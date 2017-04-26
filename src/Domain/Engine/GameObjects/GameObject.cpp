@@ -295,7 +295,7 @@ bool GameObject::AddComponent(Component *c)
     m_components.PushBack(c);
 
     #ifdef BANG_EDITOR
-    // Inspector::GetInstance()->RefreshInspectable(this);
+    Inspector::GetInstance()->Refresh(this);
     #endif
 
     return true;
@@ -318,7 +318,7 @@ void GameObject::MoveComponent(Component *c, int distance)
     }
 
     #ifdef BANG_EDITOR
-    // Inspector::GetInstance()->RefreshInspectable(this);
+    Inspector::GetInstance()->Refresh(this);
     #endif
 }
 #endif
@@ -347,7 +347,7 @@ void GameObject::RemoveComponentInstantly(Component *c)
     delete c;
 
     #ifdef BANG_EDITOR
-    // Inspector::GetInstance()->RefreshInspectable(this);
+    Inspector::GetInstance()->Refresh(this);
     #endif
 }
 

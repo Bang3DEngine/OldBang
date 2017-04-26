@@ -9,14 +9,21 @@
 template <class SerializableObjectClass>
 class Inspectable : public IInspectable
 {
+    ICLONEABLE(Inspectable<SerializableObjectClass>)
+
 public:
     Inspectable()
     {
     }
 
+    virtual void CloneInto(ICloneable *clone) const override
+    {
+        IInspectable::CloneInto(clone);
+    }
+
     Inspectable(SerializableObjectClass *relatedSerializableObject)
     {
-        SetSerializableObject(relatedSerializableObject);
+        SetRelatedSerializableObject(relatedSerializableObject);
     }
 
     virtual ~Inspectable()
@@ -35,7 +42,7 @@ public:
     virtual InspectorWidget *GetNewInspectorWidget() override
     {
         InspectorWidget *iw = new InspectorWidget();
-            iw->Init(GetTitleInInspector(), GetRelatedSerializableObject());
+        iw->Init(GetTitleInInspector(), GetRelatedSerializableObject());
         return iw;
     }
 

@@ -5,26 +5,21 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
-#include "Bang/SerializableObject.h"
-#include "Bang/IWindowEventManagerListener.h"
+#include "Bang/GameObjectInspectable.h"
 
 class GameObject;
 class InspectorWidget;
-class GameObjectPrefabInspectable;
-class PrefabAssetFileInspectable : public SerializableObject,
+class PrefabAssetFileInspectable : public Inspectable<GameObject>,
                                    public IWindowEventManagerListener
 {
-    OBJECT(PrefabAssetFileInspectable)
+    ICLONEABLE(PrefabAssetFileInspectable)
 
 public:
     PrefabAssetFileInspectable();
     PrefabAssetFileInspectable(const File &f);
     virtual ~PrefabAssetFileInspectable();
 
-    void ShowInInspector();
-
-    virtual void Write(XMLNode *xmlInfo) const override;
-    virtual void Read(const XMLNode &xmlInfo) override;
+    void CloneInto(ICloneable *clone) const override;
 
     void OnInspectorSlotChanged(InspectorWidget *InspectorWidget) override;
 

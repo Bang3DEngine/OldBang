@@ -76,7 +76,7 @@ public slots:
     void RefreshWidgetValues();
 
 protected:
-    SerializableObject *p_relatedInspectable = nullptr;
+    SerializableObject *p_relatedSerialObj = nullptr;
 
     QVBoxLayout m_vLayout;
     QHBoxLayout m_headerLayout;
@@ -112,6 +112,7 @@ private:
 
 private slots:
     void _OnSlotValueChanged(int _);
+    void _OnSlotValueChanged(bool _);
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
 };

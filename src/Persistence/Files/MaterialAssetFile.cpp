@@ -5,10 +5,7 @@
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/MaterialAssetFileInspectable.h"
-#endif
+#include "Bang/FileInspectable.h"
 
 MaterialAssetFile::MaterialAssetFile()
 {
@@ -24,11 +21,16 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
     {
         m_vshaderFilepath = xmlInfo->GetString("VertexShader");
         m_fshaderFilepath = xmlInfo->GetString("FragmentShader");
-
         m_textureFilepaths.PushBack( xmlInfo->GetFilepath("Texture") );
-
         m_diffuseColor = xmlInfo->GetColor("DiffuseColor");
         delete xmlInfo;
+    }
+
+    XMLNode *xmlMatInfo = XMLParser::FromFile( GetRelativePath() );
+    if (xmlMatInfo)
+    {
+        m_xmlInfo = *xmlMatInfo;
+        delete xmlMatInfo;
     }
 }
 
@@ -39,10 +41,36 @@ const QPixmap& MaterialAssetFile::GetIcon() const
     return IconManager::LoadMaterialPixmap(mat);
 }
 
-#ifdef BANG_EDITOR
-IInspectable *MaterialAssetFile::GetNewInspectable() const
+
+void MaterialAssetFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;//new MaterialAssetFileInspectable(*this);
+    // Update live instances currently being used
+    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+    m_xmlInfo = xmlInfo;
+}
+
+void MaterialAssetFile::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName( GetName() );
+
+    // Do Read & Write so that old files with different formats have the
+    // newer one
+    Material *mat = new Material();
+    mat->Read(m_xmlInfo);
+    mat->Write(xmlInfo);
+
+    m_xmlInfo = *xmlInfo;
+
+    delete mat;
+
+    IconManager::InvalidatePixmap( GetAbsolutePath() );
+}
+
+
+#ifdef BANG_EDITOR
+IInspectable *MaterialAssetFile::GetNewInspectable()
+{
+    return new FileInspectable<MaterialAssetFile>(*this);
 }
 #endif
 

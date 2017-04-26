@@ -12,7 +12,7 @@ public:
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
     virtual bool IsAsset() const override;
@@ -20,6 +20,9 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetNumComponents() const;
+
+    void Read(const XMLNode &xmlInfo);
+    void Write(XMLNode *xmlInfo) const;
 
 protected:
     int m_width = 0, m_height = 0;

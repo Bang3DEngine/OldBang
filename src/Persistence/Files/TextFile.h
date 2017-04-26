@@ -5,20 +5,23 @@
 
 class TextFile : public File
 {
-protected:
-    String m_contents = "";
-
 public:
     TextFile();
     TextFile(const QFileSystemModel *model, const QModelIndex &index);
 
     String GetContents() const;
 
+    void Read(const XMLNode &xmlInfo) override;
+    void Write(XMLNode *xmlInfo) const override;
+
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
     virtual bool IsAsset() const override;
+
+protected:
+    String m_contents = "";
 };
 
 #endif // TEXTFILE_H

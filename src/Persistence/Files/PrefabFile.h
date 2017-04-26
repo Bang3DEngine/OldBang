@@ -13,8 +13,7 @@
 #endif
 
 class GameObject;
-class PrefabFile : public File,
-                   public SerializableObject
+class PrefabFile : public File
                    #ifdef BANG_EDITOR
                    ,public IWindowEventManagerListener
                    #endif
@@ -28,12 +27,8 @@ public:
 
     virtual const QPixmap& GetIcon() const override;
 
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-
     #ifdef BANG_EDITOR
-    void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
 private:

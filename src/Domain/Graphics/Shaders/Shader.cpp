@@ -48,8 +48,8 @@ bool Shader::LoadFromFile(const String& filepath)
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         String errorStr(v.begin(), v.end());
-        Debug_Error("Failed to compile shader: '"
-                    + m_filepath + "': " + errorStr);
+        Debug_Error("Failed to compile shader: '"  << m_filepath << "': " <<
+                    errorStr);
         glDeleteShader(m_idGL);
         return false;
     }

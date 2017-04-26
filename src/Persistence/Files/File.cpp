@@ -267,7 +267,7 @@ const QPixmap& File::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable* File::GetNewInspectable() const
+IInspectable* File::GetNewInspectable()
 {
     return nullptr;
 }

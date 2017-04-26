@@ -32,7 +32,7 @@ public:
 
 private:
     String m_sourceCode = "";
-    String m_filepath = "";
+    String m_filepath   = "";
     Type m_type;
 
 };

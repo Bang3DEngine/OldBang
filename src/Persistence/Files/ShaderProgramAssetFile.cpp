@@ -3,13 +3,17 @@
 #include "Bang/IO.h"
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
-#include "Bang/ShaderProgramAssetFileInspectable.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/FileInspectable.h"
+
+ShaderProgramAssetFile::ShaderProgramAssetFile()
+{
+}
 
 ShaderProgramAssetFile::ShaderProgramAssetFile(const QFileSystemModel *model,
                                                const QModelIndex &index)
     : File(model, index)
 {
-
 }
 
 const QPixmap &ShaderProgramAssetFile::GetIcon() const
@@ -40,9 +44,26 @@ String ShaderProgramAssetFile::GetFragmentShaderFilepath() const
     return fShaderFilepath;
 }
 
-#ifdef BANG_EDITOR
-IInspectable *ShaderProgramAssetFile::GetNewInspectable() const
+void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;//new ShaderProgramAssetFileInspectable(*this);
+    SerializableObject::Read(xmlInfo);
+    IO::WriteToFile(GetAbsolutePath(), xmlInfo.ToString());
+    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+}
+
+void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const
+{
+    SerializableObject::Write(xmlInfo);
+    xmlInfo->SetTagName("ShaderProgram");
+    xmlInfo->SetFilepath("VertexShader", GetVertexShaderFilepath(),
+                         "vert glsl");
+    xmlInfo->SetFilepath("FragmentShader", GetFragmentShaderFilepath(),
+                         "frag glsl");
+}
+
+#ifdef BANG_EDITOR
+IInspectable *ShaderProgramAssetFile::GetNewInspectable()
+{
+    return new FileInspectable<ShaderProgramAssetFile>(*this);
 }
 #endif

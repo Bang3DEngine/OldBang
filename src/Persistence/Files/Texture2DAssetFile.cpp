@@ -2,22 +2,28 @@
 
 #include "Bang/IO.h"
 #include "Bang/Debug.h"
-#include "Bang/XMLNode.h"
+#include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#include "Bang/Texture2DAssetFileInspectable.h"
-#endif
+#include "Bang/AssetsManager.h"
+#include "Bang/FileInspectable.h"
 
 Texture2DAssetFile::Texture2DAssetFile()
 {
 }
 
-Texture2DAssetFile::Texture2DAssetFile
-    (const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
+Texture2DAssetFile::Texture2DAssetFile(const QFileSystemModel *model,
+                                       const QModelIndex &index)
+    : File(model, index)
 {
+    // Load once and save the xmlInfo
+    XMLNode *xmlTexInfo = XMLParser::FromFile(GetRelativePath());
+    if (xmlTexInfo)
+    {
+        // We can do this safely, xmlTexInfo wont have children.
+        m_xmlInfo = *xmlTexInfo;
+        delete xmlTexInfo;
+    }
 }
 
 String Texture2DAssetFile::GetImageAbsFilepath() const
@@ -39,10 +45,23 @@ const QPixmap& Texture2DAssetFile::GetIcon() const
                                    IconManager::IconOverlay::Asset);
 }
 
-#ifdef BANG_EDITOR
-IInspectable *Texture2DAssetFile::GetNewInspectable() const
+void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;//new Texture2DAssetFileInspectable(*this);
+    // Update live instances currently being used
+    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+    m_xmlInfo = xmlInfo;
+}
+
+void Texture2DAssetFile::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName("Texture2DAssetFileInspectable");
+    *xmlInfo = m_xmlInfo;
+}
+
+#ifdef BANG_EDITOR
+IInspectable *Texture2DAssetFile::GetNewInspectable()
+{
+    return new FileInspectable<Texture2DAssetFile>(*this);
 }
 #endif
 

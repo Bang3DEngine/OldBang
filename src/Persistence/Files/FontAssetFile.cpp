@@ -5,10 +5,11 @@
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/FileInspectable.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#endif
+FontAssetFile::FontAssetFile()
+{
+}
 
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
 {
@@ -28,9 +29,9 @@ const QPixmap& FontAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *FontAssetFile::GetNewInspectable() const
+IInspectable *FontAssetFile::GetNewInspectable()
 {
-    return nullptr;
+    return new FileInspectable<FontAssetFile>(*this);
 }
 #endif
 

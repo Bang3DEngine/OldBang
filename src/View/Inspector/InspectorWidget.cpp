@@ -23,27 +23,27 @@
 #include "Bang/AttrWidgetVectorFloat.h"
 
 
-InspectorWidget::InspectorWidget()
-    : DragDropQWidget(nullptr)
+InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
 
 void InspectorWidget::Init(const String &title,
-                           SerializableObject *relatedInspectable)
+                           SerializableObject *relatedSerialObj)
 {
-    p_relatedInspectable = relatedInspectable;
+    p_relatedSerialObj = relatedSerialObj;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
 
-    SetIcon( relatedInspectable->GetIcon() );
+    SetIcon( relatedSerialObj->GetIcon() );
 
     setAcceptDrops(true);
     RefreshWidgetValues();
 }
 
-void InspectorWidget::ConstructFromWidgetXMLInfo(
-        const String &title, XMLNode &xmlInfo, bool autoUpdate)
+void InspectorWidget::ConstructFromWidgetXMLInfo(const String &title,
+                                                 XMLNode &xmlInfo,
+                                                 bool autoUpdate)
 {
     setVisible(false);
 
@@ -58,8 +58,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     m_gridLayout.setSpacing(0);
 
-    m_closeOpenButton.setStyleSheet(
-                "padding:0px; border: 0px; margin-left:-5px;");
+    m_closeOpenButton.setStyleSheet("padding:0px;border:0px;margin-left:-5px;");
     QObject::connect(&m_closeOpenButton, SIGNAL(clicked()),
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
@@ -73,7 +72,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_titleLabel.setAlignment(Qt::AlignLeft);
 
     CreateWidgetSlots(xmlInfo);
-    RefreshWidgetValues();
 
     if (autoUpdate)
     {
@@ -95,10 +93,7 @@ InspectorWidget::~InspectorWidget()
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
     XMLNode xmlInfo;
-    if (p_relatedInspectable)
-    {
-        p_relatedInspectable->Write(&xmlInfo);
-    }
+    if (p_relatedSerialObj) { p_relatedSerialObj->Write(&xmlInfo); }
     return xmlInfo;
 }
 
@@ -175,7 +170,6 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *awe = Object::SCast<AttrWidgetEnum>(aw);
-                // Selected index<
                 attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(),
                                   attribute.GetProperties());
             }
@@ -193,7 +187,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
 
 SerializableObject *InspectorWidget::GetRelatedInspectable() const
 {
-    return p_relatedInspectable;
+    return p_relatedSerialObj;
 }
 
 QGridLayout *InspectorWidget::GetGridLayout()
@@ -234,7 +228,7 @@ int InspectorWidget::GetHeightSizeHint()
 
 void InspectorWidget::OnDestroy()
 {
-    p_relatedInspectable = nullptr;
+    p_relatedSerialObj = nullptr;
     m_refreshTimer.stop();
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
                         this, SLOT(RefreshWidgetValues()));
@@ -279,16 +273,19 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
         if (w)
         {
-            m_attrName_To_AttrWidget[attribute.GetName()] = w;
-            if (attribute.HasProperty(XMLProperty::Hidden)) { w->hide(); }
+            m_attrName_To_AttrWidget.Set(attribute.GetName(), w);
+            if (attribute.HasProperty(XMLProperty::Hidden))
+            {
+                w->hide();
+            }
         }
     }
 }
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    ENSURE(p_relatedInspectable);
-    if (m_created) { p_relatedInspectable->Read( GetWidgetXMLInfo() ); }
+    ENSURE(p_relatedSerialObj);
+    if (m_created) { p_relatedSerialObj->Read( GetWidgetXMLInfo() ); }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 
@@ -334,6 +331,11 @@ void InspectorWidget::UpdateCloseOpenButtonIcon()
 }
 
 void InspectorWidget::_OnSlotValueChanged(int _)
+{
+    _OnSlotValueChanged();
+}
+
+void InspectorWidget::_OnSlotValueChanged(bool _)
 {
     _OnSlotValueChanged();
 }

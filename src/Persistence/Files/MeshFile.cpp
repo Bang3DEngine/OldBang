@@ -5,11 +5,8 @@
 #include "Bang/IO.h"
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#include "Bang/MeshFileInspectable.h"
-#endif
+#include "Bang/XMLProperty.h"
+#include "Bang/FileInspectable.h"
 
 MeshFile::MeshFile()
 {
@@ -27,10 +24,27 @@ const QPixmap& MeshFile::GetIcon() const
     return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
 }
 
-#ifdef BANG_EDITOR
-IInspectable *MeshFile::GetNewInspectable() const
+void MeshFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;//new MeshFileInspectable(*this);
+    // They all are readonly properties, so we wont do anything here
+}
+
+void MeshFile::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName("MeshFile");
+
+    xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
+    xmlInfo->SetString("Mode", IsTriangles() ? "Triangles" : "Quads",
+                      {XMLProperty::Readonly});
+    xmlInfo->SetString("Faces",  String(GetNumFaces()),
+                      {XMLProperty::Readonly});
+}
+
+
+#ifdef BANG_EDITOR
+IInspectable *MeshFile::GetNewInspectable()
+{
+    return new FileInspectable<MeshFile>(*this);
 }
 #endif
 

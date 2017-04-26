@@ -15,16 +15,22 @@
 
 Material::Material() : Asset()
 {
-    SetShaderProgram(
-        AssetsManager::Load<ShaderProgram>("Shaders/G_Default.bshaderprogram",
-                                           true));
+    SetShaderProgram( new ShaderProgram(
+                          IO::ToAbsolute("Shaders/G_Default.vert", true),
+                          IO::ToAbsolute("Shaders/G_Default.frag", true)));
 }
 
 Material::Material(const Material &m)
 {
     ShaderProgram *sp = m.GetShaderProgram();
-    SetShaderProgram(new ShaderProgram(sp->GetVertexShader()->GetFilepath(),
-                                       sp->GetFragmentShader()->GetFilepath()));
+    if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
+    {
+        Shader *vshader = sp->GetVertexShader();
+        Shader *fshader = sp->GetFragmentShader();
+        SetShaderProgram( new ShaderProgram(vshader->GetFilepath(),
+                                            fshader->GetFilepath()));
+    }
+
     SetDiffuseColor(m.GetDiffuseColor());
     SetReceivesLighting(m.ReceivesLighting());
     SetShininess(m.GetShininess());
@@ -33,10 +39,7 @@ Material::Material(const Material &m)
 
 Material::~Material()
 {
-    if (m_shaderProgram)
-    {
-        delete m_shaderProgram;
-    }
+    if (m_shaderProgram) { delete m_shaderProgram; }
 }
 
 String Material::GetFileExtensionStatic()

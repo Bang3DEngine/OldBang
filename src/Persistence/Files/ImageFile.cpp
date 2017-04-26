@@ -3,11 +3,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Image.h"
 #include "Bang/IconManager.h"
-#include "Bang/Inspectable.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/ImageFileInspectable.h"
-#endif
+#include "Bang/FileInspectable.h"
 
 ImageFile::ImageFile()
 {
@@ -28,10 +24,27 @@ const QPixmap& ImageFile::GetIcon() const
                                    IconManager::IconOverlay::Data);
 }
 
-#ifdef BANG_EDITOR
-IInspectable *ImageFile::GetNewInspectable() const
+void ImageFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr; //new Inspectable<ImageFileInspectable>(*this);
+}
+
+void ImageFile::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName( GetName() );
+    xmlInfo->SetString("FileName", GetName() + "." + GetExtension(),
+                       {XMLProperty::Readonly});
+    xmlInfo->SetFilepath("ImageFilePath", GetRelativePath(), "",
+                         {XMLProperty::Readonly});
+    xmlInfo->SetString("Dimensions", String(GetWidth()) + "x" + String(GetHeight()),
+                       {XMLProperty::Readonly});
+    xmlInfo->SetString("Mode", GetNumComponents() == 3 ? "RGB" : "RGBA",
+                       {XMLProperty::Readonly});
+}
+
+#ifdef BANG_EDITOR
+IInspectable *ImageFile::GetNewInspectable()
+{
+    return new FileInspectable<ImageFile>(*this);
 }
 #endif
 

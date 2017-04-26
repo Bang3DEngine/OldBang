@@ -59,7 +59,7 @@ public:
     virtual const QPixmap& GetIcon() const;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable* GetNewInspectable() const;
+    virtual IInspectable* GetNewInspectable();
     #endif
 
     String GetContents() const;

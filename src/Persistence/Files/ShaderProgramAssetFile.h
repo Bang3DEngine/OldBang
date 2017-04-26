@@ -11,6 +11,7 @@
 class ShaderProgramAssetFile : public File
 {
 public:
+    ShaderProgramAssetFile();
     ShaderProgramAssetFile(const QFileSystemModel *model,
                            const QModelIndex &index);
 
@@ -19,8 +20,11 @@ public:
     String GetVertexShaderFilepath() const;
     String GetFragmentShaderFilepath() const;
 
+    void Read(const XMLNode &xmlInfo) override;
+    void Write(XMLNode *xmlInfo) const override;
+
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 };
 

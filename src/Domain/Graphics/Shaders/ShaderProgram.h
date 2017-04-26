@@ -62,8 +62,8 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
-    Shader *m_vshader = nullptr;
-    Shader *m_fshader = nullptr;
+    Shader *p_vshader = nullptr;
+    Shader *p_fshader = nullptr;
 
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, const Texture*> m_namesToTexture;

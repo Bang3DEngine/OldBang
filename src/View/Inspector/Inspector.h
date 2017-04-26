@@ -22,7 +22,7 @@ public:
 
     void Clear();
 
-    void RefreshInspectable(IInspectable *inspectable);
+    void Refresh(SerializableObject *serialObject);
     void ShowInspectable(IInspectable *inspectable, const String &title = "");
 
 public slots:

@@ -268,7 +268,8 @@ HEADERS +=                                                          \
     src/View/Inspector/Inspectables/Inspectable.h \
     src/View/Inspector/Inspectables/GameObjectInspectable.h \
     src/View/Inspector/Inspectables/IInspectable.h \
-    src/View/Inspector/Inspectables/FileInspectable.h
+    src/View/Inspector/Inspectables/FileInspectable.h \
+    src/View/Inspector/Inspectables/ComponentInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -279,7 +280,6 @@ HEADERS += \
     src/Persistence/Project/QtProjectManager.h \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
-    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
     src/View/DragDrop/DragDropQTreeWidget.h \
     src/View/DragDrop/DragDropQListWidget.h \
     src/View/DragDrop/DragDropAgent.h \
@@ -302,17 +302,10 @@ HEADERS += \
     src/View/Inspector/AttributeWidgets/AttrWidgetString.h          \
     src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h     \
     src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
-    src/View/Inspector/Inspectables/ImageFileInspectable.h          \
-    src/View/Inspector/Inspectables/MaterialAssetFileInspectable.h  \
-    src/View/Inspector/Inspectables/MeshAssetFileInspectable.h      \
-    src/View/Inspector/Inspectables/MeshFileInspectable.h           \
     src/View/Inspector/Inspectables/PrefabAssetFileInspectable.h    \
-    src/View/Inspector/Inspectables/TextFileInspectable.h           \
-    src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.h \
     src/View/Windows/WindowEventManager.h \
     src/View/Windows/SelectProjectWindow.h \
     src/View/Toolbar.h \
-    src/View/Inspector/Inspectables/AudioClipAssetFileInspectable.h \
     src/View/EditorState.h \
     src/View/Dialogs/GameBuildDialog.h \
     src/View/GameBuilderJob.h \
@@ -494,14 +487,14 @@ SOURCES += \
     src/View/Inspector/Inspectables/Inspectable.cpp \
     src/View/Inspector/Inspectables/GameObjectInspectable.cpp \
     src/View/Inspector/Inspectables/IInspectable.cpp \
-    src/View/Inspector/Inspectables/FileInspectable.cpp
+    src/View/Inspector/Inspectables/FileInspectable.cpp \
+    src/View/Inspector/Inspectables/ComponentInspectable.cpp
 
 EDITOR {
     SOURCES += \
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
         src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp \
         src/View/GameBuilderJob.cpp \
-        src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
         src/Persistence/Project/QtProjectManager.cpp \
@@ -525,7 +518,6 @@ EDITOR {
         src/View/EditorGameObject/EditorAxis.cpp \
         src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
         src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
-        src/View/Inspector/Inspectables/AudioClipAssetFileInspectable.cpp \
         src/View/EditorGameObject/EditorScaleAxis.cpp \
         src/View/EditorScene/EditorFloor.cpp \
         src/View/Interfaces/IWindowEventManagerListener.cpp \
@@ -546,11 +538,6 @@ EDITOR {
         src/View/Inspector/AttributeWidgets/AttrWidgetString.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorScene/EditorScene.cpp \
-        src/View/Inspector/Inspectables/MeshAssetFileInspectable.cpp \
-        src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.cpp \
-        src/View/Inspector/Inspectables/ImageFileInspectable.cpp \
-        src/View/Inspector/Inspectables/MeshFileInspectable.cpp \
-        src/View/Inspector/Inspectables/MaterialAssetFileInspectable.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \
         src/View/EditorGameObject/EditorSelectionGameObject.cpp \
         src/View/EditorScene/EditorDebugGameObject.cpp \
@@ -560,7 +547,6 @@ EDITOR {
         src/View/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
-        src/View/Inspector/Inspectables/TextFileInspectable.cpp \
         src/View/Inspector/Inspectables/PrefabAssetFileInspectable.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
         src/View/Hierarchy/HierarchyDragDropManager.cpp \

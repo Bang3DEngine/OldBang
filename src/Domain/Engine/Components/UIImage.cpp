@@ -56,7 +56,6 @@ void UIImage::Write(XMLNode *xmlInfo) const
     String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
     xmlInfo->SetFilepath("Image", texFilepath,
                          Texture2D::GetFileExtensionStatic());
-
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});

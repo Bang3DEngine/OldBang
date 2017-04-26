@@ -19,13 +19,16 @@ public:
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
     virtual bool IsAsset() const override;
 
     void SetMeshFilepath(const String &meshFilepath);
     const String& GetMeshFilepath() const;
+
+    void Read(const XMLNode &xmlInfo);
+    void Write(XMLNode *xmlInfo) const;
 
 private:
     String m_meshFilepath = "";

@@ -15,6 +15,7 @@ class SoundFile : public File,
                   public IAttrWidgetButtonListener
 {
 public:
+    SoundFile();
     SoundFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual ~SoundFile();
 
@@ -26,7 +27,7 @@ public:
     virtual void OnButtonClicked(const String &attrName) override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
 private:

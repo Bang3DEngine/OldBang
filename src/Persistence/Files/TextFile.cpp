@@ -3,10 +3,7 @@
 #include "Bang/IO.h"
 #include "Bang/FileReader.h"
 #include "Bang/Inspectable.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/TextFileInspectable.h"
-#endif
+#include "Bang/FileInspectable.h"
 
 TextFile::TextFile()
 {
@@ -23,10 +20,24 @@ String TextFile::GetContents() const
     return m_contents;
 }
 
-#ifdef BANG_EDITOR
-IInspectable *TextFile::GetNewInspectable() const
+void TextFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;
+    SerializableObject::Read(xmlInfo);
+    String contents = xmlInfo.GetString("Contents");
+    IO::WriteToFile(GetAbsolutePath(), contents);
+}
+
+void TextFile::Write(XMLNode *xmlInfo) const
+{
+    SerializableObject::Write(xmlInfo);
+    xmlInfo->SetTagName("Text file");
+    xmlInfo->SetString("Contents", GetContents(), {XMLProperty::BigText});
+}
+
+#ifdef BANG_EDITOR
+IInspectable *TextFile::GetNewInspectable()
+{
+    return new FileInspectable<TextFile>(*this);
 }
 #endif
 

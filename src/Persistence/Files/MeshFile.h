@@ -18,10 +18,13 @@ public:
     MeshFile();
     MeshFile(const QFileSystemModel *model, const QModelIndex &index);
 
+    void Read(const XMLNode &xmlInfo) override;
+    void Write(XMLNode *xmlInfo) const override;
+
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() override;
     #endif
 
     virtual bool IsAsset() const override;

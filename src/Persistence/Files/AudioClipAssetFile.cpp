@@ -5,13 +5,10 @@
 #include "Bang/AudioClip.h"
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
-#include "Bang/Inspectable.h"
+#include "Bang/AudioSource.h"
+#include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#include "Bang/AudioClipAssetFileInspectable.h"
-#endif
+#include "Bang/FileInspectable.h"
 
 AudioClipAssetFile::AudioClipAssetFile()
 {
@@ -30,6 +27,11 @@ AudioClipAssetFile::AudioClipAssetFile(
     }
 }
 
+AudioClipAssetFile::~AudioClipAssetFile()
+{
+    if (m_tmpAudioSource) { delete m_tmpAudioSource; }
+}
+
 const QPixmap& AudioClipAssetFile::GetIcon() const
 {
     String path = IO::ToAbsolute("./Icons/AudioClipIcon.png", true);
@@ -37,11 +39,53 @@ const QPixmap& AudioClipAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *AudioClipAssetFile::GetNewInspectable() const
+IInspectable *AudioClipAssetFile::GetNewInspectable()
 {
-    return nullptr; //new Inspectable<AudioClipAssetFileInspectable>(*this);
+    return new FileInspectable<AudioClipAssetFile>(*this);
 }
 #endif
+
+void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
+{
+    String audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
+    SetAudioFilepath(audioFilepath);
+
+    String audioClipFilepath = GetAbsolutePath();
+    if (m_tmpAudioSource)
+    {
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath,
+                                                              false);
+        m_tmpAudioSource->SetAudioClip(audioClip);
+    }
+
+    AssetsManager::UpdateAsset(audioClipFilepath, xmlInfo);
+}
+
+void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
+{
+    AudioClip *audioClip = GetRelatedAudioClip();
+
+    xmlInfo->SetTagName("AudioClipAssetFileInspectable");
+
+    xmlInfo->SetFilepath("AudioFilepath", GetAudioFilepath(), "ogg wav", {});
+
+    xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
+                       {XMLProperty::Readonly});
+
+    AudioClipAssetFile *noConstThis = const_cast<AudioClipAssetFile*>(this);
+    bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
+    if (isPlaying)
+    {
+        xmlInfo->SetButton("Stop", noConstThis, {});
+        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
+    }
+    else
+    {
+
+        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
+        xmlInfo->SetButton("Play", noConstThis, {});
+    }
+}
 
 void AudioClipAssetFile::SetAudioFilepath(const String &audioFilepath)
 {
@@ -53,7 +97,7 @@ void AudioClipAssetFile::SetAudioFilepath(const String &audioFilepath)
                                                               false);
         if (audioClip)
         {
-            if (!audioClip->LoadFromFile(m_audioFilepath))
+            if (!audioClip->LoadFromFile( GetAbsolutePath() ))
             {
                 // If loading fails, set to audioFilepath to ""
                 SetAudioFilepath("");
@@ -67,8 +111,34 @@ const String &AudioClipAssetFile::GetAudioFilepath() const
     return m_audioFilepath;
 }
 
+void AudioClipAssetFile::OnButtonClicked(const String &attrName)
+{
+    bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
+    if (hasToPlay)
+    {
+        if (!m_tmpAudioSource)
+        {
+            m_tmpAudioSource = new AudioSource();
+            AudioClip *audioClip = GetRelatedAudioClip();
+            m_tmpAudioSource->SetAudioClip(audioClip);
+        }
+        m_tmpAudioSource->Play();
+    }
+    else
+    {
+        m_tmpAudioSource->Stop();
+        delete m_tmpAudioSource;
+        m_tmpAudioSource = nullptr;
+    }
+}
+
 bool AudioClipAssetFile::IsAsset() const
 {
     return true;
+}
+
+AudioClip *AudioClipAssetFile::GetRelatedAudioClip() const
+{
+    return AssetsManager::Load<AudioClip>( GetAbsolutePath() );
 }
 

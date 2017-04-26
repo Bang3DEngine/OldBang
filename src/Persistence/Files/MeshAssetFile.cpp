@@ -4,11 +4,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#include "Bang/MeshAssetFileInspectable.h"
-#endif
+#include "Bang/FileInspectable.h"
 
 MeshAssetFile::MeshAssetFile()
 {
@@ -33,17 +29,29 @@ const QPixmap& MeshAssetFile::GetIcon() const
     return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
 }
 
-#ifdef BANG_EDITOR
-IInspectable *MeshAssetFile::GetNewInspectable() const
+void MeshAssetFile::Read(const XMLNode &xmlInfo)
 {
-    return nullptr;//new MeshAssetFileInspectable(*this);
+    SetMeshFilepath( xmlInfo.GetFilepath("MeshFilepath") );
+    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+}
+
+void MeshAssetFile::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName( GetName() );
+    xmlInfo->SetFilepath("MeshFilepath", GetMeshFilepath(),
+                         "obj");
+}
+
+#ifdef BANG_EDITOR
+IInspectable *MeshAssetFile::GetNewInspectable()
+{
+    return new FileInspectable<MeshAssetFile>(*this);
 }
 
 void MeshAssetFile::SetMeshFilepath(const String &meshFilepath)
 {
     m_meshFilepath = meshFilepath;
 }
-
 #endif
 
 bool MeshAssetFile::IsAsset() const

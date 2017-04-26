@@ -22,15 +22,9 @@
 #include "Bang/MaterialAssetFile.h"
 #include "Bang/Texture2DAssetFile.h"
 #include "Bang/WindowEventManager.h"
-#include "Bang/MeshFileInspectable.h"
-#include "Bang/TextFileInspectable.h"
 #include "Bang/ExplorerContextMenu.h"
-#include "Bang/ImageFileInspectable.h"
 #include "Bang/FileReferencesManager.h"
-#include "Bang/MeshAssetFileInspectable.h"
 #include "Bang/PrefabAssetFileInspectable.h"
-#include "Bang/MaterialAssetFileInspectable.h"
-#include "Bang/Texture2DAssetFileInspectable.h"
 
 Explorer::Explorer(QWidget *parent)
     : m_renameShortcut    (this, KSeq("F2"),     SLOT(OnRenameClicked())),
@@ -259,20 +253,10 @@ void Explorer::RefreshInspector()
             delete specificFile;
         }
 
-        if (f.IsPrefabAsset()) // bprefab special case
+        if (newInspectable)
         {
-            File f(m_fileSystemModel, selectedIndex);
-            PrefabAssetFileInspectable *prefabInspectable =
-                    new PrefabAssetFileInspectable(f);
-            prefabInspectable->ShowInInspector();
-        }
-        else
-        {
-            if (newInspectable)
-            {
-                Inspector::GetInstance()->ShowInspectable(newInspectable,
-                                                          f.GetName());
-            }
+            Inspector::GetInstance()->ShowInspectable(newInspectable,
+                                                      f.GetName());
         }
     }
 }

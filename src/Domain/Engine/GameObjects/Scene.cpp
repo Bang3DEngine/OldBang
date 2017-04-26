@@ -20,6 +20,10 @@
 #include "Bang/BehaviourManager.h"
 #include "Bang/DirectionalLight.h"
 
+#ifdef BANG_EDITOR
+#include "Bang/EditorState.h"
+#endif
+
 Scene::Scene() : GameObject("Scene")
 {
 }
@@ -31,8 +35,12 @@ void Scene::_OnStart()
     {
         BehaviourManager::PrepareBehavioursLibrary(true); // Load precompiled lib
     }
+
+    if (EditorState::IsPlaying())
     #endif
-    GameObject::_OnStart();
+    {
+        GameObject::_OnStart();
+    }
 }
 
 void Scene::_OnUpdate()

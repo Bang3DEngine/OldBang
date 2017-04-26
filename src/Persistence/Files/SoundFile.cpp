@@ -6,9 +6,9 @@
 #include "Bang/IconManager.h"
 #include "Bang/FileInspectable.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/SoundFileInspectable.h"
-#endif
+SoundFile::SoundFile()
+{
+}
 
 SoundFile::SoundFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
@@ -35,7 +35,7 @@ void SoundFile::Read(const XMLNode &xmlInfo)
 
 void SoundFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName("SoundFileInspectable");
+    xmlInfo->SetTagName("SoundFile");
 
     xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
 
@@ -73,7 +73,7 @@ void SoundFile::OnButtonClicked(const String &attrName)
 }
 
 #ifdef BANG_EDITOR
-IInspectable *SoundFile::GetNewInspectable() const
+IInspectable *SoundFile::GetNewInspectable()
 {
     return new FileInspectable<SoundFile>(*this);
 }

@@ -2,13 +2,16 @@
 #define IINSPECTABLE_H
 
 #include "Bang/List.h"
+#include "Bang/ICloneable.h"
 
 class InspectorWidget;
 class SerializableObject;
-class IInspectable
+class IInspectable : public ICloneable
 {
 public:
     virtual ~IInspectable();
+
+    virtual void CloneInto(ICloneable *clone) const override;
 
     virtual bool IsEnabled() const = 0;
     virtual bool NeedsEnabledCheckBox() const = 0;
@@ -17,7 +20,7 @@ public:
     virtual InspectorWidget *GetNewInspectorWidget() = 0;
     virtual List<IInspectable*> GetNewInspectablesToShow() = 0;
 
-    void SetSerializableObject(SerializableObject* serializableObject);
+    void SetRelatedSerializableObject(SerializableObject* serializableObject);
 
     SerializableObject *GetRelatedSerializableObject() const;
 

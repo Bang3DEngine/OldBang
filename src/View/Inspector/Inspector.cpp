@@ -42,7 +42,7 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    delete m_currentInspectable;
+    if (m_currentInspectable) { delete m_currentInspectable; }
     m_currentInspectable = nullptr;
 
     List<InspectorWidget*> currentInspWidgets = GetCurrentInspectorWidgets();
@@ -56,21 +56,28 @@ void Inspector::Clear()
     clear();
 }
 
-void Inspector::RefreshInspectable(IInspectable *inspectable)
+void Inspector::Refresh(SerializableObject *serialObject)
 {
-    if (inspectable == m_currentInspectable) { Refresh(); }
+    ENSURE(m_currentInspectable);
+    if (m_currentInspectable->GetRelatedSerializableObject() == serialObject)
+    {
+        Refresh();
+    }
 }
 
 void Inspector::Refresh()
 {
-    ShowInspectable(m_currentInspectable);
+    IInspectable *newInsp =
+            Object::SCast<IInspectable>(m_currentInspectable->Clone());
+    ShowInspectable(newInsp);
 }
 
 void Inspector::ShowInspectable(IInspectable *insp, const String &title)
 {
     Clear();
 
-    m_currentInspectable = insp; ENSURE(insp);
+    ENSURE(insp);
+    m_currentInspectable = insp;
 
     m_enabledCheckBox->setVisible(m_currentInspectable->NeedsEnabledCheckBox());
     m_enabledCheckBox->setChecked(m_currentInspectable->IsEnabled());
@@ -88,12 +95,12 @@ void Inspector::ShowInspectable(IInspectable *insp, const String &title)
         }
     }
 
-    if (title.Empty())
+    String inspTitle = title;
+    if (inspTitle.Empty())
     {
-        String inspTitle = m_currentInspectable->GetTitleInInspector();
-        m_titleLabel->setText(inspTitle.ToQString());
+        inspTitle = m_currentInspectable->GetTitleInInspector();
     }
-    else { m_titleLabel->setText(title.ToQString()); }
+    m_titleLabel->setText(inspTitle.ToQString());
 
     RefreshSizeHints();
 }
@@ -136,9 +143,10 @@ void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
     for (int i = 0; i < count(); ++i)
     {
         QListWidgetItem *itm = item(i);
-        //if (iw && iw->GetRelatedInspectable() == destroyed)
+        InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
+        if (iw && iw->GetRelatedInspectable() == destroyed)
         {
-        //    delete itm;
+            delete itm;
         }
     }
 }
