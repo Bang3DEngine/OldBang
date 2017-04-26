@@ -49,14 +49,10 @@ public:
 
         T *a = nullptr;
         String absPath = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-        XMLNode *xmlInfo = XMLParser::FromFile(absPath);
-        if (xmlInfo)
-        {
-            a = new T();
-            a->Read(*xmlInfo);
-            a->m_assetFilepath = absPath;
-            delete xmlInfo;
-        }
+        XMLNode xmlInfo = XMLParser::FromFile(absPath);
+        a = new T();
+        a->Read(xmlInfo);
+        a->m_assetFilepath = absPath;
         return a;
     }
 

@@ -13,13 +13,8 @@ FontAssetFile::FontAssetFile()
 
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
 {
-    XMLNode *xmlInfo;
-    xmlInfo = XMLParser::FromFile(m_path);
-    if (xmlInfo)
-    {
-        m_trueFontFilepath = xmlInfo->GetFilepath("FontFilepath");
-        delete xmlInfo;
-    }
+    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath");
 }
 
 const QPixmap& FontAssetFile::GetIcon() const

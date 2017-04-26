@@ -14,13 +14,8 @@ MeshAssetFile::MeshAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    XMLNode *xmlInfo;
-    xmlInfo = XMLParser::FromFile(m_path);
-    if (xmlInfo)
-    {
-        m_meshFilepath = xmlInfo->GetFilepath("MeshFilepath");
-        delete xmlInfo;
-    }
+    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    m_meshFilepath = xmlInfo.GetFilepath("MeshFilepath");
 }
 
 const QPixmap& MeshAssetFile::GetIcon() const

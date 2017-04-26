@@ -245,35 +245,27 @@ void MenuBar::OnCreateFromPrefab() const
 
     Prefab *p = new Prefab();
 
-    XMLNode *xmlInfo = XMLParser::FromFile(filename);
-    if (xmlInfo)
+    XMLNode xmlInfo = XMLParser::FromFile(filename);
+    p->Read(xmlInfo);
+
+    GameObject *go = p->InstantiateWithoutStarting();
+    GameObject *selectedGameObject =
+            w->widgetHierarchy->GetFirstSelectedGameObject();
+    if (selectedGameObject )
     {
-        p->Read(*xmlInfo);
-        delete xmlInfo;
-
-        GameObject *go = p->InstantiateWithoutStarting();
-        GameObject *selectedGameObject =
-                w->widgetHierarchy->GetFirstSelectedGameObject();
-        if (selectedGameObject )
-        {
-            go->SetParent(selectedGameObject);
-        }
-        else
-        {
-            Scene *activeScene = SceneManager::GetActiveScene();
-            if (activeScene)
-            {
-                go->SetParent(activeScene);
-            }
-        }
-        delete p;
-
-        Hierarchy::GetInstance()->SelectGameObject(go);
+        go->SetParent(selectedGameObject);
     }
     else
     {
-        Debug_Error("Prefab file '" << filename << "' can't be read.");
+        Scene *activeScene = SceneManager::GetActiveScene();
+        if (activeScene)
+        {
+            go->SetParent(activeScene);
+        }
     }
+    delete p;
+
+    Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 

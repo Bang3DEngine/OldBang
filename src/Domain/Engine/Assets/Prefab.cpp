@@ -66,14 +66,11 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 {
     if (!m_gameObjectXMLInfoContent.Empty())
     {
-        XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
-        if (xmlInfo)
-        {
-            GameObject *go = new GameObject();
-            go->Read(*xmlInfo);
-            delete xmlInfo;
-            return go;
-        }
+        XMLNode xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+
+        GameObject *go = new GameObject();
+        go->Read(xmlInfo);
+        return go;
     }
     return nullptr;
 }
@@ -95,11 +92,7 @@ void Prefab::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    XMLNode *goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
-    if (goInfo)
-    {
-        goInfo->CloneInto(xmlInfo);
-        xmlInfo->SetTagName("Prefab");
-        delete goInfo;
-    }
+    XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+    goInfo.CloneInto(xmlInfo);
+    xmlInfo->SetTagName("Prefab");
 }

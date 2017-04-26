@@ -184,30 +184,27 @@ void XMLParser::GetNextTag(const String &xml,
     }
 }
 
-XMLNode *XMLParser::FromFile(const String &filepath)
+XMLNode XMLParser::FromFile(const String &filepath)
 {
-	if (filepath.Empty()) { return nullptr; }
-    if (!IO::ExistsFile(filepath)) { return nullptr; }
+    if (filepath.Empty()) { return XMLNode(); }
+    if (!IO::ExistsFile(filepath)) { return XMLNode(); }
 
     String fileContents = IO::GetFileContents(filepath);
-    XMLNode *xmlInfo = XMLParser::FromString(fileContents);
-    return xmlInfo;
+    return XMLParser::FromString(fileContents);
 }
 
-XMLNode* XMLParser::FromString(const String &xml)
+XMLNode XMLParser::FromString(const String &xml)
 {
-    if (xml.Empty()) { return nullptr; }
+    if (xml.Empty()) { return XMLNode(); }
 
     ClearPointerIds();
-
-    XMLNode* root = new XMLNode();
 
     //Read name
     String tag;
     int rootOpenTagBegin, rootOpenTagEnd;
     XMLParser::GetNextOpenTag(xml, 0, &tag,
                               &rootOpenTagBegin, &rootOpenTagEnd);
-    if (rootOpenTagEnd == -1) { delete root; return nullptr; }
+    if (rootOpenTagEnd == -1) { return XMLNode(); }
 
     int tagNameEnd;
     String tagName = XMLParser::GetTagName(tag, nullptr, &tagNameEnd);
@@ -215,7 +212,8 @@ XMLNode* XMLParser::FromString(const String &xml)
     XMLParser::GetCorrespondingCloseTag(xml, rootOpenTagEnd, tagName,
                                         &rootCloseTagBegin, &rootCloseTagEnd);
 
-    root->SetTagName(tagName);
+    XMLNode root;
+    root.SetTagName(tagName);
 
     //Read attributes
     int attrEnd = tagNameEnd;
@@ -224,8 +222,8 @@ XMLNode* XMLParser::FromString(const String &xml)
         XMLAttribute attr;
         XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1) { break; }
-        root->SetGenericAttribute(attr.GetName(), attr.GetValue(),
-                                  attr.GetType(), attr.GetProperties());
+        root.SetGenericAttribute(attr.GetName(), attr.GetValue(),
+                                 attr.GetType(), attr.GetProperties());
     }
 
     //Read children
@@ -246,11 +244,8 @@ XMLNode* XMLParser::FromString(const String &xml)
                                             &childCloseTagBegin, &childCloseTagEnd);
         String childXML = innerXML.SubString(childOpenTagBegin, childCloseTagEnd);
 
-        XMLNode *child = XMLParser::FromString(childXML);
-        if (child)
-        {
-            root->AddChild(child);
-        }
+        XMLNode child = XMLParser::FromString(childXML);
+        root.AddChild(child);
 
         innerLastPos = childCloseTagEnd;
     }

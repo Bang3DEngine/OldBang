@@ -43,7 +43,7 @@ String::String(const char *cstr) :
 
 String::String(const QString &qstr)
 {
-    *this = qstr.toStdString();
+    *this = String(qstr.toStdString());
 }
 
 String::String(const std::string &stdstr) :
@@ -499,7 +499,7 @@ String String::ToString(const void *v)
 
 String String::ToString(const Color &v)
 {
-    return v.ToString();
+    return String(v.ToString());
 }
 
 String String::ToString(const String &v)

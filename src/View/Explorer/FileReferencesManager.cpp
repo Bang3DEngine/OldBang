@@ -92,14 +92,11 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
         if (!f.IsAsset()) { continue; }
 
         String fileXMLContents = f.GetContents();
-        XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
-        if (auxXMLInfo &&
-            RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow, true))
+        XMLNode auxXMLInfo = XMLNode::FromString(fileXMLContents);
+        if (RefactorXMLInfo(&auxXMLInfo, relPathBefore, relPathNow, true))
         {
-            IO::WriteToFile(filepath, auxXMLInfo->ToString());
+            IO::WriteToFile(filepath, auxXMLInfo.ToString());
         }
-
-        if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }
 
@@ -112,13 +109,11 @@ void FileReferencesManager::RefactorSerializableObject(const String &relPathBefo
         // refactoring function, let the fileable read it to be updated, and
         // delete the created aux XMLNode
         String xmlInfoStr = serialObject->GetSerializedString();
-        XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
-        if (auxXMLInfo &&
-            RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow, false))
+        XMLNode auxXMLInfo = XMLNode::FromString(xmlInfoStr);
+        if (RefactorXMLInfo(&auxXMLInfo, relPathBefore, relPathNow, false))
         {
-            serialObject->Read(*auxXMLInfo);
+            serialObject->Read(auxXMLInfo);
         }
-        if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }
 
@@ -149,10 +144,10 @@ bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
 
     if (refactorXMLChildren)
     {
-        const List<XMLNode*>& xmlChildren = xmlInfo->GetChildren();
-        for (XMLNode *xmlChild : xmlChildren)
+        List<XMLNode>& xmlChildren = xmlInfo->GetChildren();
+        for (XMLNode& xmlChild : xmlChildren)
         {
-            bool modified = RefactorXMLInfo(xmlChild, relPathBefore,
+            bool modified = RefactorXMLInfo(&xmlChild, relPathBefore,
                                             relPathNow, true);
             hasBeenModified = hasBeenModified || modified;
         }

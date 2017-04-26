@@ -16,7 +16,7 @@ private:
     String m_tagName = "";
     mutable List<String> m_attributeOrder;
     mutable Map<String, XMLAttribute> m_attributes;
-    List<XMLNode*> m_children;
+    List<XMLNode> m_children;
 
 public:
     XMLNode(const String &tagName = "");
@@ -24,7 +24,7 @@ public:
 
     void CloneInto(XMLNode *xmlNode) const;
 
-    void AddChild(XMLNode *node);
+    void AddChild(const XMLNode &node);
 
     void UpdateAttributeValue(const String &attributeName,
                               const String &newAttributeValue);
@@ -107,9 +107,10 @@ public:
     const Map<String, XMLAttribute>& GetAttributes() const;
     const List<String>& GetAttributesOrderList() const;
     List< std::pair<String, XMLAttribute> > GetAttributesListInOrder() const;
-    const List<XMLNode*>& GetChildren() const;
+    const List<XMLNode>& GetChildren() const;
+    List<XMLNode>& GetChildren();
 
-    static XMLNode* FromString(const String &xml);
+    static XMLNode FromString(const String &xml);
 };
 
 #endif // XMLNODE_H

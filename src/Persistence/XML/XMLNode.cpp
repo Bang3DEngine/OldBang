@@ -15,10 +15,6 @@ XMLNode::XMLNode(const String &tagName) :
 
 XMLNode::~XMLNode()
 {
-    for (XMLNode *child : GetChildren())
-    {
-        delete child;
-    }
 }
 
 void XMLNode::CloneInto(XMLNode *xmlNode) const
@@ -29,15 +25,15 @@ void XMLNode::CloneInto(XMLNode *xmlNode) const
     xmlNode->SetTagName(name);
     xmlNode->m_attributes = GetAttributes();
     xmlNode->m_attributeOrder = GetAttributesOrderList();
-    for (XMLNode *child : m_children)
+    for (const XMLNode& child : m_children)
     {
-        XMLNode *childClone = new XMLNode();
-        child->CloneInto(childClone);
+        XMLNode childClone;
+        child.CloneInto(&childClone);
         xmlNode->AddChild(childClone);
     }
 }
 
-void XMLNode::AddChild(XMLNode *node)
+void XMLNode::AddChild(const XMLNode &node)
 {
     m_children.PushBack(node);
 }
@@ -338,14 +334,10 @@ IAttrWidgetButtonListener *XMLNode::GetButtonListener(const String &attributeNam
 
 const XMLNode *XMLNode::GetChild(const String &name) const
 {
-    for (XMLNode *node : m_children)
+    for (const XMLNode& node : m_children)
     {
-        if (node->GetTagName() == name)
-        {
-            return node;
-        }
+        if (node.GetTagName() == name) { return &node; }
     }
-
     return nullptr;
 }
 
@@ -371,9 +363,9 @@ String XMLNode::ToString(bool writeToFile, const String& indent) const
     str += ">\n";
 
     const String newIndent = indent + "    ";
-    for (XMLNode *child : m_children)
+    for (const XMLNode& child : m_children)
     {
-        str += child->ToString(writeToFile, newIndent);
+        str += child.ToString(writeToFile, newIndent);
     }
     str += indent + "</" + m_tagName + ">\n";
     return str;
@@ -419,12 +411,17 @@ List<std::pair<String, XMLAttribute> > XMLNode::GetAttributesListInOrder() const
     return attributes;
 }
 
-const List<XMLNode*>& XMLNode::GetChildren() const
+const List<XMLNode> &XMLNode::GetChildren() const
 {
     return m_children;
 }
 
-XMLNode *XMLNode::FromString(const String &xml)
+List<XMLNode> &XMLNode::GetChildren()
+{
+    return m_children;
+}
+
+XMLNode XMLNode::FromString(const String &xml)
 {
     return XMLParser::FromString(xml);
 }

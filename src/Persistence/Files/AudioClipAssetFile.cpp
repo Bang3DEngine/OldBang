@@ -18,13 +18,8 @@ AudioClipAssetFile::AudioClipAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    XMLNode *xmlInfo;
-    xmlInfo = XMLParser::FromFile(m_path);
-    if (xmlInfo)
-    {
-        m_audioFilepath = xmlInfo->GetFilepath("AudioFilepath");
-        delete xmlInfo;
-    }
+    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
 }
 
 AudioClipAssetFile::~AudioClipAssetFile()

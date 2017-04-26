@@ -24,24 +24,14 @@ const QPixmap &ShaderProgramAssetFile::GetIcon() const
 
 String ShaderProgramAssetFile::GetVertexShaderFilepath() const
 {
-    XMLNode *xmlInfo = XMLParser::FromFile(GetAbsolutePath());
-    if (!xmlInfo) { return ""; }
-
-    String vShaderFilepath = xmlInfo->GetString("VertexShader");
-    delete xmlInfo;
-
-    return vShaderFilepath;
+    XMLNode xmlInfo = XMLParser::FromFile(GetAbsolutePath());
+    return xmlInfo.GetString("VertexShader");
 }
 
 String ShaderProgramAssetFile::GetFragmentShaderFilepath() const
 {
-    XMLNode *xmlInfo = XMLParser::FromFile(GetAbsolutePath());
-    if (!xmlInfo) { return ""; }
-
-    String fShaderFilepath = xmlInfo->GetString("FragmentShader");
-    delete xmlInfo;
-
-    return fShaderFilepath;
+    XMLNode xmlInfo = XMLParser::FromFile(GetAbsolutePath());
+    return xmlInfo.GetString("FragmentShader");
 }
 
 void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)

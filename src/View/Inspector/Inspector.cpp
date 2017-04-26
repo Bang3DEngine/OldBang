@@ -141,6 +141,7 @@ void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
         InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
         if (iw && iw->GetRelatedInspectable() == destroyed)
         {
+            iw->OnDestroy();
             delete itm;
         }
     }

@@ -29,19 +29,14 @@ ProjectManager::ProjectManager()
 
 Project* ProjectManager::OpenProject(const String &projectFilepath)
 {
-    XMLNode *xmlInfo = XMLParser::FromFile(projectFilepath);
-    if (!xmlInfo)
-    {
-        Debug_Error("Could not open project '" << projectFilepath << "'");
-        return nullptr;
-    }
+    XMLNode xmlInfo = XMLParser::FromFile(projectFilepath);
 
     #ifdef BANG_EDITOR
     ProjectManager::CloseCurrentProject();
     #endif
 
     ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->Read(*xmlInfo);
+    ProjectManager::s_currentProject->Read(xmlInfo);
     String projectDir = IO::GetDir(projectFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 

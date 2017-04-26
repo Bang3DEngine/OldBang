@@ -428,13 +428,13 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
     // of the children and components list, in order to update every child/comp
     // with its info, and not with another one !!!!!!!!!!!!!!!!!
 
-    List<XMLNode*> xmlChildren = xmlInfo.GetChildren();
+    List<XMLNode> xmlChildren = xmlInfo.GetChildren();
     Array<GameObject*> children = GetChildren().ToArray();
     Array<Component*> components = GetComponents().ToArray();
     int iChildren = 0, iComponents = 0;
-    for (XMLNode *xmlChildInfo : xmlChildren)
+    for (XMLNode& xmlChildInfo : xmlChildren)
     {
-        String tagName = xmlChildInfo->GetTagName();
+        String tagName = xmlChildInfo.GetTagName();
         if (tagName.Contains("GameObject"))
         {
             ENSURE(iChildren < children.Size());
@@ -443,14 +443,14 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
             {
                 ++iChildren;
             }
-            child->Read(*xmlChildInfo);
+            child->Read(xmlChildInfo);
             ++iChildren;
         }
         else
         {
             ENSURE(iComponents < components.Size());
             Component *component = components[iComponents];
-            component->Read(*xmlChildInfo);
+            component->Read(xmlChildInfo);
             ++iComponents;
         }
     }
@@ -463,14 +463,14 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
     SetEnabled( xmlInfo.GetBool("enabled") );
     SetName( xmlInfo.GetString("name") );
 
-    for (const XMLNode *xmlChild : xmlInfo.GetChildren() )
+    for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
-        String tagName = xmlChild->GetTagName();
+        String tagName = xmlChild.GetTagName();
         if (tagName.Contains("GameObject"))
         {
             GameObject *child = new GameObject();
             child->SetParent(this);
-            child->Read(*xmlChild);
+            child->Read(xmlChild);
         }
         else // It's a Component
         {
@@ -531,7 +531,7 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
 
             if (c)
             {
-                c->Read(*xmlChild);
+                c->Read(xmlChild);
             }
         }
     }
@@ -568,8 +568,8 @@ void GameObject::Write(XMLNode *xmlInfo) const
 
     for (Component *c : m_components)
     {
-        XMLNode *xmlComp = new XMLNode();
-        c->Write(xmlComp);
+        XMLNode xmlComp;
+        c->Write(&xmlComp);
         xmlInfo->AddChild(xmlComp);
     }
 
@@ -577,8 +577,8 @@ void GameObject::Write(XMLNode *xmlInfo) const
     {
         if (!child->GetHideFlags()->IsOn(HideFlag::DontSerialize))
         {
-            XMLNode *xmlChild = new XMLNode();
-            child->Write(xmlChild);
+            XMLNode xmlChild;
+            child->Write(&xmlChild);
             xmlInfo->AddChild(xmlChild);
         }
     }

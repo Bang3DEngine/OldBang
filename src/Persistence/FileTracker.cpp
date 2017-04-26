@@ -173,11 +173,9 @@ void FileTracker::RefreshFileDependencies(const String &absFilepath)
     List<String>& depsList = m_fileDependencies.Get(absFilepath);
     depsList.Clear();
 
-    XMLNode *xmlInfo = XMLParser::FromFile(absFilepath);
-    ENSURE(xmlInfo);
-
+    XMLNode xmlInfo = XMLParser::FromFile(absFilepath);
     List< std::pair<String, XMLAttribute> > attrs =
-            xmlInfo->GetAttributesListInOrder();
+                                           xmlInfo.GetAttributesListInOrder();
     for (const std::pair<String, XMLAttribute>& attrPair : attrs)
     {
         const XMLAttribute& attr = attrPair.second;
@@ -190,7 +188,6 @@ void FileTracker::RefreshFileDependencies(const String &absFilepath)
             }
         }
     }
-    delete xmlInfo;
 }
 
 bool FileTracker::HasFileChanged(const String &absFilepath) const

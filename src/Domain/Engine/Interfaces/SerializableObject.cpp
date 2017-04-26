@@ -33,13 +33,9 @@ String SerializableObject::GetSerializedString(bool writeToFile) const
 
 void SerializableObject::ReadFromString(const String &xmlInfoString)
 {
-    XMLNode *xmlInfo = XMLNode::FromString(xmlInfoString);
-    if (xmlInfo)
-    {
-        Read(*xmlInfo);
-        PostRead(*xmlInfo);
-        delete xmlInfo;
-    }
+    XMLNode xmlInfo = XMLNode::FromString(xmlInfoString);
+    Read(xmlInfo);
+    PostRead(xmlInfo);
 }
 
 void SerializableObject::Read(const XMLNode &xmlInfo)

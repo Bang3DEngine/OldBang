@@ -17,26 +17,15 @@ Texture2DAssetFile::Texture2DAssetFile(const QFileSystemModel *model,
     : File(model, index)
 {
     // Load once and save the xmlInfo
-    XMLNode *xmlTexInfo = XMLParser::FromFile(GetRelativePath());
-    if (xmlTexInfo)
-    {
-        // We can do this safely, xmlTexInfo wont have children.
-        m_xmlInfo = *xmlTexInfo;
-        delete xmlTexInfo;
-    }
+    XMLNode xmlTexInfo = XMLParser::FromFile(GetRelativePath());
+    m_xmlInfo = xmlTexInfo;
 }
 
 String Texture2DAssetFile::GetImageAbsFilepath() const
 {
     String contents = IO::GetFileContents(GetAbsolutePath());
-    XMLNode *xmlInfo = XMLNode::FromString(contents);
-    String result = "";
-    if (xmlInfo)
-    {
-        result = xmlInfo->GetFilepath("ImageFilepath");
-        delete xmlInfo;
-    }
-    return result;
+    XMLNode xmlInfo = XMLNode::FromString(contents);
+    return xmlInfo.GetFilepath("ImageFilepath");
 }
 
 const QPixmap& Texture2DAssetFile::GetIcon() const

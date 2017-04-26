@@ -15,23 +15,14 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
                                      const QModelIndex &index) :
     File(model, index)
 {
-    XMLNode *xmlInfo;
-    xmlInfo = XMLParser::FromFile(m_path);
-    if (xmlInfo)
-    {
-        m_vshaderFilepath = xmlInfo->GetString("VertexShader");
-        m_fshaderFilepath = xmlInfo->GetString("FragmentShader");
-        m_textureFilepaths.PushBack( xmlInfo->GetFilepath("Texture") );
-        m_diffuseColor = xmlInfo->GetColor("DiffuseColor");
-        delete xmlInfo;
-    }
+    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    m_vshaderFilepath = xmlInfo.GetString("VertexShader");
+    m_fshaderFilepath = xmlInfo.GetString("FragmentShader");
+    m_textureFilepaths.PushBack( xmlInfo.GetFilepath("Texture") );
+    m_diffuseColor = xmlInfo.GetColor("DiffuseColor");
 
-    XMLNode *xmlMatInfo = XMLParser::FromFile( GetRelativePath() );
-    if (xmlMatInfo)
-    {
-        m_xmlInfo = *xmlMatInfo;
-        delete xmlMatInfo;
-    }
+    XMLNode xmlMatInfo = XMLParser::FromFile( GetRelativePath() );
+    m_xmlInfo = xmlMatInfo;
 }
 
 const QPixmap& MaterialAssetFile::GetIcon() const
