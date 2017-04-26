@@ -105,7 +105,9 @@ void IntComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)
 void IntComponentSlotSpinBox::SetInt(int a)
 {
     String str = String(a);
+    blockSignals(true);
     setText(str.ToQString());
+    blockSignals(false);
 }
 
 int IntComponentSlotSpinBox::GetInt() const

@@ -36,9 +36,7 @@ void AttrWidgetFloat::SetValue(float f)
 {
     if (!_editing)
     {
-        blockSignals(true);
         m_lineEdit->SetFloat(f);
-        blockSignals(false);
     }
 }
 
@@ -111,7 +109,9 @@ void FloatComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)
 void FloatComponentSlotSpinBox::SetFloat(float f)
 {
     String str = String::ToString(f, 2);
+    blockSignals(true);
     setText( str.ToQString() );
+    blockSignals(false);
 }
 
 float FloatComponentSlotSpinBox::GetFloat() const
