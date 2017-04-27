@@ -21,6 +21,9 @@ public:
     float Length() const;
     float LengthSquared() const;
 
+    Vector3 ProjectedOnPlane(const Vector3& planeNormal,
+                             const Vector3& planePoint) const;
+
     /**
      * @brief Normalizes this Vector
      */

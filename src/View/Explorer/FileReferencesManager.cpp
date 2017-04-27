@@ -15,7 +15,7 @@
 
 FileReferencesManager::FileReferencesManager()
 {
-    m_timer.start(1000);
+    m_timer.start(5000);
     QObject::connect(&m_timer, SIGNAL(timeout()),
                      this, SLOT(CheckForMovedFiles()));
 }

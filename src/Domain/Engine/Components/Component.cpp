@@ -22,7 +22,8 @@ void Component::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
     Component *c = Object::SCast<Component>(clone);
-    c->m_enabled = m_enabled;
+    c->SetEnabled( IsEnabled(false) );
+    c->SetClosedInInspector( IsClosedInInspector() );
 }
 
 String Component::ToString() const

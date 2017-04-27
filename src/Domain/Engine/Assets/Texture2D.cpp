@@ -146,7 +146,8 @@ void Texture2D::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath, "jpg png bmp");
+    xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath,
+                         "jpg png bmp tga tiff gif bmp");
 
     int selectedIndex = GetFilterMode();
     if (GetFilterMode() == FilterMode::Nearest)        { selectedIndex = 0; }

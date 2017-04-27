@@ -45,6 +45,13 @@ float Vector3::LengthSquared() const
     return x*x + y*y + z*z;
 }
 
+Vector3 Vector3::ProjectedOnPlane(const Vector3 &planeNormal,
+                                  const Vector3 &planePoint) const
+{
+    Vector3 n = planeNormal.Normalized();
+    return (*this) - n * Vector3::Dot(n, *this - planePoint);
+}
+
 void Vector3::Normalize()
 {
     float l = Length();

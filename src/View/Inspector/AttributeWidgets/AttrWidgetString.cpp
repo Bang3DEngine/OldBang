@@ -34,10 +34,10 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         textWidget = m_textEdit;
     }
 
-    connect(m_lineEdit, SIGNAL(textChanged()),
-            p_inspectorWidget, SLOT(_OnSlotValueChanged()));
-    connect(m_textEdit, SIGNAL(textChanged()),
-            p_inspectorWidget, SLOT(_OnSlotValueChanged()));
+    connect(m_lineEdit, SIGNAL(textChanged(QString)),
+            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    connect(m_textEdit, SIGNAL(textChanged(QString)),
+            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
 
     m_layout.addWidget(textWidget);
 
@@ -48,16 +48,18 @@ void AttrWidgetString::SetValue(const String &value)
 {
     if (!m_editing)
     {
-        blockSignals(true);
         if (m_lineEdit)
         {
+            m_lineEdit->blockSignals(true);
             m_lineEdit->setText( value.ToQString() );
+            m_lineEdit->blockSignals(false);
         }
         else if (m_textEdit)
         {
+            m_textEdit->blockSignals(true);
             m_textEdit->setText( value.ToQString() );
+            m_textEdit->blockSignals(false);
         }
-        blockSignals(false);
     }
 }
 

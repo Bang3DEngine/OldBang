@@ -25,6 +25,11 @@ public:
 
     void InvertY();
 
+    Vector2 GetTopLeft() const;
+    Vector2 GetTopRight() const;
+    Vector2 GetBotLeft() const;
+    Vector2 GetBotRight() const;
+
     Vector2 GetMin() const;
     Vector2 GetMax() const;
 

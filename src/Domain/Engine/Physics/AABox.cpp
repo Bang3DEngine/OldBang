@@ -5,6 +5,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Camera.h"
 #include "Bang/Sphere.h"
+#include "Bang/Transform.h"
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -194,16 +195,22 @@ Array<Vector3> AABox::GetPoints() const
 
 Rect AABox::GetAABoundingScreenRect(Camera *cam) const
 {
+    Vector3 camPosition = cam->transform->GetPosition();
+    if ( Contains(camPosition) ) { return Rect::ScreenRect; }
     Array<Vector3> boxPoints = (*this).GetPoints();
-    List<Vector2> screenPoints;
 
-    // TODO: Treat properly points outside the screen
-    // (now we just return the full screen rect if 1 or more points are outside)
+    List<Vector2> screenPoints;
+    bool somePointInFront = false;
+    Vector3 camForward = cam->transform->GetForward();
     for (const Vector3 &p : boxPoints)
     {
+        somePointInFront = somePointInFront ||
+                           Vector3::Dot(p-camPosition, camForward) > 0;
+
         Vector2 screenP = cam->WorldToScreenNDCPoint(p);
         screenPoints.PushBack(screenP);
     }
+    if (!somePointInFront) { return Rect::Empty; }
 
     Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints);
     return boundingRect;

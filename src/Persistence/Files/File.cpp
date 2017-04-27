@@ -77,7 +77,7 @@ bool File::IsTexture2DAsset() const
 
 bool File::IsImageFile() const
 {
-    return  m_isFile && IsOfExtension("jpg jpeg png bmp tiff");
+    return  m_isFile && IsOfExtension("jpg jpeg png bmp tiff tga");
 }
 
 bool File::IsScene() const
@@ -93,7 +93,7 @@ bool File::IsMeshAsset() const
 bool File::IsMeshFile() const
 {
     return  m_isFile &&
-            IsOfExtension("obj fbx dae 3ds ply stl ase blend md2 md3 ");
+            IsOfExtension("obj mb fbx dae 3ds ply stl ase blend md2 md3");
 }
 
 bool File::IsMaterialAsset() const

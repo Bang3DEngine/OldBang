@@ -33,6 +33,26 @@ void Rect::InvertY()
     std::swap(m_miny, m_maxy);
 }
 
+Vector2 Rect::GetTopLeft() const
+{
+    return Vector2(m_minx, m_maxy);
+}
+
+Vector2 Rect::GetTopRight() const
+{
+    return Vector2(m_maxx, m_maxy);
+}
+
+Vector2 Rect::GetBotLeft() const
+{
+    return Vector2(m_minx, m_miny);
+}
+
+Vector2 Rect::GetBotRight() const
+{
+    return Vector2(m_maxx, m_miny);
+}
+
 Vector2 Rect::GetMin() const
 {
     return Vector2(m_minx, m_miny);
