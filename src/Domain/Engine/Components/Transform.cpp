@@ -3,7 +3,7 @@
 #include <sstream>
 #include <ostream>
 
-#include "Bang/Debug.h"
+#include "Bang/Math.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
@@ -123,7 +123,12 @@ void Transform::SetScale(float s)
 
 void Transform::SetScale(const Vector3 &v)
 {
-    SetLocalScale(1.0f / gameObject->parent->transform->GetScale() * v);
+    GameObject *p = gameObject->parent ;
+    Vector3 parentScale = p ? p->transform->GetScale() : Vector3::One;
+    parentScale.x = Math::Max(0.0001f, parentScale.x);
+    parentScale.y = Math::Max(0.0001f, parentScale.y);
+    parentScale.z = Math::Max(0.0001f, parentScale.z);
+    SetLocalScale(1.0f / parentScale * v);
 }
 
 void Transform::SetLocalScale(float s)

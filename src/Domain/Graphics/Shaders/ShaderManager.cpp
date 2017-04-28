@@ -11,8 +11,9 @@ ShaderManager::ShaderManager()
 
     #ifdef BANG_EDITOR
     FileTracker::TrackFilesWithExtension("glsl");
-    FileTracker::TrackFilesWithExtension("vert");
-    FileTracker::TrackFilesWithExtension("frag");
+    FileTracker::TrackFilesWithExtension("vert_g");
+    FileTracker::TrackFilesWithExtension("vert_pp");
+    FileTracker::TrackFilesWithExtension("frag_g");
     FileTracker::TrackFilesWithExtension("frag_pp");
     #endif
 

@@ -86,20 +86,28 @@ bool ShaderProgram::Link()
 
     if (m_type == Type::GBuffer)
     {
-        glBindFragDataLocation(m_idGL, 0, "B_GIn_NormalDepth");
-        glBindFragDataLocation(m_idGL, 1, "B_GIn_DiffColor");
-        glBindFragDataLocation(m_idGL, 2, "B_GIn_Misc");
-        glBindFragDataLocation(m_idGL, 3, "B_GIn_Color");
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetVertexInputBinding("B_In_NormalObject",   1);
+        SetVertexInputBinding("B_In_Uv",             2);
+        SetFragmentInputBinding("B_GIn_NormalDepth", 0);
+        SetFragmentInputBinding("B_GIn_DiffColor",   1);
+        SetFragmentInputBinding("B_GIn_Misc",        2);
+        SetFragmentInputBinding("B_GIn_Color",       3);
     }
     else if (m_type == Type::ScreenPass)
     {
-        glBindFragDataLocation(m_idGL, 0, "B_GIn_Color");
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetFragmentInputBinding("B_GIn_Color",       0);
     }
     else if (m_type == Type::SelectionFramebuffer)
     {
-        glBindFragDataLocation(m_idGL, 0, "fragColor");
-        glBindFragDataLocation(m_idGL, 1, "worldPosition");
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetVertexInputBinding("B_In_NormalObject",   1);
+        SetVertexInputBinding("B_In_Uv",             2);
+        SetFragmentInputBinding("fragColor",         0);
+        SetFragmentInputBinding( "worldPosition",    1);
     }
+
     glLinkProgram(m_idGL);
 
     GLint linked;
@@ -280,6 +288,20 @@ void ShaderProgram::SetFragmentShader(Shader *fragmentShader)
     if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
 
     Refresh();
+}
+
+void ShaderProgram::SetVertexInputBinding(const String &inputName, uint location)
+{
+    Bind();
+    glBindAttribLocation(m_idGL, location, inputName.ToCString());
+    UnBind();
+}
+
+void ShaderProgram::SetFragmentInputBinding(const String &inputName, uint location)
+{
+    Bind();
+    glBindFragDataLocation(m_idGL, location, inputName.ToCString());
+    UnBind();
 }
 
 ShaderProgram::Type ShaderProgram::GetType() const

@@ -62,6 +62,9 @@ public:
     void SetVertexShader(Shader *vertexShader);
     void SetFragmentShader(Shader *fragmentShader);
 
+    void SetVertexInputBinding(const String& inputName, uint location);
+    void SetFragmentInputBinding(const String& inputName, uint location);
+
     Type GetType() const;
 
     Shader* GetVertexShader() const;
