@@ -1,5 +1,5 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          FragmentShader:File="./Shaders/UI/SP_UIImage.frag"{FileExtension="frag",IsEngineFile}
-          VertexShader:File="./Shaders/SP_ScreenPass.vert"{FileExtension="vert",IsEngineFile}
+          FragmentShader:File="./Shaders/UI/SP_UIImage.frag_pp"{FileExtension="frag",IsEngineFile}
+          VertexShader:File="./Shaders/SP_ScreenPass.vert_pp"{FileExtension="vert",IsEngineFile}
          >
 </Material>

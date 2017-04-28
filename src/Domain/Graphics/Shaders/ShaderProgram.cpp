@@ -15,15 +15,37 @@ ShaderProgram::ShaderProgram()
     m_idGL = glCreateProgram();
 }
 
-ShaderProgram::ShaderProgram(const String &vshaderPath,
+ShaderProgram::ShaderProgram(const String &vshaderPath, const String &fshaderPath)
+{
+    String fShaderExt = IO::GetFileExtensionComplete(fshaderPath);
+    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
+    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::ScreenPass; }
+    else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
+    else { m_type = Type::Other; }
+
+    Init(m_type, vshaderPath, fshaderPath);
+}
+
+ShaderProgram::ShaderProgram(Type type,
+                             const String &vshaderPath,
                              const String &fshaderPath) : ShaderProgram()
 {
+    Init(type, vshaderPath, fshaderPath);
+}
+
+void ShaderProgram::Init(ShaderProgram::Type type,
+                         const String &vshaderPath,
+                         const String &fshaderPath)
+{
+    m_type = type;
+
     Shader *vs = ShaderManager::Load(Shader::Type::Vertex, vshaderPath);
     SetVertexShader(vs);
 
     Shader *fs = ShaderManager::Load(Shader::Type::Fragment, fshaderPath);
     SetFragmentShader(fs);
 }
+
 
 ShaderProgram::~ShaderProgram()
 {
@@ -61,6 +83,23 @@ bool ShaderProgram::Link()
 
     glAttachShader(m_idGL, p_vshader->GetGLId());
     glAttachShader(m_idGL, p_fshader->GetGLId());
+
+    if (m_type == Type::GBuffer)
+    {
+        glBindFragDataLocation(m_idGL, 0, "B_GIn_NormalDepth");
+        glBindFragDataLocation(m_idGL, 1, "B_GIn_DiffColor");
+        glBindFragDataLocation(m_idGL, 2, "B_GIn_Misc");
+        glBindFragDataLocation(m_idGL, 3, "B_GIn_Color");
+    }
+    else if (m_type == Type::ScreenPass)
+    {
+        glBindFragDataLocation(m_idGL, 0, "B_GIn_Color");
+    }
+    else if (m_type == Type::SelectionFramebuffer)
+    {
+        glBindFragDataLocation(m_idGL, 0, "fragColor");
+        glBindFragDataLocation(m_idGL, 1, "worldPosition");
+    }
     glLinkProgram(m_idGL);
 
     GLint linked;
@@ -205,6 +244,12 @@ void ShaderProgram::Refresh()
     Link();
 }
 
+void ShaderProgram::SetType(ShaderProgram::Type type)
+{
+    m_type = type;
+    Refresh();
+}
+
 void ShaderProgram::SetVertexShader(Shader *vertexShader)
 {
     if (vertexShader->GetType() != Shader::Type::Vertex)
@@ -235,6 +280,11 @@ void ShaderProgram::SetFragmentShader(Shader *fragmentShader)
     if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
 
     Refresh();
+}
+
+ShaderProgram::Type ShaderProgram::GetType() const
+{
+    return m_type;
 }
 
 Shader *ShaderProgram::GetVertexShader() const

@@ -1,7 +1,7 @@
 <Material DiffuseColor:Color="(1, 0, 1, 1)"{}
           Shininess:Float="60"{}
           ReceivesLighting:Bool="True"{}
-          VertexShader:File="./Shaders/G_Default.vert"{FileExtension="vert",IsEngineFile}
-          FragmentShader:File="./Shaders/G_Missing.frag"{FileExtension="frag",IsEngineFile}
+          VertexShader:File="./Shaders/G_Default.vert_g"{FileExtension="vert",IsEngineFile}
+          FragmentShader:File="./Shaders/G_Missing.frag_g"{FileExtension="frag",IsEngineFile}
          >
 </Material>

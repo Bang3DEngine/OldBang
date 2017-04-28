@@ -1,4 +1,4 @@
-#include "G.frag"
+#include "G.frag_g"
 
 void Main()
 {

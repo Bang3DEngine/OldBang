@@ -10,7 +10,7 @@ PostProcessEffect::PostProcessEffect()
 {
     m_shaderProgram = new ShaderProgram();
 
-    String vShaderPath = IO::ToAbsolute("Shaders/SP_ScreenPass.vert", true);
+    String vShaderPath = IO::ToAbsolute("Shaders/SP_ScreenPass.vert_pp", true);
     Shader *vShader = ShaderManager::Load(Shader::Type::Vertex, vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }

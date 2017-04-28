@@ -1,4 +1,4 @@
-#include "SP.frag"
+#include "SP.frag_pp"
 
 uniform vec4 B_tint;
 
