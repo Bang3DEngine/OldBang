@@ -21,13 +21,13 @@ public:
 
     virtual AABox GetAABBox() const override;
 
-    virtual const Mesh* GetMesh();
+    virtual Mesh* GetMesh() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    mutable Mesh *m_mesh = nullptr;
+    mutable Mesh *p_mesh = nullptr;
 
     virtual void RenderWithoutMaterial() const override;
 };

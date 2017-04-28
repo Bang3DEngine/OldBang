@@ -5,7 +5,7 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
-#include "Bang/Renderer.h"
+#include "Bang/MeshRenderer.h"
 
 class Mesh;
 class XMLNode;
@@ -19,21 +19,24 @@ class LineRenderer : public Renderer
 public:
     virtual ~LineRenderer();
 
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    const Array<Vector3>& GetPoints() const;
+    virtual void SetPoint(int i, const Vector3& point);
+    virtual void SetPoints(const Array<Vector3>& points);
     virtual AABox GetAABBox() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    Array<Vector3> m_points;
-
     LineRenderer();
 
-    virtual void RefreshPoints();
     virtual void RenderWithoutMaterial() const override;
 
 private:
-    Mesh *m_linesMesh = nullptr;
+    MeshRenderer  *m_meshRenderer = nullptr;
+    Array<Vector3> m_points;
 };
 
 #endif // LINERENDERER_H

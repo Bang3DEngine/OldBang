@@ -72,19 +72,35 @@ public:
     Vector3 TransformDirection(const Vector3 &dir) const;
 
     /**
-     * @brief Transforms the direction from world space to local space.
+     * @brief Transforms the vector from world space to local space.
      * @return
      */
     Vector3 InverseTransformDirection(const Vector3 &dir) const;
 
+    /**
+     * @brief Transforms the vector from local space to world space.
+     * @return
+     */
+    Vector3 TransformVector(const Vector3 &vector) const;
+
+    /**
+     * @brief Transforms the vector from world space to local space.
+     * @return
+     */
+    Vector3 InverseTransformVector(const Vector3 &vector) const;
+
     Vector3 ParentToLocalPoint(const Vector3 &point) const;
+    Vector3 ParentToLocalVector(const Vector3 &vector) const;
     Vector3 ParentToLocalDirection(const Vector3 &dir) const;
     Vector3 LocalToParentPoint(const Vector3 &point) const;
+    Vector3 LocalToParentVector(const Vector3 &vector) const;
     Vector3 LocalToParentDirection(const Vector3 &dir) const;
 
     Vector3 LocalToWorldPoint(const Vector3 &point) const;
+    Vector3 LocalToWorldVector(const Vector3 &vector) const;
     Vector3 LocalToWorldDirection(const Vector3 &dir) const;
     Vector3 WorldToLocalPoint(const Vector3 &point) const;
+    Vector3 WorldToLocalVector(const Vector3 &vector) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
 

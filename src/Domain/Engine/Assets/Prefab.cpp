@@ -70,6 +70,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 
         GameObject *go = new GameObject();
         go->Read(xmlInfo);
+        go->SetEnabled(true);
         return go;
     }
     return nullptr;

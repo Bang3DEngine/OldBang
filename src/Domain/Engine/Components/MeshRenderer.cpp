@@ -22,28 +22,28 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
     MeshRenderer *mr = Object::SCast<MeshRenderer>(clone);
-    mr->SetMesh(m_mesh);
+    mr->SetMesh( GetMesh() );
 }
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
-    m_mesh = m;
+    p_mesh = m;
 }
 
 AABox MeshRenderer::GetAABBox() const
 {
-    return m_mesh ? m_mesh->GetAABBox() : AABox::Empty;
+    return p_mesh ? p_mesh->GetAABBox() : AABox::Empty;
 }
 
-const Mesh *MeshRenderer::GetMesh()
+Mesh *MeshRenderer::GetMesh() const
 {
-    return m_mesh;
+    return p_mesh;
 }
 
 void MeshRenderer::RenderWithoutMaterial() const
 {
-    ENSURE(m_mesh);
-    GL::Render(m_mesh->GetVAO(), GetRenderMode(), m_mesh->GetVertexCount());
+    ENSURE(p_mesh);
+    GL::Render(p_mesh->GetVAO(), GetRenderMode(), p_mesh->GetVertexCount());
 }
 
 void MeshRenderer::Read(const XMLNode &xmlInfo)
@@ -63,6 +63,6 @@ void MeshRenderer::Write(XMLNode *xmlInfo) const
     {
         xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
     }
-    xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "",
+    xmlInfo->SetFilepath("Mesh", GetMesh() ? GetMesh()->GetFilepath() : "",
                          Mesh::GetFileExtensionStatic());
 }

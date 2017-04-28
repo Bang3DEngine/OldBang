@@ -184,10 +184,9 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
             File f = explorer->GetSelectedFile();
             if (f.IsPrefabAsset())
             {
-                Prefab *prefab = new Prefab();
-                prefab->ReadFromFile(f.GetAbsolutePath());
-                m_gameObjectBeingDragged = prefab->InstantiateWithoutStarting();
-                delete prefab;
+                Prefab prefab;
+                prefab.ReadFromFile(f.GetAbsolutePath());
+                m_gameObjectBeingDragged = prefab.InstantiateWithoutStarting();
             }
         }
     }

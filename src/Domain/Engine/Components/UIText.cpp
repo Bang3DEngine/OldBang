@@ -34,7 +34,7 @@ UIText::UIText() : UIRenderer()
 
 UIText::~UIText()
 {
-    if (m_mesh) { delete m_mesh; }
+    if (p_mesh) { delete p_mesh; }
 }
 
 Rect UIText::GetCharRect(char c) const
@@ -80,7 +80,7 @@ float UIText::GetCharAdvance(char current, char next) const
 
 void UIText::FillQuadsMeshPositions()
 {
-    if (!m_font) { m_mesh->LoadPositions({}); return; }
+    if (!m_font) { p_mesh->LoadPositions({}); return; }
 
     Array<Vector3> quadPos;
 
@@ -120,12 +120,12 @@ void UIText::FillQuadsMeshPositions()
         pos = Vector3(pos2, pos.z);
     }
 
-    m_mesh->LoadPositions(quadPos);
+    p_mesh->LoadPositions(quadPos);
 }
 
 void UIText::FillQuadsMeshUvs()
 {
-    if (!m_font) { m_mesh->LoadUvs({}); return; }
+    if (!m_font) { p_mesh->LoadUvs({}); return; }
 
     Array<Vector2> quadUvs;
 
@@ -139,14 +139,14 @@ void UIText::FillQuadsMeshUvs()
         quadUvs.PushBack( Vector2(minUv.x, minUv.y) );
     }
 
-    m_mesh->LoadUvs(quadUvs);
+    p_mesh->LoadUvs(quadUvs);
 }
 
 void UIText::RefreshMesh()
 {
     FillQuadsMeshPositions();
     FillQuadsMeshUvs();
-    SetMesh(m_mesh);
+    SetMesh(p_mesh);
 }
 
 void UIText::ApplyAlignmentOffset(const Vector2& contentSize,

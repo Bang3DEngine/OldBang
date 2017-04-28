@@ -14,10 +14,10 @@ CircleCulledRenderer::CircleCulledRenderer()
 void CircleCulledRenderer::OnUpdate()
 {
     LineRenderer::OnUpdate();
-    RefreshPoints();
+    ReloadPoints();
 }
 
-void CircleCulledRenderer::RefreshPoints()
+void CircleCulledRenderer::ReloadPoints()
 {
     const float radius = GetRadius();
     const int segments = 64;
@@ -29,7 +29,7 @@ void CircleCulledRenderer::RefreshPoints()
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     const Vector3 camPos = cam->transform->GetPosition();
 
-    m_points.Clear();
+    Array<Vector3> points;
     const float step = (2.0f * Math::PI) / segments;
     for (int i = 0;  i < segments; ++i)
     {
@@ -40,12 +40,11 @@ void CircleCulledRenderer::RefreshPoints()
         if (dot >= -0.1)
         {
             Vector3 pLocalNext = GetCircleLocalPoint(step * (i+1)) * radius;
-            m_points.PushBack(pLocal);
-            m_points.PushBack(pLocalNext);
+            points.PushBack(pLocal);
+            points.PushBack(pLocalNext);
         }
     }
-
-    LineRenderer::RefreshPoints();
+    SetPoints(points);
 }
 
 void CircleCulledRenderer::GetTwoClosestPointsInScreenSpace(
@@ -57,10 +56,11 @@ void CircleCulledRenderer::GetTwoClosestPointsInScreenSpace(
     transform->GetLocalToWorldMatrix(&localToWorld);
 
     float d0, d1; d0 = d1 = 99999.9f;
-    Vector3 latestPoint = m_points[0];
-    for (int i = 0; i < m_points.Size() - 1; ++i)
+    const Array<Vector3>& points = GetPoints();
+    Vector3 latestPoint = points[0];
+    for (int i = 0; i < points.Size() - 1; ++i)
     {
-        Vector3 pLocal = m_points[i];
+        Vector3 pLocal = points[i];
         if (latestPoint == pLocal) { continue; }
 
         Vector3 worldP = (localToWorld * Vector4(pLocal,1)).xyz();

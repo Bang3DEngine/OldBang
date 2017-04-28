@@ -9,24 +9,54 @@
 
 LineRenderer::LineRenderer()
 {
-    m_linesMesh = new Mesh();
+    m_meshRenderer = new MeshRenderer();
+    m_meshRenderer->SetMesh( new Mesh() );
     SetRenderMode(GL::RenderMode::Lines);
-}
-
-void LineRenderer::RefreshPoints()
-{
-    m_linesMesh->LoadPositions(m_points);
-}
-
-void LineRenderer::RenderWithoutMaterial() const
-{
-    GL::Render(m_linesMesh->GetVAO(), GetRenderMode(),
-               m_linesMesh->GetVertexCount());
 }
 
 LineRenderer::~LineRenderer()
 {
-    if (m_linesMesh) { delete m_linesMesh; }
+    delete m_meshRenderer->GetMesh();
+    delete m_meshRenderer;
+}
+
+void LineRenderer::CloneInto(ICloneable *clone) const
+{
+    Renderer::CloneInto(clone);
+    LineRenderer *lr = Object::SCast<LineRenderer>(clone);
+    lr->SetPoints( GetPoints() );
+}
+
+const Array<Vector3> &LineRenderer::GetPoints() const
+{
+    return m_points;
+}
+
+void LineRenderer::SetPoint(int i, const Vector3 &point)
+{
+    if (i >= m_points.Size())
+    {
+        if (i == m_points.Size()) { m_points.PushBack(point); }
+        else { return; }
+    }
+    else
+    {
+        m_points[i] = point;
+    }
+    SetPoints(m_points);
+}
+
+void LineRenderer::SetPoints(const Array<Vector3> &points)
+{
+    m_points = points;
+    m_meshRenderer->GetMesh()->LoadPositions(m_points);
+}
+
+void LineRenderer::RenderWithoutMaterial() const
+{
+    Mesh *mesh = m_meshRenderer->GetMesh();
+    ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);
+    GL::Render(mesh->GetVAO(), GetRenderMode(), mesh->GetVertexCount());
 }
 
 AABox LineRenderer::GetAABBox() const

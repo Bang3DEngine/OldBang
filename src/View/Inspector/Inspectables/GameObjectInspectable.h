@@ -44,6 +44,8 @@ public:
 
     virtual List<IInspectable*> GetNewInspectablesToShow() override
     {
+        if (!GetGameObject()) { return List<IInspectable*>(); }
+
         List<IInspectable*> componentsInspectables;
         for (Component *comp : GetGameObject()->GetComponents())
         {
@@ -56,8 +58,7 @@ public:
 protected:
     Inspectable() {}
 
-private:
-    GameObject *GetGameObject() const
+    virtual GameObject *GetGameObject() const
     {
         return Object::SCast<GameObject>( GetRelatedSerializableObject() );
     }

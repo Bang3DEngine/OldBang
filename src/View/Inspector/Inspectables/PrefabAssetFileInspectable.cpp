@@ -19,14 +19,17 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
 {
     Prefab prefab;
     prefab.ReadFromFile(f.GetAbsolutePath());
-    m_prefabTempGameObject = prefab.InstantiateWithoutStarting();
+    SetRelatedSerializableObject( prefab.InstantiateWithoutStarting() );
 
-    SetRelatedSerializableObject(m_prefabTempGameObject);
+    GameObject *go = Object::SCast<GameObject>(GetRelatedSerializableObject());
+    go->SetName( f.GetName() );
+    go->SetEnabled(true);
+    OnInspectorSlotChanged(nullptr);
 }
 
 PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
 {
-    if (m_prefabTempGameObject) { delete m_prefabTempGameObject; }
+    OnInspectorSlotChanged(nullptr); // Update the file
 }
 
 void PrefabAssetFileInspectable::CloneInto(ICloneable *clone) const
@@ -35,21 +38,13 @@ void PrefabAssetFileInspectable::CloneInto(ICloneable *clone) const
     PrefabAssetFileInspectable *pfinsp =
                         Object::SCast<PrefabAssetFileInspectable>(clone);
     pfinsp->m_file = m_file;
-    pfinsp->m_prefabTempGameObject = new GameObject();
-    m_prefabTempGameObject->CloneInto(pfinsp->m_prefabTempGameObject);
 }
 
 void PrefabAssetFileInspectable::OnInspectorSlotChanged(
                                              InspectorWidget *inspectorWidget)
 {
     AssetsManager::UpdateAsset(m_file.GetAbsolutePath(),
-                               m_prefabTempGameObject->GetXMLInfo());
+                               GetRelatedSerializableObject()->GetXMLInfo());
 }
-
-GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
-{
-    return m_prefabTempGameObject;
-}
-
 
 

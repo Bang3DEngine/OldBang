@@ -22,7 +22,7 @@ public:
 
     void SetRelatedSerializableObject(SerializableObject* serializableObject);
 
-    SerializableObject *GetRelatedSerializableObject() const;
+    virtual SerializableObject *GetRelatedSerializableObject() const;
 
 protected:
     IInspectable();

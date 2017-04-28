@@ -103,7 +103,7 @@ void EditorRotateAxis::OnEditorUpdate()
             Vector3 parentAxisDir;
             if (EditorState::IsUsingGlobalCoords())
             {
-                parentAxisDir = ago->parent->transform->WorldToLocalDirection(
+                parentAxisDir = ago->parent->transform->WorldToLocalVector(
                                                             m_oAxisDirection);
             }
             else

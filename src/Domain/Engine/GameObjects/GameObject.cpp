@@ -375,7 +375,7 @@ GameObject *GameObject::GetChild(const String &name) const
 
 void GameObject::SetName(const String &name)
 {
-    this->m_name = name;
+    m_name = name;
     #ifdef BANG_EDITOR
     Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
     #endif

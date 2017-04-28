@@ -5,11 +5,7 @@
 
 SingleLineRenderer::SingleLineRenderer()
 {
-    m_points.Resize(2);
-    SetOrigin(Vector3::Zero);
-    SetDestiny(Vector3::One);
-    RefreshPoints();
-
+    SetPoints( {Vector3::Zero, Vector3::One} );
     SetRenderMode(GL::RenderMode::Lines);
 }
 
@@ -27,24 +23,24 @@ void SingleLineRenderer::CloneInto(ICloneable *clone) const
 
 void SingleLineRenderer::SetOrigin(const Vector3 &o)
 {
-    m_points[0] = o;
-    RefreshPoints();
+    SetPoint(0, o);
 }
 
 void SingleLineRenderer::SetDestiny(const Vector3 &d)
 {
-    m_points[1] = d;
-    RefreshPoints();
+    SetPoint(1, d);
 }
 
 Vector3 SingleLineRenderer::GetOrigin() const
 {
-    return m_points[0];
+    const Array<Vector3>& points = GetPoints();
+    return points.Front();
 }
 
 Vector3 SingleLineRenderer::GetDestiny() const
 {
-    return m_points[1];
+    const Array<Vector3>& points = GetPoints();
+    return points.Back();
 }
 
 void SingleLineRenderer::Read(const XMLNode &xmlInfo)

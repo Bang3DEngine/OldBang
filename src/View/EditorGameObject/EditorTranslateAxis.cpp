@@ -83,12 +83,12 @@ void EditorTranslateAxis::OnEditorUpdate()
                 if (ago->parent)
                 {
                     parentAxisDir = ago->parent->transform->
-                            WorldToLocalDirection(m_oAxisDirection);
+                            WorldToLocalVector(m_oAxisDirection);
                 }
             }
             else
             {
-                wAxisDir = ago->transform->LocalToWorldDirection(m_oAxisDirection);
+                wAxisDir = ago->transform->LocalToWorldVector(m_oAxisDirection);
                 parentAxisDir = ago->transform->LocalToParentDirection(m_oAxisDirection);
             }
             wAxisDir.Normalize();

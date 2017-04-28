@@ -16,14 +16,9 @@ EditorFloor::EditorFloor()
                                   "Materials/G_DefaultNoSP.bmat", true));
     m_material->SetDiffuseColor(Color::White * 0.7f);
 
-    const int GridSize2 = 2 * (c_gridSize + 1);
-    m_lineRenderers.Resize(GridSize2);
-    for (int i = 0; i < GridSize2; ++i)
-    {
-        m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
-        m_lineRenderers[i]->SetMaterial(m_material);
-        //m_lineRenderers[i]->SetEnabled(false);
-    }
+    m_lineRenderer = AddComponent<LineRenderer>();
+    m_lineRenderer->SetEnabled(false);
+    m_lineRenderer->SetMaterial(m_material);
 
     GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
@@ -45,31 +40,28 @@ void EditorFloor::OnEditorUpdate()
     int indexOffsetX = int(camt->GetPosition().x / c_tileSize);
     int indexOffsetZ = int(camt->GetPosition().z / c_tileSize);
 
+    Array<Vector3> points;
     for (int i = 0; i <= c_gridSize; ++i)
     {
-        SingleLineRenderer *lr = m_lineRenderers[i];
-
         int j = i - c_gridSize / 2;   // [ -GridSize/2, GridSize/2 ]
         j += indexOffsetX;
 
         Vector3 center = Vector3(c_tileSize * j, 0, c_tileSize * indexOffsetZ);
-
-        lr->SetOrigin ( Vector3(0, 0, -LineSize2) + center );
-        lr->SetDestiny( Vector3(0, 0,  LineSize2) + center );
+        points.Add( Vector3(0, 0, -LineSize2) + center );
+        points.Add( Vector3(0, 0,  LineSize2) + center );
     }
 
     for (int i = 0; i <= c_gridSize; ++i)
     {
-        SingleLineRenderer *lr = m_lineRenderers[i + c_gridSize + 1];
-
         int j = i - c_gridSize / 2;   // [ -GridSize/2, GridSize/2 ]
         j += indexOffsetZ;
 
         Vector3 center = Vector3(c_tileSize * indexOffsetX, 0, c_tileSize * j);
-
-        lr->SetOrigin ( Vector3(-LineSize2, 0, 0) + center );
-        lr->SetDestiny( Vector3( LineSize2, 0, 0) + center );
+        points.Add( Vector3(-LineSize2, 0, 0) + center );
+        points.Add( Vector3( LineSize2, 0, 0) + center );
     }
+
+    m_lineRenderer->SetPoints(points);
 }
 
 #include "Bang/Hierarchy.h"

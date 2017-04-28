@@ -24,6 +24,9 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         m_lineEdit->setAlignment(Qt::AlignLeft);
         m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         textWidget = m_lineEdit;
+
+        connect(m_lineEdit, SIGNAL(textChanged(QString)),
+                p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
     }
     else
     {
@@ -32,12 +35,10 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         m_textEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         m_heightSizeHint = 550;
         textWidget = m_textEdit;
-    }
 
-    connect(m_lineEdit, SIGNAL(textChanged(QString)),
-            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
-    connect(m_textEdit, SIGNAL(textChanged(QString)),
-            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        connect(m_textEdit, SIGNAL(textChanged(QString)),
+                p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    }
 
     m_layout.addWidget(textWidget);
 

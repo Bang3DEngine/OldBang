@@ -16,7 +16,7 @@ public:
             Vector2 *p1, int *i1 ) const;
 
 protected:
-    virtual void RefreshPoints() override;
+    virtual void ReloadPoints();
     Vector3 GetCircleLocalPoint(float angle) const;
 };
 

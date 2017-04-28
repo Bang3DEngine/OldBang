@@ -2,10 +2,9 @@
 #define EDITORFLOOR_H
 
 #include "Bang/Array.h"
-
 #include "Bang/GameObject.h"
 
-class SingleLineRenderer;
+class LineRenderer;
 class EditorFloor : public GameObject
 {
 public:
@@ -13,7 +12,7 @@ public:
     const float c_tileSize = 15.0f;
     const int c_gridSize = 30;     // Number of lines
 
-    Array<SingleLineRenderer*> m_lineRenderers;
+    LineRenderer* m_lineRenderer = nullptr;
 
     EditorFloor();
     virtual ~EditorFloor();

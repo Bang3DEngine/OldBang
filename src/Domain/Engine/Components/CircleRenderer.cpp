@@ -26,31 +26,31 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
     cr->SetSegments(GetSegments());
 }
 
-void CircleRenderer::RefreshPoints()
+void CircleRenderer::ReloadPoints()
 {
-    m_points.Resize(m_segments);
+    Array<Vector3> points;
+    points.Resize(m_segments);
     const float step = (2.0f * Math::PI) / (m_segments - 1);
     for (int i = 0; i < m_segments; ++i)
     {
-        m_points[i] = Vector3(Math::Cos(step*i),
-                              Math::Sin(step*i),
-                              0.0f) * m_radius;
+        points[i] = Vector3(Math::Cos(step*i),
+                            Math::Sin(step*i),
+                            0.0f) * m_radius;
     }
-
-    LineRenderer::RefreshPoints();
+    SetPoints(points);
 }
 
 
 void CircleRenderer::SetRadius(float radius)
 {
     m_radius = radius;
-    RefreshPoints();
+    ReloadPoints();
 }
 
 void CircleRenderer::SetSegments(int segments)
 {
     m_segments = segments;
-    RefreshPoints();
+    ReloadPoints();
 }
 
 float CircleRenderer::GetRadius() const

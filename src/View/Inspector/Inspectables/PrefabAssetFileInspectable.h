@@ -23,11 +23,8 @@ public:
 
     void OnInspectorSlotChanged(InspectorWidget *InspectorWidget) override;
 
-    GameObject *GetPrefabTempGameObject() const;
-
 private:
     File m_file;
-    GameObject *m_prefabTempGameObject = nullptr;
 };
 
 #endif // PREFABASSETFILEINSPECTABLE_H

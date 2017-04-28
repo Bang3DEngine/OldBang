@@ -43,13 +43,13 @@ public:
     void Render(Renderer *rend);
 
 private:
-    Mesh *m_boxMesh = nullptr;
-    Mesh *m_sphereMesh = nullptr;
-    Mesh *m_planeMesh = nullptr;
+    Mesh *m_boxMesh      = nullptr;
+    Mesh *m_sphereMesh   = nullptr;
+    Mesh *m_planeMesh    = nullptr;
     Material *m_material = nullptr;
 
-    bool m_inited = false;
-    bool m_resetAllowed = true;
+    bool m_inited        = false;
+    bool m_resetAllowed  = true;
 
     bool IsGizmoRenderer(Renderer *rend);
 

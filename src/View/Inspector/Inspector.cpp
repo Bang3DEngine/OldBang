@@ -60,7 +60,10 @@ bool Inspector::Refresh(SerializableObject *serialObject)
 {
     bool update = m_currentInspectable &&
         (m_currentInspectable->GetRelatedSerializableObject() == serialObject);
-    if (update) { Refresh(); }
+    if (update)
+    {
+        Refresh();
+    }
     return update;
 }
 
