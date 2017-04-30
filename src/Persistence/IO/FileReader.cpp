@@ -10,29 +10,28 @@
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 
-int FileReader::GetMeshNumTriangles(const String &filepath)
+int FileReader::GetModelNumTriangles(const Path &filepath)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filepath.ToCString(),
+    const aiScene* scene = importer.ReadFile(filepath.GetAbsolute().ToCString(),
           aiProcess_Triangulate            |
-          aiProcess_JoinIdenticalVertices  |
-          aiProcess_SortByPType);
+          aiProcess_JoinIdenticalVertices);
     if (scene && scene->HasMeshes()) { return scene->mMeshes[0]->mNumFaces; }
     return 0;
 }
 
 Vector3 AIVectorToVec3(const aiVector3D &v) { return Vector3(v.x, v.y, v.z); }
 
-bool FileReader::ReadMesh(const String& filepath,
-                          Array<Vector3> *vertexPos,
-                          Array<Vector3> *vertexNormals,
-                          Array<Vector2> *vertexUvs)
+bool FileReader::ReadModel(const Path& filepath,
+                           Array<Vector3> *vertexPos,
+                           Array<Vector3> *vertexNormals,
+                           Array<Vector2> *vertexUvs)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(filepath.ToCString(),
+    const aiScene* scene = importer.ReadFile(filepath.GetAbsolute().ToCString(),
           aiProcess_Triangulate            |
           aiProcess_JoinIdenticalVertices  |
-          aiProcess_SortByPType);
+          aiProcess_GenSmoothNormals);
 
     bool ok = false;
     if (scene)

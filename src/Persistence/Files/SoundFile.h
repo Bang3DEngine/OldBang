@@ -2,8 +2,6 @@
 #define SOUNDFILE_H
 
 #include <QPixmap>
-#include <QModelIndex>
-#include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
@@ -16,7 +14,7 @@ class SoundFile : public File,
 {
 public:
     SoundFile();
-    SoundFile(const QFileSystemModel *model, const QModelIndex &index);
+    SoundFile(const Path& path);
     virtual ~SoundFile();
 
     virtual const QPixmap& GetIcon() const override;

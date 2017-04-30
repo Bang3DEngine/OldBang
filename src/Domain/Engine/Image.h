@@ -4,6 +4,7 @@
 #include <QImage>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
@@ -24,8 +25,8 @@ public:
     uint GetHeight() const;
     Vector2 GetSize() const;
 
-    void SaveToFile(const String &filepath) const;
-    static Image FromFile(const String &filepath);
+    void SaveToFile(const Path &filepath) const;
+    static Image FromFile(const Path &filepath);
     static Image FromQImage(const QImage &qImage);
 
 private:

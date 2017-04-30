@@ -26,11 +26,11 @@ String Font::GetFileExtension() const
     return Font::GetFileExtensionStatic();
 }
 
-void Font::LoadFromTTF(const String &m_filepath)
+void Font::LoadFromTTF(const Path &filepath)
 {
     Free();
     FontSheetCreator::LoadAtlasTexture(
-                m_filepath,
+                filepath,
                 Font::c_charLoadSize,
                 &m_atlasTexture,
                 &m_charUvsInAtlas,
@@ -42,7 +42,7 @@ void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
     m_fontFilepath = xmlInfo.GetFilepath("FontFilepath");
-    LoadFromTTF(m_fontFilepath.GetAbsolute());
+    LoadFromTTF(m_fontFilepath);
 }
 
 void Font::Write(XMLNode *xmlInfo) const

@@ -20,7 +20,7 @@ public:
     static int GetGlyphIndex(FT_Face face, char c);
 
     static bool LoadAtlasTexture(
-                         const String &fontFilepath,
+                         const Path &fontFilepath,
                          int glyphSizePx,
                          Texture2D **resultTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,

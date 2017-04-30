@@ -27,8 +27,8 @@ public:
 
     bool IsScene() const;
 
-    bool IsMeshAsset() const;
     bool IsMeshFile() const;
+    bool IsModelFile() const;
 
     bool IsMaterialAsset() const;
     bool IsBehaviour() const;
@@ -38,9 +38,6 @@ public:
 
     bool IsPrefabAsset() const;
     bool IsShaderProgramAssetFile() const;
-
-    bool IsDir() const;
-    bool IsFile() const;
 
     static File *GetSpecificFile(const File &f);
     static bool Exists(const String &filepath);
@@ -63,9 +60,6 @@ public:
     virtual bool IsAsset() const;
 
 protected:
-    const QFileSystemModel *m_fileSystemModel = nullptr;
-    QModelIndex m_modelIndex;
-
     Path m_path;
 
     friend class FileSystemModel;

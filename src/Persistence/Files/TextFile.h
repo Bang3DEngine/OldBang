@@ -7,7 +7,7 @@ class TextFile : public File
 {
 public:
     TextFile();
-    TextFile(const QFileSystemModel *model, const QModelIndex &index);
+    TextFile(const Path& path);
 
     String GetContents() const;
 

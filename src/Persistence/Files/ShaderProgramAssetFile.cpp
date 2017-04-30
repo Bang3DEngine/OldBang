@@ -10,9 +10,8 @@ ShaderProgramAssetFile::ShaderProgramAssetFile()
 {
 }
 
-ShaderProgramAssetFile::ShaderProgramAssetFile(const QFileSystemModel *model,
-                                               const QModelIndex &index)
-    : File(model, index)
+ShaderProgramAssetFile::ShaderProgramAssetFile(const Path& path)
+    : File(path)
 {
 }
 

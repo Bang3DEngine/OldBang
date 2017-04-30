@@ -13,13 +13,13 @@ class Texture2D : public Texture, public Asset
 
 public:
     Texture2D();
-    Texture2D(const String &imageFilepath);
+    Texture2D(const Path &imageFilepath);
     virtual ~Texture2D();
 
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;
 
-    void LoadFromImage(const String &imageFilepath);
+    void LoadFromImage(const Path &imageFilepath);
     void LoadFromImage(const Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
@@ -30,7 +30,7 @@ public:
               int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 
-    Path GetImageFilepath() const;
+    const Path& GetImageFilepath() const;
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;

@@ -16,11 +16,6 @@ PrefabFile::PrefabFile()
 
 }
 
-PrefabFile::PrefabFile(const QFileSystemModel *model, const QModelIndex &index)
-    : PrefabFile( Path( String(model->filePath(index)) ) )
-{
-}
-
 PrefabFile::PrefabFile(const Path &path) : File(path)
 {
 }

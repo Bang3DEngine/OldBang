@@ -44,7 +44,7 @@ void AnonymousAudioPlayer::PlayAudioClip(const String &audioClipFilepath,
                                                     delay, false);
 }
 
-void AnonymousAudioPlayer::PlaySound(const String &soundFilepath,
+void AnonymousAudioPlayer::PlaySound(const String &soundFilepathStr,
                                      const Vector3 &position,
                                      float volume,
                                      bool looping,
@@ -54,15 +54,15 @@ void AnonymousAudioPlayer::PlaySound(const String &soundFilepath,
 {
     AnonymousAudioPlayer::ClearAnonymousAudioSourcesAndClips();
 
-    String absSoundFilepath = IO::ToAbsolute(soundFilepath, false);
-    if (!IO::ExistsFile(absSoundFilepath))
+    Path soundFilepath = GPATH(soundFilepathStr);
+    if (!soundFilepath.Exists())
     {
-        Debug_Warn("Sound '" << soundFilepath << "' could not be found");
+        Debug_Warn("Sound '" << soundFilepathStr << "' could not be found");
         return;
     }
 
     AudioClip *audioClip = new AudioClip();
-    audioClip->LoadFromFile(absSoundFilepath);
+    audioClip->LoadFromFile(soundFilepath);
     AudioSource *audioSource =
             AnonymousAudioPlayer::CreateAudioSource(position, volume, looping,
                                                     pitch, range);

@@ -13,20 +13,20 @@ Shader::Shader(Shader::Type t)
 {
 }
 
-Shader::Shader(Shader::Type t, const String &shaderPath) : Shader(t)
+Shader::Shader(Shader::Type t, const Path &shaderPath) : Shader(t)
 {
     LoadFromFile(shaderPath);
 }
 
-bool Shader::LoadFromFile(const String& filepath)
+bool Shader::LoadFromFile(const Path& filepath)
 {
-    if (!IO::ExistsFile(filepath))
+    if (!filepath.Exists())
     {
         Debug_Error("Shader '" << filepath << "' does not exist.");
         return false;
     }
 
-    m_filepath = Path(filepath);
+    m_filepath = filepath;
     m_sourceCode = IO::GetFileContents(m_filepath.GetAbsolute());
     ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
@@ -48,8 +48,8 @@ bool Shader::LoadFromFile(const String& filepath)
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         String errorStr(v.begin(), v.end());
-        Debug_Error("Failed to compile shader: '"  <<
-                    m_filepath.GetAbsolute()<< "': " << errorStr);
+        Debug_Error("Failed to compile shader: '"  << m_filepath
+                    << "': " << errorStr);
         glDeleteShader(m_idGL);
         return false;
     }
@@ -81,10 +81,10 @@ String Shader::ToString() const
 {
     if (m_type == Type::Vertex)
     {
-        return "Vertex Shader: '" + m_filepath.GetAbsolute() + "'";
+        return "Vertex Shader: '" + m_filepath + "'";
     }
     else
     {
-        return "Fragment Shader: '" + m_filepath.GetAbsolute() + "'";
+        return "Fragment Shader: '" + m_filepath + "'";
     }
 }

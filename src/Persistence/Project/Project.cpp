@@ -59,7 +59,7 @@ Path Project::GetProjectFileFilepath() const
 
 String Project::GetProjectName() const
 {
-    return m_projectRootFilepath.GetBaseName();
+    return m_projectRootFilepath.GetName();
 }
 
 String Project::GetProjectRandomId() const

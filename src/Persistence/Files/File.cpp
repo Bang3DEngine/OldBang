@@ -18,6 +18,7 @@
 #include "Bang/Material.h"
 #include "Bang/TextFile.h"
 #include "Bang/MeshFile.h"
+#include "Bang/ModelFile.h"
 #include "Bang/SoundFile.h"
 #include "Bang/AudioClip.h"
 #include "Bang/ImageFile.h"
@@ -38,19 +39,15 @@ File::File()
 
 
 File::File(const Path &filepath)
-#ifdef BANG_EDITOR
-    : File(Explorer::GetInstance()->GetFileSystemModel(),
-           Explorer::GetInstance()->GetModelIndexFromFilepath(filepath))
-#endif
 {
+    m_path = filepath;
 }
 
 File::File(const String &filepath) : File( Path(filepath) )
 {
 }
 
-File::File(const QFileSystemModel *model, const QModelIndex &index) :
-    m_fileSystemModel(model), m_modelIndex(index)
+File::File(const QFileSystemModel *model, const QModelIndex &index)
 {
     String pathStr(model->filePath(index).toStdString());
     m_path = GPATH(pathStr);
@@ -85,13 +82,13 @@ bool File::IsScene() const
            GetPath().HasExtension(Scene::GetFileExtensionStatic());
 }
 
-bool File::IsMeshAsset() const
+bool File::IsMeshFile() const
 {
     return  GetPath().IsFile() &&
             GetPath().HasExtension(Mesh::GetFileExtensionStatic());
 }
 
-bool File::IsMeshFile() const
+bool File::IsModelFile() const
 {
     return  GetPath().IsFile() &&
             GetPath().HasExtension({"obj", "mb", "fbx", "dae", "3ds", "ply",
@@ -134,62 +131,52 @@ bool File::IsShaderProgramAssetFile() const
            GetPath().HasExtension(ShaderProgram::GetFileExtensionStatic());
 }
 
-bool File::IsDir() const
-{
-    return GetPath().IsDir();
-}
-
-bool File::IsFile() const
-{
-    return GetPath().IsFile();
-}
-
 File *File::GetSpecificFile(const File &f)
 {
-    if (!f.IsFile()) { return nullptr; }
+    if (!f.GetPath().IsFile()) { return nullptr; }
 
     if (f.IsAudioClipAsset())
     {
-        return new AudioClipAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new AudioClipAssetFile( f.GetPath() );
     }
     else if (f.IsSound())
     {
-        return new SoundFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new SoundFile( f.GetPath() );
     }
     else if (f.IsTexture2DAsset())
     {
-        return new Texture2DAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new Texture2DAssetFile( f.GetPath() );
     }
     else if (f.IsImageFile())
     {
-        return new ImageFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new ImageFile( f.GetPath() );
     }
     else if (f.IsMaterialAsset())
     {
-        return new MaterialAssetFile(f.m_fileSystemModel, f.m_modelIndex);
-    }
-    else if (f.IsMeshAsset())
-    {
-        return new MeshAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new MaterialAssetFile( f.GetPath() );
     }
     else if (f.IsMeshFile())
     {
-        return new MeshFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new MeshFile( f.GetPath() );
+    }
+    else if (f.IsModelFile())
+    {
+        return new ModelFile( f.GetPath() );
     }
     else if (f.IsPrefabAsset())
     {
-        return new PrefabFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new PrefabFile( f.GetPath() );
     }
     else if (f.IsTextFile())
     {
-        return new TextFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new TextFile( f.GetPath() );
     }
     else if (f.IsShaderProgramAssetFile())
     {
-        return new ShaderProgramAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new ShaderProgramAssetFile( f.GetPath() );
     }
 
-    return new File(f.m_fileSystemModel, f.m_modelIndex);
+    return new File( f.GetPath() );
 }
 
 bool File::Exists(const String &filepath)
@@ -269,7 +256,7 @@ const QPixmap& File::GetIcon() const
 void File::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
-    xmlInfo->SetTagName( GetPath().GetBaseName() );
+    xmlInfo->SetTagName( GetPath().GetName() );
 }
 
 #ifdef BANG_EDITOR
@@ -282,6 +269,6 @@ IInspectable* File::GetNewInspectable()
 bool File::IsAsset() const
 {
     return IsFontAssetFile() || IsTexture2DAsset() || IsMaterialAsset() ||
-           IsMeshAsset() || IsAudioClipAsset() || IsPrefabAsset() ||
+           IsMeshFile() || IsAudioClipAsset() || IsPrefabAsset() ||
            IsBehaviour() || IsScene();
 }

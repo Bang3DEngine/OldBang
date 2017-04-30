@@ -10,8 +10,8 @@ SoundFile::SoundFile()
 {
 }
 
-SoundFile::SoundFile(const QFileSystemModel *model, const QModelIndex &index)
-    : File(model, index)
+SoundFile::SoundFile(const Path& path)
+    : File(path)
 {
 
 }
@@ -37,7 +37,7 @@ void SoundFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetPath().GetBaseNameExt(),
+    xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});
 
     SoundFile *noConstThis = const_cast<SoundFile*>(this);
@@ -62,7 +62,7 @@ void SoundFile::OnButtonClicked(const String &attrName)
     {
         m_tmpAudioSource = new AudioSource();
         m_tmpAudioClip = new AudioClip();
-        m_tmpAudioClip->LoadFromFile( GetPath().GetAbsolute() );
+        m_tmpAudioClip->LoadFromFile( GetPath() );
         m_tmpAudioSource->SetAudioClip(m_tmpAudioClip);
         m_tmpAudioSource->Play();
     }

@@ -1,2 +1,2 @@
-<Mesh MeshFilepath:File="Meshes/UIPlane.obj"{FileExtension="obj",IsEngineFile}>
+<Mesh ModelFilepath:File="Meshes/UIPlane.obj"{FileExtension="obj",IsEngineFile}>
 </Mesh>

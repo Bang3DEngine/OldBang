@@ -14,9 +14,8 @@ AudioClipAssetFile::AudioClipAssetFile()
 {
 }
 
-AudioClipAssetFile::AudioClipAssetFile(
-        const QFileSystemModel *model, const QModelIndex &index)
-    : File(model, index)
+AudioClipAssetFile::AudioClipAssetFile(const Path& path)
+    : File(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
     m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
@@ -89,7 +88,7 @@ void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
         AudioClip *audioClip = AssetsManager::Load<AudioClip>(GetPath());
         if (audioClip)
         {
-            if (!audioClip->LoadFromFile( GetPath().GetAbsolute() ))
+            if (!audioClip->LoadFromFile( GetPath() ))
             {
                 // If loading fails, set to audioFilepath to ""
                 SetSoundFilepath( Path() );

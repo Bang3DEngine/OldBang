@@ -1,6 +1,7 @@
 #include "Path.h"
 
 #include "Bang/IO.h"
+#include "Bang/Array.h"
 
 Path::Path()
 {
@@ -44,13 +45,18 @@ bool Path::Exists() const
     return IO::Exists( GetAbsolute() );
 }
 
-List<Path> Path::GetFiles(bool recursively)
+
+List<Path> Path::GetFiles(bool recursively, const List<String> &extensions)
 {
     List<Path> filePaths;
     List<String> filesList = IO::GetFiles(GetAbsolute(), recursively);
-    for (String &file : filesList)
+    for (const String &file : filesList)
     {
-        filePaths.Add( Path(file, m_absolutePrefix) );
+        Path filepath(file, m_absolutePrefix);
+        if (extensions.Empty() || filepath.HasExtension(extensions))
+        {
+            filePaths.Add( Path(file, m_absolutePrefix) );
+        }
     }
     return filePaths;
 }
@@ -66,16 +72,16 @@ List<Path> Path::GetSubDirectories(bool recursively)
     return dirPaths;
 }
 
-String Path::GetBaseName() const
+String Path::GetName() const
 {
     return IO::GetBaseName( GetRelative() );
 }
 
-String Path::GetBaseNameExt() const
+String Path::GetNameExt() const
 {
     String ext = GetExtension();
-    if (ext.Empty()) { return GetBaseName(); }
-    return GetBaseName() + "." + ext;
+    if (ext.Empty()) { return GetName(); }
+    return GetName() + "." + ext;
 }
 
 String Path::GetExtension() const
@@ -120,7 +126,7 @@ bool Path::HasExtension(const String &extensions) const
     return false;
 }
 
-bool Path::HasExtension(const Array<String> &extensions) const
+bool Path::HasExtension(const List<String> &extensions) const
 {
     String extension = GetExtension();
     for (const String& ext : extensions)

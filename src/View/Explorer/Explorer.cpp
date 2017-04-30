@@ -242,7 +242,7 @@ void Explorer::RefreshInspector()
 
     QModelIndex selectedIndex = selectedIndexes().front();
     File f(m_fileSystemModel, selectedIndex);
-    if (selectedIndex.isValid() && f.IsFile() && IO::Exists(f.GetPath().GetAbsolute()))
+    if (selectedIndex.isValid() && f.GetPath().IsFile() && f.GetPath().Exists())
     {
         Inspector::GetInstance()->Clear();
 

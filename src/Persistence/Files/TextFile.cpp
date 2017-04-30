@@ -9,8 +9,8 @@ TextFile::TextFile()
 {
 }
 
-TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
-    : File(model, index)
+TextFile::TextFile(const Path& path)
+    : File(path)
 {
     m_contents = IO::GetFileContents( GetPath().ToString() );
 }

@@ -111,7 +111,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
                                    XMLProperty::FileExtension.GetName()),
                                m_xmlAttribute.GetProperties());
 
-    String fileName = m_filepath.GetBaseName();
+    String fileName = m_filepath.GetName();
     String fileText = !fileName.Empty() ? fileName : "None";
 
     m_filepathLineEdit->SetBold( !fileName.Empty() );
@@ -128,7 +128,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
 String AttrWidgetFile::GetValue()
 {
-    return m_filepath.GetBaseName();
+    return m_filepath.GetName();
 }
 
 void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)

@@ -39,12 +39,10 @@ void ShaderProgram::Init(ShaderProgram::Type type,
 {
     m_type = type;
 
-    Shader *vs = ShaderManager::Load(Shader::Type::Vertex,
-                                     vshaderPath.GetAbsolute());
+    Shader *vs = ShaderManager::Load(Shader::Type::Vertex, vshaderPath);
     SetVertexShader(vs);
 
-    Shader *fs = ShaderManager::Load(Shader::Type::Fragment,
-                                     fshaderPath.GetAbsolute());
+    Shader *fs = ShaderManager::Load(Shader::Type::Fragment, fshaderPath);
     SetFragmentShader(fs);
 }
 
@@ -388,7 +386,7 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
     if (vShaderFilepath.Exists())
     {
         Shader *vShader = ShaderManager::Load(Shader::Type::Vertex,
-                                              vShaderFilepath.GetAbsolute());
+                                              vShaderFilepath);
         SetVertexShader(vShader);
     }
 
@@ -396,7 +394,7 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
     if (fShaderFilepath.Exists())
     {
         Shader *fShader = ShaderManager::Load(Shader::Type::Fragment,
-                                              fShaderFilepath.GetAbsolute());
+                                              fShaderFilepath);
         SetFragmentShader(fShader);
     }
 }

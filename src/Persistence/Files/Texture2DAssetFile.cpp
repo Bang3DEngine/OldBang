@@ -12,9 +12,8 @@ Texture2DAssetFile::Texture2DAssetFile()
 {
 }
 
-Texture2DAssetFile::Texture2DAssetFile(const QFileSystemModel *model,
-                                       const QModelIndex &index)
-    : File(model, index)
+Texture2DAssetFile::Texture2DAssetFile(const Path& path)
+    : File(path)
 {
     // Load once and save the xmlInfo
     XMLNode xmlTexInfo = XMLParser::FromFile(GetPath().GetAbsolute());

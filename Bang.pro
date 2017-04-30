@@ -213,8 +213,6 @@ HEADERS +=                                                          \
     src/Persistence/Files/ImageFile.h                               \
     src/Persistence/Files/FontAssetFile.h                           \
     src/Persistence/Files/MaterialAssetFile.h                       \
-    src/Persistence/Files/MeshAssetFile.h                           \
-    src/Persistence/Files/MeshFile.h                                \
     src/Persistence/Files/Texture2DAssetFile.h                      \
     src/Persistence/XML/XMLAttribute.h                              \
     src/Persistence/XML/XMLNode.h                                   \
@@ -270,7 +268,9 @@ HEADERS +=                                                          \
     src/View/Inspector/Inspectables/IInspectable.h \
     src/View/Inspector/Inspectables/FileInspectable.h \
     src/View/Inspector/Inspectables/ComponentInspectable.h \
-    src/Persistence/Files/Path.h
+    src/Persistence/Files/Path.h \
+    src/Persistence/Files/ModelFile.h \
+    src/Persistence/Files/MeshFile.h
 
 EDITOR {
 HEADERS += \
@@ -433,8 +433,6 @@ SOURCES += \
     src/Persistence/Files/ImageFile.cpp \
     src/Persistence/Files/FontAssetFile.cpp \
     src/Persistence/Files/MaterialAssetFile.cpp \
-    src/Persistence/Files/MeshAssetFile.cpp \
-    src/Persistence/Files/MeshFile.cpp \
     src/Persistence/Files/Texture2DAssetFile.cpp \
     src/Persistence/Behaviours/BehaviourManager.cpp \
     src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
@@ -490,7 +488,9 @@ SOURCES += \
     src/View/Inspector/Inspectables/IInspectable.cpp \
     src/View/Inspector/Inspectables/FileInspectable.cpp \
     src/View/Inspector/Inspectables/ComponentInspectable.cpp \
-    src/Persistence/Files/Path.cpp
+    src/Persistence/Files/Path.cpp \
+    src/Persistence/Files/ModelFile.cpp \
+    src/Persistence/Files/MeshFile.cpp
 
 EDITOR {
     SOURCES += \

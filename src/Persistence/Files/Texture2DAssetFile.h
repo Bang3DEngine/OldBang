@@ -2,8 +2,6 @@
 #define FILETEXTURE2DASSET_H
 
 #include <QPixmap>
-#include <QModelIndex>
-#include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
@@ -14,7 +12,7 @@ class Texture2DAssetFile : public File
 {
 public:
     Texture2DAssetFile();
-    Texture2DAssetFile(const QFileSystemModel *model, const QModelIndex &index);
+    Texture2DAssetFile(const Path& path);
 
     Path GetImageFilepath() const;
     virtual const QPixmap& GetIcon() const override;

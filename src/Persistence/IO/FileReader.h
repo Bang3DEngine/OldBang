@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "Bang/Map.h"
+#include "Bang/Path.h"
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
 
@@ -19,11 +20,11 @@ class GameObject;
 class FileReader
 {
 public:
-    static int GetMeshNumTriangles(const String& filepath);
-    static bool ReadMesh(const String& filepath,
-                        Array<Vector3> *vertexPos,
-                        Array<Vector3> *vertexNormals,
-                        Array<Vector2> *vertexUvs);
+    static int GetModelNumTriangles(const Path& filepath);
+    static bool ReadModel(const Path& filepath,
+                          Array<Vector3> *vertexPos,
+                          Array<Vector3> *vertexNormals,
+                          Array<Vector2> *vertexUvs);
 private:
     FileReader() {}
 };

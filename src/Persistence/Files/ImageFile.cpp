@@ -9,8 +9,8 @@ ImageFile::ImageFile()
 {
 }
 
-ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
-    : File(model, index)
+ImageFile::ImageFile(const Path& path)
+    : File(path)
 {
     QImage img = IconManager::LoadImage(GetPath());
     m_width  = img.width();
@@ -31,7 +31,7 @@ void ImageFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetPath().GetBaseNameExt(),
+    xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});
     xmlInfo->SetFilepath("ImageFilePath", GetPath(), "",
                          {XMLProperty::Readonly});

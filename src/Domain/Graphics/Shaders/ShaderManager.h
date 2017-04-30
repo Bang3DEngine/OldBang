@@ -18,7 +18,7 @@ public:
     ShaderManager();
     static ShaderManager *GetInstance();
 
-    static Shader* Load(Shader::Type type, const String& absFilepath);
+    static Shader* Load(Shader::Type type, const Path& filepath);
 
     static void RegisterUsageOfShader(ShaderProgram *shaderProgram,
                                       Shader *shaderBeingUsed);
@@ -29,7 +29,7 @@ private:
     QTimer m_refreshTimer;
     EpochTime m_lastRefreshTime;
 
-    Map<String, Shader*> m_filepathToShaders;
+    Map<Path, Shader*> m_filepathToShaders;
     Map<Shader*, Set<ShaderProgram*> > m_shaderUsages;
 
 private slots:

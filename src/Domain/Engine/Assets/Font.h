@@ -36,7 +36,7 @@ public:
     Font();
     virtual ~Font();
 
-    void LoadFromTTF(const String &m_assetFilepath);
+    void LoadFromTTF(const Path &m_assetFilepath);
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

@@ -1,10 +1,6 @@
 #ifndef AUDIOCLIPASSETFILE_H
 #define AUDIOCLIPASSETFILE_H
 
-#include <QModelIndex>
-#include <QFileSystemModel>
-#include "Bang/WinUndef.h"
-
 #include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
@@ -17,7 +13,7 @@ class AudioClipAssetFile : public File,
 {
 public:
     AudioClipAssetFile();
-    AudioClipAssetFile(const QFileSystemModel *model, const QModelIndex &index);
+    AudioClipAssetFile(const Path& path);
 
     virtual ~AudioClipAssetFile();
 

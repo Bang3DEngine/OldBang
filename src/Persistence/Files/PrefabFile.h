@@ -2,8 +2,6 @@
 #define PREFABFILE_H
 
 #include <QPixmap>
-#include <QModelIndex>
-#include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
@@ -20,7 +18,6 @@ class PrefabFile : public File
 {
 public:
     PrefabFile();
-    PrefabFile(const QFileSystemModel *model, const QModelIndex &index);
     PrefabFile(const Path &path);
 
     virtual ~PrefabFile();

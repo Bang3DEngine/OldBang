@@ -172,7 +172,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         if (IO::IsFile(filePath(idx)))
         {
             Path selectedPath = m_explorer->GetSelectedFile().GetPath();
-            return QVariant( selectedPath.GetBaseName().ToQString() );
+            return QVariant( selectedPath.GetName().ToQString() );
         }
     }
     else if (role == Qt::TextColorRole)
@@ -196,7 +196,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                 {
                     textColor = Color(0.3f, 0.6f, 0.9f);
                 }
-                else if (sFile->IsMeshAsset())
+                else if (sFile->IsMeshFile())
                 {
                     textColor = Color(0.8f, 0.5f, 0.8f);
                 }

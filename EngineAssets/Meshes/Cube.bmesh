@@ -1,2 +1,2 @@
-<Mesh MeshFilepath:File="Meshes/Cube.obj"{FileExtension="obj",IsEngineFile}>
+<Mesh ModelFilepath:File="Meshes/Cube.obj"{FileExtension="obj",IsEngineFile}>
 </Mesh>

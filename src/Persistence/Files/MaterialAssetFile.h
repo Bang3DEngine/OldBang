@@ -15,7 +15,7 @@ class MaterialAssetFile : public File
 {
 public:
     MaterialAssetFile();
-    MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index);
+    MaterialAssetFile(const Path& path);
 
     virtual const QPixmap& GetIcon() const override;
 

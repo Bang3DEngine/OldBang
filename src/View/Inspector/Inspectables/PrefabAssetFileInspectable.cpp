@@ -22,7 +22,7 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     SetRelatedSerializableObject( prefab.InstantiateWithoutStarting() );
 
     GameObject *go = Object::SCast<GameObject>(GetRelatedSerializableObject());
-    go->SetName( f.GetPath().GetBaseName() );
+    go->SetName( f.GetPath().GetName() );
     go->SetEnabled(true);
     OnInspectorSlotChanged(nullptr);
 }

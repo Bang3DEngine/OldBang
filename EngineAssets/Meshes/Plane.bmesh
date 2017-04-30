@@ -1,2 +1,2 @@
-<Mesh MeshFilepath:File="Meshes/Plane.obj"{FileExtension="obj",IsEngineFile}>
+<Mesh ModelFilepath:File="Meshes/Plane.obj"{FileExtension="obj",IsEngineFile}>
 </Mesh>

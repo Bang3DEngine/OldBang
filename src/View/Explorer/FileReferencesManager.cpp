@@ -64,14 +64,14 @@ void FileReferencesManager::CheckForMovedFiles()
 {
     FileReferencesManager *frm = FileReferencesManager::GetInstance();
 
-    List< std::pair<String, String> > movedPathsList =
+    List< std::pair<Path, Path> > movedPathsList =
             FileTracker::GetInstance()->GetMovedPathsList();
 
-    for (const std::pair<String,String>& oldNewPath : movedPathsList)
+    for (const std::pair<Path,Path>& oldNewPath : movedPathsList)
     {
-        const String &oldPath = oldNewPath.first;
-        const String &newPath = oldNewPath.second;
-        frm->OnFileOrDirNameMoved(oldPath, newPath);
+        const Path &oldPath = oldNewPath.first;
+        const Path &newPath = oldNewPath.second;
+        frm->OnFileOrDirNameMoved(oldPath.GetAbsolute(), newPath.GetAbsolute());
     }
 }
 

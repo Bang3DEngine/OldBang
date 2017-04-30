@@ -23,7 +23,7 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;
 
-    bool LoadFromFile(const String &filepath);
+    bool LoadFromFile(const Path &filepath);
 
     int GetChannels() const;
     int GetBufferSize() const;
@@ -32,7 +32,7 @@ public:
     float GetLength() const;
     bool IsLoaded() const;
 
-    const String &GetAudioFilepath() const;
+    const Path &GetAudioFilepath() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

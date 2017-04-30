@@ -38,7 +38,7 @@ int FontSheetCreator::GetGlyphIndex(FT_Face face, char c)
 }
 
 bool FontSheetCreator::LoadAtlasTexture(
-                         const String &fontFilepath,
+                         const Path &fontFilepath,
                          int glyphSizePx,
                          Texture2D **atlasTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
@@ -51,7 +51,8 @@ bool FontSheetCreator::LoadAtlasTexture(
     resultMetrics->Clear();
 
     FT_Face face;
-    int error = FT_New_Face(m_singleton->m_ftLibrary, fontFilepath.c_str(),
+    int error = FT_New_Face(m_singleton->m_ftLibrary,
+                            fontFilepath.GetAbsolute().ToCString(),
                             0, &face);
     if (error)
     {

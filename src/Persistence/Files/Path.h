@@ -3,7 +3,7 @@
 
 #include <QFileInfo>
 
-#include "Bang/Array.h"
+#include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
@@ -34,12 +34,13 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> GetFiles(bool recursively = false);
+    List<Path> GetFiles(bool recursively = false,
+                        const List<String>& extensions = {});
     List<Path> GetSubDirectories(bool recursively = false);
 
     Path GetDirectory() const;
-    String GetBaseName() const;
-    String GetBaseNameExt() const;
+    String GetName() const;
+    String GetNameExt() const;
     String GetExtension() const;
     const String& GetAbsolute() const;
     const String& GetRelative() const;
@@ -49,7 +50,7 @@ public:
 
     // We receive something like "jpg png bmp obj"
     bool HasExtension(const String &extension) const;
-    bool HasExtension(const Array<String> &extensions) const;
+    bool HasExtension(const List<String> &extensions) const;
 
     bool operator!=(const Path &rhs) const;
     bool operator==(const Path &rhs) const;

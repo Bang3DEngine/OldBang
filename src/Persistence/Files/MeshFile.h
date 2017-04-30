@@ -1,26 +1,19 @@
-#ifndef FILEMESH_H
-#define FILEMESH_H
+#ifndef MESHFILE_H
+#define MESHFILE_H
 
 #include <QPixmap>
-#include <QModelIndex>
-#include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
+#include "Bang/String.h"
+#include "Bang/FileReader.h"
 
 class SerializableObject;
 class MeshFile : public File
 {
-    bool m_isTris = true;
-    int m_numFaces = 0;
-
 public:
     MeshFile();
-    MeshFile(const QFileSystemModel *model, const QModelIndex &index);
-
-    void Read(const XMLNode &xmlInfo) override;
-    void Write(XMLNode *xmlInfo) const override;
-
+    MeshFile(const Path& path);
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
@@ -29,8 +22,14 @@ public:
 
     virtual bool IsAsset() const override;
 
-    bool IsTriangles() const;
-    int GetNumFaces() const;
+    void SetModelFilepath(const Path &modelFilepath);
+    const Path& GetModelFilepath() const;
+
+    void Read(const XMLNode &xmlInfo);
+    void Write(XMLNode *xmlInfo) const;
+
+private:
+    Path m_modelFilepath;
 };
 
-#endif // FILEMESH_H
+#endif // MESHASSETFILE_H

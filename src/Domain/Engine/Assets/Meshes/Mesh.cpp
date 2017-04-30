@@ -15,7 +15,6 @@ Mesh::Mesh()
 
 Mesh::Mesh(const Mesh &m)
 {
-    //TODO, do copy of VAO and VBO's
     m_vao = m.GetVAO();
     m_bBox = m.m_bBox;
     m_bSphere = m.m_bSphere;
@@ -45,12 +44,12 @@ String Mesh::GetFileExtension() const
     return Mesh::GetFileExtensionStatic();
 }
 
-void Mesh::LoadFromFile(const String &filepath)
+void Mesh::LoadFromFile(const Path &filepath)
 {
-    m_positions.Clear();
-    m_normals.Clear();
     m_uvs.Clear();
-    if ( FileReader::ReadMesh(filepath, &m_positions, &m_normals, &m_uvs))
+    m_normals.Clear();
+    m_positions.Clear();
+    if ( FileReader::ReadModel(filepath, &m_positions, &m_normals, &m_uvs))
     {
         LoadPositions(m_positions);
         LoadNormals(m_normals);
@@ -170,21 +169,21 @@ const Array<Vector2> &Mesh::GetUvs()
     return m_uvs;
 }
 
-const String &Mesh::GetMeshFilepath() const
+const Path &Mesh::GetModelFilepath() const
 {
-    return m_meshFilepath.GetAbsolute();
+    return m_modelFilepath;
 }
 
 void Mesh::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_meshFilepath = xmlInfo.GetFilepath("MeshFilepath");
-    LoadFromFile(m_meshFilepath.GetAbsolute());
+    m_modelFilepath = xmlInfo.GetFilepath("ModelFilepath");
+    LoadFromFile(m_modelFilepath);
 }
 
 void Mesh::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("MeshFilepath", m_meshFilepath, "obj");
+    xmlInfo->SetFilepath("ModelFilepath", m_modelFilepath, "obj");
 }
 

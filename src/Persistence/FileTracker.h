@@ -23,9 +23,9 @@ class FileTracker : public QObject
 public:
     FileTracker();
     static FileTracker *GetInstance();
-    List< std::pair<String,String> > GetMovedPathsList() const;
+    List< std::pair<Path,Path> > GetMovedPathsList() const;
     static void TrackFilesWithExtension(const String& extension);
-    static bool HasFileChanged(const String& absFilepath, EpochTime since);
+    static bool HasFileChanged(const Path& filepath, EpochTime since);
 
 signals:
     void ChangedFilesRefreshed();
@@ -39,10 +39,10 @@ private:
 
     List<String> m_additionalExtensions;
 
-    mutable List<String> m_lastPathsList;
-    Map<String, EpochTime> m_lastModifTimes;
-    Map<String, EpochTime> m_lastSeenTimes;
-    Map<String, List<String> > m_fileDependencies;
+    mutable List<Path> m_lastPathsList;
+    Map<Path, EpochTime> m_lastModifTimes;
+    Map<Path, EpochTime> m_lastSeenTimes;
+    Map<Path, List<Path> > m_fileDependencies;
 
     // The refreshing updates the queue of changed files.
     // Works in a separate thread
@@ -50,13 +50,13 @@ private:
     QThread m_refreshThread;
     EpochTime m_timeBeforeRefreshing;
 
-    List<String> GetPathsToTrack() const;
+    List<Path> GetPathsToTrack() const;
     bool MustTrackFile(const File& file) const;
-    void RefreshFileModificationDate(const String& absFilepath);
-    void RefreshFileDependencies(const String& absFilepath);
-    bool HasFileChanged(const String& absFilepath) const;
-    bool HasFileChanged(const String& absFilepath,
-                        Set<String>& alreadyCheckedFiles) const;
+    void RefreshFileModificationDate(const Path& filepath);
+    void RefreshFileDependencies(const Path& filepath);
+    bool HasFileChanged(const Path& filepath) const;
+    bool HasFileChanged(const Path& filepath,
+                        Set<Path>& alreadyCheckedFiles) const;
 
     static bool HasFileChanged(EpochTime lastSeenTime,
                                EpochTime modificationTime);

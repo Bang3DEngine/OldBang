@@ -70,7 +70,7 @@ Vector2 Image::GetSize() const
     return Vector2(GetWidth(), GetHeight());
 }
 
-void Image::SaveToFile(const String &filepath) const
+void Image::SaveToFile(const Path &filepath) const
 {
     QImage qimg (GetWidth(), GetHeight(), QImage::Format::Format_ARGB32);
     for (int i = 0; i < GetHeight(); ++i)
@@ -81,15 +81,16 @@ void Image::SaveToFile(const String &filepath) const
             qimg.setPixel(j, i, qRgba(px.r, px.g, px.b, px.a));
         }
     }
-    String ext = IO::GetFileExtensionComplete(filepath);
+
+    String ext = filepath.GetExtension();
     if (ext.Empty()) { ext = "png"; }
-    qimg.save(filepath.ToQString(), ext.ToCString());
+    qimg.save(filepath.GetAbsolute().ToQString(), ext.ToCString());
 }
 
-Image Image::FromFile(const String &filepath)
+Image Image::FromFile(const Path &filepath)
 {
     Image img;
-    QImage qimg(filepath.ToQString());
+    QImage qimg(filepath.GetAbsolute().ToQString());
     if (!qimg.isNull())
     {
         img.Create(qimg.width(), qimg.height());

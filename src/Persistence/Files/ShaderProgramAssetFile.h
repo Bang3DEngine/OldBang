@@ -12,8 +12,7 @@ class ShaderProgramAssetFile : public File
 {
 public:
     ShaderProgramAssetFile();
-    ShaderProgramAssetFile(const QFileSystemModel *model,
-                           const QModelIndex &index);
+    ShaderProgramAssetFile(const Path& path);
 
     virtual const QPixmap& GetIcon() const override;
 

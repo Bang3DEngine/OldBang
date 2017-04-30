@@ -19,9 +19,9 @@ public:
     };
 
     Shader(Shader::Type t);
-    Shader(Shader::Type t, const String &shaderPath);
+    Shader(Shader::Type t, const Path &shaderPath);
 
-    bool LoadFromFile(const String &filepath);
+    bool LoadFromFile(const Path &filepath);
 
     GL::BindTarget GetGLBindTarget() const override;
 

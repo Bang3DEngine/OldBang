@@ -10,7 +10,7 @@ Texture2D::Texture2D() : Texture(Target::Texture2D)
     CreateEmpty(1,1);
 }
 
-Texture2D::Texture2D(const String &imageFilepath) : Texture2D()
+Texture2D::Texture2D(const Path &imageFilepath) : Texture2D()
 {
     LoadFromImage(imageFilepath);
 }
@@ -30,12 +30,12 @@ String Texture2D::GetFileExtension() const
 }
 
 
-void Texture2D::LoadFromImage(const String &imageFilepath)
+void Texture2D::LoadFromImage(const Path &imageFilepath)
 {
     ENSURE(!imageFilepath.Empty());
 
-    m_imageFilepath = Path(imageFilepath);
-    Image img = Image::FromFile(m_imageFilepath.GetAbsolute());
+    m_imageFilepath = imageFilepath;
+    Image img = Image::FromFile(m_imageFilepath);
     LoadFromImage(img);
 }
 
@@ -107,7 +107,7 @@ void Texture2D::Fill(const byte *newData, int width, int height,
     Fill(newData, width, height, sizeOfNewData, genMipMaps);
 }
 
-Path Texture2D::GetImageFilepath() const
+const Path& Texture2D::GetImageFilepath() const
 {
     return m_imageFilepath;
 }
@@ -127,7 +127,7 @@ void Texture2D::Read(const XMLNode &xmlInfo)
     Asset::Read(xmlInfo);
 
     Path imageFilepath = xmlInfo.GetFilepath("ImageFilepath");
-    LoadFromImage(imageFilepath.GetAbsolute());
+    LoadFromImage(imageFilepath);
 
     String filterModeString = xmlInfo.GetEnumSelectedName("FilterMode");
     Texture::FilterMode filterMode = FilterMode::Nearest;

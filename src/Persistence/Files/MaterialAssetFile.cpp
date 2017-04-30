@@ -11,9 +11,8 @@ MaterialAssetFile::MaterialAssetFile()
 {
 }
 
-MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
-                                     const QModelIndex &index) :
-    File(model, index)
+MaterialAssetFile::MaterialAssetFile(const Path& path) :
+    File(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile( GetPath().GetAbsolute() );
     m_vshaderFilepath = xmlInfo.GetFilepath("VertexShader");

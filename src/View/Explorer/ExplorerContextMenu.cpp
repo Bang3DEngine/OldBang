@@ -103,13 +103,13 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
+    String newPath = dirPath + "/" + f.GetPath().GetName() +
                      "." + Texture2D::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newTexName = IO::GetFileNameWithExtension(newPath);
 
     Texture2D *tex = mb->OnCreateTexture2D(newTexName);
-    tex->LoadFromImage(f.GetPath().GetAbsolute());
+    tex->LoadFromImage(f.GetPath() );
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(tex, newTexName);
@@ -129,13 +129,13 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
+    String newPath = dirPath + "/" + f.GetPath().GetName() +
                      "." + AudioClip::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newAudioName = IO::GetFileNameWithExtension(newPath);
 
     AudioClip *audio = mb->OnCreateAudioClip(newAudioName);
-    audio->LoadFromFile(f.GetPath().GetAbsolute());
+    audio->LoadFromFile( f.GetPath() );
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
 
@@ -156,7 +156,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
+    String newPath = dirPath + "/" + f.GetPath().GetName() +
                      "." + Material::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newMatName = IO::GetFileNameWithExtension(newPath);
