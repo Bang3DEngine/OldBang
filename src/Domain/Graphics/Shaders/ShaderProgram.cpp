@@ -15,15 +15,37 @@ ShaderProgram::ShaderProgram()
     m_idGL = glCreateProgram();
 }
 
-ShaderProgram::ShaderProgram(const String &vshaderPath,
+ShaderProgram::ShaderProgram(const String &vshaderPath, const String &fshaderPath)
+{
+    String fShaderExt = IO::GetFileExtensionComplete(fshaderPath);
+    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
+    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::ScreenPass; }
+    else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
+    else { m_type = Type::Other; }
+
+    Init(m_type, vshaderPath, fshaderPath);
+}
+
+ShaderProgram::ShaderProgram(Type type,
+                             const String &vshaderPath,
                              const String &fshaderPath) : ShaderProgram()
 {
+    Init(type, vshaderPath, fshaderPath);
+}
+
+void ShaderProgram::Init(ShaderProgram::Type type,
+                         const String &vshaderPath,
+                         const String &fshaderPath)
+{
+    m_type = type;
+
     Shader *vs = ShaderManager::Load(Shader::Type::Vertex, vshaderPath);
     SetVertexShader(vs);
 
     Shader *fs = ShaderManager::Load(Shader::Type::Fragment, fshaderPath);
     SetFragmentShader(fs);
 }
+
 
 ShaderProgram::~ShaderProgram()
 {
@@ -61,6 +83,31 @@ bool ShaderProgram::Link()
 
     glAttachShader(m_idGL, p_vshader->GetGLId());
     glAttachShader(m_idGL, p_fshader->GetGLId());
+
+    if (m_type == Type::GBuffer)
+    {
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetVertexInputBinding("B_In_NormalObject",   1);
+        SetVertexInputBinding("B_In_Uv",             2);
+        SetFragmentInputBinding("B_GIn_NormalDepth", 0);
+        SetFragmentInputBinding("B_GIn_DiffColor",   1);
+        SetFragmentInputBinding("B_GIn_Misc",        2);
+        SetFragmentInputBinding("B_GIn_Color",       3);
+    }
+    else if (m_type == Type::ScreenPass)
+    {
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetFragmentInputBinding("B_GIn_Color",       0);
+    }
+    else if (m_type == Type::SelectionFramebuffer)
+    {
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetVertexInputBinding("B_In_NormalObject",   1);
+        SetVertexInputBinding("B_In_Uv",             2);
+        SetFragmentInputBinding("fragColor",         0);
+        SetFragmentInputBinding( "worldPosition",    1);
+    }
+
     glLinkProgram(m_idGL);
 
     GLint linked;
@@ -205,6 +252,12 @@ void ShaderProgram::Refresh()
     Link();
 }
 
+void ShaderProgram::SetType(ShaderProgram::Type type)
+{
+    m_type = type;
+    Refresh();
+}
+
 void ShaderProgram::SetVertexShader(Shader *vertexShader)
 {
     if (vertexShader->GetType() != Shader::Type::Vertex)
@@ -235,6 +288,25 @@ void ShaderProgram::SetFragmentShader(Shader *fragmentShader)
     if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
 
     Refresh();
+}
+
+void ShaderProgram::SetVertexInputBinding(const String &inputName, uint location)
+{
+    Bind();
+    glBindAttribLocation(m_idGL, location, inputName.ToCString());
+    UnBind();
+}
+
+void ShaderProgram::SetFragmentInputBinding(const String &inputName, uint location)
+{
+    Bind();
+    glBindFragDataLocation(m_idGL, location, inputName.ToCString());
+    UnBind();
+}
+
+ShaderProgram::Type ShaderProgram::GetType() const
+{
+    return m_type;
 }
 
 Shader *ShaderProgram::GetVertexShader() const

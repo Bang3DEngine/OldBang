@@ -21,8 +21,19 @@ class ShaderProgram : public Asset,
     ASSET_ICON(ShaderProgram, "Icons/BehaviourIcon.png")
 
 public:
+    enum Type
+    {
+        GBuffer,
+        ScreenPass,
+        SelectionFramebuffer,
+        Other
+    };
+
     ShaderProgram();
     ShaderProgram(const String &vshaderPath,
+                  const String &fshaderPath);
+    ShaderProgram(Type type,
+                  const String &vshaderPath,
                   const String &fshaderPath);
     virtual ~ShaderProgram();
 
@@ -47,8 +58,14 @@ public:
     bool SetTexture(const String &name, const Texture *texture) const;
 
     void Refresh();
+    void SetType(Type type);
     void SetVertexShader(Shader *vertexShader);
     void SetFragmentShader(Shader *fragmentShader);
+
+    void SetVertexInputBinding(const String& inputName, uint location);
+    void SetFragmentInputBinding(const String& inputName, uint location);
+
+    Type GetType() const;
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;
@@ -62,8 +79,13 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
+    Type m_type       = Type::GBuffer;
     Shader *p_vshader = nullptr;
     Shader *p_fshader = nullptr;
+
+    void Init(Type type,
+              const String &vshaderPath,
+              const String &fshaderPath);
 
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, const Texture*> m_namesToTexture;

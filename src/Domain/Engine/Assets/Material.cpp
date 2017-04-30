@@ -16,8 +16,8 @@
 Material::Material() : Asset()
 {
     SetShaderProgram( new ShaderProgram(
-                          IO::ToAbsolute("Shaders/G_Default.vert", true),
-                          IO::ToAbsolute("Shaders/G_Default.frag", true)));
+                          IO::ToAbsolute("Shaders/G_Default.vert_g", true),
+                          IO::ToAbsolute("Shaders/G_Default.frag_g", true)));
 }
 
 Material::Material(const Material &m)
@@ -78,7 +78,8 @@ void Material::Read(const XMLNode &xmlInfo)
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
        )
     {
-        SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
+        SetShaderProgram(new ShaderProgram(vshaderFilepath,
+                                           fshaderFilepath));
     }
 }
 
@@ -109,8 +110,8 @@ void Material::Write(XMLNode *xmlInfo) const
             fsFile = sp->GetFragmentShader()->GetFilepath();
         }
     }
-    xmlInfo->SetFilepath("VertexShader", vsFile, "vert");
-    xmlInfo->SetFilepath("FragmentShader", fsFile, "frag");
+    xmlInfo->SetFilepath("VertexShader", vsFile, "vert_g vert_pp vert_sel vert");
+    xmlInfo->SetFilepath("FragmentShader", fsFile, "frag_g frag_pp frag_sel frag");
 }
 
 Material *Material::GetMissingMaterial()

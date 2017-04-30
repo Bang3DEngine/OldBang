@@ -504,7 +504,7 @@ String String::ToString(const Color &v)
 
 String String::ToString(const String &v)
 {
-    return v;
+    return String(v);
 }
 String String::ToString(const Vector2 &v)
 {

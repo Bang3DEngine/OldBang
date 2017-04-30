@@ -226,7 +226,7 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
            distScale = Vector3::Distance(camPos, pos);
         }
         Vector3 scale = transform->GetScale();
-        transform->SetScale(distScale * scale);
+        transform->SetScale(distScale * scale * 8.0f);
 
         transform->LookInDirection(cam->transform->GetForward(),
                                    cam->transform->GetUp());
