@@ -65,8 +65,7 @@ protected:
 public: \
     static const QPixmap& GetIconStatic() \
     {\
-        String path = IO::ToAbsolute(ICON_PATH, true); \
-        return IconManager::LoadPixmap(path); \
+        return IconManager::LoadPixmap( EPATH(ICON_PATH) ); \
     } \
     const virtual QPixmap& GetIcon() const override \
     { \

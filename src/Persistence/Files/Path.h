@@ -3,6 +3,7 @@
 
 #include <QFileInfo>
 
+#include "Bang/Array.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
@@ -12,11 +13,17 @@
 // Engine assets path
 #define EPATH(path) Path(path, IO::GetEngineAssetsRootAbs())
 
+// Generic path, to use when passing an absolute file, it detects whether
+// it is a user or engine path
+#define GPATH(absPath) \
+    (absPath.BeginsWith( IO::GetEngineAssetsRootAbs() ) ?  \
+        EPATH(absPath) : UPATH(absPath) )
+
 class Path : public IToString
 {
 public:
     Path();
-    Path(const String &absolutePath);
+    explicit Path(const String &absolutePath);
     Path(const String &relativePath,
          const String &absolutePrefix);
 
@@ -30,14 +37,23 @@ public:
     List<Path> GetFiles(bool recursively = false);
     List<Path> GetSubDirectories(bool recursively = false);
 
-    Path GetParentDirectory() const;
+    Path GetDirectory() const;
     String GetBaseName() const;
     String GetBaseNameExt() const;
     String GetExtension() const;
     const String& GetAbsolute() const;
     const String& GetRelative() const;
 
-    String ToString() const;
+    virtual String ToString() const override;
+    bool Empty() const;
+
+    // We receive something like "jpg png bmp obj"
+    bool HasExtension(const String &extension) const;
+    bool HasExtension(const Array<String> &extensions) const;
+
+    bool operator!=(const Path &rhs) const;
+    bool operator==(const Path &rhs) const;
+    bool operator<(const Path &rhs) const;
 
 private:
     String m_relativePath   = "";

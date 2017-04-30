@@ -46,7 +46,7 @@ void Behaviour::_OnUpdate()
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    m_sourceFilepath = xmlInfo.GetString("BehaviourScript");
+    m_sourceFilepath = xmlInfo.GetFilepath("BehaviourScript");
     RefreshBehaviourLib();
 }
 
@@ -102,7 +102,7 @@ Behaviour* Behaviour::CreateNewBehaviour()
         IO::WriteToFile(sourceFilepath, sourceCode);
 
         // Update Behaviour file
-        newBehaviour->m_sourceFilepath = sourceFilepath;
+        newBehaviour->m_sourceFilepath = Path(sourceFilepath);
         newBehaviour->RefreshBehaviourLib();
 
         // Open with system editor
@@ -185,7 +185,7 @@ void Behaviour::CloneInto(ICloneable *clone) const
     b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
-const String &Behaviour::GetSourceFilepath() const
+const Path &Behaviour::GetSourceFilepath() const
 {
     return m_sourceFilepath;
 }
@@ -198,7 +198,7 @@ void Behaviour::RefreshBehaviourLib()
     ENSURE(!gameObject->IsDraggedGameObject());
     #endif
 
-    String behaviourName = IO::GetBaseName(GetSourceFilepath());
+    String behaviourName = GetSourceFilepath().GetBaseName();
     ENSURE(!behaviourName.Empty());
 
     // Create new Behaviour, and replace in the parent gameObject this old
@@ -221,11 +221,10 @@ void Behaviour::RefreshBehaviourLib()
 
 bool Behaviour::IsLoaded() const
 {
-    String absPath = IO::ToAbsolute(GetSourceFilepath(), false);
     QLibrary *behavioursLib =  BehaviourManager::GetBehavioursMergedLibrary();
-    return IO::ExistsFile(absPath) &&
+    return GetSourceFilepath().Exists() &&
            p_behavioursLibraryBeingUsed == behavioursLib &&
-           IO::GetBaseName( GetSourceFilepath() ) == GetClassName();
+           GetSourceFilepath().GetBaseName() == GetClassName();
 }
 
 void Behaviour::OnAddedToGameObject()

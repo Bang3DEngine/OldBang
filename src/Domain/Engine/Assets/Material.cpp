@@ -15,9 +15,8 @@
 
 Material::Material() : Asset()
 {
-    SetShaderProgram( new ShaderProgram(
-                          IO::ToAbsolute("Shaders/G_Default.vert_g", true),
-                          IO::ToAbsolute("Shaders/G_Default.frag_g", true)));
+    SetShaderProgram( new ShaderProgram( EPATH("Shaders/G_Default.vert_g"),
+                                         EPATH("Shaders/G_Default.frag_g")));
 }
 
 Material::Material(const Material &m)
@@ -66,13 +65,13 @@ void Material::Read(const XMLNode &xmlInfo)
     SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
     SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
 
-    String texAssetFilepath = xmlInfo.GetString("Texture");
+    Path texAssetFilepath = xmlInfo.GetFilepath("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 
     ShaderProgram *sp = GetShaderProgram();
-    String vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
-    String fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
+    Path vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    Path fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
     if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
         vshaderFilepath != sp->GetVertexShader()->GetFilepath() ||
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
@@ -92,11 +91,11 @@ void Material::Write(XMLNode *xmlInfo) const
     xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
     xmlInfo->SetVector2("UvMultiply",    GetUvMultiply());
 
-    String textureFilepath = GetTexture() ? GetTexture()->GetFilepath() : "";
-    xmlInfo->SetFilepath("Texture", textureFilepath,
+    Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path();
+    xmlInfo->SetFilepath("Texture", texFilepath,
                          Texture2D::GetFileExtensionStatic());
 
-    String vsFile =  "", fsFile = "";
+    Path vsFile, fsFile;
     ShaderProgram *sp = GetShaderProgram();
     if (sp)
     {
@@ -116,7 +115,7 @@ void Material::Write(XMLNode *xmlInfo) const
 
 Material *Material::GetMissingMaterial()
 {
-    return AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
+    return AssetsManager::Load<Material>( EPATH("Materials/Missing.bmat") );
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

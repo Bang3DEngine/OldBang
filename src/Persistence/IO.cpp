@@ -92,7 +92,7 @@ String IO::GetFileExtensionLast(const String &filepath)
 
 String IO::GetFileContents(const String &filepath)
 {
-    if (!IO::ExistsFile(filepath)) { return ""; }
+    if (!IO::Exists(filepath) || !IO::IsFile(filepath)) { return ""; }
 
     String contents = "";
     std::ifstream ifs(filepath);
@@ -440,6 +440,11 @@ bool IO::WriteToFile(const String &absFilepath, const String &contents)
         return true;
     }
     return false;
+}
+
+bool IO::IsEngineFile(const Path &path)
+{
+    return path.GetAbsolute().BeginsWith( IO::GetEngineAssetsRootAbs() );
 }
 
 String IO::GetHash(const String &filepath)

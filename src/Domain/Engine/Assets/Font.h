@@ -54,7 +54,7 @@ public:
 
 private:
 
-    String m_fontFilepath  = "";
+    Path m_fontFilepath;
     FT_Face m_freetypeFace = nullptr;
 
     // A big texture with all the chars in it

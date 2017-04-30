@@ -9,7 +9,7 @@
 #include "Bang/ShaderPreprocessor.h"
 
 Shader::Shader(Shader::Type t)
-    : m_sourceCode(""), m_filepath(""), m_type(t)
+    : m_sourceCode(""), m_type(t)
 {
 }
 
@@ -26,8 +26,8 @@ bool Shader::LoadFromFile(const String& filepath)
         return false;
     }
 
-    m_filepath = filepath;
-    m_sourceCode = IO::GetFileContents(m_filepath);
+    m_filepath = Path(filepath);
+    m_sourceCode = IO::GetFileContents(m_filepath.GetAbsolute());
     ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
     m_idGL = glCreateShader(GLint(m_type));
@@ -48,8 +48,8 @@ bool Shader::LoadFromFile(const String& filepath)
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         String errorStr(v.begin(), v.end());
-        Debug_Error("Failed to compile shader: '"  << m_filepath << "': " <<
-                    errorStr);
+        Debug_Error("Failed to compile shader: '"  <<
+                    m_filepath.GetAbsolute()<< "': " << errorStr);
         glDeleteShader(m_idGL);
         return false;
     }
@@ -67,7 +67,7 @@ const String& Shader::GetSourceCode() const
     return m_sourceCode;
 }
 
-const String& Shader::GetFilepath() const
+const Path& Shader::GetFilepath() const
 {
     return m_filepath;
 }
@@ -79,6 +79,12 @@ Shader::Type Shader::GetType() const
 
 String Shader::ToString() const
 {
-    if (m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
-    return "Fragment Shader: '" + m_filepath + "'";
+    if (m_type == Type::Vertex)
+    {
+        return "Vertex Shader: '" + m_filepath.GetAbsolute() + "'";
+    }
+    else
+    {
+        return "Fragment Shader: '" + m_filepath.GetAbsolute() + "'";
+    }
 }

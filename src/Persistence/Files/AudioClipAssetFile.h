@@ -5,6 +5,7 @@
 #include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -29,15 +30,15 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void SetAudioFilepath(const String &audioFilepath);
-    const String& GetAudioFilepath() const;
+    void SetSoundFilepath(const Path &audioFilepath);
+    const Path& GetAudioFilepath() const;
 
     virtual void OnButtonClicked(const String &attrName);
 
     virtual bool IsAsset() const override;
 
 private:
-    String m_audioFilepath = "";
+    Path m_audioFilepath;
     AudioSource *m_tmpAudioSource = nullptr;
 
     AudioClip *GetRelatedAudioClip() const;

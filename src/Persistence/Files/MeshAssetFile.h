@@ -24,14 +24,14 @@ public:
 
     virtual bool IsAsset() const override;
 
-    void SetMeshFilepath(const String &meshFilepath);
-    const String& GetMeshFilepath() const;
+    void SetMeshFilepath(const Path &meshFilepath);
+    const Path& GetMeshFilepath() const;
 
     void Read(const XMLNode &xmlInfo);
     void Write(XMLNode *xmlInfo) const;
 
 private:
-    String m_meshFilepath = "";
+    Path m_meshFilepath;
 };
 
 #endif // FILEMESHASSET_H

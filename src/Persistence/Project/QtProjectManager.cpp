@@ -12,7 +12,7 @@ String QtProjectManager::GetQtProjectFilepathDir()
     Project *p_proj = ProjectManager::GetCurrentProject();
     if (!p_proj) { return ""; }
 
-    String projAbsDir = p_proj->GetProjectRootFilepath();
+    String projAbsDir = p_proj->GetProjectRootFilepath().GetAbsolute();
     return projAbsDir + "/Project";
 }
 
@@ -51,7 +51,7 @@ bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
-    String projAbsDir = p_proj->GetProjectRootFilepath();
+    String projAbsDir = p_proj->GetProjectRootFilepath().GetAbsolute();
     const String &engineAbsDir = IO::GetEngineRootAbs();
     const String &projAssetsDir = projAbsDir + "/Assets";
 

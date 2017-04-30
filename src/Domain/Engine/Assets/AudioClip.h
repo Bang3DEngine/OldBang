@@ -42,7 +42,7 @@ public:
 
 private:
     ALuint m_alBufferId = 0;
-    String m_audioFileFilepath = "";
+    Path m_audioFileFilepath;
     List<AudioSource*> m_audioSourcesUsingThis;
 
     ALuint GetALBufferId() const;

@@ -17,28 +17,27 @@ Texture2DAssetFile::Texture2DAssetFile(const QFileSystemModel *model,
     : File(model, index)
 {
     // Load once and save the xmlInfo
-    XMLNode xmlTexInfo = XMLParser::FromFile(GetRelativePath());
+    XMLNode xmlTexInfo = XMLParser::FromFile(GetPath().GetAbsolute());
     m_xmlInfo = xmlTexInfo;
 }
 
-String Texture2DAssetFile::GetImageAbsFilepath() const
+Path Texture2DAssetFile::GetImageFilepath() const
 {
-    String contents = IO::GetFileContents(GetAbsolutePath());
+    String contents = IO::GetFileContents(GetPath().GetAbsolute());
     XMLNode xmlInfo = XMLNode::FromString(contents);
     return xmlInfo.GetFilepath("ImageFilepath");
 }
 
 const QPixmap& Texture2DAssetFile::GetIcon() const
 {
-    return IconManager::LoadPixmap(GetImageAbsFilepath(),
+    return IconManager::LoadPixmap(GetImageFilepath(),
                                    IconManager::IconOverlay::Asset);
 }
 
 void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
 {
-    // Update live instances currently being used
-    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
     m_xmlInfo = xmlInfo;
+    AssetsManager::UpdateAsset(GetPath(), m_xmlInfo);
 }
 
 void Texture2DAssetFile::Write(XMLNode *xmlInfo) const

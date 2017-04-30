@@ -21,7 +21,7 @@ class PrefabFile : public File
 public:
     PrefabFile();
     PrefabFile(const QFileSystemModel *model, const QModelIndex &index);
-    PrefabFile(const String &absPath);
+    PrefabFile(const Path &path);
 
     virtual ~PrefabFile();
 

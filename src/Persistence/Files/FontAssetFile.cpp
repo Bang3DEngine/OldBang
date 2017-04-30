@@ -13,14 +13,14 @@ FontAssetFile::FontAssetFile()
 
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(m_path);
-    m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath");
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath").GetAbsolute();
 }
 
 const QPixmap& FontAssetFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/LetterIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
+    return IconManager::LoadPixmap(EPATH("Icons/LetterIcon.png"),
+                                   IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR

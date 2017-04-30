@@ -218,18 +218,17 @@ void XMLAttribute::SetRect(const Rect &value,
     Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
 }
 
-void XMLAttribute::SetFilepath(const String &filepath,
-                               const String &fileExtension,
+void XMLAttribute::SetFilepath(const Path &filepath,
+                               const String &allowedExtensions,
                                const Array<XMLProperty> &properties)
 {
-    String relFilepath = filepath.Empty() ?
-                             "" : IO::ToRelative(filepath);
+    String relFilepath = filepath.GetRelative();
     Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
 
-    if (!fileExtension.Empty())
+    if (!allowedExtensions.Empty())
     {
         XMLProperty extensionProp = XMLProperty::FileExtension;
-        extensionProp.SetValue(fileExtension);
+        extensionProp.SetValue(allowedExtensions);
         SetProperty(extensionProp);
     }
 
@@ -374,9 +373,12 @@ float XMLAttribute::GetFloat() const
     return String::ToFloat(m_value);
 }
 
-String XMLAttribute::GetFilepath() const
+Path XMLAttribute::GetFilepath() const
 {
-    return IO::ToAbsolute(GetValue(), HasProperty(XMLProperty::IsEngineFile));
+    if ( GetValue().Empty() ) { return Path(); }
+
+    if ( HasProperty(XMLProperty::IsEngineFile) ) { return EPATH(GetValue()); }
+    else { return GPATH(GetValue()); }
 }
 
 String XMLAttribute::GetString() const

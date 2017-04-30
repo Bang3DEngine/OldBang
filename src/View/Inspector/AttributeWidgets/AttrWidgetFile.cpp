@@ -19,17 +19,11 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    m_fileExtension = xmlAttribute.GetPropertyValue(
-                        XMLProperty::FileExtension.GetName());
+    m_allowedExtensions = xmlAttribute.GetPropertyValue(
+                                  XMLProperty::FileExtension.GetName());
 
     m_hLayout = new QHBoxLayout();
     m_layout.addLayout(m_hLayout, 1);
-
-    // Icon
-    String filepath = xmlAttribute.GetValue();
-    bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
-    filepath = IO::ToAbsolute(filepath, isEngineFile);
-    //
 
     m_iconLabel = new QLabel();
     m_iconLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -42,6 +36,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_filepathLineEdit->setMinimumWidth(50);
     m_filepathLineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_hLayout->addWidget(m_filepathLineEdit, 100);
+    QObject::connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
+                     this, SLOT(OnDoubleClick()));
     //
 
     // Browse button
@@ -56,12 +52,15 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     }
     //
 
-    QObject::connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
-                     this, SLOT(OnDoubleClick()));
 
     m_heightSizeHint = 35;
 
-    SetValue(filepath);
+    Path filepath;
+    bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
+    if (isEngineFile) { filepath = EPATH( xmlAttribute.GetValue() ); }
+    else              { filepath = UPATH( xmlAttribute.GetValue() ); }
+    SetValue(m_filepath);
+
     AfterConstructor();
 }
 
@@ -75,16 +74,15 @@ void AttrWidgetFile::Browse()
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
     dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
                  p_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
-                 m_fileExtension.Split(' ').ToList());
+                 m_allowedExtensions.Split(' ').ToList());
     while (dialog->isVisible()) { Application::processEvents(); }
 
-    if (!selectedFile.Empty())
+    Path selectedPath(selectedFile);
+    if (!selectedPath.Empty())
     {
-        SetValue(selectedFile);
+        SetValue(selectedPath);
         p_inspectorWidget->_OnSlotValueChanged();
     }
-
-    RefreshIcon();
 }
 
 void AttrWidgetFile::RefreshIcon()
@@ -101,7 +99,7 @@ void AttrWidgetFile::RefreshIcon()
     }
 }
 
-void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
+void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 {
     ENSURE(m_filepath != filepath);
 
@@ -113,7 +111,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
                                    XMLProperty::FileExtension.GetName()),
                                m_xmlAttribute.GetProperties());
 
-    String fileName = IO::GetBaseName(m_filepath);
+    String fileName = m_filepath.GetBaseName();
     String fileText = !fileName.Empty() ? fileName : "None";
 
     m_filepathLineEdit->SetBold( !fileName.Empty() );
@@ -130,7 +128,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
 
 String AttrWidgetFile::GetValue()
 {
-    return m_filepath;
+    return m_filepath.GetBaseName();
 }
 
 void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
@@ -144,7 +142,7 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
             String extensions =
                     m_xmlAttribute.GetPropertyValue(
                         XMLProperty::FileExtension.GetName());
-            if (f.IsOfExtension(extensions))
+            if (f.GetPath().HasExtension(extensions))
             {
                 m_filepathLineEdit->setStyleSheet(
                             IDragDropListener::acceptDragStyle);
@@ -163,20 +161,16 @@ void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
     m_filepathLineEdit->setStyleSheet("/* */");
 
     Explorer  *explorer  = Explorer::GetInstance();
-    Hierarchy *hierarchy = Hierarchy::GetInstance();
     if (ddi.currentObject == this)
     {
         if (ddi.sourceObject == explorer)
         {
             File f = explorer->GetSelectedFile();
-            if (f.IsOfExtension(m_fileExtension) && !m_readonly)
+            if (f.GetPath().HasExtension( m_allowedExtensions ) &&
+                !m_readonly)
             {
-                SetValue(f.GetAbsolutePath(), true);
+                SetValue(f.GetPath(), true);
             }
-        }
-        else if (ddi.sourceObject == hierarchy)
-        {
-            GameObject *go = hierarchy->GetFirstSelectedGameObject();
         }
     }
 }
@@ -184,10 +178,7 @@ void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
 
 void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (m_filepath != "")
-    {
-        OnDoubleClick();
-    }
+    if (!m_filepath.Empty()) { OnDoubleClick(); }
 }
 
 void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
@@ -197,12 +188,16 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetFilepath() );
 }
 
+const Path &AttrWidgetFile::GetPath() const
+{
+    return m_filepath;
+}
+
 void AttrWidgetFile::OnDoubleClick()
 {
-    ENSURE(IO::ExistsFile(m_filepath));
-    ENSURE(!IO::IsEngineFile(m_filepath));
-    ENSURE( m_filepath.BeginsWith( IO::GetProjectRootAbs() ) );
-    Explorer::GetInstance()->SelectFile(m_filepath);
+    ENSURE(m_filepath.Exists());
+    ENSURE(m_filepath.GetAbsolute().BeginsWith( IO::GetProjectRootAbs() ));
+    Explorer::GetInstance()->SelectPath(m_filepath);
 }
 
 

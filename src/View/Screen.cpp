@@ -185,7 +185,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
             if (f.IsPrefabAsset())
             {
                 Prefab prefab;
-                prefab.ReadFromFile(f.GetAbsolutePath());
+                prefab.ReadFromFile(f.GetPath().GetAbsolute());
                 m_gameObjectBeingDragged = prefab.InstantiateWithoutStarting();
             }
         }
@@ -241,7 +241,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
         File f = explorer->GetSelectedFile();
         if (f.IsMaterialAsset())
         {
-            Material *mat = AssetsManager::Load<Material>(f.GetRelativePath());
+            Material *mat = AssetsManager::Load<Material>(f.GetPath());
             if (mat)
             {
                 if (m_lastGameObjectOvered != overedGo)

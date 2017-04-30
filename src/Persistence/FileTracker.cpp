@@ -106,20 +106,20 @@ void FileTracker::ReloadChangedFiles()
     // Reload the files that have changed from the last time
 
     List<String> allFiles = GetPathsToTrack();
-    for (const String& absFilepath : allFiles)
+    for (const String& filepath : allFiles)
     {
-        File file(absFilepath); // Treat file in case it has changed
-        if (MustTrackFile(file) && HasFileChanged(absFilepath))
+        File file(filepath); // Treat file in case it has changed
+        if (MustTrackFile(file) && HasFileChanged(filepath))
         {
-            AssetsManager::ReloadAsset(absFilepath);
+            AssetsManager::ReloadAsset( Path(filepath) );
         }
     }
 
     // Mark them as seen later, not before, because we need to be aware of
     // changed files through the whole refresh process above, so no mark there.
-    for (const String& absFilepath : allFiles)
+    for (const String& filepath : allFiles)
     {
-        m_lastSeenTimes.Set(absFilepath, m_timeBeforeRefreshing);
+        m_lastSeenTimes.Set(filepath, m_timeBeforeRefreshing);
     }
 }
 
@@ -142,7 +142,7 @@ bool FileTracker::MustTrackFile(const File &file) const
     return file.IsFile() &&
            (
                 file.IsAsset() ||
-                m_additionalExtensions.Contains( file.GetExtension() )
+                m_additionalExtensions.Contains(file.GetPath().GetExtension())
            );
 }
 
@@ -181,11 +181,8 @@ void FileTracker::RefreshFileDependencies(const String &absFilepath)
         const XMLAttribute& attr = attrPair.second;
         if (attr.GetType() == XMLAttribute::Type::File)
         {
-            const String& depFilepath = attr.GetFilepath();
-            if (IO::ExistsFile(depFilepath))
-            {
-                depsList.Add(depFilepath);
-            }
+            const Path& depFilepath = attr.GetFilepath();
+            if (depFilepath.Exists()) { depsList.Add(depFilepath.GetAbsolute()); }
         }
     }
 }

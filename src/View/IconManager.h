@@ -7,6 +7,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class Material;
@@ -27,14 +28,14 @@ public:
     IconManager();
 
     static const QPixmap& GetEmptyPixmap();
-    static const QImage& LoadImage(const String &absPath,
+    static const QImage& LoadImage(const Path &path,
                                    IconOverlay overlay = IconOverlay::None);
-    static const QPixmap& LoadPixmap(const String &absPath,
+    static const QPixmap& LoadPixmap(const Path &path,
                                      IconOverlay overlay = IconOverlay::None);
     static const QPixmap& LoadMaterialPixmap(const Material *mat);
 
     static void InvalidatePixmap(Material *mat);
-    static void InvalidatePixmap(const String &absPath);
+    static void InvalidatePixmap(const Path &path);
 
     static QPixmap CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
                                              const QPixmap& pixmapToCenter);
@@ -52,7 +53,7 @@ private:
     QPixmap m_overlayAsset, m_overlayData;
     QImage m_materialBase;
 
-    Map<String, QImage> m_images;
+    Map<String, QImage>  m_images;
     Map<String, QPixmap> m_pixmaps;
 
     static QImage AddImageOverlay(const QImage& img, IconOverlay overlay);
@@ -63,7 +64,7 @@ private:
 
     static QImage SetQImageAlpha(const QImage &base, float alpha);
 
-    static String GetStringId(const String &absPath, IconOverlay overlay);
+    static String GetStringId(const Path &path, IconOverlay overlay);
 
     static IconManager* GetInstance();
 };

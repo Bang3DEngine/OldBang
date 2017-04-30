@@ -23,7 +23,7 @@ public:
 
     void SetImage(Texture2D *imageTexture);
 
-    Texture2D *GetImage() const;
+    Texture2D *GetImageTexture() const;
 
 private:
     Texture2D *m_imageTexture = nullptr;

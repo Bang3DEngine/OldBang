@@ -172,14 +172,14 @@ const Array<Vector2> &Mesh::GetUvs()
 
 const String &Mesh::GetMeshFilepath() const
 {
-    return m_meshFilepath;
+    return m_meshFilepath.GetAbsolute();
 }
 
 void Mesh::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
     m_meshFilepath = xmlInfo.GetFilepath("MeshFilepath");
-    LoadFromFile(m_meshFilepath);
+    LoadFromFile(m_meshFilepath.GetAbsolute());
 }
 
 void Mesh::Write(XMLNode *xmlInfo) const

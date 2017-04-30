@@ -13,9 +13,9 @@ AssetsManager::AssetsManager()
 
 AssetsManager::~AssetsManager()
 {
-    while (!m_idToAssetPointer.Empty())
+    while (!m_pathsToAssets.Empty())
     {
-        auto it = m_idToAssetPointer.Begin();
+        auto it = m_pathsToAssets.Begin();
         delete it->second;
     }
 }
@@ -26,103 +26,83 @@ AssetsManager *AssetsManager::GetCurrent()
     return  app ? app->GetAssetsManager() : nullptr;
 }
 
-String AssetsManager::FormatFilepath(const String &filepath,
-                                     bool isEngineAsset)
-{
-    return IO::ToAbsolute(filepath, isEngineAsset);
-}
-
-Asset *AssetsManager::GetAsset(const String &filepath, bool isEngineAsset)
+Asset *AssetsManager::GetAsset(const Path &filepath)
 {
     AssetsManager *am = AssetsManager::GetCurrent();
-    if (AssetsManager::IsLoaded(filepath, isEngineAsset))
+    if (AssetsManager::IsLoaded(filepath))
     {
-        String f = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-        return am->m_idToAssetPointer.Get(f);
+        return am->m_pathsToAssets.Get(filepath);
     }
     return nullptr;
 }
 
 #ifdef BANG_EDITOR
 
-void AssetsManager::UpdateAsset(const String &assetFilepath,
+void AssetsManager::UpdateAsset(const Path &assetFilepath,
                                 const XMLNode &xmlChangedInfo)
 {
     // Update live instances and rewrite the file
     ENSURE(!assetFilepath.Empty());
-    if (AssetsManager::IsLoaded(assetFilepath, false))
+    if (AssetsManager::IsLoaded(assetFilepath))
     {
-        Asset *asset = AssetsManager::GetAsset(assetFilepath, false);
+        Asset *asset = AssetsManager::GetAsset(assetFilepath);
         asset->Read(xmlChangedInfo);
     }
 
-    if (IO::ExistsFile(assetFilepath))
+    if (assetFilepath.Exists())
     {
-        IO::WriteToFile(assetFilepath, xmlChangedInfo.ToString());
+        IO::WriteToFile(assetFilepath.GetAbsolute(), xmlChangedInfo.ToString());
     }
 }
 
-void AssetsManager::InvalidateAsset(const String &assetFilepath)
+void AssetsManager::InvalidateAsset(const Path &assetFilepath)
 {
     AssetsManager *am = AssetsManager::GetCurrent();
-    String f = AssetsManager::FormatFilepath(assetFilepath, false);
-    am->m_idToAssetPointer.Remove(f);
+    am->m_pathsToAssets.Remove(assetFilepath);
 }
 
-void AssetsManager::ReloadAsset(const String &assetFilepath)
+void AssetsManager::ReloadAsset(const Path &assetFilepath)
 {
     ENSURE(!assetFilepath.Empty());
-    Asset *asset = AssetsManager::GetAsset(assetFilepath, false);
-    if (asset)
-    {
-        asset->ReadFromFile(assetFilepath);
-    }
+    Asset *asset = AssetsManager::GetAsset(assetFilepath);
+    if (asset) { asset->ReadFromFile(assetFilepath.GetAbsolute()); }
 }
 
 #endif
 
-bool AssetsManager::IsLoaded(const String &filepath,
-                             bool isEngineAsset)
+bool AssetsManager::IsLoaded(const Path &filepath)
 {
     AssetsManager *am = AssetsManager::GetCurrent();
     if (!am) { return false; }
 
-    String f = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-    return (am->m_idToAssetPointer.ContainsKey(f));
+    return (am->m_pathsToAssets.ContainsKey(filepath));
 }
 
-void AssetsManager::Unload(const String &id)
+void AssetsManager::Unload(const Path &filepath)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
-    String f = AssetsManager::FormatFilepath(id, false);
-    am->m_idToAssetPointer.Remove(f);
+    am->m_pathsToAssets.Remove(filepath);
 }
 
 void AssetsManager::Unload(Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
-    am->m_idToAssetPointer.RemoveValues(asset);
+    am->m_pathsToAssets.RemoveValues(asset);
 }
 
-void AssetsManager::SaveAssetToMap(const String &filepath,
-                                   Asset *asset,
-                                   bool isEngineAsset)
+void AssetsManager::SaveAssetToMap(const Path &filepath, Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
     if (!filepath.Empty() && asset)
     {
-        String f = FormatFilepath(filepath, isEngineAsset);
-        am->m_idToAssetPointer[f] = asset;
+        am->m_pathsToAssets.Set(filepath, asset);
     }
 }
 
-void AssetsManager::SaveAssetToFile(const String &filepath,
-                                    Asset *asset,
-                                    bool isEngineAsset)
+void AssetsManager::SaveAssetToFile(const Path &filepath, Asset *asset)
 {
     if (!filepath.Empty() && asset)
     {
-        String f = FormatFilepath(filepath, isEngineAsset);
-        IO::WriteToFile(f, asset->GetSerializedString());
+        IO::WriteToFile(filepath.GetAbsolute(), asset->GetSerializedString());
     }
 }

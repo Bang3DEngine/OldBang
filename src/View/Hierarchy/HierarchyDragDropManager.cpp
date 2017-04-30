@@ -111,7 +111,7 @@ bool HierarchyDragDropManager::AcceptDrop()
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
                                                       const DragDropInfo &ddi)
 {
-    if (f.GetRelativePath().Empty()) { return; }
+    if (f.GetPath().GetRelative().Empty()) { return; }
 
     if (f.IsPrefabAsset())
     {
@@ -125,7 +125,7 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
         ENSURE(dropTargetGameObject);
 
         Prefab *prefab = new Prefab();
-        prefab->ReadFromFile(f.GetAbsolutePath());
+        prefab->ReadFromFile(f.GetPath().GetAbsolute());
         GameObject *go = prefab->Instantiate(); ENSURE(go);
         go->SetParent(dropTargetGameObject, false, aboveGameObject);
     }

@@ -42,7 +42,7 @@ void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
     m_fontFilepath = xmlInfo.GetFilepath("FontFilepath");
-    LoadFromTTF(m_fontFilepath);
+    LoadFromTTF(m_fontFilepath.GetAbsolute());
 }
 
 void Font::Write(XMLNode *xmlInfo) const

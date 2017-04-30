@@ -18,27 +18,27 @@ ShaderProgramAssetFile::ShaderProgramAssetFile(const QFileSystemModel *model,
 
 const QPixmap &ShaderProgramAssetFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/BehaviourIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
+    return IconManager::LoadPixmap(EPATH("Icons/BehaviourIcon.png"),
+                                   IconManager::IconOverlay::Asset);
 }
 
-String ShaderProgramAssetFile::GetVertexShaderFilepath() const
+Path ShaderProgramAssetFile::GetVertexShaderFilepath() const
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetAbsolutePath());
-    return xmlInfo.GetString("VertexShader");
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    return xmlInfo.GetFilepath("VertexShader");
 }
 
-String ShaderProgramAssetFile::GetFragmentShaderFilepath() const
+Path ShaderProgramAssetFile::GetFragmentShaderFilepath() const
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetAbsolutePath());
-    return xmlInfo.GetString("FragmentShader");
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    return xmlInfo.GetFilepath("FragmentShader");
 }
 
 void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
-    IO::WriteToFile(GetAbsolutePath(), xmlInfo.ToString());
-    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+    IO::WriteToFile(GetPath().GetAbsolute(), xmlInfo.ToString());
+    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
 }
 
 void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const

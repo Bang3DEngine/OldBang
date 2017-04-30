@@ -203,10 +203,8 @@ bool GameBuilder::CreateDataDirectory(const String &executableDir)
 
 Project* GameBuilder::CreateGameProject(const String &executableDir)
 {
-    String dataDir = executableDir + "/GameData";
-    Project *gameProject =
-            ProjectManager::CreateNewProjectFileOnly(dataDir + "/Game.bproject");
-    return gameProject;
+    String projectFile = executableDir + "/GameData/Game.bproject";
+    return ProjectManager::CreateNewProjectFileOnly( Path(projectFile ) );
 }
 
 bool GameBuilder::CompileBehaviours(const String &executableDir,

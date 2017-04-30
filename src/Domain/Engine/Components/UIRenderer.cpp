@@ -12,8 +12,8 @@
 UIRenderer::UIRenderer()
 {
     SetMesh(MeshFactory::GetUIPlane());
-    SetMaterial( AssetsManager::Load<Material>("Materials/G_DefaultNoSP.bmat",
-                                               true) );
+    SetMaterial(
+        AssetsManager::Load<Material>( EPATH("Materials/G_DefaultNoSP.bmat")) );
     UseMaterialCopy();
     GetMaterial()->SetDiffuseColor(m_tint);
 

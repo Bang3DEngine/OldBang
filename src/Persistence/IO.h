@@ -9,6 +9,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/List.h"
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class Explorer;
@@ -85,6 +86,8 @@ public:
    static bool Rename(const String &oldPath, const String &newPath);
    static bool Move(const String &oldPath, const String &newPath);
    static bool WriteToFile(const String &absFilepath, const String &contents);
+
+   static bool IsEngineFile(const Path &path);
 
    static String GetHash(const String &filepath);
    static String GetHashFromString(const String &str);

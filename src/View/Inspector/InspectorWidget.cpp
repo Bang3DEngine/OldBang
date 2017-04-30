@@ -146,7 +146,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             {
                 AttrWidgetFile *awf = Object::SCast<AttrWidgetFile>(aw);
                 attribute.SetFilepath(
-                    awf->GetValue(),
+                    awf->GetPath(),
                     attribute.GetPropertyValue(XMLProperty::FileExtension
                                                .GetName()),
                     attribute.GetProperties());

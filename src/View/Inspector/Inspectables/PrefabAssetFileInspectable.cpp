@@ -18,11 +18,11 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)
 {
     Prefab prefab;
-    prefab.ReadFromFile(f.GetAbsolutePath());
+    prefab.ReadFromFile(f.GetPath().GetAbsolute());
     SetRelatedSerializableObject( prefab.InstantiateWithoutStarting() );
 
     GameObject *go = Object::SCast<GameObject>(GetRelatedSerializableObject());
-    go->SetName( f.GetName() );
+    go->SetName( f.GetPath().GetBaseName() );
     go->SetEnabled(true);
     OnInspectorSlotChanged(nullptr);
 }
@@ -43,7 +43,7 @@ void PrefabAssetFileInspectable::CloneInto(ICloneable *clone) const
 void PrefabAssetFileInspectable::OnInspectorSlotChanged(
                                              InspectorWidget *inspectorWidget)
 {
-    AssetsManager::UpdateAsset(m_file.GetAbsolutePath(),
+    AssetsManager::UpdateAsset(m_file.GetPath(),
                                GetRelatedSerializableObject()->GetXMLInfo());
 }
 

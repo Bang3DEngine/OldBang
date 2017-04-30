@@ -26,8 +26,8 @@ EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
     m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
 
     m_cornerPosition = cornerPosition;
-    m_circleTexture =
-            AssetsManager::Load<Texture2D>("Textures/CircleIcon.btex2d", true);
+    Path circleTexPath = EPATH("Textures/CircleIcon.btex2d");
+    m_circleTexture = AssetsManager::Load<Texture2D>(circleTexPath);
 }
 
 EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
@@ -151,12 +151,10 @@ void EditorRectTransformCornerGizmo::ApplyMarginDisplacement(
     }
     else if (m_cornerPosition == CornerPosition::Center)
     {
-        Debug_Log("Before: " << marginLeft << ", " << marginRight);
         marginLeft  += d.x;
         marginTop   += d.y;
         marginRight -= d.x;
         marginBot   -= d.y;
-        Debug_Log("After: " << marginLeft << ", " << marginRight);
     }
 
     m_attachedRectTransform->SetMarginLeft (marginLeft);

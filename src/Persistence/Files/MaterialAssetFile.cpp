@@ -15,19 +15,19 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
                                      const QModelIndex &index) :
     File(model, index)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(m_path);
-    m_vshaderFilepath = xmlInfo.GetString("VertexShader");
-    m_fshaderFilepath = xmlInfo.GetString("FragmentShader");
+    XMLNode xmlInfo = XMLParser::FromFile( GetPath().GetAbsolute() );
+    m_vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    m_fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
     m_textureFilepaths.PushBack( xmlInfo.GetFilepath("Texture") );
     m_diffuseColor = xmlInfo.GetColor("DiffuseColor");
 
-    XMLNode xmlMatInfo = XMLParser::FromFile( GetRelativePath() );
+    XMLNode xmlMatInfo = XMLParser::FromFile( GetPath().GetAbsolute() );
     m_xmlInfo = xmlMatInfo;
 }
 
 const QPixmap& MaterialAssetFile::GetIcon() const
 {
-    String absPath = GetAbsolutePath();
+    String absPath = GetPath().GetAbsolute();
     Material *mat = AssetsManager::Load<Material>(absPath);
     return IconManager::LoadMaterialPixmap(mat);
 }
@@ -36,7 +36,7 @@ const QPixmap& MaterialAssetFile::GetIcon() const
 void MaterialAssetFile::Read(const XMLNode &xmlInfo)
 {
     // Update live instances currently being used
-    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
     m_xmlInfo = xmlInfo;
 }
 
@@ -46,15 +46,13 @@ void MaterialAssetFile::Write(XMLNode *xmlInfo) const
 
     // Do Read & Write so that old files with different formats have the
     // newer one
-    Material *mat = new Material();
-    mat->Read(m_xmlInfo);
-    mat->Write(xmlInfo);
+    Material mat;
+    mat.Read(m_xmlInfo);
+    mat.Write(xmlInfo);
 
     m_xmlInfo = *xmlInfo;
 
-    delete mat;
-
-    IconManager::InvalidatePixmap( GetAbsolutePath() );
+    IconManager::InvalidatePixmap( GetPath() );
 }
 
 
@@ -68,24 +66,4 @@ IInspectable *MaterialAssetFile::GetNewInspectable()
 bool MaterialAssetFile::IsAsset() const
 {
     return true;
-}
-
-const String &MaterialAssetFile::GetVertexShaderFilepath() const
-{
-    return m_vshaderFilepath;
-}
-
-const String &MaterialAssetFile::GetFragmentShaderFilepath() const
-{
-    return m_fshaderFilepath;
-}
-
-const Array<String> &MaterialAssetFile::GetTextureFilepaths() const
-{
-    return m_textureFilepaths;
-}
-
-const Color &MaterialAssetFile::GetDiffuseColor() const
-{
-    return m_diffuseColor;
 }

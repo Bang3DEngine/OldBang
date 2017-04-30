@@ -48,11 +48,11 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
 
 
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
-                "Materials/SP_SelectionEffect.bmat", true);
+                EPATH("Materials/SP_SelectionEffect.bmat") );
 
     m_renderGBufferToScreenMaterial =
-         AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat",
-                                       true);
+         AssetsManager::Load<Material>(
+                EPATH("Materials/RenderGBufferToScreen.bmat") );
 
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 

@@ -26,8 +26,8 @@ Renderer::Renderer()
     p_OnBindForSelectionFunc = [](){};
     #endif
 
-    SetMaterial( AssetsManager::Load<Material>("Materials/G_Default.bmat",
-                                               true));
+    SetMaterial(
+           AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") ));
 }
 
 Renderer::~Renderer()
@@ -207,15 +207,8 @@ void Renderer::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    String materialFilepath = xmlInfo.GetFilepath("Material");
-    if (!materialFilepath.Empty())
-    {
-        SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
-    }
-    else
-    {
-        SetMaterial (nullptr);
-    }
+    Path materialFilepath = xmlInfo.GetFilepath("Material");
+    SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
 
     SetTransparent(xmlInfo.GetBool("IsTransparent"));
     SetLineWidth(xmlInfo.GetFloat("LineWidth"));
@@ -233,15 +226,10 @@ void Renderer::Write(XMLNode *xmlInfo) const
         {
             xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }
-        else // In case the asset is created in runtime, write its mem address
-        {
-            String memAddress = String::ToString((void*) sharedMat);
-            xmlInfo->SetFilepath("Material", memAddress, "bmat");
-        }
     }
     else
     {
-        xmlInfo->SetFilepath("Material", "", "bmat");
+        xmlInfo->SetFilepath("Material", Path(), "bmat");
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());

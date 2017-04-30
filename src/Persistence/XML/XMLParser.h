@@ -50,6 +50,7 @@ public:
     static String GetTagName(const String &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);
 
+    static XMLNode FromFile(const Path &filepath);
     static XMLNode FromFile(const String &filepath);
     static XMLNode FromString(const String &xml);
 };

@@ -13,27 +13,27 @@
 
 Mesh* MeshFactory::GetPlane()
 {
-    return AssetsManager::Load<Mesh>("Meshes/Plane.bmesh", true);
+    return AssetsManager::Load<Mesh>( EPATH("Meshes/Plane.bmesh") );
 }
 
 Mesh *MeshFactory::GetUIPlane()
 {
-    return AssetsManager::Load<Mesh>("Meshes/UIPlane.bmesh", true);
+    return AssetsManager::Load<Mesh>( EPATH("Meshes/UIPlane.bmesh") );
 }
 
 Mesh* MeshFactory::GetCube()
 {
-    return AssetsManager::Load<Mesh>("Meshes/Cube.bmesh", true);
+    return AssetsManager::Load<Mesh>( EPATH("Meshes/Cube.bmesh") );
 }
 
 Mesh *MeshFactory::GetSphere()
 {
-    return AssetsManager::Load<Mesh>("Meshes/Sphere.bmesh", true);
+    return AssetsManager::Load<Mesh>( EPATH("Meshes/Sphere.bmesh") );
 }
 
 Mesh *MeshFactory::GetCone()
 {
-    return AssetsManager::Load<Mesh>("Meshes/Cone.bmesh", true);
+    return AssetsManager::Load<Mesh>( EPATH("Meshes/Cone.bmesh") );
 }
 
 MeshFactory::MeshFactory() {}
@@ -42,8 +42,8 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
 {
     GameObject *go = new GameObject(name);
 
-    Material *mat = AssetsManager::Load<Material>("Materials/G_Default.bmat",
-                                                  true);
+    Material *mat =
+            AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") );
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(GL::RenderMode::Triangles);

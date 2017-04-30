@@ -9,11 +9,11 @@
 IconManager::IconManager()
 {
     m_overlayAsset = QPixmap(
-              IO::ToAbsolute("Icons/AssetDistinctor.png", true).ToQString());
+              EPATH("Icons/AssetDistinctor.png").GetAbsolute().ToQString());
     m_overlayData = QPixmap(
-              IO::ToAbsolute("Icons/NoAssetDistinctor.png", true).ToQString());
+              EPATH("Icons/NoAssetDistinctor.png").GetAbsolute().ToQString());
     m_materialBase = QImage(
-              IO::ToAbsolute("Icons/MaterialAssetIcon.png", true).ToQString());
+              EPATH("Icons/MaterialAssetIcon.png").GetAbsolute().ToQString());
 
     m_overlayAsset = m_overlayAsset.scaled(
                 32, 32, Qt::KeepAspectRatio,
@@ -38,16 +38,16 @@ IconManager *IconManager::GetInstance()
     return SingletonManager::Get<IconManager>();
 }
 
-const QImage &IconManager::LoadImage(const String &absPath,
+const QImage &IconManager::LoadImage(const Path &path,
                                      IconManager::IconOverlay overlay)
 {
     IconManager *im = GetInstance();
-    String id = IconManager::GetStringId(absPath, overlay);
+    String id = IconManager::GetStringId(path, overlay);
     if (!im->m_pixmaps.ContainsKey(id))
     {
         QImage img = (overlay == IconOverlay::None) ?
-                            QImage(absPath.ToQString())
-                          : IconManager::LoadImage(absPath, IconOverlay::None);
+                            QImage(path.GetAbsolute().ToQString())
+                          : IconManager::LoadImage(path, IconOverlay::None);
         img = img.scaled(256, 256, Qt::KeepAspectRatio,
                          Qt::TransformationMode::SmoothTransformation);
 
@@ -63,12 +63,11 @@ const QImage &IconManager::LoadImage(const String &absPath,
 }
 
 
-const QPixmap& IconManager::LoadPixmap(const String &absPath,
-                                       IconOverlay overlay)
+const QPixmap& IconManager::LoadPixmap(const Path &path, IconOverlay overlay)
 {
     IconManager *im = GetInstance();
-    IconManager::LoadImage(absPath, overlay);
-    String id = IconManager::GetStringId(absPath, overlay);
+    IconManager::LoadImage(path, overlay);
+    String id = IconManager::GetStringId(path, overlay);
     return im->m_pixmaps.Get(id);
 }
 
@@ -77,13 +76,13 @@ void IconManager::InvalidatePixmap(Material *mat)
     IconManager::InvalidatePixmap(mat->GetFilepath());
 }
 
-void IconManager::InvalidatePixmap(const String &absPath)
+void IconManager::InvalidatePixmap(const Path &path)
 {
     IconManager *im = GetInstance();
     List<String> ids = im->m_images.GetKeys();
     for (const String &id : ids)
     {
-        if ( id.Contains(absPath) )
+        if ( id.Contains( path.GetAbsolute() ) )
         {
             im->m_images.Remove(id);
             im->m_pixmaps.Remove(id);
@@ -94,7 +93,9 @@ void IconManager::InvalidatePixmap(const String &absPath)
 const QPixmap &IconManager::LoadMaterialPixmap(const Material *mat)
 {
     IconManager *im = GetInstance();
-    String matPath = mat->GetFilepath();
+    if (!mat) { return im->m_emptyPixmap; }
+
+    Path matPath = mat->GetFilepath();
     String id = IconManager::GetStringId(matPath, IconOverlay::None);
     if (!im->m_pixmaps.ContainsKey(id))
     {
@@ -218,9 +219,9 @@ QPixmap IconManager::CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
     return emptyPixmap;
 }
 
-String IconManager::GetStringId(const String &absPath,
+String IconManager::GetStringId(const Path &path,
                                 IconManager::IconOverlay overlay)
 {
-    return absPath + "|" + String(overlay);
+    return path.GetAbsolute() + "|" + String(overlay);
 }
 

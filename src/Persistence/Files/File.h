@@ -5,6 +5,7 @@
 #include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/SerializableObject.h"
 
@@ -13,12 +14,10 @@ class IInspectable;
 class File : public SerializableObject
 {
 public:
-
     File();
+    File(const Path &filepath);
     File(const String &filepath);
     File(const QFileSystemModel *model, const QModelIndex &index);
-
-    virtual ~File();
 
     bool IsSound() const;
     bool IsAudioClipAsset() const;
@@ -43,13 +42,6 @@ public:
     bool IsDir() const;
     bool IsFile() const;
 
-    /**
-     * @brief The input must be something like "jpg png bmp obj"
-     * @param extensions
-     * @return
-     */
-    bool IsOfExtension(const String &extensions) const;
-
     static File *GetSpecificFile(const File &f);
     static bool Exists(const String &filepath);
     static void Write(const String &filepath, const String &contents);
@@ -66,12 +58,7 @@ public:
     #endif
 
     String GetContents() const;
-
-    const String& GetAbsolutePath() const;
-    const String& GetRelativePath() const;
-    const String& GetName() const;
-    const String& GetExtension() const;
-    String GetNameAndExtension() const;
+    const Path& GetPath() const;
 
     virtual bool IsAsset() const;
 
@@ -79,10 +66,7 @@ protected:
     const QFileSystemModel *m_fileSystemModel = nullptr;
     QModelIndex m_modelIndex;
 
-    bool m_isFile = true;
-    String m_path = "";
-    String m_name = "";
-    String m_extension = "";
+    Path m_path;
 
     friend class FileSystemModel;
     friend class DialogBrowseAssetFile;

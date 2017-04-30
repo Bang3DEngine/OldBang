@@ -62,8 +62,9 @@ void AudioSource::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
-    String newAudioClipFilepath = xmlInfo.GetFilepath("AudioClip");
+    AudioClip *audioClip = GetAudioClip();
+    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path();
+    Path newAudioClipFilepath = xmlInfo.GetFilepath("AudioClip");
     if (audioClipFilepath != newAudioClipFilepath)
     {
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
@@ -79,7 +80,8 @@ void AudioSource::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
+    AudioClip *audioClip = GetAudioClip();
+    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path();
     xmlInfo->SetFilepath("AudioClip", audioClipFilepath,
                          AudioClip::GetFileExtensionStatic());
     xmlInfo->SetFloat("Volume",     m_volume);
@@ -254,7 +256,7 @@ void AudioSource::OnDrawGizmos(bool depthed, bool overlay)
     if (!depthed && !overlay)
     {
         Texture2D *tex = AssetsManager::Load<Texture2D>(
-                    "Textures/AudioSourceIcon.btex2d", true);
+                    EPATH("Textures/AudioSourceIcon.btex2d") );
         Gizmos::SetPosition(transform->GetPosition());
         Gizmos::SetScale(Vector3::One * 0.1f);
         Gizmos::SetColor(Color::White);

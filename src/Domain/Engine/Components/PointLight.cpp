@@ -16,7 +16,7 @@
 PointLight::PointLight() : Light()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(
-                "Materials/SP_PointLight_Screen.bmat", true);
+                EPATH("Materials/SP_PointLight_Screen.bmat") );
 }
 
 PointLight::~PointLight()
@@ -76,7 +76,7 @@ void PointLight::OnDrawGizmos(bool depthed, bool overlay)
     if (!depthed && !overlay)
     {
         Texture2D *tex = AssetsManager::Load<Texture2D>(
-                    "Textures/PointLightIcon.btex2d", true);
+                    EPATH("Textures/PointLightIcon.btex2d") );
         Gizmos::SetColor(Color(GetColor(), 1));
         Gizmos::SetPosition(transform->GetPosition());
         Gizmos::SetScale(Vector3::One * 0.1f);

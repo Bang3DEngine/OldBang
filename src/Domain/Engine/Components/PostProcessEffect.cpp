@@ -69,21 +69,22 @@ Shader *PostProcessEffect::GetPostProcessShader() const
     return p_postProcessShader;
 }
 
-String PostProcessEffect::GetPostProcessShaderFilepath() const
+Path PostProcessEffect::GetPostProcessShaderFilepath() const
 {
-    return p_postProcessShader ? p_postProcessShader->GetFilepath() : "";
+    return p_postProcessShader ? p_postProcessShader->GetFilepath() : Path();
 }
 
 void PostProcessEffect::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    String shaderFilepath = xmlInfo.GetFilepath("PostProcessShader");
+    Path shaderFilepath = xmlInfo.GetFilepath("PostProcessShader");
     if (!p_postProcessShader ||
         shaderFilepath != p_postProcessShader->GetFilepath())
     {
-        Shader *postProcessShader = ShaderManager::Load(Shader::Type::Fragment,
-                                                        shaderFilepath);
+        Shader *postProcessShader =
+                ShaderManager::Load(Shader::Type::Fragment,
+                                    shaderFilepath.GetAbsolute());
         SetPostProcessShader(postProcessShader);
     }
 

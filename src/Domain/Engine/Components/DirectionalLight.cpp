@@ -17,7 +17,7 @@
 DirectionalLight::DirectionalLight()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(
-                "Materials/SP_DirectionalLight_Screen.bmat", true);
+                EPATH("Materials/SP_DirectionalLight_Screen.bmat") );
 }
 
 DirectionalLight::~DirectionalLight()
@@ -38,7 +38,7 @@ void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
     if (!depthed && !overlay)
     {
         Texture2D *tex = AssetsManager::Load<Texture2D>(
-                    "Textures/DirectionalLightIcon.btex2d", true);
+                    EPATH("Textures/DirectionalLightIcon.btex2d") );
         Gizmos::SetColor(Color(GetColor(), 1.0f));
         Gizmos::SetPosition(transform->GetPosition());
         Gizmos::SetScale(Vector3::One * 0.1f);

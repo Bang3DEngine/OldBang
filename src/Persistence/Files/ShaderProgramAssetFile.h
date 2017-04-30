@@ -17,8 +17,8 @@ public:
 
     virtual const QPixmap& GetIcon() const override;
 
-    String GetVertexShaderFilepath() const;
-    String GetFragmentShaderFilepath() const;
+    Path GetVertexShaderFilepath() const;
+    Path GetFragmentShaderFilepath() const;
 
     void Read(const XMLNode &xmlInfo) override;
     void Write(XMLNode *xmlInfo) const override;

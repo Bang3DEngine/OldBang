@@ -25,6 +25,7 @@ void Framebuffer::CreateColorAttachment(AttachmentId attId,
                                         Texture2D::Format texFormat)
 {
     Bind();
+    GL::ClearError();
     RenderTexture *tex = new RenderTexture();
     tex->SetFormat(texFormat);
     tex->Bind();

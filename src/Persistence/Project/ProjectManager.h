@@ -1,6 +1,7 @@
 #ifndef PROJECTMANAGER_H
 #define PROJECTMANAGER_H
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class Project;
@@ -12,12 +13,12 @@ private:
 public:
     ProjectManager();
 
-    static Project* OpenProject(const String &projectFilepath);
+    static Project* OpenProject(const Path &projectFilepath);
 
     #ifdef BANG_EDITOR
     static Project* CreateNewProject(const String &projectContainingDir,
                                      const String &projectName);
-    static Project* CreateNewProjectFileOnly(const String &projectFilepath);
+    static Project* CreateNewProjectFileOnly(const Path &projectFilepath);
     static void SaveProject(const Project *project);
     static void SaveCurrentProject();
     static void CloseCurrentProject();

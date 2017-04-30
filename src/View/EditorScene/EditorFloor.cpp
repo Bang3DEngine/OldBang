@@ -13,7 +13,7 @@
 EditorFloor::EditorFloor()
 {
     m_material = new Material(*AssetsManager::Load<Material>(
-                                  "Materials/G_DefaultNoSP.bmat", true));
+                                  EPATH("Materials/G_DefaultNoSP.bmat")));
     m_material->SetDiffuseColor(Color::White * 0.7f);
 
     m_lineRenderer = AddComponent<LineRenderer>();

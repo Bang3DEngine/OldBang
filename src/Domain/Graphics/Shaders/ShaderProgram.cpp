@@ -15,9 +15,9 @@ ShaderProgram::ShaderProgram()
     m_idGL = glCreateProgram();
 }
 
-ShaderProgram::ShaderProgram(const String &vshaderPath, const String &fshaderPath)
+ShaderProgram::ShaderProgram(const Path &vshaderPath, const Path &fshaderPath)
 {
-    String fShaderExt = IO::GetFileExtensionComplete(fshaderPath);
+    String fShaderExt = fshaderPath.GetExtension();
     if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
     else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::ScreenPass; }
     else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
@@ -27,22 +27,24 @@ ShaderProgram::ShaderProgram(const String &vshaderPath, const String &fshaderPat
 }
 
 ShaderProgram::ShaderProgram(Type type,
-                             const String &vshaderPath,
-                             const String &fshaderPath) : ShaderProgram()
+                             const Path &vshaderPath,
+                             const Path &fshaderPath) : ShaderProgram()
 {
     Init(type, vshaderPath, fshaderPath);
 }
 
 void ShaderProgram::Init(ShaderProgram::Type type,
-                         const String &vshaderPath,
-                         const String &fshaderPath)
+                         const Path &vshaderPath,
+                         const Path &fshaderPath)
 {
     m_type = type;
 
-    Shader *vs = ShaderManager::Load(Shader::Type::Vertex, vshaderPath);
+    Shader *vs = ShaderManager::Load(Shader::Type::Vertex,
+                                     vshaderPath.GetAbsolute());
     SetVertexShader(vs);
 
-    Shader *fs = ShaderManager::Load(Shader::Type::Fragment, fshaderPath);
+    Shader *fs = ShaderManager::Load(Shader::Type::Fragment,
+                                     fshaderPath.GetAbsolute());
     SetFragmentShader(fs);
 }
 
@@ -382,19 +384,19 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    String vShaderFilepath = xmlInfo.GetFilepath("VertexShader");
-    if (IO::ExistsFile(vShaderFilepath))
+    Path vShaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    if (vShaderFilepath.Exists())
     {
         Shader *vShader = ShaderManager::Load(Shader::Type::Vertex,
-                                              vShaderFilepath);
+                                              vShaderFilepath.GetAbsolute());
         SetVertexShader(vShader);
     }
 
-    String fShaderFilepath = xmlInfo.GetFilepath("FragmentShader");
-    if (IO::ExistsFile(fShaderFilepath))
+    Path fShaderFilepath = xmlInfo.GetFilepath("FragmentShader");
+    if (fShaderFilepath.Exists())
     {
         Shader *fShader = ShaderManager::Load(Shader::Type::Fragment,
-                                              fShaderFilepath);
+                                              fShaderFilepath.GetAbsolute());
         SetFragmentShader(fShader);
     }
 }
@@ -403,9 +405,9 @@ void ShaderProgram::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    String vShaderFilepath = p_vshader ? p_vshader->GetFilepath() : "";
+    Path vShaderFilepath = p_vshader ? p_vshader->GetFilepath() : Path();
     xmlInfo->SetFilepath("VertexShader",   vShaderFilepath, "vert glsl");
 
-    String fShaderFilepath = p_fshader ? p_fshader->GetFilepath() : "";
+    Path fShaderFilepath = p_fshader ? p_fshader->GetFilepath() : Path();
     xmlInfo->SetFilepath("FragmentShader", fShaderFilepath, "frag glsl");
 }

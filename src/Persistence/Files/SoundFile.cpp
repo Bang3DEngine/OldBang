@@ -24,8 +24,8 @@ SoundFile::~SoundFile()
 
 const QPixmap& SoundFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/AudioIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
+    return IconManager::LoadPixmap(EPATH("Icons/AudioIcon.png"),
+                                   IconManager::IconOverlay::Data);
 }
 
 void SoundFile::Read(const XMLNode &xmlInfo)
@@ -37,7 +37,8 @@ void SoundFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
+    xmlInfo->SetString("FileName", GetPath().GetBaseNameExt(),
+                       {XMLProperty::Readonly});
 
     SoundFile *noConstThis = const_cast<SoundFile*>(this);
     bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
@@ -56,12 +57,12 @@ void SoundFile::Write(XMLNode *xmlInfo) const
 
 void SoundFile::OnButtonClicked(const String &attrName)
 {
-    ENSURE( IO::ExistsFile( GetAbsolutePath() ) );
+    ENSURE( IO::ExistsFile( GetPath().GetAbsolute() ) );
     if (attrName == "Play")
     {
         m_tmpAudioSource = new AudioSource();
         m_tmpAudioClip = new AudioClip();
-        m_tmpAudioClip->LoadFromFile( GetAbsolutePath() );
+        m_tmpAudioClip->LoadFromFile( GetPath().GetAbsolute() );
         m_tmpAudioSource->SetAudioClip(m_tmpAudioClip);
         m_tmpAudioSource->Play();
     }

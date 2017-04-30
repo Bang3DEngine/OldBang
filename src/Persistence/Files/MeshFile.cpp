@@ -15,13 +15,13 @@ MeshFile::MeshFile()
 MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    m_numFaces = FileReader::GetMeshNumTriangles(m_path);
+    m_numFaces = FileReader::GetMeshNumTriangles(m_path.GetAbsolute());
 }
 
 const QPixmap& MeshFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
+    return IconManager::LoadPixmap(EPATH("Icons/MeshAssetIcon.png"),
+                                   IconManager::IconOverlay::Data);
 }
 
 void MeshFile::Read(const XMLNode &xmlInfo)
@@ -33,7 +33,8 @@ void MeshFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
+    xmlInfo->SetString("FileName", GetPath().GetBaseNameExt(),
+                       {XMLProperty::Readonly});
     xmlInfo->SetString("Mode", IsTriangles() ? "Triangles" : "Quads",
                       {XMLProperty::Readonly});
     xmlInfo->SetString("Faces",  String(GetNumFaces()),

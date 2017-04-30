@@ -141,7 +141,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         File file(this, idx);
 
         QPixmap pm;
-        String absPath = file.GetAbsolutePath();
+        String absPath = file.GetPath().GetAbsolute();
         if (IO::IsFile(absPath))
         {
             File *sFile = File::GetSpecificFile(file);
@@ -171,8 +171,8 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     {
         if (IO::IsFile(filePath(idx)))
         {
-            String fileName = m_explorer->GetSelectedFile().GetName();
-            return QVariant( fileName.ToQString() );
+            Path selectedPath = m_explorer->GetSelectedFile().GetPath();
+            return QVariant( selectedPath.GetBaseName().ToQString() );
         }
     }
     else if (role == Qt::TextColorRole)
@@ -182,7 +182,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         {
             Color textColor;
             File *sFile = File::GetSpecificFile(file);
-            if (sFile->IsAsset())
+            if (sFile && sFile->IsAsset())
             {
                 if (sFile->IsAudioClipAsset())
                 {
@@ -218,7 +218,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         QFont font = QFileSystemModel::data(idx, role).value<QFont>();
 
         File file(this, idx);
-        if ( IO::IsFile(file.GetAbsolutePath()) )
+        if ( IO::IsFile(file.GetPath().GetAbsolute()) )
         {
             File *sFile = File::GetSpecificFile(file);
             font.setBold( sFile->IsAsset() );

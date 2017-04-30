@@ -26,13 +26,13 @@ public:
     GL::BindTarget GetGLBindTarget() const override;
 
     const String& GetSourceCode() const;
-    const String& GetFilepath() const;
+    const Path& GetFilepath() const;
     Type GetType() const;
     String ToString() const;
 
 private:
     String m_sourceCode = "";
-    String m_filepath   = "";
+    Path m_filepath;
     Type m_type;
 
 };

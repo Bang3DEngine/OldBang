@@ -52,7 +52,7 @@ void ExplorerDirTree::CheckSelection()
             m_lastSelectedModelIndexPointer = index.internalPointer();
             String selectedDirPath =
                     m_fileSystemModel->filePath(index).toStdString();
-            m_explorer->SetDir(selectedDirPath);
+            m_explorer->SetDir( Path(selectedDirPath) );
         }
     }
 }

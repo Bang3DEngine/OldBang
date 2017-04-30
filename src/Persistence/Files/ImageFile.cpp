@@ -12,7 +12,7 @@ ImageFile::ImageFile()
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    QImage img = IconManager::LoadImage(GetAbsolutePath().ToQString());
+    QImage img = IconManager::LoadImage(GetPath());
     m_width  = img.width();
     m_height = img.height();
     m_numComponents = 4;
@@ -20,8 +20,7 @@ ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
 
 const QPixmap& ImageFile::GetIcon() const
 {
-    return IconManager::LoadPixmap(GetAbsolutePath(),
-                                   IconManager::IconOverlay::Data);
+    return IconManager::LoadPixmap(GetPath(), IconManager::IconOverlay::Data);
 }
 
 void ImageFile::Read(const XMLNode &xmlInfo)
@@ -32,11 +31,12 @@ void ImageFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetName() + "." + GetExtension(),
+    xmlInfo->SetString("FileName", GetPath().GetBaseNameExt(),
                        {XMLProperty::Readonly});
-    xmlInfo->SetFilepath("ImageFilePath", GetRelativePath(), "",
+    xmlInfo->SetFilepath("ImageFilePath", GetPath(), "",
                          {XMLProperty::Readonly});
-    xmlInfo->SetString("Dimensions", String(GetWidth()) + "x" + String(GetHeight()),
+    xmlInfo->SetString("Dimensions",
+                       String(GetWidth()) + "x" + String(GetHeight()),
                        {XMLProperty::Readonly});
     xmlInfo->SetString("Mode", GetNumComponents() == 3 ? "RGB" : "RGBA",
                        {XMLProperty::Readonly});

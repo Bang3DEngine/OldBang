@@ -58,7 +58,7 @@ public:
     void BindUvsVBOToLocation(int uvsVBOLocation);
 
 private:
-    String m_meshFilepath = "";
+    Path m_meshFilepath;
 
     Array<Vector3> m_positions;
     Array<Vector3> m_normals;

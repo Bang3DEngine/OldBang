@@ -83,9 +83,10 @@ String Path::GetExtension() const
     return IO::GetFileExtensionComplete( GetAbsolute() );
 }
 
-Path Path::GetParentDirectory() const
+Path Path::GetDirectory() const
 {
-    return IO::GetDir( GetAbsolute() );
+    String dirPath = IO::GetDir( GetAbsolute() );
+    return Path(dirPath, m_absolutePrefix);
 }
 
 const String &Path::GetAbsolute() const
@@ -101,4 +102,45 @@ const String& Path::GetRelative() const
 String Path::ToString() const
 {
     return GetAbsolute();
+}
+
+bool Path::Empty() const
+{
+    return GetAbsolute().Empty();
+}
+
+bool Path::HasExtension(const String &extensions) const
+{
+    String extension = GetExtension();
+    Array<String> extensionsList = extensions.Split(' ', true);
+    for (const String& ext : extensionsList)
+    {
+        if ( ext.EqualsNoCase(extension) ) { return true; }
+    }
+    return false;
+}
+
+bool Path::HasExtension(const Array<String> &extensions) const
+{
+    String extension = GetExtension();
+    for (const String& ext : extensions)
+    {
+        if ( ext.EqualsNoCase(extension) ) { return true; }
+    }
+    return false;
+}
+
+bool Path::operator!=(const Path &rhs) const
+{
+    return !(*this == rhs);
+}
+
+bool Path::operator==(const Path &rhs) const
+{
+    return GetAbsolute() == rhs.GetAbsolute();
+}
+
+bool Path::operator<(const Path &rhs) const
+{
+    return GetAbsolute() < rhs.GetAbsolute();
 }

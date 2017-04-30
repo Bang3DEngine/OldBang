@@ -8,6 +8,7 @@
 #include <QToolButton>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
 #include "Bang/Shortcut.h"
@@ -33,14 +34,14 @@ public:
     void OnWindowShown();
 
     String GetCurrentDir() const;
-    String GetSelectedFileOrDirPath() const;
+    Path GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
     const QFileSystemModel* GetFileSystemModel() const;
     FileReferencesManager *GetFileReferencesManager() const;
 
-    void StartRenaming(const String &filepath);
+    void StartRenaming(const Path &filepath);
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
@@ -53,21 +54,21 @@ public:
     void currentChanged(const QModelIndex &current,
                         const QModelIndex &previous) override;
 
-    void OnDirDoubleClicked(const String &dirpath);
-    void OnFileDoubleClicked(const String &filepath);
+    void OnDirDoubleClicked(const Path &dirpath);
+    void OnFileDoubleClicked(const Path &filepath);
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();
 
-    void SelectFile(const String &path);
+    void SelectPath(const Path &path);
 
     static Explorer* GetInstance();
-    void SetDir(const String &path);
+    void SetDir(const Path &path);
 
     bool IsEditing() const;
     bool IsInListMode() const;
 
-    void SetLabelText(const String &absPath);
+    void SetLabelText(const String &text);
 
 public slots:
     void OnDirLoaded(QString dir);
@@ -103,12 +104,7 @@ private:
     QLabel *m_labelCurrentPath = nullptr;
     QLabel *m_labelFileName    = nullptr;
 
-    String GetPathUnderMouse() const;
-    String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
-    String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
-    String GetDirFromModelIndex(const QModelIndex &qmi) const;
-    String GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
-    QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
+    QModelIndex GetModelIndexFromFilepath(const Path &filepath) const;
 
     friend class File;
     friend class SerializableObject;

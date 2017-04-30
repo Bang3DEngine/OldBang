@@ -17,6 +17,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Matrix4.h"
+#include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 
 String::String() :
@@ -523,6 +524,11 @@ String String::ToString(const Matrix4 &v)
     return v.ToString();
 }
 String String::ToString(const Quaternion &v)
+{
+    return v.ToString();
+}
+
+String String::ToString(const IToString &v)
 {
     return v.ToString();
 }

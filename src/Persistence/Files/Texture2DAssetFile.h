@@ -16,7 +16,7 @@ public:
     Texture2DAssetFile();
     Texture2DAssetFile(const QFileSystemModel *model, const QModelIndex &index);
 
-    String GetImageAbsFilepath() const;
+    Path GetImageFilepath() const;
     virtual const QPixmap& GetIcon() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;

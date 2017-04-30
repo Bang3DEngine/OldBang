@@ -18,7 +18,7 @@ AudioClipAssetFile::AudioClipAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
     m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
 }
 
@@ -29,8 +29,8 @@ AudioClipAssetFile::~AudioClipAssetFile()
 
 const QPixmap& AudioClipAssetFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/AudioClipIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
+    return IconManager::LoadPixmap(EPATH("Icons/AudioClipIcon.png"),
+                                   IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR
@@ -42,18 +42,16 @@ IInspectable *AudioClipAssetFile::GetNewInspectable()
 
 void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
 {
-    String audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
-    SetAudioFilepath(audioFilepath);
+    Path soundFilepath = xmlInfo.GetFilepath("AudioFilepath");
+    SetSoundFilepath(soundFilepath);
 
-    String audioClipFilepath = GetAbsolutePath();
     if (m_tmpAudioSource)
     {
-        AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath,
-                                                              false);
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>( GetPath() );
         m_tmpAudioSource->SetAudioClip(audioClip);
     }
 
-    AssetsManager::UpdateAsset(audioClipFilepath, xmlInfo);
+    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
 }
 
 void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
@@ -82,26 +80,25 @@ void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
     }
 }
 
-void AudioClipAssetFile::SetAudioFilepath(const String &audioFilepath)
+void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
 {
     m_audioFilepath = audioFilepath;
 
     if (!m_audioFilepath.Empty())
     {
-        AudioClip *audioClip = AssetsManager::Load<AudioClip>(GetAbsolutePath(),
-                                                              false);
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>(GetPath());
         if (audioClip)
         {
-            if (!audioClip->LoadFromFile( GetAbsolutePath() ))
+            if (!audioClip->LoadFromFile( GetPath().GetAbsolute() ))
             {
                 // If loading fails, set to audioFilepath to ""
-                SetAudioFilepath("");
+                SetSoundFilepath( Path() );
             }
         }
     }
 }
 
-const String &AudioClipAssetFile::GetAudioFilepath() const
+const Path &AudioClipAssetFile::GetAudioFilepath() const
 {
     return m_audioFilepath;
 }
@@ -134,6 +131,6 @@ bool AudioClipAssetFile::IsAsset() const
 
 AudioClip *AudioClipAssetFile::GetRelatedAudioClip() const
 {
-    return AssetsManager::Load<AudioClip>( GetAbsolutePath() );
+    return AssetsManager::Load<AudioClip>( GetPath() );
 }
 

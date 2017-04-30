@@ -7,6 +7,7 @@
 #include <cstring>
 
 class Color;
+class IToString;
 class QString;
 class Vector2;
 class Vector3;
@@ -130,6 +131,7 @@ public:
     static String ToString(const Vector4 &v);
     static String ToString(const Matrix4 &v);
     static String ToString(const Quaternion &v);
+    static String ToString(const IToString &v);
 
 };
 

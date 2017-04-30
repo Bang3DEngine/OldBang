@@ -1,6 +1,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/SerializableObject.h"
 
@@ -16,19 +17,18 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    const String& GetProjectRootFilepath() const;
-    String GetProjectDir() const;
-    String GetProjectAssetsRootFilepath() const;
-    String GetProjectFileFilepath() const;
+    const Path& GetProjectRootFilepath() const;
+    Path GetProjectDir() const;
+    Path GetProjectAssetsRootFilepath() const;
+    Path GetProjectFileFilepath() const;
     String GetProjectName() const;
     String GetProjectRandomId() const;
 
-    void SetProjectRootFilepath(const String &projectDir);
+    void SetProjectRootFilepath(const Path &projectDir);
 
 private:
-    String m_randomId = "123456789";
-    String m_projectRootFilepath = "";
-
+    String m_randomId = "";
+    Path m_projectRootFilepath;
 };
 
 #endif // PROJECT_H

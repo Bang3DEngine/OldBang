@@ -30,7 +30,7 @@ public:
               int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 
-    String GetImageFilepath() const;
+    Path GetImageFilepath() const;
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
@@ -40,7 +40,7 @@ public:
 
 private:
     Image m_image;
-    String m_imageFilepath = "";
+    Path m_imageFilepath;
     float m_alphaCutoff = 0.1f;
 
     Texture2D(const Texture2D &t); // No copy constr.

@@ -1,6 +1,7 @@
 #ifndef XMLATTRIBUTE_H
 #define XMLATTRIBUTE_H
 
+#include "Bang/Path.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
@@ -65,7 +66,7 @@ public:
     void SetColor(const Color &value, const Array<XMLProperty>& properties = {});
     void SetQuaternion(const Quaternion &value, const Array<XMLProperty>& properties = {});
     void SetRect(const Rect &value, const Array<XMLProperty>& properties = {});
-    void SetFilepath(const String &filepath, const String &fileExtension = "",
+    void SetFilepath(const Path &filepath, const String &allowedExtensions = "",
                      const Array<XMLProperty>& properties = {});
     void SetEnum(const Array<String>& enumNames,
                  const String& selectedEnumName,
@@ -102,7 +103,7 @@ public:
     bool GetBool() const;
     int GetInt() const;
     float GetFloat() const;
-    String GetFilepath() const;
+    Path GetFilepath() const;
     String GetString() const;
     Vector2 GetVector2() const;
     Vector3 GetVector3() const;

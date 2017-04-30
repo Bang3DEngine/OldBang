@@ -17,11 +17,11 @@ PrefabFile::PrefabFile()
 }
 
 PrefabFile::PrefabFile(const QFileSystemModel *model, const QModelIndex &index)
-    : PrefabFile( model->filePath(index) )
+    : PrefabFile( Path( String(model->filePath(index)) ) )
 {
 }
 
-PrefabFile::PrefabFile(const String &absPath) : File(absPath)
+PrefabFile::PrefabFile(const Path &path) : File(path)
 {
 }
 
@@ -31,8 +31,8 @@ PrefabFile::~PrefabFile()
 
 const QPixmap& PrefabFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
+    return IconManager::LoadPixmap(EPATH("Icons/PrefabAssetIcon.png"),
+                                   IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR

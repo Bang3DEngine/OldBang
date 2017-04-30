@@ -86,19 +86,19 @@ void Explorer::OnWindowShown()
                      this, SLOT(OnIconSizeSliderValueChanged(int)));
 
     win->sliderExplorerIconSize->setValue(30);
-    SetDir(IO::GetProjectAssetsRootAbs());
+    SetDir(  Path(IO::GetProjectAssetsRootAbs()) );
 }
 
 void Explorer::OnButtonDirUpClicked()
 {
     String rootPath = GetCurrentDir();
     String parentDirPath = IO::GetDirUp(rootPath);
-    SetDir(parentDirPath);
+    SetDir(  Path(parentDirPath) );
 }
 
 void Explorer::OnRenameClicked()
 {
-    String selectedPath = GetSelectedFileOrDirPath();
+    Path selectedPath = GetSelectedFileOrDirPath();
     if (!selectedPath.Empty())
     {
         StartRenaming(selectedPath);
@@ -126,16 +126,17 @@ void Explorer::OnFileRenamed(const QString &dirPath,
 {
     UpdateLabelText();
 
-    String newAbsPath = dirPath + "/" + newName;
-    SelectFile(newAbsPath);
+    Path newAbsPath(dirPath + "/" + newName);
+    SelectPath(newAbsPath);
 
     String oldAbsPath = dirPath + "/" + oldName;
-    m_fileRefsManager->OnFileOrDirNameMoved(oldAbsPath, newAbsPath);
+    m_fileRefsManager->OnFileOrDirNameMoved(oldAbsPath,
+                                            newAbsPath.GetAbsolute());
 }
 
 void Explorer::UpdateLabelText()
 {
-    String absPath = GetSelectedFile().GetAbsolutePath();
+    String absPath = GetSelectedFile().GetPath().GetAbsolute();
     SetLabelText(absPath);
 }
 
@@ -180,10 +181,10 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         ENSURE(selectedIndexes().length() > 0);
-        String selectedPath = GetSelectedFileOrDirPath();
-        if (IO::Exists(selectedPath))
+        Path selectedPath = GetSelectedFileOrDirPath();
+        if (selectedPath.Exists())
         {
-            if (IO::IsDir(selectedPath))
+            if (selectedPath.IsDir())
             {
                 OnDirDoubleClicked(selectedPath);
             }
@@ -217,21 +218,21 @@ void Explorer::currentChanged(const QModelIndex &current,
     RefreshInspector();
 }
 
-void Explorer::OnDirDoubleClicked(const String &dirpath)
+void Explorer::OnDirDoubleClicked(const Path &dirpath)
 {
     SetDir(dirpath);
 }
 
-void Explorer::OnFileDoubleClicked(const String &filepath)
+void Explorer::OnFileDoubleClicked(const Path &filepath)
 {
     File f(filepath);
     if (f.IsScene())
     {
-        MenuBar::GetInstance()->OpenScene(f.GetAbsolutePath());
+        MenuBar::GetInstance()->OpenScene(f.GetPath().GetAbsolute());
     }
     else if (f.IsBehaviour())
     {
-        QtProjectManager::OpenBehaviourInQtCreator(filepath);
+        QtProjectManager::OpenBehaviourInQtCreator(filepath.GetAbsolute());
     }
 }
 
@@ -241,7 +242,7 @@ void Explorer::RefreshInspector()
 
     QModelIndex selectedIndex = selectedIndexes().front();
     File f(m_fileSystemModel, selectedIndex);
-    if (selectedIndex.isValid() && f.IsFile() && IO::Exists(f.GetAbsolutePath()))
+    if (selectedIndex.isValid() && f.IsFile() && IO::Exists(f.GetPath().GetAbsolute()))
     {
         Inspector::GetInstance()->Clear();
 
@@ -260,9 +261,9 @@ void Explorer::RefreshInspector()
     }
 }
 
-void Explorer::SelectFile(const String &path)
+void Explorer::SelectPath(const Path &path)
 {
-    SetDir(IO::GetDir(path));
+    SetDir(path.GetDirectory());
 
     QModelIndex ind = GetModelIndexFromFilepath(path);
     if (ind.isValid())
@@ -281,39 +282,12 @@ Explorer *Explorer::GetInstance()
     return ew ? ew->widgetListExplorer : nullptr;
 }
 
-String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
+QModelIndex Explorer::GetModelIndexFromFilepath(const Path &filepath) const
 {
-    String f = m_fileSystemModel->fileInfo(qmi)
-               .absoluteFilePath().toStdString();
-    return f;
+    return m_fileSystemModel->index(filepath.GetAbsolute().ToQString());
 }
 
-String Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
-{
-    String f = GetFilepathFromModelIndex(qmi);
-    return IO::ToRelative(f);
-}
-
-String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
-{
-    String f = m_fileSystemModel->fileInfo(qmi).absoluteDir()
-                    .absolutePath().toStdString();
-    return f;
-}
-
-String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
-{
-    String f = GetDirFromModelIndex(qmi);
-    return IO::ToRelative(f);
-}
-
-QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
-{
-    String absFilepath = IO::ToAbsolute(filepath, false);
-    return m_fileSystemModel->index(absFilepath.ToQString());
-}
-
-void Explorer::SetDir(const String &path)
+void Explorer::SetDir(const Path &dirPath)
 {
     if (!selectedIndexes().empty())
     {
@@ -321,9 +295,9 @@ void Explorer::SetDir(const String &path)
         clearSelection();
     }
 
-    String absDir = IO::ToAbsolute(path, false);
-    setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
-    SetLabelText(absDir);
+    String dir = dirPath.GetAbsolute();
+    setRootIndex(m_fileSystemModel->setRootPath(dir.ToQString()));
+    SetLabelText(dir);
     clearSelection();
 }
 
@@ -337,13 +311,13 @@ bool Explorer::IsInListMode() const
     return viewMode() == ViewMode::ListMode;
 }
 
-void Explorer::SetLabelText(const String &absPath)
+void Explorer::SetLabelText(const String &text)
 {
 	if (!m_labelCurrentPath) { return; }
-    String textDir = absPath.ElideLeft(65);
+    String textDir = text.ElideLeft(65);
     m_labelCurrentPath->setText(textDir.ToQString());
 
-    String fileNameExt = IO::GetFileNameWithExtension(absPath);
+    String fileNameExt = IO::GetFileNameWithExtension(text);
     m_labelFileName->setText( fileNameExt.ToQString() );
 }
 
@@ -369,13 +343,13 @@ String Explorer::GetCurrentDir() const
     return m_fileSystemModel->rootPath().toStdString();
 }
 
-String Explorer::GetSelectedFileOrDirPath() const
+Path Explorer::GetSelectedFileOrDirPath() const
 {
     if (!selectedIndexes().empty())
     {
-        return String(m_fileSystemModel->filePath(selectedIndexes().front()));
+        return Path(m_fileSystemModel->filePath(selectedIndexes().front()));
     }
-    return "";
+    return Path();
 }
 
 File Explorer::GetSelectedFile() const
@@ -411,9 +385,9 @@ FileReferencesManager *Explorer::GetFileReferencesManager() const
     return m_fileRefsManager;
 }
 
-void Explorer::StartRenaming(const String &filepath)
+void Explorer::StartRenaming(const Path &filepath)
 {
-    SelectFile(filepath);
+    SelectPath(filepath);
     if (!selectedIndexes().empty())
     {
         QModelIndex selectedIndex = selectedIndexes().front();
@@ -470,10 +444,10 @@ void Explorer::keyPressEvent(QKeyEvent *e)
           static_cast<Input::Key>(e->key()) == Input::Key::Return)
         )
     {
-        String selectedPath = GetSelectedFileOrDirPath();
-        if (IO::Exists(selectedPath))
+        Path selectedPath = GetSelectedFileOrDirPath();
+        if (selectedPath.Exists())
         {
-            if (IO::IsDir(selectedPath))
+            if (selectedPath.IsDir())
             {
                 OnDirDoubleClicked(selectedPath);
             }
@@ -489,11 +463,4 @@ void Explorer::updateGeometries()
 {
     QListView::updateGeometries();
     verticalScrollBar()->setSingleStep(3);
-}
-
-String Explorer::GetPathUnderMouse() const
-{
-    File destDir(m_fileSystemModel,
-                 indexAt( viewport()->mapFromGlobal(QCursor::pos()) ));
-    return destDir.GetAbsolutePath();
 }

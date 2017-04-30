@@ -28,17 +28,11 @@ public:
 
     virtual bool IsAsset() const override;
 
-    const String& GetVertexShaderFilepath() const;
-    const String& GetFragmentShaderFilepath() const;
-    int GetTextureCount() const;
-    const Array<String>& GetTextureFilepaths() const;
-    const Color& GetDiffuseColor() const;
-
 private:
     mutable XMLNode m_xmlInfo;
-    String m_vshaderFilepath = "";
-    String m_fshaderFilepath = "";
-    Array< String > m_textureFilepaths;
+    Path m_vshaderFilepath;
+    Path m_fshaderFilepath;
+    Array<Path> m_textureFilepaths;
     Color m_diffuseColor = Color(0.0f);
 };
 

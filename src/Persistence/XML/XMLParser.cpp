@@ -40,6 +40,11 @@ String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameE
     return tag.SubString(nameBegin, nameEnd - 1);
 }
 
+XMLNode XMLParser::FromFile(const Path &filepath)
+{
+    return XMLParser::FromFile(filepath.GetAbsolute());
+}
+
 void XMLParser::GetFirstAttribute(const String &tag,
                                   int startPosition,
                                   XMLAttribute *attribute,

@@ -17,16 +17,11 @@ class AttrWidgetFile : public AttributeWidget,
     Q_OBJECT
 
 public:
-    String m_filepath = "";
-    String m_fileExtension = "";
-    FileLineEdit *m_filepathLineEdit = nullptr;
-
-public:
     AttrWidgetFile(const XMLAttribute &xmlAttribute,
                    InspectorWidget *p_inspectorWidget);
     virtual ~AttrWidgetFile();
 
-    virtual void SetValue(const String &filepath, bool draggedFile = false);
+    virtual void SetValue(const Path &filepath, bool draggedFile = false);
     virtual String GetValue();
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
@@ -35,6 +30,8 @@ public:
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
     virtual void Refresh(const XMLAttribute &attribute) override;
 
+    const Path& GetPath() const;
+
 public slots:
     void OnDoubleClick();
     void Browse();
@@ -42,6 +39,10 @@ public slots:
 private:
     QLabel *m_iconLabel = nullptr;
     QHBoxLayout *m_hLayout = nullptr;
+
+    Path m_filepath;
+    String m_allowedExtensions;
+    FileLineEdit *m_filepathLineEdit = nullptr;
 
     void RefreshIcon();
 };

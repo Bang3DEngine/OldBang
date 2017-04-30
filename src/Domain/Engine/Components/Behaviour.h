@@ -52,7 +52,7 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    const String& GetSourceFilepath() const;
+    const Path& GetSourceFilepath() const;
     virtual void OnAddedToGameObject() override;
     void RefreshBehaviourLib();
 
@@ -91,9 +91,7 @@ private:
     static String s_behaviourHeaderTemplate;
     static String s_behaviourSourceTemplate;
 
-    /// Path to the source file of this Behaviour
-    String m_sourceFilepath = "";
-
+    Path m_sourceFilepath;
     QLibrary *p_behavioursLibraryBeingUsed = nullptr;
 };
 

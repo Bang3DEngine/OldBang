@@ -15,7 +15,7 @@
 
 Camera::Camera()
 {
-    p_camMesh = AssetsManager::Load<Mesh>("Meshes/Camera.bmesh", true);
+    p_camMesh = AssetsManager::Load<Mesh>( EPATH("Meshes/Camera.bmesh") );
 }
 
 Camera::~Camera()

@@ -2,6 +2,7 @@
 #define ASSET_H
 
 #include "Bang/IO.h"
+#include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/IToString.h"
 #include "Bang/IconManager.h"
@@ -17,7 +18,7 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override;
 
-    String GetFilepath() const;
+    const Path& GetFilepath() const;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -27,7 +28,7 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    String m_assetFilepath = "";
+    Path m_assetFilepath;
 
     Asset();
     virtual ~Asset();
@@ -39,8 +40,7 @@ protected:
 public: \
     static const QPixmap& GetIconStatic() \
     {\
-        String path = IO::ToAbsolute(ICON_PATH, true); \
-        return IconManager::LoadPixmap(path); \
+        return IconManager::LoadPixmap( EPATH(ICON_PATH) ); \
     } \
     const virtual QPixmap& GetIcon() const override \
     { \

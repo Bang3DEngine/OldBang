@@ -14,20 +14,20 @@ MeshAssetFile::MeshAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(m_path);
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
     m_meshFilepath = xmlInfo.GetFilepath("MeshFilepath");
 }
 
 const QPixmap& MeshAssetFile::GetIcon() const
 {
-    String path = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
-    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
+    return IconManager::LoadPixmap(EPATH("Icons/MeshAssetIcon.png"),
+                                   IconManager::IconOverlay::Asset);
 }
 
 void MeshAssetFile::Read(const XMLNode &xmlInfo)
 {
     SetMeshFilepath( xmlInfo.GetFilepath("MeshFilepath") );
-    AssetsManager::UpdateAsset(GetAbsolutePath(), xmlInfo);
+    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
 }
 
 void MeshAssetFile::Write(XMLNode *xmlInfo) const
@@ -42,7 +42,7 @@ IInspectable *MeshAssetFile::GetNewInspectable()
     return new FileInspectable<MeshAssetFile>(*this);
 }
 
-void MeshAssetFile::SetMeshFilepath(const String &meshFilepath)
+void MeshAssetFile::SetMeshFilepath(const Path &meshFilepath)
 {
     m_meshFilepath = meshFilepath;
 }
@@ -53,7 +53,7 @@ bool MeshAssetFile::IsAsset() const
     return true;
 }
 
-const String& MeshAssetFile::GetMeshFilepath() const
+const Path& MeshAssetFile::GetMeshFilepath() const
 {
     return m_meshFilepath;
 }

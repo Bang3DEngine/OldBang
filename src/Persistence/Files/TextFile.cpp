@@ -12,7 +12,7 @@ TextFile::TextFile()
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    m_contents = IO::GetFileContents(m_path);
+    m_contents = IO::GetFileContents( GetPath().ToString() );
 }
 
 String TextFile::GetContents() const
@@ -24,7 +24,7 @@ void TextFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     String contents = xmlInfo.GetString("Contents");
-    IO::WriteToFile(GetAbsolutePath(), contents);
+    IO::WriteToFile( GetPath().GetAbsolute(), contents);
 }
 
 void TextFile::Write(XMLNode *xmlInfo) const

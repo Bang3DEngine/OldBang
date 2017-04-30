@@ -103,13 +103,13 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetName() +
+    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
                      "." + Texture2D::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newTexName = IO::GetFileNameWithExtension(newPath);
 
     Texture2D *tex = mb->OnCreateTexture2D(newTexName);
-    tex->LoadFromImage(f.GetAbsolutePath());
+    tex->LoadFromImage(f.GetPath().GetAbsolute());
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(tex, newTexName);
@@ -129,13 +129,13 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetName() +
+    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
                      "." + AudioClip::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newAudioName = IO::GetFileNameWithExtension(newPath);
 
     AudioClip *audio = mb->OnCreateAudioClip(newAudioName);
-    audio->LoadFromFile(f.GetAbsolutePath());
+    audio->LoadFromFile(f.GetPath().GetAbsolute());
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
 
@@ -148,7 +148,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     if (!fromTexture)
     {
         fromTexture = AssetsManager::Load<Texture2D>(
-                    p_explorer->GetSelectedFileOrDirPath(), false);
+                    p_explorer->GetSelectedFileOrDirPath());
     }
 	if (!fromTexture) { return nullptr; }
 
@@ -156,7 +156,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     MenuBar *mb = MenuBar::GetInstance();
 
     String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetName() +
+    String newPath = dirPath + "/" + f.GetPath().GetBaseName() +
                      "." + Material::GetFileExtensionStatic();
     newPath = IO::GetDuplicatePath(newPath);
     String newMatName = IO::GetFileNameWithExtension(newPath);
@@ -172,8 +172,8 @@ void ExplorerContextMenu::OnDuplicateClicked()
 {
     ENSURE(!p_explorer->GetSelectedFileOrDirPath().Empty());
 
-    String fromPath = p_explorer->GetSelectedFileOrDirPath();
-    String toPath = IO::GetDuplicatePath(fromPath);
+    String fromPath = p_explorer->GetSelectedFileOrDirPath().GetAbsolute();
+    String toPath = IO::GetDuplicatePath( fromPath );
     if (IO::IsFile(fromPath))
     {
         IO::DuplicateFile(fromPath, toPath);
@@ -183,12 +183,12 @@ void ExplorerContextMenu::OnDuplicateClicked()
         IO::DuplicateDir(fromPath, toPath);
     }
 
-    p_explorer->SelectFile(toPath);
+    p_explorer->SelectPath( Path(toPath) );
 }
 
 void ExplorerContextMenu::OnDeleteClicked()
 {
-    String path = p_explorer->GetSelectedFile().GetAbsolutePath();
+    String path = p_explorer->GetSelectedFile().GetPath().GetAbsolute();
     String name = IO::GetFileNameWithExtension(path);
     ENSURE( IO::Exists(path) );
 
@@ -212,5 +212,5 @@ void ExplorerContextMenu::OnCreateDirClicked()
     dirPath = IO::ToAbsolute(dirPath, false);
 
     IO::CreateDirectory(dirPath);
-    p_explorer->StartRenaming(dirPath);
+    p_explorer->StartRenaming(  Path(dirPath) );
 }

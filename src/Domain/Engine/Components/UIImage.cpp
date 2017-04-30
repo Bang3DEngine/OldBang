@@ -12,8 +12,8 @@
 
 UIImage::UIImage()
 {
-    SetMaterial(AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat",
-                                              true) );
+    SetMaterial(AssetsManager::Load<Material>(
+                    EPATH("Materials/UI/G_UIImage.bmat") ) );
     UseMaterialCopy();
 
     m_imageTexture = new Texture2D();
@@ -28,7 +28,7 @@ void UIImage::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
     UIImage *img = Object::SCast<UIImage>(clone);
-    img->SetImage( GetImage() );
+    img->SetImage( GetImageTexture() );
 }
 
 void UIImage::SetImage(Texture2D *imageTexture)
@@ -37,7 +37,7 @@ void UIImage::SetImage(Texture2D *imageTexture)
     GetMaterial()->SetTexture(m_imageTexture);
 }
 
-Texture2D *UIImage::GetImage() const
+Texture2D *UIImage::GetImageTexture() const
 {
     return m_imageTexture;
 }
@@ -45,7 +45,7 @@ Texture2D *UIImage::GetImage() const
 void UIImage::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
-    String texFilepath = xmlInfo.GetFilepath("Image");
+    Path texFilepath = xmlInfo.GetFilepath("Image");
     SetImage( AssetsManager::Load<Texture2D>(texFilepath) );
 }
 
@@ -53,7 +53,8 @@ void UIImage::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 
-    String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
+    Texture2D *imgTex = GetImageTexture();
+    Path texFilepath = imgTex ? imgTex->GetFilepath() : Path();
     xmlInfo->SetFilepath("Image", texFilepath,
                          Texture2D::GetFileExtensionStatic());
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});

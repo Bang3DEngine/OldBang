@@ -36,30 +36,30 @@ void Project::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("RandomID", m_randomId);
 }
 
-const String&  Project::GetProjectRootFilepath() const
+const Path&  Project::GetProjectRootFilepath() const
 {
     return m_projectRootFilepath;
 }
 
-String Project::GetProjectDir() const
+Path Project::GetProjectDir() const
 {
-    return IO::GetDir(m_projectRootFilepath);
+    return m_projectRootFilepath.GetDirectory();
 }
 
-String Project::GetProjectAssetsRootFilepath() const
+Path Project::GetProjectAssetsRootFilepath() const
 {
-    return m_projectRootFilepath + "/Assets";
+    return Path(m_projectRootFilepath + "/Assets");
 }
 
-String Project::GetProjectFileFilepath() const
+Path Project::GetProjectFileFilepath() const
 {
-    return m_projectRootFilepath + "/" +
-            GetProjectName() + "." + GetFileExtensionStatic();
+    return Path(m_projectRootFilepath + "/" +
+                GetProjectName() + "." + GetFileExtensionStatic());
 }
 
 String Project::GetProjectName() const
 {
-    return IO::GetBaseName(m_projectRootFilepath);
+    return m_projectRootFilepath.GetBaseName();
 }
 
 String Project::GetProjectRandomId() const
@@ -67,7 +67,7 @@ String Project::GetProjectRandomId() const
     return m_randomId;
 }
 
-void Project::SetProjectRootFilepath(const String &projectDir)
+void Project::SetProjectRootFilepath(const Path &projectDir)
 {
     m_projectRootFilepath = projectDir;
 }

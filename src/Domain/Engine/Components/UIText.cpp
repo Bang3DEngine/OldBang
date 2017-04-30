@@ -22,11 +22,11 @@
 UIText::UIText() : UIRenderer()
 {
     SetMesh( new Mesh() );
-    SetMaterial(AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
-                                               true) );
+    SetMaterial(
+         AssetsManager::Load<Material>( EPATH("Materials/UI/G_UIText.bmat") ));
     UseMaterialCopy();
 
-    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
+    SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
     SetContent("");
 
     SetRenderMode(GL::RenderMode::Quads);
@@ -304,11 +304,8 @@ void UIText::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
 
-    String fontFilepath = xmlInfo.GetFilepath("Font");
-    if (!fontFilepath.Empty())
-    {
-        SetFont( AssetsManager::Load<Font>(fontFilepath) );
-    }
+    Path fontFilepath = xmlInfo.GetFilepath("Font");
+    SetFont( AssetsManager::Load<Font>(fontFilepath) );
 
     SetContent(xmlInfo.GetString("Content"));
 
@@ -333,7 +330,7 @@ void UIText::Write(XMLNode *xmlInfo) const
     UIRenderer::Write(xmlInfo);
 
     xmlInfo->SetFilepath("Font", GetFont() ?
-                             GetFont()->GetFilepath() : "", "bfont");
+                             GetFont()->GetFilepath() : Path(), "bfont");
     xmlInfo->SetColor("Color", GetTint());
     xmlInfo->SetString("Content", GetContent(), {XMLProperty::Inline});
     xmlInfo->SetFloat("TextSize", GetTextSize());

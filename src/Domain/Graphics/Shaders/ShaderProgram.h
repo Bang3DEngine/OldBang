@@ -30,11 +30,8 @@ public:
     };
 
     ShaderProgram();
-    ShaderProgram(const String &vshaderPath,
-                  const String &fshaderPath);
-    ShaderProgram(Type type,
-                  const String &vshaderPath,
-                  const String &fshaderPath);
+    ShaderProgram(const Path &vshaderPath, const Path &fshaderPath);
+    ShaderProgram(Type type, const Path &vshaderPath, const Path &fshaderPath);
     virtual ~ShaderProgram();
 
     static String GetFileExtensionStatic();
@@ -83,9 +80,7 @@ private:
     Shader *p_vshader = nullptr;
     Shader *p_fshader = nullptr;
 
-    void Init(Type type,
-              const String &vshaderPath,
-              const String &fshaderPath);
+    void Init(Type type, const Path &vshaderPath, const Path &fshaderPath);
 
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, const Texture*> m_namesToTexture;

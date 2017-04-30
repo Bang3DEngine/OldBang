@@ -30,7 +30,7 @@ public:
     int GetPriority() const;
     ShaderProgram* GetPostProcessShaderProgram() const;
     Shader* GetPostProcessShader() const;
-    String GetPostProcessShaderFilepath() const;
+    Path GetPostProcessShaderFilepath() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

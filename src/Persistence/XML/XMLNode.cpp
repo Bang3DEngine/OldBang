@@ -171,13 +171,13 @@ void XMLNode::SetString(const String &attributeName, const String &value,
     SetAttribute(attr);
 }
 
-void XMLNode::SetFilepath(const String &attributeName, const String &filepath,
-                          const String &fileExtension,
+void XMLNode::SetFilepath(const String &attributeName, const Path &filepath,
+                          const String &allowedExtensions,
                           const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
-    attr.SetFilepath(filepath, fileExtension, properties);
+    attr.SetFilepath(filepath, allowedExtensions, properties);
     SetAttribute(attr);
 }
 
@@ -260,10 +260,10 @@ String XMLNode::GetString(const String &attributeName) const
     return attr ? attr->GetString() : "";
 }
 
-String XMLNode::GetFilepath(const String &attributeName) const
+Path XMLNode::GetFilepath(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetFilepath() : "";
+    return attr ? attr->GetFilepath() : Path();
 }
 
 float XMLNode::GetFloat(const String &attributeName) const

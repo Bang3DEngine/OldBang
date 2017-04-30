@@ -27,7 +27,7 @@ ProjectManager::ProjectManager()
 {
 }
 
-Project* ProjectManager::OpenProject(const String &projectFilepath)
+Project* ProjectManager::OpenProject(const Path &projectFilepath)
 {
     XMLNode xmlInfo = XMLParser::FromFile(projectFilepath);
 
@@ -36,25 +36,25 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #endif
 
     ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->Read(xmlInfo);
-    String projectDir = IO::GetDir(projectFilepath);
-    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
+    Project *currentProject = ProjectManager::s_currentProject;
+    currentProject->Read(xmlInfo);
+    currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
     #ifdef BANG_EDITOR
     // Set directory of the explorer to the Assets' root of the new project
-    Explorer::GetInstance()->SetDir(
-             ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
+    Path projectAssetsDir = currentProject->GetProjectAssetsRootFilepath();
+    Explorer::GetInstance()->SetDir( Path(projectAssetsDir) );
 
-    EngineConfig::RegisterInRecentProjectsList(projectFilepath);
+    EngineConfig::RegisterInRecentProjectsList(projectFilepath.GetAbsolute());
 
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
     #endif
 
     // Set persistence variables
-    IO::GetInstance()->c_ProjectRootAbsolute =
-            ProjectManager::s_currentProject->GetProjectRootFilepath();
-    IO::GetInstance()->c_ProjectAssetsRootAbsolute =
-            IO::GetProjectRootAbs() + "/Assets";
+    IO *io = IO::GetInstance();
+    io->c_ProjectRootAbsolute =
+            currentProject->GetProjectRootFilepath().GetAbsolute();
+    io->c_ProjectAssetsRootAbsolute = IO::GetProjectRootAbs() + "/Assets";
 
     // Open the first found scene
     List<String> sceneFilepaths =
@@ -78,17 +78,17 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     }
     //
 
-    return ProjectManager::s_currentProject;
+    return currentProject;
 }
 
 #ifdef BANG_EDITOR
 Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
                                           const String &projectName)
 {
-    String projectDir = projectContainingDir + "/" + projectName;
-    if (!IO::ExistsDirectory(projectDir))
+    Path projectDir(projectContainingDir + "/" + projectName);
+    if (!projectDir.Exists())
     {
-        if (!IO::CreateDirectory(projectDir))
+        if (!IO::CreateDirectory(projectDir.GetAbsolute()))
         {
             Debug_Error ("Could not create project in directory '" <<
                          projectDir << "'.");
@@ -104,8 +104,8 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
 
     ProjectManager::CloseCurrentProject();
 
-    String projectFileFilepath = projectDir + "/" +
-            projectName + "." + Project::GetFileExtensionStatic();
+    Path projectFileFilepath(projectDir + "/" + projectName + "." +
+                             Project::GetFileExtensionStatic());
 
     ProjectManager::s_currentProject =
             CreateNewProjectFileOnly(projectFileFilepath);
@@ -116,17 +116,17 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
     return ProjectManager::s_currentProject;
 }
 
-Project *ProjectManager::CreateNewProjectFileOnly(const String &projectFilepath)
+Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 {
     Project *proj = new Project();
-    proj->WriteToFile(projectFilepath);
+    proj->WriteToFile(projectFilepath.GetAbsolute());
     return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)
 {
     ENSURE(project);
-    bool ok = project->WriteToFile(project->GetProjectFileFilepath());
+    bool ok = project->WriteToFile(project->GetProjectFileFilepath().GetAbsolute());
     if (ok)
     {
         Debug_Status("Project '" << project->GetProjectName() <<
@@ -173,7 +173,7 @@ String ProjectManager::DialogCreateNewProject()
             {
                 ProjectManager::CreateNewProject(dirPath, projectName);
                 return ProjectManager::GetCurrentProject()->
-                        GetProjectFileFilepath();
+                        GetProjectFileFilepath().GetAbsolute();
             }
             else
             {

@@ -31,13 +31,13 @@ String AudioClip::GetFileExtension() const
     return AudioClip::GetFileExtension();
 }
 
-bool AudioClip::LoadFromFile(const String &filepath)
+bool AudioClip::LoadFromFile(const String &filepathStr)
 {
-    if (!IO::ExistsFile(filepath)) { return false; }
+    if (!IO::ExistsFile(filepathStr)) { return false; }
 
-    if (filepath.EndsWith(".ogg"))
+    if (filepathStr.EndsWith(".ogg"))
     {
-        Debug_Error("OGG audio file format for " << filepath
+        Debug_Error("OGG audio file format for " << filepathStr
                     << " not supported.");
         return false;
     }
@@ -54,7 +54,7 @@ bool AudioClip::LoadFromFile(const String &filepath)
     }
 
     ALsizei size; ALfloat freq; ALenum format;
-    ALvoid *data = alutLoadMemoryFromFile(filepath.ToCString(),
+    ALvoid *data = alutLoadMemoryFromFile(filepathStr.ToCString(),
                                           &format, &size, &freq);
 
     AudioManager::ClearALErrors();
@@ -62,12 +62,12 @@ bool AudioClip::LoadFromFile(const String &filepath)
     if (!hasError)
     {
         alBufferData(m_alBufferId, format, data, size, freq);
-        m_audioFileFilepath = filepath;
+        m_audioFileFilepath = Path(filepathStr);
         free(data);
 
         hasError = AudioManager::CheckALError();
     }
-    else { m_audioFileFilepath = ""; }
+    else { m_audioFileFilepath = Path(); }
 
     // Rebind all previously dettached sources
     for (AudioSource *as : m_audioSourcesUsingThis)
@@ -129,14 +129,14 @@ bool AudioClip::IsLoaded() const
 
 const String &AudioClip::GetAudioFilepath() const
 {
-    return m_audioFileFilepath;
+    return m_audioFileFilepath.GetAbsolute();
 }
 
 void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
     m_audioFileFilepath = xmlInfo.GetFilepath("AudioFilepath");
-    LoadFromFile( m_audioFileFilepath );
+    LoadFromFile( m_audioFileFilepath.GetAbsolute() );
 }
 
 void AudioClip::Write(XMLNode *xmlInfo) const

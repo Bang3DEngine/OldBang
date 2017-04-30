@@ -58,8 +58,8 @@ public:
     void SetRect(const String &attributeName, const Rect &value,
                  const Array<XMLProperty>& properties = {});
     void SetFilepath(const String &attributeName,
-                     const String &filepath,
-                     const String &fileExtension = "",
+                     const Path &filepath,
+                     const String &allowedExtensions = "",
                      const Array<XMLProperty>& properties = {});
     void SetEnum(const String &attributeName,
                  const Array<String>& enumNames,
@@ -84,7 +84,7 @@ public:
     bool GetBool(const String& attributeName) const;
     int GetInt(const String& attributeName) const;
     float GetFloat(const String& attributeName) const;
-    String GetFilepath(const String& attributeName) const;
+    Path GetFilepath(const String& attributeName) const;
     String GetString(const String& attributeName) const;
     Vector2 GetVector2(const String& attributeName) const;
     Vector3 GetVector3(const String& attributeName) const;

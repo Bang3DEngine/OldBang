@@ -1,7 +1,7 @@
 #include "Bang/Asset.h"
 
-#include "Bang/FileReader.h"
 #include "Bang/IO.h"
+#include "Bang/FileReader.h"
 #include "Bang/AssetsManager.h"
 
 Asset::Asset() : SerializableObject()
@@ -24,7 +24,7 @@ String Asset::GetFileExtension() const
     return Asset::GetFileExtensionStatic();
 }
 
-String Asset::GetFilepath() const
+const Path& Asset::GetFilepath() const
 {
     return m_assetFilepath;
 }

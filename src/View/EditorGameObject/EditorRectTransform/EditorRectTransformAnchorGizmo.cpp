@@ -23,9 +23,9 @@ EditorRectTransformAnchorGizmo::
     m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
 
     m_anchorPosition = anchorPosition;
-    m_anchorTexture =
-        AssetsManager::Load<Texture2D>("Textures/RectTransformAnchor.btex2d",
-                                       true);
+
+    Path texPath = EPATH("Textures/RectTransformAnchor.btex2d");
+    m_anchorTexture = AssetsManager::Load<Texture2D>(texPath);
     m_anchorTexture->SetAlphaCutoff(0.1f);
 }
 
