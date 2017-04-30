@@ -67,7 +67,7 @@ bool BehaviourManagerStatus::HasFailed(const String &behaviourFilepath) const
 
 bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
 {
-    String behaviourName = IO::GetFileName(bid.behaviourAbsPath);
+    String behaviourName = IO::GetBaseName(bid.behaviourAbsPath);
     String behaviourObjectFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
     return m_successfullyCompiled.Contains(bid) &&

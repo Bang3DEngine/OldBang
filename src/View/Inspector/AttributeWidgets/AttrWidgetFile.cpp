@@ -113,7 +113,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
                                    XMLProperty::FileExtension.GetName()),
                                m_xmlAttribute.GetProperties());
 
-    String fileName = IO::GetFileName(m_filepath);
+    String fileName = IO::GetBaseName(m_filepath);
     String fileText = !fileName.Empty() ? fileName : "None";
 
     m_filepathLineEdit->SetBold( !fileName.Empty() );

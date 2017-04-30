@@ -52,7 +52,7 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
 
     m_path = model->filePath(index).toStdString();
     m_path = IO::ToAbsolute(m_path, false); // To canonical
-    m_name = IO::GetFileName(m_path);
+    m_name = IO::GetBaseName(m_path);
     m_extension = IO::GetFileExtensionComplete(m_path);
 }
 

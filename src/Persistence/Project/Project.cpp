@@ -59,7 +59,7 @@ String Project::GetProjectFileFilepath() const
 
 String Project::GetProjectName() const
 {
-    return IO::GetFileName(m_projectRootFilepath);
+    return IO::GetBaseName(m_projectRootFilepath);
 }
 
 String Project::GetProjectRandomId() const

@@ -269,7 +269,8 @@ HEADERS +=                                                          \
     src/View/Inspector/Inspectables/GameObjectInspectable.h \
     src/View/Inspector/Inspectables/IInspectable.h \
     src/View/Inspector/Inspectables/FileInspectable.h \
-    src/View/Inspector/Inspectables/ComponentInspectable.h
+    src/View/Inspector/Inspectables/ComponentInspectable.h \
+    src/Persistence/Files/Path.h
 
 EDITOR {
 HEADERS += \
@@ -488,7 +489,8 @@ SOURCES += \
     src/View/Inspector/Inspectables/GameObjectInspectable.cpp \
     src/View/Inspector/Inspectables/IInspectable.cpp \
     src/View/Inspector/Inspectables/FileInspectable.cpp \
-    src/View/Inspector/Inspectables/ComponentInspectable.cpp
+    src/View/Inspector/Inspectables/ComponentInspectable.cpp \
+    src/Persistence/Files/Path.cpp
 
 EDITOR {
     SOURCES += \

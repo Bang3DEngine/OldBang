@@ -53,7 +53,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
            String userInput = value.toString();
            String newExtension = IO::GetFileExtensionComplete(userInput);
            newExtension = newExtension.Empty() ? originalExtension : newExtension;
-           String newEditedFileName = IO::GetFileName(userInput);
+           String newEditedFileName = IO::GetBaseName(userInput);
            String newEditedFileNameExt = newEditedFileName + "." + newExtension;
            newFileOrDirNameWithExt = newEditedFileNameExt;
 
@@ -121,7 +121,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     if (role == Qt::DisplayRole && !m_explorer->IsInListMode())
     {
         String data = QFileSystemModel::data(idx, role).toString();
-        String fileName = IO::GetFileName(data);
+        String fileName = IO::GetBaseName(data);
         if (data == "..") { return data.ToQString(); }
 
         const int justInCase = 4; // To avoid char clamping for some cases

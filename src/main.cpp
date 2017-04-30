@@ -119,6 +119,7 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 using namespace std;
 
+#include "Bang/Path.h"
 int main(int argc, char **argv)
 {
 	Application app(argc, argv);
@@ -140,6 +141,21 @@ int main(int argc, char **argv)
             IO::GetEngineRootAbs() + "/EngineAssets";
     #endif
 
+    /*
+    Path path("Shaders", "/home/sephirot47/Bang/EngineAssets/");
+    Debug_Log("Absolute:    " << path.GetAbsolute());
+    Debug_Log("Relative:    " << path.GetRelative());
+    Debug_Log("Exists:      " << path.Exists());
+    Debug_Log("IsDir:       " << path.IsDir());
+    Debug_Log("IsFile:      " << path.IsFile());
+    Debug_Log("DirName:     " << path.GetParentDirectory().GetBaseName());
+    Debug_Log("Dir:         " << path.GetParentDirectory());
+    Debug_Log("BaseName:    " << path.GetBaseName());
+    Debug_Log("BaseNameExt: " << path.GetBaseNameExt());
+    Debug_Log("Extension:   " << path.GetExtension());
+    Debug_Log("Files:       " << path.GetFiles());
+    Debug_Log("SubDirs:     " << path.GetSubDirectories());
+*/
     String loadedProjectFilepath = "";
     #ifdef BANG_EDITOR
     // Select project

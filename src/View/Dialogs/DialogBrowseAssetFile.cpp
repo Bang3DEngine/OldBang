@@ -76,7 +76,7 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
 {
     for (const String &filepath : filepaths)
     {
-        String fileName = IO::GetFileName(filepath);
+        String fileName = IO::GetBaseName(filepath);
 
         String absFilepath = IO::ToAbsolute(filepath, engineFilepaths);
         File file(absFilepath);

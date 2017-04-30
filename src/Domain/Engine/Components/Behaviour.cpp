@@ -198,7 +198,7 @@ void Behaviour::RefreshBehaviourLib()
     ENSURE(!gameObject->IsDraggedGameObject());
     #endif
 
-    String behaviourName = IO::GetFileName(GetSourceFilepath());
+    String behaviourName = IO::GetBaseName(GetSourceFilepath());
     ENSURE(!behaviourName.Empty());
 
     // Create new Behaviour, and replace in the parent gameObject this old
@@ -225,7 +225,7 @@ bool Behaviour::IsLoaded() const
     QLibrary *behavioursLib =  BehaviourManager::GetBehavioursMergedLibrary();
     return IO::ExistsFile(absPath) &&
            p_behavioursLibraryBeingUsed == behavioursLib &&
-           IO::GetFileName( GetSourceFilepath() ) == GetClassName();
+           IO::GetBaseName( GetSourceFilepath() ) == GetClassName();
 }
 
 void Behaviour::OnAddedToGameObject()

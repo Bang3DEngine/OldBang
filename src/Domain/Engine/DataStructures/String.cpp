@@ -167,7 +167,7 @@ void String::Erase(int beginIndex, int endIndexInclusive)
     Iterator begin = Begin();
     std::advance(begin, beginIndex);
     Iterator end = begin;
-    std::advance(end, endIndexInclusive - beginIndex);
+    std::advance(end, endIndexInclusive - beginIndex + 1);
     erase(begin, end);
 }
 
@@ -228,7 +228,7 @@ int String::ReplaceInSitu(const String &from,
         lastIndex = IndexOf(from, lastIndex);
         if (lastIndex >= 0)
         {
-            Erase(lastIndex, lastIndex + from.Length());
+            Erase(lastIndex, lastIndex + from.Length() - 1);
             Insert(lastIndex, to);
             lastIndex += to.Length();
             ++numReplacements;

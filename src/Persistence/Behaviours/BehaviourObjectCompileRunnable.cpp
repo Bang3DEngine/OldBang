@@ -18,7 +18,7 @@ void BehaviourObjectCompileRunnable::run()
 
 void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 {
-    String behaviourName = IO::GetFileName(m_behaviourFilepath);
+    String behaviourName = IO::GetBaseName(m_behaviourFilepath);
     String objFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
 

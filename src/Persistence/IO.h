@@ -20,7 +20,7 @@ public:
    static bool IsAbsolute(const String &path);
 
    static String GetDir(const String &filepath);
-   static String GetFileName(const String &filepath);
+   static String GetBaseName(const String &filepath);
    static String GetFileNameWithExtension(const String &filepath);
    static String GetFileExtensionFirst(const String &filepath);
    static String GetFileExtensionLast(const String &filepath);
@@ -29,11 +29,11 @@ public:
    static String GetPathWithoutExtension(const String &filepath);
 
    /**
-    * ./Images/wololo => ${prependDirectory}/Images/wololo
-    *   Images/wololo => ${prependDirectory}/Images/wololo
+    * ./Images/wololo => ${absPrefix}/Images/wololo
+    *   Images/wololo => ${absPrefix}/Images/wololo
    **/
    static String ToAbsolute(const String &relPath,
-                            const String &prependDirectory);
+                            const String &absPrefix);
    static String ToAbsolute(const String &relPath,
                             bool isEngineFile);
 
@@ -41,7 +41,7 @@ public:
     * ${prependDirectory}/Images/wololo => ./Images/wololo
    **/
    static String ToRelative(const String &absPath,
-                            const String &prependDirectory);
+                            const String &absPrefix);
    static String ToRelative(const String &relPath,
                             bool isEngineFile);
    static String ToRelative(const String &absPath);

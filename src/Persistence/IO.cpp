@@ -44,7 +44,7 @@ String IO::GetDir(const String &filepath)
     return directory;
 }
 
-String IO::GetFileName(const String &filepath)
+String IO::GetBaseName(const String &filepath)
 {
 	if (filepath.Empty()) { return ""; }
     String filename = filepath;
@@ -122,19 +122,19 @@ String IO::GetPathWithoutExtension(const String &filepath)
 {
 	if (filepath.Empty()) { return ""; }
     String path = GetDir(filepath);
-    path += GetFileName(filepath);
+    path += GetBaseName(filepath);
     return path;
 }
 
 
 String IO::ToAbsolute(const String &relPath,
-                      const String &prependDirectory)
+                      const String &absPrefix)
 {
 	if (relPath.Empty()) { return ""; }
 
     String result = "";
     if (IO::IsAbsolute(relPath)) { result = relPath; }
-    else { result = prependDirectory + "/" + relPath; }
+    else { result = absPrefix + "/" + relPath; }
 
     if (IO::Exists(result))
     {
@@ -151,25 +151,21 @@ String IO::ToAbsolute(const String &relPath, bool isEngineFile)
                              IO::GetProjectAssetsRootAbs());
 }
 
-String IO::ToRelative(const String &absPath,
-                               const String &prependDirectory)
+String IO::ToRelative(const String &absPath, const String &absPrefix)
 {
-	if (absPath.Empty()) { return ""; }
+    if (absPath.Empty()) { return ""; }
 
-    if (!IsAbsolute(absPath))
+    std::size_t pos = absPath.find(absPrefix);
+
+    String relPath = absPath;
+    if (pos != String::npos)
     {
-        if (absPath[0] != '.')
-        {
-            return "./" + absPath;
-        }
-        return absPath;
+        relPath = absPath.SubString(pos + absPrefix.Length(),
+                                    absPath.Length() - 1);
     }
-
-    std::size_t pos = absPath.find(prependDirectory);
-    if (pos == String::npos) return absPath;
-
-    String relPath = "." + absPath.substr( pos + prependDirectory.Length(),
-                                          (absPath.Length() - prependDirectory.Length()));
+    if (relPath.BeginsWith("./")) { relPath.Erase(0,1); }
+    if (relPath.EndsWith("/")) { relPath.Erase(relPath.Length()-1,
+                                               relPath.Length()-1); }
     return relPath;
 }
 
@@ -200,7 +196,8 @@ String IO::GetDirUp(const String &filepath)
     Array<String> splits = filepath.Split('/');
     splits.PopBack();
 	String path = String::Join(splits, "/");
-    return IO::IsAbsolute(filepath) ? IO::ToAbsolute(path, IO::IsEngineFile(filepath)) : path;
+    return IO::IsAbsolute(filepath) ?
+                IO::ToAbsolute(path, IO::IsEngineFile(filepath)) : path;
 }
 
 String IO::GetRightmostDir(const String &dir)
@@ -256,7 +253,7 @@ String IO::GetNextDuplicatePath(const String &path)
 
     String filePath = path;
     String fileDir  = IO::GetDir(filePath);
-    String fileName = IO::GetFileName(filePath);
+    String fileName = IO::GetBaseName(filePath);
     String fileExtension = IO::GetFileExtensionComplete(path);
 
     Array<String> splitted = fileName.Split('_');

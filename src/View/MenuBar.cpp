@@ -205,7 +205,7 @@ void MenuBar::OnSaveSceneAs() const
     ENSURE(EditorState::IsStopped());
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
     String sceneFilepath = SceneManager::GetActiveSceneFilepath();
-    String sceneName = IO::GetFileName(sceneFilepath);
+    String sceneName = IO::GetBaseName(sceneFilepath);
     sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),

@@ -43,10 +43,10 @@ List< std::pair<String, String> > FileTracker::GetMovedPathsList() const
 
         // This old path is missing now...where has it gone?
         // Search it in the new files list
-        String oldPathBaseName = IO::GetFileName(oldPath);
+        String oldPathBaseName = IO::GetBaseName(oldPath);
         for (const String &newPath : newPathsList)
         {
-            String newPathBaseName = IO::GetFileName(newPath);
+            String newPathBaseName = IO::GetBaseName(newPath);
             if (oldPathBaseName != newPathBaseName) { continue; }
             if (oldPathsList.Contains(newPath)) { continue; }
 
