@@ -19,7 +19,6 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    virtual void _OnStart () override;
     virtual void OnEditorUpdate() override;
 
     void SetEditorCamera();

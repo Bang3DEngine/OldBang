@@ -25,7 +25,7 @@ public:
    static String GetFileNameWithExtension(const String &filepath);
    static String GetFileExtensionFirst(const String &filepath);
    static String GetFileExtensionLast(const String &filepath);
-   static String GetFileContents(const String &filepath);
+   static String GetFileContents(const Path &filepath);
    static String GetFileExtensionComplete(const String &filepath);
    static String GetPathWithoutExtension(const String &filepath);
 

@@ -44,14 +44,15 @@ public:
 public:
     XMLParser();
 
-    static void RegisterId(const XMLNode *xmlInfo, const SerializableObject *pointer);
+    static void RegisterId(const XMLNode *xmlInfo,
+                           const SerializableObject *pointer);
     static const SerializableObject* GetPointerFromId(const String &id);
 
     static String GetTagName(const String &tag,
-                                  int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);
+                             int *tagNameBegin = nullptr,
+                             int *tagNameEnd = nullptr);
 
     static XMLNode FromFile(const Path &filepath);
-    static XMLNode FromFile(const String &filepath);
     static XMLNode FromString(const String &xml);
 };
 

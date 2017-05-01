@@ -13,7 +13,7 @@ MeshFile::MeshFile()
 MeshFile::MeshFile(const Path& path)
     : File(path)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     m_modelFilepath = xmlInfo.GetFilepath("ModelFilepath");
 }
 
@@ -26,7 +26,10 @@ const QPixmap& MeshFile::GetIcon() const
 void MeshFile::Read(const XMLNode &xmlInfo)
 {
     SetModelFilepath( xmlInfo.GetFilepath("ModelFilepath") );
+
+    #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetPath(), xmlInfo);
+    #endif
 }
 
 void MeshFile::Write(XMLNode *xmlInfo) const
@@ -40,12 +43,12 @@ IInspectable *MeshFile::GetNewInspectable()
 {
     return new FileInspectable<MeshFile>(*this);
 }
+#endif
 
 void MeshFile::SetModelFilepath(const Path &modelFilepath)
 {
     m_modelFilepath = modelFilepath;
 }
-#endif
 
 bool MeshFile::IsAsset() const
 {

@@ -5,6 +5,7 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"
 
@@ -25,8 +26,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo);
     virtual void Write(XMLNode *xmlInfo) const;
 
-    virtual bool ReadFromFile(const String &absPath);
-    virtual bool WriteToFile(const String &absPath) const;
+    virtual bool ReadFromFile(const Path &path);
+    virtual bool WriteToFile(const Path &path) const;
 
     /**
       This Post stuff is basically for the SerializableObject that need info

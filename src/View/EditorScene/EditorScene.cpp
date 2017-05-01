@@ -48,7 +48,8 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
     m_fpsCounterText->SetTextSize(10);
 
-    GetHideFlags()->SetOn(HideFlag::HideInGame); // To enable updates in editor time
+    // To enable updates in editor time
+    GetHideFlags()->SetOn(HideFlag::HideInGame);
 }
 
 EditorScene::~EditorScene()
@@ -60,11 +61,6 @@ void EditorScene::CloneInto(ICloneable *clone) const
 {
     EditorScene *edScene = Object::SCast<EditorScene>(clone);
     Scene::CloneInto(edScene);
-}
-
-void EditorScene::_OnStart()
-{
-    Scene::_OnStart();
 }
 
 void EditorScene::OnEditorUpdate()

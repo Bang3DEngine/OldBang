@@ -23,6 +23,7 @@ class Path : public IToString
 {
 public:
     Path();
+    Path(const Path &path);
     explicit Path(const String &absolutePath);
     Path(const String &relativePath,
          const String &absolutePrefix);
@@ -35,8 +36,8 @@ public:
     bool Exists() const;
 
     List<Path> GetFiles(bool recursively = false,
-                        const List<String>& extensions = {});
-    List<Path> GetSubDirectories(bool recursively = false);
+                        const List<String>& extensions = {}) const;
+    List<Path> GetSubDirectories(bool recursively = false) const;
 
     Path GetDirectory() const;
     String GetName() const;
@@ -46,15 +47,20 @@ public:
     const String& GetRelative() const;
 
     virtual String ToString() const override;
-    bool Empty() const;
+    bool IsEmpty() const;
 
-    // We receive something like "jpg png bmp obj"
+    Path Append(const String& str) const;
+    Path AppendExtension(const String& extension) const;
+
+    // "*.jpg *.so.*"
     bool HasExtension(const String &extension) const;
     bool HasExtension(const List<String> &extensions) const;
 
     bool operator!=(const Path &rhs) const;
     bool operator==(const Path &rhs) const;
     bool operator<(const Path &rhs) const;
+
+    static const Path Empty;
 
 private:
     String m_relativePath   = "";

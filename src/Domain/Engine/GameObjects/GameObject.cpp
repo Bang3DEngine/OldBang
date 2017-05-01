@@ -739,6 +739,18 @@ void GameObject::_OnUpdate()
 }
 
 #ifdef BANG_EDITOR
+void GameObject::_OnEditorStart()
+{
+    OnEditorStart();
+
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(_OnEditorStart();, m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    PROPAGATE_EVENT(_OnEditorStart(), m_children);
+}
+
 void GameObject::_OnEditorUpdate()
 {
     OnEditorUpdate();

@@ -108,7 +108,7 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     newPath = IO::GetDuplicatePath(newPath);
     String newTexName = IO::GetFileNameWithExtension(newPath);
 
-    Texture2D *tex = mb->OnCreateTexture2D(newTexName);
+    Texture2D *tex = mb->OnCreateTexture2D( Path(newTexName) );
     tex->LoadFromImage(f.GetPath() );
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
@@ -134,7 +134,7 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     newPath = IO::GetDuplicatePath(newPath);
     String newAudioName = IO::GetFileNameWithExtension(newPath);
 
-    AudioClip *audio = mb->OnCreateAudioClip(newAudioName);
+    AudioClip *audio = mb->OnCreateAudioClip( Path(newAudioName) );
     audio->LoadFromFile( f.GetPath() );
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
@@ -161,7 +161,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     newPath = IO::GetDuplicatePath(newPath);
     String newMatName = IO::GetFileNameWithExtension(newPath);
 
-    Material *mat = mb->OnCreateMaterial(newMatName);
+    Material *mat = mb->OnCreateMaterial( Path(newMatName) );
     mat->SetTexture(fromTexture);
     AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(mat, newMatName);
@@ -170,7 +170,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
 
 void ExplorerContextMenu::OnDuplicateClicked()
 {
-    ENSURE(!p_explorer->GetSelectedFileOrDirPath().Empty());
+    ENSURE(!p_explorer->GetSelectedFileOrDirPath().IsEmpty());
 
     String fromPath = p_explorer->GetSelectedFileOrDirPath().GetAbsolute();
     String toPath = IO::GetDuplicatePath( fromPath );

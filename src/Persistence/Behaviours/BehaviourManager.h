@@ -35,14 +35,14 @@ public:
     static BehaviourManager* GetInstance();
 
     static QLibrary* GetBehavioursMergedLibrary();
-    static List<String> GetBehavioursSourcesFilepathsList();
-    static List<String> GetBehavioursObjectsFilepathsList();
+    static List<Path> GetBehavioursSourcesFilepathsList();
+    static List<Path> GetBehavioursObjectsFilepathsList();
 
     static bool PrepareBehavioursLibrary(bool forGame = false,
                                          bool *stopFlag = nullptr);
 
-    static void SetCurrentLibsDir(const String &currentLibsDir);
-    static const String &GetCurrentLibsDir();
+    static void SetCurrentLibsDir(const Path &currentLibsDir);
+    static const Path &GetCurrentLibsDir();
     static MergingState GetMergeState();
     static const BehaviourManagerStatus& GetStatus();
 
@@ -62,7 +62,7 @@ private slots:
     void OnMergedLibraryCompilationFailed(QString errorMessage);
 
 private:
-    String m_currentLibsDir = "";
+    Path m_currentLibsDir;
     MergingState m_state = MergingState::Idle;
     BehaviourManagerStatus m_status;
 
@@ -77,7 +77,7 @@ private:
 
     static bool StartMergingBehavioursObjects(bool forGame = false);
     static void StartCompilingAllBehaviourObjects(bool forGame = false);
-    static void StartCompilingBehaviourObject(const String &behaviourFilepath,
+    static void StartCompilingBehaviourObject(const Path &behaviourFilepath,
                                               bool forGame = false);
 
     friend class Application;

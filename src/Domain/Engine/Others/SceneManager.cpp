@@ -85,56 +85,53 @@ Scene *SceneManager::GetActiveScene()
     return sm ? sm->m_activeScene : nullptr;
 }
 
-void SceneManager::LoadScene(const String &sceneFilepath)
+void SceneManager::LoadScene(const Path &sceneFilepath)
 {
     SceneManager *sm = SceneManager::GetInstance();
-    String spath = sceneFilepath;
-    if (!IO::ExistsFile(spath))
-    {
-        spath = IO::ToAbsolute(spath, false);
-    }
 
-    if (!IO::ExistsFile(spath))
+    Path spath(sceneFilepath);
+    if (!spath.IsFile()) { spath = UPATH(spath.GetAbsolute()); }
+    if (!spath.IsFile())
     {
-        spath = IO::AppendExtension(
-                    spath, Scene::GetFileExtensionStatic());
+        spath = Path( IO::AppendExtension(
+                                  spath.GetAbsolute(),
+                                  Scene::GetFileExtensionStatic()));
     }
+    if (spath.IsFile()) { sm->m_queuedSceneFilepath = spath; }
+    else { Debug_Warn("Scene '" << spath << "' does not exist."); }
+}
 
-    if (IO::ExistsFile(spath))
-    {
-        sm->m_queuedSceneFilepath = spath;
-    }
-    else
-    {
-        Debug_Warn("Scene '" << sceneFilepath << "' does not exist.");
-    }
+void SceneManager::LoadScene(const String &sceneFilepath)
+{
+    String sceneExt = Scene::GetFileExtensionStatic();
+    SceneManager::LoadScene( UPATH(sceneFilepath).AppendExtension(sceneExt) );
 }
 
 void SceneManager::TryToLoadQueuedScene()
 {
     SceneManager *sm = SceneManager::GetInstance();
-    if (!sm->m_queuedSceneFilepath.Empty())
+    if (sm->m_queuedSceneFilepath.IsFile())
     {
         SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
-        sm->m_queuedSceneFilepath = "";
+        sm->m_queuedSceneFilepath = Path();
     }
 }
 
-const String& SceneManager::GetActiveSceneFilepath()
+const Path& SceneManager::GetActiveSceneFilepath()
 {
     return SceneManager::GetInstance()->m_activeSceneFilepath;
 }
 
-void SceneManager::OpenScene(const String &filepath)
+void SceneManager::OpenScene(const Path &filepath)
 {
-    ENSURE(IO::ExistsFile(filepath));
+    ENSURE(filepath.IsFile());
     SceneManager::LoadSceneInstantly(filepath);
     #ifdef BANG_EDITOR
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
     #endif
 }
 
-void SceneManager::SetActiveSceneFilepath(const String &sceneFilepath)
+void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
 {
     SceneManager *sm = SceneManager::GetInstance();
     sm->m_activeSceneFilepath = sceneFilepath;
@@ -142,7 +139,7 @@ void SceneManager::SetActiveSceneFilepath(const String &sceneFilepath)
 
 void SceneManager::CloseOpenScene()
 {
-    SceneManager::SetActiveSceneFilepath("");
+    SceneManager::SetActiveSceneFilepath( Path::Empty );
 }
 
 bool SceneManager::IsActiveSceneSaved()
@@ -150,13 +147,13 @@ bool SceneManager::IsActiveSceneSaved()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (!activeScene) { return false; }
 
-    String openSceneFilepath = SceneManager::GetActiveSceneFilepath();
+    Path openSceneFilepath = SceneManager::GetActiveSceneFilepath();
     String savedFileXML    = IO::GetFileContents(openSceneFilepath);
     String currentSceneXML = activeScene->GetXMLInfo().ToString(true);
     return (savedFileXML == currentSceneXML);
 }
 
-void SceneManager::OnActiveSceneSavedAs(const String &filepath)
+void SceneManager::OnActiveSceneSavedAs(const Path &filepath)
 {
     SceneManager::SetActiveSceneFilepath(filepath);
 }
@@ -178,7 +175,7 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
     }
 }
 
-void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
+void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
 {
     #ifdef BANG_EDITOR
     EditorScene *scene = new EditorScene();

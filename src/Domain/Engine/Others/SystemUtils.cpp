@@ -8,27 +8,29 @@
 #include "Bang/Behaviour.h"
 #include "Bang/SingletonManager.h"
 
-List<String> SystemUtils::GetAllEngineObjects(bool editorMode)
+List<Path> SystemUtils::GetAllEngineObjects(bool editorMode)
 {
     String subdir = editorMode ? "/bin/objEditor" : "/bin/objGame";
-    return IO::GetFiles(IO::GetEngineRootAbs() + subdir, true, {"*.o"});
+    return Path(IO::GetEngineRootAbs() + subdir).GetFiles(true, {"o"});
 }
 
-List<String> SystemUtils::GetAllProjectSubDirs()
+List<Path> SystemUtils::GetAllProjectSubDirs()
 {
-    List<String> subdirs = IO::GetSubDirectories(IO::GetProjectRootAbs(), true);
-    subdirs.PushFront(IO::GetProjectRootAbs());
+    Path projectRootPath(IO::GetProjectRootAbs());
+    List<Path> subdirs = projectRootPath.GetSubDirectories(true);
+    subdirs.PushFront(projectRootPath);
     return subdirs;
 }
 
-List<String> SystemUtils::GetAllEngineSubDirs()
+List<Path> SystemUtils::GetAllEngineSubDirs()
 {
-    List<String> subdirs = IO::GetSubDirectories(IO::GetEngineRootAbs(), true);
-    subdirs.PushFront(IO::GetEngineRootAbs());
+    Path engineRootPath(IO::GetEngineRootAbs());
+    List<Path> subdirs = engineRootPath.GetSubDirectories(true);
+    subdirs.PushFront(engineRootPath);
     return subdirs;
 }
 
-List<String> SystemUtils::GetQtIncludes()
+List<Path> SystemUtils::GetQtIncludes()
 {
     bool ok = false;
     String qtDir = "";
@@ -39,21 +41,22 @@ List<String> SystemUtils::GetQtIncludes()
         return {};
     }
     qtDir = qtDir.Replace("\n", "");
-    List<String> incs = IO::GetSubDirectories(qtDir, true);
+    List<Path> incs = Path(qtDir).GetSubDirectories(true);
     for (auto it = incs.Begin(); it != incs.End();)
     {
-        const String& incDir = *it;
-        if (!incDir.Contains("qt", false) || !IO::IsDir(incDir))
+        const Path& libPath = *it;
+        const String& incDir = libPath.GetAbsolute();
+        if (!incDir.Contains("qt", false) || !libPath.IsDir())
         {
             incs.Remove(it++);
         }
         else { ++it; }
     }
-    incs.PushFront(qtDir);
+    incs.PushFront( Path(qtDir) );
     return incs;
 }
 
-List<String> SystemUtils::GetQtLibrariesDirs()
+List<Path> SystemUtils::GetQtLibrariesDirs()
 {
     bool ok = false;
     String qtDir = "";
@@ -64,17 +67,18 @@ List<String> SystemUtils::GetQtLibrariesDirs()
         return {};
     }
     qtDir = qtDir.Replace("\n", "");
-    List<String> libs = IO::GetSubDirectories(qtDir, true);
+    List<Path> libs = Path(qtDir).GetSubDirectories(true);
     for (auto it = libs.Begin(); it != libs.End();)
     {
-        const String& libDir = *it;
-        if ( !libDir.Contains("qt", false) || !IO::IsDir(libDir) )
+        const Path& libDirPath = *it;
+        const String& libDir = libDirPath.GetAbsolute();
+        if ( !libDir.Contains("qt", false) || !libDirPath.IsDir() )
         {
             it = libs.Remove(it++);
         }
         else { ++it; }
     }
-    libs.PushFront(qtDir);
+    libs.PushFront( Path(qtDir) );
     return libs;
 }
 
@@ -126,10 +130,18 @@ void SystemUtils::_System(const String &command,
     }
 }
 
-void SystemUtils::Compile(List<String> &sourceFilesList,
-                          const String &outputLibFilepath,
+List<String> SystemUtils::ToStringList(const List<Path> &paths)
+{
+    List<String> stringList;
+    for (const Path& path : paths) { stringList.Add(path.GetAbsolute()); }
+    return stringList;
+}
+
+void SystemUtils::Compile(List<Path> &sourceFilesList,
+                          const Path &outputLibFilepath,
                           CompilationFlags clFlags,
-                          bool *success, String *output)
+                          bool *success,
+                          String *output)
 {
     typedef CompilationFlag CLFlag;
     const bool editorMode        = !clFlags.IsOn(CLFlag::ForGame);
@@ -139,46 +151,55 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     const bool addAssetsIncludes =  clFlags.IsOn(CLFlag::AddAssetsIncludeDirs);
 
     List<String> args;
-    args.PushBack( produceSharedLib ? "-shared" : "-c" );
-    args.PushBack(sourceFilesList);
-    args.PushBack({"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
+    args.Add( produceSharedLib ? "-shared" : "-c" );
+
+    List<String> sourceFilesListStr = SystemUtils::ToStringList(sourceFilesList);
+    args.Add(sourceFilesListStr);
+
+    args.Add({"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
                    "--std=c++11",
                    "-lGLEW", "-lGL", "-lpthread"});
-    if (editorMode) { args.PushBack("-DBANG_EDITOR"); }
+    if (editorMode) { args.Add("-DBANG_EDITOR"); }
 
-    List<String> qtIncludeDirs = SystemUtils::GetQtIncludes();
-    for(String &qtIncludeDir : qtIncludeDirs) { qtIncludeDir.Prepend("-I"); }
-    args.PushBack(qtIncludeDirs);
-    args.PushBack("-I" + IO::GetEngineRootAbs() + "/include");
+    List<Path> qtIncludeDirs = SystemUtils::GetQtIncludes();
+    List<String> qtIncludeDirsStr = SystemUtils::ToStringList(qtIncludeDirs);
+    for(String &qtIncludeDir : qtIncludeDirsStr) { qtIncludeDir.Prepend("-I"); }
+    args.Add(qtIncludeDirsStr);
+
+    args.Add("-I" + IO::GetEngineRootAbs() + "/include");
     if (addAssetsIncludes)
     {
-        List<String> assetsSubDirs =
-                   IO::GetSubDirectories(IO::GetProjectAssetsRootAbs(), true);
-        for(String &subDir : assetsSubDirs) { subDir.Prepend("-I"); }
-        args.PushBack(assetsSubDirs);
+        List<Path> assetsSubDirs =
+                   Path(IO::GetProjectAssetsRootAbs()).GetSubDirectories(true);
+        List<String> assetsSubDirsStr = SystemUtils::ToStringList(assetsSubDirs);
+        for(String &subDir : assetsSubDirsStr) { subDir.Prepend("-I"); }
+        args.Add(assetsSubDirsStr);
     }
 
-    List<String> objects;
+    List<Path> objectPaths;
     if (addProjObjects)
     {
-        String dir = IO::GetDir(outputLibFilepath);
-        objects.PushBack(IO::GetFiles(dir, true, {"*.o"}));
+        Path projectDir(IO::GetProjectRootAbs());
+        objectPaths.Add( projectDir.GetFiles(true, {"*.o"}) );
     }
 
     if (addEngineObjects)
     {
-        objects.PushBack(SystemUtils::GetAllEngineObjects(editorMode));
+        objectPaths.Add( SystemUtils::GetAllEngineObjects(editorMode) );
     }
-    args.PushBack(objects);
 
-    List<String> qtLibDirs = SystemUtils::GetQtLibrariesDirs();
-    for(String &libDir : qtLibDirs) { libDir.Prepend("-L"); }
-    args.PushBack(qtLibDirs);
+    List<String> objectPathsStr = SystemUtils::ToStringList(objectPaths);
+    args.Add(objectPathsStr);
 
-    args.PushBack({"-o", outputLibFilepath});
+    List<Path> qtLibDirs = SystemUtils::GetQtLibrariesDirs();
+    List<String> qtLibDirsStr = SystemUtils::ToStringList(qtLibDirs);
+    for(String &libDir : qtLibDirsStr) { libDir.Prepend("-L"); }
+    args.Add(qtLibDirsStr);
 
-    String libsDir = BehaviourManager::GetCurrentLibsDir();
-    IO::CreateDirectory(libsDir);
+    args.Add({"-o", outputLibFilepath.GetAbsolute()}); // Output to the lib
+
+    Path libsDir = BehaviourManager::GetCurrentLibsDir();
+    IO::CreateDirectory(libsDir.GetAbsolute());
     SystemUtils::System("/usr/bin/g++", args, output, success);
 }
 

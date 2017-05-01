@@ -99,7 +99,7 @@ void Explorer::OnButtonDirUpClicked()
 void Explorer::OnRenameClicked()
 {
     Path selectedPath = GetSelectedFileOrDirPath();
-    if (!selectedPath.Empty())
+    if (!selectedPath.IsEmpty())
     {
         StartRenaming(selectedPath);
     }
@@ -228,7 +228,7 @@ void Explorer::OnFileDoubleClicked(const Path &filepath)
     File f(filepath);
     if (f.IsScene())
     {
-        MenuBar::GetInstance()->OpenScene(f.GetPath().GetAbsolute());
+        MenuBar::GetInstance()->OpenScene(f.GetPath());
     }
     else if (f.IsBehaviour())
     {

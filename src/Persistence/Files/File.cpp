@@ -210,12 +210,12 @@ void File::Write(const String &filepath, const List<String> &lines)
 
 String File::GetContents(const String &filepath)
 {
-    return IO::GetFileContents(filepath);
+    return IO::GetFileContents( Path(filepath) );
 }
 
 String File::GetContents() const
 {
-    return IO::GetFileContents( GetPath().GetAbsolute() );
+    return IO::GetFileContents( GetPath() );
 }
 
 const Path &File::GetPath() const

@@ -40,11 +40,10 @@ public:
     template <class T>
     static T* ReadAssetFile(const Path &filepath)
     {
-        if (filepath.Empty()) { return nullptr; }
+        if (filepath.IsEmpty()) { return nullptr; }
 
         T *a = nullptr;
-        String absPath = filepath.GetAbsolute();
-        XMLNode xmlInfo = XMLParser::FromFile(absPath);
+        XMLNode xmlInfo = XMLParser::FromFile(filepath);
         a = new T();
         a->Read(xmlInfo);
         a->m_assetFilepath = filepath;
@@ -69,7 +68,7 @@ public:
     template <class T>
     static T* Load(const Path &filepath)
     {
-        if (filepath.Empty()) { return nullptr; }
+        if (filepath.IsEmpty()) { return nullptr; }
         if (!filepath.Exists() || !filepath.IsFile()) { return nullptr; }
 
         T *a = nullptr;

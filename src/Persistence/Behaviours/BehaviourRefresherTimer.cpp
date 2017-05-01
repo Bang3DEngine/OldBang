@@ -36,11 +36,11 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 
 void BehaviourRefresherTimer::RefreshBehaviours() const
 {
-    BehaviourManager::SetCurrentLibsDir( IO::GetProjectLibsRootAbs() );
+    BehaviourManager::SetCurrentLibsDir( Path(IO::GetProjectLibsRootAbs()) );
 
-    const List<String>& behaviourSources =
+    const List<Path>& behaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (const String &behaviourSource : behaviourSources)
+    for (const Path &behaviourSource : behaviourSources)
     {
         if (!BehaviourManager::GetStatus().IsReady(behaviourSource))
         {

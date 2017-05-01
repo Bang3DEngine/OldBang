@@ -2,19 +2,19 @@
 #define SCENEMANAGER_H
 
 #include "Bang/List.h"
-
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class Scene;
 class SceneManager
 {
 public:
-
     static void SetActiveScene(Scene *scene);
+    static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
     static Scene* GetActiveScene();
-    static const String& GetActiveSceneFilepath();
+    static const Path& GetActiveSceneFilepath();
 
     static SceneManager* GetInstance();
 
@@ -23,18 +23,18 @@ public:
 private:
     SceneManager();
 
-    Scene *m_activeScene          = nullptr;
-    String m_queuedSceneFilepath  = "";
-    String m_activeSceneFilepath  = "";
+    Scene *m_activeScene = nullptr;
+    Path m_queuedSceneFilepath;
+    Path m_activeSceneFilepath;
 
     static void TryToLoadQueuedScene();
-    static void OpenScene(const String &filepath);
-    static void SetActiveSceneFilepath(const String &sceneFilepath);
+    static void OpenScene(const Path &filepath);
+    static void SetActiveSceneFilepath(const Path &sceneFilepath);
     static void CloseOpenScene();
     static bool IsActiveSceneSaved();
-    static void OnActiveSceneSavedAs(const String &filepath);
+    static void OnActiveSceneSavedAs(const Path &filepath);
     static void LoadSceneInstantly(Scene *scene);
-    static void LoadSceneInstantly(const String &sceneFilepath);
+    static void LoadSceneInstantly(const Path &sceneFilepath);
 
     friend class MenuBar;
     friend class Explorer;

@@ -23,13 +23,13 @@ const QPixmap &ShaderProgramAssetFile::GetIcon() const
 
 Path ShaderProgramAssetFile::GetVertexShaderFilepath() const
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     return xmlInfo.GetFilepath("VertexShader");
 }
 
 Path ShaderProgramAssetFile::GetFragmentShaderFilepath() const
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     return xmlInfo.GetFilepath("FragmentShader");
 }
 
@@ -37,7 +37,10 @@ void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     IO::WriteToFile(GetPath().GetAbsolute(), xmlInfo.ToString());
+
+    #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetPath(), xmlInfo);
+    #endif
 }
 
 void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const

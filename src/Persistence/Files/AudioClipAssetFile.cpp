@@ -17,7 +17,7 @@ AudioClipAssetFile::AudioClipAssetFile()
 AudioClipAssetFile::AudioClipAssetFile(const Path& path)
     : File(path)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
 }
 
@@ -37,6 +37,27 @@ IInspectable *AudioClipAssetFile::GetNewInspectable()
 {
     return new FileInspectable<AudioClipAssetFile>(*this);
 }
+
+void AudioClipAssetFile::OnButtonClicked(const String &attrName)
+{
+    bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
+    if (hasToPlay)
+    {
+        if (!m_tmpAudioSource)
+        {
+            m_tmpAudioSource = new AudioSource();
+            AudioClip *audioClip = GetRelatedAudioClip();
+            m_tmpAudioSource->SetAudioClip(audioClip);
+        }
+        m_tmpAudioSource->Play();
+    }
+    else
+    {
+        m_tmpAudioSource->Stop();
+        delete m_tmpAudioSource;
+        m_tmpAudioSource = nullptr;
+    }
+}
 #endif
 
 void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
@@ -50,7 +71,9 @@ void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
         m_tmpAudioSource->SetAudioClip(audioClip);
     }
 
+    #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetPath(), xmlInfo);
+    #endif
 }
 
 void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
@@ -83,7 +106,7 @@ void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
 {
     m_audioFilepath = audioFilepath;
 
-    if (!m_audioFilepath.Empty())
+    if (!m_audioFilepath.IsEmpty())
     {
         AudioClip *audioClip = AssetsManager::Load<AudioClip>(GetPath());
         if (audioClip)
@@ -100,27 +123,6 @@ void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
 const Path &AudioClipAssetFile::GetAudioFilepath() const
 {
     return m_audioFilepath;
-}
-
-void AudioClipAssetFile::OnButtonClicked(const String &attrName)
-{
-    bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
-    if (hasToPlay)
-    {
-        if (!m_tmpAudioSource)
-        {
-            m_tmpAudioSource = new AudioSource();
-            AudioClip *audioClip = GetRelatedAudioClip();
-            m_tmpAudioSource->SetAudioClip(audioClip);
-        }
-        m_tmpAudioSource->Play();
-    }
-    else
-    {
-        m_tmpAudioSource->Stop();
-        delete m_tmpAudioSource;
-        m_tmpAudioSource = nullptr;
-    }
 }
 
 bool AudioClipAssetFile::IsAsset() const

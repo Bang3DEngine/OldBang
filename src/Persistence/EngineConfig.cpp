@@ -46,7 +46,7 @@ List<String> EngineConfig::GetRecentProjectsList()
 {
     String recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
     String recentProjectsContent =
-            IO::GetFileContents(recentProjectConfigFilepath);
+            IO::GetFileContents( Path(recentProjectConfigFilepath) );
 
     Array<String> projectsList = recentProjectsContent.Split('\n');
 

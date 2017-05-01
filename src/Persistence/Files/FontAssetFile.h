@@ -13,7 +13,7 @@ class FontAssetFile : public File
 {
 public:
     FontAssetFile();
-    FontAssetFile(const QFileSystemModel *model, const QModelIndex &index);
+    FontAssetFile(const Path &path);
 
     virtual const QPixmap& GetIcon() const override;
 

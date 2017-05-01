@@ -19,16 +19,19 @@ public:
         Cancel = QMessageBox::Cancel
     };
 
-    static String GetOpenDirpath(const String &caption = "Choose a directory",
-                                 const String &initDirectory = String(QDir::homePath()) );
-    static String GetOpenFilepath(const String &caption = "Open file",
-                                  const String &extension = "*",
-                                  const String &initDir = IO::GetProjectAssetsRootAbs());
-    static String GetSaveFilepath(const String &caption = "Save file",
-                                  const String &extension = "*",
-                                  const String &initPath = IO::GetProjectAssetsRootAbs(),
-                                  const String &suggestedFilename = "",
-                                  QWidget *parent = nullptr);
+    static Path GetOpenDirpath(const String &caption = "Choose a directory",
+                               const String &initDirectory =
+                                                String(QDir::homePath()) );
+    static Path GetOpenFilepath(const String &caption = "Open file",
+                                const String &extension = "*",
+                                const String &initDir =
+                                            IO::GetProjectAssetsRootAbs());
+    static Path GetSaveFilepath(const String &caption = "Save file",
+                                const String &extension = "*",
+                                const String &initPath =
+                                            IO::GetProjectAssetsRootAbs(),
+                                const String &suggestedFilename = "",
+                                QWidget *parent = nullptr);
 
     static String GetInputString(const String &caption = "Input string",
                                  const String &labelText = "Your string:",
@@ -38,8 +41,9 @@ public:
 
     static Dialog::Reply GetYesNo(const String &caption = "Confirm",
                                   const String &labelText = "Are you sure?");
-    static Dialog::Reply GetYesNoCancel(const String &caption = "Confirm",
-                                        const String &labelText = "Are you sure?");
+    static Dialog::Reply GetYesNoCancel(
+                                const String &caption = "Confirm",
+                                const String &labelText = "Are you sure?");
 
     static void Error(const String &caption = "Error",
                       const String &labelText = "There has been an error.");

@@ -27,7 +27,7 @@ bool Shader::LoadFromFile(const Path& filepath)
     }
 
     m_filepath = filepath;
-    m_sourceCode = IO::GetFileContents(m_filepath.GetAbsolute());
+    m_sourceCode = IO::GetFileContents(m_filepath);
     ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
     m_idGL = glCreateShader(GLint(m_type));

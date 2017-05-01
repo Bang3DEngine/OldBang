@@ -22,9 +22,8 @@ public:
 
     virtual ~PrefabFile();
 
-    virtual const QPixmap& GetIcon() const override;
-
     #ifdef BANG_EDITOR
+    virtual const QPixmap& GetIcon() const override;
     virtual IInspectable *GetNewInspectable() override;
     #endif
 

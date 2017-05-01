@@ -4,12 +4,17 @@
 #include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
+
+#ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
+#endif
 
 class AudioClip;
 class AudioSource;
-class AudioClipAssetFile : public File,
-                           public IAttrWidgetButtonListener
+class AudioClipAssetFile : public File
+                          #ifdef BANG_EDITOR
+                          ,public IAttrWidgetButtonListener
+                          #endif
 {
 public:
     AudioClipAssetFile();
@@ -21,6 +26,7 @@ public:
 
     #ifdef BANG_EDITOR
     virtual IInspectable *GetNewInspectable() override;
+    virtual void OnButtonClicked(const String &attrName);
     #endif
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -29,7 +35,6 @@ public:
     void SetSoundFilepath(const Path &audioFilepath);
     const Path& GetAudioFilepath() const;
 
-    virtual void OnButtonClicked(const String &attrName);
 
     virtual bool IsAsset() const override;
 

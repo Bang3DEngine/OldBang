@@ -222,7 +222,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Material *sharedMat = GetSharedMaterial();
     if (sharedMat)
     {
-        if (!sharedMat->GetFilepath().Empty())
+        if (!sharedMat->GetFilepath().IsEmpty())
         {
             xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }

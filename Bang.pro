@@ -263,14 +263,10 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/PostProcessEffect.h \
     src/Persistence/Files/ShaderProgramAssetFile.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
-    src/View/Inspector/Inspectables/Inspectable.h \
-    src/View/Inspector/Inspectables/GameObjectInspectable.h \
-    src/View/Inspector/Inspectables/IInspectable.h \
-    src/View/Inspector/Inspectables/FileInspectable.h \
-    src/View/Inspector/Inspectables/ComponentInspectable.h \
     src/Persistence/Files/Path.h \
     src/Persistence/Files/ModelFile.h \
-    src/Persistence/Files/MeshFile.h
+    src/Persistence/Files/MeshFile.h \
+    src/Domain/Engine/DataStructures/Regex.h
 
 EDITOR {
 HEADERS += \
@@ -282,6 +278,11 @@ HEADERS += \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
     src/View/DragDrop/DragDropQTreeWidget.h \
+    src/View/Inspector/Inspectables/Inspectable.h \
+    src/View/Inspector/Inspectables/GameObjectInspectable.h \
+    src/View/Inspector/Inspectables/IInspectable.h \
+    src/View/Inspector/Inspectables/FileInspectable.h \
+    src/View/Inspector/Inspectables/ComponentInspectable.h \
     src/View/DragDrop/DragDropQListWidget.h \
     src/View/DragDrop/DragDropAgent.h \
     src/View/DragDrop/IDragDropListener.h \
@@ -483,14 +484,10 @@ SOURCES += \
     src/Domain/Engine/Components/PostProcessEffect.cpp \
     src/Persistence/Files/ShaderProgramAssetFile.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
-    src/View/Inspector/Inspectables/Inspectable.cpp \
-    src/View/Inspector/Inspectables/GameObjectInspectable.cpp \
-    src/View/Inspector/Inspectables/IInspectable.cpp \
-    src/View/Inspector/Inspectables/FileInspectable.cpp \
-    src/View/Inspector/Inspectables/ComponentInspectable.cpp \
     src/Persistence/Files/Path.cpp \
     src/Persistence/Files/ModelFile.cpp \
-    src/Persistence/Files/MeshFile.cpp
+    src/Persistence/Files/MeshFile.cpp \
+    src/Domain/Engine/DataStructures/Regex.cpp
 
 EDITOR {
     SOURCES += \
@@ -549,6 +546,11 @@ EDITOR {
         src/View/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
+        src/View/Inspector/Inspectables/Inspectable.cpp \
+        src/View/Inspector/Inspectables/GameObjectInspectable.cpp \
+        src/View/Inspector/Inspectables/IInspectable.cpp \
+        src/View/Inspector/Inspectables/FileInspectable.cpp \
+        src/View/Inspector/Inspectables/ComponentInspectable.cpp \
         src/View/Inspector/Inspectables/PrefabAssetFileInspectable.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
         src/View/Hierarchy/HierarchyDragDropManager.cpp \

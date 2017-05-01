@@ -5,6 +5,7 @@
 #include <QRunnable>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class BehaviourManager;
@@ -15,7 +16,7 @@ class BehaviourObjectCompileRunnable : public QObject,
     Q_OBJECT
 
 public:
-    BehaviourObjectCompileRunnable(const String &behaviourFilepath,
+    BehaviourObjectCompileRunnable(const Path &behaviourFilepath,
                                    bool forGame);
 
 protected:
@@ -29,7 +30,7 @@ signals:
 
 private:
     bool m_forGame = false;
-    String m_behaviourFilepath = "";
+    Path m_behaviourPath;
 
     void CompileBehaviourObject();
 };

@@ -49,7 +49,7 @@ public slots:
     void OnSaveProject() const;
     void OnNewScene() const;
     void OnOpenScene() const;
-    void OpenScene(const String &filepath) const;
+    void OpenScene(const Path &filepath) const;
     void OnSaveScene() const;
     void OnSaveSceneAs() const;
     void OnBuild() const;
@@ -70,14 +70,14 @@ public slots:
 
     void OnCreatePrefab() const;
     Material* OnCreateMaterial(
-            const String &matFilepath = "New_Material") const;
+            const Path &matFilepath = Path("New_Material")) const;
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
     Texture2D* OnCreateTexture2D(
-            const String &tex2DFilepath = "New_Texture2D") const;
+            const Path &tex2DFilepath = Path("New_Texture2D")) const;
     void OnCreateFont() const;
     AudioClip* OnCreateAudioClip(
-            const String &audioClipName = "New_AudioClip") const;
+            const Path &audioClipFilepath = Path("New_AudioClip")) const;
 
     void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;

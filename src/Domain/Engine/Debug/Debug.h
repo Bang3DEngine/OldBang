@@ -58,35 +58,35 @@ private:
 
 #define Debug_Log(msg) do{\
     std::ostringstream log;\
-    log << msg;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::_Log(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Warn(msg) do{\
     std::ostringstream log;\
-    log << msg;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::_Warn(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error(msg) do{\
     std::ostringstream log;\
-    log << msg;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::_Error(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error_Unique(msg) do{\
     std::ostringstream log;\
-    log << msg;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::_Error(log.str(), __LINE__, __FILE__, true); \
 } while (0)
 
 #define Debug_Status(msg, timeInSeconds) do{\
     std::ostringstream log;\
-    log << msg;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::_Status(log.str(), timeInSeconds); \
 } while (0)
@@ -109,7 +109,6 @@ OPERATOR_OSTREAM_DECL(Vector4)
 OPERATOR_OSTREAM_DECL(Matrix4)
 OPERATOR_OSTREAM_DECL(IToString)
 OPERATOR_OSTREAM_DECL(Quaternion)
-// TODO: Do the same with Vector, List and Map
 std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);

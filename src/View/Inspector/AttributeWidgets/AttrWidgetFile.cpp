@@ -78,7 +78,7 @@ void AttrWidgetFile::Browse()
     while (dialog->isVisible()) { Application::processEvents(); }
 
     Path selectedPath(selectedFile);
-    if (!selectedPath.Empty())
+    if (!selectedPath.IsEmpty())
     {
         SetValue(selectedPath);
         p_inspectorWidget->_OnSlotValueChanged();
@@ -178,7 +178,7 @@ void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
 
 void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (!m_filepath.Empty()) { OnDoubleClick(); }
+    if (!m_filepath.IsEmpty()) { OnDoubleClick(); }
 }
 
 void AttrWidgetFile::Refresh(const XMLAttribute &attribute)

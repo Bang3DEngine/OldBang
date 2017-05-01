@@ -9,7 +9,6 @@
 #include "Bang/InspectorWidget.h"
 #include "Bang/FileReferencesManager.h"
 
-
 PrefabAssetFileInspectable::PrefabAssetFileInspectable()
 {
 }
@@ -18,7 +17,7 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)
 {
     Prefab prefab;
-    prefab.ReadFromFile(f.GetPath().GetAbsolute());
+    prefab.ReadFromFile( f.GetPath() );
     SetRelatedSerializableObject( prefab.InstantiateWithoutStarting() );
 
     GameObject *go = Object::SCast<GameObject>(GetRelatedSerializableObject());

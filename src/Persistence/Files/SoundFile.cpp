@@ -55,6 +55,12 @@ void SoundFile::Write(XMLNode *xmlInfo) const
     }
 }
 
+#ifdef BANG_EDITOR
+IInspectable *SoundFile::GetNewInspectable()
+{
+    return new FileInspectable<SoundFile>(*this);
+}
+
 void SoundFile::OnButtonClicked(const String &attrName)
 {
     ENSURE( IO::ExistsFile( GetPath().GetAbsolute() ) );
@@ -71,11 +77,5 @@ void SoundFile::OnButtonClicked(const String &attrName)
         delete m_tmpAudioSource; m_tmpAudioSource = nullptr;
         delete m_tmpAudioClip;   m_tmpAudioClip   = nullptr;
     }
-}
-
-#ifdef BANG_EDITOR
-IInspectable *SoundFile::GetNewInspectable()
-{
-    return new FileInspectable<SoundFile>(*this);
 }
 #endif

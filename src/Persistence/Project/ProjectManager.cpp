@@ -57,10 +57,9 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     io->c_ProjectAssetsRootAbsolute = IO::GetProjectRootAbs() + "/Assets";
 
     // Open the first found scene
-    List<String> sceneFilepaths =
-            IO::GetFiles(IO::GetProjectAssetsRootAbs(), true,
-                                  {"*." + Scene::GetFileExtensionStatic()});
-
+    Path assetsPath(IO::GetProjectAssetsRootAbs());
+    List<Path> sceneFilepaths = assetsPath.GetFiles(true,
+                                   {"*." + Scene::GetFileExtensionStatic()});
     #ifdef BANG_EDITOR
     QtProjectManager::CreateQtProjectFile();
     #endif
@@ -82,10 +81,10 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 }
 
 #ifdef BANG_EDITOR
-Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
+Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
                                           const String &projectName)
 {
-    Path projectDir(projectContainingDir + "/" + projectName);
+    Path projectDir(projectDirPath + "/" + projectName);
     if (!projectDir.Exists())
     {
         if (!IO::CreateDirectory(projectDir.GetAbsolute()))
@@ -119,14 +118,14 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
 Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 {
     Project *proj = new Project();
-    proj->WriteToFile(projectFilepath.GetAbsolute());
+    proj->WriteToFile(projectFilepath);
     return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)
 {
     ENSURE(project);
-    bool ok = project->WriteToFile(project->GetProjectFileFilepath().GetAbsolute());
+    bool ok = project->WriteToFile(project->GetProjectFileFilepath());
     if (ok)
     {
         Debug_Status("Project '" << project->GetProjectName() <<
@@ -154,11 +153,11 @@ void ProjectManager::CloseCurrentProject()
 
 }
 
-String ProjectManager::DialogCreateNewProject()
+Path ProjectManager::DialogCreateNewProject()
 {
-    String dirPath = Dialog::GetOpenDirpath(
-                "Select the project containing directory");
-    if (!dirPath.Empty())
+    Path dirPath = Dialog::GetOpenDirpath(
+                                   "Select the project containing directory");
+    if (!dirPath.IsEmpty())
     {
         bool ok;
         String projectName =
@@ -173,7 +172,7 @@ String ProjectManager::DialogCreateNewProject()
             {
                 ProjectManager::CreateNewProject(dirPath, projectName);
                 return ProjectManager::GetCurrentProject()->
-                        GetProjectFileFilepath().GetAbsolute();
+                                            GetProjectFileFilepath();
             }
             else
             {
@@ -184,12 +183,12 @@ String ProjectManager::DialogCreateNewProject()
             }
         }
     }
-    return "";
+    return Path::Empty;
 }
 
-String ProjectManager::DialogOpenProject()
+Path ProjectManager::DialogOpenProject()
 {
-    String projectFilepath =
+    Path projectFilepath =
             Dialog::GetOpenFilepath("Select the project file to be opened",
                                     Project::GetFileExtensionStatic(),
                                     String(QDir::homePath()) );

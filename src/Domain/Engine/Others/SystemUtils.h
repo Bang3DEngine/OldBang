@@ -9,6 +9,7 @@
 #include <sys/types.h>
 
 #include "Bang/List.h"
+#include "Bang/Path.h"
 #include "Bang/Flags.h"
 #include "Bang/String.h"
 
@@ -31,13 +32,13 @@ public:
     };
     CREATE_FLAGS(CompilationFlags, CompilationFlag);
 
-    static List<String> GetAllEngineObjects(bool editorMode);
+    static List<Path> GetAllEngineObjects(bool editorMode);
 
-    static List<String> GetAllProjectSubDirs();
-    static List<String> GetAllEngineSubDirs();
+    static List<Path> GetAllProjectSubDirs();
+    static List<Path> GetAllEngineSubDirs();
 
-    static List<String> GetQtIncludes();
-    static List<String> GetQtLibrariesDirs();
+    static List<Path> GetQtIncludes();
+    static List<Path> GetQtLibrariesDirs();
 
     /**
      * @brief Executes a system command.
@@ -53,10 +54,11 @@ public:
     static void SystemBackground(const String &command,
                                  const List<String> &argsList = {});
 
-    static void Compile(List<String> &sourceFilesList,
-                        const String &outputLibFilepath,
+    static void Compile(List<Path> &sourceFilesList,
+                        const Path &outputLibFilepath,
                         CompilationFlags clFlags = CompilationFlag::Default,
-                        bool *success = nullptr, String *output = nullptr);
+                        bool *success = nullptr,
+                        String *output = nullptr);
 
     static void CloseLibrary(QLibrary *library);
 
@@ -68,6 +70,8 @@ private:
                         String *output,
                         bool *success,
                         bool background);
+
+    static List<String> ToStringList(const List<Path> &paths);
 
 };
 

@@ -12,7 +12,7 @@ TextFile::TextFile()
 TextFile::TextFile(const Path& path)
     : File(path)
 {
-    m_contents = IO::GetFileContents( GetPath().ToString() );
+    m_contents = IO::GetFileContents( GetPath() );
 }
 
 String TextFile::GetContents() const

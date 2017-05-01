@@ -465,6 +465,11 @@ String String::ToString(long v)
 {
     return String(std::to_string(v));
 }
+
+String String::ToString(bool v)
+{
+    return v ? "True" : "False";
+}
 String String::ToString(long long unsigned v)
 {
     return String(std::to_string(v));

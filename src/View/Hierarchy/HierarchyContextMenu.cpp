@@ -136,13 +136,13 @@ void HierarchyContextMenu::OnDeleteClicked()
 void HierarchyContextMenu::OnCreatePrefab()
 {
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
-    String filename = Dialog::GetSaveFilepath("Create Prefab...",
-                                              Prefab::GetFileExtensionStatic(),
-                                              go->name);
-    if (filename != "")
+    Path filepath = Dialog::GetSaveFilepath("Create Prefab...",
+                                            Prefab::GetFileExtensionStatic(),
+                                            go->name);
+    if (filepath.IsFile())
     {
         Prefab *prefab = new Prefab(go);
-        IO::WriteToFile(filename, prefab->GetSerializedString());
+        IO::WriteToFile(filepath.GetAbsolute(), prefab->GetSerializedString());
         delete prefab;
     }
 }

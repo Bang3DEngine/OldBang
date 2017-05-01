@@ -3,7 +3,13 @@
 #include "Bang/IO.h"
 #include "Bang/Array.h"
 
+const Path Path::Empty;
+
 Path::Path()
+{
+}
+
+Path::Path(const Path &path) : Path(path.GetRelative(), path.m_absolutePrefix)
 {
 }
 
@@ -45,23 +51,18 @@ bool Path::Exists() const
     return IO::Exists( GetAbsolute() );
 }
 
-
-List<Path> Path::GetFiles(bool recursively, const List<String> &extensions)
+List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
 {
     List<Path> filePaths;
-    List<String> filesList = IO::GetFiles(GetAbsolute(), recursively);
+    List<String> filesList = IO::GetFiles(GetAbsolute(), recursive, extensions);
     for (const String &file : filesList)
     {
-        Path filepath(file, m_absolutePrefix);
-        if (extensions.Empty() || filepath.HasExtension(extensions))
-        {
-            filePaths.Add( Path(file, m_absolutePrefix) );
-        }
+        filePaths.Add( Path(file, m_absolutePrefix) );
     }
     return filePaths;
 }
 
-List<Path> Path::GetSubDirectories(bool recursively)
+List<Path> Path::GetSubDirectories(bool recursively) const
 {
     List<Path> dirPaths;
     List<String> dirsList = IO::GetSubDirectories(GetAbsolute(), recursively);
@@ -110,9 +111,20 @@ String Path::ToString() const
     return GetAbsolute();
 }
 
-bool Path::Empty() const
+bool Path::IsEmpty() const
 {
     return GetAbsolute().Empty();
+}
+
+Path Path::Append(const String &str) const
+{
+    return Path(GetRelative() + str, m_absolutePrefix);
+}
+
+Path Path::AppendExtension(const String &extension) const
+{
+    if (HasExtension(extension)) { return Path(*this); }
+    return Path(GetRelative() + "." + extension, m_absolutePrefix);
 }
 
 bool Path::HasExtension(const String &extensions) const

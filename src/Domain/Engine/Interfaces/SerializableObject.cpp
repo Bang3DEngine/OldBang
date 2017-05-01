@@ -49,20 +49,20 @@ void SerializableObject::Write(XMLNode *xmlInfo) const
     xmlInfo->SetTagName( GetClassName() );
 }
 
-bool SerializableObject::ReadFromFile(const String &absPath)
+bool SerializableObject::ReadFromFile(const Path &path)
 {
-    if (IO::Exists(absPath))
+    if (path.Exists())
     {
-        String fileContents = IO::GetFileContents(absPath);
+        String fileContents = IO::GetFileContents(path);
         ReadFromString(fileContents);
         return true;
     }
     return false;
 }
 
-bool SerializableObject::WriteToFile(const String &absPath) const
+bool SerializableObject::WriteToFile(const Path &path) const
 {
-    return IO::WriteToFile(absPath, GetSerializedString(true));
+    return IO::WriteToFile(path.GetAbsolute(), GetSerializedString(true));
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}

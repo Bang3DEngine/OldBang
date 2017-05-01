@@ -14,13 +14,13 @@ MaterialAssetFile::MaterialAssetFile()
 MaterialAssetFile::MaterialAssetFile(const Path& path) :
     File(path)
 {
-    XMLNode xmlInfo = XMLParser::FromFile( GetPath().GetAbsolute() );
+    XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
     m_vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
     m_fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
     m_textureFilepaths.PushBack( xmlInfo.GetFilepath("Texture") );
     m_diffuseColor = xmlInfo.GetColor("DiffuseColor");
 
-    XMLNode xmlMatInfo = XMLParser::FromFile( GetPath().GetAbsolute() );
+    XMLNode xmlMatInfo = XMLParser::FromFile( GetPath() );
     m_xmlInfo = xmlMatInfo;
 }
 
@@ -34,9 +34,12 @@ const QPixmap& MaterialAssetFile::GetIcon() const
 
 void MaterialAssetFile::Read(const XMLNode &xmlInfo)
 {
+    m_xmlInfo = xmlInfo;
+
+    #ifdef BANG_EDITOR
     // Update live instances currently being used
     AssetsManager::UpdateAsset(GetPath(), xmlInfo);
-    m_xmlInfo = xmlInfo;
+    #endif
 }
 
 void MaterialAssetFile::Write(XMLNode *xmlInfo) const

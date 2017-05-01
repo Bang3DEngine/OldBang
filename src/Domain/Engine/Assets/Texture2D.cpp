@@ -32,7 +32,7 @@ String Texture2D::GetFileExtension() const
 
 void Texture2D::LoadFromImage(const Path &imageFilepath)
 {
-    ENSURE(!imageFilepath.Empty());
+    ENSURE(!imageFilepath.IsEmpty());
 
     m_imageFilepath = imageFilepath;
     Image img = Image::FromFile(m_imageFilepath);

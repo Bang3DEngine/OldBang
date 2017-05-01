@@ -16,15 +16,15 @@ public:
     static Project* OpenProject(const Path &projectFilepath);
 
     #ifdef BANG_EDITOR
-    static Project* CreateNewProject(const String &projectContainingDir,
+    static Project* CreateNewProject(const Path &projectDirPath,
                                      const String &projectName);
     static Project* CreateNewProjectFileOnly(const Path &projectFilepath);
     static void SaveProject(const Project *project);
     static void SaveCurrentProject();
     static void CloseCurrentProject();
 
-    static String DialogCreateNewProject();
-    static String DialogOpenProject();
+    static Path DialogCreateNewProject();
+    static Path DialogOpenProject();
     #endif
 
     static Project* GetCurrentProject();

@@ -196,9 +196,10 @@ void EditorCamera::HandleLookAtFocus()
     }
 }
 
-void EditorCamera::OnStart()
+void EditorCamera::OnEditorStart()
 {
-    GameObject::OnStart();
+    GameObject::OnEditorStart();
+    Debug_Log("EditorCamera::OnEditorStart()");
 
     Sphere sceneSphere = SceneManager::GetActiveScene()->GetBoundingSphere();
     if (sceneSphere.GetRadius() > 0)

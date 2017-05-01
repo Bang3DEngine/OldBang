@@ -35,12 +35,17 @@ void Scene::_OnStart()
     {
         BehaviourManager::PrepareBehavioursLibrary(true); // Load precompiled lib
     }
-
+    GameObject::_OnStart();
+    #else
     if (EditorState::IsPlaying())
-    #endif
     {
         GameObject::_OnStart();
     }
+    else
+    {
+        GameObject::_OnEditorStart();
+    }
+    #endif
 }
 
 void Scene::_OnUpdate()

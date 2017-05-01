@@ -90,12 +90,12 @@ String IO::GetFileExtensionLast(const String &filepath)
     return parts[parts.Size() - 1];
 }
 
-String IO::GetFileContents(const String &filepath)
+String IO::GetFileContents(const Path &filepath)
 {
-    if (!IO::Exists(filepath) || !IO::IsFile(filepath)) { return ""; }
+    if (!filepath.IsFile()) { return ""; }
 
     String contents = "";
-    std::ifstream ifs(filepath);
+    std::ifstream ifs(filepath.GetAbsolute().ToCString());
     if (ifs)
     {
         contents = String((std::istreambuf_iterator<char>(ifs)),
@@ -330,8 +330,8 @@ List<String> IO::GetSubDirectories(const String &dirPath,
 }
 
 List<String> IO::GetFiles(const String &dirPath,
-                                   bool recursive,
-                                   const List<String> &extensions)
+                          bool recursive,
+                          const List<String> &extensions)
 {
 	if (dirPath.Empty()) { return {}; }
     List<String> filesList;

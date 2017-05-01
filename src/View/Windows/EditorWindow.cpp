@@ -91,8 +91,7 @@ bool EditorWindow::IsGameTabActive() const
 
 void EditorWindow::RefreshDocksAndWindowTitles()
 {
-    String sceneTitle = IO::GetBaseName(
-                            SceneManager::GetActiveSceneFilepath() );
+    String sceneTitle = SceneManager::GetActiveSceneFilepath().GetName();
     if (EditorState::IsStopped() &&
         !IsGameTabActive() &&
         !SceneManager::IsActiveSceneSaved())

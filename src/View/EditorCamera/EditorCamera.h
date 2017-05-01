@@ -95,7 +95,7 @@ protected:
      */
     void HandleLookAtFocus();
 
-    void OnStart() override;
+    void OnEditorStart() override;
     void OnEditorUpdate() override;
 
 private:

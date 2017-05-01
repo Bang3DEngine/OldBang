@@ -8,6 +8,7 @@
 #include "Bang/Set.h"
 #include "Bang/Map.h"
 #include "Bang/List.h"
+#include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
 #include "Bang/CodePreprocessor.h"
@@ -21,13 +22,13 @@
 class BehaviourId : public IToString
 {
 public:
-    String behaviourAbsPath = "";
+    Path behaviourPath;
     String hash = "";
 
-    BehaviourId(const String &behAbsPath)
+    BehaviourId(const Path &behPath)
     {
-        behaviourAbsPath = IO::ToAbsolute(behAbsPath, false);
-        String code = File::GetContents(behaviourAbsPath);
+        behaviourPath = behPath;
+        String code = File::GetContents(behaviourPath.GetAbsolute());
 
         List<String> includePaths = IO::GetSubDirectories(
                     IO::GetProjectAssetsRootAbs(), true);
@@ -36,15 +37,15 @@ public:
         hash = IO::GetHashFromString(code);
     }
 
-    BehaviourId(const String &behAbsPath, const String &_hash)
+    BehaviourId(const Path &behPath, const String &_hash)
     {
-        behaviourAbsPath = IO::ToAbsolute(behAbsPath, false);
+        behaviourPath = behPath;
         hash = _hash;
     }
 
     String ToString() const override
     {
-        return behaviourAbsPath + "(" + hash + ")";
+        return behaviourPath + "(" + hash + ")";
     }
 };
 
@@ -58,9 +59,9 @@ public:
     float GetPercentOfReadyBehaviours() const;
     bool IsBeingCompiled(const BehaviourId &bid) const;
     bool HasFailed(const BehaviourId &bid) const;
-    bool HasFailed(const String &behaviourFilepath) const;
+    bool HasFailed(const Path &behaviourFilepath) const;
     bool IsReady(const BehaviourId &bid) const;
-    bool IsReady(const String &behaviourFilepath) const;
+    bool IsReady(const Path &behaviourFilepath) const;
 
     bool IsBehavioursLibraryReady() const;
 
@@ -72,21 +73,21 @@ private:
     Set<BehaviourId> m_successfullyCompiled;
 
     #ifdef BANG_EDITOR
-    Map<String, List<Console::MessageId> > m_failMessagesIds;
+    Map<Path, List<Console::MessageId> > m_failMessagesIds;
     #else
     Map<String, List<int> > m_failMessagesIds; // useless map :)
     #endif
 
     BehaviourManagerStatus();
 
-    void OnBehaviourStartedCompiling(const String &behaviourPath);
-    void OnBehaviourSuccessCompiling(const String &behaviourPath);
-    void OnBehaviourFailedCompiling(const String &behaviourPath,
+    void OnBehaviourStartedCompiling(const Path &behaviourPath);
+    void OnBehaviourSuccessCompiling(const Path &behaviourPath);
+    void OnBehaviourFailedCompiling(const Path &behaviourPath,
                                     const String &errorMessage);
     void OnBehavioursLibraryReady();
     void InvalidateBehavioursLibraryReady();
 
-    void ClearFails(const String &behaviourPath);
+    void ClearFails(const Path &behaviourPath);
 
     List<BehaviourId> GetCurrentBehaviourIds() const;
 

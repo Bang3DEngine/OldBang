@@ -12,8 +12,8 @@ SelectProjectWindow::SelectProjectWindow()
 {
 }
 
-String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window,
-                                                      QApplication *app)
+Path SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window,
+                                                    QApplication *app)
 {
     SelectProjectWindow::s_instance = new SelectProjectWindow();
     SelectProjectWindow *inst = SelectProjectWindow::s_instance;
@@ -48,21 +48,15 @@ String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window,
         inst->buttonLoadRecentProject->setEnabled(false);
     }
 
-    while ( inst->m_loadedProjectFile.Empty() && !inst->m_directlyClosedByUser)
+    while ( inst->m_loadedProjectFile.IsEmpty() && !inst->m_directlyClosedByUser)
     {
         inst->m_directlyClosedByUser = true;
         window->show();
         app->exec();
     }
 
-    if (inst->m_directlyClosedByUser)
-    {
-        return "";
-    }
-    else
-    {
-        return inst->m_loadedProjectFile;
-    }
+    if (inst->m_directlyClosedByUser) { return Path(); }
+    else { return inst->m_loadedProjectFile; }
 }
 
 SelectProjectWindow *SelectProjectWindow::GetInstance()
@@ -96,15 +90,15 @@ void SelectProjectWindow::FillRecentProjectsList()
     }
 }
 
-void SelectProjectWindow::OnRecentProjectListSelectionChanged(int row, int column)
+void SelectProjectWindow::OnRecentProjectListSelectionChanged(int row,
+                                                              int column)
 {
     QTableWidgetItem *selectedItem = listRecentProjects->item(row, 1);
     ENSURE(selectedItem);
 
-    m_selectedRecentProjectFilepath = selectedItem->text();
+    m_selectedRecentProjectFilepath = Path(selectedItem->text());
 
-    String newButtonText =
-        "Load " + IO::GetBaseName(m_selectedRecentProjectFilepath);
+    String newButtonText = "Load " + m_selectedRecentProjectFilepath.GetName();
 
     buttonLoadRecentProject->setText(newButtonText.ToQString());
 }
@@ -116,7 +110,7 @@ void SelectProjectWindow::OnRecentProjectDoubleClicked(int row, int column)
 
 void SelectProjectWindow::OnLoadRecentProject()
 {
-    if (m_selectedRecentProjectFilepath.Empty()) return;
+    if (m_selectedRecentProjectFilepath.IsEmpty()) return;
 
     m_loadedProjectFile = m_selectedRecentProjectFilepath;
     m_directlyClosedByUser = false;
@@ -126,7 +120,7 @@ void SelectProjectWindow::OnLoadRecentProject()
 void SelectProjectWindow::OnCreateNewProject()
 {
     m_loadedProjectFile = ProjectManager::DialogCreateNewProject();
-    if (!m_loadedProjectFile.Empty())
+    if (!m_loadedProjectFile.IsEmpty())
     {
         m_directlyClosedByUser = false;
         m_window->close();
@@ -136,7 +130,7 @@ void SelectProjectWindow::OnCreateNewProject()
 void SelectProjectWindow::OnBrowseProject()
 {
     m_loadedProjectFile = ProjectManager::DialogOpenProject();
-    if (!m_loadedProjectFile.Empty())
+    if (!m_loadedProjectFile.IsEmpty())
     {
         m_directlyClosedByUser = false;
         m_window->close();

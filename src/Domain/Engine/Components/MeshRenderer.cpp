@@ -63,6 +63,7 @@ void MeshRenderer::Write(XMLNode *xmlInfo) const
     {
         xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
     }
-    xmlInfo->SetFilepath("Mesh", GetMesh() ? GetMesh()->GetFilepath() : Path(),
+    xmlInfo->SetFilepath("Mesh",
+                         GetMesh() ? GetMesh()->GetFilepath() : Path::Empty,
                          Mesh::GetFileExtensionStatic());
 }

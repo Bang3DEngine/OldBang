@@ -141,7 +141,8 @@ int main(int argc, char **argv)
             IO::GetEngineRootAbs() + "/EngineAssets";
     #endif
 
-    String loadedProjectFilepath = "";
+    Path loadedProjectFilepath;
+
     #ifdef BANG_EDITOR
     // Select project
     QMainWindow *selectProjectWindow = new QMainWindow();
@@ -149,10 +150,10 @@ int main(int argc, char **argv)
             SelectProjectWindow::ExecAndGetProjectFilepath(selectProjectWindow,
                                                            &app);
     #else
-    loadedProjectFilepath = executableDir + "/GameData/Game.bproject";
+    loadedProjectFilepath = Path(executableDir + "/GameData/Game.bproject");
     #endif
 
-	if (loadedProjectFilepath.Empty())
+    if (loadedProjectFilepath.IsEmpty())
 	{
 		Debug_Error("The project filepath has not been specified.");
 		return 1;
@@ -162,7 +163,7 @@ int main(int argc, char **argv)
 
     QMainWindow *editorOrGameWindow = new QMainWindow();
     InitEditorOrGame(editorOrGameWindow, &app);
-    ProjectManager::OpenProject( Path(loadedProjectFilepath) );
+    ProjectManager::OpenProject(loadedProjectFilepath);
 
     app.MainLoop();
 

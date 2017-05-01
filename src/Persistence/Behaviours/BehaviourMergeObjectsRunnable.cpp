@@ -22,10 +22,10 @@ void BehaviourMergeObjectsRunnable::run()
 
 void BehaviourMergeObjectsRunnable::Merge()
 {
-    List<String> behaviourObjects =
+    List<Path> behaviourObjects =
             BehaviourManager::GetBehavioursObjectsFilepathsList();
-    String libOutputFilepath =
-            BehaviourManager::GetCurrentLibsDir() + "/Behaviours.so.";
+    Path libOutputFilepath(
+            BehaviourManager::GetCurrentLibsDir() + "/Behaviours.so.");
     String version = "";
     if (!m_forGame)
     {
@@ -33,26 +33,29 @@ void BehaviourMergeObjectsRunnable::Merge()
     }
     else
     {
-        String gameProjectDir = IO::GetDir(libOutputFilepath);
-        gameProjectDir = IO::GetDirUp(gameProjectDir);
-        String gameProjectFilepath = gameProjectDir + "/Game.bproject";
+        Path gameProjectDir = libOutputFilepath.GetDirectory().GetDirectory();
+        Path gameProjectFilepath(gameProjectDir + "/Game.bproject");
 
         Project gameProject;
         gameProject.ReadFromFile(gameProjectFilepath);
         version = gameProject.GetProjectRandomId();
     }
-    libOutputFilepath += version + ".1.1";
+    libOutputFilepath = Path(libOutputFilepath.GetAbsolute() + version + ".1.1");
 
     typedef SystemUtils::CompilationFlag CLFlag;
-    bool successCompiling; String output;
-    SystemUtils::Compile(behaviourObjects, libOutputFilepath,
+
+    String output;
+    bool successCompiling;
+    SystemUtils::Compile(behaviourObjects,
+                         libOutputFilepath,
                          CLFlag::AddEngineObjectFiles  |
                          CLFlag::ProduceSharedLib      |
                          (m_forGame ? CLFlag::ForGame : CLFlag::None),
-                         &successCompiling, &output);
+                         &successCompiling,
+                         &output);
     if (successCompiling)
     {
-        emit NotifySuccessMerging(libOutputFilepath.ToQString(),
+        emit NotifySuccessMerging(libOutputFilepath.GetAbsolute().ToQString(),
                                   output.ToQString());
     }
     else { emit NotifyFailedMerging(output.ToQString()); }

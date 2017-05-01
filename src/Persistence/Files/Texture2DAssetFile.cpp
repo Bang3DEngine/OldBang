@@ -16,13 +16,13 @@ Texture2DAssetFile::Texture2DAssetFile(const Path& path)
     : File(path)
 {
     // Load once and save the xmlInfo
-    XMLNode xmlTexInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlTexInfo = XMLParser::FromFile( GetPath() );
     m_xmlInfo = xmlTexInfo;
 }
 
 Path Texture2DAssetFile::GetImageFilepath() const
 {
-    String contents = IO::GetFileContents(GetPath().GetAbsolute());
+    String contents = IO::GetFileContents(GetPath());
     XMLNode xmlInfo = XMLNode::FromString(contents);
     return xmlInfo.GetFilepath("ImageFilepath");
 }
@@ -36,7 +36,10 @@ const QPixmap& Texture2DAssetFile::GetIcon() const
 void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
 {
     m_xmlInfo = xmlInfo;
+
+    #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetPath(), m_xmlInfo);
+    #endif
 }
 
 void Texture2DAssetFile::Write(XMLNode *xmlInfo) const

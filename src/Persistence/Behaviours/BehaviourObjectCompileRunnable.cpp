@@ -5,10 +5,10 @@
 #include "Bang/BehaviourManager.h"
 
 BehaviourObjectCompileRunnable::BehaviourObjectCompileRunnable(
-        const String &behaviourFilepath, bool forGame)
+        const Path &behaviourFilepath, bool forGame)
 {
     m_forGame = forGame;
-    m_behaviourFilepath = behaviourFilepath;
+    m_behaviourPath = behaviourFilepath;
 }
 
 void BehaviourObjectCompileRunnable::run()
@@ -18,29 +18,30 @@ void BehaviourObjectCompileRunnable::run()
 
 void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 {
-    String behaviourName = IO::GetBaseName(m_behaviourFilepath);
-    String objFilepath =
-            BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
-
-    IO::Remove(objFilepath);
+    String behaviourName = m_behaviourPath.GetName();
+    Path objFilepath(
+           BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o");
+    IO::Remove(objFilepath.GetAbsolute());
 
     typedef SystemUtils::CompilationFlag CLFlag;
 
     String output = "";
     bool successCompiling = false;
-    List<String> sources = {m_behaviourFilepath};
-    SystemUtils::Compile(sources, objFilepath,
+    List<Path> sources = {m_behaviourPath};
+    SystemUtils::Compile(sources,
+                         objFilepath,
                          (m_forGame ? CLFlag::ForGame : CLFlag::None) |
                            CLFlag::AddAssetsIncludeDirs,
-                         &successCompiling, &output);
+                         &successCompiling,
+                         &output);
     if (successCompiling)
     {
-        emit NotifySuccessCompiling(m_behaviourFilepath.ToQString(),
+        emit NotifySuccessCompiling(m_behaviourPath.GetAbsolute().ToQString(),
                                     output.ToQString());
     }
     else
     {
-        emit NotifyFailedCompiling(m_behaviourFilepath.ToQString(),
+        emit NotifyFailedCompiling(m_behaviourPath.GetAbsolute().ToQString(),
                                    output.ToQString());
     }
 }

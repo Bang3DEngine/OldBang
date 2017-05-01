@@ -149,13 +149,13 @@ Dialog::Reply MenuBar::AskForSavingActiveScene() const
 
 void MenuBar::OnNewProject() const
 {
-    String projectFilepath = ProjectManager::DialogCreateNewProject();
+    Path projectFilepath = ProjectManager::DialogCreateNewProject();
     ProjectManager::OpenProject( Path(projectFilepath) );
 }
 
 void MenuBar::OnOpenProject() const
 {
-    String projectFilepath = ProjectManager::DialogOpenProject();
+    Path projectFilepath = ProjectManager::DialogOpenProject();
     ProjectManager::OpenProject( Path(projectFilepath) );
 }
 
@@ -173,13 +173,13 @@ void MenuBar::OnNewScene() const
 
 void MenuBar::OnOpenScene() const
 {
-    String filepath = Dialog::GetOpenFilepath("Open scene...",
-                                              Scene::GetFileExtensionStatic());
-    ENSURE(!filepath.Empty());
+    Path filepath = Dialog::GetOpenFilepath("Open scene...",
+                                            Scene::GetFileExtensionStatic());
+    ENSURE(filepath.IsFile());
     OpenScene(filepath);
 }
 
-void MenuBar::OpenScene(const String &filepath) const
+void MenuBar::OpenScene(const Path &filepath) const
 {
     if (AskForSavingActiveScene() == Dialog::Reply::Cancel) { return; }
     SceneManager::OpenScene(filepath);
@@ -188,11 +188,11 @@ void MenuBar::OpenScene(const String &filepath) const
 void MenuBar::OnSaveScene() const
 {
     ENSURE(EditorState::IsStopped());
-    String filepath = SceneManager::GetActiveSceneFilepath();
-    filepath = IO::AppendExtension(
-                           filepath, Scene::GetFileExtensionStatic());
+    Path filepath = SceneManager::GetActiveSceneFilepath();
+    filepath = Path(IO::AppendExtension(filepath.GetAbsolute(),
+                                        Scene::GetFileExtensionStatic()));
 
-    if (IO::ExistsFile(filepath))
+    if (filepath.IsFile())
     {
         Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
         scene->WriteToFile(filepath);
@@ -204,17 +204,16 @@ void MenuBar::OnSaveSceneAs() const
 {
     ENSURE(EditorState::IsStopped());
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
-    String sceneFilepath = SceneManager::GetActiveSceneFilepath();
-    String sceneName = IO::GetBaseName(sceneFilepath);
+    Path sceneFilepath = SceneManager::GetActiveSceneFilepath();
+    String sceneName = sceneFilepath.GetName();
     sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),
                              IO::GetProjectAssetsRootAbs(),
                              sceneName);
-    ENSURE(!sceneFilepath.Empty());
+    ENSURE(!sceneFilepath.IsEmpty());
 
-    sceneFilepath = IO::AppendExtension(sceneFilepath,
-                                        Scene::GetFileExtensionStatic());
+    sceneFilepath = sceneFilepath.AppendExtension(Scene::GetFileExtensionStatic());
     SceneManager::OnActiveSceneSavedAs(sceneFilepath);
     scene->WriteToFile(sceneFilepath);
 }
@@ -237,15 +236,15 @@ void MenuBar::OnCreateEmptyGameObject() const
 
 void MenuBar::OnCreateFromPrefab() const
 {
-    String filename = Dialog::GetOpenFilepath("Create from prefab...",
+    Path filepath = Dialog::GetOpenFilepath("Create from prefab...",
                                               Prefab::GetFileExtensionStatic());
-    ENSURE (!filename.Empty());
+    ENSURE (!filepath.IsEmpty());
 
     EditorWindow *w = EditorWindow::GetInstance();
 
     Prefab *p = new Prefab();
 
-    XMLNode xmlInfo = XMLParser::FromFile(filename);
+    XMLNode xmlInfo = XMLParser::FromFile(filepath);
     p->Read(xmlInfo);
 
     GameObject *go = p->InstantiateWithoutStarting();
@@ -383,11 +382,11 @@ void MenuBar::OnCreatePrefab() const
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
-Material* MenuBar::OnCreateMaterial(const String &matFilepath) const
+Material* MenuBar::OnCreateMaterial(const Path &matFilepath) const
 {
     String filepathStr = Explorer::GetInstance()->GetCurrentDir();
-    filepathStr += "/" + IO::AppendExtension(matFilepath,
-                                          Material::GetFileExtensionStatic());
+    filepathStr += "/" + IO::AppendExtension(matFilepath.GetAbsolute(),
+                                             Material::GetFileExtensionStatic());
     filepathStr = IO::GetDuplicatePath(filepathStr);
 
     Path filepath(filepathStr);
@@ -415,10 +414,10 @@ void MenuBar::OnCreateShaderProgram() const
     AssetsManager::Create<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
-Texture2D* MenuBar::OnCreateTexture2D(const String &tex2DFilepath) const
+Texture2D* MenuBar::OnCreateTexture2D(const Path &tex2DFilepath) const
 {
     String filepathStr = Explorer::GetInstance()->GetCurrentDir();
-    filepathStr += "/" + IO::AppendExtension(tex2DFilepath,
+    filepathStr += "/" + IO::AppendExtension(tex2DFilepath.GetAbsolute(),
                                              Texture2D::GetFileExtensionStatic());
     filepathStr = IO::GetDuplicatePath(filepathStr);
 
@@ -439,10 +438,10 @@ void MenuBar::OnCreateFont() const
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
-AudioClip* MenuBar::OnCreateAudioClip(const String &audioClipName) const
+AudioClip* MenuBar::OnCreateAudioClip(const Path &audioClipFilepath) const
 {
     String filepathStr = Explorer::GetInstance()->GetCurrentDir();
-    filepathStr += "/" + IO::AppendExtension(audioClipName,
+    filepathStr += "/" + IO::AppendExtension(audioClipFilepath.GetAbsolute(),
                                              AudioClip::GetFileExtensionStatic());
     filepathStr = IO::GetDuplicatePath(filepathStr);
 

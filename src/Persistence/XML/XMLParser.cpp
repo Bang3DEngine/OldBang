@@ -10,7 +10,8 @@ XMLParser::XMLParser()
 {
 }
 
-void XMLParser::RegisterId(const XMLNode *xmlInfo, const SerializableObject *pointer)
+void XMLParser::RegisterId(const XMLNode *xmlInfo,
+                           const SerializableObject *pointer)
 {
     String id = xmlInfo->GetString("id");
     m_id_To_Pointer[id] = pointer;
@@ -25,7 +26,9 @@ const SerializableObject *XMLParser::GetPointerFromId(const String &id)
     return nullptr;
 }
 
-String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameEnd)
+String XMLParser::GetTagName(const String &tag,
+                             int *tagNameBegin,
+                             int *tagNameEnd)
 {
     const String TokenSpace = " \t\n\r";
     int tagBegin = tag.IndexOfOneOf("<");
@@ -38,11 +41,6 @@ String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameE
     if (tagNameEnd) *tagNameEnd = nameEnd;
 
     return tag.SubString(nameBegin, nameEnd - 1);
-}
-
-XMLNode XMLParser::FromFile(const Path &filepath)
-{
-    return XMLParser::FromFile(filepath.GetAbsolute());
 }
 
 void XMLParser::GetFirstAttribute(const String &tag,
@@ -189,11 +187,9 @@ void XMLParser::GetNextTag(const String &xml,
     }
 }
 
-XMLNode XMLParser::FromFile(const String &filepath)
+XMLNode XMLParser::FromFile(const Path &filepath)
 {
-    if (filepath.Empty()) { return XMLNode(); }
-    if (!IO::ExistsFile(filepath)) { return XMLNode(); }
-
+    if (!filepath.IsFile()) { return XMLNode(); }
     String fileContents = IO::GetFileContents(filepath);
     return XMLParser::FromString(fileContents);
 }

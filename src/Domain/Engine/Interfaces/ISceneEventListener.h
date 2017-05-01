@@ -18,27 +18,15 @@ protected:
 
     ISceneEventListener () {}
 
-    virtual void _OnStart ()
-    {
-        OnStart();
-    }
-
-    virtual void _OnUpdate ()
-    {
-        OnUpdate();
-    }
+    virtual void _OnStart () { OnStart(); }
+    virtual void _OnUpdate() { OnUpdate(); }
+    virtual void _OnDestroy() { OnDestroy(); }
 
     #ifdef BANG_EDITOR
-    virtual void _OnEditorUpdate ()
-    {
-        OnEditorUpdate();
-    }
+    virtual void _OnEditorStart()  { OnEditorStart(); }
+    virtual void _OnEditorUpdate() { OnEditorUpdate(); }
     #endif
 
-    virtual void _OnDestroy()
-    {
-        OnDestroy();
-    }
 
     virtual void _OnDrawGizmos(bool depthed, bool overlay)
     {
@@ -49,10 +37,13 @@ protected:
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
+    virtual void OnDestroy() {}
+
     #ifdef BANG_EDITOR
+    virtual void OnEditorStart()  {}
     virtual void OnEditorUpdate()  {}
     #endif
-    virtual void OnDestroy() {}
+
     virtual void OnDrawGizmos(bool depthed, bool overlay) {}
 };
 

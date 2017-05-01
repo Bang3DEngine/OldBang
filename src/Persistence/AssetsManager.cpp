@@ -42,7 +42,7 @@ void AssetsManager::UpdateAsset(const Path &assetFilepath,
                                 const XMLNode &xmlChangedInfo)
 {
     // Update live instances and rewrite the file
-    ENSURE(!assetFilepath.Empty());
+    ENSURE(!assetFilepath.IsEmpty());
     if (AssetsManager::IsLoaded(assetFilepath))
     {
         Asset *asset = AssetsManager::GetAsset(assetFilepath);
@@ -63,9 +63,9 @@ void AssetsManager::InvalidateAsset(const Path &assetFilepath)
 
 void AssetsManager::ReloadAsset(const Path &assetFilepath)
 {
-    ENSURE(!assetFilepath.Empty());
+    ENSURE(!assetFilepath.IsEmpty());
     Asset *asset = AssetsManager::GetAsset(assetFilepath);
-    if (asset) { asset->ReadFromFile(assetFilepath.GetAbsolute()); }
+    if (asset) { asset->ReadFromFile(assetFilepath); }
 }
 
 #endif
@@ -93,7 +93,7 @@ void AssetsManager::Unload(Asset *asset)
 void AssetsManager::SaveAssetToMap(const Path &filepath, Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
-    if (!filepath.Empty() && asset)
+    if (!filepath.IsEmpty() && asset)
     {
         am->m_pathsToAssets.Set(filepath, asset);
     }
@@ -101,7 +101,7 @@ void AssetsManager::SaveAssetToMap(const Path &filepath, Asset *asset)
 
 void AssetsManager::SaveAssetToFile(const Path &filepath, Asset *asset)
 {
-    if (!filepath.Empty() && asset)
+    if (!filepath.IsEmpty() && asset)
     {
         IO::WriteToFile(filepath.GetAbsolute(), asset->GetSerializedString());
     }

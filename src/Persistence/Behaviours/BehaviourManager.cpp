@@ -33,11 +33,11 @@ BehaviourManager *BehaviourManager::GetInstance()
 
 void BehaviourManager::RemoveMergedLibraryFiles()
 {
-    List<String> libFilepaths = IO::GetFiles(
-                BehaviourManager::GetCurrentLibsDir(), true, {"*.so.*"});
-    for (const String &libFilepath : libFilepaths)
+    List<Path> libFilepaths =
+           BehaviourManager::GetCurrentLibsDir().GetFiles(true, {"*.so.*"});
+    for (const Path &libFilepath : libFilepaths)
     {
-        IO::Remove(libFilepath);
+        IO::Remove(libFilepath.GetAbsolute());
     }
 }
 
@@ -47,16 +47,14 @@ QLibrary *BehaviourManager::GetBehavioursMergedLibrary()
     return bm->m_behavioursLibrary;
 }
 
-List<String> BehaviourManager::GetBehavioursSourcesFilepathsList()
+List<Path> BehaviourManager::GetBehavioursSourcesFilepathsList()
 {
-    return IO::GetFiles(IO::GetProjectAssetsRootAbs(),
-                                 true, {"cpp"});
+    return Path(IO::GetProjectAssetsRootAbs()).GetFiles(true, {"cpp"});
 }
 
-List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
+List<Path> BehaviourManager::GetBehavioursObjectsFilepathsList()
 {
-    return IO::GetFiles(BehaviourManager::GetCurrentLibsDir(),
-                                 true, {"o"});
+    return Path(BehaviourManager::GetCurrentLibsDir()).GetFiles(true, {"o"});
 }
 
 bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
@@ -117,13 +115,13 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
 
 
 
-void BehaviourManager::SetCurrentLibsDir(const String &libsDir)
+void BehaviourManager::SetCurrentLibsDir(const Path &libsDir)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     bm->m_currentLibsDir = libsDir;
 }
 
-const String &BehaviourManager::GetCurrentLibsDir()
+const Path &BehaviourManager::GetCurrentLibsDir()
 {
     return BehaviourManager::GetInstance()->m_currentLibsDir;
 }
@@ -157,9 +155,9 @@ bool BehaviourManager::StartMergingBehavioursObjects(bool forGame)
 void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    List<String> allBehaviourSources =
+    List<Path> allBehaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (const String &behFilepath : allBehaviourSources)
+    for (const Path &behFilepath : allBehaviourSources)
     {
         if (!bm->m_status.HasFailed(behFilepath) &&
             !bm->m_status.IsReady(behFilepath) &&
@@ -171,7 +169,7 @@ void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame)
     }
 }
 
-void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath,
+void BehaviourManager::StartCompilingBehaviourObject(const Path &behFilepath,
                                                      bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
@@ -214,7 +212,7 @@ const BehaviourManagerStatus &BehaviourManager::GetStatus()
 void BehaviourManager::OnBehaviourObjectCompiled(const QString &behFilepath,
                                                  const QString &warnMessage)
 {
-    m_status.OnBehaviourSuccessCompiling(behFilepath);
+    m_status.OnBehaviourSuccessCompiling( Path( String(behFilepath) ) );
     String warn(warnMessage);
     if (!warn.Empty()) { Debug_Warn(warn); }
 }
@@ -223,7 +221,8 @@ void BehaviourManager::OnBehaviourObjectCompilationFailed(
         const QString &behaviourFilepath,
         const QString &errorMessage)
 {
-    m_status.OnBehaviourFailedCompiling(behaviourFilepath, errorMessage);
+    m_status.OnBehaviourFailedCompiling( Path( String(behaviourFilepath) ),
+                                         errorMessage);
 }
 
 void BehaviourManager::OnMergedLibraryCompiled(QString libFilepath,

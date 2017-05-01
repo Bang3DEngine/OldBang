@@ -5,6 +5,7 @@
 #include "Bang/ui_SelectProjectWindow.h"
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class SelectProjectWindow :
@@ -16,7 +17,8 @@ class SelectProjectWindow :
 public:
     SelectProjectWindow();
 
-    static String ExecAndGetProjectFilepath(QMainWindow *window, QApplication *app);
+    static Path ExecAndGetProjectFilepath(QMainWindow *window,
+                                          QApplication *app);
     static SelectProjectWindow *GetInstance();
     QMainWindow* GetMainWindow() const;
     void FillRecentProjectsList();
@@ -31,11 +33,11 @@ public slots:
 
 private:
     static SelectProjectWindow *s_instance;
-    String m_loadedProjectFile = "";
+
+    Path m_loadedProjectFile;
     QMainWindow *m_window = nullptr;
     bool m_directlyClosedByUser = false;
-
-    String m_selectedRecentProjectFilepath = "";
+    Path m_selectedRecentProjectFilepath;
 };
 
 #endif // SELECTPROJECTWINDOW_H

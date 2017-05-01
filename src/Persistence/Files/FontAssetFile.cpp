@@ -11,9 +11,9 @@ FontAssetFile::FontAssetFile()
 {
 }
 
-FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
+FontAssetFile::FontAssetFile(const Path& path) : File(path)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(GetPath().GetAbsolute());
+    XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
     m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath").GetAbsolute();
 }
 

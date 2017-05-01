@@ -37,18 +37,19 @@ String GameBuilder::AskForExecutableFilepath()
     // Get the executable output filepath
     const String defaultOutputDirectory = IO::GetProjectRootAbs();
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
-    String executableFilepath =
-        Dialog::GetSaveFilepath("Choose the file where you want to create your game",
-                                "exe",
-                                defaultOutputDirectory,
-                                projectName + ".exe");
+    Path executableFilepath =
+        Dialog::GetSaveFilepath(
+                "Choose the file where you want to create your game",
+                "exe",
+                defaultOutputDirectory,
+                projectName + ".exe");
 
-    if (!executableFilepath.Empty())
+    if (!executableFilepath.IsFile())
     {
         executableFilepath =
-                IO::AppendExtension(executableFilepath, "exe");
+           Path( IO::AppendExtension(executableFilepath.GetAbsolute(), "exe") );
     }
-    return executableFilepath;
+    return executableFilepath.GetAbsolute();
 }
 
 void GameBuilder::BuildGame(bool runGame)
@@ -152,7 +153,7 @@ bool GameBuilder::CompileGameExecutable()
 {
     List<String> sceneFiles =
         IO::GetFiles(IO::GetProjectAssetsRootAbs(), true,
-                              {"*." + Scene::GetFileExtensionStatic()});
+                     {"*." + Scene::GetFileExtensionStatic()});
     if (sceneFiles.Empty())
     {
         emit
@@ -213,10 +214,10 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
 {
     if (*cancel) { return true; }
 
-    String dataDir = executableDir + "/GameData";
-    String libsDir = dataDir + "/Libraries";
+    Path dataDir = Path(executableDir).Append("/GameData");
+    Path libsDir = dataDir.Append( + "/Libraries");
     BehaviourManager::SetCurrentLibsDir(libsDir);
-    IO::CreateDirectory(libsDir);
+    IO::CreateDirectory(libsDir.GetAbsolute());
     bool success = BehaviourManager::PrepareBehavioursLibrary(true, cancel);
     return success;
 }

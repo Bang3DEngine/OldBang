@@ -34,66 +34,54 @@ QWidget *Dialog::GetCurrentWindow()
     return nullptr;
 }
 
-String Dialog::GetOpenDirpath(const String &caption,
-                              const String &initDirectory)
+Path Dialog::GetOpenDirpath(const String &caption,
+                            const String &initDirectory)
 {
-    String dir =
-            String(
-                QFileDialog::getExistingDirectory(
+    Path dir(QFileDialog::getExistingDirectory(
                     Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     initDirectory.ToQString(),
                     QFileDialog::ShowDirsOnly |
                     QFileDialog::DontResolveSymlinks //|
                     //QFileDialog::DontUseNativeDialog
-                )
-            );
-	if (!IO::ExistsDirectory(dir)) { return ""; }
+              ));
 
+    if (!dir.IsDir()) { return Path::Empty; }
     return dir;
 }
 
-String Dialog::GetOpenFilepath(const String &caption,
+Path Dialog::GetOpenFilepath(const String &caption,
                                const String &extension,
                                const String &initDir)
 {
-    String filepath =
-            String(
-                QFileDialog::getOpenFileName(
-                    Dialog::GetCurrentWindow(),
-                    caption.ToQString(),
-                    initDir.ToQString(),
-                    Dialog::GetExtensionFilterString(extension).ToQString(),
-                    nullptr,
-                    0 // QFileDialog::DontUseNativeDialog
-                )
-            );
-	if (!IO::ExistsFile(filepath)) { return ""; }
+    Path filepath(QFileDialog::getOpenFileName(
+                      Dialog::GetCurrentWindow(),
+                      caption.ToQString(),
+                      initDir.ToQString(),
+                      Dialog::GetExtensionFilterString(extension).ToQString(),
+                      nullptr,
+                      0 // QFileDialog::DontUseNativeDialog
+                ));
 
+    if (!filepath.IsFile()) { return Path::Empty; }
     return filepath;
 }
 
-String Dialog::GetSaveFilepath(const String &caption,
-                               const String &extension,
-                               const String &initPath,
-                               const String &suggestedFilename,
-                               QWidget *parent)
+Path Dialog::GetSaveFilepath(const String &caption,
+                             const String &extension,
+                             const String &initPath,
+                             const String &suggestedFilename,
+                             QWidget *parent)
 {
-    String filepath =
-            String(
-                QFileDialog::getSaveFileName(
+    Path filepath(QFileDialog::getSaveFileName(
                     parent ? parent : Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     String(initPath + "/" + suggestedFilename).ToQString(),
                     Dialog::GetExtensionFilterString(extension).ToQString(),
                     nullptr,
                     0 // QFileDialog::DontUseNativeDialog
-                )
-            );
-
-    //This function auto detects if it was in the filepath already.
-    filepath = IO::AppendExtension(filepath, extension);
-    return filepath;
+                ));
+    return filepath.AppendExtension(extension);
 }
 
 
@@ -103,16 +91,14 @@ String Dialog::GetInputString(const String &caption,
                               bool *ok)
 {
     bool everythingOk = false;
-    String str =
-            String(
-                QInputDialog::getText(
+    String str(QInputDialog::getText(
                     Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     labelText.ToQString(),
                     QLineEdit::Normal,
                     defaultText.ToQString(),
                     &everythingOk)
-            );
+               );
 
     if (ok) { *ok = everythingOk; }
     return str;
