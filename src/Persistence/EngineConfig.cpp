@@ -9,11 +9,11 @@ EngineConfig::EngineConfig()
 
 void EngineConfig::CleanOutdatedRecentProjectList()
 {
-    List<String> recentProjectsList = EngineConfig::GetRecentProjectsList();
+    List<Path> recentProjectsList = EngineConfig::GetRecentProjectsList();
     for (auto it = recentProjectsList.Begin(); it != recentProjectsList.End();)
     {
-        String recentProject = *it;
-        if (!IO::ExistsFile(recentProject) ||              // Remove non-existing
+        Path recentProject = *it;
+        if (!recentProject.IsFile() ||                              // Remove non-existing
             recentProjectsList.CountOccurrences(recentProject) > 1) // Remove repeated
         {
             recentProjectsList.Remove(it++);
@@ -22,10 +22,10 @@ void EngineConfig::CleanOutdatedRecentProjectList()
     }
 
     WriteListToFile(EngineConfig::GetRecentProjectsFilepath(),
-                    recentProjectsList);
+                    recentProjectsList.To<List, String>());
 }
 
-void EngineConfig::WriteListToFile(const String &filepath,
+void EngineConfig::WriteListToFile(const Path &filepath,
                                    const List<String> &list)
 {
     String content = "";
@@ -37,30 +37,27 @@ void EngineConfig::WriteListToFile(const String &filepath,
     IO::WriteToFile(filepath, content);
 }
 
-String EngineConfig::GetRecentProjectsFilepath()
+Path EngineConfig::GetRecentProjectsFilepath()
 {
-    return IO::GetEngineRootAbs() + "/config/RecentProjects.cfg";
+    return Path(IO::GetEngineRootAbs()).Append("config/RecentProjects.cfg");
 }
 
-List<String> EngineConfig::GetRecentProjectsList()
+List<Path> EngineConfig::GetRecentProjectsList()
 {
-    String recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
-    String recentProjectsContent =
-            IO::GetFileContents( Path(recentProjectConfigFilepath) );
-
+    Path recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
+    String recentProjectsContent = IO::GetFileContents(recentProjectConfigFilepath);
     Array<String> projectsList = recentProjectsContent.Split('\n');
-
-    return projectsList.ToList();
+    return projectsList.To<List,Path>();
 }
 
-void EngineConfig::RegisterInRecentProjectsList(const String &projectFilepath)
+void EngineConfig::RegisterInRecentProjectsList(const Path &projectFilepath)
 {
-    String recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
+    Path recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
 
-    List<String> recentProjectsList = EngineConfig::GetRecentProjectsList();
+    List<Path> recentProjectsList = EngineConfig::GetRecentProjectsList();
     recentProjectsList.Remove(projectFilepath);    // Remove it (to move later)
     recentProjectsList.PushFront(projectFilepath); // Add the first one
 
     EngineConfig::WriteListToFile(recentProjectConfigFilepath,
-                                  recentProjectsList);
+                                  recentProjectsList.To<List,String>());
 }

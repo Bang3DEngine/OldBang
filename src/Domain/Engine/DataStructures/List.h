@@ -206,14 +206,12 @@ public:
         return result;
     }
 
-    Array<T> ToArray() const
+    template < template <class> class ContainerClass, class ValueClass = T >
+    ContainerClass<ValueClass> To() const
     {
-        Array<T> array;
-        for (const T &x : *this)
-        {
-            array.PushBack(x);
-        }
-        return array;
+        ContainerClass<ValueClass> cont;
+        for (const T &x : *this) { cont.Add( ValueClass(x) ); }
+        return cont;
     }
 
     void Sort()

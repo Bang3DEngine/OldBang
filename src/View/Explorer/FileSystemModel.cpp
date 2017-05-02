@@ -141,8 +141,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         File file(this, idx);
 
         QPixmap pm;
-        String absPath = file.GetPath().GetAbsolute();
-        if (IO::IsFile(absPath))
+        if (file.GetPath().IsFile())
         {
             File *sFile = File::GetSpecificFile(file);
             if (sFile)
@@ -151,7 +150,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                 delete sFile;
             }
         }
-        else if (IO::IsDir(absPath))
+        else if (file.GetPath().IsDir())
         {
             // Take the default pixmap and return it scaled
             const QIcon &icon = QFileSystemModel::data(idx, role).value<QIcon>();
@@ -218,7 +217,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         QFont font = QFileSystemModel::data(idx, role).value<QFont>();
 
         File file(this, idx);
-        if ( IO::IsFile(file.GetPath().GetAbsolute()) )
+        if ( file.GetPath().IsFile() )
         {
             File *sFile = File::GetSpecificFile(file);
             font.setBold( sFile->IsAsset() );

@@ -33,7 +33,7 @@ public:
 
     void OnWindowShown();
 
-    String GetCurrentDir() const;
+    Path GetCurrentDir() const;
     Path GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
     bool IsSelectedAFile() const;

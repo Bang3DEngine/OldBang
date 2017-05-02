@@ -8,6 +8,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Set.h"
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 /**
@@ -49,8 +50,8 @@ private:
                          const String &relPathNow,
                          bool refactorXMLChildren);
 
-    void OnFileOrDirNameMoved(const String &absFilepathBefore,
-                                         const String &absFilepathNow);
+    void OnFileOrDirNameMoved(const Path &filepathBefore,
+                              const Path &filepathNow);
 
     friend class Explorer;
     friend class SerializableObject;

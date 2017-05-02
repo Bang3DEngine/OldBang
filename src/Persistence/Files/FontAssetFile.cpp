@@ -14,7 +14,7 @@ FontAssetFile::FontAssetFile()
 FontAssetFile::FontAssetFile(const Path& path) : File(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
-    m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath").GetAbsolute();
+    m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath");
 }
 
 const QPixmap& FontAssetFile::GetIcon() const
@@ -35,7 +35,7 @@ bool FontAssetFile::IsAsset() const
     return true;
 }
 
-const String &FontAssetFile::GetFontFilepath() const
+const Path &FontAssetFile::GetFontFilepath() const
 {
     return m_trueFontFilepath;
 }

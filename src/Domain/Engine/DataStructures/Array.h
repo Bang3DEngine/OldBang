@@ -96,14 +96,12 @@ public:
         return this->back();
     }
 
-    List<T> ToList() const
+    template < template <class> class ContainerClass, class ValueClass = T >
+    ContainerClass<ValueClass> To() const
     {
-        List<T> list;
-        for (const T &x : *this)
-        {
-            list.PushBack(x);
-        }
-        return list;
+        ContainerClass<ValueClass> cont;
+        for (const T &x : *this) { cont.Add( ValueClass(x) ); }
+        return cont;
     }
 
     Iterator Begin() { return this->begin(); }

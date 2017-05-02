@@ -32,7 +32,7 @@ GameBuilder *GameBuilder::GetInstance()
     return GameBuilder::s_instance;
 }
 
-String GameBuilder::AskForExecutableFilepath()
+Path GameBuilder::AskForExecutableFilepath()
 {
     // Get the executable output filepath
     const String defaultOutputDirectory = IO::GetProjectRootAbs();
@@ -46,10 +46,9 @@ String GameBuilder::AskForExecutableFilepath()
 
     if (!executableFilepath.IsFile())
     {
-        executableFilepath =
-           Path( IO::AppendExtension(executableFilepath.GetAbsolute(), "exe") );
+        executableFilepath = executableFilepath.AppendExtension("exe");
     }
-    return executableFilepath.GetAbsolute();
+    return executableFilepath;
 }
 
 void GameBuilder::BuildGame(bool runGame)
@@ -64,7 +63,7 @@ void GameBuilder::BuildGame(bool runGame)
 
         // First ask for the executable output file (in the main thread)
         m_latestGameExecutableFilepath = AskForExecutableFilepath();
-        ENSURE(!m_latestGameExecutableFilepath.Empty());
+        ENSURE(!m_latestGameExecutableFilepath.IsEmpty());
 
         // Create the progress window
         if (m_gameBuildDialog) { delete m_gameBuildDialog; }
@@ -115,7 +114,8 @@ void GameBuilder::OnGameHasBeenBuilt()
 
     if (m_runGameAfterBuild)
     {
-        SystemUtils::SystemBackground(m_latestGameExecutableFilepath, {});
+        SystemUtils::SystemBackground(
+                    m_latestGameExecutableFilepath.GetAbsolute(), {});
     }
 }
 
@@ -180,21 +180,22 @@ bool GameBuilder::CompileGameExecutable()
     return true;
 }
 
-bool GameBuilder::CreateDataDirectory(const String &executableDir)
+bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
-    String dataDir = executableDir + "/GameData";
-    IO::Remove(dataDir);
+    Path dataDir = executableDir.Append("GameData");
+    IO::Remove(dataDir.GetAbsolute());
     if (!IO::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
     if (!IO::DuplicateDir(IO::GetEngineAssetsRootAbs(),
-                          dataDir + "/EngineAssets"))
+                          dataDir.Append("EngineAssets").GetAbsolute()))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(), dataDir + "/Assets"))
+    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(),
+                          dataDir.Append("Assets").GetAbsolute()))
     {
         return false;
     }
@@ -202,33 +203,32 @@ bool GameBuilder::CreateDataDirectory(const String &executableDir)
     return true;
 }
 
-Project* GameBuilder::CreateGameProject(const String &executableDir)
+Project* GameBuilder::CreateGameProject(const Path &executableDir)
 {
     String projectFile = executableDir + "/GameData/Game.bproject";
     return ProjectManager::CreateNewProjectFileOnly( Path(projectFile ) );
 }
 
-bool GameBuilder::CompileBehaviours(const String &executableDir,
+bool GameBuilder::CompileBehaviours(const Path &executableDir,
                                     Project *gameProject,
                                     bool *cancel)
 {
     if (*cancel) { return true; }
 
-    Path dataDir = Path(executableDir).Append("/GameData");
-    Path libsDir = dataDir.Append( + "/Libraries");
+    Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
     BehaviourManager::SetCurrentLibsDir(libsDir);
-    IO::CreateDirectory(libsDir.GetAbsolute());
+    IO::CreateDirectory(libsDir);
     bool success = BehaviourManager::PrepareBehavioursLibrary(true, cancel);
     return success;
 }
 
 void GameBuilder::RemoveLatestGameBuild()
 {
-    IO::Remove(m_latestGameExecutableFilepath);
+    IO::Remove(m_latestGameExecutableFilepath.GetAbsolute());
 
-    String executableDir = IO::GetDir(m_latestGameExecutableFilepath);
-    String gameDataDir = executableDir + "/GameData";
-    IO::Remove(gameDataDir);
+    Path executableDir = m_latestGameExecutableFilepath.GetDirectory();
+    Path gameDataDir = executableDir.Append("GameData");
+    IO::Remove(gameDataDir.GetAbsolute());
 }
 
 GameBuildDialog *GameBuilder::GetGameBuildDialog()

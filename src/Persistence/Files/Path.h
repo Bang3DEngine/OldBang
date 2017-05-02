@@ -8,16 +8,10 @@
 #include "Bang/IToString.h"
 
 // User assets path
-#define UPATH(path) Path(path, IO::GetProjectAssetsRootAbs())
+#define UPATH(path) (Path(IO::GetProjectAssetsRootAbs()).Append(path))
 
 // Engine assets path
-#define EPATH(path) Path(path, IO::GetEngineAssetsRootAbs())
-
-// Generic path, to use when passing an absolute file, it detects whether
-// it is a user or engine path
-#define GPATH(absPath) \
-    (absPath.BeginsWith( IO::GetEngineAssetsRootAbs() ) ?  \
-        EPATH(absPath) : UPATH(absPath) )
+#define EPATH(path) (Path(IO::GetEngineAssetsRootAbs()).Append(path))
 
 class Path : public IToString
 {
@@ -25,11 +19,7 @@ public:
     Path();
     Path(const Path &path);
     explicit Path(const String &absolutePath);
-    Path(const String &relativePath,
-         const String &absolutePrefix);
-
-    void SetPath(const String &relativePath,
-                 const String &absolutePrefix = "");
+    void SetPath(const String &path);
 
     bool IsDir() const;
     bool IsFile() const;
@@ -44,18 +34,22 @@ public:
     String GetNameExt() const;
     String GetExtension() const;
     const String& GetAbsolute() const;
-    const String& GetRelative() const;
+    String GetRelative() const;
+    Path GetDuplicate() const;
 
     virtual String ToString() const override;
     bool IsEmpty() const;
 
+    Path Append(const Path& path) const;
     Path Append(const String& str) const;
+    Path AppendRaw(const String& str) const;
     Path AppendExtension(const String& extension) const;
 
     // "*.jpg *.so.*"
     bool HasExtension(const String &extension) const;
     bool HasExtension(const List<String> &extensions) const;
 
+    explicit operator String() const;
     bool operator!=(const Path &rhs) const;
     bool operator==(const Path &rhs) const;
     bool operator<(const Path &rhs) const;
@@ -63,9 +57,7 @@ public:
     static const Path Empty;
 
 private:
-    String m_relativePath   = "";
     String m_absolutePath   = "";
-    String m_absolutePrefix = "";
 
 };
 

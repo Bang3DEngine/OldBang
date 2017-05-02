@@ -45,7 +45,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     Path projectAssetsDir = currentProject->GetProjectAssetsRootFilepath();
     Explorer::GetInstance()->SetDir( Path(projectAssetsDir) );
 
-    EngineConfig::RegisterInRecentProjectsList(projectFilepath.GetAbsolute());
+    EngineConfig::RegisterInRecentProjectsList(projectFilepath);
 
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
     #endif
@@ -87,7 +87,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
     Path projectDir(projectDirPath + "/" + projectName);
     if (!projectDir.Exists())
     {
-        if (!IO::CreateDirectory(projectDir.GetAbsolute()))
+        if (!IO::CreateDirectory(projectDir))
         {
             Debug_Error ("Could not create project in directory '" <<
                          projectDir << "'.");
@@ -110,7 +110,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
             CreateNewProjectFileOnly(projectFileFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
-    IO::CreateDirectory(projectDir + "/Assets");
+    IO::CreateDirectory(projectDir.Append("Assets"));
 
     return ProjectManager::s_currentProject;
 }

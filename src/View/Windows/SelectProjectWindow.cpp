@@ -75,15 +75,15 @@ void SelectProjectWindow::FillRecentProjectsList()
     EngineConfig::CleanOutdatedRecentProjectList();
 
     int i = 0;
-    List<String> recentProjectsFilepath = EngineConfig::GetRecentProjectsList();
+    List<Path> recentProjectsFilepath = EngineConfig::GetRecentProjectsList();
     listRecentProjects->setRowCount(recentProjectsFilepath.Size());
     listRecentProjects->setColumnCount(2);
-    for (String recentProject : recentProjectsFilepath)
+    for (const Path &recentProject : recentProjectsFilepath)
     {
         QTableWidgetItem *projNameItem = new QTableWidgetItem(
-                    IO::GetBaseName(recentProject).ToQString());
+                    recentProject.GetName().ToQString());
         QTableWidgetItem *projPathItem = new QTableWidgetItem(
-                    recentProject.ToQString());
+                    recentProject.GetAbsolute().ToQString());
         listRecentProjects->setItem(i, 0, projNameItem);
         listRecentProjects->setItem(i, 1, projPathItem);
         ++i;

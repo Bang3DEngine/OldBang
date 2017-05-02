@@ -24,7 +24,7 @@ void TextFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     String contents = xmlInfo.GetString("Contents");
-    IO::WriteToFile( GetPath().GetAbsolute(), contents);
+    IO::WriteToFile(GetPath(), contents);
 }
 
 void TextFile::Write(XMLNode *xmlInfo) const

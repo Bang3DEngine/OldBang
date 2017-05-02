@@ -36,8 +36,8 @@ void EditorGizmosGameObject::Init()
         m_boxMesh    = MeshFactory::GetCube();
         m_planeMesh  = MeshFactory::GetPlane();
         m_sphereMesh = MeshFactory::GetSphere();
-        m_material   = AssetsManager::Load<Material>(
-                              EPATH("./Materials/G_DefaultNoSP.bmat") );
+        Path matPath = EPATH("./Materials/G_DefaultNoSP.bmat");
+        m_material   = AssetsManager::Load<Material>(matPath);
         m_material   = new Material(*m_material);
 
         AddComponent<SingleLineRenderer>();

@@ -218,12 +218,12 @@ bool IO::DuplicateFile(const String &fromFilepath,
 }
 
 bool IO::DuplicateDir(const String &fromDirpath,
-                               const String &toDirpath,
-                               bool overwrite)
+                      const String &toDirpath,
+                      bool overwrite)
 {
 	if (!IO::ExistsDirectory(fromDirpath)) { return false; }
 
-    if (!IO::CreateDirectory(toDirpath)) { return false; }
+    if (!IO::CreateDirectory( Path(toDirpath) )) { return false; }
     List<String> filepaths = IO::GetFiles(fromDirpath, false);
     for(const String & filepath : filepaths)
     {
@@ -408,11 +408,11 @@ bool IO::Exists(const String &filepath)
     return IO::ExistsFile(filepath);
 }
 
-bool IO::CreateDirectory(const String &dirPath)
+bool IO::CreateDirectory(const Path &dirPath)
 {
-	if (dirPath.Empty()) { return false; }
-    if (IO::ExistsDirectory(dirPath)) { return true; }
-    return QDir().mkdir(dirPath.ToQString());
+    if (dirPath.IsEmpty()) { return false; }
+    if (dirPath.IsDir()) { return true; }
+    return QDir().mkdir(dirPath.GetAbsolute().ToQString());
 }
 
 bool IO::Rename(const String &oldPath, const String &newPath)
@@ -430,9 +430,9 @@ bool IO::Move(const String &oldPath, const String &newPath)
     return QFile().rename(oldPath.ToQString(), newPath.ToQString());
 }
 
-bool IO::WriteToFile(const String &absFilepath, const String &contents)
+bool IO::WriteToFile(const Path &filepath, const String &contents)
 {
-    std::ofstream out(absFilepath);
+    std::ofstream out(filepath.GetAbsolute());
     if (out.is_open())
     {
         out << contents;

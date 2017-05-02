@@ -23,10 +23,10 @@ public:
 
     virtual bool IsAsset() const override;
 
-    const String &GetFontFilepath() const;
+    const Path &GetFontFilepath() const;
 
 private:
-    String m_trueFontFilepath = "";
+    Path m_trueFontFilepath;
 };
 
 #endif // FONTASSETFILE_H

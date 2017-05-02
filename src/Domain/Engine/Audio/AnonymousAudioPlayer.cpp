@@ -54,7 +54,7 @@ void AnonymousAudioPlayer::PlaySound(const String &soundFilepathStr,
 {
     AnonymousAudioPlayer::ClearAnonymousAudioSourcesAndClips();
 
-    Path soundFilepath = GPATH(soundFilepathStr);
+    Path soundFilepath = Path(soundFilepathStr);
     if (!soundFilepath.Exists())
     {
         Debug_Warn("Sound '" << soundFilepathStr << "' could not be found");

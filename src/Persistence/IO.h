@@ -81,11 +81,11 @@ public:
    static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
    static bool Exists(const String &filepath);
-   static bool CreateDirectory(const String &dirPath);
+   static bool CreateDirectory(const Path &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
    static bool Rename(const String &oldPath, const String &newPath);
    static bool Move(const String &oldPath, const String &newPath);
-   static bool WriteToFile(const String &absFilepath, const String &contents);
+   static bool WriteToFile(const Path &filepath, const String &contents);
 
    static bool IsEngineFile(const Path &path);
 

@@ -24,7 +24,7 @@ public:
     enum Type
     {
         GBuffer,
-        ScreenPass,
+        PostProcess,
         SelectionFramebuffer,
         Other
     };

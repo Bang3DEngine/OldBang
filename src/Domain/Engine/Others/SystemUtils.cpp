@@ -199,7 +199,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     args.Add({"-o", outputLibFilepath.GetAbsolute()}); // Output to the lib
 
     Path libsDir = BehaviourManager::GetCurrentLibsDir();
-    IO::CreateDirectory(libsDir.GetAbsolute());
+    IO::CreateDirectory(libsDir);
     SystemUtils::System("/usr/bin/g++", args, output, success);
 }
 

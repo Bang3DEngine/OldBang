@@ -429,8 +429,8 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
     // with its info, and not with another one !!!!!!!!!!!!!!!!!
 
     List<XMLNode> xmlChildren = xmlInfo.GetChildren();
-    Array<GameObject*> children = GetChildren().ToArray();
-    Array<Component*> components = GetComponents().ToArray();
+    Array<GameObject*> children = GetChildren().To<Array>();
+    Array<Component*> components = GetComponents().To<Array>();
     int iChildren = 0, iComponents = 0;
     for (XMLNode& xmlChildInfo : xmlChildren)
     {

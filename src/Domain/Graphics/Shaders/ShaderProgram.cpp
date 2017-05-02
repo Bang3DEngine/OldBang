@@ -19,7 +19,7 @@ ShaderProgram::ShaderProgram(const Path &vshaderPath, const Path &fshaderPath)
 {
     String fShaderExt = fshaderPath.GetExtension();
     if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
-    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::ScreenPass; }
+    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
     else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
     else { m_type = Type::Other; }
 
@@ -94,7 +94,7 @@ bool ShaderProgram::Link()
         SetFragmentInputBinding("B_GIn_Misc",        2);
         SetFragmentInputBinding("B_GIn_Color",       3);
     }
-    else if (m_type == Type::ScreenPass)
+    else if (m_type == Type::PostProcess)
     {
         SetVertexInputBinding("B_In_PositionObject", 0);
         SetFragmentInputBinding("B_GIn_Color",       0);

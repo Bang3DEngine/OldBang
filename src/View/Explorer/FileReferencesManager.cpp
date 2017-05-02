@@ -35,25 +35,23 @@ void FileReferencesManager::UnRegisterSerializableObject(SerializableObject *fil
     m_inMemorySerialObjects.Remove(fileable);
 }
 
-void FileReferencesManager::OnFileOrDirNameMoved(const String &absFilepathBefore,
-                                                 const String &absFilepathNow)
+void FileReferencesManager::OnFileOrDirNameMoved(const Path &filepathBefore,
+                                                 const Path &filepathNow)
 {
-    ENSURE(!absFilepathBefore.Empty());
-    // ENSURE(!absFilepathNow.Empty());
+    ENSURE(!filepathBefore.IsEmpty());
 
-    bool fileHasMoved = !absFilepathBefore.Empty() &&
-                        !IO::Exists(absFilepathBefore) &&
-                         IO::Exists(absFilepathNow);
-
+    bool fileHasMoved = !filepathBefore.IsEmpty() &&
+                        !filepathBefore.Exists() &&
+                         filepathNow.Exists();
     if (fileHasMoved)
     {
-        String relPathBefore = IO::ToRelative(absFilepathBefore,false);
-        String relPathNow    = IO::ToRelative(absFilepathNow, false);
-        if ( IO::IsDir(absFilepathNow) )
-        {
-            relPathBefore += "/";
-            relPathNow += "/";
-        }
+        String relPathBefore = filepathBefore.GetRelative();
+        String relPathNow    = filepathNow.GetRelative();
+        //if ( filepathNow.IsDir() )
+        //{
+        //    relPathBefore.Append("/");
+        //    relPathNow.Append("/");
+        //}
 
         RefactorFiles(relPathBefore, relPathNow);
         RefactorSerializableObject(relPathBefore, relPathNow);
@@ -71,7 +69,7 @@ void FileReferencesManager::CheckForMovedFiles()
     {
         const Path &oldPath = oldNewPath.first;
         const Path &newPath = oldNewPath.second;
-        frm->OnFileOrDirNameMoved(oldPath.GetAbsolute(), newPath.GetAbsolute());
+        frm->OnFileOrDirNameMoved(oldPath, newPath);
     }
 }
 
@@ -84,9 +82,8 @@ FileReferencesManager *FileReferencesManager::GetInstance()
 void FileReferencesManager::RefactorFiles(const String &relPathBefore,
                                           const String &relPathNow)
 {
-    List<String> allFiles =
-          IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
-    for (const String &filepath : allFiles)
+    List<Path> allFiles = Path(IO::GetProjectAssetsRootAbs()).GetFiles(true);
+    for (const Path &filepath : allFiles)
     {
         File f(filepath);
         if (!f.IsAsset()) { continue; }

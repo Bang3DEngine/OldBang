@@ -1,6 +1,7 @@
 #ifndef QTPROJECTMANAGER_H
 #define QTPROJECTMANAGER_H
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 /**
@@ -10,17 +11,15 @@
 class QtProjectManager
 {
 public:
-    static String GetQtProjectFilepath();
+    static Path GetQtProjectFilepath();
 
     static void CreateQtProjectFile();
-    static void OpenBehaviourInQtCreator(const String &behaviourFilepath);
+    static void OpenBehaviourInQtCreator(const Path &behaviourFilepath);
 
 private:
     QtProjectManager();
 
-    static String GetQtProjectFilepathDir();
-    static String GetQtProjectFilepathPrefix();
-
+    static Path GetQtProjectDir();
     static bool IsQtCreatorOpenedCurrentProject();
 };
 

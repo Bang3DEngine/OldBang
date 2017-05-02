@@ -91,9 +91,7 @@ void Explorer::OnWindowShown()
 
 void Explorer::OnButtonDirUpClicked()
 {
-    String rootPath = GetCurrentDir();
-    String parentDirPath = IO::GetDirUp(rootPath);
-    SetDir(  Path(parentDirPath) );
+    SetDir( GetCurrentDir().GetDirectory() );
 }
 
 void Explorer::OnRenameClicked()
@@ -126,12 +124,11 @@ void Explorer::OnFileRenamed(const QString &dirPath,
 {
     UpdateLabelText();
 
-    Path newAbsPath(dirPath + "/" + newName);
-    SelectPath(newAbsPath);
+    Path newPath(dirPath + "/" + newName);
+    SelectPath(newPath);
 
-    String oldAbsPath = dirPath + "/" + oldName;
-    m_fileRefsManager->OnFileOrDirNameMoved(oldAbsPath,
-                                            newAbsPath.GetAbsolute());
+    Path oldPath(dirPath + "/" + oldName);
+    m_fileRefsManager->OnFileOrDirNameMoved(oldPath, newPath);
 }
 
 void Explorer::UpdateLabelText()
@@ -232,7 +229,7 @@ void Explorer::OnFileDoubleClicked(const Path &filepath)
     }
     else if (f.IsBehaviour())
     {
-        QtProjectManager::OpenBehaviourInQtCreator(filepath.GetAbsolute());
+        QtProjectManager::OpenBehaviourInQtCreator(filepath);
     }
 }
 
@@ -325,7 +322,7 @@ void Explorer::OnDirLoaded(QString dir)
 {
     ENSURE(EditorWindow::GetInstance());
 
-    if (GetCurrentDir().Length() <=
+    if (GetCurrentDir().GetAbsolute().Length() <=
         IO::GetProjectAssetsRootAbs().Length())
     {
         m_buttonDirUp->setEnabled(false);
@@ -338,9 +335,9 @@ void Explorer::OnDirLoaded(QString dir)
     }
 }
 
-String Explorer::GetCurrentDir() const
+Path Explorer::GetCurrentDir() const
 {
-    return m_fileSystemModel->rootPath().toStdString();
+    return Path( String(m_fileSystemModel->rootPath()) );
 }
 
 Path Explorer::GetSelectedFileOrDirPath() const
@@ -421,9 +418,8 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             GameObject *selected = hierarchy->GetFirstSelectedGameObject();
             ENSURE(selected);
 
-            String path = GetCurrentDir() + "/" + selected->name;
-            path = IO::AppendExtension(path,
-                          Prefab::GetFileExtensionStatic());
+            Path path = GetCurrentDir().Append(selected->name);
+            path = path.AppendExtension(Prefab::GetFileExtensionStatic());
             IO::WriteToFile(path, selected->GetSerializedString());
         }
     }

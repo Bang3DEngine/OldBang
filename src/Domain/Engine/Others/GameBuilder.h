@@ -5,6 +5,7 @@
 #include <QProgressDialog>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/GameBuilderJob.h"
 
@@ -36,16 +37,16 @@ private:
     static GameBuilder *s_instance;
 
     bool m_runGameAfterBuild = false;
+    Path m_latestGameExecutableFilepath;
     QThread *m_gameBuilderThread = nullptr;
     GameBuilderJob *m_gameBuilderJob = nullptr;
     GameBuildDialog *m_gameBuildDialog = nullptr;
-    String m_latestGameExecutableFilepath = "";
 
-    String AskForExecutableFilepath();
+    Path AskForExecutableFilepath();
     bool     CompileGameExecutable();
-    bool     CreateDataDirectory(const String &executableDir);
-    Project* CreateGameProject(const String &executableDir);
-    bool     CompileBehaviours(const String &executableDir,
+    bool     CreateDataDirectory(const Path &executableDir);
+    Project* CreateGameProject(const Path &executableDir);
+    bool     CompileBehaviours(const Path &executableDir,
                                Project *GameProject,
                                bool *cancel);
     void RemoveLatestGameBuild();

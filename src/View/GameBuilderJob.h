@@ -2,7 +2,9 @@
 #define GAMEBUILDERTHREAD_H
 
 #include <QObject>
+#include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class GameBuilderJob : public QObject
@@ -23,7 +25,7 @@ class GameBuilderJob : public QObject
         void NotifyGameBuildingHasFailed(const QString &errorMsg);
 
     protected:
-        String m_executableFilepath = "";
+        Path m_executableFilepath;
         bool m_canceled = false;
 
     friend class GameBuilder;

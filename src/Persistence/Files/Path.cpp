@@ -2,6 +2,7 @@
 
 #include "Bang/IO.h"
 #include "Bang/Array.h"
+#include <iostream>
 
 const Path Path::Empty;
 
@@ -9,31 +10,29 @@ Path::Path()
 {
 }
 
-Path::Path(const Path &path) : Path(path.GetRelative(), path.m_absolutePrefix)
+Path::Path(const Path &path) : Path(path.GetAbsolute())
 {
 }
 
 Path::Path(const String &absolutePath)
 {
-    SetPath(absolutePath, "");
+    SetPath(absolutePath);
 }
 
-Path::Path(const String &relativePath, const String &absolutePrefix)
+void Path::SetPath(const String &path)
 {
-    SetPath(relativePath, absolutePrefix);
-}
-
-void Path::SetPath(const String &relativePath, const String &absolutePrefix)
-{
-    m_absolutePrefix = absolutePrefix;
-    if (!m_absolutePrefix.Empty() &&
-         m_absolutePrefix.At(m_absolutePrefix.Length()-1) != '/')
+    m_absolutePath = path;
+    if (!m_absolutePath.Empty() &&
+         m_absolutePath.At(m_absolutePath.Length()-1) == '/')
     {
-        m_absolutePrefix += "/";
+        m_absolutePath.Erase(m_absolutePath.Length()-1,
+                             m_absolutePath.Length()-1);
     }
 
-    m_relativePath = IO::ToRelative( relativePath, m_absolutePrefix );
-    m_absolutePath = m_absolutePrefix + m_relativePath;
+    if (m_absolutePath.BeginsWith("./"))
+    {
+        m_absolutePath.Erase(0, 1);
+    }
 }
 
 bool Path::IsDir() const
@@ -57,7 +56,7 @@ List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
     List<String> filesList = IO::GetFiles(GetAbsolute(), recursive, extensions);
     for (const String &file : filesList)
     {
-        filePaths.Add( Path(file, m_absolutePrefix) );
+        filePaths.Add( Path(file) );
     }
     return filePaths;
 }
@@ -68,14 +67,14 @@ List<Path> Path::GetSubDirectories(bool recursively) const
     List<String> dirsList = IO::GetSubDirectories(GetAbsolute(), recursively);
     for (String &dir : dirsList)
     {
-        dirPaths.Add( Path(dir, m_absolutePrefix) );
+        dirPaths.Add( Path(dir) );
     }
     return dirPaths;
 }
 
 String Path::GetName() const
 {
-    return IO::GetBaseName( GetRelative() );
+    return IO::GetBaseName( GetAbsolute() );
 }
 
 String Path::GetNameExt() const
@@ -93,7 +92,7 @@ String Path::GetExtension() const
 Path Path::GetDirectory() const
 {
     String dirPath = IO::GetDir( GetAbsolute() );
-    return Path(dirPath, m_absolutePrefix);
+    return Path(dirPath);
 }
 
 const String &Path::GetAbsolute() const
@@ -101,9 +100,35 @@ const String &Path::GetAbsolute() const
     return m_absolutePath;
 }
 
-const String& Path::GetRelative() const
+String Path::GetRelative() const
 {
-    return m_relativePath;
+    const String &engineAssets  = IO::GetEngineAssetsRootAbs();
+    const String &projectAssets = IO::GetProjectAssetsRootAbs();
+    const String &projectRoot   = IO::GetProjectRootAbs();
+    const String &engineRoot    = IO::GetEngineRootAbs();
+    if (GetAbsolute().BeginsWith(engineAssets))
+    {
+        return GetAbsolute().SubString(engineAssets.Length() + 1);
+    }
+    else if (GetAbsolute().BeginsWith(projectAssets))
+    {
+        return GetAbsolute().SubString(projectAssets.Length() + 1);
+    }
+    else if (GetAbsolute().BeginsWith(engineRoot))
+    {
+        return GetAbsolute().SubString(engineRoot.Length() + 1);
+    }
+    else if (GetAbsolute().BeginsWith(projectRoot))
+    {
+        return GetAbsolute().SubString(projectRoot.Length() + 1);
+    }
+
+    return GetAbsolute();
+}
+
+Path Path::GetDuplicate() const
+{
+    return Path(IO::GetDuplicatePath( GetAbsolute() ));
 }
 
 String Path::ToString() const
@@ -116,15 +141,28 @@ bool Path::IsEmpty() const
     return GetAbsolute().Empty();
 }
 
+Path Path::Append(const Path &pathRHS) const
+{
+    String str = pathRHS.GetAbsolute();
+    if (str.BeginsWith("./")) { str.Erase(0, 0); }
+    while (str.BeginsWith("/")) { str.Erase(0, 0); }
+    return this->AppendRaw("/" + str);
+}
+
 Path Path::Append(const String &str) const
 {
-    return Path(GetRelative() + str, m_absolutePrefix);
+    return Path(GetAbsolute()).Append( Path(str) );
+}
+
+Path Path::AppendRaw(const String &str) const
+{
+    return Path(GetAbsolute() + str);
 }
 
 Path Path::AppendExtension(const String &extension) const
 {
     if (HasExtension(extension)) { return Path(*this); }
-    return Path(GetRelative() + "." + extension, m_absolutePrefix);
+    return Path(GetAbsolute() + "." + extension);
 }
 
 bool Path::HasExtension(const String &extensions) const
@@ -146,6 +184,11 @@ bool Path::HasExtension(const List<String> &extensions) const
         if ( ext.EqualsNoCase(extension) ) { return true; }
     }
     return false;
+}
+
+Path::operator String() const
+{
+    return GetAbsolute();
 }
 
 bool Path::operator!=(const Path &rhs) const

@@ -26,7 +26,7 @@ MaterialAssetFile::MaterialAssetFile(const Path& path) :
 
 const QPixmap& MaterialAssetFile::GetIcon() const
 {
-    String absPath = GetPath().GetAbsolute();
+    Path absPath = GetPath();
     Material *mat = AssetsManager::Load<Material>(absPath);
     return IconManager::LoadMaterialPixmap(mat);
 }

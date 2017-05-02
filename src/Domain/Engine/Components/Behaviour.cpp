@@ -82,27 +82,26 @@ Behaviour* Behaviour::CreateNewBehaviour()
     if (ok && !className.Empty())
     {
         newBehaviour = new Behaviour();
-        // TODO: Check that the class name is a valid name!
-        String currentDir = Explorer::GetInstance()->GetCurrentDir();
+        Path currentDir = Explorer::GetInstance()->GetCurrentDir();
 
         // Create header file
         String headerCode = Behaviour::s_behaviourHeaderTemplate;
         headerCode = headerCode.Replace("CLASS_NAME", className);
-        String headerFilepath = currentDir + "/" + className;
-        headerFilepath = IO::AppendExtension(headerFilepath, "h");
-        if (IO::ExistsFile(headerFilepath)) { return nullptr; }
+        Path headerFilepath = currentDir.Append(className);
+        headerFilepath = headerFilepath.AppendExtension("h");
+        if (headerFilepath.IsFile()) { return nullptr; }
         IO::WriteToFile(headerFilepath, headerCode);
 
         // Create source file
         String sourceCode = Behaviour::s_behaviourSourceTemplate;
         sourceCode = sourceCode.Replace("CLASS_NAME", className);
-        String sourceFilepath = currentDir + "/" + className;
-        sourceFilepath = IO::AppendExtension(sourceFilepath, "cpp");
-        if (IO::ExistsFile(sourceFilepath)) { return nullptr; }
+        Path sourceFilepath = currentDir.Append(className);
+        sourceFilepath = sourceFilepath.AppendExtension("cpp");
+        if (sourceFilepath.IsFile()) { return nullptr; }
         IO::WriteToFile(sourceFilepath, sourceCode);
 
         // Update Behaviour file
-        newBehaviour->m_sourceFilepath = Path(sourceFilepath);
+        newBehaviour->m_sourceFilepath = sourceFilepath;
         newBehaviour->RefreshBehaviourLib();
 
         // Open with system editor

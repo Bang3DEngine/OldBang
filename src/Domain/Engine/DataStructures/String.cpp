@@ -109,7 +109,7 @@ Array<String> String::Split(char splitter, bool trimResults) const
 
 String String::Join(const Array<String> &parts, String joiner)
 {
-    return String::Join(parts.ToList(), joiner);
+    return String::Join(parts.To<List>(), joiner);
 }
 
 String String::Join(const List<String> &parts, String joiner)

@@ -102,13 +102,12 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     File f = p_explorer->GetSelectedFile();
     MenuBar *mb = MenuBar::GetInstance();
 
-    String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetName() +
-                     "." + Texture2D::GetFileExtensionStatic();
-    newPath = IO::GetDuplicatePath(newPath);
-    String newTexName = IO::GetFileNameWithExtension(newPath);
+    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
+    Path newPath = dirPath.Append(f.GetPath().GetName());
+    newPath = newPath.AppendExtension(Texture2D::GetFileExtensionStatic());
+    newPath = newPath.GetDuplicate();
 
-    Texture2D *tex = mb->OnCreateTexture2D( Path(newTexName) );
+    Texture2D *tex = mb->OnCreateTexture2D(newPath);
     tex->LoadFromImage(f.GetPath() );
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
@@ -128,13 +127,12 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     File f = p_explorer->GetSelectedFile();
     MenuBar *mb = MenuBar::GetInstance();
 
-    String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetName() +
-                     "." + AudioClip::GetFileExtensionStatic();
-    newPath = IO::GetDuplicatePath(newPath);
-    String newAudioName = IO::GetFileNameWithExtension(newPath);
+    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
+    Path newPath = dirPath.Append(f.GetPath().GetName());
+    newPath = newPath.AppendExtension(AudioClip::GetFileExtensionStatic());
+    newPath = newPath.GetDuplicate();
 
-    AudioClip *audio = mb->OnCreateAudioClip( Path(newAudioName) );
+    AudioClip *audio = mb->OnCreateAudioClip( newPath );
     audio->LoadFromFile( f.GetPath() );
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
@@ -155,13 +153,13 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     File f (fromTexture->GetFilepath());
     MenuBar *mb = MenuBar::GetInstance();
 
-    String dirPath = Explorer::GetInstance()->GetCurrentDir();
-    String newPath = dirPath + "/" + f.GetPath().GetName() +
-                     "." + Material::GetFileExtensionStatic();
-    newPath = IO::GetDuplicatePath(newPath);
-    String newMatName = IO::GetFileNameWithExtension(newPath);
 
-    Material *mat = mb->OnCreateMaterial( Path(newMatName) );
+    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
+    Path newPath = dirPath.Append(f.GetPath().GetName());
+    newPath = newPath.AppendExtension(Material::GetFileExtensionStatic());
+    newPath = newPath.GetDuplicate();
+
+    Material *mat = mb->OnCreateMaterial( newPath );
     mat->SetTexture(fromTexture);
     AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(mat, newMatName);
@@ -172,15 +170,15 @@ void ExplorerContextMenu::OnDuplicateClicked()
 {
     ENSURE(!p_explorer->GetSelectedFileOrDirPath().IsEmpty());
 
-    String fromPath = p_explorer->GetSelectedFileOrDirPath().GetAbsolute();
-    String toPath = IO::GetDuplicatePath( fromPath );
-    if (IO::IsFile(fromPath))
+    Path fromPath = p_explorer->GetSelectedFileOrDirPath();
+    Path toPath = fromPath.GetDuplicate();
+    if (fromPath.IsFile())
     {
-        IO::DuplicateFile(fromPath, toPath);
+        IO::DuplicateFile(fromPath.GetAbsolute(), toPath.GetAbsolute());
     }
-    else if (IO::IsDir(fromPath))
+    else if (fromPath.IsDir())
     {
-        IO::DuplicateDir(fromPath, toPath);
+        IO::DuplicateDir(fromPath.GetAbsolute(), toPath.GetAbsolute());
     }
 
     p_explorer->SelectPath( Path(toPath) );
@@ -206,11 +204,8 @@ void ExplorerContextMenu::OnDeleteClicked()
 
 void ExplorerContextMenu::OnCreateDirClicked()
 {
-    String currentDir = p_explorer->GetCurrentDir();
-    String dirPath = currentDir + "/New_Folder";
-    dirPath = IO::GetDuplicatePath(dirPath);
-    dirPath = IO::ToAbsolute(dirPath, false);
-
+    Path dirPath = p_explorer->GetCurrentDir().Append("New_Folder");
+    dirPath = dirPath.GetDuplicate();
     IO::CreateDirectory(dirPath);
-    p_explorer->StartRenaming(  Path(dirPath) );
+    p_explorer->StartRenaming(dirPath);
 }

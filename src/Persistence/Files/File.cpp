@@ -50,7 +50,7 @@ File::File(const String &filepath) : File( Path(filepath) )
 File::File(const QFileSystemModel *model, const QModelIndex &index)
 {
     String pathStr(model->filePath(index).toStdString());
-    m_path = GPATH(pathStr);
+    m_path = Path(pathStr);
 }
 
 bool File::IsSound() const

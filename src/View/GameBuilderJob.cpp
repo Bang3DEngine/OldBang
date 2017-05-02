@@ -14,10 +14,10 @@ GameBuilderJob::GameBuilderJob()
 
 void GameBuilderJob::BuildGame()
 {
-    ENSURE(!m_executableFilepath.Empty());
+    ENSURE(!m_executableFilepath.IsEmpty());
     GameBuilder *gb = GameBuilder::GetInstance(); ENSURE(gb);
 
-    String executableDir = IO::GetDir(m_executableFilepath);
+    Path executableDir = m_executableFilepath.GetDirectory();
 
     emit NotifyPercent(0.0f);
 
@@ -66,8 +66,8 @@ void GameBuilderJob::BuildGame()
     emit NotifyMessage("Moving the executable into the desired location...");
     const String c_initialOutputDir = IO::GetEngineRootAbs() +
                                       "/bin/Game.exe";
-    IO::Remove(m_executableFilepath);
-    IO::Move(c_initialOutputDir, m_executableFilepath);
+    IO::Remove(m_executableFilepath.GetAbsolute());
+    IO::Move(c_initialOutputDir, m_executableFilepath.GetAbsolute());
 
     emit NotifyPercent(1.0f);
 

@@ -66,7 +66,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
     String &code = *srcCode;
 
     Array<String> linesArray = code.Split('\n');
-    List<String> lines = linesArray.ToList();
+    List<String> lines = linesArray.To<List>();
 
     // Keep track of the user's source line number, to use #line directive
     int originalLineNum = 1;
@@ -84,7 +84,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
             // Get the include content lines, and add it to the overall lines.
             // This way we can process it recursively, since the included lines
             // are processed too
-            List<String> contentLines = content.Split('\n').ToList();
+            List<String> contentLines = content.Split('\n').To<List>();
             originalLineNum -= contentLines.Size(); // Do this before the splice
 
             lines.Splice(it, contentLines, contentLines.Begin(),

@@ -16,7 +16,7 @@ void GraphicPipelineDebugger::Reset()
     if (Input::GetKeyDown(Input::Key::Q))
     {
         IO::Remove(GraphicPipelineDebugger::c_debugDir);
-        IO::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
+        IO::CreateDirectory( Path(GraphicPipelineDebugger::c_debugDir) );
     }
 }
 

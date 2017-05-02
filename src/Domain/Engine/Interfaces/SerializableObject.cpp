@@ -62,7 +62,7 @@ bool SerializableObject::ReadFromFile(const Path &path)
 
 bool SerializableObject::WriteToFile(const Path &path) const
 {
-    return IO::WriteToFile(path.GetAbsolute(), GetSerializedString(true));
+    return IO::WriteToFile(path, GetSerializedString(true));
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
