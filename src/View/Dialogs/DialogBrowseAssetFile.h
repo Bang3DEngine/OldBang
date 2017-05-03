@@ -9,6 +9,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class QTabWidget;
@@ -27,7 +28,7 @@ public:
 
 private:
     String *m_resultFile = nullptr;
-    Map<QListWidgetItem*, String> m_item_To_absoluteFilepath;
+    Map<QListWidgetItem*, Path> m_item_To_filepath;
 
     const int c_iconSize           = 40;
     QTabWidget *m_tabWidget        = nullptr;
@@ -38,7 +39,7 @@ private:
 
     void ShowOnList(QListWidget *listWidget,
                     bool engineFilepaths,
-                    const List<String> &filepaths);
+                    const List<Path> &filepaths);
 
     QListWidget *CreateList() const;
 

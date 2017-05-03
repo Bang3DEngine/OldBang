@@ -58,7 +58,7 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 
                 contextMenu.addSeparator();
             }
-            else if (f.IsTexture2DAsset())
+            else if (f.IsTexture2DFile())
             {
                 QAction *actionCreateMaterialFromTexture =
                         contextMenu.addAction("Create Material from Texture");
@@ -174,11 +174,11 @@ void ExplorerContextMenu::OnDuplicateClicked()
     Path toPath = fromPath.GetDuplicate();
     if (fromPath.IsFile())
     {
-        IO::DuplicateFile(fromPath.GetAbsolute(), toPath.GetAbsolute());
+        IO::DuplicateFile(fromPath, toPath);
     }
     else if (fromPath.IsDir())
     {
-        IO::DuplicateDir(fromPath.GetAbsolute(), toPath.GetAbsolute());
+        IO::DuplicateDir(fromPath, toPath);
     }
 
     p_explorer->SelectPath( Path(toPath) );
@@ -186,10 +186,10 @@ void ExplorerContextMenu::OnDuplicateClicked()
 
 void ExplorerContextMenu::OnDeleteClicked()
 {
-    String path = p_explorer->GetSelectedFile().GetPath().GetAbsolute();
-    String name = IO::GetFileNameWithExtension(path);
-    ENSURE( IO::Exists(path) );
+    Path path = p_explorer->GetSelectedFile().GetPath();
+    ENSURE( path.Exists() );
 
+    String name = path.GetNameExt();
     Dialog::Reply reply = Dialog::GetYesNo(
                 "Delete file or directory",
                 "Are you sure you want to remove '" + name + "' ? \n" +

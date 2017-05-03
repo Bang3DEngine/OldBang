@@ -126,286 +126,68 @@ String IO::GetPathWithoutExtension(const String &filepath)
     return path;
 }
 
-
-String IO::ToAbsolute(const String &relPath,
-                      const String &absPrefix)
-{
-	if (relPath.Empty()) { return ""; }
-
-    String result = "";
-    if (IO::IsAbsolute(relPath)) { result = relPath; }
-    else { result = absPrefix + "/" + relPath; }
-
-    if (IO::Exists(result))
-    {
-        return QFileInfo(result.ToQString()).canonicalFilePath();
-    }
-    return result;
-}
-
-String IO::ToAbsolute(const String &relPath, bool isEngineFile)
-{
-	if (relPath.Empty()) { return ""; }
-    return IO::ToAbsolute(relPath,
-              isEngineFile ? IO::GetEngineAssetsRootAbs() :
-                             IO::GetProjectAssetsRootAbs());
-}
-
-String IO::ToRelative(const String &absPath, const String &absPrefix)
-{
-    if (absPath.Empty()) { return ""; }
-
-    std::size_t pos = absPath.find(absPrefix);
-
-    String relPath = absPath;
-    if (pos != String::npos)
-    {
-        relPath = absPath.SubString(pos + absPrefix.Length(),
-                                    absPath.Length() - 1);
-    }
-    if (relPath.BeginsWith("./")) { relPath.Erase(0,1); }
-    if (relPath.EndsWith("/")) { relPath.Erase(relPath.Length()-1,
-                                               relPath.Length()-1); }
-    return relPath;
-}
-
-String IO::ToRelative(const String &relPath, bool isEngineFile)
-{
-	if (relPath.Empty()) { return ""; }
-
-    return IO::ToRelative(relPath,
-              isEngineFile ? IO::GetEngineAssetsRootAbs() :
-                             IO::GetProjectAssetsRootAbs());
-}
-
-String IO::ToRelative(const String &absPath)
-{
-	if (absPath.Empty()) { return ""; }
-    return IO::ToRelative(absPath, IO::IsEngineFile(absPath));
-}
-
 bool IO::IsEngineFile(const String &filepath)
 {
     if (filepath.Empty()) { return false; }
     return filepath.BeginsWith(IO::GetEngineAssetsRootAbs());
 }
 
-String IO::GetDirUp(const String &filepath)
+bool IO::DuplicateFile(const Path &fromFilepath,
+                       const Path &toFilepath,
+                       bool overwrite)
 {
-	if (filepath.Empty()) { return ""; }
-    Array<String> splits = filepath.Split('/');
-    splits.PopBack();
-	String path = String::Join(splits, "/");
-    return IO::IsAbsolute(filepath) ?
-                IO::ToAbsolute(path, IO::IsEngineFile(filepath)) : path;
-}
-
-String IO::GetRightmostDir(const String &dir)
-{
-    Array<String> parts = dir.Split('/');
-	if (parts.Empty()) { return ""; }
-    return parts.Back();
-}
-
-bool IO::DuplicateFile(const String &fromFilepath,
-                                const String &toFilepath,
-                                bool overwrite)
-{
-	if (!IO::ExistsFile(fromFilepath)) { return false; }
+    if (!fromFilepath.IsFile()) { return false; }
     if (overwrite) { IO::Remove(toFilepath); }
-    bool ok = QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
+    bool ok = QFile::copy(fromFilepath.GetAbsolute().ToQString(),
+                          toFilepath.GetAbsolute().ToQString());
     return ok;
 }
 
-bool IO::DuplicateDir(const String &fromDirpath,
-                      const String &toDirpath,
+bool IO::DuplicateDir(const Path &fromDirpath,
+                      const Path &toDirpath,
                       bool overwrite)
 {
-	if (!IO::ExistsDirectory(fromDirpath)) { return false; }
+    if (!fromDirpath.IsDir()) { return false; }
 
     if (!IO::CreateDirectory( Path(toDirpath) )) { return false; }
-    List<String> filepaths = IO::GetFiles(fromDirpath, false);
-    for(const String & filepath : filepaths)
+    List<Path> filepaths = fromDirpath.GetFiles(false);
+    for(const Path& filepath : filepaths)
     {
-        String fileName = IO::GetFileNameWithExtension(filepath);
-        bool ok = IO::DuplicateFile(fromDirpath + "/" + fileName,
-                                             toDirpath   + "/" + fileName,
-                                             overwrite);
+        String fileName = filepath.GetNameExt();
+        bool ok = IO::DuplicateFile(fromDirpath.Append(fileName),
+                                    toDirpath.Append(fileName),
+                                    overwrite);
         if (!ok) { return false; }
     }
 
-    List<String> subdirs = IO::GetSubDirectories(fromDirpath, false);
-    for (const String &subdir : subdirs)
+    List<Path> subdirs = fromDirpath.GetSubDirectories(false);
+    for (const Path &subdir : subdirs)
     {
-        bool ok = IO::DuplicateDir(
-                            subdir,
-                            toDirpath + "/" + IO::GetRightmostDir(subdir),
-                            overwrite);
+        bool ok = IO::DuplicateDir(subdir,
+                                   toDirpath.Append(subdir.GetName()),
+                                   overwrite);
         if (!ok) { return false; }
     }
     return true;
 }
 
-#ifdef BANG_EDITOR
-String IO::GetNextDuplicatePath(const String &path)
+bool IO::Remove(const Path &path)
 {
-	if (path.Empty()) { return ""; }
-
-    String filePath = path;
-    String fileDir  = IO::GetDir(filePath);
-    String fileName = IO::GetBaseName(filePath);
-    String fileExtension = IO::GetFileExtensionComplete(path);
-
-    Array<String> splitted = fileName.Split('_');
-    int number = 1;
-    if (splitted.Size() > 1)
+    if (!path.Exists()) { return false; }
+    if (path.IsFile())
     {
-        String numberString = splitted[splitted.Size() - 1];
-        bool ok = false;
-        int readNumber = String::ToInt(numberString, &ok);
-        if (ok)
-        {
-            number = readNumber + 1;
-            splitted.PopBack();
-
-            int lastUnderscorePos = fileName.rfind('_');
-            if (lastUnderscorePos != -1) // Strip _[number] from fileName
-            {
-                fileName = fileName.substr(0, lastUnderscorePos);
-            }
-        }
-    }
-
-    String result = "";
-    if (fileDir != "")
-    {
-        result += fileDir + "/";
-    }
-    result += fileName + "_" + std::to_string(number);
-    if (fileExtension != "")
-    {
-        result += "." + fileExtension;
-    }
-    return result;
-}
-
-String IO::GetDuplicatePath(const String &path)
-{
-	if (path.Empty()) { return ""; }
-    String result = path;
-    while (IO::Exists(result))
-    {
-        result = IO::GetNextDuplicatePath(result);
-    }
-    return result;
-}
-#endif
-
-List<String> IO::GetSubDirectories(const String &dirPath,
-                                            bool recursive)
-{
-	if (dirPath.Empty()) { return {}; }
-    List<String> subdirsList;
-    if (!IO::ExistsDirectory(dirPath)) { return subdirsList; }
-
-    QStringList subdirs =  QDir(dirPath.ToQString()).entryList();
-    for (QString qSubdir : subdirs)
-    {
-        if (qSubdir == "." || qSubdir == "..") continue;
-
-        String subdirName = String(qSubdir);
-        String subdirPath = dirPath + "/" + subdirName;
-        if (IO::IsDir(subdirPath))
-        {
-            subdirsList.Add(subdirPath);
-            if (recursive)
-            {
-                List<String> subdirsListRecursive =
-                        GetSubDirectories(subdirPath, recursive);
-                subdirsList.Splice(subdirsList.End(), subdirsListRecursive);
-            }
-        }
-    }
-    return subdirsList;
-}
-
-List<String> IO::GetFiles(const String &dirPath,
-                          bool recursive,
-                          const List<String> &extensions)
-{
-	if (dirPath.Empty()) { return {}; }
-    List<String> filesList;
-    QStringList extensionList;
-    for (String ext : extensions)
-    {
-        if (!ext.BeginsWith("*.")) { ext = "*." + ext; }
-        extensionList.append(ext.ToQString());
-    }
-
-    List<String> subdirs;
-    if (recursive)
-    {
-        List<String> subdirsRecursive = GetSubDirectories(dirPath, recursive);
-        subdirs.Splice(subdirs.Begin(), subdirsRecursive);
-    }
-    subdirs.PushFront(dirPath);
-    for (String subdir : subdirs)
-    {
-        QStringList filepathList = QDir(subdir.ToQString())
-                .entryList(extensionList);
-
-        for (QString qFilepath : filepathList)
-        {
-            String filepath(qFilepath);
-            filepath = subdir + "/" + filepath;
-            if (filepath == "." || filepath == ".." ||
-                !IO::IsFile(filepath)) { continue; }
-
-            filesList.Add(filepath);
-        }
-    }
-    return filesList;
-}
-
-bool IO::Remove(const String &path)
-{
-	if (!IO::ExistsFile(path)) { return false; }
-    if (IO::IsFile(path))
-    {
-        QFile f(path.ToQString());
+        QFile f(path.GetAbsolute().ToQString());
         return f.remove();
     }
     else
     {
-        List<String> subDirs  = GetSubDirectories(path, false);
-        for (String subDir : subDirs) { IO::Remove(subDir); }
-        List<String> subFiles = GetFiles(path, false);
-        for (String subFile : subFiles) { IO::Remove(subFile); }
-        QDir().rmdir(path.ToQString());
+        List<Path> subDirs  = path.GetSubDirectories(false);
+        for (const Path &subDir : subDirs) { IO::Remove(subDir); }
+        List<Path> subFiles = path.GetFiles(false);
+        for (const Path &subFile : subFiles) { IO::Remove(subFile); }
+        QDir().rmdir(path.GetAbsolute().ToQString());
     }
     return false;
-}
-
-bool IO::ExistsFile(const String &filepath)
-{
-	if (filepath.Empty()) { return false; }
-    return QFile(filepath.ToQString()).exists();
-}
-
-bool IO::ExistsDirectory(const String &dirPath)
-{
-	if (dirPath.Empty()) { return false; }
-    return QDir(dirPath.ToQString()).exists();
-}
-
-bool IO::Exists(const String &filepath)
-{
-	if (filepath.Empty()) { return false; }
-    if (IO::IsDir(filepath))
-    {
-        return IO::ExistsDirectory(filepath);
-    }
-    return IO::ExistsFile(filepath);
 }
 
 bool IO::CreateDirectory(const Path &dirPath)
@@ -415,19 +197,21 @@ bool IO::CreateDirectory(const Path &dirPath)
     return QDir().mkdir(dirPath.GetAbsolute().ToQString());
 }
 
-bool IO::Rename(const String &oldPath, const String &newPath)
+bool IO::Rename(const Path &oldPath, const Path &newPath)
 {
     return IO::Move(oldPath, newPath);
 }
 
-bool IO::Move(const String &oldPath, const String &newPath)
+bool IO::Move(const Path &oldPath, const Path &newPath)
 {
-	if (!IO::Exists(oldPath)) { return false; }
-    if (IO::IsDir(oldPath))
+    if (!oldPath.Exists()) { return false; }
+    if (oldPath.IsDir())
     {
-        return QDir().rename(oldPath.ToQString(), newPath.ToQString());
+        return QDir().rename(oldPath.GetAbsolute().ToQString(),
+                             newPath.GetAbsolute().ToQString());
     }
-    return QFile().rename(oldPath.ToQString(), newPath.ToQString());
+    return QFile().rename(oldPath.GetAbsolute().ToQString(),
+                          newPath.GetAbsolute().ToQString());
 }
 
 bool IO::WriteToFile(const Path &filepath, const String &contents)
@@ -447,12 +231,12 @@ bool IO::IsEngineFile(const Path &path)
     return path.GetAbsolute().BeginsWith( IO::GetEngineAssetsRootAbs() );
 }
 
-String IO::GetHash(const String &filepath)
+String IO::GetHash(const Path &filepath)
 {
-	if (!IO::ExistsFile(filepath)) { return ""; }
+    if (!filepath.IsFile()) { return ""; }
 
     String result = "";
-    QFile file(filepath.ToQString());
+    QFile file(filepath.GetAbsolute().ToQString());
     if(file.open(QIODevice::ReadOnly))
     {
         result = IO::GetHashFromByteArray(file.readAll());

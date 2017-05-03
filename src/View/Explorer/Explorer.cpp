@@ -16,15 +16,14 @@
 #include "Bang/SystemUtils.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/MeshAssetFile.h"
+#include "Bang/MaterialFile.h"
+#include "Bang/Texture2DFile.h"
 #include "Bang/FileSystemModel.h"
 #include "Bang/QtProjectManager.h"
-#include "Bang/MaterialAssetFile.h"
-#include "Bang/Texture2DAssetFile.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/ExplorerContextMenu.h"
+#include "Bang/PrefabFileInspectable.h"
 #include "Bang/FileReferencesManager.h"
-#include "Bang/PrefabAssetFileInspectable.h"
 
 Explorer::Explorer(QWidget *parent)
     : m_renameShortcut    (this, KSeq("F2"),     SLOT(OnRenameClicked())),

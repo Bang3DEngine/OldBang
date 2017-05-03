@@ -69,7 +69,7 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     }
 }
 
-void AudioManager::PlayAudioClip(const String &audioClipFilepath,
+void AudioManager::PlayAudioClip(const Path &audioClipFilepath,
                                  const Vector3& position,
                                  float volume,
                                  bool  looping,
@@ -81,7 +81,7 @@ void AudioManager::PlayAudioClip(const String &audioClipFilepath,
                                         looping, delay, pitch, range);
 }
 
-void AudioManager::PlaySound(const String &soundFilepath,
+void AudioManager::PlaySound(const Path &soundFilepath,
                              const Vector3& position,
                              float volume,
                              bool  looping,

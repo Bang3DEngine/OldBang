@@ -11,11 +11,11 @@
 #include "Bang/Vector4.h"
 #include "Bang/XMLNode.h"
 
-class MaterialAssetFile : public File
+class MaterialFile : public File
 {
 public:
-    MaterialAssetFile();
-    MaterialAssetFile(const Path& path);
+    MaterialFile();
+    MaterialFile(const Path& path);
 
     virtual const QPixmap& GetIcon() const override;
 

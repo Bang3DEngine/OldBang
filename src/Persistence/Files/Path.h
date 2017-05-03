@@ -59,6 +59,8 @@ public:
 private:
     String m_absolutePath   = "";
 
+    static Path GetNextDuplicatePath(const Path &path);
+
 };
 
 #endif // PATH_H

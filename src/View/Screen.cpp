@@ -182,7 +182,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
         else if (origin == explorer)
         {
             File f = explorer->GetSelectedFile();
-            if (f.IsPrefabAsset())
+            if (f.IsPrefabFile())
             {
                 Prefab prefab;
                 prefab.ReadFromFile( f.GetPath() );
@@ -239,7 +239,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     if (e->source() == explorer)
     {
         File f = explorer->GetSelectedFile();
-        if (f.IsMaterialAsset())
+        if (f.IsMaterialFile())
         {
             Material *mat = AssetsManager::Load<Material>(f.GetPath());
             if (mat)
@@ -258,7 +258,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
                 }
             }
         }
-        else if (f.IsPrefabAsset())
+        else if (f.IsPrefabFile())
         {
             HandleGameObjectDragging(e, explorer);
         }

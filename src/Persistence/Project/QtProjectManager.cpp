@@ -67,7 +67,6 @@ void QtProjectManager::CreateQtProjectFile()
 
     Path qtProjDir = QtProjectManager::GetQtProjectDir();
     IO::CreateDirectory(qtProjDir);
-    Debug_Log(qtProjDir.Append(".files"));
     IO::WriteToFile(qtProjDir.Append(".files"),
                     headersString       + "\n" +
                     sourcesString       + "\n" +

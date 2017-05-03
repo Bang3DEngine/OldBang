@@ -167,12 +167,12 @@ Path ProjectManager::DialogCreateNewProject()
                                        &ok);
         if (ok)
         {
-            String projectPath = dirPath + "/" + projectName;
-            if (!IO::ExistsDirectory(projectPath))
+            Path projectPath = Path(dirPath).Append(projectName);
+            if (!projectPath.IsDir())
             {
                 ProjectManager::CreateNewProject(dirPath, projectName);
                 return ProjectManager::GetCurrentProject()->
-                                            GetProjectFileFilepath();
+                                       GetProjectFileFilepath();
             }
             else
             {

@@ -127,11 +127,11 @@ int main(int argc, char **argv)
 
     InitSingletonManager();
 
-    String executableDir = Application::applicationDirPath();
+    Path executableDir(Application::applicationDirPath());
 
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
-    String engineRootDirAbs = IO::GetDirUp(executableDir);
+    String engineRootDirAbs = executableDir.GetDirectory().GetAbsolute();
     IO::GetInstance()->c_EngineRootAbsolute = engineRootDirAbs;
     IO::GetInstance()->c_EngineAssetsRootAbsolute =
             IO::GetEngineRootAbs() + "/EngineAssets";

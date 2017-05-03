@@ -3,6 +3,7 @@
 #include "Bang/IO.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
+#include "Bang/String.h"
 #include "Bang/AudioClip.h"
 #include "Bang/AudioSource.h"
 #include "Bang/SceneManager.h"
@@ -19,7 +20,7 @@ AnonymousAudioPlayer *AnonymousAudioPlayer::GetInstance()
                         GetAnonymousAudioPlayer();
 }
 
-void AnonymousAudioPlayer::PlayAudioClip(const String &audioClipFilepath,
+void AnonymousAudioPlayer::PlayAudioClip(const Path &audioClipFilepath,
                                          const Vector3 &position,
                                          float volume,
                                          bool looping,
@@ -29,14 +30,13 @@ void AnonymousAudioPlayer::PlayAudioClip(const String &audioClipFilepath,
 {
     AnonymousAudioPlayer::ClearAnonymousAudioSourcesAndClips();
 
-    String absAudioClipFilepath = IO::ToAbsolute(audioClipFilepath, false);
-    if (!IO::ExistsFile(absAudioClipFilepath))
+    if (!audioClipFilepath.IsFile())
     {
         Debug_Warn("Audio '" << audioClipFilepath << "' could not be found");
         return;
     }
 
-    AudioClip *audioClip = AssetsManager::Load<AudioClip>(absAudioClipFilepath);
+    AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath);
     AudioSource *audioSource =
             AnonymousAudioPlayer::CreateAudioSource(position, volume, looping,
                                                     pitch, range);
@@ -44,7 +44,7 @@ void AnonymousAudioPlayer::PlayAudioClip(const String &audioClipFilepath,
                                                     delay, false);
 }
 
-void AnonymousAudioPlayer::PlaySound(const String &soundFilepathStr,
+void AnonymousAudioPlayer::PlaySound(const Path &soundFilepath,
                                      const Vector3 &position,
                                      float volume,
                                      bool looping,
@@ -54,10 +54,9 @@ void AnonymousAudioPlayer::PlaySound(const String &soundFilepathStr,
 {
     AnonymousAudioPlayer::ClearAnonymousAudioSourcesAndClips();
 
-    Path soundFilepath = Path(soundFilepathStr);
     if (!soundFilepath.Exists())
     {
-        Debug_Warn("Sound '" << soundFilepathStr << "' could not be found");
+        Debug_Warn("Sound '" << soundFilepath << "' could not be found");
         return;
     }
 

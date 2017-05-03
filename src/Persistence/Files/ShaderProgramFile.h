@@ -8,11 +8,11 @@
 
 #include "Bang/File.h"
 
-class ShaderProgramAssetFile : public File
+class ShaderProgramFile : public File
 {
 public:
-    ShaderProgramAssetFile();
-    ShaderProgramAssetFile(const Path& path);
+    ShaderProgramFile();
+    ShaderProgramFile(const Path& path);
 
     virtual const QPixmap& GetIcon() const override;
 

@@ -9,11 +9,11 @@
 #include "Bang/File.h"
 #include "Bang/String.h"
 
-class FontAssetFile : public File
+class FontFile : public File
 {
 public:
-    FontAssetFile();
-    FontAssetFile(const Path &path);
+    FontFile();
+    FontFile(const Path &path);
 
     virtual const QPixmap& GetIcon() const override;
 

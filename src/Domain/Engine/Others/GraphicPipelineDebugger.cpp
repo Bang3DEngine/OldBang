@@ -4,7 +4,7 @@
 #include "Bang/Input.h"
 #include "Bang/IO.h"
 
-String GraphicPipelineDebugger::c_debugDir = "/home/sephirot47/Bang/tmp";
+Path GraphicPipelineDebugger::c_debugDir = Path("/home/sephirot47/Bang/tmp");
 
 GraphicPipelineDebugger::GraphicPipelineDebugger()
 {
@@ -16,7 +16,7 @@ void GraphicPipelineDebugger::Reset()
     if (Input::GetKeyDown(Input::Key::Q))
     {
         IO::Remove(GraphicPipelineDebugger::c_debugDir);
-        IO::CreateDirectory( Path(GraphicPipelineDebugger::c_debugDir) );
+        IO::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
     }
 }
 

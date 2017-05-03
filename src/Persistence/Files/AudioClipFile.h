@@ -11,16 +11,16 @@
 
 class AudioClip;
 class AudioSource;
-class AudioClipAssetFile : public File
-                          #ifdef BANG_EDITOR
-                          ,public IAttrWidgetButtonListener
-                          #endif
+class AudioClipFile : public File
+                      #ifdef BANG_EDITOR
+                      ,public IAttrWidgetButtonListener
+                      #endif
 {
 public:
-    AudioClipAssetFile();
-    AudioClipAssetFile(const Path& path);
+    AudioClipFile();
+    AudioClipFile(const Path& path);
 
-    virtual ~AudioClipAssetFile();
+    virtual ~AudioClipFile();
 
     virtual const QPixmap& GetIcon() const override;
 

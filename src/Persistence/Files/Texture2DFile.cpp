@@ -1,4 +1,4 @@
-#include "Bang/Texture2DAssetFile.h"
+#include "Bang/Texture2DFile.h"
 
 #include "Bang/IO.h"
 #include "Bang/Debug.h"
@@ -8,11 +8,11 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/FileInspectable.h"
 
-Texture2DAssetFile::Texture2DAssetFile()
+Texture2DFile::Texture2DFile()
 {
 }
 
-Texture2DAssetFile::Texture2DAssetFile(const Path& path)
+Texture2DFile::Texture2DFile(const Path& path)
     : File(path)
 {
     // Load once and save the xmlInfo
@@ -20,20 +20,20 @@ Texture2DAssetFile::Texture2DAssetFile(const Path& path)
     m_xmlInfo = xmlTexInfo;
 }
 
-Path Texture2DAssetFile::GetImageFilepath() const
+Path Texture2DFile::GetImageFilepath() const
 {
     String contents = IO::GetFileContents(GetPath());
     XMLNode xmlInfo = XMLNode::FromString(contents);
     return xmlInfo.GetFilepath("ImageFilepath");
 }
 
-const QPixmap& Texture2DAssetFile::GetIcon() const
+const QPixmap& Texture2DFile::GetIcon() const
 {
     return IconManager::LoadPixmap(GetImageFilepath(),
                                    IconManager::IconOverlay::Asset);
 }
 
-void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
+void Texture2DFile::Read(const XMLNode &xmlInfo)
 {
     m_xmlInfo = xmlInfo;
 
@@ -42,20 +42,20 @@ void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
     #endif
 }
 
-void Texture2DAssetFile::Write(XMLNode *xmlInfo) const
+void Texture2DFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
     *xmlInfo = m_xmlInfo;
 }
 
 #ifdef BANG_EDITOR
-IInspectable *Texture2DAssetFile::GetNewInspectable()
+IInspectable *Texture2DFile::GetNewInspectable()
 {
-    return new FileInspectable<Texture2DAssetFile>(*this);
+    return new FileInspectable<Texture2DFile>(*this);
 }
 #endif
 
-bool Texture2DAssetFile::IsAsset() const
+bool Texture2DFile::IsAsset() const
 {
     return true;
 }

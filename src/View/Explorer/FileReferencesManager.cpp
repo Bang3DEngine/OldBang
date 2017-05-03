@@ -40,6 +40,7 @@ void FileReferencesManager::OnFileOrDirNameMoved(const Path &filepathBefore,
 {
     ENSURE(!filepathBefore.IsEmpty());
 
+    Debug_Log("OnFileOrDirNameMoved() " << filepathBefore << " to " << filepathNow);
     bool fileHasMoved = !filepathBefore.IsEmpty() &&
                         !filepathBefore.Exists() &&
                          filepathNow.Exists();

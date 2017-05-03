@@ -1,6 +1,7 @@
 #ifndef CODEPREPROCESSOR_H
 #define CODEPREPROCESSOR_H
 
+#include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
@@ -14,7 +15,7 @@ public:
      * @param srcCode
      */
     static void PreprocessCode(String *srcCode,
-                               const List<String> &includePaths);
+                               const List<Path> &includePaths);
 
 protected:
     /**
@@ -26,7 +27,7 @@ protected:
      */
     static String GetIncludeReplacementString(const String &includeDirective,
                                               int includeDirectiveLine,
-                                              const List<String> &includePaths);
+                                              const List<Path> &includePaths);
 
 private:
     CodePreprocessor();

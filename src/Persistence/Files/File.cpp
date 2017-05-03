@@ -26,12 +26,11 @@
 #include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
 #include "Bang/IInspectable.h"
-#include "Bang/MeshAssetFile.h"
+#include "Bang/MaterialFile.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/MaterialAssetFile.h"
-#include "Bang/AudioClipAssetFile.h"
-#include "Bang/Texture2DAssetFile.h"
-#include "Bang/ShaderProgramAssetFile.h"
+#include "Bang/AudioClipFile.h"
+#include "Bang/Texture2DFile.h"
+#include "Bang/ShaderProgramFile.h"
 
 File::File()
 {
@@ -58,13 +57,13 @@ bool File::IsSound() const
     return GetPath().IsFile() && GetPath().HasExtension({"wav", "ogg", "pcm"});
 }
 
-bool File::IsAudioClipAsset() const
+bool File::IsAudioClipFile() const
 {
     return GetPath().IsFile() &&
            GetPath().HasExtension(AudioClip::GetFileExtensionStatic());
 }
 
-bool File::IsTexture2DAsset() const
+bool File::IsTexture2DFile() const
 {
     return  GetPath().IsFile() &&
             GetPath().HasExtension(Texture2D::GetFileExtensionStatic());
@@ -95,7 +94,7 @@ bool File::IsModelFile() const
                                  "stl", "ase", "blend", "md2", "md3"});
 }
 
-bool File::IsMaterialAsset() const
+bool File::IsMaterialFile() const
 {
     return GetPath().IsFile() &&
            GetPath().HasExtension(Material::GetFileExtensionStatic());
@@ -113,19 +112,19 @@ bool File::IsTextFile() const
            GetPath().HasExtension({"txt", "frag", "vert"});
 }
 
-bool File::IsFontAssetFile() const
+bool File::IsFontFile() const
 {
     return GetPath().IsFile() &&
            GetPath().HasExtension(Font::GetFileExtensionStatic());
 }
 
-bool File::IsPrefabAsset() const
+bool File::IsPrefabFile() const
 {
     return GetPath().IsFile() &&
            GetPath().HasExtension(Prefab::GetFileExtensionStatic());
 }
 
-bool File::IsShaderProgramAssetFile() const
+bool File::IsShaderProgramFile() const
 {
     return GetPath().IsFile() &&
            GetPath().HasExtension(ShaderProgram::GetFileExtensionStatic());
@@ -135,25 +134,25 @@ File *File::GetSpecificFile(const File &f)
 {
     if (!f.GetPath().IsFile()) { return nullptr; }
 
-    if (f.IsAudioClipAsset())
+    if (f.IsAudioClipFile())
     {
-        return new AudioClipAssetFile( f.GetPath() );
+        return new AudioClipFile( f.GetPath() );
     }
     else if (f.IsSound())
     {
         return new SoundFile( f.GetPath() );
     }
-    else if (f.IsTexture2DAsset())
+    else if (f.IsTexture2DFile())
     {
-        return new Texture2DAssetFile( f.GetPath() );
+        return new Texture2DFile( f.GetPath() );
     }
     else if (f.IsImageFile())
     {
         return new ImageFile( f.GetPath() );
     }
-    else if (f.IsMaterialAsset())
+    else if (f.IsMaterialFile())
     {
-        return new MaterialAssetFile( f.GetPath() );
+        return new MaterialFile( f.GetPath() );
     }
     else if (f.IsMeshFile())
     {
@@ -163,7 +162,7 @@ File *File::GetSpecificFile(const File &f)
     {
         return new ModelFile( f.GetPath() );
     }
-    else if (f.IsPrefabAsset())
+    else if (f.IsPrefabFile())
     {
         return new PrefabFile( f.GetPath() );
     }
@@ -171,9 +170,9 @@ File *File::GetSpecificFile(const File &f)
     {
         return new TextFile( f.GetPath() );
     }
-    else if (f.IsShaderProgramAssetFile())
+    else if (f.IsShaderProgramFile())
     {
-        return new ShaderProgramAssetFile( f.GetPath() );
+        return new ShaderProgramFile( f.GetPath() );
     }
 
     return new File( f.GetPath() );
@@ -181,9 +180,7 @@ File *File::GetSpecificFile(const File &f)
 
 bool File::Exists(const String &filepath)
 {
-    String absFilepath = IO::ToAbsolute(filepath, false);
-    QFileInfo f(absFilepath.ToQString());
-    return f.exists();
+    return Path(filepath).Exists();
 }
 
 void File::Write(const String &filepath, const String &contents)
@@ -208,9 +205,9 @@ void File::Write(const String &filepath, const List<String> &lines)
     File::Write(filepath, all);
 }
 
-String File::GetContents(const String &filepath)
+String File::GetContents(const Path &filepath)
 {
-    return IO::GetFileContents( Path(filepath) );
+    return IO::GetFileContents(filepath);
 }
 
 String File::GetContents() const
@@ -226,7 +223,7 @@ const Path &File::GetPath() const
 const QPixmap& File::GetIcon() const
 {
     Path iconPath;
-    if (IsPrefabAsset())
+    if (IsPrefabFile())
     {
         iconPath = EPATH("Icons/PrefabAssetIcon.png");
     }
@@ -238,7 +235,7 @@ const QPixmap& File::GetIcon() const
     {
         iconPath = EPATH("Icons/SceneIcon.png");
     }
-    else if (IsFontAssetFile())
+    else if (IsFontFile())
     {
         iconPath = EPATH("Icons/LetterIcon.png");
     }
@@ -268,7 +265,7 @@ IInspectable* File::GetNewInspectable()
 
 bool File::IsAsset() const
 {
-    return IsFontAssetFile() || IsTexture2DAsset() || IsMaterialAsset() ||
-           IsMeshFile() || IsAudioClipAsset() || IsPrefabAsset() ||
+    return IsFontFile() || IsTexture2DFile() || IsMaterialFile() ||
+           IsMeshFile() || IsAudioClipFile() || IsPrefabFile() ||
            IsBehaviour() || IsScene();
 }

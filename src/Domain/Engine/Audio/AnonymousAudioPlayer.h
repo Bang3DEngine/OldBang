@@ -8,10 +8,10 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
+#include "Bang/Path.h"
 #include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/Time.h"
-#include "Bang/String.h"
 #include "Bang/Vector3.h"
 
 class AudioClip;
@@ -22,7 +22,7 @@ class AnonymousAudioPlayer
 public:
     static AnonymousAudioPlayer *GetInstance();
 
-    static void PlayAudioClip(const String& audioClipFilepath,
+    static void PlayAudioClip(const Path& audioClipFilepath,
                               const Vector3& position,
                               float volume,
                               bool  looping,
@@ -30,7 +30,7 @@ public:
                               float pitch,
                               float range);
 
-    static void PlaySound(const String &soundFilepath,
+    static void PlaySound(const Path &soundFilepath,
                           const Vector3& position,
                           float volume,
                           bool  looping,

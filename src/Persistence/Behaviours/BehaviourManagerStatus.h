@@ -28,11 +28,11 @@ public:
     BehaviourId(const Path &behPath)
     {
         behaviourPath = behPath;
-        String code = File::GetContents(behaviourPath.GetAbsolute());
+        String code = File::GetContents(behaviourPath);
 
-        List<String> includePaths = IO::GetSubDirectories(
-                    IO::GetProjectAssetsRootAbs(), true);
-        includePaths.Add(IO::GetProjectAssetsRootAbs());
+        List<Path> includePaths =
+                Path(IO::GetProjectAssetsRootAbs()).GetSubDirectories(true);
+        includePaths.Add( Path(IO::GetProjectAssetsRootAbs()) );
         CodePreprocessor::PreprocessCode(&code, includePaths);
         hash = IO::GetHashFromString(code);
     }

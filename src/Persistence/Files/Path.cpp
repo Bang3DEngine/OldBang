@@ -1,8 +1,11 @@
 #include "Path.h"
 
+#include <QDir>
+#include <QFile>
+#include "Bang/WinUndef.h"
+
 #include "Bang/IO.h"
 #include "Bang/Array.h"
-#include <iostream>
 
 const Path Path::Empty;
 
@@ -47,29 +50,69 @@ bool Path::IsFile() const
 
 bool Path::Exists() const
 {
-    return IO::Exists( GetAbsolute() );
+    return IsDir() || IsFile();
 }
 
 List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
 {
-    List<Path> filePaths;
-    List<String> filesList = IO::GetFiles(GetAbsolute(), recursive, extensions);
-    for (const String &file : filesList)
+    if (!IsDir()) { return {}; }
+
+    QStringList extensionList;
+    for (String ext : extensions)
     {
-        filePaths.Add( Path(file) );
+        if (!ext.BeginsWith("*.")) { ext.Prepend("*."); }
+        extensionList.append(ext.ToQString());
     }
-    return filePaths;
+
+    List<Path> subdirs;
+    if (recursive)
+    {
+        List<Path> subdirsRecursive = GetSubDirectories(recursive);
+        subdirs.Splice(subdirs.Begin(), subdirsRecursive);
+    }
+    subdirs.PushFront(*this);
+
+    List<Path> filesList;
+    for (const Path &subdir : subdirs)
+    {
+        QStringList filepathList = QDir(subdir.GetAbsolute().ToQString())
+                                   .entryList(extensionList);
+        for (const QString &qFilepath : filepathList)
+        {
+            if (qFilepath == "." || qFilepath == "..") { continue; }
+
+            Path filepath = Path(subdir).Append( String(qFilepath) );
+            if (!filepath.IsFile()) { continue; }
+
+            filesList.Add(filepath);
+        }
+    }
+    return filesList;
 }
 
-List<Path> Path::GetSubDirectories(bool recursively) const
+List<Path> Path::GetSubDirectories(bool recursive) const
 {
-    List<Path> dirPaths;
-    List<String> dirsList = IO::GetSubDirectories(GetAbsolute(), recursively);
-    for (String &dir : dirsList)
+    if (!IsDir()) { return {}; }
+
+    List<Path> subdirsList;
+    QStringList subdirs =  QDir(GetAbsolute().ToQString()).entryList();
+    for (QString qSubdir : subdirs)
     {
-        dirPaths.Add( Path(dir) );
+        if (qSubdir == "." || qSubdir == "..") { continue; }
+
+        Path subdirPath = this->Append( String(qSubdir) );
+        if (subdirPath.IsDir())
+        {
+            subdirsList.Add(subdirPath);
+            if (recursive)
+            {
+                List<Path> subdirsListRecursive =
+                        subdirPath.GetSubDirectories(recursive);
+                subdirsList.Splice(subdirsList.End(), subdirsListRecursive);
+            }
+        }
     }
-    return dirPaths;
+    return subdirsList;
 }
 
 String Path::GetName() const
@@ -128,7 +171,14 @@ String Path::GetRelative() const
 
 Path Path::GetDuplicate() const
 {
-    return Path(IO::GetDuplicatePath( GetAbsolute() ));
+    if (IsEmpty()) { return Path::Empty; }
+
+    Path resultPath(*this);
+    while (resultPath.Exists())
+    {
+        resultPath = Path::GetNextDuplicatePath(resultPath);
+    }
+    return resultPath;
 }
 
 String Path::ToString() const
@@ -204,4 +254,37 @@ bool Path::operator==(const Path &rhs) const
 bool Path::operator<(const Path &rhs) const
 {
     return GetAbsolute() < rhs.GetAbsolute();
+}
+
+Path Path::GetNextDuplicatePath(const Path &filepath)
+{
+    if (filepath.IsEmpty()) { return Path::Empty; }
+
+    Path fileDir         = filepath.GetDirectory();
+    String fileName      = filepath.GetName();
+    String fileExtension = filepath.GetExtension();
+
+    Array<String> splitted = fileName.Split('_');
+    int number = 1;
+    if (splitted.Size() > 1)
+    {
+        String numberString = splitted[splitted.Size() - 1];
+        bool ok = false;
+        int readNumber = String::ToInt(numberString, &ok);
+        if (ok)
+        {
+            number = readNumber + 1;
+            splitted.PopBack();
+
+            int lastUnderscorePos = fileName.rfind('_');
+            if (lastUnderscorePos != -1) // Strip _[number] from fileName
+            {
+                fileName = fileName.substr(0, lastUnderscorePos);
+            }
+        }
+    }
+
+    Path result = fileDir.Append(fileName + "_" + String::ToString(number))
+                         .AppendExtension(fileExtension);
+    return result;
 }

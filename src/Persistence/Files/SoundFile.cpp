@@ -63,7 +63,7 @@ IInspectable *SoundFile::GetNewInspectable()
 
 void SoundFile::OnButtonClicked(const String &attrName)
 {
-    ENSURE( IO::ExistsFile( GetPath().GetAbsolute() ) );
+    ENSURE( GetPath().Exists() );
     if (attrName == "Play")
     {
         m_tmpAudioSource = new AudioSource();

@@ -1,4 +1,4 @@
-#include "Bang/AudioClipAssetFile.h"
+#include "Bang/AudioClipFile.h"
 
 #include "Bang/IO.h"
 #include "Bang/XMLNode.h"
@@ -10,35 +10,35 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/FileInspectable.h"
 
-AudioClipAssetFile::AudioClipAssetFile()
+AudioClipFile::AudioClipFile()
 {
 }
 
-AudioClipAssetFile::AudioClipAssetFile(const Path& path)
+AudioClipFile::AudioClipFile(const Path& path)
     : File(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
 }
 
-AudioClipAssetFile::~AudioClipAssetFile()
+AudioClipFile::~AudioClipFile()
 {
     if (m_tmpAudioSource) { delete m_tmpAudioSource; }
 }
 
-const QPixmap& AudioClipAssetFile::GetIcon() const
+const QPixmap& AudioClipFile::GetIcon() const
 {
     return IconManager::LoadPixmap(EPATH("Icons/AudioClipIcon.png"),
                                    IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR
-IInspectable *AudioClipAssetFile::GetNewInspectable()
+IInspectable *AudioClipFile::GetNewInspectable()
 {
-    return new FileInspectable<AudioClipAssetFile>(*this);
+    return new FileInspectable<AudioClipFile>(*this);
 }
 
-void AudioClipAssetFile::OnButtonClicked(const String &attrName)
+void AudioClipFile::OnButtonClicked(const String &attrName)
 {
     bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
     if (hasToPlay)
@@ -60,7 +60,7 @@ void AudioClipAssetFile::OnButtonClicked(const String &attrName)
 }
 #endif
 
-void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
+void AudioClipFile::Read(const XMLNode &xmlInfo)
 {
     Path soundFilepath = xmlInfo.GetFilepath("AudioFilepath");
     SetSoundFilepath(soundFilepath);
@@ -76,7 +76,7 @@ void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
     #endif
 }
 
-void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
+void AudioClipFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
@@ -87,7 +87,7 @@ void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
                        {XMLProperty::Readonly});
 
-    AudioClipAssetFile *noConstThis = const_cast<AudioClipAssetFile*>(this);
+    AudioClipFile *noConstThis = const_cast<AudioClipFile*>(this);
     bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
     if (isPlaying)
     {
@@ -102,7 +102,7 @@ void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
     }
 }
 
-void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
+void AudioClipFile::SetSoundFilepath(const Path &audioFilepath)
 {
     m_audioFilepath = audioFilepath;
 
@@ -120,17 +120,17 @@ void AudioClipAssetFile::SetSoundFilepath(const Path &audioFilepath)
     }
 }
 
-const Path &AudioClipAssetFile::GetAudioFilepath() const
+const Path &AudioClipFile::GetAudioFilepath() const
 {
     return m_audioFilepath;
 }
 
-bool AudioClipAssetFile::IsAsset() const
+bool AudioClipFile::IsAsset() const
 {
     return true;
 }
 
-AudioClip *AudioClipAssetFile::GetRelatedAudioClip() const
+AudioClip *AudioClipFile::GetRelatedAudioClip() const
 {
     return AssetsManager::Load<AudioClip>( GetPath() );
 }

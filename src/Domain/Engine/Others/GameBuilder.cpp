@@ -151,19 +151,19 @@ void GameBuilder::OnGameBuildingHasBeenCanceled()
 
 bool GameBuilder::CompileGameExecutable()
 {
-    List<String> sceneFiles =
-        IO::GetFiles(IO::GetProjectAssetsRootAbs(), true,
-                     {"*." + Scene::GetFileExtensionStatic()});
+    List<Path> sceneFiles = Path(IO::GetProjectAssetsRootAbs()).GetFiles(
+                true, {"*." + Scene::GetFileExtensionStatic()});
     if (sceneFiles.Empty())
     {
-        emit
-        DialogError("Error building game",
-                    "Please save at least one scene in the \
-                     Assets directory to build the game");
+        emit DialogError("Error building game",
+                         "Please save at least one scene in the \
+                          Assets directory to build the game");
         return false;
     }
 
-    const String initialOutputDir = IO::GetEngineRootAbs() + "/bin/Game.exe";
+    const Path initialOutputDir = Path(IO::GetEngineRootAbs())
+                                        .Append("bin/Game")
+                                        .AppendExtension("exe");
     IO::Remove(initialOutputDir);
 
     bool ok = false;
@@ -171,7 +171,7 @@ bool GameBuilder::CompileGameExecutable()
     String cmd = IO::GetEngineRootAbs() + "/scripts/compile.sh";
     SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE_MODE"},
                         &output, &ok);
-    ok = ok && IO::ExistsFile(initialOutputDir);
+    ok = ok && initialOutputDir.IsFile();
     if (!ok)
     {
         Debug_Error(output);
@@ -183,19 +183,19 @@ bool GameBuilder::CompileGameExecutable()
 bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
     Path dataDir = executableDir.Append("GameData");
-    IO::Remove(dataDir.GetAbsolute());
+    IO::Remove(dataDir);
     if (!IO::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
-    if (!IO::DuplicateDir(IO::GetEngineAssetsRootAbs(),
-                          dataDir.Append("EngineAssets").GetAbsolute()))
+    if (!IO::DuplicateDir(Path(IO::GetEngineAssetsRootAbs()),
+                          dataDir.Append("EngineAssets")))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(),
-                          dataDir.Append("Assets").GetAbsolute()))
+    if (!IO::DuplicateDir(Path(IO::GetProjectAssetsRootAbs()),
+                          dataDir.Append("Assets")))
     {
         return false;
     }
@@ -224,11 +224,11 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
 
 void GameBuilder::RemoveLatestGameBuild()
 {
-    IO::Remove(m_latestGameExecutableFilepath.GetAbsolute());
+    IO::Remove(m_latestGameExecutableFilepath);
 
     Path executableDir = m_latestGameExecutableFilepath.GetDirectory();
     Path gameDataDir = executableDir.Append("GameData");
-    IO::Remove(gameDataDir.GetAbsolute());
+    IO::Remove(gameDataDir);
 }
 
 GameBuildDialog *GameBuilder::GetGameBuildDialog()

@@ -1,4 +1,4 @@
-#include "Bang/PrefabAssetFileInspectable.h"
+#include "Bang/PrefabFileInspectable.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Prefab.h"
@@ -9,11 +9,11 @@
 #include "Bang/InspectorWidget.h"
 #include "Bang/FileReferencesManager.h"
 
-PrefabAssetFileInspectable::PrefabAssetFileInspectable()
+PrefabFileInspectable::PrefabFileInspectable()
 {
 }
 
-PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
+PrefabFileInspectable::PrefabFileInspectable(const File &f) :
     m_file(f)
 {
     Prefab prefab;
@@ -26,20 +26,20 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     OnInspectorSlotChanged(nullptr);
 }
 
-PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
+PrefabFileInspectable::~PrefabFileInspectable()
 {
     OnInspectorSlotChanged(nullptr); // Update the file
 }
 
-void PrefabAssetFileInspectable::CloneInto(ICloneable *clone) const
+void PrefabFileInspectable::CloneInto(ICloneable *clone) const
 {
     Inspectable<GameObject>::CloneInto(clone);
-    PrefabAssetFileInspectable *pfinsp =
-                        Object::SCast<PrefabAssetFileInspectable>(clone);
+    PrefabFileInspectable *pfinsp =
+                        Object::SCast<PrefabFileInspectable>(clone);
     pfinsp->m_file = m_file;
 }
 
-void PrefabAssetFileInspectable::OnInspectorSlotChanged(
+void PrefabFileInspectable::OnInspectorSlotChanged(
                                              InspectorWidget *inspectorWidget)
 {
     AssetsManager::UpdateAsset(m_file.GetPath(),

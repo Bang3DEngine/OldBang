@@ -5,6 +5,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Math.h"
+#include "Bang/Path.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
@@ -24,7 +25,7 @@ public:
                               float delay = 0.0f);
 
 
-    static void PlayAudioClip(const String& audioClipFilepath,
+    static void PlayAudioClip(const Path& audioClipFilepath,
                               const Vector3& position = Vector3::Zero,
                               float volume            = 1.0f,
                               bool  looping           = false,
@@ -33,7 +34,7 @@ public:
                               float range             = Math::Infinity<float>()
                               );
 
-    static void PlaySound(const String &soundFilepath,
+    static void PlaySound(const Path &soundFilepath,
                           const Vector3& position = Vector3::Zero,
                           float volume            = 1.0f,
                           bool  looping           = false,

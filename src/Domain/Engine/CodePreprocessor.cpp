@@ -8,45 +8,33 @@
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,
-                                   int includeDirectiveLine,
-                                   const List<String> &includePaths)
+                                   int includeLine,
+                                   const List<Path> &includePaths)
 {
     Array<String> includeParts = includeDirective.Split('"', true);
     if (includeParts.Size() < 2) { return ""; }
 
-    String includeFile = includeParts[1];
+    Path includeFile(includeParts[1]);
 
     // Search if the include file combined with any of the include paths
     // gives us an existing file. Both in Engine and in Users code
-    String completeFilepath = "";
-    for (String includePathDir : includePaths)
+    Path completeFilepath;
+    for (const Path& includeDirPath : includePaths)
     {
-        String filepath = "";
-        includePathDir = IO::ToAbsolute(includePathDir, true);
-        filepath = includePathDir + "/" + includeFile;
-        if (!File::Exists(filepath))
-        {
-            includePathDir = IO::ToAbsolute(includePathDir, false);
-        }
-        filepath = includePathDir + "/" + includeFile;
-
-        if (File::Exists(filepath))
-        {
-            completeFilepath = filepath;
-            break;
-        }
+        completeFilepath = includeDirPath.Append(includeFile);
+        if (completeFilepath.IsFile()) { break; }
     }
 
-    if (!completeFilepath.Empty())
+    if (completeFilepath.IsFile())
     {
         String includeContents = File::GetContents(completeFilepath);
 
-        // Using #line, error lines info will be reported as in the original file,
-        // for a more user-friendly debugging
-        if (includeDirectiveLine > 0)
+        // Using #line, error lines info will be reported as in the original
+        // file, for a more user-friendly debugging
+        if (includeLine > 0)
         {
             includeContents += "\n";
-            includeContents += "#line " + String::ToString(includeDirectiveLine - 1);
+            includeContents += "#line " + String::ToString(includeLine - 1);
             includeContents += "\n";
         }
 
@@ -61,7 +49,7 @@ String CodePreprocessor::
 }
 
 void CodePreprocessor::PreprocessCode(String *srcCode,
-                                      const List<String> &includePaths)
+                                      const List<Path> &includePaths)
 {
     String &code = *srcCode;
 

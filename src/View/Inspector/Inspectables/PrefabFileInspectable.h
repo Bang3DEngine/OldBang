@@ -1,5 +1,5 @@
-#ifndef PREFABASSETFILEINSPECTABLE_H
-#define PREFABASSETFILEINSPECTABLE_H
+#ifndef PREFABFILEINSPECTABLE_H
+#define PREFABFILEINSPECTABLE_H
 
 #include <QTimer>
 #include "Bang/WinUndef.h"
@@ -9,15 +9,15 @@
 
 class GameObject;
 class InspectorWidget;
-class PrefabAssetFileInspectable : public Inspectable<GameObject>,
+class PrefabFileInspectable : public Inspectable<GameObject>,
                                    public IWindowEventManagerListener
 {
-    ICLONEABLE(PrefabAssetFileInspectable)
+    ICLONEABLE(PrefabFileInspectable)
 
 public:
-    PrefabAssetFileInspectable();
-    PrefabAssetFileInspectable(const File &f);
-    virtual ~PrefabAssetFileInspectable();
+    PrefabFileInspectable();
+    PrefabFileInspectable(const File &f);
+    virtual ~PrefabFileInspectable();
 
     void CloneInto(ICloneable *clone) const override;
 
@@ -27,4 +27,4 @@ private:
     File m_file;
 };
 
-#endif // PREFABASSETFILEINSPECTABLE_H
+#endif // PREFABFILEINSPECTABLE_H

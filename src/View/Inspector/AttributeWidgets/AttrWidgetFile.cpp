@@ -80,23 +80,27 @@ void AttrWidgetFile::Browse()
     Path selectedPath(selectedFile);
     if (!selectedPath.IsEmpty())
     {
-        SetValue(selectedPath);
+        if (!selectedPath.IsFile()) { SetValue(Path::Empty); }
+        else { SetValue(selectedPath); }
         p_inspectorWidget->_OnSlotValueChanged();
     }
 }
 
 void AttrWidgetFile::RefreshIcon()
 {
+    const uint c_pixSize = 16;
     File file(m_filepath);
     File *f = File::GetSpecificFile(file);
     if (f)
     {
         const QPixmap& pm = f->GetIcon();
-        QPixmap pmCopy = pm.scaled(16, 16, Qt::IgnoreAspectRatio,
+        QPixmap pmCopy = pm.scaled(c_pixSize, c_pixSize,
+                                   Qt::IgnoreAspectRatio,
                                    Qt::SmoothTransformation);
         m_iconLabel->setPixmap(pmCopy);
         delete f;
     }
+    else { m_iconLabel->setPixmap(QPixmap(c_pixSize, c_pixSize)); }
 }
 
 void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
@@ -123,6 +127,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
     {
         p_inspectorWidget->_OnSlotValueChanged();
     }
+
     RefreshIcon();
 }
 

@@ -1,5 +1,6 @@
 #include "Bang/ShaderPreprocessor.h"
 
+#include "Bang/IO.h"
 #include "Bang/CodePreprocessor.h"
 
 const String ShaderPreprocessor::GLSLVersionString = "#version 130";
@@ -7,7 +8,7 @@ const String ShaderPreprocessor::GLSLVersionString = "#version 130";
 void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 {
     CodePreprocessor::PreprocessCode(shaderSourceCode,
-                                     {"Shaders/Include"});
+                                     {EPATH("Shaders/Include")});
 
     String &code = *shaderSourceCode;
 

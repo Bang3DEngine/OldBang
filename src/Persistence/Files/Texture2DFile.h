@@ -8,11 +8,11 @@
 #include "Bang/XMLNode.h"
 
 class SerializableObject;
-class Texture2DAssetFile : public File
+class Texture2DFile : public File
 {
 public:
-    Texture2DAssetFile();
-    Texture2DAssetFile(const Path& path);
+    Texture2DFile();
+    Texture2DFile(const Path& path);
 
     Path GetImageFilepath() const;
     virtual const QPixmap& GetIcon() const override;

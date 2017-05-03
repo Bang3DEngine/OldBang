@@ -375,14 +375,16 @@ void MenuBar::OnCreatePrefab() const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath = filepath.Append("New_Prefab")
-                             .AppendExtension(Prefab::GetFileExtensionStatic());
+                       .AppendExtension(Prefab::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 Material* MenuBar::OnCreateMaterial(const Path &matFilepath) const
 {
-    Path filepath = matFilepath.AppendExtension(Material::GetFileExtensionStatic());
+    Path filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath = filepath.Append(matFilepath)
+                       .AppendExtension(Material::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     Material *mat = AssetsManager::Create<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -392,7 +394,7 @@ void MenuBar::OnCreateMesh() const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath = filepath.Append("New_Mesh")
-                             .AppendExtension(Mesh::GetFileExtensionStatic());
+                       .AppendExtension(Mesh::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AssetsManager::Create<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -401,14 +403,16 @@ void MenuBar::OnCreateShaderProgram() const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath = filepath.Append("New_ShaderProgram")
-                             .AppendExtension(ShaderProgram::GetFileExtensionStatic());
+                       .AppendExtension(ShaderProgram::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AssetsManager::Create<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 Texture2D* MenuBar::OnCreateTexture2D(const Path &tex2DFilepath) const
 {
-    Path filepath = tex2DFilepath.AppendExtension(Texture2D::GetFileExtensionStatic());
+    Path filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath = filepath.Append(tex2DFilepath)
+                       .AppendExtension(Texture2D::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     Texture2D* tex = AssetsManager::Create<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -419,7 +423,7 @@ void MenuBar::OnCreateFont() const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath = filepath.Append("New_Font")
-                             .AppendExtension(Font::GetFileExtensionStatic());
+                       .AppendExtension(Font::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -428,8 +432,8 @@ void MenuBar::OnCreateFont() const
 AudioClip* MenuBar::OnCreateAudioClip(const Path &audioClipFilepath) const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append("New_AudioClip")
-                             .AppendExtension(AudioClip::GetFileExtensionStatic());
+    filepath = filepath.Append(audioClipFilepath)
+                       .AppendExtension(AudioClip::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AudioClip* audioClip = AssetsManager::Create<AudioClip>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);

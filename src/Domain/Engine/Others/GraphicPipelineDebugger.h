@@ -6,7 +6,7 @@
 class GraphicPipelineDebugger
 {
 public:
-    static String c_debugDir;
+    static Path c_debugDir;
     static void Reset();
     static void TakeGBufferShot(GBuffer *gbuffer,
                                 GBuffer::AttachmentId att,

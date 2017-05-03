@@ -52,7 +52,7 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
     if (ddi.sourceObject == explorer)
     {
         File f = explorer->GetSelectedFile();
-        if (f.IsPrefabAsset())
+        if (f.IsPrefabFile())
         {
             // setStyleSheet(IDroppable::acceptDragStyle);
         }
@@ -113,7 +113,7 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
 {
     if (f.GetPath().GetRelative().Empty()) { return; }
 
-    if (f.IsPrefabAsset())
+    if (f.IsPrefabFile())
     {
         GameObject *dropTargetGameObject;
         bool above, below;

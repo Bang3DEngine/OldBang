@@ -1319,7 +1319,7 @@
   <action name="actionCreateMesh">
    <property name="icon">
     <iconset resource="QtResources.qrc">
-     <normaloff>:/Bang/Icons/MeshAssetIcon.png</normaloff>:/Bang/Icons/MeshAssetIcon.png</iconset>
+     <normaloff>:/Bang/Icons/MeshIcon.png</normaloff>:/Bang/Icons/MeshIcon.png</iconset>
    </property>
    <property name="text">
     <string>Mesh</string>
@@ -1466,7 +1466,7 @@
   <action name="actionCreateCube">
    <property name="icon">
     <iconset resource="qdarkstyle/style.qrc">
-     <normaloff>:/qss_icons/Icons/MeshAssetIcon.png</normaloff>:/qss_icons/Icons/MeshAssetIcon.png</iconset>
+     <normaloff>:/qss_icons/Icons/MeshIcon.png</normaloff>:/qss_icons/Icons/MeshIcon.png</iconset>
    </property>
    <property name="text">
     <string>Cube</string>

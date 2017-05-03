@@ -41,20 +41,20 @@ bool FileSystemModel::setData(const QModelIndex &idx,
        String errorMsg = "";
        const String calidChars = "/*,;:\\ ";
 
-       String path = filePath(idx);
-       String dir = IO::GetDir(path);
-       String oldFileOrDirNameWithExt =
-               IO::GetFileNameWithExtension(path);
+       Path path( String(filePath(idx)) );
+       Path dir = path.GetDirectory();
+       String oldFileOrDirNameWithExt = path.GetNameExt();
        String newFileOrDirNameWithExt = value.toString();
-       if (IO::IsFile(path))
+       if (path.IsFile())
        {
-           String originalExtension = IO::GetFileExtensionComplete(path);
+           String originalExtension = path.GetExtension();
 
-           String userInput = value.toString();
-           String newExtension = IO::GetFileExtensionComplete(userInput);
+           Path userInput = Path(value.toString());
+           String newExtension = userInput.GetExtension();
            newExtension = newExtension.Empty() ? originalExtension : newExtension;
-           String newEditedFileName = IO::GetBaseName(userInput);
-           String newEditedFileNameExt = newEditedFileName + "." + newExtension;
+           String newEditedFileName = userInput.GetName();
+           String newEditedFileNameExt =
+                Path(newEditedFileName).AppendExtension(newExtension).GetAbsolute();
            newFileOrDirNameWithExt = newEditedFileNameExt;
 
            if (String(value.toString()).Empty())
@@ -63,7 +63,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
                errorMsg = "File name is empty.";
            }
 
-           if (IO::Exists(newFileOrDirNameWithExt))
+           if ( Path(newFileOrDirNameWithExt).Exists())
            {
                error = true;
                errorMsg = "File with that name existed before.";
@@ -83,11 +83,11 @@ bool FileSystemModel::setData(const QModelIndex &idx,
            return false;
        }
 
-       bool ok = IO::Move(dir + "/" + oldFileOrDirNameWithExt,
-                                   dir + "/" + newFileOrDirNameWithExt);
+       bool ok = IO::Move(dir.Append(oldFileOrDirNameWithExt),
+                          dir.Append(newFileOrDirNameWithExt));
        if (ok)
        {
-           emit fileRenamed(dir.ToQString(),
+           emit fileRenamed(dir.GetAbsolute().ToQString(),
                             oldFileOrDirNameWithExt.ToQString(),
                             newFileOrDirNameWithExt.ToQString());
        }
@@ -121,7 +121,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     if (role == Qt::DisplayRole && !m_explorer->IsInListMode())
     {
         String data = QFileSystemModel::data(idx, role).toString();
-        String fileName = IO::GetBaseName(data);
+        String fileName = Path(data).GetName();
         if (data == "..") { return data.ToQString(); }
 
         const int justInCase = 4; // To avoid char clamping for some cases
@@ -183,7 +183,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
             File *sFile = File::GetSpecificFile(file);
             if (sFile && sFile->IsAsset())
             {
-                if (sFile->IsAudioClipAsset())
+                if (sFile->IsAudioClipFile())
                 {
                     textColor = Color(1.0f, 1.0f, 0.0f);
                 }
@@ -191,7 +191,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                 {
                     textColor = Color(0.8f, 0.4f, 0.0f);
                 }
-                else if (sFile->IsMaterialAsset())
+                else if (sFile->IsMaterialFile())
                 {
                     textColor = Color(0.3f, 0.6f, 0.9f);
                 }

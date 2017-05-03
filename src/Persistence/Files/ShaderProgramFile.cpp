@@ -1,4 +1,4 @@
-#include "ShaderProgramAssetFile.h"
+#include "ShaderProgramFile.h"
 
 #include "Bang/IO.h"
 #include "Bang/XMLParser.h"
@@ -6,34 +6,34 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/FileInspectable.h"
 
-ShaderProgramAssetFile::ShaderProgramAssetFile()
+ShaderProgramFile::ShaderProgramFile()
 {
 }
 
-ShaderProgramAssetFile::ShaderProgramAssetFile(const Path& path)
+ShaderProgramFile::ShaderProgramFile(const Path& path)
     : File(path)
 {
 }
 
-const QPixmap &ShaderProgramAssetFile::GetIcon() const
+const QPixmap &ShaderProgramFile::GetIcon() const
 {
     return IconManager::LoadPixmap(EPATH("Icons/BehaviourIcon.png"),
                                    IconManager::IconOverlay::Asset);
 }
 
-Path ShaderProgramAssetFile::GetVertexShaderFilepath() const
+Path ShaderProgramFile::GetVertexShaderFilepath() const
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     return xmlInfo.GetFilepath("VertexShader");
 }
 
-Path ShaderProgramAssetFile::GetFragmentShaderFilepath() const
+Path ShaderProgramFile::GetFragmentShaderFilepath() const
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     return xmlInfo.GetFilepath("FragmentShader");
 }
 
-void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
+void ShaderProgramFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     IO::WriteToFile(GetPath(), xmlInfo.ToString());
@@ -43,7 +43,7 @@ void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
     #endif
 }
 
-void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const
+void ShaderProgramFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
@@ -54,8 +54,8 @@ void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *ShaderProgramAssetFile::GetNewInspectable()
+IInspectable *ShaderProgramFile::GetNewInspectable()
 {
-    return new FileInspectable<ShaderProgramAssetFile>(*this);
+    return new FileInspectable<ShaderProgramFile>(*this);
 }
 #endif

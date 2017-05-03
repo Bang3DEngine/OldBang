@@ -64,10 +64,11 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const String c_initialOutputDir = IO::GetEngineRootAbs() +
-                                      "/bin/Game.exe";
-    IO::Remove(m_executableFilepath.GetAbsolute());
-    IO::Move(c_initialOutputDir, m_executableFilepath.GetAbsolute());
+    const Path c_initialOutputDir = Path(IO::GetEngineRootAbs())
+                                          .Append("bin/Game")
+                                          .AppendExtension("exe");
+    IO::Remove(m_executableFilepath);
+    IO::Move(c_initialOutputDir, m_executableFilepath);
 
     emit NotifyPercent(1.0f);
 

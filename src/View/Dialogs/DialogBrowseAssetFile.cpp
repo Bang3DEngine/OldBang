@@ -56,15 +56,13 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
     String title = "Browse Asset ( " + String::Join(extensions, ", ") + " )";
     setWindowTitle(title.ToQString());
 
-    List<String> projectFilepaths =
-            IO::GetFiles(IO::GetProjectAssetsRootAbs(),
-                                  true, extensions);
-    List<String> engineFilepaths =
-            IO::GetFiles(IO::GetEngineAssetsRootAbs(),
-                                  true, extensions);
+    List<Path> projectFilepaths =
+            Path(IO::GetProjectAssetsRootAbs()).GetFiles(true, extensions);
+    List<Path> engineFilepaths =
+            Path(IO::GetEngineAssetsRootAbs()).GetFiles(true, extensions);
 
-    engineFilepaths.PushFront("None");
-    projectFilepaths.PushFront("None");
+    engineFilepaths.PushFront(  Path("None") );
+    projectFilepaths.PushFront( Path("None") );
     ShowOnList(m_engineFileList,  true,  engineFilepaths);
     ShowOnList(m_projectFileList, false, projectFilepaths);
     show();
@@ -72,14 +70,11 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
 
 void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
                                        bool engineFilepaths,
-                                       const List<String> &filepaths)
+                                       const List<Path> &filepaths)
 {
-    for (const String &filepath : filepaths)
+    for (const Path &filepath : filepaths)
     {
-        String fileName = IO::GetBaseName(filepath);
-
-        String absFilepath = IO::ToAbsolute(filepath, engineFilepaths);
-        File file(absFilepath);
+        File file(filepath);
 
         QPixmap filePixmap;
         File *sFile = File::GetSpecificFile(file);
@@ -106,12 +101,13 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
         }
 
         QIcon fileIcon(filePixmap);
+        String fileName = !filepath.IsEmpty() ? filepath.GetName() : "None";
         QListWidgetItem *item = new QListWidgetItem(fileIcon,
                                                     fileName.ToQString());
         item->setSizeHint(QSize(c_iconSize * 1.5f, c_iconSize * 1.5f));
         listWidget->addItem(item);
 
-        m_item_To_absoluteFilepath.Set(item, absFilepath);
+        m_item_To_filepath.Set(item, filepath);
     }
 }
 
@@ -147,14 +143,14 @@ void DialogBrowseAssetFile::OnSelectionChange(int newIndex)
     }
     else { item = m_engineFileList->item(newIndex); }
 
-    String filepath = "";
-    if (item && m_item_To_absoluteFilepath.ContainsKey(item))
+    Path filepath;
+    if (item && m_item_To_filepath.ContainsKey(item))
     {
-        filepath = m_item_To_absoluteFilepath[item];
+        filepath = m_item_To_filepath.Get(item);
     }
 
-    filepath = filepath.ElideLeft(35);
-    m_botFilepathLabel->setText(filepath.ToQString());
+    String filepathStr = filepath.GetAbsolute().ElideLeft(35);
+    m_botFilepathLabel->setText(filepathStr.ToQString());
 }
 
 void DialogBrowseAssetFile::OnFileAccepted()
@@ -162,18 +158,18 @@ void DialogBrowseAssetFile::OnFileAccepted()
     QListWidget *currentListWidget =
             Object::SCast<QListWidget>(m_tabWidget->currentWidget());
 
-    String selectedFilepath = "";
+    Path selectedFilepath;
     QList<QListWidgetItem*> selectedItems = currentListWidget->selectedItems();
     if (!selectedItems.empty())
     {
         QListWidgetItem *selectedItem = selectedItems.front();
-        if (m_item_To_absoluteFilepath.ContainsKey(selectedItem))
+        if (m_item_To_filepath.ContainsKey(selectedItem))
         {
-            selectedFilepath = m_item_To_absoluteFilepath[selectedItem];
+            selectedFilepath = m_item_To_filepath[selectedItem];
         }
     }
 
-    *m_resultFile = selectedFilepath;
+    *m_resultFile = selectedFilepath.GetAbsolute();
     close();
 }
 

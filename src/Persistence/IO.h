@@ -38,58 +38,28 @@ public:
    static String ToAbsolute(const String &relPath,
                             bool isEngineFile);
 
-   /**
-    * ${prependDirectory}/Images/wololo => ./Images/wololo
-   **/
-   static String ToRelative(const String &absPath,
-                            const String &absPrefix);
-   static String ToRelative(const String &relPath,
-                            bool isEngineFile);
-   static String ToRelative(const String &absPath);
-
    static bool IsEngineFile(const String &filepath);
 
-   static String GetDirUp(const String &filepath);
-   static String GetRightmostDir(const String &dir);
-
-   static bool DuplicateFile(const String &fromFilepath,
-                             const String &toFilepath,
+   static bool DuplicateFile(const Path &fromFilepath,
+                             const Path &toFilepath,
                              bool overwrite = true);
-   static bool DuplicateDir(const String &fromDirpath,
-                            const String &toDirpath,
+   static bool DuplicateDir(const Path &fromDirpath,
+                            const Path &toDirpath,
                             bool overwrite = true);
 
-    #ifdef BANG_EDITOR
-   /**
-    * @brief wololo/omg/myFile.jpg => wololo/omg/myFile_1.jpg
-    *        wololo/omg/myFile_2.jpg => wololo/omg/myFile_3.jpg
-    *        etc.
-    * @param path
-    * @return
-    */
-   private: static String GetNextDuplicatePath(const String &path);
-   public:  static String GetDuplicatePath(const String &path);
-    #endif
-
-   static List<String> GetSubDirectories(const String& dirPath,
-                                         bool recursive = false);
-   static List<String> GetFiles(const String& dirPath,
-                                bool recursive = false,
-                                const List<String> &extensions = {});
-
-   static bool Remove(const String &path);
-   static bool ExistsFile(const String &filepath);
-   static bool ExistsDirectory(const String &dirPath);
-   static bool Exists(const String &filepath);
+   static bool Remove(const Path &path);
+   static bool ExistsFile(const Path &filepath);
+   static bool ExistsDirectory(const Path &dirPath);
+   static bool Exists(const Path &filepath);
    static bool CreateDirectory(const Path &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
-   static bool Rename(const String &oldPath, const String &newPath);
-   static bool Move(const String &oldPath, const String &newPath);
+   static bool Rename(const Path &oldPath, const Path &newPath);
+   static bool Move(const Path &oldPath, const Path &newPath);
    static bool WriteToFile(const Path &filepath, const String &contents);
 
    static bool IsEngineFile(const Path &path);
 
-   static String GetHash(const String &filepath);
+   static String GetHash(const Path &filepath);
    static String GetHashFromString(const String &str);
    static String GetHashFromByteArray(const QByteArray &byteArray);
 

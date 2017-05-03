@@ -1,4 +1,4 @@
-#include "Bang/MaterialAssetFile.h"
+#include "Bang/MaterialFile.h"
 
 #include "Bang/IO.h"
 #include "Bang/Material.h"
@@ -7,11 +7,11 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/FileInspectable.h"
 
-MaterialAssetFile::MaterialAssetFile()
+MaterialFile::MaterialFile()
 {
 }
 
-MaterialAssetFile::MaterialAssetFile(const Path& path) :
+MaterialFile::MaterialFile(const Path& path) :
     File(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
@@ -24,7 +24,7 @@ MaterialAssetFile::MaterialAssetFile(const Path& path) :
     m_xmlInfo = xmlMatInfo;
 }
 
-const QPixmap& MaterialAssetFile::GetIcon() const
+const QPixmap& MaterialFile::GetIcon() const
 {
     Path absPath = GetPath();
     Material *mat = AssetsManager::Load<Material>(absPath);
@@ -32,7 +32,7 @@ const QPixmap& MaterialAssetFile::GetIcon() const
 }
 
 
-void MaterialAssetFile::Read(const XMLNode &xmlInfo)
+void MaterialFile::Read(const XMLNode &xmlInfo)
 {
     m_xmlInfo = xmlInfo;
 
@@ -42,7 +42,7 @@ void MaterialAssetFile::Read(const XMLNode &xmlInfo)
     #endif
 }
 
-void MaterialAssetFile::Write(XMLNode *xmlInfo) const
+void MaterialFile::Write(XMLNode *xmlInfo) const
 {
     File::Write(xmlInfo);
 
@@ -59,13 +59,13 @@ void MaterialAssetFile::Write(XMLNode *xmlInfo) const
 
 
 #ifdef BANG_EDITOR
-IInspectable *MaterialAssetFile::GetNewInspectable()
+IInspectable *MaterialFile::GetNewInspectable()
 {
-    return new FileInspectable<MaterialAssetFile>(*this);
+    return new FileInspectable<MaterialFile>(*this);
 }
 #endif
 
-bool MaterialAssetFile::IsAsset() const
+bool MaterialFile::IsAsset() const
 {
     return true;
 }

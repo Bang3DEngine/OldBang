@@ -94,7 +94,6 @@ private:
 
     friend class AudioClip;
     friend class AudioManager;
-    friend class AudioClipAssetFileInspectable;
 };
 
 #endif // AUDIOSOURCE_H

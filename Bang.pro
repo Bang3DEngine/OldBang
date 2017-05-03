@@ -209,11 +209,7 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
     src/Persistence/Files/File.h                                    \
     src/Persistence/IO/FileReader.h                                 \
-    src/Persistence/Files/AudioClipAssetFile.h                      \
     src/Persistence/Files/ImageFile.h                               \
-    src/Persistence/Files/FontAssetFile.h                           \
-    src/Persistence/Files/MaterialAssetFile.h                       \
-    src/Persistence/Files/Texture2DAssetFile.h                      \
     src/Persistence/XML/XMLAttribute.h                              \
     src/Persistence/XML/XMLNode.h                                   \
     src/Persistence/XML/XMLParser.h                                 \
@@ -261,12 +257,16 @@ HEADERS +=                                                          \
     src/Domain/Engine/DataStructures/Flags.h \
     src/Domain/Graphics/Shaders/ShaderManager.h \
     src/Domain/Engine/Components/PostProcessEffect.h \
-    src/Persistence/Files/ShaderProgramAssetFile.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
     src/Persistence/Files/Path.h \
     src/Persistence/Files/ModelFile.h \
     src/Persistence/Files/MeshFile.h \
-    src/Domain/Engine/DataStructures/Regex.h
+    src/Domain/Engine/DataStructures/Regex.h \
+    src/Persistence/Files/AudioClipFile.h \
+    src/Persistence/Files/FontFile.h \
+    src/Persistence/Files/MaterialFile.h \
+    src/Persistence/Files/ShaderProgramFile.h \
+    src/Persistence/Files/Texture2DFile.h
 
 EDITOR {
 HEADERS += \
@@ -304,7 +304,7 @@ HEADERS += \
     src/View/Inspector/AttributeWidgets/AttrWidgetString.h          \
     src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h     \
     src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
-    src/View/Inspector/Inspectables/PrefabAssetFileInspectable.h    \
+    src/View/Inspector/Inspectables/PrefabFileInspectable.h    \
     src/View/Windows/WindowEventManager.h \
     src/View/Windows/SelectProjectWindow.h \
     src/View/Toolbar.h \
@@ -428,13 +428,9 @@ SOURCES += \
     src/Domain/Graphics/Buffers/GBuffer.cpp \
     src/Domain/Graphics/Shaders/Shader.cpp \
     src/Domain/Graphics/Shaders/ShaderProgram.cpp \
-    src/Persistence/Files/AudioClipAssetFile.cpp \
     src/Persistence/Files/File.cpp \
     src/Persistence/IO/FileReader.cpp \
     src/Persistence/Files/ImageFile.cpp \
-    src/Persistence/Files/FontAssetFile.cpp \
-    src/Persistence/Files/MaterialAssetFile.cpp \
-    src/Persistence/Files/Texture2DAssetFile.cpp \
     src/Persistence/Behaviours/BehaviourManager.cpp \
     src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
     src/Persistence/XML/XMLAttribute.cpp \
@@ -482,12 +478,16 @@ SOURCES += \
     src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp \
     src/Domain/Graphics/Shaders/ShaderManager.cpp \
     src/Domain/Engine/Components/PostProcessEffect.cpp \
-    src/Persistence/Files/ShaderProgramAssetFile.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
     src/Persistence/Files/Path.cpp \
     src/Persistence/Files/ModelFile.cpp \
     src/Persistence/Files/MeshFile.cpp \
-    src/Domain/Engine/DataStructures/Regex.cpp
+    src/Domain/Engine/DataStructures/Regex.cpp \
+    src/Persistence/Files/Texture2DFile.cpp \
+    src/Persistence/Files/ShaderProgramFile.cpp \
+    src/Persistence/Files/MaterialFile.cpp \
+    src/Persistence/Files/AudioClipFile.cpp \
+    src/Persistence/Files/FontFile.cpp
 
 EDITOR {
     SOURCES += \
@@ -551,7 +551,7 @@ EDITOR {
         src/View/Inspector/Inspectables/IInspectable.cpp \
         src/View/Inspector/Inspectables/FileInspectable.cpp \
         src/View/Inspector/Inspectables/ComponentInspectable.cpp \
-        src/View/Inspector/Inspectables/PrefabAssetFileInspectable.cpp \
+        src/View/Inspector/Inspectables/PrefabFileInspectable.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
         src/View/Hierarchy/HierarchyDragDropManager.cpp \
         src/View/Hierarchy/HierarchyContextMenu.cpp \

@@ -20,9 +20,9 @@ public:
     File(const QFileSystemModel *model, const QModelIndex &index);
 
     bool IsSound() const;
-    bool IsAudioClipAsset() const;
+    bool IsAudioClipFile() const;
 
-    bool IsTexture2DAsset() const;
+    bool IsTexture2DFile() const;
     bool IsImageFile() const;
 
     bool IsScene() const;
@@ -30,21 +30,21 @@ public:
     bool IsMeshFile() const;
     bool IsModelFile() const;
 
-    bool IsMaterialAsset() const;
+    bool IsMaterialFile() const;
     bool IsBehaviour() const;
 
     bool IsTextFile() const;
-    bool IsFontAssetFile() const;
+    bool IsFontFile() const;
 
-    bool IsPrefabAsset() const;
-    bool IsShaderProgramAssetFile() const;
+    bool IsPrefabFile() const;
+    bool IsShaderProgramFile() const;
 
     static File *GetSpecificFile(const File &f);
     static bool Exists(const String &filepath);
     static void Write(const String &filepath, const String &contents);
     static void Write(const String &filepath, const Array<String> &lines);
     static void Write(const String &filepath, const List<String> &lines);
-    static String GetContents(const String &filepath);
+    static String GetContents(const Path &filepath);
 
     virtual const QPixmap& GetIcon() const;
 
