@@ -53,7 +53,7 @@ bool SerializableObject::ReadFromFile(const Path &path)
 {
     if (path.Exists())
     {
-        String fileContents = IO::GetFileContents(path);
+        String fileContents = File::GetContents(path);
         ReadFromString(fileContents);
         return true;
     }
@@ -62,7 +62,8 @@ bool SerializableObject::ReadFromFile(const Path &path)
 
 bool SerializableObject::WriteToFile(const Path &path) const
 {
-    return IO::WriteToFile(path, GetSerializedString(true));
+    File::Write(path, GetSerializedString(true));
+    return true;
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}

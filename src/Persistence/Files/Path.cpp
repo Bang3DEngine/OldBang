@@ -40,12 +40,12 @@ void Path::SetPath(const String &path)
 
 bool Path::IsDir() const
 {
-    return IO::IsDir( GetAbsolute() );
+    return QFileInfo(GetAbsolute().ToQString()).isDir();
 }
 
 bool Path::IsFile() const
 {
-    return IO::IsFile( GetAbsolute() );
+    return QFileInfo(GetAbsolute().ToQString()).isFile();
 }
 
 bool Path::Exists() const
@@ -117,25 +117,40 @@ List<Path> Path::GetSubDirectories(bool recursive) const
 
 String Path::GetName() const
 {
-    return IO::GetBaseName( GetAbsolute() );
+    Array<String> parts = GetNameExt().Split('.');
+    return parts.Size() >= 1 ? parts[0] : "";
 }
 
 String Path::GetNameExt() const
 {
-    String ext = GetExtension();
-    if (ext.Empty()) { return GetName(); }
-    return GetName() + "." + ext;
+    if (IsEmpty()) { return ""; }
+
+    String filename = GetAbsolute();
+    const size_t lastSlash = GetAbsolute().rfind('/');
+    if (lastSlash != String::npos)
+    {
+        filename = GetAbsolute().SubString(lastSlash + 1);
+    }
+    return filename;
 }
 
 String Path::GetExtension() const
 {
-    return IO::GetFileExtensionComplete( GetAbsolute() );
+    Array<String> parts = GetNameExt().Split('.');
+    return parts.Size() >= 2 ? parts[1] : "";
 }
 
 Path Path::GetDirectory() const
 {
-    String dirPath = IO::GetDir( GetAbsolute() );
-    return Path(dirPath);
+    if (IsEmpty()) { return Path::Empty; }
+
+    String directory = "";
+    const size_t lastSlash = GetAbsolute().rfind('/');
+    if (lastSlash != String::npos)
+    {
+        directory = GetAbsolute().SubString(0, lastSlash-1);
+    }
+    return Path(directory);
 }
 
 const String &Path::GetAbsolute() const

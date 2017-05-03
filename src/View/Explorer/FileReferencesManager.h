@@ -41,13 +41,12 @@ private:
 
     static FileReferencesManager *GetInstance();
 
-    void RefactorFiles(const String &relPathBefore, const String &relPathNow);
-    void RefactorSerializableObject(const String &relPathBefore,
-                            const String &relPathNow);
+    void RefactorFiles(const Path &pathBefore, const Path &pathNow);
+    void RefactorSerializableObject(const Path &pathBefore, const Path &pathNow);
 
     bool RefactorXMLInfo(XMLNode *xmlInfo,
-                         const String &relPathBefore,
-                         const String &relPathNow,
+                         const Path &pathBefore,
+                         const Path &pathNow,
                          bool refactorXMLChildren);
 
     void OnFileOrDirNameMoved(const Path &filepathBefore,

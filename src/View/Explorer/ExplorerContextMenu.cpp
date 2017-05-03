@@ -174,11 +174,11 @@ void ExplorerContextMenu::OnDuplicateClicked()
     Path toPath = fromPath.GetDuplicate();
     if (fromPath.IsFile())
     {
-        IO::DuplicateFile(fromPath, toPath);
+        File::DuplicateFile(fromPath, toPath);
     }
     else if (fromPath.IsDir())
     {
-        IO::DuplicateDir(fromPath, toPath);
+        File::DuplicateDir(fromPath, toPath);
     }
 
     p_explorer->SelectPath( Path(toPath) );
@@ -198,7 +198,7 @@ void ExplorerContextMenu::OnDeleteClicked()
     if (reply == Dialog::Reply::Yes)
     {
         Inspector::GetInstance()->Clear();
-        IO::Remove(path);
+        File::Remove(path);
     }
 }
 
@@ -206,6 +206,6 @@ void ExplorerContextMenu::OnCreateDirClicked()
 {
     Path dirPath = p_explorer->GetCurrentDir().Append("New_Folder");
     dirPath = dirPath.GetDuplicate();
-    IO::CreateDirectory(dirPath);
+    File::CreateDirectory(dirPath);
     p_explorer->StartRenaming(dirPath);
 }

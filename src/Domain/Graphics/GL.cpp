@@ -167,7 +167,7 @@ const Matrix4 &GL::GetProjectionMatrix()
     return GL::GetGLContext()->GetProjectionMatrix();
 }
 
-void GL::SaveToImage(const Texture *tex, const String &filepath)
+void GL::SaveToImage(const Texture *tex, const Path &filepath)
 {
     // TODO
 }

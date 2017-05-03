@@ -1,8 +1,9 @@
 #include "Bang/GraphicPipelineDebugger.h"
 
+#include "Bang/IO.h"
+#include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
-#include "Bang/IO.h"
 
 Path GraphicPipelineDebugger::c_debugDir = Path("/home/sephirot47/Bang/tmp");
 
@@ -15,8 +16,8 @@ void GraphicPipelineDebugger::Reset()
 {
     if (Input::GetKeyDown(Input::Key::Q))
     {
-        IO::Remove(GraphicPipelineDebugger::c_debugDir);
-        IO::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
+        File::Remove(GraphicPipelineDebugger::c_debugDir);
+        File::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
     }
 }
 
@@ -28,8 +29,8 @@ void GraphicPipelineDebugger::TakeGBufferShot(GBuffer *gbuffer,
     {
         String fileName = String::ToString( int(Time::GetNow()) ) + "_"
                           + screenshotName;
-        String filepath = GraphicPipelineDebugger::c_debugDir + "/"
-                          + fileName + ".bmp";
+        Path filepath = GraphicPipelineDebugger::c_debugDir
+                            .Append(fileName).AppendExtension("bmp");
         gbuffer->SaveToImage(att, filepath, true);
     }
 }

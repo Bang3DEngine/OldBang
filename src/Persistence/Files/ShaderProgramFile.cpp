@@ -36,7 +36,7 @@ Path ShaderProgramFile::GetFragmentShaderFilepath() const
 void ShaderProgramFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
-    IO::WriteToFile(GetPath(), xmlInfo.ToString());
+    File::Write(GetPath(), xmlInfo.ToString());
 
     #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetPath(), xmlInfo);

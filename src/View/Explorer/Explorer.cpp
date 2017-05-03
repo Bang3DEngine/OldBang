@@ -205,7 +205,7 @@ void Explorer::currentChanged(const QModelIndex &current,
 
     String selectedPath(m_fileSystemModel->filePath(current));
 
-    if ( IO::IsFile(selectedPath) )
+    if ( Path(selectedPath).IsFile() )
     {
         Hierarchy::GetInstance()->clearSelection();
     }
@@ -313,7 +313,7 @@ void Explorer::SetLabelText(const String &text)
     String textDir = text.ElideLeft(65);
     m_labelCurrentPath->setText(textDir.ToQString());
 
-    String fileNameExt = IO::GetFileNameWithExtension(text);
+    String fileNameExt = Path(text).GetNameExt();
     m_labelFileName->setText( fileNameExt.ToQString() );
 }
 
@@ -419,7 +419,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
 
             Path path = GetCurrentDir().Append(selected->name);
             path = path.AppendExtension(Prefab::GetFileExtensionStatic());
-            IO::WriteToFile(path, selected->GetSerializedString());
+            File::Write(path, selected->GetSerializedString());
         }
     }
 }

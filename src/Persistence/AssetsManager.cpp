@@ -51,7 +51,7 @@ void AssetsManager::UpdateAsset(const Path &assetFilepath,
 
     if (assetFilepath.Exists())
     {
-        IO::WriteToFile(assetFilepath, xmlChangedInfo.ToString());
+        File::Write(assetFilepath, xmlChangedInfo.ToString());
     }
 }
 
@@ -103,6 +103,6 @@ void AssetsManager::SaveAssetToFile(const Path &filepath, Asset *asset)
 {
     if (!filepath.IsEmpty() && asset)
     {
-        IO::WriteToFile(filepath, asset->GetSerializedString());
+        File::Write(filepath, asset->GetSerializedString());
     }
 }

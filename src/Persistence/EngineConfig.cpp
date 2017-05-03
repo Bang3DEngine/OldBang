@@ -1,7 +1,8 @@
 #include "Bang/EngineConfig.h"
 
-#include "Bang/FileReader.h"
 #include "Bang/IO.h"
+#include "Bang/File.h"
+#include "Bang/FileReader.h"
 
 EngineConfig::EngineConfig()
 {
@@ -34,7 +35,7 @@ void EngineConfig::WriteListToFile(const Path &filepath,
         content += str;
         content += "\n";
     }
-    IO::WriteToFile(filepath, content);
+    File::Write(filepath, content);
 }
 
 Path EngineConfig::GetRecentProjectsFilepath()
@@ -45,7 +46,7 @@ Path EngineConfig::GetRecentProjectsFilepath()
 List<Path> EngineConfig::GetRecentProjectsList()
 {
     Path recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
-    String recentProjectsContent = IO::GetFileContents(recentProjectConfigFilepath);
+    String recentProjectsContent = File::GetContents(recentProjectConfigFilepath);
     Array<String> projectsList = recentProjectsContent.Split('\n');
     return projectsList.To<List,Path>();
 }

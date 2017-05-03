@@ -34,7 +34,7 @@ public:
                 Path(IO::GetProjectAssetsRootAbs()).GetSubDirectories(true);
         includePaths.Add( Path(IO::GetProjectAssetsRootAbs()) );
         CodePreprocessor::PreprocessCode(&code, includePaths);
-        hash = IO::GetHashFromString(code);
+        hash = File::GetHashFromString(code);
     }
 
     BehaviourId(const Path &behPath, const String &_hash)

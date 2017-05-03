@@ -40,22 +40,13 @@ void FileReferencesManager::OnFileOrDirNameMoved(const Path &filepathBefore,
 {
     ENSURE(!filepathBefore.IsEmpty());
 
-    Debug_Log("OnFileOrDirNameMoved() " << filepathBefore << " to " << filepathNow);
     bool fileHasMoved = !filepathBefore.IsEmpty() &&
                         !filepathBefore.Exists() &&
                          filepathNow.Exists();
     if (fileHasMoved)
     {
-        String relPathBefore = filepathBefore.GetRelative();
-        String relPathNow    = filepathNow.GetRelative();
-        //if ( filepathNow.IsDir() )
-        //{
-        //    relPathBefore.Append("/");
-        //    relPathNow.Append("/");
-        //}
-
-        RefactorFiles(relPathBefore, relPathNow);
-        RefactorSerializableObject(relPathBefore, relPathNow);
+        RefactorFiles(filepathBefore, filepathNow);
+        RefactorSerializableObject(filepathBefore, filepathNow);
     }
 }
 
@@ -80,8 +71,8 @@ FileReferencesManager *FileReferencesManager::GetInstance()
     return exp ? exp->m_fileRefsManager : nullptr;
 }
 
-void FileReferencesManager::RefactorFiles(const String &relPathBefore,
-                                          const String &relPathNow)
+void FileReferencesManager::RefactorFiles(const Path &pathBefore,
+                                          const Path &pathNow)
 {
     List<Path> allFiles = Path(IO::GetProjectAssetsRootAbs()).GetFiles(true);
     for (const Path &filepath : allFiles)
@@ -91,15 +82,15 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
 
         String fileXMLContents = f.GetContents();
         XMLNode auxXMLInfo = XMLNode::FromString(fileXMLContents);
-        if (RefactorXMLInfo(&auxXMLInfo, relPathBefore, relPathNow, true))
+        if (RefactorXMLInfo(&auxXMLInfo, pathBefore, pathNow, true))
         {
-            IO::WriteToFile(filepath, auxXMLInfo.ToString());
+            File::Write(filepath, auxXMLInfo.ToString());
         }
     }
 }
 
-void FileReferencesManager::RefactorSerializableObject(const String &relPathBefore,
-                                                       const String &relPathNow)
+void FileReferencesManager::RefactorSerializableObject(const Path &pathBefore,
+                                                       const Path &pathNow)
 {
     for (SerializableObject *serialObject : m_inMemorySerialObjects)
     {
@@ -108,7 +99,7 @@ void FileReferencesManager::RefactorSerializableObject(const String &relPathBefo
         // delete the created aux XMLNode
         String xmlInfoStr = serialObject->GetSerializedString();
         XMLNode auxXMLInfo = XMLNode::FromString(xmlInfoStr);
-        if (RefactorXMLInfo(&auxXMLInfo, relPathBefore, relPathNow, false))
+        if (RefactorXMLInfo(&auxXMLInfo, pathBefore, pathNow, false))
         {
             serialObject->Read(auxXMLInfo);
         }
@@ -116,10 +107,12 @@ void FileReferencesManager::RefactorSerializableObject(const String &relPathBefo
 }
 
 bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
-                                            const String &relPathBefore,
-                                            const String &relPathNow,
+                                            const Path &pathBefore,
+                                            const Path &pathNow,
                                             bool refactorXMLChildren)
 {
+    String relPathBefore = pathBefore.GetRelative();
+    String relPathNow    = pathNow.GetRelative();
     bool hasBeenModified = false;
 
     // Refactor all its file attributes that are non-engine
@@ -145,8 +138,8 @@ bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
         List<XMLNode>& xmlChildren = xmlInfo->GetChildren();
         for (XMLNode& xmlChild : xmlChildren)
         {
-            bool modified = RefactorXMLInfo(&xmlChild, relPathBefore,
-                                            relPathNow, true);
+            bool modified = RefactorXMLInfo(&xmlChild, pathBefore,
+                                            pathNow, true);
             hasBeenModified = hasBeenModified || modified;
         }
     }

@@ -90,7 +90,7 @@ Behaviour* Behaviour::CreateNewBehaviour()
         Path headerFilepath = currentDir.Append(className);
         headerFilepath = headerFilepath.AppendExtension("h");
         if (headerFilepath.IsFile()) { return nullptr; }
-        IO::WriteToFile(headerFilepath, headerCode);
+        File::Write(headerFilepath, headerCode);
 
         // Create source file
         String sourceCode = Behaviour::s_behaviourSourceTemplate;
@@ -98,7 +98,7 @@ Behaviour* Behaviour::CreateNewBehaviour()
         Path sourceFilepath = currentDir.Append(className);
         sourceFilepath = sourceFilepath.AppendExtension("cpp");
         if (sourceFilepath.IsFile()) { return nullptr; }
-        IO::WriteToFile(sourceFilepath, sourceCode);
+        File::Write(sourceFilepath, sourceCode);
 
         // Update Behaviour file
         newBehaviour->m_sourceFilepath = sourceFilepath;

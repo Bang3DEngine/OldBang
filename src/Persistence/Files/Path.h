@@ -3,6 +3,7 @@
 
 #include <QFileInfo>
 
+#include "Bang/IO.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"

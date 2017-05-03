@@ -12,7 +12,7 @@ TextFile::TextFile()
 TextFile::TextFile(const Path& path)
     : File(path)
 {
-    m_contents = IO::GetFileContents( GetPath() );
+    m_contents = File::GetContents( GetPath() );
 }
 
 String TextFile::GetContents() const
@@ -24,7 +24,7 @@ void TextFile::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     String contents = xmlInfo.GetString("Contents");
-    IO::WriteToFile(GetPath(), contents);
+    File::Write(GetPath(), contents);
 }
 
 void TextFile::Write(XMLNode *xmlInfo) const

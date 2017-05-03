@@ -22,7 +22,7 @@ Texture2DFile::Texture2DFile(const Path& path)
 
 Path Texture2DFile::GetImageFilepath() const
 {
-    String contents = IO::GetFileContents(GetPath());
+    String contents = File::GetContents(GetPath());
     XMLNode xmlInfo = XMLNode::FromString(contents);
     return xmlInfo.GetFilepath("ImageFilepath");
 }

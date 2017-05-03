@@ -21,7 +21,7 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
     String behaviourName = m_behaviourPath.GetName();
     Path objFilepath = Path(BehaviourManager::GetCurrentLibsDir())
                             .Append(behaviourName).AppendExtension("o");
-    IO::Remove(objFilepath);
+    File::Remove(objFilepath);
 
     typedef SystemUtils::CompilationFlag CLFlag;
 

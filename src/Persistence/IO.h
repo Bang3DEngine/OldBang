@@ -1,10 +1,6 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-#ifdef _WIN32
-	#undef CreateDirectory
-#endif
-
 #include <QByteArray>
 #include "Bang/WinUndef.h"
 
@@ -16,55 +12,8 @@ class Explorer;
 class IO
 {
 public:
-   static bool IsDir(const String &path);
-   static bool IsFile(const String &path);
-   static bool IsAbsolute(const String &path);
-
-   static String GetDir(const String &filepath);
-   static String GetBaseName(const String &filepath);
-   static String GetFileNameWithExtension(const String &filepath);
-   static String GetFileExtensionFirst(const String &filepath);
-   static String GetFileExtensionLast(const String &filepath);
-   static String GetFileContents(const Path &filepath);
-   static String GetFileExtensionComplete(const String &filepath);
-   static String GetPathWithoutExtension(const String &filepath);
-
-   /**
-    * ./Images/wololo => ${absPrefix}/Images/wololo
-    *   Images/wololo => ${absPrefix}/Images/wololo
-   **/
-   static String ToAbsolute(const String &relPath,
-                            const String &absPrefix);
-   static String ToAbsolute(const String &relPath,
-                            bool isEngineFile);
-
    static bool IsEngineFile(const String &filepath);
-
-   static bool DuplicateFile(const Path &fromFilepath,
-                             const Path &toFilepath,
-                             bool overwrite = true);
-   static bool DuplicateDir(const Path &fromDirpath,
-                            const Path &toDirpath,
-                            bool overwrite = true);
-
-   static bool Remove(const Path &path);
-   static bool ExistsFile(const Path &filepath);
-   static bool ExistsDirectory(const Path &dirPath);
-   static bool Exists(const Path &filepath);
-   static bool CreateDirectory(const Path &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
-   static bool Rename(const Path &oldPath, const Path &newPath);
-   static bool Move(const Path &oldPath, const Path &newPath);
-   static bool WriteToFile(const Path &filepath, const String &contents);
-
-   static bool IsEngineFile(const Path &path);
-
-   static String GetHash(const Path &filepath);
-   static String GetHashFromString(const String &str);
-   static String GetHashFromByteArray(const QByteArray &byteArray);
-
-   //Appends an extension to a filepath only if that filename does not contain the extension
-   static String AppendExtension(const String &filepath, const String extNoDot);
 
    static void InitFromMainBinary();
 

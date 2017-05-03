@@ -37,7 +37,7 @@ void BehaviourManager::RemoveMergedLibraryFiles()
            BehaviourManager::GetCurrentLibsDir().GetFiles(true, {"*.so.*"});
     for (const Path &libFilepath : libFilepaths)
     {
-        IO::Remove(libFilepath);
+        File::Remove(libFilepath);
     }
 }
 

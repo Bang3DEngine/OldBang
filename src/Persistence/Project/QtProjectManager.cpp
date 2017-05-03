@@ -66,19 +66,19 @@ void QtProjectManager::CreateQtProjectFile()
     String engineIncludePathsString = String::Join(engineIncPathsStr, "\n");
 
     Path qtProjDir = QtProjectManager::GetQtProjectDir();
-    IO::CreateDirectory(qtProjDir);
-    IO::WriteToFile(qtProjDir.Append(".files"),
+    File::CreateDirectory(qtProjDir);
+    File::Write(qtProjDir.Append(".files"),
                     headersString       + "\n" +
                     sourcesString       + "\n" +
                     engineHeadersString + "\n" +
                     engineSourcesString);
 
-    IO::WriteToFile(qtProjDir.Append(".includes"),
+    File::Write(qtProjDir.Append(".includes"),
                     projIncludePathsString + "\n" +
                     engineIncludePathsString);
 
-    IO::WriteToFile(qtProjDir.Append(".creator"), "[General]");
-    IO::WriteToFile(qtProjDir.Append(".config"), "");
+    File::Write(qtProjDir.Append(".creator"), "[General]");
+    File::Write(qtProjDir.Append(".config"), "");
 }
 
 void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)

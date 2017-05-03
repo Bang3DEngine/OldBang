@@ -171,7 +171,7 @@ void Framebuffer::UnBind() const
 }
 
 // TODO: not saving the file
-void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
+void Framebuffer::SaveToImage(AttachmentId attId, const Path &filepath,
                               bool invertY) const
 {
     Bind();

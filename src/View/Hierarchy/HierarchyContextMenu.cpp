@@ -142,7 +142,7 @@ void HierarchyContextMenu::OnCreatePrefab()
     if (filepath.IsFile())
     {
         Prefab *prefab = new Prefab(go);
-        IO::WriteToFile(filepath, prefab->GetSerializedString());
+        File::Write(filepath, prefab->GetSerializedString());
         delete prefab;
     }
 }

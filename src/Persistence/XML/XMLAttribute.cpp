@@ -232,7 +232,7 @@ void XMLAttribute::SetFilepath(const Path &filepath,
         SetProperty(extensionProp);
     }
 
-    if (IO::IsEngineFile(filepath))
+    if (IO::IsEngineFile(filepath.GetAbsolute()))
     {
         SetProperty(XMLProperty::IsEngineFile);
     }

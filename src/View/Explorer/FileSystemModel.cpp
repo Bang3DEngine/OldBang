@@ -83,7 +83,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
            return false;
        }
 
-       bool ok = IO::Move(dir.Append(oldFileOrDirNameWithExt),
+       bool ok = File::Move(dir.Append(oldFileOrDirNameWithExt),
                           dir.Append(newFileOrDirNameWithExt));
        if (ok)
        {
@@ -168,7 +168,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     }
     else if (role == Qt::EditRole)
     {
-        if (IO::IsFile(filePath(idx)))
+        if (Path(filePath(idx)).IsFile())
         {
             Path selectedPath = m_explorer->GetSelectedFile().GetPath();
             return QVariant( selectedPath.GetName().ToQString() );
@@ -177,7 +177,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     else if (role == Qt::TextColorRole)
     {
         File file(this, idx);
-        if (IO::IsFile(filePath(idx)))
+        if (Path(filePath(idx)).IsFile())
         {
             Color textColor;
             File *sFile = File::GetSpecificFile(file);

@@ -4,8 +4,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "Bang/Debug.h"
 #include "Bang/IO.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
 #include "Bang/ShaderPreprocessor.h"
 
 Shader::Shader(Shader::Type t)
@@ -27,7 +28,7 @@ bool Shader::LoadFromFile(const Path& filepath)
     }
 
     m_filepath = filepath;
-    m_sourceCode = IO::GetFileContents(m_filepath);
+    m_sourceCode = File::GetContents(m_filepath);
     ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
     m_idGL = glCreateShader(GLint(m_type));

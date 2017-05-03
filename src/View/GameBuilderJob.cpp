@@ -1,7 +1,8 @@
 #include "Bang/GameBuilderJob.h"
 
-#include "Bang/Debug.h"
 #include "Bang/IO.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
 #include "Bang/GameBuilder.h"
 #include "Bang/GameBuildDialog.h"
 
@@ -67,8 +68,8 @@ void GameBuilderJob::BuildGame()
     const Path c_initialOutputDir = Path(IO::GetEngineRootAbs())
                                           .Append("bin/Game")
                                           .AppendExtension("exe");
-    IO::Remove(m_executableFilepath);
-    IO::Move(c_initialOutputDir, m_executableFilepath);
+    File::Remove(m_executableFilepath);
+    File::Move(c_initialOutputDir, m_executableFilepath);
 
     emit NotifyPercent(1.0f);
 

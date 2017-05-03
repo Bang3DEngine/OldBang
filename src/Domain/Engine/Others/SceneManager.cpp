@@ -93,10 +93,9 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     if (!spath.IsFile()) { spath = UPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
     {
-        spath = Path( IO::AppendExtension(
-                                  spath.GetAbsolute(),
-                                  Scene::GetFileExtensionStatic()));
+        spath = spath.AppendExtension(Scene::GetFileExtensionStatic());
     }
+
     if (spath.IsFile()) { sm->m_queuedSceneFilepath = spath; }
     else { Debug_Warn("Scene '" << spath << "' does not exist."); }
 }
@@ -148,7 +147,7 @@ bool SceneManager::IsActiveSceneSaved()
     if (!activeScene) { return false; }
 
     Path openSceneFilepath = SceneManager::GetActiveSceneFilepath();
-    String savedFileXML    = IO::GetFileContents(openSceneFilepath);
+    String savedFileXML    = File::GetContents(openSceneFilepath);
     String currentSceneXML = activeScene->GetXMLInfo().ToString(true);
     return (savedFileXML == currentSceneXML);
 }

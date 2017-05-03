@@ -131,8 +131,8 @@ int main(int argc, char **argv)
 
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
-    String engineRootDirAbs = executableDir.GetDirectory().GetAbsolute();
-    IO::GetInstance()->c_EngineRootAbsolute = engineRootDirAbs;
+    Path engineRootDir = executableDir.GetDirectory();
+    IO::GetInstance()->c_EngineRootAbsolute = engineRootDir.GetAbsolute();
     IO::GetInstance()->c_EngineAssetsRootAbsolute =
             IO::GetEngineRootAbs() + "/EngineAssets";
     #else
