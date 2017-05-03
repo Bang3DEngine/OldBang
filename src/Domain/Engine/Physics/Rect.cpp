@@ -192,3 +192,67 @@ Rect operator*(const Matrix4 &m, const Rect &r)
     return Rect( (m * Vector4(r.GetMin(),0,1) ).xy(),
                  (m * Vector4(r.GetMax(),0,1) ).xy() );
 }
+
+Rect operator/(float a, const Rect &r)
+{
+    return Rect(a / r.GetMin(), a / r.GetMax());
+}
+
+Rect operator/(const Rect &r, float a)
+{
+    return Rect(r.GetMin() / a, r.GetMax() / a);
+}
+
+Rect operator*(float a, const Rect &r)
+{
+    return Rect(a * r.GetMin(), a * r.GetMax());
+}
+
+Rect operator*(const Rect &r, float a)
+{
+    return a * r;
+}
+
+Rect operator*(const Vector2 &v, const Rect &r)
+{
+    return Rect(v.x * r.GetMin().x, v.x * r.GetMax().x,
+                v.y * r.GetMin().y, v.y * r.GetMax().y);
+}
+
+Rect operator*(const Rect &r, const Vector2 &v)
+{
+    return v * r;
+}
+
+Rect operator/(const Vector2 &v, const Rect &r)
+{
+    return Rect(v.x / r.GetMin().x, v.x / r.GetMax().x,
+                v.y / r.GetMin().y, v.y / r.GetMax().y);
+}
+
+Rect operator/(const Rect &r, const Vector2 &v)
+{
+    return Rect(r.GetMin().x / v.x, r.GetMax().x / v.x,
+                r.GetMin().y / v.y, r.GetMax().y / v.y);
+}
+
+Rect operator+(float a, const Rect &r)
+{
+    return Vector2(a) + r;
+}
+
+Rect operator+(const Rect &r, float a)
+{
+    return Vector2(a) + r;
+}
+
+Rect operator+(const Vector2 &v, const Rect &r)
+{
+    return Rect(r.GetMin().x + v.x, r.GetMax().x + v.x,
+                r.GetMin().y + v.y, r.GetMax().y + v.y);
+}
+
+Rect operator+(const Rect &r, const Vector2 &v)
+{
+    return v + r;
+}

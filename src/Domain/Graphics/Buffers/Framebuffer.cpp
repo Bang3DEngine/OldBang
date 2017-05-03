@@ -74,6 +74,7 @@ void Framebuffer::SetDrawBuffers(const Array<AttachmentId> &attIds) const
 {
     GL::ClearError();
     glDrawBuffers(attIds.Size(), (const GLenum*)(&attIds[0]));
+    m_currentAttachmentIds = attIds;
     GL_CheckError();
 }
 
@@ -205,6 +206,16 @@ void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
         delete[] pixels;
     }
     UnBind();
+}
+
+void Framebuffer::PushDrawAttachmentIds()
+{
+    m_latestAttachmentIds = m_currentAttachmentIds;
+}
+
+void Framebuffer::PopDrawAttachmentIds()
+{
+    SetDrawBuffers(m_latestAttachmentIds);
 }
 
 

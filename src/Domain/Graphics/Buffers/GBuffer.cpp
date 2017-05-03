@@ -91,13 +91,16 @@ void GBuffer::RenderToScreen()
     RenderToScreen(GBuffer::AttColor);
 }
 
-void GBuffer::PrepareColorReadBuffer()
+void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
 {
+    PushDrawAttachmentIds();
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
-    glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
-                      0, 0, GetWidth(), GetHeight(),
+    Rect r = (readNDCRect * 0.5f + 0.5f) * GetSize();
+    glBlitFramebuffer(r.GetMin().x, r.GetMin().x, r.GetMax().x, r.GetMax().y,
+                      r.GetMin().x, r.GetMin().x, r.GetMax().x, r.GetMax().y,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    PopDrawAttachmentIds();
 }
 
 void GBuffer::SetAllDrawBuffers() const

@@ -64,6 +64,12 @@ protected:
     GLuint m_depthRenderBufferId = 0;
     Array<AttachmentId> m_colorAttachmentIds;
     Map<AttachmentId, RenderTexture*> m_attachmentId_To_Texture;
+
+    void PushDrawAttachmentIds();
+    void PopDrawAttachmentIds();
+
+private:
+    mutable Array<AttachmentId> m_currentAttachmentIds, m_latestAttachmentIds;
 };
 
 #endif // FRAMEBUFFER_H

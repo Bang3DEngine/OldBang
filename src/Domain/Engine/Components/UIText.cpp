@@ -82,7 +82,7 @@ void UIText::FillQuadsMeshPositions()
 {
     if (!m_font) { p_mesh->LoadPositions({}); return; }
 
-    Array<Vector3> quadPos;
+    List<Vector2> quadPos;
 
     float totalAdv = 0.0f;
     Vector2 contentBoundMin = Vector2(Math::Infinity<float>());
@@ -100,10 +100,10 @@ void UIText::FillQuadsMeshPositions()
         contentBoundMax.x = Math::Max(contentBoundMax.x, charRectMax.x);
         contentBoundMax.y = Math::Max(contentBoundMax.y, charRectMax.y);
 
-        quadPos.PushBack( Vector3(charRectMin.x, charRectMin.y, 0) );
-        quadPos.PushBack( Vector3(charRectMax.x, charRectMin.y, 0) );
-        quadPos.PushBack( Vector3(charRectMax.x, charRectMax.y, 0) );
-        quadPos.PushBack( Vector3(charRectMin.x, charRectMax.y, 0) );
+        quadPos.Add( Vector2(charRectMin.x, charRectMin.y) );
+        quadPos.Add( Vector2(charRectMax.x, charRectMin.y) );
+        quadPos.Add( Vector2(charRectMax.x, charRectMax.y) );
+        quadPos.Add( Vector2(charRectMin.x, charRectMax.y) );
 
         const char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         const float advance = GetCharAdvance(c, nextChar);
@@ -112,15 +112,19 @@ void UIText::FillQuadsMeshPositions()
     contentBoundMax.x = Math::Max(contentBoundMax.x,
                                   contentBoundMin.x + totalAdv);
 
+    Array<Vector2> positions2d;
+    Array<Vector3> positions3d;
     Vector2 contentSize = contentBoundMax - contentBoundMin;
-    for (Vector3 &pos : quadPos)
+    for (const Vector2 &pos : quadPos)
     {
-        Vector2 pos2 = pos.xy();
-        ApplyAlignmentOffset(contentSize, &pos2);
-        pos = Vector3(pos2, pos.z);
+        Vector2 posAligned = pos;
+        ApplyAlignmentOffset(contentSize, &posAligned);
+        positions3d.Add(Vector3(posAligned, 0));
+        positions2d.Add(posAligned);
     }
 
-    p_mesh->LoadPositions(quadPos);
+    m_charQuadsRect = Rect::GetBoundingRectFromPositions(positions2d.To<List>());
+    p_mesh->LoadPositions(positions3d);
 }
 
 void UIText::FillQuadsMeshUvs()
@@ -286,6 +290,20 @@ void UIText::SetHorizontalSpacing(int horizontalSpacing)
 int UIText::GetHorizontalSpacing() const
 {
     return m_horizontalSpacing;
+}
+
+Rect UIText::GetNDCRect() const
+{
+    Matrix4 m; transform->GetLocalToWorldMatrix(&m);
+    return m * m_charQuadsRect;
+}
+
+void UIText::Bind() const
+{
+    Rect screenNDCRect = GetNDCRect() * 1.1f;
+    GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
+    gbuffer->PrepareColorReadBuffer(screenNDCRect);
+    UIRenderer::Bind();
 }
 
 Rect UIText::GetBoundingRect(Camera *camera) const

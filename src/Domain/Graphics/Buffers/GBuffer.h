@@ -40,7 +40,7 @@ public:
     void RenderToScreen(AttachmentId attachmentId);
     void RenderToScreen();
 
-    void PrepareColorReadBuffer();
+    void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);
 
     void SetAllDrawBuffers() const override;
     /**

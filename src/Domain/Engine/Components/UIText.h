@@ -48,14 +48,19 @@ public:
     void SetHorizontalSpacing(int horizontalSpacing);
     int GetHorizontalSpacing() const;
 
+    Rect GetNDCRect() const;
+
+    virtual void Bind() const override;
+
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
-private:
+protected:
     String m_content        = "";
     Font *m_font            = nullptr;
     int m_textSize          = 64;
     int m_horizontalSpacing = 5;
     bool m_kerning          = false;
+    Rect m_charQuadsRect    = Rect::Empty;
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
