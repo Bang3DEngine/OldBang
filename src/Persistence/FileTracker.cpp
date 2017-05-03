@@ -4,7 +4,7 @@
 #include <QDateTime>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
 #include "Bang/AssetsManager.h"
@@ -131,8 +131,8 @@ void FileTracker::ReloadChangedFiles()
 
 List<Path> FileTracker::GetPathsToTrack() const
 {
-    Path engineRoot(IO::GetEngineAssetsRootAbs());
-    Path assetsRoot(IO::GetProjectAssetsRootAbs());
+    Path engineRoot(Paths::EngineAssets());
+    Path assetsRoot(Paths::ProjectAssets());
 
     List<Path> files;
     files = files.Concat(assetsRoot.GetFiles(true));

@@ -155,7 +155,6 @@ HEADERS +=                                                          \
     include/Bang/Bang.h                                             \
     src/Persistence/AssetsManager.h                                 \
     src/Domain/Engine/Others/Input.h                                \
-    src/Persistence/IO.h                                            \
     src/Domain/Engine/Components/LineRenderer.h                     \
     src/Domain/Engine/Components/Renderer.h                         \
     src/Domain/Engine/Physics/Vector3.h                             \
@@ -266,7 +265,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/FontFile.h \
     src/Persistence/Files/MaterialFile.h \
     src/Persistence/Files/ShaderProgramFile.h \
-    src/Persistence/Files/Texture2DFile.h
+    src/Persistence/Files/Texture2DFile.h \
+    src/Persistence/Paths.h
 
 EDITOR {
 HEADERS += \
@@ -379,7 +379,6 @@ SOURCES += \
     src/Domain/Engine/Assets/Prefab.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Domain/Engine/Others/Input.cpp \
-    src/Persistence/IO.cpp \
     src/Persistence/Files/TextFile.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
@@ -487,7 +486,8 @@ SOURCES += \
     src/Persistence/Files/ShaderProgramFile.cpp \
     src/Persistence/Files/MaterialFile.cpp \
     src/Persistence/Files/AudioClipFile.cpp \
-    src/Persistence/Files/FontFile.cpp
+    src/Persistence/Files/FontFile.cpp \
+    src/Persistence/Paths.cpp
 
 EDITOR {
     SOURCES += \

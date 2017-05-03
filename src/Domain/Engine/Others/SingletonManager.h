@@ -6,7 +6,7 @@
 #include "Bang/Object.h"
 #include "Bang/TypeMap.h"
 #include "Bang/IWindow.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 
 class IO;
 class Time;
@@ -39,10 +39,11 @@ public:
      * So, they should be called in the main() function.
      */
     template<class T>
-    static void Set(T* singleton)
+    static T* Set(T* singleton)
     {
-        if (!SingletonManager::s_mainBinarySM) { return; }
-        return SingletonManager::s_mainBinarySM->m_singletons.Set<T>(singleton);
+        if (!SingletonManager::s_mainBinarySM) { return nullptr; }
+        SingletonManager::s_mainBinarySM->m_singletons.Set<T>(singleton);
+        return singleton;
     }
 
     template<class T>

@@ -2,7 +2,7 @@
 
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"

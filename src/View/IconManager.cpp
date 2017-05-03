@@ -1,6 +1,6 @@
 #include "Bang/IconManager.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"

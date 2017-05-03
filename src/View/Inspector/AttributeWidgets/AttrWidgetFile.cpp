@@ -5,7 +5,7 @@
 #include <QPushButton>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Dialog.h"
 #include "Bang/Explorer.h"
@@ -201,7 +201,7 @@ const Path &AttrWidgetFile::GetPath() const
 void AttrWidgetFile::OnDoubleClick()
 {
     ENSURE(m_filepath.Exists());
-    ENSURE(m_filepath.GetAbsolute().BeginsWith( IO::GetProjectRootAbs() ));
+    ENSURE(m_filepath.BeginsWith( Paths::Project() ));
     Explorer::GetInstance()->SelectPath(m_filepath);
 }
 

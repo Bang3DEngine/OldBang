@@ -6,7 +6,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourManager.h"
 

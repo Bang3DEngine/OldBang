@@ -1,6 +1,6 @@
 #include "PostProcessEffect.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
 #include "Bang/ShaderManager.h"

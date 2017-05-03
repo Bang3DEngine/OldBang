@@ -4,7 +4,7 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"

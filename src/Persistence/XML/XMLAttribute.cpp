@@ -5,7 +5,7 @@
 
 #include "Bang/Debug.h"
 #include "Bang/Object.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -232,7 +232,7 @@ void XMLAttribute::SetFilepath(const Path &filepath,
         SetProperty(extensionProp);
     }
 
-    if (IO::IsEngineFile(filepath.GetAbsolute()))
+    if (Paths::IsEnginePath(filepath))
     {
         SetProperty(XMLProperty::IsEngineFile);
     }

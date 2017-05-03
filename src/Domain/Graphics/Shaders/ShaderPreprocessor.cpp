@@ -1,6 +1,6 @@
 #include "Bang/ShaderPreprocessor.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/CodePreprocessor.h"
 
 const String ShaderPreprocessor::GLSLVersionString = "#version 130";

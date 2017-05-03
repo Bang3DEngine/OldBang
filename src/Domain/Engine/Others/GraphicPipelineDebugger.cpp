@@ -1,6 +1,6 @@
 #include "Bang/GraphicPipelineDebugger.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"

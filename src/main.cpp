@@ -7,7 +7,9 @@
 
 #include "Bang/glm/glm.hpp"
 
-#include "Bang/IO.h"
+#include "Bang/Path.h"
+#include "Bang/Array.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/Timer.h"
@@ -15,6 +17,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Shader.h"
 #include "Bang/Screen.h"
+#include "Bang/String.h"
 #include "Bang/XMLNode.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Behaviour.h"
@@ -42,8 +45,6 @@
 
 #endif
 
-#include "Bang/Array.h"
-#include "Bang/String.h"
 
 void LoadStylesheet(QApplication *app)
 {
@@ -77,7 +78,7 @@ void LoadStylesheet(QApplication *app)
 
     /*
     // Load dark Window theme
-    QFile f((IO::GetEngineAssetsRootAbs() + "/qdarkstyle/style.qss").ToQString()
+    QFile f((Paths::EngineAssets() + "/qdarkstyle/style.qss").ToQString()
             );
     if (!f.exists())
     {
@@ -102,7 +103,6 @@ void InitSingletonManager()
     SingletonManager::InitSingletonManagerFromMainBinary();
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
-    IO::InitFromMainBinary();
 }
 
 void InitEditorOrGame(QMainWindow *window, Application *app)
@@ -117,9 +117,6 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     Screen::GetInstance()->initializeGL();
 }
 
-using namespace std;
-
-#include "Bang/Path.h"
 int main(int argc, char **argv)
 {
 	Application app(argc, argv);
@@ -132,13 +129,9 @@ int main(int argc, char **argv)
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
     Path engineRootDir = executableDir.GetDirectory();
-    IO::GetInstance()->c_EngineRootAbsolute = engineRootDir.GetAbsolute();
-    IO::GetInstance()->c_EngineAssetsRootAbsolute =
-            IO::GetEngineRootAbs() + "/EngineAssets";
+    Paths::SetEnginePath(engineRootDir);
     #else
-    IO::GetInstance()->c_EngineRootAbsolute = executableDir + "/GameData";
-    IO::GetInstance()->c_EngineAssetsRootAbsolute =
-            IO::GetEngineRootAbs() + "/EngineAssets";
+    Paths::SetEnginePath(executableDir.Append("GameData"));
     #endif
 
     Path loadedProjectFilepath;

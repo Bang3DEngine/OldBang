@@ -1,6 +1,6 @@
 #include "Bang/AudioClipFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/XMLNode.h"
 #include "Bang/AudioClip.h"
 #include "Bang/XMLParser.h"

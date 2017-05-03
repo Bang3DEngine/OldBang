@@ -3,16 +3,12 @@
 
 #include <QFileInfo>
 
-#include "Bang/IO.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
-// User assets path
-#define UPATH(path) (Path(IO::GetProjectAssetsRootAbs()).Append(path))
-
-// Engine assets path
-#define EPATH(path) (Path(IO::GetEngineAssetsRootAbs()).Append(path))
+#define EPATH(path) Path::EnginePath(path) // Engine assets path
+#define UPATH(path) Path::UserPath(path)   // User assets path
 
 class Path : public IToString
 {
@@ -41,6 +37,9 @@ public:
     virtual String ToString() const override;
     bool IsEmpty() const;
 
+    bool BeginsWith(const Path &path) const;
+    bool BeginsWith(const String &path) const;
+
     Path Append(const Path& path) const;
     Path Append(const String& str) const;
     Path AppendRaw(const String& str) const;
@@ -56,6 +55,9 @@ public:
     bool operator<(const Path &rhs) const;
 
     static const Path Empty;
+
+    static Path EnginePath(const String &path);
+    static Path UserPath(const String &path);
 
 private:
     String m_absolutePath   = "";

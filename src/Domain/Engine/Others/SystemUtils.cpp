@@ -4,29 +4,27 @@
 #include <QLibrary>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Behaviour.h"
 #include "Bang/SingletonManager.h"
 
 List<Path> SystemUtils::GetAllEngineObjects(bool editorMode)
 {
-    String subdir = editorMode ? "/bin/objEditor" : "/bin/objGame";
-    return Path(IO::GetEngineRootAbs() + subdir).GetFiles(true, {"o"});
+    Path subdir = editorMode ? Path("bin/objEditor") : Path("bin/objGame");
+    return Paths::Engine().Append(subdir).GetFiles(true, {"o"});
 }
 
 List<Path> SystemUtils::GetAllProjectSubDirs()
 {
-    Path projectRootPath(IO::GetProjectRootAbs());
-    List<Path> subdirs = projectRootPath.GetSubDirectories(true);
-    subdirs.PushFront(projectRootPath);
+    List<Path> subdirs = Paths::Project().GetSubDirectories(true);
+    subdirs.PushFront(Paths::Project());
     return subdirs;
 }
 
 List<Path> SystemUtils::GetAllEngineSubDirs()
 {
-    Path engineRootPath(IO::GetEngineRootAbs());
-    List<Path> subdirs = engineRootPath.GetSubDirectories(true);
-    subdirs.PushFront(engineRootPath);
+    List<Path> subdirs = Paths::Engine().GetSubDirectories(true);
+    subdirs.PushFront(Paths::Engine());
     return subdirs;
 }
 
@@ -166,11 +164,11 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     for(String &qtIncludeDir : qtIncludeDirsStr) { qtIncludeDir.Prepend("-I"); }
     args.Add(qtIncludeDirsStr);
 
-    args.Add("-I" + IO::GetEngineRootAbs() + "/include");
+    args.Add("-I" + Paths::Engine() + "/include");
     if (addAssetsIncludes)
     {
         List<Path> assetsSubDirs =
-                   Path(IO::GetProjectAssetsRootAbs()).GetSubDirectories(true);
+                Paths::ProjectAssets().GetSubDirectories(true);
         List<String> assetsSubDirsStr = SystemUtils::ToStringList(assetsSubDirs);
         for(String &subDir : assetsSubDirsStr) { subDir.Prepend("-I"); }
         args.Add(assetsSubDirsStr);
@@ -179,7 +177,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     List<Path> objectPaths;
     if (addProjObjects)
     {
-        Path projectDir(IO::GetProjectRootAbs());
+        Path projectDir(Paths::Project());
         objectPaths.Add( projectDir.GetFiles(true, {"*.o"}) );
     }
 

@@ -5,6 +5,7 @@
 #include <QTreeView>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 
 class QTimer;
@@ -29,8 +30,8 @@ private:
     QFileSystemModel *m_fileSystemModel = nullptr;
     Explorer *m_explorer = nullptr;
 
-    String m_topPath = "";
-    void SetDir(const String &path);
+    Path m_topPath;
+    void SetDir(const Path &path);
 
     void *m_lastSelectedModelIndexPointer = nullptr;
 };

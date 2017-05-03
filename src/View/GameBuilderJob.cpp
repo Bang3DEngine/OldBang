@@ -1,6 +1,6 @@
 #include "Bang/GameBuilderJob.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/GameBuilder.h"
@@ -65,9 +65,8 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const Path c_initialOutputDir = Path(IO::GetEngineRootAbs())
-                                          .Append("bin/Game")
-                                          .AppendExtension("exe");
+    const Path c_initialOutputDir = Paths::Engine().Append("bin/Game")
+                                                   .AppendExtension("exe");
     File::Remove(m_executableFilepath);
     File::Move(c_initialOutputDir, m_executableFilepath);
 

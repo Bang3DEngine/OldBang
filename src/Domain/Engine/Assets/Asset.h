@@ -1,7 +1,7 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/IToString.h"

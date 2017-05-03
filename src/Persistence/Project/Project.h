@@ -17,7 +17,7 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    const Path& GetProjectRootFilepath() const;
+    const Path& GetProjectDirPath() const;
     Path GetProjectDir() const;
     Path GetProjectAssetsRootFilepath() const;
     Path GetProjectFileFilepath() const;

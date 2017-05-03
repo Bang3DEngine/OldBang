@@ -14,7 +14,7 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {
     m_fileSystemModel = new QFileSystemModel();
 
-    m_topPath = IO::GetEngineAssetsRootAbs();
+    m_topPath = Paths::EngineAssets();
 
     setModel(m_fileSystemModel);
     SetDir(m_topPath);
@@ -41,7 +41,7 @@ ExplorerDirTree::~ExplorerDirTree()
 
 void ExplorerDirTree::CheckSelection()
 {
-    SetDir(IO::GetProjectAssetsRootAbs());
+    SetDir(Paths::ProjectAssets());
 
     m_explorer = EditorWindow::GetInstance()->widgetListExplorer;
     if (selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
@@ -62,7 +62,8 @@ void ExplorerDirTree::OnDirLoaded(QString dir)
     this->expandAll();
 }
 
-void ExplorerDirTree::SetDir(const String &path)
+void ExplorerDirTree::SetDir(const Path &path)
 {
-    setRootIndex(m_fileSystemModel->setRootPath(path.ToQString()));
+    setRootIndex(
+            m_fileSystemModel->setRootPath(path.GetAbsolute().ToQString()));
 }

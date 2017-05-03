@@ -4,7 +4,7 @@
 #include <QLibrary>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
 #include "Bang/Debug.h"

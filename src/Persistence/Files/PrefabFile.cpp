@@ -1,6 +1,6 @@
 #include "Bang/PrefabFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Prefab.h"
 #include "Bang/XMLParser.h"

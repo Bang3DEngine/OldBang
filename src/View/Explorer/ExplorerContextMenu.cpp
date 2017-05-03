@@ -3,7 +3,7 @@
 #include <QTreeWidgetItem>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
 #include "Bang/Prefab.h"

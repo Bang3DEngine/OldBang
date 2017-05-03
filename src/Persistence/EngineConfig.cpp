@@ -1,6 +1,6 @@
 #include "Bang/EngineConfig.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/FileReader.h"
 
@@ -40,7 +40,7 @@ void EngineConfig::WriteListToFile(const Path &filepath,
 
 Path EngineConfig::GetRecentProjectsFilepath()
 {
-    return Path(IO::GetEngineRootAbs()).Append("config/RecentProjects.cfg");
+    return Paths::Engine().Append("config/RecentProjects.cfg");
 }
 
 List<Path> EngineConfig::GetRecentProjectsList()

@@ -4,7 +4,7 @@
 
 #include "Bang/File.h"
 #include "Bang/Debug.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,

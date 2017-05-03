@@ -3,7 +3,7 @@
 #include <QLibrary>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Time.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -49,7 +49,7 @@ QLibrary *BehaviourManager::GetBehavioursMergedLibrary()
 
 List<Path> BehaviourManager::GetBehavioursSourcesFilepathsList()
 {
-    return Path(IO::GetProjectAssetsRootAbs()).GetFiles(true, {"cpp"});
+    return Paths::ProjectAssets().GetFiles(true, {"cpp"});
 }
 
 List<Path> BehaviourManager::GetBehavioursObjectsFilepathsList()
@@ -104,11 +104,11 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
     #else
     // In game, the library is compiled from before.
     Project *project = ProjectManager::GetCurrentProject();
-    String libDir = IO::GetProjectLibsRootAbs();
+    Path libDir = Paths::ProjectLibraries();
     String projId = project->GetProjectRandomId();
     String libFilepath = "Behaviours.so." + projId + ".1.1";
-    String libOutput = libDir + "/" + libFilepath;
-    bm->OnMergedLibraryCompiled(libOutput.ToQString(), "");
+    Path libOutput = libDir.Append(libFilepath);
+    bm->OnMergedLibraryCompiled(libOutput.GetAbsolute().ToQString(), "");
     return true;
     #endif
 }

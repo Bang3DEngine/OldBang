@@ -1,6 +1,6 @@
 #include "Bang/SoundFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/AudioClip.h"
 #include "Bang/AudioSource.h"
 #include "Bang/IconManager.h"

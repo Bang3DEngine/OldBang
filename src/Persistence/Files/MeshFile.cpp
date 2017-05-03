@@ -1,6 +1,6 @@
 #include "Bang/MeshFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Mesh.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"

@@ -3,7 +3,7 @@
 #include <QTimer>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Map.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
@@ -74,7 +74,7 @@ FileReferencesManager *FileReferencesManager::GetInstance()
 void FileReferencesManager::RefactorFiles(const Path &pathBefore,
                                           const Path &pathNow)
 {
-    List<Path> allFiles = Path(IO::GetProjectAssetsRootAbs()).GetFiles(true);
+    List<Path> allFiles = Paths::ProjectAssets().GetFiles(true);
     for (const Path &filepath : allFiles)
     {
         File f(filepath);

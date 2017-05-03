@@ -34,13 +34,12 @@ QWidget *Dialog::GetCurrentWindow()
     return nullptr;
 }
 
-Path Dialog::GetOpenDirpath(const String &caption,
-                            const String &initDirectory)
+Path Dialog::GetOpenDirpath(const String &caption, const Path &initDirectory)
 {
     Path dir(QFileDialog::getExistingDirectory(
                     Dialog::GetCurrentWindow(),
                     caption.ToQString(),
-                    initDirectory.ToQString(),
+                    initDirectory.GetAbsolute().ToQString(),
                     QFileDialog::ShowDirsOnly |
                     QFileDialog::DontResolveSymlinks //|
                     //QFileDialog::DontUseNativeDialog
@@ -51,13 +50,13 @@ Path Dialog::GetOpenDirpath(const String &caption,
 }
 
 Path Dialog::GetOpenFilepath(const String &caption,
-                               const String &extension,
-                               const String &initDir)
+                             const String &extension,
+                             const Path &initDir)
 {
     Path filepath(QFileDialog::getOpenFileName(
                       Dialog::GetCurrentWindow(),
                       caption.ToQString(),
-                      initDir.ToQString(),
+                      initDir.GetAbsolute().ToQString(),
                       Dialog::GetExtensionFilterString(extension).ToQString(),
                       nullptr,
                       0 // QFileDialog::DontUseNativeDialog
@@ -69,14 +68,14 @@ Path Dialog::GetOpenFilepath(const String &caption,
 
 Path Dialog::GetSaveFilepath(const String &caption,
                              const String &extension,
-                             const String &initPath,
+                             const Path &initPath,
                              const String &suggestedFilename,
                              QWidget *parent)
 {
     Path filepath(QFileDialog::getSaveFileName(
                     parent ? parent : Dialog::GetCurrentWindow(),
                     caption.ToQString(),
-                    String(initPath + "/" + suggestedFilename).ToQString(),
+                    initPath.Append(suggestedFilename).GetAbsolute().ToQString(),
                     Dialog::GetExtensionFilterString(extension).ToQString(),
                     nullptr,
                     0 // QFileDialog::DontUseNativeDialog

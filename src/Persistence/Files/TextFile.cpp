@@ -1,6 +1,6 @@
 #include "Bang/TextFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/FileReader.h"
 #include "Bang/Inspectable.h"
 #include "Bang/FileInspectable.h"

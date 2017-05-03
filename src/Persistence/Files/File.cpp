@@ -9,7 +9,7 @@
 #include "Bang/SerializableObject.h"
 #endif
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Font.h"
 #include "Bang/Mesh.h"
 #include "Bang/Scene.h"

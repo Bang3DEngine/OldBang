@@ -1,6 +1,6 @@
 #include "Bang/GameBuilder.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
@@ -35,7 +35,7 @@ GameBuilder *GameBuilder::GetInstance()
 Path GameBuilder::AskForExecutableFilepath()
 {
     // Get the executable output filepath
-    const String defaultOutputDirectory = IO::GetProjectRootAbs();
+    const Path defaultOutputDirectory = Paths::Project();
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
     Path executableFilepath =
         Dialog::GetSaveFilepath(
@@ -151,8 +151,8 @@ void GameBuilder::OnGameBuildingHasBeenCanceled()
 
 bool GameBuilder::CompileGameExecutable()
 {
-    List<Path> sceneFiles = Path(IO::GetProjectAssetsRootAbs()).GetFiles(
-                true, {"*." + Scene::GetFileExtensionStatic()});
+    List<Path> sceneFiles = Paths::ProjectAssets().GetFiles(
+                              true, {"*." + Scene::GetFileExtensionStatic()});
     if (sceneFiles.Empty())
     {
         emit DialogError("Error building game",
@@ -161,14 +161,13 @@ bool GameBuilder::CompileGameExecutable()
         return false;
     }
 
-    const Path initialOutputDir = Path(IO::GetEngineRootAbs())
-                                        .Append("bin/Game")
-                                        .AppendExtension("exe");
+    const Path initialOutputDir = Paths::Engine().Append("bin/Game")
+                                                 .AppendExtension("exe");
     File::Remove(initialOutputDir);
 
     bool ok = false;
     String output = "";
-    String cmd = IO::GetEngineRootAbs() + "/scripts/compile.sh";
+    String cmd = Paths::Engine() + "/scripts/compile.sh";
     SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE_MODE"},
                         &output, &ok);
     ok = ok && initialOutputDir.IsFile();
@@ -187,15 +186,14 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
-    if (!File::DuplicateDir(Path(IO::GetEngineAssetsRootAbs()),
-                          dataDir.Append("EngineAssets")))
+    if (!File::DuplicateDir(Paths::EngineAssets(),
+                            dataDir.Append("EngineAssets")))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!File::DuplicateDir(Path(IO::GetProjectAssetsRootAbs()),
-                          dataDir.Append("Assets")))
+    if (!File::DuplicateDir(Paths::ProjectAssets(), dataDir.Append("Assets")))
     {
         return false;
     }

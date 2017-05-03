@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Time.h"
 #include "Bang/XMLNode.h"
 
@@ -36,7 +36,7 @@ void Project::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("RandomID", m_randomId);
 }
 
-const Path&  Project::GetProjectRootFilepath() const
+const Path&  Project::GetProjectDirPath() const
 {
     return m_projectRootFilepath;
 }

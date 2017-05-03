@@ -8,7 +8,7 @@
 #include "Bang/Asset.h"
 #include "Bang/Object.h"
 #include "Bang/XMLParser.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/BehaviourManager.h"
 
 class AssetsManager

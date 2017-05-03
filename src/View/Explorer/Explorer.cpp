@@ -3,7 +3,7 @@
 #include <QScrollBar>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Input.h"
 #include "Bang/Debug.h"
 #include "Bang/Prefab.h"
@@ -85,7 +85,7 @@ void Explorer::OnWindowShown()
                      this, SLOT(OnIconSizeSliderValueChanged(int)));
 
     win->sliderExplorerIconSize->setValue(30);
-    SetDir(  Path(IO::GetProjectAssetsRootAbs()) );
+    SetDir(Paths::ProjectAssets());
 }
 
 void Explorer::OnButtonDirUpClicked()
@@ -322,7 +322,7 @@ void Explorer::OnDirLoaded(QString dir)
     ENSURE(EditorWindow::GetInstance());
 
     if (GetCurrentDir().GetAbsolute().Length() <=
-        IO::GetProjectAssetsRootAbs().Length())
+        Paths::ProjectAssets().GetAbsolute().Length())
     {
         m_buttonDirUp->setEnabled(false);
         m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);

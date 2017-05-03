@@ -3,7 +3,7 @@
 #include <QThread>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -36,7 +36,7 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 
 void BehaviourRefresherTimer::RefreshBehaviours() const
 {
-    BehaviourManager::SetCurrentLibsDir( Path(IO::GetProjectLibsRootAbs()) );
+    BehaviourManager::SetCurrentLibsDir(Paths::ProjectLibraries());
 
     const List<Path>& behaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();

@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Color.h"
 #include "Bang/Debug.h"
@@ -57,9 +57,9 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
     setWindowTitle(title.ToQString());
 
     List<Path> projectFilepaths =
-            Path(IO::GetProjectAssetsRootAbs()).GetFiles(true, extensions);
+            Paths::ProjectAssets().GetFiles(true, extensions);
     List<Path> engineFilepaths =
-            Path(IO::GetEngineAssetsRootAbs()).GetFiles(true, extensions);
+            Paths::EngineAssets().GetFiles(true, extensions);
 
     engineFilepaths.PushFront(  Path("None") );
     projectFilepaths.PushFront( Path("None") );

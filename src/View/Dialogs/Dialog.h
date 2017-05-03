@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/String.h"
 
 class Dialog
@@ -20,16 +20,13 @@ public:
     };
 
     static Path GetOpenDirpath(const String &caption = "Choose a directory",
-                               const String &initDirectory =
-                                                String(QDir::homePath()) );
+                               const Path &initDirectory = Paths::Home() );
     static Path GetOpenFilepath(const String &caption = "Open file",
                                 const String &extension = "*",
-                                const String &initDir =
-                                            IO::GetProjectAssetsRootAbs());
+                                const Path &initDir = Paths::ProjectAssets());
     static Path GetSaveFilepath(const String &caption = "Save file",
                                 const String &extension = "*",
-                                const String &initPath =
-                                            IO::GetProjectAssetsRootAbs(),
+                                const Path &initPath = Paths::ProjectAssets(),
                                 const String &suggestedFilename = "",
                                 QWidget *parent = nullptr);
 

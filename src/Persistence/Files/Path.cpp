@@ -4,7 +4,7 @@
 #include <QFile>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Array.h"
 
 const Path Path::Empty;
@@ -160,25 +160,28 @@ const String &Path::GetAbsolute() const
 
 String Path::GetRelative() const
 {
-    const String &engineAssets  = IO::GetEngineAssetsRootAbs();
-    const String &projectAssets = IO::GetProjectAssetsRootAbs();
-    const String &projectRoot   = IO::GetProjectRootAbs();
-    const String &engineRoot    = IO::GetEngineRootAbs();
-    if (GetAbsolute().BeginsWith(engineAssets))
+    const Path &engineAssets = Paths::EngineAssets();
+    if (BeginsWith(engineAssets))
     {
-        return GetAbsolute().SubString(engineAssets.Length() + 1);
+        return GetAbsolute().SubString(engineAssets.GetAbsolute().Length() + 1);
     }
-    else if (GetAbsolute().BeginsWith(projectAssets))
+
+    const Path &projectAssets = Paths::ProjectAssets();
+    if (BeginsWith(projectAssets))
     {
-        return GetAbsolute().SubString(projectAssets.Length() + 1);
+        return GetAbsolute().SubString(projectAssets.GetAbsolute().Length() + 1);
     }
-    else if (GetAbsolute().BeginsWith(engineRoot))
+
+    const Path &engineRoot = Paths::Engine();
+    if (BeginsWith(engineRoot))
     {
-        return GetAbsolute().SubString(engineRoot.Length() + 1);
+        return GetAbsolute().SubString(engineRoot.GetAbsolute().Length() + 1);
     }
-    else if (GetAbsolute().BeginsWith(projectRoot))
+
+    const Path &projectRoot = Paths::Project();
+    if (BeginsWith(projectRoot))
     {
-        return GetAbsolute().SubString(projectRoot.Length() + 1);
+        return GetAbsolute().SubString(projectRoot.GetAbsolute().Length() + 1);
     }
 
     return GetAbsolute();
@@ -204,6 +207,16 @@ String Path::ToString() const
 bool Path::IsEmpty() const
 {
     return GetAbsolute().Empty();
+}
+
+bool Path::BeginsWith(const Path &path) const
+{
+    return BeginsWith(path.GetAbsolute());
+}
+
+bool Path::BeginsWith(const String &path) const
+{
+    return GetAbsolute().BeginsWith(path);
 }
 
 Path Path::Append(const Path &pathRHS) const
@@ -269,6 +282,16 @@ bool Path::operator==(const Path &rhs) const
 bool Path::operator<(const Path &rhs) const
 {
     return GetAbsolute() < rhs.GetAbsolute();
+}
+
+Path Path::EnginePath(const String &path)
+{
+    return Paths::EngineAssets().Append(path);
+}
+
+Path Path::UserPath(const String &path)
+{
+    return Paths::ProjectAssets().Append(path);
 }
 
 Path Path::GetNextDuplicatePath(const Path &filepath)

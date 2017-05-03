@@ -4,7 +4,7 @@
 #include <QMutex>
 #include "Bang/WinUndef.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Set.h"
 #include "Bang/Map.h"
 #include "Bang/List.h"
@@ -30,9 +30,8 @@ public:
         behaviourPath = behPath;
         String code = File::GetContents(behaviourPath);
 
-        List<Path> includePaths =
-                Path(IO::GetProjectAssetsRootAbs()).GetSubDirectories(true);
-        includePaths.Add( Path(IO::GetProjectAssetsRootAbs()) );
+        List<Path> includePaths = Paths::ProjectAssets().GetSubDirectories(true);
+        includePaths.Add(Paths::ProjectAssets());
         CodePreprocessor::PreprocessCode(&code, includePaths);
         hash = File::GetHashFromString(code);
     }

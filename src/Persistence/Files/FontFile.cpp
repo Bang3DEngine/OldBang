@@ -1,6 +1,6 @@
 #include "Bang/FontFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"

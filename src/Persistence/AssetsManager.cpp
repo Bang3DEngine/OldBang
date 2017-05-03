@@ -4,7 +4,7 @@
 #include "Bang/Scene.h"
 #include "Bang/FileReader.h"
 #include "Bang/Application.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/SceneManager.h"
 
 AssetsManager::AssetsManager()

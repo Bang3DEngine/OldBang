@@ -1,6 +1,6 @@
 #include "Bang/SelectionFramebuffer.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/Cursor.h"

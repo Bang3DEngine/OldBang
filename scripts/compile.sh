@@ -9,7 +9,7 @@ command_exists () {
     type "$1" &> /dev/null ;
 }
 
-NUM_THREADS=16
+NUM_THREADS=6
 BUILD_MODE=$1
 RELEASE_OR_DEBUG=$2
 

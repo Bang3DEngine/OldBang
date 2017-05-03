@@ -1,6 +1,6 @@
 #include "Bang/Texture2D.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"

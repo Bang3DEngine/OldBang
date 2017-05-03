@@ -2,14 +2,15 @@
 
 #include <string>
 
+#include "Bang/Paths.h"
 #include "Bang/Time.h"
 #include "Bang/List.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
 #include "Bang/XMLNode.h"
 #include "Bang/XMLParser.h"
-#include "Bang/IO.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EngineConfig.h"
 
@@ -50,15 +51,10 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
     #endif
 
-    // Set persistence variables
-    IO *io = IO::GetInstance();
-    io->c_ProjectRootAbsolute =
-            currentProject->GetProjectRootFilepath().GetAbsolute();
-    io->c_ProjectAssetsRootAbsolute = IO::GetProjectRootAbs() + "/Assets";
+    Paths::SetProjectPath(currentProject->GetProjectDirPath());
 
     // Open the first found scene
-    Path assetsPath(IO::GetProjectAssetsRootAbs());
-    List<Path> sceneFilepaths = assetsPath.GetFiles(true,
+    List<Path> sceneFilepaths = Paths::ProjectAssets().GetFiles(true,
                                    {"*." + Scene::GetFileExtensionStatic()});
     #ifdef BANG_EDITOR
     QtProjectManager::CreateQtProjectFile();
@@ -191,7 +187,7 @@ Path ProjectManager::DialogOpenProject()
     Path projectFilepath =
             Dialog::GetOpenFilepath("Select the project file to be opened",
                                     Project::GetFileExtensionStatic(),
-                                    String(QDir::homePath()) );
+                                    Paths::Home());
     return projectFilepath;
 }
 #endif

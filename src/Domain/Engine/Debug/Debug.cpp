@@ -8,7 +8,7 @@
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/SceneManager.h"
 
 #ifdef BANG_EDITOR

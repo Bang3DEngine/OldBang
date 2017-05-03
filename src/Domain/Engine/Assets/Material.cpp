@@ -1,6 +1,6 @@
 #include "Bang/Material.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
 #include "Bang/Shader.h"

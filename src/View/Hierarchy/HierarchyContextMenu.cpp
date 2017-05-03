@@ -138,7 +138,7 @@ void HierarchyContextMenu::OnCreatePrefab()
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
     Path filepath = Dialog::GetSaveFilepath("Create Prefab...",
                                             Prefab::GetFileExtensionStatic(),
-                                            go->name);
+                                            Path(go->name));
     if (filepath.IsFile())
     {
         Prefab *prefab = new Prefab(go);

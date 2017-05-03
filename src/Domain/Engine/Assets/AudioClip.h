@@ -8,7 +8,7 @@
 #include "Bang/Array.h"
 #include "Bang/Asset.h"
 #include "Bang/String.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 
 class AudioSource;
 class AudioClip : public Asset

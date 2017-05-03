@@ -5,7 +5,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "Bang/IO.h"
+#include "Bang/File.h"
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"

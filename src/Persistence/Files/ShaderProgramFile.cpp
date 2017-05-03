@@ -1,6 +1,6 @@
 #include "ShaderProgramFile.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"

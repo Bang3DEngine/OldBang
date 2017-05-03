@@ -1,6 +1,6 @@
 #include "Bang/SceneManager.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/XMLParser.h"

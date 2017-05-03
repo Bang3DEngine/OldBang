@@ -1,6 +1,6 @@
 #include "Bang/MenuBar.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Font.h"
 #include "Bang/Mesh.h"
 #include "Bang/Debug.h"
@@ -208,7 +208,7 @@ void MenuBar::OnSaveSceneAs() const
     sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),
-                             IO::GetProjectAssetsRootAbs(),
+                             Paths::ProjectAssets(),
                              sceneName);
     ENSURE(!sceneFilepath.IsEmpty());
 

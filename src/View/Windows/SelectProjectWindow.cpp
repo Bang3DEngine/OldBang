@@ -2,7 +2,7 @@
 
 #include "Bang/Debug.h"
 #include "Bang/Project.h"
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/EngineConfig.h"
 #include "Bang/ProjectManager.h"
 

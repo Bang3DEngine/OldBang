@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/ShaderPreprocessor.h"

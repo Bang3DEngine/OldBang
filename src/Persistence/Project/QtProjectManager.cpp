@@ -1,6 +1,6 @@
 #include "Bang/QtProjectManager.h"
 
-#include "Bang/IO.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
@@ -11,7 +11,7 @@ Path QtProjectManager::GetQtProjectDir()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
     if (!p_proj) { return Path::Empty; }
-    return p_proj->GetProjectRootFilepath().Append("Project");
+    return p_proj->GetProjectDirPath().Append("Project");
 }
 
 Path QtProjectManager::GetQtProjectFilepath()
@@ -40,8 +40,8 @@ bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
-    Path projectDir = p_proj->GetProjectRootFilepath();
-    const Path &engineDir = Path(IO::GetEngineRootAbs());
+    Path projectDir = p_proj->GetProjectDirPath();
+    const Path &engineDir = Paths::Engine();
     const Path &projAssetsDir = projectDir.Append("Assets");
 
     List<String> headers =
@@ -55,7 +55,7 @@ void QtProjectManager::CreateQtProjectFile()
     List<String> projIncPaths =
             projAssetsDir.GetSubDirectories(true).To<List, String>();
 
-    List<Path> engineIncPaths = { Path(IO::GetEngineRootAbs()).Append("include") };
+    List<Path> engineIncPaths = { Paths::Engine().Append("include") };
     List<String> engineIncPathsStr = engineIncPaths.To<List, String>();
 
     String headersString            = String::Join(headers,           "\n");
