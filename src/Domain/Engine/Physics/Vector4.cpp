@@ -136,6 +136,28 @@ Vector3 Vector4::xyz() const
     return Vector3(x, y, z);
 }
 
+Vector4 Vector4::Max(const Vector4 &v1, const Vector4 &v2)
+{
+    return Vector4(Math::Max(v1.x, v2.x),
+                   Math::Max(v1.y, v2.y),
+                   Math::Max(v1.z, v2.z),
+                   Math::Max(v1.w, v2.w));
+}
+
+Vector4 Vector4::Min(const Vector4 &v1, const Vector4 &v2)
+{
+    return Vector4(Math::Min(v1.x, v2.x),
+                   Math::Min(v1.y, v2.y),
+                   Math::Min(v1.z, v2.z),
+                   Math::Min(v1.w, v2.w));
+}
+
+Vector4 Vector4::Clamp(const Vector4 &v, const Vector4 &min, const Vector4 &max)
+{
+    return Vector4::Min( Vector4::Max(v, max), min );
+}
+
+
 
 
 

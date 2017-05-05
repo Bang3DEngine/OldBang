@@ -95,10 +95,8 @@ void UIText::FillQuadsMeshPositions()
         Rect charRect = GetCharRect(c);
         Vector2 charRectMin = charRect.GetMin() + Vector2::Right * totalAdv;
         Vector2 charRectMax = charRect.GetMax() + Vector2::Right * totalAdv;
-        contentBoundMin.x = Math::Min(contentBoundMin.x, charRectMin.x);
-        contentBoundMin.y = Math::Min(contentBoundMin.y, charRectMin.y);
-        contentBoundMax.x = Math::Max(contentBoundMax.x, charRectMax.x);
-        contentBoundMax.y = Math::Max(contentBoundMax.y, charRectMax.y);
+        contentBoundMin = Vector2::Min(contentBoundMin, charRectMin);
+        contentBoundMax = Vector2::Max(contentBoundMax, charRectMax);
 
         quadPos.Add( Vector2(charRectMin.x, charRectMin.y) );
         quadPos.Add( Vector2(charRectMax.x, charRectMin.y) );

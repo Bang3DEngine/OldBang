@@ -87,7 +87,7 @@ void EditorScaleAxis::OnEditorUpdate()
         // Alignment
         Vector3 wAxisCenter = transform->GetPosition();
         Vector2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
-                                  cam->WorldToScreenNDCPoint(wAxisCenter);
+                                cam->WorldToScreenNDCPoint(wAxisCenter);
         screenAxisDir.Normalize();
         float alignment = Vector2::Dot(screenAxisDir, sMouseDelta.Normalized());
         //
@@ -100,28 +100,20 @@ void EditorScaleAxis::OnEditorUpdate()
         scaling *= 1.0f / ago->parent->transform->GetScale();
 
         Vector3 newLocalScale = ago->transform->GetLocalScale() + scaling;
-        newLocalScale.x = Math::Max(newLocalScale.x, 0.01f);
-        newLocalScale.y = Math::Max(newLocalScale.y, 0.01f);
-        newLocalScale.z = Math::Max(newLocalScale.z, 0.01f);
-
+        newLocalScale         = Vector3::Max(newLocalScale, Vector3(0.01f));
         ago->transform->SetLocalScale(newLocalScale);
 
         Vector3 originalScale = m_originalScale;
-        originalScale.x = Math::Max(originalScale.x, 0.01f);
-        originalScale.y = Math::Max(originalScale.y, 0.01f);
-        originalScale.z = Math::Max(originalScale.z, 0.01f);
+        originalScale         = Vector3::Max(originalScale, Vector3(0.01f));
 
         Vector3 scaleRatio = ago->transform->GetLocalScale() / originalScale;
-        scaleRatio.x = Math::Max(scaleRatio.x, 0.2f);
-        scaleRatio.y = Math::Max(scaleRatio.y, 0.2f);
-        scaleRatio.z = Math::Max(scaleRatio.z, 0.2f);
+        scaleRatio         = Vector3::Max(scaleRatio, Vector3(0.2f));
 
-        if (m_oAxisDirection != Vector3::One) // If its not the middle axis
+        if (!EditorState::IsUsingGlobalCoords() &&
+            m_oAxisDirection != Vector3::One) // If its not the middle axis
         {
-            Vector3 axis = EditorState::IsUsingGlobalCoords() ?
-                                              wAxisDir : localAxisDir;
-            m_line->SetDestiny(axis * scaleRatio);
-            m_axisCap->transform->SetLocalPosition(axis * scaleRatio);
+            m_line->SetDestiny(localAxisDir * scaleRatio);
+            m_axisCap->transform->SetLocalPosition(localAxisDir * scaleRatio);
         }
     }
 

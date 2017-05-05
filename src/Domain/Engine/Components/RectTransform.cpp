@@ -203,8 +203,7 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
 {
     const Vector2 screenSize = Screen::GetSize();
     Vector2 parentSizeInPx = GetParentScreenRect(true).GetSize() * screenSize;
-    parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
-    parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
+    parentSizeInPx = Vector2::Max(Vector2::One, parentSizeInPx);
 
     float marginMultiplier = takeMarginsIntoAccount ? 4.0f : 0.0f;
     Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;

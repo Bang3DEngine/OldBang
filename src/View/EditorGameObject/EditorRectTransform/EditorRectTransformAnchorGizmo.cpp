@@ -125,8 +125,7 @@ void EditorRectTransformAnchorGizmo::ApplyDisplacementToAnchor(
 
     Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect(true);
     Vector2 parentScreenSize( parentScreenRect.GetSize() );
-    parentScreenSize.x = Math::Max(1.0f, parentScreenSize.x);
-    parentScreenSize.y = Math::Max(1.0f, parentScreenSize.y);
+    parentScreenSize = Vector2::Max( Vector2::One, parentScreenSize );
     Vector2 d = mouseDisp / parentScreenSize;
     d *= 2.0f;
 

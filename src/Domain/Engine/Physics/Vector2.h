@@ -68,6 +68,12 @@ public:
     static float Dot(const Vector2 &v1, const Vector2 &v2);
     static float Distance(const Vector2 &v1, const Vector2 &v2);
 
+    static Vector2 Max(const Vector2 &v1, const Vector2 &v2);
+    static Vector2 Min(const Vector2 &v1, const Vector2 &v2);
+    static Vector2 Clamp(const Vector2 &v,
+                         const Vector2 &min,
+                         const Vector2 &max);
+
     const static Vector2 Up;
     const static Vector2 Down;
     const static Vector2 Right;

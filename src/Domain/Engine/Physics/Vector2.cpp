@@ -106,6 +106,23 @@ float Vector2::Distance(const Vector2 &v1, const Vector2 &v2)
     return (v1 - v2).Length();
 }
 
+Vector2 Vector2::Max(const Vector2 &v1, const Vector2 &v2)
+{
+    return Vector2(Math::Max(v1.x, v2.x),
+                   Math::Max(v1.y, v2.y));
+}
+
+Vector2 Vector2::Min(const Vector2 &v1, const Vector2 &v2)
+{
+    return Vector2(Math::Min(v1.x, v2.x),
+                   Math::Min(v1.y, v2.y));
+}
+
+Vector2 Vector2::Clamp(const Vector2 &v, const Vector2 &min, const Vector2 &max)
+{
+    return Vector2::Min( Vector2::Max(v, max), min );
+}
+
 
 
 

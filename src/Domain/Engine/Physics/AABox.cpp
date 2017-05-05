@@ -148,10 +148,12 @@ AABox AABox::Union(const AABox &b1, const AABox &b2)
 {
     if (b1 == AABox::Empty) { return b2; }
     if (b2 == AABox::Empty) { return b1; }
-    return
-    AABox(Math::Min(b1.m_minv.x, b2.m_minv.x), Math::Max(b1.m_maxv.x, b2.m_maxv.x),
-          Math::Min(b1.m_minv.y, b2.m_minv.y), Math::Max(b1.m_maxv.y, b2.m_maxv.y),
-          Math::Min(b1.m_minv.z, b2.m_minv.z), Math::Max(b1.m_maxv.z, b2.m_maxv.z));
+    return AABox(Math::Min(b1.m_minv.x, b2.m_minv.x),
+                 Math::Max(b1.m_maxv.x, b2.m_maxv.x),
+                 Math::Min(b1.m_minv.y, b2.m_minv.y),
+                 Math::Max(b1.m_maxv.y, b2.m_maxv.y),
+                 Math::Min(b1.m_minv.z, b2.m_minv.z),
+                 Math::Max(b1.m_maxv.z, b2.m_maxv.z));
 }
 
 void AABox::FillFromPositions(const Array<Vector3> &positions)

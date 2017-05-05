@@ -84,6 +84,12 @@ public:
     static float DistanceSquared(const Vector3 &v1, const Vector3 &v2);
     static Vector3 Reflect(const Vector3 &incident, const Vector3 &normal);
 
+    static Vector3 Max(const Vector3 &v1, const Vector3 &v2);
+    static Vector3 Min(const Vector3 &v1, const Vector3 &v2);
+    static Vector3 Clamp(const Vector3 &v,
+                         const Vector3 &min,
+                         const Vector3 &max);
+
     const static Vector3 Up;
     const static Vector3 Down;
     const static Vector3 Right;

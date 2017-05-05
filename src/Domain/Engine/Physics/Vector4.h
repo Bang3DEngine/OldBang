@@ -73,6 +73,11 @@ public:
     static Vector4 Abs(const Vector4 &v);
     static float Dot(const Vector4 &v1, const Vector4 &v2);
     static float Distance(const Vector4 &v1, const Vector4 &v2);
+    static Vector4 Max(const Vector4 &v1, const Vector4 &v2);
+    static Vector4 Min(const Vector4 &v1, const Vector4 &v2);
+    static Vector4 Clamp(const Vector4 &v,
+                         const Vector4 &min,
+                         const Vector4 &max);
 
     const static Vector4 Up;
     const static Vector4 Down;

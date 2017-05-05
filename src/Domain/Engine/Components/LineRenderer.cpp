@@ -67,19 +67,14 @@ AABox LineRenderer::GetAABBox() const
     Vector3 maxp = m_points.Front();
     for (const Vector3 &p : m_points)
     {
-       minp.x = Math::Min(minp.x, p.x);
-       minp.y = Math::Min(minp.y, p.y);
-       minp.z = Math::Min(minp.z, p.z);
-       maxp.x = Math::Max(maxp.x, p.x);
-       maxp.y = Math::Max(maxp.y, p.y);
-       maxp.z = Math::Max(maxp.z, p.z);
+       minp = Vector3::Min(minp, p);
+       maxp = Vector3::Max(maxp, p);
     }
 
     // Add a bit in every dimensions, to avoid flattened Rects
     const float strokeAdd = 0.01f;
-    minp.x -= strokeAdd; maxp.x += strokeAdd;
-    minp.y -= strokeAdd; maxp.y += strokeAdd;
-    minp.z -= strokeAdd; maxp.z += strokeAdd;
+    minp -= Vector3(strokeAdd);
+    maxp += Vector3(strokeAdd);
     return AABox(minp, maxp);
 
 }

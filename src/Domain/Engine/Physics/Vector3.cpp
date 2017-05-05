@@ -156,6 +156,25 @@ Vector3 Vector3::Reflect(const Vector3 &incident, const Vector3 &normal)
     return incident - 2 * ( Vector3::Dot(incident, n) ) * n;
 }
 
+Vector3 Vector3::Max(const Vector3 &v1, const Vector3 &v2)
+{
+    return Vector3(Math::Max(v1.x, v2.x),
+                   Math::Max(v1.y, v2.y),
+                   Math::Max(v1.z, v2.z));
+}
+
+Vector3 Vector3::Min(const Vector3 &v1, const Vector3 &v2)
+{
+    return Vector3(Math::Min(v1.x, v2.x),
+                   Math::Min(v1.y, v2.y),
+                   Math::Min(v1.z, v2.z));
+}
+
+Vector3 Vector3::Clamp(const Vector3 &v, const Vector3 &min, const Vector3 &max)
+{
+    return Vector3::Min( Vector3::Max(v, max), min );
+}
+
 Vector2 Vector3::xy() const
 {
     return Vector2(x, y);

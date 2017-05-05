@@ -125,9 +125,7 @@ void Transform::SetScale(const Vector3 &v)
 {
     GameObject *p = gameObject->parent ;
     Vector3 parentScale = p ? p->transform->GetScale() : Vector3::One;
-    parentScale.x = Math::Max(0.0001f, parentScale.x);
-    parentScale.y = Math::Max(0.0001f, parentScale.y);
-    parentScale.z = Math::Max(0.0001f, parentScale.z);
+    parentScale = Vector3::Max( Vector3(0.0001f), parentScale );
     SetLocalScale(1.0f / parentScale * v);
 }
 

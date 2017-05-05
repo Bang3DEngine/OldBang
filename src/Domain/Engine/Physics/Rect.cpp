@@ -126,12 +126,9 @@ Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
     Vector2 minv = positions.Front(), maxv = positions.Front();
     for (const Vector2 &p : positions)
     {
-        minv.x = Math::Min(p.x, minv.x);
-        minv.y = Math::Min(p.y, minv.y);
-        maxv.x = Math::Max(p.x, maxv.x);
-        maxv.y = Math::Max(p.y, maxv.y);
+        minv = Vector2::Min(p, minv);
+        maxv = Vector2::Max(p, maxv);
     }
-
     return Rect(minv, maxv);
 }
 
