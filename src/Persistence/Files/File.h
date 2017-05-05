@@ -19,6 +19,7 @@ public:
     File(const Path &filepath);
     File(const String &filepath);
     File(const QFileSystemModel *model, const QModelIndex &index);
+    virtual ~File();
 
     virtual const QPixmap& GetIcon() const;
 
@@ -42,7 +43,8 @@ public:
     bool IsPrefabFile() const;
     bool IsShaderProgramFile() const;
 
-    void Write(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     #ifdef BANG_EDITOR
     virtual IInspectable* GetNewInspectable();

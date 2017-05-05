@@ -52,6 +52,10 @@ File::File(const QFileSystemModel *model, const QModelIndex &index)
     m_path = Path(pathStr);
 }
 
+File::~File()
+{
+}
+
 bool File::IsSound() const
 {
     return GetPath().IsFile() && GetPath().HasExtension({"wav", "ogg", "pcm"});
@@ -91,7 +95,7 @@ bool File::IsModelFile() const
 {
     return  GetPath().IsFile() &&
             GetPath().HasExtension({"obj", "mb", "fbx", "dae", "3ds", "ply",
-                                 "stl", "ase", "blend", "md2", "md3"});
+                                    "stl", "ase", "blend", "md2", "md3"});
 }
 
 bool File::IsMaterialFile() const
@@ -128,6 +132,11 @@ bool File::IsShaderProgramFile() const
 {
     return GetPath().IsFile() &&
             GetPath().HasExtension(ShaderProgram::GetFileExtensionStatic());
+}
+
+void File::Read(const XMLNode &xmlInfo)
+{
+    SerializableObject::Read(xmlInfo);
 }
 
 bool File::DuplicateFile(const Path &fromFilepath,
@@ -377,7 +386,6 @@ const QPixmap& File::GetIcon() const
 void File::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
-    xmlInfo->SetTagName( GetPath().GetName() );
 }
 
 #ifdef BANG_EDITOR

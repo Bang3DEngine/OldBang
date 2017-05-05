@@ -170,14 +170,16 @@ void FileTracker::RefreshFileModificationDate(const Path &filepath)
 
 void FileTracker::RefreshFileDependencies(const Path &filepath)
 {
-    // If its an asset (XML), then add the file dependencies by
-    // examining the file contents, and finding all the attributes which are
-    // filepaths.
     File file(filepath);
     ENSURE ( MustTrackFile(file) );
 
-    List<Path>& depsList = m_fileDependencies.Get(filepath);
-    depsList.Clear();
+    // If its an asset (XML), then add the file dependencies by
+    // examining the file contents, and finding all the attributes which are
+    // filepaths.
+
+    if (!m_fileDependencies.ContainsKey(filepath)) { return; }
+    List<Path>* depsList = &(m_fileDependencies.Get(filepath));
+    depsList->Clear();
 
     XMLNode xmlInfo = XMLParser::FromFile(filepath);
     List< std::pair<String, XMLAttribute> > attrs =
@@ -188,7 +190,7 @@ void FileTracker::RefreshFileDependencies(const Path &filepath)
         if (attr.GetType() == XMLAttribute::Type::File)
         {
             Path depFilepath = attr.GetFilepath();
-            if (depFilepath.Exists()) { depsList.Add(depFilepath); }
+            if (depFilepath.Exists()) { depsList->Add(depFilepath); }
         }
     }
 }

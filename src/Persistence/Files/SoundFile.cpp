@@ -30,7 +30,7 @@ const QPixmap& SoundFile::GetIcon() const
 
 void SoundFile::Read(const XMLNode &xmlInfo)
 {
-
+    File::Read(xmlInfo);
 }
 
 void SoundFile::Write(XMLNode *xmlInfo) const

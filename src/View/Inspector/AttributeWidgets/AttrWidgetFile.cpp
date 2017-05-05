@@ -91,7 +91,7 @@ void AttrWidgetFile::RefreshIcon()
     const uint c_pixSize = 16;
     File file(m_filepath);
     File *f = File::GetSpecificFile(file);
-    if (f)
+    if (file.GetPath().IsFile() && f)
     {
         const QPixmap& pm = f->GetIcon();
         QPixmap pmCopy = pm.scaled(c_pixSize, c_pixSize,

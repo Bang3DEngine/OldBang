@@ -35,6 +35,7 @@ const QPixmap& Texture2DFile::GetIcon() const
 
 void Texture2DFile::Read(const XMLNode &xmlInfo)
 {
+    File::Read(xmlInfo);
     m_xmlInfo = xmlInfo;
 
     #ifdef BANG_EDITOR

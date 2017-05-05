@@ -27,7 +27,7 @@ const QPixmap& ModelFile::GetIcon() const
 
 void ModelFile::Read(const XMLNode &xmlInfo)
 {
-    // They all are readonly properties, so we wont do anything here
+    File::Read(xmlInfo);
 }
 
 void ModelFile::Write(XMLNode *xmlInfo) const

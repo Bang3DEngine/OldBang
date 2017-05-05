@@ -25,6 +25,7 @@ const QPixmap& ImageFile::GetIcon() const
 
 void ImageFile::Read(const XMLNode &xmlInfo)
 {
+    File::Read(xmlInfo);
 }
 
 void ImageFile::Write(XMLNode *xmlInfo) const

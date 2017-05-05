@@ -17,7 +17,12 @@ public:
         Base::SetRelatedSerializableObject(&m_file);
     }
 
-    void CloneInto(ICloneable *clone) const override
+    virtual String GetTitleInInspector() const override
+    {
+        return m_file.GetPath().GetName();
+    }
+
+    virtual void CloneInto(ICloneable *clone) const override
     {
         IInspectable::CloneInto(clone);
         FileInspectable *finsp = Object::SCast<FileInspectable>(clone);

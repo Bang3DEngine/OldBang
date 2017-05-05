@@ -22,7 +22,7 @@ String TextFile::GetContents() const
 
 void TextFile::Read(const XMLNode &xmlInfo)
 {
-    SerializableObject::Read(xmlInfo);
+    File::Read(xmlInfo);
     String contents = xmlInfo.GetString("Contents");
     File::Write(GetPath(), contents);
 }

@@ -34,6 +34,8 @@ const QPixmap& MaterialFile::GetIcon() const
 
 void MaterialFile::Read(const XMLNode &xmlInfo)
 {
+    File::Read(xmlInfo);
+
     m_xmlInfo = xmlInfo;
 
     #ifdef BANG_EDITOR

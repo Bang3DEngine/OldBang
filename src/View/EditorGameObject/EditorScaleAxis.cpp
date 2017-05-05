@@ -112,25 +112,23 @@ void EditorScaleAxis::OnEditorUpdate()
         originalScale.z = Math::Max(originalScale.z, 0.01f);
 
         Vector3 scaleRatio = ago->transform->GetLocalScale() / originalScale;
-        if (EditorState::IsUsingGlobalCoords())
-        {
-            scaleRatio = ago->transform->LocalToWorldDirection(scaleRatio).Abs();
-        }
         scaleRatio.x = Math::Max(scaleRatio.x, 0.2f);
         scaleRatio.y = Math::Max(scaleRatio.y, 0.2f);
         scaleRatio.z = Math::Max(scaleRatio.z, 0.2f);
 
-        if (m_oAxisDirection != Vector3::One)
+        if (m_oAxisDirection != Vector3::One) // If its not the middle axis
         {
-            m_line->SetDestiny(m_oAxisDirection * scaleRatio);
-            m_axisCap->transform->SetLocalPosition(m_oAxisDirection * scaleRatio);
+            Vector3 axis = EditorState::IsUsingGlobalCoords() ?
+                                              wAxisDir : localAxisDir;
+            m_line->SetDestiny(axis * scaleRatio);
+            m_axisCap->transform->SetLocalPosition(axis * scaleRatio);
         }
     }
 
     if (!m_grabbed)
     {
         m_originalScale = ago->transform->GetLocalScale();
-        if (m_oAxisDirection != Vector3::One)
+        if (m_oAxisDirection != Vector3::One) // If its not the middle axis
         {
             m_line->SetDestiny(m_oAxisDirection);
             m_axisCap->transform->SetLocalPosition(m_oAxisDirection);

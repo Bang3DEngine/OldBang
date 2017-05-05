@@ -25,6 +25,7 @@ const QPixmap& MeshFile::GetIcon() const
 
 void MeshFile::Read(const XMLNode &xmlInfo)
 {
+    File::Read(xmlInfo);
     SetModelFilepath( xmlInfo.GetFilepath("ModelFilepath") );
 
     #ifdef BANG_EDITOR

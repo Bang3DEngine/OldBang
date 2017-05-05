@@ -62,6 +62,8 @@ void AudioClipFile::OnButtonClicked(const String &attrName)
 
 void AudioClipFile::Read(const XMLNode &xmlInfo)
 {
+    File::Read(xmlInfo);
+
     Path soundFilepath = xmlInfo.GetFilepath("AudioFilepath");
     SetSoundFilepath(soundFilepath);
 
