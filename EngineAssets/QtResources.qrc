@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="/Bang">
+    <file>Logos/LogoBang_B_64.png</file>
+    <file>Logos/LogoBang_128.png</file>
+    <file>Logos/LogoBang_B_512.png</file>
+    <file>Logos/LogoBang_512.png</file>
+    <file>Logos/LogoBang_B_2048.png</file>
+    <file>Logos/LogoBang_2048.png</file>
     <file>Icons/Pause.png</file>
     <file>Icons/Step.png</file>
     <file>Icons/FolderIcon.png</file>
@@ -45,7 +51,5 @@
     <file>Textures/DirectionalLightIcon.png</file>
     <file>Textures/PointLightIcon.png</file>
     <file>Textures/DefaultUIImageTexture.png</file>
-    <file>BangIcon.png</file>
-    <file>BangLogo.png</file>
   </qresource>
 </RCC>

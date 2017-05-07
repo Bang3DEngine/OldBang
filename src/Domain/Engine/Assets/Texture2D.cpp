@@ -112,6 +112,57 @@ const Path& Texture2D::GetImageFilepath() const
     return m_imageFilepath;
 }
 
+Image Texture2D::ToImage(bool invertY)
+{
+    const int width  = GetWidth();
+    const int height = GetHeight();
+    const uint bytesSize = GetBytesSize();
+    byte *pixels = new byte[bytesSize];
+
+    glBindTexture(GL_TEXTURE_2D, GetGLId());
+    glGetTexImage(GL_TEXTURE_2D,
+                  0,
+                  GL_RGBA,
+                  GL_UNSIGNED_BYTE,
+                  pixels);
+    if (invertY)
+    {
+        byte *pixelsCpy = new byte[bytesSize];
+        memcpy(pixelsCpy, pixels, bytesSize);
+        for (int i = 0; i < height; ++i)
+        {
+            for (int j = 0; j < width; ++j)
+            {
+                const int coords    = (i * width + j) * 4;
+                const int invCoords = ((height - i - 1) * width + j) * 4;
+                pixels[coords + 0] = pixelsCpy[invCoords + 0];
+                pixels[coords + 1] = pixelsCpy[invCoords + 1];
+                pixels[coords + 2] = pixelsCpy[invCoords + 2];
+                pixels[coords + 3] = pixelsCpy[invCoords + 3];
+            }
+        }
+        delete[] pixelsCpy;
+    }
+
+    Image img(width, height);
+    for (int i = 0; i < height; ++i)
+    {
+        for (int j = 0; j < width; ++j)
+        {
+            const int coords = (i * width + j) * 4;
+            Color pixelColor = Color(pixels[coords + 0] / 255.0f,
+                                     pixels[coords + 1] / 255.0f,
+                                     pixels[coords + 2] / 255.0f,
+                                     pixels[coords + 3] / 255.0f);
+            img.SetPixel(j, i, pixelColor);
+        }
+    }
+
+    delete[] pixels;
+
+    return img;
+}
+
 void Texture2D::SetAlphaCutoff(float alphaCutoff)
 {
     m_alphaCutoff = alphaCutoff;

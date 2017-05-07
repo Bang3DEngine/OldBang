@@ -69,7 +69,7 @@ protected:
     void PopDrawAttachmentIds();
 
 private:
-    mutable Array<AttachmentId> m_currentAttachmentIds, m_latestAttachmentIds;
+    mutable Array<AttachmentId> m_currentDrawAttachmentIds, m_latestDrawAttachmentIds;
 };
 
 #endif // FRAMEBUFFER_H

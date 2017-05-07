@@ -32,6 +32,8 @@ public:
 
     const Path& GetImageFilepath() const;
 
+    Image ToImage(bool invertY = false);
+
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 

@@ -5,6 +5,7 @@
 
 #include "GL/gl.h"
 #include "Bang/Path.h"
+#include "Bang/Image.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Matrix4.h"
@@ -94,8 +95,6 @@ public:
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
     static const Matrix4 &GetProjectionMatrix();
-
-    static void SaveToImage(const Texture *tex, const Path &filepath);
 
     static void Bind(const GLObject *bindable);
     static void Bind(BindTarget bindTarget, GLId glId);

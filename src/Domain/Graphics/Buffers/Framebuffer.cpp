@@ -74,7 +74,7 @@ void Framebuffer::SetDrawBuffers(const Array<AttachmentId> &attIds) const
 {
     GL::ClearError();
     glDrawBuffers(attIds.Size(), (const GLenum*)(&attIds[0]));
-    m_currentAttachmentIds = attIds;
+    m_currentDrawAttachmentIds = attIds;
     GL_CheckError();
 }
 
@@ -83,6 +83,12 @@ void Framebuffer::SetReadBuffer(AttachmentId attId) const
     GL::ClearError();
     glReadBuffer(attId);
     GL_CheckError();
+}
+
+const Array<Framebuffer::AttachmentId>
+        &Framebuffer::GetCurrentDrawAttachmentIds() const
+{
+    return m_currentDrawAttachmentIds;
 }
 
 Color Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
@@ -170,52 +176,21 @@ void Framebuffer::UnBind() const
     GL::UnBind(this);
 }
 
-// TODO: not saving the file
 void Framebuffer::SaveToImage(AttachmentId attId, const Path &filepath,
                               bool invertY) const
 {
-    Bind();
-    Texture *tex = m_attachmentId_To_Texture.Get(attId);
-    if (tex)
-    {
-        SetReadBuffer(attId);
-        uint bytesSize = m_width * m_height * 4;
-        byte *pixels = new byte[bytesSize];
-        glReadPixels(0, 0, m_width, m_height,
-                     GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-        if (invertY)
-        {
-            byte *pixelsCpy = new byte[bytesSize];
-            memcpy(pixelsCpy, pixels, bytesSize);
-            for (int i = 0; i < m_width; ++i)
-            {
-                for (int j = 0; j < m_height; ++j)
-                {
-                    int coords    = j * m_width + i;
-                    int invCoords = (m_height - j - 1) * m_width + i;
-                    coords *= 4; invCoords *= 4;
-                    pixels[coords + 0] = pixelsCpy[invCoords + 0];
-                    pixels[coords + 1] = pixelsCpy[invCoords + 1];
-                    pixels[coords + 2] = pixelsCpy[invCoords + 2];
-                    pixels[coords + 3] = pixelsCpy[invCoords + 3];
-                }
-            }
-            delete[] pixelsCpy;
-        }
-        // TODO: Save file with QImage
-        delete[] pixels;
-    }
-    UnBind();
+    Image img = GetAttachmentTexture(attId)->ToImage(invertY);
+    img.SaveToFile(filepath);
 }
 
 void Framebuffer::PushDrawAttachmentIds()
 {
-    m_latestAttachmentIds = m_currentAttachmentIds;
+    m_latestDrawAttachmentIds = m_currentDrawAttachmentIds;
 }
 
 void Framebuffer::PopDrawAttachmentIds()
 {
-    SetDrawBuffers(m_latestAttachmentIds);
+    SetDrawBuffers(m_latestDrawAttachmentIds);
 }
 
 
