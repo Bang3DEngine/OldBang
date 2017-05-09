@@ -69,15 +69,12 @@ public slots:
     void OnAlignViewWithGameObject() const;
 
     void OnCreatePrefab() const;
-    Material* OnCreateMaterial(
-            const String &matName = "New_Material") const;
+    void OnCreateMaterial(const String &matName = "") const;
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
-    Texture2D* OnCreateTexture2D(
-            const String &tex2DName = "New_Texture2D") const;
+    void OnCreateTexture2D(const String &tex2DName = "") const;
     void OnCreateFont() const;
-    AudioClip* OnCreateAudioClip(
-            const String &audioClipName = "New_AudioClip") const;
+    void OnCreateAudioClip(const String &audioClipName = "") const;
 
     void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;

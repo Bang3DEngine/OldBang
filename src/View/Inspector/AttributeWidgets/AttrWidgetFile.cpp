@@ -89,6 +89,7 @@ void AttrWidgetFile::Browse()
 void AttrWidgetFile::RefreshIcon()
 {
     const uint c_pixSize = 16;
+
     File file(m_filepath);
     File *f = File::GetSpecificFile(file);
     if (file.GetPath().IsFile() && f)
@@ -100,7 +101,11 @@ void AttrWidgetFile::RefreshIcon()
         m_iconLabel->setPixmap(pmCopy);
         delete f;
     }
-    else { m_iconLabel->setPixmap(QPixmap(c_pixSize, c_pixSize)); }
+    else
+    {
+        m_iconLabel->setPixmap( IconManager::GetEmptyPixmap()
+                                             .scaled(c_pixSize, c_pixSize) );
+    }
 }
 
 void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)

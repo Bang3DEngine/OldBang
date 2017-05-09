@@ -34,7 +34,7 @@ public:
     void OnWindowShown();
 
     Path GetCurrentDir() const;
-    Path GetSelectedFileOrDirPath() const;
+    Path GetSelectedPath() const;
     File GetSelectedFile() const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;

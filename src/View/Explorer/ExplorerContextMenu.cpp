@@ -7,7 +7,6 @@
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
 #include "Bang/Prefab.h"
-#include "Bang/MenuBar.h"
 #include "Bang/Material.h"
 #include "Bang/Explorer.h"
 #include "Bang/AudioClip.h"
@@ -15,6 +14,7 @@
 #include "Bang/Inspector.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/AssetFileCreator.h"
 #include "Bang/GameObjectClipboard.h"
 
 
@@ -99,19 +99,14 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 
 Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
 {
-    File f = p_explorer->GetSelectedFile();
-    MenuBar *mb = MenuBar::GetInstance();
+    Path selectedPath = p_explorer->GetSelectedPath();
+    String fileName = selectedPath.GetName();
+    Path texPath = AssetFileCreator::CreateOnExplorer<Texture2D>(fileName);
 
-    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
-    Path newPath = dirPath.Append(f.GetPath().GetName());
-    newPath = newPath.AppendExtension(Texture2D::GetFileExtensionStatic());
-    newPath = newPath.GetDuplicate();
-
-    Texture2D *tex = mb->OnCreateTexture2D(newPath.GetNameExt());
-    tex->LoadFromImage(f.GetPath() );
+    Texture2D *tex = AssetsManager::Load<Texture2D>(texPath);
+    tex->LoadFromImage(selectedPath);
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
-    //Inspector::GetInstance()->ShowInspectable(tex, newTexName);
 
     return tex;
 }
@@ -124,53 +119,43 @@ Material* ExplorerContextMenu::OnCreateMaterialFromImageClicked()
 
 AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
 {
-    File f = p_explorer->GetSelectedFile();
-    MenuBar *mb = MenuBar::GetInstance();
+    Path selectedPath = p_explorer->GetSelectedPath();
+    String fileName = selectedPath.GetName();
+    Path audioClipPath = AssetFileCreator::CreateOnExplorer<AudioClip>(fileName);
 
-    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
-    Path newPath = dirPath.Append(f.GetPath().GetName());
-    newPath = newPath.AppendExtension(AudioClip::GetFileExtensionStatic());
-    newPath = newPath.GetDuplicate();
+    AudioClip *audio = AssetsManager::Load<AudioClip>(audioClipPath);
+    audio->LoadFromFile(selectedPath);
 
-    AudioClip *audio = mb->OnCreateAudioClip( newPath.GetNameExt() );
-    audio->LoadFromFile( f.GetPath() );
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
-    //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
 
     return audio;
 }
 
 Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex)
 {
-    Texture2D *fromTexture = tex;
-    if (!fromTexture)
+    Texture2D *fromTex = tex;
+    if (!fromTex)
     {
-        fromTexture = AssetsManager::Load<Texture2D>(
-                    p_explorer->GetSelectedFileOrDirPath());
+        fromTex = AssetsManager::Load<Texture2D>(p_explorer->GetSelectedPath());
     }
-	if (!fromTexture) { return nullptr; }
+    if (!fromTex) { return nullptr; }
 
-    File f (fromTexture->GetFilepath());
-    MenuBar *mb = MenuBar::GetInstance();
+    String fileName = p_explorer->GetSelectedPath().GetName();
+    Path matFilepath = AssetFileCreator::CreateOnExplorer<Material>(fileName);
 
+    Material *mat = AssetsManager::Load<Material>(matFilepath);
+    mat->SetTexture(fromTex);
 
-    Path dirPath = Explorer::GetInstance()->GetCurrentDir();
-    Path newPath = dirPath.Append(f.GetPath().GetName());
-    newPath = newPath.AppendExtension(Material::GetFileExtensionStatic());
-    newPath = newPath.GetDuplicate();
-
-    Material *mat = mb->OnCreateMaterial( newPath.GetNameExt() );
-    mat->SetTexture(fromTexture);
     AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
-    //Inspector::GetInstance()->ShowInspectable(mat, newMatName);
+
     return mat;
 }
 
 void ExplorerContextMenu::OnDuplicateClicked()
 {
-    ENSURE(!p_explorer->GetSelectedFileOrDirPath().IsEmpty());
+    ENSURE(!p_explorer->GetSelectedPath().IsEmpty());
 
-    Path fromPath = p_explorer->GetSelectedFileOrDirPath();
+    Path fromPath = p_explorer->GetSelectedPath();
     Path toPath = fromPath.GetDuplicate();
     if (fromPath.IsFile())
     {

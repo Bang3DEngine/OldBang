@@ -95,7 +95,7 @@ void Explorer::OnButtonDirUpClicked()
 
 void Explorer::OnRenameClicked()
 {
-    Path selectedPath = GetSelectedFileOrDirPath();
+    Path selectedPath = GetSelectedPath();
     if (!selectedPath.IsEmpty())
     {
         StartRenaming(selectedPath);
@@ -177,7 +177,7 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         ENSURE(selectedIndexes().length() > 0);
-        Path selectedPath = GetSelectedFileOrDirPath();
+        Path selectedPath = GetSelectedPath();
         if (selectedPath.Exists())
         {
             if (selectedPath.IsDir())
@@ -339,7 +339,7 @@ Path Explorer::GetCurrentDir() const
     return Path( String(m_fileSystemModel->rootPath()) );
 }
 
-Path Explorer::GetSelectedFileOrDirPath() const
+Path Explorer::GetSelectedPath() const
 {
     if (!selectedIndexes().empty())
     {
@@ -439,7 +439,7 @@ void Explorer::keyPressEvent(QKeyEvent *e)
           static_cast<Input::Key>(e->key()) == Input::Key::Return)
         )
     {
-        Path selectedPath = GetSelectedFileOrDirPath();
+        Path selectedPath = GetSelectedPath();
         if (selectedPath.Exists())
         {
             if (selectedPath.IsDir())

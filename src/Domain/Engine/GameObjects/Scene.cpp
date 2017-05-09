@@ -129,7 +129,7 @@ Camera *Scene::GetCamera() const
     return m_cameraGameObject->GetComponent<Camera>();
 }
 
-Scene *Scene::GetDefaultScene()
+Scene *Scene::GetNewDefaultScene()
 {
     #ifdef BANG_EDITOR
     Scene *scene = new EditorScene();

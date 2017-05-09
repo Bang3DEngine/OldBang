@@ -6,8 +6,13 @@
 #include "Bang/Texture2D.h"
 #include "Bang/SingletonManager.h"
 
-IconManager::IconManager()
+IconManager::IconManager() :
+    m_emptyPixmap(16, 16),
+    m_emptyImage(16, 16, QImage::Format_ARGB32)
 {
+    m_emptyPixmap.fill( Color::Zero.ToQColor() );
+    m_emptyImage.fill( Color::Zero.ToQColor() );
+
     m_overlayAsset = QPixmap(
               EPATH("Icons/AssetDistinctor.png").GetAbsolute().ToQString());
     m_overlayData = QPixmap(
@@ -22,6 +27,11 @@ IconManager::IconManager()
     m_overlayData = m_overlayData.scaled(
                 32, 32, Qt::KeepAspectRatio,
                 Qt::TransformationMode::SmoothTransformation);
+}
+
+const QImage &IconManager::GetEmptyImage()
+{
+    return IconManager::GetInstance()->m_emptyImage;
 }
 
 const QPixmap &IconManager::GetEmptyPixmap()
@@ -41,6 +51,8 @@ IconManager *IconManager::GetInstance()
 const QImage &IconManager::LoadImage(const Path &path,
                                      IconManager::IconOverlay overlay)
 {
+    if (!path.IsFile()) { return IconManager::GetEmptyImage(); }
+
     IconManager *im = GetInstance();
     String id = IconManager::GetStringId(path, overlay);
     if (!im->m_pixmaps.ContainsKey(id))
@@ -48,7 +60,8 @@ const QImage &IconManager::LoadImage(const Path &path,
         QImage img = (overlay == IconOverlay::None) ?
                             QImage(path.GetAbsolute().ToQString())
                           : IconManager::LoadImage(path, IconOverlay::None);
-        img = img.scaled(256, 256, Qt::KeepAspectRatio,
+        img = img.scaled(256, 256,
+                         Qt::KeepAspectRatio,
                          Qt::TransformationMode::SmoothTransformation);
 
         if (overlay != IconOverlay::None)
@@ -65,6 +78,8 @@ const QImage &IconManager::LoadImage(const Path &path,
 
 const QPixmap& IconManager::LoadPixmap(const Path &path, IconOverlay overlay)
 {
+    if (!path.IsFile()) { return IconManager::GetEmptyPixmap(); }
+
     IconManager *im = GetInstance();
     IconManager::LoadImage(path, overlay);
     String id = IconManager::GetStringId(path, overlay);

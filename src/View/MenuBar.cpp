@@ -25,6 +25,7 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ProjectManager.h"
+#include "Bang/AssetFileCreator.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/WindowEventManager.h"
 
@@ -128,7 +129,7 @@ void MenuBar::CreateNewScene() const
 {
     SceneManager::CloseOpenScene();
     SceneManager::SetActiveScene(nullptr);
-    Scene *scene = Scene::GetDefaultScene();
+    Scene *scene = Scene::GetNewDefaultScene();
     SceneManager::SetActiveScene(scene);
 }
 
@@ -369,76 +370,35 @@ void MenuBar::OnAlignViewWithGameObject() const
                 GetCamera()->gameObject->parent->Cast<EditorCamera>();
         editorCamera->AlignViewWithGameObject(selected);
     }
-
 }
 
 void MenuBar::OnCreatePrefab() const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append("New_Prefab")
-                       .AppendExtension(Prefab::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    AssetsManager::Create<Prefab>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
+    AssetFileCreator::CreateOnExplorer<Prefab>();
 }
-Material* MenuBar::OnCreateMaterial(const String &matName) const
+void MenuBar::OnCreateMaterial(const String &matName) const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(matName)
-                       .AppendExtension(Material::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    Material *mat = AssetsManager::Create<Material>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
-    return mat;
+    AssetFileCreator::CreateOnExplorer<Material>(matName);
 }
 void MenuBar::OnCreateMesh() const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append("New_Mesh")
-                       .AppendExtension(Mesh::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    AssetsManager::Create<Mesh>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
+    AssetFileCreator::CreateOnExplorer<Mesh>();
 }
 void MenuBar::OnCreateShaderProgram() const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append("New_ShaderProgram")
-                       .AppendExtension(ShaderProgram::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    AssetsManager::Create<ShaderProgram>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
+    AssetFileCreator::CreateOnExplorer<ShaderProgram>();
 }
-Texture2D* MenuBar::OnCreateTexture2D(const String &tex2DName) const
+void MenuBar::OnCreateTexture2D(const String &tex2DName) const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(tex2DName)
-                       .AppendExtension(Texture2D::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    Texture2D* tex = AssetsManager::Create<Texture2D>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
-    return tex;
+    AssetFileCreator::CreateOnExplorer<Texture2D>(tex2DName);
 }
-
 void MenuBar::OnCreateFont() const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append("New_Font")
-                       .AppendExtension(Font::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    AssetsManager::Create<Font>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
+    AssetFileCreator::CreateOnExplorer<Font>();
 }
-
-AudioClip* MenuBar::OnCreateAudioClip(const String &audioClipName) const
+void MenuBar::OnCreateAudioClip(const String &audioClipName) const
 {
-    Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(audioClipName)
-                       .AppendExtension(AudioClip::GetFileExtensionStatic());
-    filepath = filepath.GetDuplicate();
-    AudioClip* audioClip = AssetsManager::Create<AudioClip>(filepath);
-    Explorer::GetInstance()->StartRenaming(filepath);
-    return audioClip;
+    AssetFileCreator::CreateOnExplorer<AudioClip>(audioClipName);
 }
 
 void MenuBar::OnAddComponentNewBehaviour() const

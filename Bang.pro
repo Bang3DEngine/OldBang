@@ -271,7 +271,8 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/Blur.frag_pp \
     EngineAssets/Shaders/GrayScale.frag_pp \
     EngineAssets/Shaders/Outline.frag_pp \
-    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h
+    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
+    src/Persistence/Files/AssetFileCreator.h
 
 EDITOR {
 HEADERS += \
@@ -492,7 +493,8 @@ SOURCES += \
     src/Persistence/Files/AudioClipFile.cpp \
     src/Persistence/Files/FontFile.cpp \
     src/Persistence/Paths.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
+    src/Persistence/Files/AssetFileCreator.cpp
 
 EDITOR {
     SOURCES += \

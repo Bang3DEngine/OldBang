@@ -27,6 +27,7 @@ public:
 
     IconManager();
 
+    static const QImage& GetEmptyImage();
     static const QPixmap& GetEmptyPixmap();
     static const QImage& LoadImage(const Path &path,
                                    IconOverlay overlay = IconOverlay::None);
@@ -50,6 +51,8 @@ private:
     };
 
     QPixmap m_emptyPixmap;
+    QImage  m_emptyImage;
+
     QPixmap m_overlayAsset, m_overlayData;
     QImage m_materialBase;
 

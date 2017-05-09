@@ -140,7 +140,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     {
         File file(this, idx);
 
-        QPixmap pm;
+        QPixmap pm = IconManager::GetEmptyPixmap();
         if (file.GetPath().IsFile())
         {
             File *sFile = File::GetSpecificFile(file);
@@ -157,8 +157,8 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
             pm = icon.pixmap(m_iconSize, m_iconSize);
         }
 
-        QPixmap pmEmpty(m_iconSize, m_iconSize);
-        pmEmpty.fill( Color(1.0f, 1.0f, 1.0f, 0.0f).ToQColor() );
+        QPixmap pmEmpty = IconManager::GetEmptyPixmap().scaled(m_iconSize,
+                                                               m_iconSize);
         QPixmap pmScaled = pm.scaled(
                     m_iconSize, m_iconSize,
                     Qt::KeepAspectRatio,
