@@ -266,7 +266,12 @@ HEADERS +=                                                          \
     src/Persistence/Files/MaterialFile.h \
     src/Persistence/Files/ShaderProgramFile.h \
     src/Persistence/Files/Texture2DFile.h \
-    src/Persistence/Paths.h
+    src/Persistence/Paths.h \
+    EngineAssets/Shaders/G_Missing.frag_g \
+    EngineAssets/Shaders/InvertColors.frag_pp \
+    EngineAssets/Shaders/Blur.frag_pp \
+    EngineAssets/Shaders/GrayScale.frag_pp \
+    EngineAssets/Shaders/Outline.frag_pp
 
 EDITOR {
 HEADERS += \
@@ -713,4 +718,5 @@ DISTFILES += \
     EngineAssets/Materials/UI/G_UIText.bmat \
     EngineAssets/Shaders/UI/G_UIText.frag_g \
     EngineAssets/Shaders/SP_Default.frag_pp \
-    EngineAssets/Shaders/G_Default.bshaderprogram
+    EngineAssets/Shaders/G_Default.bshaderprogram \
+    EngineAssets/Shaders/Cartoon.frag_pp

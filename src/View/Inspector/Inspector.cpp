@@ -163,7 +163,8 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
 Inspector *Inspector::GetInstance()
 {
-    return EditorWindow::GetInstance()->widgetInspector;
+    EditorWindow *ew = EditorWindow::GetInstance();
+    return ew ? ew->widgetInspector : nullptr;
 }
 
 void Inspector::dropEvent(QDropEvent *e)

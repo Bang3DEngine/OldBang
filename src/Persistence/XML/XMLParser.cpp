@@ -5,26 +5,9 @@
 #include "Bang/Debug.h"
 #include "Bang/SerializableObject.h"
 
-Map<String, const SerializableObject*> XMLParser::m_id_To_Pointer;
 
 XMLParser::XMLParser()
 {
-}
-
-void XMLParser::RegisterId(const XMLNode *xmlInfo,
-                           const SerializableObject *pointer)
-{
-    String id = xmlInfo->GetString("id");
-    m_id_To_Pointer[id] = pointer;
-}
-
-const SerializableObject *XMLParser::GetPointerFromId(const String &id)
-{
-    if (m_id_To_Pointer.ContainsKey(id))
-    {
-        return m_id_To_Pointer[id];
-    }
-    return nullptr;
 }
 
 String XMLParser::GetTagName(const String &tag,
@@ -129,11 +112,6 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
     }
 }
 
-void XMLParser::ClearPointerIds()
-{
-    m_id_To_Pointer.Clear();
-}
-
 void XMLParser::GetNextOpenTag(const String &xml,
                                int startPosition,
                                String *tag,
@@ -198,8 +176,6 @@ XMLNode XMLParser::FromFile(const Path &filepath)
 XMLNode XMLParser::FromString(const String &xml)
 {
     if (xml.Empty()) { return XMLNode(); }
-
-    ClearPointerIds();
 
     //Read name
     String tag;

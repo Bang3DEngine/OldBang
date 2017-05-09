@@ -71,8 +71,6 @@ private:
                         bool *success,
                         bool background);
 
-    static List<String> ToStringList(const List<Path> &paths);
-
 };
 
 #endif // SYSTEMUTILS_H

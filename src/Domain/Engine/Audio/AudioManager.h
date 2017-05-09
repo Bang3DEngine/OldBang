@@ -2,6 +2,7 @@
 #define AUDIOMANAGER_H
 
 #include <QThreadPool>
+#include <QMutexLocker>
 #include "Bang/WinUndef.h"
 
 #include "Bang/Math.h"
@@ -54,6 +55,7 @@ private:
     virtual ~AudioManager();
 
     QThreadPool m_threadPool;
+    QMutex m_mutex_currentAudios;
     List<AudioPlayerRunnable*> m_currentAudios;
     AnonymousAudioPlayer *m_anonymousAudioPlayer = nullptr;
 

@@ -18,6 +18,10 @@ uniform bool B_False      = false;
 uniform bool B_IsSelected = false;
 // ///////////////////////////////////////
 
+// Camera ///////////////////////////////
+uniform float B_Camera_Near = 0.0f;
+uniform float B_Camera_Far  = 0.0f;
+/////////////////////////////////////////
 
 // Material related /////////////////////////
 uniform bool  B_MaterialReceivesLighting;
@@ -103,6 +107,14 @@ uniform sampler2D  B_GTex_Color;
     #endif
 #endif
 // ///////////////////////////////////////
+
+// Util functions /////////////////
+float B_DepthToLinear(float d)
+{
+    return (2 * B_Camera_Near) / (B_Camera_Far + B_Camera_Near - d
+                                  * (B_Camera_Far - B_Camera_Near));
+}
+//
 
 // GBuffer Samplers //////////////////////
 #ifdef BANG_FRAGMENT

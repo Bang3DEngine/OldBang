@@ -19,6 +19,7 @@ vec3 GetDirectionalLightColorApportation(const in vec3  pixelPosWorld,
     float specDot        = max(0.0, dot(reflected, pointToCamDir));
     float specShin       = min(pow(specDot, pixelShininess), 1.0);
     vec3 lightSpecular   = specShin * lightDot * lightIntensity * lightColor;
+    lightSpecular *= 0.5f;
 
     return lightDiffuse + lightSpecular;
 }

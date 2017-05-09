@@ -81,6 +81,7 @@ public:
     static void SetModelMatrix(const Matrix4 &model);
     static void SetViewMatrix(const Matrix4 &view);
     static void SetProjectionMatrix(const Matrix4 &projection);
+    static void SetZNearFar(float zNear, float zFar);
 
     static void ApplyContextToShaderProgram(ShaderProgram *sp);
     static void Render(const VAO* vao,

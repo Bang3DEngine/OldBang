@@ -34,6 +34,7 @@ public:
     void SetModelMatrix(const Matrix4 &model);
     void SetViewMatrix(const Matrix4 &view);
     void SetProjectionMatrix(const Matrix4 &projection);
+    void SetZNearFar(float zNear, float zFar);
 
     bool IsWriteDepth() const;
     bool IsTestDepth() const;
@@ -54,6 +55,7 @@ private:
 
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
+    float m_zNear, m_zFar;
 
     void OnBind(GL::BindTarget bindTarget, GLId glId);
     void OnUnBind(GL::BindTarget bindTarget);

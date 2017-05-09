@@ -5,6 +5,7 @@
 #include <list>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 
 class String;
 template <class T> class Array;
@@ -217,6 +218,12 @@ public:
     void Sort()
     {
         this->sort();
+    }
+
+    template<class StrictWeakOrdering>
+    void Sort(const StrictWeakOrdering &sortClass)
+    {
+        this->sort(sortClass);
     }
 
     Iterator Begin() { return this->begin(); }

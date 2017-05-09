@@ -20,25 +20,21 @@
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 
-String::String() :
-    std::string("")
+String::String() : std::string("")
 {
 }
 
-String::String(int v) :
-    std::string("")
+String::String(int v) : std::string("")
 {
     *this = ToString(v);
 }
 
-String::String(float v)  :
-    std::string("")
+String::String(float v)  : std::string("")
 {
     *this = ToString(v);
 }
 
-String::String(const char *cstr) :
-    std::string(cstr)
+String::String(const char *cstr) : std::string(cstr)
 {
 }
 
@@ -47,8 +43,8 @@ String::String(const QString &qstr)
     *this = String(qstr.toStdString());
 }
 
-String::String(const std::string &stdstr) :
-    std::string(stdstr)
+// .c_str() guarrantees no CopyOnWrite so it's thread-safe (?)
+String::String(const std::string &stdstr) : std::string(stdstr.c_str())
 {
 }
 
@@ -510,7 +506,8 @@ String String::ToString(const Color &v)
 
 String String::ToString(const String &v)
 {
-    return String(v);
+    // .ToCString() to avoid COW so it's thread safe
+    return String(v.ToCString());
 }
 String String::ToString(const Vector2 &v)
 {

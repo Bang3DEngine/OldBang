@@ -10,17 +10,17 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="54.013882mm"
-   height="49.966869mm"
-   viewBox="0 0 191.38777 177.04796"
+   width="49.703072mm"
+   height="49.989029mm"
+   viewBox="0 0 176.11325 177.12648"
    id="svg4278"
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="LogoBang_B.svg"
    style="enable-background:new"
-   inkscape:export-filename="/home/sephirot47/Bang/EngineAssets/Logos/LogoBang_B_64.png"
-   inkscape:export-xdpi="30.1"
-   inkscape:export-ydpi="30.1">
+   inkscape:export-filename="/home/sephirot47/Bang/EngineAssets/Logos/LogoBang_B_2048.png"
+   inkscape:export-xdpi="1046.6"
+   inkscape:export-ydpi="1046.6">
   <defs
      id="defs4280">
     <linearGradient
@@ -48,8 +48,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="89.240988"
-     inkscape:cy="62.628381"
+     inkscape:cx="89.202651"
+     inkscape:cy="62.667659"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -65,11 +65,11 @@
      fit-margin-right="0"
      fit-margin-bottom="0">
     <sodipodi:guide
-       position="271.10525,177.00606"
+       position="271.06691,177.04534"
        orientation="0,1"
        id="guide4881" />
     <sodipodi:guide
-       position="609.60526,3.0060634"
+       position="609.56693,3.0453412"
        orientation="0,1"
        id="guide4182" />
   </sodipodi:namedview>
@@ -90,11 +90,11 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1;filter:url(#filter6651)"
-     transform="translate(-48.394747,-471.3203)">
+     transform="translate(-48.433084,-471.28105)">
     <g
        id="g5966"
        style="fill:#009dff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       transform="translate(6,1)">
+       transform="matrix(0.92355823,0,0,1.0004435,9.2790662,0.75216214)">
       <path
          style="fill:#009dff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 229.25914,620.27112 c 5.25969,-15.2784 3.4714,-43.66721 -7.93828,-60.50852 -8.02828,-11.85017 -21.11949,-21.0351 -37.4693,-20.97544 9.67314,-10.39636 12.23573,-29.7483 5.084,-42.38281 -9.69121,-17.12083 -35.79802,-25.10829 -53.42383,-25.08399 -29.94835,0.0413 -50.296876,0 -50.296876,0 l -16.685547,-5e-5 0,0.11133 -25.132813,0 c 0.101156,57.9618 0.04687,116.92755 0.04687,174.89063 l 41.853516,0 0,-139.64063 c 17.54197,0 40.74394,0.30384 51.61619,0.28217 12.86726,-0.0256 16.01066,12.40103 14.7549,20.81158 -0.90308,6.04845 -9.92177,11.21438 -14.52002,11.21438 -12.95721,0 -28.72998,0.22703 -28.72998,0.22703 l 0,35.65429 c 23.83129,0 42.02711,-0.13867 65.58789,-0.13867 12.86728,0 16.55255,10.56579 15.83008,18.70087 -0.58591,6.59734 -6.30962,12.66617 -15.30955,12.66617 -9.96145,0 -24.77638,0.0626 -24.77638,0.0626 l -14.84962,39.89258 c 11.35994,0.46265 23.60323,0.28392 37.9707,0.25781 l 0,0.002 c 26.86108,0.12614 49.64875,-6.46697 56.38805,-26.04333 z"

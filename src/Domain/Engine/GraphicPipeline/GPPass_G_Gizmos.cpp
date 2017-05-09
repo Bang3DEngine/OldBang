@@ -30,6 +30,6 @@ void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
     {
         go->_OnDrawGizmos(m_depthed, m_overlay);
     }
-    //p_gbuffer->ClearStencil();
+    // p_gbuffer->ClearStencil();
     p_gbuffer->ClearDepth();
 }

@@ -30,8 +30,8 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-    delete m_anonymousAudioPlayer;
     StopAllSounds();
+    delete m_anonymousAudioPlayer;
     alutExit();
 }
 
@@ -42,6 +42,7 @@ AnonymousAudioPlayer *AudioManager::GetAnonymousAudioPlayer() const
 
 void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
 {
+    QMutexLocker m(&m_mutex_currentAudios);
     m_currentAudios.Remove(audioPlayer);
 }
 
@@ -65,6 +66,7 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     bool started = am->m_threadPool.tryStart(player);
     if (started)
     {
+        QMutexLocker m(&am->m_mutex_currentAudios);
         am->m_currentAudios.Add(player);
     }
 }
@@ -117,8 +119,9 @@ void AudioManager::StopAllSounds()
     for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
     {
         audioPlayer->Stop();
-        delete audioPlayer;
     }
+
+    QMutexLocker m(&am->m_mutex_currentAudios);
     am->m_currentAudios.Clear();
 }
 

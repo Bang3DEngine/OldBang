@@ -40,12 +40,10 @@ void SerializableObject::ReadFromString(const String &xmlInfoString)
 
 void SerializableObject::Read(const XMLNode &xmlInfo)
 {
-    XMLParser::RegisterId(&xmlInfo, this);
 }
 
 void SerializableObject::Write(XMLNode *xmlInfo) const
 {
-    XMLParser::RegisterId(xmlInfo, this);
     xmlInfo->SetTagName( GetClassName() );
 }
 
@@ -91,6 +89,7 @@ SerializableObject::~SerializableObject()
     #ifdef BANG_EDITOR
     FileReferencesManager *frm = FileReferencesManager::GetInstance();
     if (frm) { frm->UnRegisterSerializableObject(this); }
-    Inspector::GetInstance()->OnSerializableObjectDestroyed(this);
+    Inspector *insp = Inspector::GetInstance();
+    if (insp) { insp->OnSerializableObjectDestroyed(this); }
     #endif
 }

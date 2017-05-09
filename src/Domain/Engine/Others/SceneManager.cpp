@@ -185,6 +185,7 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
     SceneManager::SetActiveSceneFilepath( sceneFilepath );
     if (scene->ReadFromFile(sceneFilepath))
     {
+        scene->SetName(sceneFilepath.GetName());
         SceneManager::LoadSceneInstantly(scene);
     }
     else

@@ -4,6 +4,7 @@
 
 #include <QTextStream>
 #include <QStyleFactory>
+#include "Bang/WinUndef.h"
 
 #include "Bang/glm/glm.hpp"
 
@@ -48,6 +49,7 @@
 
 void LoadStylesheet(QApplication *app)
 {
+    /*
     app->setStyle(QStyleFactory::create("Fusion"));
 
     QPalette darkPalette;
@@ -76,10 +78,10 @@ void LoadStylesheet(QApplication *app)
                                     background-color: #222222; } \
                         QToolButton:checked { background-color: #111111; }");
 
-    /*
+                        */
     // Load dark Window theme
-    QFile f((Paths::EngineAssets() + "/qdarkstyle/style.qss").ToQString()
-            );
+    QFile f((Paths::EngineAssets().Append("/qdarkstyle/style.qss"))
+              .GetAbsolute().ToQString());
     if (!f.exists())
     {
         Debug_Error("Unable to set stylesheet, not found.");
@@ -90,7 +92,7 @@ void LoadStylesheet(QApplication *app)
         QTextStream ts(&f);
         app->setStyleSheet(ts.readAll());
     }
-    */
+
     // Set Font
     QFont font;
     font.setFamily(font.defaultFamily());
@@ -119,8 +121,7 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 int main(int argc, char **argv)
 {
-	Application app(argc, argv);
-    LoadStylesheet(&app);
+    Application app(argc, argv);
 
     InitSingletonManager();
 
@@ -134,8 +135,9 @@ int main(int argc, char **argv)
     Paths::SetEnginePath(executableDir.Append("GameData"));
     #endif
 
-    Path loadedProjectFilepath;
+    LoadStylesheet(&app);
 
+    Path loadedProjectFilepath;
     #ifdef BANG_EDITOR
     // Select project
     QMainWindow *selectProjectWindow = new QMainWindow();

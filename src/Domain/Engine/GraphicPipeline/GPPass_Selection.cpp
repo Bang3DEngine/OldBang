@@ -20,6 +20,7 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
 {
     GPPass::InPass(renderers, sceneChildren);
 
+    p_selectionFramebuffer->ClearDepth();
     p_selectionFramebuffer->SetAllDrawBuffers();
 
     GPPass_DepthLayer *parentPassDepthLayer =

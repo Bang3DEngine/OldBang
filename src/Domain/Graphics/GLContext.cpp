@@ -31,6 +31,9 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
     sp->SetMat4("B_Projection",    m_projectionMatrix);
     sp->SetMat4("B_ProjectionInv", m_projectionMatrix.Inversed());
 
+    sp->SetFloat("B_Camera_Near", m_zNear);
+    sp->SetFloat("B_Camera_Far",  m_zFar);
+
     Matrix4 pvmMatrix;
     if (m_viewProjMode == GL::ViewProjMode::UseBoth)
     {
@@ -129,6 +132,12 @@ void GLContext::SetViewMatrix(const Matrix4 &view)
 void GLContext::SetProjectionMatrix(const Matrix4 &projection)
 {
     m_projectionMatrix = projection;
+}
+
+void GLContext::SetZNearFar(float zNear, float zFar)
+{
+    m_zNear = zNear;
+    m_zFar  = zFar;
 }
 
 

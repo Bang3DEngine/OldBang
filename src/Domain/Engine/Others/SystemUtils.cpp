@@ -128,13 +128,6 @@ void SystemUtils::_System(const String &command,
     }
 }
 
-List<String> SystemUtils::ToStringList(const List<Path> &paths)
-{
-    List<String> stringList;
-    for (const Path& path : paths) { stringList.Add(path.GetAbsolute()); }
-    return stringList;
-}
-
 void SystemUtils::Compile(List<Path> &sourceFilesList,
                           const Path &outputLibFilepath,
                           CompilationFlags clFlags,
@@ -151,8 +144,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     List<String> args;
     args.Add( produceSharedLib ? "-shared" : "-c" );
 
-    List<String> sourceFilesListStr = SystemUtils::ToStringList(sourceFilesList);
-    args.Add(sourceFilesListStr);
+    args.Add(sourceFilesList.To<List,String>());
 
     args.Add({"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
                    "--std=c++11",
@@ -160,7 +152,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     if (editorMode) { args.Add("-DBANG_EDITOR"); }
 
     List<Path> qtIncludeDirs = SystemUtils::GetQtIncludes();
-    List<String> qtIncludeDirsStr = SystemUtils::ToStringList(qtIncludeDirs);
+    List<String> qtIncludeDirsStr = qtIncludeDirs.To<List,String>();
     for(String &qtIncludeDir : qtIncludeDirsStr) { qtIncludeDir.Prepend("-I"); }
     args.Add(qtIncludeDirsStr);
 
@@ -169,7 +161,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     {
         List<Path> assetsSubDirs =
                 Paths::ProjectAssets().GetSubDirectories(true);
-        List<String> assetsSubDirsStr = SystemUtils::ToStringList(assetsSubDirs);
+        List<String> assetsSubDirsStr = assetsSubDirs.To<List,String>();
         for(String &subDir : assetsSubDirsStr) { subDir.Prepend("-I"); }
         args.Add(assetsSubDirsStr);
     }
@@ -186,11 +178,10 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
         objectPaths.Add( SystemUtils::GetAllEngineObjects(editorMode) );
     }
 
-    List<String> objectPathsStr = SystemUtils::ToStringList(objectPaths);
-    args.Add(objectPathsStr);
+    args.Add(objectPaths.To<List,String>());
 
     List<Path> qtLibDirs = SystemUtils::GetQtLibrariesDirs();
-    List<String> qtLibDirsStr = SystemUtils::ToStringList(qtLibDirs);
+    List<String> qtLibDirsStr = qtLibDirs.To<List,String>();
     for(String &libDir : qtLibDirsStr) { libDir.Prepend("-L"); }
     args.Add(qtLibDirsStr);
 

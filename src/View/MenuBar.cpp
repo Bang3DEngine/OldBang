@@ -340,7 +340,8 @@ void MenuBar::OnCreateUIImage() const
     img->SetImage(defaultTex);
 
     RectTransform *rt = go->GetComponent<RectTransform>();
-    rt->SetAnchors(Vector2(-0.3f), Vector2(0.3f));
+    rt->SetAnchors(Vector2(0.0f), Vector2(0.0f));
+    rt->SetMargins(-64, -64, -64, -64);
 
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
@@ -380,10 +381,10 @@ void MenuBar::OnCreatePrefab() const
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
-Material* MenuBar::OnCreateMaterial(const Path &matFilepath) const
+Material* MenuBar::OnCreateMaterial(const String &matName) const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(matFilepath)
+    filepath = filepath.Append(matName)
                        .AppendExtension(Material::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     Material *mat = AssetsManager::Create<Material>(filepath);
@@ -408,10 +409,10 @@ void MenuBar::OnCreateShaderProgram() const
     AssetsManager::Create<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
-Texture2D* MenuBar::OnCreateTexture2D(const Path &tex2DFilepath) const
+Texture2D* MenuBar::OnCreateTexture2D(const String &tex2DName) const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(tex2DFilepath)
+    filepath = filepath.Append(tex2DName)
                        .AppendExtension(Texture2D::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     Texture2D* tex = AssetsManager::Create<Texture2D>(filepath);
@@ -429,10 +430,10 @@ void MenuBar::OnCreateFont() const
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
-AudioClip* MenuBar::OnCreateAudioClip(const Path &audioClipFilepath) const
+AudioClip* MenuBar::OnCreateAudioClip(const String &audioClipName) const
 {
     Path filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath = filepath.Append(audioClipFilepath)
+    filepath = filepath.Append(audioClipName)
                        .AppendExtension(AudioClip::GetFileExtensionStatic());
     filepath = filepath.GetDuplicate();
     AudioClip* audioClip = AssetsManager::Create<AudioClip>(filepath);

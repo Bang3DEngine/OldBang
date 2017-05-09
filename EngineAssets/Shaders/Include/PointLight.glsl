@@ -31,7 +31,8 @@ vec3 GetPointLightColorApportation(vec3  pixelPosWorld,
     float specShin = pow(specDot, pixelShininess);
     specShin = min(specShin, 1.0);
 
-    vec3 lightSpecular   = specShin * lightDot * intensityAtt * lightIntensity * lightColor;
+    vec3 lightSpecular = specShin * lightDot * intensityAtt * lightIntensity * lightColor;
+    lightSpecular *= 0.5f;
 
     return lightDiff + lightSpecular;
 }

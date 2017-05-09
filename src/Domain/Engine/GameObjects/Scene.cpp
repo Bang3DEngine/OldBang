@@ -202,16 +202,5 @@ void Scene::Write(XMLNode *xmlInfo) const
 void Scene::PostRead(const XMLNode &xmlInfo)
 {
     GameObject::PostRead(xmlInfo);
-
-    String camId = xmlInfo.GetString("Camera");
-    if (!camId.Empty())
-    {
-        const SerializableObject *f = XMLParser::GetPointerFromId(camId);
-        const Camera *cam = Object::ConstCast<Camera>(f);
-        if (cam)
-        {
-            SetCamera(cam);
-        }
-    }
 }
 

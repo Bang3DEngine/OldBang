@@ -17,6 +17,7 @@ FileTracker::FileTracker()
     m_refreshTimer.moveToThread(&m_refreshThread);
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                      this, SLOT(Refresh()), Qt::DirectConnection);
+
     m_refreshTimer.connect(&m_refreshThread, SIGNAL(started()), SLOT(start()));
     m_refreshThread.start();
 

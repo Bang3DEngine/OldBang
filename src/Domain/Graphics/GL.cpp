@@ -121,6 +121,11 @@ void GL::SetProjectionMatrix(const Matrix4 &projection)
     GL::GetGLContext()->SetProjectionMatrix(projection);
 }
 
+void GL::SetZNearFar(float zNear, float zFar)
+{
+    GL::GetGLContext()->SetZNearFar(zNear, zFar);
+}
+
 void GL::ApplyContextToShaderProgram(ShaderProgram *sp)
 {
     GL::GetGLContext()->ApplyToShaderProgram(sp);

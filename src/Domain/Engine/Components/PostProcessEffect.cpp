@@ -106,7 +106,7 @@ void PostProcessEffect::Write(XMLNode *xmlInfo) const
     xmlInfo->SetEnum("Type", {"AfterScene", "AfterCanvas"}, int( GetType() ));
 }
 
-bool PostProcessEffect::operator<(const PostProcessEffect &ppe) const
+bool operator<(const PostProcessEffect& lhs, const PostProcessEffect& rhs)
 {
-    return GetPriority() < ppe.GetPriority();
+    return lhs.GetPriority() < rhs.GetPriority();
 }

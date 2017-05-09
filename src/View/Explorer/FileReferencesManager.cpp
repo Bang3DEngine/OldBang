@@ -27,11 +27,13 @@ FileReferencesManager::~FileReferencesManager()
 
 void FileReferencesManager::RegisterSerializableObject(SerializableObject *fileable)
 {
+    QMutexLocker m(&m_mutex_inMemorySerialObjects);
     m_inMemorySerialObjects.Insert(fileable);
 }
 
 void FileReferencesManager::UnRegisterSerializableObject(SerializableObject *fileable)
 {
+    QMutexLocker m(&m_mutex_inMemorySerialObjects);
     m_inMemorySerialObjects.Remove(fileable);
 }
 

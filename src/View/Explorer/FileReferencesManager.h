@@ -3,8 +3,10 @@
 
 #include <queue>
 
+#include <QMutex>
 #include <QTimer>
 #include <QObject>
+#include <QMutexLocker>
 #include "Bang/WinUndef.h"
 
 #include "Bang/Set.h"
@@ -35,6 +37,7 @@ private:
     // Queue with the changes we are asked for to refactor references.
     // Its a queue of pairs (oldAbsPath, newAbsPath)
     Set<SerializableObject*> m_inMemorySerialObjects;
+    QMutex m_mutex_inMemorySerialObjects;
 
     FileReferencesManager();
     virtual ~FileReferencesManager();

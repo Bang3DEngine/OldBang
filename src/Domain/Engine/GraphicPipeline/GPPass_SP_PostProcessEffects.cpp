@@ -15,13 +15,16 @@ GPPass_SP_PostProcessEffects::GPPass_SP_PostProcessEffects(
     m_type = type;
 }
 
+template<class T>
+struct PointerComparison { bool operator()(T* a, T* b) { return *a < *b; } };
+
 void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
                                           const List<GameObject *> &sceneChildren)
 {
     List<PostProcessEffect*> postProcessEffects =
                        p_scene->GetComponentsInChildren<PostProcessEffect>();
-
-    postProcessEffects.Sort();
+    postProcessEffects.Sort( [](PostProcessEffect *a, PostProcessEffect *b)
+                                   { return *a < *b; } );
 
     for (PostProcessEffect *postProcessEffect : postProcessEffects)
     {

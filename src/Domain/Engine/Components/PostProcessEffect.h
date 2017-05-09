@@ -35,7 +35,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    bool operator<(const PostProcessEffect& ppe) const;
+    friend bool operator<(const PostProcessEffect& lhs,
+                          const PostProcessEffect& rhs);
 
 private:
     ShaderProgram *m_shaderProgram = nullptr;

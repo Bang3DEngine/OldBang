@@ -65,11 +65,11 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
        new GPPass_SP_DeferredLights(this),  // Apply light to opaques
        new GPPass_G(this, false, false),    // UnLighted opaques G Pass
 
-       new GPPass_G(this, true, true,       // Lighted Transparent G pass
-       {
-         new GPPass_SP_DeferredLights(this) //   Add light to transparent
-       }),
-       new GPPass_G(this, false, true),     // Unlighted Transparent
+       // new GPPass_G(this, true, true,       // Lighted Transparent G pass
+       // {
+         // new GPPass_SP_DeferredLights(this) //   Add light to transparent
+       // }),
+       // new GPPass_G(this, false, true),     // Unlighted Transparent
 
        new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
@@ -79,7 +79,7 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
      new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
      {
       new GPPass_G(this, false, false),  // Canvas opaques
-      new GPPass_G(this, false, true),   // Canvas transparents
+      // new GPPass_G(this, false, true),   // Canvas transparents
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
@@ -265,6 +265,7 @@ void GraphicPipeline::RenderSelectionBuffer(
 void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
+    m_glContext->ApplyToShaderProgram(sp);
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
     sp->SetVec2("B_ScreenSize", Screen::GetSize());

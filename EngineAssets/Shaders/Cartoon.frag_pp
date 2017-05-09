@@ -1,0 +1,18 @@
+#include "SP.frag_pp"
+
+#define QUANT 8
+
+void Main()
+{
+    vec4 outputColor = B_SampleColor();
+
+    float originalValue = length(outputColor);
+    float toonValue = round(originalValue * QUANT) / QUANT.0f;
+    outputColor = normalize(outputColor) * toonValue;
+
+    float valueFactor = 3.0f;
+    float contrast = 1.3f;
+    outputColor = pow(outputColor * valueFactor, vec4(contrast)) / valueFactor;
+
+    B_Out_Color = outputColor;
+}

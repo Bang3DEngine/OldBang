@@ -107,7 +107,7 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     newPath = newPath.AppendExtension(Texture2D::GetFileExtensionStatic());
     newPath = newPath.GetDuplicate();
 
-    Texture2D *tex = mb->OnCreateTexture2D(newPath);
+    Texture2D *tex = mb->OnCreateTexture2D(newPath.GetNameExt());
     tex->LoadFromImage(f.GetPath() );
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
@@ -132,7 +132,7 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     newPath = newPath.AppendExtension(AudioClip::GetFileExtensionStatic());
     newPath = newPath.GetDuplicate();
 
-    AudioClip *audio = mb->OnCreateAudioClip( newPath );
+    AudioClip *audio = mb->OnCreateAudioClip( newPath.GetNameExt() );
     audio->LoadFromFile( f.GetPath() );
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
@@ -159,7 +159,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     newPath = newPath.AppendExtension(Material::GetFileExtensionStatic());
     newPath = newPath.GetDuplicate();
 
-    Material *mat = mb->OnCreateMaterial( newPath );
+    Material *mat = mb->OnCreateMaterial( newPath.GetNameExt() );
     mat->SetTexture(fromTexture);
     AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
     //Inspector::GetInstance()->ShowInspectable(mat, newMatName);

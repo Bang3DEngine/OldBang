@@ -14,6 +14,7 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
     m_audioClip = clip;
     m_alSourceId = alSourceId;
     m_delayInSeconds = delayInSeconds;
+    setAutoDelete(true);
 }
 
 void AudioPlayerRunnable::Resume()

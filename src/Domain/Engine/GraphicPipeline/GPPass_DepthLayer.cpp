@@ -23,14 +23,14 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
     GPPass::PrePass(renderers, sceneChildren);
 
     #ifdef BANG_EDITOR
-    if (!p_selectionFramebuffer->IsPassing())
+    if (p_selectionFramebuffer->IsPassing())
     {
-        p_selectionFramebuffer->ClearDepth();
+        // p_selectionFramebuffer->ClearDepth();
     }
     else
     #endif
     {
-        p_gbuffer->ClearDepth();
+        // p_gbuffer->ClearDepth();
     }
 }
 

@@ -6,6 +6,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
 #include "Bang/Transform.h"
+#include "Bang/GLContext.h"
 #include "Bang/GameObject.h"
 #include "Bang/FileReader.h"
 #include "Bang/MeshRenderer.h"
@@ -94,6 +95,7 @@ void Camera::Bind() const
     Matrix4 view, projection;
     GetViewMatrix(&view);
     GetProjectionMatrix(&projection);
+    GL::SetZNearFar(GetZNear(), GetZFar());
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
 }

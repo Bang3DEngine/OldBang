@@ -70,14 +70,14 @@ public slots:
 
     void OnCreatePrefab() const;
     Material* OnCreateMaterial(
-            const Path &matFilepath = Path("New_Material")) const;
+            const String &matName = "New_Material") const;
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
     Texture2D* OnCreateTexture2D(
-            const Path &tex2DFilepath = Path("New_Texture2D")) const;
+            const String &tex2DName = "New_Texture2D") const;
     void OnCreateFont() const;
     AudioClip* OnCreateAudioClip(
-            const Path &audioClipFilepath = Path("New_AudioClip")) const;
+            const String &audioClipName = "New_AudioClip") const;
 
     void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;
