@@ -6,7 +6,7 @@
 
 # Bang
 <br/>
-<img src="/EngineAssets/BangLogo.png" width="100">
+<img src="/EngineAssets/Logos/LogoBang_512.png" width="512">
 <br/> <br/>
 Bang 3D game engine and editor, using C++. <br/> 
 
