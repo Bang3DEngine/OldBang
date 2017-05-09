@@ -141,14 +141,14 @@ bool Renderer::IsTransparent() const
     return m_isTransparent;
 }
 
-void Renderer::SetDepthLayer(Renderer::DepthLayer dl)
+void Renderer::SetRenderLayer(Renderer::RenderLayer rl)
 {
-    m_depthLayer = dl;
+    m_renderLayer = rl;
 }
 
-Renderer::DepthLayer Renderer::GetDepthLayer() const
+Renderer::RenderLayer Renderer::GetRenderLayer() const
 {
-    return m_depthLayer;
+    return m_renderLayer;
 }
 
 void Renderer::SetDrawWireframe(bool drawWireframe)

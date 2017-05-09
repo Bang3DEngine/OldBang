@@ -32,6 +32,11 @@ void AudioPlayerRunnable::Stop()
     m_stopped = true;
 }
 
+void AudioPlayerRunnable::OnAudioManagerDelete()
+{
+    m_exited = true;
+}
+
 void AudioPlayerRunnable::run()
 {
     ENSURE(m_audioClip->IsLoaded());
@@ -47,7 +52,7 @@ void AudioPlayerRunnable::run()
     ALint state;
     do
     {
-        if (m_stopped) { alSourceStop (m_alSourceId); }
+        if (m_stopped || m_exited) { alSourceStop (m_alSourceId); }
         if (m_paused)  { alSourcePause(m_alSourceId); }
 
         alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
@@ -58,7 +63,10 @@ void AudioPlayerRunnable::run()
 
         QThread::currentThread()->msleep(100);
     }
-    while ( state != AL_STOPPED );
+    while ( state != AL_STOPPED && !m_exited );
 
-    AudioManager::GetInstance()->OnAudioFinishedPlaying(this);
+    if (!m_exited)
+    {
+        AudioManager::GetInstance()->OnAudioFinishedPlaying(this);
+    }
 }

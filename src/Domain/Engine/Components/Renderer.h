@@ -22,11 +22,9 @@ class Renderer : public GLObject,
     COMPONENT_ICON(Renderer, "Icons/eye.png")
 
 public:
-    enum DepthLayer
+    enum RenderLayer
     {
-        DepthLayerScene,
-        DepthLayerCanvas,
-        DepthLayerGizmos
+        Scene, Canvas, Gizmos
     };
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -77,8 +75,8 @@ public:
     void SetTransparent(bool transparent);
     bool IsTransparent() const;
 
-    void SetDepthLayer(DepthLayer dl);
-    DepthLayer GetDepthLayer() const;
+    void SetRenderLayer(RenderLayer dl);
+    RenderLayer GetRenderLayer() const;
 
 protected:
     bool m_drawWireframe        = false;
@@ -95,8 +93,8 @@ private:
     Material *m_material     = nullptr;
     Material *m_materialCopy = nullptr;
 
-    DepthLayer m_depthLayer = DepthLayerScene;
-    bool m_isTransparent    = false;
+    RenderLayer m_renderLayer = Scene;
+    bool m_isTransparent      = false;
 
     /**
      * @brief Width of the lines if rendering with Lines RenderMode

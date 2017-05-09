@@ -6,7 +6,7 @@
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
 #include "Bang/GraphicPipeline.h"
-#include "Bang/GPPass_DepthLayer.h"
+#include "Bang/GPPass_RenderLayer.h"
 #include "Bang/SelectionFramebuffer.h"
 
 GPPass_Selection::GPPass_Selection(GraphicPipeline *graphicPipeline,
@@ -23,10 +23,10 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
     p_selectionFramebuffer->ClearDepth();
     p_selectionFramebuffer->SetAllDrawBuffers();
 
-    GPPass_DepthLayer *parentPassDepthLayer =
-            Object::SCast<GPPass_DepthLayer>(p_parentPass);
+    GPPass_RenderLayer *parentPassRenderLayer =
+            Object::SCast<GPPass_RenderLayer>(p_parentPass);
 
-    if (parentPassDepthLayer->GetDepthLayer() != Renderer::DepthLayerGizmos)
+    if (parentPassRenderLayer->GetRenderLayer() != Renderer::Gizmos)
     {
         for (Renderer *rend : renderers)
         {

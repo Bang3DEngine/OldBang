@@ -3,7 +3,6 @@
 
 #include "Bang/GBuffer.h"
 #include "Bang/Renderer.h"
-#include "Bang/GPPass_DepthLayer.h"
 
 class Mesh;
 class Scene;
@@ -13,6 +12,7 @@ class Material;
 class GLContext;
 class GameObject;
 class Framebuffer;
+class GPPass_RenderLayer;
 class TextureUnitManager;
 class SelectionFramebuffer;
 /**
@@ -59,14 +59,14 @@ private:
     SelectionFramebuffer *m_selectionFB = nullptr;
     #endif
 
-    GPPass_DepthLayer *m_scenePass  = nullptr;
-    GPPass_DepthLayer *m_canvasPass = nullptr;
-    GPPass_DepthLayer *m_gizmosPass = nullptr;
+    GPPass_RenderLayer *m_scenePass  = nullptr;
+    GPPass_RenderLayer *m_canvasPass = nullptr;
+    GPPass_RenderLayer *m_gizmosPass = nullptr;
 
     #ifdef BANG_EDITOR
-    GPPass_DepthLayer *m_sceneSelectionPass  = nullptr;
-    GPPass_DepthLayer *m_canvasSelectionPass = nullptr;
-    GPPass_DepthLayer *m_gizmosSelectionPass = nullptr;
+    GPPass_RenderLayer *m_sceneSelectionPass  = nullptr;
+    GPPass_RenderLayer *m_canvasSelectionPass = nullptr;
+    GPPass_RenderLayer *m_gizmosSelectionPass = nullptr;
     #endif
 
     GBuffer::AttachmentId m_gbufferAttachToBeShown = GBuffer::AttColor;

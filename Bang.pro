@@ -227,7 +227,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Others/GraphicPipelineDebugger.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
     src/Domain/Graphics/GLContext.h \
     src/Domain/Graphics/GL.h \
@@ -271,7 +270,8 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/InvertColors.frag_pp \
     EngineAssets/Shaders/Blur.frag_pp \
     EngineAssets/Shaders/GrayScale.frag_pp \
-    EngineAssets/Shaders/Outline.frag_pp
+    EngineAssets/Shaders/Outline.frag_pp \
+    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h
 
 EDITOR {
 HEADERS += \
@@ -453,7 +453,6 @@ SOURCES += \
     src/Domain/Engine/Object.cpp \
     src/Domain/Engine/Others/GraphicPipelineDebugger.cpp \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
     src/Domain/Graphics/GLContext.cpp \
@@ -492,7 +491,8 @@ SOURCES += \
     src/Persistence/Files/MaterialFile.cpp \
     src/Persistence/Files/AudioClipFile.cpp \
     src/Persistence/Files/FontFile.cpp \
-    src/Persistence/Paths.cpp
+    src/Persistence/Paths.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp
 
 EDITOR {
     SOURCES += \

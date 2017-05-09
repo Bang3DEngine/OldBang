@@ -30,7 +30,10 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-    StopAllSounds();
+    for (AudioPlayerRunnable *ap : m_currentAudios)
+    {
+        ap->OnAudioManagerDelete();
+    }
     delete m_anonymousAudioPlayer;
     alutExit();
 }

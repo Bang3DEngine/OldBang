@@ -16,6 +16,7 @@ public:
     void Resume();
     void Pause();
     void Stop();
+    void OnAudioManagerDelete();
 
     void run() override;
 
@@ -26,6 +27,7 @@ private:
 
     volatile bool m_paused  = false;
     volatile bool m_stopped = false;
+    volatile bool m_exited  = false;
 };
 
 #endif // AUDIOPLAYERRUNNABLE_H

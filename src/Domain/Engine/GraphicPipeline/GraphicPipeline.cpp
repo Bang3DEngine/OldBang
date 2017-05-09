@@ -24,6 +24,7 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/GPPass_G_Gizmos.h"
+#include "Bang/GPPass_RenderLayer.h"
 #include "Bang/TextureUnitManager.h"
 #include "Bang/GraphicPipelineDebugger.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
@@ -57,34 +58,26 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
     // Set up graphic pipeline passes
-    typedef Renderer::DepthLayer DL;
+    typedef Renderer::RenderLayer RL;
     m_scenePass  =
-     new GPPass_DepthLayer(this, DL::DepthLayerScene,
+     new GPPass_RenderLayer(this, RL::Scene,
      {
-       new GPPass_G(this, true, false),     // Lighted opaques G Pass
-       new GPPass_SP_DeferredLights(this),  // Apply light to opaques
-       new GPPass_G(this, false, false),    // UnLighted opaques G Pass
-
-       // new GPPass_G(this, true, true,       // Lighted Transparent G pass
-       // {
-         // new GPPass_SP_DeferredLights(this) //   Add light to transparent
-       // }),
-       // new GPPass_G(this, false, true),     // Unlighted Transparent
-
+       new GPPass_G(this, true, false),     // Lighted G_Pass
+       new GPPass_SP_DeferredLights(this),  // Apply light
+       new GPPass_G(this, false, false),    // UnLighted G_Pass
        new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
      });
 
     m_canvasPass =
-     new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
+     new GPPass_RenderLayer(this, RL::Canvas,
      {
-      new GPPass_G(this, false, false),  // Canvas opaques
-      // new GPPass_G(this, false, true),   // Canvas transparents
+      new GPPass_G(this, false, false),
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
 
-    m_gizmosPass = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::Gizmos,
     {
      new GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
      new GPPass_G_Gizmos(this, false, false), // Gizmos normal
@@ -92,15 +85,15 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     });
 
     #ifdef BANG_EDITOR
-    m_sceneSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerScene,
+    m_sceneSelectionPass  = new GPPass_RenderLayer(this, RL::Scene,
     {
       new GPPass_Selection(this)
     });
-    m_canvasSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
+    m_canvasSelectionPass  = new GPPass_RenderLayer(this, RL::Canvas,
     {
       new GPPass_Selection(this)
     });
-    m_gizmosSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
+    m_gizmosSelectionPass  = new GPPass_RenderLayer(this, RL::Gizmos,
     {
       new GPPass_Selection(this)
     });

@@ -48,7 +48,7 @@ void EditorGizmosGameObject::Init()
         for (Renderer *rend : renderers)
         {
             rend->SetMaterial(m_material);
-            rend->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
+            rend->SetRenderLayer(Renderer::RenderLayer::Gizmos);
         }
 
         m_inited = true;

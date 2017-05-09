@@ -18,7 +18,7 @@ UIRenderer::UIRenderer()
     GetMaterial()->SetDiffuseColor(m_tint);
 
     SetTransparent(false);
-    SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
+    SetRenderLayer(Renderer::RenderLayer::Canvas);
 }
 
 UIRenderer::~UIRenderer()

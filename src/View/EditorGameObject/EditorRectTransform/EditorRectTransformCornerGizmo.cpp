@@ -42,12 +42,11 @@ void EditorRectTransformCornerGizmo::OnEditorUpdate()
     m_cornerColor = (!m_mouseIsOver && !m_grabbed) ?
                 Color(0.0f, 0.0f, 0.6f) : Color(0.0f, 0.5f, 1.0f);
 
-    EditorRectTransformGizmo *rectTransformGizmo = parent ?
-                Object::SCast<EditorRectTransformGizmo>(parent) : nullptr;
-
     /*
     if (m_cornerPosition == CornerPosition::Center)
     {
+        EditorRectTransformGizmo *rectTransformGizmo = parent ?
+                    Object::SCast<EditorRectTransformGizmo>(parent) : nullptr;
         // Special case for moving UI. Grab instant (Button instead of ButtonDown)
         // and make sure not grabbing corner and center at the same time
         m_grabbed = m_mouseIsOver &&
