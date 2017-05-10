@@ -37,8 +37,8 @@ protected:
     virtual void OnDragLeave(const DragDropInfo &ddi)     {} // Leaves a widget
     virtual void OnDrop(const DragDropInfo &ddi)          {} // Drag Ends
 
-    bool MouseOverMe() const;
-    static bool MouseOver(QWidget *w);
+    bool IsMouseOverMe() const;
+    static bool IsMouseOver(const QWidget *w);
 
     friend class DragDropManager;
     friend class DragDropAgent;

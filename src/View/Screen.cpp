@@ -135,7 +135,7 @@ Vector2 Screen::GetPixelClipSize()
     return 1.0f / Screen::GetSize();
 }
 
-bool Screen::MouseOver()
+bool Screen::IsMouseOver()
 {
     return Screen::GetInstance()->underMouse();
 }
@@ -292,7 +292,7 @@ void Screen::OnDrop(const DragDropInfo &ddi)
 {
     Scene *activeScene = SceneManager::GetActiveScene();
 
-    if ( MouseOverMe() )
+    if ( IsMouseOverMe() )
     {
         if (m_gameObjectBeingDragged)
         {

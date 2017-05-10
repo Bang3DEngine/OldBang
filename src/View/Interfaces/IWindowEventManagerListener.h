@@ -24,7 +24,7 @@ public:
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem);
     virtual void OnHierarchyGameObjectsSelected(
-                                    List<GameObject*> &selectedGameObjects);
+                                const List<GameObject*> &selectedGameObjects);
     virtual void OnHierarchyGameObjectDoubleClicked(GameObject* gameObject);
 };
 

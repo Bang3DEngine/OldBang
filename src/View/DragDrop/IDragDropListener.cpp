@@ -28,18 +28,13 @@ IDragDropListener::~IDragDropListener()
     DragDropManager::UnregisterDragDropAgent(this);
 }
 
-bool IDragDropListener::MouseOverMe() const
+bool IDragDropListener::IsMouseOverMe() const
 {
-    IDragDropListener *noConstThis = const_cast<IDragDropListener*>(this);
-    QWidget *w = Object::Cast<QWidget>(noConstThis);
-    if (w)
-    {
-        return IDragDropListener::MouseOver(w);
-    }
-    return false;
+    const QWidget *w = Object::ConstCast<QWidget>(this);
+    return IDragDropListener::IsMouseOver(w);
 }
 
-bool IDragDropListener::MouseOver(QWidget *w)
+bool IDragDropListener::IsMouseOver(const QWidget *w)
 {
     return w->rect().contains(w->mapFromGlobal(QCursor::pos()));
 }

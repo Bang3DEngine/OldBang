@@ -303,14 +303,10 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 
 #ifdef BANG_EDITOR
 
-void EditorCamera::OnHierarchyGameObjectsSelected
-    (List<GameObject *> &selectedGameObjects)
+void EditorCamera::OnHierarchyGameObjectsSelected(
+        const List<GameObject *> &selectedGameObjects)
 {
-    /*
-    if (selectedGameObjects.Size() != 1) return;
-    GameObject *selected = selectedGameObjects.Front();
-    m_currentFocus = selected;
-    */
+    // Intentionally left in blank
 }
 
 

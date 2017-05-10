@@ -55,8 +55,6 @@ public:
 
     String ToString() const;
 
-    Scene* GetScene();
-    bool IsInsideScene() const;
     GameObject* GetParent() const;
     const String& GetName() const;
     const List<Component*>& GetComponents() const;
@@ -305,8 +303,8 @@ public:
     // Is it being dragged from hierarchy into screen?
     bool IsDraggedGameObject() const;
 
-    void OnHierarchyGameObjectsSelected(
-            List<GameObject*> &selectedEntities) override;
+    virtual void OnHierarchyGameObjectsSelected(
+            const List<GameObject*> &selectedEntities) override;
     #endif
 
 protected:

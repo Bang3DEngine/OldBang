@@ -38,7 +38,7 @@ void IWindowEventManagerListener::OnInspectorSlotChanged(
 {
 }
 void IWindowEventManagerListener::OnHierarchyGameObjectsSelected(
-        List<GameObject *> &selectedGameObjects)
+        const List<GameObject *> &selectedGameObjects)
 {
 }
 void IWindowEventManagerListener::OnHierarchyGameObjectDoubleClicked(

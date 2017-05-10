@@ -204,3 +204,9 @@ void Scene::PostRead(const XMLNode &xmlInfo)
     GameObject::PostRead(xmlInfo);
 }
 
+void Scene::OnHierarchyGameObjectsSelected(
+        const List<GameObject *> &selectedEntities)
+{
+    // Intentionally left in blank
+}
+

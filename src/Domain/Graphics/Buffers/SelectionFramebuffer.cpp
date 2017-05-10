@@ -80,7 +80,7 @@ void SelectionFramebuffer::ProcessSelection()
     Vector2 coords = Input::GetMouseCoords();
     coords.y = Screen::GetHeight() - coords.y;
     GameObject *mouseOverGO = GetGameObjectInPosition(coords.x, coords.y);
-    if (!Screen::MouseOver()) { mouseOverGO = nullptr; }
+    if (!Screen::IsMouseOver()) { mouseOverGO = nullptr; }
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
     {

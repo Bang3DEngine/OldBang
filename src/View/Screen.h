@@ -41,7 +41,7 @@ public:
     static int GetWidth();
     static Vector2 GetSize();
     static Vector2 GetPixelClipSize();
-    static bool MouseOver();
+    static bool IsMouseOver();
 
     GraphicPipeline *GetGraphicPipeline() const;
 

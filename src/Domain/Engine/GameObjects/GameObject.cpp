@@ -159,21 +159,6 @@ void GameObject::SetParent(GameObject *newParent,
     }
 }
 
-
-Scene *GameObject::GetScene()
-{
-    if (IsOfType<Scene>()) { return this->Cast<Scene>(); }
-    if (p_parent) return p_parent->GetScene();
-    return nullptr;
-}
-
-bool GameObject::IsInsideScene() const
-{
-    if (IsOfType<Scene>()) { return true; }
-    if (parent) return parent->IsInsideScene();
-    return false;
-}
-
 GameObject *GameObject::GetParent() const
 {
     return p_parent;
@@ -605,10 +590,9 @@ void GameObject::ChangeTransformByRectTransform()
 
 #ifdef BANG_EDITOR
 void GameObject::OnHierarchyGameObjectsSelected(
-        List<GameObject*> &selectedEntities)
+        const List<GameObject*> &selectedEntities)
 {
-    if (GetHideFlags()->IsOn(HideFlag::HideInHierarchy) ||
-        IsOfType<Scene>()) return;
+    if (GetHideFlags()->IsOn(HideFlag::HideInHierarchy)) { return; }
 
     bool selected = selectedEntities.Contains(this);
     bool wasSelected = IsSelected();
@@ -640,7 +624,6 @@ void GameObject::OnHierarchyGameObjectsSelected(
         m_selectionGameObject = nullptr;
     }
 }
-
 #endif
 
 void GameObject::SetEnabled(bool enabled)

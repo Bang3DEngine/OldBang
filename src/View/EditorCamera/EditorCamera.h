@@ -36,7 +36,7 @@ public:
 
     #ifdef BANG_EDITOR
     void OnHierarchyGameObjectsSelected
-                (List<GameObject*> &selectedGameObjects) override;
+                (const List<GameObject*> &selectedGameObjects) override;
     void OnHierarchyGameObjectDoubleClicked(GameObject *selected) override;
     #endif
 
