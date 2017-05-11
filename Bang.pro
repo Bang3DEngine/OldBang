@@ -192,9 +192,9 @@ HEADERS +=                                                          \
     src/Domain/Engine/DataStructures/Array.h                        \
     src/Domain/Engine/DataStructures/List.h                         \
     src/Domain/Engine/DataStructures/Map.h                          \
-    src/Domain/Engine/DataStructures/NamedEnum.h                    \
     src/Domain/Engine/DataStructures/Property.h                     \
     src/Domain/Engine/DataStructures/String.h                       \
+    src/Domain/Engine/DataStructures/NamedEnum.h                    \
     src/Domain/Engine/Debug/Chrono.h                                \
     src/Domain/Engine/Debug/Debug.h                                 \
     src/Domain/Engine/Debug/Gizmos.h                                \
@@ -272,7 +272,8 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/GrayScale.frag_pp \
     EngineAssets/Shaders/Outline.frag_pp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
-    src/Persistence/Files/AssetFileCreator.h
+    src/Persistence/Files/AssetFileCreator.h \
+    src/Domain/Engine/DataStructures/Collection.h
 
 EDITOR {
 HEADERS += \
@@ -494,7 +495,8 @@ SOURCES += \
     src/Persistence/Files/FontFile.cpp \
     src/Persistence/Paths.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
-    src/Persistence/Files/AssetFileCreator.cpp
+    src/Persistence/Files/AssetFileCreator.cpp \
+    src/Domain/Engine/DataStructures/Collection.cpp
 
 EDITOR {
     SOURCES += \

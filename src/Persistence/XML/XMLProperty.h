@@ -2,8 +2,9 @@
 #define XMLPROPERTY_H
 
 #include "Bang/String.h"
+#include "Bang/IToString.h"
 
-class XMLProperty
+class XMLProperty : public IToString
 {
 public:
     const static XMLProperty Hidden;
@@ -25,6 +26,7 @@ public:
     const String& GetValue() const;
 
     static XMLProperty FromString(const String &string);
+    String ToString() const override;
 
     bool operator==(const XMLProperty &rhs) const;
 

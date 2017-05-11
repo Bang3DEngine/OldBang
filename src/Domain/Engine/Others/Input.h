@@ -150,7 +150,7 @@ private:
     Input();
     virtual ~Input();
 
-    struct EventInfo
+    struct EventInfo : public IToString
     {
         QEvent::Type m_eventType         = QEvent::Type::None;
         Input::Key m_key                 = Input::Key::None;
@@ -161,6 +161,10 @@ private:
         float m_wheelDelta              = 0.0f;
 
         EventInfo(const QEvent *e);
+        String ToString() const override
+        {
+            return String::ToString(m_eventType);
+        }
     };
 
 

@@ -5,6 +5,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
+#include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
@@ -17,8 +18,7 @@ class IAttrWidgetButtonListener;
 class XMLAttribute : public IToString
 {
 public:
-
-    NamedEnum (Type,
+    NamedEnum( Type,
         Bool = 0,
         Int,
         String,

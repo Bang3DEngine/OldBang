@@ -2,76 +2,26 @@
 #define ARRAY_H
 
 #include <vector>
-#include <algorithm>
 
-#include "Bang/String.h"
+#include "Bang/Collection.h"
 
-template <class T> class List;
 template <class T>
-class Array : private std::vector<T>
+class Array : public Collection< std::vector, T >
 {
+private: typedef class Collection< std::vector, T > Coll;
 public:
-    typedef typename std::vector<T>::iterator Iterator;
-    typedef typename std::vector<T>::const_iterator Const_Iterator;
-    typedef typename std::vector<T>::reverse_iterator Reverse_Iterator;
-    typedef typename std::vector<T>::const_reverse_iterator Const_Reverse_Iterator;
+    Array() { }
+    Array(const std::vector<T> &v)      : Coll(v) { }
+    Array(int size)                     : Coll(size) { }
+    Array(int size, const T& initValue) : Coll(size, initValue) { }
+    Array(std::initializer_list<T> l)   : Coll(l) { }
 
-    Array()
-    {
-    }
-
-    Array(const std::vector<T> &v) : std::vector<T>(v)
-    {
-    }
-
-    Array(int size) : std::vector<T>(size)
-    {
-    }
-
-    Array(int size, const T& initValue) : std::vector<T>(size, initValue)
-    {
-    }
-
-    // Allow "v = {1,2,3...}" initialization
-    Array(std::initializer_list<T> l) : std::vector<T>(l)
-    {
-    }
-
-    void Clear()
-    {
-        this->clear();
-    }
-    bool Empty() const
-    {
-        return this->Size() == 0;
-    }
-    uint Size() const
-    {
-        return this->size();
-    }
-    void Resize(int n)
-    {
-        this->resize(n);
-    }
-
-    Iterator Remove(Iterator it)
-    {
-        return this->erase(it);
-    }
-    Iterator Remove(Iterator first, Iterator last)
-    {
-        return this->erase(first, last);
-    }
-
-
-    void Add(const T& x)
-    {
-        this->PushBack(x);
-    }
-    void PushBack(const T& x)
-    {
-        this->push_back(x);
-    }
+    void PushBack(const T& x) { this->push_back(x); }
+    void Add(const T &x) override { this->PushBack(x); }
+    const T& Front() const { return this->front(); }
+    const T& Back() const  { return this->back(); }
+    T& Front() { return this->front(); }
+    T& Back()  { return this->back(); }
     T& PopBack()
     {
         T& x = Back();
@@ -79,96 +29,9 @@ public:
         return x;
     }
 
-    const T& Front() const
-    {
-        return this->front();
-    }
-    const T& Back() const
-    {
-        return this->back();
-    }
-    T& Front()
-    {
-        return this->front();
-    }
-    T& Back()
-    {
-        return this->back();
-    }
-
-    template < template <class> class ContainerClass, class ValueClass = T >
-    ContainerClass<ValueClass> To() const
-    {
-        ContainerClass<ValueClass> cont;
-        for (const T &x : *this) { cont.Add( ValueClass(x) ); }
-        return cont;
-    }
-
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
-
-    // To allow range-based for loops
-    Iterator begin() { return this->std::vector<T>::begin(); }
-    Iterator end() { return this->std::vector<T>::end(); }
-    Const_Iterator begin() const { return this->std::vector<T>::begin(); }
-    Const_Iterator end() const { return this->std::vector<T>::end(); }
-
-    bool Contains(const T& x) const
-    {
-        return std::find(Begin(), End(), x) != End();
-    }
-    Iterator Find(const T& x)
-    {
-        return std::find(this->Begin(), this->End(), x);
-    }
-    Iterator FindLast(const T& x)
-    {
-        for (auto it = this->RBegin(); it != this->REnd(); ++it)
-        {
-            if (*it == x)
-            {
-                Iterator res = it.base();
-                std::advance(res, -1);
-                return res;
-            }
-        }
-        return End();
-    }
-
-    const T* Data() const
-    {
-        return this->data();
-    }
-
-    T& operator[](int i)
-    {
-        return std::vector<T>::operator [](i);
-    }
-    const T& operator[](int i) const
-    {
-        return std::vector<T>::operator [](i);
-    }
-
-    String ToString() const
-    {
-        std::ostringstream oss;
-        oss << "["; bool first = true;
-        for (auto it = this->Begin(); it != this->End(); ++it)
-        {
-            if (!first) oss << ", ";
-            oss << (*it);
-            first = false;
-        }
-        oss <<"]";
-        return String(oss.str());
-    }
-
+protected:
+    char GetToStringOpeningBrace() const override { return '['; }
+    char GetToStringClosingBrace() const override { return ']'; }
 };
 
 #endif // ARRAY_H

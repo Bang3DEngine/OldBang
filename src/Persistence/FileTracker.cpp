@@ -213,7 +213,7 @@ bool FileTracker::HasFileChanged(const Path& filepath,
         alreadyCheckedFiles.Insert(filepath);
         for (const Path& depFilepath : m_fileDependencies.Get(filepath))
         {
-            if (HasFileChanged(depFilepath, alreadyCheckedFiles))
+            if (FileTracker::HasFileChanged(depFilepath, alreadyCheckedFiles))
             {
                 return true;
             }

@@ -7,12 +7,12 @@
 #include <cstring>
 
 class Color;
-class IToString;
 class QString;
 class Vector2;
 class Vector3;
 class Vector4;
 class Matrix4;
+class IToString;
 class Quaternion;
 template <class T> class List;
 template <class T> class Array;

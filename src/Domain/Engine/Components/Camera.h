@@ -7,7 +7,6 @@
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
-#include "Bang/NamedEnum.h"
 #include "Bang/Component.h"
 
 class Mesh;
@@ -23,10 +22,11 @@ class Camera : public Component
     COMPONENT_ICON(Camera, "Icons/CameraIcon.png")
 
 public:
-    NamedEnum (ProjectionMode,
+    enum ProjectionMode
+    {
         Orthographic,
         Perspective
-    );
+    };
 
     void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
     ShaderProgram *GetReplacementShaderProgram() const;

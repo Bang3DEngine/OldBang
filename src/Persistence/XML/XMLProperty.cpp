@@ -18,7 +18,6 @@ XMLProperty::XMLProperty()
 XMLProperty::XMLProperty(const String &name, const String &value) :
     m_name(name), m_value(value)
 {
-
 }
 
 void XMLProperty::SetName(const String &name)
@@ -56,6 +55,11 @@ XMLProperty XMLProperty::FromString(const String &string)
     }
 
     return XMLProperty(name, value);
+}
+
+String XMLProperty::ToString() const
+{
+    return GetName() + ": " + GetValue();
 }
 
 bool XMLProperty::operator==(const XMLProperty &rhs) const
