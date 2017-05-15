@@ -1,15 +1,11 @@
 #ifndef COLLECTION_H
 #define COLLECTION_H
 
-#include "Bang/ICollection.h"
-#include "Bang/AnyIterator.h"
+#include <iostream>
 
-// Intermidiate class implementing some helping functions for the ICollection
-// interface
-template<class T>
-class Collection : public ICollection
+class Collection
 {
-protected:
+private:
     Collection()
     {
     }

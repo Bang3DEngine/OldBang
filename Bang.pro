@@ -273,10 +273,7 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/Outline.frag_pp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
     src/Persistence/Files/AssetFileCreator.h \
-    src/Domain/Engine/DataStructures/ICollection.h \
-    src/Domain/Engine/DataStructures/Container.h \
-    src/Domain/Engine/DataStructures/Collection.h \
-    src/Domain/Engine/DataStructures/AnyIterator.h
+    src/Domain/Engine/DataStructures/Collection.h
 
 EDITOR {
 HEADERS += \
@@ -499,10 +496,7 @@ SOURCES += \
     src/Persistence/Paths.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
     src/Persistence/Files/AssetFileCreator.cpp \
-    src/Domain/Engine/DataStructures/ICollection.cpp \
-    src/Domain/Engine/DataStructures/Container.cpp \
-    src/Domain/Engine/DataStructures/Collection.cpp \
-    src/Domain/Engine/DataStructures/AnyIterator.cpp
+    src/Domain/Engine/DataStructures/Collection.cpp
 
 EDITOR {
     SOURCES += \
