@@ -158,7 +158,7 @@ AABox AABox::Union(const AABox &b1, const AABox &b2)
 
 void AABox::FillFromPositions(const Array<Vector3> &positions)
 {
-    ENSURE(!positions.Empty());
+    ENSURE(!positions.IsEmpty());
     m_minv = m_maxv = positions[0];
     for (const Vector3 &v : positions)
     {

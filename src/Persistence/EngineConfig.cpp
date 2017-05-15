@@ -15,7 +15,7 @@ void EngineConfig::CleanOutdatedRecentProjectList()
     {
         Path recentProject = *it;
         if (!recentProject.IsFile() ||                              // Remove non-existing
-            recentProjectsList.CountOccurrences(recentProject) > 1) // Remove repeated
+            recentProjectsList.Count(recentProject) > 1) // Remove repeated
         {
             recentProjectsList.Remove(it++);
         }

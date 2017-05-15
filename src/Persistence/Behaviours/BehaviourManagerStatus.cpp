@@ -24,29 +24,17 @@ bool BehaviourManagerStatus::AllBehavioursReady() const
 
 bool BehaviourManagerStatus::AllBehavioursReadyOrFailed() const
 {
-    List<Path> sourcesFilepaths =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (const Path &srcFilepath : sourcesFilepaths)
-    {
-        if (!IsReady(srcFilepath) && !HasFailed(srcFilepath))
-        {
-            return false;
-        }
-    }
-    return true;
+    List<Path> srcs = BehaviourManager::GetBehavioursSourcesFilepathsList();
+    return srcs.All( BPRED( this->IsReady(x) || this->HasFailed(x) ) );
 }
 
 float BehaviourManagerStatus::GetPercentOfReadyBehaviours() const
 {
     List<Path> sourcesFilepaths =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
-    if (sourcesFilepaths.Empty()) { return 1.0f; }
+    if (sourcesFilepaths.IsEmpty()) { return 1.0f; }
 
-    int compiledBehaviours = 0;
-    for (const Path &srcFilepath : sourcesFilepaths)
-    {
-        if (IsReady(srcFilepath)) { ++compiledBehaviours; }
-    }
+    uint compiledBehaviours = sourcesFilepaths.Count( BPRED(this->IsReady(x)) );
     return float(compiledBehaviours) / sourcesFilepaths.Size();
 }
 

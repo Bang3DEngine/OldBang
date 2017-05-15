@@ -22,7 +22,7 @@ void ChronoGL::MarkEvent(const String &eventName)
 {
     ChronoGLEvent cge;
     cge.eventName = eventName;
-    if (!m_events.Empty()) // Wait for previous event complete and update it
+    if (!m_events.IsEmpty()) // Wait for previous event complete and update it
     {
         glEndQuery(GL_TIME_ELAPSED); // End previous query
 
@@ -47,7 +47,7 @@ void ChronoGL::MarkEvent(const String &eventName)
 
 void ChronoGL::Log()
 {
-    if (m_events.Empty()) { return; }
+    if (m_events.IsEmpty()) { return; }
 
     MarkEvent("EmptyEvent"); // To get the last timer time
 

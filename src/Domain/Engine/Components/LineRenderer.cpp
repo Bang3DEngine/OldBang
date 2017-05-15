@@ -61,7 +61,7 @@ void LineRenderer::RenderWithoutMaterial() const
 
 AABox LineRenderer::GetAABBox() const
 {
-    if (m_points.Empty()) { return AABox::Empty; }
+    if (m_points.IsEmpty()) { return AABox::Empty; }
 
     Vector3 minp = m_points.Front();
     Vector3 maxp = m_points.Front();

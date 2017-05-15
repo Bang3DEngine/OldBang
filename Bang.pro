@@ -57,9 +57,9 @@ DEBUG_MODE {
 RELEASE_MODE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
 }
-#OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
+#OTHER_OPTS = -Wall --std=c++14 -Wl,--export-dynamic -Wno-unused-parameter \
              #-Wunused-variable -Wswitch -Wno-sign-compare -fPIC
-OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
+OTHER_OPTS = -Wall --std=c++14 -Wl,--export-dynamic -Wno-unused-parameter \
              -Wno-sign-compare -Wswitch -fPIC
 QMAKE_CFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
@@ -273,7 +273,10 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/Outline.frag_pp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
     src/Persistence/Files/AssetFileCreator.h \
-    src/Domain/Engine/DataStructures/Collection.h
+    src/Domain/Engine/DataStructures/ICollection.h \
+    src/Domain/Engine/DataStructures/Container.h \
+    src/Domain/Engine/DataStructures/Collection.h \
+    src/Domain/Engine/DataStructures/AnyIterator.h
 
 EDITOR {
 HEADERS += \
@@ -496,7 +499,10 @@ SOURCES += \
     src/Persistence/Paths.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
     src/Persistence/Files/AssetFileCreator.cpp \
-    src/Domain/Engine/DataStructures/Collection.cpp
+    src/Domain/Engine/DataStructures/ICollection.cpp \
+    src/Domain/Engine/DataStructures/Container.cpp \
+    src/Domain/Engine/DataStructures/Collection.cpp \
+    src/Domain/Engine/DataStructures/AnyIterator.cpp
 
 EDITOR {
     SOURCES += \

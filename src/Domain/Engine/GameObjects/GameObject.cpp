@@ -78,13 +78,13 @@ void GameObject::CloneInto(ICloneable *clone) const
 
 GameObject::~GameObject()
 {
-    while (!m_children.Empty())
+    while (!m_children.IsEmpty())
     {
         GameObject *child = m_children.Front();
         delete child;
     }
 
-    while (!m_components.Empty())
+    while (!m_components.IsEmpty())
     {
         Component *comp = m_components.Front();
         m_components.PopFront();
@@ -413,11 +413,11 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
     // of the children and components list, in order to update every child/comp
     // with its info, and not with another one !!!!!!!!!!!!!!!!!
 
-    List<XMLNode> xmlChildren = xmlInfo.GetChildren();
+    const List<XMLNode>& xmlChildren = xmlInfo.GetChildren();
     Array<GameObject*> children = GetChildren().To<Array>();
     Array<Component*> components = GetComponents().To<Array>();
     int iChildren = 0, iComponents = 0;
-    for (XMLNode& xmlChildInfo : xmlChildren)
+    for (const XMLNode& xmlChildInfo : xmlChildren)
     {
         String tagName = xmlChildInfo.GetTagName();
         if (tagName.Contains("GameObject"))

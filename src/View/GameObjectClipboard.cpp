@@ -7,7 +7,7 @@ Map<GameObject*, GameObject*> GameObjectClipboard::s_goCopyToItsParent;
 
 bool GameObjectClipboard::HasSomethingCopied()
 {
-    return !s_copiedGameObjects.Empty();
+    return !s_copiedGameObjects.IsEmpty();
 }
 
 void GameObjectClipboard::CopyGameObjects(const List<GameObject*> &whatToCopy)

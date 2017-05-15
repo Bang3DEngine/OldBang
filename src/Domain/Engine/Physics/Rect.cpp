@@ -121,7 +121,7 @@ Rect Rect::Intersection(const Rect &r1, const Rect &r2)
 
 Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
 {
-    if (positions.Empty()) { return Rect::Empty; }
+    if (positions.IsEmpty()) { return Rect::Empty; }
 
     Vector2 minv = positions.Front(), maxv = positions.Front();
     for (const Vector2 &p : positions)

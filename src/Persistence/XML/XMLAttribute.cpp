@@ -82,26 +82,12 @@ const String XMLAttribute::GetPropertyValue(const String &propertyName) const
 
 bool XMLAttribute::HasProperty(const XMLProperty &property) const
 {
-    for (const XMLProperty &prop : m_properties)
-    {
-        if (prop.GetName() == property.GetName())
-        {
-            return true;
-        }
-    }
-    return false;
+    return m_properties.Any( BPRED(x.GetName() == property.GetName()) );
 }
 
 bool XMLAttribute::HasProperty(const String &propertyName) const
 {
-    for (const XMLProperty &prop : m_properties)
-    {
-        if (prop.GetName() == propertyName)
-        {
-            return true;
-        }
-    }
-    return false;
+    return m_properties.Any( BPRED(x.GetName() == propertyName) );
 }
 
 void XMLAttribute::RemoveProperty(const String &propertyName)

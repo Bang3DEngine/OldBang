@@ -9,4 +9,6 @@ typedef long long EpochTime;
     if (!(mustBeTrue)) { return; }\
 } while (false)
 
+#define BPRED(boolPredicate) ( [&](const auto &x) { return (boolPredicate); } )
+
 #endif // BANG_H

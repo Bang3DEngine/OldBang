@@ -60,7 +60,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     QtProjectManager::CreateQtProjectFile();
     #endif
 
-    if (!sceneFilepaths.Empty())
+    if (!sceneFilepaths.IsEmpty())
     {
         SceneManager::OpenScene(sceneFilepaths.Front());
     }

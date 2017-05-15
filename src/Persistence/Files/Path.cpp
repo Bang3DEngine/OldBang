@@ -245,23 +245,14 @@ Path Path::AppendExtension(const String &extension) const
 
 bool Path::HasExtension(const String &extensions) const
 {
-    String extension = GetExtension();
-    Array<String> extensionsList = extensions.Split(' ', true);
-    for (const String& ext : extensionsList)
-    {
-        if ( ext.EqualsNoCase(extension) ) { return true; }
-    }
-    return false;
+    List<String> extensionsList = extensions.Split(' ', true).To<List,String>();
+    return HasExtension(extensionsList);
 }
 
 bool Path::HasExtension(const List<String> &extensions) const
 {
-    String extension = GetExtension();
-    for (const String& ext : extensions)
-    {
-        if ( ext.EqualsNoCase(extension) ) { return true; }
-    }
-    return false;
+    String ext = GetExtension();
+    return extensions.Any( BPRED(x.EqualsNoCase(ext)) );
 }
 
 Path::operator String() const

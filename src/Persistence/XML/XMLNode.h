@@ -12,12 +12,6 @@
 class IAttrWidgetButtonListener;
 class XMLNode : public IToString
 {
-private:
-    String m_tagName = "";
-    mutable List<String> m_attributeOrder;
-    mutable Map<String, XMLAttribute> m_attributes;
-    List<XMLNode> m_children;
-
 public:
     XMLNode(const String &tagName = "");
     virtual ~XMLNode();
@@ -111,6 +105,12 @@ public:
     List<XMLNode>& GetChildren();
 
     static XMLNode FromString(const String &xml);
+
+private:
+    String m_tagName = "";
+    mutable List<String> m_attributeOrder;
+    mutable Map<String, XMLAttribute> m_attributes;
+    List<XMLNode> m_children;
 };
 
 #endif // XMLNODE_H

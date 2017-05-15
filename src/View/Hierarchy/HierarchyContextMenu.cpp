@@ -86,7 +86,7 @@ void HierarchyContextMenu::OnPasteClicked()
 {
     List<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(false);
     List<GameObject*> pasted;
-    if (!selected.Empty())
+    if (!selected.IsEmpty())
     {
         for (GameObject *sel : selected)
         {
@@ -99,7 +99,7 @@ void HierarchyContextMenu::OnPasteClicked()
                     SceneManager::GetActiveScene());
     }
 
-    if (!pasted.Empty())
+    if (!pasted.IsEmpty())
     {
         m_hierarchy->SelectGameObject(pasted.Front());
     }
@@ -113,7 +113,7 @@ void HierarchyContextMenu::OnDuplicateClicked()
     List<GameObject*> duplicated =
             GameObjectClipboard::DuplicateCopiedGameObjects();
 
-    if (!duplicated.Empty())
+    if (!duplicated.IsEmpty())
     {
         m_hierarchy->SelectGameObject(duplicated.Front());
     }
@@ -122,7 +122,7 @@ void HierarchyContextMenu::OnDuplicateClicked()
 void HierarchyContextMenu::OnDeleteClicked()
 {
     List<QTreeWidgetItem*> itemsToDelete = m_hierarchy->selectedItems().toStdList();
-    ENSURE(!itemsToDelete.Empty());
+    ENSURE(!itemsToDelete.IsEmpty());
 
     m_hierarchy->LeaveOnlyOuterMostItems(&itemsToDelete);
     m_hierarchy->UnselectAll(); // Avoid a bug when trying to restore selection

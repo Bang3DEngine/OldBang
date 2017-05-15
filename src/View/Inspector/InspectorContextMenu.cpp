@@ -17,7 +17,7 @@ InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
 
 void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
-    ENSURE(!p_inspector->GetCurrentInspectorWidgets().Empty());
+    ENSURE(!p_inspector->GetCurrentInspectorWidgets().IsEmpty());
     InspectorWidget *iw = p_inspector->GetCurrentInspectorWidgets().Front();
 
     if (Object::IsOfType<ComponentWidget>(iw))

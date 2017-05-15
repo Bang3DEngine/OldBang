@@ -153,7 +153,7 @@ bool GameBuilder::CompileGameExecutable()
 {
     List<Path> sceneFiles = Paths::ProjectAssets().GetFiles(
                               true, {"*." + Scene::GetFileExtensionStatic()});
-    if (sceneFiles.Empty())
+    if (sceneFiles.IsEmpty())
     {
         emit DialogError("Error building game",
                          "Please save at least one scene in the \

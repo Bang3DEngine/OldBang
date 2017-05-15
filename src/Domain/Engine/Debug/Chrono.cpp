@@ -14,7 +14,7 @@ void Chrono::MarkEvent(const String &eventName)
     ChronoEvent ce;
     ce.eventName = eventName;
     ce.time = Time::GetNow();
-    if (!m_events.Empty())
+    if (!m_events.IsEmpty())
     {
         ChronoEvent &previousEvent = m_events.Back();
         previousEvent.timeSinceLastEvent = Time::GetNow() - previousEvent.time;
@@ -24,7 +24,7 @@ void Chrono::MarkEvent(const String &eventName)
 
 void Chrono::Log()
 {
-    if (m_events.Empty()) { return; }
+    if (m_events.IsEmpty()) { return; }
 
     MarkEvent("EmptyEvent"); // To get the last timer time
 

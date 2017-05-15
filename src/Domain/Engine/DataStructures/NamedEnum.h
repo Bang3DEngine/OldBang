@@ -13,7 +13,7 @@ static Array<String> VariadicStringToNamesArray(const String &_va_args_)
     for (int i = 0; i < result.Size(); ++i)
     {
         const Array<String> parts = result[i].Split('=', true);
-        if (!parts.Empty()) { result[i] = parts[0]; }
+        if (!parts.IsEmpty()) { result[i] = parts[0]; }
     }
     return result;
 }

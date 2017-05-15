@@ -67,7 +67,7 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
     if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
 
     m_positions = positions;
-    if (m_positions.Empty())
+    if (m_positions.IsEmpty())
     {
         m_positions.PushBack( Vector3::Zero );
     }
@@ -86,7 +86,7 @@ void Mesh::LoadNormals(const Array<Vector3> &normals)
     if (m_vertexNormalsVBO) delete m_vertexNormalsVBO;
 
     m_normals = normals;
-    if (m_normals.Empty())
+    if (m_normals.IsEmpty())
     {
         m_normals.PushBack( Vector3::Zero );
     }
@@ -101,7 +101,7 @@ void Mesh::LoadUvs(const Array<Vector2> &uvs)
     if (m_vertexUvsVBO) delete m_vertexUvsVBO;
 
     m_uvs = uvs;
-    if (m_uvs.Empty())
+    if (m_uvs.IsEmpty())
     {
         m_uvs.PushBack( Vector2::Zero );
     }

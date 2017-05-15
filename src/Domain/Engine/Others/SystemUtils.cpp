@@ -146,14 +146,15 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
 
     args.Add(sourceFilesList.To<List,String>());
 
-    args.Add({"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
-                   "--std=c++11",
-                   "-lGLEW", "-lGL", "-lpthread"});
+    args.Add(List<String>(
+              {"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
+               "--std=c++11",
+               "-lGLEW", "-lGL", "-lpthread"}));
     if (editorMode) { args.Add("-DBANG_EDITOR"); }
 
     List<Path> qtIncludeDirs = SystemUtils::GetQtIncludes();
     List<String> qtIncludeDirsStr = qtIncludeDirs.To<List,String>();
-    for(String &qtIncludeDir : qtIncludeDirsStr) { qtIncludeDir.Prepend("-I"); }
+    for (String &qtIncludeDir : qtIncludeDirsStr) { qtIncludeDir.Prepend("-I"); }
     args.Add(qtIncludeDirsStr);
 
     args.Add("-I" + Paths::Engine() + "/include");
@@ -162,7 +163,7 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
         List<Path> assetsSubDirs =
                 Paths::ProjectAssets().GetSubDirectories(true);
         List<String> assetsSubDirsStr = assetsSubDirs.To<List,String>();
-        for(String &subDir : assetsSubDirsStr) { subDir.Prepend("-I"); }
+        for (String &subDir : assetsSubDirsStr) { subDir.Prepend("-I"); }
         args.Add(assetsSubDirsStr);
     }
 
@@ -185,7 +186,8 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
     for(String &libDir : qtLibDirsStr) { libDir.Prepend("-L"); }
     args.Add(qtLibDirsStr);
 
-    args.Add({"-o", outputLibFilepath.GetAbsolute()}); // Output to the lib
+    // Output to the lib
+    args.Add(List<String>({"-o", outputLibFilepath.GetAbsolute()}));
 
     Path libsDir = BehaviourManager::GetCurrentLibsDir();
     File::CreateDirectory(libsDir);
