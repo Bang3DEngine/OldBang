@@ -2,10 +2,10 @@
 #define ARRAY_H
 
 #include <vector>
-#include <algorithm>
 #include <functional>
 
 #include "Bang/IToString.h"
+#include "Bang/Collection.h"
 
 template <class T>
 class Array  : public IToString,
@@ -22,7 +22,22 @@ public:
     Array(int size)                     : std::vector<T>(size) { }
     Array(int size, const T& initValue) : std::vector<T>(size, initValue) { }
     Array(std::initializer_list<T> l)   : std::vector<T>(l) { }
+
+    template <class OtherIterator>
+    Array(OtherIterator begin, OtherIterator end)
+        : std::vector<T>(begin, end) {}
+
+    template < template<class> class OtherContainer>
+    Array(const OtherContainer<T> &container)
+        : Array(container.begin(), container.end()) {}
+
+    template <class OtherIterator>
+    Array(const CollectionRange<OtherIterator> &col)
+        : Array(col.Begin(), col.End()) {}
+
     virtual ~Array() {}
+
+
 
     Iterator Begin() { return this->begin(); }
     Iterator End() { return this->end();   }
@@ -41,12 +56,19 @@ public:
 
     void Add(const T& x) { this->PushBack(x); }
     void PushBack(const T& x)  { this->push_back(x);  }
-    template<class OtherContainer>
-    void Add(const OtherContainer& collection)
+
+    template <template <class> class OtherCollection>
+    void Add(const OtherCollection<T> &otherCol)
     {
-        for (const T &x : collection)
+        Add (otherCol.GetRangeAll());
+    }
+
+    template <class Iterator>
+    void Add(const CollectionRange<Iterator>& col)
+    {
+        for (Iterator it = col.Begin(); it != col.End(); ++it)
         {
-            this->Add(x);
+            this->Add(*it);
         }
     }
 
@@ -54,27 +76,25 @@ public:
 
     bool Any(std::function< bool(const T&) > boolPredicate) const
     {
-        for (const auto &x : *this) { if (boolPredicate(x)) { return true; } }
-        return false;
+        return Collection::Any(GetRangeAll(), boolPredicate);
     }
     bool All(std::function< bool(const T&) > boolPredicate) const
     {
-        for (const auto &x : *this) { if (!boolPredicate(x)) { return false; } }
-        return true;
+        return Collection::All(GetRangeAll(), boolPredicate);
     }
     bool None(std::function< bool(const T&) > boolPredicate) const
     {
-        return !Any(boolPredicate);
+        return Collection::None(GetRangeAll(), boolPredicate);
     }
 
     Const_Iterator Find(const T& x) const
     {
-        return std::find(this->Begin(), this->End(), x);
+        return Collection::Find(this->GetRangeAll(), x);
     }
 
     Iterator Find(const T& x)
     {
-        return std::find(this->Begin(), this->End(), x);
+        return Collection::Find(this->GetRangeAll(), x);
     }
 
     Iterator FindLast(const T& x)
@@ -91,7 +111,10 @@ public:
         return this->End();
     }
 
-    bool Contains(const T &x) const { return this->Find(x) != this->End(); }
+    bool Contains(const T &x) const
+    {
+        return Collection::Contains(GetRangeAll(), x);
+    }
 
     const T& Front() const { return this->front(); }
     const T& Back() const  { return this->back(); }
@@ -106,16 +129,27 @@ public:
         return cont;
     }
 
-    Iterator Remove(Iterator it) { return this->erase(it); }
     Iterator Remove(const Iterator &first, const Iterator &last)
     {
         return this->erase(first, last);
     }
+    Iterator Remove(Iterator it) { return this->Remove(it, it); }
     Iterator Remove(const T& x)
     {
         Iterator it = this->Find(x);
         if (it != this->End()) { return this->Remove(it); }
         return this->End();
+    }
+    void RemoveAll(const T& x)
+    {
+        for (Iterator it = this->Begin(); it != this->End(); ++it)
+        {
+            if (*it == x)
+            {
+                it = this->Remove(it);
+                --it;
+            }
+        }
     }
 
     T& PopBack()
@@ -136,51 +170,36 @@ public:
         return -1;
     }
 
-    void RemoveAll(const T& x)
-    {
-        for (Iterator it = this->Begin(); it != this->End(); ++it)
-        {
-            if (*it == x)
-            {
-                it = this->erase(it);
-                --it;
-            }
-        }
-    }
-
     uint Count(std::function< bool(const T&) > boolPredicate) const
     {
-        uint count = 0;
-        for (const auto &x : *this) { if (boolPredicate(x)) { ++count; } }
-        return count;
+        return Collection::Count(GetRangeAll(), boolPredicate);
     }
     uint Count(const T& x) const
     {
-        int count = 0;
-        for (const auto &y : *this) { if (x == y) { ++count; } }
-        return count;
+        return Collection::Count(GetRangeAll(), x);
     }
 
-    void Resize(int n) { this->resize(n); }
-    uint Size() const  { return this->size(); }
-    void Clear()       { this->clear(); }
+    void Resize(int n)   { this->resize(n); }
+    uint Size() const    { return this->size(); }
+    void Clear()         { this->clear(); }
     bool IsEmpty() const { return this->Size() == 0; }
+
+    CollectionRange<Iterator> GetRangeAll()
+    {
+        return CollectionRange<Iterator>(this->Begin(), this->End());
+    }
+    CollectionRange<Const_Iterator> GetRangeAll() const
+    {
+        return CollectionRange<Const_Iterator>(this->Begin(), this->End());
+    }
 
     virtual String ToString() const override
     {
-        std::ostringstream oss;
-        oss << "[";
-
-        bool first = true;
-        for (auto it = this->Begin(); it != this->End(); ++it)
-        {
-            if (!first) { oss << ", "; } else { first = false; }
-            oss << &(*it);
-        }
-        oss << "]";
-
-        return String(oss.str());
+        return Collection::ToString(GetRangeAll(), "[", "]");
     }
+
+    operator CollectionRange<Iterator>() { return GetRangeAll(); }
+    operator CollectionRange<Iterator>() const { return GetRangeAll(); }
 
     T& operator[](int i)
     {
