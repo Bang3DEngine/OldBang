@@ -272,7 +272,6 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/GrayScale.frag_pp \
     EngineAssets/Shaders/Outline.frag_pp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
-    src/Persistence/Files/AssetFileCreator.h \
     src/Domain/Engine/DataStructures/Collection.h
 
 EDITOR {
@@ -281,6 +280,7 @@ HEADERS += \
     src/Domain/Engine/GraphicPipeline/GPPass_Selection.h \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
     src/View/DragDrop/DragDropQWidget.h \
+    src/Persistence/Files/AssetFileCreator.h \
     src/Persistence/Project/QtProjectManager.h \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
@@ -495,13 +495,13 @@ SOURCES += \
     src/Persistence/Files/FontFile.cpp \
     src/Persistence/Paths.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
-    src/Persistence/Files/AssetFileCreator.cpp \
     src/Domain/Engine/DataStructures/Collection.cpp
 
 EDITOR {
     SOURCES += \
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
         src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp \
+        src/Persistence/Files/AssetFileCreator.cpp \
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
