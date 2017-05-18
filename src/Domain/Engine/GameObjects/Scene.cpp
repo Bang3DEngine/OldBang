@@ -204,9 +204,11 @@ void Scene::PostRead(const XMLNode &xmlInfo)
     GameObject::PostRead(xmlInfo);
 }
 
+#ifdef BANG_EDITOR
 void Scene::OnHierarchyGameObjectsSelected(
         const List<GameObject *> &selectedEntities)
 {
     // Intentionally left in blank
 }
+#endif
 
