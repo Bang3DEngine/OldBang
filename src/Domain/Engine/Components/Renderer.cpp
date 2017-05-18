@@ -210,7 +210,7 @@ void Renderer::Read(const XMLNode &xmlInfo)
     Path materialFilepath = xmlInfo.GetFilepath("Material");
     SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
 
-    SetTransparent(xmlInfo.GetBool("IsTransparent"));
+    // SetTransparent(xmlInfo.GetBool("IsTransparent"));
     SetLineWidth(xmlInfo.GetFloat("LineWidth"));
     SetDrawWireframe(xmlInfo.GetBool("DrawWireframe"));
 }
@@ -233,6 +233,6 @@ void Renderer::Write(XMLNode *xmlInfo) const
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
-    xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
+    // xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
 }

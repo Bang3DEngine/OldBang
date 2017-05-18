@@ -60,7 +60,7 @@ void UIImage::Write(XMLNode *xmlInfo) const
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
+    // xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
 }
 
