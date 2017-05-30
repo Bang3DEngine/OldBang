@@ -72,7 +72,6 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 
     if (overlay)
     {
-
         Rect rect = m_attachedRectTransform->GetScreenSpaceRect();
         if (GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
         {

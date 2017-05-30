@@ -56,7 +56,7 @@ public:
     virtual void UnBind() const override;
 
     void SaveToImage(AttachmentId attachmentId, const Path &filepath,
-                     bool invertY = false) const;
+                     bool invertY = true) const;
 
 protected:
     int m_width = 0;

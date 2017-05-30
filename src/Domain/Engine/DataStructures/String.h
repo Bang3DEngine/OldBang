@@ -30,9 +30,11 @@ public:
     String(const char *cstr);
     String(const QString &qstr);
     String(const std::string &stdstr);
-    String(const std::vector<char>::iterator begin, const std::vector<char>::iterator end);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
+
+    template<class Iterator>
+    String(Iterator begin, Iterator end) : std::string(begin, end) { }
 
     virtual ~String();
 

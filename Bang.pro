@@ -272,7 +272,10 @@ HEADERS +=                                                          \
     EngineAssets/Shaders/GrayScale.frag_pp \
     EngineAssets/Shaders/Outline.frag_pp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
-    src/Domain/Engine/DataStructures/Collection.h
+    src/Domain/Engine/DataStructures/Collection.h \
+    src/Domain/BangPreprocessor/BangPreprocessor.h \
+    src/Domain/BangPreprocessor/BPProperty.h \
+    src/Domain/BangPreprocessor/BPStruct.h
 
 EDITOR {
 HEADERS += \
@@ -495,7 +498,10 @@ SOURCES += \
     src/Persistence/Files/FontFile.cpp \
     src/Persistence/Paths.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
-    src/Domain/Engine/DataStructures/Collection.cpp
+    src/Domain/Engine/DataStructures/Collection.cpp \
+    src/Domain/BangPreprocessor/BangPreprocessor.cpp \
+    src/Domain/BangPreprocessor/BPProperty.cpp \
+    src/Domain/BangPreprocessor/BPStruct.cpp
 
 EDITOR {
     SOURCES += \

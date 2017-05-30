@@ -119,8 +119,50 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     Screen::GetInstance()->initializeGL();
 }
 
+#include "Bang/BangPreprocessor.h"
 int main(int argc, char **argv)
 {
+    String code =
+           "#include \"Bang/Shit.h\" \n\
+            // This is a comment that contains BANG_PROPERTY() class a{}\n\
+            /* OMG */ \n\
+            BANG_CLASS (HeroClass)\n\
+            class MyHero { \n\
+            private: \n\
+                String someShit = \"hehe\"; \n\
+                BANG_CLASS () class HeroSword { }; \n\
+            public:\n\
+                MyHero(); \n\
+                ~MyHero() { OtherStuff();} \n\
+     \n\
+                BANG_PROPERTY(Speed) float m_speed = 1.0f; \n\
+                BANG_PROPERTY(CharacterName) String m_charName = \"Bob\"; \n\
+     \n\
+                int OtherStuff() { asjhdsal; } \n\
+     \n\
+                BANG_PROPERTY(MaxHealth) const int m_maxHealth = 100; \n\
+                BANG_PROPERTY(CurrentHealth) int currentHealth = m_maxHealth; \n\
+            }; \n\
+            class MyFood { \n\
+            private: \n\
+                String someShit = \"hehe\"; \n\
+     \n\
+            public:\n\
+                MyFood(); \n\
+                ~MyFood() { OtherStuff();} \n\
+     \n\
+                BANG_PROPERTY(HealthGiven) float m_healthGiven = 1.0f; \n\
+                BANG_PROPERTY(FoodFamily) String m_family = \"Bob\"; \n\
+     \n\
+                int OtherStuff() { asjhdsal; } \n\
+            };\n\
+            \n\
+            BANG_CLASS (EnemyClass) class Enemy  \n\
+            {\n\
+              BANG_PROPERTY(EnemyForce) float m_eForce = 6.0f; \n\
+            };\n\
+            ";
+    BangPreprocessor::Preprocess(code);
     Application app(argc, argv);
 
     InitSingletonManager();

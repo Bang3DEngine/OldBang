@@ -48,12 +48,6 @@ String::String(const std::string &stdstr) : std::string(stdstr.c_str())
 {
 }
 
-String::String(const std::vector<char>::iterator begin,
-               const std::vector<char>::iterator end) :
-    std::string(begin, end)
-{
-}
-
 String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
                std::istreambuf_iterator<char, std::char_traits<char> > end) :
     std::string(begin, end)

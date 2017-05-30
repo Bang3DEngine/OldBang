@@ -25,8 +25,8 @@ public:
 
     AABox();
     AABox(float minx, float maxx,
-        float miny, float maxy,
-        float minz, float maxz);
+          float miny, float maxy,
+          float minz, float maxz);
     AABox(const Vector3 &min, const Vector3 &max);
     AABox(const AABox& b);
 

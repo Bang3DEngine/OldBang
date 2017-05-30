@@ -40,7 +40,7 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::PrepareForRender(const Scene *scene)
 {
-    int id = 0;
+    int id = 1;
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
     List<GameObject*> gameObjects = scene->GetChildrenRecursively();
@@ -128,8 +128,7 @@ GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
     Color mouseOverColor = ReadColor(x, y, AttColor);
     int id = MapColorToId(mouseOverColor);
-    if (mouseOverColor != Color::Zero &&
-        m_id_To_GameObject.ContainsKey(id))
+    if (mouseOverColor != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }
@@ -167,22 +166,24 @@ void SelectionFramebuffer::OnGameObjectDestroyed(GameObject *destroyed)
 
 Color SelectionFramebuffer::MapIdToColor(long id)
 {
-    const int C = 256;
+    constexpr int C = 256;
     Color color =
             Color(
-                    double(  id           % C),
-                    double( (id / C)      % C),
-                    double(((id / C) / C) % C)
+                    double(   id                % C),
+                    double(  (id / C)           % C),
+                    double( ((id / C) / C)      % C),
+                    double((((id / C) / C) / C) % C)
                    );
    return color / float(C);
 }
 
 long SelectionFramebuffer::MapColorToId(const Color &color)
 {
-    const int C = 256;
+    constexpr int C = 256;
     return long(color.r * C) +
            long(color.g * C * C) +
-           long(color.b * C * C * C);
+           long(color.b * C * C * C) +
+           long(color.a * C * C * C * C);
 }
 
 bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
