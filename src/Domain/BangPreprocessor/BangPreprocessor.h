@@ -24,12 +24,17 @@ public:
     static void GetNextScope(String::Iterator begin,
                              String::Iterator end,
                              String::Iterator *scopeBegin,
-                             String::Iterator *scopeEnd);
+                             String::Iterator *scopeEnd,
+                             char openingBrace,
+                             char closingBrace);
 
     static void SkipBlanks(String::Iterator *it,
                            String::Iterator end);
-    static void SkipUntilNewBlank(String::Iterator *it,
+    static void SkipUntilNextBlank(String::Iterator *it,
                                   String::Iterator end);
+    static void SkipUntilNext(String::Iterator *it,
+                              String::Iterator end,
+                              const Array<String> &particles);
 
     static void FindNextWord(String::Iterator begin,
                              String::Iterator end,

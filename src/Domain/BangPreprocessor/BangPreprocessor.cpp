@@ -57,7 +57,10 @@ String BangPreprocessor::Preprocess(const String &source)
         String::Iterator _, itStructEnd;
         BP::GetNextScope(itStructBegin,
                          src.End(),
-                         &_, &itStructEnd);
+                         &_,
+                         &itStructEnd,
+                         '{',
+                         '}');
         it = itStructEnd;
 
         bool ok;
@@ -108,18 +111,20 @@ String::Iterator BangPreprocessor::Find(String::Iterator begin,
 void BangPreprocessor::GetNextScope(String::Iterator begin,
                                     String::Iterator end,
                                     String::Iterator *scopeBegin,
-                                    String::Iterator *scopeEnd)
+                                    String::Iterator *scopeEnd,
+                                    char openingBrace,
+                                    char closingBrace)
 {
     int insideness = 0;
     String::Iterator it = begin;
     for (; it != end; ++it)
     {
-        if (*it == '{')
+        if (*it == openingBrace)
         {
             if (insideness == 0) { *scopeBegin = it; }
             ++insideness;
         }
-        else if (*it == '}')
+        else if (*it == closingBrace)
         {
             --insideness;
             if (insideness == 0)
@@ -140,20 +145,27 @@ void BangPreprocessor::SkipBlanks(String::Iterator *it,
     while (c == '\n' || c == '\r' || c == '\t' || c == ' ')
     {
         ++(*it);
-        c = *(*it);
         if (*it == end) { break; }
+        c = *(*it);
     }
 }
 
-void BangPreprocessor::SkipUntilNewBlank(String::Iterator *it,
-                                         String::Iterator end)
+void BangPreprocessor::SkipUntilNextBlank(String::Iterator *it,
+                                          String::Iterator end)
 {
-    char c = *(*it);
-    while (c != '\n' && c != '\r' && c != '\t' && c != ' ')
+    SkipUntilNext(it, end, {"\n", "\r", "\t", " "});
+}
+
+void BangPreprocessor::SkipUntilNext(String::Iterator *it,
+                                     String::Iterator end,
+                                     const Array<String> &particles)
+{
+    String c( std::string(1, *(*it)) );
+    while ( !particles.Contains(c) )
     {
         ++(*it);
-        c = *(*it);
         if (*it == end) { break; }
+        c = String( std::string(1, *(*it)) );
     }
 }
 
@@ -166,7 +178,13 @@ void BangPreprocessor::FindNextWord(String::Iterator begin,
     BP::SkipBlanks(wordBegin, end);
 
     *wordEnd = (*wordBegin + 1);
-    BP::SkipUntilNewBlank(wordEnd, end);
+    char c = *(*wordEnd);
+    while (String::IsLetter(c) || String::IsNumber(c) || c == '_')
+    {
+        ++(*wordEnd);
+        if (*wordEnd == end) { break; }
+        c = *(*wordEnd);
+    }
 }
 
 BangPreprocessor::BangPreprocessor()

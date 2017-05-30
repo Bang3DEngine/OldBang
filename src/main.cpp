@@ -129,7 +129,8 @@ int main(int argc, char **argv)
             BANG_CLASS (HeroClass)\n\
             class MyHero { \n\
             private: \n\
-                String someShit = \"hehe\"; \n\
+                BANG_PROPERTY(SomeShitString, Inline) \n\
+                String someShit = \"hehe_1wololo\"; \n\
                 BANG_CLASS () class HeroSword { }; \n\
             public:\n\
                 MyHero(); \n\
@@ -143,6 +144,7 @@ int main(int argc, char **argv)
                 BANG_PROPERTY(MaxHealth) const int m_maxHealth = 100; \n\
                 BANG_PROPERTY(CurrentHealth) int currentHealth = m_maxHealth; \n\
             }; \n\
+            BANG_CLASS (FoodMYYClass) \n\
             class MyFood { \n\
             private: \n\
                 String someShit = \"hehe\"; \n\
@@ -151,7 +153,7 @@ int main(int argc, char **argv)
                 MyFood(); \n\
                 ~MyFood() { OtherStuff();} \n\
      \n\
-                BANG_PROPERTY(HealthGiven) float m_healthGiven = 1.0f; \n\
+                BANG_PROPERTY(HealthGiven) float m_healthGiven; \n\
                 BANG_PROPERTY(FoodFamily) String m_family = \"Bob\"; \n\
      \n\
                 int OtherStuff() { asjhdsal; } \n\

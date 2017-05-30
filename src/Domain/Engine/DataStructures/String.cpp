@@ -279,14 +279,14 @@ String String::TrimLeft(List<char> trimChars) const
 
 String String::TrimRight(List<char> trimChars) const
 {
-    if(Empty()) { return ""; }
+    if (Empty()) { return ""; }
 
     int i = Length() - 1;
     for (; i >= 0; --i)
     {
         if (!trimChars.Contains( At(i) )) break;
     }
-    return (i < 0) ? "" : SubString(0, i+1);
+    return (i < 0) ? "" : SubString(0, i);
 }
 
 String String::Trim(List<char> trimChars) const
