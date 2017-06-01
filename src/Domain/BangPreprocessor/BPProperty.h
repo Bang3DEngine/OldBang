@@ -14,6 +14,13 @@ public:
                            BPProperty *outProperty,
                            bool *success);
 
+    String GetInitializationCode(const String &propInitVarName) const;
+
+    void SetPropertyName(const String &name);
+    void SetVariableType(const String &varType);
+    void SetVariableName(const String &varName);
+    void SetVariableInitValue(const String &initValue);
+
     const String& GetPropertyName() const;
     const String& GetVariableType() const;
     const String& GetVariableName() const;

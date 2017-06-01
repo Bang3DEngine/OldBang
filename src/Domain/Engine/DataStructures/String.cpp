@@ -129,9 +129,14 @@ void String::Prepend(const String &str)
     *this = str + *this;
 }
 
-void String::Insert(Iterator it, char c)
+String::Iterator String::Insert(Iterator it, char c)
 {
-    insert(it, c);
+    return insert(it, c);
+}
+
+String::Iterator String::Insert(String::Iterator it, const String &str)
+{
+    return insert(it, str.Begin(), str.End());
 }
 
 void String::Insert(int position, char c)

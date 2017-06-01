@@ -17,6 +17,12 @@ public:
                            BPStruct *outStruct,
                            bool *success);
 
+    void SetStructName(const String &structName);
+    void SetStructVariableName(const String &structVarName);
+    void AddProperty(const BPProperty &prop);
+
+    String GetInitializationCode(const String &structInitVarName) const;
+
     const String &GetStructName() const;
     const String &GetStructVariableName() const;
     const Array<BPProperty> &GetProperties() const;

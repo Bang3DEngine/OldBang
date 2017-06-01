@@ -3,6 +3,7 @@
 #include <QProcess>
 #include "Bang/WinUndef.h"
 
+#include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/BPStruct.h"
 #include "Bang/BPProperty.h"
@@ -31,13 +32,13 @@ const Array<String> BangPreprocessor::VarTypes =
 
 const Array<String> BangPreprocessor::PropertyPrefixes =
 {
-    "BANG_PROPERTY"
+    "BP_PROPERTY"
 };
 
 const Array<String> BangPreprocessor::StructPrefixes =
 {
-    "BANG_CLASS",
-    "BANG_STRUCT"
+    "BP_CLASS",
+    "BP_STRUCT"
 };
 
 String BangPreprocessor::Preprocess(const String &source)
@@ -45,8 +46,8 @@ String BangPreprocessor::Preprocess(const String &source)
     String src = source;
     BP::RemoveComments(&src);
 
+    bool foundSomeStruct = false;
     String::Iterator it = src.Begin();
-    src.ReplaceInSitu("\n", " ");
     while (true)
     {
         // Find Structure/Class annotation
@@ -54,21 +55,47 @@ String BangPreprocessor::Preprocess(const String &source)
                                                   BP::StructPrefixes);
         if (itStructBegin == src.End()) { break; }
 
-        String::Iterator _, itStructEnd;
+        String::Iterator itStructScopeBegin, itStructScopeEnd;
         BP::GetNextScope(itStructBegin,
                          src.End(),
-                         &_,
-                         &itStructEnd,
+                         &itStructScopeBegin,
+                         &itStructScopeEnd,
                          '{',
                          '}');
-        it = itStructEnd;
+        it = itStructScopeEnd;
+        if (itStructScopeBegin == src.End()) { break; }
 
         bool ok;
         BPStruct bpStruct;
-        BPStruct::FromString(itStructBegin, itStructEnd, &bpStruct, &ok);
+        BPStruct::FromString(itStructBegin, itStructScopeEnd, &bpStruct, &ok);
 
-        Debug_Log(bpStruct);
+        String bpStructInitializationCode =
+        "private: \n"
+        "  static BPStruct BP_Info; \n"
+        "public: \n"
+        "  static const BPStruct& GetReflectionInfo() \n"
+        "  { \n"
+        "     static bool inited = false; \n"
+        "     if (!inited) \n"
+        "     { \n"
+        "       inited = true; \n" +
+                bpStruct.GetInitializationCode("BP_Info") +
+        "       "
+        "     } \n"
+        "     return BP_Info;\n"
+        "  }\n"
+        "private:\n";
+
+        it = src.Insert(itStructScopeBegin + 1, bpStructInitializationCode);
+        foundSomeStruct = true;
     }
+
+    if (foundSomeStruct)
+    {
+        src.Insert(src.Begin(), "#include \"Bang/BPStruct.h\"");
+        src.Insert(src.Begin(), "#include \"Bang/BPProperty.h\"");
+    }
+
     return src;
 }
 
@@ -91,7 +118,7 @@ void BangPreprocessor::RemoveComments(String *source)
                     );
     gCompilerProcess.close();
 
-    output.ReplaceInSitu("# 1 \"<stdin>\"\n", "");
+    output.Erase(output.Begin(), output.find('\n')); // Erase first line
     *source = output;
 }
 

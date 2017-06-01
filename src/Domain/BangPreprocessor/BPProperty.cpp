@@ -26,9 +26,9 @@ void BPProperty::FromString(String::Iterator propBegin,
     // Process property list
     String propertyListStr(propListBegin + 1, propListEnd - 1);
     Array<String> propertyList = propertyListStr.Split(',', true);
-    if (propertyList.Size() < 0)
+    if (propertyList.Size() == 0)
     {
-        Debug_Error("BP Error: BANG_PROPERTY has 0 properties,"
+        Debug_Error("BP Error: BP_PROPERTY has 0 properties,"
                     " but must have at least a name");
         return;
     }
@@ -73,6 +73,38 @@ void BPProperty::FromString(String::Iterator propBegin,
     }
 
     *success = true;
+}
+
+String BPProperty::GetInitializationCode(const String &propInitVarName) const
+{
+    const String vName = propInitVarName;
+
+    String code = "";
+    code += vName + ".SetPropertyName(\"" + GetPropertyName() + "\");\n";
+    code += vName + ".SetVariableType(\"" + GetVariableType() + "\");\n";
+    code += vName + ".SetVariableName(\"" + GetVariableName() + "\");\n";
+    code += vName + ".SetVariableInitValue(\"" + GetVariableInitValue() + "\");\n";
+    return code;
+}
+
+void BPProperty::SetPropertyName(const String &name)
+{
+    m_propertyName = name;
+}
+
+void BPProperty::SetVariableType(const String &varType)
+{
+    m_variableType = varType;
+}
+
+void BPProperty::SetVariableName(const String &varName)
+{
+    m_variableName = varName;
+}
+
+void BPProperty::SetVariableInitValue(const String &initValue)
+{
+    m_variableInitValue = initValue;
 }
 
 const String &BPProperty::GetPropertyName() const

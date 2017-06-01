@@ -144,13 +144,12 @@ Path Path::GetDirectory() const
 {
     if (IsEmpty()) { return Path::Empty; }
 
-    String directory = "";
     const size_t lastSlash = GetAbsolute().rfind('/');
     if (lastSlash != String::npos)
     {
-        directory = GetAbsolute().SubString(0, lastSlash-1);
+        return Path(GetAbsolute().SubString(0, lastSlash-1));
     }
-    return Path(directory);
+    return Path(".");
 }
 
 const String &Path::GetAbsolute() const

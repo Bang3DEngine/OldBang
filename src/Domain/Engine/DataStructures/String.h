@@ -48,7 +48,8 @@ public:
     void Append(const String &str);
     void Prepend(const String &str);
 
-    void Insert(Iterator it, char c);
+    Iterator Insert(Iterator it, char c);
+    Iterator Insert(Iterator it, const String &str);
     void Insert(int position, char c);
     void Insert(int position, const String &str);
     void Erase(Iterator it, int numberOfChars);
