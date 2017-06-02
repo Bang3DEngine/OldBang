@@ -1,12 +1,14 @@
 #ifndef BANGPREPROCESSOR_H
 #define BANGPREPROCESSOR_H
 
+#include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
 class BangPreprocessor
 {
 public:
+    static void Preprocess(const Path &filepath);
     static void Preprocess(const String &source,
                            String *reflectionHeaderSource,
                            bool *preprocessedSomething);

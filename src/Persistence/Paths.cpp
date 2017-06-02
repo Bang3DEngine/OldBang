@@ -16,6 +16,16 @@ Path Paths::Home()
     return Path(QDir::homePath());
 }
 
+const Path &Paths::EngineBinaryDir()
+{
+    return Paths::GetInstance()->c_engineBinaryDirPath;
+}
+
+const Path &Paths::EngineLibrariesDir()
+{
+    return Paths::GetInstance()->c_engineLibrariesDirPath;
+}
+
 const Path &Paths::Engine()
 {
     return Paths::GetInstance()->c_enginePath;
@@ -94,6 +104,13 @@ Path Paths::EnginePath(const String &path)
 Path Paths::UserPath(const String &path)
 {
     return Paths::ProjectAssets().Append(path);
+}
+
+void Paths::SetEngineBinaryDir(const Path &engineBinaryDir)
+{
+    Paths *p = Paths::GetInstance();
+    p->c_engineBinaryDirPath = engineBinaryDir;
+    p->c_engineLibrariesDirPath = p->c_engineBinaryDirPath.Append("lib");
 }
 
 

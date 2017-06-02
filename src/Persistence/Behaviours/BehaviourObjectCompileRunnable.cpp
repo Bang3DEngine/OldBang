@@ -2,6 +2,7 @@
 
 #include "Bang/Debug.h"
 #include "Bang/SystemUtils.h"
+#include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourManager.h"
 
 BehaviourObjectCompileRunnable::BehaviourObjectCompileRunnable(
@@ -22,6 +23,11 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
     Path objFilepath = Path(BehaviourManager::GetCurrentLibsDir())
                             .Append(behaviourName).AppendExtension("o");
     File::Remove(objFilepath);
+
+    Path headerPath = m_behaviourPath.GetDirectory().Append(
+                                Path(m_behaviourPath.GetName())
+                                .AppendExtension("h") );
+    BangPreprocessor::Preprocess(headerPath);
 
     typedef SystemUtils::CompilationFlag CLFlag;
 

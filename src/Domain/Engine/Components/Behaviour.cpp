@@ -237,15 +237,24 @@ String Behaviour::s_behaviourHeaderTemplate =
 #define CLASS_NAME_H \n\
 \n\
 #include \"Bang/Behaviour.h\" \n\
+#include \".CLASS_NAME.refl.h\" \n\
 \n\
 // Here go your includes \n\
 \n\
+BP_REFLECT_CLASS(CLASS_NAME)\n\
 class CLASS_NAME : public Behaviour \n\
 { \n\
 OBJECT(CLASS_NAME) \n\
 public: \n\
+\n\
+    BP_REFLECT_VARIABLE(Speed)\n\
+    float speed = 0.1f; \n\
+\n\
     void OnStart() override; \n\
     void OnUpdate() override; \n\
+\n\
+\n\
+    BP_REFLECT_DEFINITIONS_CLASS_NAME()\n\
 }; \n\
 \n\
 #endif // CLASS_NAME_H \n\

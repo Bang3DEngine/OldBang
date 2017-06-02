@@ -103,6 +103,8 @@ void SystemUtils::_System(const String &command,
     QStringList argsListQ;
     for (const String &arg : argsList) { argsListQ.push_back(arg.ToQString()); }
 
+    Debug_Log(command + " " + String::Join(argsList, " "));
+
     QProcess process;
     process.setReadChannel(QProcess::ProcessChannel::StandardOutput);
     process.start(command.ToQString(), argsListQ);
@@ -146,10 +148,12 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
 
     args.Add(sourceFilesList.To<List,String>());
 
+    args.Add("-L" + Paths::EngineLibrariesDir());
     args.Add(List<String>(
               {"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
                "--std=c++11",
-               "-lGLEW", "-lGL", "-lpthread"}));
+               "-lGLEW", "-lGL", "-lpthread",
+               "-lBang", "-lBangDataStructures"}));
     if (editorMode) { args.Add("-DBANG_EDITOR"); }
 
     List<Path> qtIncludeDirs = SystemUtils::GetQtIncludes();

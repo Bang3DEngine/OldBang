@@ -3,6 +3,7 @@
 #include <QProcess>
 #include "Bang/WinUndef.h"
 
+#include "Bang/File.h"
 #include "Bang/Array.h"
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"
@@ -45,6 +46,41 @@ const Array<String> BP::RStructPrefixes =
 
 const String BP::ReflectDefinitionsDefineName =
         "BP_REFLECT_DEFINITIONS";
+
+void BangPreprocessor::Preprocess(const Path &filepath)
+{
+    File file(filepath);
+    String srcContents = file.GetContents();
+    String reflHeaderContents;
+    bool preprocessedSomething;
+    BangPreprocessor::Preprocess(srcContents,
+                                 &reflHeaderContents,
+                                 &preprocessedSomething);
+    if (preprocessedSomething)
+    {
+        String originalExt = filepath.GetExtension();
+        Path reflFilepath  = filepath.GetDirectory()
+                                     .Append("." + filepath.GetName())
+                                     .AppendExtension("refl")
+                                     .AppendExtension(originalExt);
+
+        bool writePreprocessedFile = true;
+        if (reflFilepath.Exists())
+        {
+            String oldReflContents = File(reflFilepath).GetContents();
+            writePreprocessedFile = (oldReflContents != reflHeaderContents);
+        }
+
+        if (writePreprocessedFile)
+        {
+            File::Write(reflFilepath, reflHeaderContents);
+            std::cout << "  File '" << filepath.ToString().ToCString()
+                      << "' successfully preprocessed into '"
+                      << reflFilepath.ToString().ToCString()
+                      << "'" << std::endl;
+        }
+    }
+}
 
 void BangPreprocessor::Preprocess(const String &source,
                                   String *_reflectionHeaderSource,
@@ -111,6 +147,7 @@ void BangPreprocessor::Preprocess(const String &source,
             else if (var.IsDouble()) { getterFunctionName = "GetFloat"; }
             else if (var.IsString()) { getterFunctionName = "GetString"; }
             readReflectionFunctionCode +=
+                    var.GetVariableName() + " = " +
                     "xmlInfo." + getterFunctionName + "(\""
                                + var.GetName() + "\");";
             readReflectionFunctionCode += "\n";

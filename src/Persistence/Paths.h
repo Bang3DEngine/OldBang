@@ -13,6 +13,9 @@ public:
 
     static Path Home();
 
+    static const Path& EngineBinaryDir();
+    static const Path& EngineLibrariesDir();
+
     static const Path& Engine();
     static const Path& EngineAssets();
 
@@ -32,11 +35,14 @@ public:
 private:
     Path c_enginePath;
     Path c_engineAssetsPath;
+    Path c_engineBinaryDirPath;
+    Path c_engineLibrariesDirPath;
 
     Path c_projectPath;
     Path c_projectAssetsPath;
     Path c_projectLibrariesPath;
 
+    static void SetEngineBinaryDir(const Path &engineBinaryDir);
     static void SetEnginePath(const Path &enginePath);
     static void SetProjectPath(const Path &projectPath);
 

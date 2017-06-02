@@ -127,6 +127,7 @@ int main(int argc, char **argv)
     InitSingletonManager();
 
     Path executableDir(Application::applicationDirPath());
+    Paths::SetEngineBinaryDir(executableDir);
 
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
