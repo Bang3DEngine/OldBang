@@ -4,7 +4,6 @@
 #include <QFile>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Array.h"
 
 const Path Path::Empty;
@@ -157,35 +156,6 @@ const String &Path::GetAbsolute() const
     return m_absolutePath;
 }
 
-String Path::GetRelative() const
-{
-    const Path &engineAssets = Paths::EngineAssets();
-    if (BeginsWith(engineAssets))
-    {
-        return GetAbsolute().SubString(engineAssets.GetAbsolute().Length() + 1);
-    }
-
-    const Path &projectAssets = Paths::ProjectAssets();
-    if (BeginsWith(projectAssets))
-    {
-        return GetAbsolute().SubString(projectAssets.GetAbsolute().Length() + 1);
-    }
-
-    const Path &engineRoot = Paths::Engine();
-    if (BeginsWith(engineRoot))
-    {
-        return GetAbsolute().SubString(engineRoot.GetAbsolute().Length() + 1);
-    }
-
-    const Path &projectRoot = Paths::Project();
-    if (BeginsWith(projectRoot))
-    {
-        return GetAbsolute().SubString(projectRoot.GetAbsolute().Length() + 1);
-    }
-
-    return GetAbsolute();
-}
-
 Path Path::GetDuplicate() const
 {
     if (IsEmpty()) { return Path::Empty; }
@@ -272,16 +242,6 @@ bool Path::operator==(const Path &rhs) const
 bool Path::operator<(const Path &rhs) const
 {
     return GetAbsolute() < rhs.GetAbsolute();
-}
-
-Path Path::EnginePath(const String &path)
-{
-    return Paths::EngineAssets().Append(path);
-}
-
-Path Path::UserPath(const String &path)
-{
-    return Paths::ProjectAssets().Append(path);
 }
 
 Path Path::GetNextDuplicatePath(const Path &filepath)

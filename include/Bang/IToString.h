@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Graphics/Interfaces/IToString.h"
+#include "../.././src/Domain/Interfaces/IToString.h"

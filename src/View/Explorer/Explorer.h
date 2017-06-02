@@ -35,7 +35,7 @@ public:
 
     Path GetCurrentDir() const;
     Path GetSelectedPath() const;
-    File GetSelectedFile() const;
+    BFile GetSelectedFile() const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
     const QFileSystemModel* GetFileSystemModel() const;
@@ -106,7 +106,7 @@ private:
 
     QModelIndex GetModelIndexFromFilepath(const Path &filepath) const;
 
-    friend class File;
+    friend class BFile;
     friend class SerializableObject;
     friend class FileSystemModel;
     friend class ExplorerDirTree;

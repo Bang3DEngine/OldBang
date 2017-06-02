@@ -4,12 +4,15 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
 #include "Bang/String.h"
+#include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
+#include "Bang/IInspectable.h"
 
 class SerializableObject;
-class MeshFile : public File
+class MeshFile : public BFile
 {
 public:
     MeshFile();

@@ -3,6 +3,7 @@
 #include <QPainter>
 #include "Bang/WinUndef.h"
 
+#include "Bang/BFile.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
@@ -138,12 +139,12 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     }
     else if (role == Qt::DecorationRole)
     {
-        File file(this, idx);
+        BFile file(this, idx);
 
         QPixmap pm = IconManager::GetEmptyPixmap();
         if (file.GetPath().IsFile())
         {
-            File *sFile = File::GetSpecificFile(file);
+            BFile *sFile = BFile::GetSpecificFile(file);
             if (sFile)
             {
                 pm = sFile->GetIcon();
@@ -176,11 +177,11 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     }
     else if (role == Qt::TextColorRole)
     {
-        File file(this, idx);
+        BFile file(this, idx);
         if (Path(filePath(idx)).IsFile())
         {
             Color textColor;
-            File *sFile = File::GetSpecificFile(file);
+            BFile *sFile = BFile::GetSpecificFile(file);
             if (sFile && sFile->IsAsset())
             {
                 if (sFile->IsAudioClipFile())
@@ -216,10 +217,10 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     {
         QFont font = QFileSystemModel::data(idx, role).value<QFont>();
 
-        File file(this, idx);
+        BFile file(this, idx);
         if ( file.GetPath().IsFile() )
         {
-            File *sFile = File::GetSpecificFile(file);
+            BFile *sFile = BFile::GetSpecificFile(file);
             font.setBold( sFile->IsAsset() );
             delete sFile;
         }

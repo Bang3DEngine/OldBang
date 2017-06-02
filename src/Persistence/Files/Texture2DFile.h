@@ -4,11 +4,13 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
 class SerializableObject;
-class Texture2DFile : public File
+class Texture2DFile : public BFile
 {
 public:
     Texture2DFile();

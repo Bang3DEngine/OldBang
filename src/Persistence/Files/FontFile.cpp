@@ -11,7 +11,7 @@ FontFile::FontFile()
 {
 }
 
-FontFile::FontFile(const Path& path) : File(path)
+FontFile::FontFile(const Path& path) : BFile(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
     m_trueFontFilepath = xmlInfo.GetFilepath("FontFilepath");

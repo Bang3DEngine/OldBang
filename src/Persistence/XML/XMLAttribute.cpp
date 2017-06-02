@@ -208,7 +208,7 @@ void XMLAttribute::SetFilepath(const Path &filepath,
                                const String &allowedExtensions,
                                const Array<XMLProperty> &properties)
 {
-    String relFilepath = filepath.GetRelative();
+    String relFilepath = Paths::GetRelative(filepath).ToString();
     Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
 
     if (!allowedExtensions.Empty())

@@ -7,9 +7,6 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
-#define EPATH(path) Path::EnginePath(path) // Engine assets path
-#define UPATH(path) Path::UserPath(path)   // User assets path
-
 class Path : public IToString
 {
 public:
@@ -31,7 +28,6 @@ public:
     String GetNameExt() const;
     String GetExtension() const;
     const String& GetAbsolute() const;
-    String GetRelative() const;
     Path GetDuplicate() const;
 
     virtual String ToString() const override;
@@ -55,9 +51,6 @@ public:
     bool operator<(const Path &rhs) const;
 
     static const Path Empty;
-
-    static Path EnginePath(const String &path);
-    static Path UserPath(const String &path);
 
 private:
     String m_absolutePath   = "";

@@ -7,13 +7,16 @@
 class BangPreprocessor
 {
 public:
-    static String Preprocess(const String &source);
+    static void Preprocess(const String &source,
+                           String *reflectionHeaderSource,
+                           bool *preprocessedSomething);
 
 public:
     const static Array<String> Modifiers;
     const static Array<String> VarTypes;
-    const static Array<String> PropertyPrefixes;
-    const static Array<String> StructPrefixes;
+    const static Array<String> RVariablePrefixes;
+    const static Array<String> RStructPrefixes;
+    const static String ReflectDefinitionsDefineName;
 
     static void RemoveComments(String *source);
 

@@ -1,14 +1,24 @@
 include(../BangCommon.pri)
 
-TEMPLATE = lib
+system(cd $$PWD/.. ; sh ./scripts/preprocessHeaders.sh)
 
-TARGET = ../bin/Bang
+TEMPLATE = lib
+INCLUDEPATH += ../include
+QT += core gui opengl widgets
+
 CONFIG += staticlib
 
-# SOURCES #####################
+TARGET = $$BIN_DIR/lib/Bang
+
+LIBS = -L$$BIN_DIR/lib/ -lBangDataStructures $$LIBS
+PRE_TARGETDEPS += $$BIN_DIR/lib/libBangDataStructures.a
+
+MOC_DIR = ../src/Qt_MOCs/
+
 SOURCES += \
-    ../src/Domain/Engine/Physics/Rect.cpp \
     ../src/Domain/Engine/Others/Time.cpp \
+    ../src/Domain/Engine/Physics/AABox.cpp \
+    ../src/Domain/Engine/Physics/Sphere.cpp \
     ../src/Domain/Engine/GameObjects/GameObject.cpp \
     ../src/Domain/Engine/GameObjects/Scene.cpp \
     ../src/Domain/Graphics/Texture.cpp \
@@ -29,10 +39,6 @@ SOURCES += \
     ../src/Persistence/Files/TextFile.cpp \
     ../src/Domain/Engine/Components/LineRenderer.cpp \
     ../src/Domain/Engine/Components/Renderer.cpp \
-    ../src/Domain/Engine/Physics/Vector3.cpp \
-    ../src/Domain/Engine/Physics/Quaternion.cpp \
-    ../src/Domain/Engine/Physics/Matrix4.cpp \
-    ../src/Domain/Engine/Physics/Sphere.cpp \
     ../src/Domain/Engine/Others/SystemUtils.cpp \
     ../src/Domain/Engine/Others/SingletonManager.cpp \
     ../src/Domain/Engine/Components/CircleRenderer.cpp \
@@ -44,9 +50,6 @@ SOURCES += \
     ../src/Domain/Engine/Components/Light.cpp \
     ../src/View/GameObjectClipboard.cpp \
     ../src/Domain/Engine/Components/PointLight.cpp \
-    ../src/Domain/Engine/Physics/Vector4.cpp \
-    ../src/Domain/Engine/Physics/Vector2.cpp \
-    ../src/Domain/Engine/Physics/Color.cpp \
     ../src/View/Application.cpp \
     ../src/Domain/Engine/Others/SceneManager.cpp \
     ../src/Domain/Engine/Components/Canvas.cpp \
@@ -56,17 +59,10 @@ SOURCES += \
     ../src/Domain/Engine/Assets/Font.cpp \
     ../src/Domain/Engine/Components/UIText.cpp \
     ../src/Persistence/EngineConfig.cpp \
-    ../src/Domain/Engine/Physics/AABox.cpp \
     ../src/Domain/Engine/Assets/AudioClip.cpp \
     ../src/Domain/Engine/Components/AudioSource.cpp \
     ../src/Domain/Engine/Audio/AudioManager.cpp \
     ../src/Domain/Engine/Audio/AudioPlayerRunnable.cpp \
-    ../src/Domain/Engine/DataStructures/List.cpp \
-    ../src/Domain/Engine/DataStructures/Map.cpp \
-    ../src/Domain/Engine/DataStructures/Array.cpp \
-    ../src/Domain/Engine/DataStructures/Timer.cpp \
-    ../src/Domain/Engine/DataStructures/String.cpp \
-    ../src/Domain/Engine/DataStructures/Property.cpp \
     ../src/Domain/Engine/Debug/Gizmos.cpp \
     ../src/Domain/Engine/Debug/Debug.cpp \
     ../src/Domain/Engine/Debug/Chrono.cpp \
@@ -74,7 +70,6 @@ SOURCES += \
     ../src/Domain/Graphics/Buffers/GBuffer.cpp \
     ../src/Domain/Graphics/Shaders/Shader.cpp \
     ../src/Domain/Graphics/Shaders/ShaderProgram.cpp \
-    ../src/Persistence/Files/File.cpp \
     ../src/Persistence/IO/FileReader.cpp \
     ../src/Persistence/Files/ImageFile.cpp \
     ../src/Persistence/Behaviours/BehaviourManager.cpp \
@@ -85,8 +80,6 @@ SOURCES += \
     ../src/Persistence/XML/XMLProperty.cpp \
     ../src/View/Windows/IWindow.cpp \
     ../src/View/Windows/GameWindow.cpp \
-    ../src/Domain/Engine/Physics/Math.cpp \
-    ../src/Domain/Engine/Physics/Random.cpp \
     ../src/Domain/Engine/Components/AudioListener.cpp \
     ../src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     ../src/Domain/Engine/Components/RectTransform.cpp \
@@ -99,7 +92,6 @@ SOURCES += \
     ../src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
     ../src/Domain/Graphics/GLContext.cpp \
     ../src/Domain/Graphics/GL.cpp \
-    ../src/Domain/Engine/DataStructures/TypeMap.cpp \
     ../src/Domain/Engine/CodePreprocessor.cpp \
     ../src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
     ../src/Persistence/Project/ProjectManager.cpp \
@@ -110,11 +102,10 @@ SOURCES += \
     ../src/Domain/Engine/GraphicPipeline/GPPass.cpp \
     ../src/Domain/Graphics/Interfaces/GLObject.cpp \
     ../src/Domain/Engine/Debug/ChronoGL.cpp \
-    ../src/Domain/Engine/DataStructures/Set.cpp \
     ../src/Domain/Engine/Interfaces/SerializableObject.cpp \
     ../src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
-    ../src/Domain/Engine/DataStructures/UMap.cpp \
     ../src/View/Shortcut.cpp \
+    ../src/Persistence/Files/ExtensionManager.cpp \
     ../src/View/IconManager.cpp \
     ../src/Domain/Engine/Image.cpp \
     ../src/Domain/Engine/Components/CircleCulledRenderer.cpp \
@@ -124,10 +115,8 @@ SOURCES += \
     ../src/Domain/Graphics/Shaders/ShaderManager.cpp \
     ../src/Domain/Engine/Components/PostProcessEffect.cpp \
     ../src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
-    ../src/Persistence/Files/Path.cpp \
     ../src/Persistence/Files/ModelFile.cpp \
     ../src/Persistence/Files/MeshFile.cpp \
-    ../src/Domain/Engine/DataStructures/Regex.cpp \
     ../src/Persistence/Files/Texture2DFile.cpp \
     ../src/Persistence/Files/ShaderProgramFile.cpp \
     ../src/Persistence/Files/MaterialFile.cpp \
@@ -135,10 +124,235 @@ SOURCES += \
     ../src/Persistence/Files/FontFile.cpp \
     ../src/Persistence/Paths.cpp \
     ../src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
-    ../src/Domain/Engine/DataStructures/Collection.cpp \
     ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \
-    ../src/Domain/BangPreprocessor/BPProperty.cpp \
-    ../src/Domain/BangPreprocessor/BPStruct.cpp
+    ../src/Domain/BangPreprocessor/BPReflectedStruct.cpp \
+    ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp \
+    ../src/Persistence/Files/BFile.cpp
+
+HEADERS +=                                                          \
+    ../src/Domain/Engine/Physics/Rect.h                                \
+    ../src/Domain/Interfaces/IToString.h                               \
+    ../src/Domain/Engine/Interfaces/ISceneEventListener.h              \
+    ../src/Domain/Engine/GameObjects/GameObject.h                      \
+    ../src/Domain/Engine/GameObjects/Scene.h                           \
+    ../src/Domain/Graphics/Texture.h                                   \
+    ../src/Domain/Graphics/VAO.h                                       \
+    ../src/Domain/Graphics/VBO.h                                       \
+    ../src/Domain/Engine/Components/Transform.h                        \
+    ../src/Domain/Engine/Components/Component.h                        \
+    ../src/Domain/Engine/Components/MeshRenderer.h                     \
+    ../src/Domain/Engine/Components/Camera.h                           \
+    ../src/Domain/Engine/Assets/Asset.h                                \
+    ../src/Domain/Engine/Assets/Material.h                             \
+    ../src/Domain/Engine/Assets/Meshes/Mesh.h                          \
+    ../src/Domain/Engine/Components/Behaviour.h                        \
+    ../src/Domain/Engine/Assets/Texture2D.h                            \
+    ../src/Domain/Engine/Assets/Prefab.h                               \
+    ../include/Bang/Bang.h                                             \
+    ../src/Persistence/AssetsManager.h                                 \
+    ../src/Domain/Engine/Others/Input.h                                \
+    ../src/Domain/Engine/Components/LineRenderer.h                     \
+    ../src/Domain/Engine/Components/Renderer.h                         \
+    ../src/Domain/Engine/Physics/Vector3.h                             \
+    ../src/Domain/Engine/Physics/Quaternion.h                          \
+    ../src/Domain/Engine/Physics/Matrix4.h                             \
+    ../src/Domain/Engine/Physics/Sphere.h                              \
+    ../src/Domain/Engine/Others/SystemUtils.h                          \
+    ../src/Domain/Engine/Others/SingletonManager.h                     \
+    ../src/Domain/Engine/Components/CircleRenderer.h                   \
+    ../src/Domain/Engine/Components/SingleLineRenderer.h               \
+    ../src/Domain/Engine/Assets/Meshes/MeshFactory.h                   \
+    ../src/Domain/Engine/Interfaces/ICloneable.h                       \
+    ../src/Domain/Engine/Components/DirectionalLight.h                 \
+    ../src/Domain/Engine/Components/Light.h                            \
+    ../src/Domain/Engine/Components/PointLight.h                       \
+    ../src/Domain/Engine/Physics/Vector4.h                             \
+    ../src/Domain/Engine/Physics/Vector2.h                             \
+    ../src/Domain/Engine/Physics/Color.h                               \
+    ../src/Domain/Engine/Others/SceneManager.h                         \
+    ../src/Domain/Engine/Components/Canvas.h                           \
+    ../src/Domain/Engine/Components/UIImage.h                          \
+    ../src/Domain/Engine/Components/UIRenderer.h                       \
+    ../src/Domain/Graphics/FontSheetCreator.h                          \
+    ../src/Domain/Engine/Assets/Font.h                                 \
+    ../src/Domain/Engine/Components/UIText.h                           \
+    ../src/Persistence/EngineConfig.h                                  \
+    ../src/Domain/Engine/Physics/AABox.h                               \
+    ../src/Domain/Engine/Assets/AudioClip.h                            \
+    ../src/Domain/Engine/Components/AudioSource.h                      \
+    ../src/Domain/Engine/Audio/AudioManager.h                          \
+    ../src/Domain/Engine/Audio/AudioPlayerRunnable.h                   \
+    ../src/Domain/Engine/DataStructures/Array.h                        \
+    ../src/Domain/Engine/DataStructures/List.h                         \
+    ../src/Domain/Engine/DataStructures/Map.h                          \
+    ../src/Domain/Engine/DataStructures/Property.h                     \
+    ../src/Domain/Engine/DataStructures/String.h                       \
+    ../src/Domain/Engine/DataStructures/NamedEnum.h                    \
+    ../src/Domain/Engine/Debug/Chrono.h                                \
+    ../src/Domain/Engine/Debug/Debug.h                                 \
+    ../src/Domain/Engine/Debug/Gizmos.h                                \
+    ../src/Domain/Engine/Debug/Time.h                                  \
+    ../src/Domain/Engine/DataStructures/Timer.h                        \
+    ../src/Domain/Graphics/Buffers/Framebuffer.h                       \
+    ../src/Domain/Graphics/Buffers/GBuffer.h                           \
+    ../src/Domain/Graphics/Shaders/Shader.h                            \
+    ../src/Domain/Graphics/Shaders/ShaderProgram.h                     \
+    ../src/Persistence/Behaviours/BehaviourManager.h                   \
+    ../src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
+    ../src/Persistence/IO/FileReader.h                                 \
+    ../src/Persistence/Files/ImageFile.h                               \
+    ../src/Persistence/XML/XMLAttribute.h                              \
+    ../src/Persistence/XML/XMLNode.h                                   \
+    ../src/Persistence/XML/XMLParser.h                                 \
+    ../src/Persistence/XML/XMLProperty.h                               \
+    ../src/Persistence/Files/TextFile.h \
+    ../src/Domain/Engine/Physics/Math.h \
+    ../src/Domain/Engine/Physics/Random.h \
+    ../src/Persistence/Files/ExtensionManager.h \
+    ../src/Domain/Engine/Components/AudioListener.h \
+    ../src/Persistence/Behaviours/BehaviourManagerStatus.h \
+    ../src/Domain/Engine/Components/RectTransform.h \
+    ../src/Domain/Graphics/RenderTexture.h \
+    ../src/Domain/Engine/Object.h \
+    ../src/Domain/Engine/Others/GraphicPipelineDebugger.h \
+    ../src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
+    ../src/Domain/Graphics/GLContext.h \
+    ../src/Domain/Graphics/GL.h \
+    ../src/Domain/Engine/DataStructures/TypeMap.h \
+    ../src/Domain/Engine/CodePreprocessor.h \
+    ../src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
+    ../src/Persistence/Project/Project.h \
+    ../src/Persistence/Project/ProjectManager.h \
+    ../src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
+    ../src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_G.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass.h \
+    ../src/Domain/Graphics/Interfaces/GLObject.h \
+    ../src/Domain/Engine/Debug/ChronoGL.h \
+    ../src/Domain/Engine/DataStructures/Set.h \
+    ../src/Domain/Engine/Interfaces/SerializableObject.h \
+    ../src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
+    ../src/Domain/Engine/DataStructures/UMap.h \
+    ../src/Domain/Engine/Image.h \
+    ../src/Domain/Engine/Components/CircleCulledRenderer.h \
+    ../src/Persistence/Files/PrefabFile.h \
+    ../src/Persistence/Files/SoundFile.h \
+    ../src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
+    ../src/Domain/Engine/DataStructures/Flags.h \
+    ../src/Domain/Graphics/Shaders/ShaderManager.h \
+    ../src/Domain/Engine/Components/PostProcessEffect.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
+    ../src/Persistence/Files/Path.h \
+    ../src/Persistence/Files/ModelFile.h \
+    ../src/Persistence/Files/MeshFile.h \
+    ../src/Domain/Engine/DataStructures/Regex.h \
+    ../src/Persistence/Files/AudioClipFile.h \
+    ../src/Persistence/Files/FontFile.h \
+    ../src/Persistence/Files/MaterialFile.h \
+    ../src/Persistence/Files/ShaderProgramFile.h \
+    ../src/Persistence/Files/Texture2DFile.h \
+    ../src/Persistence/Paths.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.h \
+    ../src/Domain/Engine/DataStructures/Collection.h \
+    ../src/Domain/BangPreprocessor/BangPreprocessor.h \
+    ../src/Domain/BangPreprocessor/BPReflectedVariable.h \
+    ../src/Domain/BangPreprocessor/BPReflectedStruct.h \
+    ../src/Domain/Engine/Debug/OStreamOperators.h \
+    ../src/Persistence/Files/BFile.h
+
+EDITOR {
+HEADERS += \
+    ../src/View/Screen.h                                               \
+    ../src/View/GameObjectClipboard.h                                  \
+    ../src/View/Application.h                                          \
+    ../src/View/Windows/IWindow.h \
+    ../src/View/Windows/GameWindow.h \
+    ../src/View/Cursor.h \
+    ../src/View/Shortcut.h \
+    ../src/View/IconManager.h \
+    ../src/View/Windows/EditorWindow.h \
+    ../src/Domain/Engine/GraphicPipeline/GPPass_Selection.h \
+    ../src/View/EditorGameObject/EditorGizmosGameObject.h \
+    ../src/View/DragDrop/DragDropQWidget.h \
+    ../src/Persistence/Files/AssetFileCreator.h \
+    ../src/Persistence/Project/QtProjectManager.h \
+    ../src/View/DragDrop/DragDropQListView.h \
+    ../src/View/Explorer/FileReferencesManager.h \
+    ../src/View/DragDrop/DragDropQTreeWidget.h \
+    ../src/View/Inspector/Inspectables/Inspectable.h \
+    ../src/View/Inspector/Inspectables/GameObjectInspectable.h \
+    ../src/View/Inspector/Inspectables/IInspectable.h \
+    ../src/View/Inspector/Inspectables/FileInspectable.h \
+    ../src/View/Inspector/Inspectables/ComponentInspectable.h \
+    ../src/View/DragDrop/DragDropQListWidget.h \
+    ../src/View/DragDrop/DragDropAgent.h \
+    ../src/View/DragDrop/IDragDropListener.h \
+    ../src/View/DragDrop/DragDropManager.h \
+    ../src/View/Explorer/FileSystemModel.h \
+    ../src/View/EditorGameObject/EditorSelectionGameObject.h \
+    ../src/View/EditorScene/EditorDebugGameObject.h \
+    ../src/Domain/Graphics/Buffers/SelectionFramebuffer.h              \
+    ../src/View/EditorGameObject/EditorTranslateAxis.h \
+    ../src/View/EditorGameObject/EditorTranslateAxisGroup.h \
+    ../src/View/Dialogs/DialogBrowseAssetFile.h                        \
+    ../src/View/Inspector/AttributeWidgets/AttributeWidget.h           \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetBool.h            \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetButton.h          \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetColor.h           \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetEnum.h            \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetFile.h            \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetFloat.h           \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetString.h          \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h     \
+    ../src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
+    ../src/View/Inspector/Inspectables/PrefabFileInspectable.h    \
+    ../src/View/Windows/WindowEventManager.h \
+    ../src/View/Windows/SelectProjectWindow.h \
+    ../src/View/Toolbar.h \
+    ../src/View/EditorState.h \
+    ../src/View/Dialogs/GameBuildDialog.h \
+    ../src/View/GameBuilderJob.h \
+    ../src/View/Dialogs/Dialog.h \
+    ../src/View/Interfaces/IWindowEventManagerListener.h \
+    ../src/View/Inspector/Inspector.h \
+    ../src/View/Hierarchy/Hierarchy.h \
+    ../src/View/Inspector/ComponentWidget.h \
+    ../src/View/Console/Console.h \
+    ../src/View/Explorer/Explorer.h \
+    ../src/View/MenuBar.h \
+    ../src/View/Explorer/ExplorerDirTree.h \
+    ../src/View/Inspector/InspectorWidget.h \
+    ../src/View/EditorCamera/EditorCamera.h \
+    ../src/View/EditorScene/EditorScene.h \
+    ../src/View/EditorGameObject/EditorBBox.h \
+    ../src/View/EditorGameObject/EditorRotateAxisGroup.h \
+    ../src/View/EditorGameObject/EditorRotateAxis.h \
+    ../src/View/EditorGameObject/EditorAxisGroup.h \
+    ../src/View/EditorGameObject/EditorAxis.h \
+    ../src/View/EditorGameObject/EditorScaleAxisGroup.h \
+    ../src/View/EditorGameObject/EditorScaleAxis.h \
+    ../src/View/EditorScene/EditorFloor.h \
+    ../src/View/Inspector/ComponentClipboard.h \
+    ../src/View/Hierarchy/HierarchyDragDropManager.h \
+    ../src/View/Hierarchy/HierarchyContextMenu.h \
+    ../src/View/Explorer/ExplorerContextMenu.h \
+    ../src/View/Inspector/ComponentWidgetContextMenu.h \
+    ../src/View/Inspector/InspectorContextMenu.h \
+    ../src/View/ContextMenu.h \
+    ../src/Domain/Engine/Others/GameBuilder.h \
+    ../src/View/EditorGameObject/EditorAxisPlane.h \
+    ../src/View/Explorer/ExplorerFileSortProxy.h \
+    ../src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
+    ../src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
+    ../src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
+    ../src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
+    ../src/View/EditorGameObject/EditorGizmo.h \
+    ../src/View/DragDrop/DragDropInfo.h \
+    ../src/View/EditorPlayFlow.h \
+    ../src/Persistence/FileTracker.h
+}
 
 EDITOR {
     SOURCES += \
@@ -221,9 +435,6 @@ EDITOR {
         ../src/View/EditorGameObject/EditorAxisPlane.cpp \
         ../src/Persistence/FileTracker.cpp \
         ../src/View/EditorPlayFlow.cpp
-}
-GAME {
-    #SOURCES +=
 }
 ######################################
 
@@ -364,4 +575,9 @@ DISTFILES += \
     ../EngineAssets/Shaders/UI/G_UIText.frag_g \
     ../EngineAssets/Shaders/SP_Default.frag_pp \
     ../EngineAssets/Shaders/G_Default.bshaderprogram \
-    ../EngineAssets/Shaders/Cartoon.frag_pp
+    ../EngineAssets/Shaders/Cartoon.frag_pp \
+    ../EngineAssets/Shaders/G_Missing.frag_g \
+    ../EngineAssets/Shaders/InvertColors.frag_pp \
+    ../EngineAssets/Shaders/Blur.frag_pp \
+    ../EngineAssets/Shaders/GrayScale.frag_pp \
+    ../EngineAssets/Shaders/Outline.frag_pp \

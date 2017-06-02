@@ -4,14 +4,16 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
 #include "Bang/Array.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Vector4.h"
 #include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
-class MaterialFile : public File
+class MaterialFile : public BFile
 {
 public:
     MaterialFile();

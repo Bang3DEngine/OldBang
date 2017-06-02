@@ -8,11 +8,8 @@
 
 #include "Bang/Path.h"
 #include "Bang/String.h"
-#include "Bang/SerializableObject.h"
 
-class XMLNode;
-class IInspectable;
-class File : public SerializableObject
+class File
 {
 public:
     File();
@@ -21,39 +18,8 @@ public:
     File(const QFileSystemModel *model, const QModelIndex &index);
     virtual ~File();
 
-    virtual const QPixmap& GetIcon() const;
-
-    bool IsSound() const;
-    bool IsAudioClipFile() const;
-
-    bool IsTexture2DFile() const;
-    bool IsImageFile() const;
-
-    bool IsScene() const;
-
-    bool IsMeshFile() const;
-    bool IsModelFile() const;
-
-    bool IsMaterialFile() const;
-    bool IsBehaviour() const;
-
-    bool IsTextFile() const;
-    bool IsFontFile() const;
-
-    bool IsPrefabFile() const;
-    bool IsShaderProgramFile() const;
-
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable* GetNewInspectable();
-    #endif
-
     String GetContents() const;
     const Path& GetPath() const;
-
-    virtual bool IsAsset() const;
 
     static bool Remove(const Path &path);
     static bool CreateDirectory(const Path &dirPath);
@@ -67,8 +33,6 @@ public:
                              const Path &toDirpath,
                              bool overwrite = true);
 
-    static File *GetSpecificFile(const File &f);
-
     static String GetContents(const Path &filepath);
     static void Write(const Path &filepath, const String &contents);
     static void Write(const Path &filepath, const Array<String> &lines);
@@ -80,9 +44,6 @@ public:
 
 protected:
     Path m_path;
-
-    friend class FileSystemModel;
-    friend class DialogBrowseAssetFile;
 };
 
 #endif // FILE_H

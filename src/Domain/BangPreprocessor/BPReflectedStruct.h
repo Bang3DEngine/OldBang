@@ -4,35 +4,35 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
-#include "Bang/BPProperty.h"
+#include "Bang/BPReflectedVariable.h"
 
-class BPStruct : public IToString
+class BPReflectedStruct : public IToString
 {
 public:
-    BPStruct();
-    virtual ~BPStruct();
+    BPReflectedStruct();
+    virtual ~BPReflectedStruct();
 
     static void FromString(String::Iterator structBegin,
                            String::Iterator structEnd,
-                           BPStruct *outStruct,
+                           BPReflectedStruct *outStruct,
                            bool *success);
 
     void SetStructName(const String &structName);
     void SetStructVariableName(const String &structVarName);
-    void AddProperty(const BPProperty &prop);
+    void AddProperty(const BPReflectedVariable &prop);
 
     String GetInitializationCode(const String &structInitVarName) const;
 
     const String &GetStructName() const;
     const String &GetStructVariableName() const;
-    const Array<BPProperty> &GetProperties() const;
+    const Array<BPReflectedVariable> &GetProperties() const;
 
     String ToString() const override;
 
 private:
     String m_structName = "";
     String m_structVariableName = "";
-    Array<BPProperty> m_properties;
+    Array<BPReflectedVariable> m_properties;
 };
 
 #endif // BPSTRUCT_H

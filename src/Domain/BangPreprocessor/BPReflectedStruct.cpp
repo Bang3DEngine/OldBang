@@ -1,23 +1,22 @@
-#include "BPStruct.h"
+#include "BPReflectedStruct.h"
 
 #include <regex>
 
-#include "Bang/Debug.h"
 #include "Bang/BangPreprocessor.h"
 
 typedef BangPreprocessor BP;
 
-BPStruct::BPStruct()
+BPReflectedStruct::BPReflectedStruct()
 {
 }
 
-BPStruct::~BPStruct()
+BPReflectedStruct::~BPReflectedStruct()
 {
 }
 
-void BPStruct::FromString(String::Iterator structBegin,
+void BPReflectedStruct::FromString(String::Iterator structBegin,
                           String::Iterator structEnd,
-                          BPStruct *outStruct,
+                          BPReflectedStruct *outStruct,
                           bool *success)
 {
     *success = false;
@@ -33,8 +32,8 @@ void BPStruct::FromString(String::Iterator structBegin,
     Array<String> propertyList = propertyListStr.Split(',', true);
     if (propertyList.Size() == 0)
     {
-        Debug_Error("BP Error: BP_CLASS has 0 properties, but must have at"
-                    "least a name");
+        std::cerr << "BP Error: BP_CLASS has 0 properties, but must have at"
+                     "least a name" << std::endl;
         return;
     }
     outStruct->SetStructName(propertyList[0]);
@@ -46,8 +45,8 @@ void BPStruct::FromString(String::Iterator structBegin,
     String keyword(structKeywordBegin, structKeywordEnd);
     if (keyword != "class" && keyword != "struct")
     {
-        Debug_Error("BP Error: 'class' or 'struct' keyword expected after"
-                    " BANG_CLASS(...)");
+        std::cerr << "BP Error: 'class' or 'struct' keyword expected after"
+                     " BANG_CLASS(...)" << std::endl;
         return;
     }
 
@@ -62,7 +61,7 @@ void BPStruct::FromString(String::Iterator structBegin,
     while (it != structEnd)
     {
         String::Iterator propertyBegin = BP::Find(it, structEnd,
-                                                  BP::PropertyPrefixes);
+                                                  BP::RVariablePrefixes);
         if (propertyBegin == structEnd) { break; }
 
         String::Iterator propertyEnd = propertyBegin;
@@ -70,8 +69,8 @@ void BPStruct::FromString(String::Iterator structBegin,
         if (propertyEnd == structEnd) { break; }
         propertyEnd += 1;
 
-        BPProperty bProperty;
-        BPProperty::FromString(propertyBegin, propertyEnd,
+        BPReflectedVariable bProperty;
+        BPReflectedVariable::FromString(propertyBegin, propertyEnd,
                                &bProperty, success);
         outStruct->AddProperty(bProperty);
 
@@ -81,31 +80,31 @@ void BPStruct::FromString(String::Iterator structBegin,
     *success = true;
 }
 
-void BPStruct::SetStructName(const String &structName)
+void BPReflectedStruct::SetStructName(const String &structName)
 {
     m_structName = structName;
 }
 
-void BPStruct::SetStructVariableName(const String &structVarName)
+void BPReflectedStruct::SetStructVariableName(const String &structVarName)
 {
     m_structVariableName = structVarName;
 }
 
-void BPStruct::AddProperty(const BPProperty &prop)
+void BPReflectedStruct::AddProperty(const BPReflectedVariable &prop)
 {
     m_properties.Add(prop);
 }
 
-String BPStruct::GetInitializationCode(const String &structInitVarName) const
+String BPReflectedStruct::GetInitializationCode(const String &structInitVarName) const
 {
     const String vName = structInitVarName;
 
     int i = 0;
     String code = "";
-    for (const BPProperty &prop : GetProperties())
+    for (const BPReflectedVariable &prop : GetProperties())
     {
         String propVarName = "prop" + String(i);
-        code += "BPProperty " + propVarName + ";\n";
+        code += "BPReflectedVariable " + propVarName + ";\n";
         code += prop.GetInitializationCode(propVarName);
         code += vName + ".AddProperty(" + propVarName + ");\n";
         ++i;
@@ -113,22 +112,22 @@ String BPStruct::GetInitializationCode(const String &structInitVarName) const
     return code;
 }
 
-const String &BPStruct::GetStructName() const
+const String &BPReflectedStruct::GetStructName() const
 {
     return m_structName;
 }
 
-const String &BPStruct::GetStructVariableName() const
+const String &BPReflectedStruct::GetStructVariableName() const
 {
     return m_structVariableName;
 }
 
-const Array<BPProperty> &BPStruct::GetProperties() const
+const Array<BPReflectedVariable> &BPReflectedStruct::GetProperties() const
 {
     return m_properties;
 }
 
-String BPStruct::ToString() const
+String BPReflectedStruct::ToString() const
 {
     return "{ " +
            GetStructName() + ", " +

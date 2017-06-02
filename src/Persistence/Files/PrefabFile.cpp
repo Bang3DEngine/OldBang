@@ -19,7 +19,7 @@ PrefabFile::PrefabFile()
 
 }
 
-PrefabFile::PrefabFile(const Path &path) : File(path)
+PrefabFile::PrefabFile(const Path &path) : BFile(path)
 {
 }
 

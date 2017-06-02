@@ -1,36 +1,7 @@
 #include "Bang/File.h"
 
 #include <fstream>
-#include <QPainter>
-#include "Bang/WinUndef.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Explorer.h"
-#include "Bang/SerializableObject.h"
-#endif
-
-#include "Bang/Font.h"
-#include "Bang/Mesh.h"
-#include "Bang/Paths.h"
-#include "Bang/Scene.h"
-#include "Bang/Prefab.h"
-#include "Bang/XMLNode.h"
-#include "Bang/Material.h"
-#include "Bang/TextFile.h"
-#include "Bang/MeshFile.h"
-#include "Bang/ModelFile.h"
-#include "Bang/SoundFile.h"
-#include "Bang/AudioClip.h"
-#include "Bang/ImageFile.h"
-#include "Bang/Texture2D.h"
-#include "Bang/PrefabFile.h"
-#include "Bang/IconManager.h"
-#include "Bang/IInspectable.h"
-#include "Bang/MaterialFile.h"
-#include "Bang/ShaderProgram.h"
-#include "Bang/AudioClipFile.h"
-#include "Bang/Texture2DFile.h"
-#include "Bang/ShaderProgramFile.h"
+#include <iostream>
 
 File::File()
 {
@@ -56,92 +27,9 @@ File::~File()
 {
 }
 
-bool File::IsSound() const
-{
-    return GetPath().IsFile() && GetPath().HasExtension({"wav", "ogg", "pcm"});
-}
-
-bool File::IsAudioClipFile() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension(AudioClip::GetFileExtensionStatic());
-}
-
-bool File::IsTexture2DFile() const
-{
-    return  GetPath().IsFile() &&
-            GetPath().HasExtension(Texture2D::GetFileExtensionStatic());
-}
-
-bool File::IsImageFile() const
-{
-    return  GetPath().IsFile() &&
-            GetPath().HasExtension({"jpg", "jpeg", "png", "bmp", "tiff", "tga"});
-}
-
-bool File::IsScene() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension(Scene::GetFileExtensionStatic());
-}
-
-bool File::IsMeshFile() const
-{
-    return  GetPath().IsFile() &&
-            GetPath().HasExtension(Mesh::GetFileExtensionStatic());
-}
-
-bool File::IsModelFile() const
-{
-    return  GetPath().IsFile() &&
-            GetPath().HasExtension({"obj", "mb", "fbx", "dae", "3ds", "ply",
-                                    "stl", "ase", "blend", "md2", "md3"});
-}
-
-bool File::IsMaterialFile() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension(Material::GetFileExtensionStatic());
-}
-
-bool File::IsBehaviour() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension({"cpp", "hpp", "c", "h"});
-}
-
-bool File::IsTextFile() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension({"txt", "frag", "vert"});
-}
-
-bool File::IsFontFile() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension(Font::GetFileExtensionStatic());
-}
-
-bool File::IsPrefabFile() const
-{
-    return GetPath().IsFile() &&
-           GetPath().HasExtension(Prefab::GetFileExtensionStatic());
-}
-
-bool File::IsShaderProgramFile() const
-{
-    return GetPath().IsFile() &&
-            GetPath().HasExtension(ShaderProgram::GetFileExtensionStatic());
-}
-
-void File::Read(const XMLNode &xmlInfo)
-{
-    SerializableObject::Read(xmlInfo);
-}
-
 bool File::DuplicateFile(const Path &fromFilepath,
-                         const Path &toFilepath,
-                         bool overwrite)
+                             const Path &toFilepath,
+                             bool overwrite)
 {
     if (!fromFilepath.IsFile()) { return false; }
     if (overwrite) { File::Remove(toFilepath); }
@@ -151,8 +39,8 @@ bool File::DuplicateFile(const Path &fromFilepath,
 }
 
 bool File::DuplicateDir(const Path &fromDirpath,
-                        const Path &toDirpath,
-                        bool overwrite)
+                            const Path &toDirpath,
+                            bool overwrite)
 {
     if (!fromDirpath.IsDir()) { return false; }
 
@@ -162,8 +50,8 @@ bool File::DuplicateDir(const Path &fromDirpath,
     {
         String fileName = filepath.GetNameExt();
         bool ok = File::DuplicateFile(fromDirpath.Append(fileName),
-                                    toDirpath.Append(fileName),
-                                    overwrite);
+                                          toDirpath.Append(fileName),
+                                          overwrite);
         if (!ok) { return false; }
     }
 
@@ -229,54 +117,6 @@ bool File::Duplicate(const Path &fromPath, const Path &toPath)
     return false;
 }
 
-File *File::GetSpecificFile(const File &f)
-{
-    if (!f.GetPath().IsFile()) { return nullptr; }
-
-    if (f.IsAudioClipFile())
-    {
-        return new AudioClipFile( f.GetPath() );
-    }
-    else if (f.IsSound())
-    {
-        return new SoundFile( f.GetPath() );
-    }
-    else if (f.IsTexture2DFile())
-    {
-        return new Texture2DFile( f.GetPath() );
-    }
-    else if (f.IsImageFile())
-    {
-        return new ImageFile( f.GetPath() );
-    }
-    else if (f.IsMaterialFile())
-    {
-        return new MaterialFile( f.GetPath() );
-    }
-    else if (f.IsMeshFile())
-    {
-        return new MeshFile( f.GetPath() );
-    }
-    else if (f.IsModelFile())
-    {
-        return new ModelFile( f.GetPath() );
-    }
-    else if (f.IsPrefabFile())
-    {
-        return new PrefabFile( f.GetPath() );
-    }
-    else if (f.IsTextFile())
-    {
-        return new TextFile( f.GetPath() );
-    }
-    else if (f.IsShaderProgramFile())
-    {
-        return new ShaderProgramFile( f.GetPath() );
-    }
-
-    return new File( f.GetPath() );
-}
-
 void File::Write(const Path &filepath, const String &contents)
 {
     std::ofstream out(filepath.GetAbsolute());
@@ -311,8 +151,8 @@ String File::GetContents(const Path &filepath)
     }
     else
     {
-        Debug_Error("Can't open file '" << filepath << "': " <<
-                    std::strerror(errno));
+        std::cerr << "Can't open file '" << filepath.ToString() << "': " <<
+                     std::strerror(errno) << std::endl;
     }
     return contents;
 }
@@ -351,53 +191,4 @@ String File::GetContents() const
 const Path &File::GetPath() const
 {
     return m_path;
-}
-
-const QPixmap& File::GetIcon() const
-{
-    Path iconPath;
-    if (IsPrefabFile())
-    {
-        iconPath = EPATH("Icons/PrefabAssetIcon.png");
-    }
-    else if (IsBehaviour())
-    {
-        iconPath = EPATH("Icons/BehaviourIcon.png");
-    }
-    else if (IsScene())
-    {
-        iconPath = EPATH("Icons/SceneIcon.png");
-    }
-    else if (IsFontFile())
-    {
-        iconPath = EPATH("Icons/LetterIcon.png");
-    }
-    else
-    {
-        iconPath = EPATH("Icons/OtherFileIcon.png");
-    }
-
-    // Its a texture, the icon is the image itself
-    const QPixmap &pm =
-         IconManager::LoadPixmap(iconPath, IconManager::IconOverlay::None);
-    return pm;
-}
-
-void File::Write(XMLNode *xmlInfo) const
-{
-    SerializableObject::Write(xmlInfo);
-}
-
-#ifdef BANG_EDITOR
-IInspectable* File::GetNewInspectable()
-{
-    return nullptr;
-}
-#endif
-
-bool File::IsAsset() const
-{
-    return IsFontFile() || IsTexture2DFile() || IsMaterialFile() ||
-           IsMeshFile() || IsAudioClipFile() || IsPrefabFile() ||
-           IsBehaviour() || IsScene();
 }

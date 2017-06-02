@@ -4,14 +4,17 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IWindowEventManagerListener.h"
 #endif
 
 class GameObject;
-class PrefabFile : public File
+class PrefabFile : public BFile
                    #ifdef BANG_EDITOR
                    ,public IWindowEventManagerListener
                    #endif

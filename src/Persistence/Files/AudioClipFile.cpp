@@ -15,7 +15,7 @@ AudioClipFile::AudioClipFile()
 }
 
 AudioClipFile::AudioClipFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     m_audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
@@ -62,7 +62,7 @@ void AudioClipFile::OnButtonClicked(const String &attrName)
 
 void AudioClipFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
 
     Path soundFilepath = xmlInfo.GetFilepath("AudioFilepath");
     SetSoundFilepath(soundFilepath);
@@ -80,7 +80,7 @@ void AudioClipFile::Read(const XMLNode &xmlInfo)
 
 void AudioClipFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     AudioClip *audioClip = GetRelatedAudioClip();
 

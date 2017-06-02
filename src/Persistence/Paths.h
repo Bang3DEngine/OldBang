@@ -3,6 +3,9 @@
 
 #include "Bang/Path.h"
 
+#define EPATH(path) Paths::EnginePath(path) // Engine assets path
+#define UPATH(path) Paths::UserPath(path)   // User assets path
+
 class Paths
 {
 public:
@@ -17,9 +20,14 @@ public:
     static const Path& ProjectAssets();
     static const Path& ProjectLibraries();
 
+    static Path GetRelative(const Path &path);
+
     static bool IsEnginePath(const Path &path);
 
     static Paths* GetInstance();
+
+    static Path EnginePath(const String &path);
+    static Path UserPath(const String &path);
 
 private:
     Path c_enginePath;

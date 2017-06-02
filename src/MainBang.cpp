@@ -80,8 +80,8 @@ void LoadStylesheet(QApplication *app)
 
                         */
     // Load dark Window theme
-    QFile f((Paths::EngineAssets().Append("/qdarkstyle/style.qss"))
-              .GetAbsolute().ToQString());
+    Path stylesheetPath = Paths::EngineAssets().Append("/qdarkstyle/style.qss");
+    QFile f(stylesheetPath .GetAbsolute().ToQString());
     if (!f.exists())
     {
         Debug_Error("Unable to set stylesheet, not found.");
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
-    Path engineRootDir = executableDir.GetDirectory();
+    Path engineRootDir = executableDir.GetDirectory().GetDirectory();
     Paths::SetEnginePath(engineRootDir);
     #else
     Paths::SetEnginePath(executableDir.Append("GameData"));

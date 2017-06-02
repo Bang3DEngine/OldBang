@@ -10,7 +10,7 @@ ImageFile::ImageFile()
 }
 
 ImageFile::ImageFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     QImage img = IconManager::LoadImage(GetPath());
     m_width  = img.width();
@@ -25,12 +25,12 @@ const QPixmap& ImageFile::GetIcon() const
 
 void ImageFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
 }
 
 void ImageFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});

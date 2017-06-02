@@ -221,7 +221,7 @@ void Explorer::OnDirDoubleClicked(const Path &dirpath)
 
 void Explorer::OnFileDoubleClicked(const Path &filepath)
 {
-    File f(filepath);
+    BFile f(filepath);
     if (f.IsScene())
     {
         MenuBar::GetInstance()->OpenScene(f.GetPath());
@@ -237,13 +237,13 @@ void Explorer::RefreshInspector()
     if (selectedIndexes().empty()) return;
 
     QModelIndex selectedIndex = selectedIndexes().front();
-    File f(m_fileSystemModel, selectedIndex);
+    BFile f(m_fileSystemModel, selectedIndex);
     if (selectedIndex.isValid() && f.GetPath().IsFile() && f.GetPath().Exists())
     {
         Inspector::GetInstance()->Clear();
 
         IInspectable *newInspectable = nullptr;
-        File *specificFile = File::GetSpecificFile(f);
+        BFile *specificFile = BFile::GetSpecificFile(f);
         if (specificFile)
         {
             newInspectable = specificFile->GetNewInspectable();
@@ -348,13 +348,13 @@ Path Explorer::GetSelectedPath() const
     return Path();
 }
 
-File Explorer::GetSelectedFile() const
+BFile Explorer::GetSelectedFile() const
 {
-    File f;
+    BFile f;
     if (!selectedIndexes().empty())
     {
         QModelIndex qmi = selectedIndexes().front();
-        return File(m_fileSystemModel, qmi);
+        return BFile(m_fileSystemModel, qmi);
     }
     return f;
 }

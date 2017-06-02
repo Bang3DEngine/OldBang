@@ -3,7 +3,7 @@
 
 #include "Bang/IDragDropListener.h"
 
-class File;
+class BFile;
 class Hierarchy;
 class GameObject;
 class HierarchyDragDropManager : public IDragDropListener
@@ -33,7 +33,7 @@ private:
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
 
-    void OnDropHereFromExplorer(const File &f, const DragDropInfo &ddi);
+    void OnDropHereFromExplorer(const BFile &f, const DragDropInfo &ddi);
 
 };
 

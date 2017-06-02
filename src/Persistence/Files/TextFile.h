@@ -1,9 +1,12 @@
 #ifndef TEXTFILE_H
 #define TEXTFILE_H
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
-class TextFile : public File
+class TextFile : public BFile
 {
 public:
     TextFile();

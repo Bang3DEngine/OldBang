@@ -1,5 +1,7 @@
 # C++ objects and libs
 *.trace
+*.gen.h
+*.refl.h
 tmp
 *.exe
 **.slo

@@ -7,10 +7,10 @@
 #include <QVBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Paths.h"
-#include "Bang/File.h"
+#include "Bang/BFile.h"
 #include "Bang/Color.h"
 #include "Bang/Debug.h"
+#include "Bang/Paths.h"
 #include "Bang/Object.h"
 #include "Bang/IconManager.h"
 
@@ -74,10 +74,10 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
 {
     for (const Path &filepath : filepaths)
     {
-        File file(filepath);
+        BFile file(filepath);
 
         QPixmap filePixmap;
-        File *sFile = File::GetSpecificFile(file);
+        BFile *sFile = BFile::GetSpecificFile(file);
         if (sFile)
         {
             filePixmap = sFile->GetIcon();

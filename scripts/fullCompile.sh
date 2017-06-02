@@ -24,6 +24,7 @@ then
 fi
 rm Qt_MOCs/*
 rm ui_*
+rm -rf bin/*
 ###############################################
 
 (cd .. ; qmake "BUILD_MODE=$1" "RELEASE_OR_DEBUG=$2" ; make clean) 2> /dev/null

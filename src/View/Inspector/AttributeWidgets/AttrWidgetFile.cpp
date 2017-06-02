@@ -5,8 +5,8 @@
 #include <QPushButton>
 #include "Bang/WinUndef.h"
 
+#include "Bang/BFile.h"
 #include "Bang/Paths.h"
-#include "Bang/File.h"
 #include "Bang/Dialog.h"
 #include "Bang/Explorer.h"
 #include "Bang/Hierarchy.h"
@@ -90,8 +90,8 @@ void AttrWidgetFile::RefreshIcon()
 {
     const uint c_pixSize = 16;
 
-    File file(m_filepath);
-    File *f = File::GetSpecificFile(file);
+    BFile file(m_filepath);
+    BFile *f = BFile::GetSpecificFile(file);
     if (file.GetPath().IsFile() && f)
     {
         const QPixmap& pm = f->GetIcon();
@@ -148,7 +148,7 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
         Explorer *explorer = Explorer::GetInstance();
         if (ddi.sourceObject == explorer)
         {
-            File f = explorer->GetSelectedFile();
+            BFile f = explorer->GetSelectedFile();
             String extensions =
                     m_xmlAttribute.GetPropertyValue(
                         XMLProperty::FileExtension.GetName());
@@ -175,7 +175,7 @@ void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
     {
         if (ddi.sourceObject == explorer)
         {
-            File f = explorer->GetSelectedFile();
+            BFile f = explorer->GetSelectedFile();
             if (f.GetPath().HasExtension( m_allowedExtensions ) &&
                 !m_readonly)
             {

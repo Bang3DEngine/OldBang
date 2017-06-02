@@ -4,14 +4,14 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
-class BPProperty : public IToString
+class BPReflectedVariable : public IToString
 {
 public:
-    BPProperty();
+    BPReflectedVariable();
 
     static void FromString(String::Iterator propBegin,
                            String::Iterator propEnd,
-                           BPProperty *outProperty,
+                           BPReflectedVariable *outProperty,
                            bool *success);
 
     String GetInitializationCode(const String &propInitVarName) const;

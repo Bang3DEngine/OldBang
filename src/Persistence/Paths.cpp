@@ -3,6 +3,7 @@
 #include <QDir>
 #include "Bang/WinUndef.h"
 
+#include "Bang/String.h"
 #include "Bang/SingletonManager.h"
 
 Paths::Paths()
@@ -40,6 +41,39 @@ const Path &Paths::ProjectLibraries()
     return Paths::GetInstance()->c_projectLibrariesPath;
 }
 
+Path Paths::GetRelative(const Path &path)
+{
+    const Path &engineAssets = Paths::EngineAssets();
+    if (path.BeginsWith(engineAssets))
+    {
+        return Path(path.GetAbsolute()
+                        .SubString(engineAssets.GetAbsolute().Length() + 1));
+    }
+
+    const Path &projectAssets = Paths::ProjectAssets();
+    if (path.BeginsWith(projectAssets))
+    {
+        return Path(path.GetAbsolute()
+                        .SubString(projectAssets.GetAbsolute().Length() + 1));
+    }
+
+    const Path &engineRoot = Paths::Engine();
+    if (path.BeginsWith(engineRoot))
+    {
+        return Path(path.GetAbsolute()
+                        .SubString(engineRoot.GetAbsolute().Length() + 1));
+    }
+
+    const Path &projectRoot = Paths::Project();
+    if (path.BeginsWith(projectRoot))
+    {
+        return Path(path.GetAbsolute()
+                        .SubString(projectRoot.GetAbsolute().Length() + 1));
+    }
+
+    return Path(path.GetAbsolute());
+}
+
 bool Paths::IsEnginePath(const Path &path)
 {
     return path.BeginsWith( Paths::Engine() );
@@ -51,6 +85,17 @@ Paths *Paths::GetInstance()
     if (!paths) { paths = SingletonManager::Set<Paths>(new Paths()); }
     return paths;
 }
+
+Path Paths::EnginePath(const String &path)
+{
+    return Paths::EngineAssets().Append(path);
+}
+
+Path Paths::UserPath(const String &path)
+{
+    return Paths::ProjectAssets().Append(path);
+}
+
 
 void Paths::SetEnginePath(const Path &enginePath)
 {

@@ -3,13 +3,13 @@
 #include <QTimer>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Map.h"
-#include "Bang/File.h"
+#include "Bang/Paths.h"
+#include "Bang/BFile.h"
 #include "Bang/Debug.h"
-#include "FileTracker.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Explorer.h"
+#include "Bang/FileTracker.h"
 #include "Bang/XMLAttribute.h"
 #include "Bang/SerializableObject.h"
 
@@ -79,7 +79,7 @@ void FileReferencesManager::RefactorFiles(const Path &pathBefore,
     List<Path> allFiles = Paths::ProjectAssets().GetFiles(true);
     for (const Path &filepath : allFiles)
     {
-        File f(filepath);
+        BFile f(filepath);
         if (!f.IsAsset()) { continue; }
 
         String fileXMLContents = f.GetContents();
@@ -113,8 +113,8 @@ bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
                                             const Path &pathNow,
                                             bool refactorXMLChildren)
 {
-    String relPathBefore = pathBefore.GetRelative();
-    String relPathNow    = pathNow.GetRelative();
+    String relPathBefore = Paths::GetRelative(pathBefore).ToString();
+    String relPathNow    = Paths::GetRelative(pathNow).ToString();
     bool hasBeenModified = false;
 
     // Refactor all its file attributes that are non-engine

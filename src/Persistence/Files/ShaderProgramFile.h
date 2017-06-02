@@ -6,9 +6,12 @@
 #include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
-class ShaderProgramFile : public File
+class ShaderProgramFile : public BFile
 {
 public:
     ShaderProgramFile();

@@ -13,7 +13,7 @@ Texture2DFile::Texture2DFile()
 }
 
 Texture2DFile::Texture2DFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     // Load once and save the xmlInfo
     XMLNode xmlTexInfo = XMLParser::FromFile( GetPath() );
@@ -35,7 +35,7 @@ const QPixmap& Texture2DFile::GetIcon() const
 
 void Texture2DFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
     m_xmlInfo = xmlInfo;
 
     #ifdef BANG_EDITOR
@@ -45,7 +45,7 @@ void Texture2DFile::Read(const XMLNode &xmlInfo)
 
 void Texture2DFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
     *xmlInfo = m_xmlInfo;
 }
 

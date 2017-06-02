@@ -4,10 +4,13 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
 class SerializableObject;
-class ModelFile : public File
+class ModelFile : public BFile
 {
 public:
     ModelFile();

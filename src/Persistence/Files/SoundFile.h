@@ -4,7 +4,10 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -12,7 +15,7 @@
 
 class AudioClip;
 class AudioSource;
-class SoundFile : public File
+class SoundFile : public BFile
                   #ifdef BANG_EDITOR
                   ,public IAttrWidgetButtonListener
                   #endif

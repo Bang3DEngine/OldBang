@@ -68,14 +68,14 @@ void QtProjectManager::CreateQtProjectFile()
     Path qtProjDir = QtProjectManager::GetQtProjectDir();
     File::CreateDirectory(qtProjDir);
     File::Write(qtProjDir.Append(".files"),
-                    headersString       + "\n" +
-                    sourcesString       + "\n" +
-                    engineHeadersString + "\n" +
-                    engineSourcesString);
+                headersString       + "\n" +
+                sourcesString       + "\n" +
+                engineHeadersString + "\n" +
+                engineSourcesString);
 
     File::Write(qtProjDir.Append(".includes"),
-                    projIncludePathsString + "\n" +
-                    engineIncludePathsString);
+                projIncludePathsString + "\n" +
+                engineIncludePathsString);
 
     File::Write(qtProjDir.Append(".creator"), "[General]");
     File::Write(qtProjDir.Append(".config"), "");

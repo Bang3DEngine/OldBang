@@ -11,7 +11,7 @@ MeshFile::MeshFile()
 }
 
 MeshFile::MeshFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile(GetPath());
     m_modelFilepath = xmlInfo.GetFilepath("ModelFilepath");
@@ -25,7 +25,7 @@ const QPixmap& MeshFile::GetIcon() const
 
 void MeshFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
     SetModelFilepath( xmlInfo.GetFilepath("ModelFilepath") );
 
     #ifdef BANG_EDITOR
@@ -35,7 +35,7 @@ void MeshFile::Read(const XMLNode &xmlInfo)
 
 void MeshFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
     xmlInfo->SetFilepath("ModelFilepath", GetModelFilepath(), "obj stl mb fbx");
 }
 

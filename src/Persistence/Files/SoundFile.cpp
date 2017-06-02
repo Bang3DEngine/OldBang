@@ -11,7 +11,7 @@ SoundFile::SoundFile()
 }
 
 SoundFile::SoundFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
 
 }
@@ -30,12 +30,12 @@ const QPixmap& SoundFile::GetIcon() const
 
 void SoundFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
 }
 
 void SoundFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});

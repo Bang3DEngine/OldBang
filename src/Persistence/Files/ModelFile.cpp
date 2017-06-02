@@ -14,7 +14,7 @@ ModelFile::ModelFile()
 }
 
 ModelFile::ModelFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     m_numFaces = FileReader::GetModelNumTriangles( GetPath() );
 }
@@ -27,12 +27,12 @@ const QPixmap& ModelFile::GetIcon() const
 
 void ModelFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
 }
 
 void ModelFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});

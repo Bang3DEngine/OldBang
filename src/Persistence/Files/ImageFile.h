@@ -1,9 +1,12 @@
 #ifndef FILEIMAGE_H
 #define FILEIMAGE_H
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
-class ImageFile : public File
+class ImageFile : public BFile
 {
 public:
     ImageFile();

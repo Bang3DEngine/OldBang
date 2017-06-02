@@ -4,7 +4,7 @@
 #include <QTimer>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/BFile.h"
 #include "Bang/GameObjectInspectable.h"
 
 class GameObject;
@@ -16,7 +16,7 @@ class PrefabFileInspectable : public Inspectable<GameObject>,
 
 public:
     PrefabFileInspectable();
-    PrefabFileInspectable(const File &f);
+    PrefabFileInspectable(const BFile &f);
     virtual ~PrefabFileInspectable();
 
     void CloneInto(ICloneable *clone) const override;
@@ -24,7 +24,7 @@ public:
     void OnInspectorSlotChanged(InspectorWidget *InspectorWidget) override;
 
 private:
-    File m_file;
+    BFile m_file;
 };
 
 #endif // PREFABFILEINSPECTABLE_H

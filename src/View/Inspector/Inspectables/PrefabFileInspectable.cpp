@@ -13,7 +13,7 @@ PrefabFileInspectable::PrefabFileInspectable()
 {
 }
 
-PrefabFileInspectable::PrefabFileInspectable(const File &f) :
+PrefabFileInspectable::PrefabFileInspectable(const BFile &f) :
     m_file(f)
 {
     Prefab prefab;

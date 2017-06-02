@@ -3,11 +3,9 @@
 #include <QProcess>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
-#include "Bang/Debug.h"
-#include "Bang/BPStruct.h"
-#include "Bang/BPProperty.h"
-#include "Bang/SystemUtils.h"
+#include "Bang/Array.h"
+#include "Bang/BPReflectedStruct.h"
+#include "Bang/BPReflectedVariable.h"
 
 typedef BangPreprocessor BP;
 
@@ -30,29 +28,37 @@ const Array<String> BangPreprocessor::VarTypes =
     "class"
 };
 
-const Array<String> BangPreprocessor::PropertyPrefixes =
+const Array<String> BangPreprocessor::RVariablePrefixes =
 {
-    "BP_PROPERTY"
+    "BP_REFLECT_VARIABLE"
 };
 
-const Array<String> BangPreprocessor::StructPrefixes =
+const Array<String> BangPreprocessor::RStructPrefixes =
 {
-    "BP_CLASS",
-    "BP_STRUCT"
+    "BP_REFLECT_CLASS",
+    "BP_REFLECT_STRUCT"
 };
 
-String BangPreprocessor::Preprocess(const String &source)
+const String BangPreprocessor::ReflectDefinitionsDefineName =
+        "BP_REFLECT_DEFINITIONS";
+
+void BangPreprocessor::Preprocess(const String &source,
+                                  String *_reflectionHeaderSource,
+                                  bool *preprocessedSomething)
 {
+    *preprocessedSomething = false;
+    String &reflectionHeaderSource = *_reflectionHeaderSource;
+    reflectionHeaderSource += "#include \"Bang/BPReflectedStruct.h\"\n";
+    reflectionHeaderSource += "#include \"Bang/BPReflectedVariable.h\"\n\n";
+
     String src = source;
     BP::RemoveComments(&src);
-
-    bool foundSomeStruct = false;
     String::Iterator it = src.Begin();
     while (true)
     {
         // Find Structure/Class annotation
         String::Iterator itStructBegin = BP::Find(it, src.End(),
-                                                  BP::StructPrefixes);
+                                                  BP::RStructPrefixes);
         if (itStructBegin == src.End()) { break; }
 
         String::Iterator itStructScopeBegin, itStructScopeEnd;
@@ -66,37 +72,37 @@ String BangPreprocessor::Preprocess(const String &source)
         if (itStructScopeBegin == src.End()) { break; }
 
         bool ok;
-        BPStruct bpStruct;
-        BPStruct::FromString(itStructBegin, itStructScopeEnd, &bpStruct, &ok);
+        BPReflectedStruct reflStruct;
+        BPReflectedStruct::FromString(itStructBegin, itStructScopeEnd,
+                                      &reflStruct, &ok);
 
-        String bpStructInitializationCode =
-        "private: \n"
-        "  static BPStruct BP_Info; \n"
-        "public: \n"
-        "  static const BPStruct& GetReflectionInfo() \n"
-        "  { \n"
-        "     static bool inited = false; \n"
-        "     if (!inited) \n"
-        "     { \n"
-        "       inited = true; \n" +
-                bpStruct.GetInitializationCode("BP_Info") +
-        "       "
-        "     } \n"
-        "     return BP_Info;\n"
-        "  }\n"
-        "private:\n";
+        const String ReflectionInfoVarName = "BP_ReflectionInfo";
+        String structInitCode =
+                reflStruct.GetInitializationCode(ReflectionInfoVarName);
+        String reflectDefineCode =
+            "#define " + BP::ReflectDefinitionsDefineName + "_" +
+                         reflStruct.GetStructVariableName() + "() \n"
+            "private: \n"
+            "  static BPReflectedStruct " + ReflectionInfoVarName + "; \n"
+            "public: \n"
+            "  static const BPReflectedStruct& GetReflectionInfo() \n"
+            "  { \n"
+            "     static bool inited = false; \n"
+            "     if (!inited) \n"
+            "     { \n"
+            "       inited = true; \n" +
+                    structInitCode +
+            "       "
+            "     } \n"
+            "     return " + ReflectionInfoVarName + ";\n"
+            "  }\n"
+            "private:";
+        reflectDefineCode.ReplaceInSitu("\n", "\\\n");
+        reflectDefineCode += "\n";
 
-        it = src.Insert(itStructScopeBegin + 1, bpStructInitializationCode);
-        foundSomeStruct = true;
+        reflectionHeaderSource += reflectDefineCode;
+        *preprocessedSomething = true;
     }
-
-    if (foundSomeStruct)
-    {
-        src.Insert(src.Begin(), "#include \"Bang/BPStruct.h\"");
-        src.Insert(src.Begin(), "#include \"Bang/BPProperty.h\"");
-    }
-
-    return src;
 }
 
 void BangPreprocessor::RemoveComments(String *source)
@@ -118,7 +124,7 @@ void BangPreprocessor::RemoveComments(String *source)
                     );
     gCompilerProcess.close();
 
-    output.Erase(output.Begin(), output.find('\n')); // Erase first line
+    output.Erase(output.Begin(), output.find('\n')+1); // Erase first line
     *source = output;
 }
 

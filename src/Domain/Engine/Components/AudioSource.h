@@ -6,6 +6,7 @@
 #include <AL/alut.h>
 
 #include "Bang/Component.h"
+#include ".AudioSource.refl.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -14,6 +15,8 @@
 class XMLNode;
 class AudioClip;
 class ICloneable;
+
+BP_REFLECT_CLASS(AudioSourceClass)
 class AudioSource : public Component
                     #ifdef BANG_EDITOR
                     ,public IAttrWidgetButtonListener
@@ -83,8 +86,10 @@ private:
     ALuint m_alSourceId = 0;
 
     AudioClip *m_audioClip = nullptr;
-    float m_volume         = 1.0f;
-    float m_pitch          = 1.0f;
+
+    BP_REFLECT_VARIABLE(Volume) float m_volume = 1.0f;
+    BP_REFLECT_VARIABLE(Pitch)  float m_pitch = 1.0f;
+
     bool  m_looping        = false;
     float m_range          = 5.0f;
     bool  m_playOnStart    = true;
@@ -94,6 +99,8 @@ private:
 
     friend class AudioClip;
     friend class AudioManager;
+
+    BP_REFLECT_DEFINITIONS_AudioSource();
 };
 
 #endif // AUDIOSOURCE_H

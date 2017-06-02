@@ -12,7 +12,7 @@ MaterialFile::MaterialFile()
 }
 
 MaterialFile::MaterialFile(const Path& path) :
-    File(path)
+    BFile(path)
 {
     XMLNode xmlInfo = XMLParser::FromFile( GetPath() );
     m_vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
@@ -34,7 +34,7 @@ const QPixmap& MaterialFile::GetIcon() const
 
 void MaterialFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
 
     m_xmlInfo = xmlInfo;
 
@@ -46,7 +46,7 @@ void MaterialFile::Read(const XMLNode &xmlInfo)
 
 void MaterialFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     // Do Read & Write so that old files with different formats have the
     // newer one

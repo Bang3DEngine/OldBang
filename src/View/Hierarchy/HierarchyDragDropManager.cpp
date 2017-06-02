@@ -3,7 +3,7 @@
 #include <QTreeWidgetItem>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/BFile.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/Prefab.h"
@@ -51,7 +51,7 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
     Explorer *explorer = Explorer::GetInstance();
     if (ddi.sourceObject == explorer)
     {
-        File f = explorer->GetSelectedFile();
+        BFile f = explorer->GetSelectedFile();
         if (f.IsPrefabFile())
         {
             // setStyleSheet(IDroppable::acceptDragStyle);
@@ -108,10 +108,10 @@ bool HierarchyDragDropManager::AcceptDrop()
     return !dropTargetGameObject->IsChildOf(selectedGameObject);
 }
 
-void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
+void HierarchyDragDropManager::OnDropHereFromExplorer(const BFile &f,
                                                       const DragDropInfo &ddi)
 {
-    if (f.GetPath().GetRelative().Empty()) { return; }
+    if ( Paths::GetRelative(f.GetPath()).IsEmpty() ) { return; }
 
     if (f.IsPrefabFile())
     {

@@ -1,6 +1,7 @@
 #include "Bang/Quaternion.h"
 
-#include "Bang/Debug.h"
+#include <iostream>
+
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
@@ -105,7 +106,8 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward,
     if (Vector3::Dot(forward,  up) >= 0.99f ||
         Vector3::Dot(forward, -up) >= 0.99f)
     {
-        Debug_Warn("LookDirection: Forward and up aligned. Returning identity");
+        std::cerr << "LookDirection: Forward and up aligned. Returning identity"
+                  << std::endl;
         return Quaternion::Identity;
     }
 

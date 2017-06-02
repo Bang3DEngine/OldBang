@@ -6,10 +6,13 @@
 #include <QFileSystemModel>
 #include "Bang/WinUndef.h"
 
-#include "Bang/File.h"
+#include "Bang/Path.h"
+#include "Bang/BFile.h"
 #include "Bang/String.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IInspectable.h"
 
-class FontFile : public File
+class FontFile : public BFile
 {
 public:
     FontFile();

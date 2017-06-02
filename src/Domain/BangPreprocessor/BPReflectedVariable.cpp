@@ -1,20 +1,20 @@
-#include "BPProperty.h"
+#include "BPReflectedVariable.h"
 
 #include <regex>
 
-#include "Bang/Debug.h"
+#include "Bang/List.h"
 #include "Bang/BangPreprocessor.h"
 
 typedef BangPreprocessor BP;
 
-BPProperty::BPProperty()
+BPReflectedVariable::BPReflectedVariable()
 {
 
 }
 
-void BPProperty::FromString(String::Iterator propBegin,
+void BPReflectedVariable::FromString(String::Iterator propBegin,
                             String::Iterator propEnd,
-                            BPProperty *outProperty,
+                            BPReflectedVariable *outProperty,
                             bool *success)
 {
     *success = false;
@@ -28,8 +28,8 @@ void BPProperty::FromString(String::Iterator propBegin,
     Array<String> propertyList = propertyListStr.Split(',', true);
     if (propertyList.Size() == 0)
     {
-        Debug_Error("BP Error: BP_PROPERTY has 0 properties,"
-                    " but must have at least a name");
+        std::cerr << "BP Error: BP_PROPERTY has 0 properties,"
+                     " but must have at least a name" << std::endl;
         return;
     }
     outProperty->m_propertyName = propertyList[0];
@@ -48,8 +48,8 @@ void BPProperty::FromString(String::Iterator propBegin,
     String variableType = nextWord;
     if (!BP::VarTypes.Contains(variableType))
     {
-        Debug_Error("BP Error: Expected a variable type,"
-                    "but got '" << variableType << "'");
+        std::cerr << "BP Error: Expected a variable type,"
+                     "but got '" << variableType << "'" << std::endl;
         return;
     }
 
@@ -59,7 +59,7 @@ void BPProperty::FromString(String::Iterator propBegin,
     BP::FindNextWord(wordEnd, propEnd, &nameBegin, &nameEnd);
     if (nameBegin == propEnd || nameEnd == propEnd)
     {
-        Debug_Error("BP Error: Expected a variable name");
+        std::cerr << "BP Error: Expected a variable name" << std::endl;
         return;
     }
     outProperty->m_variableName = String(nameBegin, nameEnd);
@@ -75,7 +75,7 @@ void BPProperty::FromString(String::Iterator propBegin,
     *success = true;
 }
 
-String BPProperty::GetInitializationCode(const String &propInitVarName) const
+String BPReflectedVariable::GetInitializationCode(const String &propInitVarName) const
 {
     const String vName = propInitVarName;
 
@@ -87,47 +87,47 @@ String BPProperty::GetInitializationCode(const String &propInitVarName) const
     return code;
 }
 
-void BPProperty::SetPropertyName(const String &name)
+void BPReflectedVariable::SetPropertyName(const String &name)
 {
     m_propertyName = name;
 }
 
-void BPProperty::SetVariableType(const String &varType)
+void BPReflectedVariable::SetVariableType(const String &varType)
 {
     m_variableType = varType;
 }
 
-void BPProperty::SetVariableName(const String &varName)
+void BPReflectedVariable::SetVariableName(const String &varName)
 {
     m_variableName = varName;
 }
 
-void BPProperty::SetVariableInitValue(const String &initValue)
+void BPReflectedVariable::SetVariableInitValue(const String &initValue)
 {
     m_variableInitValue = initValue;
 }
 
-const String &BPProperty::GetPropertyName() const
+const String &BPReflectedVariable::GetPropertyName() const
 {
     return m_propertyName;
 }
 
-const String &BPProperty::GetVariableType() const
+const String &BPReflectedVariable::GetVariableType() const
 {
     return m_variableType;
 }
 
-const String &BPProperty::GetVariableName() const
+const String &BPReflectedVariable::GetVariableName() const
 {
     return m_variableName;
 }
 
-const String &BPProperty::GetVariableInitValue() const
+const String &BPReflectedVariable::GetVariableInitValue() const
 {
     return m_variableInitValue;
 }
 
-String BPProperty::ToString() const
+String BPReflectedVariable::ToString() const
 {
     return "(" + GetPropertyName() + ", " +
                  GetVariableType() + ", " +

@@ -4,8 +4,6 @@
 #include "Bang/List.h"
 #include "Bang/IToString.h"
 
-class AABox;
-class Camera;
 class Vector2;
 class Rect : public IToString
 {

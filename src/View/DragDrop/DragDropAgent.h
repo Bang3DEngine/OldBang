@@ -15,7 +15,7 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 
-class File;
+class BFile;
 class GameObject;
 class EditorWindow;
 class WindowEventManager;

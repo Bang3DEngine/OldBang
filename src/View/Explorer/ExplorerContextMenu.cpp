@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 #include "Bang/WinUndef.h"
 
+#include "Bang/BFile.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
@@ -43,7 +44,7 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     {
         if (p_explorer->IsSelectedAFile())
         {
-            const File &f = p_explorer->GetSelectedFile();
+            const BFile &f = p_explorer->GetSelectedFile();
             if (f.IsImageFile())
             {
                 QAction *actionCreateTextureFromImage =

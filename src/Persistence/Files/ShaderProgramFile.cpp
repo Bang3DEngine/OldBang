@@ -11,7 +11,7 @@ ShaderProgramFile::ShaderProgramFile()
 }
 
 ShaderProgramFile::ShaderProgramFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
 }
 
@@ -35,7 +35,7 @@ Path ShaderProgramFile::GetFragmentShaderFilepath() const
 
 void ShaderProgramFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
     File::Write(GetPath(), xmlInfo.ToString());
 
     #ifdef BANG_EDITOR
@@ -45,7 +45,7 @@ void ShaderProgramFile::Read(const XMLNode &xmlInfo)
 
 void ShaderProgramFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     xmlInfo->SetFilepath("VertexShader", GetVertexShaderFilepath(),
                          "vert glsl");

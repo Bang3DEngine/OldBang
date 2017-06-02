@@ -10,7 +10,7 @@ TextFile::TextFile()
 }
 
 TextFile::TextFile(const Path& path)
-    : File(path)
+    : BFile(path)
 {
     m_contents = File::GetContents( GetPath() );
 }
@@ -22,14 +22,14 @@ String TextFile::GetContents() const
 
 void TextFile::Read(const XMLNode &xmlInfo)
 {
-    File::Read(xmlInfo);
+    BFile::Read(xmlInfo);
     String contents = xmlInfo.GetString("Contents");
     File::Write(GetPath(), contents);
 }
 
 void TextFile::Write(XMLNode *xmlInfo) const
 {
-    File::Write(xmlInfo);
+    BFile::Write(xmlInfo);
 
     xmlInfo->SetString("Contents", GetContents(), {XMLProperty::BigText});
 }

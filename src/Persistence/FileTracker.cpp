@@ -5,6 +5,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Paths.h"
+#include "Bang/BFile.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
 #include "Bang/AssetsManager.h"
@@ -115,7 +116,7 @@ void FileTracker::ReloadChangedFiles()
     List<Path> allPaths = GetPathsToTrack();
     for (const Path& filepath : allPaths)
     {
-        File file(filepath); // Treat file in case it has changed
+        BFile file(filepath); // Treat file in case it has changed
         if (MustTrackFile(file) && HasFileChanged(filepath))
         {
             AssetsManager::ReloadAsset(filepath);
@@ -144,7 +145,7 @@ List<Path> FileTracker::GetPathsToTrack() const
     return files;
 }
 
-bool FileTracker::MustTrackFile(const File &file) const
+bool FileTracker::MustTrackFile(const BFile &file) const
 {
     return file.GetPath().IsFile() &&
            (
@@ -171,7 +172,7 @@ void FileTracker::RefreshFileModificationDate(const Path &filepath)
 
 void FileTracker::RefreshFileDependencies(const Path &filepath)
 {
-    File file(filepath);
+    BFile file(filepath);
     ENSURE ( MustTrackFile(file) );
 
     // If its an asset (XML), then add the file dependencies by

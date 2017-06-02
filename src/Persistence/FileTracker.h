@@ -11,9 +11,9 @@
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"
-#include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/List.h"
+#include "Bang/BFile.h"
 #include "Bang/String.h"
 
 class FileTracker : public QObject
@@ -51,7 +51,7 @@ private:
     EpochTime m_timeBeforeRefreshing;
 
     List<Path> GetPathsToTrack() const;
-    bool MustTrackFile(const File& file) const;
+    bool MustTrackFile(const BFile& file) const;
     void RefreshFileModificationDate(const Path& filepath);
     void RefreshFileDependencies(const Path& filepath);
     bool HasFileChanged(const Path& filepath) const;

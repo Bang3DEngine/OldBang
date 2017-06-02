@@ -3,6 +3,7 @@
 #include "Bang/Input.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/BFile.h"
 #include "Bang/Prefab.h"
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
@@ -181,7 +182,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
         }
         else if (origin == explorer)
         {
-            File f = explorer->GetSelectedFile();
+            BFile f = explorer->GetSelectedFile();
             if (f.IsPrefabFile())
             {
                 Prefab prefab;
@@ -238,7 +239,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     Hierarchy *hierarchy = Hierarchy::GetInstance();
     if (e->source() == explorer)
     {
-        File f = explorer->GetSelectedFile();
+        BFile f = explorer->GetSelectedFile();
         if (f.IsMaterialFile())
         {
             Material *mat = AssetsManager::Load<Material>(f.GetPath());
