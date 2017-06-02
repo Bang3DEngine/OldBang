@@ -12,6 +12,11 @@ public:
                            bool *preprocessedSomething);
 
 public:
+    const static Array<String> VarTypeInt;
+    const static Array<String> VarTypeFloat;
+    const static Array<String> VarTypeDouble;
+    const static Array<String> VarTypeString;
+
     const static Array<String> Modifiers;
     const static Array<String> VarTypes;
     const static Array<String> RVariablePrefixes;

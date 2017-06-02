@@ -26,10 +26,10 @@ int main(int argc, char **argv)
     if (preprocessedSomething)
     {
         String originalExt = filepath.GetExtension();
-        Path reflFilepath = filepath.GetDirectory()
-                                   .Append("." + filepath.GetName())
-                                   .AppendExtension("refl")
-                                   .AppendExtension(originalExt);
+        Path reflFilepath  = filepath.GetDirectory()
+                                     .Append("." + filepath.GetName())
+                                     .AppendExtension("refl")
+                                     .AppendExtension(originalExt);
 
         bool writePreprocessedFile = true;
         if (reflFilepath.Exists())

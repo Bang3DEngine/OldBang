@@ -38,12 +38,22 @@ void SerializableObject::ReadFromString(const String &xmlInfoString)
     PostRead(xmlInfo);
 }
 
+void SerializableObject::ReadReflection(const XMLNode &xmlInfo)
+{
+}
+
+void SerializableObject::WriteReflection(XMLNode *xmlInfo) const
+{
+}
+
 void SerializableObject::Read(const XMLNode &xmlInfo)
 {
+    ReadReflection(xmlInfo);
 }
 
 void SerializableObject::Write(XMLNode *xmlInfo) const
 {
+    WriteReflection(xmlInfo);
     xmlInfo->SetTagName( GetClassName() );
 }
 

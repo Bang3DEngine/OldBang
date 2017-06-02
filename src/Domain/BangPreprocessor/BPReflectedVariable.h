@@ -16,12 +16,17 @@ public:
 
     String GetInitializationCode(const String &propInitVarName) const;
 
+    bool IsInt() const;
+    bool IsFloat() const;
+    bool IsDouble() const;
+    bool IsString() const;
+
     void SetPropertyName(const String &name);
     void SetVariableType(const String &varType);
     void SetVariableName(const String &varName);
     void SetVariableInitValue(const String &initValue);
 
-    const String& GetPropertyName() const;
+    const String& GetName() const;
     const String& GetVariableType() const;
     const String& GetVariableName() const;
     const String& GetVariableInitValue() const;

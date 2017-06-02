@@ -5,14 +5,16 @@ cd .. # Go to root directory
 
 echo "Starting preprocessing of header files..."
 
-if [ ! -f "bin/BangPreprocessor" ]
+bangPreprocessor="$(find bin | grep -E "\bBangPreprocessor$" | xargs | cut -d' ' -f1)"
+if [ ! -f $bangPreprocessor ]
 then
-	echo "bin/BangPreprocessor does not exist. Ignoring preprocessing..."
+	echo "BangPreprocessor binary was not found. Ignoring preprocessing..."
 	exit 0
 fi
+bangPreprocessor="./$bangPreprocessor"
 
 FILES="$(find . | grep -E ".*/src/.*/[A-Z][A-Za-z0-9_-]*\.h$" | xargs)"
 for f in $FILES
 do
-	./bin/BangPreprocessor "$f"
+	$bangPreprocessor "$f"
 done

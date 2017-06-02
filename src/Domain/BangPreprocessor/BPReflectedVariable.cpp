@@ -80,11 +80,31 @@ String BPReflectedVariable::GetInitializationCode(const String &propInitVarName)
     const String vName = propInitVarName;
 
     String code = "";
-    code += vName + ".SetPropertyName(\"" + GetPropertyName() + "\");\n";
+    code += vName + ".SetPropertyName(\"" + GetName() + "\");\n";
     code += vName + ".SetVariableType(\"" + GetVariableType() + "\");\n";
     code += vName + ".SetVariableName(\"" + GetVariableName() + "\");\n";
     code += vName + ".SetVariableInitValue(\"" + GetVariableInitValue() + "\");\n";
     return code;
+}
+
+bool BPReflectedVariable::IsInt() const
+{
+    return BP::VarTypeInt.Contains(GetVariableType());
+}
+
+bool BPReflectedVariable::IsFloat() const
+{
+    return BP::VarTypeFloat.Contains(GetVariableType());
+}
+
+bool BPReflectedVariable::IsDouble() const
+{
+    return BP::VarTypeDouble.Contains(GetVariableType());
+}
+
+bool BPReflectedVariable::IsString() const
+{
+    return BP::VarTypeString.Contains(GetVariableType());
 }
 
 void BPReflectedVariable::SetPropertyName(const String &name)
@@ -107,7 +127,7 @@ void BPReflectedVariable::SetVariableInitValue(const String &initValue)
     m_variableInitValue = initValue;
 }
 
-const String &BPReflectedVariable::GetPropertyName() const
+const String &BPReflectedVariable::GetName() const
 {
     return m_propertyName;
 }
@@ -129,7 +149,7 @@ const String &BPReflectedVariable::GetVariableInitValue() const
 
 String BPReflectedVariable::ToString() const
 {
-    return "(" + GetPropertyName() + ", " +
+    return "(" + GetName() + ", " +
                  GetVariableType() + ", " +
                  GetVariableName() + " = " +
                  GetVariableInitValue() +

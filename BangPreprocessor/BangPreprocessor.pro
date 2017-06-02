@@ -10,6 +10,11 @@ OBJECTS -= moc_*
 
 TARGET = $$BIN_DIR/BangPreprocessor
 
+PreprocessTarget.target = PreprocessTarget
+PreprocessTarget.commands = sh ../scripts/preprocessHeaders.sh
+QMAKE_EXTRA_TARGETS += PreprocessTarget
+POST_TARGETDEPS += PreprocessTarget
+
 SOURCES += \
     ./MainBangPreprocessor.cpp \
     ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \

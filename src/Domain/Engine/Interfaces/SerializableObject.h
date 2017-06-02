@@ -8,11 +8,13 @@
 #include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"
+#include "Bang/IReflectable.h"
 
 class String;
 class XMLNode;
 class InspectorWidget;
-class SerializableObject : public Object
+class SerializableObject : public Object,
+                           public IReflectable
 {
     OBJECT(SerializableObject)
 
@@ -22,6 +24,9 @@ public:
     XMLNode GetXMLInfo() const;
     String GetSerializedString(bool writeToFile = true) const;
     void ReadFromString(const String &xmlInfoString);
+
+    virtual void ReadReflection(const XMLNode &xmlInfo);
+    virtual void WriteReflection(XMLNode *xmlInfo) const;
 
     virtual void Read(const XMLNode &xmlInfo);
     virtual void Write(XMLNode *xmlInfo) const;
