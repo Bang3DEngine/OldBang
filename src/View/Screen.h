@@ -73,7 +73,9 @@ private:
     GameObject *m_lastGameObjectOvered = nullptr;
     GameObject *m_gameObjectBeingDragged = nullptr;
 
+    #ifdef BANG_EDITOR
     void HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin);
+    #endif
 
     friend class GraphicPipeline;
 };

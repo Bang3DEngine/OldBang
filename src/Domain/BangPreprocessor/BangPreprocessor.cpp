@@ -138,10 +138,6 @@ void BangPreprocessor::Preprocess(const String &source,
                     GET_READ_REFLECTION_CODE
                     GET_WRITE_REFLECTION_CODE
                 private:   )VERBATIM";
-        reflectDefineCode.ReplaceInSitu("REFLECT_DEFINITIONS_DEFINE_NAME",
-                                        BP::ReflectDefinitionsDefineName);
-        reflectDefineCode.ReplaceInSitu("RSTRUCT_VAR_NAME",
-                                        reflStruct.GetStructVariableName());
         reflectDefineCode.ReplaceInSitu("GET_REFLECTION_INFO_CODE",
                                         reflStruct.GetGetReflectionInfoCode());
         reflectDefineCode.ReplaceInSitu("GET_READ_REFLECTION_CODE",
@@ -149,6 +145,16 @@ void BangPreprocessor::Preprocess(const String &source,
         reflectDefineCode.ReplaceInSitu("GET_WRITE_REFLECTION_CODE",
                                         reflStruct.GetWriteReflectionCode());
         reflectDefineCode.ReplaceInSitu("\n", "\\\n");
+
+        reflectDefineCode += "\n"
+                "#undef REFLECT_DEFINITIONS_DEFINE_NAME \n"
+                "#define REFLECT_DEFINITIONS_DEFINE_NAME(ClassName) \
+                         REFLECT_DEFINITIONS_DEFINE_NAME_##ClassName()";
+
+        reflectDefineCode.ReplaceInSitu("RSTRUCT_VAR_NAME",
+                                        reflStruct.GetStructVariableName());
+        reflectDefineCode.ReplaceInSitu("REFLECT_DEFINITIONS_DEFINE_NAME",
+                                        BP::ReflectDefinitionsDefineName);
 
         reflectionHeaderSource += reflectDefineCode;
         *preprocessedSomething = true;

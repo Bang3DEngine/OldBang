@@ -3,6 +3,11 @@
 
 #include "Bang/BPReflectedStruct.h"
 
+#define BP_REFLECT_VARIABLE(args...)
+#define BP_REFLECT_CLASS(args...)
+#define BP_REFLECT_STRUCT(args...)
+#define BP_REFLECT_DEFINITIONS(args...)
+
 class IReflectable
 {
 public:

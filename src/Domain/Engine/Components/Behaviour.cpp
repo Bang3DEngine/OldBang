@@ -252,7 +252,7 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
-    BP_REFLECT_DEFINITIONS_CLASS_NAME()
+    BP_REFLECT_DEFINITIONS(CLASS_NAME)
 };
 
 #endif // CLASS_NAME_H

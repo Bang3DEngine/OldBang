@@ -2,24 +2,20 @@ TEMPLATE = lib
 QT_VERSION = 5
 
 # PARAMETERS CATCHING
-BUILD_MODE=$$BUILD_MODE # EDITOR or GAME
-isEmpty(BUILD_MODE) {
-  BUILD_MODE=EDITOR
+EDITOR_OR_GAME=$$(BANG_BUILD_EDITOR_OR_GAME) # EDITOR or GAME
+isEmpty(EDITOR_OR_GAME) {
+  EDITOR_OR_GAME=EDITOR
 }
 
-RELEASE_OR_DEBUG=$$RELEASE_OR_DEBUG # RELEASE or DEBUG
+RELEASE_OR_DEBUG=$$(BANG_BUILD_RELEASE_OR_DEBUG) # RELEASE or DEBUG
 isEmpty(RELEASE_OR_DEBUG) {
-  RELEASE_OR_DEBUG=RELEASE_MODE
+  RELEASE_OR_DEBUG=RELEASE
 }
 #####################
 
-
-# QMake config #############
-CONFIG += $$BUILD_MODE $$RELEASE_OR_DEBUG
+CONFIG += $$EDITOR_OR_GAME $$RELEASE_OR_DEBUG
 CONFIG += qt
-####################################
 
-# LIBS ###########################
 LIBS += \
     -lGLEW            \ # GLEW
     -lGLU             \
@@ -27,33 +23,30 @@ LIBS += \
     -lalut -lopenal   \ # Alut and OpenAL
     -lassimp          \
     -lfreetype
-########################################
 
-# INCLUDE PATH ###################
 INCLUDEPATH +=                       \
     /usr/include                     \
     ../include                       \
     ../include/freetype
-######################################
 
 BIN_DIR=""
 EDITOR {
-    DEBUG_MODE   { BIN_DIR = ../bin/EditorDebug   }
-    RELEASE_MODE { BIN_DIR = ../bin/EditorRelease }
+    DEBUG   { BIN_DIR = ../bin/EditorDebug   }
+    RELEASE { BIN_DIR = ../bin/EditorRelease }
 }
 GAME {
-    DEBUG_MODE   { BIN_DIR = ../bin/GameDebug   }
-    RELEASE_MODE { BIN_DIR = ../bin/GameRelease }
+    DEBUG   { BIN_DIR = ../bin/GameDebug   }
+    RELEASE { BIN_DIR = ../bin/GameRelease }
 }
 OBJECTS_DIR = $$BIN_DIR/obj
 
 
 # G++ options (release, debug, etc.) ############
-DEBUG_MODE {
+DEBUG {
     OPTIMIZATION_OPT = -O0 -Wl,-O0
     DEBUG_OPT = -g
 }
-RELEASE_MODE {
+RELEASE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
 }
 

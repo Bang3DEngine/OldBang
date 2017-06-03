@@ -168,7 +168,7 @@ bool GameBuilder::CompileGameExecutable()
     bool ok = false;
     String output = "";
     String cmd = Paths::Engine() + "/scripts/compile.sh";
-    SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE_MODE"},
+    SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE"},
                         &output, &ok);
     ok = ok && initialOutputDir.IsFile();
     if (!ok)

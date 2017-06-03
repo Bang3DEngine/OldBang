@@ -1,4 +1,5 @@
 include(../BangCommon.pri)
+system(rm -f Makefile) # Force always running of qmake
 
 TEMPLATE = app
 QT = core gui widgets
@@ -10,10 +11,10 @@ OBJECTS -= moc_*
 
 TARGET = $$BIN_DIR/BangPreprocessor
 
-PreprocessTarget.target = PreprocessTarget
-PreprocessTarget.commands = sh ../scripts/preprocessHeaders.sh
-QMAKE_EXTRA_TARGETS += PreprocessTarget
-POST_TARGETDEPS += PreprocessTarget
+PreprocessTarget.target = PreprocessTargetName
+PreprocessTarget.commands = (cd $$PWD/.. ; sh ../scripts/preprocessHeaders.sh)
+QMAKE_EXTRA_TARGETS += $$PreprocessTarget.target
+POST_TARGETDEPS += PreprocessTargetName
 
 SOURCES += \
     ./MainBangPreprocessor.cpp \

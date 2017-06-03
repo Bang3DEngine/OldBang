@@ -1,5 +1,5 @@
 include(../BangCommon.pri)
-
+system(rm -f Makefile) # Force always running of qmake
 system(cd $$PWD/.. ; sh ./scripts/preprocessHeaders.sh)
 
 TEMPLATE = lib
@@ -14,6 +14,13 @@ LIBS = -L$$BIN_DIR/lib/ -lBangDataStructures $$LIBS
 PRE_TARGETDEPS += $$BIN_DIR/lib/libBangDataStructures.a
 
 MOC_DIR = ../src/Qt_MOCs/
+
+UI_DIR  = ../include/Bang
+
+EDITOR {
+    FORMS   += ../EngineAssets/EditorWindow.ui
+    FORMS   += ../EngineAssets/SelectProjectWindow.ui
+}
 
 SOURCES += \
     ../src/Domain/Engine/Others/Time.cpp \
@@ -130,6 +137,8 @@ SOURCES += \
     ../src/Persistence/Files/BFile.cpp
 
 HEADERS +=                                                          \
+    ../src/View/Application.h                                          \
+    ../src/View/Screen.h                                               \
     ../src/Domain/Engine/Physics/Rect.h                                \
     ../src/Domain/Interfaces/IToString.h                               \
     ../src/Domain/Engine/Interfaces/ISceneEventListener.h              \
@@ -264,9 +273,7 @@ HEADERS +=                                                          \
 
 EDITOR {
 HEADERS += \
-    ../src/View/Screen.h                                               \
     ../src/View/GameObjectClipboard.h                                  \
-    ../src/View/Application.h                                          \
     ../src/View/Windows/IWindow.h \
     ../src/View/Windows/GameWindow.h \
     ../src/View/Cursor.h \

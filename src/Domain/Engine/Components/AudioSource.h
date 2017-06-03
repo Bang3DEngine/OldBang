@@ -16,7 +16,6 @@ class XMLNode;
 class AudioClip;
 class ICloneable;
 
-BP_REFLECT_CLASS(AudioSource)
 class AudioSource : public Component
                     #ifdef BANG_EDITOR
                     ,public IAttrWidgetButtonListener
@@ -87,7 +86,6 @@ private:
 
     AudioClip *m_audioClip = nullptr;
 
-    BP_REFLECT_VARIABLE(TestVar)
     float m_test = 0.5f;
 
     float m_volume = 1.0f;
@@ -99,8 +97,6 @@ private:
 
     void UpdateALProperties() const;
     void SetAudioClipNoDettachAttach(AudioClip *audioClip);
-
-    BP_REFLECT_DEFINITIONS_AudioSource();
 
     friend class AudioClip;
     friend class AudioManager;

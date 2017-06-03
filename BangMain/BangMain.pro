@@ -1,19 +1,16 @@
 include(../BangCommon.pri)
+system(rm -f Makefile) # Force always running of qmake
 
 TEMPLATE = app
 CONFIG -= console
 INCLUDEPATH += ../include
 QT = core gui opengl widgets
 
-UI_DIR  = ../include/Bang
-
 SOURCES += \
     ../src/MainBang.cpp
 
 EDITOR {
     TARGET = $$BIN_DIR/Bang
-    FORMS   += ../EngineAssets/EditorWindow.ui
-    FORMS   += ../EngineAssets/SelectProjectWindow.ui
     RESOURCES += ../EngineAssets/qdarkstyle/style.qrc
     RESOURCES += ../EngineAssets/QtResources.qrc
 }
