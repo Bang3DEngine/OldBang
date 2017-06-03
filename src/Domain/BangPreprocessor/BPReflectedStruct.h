@@ -12,6 +12,19 @@ public:
     BPReflectedStruct();
     virtual ~BPReflectedStruct();
 
+    void AddProperty(const BPReflectedVariable &prop);
+
+    const String &GetStructName() const;
+    const String &GetStructVariableName() const;
+    const Array<BPReflectedVariable> &GetVariables() const;
+
+    String ToString() const override;
+
+private:
+    String m_structName = "";
+    String m_structVariableName = "";
+    Array<BPReflectedVariable> m_variables;
+
     static void FromString(String::Iterator structBegin,
                            String::Iterator structEnd,
                            BPReflectedStruct *outStruct,
@@ -19,20 +32,13 @@ public:
 
     void SetStructName(const String &structName);
     void SetStructVariableName(const String &structVarName);
-    void AddProperty(const BPReflectedVariable &prop);
 
-    String GetInitializationCode(const String &structInitVarName) const;
+    String GetInitializationCode() const;
+    String GetGetReflectionInfoCode() const;
+    String GetWriteReflectionCode() const;
+    String GetReadReflectionCode() const;
 
-    const String &GetStructName() const;
-    const String &GetStructVariableName() const;
-    const Array<BPReflectedVariable> &GetProperties() const;
-
-    String ToString() const override;
-
-private:
-    String m_structName = "";
-    String m_structVariableName = "";
-    Array<BPReflectedVariable> m_properties;
+    friend class BangPreprocessor;
 };
 
 #endif // BPSTRUCT_H

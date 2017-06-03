@@ -24,6 +24,7 @@ public:
     const static Array<String> RVariablePrefixes;
     const static Array<String> RStructPrefixes;
     const static String ReflectDefinitionsDefineName;
+    const static String ReflectionInfoVarName;
 
     static void RemoveComments(String *source);
 

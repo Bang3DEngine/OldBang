@@ -21,7 +21,7 @@ public:
     bool IsDouble() const;
     bool IsString() const;
 
-    void SetPropertyName(const String &name);
+    void SetName(const String &name);
     void SetVariableType(const String &varType);
     void SetVariableName(const String &varName);
     void SetVariableInitValue(const String &initValue);
@@ -32,7 +32,7 @@ public:
     const String& GetVariableInitValue() const;
 
 private:
-    String m_propertyName = "";
+    String m_name = "";
     String m_variableType = "";
     String m_variableName = "";
     String m_variableInitValue = "";

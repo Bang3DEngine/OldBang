@@ -231,54 +231,51 @@ void Behaviour::OnAddedToGameObject()
 }
 
 
-String Behaviour::s_behaviourHeaderTemplate =
-"\
-#ifndef CLASS_NAME_H \n\
-#define CLASS_NAME_H \n\
-\n\
-#include \"Bang/Behaviour.h\" \n\
-#include \".CLASS_NAME.refl.h\" \n\
-\n\
-// Here go your includes \n\
-\n\
-BP_REFLECT_CLASS(CLASS_NAME)\n\
-class CLASS_NAME : public Behaviour \n\
-{ \n\
-OBJECT(CLASS_NAME) \n\
-public: \n\
-\n\
-    BP_REFLECT_VARIABLE(Speed)\n\
-    float speed = 0.1f; \n\
-\n\
-    void OnStart() override; \n\
-    void OnUpdate() override; \n\
-\n\
-\n\
-    BP_REFLECT_DEFINITIONS_CLASS_NAME()\n\
-}; \n\
-\n\
-#endif // CLASS_NAME_H \n\
-\n\
-BANG_BEHAVIOUR_CLASS(CLASS_NAME);\
-"
+String Behaviour::s_behaviourHeaderTemplate = R"VERBATIM(
+#ifndef CLASS_NAME_H
+#define CLASS_NAME_H
+
+#include "Bang/Behaviour.h"
+#include ".CLASS_NAME.refl.h"
+
+// Here go your includes
+
+BP_REFLECT_CLASS(CLASS_NAME)
+class CLASS_NAME : public Behaviour
+{
+OBJECT(CLASS_NAME)
+public:
+
+    BP_REFLECT_VARIABLE(Speed)
+    float speed = 0.1f;
+
+    void OnStart() override;
+    void OnUpdate() override;
+
+    BP_REFLECT_DEFINITIONS_CLASS_NAME()
+};
+
+#endif // CLASS_NAME_H
+
+BANG_BEHAVIOUR_CLASS(CLASS_NAME);
+)VERBATIM"
 ;
 
-String Behaviour::s_behaviourSourceTemplate =
-"\
-#include \"CLASS_NAME.h\" \n\
-\n\
-// This function will be executed once when created \n\
-void CLASS_NAME::OnStart() \n\
-{ \n\
-    Behaviour::OnStart(); \n\
-} \n\
-\n\
-// This function will be executed every frame \n\
-void CLASS_NAME::OnUpdate() \n\
-{ \n\
-    Behaviour::OnUpdate(); \n\
-} \n\
-\n\
-BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME);\
-"
+String Behaviour::s_behaviourSourceTemplate = R"VERBATIM(
+#include "CLASS_NAME.h"
+
+// This function will be executed once when created
+void CLASS_NAME::OnStart()
+{
+    Behaviour::OnStart();
+}
+
+// This function will be executed every frame
+void CLASS_NAME::OnUpdate()
+{
+    Behaviour::OnUpdate();
+}
+
+BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME);
+)VERBATIM"
 ;

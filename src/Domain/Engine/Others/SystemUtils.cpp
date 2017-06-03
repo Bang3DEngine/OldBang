@@ -103,8 +103,6 @@ void SystemUtils::_System(const String &command,
     QStringList argsListQ;
     for (const String &arg : argsList) { argsListQ.push_back(arg.ToQString()); }
 
-    Debug_Log(command + " " + String::Join(argsList, " "));
-
     QProcess process;
     process.setReadChannel(QProcess::ProcessChannel::StandardOutput);
     process.start(command.ToQString(), argsListQ);

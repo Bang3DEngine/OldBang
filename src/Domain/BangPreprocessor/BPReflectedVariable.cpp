@@ -12,7 +12,8 @@ BPReflectedVariable::BPReflectedVariable()
 
 }
 
-void BPReflectedVariable::FromString(String::Iterator propBegin,
+void BPReflectedVariable::FromString(
+                            String::Iterator propBegin,
                             String::Iterator propEnd,
                             BPReflectedVariable *outProperty,
                             bool *success)
@@ -28,11 +29,11 @@ void BPReflectedVariable::FromString(String::Iterator propBegin,
     Array<String> propertyList = propertyListStr.Split(',', true);
     if (propertyList.Size() == 0)
     {
-        std::cerr << "BP Error: BP_PROPERTY has 0 properties,"
+        std::cerr << "BP Error: BP_REFLECT_VARIABLE has 0 properties,"
                      " but must have at least a name" << std::endl;
         return;
     }
-    outProperty->m_propertyName = propertyList[0];
+    outProperty->m_name = propertyList[0];
 
     // Skip modifiers
     String nextWord = "";
@@ -75,16 +76,20 @@ void BPReflectedVariable::FromString(String::Iterator propBegin,
     *success = true;
 }
 
-String BPReflectedVariable::GetInitializationCode(const String &propInitVarName) const
+String BPReflectedVariable::GetInitializationCode(const String &rvarInitVarName) const
 {
-    const String vName = propInitVarName;
-
-    String code = "";
-    code += vName + ".SetPropertyName(\"" + GetName() + "\");\n";
-    code += vName + ".SetVariableType(\"" + GetVariableType() + "\");\n";
-    code += vName + ".SetVariableName(\"" + GetVariableName() + "\");\n";
-    code += vName + ".SetVariableInitValue(\"" + GetVariableInitValue() + "\");\n";
-    return code;
+    String src = R"VERBATIM(
+            RVAR_VARIABLE_NAME.SetName("RVAR_NAME");
+            RVAR_VARIABLE_NAME.SetVariableType("VARIABLE_TYPE");
+            RVAR_VARIABLE_NAME.SetVariableName("VARIABLE_NAME");
+            RVAR_VARIABLE_NAME.SetVariableInitValue("VARIABLE_INIT_VALUE");
+    )VERBATIM";
+    src.ReplaceInSitu("RVAR_VARIABLE_NAME",  rvarInitVarName);
+    src.ReplaceInSitu("RVAR_NAME",           GetName());
+    src.ReplaceInSitu("VARIABLE_TYPE",       GetVariableType());
+    src.ReplaceInSitu("VARIABLE_NAME",       GetVariableName());
+    src.ReplaceInSitu("VARIABLE_INIT_VALUE", GetVariableInitValue());
+    return src;
 }
 
 bool BPReflectedVariable::IsInt() const
@@ -107,9 +112,9 @@ bool BPReflectedVariable::IsString() const
     return BP::VarTypeString.Contains(GetVariableType());
 }
 
-void BPReflectedVariable::SetPropertyName(const String &name)
+void BPReflectedVariable::SetName(const String &name)
 {
-    m_propertyName = name;
+    m_name = name;
 }
 
 void BPReflectedVariable::SetVariableType(const String &varType)
@@ -129,7 +134,7 @@ void BPReflectedVariable::SetVariableInitValue(const String &initValue)
 
 const String &BPReflectedVariable::GetName() const
 {
-    return m_propertyName;
+    return m_name;
 }
 
 const String &BPReflectedVariable::GetVariableType() const

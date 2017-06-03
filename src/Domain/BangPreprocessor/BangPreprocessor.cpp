@@ -44,8 +44,8 @@ const Array<String> BP::RStructPrefixes =
     "BP_REFLECT_STRUCT"
 };
 
-const String BP::ReflectDefinitionsDefineName =
-        "BP_REFLECT_DEFINITIONS";
+const String BP::ReflectDefinitionsDefineName = "BP_REFLECT_DEFINITIONS";
+const String BP::ReflectionInfoVarName = "BP_ReflectionInfo";
 
 void BangPreprocessor::Preprocess(const Path &filepath)
 {
@@ -88,10 +88,11 @@ void BangPreprocessor::Preprocess(const String &source,
 {
     *preprocessedSomething = false;
     String &reflectionHeaderSource = *_reflectionHeaderSource;
-    reflectionHeaderSource =
-            "#include \"Bang/XMLNode.h\"\n"
-            "#include \"Bang/BPReflectedStruct.h\"\n"
-            "#include \"Bang/BPReflectedVariable.h\"\n\n";
+    reflectionHeaderSource = R"VERBATIM(
+             #include "Bang/XMLNode.h"
+             #include "Bang/BPReflectedStruct.h"
+             #include "Bang/BPReflectedVariable.h"
+          )VERBATIM";
 
     String src = source;
     BP::RemoveComments(&src);
@@ -118,73 +119,26 @@ void BangPreprocessor::Preprocess(const String &source,
         BPReflectedStruct::FromString(itStructBegin, itStructScopeEnd,
                                       &reflStruct, &ok);
 
-        const String ReflectionInfoVarName = "BP_ReflectionInfo";
-        String structInitCode =
-                reflStruct.GetInitializationCode(ReflectionInfoVarName);
+        String reflectDefineCode =
+                "#define  REFLECT_DEFINITIONS_DEFINE_NAME_RSTRUCT_VAR_NAME() ";
+        reflectDefineCode += R"VERBATIM( public:
+                    GET_REFLECTION_INFO_CODE
+                    GET_READ_REFLECTION_CODE
+                    GET_WRITE_REFLECTION_CODE
+                private:   )VERBATIM";
+        reflectDefineCode.ReplaceInSitu("REFLECT_DEFINITIONS_DEFINE_NAME",
+                                        BP::ReflectDefinitionsDefineName);
+        reflectDefineCode.ReplaceInSitu("RSTRUCT_VAR_NAME",
+                                        reflStruct.GetStructVariableName());
+        reflectDefineCode.ReplaceInSitu("GET_REFLECTION_INFO_CODE",
+                                        reflStruct.GetGetReflectionInfoCode());
+        reflectDefineCode.ReplaceInSitu("GET_READ_REFLECTION_CODE",
+                                        reflStruct.GetReadReflectionCode());
+        reflectDefineCode.ReplaceInSitu("GET_WRITE_REFLECTION_CODE",
+                                        reflStruct.GetWriteReflectionCode());
+        reflectDefineCode.ReplaceInSitu("\n", "\\\n");
 
-        String getReflectionInfoFunctionCode =
-            "const BPReflectedStruct& GetReflectionInfo() const override \n"
-            "{ \n"
-            "   static BPReflectedStruct " + ReflectionInfoVarName + "; \n"
-            "   static bool inited = false; \n"
-            "   if (!inited) \n"
-            "   { \n"
-            "     inited = true; \n" +
-                  structInitCode +
-            "     "
-            "   } \n"
-            "   return " + ReflectionInfoVarName + ";\n"
-            "}";
-
-        String readReflectionFunctionCode =
-            "  void ReadReflection(const XMLNode &xmlInfo) override \n"
-            "  { \n";
-        for (const BPReflectedVariable &var : reflStruct.GetProperties())
-        {
-            String getterFunctionName = "";
-            if      (var.IsInt())    { getterFunctionName = "GetInt"; }
-            else if (var.IsFloat())  { getterFunctionName = "GetFloat"; }
-            else if (var.IsDouble()) { getterFunctionName = "GetFloat"; }
-            else if (var.IsString()) { getterFunctionName = "GetString"; }
-            readReflectionFunctionCode +=
-                    var.GetVariableName() + " = " +
-                    "xmlInfo." + getterFunctionName + "(\""
-                               + var.GetName() + "\");";
-            readReflectionFunctionCode += "\n";
-        }
-        readReflectionFunctionCode += "}\n";
-
-        String writeReflectionFunctionCode =
-            "void WriteReflection(XMLNode *xmlInfo) const override \n"
-            "{ \n";
-        for (const BPReflectedVariable &var : reflStruct.GetProperties())
-        {
-            String setterFunctionName = "";
-            if      (var.IsInt())    { setterFunctionName = "SetInt"; }
-            else if (var.IsFloat())  { setterFunctionName = "SetFloat"; }
-            else if (var.IsDouble()) { setterFunctionName = "SetFloat"; }
-            else if (var.IsString()) { setterFunctionName = "SetString"; }
-            writeReflectionFunctionCode +=
-                    "xmlInfo->" + setterFunctionName
-                                        + "(\"" + var.GetName() + "\", "
-                                                + var.GetVariableName() + ");";
-            writeReflectionFunctionCode += "\n";
-        }
-        writeReflectionFunctionCode += "}\n";
-
-
-        String reflectDefinitionsDefineCode =
-                "#define " + BP::ReflectDefinitionsDefineName + "_" +
-                             reflStruct.GetStructVariableName() + "() \n"
-                "public: \n" +
-                getReflectionInfoFunctionCode + "\n" +
-                readReflectionFunctionCode    + "\n" +
-                writeReflectionFunctionCode   + "\n" +
-                "private:";
-        reflectDefinitionsDefineCode.ReplaceInSitu("\n", "\\\n");
-        reflectDefinitionsDefineCode += "\n";
-
-        reflectionHeaderSource += reflectDefinitionsDefineCode;
+        reflectionHeaderSource += reflectDefineCode;
         *preprocessedSomething = true;
     }
 }
