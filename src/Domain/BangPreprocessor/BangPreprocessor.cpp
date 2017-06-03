@@ -10,10 +10,16 @@
 
 typedef BangPreprocessor BP;
 
-const Array<String> BP::VarTypeInt    = {"int"};
-const Array<String> BP::VarTypeFloat  = {"float"};
-const Array<String> BP::VarTypeDouble = {"double"};
-const Array<String> BP::VarTypeString = {"string", "String"};
+const Array<String> BP::VarTypeInt     = {"int"};
+const Array<String> BP::VarTypeBool    = {"bool"};
+const Array<String> BP::VarTypeColor   = {"Color"};
+const Array<String> BP::VarTypeFloat   = {"float"};
+const Array<String> BP::VarTypeDouble  = {"double"};
+const Array<String> BP::VarTypeString  = {"std::string", "string", "String"};
+const Array<String> BP::VarTypeVector2 = {"Vector2"};
+const Array<String> BP::VarTypeVector3 = {"Vector3"};
+const Array<String> BP::VarTypeVector4 = {"Vector4"};
+const Array<String> BP::VarTypeQuaternion = {"Quaternion"};
 
 const Array<String> BP::Modifiers =
 {
@@ -26,9 +32,15 @@ const Array<String> BP::Modifiers =
 const Array<String> BP::VarTypes =
 {
     BP::VarTypeInt[0],
+    BP::VarTypeBool[0],
+    BP::VarTypeColor[0],
     BP::VarTypeFloat[0],
     BP::VarTypeDouble[0],
-    BP::VarTypeString[0], BP::VarTypeString[1],
+    BP::VarTypeString[0], BP::VarTypeString[1], BP::VarTypeString[2],
+    BP::VarTypeVector2[0],
+    BP::VarTypeVector3[0],
+    BP::VarTypeVector4[0],
+    BP::VarTypeQuaternion[0],
     "struct",
     "class"
 };

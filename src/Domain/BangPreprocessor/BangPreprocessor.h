@@ -15,9 +15,15 @@ public:
 
 public:
     const static Array<String> VarTypeInt;
+    const static Array<String> VarTypeBool;
     const static Array<String> VarTypeFloat;
+    const static Array<String> VarTypeColor;
     const static Array<String> VarTypeDouble;
     const static Array<String> VarTypeString;
+    const static Array<String> VarTypeVector2;
+    const static Array<String> VarTypeVector3;
+    const static Array<String> VarTypeVector4;
+    const static Array<String> VarTypeQuaternion;
 
     const static Array<String> Modifiers;
     const static Array<String> VarTypes;
