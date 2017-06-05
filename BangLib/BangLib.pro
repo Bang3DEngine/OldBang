@@ -1,5 +1,4 @@
 include(../BangCommon.pri)
-system(rm -f Makefile) # Force always running of qmake
 system(cd $$PWD/.. ; sh ./scripts/preprocessHeaders.sh)
 
 TEMPLATE = lib
@@ -134,8 +133,7 @@ SOURCES += \
     ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp \
-    ../src/Persistence/Files/BFile.cpp \
-    ../src/View/Hierarchy/HierarchyItem.cpp
+    ../src/Persistence/Files/BFile.cpp
 
 HEADERS +=                                                          \
     ../src/View/Application.h                                          \
@@ -270,8 +268,7 @@ HEADERS +=                                                          \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.h \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.h \
     ../src/Domain/Engine/Debug/OStreamOperators.h \
-    ../src/Persistence/Files/BFile.h \
-    ../src/View/Hierarchy/HierarchyItem.h
+    ../src/Persistence/Files/BFile.h
 
 EDITOR {
 HEADERS += \
@@ -348,6 +345,7 @@ HEADERS += \
     ../src/View/Hierarchy/HierarchyContextMenu.h \
     ../src/View/Explorer/ExplorerContextMenu.h \
     ../src/View/Inspector/ComponentWidgetContextMenu.h \
+    ../src/View/Hierarchy/HierarchyItem.h \
     ../src/View/Inspector/InspectorContextMenu.h \
     ../src/View/ContextMenu.h \
     ../src/Domain/Engine/Others/GameBuilder.h \
@@ -435,6 +433,7 @@ EDITOR {
         ../src/View/Inspector/InspectorContextMenu.cpp \
         ../src/Domain/Engine/Others/GameBuilder.cpp \
         ../src/View/ContextMenu.cpp \
+        ../src/View/Hierarchy/HierarchyItem.cpp \
         ../src/View/Explorer/ExplorerFileSortProxy.cpp \
         ../src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
         ../src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \

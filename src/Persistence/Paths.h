@@ -13,6 +13,8 @@ public:
 
     static Path Home();
 
+    static Path GameExecutableLibrariesDir();
+    static Path GameExecutableOutputFile();
     static const Path& EngineBinaryDir();
     static const Path& EngineLibrariesDir();
 

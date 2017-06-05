@@ -1,5 +1,4 @@
-system(rm -f Makefile) # Force always running of qmake
-
+system(cd $$PWD ; ./scripts/qmakeAll.sh Bang.pro)
 system(cd $$PWD ; mkdir -p bin/GameDebug/obj      bin/GameDebug/lib)
 system(cd $$PWD ; mkdir -p bin/GameRelease/obj    bin/GameRelease/lib)
 system(cd $$PWD ; mkdir -p bin/EditorDebug/obj    bin/EditorDebug/lib)

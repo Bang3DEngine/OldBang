@@ -146,7 +146,8 @@ void SystemUtils::Compile(List<Path> &sourceFilesList,
 
     args.Add(sourceFilesList.To<List,String>());
 
-    args.Add("-L" + Paths::EngineLibrariesDir());
+    args.Add("-L" + (editorMode ? Paths::EngineLibrariesDir() :
+                                  Paths::GameExecutableLibrariesDir()));
     args.Add(List<String>(
               {"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
                "--std=c++11",

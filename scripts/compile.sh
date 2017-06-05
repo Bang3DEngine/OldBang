@@ -37,7 +37,7 @@ fi
 
 
 # Make and run Bang
-echo "EDITOR_OR_GAME on compile.sh:       '${EDITOR_OR_GAME}'"
+echo "EDITOR_OR_GAME on compile.sh:   '${EDITOR_OR_GAME}'"
 echo "RELEASE_OR_DEBUG on compile.sh: '${RELEASE_OR_DEBUG}'"
 echo "-----"
 sleep 2
@@ -46,5 +46,5 @@ export BANG_BUILD_EDITOR_OR_GAME="${EDITOR_OR_GAME}"
 export BANG_BUILD_RELEASE_OR_DEBUG="${RELEASE_OR_DEBUG}"
 
 # QMAKE & MAKE !!!
-qmake "EDITOR_OR_GAME=${EDITOR_OR_GAME}" "RELEASE_OR_DEBUG=${RELEASE_OR_DEBUG}" 
+qmake
 make -j${NUM_THREADS}

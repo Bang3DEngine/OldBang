@@ -1,5 +1,4 @@
 include(../BangCommon.pri)
-system(rm -f Makefile) # Force always running of qmake
 
 TEMPLATE = app
 QT = core gui widgets

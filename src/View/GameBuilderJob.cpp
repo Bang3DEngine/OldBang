@@ -65,8 +65,7 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const Path c_initialOutputDir = Paths::Engine().Append("bin/Game")
-                                                   .AppendExtension("exe");
+    const Path c_initialOutputDir = Paths::GameExecutableOutputFile();
     File::Remove(m_executableFilepath);
     File::Move(c_initialOutputDir, m_executableFilepath);
 

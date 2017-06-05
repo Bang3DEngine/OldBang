@@ -68,24 +68,26 @@ void BangPreprocessor::Preprocess(const Path &filepath)
     BangPreprocessor::Preprocess(srcContents,
                                  &reflHeaderContents,
                                  &preprocessedSomething);
-    if (preprocessedSomething)
+
+    String originalExt = filepath.GetExtension();
+    Path reflFilepath  = filepath.GetDirectory()
+                                 .Append("." + filepath.GetName())
+                                 .AppendExtension("refl")
+                                 .AppendExtension(originalExt);
+
+    bool writePreprocessedFile = true;
+    if (reflFilepath.Exists())
     {
-        String originalExt = filepath.GetExtension();
-        Path reflFilepath  = filepath.GetDirectory()
-                                     .Append("." + filepath.GetName())
-                                     .AppendExtension("refl")
-                                     .AppendExtension(originalExt);
+        String oldReflContents = File(reflFilepath).GetContents();
+        writePreprocessedFile = (oldReflContents != reflHeaderContents);
+    }
 
-        bool writePreprocessedFile = true;
-        if (reflFilepath.Exists())
-        {
-            String oldReflContents = File(reflFilepath).GetContents();
-            writePreprocessedFile = (oldReflContents != reflHeaderContents);
-        }
+    if (writePreprocessedFile)
+    {
+        File::Write(reflFilepath, reflHeaderContents);
 
-        if (writePreprocessedFile)
+        if (preprocessedSomething)
         {
-            File::Write(reflFilepath, reflHeaderContents);
             std::cout << "  File '" << filepath.ToString().ToCString()
                       << "' successfully preprocessed into '"
                       << reflFilepath.ToString().ToCString()

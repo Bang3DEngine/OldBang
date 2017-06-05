@@ -16,6 +16,20 @@ Path Paths::Home()
     return Path(QDir::homePath());
 }
 
+Path Paths::GameExecutableLibrariesDir()
+{
+    return Paths::EngineBinaryDir()
+                    .GetDirectory().Append("GameRelease/lib");
+}
+
+Path Paths::GameExecutableOutputFile()
+{
+    return Paths::EngineBinaryDir()
+                    .GetDirectory()
+                    .Append("GameRelease/Game")
+                    .AppendExtension("exe");
+}
+
 const Path &Paths::EngineBinaryDir()
 {
     return Paths::GetInstance()->c_engineBinaryDirPath;

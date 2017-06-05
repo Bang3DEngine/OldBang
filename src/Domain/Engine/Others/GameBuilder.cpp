@@ -161,16 +161,15 @@ bool GameBuilder::CompileGameExecutable()
         return false;
     }
 
-    const Path initialOutputDir = Paths::Engine().Append("bin/Game")
-                                                 .AppendExtension("exe");
-    File::Remove(initialOutputDir);
+    const Path gameOutputFilepath = Paths::GameExecutableOutputFile();
+    File::Remove(gameOutputFilepath);
 
     bool ok = false;
     String output = "";
     String cmd = Paths::Engine() + "/scripts/compile.sh";
     SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE"},
                         &output, &ok);
-    ok = ok && initialOutputDir.IsFile();
+    ok = ok && gameOutputFilepath.IsFile();
     if (!ok)
     {
         Debug_Error(output);
