@@ -52,6 +52,7 @@ public:
     static Hierarchy *GetInstance();
 
     bool Contains(GameObject *go);
+    void SetSyncFromSceneEnabled(bool syncFromSceneEnabled);
     void DeleteGameObjectItem(GameObject *go);
     void Print(HierarchyItem *item = nullptr, const String &indent = "");
 
@@ -102,6 +103,7 @@ private:
     LocalShortcut m_copyShortcut, m_pasteShortcut,
                   m_duplicateShortcut, m_deleteShortcut;
 
+    bool m_syncFromSceneEnabled = true;
     QTimer m_syncHierarchyFromSceneTimer;
     HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;

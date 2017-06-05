@@ -10,6 +10,7 @@
 #include "Bang/Explorer.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/GameObject.h"
+#include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 
 HierarchyDragDropManager::HierarchyDragDropManager(Hierarchy *hierarchy) :
@@ -61,6 +62,8 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 
 void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
 {
+    Hierarchy::GetInstance()->SetSyncFromSceneEnabled(true);
+
     Explorer *explorer = Explorer::GetInstance();
     if (ddi.currentObject == p_hierarchy)
     {
@@ -72,6 +75,7 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
         {
             if ( AcceptDrop() )
             {
+                Debug_Log("  Drop accepted!!!");
                 p_hierarchy->SyncSceneFromHierarchy();
                 p_hierarchy->SyncHierarchyFromScene();
 
@@ -97,6 +101,7 @@ bool HierarchyDragDropManager::AcceptDrop()
     GameObject *selectedGameObject =
          p_hierarchy->GetGameObjectFromItem(p_selectedItemInDragStart);
     if (!selectedGameObject) { return true; }
+
 
     bool insertingIntoItem = (!above && !below);
     if ( insertingIntoItem && (dropTargetGameObject == selectedGameObject) )

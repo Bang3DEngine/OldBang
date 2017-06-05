@@ -36,7 +36,7 @@ Hierarchy::Hierarchy(QWidget *parent)
            SLOT(_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem*,int)));
     connect(&m_syncHierarchyFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(SyncHierarchyFromScene()));
-    m_syncHierarchyFromSceneTimer.start(50);
+    m_syncHierarchyFromSceneTimer.start(1000);
 
     setMinimumWidth(150); // For initial size, modify SizeHint
 }
@@ -158,6 +158,11 @@ bool Hierarchy::Contains(GameObject *go)
     return GetItemFromGameObject(go) != nullptr;
 }
 
+void Hierarchy::SetSyncFromSceneEnabled(bool syncFromSceneEnabled)
+{
+    m_syncFromSceneEnabled = syncFromSceneEnabled;
+}
+
 
 void Hierarchy::Clear()
 {
@@ -168,6 +173,7 @@ void Hierarchy::Clear()
 
 void Hierarchy::SyncHierarchyFromScene()
 {
+    if (!m_syncFromSceneEnabled) { return; }
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
 
     // Refresh go's children. If we find a new child, add it to topLevel.
@@ -537,6 +543,11 @@ void Hierarchy::dropEvent(QDropEvent *e)
 {
     DragDropQTreeWidget::dropEvent(e);
     e->setAccepted(m_hDragDropManager.AcceptDrop());
+
+    // Prevent syncing the scene between now and the moment the
+    // HierarchyDragDropManager handles the event. If we dont do this, it can
+    // happen, and nullify the user's action, which is very annoying.
+    SetSyncFromSceneEnabled(false);
 }
 
 QSize Hierarchy::sizeHint() const
