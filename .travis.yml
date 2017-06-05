@@ -49,6 +49,7 @@ addons:
         - ubuntu-toolchain-r-test
 
 script:
+- alias g++="g++-5"
 - ./scripts/fullCompile.sh EDITOR DEBUG
 - ./scripts/fullCompile.sh EDITOR RELEASE
 - ./scripts/fullCompile.sh GAME   DEBUG
