@@ -7,12 +7,14 @@ system(cd $$PWD ; sh ./scripts/createIncludeHeaders.sh)
 
 TEMPLATE = subdirs
 
+CONFIG += ordered
+
 SUBDIRS = \
 BangDataStructures \
+BangPreprocessor \
 BangLib \
-BangMain \
-BangPreprocessor
+BangMain
 
-BangPreprocessor.depends += BangDataStructures
-BangLib.depends          += BangDataStructures BangPreprocessor
-BangMain.depends         += BangDataStructures BangLib
+#BangPreprocessor.depends += BangDataStructures
+#BangLib.depends          += BangDataStructures BangPreprocessor
+#BangMain.depends         += BangDataStructures BangLib
