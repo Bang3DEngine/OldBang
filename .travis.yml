@@ -36,11 +36,11 @@ addons:
       description: "Description"
     notification_email: ""
     build_command_prepend: ""
-    build_command: "./scripts/fullCompile.sh EDITOR DEBUG_MODE"
+    build_command: "./scripts/fullCompile.sh EDITOR DEBUG"
     branch_pattern: coverity_scan
 
 script:
-- ./scripts/fullCompile.sh EDITOR DEBUG_MODE
-- ./scripts/fullCompile.sh EDITOR RELEASE_MODE
-- ./scripts/fullCompile.sh GAME   DEBUG_MODE
-- ./scripts/fullCompile.sh GAME   RELEASE_MODE
+- ./scripts/fullCompile.sh EDITOR DEBUG
+- ./scripts/fullCompile.sh EDITOR RELEASE
+- ./scripts/fullCompile.sh GAME   DEBUG
+- ./scripts/fullCompile.sh GAME   RELEASE
