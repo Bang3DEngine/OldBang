@@ -28,6 +28,7 @@ install:
 - sudo apt-get install libopenal-dev
 - sudo apt-get install libalut-dev
 - sudo apt-get install libassimp-dev
+- sudo apt-get install g++-5
 - export QT_SELECT=5
 
 addons:
@@ -39,13 +40,6 @@ addons:
     build_command_prepend: ""
     build_command: "./scripts/fullCompile.sh EDITOR DEBUG"
     branch_pattern: coverity_scan
-
-    apt:
-      packages:
-        - g++-5
-      sources: 
-        - llvm-toolchain-precise-3.8
-        - ubuntu-toolchain-r-test
 
 script:
 - export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR DEBUG
