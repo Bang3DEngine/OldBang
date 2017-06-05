@@ -21,7 +21,8 @@ In order to install Bang do the following:
 ``` Bash
 git clone https://github.com/Bang3DEngine/Bang
 cd Bang
-./scripts/fullCompile.sh EDITOR RELEASE_MODE
+./scripts/fullCompile.sh EDITOR RELEASE
+./scripts/fullCompile.sh GAME   RELEASE
 ```
 This will take a few minutes. <br/>
 If something fails, check the [Dependencies](#dependencies) section below.
