@@ -40,7 +40,6 @@ addons:
     build_command: "./scripts/fullCompile.sh EDITOR DEBUG"
     branch_pattern: coverity_scan
 
-  addons:
     apt:
       packages:
         - g++-5
@@ -49,7 +48,7 @@ addons:
         - ubuntu-toolchain-r-test
 
 script:
-- alias g++="g++-5"
+- echo "alias g++=\"g++-5\"" > ~/.bashrc
 - ./scripts/fullCompile.sh EDITOR DEBUG
 - ./scripts/fullCompile.sh EDITOR RELEASE
 - ./scripts/fullCompile.sh GAME   DEBUG
