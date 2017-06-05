@@ -17,6 +17,8 @@ notifications:
 
 before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+      - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+      - sudo apt-get update -qq
 
 
 install:
@@ -28,7 +30,8 @@ install:
 - sudo apt-get install libopenal-dev
 - sudo apt-get install libalut-dev
 - sudo apt-get install libassimp-dev
-- sudo apt-get install g++-5
+- sudo apt-get install -qq g++-6
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 - export QT_SELECT=5
 
 addons:
@@ -42,7 +45,7 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR DEBUG
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR RELEASE
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   DEBUG
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   RELEASE
+- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh EDITOR DEBUG
+- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh EDITOR RELEASE
+- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh GAME   DEBUG
+- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh GAME   RELEASE
