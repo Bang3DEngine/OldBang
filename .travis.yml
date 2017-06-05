@@ -48,8 +48,7 @@ addons:
         - ubuntu-toolchain-r-test
 
 script:
-- echo "alias g++=\"g++-5\"" > ~/.bashrc
-- ./scripts/fullCompile.sh EDITOR DEBUG
-- ./scripts/fullCompile.sh EDITOR RELEASE
-- ./scripts/fullCompile.sh GAME   DEBUG
-- ./scripts/fullCompile.sh GAME   RELEASE
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR DEBUG
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR RELEASE
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   DEBUG
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   RELEASE
