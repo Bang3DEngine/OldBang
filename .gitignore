@@ -17,6 +17,7 @@ tmp
 *.dll
 *.dylib
 *.cfg
+.donePreprocess
 callgrind.*
 nohup.out
 bin/*
