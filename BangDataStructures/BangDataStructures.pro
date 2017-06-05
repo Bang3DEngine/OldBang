@@ -1,4 +1,5 @@
 include(../BangCommon.pri)
+system(rm -f Makefile)
 
 TEMPLATE = lib
 QT = core gui widgets

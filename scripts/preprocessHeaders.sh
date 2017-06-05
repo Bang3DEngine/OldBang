@@ -6,6 +6,7 @@ cd .. # Go to root directory
 echo "Starting preprocessing of header files..."
 
 bangPreprocessor="$(find bin | grep -E "\bBangPreprocessor$" | xargs | cut -d' ' -f1)"
+echo "$bangPreprocessor"
 if [ ! -f $bangPreprocessor ] || [ -z $bangPreprocessor ]
 then
 	echo "BangPreprocessor binary was not found. Ignoring preprocessing..."

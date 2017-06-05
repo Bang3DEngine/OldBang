@@ -1,9 +1,18 @@
 include(../BangCommon.pri)
+system(rm -f Makefile)
+system(rm -f .donePreprocess)
 system(cd $$PWD/.. ; sh ./scripts/preprocessHeaders.sh)
 
 TEMPLATE = lib
 INCLUDEPATH += ../include
 QT += core gui opengl widgets
+
+DoPreprocess = .donePreprocess
+DoPreprocess.commands = cd $$PWD/.. ; \
+                        sh ./scripts/preprocessHeaders.sh ; \
+                        touch .donePreprocess
+QMAKE_EXTRA_TARGETS += DoPreprocess
+PRE_TARGETDEPS += DoPreprocess
 
 CONFIG += staticlib
 
