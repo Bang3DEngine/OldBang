@@ -134,7 +134,8 @@ SOURCES += \
     ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp \
-    ../src/Persistence/Files/BFile.cpp
+    ../src/Persistence/Files/BFile.cpp \
+    ../src/View/Hierarchy/HierarchyItem.cpp
 
 HEADERS +=                                                          \
     ../src/View/Application.h                                          \
@@ -269,7 +270,8 @@ HEADERS +=                                                          \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.h \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.h \
     ../src/Domain/Engine/Debug/OStreamOperators.h \
-    ../src/Persistence/Files/BFile.h
+    ../src/Persistence/Files/BFile.h \
+    ../src/View/Hierarchy/HierarchyItem.h
 
 EDITOR {
 HEADERS += \

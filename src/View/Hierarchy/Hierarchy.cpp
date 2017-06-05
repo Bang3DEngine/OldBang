@@ -36,7 +36,7 @@ Hierarchy::Hierarchy(QWidget *parent)
            SLOT(_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem*,int)));
     connect(&m_syncHierarchyFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(SyncHierarchyFromScene()));
-    m_syncHierarchyFromSceneTimer.start(1000);
+    m_syncHierarchyFromSceneTimer.start(50);
 
     setMinimumWidth(150); // For initial size, modify SizeHint
 }
@@ -52,11 +52,11 @@ void Hierarchy::OnWindowShown()
           Explorer::GetInstance(), this});
 }
 
-void Hierarchy::Expand(QTreeWidgetItem *item)
+void Hierarchy::Expand(HierarchyItem *item)
 {
     ENSURE(item);
     item->setExpanded(true);
-    Expand(item->parent());
+    Expand(item->Parent());
 }
 
 void Hierarchy::LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items)
@@ -75,18 +75,20 @@ void Hierarchy::LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items)
     *items = result;
 }
 
-QTreeWidgetItem *Hierarchy::GetFirstSelectedItem() const
+HierarchyItem *Hierarchy::GetFirstSelectedItem() const
 {
     if (!selectedItems().empty())
     {
-        return selectedItems()[0];
+        return static_cast<HierarchyItem*>(selectedItems()[0]);
     }
     return nullptr;
 }
 
-GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
+GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *_item) const
 {
-	if (!item) { return nullptr; }
+    if (!_item) { return nullptr; }
+
+    HierarchyItem *item = static_cast<HierarchyItem*>(_item);
     if (m_treeItem_To_GameObject.ContainsKey(item))
     {
         return m_treeItem_To_GameObject[item];
@@ -94,12 +96,12 @@ GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
     return nullptr;
 }
 
-QTreeWidgetItem *Hierarchy::GetItemFromGameObject(GameObject *go) const
+HierarchyItem *Hierarchy::GetItemFromGameObject(GameObject *go) const
 {
 	if (!go) { return nullptr; }
     if (m_gameObject_To_TreeItem.ContainsKey(go))
     {
-        QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];
+        HierarchyItem *item = m_gameObject_To_TreeItem[go];
         return item;
     }
     return nullptr;
@@ -139,7 +141,7 @@ void Hierarchy::mousePressEvent(QMouseEvent *e)
 
 void Hierarchy::OnGameObjectNameChanged(GameObject *go)
 {
-    QTreeWidgetItem *item = GetItemFromGameObject(go);
+    HierarchyItem *item = GetItemFromGameObject(go);
     if (item)
     {
         item->setText(0, go->name.ToQString());
@@ -172,7 +174,7 @@ void Hierarchy::SyncHierarchyFromScene()
     const List<GameObject*> &sceneChildren = scene->GetChildren();
     for (GameObject* child : sceneChildren)
     {
-        QTreeWidgetItem *childItem = GetItemFromGameObject(child);
+        HierarchyItem *childItem = GetItemFromGameObject(child);
         if (!childItem)
         {
             // New child item !!!
@@ -194,7 +196,7 @@ void Hierarchy::SyncSceneFromHierarchy()
     Scene *scene = SceneManager::GetActiveScene();
     for (int i = 0; i < topLevelItemCount(); ++i)
     {
-        QTreeWidgetItem *childItem = topLevelItem(i);
+        HierarchyItem *childItem = static_cast<HierarchyItem*>(topLevelItem(i));
         SyncGameObjectFromHierarchy(childItem);
 
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
@@ -202,13 +204,13 @@ void Hierarchy::SyncSceneFromHierarchy()
     }
 }
 
-void Hierarchy::SyncGameObjectFromHierarchy(QTreeWidgetItem *goItem)
+void Hierarchy::SyncGameObjectFromHierarchy(HierarchyItem *goItem)
 {
     // Iterate all items, and update
     GameObject *go = GetGameObjectFromItem(goItem);
     for (int i = 0; i < goItem->childCount(); ++i)
     {
-        QTreeWidgetItem *childItem = goItem->child(i);
+        HierarchyItem *childItem = goItem->Child(i);
         SyncGameObjectFromHierarchy(childItem); // Recursive call
 
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
@@ -221,36 +223,36 @@ void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,
                                  GameObject **gameObjectAbove,
                                  GameObject **gameObjectBelow)
 {
-    QTreeWidgetItem *item = GetItemFromGameObject(gameObjectToLocate);
+    HierarchyItem *item = GetItemFromGameObject(gameObjectToLocate);
 
     if (gameObjectParent)
     {
-        QTreeWidgetItem *parentItem = item->parent();
+        HierarchyItem *parentItem = item->Parent();
         *gameObjectParent = parentItem ? GetGameObjectFromItem(parentItem) :
                                          SceneManager::GetActiveScene();
     }
     if (gameObjectAbove)
     {
-        QTreeWidgetItem *aboveItem = itemAbove(item);
+        HierarchyItem *aboveItem = static_cast<HierarchyItem*>(itemAbove(item));
         *gameObjectAbove = GetGameObjectFromItem(aboveItem);
     }
     if (gameObjectBelow)
     {
-        QTreeWidgetItem *belowItem = itemBelow(item);
+        HierarchyItem *belowItem = static_cast<HierarchyItem*>(itemBelow(item));
         *gameObjectBelow = GetGameObjectFromItem(belowItem);
     }
 }
 
-QTreeWidgetItem* Hierarchy::SyncHierarchyFromGameObject(GameObject *go)
+HierarchyItem* Hierarchy::SyncHierarchyFromGameObject(GameObject *go)
 {
     if (!SceneManager::GetActiveScene()) { return nullptr; }
     if (go->GetHideFlags()->IsOn(HideFlag::HideInHierarchy)) { return nullptr; }
 
-    QTreeWidgetItem *goItem = GetItemFromGameObject(go);
+    HierarchyItem *goItem = GetItemFromGameObject(go);
     if (!goItem)
     {
         // New item found! Create item, put name and register into the maps
-        goItem = new QTreeWidgetItem();
+        goItem = new HierarchyItem();
         goItem->setText(0, go->name.ToQString());
 
         m_gameObject_To_TreeItem[go] = goItem;
@@ -261,7 +263,7 @@ QTreeWidgetItem* Hierarchy::SyncHierarchyFromGameObject(GameObject *go)
     const List<GameObject*> &children = go->GetChildren();
     for (GameObject* cgo : children)
     {
-        QTreeWidgetItem *citem = GetItemFromGameObject(cgo);
+        HierarchyItem *citem = GetItemFromGameObject(cgo);
         if (citem)
         {
             // Look for possibly new gameObjects inside it
@@ -276,13 +278,13 @@ QTreeWidgetItem* Hierarchy::SyncHierarchyFromGameObject(GameObject *go)
     }
 
     // Remove items that are not children of go
-    List<QTreeWidgetItem*> childrenItem;
-    for (int i = 0; i < goItem->childCount(); ++i)
+    List<HierarchyItem*> childrenItem;
+    for (int i = 0; i < goItem->childCount(); ++i) // SEG FAULT HERE, goItem deleted
     {
-        childrenItem.PushBack(goItem->child(i));
+        childrenItem.PushBack(goItem->Child(i));
     }
 
-    for (QTreeWidgetItem *childItem : childrenItem)
+    for (HierarchyItem *childItem : childrenItem)
     {
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
         if (!childItemGo->IsChildOf(go))
@@ -309,7 +311,7 @@ bool Hierarchy::IsSelected(GameObject *go)
     return IsSelected(GetItemFromGameObject(go));
 }
 
-bool Hierarchy::IsSelected(QTreeWidgetItem *item)
+bool Hierarchy::IsSelected(HierarchyItem *item)
 {
     return item && selectedItems().contains(item);
 }
@@ -318,7 +320,7 @@ void Hierarchy::ExpandToggle(GameObject *go)
 {
     if (go && m_gameObject_To_TreeItem.ContainsKey(go))
     {
-        QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];
+        HierarchyItem *item = m_gameObject_To_TreeItem[go];
         if (!item->isExpanded())
         {
             Expand(item);
@@ -370,7 +372,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
     SyncHierarchyFromScene();
     UnselectAll();
 
-    QTreeWidgetItem *item = GetItemFromGameObject(go);
+    HierarchyItem *item = GetItemFromGameObject(go);
     if (item)
     {
         GameObject *parent = go->parent;
@@ -425,14 +427,14 @@ void Hierarchy::OnDownClicked()
 void Hierarchy::OnRightClicked()
 {
     ENSURE (state() != State::EditingState);
-    QTreeWidgetItem *item = GetFirstSelectedItem();
+    HierarchyItem *item = GetFirstSelectedItem();
     if (item) { item->setExpanded(true); }
 }
 
 void Hierarchy::OnLeftClicked()
 {
     ENSURE (state() != State::EditingState);
-    QTreeWidgetItem *item = GetFirstSelectedItem();
+    HierarchyItem *item = GetFirstSelectedItem();
     if (item) { item->setExpanded(false); }
 }
 
@@ -457,7 +459,7 @@ void Hierarchy::OnEnterClicked()
 
 void Hierarchy::OnRenameClicked()
 {
-    QTreeWidgetItem *selected = GetFirstSelectedItem();
+    HierarchyItem *selected = GetFirstSelectedItem();
     if (selected)
     {
         Qt::ItemFlags oldFlags = selected->flags();
@@ -490,7 +492,7 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
 {
     ENSURE(go);
 
-    QTreeWidgetItem *item = GetItemFromGameObject(go);
+    HierarchyItem *item = GetItemFromGameObject(go);
     if (item)
     {
         m_gameObject_To_TreeItem.Remove(go);
@@ -499,30 +501,36 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
     }
 }
 
-void Hierarchy::Print(QTreeWidgetItem *item, const String &indent)
+void Hierarchy::Print(HierarchyItem *item, const String &indent)
 {
-    List<QTreeWidgetItem*> itemChildren;
+    List<HierarchyItem*> itemChildren;
     if (!item)
     {
         for (int i = 0; i < topLevelItemCount(); ++i)
         {
-            itemChildren.PushBack(topLevelItem(i));
+            itemChildren.PushBack(static_cast<HierarchyItem*>(topLevelItem(i)));
         }
     }
     else
     {
         for (int i = 0; i < item->childCount(); ++i)
         {
-            itemChildren.PushBack(item->child(i));
+            itemChildren.PushBack(item->Child(i));
         }
     }
 
-    for (QTreeWidgetItem *it : itemChildren)
+    for (HierarchyItem *it : itemChildren)
     {
         Debug_Log(indent << it->text(0));
         String indent2 = indent; indent2 += "   ";
         Print(it, indent2);
     }
+}
+
+void Hierarchy::OnItemDeleted(HierarchyItem *item)
+{
+    m_gameObject_To_TreeItem.RemoveValues(item);
+    m_treeItem_To_GameObject.Remove(item);
 }
 
 void Hierarchy::dropEvent(QDropEvent *e)

@@ -11,6 +11,7 @@
 #include "Bang/List.h"
 #include "Bang/Array.h"
 #include "Bang/Shortcut.h"
+#include "Bang/HierarchyItem.h"
 #include "Bang/DragDropQTreeWidget.h"
 #include "Bang/HierarchyContextMenu.h"
 #include "Bang/HierarchyDragDropManager.h"
@@ -31,7 +32,7 @@ public:
     void Clear();
     void Expand(GameObject *go);
     bool IsSelected(GameObject *go);
-    bool IsSelected(QTreeWidgetItem *item);
+    bool IsSelected(HierarchyItem *item);
     void ExpandToggle(GameObject *go);
 
     GameObject* GetFirstSelectedGameObject() const;
@@ -52,7 +53,9 @@ public:
 
     bool Contains(GameObject *go);
     void DeleteGameObjectItem(GameObject *go);
-    void Print(QTreeWidgetItem *item = nullptr, const String &indent = "");
+    void Print(HierarchyItem *item = nullptr, const String &indent = "");
+
+    void OnItemDeleted(HierarchyItem *item);
 
     void dropEvent(QDropEvent *e) override;
 
@@ -81,18 +84,18 @@ public slots:
 private slots:
     void SyncHierarchyFromScene();
     void SyncSceneFromHierarchy();
-    void SyncGameObjectFromHierarchy(QTreeWidgetItem *goItem);
+    void SyncGameObjectFromHierarchy(HierarchyItem *goItem);
     void LocateGameObject(GameObject *gameObjectToLocate,
                           GameObject **gameObjectParent,
                           GameObject **gameObjectAbove,
                           GameObject **gameObjectBelow);
-    QTreeWidgetItem* SyncHierarchyFromGameObject(GameObject *go);
+    HierarchyItem* SyncHierarchyFromGameObject(GameObject *go);
 
 private:
     //For every gameObject, we have the associated treeItem,
     //in order to update :)
-    mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
-    mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
+    mutable Map<GameObject*, HierarchyItem*> m_gameObject_To_TreeItem;
+    mutable Map<HierarchyItem*,GameObject*> m_treeItem_To_GameObject;
 
     LocalShortcut m_upShortcut, m_downShortcut, m_rightShortcut, m_leftShortcut;
     LocalShortcut m_renameShortcut, m_toggleShortcut, m_toggleShortcut2;
@@ -103,16 +106,16 @@ private:
     HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;
 
-    void Expand(QTreeWidgetItem *item);
-    QTreeWidgetItem* PopulateItemGameObject(GameObject *e);
+    void Expand(HierarchyItem *item);
+    HierarchyItem* PopulateItemGameObject(GameObject *e);
 
     //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items);
 
-    QTreeWidgetItem* GetFirstSelectedItem() const;
+    HierarchyItem* GetFirstSelectedItem() const;
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
-    QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
+    HierarchyItem *GetItemFromGameObject(GameObject *go) const;
 
     friend class Screen;
     friend class HierarchyContextMenu;

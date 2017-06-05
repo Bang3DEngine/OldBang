@@ -28,7 +28,7 @@ Rect PointLight::GetRenderRect(Camera *cam) const
 {
     Sphere sphere(gameObject->transform->GetPosition(), m_range);
     AABox bbox = AABox::FromSphere(sphere);
-    return bbox.GetAABoundingScreenRect(cam);;
+    return bbox.GetAABoundingScreenRect(cam);
 }
 
 

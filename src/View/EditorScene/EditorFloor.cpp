@@ -17,7 +17,7 @@ EditorFloor::EditorFloor()
     m_material->SetDiffuseColor(Color::White * 0.7f);
 
     m_lineRenderer = AddComponent<LineRenderer>();
-    m_lineRenderer->SetEnabled(false);
+    m_lineRenderer->SetEnabled(true);
     m_lineRenderer->SetMaterial(m_material);
 
     GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
