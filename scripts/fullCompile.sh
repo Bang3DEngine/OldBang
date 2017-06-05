@@ -13,14 +13,14 @@ echo "Go!"
 echo "Clearing previous builds..." ############
 if [ "$1" == "EDITOR" ]
 then
-	if ["$2" == "DEBUG"] ; then rm bin/objEditorDebug/* ; fi
-	if ["$2" == "RELEASE"] ; then rm bin/objEditorRelease/* ; fi
+	if [ "$2" == "DEBUG" ] ; then rm bin/objEditorDebug/* ; fi
+	if [ "$2" == "RELEASE" ] ; then rm bin/objEditorRelease/* ; fi
 fi
 
 if [ "$1" == "GAME" ]
 then
-	if ["$2" == "DEBUG"] ; then rm bin/objGameDebug/* ; fi
-	if ["$2" == "RELEASE"] ; then rm bin/objGameRelease/* ; fi
+	if [ "$2" == "DEBUG" ] ; then rm bin/objGameDebug/* ; fi
+	if [ "$2" == "RELEASE" ] ; then rm bin/objGameRelease/* ; fi
 fi
 rm Qt_MOCs/*
 rm ui_*

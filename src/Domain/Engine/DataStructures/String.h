@@ -49,7 +49,13 @@ public:
     void Prepend(const String &str);
 
     Iterator Insert(Iterator it, char c);
-    Iterator Insert(Iterator it, const String &str);
+
+    template<class TIterator>
+    Iterator Insert(TIterator it, const String &str)
+    {
+        return insert(it, str.Begin(), str.End());
+    }
+
     void Insert(int position, char c);
     void Insert(int position, const String &str);
     void Erase(Iterator it, int numberOfChars);
