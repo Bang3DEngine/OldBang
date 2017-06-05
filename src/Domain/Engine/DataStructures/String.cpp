@@ -134,11 +134,6 @@ String::Iterator String::Insert(Iterator it, char c)
     return insert(it, c);
 }
 
-String::Iterator String::Insert(String::Iterator it, const String &str)
-{
-    return insert(it, str.Begin(), str.End());
-}
-
 void String::Insert(int position, char c)
 {
     Iterator pos = begin();
