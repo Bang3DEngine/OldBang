@@ -30,8 +30,8 @@ install:
 - sudo apt-get install libopenal-dev
 - sudo apt-get install libalut-dev
 - sudo apt-get install libassimp-dev
-- sudo apt-get install -qq g++-6
-- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+- sudo apt-get install -qq g++-5
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
 - export QT_SELECT=5
 
 addons:
@@ -45,7 +45,7 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh EDITOR DEBUG
-- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh EDITOR RELEASE
-- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh GAME   DEBUG
-- export BANG_BUILD_COMPILER="g++-6" && ./scripts/fullCompile.sh GAME   RELEASE
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR DEBUG
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR RELEASE
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   DEBUG
+- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   RELEASE
