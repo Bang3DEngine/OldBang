@@ -215,6 +215,12 @@ void BehaviourManager::OnBehaviourObjectCompiled(const QString &behFilepath,
     m_status.OnBehaviourSuccessCompiling( Path( String(behFilepath) ) );
     String warn(warnMessage);
     if (!warn.Empty()) { Debug_Warn(warn); }
+
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (bm->m_status.AllBehavioursReady())
+    {
+        BehaviourManager::StartMergingBehavioursObjects(false);
+    }
 }
 
 void BehaviourManager::OnBehaviourObjectCompilationFailed(

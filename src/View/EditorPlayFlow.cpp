@@ -97,7 +97,12 @@ bool EditorPlayFlow::PlayScene()
     if (p_latestSceneBeforePlaying)
     {
         m_latestSceneBeforePlayingFilepath = SceneManager::GetActiveSceneFilepath();
-        sceneCopy = p_latestSceneBeforePlaying->Clone();
+        sceneCopy = new Scene();
+
+        // Copy scene by writing/reading
+        XMLNode xmlInfo;
+        p_latestSceneBeforePlaying->Write(&xmlInfo);
+        sceneCopy->Read(xmlInfo);
         if (sceneCopy)
         {
             SceneManager::SetActiveScene(sceneCopy);

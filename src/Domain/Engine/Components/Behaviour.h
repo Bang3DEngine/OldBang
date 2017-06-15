@@ -50,11 +50,15 @@ public:
     virtual void _OnStart () override;
     virtual void _OnUpdate() override;
 
+    #ifdef BANG_EDITOR
+    virtual void OnEditorUpdate() override;
+    #endif
+
     virtual void CloneInto(ICloneable *clone) const override;
 
     const Path& GetSourceFilepath() const;
     virtual void OnAddedToGameObject() override;
-    void RefreshBehaviourLib();
+    void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
 
     bool IsLoaded() const;
 
@@ -84,14 +88,21 @@ public:
                                        Behaviour *behaviour,
                                        QLibrary *openLibrary);
 
+    void SetSourceFilepath(const Path &sourceFilepath);
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
+    enum StateInInspector { Normal, BeingCompiled, Failed };
+    mutable StateInInspector m_stateInInspector = StateInInspector::Normal;
+    mutable bool m_refreshInspectorRequested = false;
+
     static String s_behaviourHeaderTemplate;
     static String s_behaviourSourceTemplate;
 
     Path m_sourceFilepath;
+    XMLNode m_behaviourVariablesInitValues;
     QLibrary *p_behavioursLibraryBeingUsed = nullptr;
 };
 

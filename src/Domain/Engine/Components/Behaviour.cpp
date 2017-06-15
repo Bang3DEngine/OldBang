@@ -8,6 +8,7 @@
 
 #ifdef BANG_EDITOR
 #include "Bang/Explorer.h"
+#include "Bang/Inspector.h"
 #endif
 
 Behaviour::Behaviour()
@@ -32,32 +33,67 @@ void Behaviour::_OnStart()
 void Behaviour::_OnUpdate()
 {
     RefreshBehaviourLib(); // For instances created in runtime
-    #ifdef BANG_EDITOR
-    if (EditorState::IsPlaying())
-    #endif
-    {
-        // Update static Time::deltaTime variable with mainBinary deltaTime
-        Time::s_deltaTime = Time::GetInstance()->m_deltaTime;
-        Time::s_time = Time::GetInstance()->m_time;
-        Component::_OnUpdate();
-    }
+
+    // Update static Time::deltaTime variable with mainBinary deltaTime
+    Time::s_deltaTime = Time::GetInstance()->m_deltaTime;
+    Time::s_time = Time::GetInstance()->m_time;
+    Component::_OnUpdate();
 }
+
+#ifdef BANG_EDITOR
+void Behaviour::OnEditorUpdate()
+{
+    Component::OnEditorUpdate();
+    if (m_refreshInspectorRequested)
+    {
+        Inspector::GetInstance()->Refresh(gameObject);
+    }
+
+    RefreshBehaviourLib();
+}
+#endif
 
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    m_sourceFilepath = xmlInfo.GetFilepath("BehaviourScript");
-    RefreshBehaviourLib();
+    SetSourceFilepath( xmlInfo.GetFilepath("BehaviourScript") );
+    m_behaviourVariablesInitValues = xmlInfo;
+
+    RefreshBehaviourLib(&xmlInfo);
 }
 
 void Behaviour::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
+
+    BehaviourId bid(GetSourceFilepath());
+    bool beingCompiled = BehaviourManager::GetStatus().IsBeingCompiled(bid);
+    bool failed = BehaviourManager::GetStatus().HasFailed(bid);
+
     xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath(), "cpp");
 
     Behaviour *noConstThis = const_cast<Behaviour*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
+
+    if (!beingCompiled && !failed)
+    {
+        m_refreshInspectorRequested =
+                (m_stateInInspector != StateInInspector::Normal);
+        m_stateInInspector = StateInInspector::Normal;
+    }
+    else if (beingCompiled)
+    {
+        m_refreshInspectorRequested =
+                (m_stateInInspector != StateInInspector::BeingCompiled);
+        m_stateInInspector = StateInInspector::BeingCompiled;
+    }
+    else if (failed)
+    {
+        m_refreshInspectorRequested =
+                (m_stateInInspector != StateInInspector::Failed);
+        m_stateInInspector = StateInInspector::Failed;
+    }
 }
 
 #ifdef BANG_EDITOR
@@ -101,7 +137,7 @@ Behaviour* Behaviour::CreateNewBehaviour()
         File::Write(sourceFilepath, sourceCode);
 
         // Update Behaviour file
-        newBehaviour->m_sourceFilepath = sourceFilepath;
+        newBehaviour->SetSourceFilepath( sourceFilepath );
         newBehaviour->RefreshBehaviourLib();
 
         // Open with system editor
@@ -176,11 +212,22 @@ bool Behaviour::DeleteDynamicBehaviour(const String &behaviourName,
     }
 }
 
+void Behaviour::SetSourceFilepath(const Path &sourceFilepath)
+{
+    ENSURE(GetSourceFilepath() != sourceFilepath);
+
+    m_sourceFilepath = sourceFilepath;
+
+    XMLNode empty;
+    m_behaviourVariablesInitValues = empty;
+}
+
 void Behaviour::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Behaviour *b = Object::SCast<Behaviour>(clone);
-    b->m_sourceFilepath = GetSourceFilepath();
+    b->SetSourceFilepath( GetSourceFilepath() );
+    b->m_behaviourVariablesInitValues = m_behaviourVariablesInitValues;
     b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
@@ -189,7 +236,7 @@ const Path &Behaviour::GetSourceFilepath() const
     return m_sourceFilepath;
 }
 
-void Behaviour::RefreshBehaviourLib()
+void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 {
     ENSURE(gameObject);
     ENSURE(!IsLoaded());
@@ -213,6 +260,11 @@ void Behaviour::RefreshBehaviourLib()
         if (gameObject->AddComponent(createdBehaviour))
         {
             CloneInto(createdBehaviour);
+            createdBehaviour->Read(m_behaviourVariablesInitValues);
+            if (xmlInfoForNewBehaviour)
+            {
+                createdBehaviour->Read(*xmlInfoForNewBehaviour);
+            }
             gameObject->RemoveComponent(this);
         }
     }
