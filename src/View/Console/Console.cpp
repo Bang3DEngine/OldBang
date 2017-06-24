@@ -272,7 +272,6 @@ void Console::OnEditorPlay()
 
 void Console::ClearMessage(Console::MessageId id)
 {
-    //Debug_Log("ClearMessage: " << m_id_to_messages);
     if (m_id_to_messages.ContainsKey(id))
     {
         const Message &msg = m_id_to_messages[id];

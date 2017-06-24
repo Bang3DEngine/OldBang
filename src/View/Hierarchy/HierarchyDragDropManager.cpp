@@ -75,7 +75,6 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
         {
             if ( AcceptDrop() )
             {
-                Debug_Log("  Drop accepted!!!");
                 p_hierarchy->SyncSceneFromHierarchy();
                 p_hierarchy->SyncHierarchyFromScene();
 

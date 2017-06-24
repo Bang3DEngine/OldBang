@@ -24,6 +24,7 @@ protected:
 
 signals:
     void NotifySuccessCompiling(const QString &behavioursLibFilepath,
+                                bool mergingForGame,
                                 const QString &warnMessage);
     void NotifyFailedCompiling(const QString &behavioursLibFilepath,
                                const QString &errorMessage);

@@ -575,7 +575,7 @@ bool GameObject::IsSelected() const
     return m_isSelectedInHierarchy;
     #else
     return false;
-#endif
+    #endif
 }
 
 void GameObject::ChangeTransformByRectTransform()
@@ -687,14 +687,14 @@ bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
 
 void GameObject::_OnStart()
 {
-    OnStart();
-
     m_iteratingComponents = true;
     PROPAGATE_EVENT(_OnStart(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
     PROPAGATE_EVENT(_OnStart(), m_children);
+
+    ISceneEventListener::_OnStart();
 }
 
 

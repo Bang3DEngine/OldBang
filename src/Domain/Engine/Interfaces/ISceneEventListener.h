@@ -15,10 +15,16 @@
 class ISceneEventListener
 {
 protected:
-
     ISceneEventListener () {}
 
-    virtual void _OnStart () { OnStart(); }
+    virtual void _OnStart ()
+    {
+        if (!IsStarted())
+        {
+            OnStart();
+            m_started = true;
+        }
+    }
     virtual void _OnUpdate() { OnUpdate(); }
     virtual void _OnDestroy() { OnDestroy(); }
 
@@ -45,6 +51,10 @@ protected:
     #endif
 
     virtual void OnDrawGizmos(bool depthed, bool overlay) {}
+    bool IsStarted() const { return m_started; }
+
+private:
+    bool m_started = false;
 };
 
 #endif // SCENEEVENTLISTENER_H

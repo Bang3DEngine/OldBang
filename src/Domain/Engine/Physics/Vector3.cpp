@@ -60,6 +60,14 @@ void Vector3::Normalize()
     z /= l;
 }
 
+Vector3 Vector3::NormalizedSafe() const
+{
+    Vector3 v(*this);
+    if (v == Vector3::Zero) { return Vector3::Zero; }
+    v.Normalize();
+    return v;
+}
+
 Vector3 Vector3::Normalized() const
 {
     Vector3 v(*this);

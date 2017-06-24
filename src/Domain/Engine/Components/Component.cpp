@@ -37,7 +37,6 @@ void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
     m_gameObjectTransform = m_gameObject->transform;
-    OnAddedToGameObject();
 }
 
 void Component::SetEnabled(bool enabled)

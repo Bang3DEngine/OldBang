@@ -18,6 +18,7 @@ protected:
 
 signals:
     void NotifySuccessMerging(QString mergedLibFilepath,
+                              bool mergingForGame,
                               QString warnMessage);
     void NotifyFailedMerging(QString errorMessage);
 

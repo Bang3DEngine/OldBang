@@ -59,6 +59,14 @@ void Vector4::Normalize()
     w /= l;
 }
 
+Vector4 Vector4::NormalizedSafe() const
+{
+    Vector4 v(*this);
+    if (v == Vector4::Zero) { return Vector4::Zero; }
+    v.Normalize();
+    return v;
+}
+
 Vector4 Vector4::Normalized() const
 {
     Vector4 v(*this);

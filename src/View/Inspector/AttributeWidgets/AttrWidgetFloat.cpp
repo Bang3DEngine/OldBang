@@ -34,7 +34,7 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetFloat::SetValue(float f)
 {
-    if (!_editing)
+    if (!m_editing)
     {
         m_lineEdit->SetFloat(f);
     }
@@ -55,12 +55,12 @@ void AttrWidgetFloat::Refresh(const XMLAttribute &attribute)
 
 void AttrWidgetFloat::OnLineEditFocusIn()
 {
-    _editing = true;
+    m_editing = true;
 }
 
 void AttrWidgetFloat::OnLineEditFocusOut()
 {
-    _editing = false;
+    m_editing = false;
 }
 
 

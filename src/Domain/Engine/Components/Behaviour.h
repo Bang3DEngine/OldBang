@@ -57,7 +57,6 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
 
     const Path& GetSourceFilepath() const;
-    virtual void OnAddedToGameObject() override;
     void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
 
     bool IsLoaded() const;

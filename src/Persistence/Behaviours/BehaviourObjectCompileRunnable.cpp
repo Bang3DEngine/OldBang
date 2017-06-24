@@ -43,6 +43,7 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
     if (successCompiling)
     {
         emit NotifySuccessCompiling(m_behaviourPath.GetAbsolute().ToQString(),
+                                    m_forGame,
                                     output.ToQString());
     }
     else

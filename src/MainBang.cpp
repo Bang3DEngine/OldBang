@@ -162,6 +162,10 @@ int main(int argc, char **argv)
     InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath);
 
+    #ifndef BANG_EDITOR
+    BehaviourManager::PrepareBehavioursLibrary(true, nullptr);
+    #endif
+
     app.MainLoop();
 
     return 0;

@@ -54,8 +54,6 @@ protected:
     Component();
     virtual ~Component();
 
-    virtual void OnAddedToGameObject() {}
-
     virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
     friend class ComponentClipboard;

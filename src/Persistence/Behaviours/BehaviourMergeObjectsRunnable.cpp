@@ -56,6 +56,7 @@ void BehaviourMergeObjectsRunnable::Merge()
     if (successCompiling)
     {
         emit NotifySuccessMerging(libOutputFilepath.GetAbsolute().ToQString(),
+                                  !m_forGame,
                                   output.ToQString());
     }
     else { emit NotifyFailedMerging(output.ToQString()); }

@@ -100,7 +100,7 @@ Path Paths::GetRelative(const Path &path)
 
 bool Paths::IsEnginePath(const Path &path)
 {
-    return path.BeginsWith( Paths::Engine() );
+    return path.BeginsWith( Paths::Engine() + "/" );
 }
 
 Paths *Paths::GetInstance()

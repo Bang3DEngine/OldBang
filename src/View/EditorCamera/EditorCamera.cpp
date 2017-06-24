@@ -87,7 +87,6 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
             *moveStep += m_zoomValue * m_camt->GetForward();
             *hasMoved  = (mouseWheel != 0.0f);
         }
-        //Debug_Log(mouseWheel);
         m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
         m_cam->SetOrthoHeight(m_orthoHeight);
     }

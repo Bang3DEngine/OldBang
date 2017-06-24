@@ -26,7 +26,10 @@ void Behaviour::_OnStart()
     if (EditorState::IsPlaying())
     #endif
     {
-        Component::_OnStart();
+        if (!IsStarted())
+        {
+            Component::_OnStart();
+        }
     }
 }
 
@@ -55,6 +58,9 @@ void Behaviour::OnEditorUpdate()
 
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
+    // Needed to avoid a bug when creating new behaviours
+    if (xmlInfo.GetTagName().Empty()) { return; }
+
     Component::Read(xmlInfo);
     SetSourceFilepath( xmlInfo.GetFilepath("BehaviourScript") );
     m_behaviourVariablesInitValues = xmlInfo;
@@ -141,8 +147,6 @@ Behaviour* Behaviour::CreateNewBehaviour()
         newBehaviour->RefreshBehaviourLib();
 
         // Open with system editor
-        // TODO: Make cross-platform
-        QtProjectManager::OpenBehaviourInQtCreator(headerFilepath);
         QtProjectManager::OpenBehaviourInQtCreator(sourceFilepath);
         QtProjectManager::CreateQtProjectFile(); // Refresh it
     }
@@ -228,7 +232,7 @@ void Behaviour::CloneInto(ICloneable *clone) const
     Behaviour *b = Object::SCast<Behaviour>(clone);
     b->SetSourceFilepath( GetSourceFilepath() );
     b->m_behaviourVariablesInitValues = m_behaviourVariablesInitValues;
-    b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
+    b->p_behavioursLibraryBeingUsed   = p_behavioursLibraryBeingUsed;
 }
 
 const Path &Behaviour::GetSourceFilepath() const
@@ -242,6 +246,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
     ENSURE(!IsLoaded());
     #ifdef BANG_EDITOR
     ENSURE(!gameObject->IsDraggedGameObject());
+    ENSURE(BehaviourManager::GetStatus().IsReady(GetSourceFilepath()));
     #endif
 
     String behaviourName = GetSourceFilepath().GetName();
@@ -278,10 +283,6 @@ bool Behaviour::IsLoaded() const
            GetSourceFilepath().GetName() == GetClassName();
 }
 
-void Behaviour::OnAddedToGameObject()
-{
-}
-
 
 String Behaviour::s_behaviourHeaderTemplate = R"VERBATIM(
 #ifndef CLASS_NAME_H
@@ -295,12 +296,8 @@ String Behaviour::s_behaviourHeaderTemplate = R"VERBATIM(
 BP_REFLECT_CLASS(CLASS_NAME)
 class CLASS_NAME : public Behaviour
 {
-OBJECT(CLASS_NAME)
+    OBJECT(CLASS_NAME);
 public:
-
-    BP_REFLECT_VARIABLE(Speed)
-    float speed = 0.1f;
-
     void OnStart() override;
     void OnUpdate() override;
 
@@ -309,7 +306,7 @@ public:
 
 #endif // CLASS_NAME_H
 
-BANG_BEHAVIOUR_CLASS(CLASS_NAME);
+BANG_BEHAVIOUR_CLASS(CLASS_NAME)
 )VERBATIM"
 ;
 

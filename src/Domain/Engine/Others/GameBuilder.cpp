@@ -95,7 +95,7 @@ void GameBuilder::BuildGame(bool runGame)
                          SIGNAL(NotifyGameBuildingHasFailed(const QString&)),
                          this, SLOT(OnGameBuildingHasFailed(const QString&)));
         QObject::connect(m_gameBuildDialog, SIGNAL(canceled()),
-                         this, SLOT(OnGameBuildingCanceled()));
+                         m_gameBuilderJob, SLOT(OnGameBuildingCanceled()));
 
         // Start the thread
         m_gameBuilderJob->moveToThread(m_gameBuilderThread);
@@ -211,6 +211,8 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
                                     bool *cancel)
 {
     if (*cancel) { return true; }
+
+    Debug_Log("CompileBehaviours " << executableDir);
 
     Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
     BehaviourManager::SetCurrentLibsDir(libsDir);

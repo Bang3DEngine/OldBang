@@ -58,10 +58,17 @@ bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
     String behaviourName = bid.behaviourPath.GetName();
     Path behaviourObjectFilepath(
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o");
-    return m_successfullyCompiled.Contains(bid) &&
-           !IsBeingCompiled(bid) &&
-           !HasFailed(bid) &&
-           behaviourObjectFilepath.IsFile();
+
+    bool ready = true;
+    #ifdef BANG_EDITOR
+    ready = ready && m_successfullyCompiled.Contains(bid);
+    #endif
+    ready = ready &&
+            !IsBeingCompiled(bid) &&
+            !HasFailed(bid) &&
+            behaviourObjectFilepath.IsFile();
+
+    return ready;
 }
 
 bool BehaviourManagerStatus::IsReady(const Path &behaviourFilepath) const

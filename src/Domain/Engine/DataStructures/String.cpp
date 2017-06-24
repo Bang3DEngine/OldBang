@@ -188,6 +188,9 @@ long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 
 String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 {
+    if (startIndexInclusive >= Length()) { return ""; }
+    if (endIndexInclusive   >= Length()) { endIndexInclusive = Length()-1; }
+
     if (endIndexInclusive == String::npos)
     {
         return substr(startIndexInclusive);

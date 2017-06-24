@@ -34,6 +34,7 @@ public:
      * @brief Returns this Vector Normalized
      * @return
      */
+    Vector4 NormalizedSafe() const;
     Vector4 Normalized() const;
 
     /**

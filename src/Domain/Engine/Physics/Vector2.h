@@ -28,6 +28,7 @@ public:
      * @brief Returns this Vector Normalized
      * @return
      */
+    Vector2 NormalizedSafe() const;
     Vector2 Normalized() const;
 
     /**

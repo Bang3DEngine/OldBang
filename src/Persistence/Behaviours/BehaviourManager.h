@@ -52,13 +52,16 @@ signals:
 // Behaviour Objects signals and slots
 public slots:
     void OnBehaviourObjectCompiled(const QString &behaviourFilepath,
+                                   bool mergingForGame,
                                    const QString &warnMessage);
     void OnBehaviourObjectCompilationFailed(const QString &behaviourFilepath,
                                             const QString &errorMessage);
 
 // Merging slots
 private slots:
-    void OnMergedLibraryCompiled(QString libFilepath, QString warnMessage);
+    void OnMergedLibraryCompiled(QString libFilepath,
+                                 bool loadLibrary,
+                                 QString warnMessage);
     void OnMergedLibraryCompilationFailed(QString errorMessage);
 
 private:
@@ -69,6 +72,7 @@ private:
     QThreadPool m_threadPool;
     BehaviourRefresherTimer m_behaviourRefresherTimer;
 
+    bool m_mergingForGame = false;
     QLibrary *m_behavioursLibrary = nullptr;
 
     BehaviourManager();

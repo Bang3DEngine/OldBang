@@ -33,7 +33,7 @@ public:
     virtual void OnLineEditFocusOut();
 
 private:
-    bool _editing = false;
+    bool m_editing = false;
     FloatComponentSlotSpinBox *m_lineEdit = nullptr;
 };
 

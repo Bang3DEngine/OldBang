@@ -41,6 +41,14 @@ void Vector2::Normalize()
     y /= l;
 }
 
+Vector2 Vector2::NormalizedSafe() const
+{
+    Vector2 v(*this);
+    if (v == Vector2::Zero) { return Vector2::Zero; }
+    v.Normalize();
+    return v;
+}
+
 Vector2 Vector2::Normalized() const
 {
     Vector2 v(*this);
