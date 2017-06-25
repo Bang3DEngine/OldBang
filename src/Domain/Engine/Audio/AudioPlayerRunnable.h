@@ -12,6 +12,7 @@ class AudioPlayerRunnable : public QRunnable
 public:
     AudioPlayerRunnable(AudioClip *clip, int alSourceId,
                         float delayInSeconds = 0.0f);
+    virtual ~AudioPlayerRunnable();
 
     void Resume();
     void Pause();

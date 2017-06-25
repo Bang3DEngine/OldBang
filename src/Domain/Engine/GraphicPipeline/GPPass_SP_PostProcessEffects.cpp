@@ -6,6 +6,10 @@
 #include "Bang/GraphicPipeline.h"
 #include "Bang/PostProcessEffect.h"
 
+#ifdef BANG_EDITOR
+#include "Bang/EditorState.h"
+#endif
+
 GPPass_SP_PostProcessEffects::GPPass_SP_PostProcessEffects(
         GraphicPipeline *graphicPipeline,
         PostProcessEffect::Type type,
@@ -21,6 +25,10 @@ struct PointerComparison { bool operator()(T* a, T* b) { return *a < *b; } };
 void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
                                           const List<GameObject *> &sceneChildren)
 {
+    #ifdef BANG_EDITOR
+    if (!EditorState::IsShowingGameTab()) { return; }
+    #endif
+
     List<PostProcessEffect*> postProcessEffects =
                        p_scene->GetComponentsInChildren<PostProcessEffect>();
     postProcessEffects.Sort( [](PostProcessEffect *a, PostProcessEffect *b)

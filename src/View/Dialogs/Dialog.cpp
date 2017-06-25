@@ -80,7 +80,11 @@ Path Dialog::GetSaveFilepath(const String &caption,
                     nullptr,
                     0 // QFileDialog::DontUseNativeDialog
                 ));
-    return filepath.AppendExtension(extension);
+    if (!filepath.IsEmpty())
+    {
+        filepath.AppendExtension(extension);
+    }
+    return filepath;
 }
 
 

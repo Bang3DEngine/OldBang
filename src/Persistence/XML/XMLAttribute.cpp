@@ -92,14 +92,14 @@ bool XMLAttribute::HasProperty(const String &propertyName) const
 
 void XMLAttribute::RemoveProperty(const String &propertyName)
 {
-    for (auto it = m_properties.Begin(); it != m_properties.End(); ++it)
+    for (auto it = m_properties.Begin(); it != m_properties.End();)
     {
         const XMLProperty &prop = *it;
         if (prop.GetName() == propertyName)
         {
-            m_properties.Remove(it);
-            return;
+            it = m_properties.Remove(it);
         }
+        else { ++it; }
     }
 }
 

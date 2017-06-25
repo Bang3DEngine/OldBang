@@ -196,7 +196,7 @@ AudioSource::State AudioSource::GetState() const
 void AudioSource::OnStart()
 {
     Component::OnStart();
-    if (m_playOnStart)
+    if (IsPlayOnStart())
     {
         #ifdef BANG_EDITOR
         if (EditorState::IsPlaying())

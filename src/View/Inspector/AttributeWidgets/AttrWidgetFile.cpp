@@ -130,6 +130,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
     if (draggedFile)
     {
+        Debug_Log("Dragged file: " << filepath);
         p_inspectorWidget->_OnSlotValueChanged();
     }
 

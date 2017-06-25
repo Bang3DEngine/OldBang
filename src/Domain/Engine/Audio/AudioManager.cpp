@@ -62,9 +62,9 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
         Debug_Warn ("The scene does not contain an AudioListener");
     }
 
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, alSourceId,
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
+                                                          alSourceId,
                                                           delay);
-
     AudioManager *am = AudioManager::GetInstance();
     bool started = am->m_threadPool.tryStart(player);
     if (started)
@@ -74,13 +74,13 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     }
 }
 
-void AudioManager::PlayAudioClip(const Path &audioClipFilepath,
-                                 const Vector3& position,
-                                 float volume,
-                                 bool  looping,
-                                 float delay,
-                                 float pitch,
-                                 float range)
+void AudioManager::PlayAnonymousAudioClip(const Path &audioClipFilepath,
+                                          const Vector3& position,
+                                          float volume,
+                                          bool  looping,
+                                          float delay,
+                                          float pitch,
+                                          float range)
 {
     AnonymousAudioPlayer::PlayAudioClip(audioClipFilepath, position, volume,
                                         looping, delay, pitch, range);

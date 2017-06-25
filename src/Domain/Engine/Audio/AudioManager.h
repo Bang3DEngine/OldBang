@@ -26,7 +26,8 @@ public:
                               float delay = 0.0f);
 
 
-    static void PlayAudioClip(const Path& audioClipFilepath,
+    static void PlayAnonymousAudioClip(
+                              const Path& audioClipFilepath,
                               const Vector3& position = Vector3::Zero,
                               float volume            = 1.0f,
                               bool  looping           = false,

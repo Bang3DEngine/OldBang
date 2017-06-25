@@ -133,7 +133,7 @@ public:
     {
         return this->erase(first, last);
     }
-    Iterator Remove(Iterator it) { return this->Remove(it, it); }
+    Iterator Remove(Iterator it) { return this->erase(it); }
     Iterator Remove(const T& x)
     {
         Iterator it = this->Find(x);

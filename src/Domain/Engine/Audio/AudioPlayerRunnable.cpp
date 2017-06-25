@@ -17,6 +17,10 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
     setAutoDelete(true);
 }
 
+AudioPlayerRunnable::~AudioPlayerRunnable()
+{
+}
+
 void AudioPlayerRunnable::Resume()
 {
     m_paused = false;
@@ -50,14 +54,18 @@ void AudioPlayerRunnable::run()
     AudioManager::CheckALError();
 
     ALint state;
+    bool startedToPlay = false;
     do
     {
-        if (m_stopped || m_exited) { alSourceStop (m_alSourceId); }
+        if (m_stopped || m_exited) { alSourceStop (m_alSourceId); break; }
         if (m_paused)  { alSourcePause(m_alSourceId); }
 
         alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
+        if (startedToPlay && state == AL_STOPPED) { break; }
+
         if (!m_paused && state != AL_PLAYING)
         {
+            startedToPlay = true;
             alSourcePlay(m_alSourceId); // Resume
         }
 

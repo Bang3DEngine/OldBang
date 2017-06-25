@@ -44,7 +44,7 @@ Path GameBuilder::AskForExecutableFilepath()
                 defaultOutputDirectory,
                 projectName + ".exe");
 
-    if (!executableFilepath.IsFile())
+    if (!executableFilepath.Exists() && !executableFilepath.IsEmpty())
     {
         executableFilepath = executableFilepath.AppendExtension("exe");
     }
@@ -211,8 +211,6 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
                                     bool *cancel)
 {
     if (*cancel) { return true; }
-
-    Debug_Log("CompileBehaviours " << executableDir);
 
     Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
     BehaviourManager::SetCurrentLibsDir(libsDir);
