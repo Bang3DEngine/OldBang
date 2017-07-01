@@ -17,28 +17,7 @@ class QLibrary;
 class Behaviour;
 class SystemUtils
 {
-
 public:
-    enum CompilationFlag
-    {
-        None                  = 0,
-        ProduceSharedLib      = 1,
-        AddEngineObjectFiles  = 2,
-        AddProjectObjectFiles = 4,
-        ForGame               = 8,
-        AddAssetsIncludeDirs  = 16,
-
-        Default = AddProjectObjectFiles | AddEngineObjectFiles
-    };
-    CREATE_FLAGS(CompilationFlags, CompilationFlag);
-
-    static List<Path> GetAllEngineObjects(bool editorMode);
-
-    static List<Path> GetAllProjectSubDirs();
-    static List<Path> GetAllEngineSubDirs();
-
-    static List<Path> GetQtIncludes();
-    static List<Path> GetQtLibrariesDirs();
 
     /**
      * @brief Executes a system command.
@@ -53,12 +32,6 @@ public:
 
     static void SystemBackground(const String &command,
                                  const List<String> &argsList = {});
-
-    static void Compile(List<Path> &sourceFilesList,
-                        const Path &outputLibFilepath,
-                        CompilationFlags clFlags = CompilationFlag::Default,
-                        bool *success = nullptr,
-                        String *output = nullptr);
 
     static void CloseLibrary(QLibrary *library);
 

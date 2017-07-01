@@ -141,6 +141,8 @@ SOURCES += \
     ../src/Domain/Engine/GraphicPipeline/GPPass_RenderLayer.cpp \
     ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.cpp \
+    ../src/Domain/Engine/Others/Compiler.cpp \
+    ../src/Domain/Engine/Others/BangCompiler.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp \
     ../src/Persistence/Files/BFile.cpp
 
@@ -281,9 +283,11 @@ HEADERS +=                                                          \
 
 EDITOR {
 HEADERS += \
-    ../src/View/GameObjectClipboard.h                                  \
+    ../src/View/GameObjectClipboard.h \
     ../src/View/Windows/IWindow.h \
     ../src/View/Windows/GameWindow.h \
+    ../src/Domain/Engine/Others/Compiler.h \
+    ../src/Domain/Engine/Others/BangCompiler.h \
     ../src/View/Cursor.h \
     ../src/View/Shortcut.h \
     ../src/View/IconManager.h \

@@ -3,10 +3,10 @@
 #include "Bang/Time.h"
 #include "Bang/List.h"
 #include "Bang/Debug.h"
+#include "Bang/Paths.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Project.h"
-#include "Bang/SystemUtils.h"
-#include "Bang/Paths.h"
+#include "Bang/BangCompiler.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourManager.h"
 
@@ -42,23 +42,16 @@ void BehaviourMergeObjectsRunnable::Merge()
     }
     libOutputFilepath = Path(libOutputFilepath.GetAbsolute() + version + ".1.1");
 
-    typedef SystemUtils::CompilationFlag CLFlag;
-
-    String output;
-    bool successCompiling;
-    SystemUtils::Compile(behaviourObjects,
-                         libOutputFilepath,
-                         CLFlag::AddEngineObjectFiles  |
-                         CLFlag::ProduceSharedLib      |
-                         (m_forGame ? CLFlag::ForGame : CLFlag::None),
-                         &successCompiling,
-                         &output);
-    if (successCompiling)
+    Compiler::Result compileResult;
+    compileResult = BangCompiler::MergeBehaviourLibraries(behaviourObjects,
+                                                          libOutputFilepath,
+                                                          m_forGame);
+    if (compileResult.success)
     {
         emit NotifySuccessMerging(libOutputFilepath.GetAbsolute().ToQString(),
                                   !m_forGame,
-                                  output.ToQString());
+                                  compileResult.output.ToQString());
     }
-    else { emit NotifyFailedMerging(output.ToQString()); }
+    else { emit NotifyFailedMerging(compileResult.output.ToQString()); }
 }
 

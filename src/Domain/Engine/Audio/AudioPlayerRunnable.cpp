@@ -53,19 +53,18 @@ void AudioPlayerRunnable::run()
     AudioManager::ClearALErrors();
     AudioManager::CheckALError();
 
+    alSourcePlay(m_alSourceId);
+    alSourceStop(m_alSourceId); // So we can assume initial state is AL_STOPPED
+
     ALint state;
-    bool startedToPlay = false;
     do
     {
         if (m_stopped || m_exited) { alSourceStop (m_alSourceId); break; }
         if (m_paused)  { alSourcePause(m_alSourceId); }
 
         alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
-        if (startedToPlay && state == AL_STOPPED) { break; }
-
         if (!m_paused && state != AL_PLAYING)
         {
-            startedToPlay = true;
             alSourcePlay(m_alSourceId); // Resume
         }
 

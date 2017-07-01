@@ -1,7 +1,7 @@
 #include "Bang/BehaviourObjectCompileRunnable.h"
 
 #include "Bang/Debug.h"
-#include "Bang/SystemUtils.h"
+#include "Bang/BangCompiler.h"
 #include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourManager.h"
 
@@ -20,35 +20,28 @@ void BehaviourObjectCompileRunnable::run()
 void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 {
     String behaviourName = m_behaviourPath.GetName();
-    Path objFilepath = Path(BehaviourManager::GetCurrentLibsDir())
-                            .Append(behaviourName).AppendExtension("o");
-    File::Remove(objFilepath);
+    Path objOutFilepath = Path(BehaviourManager::GetCurrentLibsDir())
+                               .Append(behaviourName).AppendExtension("o");
+    File::Remove(objOutFilepath);
 
     Path headerPath = m_behaviourPath.GetDirectory().Append(
                                 Path(m_behaviourPath.GetName())
                                 .AppendExtension("h") );
     BangPreprocessor::Preprocess(headerPath);
 
-    typedef SystemUtils::CompilationFlag CLFlag;
-
-    String output = "";
-    bool successCompiling = false;
-    List<Path> sources = {m_behaviourPath};
-    SystemUtils::Compile(sources,
-                         objFilepath,
-                         (m_forGame ? CLFlag::ForGame : CLFlag::None) |
-                           CLFlag::AddAssetsIncludeDirs,
-                         &successCompiling,
-                         &output);
-    if (successCompiling)
+    Compiler::Result compileResult;
+    compileResult = BangCompiler::CompileBehaviourObject(m_behaviourPath,
+                                                         objOutFilepath,
+                                                         m_forGame);
+    if (compileResult.success)
     {
         emit NotifySuccessCompiling(m_behaviourPath.GetAbsolute().ToQString(),
                                     m_forGame,
-                                    output.ToQString());
+                                    compileResult.output.ToQString());
     }
     else
     {
         emit NotifyFailedCompiling(m_behaviourPath.GetAbsolute().ToQString(),
-                                   output.ToQString());
+                                   compileResult.output.ToQString());
     }
 }
