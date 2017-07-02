@@ -25,7 +25,6 @@ BangCompilerAsyncJob::~BangCompilerAsyncJob()
 
 void BangCompilerAsyncJob::run()
 {
-    Debug_Log("BangCompilerAsyncJob " << m_compileJob.outputFile);
     BangCompiler::Result result = BangCompiler::Compile(m_compileJob);
     emit SignalCompileFinished(result);
 }

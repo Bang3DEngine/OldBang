@@ -140,8 +140,6 @@ bool BangCompiler::MergeBehaviourLibrariesAsync(const List<Path> &objectsPaths,
                                                 QObject *resultListener,
                                                 QSlot slot)
 {
-    Debug_Log("MergeBehaviourLibrariesAsync");
-    Application::processEvents();
     BangCompiler::Job job = BuildMergeBehaviourLibrariesJob(objectsPaths,
                                                             outputLibDir,
                                                             forGame);

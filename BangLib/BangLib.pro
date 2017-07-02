@@ -110,8 +110,6 @@ SOURCES += \
     ../src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
     ../src/Persistence/Project/ProjectManager.cpp \
     ../src/Persistence/Project/Project.cpp \
-    ../src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp \
-    ../src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp \
     ../src/Domain/Engine/GraphicPipeline/GPPass_G.cpp \
     ../src/Domain/Engine/GraphicPipeline/GPPass.cpp \
     ../src/Domain/Graphics/Interfaces/GLObject.cpp \
@@ -243,8 +241,6 @@ HEADERS +=                                                          \
     ../src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
     ../src/Persistence/Project/Project.h \
     ../src/Persistence/Project/ProjectManager.h \
-    ../src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
-    ../src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
     ../src/Domain/Engine/GraphicPipeline/GPPass_G.h \
     ../src/Domain/Engine/GraphicPipeline/GPPass.h \
     ../src/Domain/Graphics/Interfaces/GLObject.h \

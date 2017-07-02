@@ -16,17 +16,17 @@
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
-    c_timeMs = 2000;
+    c_timeMs = 500;
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(OnRefreshTimer()));
     m_timer.start(c_timeMs);
 }
 
 void BehaviourRefresherTimer::OnRefreshTimer() const
 {
+    const Path libsDir = Paths::ProjectLibrariesDir();
+
     if (IWindow::GetInstance()->IsInFront())
     {
-        BehaviourManager::StartCompilingAllBehaviourObjects(
-                                            false,
-                                            Paths::ProjectLibrariesDir());
+        BehaviourManager::StartCompilingAllBehaviourObjects(false, libsDir);
     }
 }

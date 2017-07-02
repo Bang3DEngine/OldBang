@@ -41,7 +41,6 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame,
                                                 const Path& outputLibDir,
                                                 bool *stopFlag)
 {
-    Debug_Log("PrepareBehavioursLibrary " << outputLibDir);
     BehaviourManager *bm = BehaviourManager::GetInstance();
     #ifdef BANG_EDITOR
     do
@@ -123,10 +122,10 @@ bool BehaviourManager::StartMergingBehavioursObjects(bool forGame,
 void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame,
                                                          const Path& objectsDir)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance();
     List<Path> allBehaviourSources = Paths::GetBehavioursSourcesFilepaths();
     for (const Path &behFilepath : allBehaviourSources)
     {
+        BehaviourManager *bm = BehaviourManager::GetInstance();
         if (!bm->GetStatus().IsReady(behFilepath, objectsDir) &&
             !bm->GetStatus().IsBeingCompiled(behFilepath)     &&
             !bm->GetStatus().HasFailed(behFilepath))
@@ -168,13 +167,13 @@ const BehaviourManagerStatus &BehaviourManager::GetStatus()
 void BehaviourManager::OnBehaviourObjectCompilationFinished(
                                             const BangCompiler::Result &result)
 {
-    Debug_Log("OnBehaviourObjectCompilationFinished " << result.compileJob.outputFile.GetAbsolute());
     if (result.success)
     {
         const Path &behFilepath = result.compileJob.inputFiles.Front();
         m_status.OnBehaviourSuccessCompiling(behFilepath);
         if (!result.output.Empty()) { Debug_Warn(result.output); }
 
+        /*
         if (!result.forGame)
         {
             BehaviourManager *bm = BehaviourManager::GetInstance();
@@ -185,6 +184,7 @@ void BehaviourManager::OnBehaviourObjectCompilationFinished(
                                                                 libsDir);
             }
         }
+        */
     }
     else
     {
