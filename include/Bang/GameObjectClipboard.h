@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/GameObjectClipboard.h"
+#include "../.././src/Editor/General/GameObjectClipboard.h"

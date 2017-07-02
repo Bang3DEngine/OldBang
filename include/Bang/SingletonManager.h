@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/SingletonManager.h"
+#include "../.././src/Engine/General/SingletonManager.h"

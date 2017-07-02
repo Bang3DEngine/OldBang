@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/Property.h"
+#include "../.././src/Engine/DataStructures/Property.h"

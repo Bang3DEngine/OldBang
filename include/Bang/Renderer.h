@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/Renderer.h"
+#include "../.././src/Engine/Components/Renderer.h"

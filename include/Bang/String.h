@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/String.h"
+#include "../.././src/Engine/DataStructures/String.h"

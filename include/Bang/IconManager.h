@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/IconManager.h"
+#include "../.././src/Editor/General/IconManager.h"

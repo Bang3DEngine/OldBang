@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/AttributeWidgets/AttrWidgetButton.h"
+#include "../.././src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.h"

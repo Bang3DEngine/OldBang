@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/PointLight.h"
+#include "../.././src/Engine/Components/PointLight.h"

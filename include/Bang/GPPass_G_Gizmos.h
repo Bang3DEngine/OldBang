@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h"
+#include "../.././src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.h"

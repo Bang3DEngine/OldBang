@@ -1,8 +1,7 @@
-#include "BangCompiler.h"
+#include "Bang/BangCompiler.h"
 
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
-#include "Bang/Debug.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/BangPreprocessor.h"

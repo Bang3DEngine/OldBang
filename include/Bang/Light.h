@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/Light.h"
+#include "../.././src/Engine/Components/Light.h"

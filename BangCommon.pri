@@ -80,7 +80,7 @@ QMAKE_CXXFLAGS         += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 ###################################################
 
 HEADERS += \
-    $$PWD/src/Domain/BangPreprocessor/IReflectable.h
+    ../src/Engine/Compiler/BangPreprocessor/IReflectable.h
 
 SOURCES += \
-    $$PWD/src/Domain/BangPreprocessor/IReflectable.cpp
+    ../src/Engine/Compiler/BangPreprocessor/IReflectable.cpp

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Graphics/VAO.h"
+#include "../.././src/Engine/Graphics/General/VAO.h"

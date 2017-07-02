@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Graphics/Interfaces/GLObject.h"
+#include "../.././src/Engine/Graphics/General/GLObject.h"

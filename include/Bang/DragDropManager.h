@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/DragDrop/DragDropManager.h"
+#include "../.././src/Editor/DragDrop/DragDropManager.h"

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Shortcut.h"
+#include "../.././src/Editor/General/Shortcut.h"

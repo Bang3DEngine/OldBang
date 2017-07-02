@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/NamedEnum.h"
+#include "../.././src/Engine/DataStructures/NamedEnum.h"

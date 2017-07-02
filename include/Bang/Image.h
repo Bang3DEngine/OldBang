@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Image.h"
+#include "../.././src/Engine/Graphics/General/Image.h"

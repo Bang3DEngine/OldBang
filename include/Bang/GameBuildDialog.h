@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Dialogs/GameBuildDialog.h"
+#include "../.././src/Editor/Dialogs/GameBuildDialog.h"

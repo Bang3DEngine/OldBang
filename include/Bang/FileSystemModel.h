@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Explorer/FileSystemModel.h"
+#include "../.././src/Editor/Explorer/FileSystemModel.h"

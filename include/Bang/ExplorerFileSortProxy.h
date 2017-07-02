@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Explorer/ExplorerFileSortProxy.h"
+#include "../.././src/Editor/Explorer/ExplorerFileSortProxy.h"

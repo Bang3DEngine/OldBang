@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/ComponentWidget.h"
+#include "../.././src/Editor/Inspector/ComponentWidget.h"

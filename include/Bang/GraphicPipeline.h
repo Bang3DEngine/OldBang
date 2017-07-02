@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/GraphicPipeline/GraphicPipeline.h"
+#include "../.././src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h"

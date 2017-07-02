@@ -83,7 +83,7 @@ const List<Path> &Paths::GetQtIncludeDirs()
         if (!ok)
         {
             Debug_Error("Error trying to find Qt include directories to compile.");
-            return {};
+            return qtIncludeDirs;
         }
         qtDir = qtDir.Replace("\n", "");
 
@@ -115,7 +115,7 @@ const List<Path> &Paths::GetQtLibrariesDirs()
         if (!ok)
         {
             Debug_Error("Error trying to find Qt library directories to compile.");
-            return {};
+            return qtLibDirs;
         }
         qtDir = qtDir.Replace("\n", "");
 

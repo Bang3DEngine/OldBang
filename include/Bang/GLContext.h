@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Graphics/GLContext.h"
+#include "../.././src/Engine/Graphics/General/GLContext.h"

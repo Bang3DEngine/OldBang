@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Debug/Time.h"
+#include "../.././src/Engine/General/Time.h"

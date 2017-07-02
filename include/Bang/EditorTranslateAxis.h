@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorTranslateAxis.h"
+#include "../.././src/Editor/EditorGameObject/EditorTranslateAxis.h"

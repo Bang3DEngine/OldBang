@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Physics/Vector2.h"
+#include "../.././src/Engine/Math/Vector2.h"

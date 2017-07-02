@@ -11,26 +11,26 @@ INCLUDEPATH += ../include
 OBJECTS -= $$system("ls -1 . | grep moc_ | xargs")
 
 SOURCES += \
-    ../src/Domain/Engine/DataStructures/Timer.cpp \
-    ../src/Domain/Engine/DataStructures/List.cpp \
-    ../src/Domain/Engine/DataStructures/Map.cpp \
-    ../src/Domain/Engine/DataStructures/Array.cpp \
-    ../src/Domain/Engine/DataStructures/String.cpp \
-    ../src/Domain/Engine/DataStructures/Property.cpp \
-    ../src/Domain/Engine/DataStructures/TypeMap.cpp \
-    ../src/Domain/Engine/DataStructures/Set.cpp \
-    ../src/Domain/Engine/DataStructures/UMap.cpp \
-    ../src/Domain/Engine/DataStructures/Collection.cpp \
-    ../src/Domain/Engine/DataStructures/Regex.cpp \
-    ../src/Domain/Engine/Physics/Rect.cpp \
-    ../src/Domain/Engine/Physics/Vector3.cpp \
-    ../src/Domain/Engine/Physics/Quaternion.cpp \
-    ../src/Domain/Engine/Physics/Matrix4.cpp \
-    ../src/Domain/Engine/Physics/Vector4.cpp \
-    ../src/Domain/Engine/Physics/Vector2.cpp \
-    ../src/Domain/Engine/Physics/Color.cpp \
-    ../src/Domain/Engine/Physics/Math.cpp \
-    ../src/Domain/Engine/Physics/Random.cpp \
-    ../src/Persistence/Files/Path.cpp \
-    ../src/Domain/Engine/Debug/OStreamOperators.cpp \
-    ../src/Persistence/Files/File.cpp
+    ../src/Engine/DataStructures/Timer.cpp \
+    ../src/Engine/DataStructures/List.cpp \
+    ../src/Engine/DataStructures/Map.cpp \
+    ../src/Engine/DataStructures/Array.cpp \
+    ../src/Engine/DataStructures/String.cpp \
+    ../src/Engine/DataStructures/Property.cpp \
+    ../src/Engine/DataStructures/TypeMap.cpp \
+    ../src/Engine/DataStructures/Set.cpp \
+    ../src/Engine/DataStructures/UMap.cpp \
+    ../src/Engine/DataStructures/Collection.cpp \
+    ../src/Engine/DataStructures/Regex.cpp \
+    ../src/Engine/Math/Rect.cpp \
+    ../src/Engine/Math/Vector3.cpp \
+    ../src/Engine/Math/Quaternion.cpp \
+    ../src/Engine/Math/Matrix4.cpp \
+    ../src/Engine/Math/Vector4.cpp \
+    ../src/Engine/Math/Vector2.cpp \
+    ../src/Engine/Math/Color.cpp \
+    ../src/Engine/Math/Math.cpp \
+    ../src/Engine/Math/Random.cpp \
+    ../src/Engine/IO/Files/Path.cpp \
+    ../src/Engine/Debug/OStreamOperators.cpp \
+    ../src/Engine/IO/Files/File.cpp

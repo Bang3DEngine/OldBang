@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Hierarchy/Hierarchy.h"
+#include "../.././src/Editor/Hierarchy/Hierarchy.h"

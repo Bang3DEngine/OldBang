@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/UIImage.h"
+#include "../.././src/Engine/Components/UIImage.h"

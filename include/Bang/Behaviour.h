@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/Behaviour.h"
+#include "../.././src/Engine/Components/Behaviour.h"

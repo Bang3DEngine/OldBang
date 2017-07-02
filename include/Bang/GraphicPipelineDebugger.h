@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/GraphicPipelineDebugger.h"
+#include "../.././src/Engine/Debug/GraphicPipelineDebugger.h"

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Application.h"
+#include "../.././src/Editor/General/Application.h"

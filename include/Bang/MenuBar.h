@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/MenuBar.h"
+#include "../.././src/Editor/General/MenuBar.h"

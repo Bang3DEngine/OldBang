@@ -18,14 +18,14 @@ POST_TARGETDEPS += PreprocessTargetName
 
 SOURCES += \
     ./MainBangPreprocessor.cpp \
-    ../src/Domain/BangPreprocessor/BangPreprocessor.cpp \
-    ../src/Domain/BangPreprocessor/BPReflectedStruct.cpp \
-    ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp
+    ../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
+    ../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
+    ../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 
 HEADERS += \
-    ../src/Domain/BangPreprocessor/BangPreprocessor.h \
-    ../src/Domain/BangPreprocessor/BPReflectedStruct.h \
-    ../src/Domain/BangPreprocessor/BPReflectedVariable.h
+    ../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
+    ../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
+    ../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h
 
 LIBS = -L$$BIN_DIR/lib/ -lBangDataStructures $$LIBS
 PRE_TARGETDEPS += $$BIN_DIR/lib/libBangDataStructures.a

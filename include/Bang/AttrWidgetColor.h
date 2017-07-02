@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/AttributeWidgets/AttrWidgetColor.h"
+#include "../.././src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.h"

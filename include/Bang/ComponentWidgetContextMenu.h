@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/ComponentWidgetContextMenu.h"
+#include "../.././src/Editor/Inspector/ComponentWidgetContextMenu.h"

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Assets/Material.h"
+#include "../.././src/Engine/Assets/Material.h"

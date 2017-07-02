@@ -13,8 +13,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/CodePreprocessor.h"
-#include "Bang/BehaviourMergeObjectsRunnable.h"
-#include "Bang/BehaviourObjectCompileRunnable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Console.h"

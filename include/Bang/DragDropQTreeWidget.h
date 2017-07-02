@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/DragDrop/DragDropQTreeWidget.h"
+#include "../.././src/Editor/DragDrop/DragDropQTreeWidget.h"

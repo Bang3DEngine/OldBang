@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorGizmo.h"
+#include "../.././src/Editor/EditorGameObject/EditorGizmo.h"

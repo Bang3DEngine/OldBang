@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/TypeMap.h"
+#include "../.././src/Engine/DataStructures/TypeMap.h"

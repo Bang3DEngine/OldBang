@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorScaleAxisGroup.h"
+#include "../.././src/Editor/EditorGameObject/EditorScaleAxisGroup.h"

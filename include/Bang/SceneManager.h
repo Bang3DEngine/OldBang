@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/SceneManager.h"
+#include "../.././src/Engine/General/SceneManager.h"

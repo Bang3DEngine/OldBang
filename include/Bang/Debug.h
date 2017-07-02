@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Debug/Debug.h"
+#include "../.././src/Engine/Debug/Debug.h"

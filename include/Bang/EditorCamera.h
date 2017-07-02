@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorCamera/EditorCamera.h"
+#include "../.././src/Editor/EditorCamera/EditorCamera.h"

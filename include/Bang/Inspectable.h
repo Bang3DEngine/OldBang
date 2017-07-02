@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/Inspectables/Inspectable.h"
+#include "../.././src/Editor/Inspector/Inspectables/Inspectable.h"

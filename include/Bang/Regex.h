@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/Regex.h"
+#include "../.././src/Engine/DataStructures/Regex.h"

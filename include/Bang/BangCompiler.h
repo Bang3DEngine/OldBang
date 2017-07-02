@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/BangCompiler.h"
+#include "../.././src/Engine/Compiler/BangCompiler.h"

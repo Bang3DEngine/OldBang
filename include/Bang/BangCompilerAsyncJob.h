@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/BangCompilerAsyncJob.h"
+#include "../.././src/Engine/Compiler/BangCompilerAsyncJob.h"

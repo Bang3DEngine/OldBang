@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/AudioSource.h"
+#include "../.././src/Engine/Components/AudioSource.h"

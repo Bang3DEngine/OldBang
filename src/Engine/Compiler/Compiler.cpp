@@ -1,4 +1,4 @@
-#include "Compiler.h"
+#include "Bang/Compiler.h"
 
 #include "Bang/SystemUtils.h"
 

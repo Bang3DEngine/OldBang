@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h"
+#include "../.././src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h"

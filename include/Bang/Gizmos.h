@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Debug/Gizmos.h"
+#include "../.././src/Engine/Debug/Gizmos.h"

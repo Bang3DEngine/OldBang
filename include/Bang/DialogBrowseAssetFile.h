@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Dialogs/DialogBrowseAssetFile.h"
+#include "../.././src/Editor/Dialogs/DialogBrowseAssetFile.h"

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/AttributeWidgets/AttrWidgetEnum.h"
+#include "../.././src/Editor/Inspector/AttributeWidgets/AttrWidgetEnum.h"

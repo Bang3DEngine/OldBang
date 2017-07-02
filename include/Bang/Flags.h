@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/DataStructures/Flags.h"
+#include "../.././src/Engine/DataStructures/Flags.h"

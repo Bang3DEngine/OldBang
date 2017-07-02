@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/BangPreprocessor/BPReflectedStruct.h"
+#include "../.././src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h"

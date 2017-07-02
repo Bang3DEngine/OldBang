@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Windows/IWindow.h"
+#include "../.././src/Editor/Windows/IWindow.h"

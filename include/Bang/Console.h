@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Console/Console.h"
+#include "../.././src/Editor/Console/Console.h"

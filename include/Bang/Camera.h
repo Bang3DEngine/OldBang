@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/Camera.h"
+#include "../.././src/Engine/Components/Camera.h"

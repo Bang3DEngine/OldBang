@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorAxisPlane.h"
+#include "../.././src/Editor/EditorGameObject/EditorAxisPlane.h"

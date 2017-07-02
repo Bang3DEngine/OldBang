@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Windows/SelectProjectWindow.h"
+#include "../.././src/Editor/Windows/SelectProjectWindow.h"

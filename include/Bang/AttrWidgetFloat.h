@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/Inspector/AttributeWidgets/AttrWidgetFloat.h"
+#include "../.././src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.h"

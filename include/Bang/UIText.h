@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Components/UIText.h"
+#include "../.././src/Engine/Components/UIText.h"

@@ -1,6 +1,4 @@
-#include "BangCompilerAsyncJob.h"
-
-#include "Bang/Debug.h"
+#include "Bang/BangCompilerAsyncJob.h"
 
 BangCompilerAsyncJob::BangCompilerAsyncJob(
                                    const BangCompiler::Job &compileJob,

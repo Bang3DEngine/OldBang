@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/View/EditorGameObject/EditorRotateAxis.h"
+#include "../.././src/Editor/EditorGameObject/EditorRotateAxis.h"

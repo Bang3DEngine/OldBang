@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Domain/Engine/Others/GameBuilder.h"
+#include "../.././src/Editor/GameBuilder/GameBuilder.h"
