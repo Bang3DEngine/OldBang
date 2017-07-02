@@ -13,10 +13,10 @@ class GameBuilderJob : public QObject
 
     public:
         GameBuilderJob();
-        void OnGameBuildingCanceled();
 
     public slots:
         void BuildGame();
+        void OnGameBuildingCanceled();
 
     signals:
         void NotifyPercent(float);

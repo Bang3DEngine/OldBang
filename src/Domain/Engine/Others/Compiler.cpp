@@ -36,6 +36,7 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
     args.Add( List<String>({"-o", job.outputFile.ToString()}) );
 
     Result result;
+    result.compileJob = job;
     SystemUtils::System("/usr/bin/g++",
                         args,
                         &result.output,

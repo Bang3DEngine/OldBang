@@ -9,13 +9,10 @@
 #include "Bang/Scene.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Application.h"
-#include "Bang/SceneManager.h"
-#include "Bang/BehaviourManager.h"
-
-#ifdef BANG_EDITOR
 #include "Bang/EditorState.h"
 #include "Bang/EditorWindow.h"
-#endif
+#include "Bang/SceneManager.h"
+#include "Bang/BehaviourManager.h"
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
@@ -26,26 +23,10 @@ BehaviourRefresherTimer::BehaviourRefresherTimer()
 
 void BehaviourRefresherTimer::OnRefreshTimer() const
 {
-    #ifdef BANG_EDITOR
     if (IWindow::GetInstance()->IsInFront())
     {
-        RefreshBehaviours();
-    }
-    #endif
-}
-
-void BehaviourRefresherTimer::RefreshBehaviours() const
-{
-    BehaviourManager::SetCurrentLibsDir(Paths::ProjectLibraries());
-
-    const List<Path>& behaviourSources =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (const Path &behaviourSource : behaviourSources)
-    {
-        if (!BehaviourManager::GetStatus().IsReady(behaviourSource))
-        {
-            BehaviourManager::StartCompilingBehaviourObject(
-                        behaviourSource, false);
-        }
+        BehaviourManager::StartCompilingAllBehaviourObjects(
+                                            false,
+                                            Paths::ProjectLibrariesDir());
     }
 }

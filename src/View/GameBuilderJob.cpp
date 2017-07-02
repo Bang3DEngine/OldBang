@@ -55,7 +55,7 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Compiling behaviours...");
-    if (!gb->CompileBehaviours(executableDir, gameProject, &m_canceled))
+    if (!gb->CompileBehaviours(executableDir, &m_canceled))
     {
         emit NotifyGameBuildingHasFailed("Could not compile the behaviours");
         return;

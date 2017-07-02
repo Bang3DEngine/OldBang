@@ -19,52 +19,30 @@
 
 #include "Bang/IToString.h"
 
-class BehaviourId : public IToString
-{
-public:
-    Path behaviourPath;
-    String hash = "";
-
-    BehaviourId(const Path &behPath)
-    {
-        behaviourPath = behPath;
-        String code = File::GetContents(behaviourPath);
-
-        List<Path> includePaths = Paths::ProjectAssets().GetSubDirectories(true);
-        includePaths.Add(Paths::ProjectAssets());
-        CodePreprocessor::PreprocessCode(&code, includePaths);
-        hash = File::GetHashFromString(code);
-    }
-
-    BehaviourId(const Path &behPath, const String &_hash)
-    {
-        behaviourPath = behPath;
-        hash = _hash;
-    }
-
-    String ToString() const override
-    {
-        return behaviourPath + "(" + hash + ")";
-    }
-};
-
 class QLibrary;
 class Behaviour;
+class BehaviourId;
 class BehaviourManagerStatus
 {
 public:
-    bool AllBehavioursReady() const;
-    bool AllBehavioursReadyOrFailed() const;
-    float GetPercentOfReadyBehaviours() const;
+    bool AllBehavioursReady(const Path &libsDir) const;
+    bool AllBehavioursReadyOrFailed(const Path &libsDir) const;
+    float GetPercentOfReadyBehaviours(const Path &libsDir) const;
     bool IsBeingCompiled(const BehaviourId &bid) const;
     bool HasFailed(const BehaviourId &bid) const;
     bool HasFailed(const Path &behaviourFilepath) const;
-    bool IsReady(const BehaviourId &bid) const;
-    bool IsReady(const Path &behaviourFilepath) const;
+    bool IsReady(const BehaviourId &bid,
+                 const Path &libsDir = Paths::ProjectLibrariesDir()) const;
+    bool IsReady(const Path &behaviourFilepath,
+                 const Path &libsDir = Paths::ProjectLibrariesDir()) const;
 
     bool IsBehavioursLibraryReady() const;
+    bool HasMergingSucceed() const;
+    bool IsMerging() const;
 
 private:
+    enum MergingState { Idle, Merging, Success, Failed };
+    MergingState m_mergeState = MergingState::Idle;
     bool m_behavioursLibraryReady = false;
 
     Set<BehaviourId> m_failed;
@@ -81,8 +59,11 @@ private:
 
     void OnBehaviourStartedCompiling(const Path &behaviourPath);
     void OnBehaviourSuccessCompiling(const Path &behaviourPath);
-    void OnBehaviourFailedCompiling(const Path &behaviourPath,
+    void OnBehaviourObjectCompilationFailed(const Path &behaviourPath,
                                     const String &errorMessage);
+    void OnMergingStarted();
+    void OnMergingFinished(bool success);
+
     void OnBehavioursLibraryReady();
     void InvalidateBehavioursLibraryReady();
 
@@ -91,6 +72,17 @@ private:
     List<BehaviourId> GetCurrentBehaviourIds() const;
 
     friend class BehaviourManager;
+};
+
+class BehaviourId : public IToString
+{
+public:
+    Path behaviourPath;
+    String hash = "";
+
+    BehaviourId(const Path &behPath);
+    BehaviourId(const Path &behPath, const String &_hash);
+    String ToString() const override;
 };
 
 bool operator<(BehaviourId bid0, BehaviourId bid1);

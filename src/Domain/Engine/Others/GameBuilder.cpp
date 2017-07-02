@@ -207,15 +207,15 @@ Project* GameBuilder::CreateGameProject(const Path &executableDir)
 }
 
 bool GameBuilder::CompileBehaviours(const Path &executableDir,
-                                    Project *gameProject,
                                     bool *cancel)
 {
     if (*cancel) { return true; }
 
     Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
-    BehaviourManager::SetCurrentLibsDir(libsDir);
     File::CreateDirectory(libsDir);
-    bool success = BehaviourManager::PrepareBehavioursLibrary(true, cancel);
+    bool success = BehaviourManager::PrepareBehavioursLibrary(true,
+                                                              libsDir,
+                                                              cancel);
     return success;
 }
 

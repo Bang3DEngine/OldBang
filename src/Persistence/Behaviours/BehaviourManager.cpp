@@ -3,8 +3,8 @@
 #include <QLibrary>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Time.h"
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
@@ -22,7 +22,7 @@
 
 BehaviourManager::BehaviourManager()
 {
-    m_threadPool.setMaxThreadCount(2);
+    BangCompiler::Init();
 }
 
 BehaviourManager *BehaviourManager::GetInstance()
@@ -31,73 +31,55 @@ BehaviourManager *BehaviourManager::GetInstance()
     return app ? app->m_behaviourManager : nullptr;
 }
 
-void BehaviourManager::RemoveMergedLibraryFiles()
-{
-    List<Path> libFilepaths =
-           BehaviourManager::GetCurrentLibsDir().GetFiles(true, {"*.so.*"});
-    for (const Path &libFilepath : libFilepaths)
-    {
-        File::Remove(libFilepath);
-    }
-}
-
 QLibrary *BehaviourManager::GetBehavioursMergedLibrary()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     return bm->m_behavioursLibrary;
 }
 
-List<Path> BehaviourManager::GetBehavioursSourcesFilepathsList()
+bool BehaviourManager::PrepareBehavioursLibrary(bool forGame,
+                                                const Path& outputLibDir,
+                                                bool *stopFlag)
 {
-    return Paths::ProjectAssets().GetFiles(true, {"cpp"});
-}
-
-List<Path> BehaviourManager::GetBehavioursObjectsFilepathsList()
-{
-    return Path(BehaviourManager::GetCurrentLibsDir()).GetFiles(true, {"o"});
-}
-
-bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
-{
+    Debug_Log("PrepareBehavioursLibrary " << outputLibDir);
     BehaviourManager *bm = BehaviourManager::GetInstance();
     #ifdef BANG_EDITOR
     do
     {
-        bm->StartCompilingAllBehaviourObjects(forGame);
+        bm->StartCompilingAllBehaviourObjects(forGame, outputLibDir);
 
-        float percent = bm->m_status.GetPercentOfReadyBehaviours();
+        float percent = bm->GetStatus().GetPercentOfReadyBehaviours(outputLibDir);
         emit bm->NotifyPrepareBehavioursLibraryProgressed( int(percent * 100) );
         if (stopFlag && *stopFlag) { return false; }
 
         QThread::currentThread()->msleep(100);
         Application::GetInstance()->processEvents();
     }
-    while(!bm->m_status.AllBehavioursReadyOrFailed());
+    while(!bm->GetStatus().AllBehavioursReadyOrFailed(outputLibDir));
 
     emit bm->NotifyPrepareBehavioursLibraryProgressed(99);
 
     // Now merge them
-    bool error = !bm->m_status.AllBehavioursReady();
+    bool error = !bm->GetStatus().AllBehavioursReady(outputLibDir);
 
     // Invalidating will force a new library with new name reload, and thus
     // forcing static reinitialization, instead of them keeping latest lib
-    // values, which is exactly what we want (static reinitialization)
+    // values
     bm->m_status.InvalidateBehavioursLibraryReady();
-    if (!error && !bm->m_status.IsBehavioursLibraryReady())
+    if (!error && !bm->GetStatus().IsBehavioursLibraryReady())
     {
         bool mergingStarted = false;
         do
         {
-            mergingStarted =
-                    BehaviourManager::StartMergingBehavioursObjects(forGame);
+            mergingStarted = BehaviourManager::StartMergingBehavioursObjects(
+                                                                forGame,
+                                                                outputLibDir);
             QThread::currentThread()->msleep(100);
             Application::processEvents();
         }
-        while (!mergingStarted || BehaviourManager::GetMergeState() ==
-               BehaviourManager::MergingState::Merging);
+        while (!mergingStarted || bm->GetStatus().IsMerging());
 
-        error = (BehaviourManager::GetMergeState() !=
-                BehaviourManager::MergingState::Success);
+        error = !bm->m_status.HasMergingSucceed();
         if (!error) { bm->m_status.OnBehavioursLibraryReady(); }
     }
     return !error;
@@ -106,97 +88,75 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
     if (!BehaviourManager::GetBehavioursMergedLibrary())
     {
         Project *project = ProjectManager::GetCurrentProject();
-        Path libDir = Paths::ProjectLibraries();
+        Path libDir = Paths::ProjectLibrariesDir();
         String projId = project->GetProjectRandomId();
         String libFilepath = "Behaviours.so." + projId + ".1.1";
         Path libOutput = libDir.Append(libFilepath);
-        bm->OnMergedLibraryCompiled(libOutput.GetAbsolute().ToQString(), true, "");
+        BangCompiler::Result result;
+        result.compileJob.outputFile = libOutput;
+        result.success = true;
+        bm->OnMergingLibraryFinished(result);
     }
     return true;
     #endif
 }
 
-
-
-void BehaviourManager::SetCurrentLibsDir(const Path &libsDir)
+bool BehaviourManager::StartMergingBehavioursObjects(bool forGame,
+                                                     const Path& outputLibDir)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    bm->m_currentLibsDir = libsDir;
+    if (!bm->GetStatus().AllBehavioursReady(outputLibDir)) { return false; }
+    if (bm->GetStatus().IsMerging()) { return true; }
+
+    List<Path> objsPaths = outputLibDir.GetFiles(false, {"*.o"});
+    QSlot callbackSlot = SLOT(OnMergingLibraryFinished(BangCompiler::Result));
+    bool mergeStarted = BangCompiler::MergeBehaviourLibrariesAsync(
+                                                                objsPaths,
+                                                                outputLibDir,
+                                                                forGame,
+                                                                bm,
+                                                                callbackSlot);
+    if (mergeStarted) { bm->m_status.OnMergingStarted(); }
+    return mergeStarted;
 }
 
-const Path &BehaviourManager::GetCurrentLibsDir()
-{
-    return BehaviourManager::GetInstance()->m_currentLibsDir;
-}
-
-bool BehaviourManager::StartMergingBehavioursObjects(bool forGame)
+void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame,
+                                                         const Path& objectsDir)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    if (!bm->GetStatus().AllBehavioursReady()) { return false; }
-    if (BehaviourManager::GetMergeState() == MergingState::Merging)
-    {
-        return true;
-    }
-
-    RemoveMergedLibraryFiles();
-    BehaviourMergeObjectsRunnable *mergeRunn =
-            new BehaviourMergeObjectsRunnable(forGame);
-    bool mergingStarted = bm->m_threadPool.tryStart(mergeRunn);
-    if (mergingStarted)
-    {
-        connect(mergeRunn, SIGNAL(NotifySuccessMerging(QString, bool, QString)),
-                bm, SLOT(OnMergedLibraryCompiled(QString, bool, QString)));
-        connect(mergeRunn, SIGNAL(NotifyFailedMerging(QString)),
-                bm, SLOT(OnMergedLibraryCompilationFailed(QString)));
-        bm->m_state = MergingState::Merging;
-    }
-    else { delete mergeRunn; }
-
-    return mergingStarted;
-}
-
-void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame)
-{
-    List<Path> allBehaviourSources =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    List<Path> allBehaviourSources = Paths::GetBehavioursSourcesFilepaths();
     for (const Path &behFilepath : allBehaviourSources)
     {
-        BehaviourManager::StartCompilingBehaviourObject(behFilepath, forGame);
+        if (!bm->GetStatus().IsReady(behFilepath, objectsDir) &&
+            !bm->GetStatus().IsBeingCompiled(behFilepath)     &&
+            !bm->GetStatus().HasFailed(behFilepath))
+        {
+            BehaviourManager::StartCompilingBehaviourObject(behFilepath,
+                                                            objectsDir,
+                                                            forGame);
+        }
     }
 }
 
 void BehaviourManager::StartCompilingBehaviourObject(const Path &behFilepath,
+                                                     const Path& objectsDir,
                                                      bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
 
-    if (bm->GetStatus().IsReady(behFilepath) ||
-        bm->GetStatus().IsBeingCompiled(behFilepath) ||
-        bm->GetStatus().HasFailed(behFilepath))
+    QSlot callbackSlot =
+              SLOT(OnBehaviourObjectCompilationFinished(BangCompiler::Result));
+    bool compileStarted = BangCompiler::CompileBehaviourObjectAsync(
+                                            behFilepath,
+                                            objectsDir,
+                                            forGame,
+                                            bm,
+                                            callbackSlot);
+    if (compileStarted)
     {
-        return;
-    }
-
-    Debug_Status("Compiling " << behFilepath, 3.0f);
-
-    BehaviourObjectCompileRunnable *objRunn =
-            new BehaviourObjectCompileRunnable(behFilepath, forGame);
-    bool started = bm->m_threadPool.tryStart(objRunn);
-    if (started)
-    {
-        connect(objRunn, SIGNAL(NotifySuccessCompiling(QString,bool,QString)),
-                bm, SLOT(OnBehaviourObjectCompiled(QString,bool,QString)));
-        connect(objRunn, SIGNAL(NotifyFailedCompiling(QString, QString)),
-                bm, SLOT(OnBehaviourObjectCompilationFailed(QString, QString)));
+        Debug_Status("Compiling " << behFilepath, 3.0f);
         bm->m_status.OnBehaviourStartedCompiling(behFilepath);
     }
-    else { delete objRunn; }
-}
-
-BehaviourManager::MergingState BehaviourManager::GetMergeState()
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    return bm->m_state;
 }
 
 const BehaviourManagerStatus &BehaviourManager::GetStatus()
@@ -205,57 +165,61 @@ const BehaviourManagerStatus &BehaviourManager::GetStatus()
     return bm->m_status;
 }
 
-void BehaviourManager::OnBehaviourObjectCompiled(const QString &behFilepath,
-                                                 bool mergingForGame,
-                                                 const QString &warnMessage)
+void BehaviourManager::OnBehaviourObjectCompilationFinished(
+                                            const BangCompiler::Result &result)
 {
-    m_status.OnBehaviourSuccessCompiling( Path( String(behFilepath) ) );
-    String warn(warnMessage);
-    if (!warn.Empty()) { Debug_Warn(warn); }
-
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    if (bm->m_status.AllBehavioursReady())
+    Debug_Log("OnBehaviourObjectCompilationFinished " << result.compileJob.outputFile.GetAbsolute());
+    if (result.success)
     {
-        BehaviourManager::StartMergingBehavioursObjects(mergingForGame);
-    }
-}
+        const Path &behFilepath = result.compileJob.inputFiles.Front();
+        m_status.OnBehaviourSuccessCompiling(behFilepath);
+        if (!result.output.Empty()) { Debug_Warn(result.output); }
 
-void BehaviourManager::OnBehaviourObjectCompilationFailed(
-        const QString &behaviourFilepath,
-        const QString &errorMessage)
-{
-    m_status.OnBehaviourFailedCompiling( Path( String(behaviourFilepath) ),
-                                         errorMessage);
-}
-
-void BehaviourManager::OnMergedLibraryCompiled(QString libFilepath,
-                                               bool loadLibrary,
-                                               QString warnMessage)
-{
-    String warn(warnMessage);
-    if (!warn.Empty()) { Debug_Warn(warn); }
-
-    bool success = true;
-    if (loadLibrary)
-    {
-        QLibrary *behavioursLib = new QLibrary(libFilepath);
-        behavioursLib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
-        success = behavioursLib->load();
-        m_behavioursLibrary = success ? behavioursLib : nullptr;
-
-        if (!success)
+        if (!result.forGame)
         {
-            Debug_Error("There was an error when loading the library '" <<
-                         libFilepath << "': " << behavioursLib->errorString());
+            BehaviourManager *bm = BehaviourManager::GetInstance();
+            Path libsDir = Paths::ProjectLibrariesDir();
+            if (bm->m_status.AllBehavioursReady(libsDir))
+            {
+                BehaviourManager::StartMergingBehavioursObjects(result.forGame,
+                                                                libsDir);
+            }
         }
     }
-
-    m_state = success ? MergingState::Success : MergingState::Failed;
+    else
+    {
+        m_status.OnBehaviourObjectCompilationFailed(
+                    result.compileJob.inputFiles.Front(), result.output);
+    }
 }
 
-void BehaviourManager::OnMergedLibraryCompilationFailed(QString errorMessage)
+void BehaviourManager::OnMergingLibraryFinished(
+                                        const BangCompiler::Result &result)
 {
-    Debug_Error("Error while merging behaviour objects into a single shared "
-                << "library: " << errorMessage);
-    m_state = MergingState::Failed;
+    if (result.success)
+    {
+        if (!result.output.Empty()) { Debug_Warn(result.output); }
+
+        if (!result.forGame) // Load library
+        {
+            String behaviourLibPath = result.compileJob.outputFile.GetAbsolute();
+            QLibrary *behLib = new QLibrary(behaviourLibPath.ToQString());
+            behLib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
+            bool success = behLib->load();
+            m_behavioursLibrary = success ? behLib : nullptr;
+
+            if (!success)
+            {
+                Debug_Error("There was an error when loading the library '" <<
+                             behaviourLibPath << "': " << behLib->errorString());
+            }
+        }
+    }
+    else
+    {
+        Debug_Error("Error while merging behaviour objects into a single shared "
+                    << "library: " << result.output);
+    }
+
+    m_status.OnMergingFinished(result.success);
 }

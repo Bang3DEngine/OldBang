@@ -98,15 +98,6 @@ bool EditorPlayFlow::PlayScene()
     {
         m_latestSceneBeforePlayingFilepath = SceneManager::GetActiveSceneFilepath();
         sceneCopy = p_latestSceneBeforePlaying->Clone();
-        /*
-        sceneCopy = new Scene();
-
-        // Copy scene by writing/reading
-        XMLNode xmlInfo;
-        p_latestSceneBeforePlaying->Write(&xmlInfo);
-        sceneCopy->Read(xmlInfo);
-        */
-
         if (sceneCopy)
         {
             SceneManager::SetActiveScene(sceneCopy);
@@ -154,8 +145,6 @@ bool EditorPlayFlow::WaitForAllBehavioursToBeLoaded()
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
 
-    m_playingCanceled = false;
-
     // Create a progress dialog to show progress
     QProgressDialog progressDialog(mainWin);
     progressDialog.setRange(0, 100);
@@ -174,10 +163,11 @@ bool EditorPlayFlow::WaitForAllBehavioursToBeLoaded()
     connect(bm, SIGNAL(NotifyPrepareBehavioursLibraryProgressed(int)),
             &progressDialog, SLOT(setValue(int)));
 
-    BehaviourManager::SetCurrentLibsDir(Paths::ProjectLibraries());
+    m_playingCanceled = false;
     bool success = BehaviourManager::PrepareBehavioursLibrary(
-                                            false, &m_playingCanceled);
-
+                                            false,
+                                            Paths::ProjectLibrariesDir(),
+                                            &m_playingCanceled);
     if (!success && !m_playingCanceled)
     {
         String errMsg = "Please fix all the behaviour errors before playing.";

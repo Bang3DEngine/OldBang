@@ -5,13 +5,16 @@
 #include <QRunnable>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
+
 class BehaviourMergeObjectsRunnable : public QObject,
                                       public QRunnable
 {
     Q_OBJECT
 
 public:
-    BehaviourMergeObjectsRunnable(bool forGame);
+    BehaviourMergeObjectsRunnable(bool forGame,
+                                  const Path& outputDir);
 
 protected:
     void run() override;
@@ -24,8 +27,7 @@ signals:
 
 private:
     bool m_forGame = false;
-
-    void Merge();
+    Path m_outputDir;
 };
 
 

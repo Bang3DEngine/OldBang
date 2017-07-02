@@ -17,24 +17,24 @@ BehaviourManagerStatus::BehaviourManagerStatus()
 {
 }
 
-bool BehaviourManagerStatus::AllBehavioursReady() const
+bool BehaviourManagerStatus::AllBehavioursReady(const Path &libsDir) const
 {
-    return GetPercentOfReadyBehaviours() >= 1.0f;
+    return GetPercentOfReadyBehaviours(libsDir) >= 1.0f;
 }
 
-bool BehaviourManagerStatus::AllBehavioursReadyOrFailed() const
+bool BehaviourManagerStatus::AllBehavioursReadyOrFailed(const Path &libsDir) const
 {
-    List<Path> srcs = BehaviourManager::GetBehavioursSourcesFilepathsList();
-    return srcs.All( BPRED( this->IsReady(x) || this->HasFailed(x) ) );
+    List<Path> srcs = Paths::GetBehavioursSourcesFilepaths();
+    return srcs.All( BPRED( this->IsReady(x, libsDir) || this->HasFailed(x) ) );
 }
 
-float BehaviourManagerStatus::GetPercentOfReadyBehaviours() const
+float BehaviourManagerStatus::GetPercentOfReadyBehaviours(const Path &libsDir) const
 {
-    List<Path> sourcesFilepaths =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    List<Path> sourcesFilepaths = Paths::GetBehavioursSourcesFilepaths();
     if (sourcesFilepaths.IsEmpty()) { return 1.0f; }
 
-    uint compiledBehaviours = sourcesFilepaths.Count( BPRED(this->IsReady(x)) );
+    uint compiledBehaviours =
+            sourcesFilepaths.Count( BPRED(this->IsReady(x, libsDir)) );
     return float(compiledBehaviours) / sourcesFilepaths.Size();
 }
 
@@ -53,11 +53,12 @@ bool BehaviourManagerStatus::HasFailed(const Path &behaviourFilepath) const
     return HasFailed( BehaviourId(behaviourFilepath) );
 }
 
-bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
+bool BehaviourManagerStatus::IsReady(const BehaviourId &bid,
+                                     const Path &libsDir) const
 {
     String behaviourName = bid.behaviourPath.GetName();
-    Path behaviourObjectFilepath(
-            BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o");
+    Path behaviourObjectFilepath = libsDir.Append(behaviourName)
+                                          .AppendExtension("o");
 
     bool ready = true;
     #ifdef BANG_EDITOR
@@ -66,19 +67,30 @@ bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
     ready = ready &&
             !IsBeingCompiled(bid) &&
             !HasFailed(bid) &&
-            behaviourObjectFilepath.IsFile();
+            behaviourObjectFilepath.Exists();
 
     return ready;
 }
 
-bool BehaviourManagerStatus::IsReady(const Path &behaviourFilepath) const
+bool BehaviourManagerStatus::IsReady(const Path &behaviourFilepath,
+                                     const Path &libsDir) const
 {
-    return IsReady( BehaviourId(behaviourFilepath) );
+    return IsReady( BehaviourId(behaviourFilepath), libsDir );
 }
 
 bool BehaviourManagerStatus::IsBehavioursLibraryReady() const
 {
     return m_behavioursLibraryReady;
+}
+
+bool BehaviourManagerStatus::HasMergingSucceed() const
+{
+    return m_mergeState == MergingState::Success;
+}
+
+bool BehaviourManagerStatus::IsMerging() const
+{
+    return m_mergeState == MergingState::Merging;
 }
 
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(
@@ -98,7 +110,7 @@ void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const Path &behPath)
     ClearFails(bid.behaviourPath);
 }
 
-void BehaviourManagerStatus::OnBehaviourFailedCompiling(
+void BehaviourManagerStatus::OnBehaviourObjectCompilationFailed(
         const Path &behaviourPath,
         const String &errorMessage)
 {
@@ -112,6 +124,16 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(
             Console::AddError(errorMessage, __LINE__, __FILE__, true);
     m_failMessagesIds.Get(behaviourPath).Add(failMsgId);
     #endif
+}
+
+void BehaviourManagerStatus::OnMergingStarted()
+{
+    m_mergeState = MergingState::Merging;
+}
+
+void BehaviourManagerStatus::OnMergingFinished(bool success)
+{
+    m_mergeState = success ? MergingState::Success : MergingState::Failed;
 }
 
 void BehaviourManagerStatus::OnBehavioursLibraryReady()
@@ -174,4 +196,26 @@ bool operator==(BehaviourId bid0, BehaviourId bid1)
 {
     return (bid0.behaviourPath == bid1.behaviourPath) &&
             (bid0.hash == bid1.hash);
+}
+
+BehaviourId::BehaviourId(const Path &behPath)
+{
+    behaviourPath = behPath;
+    String code = File::GetContents(behaviourPath);
+
+    List<Path> includePaths = Paths::ProjectAssets().GetSubDirectories(true);
+    includePaths.Add(Paths::ProjectAssets());
+    CodePreprocessor::PreprocessCode(&code, includePaths);
+    hash = File::GetHashFromString(code);
+}
+
+BehaviourId::BehaviourId(const Path &behPath, const String &_hash)
+{
+    behaviourPath = behPath;
+    hash = _hash;
+}
+
+String BehaviourId::ToString() const
+{
+    return behaviourPath + "(" + hash + ")";
 }

@@ -10,22 +10,18 @@
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourManager.h"
 
-BehaviourMergeObjectsRunnable::BehaviourMergeObjectsRunnable(bool forGame)
+BehaviourMergeObjectsRunnable::BehaviourMergeObjectsRunnable(bool forGame,
+                                                             const Path& outputDir)
 {
     m_forGame = forGame;
+    m_outputDir = outputDir;
 }
 
 void BehaviourMergeObjectsRunnable::run()
 {
-    Merge();
-}
-
-void BehaviourMergeObjectsRunnable::Merge()
-{
-    List<Path> behaviourObjects =
-            BehaviourManager::GetBehavioursObjectsFilepathsList();
-    Path libOutputFilepath(
-            BehaviourManager::GetCurrentLibsDir() + "/Behaviours.so.");
+    List<Path> behaviourObjects = m_outputDir.GetFiles(true, {"o"});
+    Path libOutputFilepath = m_outputDir.Append("Behaviours")
+                                        .AppendExtension("so");
     String version = "";
     if (!m_forGame)
     {
@@ -34,13 +30,14 @@ void BehaviourMergeObjectsRunnable::Merge()
     else
     {
         Path gameProjectDir = libOutputFilepath.GetDirectory().GetDirectory();
-        Path gameProjectFilepath(gameProjectDir + "/Game.bproject");
+        Path gameProjectFilepath = gameProjectDir.Append("Game")
+                                                 .AppendExtension("bproject");
 
         Project gameProject;
         gameProject.ReadFromFile(gameProjectFilepath);
         version = gameProject.GetProjectRandomId();
     }
-    libOutputFilepath = Path(libOutputFilepath.GetAbsolute() + version + ".1.1");
+    libOutputFilepath = libOutputFilepath.AppendExtension(version + ".1.1");
 
     Compiler::Result compileResult;
     compileResult = BangCompiler::MergeBehaviourLibraries(behaviourObjects,

@@ -36,6 +36,7 @@ void SystemUtils::_System(const String &command,
     process.start(command.ToQString(), argsListQ);
     if (!background)
     {
+        Debug_Log(command << ", " << argsList);
         bool ok = process.waitForFinished(999999);
         ok = ok && (process.exitCode() == 0);
 
@@ -54,8 +55,6 @@ void SystemUtils::_System(const String &command,
             Debug_Error("Could not start background process " << command);
         }
     }
-
-    Debug_Log(command << argsList);
 }
 
 void SystemUtils::CloseLibrary(QLibrary *library)

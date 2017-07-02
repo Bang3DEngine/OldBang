@@ -17,6 +17,7 @@ class BehaviourObjectCompileRunnable : public QObject,
 
 public:
     BehaviourObjectCompileRunnable(const Path &behaviourFilepath,
+                                   const Path &outputObjectDir,
                                    bool forGame);
 
 protected:
@@ -31,9 +32,8 @@ signals:
 
 private:
     bool m_forGame = false;
+    Path m_outputObjectDir;
     Path m_behaviourPath;
-
-    void CompileBehaviourObject();
 };
 
 #endif // BEHAVIOUROBJECTCOMPILERUNNABLE_H

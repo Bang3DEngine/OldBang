@@ -4,6 +4,7 @@
 typedef unsigned int  uint;
 typedef unsigned char byte;
 typedef long long EpochTime;
+typedef const char* QSlot;
 
 #define ENSURE(mustBeTrue) do{\
     if (!(mustBeTrue)) { return; }\

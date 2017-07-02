@@ -47,7 +47,6 @@ private:
     bool     CreateDataDirectory(const Path &executableDir);
     Project* CreateGameProject(const Path &executableDir);
     bool     CompileBehaviours(const Path &executableDir,
-                               Project *GameProject,
                                bool *cancel);
     void RemoveLatestGameBuild();
 

@@ -21,9 +21,15 @@ public:
     static const Path& Engine();
     static const Path& EngineAssets();
 
+    static List<Path> GetBehavioursSourcesFilepaths();
+    static List<Path> GetAllProjectSubDirs();
+    static List<Path> GetAllEngineSubDirs();
+    static const List<Path>& GetQtIncludeDirs();
+    static const List<Path>& GetQtLibrariesDirs();
+
     static const Path& Project();
     static const Path& ProjectAssets();
-    static const Path& ProjectLibraries();
+    static const Path& ProjectLibrariesDir();
 
     static Path GetRelative(const Path &path);
 

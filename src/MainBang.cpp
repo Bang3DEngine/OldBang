@@ -163,7 +163,8 @@ int main(int argc, char **argv)
     ProjectManager::OpenProject(loadedProjectFilepath);
 
     #ifndef BANG_EDITOR
-    BehaviourManager::PrepareBehavioursLibrary(true, nullptr);
+    BehaviourManager::PrepareBehavioursLibrary(true,
+                                               Paths::ProjectLibrariesDir());
     #endif
 
     app.MainLoop();

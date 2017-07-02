@@ -212,6 +212,11 @@ Path Path::AppendExtension(const String &extension) const
     return Path(GetAbsolute() + "." + extension);
 }
 
+Path Path::ChangeExtension(const String &extension) const
+{
+    return Path( GetDirectory().Append(GetName()).Append(extension) );
+}
+
 bool Path::HasExtension(const String &extensions) const
 {
     List<String> extensionsList = extensions.Split(' ', true).To<List,String>();

@@ -27,6 +27,7 @@ public:
 
     struct Result
     {
+        Job compileJob;
         bool success;
         String output;
     };

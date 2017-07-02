@@ -6,27 +6,23 @@
 #include "Bang/BehaviourManager.h"
 
 BehaviourObjectCompileRunnable::BehaviourObjectCompileRunnable(
-        const Path &behaviourFilepath, bool forGame)
+        const Path &behaviourFilepath,
+        const Path &outputObjectDir,
+        bool forGame)
 {
     m_forGame = forGame;
+    m_outputObjectDir = outputObjectDir;
     m_behaviourPath = behaviourFilepath;
 }
 
 void BehaviourObjectCompileRunnable::run()
 {
-    CompileBehaviourObject();
-}
-
-void BehaviourObjectCompileRunnable::CompileBehaviourObject()
-{
     String behaviourName = m_behaviourPath.GetName();
-    Path objOutFilepath = Path(BehaviourManager::GetCurrentLibsDir())
-                               .Append(behaviourName).AppendExtension("o");
+    Path objOutFilepath = m_outputObjectDir.Append(behaviourName)
+                                           .AppendExtension("o");
     File::Remove(objOutFilepath);
 
-    Path headerPath = m_behaviourPath.GetDirectory().Append(
-                                Path(m_behaviourPath.GetName())
-                                .AppendExtension("h") );
+    Path headerPath = m_behaviourPath.ChangeExtension("h");
     BangPreprocessor::Preprocess(headerPath);
 
     Compiler::Result compileResult;

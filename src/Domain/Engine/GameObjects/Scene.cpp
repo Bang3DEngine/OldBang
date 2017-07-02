@@ -31,10 +31,6 @@ Scene::Scene() : GameObject("Scene")
 void Scene::_OnStart()
 {
     #ifndef BANG_EDITOR
-    if (!BehaviourManager::GetBehavioursMergedLibrary())
-    {
-        BehaviourManager::PrepareBehavioursLibrary(true); // Load precompiled lib
-    }
     GameObject::_OnStart();
     #else
     if (EditorState::IsPlaying())

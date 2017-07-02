@@ -88,7 +88,6 @@ SOURCES += \
     ../src/Persistence/IO/FileReader.cpp \
     ../src/Persistence/Files/ImageFile.cpp \
     ../src/Persistence/Behaviours/BehaviourManager.cpp \
-    ../src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
     ../src/Persistence/XML/XMLAttribute.cpp \
     ../src/Persistence/XML/XMLNode.cpp \
     ../src/Persistence/XML/XMLParser.cpp \
@@ -144,7 +143,8 @@ SOURCES += \
     ../src/Domain/Engine/Others/Compiler.cpp \
     ../src/Domain/Engine/Others/BangCompiler.cpp \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.cpp \
-    ../src/Persistence/Files/BFile.cpp
+    ../src/Persistence/Files/BFile.cpp \
+    ../src/Domain/Engine/Others/BangCompilerAsyncJob.cpp
 
 HEADERS +=                                                          \
     ../src/View/Application.h                                          \
@@ -217,7 +217,6 @@ HEADERS +=                                                          \
     ../src/Domain/Graphics/Shaders/Shader.h                            \
     ../src/Domain/Graphics/Shaders/ShaderProgram.h                     \
     ../src/Persistence/Behaviours/BehaviourManager.h                   \
-    ../src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
     ../src/Persistence/IO/FileReader.h                                 \
     ../src/Persistence/Files/ImageFile.h                               \
     ../src/Persistence/XML/XMLAttribute.h                              \
@@ -279,7 +278,8 @@ HEADERS +=                                                          \
     ../src/Domain/BangPreprocessor/BPReflectedVariable.h \
     ../src/Domain/BangPreprocessor/BPReflectedStruct.h \
     ../src/Domain/Engine/Debug/OStreamOperators.h \
-    ../src/Persistence/Files/BFile.h
+    ../src/Persistence/Files/BFile.h \
+    ../src/Domain/Engine/Others/BangCompilerAsyncJob.h
 
 EDITOR {
 HEADERS += \
@@ -308,6 +308,7 @@ HEADERS += \
     ../src/View/DragDrop/DragDropQListWidget.h \
     ../src/View/DragDrop/DragDropAgent.h \
     ../src/View/DragDrop/IDragDropListener.h \
+    ../src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
     ../src/View/DragDrop/DragDropManager.h \
     ../src/View/Explorer/FileSystemModel.h \
     ../src/View/EditorGameObject/EditorSelectionGameObject.h \
@@ -392,6 +393,7 @@ EDITOR {
         ../src/View/DragDrop/DragDropQListWidget.cpp \
         ../src/View/DragDrop/DragDropAgent.cpp \
         ../src/View/DragDrop/IDragDropListener.cpp \
+        ../src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
         ../src/Domain/Graphics/Buffers/SelectionFramebuffer.cpp \
         ../src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         ../src/View/Windows/EditorWindow.cpp \

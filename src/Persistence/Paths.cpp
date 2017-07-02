@@ -3,7 +3,9 @@
 #include <QDir>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Debug.h"
 #include "Bang/String.h"
+#include "Bang/SystemUtils.h"
 #include "Bang/SingletonManager.h"
 
 Paths::Paths()
@@ -50,6 +52,89 @@ const Path &Paths::EngineAssets()
     return Paths::GetInstance()->c_engineAssetsPath;
 }
 
+List<Path> Paths::GetBehavioursSourcesFilepaths()
+{
+    return Paths::ProjectAssets().GetFiles(true, {"cpp"});
+}
+
+List<Path> Paths::GetAllProjectSubDirs()
+{
+    List<Path> subdirs = Paths::Project().GetSubDirectories(true);
+    subdirs.PushFront(Paths::Project());
+    return subdirs;
+}
+
+List<Path> Paths::GetAllEngineSubDirs()
+{
+    List<Path> subdirs = Paths::Engine().GetSubDirectories(true);
+    subdirs.PushFront(Paths::Engine());
+    return subdirs;
+}
+
+const List<Path> &Paths::GetQtIncludeDirs()
+{
+    static List<Path> qtIncludeDirs;
+    if (qtIncludeDirs.IsEmpty())
+    {
+        bool ok = false;
+        String qtDir = "";
+        SystemUtils::System("qmake", {"-query", "QT_INSTALL_HEADERS"},
+                            &qtDir, &ok);
+        if (!ok)
+        {
+            Debug_Error("Error trying to find Qt include directories to compile.");
+            return {};
+        }
+        qtDir = qtDir.Replace("\n", "");
+
+        qtIncludeDirs = Path(qtDir).GetSubDirectories(true);
+        for (auto it = qtIncludeDirs.Begin(); it != qtIncludeDirs.End();)
+        {
+            const Path& libPath = *it;
+            const String& incDir = libPath.GetAbsolute();
+            if (!incDir.Contains("qt", false) || !libPath.IsDir())
+            {
+                qtIncludeDirs.Remove(it++);
+            }
+            else { ++it; }
+        }
+        qtIncludeDirs.PushFront( Path(qtDir) );
+    }
+    return qtIncludeDirs;
+}
+
+const List<Path> &Paths::GetQtLibrariesDirs()
+{
+    static List<Path> qtLibDirs;
+    if (qtLibDirs.IsEmpty())
+    {
+        bool ok = false;
+        String qtDir = "";
+        SystemUtils::System("qmake", {"-query", "QT_INSTALL_LIBS"},
+                            &qtDir, &ok);
+        if (!ok)
+        {
+            Debug_Error("Error trying to find Qt library directories to compile.");
+            return {};
+        }
+        qtDir = qtDir.Replace("\n", "");
+
+        qtLibDirs = Path(qtDir).GetSubDirectories(true);
+        for (auto it = qtLibDirs.Begin(); it != qtLibDirs.End();)
+        {
+            const Path& libDirPath = *it;
+            const String& libDir = libDirPath.GetAbsolute();
+            if ( !libDir.Contains("qt", false) || !libDirPath.IsDir() )
+            {
+                it = qtLibDirs.Remove(it++);
+            }
+            else { ++it; }
+        }
+        qtLibDirs.PushFront( Path(qtDir) );
+    }
+    return qtLibDirs;
+}
+
 const Path &Paths::Project()
 {
     return Paths::GetInstance()->c_projectPath;
@@ -60,7 +145,7 @@ const Path &Paths::ProjectAssets()
     return Paths::GetInstance()->c_projectAssetsPath;
 }
 
-const Path &Paths::ProjectLibraries()
+const Path &Paths::ProjectLibrariesDir()
 {
     return Paths::GetInstance()->c_projectLibrariesPath;
 }

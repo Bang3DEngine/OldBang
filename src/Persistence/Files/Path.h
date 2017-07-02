@@ -41,6 +41,8 @@ public:
     Path AppendRaw(const String& str) const;
     Path AppendExtension(const String& extension) const;
 
+    Path ChangeExtension(const String& extension) const;
+
     // "*.jpg *.so.*"
     bool HasExtension(const String &extension) const;
     bool HasExtension(const List<String> &extensions) const;
