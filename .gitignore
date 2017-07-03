@@ -25,9 +25,6 @@ cov-int
 Bang.tgz
 
 # Visual Studio
-DependenciesProjects/freealut-1.1.0/Alut/.vs/*
-DependenciesProjects/freealut-1.1.0/Alut/x64
-DependenciesProjects/freealut-1.1.0/Alut/Alut/x64
 *.vcxproj.filters
 *.vcxproj.user
 *.db

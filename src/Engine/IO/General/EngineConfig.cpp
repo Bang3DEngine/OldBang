@@ -40,7 +40,7 @@ void EngineConfig::WriteListToFile(const Path &filepath,
 
 Path EngineConfig::GetRecentProjectsFilepath()
 {
-    return Paths::Engine().Append("config/RecentProjects.cfg");
+    return Paths::Engine().Append("res/config/RecentProjects.cfg");
 }
 
 List<Path> EngineConfig::GetRecentProjectsList()

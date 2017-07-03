@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
-cd .. # Go to root directory
+cd ../proj # Go to root directory
 
 export QT_SELECT=5
 

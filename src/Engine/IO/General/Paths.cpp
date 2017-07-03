@@ -217,7 +217,8 @@ void Paths::SetEnginePath(const Path &enginePath)
 {
     Paths *p = Paths::GetInstance();
     p->c_enginePath       = enginePath;
-    p->c_engineAssetsPath = p->c_enginePath.Append("EngineAssets");
+    p->c_engineAssetsPath = p->c_enginePath.Append("res")
+                                           .Append("EngineAssets");
 }
 
 void Paths::SetProjectPath(const Path &projectPath)
