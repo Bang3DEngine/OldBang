@@ -2,7 +2,6 @@
 #define G_SHADERPROGRAM_H
 
 #include "Bang/Map.h"
-#include "Bang/UMap.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
@@ -24,9 +23,9 @@ public:
     };
 
     G_ShaderProgram();
-    G_ShaderProgram(const Path &vshaderPath, const Path &fshaderPath);
-    G_ShaderProgram(Type type, const Path &vshaderPath, const Path &fshaderPath);
     virtual ~G_ShaderProgram();
+
+    virtual void Load(const Path &vshaderPath, const Path &fshaderPath);
 
     bool Link();
 
@@ -47,8 +46,8 @@ public:
 
     void Refresh();
     void SetType(Type type);
-    void SetVertexShader(G_Shader *vertexShader);
-    void SetFragmentShader(G_Shader *fragmentShader);
+    virtual void SetVertexShader(G_Shader *vertexShader);
+    virtual void SetFragmentShader(G_Shader *fragmentShader);
 
     void SetVertexInputBinding(const String& inputName, uint location);
     void SetFragmentInputBinding(const String& inputName, uint location);
@@ -66,14 +65,14 @@ protected:
     G_Shader *p_vshader = nullptr;
     G_Shader *p_fshader = nullptr;
 
-    void Init(Type type, const Path &vshaderPath, const Path &fshaderPath);
-
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, const G_Texture*> m_namesToTexture;
 
     bool BindTextureToAvailableUnit(const String &texName,
                                     const G_Texture *texture) const;
     void UpdateTextureBindings() const;
+
+    void RetrieveType(const Path &fshaderPath);
 };
 
 #endif // G_SHADERPROGRAM_H

@@ -6,7 +6,6 @@
 #include "Bang/Debug.h"
 #include "Bang/G_Shader.h"
 #include "Bang/G_Texture.h"
-#include "Bang/G_ShaderManager.h"
 #include "Bang/G_TextureUnitManager.h"
 
 G_ShaderProgram::G_ShaderProgram()
@@ -14,42 +13,22 @@ G_ShaderProgram::G_ShaderProgram()
     m_idGL = glCreateProgram();
 }
 
-G_ShaderProgram::G_ShaderProgram(const Path &vshaderPath, const Path &fshaderPath)
+void G_ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
-    String fShaderExt = fshaderPath.GetExtension();
-    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::G_GBuffer; }
-    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
-    else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
-    else { m_type = Type::Other; }
+    RetrieveType(fshaderPath);
 
-    Init(m_type, vshaderPath, fshaderPath);
-}
-
-G_ShaderProgram::G_ShaderProgram(Type type,
-                             const Path &vshaderPath,
-                             const Path &fshaderPath) : G_ShaderProgram()
-{
-    Init(type, vshaderPath, fshaderPath);
-}
-
-void G_ShaderProgram::Init(G_ShaderProgram::Type type,
-                         const Path &vshaderPath,
-                         const Path &fshaderPath)
-{
-    m_type = type;
-
-    G_Shader *vs = G_ShaderManager::Load(G_Shader::Type::Vertex, vshaderPath);
+    G_Shader *vs = new G_Shader(G_Shader::Type::Vertex);
+    vs->LoadFromFile(vshaderPath);
     SetVertexShader(vs);
 
-    G_Shader *fs = G_ShaderManager::Load(G_Shader::Type::Fragment, fshaderPath);
+    G_Shader *fs = new G_Shader(G_Shader::Type::Fragment);
+    vs->LoadFromFile(fshaderPath);
     SetFragmentShader(fs);
 }
 
 
 G_ShaderProgram::~G_ShaderProgram()
 {
-    if (p_vshader) { G_ShaderManager::UnRegisterUsageOfShader(this, p_vshader); }
-    if (p_fshader) { G_ShaderManager::UnRegisterUsageOfShader(this, p_fshader); }
     glDeleteProgram(m_idGL);
 }
 
@@ -235,6 +214,15 @@ bool G_ShaderProgram::SetTexture(const String &name, const G_Texture *texture) c
     return uniformIsUsed;
 }
 
+void G_ShaderProgram::RetrieveType(const Path &fshaderPath)
+{
+    String fShaderExt = fshaderPath.GetExtension();
+    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::G_GBuffer; }
+    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
+    else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
+    else { m_type = Type::Other; }
+}
+
 void G_ShaderProgram::Refresh()
 {
     ENSURE(p_vshader && p_fshader);
@@ -253,13 +241,7 @@ void G_ShaderProgram::SetVertexShader(G_Shader *vertexShader)
     {
         Debug_Error("You are trying to set as vertex shader a non-vertex shader");
     }
-
-    if (p_vshader) { G_ShaderManager::UnRegisterUsageOfShader(this, p_vshader); }
-
     p_vshader = vertexShader;
-
-    if (p_vshader) { G_ShaderManager::RegisterUsageOfShader(this, p_vshader); }
-
     Refresh();
 }
 
@@ -269,13 +251,7 @@ void G_ShaderProgram::SetFragmentShader(G_Shader *fragmentShader)
     {
         Debug_Error("You are trying to set as fragment shader a non-fragment shader");
     }
-
-    if (p_fshader) { G_ShaderManager::UnRegisterUsageOfShader(this, p_fshader); }
-
     p_fshader = fragmentShader;
-
-    if (p_fshader) { G_ShaderManager::RegisterUsageOfShader(this, p_fshader); }
-
     Refresh();
 }
 

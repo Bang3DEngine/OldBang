@@ -4,19 +4,12 @@
 #include <fstream>
 #include <iostream>
 
-#include "Bang/File.h"
-#include "Bang/Paths.h"
+#include "Bang/Path.h"
 #include "Bang/Debug.h"
-#include "Bang/G_ShaderPreprocessor.h"
 
 G_Shader::G_Shader(G_Shader::Type t)
     : m_sourceCode(""), m_type(t)
 {
-}
-
-G_Shader::G_Shader(G_Shader::Type t, const Path &shaderPath) : G_Shader(t)
-{
-    LoadFromFile(shaderPath);
 }
 
 bool G_Shader::LoadFromFile(const Path& filepath)
@@ -29,7 +22,7 @@ bool G_Shader::LoadFromFile(const Path& filepath)
 
     m_filepath = filepath;
     m_sourceCode = File::GetContents(m_filepath);
-    G_ShaderPreprocessor::PreprocessCode(&m_sourceCode);
+    PreprocessCode(&m_sourceCode);
 
     m_idGL = glCreateShader(GLint(m_type));
 
@@ -78,14 +71,6 @@ G_Shader::Type G_Shader::GetType() const
     return m_type;
 }
 
-String G_Shader::ToString() const
+void G_Shader::PreprocessCode(String *shaderSrc) const
 {
-    if (m_type == Type::Vertex)
-    {
-        return "Vertex Shader: '" + m_filepath + "'";
-    }
-    else
-    {
-        return "Fragment Shader: '" + m_filepath + "'";
-    }
 }

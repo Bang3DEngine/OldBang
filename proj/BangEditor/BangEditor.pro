@@ -97,6 +97,7 @@ HEADERS += \
     $$PWD/../../src/Editor/EditorGameObject/EditorAxis.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.h \
+    $$PWD/../../src/Editor/Graphics/ShaderManager.h \
     $$PWD/../../src/Editor/EditorScene/EditorFloor.h \
     $$PWD/../../src/Editor/Inspector/ComponentClipboard.h \
     $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.h \
@@ -145,6 +146,7 @@ EDITOR {
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
         $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.cpp \
         $$PWD/../../src/Editor/EditorScene/EditorFloor.cpp \
+        $$PWD/../../src/Editor/Graphics/ShaderManager.cpp \
         $$PWD/../../src/Editor/General/IWindowEventManagerListener.cpp \
         $$PWD/../../src/Editor/Inspector/Inspector.cpp \
         $$PWD/../../src/Editor/Hierarchy/Hierarchy.cpp \

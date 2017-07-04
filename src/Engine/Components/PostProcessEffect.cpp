@@ -4,14 +4,14 @@
 #include "Bang/XMLNode.h"
 #include "Bang/G_Shader.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/G_ShaderManager.h"
+#include "Bang/ShaderManager.h"
 
 PostProcessEffect::PostProcessEffect()
 {
-    m_shaderProgram = new G_ShaderProgram();
+    m_shaderProgram = new ShaderProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
-    G_Shader *vShader = G_ShaderManager::Load(G_Shader::Type::Vertex, vShaderPath);
+    G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex, vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }
 
@@ -84,7 +84,7 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
         shaderFilepath != p_postProcessShader->GetFilepath())
     {
         G_Shader *postProcessShader =
-                G_ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
+                ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
         SetPostProcessShader(postProcessShader);
     }
 

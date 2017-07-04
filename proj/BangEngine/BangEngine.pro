@@ -23,6 +23,7 @@ SOURCES += \
     $$PWD/../../src/Engine/General/Time.cpp \
     $$PWD/../../src/Engine/Math/AABox.cpp \
     $$PWD/../../src/Engine/Math/Sphere.cpp \
+    $$PWD/../../src/Engine/Graphics/Shaders/Shader.cpp \
     $$PWD/../../src/Engine/GameObjects/GameObject.cpp \
     $$PWD/../../src/Engine/GameObjects/Scene.cpp \
     $$PWD/../../src/Engine/Components/Transform.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
     $$PWD/../../src/Engine/General/SystemUtils.cpp \
     $$PWD/../../src/Engine/General/SingletonManager.cpp \
     $$PWD/../../src/Engine/Components/CircleRenderer.cpp \
+    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.cpp \
     $$PWD/../../src/Engine/Components/SingleLineRenderer.cpp \
     $$PWD/../../src/Engine/Assets/MeshFactory.cpp \
     $$PWD/../../src/Engine/General/ICloneable.cpp \
@@ -150,6 +152,7 @@ HEADERS += \
     $$PWD/../../src/Engine/Debug/Debug.h \
     $$PWD/../../src/Engine/Debug/Gizmos.h \
     $$PWD/../../src/Engine/General/Time.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManager.h \
     $$PWD/../../src/Engine/IO/Files/FileReader.h \
     $$PWD/../../src/Engine/IO/Files/ImageFile.h \
@@ -158,6 +161,7 @@ HEADERS += \
     $$PWD/../../src/Engine/IO/XML/XMLParser.h \
     $$PWD/../../src/Engine/IO/XML/XMLProperty.h \
     $$PWD/../../src/Engine/IO/Files/TextFile.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/Shader.h \
     $$PWD/../../src/Engine/IO/Files/ExtensionManager.h \
     $$PWD/../../src/Engine/Components/AudioListener.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManagerStatus.h \

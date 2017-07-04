@@ -4,7 +4,7 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 
-class G_ShaderPreprocessor
+class ShaderPreprocessor
 {
 public:
     /**
@@ -18,7 +18,7 @@ protected:
     static const String GLSLVersionString;
 
 private:
-    G_ShaderPreprocessor();
+    ShaderPreprocessor();
 };
 
 #endif // SHADERPREPROCESSOR_H

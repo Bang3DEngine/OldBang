@@ -18,31 +18,29 @@ EDITOR {
 MOC_DIR = $$PWD/../../bin/Qt_MOCs/
 
 SOURCES += \
-$$PWD/../../src/Engine/Graphics/General/G_Screen.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_TextureUnitManager.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_Texture.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_VAO.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_VBO.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.cpp \
-$$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
-$$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.cpp \
-$$PWD/../../src/Engine/Graphics/Shaders/G_Shader.cpp \
-$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GraphicPipeline.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_RenderTexture.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_DeferredLights.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G_Gizmos.cpp \
-$$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
-$$PWD/../../src/Engine/Graphics/General/GL.cpp \
-$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderPreprocessor.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.cpp \
-$$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_Image.cpp \
-$$PWD/../../src/Engine/Graphics/General/G_Texture2D.cpp \
-$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderManager.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.cpp \
-$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_RenderLayer.cpp
+    $$PWD/../../src/Engine/Graphics/General/G_Screen.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_TextureUnitManager.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_Texture.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_VAO.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_VBO.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.cpp \
+    $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
+    $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.cpp \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_Shader.cpp \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GraphicPipeline.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_RenderTexture.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_DeferredLights.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G_Gizmos.cpp \
+    $$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
+    $$PWD/../../src/Engine/Graphics/General/GL.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.cpp \
+    $$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_Image.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_Texture2D.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_RenderLayer.cpp
 
 HEADERS += \
     $$PWD/../../src/Engine/Graphics/General/G_Screen.h \
@@ -61,11 +59,9 @@ HEADERS += \
     $$PWD/../../src/Engine/Graphics/General/GLContext.h \
     $$PWD/../../src/Engine/Graphics/General/GL.h \
     $$PWD/../../src/Engine/Graphics/General/G_Texture2D.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderPreprocessor.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.h \
     $$PWD/../../src/Engine/Graphics/General/GLObject.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderManager.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_TextureUnitManager.h \
     $$PWD/../../src/Engine/Graphics/General/G_Image.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.h \

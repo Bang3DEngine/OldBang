@@ -10,13 +10,13 @@
 #include "Bang/String.h"
 #include "Bang/G_Shader.h"
 
-class G_ShaderManager : public QObject
+class ShaderManager : public QObject
 {
     Q_OBJECT
 
 public:
-    G_ShaderManager();
-    static G_ShaderManager *GetInstance();
+    ShaderManager();
+    static ShaderManager *GetInstance();
 
     static G_Shader* Load(G_Shader::Type type, const Path& filepath);
 

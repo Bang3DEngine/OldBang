@@ -15,8 +15,10 @@
 
 Material::Material() : Asset()
 {
-    SetShaderProgram( new G_ShaderProgram( EPATH("Shaders/G_Default.vert_g"),
-                                         EPATH("Shaders/G_Default.frag_g")));
+    ShaderProgram *sp = new ShaderProgram();
+    sp->Load(EPATH("Shaders/G_Default.vert_g"),
+             EPATH("Shaders/G_Default.frag_g"));
+    SetShaderProgram(sp);
 }
 
 Material::Material(const Material &m)
@@ -26,8 +28,9 @@ Material::Material(const Material &m)
     {
         G_Shader *vshader = sp->GetVertexShader();
         G_Shader *fshader = sp->GetFragmentShader();
-        SetShaderProgram( new G_ShaderProgram(vshader->GetFilepath(),
-                                            fshader->GetFilepath()));
+        ShaderProgram *sp = new ShaderProgram();
+        sp->Load(vshader->GetFilepath(), fshader->GetFilepath());
+        SetShaderProgram(sp);
     }
 
     SetDiffuseColor(m.GetDiffuseColor());
@@ -77,8 +80,9 @@ void Material::Read(const XMLNode &xmlInfo)
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
        )
     {
-        SetShaderProgram(new G_ShaderProgram(vshaderFilepath,
-                                           fshaderFilepath));
+        ShaderProgram *sp = new ShaderProgram();
+        sp->Load(vshaderFilepath, fshaderFilepath);
+        SetShaderProgram(sp);
     }
 }
 

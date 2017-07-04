@@ -1,10 +1,11 @@
-#include "G_ShaderManager.h"
+#include "Bang/ShaderManager.h"
 
+#include "Bang/Shader.h"
 #include "Bang/FileTracker.h"
 #include "Bang/G_ShaderProgram.h"
 #include "Bang/SingletonManager.h"
 
-G_ShaderManager::G_ShaderManager()
+ShaderManager::ShaderManager()
 {
     m_refreshTimer.start(3000);
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
@@ -21,23 +22,24 @@ G_ShaderManager::G_ShaderManager()
     m_lastRefreshTime = Time::GetNow();
 }
 
-G_ShaderManager *G_ShaderManager::GetInstance()
+ShaderManager *ShaderManager::GetInstance()
 {
-    if (!SingletonManager::Exists<G_ShaderManager>())
+    if (!SingletonManager::Exists<ShaderManager>())
     {
-        SingletonManager::Set<G_ShaderManager>( new G_ShaderManager() );
+        SingletonManager::Set<ShaderManager>( new ShaderManager() );
     }
-    return SingletonManager::Get<G_ShaderManager>();
+    return SingletonManager::Get<ShaderManager>();
 }
 
-G_Shader *G_ShaderManager::Load(G_Shader::Type type, const Path &filepath)
+G_Shader *ShaderManager::Load(G_Shader::Type type, const Path &filepath)
 {
-    G_ShaderManager *sm = G_ShaderManager::GetInstance();
+    ShaderManager *sm = ShaderManager::GetInstance();
 
     G_Shader* shader = nullptr;
     if (!sm->m_filepathToShaders.ContainsKey(filepath))
     {
-        shader = new G_Shader(type, filepath);
+        shader = new Shader(type);
+        shader->LoadFromFile(filepath);
         sm->m_filepathToShaders.Set(filepath, shader);
     }
     else
@@ -48,12 +50,12 @@ G_Shader *G_ShaderManager::Load(G_Shader::Type type, const Path &filepath)
     return shader;
 }
 
-void G_ShaderManager::RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
+void ShaderManager::RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
                                           G_Shader *shaderBeingUsed)
 {
     ENSURE(shaderProgram); ENSURE(shaderBeingUsed);
 
-    G_ShaderManager *sm = G_ShaderManager::GetInstance();
+    ShaderManager *sm = ShaderManager::GetInstance();
     if (!sm->m_shaderUsages.ContainsKey(shaderBeingUsed))
     {
         sm->m_shaderUsages.Set(shaderBeingUsed, Set<G_ShaderProgram*>());
@@ -61,18 +63,18 @@ void G_ShaderManager::RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
     sm->m_shaderUsages.Get(shaderBeingUsed).Insert(shaderProgram);
 }
 
-void G_ShaderManager::UnRegisterUsageOfShader(G_ShaderProgram *shaderProgram,
+void ShaderManager::UnRegisterUsageOfShader(G_ShaderProgram *shaderProgram,
                                             G_Shader *shaderBeingUsed)
 {
     ENSURE(shaderProgram); ENSURE(shaderBeingUsed);
 
-    G_ShaderManager *sm = G_ShaderManager::GetInstance();
+    ShaderManager *sm = ShaderManager::GetInstance();
     ENSURE (sm->m_shaderUsages.ContainsKey(shaderBeingUsed));
 
     sm->m_shaderUsages.Get(shaderBeingUsed).Remove(shaderProgram);
 }
 
-void G_ShaderManager::Refresh()
+void ShaderManager::Refresh()
 {
     #ifdef BANG_EDITOR
     List<Path> shaderFilepaths = m_filepathToShaders.GetKeys();

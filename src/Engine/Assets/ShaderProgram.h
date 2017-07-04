@@ -13,6 +13,11 @@ class ShaderProgram : public G_ShaderProgram,
 
 public:
     ShaderProgram();
+    virtual ~ShaderProgram();
+
+    void Load(const Path &vshaderPath, const Path &fshaderPath) override;
+    void SetVertexShader(G_Shader *vertexShader) override;
+    void SetFragmentShader(G_Shader *fragmentShader) override;
 
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override;

@@ -21,9 +21,9 @@
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     G_Framebuffer(width, height)
 {
-    m_selectionProgram = new G_ShaderProgram(
-                                    EPATH("Shaders/G_Default.vert_g"),
-                                    EPATH("Shaders/SelectionBuffer.frag_sel"));
+    m_selectionProgram = new ShaderProgram();
+    m_selectionProgram->Load( EPATH("Shaders/G_Default.vert_g"),
+                              EPATH("Shaders/SelectionBuffer.frag_sel") );
 
     CreateColorAttachment(AttColor,    G_Texture::Format::RGBA_Float16);
     CreateColorAttachment(AttWorldPos, G_Texture::Format::RGBA_Float16);

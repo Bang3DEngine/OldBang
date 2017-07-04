@@ -5,7 +5,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/G_GraphicPipeline.h"
 
-G_GPPass::G_GPPass(G_GraphicPipeline *graphicPipeline, const List<G_GPPass*> &subPasses)
+G_GPPass::G_GPPass(G_GraphicPipeline *graphicPipeline,
+                   const List<G_GPPass*> &subPasses)
 {
     p_graphicPipeline = graphicPipeline;
     p_gbuffer = graphicPipeline->GetG_GBuffer();
