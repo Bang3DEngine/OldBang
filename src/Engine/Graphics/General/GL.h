@@ -2,23 +2,23 @@
 #define GL_H
 
 #include <GL/glew.h>
+#include <GL/gl.h>
 
-#include "GL/gl.h"
 #include "Bang/Path.h"
-#include "Bang/Image.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
+#include "Bang/G_Image.h"
 #include "Bang/Matrix4.h"
 
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 
 typedef GLuint GLId;
 
-class VAO;
-class Texture;
+class G_VAO;
+class G_Texture;
 class GLObject;
 class GLContext;
-class ShaderProgram;
+class G_ShaderProgram;
 class GL
 {
 public:
@@ -44,7 +44,7 @@ public:
         None           = 0,
         Texture2D      = GL_TEXTURE_2D,
         ShaderProgram  ,
-        Framebuffer    = GL_FRAMEBUFFER,
+        G_Framebuffer    = GL_FRAMEBUFFER,
         VAO            ,
         VBO
     };
@@ -59,7 +59,7 @@ public:
     static void ClearError();
     static bool CheckError(int line = 0, const String &func = "",
                            const String &file = "");
-    static bool CheckFramebufferError();
+    static bool CheckG_FramebufferError();
 
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,
@@ -83,8 +83,8 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static void ApplyContextToShaderProgram(ShaderProgram *sp);
-    static void Render(const VAO* vao,
+    static void ApplyContextToShaderProgram(G_ShaderProgram *sp);
+    static void Render(const G_VAO* vao,
                        GL::RenderMode renderMode,
                        int elementsCount,
                        int startElementIndex = 0);

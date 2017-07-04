@@ -2,15 +2,15 @@
 
 #include <GL/glew.h>
 
-#include "Bang/VAO.h"
-#include "Bang/VBO.h"
+#include "Bang/G_VAO.h"
+#include "Bang/G_VBO.h"
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
 #include "Bang/SerializableObject.h"
 
 Mesh::Mesh()
 {
-    m_vao = new VAO();
+    m_vao = new G_VAO();
 }
 
 Mesh::Mesh(const Mesh &m)
@@ -72,7 +72,7 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
         m_positions.PushBack( Vector3::Zero );
     }
 
-    m_vertexPositionsVBO = new VBO();
+    m_vertexPositionsVBO = new G_VBO();
     m_vertexPositionsVBO->Fill((void*)(&m_positions[0]),
                                m_positions.Size() * sizeof(float) * 3);
     BindPositionsVBOToLocation(Mesh::DefaultPositionsVBOLocation);
@@ -90,7 +90,7 @@ void Mesh::LoadNormals(const Array<Vector3> &normals)
     {
         m_normals.PushBack( Vector3::Zero );
     }
-    m_vertexNormalsVBO = new VBO();
+    m_vertexNormalsVBO = new G_VBO();
     m_vertexNormalsVBO->Fill((void*)(&m_normals[0]),
                                      m_normals.Size() * sizeof(float) * 3);
     BindNormalsVBOToLocation(Mesh::DefaultNormalsVBOLocation);
@@ -105,7 +105,7 @@ void Mesh::LoadUvs(const Array<Vector2> &uvs)
     {
         m_uvs.PushBack( Vector2::Zero );
     }
-    m_vertexUvsVBO = new VBO();
+    m_vertexUvsVBO = new G_VBO();
     m_vertexUvsVBO->Fill((void*)(&m_uvs[0]), m_uvs.Size() * sizeof(float) * 2);
     BindUvsVBOToLocation(Mesh::DefaultUvsVBOLocation);
 }
@@ -134,7 +134,7 @@ void Mesh::BindUvsVBOToLocation(int uvsVBOLocation)
     m_vao->BindVBO(m_vertexUvsVBO, uvsVBOLocation, 2);
 }
 
-VAO *Mesh::GetVAO() const
+G_VAO *Mesh::GetVAO() const
 {
     return m_vao;
 }

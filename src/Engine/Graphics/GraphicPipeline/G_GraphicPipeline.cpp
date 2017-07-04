@@ -1,0 +1,335 @@
+#include "Bang/G_GraphicPipeline.h"
+
+#include "Bang/Mesh.h"
+#include "Bang/Debug.h"
+#include "Bang/G_VAO.h"
+#include "Bang/G_VBO.h"
+#include "Bang/Scene.h"
+#include "Bang/Light.h"
+#include "Bang/Input.h"
+#include "Bang/Camera.h"
+#include "Bang/ChronoGL.h"
+#include "Bang/Material.h"
+#include "Bang/G_Screen.h"
+#include "Bang/Transform.h"
+#include "Bang/G_GBuffer.h"
+#include "Bang/G_Texture.h"
+#include "Bang/GLContext.h"
+#include "Bang/GameObject.h"
+#include "Bang/G_GPPass_G.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/RectTransform.h"
+#include "Bang/G_RenderTexture.h"
+#include "Bang/G_ShaderProgram.h"
+#include "Bang/G_GPPass_G_Gizmos.h"
+#include "Bang/G_GPPass_RenderLayer.h"
+#include "Bang/G_TextureUnitManager.h"
+#include "Bang/GraphicPipelineDebugger.h"
+#include "Bang/G_GPPass_SP_DeferredLights.h"
+#include "Bang/G_GPPass_SP_PostProcessEffects.h"
+
+#ifdef BANG_EDITOR
+#include "Bang/Hierarchy.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/GPPass_Selection.h"
+#include "Bang/SelectionFramebuffer.h"
+#endif
+
+G_GraphicPipeline::G_GraphicPipeline(G_Screen *screen)
+{
+    m_glContext = new GLContext();
+    m_texUnitManager = new G_TextureUnitManager();
+
+    m_gbuffer = new G_GBuffer(screen->m_width, screen->m_height);
+    #ifdef BANG_EDITOR
+    m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
+    #endif
+
+
+    m_matSelectionEffectScreen = AssetsManager::Load<Material>(
+                EPATH("Materials/SP_SelectionEffect.bmat") );
+
+    m_renderGBufferToScreenMaterial =
+         AssetsManager::Load<Material>(
+                EPATH("Materials/RenderGBufferToScreen.bmat") );
+
+    m_screenPlaneMesh = MeshFactory::GetUIPlane();
+
+    // Set up graphic pipeline passes
+    typedef Renderer::RenderLayer RL;
+    m_scenePass  =
+     new G_GPPass_RenderLayer(this, RL::Scene,
+     {
+       new G_GPPass_G(this, true, false),     // Lighted G_Pass
+       new G_GPPass_SP_DeferredLights(this),  // Apply light
+       new G_GPPass_G(this, false, false),    // UnLighted G_Pass
+       new G_GPPass_SP_PostProcessEffects(this,
+                                        PostProcessEffect::Type::AfterScene)
+     });
+
+    m_canvasPass =
+     new G_GPPass_RenderLayer(this, RL::Canvas,
+     {
+      new G_GPPass_G(this, false, false),
+      new G_GPPass_SP_PostProcessEffects(this,
+                                       PostProcessEffect::Type::AfterCanvas)
+     });
+
+    m_gizmosPass = new G_GPPass_RenderLayer(this, RL::Gizmos,
+    {
+     new G_GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
+     new G_GPPass_G_Gizmos(this, false, false), // Gizmos normal
+     new G_GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
+    });
+
+    #ifdef BANG_EDITOR
+    m_sceneSelectionPass  = new G_GPPass_RenderLayer(this, RL::Scene,
+    {
+      new GPPass_Selection(this)
+    });
+    m_canvasSelectionPass  = new G_GPPass_RenderLayer(this, RL::Canvas,
+    {
+      new GPPass_Selection(this)
+    });
+    m_gizmosSelectionPass  = new G_GPPass_RenderLayer(this, RL::Gizmos,
+    {
+      new GPPass_Selection(this)
+    });
+    #endif
+}
+
+G_GraphicPipeline::~G_GraphicPipeline()
+{
+    delete m_gbuffer;
+    delete m_scenePass;
+    delete m_canvasPass;
+    delete m_gizmosPass;
+
+    #ifdef BANG_EDITOR
+    delete m_selectionFB;
+    delete m_sceneSelectionPass;
+    delete m_canvasSelectionPass;
+    delete m_gizmosSelectionPass;
+    #endif
+
+    delete m_matSelectionEffectScreen;
+    delete m_texUnitManager;
+    delete m_glContext;
+}
+
+void G_GraphicPipeline::RenderScene(Scene *scene, bool inGame)
+{
+    p_scene = scene; ENSURE(p_scene);
+    m_renderingInGame = inGame;
+
+    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
+    List<GameObject*> sceneChildren = scene->GetChildren();
+
+    Camera *camera = scene->GetCamera();
+    if (camera) { camera->Bind(); }
+
+    RenderG_GBuffer(renderers, sceneChildren);
+    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
+
+    #ifdef BANG_EDITOR
+    if (!m_renderingInGame)
+    {
+        RenderSelectionBuffer(renderers, sceneChildren, p_scene);
+        if (Input::GetKey(Input::Key::S))
+        {
+            RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
+        }
+    }
+    #endif
+}
+
+void G_GraphicPipeline::ApplySelectionOutline()
+{
+    #ifdef BANG_EDITOR
+    if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
+
+    List<GameObject*> sceneGameObjects = p_scene->GetChildrenRecursively();
+
+    // Create stencil mask that the selection pass will use
+    GL::SetTestDepth(false);
+    m_gbuffer->Bind();
+    m_gbuffer->ClearStencil();
+    m_gbuffer->SetStencilTest(false);
+    m_gbuffer->SetStencilWrite(true);
+    m_gbuffer->SetAllDrawBuffersExceptColor();
+    for (GameObject *go : sceneGameObjects)
+    {
+        if (go->IsSelected() &&
+            (!go->transform || !go->transform->IsOfType<RectTransform>()))
+        {
+            List<Renderer*> rends = go->GetComponents<Renderer>();
+            for (Renderer *rend : rends)
+            {
+                if (rend && rend->IsEnabled()) { rend->Render(); }
+            }
+        }
+    }
+
+    // Apply selection outline
+    m_gbuffer->ApplyPass(m_matSelectionEffectScreen->GetShaderProgram());
+    m_gbuffer->UnBind();
+    GL::SetTestDepth(true);
+    #endif
+}
+
+void G_GraphicPipeline::ApplyDeferredLights(Renderer *rend)
+{
+    // Limit rendering to the renderer visible rect
+    Rect renderRect = Rect::ScreenRect;
+    Camera *sceneCam = p_scene->GetCamera();
+    if (rend)
+    {
+        renderRect = rend->gameObject->GetBoundingScreenRect(sceneCam, false);
+    }
+    else
+    {
+        // Apply deferred lights to the whole scene
+        renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
+        // renderRect = Rect::ScreenRect;
+    }
+    ENSURE(renderRect != Rect::Empty);
+
+    // We have marked from before the zone where we want to apply the effect
+    m_gbuffer->SetStencilTest(true);
+
+    Material *rendMat = rend ? rend->GetMaterial() : nullptr;
+    if ( !rend || (rendMat && rendMat->ReceivesLighting()) )
+    {
+        List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
+        for (Light *light : lights)
+        {
+            if (!light || !light->IsEnabled()) { continue; }
+            light->ApplyLight(m_gbuffer, renderRect);
+        }
+    }
+}
+
+void G_GraphicPipeline::RenderG_GBuffer(const List<Renderer*> &renderers,
+                                    const List<GameObject*> &sceneChildren)
+{
+    m_gbuffer->Bind();
+
+    Color bgColor = p_scene->GetCamera()->GetClearColor();
+    m_gbuffer->ClearBuffersAndBackground(bgColor);
+
+    m_scenePass->Pass(renderers, sceneChildren);
+    if (!m_renderingInGame) { ApplySelectionOutline(); }
+    m_gbuffer->ClearStencil();
+
+    m_canvasPass->Pass(renderers, sceneChildren);
+    m_gizmosPass->Pass(renderers, sceneChildren);
+
+    m_gbuffer->UnBind();
+}
+
+#ifdef BANG_EDITOR
+void G_GraphicPipeline::RenderSelectionBuffer(
+                        const List<Renderer*> &renderers,
+                        const List<GameObject*> &sceneChildren,
+                        Scene *scene)
+{
+    Camera *cam = p_scene->GetCamera();
+    m_selectionFB->m_isPassing = true;
+    m_selectionFB->PrepareForRender(scene);
+    cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
+
+    m_selectionFB->Bind();
+
+    m_selectionFB->ClearColor(Color::One);
+    m_sceneSelectionPass->Pass (renderers, sceneChildren);
+    m_canvasSelectionPass->Pass(renderers, sceneChildren);
+    m_gizmosSelectionPass->Pass(renderers, sceneChildren);
+
+    m_selectionFB->UnBind();
+
+    cam->SetReplacementShaderProgram(nullptr);
+    m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
+}
+#endif
+
+void G_GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
+{
+    sp->Bind();
+    m_glContext->ApplyToShaderProgram(sp);
+    sp->SetVec2("B_rectMinCoord", mask.GetMin());
+    sp->SetVec2("B_rectMaxCoord", mask.GetMax());
+    sp->SetVec2("B_ScreenSize", G_Screen::GetSize());
+    RenderScreenPlane();
+    sp->UnBind();
+}
+
+void G_GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
+{
+    G_ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    ENSURE(sp);
+
+    m_renderGBufferToScreenMaterial->Bind();
+    GL::ApplyContextToShaderProgram(sp);
+
+    sp->SetTexture("B_GTex_Color", fullScreenTexture);
+
+    G_GraphicPipeline::RenderScreenPlane();
+    m_renderGBufferToScreenMaterial->UnBind();
+}
+
+void G_GraphicPipeline::RenderScreenPlane()
+{
+    GL::SetWireframe(false);
+    GL::SetTestDepth(false);
+    GL::SetWriteDepth(false);
+    GL::SetCullMode(GL::CullMode::None);
+    GL::Render(m_screenPlaneMesh->GetVAO(), GL::RenderMode::Triangles,
+               m_screenPlaneMesh->GetVertexCount());
+    GL::SetWriteDepth(true);
+    GL::SetTestDepth(true);
+}
+
+#ifdef BANG_EDITOR
+SelectionFramebuffer *G_GraphicPipeline::GetSelectionFramebuffer()
+{
+    return m_selectionFB;
+}
+#endif
+
+G_GraphicPipeline* G_GraphicPipeline::GetActive()
+{
+    G_Screen *screen = G_Screen::GetInstance();
+    return screen ? screen->GetGraphicPipeline() : nullptr;
+}
+
+void G_GraphicPipeline::OnResize(int newWidth, int newHeight)
+{
+    m_gbuffer->Resize(newWidth, newHeight);
+    #ifdef BANG_EDITOR
+    m_selectionFB->Resize(newWidth, newHeight);
+    #endif
+}
+
+void G_GraphicPipeline::SetG_GBufferAttachmentToBeRendered(
+        G_GBuffer::AttachmentId attachment)
+{
+    m_gbufferAttachToBeShown = attachment;
+}
+
+GLContext *G_GraphicPipeline::GetGLContext() const
+{
+    return m_glContext;
+}
+
+G_GBuffer *G_GraphicPipeline::GetG_GBuffer()
+{
+    return m_gbuffer;
+}
+
+G_TextureUnitManager *G_GraphicPipeline::GetTextureUnitManager() const
+{
+    return m_texUnitManager;
+}

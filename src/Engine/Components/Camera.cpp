@@ -4,7 +4,7 @@
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Transform.h"
 #include "Bang/GLContext.h"
 #include "Bang/GameObject.h"
@@ -24,12 +24,12 @@ Camera::~Camera()
 
 }
 
-void Camera::SetReplacementShaderProgram(ShaderProgram *replacementSP)
+void Camera::SetReplacementShaderProgram(G_ShaderProgram *replacementSP)
 {
     m_replacementShaderProgram = replacementSP;
 }
 
-ShaderProgram *Camera::GetReplacementShaderProgram() const
+G_ShaderProgram *Camera::GetReplacementShaderProgram() const
 {
     return m_replacementShaderProgram;
 }
@@ -49,7 +49,7 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     if (m_projMode == ProjectionMode::Perspective)
     {
         *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatio(),
+                    Math::Deg2Rad(m_fovDegrees), G_Screen::GetAspectRatio(),
                     m_zNear, m_zFar);
     }
     else //Ortho
@@ -107,7 +107,7 @@ const Color &Camera::GetClearColor() const
 
 float Camera::GetOrthoWidth() const
 {
-    return GetOrthoHeight() * Screen::GetAspectRatio();
+    return GetOrthoHeight() * G_Screen::GetAspectRatio();
 }
 
 float Camera::GetOrthoHeight() const
@@ -232,7 +232,7 @@ void Camera::OnDrawGizmos(bool depthed, bool overlay)
             Gizmos::RenderFrustum(transform->GetForward(), transform->GetUp(),
                                   transform->GetPosition(),
                                   GetZNear(), GetZFar(),
-                                  GetFovDegrees(), Screen::GetAspectRatio());
+                                  GetFovDegrees(), G_Screen::GetAspectRatio());
         }
         else
         {

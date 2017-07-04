@@ -16,14 +16,14 @@
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Chrono.h"
+#include "Bang/G_Screen.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/EditorPlayFlow.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/FontSheetCreator.h"
+#include "Bang/G_FontSheetCreator.h"
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
@@ -64,7 +64,7 @@ void Application::MainLoop()
     while ( win->GetMainWindow()->isVisible() )
     {
         processEvents();
-        if (!Screen::GetInstance()) { continue; }
+        if (!G_Screen::GetInstance()) { continue; }
 
         float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
         m_lastRenderTime = Time::GetNow();
@@ -81,9 +81,9 @@ void Application::MainLoop()
         SceneManager::Update();
 
         // Render screen
-        Screen::GetInstance()->Render();
-		Screen::GetInstance()->makeCurrent();
-        Screen::GetInstance()->swapBuffers();
+        G_Screen::GetInstance()->Render();
+		G_Screen::GetInstance()->makeCurrent();
+        G_Screen::GetInstance()->swapBuffers();
 
         Input::GetInstance()->OnFrameFinished();
 
@@ -121,7 +121,7 @@ void Application::ResetDeltaTime()
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
-    Screen *screen = Screen::GetInstance();
+    G_Screen *screen = G_Screen::GetInstance();
     if (screen && receiver == screen)
     {
         Input::GetInstance()->EnqueueEvent(e);

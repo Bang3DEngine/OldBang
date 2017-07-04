@@ -16,10 +16,10 @@
 #include "Bang/Timer.h"
 #include "Bang/Debug.h"
 #include "Bang/Camera.h"
-#include "Bang/Shader.h"
-#include "Bang/Screen.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
+#include "Bang/G_Shader.h"
+#include "Bang/G_Screen.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Texture2D.h"
@@ -27,7 +27,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/FileReader.h"
 #include "Bang/Application.h"
-#include "Bang/Framebuffer.h"
+#include "Bang/G_Framebuffer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/ShaderProgram.h"
@@ -115,8 +115,8 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     GameWindow::InitFromMainBinary(window, app);
     #endif
 
-    Screen::GetInstance()->makeCurrent();
-    Screen::GetInstance()->initializeGL();
+    G_Screen::GetInstance()->makeCurrent();
+    G_Screen::GetInstance()->initializeGL();
 }
 
 #include "Bang/BangPreprocessor.h"

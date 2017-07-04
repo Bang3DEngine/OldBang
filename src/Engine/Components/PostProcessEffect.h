@@ -3,8 +3,8 @@
 
 #include "Bang/Component.h"
 
-class Shader;
-class ShaderProgram;
+class G_Shader;
+class G_ShaderProgram;
 class PostProcessEffect : public Component
 {
     OBJECT(PostProcessEffect)
@@ -22,14 +22,14 @@ public:
 
     void SetType(Type type);
     void SetPriority(int priority);
-    void SetPostProcessShader(Shader *postProcessShader);
+    void SetPostProcessShader(G_Shader *postProcessShader);
 
     virtual void CloneInto(ICloneable *clone) const override;
 
     Type GetType() const;
     int GetPriority() const;
-    ShaderProgram* GetPostProcessShaderProgram() const;
-    Shader* GetPostProcessShader() const;
+    G_ShaderProgram* GetPostProcessShaderProgram() const;
+    G_Shader* GetPostProcessShader() const;
     Path GetPostProcessShaderFilepath() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -39,8 +39,8 @@ public:
                           const PostProcessEffect& rhs);
 
 private:
-    ShaderProgram *m_shaderProgram = nullptr;
-    Shader *p_postProcessShader    = nullptr;
+    G_ShaderProgram *m_shaderProgram = nullptr;
+    G_Shader *p_postProcessShader    = nullptr;
     Type m_type = Type::AfterScene;
     int m_priority = 0;
 };

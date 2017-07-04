@@ -7,7 +7,7 @@
 
 #include "Bang/IWindow.h"
 
-class Screen;
+class G_Screen;
 class GameWindow : public IWindow
 {
 private:
@@ -15,7 +15,7 @@ private:
     void SetupUI();
 
 public:
-    Screen *screen = nullptr;
+    G_Screen *screen = nullptr;
 
     GameWindow(QMainWindow *window);
 

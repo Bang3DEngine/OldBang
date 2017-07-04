@@ -3,7 +3,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Vector3.h"
-#include "Bang/Framebuffer.h"
+#include "Bang/G_Framebuffer.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IWindowEventManagerListener.h"
@@ -12,12 +12,12 @@
 class Scene;
 class Renderer;
 class GameObject;
-class ShaderProgram;
+class G_ShaderProgram;
 
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
  */
-class SelectionFramebuffer : public Framebuffer
+class SelectionFramebuffer : public G_Framebuffer
                             #ifdef BANG_EDITOR
                             ,public IWindowEventManagerListener
                             #endif
@@ -31,14 +31,14 @@ public:
     void RenderForSelectionBuffer(Renderer *renderer);
     void ProcessSelection();
 
-    RenderTexture *GetColorTexture() const;
-    RenderTexture *GetWorldPosTexture() const;
+    G_RenderTexture *GetColorTexture() const;
+    G_RenderTexture *GetWorldPosTexture() const;
 
     GameObject *GetGameObjectInPosition(int x, int y);
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 
-    ShaderProgram *GetSelectionShaderProgram() const;
+    G_ShaderProgram *GetSelectionShaderProgram() const;
 
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
@@ -46,8 +46,8 @@ private:
     static const AttachmentId AttColor    = AttachmentId::ColorAttachment0;
     static const AttachmentId AttWorldPos = AttachmentId::ColorAttachment1;
 
-    RenderTexture *m_colorTexture    = nullptr;
-    RenderTexture *m_worldPosTexture = nullptr;
+    G_RenderTexture *m_colorTexture    = nullptr;
+    G_RenderTexture *m_worldPosTexture = nullptr;
 
     /**
      * @brief m_isPassing is true only when SelectionFrambuffer is rendering.
@@ -57,7 +57,7 @@ private:
     bool m_isPassing = false;
     GameObject *m_nextGameObjectToBeRendered = nullptr;
 
-    ShaderProgram *m_selectionProgram = nullptr;
+    G_ShaderProgram *m_selectionProgram = nullptr;
     /**
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.
@@ -75,7 +75,7 @@ private:
     Color GetSelectionColor(GameObject *go) const;
 
     friend class Gizmos;
-    friend class GraphicPipeline;
+    friend class G_GraphicPipeline;
 };
 
 

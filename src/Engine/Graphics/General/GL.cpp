@@ -1,11 +1,11 @@
 #include "Bang/GL.h"
 
 #include "Bang/Debug.h"
-#include "Bang/Texture.h"
 #include "Bang/GLObject.h"
+#include "Bang/G_Texture.h"
 #include "Bang/GLContext.h"
-#include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_ShaderProgram.h"
+#include "Bang/G_GraphicPipeline.h"
 
 void GL::ClearError()
 {
@@ -28,7 +28,7 @@ bool GL::CheckError(int line, const String &func, const String &file)
     return error;
 }
 
-bool GL::CheckFramebufferError()
+bool GL::CheckG_FramebufferError()
 {
     bool error = false;
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -126,12 +126,12 @@ void GL::SetZNearFar(float zNear, float zFar)
     GL::GetGLContext()->SetZNearFar(zNear, zFar);
 }
 
-void GL::ApplyContextToShaderProgram(ShaderProgram *sp)
+void GL::ApplyContextToShaderProgram(G_ShaderProgram *sp)
 {
     GL::GetGLContext()->ApplyToShaderProgram(sp);
 }
 
-void GL::Render(const VAO *vao, GL::RenderMode renderMode, int elementsCount,
+void GL::Render(const G_VAO *vao, GL::RenderMode renderMode, int elementsCount,
                 int startIdx)
 {
     return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);
@@ -194,7 +194,7 @@ void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
         case BindTarget::ShaderProgram:
             glUseProgram(glId);
         break;
-        case BindTarget::Framebuffer:
+        case BindTarget::G_Framebuffer:
             glBindFramebuffer(GL_FRAMEBUFFER, glId);
         break;
         case BindTarget::VAO:
@@ -244,6 +244,6 @@ GL::GL()
 
 GLContext *GL::GetGLContext()
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
     return gp ? gp->GetGLContext() : nullptr;
 }

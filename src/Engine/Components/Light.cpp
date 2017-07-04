@@ -3,7 +3,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
-#include "Bang/GBuffer.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -26,7 +26,7 @@ Light::~Light()
 
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
-    ShaderProgram *sp = mat->GetShaderProgram();
+    G_ShaderProgram *sp = mat->GetShaderProgram();
     sp->SetFloat("B_LightIntensity", m_intensity);
     sp->SetColor("B_LightColor", m_color);
 
@@ -35,7 +35,7 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->SetVec3("B_LightPositionWorld", t->GetPosition());
 }
 
-void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
+void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
 {
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
 

@@ -35,6 +35,7 @@ SOURCES += \
     $$PWD/../../src/Engine/Components/Behaviour.cpp \
     $$PWD/../../src/Engine/Assets/Texture2D.cpp \
     $$PWD/../../src/Engine/Assets/Prefab.cpp \
+    $$PWD/../../src/Engine/Assets/ShaderProgram.cpp \
     $$PWD/../../src/Engine/IO/General/AssetsManager.cpp \
     $$PWD/../../src/Engine/General/Input.cpp \
     $$PWD/../../src/Engine/IO/Files/TextFile.cpp \
@@ -137,6 +138,7 @@ HEADERS += \
     $$PWD/../../src/Engine/Components/UIImage.h \
     $$PWD/../../src/Engine/Components/UIRenderer.h \
     $$PWD/../../src/Engine/Assets/Font.h \
+    $$PWD/../../src/Engine/Assets/ShaderProgram.h \
     $$PWD/../../src/Engine/Components/UIText.h \
     $$PWD/../../src/Engine/IO/General/EngineConfig.h \
     $$PWD/../../src/Engine/Math/AABox.h \
@@ -213,7 +215,7 @@ DISTFILES += \
     ../.gitignore \
     $$PWD/../../src/Engine \
     $$PWD/../../src/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
-    $$PWD/../../src/res/EngineAssets/Shaders/RenderGBufferToScreen.frag_pp \
+    $$PWD/../../src/res/EngineAssets/Shaders/RenderG_GBufferToScreen.frag_pp \
     $$PWD/../../src/res/EngineAssets/Shaders/G_Template.frag_g \
     $$PWD/../../src/res/EngineAssets/Shaders/G_Default.frag_g \
     $$PWD/../../src/res/EngineAssets/Shaders/SelectionBuffer.vert_sel \
@@ -225,7 +227,7 @@ DISTFILES += \
     $$PWD/../../src/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
     $$PWD/../../src/res/EngineAssets/Shaders/Include/G.frag_g \
     $$PWD/../../src/res/EngineAssets/Shaders/Include/G.vert_g \
-    $$PWD/../../src/res/EngineAssets/Materials/RenderGBufferToScreen.bmat \
+    $$PWD/../../src/res/EngineAssets/Materials/RenderG_GBufferToScreen.bmat \
     $$PWD/../../src/res/EngineAssets/Materials/G_Default.bmat \
     $$PWD/../../src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
     $$PWD/../../src/res/EngineAssets/Shaders/G_Missing.frag \

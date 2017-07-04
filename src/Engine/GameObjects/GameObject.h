@@ -348,13 +348,13 @@ protected:
     virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
     friend class Scene;
-    friend class Screen;
     friend class Prefab;
+    friend class G_Screen;
     friend class Hierarchy;
     friend class SceneManager;
-    friend class GPPass_G_Gizmos;
-    friend class GraphicPipeline;
     friend class GPPass_Selection;
+    friend class G_GPPass_G_Gizmos;
+    friend class G_GraphicPipeline;
     friend class SelectionFramebuffer;
 };
 

@@ -1,12 +1,12 @@
 ﻿#ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
-#include "Bang/Image.h"
 #include "Bang/Array.h"
 #include "Bang/Asset.h"
-#include "Bang/Texture.h"
+#include "Bang/G_Image.h"
+#include "Bang/G_Texture.h"
 
-class Texture2D : public Texture, public Asset
+class Texture2D : public G_Texture, public Asset
 {
 	OBJECT(Texture2D)
     ASSET_ICON(Texture2D, "Icons/ImageIcon.png")
@@ -20,11 +20,11 @@ public:
     virtual String GetFileExtension() const override ;
 
     void LoadFromImage(const Path &imageFilepath);
-    void LoadFromImage(const Image &image);
+    void LoadFromImage(const G_Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const byte *newData, int width, int height,
-              Texture::Format imageFormat,
+              G_Texture::Format imageFormat,
               bool genMipMaps = true);
     void Fill(const byte *newData, int width, int height,
               int sizeOfNewData, bool genMipMaps = true);
@@ -32,7 +32,7 @@ public:
 
     const Path& GetImageFilepath() const;
 
-    Image ToImage(bool invertY = false);
+    G_Image ToImage(bool invertY = false);
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
@@ -41,7 +41,7 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
-    Image m_image;
+    G_Image m_image;
     Path m_imageFilepath;
     float m_alphaCutoff = 0.1f;
 

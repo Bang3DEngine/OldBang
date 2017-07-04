@@ -6,14 +6,14 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
-#include "Bang/GBuffer.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/EditorScene.h"
@@ -77,7 +77,7 @@ void Renderer::Bind() const
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
 
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    G_ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetBool("B_IsSelected", gameObject->IsSelected());
 }
 
@@ -99,7 +99,7 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     mat->Bind();
 
     #ifdef BANG_EDITOR
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
     {
@@ -128,7 +128,7 @@ void Renderer::UseMaterialCopy()
 
 void Renderer::UnBind() const
 {
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    G_ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->UnBind();
 }
 

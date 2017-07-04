@@ -5,7 +5,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
 
-Texture2D::Texture2D() : Texture(Target::Texture2D)
+Texture2D::Texture2D() : G_Texture(Target::Texture2D)
 {
     CreateEmpty(1,1);
 }
@@ -35,26 +35,26 @@ void Texture2D::LoadFromImage(const Path &imageFilepath)
     ENSURE(!imageFilepath.IsEmpty());
 
     m_imageFilepath = imageFilepath;
-    Image img = Image::FromFile(m_imageFilepath);
+    G_Image img = G_Image::FromFile(m_imageFilepath);
     LoadFromImage(img);
 }
 
-void Texture2D::LoadFromImage(const Image &image)
+void Texture2D::LoadFromImage(const G_Image &image)
 {
     if (image.GetData8())
     {
         m_width  = image.GetWidth();
         m_height = image.GetHeight();
 
-        SetFormat(Texture::Format::RGBA_Byte8);
-        Fill(image.GetData8(), m_width, m_height, Texture::Format::RGBA_Byte8);
+        SetFormat(G_Texture::Format::RGBA_Byte8);
+        Fill(image.GetData8(), m_width, m_height, G_Texture::Format::RGBA_Byte8);
     }
 
 }
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    int dataSize = width * height * Texture::GetPixelBytesSize(m_format);
+    int dataSize = width * height * G_Texture::GetPixelBytesSize(m_format);
     byte *data = new byte[dataSize];
     memset(data, 0, dataSize);
     Fill(data, width, height, dataSize, true);
@@ -97,13 +97,13 @@ void Texture2D::GenerateMipMaps() const
 }
 
 void Texture2D::Fill(const byte *newData, int width, int height,
-                     Texture::Format imageFormat,
+                     G_Texture::Format imageFormat,
                      bool genMipMaps)
 {
     SetFormat(imageFormat);
 
     int sizeOfNewData =
-            width * height * Texture::GetPixelBytesSize(imageFormat);
+            width * height * G_Texture::GetPixelBytesSize(imageFormat);
     Fill(newData, width, height, sizeOfNewData, genMipMaps);
 }
 
@@ -112,7 +112,7 @@ const Path& Texture2D::GetImageFilepath() const
     return m_imageFilepath;
 }
 
-Image Texture2D::ToImage(bool invertY)
+G_Image Texture2D::ToImage(bool invertY)
 {
     const int width  = GetWidth();
     const int height = GetHeight();
@@ -144,7 +144,7 @@ Image Texture2D::ToImage(bool invertY)
         delete[] pixelsCpy;
     }
 
-    Image img(width, height);
+    G_Image img(width, height);
     for (int i = 0; i < height; ++i)
     {
         for (int j = 0; j < width; ++j)
@@ -181,7 +181,7 @@ void Texture2D::Read(const XMLNode &xmlInfo)
     LoadFromImage(imageFilepath);
 
     String filterModeString = xmlInfo.GetEnumSelectedName("FilterMode");
-    Texture::FilterMode filterMode = FilterMode::Nearest;
+    G_Texture::FilterMode filterMode = FilterMode::Nearest;
     if (filterModeString == "Nearest") { filterMode = FilterMode::Nearest; }
     else if (filterModeString == "Linear") { filterMode = FilterMode::Linear; }
     else if (filterModeString == "Trilinear")

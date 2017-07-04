@@ -10,8 +10,8 @@
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorPlayFlow.h"
-#include "Bang/GraphicPipeline.h"
 #include "Bang/BehaviourManager.h"
+#include "Bang/G_GraphicPipeline.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
@@ -78,7 +78,7 @@ void Toolbar::Init()
             tb, SLOT(OnOrthoPerspectiveClicked()));
 
     connect(tb->m_gbufferAttachmentComboBox, SIGNAL(currentIndexChanged(int)),
-            tb, SLOT(OnGBufferAttachmentIndexChanged(int)));
+            tb, SLOT(OnG_GBufferAttachmentIndexChanged(int)));
 
     tb->m_buttonTranslateMode->click();
     tb->m_buttonGlobalCoords->click();
@@ -221,21 +221,21 @@ void Toolbar::OnOrthoPerspectiveClicked()
     edCam->SwitchProjectionModeTo(mode3D);
 }
 
-void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
+void Toolbar::OnG_GBufferAttachmentIndexChanged(int newIndex)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
 
     if (newIndex == 0)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttColor);
+        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttColor);
     }
     else if (newIndex == 1)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttNormalDepth);
+        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttNormalDepth);
     }
     else if (newIndex == 2)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttDiffuse);
+        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttDiffuse);
     }
 }
 

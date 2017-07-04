@@ -5,10 +5,9 @@
 #include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Cursor.h"
 #include "Bang/Camera.h"
-#include "Bang/Screen.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Transform.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
@@ -40,7 +39,7 @@ EditorCamera::~EditorCamera()
 
 void EditorCamera::AdjustSpeeds()
 {
-    Screen *c = Screen::GetInstance();
+    G_Screen *c = G_Screen::GetInstance();
     int cw = c->GetWidth();
     int ch = c->GetHeight();
 

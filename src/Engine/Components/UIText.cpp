@@ -4,15 +4,15 @@
 #include "Bang/Font.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/SerializableObject.h"
@@ -299,7 +299,7 @@ Rect UIText::GetNDCRect() const
 void UIText::Bind() const
 {
     Rect screenNDCRect = GetNDCRect() * 1.1f;
-    GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
+    G_GBuffer *gbuffer = G_GraphicPipeline::GetActive()->GetG_GBuffer();
     gbuffer->PrepareColorReadBuffer(screenNDCRect);
     UIRenderer::Bind();
 }

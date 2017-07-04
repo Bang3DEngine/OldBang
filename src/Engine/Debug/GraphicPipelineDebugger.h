@@ -1,15 +1,15 @@
 #ifndef GRAPHICPIPELINEDEBUGGER_H
 #define GRAPHICPIPELINEDEBUGGER_H
 
-#include "Bang/GBuffer.h"
+#include "Bang/G_GBuffer.h"
 
 class GraphicPipelineDebugger
 {
 public:
     static Path c_debugDir;
     static void Reset();
-    static void TakeGBufferShot(GBuffer *gbuffer,
-                                GBuffer::AttachmentId att,
+    static void TakeG_GBufferShot(G_GBuffer *gbuffer,
+                                G_GBuffer::AttachmentId att,
                                 const String &screenshotName);
 
 private:

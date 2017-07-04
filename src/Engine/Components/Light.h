@@ -6,7 +6,7 @@
 #include "Bang/Component.h"
 
 class Camera;
-class GBuffer;
+class G_GBuffer;
 class Material;
 class Renderer;
 class Light : public Component
@@ -32,7 +32,7 @@ protected:
     Material *m_lightMaterialScreen = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(GBuffer *gbuffer,
+    void ApplyLight(G_GBuffer *gbuffer,
                     const Rect &renderRect = Rect::ScreenRect) const;
 
     /**
@@ -48,7 +48,7 @@ protected:
     Light();
     virtual ~Light();
 
-    friend class GraphicPipeline;
+    friend class G_GraphicPipeline;
 };
 
 #endif // LIGHT_H

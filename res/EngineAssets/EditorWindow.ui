@@ -351,7 +351,7 @@
            </widget>
           </item>
           <item>
-           <widget class="Screen" name="screen" native="true">
+           <widget class="G_Screen" name="screen" native="true">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
@@ -1741,9 +1741,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Screen</class>
+   <class>G_Screen</class>
    <extends>QWidget</extends>
-   <header>Bang/Screen.h</header>
+   <header>Bang/G_Screen.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -8,8 +8,8 @@
 #include "Bang/Renderer.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/RenderTexture.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/G_RenderTexture.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
@@ -19,14 +19,14 @@
 #endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
-    Framebuffer(width, height)
+    G_Framebuffer(width, height)
 {
-    m_selectionProgram = new ShaderProgram(
+    m_selectionProgram = new G_ShaderProgram(
                                     EPATH("Shaders/G_Default.vert_g"),
                                     EPATH("Shaders/SelectionBuffer.frag_sel"));
 
-    CreateColorAttachment(AttColor,    Texture::Format::RGBA_Float16);
-    CreateColorAttachment(AttWorldPos, Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttColor,    G_Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttWorldPos, G_Texture::Format::RGBA_Float16);
     CreateDepthRenderbufferAttachment();
 
     m_colorTexture    = GetAttachmentTexture(AttColor);
@@ -67,7 +67,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     {
         // This should be a selection ReplacementShader put by the GP
         Material *rendMaterial = rend->GetMaterial();
-        ShaderProgram *sp = rendMaterial->GetShaderProgram();
+        G_ShaderProgram *sp = rendMaterial->GetShaderProgram();
         sp->SetColor("selectionColor", GetSelectionColor(go));
 
         rend->Render();
@@ -78,9 +78,9 @@ void SelectionFramebuffer::ProcessSelection()
 {
     // Get mouse coordinates and read pixel color
     Vector2 coords = Input::GetMouseCoords();
-    coords.y = Screen::GetHeight() - coords.y;
+    coords.y = G_Screen::GetHeight() - coords.y;
     GameObject *mouseOverGO = GetGameObjectInPosition(coords.x, coords.y);
-    if (!Screen::IsMouseOver()) { mouseOverGO = nullptr; }
+    if (!G_Screen::IsMouseOver()) { mouseOverGO = nullptr; }
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
     {
@@ -150,7 +150,7 @@ bool SelectionFramebuffer::IsPassing() const
     return m_isPassing;
 }
 
-ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
+G_ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
 {
     return m_selectionProgram;
 }
@@ -198,12 +198,12 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 }
 
 
-RenderTexture *SelectionFramebuffer::GetColorTexture() const
+G_RenderTexture *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }
 
-RenderTexture *SelectionFramebuffer::GetWorldPosTexture() const
+G_RenderTexture *SelectionFramebuffer::GetWorldPosTexture() const
 {
     return m_worldPosTexture;
 }

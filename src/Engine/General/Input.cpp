@@ -2,8 +2,8 @@
 
 #include "Bang/Time.h"
 #include "Bang/Cursor.h"
-#include "Bang/Screen.h"
 #include "Bang/Object.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Application.h"
 #include "Bang/SingletonManager.h"
 
@@ -97,7 +97,7 @@ void Input::HandleMouseWrapping()
 
         QCursor cursor = w->GetMainWindow()->cursor();
 
-        Screen *screen = Screen::GetInstance();
+        G_Screen *screen = G_Screen::GetInstance();
         int cw = screen->GetWidth();
         int ch = screen->GetHeight();
 
@@ -184,7 +184,7 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
     {
         QPoint glob = QPoint(m_lastMouseCoords.x,
                              m_lastMouseCoords.y);
-        glob = Screen::GetInstance()->mapToGlobal(glob);
+        glob = G_Screen::GetInstance()->mapToGlobal(glob);
 
         fakeMoveEvent = true;
         QCursor::setPos(glob);
@@ -335,12 +335,12 @@ bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
 
 float Input::GetMouseAxisX()
 {
-    return Input::GetMouseDeltaX() / Screen::GetWidth();
+    return Input::GetMouseDeltaX() / G_Screen::GetWidth();
 }
 
 float Input::GetMouseAxisY()
 {
-    return Input::GetMouseDeltaY() / Screen::GetHeight();
+    return Input::GetMouseDeltaY() / G_Screen::GetHeight();
 }
 
 Vector2 Input::GetMouseAxis()
@@ -385,7 +385,7 @@ Vector2 Input::GetMouseCoords()
 
 Vector2 Input::GetMouseCoordsNDC()
 {
-    return Input::GetMouseCoords() * Screen::GetPixelClipSize() * 2.0f - 1.0f;
+    return Input::GetMouseCoords() * G_Screen::GetPixelClipSize() * 2.0f - 1.0f;
 }
 
 Vector2 Input::GetPreviousMouseCoords()

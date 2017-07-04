@@ -3,7 +3,7 @@
 
 #include "Bang/Renderer.h"
 
-class VAO;
+class G_VAO;
 class Mesh;
 class Material;
 class MeshRenderer : public Renderer

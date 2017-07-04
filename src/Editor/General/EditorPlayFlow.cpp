@@ -5,9 +5,9 @@
 
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Dialog.h"
 #include "Bang/Console.h"
+#include "Bang/G_Screen.h"
 #include "Bang/EditorState.h"
 #include "Bang/Application.h"
 #include "Bang/EditorScene.h"

@@ -2,7 +2,7 @@
 
 #include "Bang/Input.h"
 #include "Bang/Camera.h"
-#include "Bang/Screen.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"

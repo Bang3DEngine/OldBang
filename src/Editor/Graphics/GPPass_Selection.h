@@ -1,14 +1,14 @@
 #ifndef GPPASS_SELECTION_H
 #define GPPASS_SELECTION_H
 
-#include "Bang/GPPass.h"
+#include "Bang/G_GPPass.h"
 
 class SelectionFramebuffer;
-class GPPass_Selection : public GPPass
+class GPPass_Selection : public G_GPPass
 {
 public:
-    GPPass_Selection(GraphicPipeline *graphicPipeline,
-                     const List<GPPass*> &subPasses = {});
+    GPPass_Selection(G_GraphicPipeline *graphicPipeline,
+                     const List<G_GPPass*> &subPasses = {});
 
     virtual void InPass(const List<Renderer*> &renderers,
                         const List<GameObject*> &sceneChildren) override;

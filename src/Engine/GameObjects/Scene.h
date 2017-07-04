@@ -8,7 +8,7 @@
 #include "Bang/GameObject.h"
 
 class Camera;
-class GraphicPipeline;
+class G_GraphicPipeline;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
@@ -44,7 +44,7 @@ protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
 
-    //Framebuffer for positions, normals, uvs and diffuse
+    //G_Framebuffer for positions, normals, uvs and diffuse
     GameObject *m_cameraGameObject = nullptr;
 
     virtual void _OnStart () override;
@@ -53,12 +53,12 @@ protected:
 
     void DestroyQueuedGameObjects();
 
-    friend class Screen;
     friend class Toolbar;
+    friend class G_Screen;
     friend class Application;
     friend class SceneManager;
-    friend class GraphicPipeline;
-    friend class SelectionFramebuffer;
+    friend class G_GraphicPipeline;
+    friend class G_SelectionFramebuffer;
 };
 
 #endif // SCENE_H

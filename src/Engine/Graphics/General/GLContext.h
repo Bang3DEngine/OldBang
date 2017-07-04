@@ -11,18 +11,18 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Matrix4.h"
-#include "Bang/Texture.h"
+#include "Bang/G_Texture.h"
 
-class VAO;
+class G_VAO;
 class GLContext
 {
 public:
     GLContext();
     virtual ~GLContext();
 
-    virtual void ApplyToShaderProgram(ShaderProgram *sp) const;
+    virtual void ApplyToShaderProgram(G_ShaderProgram *sp) const;
 
-    void Render(const VAO* vao, GL::RenderMode renderMode,
+    void Render(const G_VAO* vao, GL::RenderMode renderMode,
                 int elementsCount, int startIndex) const;
 
     void SetViewProjMode(GL::ViewProjMode mode);

@@ -2,9 +2,9 @@
 
 #include "Bang/Math.h"
 #include "Bang/Debug.h"
-#include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Vector4.h"
+#include "Bang/G_Screen.h"
 #include "Bang/GameObject.h"
 
 RectTransform::RectTransform()
@@ -201,7 +201,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 Matrix4 RectTransform::GetLocalToParentMatrix(
         bool takeMarginsIntoAccount) const
 {
-    const Vector2 screenSize = Screen::GetSize();
+    const Vector2 screenSize = G_Screen::GetSize();
     Vector2 parentSizeInPx = GetParentScreenRect(true).GetSize() * screenSize;
     parentSizeInPx = Vector2::Max(Vector2::One, parentSizeInPx);
 

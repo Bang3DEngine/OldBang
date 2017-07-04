@@ -22,9 +22,9 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
-#include "Bang/GraphicPipeline.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/DirectionalLight.h"
+#include "Bang/G_GraphicPipeline.h"
 #include "Bang/PostProcessEffect.h"
 
 #ifdef BANG_EDITOR
@@ -813,7 +813,7 @@ void GameObject::_OnDrawGizmos(bool depthed, bool overlay)
     #ifdef BANG_EDITOR
     ENSURE(EditorState::ShowGizmosEnabled());
 
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
     PROPAGATE_EVENT(_OnDrawGizmos(depthed, overlay), m_components);

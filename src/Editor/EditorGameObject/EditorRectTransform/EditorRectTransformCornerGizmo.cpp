@@ -4,13 +4,13 @@
 #include "Bang/Input.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Texture2D.h"
 #include "Bang/EditorState.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_GraphicPipeline.h"
 #include "Bang/SelectionFramebuffer.h"
 #include "Bang/EditorRectTransformGizmo.h"
 
@@ -57,8 +57,8 @@ void EditorRectTransformCornerGizmo::OnEditorUpdate()
 
     if (m_grabbed)
     {
-        Vector2 mpLast = Input::GetPreviousMouseCoords() / Screen::GetSize();
-        Vector2 mp = Input::GetMouseCoords() / Screen::GetSize();
+        Vector2 mpLast = Input::GetPreviousMouseCoords() / G_Screen::GetSize();
+        Vector2 mp = Input::GetMouseCoords() / G_Screen::GetSize();
         Vector2 cornerDisplacement = mp - mpLast;
         ApplyMarginDisplacement(cornerDisplacement);
     }
@@ -73,7 +73,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
     if (overlay)
     {
         Rect rect = m_attachedRectTransform->GetScreenSpaceRect();
-        if (GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
+        if (G_GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
         {
             if (m_cornerPosition == CornerPosition::Center)
             {
@@ -118,7 +118,7 @@ Vector2 EditorRectTransformCornerGizmo::GetCornerOffset() const
 void EditorRectTransformCornerGizmo::ApplyMarginDisplacement(
         const Vector2 &mouseDisp)
 {
-    Vector2 d = mouseDisp * Screen::GetSize();
+    Vector2 d = mouseDisp * G_Screen::GetSize();
     d.x = int( Math::Round(d.x) ); // Needed to avoid precission issues
     d.y = int( Math::Round(d.y) );
 

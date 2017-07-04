@@ -1,7 +1,7 @@
 #include "Bang/ImageFile.h"
 
 #include "Bang/Debug.h"
-#include "Bang/Image.h"
+#include "Bang/G_Image.h"
 #include "Bang/IconManager.h"
 #include "Bang/FileInspectable.h"
 

@@ -5,7 +5,7 @@
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Texture2D.h"
-#include "Bang/FontSheetCreator.h"
+#include "Bang/G_FontSheetCreator.h"
 
 Font::Font()
 {
@@ -29,7 +29,7 @@ String Font::GetFileExtension() const
 void Font::LoadFromTTF(const Path &filepath)
 {
     Free();
-    FontSheetCreator::LoadAtlasTexture(
+    G_FontSheetCreator::LoadAtlasTexture(
                 filepath,
                 Font::c_charLoadSize,
                 &m_atlasTexture,
@@ -84,9 +84,9 @@ int Font::GetKerningX(char leftChar, char rightChar)
     if (!FT_HAS_KERNING(m_freetypeFace)) { return -1; }
 
     FT_Vector kerning;
-    int leftGlyphIndex  = FontSheetCreator::GetGlyphIndex(m_freetypeFace,
+    int leftGlyphIndex  = G_FontSheetCreator::GetGlyphIndex(m_freetypeFace,
                                                           leftChar);
-    int rightGlyphIndex = FontSheetCreator::GetGlyphIndex(m_freetypeFace,
+    int rightGlyphIndex = G_FontSheetCreator::GetGlyphIndex(m_freetypeFace,
                                                           rightChar);
     int error = FT_Get_Kerning(m_freetypeFace,
                                leftGlyphIndex, rightGlyphIndex,

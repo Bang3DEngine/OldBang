@@ -7,7 +7,7 @@
 #include "Bang/Vector2.h"
 
 class Texture2D;
-class ShaderProgram;
+class G_ShaderProgram;
 class Material : public Asset
 {
 	OBJECT(Material)
@@ -22,14 +22,14 @@ public:
     virtual String GetFileExtension() const override ;
 
     void SetUvMultiply(const Vector2& uvMultiply);
-    void SetShaderProgram(ShaderProgram *program);
+    void SetShaderProgram(G_ShaderProgram *program);
     void SetTexture(const Texture2D *mtexture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
     const Vector2&   GetUvMultiply() const;
-    ShaderProgram*   GetShaderProgram() const;
+    G_ShaderProgram*   GetShaderProgram() const;
     const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;
     float GetShininess() const;
@@ -49,7 +49,7 @@ private:
     bool m_receivesLighting = true;
     Vector2 m_uvMultiply    = Vector2::One;
 
-    ShaderProgram *m_shaderProgram = nullptr;
+    G_ShaderProgram *m_shaderProgram = nullptr;
     const Texture2D *m_texture     = nullptr;
 
     friend class Renderer;

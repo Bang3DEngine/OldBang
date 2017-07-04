@@ -6,8 +6,8 @@
 #include "Bang/Asset.h"
 #include "Bang/Sphere.h"
 
-class VAO;
-class VBO;
+class G_VAO;
+class G_VBO;
 class Sphere;
 class Vector2;
 class Vector3;
@@ -39,7 +39,7 @@ public:
                  const Array<Vector3>& normals,
                  const Array<Vector2>& uvs);
 
-    VAO *GetVAO() const;
+    G_VAO *GetVAO() const;
     int GetVertexCount() const;
     const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
@@ -64,10 +64,10 @@ private:
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;
 
-    mutable VAO *m_vao = nullptr;
-    VBO *m_vertexPositionsVBO = nullptr;
-    VBO *m_vertexNormalsVBO = nullptr;
-    VBO *m_vertexUvsVBO = nullptr;
+    mutable G_VAO *m_vao = nullptr;
+    G_VBO *m_vertexPositionsVBO = nullptr;
+    G_VBO *m_vertexNormalsVBO = nullptr;
+    G_VBO *m_vertexUvsVBO = nullptr;
 
     AABox m_bBox;
     Sphere m_bSphere;

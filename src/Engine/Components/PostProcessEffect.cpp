@@ -1,17 +1,17 @@
-#include "PostProcessEffect.h"
+#include "Bang/PostProcessEffect.h"
 
 #include "Bang/Paths.h"
-#include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
-#include "Bang/ShaderManager.h"
+#include "Bang/G_Shader.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/G_ShaderManager.h"
 
 PostProcessEffect::PostProcessEffect()
 {
-    m_shaderProgram = new ShaderProgram();
+    m_shaderProgram = new G_ShaderProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
-    Shader *vShader = ShaderManager::Load(Shader::Type::Vertex, vShaderPath);
+    G_Shader *vShader = G_ShaderManager::Load(G_Shader::Type::Vertex, vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }
 
@@ -30,14 +30,14 @@ void PostProcessEffect::SetPriority(int priority)
     m_priority = priority;
 }
 
-void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
+void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
 {
     ENSURE(p_postProcessShader != postProcessShader);
 
     p_postProcessShader = postProcessShader;
     ENSURE(p_postProcessShader);
 
-    m_shaderProgram->SetType(ShaderProgram::Type::PostProcess);
+    m_shaderProgram->SetType(G_ShaderProgram::Type::PostProcess);
     m_shaderProgram->SetFragmentShader( p_postProcessShader );
 }
 
@@ -60,12 +60,12 @@ int PostProcessEffect::GetPriority() const
     return m_priority;
 }
 
-ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
+G_ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
 {
     return m_shaderProgram;
 }
 
-Shader *PostProcessEffect::GetPostProcessShader() const
+G_Shader *PostProcessEffect::GetPostProcessShader() const
 {
     return p_postProcessShader;
 }
@@ -83,8 +83,8 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
     if (!p_postProcessShader ||
         shaderFilepath != p_postProcessShader->GetFilepath())
     {
-        Shader *postProcessShader =
-                ShaderManager::Load(Shader::Type::Fragment, shaderFilepath);
+        G_Shader *postProcessShader =
+                G_ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
         SetPostProcessShader(postProcessShader);
     }
 

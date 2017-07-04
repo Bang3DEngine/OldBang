@@ -1,7 +1,7 @@
 #include "Bang/MeshRenderer.h"
 
-#include "Bang/VAO.h"
 #include "Bang/Mesh.h"
+#include "Bang/G_VAO.h"
 #include "Bang/Debug.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"

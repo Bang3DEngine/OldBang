@@ -4,9 +4,9 @@
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Camera.h"
 #include "Bang/Renderer.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
@@ -18,7 +18,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/CircleRenderer.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
 #include "Bang/SelectionFramebuffer.h"
 #include "Bang/EditorGizmosGameObject.h"
@@ -414,7 +414,7 @@ void EditorGizmosGameObject::Reset()
 
 void EditorGizmosGameObject::Render(Renderer *rend)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive(); ENSURE(gp);
+    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive(); ENSURE(gp);
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (!sfb->IsPassing())
     {

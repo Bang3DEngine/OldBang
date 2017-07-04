@@ -4,8 +4,8 @@
 #include <QLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Screen.h"
 #include "Bang/Object.h"
+#include "Bang/G_Screen.h"
 #include "Bang/SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;
@@ -22,7 +22,7 @@ GameWindow::GameWindow(QMainWindow *window)
 
 void GameWindow::SetupUI()
 {
-    screen = new Screen(GameWindow::GetInstance()->m_mainWindow);
+    screen = new G_Screen(GameWindow::GetInstance()->m_mainWindow);
     screen->setMouseTracking(true);
     screen->setFocusPolicy(Qt::NoFocus);
 

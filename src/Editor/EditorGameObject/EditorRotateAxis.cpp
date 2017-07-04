@@ -3,8 +3,8 @@
 #include "Bang/Input.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Screen.h"
 #include "Bang/Camera.h"
+#include "Bang/G_Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/EditorState.h"
@@ -66,7 +66,7 @@ void EditorRotateAxis::OnEditorUpdate()
         {
             // This will be done once every grab
             Vector2 sMousePos = Input::GetMouseCoords();
-            sMousePos /= Screen::GetSize();
+            sMousePos /= G_Screen::GetSize();
             sMousePos.y = 1.0f - sMousePos.y;
             sMousePos = sMousePos * 2.0f - 1.0f;
 

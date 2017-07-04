@@ -10,7 +10,7 @@
 
 class Input;
 class Camera;
-class Screen;
+class G_Screen;
 
 /**
  * Pre-built GameObject, with a Camera that you can control in the editor

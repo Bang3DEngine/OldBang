@@ -18,56 +18,56 @@ EDITOR {
 MOC_DIR = $$PWD/../../bin/Qt_MOCs/
 
 SOURCES += \
-    $$PWD/../../src/Engine/Graphics/General/Screen.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/TextureUnitManager.cpp \
-    $$PWD/../../src/Engine/Graphics/General/Texture.cpp \
-    $$PWD/../../src/Engine/Graphics/General/VAO.cpp \
-    $$PWD/../../src/Engine/Graphics/General/VBO.cpp \
-    $$PWD/../../src/Engine/Graphics/General/FontSheetCreator.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/Framebuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/GBuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/Shader.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderProgram.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
-    $$PWD/../../src/Engine/Graphics/General/RenderTexture.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GL.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
-    $$PWD/../../src/Engine/Graphics/General/Image.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderManager.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.cpp
+$$PWD/../../src/Engine/Graphics/General/G_Screen.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_TextureUnitManager.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_Texture.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_VAO.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_VBO.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.cpp \
+$$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
+$$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.cpp \
+$$PWD/../../src/Engine/Graphics/Shaders/G_Shader.cpp \
+$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GraphicPipeline.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_RenderTexture.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_DeferredLights.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G_Gizmos.cpp \
+$$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
+$$PWD/../../src/Engine/Graphics/General/GL.cpp \
+$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderPreprocessor.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.cpp \
+$$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_Image.cpp \
+$$PWD/../../src/Engine/Graphics/Shaders/G_ShaderManager.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.cpp \
+$$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_RenderLayer.cpp
 
 HEADERS += \
-    $$PWD/../../src/Engine/Graphics/General/Screen.h \
-    $$PWD/../../src/Engine/Graphics/General/Texture.h \
-    $$PWD/../../src/Engine/Graphics/General/VAO.h \
-    $$PWD/../../src/Engine/Graphics/General/VBO.h \
-    $$PWD/../../src/Engine/Graphics/General/FontSheetCreator.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/Framebuffer.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/GBuffer.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/Shader.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderProgram.h \
-    $$PWD/../../src/Engine/Graphics/General/RenderTexture.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Screen.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Texture.h \
+    $$PWD/../../src/Engine/Graphics/General/G_VAO.h \
+    $$PWD/../../src/Engine/Graphics/General/G_VBO.h \
+    $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.h \
+    $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.h \
+    $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_Shader.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.h \
+    $$PWD/../../src/Engine/Graphics/General/G_RenderTexture.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GraphicPipeline.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_DeferredLights.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G_Gizmos.h \
     $$PWD/../../src/Engine/Graphics/General/GLContext.h \
     $$PWD/../../src/Engine/Graphics/General/GL.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderPreprocessor.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.h \
     $$PWD/../../src/Engine/Graphics/General/GLObject.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderManager.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/TextureUnitManager.h \
-    $$PWD/../../src/Engine/Graphics/General/Image.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.h \
+    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderManager.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_TextureUnitManager.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Image.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_RenderLayer.h
 
 ######################################
 

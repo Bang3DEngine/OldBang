@@ -3,13 +3,13 @@
 #include "GL/gl.h"
 #include "GL/glew.h"
 
-#include "Bang/VAO.h"
+#include "Bang/G_VAO.h"
 #include "Bang/Debug.h"
-#include "Bang/Screen.h"
 #include "Bang/Matrix4.h"
-#include "Bang/ShaderProgram.h"
+#include "Bang/G_Screen.h"
+#include "Bang/G_ShaderProgram.h"
 
-void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
+void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
 {
     sp->SetMat4("B_Model",    m_modelMatrix);
     sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
@@ -45,7 +45,7 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
         Matrix4 modelNoTranslate = m_modelMatrix;
         modelNoTranslate.SetTranslate( Vector3(0,0,0) );
 
-        float ar = 1.0f / Screen::GetAspectRatio();
+        float ar = 1.0f / G_Screen::GetAspectRatio();
         Matrix4 fixAR(ar, 0, 0, 0,
                        0, 1, 0, 0,
                        0, 0, 1, 0,
@@ -61,7 +61,7 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
     sp->SetMat4("B_PVM", pvmMatrix);
 }
 
-void GLContext::Render(const VAO* vao, GL::RenderMode renderMode,
+void GLContext::Render(const G_VAO* vao, GL::RenderMode renderMode,
                        int elementsCount, int startIndex) const
 {
     vao->Bind();

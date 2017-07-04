@@ -14,7 +14,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/CircleRenderer.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/G_GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
 
 #ifdef BANG_EDITOR
