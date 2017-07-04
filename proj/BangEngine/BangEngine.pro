@@ -1,25 +1,14 @@
 include(../BangCommon.pri)
 system(rm -f Makefile)
-system(rm -f .donePreprocess)
 system(cd $$PWD/../.. ; sh ./scripts/preprocessHeaders.sh)
 
 TEMPLATE = lib
 INCLUDEPATH += $$PWD/../../include
 QT += core gui opengl widgets
 
-DoPreprocess = .donePreprocess
-DoPreprocess.commands = cd $$PWD/../.. ; \
-                        sh ./scripts/preprocessHeaders.sh ; \
-                        touch .donePreprocess
-QMAKE_EXTRA_TARGETS += DoPreprocess
-PRE_TARGETDEPS += DoPreprocess
-
 CONFIG += staticlib
 
-TARGET = $$BIN_DIR/lib/Bang
-
-LIBS = -L$$BIN_DIR/lib/ -lBangDataStructures $$LIBS
-PRE_TARGETDEPS += $$BIN_DIR/lib/libBangDataStructures.a
+TARGET = $$BIN_DIR/lib/BangEngine
 
 MOC_DIR = $$PWD/../../bin/Qt_MOCs/
 
@@ -36,9 +25,6 @@ SOURCES += \
     $$PWD/../../src/Engine/Math/Sphere.cpp \
     $$PWD/../../src/Engine/GameObjects/GameObject.cpp \
     $$PWD/../../src/Engine/GameObjects/Scene.cpp \
-    $$PWD/../../src/Engine/Graphics/General/Texture.cpp \
-    $$PWD/../../src/Engine/Graphics/General/VAO.cpp \
-    $$PWD/../../src/Engine/Graphics/General/VBO.cpp \
     $$PWD/../../src/Engine/Components/Transform.cpp \
     $$PWD/../../src/Engine/Components/Component.cpp \
     $$PWD/../../src/Engine/Components/MeshRenderer.cpp \
@@ -60,17 +46,13 @@ SOURCES += \
     $$PWD/../../src/Engine/Components/SingleLineRenderer.cpp \
     $$PWD/../../src/Engine/Assets/MeshFactory.cpp \
     $$PWD/../../src/Engine/General/ICloneable.cpp \
-    $$PWD/../../src/Editor/General/Screen.cpp \
     $$PWD/../../src/Engine/Components/DirectionalLight.cpp \
     $$PWD/../../src/Engine/Components/Light.cpp \
-    $$PWD/../../src/Editor/General/GameObjectClipboard.cpp \
     $$PWD/../../src/Engine/Components/PointLight.cpp \
-    $$PWD/../../src/Editor/General/Application.cpp \
     $$PWD/../../src/Engine/General/SceneManager.cpp \
     $$PWD/../../src/Engine/Components/Canvas.cpp \
     $$PWD/../../src/Engine/Components/UIImage.cpp \
     $$PWD/../../src/Engine/Components/UIRenderer.cpp \
-    $$PWD/../../src/Engine/Graphics/General/FontSheetCreator.cpp \
     $$PWD/../../src/Engine/Assets/Font.cpp \
     $$PWD/../../src/Engine/Components/UIText.cpp \
     $$PWD/../../src/Engine/IO/General/EngineConfig.cpp \
@@ -82,51 +64,28 @@ SOURCES += \
     $$PWD/../../src/Engine/Debug/Debug.cpp \
     $$PWD/../../src/Engine/Debug/Chrono.cpp \
     $$PWD/../../src/Engine/IO/Files/FileReader.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/Framebuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/GBuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/Shader.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderProgram.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
     $$PWD/../../src/Engine/IO/Files/ImageFile.cpp \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$PWD/../../src/Engine/IO/XML/XMLAttribute.cpp \
     $$PWD/../../src/Engine/IO/XML/XMLNode.cpp \
     $$PWD/../../src/Engine/IO/XML/XMLParser.cpp \
     $$PWD/../../src/Engine/IO/XML/XMLProperty.cpp \
-    $$PWD/../../src/Editor/Windows/IWindow.cpp \
-    $$PWD/../../src/Editor/Windows/GameWindow.cpp \
     $$PWD/../../src/Engine/Components/AudioListener.cpp \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManagerStatus.cpp \
     $$PWD/../../src/Engine/Components/RectTransform.cpp \
-    $$PWD/../../src/Editor/General/Cursor.cpp \
-    $$PWD/../../src/Engine/Graphics/General/RenderTexture.cpp \
     $$PWD/../../src/Engine/General/Object.cpp \
     $$PWD/../../src/Engine/Debug/GraphicPipelineDebugger.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GL.cpp \
     $$PWD/../../src/Engine/Compiler/CodePreprocessor.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.cpp \
     $$PWD/../../src/Engine/IO/Project/ProjectManager.cpp \
     $$PWD/../../src/Engine/IO/Project/Project.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
     $$PWD/../../src/Engine/Debug/ChronoGL.cpp \
     $$PWD/../../src/Engine/IO/General/SerializableObject.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/TextureUnitManager.cpp \
-    $$PWD/../../src/Editor/General/Shortcut.cpp \
     $$PWD/../../src/Engine/IO/Files/ExtensionManager.cpp \
-    $$PWD/../../src/Editor/General/IconManager.cpp \
-    $$PWD/../../src/Engine/Graphics/General/Image.cpp \
     $$PWD/../../src/Engine/Components/CircleCulledRenderer.cpp \
     $$PWD/../../src/Engine/IO/Files/PrefabFile.cpp \
     $$PWD/../../src/Engine/IO/Files/SoundFile.cpp \
     $$PWD/../../src/Engine/Audio/AnonymousAudioPlayer.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderManager.cpp \
     $$PWD/../../src/Engine/Components/PostProcessEffect.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
     $$PWD/../../src/Engine/IO/Files/ModelFile.cpp \
     $$PWD/../../src/Engine/IO/Files/MeshFile.cpp \
     $$PWD/../../src/Engine/IO/Files/Texture2DFile.cpp \
@@ -135,7 +94,6 @@ SOURCES += \
     $$PWD/../../src/Engine/IO/Files/AudioClipFile.cpp \
     $$PWD/../../src/Engine/IO/Files/FontFile.cpp \
     $$PWD/../../src/Engine/IO/General/Paths.cpp \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.cpp \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
     $$PWD/../../src/Engine/Compiler/Compiler.cpp \
@@ -145,16 +103,11 @@ SOURCES += \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.cpp
 
 HEADERS += \
-    $$PWD/../../src/Editor/General/Application.h \
-    $$PWD/../../src/Editor/General/Screen.h \
     $$PWD/../../src/Engine/Math/Rect.h \
     $$PWD/../../src/Engine/General/IToString.h \
     $$PWD/../../src/Engine/General/ISceneEventListener.h \
     $$PWD/../../src/Engine/GameObjects/GameObject.h \
     $$PWD/../../src/Engine/GameObjects/Scene.h \
-    $$PWD/../../src/Engine/Graphics/General/Texture.h \
-    $$PWD/../../src/Engine/Graphics/General/VAO.h \
-    $$PWD/../../src/Engine/Graphics/General/VBO.h \
     $$PWD/../../src/Engine/Components/Transform.h \
     $$PWD/../../src/Engine/Components/Component.h \
     $$PWD/../../src/Engine/Components/MeshRenderer.h \
@@ -190,7 +143,6 @@ HEADERS += \
     $$PWD/../../src/Engine/Components/Canvas.h \
     $$PWD/../../src/Engine/Components/UIImage.h \
     $$PWD/../../src/Engine/Components/UIRenderer.h \
-    $$PWD/../../src/Engine/Graphics/General/FontSheetCreator.h \
     $$PWD/../../src/Engine/Assets/Font.h \
     $$PWD/../../src/Engine/Components/UIText.h \
     $$PWD/../../src/Engine/IO/General/EngineConfig.h \
@@ -210,10 +162,6 @@ HEADERS += \
     $$PWD/../../src/Engine/Debug/Gizmos.h \
     $$PWD/../../src/Engine/General/Time.h \
     $$PWD/../../src/Engine/DataStructures/Timer.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/Framebuffer.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/GBuffer.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/Shader.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderProgram.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManager.h \
     $$PWD/../../src/Engine/IO/Files/FileReader.h \
     $$PWD/../../src/Engine/IO/Files/ImageFile.h \
@@ -228,36 +176,22 @@ HEADERS += \
     $$PWD/../../src/Engine/Components/AudioListener.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$PWD/../../src/Engine/Components/RectTransform.h \
-    $$PWD/../../src/Engine/Graphics/General/RenderTexture.h \
-    $$PWD/../../src/Engine/General/Object.h \
     $$PWD/../../src/Engine/Debug/GraphicPipelineDebugger.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.h \
-    $$PWD/../../src/Engine/Graphics/General/GLContext.h \
-    $$PWD/../../src/Engine/Graphics/General/GL.h \
+    $$PWD/../../src/Engine/General/Object.h \
     $$PWD/../../src/Engine/DataStructures/TypeMap.h \
     $$PWD/../../src/Engine/Compiler/CodePreprocessor.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderPreprocessor.h \
     $$PWD/../../src/Engine/IO/Project/Project.h \
     $$PWD/../../src/Engine/IO/Project/ProjectManager.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.h \
-    $$PWD/../../src/Engine/Graphics/General/GLObject.h \
     $$PWD/../../src/Engine/Debug/ChronoGL.h \
     $$PWD/../../src/Engine/DataStructures/Set.h \
     $$PWD/../../src/Engine/IO/General/SerializableObject.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/TextureUnitManager.h \
     $$PWD/../../src/Engine/DataStructures/UMap.h \
-    $$PWD/../../src/Engine/Graphics/General/Image.h \
     $$PWD/../../src/Engine/Components/CircleCulledRenderer.h \
     $$PWD/../../src/Engine/IO/Files/PrefabFile.h \
     $$PWD/../../src/Engine/IO/Files/SoundFile.h \
     $$PWD/../../src/Engine/Audio/AnonymousAudioPlayer.h \
     $$PWD/../../src/Engine/DataStructures/Flags.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/ShaderManager.h \
     $$PWD/../../src/Engine/Components/PostProcessEffect.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
     $$PWD/../../src/Engine/IO/Files/Path.h \
     $$PWD/../../src/Engine/IO/Files/ModelFile.h \
     $$PWD/../../src/Engine/IO/Files/MeshFile.h \
@@ -268,192 +202,30 @@ HEADERS += \
     $$PWD/../../src/Engine/IO/Files/ShaderProgramFile.h \
     $$PWD/../../src/Engine/IO/Files/Texture2DFile.h \
     $$PWD/../../src/Engine/IO/General/Paths.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.h \
     $$PWD/../../src/Engine/DataStructures/Collection.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$PWD/../../src/Engine/Debug/OStreamOperators.h \
     $$PWD/../../src/Engine/IO/Files/BFile.h \
+    $$PWD/../../src/Engine/Compiler/Compiler.h \
+    $$PWD/../../src/Engine/Compiler/BangCompiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.h
 
 EDITOR {
 HEADERS += \
-    $$PWD/../../src/Editor/General/GameObjectClipboard.h \
-    $$PWD/../../src/Editor/Windows/IWindow.h \
-    $$PWD/../../src/Editor/Windows/GameWindow.h \
-    $$PWD/../../src/Engine/Compiler/Compiler.h \
-    $$PWD/../../src/Engine/Compiler/BangCompiler.h \
-    $$PWD/../../src/Editor/General/Cursor.h \
-    $$PWD/../../src/Editor/General/Shortcut.h \
-    $$PWD/../../src/Editor/General/IconManager.h \
-    $$PWD/../../src/Editor/Windows/EditorWindow.h \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_Selection.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorGizmosGameObject.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropQWidget.h \
     $$PWD/../../src/Engine/IO/Files/AssetFileCreator.h \
     $$PWD/../../src/Engine/IO/Project/QtProjectManager.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropQListView.h \
-    $$PWD/../../src/Editor/Explorer/FileReferencesManager.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropQTreeWidget.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/Inspectable.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/GameObjectInspectable.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/IInspectable.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/FileInspectable.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/ComponentInspectable.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropQListWidget.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropAgent.h \
-    $$PWD/../../src/Editor/DragDrop/IDragDropListener.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropManager.h \
-    $$PWD/../../src/Editor/Explorer/FileSystemModel.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorSelectionGameObject.h \
-    $$PWD/../../src/Editor/EditorScene/EditorDebugGameObject.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/SelectionFramebuffer.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxisGroup.h \
-    $$PWD/../../src/Editor/Dialogs/DialogBrowseAssetFile.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttributeWidget.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetEnum.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFile.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetString.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
-    $$PWD/../../src/Editor/Inspector/Inspectables/PrefabFileInspectable.h \
-    $$PWD/../../src/Editor/Windows/WindowEventManager.h \
-    $$PWD/../../src/Editor/Windows/SelectProjectWindow.h \
-    $$PWD/../../src/Editor/General/Toolbar.h \
-    $$PWD/../../src/Editor/General/EditorState.h \
-    $$PWD/../../src/Editor/Dialogs/GameBuildDialog.h \
-    $$PWD/../../src/Editor/GameBuilder/GameBuilderJob.h \
-    $$PWD/../../src/Editor/Dialogs/Dialog.h \
-    $$PWD/../../src/Editor/General/IWindowEventManagerListener.h \
-    $$PWD/../../src/Editor/Inspector/Inspector.h \
-    $$PWD/../../src/Editor/Hierarchy/Hierarchy.h \
-    $$PWD/../../src/Editor/Inspector/ComponentWidget.h \
-    $$PWD/../../src/Editor/Console/Console.h \
-    $$PWD/../../src/Editor/Explorer/Explorer.h \
-    $$PWD/../../src/Editor/General/MenuBar.h \
-    $$PWD/../../src/Editor/Explorer/ExplorerDirTree.h \
-    $$PWD/../../src/Editor/Inspector/InspectorWidget.h \
-    $$PWD/../../src/Editor/EditorCamera/EditorCamera.h \
-    $$PWD/../../src/Editor/EditorScene/EditorScene.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorBBox.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxisGroup.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxis.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorAxisGroup.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorAxis.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.h \
-    $$PWD/../../src/Editor/EditorScene/EditorFloor.h \
-    $$PWD/../../src/Editor/Inspector/ComponentClipboard.h \
-    $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.h \
-    $$PWD/../../src/Editor/Hierarchy/HierarchyContextMenu.h \
-    $$PWD/../../src/Editor/Explorer/ExplorerContextMenu.h \
-    $$PWD/../../src/Editor/Inspector/ComponentWidgetContextMenu.h \
-    $$PWD/../../src/Editor/Hierarchy/HierarchyItem.h \
-    $$PWD/../../src/Editor/Inspector/InspectorContextMenu.h \
-    $$PWD/../../src/Editor/General/ContextMenu.h \
-    $$PWD/../../src/Editor/GameBuilder/GameBuilder.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorAxisPlane.h \
-    $$PWD/../../src/Editor/Explorer/ExplorerFileSortProxy.h \
-    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetInt.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
-    $$PWD/../../src/Editor/EditorGameObject/EditorGizmo.h \
-    $$PWD/../../src/Editor/DragDrop/DragDropInfo.h \
-    $$PWD/../../src/Editor/General/EditorPlayFlow.h \
     $$PWD/../../src/Engine/IO/Files/FileTracker.h
 }
 
 EDITOR {
     SOURCES += \
-        $$PWD/../../src/Editor/EditorGameObject/EditorGizmosGameObject.cpp \
-        $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_Selection.cpp \
         $$PWD/../../src/Engine/IO/Files/AssetFileCreator.cpp \
-        $$PWD/../../src/Editor/GameBuilder/GameBuilderJob.cpp \
-        $$PWD/../../src/Editor/Dialogs/GameBuildDialog.cpp \
-        $$PWD/../../src/Editor/Explorer/FileSystemModel.cpp \
         $$PWD/../../src/Engine/IO/Project/QtProjectManager.cpp \
-        $$PWD/../../src/Editor/General/EditorState.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropManager.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQWidget.cpp \
-        $$PWD/../../src/Editor/Explorer/FileReferencesManager.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQListView.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQTreeWidget.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQListWidget.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropAgent.cpp \
-        $$PWD/../../src/Editor/DragDrop/IDragDropListener.cpp \
         $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp \
-        $$PWD/../../src/Engine/Graphics/Buffers/SelectionFramebuffer.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxisGroup.cpp \
-        $$PWD/../../src/Editor/Windows/EditorWindow.cpp \
-        $$PWD/../../src/Editor/Dialogs/DialogBrowseAssetFile.cpp \
-        $$PWD/../../src/Editor/Windows/SelectProjectWindow.cpp \
-        $$PWD/../../src/Editor/Windows/WindowEventManager.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxis.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxisGroup.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxis.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorFloor.cpp \
-        $$PWD/../../src/Editor/General/IWindowEventManagerListener.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspector.cpp \
-        $$PWD/../../src/Editor/Hierarchy/Hierarchy.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttributeWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.cpp \
-        $$PWD/../../src/Editor/Console/Console.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
-        $$PWD/../../src/Editor/Explorer/Explorer.cpp \
-        $$PWD/../../src/Editor/General/MenuBar.cpp \
-        $$PWD/../../src/Editor/Dialogs/Dialog.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFile.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerDirTree.cpp \
-        $$PWD/../../src/Editor/Inspector/InspectorWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetString.cpp \
-        $$PWD/../../src/Editor/EditorCamera/EditorCamera.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorScene.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorBBox.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorSelectionGameObject.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorDebugGameObject.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxisGroup.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.cpp \
-        $$PWD/../../src/Editor/General/Toolbar.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/Inspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/GameObjectInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/IInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/FileInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/ComponentInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/PrefabFileInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentClipboard.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyContextMenu.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerContextMenu.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentWidgetContextMenu.cpp \
-        $$PWD/../../src/Editor/Inspector/InspectorContextMenu.cpp \
-        $$PWD/../../src/Editor/GameBuilder/GameBuilder.cpp \
-        $$PWD/../../src/Editor/General/ContextMenu.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyItem.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerFileSortProxy.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxisPlane.cpp \
-        $$PWD/../../src/Engine/IO/Files/FileTracker.cpp \
-        $$PWD/../../src/Editor/General/EditorPlayFlow.cpp
+        $$PWD/../../src/Engine/IO/Files/FileTracker.cpp
 }
 ######################################
 
@@ -526,4 +298,4 @@ DISTFILES += \
     $$PWD/../../src/res/EngineAssets/Shaders/InvertColors.frag_pp \
     $$PWD/../../src/res/EngineAssets/Shaders/Blur.frag_pp \
     $$PWD/../../src/res/EngineAssets/Shaders/GrayScale.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Outline.frag_pp \
+    $$PWD/../../src/res/EngineAssets/Shaders/Outline.frag_pp

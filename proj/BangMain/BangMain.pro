@@ -19,5 +19,19 @@ GAME {
     TARGET = $$BIN_DIR/Game.exe
 }
 
-LIBS = -L$$BIN_DIR/lib/ -lBang -lBangDataStructures $$LIBS
-PRE_TARGETDEPS += $$BIN_DIR/lib/libBang.a $$BIN_DIR/lib/libBangDataStructures.a
+CONFIG += no_lflags_merge
+LIBS = -L$$BIN_DIR/lib/ \
+    -lBangEditor \
+    -lBangEngine \
+    -lBangGraphics \
+    -lBangDataStructures \
+    -lBangEditor \
+    -lBangEngine \
+    -lBangGraphics \
+    -lBangDataStructures \
+    $$LIBS
+PRE_TARGETDEPS += \
+    $$BIN_DIR/lib/libBangEngine.a \
+    $$BIN_DIR/lib/libBangEditor.a \
+    $$BIN_DIR/lib/libBangGraphics.a \
+    $$BIN_DIR/lib/libBangDataStructures.a \

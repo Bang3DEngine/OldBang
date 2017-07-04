@@ -70,7 +70,14 @@ BangCompiler::Job BangCompiler::BuildCommonJob(bool forGame)
     job.libDirs.Add(forGame ? Paths::GameExecutableLibrariesDir() :
                               Paths::EngineLibrariesDir());
     job.libraries.Add( List<String>({"GLEW", "GL", "pthread",
-                                     "Bang", "BangDataStructures"}) );
+                                     "BangDataStructures",
+                                     "BangGraphics",
+                                     "BangEngine",
+                                     "BangEditor",
+                                     "BangDataStructures",
+                                     "BangGraphics",
+                                     "BangEngine",
+                                     "BangEditor"}) );
 
     job.flags =  {"-O0", "-g",
                   "-Wl,-O0,--export-dynamic",

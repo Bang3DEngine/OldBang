@@ -16,6 +16,13 @@ PreprocessTarget.commands = (cd $$PWD/../.. ; sh ../scripts/preprocessHeaders.sh
 QMAKE_EXTRA_TARGETS += $$PreprocessTarget.target
 POST_TARGETDEPS += PreprocessTargetName
 
+LIBS = \
+     -L$$BIN_DIR/lib/ \
+    -lBangDataStructures \
+    $$LIBS
+PRE_TARGETDEPS += \
+    $$BIN_DIR/lib/libBangDataStructures.a
+
 SOURCES += \
     ./MainBangPreprocessor.cpp \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
@@ -26,6 +33,3 @@ HEADERS += \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h
-
-LIBS = -L$$BIN_DIR/lib/ -lBangDataStructures $$LIBS
-PRE_TARGETDEPS += $$BIN_DIR/lib/libBangDataStructures.a

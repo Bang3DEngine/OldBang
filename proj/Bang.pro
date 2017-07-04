@@ -11,11 +11,14 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
 BangDataStructures \
+BangGraphics \
 BangPreprocessor \
-BangLib \
+BangEngine \
+BangEditor \
 BangMain
 
 BangPreprocessor.depends += BangDataStructures
-BangDoPreprocess.depends += BangDataStructures BangPreprocessor
-BangLib.depends          += BangDataStructures BangPreprocessor
-BangMain.depends         += BangDataStructures BangPreprocessor BangLib
+BangGraphics.depends     += BangDataStructures
+BangEditor.depends       += BangDataStructures BangPreprocessor
+BangEngine.depends       += BangDataStructures BangPreprocessor BangGraphics
+BangMain.depends         += BangDataStructures BangPreprocessor BangEditor BangEngine
