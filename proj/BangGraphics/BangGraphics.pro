@@ -39,6 +39,7 @@ $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.cpp \
 $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.cpp \
 $$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
 $$PWD/../../src/Engine/Graphics/General/G_Image.cpp \
+$$PWD/../../src/Engine/Graphics/General/G_Texture2D.cpp \
 $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderManager.cpp \
 $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_SP_PostProcessEffects.cpp \
 $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_RenderLayer.cpp
@@ -59,6 +60,7 @@ HEADERS += \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G_Gizmos.h \
     $$PWD/../../src/Engine/Graphics/General/GLContext.h \
     $$PWD/../../src/Engine/Graphics/General/GL.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Texture2D.h \
     $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderPreprocessor.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass_G.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/G_GPPass.h \

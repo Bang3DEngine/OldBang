@@ -58,4 +58,4 @@ HEADERS += \
     $$PWD/../../src/Engine/DataStructures/NamedEnum.h \
     $$PWD/../../src/Engine/Math/Quaternion.h \
     $$PWD/../../src/Engine/Math/Matrix4.h \
-    $$PWD/../../src/Engine/Math/File.h
+    $$PWD/../../src/Engine/IO/Files/File.h
