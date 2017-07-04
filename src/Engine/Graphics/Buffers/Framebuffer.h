@@ -1,9 +1,8 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "Bang/Array.h"
-
 #include "Bang/Map.h"
+#include "Bang/Array.h"
 #include "Bang/Color.h"
 #include "Bang/GLObject.h"
 #include "Bang/Texture2D.h"

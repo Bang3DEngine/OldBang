@@ -1,6 +1,5 @@
 #include "Image.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 
 Image::Image()

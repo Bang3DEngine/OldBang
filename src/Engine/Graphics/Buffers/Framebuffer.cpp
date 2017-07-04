@@ -2,7 +2,6 @@
 
 #include "Bang/GL.h"
 #include "Bang/Math.h"
-#include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/RenderTexture.h"
 

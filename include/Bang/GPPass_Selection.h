@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Engine/Graphics/GraphicPipeline/GPPass_Selection.h"
+#include "../.././src/Editor/Graphics/GPPass_Selection.h"

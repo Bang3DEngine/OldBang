@@ -4,19 +4,11 @@
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/Rect.h"
-#include "Bang/Debug.h"
-#include "Bang/Scene.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
-#include "Bang/Input.h"
-#include "Bang/Camera.h"
 #include "Bang/Screen.h"
-#include "Bang/Material.h"
-#include "Bang/Transform.h"
-#include "Bang/MeshFactory.h"
-#include "Bang/ShaderProgram.h"
-#include "Bang/AssetsManager.h"
 #include "Bang/RenderTexture.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
@@ -49,9 +41,9 @@ void GBuffer::BindTextureBuffersTo(ShaderProgram *sp,
 {
     // Color Attachments bindings as Shader Inputs
     Bind();
-    sp->SetTexture("B_GTex_NormalDepth",    m_normalTexture);
-    sp->SetTexture("B_GTex_DiffColor", m_diffuseTexture);
-    sp->SetTexture("B_GTex_Misc",      m_miscTexture);
+    sp->SetTexture("B_GTex_NormalDepth", m_normalTexture);
+    sp->SetTexture("B_GTex_DiffColor",   m_diffuseTexture);
+    sp->SetTexture("B_GTex_Misc",        m_miscTexture);
 
     sp->SetTexture("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
                                                        m_colorTexture);

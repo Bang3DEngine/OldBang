@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 
 #include "Bang/Array.h"
-
 #include "Bang/GLObject.h"
 
 class VBO;

@@ -8,13 +8,13 @@
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
-#include "Bang/Paths.h"
-#include "Bang/SceneManager.h"
 
 #ifdef BANG_EDITOR
+#include "Bang/Paths.h"
 #include "Bang/Console.h"
 #include "Bang/EditorScene.h"
 #include "Bang/EditorWindow.h"
+#include "Bang/SceneManager.h"
 #include "Bang/EditorDebugGameObject.h"
 #endif
 

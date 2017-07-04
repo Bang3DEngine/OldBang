@@ -103,7 +103,6 @@ SOURCES += \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.cpp
 
 HEADERS += \
-    $$PWD/../../src/Engine/Math/Rect.h \
     $$PWD/../../src/Engine/General/IToString.h \
     $$PWD/../../src/Engine/General/ISceneEventListener.h \
     $$PWD/../../src/Engine/GameObjects/GameObject.h \
@@ -123,9 +122,6 @@ HEADERS += \
     $$PWD/../../src/Engine/General/Input.h \
     $$PWD/../../src/Engine/Components/LineRenderer.h \
     $$PWD/../../src/Engine/Components/Renderer.h \
-    $$PWD/../../src/Engine/Math/Vector3.h \
-    $$PWD/../../src/Engine/Math/Quaternion.h \
-    $$PWD/../../src/Engine/Math/Matrix4.h \
     $$PWD/../../src/Engine/Math/Sphere.h \
     $$PWD/../../src/Engine/General/SystemUtils.h \
     $$PWD/../../src/Engine/General/SingletonManager.h \
@@ -136,9 +132,6 @@ HEADERS += \
     $$PWD/../../src/Engine/Components/DirectionalLight.h \
     $$PWD/../../src/Engine/Components/Light.h \
     $$PWD/../../src/Engine/Components/PointLight.h \
-    $$PWD/../../src/Engine/Math/Vector4.h \
-    $$PWD/../../src/Engine/Math/Vector2.h \
-    $$PWD/../../src/Engine/Math/Color.h \
     $$PWD/../../src/Engine/General/SceneManager.h \
     $$PWD/../../src/Engine/Components/Canvas.h \
     $$PWD/../../src/Engine/Components/UIImage.h \
@@ -151,17 +144,10 @@ HEADERS += \
     $$PWD/../../src/Engine/Components/AudioSource.h \
     $$PWD/../../src/Engine/Audio/AudioManager.h \
     $$PWD/../../src/Engine/Audio/AudioPlayerRunnable.h \
-    $$PWD/../../src/Engine/DataStructures/Array.h \
-    $$PWD/../../src/Engine/DataStructures/List.h \
-    $$PWD/../../src/Engine/DataStructures/Map.h \
-    $$PWD/../../src/Engine/DataStructures/Property.h \
-    $$PWD/../../src/Engine/DataStructures/String.h \
-    $$PWD/../../src/Engine/DataStructures/NamedEnum.h \
     $$PWD/../../src/Engine/Debug/Chrono.h \
     $$PWD/../../src/Engine/Debug/Debug.h \
     $$PWD/../../src/Engine/Debug/Gizmos.h \
     $$PWD/../../src/Engine/General/Time.h \
-    $$PWD/../../src/Engine/DataStructures/Timer.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManager.h \
     $$PWD/../../src/Engine/IO/Files/FileReader.h \
     $$PWD/../../src/Engine/IO/Files/ImageFile.h \
@@ -170,29 +156,23 @@ HEADERS += \
     $$PWD/../../src/Engine/IO/XML/XMLParser.h \
     $$PWD/../../src/Engine/IO/XML/XMLProperty.h \
     $$PWD/../../src/Engine/IO/Files/TextFile.h \
-    $$PWD/../../src/Engine/Math/Math.h \
-    $$PWD/../../src/Engine/Math/Random.h \
     $$PWD/../../src/Engine/IO/Files/ExtensionManager.h \
     $$PWD/../../src/Engine/Components/AudioListener.h \
     $$PWD/../../src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$PWD/../../src/Engine/Components/RectTransform.h \
     $$PWD/../../src/Engine/Debug/GraphicPipelineDebugger.h \
     $$PWD/../../src/Engine/General/Object.h \
-    $$PWD/../../src/Engine/DataStructures/TypeMap.h \
     $$PWD/../../src/Engine/Compiler/CodePreprocessor.h \
     $$PWD/../../src/Engine/IO/Project/Project.h \
     $$PWD/../../src/Engine/IO/Project/ProjectManager.h \
     $$PWD/../../src/Engine/Debug/ChronoGL.h \
-    $$PWD/../../src/Engine/DataStructures/Set.h \
     $$PWD/../../src/Engine/IO/General/SerializableObject.h \
-    $$PWD/../../src/Engine/DataStructures/UMap.h \
     $$PWD/../../src/Engine/Components/CircleCulledRenderer.h \
     $$PWD/../../src/Engine/IO/Files/PrefabFile.h \
     $$PWD/../../src/Engine/IO/Files/SoundFile.h \
     $$PWD/../../src/Engine/Audio/AnonymousAudioPlayer.h \
     $$PWD/../../src/Engine/DataStructures/Flags.h \
     $$PWD/../../src/Engine/Components/PostProcessEffect.h \
-    $$PWD/../../src/Engine/IO/Files/Path.h \
     $$PWD/../../src/Engine/IO/Files/ModelFile.h \
     $$PWD/../../src/Engine/IO/Files/MeshFile.h \
     $$PWD/../../src/Engine/DataStructures/Regex.h \
@@ -202,11 +182,9 @@ HEADERS += \
     $$PWD/../../src/Engine/IO/Files/ShaderProgramFile.h \
     $$PWD/../../src/Engine/IO/Files/Texture2DFile.h \
     $$PWD/../../src/Engine/IO/General/Paths.h \
-    $$PWD/../../src/Engine/DataStructures/Collection.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
-    $$PWD/../../src/Engine/Debug/OStreamOperators.h \
     $$PWD/../../src/Engine/IO/Files/BFile.h \
     $$PWD/../../src/Engine/Compiler/Compiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompiler.h \

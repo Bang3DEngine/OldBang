@@ -18,6 +18,7 @@ EDITOR {
 MOC_DIR = $$PWD/../../bin/Qt_MOCs/
 
 SOURCES += \
+    $$PWD/../../src/Engine/Graphics/General/Screen.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/TextureUnitManager.cpp \
     $$PWD/../../src/Engine/Graphics/General/Texture.cpp \
     $$PWD/../../src/Engine/Graphics/General/VAO.cpp \
@@ -43,6 +44,7 @@ SOURCES += \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.cpp
 
 HEADERS += \
+    $$PWD/../../src/Engine/Graphics/General/Screen.h \
     $$PWD/../../src/Engine/Graphics/General/Texture.h \
     $$PWD/../../src/Engine/Graphics/General/VAO.h \
     $$PWD/../../src/Engine/Graphics/General/VBO.h \
@@ -67,17 +69,6 @@ HEADERS += \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.h \
 
-EDITOR {
-HEADERS += \
-    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_Selection.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/SelectionFramebuffer.h
-}
-
-EDITOR {
-    SOURCES += \
-        $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_Selection.cpp \
-        $$PWD/../../src/Engine/Graphics/Buffers/SelectionFramebuffer.cpp
-}
 ######################################
 
 

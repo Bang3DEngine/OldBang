@@ -19,7 +19,6 @@ EDITOR {
 }
 
 SOURCES += \
-    $$PWD/../../src/Editor/General/Screen.cpp \
     $$PWD/../../src/Editor/General/GameObjectClipboard.cpp \
     $$PWD/../../src/Editor/General/Application.cpp \
     $$PWD/../../src/Editor/Windows/IWindow.cpp \
@@ -29,8 +28,7 @@ SOURCES += \
     $$PWD/../../src/Editor/General/IconManager.cpp
 
 HEADERS += \
-    $$PWD/../../src/Editor/General/Application.h \
-    $$PWD/../../src/Editor/General/Screen.h
+    $$PWD/../../src/Editor/General/Application.h
 
 EDITOR {
 HEADERS += \
@@ -56,6 +54,8 @@ HEADERS += \
     $$PWD/../../src/Editor/DragDrop/IDragDropListener.h \
     $$PWD/../../src/Editor/DragDrop/DragDropManager.h \
     $$PWD/../../src/Editor/Explorer/FileSystemModel.h \
+    $$PWD/../../src/Editor/Graphics/GPPass_Selection.h \
+    $$PWD/../../src/Editor/Graphics/SelectionFramebuffer.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorSelectionGameObject.h \
     $$PWD/../../src/Editor/EditorScene/EditorDebugGameObject.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.h \
@@ -169,6 +169,8 @@ EDITOR {
         $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxisGroup.cpp \
         $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.cpp \
         $$PWD/../../src/Editor/General/Toolbar.cpp \
+        $$PWD/../../src/Editor/Graphics/GPPass_Selection.cpp \
+        $$PWD/../../src/Editor/Graphics/SelectionFramebuffer.cpp \
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.cpp \

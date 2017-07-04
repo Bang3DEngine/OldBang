@@ -2,6 +2,7 @@
 *.trace
 *.gen.h
 *.refl.h
+*refactor-cpp-class-name.sh
 tmp
 *.exe
 **.slo

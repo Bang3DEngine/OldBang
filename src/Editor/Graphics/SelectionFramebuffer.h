@@ -10,7 +10,6 @@
 #endif
 
 class Scene;
-class Material;
 class Renderer;
 class GameObject;
 class ShaderProgram;

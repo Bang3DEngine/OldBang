@@ -1,8 +1,5 @@
 #include "Bang/GLObject.h"
 
-#include <iostream>
-#include "Bang/Debug.h"
-
 GLObject::GLObject() {}
 
 GLId GLObject::GetGLId() const

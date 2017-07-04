@@ -11,7 +11,6 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Matrix4.h"
-#include "Bang/TypeMap.h"
 #include "Bang/Texture.h"
 
 class VAO;
