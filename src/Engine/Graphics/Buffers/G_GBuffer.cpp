@@ -37,7 +37,7 @@ G_GBuffer::~G_GBuffer()
 }
 
 void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
-                                   bool willReadFromColor) const
+                                     bool willReadFromColor) const
 {
     // Color Attachments bindings as Shader Inputs
     Bind();
@@ -52,8 +52,8 @@ void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
 
 
 void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
-                        bool prepareReadFromColorBuffer,
-                        const Rect &mask)
+                          bool prepareReadFromColorBuffer,
+                          const Rect &mask)
 {
     bool prevStencilWrite = m_stencilWrite;
     SetStencilWrite(false);
@@ -89,21 +89,24 @@ void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
     Rect r = (readNDCRect * 0.5f + 0.5f) * GetSize();
-    glBlitFramebuffer(r.GetMin().x, r.GetMin().x, r.GetMax().x, r.GetMax().y,
-                      r.GetMin().x, r.GetMin().x, r.GetMax().x, r.GetMax().y,
+    glBlitFramebuffer(r.GetMin().x, r.GetMin().x, r.GetMax().x,
+                      r.GetMax().y, r.GetMin().x, r.GetMin().x,
+                      r.GetMax().x, r.GetMax().y,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
     PopDrawAttachmentIds();
 }
 
 void G_GBuffer::SetAllDrawBuffers() const
 {
-    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse, G_GBuffer::AttMisc,
-                    G_GBuffer::AttColor});
+    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse,
+                    G_GBuffer::AttMisc, G_GBuffer::AttColor
+                   });
 }
 
 void G_GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse, G_GBuffer::AttMisc});
+    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse,
+                    G_GBuffer::AttMisc});
 }
 
 void G_GBuffer::SetColorDrawBuffer()

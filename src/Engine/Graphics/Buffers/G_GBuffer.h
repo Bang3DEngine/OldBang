@@ -55,7 +55,7 @@ public:
     void ClearStencil();
     void ClearDepth(float clearDepth = 1.0f) override;
 
-    void ClearBuffersAndBackground(const ::Color& backgroundColor);
+    void ClearBuffersAndBackground(const ::Color &backgroundColor);
 
 private:
     G_RenderTexture *m_normalTexture    = nullptr;

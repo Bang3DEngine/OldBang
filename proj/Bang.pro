@@ -9,6 +9,9 @@ system(cd $$PWD ; sh ../scripts/createIncludeHeaders.sh)
 
 TEMPLATE = subdirs
 
+DISTFILES += \
+$$PWD/../res/.astylerc
+
 SUBDIRS = \
 BangDataStructures \
 BangGraphics \
