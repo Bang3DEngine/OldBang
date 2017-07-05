@@ -2,7 +2,7 @@
 
 #include "Bang/Debug.h"
 #include "Bang/G_Texture.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 G_TextureUnitManager::G_TextureUnitManager()
 {
@@ -11,7 +11,7 @@ G_TextureUnitManager::G_TextureUnitManager()
 
 G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture *tex)
 {
-    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
     G_TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnit unitToUse = 0;
@@ -43,7 +43,7 @@ G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture 
 
 void G_TextureUnitManager::UnBindTexture(const G_Texture *tex)
 {
-    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
     G_TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnitMap::Iterator it = tm->m_textureToUnit.Find(tex);

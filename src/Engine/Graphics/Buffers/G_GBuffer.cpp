@@ -7,9 +7,9 @@
 #include "Bang/Color.h"
 #include "Bang/Array.h"
 #include "Bang/G_Screen.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/G_RenderTexture.h"
 #include "Bang/G_ShaderProgram.h"
-#include "Bang/G_GraphicPipeline.h"
 
 G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
 {
@@ -64,7 +64,7 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
     if (prepareReadFromColorBuffer) { PrepareColorReadBuffer(); }
     SetColorDrawBuffer();
 
-    G_GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
+    GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
     UnBind();
 
@@ -75,7 +75,7 @@ void G_GBuffer::RenderToScreen(G_GBuffer::AttachmentId attId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
     G_Texture *tex = GetAttachmentTexture(attId); ENSURE(tex);
-    G_GraphicPipeline::GetActive()->RenderToScreen(tex);
+    GraphicPipeline::GetActive()->RenderToScreen(tex);
 }
 
 void G_GBuffer::RenderToScreen()

@@ -10,7 +10,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/SelectionFramebuffer.h"
 #include "Bang/EditorRectTransformGizmo.h"
 
@@ -73,7 +73,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
     if (overlay)
     {
         Rect rect = m_attachedRectTransform->GetScreenSpaceRect();
-        if (G_GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
+        if (GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
         {
             if (m_cornerPosition == CornerPosition::Center)
             {

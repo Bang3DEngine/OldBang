@@ -18,7 +18,6 @@ isEmpty(RELEASE_OR_DEBUG) {
 }
 #####################
 
-
 QMAKE_CXX  = $$COMPILER
 QMAKE_LINK = $$COMPILER
 CONFIG += $$EDITOR_OR_GAME $$RELEASE_OR_DEBUG
@@ -78,9 +77,3 @@ QMAKE_LFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_LFLAGS           += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 QMAKE_CXXFLAGS         += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 ###################################################
-
-HEADERS += \
-    $$PWD/../src/Engine/Compiler/BangPreprocessor/IReflectable.h
-
-SOURCES += \
-    $$PWD/../src/Engine/Compiler/BangPreprocessor/IReflectable.cpp

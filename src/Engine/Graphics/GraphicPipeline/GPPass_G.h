@@ -1,7 +1,7 @@
 #ifndef GPPASS_G_H
 #define GPPASS_G_H
 
-#include "Bang/G_GPPass.h"
+#include "Bang/GPPass.h"
 
 class Renderer;
 class G_GBuffer;
@@ -9,12 +9,12 @@ class G_GBuffer;
  * @brief The GPPass_G class is a GraphicPipeline pass that will
  * render all renderers into the G_GBuffer.
  */
-class G_GPPass_G : public G_GPPass
+class GPPass_G : public GPPass
 {
 public:
-    G_GPPass_G(G_GraphicPipeline *graphicPipeline,
+    GPPass_G(GraphicPipeline *graphicPipeline,
              bool receiveLighting, bool transparentPass,
-             const List<G_GPPass*> &subPasses = {});
+             const List<GPPass*> &subPasses = {});
 
     virtual void InPass(const List<Renderer*> &renderers,
                         const List<GameObject*> &sceneChildren) override;

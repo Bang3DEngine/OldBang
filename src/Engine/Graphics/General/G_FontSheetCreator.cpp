@@ -4,7 +4,7 @@
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
-#include "Bang/Texture2D.h"
+#include "Bang/G_Texture2D.h"
 
 #include <ftglyph.h>
 
@@ -40,9 +40,9 @@ int G_FontSheetCreator::GetGlyphIndex(FT_Face face, char c)
 bool G_FontSheetCreator::LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
-                         Texture2D **atlasTexture,
+                         G_Texture2D **atlasTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
-                         Map<char, Font::CharGlyphMetrics> *resultMetrics,
+                         Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
                          FT_Face *fontFace)
 {
     if (!G_FontSheetCreator::Init()) { return false; }
@@ -79,7 +79,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     // Generate the atlas, adding each char in a simple grid
     uint numChars        = charactersToLoadStr.Length();
     uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
-    uint charInAtlasSize = Font::c_charLoadSize * 2;
+    uint charInAtlasSize = G_Font::c_charLoadSize * 2;
     uint sideSize        = charsPerRowCol * charInAtlasSize;
     G_Image atlasImage(sideSize, sideSize);
     for (int i = 0; i < numChars; ++i)
@@ -115,7 +115,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
         // Get some metrics (they are given in 1/64 pixels...)
         // These are measurements relative to the full tex quad (size x size)
-        Font::CharGlyphMetrics charMetrics;
+        G_Font::CharGlyphMetrics charMetrics;
         charMetrics.width    =  face->glyph->metrics.width  / 64;
         charMetrics.height   =  face->glyph->metrics.height / 64;
         charMetrics.bearingX = (face->glyph->metrics.horiBearingX) / 64;
@@ -159,7 +159,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    *atlasTexture = new Texture2D();
+    *atlasTexture = new G_Texture2D();
     (*atlasTexture)->LoadFromImage(atlasImage);
     (*atlasTexture)->SetWrapMode(G_Texture::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(G_Texture::FilterMode::Trilinear);

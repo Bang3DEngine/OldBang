@@ -1,12 +1,12 @@
-#include "Bang/G_GPPass.h"
+#include "Bang/GPPass.h"
 
 #include "Bang/Scene.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/SceneManager.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
-G_GPPass::G_GPPass(G_GraphicPipeline *graphicPipeline,
-                   const List<G_GPPass*> &subPasses)
+GPPass::GPPass(GraphicPipeline *graphicPipeline,
+                   const List<GPPass*> &subPasses)
 {
     p_graphicPipeline = graphicPipeline;
     p_gbuffer = graphicPipeline->GetG_GBuffer();
@@ -14,35 +14,35 @@ G_GPPass::G_GPPass(G_GraphicPipeline *graphicPipeline,
     p_selectionG_Framebuffer = graphicPipeline->GetSelectionFramebuffer();
     #endif
 
-    for (G_GPPass *subPass : subPasses)
+    for (GPPass *subPass : subPasses)
     {
         m_subPasses.PushBack(subPass);
         subPass->p_parentPass = this;
     }
 }
 
-G_GPPass::~G_GPPass()
+GPPass::~GPPass()
 {
-    for (G_GPPass *subPass : m_subPasses)
+    for (GPPass *subPass : m_subPasses)
     {
         delete subPass;
     }
 }
 
-void G_GPPass::PrePass(const List<Renderer*> &renderers,
+void GPPass::PrePass(const List<Renderer*> &renderers,
                      const List<GameObject*> &sceneChildren)
 {
 }
-void G_GPPass::InPass(const List<Renderer*> &renderers,
+void GPPass::InPass(const List<Renderer*> &renderers,
                     const List<GameObject*> &sceneChildren)
 {
 }
-void G_GPPass::PostPass(const List<Renderer*> &renderers,
+void GPPass::PostPass(const List<Renderer*> &renderers,
                       const List<GameObject*> &sceneChildren)
 {
 }
 
-void G_GPPass::Pass(const List<Renderer*> &renderers,
+void GPPass::Pass(const List<Renderer*> &renderers,
                   const List<GameObject*> &sceneChildren)
 {
     p_scene = SceneManager::GetActiveScene();
@@ -50,7 +50,7 @@ void G_GPPass::Pass(const List<Renderer*> &renderers,
     PrePass(renderers, sceneChildren);
     InPass(renderers, sceneChildren);
 
-    for (G_GPPass *gpSubPass : m_subPasses)
+    for (GPPass *gpSubPass : m_subPasses)
     {
         gpSubPass->Pass(renderers, sceneChildren);
     }
@@ -58,13 +58,13 @@ void G_GPPass::Pass(const List<Renderer*> &renderers,
     PostPass(renderers, sceneChildren);
 }
 
-void G_GPPass::AddSubPass(G_GPPass *subPass)
+void GPPass::AddSubPass(GPPass *subPass)
 {
     subPass->p_parentPass = this;
     m_subPasses.PushBack(subPass);
 }
 
-bool G_GPPass::CanRender(const Renderer *renderer) const
+bool GPPass::CanRender(const Renderer *renderer) const
 {
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
             (renderer && renderer->IsEnabled());

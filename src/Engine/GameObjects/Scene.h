@@ -8,7 +8,7 @@
 #include "Bang/GameObject.h"
 
 class Camera;
-class G_GraphicPipeline;
+class GraphicPipeline;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
@@ -57,7 +57,7 @@ protected:
     friend class G_Screen;
     friend class Application;
     friend class SceneManager;
-    friend class G_GraphicPipeline;
+    friend class GraphicPipeline;
     friend class G_SelectionFramebuffer;
 };
 

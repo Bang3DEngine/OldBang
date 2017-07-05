@@ -14,7 +14,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/CircleRenderer.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
 
 #ifdef BANG_EDITOR
@@ -70,7 +70,7 @@ void Gizmos::SetDrawWireframe(bool wireframe)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            SetDrawWireframe(wireframe);
+    SetDrawWireframe(wireframe);
 #endif
 }
 
@@ -78,7 +78,7 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            SetReceivesLighting(receivesLighting);
+    SetReceivesLighting(receivesLighting);
 #endif
 }
 
@@ -93,7 +93,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderCustomMesh(m);
+    RenderCustomMesh(m);
 #endif
 }
 
@@ -102,7 +102,7 @@ void Gizmos::RenderSimpleBox(const AABox &b)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderSimpleBox(b);
+    RenderSimpleBox(b);
 #endif
 }
 
@@ -132,7 +132,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderIcon(texture, billboard);
+    RenderIcon(texture, billboard);
 #endif
 }
 
@@ -142,7 +142,7 @@ void Gizmos::RenderScreenIcon(const Texture2D *texture,
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderScreenIcon(texture, screenRect, fixAspectRatio);
+    RenderScreenIcon(texture, screenRect, fixAspectRatio);
 #endif
 }
 
@@ -150,7 +150,7 @@ void Gizmos::RenderCircle(float radius)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderCircle(radius);
+    RenderCircle(radius);
 #endif
 }
 
@@ -158,7 +158,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderLine(origin, destiny);
+    RenderLine(origin, destiny);
 #endif
 }
 
@@ -166,7 +166,7 @@ void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderScreenLine(origin, destiny);
+    RenderScreenLine(origin, destiny);
 #endif
 }
 
@@ -174,7 +174,7 @@ void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderRay(origin, rayDir);
+    RenderRay(origin, rayDir);
 #endif
 }
 
@@ -182,7 +182,7 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderSphere(origin, radius);
+    RenderSphere(origin, radius);
 #endif
 }
 
@@ -193,8 +193,8 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderFrustum(forward, up, origin, zNear, zFar,
-                          fovDegrees, aspectRatio);
+    RenderFrustum(forward, up, origin, zNear, zFar,
+                  fovDegrees, aspectRatio);
 #endif
 }
 
@@ -202,17 +202,17 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderSimpleSphere(origin, radius);
+    RenderSimpleSphere(origin, radius);
 #endif
 }
 
 EditorGizmosGameObject *Gizmos::GetEditorGizmosGameObject()
 {
-    #ifdef BANG_EDITOR
+#ifdef BANG_EDITOR
     return EditorGizmosGameObject::GetInstance();
-    #else
+#else
     return nullptr;
-    #endif
+#endif
 }
 
 void Gizmos::Reset()

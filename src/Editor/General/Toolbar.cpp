@@ -10,8 +10,8 @@
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorPlayFlow.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/G_GraphicPipeline.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
@@ -223,7 +223,7 @@ void Toolbar::OnOrthoPerspectiveClicked()
 
 void Toolbar::OnG_GBufferAttachmentIndexChanged(int newIndex)
 {
-    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
 
     if (newIndex == 0)
     {

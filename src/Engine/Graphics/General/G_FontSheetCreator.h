@@ -4,7 +4,7 @@
 #include "freetype/ft2build.h"
 #include FT_FREETYPE_H
 
-#include "Bang/Font.h"
+#include "Bang/G_Font.h"
 #include "Bang/String.h"
 
 /**
@@ -12,8 +12,8 @@
  * library to create fontsheets. A Fontsheet is an image
  * which contains the set of glyphs of the font.
  */
-class Font;
-class Texture2D;
+class G_Font;
+class G_Texture2D;
 class G_FontSheetCreator
 {
 public:
@@ -22,9 +22,9 @@ public:
     static bool LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
-                         Texture2D **resultTexture,
+                         G_Texture2D **resultTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
-                         Map<char, Font::CharGlyphMetrics> *resultMetrics,
+                         Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
                          FT_Face *fontFace);
 private:
     G_FontSheetCreator();

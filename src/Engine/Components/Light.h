@@ -48,7 +48,7 @@ protected:
     Light();
     virtual ~Light();
 
-    friend class G_GraphicPipeline;
+    friend class GraphicPipeline;
 };
 
 #endif // LIGHT_H

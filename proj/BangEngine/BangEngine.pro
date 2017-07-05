@@ -33,6 +33,13 @@ SOURCES += \
     $$PWD/../../src/Engine/Assets/Asset.cpp \
     $$PWD/../../src/Engine/Assets/Mesh.cpp \
     $$PWD/../../src/Engine/Assets/Material.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.cpp \
     $$PWD/../../src/Engine/Components/Behaviour.cpp \
     $$PWD/../../src/Engine/Assets/Texture2D.cpp \
     $$PWD/../../src/Engine/Assets/Prefab.cpp \
@@ -170,6 +177,13 @@ HEADERS += \
     $$PWD/../../src/Engine/General/Object.h \
     $$PWD/../../src/Engine/Compiler/CodePreprocessor.h \
     $$PWD/../../src/Engine/IO/Project/Project.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
+    $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.h \
     $$PWD/../../src/Engine/IO/Project/ProjectManager.h \
     $$PWD/../../src/Engine/Debug/ChronoGL.h \
     $$PWD/../../src/Engine/IO/General/SerializableObject.h \
@@ -192,6 +206,7 @@ HEADERS += \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$PWD/../../src/Engine/IO/Files/BFile.h \
+    $$PWD/../src/Engine/Compiler/BangPreprocessor/IReflectable.h \
     $$PWD/../../src/Engine/Compiler/Compiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.h

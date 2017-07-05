@@ -1,4 +1,4 @@
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 #include "Bang/Mesh.h"
 #include "Bang/Debug.h"
@@ -11,24 +11,24 @@
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
 #include "Bang/G_Screen.h"
+#include "Bang/GPPass_G.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/G_Texture.h"
 #include "Bang/GLContext.h"
 #include "Bang/GameObject.h"
-#include "Bang/G_GPPass_G.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
 #include "Bang/G_ShaderProgram.h"
-#include "Bang/G_GPPass_G_Gizmos.h"
-#include "Bang/G_GPPass_RenderLayer.h"
+#include "Bang/GPPass_G_Gizmos.h"
+#include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
 #include "Bang/GraphicPipelineDebugger.h"
-#include "Bang/G_GPPass_SP_DeferredLights.h"
-#include "Bang/G_GPPass_SP_PostProcessEffects.h"
+#include "Bang/GPPass_SP_DeferredLights.h"
+#include "Bang/GPPass_SP_PostProcessEffects.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
@@ -37,7 +37,7 @@
 #include "Bang/SelectionFramebuffer.h"
 #endif
 
-G_GraphicPipeline::G_GraphicPipeline(G_Screen *screen)
+GraphicPipeline::GraphicPipeline(G_Screen *screen)
 {
     m_glContext = new GLContext();
     m_texUnitManager = new G_TextureUnitManager();
@@ -60,47 +60,47 @@ G_GraphicPipeline::G_GraphicPipeline(G_Screen *screen)
     // Set up graphic pipeline passes
     typedef Renderer::RenderLayer RL;
     m_scenePass  =
-     new G_GPPass_RenderLayer(this, RL::Scene,
+     new GPPass_RenderLayer(this, RL::Scene,
      {
-       new G_GPPass_G(this, true, false),     // Lighted G_Pass
-       new G_GPPass_SP_DeferredLights(this),  // Apply light
-       new G_GPPass_G(this, false, false),    // UnLighted G_Pass
-       new G_GPPass_SP_PostProcessEffects(this,
+       new GPPass_G(this, true, false),     // Lighted G_Pass
+       new GPPass_SP_DeferredLights(this),  // Apply light
+       new GPPass_G(this, false, false),    // UnLighted G_Pass
+       new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
      });
 
     m_canvasPass =
-     new G_GPPass_RenderLayer(this, RL::Canvas,
+     new GPPass_RenderLayer(this, RL::Canvas,
      {
-      new G_GPPass_G(this, false, false),
-      new G_GPPass_SP_PostProcessEffects(this,
+      new GPPass_G(this, false, false),
+      new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
 
-    m_gizmosPass = new G_GPPass_RenderLayer(this, RL::Gizmos,
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::Gizmos,
     {
-     new G_GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
-     new G_GPPass_G_Gizmos(this, false, false), // Gizmos normal
-     new G_GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
+     new GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
+     new GPPass_G_Gizmos(this, false, false), // Gizmos normal
+     new GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
     });
 
     #ifdef BANG_EDITOR
-    m_sceneSelectionPass  = new G_GPPass_RenderLayer(this, RL::Scene,
+    m_sceneSelectionPass  = new GPPass_RenderLayer(this, RL::Scene,
     {
       new GPPass_Selection(this)
     });
-    m_canvasSelectionPass  = new G_GPPass_RenderLayer(this, RL::Canvas,
+    m_canvasSelectionPass  = new GPPass_RenderLayer(this, RL::Canvas,
     {
       new GPPass_Selection(this)
     });
-    m_gizmosSelectionPass  = new G_GPPass_RenderLayer(this, RL::Gizmos,
+    m_gizmosSelectionPass  = new GPPass_RenderLayer(this, RL::Gizmos,
     {
       new GPPass_Selection(this)
     });
     #endif
 }
 
-G_GraphicPipeline::~G_GraphicPipeline()
+GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
     delete m_scenePass;
@@ -119,7 +119,7 @@ G_GraphicPipeline::~G_GraphicPipeline()
     delete m_glContext;
 }
 
-void G_GraphicPipeline::RenderScene(Scene *scene, bool inGame)
+void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
     p_scene = scene; ENSURE(p_scene);
     m_renderingInGame = inGame;
@@ -145,7 +145,7 @@ void G_GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     #endif
 }
 
-void G_GraphicPipeline::ApplySelectionOutline()
+void GraphicPipeline::ApplySelectionOutline()
 {
     #ifdef BANG_EDITOR
     if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
@@ -179,7 +179,7 @@ void G_GraphicPipeline::ApplySelectionOutline()
     #endif
 }
 
-void G_GraphicPipeline::ApplyDeferredLights(Renderer *rend)
+void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
     // Limit rendering to the renderer visible rect
     Rect renderRect = Rect::ScreenRect;
@@ -211,7 +211,7 @@ void G_GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
 }
 
-void G_GraphicPipeline::RenderG_GBuffer(const List<Renderer*> &renderers,
+void GraphicPipeline::RenderG_GBuffer(const List<Renderer*> &renderers,
                                     const List<GameObject*> &sceneChildren)
 {
     m_gbuffer->Bind();
@@ -230,7 +230,7 @@ void G_GraphicPipeline::RenderG_GBuffer(const List<Renderer*> &renderers,
 }
 
 #ifdef BANG_EDITOR
-void G_GraphicPipeline::RenderSelectionBuffer(
+void GraphicPipeline::RenderSelectionBuffer(
                         const List<Renderer*> &renderers,
                         const List<GameObject*> &sceneChildren,
                         Scene *scene)
@@ -255,7 +255,7 @@ void G_GraphicPipeline::RenderSelectionBuffer(
 }
 #endif
 
-void G_GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
+void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
     m_glContext->ApplyToShaderProgram(sp);
@@ -266,7 +266,7 @@ void G_GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
     sp->UnBind();
 }
 
-void G_GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
+void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 {
     G_ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ENSURE(sp);
@@ -276,11 +276,11 @@ void G_GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 
     sp->SetTexture("B_GTex_Color", fullScreenTexture);
 
-    G_GraphicPipeline::RenderScreenPlane();
+    GraphicPipeline::RenderScreenPlane();
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void G_GraphicPipeline::RenderScreenPlane()
+void GraphicPipeline::RenderScreenPlane()
 {
     GL::SetWireframe(false);
     GL::SetTestDepth(false);
@@ -293,19 +293,19 @@ void G_GraphicPipeline::RenderScreenPlane()
 }
 
 #ifdef BANG_EDITOR
-SelectionFramebuffer *G_GraphicPipeline::GetSelectionFramebuffer()
+SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {
     return m_selectionFB;
 }
 #endif
 
-G_GraphicPipeline* G_GraphicPipeline::GetActive()
+GraphicPipeline* GraphicPipeline::GetActive()
 {
     G_Screen *screen = G_Screen::GetInstance();
     return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 
-void G_GraphicPipeline::OnResize(int newWidth, int newHeight)
+void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
     #ifdef BANG_EDITOR
@@ -313,23 +313,23 @@ void G_GraphicPipeline::OnResize(int newWidth, int newHeight)
     #endif
 }
 
-void G_GraphicPipeline::SetG_GBufferAttachmentToBeRendered(
+void GraphicPipeline::SetG_GBufferAttachmentToBeRendered(
         G_GBuffer::AttachmentId attachment)
 {
     m_gbufferAttachToBeShown = attachment;
 }
 
-GLContext *G_GraphicPipeline::GetGLContext() const
+GLContext *GraphicPipeline::GetGLContext() const
 {
     return m_glContext;
 }
 
-G_GBuffer *G_GraphicPipeline::GetG_GBuffer()
+G_GBuffer *GraphicPipeline::GetG_GBuffer()
 {
     return m_gbuffer;
 }
 
-G_TextureUnitManager *G_GraphicPipeline::GetTextureUnitManager() const
+G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }

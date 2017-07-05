@@ -17,7 +17,7 @@
 class GameObject;
 class GameWindow;
 class EditorWindow;
-class G_GraphicPipeline;
+class GraphicPipeline;
 class SelectionFramebuffer;
 class G_Screen : public QGLWidget,
                  public IDragDropListener
@@ -43,7 +43,7 @@ public:
     static Vector2 GetPixelClipSize();
     static bool IsMouseOver();
 
-    G_GraphicPipeline *GetGraphicPipeline() const;
+    GraphicPipeline *GetGraphicPipeline() const;
 
     #ifdef BANG_EDITOR
     void dragEnterEvent(QDragEnterEvent *e) override;
@@ -64,7 +64,7 @@ private:
                   m_duplicateShortcut, m_deleteShortcut;
 
     QWidget *m_dragOrigin = nullptr;
-    G_GraphicPipeline *m_gPipeline = nullptr;
+    GraphicPipeline *m_gPipeline = nullptr;
 
     int m_width = 1;
     int m_height = 1;
@@ -77,7 +77,7 @@ private:
     void HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin);
     #endif
 
-    friend class G_GraphicPipeline;
+    friend class GraphicPipeline;
 };
 
 #endif // SCREEN_H

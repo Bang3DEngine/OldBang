@@ -12,18 +12,18 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#include "Bang/SelectionFramebuffer.h"
+    #include "Bang/SerializableObject.h"
+    #include "Bang/SelectionFramebuffer.h"
 #endif
 
 UIText::UIText() : UIRenderer()
 {
     SetMesh( new Mesh() );
     SetMaterial(
-         AssetsManager::Load<Material>( EPATH("Materials/UI/G_UIText.bmat") ));
+        AssetsManager::Load<Material>( EPATH("Materials/UI/G_UIText.bmat") ));
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
@@ -103,7 +103,7 @@ void UIText::FillQuadsMeshPositions()
         quadPos.Add( Vector2(charRectMax.x, charRectMax.y) );
         quadPos.Add( Vector2(charRectMin.x, charRectMax.y) );
 
-        const char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
+        const char nextChar = i < m_content.Length() - 1 ? m_content[i + 1] : '\0';
         const float advance = GetCharAdvance(c, nextChar);
         totalAdv += advance + hSpacingNDC;
     }
@@ -151,7 +151,7 @@ void UIText::RefreshMesh()
     SetMesh(p_mesh);
 }
 
-void UIText::ApplyAlignmentOffset(const Vector2& contentSize,
+void UIText::ApplyAlignmentOffset(const Vector2 &contentSize,
                                   Vector2 *minPosition) const
 {
     if (m_horizontalAlignment == HorizontalAlignment::Center)
@@ -299,7 +299,7 @@ Rect UIText::GetNDCRect() const
 void UIText::Bind() const
 {
     Rect screenNDCRect = GetNDCRect() * 1.1f;
-    G_GBuffer *gbuffer = G_GraphicPipeline::GetActive()->GetG_GBuffer();
+    G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetG_GBuffer();
     gbuffer->PrepareColorReadBuffer(screenNDCRect);
     UIRenderer::Bind();
 }
@@ -346,7 +346,7 @@ void UIText::Write(XMLNode *xmlInfo) const
     UIRenderer::Write(xmlInfo);
 
     xmlInfo->SetFilepath("Font", GetFont() ?
-                             GetFont()->GetFilepath() : Path(), "bfont");
+                         GetFont()->GetFilepath() : Path(), "bfont");
     xmlInfo->SetColor("Color", GetTint());
     xmlInfo->SetString("Content", GetContent(), {XMLProperty::Inline});
     xmlInfo->SetFloat("TextSize", GetTextSize());

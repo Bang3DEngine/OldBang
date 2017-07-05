@@ -352,9 +352,9 @@ protected:
     friend class G_Screen;
     friend class Hierarchy;
     friend class SceneManager;
+    friend class GPPass_G_Gizmos;
+    friend class GraphicPipeline;
     friend class GPPass_Selection;
-    friend class G_GPPass_G_Gizmos;
-    friend class G_GraphicPipeline;
     friend class SelectionFramebuffer;
 };
 

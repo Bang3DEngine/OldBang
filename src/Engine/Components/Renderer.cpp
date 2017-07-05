@@ -13,7 +13,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/EditorScene.h"
@@ -99,7 +99,7 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     mat->Bind();
 
     #ifdef BANG_EDITOR
-    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
     {

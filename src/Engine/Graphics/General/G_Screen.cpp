@@ -13,7 +13,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/SingletonManager.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Explorer.h"
@@ -53,7 +53,7 @@ void G_Screen::initializeGL()
     static bool firstInitializeGL = true;
     if (firstInitializeGL)
     {
-        m_gPipeline = new G_GraphicPipeline(this);
+        m_gPipeline = new GraphicPipeline(this);
         firstInitializeGL = false;
     }
 }
@@ -146,7 +146,7 @@ int G_Screen::GetHeight()
     return G_Screen::GetInstance()->m_height;
 }
 
-G_GraphicPipeline *G_Screen::GetGraphicPipeline() const
+GraphicPipeline *G_Screen::GetGraphicPipeline() const
 {
     return m_gPipeline;
 }
@@ -161,7 +161,7 @@ void G_Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
     Scene *activeScene = SceneManager::GetActiveScene();
     EditorScene *scene = Object::SCast<EditorScene>(activeScene);
-    SelectionFramebuffer *sfb = G_GraphicPipeline::GetActive()->
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->
                                                     GetSelectionFramebuffer();
     int x = e->pos().x();
     int y = G_Screen::GetHeight() - e->pos().y();
@@ -231,7 +231,7 @@ void G_Screen::dragMoveEvent(QDragMoveEvent *e)
     ENSURE(activeScene);
 
     SelectionFramebuffer *sfb =
-            G_GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x(), y = G_Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
 

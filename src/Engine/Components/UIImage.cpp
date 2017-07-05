@@ -8,7 +8,7 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 UIImage::UIImage()
 {

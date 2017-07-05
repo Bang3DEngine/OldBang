@@ -16,9 +16,9 @@
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/DirectionalLight.h"
-#include "Bang/G_GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/EditorState.h"

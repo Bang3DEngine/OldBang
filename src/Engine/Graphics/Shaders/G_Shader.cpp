@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "Bang/File.h"
 #include "Bang/Path.h"
 #include "Bang/Debug.h"
 

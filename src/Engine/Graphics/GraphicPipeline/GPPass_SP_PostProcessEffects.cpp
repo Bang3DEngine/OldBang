@@ -1,20 +1,20 @@
-#include "Bang/G_GPPass_SP_PostProcessEffects.h"
+#include "Bang/GPPass_SP_PostProcessEffects.h"
 
 #include "Bang/Scene.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/G_ShaderProgram.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/PostProcessEffect.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/EditorState.h"
 #endif
 
-G_GPPass_SP_PostProcessEffects::G_GPPass_SP_PostProcessEffects(
-        G_GraphicPipeline *graphicPipeline,
+GPPass_SP_PostProcessEffects::GPPass_SP_PostProcessEffects(
+        GraphicPipeline *graphicPipeline,
         PostProcessEffect::Type type,
-        const List<G_GPPass*> &subPasses)
-    : G_GPPass(graphicPipeline, subPasses)
+        const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
     m_type = type;
 }
@@ -22,7 +22,7 @@ G_GPPass_SP_PostProcessEffects::G_GPPass_SP_PostProcessEffects(
 template<class T>
 struct PointerComparison { bool operator()(T* a, T* b) { return *a < *b; } };
 
-void G_GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
+void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
                                           const List<GameObject *> &sceneChildren)
 {
     #ifdef BANG_EDITOR

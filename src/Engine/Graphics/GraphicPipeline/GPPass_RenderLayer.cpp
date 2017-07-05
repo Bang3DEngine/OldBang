@@ -1,4 +1,4 @@
-#include "Bang/G_GPPass_RenderLayer.h"
+#include "Bang/GPPass_RenderLayer.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -9,15 +9,15 @@
 #include "Bang/SelectionFramebuffer.h"
 #endif
 
-G_GPPass_RenderLayer::G_GPPass_RenderLayer(G_GraphicPipeline *graphicPipeline,
+GPPass_RenderLayer::GPPass_RenderLayer(GraphicPipeline *graphicPipeline,
                                      Renderer::RenderLayer depthLayer,
-                                     const List<G_GPPass*> &subPasses)
-    : G_GPPass(graphicPipeline, subPasses)
+                                     const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
     m_renderLayer = depthLayer;
 }
 
-bool G_GPPass_RenderLayer::CanRender(const Renderer *renderer) const
+bool GPPass_RenderLayer::CanRender(const Renderer *renderer) const
 {
     #ifdef BANG_EDITOR
     bool dontRenderEditorStuffInGame =
@@ -27,12 +27,12 @@ bool G_GPPass_RenderLayer::CanRender(const Renderer *renderer) const
     bool dontRenderEditorStuffInGame = true;
     #endif
 
-    return G_GPPass::CanRender(renderer) &&
+    return GPPass::CanRender(renderer) &&
            renderer->GetRenderLayer() == m_renderLayer &&
            dontRenderEditorStuffInGame;
 }
 
-Renderer::RenderLayer G_GPPass_RenderLayer::GetRenderLayer() const
+Renderer::RenderLayer GPPass_RenderLayer::GetRenderLayer() const
 {
     return m_renderLayer;
 }

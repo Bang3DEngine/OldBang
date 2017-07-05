@@ -12,19 +12,19 @@ class Material;
 class GLContext;
 class GameObject;
 class G_Framebuffer;
-class G_GPPass_RenderLayer;
+class GPPass_RenderLayer;
 class G_TextureUnitManager;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
  */
-class G_GraphicPipeline
+class GraphicPipeline
 {
 public:
-    G_GraphicPipeline(G_Screen *screen);
-    virtual ~G_GraphicPipeline();
+    GraphicPipeline(G_Screen *screen);
+    virtual ~GraphicPipeline();
 
-    static G_GraphicPipeline* GetActive();
+    static GraphicPipeline* GetActive();
 
     void RenderScene(Scene *scene, bool inGame);
     void RenderRenderer(Renderer *rend);
@@ -59,14 +59,14 @@ private:
     SelectionFramebuffer *m_selectionFB = nullptr;
     #endif
 
-    G_GPPass_RenderLayer *m_scenePass  = nullptr;
-    G_GPPass_RenderLayer *m_canvasPass = nullptr;
-    G_GPPass_RenderLayer *m_gizmosPass = nullptr;
+    GPPass_RenderLayer *m_scenePass  = nullptr;
+    GPPass_RenderLayer *m_canvasPass = nullptr;
+    GPPass_RenderLayer *m_gizmosPass = nullptr;
 
     #ifdef BANG_EDITOR
-    G_GPPass_RenderLayer *m_sceneSelectionPass  = nullptr;
-    G_GPPass_RenderLayer *m_canvasSelectionPass = nullptr;
-    G_GPPass_RenderLayer *m_gizmosSelectionPass = nullptr;
+    GPPass_RenderLayer *m_sceneSelectionPass  = nullptr;
+    GPPass_RenderLayer *m_canvasSelectionPass = nullptr;
+    GPPass_RenderLayer *m_gizmosSelectionPass = nullptr;
     #endif
 
     G_GBuffer::AttachmentId m_gbufferAttachToBeShown = G_GBuffer::AttColor;

@@ -11,7 +11,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 Material::Material() : Asset()
 {
@@ -205,7 +205,7 @@ void Material::Bind() const
     G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    G_GBuffer *gb = G_GraphicPipeline::GetActive()->GetG_GBuffer();
+    G_GBuffer *gb = GraphicPipeline::GetActive()->GetG_GBuffer();
     gb->BindTextureBuffersTo(sp, false);
 
     sp->SetVec2("B_ScreenSize", G_Screen::GetSize());

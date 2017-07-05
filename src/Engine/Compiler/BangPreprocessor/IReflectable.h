@@ -18,7 +18,7 @@ public:
     }
 
 protected:
-    IReflectable();
+    IReflectable() {}
 };
 
 #endif // IREFLECTABLE_H

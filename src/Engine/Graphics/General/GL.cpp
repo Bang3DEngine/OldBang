@@ -5,7 +5,7 @@
 #include "Bang/G_Texture.h"
 #include "Bang/GLContext.h"
 #include "Bang/G_ShaderProgram.h"
-#include "Bang/G_GraphicPipeline.h"
+#include "Bang/GraphicPipeline.h"
 
 void GL::ClearError()
 {
@@ -244,6 +244,6 @@ GL::GL()
 
 GLContext *GL::GetGLContext()
 {
-    G_GraphicPipeline *gp = G_GraphicPipeline::GetActive();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
     return gp ? gp->GetGLContext() : nullptr;
 }

@@ -75,7 +75,7 @@ private:
     Color GetSelectionColor(GameObject *go) const;
 
     friend class Gizmos;
-    friend class G_GraphicPipeline;
+    friend class GraphicPipeline;
 };
 
 
