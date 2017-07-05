@@ -67,7 +67,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     {
         // This should be a selection ReplacementShader put by the GP
         Material *rendMaterial = rend->GetMaterial();
-        G_ShaderProgram *sp = rendMaterial->GetShaderProgram();
+        ShaderProgram *sp = rendMaterial->GetShaderProgram();
         sp->SetColor("selectionColor", GetSelectionColor(go));
 
         rend->Render();
@@ -150,7 +150,7 @@ bool SelectionFramebuffer::IsPassing() const
     return m_isPassing;
 }
 
-G_ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
+ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
 {
     return m_selectionProgram;
 }

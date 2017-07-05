@@ -10,6 +10,10 @@ Texture2D::Texture2D(const Path &imageFilepath) : G_Texture2D(imageFilepath)
 {
 }
 
+Texture2D::Texture2D(const G_Texture2D *gTexture) : G_Texture2D(*gTexture)
+{
+}
+
 Texture2D::~Texture2D()
 {
 }

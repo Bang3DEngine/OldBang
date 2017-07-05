@@ -20,9 +20,9 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
-#include "Bang/G_ShaderProgram.h"
 #include "Bang/GPPass_G_Gizmos.h"
 #include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
@@ -268,7 +268,7 @@ void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 
 void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 {
-    G_ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ENSURE(sp);
 
     m_renderGBufferToScreenMaterial->Bind();
@@ -324,7 +324,7 @@ GLContext *GraphicPipeline::GetGLContext() const
     return m_glContext;
 }
 
-G_GBuffer *GraphicPipeline::GetG_GBuffer()
+G_GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
 }

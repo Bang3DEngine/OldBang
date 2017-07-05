@@ -23,6 +23,8 @@ SOURCES += \
     $$PWD/../../src/Engine/Graphics/General/G_Texture.cpp \
     $$PWD/../../src/Engine/Graphics/General/G_VAO.cpp \
     $$PWD/../../src/Engine/Graphics/General/G_VBO.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_Font.cpp \
+    $$PWD/../../src/Engine/Graphics/General/G_Material.cpp \
     $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.cpp \
     $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
     $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.cpp \
@@ -40,6 +42,8 @@ HEADERS += \
     $$PWD/../../src/Engine/Graphics/General/G_Texture.h \
     $$PWD/../../src/Engine/Graphics/General/G_VAO.h \
     $$PWD/../../src/Engine/Graphics/General/G_VBO.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Font.h \
+    $$PWD/../../src/Engine/Graphics/General/G_Material.h \
     $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.h \
     $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.h \
     $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.h \

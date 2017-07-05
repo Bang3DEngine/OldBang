@@ -10,6 +10,10 @@ G_Texture2D::G_Texture2D(const Path &imageFilepath) : G_Texture2D()
     LoadFromImage(imageFilepath);
 }
 
+G_Texture2D::G_Texture2D(const G_Texture2D &t) : G_Texture(t)
+{
+}
+
 G_Texture2D::~G_Texture2D()
 {
 }
@@ -156,5 +160,3 @@ float G_Texture2D::GetAlphaCutoff() const
 {
     return m_alphaCutoff;
 }
-
-G_Texture2D::G_Texture2D(const G_Texture2D &t) : G_Texture2D() {}

@@ -39,6 +39,7 @@ public:
 
     G_Texture();
     G_Texture(Target texTarget);
+    G_Texture(const G_Texture &t);
     virtual ~G_Texture();
 
     virtual void CreateEmpty(int width, int height) = 0;
@@ -84,9 +85,6 @@ protected:
     static GLint GetGLFormatFrom(Format texFormat);
     static GLint GetGLInternalFormatFrom(Format texFormat);
 
-private:
-    //NON COPYABLE:
-    G_Texture(const G_Texture &t) {}
 };
 
 #endif // TEXTURE_H

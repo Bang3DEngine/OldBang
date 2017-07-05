@@ -15,6 +15,7 @@
 
 Material::Material() : Asset()
 {
+    m_gMaterial = new G_MaterialImpl();
     ShaderProgram *sp = new ShaderProgram();
     sp->Load(EPATH("Shaders/G_Default.vert_g"),
              EPATH("Shaders/G_Default.frag_g"));
@@ -23,25 +24,25 @@ Material::Material() : Asset()
 
 Material::Material(const Material &m)
 {
-    G_ShaderProgram *sp = m.GetShaderProgram();
+    m_gMaterial = new G_MaterialImpl(*m.m_gMaterial);
+
+    ShaderProgram *sp = m.GetShaderProgram();
     if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
     {
         G_Shader *vshader = sp->GetVertexShader();
         G_Shader *fshader = sp->GetFragmentShader();
-        ShaderProgram *sp = new ShaderProgram();
+        sp = new ShaderProgram();
         sp->Load(vshader->GetFilepath(), fshader->GetFilepath());
-        SetShaderProgram(sp);
     }
+    m_gMaterial->SetShaderProgram(sp);
 
-    SetDiffuseColor(m.GetDiffuseColor());
-    SetReceivesLighting(m.ReceivesLighting());
-    SetShininess(m.GetShininess());
-    SetTexture(m.GetTexture());
+    m_shaderProgram = sp;
+    m_texture = m.GetTexture();
 }
 
 Material::~Material()
 {
-    if (m_shaderProgram) { delete m_shaderProgram; }
+    if (m_gMaterial) { delete m_gMaterial; }
 }
 
 String Material::GetFileExtensionStatic()
@@ -54,25 +55,20 @@ String Material::GetFileExtension() const
     return Material::GetFileExtensionStatic();
 }
 
-void Material::SetUvMultiply(const Vector2 &uvMultiply)
-{
-    m_uvMultiply = uvMultiply;
-}
-
 void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
-    SetShininess(xmlInfo.GetFloat("Shininess"));
-    SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
-    SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
+    m_gMaterial->SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
+    m_gMaterial->SetShininess(xmlInfo.GetFloat("Shininess"));
+    m_gMaterial->SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
+    m_gMaterial->SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
 
     Path texAssetFilepath = xmlInfo.GetFilepath("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 
-    G_ShaderProgram *sp = GetShaderProgram();
+    ShaderProgram *sp = GetShaderProgram();
     Path vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
     Path fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
     if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
@@ -80,9 +76,9 @@ void Material::Read(const XMLNode &xmlInfo)
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
        )
     {
-        ShaderProgram *sp = new ShaderProgram();
-        sp->Load(vshaderFilepath, fshaderFilepath);
-        SetShaderProgram(sp);
+        ShaderProgram *newSp = new ShaderProgram();
+        newSp->Load(vshaderFilepath, fshaderFilepath);
+        SetShaderProgram(newSp);
     }
 }
 
@@ -90,10 +86,10 @@ void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetColor("DiffuseColor",    GetDiffuseColor());
-    xmlInfo->SetFloat("Shininess",       GetShininess());
-    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
-    xmlInfo->SetVector2("UvMultiply",    GetUvMultiply());
+    xmlInfo->SetColor("DiffuseColor",    m_gMaterial->GetDiffuseColor());
+    xmlInfo->SetFloat("Shininess",       m_gMaterial->GetShininess());
+    xmlInfo->SetBool("ReceivesLighting", m_gMaterial->ReceivesLighting());
+    xmlInfo->SetVector2("UvMultiply",    m_gMaterial->GetUvMultiply());
 
     Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path();
     xmlInfo->SetFilepath("Texture", texFilepath,
@@ -122,61 +118,53 @@ Material *Material::GetMissingMaterial()
     return AssetsManager::Load<Material>( EPATH("Materials/Missing.bmat") );
 }
 
-void Material::SetShaderProgram(G_ShaderProgram *program)
+void Material::SetShaderProgram(ShaderProgram *program)
 {
     m_shaderProgram = program;
+    m_gMaterial->SetShaderProgram(program);
 }
 
 void Material::SetTexture(const Texture2D *texture)
 {
     m_texture = texture;
-    if (m_texture)
-    {
-        G_ShaderProgram *sp = GetShaderProgram();
-        sp->SetTexture("B_Texture0", m_texture);
-    }
+    m_gMaterial->SetTexture(texture);
 }
 
 void Material::SetReceivesLighting(bool receivesLighting)
 {
-    m_receivesLighting = receivesLighting;
+    m_gMaterial->SetReceivesLighting(receivesLighting);
 }
 
 void Material::SetShininess(float shininess)
 {
-    m_shininess = shininess;
+    m_gMaterial->SetShininess(shininess);
 }
 
 void Material::SetDiffuseColor(const Color &diffuseColor)
 {
-    m_diffuseColor = diffuseColor;
+    m_gMaterial->SetDiffuseColor(diffuseColor);
 }
 
-const Vector2 &Material::GetUvMultiply() const
+ShaderProgram *Material::GetShaderProgram() const
 {
-    return m_uvMultiply;
-}
-
-G_ShaderProgram *Material::GetShaderProgram() const
-{
-    G_ShaderProgram *camReplacementSP = nullptr;
     Scene *scene = SceneManager::GetActiveScene();
     if (scene)
     {
         Camera *cam = scene->GetCamera();
-        if (cam) { camReplacementSP = cam->GetReplacementShaderProgram(); }
+        if (cam)
+        {
+            ShaderProgram *camReplacementSP = cam->GetReplacementShaderProgram();
+            if (camReplacementSP) { return camReplacementSP; }
+        }
     }
 
-    if (camReplacementSP)
+    if (!m_shaderProgram)
     {
-        return camReplacementSP;
-    }
-    else if (!m_shaderProgram)
-    {
-        G_ShaderProgram *defaultSP = nullptr;
-        defaultSP = Material::GetMissingMaterial()->GetShaderProgram();
+        ShaderProgram *defaultSP =
+                           Material::GetMissingMaterial()->GetShaderProgram();
         return defaultSP;
     }
+
     return m_shaderProgram;
 }
 
@@ -185,46 +173,52 @@ const Texture2D *Material::GetTexture() const
     return m_texture;
 }
 
+const Vector2 &Material::GetUvMultiply() const
+{
+    return m_gMaterial->GetUvMultiply();
+}
+
 bool Material::ReceivesLighting() const
 {
-    return m_receivesLighting;
+    return m_gMaterial->ReceivesLighting();
 }
 
 float Material::GetShininess() const
 {
-    return m_shininess;
+    return m_gMaterial->GetShininess();
 }
 
 const Color& Material::GetDiffuseColor() const
 {
-    return m_diffuseColor;
+    return m_gMaterial->GetDiffuseColor();
 }
+
 
 void Material::Bind() const
 {
-    G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
-    sp->Bind();
-
-    G_GBuffer *gb = GraphicPipeline::GetActive()->GetG_GBuffer();
-    gb->BindTextureBuffersTo(sp, false);
-
-    sp->SetVec2("B_ScreenSize", G_Screen::GetSize());
-
-    sp->SetVec2( "B_UvMultiply",               GetUvMultiply());
-    sp->SetColor("B_MaterialDiffuseColor",     GetDiffuseColor());
-    sp->SetFloat("B_MaterialShininess",        GetShininess());
-    sp->SetFloat("B_MaterialReceivesLighting", ReceivesLighting() ? 1.0f : 0.0f);
-
-    float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
-    sp->SetTexture("B_Texture0",  GetTexture());
-    sp->SetFloat("B_AlphaCutoff", alphaCutoff);
-    sp->SetBool("B_HasTexture",   GetTexture() != nullptr);
-
-    GL::ApplyContextToShaderProgram(sp);
+    m_gMaterial->Bind();
 }
 
 void Material::UnBind() const
 {
+    m_gMaterial->UnBind();
+}
+
+Material::G_MaterialImpl::G_MaterialImpl() : G_Material()
+{
+}
+
+Material::G_MaterialImpl::G_MaterialImpl(const G_Material &m) : G_Material(m)
+{
+}
+
+void Material::G_MaterialImpl::Bind() const
+{
     G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
-    sp->UnBind();
+    sp->Bind();
+
+    G_GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->BindTextureBuffersTo(sp, false);
+
+    G_Material::Bind();
 }

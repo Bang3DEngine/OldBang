@@ -13,6 +13,18 @@ G_Texture::G_Texture(Target texTarget) : G_Texture()
     m_target = texTarget;
 }
 
+G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
+{
+    m_width = t.m_width;
+    m_height = t.m_height;
+    m_filterMode = t.m_filterMode;
+    m_wrapMode = t.m_wrapMode;
+    m_textureUnit = t.m_textureUnit;
+    m_format = t.m_format;
+    m_target = t.m_target;
+    m_data = t.m_data;
+}
+
 G_Texture::~G_Texture()
 {
     if (m_data) { delete[] m_data; }

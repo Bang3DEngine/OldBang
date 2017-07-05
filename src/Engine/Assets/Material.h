@@ -1,13 +1,12 @@
 ﻿#ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "Bang/Array.h"
 #include "Bang/Asset.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
+#include "Bang/G_Material.h"
 
 class Texture2D;
-class G_ShaderProgram;
+class G_Material;
+class ShaderProgram;
 class Material : public Asset
 {
 	OBJECT(Material)
@@ -18,25 +17,25 @@ public:
     Material(const Material &m);
     virtual ~Material();
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     void SetUvMultiply(const Vector2& uvMultiply);
-    void SetShaderProgram(G_ShaderProgram *program);
-    void SetTexture(const Texture2D *mtexture);
+    void SetShaderProgram(ShaderProgram *program);
+    void SetTexture(const Texture2D *texture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
-    const Vector2&   GetUvMultiply() const;
-    G_ShaderProgram*   GetShaderProgram() const;
+    const Vector2&     GetUvMultiply() const;
+    ShaderProgram*   GetShaderProgram() const;
     const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
-    virtual void Bind() const;
-    virtual void UnBind() const;
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension() const override ;
+
+    void Bind() const;
+    void UnBind() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -44,13 +43,18 @@ public:
     static Material* GetMissingMaterial();
 
 private:
-    Color m_diffuseColor    = Color::White;
-    float m_shininess       = 60.0f;
-    bool m_receivesLighting = true;
-    Vector2 m_uvMultiply    = Vector2::One;
+    const Texture2D *m_texture = nullptr;
+    ShaderProgram *m_shaderProgram = nullptr;
 
-    G_ShaderProgram *m_shaderProgram = nullptr;
-    const Texture2D *m_texture     = nullptr;
+    class G_MaterialImpl : public G_Material
+    {
+    public:
+        G_MaterialImpl();
+        G_MaterialImpl(const G_Material &m);
+        void Bind() const override;
+    };
+
+    G_Material *m_gMaterial = nullptr; // Delegate
 
     friend class Renderer;
 };

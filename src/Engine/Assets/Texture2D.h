@@ -15,6 +15,7 @@ class Texture2D : public G_Texture2D,
 public:
     Texture2D();
     Texture2D(const Path &imageFilepath);
+    explicit Texture2D(const G_Texture2D *gTexture);
     virtual ~Texture2D();
 
     static String GetFileExtensionStatic();

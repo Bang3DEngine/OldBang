@@ -10,6 +10,7 @@ class G_Texture2D : public G_Texture
 public:
     G_Texture2D();
     G_Texture2D(const Path &imageFilepath);
+    G_Texture2D(const G_Texture2D &t);
     virtual ~G_Texture2D();
 
     void LoadFromImage(const Path &imageFilepath);
@@ -34,9 +35,6 @@ protected:
     G_Image m_image;
     Path m_imageFilepath;
     float m_alphaCutoff = 0.1f;
-
-private:
-    G_Texture2D(const G_Texture2D &t); // No copy constr.
 };
 
 #endif // G_TEXTURE2D_H

@@ -15,7 +15,7 @@ class Matrix4;
 class XMLNode;
 class ICloneable;
 class MeshRenderer;
-class G_ShaderProgram;
+class ShaderProgram;
 class Camera : public Component
 {
     OBJECT(Camera)
@@ -28,8 +28,8 @@ public:
         Perspective
     };
 
-    void SetReplacementShaderProgram(G_ShaderProgram *replacementShaderProgram);
-    G_ShaderProgram *GetReplacementShaderProgram() const;
+    void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
+    ShaderProgram *GetReplacementShaderProgram() const;
 
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
@@ -79,7 +79,7 @@ protected:
     virtual ~Camera();
 
 private:
-    G_ShaderProgram *m_replacementShaderProgram = nullptr;
+    ShaderProgram *m_replacementShaderProgram = nullptr;
     float m_orthoHeight  = 25.0f;
     bool m_identityMode = false;
     Mesh *p_camMesh = nullptr;

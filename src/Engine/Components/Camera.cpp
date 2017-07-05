@@ -24,12 +24,12 @@ Camera::~Camera()
 
 }
 
-void Camera::SetReplacementShaderProgram(G_ShaderProgram *replacementSP)
+void Camera::SetReplacementShaderProgram(ShaderProgram *replacementSP)
 {
     m_replacementShaderProgram = replacementSP;
 }
 
-G_ShaderProgram *Camera::GetReplacementShaderProgram() const
+ShaderProgram *Camera::GetReplacementShaderProgram() const
 {
     return m_replacementShaderProgram;
 }

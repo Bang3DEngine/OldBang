@@ -12,7 +12,7 @@
 class Scene;
 class Renderer;
 class GameObject;
-class G_ShaderProgram;
+class ShaderProgram;
 
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
@@ -38,7 +38,7 @@ public:
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 
-    G_ShaderProgram *GetSelectionShaderProgram() const;
+    ShaderProgram *GetSelectionShaderProgram() const;
 
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
@@ -57,7 +57,7 @@ private:
     bool m_isPassing = false;
     GameObject *m_nextGameObjectToBeRendered = nullptr;
 
-    G_ShaderProgram *m_selectionProgram = nullptr;
+    ShaderProgram *m_selectionProgram = nullptr;
     /**
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.

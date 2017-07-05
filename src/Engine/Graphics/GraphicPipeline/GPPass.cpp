@@ -9,7 +9,7 @@ GPPass::GPPass(GraphicPipeline *graphicPipeline,
                    const List<GPPass*> &subPasses)
 {
     p_graphicPipeline = graphicPipeline;
-    p_gbuffer = graphicPipeline->GetG_GBuffer();
+    p_gbuffer = graphicPipeline->GetGBuffer();
     #ifdef BANG_EDITOR
     p_selectionG_Framebuffer = graphicPipeline->GetSelectionFramebuffer();
     #endif

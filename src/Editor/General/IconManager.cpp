@@ -116,7 +116,7 @@ const QPixmap &IconManager::LoadMaterialPixmap(const Material *mat)
     {
         QImage result = im->m_materialBase;
 
-        const Texture2D *tex = mat->GetTexture();
+        const G_Texture2D *tex = mat->GetTexture();
         if (tex)
         {
             const QImage& textureImg =

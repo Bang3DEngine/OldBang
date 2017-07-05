@@ -39,7 +39,7 @@ public:
     void SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttachmentId attachment);
 
     GLContext *GetGLContext() const;
-    G_GBuffer *GetG_GBuffer();
+    G_GBuffer *GetGBuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer();

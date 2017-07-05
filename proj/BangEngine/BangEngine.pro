@@ -32,7 +32,6 @@ SOURCES += \
     $$PWD/../../src/Engine/Components/Camera.cpp \
     $$PWD/../../src/Engine/Assets/Asset.cpp \
     $$PWD/../../src/Engine/Assets/Mesh.cpp \
-    $$PWD/../../src/Engine/Assets/Material.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
@@ -47,6 +46,7 @@ SOURCES += \
     $$PWD/../../src/Engine/IO/General/AssetsManager.cpp \
     $$PWD/../../src/Engine/General/Input.cpp \
     $$PWD/../../src/Engine/IO/Files/TextFile.cpp \
+    $$PWD/../../src/Engine/Assets/Material.cpp \
     $$PWD/../../src/Engine/Components/LineRenderer.cpp \
     $$PWD/../../src/Engine/Components/Renderer.cpp \
     $$PWD/../../src/Engine/General/SystemUtils.cpp \
@@ -152,6 +152,7 @@ HEADERS += \
     $$PWD/../../src/Engine/IO/General/EngineConfig.h \
     $$PWD/../../src/Engine/Math/AABox.h \
     $$PWD/../../src/Engine/Assets/AudioClip.h \
+    $$PWD/../../src/Engine/Assets/Material.h \
     $$PWD/../../src/Engine/Components/AudioSource.h \
     $$PWD/../../src/Engine/Audio/AudioManager.h \
     $$PWD/../../src/Engine/Audio/AudioPlayerRunnable.h \
@@ -206,7 +207,7 @@ HEADERS += \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$PWD/../../src/Engine/IO/Files/BFile.h \
-    $$PWD/../src/Engine/Compiler/BangPreprocessor/IReflectable.h \
+    $$PWD/../../src/Engine/Compiler/BangPreprocessor/IReflectable.h \
     $$PWD/../../src/Engine/Compiler/Compiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.h

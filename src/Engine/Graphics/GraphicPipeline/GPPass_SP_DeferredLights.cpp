@@ -17,6 +17,6 @@ void GPPass_SP_DeferredLights::InPass(const List<Renderer *> &renderers,
 
     // TODO: will have to change this in a future and maybe use clear stencil as
     // a separate GPPass
-    p_graphicPipeline->GetG_GBuffer()->ClearStencil();
+    p_graphicPipeline->GetGBuffer()->ClearStencil();
 }
 

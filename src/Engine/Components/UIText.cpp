@@ -224,7 +224,9 @@ void UIText::SetFont(Font *font)
         RefreshMesh();
         if (m_font)
         {
-            GetMaterial()->SetTexture( m_font->GetAtlasTexture() );
+            // TODO MEMLEAK
+            Texture2D *tex = new Texture2D(m_font->GetAtlasTexture());
+            GetMaterial()->SetTexture(tex);
         }
     }
 }
@@ -299,7 +301,7 @@ Rect UIText::GetNDCRect() const
 void UIText::Bind() const
 {
     Rect screenNDCRect = GetNDCRect() * 1.1f;
-    G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetG_GBuffer();
+    G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
     gbuffer->PrepareColorReadBuffer(screenNDCRect);
     UIRenderer::Bind();
 }
