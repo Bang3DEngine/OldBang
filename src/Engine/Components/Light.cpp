@@ -1,11 +1,12 @@
 #include "Bang/Light.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Debug.h"
 #include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
-#include "Bang/G_GBuffer.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
@@ -27,6 +28,8 @@ Light::~Light()
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
     G_ShaderProgram *sp = mat->GetShaderProgram();
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
+
     sp->SetFloat("B_LightIntensity", m_intensity);
     sp->SetColor("B_LightColor", m_color);
 
@@ -37,15 +40,16 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 
 void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
 {
+    m_lightMaterialScreen->Bind();
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
 
     // Intersect with light rect to draw exactly what we need
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
-    GL::ApplyContextToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
                        true,
                        improvedRenderRect);
+    m_lightMaterialScreen->UnBind();
 }
 
 Rect Light::GetRenderRect(Camera *cam) const

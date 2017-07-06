@@ -21,7 +21,7 @@ void GraphicPipelineDebugger::Reset()
     }
 }
 
-void GraphicPipelineDebugger::TakeG_GBufferShot(G_GBuffer *gbuffer,
+void GraphicPipelineDebugger::TakeGBufferShot(G_GBuffer *gbuffer,
                                               G_GBuffer::AttachmentId att,
                                               const String &screenshotName)
 {

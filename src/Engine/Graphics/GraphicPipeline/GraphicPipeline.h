@@ -37,7 +37,7 @@ public:
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
 
-    void SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttachmentId attachment);
+    void SetGBufferAttachmentToBeRendered(G_GBuffer::AttachmentId attachment);
 
     GLContext *GetGLContext() const;
     G_GBuffer *GetGBuffer();
@@ -82,7 +82,7 @@ private:
 
     Material *m_matSelectionEffectScreen = nullptr;
 
-    void RenderG_GBuffer(const List<Renderer*> &renderers,
+    void RenderGBuffer(const List<Renderer*> &renderers,
                        const List<GameObject*> &sceneChildren);
 
     #ifdef BANG_EDITOR

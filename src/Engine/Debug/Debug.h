@@ -92,6 +92,9 @@ private:
     Debug::_Status(log.str(), timeInSeconds); \
 } while (0)
 
+#define ASSERT(assertion) if ( !(assertion) ) {\
+    Debug_Error("Assertion '" << #assertion << "' failed!"); }
+
 #define _Debug_Suffix \
        " (file:'" << __FILE__ << "':" << __LINE__ << ", '" << __FUNCTION__ << \
          "')" << std::endl

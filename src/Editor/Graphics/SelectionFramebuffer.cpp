@@ -7,6 +7,7 @@
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
 #include "Bang/GameObject.h"
+#include "Bang/G_Material.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/G_RenderTexture.h"
@@ -21,9 +22,12 @@
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     G_Framebuffer(width, height)
 {
-    m_selectionProgram = new ShaderProgram();
-    m_selectionProgram->Load( EPATH("Shaders/G_Default.vert_g"),
-                              EPATH("Shaders/SelectionBuffer.frag_sel") );
+    ShaderProgram *selectionProgram = new ShaderProgram();
+    selectionProgram->Load( EPATH("Shaders/G_Default.vert_g"),
+                            EPATH("Shaders/SelectionBuffer.frag_sel") );
+
+    m_selectionMaterial = new Material();
+    m_selectionMaterial->SetShaderProgram(selectionProgram);
 
     CreateColorAttachment(AttColor,    G_Texture::Format::RGBA_Float16);
     CreateColorAttachment(AttWorldPos, G_Texture::Format::RGBA_Float16);
@@ -35,7 +39,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete m_selectionProgram;
+    delete m_selectionMaterial;
 }
 
 void SelectionFramebuffer::PrepareForRender(const Scene *scene)
@@ -59,18 +63,21 @@ void SelectionFramebuffer::PrepareNextGameObject(GameObject *go)
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
+    ASSERT(GL::IsBound(this));
     SetAllDrawBuffers();
 
     GameObject *go = !Gizmos::IsGizmoRenderer(rend) ?
                 rend->gameObject : m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
-        // This should be a selection ReplacementShader put by the GP
-        Material *rendMaterial = rend->GetMaterial();
-        ShaderProgram *sp = rendMaterial->GetShaderProgram();
-        sp->SetColor("selectionColor", GetSelectionColor(go));
-
+        Material *previousMaterial = rend->GetMaterial();
+        rend->SetMaterial(m_selectionMaterial, false);
+        rend->Bind();
+        G_ShaderProgram *selSP = m_selectionMaterial->GetShaderProgram();
+        selSP->SetColor("selectionColor", GetSelectionColor(go));
         rend->Render();
+        rend->UnBind();
+        rend->SetMaterial(previousMaterial);
     }
 }
 
@@ -148,11 +155,6 @@ Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)
 bool SelectionFramebuffer::IsPassing() const
 {
     return m_isPassing;
-}
-
-ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
-{
-    return m_selectionProgram;
 }
 
 void SelectionFramebuffer::OnGameObjectDestroyed(GameObject *destroyed)

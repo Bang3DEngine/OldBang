@@ -37,6 +37,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     Light::SetUniformsBeforeApplyingLight(mat);
 
     G_ShaderProgram *sp = mat->GetShaderProgram();
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
     sp->SetFloat("B_LightRange", m_range);
 }
 

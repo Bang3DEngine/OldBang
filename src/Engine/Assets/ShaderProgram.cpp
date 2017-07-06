@@ -1,4 +1,4 @@
-#include "ShaderProgram.h"
+#include "Bang/ShaderProgram.h"
 
 #include "Bang/XMLNode.h"
 #include "Bang/G_Shader.h"
@@ -48,16 +48,6 @@ String ShaderProgram::GetFileExtensionStatic()
 String ShaderProgram::GetFileExtension() const
 {
     return ShaderProgram::GetFileExtensionStatic();
-}
-
-
-String ShaderProgram::ToString() const
-{
-    std::ostringstream oss;
-    oss << "Shader program: " << std::endl <<
-           "   " << p_vshader << std::endl <<
-           "   " << p_fshader << std::endl;
-    return oss.str();
 }
 
 void ShaderProgram::Read(const XMLNode &xmlInfo)

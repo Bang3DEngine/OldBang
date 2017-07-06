@@ -47,7 +47,9 @@ void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
             p_gbuffer->Bind();
             p_gbuffer->SetStencilTest(false);
             p_gbuffer->SetStencilWrite(false);
+            postProcessShaderProgram->Bind();
             p_gbuffer->ApplyPass(postProcessShaderProgram, true);
+            postProcessShaderProgram->UnBind();
             p_gbuffer->UnBind();
             GL::SetTestDepth(true);
         }

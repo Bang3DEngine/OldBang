@@ -112,24 +112,22 @@ GL::BindTarget G_ShaderProgram::GetGLBindTarget() const
 
 bool G_ShaderProgram::SetInt(const String &name, int v) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniform1i(location, v);
-        UnBind();
     }
     return (location >= 0);
 }
 
 bool G_ShaderProgram::SetFloat(const String &name, float v) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniform1f(location, v);
-        UnBind();
     }
     return (location >= 0);
 }
@@ -141,36 +139,36 @@ bool G_ShaderProgram::SetBool(const String &name, bool v) const
 
 bool G_ShaderProgram::SetVec2 (const String &name, const Vector2& v) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniform2fv(location, 1, &v.x);
-        UnBind();
     }
     return (location >= 0);
 }
 
 bool G_ShaderProgram::SetVec3 (const String &name, const Vector3& v) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniform3fv(location, 1, &v.x);
-        UnBind();
     }
     return (location >= 0);
 }
 
 bool G_ShaderProgram::SetVec4 (const String &name, const Vector4& v) const
 {
+    ASSERT(GL::IsBound(this));
+    if (!GL::IsBound(this)) {
+        int a = 2;
+    }
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniform4fv(location, 1, &v.x);
-        UnBind();
     }
     return (location >= 0);
 }
@@ -182,24 +180,22 @@ bool G_ShaderProgram::SetColor(const String &name, const Color &c) const
 
 bool G_ShaderProgram::SetMat3(const String &name, const glm::mat3 &m) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniformMatrix3fv(location, 1, GL_FALSE, &m[0][0]);
-        UnBind();
     }
     return (location >= 0);
 }
 
 bool G_ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
 {
+    ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
         glUniformMatrix4fv(location, 1, GL_FALSE, m.GetFirstAddress());
-        UnBind();
     }
     return (location >= 0);
 }
@@ -257,16 +253,12 @@ void G_ShaderProgram::SetFragmentShader(G_Shader *fragmentShader)
 
 void G_ShaderProgram::SetVertexInputBinding(const String &inputName, uint location)
 {
-    Bind();
     glBindAttribLocation(m_idGL, location, inputName.ToCString());
-    UnBind();
 }
 
 void G_ShaderProgram::SetFragmentInputBinding(const String &inputName, uint location)
 {
-    Bind();
     glBindFragDataLocation(m_idGL, location, inputName.ToCString());
-    UnBind();
 }
 
 G_ShaderProgram::Type G_ShaderProgram::GetType() const
@@ -300,7 +292,7 @@ GLint G_ShaderProgram::GetAttribLocation(const String &name) const
 }
 
 bool G_ShaderProgram::BindTextureToAvailableUnit(const String &texName,
-                                               const G_Texture *texture) const
+                                                 const G_Texture *texture) const
 {
     int location = -1;
     if (texture)

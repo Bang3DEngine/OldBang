@@ -6,6 +6,7 @@
 #include "Bang/G_VAO.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
+#include "Bang/Debug.h"
 #include "Bang/G_Screen.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/G_RenderTexture.h"
@@ -39,16 +40,13 @@ G_GBuffer::~G_GBuffer()
 void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
                                      bool willReadFromColor) const
 {
-    // Color Attachments bindings as Shader Inputs
-    Bind();
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
 
     sp->SetTexture("B_GTex_NormalDepth", m_normalTexture);
     sp->SetTexture("B_GTex_DiffColor",   m_diffuseTexture);
     sp->SetTexture("B_GTex_Misc",        m_miscTexture);
     sp->SetTexture("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
                                                        m_colorTexture);
-
-    UnBind();
 }
 
 
@@ -56,18 +54,16 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
                           bool prepareReadFromColorBuffer,
                           const Rect &mask)
 {
+    ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
     bool prevStencilWrite = m_stencilWrite;
     SetStencilWrite(false);
 
-    Bind();
     BindTextureBuffersTo(sp, prepareReadFromColorBuffer);
 
     if (prepareReadFromColorBuffer) { PrepareColorReadBuffer(); }
     SetColorDrawBuffer();
 
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
-
-    UnBind();
 
     SetStencilWrite(prevStencilWrite);
 }

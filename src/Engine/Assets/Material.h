@@ -2,7 +2,6 @@
 #define MATERIAL_H
 
 #include "Bang/Asset.h"
-#include "Bang/G_Material.h"
 
 class Texture2D;
 class G_Material;

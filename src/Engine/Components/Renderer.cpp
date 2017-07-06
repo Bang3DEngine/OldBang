@@ -52,9 +52,21 @@ void Renderer::CloneInto(ICloneable *clone) const
 
 }
 
-void Renderer::SetMaterial(Material *m)
+void Renderer::SetMaterial(Material *m, bool deleteMaterialCopy)
 {
-    m_material = m;
+    if (m_material != m)
+    {
+        m_material = m;
+        m_materialCopy = nullptr;
+
+        // You may not want to delete the material copy, in case you want to
+        // swap this renderer's material temporary, and then switch back to
+        // this material copy
+        if (deleteMaterialCopy)
+        {
+            delete m_materialCopy;
+        }
+    }
 }
 
 Material *Renderer::GetMaterial() const
@@ -77,27 +89,14 @@ void Renderer::Bind() const
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
 
-    G_ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    Material *mat = GetMaterial();
+    mat->Bind();
+    G_ShaderProgram *sp = mat->GetShaderProgram();
     sp->SetBool("B_IsSelected", gameObject->IsSelected());
-}
-
-void Renderer::RenderForSelectionWithoutMaterial() const
-{
-    RenderWithoutMaterial();
 }
 
 void Renderer::Render() const
 {
-    RenderWithMaterial( GetMaterial() );
-}
-
-void Renderer::RenderWithMaterial(Material *_mat) const
-{
-    Bind();
-
-    Material *mat = _mat ? _mat : Material::GetMissingMaterial();
-    mat->Bind();
-
     #ifdef BANG_EDITOR
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
@@ -111,15 +110,21 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     {
         RenderWithoutMaterial();
     }
+}
 
-    mat->UnBind();
-
-    UnBind();
+void Renderer::RenderForSelectionWithoutMaterial() const
+{
+    RenderWithoutMaterial();
 }
 
 void Renderer::UseMaterialCopy()
 {
-    if (m_materialCopy) { delete m_materialCopy; }
+    if (m_materialCopy)
+    {
+        delete m_materialCopy;
+        m_materialCopy = nullptr;
+    }
+
     if (GetSharedMaterial())
     {
         m_materialCopy = new Material( *GetSharedMaterial() );
@@ -128,8 +133,7 @@ void Renderer::UseMaterialCopy()
 
 void Renderer::UnBind() const
 {
-    G_ShaderProgram *sp = GetMaterial()->GetShaderProgram();
-    sp->UnBind();
+    GetMaterial()->UnBind();
 }
 
 void Renderer::SetTransparent(bool transparent)
@@ -196,8 +200,7 @@ float Renderer::GetLineWidth() const
 }
 
 #ifdef BANG_EDITOR
-void Renderer::SetBindForSelectionFunction(
-        const std::function<void()> &f)
+void Renderer::SetBindForSelectionFunction(const std::function<void()> &f)
 {
     p_OnBindForSelectionFunc = f;
 }
@@ -219,6 +222,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
+    xmlInfo->SetFilepath("Material", Path(), "bmat");
     Material *sharedMat = GetSharedMaterial();
     if (sharedMat)
     {
@@ -226,10 +230,6 @@ void Renderer::Write(XMLNode *xmlInfo) const
         {
             xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }
-    }
-    else
-    {
-        xmlInfo->SetFilepath("Material", Path(), "bmat");
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());

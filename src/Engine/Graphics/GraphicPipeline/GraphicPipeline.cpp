@@ -100,25 +100,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     #endif
 }
 
-GraphicPipeline::~GraphicPipeline()
-{
-    delete m_gbuffer;
-    delete m_scenePass;
-    delete m_canvasPass;
-    delete m_gizmosPass;
-
-    #ifdef BANG_EDITOR
-    delete m_selectionFB;
-    delete m_sceneSelectionPass;
-    delete m_canvasSelectionPass;
-    delete m_gizmosSelectionPass;
-    #endif
-
-    delete m_matSelectionEffectScreen;
-    delete m_texUnitManager;
-    delete m_glContext;
-}
-
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
     p_scene = scene; ENSURE(p_scene);
@@ -130,7 +111,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     Camera *camera = scene->GetCamera();
     if (camera) { camera->Bind(); }
 
-    RenderG_GBuffer(renderers, sceneChildren);
+    RenderGBuffer(renderers, sceneChildren);
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
@@ -172,8 +153,10 @@ void GraphicPipeline::ApplySelectionOutline()
         }
     }
 
-    // Apply selection outline
+    m_matSelectionEffectScreen->Bind();
     m_gbuffer->ApplyPass(m_matSelectionEffectScreen->GetShaderProgram());
+    m_matSelectionEffectScreen->UnBind();
+
     m_gbuffer->UnBind();
     GL::SetTestDepth(true);
     #endif
@@ -211,7 +194,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
 }
 
-void GraphicPipeline::RenderG_GBuffer(const List<Renderer*> &renderers,
+void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
                                     const List<GameObject*> &sceneChildren)
 {
     m_gbuffer->Bind();
@@ -238,7 +221,7 @@ void GraphicPipeline::RenderSelectionBuffer(
     Camera *cam = p_scene->GetCamera();
     m_selectionFB->m_isPassing = true;
     m_selectionFB->PrepareForRender(scene);
-    cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
+    // cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
 
     m_selectionFB->Bind();
 
@@ -271,8 +254,8 @@ void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ENSURE(sp);
 
-    m_gbuffer->BindTextureBuffersTo(sp, false);
     m_renderGBufferToScreenMaterial->Bind();
+    m_gbuffer->BindTextureBuffersTo(sp, false);
     GL::ApplyContextToShaderProgram(sp);
 
     sp->SetTexture("B_GTex_Color", fullScreenTexture);
@@ -296,12 +279,12 @@ void GraphicPipeline::RenderScreenPlane()
 void GraphicPipeline::RenderForGBuffer(Renderer *renderer) const
 {
     ENSURE(renderer && renderer->IsEnabled());
+    renderer->Bind();
     Material *mat = renderer->GetMaterial();
-    if (mat)
-    {
-        m_gbuffer->BindTextureBuffersTo(mat->GetShaderProgram(), false);
-    }
+    ShaderProgram *sp = mat->GetShaderProgram();
+    m_gbuffer->BindTextureBuffersTo(sp, false);
     renderer->Render();
+    renderer->UnBind();
 }
 
 #ifdef BANG_EDITOR
@@ -325,7 +308,7 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
     #endif
 }
 
-void GraphicPipeline::SetG_GBufferAttachmentToBeRendered(
+void GraphicPipeline::SetGBufferAttachmentToBeRendered(
         G_GBuffer::AttachmentId attachment)
 {
     m_gbufferAttachToBeShown = attachment;
@@ -344,4 +327,23 @@ G_GBuffer *GraphicPipeline::GetGBuffer()
 G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
+}
+
+GraphicPipeline::~GraphicPipeline()
+{
+    delete m_gbuffer;
+    delete m_scenePass;
+    delete m_canvasPass;
+    delete m_gizmosPass;
+
+    #ifdef BANG_EDITOR
+    delete m_selectionFB;
+    delete m_sceneSelectionPass;
+    delete m_canvasSelectionPass;
+    delete m_gizmosSelectionPass;
+    #endif
+
+    delete m_matSelectionEffectScreen;
+    delete m_texUnitManager;
+    delete m_glContext;
 }

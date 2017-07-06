@@ -22,7 +22,6 @@ G_Material::G_Material(const G_Material &m)
 
 G_Material::~G_Material()
 {
-    if (m_shaderProgram) { delete m_shaderProgram; }
 }
 
 void G_Material::SetUvMultiply(const Vector2 &uvMultiply)

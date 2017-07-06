@@ -11,6 +11,7 @@
 
 void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
 {
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
     sp->SetMat4("B_Model",    m_modelMatrix);
     sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
 
@@ -198,10 +199,7 @@ void GLContext::OnBind(GL::BindTarget bindTarget, GLId glId)
     {
         m_glBoundIds.Set(bindTarget, std::stack<GLId>());
     }
-
-    // Push id if it was not bound, push a 0 to indicate its a redundant bind
-    const GLId idToBind = IsBound(bindTarget, glId) ? 0 : glId;
-    m_glBoundIds[bindTarget].push(idToBind);
+    m_glBoundIds[bindTarget].push(glId);
 }
 
 void GLContext::OnUnBind(GL::BindTarget bindTarget)
@@ -211,15 +209,12 @@ void GLContext::OnUnBind(GL::BindTarget bindTarget)
     std::stack<GLId> &boundIds = m_glBoundIds.Get(bindTarget);
     if (!boundIds.empty())
     {
+        const GLId currentId = GetBoundId(bindTarget);
         boundIds.pop();
-        if (boundIds.empty()) { GL::_Bind(bindTarget, 0); }
-        else
+        const GLId previousBoundId = GetBoundId(bindTarget);
+        if (currentId != previousBoundId)
         {
-            const GLId previousBoundId = GetBoundId(bindTarget);
-            if (previousBoundId > 0)
-            {
-                GL::_Bind(bindTarget, previousBoundId);
-            }
+            GL::_Bind(bindTarget, previousBoundId);
         }
     }
 }

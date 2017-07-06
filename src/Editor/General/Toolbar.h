@@ -41,7 +41,7 @@ public slots:
     void OnStepFrameClicked();
     void OnStopClicked();
     void OnOrthoPerspectiveClicked();
-    void OnG_GBufferAttachmentIndexChanged(int newIndex);
+    void OnGBufferAttachmentIndexChanged(int newIndex);
 
     void OnSceneGameTabChanged();
 

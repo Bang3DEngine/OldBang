@@ -8,6 +8,7 @@
 #include "Bang/G_Shader.h"
 #include "Bang/G_Texture.h"
 #include "Bang/Texture2D.h"
+#include "Bang/G_Material.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
@@ -147,24 +148,6 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
 
 ShaderProgram *Material::GetShaderProgram() const
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    if (scene)
-    {
-        Camera *cam = scene->GetCamera();
-        if (cam)
-        {
-            ShaderProgram *camReplacementSP = cam->GetReplacementShaderProgram();
-            if (camReplacementSP) { return camReplacementSP; }
-        }
-    }
-
-    if (!m_shaderProgram)
-    {
-        ShaderProgram *defaultSP =
-                           Material::GetMissingMaterial()->GetShaderProgram();
-        return defaultSP;
-    }
-
     return m_shaderProgram;
 }
 
@@ -192,7 +175,6 @@ const Color& Material::GetDiffuseColor() const
 {
     return m_gMaterial->GetDiffuseColor();
 }
-
 
 void Material::Bind() const
 {

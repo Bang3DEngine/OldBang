@@ -35,7 +35,9 @@ void Asset::CloneInto(ICloneable * clone) const
 
 String Asset::ToString() const
 {
-    return "Asset '" + m_assetFilepath + "'.";
+    String res = GetClassName();
+    res +=  " '" + m_assetFilepath + "'. (" + String::ToString((void*)this) + ")";
+    return res;
 }
 
 void Asset::Read(const XMLNode &xmlInfo)

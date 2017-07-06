@@ -12,6 +12,7 @@
 class Scene;
 class Renderer;
 class GameObject;
+class G_Material;
 class ShaderProgram;
 
 /**
@@ -38,8 +39,6 @@ public:
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 
-    ShaderProgram *GetSelectionShaderProgram() const;
-
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
 private:
@@ -57,7 +56,7 @@ private:
     bool m_isPassing = false;
     GameObject *m_nextGameObjectToBeRendered = nullptr;
 
-    ShaderProgram *m_selectionProgram = nullptr;
+    Material *m_selectionMaterial = nullptr;
     /**
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.

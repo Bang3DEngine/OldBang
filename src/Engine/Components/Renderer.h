@@ -29,7 +29,7 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    virtual void SetMaterial(Material *m);
+    virtual void SetMaterial(Material *m, bool deleteMaterialCopy = true);
     virtual Material* GetMaterial() const;
     virtual Material* GetSharedMaterial() const;
 
@@ -57,13 +57,11 @@ public:
     float GetLineWidth() const;
 
     virtual void Render() const;
-    virtual void RenderWithMaterial(Material *mat) const;
 
     void UseMaterialCopy();
 
     #ifdef BANG_EDITOR
-    void SetBindForSelectionFunction(
-            const std::function<void()> &f);
+    void SetBindForSelectionFunction(const std::function<void()> &f);
     #endif
 
     virtual void Bind() const override;

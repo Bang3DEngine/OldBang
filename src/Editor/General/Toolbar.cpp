@@ -78,7 +78,7 @@ void Toolbar::Init()
             tb, SLOT(OnOrthoPerspectiveClicked()));
 
     connect(tb->m_gbufferAttachmentComboBox, SIGNAL(currentIndexChanged(int)),
-            tb, SLOT(OnG_GBufferAttachmentIndexChanged(int)));
+            tb, SLOT(OnGBufferAttachmentIndexChanged(int)));
 
     tb->m_buttonTranslateMode->click();
     tb->m_buttonGlobalCoords->click();
@@ -221,21 +221,21 @@ void Toolbar::OnOrthoPerspectiveClicked()
     edCam->SwitchProjectionModeTo(mode3D);
 }
 
-void Toolbar::OnG_GBufferAttachmentIndexChanged(int newIndex)
+void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive();
 
     if (newIndex == 0)
     {
-        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttColor);
+        gp->SetGBufferAttachmentToBeRendered(G_GBuffer::AttColor);
     }
     else if (newIndex == 1)
     {
-        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttNormalDepth);
+        gp->SetGBufferAttachmentToBeRendered(G_GBuffer::AttNormalDepth);
     }
     else if (newIndex == 2)
     {
-        gp->SetG_GBufferAttachmentToBeRendered(G_GBuffer::AttDiffuse);
+        gp->SetGBufferAttachmentToBeRendered(G_GBuffer::AttDiffuse);
     }
 }
 
