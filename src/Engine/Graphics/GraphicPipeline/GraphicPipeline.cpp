@@ -1,4 +1,4 @@
-#include "Bang/GraphicPipeline.h"
+﻿#include "Bang/GraphicPipeline.h"
 
 #include "Bang/Mesh.h"
 #include "Bang/Debug.h"
@@ -167,7 +167,7 @@ void GraphicPipeline::ApplySelectionOutline()
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)
             {
-                if (rend && rend->IsEnabled()) { rend->Render(); }
+                RenderForGBuffer(rend);
             }
         }
     }
@@ -271,6 +271,7 @@ void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ENSURE(sp);
 
+    m_gbuffer->BindTextureBuffersTo(sp, false);
     m_renderGBufferToScreenMaterial->Bind();
     GL::ApplyContextToShaderProgram(sp);
 
@@ -290,6 +291,17 @@ void GraphicPipeline::RenderScreenPlane()
                m_screenPlaneMesh->GetVertexCount());
     GL::SetWriteDepth(true);
     GL::SetTestDepth(true);
+}
+
+void GraphicPipeline::RenderForGBuffer(Renderer *renderer) const
+{
+    ENSURE(renderer && renderer->IsEnabled());
+    Material *mat = renderer->GetMaterial();
+    if (mat)
+    {
+        m_gbuffer->BindTextureBuffersTo(mat->GetShaderProgram(), false);
+    }
+    renderer->Render();
 }
 
 #ifdef BANG_EDITOR

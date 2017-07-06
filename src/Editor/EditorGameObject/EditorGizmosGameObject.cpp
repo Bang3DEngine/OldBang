@@ -418,7 +418,7 @@ void EditorGizmosGameObject::Render(Renderer *rend)
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (!sfb->IsPassing())
     {
-        rend->Render();
+        gp->RenderForGBuffer(rend);
     }
     else
     {

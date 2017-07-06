@@ -32,7 +32,7 @@ public:
     virtual ~G_GBuffer();
 
     virtual void BindTextureBuffersTo(G_ShaderProgram *sp,
-                                      bool willReadFromColor) const;
+                                      bool willReadFromColor = false) const;
 
     void ApplyPass(G_ShaderProgram *sp,
                    bool prepareReadFromColorBuffer = false,

@@ -15,7 +15,7 @@
 
 Material::Material() : Asset()
 {
-    m_gMaterial = new G_MaterialImpl();
+    m_gMaterial = new G_Material();
     ShaderProgram *sp = new ShaderProgram();
     sp->Load(EPATH("Shaders/G_Default.vert_g"),
              EPATH("Shaders/G_Default.frag_g"));
@@ -24,7 +24,7 @@ Material::Material() : Asset()
 
 Material::Material(const Material &m)
 {
-    m_gMaterial = new G_MaterialImpl(*m.m_gMaterial);
+    m_gMaterial = new G_Material(*m.m_gMaterial);
 
     ShaderProgram *sp = m.GetShaderProgram();
     if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
@@ -202,23 +202,4 @@ void Material::Bind() const
 void Material::UnBind() const
 {
     m_gMaterial->UnBind();
-}
-
-Material::G_MaterialImpl::G_MaterialImpl() : G_Material()
-{
-}
-
-Material::G_MaterialImpl::G_MaterialImpl(const G_Material &m) : G_Material(m)
-{
-}
-
-void Material::G_MaterialImpl::Bind() const
-{
-    G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
-    sp->Bind();
-
-    G_GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->BindTextureBuffersTo(sp, false);
-
-    G_Material::Bind();
 }

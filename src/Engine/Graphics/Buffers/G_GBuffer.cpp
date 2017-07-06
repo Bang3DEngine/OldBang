@@ -41,12 +41,13 @@ void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
 {
     // Color Attachments bindings as Shader Inputs
     Bind();
+
     sp->SetTexture("B_GTex_NormalDepth", m_normalTexture);
     sp->SetTexture("B_GTex_DiffColor",   m_diffuseTexture);
     sp->SetTexture("B_GTex_Misc",        m_miscTexture);
-
     sp->SetTexture("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
                                                        m_colorTexture);
+
     UnBind();
 }
 

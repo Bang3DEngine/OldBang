@@ -46,15 +46,7 @@ private:
     const Texture2D *m_texture = nullptr;
     ShaderProgram *m_shaderProgram = nullptr;
 
-    class G_MaterialImpl : public G_Material
-    {
-    public:
-        G_MaterialImpl();
-        G_MaterialImpl(const G_Material &m);
-        void Bind() const override;
-    };
-
-    G_Material *m_gMaterial = nullptr; // Delegate
+    G_Material *m_gMaterial = nullptr; // Material delegate
 
     friend class Renderer;
 };

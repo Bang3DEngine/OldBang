@@ -34,7 +34,7 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
             p_gbuffer->PrepareColorReadBuffer();
             p_gbuffer->SetAllDrawBuffers();
         }
-        rend->Render();
+        p_graphicPipeline->RenderForGBuffer(rend);
     }
     //if (m_transparentPass) { GL::SetWriteDepth(true); }
 }
