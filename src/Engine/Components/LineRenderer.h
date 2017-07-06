@@ -32,7 +32,7 @@ public:
 protected:
     LineRenderer();
 
-    virtual void RenderWithoutMaterial() const override;
+    virtual void Render() const override;
 
 private:
     MeshRenderer  *m_meshRenderer = nullptr;

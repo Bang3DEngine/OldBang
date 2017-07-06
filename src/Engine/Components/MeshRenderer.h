@@ -29,7 +29,7 @@ public:
 protected:
     mutable Mesh *p_mesh = nullptr;
 
-    virtual void RenderWithoutMaterial() const override;
+    virtual void Render() const override;
 };
 
 #endif // MESHRENDERER_H

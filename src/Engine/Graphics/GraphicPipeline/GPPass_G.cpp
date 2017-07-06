@@ -8,12 +8,11 @@
 #include "Bang/GraphicPipeline.h"
 
 GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
-                   bool receiveLighting, bool transparentPass,
+                   bool receiveLighting,
                    const List<GPPass*> &subPasses)
     : GPPass(graphicPipeline, subPasses)
 {
     m_receiveLighting = receiveLighting;
-    m_transparentPass = transparentPass;
 }
 
 void GPPass_G::InPass(const List<Renderer*> &renderers,
@@ -22,21 +21,14 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
     GPPass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
-    //if (m_transparentPass) { GL::SetWriteDepth(false); }
 
     p_gbuffer->SetStencilTest(false);
     p_gbuffer->SetStencilWrite(true);
     for (Renderer *rend : renderers)
     {
         if (!CanRender(rend)) { continue; }
-        if (rend->IsTransparent())
-        {
-            p_gbuffer->PrepareColorReadBuffer();
-            p_gbuffer->SetAllDrawBuffers();
-        }
-        p_graphicPipeline->RenderForGBuffer(rend);
+        p_graphicPipeline->Render(rend);
     }
-    //if (m_transparentPass) { GL::SetWriteDepth(true); }
 }
 
 bool GPPass_G::CanRender(const Renderer *renderer) const
@@ -44,6 +36,5 @@ bool GPPass_G::CanRender(const Renderer *renderer) const
     Material *rendMaterial = renderer->GetMaterial();
     bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
     return GPPass::CanRender(renderer) &&
-           (m_transparentPass == renderer->IsTransparent()) &&
            (m_receiveLighting == receivesLighting);
 }

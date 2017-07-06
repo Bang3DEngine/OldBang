@@ -32,7 +32,7 @@ public:
     void ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();
 
-    void RenderForGBuffer(Renderer *renderer) const;
+    void Render(Renderer *renderer) const;
     void OnResize(int newWidth, int newHeight);
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);

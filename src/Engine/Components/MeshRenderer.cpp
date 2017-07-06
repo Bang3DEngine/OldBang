@@ -40,7 +40,7 @@ Mesh *MeshRenderer::GetMesh() const
     return p_mesh;
 }
 
-void MeshRenderer::RenderWithoutMaterial() const
+void MeshRenderer::Render() const
 {
     ENSURE(p_mesh);
     GL::Render(p_mesh->GetVAO(), GetRenderMode(), p_mesh->GetVertexCount());

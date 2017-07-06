@@ -17,7 +17,6 @@ UIRenderer::UIRenderer()
     UseMaterialCopy();
     GetMaterial()->SetDiffuseColor(m_tint);
 
-    SetTransparent(false);
     SetRenderLayer(Renderer::RenderLayer::Canvas);
 }
 
@@ -60,10 +59,10 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
     return MeshRenderer::GetBoundingRect(camera);
 }
 
-void UIRenderer::RenderWithoutMaterial() const
+void UIRenderer::Render() const
 {
     GL::SetTestDepth(false);
-    MeshRenderer::RenderWithoutMaterial();
+    MeshRenderer::Render();
     GL::SetTestDepth(true);
 }
 

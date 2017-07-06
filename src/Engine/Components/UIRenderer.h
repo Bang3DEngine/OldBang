@@ -14,7 +14,7 @@ class UIRenderer : public MeshRenderer
     OBJECT(UIRenderer)
 
 public:
-    virtual void RenderWithoutMaterial() const override;
+    virtual void Render() const override;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 

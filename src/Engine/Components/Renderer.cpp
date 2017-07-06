@@ -2,30 +2,16 @@
 
 #include <functional>
 
-#include "Bang/AABox.h"
 #include "Bang/Debug.h"
-#include "Bang/Scene.h"
 #include "Bang/Camera.h"
-#include "Bang/G_GBuffer.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
-#include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/EditorScene.h"
-#include "Bang/SelectionFramebuffer.h"
-#endif
 
 Renderer::Renderer()
 {
-    #ifdef BANG_EDITOR
-    p_OnBindForSelectionFunc = [](){};
-    #endif
-
     SetMaterial(
            AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") ));
 }
@@ -48,7 +34,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
     r->SetClosedInInspector(IsClosedInInspector());
-    r->SetTransparent(IsTransparent());
 
 }
 
@@ -95,28 +80,6 @@ void Renderer::Bind() const
     sp->SetBool("B_IsSelected", gameObject->IsSelected());
 }
 
-void Renderer::Render() const
-{
-    #ifdef BANG_EDITOR
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
-    if (sfb->IsPassing())
-    {
-        p_OnBindForSelectionFunc();
-        RenderForSelectionWithoutMaterial();
-    }
-    else
-    #endif
-    {
-        RenderWithoutMaterial();
-    }
-}
-
-void Renderer::RenderForSelectionWithoutMaterial() const
-{
-    RenderWithoutMaterial();
-}
-
 void Renderer::UseMaterialCopy()
 {
     if (m_materialCopy)
@@ -134,15 +97,6 @@ void Renderer::UseMaterialCopy()
 void Renderer::UnBind() const
 {
     GetMaterial()->UnBind();
-}
-
-void Renderer::SetTransparent(bool transparent)
-{
-    m_isTransparent = transparent;
-}
-bool Renderer::IsTransparent() const
-{
-    return m_isTransparent;
 }
 
 void Renderer::SetRenderLayer(Renderer::RenderLayer rl)
@@ -198,13 +152,6 @@ float Renderer::GetLineWidth() const
 {
     return m_lineWidth;
 }
-
-#ifdef BANG_EDITOR
-void Renderer::SetBindForSelectionFunction(const std::function<void()> &f)
-{
-    p_OnBindForSelectionFunc = f;
-}
-#endif
 
 void Renderer::Read(const XMLNode &xmlInfo)
 {

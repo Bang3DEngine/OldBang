@@ -414,11 +414,13 @@ void EditorGizmosGameObject::Reset()
 
 void EditorGizmosGameObject::Render(Renderer *rend)
 {
+    rend->SetEnabled(true);
+
     GraphicPipeline *gp = GraphicPipeline::GetActive(); ENSURE(gp);
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (!sfb->IsPassing())
     {
-        gp->RenderForGBuffer(rend);
+        gp->Render(rend);
     }
     else
     {

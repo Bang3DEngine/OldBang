@@ -7,12 +7,14 @@
 #include "Bang/Matrix4.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
+#include "Bang/GameObject.h"
 #include "Bang/EditorState.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
-#include "Bang/GameObject.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
+#include "Bang/SelectionFramebuffer.h"
 
 EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
                                          GameObject *attachedGameObject)
@@ -25,11 +27,6 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_line->SetMaterial(m_material);
     m_line->SetLineWidth(2.0f);
     m_line->SetRenderLayer(Renderer::RenderLayer::Gizmos);
-    m_line->SetBindForSelectionFunction([]()
-        {
-            GL::SetLineWidth(25.0f); // Easier grab
-        }
-    );
 
     m_axisCap = MeshFactory::GetConeGameObject();
     m_axisCap->GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
@@ -119,6 +116,11 @@ void EditorTranslateAxis::OnEditorUpdate()
 void EditorTranslateAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
     EditorAxis::OnDrawGizmos(depthed, overlay);
+
+    // Bigger grab for selecting
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    bool selectionPass = gp->GetSelectionFramebuffer()->IsPassing();
+    m_line->SetLineWidth(!selectionPass ? 2.0f : 25.0f);
 
     if (overlay && !depthed)
     {

@@ -14,7 +14,9 @@
 #include "Bang/EditorState.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
+#include "Bang/GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
+#include "Bang/SelectionFramebuffer.h"
 
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
                                  GameObject *attachedGameObject)
@@ -27,11 +29,6 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_line->SetMaterial(m_material);
     m_line->SetLineWidth(2.0f);
     m_line->SetRenderLayer(Renderer::RenderLayer::Gizmos);
-    m_line->SetBindForSelectionFunction([]()
-        {
-            GL::SetLineWidth(25.0f); // Easier grab
-        }
-    );
 
     // Scale axis cap configuration (the cube at the end)
     m_axisCap = MeshFactory::GetCubeGameObject();
@@ -132,6 +129,11 @@ void EditorScaleAxis::OnEditorUpdate()
 void EditorScaleAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
     EditorAxis::OnDrawGizmos(depthed, overlay);
+
+    // Bigger grab for selecting
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    bool selectionPass = gp->GetSelectionFramebuffer()->IsPassing();
+    m_line->SetLineWidth(!selectionPass ? 2.0f : 25.0f);
 
     if (overlay)
     {

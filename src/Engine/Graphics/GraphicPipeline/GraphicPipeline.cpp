@@ -47,7 +47,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
     #endif
 
-
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 EPATH("Materials/SP_SelectionEffect.bmat") );
 
@@ -62,9 +61,9 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_scenePass  =
      new GPPass_RenderLayer(this, RL::Scene,
      {
-       new GPPass_G(this, true, false),     // Lighted G_Pass
+       new GPPass_G(this, true),     // Lighted G_Pass
        new GPPass_SP_DeferredLights(this),  // Apply light
-       new GPPass_G(this, false, false),    // UnLighted G_Pass
+       new GPPass_G(this, false),    // UnLighted G_Pass
        new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
      });
@@ -72,7 +71,7 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_canvasPass =
      new GPPass_RenderLayer(this, RL::Canvas,
      {
-      new GPPass_G(this, false, false),
+      new GPPass_G(this, false),
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
@@ -148,7 +147,7 @@ void GraphicPipeline::ApplySelectionOutline()
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)
             {
-                RenderForGBuffer(rend);
+                Render(rend);
             }
         }
     }
@@ -276,13 +275,12 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetTestDepth(true);
 }
 
-void GraphicPipeline::RenderForGBuffer(Renderer *renderer) const
+void GraphicPipeline::Render(Renderer *renderer) const
 {
     ENSURE(renderer && renderer->IsEnabled());
     renderer->Bind();
-    Material *mat = renderer->GetMaterial();
-    ShaderProgram *sp = mat->GetShaderProgram();
-    m_gbuffer->BindTextureBuffersTo(sp, false);
+    m_gbuffer->BindTextureBuffersTo(
+                renderer->GetMaterial()->GetShaderProgram(), false);
     renderer->Render();
     renderer->UnBind();
 }

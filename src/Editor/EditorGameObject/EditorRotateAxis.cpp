@@ -11,6 +11,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/GraphicPipeline.h"
+#include "Bang/SelectionFramebuffer.h"
 #include "Bang/CircleCulledRenderer.h"
 
 EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
@@ -24,11 +26,6 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     m_circle->SetMaterial(m_material);
     m_circle->SetRenderLayer(Renderer::RenderLayer::Gizmos);
-    m_circle->SetBindForSelectionFunction([]()
-        {
-            GL::SetLineWidth(10.0f); // Easier grab
-        }
-    );
 
     if (dir == EditorAxisDirection::X)
     {
@@ -132,6 +129,11 @@ void EditorRotateAxis::OnEditorUpdate()
 void EditorRotateAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
     EditorAxis::OnDrawGizmos(depthed, overlay);
+
+    // Bigger grab for selecting
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    bool selectionPass = gp->GetSelectionFramebuffer()->IsPassing();
+    m_circle->SetLineWidth(!selectionPass ? 2.0f : 10.0f);
 
     if (overlay)
     {

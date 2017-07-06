@@ -2,8 +2,6 @@
 #define RENDERER_H
 
 #include <GL/glew.h>
-#include <functional>
-#include "Bang/WinUndef.h"
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
@@ -56,22 +54,15 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    virtual void Render() const;
+    virtual void Render() const = 0;
 
     void UseMaterialCopy();
-
-    #ifdef BANG_EDITOR
-    void SetBindForSelectionFunction(const std::function<void()> &f);
-    #endif
 
     virtual void Bind() const override;
     virtual void UnBind() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    void SetTransparent(bool transparent);
-    bool IsTransparent() const;
 
     void SetRenderLayer(RenderLayer dl);
     RenderLayer GetRenderLayer() const;
@@ -81,9 +72,6 @@ protected:
     GL::CullMode m_cullMode     = GL::CullMode::Back;
     GL::RenderMode m_renderMode = GL::RenderMode::Triangles;
 
-    virtual void RenderWithoutMaterial() const = 0;
-    virtual void RenderForSelectionWithoutMaterial() const;
-
     Renderer();
     virtual ~Renderer();
 
@@ -92,27 +80,12 @@ private:
     Material *m_materialCopy = nullptr;
 
     RenderLayer m_renderLayer = Scene;
-    bool m_isTransparent      = false;
 
     /**
      * @brief Width of the lines if rendering with Lines RenderMode
      * or if rendering with wireframe.
      */
     float m_lineWidth = 1.0f;
-
-    #ifdef BANG_EDITOR
-    /**
-     * @brief Called by SelectionFramebuffer.
-     * Use this if you want to activate
-     * special states before rendering for the selection framebuffer.
-     * For example, you may want to draw a bigger object in order for
-     * the selection to be easier to do.
-     *
-     * This is used in the transform axes for example, in which we
-     * increase the lineWidth for an easier axis grabbing.
-     */
-    std::function<void()> p_OnBindForSelectionFunc = nullptr;
-    #endif
 
     friend class GraphicPipeline;
     friend class SelectionFramebuffer;
