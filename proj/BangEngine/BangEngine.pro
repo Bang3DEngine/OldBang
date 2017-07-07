@@ -32,6 +32,7 @@ SOURCES += \
     $$PWD/../../src/Engine/Components/Camera.cpp \
     $$PWD/../../src/Engine/Assets/Asset.cpp \
     $$PWD/../../src/Engine/Assets/Mesh.cpp \
+    $$PWD/../../src/Engine/Graphics/General/Screen.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
     $$PWD/../../src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
@@ -114,6 +115,7 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/../../src/Engine/General/IToString.h \
+    $$PWD/../../src/Engine/Graphics/General/Screen.h \
     $$PWD/../../src/Engine/General/ISceneEventListener.h \
     $$PWD/../../src/Engine/GameObjects/GameObject.h \
     $$PWD/../../src/Engine/GameObjects/Scene.h \

@@ -6,18 +6,15 @@
 #include "Bang/Cursor.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
+#include "Bang/Hierarchy.h"
 #include "Bang/GameObject.h"
 #include "Bang/G_Material.h"
+#include "Bang/EditorScreen.h"
+#include "Bang/EditorWindow.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/G_RenderTexture.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Hierarchy.h"
-#include "Bang/GameObject.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/WindowEventManager.h"
-#endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     G_Framebuffer(width, height)
@@ -85,9 +82,10 @@ void SelectionFramebuffer::ProcessSelection()
 {
     // Get mouse coordinates and read pixel color
     Vector2 coords = Input::GetMouseCoords();
-    coords.y = G_Screen::GetHeight() - coords.y;
+    coords.y = Screen::GetHeight() - coords.y;
     GameObject *mouseOverGO = GetGameObjectInPosition(coords.x, coords.y);
-    if (!G_Screen::IsMouseOver()) { mouseOverGO = nullptr; }
+    EditorScreen *screen = static_cast<EditorScreen*>(Screen::GetInstance());
+    if (!screen->IsMouseOver()) { mouseOverGO = nullptr; }
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
     {

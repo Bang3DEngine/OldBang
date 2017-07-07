@@ -6,7 +6,6 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/IWindow.h"
-#include "Bang/G_Screen.h"
 
 /**
  *  This will be a singleton shared amongst ALL *.o and *.so
@@ -38,6 +37,7 @@ public:
     void RefreshDocksAndWindowTitles();
 
     static EditorWindow *GetInstance();
+    Screen *GetScreen() const override;
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
 

@@ -1,6 +1,7 @@
 #include "Bang/EditorWindow.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Screen.h"
 #include "Bang/Project.h"
 #include "Bang/Toolbar.h"
 #include "Bang/Explorer.h"
@@ -110,6 +111,11 @@ EditorWindow *EditorWindow::GetInstance()
 {
     IWindow *w = SingletonManager::Get<IWindow>();
     return w ? Object::SCast<EditorWindow>(w) : nullptr;
+}
+
+Screen *EditorWindow::GetScreen() const
+{
+    return screen;
 }
 
 QMainWindow *EditorWindow::GetMainWindow() const

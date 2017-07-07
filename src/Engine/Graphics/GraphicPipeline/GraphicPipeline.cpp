@@ -7,10 +7,10 @@
 #include "Bang/Scene.h"
 #include "Bang/Light.h"
 #include "Bang/Input.h"
+#include "Bang/Screen.h"
 #include "Bang/Camera.h"
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
-#include "Bang/G_Screen.h"
 #include "Bang/GPPass_G.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
@@ -42,9 +42,10 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_glContext = new GLContext();
     m_texUnitManager = new G_TextureUnitManager();
 
-    m_gbuffer = new G_GBuffer(screen->m_width, screen->m_height);
+    m_gbuffer = new G_GBuffer(screen->GetWidth(), screen->GetHeight());
     #ifdef BANG_EDITOR
-    m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
+    m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
+                                             screen->GetHeight());
     #endif
 
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
@@ -243,7 +244,7 @@ void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
     m_glContext->ApplyToShaderProgram(sp);
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
-    sp->SetVec2("B_ScreenSize", G_Screen::GetSize());
+    sp->SetVec2("B_ScreenSize", Screen::GetSize());
     RenderScreenPlane();
     sp->UnBind();
 }
@@ -294,7 +295,7 @@ SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
-    G_Screen *screen = G_Screen::GetInstance();
+    Screen *screen = Screen::GetInstance();
     return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 

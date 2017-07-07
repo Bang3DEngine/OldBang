@@ -5,8 +5,8 @@
 
 #include "Bang/G_VAO.h"
 #include "Bang/Debug.h"
+#include "Bang/Screen.h"
 #include "Bang/Matrix4.h"
-#include "Bang/G_Screen.h"
 #include "Bang/G_ShaderProgram.h"
 
 void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
@@ -46,7 +46,7 @@ void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
         Matrix4 modelNoTranslate = m_modelMatrix;
         modelNoTranslate.SetTranslate( Vector3(0,0,0) );
 
-        float ar = 1.0f / G_Screen::GetAspectRatio();
+        float ar = 1.0f / Screen::GetAspectRatio();
         Matrix4 fixAR(ar, 0, 0, 0,
                        0, 1, 0, 0,
                        0, 0, 1, 0,

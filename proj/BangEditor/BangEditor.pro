@@ -22,12 +22,14 @@ SOURCES += \
     $$PWD/../../src/Editor/General/GameObjectClipboard.cpp \
     $$PWD/../../src/Editor/General/Application.cpp \
     $$PWD/../../src/Editor/Windows/IWindow.cpp \
+    $$PWD/../../src/Editor/Graphics/ShaderManager.cpp \
     $$PWD/../../src/Editor/Windows/GameWindow.cpp \
-    $$PWD/../../src/Editor/General/Cursor.cpp \
-    $$PWD/../../src/Editor/General/Shortcut.cpp \
-    $$PWD/../../src/Editor/General/IconManager.cpp
+    $$PWD/../../src/Editor/General/IconManager.cpp \
+    $$PWD/../../src/Editor/General/Cursor.cpp
 
 HEADERS += \
+    $$PWD/../../src/Editor/General/IconManager.h \
+    $$PWD/../../src/Editor/Graphics/ShaderManager.h \
     $$PWD/../../src/Editor/General/Application.h
 
 EDITOR {
@@ -37,12 +39,12 @@ HEADERS += \
     $$PWD/../../src/Editor/Windows/GameWindow.h \
     $$PWD/../../src/Editor/General/Cursor.h \
     $$PWD/../../src/Editor/General/Shortcut.h \
-    $$PWD/../../src/Editor/General/IconManager.h \
     $$PWD/../../src/Editor/Windows/EditorWindow.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorGizmosGameObject.h \
     $$PWD/../../src/Editor/DragDrop/DragDropQWidget.h \
     $$PWD/../../src/Editor/DragDrop/DragDropQListView.h \
     $$PWD/../../src/Editor/Explorer/FileReferencesManager.h \
+    $$PWD/../../src/Editor/Graphics/EditorScreen.h \
     $$PWD/../../src/Editor/DragDrop/DragDropQTreeWidget.h \
     $$PWD/../../src/Editor/Inspector/Inspectables/Inspectable.h \
     $$PWD/../../src/Editor/Inspector/Inspectables/GameObjectInspectable.h \
@@ -97,7 +99,6 @@ HEADERS += \
     $$PWD/../../src/Editor/EditorGameObject/EditorAxis.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.h \
     $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.h \
-    $$PWD/../../src/Editor/Graphics/ShaderManager.h \
     $$PWD/../../src/Editor/EditorScene/EditorFloor.h \
     $$PWD/../../src/Editor/Inspector/ComponentClipboard.h \
     $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.h \
@@ -146,10 +147,11 @@ EDITOR {
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
         $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.cpp \
         $$PWD/../../src/Editor/EditorScene/EditorFloor.cpp \
-        $$PWD/../../src/Editor/Graphics/ShaderManager.cpp \
         $$PWD/../../src/Editor/General/IWindowEventManagerListener.cpp \
         $$PWD/../../src/Editor/Inspector/Inspector.cpp \
         $$PWD/../../src/Editor/Hierarchy/Hierarchy.cpp \
+        $$PWD/../../src/Editor/General/Shortcut.cpp \
+        $$PWD/../../src/Editor/Graphics/EditorScreen.cpp \
         $$PWD/../../src/Editor/Inspector/ComponentWidget.cpp \
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttributeWidget.cpp \
         $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \

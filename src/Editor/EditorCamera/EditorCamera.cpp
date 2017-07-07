@@ -39,9 +39,9 @@ EditorCamera::~EditorCamera()
 
 void EditorCamera::AdjustSpeeds()
 {
-    G_Screen *c = G_Screen::GetInstance();
-    int cw = c->GetWidth();
-    int ch = c->GetHeight();
+    Screen *screen = Screen::GetInstance();
+    int cw = screen->GetWidth();
+    int ch = screen->GetHeight();
 
     m_mouseRotDegreesPerPixel.x = 180.0f / cw;
     m_mouseRotDegreesPerPixel.y = 180.0f / ch;
@@ -54,7 +54,7 @@ void EditorCamera::AdjustSpeeds()
         {
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, transform->GetPosition());
-            float ar = c->GetAspectRatio();
+            float ar = screen->GetAspectRatio();
             float halfFov = Math::Deg2Rad(m_cam->GetFovDegrees()/2.0f);
             float halfHeightInWorldSpace = Math::Tan(halfFov) * d;
             m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;

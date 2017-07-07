@@ -10,7 +10,7 @@
 #include "Bang/G_RenderTexture.h"
 
 G_Framebuffer::G_Framebuffer(int width, int height) : m_width(width),
-                                                  m_height(height)
+                                                      m_height(height)
 {
     glGenFramebuffers(1, &m_idGL);
 }

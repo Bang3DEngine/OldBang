@@ -349,8 +349,8 @@ protected:
 
     friend class Scene;
     friend class Prefab;
-    friend class G_Screen;
     friend class Hierarchy;
+    friend class EditorScreen;
     friend class SceneManager;
     friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;

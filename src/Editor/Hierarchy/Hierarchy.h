@@ -119,7 +119,7 @@ private:
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     HierarchyItem *GetItemFromGameObject(GameObject *go) const;
 
-    friend class G_Screen;
+    friend class EditorScreen;
     friend class HierarchyContextMenu;
     friend class HierarchyDragDropManager;
 };

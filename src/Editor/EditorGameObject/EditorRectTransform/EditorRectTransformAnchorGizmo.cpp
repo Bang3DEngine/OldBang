@@ -4,8 +4,8 @@
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Debug.h"
+#include "Bang/Screen.h"
 #include "Bang/Vector2.h"
-#include "Bang/G_Screen.h"
 #include "Bang/Texture2D.h"
 #include "Bang/EditorState.h"
 #include "Bang/AssetsManager.h"
@@ -43,8 +43,8 @@ void EditorRectTransformAnchorGizmo::OnEditorUpdate()
 
     if (m_grabbed)
     {
-        Vector2 mpLast = Input::GetPreviousMouseCoords() / G_Screen::GetSize();
-        Vector2 mp = Input::GetMouseCoords() / G_Screen::GetSize();
+        Vector2 mpLast = Input::GetPreviousMouseCoords() / Screen::GetSize();
+        Vector2 mp = Input::GetMouseCoords() / Screen::GetSize();
         Vector2 anchorDisplacement = mp - mpLast;
         ApplyDisplacementToAnchor(anchorDisplacement);
     }
@@ -103,7 +103,7 @@ Vector2 EditorRectTransformAnchorGizmo::GetAnchorCenter() const
                             screenAnchorRect.GetMin().y,
                             screenAnchorRect.GetMax().y);
 
-    Vector2 offset = offsetSign * G_Screen::GetPixelClipSize() * 20.0f;
+    Vector2 offset = offsetSign * Screen::GetPixelClipSize() * 20.0f;
     return anchorPos + offset;
 }
 

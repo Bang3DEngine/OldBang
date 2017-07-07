@@ -53,8 +53,8 @@ protected:
 
     void DestroyQueuedGameObjects();
 
+    friend class Screen;
     friend class Toolbar;
-    friend class G_Screen;
     friend class Application;
     friend class SceneManager;
     friend class GraphicPipeline;

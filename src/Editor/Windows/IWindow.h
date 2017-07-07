@@ -5,12 +5,14 @@
 #include <QMainWindow>
 #include "Bang/WinUndef.h"
 
+class Screen;
 class IWindow
 {
 public:
     static QWidget* GetWidgetBelowMouse();
     static IWindow* GetInstance();
 
+    virtual Screen *GetScreen() const = 0;
     virtual QMainWindow *GetMainWindow() const = 0;
     virtual QApplication *GetApplication() const = 0;
 

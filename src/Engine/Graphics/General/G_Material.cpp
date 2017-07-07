@@ -1,7 +1,7 @@
 #include "G_Material.h"
 
+#include "Bang/Screen.h"
 #include "Bang/Vector4.h"
-#include "Bang/G_Screen.h"
 #include "Bang/G_Shader.h"
 #include "Bang/G_Texture.h"
 #include "Bang/G_Texture2D.h"
@@ -94,7 +94,7 @@ void G_Material::Bind() const
     G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->SetVec2("B_ScreenSize", G_Screen::GetSize());
+    sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
     sp->SetVec2( "B_UvMultiply",               GetUvMultiply());
     sp->SetColor("B_MaterialDiffuseColor",     GetDiffuseColor());

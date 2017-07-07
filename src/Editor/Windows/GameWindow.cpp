@@ -5,13 +5,15 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Object.h"
-#include "Bang/G_Screen.h"
+#include "Bang/Screen.h"
 #include "Bang/SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;
 
 GameWindow::GameWindow(QMainWindow *window)
 {
+    m_screen = new Screen(window);
+
     if (window->objectName().isEmpty())
         window->setObjectName(QString::fromUtf8("EditorWindow"));
     window->setWindowModality(Qt::NonModal);
@@ -22,11 +24,11 @@ GameWindow::GameWindow(QMainWindow *window)
 
 void GameWindow::SetupUI()
 {
-    screen = new G_Screen(GameWindow::GetInstance()->m_mainWindow);
-    screen->setMouseTracking(true);
-    screen->setFocusPolicy(Qt::NoFocus);
+    m_screen = new Screen(GameWindow::GetInstance()->m_mainWindow);
+    m_screen->setMouseTracking(true);
+    m_screen->setFocusPolicy(Qt::NoFocus);
 
-    GameWindow::GetInstance()->m_mainWindow->setCentralWidget(screen);
+    GameWindow::GetInstance()->m_mainWindow->setCentralWidget(m_screen);
 }
 
 
@@ -44,8 +46,12 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
 GameWindow *GameWindow::GetInstance()
 {
-    return Object::SCast<GameWindow>(
-                SingletonManager::Get<IWindow>());
+    return Object::SCast<GameWindow>(SingletonManager::Get<IWindow>());
+}
+
+Screen *GameWindow::GetScreen() const
+{
+    return m_screen;
 }
 
 QMainWindow *GameWindow::GetMainWindow() const

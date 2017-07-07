@@ -7,23 +7,24 @@
 
 #include "Bang/IWindow.h"
 
-class G_Screen;
+class Screen;
 class GameWindow : public IWindow
 {
-private:
-    static GameWindow *s_m_win;
-    void SetupUI();
-
 public:
-    G_Screen *screen = nullptr;
-
     GameWindow(QMainWindow *window);
 
     static void InitFromMainBinary(QMainWindow *window, QApplication *application);
 
     static GameWindow *GetInstance();
+    Screen *GetScreen() const override;
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
+
+private:
+    Screen *m_screen = nullptr;
+
+    static GameWindow *s_m_win;
+    void SetupUI();
 };
 
 #endif // GAMEWINDOW_H
