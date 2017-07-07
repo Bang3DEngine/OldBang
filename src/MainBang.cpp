@@ -116,7 +116,7 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     #endif
 
     Screen::GetInstance()->makeCurrent();
-    Screen::GetInstance()->OnInitialize();
+    Screen::GetInstance()->Initialize();
 }
 
 #include "Bang/BangPreprocessor.h"

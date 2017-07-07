@@ -23,6 +23,7 @@ public:
     Screen(QWidget *parent = nullptr);
     virtual ~Screen();
 
+    void Initialize();
     void initializeGL() override;
     void paintGL() override;
     virtual void Render() const;

@@ -16,8 +16,9 @@ Screen::~Screen()
     if (m_gPipeline) { delete m_gPipeline; }
 }
 
-void Screen::initializeGL()
+void Screen::Initialize()
 {
+    std::cerr << "initializeGL" << std::endl;
     static bool firstInitializeGL = true;
     if (firstInitializeGL)
     {
@@ -26,6 +27,11 @@ void Screen::initializeGL()
         OnInitialize();
         m_gPipeline = new GraphicPipeline(this);
     }
+}
+
+void Screen::initializeGL()
+{
+    Initialize();
 }
 
 void Screen::paintGL()

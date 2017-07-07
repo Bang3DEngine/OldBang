@@ -39,6 +39,7 @@
 
 GraphicPipeline::GraphicPipeline(G_Screen *screen)
 {
+    std::cerr << "GraphicPipeline()" << std::endl;
     m_glContext = new GLContext();
     m_texUnitManager = new G_TextureUnitManager();
 

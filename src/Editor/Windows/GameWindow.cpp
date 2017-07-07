@@ -12,8 +12,6 @@ GameWindow *GameWindow::s_m_win = nullptr;
 
 GameWindow::GameWindow(QMainWindow *window)
 {
-    m_screen = new Screen(window);
-
     if (window->objectName().isEmpty())
         window->setObjectName(QString::fromUtf8("EditorWindow"));
     window->setWindowModality(Qt::NonModal);
