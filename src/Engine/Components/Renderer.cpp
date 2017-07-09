@@ -37,19 +37,15 @@ void Renderer::CloneInto(ICloneable *clone) const
 
 }
 
-void Renderer::SetMaterial(Material *m, bool deleteMaterialCopy)
+void Renderer::SetMaterial(Material *m)
 {
     if (m_material != m)
     {
         m_material = m;
-        m_materialCopy = nullptr;
-
-        // You may not want to delete the material copy, in case you want to
-        // swap this renderer's material temporary, and then switch back to
-        // this material copy
-        if (deleteMaterialCopy)
+        if (m_materialCopy)
         {
             delete m_materialCopy;
+            m_materialCopy = nullptr;
         }
     }
 }
@@ -90,7 +86,8 @@ void Renderer::UseMaterialCopy()
 
     if (GetSharedMaterial())
     {
-        m_materialCopy = new Material( *GetSharedMaterial() );
+        m_materialCopy = new Material();
+        GetSharedMaterial()->CloneInto(m_materialCopy);
     }
 }
 
@@ -159,8 +156,6 @@ void Renderer::Read(const XMLNode &xmlInfo)
 
     Path materialFilepath = xmlInfo.GetFilepath("Material");
     SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
-
-    // SetTransparent(xmlInfo.GetBool("IsTransparent"));
     SetLineWidth(xmlInfo.GetFloat("LineWidth"));
     SetDrawWireframe(xmlInfo.GetBool("DrawWireframe"));
 }
@@ -169,17 +164,9 @@ void Renderer::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("Material", Path(), "bmat");
     Material *sharedMat = GetSharedMaterial();
-    if (sharedMat)
-    {
-        if (!sharedMat->GetFilepath().IsEmpty())
-        {
-            xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
-        }
-    }
-
+    xmlInfo->SetFilepath("Material", sharedMat ? sharedMat->GetFilepath() :
+                                                 Path::Empty, "bmat");
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
-    // xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
 }

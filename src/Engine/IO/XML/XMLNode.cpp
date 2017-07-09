@@ -55,8 +55,7 @@ void XMLNode::SetAttribute(const XMLAttribute &attribute)
     }
     else
     {
-        attr->SetValue( attribute.GetValue() );
-        attr->SetProperties( attr->GetProperties() );
+        *attr = attribute;
     }
 }
 

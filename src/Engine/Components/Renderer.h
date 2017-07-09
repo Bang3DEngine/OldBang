@@ -27,7 +27,7 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    virtual void SetMaterial(Material *m, bool deleteMaterialCopy = true);
+    virtual void SetMaterial(Material *m);
     virtual Material* GetMaterial() const;
     virtual Material* GetSharedMaterial() const;
 

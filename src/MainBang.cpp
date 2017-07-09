@@ -160,12 +160,13 @@ int main(int argc, char **argv)
 
     #ifdef BANG_EDITOR
     EditorProjectManager pm;
+    pm.OpenProject(loadedProjectFilepath);
     #else
     ProjectManager pm;
-    #endif
     pm.OpenProject(loadedProjectFilepath);
     BehaviourManager::PrepareBehavioursLibrary(true,
                                                Paths::ProjectLibrariesDir());
+    #endif
 
     app.MainLoop();
 

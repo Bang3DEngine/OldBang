@@ -65,16 +65,16 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 
     GameObject *go = !Gizmos::IsGizmoRenderer(rend) ?
                 rend->gameObject : m_nextGameObjectToBeRendered;
+    ShaderProgram *selSP = m_selectionMaterial->GetShaderProgram();
     if (CanRenderGameObject(go))
     {
-        Material *previousMaterial = rend->GetMaterial();
-        rend->SetMaterial(m_selectionMaterial, false);
+        ShaderProgram *prevSP = rend->GetMaterial()->GetShaderProgram();
+        rend->GetMaterial()->SetShaderProgram(selSP);
         rend->Bind();
-        G_ShaderProgram *selSP = m_selectionMaterial->GetShaderProgram();
         selSP->SetColor("selectionColor", GetSelectionColor(go));
         rend->Render();
         rend->UnBind();
-        rend->SetMaterial(previousMaterial);
+        rend->GetMaterial()->SetShaderProgram(prevSP);
     }
 }
 

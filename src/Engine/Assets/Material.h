@@ -16,6 +16,8 @@ public:
     Material(const Material &m);
     virtual ~Material();
 
+    virtual void CloneInto(ICloneable *clone) const override;
+
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *texture);

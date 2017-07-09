@@ -25,9 +25,21 @@ Material::Material() : Asset()
 
 Material::Material(const Material &m)
 {
-    m_gMaterial = new G_Material(*m.m_gMaterial);
+    m.CloneInto(this);
+}
 
-    ShaderProgram *sp = m.GetShaderProgram();
+Material::~Material()
+{
+    if (m_gMaterial) { delete m_gMaterial; }
+}
+
+void Material::CloneInto(ICloneable *clone) const
+{
+    Material *matClone = static_cast<Material*>(clone);
+
+    matClone->m_gMaterial = new G_Material(*m_gMaterial);
+
+    ShaderProgram *sp = GetShaderProgram();
     if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
     {
         G_Shader *vshader = sp->GetVertexShader();
@@ -35,15 +47,10 @@ Material::Material(const Material &m)
         sp = new ShaderProgram();
         sp->Load(vshader->GetFilepath(), fshader->GetFilepath());
     }
-    m_gMaterial->SetShaderProgram(sp);
+    matClone->m_gMaterial->SetShaderProgram(sp);
 
-    m_shaderProgram = sp;
-    m_texture = m.GetTexture();
-}
-
-Material::~Material()
-{
-    if (m_gMaterial) { delete m_gMaterial; }
+    matClone->SetShaderProgram(sp);
+    matClone->SetTexture(GetTexture());
 }
 
 String Material::GetFileExtensionStatic()

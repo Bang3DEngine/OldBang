@@ -30,8 +30,9 @@ LIBS = -L$$BIN_DIR/lib/ \
     -lBangGraphics \
     -lBangDataStructures \
     $$LIBS
+
 PRE_TARGETDEPS += \
-    $$BIN_DIR/lib/libBangEngine.a \
-    $$BIN_DIR/lib/libBangEditor.a \
-    $$BIN_DIR/lib/libBangGraphics.a \
-    $$BIN_DIR/lib/libBangDataStructures.a \
+    $$BIN_DIR/lib/libBangEngine.so \
+    $$BIN_DIR/lib/libBangEditor.so  \
+    $$BIN_DIR/lib/libBangGraphics.so \
+    $$BIN_DIR/lib/libBangDataStructures.so \

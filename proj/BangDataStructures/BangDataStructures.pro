@@ -4,7 +4,7 @@ system(rm -f Makefile)
 TEMPLATE = lib
 QT = core gui widgets
 
-CONFIG += staticlib
+CONFIG += dll
 
 TARGET = $$BIN_DIR/lib/BangDataStructures
 INCLUDEPATH += $$PWD/../../include
