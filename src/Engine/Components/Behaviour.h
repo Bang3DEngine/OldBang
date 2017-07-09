@@ -93,9 +93,11 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
+    #ifdef BANG_EDITOR
     enum StateInInspector { Normal, BeingCompiled, Failed };
     mutable StateInInspector m_stateInInspector = StateInInspector::Normal;
     mutable bool m_refreshInspectorRequested = false;
+    #endif
 
     static String s_behaviourHeaderTemplate;
     static String s_behaviourSourceTemplate;

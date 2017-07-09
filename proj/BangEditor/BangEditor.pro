@@ -25,11 +25,15 @@ SOURCES += \
     $$PWD/../../src/Editor/Graphics/ShaderManager.cpp \
     $$PWD/../../src/Editor/Windows/GameWindow.cpp \
     $$PWD/../../src/Editor/General/IconManager.cpp \
+    $$PWD/../../src/Engine/IO/Files/AssetFileCreator.cpp \
+    $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp \
     $$PWD/../../src/Editor/General/Cursor.cpp
 
 HEADERS += \
     $$PWD/../../src/Editor/General/IconManager.h \
     $$PWD/../../src/Editor/Graphics/ShaderManager.h \
+    $$PWD/../../src/Engine/IO/Files/AssetFileCreator.h \
+    $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.h \
     $$PWD/../../src/Editor/General/Application.h
 
 EDITOR {
@@ -37,6 +41,7 @@ HEADERS += \
     $$PWD/../../src/Editor/General/GameObjectClipboard.h \
     $$PWD/../../src/Editor/Windows/IWindow.h \
     $$PWD/../../src/Editor/Windows/GameWindow.h \
+    $$PWD/../../src/Engine/IO/Files/FileTracker.h \
     $$PWD/../../src/Editor/General/Cursor.h \
     $$PWD/../../src/Editor/General/Shortcut.h \
     $$PWD/../../src/Editor/Windows/EditorWindow.h \
@@ -53,6 +58,8 @@ HEADERS += \
     $$PWD/../../src/Editor/Inspector/Inspectables/ComponentInspectable.h \
     $$PWD/../../src/Editor/DragDrop/DragDropQListWidget.h \
     $$PWD/../../src/Editor/DragDrop/DragDropAgent.h \
+    $$PWD/../../src/Editor/General/EditorProjectManager.h \
+    $$PWD/../../src/Engine/IO/Project/QtProjectManager.h \
     $$PWD/../../src/Editor/DragDrop/IDragDropListener.h \
     $$PWD/../../src/Editor/DragDrop/DragDropManager.h \
     $$PWD/../../src/Editor/Explorer/FileSystemModel.h \
@@ -121,85 +128,88 @@ HEADERS += \
 }
 
 EDITOR {
-    SOURCES += \
-        $$PWD/../../src/Editor/EditorGameObject/EditorGizmosGameObject.cpp \
-        $$PWD/../../src/Editor/GameBuilder/GameBuilderJob.cpp \
-        $$PWD/../../src/Editor/Dialogs/GameBuildDialog.cpp \
-        $$PWD/../../src/Editor/Explorer/FileSystemModel.cpp \
-        $$PWD/../../src/Editor/General/EditorState.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropManager.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQWidget.cpp \
-        $$PWD/../../src/Editor/Explorer/FileReferencesManager.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQListView.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQTreeWidget.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropQListWidget.cpp \
-        $$PWD/../../src/Editor/DragDrop/DragDropAgent.cpp \
-        $$PWD/../../src/Editor/DragDrop/IDragDropListener.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxisGroup.cpp \
-        $$PWD/../../src/Editor/Windows/EditorWindow.cpp \
-        $$PWD/../../src/Editor/Dialogs/DialogBrowseAssetFile.cpp \
-        $$PWD/../../src/Editor/Windows/SelectProjectWindow.cpp \
-        $$PWD/../../src/Editor/Windows/WindowEventManager.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxis.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxisGroup.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxis.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorFloor.cpp \
-        $$PWD/../../src/Editor/General/IWindowEventManagerListener.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspector.cpp \
-        $$PWD/../../src/Editor/Hierarchy/Hierarchy.cpp \
-        $$PWD/../../src/Editor/General/Shortcut.cpp \
-        $$PWD/../../src/Editor/Graphics/EditorScreen.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttributeWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.cpp \
-        $$PWD/../../src/Editor/Console/Console.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
-        $$PWD/../../src/Editor/Explorer/Explorer.cpp \
-        $$PWD/../../src/Editor/General/MenuBar.cpp \
-        $$PWD/../../src/Editor/Dialogs/Dialog.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFile.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerDirTree.cpp \
-        $$PWD/../../src/Editor/Inspector/InspectorWidget.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetString.cpp \
-        $$PWD/../../src/Editor/EditorCamera/EditorCamera.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorScene.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorBBox.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorSelectionGameObject.cpp \
-        $$PWD/../../src/Editor/EditorScene/EditorDebugGameObject.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxisGroup.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.cpp \
-        $$PWD/../../src/Editor/General/Toolbar.cpp \
-        $$PWD/../../src/Editor/Graphics/GPPass_Selection.cpp \
-        $$PWD/../../src/Editor/Graphics/SelectionFramebuffer.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/Inspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/GameObjectInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/IInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/FileInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/ComponentInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/Inspectables/PrefabFileInspectable.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentClipboard.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyContextMenu.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerContextMenu.cpp \
-        $$PWD/../../src/Editor/Inspector/ComponentWidgetContextMenu.cpp \
-        $$PWD/../../src/Editor/Inspector/InspectorContextMenu.cpp \
-        $$PWD/../../src/Editor/GameBuilder/GameBuilder.cpp \
-        $$PWD/../../src/Editor/General/ContextMenu.cpp \
-        $$PWD/../../src/Editor/Hierarchy/HierarchyItem.cpp \
-        $$PWD/../../src/Editor/Explorer/ExplorerFileSortProxy.cpp \
-        $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorGizmo.cpp \
-        $$PWD/../../src/Editor/EditorGameObject/EditorAxisPlane.cpp \
-        $$PWD/../../src/Editor/General/EditorPlayFlow.cpp
+SOURCES += \
+    $$PWD/../../src/Editor/EditorGameObject/EditorGizmosGameObject.cpp \
+    $$PWD/../../src/Editor/GameBuilder/GameBuilderJob.cpp \
+    $$PWD/../../src/Editor/Dialogs/GameBuildDialog.cpp \
+    $$PWD/../../src/Editor/Explorer/FileSystemModel.cpp \
+    $$PWD/../../src/Editor/General/EditorState.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropManager.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropQWidget.cpp \
+    $$PWD/../../src/Editor/Explorer/FileReferencesManager.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropQListView.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropQTreeWidget.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropQListWidget.cpp \
+    $$PWD/../../src/Editor/DragDrop/DragDropAgent.cpp \
+    $$PWD/../../src/Editor/DragDrop/IDragDropListener.cpp \
+    $$PWD/../../src/Engine/IO/Project/QtProjectManager.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxisGroup.cpp \
+    $$PWD/../../src/Editor/Windows/EditorWindow.cpp \
+    $$PWD/../../src/Editor/Dialogs/DialogBrowseAssetFile.cpp \
+    $$PWD/../../src/Editor/Windows/SelectProjectWindow.cpp \
+    $$PWD/../../src/Editor/Windows/WindowEventManager.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorRotateAxis.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorAxisGroup.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorAxis.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxisGroup.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorScaleAxis.cpp \
+    $$PWD/../../src/Editor/EditorScene/EditorFloor.cpp \
+    $$PWD/../../src/Editor/General/IWindowEventManagerListener.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspector.cpp \
+    $$PWD/../../src/Editor/Hierarchy/Hierarchy.cpp \
+    $$PWD/../../src/Editor/General/Shortcut.cpp \
+    $$PWD/../../src/Editor/Graphics/EditorScreen.cpp \
+    $$PWD/../../src/Editor/Inspector/ComponentWidget.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttributeWidget.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.cpp \
+    $$PWD/../../src/Editor/Console/Console.cpp \
+    $$PWD/../../src/Engine/IO/Files/FileTracker.cpp \
+    $$PWD/../../src/Editor/General/EditorProjectManager.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
+    $$PWD/../../src/Editor/Explorer/Explorer.cpp \
+    $$PWD/../../src/Editor/General/MenuBar.cpp \
+    $$PWD/../../src/Editor/Dialogs/Dialog.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetFile.cpp \
+    $$PWD/../../src/Editor/Explorer/ExplorerDirTree.cpp \
+    $$PWD/../../src/Editor/Inspector/InspectorWidget.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetString.cpp \
+    $$PWD/../../src/Editor/EditorCamera/EditorCamera.cpp \
+    $$PWD/../../src/Editor/EditorScene/EditorScene.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorBBox.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorSelectionGameObject.cpp \
+    $$PWD/../../src/Editor/EditorScene/EditorDebugGameObject.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxisGroup.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorTranslateAxis.cpp \
+    $$PWD/../../src/Editor/General/Toolbar.cpp \
+    $$PWD/../../src/Editor/Graphics/GPPass_Selection.cpp \
+    $$PWD/../../src/Editor/Graphics/SelectionFramebuffer.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/Inspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/GameObjectInspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/IInspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/FileInspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/ComponentInspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/Inspectables/PrefabFileInspectable.cpp \
+    $$PWD/../../src/Editor/Inspector/ComponentClipboard.cpp \
+    $$PWD/../../src/Editor/Hierarchy/HierarchyDragDropManager.cpp \
+    $$PWD/../../src/Editor/Hierarchy/HierarchyContextMenu.cpp \
+    $$PWD/../../src/Editor/Explorer/ExplorerContextMenu.cpp \
+    $$PWD/../../src/Editor/Inspector/ComponentWidgetContextMenu.cpp \
+    $$PWD/../../src/Editor/Inspector/InspectorContextMenu.cpp \
+    $$PWD/../../src/Editor/GameBuilder/GameBuilder.cpp \
+    $$PWD/../../src/Editor/General/ContextMenu.cpp \
+    $$PWD/../../src/Editor/Hierarchy/HierarchyItem.cpp \
+    $$PWD/../../src/Editor/Explorer/ExplorerFileSortProxy.cpp \
+    $$PWD/../../src/Editor/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorGizmo.cpp \
+    $$PWD/../../src/Editor/EditorGameObject/EditorAxisPlane.cpp \
+    $$PWD/../../src/Editor/General/EditorPlayFlow.cpp
 }
 ######################################

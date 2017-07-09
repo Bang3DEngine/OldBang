@@ -36,8 +36,6 @@ Asset *AssetsManager::GetAsset(const Path &filepath)
     return nullptr;
 }
 
-#ifdef BANG_EDITOR
-
 void AssetsManager::UpdateAsset(const Path &assetFilepath,
                                 const XMLNode &xmlChangedInfo)
 {
@@ -67,8 +65,6 @@ void AssetsManager::ReloadAsset(const Path &assetFilepath)
     Asset *asset = AssetsManager::GetAsset(assetFilepath);
     if (asset) { asset->ReadFromFile(assetFilepath); }
 }
-
-#endif
 
 bool AssetsManager::IsLoaded(const Path &filepath)
 {

@@ -60,17 +60,6 @@ public:
                  int selectedEnumIndex,
                  const Array<XMLProperty>& properties = {});
 
-    #ifdef BANG_EDITOR
-    void SetButton(
-           const String &attributeName,
-           IAttrWidgetButtonListener* listener,
-           const Array<XMLProperty>& properties = {});
-    #else
-    // Dummy function
-    void SetButton(const String &attributeName, void* listener,
-                   const Array<XMLProperty>& properties = {}) {}
-    #endif
-
     void RemoveAttribute(const String& attributeName);
     XMLAttribute* GetAttribute(const String& attributeName) const;
     String GetAttributeValue(const String& attributeName) const;
@@ -89,7 +78,14 @@ public:
     int GetEnumSelectedIndex(const String& attributeName) const;
     String GetEnumSelectedName(const String& attributeName) const;
     Array<String> GetEnumNames(const String& attributeName) const;
+
+    #ifdef BANG_EDITOR
+    void SetButton(
+           const String &attributeName,
+           IAttrWidgetButtonListener* listener,
+           const Array<XMLProperty>& properties = {});
     IAttrWidgetButtonListener *GetButtonListener(const String &attributeName) const;
+    #endif
 
     const XMLNode *GetChild(const String &name) const;
     void SetTagName(const String tagName);

@@ -89,6 +89,7 @@ void AudioClipFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
                        {XMLProperty::Readonly});
 
+    #ifdef BANG_EDITOR
     AudioClipFile *noConstThis = const_cast<AudioClipFile*>(this);
     bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
     if (isPlaying)
@@ -102,6 +103,7 @@ void AudioClipFile::Write(XMLNode *xmlInfo) const
         xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
         xmlInfo->SetButton("Play", noConstThis, {});
     }
+    #endif
 }
 
 void AudioClipFile::SetSoundFilepath(const Path &audioFilepath)

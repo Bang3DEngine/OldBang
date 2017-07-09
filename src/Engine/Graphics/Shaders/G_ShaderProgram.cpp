@@ -162,9 +162,6 @@ bool G_ShaderProgram::SetVec3 (const String &name, const Vector3& v) const
 bool G_ShaderProgram::SetVec4 (const String &name, const Vector4& v) const
 {
     ASSERT(GL::IsBound(this));
-    if (!GL::IsBound(this)) {
-        int a = 2;
-    }
     int location = GetUniformLocation(name);
     if (location >= 0)
     {

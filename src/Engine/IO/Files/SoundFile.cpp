@@ -40,6 +40,7 @@ void SoundFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("FileName", GetPath().GetNameExt(),
                        {XMLProperty::Readonly});
 
+    #ifdef BANG_EDITOR
     SoundFile *noConstThis = const_cast<SoundFile*>(this);
     bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
     if (isPlaying)
@@ -53,6 +54,7 @@ void SoundFile::Write(XMLNode *xmlInfo) const
         xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
         xmlInfo->SetButton("Play", noConstThis, {});
     }
+    #endif
 }
 
 #ifdef BANG_EDITOR

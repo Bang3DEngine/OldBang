@@ -72,12 +72,12 @@ void Behaviour::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
+    xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath(), "cpp");
 
+    #ifdef BANG_EDITOR
     BehaviourId bid(GetSourceFilepath());
     bool beingCompiled = BehaviourManager::GetStatus().IsBeingCompiled(bid);
     bool failed = BehaviourManager::GetStatus().HasFailed(bid);
-
-    xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath(), "cpp");
 
     Behaviour *noConstThis = const_cast<Behaviour*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
@@ -100,6 +100,7 @@ void Behaviour::Write(XMLNode *xmlInfo) const
                 (m_stateInInspector != StateInInspector::Failed);
         m_stateInInspector = StateInInspector::Failed;
     }
+    #endif
 }
 
 #ifdef BANG_EDITOR

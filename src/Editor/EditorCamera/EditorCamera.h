@@ -34,11 +34,9 @@ public:
 
     void SwitchProjectionModeTo(bool mode3D);
 
-    #ifdef BANG_EDITOR
     void OnHierarchyGameObjectsSelected
                 (const List<GameObject*> &selectedGameObjects) override;
     void OnHierarchyGameObjectDoubleClicked(GameObject *selected) override;
-    #endif
 
     void StartLookAt(GameObject *lookAtFocus);
 

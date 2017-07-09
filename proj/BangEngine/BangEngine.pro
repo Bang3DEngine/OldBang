@@ -214,21 +214,6 @@ HEADERS += \
     $$PWD/../../src/Engine/Compiler/BangCompiler.h \
     $$PWD/../../src/Engine/Compiler/BangCompilerAsyncJob.h
 
-EDITOR {
-HEADERS += \
-    $$PWD/../../src/Engine/IO/Files/AssetFileCreator.h \
-    $$PWD/../../src/Engine/IO/Project/QtProjectManager.h \
-    $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.h \
-    $$PWD/../../src/Engine/IO/Files/FileTracker.h
-}
-
-EDITOR {
-    SOURCES += \
-        $$PWD/../../src/Engine/IO/Files/AssetFileCreator.cpp \
-        $$PWD/../../src/Engine/IO/Project/QtProjectManager.cpp \
-        $$PWD/../../src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp \
-        $$PWD/../../src/Engine/IO/Files/FileTracker.cpp
-}
 ######################################
 
 

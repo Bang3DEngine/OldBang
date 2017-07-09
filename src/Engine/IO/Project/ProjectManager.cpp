@@ -8,19 +8,16 @@
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/Dialog.h"
 #include "Bang/Project.h"
+#include "Bang/MenuBar.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Explorer.h"
 #include "Bang/XMLParser.h"
+#include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EngineConfig.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Dialog.h"
-#include "Bang/MenuBar.h"
-#include "Bang/Explorer.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/QtProjectManager.h"
-#endif
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -28,55 +25,24 @@ ProjectManager::ProjectManager()
 {
 }
 
-Project* ProjectManager::OpenProject(const Path &projectFilepath)
+Project* ProjectManager::OpenProject(const Path &projectFilepath) const
 {
     XMLNode xmlInfo = XMLParser::FromFile(projectFilepath);
 
-    #ifdef BANG_EDITOR
-    ProjectManager::CloseCurrentProject();
-    #endif
+    CloseCurrentProject();
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
     currentProject->Read(xmlInfo);
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
-    #ifdef BANG_EDITOR
-    // Set directory of the explorer to the Assets' root of the new project
-    Path projectAssetsDir = currentProject->GetProjectAssetsRootFilepath();
-    Explorer::GetInstance()->SetDir( Path(projectAssetsDir) );
-
-    EngineConfig::RegisterInRecentProjectsList(projectFilepath);
-
-    EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
-    #endif
-
     Paths::SetProjectPath(currentProject->GetProjectDirPath());
 
-    // Open the first found scene
-    List<Path> sceneFilepaths = Paths::ProjectAssets().GetFiles(true,
-                                   {"*." + Scene::GetFileExtensionStatic()});
-    #ifdef BANG_EDITOR
-    QtProjectManager::CreateQtProjectFile();
-    #endif
-
-    if (!sceneFilepaths.IsEmpty())
-    {
-        SceneManager::OpenScene(sceneFilepaths.Front());
-    }
-    else
-    {
-        #ifdef BANG_EDITOR
-        // Create new empty scene
-        MenuBar::GetInstance()->CreateNewScene();
-        #endif
-    }
-    //
+    OpenFirstFoundScene(currentProject->GetProjectDirPath());
 
     return currentProject;
 }
 
-#ifdef BANG_EDITOR
 Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
                                           const String &projectName)
 {
@@ -149,50 +115,21 @@ void ProjectManager::CloseCurrentProject()
 
 }
 
-Path ProjectManager::DialogCreateNewProject()
-{
-    Path dirPath = Dialog::GetOpenDirpath(
-                                   "Select the project containing directory");
-    if (!dirPath.IsEmpty())
-    {
-        bool ok;
-        String projectName =
-                Dialog::GetInputString("Please specify your new project's name",
-                                       "Project name:",
-                                       "MyBangProject",
-                                       &ok);
-        if (ok)
-        {
-            Path projectPath = Path(dirPath).Append(projectName);
-            if (!projectPath.IsDir())
-            {
-                ProjectManager::CreateNewProject(dirPath, projectName);
-                return ProjectManager::GetCurrentProject()->
-                                       GetProjectFileFilepath();
-            }
-            else
-            {
-                Dialog::Error(
-                      "Error creating the project",
-                      "The directory '" + projectPath + "' existed before.\n" +
-                      "Please select another name for your project.");
-            }
-        }
-    }
-    return Path::Empty;
-}
-
-Path ProjectManager::DialogOpenProject()
-{
-    Path projectFilepath =
-            Dialog::GetOpenFilepath("Select the project file to be opened",
-                                    Project::GetFileExtensionStatic(),
-                                    Paths::Home());
-    return projectFilepath;
-}
-#endif
-
 Project *ProjectManager::GetCurrentProject()
 {
     return ProjectManager::s_currentProject;
+}
+
+bool ProjectManager::OpenFirstFoundScene(const Path &projectDirPath) const
+{
+    List<Path> sceneFilepaths = projectDirPath.GetFiles(true,
+                                   {"*." + Scene::GetFileExtensionStatic()});
+
+    bool foundSceneFile = !sceneFilepaths.IsEmpty();
+    if (foundSceneFile)
+    {
+        SceneManager::OpenScene(sceneFilepaths.Front());
+    }
+
+    return foundSceneFile;
 }

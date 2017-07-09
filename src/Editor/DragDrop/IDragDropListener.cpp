@@ -1,10 +1,7 @@
 #include "Bang/IDragDropListener.h"
 
 #include "Bang/Object.h"
-
-#ifdef BANG_EDITOR
 #include "Bang/DragDropManager.h"
-#endif
 
 QString IDragDropListener::acceptDragStyleOnlyBorder =
      "border: 1px solid #0F0";

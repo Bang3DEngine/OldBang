@@ -1,10 +1,10 @@
 #include "Bang/SelectProjectWindow.h"
 
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Project.h"
-#include "Bang/Paths.h"
 #include "Bang/EngineConfig.h"
-#include "Bang/ProjectManager.h"
+#include "Bang/EditorProjectManager.h"
 
 SelectProjectWindow *SelectProjectWindow::s_instance = nullptr;
 
@@ -119,7 +119,7 @@ void SelectProjectWindow::OnLoadRecentProject()
 
 void SelectProjectWindow::OnCreateNewProject()
 {
-    m_loadedProjectFile = ProjectManager::DialogCreateNewProject();
+    m_loadedProjectFile = EditorProjectManager::DialogCreateNewProject();
     if (!m_loadedProjectFile.IsEmpty())
     {
         m_directlyClosedByUser = false;
@@ -129,7 +129,7 @@ void SelectProjectWindow::OnCreateNewProject()
 
 void SelectProjectWindow::OnBrowseProject()
 {
-    m_loadedProjectFile = ProjectManager::DialogOpenProject();
+    m_loadedProjectFile = EditorProjectManager::DialogOpenProject();
     if (!m_loadedProjectFile.IsEmpty())
     {
         m_directlyClosedByUser = false;

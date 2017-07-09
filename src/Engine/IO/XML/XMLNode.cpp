@@ -1,12 +1,9 @@
 #include "Bang/XMLNode.h"
 
+#include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
-#include "Bang/Paths.h"
-
-#ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
-#endif
 
 XMLNode::XMLNode(const String &tagName) :
     m_tagName(tagName)
@@ -207,6 +204,12 @@ void XMLNode::SetButton(const String &attributeName,
     attr.SetButton(attributeName, listener, properties);
     SetAttribute(attr);
 }
+
+IAttrWidgetButtonListener *XMLNode::GetButtonListener(const String &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetButtonListener() : nullptr;
+}
 #endif
 
 XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
@@ -324,12 +327,6 @@ Array<String> XMLNode::GetEnumNames(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
     return attr ? attr->GetEnumNames() : Array<String>();
-}
-
-IAttrWidgetButtonListener *XMLNode::GetButtonListener(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetButtonListener() : nullptr;
 }
 
 const XMLNode *XMLNode::GetChild(const String &name) const

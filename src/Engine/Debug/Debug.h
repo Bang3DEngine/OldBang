@@ -95,8 +95,4 @@ private:
 #define ASSERT(assertion) if ( !(assertion) ) {\
     Debug_Error("Assertion '" << #assertion << "' failed!"); }
 
-#define _Debug_Suffix \
-       " (file:'" << __FILE__ << "':" << __LINE__ << ", '" << __FUNCTION__ << \
-         "')" << std::endl
-
 #endif // DEBUG_H

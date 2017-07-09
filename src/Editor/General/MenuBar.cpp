@@ -24,10 +24,10 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ProjectManager.h"
 #include "Bang/AssetFileCreator.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/WindowEventManager.h"
+#include "Bang/EditorProjectManager.h"
 
 MenuBar *MenuBar::s_instance = nullptr;
 
@@ -150,19 +150,22 @@ Dialog::Reply MenuBar::AskForSavingActiveScene() const
 
 void MenuBar::OnNewProject() const
 {
-    Path projectFilepath = ProjectManager::DialogCreateNewProject();
-    ProjectManager::OpenProject( Path(projectFilepath) );
+    Path projectFilepath = EditorProjectManager::DialogCreateNewProject();
+    EditorProjectManager pm;
+    pm.OpenProject( Path(projectFilepath) );
 }
 
 void MenuBar::OnOpenProject() const
 {
-    Path projectFilepath = ProjectManager::DialogOpenProject();
-    ProjectManager::OpenProject( Path(projectFilepath) );
+    Path projectFilepath = EditorProjectManager::DialogOpenProject();
+    EditorProjectManager pm;
+    pm.OpenProject( Path(projectFilepath) );
 }
 
 void MenuBar::OnSaveProject() const
 {
-    ProjectManager::SaveProject( ProjectManager::GetCurrentProject() );
+    EditorProjectManager pm;
+    pm.SaveProject( ProjectManager::GetCurrentProject() );
 }
 
 

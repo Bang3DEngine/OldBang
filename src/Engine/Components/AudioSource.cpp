@@ -90,6 +90,7 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     xmlInfo->SetBool("Looping",     m_looping);
     xmlInfo->SetBool("PlayOnStart", m_playOnStart);
 
+    #ifdef BANG_EDITOR
     AudioSource *noConstThis = const_cast<AudioSource*>(this);
     if (IsPlaying())
     {
@@ -102,6 +103,7 @@ void AudioSource::Write(XMLNode *xmlInfo) const
         xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
         xmlInfo->SetButton("Play", noConstThis, {});
     }
+    #endif
 }
 
 void AudioSource::Play(float delay)

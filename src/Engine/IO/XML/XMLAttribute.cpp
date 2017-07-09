@@ -3,13 +3,9 @@
 #include <iostream>
 #include <functional>
 
-#include "Bang/Debug.h"
-#include "Bang/Object.h"
 #include "Bang/Paths.h"
-
-#ifdef BANG_EDITOR
+#include "Bang/Object.h"
 #include "Bang/IAttrWidgetButtonListener.h"
-#endif
 
 XMLAttribute::XMLAttribute()
 {
@@ -269,6 +265,20 @@ void XMLAttribute::SetButton(const String buttonText,
     SetProperty(XMLProperty::DontWriteToFile);
     SetProperty(prop);
 }
+
+IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
+{
+    std::istringstream iss(GetPropertyValue("Listener"));
+    void *lp = nullptr;
+    iss >> lp;
+    if (lp)
+    {
+        IAttrWidgetButtonListener *listener =
+           Object::SCast<IAttrWidgetButtonListener>(lp);
+        return listener;
+    }
+    return nullptr;
+}
 #endif
 
 bool XMLAttribute::HasVectoredType() const
@@ -426,20 +436,6 @@ Rect XMLAttribute::GetRect() const
 {
     Vector4 v = GetVector4();
     return Rect(v.x, v.y, v.z, v.w);
-}
-
-IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
-{
-    std::istringstream iss(GetPropertyValue("Listener"));
-    void *lp = nullptr;
-    iss >> lp;
-    if (lp)
-    {
-        IAttrWidgetButtonListener *listener =
-           Object::SCast<IAttrWidgetButtonListener>(lp);
-        return listener;
-    }
-    return nullptr;
 }
 
 String XMLAttribute::GetEnumSelectedName() const

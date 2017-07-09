@@ -7,15 +7,11 @@
 class Project;
 class ProjectManager
 {
-private:
-    static Project *s_currentProject;
-
 public:
     ProjectManager();
 
-    static Project* OpenProject(const Path &projectFilepath);
+    virtual Project* OpenProject(const Path &projectFilepath) const;
 
-    #ifdef BANG_EDITOR
     static Project* CreateNewProject(const Path &projectDirPath,
                                      const String &projectName);
     static Project* CreateNewProjectFileOnly(const Path &projectFilepath);
@@ -23,11 +19,13 @@ public:
     static void SaveCurrentProject();
     static void CloseCurrentProject();
 
-    static Path DialogCreateNewProject();
-    static Path DialogOpenProject();
-    #endif
-
     static Project* GetCurrentProject();
+
+protected:
+    virtual bool OpenFirstFoundScene(const Path &projectDirPath) const;
+
+private:
+    static Project *s_currentProject;
 };
 
 #endif // PROJECTMANAGER_H

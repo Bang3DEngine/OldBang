@@ -31,19 +31,16 @@
 #include "Bang/SceneManager.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ProjectManager.h"
 #include "Bang/SingletonManager.h"
 
 #ifdef BANG_EDITOR
-
 #include "Bang/EditorScene.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SelectProjectWindow.h"
-
+#include "Bang/EditorProjectManager.h"
 #else
-
 #include "Bang/GameWindow.h"
-
+#include "Bang/ProjectManager.h"
 #endif
 
 
@@ -160,12 +157,15 @@ int main(int argc, char **argv)
 
     QMainWindow *editorOrGameWindow = new QMainWindow();
     InitEditorOrGame(editorOrGameWindow, &app);
-    ProjectManager::OpenProject(loadedProjectFilepath);
 
-    #ifndef BANG_EDITOR
+    #ifdef BANG_EDITOR
+    EditorProjectManager pm;
+    #else
+    ProjectManager pm;
+    #endif
+    pm.OpenProject(loadedProjectFilepath);
     BehaviourManager::PrepareBehavioursLibrary(true,
                                                Paths::ProjectLibrariesDir());
-    #endif
 
     app.MainLoop();
 

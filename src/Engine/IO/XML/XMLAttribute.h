@@ -75,13 +75,6 @@ public:
                  int selectedEnumIndex,
                  const Array<XMLProperty>& properties = {});
 
-    #ifdef BANG_EDITOR
-    void SetButton(
-         const String buttonText,
-         IAttrWidgetButtonListener *listener,
-         const Array<XMLProperty>& properties = {});
-    #endif
-
     /**
      * @brief HasVectorLikeType
      * @return Whether the type is either Float, Vector*, or Quaternion.
@@ -111,10 +104,17 @@ public:
     Color GetColor() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
-    IAttrWidgetButtonListener* GetButtonListener() const;
     String GetEnumSelectedName() const;
     int GetEnumSelectedIndex() const;
     Array<String> GetEnumNames() const;
+
+    #ifdef BANG_EDITOR
+    void SetButton(
+         const String buttonText,
+         IAttrWidgetButtonListener *listener,
+         const Array<XMLProperty>& properties = {});
+    IAttrWidgetButtonListener* GetButtonListener() const;
+    #endif
 
     String GetTypeName() const;
     const Array<XMLProperty>& GetProperties() const;

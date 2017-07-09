@@ -299,14 +299,11 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
     }
 }
 
-#ifdef BANG_EDITOR
-
 void EditorCamera::OnHierarchyGameObjectsSelected(
         const List<GameObject *> &selectedGameObjects)
 {
     // Intentionally left in blank
 }
-
 
 void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
@@ -318,5 +315,3 @@ void EditorCamera::StartLookAt(GameObject *lookAtFocus)
 {
     m_currentFocus = lookAtFocus;
 }
-#endif
-

@@ -4,10 +4,7 @@
 #include "Bang/Map.h"
 #include "Bang/Vector3.h"
 #include "Bang/G_Framebuffer.h"
-
-#ifdef BANG_EDITOR
 #include "Bang/IWindowEventManagerListener.h"
-#endif
 
 class Scene;
 class Renderer;
@@ -19,9 +16,7 @@ class ShaderProgram;
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
  */
 class SelectionFramebuffer : public G_Framebuffer
-                            #ifdef BANG_EDITOR
                             ,public IWindowEventManagerListener
-                            #endif
 {
 public:
     SelectionFramebuffer(int width, int height);

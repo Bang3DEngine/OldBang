@@ -89,12 +89,10 @@ public:
         return AssetsManager::Load<T>( UPATH(filepath) );
     }
 
-    #ifdef BANG_EDITOR
     static void UpdateAsset(const Path &assetFilepath,
                             const XMLNode &xmlChangedInfo);
     static void InvalidateAsset(const Path &assetFilepath);
     static void ReloadAsset(const Path &assetFilepath);
-    #endif
 
     static void SaveAssetToMap(const Path &filepath, Asset* asset);
     static void SaveAssetToFile(const Path &filepath, Asset* asset);

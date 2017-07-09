@@ -18,7 +18,6 @@ Screen::~Screen()
 
 void Screen::Initialize()
 {
-    std::cerr << "initializeGL" << std::endl;
     static bool firstInitializeGL = true;
     if (firstInitializeGL)
     {

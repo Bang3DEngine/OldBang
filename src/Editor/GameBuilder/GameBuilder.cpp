@@ -7,9 +7,9 @@
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/ProjectManager.h"
 #include "Bang/GameBuildDialog.h"
 #include "Bang/BehaviourManager.h"
+#include "Bang/EditorProjectManager.h"
 
 GameBuilder *GameBuilder::s_instance = nullptr;
 
@@ -205,7 +205,8 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 Project* GameBuilder::CreateGameProject(const Path &executableDir)
 {
     String projectFile = executableDir + "/GameData/Game.bproject";
-    return ProjectManager::CreateNewProjectFileOnly( Path(projectFile ) );
+    EditorProjectManager pm;
+    return pm.CreateNewProjectFileOnly( Path(projectFile ) );
 }
 
 bool GameBuilder::CompileBehaviours(const Path &executableDir,
