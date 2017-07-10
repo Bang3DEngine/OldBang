@@ -20,7 +20,7 @@ PrefabFileInspectable::PrefabFileInspectable(const BFile &f) :
     prefab.ReadFromFile( f.GetPath() );
     SetRelatedSerializableObject( prefab.InstantiateWithoutStarting() );
 
-    GameObject *go = Object::SCast<GameObject>(GetRelatedSerializableObject());
+    GameObject *go = Object::SCast<GameObject>(GetSerializableObject());
     go->SetName( f.GetPath().GetName() );
     go->SetEnabled(true);
     OnInspectorSlotChanged(nullptr);
@@ -43,7 +43,7 @@ void PrefabFileInspectable::OnInspectorSlotChanged(
                                              InspectorWidget *inspectorWidget)
 {
     AssetsManager::UpdateAsset(m_file.GetPath(),
-                               GetRelatedSerializableObject()->GetXMLInfo());
+                               GetSerializableObject()->GetXMLInfo());
 }
 
 

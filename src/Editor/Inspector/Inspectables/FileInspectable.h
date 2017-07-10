@@ -29,6 +29,13 @@ public:
         finsp->m_file = m_file;
     }
 
+    virtual const QPixmap& GetIcon() const override
+    {
+        SerializableObject *so = Base::GetSerializableObject();
+        FileClass *fc = static_cast<FileClass*>(so);
+        return fc->GetIcon();
+    }
+
 private:
     FileClass m_file;
 };

@@ -10,6 +10,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/EditorScene.h"
 #include "Bang/EditorWindow.h"
+#include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/SelectionFramebuffer.h"

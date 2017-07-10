@@ -42,7 +42,7 @@ public:
     virtual InspectorWidget *GetNewInspectorWidget() override
     {
         InspectorWidget *iw = new InspectorWidget();
-        iw->Init(GetRelatedSerializableObject());
+        iw->Init(this);
         return iw;
     }
 

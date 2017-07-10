@@ -59,7 +59,7 @@ void Inspector::Clear()
 bool Inspector::Refresh(SerializableObject *serialObject)
 {
     bool update = m_currentInspectable &&
-        (m_currentInspectable->GetRelatedSerializableObject() == serialObject);
+        (m_currentInspectable->GetSerializableObject() == serialObject);
     if (update)
     {
         Refresh();
@@ -131,7 +131,7 @@ IInspectable *Inspector::GetCurrentInspectable()
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
     ENSURE(m_currentInspectable);
-    if (destroyed == m_currentInspectable->GetRelatedSerializableObject())
+    if (destroyed == m_currentInspectable->GetSerializableObject())
     {
         m_currentInspectable = nullptr;
         Clear();
@@ -142,7 +142,7 @@ void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
     {
         QListWidgetItem *itm = item(i);
         InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
-        if (iw && iw->GetRelatedInspectable() == destroyed)
+        if (iw && iw->GetInspectable()->GetSerializableObject() == destroyed)
         {
             iw->OnDestroy();
             delete itm;

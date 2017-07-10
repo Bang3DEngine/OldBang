@@ -7,7 +7,6 @@
 #include "Bang/Vector4.h"
 #include "Bang/Quaternion.h"
 
-#include "Bang/ComponentWidget.h"
 #include "Bang/AttrWidgetFloat.h"
 
 class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size N

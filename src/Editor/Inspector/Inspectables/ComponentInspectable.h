@@ -3,6 +3,7 @@
 
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
+#include "Bang/IconManager.h"
 #include "Bang/Inspectable.h"
 #include "Bang/ComponentWidget.h"
 
@@ -57,10 +58,16 @@ public:
         return {};
     }
 
+    virtual const QPixmap& GetIcon() const
+    {
+        const Component *c = GetComponent();
+        return IconManager::GetIcon( c ? c->GetClassName() : "" );
+    }
+
 private:
     Component *GetComponent() const
     {
-        return Object::SCast<Component>( GetRelatedSerializableObject() );
+        return Object::SCast<Component>( GetSerializableObject() );
     }
 
 };

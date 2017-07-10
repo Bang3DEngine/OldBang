@@ -10,7 +10,7 @@
 class GameObject;
 class InspectorWidget;
 class PrefabFileInspectable : public Inspectable<GameObject>,
-                                   public IWindowEventManagerListener
+                              public IWindowEventManagerListener
 {
     ICLONEABLE(PrefabFileInspectable)
 

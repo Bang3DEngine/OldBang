@@ -22,10 +22,10 @@
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/DragDropQWidget.h"
-#include "Bang/SerializableObject.h"
 
 class Component;
 class GameObject;
+class IInspectable;
 class AttributeWidget;
 
 /**
@@ -38,7 +38,7 @@ class InspectorWidget : public DragDropQWidget
 
 public:
     InspectorWidget();
-    void Init(SerializableObject *relatedInspectable);
+    void Init(IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
 
@@ -55,7 +55,7 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
-    SerializableObject* GetRelatedInspectable() const;
+    IInspectable* GetInspectable() const;
 
     QGridLayout *GetGridLayout();
     int GetNextRowIndex() const;
@@ -76,7 +76,7 @@ public slots:
     void RefreshWidgetValues();
 
 protected:
-    SerializableObject *p_relatedSerialObj = nullptr;
+    IInspectable *p_inspectable = nullptr;
 
     QVBoxLayout m_vLayout;
     QHBoxLayout m_headerLayout;

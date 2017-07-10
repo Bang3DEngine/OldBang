@@ -9,6 +9,7 @@
 #include "Bang/Inspector.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
+#include "Bang/IInspectable.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/AttrWidgetInt.h"
 #include "Bang/AttrWidgetEnum.h"
@@ -20,6 +21,7 @@
 #include "Bang/AttrWidgetButton.h"
 #include "Bang/AttrWidgetString.h"
 #include "Bang/WindowEventManager.h"
+#include "Bang/SerializableObject.h"
 #include "Bang/AttrWidgetVectorFloat.h"
 
 
@@ -27,14 +29,14 @@ InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
 
-void InspectorWidget::Init(SerializableObject *relatedSerialObj)
+void InspectorWidget::Init(IInspectable *relatedInspectable)
 {
-    p_relatedSerialObj = relatedSerialObj;
+    p_inspectable = relatedInspectable;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(xmlInfo);
 
-    SetIcon( relatedSerialObj->GetIcon() );
+    SetIcon( relatedInspectable->GetIcon() );
 
     setAcceptDrops(true);
     RefreshWidgetValues();
@@ -87,7 +89,10 @@ InspectorWidget::~InspectorWidget()
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
     XMLNode xmlInfo;
-    if (p_relatedSerialObj) { p_relatedSerialObj->Write(&xmlInfo); }
+    if (p_inspectable)
+    {
+        p_inspectable->GetSerializableObject()->Write(&xmlInfo);
+    }
     return xmlInfo;
 }
 
@@ -179,9 +184,9 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     return xmlInfo;
 }
 
-SerializableObject *InspectorWidget::GetRelatedInspectable() const
+IInspectable *InspectorWidget::GetInspectable() const
 {
-    return p_relatedSerialObj;
+    return p_inspectable;
 }
 
 QGridLayout *InspectorWidget::GetGridLayout()
@@ -223,14 +228,14 @@ int InspectorWidget::GetHeightSizeHint()
 void InspectorWidget::OnDestroy()
 {
     m_refreshTimer.stop();
-    p_relatedSerialObj = nullptr;
+    p_inspectable = nullptr;
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
                         this, SLOT(RefreshWidgetValues()));
 }
 
 void InspectorWidget::RefreshWidgetValues()
 {
-    ENSURE(p_relatedSerialObj);
+    ENSURE(p_inspectable);
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
@@ -280,8 +285,11 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    ENSURE(p_relatedSerialObj);
-    if (m_created) { p_relatedSerialObj->Read( GetWidgetXMLInfo() ); }
+    ENSURE(p_inspectable);
+    if (m_created)
+    {
+        p_inspectable->GetSerializableObject()->Read( GetWidgetXMLInfo() );
+    }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 

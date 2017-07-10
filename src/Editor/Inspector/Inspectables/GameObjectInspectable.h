@@ -60,7 +60,7 @@ protected:
 
     virtual GameObject *GetGameObject() const
     {
-        return Object::SCast<GameObject>( GetRelatedSerializableObject() );
+        return Object::SCast<GameObject>( GetSerializableObject() );
     }
 
 };

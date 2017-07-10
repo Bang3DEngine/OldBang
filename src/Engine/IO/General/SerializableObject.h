@@ -2,8 +2,6 @@
 #define SERIALIZABLEOBJECT_H
 
 #include <set>
-#include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/Object.h"
@@ -42,7 +40,6 @@ public:
      */
     virtual void PostRead(const XMLNode &xmlInfo);
 
-    virtual const QPixmap& GetIcon() const;
     virtual String GetFileExtension() const;
 
 protected:

@@ -42,7 +42,12 @@ public:
                                              const QPixmap& pixmapToCenter);
 
     template<class Class>
-    static const QPixmap& GetIcon();
+    static const QPixmap& GetIcon()
+    {
+        return IconManager::GetIcon( Class::GetClassNameStatic() );
+    }
+
+    static const QPixmap& GetIcon(const String &className);
 
 private:
     typedef QPainter::CompositionMode CompMode;

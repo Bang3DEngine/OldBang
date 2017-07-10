@@ -20,16 +20,13 @@
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/AudioClip.h"
-#include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
-#include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/DirectionalLight.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/ISceneEventListener.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 
 /**
  * @brief The Behaviour class is a base class which will be inherited by all

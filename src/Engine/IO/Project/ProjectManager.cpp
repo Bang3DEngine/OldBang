@@ -2,22 +2,15 @@
 
 #include <string>
 
-#include "Bang/Paths.h"
-#include "Bang/Time.h"
+#include "Bang/File.h"
 #include "Bang/List.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
-#include "Bang/Dialog.h"
 #include "Bang/Project.h"
-#include "Bang/MenuBar.h"
 #include "Bang/XMLNode.h"
-#include "Bang/Explorer.h"
 #include "Bang/XMLParser.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
-#include "Bang/EngineConfig.h"
-#include "Bang/QtProjectManager.h"
 
 Project *ProjectManager::s_currentProject = nullptr;
 

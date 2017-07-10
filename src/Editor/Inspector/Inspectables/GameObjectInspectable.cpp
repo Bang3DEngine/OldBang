@@ -1,2 +1,2 @@
-#include "GameObjectInspectable.h"
+#include "Bang/GameObjectInspectable.h"
 

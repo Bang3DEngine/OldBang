@@ -8,6 +8,7 @@
 #include "Bang/ComponentWidgetContextMenu.h"
 
 class Component;
+template <class Component> class Inspectable;
 class ComponentWidget : public InspectorWidget
 {
     Q_OBJECT
@@ -30,6 +31,7 @@ private:
     ComponentWidgetContextMenu m_cwContextMenu;
 
     Component *p_component = nullptr;
+    Inspectable<Component> *m_componentInspectable = nullptr;
     QCheckBox m_enabledCheckbox;
 
     friend class InspectorContextMenu;

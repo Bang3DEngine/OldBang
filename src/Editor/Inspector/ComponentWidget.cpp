@@ -4,6 +4,7 @@
 #include "Bang/Component.h"
 #include "Bang/IconManager.h"
 #include "Bang/EditorWindow.h"
+#include "Bang/ComponentInspectable.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(),
@@ -11,7 +12,8 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_cwContextMenu(this)
 {
     p_component = relatedComponent;
-    InspectorWidget::Init(p_component);
+    m_componentInspectable = new Inspectable<Component>(p_component);
+    InspectorWidget::Init(m_componentInspectable);
 
     m_closed = p_component->IsClosedInInspector();
     SetClosed(m_closed);
@@ -30,6 +32,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
 
 ComponentWidget::~ComponentWidget()
 {
+    delete m_componentInspectable;
 }
 
 int ComponentWidget::GetHeightSizeHint()

@@ -1,6 +1,9 @@
 #ifndef IINSPECTABLE_H
 #define IINSPECTABLE_H
 
+#include <QPixmap>
+#include "Bang/WinUndef.h"
+
 #include "Bang/List.h"
 #include "Bang/ICloneable.h"
 
@@ -20,15 +23,21 @@ public:
     virtual InspectorWidget *GetNewInspectorWidget() = 0;
     virtual List<IInspectable*> GetNewInspectablesToShow() = 0;
 
+    virtual const QPixmap& GetIcon() const
+    {
+        static QPixmap empty;
+        return empty;
+    }
+
     void SetRelatedSerializableObject(SerializableObject* serializableObject);
 
-    virtual SerializableObject *GetRelatedSerializableObject() const;
+    virtual SerializableObject *GetSerializableObject() const;
 
 protected:
     IInspectable();
 
 private:
-    SerializableObject *p_relatedSerializableObject = nullptr;
+    SerializableObject *p_serializableObject = nullptr;
 };
 
 #endif // IINSPECTABLE_H

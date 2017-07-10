@@ -8,10 +8,8 @@
 #include "Bang/File.h"
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
-#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "Bang/Explorer.h"
 #include "Bang/Inspector.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/FileReferencesManager.h"
@@ -75,11 +73,6 @@ bool SerializableObject::WriteToFile(const Path &path) const
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
-
-const QPixmap &SerializableObject::GetIcon() const
-{
-    return IconManager::GetEmptyPixmap();
-}
 
 String SerializableObject::GetFileExtension() const
 {

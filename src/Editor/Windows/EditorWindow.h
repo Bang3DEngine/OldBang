@@ -13,8 +13,8 @@
  */
 class EditorState;
 class QApplication;
-class WindowEventManager;
 class EditorPlayFlow;
+class WindowEventManager;
 class EditorWindow : public QObject,
                      public IWindow,
                      public Ui_EditorWindow

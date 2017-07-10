@@ -482,7 +482,7 @@ GameObject *MenuBar::GetInspectorGameObject() const
     IInspectable *inspectable = inspector->GetCurrentInspectable();
     if (!inspectable) { return nullptr; }
 
-    SerializableObject *serialObject = inspectable->GetRelatedSerializableObject();
+    SerializableObject *serialObject = inspectable->GetSerializableObject();
     if (!serialObject) { return nullptr; }
 
     return Object::Cast<GameObject>(serialObject);
