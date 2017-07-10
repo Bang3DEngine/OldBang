@@ -1,8 +1,8 @@
-#ifndef WINDOWMAIN_H
-#define WINDOWMAIN_H
+#ifndef EDITORWINDOW_H
+#define EDITORWINDOW_H
 
 #include <QApplication>
-#include "Bang/ui_EditorWindow.h"
+#include "ui_EditorWindow.h"
 #include "Bang/WinUndef.h"
 
 #include "Bang/IWindow.h"
@@ -58,4 +58,4 @@ private:
     friend class EditorPlayFlow;
 };
 
-#endif // WINDOWMAIN_H
+#endif // EDITORWINDOW_H

@@ -129,7 +129,7 @@ void MenuBar::CreateNewScene() const
 {
     SceneManager::CloseOpenScene();
     SceneManager::SetActiveScene(nullptr);
-    Scene *scene = Scene::GetNewDefaultScene();
+    EditorScene *scene = EditorScene::GetNewDefaultScene();
     SceneManager::SetActiveScene(scene);
 }
 

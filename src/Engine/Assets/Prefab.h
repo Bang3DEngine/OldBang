@@ -15,7 +15,6 @@ class GameObject;
 class Prefab : public Asset
 {
 	OBJECT(Prefab)
-    ASSET_ICON(Prefab, "Icons/PrefabAssetIcon.png")
 
 public:
     Prefab();

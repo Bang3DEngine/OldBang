@@ -11,10 +11,8 @@
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/String.h"
-#include "Bang/Application.h"
 #include "Bang/BangCompiler.h"
 #include "Bang/BehaviourManagerStatus.h"
-#include "Bang/BehaviourRefresherTimer.h"
 
 class QLibrary;
 class Behaviour;
@@ -51,10 +49,6 @@ public slots: // Behaviour Objects signals and slots
 private:
     Path m_currentLibsDir;
     BehaviourManagerStatus m_status;
-
-    #ifdef BANG_EDITOR
-    BehaviourRefresherTimer m_behaviourRefresherTimer;
-    #endif
 
     bool m_mergingForGame = false;
     QLibrary *m_behavioursLibrary = nullptr;

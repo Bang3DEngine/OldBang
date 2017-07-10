@@ -9,6 +9,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"
+#include "Bang/BehaviourRefresherTimer.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/FileTracker.h"
@@ -38,8 +39,10 @@ public:
     bool notify(QObject *receiver, QEvent *e) override;
 
 private:
+
     #ifdef BANG_EDITOR
-    FileTracker *m_fileTracker           = nullptr;
+    BehaviourRefresherTimer m_behaviourRefresherTimer;
+    FileTracker *m_fileTracker = nullptr;
     #endif
 
     AudioManager *m_audioManager         = nullptr;

@@ -25,7 +25,8 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 {
     const Path libsDir = Paths::ProjectLibrariesDir();
 
-    if (IWindow::GetInstance()->IsInFront())
+    IWindow *win = IWindow::GetInstance();
+    if (win && win->IsInFront())
     {
         BehaviourManager::StartCompilingAllBehaviourObjects(false, libsDir);
     }

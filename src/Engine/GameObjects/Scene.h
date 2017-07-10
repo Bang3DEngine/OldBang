@@ -24,7 +24,6 @@ public:
     void SetFirstFoundCameraOrDefaultOne();
 
     static Scene *GetActiveScene();
-    static Scene *GetNewDefaultScene();
 
     void Destroy(GameObject *gameObject);
     void DestroyImmediate(GameObject *gameObject);

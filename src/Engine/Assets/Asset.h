@@ -5,7 +5,6 @@
 #include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/IToString.h"
-#include "Bang/IconManager.h"
 #include "Bang/SerializableObject.h"
 
 class AssetsManager;
@@ -35,16 +34,5 @@ protected:
 
     friend class AssetsManager;
 };
-
-#define ASSET_ICON(CLASS, ICON_PATH) \
-public: \
-    static const QPixmap& GetIconStatic() \
-    {\
-        return IconManager::LoadPixmap( EPATH(ICON_PATH) ); \
-    } \
-    const virtual QPixmap& GetIcon() const override \
-    { \
-        return CLASS::GetIconStatic(); \
-    }
 
 #endif // ASSET_H

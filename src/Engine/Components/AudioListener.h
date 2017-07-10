@@ -6,7 +6,6 @@
 class AudioListener : public Component
 {
     OBJECT(AudioListener)
-    COMPONENT_ICON(AudioListener, "Icons/AudioIcon.png")
 
 public:
     AudioListener();

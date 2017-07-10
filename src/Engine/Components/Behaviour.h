@@ -41,7 +41,6 @@ class Behaviour : public Component
                   #endif
 {
     OBJECT(Behaviour)
-    COMPONENT_ICON(Behaviour, "Icons/BehaviourIcon.png")
 
 public:
     Behaviour();

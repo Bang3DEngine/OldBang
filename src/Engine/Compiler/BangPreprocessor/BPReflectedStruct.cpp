@@ -1,4 +1,4 @@
-#include "BPReflectedStruct.h"
+#include "Bang/BPReflectedStruct.h"
 
 #include <regex>
 

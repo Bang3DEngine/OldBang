@@ -8,7 +8,6 @@ class G_ShaderProgram;
 class PostProcessEffect : public Component
 {
     OBJECT(PostProcessEffect)
-    COMPONENT_ICON(PostProcessEffect, "Icons/ImageIcon.png")
 
 public:
     enum Type

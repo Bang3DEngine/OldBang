@@ -8,13 +8,8 @@
 #include "Bang/Object.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
-#include "Bang/IconManager.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/IWindowEventManagerListener.h"
-#endif
 
 class XMLNode;
 class Transform;
@@ -58,16 +53,5 @@ protected:
 
     friend class ComponentClipboard;
 };
-
-#define COMPONENT_ICON(CLASS, ICON_PATH) \
-public: \
-    static const QPixmap& GetIconStatic() \
-    {\
-        return IconManager::LoadPixmap( EPATH(ICON_PATH) ); \
-    } \
-    const virtual QPixmap& GetIcon() const override \
-    { \
-        return CLASS::GetIconStatic(); \
-    }
 
 #endif // COMPONENT_H

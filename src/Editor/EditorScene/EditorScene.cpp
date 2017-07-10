@@ -8,10 +8,13 @@
 #include "Bang/UIText.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/Transform.h"
+#include "Bang/MeshFactory.h"
 #include "Bang/EditorState.h"
 #include "Bang/EditorFloor.h"
 #include "Bang/EditorCamera.h"
+#include "Bang/AudioListener.h"
 #include "Bang/RectTransform.h"
+#include "Bang/DirectionalLight.h"
 #include "Bang/SelectionFramebuffer.h"
 #include "Bang/EditorDebugGameObject.h"
 #include "Bang/EditorGizmosGameObject.h"
@@ -101,6 +104,31 @@ EditorCamera *EditorScene::GetEditorCamera() const
     return m_edCameraGameObject;
 }
 
+EditorScene *EditorScene::GetNewDefaultScene()
+{
+    EditorScene *scene = new EditorScene();
+
+    GameObject *cube = MeshFactory::GetCubeGameObject();
+    cube->SetParent(scene);
+
+    const float c_dist = 5.0f;
+    GameObject *dirLight = new GameObject("Directional Light");
+    dirLight->AddComponent<DirectionalLight>();
+    dirLight->transform->SetPosition(Vector3(-1, 1, -1) * c_dist);
+    dirLight->transform->LookAt(cube);
+    dirLight->SetParent(scene);
+
+    GameObject *camera = new GameObject("Camera");
+    Camera *camComp = camera->AddComponent<Camera>();
+    camera->transform->SetPosition(Vector3(1, 1, -1) * c_dist);
+    camera->transform->LookAt(cube);
+    camera->AddComponent<AudioListener>();
+    camComp->SetClearColor(Color::LightBlue);
+    camera->SetParent(scene);
+
+    return scene;
+}
+
 EditorGizmosGameObject *EditorScene::GetGizmosGameObject() const
 {
     return m_gizmosGameObject;
@@ -110,4 +138,16 @@ EditorGizmosGameObject *EditorScene::GetGizmosGameObject() const
 void EditorScene::PostRead(const XMLNode &xmlInfo)
 {
     GameObject::PostRead(xmlInfo);
+}
+
+void EditorScene::_OnStart()
+{
+    if (EditorState::IsPlaying())
+    {
+        Scene::_OnStart();
+    }
+    else
+    {
+        GameObject::_OnEditorStart();
+    }
 }

@@ -2,7 +2,7 @@
 #define SELECTPROJECTWINDOW_H
 
 #include <QMainWindow>
-#include "Bang/ui_SelectProjectWindow.h"
+#include "ui_SelectProjectWindow.h"
 #include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"

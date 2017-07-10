@@ -25,9 +25,14 @@ public:
     Camera *GetCamera() const override;
     EditorCamera *GetEditorCamera() const;
 
+    static EditorScene *GetNewDefaultScene();
+
     EditorGizmosGameObject *GetGizmosGameObject() const;
 
     virtual void PostRead(const XMLNode &xmlInfo) override;
+
+protected:
+    virtual void _OnStart() override;
 
 private:
     EditorGizmosGameObject *m_gizmosGameObject = nullptr;

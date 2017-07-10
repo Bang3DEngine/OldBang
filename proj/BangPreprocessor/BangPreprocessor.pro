@@ -2,17 +2,15 @@ include(../BangCommon.pri)
 system(rm -f Makefile)
 
 TEMPLATE = app
-QT = core gui widgets
-
-CONFIG -= app
+CONFIG -= app app_bundle
 CONFIG += console
-CONFIG -= app_bundle
 OBJECTS -= moc_*
+QT = core gui widgets
 
 TARGET = $$BIN_DIR/BangPreprocessor
 
 PreprocessTarget.target = PreprocessTargetName
-PreprocessTarget.commands = (cd $$PWD/../.. ; sh ../scripts/preprocessHeaders.sh)
+PreprocessTarget.commands = (cd $$BANG_ROOT ; sh ../scripts/preprocessHeaders.sh)
 QMAKE_EXTRA_TARGETS += $$PreprocessTarget.target
 POST_TARGETDEPS += PreprocessTargetName
 
@@ -26,11 +24,11 @@ PRE_TARGETDEPS += \
 
 SOURCES += \
     ./MainBangPreprocessor.cpp \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 
 HEADERS += \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
-    $$PWD/../../src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h

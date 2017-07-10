@@ -10,7 +10,6 @@ class XMLNode;
 class RectTransform : public Transform
 {
     OBJECT(RectTransform)
-    COMPONENT_ICON(RectTransform, "Icons/RectTransformIcon.png")
 
 public:
     RectTransform();

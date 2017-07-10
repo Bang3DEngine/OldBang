@@ -6,7 +6,6 @@
 #include <AL/alut.h>
 
 #include "Bang/Component.h"
-#include ".AudioSource.refl.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -22,7 +21,6 @@ class AudioSource : public Component
                     #endif
 {
     OBJECT(AudioSource)
-    COMPONENT_ICON(AudioSource, "Icons/AudioIcon.png")
 
 public:
     enum State

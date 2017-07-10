@@ -7,7 +7,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
-#include "Bang/Path.h"
+#include "Bang/Paths.h"
 #include "Bang/String.h"
 
 class Material;
@@ -40,6 +40,9 @@ public:
 
     static QPixmap CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
                                              const QPixmap& pixmapToCenter);
+
+    template<class Class>
+    static const QPixmap& GetIcon();
 
 private:
     typedef QPainter::CompositionMode CompMode;

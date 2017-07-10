@@ -7,6 +7,7 @@
 #include "Bang/IWindowEventManagerListener.h"
 
 class Scene;
+class Material;
 class Renderer;
 class GameObject;
 class G_Material;

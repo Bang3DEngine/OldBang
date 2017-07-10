@@ -11,7 +11,6 @@ class ICloneable;
 class CircleRenderer : public LineRenderer
 {
     OBJECT(CircleRenderer)
-    COMPONENT_ICON(CircleRenderer, "Icons/eye.png")
 
 public:
     virtual ~CircleRenderer();

@@ -4,17 +4,17 @@ QT_VERSION = 5
 # PARAMETERS CATCHING
 COMPILER=$$(BANG_BUILD_COMPILER) # EDITOR or GAME
 isEmpty(COMPILER) {
-  COMPILER=g++
+  COMPILER = g++
 }
 
 EDITOR_OR_GAME=$$(BANG_BUILD_EDITOR_OR_GAME) # EDITOR or GAME
 isEmpty(EDITOR_OR_GAME) {
-  EDITOR_OR_GAME=EDITOR
+  EDITOR_OR_GAME = EDITOR
 }
 
 RELEASE_OR_DEBUG=$$(BANG_BUILD_RELEASE_OR_DEBUG) # RELEASE or DEBUG
 isEmpty(RELEASE_OR_DEBUG) {
-  RELEASE_OR_DEBUG=RELEASE
+  RELEASE_OR_DEBUG = RELEASE
 }
 #####################
 
@@ -31,19 +31,25 @@ LIBS += \
     -lassimp          \
     -lfreetype
 
-INCLUDEPATH +=                       \
-    /usr/include                     \
-    $$PWD/../include              \
-    $$PWD/../include/freetype
+BANG_ROOT=$$PWD/..
+
+INCLUDEPATH +=                               \
+    /usr/include                             \
+    $$BANG_ROOT/include                         \
+    $$BANG_ROOT/include/Bang                    \
+    $$BANG_ROOT/include/Bang/BangDataStructures \
+    $$BANG_ROOT/include/Bang/BangPreprocessor   \
+    $$BANG_ROOT/include/Bang/BangEngine         \
+    $$BANG_ROOT/include/freetype
 
 BIN_DIR=""
 EDITOR {
-    DEBUG   { BIN_DIR = $$PWD/../bin/EditorDebug   }
-    RELEASE { BIN_DIR = $$PWD/../bin/EditorRelease }
+    DEBUG   { BIN_DIR = $$BANG_ROOT/bin/EditorDebug   }
+    RELEASE { BIN_DIR = $$BANG_ROOT/bin/EditorRelease }
 }
 GAME {
-    DEBUG   { BIN_DIR = $$PWD/../bin/GameDebug   }
-    RELEASE { BIN_DIR = $$PWD/../bin/GameRelease }
+    DEBUG   { BIN_DIR = $$BANG_ROOT/bin/GameDebug   }
+    RELEASE { BIN_DIR = $$BANG_ROOT/bin/GameRelease }
 }
 OBJECTS_DIR = $$BIN_DIR/obj
 
@@ -62,17 +68,25 @@ EDITOR {
 
 #OTHER_OPTS = -Wall --std=c++14 -Wl,--export-dynamic -Wno-unused-parameter \
              #-Wunused-variable -Wswitch -Wno-sign-compare -fPIC
-OTHER_OPTS = -Wall --std=c++14 -Wl,--export-dynamic -Wno-unused-parameter \
-             -Wno-sign-compare -Wswitch -fPIC
-QMAKE_CFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_CFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_CFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_CXXFLAGS         -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_CXXFLAGS_DEBUG   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_CXXFLAGS_RELEASE -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_LFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_LFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
-QMAKE_LFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
+OTHER_OPTS = --std=c++14 \
+             -Wall \
+             -Wint-to-pointer-cast \
+             -Wno-unused-parameter \
+             -Wno-sign-compare \
+             -Wswitch \
+             -Wl,--export-dynamic  \
+             -fPIC
+ALL_OPTS = -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
+QMAKE_CFLAGS           -= $$ALL_OPTS
+QMAKE_CFLAGS_DEBUG     -= $$ALL_OPTS
+QMAKE_CFLAGS_RELEASE   -= $$ALL_OPTS
+QMAKE_CXXFLAGS         -= $$ALL_OPTS
+QMAKE_CXXFLAGS_DEBUG   -= $$ALL_OPTS
+QMAKE_CXXFLAGS_RELEASE -= $$ALL_OPTS
+QMAKE_LFLAGS           -= $$ALL_OPTS
+QMAKE_LFLAGS_DEBUG     -= $$ALL_OPTS
+QMAKE_LFLAGS_RELEASE   -= $$ALL_OPTS
+
 QMAKE_LFLAGS           += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 QMAKE_CXXFLAGS         += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 ###################################################

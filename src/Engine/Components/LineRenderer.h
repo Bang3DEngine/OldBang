@@ -14,7 +14,6 @@ class ICloneable;
 class LineRenderer : public Renderer
 {
     OBJECT(LineRenderer)
-    COMPONENT_ICON(LineRenderer, "Icons/eye.png")
 
 public:
     virtual ~LineRenderer();

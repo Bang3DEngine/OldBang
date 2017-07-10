@@ -2,60 +2,61 @@ include(../BangCommon.pri)
 system(rm -f Makefile)
 
 TEMPLATE = lib
-INCLUDEPATH += $$PWD/../../include
+CONFIG += staticlib
 QT += core gui opengl widgets
 
-CONFIG += staticlib
+INCLUDEPATH += \
+    $$BANG_ROOT/include/Bang/BangGraphics
 
 TARGET = $$BIN_DIR/lib/BangGraphics
 
-UI_DIR  = $$PWD/../../include/Bang
+UI_DIR  = $$BANG_ROOT/include/Bang/UI_Qt
 EDITOR {
-    FORMS   += $$PWD/../../res/EngineAssets/EditorWindow.ui
-    FORMS   += $$PWD/../../res/EngineAssets/SelectProjectWindow.ui
+    FORMS   += $$BANG_ROOT/res/EngineAssets/EditorWindow.ui
+    FORMS   += $$BANG_ROOT/res/EngineAssets/SelectProjectWindow.ui
 }
 
-MOC_DIR = $$PWD/../../bin/Qt_MOCs/
+MOC_DIR = $$BANG_ROOT/bin/Qt_MOCs/
 
 SOURCES += \
-    $$PWD/../../src/Engine/Graphics/General/G_Screen.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_TextureUnitManager.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_Texture.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_VAO.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_VBO.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_Font.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_Material.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_Shader.cpp \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_RenderTexture.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLContext.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GL.cpp \
-    $$PWD/../../src/Engine/Graphics/General/GLObject.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_Image.cpp \
-    $$PWD/../../src/Engine/Graphics/General/G_Texture2D.cpp
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Screen.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_TextureUnitManager.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Texture.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_VAO.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_VBO.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Font.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Material.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_FontSheetCreator.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/Buffers/G_Framebuffer.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/Buffers/G_GBuffer.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/Shaders/G_Shader.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_RenderTexture.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/GLContext.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/GL.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/GLObject.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Image.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Texture2D.cpp
 
 HEADERS += \
-    $$PWD/../../src/Engine/Graphics/General/G_Screen.h \
-    $$PWD/../../src/Engine/Graphics/General/G_Texture.h \
-    $$PWD/../../src/Engine/Graphics/General/G_VAO.h \
-    $$PWD/../../src/Engine/Graphics/General/G_VBO.h \
-    $$PWD/../../src/Engine/Graphics/General/G_Font.h \
-    $$PWD/../../src/Engine/Graphics/General/G_Material.h \
-    $$PWD/../../src/Engine/Graphics/General/G_FontSheetCreator.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/G_Framebuffer.h \
-    $$PWD/../../src/Engine/Graphics/Buffers/G_GBuffer.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_Shader.h \
-    $$PWD/../../src/Engine/Graphics/Shaders/G_ShaderProgram.h \
-    $$PWD/../../src/Engine/Graphics/General/G_RenderTexture.h \
-    $$PWD/../../src/Engine/Graphics/General/GLContext.h \
-    $$PWD/../../src/Engine/Graphics/General/GL.h \
-    $$PWD/../../src/Engine/Graphics/General/G_Texture2D.h \
-    $$PWD/../../src/Engine/Graphics/General/GLObject.h \
-    $$PWD/../../src/Engine/Graphics/General/G_TextureUnitManager.h \
-    $$PWD/../../src/Engine/Graphics/General/G_Image.h
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Screen.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Texture.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_VAO.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_VBO.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Font.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Material.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_FontSheetCreator.h \
+    $$BANG_ROOT/src/Engine/Graphics/Buffers/G_Framebuffer.h \
+    $$BANG_ROOT/src/Engine/Graphics/Buffers/G_GBuffer.h \
+    $$BANG_ROOT/src/Engine/Graphics/Shaders/G_Shader.h \
+    $$BANG_ROOT/src/Engine/Graphics/Shaders/G_ShaderProgram.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_RenderTexture.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/GLContext.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/GL.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Texture2D.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/GLObject.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_TextureUnitManager.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/G_Image.h
 
 ######################################
 
@@ -63,69 +64,69 @@ HEADERS += \
 # OTHER FILES #############
 DISTFILES += \
     ../.gitignore \
-    $$PWD/../../src/Engine \
-    $$PWD/../../src/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
-    $$PWD/../../src/res/EngineAssets/Shaders/RenderGBufferToScreen.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Template.frag_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Default.frag_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/SelectionBuffer.vert_sel \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Template.vert_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Default.vert_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/PointLight.glsl \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/Main.glsl \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/G.frag_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/G.vert_g \
-    $$PWD/../../src/res/EngineAssets/Materials/RenderGBufferToScreen.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/G_Default.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Missing.frag \
-    $$PWD/../../src/res/EngineAssets/Materials/Missing.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/SP_SelectionEffect.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/SP.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/SP.vert_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_SelectionEffect.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_Template.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
-    $$PWD/../../src/res/EngineAssets/Materials/UI/SP_UIImage.bmat \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_FXAA.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Include/Common.glsl \
-    $$PWD/../../src/res/EngineAssets/Fonts/GreatFont.bfont \
-    $$PWD/../../src/res/EngineAssets/Fonts/HandwrittenFont.bfont \
-    $$PWD/../../src/res/EngineAssets/Fonts/PrettyFont.bfont \
-    $$PWD/../../src/res/EngineAssets/Fonts/UbuntuFont.bfont \
-    $$PWD/../../src/res/EngineAssets/Camera.bmesh \
-    $$PWD/../../src/res/EngineAssets/Cone.bmesh \
-    $$PWD/../../src/res/EngineAssets/Cube.bmesh \
-    $$PWD/../../src/res/EngineAssets/Plane.bmesh \
-    $$PWD/../../src/res/EngineAssets/Pyramid.bmesh \
-    $$PWD/../../src/res/EngineAssets/Sphere.bmesh \
-    $$PWD/../../src/res/EngineAssets/UIPlane.bmesh \
-    $$PWD/../../src/res/EngineAssets/Textures/AudioSourceIcon.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/CameraIcon.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/CircleIcon.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/DefaultUIImageTexture.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/DirectionalLightIcon.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/PointLightIcon.btex2d \
-    $$PWD/../../src/res/EngineAssets/Textures/RectTransformAnchor.btex2d \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_Default.vert_pp \
-    $$PWD/../../src/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
-    $$PWD/../../src/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
-    $$PWD/../../src/res/EngineAssets/Materials/UI/G_UIText.bmat \
-    $$PWD/../../src/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/SP_Default.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Default.bshaderprogram \
-    $$PWD/../../src/res/EngineAssets/Shaders/Cartoon.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/G_Missing.frag_g \
-    $$PWD/../../src/res/EngineAssets/Shaders/InvertColors.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Blur.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/GrayScale.frag_pp \
-    $$PWD/../../src/res/EngineAssets/Shaders/Outline.frag_pp
+    $$BANG_ROOT/src/Engine \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/RenderGBufferToScreen.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.vert_sel \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.vert_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.vert_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/PointLight.glsl \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/Main.glsl \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/G.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/G.vert_g \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/RenderGBufferToScreen.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/G_Default.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/Missing.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_SelectionEffect.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.vert_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_SelectionEffect.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Template.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/SP_UIImage.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_FXAA.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/Common.glsl \
+    $$BANG_ROOT/src/res/EngineAssets/Fonts/GreatFont.bfont \
+    $$BANG_ROOT/src/res/EngineAssets/Fonts/HandwrittenFont.bfont \
+    $$BANG_ROOT/src/res/EngineAssets/Fonts/PrettyFont.bfont \
+    $$BANG_ROOT/src/res/EngineAssets/Fonts/UbuntuFont.bfont \
+    $$BANG_ROOT/src/res/EngineAssets/Camera.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Cone.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Cube.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Plane.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Pyramid.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Sphere.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/UIPlane.bmesh \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/AudioSourceIcon.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/CameraIcon.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/CircleIcon.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/DefaultUIImageTexture.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/DirectionalLightIcon.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/PointLightIcon.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Textures/RectTransformAnchor.btex2d \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.vert_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText.bmat \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.bshaderprogram \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Cartoon.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag_g \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/InvertColors.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Blur.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/GrayScale.frag_pp \
+    $$BANG_ROOT/src/res/EngineAssets/Shaders/Outline.frag_pp

@@ -8,6 +8,7 @@
 #include "Bang/BFile.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
+#include "Bang/Application.h"
 #include "Bang/AssetsManager.h"
 
 FileTracker::FileTracker()

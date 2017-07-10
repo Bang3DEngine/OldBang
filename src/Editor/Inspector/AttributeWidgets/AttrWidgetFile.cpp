@@ -11,6 +11,7 @@
 #include "Bang/Explorer.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/Application.h"
+#include "Bang/IconManager.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/DialogBrowseAssetFile.h"

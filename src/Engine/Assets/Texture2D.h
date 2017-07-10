@@ -10,7 +10,6 @@ class Texture2D : public G_Texture2D,
                   public Asset
 {
 	OBJECT(Texture2D)
-    ASSET_ICON(Texture2D, "Icons/ImageIcon.png")
 
 public:
     Texture2D();

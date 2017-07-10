@@ -16,7 +16,6 @@
 #include "Bang/Transform.h"
 #include "Bang/PointLight.h"
 #include "Bang/AudioSource.h"
-#include "Bang/EditorState.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
@@ -31,6 +30,7 @@
 #include "Bang/Inspector.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/EditorScene.h"
+#include "Bang/EditorState.h"
 #include "Bang/EditorPlayFlow.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/SelectionFramebuffer.h"
@@ -603,6 +603,7 @@ void GameObject::OnHierarchyGameObjectsSelected(
         m_selectionGameObject = new EditorSelectionGameObject(this);
         m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
 
+        #ifdef BANG_EDITOR
         if (!HasComponent<RectTransform>())
         {
             if (EditorState::GetCurrentTransformMode() ==
@@ -617,6 +618,7 @@ void GameObject::OnHierarchyGameObjectsSelected(
             EditorState::SetTransformMode(
                         EditorState::TransformMode::RectTransform);
         }
+        #endif
     }
     else if (wasSelected && !selected && m_selectionGameObject)
     {

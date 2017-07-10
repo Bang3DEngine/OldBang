@@ -17,8 +17,6 @@ class SelectionFramebuffer;
 class Renderer : public GLObject,
                  public Component
 {
-    COMPONENT_ICON(Renderer, "Icons/eye.png")
-
 public:
     enum RenderLayer
     {

@@ -19,7 +19,6 @@ class ShaderProgram;
 class Camera : public Component
 {
     OBJECT(Camera)
-    COMPONENT_ICON(Camera, "Icons/CameraIcon.png")
 
 public:
     enum ProjectionMode

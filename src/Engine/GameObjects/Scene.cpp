@@ -1,9 +1,5 @@
 #include "Bang/Scene.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/EditorScene.h"
-#endif
-
 #include "Bang/Debug.h"
 #include "Bang/Camera.h"
 #include "Bang/G_Screen.h"
@@ -20,28 +16,13 @@
 #include "Bang/BehaviourManager.h"
 #include "Bang/DirectionalLight.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/EditorState.h"
-#endif
-
 Scene::Scene() : GameObject("Scene")
 {
 }
 
 void Scene::_OnStart()
 {
-    #ifndef BANG_EDITOR
     GameObject::_OnStart();
-    #else
-    if (EditorState::IsPlaying())
-    {
-        GameObject::_OnStart();
-    }
-    else
-    {
-        GameObject::_OnEditorStart();
-    }
-    #endif
 }
 
 void Scene::_OnUpdate()
@@ -123,35 +104,6 @@ Camera *Scene::GetCamera() const
         return nullptr;
     }
     return m_cameraGameObject->GetComponent<Camera>();
-}
-
-Scene *Scene::GetNewDefaultScene()
-{
-    #ifdef BANG_EDITOR
-    Scene *scene = new EditorScene();
-    #else
-    Scene *scene = new Scene();
-    #endif
-
-    GameObject *cube = MeshFactory::GetCubeGameObject();
-    cube->SetParent(scene);
-
-    const float c_dist = 5.0f;
-    GameObject *dirLight = new GameObject("Directional Light");
-    dirLight->AddComponent<DirectionalLight>();
-    dirLight->transform->SetPosition(Vector3(-1, 1, -1) * c_dist);
-    dirLight->transform->LookAt(cube);
-    dirLight->SetParent(scene);
-
-    GameObject *camera = new GameObject("Camera");
-    Camera *camComp = camera->AddComponent<Camera>();
-    camera->transform->SetPosition(Vector3(1, 1, -1) * c_dist);
-    camera->transform->LookAt(cube);
-    camera->AddComponent<AudioListener>();
-    camComp->SetClearColor(Color::LightBlue);
-    camera->SetParent(scene);
-
-    return scene;
 }
 
 void Scene::Destroy(GameObject *gameObject)

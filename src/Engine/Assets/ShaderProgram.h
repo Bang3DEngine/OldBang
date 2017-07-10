@@ -9,7 +9,6 @@ class ShaderProgram : public G_ShaderProgram,
                       public Asset
 {
     OBJECT(ShaderProgram)
-    ASSET_ICON(ShaderProgram, "Icons/BehaviourIcon.png")
 
 public:
     ShaderProgram();

@@ -17,7 +17,6 @@ class SerializableObject;
 class Mesh : public Asset
 {
 	OBJECT(Mesh)
-    ASSET_ICON(Mesh, "Icons/MeshAssetIcon.png")
 
 public:
     static constexpr uint DefaultPositionsVBOLocation = 0;

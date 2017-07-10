@@ -1,10 +1,27 @@
 #include "Bang/IconManager.h"
 
+#include "Bang/Font.h"
+#include "Bang/Mesh.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
+#include "Bang/Light.h"
+#include "Bang/Canvas.h"
+#include "Bang/Prefab.h"
+#include "Bang/UIText.h"
+#include "Bang/UIImage.h"
 #include "Bang/Material.h"
+#include "Bang/Behaviour.h"
+#include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
+#include "Bang/AudioClip.h"
+#include "Bang/PointLight.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/LineRenderer.h"
+#include "Bang/AudioListener.h"
+#include "Bang/RectTransform.h"
+#include "Bang/CircleRenderer.h"
 #include "Bang/SingletonManager.h"
+#include "Bang/PostProcessEffect.h"
 
 IconManager::IconManager() :
     m_emptyPixmap(16, 16),
@@ -240,3 +257,49 @@ String IconManager::GetStringId(const Path &path,
     return path.GetAbsolute() + "|" + String(overlay);
 }
 
+template<> const QPixmap& IconManager::GetIcon<AudioClip>() {
+    return IconManager::LoadPixmap( EPATH("Icons/AudioIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Font>() {
+    return IconManager::LoadPixmap( EPATH("Icons/LetterIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Material>() {
+    return IconManager::LoadPixmap( EPATH("Icons/MaterialAssetIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Mesh>() {
+    return IconManager::LoadPixmap( EPATH("Icons/MeshAssetIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Prefab>() {
+    return IconManager::LoadPixmap( EPATH("Icons/PrefabAssetIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<ShaderProgram>() {
+    return IconManager::LoadPixmap( EPATH("Icons/BehaviourIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Texture2D>() {
+    return IconManager::LoadPixmap( EPATH("Icons/ImageIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<AudioListener>() {
+    return IconManager::LoadPixmap( EPATH("Icons/AudioIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<AudioSource>() {
+    return IconManager::LoadPixmap( EPATH("Icons/AudioIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Behaviour>() {
+    return IconManager::LoadPixmap( EPATH("Icons/BehaviourIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Camera>() {
+    return IconManager::LoadPixmap( EPATH("Icons/CameraIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Canvas>() {
+    return IconManager::LoadPixmap( EPATH("Icons/RectTransformIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<CircleRenderer>() {
+    return IconManager::LoadPixmap( EPATH("Icons/eye.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Light>() {
+    return IconManager::LoadPixmap( EPATH("Icons/PointLightIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<LineRenderer>() {
+    return IconManager::LoadPixmap( EPATH("Icons/eye.png") ); }
+template<> const QPixmap& IconManager::GetIcon<MeshRenderer>() {
+    return IconManager::LoadPixmap( EPATH("Icons/eye.png") ); }
+template<> const QPixmap& IconManager::GetIcon<PointLight>() {
+    return IconManager::LoadPixmap( EPATH("Icons/PointLightIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<PostProcessEffect>() {
+    return IconManager::LoadPixmap( EPATH("Icons/ImageIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<RectTransform>() {
+    return IconManager::LoadPixmap( EPATH("Icons/RectTransformIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Renderer>() {
+    return IconManager::LoadPixmap( EPATH("Icons/eye.png") ); }
+template<> const QPixmap& IconManager::GetIcon<Transform>() {
+    return IconManager::LoadPixmap( EPATH("Icons/TransformIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<UIImage>() {
+    return IconManager::LoadPixmap( EPATH("Icons/ImageIcon.png") ); }
+template<> const QPixmap& IconManager::GetIcon<UIText>() {
+    return IconManager::LoadPixmap( EPATH("Icons/LetterIcon.png") ); }

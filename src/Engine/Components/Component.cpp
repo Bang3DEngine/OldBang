@@ -4,7 +4,6 @@
 #include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
-#include "Bang/ComponentWidget.h"
 
 Component::Component()
 {

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm $(find . | grep -E "Makefile$" | xargs)
+rm -f $(find . | grep -E "Makefile$" | xargs)

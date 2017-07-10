@@ -3,16 +3,18 @@ system(rm -f Makefile)
 
 TEMPLATE = app
 CONFIG -= console
-INCLUDEPATH += $$PWD/../../include
 QT = core gui opengl widgets
 
 SOURCES += \
-    $$PWD/../../src/MainBang.cpp
+    $$BANG_ROOT/src/MainBang.cpp
+
+INCLUDEPATH += \
+    $$BANG_ROOT/include/Bang/BangGraphics
 
 EDITOR {
     TARGET = $$BIN_DIR/Bang
-    RESOURCES += $$PWD/../../res/EngineAssets/qdarkstyle/style.qrc
-    RESOURCES += $$PWD/../../res/EngineAssets/QtResources.qrc
+    RESOURCES += $$BANG_ROOT/res/EngineAssets/qdarkstyle/style.qrc
+    RESOURCES += $$BANG_ROOT/res/EngineAssets/QtResources.qrc
 }
 
 GAME {
