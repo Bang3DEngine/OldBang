@@ -5,7 +5,7 @@ TEMPLATE = lib
 INCLUDEPATH += $$PWD/../../include
 QT += core gui opengl widgets
 
-CONFIG += dll
+CONFIG += staticlib
 
 TARGET = $$BIN_DIR/lib/BangGraphics
 

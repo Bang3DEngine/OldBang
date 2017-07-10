@@ -47,7 +47,6 @@ GAME {
 }
 OBJECTS_DIR = $$BIN_DIR/obj
 
-
 # G++ options (release, debug, etc.) ############
 DEBUG {
     OPTIMIZATION_OPT = -O0 -Wl,-O0

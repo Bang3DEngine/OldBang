@@ -22,7 +22,7 @@ LIBS = \
     $$LIBS
 
 PRE_TARGETDEPS += \
-    $$BIN_DIR/lib/libBangDataStructures.so
+    $$BIN_DIR/lib/libBangDataStructures.a
 
 SOURCES += \
     ./MainBangPreprocessor.cpp \
