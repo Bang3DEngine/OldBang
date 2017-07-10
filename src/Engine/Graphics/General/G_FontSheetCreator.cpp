@@ -6,7 +6,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/G_Texture2D.h"
 
-#include <ftglyph.h>
+#include FT_GLYPH_H
 
 G_FontSheetCreator *G_FontSheetCreator::m_singleton = nullptr;
 

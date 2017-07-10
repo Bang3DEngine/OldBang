@@ -2,7 +2,7 @@
 #define G_FONT_H
 
 #include "freetype/ft2build.h"
-#include "freetype/freetype.h"
+#include FT_FREETYPE_H
 
 #include "Bang/Map.h"
 #include "Bang/Path.h"
