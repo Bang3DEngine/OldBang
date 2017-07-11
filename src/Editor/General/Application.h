@@ -9,11 +9,6 @@
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"
-#include "Bang/BehaviourRefresherTimer.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/FileTracker.h"
-#endif
 
 class Scene;
 class AudioManager;
@@ -28,23 +23,17 @@ public:
     Application(int& argc, char** argv);
     virtual ~Application();
 
-    void InitManagers();
-    void MainLoop();
+    virtual void InitManagers();
+    virtual void MainLoop();
 
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
     void ResetDeltaTime();
 
-    bool notify(QObject *receiver, QEvent *e) override;
+    virtual bool notify(QObject *receiver, QEvent *e) override;
 
-private:
-
-    #ifdef BANG_EDITOR
-    BehaviourRefresherTimer m_behaviourRefresherTimer;
-    FileTracker *m_fileTracker = nullptr;
-    #endif
-
+protected:
     AudioManager *m_audioManager         = nullptr;
     SceneManager *m_sceneManager         = nullptr;
     AssetsManager *m_assetsManager       = nullptr;
@@ -52,12 +41,11 @@ private:
 
     unsigned long long m_lastRenderTime = 0;
 
-    // If this is too low, Qt stops it when dragging
-    // something around the window :(
+    // If its too low, Qt stops it when dragging smthing around the screen :(
     const int c_redrawDelay = 16; // 60 FPS cap
-    //const int c_redrawDelay = 35; // 30 FPS cap
 
-    friend class FileTracker;
+    virtual void OnMainLoopIterationEnd();
+
     friend class SceneManager;
     friend class BehaviourManager;
 };

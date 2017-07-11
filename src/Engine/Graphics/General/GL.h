@@ -7,7 +7,6 @@
 #include "Bang/Path.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
-#include "Bang/G_Image.h"
 #include "Bang/Matrix4.h"
 
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
@@ -44,7 +43,7 @@ public:
         None           = 0,
         Texture2D      = GL_TEXTURE_2D,
         ShaderProgram  ,
-        G_Framebuffer    = GL_FRAMEBUFFER,
+        Framebuffer    = GL_FRAMEBUFFER,
         VAO            ,
         VBO
     };
@@ -59,7 +58,7 @@ public:
     static void ClearError();
     static bool CheckError(int line = 0, const String &func = "",
                            const String &file = "");
-    static bool CheckG_FramebufferError();
+    static bool CheckFramebufferError();
 
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,

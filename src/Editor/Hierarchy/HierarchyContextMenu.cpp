@@ -5,13 +5,12 @@
 #include <QTreeWidgetItem>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Debug.h"
+#include "Bang/File.h"
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
 #include "Bang/Prefab.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/GameObject.h"
-#include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectClipboard.h"
 

@@ -10,6 +10,7 @@ UI_DIR  = $$BANG_ROOT/include/Bang/UI_Qt
 
 INCLUDEPATH += \
     $$BANG_ROOT/include/Bang/BangGraphics \
+    $$BANG_ROOT/include/Bang/BangEngine \
     $$BANG_ROOT/include/Bang/BangEditor \
     $$UI_DIR
 
@@ -24,29 +25,20 @@ EDITOR {
 
 SOURCES += \
     $$BANG_ROOT/src/Editor/General/GameObjectClipboard.cpp \
-    $$BANG_ROOT/src/Editor/General/Application.cpp \
-    $$BANG_ROOT/src/Editor/Windows/IWindow.cpp \
-    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.cpp \
-    $$BANG_ROOT/src/Editor/Windows/GameWindow.cpp \
     $$BANG_ROOT/src/Editor/General/IconManager.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/AssetFileCreator.cpp \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp \
-    $$BANG_ROOT/src/Editor/General/Cursor.cpp
+    $$BANG_ROOT/src/Editor/General/EditorApplication.cpp \
+    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/IconManager.h \
-    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.h \
     $$BANG_ROOT/src/Engine/IO/Files/AssetFileCreator.h \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourRefresherTimer.h \
-    $$BANG_ROOT/src/Editor/General/Application.h
+    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourRefresherTimer.h
 
 EDITOR {
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/GameObjectClipboard.h \
-    $$BANG_ROOT/src/Editor/Windows/IWindow.h \
-    $$BANG_ROOT/src/Editor/Windows/GameWindow.h \
     $$BANG_ROOT/src/Engine/IO/Files/FileTracker.h \
-    $$BANG_ROOT/src/Editor/General/Cursor.h \
     $$BANG_ROOT/src/Editor/General/Shortcut.h \
     $$BANG_ROOT/src/Editor/Windows/EditorWindow.h \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorGizmosGameObject.h \

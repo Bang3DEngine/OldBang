@@ -21,6 +21,11 @@ EDITOR {
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
+    $$BANG_ROOT/src/Editor/General/Cursor.cpp \
+    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.cpp \
+    $$BANG_ROOT/src/Editor/General/Application.cpp \
+    $$BANG_ROOT/src/Editor/Windows/GameWindow.cpp \
+    $$BANG_ROOT/src/Editor/Windows/IWindow.cpp \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
@@ -115,6 +120,11 @@ SOURCES += \
 
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
+    $$BANG_ROOT/src/Editor/General/Cursor.h \
+    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.h \
+    $$BANG_ROOT/src/Editor/Windows/GameWindow.h \
+    $$BANG_ROOT/src/Editor/General/Application.h \
+    $$BANG_ROOT/src/Editor/Windows/IWindow.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \

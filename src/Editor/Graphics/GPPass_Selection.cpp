@@ -20,8 +20,8 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
 {
     GPPass::InPass(renderers, sceneChildren);
 
-    p_selectionG_Framebuffer->ClearDepth();
-    p_selectionG_Framebuffer->SetAllDrawBuffers();
+    p_selectionFramebuffer->ClearDepth();
+    p_selectionFramebuffer->SetAllDrawBuffers();
 
     GPPass_RenderLayer *parentPassRenderLayer =
             Object::SCast<GPPass_RenderLayer>(p_parentPass);
@@ -31,7 +31,7 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
         for (Renderer *rend : renderers)
         {
             if (!CanRender(rend)) { continue; }
-            p_selectionG_Framebuffer->RenderForSelectionBuffer(rend);
+            p_selectionFramebuffer->RenderForSelectionBuffer(rend);
         }
     }
     else

@@ -25,7 +25,8 @@ EditorWindow::EditorWindow(QWidget *parent) :
                      this, SLOT(Refresh()));
 }
 
-void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
+void EditorWindow::InitFromMainBinary(QMainWindow *window,
+                                      QApplication *application)
 {
     EditorWindow::s_win = new EditorWindow();
     EditorWindow::s_win->m_editorState        = new EditorState();

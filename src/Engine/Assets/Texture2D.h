@@ -3,7 +3,6 @@
 
 #include "Bang/Array.h"
 #include "Bang/Asset.h"
-#include "Bang/G_Image.h"
 #include "Bang/G_Texture2D.h"
 
 class Texture2D : public G_Texture2D,

@@ -1,3 +1,4 @@
+include(./BangCommon.pri)
 system(rm -f Makefile)
 system(rm -f .donePreprocess)
 system(cd $$PWD ; ../scripts/qmakeAll.sh Bang.pro)
@@ -16,11 +17,15 @@ BangDataStructures \
 BangGraphics \
 BangPreprocessor \
 BangEngine \
-BangEditor \
 BangMain
 
 BangPreprocessor.depends += BangDataStructures
 BangGraphics.depends     += BangDataStructures
 BangEditor.depends       += BangDataStructures BangPreprocessor
 BangEngine.depends       += BangDataStructures BangPreprocessor BangGraphics
-BangMain.depends         += BangDataStructures BangPreprocessor BangEditor BangEngine
+BangMain.depends         += BangDataStructures BangPreprocessor BangEngine
+
+EDITOR {
+    SUBDIRS += BangEditor
+    BangMain.depends += BangEditor
+}

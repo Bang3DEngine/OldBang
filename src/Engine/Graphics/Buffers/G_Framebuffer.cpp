@@ -39,7 +39,7 @@ void G_Framebuffer::CreateColorAttachment(AttachmentId attId,
 
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
                            tex->GetGLId(), 0);
-    GL::CheckG_FramebufferError();
+    GL::CheckFramebufferError();
     GL_CheckError();
     tex->UnBind();
     UnBind();
@@ -57,7 +57,7 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
                               GL_RENDERBUFFER, m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-    GL::CheckG_FramebufferError();
+    GL::CheckFramebufferError();
     GL_CheckError();
     UnBind();
 }
@@ -166,7 +166,7 @@ void G_Framebuffer::ClearColor(const Color &clearColor)
 
 GL::BindTarget G_Framebuffer::GetGLBindTarget() const
 {
-    return GL::BindTarget::G_Framebuffer;
+    return GL::BindTarget::Framebuffer;
 }
 
 void G_Framebuffer::Bind() const

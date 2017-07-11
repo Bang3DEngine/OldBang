@@ -6,15 +6,15 @@
 #include "Bang/GameBuilder.h"
 #include "Bang/GameBuildDialog.h"
 
-#define CHECK_CANCEL if (m_canceled) \
-                     { QThread::currentThread()->exit(0); return; }
-
 GameBuilderJob::GameBuilderJob()
 {
 }
 
 void GameBuilderJob::BuildGame()
 {
+    #define CHECK_CANCEL if (m_canceled) \
+                     { QThread::currentThread()->exit(0); return; }
+
     ENSURE(!m_executableFilepath.IsEmpty());
     GameBuilder *gb = GameBuilder::GetInstance(); ENSURE(gb);
 

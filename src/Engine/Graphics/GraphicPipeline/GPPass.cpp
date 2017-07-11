@@ -11,7 +11,7 @@ GPPass::GPPass(GraphicPipeline *graphicPipeline,
     p_graphicPipeline = graphicPipeline;
     p_gbuffer = graphicPipeline->GetGBuffer();
     #ifdef BANG_EDITOR
-    p_selectionG_Framebuffer = graphicPipeline->GetSelectionFramebuffer();
+    p_selectionFramebuffer = graphicPipeline->GetSelectionFramebuffer();
     #endif
 
     for (GPPass *subPass : subPasses)

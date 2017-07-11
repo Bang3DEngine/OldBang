@@ -123,7 +123,7 @@ private:
     MessageId AddMessage(const Message &message,
                          int forcedMessageId = -1);
 
-    friend class Application;
+    friend class EditorApplication;
 };
 
 #endif // CONSOLE_H

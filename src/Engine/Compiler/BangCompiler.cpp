@@ -78,6 +78,7 @@ BangCompiler::Job BangCompiler::BuildCommonJob(bool forGame)
                                      "BangGraphics",
                                      "BangEngine",
                                      "BangEditor"}) );
+    if (forGame) { job.libraries.RemoveAll("BangEditor"); }
 
     job.flags =  {"-O0", "-g",
                   "-Wl,-O0,--export-dynamic",

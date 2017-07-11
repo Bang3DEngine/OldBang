@@ -28,7 +28,7 @@ bool GL::CheckError(int line, const String &func, const String &file)
     return error;
 }
 
-bool GL::CheckG_FramebufferError()
+bool GL::CheckFramebufferError()
 {
     bool error = false;
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -194,7 +194,7 @@ void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
         case BindTarget::ShaderProgram:
             glUseProgram(glId);
         break;
-        case BindTarget::G_Framebuffer:
+        case BindTarget::Framebuffer:
             glBindFramebuffer(GL_FRAMEBUFFER, glId);
         break;
         case BindTarget::VAO:

@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "Bang/Array.h"
+#include "Bang/Vector2.h"
 
 class G_Screen
 {

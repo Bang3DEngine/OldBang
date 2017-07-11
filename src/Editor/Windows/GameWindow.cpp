@@ -40,6 +40,9 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
     GameWindow::s_m_win->m_mainWindow->showMaximized();
 
     GameWindow::s_m_win->m_app = application;
+
+    GameWindow::s_m_win->m_screen->makeCurrent();
+    GameWindow::s_m_win->m_screen->Initialize();
 }
 
 GameWindow *GameWindow::GetInstance()

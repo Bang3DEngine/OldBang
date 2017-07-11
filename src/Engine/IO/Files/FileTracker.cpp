@@ -8,8 +8,8 @@
 #include "Bang/BFile.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
-#include "Bang/Application.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/EditorApplication.h"
 
 FileTracker::FileTracker()
 {
@@ -29,7 +29,7 @@ FileTracker::FileTracker()
 
 FileTracker *FileTracker::GetInstance()
 {
-    return Application::GetInstance()->m_fileTracker;
+    return EditorApplication::GetInstance()->m_fileTracker;
 }
 
 List< std::pair<Path, Path> > FileTracker::GetMovedPathsList() const

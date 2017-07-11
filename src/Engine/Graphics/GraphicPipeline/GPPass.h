@@ -38,7 +38,7 @@ protected:
     List<GPPass*> m_subPasses;
 
     #ifdef BANG_EDITOR
-    SelectionFramebuffer *p_selectionG_Framebuffer = nullptr;
+    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
     #endif
 
 };
