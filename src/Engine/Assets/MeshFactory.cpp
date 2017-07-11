@@ -7,10 +7,6 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/AssetsManager.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/GameObject.h"
-#endif
-
 Mesh* MeshFactory::GetPlane()
 {
     return AssetsManager::Load<Mesh>( EPATH("Meshes/Plane.bmesh") );

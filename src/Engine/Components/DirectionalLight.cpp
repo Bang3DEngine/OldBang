@@ -10,10 +10,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/InspectorWidget.h"
-#endif
-
 DirectionalLight::DirectionalLight()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(

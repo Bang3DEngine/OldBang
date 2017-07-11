@@ -254,7 +254,6 @@ void AudioSource::OnDrawGizmos(bool depthed, bool overlay)
 {
     Component::OnDrawGizmos(depthed, overlay);
 
-    #ifdef BANG_EDITOR
     if (!depthed && !overlay)
     {
         Texture2D *tex = AssetsManager::Load<Texture2D>(
@@ -271,7 +270,6 @@ void AudioSource::OnDrawGizmos(bool depthed, bool overlay)
         Gizmos::SetPosition(transform->GetPosition());
         Gizmos::RenderSimpleSphere(transform->GetPosition(), m_range);
     }
-    #endif
 }
 
 ALuint AudioSource::GetALSourceId() const

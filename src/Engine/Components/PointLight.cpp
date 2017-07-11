@@ -8,11 +8,6 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/InspectorWidget.h"
-#endif
-
-
 PointLight::PointLight() : Light()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(

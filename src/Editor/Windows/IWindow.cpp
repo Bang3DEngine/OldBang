@@ -1,13 +1,6 @@
 #include "Bang/IWindow.h"
 
-#include "Bang/Application.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/EditorWindow.h"
-#else
-#include "Bang/GameWindow.h"
-#endif
-
+#include "Bang/SingletonManager.h"
 
 IWindow::IWindow()
 {
@@ -21,11 +14,7 @@ QWidget *IWindow::GetWidgetBelowMouse()
 
 IWindow *IWindow::GetInstance()
 {
-    #ifdef BANG_EDITOR
-    return EditorWindow::GetInstance();
-    #else
-    return GameWindow::GetInstance();
-    #endif
+    return SingletonManager::Get<IWindow>();
 }
 
 bool IWindow::IsInFront()

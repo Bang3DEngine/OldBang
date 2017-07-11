@@ -12,10 +12,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/InspectorWidget.h"
-#endif
-
 Light::Light()
 {
 }

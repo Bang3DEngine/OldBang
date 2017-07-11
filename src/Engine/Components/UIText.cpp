@@ -14,11 +14,6 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/GraphicPipeline.h"
 
-#ifdef BANG_EDITOR
-    #include "Bang/SerializableObject.h"
-    #include "Bang/SelectionFramebuffer.h"
-#endif
-
 UIText::UIText() : UIRenderer()
 {
     SetMesh( new Mesh() );

@@ -203,7 +203,6 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     return screenRect;
 }
 
-#ifdef BANG_EDITOR
 void Camera::OnDrawGizmos(bool depthed, bool overlay)
 {
     if (gameObject->GetHideFlags()->IsOn(HideFlag::HideInGame)) return;
@@ -246,7 +245,6 @@ void Camera::OnDrawGizmos(bool depthed, bool overlay)
         }
     }
 }
-#endif
 
 void Camera::Read(const XMLNode &xmlInfo)
 {
