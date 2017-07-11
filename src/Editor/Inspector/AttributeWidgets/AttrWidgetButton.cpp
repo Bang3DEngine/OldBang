@@ -3,15 +3,13 @@
 #include <QVBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Debug.h"
 #include "Bang/Inspector.h"
 
-AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
-                                   InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget, false, false)
+AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute, false, false)
 {
     QLayout *layout = new QVBoxLayout();
-    m_layout.addLayout(layout, 1);
+    m_horizontalLayout.addLayout(layout, 1);
 
     m_listener = xmlAttribute.GetButtonListener();
 
@@ -24,7 +22,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     m_heightSizeHint = 50;
 
     AfterConstructor();
-    m_layout.setAlignment(Qt::AlignRight);
+    m_horizontalLayout.setAlignment(Qt::AlignRight);
 }
 
 void AttrWidgetButton::SetValue(const String &buttonText)

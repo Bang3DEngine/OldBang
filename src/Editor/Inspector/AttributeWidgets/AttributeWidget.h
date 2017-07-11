@@ -27,8 +27,8 @@ public:
                                              InspectorWidget *inspectorWidget);
 
 protected:
-    QHBoxLayout m_layout;
-    QLabel *m_label = nullptr;
+    QHBoxLayout m_horizontalLayout;
+    QLabel *m_attrNameLabel = nullptr;
     int m_rowIndexInGridLayout = 0;
     int m_heightSizeHint = -1;
 
@@ -39,10 +39,7 @@ protected:
     bool m_inlined  = false;
     bool m_hidden   = false;
 
-    InspectorWidget *p_inspectorWidget = nullptr;
-
     AttributeWidget(const XMLAttribute &xmlAttribute,
-                    InspectorWidget *inspectorWidget,
                     bool isSubWidget = false,
                     bool createLabel = true,
                     bool labelAbove  = false);

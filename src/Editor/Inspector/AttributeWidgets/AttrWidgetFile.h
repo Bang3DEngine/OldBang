@@ -17,8 +17,7 @@ class AttrWidgetFile : public AttributeWidget,
     Q_OBJECT
 
 public:
-    AttrWidgetFile(const XMLAttribute &xmlAttribute,
-                   InspectorWidget *p_inspectorWidget);
+    AttrWidgetFile(const XMLAttribute &xmlAttribute);
     virtual ~AttrWidgetFile();
 
     virtual void SetValue(const Path &filepath, bool draggedFile = false);

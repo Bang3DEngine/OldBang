@@ -2,12 +2,11 @@
 
 #include "Bang/Array.h"
 
-AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
-                               InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget)
+AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute)
 {
     QLayout *layout = new QHBoxLayout();
-    m_layout.addLayout(layout, 1);
+    m_horizontalLayout.addLayout(layout, 1);
 
     m_comboBox = new ComboBox(this);
     layout->addWidget(m_comboBox);
@@ -16,8 +15,8 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
     {
         m_comboBox->addItem( enumString.ToQString() );
     }
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
-            inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    // connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+    //         inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
 
     m_heightSizeHint = 45;
 

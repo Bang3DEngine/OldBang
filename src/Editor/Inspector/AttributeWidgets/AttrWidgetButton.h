@@ -16,8 +16,7 @@ private:
     IAttrWidgetButtonListener *m_listener = nullptr;
 
 public:
-    AttrWidgetButton(const XMLAttribute &xmlAttribute,
-                     InspectorWidget *inspectorWidget);
+    AttrWidgetButton(const XMLAttribute &xmlAttribute);
 
     void SetValue(const String &buttonText);
     String GetValue() const;

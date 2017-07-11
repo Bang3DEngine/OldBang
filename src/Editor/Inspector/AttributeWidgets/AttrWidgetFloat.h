@@ -12,7 +12,8 @@
 class XMLAttribute;
 class InspectorWidget;
 class FloatComponentSlotSpinBox;
-class AttrWidgetFloat : public AttributeWidget //Slot for a float (label + float)
+//Slot for a float (label + float)
+class AttrWidgetFloat : public AttributeWidget
 {
     Q_OBJECT
 
@@ -21,7 +22,6 @@ public:
     // isSubWidget indicates if it belongs to another parent attributeWidget,
     // such as AttrWidgetFloat's inside AttrWidgetVectorFloat
     AttrWidgetFloat(const XMLAttribute &xmlAttribute,
-                    InspectorWidget *p_inspectorWidget,
                     bool isSubWidget = false);
 
     virtual void SetValue(float f);

@@ -1,6 +1,9 @@
 #ifndef AUDIOSOURCEINSPECTORWIDGET_H
 #define AUDIOSOURCEINSPECTORWIDGET_H
 
+#include <QPushButton>
+#include "Bang/WinUndef.h"
+
 #include "Bang/ComponentWidget.h"
 #include "Bang/AttrWidgetButton.h"
 
@@ -14,7 +17,7 @@ protected:
     virtual void CreateWidgetSlots(const XMLNode &xmlInfo) override;
 
 private:
-    AttrWidgetButton *m_playStopButton = nullptr;
+    QPushButton *m_playStopButton = nullptr;
 };
 
 #endif // AUDIOSOURCEINSPECTORWIDGET_H

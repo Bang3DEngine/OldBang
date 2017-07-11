@@ -9,13 +9,13 @@
 
 #include "Bang/AttrWidgetFloat.h"
 
-class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size N
+ //Slot for a vector of size N
+class AttrWidgetVectorFloat : public AttributeWidget
 {
 public:
     Array<AttrWidgetFloat*> m_floatSlots;
 
-    AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
-                          InspectorWidget *p_inspectorWidget);
+    AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute);
 
     virtual void SetValue(const Array<float> &v);
     virtual Array<float> GetValue();

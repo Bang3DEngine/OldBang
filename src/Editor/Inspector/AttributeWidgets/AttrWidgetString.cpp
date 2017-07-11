@@ -7,14 +7,13 @@
 #include "Bang/InspectorWidget.h"
 
 
-AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
-                                   InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget, false, true,
+AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute, false, true,
                     xmlAttribute.HasProperty(XMLProperty::BigText))
 {
     QLayout *layout = new QVBoxLayout();
-    m_layout.addLayout(layout, 0);
-    m_layout.setContentsMargins(0,0,0,0);
+    m_horizontalLayout.addLayout(layout, 0);
+    m_horizontalLayout.setContentsMargins(0,0,0,0);
 
     bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
     QWidget *textWidget = nullptr;
@@ -25,8 +24,8 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         textWidget = m_lineEdit;
 
-        connect(m_lineEdit, SIGNAL(textChanged(QString)),
-                p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        // connect(m_lineEdit, SIGNAL(textChanged(QString)),
+        //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
     }
     else
     {
@@ -36,11 +35,11 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         m_heightSizeHint = 550;
         textWidget = m_textEdit;
 
-        connect(m_textEdit, SIGNAL(textChanged(QString)),
-                p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        // connect(m_textEdit, SIGNAL(textChanged(QString)),
+        //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
     }
 
-    m_layout.addWidget(textWidget);
+    m_horizontalLayout.addWidget(textWidget);
 
     AfterConstructor();
 }
@@ -92,12 +91,12 @@ void AttrWidgetString::OnFocusIn()
 void AttrWidgetString::OnFocusOut()
 {
     m_editing = false;
-    p_inspectorWidget->_OnSlotValueChanged();
+    // p_inspectorWidget->_OnSlotValueChanged();
 }
 
 void AttrWidgetString::OnKeyPressed()
 {
-    p_inspectorWidget->_OnSlotValueChanged();
+    // p_inspectorWidget->_OnSlotValueChanged();
 }
 
 QSize AttrWidgetString::sizeHint() const

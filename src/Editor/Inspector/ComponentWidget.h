@@ -24,7 +24,7 @@ public slots:
 
 protected:
     void SetClosed(bool closed) override;
-    virtual void CreateWidgetSlots(XMLNode &xmlInfo) override;
+    virtual void CreateWidgetSlots(const XMLNode &xmlInfo) override;
 
 private:
 

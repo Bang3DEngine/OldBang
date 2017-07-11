@@ -1,15 +1,14 @@
 #include "Bang/AttrWidgetBool.h"
 
-AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
-                               InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget)
+AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute)
 {
     m_checkbox = new CheckboxWidget();
     m_checkbox->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    m_layout.addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
+    m_horizontalLayout.addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
-    connect(m_checkbox, SIGNAL(clicked(bool)),
-            inspectorWidget, SLOT(_OnSlotValueChanged(bool)));
+    // connect(m_checkbox, SIGNAL(clicked(bool)),
+    //         inspectorWidget, SLOT(_OnSlotValueChanged(bool)));
 
     setFixedHeight(25);
     AfterConstructor();

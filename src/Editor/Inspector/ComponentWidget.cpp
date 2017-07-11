@@ -53,7 +53,7 @@ void ComponentWidget::SetClosed(bool closed)
     p_component->SetClosedInInspector(closed);
 }
 
-void ComponentWidget::CreateWidgetSlots(XMLNode &xmlInfo)
+void ComponentWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
 {
     InspectorWidget::CreateWidgetSlots(xmlInfo);
 }

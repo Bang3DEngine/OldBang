@@ -16,15 +16,14 @@
 #include "Bang/InspectorWidget.h"
 #include "Bang/DialogBrowseAssetFile.h"
 
-AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
-                               InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget)
+AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute)
 {
     m_allowedExtensions = xmlAttribute.GetPropertyValue(
                                   XMLProperty::FileExtension.GetName());
 
     m_hLayout = new QHBoxLayout();
-    m_layout.addLayout(m_hLayout, 1);
+    m_horizontalLayout.addLayout(m_hLayout, 1);
 
     m_iconLabel = new QLabel();
     m_iconLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -73,9 +72,9 @@ void AttrWidgetFile::Browse()
 {
     String selectedFile = "";
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
-    dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
-                 p_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
-                 m_allowedExtensions.Split(' ').To<List>());
+    // dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
+    //              p_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
+    //              m_allowedExtensions.Split(' ').To<List>());
     while (dialog->isVisible()) { Application::processEvents(); }
 
     Path selectedPath(selectedFile);
@@ -83,7 +82,7 @@ void AttrWidgetFile::Browse()
     {
         if (!selectedPath.IsFile()) { SetValue(Path::Empty); }
         else { SetValue(selectedPath); }
-        p_inspectorWidget->_OnSlotValueChanged();
+        // p_inspectorWidget->_OnSlotValueChanged();
     }
 }
 
@@ -131,8 +130,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
     if (draggedFile)
     {
-        Debug_Log("Dragged file: " << filepath);
-        p_inspectorWidget->_OnSlotValueChanged();
+        // p_inspectorWidget->_OnSlotValueChanged();
     }
 
     RefreshIcon();

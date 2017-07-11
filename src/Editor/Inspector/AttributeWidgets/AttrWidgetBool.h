@@ -19,8 +19,7 @@ private:
     CheckboxWidget *m_checkbox = nullptr;
 
 public:
-    AttrWidgetBool(const XMLAttribute &xmlAttribute,
-                   InspectorWidget *inspectorWidget);
+    AttrWidgetBool(const XMLAttribute &xmlAttribute);
 
     virtual void SetValue(bool value);
     virtual bool GetValue() const;

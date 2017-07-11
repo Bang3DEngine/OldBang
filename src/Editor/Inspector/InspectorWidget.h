@@ -91,7 +91,7 @@ protected:
     void UpdateCloseOpenButtonIcon();
     virtual void SetClosed(bool closedWidget);
 
-    virtual void CreateWidgetSlots(XMLNode &xmlInfo);
+    virtual void CreateWidgetSlots(const XMLNode &xmlInfo);
 
 protected slots:
     void OnCloseOpenButtonClicked();
@@ -108,7 +108,7 @@ private:
 
 
     void UpdateContentMargins();
-    void ConstructFromWidgetXMLInfo(XMLNode &info);
+    void ConstructFromWidgetXMLInfo(const XMLNode &info);
 
 private slots:
     void _OnSlotValueChanged(int _);

@@ -8,19 +8,18 @@
 #include "Bang/InspectorWidget.h"
 
 AttrWidgetInt::AttrWidgetInt(const XMLAttribute &xmlAttribute,
-                             InspectorWidget *inspectorWidget,
                              bool isSubWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget, isSubWidget, !isSubWidget)
+    AttributeWidget(xmlAttribute, isSubWidget, !isSubWidget)
 {
     QVBoxLayout *layout = new QVBoxLayout();
-    m_layout.addLayout(layout, 1);
-    m_layout.setMargin(1);
+    m_horizontalLayout.addLayout(layout, 1);
+    m_horizontalLayout.setMargin(1);
 
     m_lineEdit = new IntComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);
     m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    connect(m_lineEdit, SIGNAL(textChanged(QString)),
-            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    // connect(m_lineEdit, SIGNAL(textChanged(QString)),
+    //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
 
     layout->addWidget(m_lineEdit);
 

@@ -3,13 +3,12 @@
 #include "Bang/Math.h"
 #include "Bang/EditorWindow.h"
 
-AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
-                                 InspectorWidget *inspectorWidget) :
-  AttributeWidget(xmlAttribute, inspectorWidget)
+AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute) :
+  AttributeWidget(xmlAttribute)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setMargin(0); vLayout->setSpacing(0);
-    m_layout.addLayout(vLayout, 1);
+    m_horizontalLayout.addLayout(vLayout, 1);
 
     m_colorDialog = new ColorDialog();
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
@@ -76,7 +75,7 @@ void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
 void AttrWidgetColor::OnColorChanged(const QColor &c)
 {
     SetValue(Color::FromQColor(c));
-    p_inspectorWidget->_OnSlotValueChanged();
+    // p_inspectorWidget->_OnSlotValueChanged();
 }
 
 

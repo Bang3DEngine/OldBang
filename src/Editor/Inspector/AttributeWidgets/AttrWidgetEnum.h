@@ -14,8 +14,7 @@ private:
     ComboBox *m_comboBox = nullptr;
 
 public:
-    AttrWidgetEnum(const XMLAttribute &xmlAttribute,
-                   InspectorWidget *p_inspectorWidget);
+    AttrWidgetEnum(const XMLAttribute &xmlAttribute);
 
     virtual void SetValue(int index);
     virtual int GetValue();

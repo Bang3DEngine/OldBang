@@ -24,7 +24,6 @@ private:
 public:
 
     AttrWidgetInt(const XMLAttribute &xmlAttribute,
-                  InspectorWidget *p_inspectorWidget,
                   bool isSubWidget = false);
 
     virtual void SetValue(int a);

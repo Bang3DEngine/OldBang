@@ -30,8 +30,7 @@ private:
 
 public:
 
-    AttrWidgetColor(const XMLAttribute &xmlAttribute,
-                    InspectorWidget *inspectorWidget);
+    AttrWidgetColor(const XMLAttribute &xmlAttribute);
     virtual ~AttrWidgetColor();
 
     void SetValue(const Color &c);

@@ -1,20 +1,18 @@
 #include "Bang/AttrWidgetVectorFloat.h"
 
-AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
-                                             InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget, false, true, true)
+AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute) :
+    AttributeWidget(xmlAttribute, false, true, true)
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
-    m_layout.addLayout(hLayout, 1);
-    m_layout.setSpacing(0);
-    m_layout.setMargin(0);
+    m_horizontalLayout.addLayout(hLayout, 1);
+    m_horizontalLayout.setSpacing(0);
+    m_horizontalLayout.setMargin(0);
 
     String labels[] = {"X", "Y", "Z", "W"};
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (uint i = 0; i < numberOfFields; ++i)
     {
-        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget,
-                                                 true);
+        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, true);
         m_floatSlots.PushBack(s);
 
         QLabel *label = new QLabel(labels[i].ToQString());

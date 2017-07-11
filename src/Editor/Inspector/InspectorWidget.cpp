@@ -42,7 +42,7 @@ void InspectorWidget::Init(IInspectable *relatedInspectable)
     RefreshWidgetValues();
 }
 
-void InspectorWidget::ConstructFromWidgetXMLInfo(XMLNode &xmlInfo)
+void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
 {
     setVisible(false);
 
@@ -264,7 +264,7 @@ void InspectorWidget::SetIcon(const QPixmap &icon)
     m_headerLayout.insertWidget(1, &m_iconLabel, 0, Qt::AlignCenter);
 }
 
-void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
+void InspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
 {
     m_tagName = xmlInfo.GetTagName();
     for (auto itAttr : xmlInfo.GetAttributesListInOrder())
@@ -274,6 +274,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
         if (w)
         {
+            m_gridLayout.addWidget(w, GetNextRowIndex(), 0);
             m_attrName_To_AttrWidget.Set(attribute.GetName(), w);
             if (attribute.HasProperty(XMLProperty::Hidden))
             {

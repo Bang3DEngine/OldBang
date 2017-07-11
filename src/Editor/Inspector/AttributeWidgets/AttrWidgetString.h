@@ -22,8 +22,7 @@ private:
     bool m_editing = false;
 
 public:
-    AttrWidgetString(const XMLAttribute &xmlAttribute,
-                     InspectorWidget *p_inspectorWidget);
+    AttrWidgetString(const XMLAttribute &xmlAttribute);
 
     virtual void SetValue(const String &value);
     virtual String GetValue() const;

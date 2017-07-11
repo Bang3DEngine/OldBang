@@ -19,18 +19,16 @@
 #include "Bang/AttrWidgetVectorFloat.h"
 
 AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
-                                 InspectorWidget *inspectorWidget,
                                  bool isSubWidget,
                                  bool createLabel,
-                                 bool labelAbove ) :
-    p_inspectorWidget(inspectorWidget)
+                                 bool labelAbove )
 {
     setVisible(false);
     m_xmlAttribute = xmlAttribute;
     Refresh(xmlAttribute);
 
-    m_layout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_layout.setContentsMargins(labelAbove ? 0 : 5,0,0,0);
+    m_horizontalLayout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_horizontalLayout.setContentsMargins(labelAbove ? 0 : 5,0,0,0);
 
     if (!isSubWidget)
     {
@@ -42,22 +40,13 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
             label = name.ToQString();
         }
 
-        QGridLayout *gridLayout = p_inspectorWidget->GetGridLayout();
-        m_rowIndexInGridLayout = p_inspectorWidget->GetNextRowIndex();
-
-        const int widgetRow = m_rowIndexInGridLayout + (labelAbove ? 1 : 0);
-        const int widgetCol = (labelAbove ? 0 : 1);
-        const int colSpan   = (labelAbove ? 2 : 1);
-        m_label = new QLabel(label);
-        m_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1,
-                              colSpan, Qt::AlignLeft | Qt::AlignVCenter);
-        gridLayout->addWidget(this, widgetRow, widgetCol, 1,
-                              colSpan, Qt::AlignVCenter);
+        m_attrNameLabel = new QLabel(label);
+        m_attrNameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        m_horizontalLayout.addWidget(m_attrNameLabel);
     }
     Refresh(xmlAttribute);
 
-    setLayout(&m_layout);
+    setLayout(&m_horizontalLayout);
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_heightSizeHint = labelAbove ? 45 : 25;
     setVisible(true);
@@ -76,76 +65,76 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
     setEnabled(m_enabled);
 
-    const bool hasToBeHidden = m_hidden || p_inspectorWidget->IsClosed();
+    const bool hasToBeHidden = m_hidden; // || p_inspectorWidget->IsClosed();
     if (hasToBeHidden && !isHidden()) // Only hide, to avoid window flickering
     {
         hide();
-        if (m_label) { m_label->hide(); }
+        if (m_attrNameLabel) { m_attrNameLabel->hide(); }
     }
     else if (!hasToBeHidden && isHidden())
     {
         setVisible(true); //show();
-        if (m_label) { m_label->setVisible(true); } //show(); }
+        if (m_attrNameLabel) { m_attrNameLabel->setVisible(true); } //show(); }
     }
 }
 
 int AttributeWidget::GetHeightSizeHint()
 {
-    if (m_hidden || p_inspectorWidget->IsClosed())
+    if (m_hidden) // || p_inspectorWidget->IsClosed())
     {
         return 0;
     }
     return m_heightSizeHint;
 }
 
-AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttribute,
-                                                   InspectorWidget *inspectorWidget)
+AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr,
+                                                   InspectorWidget *inspWidget)
 {
     AttributeWidget *w = nullptr;
-    XMLAttribute::Type attrType = xmlAttribute.GetType();
+    XMLAttribute::Type attrType = xmlAttr.GetType();
 
-    if (xmlAttribute.HasVectoredType())
+    if (xmlAttr.HasVectoredType())
     {
-        int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
+        int numberOfFields = xmlAttr.GetNumberOfFieldsOfType();
         if (numberOfFields == 1)
         {
             if (attrType == XMLAttribute::Type::Float)
             {
-                w = new AttrWidgetFloat(xmlAttribute, inspectorWidget, false);
+                w = new AttrWidgetFloat(xmlAttr, false);
             }
             else if (attrType == XMLAttribute::Type::Int)
             {
-                w = new AttrWidgetInt(xmlAttribute, inspectorWidget, false);
+                w = new AttrWidgetInt(xmlAttr, false);
             }
         }
         else
         {
-            w = new AttrWidgetVectorFloat(xmlAttribute, inspectorWidget);
+            w = new AttrWidgetVectorFloat(xmlAttr);
         }
     }
     else if (attrType == XMLAttribute::Type::File)
     {
-        w = new AttrWidgetFile(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetFile(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::String)
     {
-        w = new AttrWidgetString(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetString(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Bool)
     {
-        w = new AttrWidgetBool(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetBool(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Enum)
     {
-        w = new AttrWidgetEnum(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetEnum(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Color)
     {
-        w = new AttrWidgetColor(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetColor(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Button)
     {
-        w = new AttrWidgetButton(xmlAttribute, inspectorWidget);
+        w = new AttrWidgetButton(xmlAttr);
     }
 
     return w;
