@@ -5,7 +5,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/IconManager.h"
 #include "Bang/Inspectable.h"
-#include "Bang/ComponentWidget.h"
+#include "Bang/InspectorWidgetFactory.h"
 
 template <>
 class Inspectable<Component> : public IInspectable
@@ -49,8 +49,7 @@ public:
 
     virtual InspectorWidget *GetNewInspectorWidget() override
     {
-        ComponentWidget *cw = new ComponentWidget( GetComponent() );
-        return cw;
+        return InspectorWidgetFactory::CreateWidget( GetComponent() );
     }
 
     virtual List<IInspectable*> GetNewInspectablesToShow() override

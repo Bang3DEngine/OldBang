@@ -32,5 +32,7 @@ echo "Created include:"
 echo "   - From header '$HEADER_FILE'"
 echo "   - Into project '$INCLUDE_PROJ'"
 echo "   - In include file '$PWD/$INCLUDE_FILE'..."
+echo "   - With contents:"
+cat $INCLUDE_FILE 
 
 exit 0

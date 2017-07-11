@@ -89,21 +89,6 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Range",      m_range);
     xmlInfo->SetBool("Looping",     m_looping);
     xmlInfo->SetBool("PlayOnStart", m_playOnStart);
-
-    #ifdef BANG_EDITOR
-    AudioSource *noConstThis = const_cast<AudioSource*>(this);
-    if (IsPlaying())
-    {
-        xmlInfo->SetButton("Stop", noConstThis, {});
-        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
-    }
-    else
-    {
-
-        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
-        xmlInfo->SetButton("Play", noConstThis, {});
-    }
-    #endif
 }
 
 void AudioSource::Play(float delay)
