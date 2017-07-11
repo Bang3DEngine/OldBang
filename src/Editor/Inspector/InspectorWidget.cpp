@@ -96,87 +96,16 @@ XMLNode InspectorWidget::GetInspectableXMLInfo() const
 
 XMLNode InspectorWidget::GetWidgetXMLInfo() const
 {
-    // Gather all attributes
-    XMLNode xmlInfo;
-    xmlInfo.SetTagName(m_tagName);
-    for (XMLAttribute attribute : m_attributes)
+    // Gather all attributes XML info's, mantaining their original XMLProp's.
+    XMLNode xmlInfo(m_tagName);
+    for (const auto &attrWidget_originalAttr : m_attrWidget_To_XMLAttr)
     {
-        String attrName = attribute.GetName();
-        XMLAttribute::Type attrType = attribute.GetType();
-
-        if (m_attrName_To_AttrWidget.ContainsKey(attrName))
-        {
-            AttributeWidget *aw = m_attrName_To_AttrWidget[attrName];
-            if (attribute.HasVectoredType())
-            {
-                if (attrType == XMLAttribute::Type::Float)
-                {
-                    AttrWidgetFloat *wf = Object::SCast<AttrWidgetFloat>(aw);
-                    float v = wf->GetValue();
-                    attribute.SetFloat(v, attribute.GetProperties());
-                }
-                else if (attrType == XMLAttribute::Type::Int)
-                {
-                    AttrWidgetInt *wi = Object::SCast<AttrWidgetInt>(aw);
-                    int v = wi->GetValue();
-                    attribute.SetInt(v, attribute.GetProperties());
-                }
-                else
-                {
-                    AttrWidgetVectorFloat *awv =
-                            Object::SCast<AttrWidgetVectorFloat>(aw);
-                    Array<float> v = awv->GetValue();
-                    if (attrType == XMLAttribute::Type::Vector2)
-                    {
-                        attribute.SetVector2(Vector2(v[0], v[1]),
-                                             attribute.GetProperties());
-                    }
-                    else if (attrType == XMLAttribute::Type::Vector3)
-                    {
-                        attribute.SetVector3(Vector3(v[0], v[1], v[2]),
-                                             attribute.GetProperties());
-                    }
-                    else if (attrType == XMLAttribute::Type::Vector4 ||
-                             attrType == XMLAttribute::Type::Quaternion ||
-                             attrType == XMLAttribute::Type::Rect)
-                    {
-                        attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]),
-                                             attribute.GetProperties());
-                    }
-                }
-            }
-            else if (attrType == XMLAttribute::Type::File)
-            {
-                AttrWidgetFile *awf = Object::SCast<AttrWidgetFile>(aw);
-                attribute.SetFilepath(
-                    awf->GetPath(),
-                    attribute.GetPropertyValue(XMLProperty::FileExtension
-                                               .GetName()),
-                    attribute.GetProperties());
-            }
-            else if (attrType == XMLAttribute::Type::String)
-            {
-                AttrWidgetString *aws = Object::SCast<AttrWidgetString>(aw);
-                attribute.SetString(aws->GetValue(), attribute.GetProperties());
-            }
-            else if (attrType == XMLAttribute::Type::Bool)
-            {
-                AttrWidgetBool *wb = Object::SCast<AttrWidgetBool>(aw);
-                attribute.SetBool(wb->GetValue(), attribute.GetProperties());
-            }
-            else if (attrType == XMLAttribute::Type::Enum)
-            {
-                AttrWidgetEnum *awe = Object::SCast<AttrWidgetEnum>(aw);
-                attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(),
-                                  attribute.GetProperties());
-            }
-            else if (attrType == XMLAttribute::Type::Color)
-            {
-                AttrWidgetColor *awc = Object::SCast<AttrWidgetColor>(aw);
-                attribute.SetColor(awc->GetValue(), attribute.GetProperties());
-            }
-        }
-        xmlInfo.SetAttribute(attribute);
+        const AttributeWidget *aw = attrWidget_originalAttr.first;
+        const XMLAttribute &originalAttr = attrWidget_originalAttr.second;
+        XMLAttribute newAttr = aw->GetXMLAttribute();
+        newAttr.SetName(originalAttr.GetName());
+        newAttr.SetProperties(originalAttr.GetProperties());
+        xmlInfo.SetAttribute(newAttr);
     }
 
     return xmlInfo;
@@ -190,11 +119,6 @@ IInspectable *InspectorWidget::GetInspectable() const
 QGridLayout *InspectorWidget::GetGridLayout()
 {
     return &m_gridLayout;
-}
-
-int InspectorWidget::GetNextRowIndex() const
-{
-    return m_gridLayout.rowCount();
 }
 
 void InspectorWidget::SetTitle(const String &title)
@@ -265,12 +189,11 @@ void InspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
     m_tagName = xmlInfo.GetTagName();
     for (auto itAttr : xmlInfo.GetAttributesListInOrder())
     {
-        XMLAttribute attribute = itAttr.second;
-        m_attributes.PushBack(attribute);
+        const XMLAttribute &attribute = itAttr.second;
         AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute);
         if (!w) continue;
 
-        m_gridLayout.addWidget(w, GetNextRowIndex(), 0);
+        m_gridLayout.addWidget(w, m_gridLayout.rowCount(), 0);
         QObject::connect(w, SIGNAL(OnValueChanged()),
                          this, SLOT(OnAttrWidgetValueChanged()));
 
@@ -279,6 +202,8 @@ void InspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
         {
             w->hide();
         }
+
+        m_attrWidget_To_XMLAttr.Set(w, attribute);
     }
 }
 

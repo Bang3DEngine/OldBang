@@ -56,9 +56,7 @@ public:
     XMLNode GetWidgetXMLInfo() const;
 
     IInspectable* GetInspectable() const;
-
     QGridLayout *GetGridLayout();
-    int GetNextRowIndex() const;
 
     void SetTitle(const String &title);
     bool IsClosed() const;
@@ -103,9 +101,8 @@ private:
 
     String m_tagName = "";
     QTimer m_refreshTimer;
-    Array<XMLAttribute> m_attributes;
+    Map<AttributeWidget*, XMLAttribute> m_attrWidget_To_XMLAttr;
     mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
-
 
     void UpdateContentMargins();
     void ConstructFromWidgetXMLInfo(const XMLNode &info);

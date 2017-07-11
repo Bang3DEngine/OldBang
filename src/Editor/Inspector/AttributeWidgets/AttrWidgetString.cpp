@@ -83,6 +83,13 @@ void AttrWidgetString::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetString() );
 }
 
+XMLAttribute AttrWidgetString::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetString(GetValue());
+    return attr;
+}
+
 void AttrWidgetString::OnFocusIn()
 {
     m_editing = true;

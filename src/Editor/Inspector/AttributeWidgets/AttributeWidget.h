@@ -26,6 +26,7 @@ public:
     void SetVisible(bool visible);
     bool IsVisible() const;
 
+    virtual XMLAttribute GetXMLAttribute() const;
     static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute);
 
 protected:

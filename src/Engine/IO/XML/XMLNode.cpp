@@ -5,9 +5,9 @@
 #include "Bang/FileReader.h"
 #include "Bang/IAttrWidgetButtonListener.h"
 
-XMLNode::XMLNode(const String &tagName) :
-    m_tagName(tagName)
+XMLNode::XMLNode(const String &tagName)
 {
+    SetTagName(tagName);
 }
 
 XMLNode::~XMLNode()

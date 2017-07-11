@@ -27,9 +27,10 @@ public:
                   bool isSubWidget = false);
 
     virtual void SetValue(int a);
-    virtual int GetValue();
+    virtual int GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual XMLAttribute GetXMLAttribute() const override;
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();

@@ -17,9 +17,10 @@ public:
     AttrWidgetEnum(const XMLAttribute &xmlAttribute);
 
     virtual void SetValue(int index);
-    virtual int GetValue();
+    virtual int GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual XMLAttribute GetXMLAttribute() const override;
 };
 
 class ComboBox : public QComboBox

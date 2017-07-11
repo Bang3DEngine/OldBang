@@ -44,6 +44,13 @@ void AttrWidgetButton::Refresh(const XMLAttribute &attribute)
     if (attribute.GetType() != XMLAttribute::Type::Button) return;
 }
 
+XMLAttribute AttrWidgetButton::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetButton(GetValue(), m_listener );
+    return attr;
+}
+
 void AttrWidgetButton::OnButtonClicked(bool _)
 {
     if (m_listener)

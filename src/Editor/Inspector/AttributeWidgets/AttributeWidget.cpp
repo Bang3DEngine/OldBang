@@ -83,6 +83,12 @@ bool AttributeWidget::IsVisible() const
     return !isHidden();
 }
 
+XMLAttribute AttributeWidget::GetXMLAttribute() const
+{
+    XMLAttribute empty;
+    return empty; // Empty
+}
+
 AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr)
 {
     const XMLAttribute::Type attrType = xmlAttr.GetType();

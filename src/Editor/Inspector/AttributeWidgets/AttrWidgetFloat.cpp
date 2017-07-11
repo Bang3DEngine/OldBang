@@ -37,7 +37,7 @@ void AttrWidgetFloat::SetValue(float f)
     }
 }
 
-float AttrWidgetFloat::GetValue()
+float AttrWidgetFloat::GetValue() const
 {
     return m_lineEdit->GetFloat();
 }
@@ -48,6 +48,13 @@ void AttrWidgetFloat::Refresh(const XMLAttribute &attribute)
 
     if (attribute.GetType() != XMLAttribute::Type::Float) return;
     SetValue( attribute.GetFloat() );
+}
+
+XMLAttribute AttrWidgetFloat::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetFloat(GetValue());
+    return attr;
 }
 
 void AttrWidgetFloat::OnLineEditFocusIn()

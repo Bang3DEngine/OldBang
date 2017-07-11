@@ -30,7 +30,7 @@ void AttrWidgetEnum::SetValue(int index)
     m_comboBox->blockSignals(false);
 }
 
-int AttrWidgetEnum::GetValue()
+int AttrWidgetEnum::GetValue() const
 {
     return m_comboBox->currentIndex();
 }
@@ -40,6 +40,19 @@ void AttrWidgetEnum::Refresh(const XMLAttribute &attribute)
     AttributeWidget::Refresh(attribute);
     if (attribute.GetType() != XMLAttribute::Type::Enum) return;
     SetValue( attribute.GetEnumSelectedIndex() );
+}
+
+XMLAttribute AttrWidgetEnum::GetXMLAttribute() const
+{
+    Array<String> enumNames;
+    for (int i = 0; i < m_comboBox->children().size(); ++i)
+    {
+        enumNames.PushBack(m_comboBox->itemText(i));
+    }
+
+    XMLAttribute attr;
+    attr.SetEnum(enumNames, GetValue());
+    return attr;
 }
 
 ComboBox::ComboBox(QWidget *parent)

@@ -131,7 +131,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
     RefreshIcon();
 }
 
-String AttrWidgetFile::GetValue()
+String AttrWidgetFile::GetValue() const
 {
     return m_filepath.GetName();
 }
@@ -188,6 +188,13 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
     AttributeWidget::Refresh(attribute);
     if (attribute.GetType() != XMLAttribute::Type::File) return;
     SetValue( attribute.GetFilepath() );
+}
+
+XMLAttribute AttrWidgetFile::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetFilepath(GetPath(), m_allowedExtensions);
+    return attr;
 }
 
 const Path &AttrWidgetFile::GetPath() const

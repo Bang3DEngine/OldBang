@@ -39,7 +39,7 @@ void AttrWidgetInt::SetValue(int a)
     }
 }
 
-int AttrWidgetInt::GetValue()
+int AttrWidgetInt::GetValue() const
 {
     return m_lineEdit->GetInt();
 }
@@ -50,6 +50,13 @@ void AttrWidgetInt::Refresh(const XMLAttribute &attribute)
 
     if (attribute.GetType() != XMLAttribute::Type::Int) return;
     SetValue( attribute.GetInt() );
+}
+
+XMLAttribute AttrWidgetInt::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetInt(GetValue());
+    return attr;
 }
 
 void AttrWidgetInt::OnLineEditFocusIn()

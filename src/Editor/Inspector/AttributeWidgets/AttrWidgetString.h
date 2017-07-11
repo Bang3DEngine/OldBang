@@ -28,6 +28,7 @@ public:
     virtual String GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual XMLAttribute GetXMLAttribute() const override;
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();

@@ -21,13 +21,14 @@ public:
     virtual ~AttrWidgetFile();
 
     virtual void SetValue(const Path &filepath, bool draggedFile = false);
-    virtual String GetValue();
+    virtual String GetValue() const;
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
     virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual XMLAttribute GetXMLAttribute() const override;
 
     const Path& GetPath() const;
 

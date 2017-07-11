@@ -72,6 +72,13 @@ void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetColor() );
 }
 
+XMLAttribute AttrWidgetColor::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetColor(GetValue());
+    return attr;
+}
+
 void AttrWidgetColor::OnColorChanged(const QColor &c)
 {
     SetValue(Color::FromQColor(c));

@@ -37,6 +37,7 @@ public:
     const Color& GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual XMLAttribute GetXMLAttribute() const override;
 
 private slots:
 

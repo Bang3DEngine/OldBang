@@ -23,6 +23,8 @@ public:
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 
+    virtual XMLAttribute GetXMLAttribute() const override;
+
     QSize sizeHint() const;
 
 public slots:

@@ -26,6 +26,13 @@ bool AttrWidgetBool::GetValue() const
     return m_checkbox->isChecked();
 }
 
+XMLAttribute AttrWidgetBool::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    attr.SetBool(GetValue());
+    return attr;
+}
+
 void AttrWidgetBool::Refresh(const XMLAttribute &attribute)
 {
     AttributeWidget::Refresh(attribute);

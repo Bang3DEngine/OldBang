@@ -24,6 +24,8 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
+    virtual XMLAttribute GetXMLAttribute() const override;
+
     virtual void Refresh(const XMLAttribute &attribute) override;
 };
 

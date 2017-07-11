@@ -40,7 +40,7 @@ void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
     }
 }
 
-Array<float>  AttrWidgetVectorFloat::GetValue()
+Array<float>  AttrWidgetVectorFloat::GetValue() const
 {
     Array<float> result;
     for (uint i = 0; i < m_floatSlots.Size(); ++i)
@@ -108,4 +108,23 @@ void AttrWidgetVectorFloat::Refresh(const XMLAttribute &attribute)
     }
 
     SetValue(vf);
+}
+
+XMLAttribute AttrWidgetVectorFloat::GetXMLAttribute() const
+{
+    XMLAttribute attr;
+    Array<float> floats = GetValue();
+    if (floats.Size() == 2)
+    {
+        attr.SetVector2( Vector2(floats[0], floats[1]) );
+    }
+    else if (floats.Size() == 3)
+    {
+        attr.SetVector3( Vector3(floats[0], floats[1], floats[2]));
+    }
+    else if (floats.Size() == 4)
+    {
+        attr.SetVector4( Vector4(floats[0], floats[1], floats[2], floats[3]) );
+    }
+    return attr;
 }
