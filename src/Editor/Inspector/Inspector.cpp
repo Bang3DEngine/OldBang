@@ -95,7 +95,7 @@ void Inspector::ShowInspectable(IInspectable *insp)
         InspectorWidget *iw = inspectableToShow->GetNewInspectorWidget();
         if (iw)
         {
-            iw->RefreshWidgetValues();
+            iw->Refresh();
             AddWidget(iw);
         }
     }

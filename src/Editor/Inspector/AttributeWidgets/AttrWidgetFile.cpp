@@ -53,7 +53,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
     //
 
 
-    m_heightSizeHint = 35;
+    SetHeightSizeHint(35);
 
     Path filepath;
     bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
@@ -72,9 +72,9 @@ void AttrWidgetFile::Browse()
 {
     String selectedFile = "";
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
-    // dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
-    //              p_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
-    //              m_allowedExtensions.Split(' ').To<List>());
+    dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
+                 String(m_attrNameLabel->text()),
+                 m_allowedExtensions.Split(' ').To<List>());
     while (dialog->isVisible()) { Application::processEvents(); }
 
     Path selectedPath(selectedFile);
@@ -82,7 +82,7 @@ void AttrWidgetFile::Browse()
     {
         if (!selectedPath.IsFile()) { SetValue(Path::Empty); }
         else { SetValue(selectedPath); }
-        // p_inspectorWidget->_OnSlotValueChanged();
+        emit OnValueChanged();
     }
 }
 
@@ -114,12 +114,6 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
     m_filepath = filepath;
 
-    // Change the filepath in the xmlAttribute too
-    m_xmlAttribute.SetFilepath(m_filepath,
-                               m_xmlAttribute.GetPropertyValue(
-                                   XMLProperty::FileExtension.GetName()),
-                               m_xmlAttribute.GetProperties());
-
     String fileName = m_filepath.GetName();
     String fileText = !fileName.Empty() ? fileName : "None";
 
@@ -130,7 +124,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
     if (draggedFile)
     {
-        // p_inspectorWidget->_OnSlotValueChanged();
+        emit OnValueChanged();
     }
 
     RefreshIcon();
@@ -149,18 +143,15 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
         if (ddi.sourceObject == explorer)
         {
             BFile f = explorer->GetSelectedFile();
-            String extensions =
-                    m_xmlAttribute.GetPropertyValue(
-                        XMLProperty::FileExtension.GetName());
-            if (f.GetPath().HasExtension(extensions))
+            if (f.GetPath().HasExtension(m_allowedExtensions))
             {
                 m_filepathLineEdit->setStyleSheet(
-                            IDragDropListener::acceptDragStyle);
+                            IDragDropListener::AcceptDragStyle);
             }
             else
             {
                 m_filepathLineEdit->setStyleSheet(
-                            IDragDropListener::rejectDragStyle);
+                            IDragDropListener::RejectDragStyle);
             }
         }
     }

@@ -18,8 +18,8 @@ AttrWidgetInt::AttrWidgetInt(const XMLAttribute &xmlAttribute,
     m_lineEdit = new IntComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);
     m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    // connect(m_lineEdit, SIGNAL(textChanged(QString)),
-    //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    QObject::connect(m_lineEdit, SIGNAL(textChanged(QString)),
+                     this, SIGNAL(OnValueChanged()));
 
     layout->addWidget(m_lineEdit);
 

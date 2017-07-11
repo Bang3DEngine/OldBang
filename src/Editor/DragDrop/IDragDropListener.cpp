@@ -6,13 +6,13 @@
 QString IDragDropListener::acceptDragStyleOnlyBorder =
      "border: 1px solid #0F0";
 
-QString IDragDropListener::acceptDragStyle =
+QString IDragDropListener::AcceptDragStyle =
      "background-color: #151; " + IDragDropListener::acceptDragStyleOnlyBorder;
 
 QString IDragDropListener::overDragStyle   =
      "background-color: #1B1; " + IDragDropListener::acceptDragStyleOnlyBorder;
 
-QString IDragDropListener::rejectDragStyle =
+QString IDragDropListener::RejectDragStyle =
      "background-color: #511; border: 1px solid #F00";
 
 IDragDropListener::IDragDropListener()

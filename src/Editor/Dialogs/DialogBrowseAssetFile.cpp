@@ -53,7 +53,8 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
                                  const List<String> &extensions)
 {
     setModal(parent != nullptr);
-    String title = "Browse Asset ( " + String::Join(extensions, ", ") + " )";
+    String title = "Browse " + assetNameForTitle +
+                   " (" + String::Join(extensions, ", ") + ")";
     setWindowTitle(title.ToQString());
 
     List<Path> projectFilepaths =

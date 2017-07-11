@@ -15,10 +15,10 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute) :
     {
         m_comboBox->addItem( enumString.ToQString() );
     }
-    // connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
-    //         inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+    QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+                     this, SIGNAL(OnValueChanged()));
 
-    m_heightSizeHint = 45;
+    SetHeightSizeHint(45);
 
     AfterConstructor();
 }

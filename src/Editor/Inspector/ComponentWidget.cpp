@@ -27,7 +27,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
         m_headerLayout.addWidget(&m_enabledCheckbox, 0,
                                  Qt::AlignRight | Qt::AlignVCenter);
     }
-    RefreshWidgetValues();
+    Refresh();
 }
 
 ComponentWidget::~ComponentWidget()
@@ -35,7 +35,7 @@ ComponentWidget::~ComponentWidget()
     delete m_componentInspectable;
 }
 
-int ComponentWidget::GetHeightSizeHint()
+int ComponentWidget::GetHeightSizeHint() const
 {
     return InspectorWidget::GetHeightSizeHint();
 }

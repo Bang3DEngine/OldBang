@@ -12,7 +12,6 @@
 class QLabel;
 class XMLNode;
 class QHBoxLayout;
-class InspectorWidget;
 class AttributeWidget : public DragDropQWidget,
                         public IDragDropListener
 {
@@ -21,23 +20,18 @@ class AttributeWidget : public DragDropQWidget,
 public:
 
     virtual void Refresh(const XMLAttribute &attribute);
-    virtual int GetHeightSizeHint();
+    virtual int GetHeightSizeHint() const;
 
-    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute,
-                                             InspectorWidget *inspectorWidget);
+    void SetHeightSizeHint(int heightSizeHint);
+    void SetVisible(bool visible);
+    bool IsVisible() const;
+
+    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute);
 
 protected:
     QHBoxLayout m_horizontalLayout;
     QLabel *m_attrNameLabel = nullptr;
-    int m_rowIndexInGridLayout = 0;
-    int m_heightSizeHint = -1;
-
-    XMLAttribute m_xmlAttribute;
-
     bool m_readonly = false;
-    bool m_enabled  = false;
-    bool m_inlined  = false;
-    bool m_hidden   = false;
 
     AttributeWidget(const XMLAttribute &xmlAttribute,
                     bool isSubWidget = false,
@@ -45,6 +39,12 @@ protected:
                     bool labelAbove  = false);
 
     void AfterConstructor();
+
+private:
+    int m_heightSizeHint = -1;
+
+signals:
+    void OnValueChanged();
 };
 
 #endif // INSPECTORSW_H

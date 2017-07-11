@@ -63,17 +63,17 @@ public:
     void SetTitle(const String &title);
     bool IsClosed() const;
 
-    virtual int GetHeightSizeHint();
+    virtual int GetHeightSizeHint() const;
     void OnDestroy();
 
 public slots:
 
-    virtual void _OnSlotValueChanged();
+    virtual void OnAttrWidgetValueChanged();
     /**
      * @brief Refreshes all widget values with the related SerializableObject
      * current values.
      */
-    void RefreshWidgetValues();
+    void Refresh();
 
 protected:
     IInspectable *p_inspectable = nullptr;
@@ -109,12 +109,6 @@ private:
 
     void UpdateContentMargins();
     void ConstructFromWidgetXMLInfo(const XMLNode &info);
-
-private slots:
-    void _OnSlotValueChanged(int _);
-    void _OnSlotValueChanged(bool _);
-    void _OnSlotValueChanged(double _);
-    void _OnSlotValueChanged(QString _);
 };
 
 #endif // INSPECTORWIDGET_H

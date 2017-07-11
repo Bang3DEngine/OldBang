@@ -24,19 +24,19 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute) :
         m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         textWidget = m_lineEdit;
 
-        // connect(m_lineEdit, SIGNAL(textChanged(QString)),
-        //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        QObject::connect(m_lineEdit, SIGNAL(textChanged(QString)),
+                         this, SIGNAL(OnValueChanged()));
     }
     else
     {
         m_textEdit = new TextEdit(m_readonly);
         m_textEdit->setAlignment(Qt::AlignLeft);
         m_textEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-        m_heightSizeHint = 550;
+        SetHeightSizeHint(550);
         textWidget = m_textEdit;
 
-        // connect(m_textEdit, SIGNAL(textChanged(QString)),
-        //         p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        QObject::connect(m_textEdit, SIGNAL(textChanged(QString)),
+                         this, SIGNAL(OnValueChanged()));
     }
 
     m_horizontalLayout.addWidget(textWidget);
@@ -91,12 +91,12 @@ void AttrWidgetString::OnFocusIn()
 void AttrWidgetString::OnFocusOut()
 {
     m_editing = false;
-    // p_inspectorWidget->_OnSlotValueChanged();
+    emit OnValueChanged();
 }
 
 void AttrWidgetString::OnKeyPressed()
 {
-    // p_inspectorWidget->_OnSlotValueChanged();
+    emit OnValueChanged();
 }
 
 QSize AttrWidgetString::sizeHint() const

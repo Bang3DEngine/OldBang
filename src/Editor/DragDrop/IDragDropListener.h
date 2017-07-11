@@ -20,8 +20,8 @@
 class IDragDropListener
 {
 public:
-    static QString acceptDragStyle, acceptDragStyleOnlyBorder,
-                   overDragStyle, rejectDragStyle;
+    static QString AcceptDragStyle, acceptDragStyleOnlyBorder,
+                   overDragStyle, RejectDragStyle;
 
     IDragDropListener();
     virtual ~IDragDropListener();

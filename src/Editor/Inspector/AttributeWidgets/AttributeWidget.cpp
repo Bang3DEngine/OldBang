@@ -13,7 +13,6 @@
 #include "Bang/AttrWidgetFile.h"
 #include "Bang/AttrWidgetColor.h"
 #include "Bang/AttrWidgetFloat.h"
-#include "Bang/InspectorWidget.h"
 #include "Bang/AttrWidgetString.h"
 #include "Bang/AttrWidgetButton.h"
 #include "Bang/AttrWidgetVectorFloat.h"
@@ -24,7 +23,6 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  bool labelAbove )
 {
     setVisible(false);
-    m_xmlAttribute = xmlAttribute;
     Refresh(xmlAttribute);
 
     m_horizontalLayout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -48,7 +46,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     setLayout(&m_horizontalLayout);
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    m_heightSizeHint = labelAbove ? 45 : 25;
+    SetHeightSizeHint(labelAbove ? 45 : 25);
     setVisible(true);
 }
 
@@ -59,83 +57,79 @@ void AttributeWidget::AfterConstructor()
 
 void AttributeWidget::Refresh(const XMLAttribute &attribute)
 {
-    m_readonly =  attribute.HasProperty(XMLProperty::Readonly);
-    m_enabled  = !attribute.HasProperty(XMLProperty::Disabled);
-    m_inlined  =  attribute.HasProperty(XMLProperty::Inline);
-    m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
-    setEnabled(m_enabled);
+    m_readonly = attribute.HasProperty(XMLProperty::Readonly);
+    setEnabled( !attribute.HasProperty(XMLProperty::Disabled) );
+}
 
-    const bool hasToBeHidden = m_hidden; // || p_inspectorWidget->IsClosed();
-    if (hasToBeHidden && !isHidden()) // Only hide, to avoid window flickering
+int AttributeWidget::GetHeightSizeHint() const
+{
+    if (!IsVisible()) { return 0; }
+    return m_heightSizeHint;
+}
+
+void AttributeWidget::SetHeightSizeHint(int heightSizeHint)
+{
+    m_heightSizeHint = heightSizeHint;
+}
+
+void AttributeWidget::SetVisible(bool visible)
+{
+    if (visible && !IsVisible())
+    {
+        setVisible(true);
+        if (m_attrNameLabel) { m_attrNameLabel->setVisible(true); }
+    }
+    else if (!visible && IsVisible())
     {
         hide();
         if (m_attrNameLabel) { m_attrNameLabel->hide(); }
     }
-    else if (!hasToBeHidden && isHidden())
-    {
-        setVisible(true); //show();
-        if (m_attrNameLabel) { m_attrNameLabel->setVisible(true); } //show(); }
-    }
 }
 
-int AttributeWidget::GetHeightSizeHint()
+bool AttributeWidget::IsVisible() const
 {
-    if (m_hidden) // || p_inspectorWidget->IsClosed())
-    {
-        return 0;
-    }
-    return m_heightSizeHint;
+    return !isHidden();
 }
 
-AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr,
-                                                   InspectorWidget *inspWidget)
+AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr)
 {
-    AttributeWidget *w = nullptr;
-    XMLAttribute::Type attrType = xmlAttr.GetType();
+    const XMLAttribute::Type attrType = xmlAttr.GetType();
 
     if (xmlAttr.HasVectoredType())
     {
         int numberOfFields = xmlAttr.GetNumberOfFieldsOfType();
         if (numberOfFields == 1)
         {
-            if (attrType == XMLAttribute::Type::Float)
-            {
-                w = new AttrWidgetFloat(xmlAttr, false);
-            }
-            else if (attrType == XMLAttribute::Type::Int)
-            {
-                w = new AttrWidgetInt(xmlAttr, false);
-            }
+            return (attrType == XMLAttribute::Type::Float) ?
+                            new AttrWidgetFloat(xmlAttr, false) :
+                            new AttrWidgetInt(xmlAttr, false);
         }
-        else
-        {
-            w = new AttrWidgetVectorFloat(xmlAttr);
-        }
+        else { return new AttrWidgetVectorFloat(xmlAttr); }
     }
     else if (attrType == XMLAttribute::Type::File)
     {
-        w = new AttrWidgetFile(xmlAttr);
+        return new AttrWidgetFile(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::String)
     {
-        w = new AttrWidgetString(xmlAttr);
+        return new AttrWidgetString(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Bool)
     {
-        w = new AttrWidgetBool(xmlAttr);
+        return new AttrWidgetBool(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Enum)
     {
-        w = new AttrWidgetEnum(xmlAttr);
+        return new AttrWidgetEnum(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Color)
     {
-        w = new AttrWidgetColor(xmlAttr);
+        return new AttrWidgetColor(xmlAttr);
     }
     else if (attrType == XMLAttribute::Type::Button)
     {
-        w = new AttrWidgetButton(xmlAttr);
+        return new AttrWidgetButton(xmlAttr);
     }
 
-    return w;
+    return nullptr;
 }

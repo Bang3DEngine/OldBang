@@ -17,7 +17,7 @@ public:
     explicit ComponentWidget(Component *relatedComponent);
     virtual ~ComponentWidget();
 
-    int GetHeightSizeHint() override;
+    int GetHeightSizeHint() const override;
 
 public slots:
     void OnEnabledCheckboxPressed(bool checked);

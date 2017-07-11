@@ -7,8 +7,8 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute) :
     m_checkbox->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_horizontalLayout.addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
-    // connect(m_checkbox, SIGNAL(clicked(bool)),
-    //         inspectorWidget, SLOT(_OnSlotValueChanged(bool)));
+    QObject::connect(m_checkbox, SIGNAL(clicked(bool)),
+                     this, SIGNAL(OnValueChanged()));
 
     setFixedHeight(25);
     AfterConstructor();

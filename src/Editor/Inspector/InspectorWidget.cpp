@@ -24,7 +24,6 @@
 #include "Bang/SerializableObject.h"
 #include "Bang/AttrWidgetVectorFloat.h"
 
-
 InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
@@ -39,7 +38,7 @@ void InspectorWidget::Init(IInspectable *relatedInspectable)
     SetIcon( relatedInspectable->GetIcon() );
 
     setAcceptDrops(true);
-    RefreshWidgetValues();
+    Refresh();
 }
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
@@ -54,7 +53,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
                              Qt::AlignLeft | Qt::AlignVCenter);
     m_headerLayout.addWidget(&m_titleLabel,     99,
                              Qt::AlignLeft | Qt::AlignVCenter);
-
     m_gridLayout.setSpacing(0);
 
     m_closeOpenButton.setStyleSheet("padding:0px;border:0px;margin-left:-5px;");
@@ -73,7 +71,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
     CreateWidgetSlots(xmlInfo);
 
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
-                     this, SLOT(RefreshWidgetValues()));
+                     this, SLOT(Refresh()));
     m_refreshTimer.start(10);
 
     setLayout(&m_vLayout);
@@ -209,7 +207,7 @@ bool InspectorWidget::IsClosed() const
     return m_closed;
 }
 
-int InspectorWidget::GetHeightSizeHint()
+int InspectorWidget::GetHeightSizeHint() const
 {
     int heightSizeHint = 0;
     heightSizeHint += 60; // Header height
@@ -230,10 +228,10 @@ void InspectorWidget::OnDestroy()
     m_refreshTimer.stop();
     p_inspectable = nullptr;
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(RefreshWidgetValues()));
+                        this, SLOT(Refresh()));
 }
 
-void InspectorWidget::RefreshWidgetValues()
+void InspectorWidget::Refresh()
 {
     ENSURE(p_inspectable);
 
@@ -245,12 +243,10 @@ void InspectorWidget::RefreshWidgetValues()
         String attrName = attribute.GetName();
         if( m_attrName_To_AttrWidget.ContainsKey(attrName))
         {
-            AttributeWidget *ws = m_attrName_To_AttrWidget[attrName];
-            ws->Refresh(attribute);
-        }
-        else
-        {
-            // New attribute detected when refreshing
+            AttributeWidget *attrWidget = m_attrName_To_AttrWidget[attrName];
+            attrWidget->SetVisible( !IsClosed() &&
+                                    !attribute.HasProperty(XMLProperty::Hidden));
+            attrWidget->Refresh(attribute);
         }
     }
     UpdateContentMargins();
@@ -271,20 +267,22 @@ void InspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
     {
         XMLAttribute attribute = itAttr.second;
         m_attributes.PushBack(attribute);
-        AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
-        if (w)
+        AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute);
+        if (!w) continue;
+
+        m_gridLayout.addWidget(w, GetNextRowIndex(), 0);
+        QObject::connect(w, SIGNAL(OnValueChanged()),
+                         this, SLOT(OnAttrWidgetValueChanged()));
+
+        m_attrName_To_AttrWidget.Set(attribute.GetName(), w);
+        if (attribute.HasProperty(XMLProperty::Hidden))
         {
-            m_gridLayout.addWidget(w, GetNextRowIndex(), 0);
-            m_attrName_To_AttrWidget.Set(attribute.GetName(), w);
-            if (attribute.HasProperty(XMLProperty::Hidden))
-            {
-                w->hide();
-            }
+            w->hide();
         }
     }
 }
 
-void InspectorWidget::_OnSlotValueChanged()
+void InspectorWidget::OnAttrWidgetValueChanged()
 {
     ENSURE(p_inspectable);
     if (m_created)
@@ -298,7 +296,7 @@ void InspectorWidget::OnCloseOpenButtonClicked()
 {
     m_closed = !m_closed;
     SetClosed(m_closed);
-    RefreshWidgetValues();
+    Refresh();
     UpdateContentMargins();
     Inspector::GetInstance()->RefreshSizeHints();
 }
@@ -333,22 +331,4 @@ void InspectorWidget::UpdateCloseOpenButtonIcon()
 
     const QPixmap &pixmap = m_closed ? closeButtonPixmap : openButtonPixmap;
     m_closeOpenButton.setIcon( QIcon(pixmap) );
-}
-
-void InspectorWidget::_OnSlotValueChanged(int _)
-{
-    _OnSlotValueChanged();
-}
-
-void InspectorWidget::_OnSlotValueChanged(bool _)
-{
-    _OnSlotValueChanged();
-}
-void InspectorWidget::_OnSlotValueChanged(double _)
-{
-    _OnSlotValueChanged();
-}
-void InspectorWidget::_OnSlotValueChanged(QString _)
-{
-    _OnSlotValueChanged();
 }
