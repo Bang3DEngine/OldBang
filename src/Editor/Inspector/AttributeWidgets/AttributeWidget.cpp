@@ -30,17 +30,17 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     if (!isSubWidget)
     {
-        QString label = "";
+        QString labelString = "";
         if (createLabel)
         {
             String name = xmlAttribute.GetName();
             name = Inspector::FormatInspectorLabel(name);
-            label = name.ToQString();
-        }
+            labelString = name.ToQString();
 
-        m_attrNameLabel = new QLabel(label);
-        m_attrNameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        m_horizontalLayout.addWidget(m_attrNameLabel);
+            QLabel *attrNameLabel = new QLabel(labelString);
+            attrNameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            m_horizontalLayout.addWidget(attrNameLabel);
+        }
     }
     Refresh(xmlAttribute);
 
@@ -74,16 +74,8 @@ void AttributeWidget::SetHeightSizeHint(int heightSizeHint)
 
 void AttributeWidget::SetVisible(bool visible)
 {
-    if (visible && !IsVisible())
-    {
-        setVisible(true);
-        if (m_attrNameLabel) { m_attrNameLabel->setVisible(true); }
-    }
-    else if (!visible && IsVisible())
-    {
-        hide();
-        if (m_attrNameLabel) { m_attrNameLabel->hide(); }
-    }
+    if (visible && !IsVisible()) { setVisible(true); }
+    else if (!visible && IsVisible()) { hide(); }
 }
 
 bool AttributeWidget::IsVisible() const
@@ -100,9 +92,11 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr)
         int numberOfFields = xmlAttr.GetNumberOfFieldsOfType();
         if (numberOfFields == 1)
         {
-            return (attrType == XMLAttribute::Type::Float) ?
-                            new AttrWidgetFloat(xmlAttr, false) :
-                            new AttrWidgetInt(xmlAttr, false);
+            if (attrType == XMLAttribute::Type::Float)
+            {
+                return new AttrWidgetFloat(xmlAttr, false);
+            }
+            else { return new AttrWidgetInt(xmlAttr, false); }
         }
         else { return new AttrWidgetVectorFloat(xmlAttr); }
     }

@@ -30,7 +30,6 @@ public:
 
 protected:
     QHBoxLayout m_horizontalLayout;
-    QLabel *m_attrNameLabel = nullptr;
     bool m_readonly = false;
 
     AttributeWidget(const XMLAttribute &xmlAttribute,

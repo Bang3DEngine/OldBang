@@ -29,6 +29,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
     m_iconLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_hLayout->addWidget(m_iconLabel, 0, Qt::AlignRight | Qt::AlignVCenter);
 
+    m_attrName = xmlAttribute.GetName();
+
     // File Line Edit
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(true);
@@ -73,8 +75,7 @@ void AttrWidgetFile::Browse()
     String selectedFile = "";
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
     dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
-                 String(m_attrNameLabel->text()),
-                 m_allowedExtensions.Split(' ').To<List>());
+                 m_attrName, m_allowedExtensions.Split(' ').To<List>());
     while (dialog->isVisible()) { Application::processEvents(); }
 
     Path selectedPath(selectedFile);

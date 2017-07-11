@@ -38,6 +38,7 @@ public slots:
 private:
     QLabel *m_iconLabel = nullptr;
     QHBoxLayout *m_hLayout = nullptr;
+    String m_attrName = "";
 
     Path m_filepath;
     String m_allowedExtensions;
