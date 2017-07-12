@@ -15,8 +15,8 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const String &labelText) :
         AttrWidgetFloat *s = new AttrWidgetFloat(labels[i]);
         m_floatSlots.PushBack(s);
 
-        QObject::connect(s, SIGNAL(OnValueChanged(AttributeWidget*)),
-                         this, SLOT(OnValueChanged(AttributeWidget*)));
+        QObject::connect(s, SIGNAL(OnValueChanged(IAttributeWidget*)),
+                         this, SLOT(OnValueChanged(IAttributeWidget*)));
 
         QLabel *label = new QLabel(labels[i].ToQString());
         if (i != 0)

@@ -105,7 +105,13 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorGizmo.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorAxisPlane.cpp \
-    $$BANG_ROOT/src/Editor/General/EditorPlayFlow.cpp
+    $$BANG_ROOT/src/Editor/General/EditorPlayFlow.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/AudioListenerInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/CameraInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/RendererInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/CircleRendererInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/LineRendererInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/IconManager.h \
@@ -192,6 +198,12 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorGizmo.h \
     $$BANG_ROOT/src/Editor/DragDrop/DragDropInfo.h \
-    $$BANG_ROOT/src/Editor/General/EditorPlayFlow.h
+    $$BANG_ROOT/src/Editor/General/EditorPlayFlow.h \
+    $$BANG_ROOT/src/Editor/Inspector/AudioListenerInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/CameraInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/RendererInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/CircleRendererInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/LineRendererInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.h
 
 ######################################

@@ -122,9 +122,9 @@ void SelectionFramebuffer::ProcessSelection()
                 }
             }
         }
-        else // Background has been pressed
+        else if (Screen::GetInstance()->underMouse()) // Background has been pressed
         {
-            EditorWindow::GetInstance()->widgetHierarchy->UnselectAll();
+            Hierarchy::GetInstance()->UnselectAll();
         }
     }
 }

@@ -2,12 +2,9 @@
 #define BEHAVIOURINSPECTORWIDGET_H
 
 #include "Bang/ComponentWidget.h"
-#include "Bang/IAttrWidgetButtonListener.h"
 
 class Behaviour;
-class AttrWidgetButton;
-class BehaviourInspectorWidget : public ComponentWidget,
-                                 public IAttrWidgetButtonListener
+class BehaviourInspectorWidget : public ComponentWidget
 {
 public:
     BehaviourInspectorWidget(Behaviour *behaviour);
@@ -16,7 +13,12 @@ public:
 protected:
     void InitExtra() override;
     void Refresh() override;
+    void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget) override;
     void OnDestroy() override;
+
+private:
+    Behaviour *p_behaviour;
+    AttrWidgetFile *m_sourceFileAW = nullptr;
 };
 
 #endif // BEHAVIOURINSPECTORWIDGET_H

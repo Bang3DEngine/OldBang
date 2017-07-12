@@ -11,7 +11,6 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_cwContextMenu(this)
 {
     p_component = relatedComponent;
-    // m_componentInspectable = new Inspectable<Component>(p_component);
 }
 
 ComponentWidget::~ComponentWidget()
@@ -20,14 +19,16 @@ ComponentWidget::~ComponentWidget()
 void ComponentWidget::OnDestroy()
 {
     InspectorWidget::OnDestroy();
-    // delete m_componentInspectable;
 }
 
 void ComponentWidget::InitExtra()
 {
     InspectorWidget::InitExtra();
 
+    SetIcon(IconManager::GetIcon(p_component->GetClassName()));
+    SetTitle(p_component->GetClassName());
     m_closed = p_component->IsClosedInInspector();
+
     SetClosed(m_closed);
     UpdateCloseOpenButtonIcon();
 
