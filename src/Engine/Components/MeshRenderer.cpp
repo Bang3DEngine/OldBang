@@ -49,21 +49,12 @@ void MeshRenderer::Render() const
 void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    if (!xmlInfo.GetAttribute("Mesh")->HasProperty(XMLProperty::Hidden))
-    {
-        SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
-    }
+    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-
-    if (!GetDrawWireframe())
-    {
-        xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
-    }
     xmlInfo->SetFilepath("Mesh",
-                         GetMesh() ? GetMesh()->GetFilepath() : Path::Empty,
-                         Mesh::GetFileExtensionStatic());
+                         GetMesh() ? GetMesh()->GetFilepath() : Path::Empty);
 }

@@ -3,7 +3,6 @@
 #include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
-#include "Bang/IAttrWidgetButtonListener.h"
 
 XMLNode::XMLNode(const String &tagName)
 {
@@ -168,48 +167,13 @@ void XMLNode::SetString(const String &attributeName, const String &value,
 }
 
 void XMLNode::SetFilepath(const String &attributeName, const Path &filepath,
-                          const String &allowedExtensions,
                           const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
-    attr.SetFilepath(filepath, allowedExtensions, properties);
+    attr.SetFilepath(filepath, properties);
     SetAttribute(attr);
 }
-
-void XMLNode::SetEnum(const String &attributeName, const Array<String>& enumNames,
-                      int selectedEnumIndex, const Array<XMLProperty> &properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetEnum(enumNames, selectedEnumIndex, properties);
-    for (int i = 0; i < enumNames.Size(); ++i)
-    {
-        const String &enumName = enumNames[i];
-        XMLProperty prop("EnumName" + std::to_string(i), enumName);
-        attr.SetProperty(prop);
-    }
-
-    SetAttribute(attr);
-}
-
-#ifdef BANG_EDITOR
-void XMLNode::SetButton(const String &attributeName,
-                        IAttrWidgetButtonListener* listener,
-                        const Array<XMLProperty> &properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetButton(attributeName, listener, properties);
-    SetAttribute(attr);
-}
-
-IAttrWidgetButtonListener *XMLNode::GetButtonListener(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetButtonListener() : nullptr;
-}
-#endif
 
 XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
 {
@@ -310,24 +274,6 @@ Rect XMLNode::GetRect(const String &attributeName) const
     return attr ? attr->GetRect() : Rect();
 }
 
-int XMLNode::GetEnumSelectedIndex(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetEnumSelectedIndex() : -1;
-}
-
-String XMLNode::GetEnumSelectedName(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetEnumSelectedName() : "";
-}
-
-Array<String> XMLNode::GetEnumNames(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetEnumNames() : Array<String>();
-}
-
 const XMLNode *XMLNode::GetChild(const String &name) const
 {
     for (const XMLNode& node : m_children)
@@ -337,7 +283,7 @@ const XMLNode *XMLNode::GetChild(const String &name) const
     return nullptr;
 }
 
-String XMLNode::ToString(bool writeToFile, const String& indent) const
+String XMLNode::ToString(const String& indent) const
 {
     String str = "";
 
@@ -345,11 +291,6 @@ String XMLNode::ToString(bool writeToFile, const String& indent) const
     for (auto itAttr : GetAttributesListInOrder())
     {
         const XMLAttribute& attr = itAttr.second;
-        if (writeToFile && attr.HasProperty(XMLProperty::DontWriteToFile))
-        {
-            continue;
-        }
-
         str += " " + attr.ToString() + "\n";
         for (int i = 0; i < m_tagName.Length() + indent.Length() + 1; ++i )
         {
@@ -361,7 +302,7 @@ String XMLNode::ToString(bool writeToFile, const String& indent) const
     const String newIndent = indent + "    ";
     for (const XMLNode& child : m_children)
     {
-        str += child.ToString(writeToFile, newIndent);
+        str += child.ToString(newIndent);
     }
     str += indent + "</" + m_tagName + ">\n";
     return str;
@@ -374,12 +315,7 @@ void XMLNode::SetTagName(const String tagName)
 
 String XMLNode::ToString() const
 {
-    return ToString(false);
-}
-
-String XMLNode::ToString(bool writeToFile) const
-{
-    return ToString(writeToFile, "");
+    return ToString("");
 }
 
 const String &XMLNode::GetTagName() const

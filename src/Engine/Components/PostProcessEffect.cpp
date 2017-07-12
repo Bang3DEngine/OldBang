@@ -89,21 +89,16 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
     }
 
     SetPriority( xmlInfo.GetInt("Priority") );
-
-    String typeStr = xmlInfo.GetEnumSelectedName("Type");
-    if      (typeStr.Contains("Scene")) { SetType(Type::AfterScene); }
-    else if (typeStr.Contains("Canvas")) { SetType(Type::AfterCanvas); }
+    SetType( xmlInfo.GetEnum<Type>("Type") );
 }
 
 void PostProcessEffect::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("PostProcessShader", GetPostProcessShaderFilepath(),
-                         "frag_pp");
-
+    xmlInfo->SetFilepath("PostProcessShader", GetPostProcessShaderFilepath());
     xmlInfo->SetInt("Priority", GetPriority());
-    xmlInfo->SetEnum("Type", {"AfterScene", "AfterCanvas"}, int( GetType() ));
+    xmlInfo->SetEnum<Type>("Type", GetType());
 }
 
 bool operator<(const PostProcessEffect& lhs, const PostProcessEffect& rhs)

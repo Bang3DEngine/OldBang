@@ -72,7 +72,7 @@ void Behaviour::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
-    xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath(), "cpp");
+    xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath());
 
     #ifdef BANG_EDITOR
     BehaviourId bid(GetSourceFilepath());

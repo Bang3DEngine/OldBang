@@ -9,7 +9,6 @@
 #include "Bang/Quaternion.h"
 #include "Bang/XMLAttribute.h"
 
-class IAttrWidgetButtonListener;
 class XMLNode : public IToString
 {
 public:
@@ -53,12 +52,7 @@ public:
                  const Array<XMLProperty>& properties = {});
     void SetFilepath(const String &attributeName,
                      const Path &filepath,
-                     const String &allowedExtensions = "",
                      const Array<XMLProperty>& properties = {});
-    void SetEnum(const String &attributeName,
-                 const Array<String>& enumNames,
-                 int selectedEnumIndex,
-                 const Array<XMLProperty>& properties = {});
 
     void RemoveAttribute(const String& attributeName);
     XMLAttribute* GetAttribute(const String& attributeName) const;
@@ -75,23 +69,29 @@ public:
     Color GetColor(const String& attributeName) const;
     Quaternion GetQuaternion(const String& attributeName) const;
     Rect GetRect(const String& attributeName) const;
-    int GetEnumSelectedIndex(const String& attributeName) const;
-    String GetEnumSelectedName(const String& attributeName) const;
-    Array<String> GetEnumNames(const String& attributeName) const;
 
-    #ifdef BANG_EDITOR
-    void SetButton(
-           const String &attributeName,
-           IAttrWidgetButtonListener* listener,
-           const Array<XMLProperty>& properties = {});
-    IAttrWidgetButtonListener *GetButtonListener(const String &attributeName) const;
-    #endif
+    template<class EnumClass>
+    void SetEnum(const String &attributeName,
+                 const EnumClass value,
+                 const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetEnum<EnumClass>(value, properties);
+        SetAttribute(attr);
+    }
+
+    template<class EnumClass>
+    EnumClass GetEnum(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr->GetEnum<EnumClass>();
+    }
 
     const XMLNode *GetChild(const String &name) const;
     void SetTagName(const String tagName);
     String ToString() const override;
-    String ToString(bool writeToFile) const;
-    String ToString(bool writeToFile, const String& indent) const;
+    String ToString(const String& indent) const;
 
     const String& GetTagName() const;
     const Map<String, XMLAttribute>& GetAttributes() const;

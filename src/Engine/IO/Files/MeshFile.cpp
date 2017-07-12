@@ -35,7 +35,7 @@ void MeshFile::Read(const XMLNode &xmlInfo)
 void MeshFile::Write(XMLNode *xmlInfo) const
 {
     BFile::Write(xmlInfo);
-    xmlInfo->SetFilepath("ModelFilepath", GetModelFilepath(), "obj stl mb fbx");
+    xmlInfo->SetFilepath("ModelFilepath", GetModelFilepath());
 }
 
 void MeshFile::SetModelFilepath(const Path &modelFilepath)

@@ -20,7 +20,7 @@ public:
     virtual ~SerializableObject();
 
     XMLNode GetXMLInfo() const;
-    String GetSerializedString(bool writeToFile = true) const;
+    String GetSerializedString() const;
     void ReadFromString(const String &xmlInfoString);
 
     virtual void ReadReflection(const XMLNode &xmlInfo);

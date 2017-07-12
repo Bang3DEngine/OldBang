@@ -99,9 +99,8 @@ void Material::Write(XMLNode *xmlInfo) const
     xmlInfo->SetBool("ReceivesLighting", m_gMaterial->ReceivesLighting());
     xmlInfo->SetVector2("UvMultiply",    m_gMaterial->GetUvMultiply());
 
-    Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path();
-    xmlInfo->SetFilepath("Texture", texFilepath,
-                         Texture2D::GetFileExtensionStatic());
+    Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path::Empty;
+    xmlInfo->SetFilepath("Texture", texFilepath);
 
     Path vsFile, fsFile;
     G_ShaderProgram *sp = GetShaderProgram();
@@ -117,8 +116,8 @@ void Material::Write(XMLNode *xmlInfo) const
             fsFile = sp->GetFragmentShader()->GetFilepath();
         }
     }
-    xmlInfo->SetFilepath("VertexShader", vsFile, "vert_g vert_pp vert_sel vert");
-    xmlInfo->SetFilepath("FragmentShader", fsFile, "frag_g frag_pp frag_sel frag");
+    xmlInfo->SetFilepath("VertexShader", vsFile);
+    xmlInfo->SetFilepath("FragmentShader", fsFile);
 }
 
 Material *Material::GetMissingMaterial()

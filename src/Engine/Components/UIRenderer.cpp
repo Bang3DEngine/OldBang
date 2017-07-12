@@ -68,12 +68,12 @@ void UIRenderer::Render() const
 
 void UIRenderer::Read(const XMLNode &xmlInfo)
 {
-    MeshRenderer::Read(xmlInfo);
+    Renderer::Read(xmlInfo);
     SetTint( xmlInfo.GetColor("Tint") );
 }
 
 void UIRenderer::Write(XMLNode *xmlInfo) const
 {
-    MeshRenderer::Write(xmlInfo);
+    Renderer::Write(xmlInfo);
     xmlInfo->SetColor("Tint", GetTint());
 }

@@ -148,7 +148,7 @@ bool SceneManager::IsActiveSceneSaved()
 
     Path openSceneFilepath = SceneManager::GetActiveSceneFilepath();
     String savedFileXML    = File::GetContents(openSceneFilepath);
-    String currentSceneXML = activeScene->GetXMLInfo().ToString(true);
+    String currentSceneXML = activeScene->GetXMLInfo().ToString();
     return (savedFileXML == currentSceneXML);
 }
 

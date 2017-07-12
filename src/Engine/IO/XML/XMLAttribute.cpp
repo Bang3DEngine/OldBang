@@ -5,7 +5,6 @@
 
 #include "Bang/Paths.h"
 #include "Bang/Object.h"
-#include "Bang/IAttrWidgetButtonListener.h"
 
 XMLAttribute::XMLAttribute()
 {
@@ -64,7 +63,7 @@ void XMLAttribute::SetProperties(const Array<XMLProperty> &properties)
     }
 }
 
-const String XMLAttribute::GetPropertyValue(const String &propertyName) const
+const String& XMLAttribute::GetPropertyValue(const String &propertyName) const
 {
     for (const XMLProperty& prop : m_properties)
     {
@@ -73,7 +72,8 @@ const String XMLAttribute::GetPropertyValue(const String &propertyName) const
             return prop.GetValue();
         }
     }
-    return "";
+    static String emptyString;
+    return emptyString;
 }
 
 bool XMLAttribute::HasProperty(const XMLProperty &property) const
@@ -104,9 +104,7 @@ void XMLAttribute::SetPointer(const void *value,
 {
     std::ostringstream oss;
     oss << value;
-    Array<XMLProperty> props = properties;
-    props.PushBack(XMLProperty::DontWriteToFile);
-    Set(m_name, oss.str(), XMLAttribute::Type::String, props);
+    Set(m_name, oss.str(), XMLAttribute::Type::String, properties);
 }
 
 void XMLAttribute::SetBool(bool value,
@@ -201,18 +199,10 @@ void XMLAttribute::SetRect(const Rect &value,
 }
 
 void XMLAttribute::SetFilepath(const Path &filepath,
-                               const String &allowedExtensions,
                                const Array<XMLProperty> &properties)
 {
     String relFilepath = Paths::GetRelative(filepath).ToString();
     Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
-
-    if (!allowedExtensions.Empty())
-    {
-        XMLProperty extensionProp = XMLProperty::FileExtension;
-        extensionProp.SetValue(allowedExtensions);
-        SetProperty(extensionProp);
-    }
 
     if (Paths::IsEnginePath(filepath))
     {
@@ -223,93 +213,6 @@ void XMLAttribute::SetFilepath(const Path &filepath,
         RemoveProperty(XMLProperty::IsEngineFile.GetName());
     }
 }
-
-void XMLAttribute::SetEnum(const Array<String> &enumNames,
-                           const String &selectedEnumName,
-                           const Array<XMLProperty> &properties)
-{
-    int selectedEnumIndex = -1;
-    for (int i = 0; i < enumNames.Size(); ++i)
-    {
-        const String& enumName = enumNames[i];
-        if (enumName == selectedEnumName)
-        {
-            selectedEnumIndex = i;
-            break;
-        }
-    }
-    SetEnum(enumNames, selectedEnumIndex, properties);
-}
-
-void XMLAttribute::SetEnum(const Array<String> &enumNames,
-                           int selectedEnumIndex,
-                           const Array<XMLProperty> &properties)
-{
-    Set(m_name, std::to_string(selectedEnumIndex),
-        XMLAttribute::Type::Enum, properties);
-    for (int i = 0; i < enumNames.Size(); ++i)
-    {
-        XMLProperty prop("EnumName" + std::to_string(i), enumNames[i]);
-        SetProperty(prop);
-    }
-}
-
-#ifdef BANG_EDITOR
-void XMLAttribute::SetButton(const String buttonText,
-                             IAttrWidgetButtonListener *listener,
-                             const Array<XMLProperty> &properties)
-{
-    Set(m_name, buttonText, XMLAttribute::Type::Button, properties);
-    std::ostringstream oss; oss << ( (void*) listener );
-    XMLProperty prop("Listener", oss.str());
-    SetProperty(XMLProperty::DontWriteToFile);
-    SetProperty(prop);
-}
-
-IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
-{
-    std::istringstream iss(GetPropertyValue("Listener"));
-    void *lp = nullptr;
-    iss >> lp;
-    if (lp)
-    {
-        IAttrWidgetButtonListener *listener =
-           Object::SCast<IAttrWidgetButtonListener>(lp);
-        return listener;
-    }
-    return nullptr;
-}
-#endif
-
-bool XMLAttribute::HasVectoredType() const
-{
-    return m_type == XMLAttribute::Type::Int     ||
-           m_type == XMLAttribute::Type::Float   ||
-           m_type == XMLAttribute::Type::Vector2 ||
-           m_type == XMLAttribute::Type::Vector3 ||
-           m_type == XMLAttribute::Type::Vector4 ||
-           m_type == XMLAttribute::Type::Rect    ||
-           m_type == XMLAttribute::Type::Quaternion;
-}
-
-int XMLAttribute::GetNumberOfFieldsOfType() const
-{
-    if (m_type == XMLAttribute::Type::Bool)            return 1;
-    else if (m_type == XMLAttribute::Type::Int)        return 1;
-    else if (m_type == XMLAttribute::Type::String)     return 1;
-    else if (m_type == XMLAttribute::Type::Float)      return 1;
-    else if (m_type == XMLAttribute::Type::Vector2)    return 2;
-    else if (m_type == XMLAttribute::Type::Vector3)    return 3;
-    else if (m_type == XMLAttribute::Type::Vector4)    return 4;
-    else if (m_type == XMLAttribute::Type::Color)      return 4;
-    else if (m_type == XMLAttribute::Type::Quaternion) return 4;
-    else if (m_type == XMLAttribute::Type::Rect)       return 4;
-    else if (m_type == XMLAttribute::Type::File)       return 1;
-    else if (m_type == XMLAttribute::Type::Enum)       return 1;
-    else if (m_type == XMLAttribute::Type::Button)     return 1;
-    return -1;
-}
-
 
 void XMLAttribute::SetType(const XMLAttribute::Type &type)
 {
@@ -436,37 +339,6 @@ Rect XMLAttribute::GetRect() const
 {
     Vector4 v = GetVector4();
     return Rect(v.x, v.y, v.z, v.w);
-}
-
-String XMLAttribute::GetEnumSelectedName() const
-{
-    String propName = "EnumName" + std::to_string(GetEnumSelectedIndex());
-    return GetPropertyValue(propName);
-}
-
-int XMLAttribute::GetEnumSelectedIndex() const
-{
-    return std::atoi(GetValue().ToCString());
-}
-
-Array<String> XMLAttribute::GetEnumNames() const
-{
-    Array<String> enumNames;
-    int i = 0;
-    while (true)
-    {
-        String propName = "EnumName" + std::to_string(i);
-        if (HasProperty(propName))
-        {
-            enumNames.PushBack( GetPropertyValue(propName) );
-        }
-        else
-        {
-            break;
-        }
-        ++i;
-    }
-    return enumNames;
 }
 
 const Array<XMLProperty> &XMLAttribute::GetProperties() const

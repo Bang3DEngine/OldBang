@@ -33,12 +33,9 @@ void ModelFile::Write(XMLNode *xmlInfo) const
 {
     BFile::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetPath().GetNameExt(),
-                       {XMLProperty::Readonly});
-    xmlInfo->SetString("Mode", IsTriangles() ? "Triangles" : "Quads",
-                      {XMLProperty::Readonly});
-    xmlInfo->SetString("Faces",  String(GetNumFaces()),
-                      {XMLProperty::Readonly});
+    xmlInfo->SetString("FileName", GetPath().GetNameExt());
+    xmlInfo->SetString("Mode", IsTriangles() ? "Triangles" : "Quads");
+    xmlInfo->SetString("Faces",  String(GetNumFaces()));
 }
 
 bool ModelFile::IsAsset() const

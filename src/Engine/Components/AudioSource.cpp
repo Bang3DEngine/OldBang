@@ -83,9 +83,8 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
 
     AudioClip *audioClip = GetAudioClip();
-    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path();
-    xmlInfo->SetFilepath("AudioClip", audioClipFilepath,
-                         AudioClip::GetFileExtensionStatic());
+    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path::Empty;
+    xmlInfo->SetFilepath("AudioClip", audioClipFilepath);
     xmlInfo->SetFloat("Volume",     m_volume);
     xmlInfo->SetFloat("Pitch",      m_pitch);
     xmlInfo->SetFloat("Range",      m_range);

@@ -22,11 +22,11 @@ XMLNode SerializableObject::GetXMLInfo() const
     return xmlInfo;
 }
 
-String SerializableObject::GetSerializedString(bool writeToFile) const
+String SerializableObject::GetSerializedString() const
 {
     XMLNode xmlInfo;
     Write(&xmlInfo);
-    return xmlInfo.ToString(writeToFile);
+    return xmlInfo.ToString();
 }
 
 void SerializableObject::ReadFromString(const String &xmlInfoString)
@@ -68,7 +68,7 @@ bool SerializableObject::ReadFromFile(const Path &path)
 
 bool SerializableObject::WriteToFile(const Path &path) const
 {
-    File::Write(path, GetSerializedString(true));
+    File::Write(path, GetSerializedString());
     return true;
 }
 

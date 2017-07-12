@@ -31,15 +31,11 @@ void ImageFile::Write(XMLNode *xmlInfo) const
 {
     BFile::Write(xmlInfo);
 
-    xmlInfo->SetString("FileName", GetPath().GetNameExt(),
-                       {XMLProperty::Readonly});
-    xmlInfo->SetFilepath("ImageFilePath", GetPath(), "",
-                         {XMLProperty::Readonly});
+    xmlInfo->SetString("FileName", GetPath().GetNameExt());
+    xmlInfo->SetFilepath("ImageFilePath", GetPath());
     xmlInfo->SetString("Dimensions",
-                       String(GetWidth()) + "x" + String(GetHeight()),
-                       {XMLProperty::Readonly});
-    xmlInfo->SetString("Mode", GetNumComponents() == 3 ? "RGB" : "RGBA",
-                       {XMLProperty::Readonly});
+                       String(GetWidth()) + "x" + String(GetHeight()));
+    xmlInfo->SetString("Mode", GetNumComponents() == 3 ? "RGB" : "RGBA");
 }
 
 bool ImageFile::IsAsset() const

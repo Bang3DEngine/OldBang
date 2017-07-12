@@ -142,7 +142,7 @@ void AudioClip::Read(const XMLNode &xmlInfo)
 void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("AudioFilepath", m_audioFileFilepath, "ogg wav");
+    xmlInfo->SetFilepath("AudioFilepath", m_audioFileFilepath);
 }
 
 void AudioClip::OnAudioSourceAttached(AudioSource *as)

@@ -80,26 +80,9 @@ void AudioClipFile::Write(XMLNode *xmlInfo) const
 
     AudioClip *audioClip = GetRelatedAudioClip();
 
-    xmlInfo->SetFilepath("AudioFilepath", GetAudioFilepath(), "ogg wav", {});
+    xmlInfo->SetFilepath("AudioFilepath", GetAudioFilepath());
 
-    xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
-                       {XMLProperty::Readonly});
-
-    #ifdef BANG_EDITOR
-    AudioClipFile *noConstThis = const_cast<AudioClipFile*>(this);
-    bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
-    if (isPlaying)
-    {
-        xmlInfo->SetButton("Stop", noConstThis, {});
-        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
-    }
-    else
-    {
-
-        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
-        xmlInfo->SetButton("Play", noConstThis, {});
-    }
-    #endif
+    xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds");
 }
 
 void AudioClipFile::SetSoundFilepath(const Path &audioFilepath)

@@ -7,14 +7,7 @@
 class XMLProperty : public IToString
 {
 public:
-    const static XMLProperty Hidden;
-    const static XMLProperty Inline;
-    const static XMLProperty BigText;
-    const static XMLProperty Readonly;
-    const static XMLProperty Disabled;
     const static XMLProperty IsEngineFile;
-    const static XMLProperty FileExtension;
-    const static XMLProperty DontWriteToFile;
 
     XMLProperty();
     XMLProperty(const String &name, const String &value = "");

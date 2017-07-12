@@ -144,7 +144,7 @@ void Scene::Write(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Scene");
 
     Camera *cam = GetCamera();
-    xmlInfo->SetString("id", cam->GetInstanceId(), {XMLProperty::Hidden});
+    xmlInfo->SetString("id", cam->GetInstanceId());
 }
 
 void Scene::PostRead(const XMLNode &xmlInfo)

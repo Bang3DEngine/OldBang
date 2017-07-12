@@ -28,8 +28,7 @@ void TextFile::Read(const XMLNode &xmlInfo)
 void TextFile::Write(XMLNode *xmlInfo) const
 {
     BFile::Write(xmlInfo);
-
-    xmlInfo->SetString("Contents", GetContents(), {XMLProperty::BigText});
+    xmlInfo->SetString("Contents", GetContents());
 }
 
 bool TextFile::IsAsset() const

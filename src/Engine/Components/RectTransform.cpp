@@ -248,6 +248,8 @@ void RectTransform::Read(const XMLNode &xmlInfo)
 
 void RectTransform::Write(XMLNode *xmlInfo) const
 {
+    Transform::Write(xmlInfo);
+
     xmlInfo->SetInt("MarginLeft",  GetMarginLeft() );
     xmlInfo->SetInt("MarginTop",   GetMarginTop()  );
     xmlInfo->SetInt("MarginRight", GetMarginRight());
@@ -256,9 +258,4 @@ void RectTransform::Write(XMLNode *xmlInfo) const
     xmlInfo->SetVector2("PivotPosition",  GetPivotPosition());
     xmlInfo->SetVector2("AnchorMin",      GetAnchorMin()    );
     xmlInfo->SetVector2("AnchorMax",      GetAnchorMax()    );
-
-    Transform::Write(xmlInfo);
-    xmlInfo->GetAttribute("Position")->SetProperty(XMLProperty::Hidden);
-    xmlInfo->GetAttribute("Rotation")->SetProperty(XMLProperty::Hidden);
-    xmlInfo->GetAttribute("Scale")->SetProperty(XMLProperty::Hidden);
 }

@@ -327,13 +327,8 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetHorizontalSpacing(xmlInfo.GetFloat("HSpacing"));
     SetKerning(xmlInfo.GetBool("Kerning"));
 
-    int vAlignIndex = xmlInfo.GetEnumSelectedIndex("VerticalAlign");
-    VerticalAlignment vAlign = static_cast<VerticalAlignment>(vAlignIndex);
-    SetVerticalAlign(vAlign);
-
-    int hAlignIndex = xmlInfo.GetEnumSelectedIndex("HorizontalAlign");
-    HorizontalAlignment hAlign = static_cast<HorizontalAlignment>(hAlignIndex);
-    SetHorizontalAlign(hAlign);
+    SetVerticalAlign( xmlInfo.GetEnum<VerticalAlignment>("VerticalAlign") );
+    SetHorizontalAlign( xmlInfo.GetEnum<HorizontalAlignment>("HorizontalAlign"));
 
     RefreshMesh();
 }
@@ -342,22 +337,15 @@ void UIText::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("Font", GetFont() ?
-                         GetFont()->GetFilepath() : Path(), "bfont");
+    xmlInfo->SetFilepath("Font", GetFont() ? GetFont()->GetFilepath() :
+                                             Path::Empty);
     xmlInfo->SetColor("Color", GetTint());
-    xmlInfo->SetString("Content", GetContent(), {XMLProperty::Inline});
+    xmlInfo->SetString("Content", GetContent());
     xmlInfo->SetFloat("TextSize", GetTextSize());
     xmlInfo->SetFloat("HSpacing", GetHorizontalSpacing());
     xmlInfo->SetBool("Kerning", GetKerning());
-    xmlInfo->SetEnum("VerticalAlign", {"Top", "Center", "Bot"},
-                     int(GetVerticalAlignment()), {});
-    xmlInfo->SetEnum("HorizontalAlign", {"Left", "Center", "Right"},
-                     int(GetHorizontalAlignment()), {});
-
-    xmlInfo->GetAttribute("Tint")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
-    // xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->SetEnum<VerticalAlignment>("VerticalAlign",
+                                        GetVerticalAlignment() );
+    xmlInfo->SetEnum<HorizontalAlignment>("HorizontalAlign",
+                                          GetHorizontalAlignment() );
 }

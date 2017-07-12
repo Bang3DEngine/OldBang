@@ -166,7 +166,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
 
     Material *sharedMat = GetSharedMaterial();
     xmlInfo->SetFilepath("Material", sharedMat ? sharedMat->GetFilepath() :
-                                                 Path::Empty, "bmat");
+                                                 Path::Empty);
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
-    xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
+    xmlInfo->SetBool("DrawWireframe", GetDrawWireframe());
 }

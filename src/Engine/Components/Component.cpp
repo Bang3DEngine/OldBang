@@ -85,10 +85,7 @@ void Component::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
-    xmlInfo->SetString("id", GetInstanceId(),
-                       {XMLProperty::Hidden, XMLProperty::Readonly});
-    xmlInfo->SetBool("enabled", m_enabled,
-                     {XMLProperty::Hidden, XMLProperty::Readonly});
-    xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
-    {XMLProperty::Hidden, XMLProperty::Readonly});
+    xmlInfo->SetString("id", GetInstanceId());
+    xmlInfo->SetBool("enabled", m_enabled);
+    xmlInfo->SetBool("closedInInspector", IsClosedInInspector());
 }

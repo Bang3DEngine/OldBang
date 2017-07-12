@@ -14,7 +14,6 @@
 #include "Bang/Quaternion.h"
 #include "Bang/XMLProperty.h"
 
-class IAttrWidgetButtonListener;
 class XMLAttribute : public IToString
 {
 public:
@@ -30,8 +29,7 @@ public:
         Quaternion,
         Rect,
         File,
-        Enum,
-        Button
+        Enum
     );
 
     XMLAttribute();
@@ -50,7 +48,7 @@ public:
     void SetProperty(const XMLProperty &property);
     void SetProperty(const String &propertyName, const String &propertyValue = "");
     void SetProperties(const Array<XMLProperty>& properties);
-    const String GetPropertyValue(const String &propertyName) const;
+    const String& GetPropertyValue(const String &propertyName) const;
     bool HasProperty(const XMLProperty &property) const;
     bool HasProperty(const String &propertyName) const;
     void RemoveProperty(const String &propertyName);
@@ -66,26 +64,8 @@ public:
     void SetColor(const Color &value, const Array<XMLProperty>& properties = {});
     void SetQuaternion(const Quaternion &value, const Array<XMLProperty>& properties = {});
     void SetRect(const Rect &value, const Array<XMLProperty>& properties = {});
-    void SetFilepath(const Path &filepath, const String &allowedExtensions = "",
+    void SetFilepath(const Path &filepath,
                      const Array<XMLProperty>& properties = {});
-    void SetEnum(const Array<String>& enumNames,
-                 const String& selectedEnumName,
-                 const Array<XMLProperty>& properties = {});
-    void SetEnum(const Array<String>& enumNames,
-                 int selectedEnumIndex,
-                 const Array<XMLProperty>& properties = {});
-
-    /**
-     * @brief HasVectorLikeType
-     * @return Whether the type is either Float, Vector*, or Quaternion.
-     */
-    bool HasVectoredType() const;
-
-    /**
-     * @brief GetNumberOfFields
-     * @return The number of fields of the type. For example: TFloat=1, TVector2=2, TQuaternion=4, etc.
-     */
-    int GetNumberOfFieldsOfType() const;
 
     String ToString() const override;
 
@@ -104,17 +84,19 @@ public:
     Color GetColor() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
-    String GetEnumSelectedName() const;
-    int GetEnumSelectedIndex() const;
-    Array<String> GetEnumNames() const;
 
-    #ifdef BANG_EDITOR
-    void SetButton(
-         const String buttonText,
-         IAttrWidgetButtonListener *listener,
-         const Array<XMLProperty>& properties = {});
-    IAttrWidgetButtonListener* GetButtonListener() const;
-    #endif
+    template<class EnumClass>
+    void SetEnum(EnumClass value, const Array<XMLProperty> &properties)
+    {
+        Set(m_name, String::ToString( static_cast<int>(value) ),
+            XMLAttribute::Type::Enum, properties);
+    }
+
+    template<class EnumClass>
+    EnumClass GetEnum() const
+    {
+        return static_cast<EnumClass>(String::ToInt(GetValue().ToCString()));
+    }
 
     String GetTypeName() const;
     const Array<XMLProperty>& GetProperties() const;

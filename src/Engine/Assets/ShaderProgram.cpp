@@ -76,8 +76,8 @@ void ShaderProgram::Write(XMLNode *xmlInfo) const
     Asset::Write(xmlInfo);
 
     Path vShaderFilepath = p_vshader ? p_vshader->GetFilepath() : Path();
-    xmlInfo->SetFilepath("VertexShader",   vShaderFilepath, "vert glsl");
+    xmlInfo->SetFilepath("VertexShader",   vShaderFilepath);
 
     Path fShaderFilepath = p_fshader ? p_fshader->GetFilepath() : Path();
-    xmlInfo->SetFilepath("FragmentShader", fShaderFilepath, "frag glsl");
+    xmlInfo->SetFilepath("FragmentShader", fShaderFilepath);
 }

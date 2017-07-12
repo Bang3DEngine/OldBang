@@ -541,15 +541,9 @@ void GameObject::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetString("id", GetInstanceId(),
-                       {XMLProperty::Hidden,
-                        XMLProperty::Readonly});
-    xmlInfo->SetBool("enabled", m_enabled,
-                     {XMLProperty::Hidden,
-                      XMLProperty::Readonly});
-    xmlInfo->SetString("name", m_name,
-                       {XMLProperty::Hidden,
-                        XMLProperty::Readonly});
+    xmlInfo->SetString("id", GetInstanceId());
+    xmlInfo->SetBool("enabled", m_enabled);
+    xmlInfo->SetString("name", m_name);
 
     for (Component *c : m_components)
     {

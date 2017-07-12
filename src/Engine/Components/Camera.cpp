@@ -254,10 +254,7 @@ void Camera::Read(const XMLNode &xmlInfo)
     SetFovDegrees(xmlInfo.GetFloat("FOVDegrees"));
     SetZNear(xmlInfo.GetFloat("ZNear"));
     SetZFar(xmlInfo.GetFloat("ZFar"));
-    ProjectionMode pm =
-            xmlInfo.GetEnumSelectedName("ProjectionMode").Contains("Ortho") ?
-                ProjectionMode::Orthographic : ProjectionMode::Perspective;
-    SetProjectionMode(pm);
+    SetProjectionMode( xmlInfo.GetEnum<ProjectionMode>("ProjectionMode") );
     SetOrthoHeight( xmlInfo.GetFloat("OrthoHeight") );
 }
 
@@ -268,22 +265,9 @@ void Camera::Write(XMLNode *xmlInfo) const
     xmlInfo->SetColor("ClearColor", GetClearColor());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());
-    xmlInfo->SetEnum("ProjectionMode",
-                     {"Orthographic", "Perspective"},
-                     (m_projMode == ProjectionMode::Orthographic) ? 0 : 1,
-                     {XMLProperty::Readonly});
-
-    if (GetProjectionMode() == ProjectionMode::Orthographic)
-    {
-        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight());
-        xmlInfo->SetFloat("FOVDegrees", GetFovDegrees(), {XMLProperty::Hidden});
-    }
-    else
-    {
-        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight(),
-                          {XMLProperty::Hidden});
-        xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
-    }
+    xmlInfo->SetEnum<ProjectionMode>("ProjectionMode", GetProjectionMode());
+    xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight());
+    xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
 }
 
 void Camera::SetIdentityMode(bool identityMode)

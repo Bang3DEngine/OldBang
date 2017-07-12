@@ -46,8 +46,6 @@ void ShaderProgramFile::Write(XMLNode *xmlInfo) const
 {
     BFile::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("VertexShader", GetVertexShaderFilepath(),
-                         "vert glsl");
-    xmlInfo->SetFilepath("FragmentShader", GetFragmentShaderFilepath(),
-                         "frag glsl");
+    xmlInfo->SetFilepath("VertexShader", GetVertexShaderFilepath());
+    xmlInfo->SetFilepath("FragmentShader", GetFragmentShaderFilepath());
 }

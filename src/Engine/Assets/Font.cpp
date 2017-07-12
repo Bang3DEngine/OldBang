@@ -34,6 +34,5 @@ void Font::Read(const XMLNode &xmlInfo)
 void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath,
-                         Font::GetFileExtensionStatic());
+    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath);
 }

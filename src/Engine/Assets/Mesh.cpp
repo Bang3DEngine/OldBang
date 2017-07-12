@@ -184,6 +184,6 @@ void Mesh::Read(const XMLNode &xmlInfo)
 void Mesh::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("ModelFilepath", m_modelFilepath, "obj");
+    xmlInfo->SetFilepath("ModelFilepath", m_modelFilepath);
 }
 
