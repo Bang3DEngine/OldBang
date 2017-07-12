@@ -5,7 +5,6 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Color.h"
-#include "Bang/XMLAttribute.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/AttributeWidget.h"
 
@@ -30,14 +29,13 @@ private:
 
 public:
 
-    AttrWidgetColor(const XMLAttribute &xmlAttribute);
+    AttrWidgetColor(const String &labelText);
     virtual ~AttrWidgetColor();
 
     void SetValue(const Color &c);
     const Color& GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 
 private slots:
 

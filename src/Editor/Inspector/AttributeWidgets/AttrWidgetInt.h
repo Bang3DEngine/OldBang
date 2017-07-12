@@ -10,7 +10,6 @@
 
 #include "Bang/AttributeWidget.h"
 
-class XMLAttribute;
 class InspectorWidget;
 class IntComponentSlotSpinBox;
 class AttrWidgetInt : public AttributeWidget //Slot for a float (label + float)
@@ -19,18 +18,16 @@ class AttrWidgetInt : public AttributeWidget //Slot for a float (label + float)
 
 private:
     IntComponentSlotSpinBox *m_lineEdit = nullptr;
-    bool _editing = false;
+    bool m_editing = false;
 
 public:
 
-    AttrWidgetInt(const XMLAttribute &xmlAttribute,
-                  bool isSubWidget = false);
+    AttrWidgetInt(const String &labelText);
 
     virtual void SetValue(int a);
     virtual int GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();

@@ -29,7 +29,6 @@ public:
     void OnSerializableObjectDestroyed(SerializableObject *destroyed);
     void InsertInspectorWidget(InspectorWidget *inspectorWidget,
                                int row = -1);
-    static String FormatInspectorLabel(const String &labelString);
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);

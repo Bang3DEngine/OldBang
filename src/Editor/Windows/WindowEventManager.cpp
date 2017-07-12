@@ -37,11 +37,6 @@ void WindowEventManager::NotifyGameObjectDestroyed(GameObject *destroyed)
     PROPAGATE_EVENT_PAR(OnGameObjectDestroyed(destroyed), s_wem->m_listeners);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(InspectorWidget *inspectorItem)
-{
-    PROPAGATE_EVENT_PAR(OnInspectorSlotChanged(inspectorItem), s_wem->m_listeners);
-}
-
 void WindowEventManager::NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects)
 {
     PROPAGATE_EVENT_PAR(OnHierarchyGameObjectsSelected(selectedGameObjects), s_wem->m_listeners);

@@ -3,7 +3,6 @@
 
 #include <QComboBox>
 
-#include "Bang/XMLAttribute.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/AttributeWidget.h"
 
@@ -14,13 +13,12 @@ private:
     ComboBox *m_comboBox = nullptr;
 
 public:
-    AttrWidgetEnum(const XMLAttribute &xmlAttribute);
+    AttrWidgetEnum(const String &labelText);
 
     virtual void SetValue(int index);
     virtual int GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 };
 
 class ComboBox : public QComboBox

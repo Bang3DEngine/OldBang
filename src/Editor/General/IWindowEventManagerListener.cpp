@@ -1,6 +1,5 @@
 #include "Bang/IWindowEventManagerListener.h"
 
-#include "Bang/Debug.h"
 #include "Bang/WindowEventManager.h"
 
 IWindowEventManagerListener::IWindowEventManagerListener()
@@ -33,10 +32,7 @@ void IWindowEventManagerListener::OnFilenameChanged(
         const String &absFilepathBefore, const String &absFilepathNow)
 {
 }
-void IWindowEventManagerListener::OnInspectorSlotChanged(
-        InspectorWidget *inspectorItem)
-{
-}
+
 void IWindowEventManagerListener::OnHierarchyGameObjectsSelected(
         const List<GameObject *> &selectedGameObjects)
 {

@@ -20,7 +20,6 @@ void AudioClipFileInspectorWidget::OnDestroy()
 
 void AudioClipFileInspectorWidget::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
-
 }
 
 

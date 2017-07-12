@@ -15,7 +15,7 @@ class AttrWidgetVectorFloat : public AttributeWidget
 public:
     Array<AttrWidgetFloat*> m_floatSlots;
 
-    AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute);
+    AttrWidgetVectorFloat(const String &labelText);
 
     virtual void SetValue(const Array<float> &v);
     virtual Array<float> GetValue() const;
@@ -24,8 +24,7 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 };
 
 #endif // INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H

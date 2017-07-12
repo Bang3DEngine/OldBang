@@ -1,7 +1,7 @@
 #include "Bang/AttrWidgetVectorFloat.h"
 
-AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute, false, true, true)
+AttrWidgetVectorFloat::AttrWidgetVectorFloat(const String &labelText) :
+    AttributeWidget()
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
     m_horizontalLayout.addLayout(hLayout, 1);
@@ -9,14 +9,14 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute) :
     m_horizontalLayout.setMargin(0);
 
     String labels[] = {"X", "Y", "Z", "W"};
-    int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
+    int numberOfFields = 4;
     for (uint i = 0; i < numberOfFields; ++i)
     {
-        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, true);
+        AttrWidgetFloat *s = new AttrWidgetFloat(labels[i]);
         m_floatSlots.PushBack(s);
 
-        QObject::connect(s, SIGNAL(OnValueChanged()),
-                         this, SIGNAL(OnValueChanged()));
+        QObject::connect(s, SIGNAL(OnValueChanged(AttributeWidget*)),
+                         this, SLOT(OnValueChanged(AttributeWidget*)));
 
         QLabel *label = new QLabel(labels[i].ToQString());
         if (i != 0)
@@ -29,6 +29,8 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute) :
 
     setMinimumWidth(40);
     setFixedHeight(20);
+
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -77,54 +79,7 @@ Vector4 AttrWidgetVectorFloat::GetVector4() const
                    m_floatSlots[3]->GetValue());
 }
 
-void AttrWidgetVectorFloat::Refresh(const XMLAttribute &attribute)
+void AttrWidgetVectorFloat::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-
-    XMLAttribute::Type attrType = attribute.GetType();
-
-    Array<float> vf;
-    if (attrType == XMLAttribute::Type::Float)
-    {
-        float v = attribute.GetFloat();
-        vf = {v};
-    }
-    else if (attrType == XMLAttribute::Type::Vector2)
-    {
-        Vector2 v = attribute.GetVector2();
-        vf = {v.x, v.y};
-    }
-    else if (attrType == XMLAttribute::Type::Vector3)
-    {
-        Vector3 v = attribute.GetVector3();
-        vf = {v.x, v.y, v.z};
-    }
-    else if (attrType == XMLAttribute::Type::Vector4 ||
-             attrType == XMLAttribute::Type::Quaternion ||
-             attrType == XMLAttribute::Type::Rect)
-    {
-        Vector4 v = attribute.GetVector4();
-        vf = {v.x, v.y, v.z, v.w};
-    }
-
-    SetValue(vf);
-}
-
-XMLAttribute AttrWidgetVectorFloat::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    Array<float> floats = GetValue();
-    if (floats.Size() == 2)
-    {
-        attr.SetVector2( Vector2(floats[0], floats[1]) );
-    }
-    else if (floats.Size() == 3)
-    {
-        attr.SetVector3( Vector3(floats[0], floats[1], floats[2]));
-    }
-    else if (floats.Size() == 4)
-    {
-        attr.SetVector4( Vector4(floats[0], floats[1], floats[2], floats[3]) );
-    }
-    return attr;
+    AttributeWidget::Refresh();
 }

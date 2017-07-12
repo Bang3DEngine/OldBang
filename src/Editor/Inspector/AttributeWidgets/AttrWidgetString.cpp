@@ -7,40 +7,41 @@
 #include "Bang/InspectorWidget.h"
 
 
-AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute, false, true,
-                    xmlAttribute.HasProperty(XMLProperty::BigText))
+AttrWidgetString::AttrWidgetString(const String &labelText) :
+    AttributeWidget()
 {
     QLayout *layout = new QVBoxLayout();
     m_horizontalLayout.addLayout(layout, 0);
     m_horizontalLayout.setContentsMargins(0,0,0,0);
 
-    bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
+    bool bigText = false;
+    bool readonly = false;
     QWidget *textWidget = nullptr;
     if (!bigText)
     {
-        m_lineEdit = new LineEdit(m_readonly); //Right side
+        m_lineEdit = new LineEdit(readonly); //Right side
         m_lineEdit->setAlignment(Qt::AlignLeft);
         m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         textWidget = m_lineEdit;
 
         QObject::connect(m_lineEdit, SIGNAL(textChanged(QString)),
-                         this, SIGNAL(OnValueChanged()));
+                         this, SLOT(OnValueChanged()));
     }
     else
     {
-        m_textEdit = new TextEdit(m_readonly);
+        m_textEdit = new TextEdit(readonly);
         m_textEdit->setAlignment(Qt::AlignLeft);
         m_textEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         SetHeightSizeHint(550);
         textWidget = m_textEdit;
 
         QObject::connect(m_textEdit, SIGNAL(textChanged(QString)),
-                         this, SIGNAL(OnValueChanged()));
+                         this, SLOT(OnValueChanged()));
     }
 
     m_horizontalLayout.addWidget(textWidget);
 
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -76,18 +77,9 @@ String AttrWidgetString::GetValue() const
     return "";
 }
 
-void AttrWidgetString::Refresh(const XMLAttribute &attribute)
+void AttrWidgetString::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-    ENSURE (attribute.GetType() == XMLAttribute::Type::String);
-    SetValue( attribute.GetString() );
-}
-
-XMLAttribute AttrWidgetString::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    attr.SetString(GetValue());
-    return attr;
+    AttributeWidget::Refresh();
 }
 
 void AttrWidgetString::OnFocusIn()
@@ -98,12 +90,12 @@ void AttrWidgetString::OnFocusIn()
 void AttrWidgetString::OnFocusOut()
 {
     m_editing = false;
-    emit OnValueChanged();
+    emit OnValueChanged(this);
 }
 
 void AttrWidgetString::OnKeyPressed()
 {
-    emit OnValueChanged();
+    emit OnValueChanged(this);
 }
 
 QSize AttrWidgetString::sizeHint() const

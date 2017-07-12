@@ -67,6 +67,6 @@ private:
     BangCompiler();
 };
 
-Q_DECLARE_METATYPE(BangCompiler::Result);
+Q_DECLARE_METATYPE(BangCompiler::Result)
 
 #endif // BANGCOMPILER_H

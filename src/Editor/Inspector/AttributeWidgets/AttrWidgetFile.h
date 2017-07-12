@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/AttributeWidget.h"
 #include "Bang/IWindowEventManagerListener.h"
@@ -17,7 +18,7 @@ class AttrWidgetFile : public AttributeWidget,
     Q_OBJECT
 
 public:
-    AttrWidgetFile(const XMLAttribute &xmlAttribute);
+    AttrWidgetFile(const String &labelText);
     virtual ~AttrWidgetFile();
 
     virtual void SetValue(const Path &filepath, bool draggedFile = false);
@@ -27,8 +28,7 @@ public:
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 
     const Path& GetPath() const;
 

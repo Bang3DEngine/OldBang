@@ -22,13 +22,12 @@ private:
     bool m_editing = false;
 
 public:
-    AttrWidgetString(const XMLAttribute &xmlAttribute);
+    AttrWidgetString(const String &labelText);
 
     virtual void SetValue(const String &value);
     virtual String GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();

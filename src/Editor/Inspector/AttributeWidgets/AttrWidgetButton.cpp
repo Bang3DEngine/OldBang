@@ -3,8 +3,6 @@
 #include <QVBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Inspector.h"
-
 AttrWidgetButton::AttrWidgetButton(const String &buttonText,
                                    IAttrWidgetButtonListener *listener)
 {
@@ -13,8 +11,6 @@ AttrWidgetButton::AttrWidgetButton(const String &buttonText,
 
     m_listener = listener;
 
-    // m_listener = xmlAttribute.GetListener();
-    // String buttonText = Inspector::FormatInspectorLabel(xmlAttribute.GetName());
     m_button = new QPushButton(buttonText.ToQString());
     m_button->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     QObject::connect(m_button, SIGNAL(pressed()),
@@ -39,10 +35,9 @@ String AttrWidgetButton::GetValue() const
     return m_button->text().toStdString();
 }
 
-void AttrWidgetButton::Refresh(const XMLAttribute &attribute)
+void AttrWidgetButton::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::Button) return;
+    AttributeWidget::Refresh();
 }
 
 void AttrWidgetButton::OnButtonClicked()

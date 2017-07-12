@@ -6,7 +6,6 @@
 #include <QFocusEvent>
 #include "Bang/WinUndef.h"
 
-#include "Bang/XMLAttribute.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/AttributeWidget.h"
 
@@ -19,14 +18,12 @@ private:
     CheckboxWidget *m_checkbox = nullptr;
 
 public:
-    AttrWidgetBool(const XMLAttribute &xmlAttribute);
+    AttrWidgetBool(const String &labelText);
 
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual XMLAttribute GetXMLAttribute() const override;
-
-    virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual void Refresh() override;
 };
 
 class CheckboxWidget : public QCheckBox

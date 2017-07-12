@@ -5,7 +5,6 @@
 #include "Bang/IAttrWidgetButtonListener.h"
 
 class AudioSource;
-class AttrWidgetButton;
 class AudioSourceInspectorWidget : public ComponentWidget,
                                    public IAttrWidgetButtonListener
 {
@@ -16,12 +15,19 @@ public:
 protected:
     void InitExtra() override;
     void Refresh() override;
+    void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget) override;
     void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     void OnDestroy() override;
 
 private:
     AudioSource *p_audioSource = nullptr;
-    AttrWidgetButton *m_playStopButton = nullptr;
+
+    AttrWidgetFile   *m_audioClipFileAW  = nullptr;
+    AttrWidgetFloat  *m_volumeAW         = nullptr;
+    AttrWidgetFloat  *m_pitchAW          = nullptr;
+    AttrWidgetFloat  *m_rangeAW          = nullptr;
+    AttrWidgetBool   *m_loopingAW        = nullptr;
+    AttrWidgetButton *m_playStopButtonAW = nullptr;
 };
 
 #endif // AUDIOSOURCEINSPECTORWIDGET_H

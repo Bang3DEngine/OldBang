@@ -3,8 +3,8 @@
 #include "Bang/Math.h"
 #include "Bang/EditorWindow.h"
 
-AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute) :
-  AttributeWidget(xmlAttribute)
+AttrWidgetColor::AttrWidgetColor(const String &labelText) :
+  AttributeWidget()
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setMargin(0); vLayout->setSpacing(0);
@@ -37,6 +37,7 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute) :
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
             this, SLOT(OnColorChanged(const QColor&)));
 
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -66,24 +67,15 @@ const Color& AttrWidgetColor::GetValue() const
     return m_selectedColor;
 }
 
-void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
+void AttrWidgetColor::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::Color) return;
-    SetValue( attribute.GetColor() );
-}
-
-XMLAttribute AttrWidgetColor::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    attr.SetColor(GetValue());
-    return attr;
+    AttributeWidget::Refresh();
 }
 
 void AttrWidgetColor::OnColorChanged(const QColor &c)
 {
     SetValue(Color::FromQColor(c));
-    emit OnValueChanged();
+    emit OnValueChanged(this);
 }
 
 

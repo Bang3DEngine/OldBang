@@ -16,11 +16,10 @@
 #include "Bang/InspectorWidget.h"
 #include "Bang/DialogBrowseAssetFile.h"
 
-AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute)
+AttrWidgetFile::AttrWidgetFile(const String &labelText) :
+    AttributeWidget()
 {
-    m_allowedExtensions = xmlAttribute.GetPropertyValue(
-                                  XMLProperty::FileExtension.GetName());
+    m_allowedExtensions = {"*"};
 
     m_hLayout = new QHBoxLayout();
     m_horizontalLayout.addLayout(m_hLayout, 1);
@@ -29,7 +28,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
     m_iconLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_hLayout->addWidget(m_iconLabel, 0, Qt::AlignRight | Qt::AlignVCenter);
 
-    m_attrName = xmlAttribute.GetName();
+    m_attrName = "TODO_NAME";
 
     // File Line Edit
     m_filepathLineEdit = new FileLineEdit();
@@ -44,7 +43,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
 
     // Browse button
     static QIcon browseIcon(":/qss_icons/rc/radio_checked.png");
-    if (!m_readonly)
+    bool readonly = false;
+    if (!readonly)
     {
         QToolButton *browseButton = new QToolButton();
         browseButton->setIcon(browseIcon);
@@ -58,11 +58,12 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute) :
     SetHeightSizeHint(35);
 
     Path filepath;
-    bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
-    if (isEngineFile) { filepath = EPATH( xmlAttribute.GetValue() ); }
-    else              { filepath = UPATH( xmlAttribute.GetValue() ); }
+    bool isEngineFile = false;
+    if (isEngineFile) { filepath = EPATH("TODO"); }
+    else              { filepath = UPATH("TODO"); }
     SetValue(m_filepath);
 
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -83,7 +84,7 @@ void AttrWidgetFile::Browse()
     {
         if (!selectedPath.IsFile()) { SetValue(Path::Empty); }
         else { SetValue(selectedPath); }
-        emit OnValueChanged();
+        emit OnValueChanged(this);
     }
 }
 
@@ -125,7 +126,7 @@ void AttrWidgetFile::SetValue(const Path &filepath, bool draggedFile)
 
     if (draggedFile)
     {
-        emit OnValueChanged();
+        emit OnValueChanged(this);
     }
 
     RefreshIcon();
@@ -138,7 +139,8 @@ String AttrWidgetFile::GetValue() const
 
 void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
 {
-    if (!m_readonly)
+    bool readonly = false;
+    if (!readonly)
     {
         Explorer *explorer = Explorer::GetInstance();
         if (ddi.sourceObject == explorer)
@@ -167,9 +169,10 @@ void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
     {
         if (ddi.sourceObject == explorer)
         {
+            bool readonly = false;
             BFile f = explorer->GetSelectedFile();
             if (f.GetPath().HasExtension( m_allowedExtensions ) &&
-                !m_readonly)
+                !readonly)
             {
                 SetValue(f.GetPath(), true);
             }
@@ -183,18 +186,9 @@ void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
     if (!m_filepath.IsEmpty()) { OnDoubleClick(); }
 }
 
-void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
+void AttrWidgetFile::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::File) return;
-    SetValue( attribute.GetFilepath() );
-}
-
-XMLAttribute AttrWidgetFile::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    attr.SetFilepath(GetPath(), m_allowedExtensions);
-    return attr;
+    AttributeWidget::Refresh();
 }
 
 const Path &AttrWidgetFile::GetPath() const

@@ -34,6 +34,7 @@ void Inspector::OnWindowShown()
 {
     this->SetDragDropEventPossibleSources({
           Explorer::GetInstance(), Hierarchy::GetInstance()});
+    qRegisterMetaType<IAttributeWidget>("IAttributeWidget");
     Clear();
 }
 
@@ -173,29 +174,6 @@ Inspector *Inspector::GetInstance()
 const List<InspectorWidget *> Inspector::GetCurrentInspectorWidgets() const
 {
     return m_currentInspectorWidgets;
-}
-
-String Inspector::FormatInspectorLabel(const String &labelString)
-{
-    String labelFormatted = labelString.Replace("_", " ");
-
-    // Add space after every cap (except for consecutive caps).
-    for (auto it = labelFormatted.Begin(); it != labelFormatted.End(); ++it)
-    {
-        ++it;
-        bool nextOneIsCap = (it != labelFormatted.End()) &&
-                             String::IsUpperCase(*it);
-        --it;
-        if (!nextOneIsCap && String::IsUpperCase(*it) &&
-            it != labelFormatted.Begin())
-        {
-            it = labelFormatted.insert(it, ' ');
-            ++it;
-        }
-    }
-
-    labelFormatted = labelFormatted;
-    return labelFormatted.Replace("  ", " ");
 }
 
 void Inspector::dropEvent(QDropEvent *e)

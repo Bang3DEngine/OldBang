@@ -20,13 +20,19 @@
 
 #include "Bang/File.h"
 #include "Bang/Debug.h"
-#include "Bang/XMLNode.h"
+#include "Bang/AttrWidgetInt.h"
+#include "Bang/AttrWidgetBool.h"
+#include "Bang/AttrWidgetEnum.h"
+#include "Bang/AttrWidgetFile.h"
 #include "Bang/DragDropQWidget.h"
+#include "Bang/AttrWidgetFloat.h"
+#include "Bang/AttrWidgetColor.h"
+#include "Bang/AttrWidgetString.h"
+#include "Bang/AttrWidgetButton.h"
+#include "Bang/AttrWidgetVectorFloat.h"
 
 class Component;
 class GameObject;
-class AttributeWidget;
-
 /**
  * @brief Represents a widget that can be put in the Inspector.
  * It tracks the attributes and attributeWidget it contains.
@@ -41,12 +47,6 @@ public:
 
     void Init();
 
-    /**
-     * @brief GetUpdatedWidgetXMLInfo
-     * @return An XMLNode with the updated information
-     */
-    XMLNode GetWidgetXMLInfo() const;
-
     // IInspectable* GetInspectable() const;
     QGridLayout *GetGridLayout();
 
@@ -57,7 +57,7 @@ public:
     virtual void OnDestroy();
 
 public slots:
-    virtual void OnAttrWidgetValueChanged();
+    virtual void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget);
 
     /**
      * @brief Refreshes all widget values with the related SerializableObject
@@ -93,15 +93,7 @@ private:
     String m_tagName = "";
     QTimer m_refreshTimer;
     List<AttributeWidget*> m_attributeWidgets;
-    Map<AttributeWidget*, XMLAttribute> m_attrWidget_To_XMLAttr;
     mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
-
-    /**
-     * @brief GetUpdatedWidgetXMLInfo
-     * @return An XMLNode with the info of the related SerializableObject.
-     *         It's not updated.
-     */
-    // XMLNode GetInspectableXMLInfo() const;
 
     void UpdateContentMargins();
 };

@@ -3,7 +3,6 @@
 
 #include <QPushButton>
 
-#include "Bang/XMLAttribute.h"
 #include "Bang/AttributeWidget.h"
 #include "Bang/IAttrWidgetButtonListener.h"
 
@@ -22,7 +21,7 @@ public:
     void SetValue(const String &buttonText);
     String GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
+    virtual void Refresh() override;
 
     QSize sizeHint() const;
 

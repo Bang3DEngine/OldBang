@@ -5,47 +5,51 @@
 #include <QHBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/XMLAttribute.h"
 #include "Bang/DragDropQWidget.h"
 #include "Bang/IDragDropListener.h"
 
+class IAttributeWidget
+{
+};
+
 class QLabel;
-class XMLNode;
 class QHBoxLayout;
 class AttributeWidget : public DragDropQWidget,
+                        public IAttributeWidget,
                         public IDragDropListener
 {
     Q_OBJECT
 
 public:
+    AttributeWidget();
+    virtual ~AttributeWidget();
 
-    virtual void Refresh(const XMLAttribute &attribute);
+    virtual void Refresh();
     virtual int GetHeightSizeHint() const;
 
     void SetHeightSizeHint(int heightSizeHint);
     void SetVisible(bool visible);
     bool IsVisible() const;
 
-    virtual XMLAttribute GetXMLAttribute() const;
-    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute);
-
 protected:
     QHBoxLayout m_horizontalLayout;
-    bool m_readonly = false;
 
-    AttributeWidget();
-    AttributeWidget(const XMLAttribute &xmlAttribute,
-                    bool isSubWidget = false,
-                    bool createLabel = true,
-                    bool labelAbove  = false);
+    void CreateLabel(const String &labelText);
+    void RemoveLabel();
 
     void AfterConstructor();
 
 private:
+    QLabel *m_nameLabel = nullptr;
     int m_heightSizeHint = -1;
 
-signals:
+protected slots:
     void OnValueChanged();
+
+signals:
+    void OnValueChanged(IAttributeWidget *attrWidget);
 };
+
+Q_DECLARE_METATYPE(IAttributeWidget)
 
 #endif // INSPECTORSW_H

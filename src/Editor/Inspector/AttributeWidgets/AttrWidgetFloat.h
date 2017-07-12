@@ -9,7 +9,6 @@
 
 #include "Bang/AttributeWidget.h"
 
-class XMLAttribute;
 class InspectorWidget;
 class FloatComponentSlotSpinBox;
 //Slot for a float (label + float)
@@ -21,14 +20,12 @@ public:
 
     // isSubWidget indicates if it belongs to another parent attributeWidget,
     // such as AttrWidgetFloat's inside AttrWidgetVectorFloat
-    AttrWidgetFloat(const XMLAttribute &xmlAttribute,
-                    bool isSubWidget = false);
+    AttrWidgetFloat(const String &labelText);
 
     virtual void SetValue(float f);
     virtual float GetValue() const;
 
-    virtual void Refresh(const XMLAttribute &attribute) override;
-    virtual XMLAttribute GetXMLAttribute() const override;
+    virtual void Refresh() override;
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();

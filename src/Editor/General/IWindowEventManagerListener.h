@@ -22,7 +22,6 @@ public:
     virtual void OnFilenameChanged(const String &absFilepathBefore,
                                    const String &absFilepathNow);
 
-    virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem);
     virtual void OnHierarchyGameObjectsSelected(
                                 const List<GameObject*> &selectedGameObjects);
     virtual void OnHierarchyGameObjectDoubleClicked(GameObject* gameObject);

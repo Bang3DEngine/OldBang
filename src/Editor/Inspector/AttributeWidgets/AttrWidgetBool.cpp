@@ -1,15 +1,15 @@
 #include "Bang/AttrWidgetBool.h"
 
-AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute)
+AttrWidgetBool::AttrWidgetBool(const String &labelText)
 {
     m_checkbox = new CheckboxWidget();
     m_checkbox->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_horizontalLayout.addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
     QObject::connect(m_checkbox, SIGNAL(clicked(bool)),
-                     this, SIGNAL(OnValueChanged()));
+                     this, SLOT(OnValueChanged()));
 
+    CreateLabel(labelText);
     SetHeightSizeHint(25);
     AfterConstructor();
 }
@@ -26,16 +26,7 @@ bool AttrWidgetBool::GetValue() const
     return m_checkbox->isChecked();
 }
 
-XMLAttribute AttrWidgetBool::GetXMLAttribute() const
+void AttrWidgetBool::Refresh()
 {
-    XMLAttribute attr;
-    attr.SetBool(GetValue());
-    return attr;
-}
-
-void AttrWidgetBool::Refresh(const XMLAttribute &attribute)
-{
-    AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::Bool) return;
-    SetValue( attribute.GetBool() );
+    AttributeWidget::Refresh();
 }

@@ -23,7 +23,7 @@
 
 class Component;
 class GameObject;
-class InspectorWidget;
+class IAttributeWidget;
 class IWindowEventManagerListener;
 class WindowEventManager : public QGLWidget
 {
@@ -42,7 +42,6 @@ public:
 
 
     static void NotifyGameObjectDestroyed(GameObject *destroyed);
-    static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects);
     static void NotifyHierarchyGameObjectDoubleClicked(GameObject *selected);
 };

@@ -20,13 +20,6 @@ InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 
 void InspectorWidget::Init()
 {
-    // p_inspectable = inspectable;
-
-    // XMLNode xmlInfo = GetInspectableXMLInfo();
-    // ConstructFromWidgetXMLInfo(xmlInfo);
-
-    // SetIcon( inspectable->GetIcon() );
-
     setVisible(false);
 
     m_vLayout.addLayout(&m_headerLayout, 0);
@@ -44,7 +37,7 @@ void InspectorWidget::Init()
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
-    String title = Inspector::FormatInspectorLabel("NAME_TODO");
+    String title = "NAME_TODO";
     m_titleLabel.setText(title.ToQString());
     QFont font = m_titleLabel.font();
     font.setPixelSize(13);
@@ -73,44 +66,9 @@ InspectorWidget::~InspectorWidget()
 void InspectorWidget::OnDestroy()
 {
     m_refreshTimer.stop();
-    // p_inspectable = nullptr;
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
                         this, SLOT(Refresh()));
 }
-
-/*
-XMLNode InspectorWidget::GetInspectableXMLInfo() const
-{
-    XMLNode xmlInfo;
-    if (p_inspectable)
-    {
-        p_inspectable->GetSerializableObject()->Write(&xmlInfo);
-    }
-    return xmlInfo;
-}
-*/
-
-XMLNode InspectorWidget::GetWidgetXMLInfo() const
-{
-    // Gather all attributes XML info's, mantaining their original XMLProp's.
-    XMLNode xmlInfo(m_tagName);
-    for (const auto &attrWidget_originalAttr : m_attrWidget_To_XMLAttr)
-    {
-        const AttributeWidget *aw = attrWidget_originalAttr.first;
-        const XMLAttribute &originalAttr = attrWidget_originalAttr.second;
-        XMLAttribute newAttr = aw->GetXMLAttribute();
-        newAttr.SetName(originalAttr.GetName());
-        newAttr.SetProperties(originalAttr.GetProperties());
-        xmlInfo.SetAttribute(newAttr);
-    }
-
-    return xmlInfo;
-}
-
-// IInspectable *InspectorWidget::GetInspectable() const
-// {
-//     return p_inspectable;
-// }
 
 QGridLayout *InspectorWidget::GetGridLayout()
 {
@@ -143,25 +101,7 @@ int InspectorWidget::GetHeightSizeHint() const
 
 void InspectorWidget::Refresh()
 {
-    /*
-    ENSURE(p_inspectable);
-
-    XMLNode xmlInfo = GetInspectableXMLInfo();
-    xmlInfo.SetTagName(m_tagName);
-    for (auto itAttr : xmlInfo.GetAttributesListInOrder())
-    {
-        const XMLAttribute& attribute = itAttr.second;
-        const String& attrName = attribute.GetName();
-        if( m_attrName_To_AttrWidget.ContainsKey(attrName))
-        {
-            AttributeWidget *attrWidget = m_attrName_To_AttrWidget[attrName];
-            attrWidget->SetVisible( !IsClosed() &&
-                                    !attribute.HasProperty(XMLProperty::Hidden));
-            attrWidget->Refresh(attribute);
-        }
-    }
     UpdateContentMargins();
-    */
 }
 
 void InspectorWidget::InitExtra()
@@ -176,16 +116,8 @@ void InspectorWidget::SetIcon(const QPixmap &icon)
     m_headerLayout.insertWidget(1, &m_iconLabel, 0, Qt::AlignCenter);
 }
 
-void InspectorWidget::OnAttrWidgetValueChanged()
+void InspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget* attrWidget)
 {
-    /*
-    ENSURE(p_inspectable);
-    if (m_created)
-    {
-        p_inspectable->GetSerializableObject()->Read( GetWidgetXMLInfo() );
-    }
-    */
-    WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 
 void InspectorWidget::OnCloseOpenButtonClicked()
@@ -213,8 +145,8 @@ void InspectorWidget::InsertAttributeWidget(AttributeWidget *attrWidget,
 {
     const int index = (_index >= 0 ? _index : m_gridLayout.rowCount());
     m_gridLayout.addWidget(attrWidget, index, 0);
-    QObject::connect(attrWidget, SIGNAL(OnValueChanged()),
-                     this, SLOT(OnAttrWidgetValueChanged()));
+    QObject::connect(attrWidget, SIGNAL(OnValueChanged(AttributeWidget*)),
+                     this, SLOT(OnAttrWidgetValueChanged(AttributeWidget*)));
 
     m_attributeWidgets.PushBack(attrWidget);
 }

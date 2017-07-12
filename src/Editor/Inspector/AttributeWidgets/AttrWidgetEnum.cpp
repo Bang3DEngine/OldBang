@@ -2,24 +2,27 @@
 
 #include "Bang/Array.h"
 
-AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute)
+AttrWidgetEnum::AttrWidgetEnum(const String &labelText) :
+    AttributeWidget()
 {
     QLayout *layout = new QHBoxLayout();
     m_horizontalLayout.addLayout(layout, 1);
 
     m_comboBox = new ComboBox(this);
     layout->addWidget(m_comboBox);
+    /*
     Array<String> enumNames = xmlAttribute.GetEnumNames();
     for (String enumString : enumNames)
     {
         m_comboBox->addItem( enumString.ToQString() );
     }
+    */
     QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
-                     this, SIGNAL(OnValueChanged()));
+                     this, SLOT(OnValueChanged()));
 
     SetHeightSizeHint(35);
 
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -35,24 +38,9 @@ int AttrWidgetEnum::GetValue() const
     return m_comboBox->currentIndex();
 }
 
-void AttrWidgetEnum::Refresh(const XMLAttribute &attribute)
+void AttrWidgetEnum::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::Enum) return;
-    SetValue( attribute.GetEnumSelectedIndex() );
-}
-
-XMLAttribute AttrWidgetEnum::GetXMLAttribute() const
-{
-    Array<String> enumNames;
-    for (int i = 0; i < m_comboBox->children().size(); ++i)
-    {
-        enumNames.PushBack(m_comboBox->itemText(i));
-    }
-
-    XMLAttribute attr;
-    attr.SetEnum(enumNames, GetValue());
-    return attr;
+    AttributeWidget::Refresh();
 }
 
 ComboBox::ComboBox(QWidget *parent)

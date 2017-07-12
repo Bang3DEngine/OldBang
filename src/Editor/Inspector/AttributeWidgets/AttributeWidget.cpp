@@ -4,55 +4,23 @@
 #include <QBoxLayout>
 #include "Bang/WinUndef.h"
 
-#include "Bang/XMLNode.h"
 #include "Bang/Inspector.h"
-#include "Bang/XMLAttribute.h"
-#include "Bang/AttrWidgetInt.h"
-#include "Bang/AttrWidgetBool.h"
-#include "Bang/AttrWidgetEnum.h"
-#include "Bang/AttrWidgetFile.h"
-#include "Bang/AttrWidgetColor.h"
-#include "Bang/AttrWidgetFloat.h"
-#include "Bang/AttrWidgetString.h"
-#include "Bang/AttrWidgetButton.h"
-#include "Bang/AttrWidgetVectorFloat.h"
 
 AttributeWidget::AttributeWidget()
-    : AttributeWidget(XMLAttribute())
-{
-}
-
-AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
-                                 bool isSubWidget,
-                                 bool createLabel,
-                                 bool labelAbove )
 {
     setVisible(false);
-    Refresh(xmlAttribute);
 
     m_horizontalLayout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_horizontalLayout.setContentsMargins(labelAbove ? 0 : 5,0,0,0);
-
-    if (!isSubWidget)
-    {
-        QString labelString = "";
-        if (createLabel)
-        {
-            String name = xmlAttribute.GetName();
-            name = Inspector::FormatInspectorLabel(name);
-            labelString = name.ToQString();
-
-            QLabel *attrNameLabel = new QLabel(labelString);
-            attrNameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-            m_horizontalLayout.addWidget(attrNameLabel);
-        }
-    }
-    Refresh(xmlAttribute);
+    m_horizontalLayout.setContentsMargins(5,0,0,0);
 
     setLayout(&m_horizontalLayout);
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    SetHeightSizeHint(labelAbove ? 45 : 25);
+    SetHeightSizeHint(25);
     setVisible(true);
+}
+
+AttributeWidget::~AttributeWidget()
+{
 }
 
 void AttributeWidget::AfterConstructor()
@@ -60,10 +28,13 @@ void AttributeWidget::AfterConstructor()
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 }
 
-void AttributeWidget::Refresh(const XMLAttribute &attribute)
+void AttributeWidget::OnValueChanged()
 {
-    m_readonly = attribute.HasProperty(XMLProperty::Readonly);
-    setEnabled( !attribute.HasProperty(XMLProperty::Disabled) );
+    emit OnValueChanged(this);
+}
+
+void AttributeWidget::Refresh()
+{
 }
 
 int AttributeWidget::GetHeightSizeHint() const
@@ -89,53 +60,12 @@ bool AttributeWidget::IsVisible() const
     return !isHidden();
 }
 
-XMLAttribute AttributeWidget::GetXMLAttribute() const
+void AttributeWidget::CreateLabel(const String &labelText)
 {
-    XMLAttribute empty;
-    return empty; // Empty
-}
-
-AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr)
-{
-    const XMLAttribute::Type attrType = xmlAttr.GetType();
-
-    if (xmlAttr.HasVectoredType())
+    if (!labelText.Empty())
     {
-        int numberOfFields = xmlAttr.GetNumberOfFieldsOfType();
-        if (numberOfFields == 1)
-        {
-            if (attrType == XMLAttribute::Type::Float)
-            {
-                return new AttrWidgetFloat(xmlAttr, false);
-            }
-            else { return new AttrWidgetInt(xmlAttr, false); }
-        }
-        else { return new AttrWidgetVectorFloat(xmlAttr); }
+        m_nameLabel = new QLabel(labelText.ToQString());
+        m_nameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        m_horizontalLayout.insertWidget(0, m_nameLabel);
     }
-    else if (attrType == XMLAttribute::Type::File)
-    {
-        return new AttrWidgetFile(xmlAttr);
-    }
-    else if (attrType == XMLAttribute::Type::String)
-    {
-        return new AttrWidgetString(xmlAttr);
-    }
-    else if (attrType == XMLAttribute::Type::Bool)
-    {
-        return new AttrWidgetBool(xmlAttr);
-    }
-    else if (attrType == XMLAttribute::Type::Enum)
-    {
-        return new AttrWidgetEnum(xmlAttr);
-    }
-    else if (attrType == XMLAttribute::Type::Color)
-    {
-        return new AttrWidgetColor(xmlAttr);
-    }
-    else if (attrType == XMLAttribute::Type::Button)
-    {
-        // return new AttrWidgetButton(xmlAttr);
-    }
-
-    return nullptr;
 }

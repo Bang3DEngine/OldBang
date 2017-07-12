@@ -4,12 +4,10 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Object.h"
-#include "Bang/XMLAttribute.h"
 #include "Bang/InspectorWidget.h"
 
-AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
-                                 bool isSubWidget) :
-    AttributeWidget(xmlAttribute, isSubWidget, !isSubWidget)
+AttrWidgetFloat::AttrWidgetFloat(const String &labelText) :
+    AttributeWidget()
 {
     QVBoxLayout *layout = new QVBoxLayout();
     m_horizontalLayout.addLayout(layout, 1);
@@ -19,13 +17,14 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
     m_lineEdit->setAlignment(Qt::AlignLeft);
     m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     QObject::connect(m_lineEdit, SIGNAL(textChanged(QString)),
-                     this, SIGNAL(OnValueChanged()));
+                     this, SLOT(OnValueChanged()));
 
     layout->addWidget(m_lineEdit);
 
     setMinimumWidth(15);
     setContentsMargins(0, 0, 0, 0);
 
+    CreateLabel(labelText);
     AfterConstructor();
 }
 
@@ -42,19 +41,9 @@ float AttrWidgetFloat::GetValue() const
     return m_lineEdit->GetFloat();
 }
 
-void AttrWidgetFloat::Refresh(const XMLAttribute &attribute)
+void AttrWidgetFloat::Refresh()
 {
-    AttributeWidget::Refresh(attribute);
-
-    if (attribute.GetType() != XMLAttribute::Type::Float) return;
-    SetValue( attribute.GetFloat() );
-}
-
-XMLAttribute AttrWidgetFloat::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    attr.SetFloat(GetValue());
-    return attr;
+    AttributeWidget::Refresh();
 }
 
 void AttrWidgetFloat::OnLineEditFocusIn()
