@@ -33,6 +33,7 @@ protected:
     QHBoxLayout m_horizontalLayout;
     bool m_readonly = false;
 
+    AttributeWidget();
     AttributeWidget(const XMLAttribute &xmlAttribute,
                     bool isSubWidget = false,
                     bool createLabel = true,

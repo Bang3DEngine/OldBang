@@ -28,7 +28,7 @@ public:
 
     #ifdef BANG_EDITOR
     virtual IInspectable *GetNewInspectable() override;
-    virtual void OnButtonClicked(const String &attrName);
+    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton);
     #endif
 
     virtual void Read(const XMLNode &xmlInfo) override;

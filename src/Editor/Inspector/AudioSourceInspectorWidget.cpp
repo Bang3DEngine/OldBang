@@ -1,43 +1,49 @@
 #include "Bang/AudioSourceInspectorWidget.h"
 
 #include "Bang/Debug.h"
+#include "Bang/EditorState.h"
 #include "Bang/AudioSource.h"
+#include "Bang/AttrWidgetButton.h"
 
 AudioSourceInspectorWidget::AudioSourceInspectorWidget(AudioSource *audioSource)
     : ComponentWidget(audioSource)
 {
-    /*
-    AudioSource *noConstThis = const_cast<AudioSource*>(this);
-    if (IsPlaying())
-    {
-        xmlInfo->SetButton("Stop", noConstThis, {});
-        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
-    }
-    else
-    {
-
-        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
-        xmlInfo->SetButton("Play", noConstThis, {});
-    }
-    */
+    p_audioSource = audioSource;
 }
 
-void AudioSourceInspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
+AudioSourceInspectorWidget::~AudioSourceInspectorWidget()
 {
-    ComponentWidget::CreateWidgetSlots(xmlInfo);
+}
+void AudioSourceInspectorWidget::OnDestroy()
+{
+    ComponentWidget::OnDestroy();
+    if (EditorState::IsStopped())
+    {
+        p_audioSource->Stop();
+    }
+}
 
-    /*
-    m_playStopButton = new QPushButton("Play");
-    m_playStopButton->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    connect(m_playStopButton, SIGNAL(pressed()),
-            this, SLOT(OnPlayStopButtonClicked()));
 
-    QGridLayout *gridLayout = GetGridLayout();
-    gridLayout->addWidget(m_playStopButton, GetNextRowIndex(), 0, 1,
-                          colSpan, Qt::AlignLeft | Qt::AlignVCenter)
+void AudioSourceInspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
+{
+    ComponentWidget::CreateAttributeWidgets(xmlInfo);
 
-    AfterConstructor();
-    m_layout.setAlignment(Qt::AlignRight);
-    InspectorWidget.GetGridLayout()
-    */
+    m_playStopButton = new AttrWidgetButton("Play", this);
+    m_playStopButton->SetValue("Play");
+    InsertAttributeWidget(m_playStopButton);
+}
+
+void AudioSourceInspectorWidget::Refresh()
+{
+    InspectorWidget::Refresh();
+    m_playStopButton->SetValue( p_audioSource->IsPlaying() ? "Stop" : "Play" );
+}
+
+void AudioSourceInspectorWidget::OnButtonClicked(const AttrWidgetButton *clickedButton)
+{
+    if (clickedButton == m_playStopButton)
+    {
+        if (p_audioSource->IsPlaying()) { p_audioSource->Stop(); }
+        else { p_audioSource->Play(); }
+    }
 }

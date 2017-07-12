@@ -389,7 +389,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
 
         UnselectAll();
         item->setSelected(true);
-        _NotifyHierarchyGameObjectSelectionChanged();
+        _NotifyHierarchyGameObjectSelectionChanged();z
     }
 }
 

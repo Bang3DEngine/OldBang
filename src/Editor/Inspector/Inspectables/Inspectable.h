@@ -5,6 +5,7 @@
 #include "Bang/IInspectable.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/SerializableObject.h"
+#include "Bang/InspectorWidgetFactory.h"
 
 template <class SerializableObjectClass>
 class Inspectable : public IInspectable
@@ -41,9 +42,7 @@ public:
 
     virtual InspectorWidget *GetNewInspectorWidget() override
     {
-        InspectorWidget *iw = new InspectorWidget();
-        iw->Init(this);
-        return iw;
+        return InspectorWidgetFactory::CreateWidget(this);
     }
 
     virtual List<IInspectable*> GetNewInspectablesToShow() override

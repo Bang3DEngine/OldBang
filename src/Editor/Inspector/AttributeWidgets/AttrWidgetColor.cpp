@@ -33,6 +33,7 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute) :
 
     SetValue(m_selectedColor);
 
+    SetHeightSizeHint(35);
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
             this, SLOT(OnColorChanged(const QColor&)));
 

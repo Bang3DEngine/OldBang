@@ -45,8 +45,9 @@ void AudioSource::CloneInto(ICloneable *clone) const
 }
 
 #ifdef BANG_EDITOR
-void AudioSource::OnButtonClicked(const String &attrName)
+void AudioSource::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
+    /*
     if (IsPlaying())
     {
         Stop();
@@ -55,6 +56,7 @@ void AudioSource::OnButtonClicked(const String &attrName)
     {
         Play();
     }
+    */
 }
 #endif
 

@@ -6,29 +6,28 @@
 #include "Bang/ComponentWidget.h"
 #include "Bang/AudioSourceInspectorWidget.h"
 
+InspectorWidget *InspectorWidgetFactory::CreateWidget(IInspectable *inspectable)
+{
+    InspectorWidget *inspWidget = new InspectorWidget();
+    inspWidget->Init(inspectable);
+    return inspWidget;
+}
+
 InspectorWidget *InspectorWidgetFactory::CreateWidget(Component *component)
 {
-    InspectorWidget *inspWidget = nullptr;
+    ComponentWidget *compWidget = nullptr;
 
     // N-ary dispatch...using RTTI
     if (component->IsOfType<AudioSource>())
     {
-        inspWidget = _CreateWidget( static_cast<AudioSource*>(component) );
+        AudioSource *as = static_cast<AudioSource*>(component);
+        compWidget = new AudioSourceInspectorWidget(as);
     }
     else
     {
-        inspWidget = _CreateWidget(component);
+        compWidget = new ComponentWidget(component);
     }
 
-    return inspWidget;
-}
-
-InspectorWidget *InspectorWidgetFactory::_CreateWidget(Component *component)
-{
-    return new ComponentWidget(component);
-}
-
-InspectorWidget *InspectorWidgetFactory::_CreateWidget(AudioSource *audioSource)
-{
-    return new AudioSourceInspectorWidget(audioSource);
+    compWidget->Init();
+    return compWidget;
 }

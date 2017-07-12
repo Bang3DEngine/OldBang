@@ -10,7 +10,7 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute) :
     QObject::connect(m_checkbox, SIGNAL(clicked(bool)),
                      this, SIGNAL(OnValueChanged()));
 
-    setFixedHeight(25);
+    SetHeightSizeHint(25);
     AfterConstructor();
 }
 

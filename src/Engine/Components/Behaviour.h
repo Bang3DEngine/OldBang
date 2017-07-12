@@ -58,7 +58,7 @@ public:
     bool IsLoaded() const;
 
     #ifdef BANG_EDITOR
-    void OnButtonClicked(const String &attrName) override;
+    void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     static Behaviour* CreateNewBehaviour();
     #endif
 

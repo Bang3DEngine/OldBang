@@ -38,16 +38,9 @@ class InspectorWidget : public DragDropQWidget
 
 public:
     InspectorWidget();
-    void Init(IInspectable *relatedInspectable);
-
     virtual ~InspectorWidget();
 
-    /**
-     * @brief GetUpdatedWidgetXMLInfo
-     * @return An XMLNode with the info of the related SerializableObject.
-     *         It's not updated.
-     */
-    XMLNode GetInspectableXMLInfo() const;
+    void Init(IInspectable *inspectable);
 
     /**
      * @brief GetUpdatedWidgetXMLInfo
@@ -62,7 +55,7 @@ public:
     bool IsClosed() const;
 
     virtual int GetHeightSizeHint() const;
-    void OnDestroy();
+    virtual void OnDestroy();
 
 public slots:
 
@@ -71,7 +64,7 @@ public slots:
      * @brief Refreshes all widget values with the related SerializableObject
      * current values.
      */
-    void Refresh();
+    virtual void Refresh();
 
 protected:
     IInspectable *p_inspectable = nullptr;
@@ -89,20 +82,29 @@ protected:
     void UpdateCloseOpenButtonIcon();
     virtual void SetClosed(bool closedWidget);
 
-    virtual void CreateWidgetSlots(const XMLNode &xmlInfo);
+    void InsertAttributeWidget(AttributeWidget *attrWidget, int index = -1);
+    virtual void CreateAttributeWidgets(const XMLNode &xmlInfo);
 
 protected slots:
     void OnCloseOpenButtonClicked();
 
 private:
-    /** @brief This variable is used to avoid premature OnSlotValueChanged,
+    /** @brief This variable is used to avoid premature OnValueChanged,
      * before creating the widget**/
     bool m_created = false;
 
     String m_tagName = "";
     QTimer m_refreshTimer;
+    List<AttributeWidget*> m_attributeWidgets;
     Map<AttributeWidget*, XMLAttribute> m_attrWidget_To_XMLAttr;
     mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
+
+    /**
+     * @brief GetUpdatedWidgetXMLInfo
+     * @return An XMLNode with the info of the related SerializableObject.
+     *         It's not updated.
+     */
+    XMLNode GetInspectableXMLInfo() const;
 
     void UpdateContentMargins();
     void ConstructFromWidgetXMLInfo(const XMLNode &info);

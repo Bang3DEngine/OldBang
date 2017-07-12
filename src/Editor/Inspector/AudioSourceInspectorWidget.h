@@ -5,19 +5,26 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/ComponentWidget.h"
-#include "Bang/AttrWidgetButton.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 
 class AudioSource;
-class AudioSourceInspectorWidget : public ComponentWidget
+class AttrWidgetButton;
+class AudioSourceInspectorWidget : public ComponentWidget,
+                                   public IAttrWidgetButtonListener
 {
 public:
     AudioSourceInspectorWidget(AudioSource *audioSource);
+    ~AudioSourceInspectorWidget();
 
 protected:
-    virtual void CreateWidgetSlots(const XMLNode &xmlInfo) override;
+    void CreateAttributeWidgets(const XMLNode &xmlInfo) override;
+    void Refresh() override;
+    void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
+    void OnDestroy() override;
 
 private:
-    QPushButton *m_playStopButton = nullptr;
+    AudioSource *p_audioSource = nullptr;
+    AttrWidgetButton *m_playStopButton = nullptr;
 };
 
 #endif // AUDIOSOURCEINSPECTORWIDGET_H

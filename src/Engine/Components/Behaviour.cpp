@@ -104,12 +104,14 @@ void Behaviour::Write(XMLNode *xmlInfo) const
 }
 
 #ifdef BANG_EDITOR
-void Behaviour::OnButtonClicked(const String &attrName)
+void Behaviour::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
+    /*
     if (attrName.Contains("Create"))
     {
         CreateNewBehaviour();
     }
+    */
 }
 
 Behaviour* Behaviour::CreateNewBehaviour()

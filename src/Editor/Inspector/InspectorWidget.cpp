@@ -11,31 +11,22 @@
 #include "Bang/GameObject.h"
 #include "Bang/IInspectable.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/AttrWidgetInt.h"
-#include "Bang/AttrWidgetEnum.h"
-#include "Bang/AttrWidgetFile.h"
-#include "Bang/AttrWidgetBool.h"
-#include "Bang/AttrWidgetFloat.h"
-#include "Bang/AttrWidgetColor.h"
 #include "Bang/AttributeWidget.h"
-#include "Bang/AttrWidgetButton.h"
-#include "Bang/AttrWidgetString.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/SerializableObject.h"
-#include "Bang/AttrWidgetVectorFloat.h"
 
 InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
 
-void InspectorWidget::Init(IInspectable *relatedInspectable)
+void InspectorWidget::Init(IInspectable *inspectable)
 {
-    p_inspectable = relatedInspectable;
+    p_inspectable = inspectable;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(xmlInfo);
 
-    SetIcon( relatedInspectable->GetIcon() );
+    SetIcon( inspectable->GetIcon() );
 
     setAcceptDrops(true);
     Refresh();
@@ -68,7 +59,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
     m_titleLabel.setFont(font);
     m_titleLabel.setAlignment(Qt::AlignLeft);
 
-    CreateWidgetSlots(xmlInfo);
+    CreateAttributeWidgets(xmlInfo);
 
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                      this, SLOT(Refresh()));
@@ -83,6 +74,15 @@ InspectorWidget::~InspectorWidget()
 {
     OnDestroy();
 }
+
+void InspectorWidget::OnDestroy()
+{
+    m_refreshTimer.stop();
+    p_inspectable = nullptr;
+    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
+                        this, SLOT(Refresh()));
+}
+
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
@@ -134,25 +134,15 @@ bool InspectorWidget::IsClosed() const
 int InspectorWidget::GetHeightSizeHint() const
 {
     int heightSizeHint = 0;
-    heightSizeHint += 60; // Header height
+    heightSizeHint += 50; // Header height
 
     // Add up children widget's height size hints
-    typedef std::pair<String, AttributeWidget*> Pair;
-    for (Pair name_AttrWidget : m_attrName_To_AttrWidget)
+    for (AttributeWidget *aw : m_attributeWidgets)
     {
-        AttributeWidget *attrWidget = name_AttrWidget.second;
-        heightSizeHint += attrWidget->GetHeightSizeHint();
+        heightSizeHint += aw->IsVisible() ? aw->GetHeightSizeHint() : 0;
     }
 
     return heightSizeHint;
-}
-
-void InspectorWidget::OnDestroy()
-{
-    m_refreshTimer.stop();
-    p_inspectable = nullptr;
-    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(Refresh()));
 }
 
 void InspectorWidget::Refresh()
@@ -163,8 +153,8 @@ void InspectorWidget::Refresh()
     xmlInfo.SetTagName(m_tagName);
     for (auto itAttr : xmlInfo.GetAttributesListInOrder())
     {
-        XMLAttribute attribute = itAttr.second;
-        String attrName = attribute.GetName();
+        const XMLAttribute& attribute = itAttr.second;
+        const String& attrName = attribute.GetName();
         if( m_attrName_To_AttrWidget.ContainsKey(attrName))
         {
             AttributeWidget *attrWidget = m_attrName_To_AttrWidget[attrName];
@@ -184,26 +174,18 @@ void InspectorWidget::SetIcon(const QPixmap &icon)
     m_headerLayout.insertWidget(1, &m_iconLabel, 0, Qt::AlignCenter);
 }
 
-void InspectorWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
+void InspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
 {
     m_tagName = xmlInfo.GetTagName();
     for (auto itAttr : xmlInfo.GetAttributesListInOrder())
     {
         const XMLAttribute &attribute = itAttr.second;
-        AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute);
-        if (!w) continue;
+        AttributeWidget *aw = AttributeWidget::FromXMLAttribute(attribute);
+        if (!aw) { continue; }
 
-        m_gridLayout.addWidget(w, m_gridLayout.rowCount(), 0);
-        QObject::connect(w, SIGNAL(OnValueChanged()),
-                         this, SLOT(OnAttrWidgetValueChanged()));
-
-        m_attrName_To_AttrWidget.Set(attribute.GetName(), w);
-        if (attribute.HasProperty(XMLProperty::Hidden))
-        {
-            w->hide();
-        }
-
-        m_attrWidget_To_XMLAttr.Set(w, attribute);
+        InsertAttributeWidget(aw);
+        m_attrWidget_To_XMLAttr.Set(aw, attribute);
+        m_attrName_To_AttrWidget.Set(attribute.GetName(), aw);
     }
 }
 
@@ -235,6 +217,17 @@ void InspectorWidget::SetClosed(bool closedWidget)
         item->widget()->setHidden(closedWidget);
     }
     UpdateCloseOpenButtonIcon();
+}
+
+void InspectorWidget::InsertAttributeWidget(AttributeWidget *attrWidget,
+                                            int _index)
+{
+    const int index = (_index >= 0 ? _index : m_gridLayout.rowCount());
+    m_gridLayout.addWidget(attrWidget, index, 0);
+    QObject::connect(attrWidget, SIGNAL(OnValueChanged()),
+                     this, SLOT(OnAttrWidgetValueChanged()));
+
+    m_attributeWidgets.PushBack(attrWidget);
 }
 
 void InspectorWidget::UpdateContentMargins()

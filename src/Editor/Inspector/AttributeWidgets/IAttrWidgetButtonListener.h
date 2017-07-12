@@ -1,15 +1,14 @@
 #ifndef ATTRWIDGETBUTTONLISTENER_H
 #define ATTRWIDGETBUTTONLISTENER_H
 
-#include "Bang/String.h"
-
+class AttrWidgetButton;
 class IAttrWidgetButtonListener
 {
 protected:
     IAttrWidgetButtonListener();
 
 public:
-    virtual void OnButtonClicked(const String &attrName) = 0;
+    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) = 0;
 };
 
 #endif // ATTRWIDGETBUTTONLISTENER_H

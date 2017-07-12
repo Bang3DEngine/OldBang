@@ -38,8 +38,9 @@ IInspectable *AudioClipFile::GetNewInspectable()
     return new FileInspectable<AudioClipFile>(*this);
 }
 
-void AudioClipFile::OnButtonClicked(const String &attrName)
+void AudioClipFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
+    /*
     bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
     if (hasToPlay)
     {
@@ -57,6 +58,7 @@ void AudioClipFile::OnButtonClicked(const String &attrName)
         delete m_tmpAudioSource;
         m_tmpAudioSource = nullptr;
     }
+    */
 }
 #endif
 

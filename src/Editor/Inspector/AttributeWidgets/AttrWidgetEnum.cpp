@@ -18,7 +18,7 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute) :
     QObject::connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
                      this, SIGNAL(OnValueChanged()));
 
-    SetHeightSizeHint(45);
+    SetHeightSizeHint(35);
 
     AfterConstructor();
 }

@@ -32,7 +32,7 @@ public:
 
     #ifdef BANG_EDITOR
     virtual IInspectable *GetNewInspectable() override;
-    virtual void OnButtonClicked(const String &attrName) override;
+    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     #endif
 
 private:

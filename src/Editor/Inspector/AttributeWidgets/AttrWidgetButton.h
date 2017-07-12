@@ -16,19 +16,18 @@ private:
     IAttrWidgetButtonListener *m_listener = nullptr;
 
 public:
-    AttrWidgetButton(const XMLAttribute &xmlAttribute);
+    AttrWidgetButton(const String &buttonText,
+                     IAttrWidgetButtonListener *listener);
 
     void SetValue(const String &buttonText);
     String GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 
-    virtual XMLAttribute GetXMLAttribute() const override;
-
     QSize sizeHint() const;
 
 public slots:
-    void OnButtonClicked(bool _);
+    void OnButtonClicked();
 };
 
 

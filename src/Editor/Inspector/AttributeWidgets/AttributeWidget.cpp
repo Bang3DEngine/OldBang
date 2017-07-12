@@ -17,6 +17,11 @@
 #include "Bang/AttrWidgetButton.h"
 #include "Bang/AttrWidgetVectorFloat.h"
 
+AttributeWidget::AttributeWidget()
+    : AttributeWidget(XMLAttribute())
+{
+}
+
 AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  bool isSubWidget,
                                  bool createLabel,
@@ -69,6 +74,7 @@ int AttributeWidget::GetHeightSizeHint() const
 
 void AttributeWidget::SetHeightSizeHint(int heightSizeHint)
 {
+    setFixedHeight(heightSizeHint);
     m_heightSizeHint = heightSizeHint;
 }
 
@@ -128,7 +134,7 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttr)
     }
     else if (attrType == XMLAttribute::Type::Button)
     {
-        return new AttrWidgetButton(xmlAttr);
+        // return new AttrWidgetButton(xmlAttr);
     }
 
     return nullptr;

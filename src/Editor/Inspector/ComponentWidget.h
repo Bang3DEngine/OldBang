@@ -17,6 +17,8 @@ public:
     explicit ComponentWidget(Component *relatedComponent);
     virtual ~ComponentWidget();
 
+    void Init();
+    virtual void OnDestroy() override;
     int GetHeightSizeHint() const override;
 
 public slots:
@@ -24,7 +26,7 @@ public slots:
 
 protected:
     void SetClosed(bool closed) override;
-    virtual void CreateWidgetSlots(const XMLNode &xmlInfo) override;
+    virtual void CreateAttributeWidgets(const XMLNode &xmlInfo) override;
 
 private:
 

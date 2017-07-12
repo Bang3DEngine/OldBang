@@ -36,7 +36,7 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
 
     #ifdef BANG_EDITOR
-    virtual void OnButtonClicked(const String &attrName) override;
+    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     #endif
 
     virtual void Read(const XMLNode &xmlInfo) override;

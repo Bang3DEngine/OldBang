@@ -5,19 +5,20 @@
 
 #include "Bang/Inspector.h"
 
-AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute) :
-    AttributeWidget(xmlAttribute, false, false)
+AttrWidgetButton::AttrWidgetButton(const String &buttonText,
+                                   IAttrWidgetButtonListener *listener)
 {
     QLayout *layout = new QVBoxLayout();
     m_horizontalLayout.addLayout(layout, 1);
 
-    m_listener = xmlAttribute.GetButtonListener();
+    m_listener = listener;
 
-    String buttonText = Inspector::FormatInspectorLabel(xmlAttribute.GetName());
+    // m_listener = xmlAttribute.GetListener();
+    // String buttonText = Inspector::FormatInspectorLabel(xmlAttribute.GetName());
     m_button = new QPushButton(buttonText.ToQString());
     m_button->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    QObject::connect(m_button, SIGNAL(clicked(bool)),
-                     this, SLOT(OnButtonClicked(bool)));
+    QObject::connect(m_button, SIGNAL(pressed()),
+                     this, SLOT(OnButtonClicked()));
     layout->addWidget(m_button);
 
     SetHeightSizeHint(50);
@@ -44,18 +45,11 @@ void AttrWidgetButton::Refresh(const XMLAttribute &attribute)
     if (attribute.GetType() != XMLAttribute::Type::Button) return;
 }
 
-XMLAttribute AttrWidgetButton::GetXMLAttribute() const
-{
-    XMLAttribute attr;
-    attr.SetButton(GetValue(), m_listener );
-    return attr;
-}
-
-void AttrWidgetButton::OnButtonClicked(bool _)
+void AttrWidgetButton::OnButtonClicked()
 {
     if (m_listener)
     {
-        m_listener->OnButtonClicked(GetValue());
+        m_listener->OnButtonClicked(this);
     }
 }
 

@@ -63,8 +63,9 @@ IInspectable *SoundFile::GetNewInspectable()
     return new FileInspectable<SoundFile>(*this);
 }
 
-void SoundFile::OnButtonClicked(const String &attrName)
+void SoundFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
+    /*
     ENSURE( GetPath().Exists() );
     if (attrName == "Play")
     {
@@ -79,5 +80,6 @@ void SoundFile::OnButtonClicked(const String &attrName)
         delete m_tmpAudioSource; m_tmpAudioSource = nullptr;
         delete m_tmpAudioClip;   m_tmpAudioClip   = nullptr;
     }
+    */
 }
 #endif

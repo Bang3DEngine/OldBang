@@ -13,6 +13,19 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
 {
     p_component = relatedComponent;
     m_componentInspectable = new Inspectable<Component>(p_component);
+}
+
+ComponentWidget::~ComponentWidget()
+{
+}
+void ComponentWidget::OnDestroy()
+{
+    InspectorWidget::OnDestroy();
+    delete m_componentInspectable;
+}
+
+void ComponentWidget::Init()
+{
     InspectorWidget::Init(m_componentInspectable);
 
     m_closed = p_component->IsClosedInInspector();
@@ -28,11 +41,6 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
                                  Qt::AlignRight | Qt::AlignVCenter);
     }
     Refresh();
-}
-
-ComponentWidget::~ComponentWidget()
-{
-    delete m_componentInspectable;
 }
 
 int ComponentWidget::GetHeightSizeHint() const
@@ -53,8 +61,8 @@ void ComponentWidget::SetClosed(bool closed)
     p_component->SetClosedInInspector(closed);
 }
 
-void ComponentWidget::CreateWidgetSlots(const XMLNode &xmlInfo)
+void ComponentWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
 {
-    InspectorWidget::CreateWidgetSlots(xmlInfo);
+    InspectorWidget::CreateAttributeWidgets(xmlInfo);
 }
 

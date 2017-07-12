@@ -3,16 +3,15 @@
 
 class Component;
 class AudioSource;
+class IInspectable;
 class InspectorWidget;
 class InspectorWidgetFactory
 {
 public:
-    static InspectorWidget* CreateWidget(Component *component);
+    static InspectorWidget* CreateWidget(IInspectable *inspectable);
+    static InspectorWidget* CreateWidget(Component *comp);
 
 private:
-    static InspectorWidget* _CreateWidget(Component *component);
-    static InspectorWidget* _CreateWidget(AudioSource *audioSource);
-
     InspectorWidgetFactory() = delete;
 };
 

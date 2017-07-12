@@ -42,8 +42,11 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    if (m_currentInspectable) { delete m_currentInspectable; }
-    m_currentInspectable = nullptr;
+    if (m_currentInspectable)
+    {
+        delete m_currentInspectable;
+        m_currentInspectable = nullptr;
+    }
 
     List<InspectorWidget*> currentInspWidgets = GetCurrentInspectorWidgets();
     for (InspectorWidget *iw : currentInspWidgets) { iw->OnDestroy(); }
@@ -58,13 +61,10 @@ void Inspector::Clear()
 
 bool Inspector::Refresh(SerializableObject *serialObject)
 {
-    bool update = m_currentInspectable &&
+    bool doRefresh = m_currentInspectable &&
         (m_currentInspectable->GetSerializableObject() == serialObject);
-    if (update)
-    {
-        Refresh();
-    }
-    return update;
+    if (doRefresh) { Refresh(); }
+    return doRefresh;
 }
 
 void Inspector::Refresh()
@@ -89,7 +89,6 @@ void Inspector::ShowInspectable(IInspectable *insp)
 
     List<IInspectable*> inspectablesToShow =
             m_currentInspectable->GetNewInspectablesToShow();
-
     for (IInspectable *inspectableToShow : inspectablesToShow)
     {
         InspectorWidget *iw = inspectableToShow->GetNewInspectorWidget();
@@ -99,6 +98,7 @@ void Inspector::ShowInspectable(IInspectable *insp)
             AddWidget(iw);
         }
     }
+    for (IInspectable *insp : inspectablesToShow) { delete insp; }
 
     RefreshSizeHints();
 }
