@@ -14,7 +14,7 @@ public:
     virtual ~AudioClipFileInspectorWidget();
 
 protected:
-    void CreateAttributeWidgets(const XMLNode &xmlInfo) override;
+    void InitExtra() override;
     void Refresh() override;
     void OnDestroy() override;
     void OnButtonClicked(const AttrWidgetButton *clickedButton) override;

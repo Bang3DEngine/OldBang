@@ -17,7 +17,6 @@
 #include "Bang/EditorScene.h"
 #include "Bang/Application.h"
 #include "Bang/GameBuilder.h"
-#include "Bang/IInspectable.h"
 #include "Bang/EditorCamera.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorWindow.h"
@@ -479,13 +478,15 @@ GameObject *MenuBar::GetInspectorGameObject() const
     Inspector *inspector = Inspector::GetInstance();
     if (!inspector) { return nullptr; }
 
+    /*
     IInspectable *inspectable = inspector->GetCurrentInspectable();
     if (!inspectable) { return nullptr; }
 
     SerializableObject *serialObject = inspectable->GetSerializableObject();
     if (!serialObject) { return nullptr; }
+    */
 
-    return Object::Cast<GameObject>(serialObject);
+    return nullptr; //Object::Cast<GameObject>(serialObject);
 }
 
 MenuBar *MenuBar::GetInstance()

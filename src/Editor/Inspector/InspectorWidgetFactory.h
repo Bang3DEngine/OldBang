@@ -1,16 +1,17 @@
 #ifndef INSPECTORWIDGETFACTORY_H
 #define INSPECTORWIDGETFACTORY_H
 
+#include "Bang/List.h"
 #include "Bang/BFile.h"
 
 class Component;
+class GameObject;
 class AudioSource;
-class IInspectable;
 class InspectorWidget;
 class InspectorWidgetFactory
 {
 public:
-    static InspectorWidget* CreateWidget(IInspectable *inspectable);
+    static List<InspectorWidget*> CreateWidgets(GameObject *go);
     static InspectorWidget* CreateWidget(Component *comp);
     static InspectorWidget* CreateWidget(const BFile &file);
 

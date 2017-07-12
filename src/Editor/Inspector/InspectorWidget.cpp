@@ -9,7 +9,6 @@
 #include "Bang/Inspector.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
-#include "Bang/IInspectable.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/AttributeWidget.h"
 #include "Bang/WindowEventManager.h"
@@ -19,22 +18,15 @@ InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
 
-void InspectorWidget::Init(IInspectable *inspectable)
+void InspectorWidget::Init()
 {
-    p_inspectable = inspectable;
+    // p_inspectable = inspectable;
 
-    XMLNode xmlInfo = GetInspectableXMLInfo();
-    ConstructFromWidgetXMLInfo(xmlInfo);
+    // XMLNode xmlInfo = GetInspectableXMLInfo();
+    // ConstructFromWidgetXMLInfo(xmlInfo);
 
-    SetIcon( inspectable->GetIcon() );
+    // SetIcon( inspectable->GetIcon() );
 
-    setAcceptDrops(true);
-    Refresh();
-}
-
-void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
-{
-    Debug_Log("ConstructFromWidgetXMLInfo: " << xmlInfo);
     setVisible(false);
 
     m_vLayout.addLayout(&m_headerLayout, 0);
@@ -52,7 +44,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
-    String title = Inspector::FormatInspectorLabel( xmlInfo.GetTagName() );
+    String title = Inspector::FormatInspectorLabel("NAME_TODO");
     m_titleLabel.setText(title.ToQString());
     QFont font = m_titleLabel.font();
     font.setPixelSize(13);
@@ -60,7 +52,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
     m_titleLabel.setFont(font);
     m_titleLabel.setAlignment(Qt::AlignLeft);
 
-    CreateAttributeWidgets(xmlInfo);
+    InitExtra();
 
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                      this, SLOT(Refresh()));
@@ -68,6 +60,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
 
     setLayout(&m_vLayout);
     m_created = true;
+
+    setAcceptDrops(true);
     setVisible(true);
 }
 
@@ -79,12 +73,12 @@ InspectorWidget::~InspectorWidget()
 void InspectorWidget::OnDestroy()
 {
     m_refreshTimer.stop();
-    p_inspectable = nullptr;
+    // p_inspectable = nullptr;
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
                         this, SLOT(Refresh()));
 }
 
-
+/*
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
     XMLNode xmlInfo;
@@ -94,6 +88,7 @@ XMLNode InspectorWidget::GetInspectableXMLInfo() const
     }
     return xmlInfo;
 }
+*/
 
 XMLNode InspectorWidget::GetWidgetXMLInfo() const
 {
@@ -112,10 +107,10 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     return xmlInfo;
 }
 
-IInspectable *InspectorWidget::GetInspectable() const
-{
-    return p_inspectable;
-}
+// IInspectable *InspectorWidget::GetInspectable() const
+// {
+//     return p_inspectable;
+// }
 
 QGridLayout *InspectorWidget::GetGridLayout()
 {
@@ -148,6 +143,7 @@ int InspectorWidget::GetHeightSizeHint() const
 
 void InspectorWidget::Refresh()
 {
+    /*
     ENSURE(p_inspectable);
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
@@ -165,6 +161,11 @@ void InspectorWidget::Refresh()
         }
     }
     UpdateContentMargins();
+    */
+}
+
+void InspectorWidget::InitExtra()
+{
 }
 
 void InspectorWidget::SetIcon(const QPixmap &icon)
@@ -175,28 +176,15 @@ void InspectorWidget::SetIcon(const QPixmap &icon)
     m_headerLayout.insertWidget(1, &m_iconLabel, 0, Qt::AlignCenter);
 }
 
-void InspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
-{
-    m_tagName = xmlInfo.GetTagName();
-    for (auto itAttr : xmlInfo.GetAttributesListInOrder())
-    {
-        const XMLAttribute &attribute = itAttr.second;
-        AttributeWidget *aw = AttributeWidget::FromXMLAttribute(attribute);
-        if (!aw) { continue; }
-
-        InsertAttributeWidget(aw);
-        m_attrWidget_To_XMLAttr.Set(aw, attribute);
-        m_attrName_To_AttrWidget.Set(attribute.GetName(), aw);
-    }
-}
-
 void InspectorWidget::OnAttrWidgetValueChanged()
 {
+    /*
     ENSURE(p_inspectable);
     if (m_created)
     {
         p_inspectable->GetSerializableObject()->Read( GetWidgetXMLInfo() );
     }
+    */
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 

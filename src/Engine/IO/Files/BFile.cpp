@@ -25,7 +25,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
-#include "Bang/IInspectable.h"
 #include "Bang/MaterialFile.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AudioClipFile.h"
@@ -219,13 +218,6 @@ void BFile::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
 }
-
-#ifdef BANG_EDITOR
-IInspectable* BFile::GetNewInspectable()
-{
-    return nullptr;
-}
-#endif
 
 bool BFile::IsAsset() const
 {

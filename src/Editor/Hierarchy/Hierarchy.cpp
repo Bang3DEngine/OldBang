@@ -12,7 +12,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/EditorCamera.h"
 #include "Bang/WindowEventManager.h"
-#include "Bang/GameObjectInspectable.h"
 
 Hierarchy::Hierarchy(QWidget *parent)
  :m_upShortcut       (this, KSeq(Qt::Key_Up),     SLOT(OnUpClicked())),
@@ -575,8 +574,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     GameObject *selectedGameObject = GetFirstSelectedGameObject();
     if (selectedGameObject && GetItemFromGameObject(selectedGameObject))
     {
-        Inspector::GetInstance()->ShowInspectable(
-                    new Inspectable<GameObject>(selectedGameObject));
+        Inspector::GetInstance()->Show(selectedGameObject);
     }
 }
 

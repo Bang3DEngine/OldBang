@@ -6,9 +6,9 @@
 #include "Bang/InspectorContextMenu.h"
 
 class QLabel;
+class Component;
 class QCheckBox;
 class QDropEvent;
-class IInspectable;
 class InspectorWidget;
 class SerializableObject;
 class Inspector : public DragDropQListWidget
@@ -18,43 +18,39 @@ class Inspector : public DragDropQListWidget
 public:
     explicit Inspector(QWidget *parent = nullptr);
 
-    void OnWindowShown();
-
     void Clear();
+    void OnWindowShown();
+    void Show(GameObject *gameObject);
+    void Show(Component *component);
+    void Show(const BFile &file);
+    static Inspector* GetInstance();
 
-    bool Refresh(SerializableObject *serialObject);
-    void ShowInspectable(IInspectable *inspectable);
+    const List<InspectorWidget*> GetCurrentInspectorWidgets() const;
+    void OnSerializableObjectDestroyed(SerializableObject *destroyed);
+    void InsertInspectorWidget(InspectorWidget *inspectorWidget,
+                               int row = -1);
+    static String FormatInspectorLabel(const String &labelString);
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);
-    void Refresh();
+    bool Refresh();
 
-public:
-    IInspectable* GetCurrentInspectable();
-    void OnSerializableObjectDestroyed(SerializableObject *destroyed);
-
-    void AddWidget(InspectorWidget *widget, int row = -1);
-
-    static Inspector* GetInstance();
-
-    void dropEvent(QDropEvent *e) override;
-    List<InspectorWidget*> GetCurrentInspectorWidgets() const;
-
-    static String FormatInspectorLabel(const String &labelString);
 
 protected:
     //To set the scroll step to a smaller one
     virtual void updateGeometries() override;
 
 private:
+    void Show(const List<InspectorWidget*> &inspectorWidgets);
+
+    void dropEvent(QDropEvent *e) override;
     void RefreshSizeHints();
 
+    List<InspectorWidget*> m_currentInspectorWidgets;
     InspectorContextMenu m_iContextMenu;
 
     QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
-
-    IInspectable *m_currentInspectable = nullptr;
 
     friend class InspectorWidget;
     friend class InspectorContextMenu;

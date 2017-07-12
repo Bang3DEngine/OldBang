@@ -3,7 +3,6 @@
 #include "Bang/Debug.h"
 #include "Bang/G_Image.h"
 #include "Bang/IconManager.h"
-#include "Bang/FileInspectable.h"
 
 ImageFile::ImageFile()
 {
@@ -42,13 +41,6 @@ void ImageFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("Mode", GetNumComponents() == 3 ? "RGB" : "RGBA",
                        {XMLProperty::Readonly});
 }
-
-#ifdef BANG_EDITOR
-IInspectable *ImageFile::GetNewInspectable()
-{
-    return new FileInspectable<ImageFile>(*this);
-}
-#endif
 
 bool ImageFile::IsAsset() const
 {

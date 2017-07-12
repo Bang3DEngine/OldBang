@@ -6,7 +6,6 @@
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 Texture2DFile::Texture2DFile()
 {
@@ -48,13 +47,6 @@ void Texture2DFile::Write(XMLNode *xmlInfo) const
     BFile::Write(xmlInfo);
     *xmlInfo = m_xmlInfo;
 }
-
-#ifdef BANG_EDITOR
-IInspectable *Texture2DFile::GetNewInspectable()
-{
-    return new FileInspectable<Texture2DFile>(*this);
-}
-#endif
 
 bool Texture2DFile::IsAsset() const
 {

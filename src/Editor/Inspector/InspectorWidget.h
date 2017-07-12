@@ -25,7 +25,6 @@
 
 class Component;
 class GameObject;
-class IInspectable;
 class AttributeWidget;
 
 /**
@@ -40,7 +39,7 @@ public:
     InspectorWidget();
     virtual ~InspectorWidget();
 
-    void Init(IInspectable *inspectable);
+    void Init();
 
     /**
      * @brief GetUpdatedWidgetXMLInfo
@@ -48,7 +47,7 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
-    IInspectable* GetInspectable() const;
+    // IInspectable* GetInspectable() const;
     QGridLayout *GetGridLayout();
 
     void SetTitle(const String &title);
@@ -58,8 +57,8 @@ public:
     virtual void OnDestroy();
 
 public slots:
-
     virtual void OnAttrWidgetValueChanged();
+
     /**
      * @brief Refreshes all widget values with the related SerializableObject
      * current values.
@@ -67,8 +66,6 @@ public slots:
     virtual void Refresh();
 
 protected:
-    IInspectable *p_inspectable = nullptr;
-
     QVBoxLayout m_vLayout;
     QHBoxLayout m_headerLayout;
     QToolButton m_closeOpenButton;
@@ -78,12 +75,12 @@ protected:
 
     bool m_closed = false;
 
+    virtual void InitExtra();
     void SetIcon(const QPixmap &icon);
     void UpdateCloseOpenButtonIcon();
     virtual void SetClosed(bool closedWidget);
 
     void InsertAttributeWidget(AttributeWidget *attrWidget, int index = -1);
-    virtual void CreateAttributeWidgets(const XMLNode &xmlInfo);
 
 protected slots:
     void OnCloseOpenButtonClicked();
@@ -104,10 +101,9 @@ private:
      * @return An XMLNode with the info of the related SerializableObject.
      *         It's not updated.
      */
-    XMLNode GetInspectableXMLInfo() const;
+    // XMLNode GetInspectableXMLInfo() const;
 
     void UpdateContentMargins();
-    void ConstructFromWidgetXMLInfo(const XMLNode &info);
 };
 
 #endif // INSPECTORWIDGET_H

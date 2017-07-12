@@ -11,7 +11,6 @@
 #include "Bang/Inspector.h"
 #include "Bang/IconManager.h"
 #include "Bang/InspectorWidget.h"
-#include "Bang/PrefabFileInspectable.h"
 #endif
 
 PrefabFile::PrefabFile()
@@ -32,10 +31,5 @@ const QPixmap& PrefabFile::GetIcon() const
 {
     return IconManager::LoadPixmap(EPATH("Icons/PrefabAssetIcon.png"),
                                    IconManager::IconOverlay::Asset);
-}
-
-IInspectable *PrefabFile::GetNewInspectable()
-{
-    return new PrefabFileInspectable(*this);
 }
 #endif

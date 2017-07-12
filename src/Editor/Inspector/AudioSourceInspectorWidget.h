@@ -14,7 +14,7 @@ public:
     virtual ~AudioSourceInspectorWidget();
 
 protected:
-    void CreateAttributeWidgets(const XMLNode &xmlInfo) override;
+    void InitExtra() override;
     void Refresh() override;
     void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     void OnDestroy() override;

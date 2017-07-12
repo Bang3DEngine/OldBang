@@ -24,9 +24,9 @@ void AudioSourceInspectorWidget::OnDestroy()
 }
 
 
-void AudioSourceInspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
+void AudioSourceInspectorWidget::InitExtra()
 {
-    ComponentWidget::CreateAttributeWidgets(xmlInfo);
+    ComponentWidget::InitExtra();
 
     m_playStopButton = new AttrWidgetButton("Play", this);
     m_playStopButton->SetValue("Play");

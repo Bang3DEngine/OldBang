@@ -4,7 +4,6 @@
 #include "Bang/Component.h"
 #include "Bang/IconManager.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/ComponentInspectable.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(),
@@ -12,7 +11,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_cwContextMenu(this)
 {
     p_component = relatedComponent;
-    m_componentInspectable = new Inspectable<Component>(p_component);
+    // m_componentInspectable = new Inspectable<Component>(p_component);
 }
 
 ComponentWidget::~ComponentWidget()
@@ -21,12 +20,12 @@ ComponentWidget::~ComponentWidget()
 void ComponentWidget::OnDestroy()
 {
     InspectorWidget::OnDestroy();
-    delete m_componentInspectable;
+    // delete m_componentInspectable;
 }
 
-void ComponentWidget::Init()
+void ComponentWidget::InitExtra()
 {
-    InspectorWidget::Init(m_componentInspectable);
+    InspectorWidget::InitExtra();
 
     m_closed = p_component->IsClosedInInspector();
     SetClosed(m_closed);
@@ -40,7 +39,6 @@ void ComponentWidget::Init()
         m_headerLayout.addWidget(&m_enabledCheckbox, 0,
                                  Qt::AlignRight | Qt::AlignVCenter);
     }
-    Refresh();
 }
 
 int ComponentWidget::GetHeightSizeHint() const
@@ -59,10 +57,5 @@ void ComponentWidget::SetClosed(bool closed)
     ENSURE(p_component);
     InspectorWidget::SetClosed(closed);
     p_component->SetClosedInInspector(closed);
-}
-
-void ComponentWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
-{
-    InspectorWidget::CreateAttributeWidgets(xmlInfo);
 }
 

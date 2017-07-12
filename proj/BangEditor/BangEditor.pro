@@ -89,12 +89,6 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/Inspectable.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/GameObjectInspectable.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/IInspectable.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/FileInspectable.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/ComponentInspectable.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/PrefabFileInspectable.cpp \
     $$BANG_ROOT/src/Editor/Inspector/ComponentClipboard.cpp \
     $$BANG_ROOT/src/Editor/Hierarchy/HierarchyDragDropManager.cpp \
     $$BANG_ROOT/src/Editor/Hierarchy/HierarchyContextMenu.cpp \
@@ -127,11 +121,6 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Explorer/FileReferencesManager.h \
     $$BANG_ROOT/src/Editor/Graphics/EditorScreen.h \
     $$BANG_ROOT/src/Editor/DragDrop/DragDropQTreeWidget.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/Inspectable.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/GameObjectInspectable.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/IInspectable.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/FileInspectable.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/ComponentInspectable.h \
     $$BANG_ROOT/src/Editor/DragDrop/DragDropQListWidget.h \
     $$BANG_ROOT/src/Editor/DragDrop/DragDropAgent.h \
     $$BANG_ROOT/src/Editor/General/EditorProjectManager.h \
@@ -156,7 +145,6 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetString.h \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
-    $$BANG_ROOT/src/Editor/Inspector/Inspectables/PrefabFileInspectable.h \
     $$BANG_ROOT/src/Editor/Windows/WindowEventManager.h \
     $$BANG_ROOT/src/Editor/Windows/SelectProjectWindow.h \
     $$BANG_ROOT/src/Editor/Inspector/AudioClipFileInspectorWidget.h \

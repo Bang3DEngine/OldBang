@@ -7,7 +7,6 @@
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -31,7 +30,6 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
     virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     #endif
 

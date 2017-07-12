@@ -11,7 +11,6 @@
 #include "Bang/SerializableObject.h"
 
 class XMLNode;
-class IInspectable;
 class BFile : public File,
               public SerializableObject
 {
@@ -48,10 +47,6 @@ public:
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable* GetNewInspectable();
-    #endif
 
     static BFile *GetSpecificFile(const BFile &f);
 

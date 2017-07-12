@@ -10,7 +10,6 @@
 #include "Bang/BFile.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 class FontFile : public BFile
 {
@@ -19,10 +18,6 @@ public:
     FontFile(const Path &path);
 
     virtual const QPixmap& GetIcon() const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
-    #endif
 
     virtual bool IsAsset() const override;
 

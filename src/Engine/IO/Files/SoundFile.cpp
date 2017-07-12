@@ -4,7 +4,6 @@
 #include "Bang/AudioClip.h"
 #include "Bang/AudioSource.h"
 #include "Bang/IconManager.h"
-#include "Bang/FileInspectable.h"
 
 SoundFile::SoundFile()
 {
@@ -58,11 +57,6 @@ void SoundFile::Write(XMLNode *xmlInfo) const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *SoundFile::GetNewInspectable()
-{
-    return new FileInspectable<SoundFile>(*this);
-}
-
 void SoundFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
     /*

@@ -5,7 +5,6 @@
 #include "Bang/BFile.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IAttrWidgetButtonListener.h"
@@ -27,7 +26,6 @@ public:
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
     virtual void OnButtonClicked(const AttrWidgetButton *clickedButton);
     #endif
 

@@ -7,7 +7,6 @@
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
 #include "Bang/XMLProperty.h"
-#include "Bang/FileInspectable.h"
 
 ModelFile::ModelFile()
 {
@@ -41,14 +40,6 @@ void ModelFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetString("Faces",  String(GetNumFaces()),
                       {XMLProperty::Readonly});
 }
-
-
-#ifdef BANG_EDITOR
-IInspectable *ModelFile::GetNewInspectable()
-{
-    return new FileInspectable<ModelFile>(*this);
-}
-#endif
 
 bool ModelFile::IsAsset() const
 {

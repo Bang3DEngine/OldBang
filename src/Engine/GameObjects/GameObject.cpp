@@ -280,7 +280,7 @@ bool GameObject::AddComponent(Component *c)
     m_components.PushBack(c);
 
     #ifdef BANG_EDITOR
-    if (Inspector::GetInstance()->Refresh(this))
+    if (Inspector::GetInstance()->Refresh())
     {
         Inspector::GetInstance()->scrollToBottom();
     }
@@ -306,7 +306,7 @@ void GameObject::MoveComponent(Component *c, int distance)
     }
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->Refresh(this);
+    // Inspector::GetInstance()->Refresh(this);
     #endif
 }
 #endif

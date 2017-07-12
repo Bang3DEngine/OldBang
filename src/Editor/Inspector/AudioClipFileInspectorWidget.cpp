@@ -24,9 +24,9 @@ void AudioClipFileInspectorWidget::OnButtonClicked(const AttrWidgetButton *click
 }
 
 
-void AudioClipFileInspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
+void AudioClipFileInspectorWidget::InitExtra()
 {
-    InspectorWidget::CreateAttributeWidgets(xmlInfo);
+    InspectorWidget::InitExtra();
 }
 
 void AudioClipFileInspectorWidget::Refresh()

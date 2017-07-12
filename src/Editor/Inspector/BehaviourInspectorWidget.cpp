@@ -18,9 +18,9 @@ void BehaviourInspectorWidget::OnDestroy()
 }
 
 
-void BehaviourInspectorWidget::CreateAttributeWidgets(const XMLNode &xmlInfo)
+void BehaviourInspectorWidget::InitExtra()
 {
-    ComponentWidget::CreateAttributeWidgets(xmlInfo);
+    ComponentWidget::InitExtra();
 }
 
 void BehaviourInspectorWidget::Refresh()

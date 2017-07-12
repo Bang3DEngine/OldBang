@@ -4,7 +4,6 @@
 #include "Bang/Mesh.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 MeshFile::MeshFile()
 {
@@ -38,13 +37,6 @@ void MeshFile::Write(XMLNode *xmlInfo) const
     BFile::Write(xmlInfo);
     xmlInfo->SetFilepath("ModelFilepath", GetModelFilepath(), "obj stl mb fbx");
 }
-
-#ifdef BANG_EDITOR
-IInspectable *MeshFile::GetNewInspectable()
-{
-    return new FileInspectable<MeshFile>(*this);
-}
-#endif
 
 void MeshFile::SetModelFilepath(const Path &modelFilepath)
 {

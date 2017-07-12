@@ -8,7 +8,6 @@
 #include "Bang/ComponentWidgetContextMenu.h"
 
 class Component;
-template <class Component> class Inspectable;
 class ComponentWidget : public InspectorWidget
 {
     Q_OBJECT
@@ -17,7 +16,7 @@ public:
     explicit ComponentWidget(Component *relatedComponent);
     virtual ~ComponentWidget();
 
-    void Init();
+    virtual void InitExtra() override;
     virtual void OnDestroy() override;
     int GetHeightSizeHint() const override;
 
@@ -26,7 +25,6 @@ public slots:
 
 protected:
     void SetClosed(bool closed) override;
-    virtual void CreateAttributeWidgets(const XMLNode &xmlInfo) override;
 
 private:
 
@@ -34,7 +32,6 @@ private:
     ComponentWidgetContextMenu m_cwContextMenu;
 
     Component *p_component = nullptr;
-    Inspectable<Component> *m_componentInspectable = nullptr;
     QCheckBox m_enabledCheckbox;
 
     friend class InspectorContextMenu;

@@ -4,7 +4,6 @@
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 class ImageFile : public BFile
 {
@@ -13,10 +12,6 @@ public:
     ImageFile(const Path& path);
 
     virtual const QPixmap& GetIcon() const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
-    #endif
 
     virtual bool IsAsset() const override;
 

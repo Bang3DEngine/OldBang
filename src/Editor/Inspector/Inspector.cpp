@@ -5,10 +5,13 @@
 #include <QScrollBar>
 #include "Bang/WinUndef.h"
 
+#include "Bang/BFile.h"
+#include "Bang/Component.h"
+#include "Bang/GameObject.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/IInspectable.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/SerializableObject.h"
+#include "Bang/InspectorWidgetFactory.h"
 
 Inspector::Inspector(QWidget *parent) : DragDropQListWidget(),
                                         m_iContextMenu(this)
@@ -34,22 +37,28 @@ void Inspector::OnWindowShown()
     Clear();
 }
 
-void Inspector::updateGeometries()
+void Inspector::Show(GameObject *gameObject)
 {
-    QListWidget::updateGeometries();
-    verticalScrollBar()->setSingleStep(3);
+    Show( InspectorWidgetFactory::CreateWidgets(gameObject) );
+}
+
+void Inspector::Show(Component *component)
+{
+    Show( { InspectorWidgetFactory::CreateWidget(component) } );
+}
+
+void Inspector::Show(const BFile &file)
+{
+    Show( { InspectorWidgetFactory::CreateWidget(file) } );
 }
 
 void Inspector::Clear()
 {
-    if (m_currentInspectable)
+    for (InspectorWidget *inspWidget : GetCurrentInspectorWidgets())
     {
-        delete m_currentInspectable;
-        m_currentInspectable = nullptr;
+        inspWidget->OnDestroy();
     }
-
-    List<InspectorWidget*> currentInspWidgets = GetCurrentInspectorWidgets();
-    for (InspectorWidget *iw : currentInspWidgets) { iw->OnDestroy(); }
+    m_currentInspectorWidgets.Clear();
 
     m_titleLabel->setText(tr(""));
     m_enabledCheckBox->setVisible(false);
@@ -59,28 +68,23 @@ void Inspector::Clear()
     clear();
 }
 
-bool Inspector::Refresh(SerializableObject *serialObject)
+bool Inspector::Refresh()
 {
-    bool doRefresh = m_currentInspectable &&
-        (m_currentInspectable->GetSerializableObject() == serialObject);
-    if (doRefresh) { Refresh(); }
-    return doRefresh;
+    return true;
 }
 
-void Inspector::Refresh()
-{
-    IInspectable *newInsp =
-            Object::SCast<IInspectable>(m_currentInspectable->Clone());
-    ShowInspectable(newInsp);
-}
-
-void Inspector::ShowInspectable(IInspectable *insp)
+void Inspector::Show(const List<InspectorWidget *> &inspWidgets)
 {
     Clear();
 
-    ENSURE(insp);
-    m_currentInspectable = insp;
+    for (InspectorWidget *inspWidget : inspWidgets)
+    {
+        InsertInspectorWidget(inspWidget);
+    }
 
+    // m_currentInspectable = inspWidget;
+
+    /*
     String inspTitle = m_currentInspectable->GetTitleInInspector();
     m_titleLabel->setText(inspTitle.ToQString());
 
@@ -99,6 +103,7 @@ void Inspector::ShowInspectable(IInspectable *insp)
         }
     }
     for (IInspectable *insp : inspectablesToShow) { delete insp; }
+    */
 
     RefreshSizeHints();
 }
@@ -119,46 +124,44 @@ void Inspector::RefreshSizeHints()
 
 void Inspector::OnEnabledCheckBoxChanged(bool checked)
 {
-    ENSURE(m_currentInspectable);
-    m_currentInspectable->OnEnabledChanged(checked);
-}
-
-IInspectable *Inspector::GetCurrentInspectable()
-{
-    return m_currentInspectable;
+    // ENSURE(m_currentInspectable);
+    // m_currentInspectable->OnEnabledChanged(checked);
 }
 
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
-    ENSURE(m_currentInspectable);
+    /*ENSURE(m_currentInspectable);
     if (destroyed == m_currentInspectable->GetSerializableObject())
     {
         m_currentInspectable = nullptr;
         Clear();
         return;
     }
+    */
 
     for (int i = 0; i < count(); ++i)
     {
         QListWidgetItem *itm = item(i);
         InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
-        if (iw && iw->GetInspectable()->GetSerializableObject() == destroyed)
+        /*if (iw && iw->GetInspectable()->GetSerializableObject() == destroyed)
         {
             iw->OnDestroy();
             delete itm;
-        }
+        }*/
     }
 }
 
-void Inspector::AddWidget(InspectorWidget *widget, int row)
+void Inspector::InsertInspectorWidget(InspectorWidget *inspWidget, int row)
 {
-    ENSURE(widget);
+    ENSURE(inspWidget);
 
     int newRow = (row == -1 ? count() : row);
 
     QListWidgetItem *item = new QListWidgetItem();
     insertItem(newRow, item);
-    setItemWidget(item, widget);
+    setItemWidget(item, inspWidget);
+
+    m_currentInspectorWidgets.PushBack(inspWidget);
 }
 
 Inspector *Inspector::GetInstance()
@@ -167,23 +170,10 @@ Inspector *Inspector::GetInstance()
     return ew ? ew->widgetInspector : nullptr;
 }
 
-void Inspector::dropEvent(QDropEvent *e)
+const List<InspectorWidget *> Inspector::GetCurrentInspectorWidgets() const
 {
-    e->ignore();
+    return m_currentInspectorWidgets;
 }
-
-List<InspectorWidget*> Inspector::GetCurrentInspectorWidgets() const
-{
-    List<InspectorWidget*> inspectorWidgets;
-    for (int i = 0; i < count(); ++i)
-    {
-        QListWidgetItem *itm = item(i);
-        InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
-        if (iw) { inspectorWidgets.Add(iw); }
-    }
-    return inspectorWidgets;
-}
-
 
 String Inspector::FormatInspectorLabel(const String &labelString)
 {
@@ -206,4 +196,15 @@ String Inspector::FormatInspectorLabel(const String &labelString)
 
     labelFormatted = labelFormatted;
     return labelFormatted.Replace("  ", " ");
+}
+
+void Inspector::dropEvent(QDropEvent *e)
+{
+    e->ignore();
+}
+
+void Inspector::updateGeometries()
+{
+    QListWidget::updateGeometries();
+    verticalScrollBar()->setSingleStep(3);
 }

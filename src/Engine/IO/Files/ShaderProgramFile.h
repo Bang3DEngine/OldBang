@@ -9,7 +9,6 @@
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 class ShaderProgramFile : public BFile
 {
@@ -24,10 +23,6 @@ public:
 
     void Read(const XMLNode &xmlInfo) override;
     void Write(XMLNode *xmlInfo) const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
-    #endif
 };
 
 #endif // SHADERPROGRAMASSETFILE_H

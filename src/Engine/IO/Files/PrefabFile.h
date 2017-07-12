@@ -7,7 +7,6 @@
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/IWindowEventManagerListener.h"
@@ -27,7 +26,6 @@ public:
 
     #ifdef BANG_EDITOR
     virtual const QPixmap& GetIcon() const override;
-    virtual IInspectable *GetNewInspectable() override;
     #endif
 
 private:

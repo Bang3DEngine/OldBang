@@ -49,7 +49,7 @@ void Behaviour::OnEditorUpdate()
     Component::OnEditorUpdate();
     if (m_refreshInspectorRequested)
     {
-        Inspector::GetInstance()->Refresh(gameObject);
+        // Inspector::GetInstance()->Refresh(gameObject);
     }
 
     RefreshBehaviourLib();

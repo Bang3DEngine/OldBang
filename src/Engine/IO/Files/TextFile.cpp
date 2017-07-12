@@ -2,8 +2,6 @@
 
 #include "Bang/Paths.h"
 #include "Bang/FileReader.h"
-#include "Bang/Inspectable.h"
-#include "Bang/FileInspectable.h"
 
 TextFile::TextFile()
 {
@@ -33,13 +31,6 @@ void TextFile::Write(XMLNode *xmlInfo) const
 
     xmlInfo->SetString("Contents", GetContents(), {XMLProperty::BigText});
 }
-
-#ifdef BANG_EDITOR
-IInspectable *TextFile::GetNewInspectable()
-{
-    return new FileInspectable<TextFile>(*this);
-}
-#endif
 
 bool TextFile::IsAsset() const
 {

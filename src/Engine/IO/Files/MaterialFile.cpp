@@ -5,7 +5,6 @@
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 MaterialFile::MaterialFile()
 {
@@ -59,13 +58,6 @@ void MaterialFile::Write(XMLNode *xmlInfo) const
     IconManager::InvalidatePixmap( GetPath() );
 }
 
-
-#ifdef BANG_EDITOR
-IInspectable *MaterialFile::GetNewInspectable()
-{
-    return new FileInspectable<MaterialFile>(*this);
-}
-#endif
 
 bool MaterialFile::IsAsset() const
 {

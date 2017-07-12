@@ -7,7 +7,6 @@
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
-#include "Bang/IInspectable.h"
 
 class SerializableObject;
 class ModelFile : public BFile
@@ -20,10 +19,6 @@ public:
     void Write(XMLNode *xmlInfo) const override;
 
     virtual const QPixmap& GetIcon() const override;
-
-    #ifdef BANG_EDITOR
-    virtual IInspectable *GetNewInspectable() override;
-    #endif
 
     virtual bool IsAsset() const override;
 

@@ -4,7 +4,6 @@
 #include "Bang/XMLParser.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 ShaderProgramFile::ShaderProgramFile()
 {
@@ -52,10 +51,3 @@ void ShaderProgramFile::Write(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("FragmentShader", GetFragmentShaderFilepath(),
                          "frag glsl");
 }
-
-#ifdef BANG_EDITOR
-IInspectable *ShaderProgramFile::GetNewInspectable()
-{
-    return new FileInspectable<ShaderProgramFile>(*this);
-}
-#endif

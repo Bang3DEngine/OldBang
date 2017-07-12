@@ -22,7 +22,6 @@
 #include "Bang/QtProjectManager.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/ExplorerContextMenu.h"
-#include "Bang/PrefabFileInspectable.h"
 #include "Bang/FileReferencesManager.h"
 
 Explorer::Explorer(QWidget *parent)
@@ -242,6 +241,7 @@ void Explorer::RefreshInspector()
     {
         Inspector::GetInstance()->Clear();
 
+        /*
         IInspectable *newInspectable = nullptr;
         BFile *specificFile = BFile::GetSpecificFile(f);
         if (specificFile)
@@ -254,6 +254,7 @@ void Explorer::RefreshInspector()
         {
             Inspector::GetInstance()->ShowInspectable(newInspectable);
         }
+        */
     }
 }
 

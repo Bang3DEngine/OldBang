@@ -5,7 +5,6 @@
 #include "Bang/FileReader.h"
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 FontFile::FontFile()
 {
@@ -22,13 +21,6 @@ const QPixmap& FontFile::GetIcon() const
     return IconManager::LoadPixmap(EPATH("Icons/LetterIcon.png"),
                                    IconManager::IconOverlay::Asset);
 }
-
-#ifdef BANG_EDITOR
-IInspectable *FontFile::GetNewInspectable()
-{
-    return new FileInspectable<FontFile>(*this);
-}
-#endif
 
 bool FontFile::IsAsset() const
 {

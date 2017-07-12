@@ -8,7 +8,6 @@
 #include "Bang/AudioSource.h"
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/FileInspectable.h"
 
 AudioClipFile::AudioClipFile()
 {
@@ -33,11 +32,6 @@ const QPixmap& AudioClipFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *AudioClipFile::GetNewInspectable()
-{
-    return new FileInspectable<AudioClipFile>(*this);
-}
-
 void AudioClipFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
 {
     /*
