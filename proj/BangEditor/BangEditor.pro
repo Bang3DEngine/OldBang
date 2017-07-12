@@ -28,7 +28,9 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourRefresherTimer.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorGizmosGameObject.cpp \
     $$BANG_ROOT/src/Editor/GameBuilder/GameBuilderJob.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/BehaviourInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/AudioSourceInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/AudioClipFileInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Dialogs/GameBuildDialog.cpp \
     $$BANG_ROOT/src/Editor/Explorer/FileSystemModel.cpp \
     $$BANG_ROOT/src/Editor/General/EditorState.cpp \
@@ -157,6 +159,7 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/Inspectables/PrefabFileInspectable.h \
     $$BANG_ROOT/src/Editor/Windows/WindowEventManager.h \
     $$BANG_ROOT/src/Editor/Windows/SelectProjectWindow.h \
+    $$BANG_ROOT/src/Editor/Inspector/AudioClipFileInspectorWidget.h \
     $$BANG_ROOT/src/Editor/General/Toolbar.h \
     $$BANG_ROOT/src/Editor/General/EditorState.h \
     $$BANG_ROOT/src/Editor/Dialogs/GameBuildDialog.h \
@@ -181,6 +184,7 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorAxis.h \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorScaleAxisGroup.h \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorScaleAxis.h \
+    $$BANG_ROOT/src/Editor/Inspector/BehaviourInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/AudioSourceInspectorWidget.h \
     $$BANG_ROOT/src/Editor/EditorScene/EditorFloor.h \
     $$BANG_ROOT/src/Editor/Inspector/ComponentClipboard.h \

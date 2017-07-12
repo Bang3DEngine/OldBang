@@ -34,6 +34,7 @@ void InspectorWidget::Init(IInspectable *inspectable)
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(const XMLNode &xmlInfo)
 {
+    Debug_Log("ConstructFromWidgetXMLInfo: " << xmlInfo);
     setVisible(false);
 
     m_vLayout.addLayout(&m_headerLayout, 0);

@@ -29,6 +29,11 @@ public:
         finsp->m_file = m_file;
     }
 
+    virtual InspectorWidget *GetNewInspectorWidget() override
+    {
+        return InspectorWidgetFactory::CreateWidget(m_file);
+    }
+
     virtual const QPixmap& GetIcon() const override
     {
         SerializableObject *so = Base::GetSerializableObject();

@@ -1,9 +1,6 @@
 #ifndef AUDIOSOURCEINSPECTORWIDGET_H
 #define AUDIOSOURCEINSPECTORWIDGET_H
 
-#include <QPushButton>
-#include "Bang/WinUndef.h"
-
 #include "Bang/ComponentWidget.h"
 #include "Bang/IAttrWidgetButtonListener.h"
 
@@ -14,7 +11,7 @@ class AudioSourceInspectorWidget : public ComponentWidget,
 {
 public:
     AudioSourceInspectorWidget(AudioSource *audioSource);
-    ~AudioSourceInspectorWidget();
+    virtual ~AudioSourceInspectorWidget();
 
 protected:
     void CreateAttributeWidgets(const XMLNode &xmlInfo) override;

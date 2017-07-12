@@ -78,10 +78,6 @@ void Behaviour::Write(XMLNode *xmlInfo) const
     BehaviourId bid(GetSourceFilepath());
     bool beingCompiled = BehaviourManager::GetStatus().IsBeingCompiled(bid);
     bool failed = BehaviourManager::GetStatus().HasFailed(bid);
-
-    Behaviour *noConstThis = const_cast<Behaviour*>(this);
-    xmlInfo->SetButton("CreateNew...", noConstThis);
-
     if (!beingCompiled && !failed)
     {
         m_refreshInspectorRequested =
