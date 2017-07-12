@@ -1,37 +1,40 @@
 #include "Bang/AttrWidgetVectorFloat.h"
 
-AttrWidgetVectorFloat::AttrWidgetVectorFloat(const String &labelText) :
-    AttributeWidget()
+AttrWidgetVectorFloat::AttrWidgetVectorFloat(const String &labelText,
+                                             int numFields)
+    : AttributeWidget()
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
     m_horizontalLayout.addLayout(hLayout, 1);
     m_horizontalLayout.setSpacing(0);
     m_horizontalLayout.setMargin(0);
 
-    String labels[] = {"X", "Y", "Z", "W"};
-    int numberOfFields = 4;
-    for (uint i = 0; i < numberOfFields; ++i)
+    hLayout->setSpacing(3);
+    static String labels[] = {"X", "Y", "Z", "W"};
+    static Color labelColors[] = {Color(1.0f, 0.3f, 0.3f),
+                                  Color(0.0f, 1.0f, 0.0f),
+                                  Color(0.4f, 0.4f, 1.0f),
+                                  Color(1.0f, 1.0f, 1.0f)};
+    for (uint i = 0; i < numFields; ++i)
     {
         AttrWidgetFloat *s = new AttrWidgetFloat(labels[i]);
+        s->SetLabelColor(labelColors[i]);
         m_floatSlots.PushBack(s);
 
         QObject::connect(s, SIGNAL(OnValueChanged(IAttributeWidget*)),
-                         this, SLOT(OnValueChanged(IAttributeWidget*)));
-
-        QLabel *label = new QLabel(labels[i].ToQString());
-        if (i != 0)
-        {
-            hLayout->setSpacing(3);
-        }
-        hLayout->addWidget(label, 0, Qt::AlignRight | Qt::AlignVCenter);
-        hLayout->addWidget(s,     0, Qt::AlignLeft | Qt::AlignVCenter);
+                         this, SLOT(OnFloatValueChanged(IAttributeWidget*)));
+        hLayout->addWidget(s, 0, Qt::AlignLeft | Qt::AlignVCenter);
     }
 
-    setMinimumWidth(40);
-    setFixedHeight(20);
+    setMinimumWidth(20);
+    SetHeightSizeHint(20);
 
     CreateLabel(labelText);
-    AfterConstructor();
+}
+
+AttrWidgetVectorFloat::~AttrWidgetVectorFloat()
+{
+
 }
 
 void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
@@ -40,6 +43,21 @@ void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
     {
         m_floatSlots[i]->SetValue(v[i]);
     }
+}
+
+void AttrWidgetVectorFloat::SetValue(const Vector2 &v)
+{
+    SetValue( Array<float>({v.x, v.y}) );
+}
+
+void AttrWidgetVectorFloat::SetValue(const Vector3 &v)
+{
+    SetValue( Array<float>({v.x, v.y, v.z}) );
+}
+
+void AttrWidgetVectorFloat::SetValue(const Vector4 &v)
+{
+    SetValue( Array<float>({v.x, v.y, v.z, v.w}) );
 }
 
 Array<float>  AttrWidgetVectorFloat::GetValue() const
@@ -82,4 +100,9 @@ Vector4 AttrWidgetVectorFloat::GetVector4() const
 void AttrWidgetVectorFloat::Refresh()
 {
     AttributeWidget::Refresh();
+}
+
+void AttrWidgetVectorFloat::OnFloatValueChanged(IAttributeWidget *attrWidget)
+{
+    emit AttributeWidget::OnValueChanged(this);
 }

@@ -16,8 +16,8 @@ AttrWidgetFloat::AttrWidgetFloat(const String &labelText) :
     m_lineEdit = new FloatComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);
     m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    QObject::connect(m_lineEdit, SIGNAL(textChanged(QString)),
-                     this, SLOT(OnValueChanged()));
+    QObject::connect(m_lineEdit, SIGNAL(textChanged(const QString&)),
+                     this, SLOT(OnValueChanged(const QString&)));
 
     layout->addWidget(m_lineEdit);
 
@@ -25,7 +25,6 @@ AttrWidgetFloat::AttrWidgetFloat(const String &labelText) :
     setContentsMargins(0, 0, 0, 0);
 
     CreateLabel(labelText);
-    AfterConstructor();
 }
 
 void AttrWidgetFloat::SetValue(float f)
@@ -54,6 +53,11 @@ void AttrWidgetFloat::OnLineEditFocusIn()
 void AttrWidgetFloat::OnLineEditFocusOut()
 {
     m_editing = false;
+}
+
+void AttrWidgetFloat::OnValueChanged(const QString &text)
+{
+    emit AttributeWidget::OnValueChanged(this);
 }
 
 

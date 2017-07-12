@@ -1,5 +1,5 @@
-#ifndef CIRCLECircleRendererINSPECTORWIDGET_H
-#define CIRCLECircleRendererINSPECTORWIDGET_H
+#ifndef CIRCLERENDERERINSPECTORWIDGET_H
+#define CIRCLERENDERERINSPECTORWIDGET_H
 
 #include "Bang/CircleRenderer.h"
 #include "Bang/RendererInspectorWidget.h"
@@ -23,4 +23,4 @@ private:
     AttrWidgetInt   *m_segmentsAW = nullptr;
 };
 
-#endif // CIRCLECircleRendererINSPECTORWIDGET_H
+#endif // CIRCLERENDERERINSPECTORWIDGET_H

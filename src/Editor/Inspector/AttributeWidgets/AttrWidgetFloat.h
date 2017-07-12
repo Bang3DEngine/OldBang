@@ -11,15 +11,12 @@
 
 class InspectorWidget;
 class FloatComponentSlotSpinBox;
-//Slot for a float (label + float)
 class AttrWidgetFloat : public AttributeWidget
 {
     Q_OBJECT
 
 public:
 
-    // isSubWidget indicates if it belongs to another parent attributeWidget,
-    // such as AttrWidgetFloat's inside AttrWidgetVectorFloat
     AttrWidgetFloat(const String &labelText);
 
     virtual void SetValue(float f);
@@ -33,9 +30,12 @@ public:
 private:
     bool m_editing = false;
     FloatComponentSlotSpinBox *m_lineEdit = nullptr;
+
+private slots:
+    void OnValueChanged(const QString &text);
 };
 
-class FloatComponentSlotSpinBox : public QLineEdit //Slot for a float (label + float)
+class FloatComponentSlotSpinBox : public QLineEdit
 {
     Q_OBJECT
 

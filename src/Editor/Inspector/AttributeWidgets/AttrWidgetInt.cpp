@@ -25,7 +25,6 @@ AttrWidgetInt::AttrWidgetInt(const String &labelText) :
     setContentsMargins(0, 0, 0, 0);
 
     CreateLabel(labelText);
-    AfterConstructor();
 }
 
 void AttrWidgetInt::SetValue(int a)

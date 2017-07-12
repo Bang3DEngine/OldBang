@@ -31,13 +31,13 @@ public:
     void SetVisible(bool visible);
     bool IsVisible() const;
 
+    void SetLabelText(const String &labelText);
+    void SetLabelColor(const Color &color);
+
 protected:
     QHBoxLayout m_horizontalLayout;
 
     void CreateLabel(const String &labelText);
-    void RemoveLabel();
-
-    void AfterConstructor();
 
 private:
     QLabel *m_nameLabel = nullptr;

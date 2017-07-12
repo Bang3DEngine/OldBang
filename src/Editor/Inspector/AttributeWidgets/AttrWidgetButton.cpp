@@ -19,7 +19,6 @@ AttrWidgetButton::AttrWidgetButton(const String &buttonText,
 
     SetHeightSizeHint(50);
 
-    AfterConstructor();
     m_horizontalLayout.setAlignment(Qt::AlignRight);
 }
 

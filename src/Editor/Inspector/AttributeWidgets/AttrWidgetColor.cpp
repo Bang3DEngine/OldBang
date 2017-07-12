@@ -38,7 +38,6 @@ AttrWidgetColor::AttrWidgetColor(const String &labelText) :
             this, SLOT(OnColorChanged(const QColor&)));
 
     CreateLabel(labelText);
-    AfterConstructor();
 }
 
 AttrWidgetColor::~AttrWidgetColor()

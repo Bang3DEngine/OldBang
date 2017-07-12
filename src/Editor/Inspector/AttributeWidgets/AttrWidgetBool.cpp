@@ -11,7 +11,6 @@ AttrWidgetBool::AttrWidgetBool(const String &labelText)
 
     CreateLabel(labelText);
     SetHeightSizeHint(25);
-    AfterConstructor();
 }
 
 void AttrWidgetBool::SetValue(bool value)

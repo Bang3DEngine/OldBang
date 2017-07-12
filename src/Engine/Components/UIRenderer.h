@@ -18,6 +18,9 @@ public:
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
+    void SetTint(const Color &tint);
+    const Color& GetTint() const;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -26,9 +29,6 @@ protected:
 
     UIRenderer();
     virtual ~UIRenderer();
-
-    void SetTint(const Color &tint);
-    const Color& GetTint() const;
 
     virtual void Bind() const override;
     virtual void UnBind() const override;

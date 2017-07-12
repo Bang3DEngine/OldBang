@@ -41,7 +41,6 @@ public:
         SetHeightSizeHint(35);
 
         CreateLabel(labelText);
-        AfterConstructor();
     }
 
     virtual void SetValue(EnumClass value)

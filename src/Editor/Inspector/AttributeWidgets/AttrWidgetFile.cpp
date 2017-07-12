@@ -64,7 +64,6 @@ AttrWidgetFile::AttrWidgetFile(const String &labelText) :
     SetValue(m_filepath);
 
     CreateLabel(labelText);
-    AfterConstructor();
 }
 
 AttrWidgetFile::~AttrWidgetFile()

@@ -33,6 +33,8 @@ void RendererInspectorWidget::Refresh()
     m_materialAW->SetValue( p_renderer->GetMaterial()->GetFilepath() );
     m_drawWireframeAW->SetValue( p_renderer->GetDrawWireframe() );
     m_lineWidthAW->SetValue( p_renderer->GetLineWidth() );
+
+    m_lineWidthAW->SetVisible(p_renderer->GetDrawWireframe());
 }
 
 void RendererInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)

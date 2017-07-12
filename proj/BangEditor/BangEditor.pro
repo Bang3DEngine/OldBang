@@ -111,7 +111,16 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/Inspector/RendererInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/CircleRendererInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/LineRendererInspectorWidget.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.cpp
+    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/UIRendererInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/UIImageInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/UITextInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/LightInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/DirectionalLightInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/PointLightInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/PostProcessEffectInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/TransformInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/IconManager.h \
@@ -204,6 +213,14 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/RendererInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/CircleRendererInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/LineRendererInspectorWidget.h \
-    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.h
+    $$BANG_ROOT/src/Editor/Inspector/MeshRendererInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/UIRendererInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/UIImageInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/UITextInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/LightInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/DirectionalLightInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/PostProcessEffectInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/TransformInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.h
 
 ######################################
