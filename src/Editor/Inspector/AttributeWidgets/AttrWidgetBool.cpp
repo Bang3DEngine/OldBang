@@ -9,7 +9,7 @@ AttrWidgetBool::AttrWidgetBool(const String &labelText)
     QObject::connect(m_checkbox, SIGNAL(clicked(bool)),
                      this, SLOT(OnValueChanged()));
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
     SetHeightSizeHint(25);
 }
 

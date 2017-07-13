@@ -37,8 +37,7 @@ void InspectorWidget::Init()
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
-    String title = "NAME_NOT_SET";
-    m_titleLabel.setText(title.ToQString());
+    m_titleLabel.setText( QString("NAME_NOT_SET") );
     QFont font = m_titleLabel.font();
     font.setPixelSize(13);
     font.setBold(true);
@@ -52,7 +51,6 @@ void InspectorWidget::Init()
     m_refreshTimer.start(10);
 
     setLayout(&m_vLayout);
-    m_created = true;
 
     setAcceptDrops(true);
     setVisible(true);
@@ -144,7 +142,13 @@ void InspectorWidget::InsertAttributeWidget(AttributeWidget *attrWidget,
                                             int _index)
 {
     const int index = (_index >= 0 ? _index : m_gridLayout.rowCount());
-    m_gridLayout.addWidget(attrWidget, index, 0);
+
+    attrWidget->DettachNameLabel();
+    m_gridLayout.setSpacing(5);
+    m_gridLayout.addWidget(attrWidget->GetNameLabel(),  index, 0, 1, 1,
+                           Qt::AlignVCenter | Qt::AlignLeft);
+    m_gridLayout.addWidget(attrWidget, index, 1, 1, 1,
+                           Qt::AlignVCenter);
     QObject::connect(attrWidget, SIGNAL(OnValueChanged(IAttributeWidget*)),
                      this, SLOT(OnAttrWidgetValueChanged(IAttributeWidget*)));
 

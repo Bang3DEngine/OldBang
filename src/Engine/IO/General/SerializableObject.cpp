@@ -6,14 +6,16 @@
 #include <fstream>
 
 #include "Bang/File.h"
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Inspector.h"
-#include "Bang/InspectorWidget.h"
-#include "Bang/FileReferencesManager.h"
-#endif
+SerializableObject::SerializableObject()
+{
+}
+
+SerializableObject::~SerializableObject()
+{
+}
 
 XMLNode SerializableObject::GetXMLInfo() const
 {
@@ -77,20 +79,4 @@ void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
 String SerializableObject::GetFileExtension() const
 {
     return "";
-}
-
-SerializableObject::SerializableObject()
-{
-    #ifdef BANG_EDITOR
-    FileReferencesManager *frm = FileReferencesManager::GetInstance();
-    if (frm) { frm->RegisterSerializableObject(this); }
-    #endif
-}
-
-SerializableObject::~SerializableObject()
-{
-    #ifdef BANG_EDITOR
-    FileReferencesManager *frm = FileReferencesManager::GetInstance();
-    if (frm) { frm->UnRegisterSerializableObject(this); }
-    #endif
 }

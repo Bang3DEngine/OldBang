@@ -38,18 +38,20 @@ protected:
     virtual void updateGeometries() override;
 
 private:
+    List<InspectorWidget*> m_currentInspectorWidgets;
+    InspectorContextMenu m_iContextMenu;
+
+    Object    *p_inspectedObject = nullptr;
+    QLabel    *m_titleLabel      = nullptr;
+    QCheckBox *m_enabledCheckBox = nullptr;
+
     void Show(const List<InspectorWidget*> &inspectorWidgets);
 
     void dropEvent(QDropEvent *e) override;
     void RefreshSizeHints();
 
-    List<InspectorWidget*> m_currentInspectorWidgets;
-    InspectorContextMenu m_iContextMenu;
-
-    QLabel    *m_titleLabel      = nullptr;
-    QCheckBox *m_enabledCheckBox = nullptr;
-
 protected: // IDestroyListener
+    void OnDestroyableDestroyed(Destroyable *destroyedObject) override;
     void OnDestroyDemanded(Destroyable *objectDemandingDestroy) override;
 
     friend class InspectorWidget;

@@ -24,7 +24,7 @@ AttrWidgetFloat::AttrWidgetFloat(const String &labelText) :
     setMinimumWidth(15);
     setContentsMargins(0, 0, 0, 0);
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
 }
 
 void AttrWidgetFloat::SetValue(float f)

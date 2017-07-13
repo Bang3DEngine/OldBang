@@ -50,7 +50,8 @@ void Inspector::Show(Object *object)
         Show( { InspectorWidgetFactory::CreateWidget(object) } );
     }
 
-    object->RegisterDestroyListener(this);
+    p_inspectedObject = object;
+    p_inspectedObject->RegisterDestroyListener(this);
 }
 
 void Inspector::Clear()
@@ -59,6 +60,8 @@ void Inspector::Clear()
     {
         inspWidget->OnDestroy();
     }
+
+    p_inspectedObject = nullptr;
     m_currentInspectorWidgets.Clear();
 
     m_titleLabel->setText(tr(""));
@@ -99,6 +102,15 @@ void Inspector::RefreshSizeHints()
     }
 }
 
+void Inspector::OnDestroyableDestroyed(Destroyable *destroyedObject)
+{
+    if ( destroyedObject == p_inspectedObject )
+    {
+        // The object being inspected has been destroyed (GameObj, file, etc.)
+        Clear();
+    }
+}
+
 void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
 {
     // Delete the widget corresponding to the destroyed object
@@ -112,6 +124,7 @@ void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
                 if (itemWidget(itm) == inspWidget)
                 {
                     m_currentInspectorWidgets.Remove(inspWidget);
+                    inspWidget->OnDestroy();
                     delete itm;
                 }
             }
@@ -150,10 +163,7 @@ const List<InspectorWidget *> Inspector::GetCurrentInspectorWidgets() const
     return m_currentInspectorWidgets;
 }
 
-void Inspector::dropEvent(QDropEvent *e)
-{
-    e->ignore();
-}
+void Inspector::dropEvent(QDropEvent *e) { e->ignore(); }
 
 void Inspector::updateGeometries()
 {

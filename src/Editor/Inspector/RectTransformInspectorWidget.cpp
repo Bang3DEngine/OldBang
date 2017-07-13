@@ -30,6 +30,8 @@ void RectTransformInspectorWidget::InitExtra()
     InsertAttributeWidget(m_pivotPositionAW);
     InsertAttributeWidget(m_anchorMinAW);
     InsertAttributeWidget(m_anchorMaxAW);
+
+    SetEnabledCheckboxVisible(false);
 }
 
 void RectTransformInspectorWidget::Refresh()

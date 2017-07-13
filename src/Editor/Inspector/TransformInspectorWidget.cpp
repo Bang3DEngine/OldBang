@@ -21,6 +21,8 @@ void TransformInspectorWidget::InitExtra()
     InsertAttributeWidget(m_positionAW);
     InsertAttributeWidget(m_rotationAW);
     InsertAttributeWidget(m_scaleAW);
+
+    SetEnabledCheckboxVisible(false);
 }
 
 void TransformInspectorWidget::Refresh()

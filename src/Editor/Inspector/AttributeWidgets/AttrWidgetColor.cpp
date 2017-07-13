@@ -37,7 +37,7 @@ AttrWidgetColor::AttrWidgetColor(const String &labelText) :
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
             this, SLOT(OnColorChanged(const QColor&)));
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
 }
 
 AttrWidgetColor::~AttrWidgetColor()

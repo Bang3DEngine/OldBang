@@ -29,7 +29,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const String &labelText,
     setMinimumWidth(20);
     SetHeightSizeHint(20);
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
 }
 
 AttrWidgetVectorFloat::~AttrWidgetVectorFloat()

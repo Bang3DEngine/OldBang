@@ -60,11 +60,6 @@ public:
 
 public slots:
     virtual void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget);
-
-    /**
-     * @brief Refreshes all widget values with the related SerializableObject
-     * current values.
-     */
     virtual void Refresh();
 
 protected:
@@ -88,14 +83,8 @@ protected slots:
     void OnCloseOpenButtonClicked();
 
 private:
-    /** @brief This variable is used to avoid premature OnValueChanged,
-     * before creating the widget**/
-    bool m_created = false;
-
-    String m_tagName = "";
     QTimer m_refreshTimer;
     List<AttributeWidget*> m_attributeWidgets;
-    mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
 
     void UpdateContentMargins();
 };

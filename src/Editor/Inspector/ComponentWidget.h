@@ -22,13 +22,13 @@ public:
     int GetHeightSizeHint() const override;
 
 public slots:
+    void SetEnabledCheckboxVisible(bool visible);
     void OnEnabledCheckboxPressed(bool checked);
 
 protected:
     void SetClosed(bool closed) override;
 
 private:
-
     QLabel m_iconLabel;
     ComponentWidgetContextMenu m_cwContextMenu;
 

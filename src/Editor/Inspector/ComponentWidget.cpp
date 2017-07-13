@@ -33,14 +33,11 @@ void ComponentWidget::InitExtra()
     SetClosed(m_closed);
     UpdateCloseOpenButtonIcon();
 
-    if (!p_component->GetClassName().Contains("Transform"))
-    {
-        m_enabledCheckbox.setChecked(p_component->IsEnabled(false));
-        connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),
-                this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_headerLayout.addWidget(&m_enabledCheckbox, 0,
-                                 Qt::AlignRight | Qt::AlignVCenter);
-    }
+    m_enabledCheckbox.setChecked(p_component->IsEnabled(false));
+    connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),
+            this, SLOT(OnEnabledCheckboxPressed(bool)));
+    m_headerLayout.addWidget(&m_enabledCheckbox, 0,
+                             Qt::AlignRight | Qt::AlignVCenter);
 }
 
 int ComponentWidget::GetHeightSizeHint() const
@@ -48,15 +45,18 @@ int ComponentWidget::GetHeightSizeHint() const
     return InspectorWidget::GetHeightSizeHint();
 }
 
+void ComponentWidget::SetEnabledCheckboxVisible(bool visible)
+{
+    m_enabledCheckbox.setVisible(visible);
+}
+
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    ENSURE(p_component);
     p_component->SetEnabled(checked);
 }
 
 void ComponentWidget::SetClosed(bool closed)
 {
-    ENSURE(p_component);
     InspectorWidget::SetClosed(closed);
     p_component->SetClosedInInspector(closed);
 }

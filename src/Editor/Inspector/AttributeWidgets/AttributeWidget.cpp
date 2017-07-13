@@ -13,6 +13,10 @@ AttributeWidget::AttributeWidget()
     m_horizontalLayout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_horizontalLayout.setContentsMargins(5,0,0,0);
 
+    m_nameLabel = new QLabel();
+    m_nameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_horizontalLayout.addWidget(m_nameLabel);
+
     setLayout(&m_horizontalLayout);
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
     // setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -47,8 +51,16 @@ void AttributeWidget::SetHeightSizeHint(int heightSizeHint)
 
 void AttributeWidget::SetVisible(bool visible)
 {
-    if (visible && !IsVisible()) { setVisible(true); }
-    else if (!visible && IsVisible()) { hide(); }
+    if (visible && !IsVisible())
+    {
+        setVisible(true);
+        m_nameLabel->setVisible(true);
+    }
+    else if (!visible && IsVisible())
+    {
+        hide();
+        m_nameLabel->hide();
+    }
 }
 
 bool AttributeWidget::IsVisible() const
@@ -56,30 +68,23 @@ bool AttributeWidget::IsVisible() const
     return !isHidden();
 }
 
-void AttributeWidget::CreateLabel(const String &labelText)
+void AttributeWidget::DettachNameLabel()
 {
-    if (!labelText.Empty())
-    {
-        m_nameLabel = new QLabel(labelText.ToQString());
-        m_nameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        m_horizontalLayout.insertWidget(0, m_nameLabel);
-    }
+    m_horizontalLayout.removeWidget(m_nameLabel);
+}
+
+QLabel *AttributeWidget::GetNameLabel() const
+{
+    return m_nameLabel;
 }
 
 void AttributeWidget::SetLabelText(const String &labelText)
 {
-    if (m_nameLabel)
-    {
-        m_nameLabel->setText(labelText.ToQString());
-    }
+    m_nameLabel->setText(labelText.ToQString());
 }
 
-void AttributeWidget::SetLabelColor(const Color &color)
+void AttributeWidget::SetLabelColor(const Color &labelColor)
 {
-    if (m_nameLabel)
-    {
-        m_nameLabel->setStyleSheet(
-                    "color: " +
-                    color.ToQColor().name(QColor::NameFormat::HexRgb));
-    }
+    m_nameLabel->setStyleSheet(
+          "color: " + labelColor.ToQColor().name(QColor::NameFormat::HexRgb));
 }

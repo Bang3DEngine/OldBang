@@ -40,7 +40,7 @@ public:
         m_enumValues = enumValues;
         SetHeightSizeHint(35);
 
-        CreateLabel(labelText);
+        SetLabelText(labelText);
     }
 
     virtual void SetValue(EnumClass value)

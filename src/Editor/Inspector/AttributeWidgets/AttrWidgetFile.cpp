@@ -63,7 +63,7 @@ AttrWidgetFile::AttrWidgetFile(const String &labelText) :
     else              { filepath = UPATH("TODO"); }
     SetValue(m_filepath);
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
 }
 
 AttrWidgetFile::~AttrWidgetFile()

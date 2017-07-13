@@ -41,7 +41,7 @@ AttrWidgetString::AttrWidgetString(const String &labelText) :
 
     m_horizontalLayout.addWidget(textWidget);
 
-    CreateLabel(labelText);
+    SetLabelText(labelText);
 }
 
 void AttrWidgetString::SetValue(const String &value)

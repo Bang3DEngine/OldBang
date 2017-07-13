@@ -1,5 +1,5 @@
-#ifndef INSPECTORSW_H
-#define INSPECTORSW_H
+#ifndef ATTRIBUTEWIDGET_H
+#define ATTRIBUTEWIDGET_H
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -31,13 +31,13 @@ public:
     void SetVisible(bool visible);
     bool IsVisible() const;
 
+    void DettachNameLabel();
     void SetLabelText(const String &labelText);
-    void SetLabelColor(const Color &color);
+    void SetLabelColor(const Color &labelColor);
+    QLabel *GetNameLabel() const;
 
 protected:
     QHBoxLayout m_horizontalLayout;
-
-    void CreateLabel(const String &labelText);
 
 private:
     QLabel *m_nameLabel = nullptr;
@@ -52,4 +52,4 @@ signals:
 
 Q_DECLARE_METATYPE(IAttributeWidget)
 
-#endif // INSPECTORSW_H
+#endif // ATTRIBUTEWIDGET_H

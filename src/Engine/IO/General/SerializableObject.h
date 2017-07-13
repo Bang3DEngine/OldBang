@@ -1,8 +1,6 @@
 #ifndef SERIALIZABLEOBJECT_H
 #define SERIALIZABLEOBJECT_H
 
-#include <set>
-
 #include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"
