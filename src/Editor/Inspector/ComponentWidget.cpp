@@ -11,6 +11,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_cwContextMenu(this)
 {
     p_component = relatedComponent;
+    p_component->RegisterDestroyListener(this);
 }
 
 ComponentWidget::~ComponentWidget()
@@ -60,3 +61,7 @@ void ComponentWidget::SetClosed(bool closed)
     p_component->SetClosedInInspector(closed);
 }
 
+void ComponentWidget::OnDestroyableDestroyed(Destroyable *destroyedObject)
+{
+    if (destroyedObject == p_component) { DemandDestroy(); }
+}

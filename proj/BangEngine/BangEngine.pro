@@ -22,6 +22,7 @@ EDITOR {
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
     $$BANG_ROOT/src/Editor/General/Cursor.cpp \
+    $$BANG_ROOT/src/Engine/General/Destroyable.cpp \
     $$BANG_ROOT/src/Editor/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Editor/General/Application.cpp \
     $$BANG_ROOT/src/Editor/Windows/GameWindow.cpp \
@@ -121,6 +122,7 @@ SOURCES += \
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
     $$BANG_ROOT/src/Editor/General/Cursor.h \
+    $$BANG_ROOT/src/Engine/General/Destroyable.h \
     $$BANG_ROOT/src/Editor/Graphics/ShaderManager.h \
     $$BANG_ROOT/src/Editor/Windows/GameWindow.h \
     $$BANG_ROOT/src/Editor/General/Application.h \

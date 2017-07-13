@@ -92,7 +92,5 @@ SerializableObject::~SerializableObject()
     #ifdef BANG_EDITOR
     FileReferencesManager *frm = FileReferencesManager::GetInstance();
     if (frm) { frm->UnRegisterSerializableObject(this); }
-    Inspector *insp = Inspector::GetInstance();
-    if (insp) { insp->OnSerializableObjectDestroyed(this); }
     #endif
 }

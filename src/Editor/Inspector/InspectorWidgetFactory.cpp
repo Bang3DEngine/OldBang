@@ -46,100 +46,97 @@ List<InspectorWidget*> InspectorWidgetFactory::CreateWidgets(GameObject *go)
     return componentWidgets;
 }
 
-InspectorWidget* InspectorWidgetFactory::CreateWidget(Component *component)
-{
-    ComponentWidget *compWidget = nullptr;
-    if (component->IsOfType<AudioSource>())
-    {
-        AudioSource *as = static_cast<AudioSource*>(component);
-        compWidget = new AudioSourceInspectorWidget(as);
-    }
-    else if (component->IsOfType<AudioListener>())
-    {
-        AudioListener *al = static_cast<AudioListener*>(component);
-        compWidget = new AudioListenerInspectorWidget(al);
-    }
-    else if (component->IsOfType<Behaviour>())
-    {
-        Behaviour *b = static_cast<Behaviour*>(component);
-        compWidget = new BehaviourInspectorWidget(b);
-    }
-    else if (component->IsOfType<Camera>())
-    {
-        Camera *c = static_cast<Camera*>(component);
-        compWidget = new CameraInspectorWidget(c);
-    }
-    else if (component->IsOfType<UIImage>())
-    {
-        UIImage *img = static_cast<UIImage*>(component);
-        compWidget = new UIImageInspectorWidget(img);
-    }
-    else if (component->IsOfType<UIText>())
-    {
-        UIText *txt = static_cast<UIText*>(component);
-        compWidget = new UITextInspectorWidget(txt);
-    }
-    else if (component->IsOfType<CircleRenderer>())
-    {
-        CircleRenderer *cr = static_cast<CircleRenderer*>(component);
-        compWidget = new CircleRendererInspectorWidget(cr);
-    }
-    else if (component->IsOfType<LineRenderer>())
-    {
-        LineRenderer *lr = static_cast<LineRenderer*>(component);
-        compWidget = new LineRendererInspectorWidget(lr);
-    }
-    else if (component->IsOfType<MeshRenderer>())
-    {
-        MeshRenderer *mr = static_cast<MeshRenderer*>(component);
-        compWidget = new MeshRendererInspectorWidget(mr);
-    }
-    else if (component->IsOfType<DirectionalLight>())
-    {
-        DirectionalLight *dl = static_cast<DirectionalLight*>(component);
-        compWidget = new DirectionalLightInspectorWidget(dl);
-    }
-    else if (component->IsOfType<PointLight>())
-    {
-        PointLight *pl = static_cast<PointLight*>(component);
-        compWidget = new PointLightInspectorWidget(pl);
-    }
-    else if (component->IsOfType<RectTransform>())
-    {
-        RectTransform *rt = static_cast<RectTransform*>(component);
-        compWidget = new RectTransformInspectorWidget(rt);
-    }
-    else if (component->IsOfType<Transform>())
-    {
-        Transform *tr = static_cast<Transform*>(component);
-        compWidget = new TransformInspectorWidget(tr);
-    }
-    else if (component->IsOfType<PostProcessEffect>())
-    {
-        PostProcessEffect *ppe = static_cast<PostProcessEffect*>(component);
-        compWidget = new PostProcessEffectInspectorWidget(ppe);
-    }
-    else
-    {
-        compWidget = new ComponentWidget(component);
-    }
-
-    compWidget->Init();
-    compWidget->Refresh();
-    return compWidget;
-}
-
-InspectorWidget* InspectorWidgetFactory::CreateWidget(const BFile &file)
+InspectorWidget* InspectorWidgetFactory::CreateWidget(Object *obj)
 {
     InspectorWidget *inspWidget = nullptr;
-    if ( Object::IsOfType<AudioClipFile>(&file) )
+    if (obj->IsOfType<Component>())
     {
-        const AudioClipFile &audioFile = static_cast<const AudioClipFile&>(file);
-        inspWidget = new AudioClipFileInspectorWidget(audioFile);
+        if (obj->IsOfType<AudioSource>())
+        {
+            AudioSource *as = static_cast<AudioSource*>(obj);
+            inspWidget = new AudioSourceInspectorWidget(as);
+        }
+        else if (obj->IsOfType<AudioListener>())
+        {
+            AudioListener *al = static_cast<AudioListener*>(obj);
+            inspWidget = new AudioListenerInspectorWidget(al);
+        }
+        else if (obj->IsOfType<Behaviour>())
+        {
+            Behaviour *b = static_cast<Behaviour*>(obj);
+            inspWidget = new BehaviourInspectorWidget(b);
+        }
+        else if (obj->IsOfType<Camera>())
+        {
+            Camera *c = static_cast<Camera*>(obj);
+            inspWidget = new CameraInspectorWidget(c);
+        }
+        else if (obj->IsOfType<UIImage>())
+        {
+            UIImage *img = static_cast<UIImage*>(obj);
+            inspWidget = new UIImageInspectorWidget(img);
+        }
+        else if (obj->IsOfType<UIText>())
+        {
+            UIText *txt = static_cast<UIText*>(obj);
+            inspWidget = new UITextInspectorWidget(txt);
+        }
+        else if (obj->IsOfType<CircleRenderer>())
+        {
+            CircleRenderer *cr = static_cast<CircleRenderer*>(obj);
+            inspWidget = new CircleRendererInspectorWidget(cr);
+        }
+        else if (obj->IsOfType<LineRenderer>())
+        {
+            LineRenderer *lr = static_cast<LineRenderer*>(obj);
+            inspWidget = new LineRendererInspectorWidget(lr);
+        }
+        else if (obj->IsOfType<MeshRenderer>())
+        {
+            MeshRenderer *mr = static_cast<MeshRenderer*>(obj);
+            inspWidget = new MeshRendererInspectorWidget(mr);
+        }
+        else if (obj->IsOfType<DirectionalLight>())
+        {
+            DirectionalLight *dl = static_cast<DirectionalLight*>(obj);
+            inspWidget = new DirectionalLightInspectorWidget(dl);
+        }
+        else if (obj->IsOfType<PointLight>())
+        {
+            PointLight *pl = static_cast<PointLight*>(obj);
+            inspWidget = new PointLightInspectorWidget(pl);
+        }
+        else if (obj->IsOfType<RectTransform>())
+        {
+            RectTransform *rt = static_cast<RectTransform*>(obj);
+            inspWidget = new RectTransformInspectorWidget(rt);
+        }
+        else if (obj->IsOfType<Transform>())
+        {
+            Transform *tr = static_cast<Transform*>(obj);
+            inspWidget = new TransformInspectorWidget(tr);
+        }
+        else if (obj->IsOfType<PostProcessEffect>())
+        {
+            PostProcessEffect *ppe = static_cast<PostProcessEffect*>(obj);
+            inspWidget = new PostProcessEffectInspectorWidget(ppe);
+        }
+        else
+        {
+            inspWidget = new ComponentWidget( static_cast<Component*>(obj) );
+        }
     }
-    else
+    else if (obj->IsOfType<BFile>())
     {
-        inspWidget = new InspectorWidget();
+        if ( Object::IsOfType<AudioClipFile>(obj) )
+        {
+            const AudioClipFile &audioFile = static_cast<const AudioClipFile&>(*obj);
+            inspWidget = new AudioClipFileInspectorWidget(audioFile);
+        }
+        else
+        {
+            inspWidget = new InspectorWidget();
+        }
     }
 
     inspWidget->Init();

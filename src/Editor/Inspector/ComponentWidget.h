@@ -8,7 +8,8 @@
 #include "Bang/ComponentWidgetContextMenu.h"
 
 class Component;
-class ComponentWidget : public InspectorWidget
+class ComponentWidget : public InspectorWidget,
+                        public IDestroyListener
 {
     Q_OBJECT
 
@@ -36,6 +37,9 @@ private:
 
     friend class InspectorContextMenu;
     friend class ComponentWidgetContextMenu;
+
+protected: // IDestroyListener
+   void OnDestroyableDestroyed(Destroyable *destroyedObject) override;
 };
 
 #endif // COMPONENTWIDGET_H

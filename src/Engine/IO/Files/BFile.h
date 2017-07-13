@@ -8,6 +8,7 @@
 #include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
+#include "Bang/Destroyable.h"
 #include "Bang/SerializableObject.h"
 
 class XMLNode;

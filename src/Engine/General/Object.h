@@ -4,6 +4,7 @@
 #include "Bang/Flags.h"
 #include "Bang/String.h"
 #include "Bang/ICloneable.h"
+#include "Bang/Destroyable.h"
 
 #define OBJECT_NO_FRIEND(CLASS) \
         ICLONEABLE(CLASS)\
@@ -35,7 +36,8 @@ enum HideFlag
 };
 CREATE_FLAGS(HideFlags, HideFlag);
 
-class Object : public ICloneable
+class Object : public ICloneable,
+               public Destroyable
 {
 public:
     Object();

@@ -2,16 +2,18 @@
 #define LISTINSPECTOR_H
 
 #include "Bang/Map.h"
+#include "Bang/Destroyable.h"
 #include "Bang/DragDropQListWidget.h"
 #include "Bang/InspectorContextMenu.h"
 
 class QLabel;
-class Component;
+class Object;
 class QCheckBox;
 class QDropEvent;
 class InspectorWidget;
 class SerializableObject;
-class Inspector : public DragDropQListWidget
+class Inspector : public DragDropQListWidget,
+                  public IDestroyListener
 {
     Q_OBJECT
 
@@ -20,20 +22,16 @@ public:
 
     void Clear();
     void OnWindowShown();
-    void Show(GameObject *gameObject);
-    void Show(Component *component);
-    void Show(const BFile &file);
+    void Show(Object *object);
     static Inspector* GetInstance();
 
     const List<InspectorWidget*> GetCurrentInspectorWidgets() const;
-    void OnSerializableObjectDestroyed(SerializableObject *destroyed);
     void InsertInspectorWidget(InspectorWidget *inspectorWidget,
                                int row = -1);
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);
     bool Refresh();
-
 
 protected:
     //To set the scroll step to a smaller one
@@ -50,6 +48,9 @@ private:
 
     QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
+
+protected: // IDestroyListener
+    void OnDestroyDemanded(Destroyable *objectDemandingDestroy) override;
 
     friend class InspectorWidget;
     friend class InspectorContextMenu;

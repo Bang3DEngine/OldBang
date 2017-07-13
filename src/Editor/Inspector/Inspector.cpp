@@ -38,19 +38,19 @@ void Inspector::OnWindowShown()
     Clear();
 }
 
-void Inspector::Show(GameObject *gameObject)
+void Inspector::Show(Object *object)
 {
-    Show( InspectorWidgetFactory::CreateWidgets(gameObject) );
-}
+    if (object->IsOfType<GameObject>())
+    {
+        GameObject *go = static_cast<GameObject*>(object);
+        Show( InspectorWidgetFactory::CreateWidgets(go) );
+    }
+    else
+    {
+        Show( { InspectorWidgetFactory::CreateWidget(object) } );
+    }
 
-void Inspector::Show(Component *component)
-{
-    Show( { InspectorWidgetFactory::CreateWidget(component) } );
-}
-
-void Inspector::Show(const BFile &file)
-{
-    Show( { InspectorWidgetFactory::CreateWidget(file) } );
+    object->RegisterDestroyListener(this);
 }
 
 void Inspector::Clear()
@@ -82,30 +82,6 @@ void Inspector::Show(const List<InspectorWidget *> &inspWidgets)
     {
         InsertInspectorWidget(inspWidget);
     }
-
-    // m_currentInspectable = inspWidget;
-
-    /*
-    String inspTitle = m_currentInspectable->GetTitleInInspector();
-    m_titleLabel->setText(inspTitle.ToQString());
-
-    m_enabledCheckBox->setVisible(m_currentInspectable->NeedsEnabledCheckBox());
-    m_enabledCheckBox->setChecked(m_currentInspectable->IsEnabled());
-
-    List<IInspectable*> inspectablesToShow =
-            m_currentInspectable->GetNewInspectablesToShow();
-    for (IInspectable *inspectableToShow : inspectablesToShow)
-    {
-        InspectorWidget *iw = inspectableToShow->GetNewInspectorWidget();
-        if (iw)
-        {
-            iw->Refresh();
-            AddWidget(iw);
-        }
-    }
-    for (IInspectable *insp : inspectablesToShow) { delete insp; }
-    */
-
     RefreshSizeHints();
 }
 
@@ -123,33 +99,30 @@ void Inspector::RefreshSizeHints()
     }
 }
 
+void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
+{
+    // Delete the widget corresponding to the destroyed object
+    for (InspectorWidget *inspWidget : GetCurrentInspectorWidgets())
+    {
+        if (objectDemandingDestroy == inspWidget)
+        {
+            for (int i = 0; i < count(); ++i)
+            {
+                QListWidgetItem *itm = item(i);
+                if (itemWidget(itm) == inspWidget)
+                {
+                    m_currentInspectorWidgets.Remove(inspWidget);
+                    delete itm;
+                }
+            }
+        }
+    }
+}
+
 void Inspector::OnEnabledCheckBoxChanged(bool checked)
 {
     // ENSURE(m_currentInspectable);
     // m_currentInspectable->OnEnabledChanged(checked);
-}
-
-void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
-{
-    /*ENSURE(m_currentInspectable);
-    if (destroyed == m_currentInspectable->GetSerializableObject())
-    {
-        m_currentInspectable = nullptr;
-        Clear();
-        return;
-    }
-    */
-
-    for (int i = 0; i < count(); ++i)
-    {
-        QListWidgetItem *itm = item(i);
-        InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
-        /*if (iw && iw->GetInspectable()->GetSerializableObject() == destroyed)
-        {
-            iw->OnDestroy();
-            delete itm;
-        }*/
-    }
 }
 
 void Inspector::InsertInspectorWidget(InspectorWidget *inspWidget, int row)
@@ -162,6 +135,7 @@ void Inspector::InsertInspectorWidget(InspectorWidget *inspWidget, int row)
     insertItem(newRow, item);
     setItemWidget(item, inspWidget);
 
+    inspWidget->RegisterDestroyListener(this);
     m_currentInspectorWidgets.PushBack(inspWidget);
 }
 

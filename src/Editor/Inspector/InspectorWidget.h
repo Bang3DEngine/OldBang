@@ -18,15 +18,17 @@
 #include <QDoubleSpinBox>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Map.h"
 #include "Bang/File.h"
-#include "Bang/Debug.h"
+#include "Bang/Destroyable.h"
 #include "Bang/AttrWidgetInt.h"
 #include "Bang/AttrWidgetBool.h"
 #include "Bang/AttrWidgetEnum.h"
 #include "Bang/AttrWidgetFile.h"
-#include "Bang/DragDropQWidget.h"
+#include "Bang/AttributeWidget.h"
 #include "Bang/AttrWidgetFloat.h"
 #include "Bang/AttrWidgetColor.h"
+#include "Bang/DragDropQWidget.h"
 #include "Bang/AttrWidgetString.h"
 #include "Bang/AttrWidgetButton.h"
 #include "Bang/AttrWidgetVectorFloat.h"
@@ -37,7 +39,8 @@ class GameObject;
  * @brief Represents a widget that can be put in the Inspector.
  * It tracks the attributes and attributeWidget it contains.
  */
-class InspectorWidget : public DragDropQWidget
+class InspectorWidget : public DragDropQWidget,
+                        public Destroyable
 {
     Q_OBJECT
 
@@ -47,7 +50,6 @@ public:
 
     void Init();
 
-    // IInspectable* GetInspectable() const;
     QGridLayout *GetGridLayout();
 
     void SetTitle(const String &title);
