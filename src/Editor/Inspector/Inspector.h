@@ -18,12 +18,13 @@ class Inspector : public DragDropQListWidget,
     Q_OBJECT
 
 public:
+    static Inspector* GetInstance();
     explicit Inspector(QWidget *parent = nullptr);
 
     void Clear();
     void OnWindowShown();
-    void Show(Object *object);
-    static Inspector* GetInstance();
+    void Show(Object *object, bool clearWhenDestroyed);
+    Object *GetInspectedObject() const;
 
     const List<InspectorWidget*> GetCurrentInspectorWidgets() const;
     void InsertInspectorWidget(InspectorWidget *inspectorWidget,

@@ -127,7 +127,7 @@ bool AudioClip::IsLoaded() const
     return m_alBufferId != 0;
 }
 
-const Path &AudioClip::GetAudioFilepath() const
+const Path &AudioClip::GetSoundFilepath() const
 {
     return m_audioFileFilepath;
 }

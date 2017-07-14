@@ -31,7 +31,7 @@ public:
     float GetLength() const;
     bool IsLoaded() const;
 
-    const Path &GetAudioFilepath() const;
+    const Path &GetSoundFilepath() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

@@ -241,20 +241,9 @@ void Explorer::RefreshInspector()
     {
         Inspector::GetInstance()->Clear();
 
-        /*
-        IInspectable *newInspectable = nullptr;
         BFile *specificFile = BFile::GetSpecificFile(f);
-        if (specificFile)
-        {
-            newInspectable = specificFile->GetNewInspectable();
-            delete specificFile;
-        }
-
-        if (newInspectable)
-        {
-            Inspector::GetInstance()->ShowInspectable(newInspectable);
-        }
-        */
+        Inspector::GetInstance()->Show(specificFile, true);
+        delete specificFile;
     }
 }
 

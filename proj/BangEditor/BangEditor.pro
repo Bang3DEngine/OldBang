@@ -30,7 +30,7 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/GameBuilder/GameBuilderJob.cpp \
     $$BANG_ROOT/src/Editor/Inspector/BehaviourInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/AudioSourceInspectorWidget.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/AudioClipFileInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/AudioClipInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Dialogs/GameBuildDialog.cpp \
     $$BANG_ROOT/src/Editor/Explorer/FileSystemModel.cpp \
     $$BANG_ROOT/src/Editor/General/EditorState.cpp \
@@ -120,7 +120,11 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/Inspector/PointLightInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/PostProcessEffectInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/TransformInspectorWidget.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.cpp
+    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/FileInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/FontInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/ImageInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/MaterialInspectorWidget.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/IconManager.h \
@@ -162,7 +166,7 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
     $$BANG_ROOT/src/Editor/Windows/WindowEventManager.h \
     $$BANG_ROOT/src/Editor/Windows/SelectProjectWindow.h \
-    $$BANG_ROOT/src/Editor/Inspector/AudioClipFileInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/AudioClipInspectorWidget.h \
     $$BANG_ROOT/src/Editor/General/Toolbar.h \
     $$BANG_ROOT/src/Editor/General/EditorState.h \
     $$BANG_ROOT/src/Editor/Dialogs/GameBuildDialog.h \
@@ -221,6 +225,11 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/DirectionalLightInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/PostProcessEffectInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/TransformInspectorWidget.h \
-    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.h
+    $$BANG_ROOT/src/Editor/Inspector/RectTransformInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/FileInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/AssetInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/FontInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/ImageInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/MaterialInspectorWidget.h
 
 ######################################

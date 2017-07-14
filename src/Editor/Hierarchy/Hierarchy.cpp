@@ -574,7 +574,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     GameObject *selectedGameObject = GetFirstSelectedGameObject();
     if (selectedGameObject && GetItemFromGameObject(selectedGameObject))
     {
-        Inspector::GetInstance()->Show(selectedGameObject);
+        Inspector::GetInstance()->Show(selectedGameObject, false);
     }
 }
 

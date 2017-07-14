@@ -16,11 +16,14 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;
 
+    void LoadFromTTF(const Path &ttfFilepath) override;
+    Path GetTTFFilepath() const;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
-    Path m_fontFilepath;
+    Path m_ttfFilepath;
 };
 
 #endif // FONT_H

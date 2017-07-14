@@ -86,7 +86,7 @@ bool InspectorWidget::IsClosed() const
 int InspectorWidget::GetHeightSizeHint() const
 {
     int heightSizeHint = 0;
-    heightSizeHint += 50; // Header height
+    heightSizeHint += 40; // Header height
 
     // Add up children widget's height size hints
     for (AttributeWidget *aw : m_attributeWidgets)

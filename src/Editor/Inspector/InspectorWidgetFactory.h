@@ -13,6 +13,7 @@ class InspectorWidgetFactory
 public:
     static List<InspectorWidget*> CreateWidgets(GameObject *go);
     static InspectorWidget* CreateWidget(Object *obj);
+    static InspectorWidget* CreateWidget(const Object &obj);
 
 private:
     InspectorWidgetFactory() = delete;

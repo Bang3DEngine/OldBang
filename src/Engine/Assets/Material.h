@@ -24,8 +24,8 @@ public:
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
-    const Vector2&     GetUvMultiply() const;
-    ShaderProgram*   GetShaderProgram() const;
+    const Vector2& GetUvMultiply() const;
+    ShaderProgram* GetShaderProgram() const;
     const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;
     float GetShininess() const;

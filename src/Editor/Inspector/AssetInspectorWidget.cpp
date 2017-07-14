@@ -1,0 +1,1 @@
+#include "Bang/AssetInspectorWidget.h"

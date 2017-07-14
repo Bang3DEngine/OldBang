@@ -24,15 +24,25 @@ String Font::GetFileExtension() const
     return Font::GetFileExtensionStatic();
 }
 
+void Font::LoadFromTTF(const Path &ttfFilepath)
+{
+    m_ttfFilepath = ttfFilepath;
+    G_Font::LoadFromTTF(ttfFilepath);
+}
+
+Path Font::GetTTFFilepath() const
+{
+    return m_ttfFilepath;
+}
+
 void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_fontFilepath = xmlInfo.GetFilepath("FontFilepath");
-    LoadFromTTF(m_fontFilepath);
+    LoadFromTTF( xmlInfo.GetFilepath("FontFilepath") );
 }
 
 void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath);
+    xmlInfo->SetFilepath("FontFilepath", GetTTFFilepath());
 }

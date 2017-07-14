@@ -38,20 +38,33 @@ void Inspector::OnWindowShown()
     Clear();
 }
 
-void Inspector::Show(Object *object)
+void Inspector::Show(Object *object, bool tmpObject)
 {
+    String title = "";
     if (object->IsOfType<GameObject>())
     {
         GameObject *go = static_cast<GameObject*>(object);
         Show( InspectorWidgetFactory::CreateWidgets(go) );
+        title = go->GetName();
     }
     else
     {
         Show( { InspectorWidgetFactory::CreateWidget(object) } );
+        if (object->IsOfType<BFile>())
+        {
+            const BFile *f = static_cast<const BFile*>(object);
+            title = f->GetPath().GetName();
+        }
     }
+    m_titleLabel->setText(title.ToQString());
 
-    p_inspectedObject = object;
-    p_inspectedObject->RegisterDestroyListener(this);
+    p_inspectedObject = !tmpObject ? object : nullptr;
+    if (p_inspectedObject) { p_inspectedObject->RegisterDestroyListener(this); }
+}
+
+Object *Inspector::GetInspectedObject() const
+{
+    return p_inspectedObject;
 }
 
 void Inspector::Clear()
@@ -106,7 +119,7 @@ void Inspector::OnDestroyableDestroyed(Destroyable *destroyedObject)
 {
     if ( destroyedObject == p_inspectedObject )
     {
-        // The object being inspected has been destroyed (GameObj, file, etc.)
+        // The object being inspected has been destroyed
         Clear();
     }
 }
@@ -134,8 +147,11 @@ void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
 
 void Inspector::OnEnabledCheckBoxChanged(bool checked)
 {
-    // ENSURE(m_currentInspectable);
-    // m_currentInspectable->OnEnabledChanged(checked);
+    if (Object::IsOfType<GameObject>(p_inspectedObject))
+    {
+        GameObject *go = Object::SCast<GameObject>(p_inspectedObject);
+        go->SetEnabled(checked);
+    }
 }
 
 void Inspector::InsertInspectorWidget(InspectorWidget *inspWidget, int row)

@@ -31,7 +31,7 @@ public:
     G_Font();
     virtual ~G_Font();
 
-    void LoadFromTTF(const Path &m_assetFilepath);
+    virtual void LoadFromTTF(const Path &m_assetFilepath);
 
     G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c);
     Vector2 GetCharMinUvInAtlas(char c) const;

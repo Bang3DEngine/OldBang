@@ -53,6 +53,11 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetTexture(GetTexture());
 }
 
+void Material::SetUvMultiply(const Vector2 &uvMultiply)
+{
+    m_gMaterial->SetUvMultiply(uvMultiply);
+}
+
 String Material::GetFileExtensionStatic()
 {
     return "bmat";
@@ -67,10 +72,10 @@ void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    m_gMaterial->SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
-    m_gMaterial->SetShininess(xmlInfo.GetFloat("Shininess"));
-    m_gMaterial->SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
-    m_gMaterial->SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
+    SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
+    SetShininess(xmlInfo.GetFloat("Shininess"));
+    SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
+    SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
 
     Path texAssetFilepath = xmlInfo.GetFilepath("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
@@ -94,10 +99,10 @@ void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetColor("DiffuseColor",    m_gMaterial->GetDiffuseColor());
-    xmlInfo->SetFloat("Shininess",       m_gMaterial->GetShininess());
-    xmlInfo->SetBool("ReceivesLighting", m_gMaterial->ReceivesLighting());
-    xmlInfo->SetVector2("UvMultiply",    m_gMaterial->GetUvMultiply());
+    xmlInfo->SetColor("DiffuseColor",    GetDiffuseColor());
+    xmlInfo->SetFloat("Shininess",       GetShininess());
+    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
+    xmlInfo->SetVector2("UvMultiply",    GetUvMultiply());
 
     Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path::Empty;
     xmlInfo->SetFilepath("Texture", texFilepath);

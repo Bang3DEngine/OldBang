@@ -4,12 +4,15 @@
 #include "Bang/UIText.h"
 #include "Bang/Camera.h"
 #include "Bang/UIImage.h"
+#include "Bang/FontFile.h"
+#include "Bang/ImageFile.h"
+#include "Bang/Transform.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 #include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
-#include "Bang/Transform.h"
 #include "Bang/AudioSource.h"
+#include "Bang/MaterialFile.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/AudioListener.h"
@@ -19,25 +22,27 @@
 #include "Bang/ComponentWidget.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/PostProcessEffect.h"
+#include "Bang/FontInspectorWidget.h"
+#include "Bang/ImageInspectorWidget.h"
 #include "Bang/UITextInspectorWidget.h"
 #include "Bang/CameraInspectorWidget.h"
 #include "Bang/UIImageInspectorWidget.h"
+#include "Bang/MaterialInspectorWidget.h"
 #include "Bang/BehaviourInspectorWidget.h"
 #include "Bang/TransformInspectorWidget.h"
+#include "Bang/AudioClipInspectorWidget.h"
 #include "Bang/PointLightInspectorWidget.h"
 #include "Bang/AudioSourceInspectorWidget.h"
 #include "Bang/MeshRendererInspectorWidget.h"
 #include "Bang/LineRendererInspectorWidget.h"
 #include "Bang/RectTransformInspectorWidget.h"
 #include "Bang/AudioListenerInspectorWidget.h"
-#include "Bang/AudioClipFileInspectorWidget.h"
 #include "Bang/CircleRendererInspectorWidget.h"
 #include "Bang/DirectionalLightInspectorWidget.h"
 #include "Bang/PostProcessEffectInspectorWidget.h"
 
 List<InspectorWidget*> InspectorWidgetFactory::CreateWidgets(GameObject *go)
-{
-    List<InspectorWidget*> componentWidgets;
+{    List<InspectorWidget*> componentWidgets;
     for (Component *comp : go->GetComponents())
     {
         InspectorWidget *compIW = InspectorWidgetFactory::CreateWidget(comp);
@@ -130,8 +135,23 @@ InspectorWidget* InspectorWidgetFactory::CreateWidget(Object *obj)
     {
         if ( Object::IsOfType<AudioClipFile>(obj) )
         {
-            const AudioClipFile &audioFile = static_cast<const AudioClipFile&>(*obj);
-            inspWidget = new AudioClipFileInspectorWidget(audioFile);
+            AudioClipFile *acf = static_cast<AudioClipFile*>(obj);
+            inspWidget = new AudioClipInspectorWidget(*acf);
+        }
+        else if ( Object::IsOfType<FontFile>(obj) )
+        {
+            FontFile *ff = static_cast<FontFile*>(obj);
+            inspWidget = new FontInspectorWidget(*ff);
+        }
+        else if ( Object::IsOfType<ImageFile>(obj) )
+        {
+            ImageFile *imgf = static_cast<ImageFile*>(obj);
+            inspWidget = new ImageInspectorWidget(*imgf);
+        }
+        else if ( Object::IsOfType<MaterialFile>(obj) )
+        {
+            MaterialFile *matF = static_cast<MaterialFile*>(obj);
+            inspWidget = new MaterialInspectorWidget(*matF );
         }
         else
         {

@@ -21,6 +21,7 @@ class Destroyable
 {
 public:
     void RegisterDestroyListener(IDestroyListener *listener);
+    void UnRegisterDestroyListener(IDestroyListener *listener);
 
 protected:
     Destroyable();
@@ -30,7 +31,6 @@ protected:
 
 private:
     List<IDestroyListener*> m_destroyListeners;
-    void UnRegisterDestroyListener(IDestroyListener *listener);
 
     friend class IDestroyListener;
 };
