@@ -2,7 +2,7 @@
 #define IMAGEINSPECTORWIDGET_H
 
 #include "Bang/ImageFile.h"
-#include "Bang/AssetInspectorWidget.h"
+#include "Bang/FileInspectorWidget.h"
 
 class ImageInspectorWidget : public FileInspectorWidget
 {

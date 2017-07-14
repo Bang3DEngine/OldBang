@@ -46,22 +46,22 @@ void MaterialInspectorWidget::Refresh()
     AssetInspectorWidget::Refresh();
 
     Material *mat = GetAsset();
-    if (mat)
-    {
-        m_diffuseColorAW->SetValue(mat->GetDiffuseColor());
-        m_shininessAW->SetValue(mat->GetShininess());
-        m_receivesLightingAW->SetValue(mat->ReceivesLighting());
-        m_uvMultiplyAW->SetValue(mat->GetUvMultiply());
-        m_textureAW->SetValue(mat->GetTexture()->GetFilepath());
 
-        ShaderProgram *sp = mat->GetShaderProgram();
-        if (sp)
-        {
-            G_Shader *vShader = sp->GetVertexShader();
-            G_Shader *fShader = sp->GetFragmentShader();
-            m_vShaderAW->SetValue(vShader ? vShader->GetFilepath() : Path::Empty);
-            m_fShaderAW->SetValue(fShader ? fShader->GetFilepath() : Path::Empty);
-        }
+    m_diffuseColorAW->SetValue(mat->GetDiffuseColor());
+    m_shininessAW->SetValue(mat->GetShininess());
+    m_receivesLightingAW->SetValue(mat->ReceivesLighting());
+    m_uvMultiplyAW->SetValue(mat->GetUvMultiply());
+
+    const Texture2D *tex = mat->GetTexture();
+    if (tex) { m_textureAW->SetValue(tex->GetFilepath()); }
+
+    ShaderProgram *sp = mat->GetShaderProgram();
+    if (sp)
+    {
+        G_Shader *vShader = sp->GetVertexShader();
+        G_Shader *fShader = sp->GetFragmentShader();
+        m_vShaderAW->SetValue(vShader ? vShader->GetFilepath() : Path::Empty);
+        m_fShaderAW->SetValue(fShader ? fShader->GetFilepath() : Path::Empty);
     }
 }
 

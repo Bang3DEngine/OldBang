@@ -5,6 +5,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Array.h"
+#include "Bang/Debug.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/AttributeWidget.h"
 

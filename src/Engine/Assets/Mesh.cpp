@@ -18,6 +18,7 @@ Mesh::Mesh(const Mesh &m)
     m_vao = m.GetVAO();
     m_bBox = m.m_bBox;
     m_bSphere = m.m_bSphere;
+    m_modelFilepath = m.m_modelFilepath;
     m_vertexPositionsVBO = m.m_vertexPositionsVBO;
     m_vertexNormalsVBO = m.m_vertexNormalsVBO;
     m_vertexUvsVBO = m.m_vertexUvsVBO;
@@ -54,6 +55,7 @@ void Mesh::LoadFromFile(const Path &filepath)
         LoadPositions(m_positions);
         LoadNormals(m_normals);
         LoadUvs(m_uvs);
+        m_modelFilepath = filepath;
     }
     else
     {

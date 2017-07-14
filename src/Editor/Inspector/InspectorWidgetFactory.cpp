@@ -5,16 +5,21 @@
 #include "Bang/Camera.h"
 #include "Bang/UIImage.h"
 #include "Bang/FontFile.h"
+#include "Bang/MeshFile.h"
+#include "Bang/ModelFile.h"
 #include "Bang/ImageFile.h"
 #include "Bang/Transform.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Component.h"
+#include "Bang/SoundFile.h"
 #include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
+#include "Bang/PrefabFile.h"
 #include "Bang/AudioSource.h"
 #include "Bang/MaterialFile.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
+#include "Bang/Texture2DFile.h"
 #include "Bang/AudioListener.h"
 #include "Bang/AudioClipFile.h"
 #include "Bang/RectTransform.h"
@@ -23,12 +28,17 @@
 #include "Bang/DirectionalLight.h"
 #include "Bang/PostProcessEffect.h"
 #include "Bang/FontInspectorWidget.h"
+#include "Bang/MeshInspectorWidget.h"
 #include "Bang/ImageInspectorWidget.h"
+#include "Bang/ModelInspectorWidget.h"
+#include "Bang/SoundInspectorWidget.h"
 #include "Bang/UITextInspectorWidget.h"
 #include "Bang/CameraInspectorWidget.h"
+#include "Bang/PrefabInspectorWidget.h"
 #include "Bang/UIImageInspectorWidget.h"
 #include "Bang/MaterialInspectorWidget.h"
 #include "Bang/BehaviourInspectorWidget.h"
+#include "Bang/Texture2DInspectorWidget.h"
 #include "Bang/TransformInspectorWidget.h"
 #include "Bang/AudioClipInspectorWidget.h"
 #include "Bang/PointLightInspectorWidget.h"
@@ -152,6 +162,31 @@ InspectorWidget* InspectorWidgetFactory::CreateWidget(Object *obj)
         {
             MaterialFile *matF = static_cast<MaterialFile*>(obj);
             inspWidget = new MaterialInspectorWidget(*matF );
+        }
+        else if ( Object::IsOfType<MeshFile>(obj) )
+        {
+            MeshFile *meshF = static_cast<MeshFile*>(obj);
+            inspWidget = new MeshInspectorWidget(*meshF );
+        }
+        else if ( Object::IsOfType<ModelFile>(obj) )
+        {
+            ModelFile *modelF = static_cast<ModelFile*>(obj);
+            inspWidget = new ModelInspectorWidget(*modelF );
+        }
+        else if ( Object::IsOfType<PrefabFile>(obj) )
+        {
+            PrefabFile *prefF = static_cast<PrefabFile*>(obj);
+            inspWidget = new PrefabInspectorWidget(*prefF );
+        }
+        else if ( Object::IsOfType<SoundFile>(obj) )
+        {
+            SoundFile *soundF = static_cast<SoundFile*>(obj);
+            inspWidget = new SoundInspectorWidget(*soundF );
+        }
+        else if ( Object::IsOfType<Texture2DFile>(obj) )
+        {
+            Texture2DFile *texF = static_cast<Texture2DFile*>(obj);
+            inspWidget = new Texture2DInspectorWidget(*texF );
         }
         else
         {

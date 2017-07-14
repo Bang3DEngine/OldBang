@@ -28,7 +28,7 @@ public:
                          FT_Face *fontFace);
 private:
     G_FontSheetCreator();
-    ~G_FontSheetCreator();
+    virtual ~G_FontSheetCreator();
     FT_Library m_ftLibrary;
 
     static bool Init();
