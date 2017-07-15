@@ -22,9 +22,9 @@ void UIImageInspectorWidget::InitExtra()
     InsertAttributeWidget(m_imageAW);
 }
 
-void UIImageInspectorWidget::Refresh()
+void UIImageInspectorWidget::OnUpdate()
 {
-    UIRendererInspectorWidget::Refresh();
+    UIRendererInspectorWidget::OnUpdate();
 
     Texture2D *tex = p_uiImage->GetImageTexture();
     Path texPath = tex ? tex->GetFilepath() : Path::Empty;
@@ -41,6 +41,8 @@ void UIImageInspectorWidget::OnAttrWidgetValueChanged(
         Texture2D *tex = AssetsManager::Load<Texture2D>(m_imageAW->GetPath());
         p_uiImage->SetImage(tex);
     }
+
+    emit Changed(this);
 }
 
 void UIImageInspectorWidget::OnDestroy()

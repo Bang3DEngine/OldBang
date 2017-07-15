@@ -185,9 +185,9 @@ void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
     if (!m_filepath.IsEmpty()) { OnDoubleClick(); }
 }
 
-void AttrWidgetFile::Refresh()
+void AttrWidgetFile::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 const Path &AttrWidgetFile::GetPath() const

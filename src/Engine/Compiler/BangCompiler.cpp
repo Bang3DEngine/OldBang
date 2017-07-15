@@ -96,7 +96,7 @@ QThreadPool* BangCompiler::GetThreadPool()
     static QThreadPool s_threadPool;
     if (!init)
     {
-        s_threadPool.setMaxThreadCount(2);
+        s_threadPool.setMaxThreadCount(1);
         init = true;
     }
     return &s_threadPool;

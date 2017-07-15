@@ -23,7 +23,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 };
 
 class CheckboxWidget : public QCheckBox

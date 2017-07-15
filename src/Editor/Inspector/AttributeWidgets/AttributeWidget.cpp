@@ -33,7 +33,7 @@ void AttributeWidget::OnValueChanged()
     emit OnValueChanged(this);
 }
 
-void AttributeWidget::Refresh()
+void AttributeWidget::OnUpdate()
 {
 }
 

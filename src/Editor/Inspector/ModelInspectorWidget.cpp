@@ -19,7 +19,7 @@ void ModelInspectorWidget::InitExtra()
     FileInspectorWidget::InitExtra();
 }
 
-void ModelInspectorWidget::Refresh()
+void ModelInspectorWidget::OnUpdate()
 {
-    FileInspectorWidget::Refresh();
+    FileInspectorWidget::OnUpdate();
 }

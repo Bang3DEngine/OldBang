@@ -28,9 +28,8 @@ void ComponentWidget::InitExtra()
 
     SetIcon(IconManager::GetIcon(p_component->GetClassName()));
     SetTitle(p_component->GetClassName());
-    m_closed = p_component->IsClosedInInspector();
 
-    SetClosed(m_closed);
+    SetClosed(false);
     UpdateCloseOpenButtonIcon();
 
     m_enabledCheckbox.setChecked(p_component->IsEnabled(false));
@@ -53,12 +52,12 @@ void ComponentWidget::SetEnabledCheckboxVisible(bool visible)
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
     p_component->SetEnabled(checked);
+    emit Changed(this);
 }
 
 void ComponentWidget::SetClosed(bool closed)
 {
     InspectorWidget::SetClosed(closed);
-    p_component->SetClosedInInspector(closed);
 }
 
 void ComponentWidget::OnDestroyableDestroyed(Destroyable *destroyedObject)

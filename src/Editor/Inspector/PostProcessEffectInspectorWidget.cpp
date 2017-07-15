@@ -30,9 +30,9 @@ void PostProcessEffectInspectorWidget::InitExtra()
     InsertAttributeWidget(m_typeAW);
 }
 
-void PostProcessEffectInspectorWidget::Refresh()
+void PostProcessEffectInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_postProcessShaderAW->SetValue(
                 p_postProcessEffect->GetPostProcessShaderFilepath() );
@@ -40,8 +40,11 @@ void PostProcessEffectInspectorWidget::Refresh()
     m_typeAW->SetValue( p_postProcessEffect->GetType() );
 }
 
-void PostProcessEffectInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
+void PostProcessEffectInspectorWidget::OnAttrWidgetValueChanged(
+        IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_postProcessShaderAW)
     {
         G_Shader *postProcessShader =
@@ -57,6 +60,8 @@ void PostProcessEffectInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget
     {
         p_postProcessEffect->SetType( m_typeAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void PostProcessEffectInspectorWidget::OnDestroy()

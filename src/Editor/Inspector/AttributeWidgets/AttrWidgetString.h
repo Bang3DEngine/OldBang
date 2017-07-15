@@ -27,7 +27,7 @@ public:
     virtual void SetValue(const String &value);
     virtual String GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();

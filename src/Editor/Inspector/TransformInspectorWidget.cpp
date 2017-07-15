@@ -25,9 +25,9 @@ void TransformInspectorWidget::InitExtra()
     SetEnabledCheckboxVisible(false);
 }
 
-void TransformInspectorWidget::Refresh()
+void TransformInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_positionAW->SetValue( p_transform->GetLocalPosition() );
     m_rotationAW->SetValue( p_transform->GetLocalEuler() );
@@ -36,6 +36,8 @@ void TransformInspectorWidget::Refresh()
 
 void TransformInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_positionAW)
     {
         p_transform->SetLocalPosition( m_positionAW->GetVector3() );
@@ -48,6 +50,8 @@ void TransformInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWi
     {
         p_transform->SetLocalScale( m_scaleAW->GetVector3() );
     }
+
+    emit Changed(this);
 }
 
 void TransformInspectorWidget::OnDestroy()

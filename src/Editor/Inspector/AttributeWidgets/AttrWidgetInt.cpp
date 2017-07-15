@@ -42,9 +42,9 @@ int AttrWidgetInt::GetValue() const
     return m_lineEdit->GetInt();
 }
 
-void AttrWidgetInt::Refresh()
+void AttrWidgetInt::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetInt::OnLineEditFocusIn()

@@ -8,12 +8,12 @@ class Component;
 class GameObject;
 class AudioSource;
 class InspectorWidget;
+class InspectorWidgetGroup;
 class InspectorWidgetFactory
 {
 public:
-    static List<InspectorWidget*> CreateWidgets(GameObject *go);
-    static InspectorWidget* CreateWidget(Object *obj);
-    static InspectorWidget* CreateWidget(const Object &obj);
+    static InspectorWidgetGroup* CreateWidgetGroup(Object *obj);
+    static InspectorWidget* CreateComponentWidget(Component *comp);
 
 private:
     InspectorWidgetFactory() = delete;

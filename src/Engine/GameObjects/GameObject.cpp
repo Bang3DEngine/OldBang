@@ -280,10 +280,7 @@ bool GameObject::AddComponent(Component *c)
     m_components.PushBack(c);
 
     #ifdef BANG_EDITOR
-    if (Inspector::GetInstance()->Refresh())
-    {
-        Inspector::GetInstance()->scrollToBottom();
-    }
+    Inspector::GetInstance()->scrollToBottom();
     #endif
 
     return true;

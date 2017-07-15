@@ -20,9 +20,9 @@ void PointLightInspectorWidget::InitExtra()
     InsertAttributeWidget(m_rangeAW);
 }
 
-void PointLightInspectorWidget::Refresh()
+void PointLightInspectorWidget::OnUpdate()
 {
-    LightInspectorWidget::Refresh();
+    LightInspectorWidget::OnUpdate();
 
     m_rangeAW->SetValue( p_pointLight->GetRange() );
 }
@@ -36,6 +36,8 @@ void PointLightInspectorWidget::OnAttrWidgetValueChanged(
     {
         p_pointLight->SetRange( m_rangeAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void PointLightInspectorWidget::OnDestroy()

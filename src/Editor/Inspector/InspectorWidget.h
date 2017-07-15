@@ -33,13 +33,12 @@
 #include "Bang/AttrWidgetButton.h"
 #include "Bang/AttrWidgetVectorFloat.h"
 
+class IInspectorWidget { };
+
 class Component;
 class GameObject;
-/**
- * @brief Represents a widget that can be put in the Inspector.
- * It tracks the attributes and attributeWidget it contains.
- */
 class InspectorWidget : public DragDropQWidget,
+                        public IInspectorWidget,
                         public Destroyable
 {
     Q_OBJECT
@@ -55,12 +54,15 @@ public:
     void SetTitle(const String &title);
     bool IsClosed() const;
 
+    void SetHeaderVisible(bool visible);
+    bool IsHeaderVisible() const;
+
     virtual int GetHeightSizeHint() const;
     virtual void OnDestroy();
 
 public slots:
     virtual void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget);
-    virtual void Refresh();
+    virtual void OnUpdate();
 
 protected:
     QVBoxLayout m_vLayout;
@@ -83,10 +85,14 @@ protected slots:
     void OnCloseOpenButtonClicked();
 
 private:
-    QTimer m_refreshTimer;
     List<AttributeWidget*> m_attributeWidgets;
 
     void UpdateContentMargins();
+
+signals:
+    void Changed(IInspectorWidget *inspectorWidget);
 };
+
+Q_DECLARE_METATYPE(IInspectorWidget)
 
 #endif // INSPECTORWIDGET_H

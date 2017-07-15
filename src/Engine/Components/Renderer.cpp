@@ -33,8 +33,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
-    r->SetClosedInInspector(IsClosedInInspector());
-
 }
 
 void Renderer::SetMaterial(Material *m)

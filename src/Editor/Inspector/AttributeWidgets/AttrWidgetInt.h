@@ -27,7 +27,7 @@ public:
     virtual void SetValue(int a);
     virtual int GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();

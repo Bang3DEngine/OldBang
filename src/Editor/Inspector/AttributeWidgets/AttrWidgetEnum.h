@@ -56,9 +56,9 @@ public:
         return m_enumValues[m_comboBox->currentIndex()];
     }
 
-    virtual void Refresh() override
+    virtual void OnUpdate() override
     {
-        AttributeWidget::Refresh();
+        AttributeWidget::OnUpdate();
     }
 
 

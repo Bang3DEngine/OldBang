@@ -1,5 +1,8 @@
-#ifndef LISTINSPECTOR_H
-#define LISTINSPECTOR_H
+#ifndef INSPECTOR_H
+#define INSPECTOR_H
+
+#include <QTimer>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Destroyable.h"
@@ -12,6 +15,7 @@ class QCheckBox;
 class QDropEvent;
 class InspectorWidget;
 class SerializableObject;
+class InspectorWidgetGroup;
 class Inspector : public DragDropQListWidget,
                   public IDestroyListener
 {
@@ -26,27 +30,29 @@ public:
     void Show(Object *object, bool clearWhenDestroyed);
     Object *GetInspectedObject() const;
 
-    const List<InspectorWidget*> GetCurrentInspectorWidgets() const;
+    const List<InspectorWidget*>& GetCurrentInspectorWidgets() const;
+    const InspectorWidgetGroup* GetCurrentInspectorWidgetGroup() const;
     void InsertInspectorWidget(InspectorWidget *inspectorWidget,
                                int row = -1);
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);
-    bool Refresh();
+    void OnUpdate();
 
 protected:
     //To set the scroll step to a smaller one
     virtual void updateGeometries() override;
 
 private:
-    List<InspectorWidget*> m_currentInspectorWidgets;
+    InspectorWidgetGroup* m_currentInspectorWidgetGroup = nullptr;
     InspectorContextMenu m_iContextMenu;
 
+    QTimer     m_refreshTimer;
     Object    *p_inspectedObject = nullptr;
     QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
 
-    void Show(const List<InspectorWidget*> &inspectorWidgets);
+    void Show(InspectorWidgetGroup* inspectorWidgetGroup);
 
     void dropEvent(QDropEvent *e) override;
     void RefreshSizeHints();
@@ -59,4 +65,4 @@ protected: // IDestroyListener
     friend class InspectorContextMenu;
 };
 
-#endif // LISTINSPECTOR_H
+#endif // INSPECTOR_H

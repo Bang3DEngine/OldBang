@@ -21,9 +21,9 @@ void UIRendererInspectorWidget::InitExtra()
     InsertAttributeWidget(m_tintAW);
 }
 
-void UIRendererInspectorWidget::Refresh()
+void UIRendererInspectorWidget::OnUpdate()
 {
-    RendererInspectorWidget::Refresh();
+    RendererInspectorWidget::OnUpdate();
 
     m_tintAW->SetValue( p_uiRenderer->GetTint() );
 }
@@ -37,6 +37,8 @@ void UIRendererInspectorWidget::OnAttrWidgetValueChanged(
     {
         p_uiRenderer->SetTint( m_tintAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void UIRendererInspectorWidget::OnDestroy()

@@ -21,19 +21,23 @@ void BehaviourInspectorWidget::InitExtra()
     InsertAttributeWidget(m_sourceFileAW);
 }
 
-void BehaviourInspectorWidget::Refresh()
+void BehaviourInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_sourceFileAW->SetValue( p_behaviour->GetSourceFilepath() );
 }
 
 void BehaviourInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_sourceFileAW)
     {
         p_behaviour->SetSourceFilepath(m_sourceFileAW->GetPath());
     }
+
+    emit Changed(this);
 }
 
 void BehaviourInspectorWidget::OnDestroy()

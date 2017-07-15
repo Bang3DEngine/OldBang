@@ -40,9 +40,9 @@ float AttrWidgetFloat::GetValue() const
     return m_lineEdit->GetFloat();
 }
 
-void AttrWidgetFloat::Refresh()
+void AttrWidgetFloat::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetFloat::OnLineEditFocusIn()

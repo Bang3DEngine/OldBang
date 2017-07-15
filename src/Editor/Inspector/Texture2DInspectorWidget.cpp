@@ -32,9 +32,9 @@ void Texture2DInspectorWidget::InitExtra()
     InsertAttributeWidget(m_alphaCutoffAW);
 }
 
-void Texture2DInspectorWidget::Refresh()
+void Texture2DInspectorWidget::OnUpdate()
 {
-    AssetInspectorWidget::Refresh();
+    AssetInspectorWidget::OnUpdate();
 
     Texture2D *tex = GetAsset();
     m_imageFileAW->SetValue(tex->GetImageFilepath());
@@ -61,5 +61,5 @@ void Texture2DInspectorWidget::OnAttrWidgetValueChanged(
         tex->SetAlphaCutoff(m_alphaCutoffAW->GetValue());
     }
 
-    RewriteAsset();
+    emit Changed(this);
 }

@@ -12,7 +12,7 @@ public:
 
 protected:
     virtual void InitExtra() override;
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
     virtual void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget) override;
     virtual void OnDestroy() override;
 

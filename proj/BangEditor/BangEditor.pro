@@ -127,9 +127,14 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/Inspector/MaterialInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/MeshInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/ModelInspectorWidget.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/PrefabInspectorWidget.cpp \
     $$BANG_ROOT/src/Editor/Inspector/SoundInspectorWidget.cpp \
-    $$BANG_ROOT/src/Editor/Inspector/Texture2DInspectorWidget.cpp
+    $$BANG_ROOT/src/Editor/Inspector/Texture2DInspectorWidget.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/InspectorWidgetGroup.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/SingleInspectorWidgetGroup.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/GameObjectInspectorWidgetGroup.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/PrefabInspectorWidgetGroup.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/FileInspectorWidgetGroup.cpp \
+    $$BANG_ROOT/src/Editor/Inspector/AssetInspectorWidgetGroup.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Editor/General/IconManager.h \
@@ -238,8 +243,13 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/MaterialInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/MeshInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/ModelInspectorWidget.h \
-    $$BANG_ROOT/src/Editor/Inspector/PrefabInspectorWidget.h \
     $$BANG_ROOT/src/Editor/Inspector/SoundInspectorWidget.h \
-    $$BANG_ROOT/src/Editor/Inspector/Texture2DInspectorWidget.h
+    $$BANG_ROOT/src/Editor/Inspector/Texture2DInspectorWidget.h \
+    $$BANG_ROOT/src/Editor/Inspector/InspectorWidgetGroup.h \
+    $$BANG_ROOT/src/Editor/Inspector/SingleInspectorWidgetGroup.h \
+    $$BANG_ROOT/src/Editor/Inspector/GameObjectInspectorWidgetGroup.h \
+    $$BANG_ROOT/src/Editor/Inspector/PrefabInspectorWidgetGroup.h \
+    $$BANG_ROOT/src/Editor/Inspector/FileInspectorWidgetGroup.h \
+    $$BANG_ROOT/src/Editor/Inspector/AssetInspectorWidgetGroup.h
 
 ######################################

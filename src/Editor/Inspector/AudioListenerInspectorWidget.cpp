@@ -19,14 +19,16 @@ void AudioListenerInspectorWidget::InitExtra()
     ComponentWidget::InitExtra();
 }
 
-void AudioListenerInspectorWidget::Refresh()
+void AudioListenerInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 }
 
-void AudioListenerInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
+void AudioListenerInspectorWidget::OnAttrWidgetValueChanged(
+        IAttributeWidget *attrWidget)
 {
-
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+    emit Changed(this);
 }
 
 void AudioListenerInspectorWidget::OnDestroy()

@@ -24,7 +24,7 @@ public:
     AttributeWidget();
     virtual ~AttributeWidget();
 
-    virtual void Refresh();
+    virtual void OnUpdate();
     virtual int GetHeightSizeHint() const;
 
     void SetHeightSizeHint(int heightSizeHint);

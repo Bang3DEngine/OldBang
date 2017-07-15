@@ -22,7 +22,6 @@ void Component::CloneInto(ICloneable *clone) const
     Object::CloneInto(clone);
     Component *c = Object::SCast<Component>(clone);
     c->SetEnabled( IsEnabled(false) );
-    c->SetClosedInInspector( IsClosedInInspector() );
 }
 
 String Component::ToString() const
@@ -49,16 +48,6 @@ bool Component::IsEnabled(bool recursive) const
                        m_enabled;
 }
 
-void Component::SetClosedInInspector(bool closed)
-{
-    m_closedInInspector = closed;
-}
-
-bool Component::IsClosedInInspector() const
-{
-    return m_closedInInspector;
-}
-
 String Component::GetInstanceId() const
 {
     String instanceId = "Component";
@@ -77,7 +66,6 @@ void Component::Read(const XMLNode &xmlInfo)
     SerializableObject::Read(xmlInfo);
 
     SetEnabled(xmlInfo.GetBool("enabled"));
-    SetClosedInInspector(xmlInfo.GetBool("closedInInspector"));
 }
 
 void Component::Write(XMLNode *xmlInfo) const
@@ -87,5 +75,4 @@ void Component::Write(XMLNode *xmlInfo) const
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->SetString("id", GetInstanceId());
     xmlInfo->SetBool("enabled", m_enabled);
-    xmlInfo->SetBool("closedInInspector", IsClosedInInspector());
 }

@@ -21,6 +21,7 @@ public:
     Prefab(const Prefab &p);
     Prefab(GameObject *go);
     Prefab(const String &gameObjectXMLInfoContent);
+    virtual ~Prefab();
 
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;

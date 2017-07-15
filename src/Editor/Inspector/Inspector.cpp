@@ -11,6 +11,7 @@
 #include "Bang/EditorWindow.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/SerializableObject.h"
+#include "Bang/InspectorWidgetGroup.h"
 #include "Bang/InspectorWidgetFactory.h"
 
 Inspector::Inspector(QWidget *parent) : DragDropQListWidget(),
@@ -18,6 +19,9 @@ Inspector::Inspector(QWidget *parent) : DragDropQListWidget(),
 {
     setAlternatingRowColors(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+    m_refreshTimer.start(100);
+    QObject::connect(&m_refreshTimer, SIGNAL(timeout()), this, SLOT(OnUpdate()));
 
     m_titleLabel      = parent->findChild<QLabel*>("labelInspectorName");
     m_enabledCheckBox = parent->findChild<QCheckBox*>("enabledInspectorCheckBox");
@@ -34,29 +38,16 @@ void Inspector::OnWindowShown()
 {
     this->SetDragDropEventPossibleSources({
           Explorer::GetInstance(), Hierarchy::GetInstance()});
+    qRegisterMetaType<IInspectorWidget>("IInspectorWidget");
     qRegisterMetaType<IAttributeWidget>("IAttributeWidget");
     Clear();
 }
 
 void Inspector::Show(Object *object, bool tmpObject)
 {
-    String title = "";
-    if (object->IsOfType<GameObject>())
-    {
-        GameObject *go = static_cast<GameObject*>(object);
-        Show( InspectorWidgetFactory::CreateWidgets(go) );
-        title = go->GetName();
-    }
-    else
-    {
-        Show( { InspectorWidgetFactory::CreateWidget(object) } );
-        if (object->IsOfType<BFile>())
-        {
-            const BFile *f = static_cast<const BFile*>(object);
-            title = f->GetPath().GetName();
-        }
-    }
-    m_titleLabel->setText(title.ToQString());
+    InspectorWidgetGroup* inspectorWidgetGroup =
+                            InspectorWidgetFactory::CreateWidgetGroup(object);
+    Show(inspectorWidgetGroup);
 
     p_inspectedObject = !tmpObject ? object : nullptr;
     if (p_inspectedObject) { p_inspectedObject->RegisterDestroyListener(this); }
@@ -67,6 +58,17 @@ Object *Inspector::GetInspectedObject() const
     return p_inspectedObject;
 }
 
+const List<InspectorWidget*>& Inspector::GetCurrentInspectorWidgets() const
+{
+    if (m_currentInspectorWidgetGroup)
+    {
+        return m_currentInspectorWidgetGroup->GetInspectorWidgets();
+    }
+
+    static List<InspectorWidget*> empty;
+    return empty;
+}
+
 void Inspector::Clear()
 {
     for (InspectorWidget *inspWidget : GetCurrentInspectorWidgets())
@@ -74,9 +76,13 @@ void Inspector::Clear()
         inspWidget->OnDestroy();
     }
 
-    p_inspectedObject = nullptr;
-    m_currentInspectorWidgets.Clear();
+    if (m_currentInspectorWidgetGroup)
+    {
+        delete m_currentInspectorWidgetGroup;
+        m_currentInspectorWidgetGroup = nullptr;
+    }
 
+    p_inspectedObject = nullptr;
     m_titleLabel->setText(tr(""));
     m_enabledCheckBox->setVisible(false);
 
@@ -85,19 +91,28 @@ void Inspector::Clear()
     clear();
 }
 
-bool Inspector::Refresh()
+void Inspector::OnUpdate()
 {
-    return true;
+    if (m_currentInspectorWidgetGroup)
+    {
+        m_currentInspectorWidgetGroup->OnUpdate();
+    }
 }
 
-void Inspector::Show(const List<InspectorWidget *> &inspWidgets)
+void Inspector::Show(InspectorWidgetGroup* inspWidgetGroup)
 {
     Clear();
 
-    for (InspectorWidget *inspWidget : inspWidgets)
+    m_currentInspectorWidgetGroup = inspWidgetGroup;
+    for (InspectorWidget *inspWidget : inspWidgetGroup->GetInspectorWidgets())
     {
         InsertInspectorWidget(inspWidget);
     }
+
+    m_enabledCheckBox->setChecked( inspWidgetGroup->IsEnabled() );
+    m_enabledCheckBox->setVisible( inspWidgetGroup->NeedsEnableCheckBox() );
+    m_titleLabel->setText( inspWidgetGroup->GetTitle().ToQString() );
+
     RefreshSizeHints();
 }
 
@@ -119,8 +134,7 @@ void Inspector::OnDestroyableDestroyed(Destroyable *destroyedObject)
 {
     if ( destroyedObject == p_inspectedObject )
     {
-        // The object being inspected has been destroyed
-        Clear();
+        Clear(); // The object being inspected has been destroyed
     }
 }
 
@@ -136,7 +150,6 @@ void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
                 QListWidgetItem *itm = item(i);
                 if (itemWidget(itm) == inspWidget)
                 {
-                    m_currentInspectorWidgets.Remove(inspWidget);
                     inspWidget->OnDestroy();
                     delete itm;
                 }
@@ -147,10 +160,9 @@ void Inspector::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
 
 void Inspector::OnEnabledCheckBoxChanged(bool checked)
 {
-    if (Object::IsOfType<GameObject>(p_inspectedObject))
+    if (m_currentInspectorWidgetGroup)
     {
-        GameObject *go = Object::SCast<GameObject>(p_inspectedObject);
-        go->SetEnabled(checked);
+        m_currentInspectorWidgetGroup->OnEnableCheckBoxChanged(checked);
     }
 }
 
@@ -165,7 +177,6 @@ void Inspector::InsertInspectorWidget(InspectorWidget *inspWidget, int row)
     setItemWidget(item, inspWidget);
 
     inspWidget->RegisterDestroyListener(this);
-    m_currentInspectorWidgets.PushBack(inspWidget);
 }
 
 Inspector *Inspector::GetInstance()
@@ -174,9 +185,9 @@ Inspector *Inspector::GetInstance()
     return ew ? ew->widgetInspector : nullptr;
 }
 
-const List<InspectorWidget *> Inspector::GetCurrentInspectorWidgets() const
+const InspectorWidgetGroup* Inspector::GetCurrentInspectorWidgetGroup() const
 {
-    return m_currentInspectorWidgets;
+    return m_currentInspectorWidgetGroup;
 }
 
 void Inspector::dropEvent(QDropEvent *e) { e->ignore(); }

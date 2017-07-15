@@ -16,15 +16,16 @@ void DirectionalLightInspectorWidget::InitExtra()
     LightInspectorWidget::InitExtra();
 }
 
-void DirectionalLightInspectorWidget::Refresh()
+void DirectionalLightInspectorWidget::OnUpdate()
 {
-    LightInspectorWidget::Refresh();
+    LightInspectorWidget::OnUpdate();
 }
 
 void DirectionalLightInspectorWidget::OnAttrWidgetValueChanged(
         IAttributeWidget *attrWidget)
 {
     LightInspectorWidget::OnAttrWidgetValueChanged(attrWidget);
+    emit Changed(this);
 }
 
 void DirectionalLightInspectorWidget::OnDestroy()

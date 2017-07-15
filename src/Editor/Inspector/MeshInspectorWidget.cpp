@@ -23,9 +23,9 @@ void MeshInspectorWidget::InitExtra()
     InsertAttributeWidget(m_modelFileAW);
 }
 
-void MeshInspectorWidget::Refresh()
+void MeshInspectorWidget::OnUpdate()
 {
-    AssetInspectorWidget::Refresh();
+    AssetInspectorWidget::OnUpdate();
 
     Mesh *mesh = GetAsset();
     m_modelFileAW->SetValue( mesh->GetModelFilepath() );
@@ -42,5 +42,5 @@ void MeshInspectorWidget::OnAttrWidgetValueChanged(
         mesh->LoadFromFile( m_modelFileAW->GetPath() );
     }
 
-    RewriteAsset();
+    emit Changed(this);
 }

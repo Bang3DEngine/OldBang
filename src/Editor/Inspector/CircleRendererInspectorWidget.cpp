@@ -22,9 +22,9 @@ void CircleRendererInspectorWidget::InitExtra()
     InsertAttributeWidget(m_segmentsAW);
 }
 
-void CircleRendererInspectorWidget::Refresh()
+void CircleRendererInspectorWidget::OnUpdate()
 {
-    RendererInspectorWidget::Refresh();
+    RendererInspectorWidget::OnUpdate();
 
     m_radiusAW->SetValue( p_circleRenderer->GetRadius() );
     m_segmentsAW->SetValue( p_circleRenderer->GetSegments() );
@@ -43,6 +43,8 @@ void CircleRendererInspectorWidget::OnAttrWidgetValueChanged(
     {
         p_circleRenderer->SetDrawWireframe( m_segmentsAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void CircleRendererInspectorWidget::OnDestroy()

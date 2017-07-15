@@ -34,9 +34,9 @@ String AttrWidgetButton::GetValue() const
     return m_button->text().toStdString();
 }
 
-void AttrWidgetButton::Refresh()
+void AttrWidgetButton::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetButton::OnButtonClicked()

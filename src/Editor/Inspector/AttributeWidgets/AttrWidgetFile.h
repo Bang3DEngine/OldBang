@@ -28,7 +28,7 @@ public:
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
     const Path& GetPath() const;
 

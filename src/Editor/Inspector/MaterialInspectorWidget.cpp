@@ -41,9 +41,9 @@ void MaterialInspectorWidget::InitExtra()
     InsertAttributeWidget(m_fShaderAW);
 }
 
-void MaterialInspectorWidget::Refresh()
+void MaterialInspectorWidget::OnUpdate()
 {
-    AssetInspectorWidget::Refresh();
+    AssetInspectorWidget::OnUpdate();
 
     Material *mat = GetAsset();
 
@@ -104,6 +104,5 @@ void MaterialInspectorWidget::OnAttrWidgetValueChanged(
     }
 
     IconManager::InvalidatePixmap( m_file.GetPath() );
-
-    RewriteAsset();
+    emit Changed(this);
 }

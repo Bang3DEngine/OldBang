@@ -23,9 +23,9 @@ void ImageInspectorWidget::InitExtra()
     InsertAttributeWidget(m_dimensionsAW);
 }
 
-void ImageInspectorWidget::Refresh()
+void ImageInspectorWidget::OnUpdate()
 {
-    FileInspectorWidget::Refresh();
+    FileInspectorWidget::OnUpdate();
     ImageFile imgFile(m_file.GetPath());
     m_dimensionsAW->SetValue(
         String::ToString(imgFile.GetWidth()) + " x " +

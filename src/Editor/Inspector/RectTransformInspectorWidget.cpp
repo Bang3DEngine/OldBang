@@ -34,9 +34,9 @@ void RectTransformInspectorWidget::InitExtra()
     SetEnabledCheckboxVisible(false);
 }
 
-void RectTransformInspectorWidget::Refresh()
+void RectTransformInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_marginLeftAW->SetValue( p_rectTransform->GetMarginLeft() );
     m_marginTopAW->SetValue( p_rectTransform->GetMarginTop() );
@@ -48,8 +48,11 @@ void RectTransformInspectorWidget::Refresh()
     m_anchorMaxAW->SetValue( p_rectTransform->GetAnchorMax() );
 }
 
-void RectTransformInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
+void RectTransformInspectorWidget::OnAttrWidgetValueChanged(
+        IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_marginLeftAW)
     {
         p_rectTransform->SetMarginLeft( m_marginLeftAW->GetValue() );
@@ -78,6 +81,8 @@ void RectTransformInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *at
     {
         p_rectTransform->SetAnchorMax( m_anchorMaxAW->GetVector2() );
     }
+
+    emit Changed(this);
 }
 
 void RectTransformInspectorWidget::OnDestroy()

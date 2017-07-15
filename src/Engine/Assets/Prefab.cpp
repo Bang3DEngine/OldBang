@@ -34,6 +34,10 @@ Prefab::Prefab(const String &gameObjectXMLInfoContent)
     m_gameObjectXMLInfoContent = gameObjectXMLInfoContent;
 }
 
+Prefab::~Prefab()
+{
+}
+
 String Prefab::GetFileExtensionStatic()
 {
     return "bprefab";

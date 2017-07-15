@@ -12,9 +12,10 @@ FileInspectorWidget::~FileInspectorWidget()
 {
 
 }
-void FileInspectorWidget::OnDestroy()
+
+const File &FileInspectorWidget::GetFile() const
 {
-    InspectorWidget::OnDestroy();
+    return m_file;
 }
 
 void FileInspectorWidget::InitExtra()
@@ -24,7 +25,12 @@ void FileInspectorWidget::InitExtra()
     SetTitle(m_file.GetPath().GetName());
 }
 
-void FileInspectorWidget::Refresh()
+void FileInspectorWidget::OnUpdate()
 {
-    InspectorWidget::Refresh();
+    InspectorWidget::OnUpdate();
+}
+
+void FileInspectorWidget::OnDestroy()
+{
+    InspectorWidget::OnDestroy();
 }

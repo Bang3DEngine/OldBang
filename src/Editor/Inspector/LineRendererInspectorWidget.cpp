@@ -16,15 +16,16 @@ void LineRendererInspectorWidget::InitExtra()
     RendererInspectorWidget::InitExtra();
 }
 
-void LineRendererInspectorWidget::Refresh()
+void LineRendererInspectorWidget::OnUpdate()
 {
-    RendererInspectorWidget::Refresh();
+    RendererInspectorWidget::OnUpdate();
 }
 
 void LineRendererInspectorWidget::OnAttrWidgetValueChanged(
         IAttributeWidget *attrWidget)
 {
     RendererInspectorWidget::OnAttrWidgetValueChanged(attrWidget);
+    emit Changed(this);
 }
 
 void LineRendererInspectorWidget::OnDestroy()

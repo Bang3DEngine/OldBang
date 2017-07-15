@@ -35,16 +35,12 @@ public:
     void SetEnabled(bool enabled);
     bool IsEnabled(bool recursive = true) const;
 
-    void SetClosedInInspector(bool closed);
-    bool IsClosedInInspector() const;
-
     virtual String GetInstanceId() const override;
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     bool m_enabled = true;
-    bool m_closedInInspector = false;
 
     Component();
     virtual ~Component();

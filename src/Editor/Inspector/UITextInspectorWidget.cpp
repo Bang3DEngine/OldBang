@@ -47,9 +47,9 @@ void UITextInspectorWidget::InitExtra()
     m_tintAW->SetLabelText("Color");
 }
 
-void UITextInspectorWidget::Refresh()
+void UITextInspectorWidget::OnUpdate()
 {
-    UIRendererInspectorWidget::Refresh();
+    UIRendererInspectorWidget::OnUpdate();
 
     Font *font = p_uiText->GetFont();
     Path fontPath = font ? font->GetFilepath() : Path::Empty;
@@ -97,6 +97,8 @@ void UITextInspectorWidget::OnAttrWidgetValueChanged(
     {
         p_uiText->SetKerning(m_kerningAW->GetValue());
     }
+
+    emit Changed(this);
 }
 
 void UITextInspectorWidget::OnDestroy()

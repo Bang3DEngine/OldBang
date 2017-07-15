@@ -14,10 +14,6 @@
 #include "Bang/ProjectManager.h"
 #include "Bang/CodePreprocessor.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Console.h"
-#endif
-
 BehaviourManager::BehaviourManager()
 {
     BangCompiler::Init();
@@ -170,19 +166,6 @@ void BehaviourManager::OnBehaviourObjectCompilationFinished(
         const Path &behFilepath = result.compileJob.inputFiles.Front();
         m_status.OnBehaviourSuccessCompiling(behFilepath);
         if (!result.output.Empty()) { Debug_Warn(result.output); }
-
-        /*
-        if (!result.forGame)
-        {
-            BehaviourManager *bm = BehaviourManager::GetInstance();
-            Path libsDir = Paths::ProjectLibrariesDir();
-            if (bm->m_status.AllBehavioursReady(libsDir))
-            {
-                BehaviourManager::StartMergingBehavioursObjects(result.forGame,
-                                                                libsDir);
-            }
-        }
-        */
     }
     else
     {

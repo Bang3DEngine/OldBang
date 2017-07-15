@@ -21,9 +21,9 @@ void LightInspectorWidget::InitExtra()
     InsertAttributeWidget(m_colorAW);
 }
 
-void LightInspectorWidget::Refresh()
+void LightInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_intensityAW->SetValue( p_light->GetIntensity() );
     m_colorAW->SetValue( p_light->GetColor() );
@@ -31,6 +31,8 @@ void LightInspectorWidget::Refresh()
 
 void LightInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_intensityAW)
     {
         p_light->SetIntensity( m_intensityAW->GetValue() );
@@ -39,6 +41,8 @@ void LightInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget
     {
         p_light->SetColor( m_colorAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void LightInspectorWidget::OnDestroy()

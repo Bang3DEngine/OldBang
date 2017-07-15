@@ -46,10 +46,6 @@ void InspectorWidget::Init()
 
     InitExtra();
 
-    QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
-                     this, SLOT(Refresh()));
-    m_refreshTimer.start(10);
-
     setLayout(&m_vLayout);
 
     setAcceptDrops(true);
@@ -63,9 +59,6 @@ InspectorWidget::~InspectorWidget()
 
 void InspectorWidget::OnDestroy()
 {
-    m_refreshTimer.stop();
-    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(Refresh()));
 }
 
 QGridLayout *InspectorWidget::GetGridLayout()
@@ -83,10 +76,25 @@ bool InspectorWidget::IsClosed() const
     return m_closed;
 }
 
+void InspectorWidget::SetHeaderVisible(bool visible)
+{
+    m_titleLabel.setVisible(visible);
+    m_closeOpenButton.setVisible(visible);
+}
+
+bool InspectorWidget::IsHeaderVisible() const
+{
+    return m_titleLabel.isVisible();
+}
+
 int InspectorWidget::GetHeightSizeHint() const
 {
     int heightSizeHint = 0;
-    heightSizeHint += 40; // Header height
+
+    if (IsHeaderVisible())
+    {
+        heightSizeHint += 40; // Header height
+    }
 
     // Add up children widget's height size hints
     for (AttributeWidget *aw : m_attributeWidgets)
@@ -97,8 +105,12 @@ int InspectorWidget::GetHeightSizeHint() const
     return heightSizeHint;
 }
 
-void InspectorWidget::Refresh()
+void InspectorWidget::OnUpdate()
 {
+    for (AttributeWidget *attrWidget : m_attributeWidgets)
+    {
+        attrWidget->OnUpdate();
+    }
     UpdateContentMargins();
 }
 
@@ -116,13 +128,14 @@ void InspectorWidget::SetIcon(const QPixmap &icon)
 
 void InspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget* attrWidget)
 {
+    emit Changed(this);
 }
 
 void InspectorWidget::OnCloseOpenButtonClicked()
 {
     m_closed = !m_closed;
     SetClosed(m_closed);
-    Refresh();
+    OnUpdate();
     UpdateContentMargins();
     Inspector::GetInstance()->RefreshSizeHints();
 }

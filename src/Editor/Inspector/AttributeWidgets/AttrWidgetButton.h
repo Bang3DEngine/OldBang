@@ -21,7 +21,7 @@ public:
     void SetValue(const String &buttonText);
     String GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
     QSize sizeHint() const;
 

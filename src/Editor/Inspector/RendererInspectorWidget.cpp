@@ -26,9 +26,9 @@ void RendererInspectorWidget::InitExtra()
     InsertAttributeWidget(m_lineWidthAW);
 }
 
-void RendererInspectorWidget::Refresh()
+void RendererInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_materialAW->SetValue( p_renderer->GetMaterial()->GetFilepath() );
     m_drawWireframeAW->SetValue( p_renderer->GetDrawWireframe() );
@@ -37,8 +37,11 @@ void RendererInspectorWidget::Refresh()
     m_lineWidthAW->SetVisible(p_renderer->GetDrawWireframe());
 }
 
-void RendererInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
+void RendererInspectorWidget::OnAttrWidgetValueChanged(
+        IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_materialAW)
     {
         Material *mat = AssetsManager::Load<Material>(m_materialAW->GetPath());
@@ -52,6 +55,8 @@ void RendererInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWid
     {
         p_renderer->SetLineWidth( m_lineWidthAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void RendererInspectorWidget::OnDestroy()

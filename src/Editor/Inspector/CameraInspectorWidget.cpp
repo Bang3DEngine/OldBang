@@ -34,9 +34,9 @@ void CameraInspectorWidget::InitExtra()
     InsertAttributeWidget(m_fovDegreesAW);
 }
 
-void CameraInspectorWidget::Refresh()
+void CameraInspectorWidget::OnUpdate()
 {
-    ComponentWidget::Refresh();
+    ComponentWidget::OnUpdate();
 
     m_clearColorAW->SetValue( p_camera->GetClearColor() );
     m_zNearAW->SetValue( p_camera->GetZNear() );
@@ -48,6 +48,8 @@ void CameraInspectorWidget::Refresh()
 
 void CameraInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_clearColorAW)
     {
         p_camera->SetClearColor( m_clearColorAW->GetValue() );
@@ -72,6 +74,8 @@ void CameraInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidge
     {
         p_camera->SetFovDegrees( m_fovDegreesAW->GetValue() );
     }
+
+    emit Changed(this);
 }
 
 void CameraInspectorWidget::OnDestroy()

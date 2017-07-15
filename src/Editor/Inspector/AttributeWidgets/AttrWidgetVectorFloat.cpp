@@ -97,9 +97,9 @@ Vector4 AttrWidgetVectorFloat::GetVector4() const
                    m_floatSlots[3]->GetValue());
 }
 
-void AttrWidgetVectorFloat::Refresh()
+void AttrWidgetVectorFloat::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetVectorFloat::OnFloatValueChanged(IAttributeWidget *attrWidget)

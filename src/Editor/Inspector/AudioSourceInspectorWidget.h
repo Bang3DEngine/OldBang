@@ -14,7 +14,7 @@ public:
 
 protected:
     void InitExtra() override;
-    void Refresh() override;
+    void OnUpdate() override;
     void OnAttrWidgetValueChanged(IAttributeWidget *attrWidget) override;
     void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
     void OnDestroy() override;

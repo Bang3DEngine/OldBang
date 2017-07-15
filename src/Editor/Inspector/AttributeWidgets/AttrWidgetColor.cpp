@@ -66,9 +66,9 @@ const Color& AttrWidgetColor::GetValue() const
     return m_selectedColor;
 }
 
-void AttrWidgetColor::Refresh()
+void AttrWidgetColor::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetColor::OnColorChanged(const QColor &c)

@@ -25,7 +25,7 @@ bool AttrWidgetBool::GetValue() const
     return m_checkbox->isChecked();
 }
 
-void AttrWidgetBool::Refresh()
+void AttrWidgetBool::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }

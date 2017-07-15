@@ -19,20 +19,14 @@ protected:
         FileInspectorWidget::InitExtra();
     }
 
-    virtual void Refresh() override
+    virtual void OnUpdate() override
     {
-        FileInspectorWidget::Refresh();
+        FileInspectorWidget::OnUpdate();
     }
 
     AssetClass *GetAsset() const
     {
         return AssetsManager::Load<AssetClass>( m_file.GetPath() );
-    }
-
-    void RewriteAsset() const
-    {
-        AssetClass *asset = GetAsset();
-        AssetsManager::SaveAssetToFile(m_file.GetPath(), asset);
     }
 };
 

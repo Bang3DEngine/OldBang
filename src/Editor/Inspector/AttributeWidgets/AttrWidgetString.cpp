@@ -76,9 +76,9 @@ String AttrWidgetString::GetValue() const
     return "";
 }
 
-void AttrWidgetString::Refresh()
+void AttrWidgetString::OnUpdate()
 {
-    AttributeWidget::Refresh();
+    AttributeWidget::OnUpdate();
 }
 
 void AttrWidgetString::OnFocusIn()

@@ -12,7 +12,7 @@ public:
 
 protected:
     void InitExtra() override;
-    void Refresh() override;
+    void OnUpdate() override;
     void OnDestroy() override;
 };
 

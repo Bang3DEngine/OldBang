@@ -45,9 +45,10 @@ void AudioSourceInspectorWidget::InitExtra()
     InsertAttributeWidget(m_playStopButtonAW);
 }
 
-void AudioSourceInspectorWidget::Refresh()
+void AudioSourceInspectorWidget::OnUpdate()
 {
-    InspectorWidget::Refresh();
+    ComponentWidget::OnUpdate();
+
     m_audioClipFileAW->SetValue( p_audioSource->GetAudioClip()->GetFilepath() );
     m_volumeAW->SetValue(p_audioSource->GetVolume());
     m_pitchAW->SetValue(p_audioSource->GetPitch());
@@ -56,8 +57,11 @@ void AudioSourceInspectorWidget::Refresh()
     m_playStopButtonAW->SetValue( p_audioSource->IsPlaying() ? "Stop" : "Play" );
 }
 
-void AudioSourceInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)
+void AudioSourceInspectorWidget::OnAttrWidgetValueChanged(
+        IAttributeWidget *attrWidget)
 {
+    ComponentWidget::OnAttrWidgetValueChanged(attrWidget);
+
     if (attrWidget == m_audioClipFileAW)
     {
         Path acPath = m_audioClipFileAW->GetPath();
@@ -80,6 +84,8 @@ void AudioSourceInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attr
     {
         p_audioSource->SetLooping(m_loopingAW->GetValue());
     }
+
+    emit Changed(this);
 }
 
 void AudioSourceInspectorWidget::OnButtonClicked(const AttrWidgetButton *clickedButton)

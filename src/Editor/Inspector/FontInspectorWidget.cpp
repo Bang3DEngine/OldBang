@@ -23,9 +23,9 @@ void FontInspectorWidget::InitExtra()
     InsertAttributeWidget(m_ttfFontAW);
 }
 
-void FontInspectorWidget::Refresh()
+void FontInspectorWidget::OnUpdate()
 {
-    AssetInspectorWidget::Refresh();
+    AssetInspectorWidget::OnUpdate();
 
     Font *font = GetAsset();
     if (font)
@@ -45,5 +45,5 @@ void FontInspectorWidget::OnAttrWidgetValueChanged(
         font->LoadFromTTF(m_ttfFontAW->GetPath());
     }
 
-    RewriteAsset();
+    emit Changed(this);
 }

@@ -22,7 +22,7 @@ public:
     virtual void SetValue(float f);
     virtual float GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();

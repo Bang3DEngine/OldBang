@@ -23,9 +23,9 @@ void MeshRendererInspectorWidget::InitExtra()
     InsertAttributeWidget(m_meshAW);
 }
 
-void MeshRendererInspectorWidget::Refresh()
+void MeshRendererInspectorWidget::OnUpdate()
 {
-    RendererInspectorWidget::Refresh();
+    RendererInspectorWidget::OnUpdate();
 
     Mesh *mesh = p_meshRenderer->GetMesh();
     Path meshPath = mesh ? mesh->GetFilepath() : Path::Empty;
@@ -42,6 +42,8 @@ void MeshRendererInspectorWidget::OnAttrWidgetValueChanged(
         Mesh *mesh = AssetsManager::Load<Mesh>(m_meshAW->GetPath());
         p_meshRenderer->SetMesh( mesh );
     }
+
+    emit Changed(this);
 }
 
 void MeshRendererInspectorWidget::OnDestroy()

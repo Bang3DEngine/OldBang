@@ -35,7 +35,7 @@ public:
     void SetValue(const Color &c);
     const Color& GetValue() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
 private slots:
 

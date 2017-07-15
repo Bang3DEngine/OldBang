@@ -25,9 +25,9 @@ void AudioClipInspectorWidget::InitExtra()
     InsertAttributeWidget(m_lengthAW);
 }
 
-void AudioClipInspectorWidget::Refresh()
+void AudioClipInspectorWidget::OnUpdate()
 {
-    AssetInspectorWidget::Refresh();
+    AssetInspectorWidget::OnUpdate();
 
     AudioClip *ac = GetAsset();
     m_soundFileAW->SetValue( ac->GetSoundFilepath() );
@@ -45,5 +45,5 @@ void AudioClipInspectorWidget::OnAttrWidgetValueChanged(
         ac->LoadFromFile(m_soundFileAW->GetPath());
     }
 
-    RewriteAsset();
+    emit Changed(this);
 }

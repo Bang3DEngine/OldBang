@@ -30,7 +30,7 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
-    virtual void Refresh() override;
+    virtual void OnUpdate() override;
 
 private slots:
     void OnFloatValueChanged(IAttributeWidget *attrWidget);

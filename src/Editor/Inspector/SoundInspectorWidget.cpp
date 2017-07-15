@@ -19,7 +19,7 @@ void SoundInspectorWidget::InitExtra()
     FileInspectorWidget::InitExtra();
 }
 
-void SoundInspectorWidget::Refresh()
+void SoundInspectorWidget::OnUpdate()
 {
-    FileInspectorWidget::Refresh();
+    FileInspectorWidget::OnUpdate();
 }
