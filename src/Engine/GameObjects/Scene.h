@@ -15,8 +15,6 @@ class Scene : public GameObject
     OBJECT(Scene)
 
 public:
-    const static String GetFileExtensionStatic ();
-
     Scene();
     virtual ~Scene();
 

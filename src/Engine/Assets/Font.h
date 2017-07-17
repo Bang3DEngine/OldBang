@@ -13,9 +13,6 @@ public:
     Font();
     virtual ~Font();
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     void LoadFromTTF(const Path &ttfFilepath) override;
     Path GetTTFFilepath() const;
 

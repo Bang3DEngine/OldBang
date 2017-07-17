@@ -6,6 +6,7 @@
 #include "Bang/XMLParser.h"
 #include "Bang/Behaviour.h"
 #include "Bang/FileReader.h"
+#include "Bang/Extensions.h"
 #include "Bang/Application.h"
 #include "Bang/BehaviourManager.h"
 
@@ -93,7 +94,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     if (!spath.IsFile()) { spath = UPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
     {
-        spath = spath.AppendExtension(Scene::GetFileExtensionStatic());
+        spath = spath.AppendExtension(Extensions::Get<Scene>());
     }
 
     if (spath.IsFile()) { sm->m_queuedSceneFilepath = spath; }
@@ -102,7 +103,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
 
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
-    String sceneExt = Scene::GetFileExtensionStatic();
+    String sceneExt = Extensions::Get<Scene>();
     SceneManager::LoadScene( UPATH(sceneFilepath).AppendExtension(sceneExt) );
 }
 

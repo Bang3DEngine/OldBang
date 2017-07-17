@@ -23,6 +23,7 @@
 #include "Bang/AudioClip.h"
 #include "Bang/ImageFile.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Extensions.h"
 #include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
 #include "Bang/MaterialFile.h"
@@ -55,80 +56,80 @@ BFile::~BFile()
 
 bool BFile::IsSound() const
 {
-    return GetPath().IsFile() && GetPath().HasExtension({"wav", "ogg", "pcm"});
+    return GetPath().IsFile() &&
+           GetPath().HasExtension(Extensions::GetList<SoundFile>());
 }
 
 bool BFile::IsAudioClipFile() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(AudioClip::GetFileExtensionStatic());
+           GetPath().HasExtension(Extensions::Get<AudioClip>());
 }
 
 bool BFile::IsTexture2DFile() const
 {
     return  GetPath().IsFile() &&
-            GetPath().HasExtension(Texture2D::GetFileExtensionStatic());
+            GetPath().HasExtension(Extensions::Get<Texture2D>());
 }
 
 bool BFile::IsImageFile() const
 {
     return  GetPath().IsFile() &&
-            GetPath().HasExtension({"jpg", "jpeg", "png", "bmp", "tiff", "tga"});
+            GetPath().HasExtension(Extensions::GetList<ImageFile>());
 }
 
 bool BFile::IsScene() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(Scene::GetFileExtensionStatic());
+           GetPath().HasExtension(Extensions::Get<Scene>());
 }
 
 bool BFile::IsMeshFile() const
 {
     return  GetPath().IsFile() &&
-            GetPath().HasExtension(Mesh::GetFileExtensionStatic());
+            GetPath().HasExtension(Extensions::Get<Mesh>());
 }
 
 bool BFile::IsModelFile() const
 {
     return  GetPath().IsFile() &&
-            GetPath().HasExtension({"obj", "mb", "fbx", "dae", "3ds", "ply",
-                                    "stl", "ase", "blend", "md2", "md3"});
+            GetPath().HasExtension(Extensions::GetList<ModelFile>());
 }
 
 bool BFile::IsMaterialFile() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(Material::GetFileExtensionStatic());
+           GetPath().HasExtension(Extensions::Get<Material>());
 }
 
 bool BFile::IsBehaviour() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension({"cpp", "hpp", "c", "h"});
+           GetPath().HasExtension(Extensions::GetList<BehaviourFile>());
 }
 
 bool BFile::IsTextFile() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension({"txt", "frag", "vert"});
+           GetPath().HasExtension(Extensions::GetTextFileList());
 }
 
 bool BFile::IsFontFile() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(Font::GetFileExtensionStatic());
+           GetPath().HasExtension(Extensions::Get<Font>());
 }
 
 bool BFile::IsPrefabFile() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(Prefab::GetFileExtensionStatic());
+           GetPath().HasExtension(Extensions::Get<Prefab>());
 }
 
 bool BFile::IsShaderProgramFile() const
 {
     return GetPath().IsFile() &&
-            GetPath().HasExtension(ShaderProgram::GetFileExtensionStatic());
+            GetPath().HasExtension(Extensions::Get<ShaderProgram>());
 }
 
 void BFile::Read(const XMLNode &xmlInfo)

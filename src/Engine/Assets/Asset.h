@@ -14,9 +14,6 @@ class Asset : public IToString,
     OBJECT(Asset)
 
 public:
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override;
-
     const Path& GetFilepath() const;
 
     virtual void CloneInto(ICloneable *clone) const override;

@@ -21,16 +21,6 @@ AudioClip::~AudioClip()
     }
 }
 
-String AudioClip::GetFileExtensionStatic()
-{
-    return "baudioclip";
-}
-
-String AudioClip::GetFileExtension() const
-{
-    return AudioClip::GetFileExtension();
-}
-
 bool AudioClip::LoadFromFile(const Path &filepath)
 {
     if (!filepath.Exists() || !filepath.IsFile()) { return false; }

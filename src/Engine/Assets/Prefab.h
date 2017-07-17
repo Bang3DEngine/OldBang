@@ -23,9 +23,6 @@ public:
     Prefab(const String &gameObjectXMLInfoContent);
     virtual ~Prefab();
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 

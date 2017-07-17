@@ -12,6 +12,7 @@
 #include "Bang/Inspector.h"
 #include "Bang/Texture2D.h"
 #include "Bang/FileReader.h"
+#include "Bang/Extensions.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/EditorScene.h"
@@ -177,7 +178,7 @@ void MenuBar::OnNewScene() const
 void MenuBar::OnOpenScene() const
 {
     Path filepath = Dialog::GetOpenFilepath("Open scene...",
-                                            Scene::GetFileExtensionStatic());
+                                            Extensions::Get<Scene>());
     ENSURE(filepath.IsFile());
     OpenScene(filepath);
 }
@@ -192,7 +193,7 @@ void MenuBar::OnSaveScene() const
 {
     ENSURE(EditorState::IsStopped());
     Path filepath = SceneManager::GetActiveSceneFilepath();
-    filepath = filepath.AppendExtension(Scene::GetFileExtensionStatic());
+    filepath = filepath.AppendExtension(Extensions::Get<Scene>());
 
     if (filepath.IsFile())
     {
@@ -210,12 +211,12 @@ void MenuBar::OnSaveSceneAs() const
     String sceneName = sceneFilepath.GetName();
     sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
-                             Scene::GetFileExtensionStatic(),
+                             Extensions::Get<Scene>(),
                              Paths::ProjectAssets(),
                              sceneName);
     ENSURE(!sceneFilepath.IsEmpty());
 
-    sceneFilepath = sceneFilepath.AppendExtension(Scene::GetFileExtensionStatic());
+    sceneFilepath = sceneFilepath.AppendExtension(Extensions::Get<Scene>());
     SceneManager::OnActiveSceneSavedAs(sceneFilepath);
     scene->WriteToFile(sceneFilepath);
 }
@@ -239,7 +240,7 @@ void MenuBar::OnCreateEmptyGameObject() const
 void MenuBar::OnCreateFromPrefab() const
 {
     Path filepath = Dialog::GetOpenFilepath("Create from prefab...",
-                                              Prefab::GetFileExtensionStatic());
+                                             Extensions::Get<Scene>());
     ENSURE (!filepath.IsEmpty());
 
     EditorWindow *w = EditorWindow::GetInstance();

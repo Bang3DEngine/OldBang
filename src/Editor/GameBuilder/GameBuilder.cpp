@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
 #include "Bang/Project.h"
+#include "Bang/Extensions.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/GameBuildDialog.h"
@@ -152,7 +153,7 @@ void GameBuilder::OnGameBuildingHasBeenCanceled()
 bool GameBuilder::CompileGameExecutable()
 {
     List<Path> sceneFiles = Paths::ProjectAssets().GetFiles(
-                              true, {"*." + Scene::GetFileExtensionStatic()});
+                              true, {"*." + Extensions::Get<Scene>()});
     if (sceneFiles.IsEmpty())
     {
         emit DialogError("Error building game",

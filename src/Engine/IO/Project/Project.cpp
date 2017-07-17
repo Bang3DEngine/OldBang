@@ -5,6 +5,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Time.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Extensions.h"
 
 Project::Project()
 {
@@ -13,16 +14,6 @@ Project::Project()
 
 Project::~Project()
 {
-}
-
-String Project::GetFileExtensionStatic()
-{
-    return "bproject";
-}
-
-String Project::GetFileExtension() const
-{
-    return Project::GetFileExtensionStatic();
 }
 
 void Project::Read(const XMLNode &xmlInfo)
@@ -54,7 +45,7 @@ Path Project::GetProjectAssetsRootFilepath() const
 Path Project::GetProjectFileFilepath() const
 {
     return Path(m_projectRootFilepath + "/" +
-                GetProjectName() + "." + GetFileExtensionStatic());
+                GetProjectName() + "." + Extensions::Get<Project>());
 }
 
 String Project::GetProjectName() const

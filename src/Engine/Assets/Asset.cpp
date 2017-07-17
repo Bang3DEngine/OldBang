@@ -13,17 +13,6 @@ Asset::~Asset()
     AssetsManager::Unload(this);
 }
 
-
-String Asset::GetFileExtensionStatic()
-{
-    return "basset";
-}
-
-String Asset::GetFileExtension() const
-{
-    return Asset::GetFileExtensionStatic();
-}
-
 const Path& Asset::GetFilepath() const
 {
     return m_assetFilepath;

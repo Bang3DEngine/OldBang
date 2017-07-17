@@ -3,6 +3,7 @@
 #include "Bang/Project.h"
 #include "Bang/MenuBar.h"
 #include "Bang/Explorer.h"
+#include "Bang/Extensions.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EngineConfig.h"
@@ -76,7 +77,7 @@ Path EditorProjectManager::DialogOpenProject()
 {
     Path projectFilepath =
             Dialog::GetOpenFilepath("Select the project file to be opened",
-                                    Project::GetFileExtensionStatic(),
+                                    Extensions::Get<Project>(),
                                     Paths::Home());
     return projectFilepath;
 }

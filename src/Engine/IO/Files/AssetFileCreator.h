@@ -3,6 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/Explorer.h"
+#include "Bang/Extensions.h"
 #include "Bang/AssetsManager.h"
 
 class AssetFileCreator
@@ -12,7 +13,7 @@ public:
     static Path Create(const Path &_assetNewPath)
     {
         Path assetNewPath = _assetNewPath
-                             .AppendExtension(AssetType::GetFileExtensionStatic())
+                             .AppendExtension(Extensions::Get<AssetType>())
                              .GetDuplicate();
 
         AssetsManager::Create<AssetType>(assetNewPath);
@@ -31,7 +32,7 @@ public:
         Path filepath =
            Explorer::GetInstance()->GetCurrentDir()
                            .Append(assetNewName)
-                           .AppendExtension(AssetType::GetFileExtensionStatic());
+                           .AppendExtension(Extensions::Get<AssetType>());
 
         filepath = AssetFileCreator::Create<AssetType>(filepath);
         Explorer::GetInstance()->StartRenaming(filepath);

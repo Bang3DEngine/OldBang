@@ -38,8 +38,6 @@ public:
      */
     virtual void PostRead(const XMLNode &xmlInfo);
 
-    virtual String GetFileExtension() const;
-
 protected:
     SerializableObject();
 };

@@ -31,9 +31,6 @@ public:
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     void Bind() const;
     void UnBind() const;
 

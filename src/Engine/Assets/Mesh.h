@@ -23,9 +23,6 @@ public:
     static constexpr uint DefaultNormalsVBOLocation   = 1;
     static constexpr uint DefaultUvsVBOLocation       = 2;
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     Mesh();
     Mesh(const Mesh& m);
     virtual ~Mesh();

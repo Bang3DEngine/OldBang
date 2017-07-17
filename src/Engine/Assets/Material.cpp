@@ -58,16 +58,6 @@ void Material::SetUvMultiply(const Vector2 &uvMultiply)
     m_gMaterial->SetUvMultiply(uvMultiply);
 }
 
-String Material::GetFileExtensionStatic()
-{
-    return "bmat";
-}
-
-String Material::GetFileExtension() const
-{
-    return Material::GetFileExtensionStatic();
-}
-
 void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);

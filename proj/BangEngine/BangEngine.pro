@@ -82,6 +82,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Debug/Chrono.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/FileReader.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/ImageFile.cpp \
+    $$BANG_ROOT/src/Engine/IO/Files/Extensions.cpp \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLAttribute.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLNode.cpp \
@@ -97,7 +98,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/IO/Project/Project.cpp \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.cpp \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/ExtensionManager.cpp \
     $$BANG_ROOT/src/Engine/Components/CircleCulledRenderer.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/PrefabFile.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/SoundFile.cpp \
@@ -184,7 +184,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/IO/XML/XMLProperty.h \
     $$BANG_ROOT/src/Engine/IO/Files/TextFile.h \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.h \
-    $$BANG_ROOT/src/Engine/IO/Files/ExtensionManager.h \
     $$BANG_ROOT/src/Engine/Components/AudioListener.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$BANG_ROOT/src/Engine/Components/RectTransform.h \
@@ -202,6 +201,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/IO/Project/ProjectManager.h \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.h \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.h \
+    $$BANG_ROOT/src/Engine/IO/Files/Extensions.h \
     $$BANG_ROOT/src/Engine/Components/CircleCulledRenderer.h \
     $$BANG_ROOT/src/Engine/IO/Files/PrefabFile.h \
     $$BANG_ROOT/src/Engine/IO/Files/SoundFile.h \

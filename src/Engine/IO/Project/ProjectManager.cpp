@@ -10,6 +10,7 @@
 #include "Bang/Project.h"
 #include "Bang/XMLNode.h"
 #include "Bang/XMLParser.h"
+#include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"
 
 Project *ProjectManager::s_currentProject = nullptr;
@@ -59,7 +60,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
     ProjectManager::CloseCurrentProject();
 
     Path projectFileFilepath(projectDir + "/" + projectName + "." +
-                             Project::GetFileExtensionStatic());
+                             Extensions::Get<Project>());
 
     ProjectManager::s_currentProject =
             CreateNewProjectFileOnly(projectFileFilepath);
@@ -116,7 +117,7 @@ Project *ProjectManager::GetCurrentProject()
 bool ProjectManager::OpenFirstFoundScene(const Path &projectDirPath) const
 {
     List<Path> sceneFilepaths = projectDirPath.GetFiles(true,
-                                   {"*." + Scene::GetFileExtensionStatic()});
+                                   {"*." + Extensions::Get<Scene>()});
 
     bool foundSceneFile = !sceneFilepaths.IsEmpty();
     if (foundSceneFile)

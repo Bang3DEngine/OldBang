@@ -19,9 +19,6 @@ public:
     AudioClip();
     virtual ~AudioClip();
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     bool LoadFromFile(const Path &filepath);
 
     int GetChannels() const;

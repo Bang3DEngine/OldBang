@@ -75,8 +75,3 @@ bool SerializableObject::WriteToFile(const Path &path) const
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
-
-String SerializableObject::GetFileExtension() const
-{
-    return "";
-}

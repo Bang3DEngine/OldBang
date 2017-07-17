@@ -10,6 +10,7 @@
 #include "Bang/Dialog.h"
 #include "Bang/Prefab.h"
 #include "Bang/Hierarchy.h"
+#include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectClipboard.h"
@@ -136,7 +137,7 @@ void HierarchyContextMenu::OnCreatePrefab()
 {
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
     Path filepath = Dialog::GetSaveFilepath("Create Prefab...",
-                                            Prefab::GetFileExtensionStatic(),
+                                            Extensions::Get<Prefab>(),
                                             Path(go->name));
     if (filepath.IsFile())
     {

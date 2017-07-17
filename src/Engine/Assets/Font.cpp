@@ -14,16 +14,6 @@ Font::~Font()
 {
 }
 
-String Font::GetFileExtensionStatic()
-{
-    return "bfont";
-}
-
-String Font::GetFileExtension() const
-{
-    return Font::GetFileExtensionStatic();
-}
-
 void Font::LoadFromTTF(const Path &ttfFilepath)
 {
     m_ttfFilepath = ttfFilepath;

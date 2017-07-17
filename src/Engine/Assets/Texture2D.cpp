@@ -18,16 +18,6 @@ Texture2D::~Texture2D()
 {
 }
 
-String Texture2D::GetFileExtensionStatic()
-{
-    return "btex2d";
-}
-
-String Texture2D::GetFileExtension() const
-{
-    return Texture2D::GetFileExtensionStatic();
-}
-
 void Texture2D::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);

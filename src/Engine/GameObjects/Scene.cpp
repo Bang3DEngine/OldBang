@@ -39,10 +39,6 @@ void Scene::_OnResize(int newWidth, int newHeight)
         rt->OnParentSizeChanged();
     }
 }
-const String Scene::GetFileExtensionStatic()
-{
-    return "bscene";
-}
 
 Scene::~Scene()
 {

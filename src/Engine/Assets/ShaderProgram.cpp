@@ -40,16 +40,6 @@ void ShaderProgram::SetFragmentShader(G_Shader *fragmentShader)
     if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
 }
 
-String ShaderProgram::GetFileExtensionStatic()
-{
-    return "bshaderprogram";
-}
-
-String ShaderProgram::GetFileExtension() const
-{
-    return ShaderProgram::GetFileExtensionStatic();
-}
-
 void ShaderProgram::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);

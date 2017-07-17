@@ -35,16 +35,6 @@ Mesh::~Mesh()
     if (m_vertexUvsVBO)       { delete m_vertexUvsVBO;       }
 }
 
-String Mesh::GetFileExtensionStatic()
-{
-    return "bmesh";
-}
-
-String Mesh::GetFileExtension() const
-{
-    return Mesh::GetFileExtensionStatic();
-}
-
 void Mesh::LoadFromFile(const Path &filepath)
 {
     m_uvs.Clear();

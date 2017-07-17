@@ -16,9 +16,6 @@ public:
     explicit Texture2D(const G_Texture2D *gTexture);
     virtual ~Texture2D();
 
-    static String GetFileExtensionStatic();
-    virtual String GetFileExtension() const override ;
-
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 };

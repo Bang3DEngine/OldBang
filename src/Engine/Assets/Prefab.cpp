@@ -38,16 +38,6 @@ Prefab::~Prefab()
 {
 }
 
-String Prefab::GetFileExtensionStatic()
-{
-    return "bprefab";
-}
-
-String Prefab::GetFileExtension() const
-{
-    return Prefab::GetFileExtensionStatic();
-}
-
 GameObject *Prefab::Instantiate() const
 {
     GameObject *go = InstantiateWithoutStarting();

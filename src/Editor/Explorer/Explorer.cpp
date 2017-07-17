@@ -12,6 +12,7 @@
 #include "Bang/ImageFile.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/GameObject.h"
+#include "Bang/Extensions.h"
 #include "Bang/FileTracker.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/SceneManager.h"
@@ -408,7 +409,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             ENSURE(selected);
 
             Path path = GetCurrentDir().Append(selected->name);
-            path = path.AppendExtension(Prefab::GetFileExtensionStatic());
+            path = path.AppendExtension(Extensions::Get<Prefab>());
             File::Write(path, selected->GetSerializedString());
         }
     }
