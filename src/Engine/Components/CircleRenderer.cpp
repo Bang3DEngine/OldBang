@@ -2,7 +2,6 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/Array.h"
-#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
@@ -21,7 +20,7 @@ CircleRenderer::~CircleRenderer()
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    CircleRenderer *cr = Object::SCast<CircleRenderer>(clone);
+    CircleRenderer *cr = SCAST<CircleRenderer*>(clone);
     cr->SetRadius(GetRadius());
     cr->SetSegments(GetSegments());
 }

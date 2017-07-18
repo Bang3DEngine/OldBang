@@ -4,7 +4,6 @@
 #include <ostream>
 
 #include "Bang/Math.h"
-#include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 
@@ -15,7 +14,7 @@ Transform::Transform()
 void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Transform *t = Object::SCast<Transform>(clone);
+    Transform *t = SCAST<Transform*>(clone);
     t->SetLocalPosition(GetLocalPosition());
     t->SetLocalRotation(GetLocalRotation());
     t->SetLocalScale(GetLocalScale());

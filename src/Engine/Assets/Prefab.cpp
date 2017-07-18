@@ -1,7 +1,6 @@
 #include "Bang/Prefab.h"
 
 #include "Bang/Scene.h"
-#include "Bang/Debug.h"
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"

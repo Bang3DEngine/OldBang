@@ -4,6 +4,7 @@
 
 #include "Bang/G_VAO.h"
 #include "Bang/G_VBO.h"
+#include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
 #include "Bang/SerializableObject.h"

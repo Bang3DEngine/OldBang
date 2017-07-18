@@ -1,5 +1,6 @@
 #include "Bang/PointLight.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
@@ -38,7 +39,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
-    PointLight *pl = Object::SCast<PointLight>(clone);
+    PointLight *pl = SCAST<PointLight*>(clone);
     pl->SetRange(GetRange());
 }
 

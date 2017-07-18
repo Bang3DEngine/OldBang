@@ -13,7 +13,6 @@ TARGET = $$BIN_DIR/lib/BangEngine
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
-    $$BANG_ROOT/src/Engine/General/Destroyable.cpp \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Engine/General/Application.cpp \
     $$BANG_ROOT/src/Engine/Windows/Window.cpp \
@@ -41,7 +40,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.cpp \
     $$BANG_ROOT/src/Engine/IO/General/AssetsManager.cpp \
     $$BANG_ROOT/src/Engine/General/Input.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/TextFile.cpp \
     $$BANG_ROOT/src/Engine/Assets/Material.cpp \
     $$BANG_ROOT/src/Engine/Components/LineRenderer.cpp \
     $$BANG_ROOT/src/Engine/Components/Renderer.cpp \
@@ -60,7 +58,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
     $$BANG_ROOT/src/Engine/Components/UIText.cpp \
-    $$BANG_ROOT/src/Engine/IO/General/EngineConfig.cpp \
     $$BANG_ROOT/src/Engine/Assets/AudioClip.cpp \
     $$BANG_ROOT/src/Engine/Components/AudioSource.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioManager.cpp \
@@ -68,15 +65,12 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Debug/Debug.cpp \
     $$BANG_ROOT/src/Engine/Debug/Chrono.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/FileReader.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/ImageFile.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/Extensions.cpp \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLAttribute.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLNode.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLParser.cpp \
     $$BANG_ROOT/src/Engine/IO/XML/XMLProperty.cpp \
     $$BANG_ROOT/src/Engine/Components/AudioListener.cpp \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManagerStatus.cpp \
     $$BANG_ROOT/src/Engine/Components/RectTransform.cpp \
     $$BANG_ROOT/src/Engine/General/Object.cpp \
     $$BANG_ROOT/src/Engine/Debug/GraphicPipelineDebugger.cpp \
@@ -85,30 +79,18 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/IO/Project/Project.cpp \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.cpp \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.cpp \
-    $$BANG_ROOT/src/Engine/Components/CircleCulledRenderer.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/PrefabFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/SoundFile.cpp \
     $$BANG_ROOT/src/Engine/Audio/AnonymousAudioPlayer.cpp \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/ModelFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/MeshFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/Texture2DFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/ShaderProgramFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/MaterialFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/AudioClipFile.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/FontFile.cpp \
     $$BANG_ROOT/src/Engine/IO/General/Paths.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
     $$BANG_ROOT/src/Engine/Compiler/Compiler.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangCompiler.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp \
-    $$BANG_ROOT/src/Engine/IO/Files/BFile.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangCompilerAsyncJob.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
-    $$BANG_ROOT/src/Engine/General/Destroyable.h \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.h \
     $$BANG_ROOT/src/Engine/General/Application.h \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
@@ -147,7 +129,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Assets/Font.h \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.h \
     $$BANG_ROOT/src/Engine/Components/UIText.h \
-    $$BANG_ROOT/src/Engine/IO/General/EngineConfig.h \
     $$BANG_ROOT/src/Engine/Math/AABox.h \
     $$BANG_ROOT/src/Engine/Assets/AudioClip.h \
     $$BANG_ROOT/src/Engine/Assets/Material.h \
@@ -158,17 +139,13 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Debug/Debug.h \
     $$BANG_ROOT/src/Engine/General/Time.h \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/ShaderPreprocessor.h \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
     $$BANG_ROOT/src/Engine/IO/Files/FileReader.h \
-    $$BANG_ROOT/src/Engine/IO/Files/ImageFile.h \
     $$BANG_ROOT/src/Engine/IO/XML/XMLAttribute.h \
     $$BANG_ROOT/src/Engine/IO/XML/XMLNode.h \
     $$BANG_ROOT/src/Engine/IO/XML/XMLParser.h \
     $$BANG_ROOT/src/Engine/IO/XML/XMLProperty.h \
-    $$BANG_ROOT/src/Engine/IO/Files/TextFile.h \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.h \
     $$BANG_ROOT/src/Engine/Components/AudioListener.h \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$BANG_ROOT/src/Engine/Components/RectTransform.h \
     $$BANG_ROOT/src/Engine/Debug/GraphicPipelineDebugger.h \
     $$BANG_ROOT/src/Engine/General/Object.h \
@@ -184,24 +161,13 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.h \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.h \
     $$BANG_ROOT/src/Engine/IO/Files/Extensions.h \
-    $$BANG_ROOT/src/Engine/Components/CircleCulledRenderer.h \
-    $$BANG_ROOT/src/Engine/IO/Files/PrefabFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/SoundFile.h \
     $$BANG_ROOT/src/Engine/Audio/AnonymousAudioPlayer.h \
     $$BANG_ROOT/src/Engine/DataStructures/Flags.h \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.h \
-    $$BANG_ROOT/src/Engine/IO/Files/ModelFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/MeshFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/AudioClipFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/FontFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/MaterialFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/ShaderProgramFile.h \
-    $$BANG_ROOT/src/Engine/IO/Files/Texture2DFile.h \
     $$BANG_ROOT/src/Engine/IO/General/Paths.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
-    $$BANG_ROOT/src/Engine/IO/Files/BFile.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/IReflectable.h \
     $$BANG_ROOT/src/Engine/Compiler/Compiler.h \
     $$BANG_ROOT/src/Engine/Compiler/BangCompiler.h \
@@ -214,64 +180,54 @@ HEADERS += \
 DISTFILES += \
     ../.gitignore \
     $$BANG_ROOT/src/Engine \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/RenderG_GBufferToScreen.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.vert_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.vert_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/PointLight.glsl \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/Main.glsl \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/G.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/G.vert_g \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/RenderG_GBufferToScreen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/G_Default.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/Missing.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.vert_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Template.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/SP_UIImage.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_FXAA.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/Common.glsl \
-    $$BANG_ROOT/src/res/EngineAssets/Fonts/GreatFont.bfont \
-    $$BANG_ROOT/src/res/EngineAssets/Fonts/HandwrittenFont.bfont \
-    $$BANG_ROOT/src/res/EngineAssets/Fonts/PrettyFont.bfont \
-    $$BANG_ROOT/src/res/EngineAssets/Fonts/UbuntuFont.bfont \
-    $$BANG_ROOT/src/res/EngineAssets/Camera.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Cone.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Cube.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Plane.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Pyramid.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Sphere.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/UIPlane.bmesh \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/AudioSourceIcon.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/CameraIcon.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/CircleIcon.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/DefaultUIImageTexture.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/DirectionalLightIcon.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/PointLightIcon.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Textures/RectTransformAnchor.btex2d \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.vert_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.bshaderprogram \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Cartoon.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/InvertColors.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Blur.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/GrayScale.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/Outline.frag_pp
+    $$BANG_ROOT/res/EngineAssets/Shaders/RenderG_GBufferToScreen.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Template.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Template.vert_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.vert_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/PointLight.glsl \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/Main.glsl \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/G.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/G.vert_g \
+    $$BANG_ROOT/res/EngineAssets/Materials/RenderG_GBufferToScreen.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/G_Default.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImage.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Missing.frag \
+    $$BANG_ROOT/res/EngineAssets/Materials/Missing.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/SP.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/SP.vert_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_Template.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImage.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/SP_UIImage.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_FXAA.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Include/Common.glsl \
+    $$BANG_ROOT/res/EngineAssets/Fonts/UbuntuFont.bfont \
+    $$BANG_ROOT/res/EngineAssets/Camera.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Cone.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Cube.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Plane.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Pyramid.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Sphere.bmesh \
+    $$BANG_ROOT/res/EngineAssets/UIPlane.bmesh \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.vert_pp \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIText.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.bshaderprogram \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Cartoon.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/G_Missing.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Shaders/InvertColors.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Blur.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/GrayScale.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/Outline.frag_pp

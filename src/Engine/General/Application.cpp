@@ -12,7 +12,6 @@
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/BehaviourManager.h"
 #include "Bang/G_FontSheetCreator.h"
 
 Application* Application::s_appSingleton = nullptr;
@@ -28,7 +27,6 @@ Application::Application()
     m_audioManager     = new AudioManager();
     m_sceneManager     = new SceneManager();
     m_assetsManager    = new AssetsManager();
-    m_behaviourManager = new BehaviourManager();
 }
 
 Application::~Application()
@@ -38,7 +36,6 @@ Application::~Application()
     delete m_audioManager;
     delete m_sceneManager;
     delete m_assetsManager;
-    delete m_behaviourManager;
 }
 
 void Application::MainLoop()

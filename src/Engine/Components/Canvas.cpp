@@ -14,7 +14,7 @@ Canvas::~Canvas()
 void Canvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Canvas *c = Object::SCast<Canvas>(clone);
+    Canvas *c = SCAST<Canvas*>(clone);
 }
 
 void Canvas::Read(const XMLNode &xmlInfo)

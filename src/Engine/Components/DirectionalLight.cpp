@@ -23,7 +23,7 @@ DirectionalLight::~DirectionalLight()
 void DirectionalLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
-    DirectionalLight *dl = Object::SCast<DirectionalLight>(clone);
+    DirectionalLight *dl = SCAST<DirectionalLight*>(clone);
 }
 
 void DirectionalLight::Read(const XMLNode &xmlInfo)

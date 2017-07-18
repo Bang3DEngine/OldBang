@@ -1,6 +1,5 @@
 #include "Bang/Component.h"
 
-#include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
@@ -16,7 +15,7 @@ Component::~Component()
 void Component::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
-    Component *c = Object::SCast<Component>(clone);
+    Component *c = SCAST<Component*>(clone);
     c->SetEnabled( IsEnabled(false) );
 }
 

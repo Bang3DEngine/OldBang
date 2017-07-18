@@ -123,7 +123,7 @@ void Behaviour::SetSourceFilepath(const Path &sourceFilepath)
 void Behaviour::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Behaviour *b = Object::SCast<Behaviour>(clone);
+    Behaviour *b = SCAST<Behaviour*>(clone);
     b->SetSourceFilepath( GetSourceFilepath() );
     b->m_behaviourVariablesInitValues = m_behaviourVariablesInitValues;
     b->p_behavioursLibraryBeingUsed   = p_behavioursLibraryBeingUsed;
@@ -144,6 +144,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically
+    /*
     QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
     p_behavioursLibraryBeingUsed = behavioursLib;
     ENSURE(behavioursLib && behavioursLib->isLoaded());
@@ -163,11 +164,13 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
             gameObject->RemoveComponent(this);
         }
     }
+    */
 }
 
 bool Behaviour::IsLoaded() const
 {
-    QLibrary *behavioursLib =  BehaviourManager::GetBehavioursMergedLibrary();
+    QLibrary *behavioursLib = nullptr;
+    // QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
     return GetSourceFilepath().Exists() &&
            p_behavioursLibraryBeingUsed == behavioursLib &&
            GetSourceFilepath().GetName() == GetClassName();

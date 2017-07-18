@@ -7,11 +7,8 @@
 #include "Bang/Project.h"
 #include "Bang/Material.h"
 #include "Bang/Behaviour.h"
-#include "Bang/ModelFile.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Texture2D.h"
-#include "Bang/ImageFile.h"
-#include "Bang/SoundFile.h"
 
 template<> String Extensions::Get<Mesh>() { return "bmesh"; }
 template<> String Extensions::Get<Font>() { return "bfont"; }
@@ -27,19 +24,6 @@ template<> String Extensions::Get<Project>() { return "bproject"; }
 template<> List<String> Extensions::GetList<Behaviour>()
 {
     return {"c", "cpp", "h", "hpp"};
-}
-template<> List<String> Extensions::GetList<SoundFile>()
-{
-    return {"wav", "ogg", "pcm"};
-}
-template<> List<String> Extensions::GetList<ModelFile>()
-{
-    return {"obj", "mb", "fbx", "dae", "3ds", "ply",
-            "stl", "ase", "blend", "md2", "md3"};
-}
-template<> List<String> Extensions::GetList<ImageFile>()
-{
-    return {"jpg", "jpeg", "png", "bmp", "tiff", "tga"};
 }
 
 List<String> Extensions::GetTTFList()

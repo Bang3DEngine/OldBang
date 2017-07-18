@@ -1,6 +1,5 @@
 #include "Bang/Shader.h"
 
-#include "Bang/Debug.h"
 #include "Bang/ShaderPreprocessor.h"
 
 Shader::Shader(G_Shader::Type t) : G_Shader(t)

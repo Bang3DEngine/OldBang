@@ -2,7 +2,6 @@
 
 #include "Bang/Math.h"
 #include "Bang/Font.h"
-#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
@@ -172,7 +171,7 @@ void UIText::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
 
-    UIText *text = Object::SCast<UIText>(clone);
+    UIText *text = SCAST<UIText*>(clone);
     text->SetMesh( new Mesh() );
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );

@@ -1,6 +1,5 @@
 #include "Bang/G_TextureUnitManager.h"
 
-#include "Bang/Debug.h"
 #include "Bang/G_Texture.h"
 #include "Bang/GraphicPipeline.h"
 

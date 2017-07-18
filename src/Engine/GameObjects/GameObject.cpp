@@ -35,7 +35,7 @@ GameObject::GameObject(const String &name)
 void GameObject::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
-    GameObject *go = Object::SCast<GameObject>(clone);
+    GameObject *go = SCAST<GameObject*>(clone);
     if (HasComponent<RectTransform>())
     {
         go->ChangeTransformByRectTransform();
@@ -52,7 +52,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (Component *comp : m_components)
     {
-        if (!comp->IsOfType<Transform>())
+        if (!DCAST<Transform*>(comp))
         {
             go->AddComponent(comp->Clone());
         }
@@ -240,11 +240,11 @@ bool GameObject::AddComponent(Component *c)
     if (!c) { return false; }
     if (m_components.Contains(c)) { return false; }
 
-    if (c->IsOfType<Transform>())
+    if (DCAST<Transform*>(c))
     {
         if (!HasComponent<Transform>())
         {
-            m_transform = c->Cast<Transform>();
+            m_transform = DCAST<Transform*>(c);
         }
         else
         {

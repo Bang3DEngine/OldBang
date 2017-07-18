@@ -2,7 +2,6 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/G_VAO.h"
-#include "Bang/Debug.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
@@ -21,7 +20,7 @@ MeshRenderer::~MeshRenderer()
 void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
-    MeshRenderer *mr = Object::SCast<MeshRenderer>(clone);
+    MeshRenderer *mr = SCAST<MeshRenderer*>(clone);
     mr->SetMesh( GetMesh() );
 }
 

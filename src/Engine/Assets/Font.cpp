@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 
-#include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Texture2D.h"
 

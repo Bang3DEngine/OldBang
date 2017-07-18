@@ -4,12 +4,10 @@
 #include <sstream>
 
 #include "Bang/Map.h"
-#include "Bang/Debug.h"
 #include "Bang/Asset.h"
 #include "Bang/Paths.h"
 #include "Bang/Object.h"
 #include "Bang/XMLParser.h"
-#include "Bang/BehaviourManager.h"
 
 class AssetsManager
 {
@@ -28,7 +26,7 @@ public:
     template <class T>
     static T* GetAsset(const Path &filepath)
     {
-        return Object::Cast<T>( GetAsset(filepath) );
+        return DCAST<T*>( GetAsset(filepath) );
     }
 
     static Asset* GetAsset(const Path &filepath);

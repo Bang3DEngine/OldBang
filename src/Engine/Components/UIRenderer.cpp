@@ -49,7 +49,7 @@ void UIRenderer::UnBind() const
 
 void UIRenderer::CloneInto(ICloneable *clone) const
 {
-    UIRenderer *rend = Object::SCast<UIRenderer>(clone);
+    UIRenderer *rend = SCAST<UIRenderer*>(clone);
     MeshRenderer::CloneInto(rend);
     rend->SetTint( GetTint() );
 }

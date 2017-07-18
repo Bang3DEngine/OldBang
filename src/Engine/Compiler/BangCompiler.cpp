@@ -1,11 +1,11 @@
 #include "Bang/BangCompiler.h"
 
+#include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/BangPreprocessor.h"
-#include "Bang/BehaviourManager.h"
 #include "Bang/BangCompilerAsyncJob.h"
 
 BangCompiler::Job BangCompiler::BuildCompileBehaviourObjectJob(

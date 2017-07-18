@@ -12,7 +12,6 @@ class AudioManager;
 class SceneManager;
 class AssetsManager;
 class ShaderManager;
-class BehaviourManager;
 class Application
 {
 public:
@@ -38,7 +37,6 @@ protected:
     AudioManager *m_audioManager         = nullptr;
     SceneManager *m_sceneManager         = nullptr;
     AssetsManager *m_assetsManager       = nullptr;
-    BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
     const int c_redrawDelay = 16; // 60 FPS cap

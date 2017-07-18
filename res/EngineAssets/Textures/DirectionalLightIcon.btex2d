@@ -1,5 +1,0 @@
-<Texture2D AlphaCuttoff:Float="0.5"{}
-           FilterMode:Enum="1"{EnumName0="Nearest",EnumName1="Linear"}
-           ImageFilepath:File="./Textures/DirectionalLightIcon.png"{FileExtension="jpg png bmp",IsEngineFile}
-          >
-</Texture2D>

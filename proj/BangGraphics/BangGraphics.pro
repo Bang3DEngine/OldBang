@@ -10,8 +10,6 @@ INCLUDEPATH += \
 
 TARGET = $$BIN_DIR/lib/BangGraphics
 
-MOC_DIR = $$BANG_ROOT/bin/Qt_MOCs/
-
 SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Screen.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/G_TextureUnitManager.cpp \

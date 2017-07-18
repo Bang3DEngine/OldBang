@@ -165,7 +165,7 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
 void Camera::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Camera *cam = Object::SCast<Camera>(clone);
+    Camera *cam = SCAST<Camera*>(clone);
     cam->SetZFar(GetZFar());
     cam->SetZNear(GetZNear());
     cam->SetClearColor(GetClearColor());

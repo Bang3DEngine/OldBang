@@ -1,5 +1,6 @@
 #include "Bang/SceneManager.h"
 
+#include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -8,7 +9,6 @@
 #include "Bang/FileReader.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
-#include "Bang/BehaviourManager.h"
 
 SceneManager::SceneManager()
 {

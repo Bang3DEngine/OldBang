@@ -13,7 +13,6 @@
 #include "Bang/Map.h"
 #include "Bang/Path.h"
 #include "Bang/Rect.h"
-#include "Bang/Debug.h"
 
 class Scene;
 class GameObject;

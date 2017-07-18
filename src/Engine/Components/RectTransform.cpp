@@ -1,7 +1,6 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/Math.h"
-#include "Bang/Debug.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Vector4.h"
@@ -18,7 +17,7 @@ RectTransform::~RectTransform()
 void RectTransform::CloneInto(ICloneable *clone) const
 {
     Transform::CloneInto(clone);
-    RectTransform *rt = Object::SCast<RectTransform>(clone);
+    RectTransform *rt = SCAST<RectTransform*>(clone);
 
     rt->SetMarginLeft ( GetMarginLeft()  );
     rt->SetMarginTop  ( GetMarginTop()   );

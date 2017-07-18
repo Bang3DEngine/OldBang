@@ -2,7 +2,6 @@
 
 #include "Bang/Paths.h"
 #include "Bang/File.h"
-#include "Bang/Debug.h"
 #include "Bang/SerializableObject.h"
 
 

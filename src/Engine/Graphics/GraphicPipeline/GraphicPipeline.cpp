@@ -1,7 +1,6 @@
 ﻿#include "Bang/GraphicPipeline.h"
 
 #include "Bang/Mesh.h"
-#include "Bang/Debug.h"
 #include "Bang/G_VAO.h"
 #include "Bang/G_VBO.h"
 #include "Bang/Scene.h"
@@ -25,7 +24,6 @@
 #include "Bang/G_RenderTexture.h"
 #include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
-#include "Bang/GraphicPipelineDebugger.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
 #include "Bang/GPPass_SP_PostProcessEffects.h"
 

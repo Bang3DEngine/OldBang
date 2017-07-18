@@ -27,7 +27,7 @@ UIImage::~UIImage()
 void UIImage::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
-    UIImage *img = Object::SCast<UIImage>(clone);
+    UIImage *img = SCAST<UIImage*>(clone);
     img->SetImage( GetImageTexture() );
 }
 

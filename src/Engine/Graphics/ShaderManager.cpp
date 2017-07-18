@@ -1,8 +1,8 @@
 #include "Bang/ShaderManager.h"
 
+#include "Bang/Time.h"
 #include "Bang/Shader.h"
 #include "Bang/Application.h"
-#include "Bang/FileTracker.h"
 #include "Bang/G_ShaderProgram.h"
 
 ShaderManager::ShaderManager()

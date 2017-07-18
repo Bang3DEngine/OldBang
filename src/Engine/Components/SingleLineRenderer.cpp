@@ -16,7 +16,7 @@ SingleLineRenderer::~SingleLineRenderer()
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    SingleLineRenderer *slr = Object::SCast<SingleLineRenderer>(clone);
+    SingleLineRenderer *slr = SCAST<SingleLineRenderer*>(clone);
     slr->SetOrigin(GetOrigin());
     slr->SetDestiny(GetDestiny());
 }

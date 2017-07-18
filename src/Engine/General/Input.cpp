@@ -324,9 +324,9 @@ Input::EventInfo::EventInfo(const QEvent *e)
 {
     m_eventType = e->type();
     if (m_eventType == QEvent::KeyPress ||
-            m_eventType == QEvent::KeyRelease)
+        m_eventType == QEvent::KeyRelease)
     {
-        const QKeyEvent *ke = Object::SConstCast<QKeyEvent>(e);
+        const QKeyEvent *ke = SCAST<const QKeyEvent*>(e);
         int k = ke->key();
         m_autoRepeat = ke->isAutoRepeat();
         m_key = static_cast<Input::Key>(k);
@@ -335,7 +335,7 @@ Input::EventInfo::EventInfo(const QEvent *e)
              m_eventType == QEvent::MouseButtonRelease ||
              m_eventType == QEvent::MouseMove)
     {
-        const QMouseEvent *me = Object::SConstCast<QMouseEvent>(e);
+        const QMouseEvent *me = SCAST<const QMouseEvent*>(e);
         Qt::MouseButton mb = me->button();
         m_mouseButton = static_cast<Input::MouseButton>(mb);
         m_x = me->pos().x();
@@ -343,7 +343,7 @@ Input::EventInfo::EventInfo(const QEvent *e)
     }
     else if (m_eventType == QEvent::Wheel)
     {
-        const QWheelEvent *we = Object::SConstCast<QWheelEvent>(e);
+        const QWheelEvent *we = SCAST<const QWheelEvent*>(e);
         m_wheelDelta = we->angleDelta().y();
     }
 }

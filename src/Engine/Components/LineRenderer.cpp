@@ -23,7 +23,7 @@ LineRenderer::~LineRenderer()
 void LineRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
-    LineRenderer *lr = Object::SCast<LineRenderer>(clone);
+    LineRenderer *lr = SCAST<LineRenderer*>(clone);
     lr->SetPoints( GetPoints() );
 }
 

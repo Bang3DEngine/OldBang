@@ -44,7 +44,7 @@ void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
 void PostProcessEffect::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    PostProcessEffect *ppe = Object::SCast<PostProcessEffect>(clone);
+    PostProcessEffect *ppe = SCAST<PostProcessEffect*>(clone);
     ppe->SetPostProcessShader( GetPostProcessShader() );
     ppe->SetType( GetType() );
     ppe->SetPriority( GetPriority() );

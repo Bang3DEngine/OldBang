@@ -2,7 +2,6 @@
 
 #include <QThread>
 
-#include "Bang/Debug.h"
 #include "Bang/AudioClip.h"
 #include "Bang/AudioManager.h"
 

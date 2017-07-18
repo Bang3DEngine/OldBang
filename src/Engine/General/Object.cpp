@@ -14,7 +14,7 @@ Object::~Object()
 
 void Object::CloneInto(ICloneable *clone) const
 {
-    Object *obj = Object::SCast<Object>(clone);
+    Object *obj = SCAST<Object*>(clone);
 }
 
 String Object::GetInstanceId() const

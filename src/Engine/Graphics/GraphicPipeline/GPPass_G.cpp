@@ -1,6 +1,5 @@
 #include "Bang/GPPass_G.h"
 
-#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/Material.h"

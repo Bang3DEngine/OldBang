@@ -2,7 +2,6 @@
 
 #include <functional>
 
-#include "Bang/Debug.h"
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -27,7 +26,7 @@ Renderer::~Renderer()
 void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Renderer *r = Object::SCast<Renderer>(clone);
+    Renderer *r = SCAST<Renderer*>(clone);
     r->SetMaterial(GetSharedMaterial());
     r->SetDrawWireframe(GetDrawWireframe());
     r->SetCullMode(GetCullMode());

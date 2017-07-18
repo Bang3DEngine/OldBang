@@ -13,7 +13,6 @@
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
 #include "Bang/GraphicPipeline.h"
-#include "Bang/BehaviourManager.h"
 #include "Bang/DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")

@@ -2,10 +2,10 @@
 
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
-#include "Bang/Debug.h"
 #include "Bang/Camera.h"
 #include "Bang/Sphere.h"
 #include "Bang/Transform.h"
+#include "Bang/OStreamOperators.h"
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -243,11 +243,7 @@ AABox operator*(const Matrix4 &m, const AABox &b)
 String AABox::ToString() const
 {
     std::ostringstream oss;
-    oss << "Box: [" << std::endl <<
-           "  min: " << m_minv << std::endl <<
-           "  max" << m_maxv << std::endl <<
-           "]" << std::endl;
-
+    oss << "Box(" << m_minv << ", " << m_maxv << ")" << std::endl;
     return oss.str();
 }
 

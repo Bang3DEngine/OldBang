@@ -15,7 +15,6 @@ uniform mat4 B_PVM;
 // Misc ////////////////////////////////
 // Uniform that's always False. Useful to fool glsl optimization.
 uniform bool B_False      = false;
-uniform bool B_IsSelected = false;
 // ///////////////////////////////////////
 
 // Camera ///////////////////////////////

@@ -123,7 +123,7 @@ public:
     {
         for (Component *comp : m_components)
         {
-            T *tp = Object::Cast<T>(comp);
+            T *tp = DCAST<T*>(comp);
             if (tp) { return tp; }
         }
         return nullptr;
@@ -138,7 +138,7 @@ public:
         List<T*> comps_l;
         for (Component *comp : m_components)
         {
-            T *tp = Object::Cast<T>(comp);
+            T *tp = DCAST<T*>(comp);
             if (tp) { comps_l.PushBack(tp); }
         }
         return comps_l;
@@ -227,7 +227,7 @@ public:
         int count = 0;
         for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
-            T *tp = Object::Cast<T>(*comp);
+            T *tp = DCAST<T*>(comp);
             if (tp) { ++count; }
         }
         return count;
@@ -248,7 +248,7 @@ public:
     {
         for (Component *comp : m_components)
         {
-            T *compT = Object::Cast<T>(comp);
+            T *compT = DCAST<T*>(comp);
             if (compT)
             {
                 RemoveComponent(compT);
