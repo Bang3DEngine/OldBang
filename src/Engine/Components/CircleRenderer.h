@@ -33,8 +33,6 @@ protected:
     int m_segments = 32;
 
     virtual void ReloadPoints();
-
-    friend class EditorRotateAxis;
 };
 
 #endif // CIRCLERENDERER_H

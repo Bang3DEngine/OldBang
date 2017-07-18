@@ -2,7 +2,6 @@
 
 #include <QDir>
 #include <QFile>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Array.h"
 

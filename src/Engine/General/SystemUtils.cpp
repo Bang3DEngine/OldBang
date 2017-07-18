@@ -2,11 +2,9 @@
 
 #include <QProcess>
 #include <QLibrary>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Paths.h"
 #include "Bang/Behaviour.h"
-#include "Bang/SingletonManager.h"
 
 void SystemUtils::System(const String &command,
                          const List<String> &argsList,

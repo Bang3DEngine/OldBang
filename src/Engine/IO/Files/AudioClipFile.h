@@ -6,28 +6,15 @@
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/IAttrWidgetButtonListener.h"
-#endif
-
 class AudioClip;
 class AudioSource;
 class AudioClipFile : public BFile
-                      #ifdef BANG_EDITOR
-                      ,public IAttrWidgetButtonListener
-                      #endif
 {
 public:
     AudioClipFile();
     AudioClipFile(const Path& path);
 
     virtual ~AudioClipFile();
-
-    virtual const QPixmap& GetIcon() const override;
-
-    #ifdef BANG_EDITOR
-    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton);
-    #endif
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

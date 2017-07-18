@@ -2,7 +2,6 @@
 #define COLOR_H
 
 #include <QColor>
-#include "Bang/WinUndef.h"
 
 class String;
 class Vector2;

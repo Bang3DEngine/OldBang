@@ -5,7 +5,6 @@
 #include "Bang/Mesh.h"
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
-#include "Bang/Gizmos.h"
 #include "Bang/Transform.h"
 #include "Bang/GLContext.h"
 #include "Bang/GameObject.h"
@@ -202,49 +201,6 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     }
 
     return screenRect;
-}
-
-void Camera::OnDrawGizmos(bool depthed, bool overlay)
-{
-    if (gameObject->GetHideFlags()->IsOn(HideFlag::HideInGame)) return;
-
-    Component::OnDrawGizmos(depthed, overlay);
-
-    Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
-    float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
-                                        transform->GetPosition());
-
-    Gizmos::SetDrawWireframe(false);
-    Gizmos::SetReceivesLighting(true);
-    Gizmos::SetPosition(transform->GetPosition());
-    Gizmos::SetRotation(transform->GetRotation());
-    Gizmos::SetScale(Vector3::One * 0.02f * distScale);
-    Gizmos::SetColor(Color::White);
-    Gizmos::RenderCustomMesh(p_camMesh);
-
-    if (depthed && gameObject->IsSelected())
-    {
-        Gizmos::SetColor(Color::Red);
-        Gizmos::SetReceivesLighting(false);
-
-        if (GetProjectionMode() == ProjectionMode::Perspective)
-        {
-            Gizmos::RenderFrustum(transform->GetForward(), transform->GetUp(),
-                                  transform->GetPosition(),
-                                  GetZNear(), GetZFar(),
-                                  GetFovDegrees(), Screen::GetAspectRatio());
-        }
-        else
-        {
-            AABox orthoBox;
-            orthoBox.SetMin(transform->GetPosition() +
-                   Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
-            orthoBox.SetMax(transform->GetPosition() +
-                   Vector3( GetOrthoWidth(), GetOrthoHeight(), -GetZFar()));
-            Gizmos::SetRotation(transform->GetRotation());
-            Gizmos::RenderSimpleBox(orthoBox);
-        }
-    }
 }
 
 void Camera::Read(const XMLNode &xmlInfo)

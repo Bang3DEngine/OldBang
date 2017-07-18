@@ -2,7 +2,6 @@
 #define BANGCOMPILER_H
 
 #include <QThreadPool>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Compiler.h"
 

@@ -1,6 +1,5 @@
 #include "Bang/AudioSource.h"
 
-#include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Transform.h"
@@ -10,10 +9,6 @@
 #include "Bang/ICloneable.h"
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/EditorState.h"
-#endif
 
 AudioSource::AudioSource()
 {
@@ -43,22 +38,6 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetLooping( IsLooping() );
     as->SetPlayOnStart( IsPlayOnStart() );
 }
-
-#ifdef BANG_EDITOR
-void AudioSource::OnButtonClicked(const AttrWidgetButton *clickedButton)
-{
-    /*
-    if (IsPlaying())
-    {
-        Stop();
-    }
-    else
-    {
-        Play();
-    }
-    */
-}
-#endif
 
 void AudioSource::Read(const XMLNode &xmlInfo)
 {
@@ -186,12 +165,7 @@ void AudioSource::OnStart()
     Component::OnStart();
     if (IsPlayOnStart())
     {
-        #ifdef BANG_EDITOR
-        if (EditorState::IsPlaying())
-        #endif
-        {
-            Play();
-        }
+        Play();
     }
 }
 
@@ -234,28 +208,6 @@ void AudioSource::OnUpdate()
     Component::OnUpdate();
 
     UpdateALProperties();
-}
-
-void AudioSource::OnDrawGizmos(bool depthed, bool overlay)
-{
-    Component::OnDrawGizmos(depthed, overlay);
-
-    if (!depthed && !overlay)
-    {
-        Texture2D *tex = AssetsManager::Load<Texture2D>(
-                    EPATH("Textures/AudioSourceIcon.btex2d") );
-        Gizmos::SetPosition(transform->GetPosition());
-        Gizmos::SetScale(Vector3::One * 0.1f);
-        Gizmos::SetColor(Color::White);
-        Gizmos::RenderIcon(tex);
-    }
-
-    if (depthed && gameObject->IsSelected())
-    {
-        Gizmos::SetColor(Color::Orange);
-        Gizmos::SetPosition(transform->GetPosition());
-        Gizmos::RenderSimpleSphere(transform->GetPosition(), m_range);
-    }
 }
 
 ALuint AudioSource::GetALSourceId() const

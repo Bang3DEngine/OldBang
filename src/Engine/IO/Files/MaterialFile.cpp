@@ -3,7 +3,6 @@
 #include "Bang/Paths.h"
 #include "Bang/Material.h"
 #include "Bang/XMLParser.h"
-#include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
 
 MaterialFile::MaterialFile()
@@ -23,24 +22,11 @@ MaterialFile::MaterialFile(const Path& path) :
     m_xmlInfo = xmlMatInfo;
 }
 
-const QPixmap& MaterialFile::GetIcon() const
-{
-    Path absPath = GetPath();
-    Material *mat = AssetsManager::Load<Material>(absPath);
-    return IconManager::LoadMaterialPixmap(mat);
-}
-
-
 void MaterialFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
 
     m_xmlInfo = xmlInfo;
-
-    #ifdef BANG_EDITOR
-    // Update live instances currently being used
-    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
-    #endif
 }
 
 void MaterialFile::Write(XMLNode *xmlInfo) const
@@ -54,8 +40,6 @@ void MaterialFile::Write(XMLNode *xmlInfo) const
     mat.Write(xmlInfo);
 
     m_xmlInfo = *xmlInfo;
-
-    IconManager::InvalidatePixmap( GetPath() );
 }
 
 

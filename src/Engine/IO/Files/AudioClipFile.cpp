@@ -4,7 +4,6 @@
 #include "Bang/XMLNode.h"
 #include "Bang/AudioClip.h"
 #include "Bang/XMLParser.h"
-#include "Bang/IconManager.h"
 #include "Bang/AudioSource.h"
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
@@ -25,37 +24,6 @@ AudioClipFile::~AudioClipFile()
     if (m_tmpAudioSource) { delete m_tmpAudioSource; }
 }
 
-const QPixmap& AudioClipFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(EPATH("Icons/AudioClipIcon.png"),
-                                   IconManager::IconOverlay::Asset);
-}
-
-#ifdef BANG_EDITOR
-void AudioClipFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
-{
-    /*
-    bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
-    if (hasToPlay)
-    {
-        if (!m_tmpAudioSource)
-        {
-            m_tmpAudioSource = new AudioSource();
-            AudioClip *audioClip = GetRelatedAudioClip();
-            m_tmpAudioSource->SetAudioClip(audioClip);
-        }
-        m_tmpAudioSource->Play();
-    }
-    else
-    {
-        m_tmpAudioSource->Stop();
-        delete m_tmpAudioSource;
-        m_tmpAudioSource = nullptr;
-    }
-    */
-}
-#endif
-
 void AudioClipFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
@@ -68,10 +36,6 @@ void AudioClipFile::Read(const XMLNode &xmlInfo)
         AudioClip *audioClip = AssetsManager::Load<AudioClip>( GetPath() );
         m_tmpAudioSource->SetAudioClip(audioClip);
     }
-
-    #ifdef BANG_EDITOR
-    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
-    #endif
 }
 
 void AudioClipFile::Write(XMLNode *xmlInfo) const

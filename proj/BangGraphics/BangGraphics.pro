@@ -59,11 +59,9 @@ HEADERS += \
 DISTFILES += \
     ../.gitignore \
     $$BANG_ROOT/src/Engine \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/RenderGBufferToScreen.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.frag_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.vert_sel \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.vert_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.vert_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
@@ -78,7 +76,6 @@ DISTFILES += \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag \
     $$BANG_ROOT/src/res/EngineAssets/Materials/Missing.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_SelectionEffect.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.frag_pp \
@@ -86,7 +83,6 @@ DISTFILES += \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_SelectionEffect.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Template.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \

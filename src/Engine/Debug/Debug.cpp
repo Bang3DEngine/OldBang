@@ -9,15 +9,6 @@
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Paths.h"
-#include "Bang/Console.h"
-#include "Bang/EditorScene.h"
-#include "Bang/EditorWindow.h"
-#include "Bang/SceneManager.h"
-#include "Bang/EditorDebugGameObject.h"
-#endif
-
 const String Debug::c_logPrefix    = "[   LOG   ]: ";
 const String Debug::c_warnPrefix   = "[ WARNING ]: ";
 const String Debug::c_errorPrefix  = "[  ERROR  ]: ";
@@ -25,47 +16,14 @@ const String Debug::c_statusPrefix = "[  STATUS ]: ";
 
 Debug::Debug() { }
 
-void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny,
-                     const Color &color, float lineWidth, float secsTime,
-                     bool depthTest)
-{
-    #ifdef BANG_EDITOR
-    Scene *s = SceneManager::GetActiveScene(); ENSURE(s);
-    EditorScene *es = s->Cast<EditorScene>(); ENSURE(es);
-    EditorDebugGameObject *edgo = es->m_debugGameObject; ENSURE(edgo);
-    edgo->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
-    #endif
-}
-
-void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
-                           const Color &color, float lineWidth, float secsTime)
-{
-    #ifdef BANG_EDITOR
-    Scene *s = SceneManager::GetActiveScene(); ENSURE(s);
-    EditorScene *es = s->Cast<EditorScene>(); ENSURE(es);
-    EditorDebugGameObject *edgo = es->m_debugGameObject; ENSURE(edgo);
-    edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
-    #endif
-}
-
 void Debug::_Clear()
 {
-    #ifdef BANG_EDITOR
-    Console::Clear();
-    #endif
 }
 
 void Debug::_Status(const String &str, float timeInSeconds)
 {
     std::cerr << c_statusPrefix << str << std::endl;
     std::cerr.flush();
-    #ifdef BANG_EDITOR
-    if (QThread::currentThread() == QApplication::instance()->thread())
-    {
-        EditorWindow *win = EditorWindow::GetInstance();
-        win->statusbar->showMessage( str.ToQString(), timeInSeconds * 1000 );
-    }
-    #endif
 }
 
 void Debug::_Log(const String &str, int line, const String &filePath)
@@ -74,9 +32,6 @@ void Debug::_Log(const String &str, int line, const String &filePath)
     std::cerr << c_logPrefix << str << " | " <<
                  fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
-    #ifdef BANG_EDITOR
-    Console::AddLog(str, line, fileName);
-    #endif
 }
 
 void Debug::_Warn(const String &str, int line, const String &filePath)
@@ -85,9 +40,6 @@ void Debug::_Warn(const String &str, int line, const String &filePath)
     std::cerr << c_warnPrefix << str << " | " <<
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
-    #ifdef BANG_EDITOR
-    Console::AddWarn(str, line, fileName);
-    #endif
 }
 
 void Debug::_Error(const String &str, int line, const String &filePath)
@@ -96,7 +48,4 @@ void Debug::_Error(const String &str, int line, const String &filePath)
     std::cerr << c_errorPrefix << str << " | " <<
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
-    #ifdef BANG_EDITOR
-    Console::AddError(str, line, fileName);
-    #endif
 }

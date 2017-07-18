@@ -14,7 +14,6 @@ class GameObject;
 class G_Framebuffer;
 class GPPass_RenderLayer;
 class G_TextureUnitManager;
-class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
  */
@@ -42,9 +41,6 @@ public:
     GLContext *GetGLContext() const;
     G_GBuffer *GetGBuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer* GetSelectionFramebuffer();
-    #endif
 
     /**
      * @brief Apply all the scene lights over the current gbuffer.
@@ -56,19 +52,9 @@ private:
     GLContext *m_glContext = nullptr;
 
     G_GBuffer *m_gbuffer = nullptr;
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *m_selectionFB = nullptr;
-    #endif
 
     GPPass_RenderLayer *m_scenePass  = nullptr;
     GPPass_RenderLayer *m_canvasPass = nullptr;
-    GPPass_RenderLayer *m_gizmosPass = nullptr;
-
-    #ifdef BANG_EDITOR
-    GPPass_RenderLayer *m_sceneSelectionPass  = nullptr;
-    GPPass_RenderLayer *m_canvasSelectionPass = nullptr;
-    GPPass_RenderLayer *m_gizmosSelectionPass = nullptr;
-    #endif
 
     G_GBuffer::AttachmentId m_gbufferAttachToBeShown = G_GBuffer::AttColor;
 
@@ -80,18 +66,8 @@ private:
 
     Scene *p_scene = nullptr;
 
-    Material *m_matSelectionEffectScreen = nullptr;
-
     void RenderGBuffer(const List<Renderer*> &renderers,
                        const List<GameObject*> &sceneChildren);
-
-    #ifdef BANG_EDITOR
-    void RenderSelectionBuffer(const List<Renderer*> &renderers,
-                               const List<GameObject*> &sceneChildren,
-                               Scene *scene);
-    #endif
-
-    void ApplySelectionOutline();
 };
 
 #endif // GRAPHICPIPELINE_H

@@ -7,18 +7,11 @@
 
 #include "Bang/Component.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/IAttrWidgetButtonListener.h"
-#endif
-
 class XMLNode;
 class AudioClip;
 class ICloneable;
 
 class AudioSource : public Component
-                    #ifdef BANG_EDITOR
-                    ,public IAttrWidgetButtonListener
-                    #endif
 {
     OBJECT(AudioSource)
 
@@ -34,10 +27,6 @@ public:
     virtual ~AudioSource();
 
     virtual void CloneInto(ICloneable *clone) const override;
-
-    #ifdef BANG_EDITOR
-    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
-    #endif
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -77,7 +66,6 @@ public:
 
 protected:
     virtual void OnUpdate() override;
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
     ALuint m_alSourceId = 0;

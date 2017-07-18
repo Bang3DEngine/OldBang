@@ -3,7 +3,6 @@
 
 #include <QModelIndex>
 #include <QFileSystemModel>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/File.h"
@@ -21,8 +20,6 @@ public:
     BFile(const String &filepath);
     BFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual ~BFile();
-
-    virtual const QPixmap& GetIcon() const;
 
     bool IsSound() const;
     bool IsAudioClipFile() const;

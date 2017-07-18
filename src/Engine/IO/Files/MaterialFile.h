@@ -2,7 +2,6 @@
 #define MATERIALASSETFILE_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -17,8 +16,6 @@ class MaterialFile : public BFile
 public:
     MaterialFile();
     MaterialFile(const Path& path);
-
-    virtual const QPixmap& GetIcon() const override;
 
     void Read(const XMLNode &xmlInfo);
     void Write(XMLNode *xmlInfo) const;

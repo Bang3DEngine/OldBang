@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <QKeyEvent>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"
@@ -11,7 +10,6 @@
 #include "Bang/Vector2.h"
 #include "Bang/IToString.h"
 
-class Cursor;
 class Input
 {
 
@@ -97,10 +95,6 @@ public:
     };
 
     static Input* GetInstance();
-    static void InitFromMainBinary();
-
-    static bool GetMouseWrapping();
-    static void SetMouseWrapping(bool m_mouseWrapping);
 
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);
@@ -203,14 +197,6 @@ private:
      */
     Map<Key, ButtonInfo> m_keyInfos;
 
-    Cursor *m_cursor = nullptr;
-
-    /**
-     * @brief If true, mouse will loop in x and y when
-     * going outside the Screen.
-     */
-    bool m_mouseWrapping = false;
-
     /**
      * @brief isADoubleClick will be true in the frame where
      * there's the second click of a double click
@@ -253,7 +239,6 @@ private:
      */
     Array<EventInfo> m_eventInfoQueue;
 
-    void HandleMouseWrapping();
     void ProcessMouseWheelEventInfo(const EventInfo &ei);
     void ProcessMouseMoveEventInfo(const EventInfo &ei);
     void ProcessMousePressEventInfo(const EventInfo &ei);
@@ -268,7 +253,6 @@ private:
     void OnFrameFinished();
 
     friend class Screen;
-    friend class Cursor;
     friend class Application;
 };
 

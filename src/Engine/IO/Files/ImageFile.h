@@ -11,8 +11,6 @@ public:
     ImageFile();
     ImageFile(const Path& path);
 
-    virtual const QPixmap& GetIcon() const override;
-
     virtual bool IsAsset() const override;
 
     int GetWidth() const;

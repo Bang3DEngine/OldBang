@@ -6,13 +6,11 @@
 #include <iostream>
 
 #include <QString>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
 #include "Bang/Array.h"
 #include "Bang/Color.h"
-#include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"

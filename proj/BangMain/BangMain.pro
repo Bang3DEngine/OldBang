@@ -16,11 +16,9 @@ TARGET = $$BIN_DIR/Bang
 
 CONFIG += no_lflags_merge
 LIBS = -L$$BIN_DIR/lib/ \
-    -lBangEditor \
     -lBangEngine \
     -lBangGraphics \
     -lBangDataStructures \
-    -lBangEditor \
     -lBangEngine \
     -lBangGraphics \
     -lBangDataStructures \

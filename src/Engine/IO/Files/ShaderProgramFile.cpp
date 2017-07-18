@@ -2,7 +2,6 @@
 
 #include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
-#include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
 
 ShaderProgramFile::ShaderProgramFile()
@@ -12,12 +11,6 @@ ShaderProgramFile::ShaderProgramFile()
 ShaderProgramFile::ShaderProgramFile(const Path& path)
     : BFile(path)
 {
-}
-
-const QPixmap &ShaderProgramFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(EPATH("Icons/BehaviourIcon.png"),
-                                   IconManager::IconOverlay::Asset);
 }
 
 Path ShaderProgramFile::GetVertexShaderFilepath() const
@@ -36,10 +29,6 @@ void ShaderProgramFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
     File::Write(GetPath(), xmlInfo.ToString());
-
-    #ifdef BANG_EDITOR
-    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
-    #endif
 }
 
 void ShaderProgramFile::Write(XMLNode *xmlInfo) const

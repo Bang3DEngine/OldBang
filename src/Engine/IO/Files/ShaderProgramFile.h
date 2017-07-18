@@ -4,7 +4,6 @@
 #include <QPixmap>
 #include <QModelIndex>
 #include <QFileSystemModel>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -15,8 +14,6 @@ class ShaderProgramFile : public BFile
 public:
     ShaderProgramFile();
     ShaderProgramFile(const Path& path);
-
-    virtual const QPixmap& GetIcon() const override;
 
     Path GetVertexShaderFilepath() const;
     Path GetFragmentShaderFilepath() const;

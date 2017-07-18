@@ -1,6 +1,0 @@
-<Material DiffuseColor:Color="(1, 1, 1, 0)"{}
-          ReceivesLighting:Bool="false"{}
-          FragmentShader:File="./Shaders/SP_SelectionEffect.frag_pp"{FileExtension="frag",IsEngineFile}
-          VertexShader:File="./Shaders/SP_ScreenPass.vert_pp"{FileExtension="vert",IsEngineFile}
-         >
-</Material>

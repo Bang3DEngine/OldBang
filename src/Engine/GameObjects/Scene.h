@@ -9,7 +9,6 @@
 
 class Camera;
 class GraphicPipeline;
-class SelectionFramebuffer;
 class Scene : public GameObject
 {
     OBJECT(Scene)
@@ -32,11 +31,6 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
     virtual void PostRead(const XMLNode &xmlInfo) override;
 
-    #ifdef BANG_EDITOR
-    virtual void OnHierarchyGameObjectsSelected(
-            const List<GameObject*> &selectedEntities) override;
-    #endif
-
 protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
@@ -55,7 +49,6 @@ protected:
     friend class Application;
     friend class SceneManager;
     friend class GraphicPipeline;
-    friend class G_SelectionFramebuffer;
 };
 
 #endif // SCENE_H

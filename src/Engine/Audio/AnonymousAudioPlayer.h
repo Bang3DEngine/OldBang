@@ -2,7 +2,6 @@
 #define ANONYMOUSAUDIOPLAYER_H
 
 #include <QThreadPool>
-#include "Bang/WinUndef.h"
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -70,7 +69,6 @@ private:
 
     friend class Application;
     friend class AudioManager;
-    friend class EditorPlayFlow;
 };
 
 #endif // ANONYMOUSAUDIOPLAYER_H

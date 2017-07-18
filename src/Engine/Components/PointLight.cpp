@@ -1,6 +1,5 @@
 #include "Bang/PointLight.h"
 
-#include "Bang/Gizmos.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
@@ -63,26 +62,4 @@ void PointLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
     xmlInfo->SetFloat("Range", m_range);
-}
-
-void PointLight::OnDrawGizmos(bool depthed, bool overlay)
-{
-    Light::OnDrawGizmos(depthed, overlay);
-
-    if (!depthed && !overlay)
-    {
-        Texture2D *tex = AssetsManager::Load<Texture2D>(
-                    EPATH("Textures/PointLightIcon.btex2d") );
-        Gizmos::SetColor(Color(GetColor(), 1));
-        Gizmos::SetPosition(transform->GetPosition());
-        Gizmos::SetScale(Vector3::One * 0.1f);
-        Gizmos::RenderIcon(tex);
-    }
-
-    if (depthed && gameObject->IsSelected())
-    {
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetColor(Color(GetColor(), 1));
-        Gizmos::RenderSimpleSphere(transform->GetPosition(), GetRange());
-    }
 }

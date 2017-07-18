@@ -2,7 +2,6 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
-#include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"

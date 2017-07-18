@@ -13,14 +13,12 @@ class AABox;
 class Camera;
 class Material;
 class SceneManager;
-class SelectionFramebuffer;
-class Renderer : public GLObject,
-                 public Component
+class Renderer : public GLObject, public Component
 {
 public:
     enum RenderLayer
     {
-        Scene, Canvas, Gizmos
+        Scene, Canvas
     };
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -86,7 +84,6 @@ private:
     float m_lineWidth = 1.0f;
 
     friend class GraphicPipeline;
-    friend class SelectionFramebuffer;
 };
 
 #endif // RENDERER_H

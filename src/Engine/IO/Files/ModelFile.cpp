@@ -5,7 +5,6 @@
 #include "Bang/Paths.h"
 #include "Bang/Path.h"
 #include "Bang/FileReader.h"
-#include "Bang/IconManager.h"
 #include "Bang/XMLProperty.h"
 
 ModelFile::ModelFile()
@@ -16,12 +15,6 @@ ModelFile::ModelFile(const Path& path)
     : BFile(path)
 {
     m_numFaces = FileReader::GetModelNumTriangles( GetPath() );
-}
-
-const QPixmap& ModelFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(EPATH("Icons/MeshIcon.png"),
-                                   IconManager::IconOverlay::Data);
 }
 
 void ModelFile::Read(const XMLNode &xmlInfo)

@@ -2,7 +2,6 @@
 
 #include "Bang/Debug.h"
 #include "Bang/G_Image.h"
-#include "Bang/IconManager.h"
 
 ImageFile::ImageFile()
 {
@@ -11,15 +10,10 @@ ImageFile::ImageFile()
 ImageFile::ImageFile(const Path& path)
     : BFile(path)
 {
-    QImage img = IconManager::LoadImage(GetPath());
-    m_width  = img.width();
-    m_height = img.height();
+    G_Image img = G_Image::FromFile(GetPath());
+    m_width  = img.GetWidth();
+    m_height = img.GetHeight();
     m_numComponents = 4;
-}
-
-const QPixmap& ImageFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(GetPath(), IconManager::IconOverlay::Data);
 }
 
 void ImageFile::Read(const XMLNode &xmlInfo)

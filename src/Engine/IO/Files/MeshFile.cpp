@@ -1,8 +1,7 @@
 #include "Bang/MeshFile.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Mesh.h"
-#include "Bang/IconManager.h"
+#include "Bang/Paths.h"
 #include "Bang/AssetsManager.h"
 
 MeshFile::MeshFile()
@@ -16,20 +15,10 @@ MeshFile::MeshFile(const Path& path)
     m_modelFilepath = xmlInfo.GetFilepath("ModelFilepath");
 }
 
-const QPixmap& MeshFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(EPATH("Icons/MeshIcon.png"),
-                                   IconManager::IconOverlay::Asset);
-}
-
 void MeshFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
     SetModelFilepath( xmlInfo.GetFilepath("ModelFilepath") );
-
-    #ifdef BANG_EDITOR
-    AssetsManager::UpdateAsset(GetPath(), xmlInfo);
-    #endif
 }
 
 void MeshFile::Write(XMLNode *xmlInfo) const

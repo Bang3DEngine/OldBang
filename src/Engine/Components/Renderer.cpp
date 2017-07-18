@@ -70,8 +70,6 @@ void Renderer::Bind() const
 
     Material *mat = GetMaterial();
     mat->Bind();
-    G_ShaderProgram *sp = mat->GetShaderProgram();
-    sp->SetBool("B_IsSelected", gameObject->IsSelected());
 }
 
 void Renderer::UseMaterialCopy()

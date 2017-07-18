@@ -73,19 +73,15 @@ BangCompiler::Job BangCompiler::BuildCommonJob(bool forGame)
                                      "BangDataStructures",
                                      "BangGraphics",
                                      "BangEngine",
-                                     "BangEditor",
                                      "BangDataStructures",
                                      "BangGraphics",
-                                     "BangEngine",
-                                     "BangEditor"}) );
-    if (forGame) { job.libraries.RemoveAll("BangEditor"); }
+                                     "BangEngine"}) );
 
     job.flags =  {"-O0", "-g",
                   "-Wl,-O0,--export-dynamic",
                   "-fPIC", "--std=c++11"};
 
     job.forGame = forGame;
-    if (!job.forGame) { job.flags.Add("-DBANG_EDITOR"); }
 
     return job;
 }

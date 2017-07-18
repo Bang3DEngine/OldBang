@@ -1,7 +1,6 @@
 #include "BangPreprocessor.h"
 
 #include <QProcess>
-#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/Array.h"

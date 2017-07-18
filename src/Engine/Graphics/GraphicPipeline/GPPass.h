@@ -8,7 +8,6 @@ class G_GBuffer;
 class Renderer;
 class GameObject;
 class GraphicPipeline;
-class SelectionFramebuffer;
 class GPPass
 {
 public:
@@ -36,11 +35,6 @@ protected:
     GraphicPipeline *p_graphicPipeline = nullptr;
 
     List<GPPass*> m_subPasses;
-
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
-    #endif
-
 };
 
 #endif // GRAPHICPIPELINEPASS_H

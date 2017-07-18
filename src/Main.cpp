@@ -10,15 +10,10 @@
 #include "Bang/Application.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/SingletonManager.h"
 
 int main(int argc, char **argv)
 {
-    SingletonManager::InitSingletonManagerFromMainBinary();
-
     Application app;
-
     app.MainLoop();
-
     return 0;
 }

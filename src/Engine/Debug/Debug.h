@@ -22,20 +22,6 @@ class Quaternion;
 class Debug
 {
 public:
-
-    static void DrawLine(const Vector3 &origin,
-                         const Vector3 &destiny,
-                         const Color &color = Color::Green,
-                         float lineWidth = 1.0f,
-                         float secsTime = 1.0f,
-                         bool depthTest = true);
-
-    static void DrawScreenLine(const Vector2 &origin,
-                               const Vector2 &destiny,
-                               const Color &color = Color::Green,
-                               float lineWidth = 1.0f,
-                               float secsTime = 1.0f);
-
     static void _Clear();
     static void _Log(const String &str, int line, const String &fileName);
     static void _Warn(const String &str, int line, const String &fileName);

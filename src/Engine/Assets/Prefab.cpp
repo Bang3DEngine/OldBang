@@ -7,10 +7,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/EditorState.h"
-#endif
-
 Prefab::Prefab()
 {
 
@@ -41,13 +37,7 @@ Prefab::~Prefab()
 GameObject *Prefab::Instantiate() const
 {
     GameObject *go = InstantiateWithoutStarting();
-    bool canStart = go;
-
-    #ifdef BANG_EDITOR
-    canStart = canStart && EditorState::IsPlaying();
-    #endif
-
-    if (canStart)
+    if (go)
     {
         Scene *scene = SceneManager::GetActiveScene();
         go->SetParent(scene);
@@ -77,9 +67,6 @@ void Prefab::Read(const XMLNode &xmlInfo)
     if (m_gameObjectXMLInfoContent != newXMLInfo)
     {
         m_gameObjectXMLInfoContent = xmlInfo.ToString();
-        #ifdef BANG_EDITOR
-        AssetsManager::UpdateAsset(m_assetFilepath, xmlInfo);
-        #endif
     }
 }
 

@@ -35,20 +35,18 @@ public:
 
     static bool IsEnginePath(const Path &path);
 
-    static Paths* GetInstance();
-
     static Path EnginePath(const String &path);
     static Path UserPath(const String &path);
 
 private:
-    Path c_enginePath;
-    Path c_engineAssetsPath;
-    Path c_engineBinaryDirPath;
-    Path c_engineLibrariesDirPath;
+    static Path c_enginePath;
+    static Path c_engineAssetsPath;
+    static Path c_engineBinaryDirPath;
+    static Path c_engineLibrariesDirPath;
 
-    Path c_projectPath;
-    Path c_projectAssetsPath;
-    Path c_projectLibrariesPath;
+    static Path c_projectPath;
+    static Path c_projectAssetsPath;
+    static Path c_projectLibrariesPath;
 
     static void SetEngineBinaryDir(const Path &engineBinaryDir);
     static void SetEnginePath(const Path &enginePath);

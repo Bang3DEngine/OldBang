@@ -2,7 +2,6 @@
 #define MESHFILE_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -16,7 +15,6 @@ class MeshFile : public BFile
 public:
     MeshFile();
     MeshFile(const Path& path);
-    virtual const QPixmap& GetIcon() const override;
 
     virtual bool IsAsset() const override;
 

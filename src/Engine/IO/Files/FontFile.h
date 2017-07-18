@@ -4,7 +4,6 @@
 #include <QPixmap>
 #include <QModelIndex>
 #include <QFileSystemModel>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -16,8 +15,6 @@ class FontFile : public BFile
 public:
     FontFile();
     FontFile(const Path &path);
-
-    virtual const QPixmap& GetIcon() const override;
 
     virtual bool IsAsset() const override;
 

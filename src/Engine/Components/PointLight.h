@@ -20,8 +20,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
-
 protected:
     float m_range = 1.0f;
 
@@ -30,8 +28,6 @@ protected:
 
     Rect GetRenderRect(Camera *cam) const override;
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
-
-    friend class EditorFloor;
 };
 
 #endif // POINTLIGHT_H

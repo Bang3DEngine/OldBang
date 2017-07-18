@@ -1,12 +1,19 @@
 #include "Paths.h"
 
 #include <QDir>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/SystemUtils.h"
-#include "Bang/SingletonManager.h"
+
+Path Paths::c_enginePath = Path::Empty;
+Path Paths::c_engineAssetsPath = Path::Empty;
+Path Paths::c_engineBinaryDirPath = Path::Empty;
+Path Paths::c_engineLibrariesDirPath = Path::Empty;
+
+Path Paths::c_projectPath = Path::Empty;
+Path Paths::c_projectAssetsPath = Path::Empty;
+Path Paths::c_projectLibrariesPath = Path::Empty;
 
 Paths::Paths()
 {
@@ -34,22 +41,22 @@ Path Paths::GameExecutableOutputFile()
 
 const Path &Paths::EngineBinaryDir()
 {
-    return Paths::GetInstance()->c_engineBinaryDirPath;
+    return Paths::c_engineBinaryDirPath;
 }
 
 const Path &Paths::EngineLibrariesDir()
 {
-    return Paths::GetInstance()->c_engineLibrariesDirPath;
+    return Paths::c_engineLibrariesDirPath;
 }
 
 const Path &Paths::Engine()
 {
-    return Paths::GetInstance()->c_enginePath;
+    return Paths::c_enginePath;
 }
 
 const Path &Paths::EngineAssets()
 {
-    return Paths::GetInstance()->c_engineAssetsPath;
+    return Paths::c_engineAssetsPath;
 }
 
 List<Path> Paths::GetBehavioursSourcesFilepaths()
@@ -137,17 +144,17 @@ const List<Path> &Paths::GetQtLibrariesDirs()
 
 const Path &Paths::Project()
 {
-    return Paths::GetInstance()->c_projectPath;
+    return Paths::c_projectPath;
 }
 
 const Path &Paths::ProjectAssets()
 {
-    return Paths::GetInstance()->c_projectAssetsPath;
+    return Paths::c_projectAssetsPath;
 }
 
 const Path &Paths::ProjectLibrariesDir()
 {
-    return Paths::GetInstance()->c_projectLibrariesPath;
+    return Paths::c_projectLibrariesPath;
 }
 
 Path Paths::GetRelative(const Path &path)
@@ -188,13 +195,6 @@ bool Paths::IsEnginePath(const Path &path)
     return path.BeginsWith( Paths::Engine() + "/" );
 }
 
-Paths *Paths::GetInstance()
-{
-    Paths *paths = SingletonManager::Get<Paths>();
-    if (!paths) { paths = SingletonManager::Set<Paths>(new Paths()); }
-    return paths;
-}
-
 Path Paths::EnginePath(const String &path)
 {
     return Paths::EngineAssets().Append(path);
@@ -207,24 +207,21 @@ Path Paths::UserPath(const String &path)
 
 void Paths::SetEngineBinaryDir(const Path &engineBinaryDir)
 {
-    Paths *p = Paths::GetInstance();
-    p->c_engineBinaryDirPath = engineBinaryDir;
-    p->c_engineLibrariesDirPath = p->c_engineBinaryDirPath.Append("lib");
+    Paths::c_engineBinaryDirPath = engineBinaryDir;
+    Paths::c_engineLibrariesDirPath = Paths::c_engineBinaryDirPath.Append("lib");
 }
 
 
 void Paths::SetEnginePath(const Path &enginePath)
 {
-    Paths *p = Paths::GetInstance();
-    p->c_enginePath       = enginePath;
-    p->c_engineAssetsPath = p->c_enginePath.Append("res")
-                                           .Append("EngineAssets");
+    Paths::c_enginePath       = enginePath;
+    Paths::c_engineAssetsPath = Paths::c_enginePath.Append("res")
+                                                   .Append("EngineAssets");
 }
 
 void Paths::SetProjectPath(const Path &projectPath)
 {
-    Paths *p = Paths::GetInstance();
-    p->c_projectPath          = projectPath;
-    p->c_projectAssetsPath    = p->c_projectPath.Append("Assets");
-    p->c_projectLibrariesPath = p->c_projectPath.Append("Libraries");
+    Paths::c_projectPath          = projectPath;
+    Paths::c_projectAssetsPath    = Paths::c_projectPath.Append("Assets");
+    Paths::c_projectLibrariesPath = Paths::c_projectPath.Append("Libraries");
 }

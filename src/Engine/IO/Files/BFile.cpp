@@ -2,12 +2,6 @@
 
 #include <fstream>
 #include <QPainter>
-#include "Bang/WinUndef.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Explorer.h"
-#include "Bang/SerializableObject.h"
-#endif
 
 #include "Bang/Font.h"
 #include "Bang/Mesh.h"
@@ -26,7 +20,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Extensions.h"
 #include "Bang/PrefabFile.h"
-#include "Bang/IconManager.h"
 #include "Bang/MaterialFile.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AudioClipFile.h"
@@ -184,36 +177,6 @@ BFile *BFile::GetSpecificFile(const BFile &f)
     }
 
     return new BFile( f.GetPath() );
-}
-
-const QPixmap& BFile::GetIcon() const
-{
-    Path iconPath;
-    if (IsPrefabFile())
-    {
-        iconPath = EPATH("Icons/PrefabAssetIcon.png");
-    }
-    else if (IsBehaviour())
-    {
-        iconPath = EPATH("Icons/BehaviourIcon.png");
-    }
-    else if (IsScene())
-    {
-        iconPath = EPATH("Icons/SceneIcon.png");
-    }
-    else if (IsFontFile())
-    {
-        iconPath = EPATH("Icons/LetterIcon.png");
-    }
-    else
-    {
-        iconPath = EPATH("Icons/OtherFileIcon.png");
-    }
-
-    // Its a texture, the icon is the image itself
-    const QPixmap &pm =
-         IconManager::LoadPixmap(iconPath, IconManager::IconOverlay::None);
-    return pm;
 }
 
 void BFile::Write(XMLNode *xmlInfo) const

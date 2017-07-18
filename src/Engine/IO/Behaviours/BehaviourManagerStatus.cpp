@@ -1,17 +1,12 @@
 #include "Bang/BehaviourManagerStatus.h"
 
 #include <QLibrary>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/Behaviour.h"
 #include "Bang/SceneManager.h"
 #include "Bang/BehaviourManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Console.h"
-#endif
 
 BehaviourManagerStatus::BehaviourManagerStatus()
 {
@@ -60,15 +55,9 @@ bool BehaviourManagerStatus::IsReady(const BehaviourId &bid,
     Path behaviourObjectFilepath = libsDir.Append(behaviourName)
                                           .AppendExtension("o");
 
-    bool ready = true;
-    #ifdef BANG_EDITOR
-    ready = ready && m_successfullyCompiled.Contains(bid);
-    #endif
-    ready = ready &&
-            !IsBeingCompiled(bid) &&
-            !HasFailed(bid) &&
-            behaviourObjectFilepath.Exists();
-
+    bool ready = !IsBeingCompiled(bid) &&
+                 !HasFailed(bid) &&
+                 behaviourObjectFilepath.Exists();
     return ready;
 }
 
@@ -118,12 +107,6 @@ void BehaviourManagerStatus::OnBehaviourObjectCompilationFailed(
     BehaviourId bid(behaviourPath);
     m_beingCompiled.Remove(bid);
     m_failed.Insert(bid);
-
-    #ifdef BANG_EDITOR
-    Console::MessageId failMsgId =
-            Console::AddError(errorMessage, __LINE__, __FILE__, true);
-    m_failMessagesIds.Get(behaviourPath).Add(failMsgId);
-    #endif
 }
 
 void BehaviourManagerStatus::OnMergingStarted()
@@ -159,15 +142,6 @@ void BehaviourManagerStatus::ClearFails(const Path &behaviourPath)
             m_failed.Remove(oldBid);
         }
     }
-
-    // Clear the fail messages from the Console.
-    #ifdef BANG_EDITOR
-    for (Console::MessageId msgId : m_failMessagesIds.Get(bid.behaviourPath))
-    {
-        Console::GetInstance()->ClearMessage(msgId);
-    }
-    m_failMessagesIds.Remove(bid.behaviourPath);
-    #endif
 }
 
 List<BehaviourId> BehaviourManagerStatus::GetCurrentBehaviourIds() const

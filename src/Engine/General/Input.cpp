@@ -1,26 +1,17 @@
 #include "Bang/Input.h"
 
 #include "Bang/Time.h"
-#include "Bang/Cursor.h"
 #include "Bang/Object.h"
 #include "Bang/Window.h"
 #include "Bang/Screen.h"
 #include "Bang/Application.h"
-#include "Bang/SingletonManager.h"
 
 Input::Input()
 {
-    m_cursor = new Cursor();
 }
 
 Input::~Input()
 {
-    if (m_cursor) { delete m_cursor; }
-}
-
-void Input::InitFromMainBinary()
-{
-    SingletonManager::Set<Input>(new Input());
 }
 
 void Input::OnFrameFinished()
@@ -76,58 +67,6 @@ void Input::OnFrameFinished()
     //
 
     m_secsSinceLastMouseDown += Time::GetDeltaTime();
-
-    HandleMouseWrapping();
-}
-
-void Input::HandleMouseWrapping()
-{
-    if (m_mouseWrapping)
-    {
-        /*
-        #ifdef BANG_EDITOR
-        EditorWindow *w = EditorWindow::GetInstance();
-        #else
-        GameWindow *w = GameWindow::GetInstance();
-        #endif
-
-        QCursor cursor = w->GetMainWindow()->cursor();
-
-        Screen *screen = Screen::GetInstance();
-        int cw = screen->GetWidth();
-        int ch = screen->GetHeight();
-
-        bool wrapped = false;
-        if (m_mouseCoords.x >= cw)
-        {
-            cursor.setPos(screen->mapToGlobal(QPoint(0, m_mouseCoords.y)));
-            wrapped = true;
-        }
-        else if (m_mouseCoords.x < 0)
-        {
-            cursor.setPos(screen->mapToGlobal(QPoint(cw, m_mouseCoords.y)));
-            wrapped = true;
-        }
-
-        if (m_mouseCoords.y >= ch)
-        {
-            cursor.setPos(screen->mapToGlobal(QPoint(m_mouseCoords.x, 0)));
-            wrapped = true;
-        }
-        else if (m_mouseCoords.y < 0)
-        {
-            cursor.setPos(screen->mapToGlobal(QPoint(m_mouseCoords.x, ch)));
-            wrapped = true;
-        }
-
-        if (wrapped)
-        {
-            QPoint newCoords = screen->mapFromGlobal(cursor.pos());
-            m_mouseCoords = Vector2(newCoords.x(), newCoords.y());
-            m_lastMouseCoords = m_mouseCoords;
-        }
-        */
-    }
 }
 
 void Input::ProcessEventInfo(const EventInfo &ei)
@@ -269,19 +208,6 @@ Input *Input::GetInstance()
 {
     return Application::GetInstance()->GetInput();
 }
-
-bool Input::GetMouseWrapping()
-{
-    Input *inp = Input::GetInstance();
-    return inp->m_mouseWrapping;
-}
-
-void Input::SetMouseWrapping(bool mouseWrapping)
-{
-    Input *inp = Input::GetInstance();
-    inp->m_mouseWrapping = mouseWrapping;
-}
-
 
 bool Input::GetKey(Input::Key k)
 {

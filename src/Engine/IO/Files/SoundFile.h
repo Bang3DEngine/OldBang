@@ -2,36 +2,22 @@
 #define SOUNDFILE_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
 #include "Bang/XMLNode.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/IAttrWidgetButtonListener.h"
-#endif
-
 class AudioClip;
 class AudioSource;
 class SoundFile : public BFile
-                  #ifdef BANG_EDITOR
-                  ,public IAttrWidgetButtonListener
-                  #endif
 {
 public:
     SoundFile();
     SoundFile(const Path& path);
     virtual ~SoundFile();
 
-    virtual const QPixmap& GetIcon() const override;
-
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    #ifdef BANG_EDITOR
-    virtual void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
-    #endif
 
 private:
     AudioSource* m_tmpAudioSource = nullptr;

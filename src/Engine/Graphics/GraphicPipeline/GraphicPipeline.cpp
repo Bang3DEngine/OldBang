@@ -23,18 +23,11 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
-#include "Bang/GPPass_G_Gizmos.h"
 #include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
 #include "Bang/GraphicPipelineDebugger.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
 #include "Bang/GPPass_SP_PostProcessEffects.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Hierarchy.h"
-#include "Bang/GPPass_Selection.h"
-#include "Bang/SelectionFramebuffer.h"
-#endif
 
 GraphicPipeline::GraphicPipeline(G_Screen *screen)
 {
@@ -42,13 +35,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_texUnitManager = new G_TextureUnitManager();
 
     m_gbuffer = new G_GBuffer(screen->GetWidth(), screen->GetHeight());
-    #ifdef BANG_EDITOR
-    m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
-                                             screen->GetHeight());
-    #endif
-
-    m_matSelectionEffectScreen = AssetsManager::Load<Material>(
-                EPATH("Materials/SP_SelectionEffect.bmat") );
 
     m_renderGBufferToScreenMaterial =
          AssetsManager::Load<Material>(
@@ -75,28 +61,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
-
-    m_gizmosPass = new GPPass_RenderLayer(this, RL::Gizmos,
-    {
-     new GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
-     new GPPass_G_Gizmos(this, false, false), // Gizmos normal
-     new GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
-    });
-
-    #ifdef BANG_EDITOR
-    m_sceneSelectionPass  = new GPPass_RenderLayer(this, RL::Scene,
-    {
-      new GPPass_Selection(this)
-    });
-    m_canvasSelectionPass  = new GPPass_RenderLayer(this, RL::Canvas,
-    {
-      new GPPass_Selection(this)
-    });
-    m_gizmosSelectionPass  = new GPPass_RenderLayer(this, RL::Gizmos,
-    {
-      new GPPass_Selection(this)
-    });
-    #endif
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
@@ -112,53 +76,6 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 
     RenderGBuffer(renderers, sceneChildren);
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
-
-    #ifdef BANG_EDITOR
-    if (!m_renderingInGame)
-    {
-        RenderSelectionBuffer(renderers, sceneChildren, p_scene);
-        if (Input::GetKey(Input::Key::S))
-        {
-            RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
-        }
-    }
-    #endif
-}
-
-void GraphicPipeline::ApplySelectionOutline()
-{
-    #ifdef BANG_EDITOR
-    if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
-
-    List<GameObject*> sceneGameObjects = p_scene->GetChildrenRecursively();
-
-    // Create stencil mask that the selection pass will use
-    GL::SetTestDepth(false);
-    m_gbuffer->Bind();
-    m_gbuffer->ClearStencil();
-    m_gbuffer->SetStencilTest(false);
-    m_gbuffer->SetStencilWrite(true);
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-    for (GameObject *go : sceneGameObjects)
-    {
-        if (go->IsSelected() &&
-            (!go->transform || !go->transform->IsOfType<RectTransform>()))
-        {
-            List<Renderer*> rends = go->GetComponents<Renderer>();
-            for (Renderer *rend : rends)
-            {
-                Render(rend);
-            }
-        }
-    }
-
-    m_matSelectionEffectScreen->Bind();
-    m_gbuffer->ApplyPass(m_matSelectionEffectScreen->GetShaderProgram());
-    m_matSelectionEffectScreen->UnBind();
-
-    m_gbuffer->UnBind();
-    GL::SetTestDepth(true);
-    #endif
 }
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
@@ -202,40 +119,12 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
     m_scenePass->Pass(renderers, sceneChildren);
-    if (!m_renderingInGame) { ApplySelectionOutline(); }
     m_gbuffer->ClearStencil();
 
     m_canvasPass->Pass(renderers, sceneChildren);
-    m_gizmosPass->Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
 }
-
-#ifdef BANG_EDITOR
-void GraphicPipeline::RenderSelectionBuffer(
-                        const List<Renderer*> &renderers,
-                        const List<GameObject*> &sceneChildren,
-                        Scene *scene)
-{
-    Camera *cam = p_scene->GetCamera();
-    m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(scene);
-    // cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
-
-    m_selectionFB->Bind();
-
-    m_selectionFB->ClearColor(Color::One);
-    m_sceneSelectionPass->Pass (renderers, sceneChildren);
-    m_canvasSelectionPass->Pass(renderers, sceneChildren);
-    m_gizmosSelectionPass->Pass(renderers, sceneChildren);
-
-    m_selectionFB->UnBind();
-
-    cam->SetReplacementShaderProgram(nullptr);
-    m_selectionFB->ProcessSelection();
-    m_selectionFB->m_isPassing = false;
-}
-#endif
 
 void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 {
@@ -285,13 +174,6 @@ void GraphicPipeline::Render(Renderer *renderer) const
     renderer->UnBind();
 }
 
-#ifdef BANG_EDITOR
-SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
-{
-    return m_selectionFB;
-}
-#endif
-
 GraphicPipeline* GraphicPipeline::GetActive()
 {
     Screen *screen = Screen::GetInstance();
@@ -301,9 +183,6 @@ GraphicPipeline* GraphicPipeline::GetActive()
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
-    #ifdef BANG_EDITOR
-    m_selectionFB->Resize(newWidth, newHeight);
-    #endif
 }
 
 void GraphicPipeline::SetGBufferAttachmentToBeRendered(
@@ -332,16 +211,6 @@ GraphicPipeline::~GraphicPipeline()
     delete m_gbuffer;
     delete m_scenePass;
     delete m_canvasPass;
-    delete m_gizmosPass;
-
-    #ifdef BANG_EDITOR
-    delete m_selectionFB;
-    delete m_sceneSelectionPass;
-    delete m_canvasSelectionPass;
-    delete m_gizmosSelectionPass;
-    #endif
-
-    delete m_matSelectionEffectScreen;
     delete m_texUnitManager;
     delete m_glContext;
 }

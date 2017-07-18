@@ -2,7 +2,6 @@
 #define IMAGE_H
 
 #include <QImage>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/Array.h"

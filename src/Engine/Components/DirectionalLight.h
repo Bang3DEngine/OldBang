@@ -17,8 +17,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
-
 protected:
     DirectionalLight();
     virtual ~DirectionalLight();

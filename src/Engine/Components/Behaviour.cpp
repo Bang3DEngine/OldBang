@@ -1,15 +1,8 @@
 #include "Bang/Behaviour.h"
 
 #include "Bang/Time.h"
-#include "Bang/Dialog.h"
-#include "Bang/EditorState.h"
+#include "Bang/Application.h"
 #include "Bang/QtProjectManager.h"
-#include "Bang/SingletonManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Explorer.h"
-#include "Bang/Inspector.h"
-#endif
 
 Behaviour::Behaviour()
 {
@@ -22,14 +15,9 @@ Behaviour::~Behaviour()
 void Behaviour::_OnStart()
 {
     RefreshBehaviourLib();
-    #ifdef BANG_EDITOR
-    if (EditorState::IsPlaying())
-    #endif
+    if (!IsStarted())
     {
-        if (!IsStarted())
-        {
-            Component::_OnStart();
-        }
+        Component::_OnStart();
     }
 }
 
@@ -42,19 +30,6 @@ void Behaviour::_OnUpdate()
     Time::s_time = Time::GetInstance()->m_time;
     Component::_OnUpdate();
 }
-
-#ifdef BANG_EDITOR
-void Behaviour::OnEditorUpdate()
-{
-    Component::OnEditorUpdate();
-    if (m_refreshInspectorRequested)
-    {
-        // Inspector::GetInstance()->Refresh(gameObject);
-    }
-
-    RefreshBehaviourLib();
-}
-#endif
 
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
@@ -73,87 +48,7 @@ void Behaviour::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
     xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath());
-
-    #ifdef BANG_EDITOR
-    BehaviourId bid(GetSourceFilepath());
-    bool beingCompiled = BehaviourManager::GetStatus().IsBeingCompiled(bid);
-    bool failed = BehaviourManager::GetStatus().HasFailed(bid);
-    if (!beingCompiled && !failed)
-    {
-        m_refreshInspectorRequested =
-                (m_stateInInspector != StateInInspector::Normal);
-        m_stateInInspector = StateInInspector::Normal;
-    }
-    else if (beingCompiled)
-    {
-        m_refreshInspectorRequested =
-                (m_stateInInspector != StateInInspector::BeingCompiled);
-        m_stateInInspector = StateInInspector::BeingCompiled;
-    }
-    else if (failed)
-    {
-        m_refreshInspectorRequested =
-                (m_stateInInspector != StateInInspector::Failed);
-        m_stateInInspector = StateInInspector::Failed;
-    }
-    #endif
 }
-
-#ifdef BANG_EDITOR
-void Behaviour::OnButtonClicked(const AttrWidgetButton *clickedButton)
-{
-    /*
-    if (attrName.Contains("Create"))
-    {
-        CreateNewBehaviour();
-    }
-    */
-}
-
-Behaviour* Behaviour::CreateNewBehaviour()
-{
-    bool ok;
-    // Get Behaviour Class Name using a Dialog
-    String className = Dialog::GetInputString("Behaviour class name",
-                                              "Behaviour name:",
-                                              "MyBehaviourName",
-                                              &ok );
-
-    Behaviour *newBehaviour = nullptr;
-    if (ok && !className.Empty())
-    {
-        newBehaviour = new Behaviour();
-        Path currentDir = Explorer::GetInstance()->GetCurrentDir();
-
-        // Create header file
-        String headerCode = Behaviour::s_behaviourHeaderTemplate;
-        headerCode = headerCode.Replace("CLASS_NAME", className);
-        Path headerFilepath = currentDir.Append(className);
-        headerFilepath = headerFilepath.AppendExtension("h");
-        if (headerFilepath.IsFile()) { return nullptr; }
-        File::Write(headerFilepath, headerCode);
-
-        // Create source file
-        String sourceCode = Behaviour::s_behaviourSourceTemplate;
-        sourceCode = sourceCode.Replace("CLASS_NAME", className);
-        Path sourceFilepath = currentDir.Append(className);
-        sourceFilepath = sourceFilepath.AppendExtension("cpp");
-        if (sourceFilepath.IsFile()) { return nullptr; }
-        File::Write(sourceFilepath, sourceCode);
-
-        // Update Behaviour file
-        newBehaviour->SetSourceFilepath( sourceFilepath );
-        newBehaviour->RefreshBehaviourLib();
-
-        // Open with system editor
-        QtProjectManager::OpenBehaviourInQtCreator(sourceFilepath);
-        QtProjectManager::CreateQtProjectFile(); // Refresh it
-    }
-
-    return newBehaviour;
-}
-#endif
-
 
 Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
                                              QLibrary *openLibrary)
@@ -166,16 +61,16 @@ Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
     {
         // Get the pointer to the CreateDynamically function
         String funcName = "CreateDynamically_" + behaviourName;
-        Behaviour* (*createFunction)(SingletonManager*) =
-                (Behaviour* (*)(SingletonManager*)) (
+        Behaviour* (*createFunction)(Application*) =
+                (Behaviour* (*)(Application*)) (
                     lib->resolve(funcName.ToCString()));
 
         if (createFunction)
         {
             // Call it and get the pointer to the created Behaviour
-            // Create the Behaviour, passing to it the SingletonManager
+            // Create the Behaviour, passing to it the Application
             // of this main binary, so it can link it.
-            return createFunction(SingletonManager::s_mainBinarySM);
+            return createFunction(Application::GetInstance());
         }
         else
         {
@@ -243,10 +138,6 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 {
     ENSURE(gameObject);
     ENSURE(!IsLoaded());
-    #ifdef BANG_EDITOR
-    ENSURE(!gameObject->IsDraggedGameObject());
-    ENSURE(BehaviourManager::GetStatus().IsReady(GetSourceFilepath()));
-    #endif
 
     String behaviourName = GetSourceFilepath().GetName();
     ENSURE(!behaviourName.Empty());
@@ -281,49 +172,3 @@ bool Behaviour::IsLoaded() const
            p_behavioursLibraryBeingUsed == behavioursLib &&
            GetSourceFilepath().GetName() == GetClassName();
 }
-
-
-String Behaviour::s_behaviourHeaderTemplate = R"VERBATIM(
-#ifndef CLASS_NAME_H
-#define CLASS_NAME_H
-
-#include "Bang/Behaviour.h"
-#include ".CLASS_NAME.refl.h"
-
-// Here go your includes
-
-BP_REFLECT_CLASS(CLASS_NAME)
-class CLASS_NAME : public Behaviour
-{
-    OBJECT(CLASS_NAME);
-public:
-    void OnStart() override;
-    void OnUpdate() override;
-
-    BP_REFLECT_DEFINITIONS(CLASS_NAME)
-};
-
-#endif // CLASS_NAME_H
-
-BANG_BEHAVIOUR_CLASS(CLASS_NAME)
-)VERBATIM"
-;
-
-String Behaviour::s_behaviourSourceTemplate = R"VERBATIM(
-#include "CLASS_NAME.h"
-
-// This function will be executed once when created
-void CLASS_NAME::OnStart()
-{
-    Behaviour::OnStart();
-}
-
-// This function will be executed every frame
-void CLASS_NAME::OnUpdate()
-{
-    Behaviour::OnUpdate();
-}
-
-BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME);
-)VERBATIM"
-;

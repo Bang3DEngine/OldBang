@@ -39,9 +39,7 @@ private:
     friend class MenuBar;
     friend class Explorer;
     friend class Application;
-    friend class EditorWindow;
     friend class ProjectManager;
-    friend class EditorPlayFlow;
 };
 
 #endif // SCENEMANAGER_H

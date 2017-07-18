@@ -10,15 +10,6 @@
 #include "Bang/Application.h"
 #include "Bang/BehaviourManager.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Inspector.h"
-#include "Bang/Hierarchy.h"
-#include "Bang/EditorScene.h"
-#include "Bang/EditorState.h"
-#include "Bang/EditorWindow.h"
-#include "Bang/EditorPlayFlow.h"
-#endif
-
 SceneManager::SceneManager()
 {
 }
@@ -36,22 +27,7 @@ void SceneManager::Update()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        #ifdef BANG_EDITOR
-        if (EditorState::IsPlaying())
-        #endif
-        {
-            activeScene->_OnUpdate();
-        }
-
-        #ifdef BANG_EDITOR
-        activeScene->_OnEditorUpdate();
-        if (EditorWindow::GetInstance()->IsSceneTabActive())
-        {
-            EditorScene *edScene = Object::SCast<EditorScene>(activeScene);
-            edScene->SetEditorCamera();
-        }
-        #endif
-
+        activeScene->_OnUpdate();
         activeScene->DestroyQueuedGameObjects();
     }
 }
@@ -65,10 +41,6 @@ void SceneManager::SetActiveScene(Scene *scene)
     if (sm->m_activeScene)
     {
         bool setCamera = true;
-        #ifdef BANG_EDITOR
-        Hierarchy::GetInstance()->Clear();
-        setCamera = EditorState::IsPlaying();
-        #endif
 
         Application::GetInstance()->ResetDeltaTime();
         sm->m_activeScene->_OnStart();
@@ -126,9 +98,6 @@ void SceneManager::OpenScene(const Path &filepath)
 {
     ENSURE(filepath.IsFile());
     SceneManager::LoadSceneInstantly(filepath);
-    #ifdef BANG_EDITOR
-    EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
-    #endif
 }
 
 void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
@@ -163,10 +132,6 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
 
-    #ifdef BANG_EDITOR
-    Hierarchy::GetInstance()->Clear();
-    Inspector::GetInstance()->Clear();
-    #endif
     SceneManager::SetActiveScene(nullptr);
 
     if (scene)
@@ -177,11 +142,7 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
 
 void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
 {
-    #ifdef BANG_EDITOR
-    EditorScene *scene = new EditorScene();
-    #else
     Scene *scene = new Scene();
-    #endif
 
     SceneManager::SetActiveSceneFilepath( sceneFilepath );
     if (scene->ReadFromFile(sceneFilepath))

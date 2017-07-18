@@ -3,7 +3,6 @@
 #include "Bang/Paths.h"
 #include "Bang/AudioClip.h"
 #include "Bang/AudioSource.h"
-#include "Bang/IconManager.h"
 
 SoundFile::SoundFile()
 {
@@ -21,12 +20,6 @@ SoundFile::~SoundFile()
     if (m_tmpAudioClip)   { delete m_tmpAudioClip;   }
 }
 
-const QPixmap& SoundFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(EPATH("Icons/AudioIcon.png"),
-                                   IconManager::IconOverlay::Data);
-}
-
 void SoundFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
@@ -38,25 +31,3 @@ void SoundFile::Write(XMLNode *xmlInfo) const
 
     xmlInfo->SetString("FileName", GetPath().GetNameExt());
 }
-
-#ifdef BANG_EDITOR
-void SoundFile::OnButtonClicked(const AttrWidgetButton *clickedButton)
-{
-    /*
-    ENSURE( GetPath().Exists() );
-    if (attrName == "Play")
-    {
-        m_tmpAudioSource = new AudioSource();
-        m_tmpAudioClip = new AudioClip();
-        m_tmpAudioClip->LoadFromFile( GetPath() );
-        m_tmpAudioSource->SetAudioClip(m_tmpAudioClip);
-        m_tmpAudioSource->Play();
-    }
-    else if (attrName == "Stop")
-    {
-        delete m_tmpAudioSource; m_tmpAudioSource = nullptr;
-        delete m_tmpAudioClip;   m_tmpAudioClip   = nullptr;
-    }
-    */
-}
-#endif

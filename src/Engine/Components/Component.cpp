@@ -13,10 +13,6 @@ Component::~Component()
 {
 }
 
-void Component::OnDrawGizmos(bool depthed, bool overlay)
-{
-}
-
 void Component::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);

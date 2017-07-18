@@ -11,23 +11,13 @@
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Gizmos.h"
-#include "Bang/IWindowEventManagerListener.h"
-#endif
-
-
 class Scene;
 class Material;
 class Component;
 class Transform;
-class EditorSelectionGameObject;
 class GameObject : public ISceneEventListener
                   ,public IToString
                   ,public SerializableObject
-                  #ifdef BANG_EDITOR
-                  ,public IWindowEventManagerListener
-                  #endif
 {
     OBJECT_NO_FRIEND(GameObject)
 
@@ -106,15 +96,6 @@ public:
      * @return
      */
     Sphere GetBoundingSphere(bool includeChildren = true) const;
-
-    #ifdef BANG_EDITOR
-    /**
-     * Moves the Component c upwards(-N), or downwards(N).
-     * Used only for Inspector showing order purposes
-     */
-    void MoveComponent(Component *c, int distance);
-    #endif
-
 
     /**
      * Adds the Component c to this.
@@ -296,17 +277,7 @@ public:
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 
-    bool IsSelected() const;
-
     void ChangeTransformByRectTransform();
-
-    #ifdef BANG_EDITOR
-    // Is it being dragged from hierarchy into screen?
-    bool IsDraggedGameObject() const;
-
-    virtual void OnHierarchyGameObjectsSelected(
-            const List<GameObject*> &selectedEntities) override;
-    #endif
 
 protected:
     String m_name = "";
@@ -321,41 +292,16 @@ protected:
     bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
 
-    #ifdef BANG_EDITOR
-    // Dont load Behaviours. Used on drags from hierarchy for example
-    bool m_isDragged = false;
-
-    bool m_isSelectedInHierarchy = false;
-    EditorSelectionGameObject *m_selectionGameObject = nullptr;
-    #endif
-
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
-    #ifdef BANG_EDITOR
-    virtual void _OnEditorStart () override;
-    virtual void _OnEditorUpdate () override;
-    #endif
     virtual void _OnDestroy () override;
 
-    #ifdef BANG_EDITOR
-    Array<Material*> m_materialsBeforeDrag;
-    void OnDragEnterMaterial(Material *m);
-    void OnDragLeaveMaterial(Material *m);
-    void OnDropMaterial(Material *m);
-    #endif
-
-    virtual void _OnDrawGizmos (bool depthed, bool overlay) override;
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
     friend class Scene;
     friend class Prefab;
     friend class Hierarchy;
-    friend class EditorScreen;
     friend class SceneManager;
-    friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
-    friend class GPPass_Selection;
-    friend class SelectionFramebuffer;
 };
 
 #endif // GAMEOBJECT_H

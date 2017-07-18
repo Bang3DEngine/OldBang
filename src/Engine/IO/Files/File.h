@@ -4,7 +4,6 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 #include <QCryptographicHash>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/String.h"

@@ -52,7 +52,7 @@ bool G_ShaderProgram::Link()
     glAttachShader(m_idGL, p_vshader->GetGLId());
     glAttachShader(m_idGL, p_fshader->GetGLId());
 
-    if (m_type == Type::G_GBuffer)
+    if (m_type == Type::GBuffer)
     {
         SetVertexInputBinding("B_In_PositionObject", 0);
         SetVertexInputBinding("B_In_NormalObject",   1);
@@ -66,14 +66,6 @@ bool G_ShaderProgram::Link()
     {
         SetVertexInputBinding("B_In_PositionObject", 0);
         SetFragmentInputBinding("B_GIn_Color",       0);
-    }
-    else if (m_type == Type::SelectionFramebuffer)
-    {
-        SetVertexInputBinding("B_In_PositionObject", 0);
-        SetVertexInputBinding("B_In_NormalObject",   1);
-        SetVertexInputBinding("B_In_Uv",             2);
-        SetFragmentInputBinding("fragColor",         0);
-        SetFragmentInputBinding( "worldPosition",    1);
     }
 
     glLinkProgram(m_idGL);
@@ -210,9 +202,8 @@ bool G_ShaderProgram::SetTexture(const String &name, const G_Texture *texture) c
 void G_ShaderProgram::RetrieveType(const Path &fshaderPath)
 {
     String fShaderExt = fshaderPath.GetExtension();
-    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::G_GBuffer; }
+    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
     else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
-    else if (fShaderExt.EndsWith("_sel")) { m_type = Type::SelectionFramebuffer; }
     else { m_type = Type::Other; }
 }
 

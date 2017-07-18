@@ -7,7 +7,6 @@
 #include <QObject>
 #include <QThread>
 #include <QMutexLocker>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"

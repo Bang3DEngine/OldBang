@@ -16,9 +16,8 @@ class G_ShaderProgram : public GLObject
 public:
     enum Type
     {
-        G_GBuffer,
+        GBuffer,
         PostProcess,
-        SelectionFramebuffer,
         Other
     };
 
@@ -61,7 +60,7 @@ public:
     GLint GetAttribLocation(const String &name) const;
 
 protected:
-    Type m_type         = Type::G_GBuffer;
+    Type m_type         = Type::GBuffer;
     G_Shader *p_vshader = nullptr;
     G_Shader *p_fshader = nullptr;
 

@@ -13,11 +13,10 @@ TARGET = $$BIN_DIR/lib/BangEngine
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
-    $$BANG_ROOT/src/Editor/General/Cursor.cpp \
     $$BANG_ROOT/src/Engine/General/Destroyable.cpp \
-    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.cpp \
-    $$BANG_ROOT/src/Editor/General/Application.cpp \
-    $$BANG_ROOT/src/Editor/Windows/Window.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
+    $$BANG_ROOT/src/Engine/General/Application.cpp \
+    $$BANG_ROOT/src/Engine/Windows/Window.cpp \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
@@ -32,7 +31,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
@@ -48,7 +46,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/LineRenderer.cpp \
     $$BANG_ROOT/src/Engine/Components/Renderer.cpp \
     $$BANG_ROOT/src/Engine/General/SystemUtils.cpp \
-    $$BANG_ROOT/src/Engine/General/SingletonManager.cpp \
     $$BANG_ROOT/src/Engine/Components/CircleRenderer.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/ShaderPreprocessor.cpp \
     $$BANG_ROOT/src/Engine/Components/SingleLineRenderer.cpp \
@@ -68,7 +65,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/AudioSource.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioManager.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioPlayerRunnable.cpp \
-    $$BANG_ROOT/src/Engine/Debug/Gizmos.cpp \
     $$BANG_ROOT/src/Engine/Debug/Debug.cpp \
     $$BANG_ROOT/src/Engine/Debug/Chrono.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/FileReader.cpp \
@@ -112,11 +108,10 @@ SOURCES += \
 
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
-    $$BANG_ROOT/src/Editor/General/Cursor.h \
     $$BANG_ROOT/src/Engine/General/Destroyable.h \
-    $$BANG_ROOT/src/Editor/Graphics/ShaderManager.h \
-    $$BANG_ROOT/src/Editor/General/Application.h \
-    $$BANG_ROOT/src/Editor/Windows/Window.h \
+    $$BANG_ROOT/src/Engine/Graphics/ShaderManager.h \
+    $$BANG_ROOT/src/Engine/General/Application.h \
+    $$BANG_ROOT/src/Engine/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \
@@ -138,7 +133,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/Renderer.h \
     $$BANG_ROOT/src/Engine/Math/Sphere.h \
     $$BANG_ROOT/src/Engine/General/SystemUtils.h \
-    $$BANG_ROOT/src/Engine/General/SingletonManager.h \
     $$BANG_ROOT/src/Engine/Components/CircleRenderer.h \
     $$BANG_ROOT/src/Engine/Components/SingleLineRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/MeshFactory.h \
@@ -162,7 +156,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Audio/AudioPlayerRunnable.h \
     $$BANG_ROOT/src/Engine/Debug/Chrono.h \
     $$BANG_ROOT/src/Engine/Debug/Debug.h \
-    $$BANG_ROOT/src/Engine/Debug/Gizmos.h \
     $$BANG_ROOT/src/Engine/General/Time.h \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/ShaderPreprocessor.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
@@ -183,7 +176,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/IO/Project/Project.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G_Gizmos.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
@@ -200,7 +192,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.h \
     $$BANG_ROOT/src/Engine/IO/Files/ModelFile.h \
     $$BANG_ROOT/src/Engine/IO/Files/MeshFile.h \
-    $$BANG_ROOT/src/Engine/DataStructures/Regex.h \
     $$BANG_ROOT/src/Engine/IO/Files/AudioClipFile.h \
     $$BANG_ROOT/src/Engine/IO/Files/FontFile.h \
     $$BANG_ROOT/src/Engine/IO/Files/MaterialFile.h \
@@ -223,11 +214,9 @@ HEADERS += \
 DISTFILES += \
     ../.gitignore \
     $$BANG_ROOT/src/Engine \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/RenderG_GBufferToScreen.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.frag_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.frag_g \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SelectionBuffer.vert_sel \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Template.vert_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Default.vert_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
@@ -242,7 +231,6 @@ DISTFILES += \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/G_Missing.frag \
     $$BANG_ROOT/src/res/EngineAssets/Materials/Missing.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/SP_SelectionEffect.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_PointLight_Screen.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/Include/SP.frag_pp \
@@ -250,7 +238,6 @@ DISTFILES += \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_DirectionalLight.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_ScreenPass.vert_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_SelectionEffect.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Template.frag_pp \
     $$BANG_ROOT/src/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIImage.bmat \

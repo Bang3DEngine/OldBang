@@ -2,7 +2,6 @@
 #define MODELFILE_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -17,8 +16,6 @@ public:
 
     void Read(const XMLNode &xmlInfo) override;
     void Write(XMLNode *xmlInfo) const override;
-
-    virtual const QPixmap& GetIcon() const override;
 
     virtual bool IsAsset() const override;
 

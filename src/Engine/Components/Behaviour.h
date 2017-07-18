@@ -2,7 +2,6 @@
 #define BEHAVIOUR_H
 
 #include <QLibrary>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Paths.h"
 #include "Bang/Math.h"
@@ -22,20 +21,16 @@
 #include "Bang/AudioClip.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
+#include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/SingletonManager.h"
 #include "Bang/ISceneEventListener.h"
-#include "Bang/IAttrWidgetButtonListener.h"
 
 /**
  * @brief The Behaviour class is a base class which will be inherited by all
  * the User Behaviour classes. This lets the engine handle Behaviours uniformly.
  */
 class Behaviour : public Component
-                  #ifdef BANG_EDITOR
-                  ,public IAttrWidgetButtonListener
-                  #endif
 {
     OBJECT(Behaviour)
 
@@ -46,21 +41,12 @@ public:
     virtual void _OnStart () override;
     virtual void _OnUpdate() override;
 
-    #ifdef BANG_EDITOR
-    virtual void OnEditorUpdate() override;
-    #endif
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     const Path& GetSourceFilepath() const;
     void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
 
     bool IsLoaded() const;
-
-    #ifdef BANG_EDITOR
-    void OnButtonClicked(const AttrWidgetButton *clickedButton) override;
-    static Behaviour* CreateNewBehaviour();
-    #endif
 
     /**
      * @brief Creates a Behaviour from its QLibrary passed as parameter.
@@ -89,15 +75,6 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
-    #ifdef BANG_EDITOR
-    enum StateInInspector { Normal, BeingCompiled, Failed };
-    mutable StateInInspector m_stateInInspector = StateInInspector::Normal;
-    mutable bool m_refreshInspectorRequested = false;
-    #endif
-
-    static String s_behaviourHeaderTemplate;
-    static String s_behaviourSourceTemplate;
-
     Path m_sourceFilepath;
     XMLNode m_behaviourVariablesInitValues;
     QLibrary *p_behavioursLibraryBeingUsed = nullptr;
@@ -106,18 +83,16 @@ private:
 // DEFINES
 #define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
 extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
-        SingletonManager *mainBinarySingletonManager); \
+        Application *mainBinaryApplication); \
 extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b);
 
 #define BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME) \
 extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
-        SingletonManager *mainBinarySingletonManager) \
+        Application *mainBinaryApplication) \
 { \
 \
-    /* This line links the SingletonManager in the main binary \
-        to the SingletonManager in the behaviour loaded library. */ \
-    SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(\
-                mainBinarySingletonManager); \
+    /* This line links the Application in the main binary \
+        to the Application in the behaviour loaded library. */ \
 \
     return new CLASS_NAME(); \
 } \

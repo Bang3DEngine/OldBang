@@ -3,7 +3,6 @@
 #include <chrono>
 
 #include "Bang/Application.h"
-#include "Bang/SingletonManager.h"
 
 double Time::s_time = 0.0f;
 double const& Time::time = Time::s_time;

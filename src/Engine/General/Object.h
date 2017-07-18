@@ -16,26 +16,6 @@
         OBJECT_NO_FRIEND(CLASS) \
         friend class GameObject;
 
-enum HideFlag
-{
-    None            = 0,
-    HideInHierarchy = 1,
-    HideInInspector = 2,
-    HideInGame      = 4,
-    DontSerialize   = 8,
-    DontClone       = 16,
-    HideInSelection = 32,
-    HideInChildren  = 64,
-
-    HideAndDontSave = HideInHierarchy | HideInInspector |
-                      HideInChildren  | HideInSelection |
-                      HideInGame      |
-                      DontSerialize   | DontClone,
-
-    Default = None
-};
-CREATE_FLAGS(HideFlags, HideFlag);
-
 class Object : public ICloneable,
                public Destroyable
 {
@@ -44,9 +24,6 @@ public:
     virtual ~Object();
 
     virtual void CloneInto(ICloneable *clone) const override;
-
-    HideFlags* GetHideFlags();
-    const HideFlags& GetHideFlags() const;
 
     virtual String GetClassName() const = 0;
     virtual String GetInstanceId() const;
@@ -92,8 +69,6 @@ public:
     template <class T>
     const T *ConstCast() const { return Object::Cast<const T>(this); }
 
-private:
-    HideFlags m_hideFlags = HideFlag::None;
 };
 
 #endif // OBJECT_H

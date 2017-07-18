@@ -2,22 +2,17 @@
 #define BEHAVIOURMANAGERSTATUS_H
 
 #include <QMutex>
-#include "Bang/WinUndef.h"
 
-#include "Bang/Paths.h"
 #include "Bang/Set.h"
 #include "Bang/Map.h"
 #include "Bang/List.h"
 #include "Bang/Path.h"
 #include "Bang/File.h"
+#include "Bang/Paths.h"
 #include "Bang/String.h"
+#include "Bang/IToString.h"
 #include "Bang/CodePreprocessor.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/Console.h"
-#endif
-
-#include "Bang/IToString.h"
 
 class QLibrary;
 class Behaviour;
@@ -49,18 +44,12 @@ private:
     Set<BehaviourId> m_beingCompiled;
     Set<BehaviourId> m_successfullyCompiled;
 
-    #ifdef BANG_EDITOR
-    Map<Path, List<Console::MessageId> > m_failMessagesIds;
-    #else
-    Map<String, List<int> > m_failMessagesIds; // useless map :)
-    #endif
-
     BehaviourManagerStatus();
 
     void OnBehaviourStartedCompiling(const Path &behaviourPath);
     void OnBehaviourSuccessCompiling(const Path &behaviourPath);
     void OnBehaviourObjectCompilationFailed(const Path &behaviourPath,
-                                    const String &errorMessage);
+                                            const String &errorMessage);
     void OnMergingStarted();
     void OnMergingFinished(bool success);
 

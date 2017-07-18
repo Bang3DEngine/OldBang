@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QRunnable>
-#include "Bang/WinUndef.h"
 
 #include "Bang/BangCompiler.h"
 

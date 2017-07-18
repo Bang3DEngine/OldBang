@@ -4,7 +4,6 @@
 #include "Bang/Debug.h"
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
-#include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
 
 Texture2DFile::Texture2DFile()
@@ -26,20 +25,10 @@ Path Texture2DFile::GetImageFilepath() const
     return xmlInfo.GetFilepath("ImageFilepath");
 }
 
-const QPixmap& Texture2DFile::GetIcon() const
-{
-    return IconManager::LoadPixmap(GetImageFilepath(),
-                                   IconManager::IconOverlay::Asset);
-}
-
 void Texture2DFile::Read(const XMLNode &xmlInfo)
 {
     BFile::Read(xmlInfo);
     m_xmlInfo = xmlInfo;
-
-    #ifdef BANG_EDITOR
-    AssetsManager::UpdateAsset(GetPath(), m_xmlInfo);
-    #endif
 }
 
 void Texture2DFile::Write(XMLNode *xmlInfo) const

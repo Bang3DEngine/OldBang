@@ -22,20 +22,8 @@
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
 #include "Bang/GraphicPipeline.h"
-#include "Bang/SingletonManager.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/PostProcessEffect.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/Inspector.h"
-#include "Bang/Hierarchy.h"
-#include "Bang/EditorScene.h"
-#include "Bang/EditorState.h"
-#include "Bang/EditorPlayFlow.h"
-#include "Bang/WindowEventManager.h"
-#include "Bang/SelectionFramebuffer.h"
-#include "Bang/EditorSelectionGameObject.h"
-#endif
 
 GameObject::GameObject(const String &name)
     : m_name(name)
@@ -58,7 +46,6 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (GameObject *child : m_children)
     {
-        if (child->GetHideFlags()->IsOn(HideFlag::DontClone)) { continue; }
         GameObject *childClone = child->Clone();
         childClone->SetParent(go);
     }
@@ -92,10 +79,6 @@ GameObject::~GameObject()
     }
 
     SetParent(nullptr);
-
-    #ifdef BANG_EDITOR
-    WindowEventManager::NotifyGameObjectDestroyed(this);
-    #endif
 }
 
 void GameObject::SetParent(GameObject *newParent,
@@ -219,11 +202,6 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
     {
         for (GameObject *child : m_children)
         {
-            #ifdef BANG_EDITOR
-            if (child->GetHideFlags()->IsOn(HideFlag::HideInGame) ||
-                child->IsDraggedGameObject()) continue;
-            #endif
-
             AABox aabBoxChild = child->GetObjectAABBox(true);
             Matrix4 mat;
             if (child->transform)
@@ -278,35 +256,8 @@ bool GameObject::AddComponent(Component *c)
 
     c->SetGameObject(this);
     m_components.PushBack(c);
-
-    #ifdef BANG_EDITOR
-    Inspector::GetInstance()->scrollToBottom();
-    #endif
-
     return true;
 }
-
-#ifdef BANG_EDITOR
-void GameObject::MoveComponent(Component *c, int distance)
-{
-    for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
-    {
-        if (c == *comp)
-        {
-            auto comp1 = comp;
-            std::advance(comp1, 1);
-            m_components.Remove(comp, comp1);
-            std::advance(comp1, distance);
-            m_components.Insert(comp1, 1, c);
-            break;
-        }
-    }
-
-    #ifdef BANG_EDITOR
-    // Inspector::GetInstance()->Refresh(this);
-    #endif
-}
-#endif
 
 Transform *GameObject::GetTransform() const
 {
@@ -358,9 +309,6 @@ GameObject *GameObject::GetChild(const String &name) const
 void GameObject::SetName(const String &name)
 {
     m_name = name;
-    #ifdef BANG_EDITOR
-    Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
-    #endif
 }
 
 void GameObject::Print(const String &indent) const
@@ -421,10 +369,6 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
         {
             ENSURE(iChildren < children.Size());
             GameObject *child = children[iChildren];
-            while (children[iChildren]->GetHideFlags()->IsOn(HideFlag::DontSerialize))
-            {
-                ++iChildren;
-            }
             child->Read(xmlChildInfo);
             ++iChildren;
         }
@@ -521,7 +465,6 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
 
 void GameObject::Read(const XMLNode &xmlInfo)
 {
-    // No editor stuff added before
     if (!m_hasBeenReadOnce)
     {
         ReadFirstTime(xmlInfo);
@@ -551,22 +494,10 @@ void GameObject::Write(XMLNode *xmlInfo) const
 
     for (GameObject *child : m_children)
     {
-        if (!child->GetHideFlags()->IsOn(HideFlag::DontSerialize))
-        {
-            XMLNode xmlChild;
-            child->Write(&xmlChild);
-            xmlInfo->AddChild(xmlChild);
-        }
+        XMLNode xmlChild;
+        child->Write(&xmlChild);
+        xmlInfo->AddChild(xmlChild);
     }
-}
-
-bool GameObject::IsSelected() const
-{
-    #ifdef BANG_EDITOR
-    return m_isSelectedInHierarchy;
-    #else
-    return false;
-    #endif
 }
 
 void GameObject::ChangeTransformByRectTransform()
@@ -578,47 +509,6 @@ void GameObject::ChangeTransformByRectTransform()
     }
 }
 
-
-#ifdef BANG_EDITOR
-void GameObject::OnHierarchyGameObjectsSelected(
-        const List<GameObject*> &selectedEntities)
-{
-    if (GetHideFlags()->IsOn(HideFlag::HideInHierarchy)) { return; }
-
-    bool selected = selectedEntities.Contains(this);
-    bool wasSelected = IsSelected();
-    m_isSelectedInHierarchy = selected;
-
-    if (!wasSelected && selected)
-    {
-        m_selectionGameObject = new EditorSelectionGameObject(this);
-        m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
-
-        #ifdef BANG_EDITOR
-        if (!HasComponent<RectTransform>())
-        {
-            if (EditorState::GetCurrentTransformMode() ==
-                EditorState::TransformMode::RectTransform)
-            {
-                EditorState::SetTransformMode(
-                            EditorState::TransformMode::Translate);
-            }
-        }
-        else
-        {
-            EditorState::SetTransformMode(
-                        EditorState::TransformMode::RectTransform);
-        }
-        #endif
-    }
-    else if (wasSelected && !selected && m_selectionGameObject)
-    {
-        delete m_selectionGameObject;
-        m_selectionGameObject = nullptr;
-    }
-}
-#endif
-
 void GameObject::SetEnabled(bool enabled)
 {
     m_enabled = enabled;
@@ -628,13 +518,6 @@ bool GameObject::IsEnabled() const
 {
     return m_enabled && (!p_parent ? true : p_parent->IsEnabled());
 }
-
-#ifdef BANG_EDITOR
-bool GameObject::IsDraggedGameObject() const
-{
-    return m_isDragged || (parent && parent->IsDraggedGameObject());
-}
-#endif
 
 String GameObject::ToString() const
 {
@@ -693,52 +576,15 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
-    #ifdef BANG_EDITOR
-    bool canUpdate = !GetHideFlags()->IsOn(HideFlag::HideInGame);
-    #else
-    bool canUpdate = true;
-    #endif
+    OnUpdate();
 
-    if (canUpdate)
-    {
-        OnUpdate();
-    }
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(_OnUpdate(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
 
-    if (canUpdate)
-    {
-        m_iteratingComponents = true;
-        PROPAGATE_EVENT(_OnUpdate(), m_components);
-        m_iteratingComponents = false;
-        RemoveQueuedComponents();
-    }
     PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
-
-#ifdef BANG_EDITOR
-void GameObject::_OnEditorStart()
-{
-    OnEditorStart();
-
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(_OnEditorStart();, m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    PROPAGATE_EVENT(_OnEditorStart(), m_children);
-}
-
-void GameObject::_OnEditorUpdate()
-{
-    OnEditorUpdate();
-
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(_OnEditorUpdate(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    PROPAGATE_EVENT(_OnEditorUpdate(), m_children);
-}
-#endif
 
 void GameObject::_OnDestroy()
 {
@@ -752,42 +598,6 @@ void GameObject::_OnDestroy()
     OnDestroy();
 }
 
-#ifdef BANG_EDITOR
-
-void GameObject::OnDragEnterMaterial(Material *m)
-{
-    m_materialsBeforeDrag.Clear();
-
-    List<Renderer*> rends = GetComponents<Renderer>();
-    for (Renderer *r : rends)
-    {
-        m_materialsBeforeDrag.PushBack(r->GetMaterial());
-        r->SetMaterial(m);
-    }
-}
-
-void GameObject::OnDragLeaveMaterial(Material *m)
-{
-    int i = 0;
-    List<Renderer*> rends = GetComponents<Renderer>();
-    for (Renderer *r : rends)
-    {
-        r->SetMaterial(m_materialsBeforeDrag[i]);
-        ++i;
-    }
-}
-
-void GameObject::OnDropMaterial(Material *m)
-{
-    List<Renderer*> rends = GetComponents<Renderer>();
-    for (Renderer *r : rends)
-    {
-        r->SetMaterial(m);
-    }
-}
-
-#endif
-
 String GameObject::GetInstanceId() const
 {
     String instanceId = name;
@@ -800,24 +610,3 @@ String GameObject::GetInstanceId() const
     }
     return instanceId;
 }
-
-void GameObject::_OnDrawGizmos(bool depthed, bool overlay)
-{
-    #ifdef BANG_EDITOR
-    ENSURE(EditorState::ShowGizmosEnabled());
-
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
-    if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
-    PROPAGATE_EVENT(_OnDrawGizmos(depthed, overlay), m_components);
-    OnDrawGizmos(depthed, overlay);
-
-    PROPAGATE_EVENT(_OnDrawGizmos(depthed, overlay), m_children);
-
-    #endif
-}
-
-void GameObject::OnDrawGizmos(bool depthed, bool overlay)
-{
-}
-

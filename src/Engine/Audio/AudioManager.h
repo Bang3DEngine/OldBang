@@ -3,7 +3,6 @@
 
 #include <QThreadPool>
 #include <QMutexLocker>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Math.h"
 #include "Bang/Path.h"

@@ -2,7 +2,6 @@
 #define COMPONENT_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Paths.h"
 #include "Bang/Object.h"
@@ -44,10 +43,6 @@ protected:
 
     Component();
     virtual ~Component();
-
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
-
-    friend class ComponentClipboard;
 };
 
 #endif // COMPONENT_H

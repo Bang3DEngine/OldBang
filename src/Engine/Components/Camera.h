@@ -63,8 +63,6 @@ public:
 
     Rect GetScreenBoundingRect(const AABox &bbox);
 
-    void OnDrawGizmos(bool depthed, bool overlay) override;
-
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

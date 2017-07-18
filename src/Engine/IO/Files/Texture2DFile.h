@@ -2,7 +2,6 @@
 #define FILETEXTURE2DASSET_H
 
 #include <QPixmap>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Path.h"
 #include "Bang/BFile.h"
@@ -16,7 +15,6 @@ public:
     Texture2DFile(const Path& path);
 
     Path GetImageFilepath() const;
-    virtual const QPixmap& GetIcon() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

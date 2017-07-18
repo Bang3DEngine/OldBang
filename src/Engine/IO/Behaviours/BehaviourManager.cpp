@@ -1,7 +1,6 @@
 #include "Bang/BehaviourManager.h"
 
 #include <QLibrary>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
@@ -36,47 +35,7 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame,
                                                 bool *stopFlag)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    #ifdef BANG_EDITOR
-    do
-    {
-        bm->StartCompilingAllBehaviourObjects(forGame, outputLibDir);
 
-        float percent = bm->GetStatus().GetPercentOfReadyBehaviours(outputLibDir);
-        emit bm->NotifyPrepareBehavioursLibraryProgressed( int(percent * 100) );
-        if (stopFlag && *stopFlag) { return false; }
-
-        QThread::currentThread()->msleep(100);
-        Application::GetInstance()->processEvents();
-    }
-    while(!bm->GetStatus().AllBehavioursReadyOrFailed(outputLibDir));
-
-    emit bm->NotifyPrepareBehavioursLibraryProgressed(99);
-
-    // Now merge them
-    bool error = !bm->GetStatus().AllBehavioursReady(outputLibDir);
-
-    // Invalidating will force a new library with new name reload, and thus
-    // forcing static reinitialization, instead of them keeping latest lib
-    // values
-    bm->m_status.InvalidateBehavioursLibraryReady();
-    if (!error && !bm->GetStatus().IsBehavioursLibraryReady())
-    {
-        bool mergingStarted = false;
-        do
-        {
-            mergingStarted = BehaviourManager::StartMergingBehavioursObjects(
-                                                                forGame,
-                                                                outputLibDir);
-            QThread::currentThread()->msleep(100);
-            Application::processEvents();
-        }
-        while (!mergingStarted || bm->GetStatus().IsMerging());
-
-        error = !bm->m_status.HasMergingSucceed();
-        if (!error) { bm->m_status.OnBehavioursLibraryReady(); }
-    }
-    return !error;
-    #else
     // In game, the library is compiled from before.
     if (!BehaviourManager::GetBehavioursMergedLibrary())
     {
@@ -91,7 +50,6 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame,
         bm->OnMergingLibraryFinished(result);
     }
     return true;
-    #endif
 }
 
 bool BehaviourManager::StartMergingBehavioursObjects(bool forGame,
