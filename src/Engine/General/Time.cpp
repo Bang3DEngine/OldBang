@@ -2,6 +2,7 @@
 
 #include <chrono>
 
+#include "Bang/Application.h"
 #include "Bang/SingletonManager.h"
 
 double Time::s_time = 0.0f;
@@ -9,14 +10,9 @@ double const& Time::time = Time::s_time;
 float Time::s_deltaTime = 0.0f;
 float const& Time::deltaTime = Time::s_deltaTime;
 
-void Time::InitFromMainBinary()
-{
-   SingletonManager::Set<Time>(new Time());
-}
-
 Time* Time::GetInstance()
 {
-    return SingletonManager::Get<Time>();
+    return Application::GetInstance()->GetTime();
 }
 
 float Time::GetDeltaTime()

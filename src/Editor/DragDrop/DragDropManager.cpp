@@ -41,7 +41,7 @@ DragDropAgent* DragDropManager::GetDragDropAgentBelowMouse()
 {
     // Go up in the hierarchy (parent->parent->...->nullptr), until
     // we find a widget that can be cast to DragDropAgent* (if any)
-    QObject *objBelowMouse = IWindow::GetWidgetBelowMouse();
+    QObject *objBelowMouse = Window::GetWidgetBelowMouse();
     while (objBelowMouse != nullptr)
     {
         DragDropAgent *dda = Object::Cast<DragDropAgent>(objBelowMouse);

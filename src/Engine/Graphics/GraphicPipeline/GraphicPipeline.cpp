@@ -32,7 +32,6 @@
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/GPPass_Selection.h"
 #include "Bang/SelectionFramebuffer.h"
 #endif

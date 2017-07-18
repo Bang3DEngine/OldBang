@@ -21,11 +21,5 @@ BangMain
 
 BangPreprocessor.depends += BangDataStructures
 BangGraphics.depends     += BangDataStructures
-BangEditor.depends       += BangDataStructures BangPreprocessor
 BangEngine.depends       += BangDataStructures BangPreprocessor BangGraphics
 BangMain.depends         += BangDataStructures BangPreprocessor BangEngine
-
-EDITOR {
-    SUBDIRS += BangEditor
-    BangMain.depends += BangEditor
-}

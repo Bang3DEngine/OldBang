@@ -8,7 +8,7 @@
 class EditorApplication : public Application
 {
 public:
-    EditorApplication(int &argc, char **argv);
+    EditorApplication();
     virtual ~EditorApplication();
 
     virtual void InitManagers() override;

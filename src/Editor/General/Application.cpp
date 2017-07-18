@@ -1,37 +1,38 @@
 #include "Bang/Application.h"
 
-#include <QThreadPool>
-#include "Bang/WinUndef.h"
-
 #include "Bang/Math.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
 #include "Bang/Chrono.h"
+#include "Bang/Window.h"
 #include "Bang/G_Screen.h"
-#include "Bang/GameWindow.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/EditorPlayFlow.h"
+#include "Bang/SingletonManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/G_FontSheetCreator.h"
 
-Application::Application(int &argc, char **argv) : QApplication(argc, argv)
+Application::Application()
 {
-}
-
-void Application::InitManagers()
-{
+    m_window           = new Window();
+    m_time             = new Time();
+    m_input            = new Input();
     m_audioManager     = new AudioManager();
     m_sceneManager     = new SceneManager();
     m_assetsManager    = new AssetsManager();
     m_behaviourManager = new BehaviourManager();
+
+    SingletonManager::Set<Application>(this);
 }
 
 Application::~Application()
 {
+    delete m_time;
+    delete m_input;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_assetsManager;
@@ -45,12 +46,8 @@ AudioManager *Application::GetAudioManager() const
 
 void Application::MainLoop()
 {
-    IWindow *win = IWindow::GetInstance();
-    while ( win->GetMainWindow()->isVisible() )
+    while (true)
     {
-        processEvents();
-        if (!Screen::GetInstance()) { continue; }
-
         float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
         m_lastRenderTime = Time::GetNow();
         Time::GetInstance()->m_deltaTime = deltaTime;
@@ -67,13 +64,21 @@ void Application::MainLoop()
 
         // Render screen
         Screen::GetInstance()->Render();
-        Screen::GetInstance()->makeCurrent();
-        Screen::GetInstance()->swapBuffers();
 
         Input::GetInstance()->OnFrameFinished();
 
         OnMainLoopIterationEnd();
     }
+}
+
+Time *Application::GetTime() const
+{
+    return m_time;
+}
+
+Input *Application::GetInput() const
+{
+    return m_input;
 }
 
 AssetsManager *Application::GetAssetsManager() const
@@ -83,31 +88,17 @@ AssetsManager *Application::GetAssetsManager() const
 
 Application *Application::GetInstance()
 {
-    if (!GameWindow::GetInstance()) { return nullptr; }
-    return Object::SCast<Application>(
-                GameWindow::GetInstance()->GetApplication());
+    return SingletonManager::Get<Application>();
+}
+
+Window *Application::GetMainWindow() const
+{
+    return m_window;
 }
 
 void Application::ResetDeltaTime()
 {
     m_lastRenderTime = Time::GetNow();
-}
-
-bool Application::notify(QObject *receiver, QEvent *e)
-{
-    Screen *screen = Screen::GetInstance();
-    if (screen && receiver == screen)
-    {
-        Input::GetInstance()->EnqueueEvent(e);
-    }
-
-    Input *input = Input::GetInstance();
-    if (input)
-    {
-        input->EnqueueEvent(e);
-    }
-
-    return QApplication::notify(receiver, e);
 }
 
 void Application::OnMainLoopIterationEnd()

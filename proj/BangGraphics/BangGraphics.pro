@@ -10,12 +10,6 @@ INCLUDEPATH += \
 
 TARGET = $$BIN_DIR/lib/BangGraphics
 
-UI_DIR  = $$BANG_ROOT/include/Bang/UI_Qt
-EDITOR {
-    FORMS   += $$BANG_ROOT/res/EngineAssets/EditorWindow.ui
-    FORMS   += $$BANG_ROOT/res/EngineAssets/SelectProjectWindow.ui
-}
-
 MOC_DIR = $$BANG_ROOT/bin/Qt_MOCs/
 
 SOURCES += \

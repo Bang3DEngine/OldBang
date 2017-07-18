@@ -11,22 +11,13 @@ INCLUDEPATH += \
 
 TARGET = $$BIN_DIR/lib/BangEngine
 
-MOC_DIR = $$BANG_ROOT/bin/Qt_MOCs/
-
-UI_DIR  = $$BANG_ROOT/include/Bang/UI_Qt
-EDITOR {
-    FORMS   += $$BANG_ROOT/res/EngineAssets/EditorWindow.ui
-    FORMS   += $$BANG_ROOT/res/EngineAssets/SelectProjectWindow.ui
-}
-
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
     $$BANG_ROOT/src/Editor/General/Cursor.cpp \
     $$BANG_ROOT/src/Engine/General/Destroyable.cpp \
     $$BANG_ROOT/src/Editor/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Editor/General/Application.cpp \
-    $$BANG_ROOT/src/Editor/Windows/GameWindow.cpp \
-    $$BANG_ROOT/src/Editor/Windows/IWindow.cpp \
+    $$BANG_ROOT/src/Editor/Windows/Window.cpp \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
@@ -124,9 +115,8 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/General/Cursor.h \
     $$BANG_ROOT/src/Engine/General/Destroyable.h \
     $$BANG_ROOT/src/Editor/Graphics/ShaderManager.h \
-    $$BANG_ROOT/src/Editor/Windows/GameWindow.h \
     $$BANG_ROOT/src/Editor/General/Application.h \
-    $$BANG_ROOT/src/Editor/Windows/IWindow.h \
+    $$BANG_ROOT/src/Editor/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \

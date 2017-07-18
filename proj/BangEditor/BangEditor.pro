@@ -6,8 +6,6 @@ TEMPLATE = lib
 CONFIG += staticlib
 QT += core gui opengl widgets
 
-UI_DIR  = $$BANG_ROOT/include/Bang/UI_Qt
-
 INCLUDEPATH += \
     $$BANG_ROOT/include/Bang/BangGraphics \
     $$BANG_ROOT/include/Bang/BangEngine \
@@ -15,10 +13,6 @@ INCLUDEPATH += \
     $$UI_DIR
 
 TARGET = $$BIN_DIR/lib/BangEditor
-
-MOC_DIR = $$BANG_ROOT/bin/Qt_MOCs/
-FORMS   += $$BANG_ROOT/res/EngineAssets/EditorWindow.ui
-FORMS   += $$BANG_ROOT/res/EngineAssets/SelectProjectWindow.ui
 
 SOURCES += \
     $$BANG_ROOT/src/Editor/General/GameObjectClipboard.cpp \
@@ -44,9 +38,7 @@ SOURCES += \
     $$BANG_ROOT/src/Editor/DragDrop/IDragDropListener.cpp \
     $$BANG_ROOT/src/Engine/IO/Project/QtProjectManager.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorRotateAxisGroup.cpp \
-    $$BANG_ROOT/src/Editor/Windows/EditorWindow.cpp \
     $$BANG_ROOT/src/Editor/Dialogs/DialogBrowseAssetFile.cpp \
-    $$BANG_ROOT/src/Editor/Windows/SelectProjectWindow.cpp \
     $$BANG_ROOT/src/Editor/Windows/WindowEventManager.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorRotateAxis.cpp \
     $$BANG_ROOT/src/Editor/EditorGameObject/EditorAxisGroup.cpp \
@@ -175,7 +167,6 @@ HEADERS += \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h \
     $$BANG_ROOT/src/Editor/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
     $$BANG_ROOT/src/Editor/Windows/WindowEventManager.h \
-    $$BANG_ROOT/src/Editor/Windows/SelectProjectWindow.h \
     $$BANG_ROOT/src/Editor/Inspector/AudioClipInspectorWidget.h \
     $$BANG_ROOT/src/Editor/General/Toolbar.h \
     $$BANG_ROOT/src/Editor/General/EditorState.h \

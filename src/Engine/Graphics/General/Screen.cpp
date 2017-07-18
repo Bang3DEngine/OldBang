@@ -1,14 +1,13 @@
 #include "Bang/Screen.h"
 
 #include "Bang/Scene.h"
-#include "Bang/IWindow.h"
+#include "Bang/Window.h"
+#include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GraphicPipeline.h"
 
-Screen::Screen(QWidget *parent) : QGLWidget(parent)
+Screen::Screen()
 {
-    setFormat(QGLFormat(QGL::DoubleBuffer));
-    setAutoBufferSwap(false);
 }
 
 Screen::~Screen()
@@ -18,24 +17,8 @@ Screen::~Screen()
 
 void Screen::Initialize()
 {
-    static bool firstInitializeGL = true;
-    if (firstInitializeGL)
-    {
-        firstInitializeGL = false;
-
-        OnInitialize();
-        m_gPipeline = new GraphicPipeline(this);
-    }
-}
-
-void Screen::initializeGL()
-{
-    Initialize();
-}
-
-void Screen::paintGL()
-{
-    Render();
+    Screen::Initialize();
+    m_gPipeline = new GraphicPipeline(this);
 }
 
 void Screen::Render() const
@@ -47,9 +30,9 @@ void Screen::Render() const
     }
 }
 
-void Screen::resizeGL(int w, int h)
+void Screen::Resize(int w, int h)
 {
-    OnResize(w,h);
+    Screen::Resize(w,h);
     ENSURE(m_gPipeline);
 
     m_gPipeline->OnResize(w, h);
@@ -92,7 +75,7 @@ Vector2 Screen::GetPixelClipSize()
 
 Screen *Screen::GetInstance()
 {
-    IWindow *win = IWindow::GetInstance();
+    Window *win = Application::GetInstance()->GetMainWindow();
     return win ? win->GetScreen() : nullptr;
 }
 

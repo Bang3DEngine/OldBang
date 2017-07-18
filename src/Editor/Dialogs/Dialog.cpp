@@ -5,7 +5,6 @@
 
 #include "Bang/Debug.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/SelectProjectWindow.h"
 
 Dialog::Dialog()
 {
@@ -22,12 +21,6 @@ QWidget *Dialog::GetCurrentWindow()
     if (EditorWindow::GetInstance())
     {
         QWidget *w = EditorWindow::GetInstance()->GetMainWindow();
-        if (w) { return w; }
-    }
-
-    if (SelectProjectWindow::GetInstance())
-    {
-        QWidget *w = SelectProjectWindow::GetInstance()->GetMainWindow();
         if (w) { return w; }
     }
 

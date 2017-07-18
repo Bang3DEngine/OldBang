@@ -1,39 +1,37 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <QTimer>
-#include <iostream>
-#include <QKeyEvent>
-#include <QApplication>
-#include "Bang/WinUndef.h"
-
 #include "Bang/Map.h"
 #include "Bang/Array.h"
 
+class Time;
+class Input;
 class Scene;
+class Window;
 class AudioManager;
 class SceneManager;
 class AssetsManager;
 class BehaviourManager;
-class Application : public QApplication
+class Application
 {
-    Q_OBJECT
-
 public:
-    Application(int& argc, char** argv);
+    Application();
     virtual ~Application();
 
-    virtual void InitManagers();
     virtual void MainLoop();
 
+    Time *GetTime() const;
+    Input *GetInput() const;
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
+    Window *GetMainWindow() const;
     void ResetDeltaTime();
 
-    virtual bool notify(QObject *receiver, QEvent *e) override;
-
 protected:
+    Window *m_window                     = nullptr;
+    Time *m_time                         = nullptr;
+    Input *m_input                       = nullptr;
     AudioManager *m_audioManager         = nullptr;
     SceneManager *m_sceneManager         = nullptr;
     AssetsManager *m_assetsManager       = nullptr;

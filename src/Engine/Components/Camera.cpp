@@ -5,6 +5,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
+#include "Bang/Gizmos.h"
 #include "Bang/Transform.h"
 #include "Bang/GLContext.h"
 #include "Bang/GameObject.h"

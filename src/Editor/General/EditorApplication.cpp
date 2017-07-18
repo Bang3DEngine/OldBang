@@ -7,8 +7,7 @@
 #include "Bang/DragDropManager.h"
 #include "Bang/WindowEventManager.h"
 
-EditorApplication::EditorApplication(int &argc, char **argv)
-    : Application(argc, argv)
+EditorApplication::EditorApplication() : Application()
 {
 
 }

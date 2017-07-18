@@ -34,8 +34,6 @@ void Cursor::SetIcon(Cursor::CursorIcon icon)
     {
         cursor.setShape(Qt::CursorShape::ClosedHandCursor);
     }
-
-    Application::GetInstance()->setOverrideCursor(cursor);
 }
 
 Cursor *Cursor::GetInstance()

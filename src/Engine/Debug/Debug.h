@@ -2,10 +2,8 @@
 #define DEBUG_H
 
 #include <string>
-#include <QString>
 #include <sstream>
 #include <iostream>
-#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"

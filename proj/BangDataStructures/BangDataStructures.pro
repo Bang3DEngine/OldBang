@@ -20,7 +20,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/DataStructures/Set.cpp \
     $$BANG_ROOT/src/Engine/DataStructures/UMap.cpp \
     $$BANG_ROOT/src/Engine/DataStructures/Collection.cpp \
-    $$BANG_ROOT/src/Engine/DataStructures/Regex.cpp \
     $$BANG_ROOT/src/Engine/Math/Rect.cpp \
     $$BANG_ROOT/src/Engine/Math/Vector3.cpp \
     $$BANG_ROOT/src/Engine/Math/Quaternion.cpp \

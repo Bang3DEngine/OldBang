@@ -5,14 +5,14 @@
 #include "Bang/Input.h"
 #include "Bang/Object.h"
 #include "Bang/TypeMap.h"
-#include "Bang/IWindow.h"
+#include "Bang/Window.h"
 #include "Bang/Paths.h"
 
 class IO;
 class Time;
 class Input;
 class Console;
-class IWindow;
+class Window;
 class EditorWindow;
 /**
  * @brief This class manages the global Singleton's across

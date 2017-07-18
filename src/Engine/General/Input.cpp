@@ -3,15 +3,10 @@
 #include "Bang/Time.h"
 #include "Bang/Cursor.h"
 #include "Bang/Object.h"
+#include "Bang/Window.h"
 #include "Bang/Screen.h"
 #include "Bang/Application.h"
 #include "Bang/SingletonManager.h"
-
-#ifdef BANG_EDITOR
-#include "Bang/EditorWindow.h"
-#else
-#include "Bang/GameWindow.h"
-#endif
 
 Input::Input()
 {
@@ -23,7 +18,7 @@ Input::~Input()
     if (m_cursor) { delete m_cursor; }
 }
 
-void Input::InitFromMainBinary() // Called from Screen
+void Input::InitFromMainBinary()
 {
     SingletonManager::Set<Input>(new Input());
 }
@@ -89,6 +84,7 @@ void Input::HandleMouseWrapping()
 {
     if (m_mouseWrapping)
     {
+        /*
         #ifdef BANG_EDITOR
         EditorWindow *w = EditorWindow::GetInstance();
         #else
@@ -130,6 +126,7 @@ void Input::HandleMouseWrapping()
             m_mouseCoords = Vector2(newCoords.x(), newCoords.y());
             m_lastMouseCoords = m_mouseCoords;
         }
+        */
     }
 }
 
@@ -182,12 +179,14 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 
     if (m_lockMouseMovement)
     {
+        /*
         QPoint glob = QPoint(m_lastMouseCoords.x,
                              m_lastMouseCoords.y);
         glob = Screen::GetInstance()->mapToGlobal(glob);
 
         fakeMoveEvent = true;
         QCursor::setPos(glob);
+        */
     }
 }
 
@@ -268,7 +267,7 @@ void Input::ProcessEnqueuedEvents()
 
 Input *Input::GetInstance()
 {
-    return SingletonManager::Get<Input>();
+    return Application::GetInstance()->GetInput();
 }
 
 bool Input::GetMouseWrapping()

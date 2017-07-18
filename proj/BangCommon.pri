@@ -7,7 +7,8 @@ isEmpty(COMPILER) {
   COMPILER = g++
 }
 
-EDITOR_OR_GAME=$$(BANG_BUILD_EDITOR_OR_GAME) # EDITOR or GAME
+#EDITOR_OR_GAME=$$(BANG_BUILD_EDITOR_OR_GAME) # EDITOR or GAME
+EDITOR_OR_GAME=GAME
 isEmpty(EDITOR_OR_GAME) {
   EDITOR_OR_GAME = EDITOR
 }
@@ -43,14 +44,9 @@ INCLUDEPATH +=                               \
     $$BANG_ROOT/include/freetype
 
 BIN_DIR=""
-EDITOR {
-    DEBUG   { BIN_DIR = $$BANG_ROOT/bin/EditorDebug   }
-    RELEASE { BIN_DIR = $$BANG_ROOT/bin/EditorRelease }
-}
-GAME {
-    DEBUG   { BIN_DIR = $$BANG_ROOT/bin/GameDebug   }
-    RELEASE { BIN_DIR = $$BANG_ROOT/bin/GameRelease }
-}
+DEBUG   { BIN_DIR = $$BANG_ROOT/bin/EditorDebug   }
+RELEASE { BIN_DIR = $$BANG_ROOT/bin/EditorRelease }
+
 OBJECTS_DIR = $$BIN_DIR/obj
 
 # G++ options (release, debug, etc.) ############
@@ -60,10 +56,6 @@ DEBUG {
 }
 RELEASE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
-}
-
-EDITOR {
-    DEFINES += BANG_EDITOR
 }
 
 #OTHER_OPTS = -Wall --std=c++14 -Wl,--export-dynamic -Wno-unused-parameter \

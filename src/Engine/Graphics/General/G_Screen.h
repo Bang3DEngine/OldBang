@@ -13,8 +13,8 @@ public:
     explicit G_Screen();
     virtual ~G_Screen();
 
-    void OnInitialize();
-    void OnResize(int w, int h);
+    virtual void Initialize();
+    virtual void Resize(int w, int h);
     virtual void Render();
 
     float GetAspectRatio() const;

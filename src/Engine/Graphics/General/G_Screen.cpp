@@ -14,7 +14,7 @@ void G_Screen::Render()
 {
 }
 
-void G_Screen::OnInitialize()
+void G_Screen::Initialize()
 {
     glewExperimental = GL_TRUE;
     glewInit();
@@ -24,7 +24,7 @@ void G_Screen::OnInitialize()
     GL::Enable(GL_CULL_FACE);
 }
 
-void G_Screen::OnResize(int w, int h)
+void G_Screen::Resize(int w, int h)
 {
     GL::SetViewport(0, 0, w, h);
     m_width = w;
