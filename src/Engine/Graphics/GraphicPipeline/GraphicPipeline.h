@@ -36,8 +36,6 @@ public:
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
 
-    void SetGBufferAttachmentToBeRendered(G_GBuffer::AttachmentId attachment);
-
     GLContext *GetGLContext() const;
     G_GBuffer *GetGBuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
@@ -55,8 +53,6 @@ private:
 
     GPPass_RenderLayer *m_scenePass  = nullptr;
     GPPass_RenderLayer *m_canvasPass = nullptr;
-
-    G_GBuffer::AttachmentId m_gbufferAttachToBeShown = G_GBuffer::AttColor;
 
     // Rendering for the Game Screen or the Scene screen
     bool m_renderingInGame = false;

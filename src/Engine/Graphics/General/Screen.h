@@ -15,7 +15,7 @@ public:
     virtual ~Screen();
 
     virtual void Initialize() override;
-    virtual void Resize(int w, int h) override;
+    virtual void OnResize(int w, int h) override;
     virtual void Render() const;
 
     static float GetAspectRatio();

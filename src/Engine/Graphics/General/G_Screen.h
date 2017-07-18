@@ -14,7 +14,7 @@ public:
     virtual ~G_Screen();
 
     virtual void Initialize();
-    virtual void Resize(int w, int h);
+    virtual void OnResize(int w, int h);
     virtual void Render();
 
     float GetAspectRatio() const;

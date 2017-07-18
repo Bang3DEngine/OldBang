@@ -8,8 +8,10 @@ public:
     static double const& time;
     static float s_deltaTime;
     static float const& deltaTime;
+    static double s_lastRenderTime;
 
-    static void InitFromMainBinary();
+    static void OnFrameStarted();
+    static void OnFrameFinished();
 
     /**
      * @brief Returns the number of seconds that have passed between
@@ -17,8 +19,8 @@ public:
      * @return The delta time in seconds.
      */
     static float GetDeltaTime();
-
     static double GetTime();
+    static void ResetDeltaTime();
 
     /**
      * @brief GetNow
@@ -27,16 +29,7 @@ public:
     static unsigned long long GetNow();
 
 private:
-    double m_time = 0.0f;
-    float m_deltaTime = 0.0f;
-
-    Time() {}
-    static Time* GetInstance();
-
-    friend class Behaviour;
-    friend class GameObject;
-    friend class Application;
-    friend class SceneManager;
+    Time() = delete;
 };
 
 #endif // TIME_H

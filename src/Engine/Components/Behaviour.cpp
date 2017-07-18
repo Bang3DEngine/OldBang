@@ -24,10 +24,6 @@ void Behaviour::_OnStart()
 void Behaviour::_OnUpdate()
 {
     RefreshBehaviourLib(); // For instances created in runtime
-
-    // Update static Time::deltaTime variable with mainBinary deltaTime
-    Time::s_deltaTime = Time::GetInstance()->m_deltaTime;
-    Time::s_time = Time::GetInstance()->m_time;
     Component::_OnUpdate();
 }
 

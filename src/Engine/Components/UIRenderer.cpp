@@ -9,6 +9,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 
+#include "Bang/Debug.h"
 UIRenderer::UIRenderer()
 {
     SetMesh(MeshFactory::GetUIPlane());

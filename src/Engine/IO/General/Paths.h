@@ -38,6 +38,10 @@ public:
     static Path EnginePath(const String &path);
     static Path UserPath(const String &path);
 
+    static void SetEngineBinaryDir(const Path &engineBinaryDir);
+    static void SetEnginePath(const Path &enginePath);
+    static void SetProjectPath(const Path &projectPath);
+
 private:
     static Path c_enginePath;
     static Path c_engineAssetsPath;
@@ -47,13 +51,6 @@ private:
     static Path c_projectPath;
     static Path c_projectAssetsPath;
     static Path c_projectLibrariesPath;
-
-    static void SetEngineBinaryDir(const Path &engineBinaryDir);
-    static void SetEnginePath(const Path &enginePath);
-    static void SetProjectPath(const Path &projectPath);
-
-    friend class ProjectManager;
-    friend int main(int argc, char** argv);
 };
 
 #endif // PATHS_H

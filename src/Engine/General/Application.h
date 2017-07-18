@@ -15,23 +15,21 @@ class ShaderManager;
 class Application
 {
 public:
-    Application();
+    Application(int argc, char **argv);
     virtual ~Application();
 
     virtual void MainLoop();
+    bool ProcessEvents();
 
-    Time *GetTime() const;
     Input *GetInput() const;
     ShaderManager *GetShaderManager() const;
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
     Window *GetMainWindow() const;
-    void ResetDeltaTime();
 
 protected:
     Window *m_window                     = nullptr;
-    Time *m_time                         = nullptr;
     Input *m_input                       = nullptr;
     ShaderManager *m_shaderManager       = nullptr;
     AudioManager *m_audioManager         = nullptr;

@@ -7,7 +7,6 @@ QT = core gui widgets
 CONFIG += staticlib
 
 TARGET = $$BIN_DIR/lib/BangDataStructures
-OBJECTS -= $$system("ls -1 . | grep moc_ | xargs")
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/DataStructures/Timer.cpp \

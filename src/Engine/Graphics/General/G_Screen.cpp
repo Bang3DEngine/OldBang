@@ -1,6 +1,7 @@
 #include "Bang/G_Screen.h"
 
 #include "Bang/GL.h"
+#include "Bang/Debug.h"
 
 G_Screen::G_Screen()
 {
@@ -17,14 +18,19 @@ void G_Screen::Render()
 void G_Screen::Initialize()
 {
     glewExperimental = GL_TRUE;
-    glewInit();
+
+    GLenum glewError = glewInit();
+    if (glewError != GLEW_OK)
+    {
+        Debug_Error("Glew init error: " << glewGetErrorString(glewError));
+    }
 
     GL::Enable(GL_DEPTH_TEST);
     GL::Enable(GL_STENCIL_TEST);
     GL::Enable(GL_CULL_FACE);
 }
 
-void G_Screen::Resize(int w, int h)
+void G_Screen::OnResize(int w, int h)
 {
     GL::SetViewport(0, 0, w, h);
     m_width = w;

@@ -45,9 +45,9 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_scenePass  =
      new GPPass_RenderLayer(this, RL::Scene,
      {
-       new GPPass_G(this, true),     // Lighted G_Pass
+       new GPPass_G(this, true),            // Lighted G_Pass
        new GPPass_SP_DeferredLights(this),  // Apply light
-       new GPPass_G(this, false),    // UnLighted G_Pass
+       new GPPass_G(this, false),           // UnLighted G_Pass
        new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
      });
@@ -73,7 +73,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     if (camera) { camera->Bind(); }
 
     RenderGBuffer(renderers, sceneChildren);
-    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
+    m_gbuffer->RenderToScreen(G_GBuffer::AttColor);
 }
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
@@ -181,12 +181,6 @@ GraphicPipeline* GraphicPipeline::GetActive()
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
-}
-
-void GraphicPipeline::SetGBufferAttachmentToBeRendered(
-        G_GBuffer::AttachmentId attachment)
-{
-    m_gbufferAttachToBeShown = attachment;
 }
 
 GLContext *GraphicPipeline::GetGLContext() const

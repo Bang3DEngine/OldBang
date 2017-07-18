@@ -41,13 +41,13 @@ public:
 
     void RemoveValues(const Value &value)
     {
-        for (auto it = this->Begin(); it != this->End(); ++it)
+        for (auto it = this->Begin(); it != this->End(); )
         {
             if (it->second == value)
             {
                 it = Remove(it);
-                --it;
             }
+            else { ++it; }
         }
     }
 

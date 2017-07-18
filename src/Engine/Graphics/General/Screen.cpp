@@ -17,7 +17,7 @@ Screen::~Screen()
 
 void Screen::Initialize()
 {
-    Screen::Initialize();
+    G_Screen::Initialize();
     m_gPipeline = new GraphicPipeline(this);
 }
 
@@ -30,9 +30,9 @@ void Screen::Render() const
     }
 }
 
-void Screen::Resize(int w, int h)
+void Screen::OnResize(int w, int h)
 {
-    Screen::Resize(w,h);
+    G_Screen::OnResize(w,h);
     ENSURE(m_gPipeline);
 
     m_gPipeline->OnResize(w, h);

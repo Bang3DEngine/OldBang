@@ -16,22 +16,24 @@
 
 Application* Application::s_appSingleton = nullptr;
 
-Application::Application()
+Application::Application(int argc, char **argv)
 {
     Application::s_appSingleton = this;
 
-    m_window           = new Window();
-    m_time             = new Time();
+    Path binPath(argv[0]);
+    Paths::SetEnginePath( binPath.GetDirectory().GetDirectory().GetDirectory() );
+    Paths::SetEngineBinaryDir(binPath.GetDirectory());
+
     m_input            = new Input();
     m_shaderManager    = new ShaderManager();
     m_audioManager     = new AudioManager();
     m_sceneManager     = new SceneManager();
     m_assetsManager    = new AssetsManager();
+    m_window           = new Window();
 }
 
 Application::~Application()
 {
-    delete m_time;
     delete m_input;
     delete m_audioManager;
     delete m_sceneManager;
@@ -40,32 +42,52 @@ Application::~Application()
 
 void Application::MainLoop()
 {
-    while (true)
+    bool quit = false;
+    while (!quit)
     {
-        float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
-        m_lastRenderTime = Time::GetNow();
-        Time::GetInstance()->m_deltaTime = deltaTime;
-        Time::s_deltaTime = deltaTime;
-        Time::s_time += deltaTime;
-        //
+        Time::OnFrameStarted();
 
         // Process mouse and key events, so the Input is available in OnUpdate
         // as accurate as possible.
         // Lost events in between Update and Render will be delayed by Input.
-        Input::GetInstance()->ProcessEnqueuedEvents();
+        m_input->ProcessEnqueuedEvents();
+        m_sceneManager->Update();
+        m_window->Render();
 
-        SceneManager::Update();
-
-        // Render screen
-        Screen::GetInstance()->Render();
-
-        Input::GetInstance()->OnFrameFinished();
+        m_input->OnFrameFinished();
+        Time::OnFrameFinished();
+        quit = !ProcessEvents();
     }
 }
 
-Time *Application::GetTime() const
+bool Application::ProcessEvents()
 {
-    return m_time;
+    SDL_Event event;
+    constexpr int THERE_ARE_MORE_EVENTS = 1;
+    while (SDL_PollEvent(&event) == THERE_ARE_MORE_EVENTS)
+    {
+        switch (event.type)
+        {
+            case SDL_QUIT: return false;
+
+            case SDL_WINDOWEVENT:
+            switch (event.window.event)
+            {
+                case SDL_WINDOWEVENT_CLOSE:
+                    return false;
+
+                case SDL_WINDOWEVENT_RESIZED:
+                case SDL_WINDOWEVENT_SIZE_CHANGED:
+                    m_window->OnResize(event.window.data1, event.window.data2);
+                    break;
+            }
+            break;
+
+            default:
+                m_input->PeekEvent(event);
+        }
+    }
+    return true;
 }
 
 Input *Application::GetInput() const
@@ -91,11 +113,6 @@ Application *Application::GetInstance()
 Window *Application::GetMainWindow() const
 {
     return m_window;
-}
-
-void Application::ResetDeltaTime()
-{
-    m_lastRenderTime = Time::GetNow();
 }
 
 ShaderManager *Application::GetShaderManager() const

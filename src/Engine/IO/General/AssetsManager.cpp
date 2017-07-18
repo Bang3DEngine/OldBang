@@ -13,11 +13,8 @@ AssetsManager::AssetsManager()
 
 AssetsManager::~AssetsManager()
 {
-    while (!m_pathsToAssets.Empty())
-    {
-        auto it = m_pathsToAssets.Begin();
-        delete it->second;
-    }
+    List<Asset*> assets = m_pathsToAssets.GetValues();
+    for (Asset *asset : assets) { delete asset; }
 }
 
 AssetsManager *AssetsManager::GetCurrent()

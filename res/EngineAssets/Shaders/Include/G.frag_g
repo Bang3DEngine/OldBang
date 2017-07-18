@@ -18,7 +18,7 @@ void EndMain()
     B_GIn_DiffColor    = B_Out_DiffColor;
     B_GIn_Misc         = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
                               B_Out_Shininess,
-                              B_IsSelected ? 1.0 : 0.0,
+                              0.0,
                               0);
 
     // Encode depth
