@@ -1,6 +1,8 @@
 #include "Bang/UIImageInspectorWidget.h"
 
+#include "Bang/ImageFile.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Extensions.h"
 #include "Bang/AssetsManager.h"
 
 UIImageInspectorWidget::UIImageInspectorWidget(UIImage *uiImage)
@@ -17,7 +19,7 @@ void UIImageInspectorWidget::InitExtra()
 {
     UIRendererInspectorWidget::InitExtra();
 
-    m_imageAW = new AttrWidgetFile("Image");
+    m_imageAW = new AttrWidgetFile("Image", {Extensions::Get<Texture2D>()});
 
     InsertAttributeWidget(m_imageAW);
 }

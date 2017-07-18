@@ -48,7 +48,15 @@ bool InspectorWidgetGroup::IsEnabled() const
 void InspectorWidgetGroup::InsertInspectorWidget(
         InspectorWidget *inspectorWidget)
 {
-    InsertInspectorWidgets( {inspectorWidget} );
+    inspectorWidget->Init();
+    inspectorWidget->OnUpdate();
+
+    QObject::connect(inspectorWidget, SIGNAL(Changed(IInspectorWidget*)),
+                     this, SLOT(OnInspectorWidgetChanged(IInspectorWidget*)));
+
+    inspectorWidget->RegisterDestroyListener(this);
+    m_inspectorWidgets.PushBack(inspectorWidget);
+    emit RequestInsert(inspectorWidget);
 }
 
 void InspectorWidgetGroup::InsertInspectorWidgets(
@@ -56,14 +64,28 @@ void InspectorWidgetGroup::InsertInspectorWidgets(
 {
     for (InspectorWidget* inspWidget : inspectorWidgets)
     {
-        inspWidget->Init();
-        inspWidget->OnUpdate();
-
-        QObject::connect(inspWidget, SIGNAL(Changed(IInspectorWidget*)),
-                         this, SLOT(OnInspectorWidgetChanged(IInspectorWidget*)));
-
-        m_inspectorWidgets.PushBack(inspWidget);
+        InsertInspectorWidget(inspWidget);
     }
+}
+
+void InspectorWidgetGroup::MoveInspectorWidget(InspectorWidget *inspWidget,
+                                               int newIndex)
+{
+    auto oldIt = m_inspectorWidgets.Find(inspWidget);
+    auto newIt = m_inspectorWidgets.Begin();
+    std::advance(newIt, newIndex);
+
+    m_inspectorWidgets.InsertAfter(newIt, inspWidget);
+    m_inspectorWidgets.Remove(oldIt);
+
+    emit RequestMove(inspWidget, newIndex);
+}
+
+List<InspectorWidget*>::Iterator InspectorWidgetGroup::RemoveInspectorWidget(
+                                               InspectorWidget *inspWidget)
+{
+    emit RequestRemove(inspWidget);
+    return m_inspectorWidgets.Remove(inspWidget);
 }
 
 const List<InspectorWidget*>& InspectorWidgetGroup::GetInspectorWidgets() const
@@ -76,3 +98,16 @@ void InspectorWidgetGroup::OnInspectorWidgetChanged(
 {
 }
 
+void InspectorWidgetGroup::OnDestroyDemanded(Destroyable *objectDemandingDestroy)
+{
+    for (auto it = GetInspectorWidgets().Begin();
+         it != GetInspectorWidgets().End(); )
+    {
+        InspectorWidget *inspectorWidget = *it;
+        if (inspectorWidget == objectDemandingDestroy)
+        {
+            it = RemoveInspectorWidget(inspectorWidget);
+        }
+        else { ++it; }
+    }
+}

@@ -1,7 +1,7 @@
 #include "Bang/AudioSourceInspectorWidget.h"
 
-#include "Bang/Debug.h"
 #include "Bang/AudioClip.h"
+#include "Bang/Extensions.h"
 #include "Bang/EditorState.h"
 #include "Bang/AudioSource.h"
 #include "Bang/AssetsManager.h"
@@ -30,7 +30,8 @@ void AudioSourceInspectorWidget::InitExtra()
 {
     ComponentWidget::InitExtra();
 
-    m_audioClipFileAW  = new AttrWidgetFile("Audio Clip");
+    m_audioClipFileAW  = new AttrWidgetFile("Audio Clip",
+                                            {Extensions::Get<AudioClip>()});
     m_volumeAW         = new AttrWidgetFloat("Volume");
     m_pitchAW          = new AttrWidgetFloat("Pitch");
     m_rangeAW          = new AttrWidgetFloat("Range");

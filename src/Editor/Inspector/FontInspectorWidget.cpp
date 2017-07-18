@@ -1,7 +1,8 @@
 #include "Bang/FontInspectorWidget.h"
 
-FontInspectorWidget::FontInspectorWidget(
-        const FontFile &FontFile)
+#include "Bang/Extensions.h"
+
+FontInspectorWidget::FontInspectorWidget(const FontFile &FontFile)
     : AssetInspectorWidget(FontFile)
 {
 }
@@ -18,7 +19,7 @@ void FontInspectorWidget::OnDestroy()
 void FontInspectorWidget::InitExtra()
 {
     AssetInspectorWidget::InitExtra();
-    m_ttfFontAW = new AttrWidgetFile("TTF File");
+    m_ttfFontAW = new AttrWidgetFile("TTF File", Extensions::GetTTFList());
 
     InsertAttributeWidget(m_ttfFontAW);
 }

@@ -2,6 +2,7 @@
 
 #include "Bang/G_Shader.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Extensions.h"
 #include "Bang/IconManager.h"
 #include "Bang/ShaderProgram.h"
 
@@ -28,9 +29,12 @@ void MaterialInspectorWidget::InitExtra()
     m_shininessAW        = new AttrWidgetFloat("Shininess");
     m_receivesLightingAW = new AttrWidgetBool("Receives Lighting");
     m_uvMultiplyAW       = new AttrWidgetVectorFloat("Uv Multiply", 2);
-    m_textureAW          = new AttrWidgetFile("Texture");
-    m_vShaderAW          = new AttrWidgetFile("Vertex Shader");
-    m_fShaderAW          = new AttrWidgetFile("Fragment Shader");
+    m_textureAW          = new AttrWidgetFile("Texture",
+                                              {Extensions::Get<Texture2D>()});
+    m_vShaderAW          = new AttrWidgetFile("Vertex Shader",
+                                              Extensions::GetVertexShaderList());
+    m_fShaderAW          = new AttrWidgetFile("Fragment Shader",
+                                              Extensions::GetFragmentShaderList());
 
     InsertAttributeWidget(m_diffuseColorAW);
     InsertAttributeWidget(m_shininessAW);

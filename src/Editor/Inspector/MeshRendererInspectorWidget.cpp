@@ -1,6 +1,7 @@
 #include "Bang/MeshRendererInspectorWidget.h"
 
 #include "Bang/Mesh.h"
+#include "Bang/Extensions.h"
 #include "Bang/AssetsManager.h"
 
 MeshRendererInspectorWidget::MeshRendererInspectorWidget(
@@ -18,7 +19,7 @@ void MeshRendererInspectorWidget::InitExtra()
 {
     RendererInspectorWidget::InitExtra();
 
-    m_meshAW = new AttrWidgetFile("Mesh");
+    m_meshAW = new AttrWidgetFile("Mesh", {Extensions::Get<Mesh>()});
 
     InsertAttributeWidget(m_meshAW);
 }

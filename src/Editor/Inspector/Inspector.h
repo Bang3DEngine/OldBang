@@ -14,6 +14,7 @@ class Object;
 class QCheckBox;
 class QDropEvent;
 class InspectorWidget;
+class IInspectorWidget;
 class SerializableObject;
 class InspectorWidgetGroup;
 class Inspector : public DragDropQListWidget,
@@ -32,10 +33,11 @@ public:
 
     const List<InspectorWidget*>& GetCurrentInspectorWidgets() const;
     const InspectorWidgetGroup* GetCurrentInspectorWidgetGroup() const;
-    void InsertInspectorWidget(InspectorWidget *inspectorWidget,
-                               int row = -1);
 
 public slots:
+    void InsertInspectorWidget(InspectorWidget *inspectorWidget);
+    void MoveInspectorWidget(InspectorWidget *inspectorWidget, int newRow);
+    void RemoveInspectorWidget(InspectorWidget *inspectorWidget);
     void OnEnabledCheckBoxChanged(bool checked);
     void OnUpdate();
 
@@ -47,22 +49,21 @@ private:
     InspectorWidgetGroup* m_currentInspectorWidgetGroup = nullptr;
     InspectorContextMenu m_iContextMenu;
 
-    QTimer     m_refreshTimer;
+    QTimer     m_updateTimer;
     Object    *p_inspectedObject = nullptr;
     QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
 
     void Show(InspectorWidgetGroup* inspectorWidgetGroup);
+    int GetInspectorWidgetRow(InspectorWidget *inspectorWidget) const;
 
     void dropEvent(QDropEvent *e) override;
-    void RefreshSizeHints();
+    void UpdateSizeHints();
 
 protected: // IDestroyListener
     void OnDestroyableDestroyed(Destroyable *destroyedObject) override;
-    void OnDestroyDemanded(Destroyable *objectDemandingDestroy) override;
 
     friend class InspectorWidget;
-    friend class InspectorContextMenu;
 };
 
 #endif // INSPECTOR_H

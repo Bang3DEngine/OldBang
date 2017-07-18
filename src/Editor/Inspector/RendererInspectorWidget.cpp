@@ -1,6 +1,7 @@
 #include "Bang/RendererInspectorWidget.h"
 
 #include "Bang/Material.h"
+#include "Bang/Extensions.h"
 #include "Bang/AssetsManager.h"
 
 RendererInspectorWidget::RendererInspectorWidget(Renderer *renderer)
@@ -17,7 +18,8 @@ void RendererInspectorWidget::InitExtra()
 {
     ComponentWidget::InitExtra();
 
-    m_materialAW      = new AttrWidgetFile("Material");
+    m_materialAW      = new AttrWidgetFile("Material",
+                                           {Extensions::Get<Material>()});
     m_drawWireframeAW = new AttrWidgetBool("Wireframe");
     m_lineWidthAW     = new AttrWidgetFloat("Wire Width");
 

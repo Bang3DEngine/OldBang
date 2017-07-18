@@ -1,5 +1,8 @@
 #include "Bang/Texture2DInspectorWidget.h"
 
+#include "Bang/ImageFile.h"
+#include "Bang/Extensions.h"
+
 Texture2DInspectorWidget::Texture2DInspectorWidget(const Texture2DFile &texFile)
     : AssetInspectorWidget(texFile)
 {
@@ -18,7 +21,7 @@ void Texture2DInspectorWidget::InitExtra()
 {
     AssetInspectorWidget::InitExtra();
 
-    m_imageFileAW   = new AttrWidgetFile("Image");
+    m_imageFileAW   = new AttrWidgetFile("Image", Extensions::GetList<ImageFile>());
     m_filterModeAW  = new AttrWidgetEnum<G_Texture::FilterMode>(
                              "Filter Mode",
                              {G_Texture::FilterMode::Nearest,

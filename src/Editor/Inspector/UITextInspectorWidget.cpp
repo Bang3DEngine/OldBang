@@ -1,6 +1,7 @@
 #include "UITextInspectorWidget.h"
 
 #include "Bang/Font.h"
+#include "Bang/Extensions.h"
 #include "Bang/AssetsManager.h"
 
 UITextInspectorWidget::UITextInspectorWidget(UIText *uiText)
@@ -17,7 +18,7 @@ void UITextInspectorWidget::InitExtra()
 {
     UIRendererInspectorWidget::InitExtra();
 
-    m_fontAW     = new AttrWidgetFile("Font");
+    m_fontAW     = new AttrWidgetFile("Font", {Extensions::Get<Font>()});
     m_contentAW  = new AttrWidgetString("Content");
     m_textSizeAW = new AttrWidgetFloat("Size");
     m_hSpacingAW = new AttrWidgetFloat("HSpacing");

@@ -11,12 +11,12 @@ template <class T>
 class List : public IToString,
              public std::list<T>
 {
+public:
     typedef typename std::list<T>::iterator               Iterator;
     typedef typename std::list<T>::const_iterator         Const_Iterator;
     typedef typename std::list<T>::reverse_iterator       Reverse_Iterator;
     typedef typename std::list<T>::const_reverse_iterator Const_Reverse_Iterator;
 
-public:
     List() { }
     List(const std::list<T> &l)         : std::list<T>(l) { }
     List(int size)                      : std::list<T>(size) { }

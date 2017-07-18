@@ -4,7 +4,6 @@
 #include <QAction>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Inspector.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
 #include "Bang/EditorWindow.h"
@@ -87,9 +86,7 @@ void ComponentWidgetContextMenu::OnMoveUpSelected()
 }
 void ComponentWidgetContextMenu::MenuMoveUpSelected()
 {
-    m_cWidget->p_component->gameObject->
-            MoveComponent(m_cWidget->p_component, -1);
-    Inspector::GetInstance()->OnUpdate();
+    m_cWidget->p_component->gameObject->MoveComponent(m_cWidget->p_component, -1);
 }
 
 void ComponentWidgetContextMenu::OnMoveDownSelected()
@@ -98,9 +95,7 @@ void ComponentWidgetContextMenu::OnMoveDownSelected()
 }
 void ComponentWidgetContextMenu::MenuMoveDownSelected()
 {
-    m_cWidget->p_component->gameObject->
-            MoveComponent(m_cWidget->p_component, 1);
-    Inspector::GetInstance()->OnUpdate();
+    m_cWidget->p_component->gameObject->MoveComponent(m_cWidget->p_component, 1);
 }
 
 void ComponentWidgetContextMenu::OnCopyComponentSelected()
@@ -109,9 +104,7 @@ void ComponentWidgetContextMenu::OnCopyComponentSelected()
 }
 void ComponentWidgetContextMenu::CopyComponentSelected()
 {
-    ComponentClipboard::CopyComponent(
-                m_cWidget->p_component);
-    Inspector::GetInstance()->OnUpdate();
+    ComponentClipboard::CopyComponent(m_cWidget->p_component);
 }
 
 void ComponentWidgetContextMenu::OnPasteComponentSelected()
@@ -120,9 +113,7 @@ void ComponentWidgetContextMenu::OnPasteComponentSelected()
 }
 void ComponentWidgetContextMenu::PasteComponentSelected()
 {
-    ComponentClipboard::PasteComponentInto(
-                m_cWidget->p_component->gameObject);
-    Inspector::GetInstance()->OnUpdate();
+    ComponentClipboard::PasteComponentInto(m_cWidget->p_component->gameObject);
 }
 
 void ComponentWidgetContextMenu::OnPasteComponentValuesSelected()
@@ -131,9 +122,7 @@ void ComponentWidgetContextMenu::OnPasteComponentValuesSelected()
 }
 void ComponentWidgetContextMenu::PasteComponentValuesSelected()
 {
-    ComponentClipboard::PasteComponentValuesInto(
-                m_cWidget->p_component);
-    Inspector::GetInstance()->OnUpdate();
+    ComponentClipboard::PasteComponentValuesInto(m_cWidget->p_component);
 }
 
 void ComponentWidgetContextMenu::OnRemoveComponentSelected()
@@ -142,7 +131,5 @@ void ComponentWidgetContextMenu::OnRemoveComponentSelected()
 }
 void ComponentWidgetContextMenu::RemoveComponentSelected()
 {
-    m_cWidget->p_component->gameObject->
-            RemoveComponent(m_cWidget->p_component);
-    Inspector::GetInstance()->OnUpdate();
+    m_cWidget->p_component->gameObject->RemoveComponent(m_cWidget->p_component);
 }

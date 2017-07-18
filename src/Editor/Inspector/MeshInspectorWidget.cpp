@@ -1,5 +1,8 @@
 #include "Bang/MeshInspectorWidget.h"
 
+#include "Bang/ModelFile.h"
+#include "Bang/Extensions.h"
+
 MeshInspectorWidget::MeshInspectorWidget(const MeshFile &meshFile)
     : AssetInspectorWidget(meshFile)
 {
@@ -18,7 +21,8 @@ void MeshInspectorWidget::InitExtra()
 {
     AssetInspectorWidget::InitExtra();
 
-    m_modelFileAW = new AttrWidgetFile("Model");
+    m_modelFileAW = new AttrWidgetFile("Model",
+                                       Extensions::GetList<ModelFile>());
 
     InsertAttributeWidget(m_modelFileAW);
 }

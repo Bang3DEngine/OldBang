@@ -18,6 +18,7 @@
 #include "Bang/Material.h"
 #include "Bang/TextFile.h"
 #include "Bang/MeshFile.h"
+#include "Bang/Behaviour.h"
 #include "Bang/ModelFile.h"
 #include "Bang/SoundFile.h"
 #include "Bang/AudioClip.h"
@@ -105,7 +106,7 @@ bool BFile::IsMaterialFile() const
 bool BFile::IsBehaviour() const
 {
     return GetPath().IsFile() &&
-           GetPath().HasExtension(Extensions::GetList<BehaviourFile>());
+           GetPath().HasExtension(Extensions::GetList<Behaviour>());
 }
 
 bool BFile::IsTextFile() const

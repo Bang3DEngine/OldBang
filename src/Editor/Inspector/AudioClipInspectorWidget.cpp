@@ -1,5 +1,8 @@
 #include "Bang/AudioClipInspectorWidget.h"
 
+#include "Bang/SoundFile.h"
+#include "Bang/Extensions.h"
+
 AudioClipInspectorWidget::AudioClipInspectorWidget(
         const AudioClipFile &audioClipFile)
     : AssetInspectorWidget(audioClipFile)
@@ -18,7 +21,8 @@ void AudioClipInspectorWidget::OnDestroy()
 void AudioClipInspectorWidget::InitExtra()
 {
     AssetInspectorWidget::InitExtra();
-    m_soundFileAW = new AttrWidgetFile("Sound File");
+    m_soundFileAW = new AttrWidgetFile("Sound File",
+                                       Extensions::GetList<SoundFile>());
     m_lengthAW = new AttrWidgetString("Length");
 
     InsertAttributeWidget(m_soundFileAW);

@@ -112,8 +112,7 @@ void SelectionFramebuffer::ProcessSelection()
             // Selection of a GameObject
             if (!mouseOverGO->GetHideFlags()->IsOn(HideFlag::HideInHierarchy))
             {
-                EditorWindow::GetInstance()->
-                        widgetHierarchy->SelectGameObject(mouseOverGO);
+                Hierarchy::GetInstance()->SelectGameObject(mouseOverGO);
                 if (Input::GetMouseButtonDoubleClick(Input::MouseButton::Left))
                 {
                     // Double clicking

@@ -6,6 +6,7 @@
 #include "Bang/Prefab.h"
 #include "Bang/Project.h"
 #include "Bang/Material.h"
+#include "Bang/Behaviour.h"
 #include "Bang/ModelFile.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Texture2D.h"
@@ -41,7 +42,22 @@ template<> List<String> Extensions::GetList<ImageFile>()
     return {"jpg", "jpeg", "png", "bmp", "tiff", "tga"};
 }
 
+List<String> Extensions::GetTTFList()
+{
+    return {"ttf"};
+}
+
 List<String> Extensions::GetTextFileList()
 {
-    return {"txt", "frag", "vert", "glsl"}
+    return {"txt"};
+}
+
+List<String> Extensions::GetVertexShaderList()
+{
+    return {"vert", "vert_*"};
+}
+
+List<String> Extensions::GetFragmentShaderList()
+{
+    return {"frag", "frag_*"};
 }

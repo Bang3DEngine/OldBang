@@ -1,6 +1,7 @@
 #include "BehaviourInspectorWidget.h"
 
 #include "Bang/Behaviour.h"
+#include "Bang/Extensions.h"
 
 BehaviourInspectorWidget::BehaviourInspectorWidget(Behaviour *behaviour)
     : ComponentWidget(behaviour)
@@ -17,7 +18,8 @@ void BehaviourInspectorWidget::InitExtra()
 {
     ComponentWidget::InitExtra();
 
-    m_sourceFileAW = new AttrWidgetFile("Source file");
+    m_sourceFileAW = new AttrWidgetFile("Source file",
+                                        Extensions::GetList<Behaviour>());
     InsertAttributeWidget(m_sourceFileAW);
 }
 

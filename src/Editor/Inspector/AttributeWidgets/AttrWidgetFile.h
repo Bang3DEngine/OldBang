@@ -18,10 +18,11 @@ class AttrWidgetFile : public AttributeWidget,
     Q_OBJECT
 
 public:
-    AttrWidgetFile(const String &labelText);
+    AttrWidgetFile(const String &labelText,
+                   const List<String> &allowedExtensions = {"*"});
     virtual ~AttrWidgetFile();
 
-    virtual void SetValue(const Path &filepath, bool draggedFile = false);
+    virtual void SetValue(const Path &filepath);
     virtual String GetValue() const;
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
@@ -39,10 +40,10 @@ public slots:
 private:
     QLabel *m_iconLabel = nullptr;
     QHBoxLayout *m_hLayout = nullptr;
-    String m_attrName = "";
+    String m_labelText = "";
 
-    Path m_filepath;
-    String m_allowedExtensions;
+    Path m_filepath = Path::Empty;
+    List<String> m_allowedExtensions;
     FileLineEdit *m_filepathLineEdit = nullptr;
 
     void RefreshIcon();

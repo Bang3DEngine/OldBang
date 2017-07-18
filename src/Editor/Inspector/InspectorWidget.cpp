@@ -137,7 +137,7 @@ void InspectorWidget::OnCloseOpenButtonClicked()
     SetClosed(m_closed);
     OnUpdate();
     UpdateContentMargins();
-    Inspector::GetInstance()->RefreshSizeHints();
+    Inspector::GetInstance()->UpdateSizeHints();
 }
 
 void InspectorWidget::SetClosed(bool closedWidget)

@@ -44,6 +44,11 @@ void CameraInspectorWidget::OnUpdate()
     m_projModeAW->SetValue( p_camera->GetProjectionMode() );
     m_orthoHeightAW->SetValue( p_camera->GetOrthoHeight() );
     m_fovDegreesAW->SetValue( p_camera->GetFovDegrees() );
+
+    const bool orthoMode =
+            p_camera->GetProjectionMode() == Camera::ProjectionMode::Orthographic;
+    m_orthoHeightAW->SetVisible(orthoMode);
+    m_fovDegreesAW->SetVisible(!orthoMode);
 }
 
 void CameraInspectorWidget::OnAttrWidgetValueChanged(IAttributeWidget *attrWidget)

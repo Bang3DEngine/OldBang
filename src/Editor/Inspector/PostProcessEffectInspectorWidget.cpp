@@ -1,5 +1,6 @@
 #include "Bang/PostProcessEffectInspectorWidget.h"
 
+#include "Bang/Extensions.h"
 #include "Bang/ShaderManager.h"
 
 PostProcessEffectInspectorWidget::PostProcessEffectInspectorWidget(
@@ -17,7 +18,8 @@ void PostProcessEffectInspectorWidget::InitExtra()
 {
     ComponentWidget::InitExtra();
 
-    m_postProcessShaderAW = new AttrWidgetFile("Post Process Shader");
+    m_postProcessShaderAW = new AttrWidgetFile("Post Process Shader",
+                                               Extensions::GetFragmentShaderList());
     m_priorityAW          = new AttrWidgetInt("Priority");
     m_typeAW              = new AttrWidgetEnum<PostProcessEffect::Type>(
                                 "Type",

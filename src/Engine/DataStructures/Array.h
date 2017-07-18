@@ -11,12 +11,12 @@ template <class T>
 class Array  : public IToString,
                public std::vector<T>
 {
+public:
     typedef typename std::vector<T>::iterator               Iterator;
     typedef typename std::vector<T>::const_iterator         Const_Iterator;
     typedef typename std::vector<T>::reverse_iterator       Reverse_Iterator;
     typedef typename std::vector<T>::const_reverse_iterator Const_Reverse_Iterator;
 
-public:
     Array() { }
     Array(const std::vector<T> &v)      : std::vector<T>(v) { }
     Array(int size)                     : std::vector<T>(size) { }
