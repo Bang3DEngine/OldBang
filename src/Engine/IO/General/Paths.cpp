@@ -6,18 +6,20 @@
 #include "Bang/String.h"
 #include "Bang/SystemUtils.h"
 
-Path Paths::c_enginePath = Path::Empty;
-Path Paths::c_engineAssetsPath = Path::Empty;
-Path Paths::c_engineBinaryDirPath = Path::Empty;
-Path Paths::c_engineLibrariesDirPath = Path::Empty;
-
-Path Paths::c_projectPath = Path::Empty;
-Path Paths::c_projectAssetsPath = Path::Empty;
-Path Paths::c_projectLibrariesPath = Path::Empty;
+Path Paths::c_engineRoot = Path::Empty;
+Path Paths::c_projectRoot = Path::Empty;
 
 Paths::Paths()
 {
 
+}
+
+void Paths::InitPaths(int argc, char **argv)
+{
+    Path binPath(argv[0]);
+    Paths::SetEngineRoot(binPath.GetDirectory()
+                                .GetDirectory()
+                                .GetDirectory());
 }
 
 Path Paths::Home()
@@ -25,38 +27,27 @@ Path Paths::Home()
     return Path(QDir::homePath());
 }
 
-Path Paths::GameExecutableLibrariesDir()
-{
-    return Paths::EngineBinaryDir()
-                    .GetDirectory().Append("GameRelease/lib");
-}
-
-Path Paths::GameExecutableOutputFile()
-{
-    return Paths::EngineBinaryDir()
-                    .GetDirectory()
-                    .Append("GameRelease/Game")
-                    .AppendExtension("exe");
-}
-
-const Path &Paths::EngineBinaryDir()
-{
-    return Paths::c_engineBinaryDirPath;
-}
-
-const Path &Paths::EngineLibrariesDir()
-{
-    return Paths::c_engineLibrariesDirPath;
-}
-
 const Path &Paths::Engine()
 {
-    return Paths::c_enginePath;
+    return Paths::c_engineRoot;
 }
-
-const Path &Paths::EngineAssets()
+Path Paths::EngineAssets()
 {
-    return Paths::c_engineAssetsPath;
+    return Engine().Append("res/EngineAssets");
+}
+Path Paths::EngineBinaryDir(BinType binaryType)
+{
+    return Engine()
+              .Append("bin")
+              .Append( binaryType == BinType::Debug ? "Debug" : "Release" );
+}
+Path Paths::EngineLibrariesDir(BinType binaryType)
+{
+    return Paths::EngineBinaryDir(binaryType).Append("lib");
+}
+Path Paths::GameExecutableOutputFile(BinType binaryType)
+{
+    return Paths::EngineBinaryDir(binaryType).Append("Game.exe");
 }
 
 List<Path> Paths::GetBehavioursSourcesFilepaths()
@@ -144,17 +135,17 @@ const List<Path> &Paths::GetQtLibrariesDirs()
 
 const Path &Paths::Project()
 {
-    return Paths::c_projectPath;
+    return Paths::c_projectRoot;
 }
 
-const Path &Paths::ProjectAssets()
+Path Paths::ProjectAssets()
 {
-    return Paths::c_projectAssetsPath;
+    return Project().Append("Assets");
 }
 
-const Path &Paths::ProjectLibrariesDir()
+Path Paths::ProjectLibrariesDir()
 {
-    return Paths::c_projectLibrariesPath;
+    return Project().Append("Libraries");
 }
 
 Path Paths::GetRelative(const Path &path)
@@ -195,33 +186,22 @@ bool Paths::IsEnginePath(const Path &path)
     return path.BeginsWith( Paths::Engine() + "/" );
 }
 
-Path Paths::EnginePath(const String &path)
+Path Paths::MakeEnginePath(const String &path)
 {
     return Paths::EngineAssets().Append(path);
 }
 
-Path Paths::UserPath(const String &path)
+Path Paths::MakeProjectPath(const String &path)
 {
     return Paths::ProjectAssets().Append(path);
 }
 
-void Paths::SetEngineBinaryDir(const Path &engineBinaryDir)
+void Paths::SetEngineRoot(const Path &engineRootDir)
 {
-    Paths::c_engineBinaryDirPath = engineBinaryDir;
-    Paths::c_engineLibrariesDirPath = Paths::c_engineBinaryDirPath.Append("lib");
+    Paths::c_engineRoot = engineRootDir;
 }
 
-
-void Paths::SetEnginePath(const Path &enginePath)
+void Paths::SetProjectRoot(const Path &projectRootDir)
 {
-    Paths::c_enginePath       = enginePath;
-    Paths::c_engineAssetsPath = Paths::c_enginePath.Append("res")
-                                                   .Append("EngineAssets");
-}
-
-void Paths::SetProjectPath(const Path &projectPath)
-{
-    Paths::c_projectPath          = projectPath;
-    Paths::c_projectAssetsPath    = Paths::c_projectPath.Append("Assets");
-    Paths::c_projectLibrariesPath = Paths::c_projectPath.Append("Libraries");
+    Paths::c_projectRoot = projectRootDir;
 }

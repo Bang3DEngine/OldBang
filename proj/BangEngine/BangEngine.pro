@@ -16,6 +16,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Engine/General/Application.cpp \
     $$BANG_ROOT/src/Engine/Windows/Window.cpp \
+    $$BANG_ROOT/src/Engine/GameBuilder/GameBuilder.cpp \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
@@ -97,6 +98,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \
+    $$BANG_ROOT/src/Engine/GameBuilder/GameBuilder.h \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.h \
     $$BANG_ROOT/src/Engine/Components/Transform.h \
     $$BANG_ROOT/src/Engine/Components/Component.h \

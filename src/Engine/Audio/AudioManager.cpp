@@ -1,7 +1,5 @@
 #include "Bang/AudioManager.h"
 
-#include <QThreadPool>
-
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/alut.h>

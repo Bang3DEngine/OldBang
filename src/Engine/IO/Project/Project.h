@@ -15,7 +15,6 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
     const Path& GetProjectDirPath() const;
-    Path GetProjectDir() const;
     Path GetProjectAssetsRootFilepath() const;
     Path GetProjectFileFilepath() const;
     String GetProjectName() const;
@@ -23,6 +22,7 @@ public:
 
     void SetProjectRootFilepath(const Path &projectDir);
 
+    virtual bool OpenFirstFoundScene() const;
 private:
     String m_randomId = "";
     Path m_projectRootFilepath;

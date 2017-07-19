@@ -21,9 +21,6 @@ public:
 
     static Project* GetCurrentProject();
 
-protected:
-    virtual bool OpenFirstFoundScene(const Path &projectDirPath) const;
-
 private:
     static Project *s_currentProject;
 };

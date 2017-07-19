@@ -277,7 +277,7 @@ Path XMLAttribute::GetFilepath() const
     if ( GetValue().Empty() ) { return Path(); }
 
     if ( HasProperty(XMLProperty::IsEngineFile) ) { return EPATH(GetValue()); }
-    else { return UPATH(GetValue()); }
+    else { return PPATH(GetValue()); }
 }
 
 String XMLAttribute::GetString() const

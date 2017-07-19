@@ -63,7 +63,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     SceneManager *sm = SceneManager::GetInstance();
 
     Path spath(sceneFilepath);
-    if (!spath.IsFile()) { spath = UPATH(spath.GetAbsolute()); }
+    if (!spath.IsFile()) { spath = PPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
     {
         spath = spath.AppendExtension(Extensions::Get<Scene>());
@@ -76,7 +76,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
     String sceneExt = Extensions::Get<Scene>();
-    SceneManager::LoadScene( UPATH(sceneFilepath).AppendExtension(sceneExt) );
+    SceneManager::LoadScene( PPATH(sceneFilepath).AppendExtension(sceneExt) );
 }
 
 void SceneManager::TryToLoadQueuedScene()

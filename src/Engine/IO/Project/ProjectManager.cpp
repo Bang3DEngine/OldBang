@@ -11,7 +11,6 @@
 #include "Bang/XMLNode.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Extensions.h"
-#include "Bang/SceneManager.h"
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -30,9 +29,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath) const
     currentProject->Read(xmlInfo);
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
-    Paths::SetProjectPath(currentProject->GetProjectDirPath());
-
-    OpenFirstFoundScene(currentProject->GetProjectDirPath());
+    Paths::SetProjectRoot(currentProject->GetProjectDirPath());
 
     return currentProject;
 }
@@ -100,7 +97,6 @@ void ProjectManager::SaveCurrentProject()
 
 void ProjectManager::CloseCurrentProject()
 {
-    // TODO: Ask for saving current open project and stuff
     if (ProjectManager::s_currentProject)
     {
         delete s_currentProject;
@@ -112,18 +108,4 @@ void ProjectManager::CloseCurrentProject()
 Project *ProjectManager::GetCurrentProject()
 {
     return ProjectManager::s_currentProject;
-}
-
-bool ProjectManager::OpenFirstFoundScene(const Path &projectDirPath) const
-{
-    List<Path> sceneFilepaths = projectDirPath.GetFiles(true,
-                                   {"*." + Extensions::Get<Scene>()});
-
-    bool foundSceneFile = !sceneFilepaths.IsEmpty();
-    if (foundSceneFile)
-    {
-        SceneManager::OpenScene(sceneFilepaths.Front());
-    }
-
-    return foundSceneFile;
 }

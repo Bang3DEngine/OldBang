@@ -1,8 +1,6 @@
 #ifndef ANONYMOUSAUDIOPLAYER_H
 #define ANONYMOUSAUDIOPLAYER_H
 
-#include <QThreadPool>
-
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/alut.h>

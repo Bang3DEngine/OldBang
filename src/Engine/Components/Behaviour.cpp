@@ -2,7 +2,6 @@
 
 #include "Bang/Time.h"
 #include "Bang/Application.h"
-#include "Bang/QtProjectManager.h"
 
 Behaviour::Behaviour()
 {

@@ -1,8 +1,6 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <QPixmap>
-
 #include "Bang/Paths.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"

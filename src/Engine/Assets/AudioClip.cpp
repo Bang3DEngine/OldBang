@@ -1,7 +1,5 @@
 #include "Bang/AudioClip.h"
 
-#include <QThread>
-
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/AudioSource.h"

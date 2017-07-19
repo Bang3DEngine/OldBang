@@ -6,6 +6,7 @@
 #include "Bang/Time.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Extensions.h"
+#include "Bang/SceneManager.h"
 
 Project::Project()
 {
@@ -32,11 +33,6 @@ const Path&  Project::GetProjectDirPath() const
     return m_projectRootFilepath;
 }
 
-Path Project::GetProjectDir() const
-{
-    return m_projectRootFilepath.GetDirectory();
-}
-
 Path Project::GetProjectAssetsRootFilepath() const
 {
     return Path(m_projectRootFilepath + "/Assets");
@@ -61,4 +57,18 @@ String Project::GetProjectRandomId() const
 void Project::SetProjectRootFilepath(const Path &projectDir)
 {
     m_projectRootFilepath = projectDir;
+}
+
+bool Project::OpenFirstFoundScene() const
+{
+    List<Path> sceneFilepaths = GetProjectDirPath()
+            .GetFiles(true, {"*." + Extensions::Get<Scene>()});
+
+    bool foundSceneFile = !sceneFilepaths.IsEmpty();
+    if (foundSceneFile)
+    {
+        SceneManager::OpenScene(sceneFilepaths.Front());
+    }
+
+    return foundSceneFile;
 }

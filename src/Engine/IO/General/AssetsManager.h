@@ -85,7 +85,7 @@ public:
     template <class T>
     static T* Load(const String &filepath)
     {
-        return AssetsManager::Load<T>( UPATH(filepath) );
+        return AssetsManager::Load<T>( PPATH(filepath) );
     }
 
     static void UpdateAsset(const Path &assetFilepath,

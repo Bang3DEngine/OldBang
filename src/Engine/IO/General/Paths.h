@@ -2,55 +2,50 @@
 #define PATHS_H
 
 #include "Bang/Path.h"
+#include "Bang/BinType.h"
 
-#define EPATH(path) Paths::EnginePath(path) // Engine assets path
-#define UPATH(path) Paths::UserPath(path)   // User assets path
+#define EPATH(path) Paths::MakeEnginePath(path)  // Engine assets path
+#define PPATH(path) Paths::MakeProjectPath(path) // Project assets path
 
 class Paths
 {
 public:
     Paths();
 
+    static void InitPaths(int argc, char **argv);
+    static void InitPaths(const Path &engineRoot);
+
     static Path Home();
 
-    static Path GameExecutableLibrariesDir();
-    static Path GameExecutableOutputFile();
-    static const Path& EngineBinaryDir();
-    static const Path& EngineLibrariesDir();
-
     static const Path& Engine();
-    static const Path& EngineAssets();
+    static Path EngineAssets();
+    static Path EngineBinaryDir(BinType binaryType);
+    static Path EngineLibrariesDir(BinType binaryType);
+    static Path GameExecutableOutputFile(BinType binaryType);
+    static Path GameExecutableLibrariesDir(BinType binaryType);
+    static bool IsEnginePath(const Path &path);
 
-    static List<Path> GetBehavioursSourcesFilepaths();
+    static const Path& Project();
+    static Path ProjectAssets();
+    static Path ProjectLibrariesDir();
+
     static List<Path> GetAllProjectSubDirs();
     static List<Path> GetAllEngineSubDirs();
     static const List<Path>& GetQtIncludeDirs();
     static const List<Path>& GetQtLibrariesDirs();
-
-    static const Path& Project();
-    static const Path& ProjectAssets();
-    static const Path& ProjectLibrariesDir();
+    static List<Path> GetBehavioursSourcesFilepaths();
 
     static Path GetRelative(const Path &path);
 
-    static bool IsEnginePath(const Path &path);
+    static Path MakeEnginePath(const String &path);
+    static Path MakeProjectPath(const String &path);
 
-    static Path EnginePath(const String &path);
-    static Path UserPath(const String &path);
-
-    static void SetEngineBinaryDir(const Path &engineBinaryDir);
-    static void SetEnginePath(const Path &enginePath);
-    static void SetProjectPath(const Path &projectPath);
+    static void SetEngineRoot(const Path &engineRootDir);
+    static void SetProjectRoot(const Path &projectRootDir);
 
 private:
-    static Path c_enginePath;
-    static Path c_engineAssetsPath;
-    static Path c_engineBinaryDirPath;
-    static Path c_engineLibrariesDirPath;
-
-    static Path c_projectPath;
-    static Path c_projectAssetsPath;
-    static Path c_projectLibrariesPath;
+    static Path c_engineRoot;
+    static Path c_projectRoot;
 };
 
 #endif // PATHS_H

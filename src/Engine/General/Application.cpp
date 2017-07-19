@@ -20,16 +20,12 @@ Application::Application(int argc, char **argv)
 {
     Application::s_appSingleton = this;
 
-    Path binPath(argv[0]);
-    Paths::SetEnginePath( binPath.GetDirectory().GetDirectory().GetDirectory() );
-    Paths::SetEngineBinaryDir(binPath.GetDirectory());
-
-    m_input            = new Input();
-    m_shaderManager    = new ShaderManager();
-    m_audioManager     = new AudioManager();
-    m_sceneManager     = new SceneManager();
-    m_assetsManager    = new AssetsManager();
-    m_window           = new Window();
+    m_sceneManager  = new SceneManager();
+    m_input         = new Input();
+    m_shaderManager = new ShaderManager();
+    m_audioManager  = new AudioManager();
+    m_assetsManager = new AssetsManager();
+    m_window        = new Window();
 }
 
 Application::~Application()

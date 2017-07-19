@@ -36,10 +36,10 @@ private:
     static void LoadSceneInstantly(Scene *scene);
     static void LoadSceneInstantly(const Path &sceneFilepath);
 
+    friend class Project;
     friend class MenuBar;
     friend class Explorer;
     friend class Application;
-    friend class ProjectManager;
 };
 
 #endif // SCENEMANAGER_H

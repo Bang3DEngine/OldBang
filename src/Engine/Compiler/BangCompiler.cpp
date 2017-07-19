@@ -3,6 +3,7 @@
 #include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
+#include "Bang/Debug.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/BangPreprocessor.h"
@@ -11,14 +12,15 @@
 BangCompiler::Job BangCompiler::BuildCompileBehaviourObjectJob(
                                             const Path &behaviourPath,
                                             const Path &outputObjectDir,
-                                            bool forGame)
+                                            bool forGame,
+                                            BinType binaryType)
 {
     Path outputObjectPath = outputObjectDir.Append(behaviourPath.GetName())
                                            .AppendExtension("o");
     File::Remove(outputObjectPath);
     File::CreateDirectory(outputObjectDir);
 
-    BangCompiler::Job job = BuildCommonJob(forGame);
+    BangCompiler::Job job = BuildCommonJob(forGame, binaryType);
     job.outputMode = Compiler::OutputMode::Object;
     job.includePaths.Add( Paths::GetAllEngineSubDirs() );
     job.includePaths.Add( Paths::GetAllProjectSubDirs() );
@@ -31,7 +33,8 @@ BangCompiler::Job BangCompiler::BuildCompileBehaviourObjectJob(
 BangCompiler::Job BangCompiler::BuildMergeBehaviourLibrariesJob(
                                             const List<Path> &objectsPaths,
                                             const Path &outputLibDir,
-                                            bool forGame)
+                                            bool forGame,
+                                            BinType binaryType)
 {
     // Remove merged library files
     List<Path> libFilepaths = outputLibDir.GetFiles(true, {"*.so.*"});
@@ -55,7 +58,7 @@ BangCompiler::Job BangCompiler::BuildMergeBehaviourLibrariesJob(
 
     File::CreateDirectory(outputLibDir);
 
-    BangCompiler::Job job = BuildCommonJob(forGame);
+    BangCompiler::Job job = BuildCommonJob(forGame, binaryType);
     job.outputMode = Compiler::OutputMode::SharedLib;
     job.inputFiles.Add(objectsPaths);
     job.outputFile = libOutputFilepath;
@@ -63,12 +66,13 @@ BangCompiler::Job BangCompiler::BuildMergeBehaviourLibrariesJob(
     return job;
 }
 
-BangCompiler::Job BangCompiler::BuildCommonJob(bool forGame)
+BangCompiler::Job BangCompiler::BuildCommonJob(bool forGame,
+                                               BinType binaryType)
 {
     BangCompiler::Job job;
 
-    job.libDirs.Add(forGame ? Paths::GameExecutableLibrariesDir() :
-                              Paths::EngineLibrariesDir());
+    job.libDirs.Add(forGame ? Paths::GameExecutableLibrariesDir(binaryType) :
+                              Paths::EngineLibrariesDir(binaryType));
     job.libraries.Add( List<String>({"GLEW", "GL", "pthread",
                                      "BangDataStructures",
                                      "BangGraphics",
@@ -101,22 +105,26 @@ QThreadPool* BangCompiler::GetThreadPool()
 BangCompiler::Result BangCompiler::MergeBehaviourLibraries(
                                             const List<Path> &objectsPaths,
                                             const Path &outputLibPath,
-                                            bool forGame)
+                                            bool forGame,
+                                            BinType binaryType)
 {
     BangCompiler::Job job = BuildMergeBehaviourLibrariesJob(objectsPaths,
                                                             outputLibPath,
-                                                            forGame);
+                                                            forGame,
+                                                            binaryType);
     return BangCompiler::Compile(job);
 }
 
 BangCompiler::Result BangCompiler::CompileBehaviourObject(
                                             const Path &behaviourPath,
                                             const Path &outputObjectPath,
-                                            bool forGame)
+                                            bool forGame,
+                                            BinType binaryType)
 {
     BangCompiler::Job job = BuildCompileBehaviourObjectJob({behaviourPath},
                                                            outputObjectPath,
-                                                           forGame);
+                                                           forGame,
+                                                           binaryType);
     return BangCompiler::Compile(job);
 }
 
@@ -140,12 +148,14 @@ BangCompiler::Result BangCompiler::Compile(const BangCompiler::Job &job)
 bool BangCompiler::MergeBehaviourLibrariesAsync(const List<Path> &objectsPaths,
                                                 const Path &outputLibDir,
                                                 bool forGame,
+                                                BinType binaryType,
                                                 QObject *resultListener,
                                                 QSlot slot)
 {
     BangCompiler::Job job = BuildMergeBehaviourLibrariesJob(objectsPaths,
                                                             outputLibDir,
-                                                            forGame);
+                                                            forGame,
+                                                            binaryType);
     BangCompilerAsyncJob *asyncJob = new BangCompilerAsyncJob(job,
                                                               resultListener,
                                                               slot);
@@ -157,18 +167,39 @@ bool BangCompiler::MergeBehaviourLibrariesAsync(const List<Path> &objectsPaths,
 bool BangCompiler::CompileBehaviourObjectAsync(const Path &behaviourPath,
                                                const Path &outputObjectDir,
                                                bool forGame,
+                                               BinType binaryType,
                                                QObject *resultListener,
                                                QSlot slot)
 {
     BangCompiler::Job job = BuildCompileBehaviourObjectJob(behaviourPath,
                                                            outputObjectDir,
-                                                           forGame);
+                                                           forGame,
+                                                           binaryType);
     BangCompilerAsyncJob *asyncJob = new BangCompilerAsyncJob(job,
                                                               resultListener,
                                                               slot);
     bool started = BangCompiler::GetThreadPool()->tryStart(asyncJob);
     if (!started) { delete asyncJob; }
     return started;
+}
+
+bool BangCompiler::QMakeMake(const Path &proFilepath,
+                             const List<String> &qmakeArgs)
+{
+    String cmd = "";
+    cmd += "cd " + proFilepath.GetDirectory()  + " && ";
+    cmd += "qmake " + proFilepath.GetNameExt() +
+            " " + String::Join(qmakeArgs, " ") + " && ";
+    cmd += "make";
+
+    String output = "";
+    bool success = false;
+    SystemUtils::System(cmd, {}, &output, &success);
+
+    if (!success) { Debug_Error(output); }
+    else { Debug_Warn(output); }
+
+    return success;
 }
 
 void BangCompiler::Init()
