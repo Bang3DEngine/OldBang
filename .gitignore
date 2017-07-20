@@ -7,9 +7,7 @@ tmp
 *.exe
 **.slo
 **.lo
-*.obj
 *.o
-*.obj
 *.a
 *.la
 *.lai
