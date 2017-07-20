@@ -53,6 +53,7 @@ private:
 
     GPPass_RenderLayer *m_scenePass  = nullptr;
     GPPass_RenderLayer *m_canvasPass = nullptr;
+    GPPass_RenderLayer *m_gizmosPass = nullptr;
 
     // Rendering for the Game Screen or the Scene screen
     bool m_renderingInGame = false;

@@ -23,11 +23,6 @@
 
 Gizmos::Gizmos()
 {
-}
-
-
-void Gizmos::Init()
-{
     m_boxMesh    = MeshFactory::GetCube();
     m_planeMesh  = MeshFactory::GetPlane();
     m_sphereMesh = MeshFactory::GetSphere();
@@ -46,6 +41,7 @@ void Gizmos::Init()
     for (Renderer *rend : m_renderers)
     {
         rend->SetMaterial(m_material);
+        rend->SetRenderLayer(Renderer::RenderLayer::Gizmos);
     }
 }
 
@@ -56,31 +52,31 @@ void Gizmos::SetResetAllowed(bool allowed)
 
 void Gizmos::SetColor(const Color &color)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     g->m_material->SetDiffuseColor(color);
 }
 
 void Gizmos::SetPosition(const Vector3 &position)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     g->m_transform->SetLocalPosition(position);
 }
 
 void Gizmos::SetRotation(const Quaternion &rotation)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     g->m_transform->SetLocalRotation(rotation);
 }
 
 void Gizmos::SetScale(const Vector3 &scale)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     g->m_transform->SetLocalScale(scale);
 }
 
 void Gizmos::SetLineWidth(float lineWidth)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     for (Renderer *rend : g->m_renderers)
     {
         rend->SetLineWidth(lineWidth);
@@ -89,7 +85,7 @@ void Gizmos::SetLineWidth(float lineWidth)
 
 void Gizmos::SetDrawWireframe(bool wireframe)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     for (Renderer *rend : g->m_renderers)
     {
         rend->SetDrawWireframe(wireframe);
@@ -98,7 +94,7 @@ void Gizmos::SetDrawWireframe(bool wireframe)
 
 void Gizmos::SetReceivesLighting(bool receivesLighting)
 {
-    Gizmos *g = Gimzos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance();
     for (Renderer *rend : g->m_renderers)
     {
         if (!rend->GetMaterial()) { continue; }
@@ -108,21 +104,21 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 
 void Gizmos::SetBillboard()
 {
+    Gizmos *g = Gizmos::GetInstance();
     Scene *scene = SceneManager::GetActiveScene();
     GameObject *cam = scene->GetCamera()->gameObject;
-    Vector3 lookDir = (cam->transform->GetPosition() - m_transform->GetPosition());
+    Vector3 lookDir = (cam->transform->GetPosition() - g->m_transform->GetPosition());
     lookDir.Normalize();
     Gizmos::SetRotation( Quaternion::LookDirection(lookDir) );
 }
 
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
-    ENSURE(m);
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetEnabled(true);
     g->m_meshRenderer->SetMesh(m);
     Render(g->m_meshRenderer);
-    Reset();
+    g->Reset();
 }
 
 
@@ -133,7 +129,7 @@ void Gizmos::RenderSimpleBox(const AABox &b)
     const Vector3& bMin = b.GetMin();
     const Vector3& bMax = b.GetMax();
 
-    SetResetAllowed(false);
+    g->SetResetAllowed(false);
     RenderLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMax.x, bMin.y, bMin.z));
     RenderLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMin.x, bMax.y, bMin.z));
     RenderLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMin.x, bMin.y, bMax.z));
@@ -150,30 +146,32 @@ void Gizmos::RenderSimpleBox(const AABox &b)
     RenderLine(r * Vector3(bMin.x, bMax.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
     RenderLine(r * Vector3(bMax.x, bMin.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
     RenderLine(r * Vector3(bMax.x, bMax.y, bMin.z), r * Vector3(bMax.x, bMax.y, bMax.z));
-    SetResetAllowed(true);
+    g->SetResetAllowed(true);
 
-    Reset();
+    g->Reset();
 }
 
 void Gizmos::RenderBox(const AABox &b)
 {
-    m_meshRenderer->SetEnabled(true);
-    m_meshRenderer->SetMesh(m_boxMesh);
-    m_transform->SetPosition(b.GetCenter());
-    m_transform->SetScale(m_transform->GetScale() * b.GetDimensions());
-    Render(m_meshRenderer);
-    Reset();
+    Gizmos *g = Gizmos::GetInstance();
+    g->m_meshRenderer->SetEnabled(true);
+    g->m_meshRenderer->SetMesh(g->m_boxMesh);
+    g->m_transform->SetPosition(b.GetCenter());
+    g->m_transform->SetScale(g->m_transform->GetScale() * b.GetDimensions());
+    g->Render(g->m_meshRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderRect(const Rect &r)
 {
-    SetResetAllowed(false);
+    Gizmos *g = Gizmos::GetInstance();
+    g->SetResetAllowed(false);
     RenderScreenLine( Vector2(r.m_minx, r.m_miny), Vector2(r.m_maxx, r.m_miny) );
     RenderScreenLine( Vector2(r.m_maxx, r.m_miny), Vector2(r.m_maxx, r.m_maxy) );
     RenderScreenLine( Vector2(r.m_maxx, r.m_maxy), Vector2(r.m_minx, r.m_maxy) );
     RenderScreenLine( Vector2(r.m_minx, r.m_maxy), Vector2(r.m_minx, r.m_miny) );
-    SetResetAllowed(true);
-    Reset();
+    g->SetResetAllowed(true);
+    g->Reset();
 }
 
 void Gizmos::RenderFillRect(const Rect &r, const Color &fillColor)
@@ -189,16 +187,16 @@ void Gizmos::RenderFillRect(const Rect &r, const Color &fillColor)
     mat->SetDiffuseColor(fillColor);
 
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    Gizmos::Render(mr);
-    Reset();
+    g->Render(g->m_meshRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderCircle(float radius)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_circleRenderer->SetRadius(radius);
-    Gizmos::Render(cr);
-    Reset();
+    g->Render(g->m_circleRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderIcon(const Texture2D *texture,
@@ -226,9 +224,9 @@ void Gizmos::RenderIcon(const Texture2D *texture,
         g->m_transform->LookInDirection(cam->transform->GetForward(),
                                         cam->transform->GetUp());
     }
-    mr->GetMaterial()->SetTexture(texture);
-    Render(mr);
-    Reset();
+    g->m_meshRenderer->GetMaterial()->SetTexture(texture);
+    g->Render(g->m_meshRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderScreenIcon(const Texture2D *texture,
@@ -246,8 +244,8 @@ void Gizmos::RenderScreenIcon(const Texture2D *texture,
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
     GL::SetViewProjMode(fixAspectRatio ? GL::ViewProjMode::OnlyFixAspectRatio :
                                          GL::ViewProjMode::IgnoreBoth);
-    Render(mr);
-    Reset();
+    g->Render(g->m_meshRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderLine(const Vector3 &origin,
@@ -260,8 +258,8 @@ void Gizmos::RenderLine(const Vector3 &origin,
     g->m_transform->SetPosition(Vector3::Zero);
     g->m_transform->SetScale(Vector3::One);
 
-    Render(slr);
-    Reset();
+    g->Render(g->m_singleLineRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderScreenLine(const Vector2 &origin,
@@ -275,14 +273,15 @@ void Gizmos::RenderScreenLine(const Vector2 &origin,
     g->m_transform->SetScale(Vector3::One);
 
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    Render(slr);
-    Reset();
+    g->Render(g->m_singleLineRenderer);
+    g->Reset();
 }
 
 void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 {
-    RenderLine(origin, origin + rayDir);
-    Reset();
+    Gizmos *g = Gizmos::GetInstance();
+    Gizmos::RenderLine(origin, origin + rayDir);
+    g->Reset();
 }
 
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
@@ -292,16 +291,17 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
     g->m_meshRenderer->SetMesh(g->m_sphereMesh);
     g->m_transform->SetPosition(origin);
     g->m_transform->SetScale(radius);
-    Render(mr);
-    Reset();
+    g->Render(g->m_meshRenderer);
+    g->Reset();
 }
 
-void Gizmos::RenderFrustum(
-       const Vector3 &forward, const Vector3 &up,
-       const Vector3 &origin,
-       float zNear, float zFar,
-       float fovDegrees, float aspectRatio)
+void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
+                           const Vector3 &origin,
+                           float zNear, float zFar,
+                           float fovDegrees, float aspectRatio)
 {
+    Gizmos *g = Gizmos::GetInstance();
+
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
 
@@ -325,28 +325,28 @@ void Gizmos::RenderFrustum(
     Vector3 farDownRight  = farPlaneCenter + right * farWidth2 - up * farHeight2;
     Vector3 farDownLeft   = farPlaneCenter - right * farWidth2 - up * farHeight2;
 
-    SetResetAllowed(false);
+    g->SetResetAllowed(false);
 
     // Near plane
-    RenderLine(nearUpLeft   , nearUpRight);
-    RenderLine(nearUpRight  , nearDownRight);
-    RenderLine(nearDownRight, nearDownLeft);
-    RenderLine(nearDownLeft , nearUpLeft);
+    Gizmos::RenderLine(nearUpLeft   , nearUpRight);
+    Gizmos::RenderLine(nearUpRight  , nearDownRight);
+    Gizmos::RenderLine(nearDownRight, nearDownLeft);
+    Gizmos::RenderLine(nearDownLeft , nearUpLeft);
 
     // Far plane
-    RenderLine(farUpLeft   , farUpRight);
-    RenderLine(farUpRight  , farDownRight);
-    RenderLine(farDownRight, farDownLeft);
-    RenderLine(farDownLeft , farUpLeft);
+    Gizmos::RenderLine(farUpLeft   , farUpRight);
+    Gizmos::RenderLine(farUpRight  , farDownRight);
+    Gizmos::RenderLine(farDownRight, farDownLeft);
+    Gizmos::RenderLine(farDownLeft , farUpLeft);
 
     // Projection lines
-    RenderLine(nearUpLeft   , farUpLeft);
-    RenderLine(nearUpRight  , farUpRight);
-    RenderLine(nearDownRight, farDownRight);
-    RenderLine(nearDownLeft , farDownLeft);
+    Gizmos::RenderLine(nearUpLeft   , farUpLeft);
+    Gizmos::RenderLine(nearUpRight  , farUpRight);
+    Gizmos::RenderLine(nearDownRight, farDownRight);
+    Gizmos::RenderLine(nearDownLeft , farDownLeft);
 
-    SetResetAllowed(true);
-    Reset();
+    g->SetResetAllowed(true);
+    g->Reset();
 }
 
 void Gizmos::RenderSimpleSphere(const Vector3 &origin,
@@ -359,24 +359,13 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin,
     g->m_transform->SetPosition(origin);
 
     g->m_transform->SetLocalEuler(0, 0, 0);
-    Render(g->m_circleRenderer);
-    //g->m_transform->SetLocalEuler(0, 45, 0);
-    //Render(g->m_circleRenderer);
+    g->Render(g->m_circleRenderer);
     g->m_transform->SetLocalEuler(0, 90, 0);
-    Render(g->m_circleRenderer);
-    //g->m_transform->SetLocalEuler(0, 135, 0);
-    //Render(g->m_circleRenderer);
-
-    g->m_transform->SetLocalEuler(0, 0, 0);
-    Render(g->m_circleRenderer);
-    //g->m_transform->SetLocalEuler(45, 0, 0);
-    //Render(g->m_circleRenderer);
+    g->Render(g->m_circleRenderer);
     g->m_transform->SetLocalEuler(90, 0, 0);
     Render(g->m_circleRenderer);
-    //g->m_transform->SetLocalEuler(135, 0, 0);
-    //Render(g->m_circleRenderer);
 
-    Reset();
+    g->Reset();
 }
 
 void Gizmos::Reset()
@@ -414,13 +403,9 @@ void Gizmos::Render(Renderer *rend)
 
 Gizmos *Gizmos::GetInstance()
 {
-    return nullptr;
-    /*
     Scene *scene = SceneManager::GetActiveScene();
     if (!scene) { return nullptr; }
 
-    Gizmos *gizmosGo = scene->GetGizmos();
-    gizmosGo->Init();
-    return gizmosGo;
-    */
+    Gizmos *gizmos = scene->GetGizmos();
+    return gizmos;
 }

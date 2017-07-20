@@ -22,6 +22,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
+#include "Bang/GPPass_G_Gizmos.h"
 #include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
@@ -59,6 +60,13 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
+
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::Gizmos,
+    {
+     new GPPass_G_Gizmos(this, Gizmos::GizmosPassType::Depth),  // Gizmos with depth
+     new GPPass_G_Gizmos(this, Gizmos::GizmosPassType::Overlay) // Gizmos normal
+    });
+
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
@@ -120,6 +128,7 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_gbuffer->ClearStencil();
 
     m_canvasPass->Pass(renderers, sceneChildren);
+    m_gizmosPass->Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
 }
@@ -203,6 +212,7 @@ GraphicPipeline::~GraphicPipeline()
     delete m_gbuffer;
     delete m_scenePass;
     delete m_canvasPass;
+    delete m_gizmosPass;
     delete m_texUnitManager;
     delete m_glContext;
 }

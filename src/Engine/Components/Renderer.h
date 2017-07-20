@@ -18,7 +18,7 @@ class Renderer : public GLObject, public Component
 public:
     enum RenderLayer
     {
-        Scene, Canvas
+        Scene, Canvas, Gizmos
     };
 
     virtual void CloneInto(ICloneable *clone) const override;

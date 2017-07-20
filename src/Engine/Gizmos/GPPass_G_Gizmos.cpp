@@ -22,9 +22,8 @@ void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
     p_gbuffer->SetStencilTest(false);
     p_gbuffer->SetStencilWrite(false);
 
-    GL::SetTestDepth(true);
     GL::SetWriteDepth(true);
-    if (m_gizmosPassType == Gizmos::Overlay) { GL::SetTestDepth(false); }
+    GL::SetTestDepth(m_gizmosPassType == Gizmos::Depth);
     for (GameObject *go : sceneChildren)
     {
         go->_OnDrawGizmos(m_gizmosPassType);

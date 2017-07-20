@@ -2,31 +2,32 @@
 
 #include "Bang/Debug.h"
 #include "Bang/Camera.h"
-#include "Bang/G_Screen.h"
-#include "Bang/Material.h"
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
-#include "Bang/Behaviour.h"
 #include "Bang/GameObject.h"
-#include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AudioListener.h"
-#include "Bang/GraphicPipeline.h"
-#include "Bang/DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")
 {
+    m_gizmos = new Gizmos();
 }
 
 void Scene::_OnStart()
 {
+    m_gizmos->GetInstance()->m_gizmosGameObject->SetParent(this);
+
     GameObject::_OnStart();
 }
 
 void Scene::_OnUpdate()
 {
     GameObject::_OnUpdate();
+}
+
+void Scene::_OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType)
+{
+    GameObject::_OnDrawGizmos(gizmosPassType);
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
@@ -39,21 +40,26 @@ void Scene::_OnResize(int newWidth, int newHeight)
     }
 }
 
-Scene::~Scene()
+Gizmos *Scene::GetGizmos() const
 {
-    delete m_defaultCamera;
+    return m_gizmos;
 }
 
-void Scene::SetCamera(const Camera *cam)
+Scene::~Scene()
+{
+    delete m_gizmos;
+}
+
+void Scene::SetCamera(Camera *cam)
 {
     if (!cam)
     {
-        m_cameraGameObject = nullptr;
+        p_camera = nullptr;
         SetCamera(m_defaultCamera->GetComponent<Camera>());
     }
     else
     {
-        m_cameraGameObject = cam->gameObject;
+        p_camera = cam;
     }
 }
 
@@ -90,11 +96,7 @@ Scene *Scene::GetActiveScene()
 
 Camera *Scene::GetCamera() const
 {
-    if (!m_cameraGameObject)
-    {
-        return nullptr;
-    }
-    return m_cameraGameObject->GetComponent<Camera>();
+    return p_camera;
 }
 
 void Scene::Destroy(GameObject *gameObject)

@@ -8,7 +8,6 @@
 #include "Bang/GameObject.h"
 
 class Camera;
-class GraphicPipeline;
 class Scene : public GameObject
 {
     OBJECT(Scene)
@@ -17,7 +16,7 @@ public:
     Scene();
     virtual ~Scene();
 
-    void SetCamera (const Camera *cam);
+    void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
 
     static Scene *GetActiveScene();
@@ -34,17 +33,19 @@ public:
 protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
-
-    //G_Framebuffer for positions, normals, uvs and diffuse
-    GameObject *m_cameraGameObject = nullptr;
+    Camera *p_camera = nullptr;
+    Gizmos *m_gizmos = nullptr;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
+    virtual void _OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType) override;
     virtual void _OnResize (int newWidth, int newHeight);
 
+    Gizmos *GetGizmos() const;
     void DestroyQueuedGameObjects();
 
     friend class Screen;
+    friend class Gizmos;
     friend class Application;
     friend class SceneManager;
     friend class GraphicPipeline;

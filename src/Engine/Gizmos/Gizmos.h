@@ -76,12 +76,10 @@ private:
 
     Gizmos();
 
-    void Init();
-
     void SetResetAllowed(bool allowed);
     void Reset();
 
-    Gizmos *GetInstance();
+    static Gizmos *GetInstance();
 
     friend class Scene;
 };
