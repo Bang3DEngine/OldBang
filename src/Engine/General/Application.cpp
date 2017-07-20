@@ -24,12 +24,7 @@ Application::Application(int argc, char **argv)
 {
     Application::s_appSingleton = this;
 
-    Path binPath(argv[0]);
-    m_paths = new Paths();
-    m_paths->SetEngineRoot(binPath.GetDirectory()
-                                  .GetDirectory()
-                                  .GetDirectory());
-
+    m_paths            = new Paths();
     m_input            = new Input();
     m_time             = new Time();
     m_sceneManager     = new SceneManager();

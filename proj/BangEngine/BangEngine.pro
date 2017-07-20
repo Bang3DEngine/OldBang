@@ -92,7 +92,6 @@ SOURCES += \
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
-    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.h \
     $$BANG_ROOT/src/Engine/General/Application.h \
     $$BANG_ROOT/src/Engine/Windows/Window.h \

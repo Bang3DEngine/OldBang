@@ -213,7 +213,8 @@ Path Path::AppendExtension(const String &extension) const
 
 Path Path::ChangeExtension(const String &extension) const
 {
-    return Path( GetDirectory().Append(GetName()).Append(extension) );
+    return Path( GetDirectory().Append(GetName())
+                               .AppendExtension(extension) );
 }
 
 bool Path::HasExtension(const String &extensions) const

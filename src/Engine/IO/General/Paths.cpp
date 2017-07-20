@@ -1,6 +1,8 @@
 #include "Paths.h"
 
 #include <QDir>
+#include <limits.h>
+#include <unistd.h>
 
 #include "Bang/Debug.h"
 #include "Bang/String.h"
@@ -9,7 +11,12 @@
 
 Paths::Paths()
 {
-
+  char result[PATH_MAX];
+  ssize_t count = readlink("/proc/self/exe", result, PATH_MAX );
+  String strPath( std::string(result, (count > 0) ? count : 0) );
+  c_engineRoot = Path(strPath).GetDirectory()
+                              .GetDirectory()
+                              .GetDirectory();
 }
 
 Path Paths::Home()

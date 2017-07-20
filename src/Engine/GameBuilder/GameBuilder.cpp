@@ -9,6 +9,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/ProjectManager.h"
+#include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourManager.h"
 
 void GameBuilder::BuildGame(const Project *project,
@@ -120,10 +121,19 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
     File::CreateDirectory(libsDir);
 
-    // Compile every behaviour into its .so
+    // Compile every behaviour into its .o
     List<Path> behavioursSourceFiles =
             Paths::ProjectAssets().FindFiles(true,
                                              Extensions::GetSourceFileList());
+
+    // Preprocess behaviours before
+    for (const Path &behaviourSourcePath : behavioursSourceFiles)
+    {
+        Path behaviourHeader = behaviourSourcePath.ChangeExtension("h");
+        BangPreprocessor::Preprocess(behaviourHeader);
+    }
+
+    // Compile
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
         Path outputObjPath = libsDir.Append(behaviourSourcePath.GetName())

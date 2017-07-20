@@ -1,6 +1,7 @@
 #include "Bang/Compiler.h"
 
 #include "Bang/SystemUtils.h"
+#include "Bang/BangPreprocessor.h"
 
 Compiler::Result Compiler::Compile(const Compiler::Job &job)
 {
@@ -34,6 +35,7 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
 
     // Output file
     args.Add( List<String>({"-o", job.outputFile.ToString()}) );
+
 
     Result result;
     result.compileJob = job;
