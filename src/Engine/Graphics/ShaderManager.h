@@ -1,7 +1,6 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
 
-#include <QTimer>
 #include <QObject>
 
 #include "Bang/Map.h"
@@ -25,9 +24,6 @@ public:
                                         G_Shader *shaderBeingUsed);
 
 private:
-    QTimer m_refreshTimer;
-    EpochTime m_lastRefreshTime;
-
     Map<Path, G_Shader*> m_filepathToShaders;
     Map<G_Shader*, Set<G_ShaderProgram*> > m_shaderUsages;
 

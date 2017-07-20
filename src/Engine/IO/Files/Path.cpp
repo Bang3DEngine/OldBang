@@ -225,7 +225,11 @@ bool Path::HasExtension(const String &extensions) const
 bool Path::HasExtension(const List<String> &extensions) const
 {
     String ext = GetExtension();
-    return extensions.Any( BPRED(x.EqualsNoCase(ext)) );
+    for (const String &extension : extensions)
+    {
+        if (extension.EqualsNoCase(ext)) { return true; }
+    }
+    return false;
 }
 
 Path::operator String() const

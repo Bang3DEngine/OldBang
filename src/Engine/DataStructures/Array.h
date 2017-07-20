@@ -74,19 +74,6 @@ public:
 
     const T* Data() const { return this->data(); }
 
-    bool Any(std::function< bool(const T&) > boolPredicate) const
-    {
-        return Collection::Any(GetRangeAll(), boolPredicate);
-    }
-    bool All(std::function< bool(const T&) > boolPredicate) const
-    {
-        return Collection::All(GetRangeAll(), boolPredicate);
-    }
-    bool None(std::function< bool(const T&) > boolPredicate) const
-    {
-        return Collection::None(GetRangeAll(), boolPredicate);
-    }
-
     Const_Iterator Find(const T& x) const
     {
         return Collection::Find(this->GetRangeAll(), x);

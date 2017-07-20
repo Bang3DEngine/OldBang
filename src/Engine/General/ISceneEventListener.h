@@ -2,6 +2,7 @@
 #define ISCENEEVENTLISTENER_H
 
 #include "Bang/List.h"
+#include "Bang/Gizmos.h"
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
@@ -25,12 +26,24 @@ protected:
             m_started = true;
         }
     }
+
     virtual void _OnUpdate() { OnUpdate(); }
+
+    virtual void _OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType)
+    {
+        OnDrawGizmos(gizmosPassType);
+    }
+
     virtual void _OnDestroy() { OnDestroy(); }
+
+    //========
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
+    virtual void OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType)  {}
     virtual void OnDestroy() {}
+
+    // ========
 
     bool IsStarted() const { return m_started; }
 

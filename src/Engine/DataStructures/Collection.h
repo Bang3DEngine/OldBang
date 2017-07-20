@@ -40,47 +40,6 @@ public:
     }
 
     template <class Iterator, class T>
-    static bool Any(const CollectionRange<Iterator> &col,
-                    std::function< bool(const T&) > boolPredicate)
-    {
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            if (boolPredicate(*it)) { return true; }
-        }
-        return false;
-    }
-
-    template <class Iterator, class T>
-    static bool All(const CollectionRange<Iterator> &col,
-                    std::function< bool(const T&) > boolPredicate)
-    {
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            if (!boolPredicate(*it)) { return false; }
-        }
-        return true;
-    }
-
-    template <class Iterator, class T>
-    static bool None(const CollectionRange<Iterator> &col,
-                     std::function< bool(const T&) > boolPredicate)
-    {
-        return !Collection::Any(col, boolPredicate);
-    }
-
-    template <class Iterator, class T>
-    static uint Count(const CollectionRange<Iterator> &col,
-                      std::function< bool(const T&) > boolPredicate)
-    {
-        uint count = 0;
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            if (boolPredicate(*it)) { ++count; }
-        }
-        return count;
-    }
-
-    template <class Iterator, class T>
     static uint Count(const CollectionRange<Iterator> &col, const T& x)
     {
         int count = 0;

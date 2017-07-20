@@ -586,6 +586,16 @@ void GameObject::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
 
+void GameObject::_OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType)
+{
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+
+    PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_components);
+    OnDrawGizmos(gizmosPassType);
+
+    PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_children);
+}
+
 void GameObject::_OnDestroy()
 {
     PROPAGATE_EVENT(_OnDestroy(), m_children);

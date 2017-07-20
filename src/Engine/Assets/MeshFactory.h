@@ -29,8 +29,6 @@ public:
 private:
     MeshFactory();
     static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
-
-    friend class MenuBar;
 };
 
 #endif // MESHFACTORY_H

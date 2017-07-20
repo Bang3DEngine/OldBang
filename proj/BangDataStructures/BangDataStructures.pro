@@ -9,7 +9,6 @@ CONFIG += staticlib
 TARGET = $$BIN_DIR/lib/BangDataStructures
 
 SOURCES += \
-    $$BANG_ROOT/src/Engine/DataStructures/Timer.cpp \
     $$BANG_ROOT/src/Engine/DataStructures/List.cpp \
     $$BANG_ROOT/src/Engine/DataStructures/Map.cpp \
     $$BANG_ROOT/src/Engine/DataStructures/Array.cpp \
@@ -48,7 +47,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/DataStructures/TypeMap.h \
     $$BANG_ROOT/src/Engine/DataStructures/Array.h \
     $$BANG_ROOT/src/Engine/DataStructures/List.h \
-    $$BANG_ROOT/src/Engine/DataStructures/Timer.h \
     $$BANG_ROOT/src/Engine/DataStructures/Map.h \
     $$BANG_ROOT/src/Engine/DataStructures/Property.h \
     $$BANG_ROOT/src/Engine/DataStructures/String.h \

@@ -294,13 +294,13 @@ protected:
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
+    virtual void _OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType) override;
     virtual void _OnDestroy () override;
-
 
     friend class Scene;
     friend class Prefab;
-    friend class Hierarchy;
     friend class SceneManager;
+    friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
 };
 

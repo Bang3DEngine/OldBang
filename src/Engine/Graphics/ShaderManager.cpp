@@ -7,11 +7,6 @@
 
 ShaderManager::ShaderManager()
 {
-    m_refreshTimer.start(3000);
-    QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
-                     this, SLOT(Refresh()));
-
-    m_lastRefreshTime = Time::GetNow();
 }
 
 ShaderManager *ShaderManager::GetInstance()
