@@ -4,22 +4,12 @@
 
 #include "Bang/Debug.h"
 #include "Bang/String.h"
+#include "Bang/Application.h"
 #include "Bang/SystemUtils.h"
-
-Path Paths::c_engineRoot = Path::Empty;
-Path Paths::c_projectRoot = Path::Empty;
 
 Paths::Paths()
 {
 
-}
-
-void Paths::InitPaths(int argc, char **argv)
-{
-    Path binPath(argv[0]);
-    Paths::SetEngineRoot(binPath.GetDirectory()
-                                .GetDirectory()
-                                .GetDirectory());
 }
 
 Path Paths::Home()
@@ -29,7 +19,7 @@ Path Paths::Home()
 
 const Path &Paths::Engine()
 {
-    return Paths::c_engineRoot;
+    return Paths::GetInstance()->c_engineRoot;
 }
 Path Paths::EngineAssets()
 {
@@ -52,19 +42,19 @@ Path Paths::GameExecutableOutputFile(BinType binaryType)
 
 List<Path> Paths::GetBehavioursSourcesFilepaths()
 {
-    return Paths::ProjectAssets().GetFiles(true, {"cpp"});
+    return Paths::ProjectAssets().FindFiles(true, {"cpp"});
 }
 
 List<Path> Paths::GetAllProjectSubDirs()
 {
-    List<Path> subdirs = Paths::Project().GetSubDirectories(true);
+    List<Path> subdirs = Paths::Project().FindSubDirectories(true);
     subdirs.PushFront(Paths::Project());
     return subdirs;
 }
 
 List<Path> Paths::GetAllEngineSubDirs()
 {
-    List<Path> subdirs = Paths::Engine().GetSubDirectories(true);
+    List<Path> subdirs = Paths::Engine().FindSubDirectories(true);
     subdirs.PushFront(Paths::Engine());
     return subdirs;
 }
@@ -85,7 +75,7 @@ const List<Path> &Paths::GetQtIncludeDirs()
         }
         qtDir = qtDir.Replace("\n", "");
 
-        qtIncludeDirs = Path(qtDir).GetSubDirectories(true);
+        qtIncludeDirs = Path(qtDir).FindSubDirectories(true);
         for (auto it = qtIncludeDirs.Begin(); it != qtIncludeDirs.End();)
         {
             const Path& libPath = *it;
@@ -117,7 +107,7 @@ const List<Path> &Paths::GetQtLibrariesDirs()
         }
         qtDir = qtDir.Replace("\n", "");
 
-        qtLibDirs = Path(qtDir).GetSubDirectories(true);
+        qtLibDirs = Path(qtDir).FindSubDirectories(true);
         for (auto it = qtLibDirs.Begin(); it != qtLibDirs.End();)
         {
             const Path& libDirPath = *it;
@@ -135,7 +125,7 @@ const List<Path> &Paths::GetQtLibrariesDirs()
 
 const Path &Paths::Project()
 {
-    return Paths::c_projectRoot;
+    return Paths::GetInstance()->c_projectRoot;
 }
 
 Path Paths::ProjectAssets()
@@ -198,10 +188,15 @@ Path Paths::MakeProjectPath(const String &path)
 
 void Paths::SetEngineRoot(const Path &engineRootDir)
 {
-    Paths::c_engineRoot = engineRootDir;
+    Paths::GetInstance()->c_engineRoot = engineRootDir;
 }
 
 void Paths::SetProjectRoot(const Path &projectRootDir)
 {
-    Paths::c_projectRoot = projectRootDir;
+    Paths::GetInstance()->c_projectRoot = projectRootDir;
+}
+
+Paths *Paths::GetInstance()
+{
+    return Application::GetInstance()->GetPaths();
 }

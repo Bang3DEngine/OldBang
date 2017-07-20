@@ -17,7 +17,7 @@ SceneManager::SceneManager()
 SceneManager *SceneManager::GetInstance()
 {
     Application *app = Application::GetInstance();
-    return app ? app->m_sceneManager : nullptr;
+    return app ? app->GetSceneManager() : nullptr;
 }
 
 void SceneManager::Update()
@@ -60,8 +60,6 @@ Scene *SceneManager::GetActiveScene()
 
 void SceneManager::LoadScene(const Path &sceneFilepath)
 {
-    SceneManager *sm = SceneManager::GetInstance();
-
     Path spath(sceneFilepath);
     if (!spath.IsFile()) { spath = PPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
@@ -69,14 +67,14 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
         spath = spath.AppendExtension(Extensions::Get<Scene>());
     }
 
+    SceneManager *sm = SceneManager::GetInstance();
     if (spath.IsFile()) { sm->m_queuedSceneFilepath = spath; }
     else { Debug_Warn("Scene '" << spath << "' does not exist."); }
 }
 
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
-    String sceneExt = Extensions::Get<Scene>();
-    SceneManager::LoadScene( PPATH(sceneFilepath).AppendExtension(sceneExt) );
+    SceneManager::LoadScene( Path(sceneFilepath) );
 }
 
 void SceneManager::TryToLoadQueuedScene()

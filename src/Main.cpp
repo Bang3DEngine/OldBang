@@ -8,7 +8,6 @@
 
 int main(int argc, char **argv)
 {
-    Paths::InitPaths(argc, argv);
     Application app(argc, argv);
 
     if (argc <= 1)
@@ -20,8 +19,9 @@ int main(int argc, char **argv)
     Path projectPath(argv[1]);
     ProjectManager pm;
     Project *proj = pm.OpenProject(projectPath);
-    proj->OpenFirstFoundScene();
 
+    app.CreateWindow();
+    proj->OpenFirstFoundScene();
     app.MainLoop();
 
     return 0;

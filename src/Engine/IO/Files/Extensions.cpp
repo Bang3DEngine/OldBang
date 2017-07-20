@@ -36,6 +36,11 @@ List<String> Extensions::GetTextFileList()
     return {"txt"};
 }
 
+List<String> Extensions::GetSourceFileList()
+{
+    return {"c", "cpp"};
+}
+
 List<String> Extensions::GetVertexShaderList()
 {
     return {"vert", "vert_*"};

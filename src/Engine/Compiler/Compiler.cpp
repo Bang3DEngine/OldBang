@@ -7,9 +7,9 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
     List<String> args;
 
     // Output mode
-    if      (job.outputMode == OutputMode::Object)     { args.Add("-c"); }
-    else if (job.outputMode == OutputMode::SharedLib)  { args.Add("-shared"); }
-    else if (job.outputMode == OutputMode::Executable) { args.Add("-c"); }
+    if      (job.outputMode == OutputType::Object)     { args.Add("-c"); }
+    else if (job.outputMode == OutputType::SharedLib)  { args.Add("-shared"); }
+    else if (job.outputMode == OutputType::Executable) { args.Add("-c"); }
 
     // Flags
     args.Add(job.flags);

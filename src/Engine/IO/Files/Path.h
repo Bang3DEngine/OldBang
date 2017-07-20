@@ -19,9 +19,9 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> GetFiles(bool recursively = false,
+    List<Path> FindFiles(bool recursively = false,
                         const List<String>& extensions = {}) const;
-    List<Path> GetSubDirectories(bool recursively = false) const;
+    List<Path> FindSubDirectories(bool recursively = false) const;
 
     Path GetDirectory() const;
     String GetName() const;

@@ -1,6 +1,7 @@
 #include "Bang/GameBuilder.h"
 
 #include "Bang/File.h"
+#include "Bang/Time.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -8,13 +9,13 @@
 #include "Bang/Extensions.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/ProjectManager.h"
-// #include "Bang/BehaviourManager.h"
+#include "Bang/BehaviourManager.h"
 
 void GameBuilder::BuildGame(const Project *project,
-                            const Path &executablePath,
+                            const Path &outputExecutableFilepath,
                             BinType binaryType)
 {
-    Path executableDir = executablePath.GetDirectory();
+    Path executableDir = outputExecutableFilepath.GetDirectory();
 
     Debug_Log("Compiling the game executable...");
     if (!GameBuilder::CompileGameExecutable(binaryType))
@@ -39,23 +40,21 @@ void GameBuilder::BuildGame(const Project *project,
     }
 
     Debug_Log("Compiling behaviours...");
-    bool canceled = false;
-    if (!GameBuilder::CompileBehaviours(executableDir, &canceled))
+    if (!GameBuilder::CompileBehaviours(executableDir, binaryType))
     {
         Debug_Error("Could not compile the behaviours");
         return;
     }
-    if (canceled) { return; }
 
-    Debug_Error("Moving the executable into the desired location...");
+    Debug_Log("Moving the executable to '" <<outputExecutableFilepath  << "'...");
     const Path c_initialOutputDir = Paths::GameExecutableOutputFile(binaryType);
-    File::Remove(executablePath);
-    File::Move(c_initialOutputDir, executablePath);
+    File::Remove(outputExecutableFilepath);
+    File::Move(c_initialOutputDir, outputExecutableFilepath);
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
-    List<Path> sceneFiles = Paths::ProjectAssets().GetFiles(
+    List<Path> sceneFiles = Paths::ProjectAssets().FindFiles(
                                 true, {"*." + Extensions::Get<Scene>()});
     if (sceneFiles.IsEmpty())
     {
@@ -115,15 +114,46 @@ Project *GameBuilder::CreateGameProject(const Path &executableDir)
 }
 
 bool GameBuilder::CompileBehaviours(const Path &executableDir,
-                                    bool *cancel)
+                                    BinType binType)
 {
-    if (*cancel) { return true; }
-
+    // Create Libraries directory
     Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
     File::CreateDirectory(libsDir);
-    bool success = true;
-    // bool success = BehaviourManager::PrepareBehavioursLibrary(true,
-    //                                                           libsDir,
-    //                                                           cancel);
-    return success;
+
+    // Compile every behaviour into its .so
+    List<Path> behavioursSourceFiles =
+            Paths::ProjectAssets().FindFiles(true,
+                                             Extensions::GetSourceFileList());
+    for (const Path &behaviourSourcePath : behavioursSourceFiles)
+    {
+        Path outputObjPath = libsDir.Append(behaviourSourcePath.GetName())
+                                    .AppendExtension("o");
+
+        Debug_Log("Compiling '" << behaviourSourcePath << "' into '" <<
+                  outputObjPath << "'...");
+        Compiler::Result res =
+                BehaviourManager::CompileBehaviourObject(behaviourSourcePath,
+                                                         outputObjPath,
+                                                         binType);
+
+        if (!res.success) { Debug_Error(res.output); return false; }
+    }
+    //
+
+    // Merge into .so
+    List<Path> behaviourObjectsPaths = libsDir.FindFiles(false, {"*.o"});
+    Path outputLibPath =
+                libsDir.Append("Behaviours")
+                       .AppendExtension("so")
+                       .AppendExtension( String::ToString(Time::GetNow()) );
+    Debug_Log("Merging behaviour objects into '" << outputLibPath << "'...");
+
+    Compiler::Result res =
+            BehaviourManager::MergeBehaviourObjects(outputLibPath,
+                                                    behaviourObjectsPaths,
+                                                    binType);
+    if (!res.success) { Debug_Error(res.output); return false; }
+    //
+
+    return true;
 }

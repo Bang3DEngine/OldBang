@@ -45,7 +45,7 @@ bool File::DuplicateDir(const Path &fromDirpath,
     if (!fromDirpath.IsDir()) { return false; }
 
     if (!File::CreateDirectory( Path(toDirpath) )) { return false; }
-    List<Path> filepaths = fromDirpath.GetFiles(false);
+    List<Path> filepaths = fromDirpath.FindFiles(false);
     for(const Path& filepath : filepaths)
     {
         String fileName = filepath.GetNameExt();
@@ -55,7 +55,7 @@ bool File::DuplicateDir(const Path &fromDirpath,
         if (!ok) { return false; }
     }
 
-    List<Path> subdirs = fromDirpath.GetSubDirectories(false);
+    List<Path> subdirs = fromDirpath.FindSubDirectories(false);
     for (const Path &subdir : subdirs)
     {
         bool ok = File::DuplicateDir(subdir,
@@ -76,9 +76,9 @@ bool File::Remove(const Path &path)
     }
     else
     {
-        List<Path> subDirs  = path.GetSubDirectories(false);
+        List<Path> subDirs  = path.FindSubDirectories(false);
         for (const Path &subDir : subDirs) { File::Remove(subDir); }
-        List<Path> subFiles = path.GetFiles(false);
+        List<Path> subFiles = path.FindFiles(false);
         for (const Path &subFile : subFiles) { File::Remove(subFile); }
         QDir().rmdir(path.GetAbsolute().ToQString());
     }

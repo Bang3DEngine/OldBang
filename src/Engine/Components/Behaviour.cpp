@@ -2,6 +2,7 @@
 
 #include "Bang/Time.h"
 #include "Bang/Application.h"
+#include "Bang/BehaviourManager.h"
 
 Behaviour::Behaviour()
 {
@@ -23,6 +24,11 @@ void Behaviour::_OnStart()
 void Behaviour::_OnUpdate()
 {
     RefreshBehaviourLib(); // For instances created in runtime
+
+    // Update static local Times
+    Time::deltaTime = Time::GetDeltaTime();
+    Time::time      = Time::GetNow();
+
     Component::_OnUpdate();
 }
 
@@ -33,7 +39,6 @@ void Behaviour::Read(const XMLNode &xmlInfo)
 
     Component::Read(xmlInfo);
     SetSourceFilepath( xmlInfo.GetFilepath("BehaviourScript") );
-    m_behaviourVariablesInitValues = xmlInfo;
 
     RefreshBehaviourLib(&xmlInfo);
 }
@@ -110,9 +115,6 @@ void Behaviour::SetSourceFilepath(const Path &sourceFilepath)
     ENSURE(GetSourceFilepath() != sourceFilepath);
 
     m_sourceFilepath = sourceFilepath;
-
-    XMLNode empty;
-    m_behaviourVariablesInitValues = empty;
 }
 
 void Behaviour::CloneInto(ICloneable *clone) const
@@ -120,8 +122,7 @@ void Behaviour::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Behaviour *b = SCAST<Behaviour*>(clone);
     b->SetSourceFilepath( GetSourceFilepath() );
-    b->m_behaviourVariablesInitValues = m_behaviourVariablesInitValues;
-    b->p_behavioursLibraryBeingUsed   = p_behavioursLibraryBeingUsed;
+    b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
 const Path &Behaviour::GetSourceFilepath() const
@@ -139,8 +140,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically
-    /*
-    QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
+    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
     p_behavioursLibraryBeingUsed = behavioursLib;
     ENSURE(behavioursLib && behavioursLib->isLoaded());
 
@@ -151,7 +151,6 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
         if (gameObject->AddComponent(createdBehaviour))
         {
             CloneInto(createdBehaviour);
-            createdBehaviour->Read(m_behaviourVariablesInitValues);
             if (xmlInfoForNewBehaviour)
             {
                 createdBehaviour->Read(*xmlInfoForNewBehaviour);
@@ -159,13 +158,11 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
             gameObject->RemoveComponent(this);
         }
     }
-    */
 }
 
 bool Behaviour::IsLoaded() const
 {
-    QLibrary *behavioursLib = nullptr;
-    // QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
+    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
     return GetSourceFilepath().Exists() &&
            p_behavioursLibraryBeingUsed == behavioursLib &&
            GetSourceFilepath().GetName() == GetClassName();

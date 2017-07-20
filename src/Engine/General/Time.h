@@ -4,14 +4,9 @@
 class Time
 {
 public:
-    static double s_time;
-    static double const& time;
-    static float s_deltaTime;
-    static float const& deltaTime;
-    static double s_lastRenderTime;
 
-    static void OnFrameStarted();
-    static void OnFrameFinished();
+    static double time;
+    static float deltaTime;
 
     /**
      * @brief Returns the number of seconds that have passed between
@@ -20,6 +15,7 @@ public:
      */
     static float GetDeltaTime();
     static double GetTime();
+
     static void ResetDeltaTime();
 
     /**
@@ -29,7 +25,17 @@ public:
     static unsigned long long GetNow();
 
 private:
-    Time() = delete;
+    double m_time = 0.0;
+    float m_deltaTime = 0.0f;
+    unsigned long long m_lastRenderTime = 0.0;
+
+    Time();
+
+    void OnFrameStarted();
+    void OnFrameFinished();
+    static Time *GetInstance();
+
+    friend class Application;
 };
 
 #endif // TIME_H

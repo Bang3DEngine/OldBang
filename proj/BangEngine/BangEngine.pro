@@ -13,6 +13,7 @@ TARGET = $$BIN_DIR/lib/BangEngine
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
+    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Engine/General/Application.cpp \
     $$BANG_ROOT/src/Engine/Windows/Window.cpp \
@@ -86,12 +87,12 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.cpp \
     $$BANG_ROOT/src/Engine/Compiler/Compiler.cpp \
-    $$BANG_ROOT/src/Engine/Compiler/BangCompiler.cpp \
-    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp \
-    $$BANG_ROOT/src/Engine/Compiler/BangCompilerAsyncJob.cpp
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
+    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
+    $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManagerStatus.h \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.h \
     $$BANG_ROOT/src/Engine/General/Application.h \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
@@ -171,9 +172,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/IReflectable.h \
-    $$BANG_ROOT/src/Engine/Compiler/Compiler.h \
-    $$BANG_ROOT/src/Engine/Compiler/BangCompiler.h \
-    $$BANG_ROOT/src/Engine/Compiler/BangCompilerAsyncJob.h
+    $$BANG_ROOT/src/Engine/Compiler/Compiler.h
 
 ######################################
 

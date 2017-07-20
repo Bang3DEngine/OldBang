@@ -4,41 +4,50 @@
 
 #include "Bang/Application.h"
 
-double        Time::s_time           = 0.0;
-float         Time::s_deltaTime      = 0.0f;
-double        Time::s_lastRenderTime = 0.0f;
-double const& Time::time             = Time::s_time;
-float  const& Time::deltaTime        = Time::s_deltaTime;
-
-void Time::OnFrameStarted()
-{
-    float deltaTime = float(Time::GetNow() - s_lastRenderTime) / 1000.0f;
-    Time::s_deltaTime = deltaTime;
-    Time::s_time += deltaTime;
-}
-
-void Time::OnFrameFinished()
-{
-    Time::s_lastRenderTime = Time::GetNow();
-}
+double Time::time      = 0.0;
+float  Time::deltaTime = 0.0f;
 
 float Time::GetDeltaTime()
 {
-    return Time::deltaTime;
+    return Time::GetInstance()->m_deltaTime;
 }
 
 double Time::GetTime()
 {
-    return Time::time;
-}
-
-void Time::ResetDeltaTime()
-{
-    Time::s_lastRenderTime = Time::GetNow();
+    return Time::GetInstance()->m_time;
 }
 
 unsigned long long Time::GetNow()
 {
     return std::chrono::system_clock::now().time_since_epoch() /
            std::chrono::milliseconds(1);
+}
+
+Time::Time()
+{
+}
+
+void Time::OnFrameStarted()
+{
+    float deltaTime = (Time::GetNow() - m_lastRenderTime) / 1000.0f;
+    m_deltaTime = deltaTime;
+    m_time += deltaTime;
+
+    Time::deltaTime = m_deltaTime;
+    Time::time = m_time;
+}
+
+void Time::OnFrameFinished()
+{
+    m_lastRenderTime = Time::GetNow();
+}
+
+void Time::ResetDeltaTime()
+{
+    Time::GetInstance()->m_lastRenderTime = Time::GetNow();
+}
+
+Time *Time::GetInstance()
+{
+    return Application::GetInstance()->GetTime();
 }

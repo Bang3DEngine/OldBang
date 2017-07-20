@@ -7,7 +7,7 @@
 class Compiler
 {
 public:
-    enum OutputMode
+    enum OutputType
     {
         Object,
         SharedLib,
@@ -20,7 +20,7 @@ public:
         List<Path> includePaths;
         List<Path> libDirs;
         List<String> libraries;
-        OutputMode outputMode;
+        OutputType outputMode;
         List<String> flags;
         Path outputFile;
     };

@@ -72,8 +72,6 @@ public:
         XButton2         = SDL_BUTTON_X2
     };
 
-    static Input* GetInstance();
-
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);
     static bool GetKeyDown(Key k);
@@ -223,6 +221,8 @@ private:
      * the next frame.
      */
     Array<EventInfo> m_eventInfoQueue;
+
+    static Input* GetInstance();
 
     void ProcessMouseWheelEventInfo(const EventInfo &ei);
     void ProcessMouseMoveEventInfo(const EventInfo &ei);

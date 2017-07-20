@@ -10,11 +10,6 @@
 class Paths
 {
 public:
-    Paths();
-
-    static void InitPaths(int argc, char **argv);
-    static void InitPaths(const Path &engineRoot);
-
     static Path Home();
 
     static const Path& Engine();
@@ -44,8 +39,14 @@ public:
     static void SetProjectRoot(const Path &projectRootDir);
 
 private:
-    static Path c_engineRoot;
-    static Path c_projectRoot;
+    Path c_engineRoot  = Path::Empty;
+    Path c_projectRoot = Path::Empty;
+
+    Paths();
+
+    static Paths* GetInstance();
+
+    friend class Application;
 };
 
 #endif // PATHS_H

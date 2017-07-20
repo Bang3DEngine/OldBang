@@ -1,6 +1,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
+#include "Bang/Application.h"
 #include "Bang/GameBuilder.h"
 #include "Bang/ProjectManager.h"
 
@@ -8,7 +9,7 @@ void Usage()
 {
     std::cerr <<
      "Usage:" << std::endl <<
-     "   ./BangGameBuilder Path/To/Project.pro DebugOrRelease" << std::endl <<
+     "   ./BangGameBuilder Path/To/Project.bproject DebugOrRelease" << std::endl <<
      "    (where DebugOrRelease can be 'DEBUG' or 'RELEASE')"  << std::endl <<
      std::endl;
     exit(1);
@@ -16,7 +17,7 @@ void Usage()
 
 int main(int argc, char **argv)
 {
-    Paths::InitPaths(argc, argv);
+    Application app(argc, argv);
 
     if (argc <= 2) { Usage(); }
 
@@ -24,6 +25,7 @@ int main(int argc, char **argv)
     if (debugOrRelease != "DEBUG" && debugOrRelease != "RELEASE") { Usage(); }
     BinType binaryType = (debugOrRelease == "DEBUG") ? BinType::Debug :
                                                        BinType::Release;
+
     Path projectPath(argv[1]);
     ProjectManager pm;
     Project *project = pm.OpenProject(projectPath);

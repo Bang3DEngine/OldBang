@@ -1,7 +1,6 @@
 #ifndef GAMEBUILDER_H
 #define GAMEBUILDER_H
 
-#include <QThread>
 #include <QProgressDialog>
 
 #include "Bang/Path.h"
@@ -15,7 +14,7 @@ class GameBuilder : public QObject
 
 public:
     static void BuildGame(const Project *project,
-                          const Path &executablePath,
+                          const Path &outputExecutableFilepath,
                           BinType binType);
 
 private:
@@ -25,7 +24,7 @@ private:
     static bool     CreateDataDirectory(const Path &executableDir);
     static Project* CreateGameProject(const Path &executableDir);
     static bool     CompileBehaviours(const Path &executableDir,
-                                      bool *cancel);
+                                      BinType binType);
 };
 
 #endif // GAMEBUILDER_H

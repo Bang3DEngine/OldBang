@@ -76,7 +76,6 @@ public:
 
 private:
     Path m_sourceFilepath;
-    XMLNode m_behaviourVariablesInitValues;
     QLibrary *p_behavioursLibraryBeingUsed = nullptr;
 };
 
@@ -93,7 +92,7 @@ extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
 \
     /* This line links the Application in the main binary \
         to the Application in the behaviour loaded library. */ \
-\
+    Application::SetApplicationSingleton(mainBinaryApplication); \
     return new CLASS_NAME(); \
 } \
 \

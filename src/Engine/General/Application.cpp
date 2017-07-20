@@ -1,9 +1,12 @@
 #include "Bang/Application.h"
 
+#include <thread>
+
 #include "Bang/Math.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Paths.h"
 #include "Bang/Screen.h"
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
@@ -12,6 +15,7 @@
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/BehaviourManager.h"
 #include "Bang/G_FontSheetCreator.h"
 
 Application* Application::s_appSingleton = nullptr;
@@ -20,20 +24,36 @@ Application::Application(int argc, char **argv)
 {
     Application::s_appSingleton = this;
 
-    m_sceneManager  = new SceneManager();
-    m_input         = new Input();
-    m_shaderManager = new ShaderManager();
-    m_audioManager  = new AudioManager();
-    m_assetsManager = new AssetsManager();
-    m_window        = new Window();
+    Path binPath(argv[0]);
+    m_paths = new Paths();
+    m_paths->SetEngineRoot(binPath.GetDirectory()
+                                  .GetDirectory()
+                                  .GetDirectory());
+
+    m_input            = new Input();
+    m_time             = new Time();
+    m_sceneManager     = new SceneManager();
+    m_shaderManager    = new ShaderManager();
+    m_audioManager     = new AudioManager();
+    m_assetsManager    = new AssetsManager();
+    m_behaviourManager = new BehaviourManager();
 }
 
 Application::~Application()
 {
+    delete m_paths;
     delete m_input;
+    delete m_window;
+    delete m_shaderManager;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_assetsManager;
+    delete m_behaviourManager;
+}
+
+void Application::CreateWindow()
+{
+    m_window = new Window();
 }
 
 void Application::MainLoop()
@@ -41,7 +61,7 @@ void Application::MainLoop()
     bool quit = false;
     while (!quit)
     {
-        Time::OnFrameStarted();
+        m_time->OnFrameStarted();
 
         // Process mouse and key events, so the Input is available in OnUpdate
         // as accurate as possible.
@@ -51,8 +71,11 @@ void Application::MainLoop()
         m_window->Render();
 
         m_input->OnFrameFinished();
-        Time::OnFrameFinished();
+        m_time->OnFrameFinished();
+
         quit = !ProcessEvents();
+
+        SDL_Delay(RedrawDelay_ms);
     }
 }
 
@@ -91,6 +114,21 @@ Input *Application::GetInput() const
     return m_input;
 }
 
+Time *Application::GetTime() const
+{
+    return m_time;
+}
+
+Paths *Application::GetPaths() const
+{
+    return m_paths;
+}
+
+SceneManager *Application::GetSceneManager() const
+{
+    return m_sceneManager;
+}
+
 AudioManager *Application::GetAudioManager() const
 {
     return m_audioManager;
@@ -101,9 +139,19 @@ AssetsManager *Application::GetAssetsManager() const
     return m_assetsManager;
 }
 
+BehaviourManager *Application::GetBehaviourManager() const
+{
+    return m_behaviourManager;
+}
+
 Application *Application::GetInstance()
 {
     return Application::s_appSingleton;
+}
+
+void Application::SetApplicationSingleton(Application *app)
+{
+    Application::s_appSingleton = app;
 }
 
 Window *Application::GetMainWindow() const

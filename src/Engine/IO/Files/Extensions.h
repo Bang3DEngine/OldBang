@@ -12,6 +12,7 @@ public:
 
     static List<String> GetTTFList();
     static List<String> GetTextFileList();
+    static List<String> GetSourceFileList();
     static List<String> GetVertexShaderList();
     static List<String> GetFragmentShaderList();
 

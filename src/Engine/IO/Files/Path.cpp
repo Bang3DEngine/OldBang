@@ -51,7 +51,7 @@ bool Path::Exists() const
     return IsDir() || IsFile();
 }
 
-List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
+List<Path> Path::FindFiles(bool recursive, const List<String> &extensions) const
 {
     if (!IsDir()) { return {}; }
 
@@ -65,7 +65,7 @@ List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
     List<Path> subdirs;
     if (recursive)
     {
-        List<Path> subdirsRecursive = GetSubDirectories(recursive);
+        List<Path> subdirsRecursive = FindSubDirectories(recursive);
         subdirs.Splice(subdirs.Begin(), subdirsRecursive);
     }
     subdirs.PushFront(*this);
@@ -88,7 +88,7 @@ List<Path> Path::GetFiles(bool recursive, const List<String> &extensions) const
     return filesList;
 }
 
-List<Path> Path::GetSubDirectories(bool recursive) const
+List<Path> Path::FindSubDirectories(bool recursive) const
 {
     if (!IsDir()) { return {}; }
 
@@ -105,7 +105,7 @@ List<Path> Path::GetSubDirectories(bool recursive) const
             if (recursive)
             {
                 List<Path> subdirsListRecursive =
-                        subdirPath.GetSubDirectories(recursive);
+                        subdirPath.FindSubDirectories(recursive);
                 subdirsList.Splice(subdirsList.End(), subdirsListRecursive);
             }
         }
