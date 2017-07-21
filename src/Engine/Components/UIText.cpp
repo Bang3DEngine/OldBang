@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/Gizmos.h"
+#include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/G_Screen.h"
 #include "Bang/Material.h"
@@ -40,8 +41,9 @@ Rect UIText::GetCharRect(char c) const
     const Vector2 textSize = GetTextSizeScaled();
     Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(c);
 
-    const Vector2 charSize =
+    Vector2 charSize =
             Vector2(charMetrics.width, charMetrics.height) * textSize;
+
     const Vector2 bearing =
             Vector2(charMetrics.bearingX, charMetrics.bearingY) * textSize;
 
@@ -340,7 +342,8 @@ Rect UIText::GetBoundingRect(Camera *camera) const
 Vector2 UIText::GetTextSizeScaled() const
 {
     constexpr double scaleFactor = 0.00015;
-    return Vector2(m_textSize * scaleFactor);
+    return Vector2(m_textSize * scaleFactor) /
+            Vector2(Screen::GetAspectRatio(), 1.0f);
 }
 
 
