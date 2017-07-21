@@ -94,6 +94,7 @@ SOURCES += \
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
     $$BANG_ROOT/src/Engine/Gizmos/Gizmos.h \
+    $$BANG_ROOT/src/Engine/Gizmos/GizmosPassType.h \
     $$BANG_ROOT/src/Engine/Gizmos/GPPass_G_Gizmos.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.h \

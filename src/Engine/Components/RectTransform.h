@@ -49,7 +49,7 @@ public:
     virtual const Matrix4& GetLocalToParentMatrix() const override;
     Matrix4 GetLocalToParentMatrix(bool takeMarginsIntoAccount) const;
 
-    void OnParentSizeChanged();
+    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
 
 private:
     Vector2 m_anchorScale = Vector2(1.0f, -1.0f);

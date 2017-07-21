@@ -240,6 +240,8 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
+    if (!IsEnabled(false)) { return Matrix4::Identity; }
+
     if (m_hasChanged)
     {
         Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());

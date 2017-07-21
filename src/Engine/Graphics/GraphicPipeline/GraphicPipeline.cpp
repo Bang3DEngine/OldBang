@@ -44,7 +44,7 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     // Set up graphic pipeline passes
     typedef Renderer::RenderLayer RL;
     m_scenePass  =
-     new GPPass_RenderLayer(this, RL::Scene,
+     new GPPass_RenderLayer(this, RL::RLScene,
      {
        new GPPass_G(this, true),            // Lighted G_Pass
        new GPPass_SP_DeferredLights(this),  // Apply light
@@ -54,17 +54,17 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
      });
 
     m_canvasPass =
-     new GPPass_RenderLayer(this, RL::Canvas,
+     new GPPass_RenderLayer(this, RL::RLCanvas,
      {
       new GPPass_G(this, false),
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
 
-    m_gizmosPass = new GPPass_RenderLayer(this, RL::Gizmos,
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
     {
-     new GPPass_G_Gizmos(this, Gizmos::GizmosPassType::Depth),  // Gizmos with depth
-     new GPPass_G_Gizmos(this, Gizmos::GizmosPassType::Overlay) // Gizmos normal
+     new GPPass_G_Gizmos(this, GizmosPassType::Depth),  // Gizmos with depth
+     new GPPass_G_Gizmos(this, GizmosPassType::Overlay) // Gizmos normal
     });
 
 }

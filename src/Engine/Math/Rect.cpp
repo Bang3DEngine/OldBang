@@ -254,3 +254,11 @@ Rect operator+(const Rect &r, const Vector2 &v)
 {
     return v + r;
 }
+
+void operator+=(Rect &r, const Vector2 &v)
+{
+    r.m_minx += v.x;
+    r.m_maxx += v.x;
+    r.m_miny += v.y;
+    r.m_maxy += v.y;
+}

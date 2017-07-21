@@ -1,12 +1,12 @@
 #include "Bang/GPPass_G_Gizmos.h"
 
-#include "Bang/Debug.h"
+#include "Bang/Scene.h"
 #include "Bang/Renderer.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/GameObject.h"
 
 GPPass_G_Gizmos::GPPass_G_Gizmos(GraphicPipeline *graphicPipeline,
-                                 Gizmos::GizmosPassType gizmosPassType,
+                                 GizmosPassType gizmosPassType,
                                  const List<GPPass*> &subPasses)
     : GPPass(graphicPipeline, subPasses)
 {
@@ -23,11 +23,8 @@ void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
     p_gbuffer->SetStencilWrite(false);
 
     GL::SetWriteDepth(true);
-    GL::SetTestDepth(m_gizmosPassType == Gizmos::Depth);
-    for (GameObject *go : sceneChildren)
-    {
-        go->_OnDrawGizmos(m_gizmosPassType);
-    }
+    GL::SetTestDepth(m_gizmosPassType == GizmosPassType::Depth);
+    p_scene->_OnDrawGizmos(m_gizmosPassType);
     // p_gbuffer->ClearStencil();
     p_gbuffer->ClearDepth();
 }

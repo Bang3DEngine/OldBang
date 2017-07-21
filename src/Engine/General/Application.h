@@ -40,7 +40,7 @@ public:
     static void SetApplicationSingleton(Application *app);
 
 protected:
-    const int RedrawDelay_ms = 16; // 60 FPS cap
+    const int RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;
 
     Window           *m_window           = nullptr;

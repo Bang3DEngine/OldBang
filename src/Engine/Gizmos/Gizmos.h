@@ -5,6 +5,7 @@
 #include "Bang/Color.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/GameObject.h"
 #include "Bang/Quaternion.h"
 
 class Mesh;
@@ -13,19 +14,12 @@ class Material;
 class Renderer;
 class Transform;
 class Texture2D;
-class GameObject;
 class MeshRenderer;
 class CircleRenderer;
 class SingleLineRenderer;
-class Gizmos
+class Gizmos : public GameObject
 {
 public:
-    enum GizmosPassType
-    {
-        Depth,
-        Overlay
-    };
-
     static void SetColor(const Color &color);
 
     static void SetPosition(const Vector3 &position);
@@ -40,7 +34,7 @@ public:
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
     static void RenderRect(const Rect &r);
-    static void RenderFillRect(const Rect &r, const Color &fillColor);
+    static void RenderFillRect(const Rect &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
     static void RenderScreenIcon(const Texture2D *texture,
@@ -65,8 +59,6 @@ private:
     Mesh *m_planeMesh    = nullptr;
     Material *m_material = nullptr;
 
-    GameObject *m_gizmosGameObject = nullptr;
-    Transform  *m_transform = nullptr;
     SingleLineRenderer *m_singleLineRenderer = nullptr;
     CircleRenderer *m_circleRenderer = nullptr;
     MeshRenderer *m_meshRenderer = nullptr;

@@ -1,6 +1,7 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/Math.h"
+#include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Vector4.h"
@@ -31,26 +32,38 @@ void RectTransform::CloneInto(ICloneable *clone) const
 
 void RectTransform::SetMarginLeft(int marginLeft)
 {
-    m_marginLeft = marginLeft;
-    OnChanged();
+    if (m_marginLeft != marginLeft)
+    {
+        m_marginLeft = marginLeft;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetMarginTop(int marginTop)
 {
-    m_marginTop = marginTop;
-    OnChanged();
+    if (m_marginTop != marginTop)
+    {
+        m_marginTop = marginTop;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetMarginRight(int marginRight)
 {
-    m_marginRight = marginRight;
-    OnChanged();
+    if (m_marginRight != marginRight)
+    {
+        m_marginRight = marginRight;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetMarginBot(int marginBot)
 {
-    m_marginBot = marginBot;
-    OnChanged();
+    if (m_marginBot != marginBot)
+    {
+        m_marginBot = marginBot;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetMargins(int marginAll)
@@ -60,37 +73,53 @@ void RectTransform::SetMargins(int marginAll)
 
 void RectTransform::SetMargins(int left, int top, int right, int bot)
 {
-    SetMarginTop(top);
-    SetMarginBot(bot);
-    SetMarginLeft(left);
-    SetMarginRight(right);
+    if (m_marginLeft  != left  || m_marginTop != top ||
+        m_marginRight != right || m_marginBot != bot)
+    {
+        m_marginLeft  = left;
+        m_marginTop   = top;
+        m_marginRight = right;
+        m_marginBot   = bot;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 {
-    m_pivotPosition = pivotPosition;
-    OnChanged();
+    if (m_pivotPosition != pivotPosition)
+    {
+        m_pivotPosition = pivotPosition;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
 {
-    m_anchorMin = anchorMin;
-    OnChanged();
+    if (m_anchorMin != anchorMin)
+    {
+        m_anchorMin = anchorMin;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
 {
-    m_anchorMax = anchorMax;
-    OnChanged();
+    if (m_anchorMax != anchorMax)
+    {
+        m_anchorMax = anchorMax;
+        OnChanged();
+    }
 }
 
 void RectTransform::SetAnchors(const Vector2 &anchorMin,
                                const Vector2 &anchorMax)
 {
-    m_anchorMin = anchorMin;
-    m_anchorMax = anchorMax;
-    SetAnchorMin(anchorMin);
-    SetAnchorMax(anchorMax);
+    if (m_anchorMin != anchorMin || m_anchorMax != anchorMax)
+    {
+        m_anchorMin = anchorMin;
+        m_anchorMax = anchorMax;
+        OnChanged();
+    }
 }
 
 int RectTransform::GetMarginLeft() const
@@ -173,22 +202,13 @@ void RectTransform::OnChanged()
     m_hasChanged = true;
 
     ENSURE(gameObject);
-
-    List<RectTransform*> rectTransforms =
-            gameObject->GetComponentsInChildren<RectTransform>();
-    for (RectTransform *rt : rectTransforms)
-    {
-        rt->OnParentSizeChanged();
-    }
-}
-
-void RectTransform::OnParentSizeChanged()
-{
-    OnChanged();
+    gameObject->_OnParentSizeChanged();
 }
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
+    if (!IsEnabled(false)) { return Matrix4::Identity; }
+
     if (m_hasChanged)
     {
         m_localToParentMatrix = GetLocalToParentMatrix(true);
@@ -229,6 +249,17 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
            moveToAnchorCenter *
            anchorScaling *
            moveToPivot;
+}
+
+void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
+{
+    Transform::OnDrawGizmos(gizmosPassType);
+
+    Gizmos::SetColor(Color::Green);
+    Gizmos::RenderRect( GetScreenSpaceRect() );
+
+    Gizmos::SetColor(Color::Red);
+    Gizmos::RenderRect( GetScreenSpaceRect(false) );
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

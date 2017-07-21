@@ -8,6 +8,7 @@
 #include "Bang/Object.h"
 #include "Bang/Sphere.h"
 #include "Bang/IToString.h"
+#include "Bang/GizmosPassType.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
@@ -15,9 +16,9 @@ class Scene;
 class Material;
 class Component;
 class Transform;
-class GameObject : public ISceneEventListener
-                  ,public IToString
-                  ,public SerializableObject
+class GameObject : public ISceneEventListener,
+                   public IToString,
+                   public SerializableObject
 {
     OBJECT_NO_FRIEND(GameObject)
 
@@ -292,15 +293,16 @@ protected:
     bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
 
-    virtual void _OnStart () override;
-    virtual void _OnUpdate () override;
-    virtual void _OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType) override;
-    virtual void _OnDestroy () override;
+    virtual void _OnStart() override;
+    virtual void _OnUpdate() override;
+    virtual void _OnParentSizeChanged() override;
+    virtual void _OnDrawGizmos(GizmosPassType gizmosPassType) override;
+    virtual void _OnDestroy() override;
 
     friend class Scene;
     friend class Prefab;
     friend class SceneManager;
-    friend class GPPass_G_Gizmos;
+    friend class RectTransform;
     friend class GraphicPipeline;
 };
 

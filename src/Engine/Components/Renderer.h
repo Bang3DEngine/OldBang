@@ -18,7 +18,7 @@ class Renderer : public GLObject, public Component
 public:
     enum RenderLayer
     {
-        Scene, Canvas, Gizmos
+        RLScene, RLCanvas, RLGizmos
     };
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -75,7 +75,7 @@ private:
     Material *m_material     = nullptr;
     Material *m_materialCopy = nullptr;
 
-    RenderLayer m_renderLayer = Scene;
+    RenderLayer m_renderLayer = RLScene;
 
     /**
      * @brief Width of the lines if rendering with Lines RenderMode

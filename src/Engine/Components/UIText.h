@@ -5,6 +5,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
+#include "Bang/Vector2.h"
 #include "Bang/UIRenderer.h"
 
 class Font;
@@ -44,25 +45,28 @@ public:
     void SetTextSize(int size);
     int GetTextSize() const;
 
-    void SetHorizontalSpacing(int horizontalSpacing);
-    int GetHorizontalSpacing() const;
+    void SetSpacing(const Vector2 &spacing);
+    Vector2 GetSpacing() const;
 
     Rect GetNDCRect() const;
 
     virtual void Bind() const override;
+    virtual void UnBind() const override;
 
+    void OnParentSizeChanged() override;
+    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 protected:
-    String m_content        = "";
-    Font *m_font            = nullptr;
-    int m_textSize          = 64;
-    int m_horizontalSpacing = 5;
-    bool m_kerning          = false;
-    Rect m_charQuadsRect    = Rect::Empty;
+    String m_content   = "";
+    Font *m_font       = nullptr;
+    int m_textSize     = 64;
+    Vector2 m_spacing  = Vector2(5, 200);
+    bool m_kerning     = false;
+    Rect m_textRectNDC = Rect::Empty;
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
-    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
+    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
     Vector2 GetTextSizeScaled() const;
     Rect GetCharRect(char c) const;
@@ -72,8 +76,7 @@ protected:
     void FillQuadsMeshUvs();
     void RefreshMesh();
 
-    void ApplyAlignmentOffset(const Vector2& contentSize,
-                              Vector2 *minPosition) const;
+    Vector2 GetAlignmentOffset(const Rect& contentRect) const;
 };
 
 #endif // UITEXT_H

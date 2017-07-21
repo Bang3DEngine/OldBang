@@ -8,6 +8,7 @@
 #include "Bang/GameObject.h"
 
 class Camera;
+class Gizmos;
 class Scene : public GameObject
 {
     OBJECT(Scene)
@@ -32,14 +33,17 @@ public:
 
 protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;
+    List<GameObject*> m_hiddenGameObjects;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
-    virtual void _OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType) override;
+    virtual void _OnDrawGizmos(GizmosPassType gizmosPassType) override;
     virtual void _OnResize (int newWidth, int newHeight);
+
+    void AddHiddenChild(GameObject *go);
 
     Gizmos *GetGizmos() const;
     void DestroyQueuedGameObjects();
@@ -48,6 +52,7 @@ protected:
     friend class Gizmos;
     friend class Application;
     friend class SceneManager;
+    friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
 };
 

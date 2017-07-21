@@ -77,6 +77,7 @@ Rect operator*(float a, const Rect &r);
 Rect operator*(const Rect &r, float a);
 Rect operator*(const Vector2 &v, const Rect &r);
 Rect operator*(const Rect &r, const Vector2 &v);
+void operator+=(Rect &r, const Vector2 &v);
 void operator*=(Rect &r, const Vector2 &v);
 void operator/=(Rect &r, const Vector2 &v);
 bool operator==(const Rect &r1, const Rect &r2);

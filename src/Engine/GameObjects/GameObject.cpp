@@ -576,7 +576,7 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
-    OnUpdate();
+    ISceneEventListener::_OnUpdate();
 
     m_iteratingComponents = true;
     PROPAGATE_EVENT(_OnUpdate(), m_components);
@@ -586,10 +586,15 @@ void GameObject::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
 
-void GameObject::_OnDrawGizmos(Gizmos::GizmosPassType gizmosPassType)
+void GameObject::_OnParentSizeChanged()
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    ISceneEventListener::_OnParentSizeChanged();
+    PROPAGATE_EVENT(_OnParentSizeChanged(), m_components);
+    PROPAGATE_EVENT(_OnParentSizeChanged(), m_children);
+}
 
+void GameObject::_OnDrawGizmos(GizmosPassType gizmosPassType)
+{
     PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_components);
     OnDrawGizmos(gizmosPassType);
 

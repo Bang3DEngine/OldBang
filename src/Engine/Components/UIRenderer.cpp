@@ -18,7 +18,7 @@ UIRenderer::UIRenderer()
     UseMaterialCopy();
     GetMaterial()->SetDiffuseColor(m_tint);
 
-    SetRenderLayer(Renderer::RenderLayer::Canvas);
+    SetRenderLayer(Renderer::RenderLayer::RLCanvas);
 }
 
 UIRenderer::~UIRenderer()
