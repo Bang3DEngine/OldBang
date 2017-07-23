@@ -41,6 +41,8 @@ Array<Vector2> TextFormatter::GetFormattedTextPositions(
     TextFormatter::ApplyAlignment(&linedCharQuads, hAlignment,
                                   vAlignment, limitsRectNDC);
 
+    TextFormatter::ApplyVerticalWrap(linedCharQuads, vWrapMode, limitsRectNDC);
+
     Array<Vector2> newCharQuadPositions; // Flattened result
     for (const Array<Vector2> &line : linedCharQuads)
     {
@@ -139,25 +141,6 @@ Array< Array<Vector2> > TextFormatter::GetLinedPositions(
         }
     }
 
-
-    // Apply vertical wrapping
-    if (vWrapMode == WrapMode::Hide)
-    {
-        auto it = linedCharQuadPositions.Begin();
-        while (it != linedCharQuadPositions.End())
-        {
-            const Array<Vector2> &line = *it;
-            Vector2 minCoord = FindMin(line);
-            Vector2 maxCoord = FindMax(line);
-            if (minCoord.y < limitsRect.GetMin().y ||
-                maxCoord.y > limitsRect.GetMax().y)
-            {
-                it = linedCharQuadPositions.Remove(it);
-            }
-            else { ++it; }
-        }
-    }
-
     return linedCharQuadPositions;
 }
 
@@ -219,6 +202,29 @@ void TextFormatter::ApplyAlignment(
         for (int i = 0; i < line.Size(); ++i)
         {
             line[i].y += lineVerticalOffset;
+        }
+    }
+}
+
+void TextFormatter::ApplyVerticalWrap(
+        Array<Array<Vector2> > *linedCharQuadPositions,
+        WrapMode verticalWrap,
+        const Rect &limitsRect)
+{
+    if (verticalWrap == WrapMode::Hide)
+    {
+        auto it = linedCharQuadPositions->Begin();
+        while (it != linedCharQuadPositions->End())
+        {
+            const Array<Vector2> &line = *it;
+            Vector2 minCoord = FindMin(line);
+            Vector2 maxCoord = FindMax(line);
+            if (minCoord.y < limitsRect.GetMin().y ||
+                maxCoord.y > limitsRect.GetMax().y)
+            {
+                it = linedCharQuadPositions->Remove(it);
+            }
+            else { ++it; }
         }
     }
 }

@@ -37,11 +37,14 @@ private:
                                 WrapMode vWrapMode);
 
     static void ApplyAlignment(
-                        Array< Array<Vector2> > *linesCharQuadPositions,
+                        Array< Array<Vector2> > *linedCharQuadPositions,
                         HorizontalAlignment hAlignment,
                         VerticalAlignment vAlignment,
                         const Rect &limitsRect);
 
+    static void ApplyVerticalWrap(Array< Array<Vector2> > *linesCharQuadPositions,
+                                  WrapMode verticalWrap,
+                                  const Rect &limitsRect);
 
     static Vector2 GetTextSizeScaled(int textSize);
     static Rect GetCharRect(const Font *font,
