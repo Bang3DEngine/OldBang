@@ -13,7 +13,14 @@
 class TextFormatter
 {
 public:
-    static Array<Vector2> GetFormattedTextPositions(
+    struct CharRect
+    {
+        char character;
+        Rect rect;
+        CharRect(char _c, const Rect &_rect) : character(_c), rect(_rect) {}
+    };
+
+    static Array<CharRect> GetFormattedTextPositions(
                                             const String &content,
                                             const Font *font,
                                             HorizontalAlignment hAlignment,
@@ -26,67 +33,38 @@ public:
 private:
     TextFormatter() = delete;
 
-    static Array< Array<Vector2> > GetLinedPositions(
+    static Array< Array<CharRect> > SplitCharRectsInLines(
                                 const String &content,
                                 const Font *font,
-                                const Array<Vector2> &charQuadPositions,
+                                const Array<CharRect> &charRects,
                                 const Rect &limitsRect,
                                 const Vector2 &spacing,
                                 int textSize,
-                                WrapMode hWrapMode,
-                                WrapMode vWrapMode);
+                                WrapMode hWrapMode);
 
-    static void ApplyAlignment(
-                        Array< Array<Vector2> > *linedCharQuadPositions,
-                        HorizontalAlignment hAlignment,
-                        VerticalAlignment vAlignment,
-                        const Rect &limitsRect);
+    static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
+                               HorizontalAlignment hAlignment,
+                               VerticalAlignment vAlignment,
+                               const Rect &limitsRect);
 
-    static void ApplyVerticalWrap(Array< Array<Vector2> > *linesCharQuadPositions,
-                                  WrapMode verticalWrap,
-                                  const Rect &limitsRect);
+    static void ApplyHorizontalHideWrap(Array< Array<CharRect> > *linedCharRects,
+                                        const Rect &limitsRect);
+    static void ApplyVerticalHideWrap(Array< Array<CharRect> > *linedCharRects,
+                                      const Rect &limitsRect);
 
     static Vector2 GetTextSizeScaled(int textSize);
     static Rect GetCharRect(const Font *font,
                             int textSize,
                             char c);
     static float GetCharAdvanceX(const Font *font,
-                                int textSize,
-                                const String &content,
-                                int currentCharIndex);
+                                 int textSize,
+                                 const String &content,
+                                 int currentCharIndex);
 
-    template<class T, class FuncType>
-    static T Find(const Array<T>& values, FuncType func)
-    {
-        T result;
-        bool first = true;
-        for (const T& v : values)
-        {
-            if (first) { first = false; result = v; }
-            result = func(result, v);
-        }
-        return result;
-    }
-    template<class T, class FuncType>
-    static T Find(const Array< Array<T> >& values, FuncType func)
-    {
-        T result;
-        bool first = true;
-        for (const Array<T> &arr : values)
-        {
-            for (const T& v : arr)
-            {
-                if (first) { first = false; result = v; }
-                result = func(result, v);
-            }
-        }
-        return result;
-    }
-
-    static Vector2 FindMin(const Array<Vector2>& values);
-    static Vector2 FindMax(const Array<Vector2>& values);
-    static Vector2 FindMin(const Array< Array<Vector2> >& values);
-    static Vector2 FindMax(const Array< Array<Vector2> >& values);
+    static Vector2 FindMinCoord(const Array<CharRect>& rects);
+    static Vector2 FindMaxCoord(const Array<CharRect>& rects);
+    static Vector2 FindMinCoord(const Array< Array<CharRect> >& rects);
+    static Vector2 FindMaxCoord(const Array< Array<CharRect> >& rects);
 };
 
 #endif // TEXTFORMATTER_H

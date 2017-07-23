@@ -51,7 +51,6 @@ public:
     virtual void UnBind() const override;
 
     void OnParentSizeChanged() override;
-    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 protected:
@@ -67,8 +66,6 @@ protected:
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
-    void FillQuadsMeshPositions();
-    void FillQuadsMeshUvs();
     void RefreshMesh();
 
     Vector2 GetAlignmentOffset(const Rect& contentRect) const;

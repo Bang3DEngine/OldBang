@@ -25,21 +25,21 @@ public:
     {
         ChangeTransformByRectTransform();
         rt = SCAST<RectTransform*>(transform);
-        rt->SetAnchors( Vector2(-1.0f), Vector2(1.0f) );
+        rt->SetAnchors(Vector2(-0.7, -0.3), Vector2(0.7, 0.3));
         // rt->SetMargins(10);
 
         text = AddComponent<UIText>();
-        text->SetTextSize(5);
+        text->SetTextSize(20);
         text->SetContent("El veloz murcielago hindu comia feliz cardillo y kiwi. La ciguena tocaba el saxofon detras del palenque de paja.");
-        text->SetHorizontalWrapMode(WrapMode::Overflow);
+        text->SetHorizontalWrapMode(WrapMode::Wrap);
         text->SetVerticalWrapMode(WrapMode::Hide);
+        text->SetHorizontalAlign(HorizontalAlignment::Center);
+        text->SetVerticalAlign(VerticalAlignment::Center);
     }
 
     void OnUpdate() override
     {
         GameObject::OnUpdate();
-
-        if (Input::GetKey(Input::Key::LControl)) { return; }
 
         if (Input::GetKeyDown(Input::Key::E))
         {
@@ -110,22 +110,6 @@ public:
             text->SetHorizontalAlign(HorizontalAlignment::Right);
         }
     }
-
-    void OnDrawGizmos(GizmosPassType gizmosPassType) override
-    {
-        GameObject::OnDrawGizmos(gizmosPassType);
-        if (gizmosPassType == GizmosPassType::Overlay)
-        {
-            /*
-            Gizmos::SetPosition( Vector3::Zero );
-            Gizmos::SetColor( Color::Green );
-            Gizmos::RenderCircle( (rand() % 1000)/200.0f );
-            Gizmos::SetColor( Color::Red );
-            Gizmos::RenderScreenLine( Vector2(-0.8), Vector2(0.8) );
-            Gizmos::RenderFillRect( Rect( Vector2(-0.2), Vector2(0.2) ) );
-            */
-        }
-    }
 };
 
 class BackPanel : public GameObject
@@ -133,36 +117,30 @@ class BackPanel : public GameObject
 public:
     UIImage *img;
     RectTransform *rt;
+    UIText *instructionsText;
     BackPanel() : GameObject("BackPanel")
     {
         ChangeTransformByRectTransform();
         rt = SCAST<RectTransform*>(transform);
         img = AddComponent<UIImage>();
         img->SetTint(Color::Gray);
-        rt->SetAnchors(Vector2(-0.7, -0.3), Vector2(0.7, 0.3));
+
+        instructionsText = AddComponent<UIText>();
+        instructionsText->SetTextSize(20);
+        instructionsText->SetTint(Color::Black);
+        instructionsText->SetHorizontalAlign(HorizontalAlignment::Right);
+        instructionsText->SetVerticalAlign(VerticalAlignment::Bot);
+        instructionsText->SetContent("Instructions: \n"
+                                     " - WASD: Move lower left corner.\n"
+                                     " - WASD + Shift: Move top right corner.\n"
+                                     " - UP/DOWN: Change text size.\n"
+                                     " - E: Change Horizontal Wrap Mode.\n"
+                                     " - Q: Change Vertical Wrap Mode.\n"
+                                     " - 1/2/3: Change Vertical Alignment.\n"
+                                     " - 4/5/6: Change Horizontal Alignment.\n");
 
         GOTest *gt = new GOTest();
         gt->SetParent(this);
-    }
-
-    void OnUpdate() override
-    {
-        if (!Input::GetKey(Input::Key::LControl)) { return; }
-
-        float delta = 0.1f;
-        Vector2 offset = Vector2::Zero;
-        if (Input::GetKeyDown(Input::Key::A)) { offset.x = -delta; }
-        if (Input::GetKeyDown(Input::Key::D)) { offset.x =  delta; }
-        if (Input::GetKeyDown(Input::Key::W)) { offset.y =  delta; }
-        if (Input::GetKeyDown(Input::Key::S)) { offset.y = -delta; }
-        if (!Input::GetKey(Input::Key::LShift))
-        {
-            rt->SetAnchorMin( rt->GetAnchorMin() + offset);
-        }
-        else
-        {
-            rt->SetAnchorMax( rt->GetAnchorMax() + offset);
-        }
     }
 };
 

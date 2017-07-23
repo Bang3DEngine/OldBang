@@ -4,18 +4,17 @@
 #include "Bang/Font.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
-#include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/G_Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
+#include "Bang/Texture2D.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
-#include "Bang/GraphicPipeline.h"
 
 UIText::UIText() : UIRenderer()
 {
@@ -35,12 +34,18 @@ UIText::~UIText()
     if (p_mesh) { delete p_mesh; }
 }
 
-void UIText::FillQuadsMeshPositions()
+void UIText::RefreshMesh()
 {
-    if (!m_font) { p_mesh->LoadPositions({}); return; }
-    RectTransform *rt = SCAST<RectTransform*>(transform); ENSURE(rt);
+    if (!m_font)
+    {
+        p_mesh->LoadPositions({});
+        p_mesh->LoadUvs({});
+        return;
+    }
 
-    Array<Vector2> textQuadPositions =
+    // Get the quad positions of the rects of each char
+    RectTransform *rt = SCAST<RectTransform*>(transform); ENSURE(rt);
+    Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
                                         GetFont(),
@@ -51,38 +56,36 @@ void UIText::FillQuadsMeshPositions()
                                         GetTextSize(),
                                         GetSpacing(),
                                         rt->GetScreenSpaceRect());
-    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions);
 
+    // Generate quad positions and uvs for the mesh, and load them
+    Array<Vector2> textQuadUvs;
+    Array<Vector2> textQuadPositions2D;
     Array<Vector3> textQuadPositions3D;
-    for (const Vector2 &quadPos : textQuadPositions)
+    for (const TextFormatter::CharRect &cr : textCharRects)
     {
-        textQuadPositions3D.PushBack( Vector3(quadPos, 0) );
+        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+
+        textQuadPositions2D.PushBack(cr.rect.GetBotLeft());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetBotLeft(), 0) );
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+
+        textQuadPositions2D.PushBack(cr.rect.GetBotRight());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetBotRight(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+
+        textQuadPositions2D.PushBack(cr.rect.GetTopRight());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetTopRight(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+
+        textQuadPositions2D.PushBack(cr.rect.GetTopLeft());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetTopLeft(), 0) );
+        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
     }
+
+    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
     p_mesh->LoadPositions(textQuadPositions3D);
-}
-
-void UIText::FillQuadsMeshUvs()
-{
-    if (!m_font) { p_mesh->LoadUvs({}); return; }
-
-    Array<Vector2> quadUvs;
-    for (char c : m_content)
-    {
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(c);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(c);
-        quadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        quadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        quadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        quadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-    }
-
-    p_mesh->LoadUvs(quadUvs);
-}
-
-void UIText::RefreshMesh()
-{
-    FillQuadsMeshPositions();
-    FillQuadsMeshUvs();
+    p_mesh->LoadUvs(textQuadUvs);
     SetMesh(p_mesh);
 }
 
@@ -246,10 +249,6 @@ HorizontalAlignment UIText::GetHorizontalAlignment() const
 
 void UIText::Bind() const
 {
-    Rect screenNDCRect = GetNDCRect() * 1.1f;
-    G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
-    gbuffer->PrepareColorReadBuffer(screenNDCRect);
-
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
     transform->SetEnabled(false);
@@ -266,13 +265,6 @@ void UIText::OnParentSizeChanged()
 {
     UIRenderer::OnParentSizeChanged();
     RefreshMesh();
-}
-
-void UIText::OnDrawGizmos(GizmosPassType gizmosPassType)
-{
-    UIRenderer::OnDrawGizmos(gizmosPassType);
-
-    // Gizmos::RenderRect(m_textRectNDC);
 }
 
 Rect UIText::GetBoundingRect(Camera *camera) const

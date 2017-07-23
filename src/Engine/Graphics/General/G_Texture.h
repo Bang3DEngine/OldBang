@@ -27,7 +27,10 @@ public:
     {
         Nearest = GL_NEAREST,
         Linear = GL_LINEAR,
-        Trilinear = GL_LINEAR_MIPMAP_LINEAR
+        Trilinear_NN = GL_NEAREST_MIPMAP_NEAREST,
+        Trilinear_NL = GL_NEAREST_MIPMAP_LINEAR,
+        Trilinear_LN = GL_LINEAR_MIPMAP_NEAREST,
+        Trilinear_LL = GL_LINEAR_MIPMAP_LINEAR
     };
 
     enum WrapMode
