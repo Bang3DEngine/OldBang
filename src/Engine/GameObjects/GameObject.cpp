@@ -139,6 +139,8 @@ void GameObject::SetParent(GameObject *newParent,
                 p_parent->m_children.PushBack(this); // Just in case, add to the end
             }
         }
+
+        _OnParentSizeChanged();
     }
 }
 

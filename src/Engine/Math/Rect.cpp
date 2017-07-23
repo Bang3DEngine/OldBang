@@ -2,6 +2,7 @@
 
 #include "Bang/Math.h"
 #include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
@@ -120,7 +121,7 @@ Rect Rect::Intersection(const Rect &r1, const Rect &r2)
     return Rect(minx, maxx, miny, maxy);
 }
 
-Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
+Rect Rect::GetBoundingRectFromPositions(const Array<Vector2> &positions)
 {
     if (positions.IsEmpty()) { return Rect::Empty; }
 

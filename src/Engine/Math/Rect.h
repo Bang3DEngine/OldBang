@@ -57,7 +57,7 @@ public:
      */
     static Rect Intersection(const Rect &r1, const Rect &r2);
 
-    static Rect GetBoundingRectFromPositions(const List<Vector2> &positions);
+    static Rect GetBoundingRectFromPositions(const Array<Vector2> &positions);
 
     String ToString() const override;
 };

@@ -43,11 +43,10 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    Rect GetScreenSpaceRect(bool takeMarginsIntoAccount = true) const;
+    Rect GetScreenSpaceRect() const;
 
-    Rect GetParentScreenRect(bool takeMarginsIntoAccount = true) const;
+    Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
-    Matrix4 GetLocalToParentMatrix(bool takeMarginsIntoAccount) const;
 
     void OnDrawGizmos(GizmosPassType gizmosPassType) override;
 

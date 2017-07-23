@@ -1,6 +1,7 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/Math.h"
+#include "Bang/Debug.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
@@ -167,21 +168,14 @@ Vector2 RectTransform::GetAnchorMax() const
     return m_anchorMax;
 }
 
-Rect RectTransform::GetScreenSpaceRect(bool takeMarginsIntoAccount) const
+Rect RectTransform::GetScreenSpaceRect() const
 {
-    Matrix4 parentToWorld;
-    if (gameObject->parent)
-    {
-        gameObject->parent->transform->GetLocalToWorldMatrix(&parentToWorld);
-    }
-
-    Matrix4 localToParentMatrix =
-            takeMarginsIntoAccount ? GetLocalToParentMatrix() :
-                                     GetLocalToParentMatrix(false);
-    return parentToWorld * localToParentMatrix * Rect::ScreenRect;
+    Matrix4 localToWorld;
+    GetLocalToWorldMatrix(&localToWorld);
+    return localToWorld * Rect::ScreenRect;
 }
 
-Rect RectTransform::GetParentScreenRect(bool takeMarginsIntoAccount) const
+Rect RectTransform::GetParentScreenRect() const
 {
     Rect parentScreenRect = Rect::ScreenRect;
     if (gameObject->parent)
@@ -190,8 +184,7 @@ Rect RectTransform::GetParentScreenRect(bool takeMarginsIntoAccount) const
                 gameObject->parent->GetComponent<RectTransform>();
         if (parentRectTransform)
         {
-            parentScreenRect = parentRectTransform->
-                    GetScreenSpaceRect(takeMarginsIntoAccount);
+            parentScreenRect = parentRectTransform->GetScreenSpaceRect();
         }
     }
     return parentScreenRect;
@@ -208,24 +201,16 @@ void RectTransform::OnChanged()
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled(false)) { return Matrix4::Identity; }
+    if (!m_hasChanged) { return m_localToParentMatrix; }
 
-    if (m_hasChanged)
-    {
-        m_localToParentMatrix = GetLocalToParentMatrix(true);
-        m_hasChanged = false;
-    }
-    return m_localToParentMatrix;
-}
-
-Matrix4 RectTransform::GetLocalToParentMatrix(
-        bool takeMarginsIntoAccount) const
-{
     const Vector2 screenSize = Screen::GetSize();
-    Vector2 parentSizeInPx = GetParentScreenRect(true).GetSize() * screenSize;
+    Vector2 parentSizeInPx = GetParentScreenRect().GetSize() * screenSize;
     parentSizeInPx = Vector2::Max(Vector2::One, parentSizeInPx);
 
-    float marginMultiplier = takeMarginsIntoAccount ? 4.0f : 0.0f;
-    Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;
+    Vector2 pixelSizeInParent = Vector2::Zero; // (1.0f / parentSizeInPx) * 4.0f;
+
+    Vector3 moveToPivotV(m_pivotPosition, 0);
+    Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
 
     Vector2 minMarginedAnchor
             (m_anchorMin + GetMarginLeftBot()  * pixelSizeInParent);
@@ -235,9 +220,6 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
             ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
     Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
 
-    Vector3 moveToPivotV(m_pivotPosition, 0);
-    Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
-
     Vector3 moveToAnchorCenterV(
                 (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
     Matrix4 moveToAnchorCenter = Matrix4::TranslateMatrix(moveToAnchorCenterV);
@@ -245,21 +227,36 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
     //bool beforeHasChanged = m_hasChanged;
     //Matrix4 rotScaleTransform = Transform::GetLocalToParentMatrix();
     //m_hasChanged = beforeHasChanged;
-    return //rotScaleTransform *
-           moveToAnchorCenter *
-           anchorScaling *
-           moveToPivot;
+    m_localToParentMatrix = //rotScaleTransform *
+                            moveToAnchorCenter *
+                            anchorScaling;// *
+                            moveToPivot;
+    m_hasChanged = false;
+    return m_localToParentMatrix;
 }
 
 void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
 {
     Transform::OnDrawGizmos(gizmosPassType);
 
-    Gizmos::SetColor(Color::Green);
-    Gizmos::RenderRect( GetScreenSpaceRect() );
+    Vector2 size(0.05f);
+    Color col = gameObject->name.Contains("ack") ? Color::Red : Color::Green;
 
-    Gizmos::SetColor(Color::Red);
-    Gizmos::RenderRect( GetScreenSpaceRect(false) );
+    Vector2 amin = GetAnchorMin(), amax = GetAnchorMax();
+    Gizmos::SetColor(col);
+    Vector2 p = Vector2(amin.x, amin.y);
+    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
+    Gizmos::SetColor(col);
+    p = Vector2(amin.x, amax.y);
+    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
+    Gizmos::SetColor(col);
+    p = Vector2(amax.x, amax.y);
+    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
+    Gizmos::SetColor(col);
+    p = Vector2(amax.x, amin.y);
+    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
+    Gizmos::SetColor(col);
+    Gizmos::RenderRect( GetScreenSpaceRect() );
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

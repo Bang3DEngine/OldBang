@@ -14,6 +14,7 @@ TARGET = $$BIN_DIR/lib/BangEngine
 SOURCES += \
     $$BANG_ROOT/src/Engine/General/Time.cpp \
     $$BANG_ROOT/src/Engine/Gizmos/Gizmos.cpp \
+    $$BANG_ROOT/src/Engine/General/TextFormatter.cpp \
     $$BANG_ROOT/src/Engine/Gizmos/GPPass_G_Gizmos.cpp \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
@@ -94,6 +95,7 @@ SOURCES += \
 HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
     $$BANG_ROOT/src/Engine/Gizmos/Gizmos.h \
+    $$BANG_ROOT/src/Engine/General/TextFormatter.h \
     $$BANG_ROOT/src/Engine/Gizmos/GizmosPassType.h \
     $$BANG_ROOT/src/Engine/Gizmos/GPPass_G_Gizmos.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \

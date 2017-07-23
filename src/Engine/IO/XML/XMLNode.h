@@ -85,7 +85,8 @@ public:
     EnumClass GetEnum(const String& attributeName) const
     {
         XMLAttribute *attr = GetAttribute(attributeName);
-        return attr->GetEnum<EnumClass>();
+        if (attr) { return attr->GetEnum<EnumClass>(); }
+        else { return static_cast<EnumClass>(0); }
     }
 
     const XMLNode *GetChild(const String &name) const;

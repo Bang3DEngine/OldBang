@@ -33,7 +33,7 @@ public:
 
     virtual void LoadFromTTF(const Path &m_assetFilepath);
 
-    G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c);
+    G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
     G_Texture2D *GetAtlasTexture() const;

@@ -24,7 +24,7 @@ void G_Font::LoadFromTTF(const Path &filepath)
         &m_freetypeFace);
 }
 
-G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c)
+G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c) const
 {
     if (!m_charMetrics.ContainsKey(c))
     {
