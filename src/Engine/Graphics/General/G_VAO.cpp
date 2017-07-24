@@ -31,7 +31,8 @@ void G_VAO::BindVBO(const G_VBO *vbo,
     glEnableVertexAttribArray(location);
     glVertexAttribPointer(location,
                           dataComponentsCount, dataType,
-                          dataNormalized, dataStride, (void*) dataOffset);
+                          dataNormalized, dataStride,
+                          reinterpret_cast<void*>(dataOffset));
     vbo->UnBind();
 
     UnBind();

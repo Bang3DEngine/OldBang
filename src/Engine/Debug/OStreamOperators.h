@@ -22,7 +22,6 @@ std::ostream& operator<<(std::ostream &log, const CLASS &v) { \
 }
 OPERATOR_OSTREAM_DECL(Path)
 OPERATOR_OSTREAM_DECL(Color)
-OPERATOR_OSTREAM_DECL(Vector2)
 OPERATOR_OSTREAM_DECL(Vector3)
 OPERATOR_OSTREAM_DECL(Vector4)
 OPERATOR_OSTREAM_DECL(Matrix4)
@@ -33,6 +32,13 @@ std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
 
 // Templated ostream operators
+template<class T>
+std::ostream& operator<<(std::ostream &log, const Vector2G<T> &v)
+{
+    log << "(" << v.x << ", " << v.y << ")";
+    return log;
+}
+
 // List
 template <class T>
 std::ostream &operator<<(std::ostream &log, const List<T> *l)

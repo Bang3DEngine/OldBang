@@ -10,10 +10,10 @@
 #include "Bang/List.h"
 #include "Bang/Array.h"
 #include "Bang/Color.h"
+#include "Bang/Vector2.h"
 #include "Bang/OStreamOperators.h"
 
 class String;
-class Vector2;
 class Vector3;
 class Vector4;
 class Matrix4;

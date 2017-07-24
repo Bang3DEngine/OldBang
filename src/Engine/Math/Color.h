@@ -3,8 +3,9 @@
 
 #include <QColor>
 
+#include "Bang/Vector2.h"
+
 class String;
-class Vector2;
 class Vector3;
 class Vector4;
 class Color

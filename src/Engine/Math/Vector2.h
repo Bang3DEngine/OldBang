@@ -1,113 +1,303 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-#include "Bang/glm/glm.hpp"
+#include "Bang/Math.h"
 
-class String;
-class Matrix4;
-class Vector3;
-class Vector2 : public glm::vec2
+template<class T>
+class Vector2G
 {
 public:
-    Vector2();
-    explicit Vector2(const glm::vec2 &v);
-    explicit Vector2(float a);
-    explicit Vector2(float x, float y);
+    T x, y;
 
-    /**
-     * @brief Returns the length/magnitude of this Vector
-     */
-    float Length() const;
+    Vector2G() : x(SCAST<T>(0)), y(SCAST<T>(0))
+    {
+    }
 
-    /**
-     * @brief Normalizes this Vector
-     */
-    void Normalize();
+    explicit Vector2G(const T& a) : x(a), y(a)
+    {
+    }
 
-    /**
-     * @brief Returns this Vector Normalized
-     * @return
-     */
-    Vector2 NormalizedSafe() const;
-    Vector2 Normalized() const;
+    explicit Vector2G(const T& _x, const T& _y) : x(_x), y(_y)
+    {
+    }
 
-    /**
-     * @brief Returns this Vector with a rad->degrees conversion to all its components
-     * @return
-     */
-    Vector2 ToDegrees() const;
+    T Length() const
+    {
+        return Math::Sqrt(x*x + y*y);
+    }
 
-    /**
-     * @brief Returns this Vector with a degrees->rad conversion to all its components
-     * @return
-     */
-    Vector2 ToRadians() const;
+    void Normalize()
+    {
+        float l = Length();
+        x /= l;
+        y /= l;
+    }
 
-    glm::vec2 ToGlmVec2() const;
-    String ToString() const;
+    Vector2G NormalizedSafe() const
+    {
+        Vector2G<T> v(*this);
+        if (v == Vector2G<T>::Zero) { return Vector2G<T>::Zero; }
+        v.Normalize();
+        return v;
+    }
 
-    float Distance(const Vector2 &p) const;
+    Vector2G Normalized() const
+    {
+        Vector2G<T> v(*this);
+        v.Normalize();
+        return v;
+    }
 
-    /**
-     * @brief If progression == 0, returns v1.
-     *        If progression == 1, returns v2.
-     *        If 0 < progression < 1, returns a linear interpolation between v1 and v2.
-     * @param v1 First Vector
-     * @param v2 Second Vector
-     * @param v2 A float between 0 and 1 indicating the progression.
-     * @return
-     */
-    static Vector2 Lerp(const Vector2 &v1,
-                        const Vector2 &v2,
-                        float progression);
+    Vector2G ToDegrees() const
+    {
+        return Vector2G<T>( Math::Rad2Deg(x), Math::Rad2Deg(y) );
+    }
 
-    Vector2 Abs() const;
+    Vector2G ToRadians() const
+    {
+        return Vector2G<T>( Math::Deg2Rad(x), Math::Deg2Rad(y) );
+    }
 
-    float* Values() const;
+    T Distance(const Vector2G<T> &p) const
+    {
+        return Vector2G<T>::Distance(*this, p);
+    }
 
-    static Vector2 Abs(const Vector2 &v);
-    static float Dot(const Vector2 &v1, const Vector2 &v2);
-    static float Distance(const Vector2 &v1, const Vector2 &v2);
+    template<class OtherT1, class OtherT2, class Real>
+    static Vector2G<T> Lerp(const Vector2G<OtherT1> &v1,
+                            const Vector2G<OtherT2> &v2,
+                            const Real& t)
+    {
+        return v1 + (v2 - v1) * t;
+    }
 
-    static Vector2 Max(const Vector2 &v1, const Vector2 &v2);
-    static Vector2 Min(const Vector2 &v1, const Vector2 &v2);
-    static Vector2 Clamp(const Vector2 &v,
-                         const Vector2 &min,
-                         const Vector2 &max);
+    Vector2G<T> Abs() const
+    {
+        return Vector2G<T>(Math::Abs(x), Math::Abs(y));
+    }
 
-    const static Vector2 Up;
-    const static Vector2 Down;
-    const static Vector2 Right;
-    const static Vector2 Left;
-    const static Vector2 Zero;
-    const static Vector2 One;
+    T* Data() const
+    {
+        return SCAST<T*>(&x);
+    }
+
+    static Vector2G<T> Abs(const Vector2G<T> &v)
+    {
+        return v.Abs();
+    }
+
+    template<class OtherT>
+    static T Dot(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+    {
+        return (v1.x * SCAST<OtherT>(v2.x)) + (v1.y * SCAST<OtherT>(v2.y));
+    }
+
+    template<class OtherT>
+    static T Distance(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+    {
+        return (v1 - v2).Length();
+    }
+
+    template<class OtherT>
+    static Vector2G<T> Max(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+    {
+        return Vector2G<T>(Math::Max(v1.x, v2.x),
+                           Math::Max(v1.y, v2.y));
+    }
+
+    template<class OtherT>
+    static Vector2G<T> Min(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+    {
+        return Vector2G<T>(Math::Min(v1.x, v2.x),
+                           Math::Min(v1.y, v2.y));
+    }
+
+    template<class OtherT1, class OtherT2>
+    static Vector2G<T> Clamp(const Vector2G<T> &v,
+                             const Vector2G<OtherT1> &min,
+                             const Vector2G<OtherT2> &max)
+    {
+        return Vector2G<T>::Min( Vector2G<T>::Max(v, max), min );
+    }
+
+    template<class OtherT>
+    bool operator==(const Vector2G<OtherT> &lhs) const
+    {
+        return x == lhs.x && y == lhs.y;
+    }
+    template<class OtherT>
+    bool operator!=(const Vector2G<OtherT> &lhs) const
+    {
+        return !(*this == lhs);
+    }
+
+    const static Vector2G Up;
+    const static Vector2G Down;
+    const static Vector2G Right;
+    const static Vector2G Left;
+    const static Vector2G Zero;
+    const static Vector2G One;
 };
 
-Vector2 operator+(float a, const Vector2& v);
-Vector2 operator+(const Vector2& v, float a);
-Vector2 operator+(const Vector2& v1, const Vector2& v2);
+template<class T>
+const Vector2G<T> Vector2G<T>::Up = Vector2G<T>(SCAST<T>(0), SCAST<T>(1));
+template<class T>
+const Vector2G<T> Vector2G<T>::Down = Vector2G<T>(SCAST<T>(0), SCAST<T>(-1));
+template<class T>
+const Vector2G<T> Vector2G<T>::Right = Vector2G<T>(SCAST<T>(1), SCAST<T>(1));
+template<class T>
+const Vector2G<T> Vector2G<T>::Left = Vector2G<T>(SCAST<T>(-1), SCAST<T>(0));
+template<class T>
+const Vector2G<T> Vector2G<T>::Zero = Vector2G<T>(SCAST<T>(0), SCAST<T>(0));
+template<class T>
+const Vector2G<T> Vector2G<T>::One = Vector2G<T>(SCAST<T>(1), SCAST<T>(1));
 
-Vector2 operator-(float a, const Vector2& v);
-Vector2 operator-(const Vector2& v, float a);
-Vector2 operator-(const Vector2& v1, const Vector2& v2);
-Vector2 operator-(const Vector2& v);
+template<class T, class OtherT>
+Vector2G<T> operator+(const Vector2G<T> & v1, const Vector2G<OtherT> &v2)
+{
+    return Vector2G<T>(v1.x + SCAST<T>(v2.x), v1.y + SCAST<T>(v2.y));
+}
 
-Vector2 operator*(float a, const Vector2& v);
-Vector2 operator*(const Vector2& v, float a);
-Vector2 operator*(const Vector2& v1, const Vector2& v2);
+template<class T, class OtherT>
+Vector2G<T> operator*(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+{
+    return Vector2G<T>(v1.x * SCAST<T>(v2.x), v1.y * SCAST<T>(v2.y));
+}
 
-Vector2 operator/(float a, const Vector2& v);
-Vector2 operator/(const Vector2& v, float a);
-Vector2 operator/(const Vector2& v1, const Vector2& v2);
-Vector2 operator*(const Matrix4& m, const Vector2& v);
+template<class T, class OtherT>
+Vector2G<T> operator-(const Vector2G<T> &v)
+{
+    return Vector2G<T>(-v.x, -v.y);
+}
 
-Vector2& operator+=(Vector2& lhs, const Vector2& rhs);
-Vector2& operator-=(Vector2& lhs, const Vector2& rhs);
-Vector2& operator*=(Vector2& lhs, const Vector2& rhs);
-Vector2& operator/=(Vector2& lhs, const Vector2& rhs);
-Vector2& operator+=(Vector2& lhs, float a);
-Vector2& operator-=(Vector2& lhs, float a);
-Vector2& operator*=(Vector2& lhs, float a);
-Vector2& operator/=(Vector2& lhs, float a);
+template<class T, class OtherT>
+Vector2G<T> operator*(const OtherT &a, const Vector2G<T> &v)
+{
+    return Vector2G<T>(SCAST<T>(a) * v.x, SCAST<T>(a) * v.y);
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator*(const Vector2G<T> &v, const OtherT &a)
+{
+    return SCAST<T>(a) * v;
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator/(const OtherT &a, const Vector2G<T> &v)
+{
+    return Vector2G<T>(SCAST<T>(a) / v.x, SCAST<T>(a) / v.y);
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator/(const Vector2G<T> &v, const OtherT &a)
+{
+    return Vector2G<T>(v.x / SCAST<T>(a), v.y / SCAST<T>(a));
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator/(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+{
+    return Vector2G<T>(v1.x / SCAST<T>(v2.x), v1.y / SCAST<T>(v2.y));
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator+=(Vector2G<T> &lhs, const Vector2G<OtherT> &rhs)
+{
+    lhs.x += SCAST<T>(rhs.x);
+    lhs.y += SCAST<T>(rhs.y);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator-=(Vector2G<T> &lhs, const Vector2G<OtherT> &rhs)
+{
+    lhs.x -= SCAST<T>(rhs.x);
+    lhs.y -= SCAST<T>(rhs.y);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator*=(Vector2G<T> &lhs, const Vector2G<OtherT> &rhs)
+{
+    lhs.x *= SCAST<T>(rhs.x);
+    lhs.y *= SCAST<T>(rhs.y);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator/=(Vector2G<T> &lhs, const Vector2G<OtherT> &rhs)
+{
+    lhs.x /= SCAST<T>(rhs.x);
+    lhs.y /= SCAST<T>(rhs.y);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator+(const OtherT &a, const Vector2G<T> &v)
+{
+    return Vector2G<T>(SCAST<T>(a) + v.x, SCAST<T>(a) + v.y);
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator+(const Vector2G<T> &v, const OtherT &a)
+{
+    return SCAST<T>(a) + v;
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator-(const Vector2G<T> &v1, const Vector2G<OtherT> &v2)
+{
+    return Vector2G<T>(v1.x - SCAST<T>(v2.x), v1.y - SCAST<T>(v2.y));
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator-(const OtherT &a, const Vector2G<T> &v)
+{
+    return Vector2G<T>(SCAST<T>(a) - v.x, SCAST<T>(a) - v.y);
+}
+
+template<class T, class OtherT>
+Vector2G<T> operator-(const Vector2G<T> &v, const OtherT &a)
+{
+    return Vector2G<T>(v.x - SCAST<T>(a), v.y - SCAST<T>(a));
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator+=(Vector2G<T> &lhs, const OtherT &a)
+{
+    lhs.x += SCAST<T>(a);
+    lhs.y += SCAST<T>(a);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator-=(Vector2G<T> &lhs, const T &a)
+{
+    lhs.x -= SCAST<T>(a);
+    lhs.y -= SCAST<T>(a);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator*=(Vector2G<T> &lhs, const OtherT &a)
+{
+    lhs.x *= SCAST<T>(a);
+    lhs.y *= SCAST<T>(a);
+    return lhs;
+}
+
+template<class T, class OtherT>
+Vector2G<T> &operator/=(Vector2G<T> &lhs, const OtherT &a)
+{
+    lhs.x /= SCAST<T>(a);
+    lhs.y /= SCAST<T>(a);
+    return lhs;
+}
+
+using Vector2f = Vector2G<float>;
+using Vector2d = Vector2G<double>;
+using Vector2i = Vector2G<int>;
+using Vector2u = Vector2G<uint>;
+using Vector2  = Vector2f;
 
 #endif // VECTOR2_H

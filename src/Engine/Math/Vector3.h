@@ -1,10 +1,10 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include "Bang/Vector2.h"
 #include "Bang/glm/glm.hpp"
 
 class String;
-class Vector2;
 class Quaternion;
 class Vector3 : public glm::vec3
 {

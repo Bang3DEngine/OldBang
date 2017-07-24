@@ -6,6 +6,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/OStreamOperators.h"
 
 Rect Rect::ScreenRect = Rect(Vector2(-1), Vector2(1));
 Rect Rect::Empty = Rect(0, 0, 0, 0);
@@ -137,7 +138,7 @@ Rect Rect::GetBoundingRectFromPositions(const Array<Vector2> &positions)
 String Rect::ToString() const
 {
     std::ostringstream oss;
-    oss << "Rect(" << GetMin().ToString() << ", " << GetMax().ToString() << ")";
+    oss << "Rect(" << GetMin() << ", " << GetMax() << ")";
     return String(oss.str());
 }
 

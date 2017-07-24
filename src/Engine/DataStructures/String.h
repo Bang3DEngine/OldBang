@@ -8,7 +8,6 @@
 
 class Color;
 class QString;
-class Vector2;
 class Vector3;
 class Vector4;
 class Matrix4;
@@ -136,7 +135,6 @@ public:
     static String ToString(const void *v);
     static String ToString(const Color &v);
     static String ToString(const String &v);
-    static String ToString(const Vector2 &v);
     static String ToString(const Vector3 &v);
     static String ToString(const Vector4 &v);
     static String ToString(const Matrix4 &v);
@@ -165,8 +163,6 @@ String operator+(const CLASS &v, const String &str) { \
 
 OPERATOR_PLUS_RIGHT_DECL(Color)
  OPERATOR_PLUS_LEFT_DECL(Color)
-OPERATOR_PLUS_RIGHT_DECL(Vector2)
- OPERATOR_PLUS_LEFT_DECL(Vector2)
 OPERATOR_PLUS_RIGHT_DECL(Vector3)
  OPERATOR_PLUS_LEFT_DECL(Vector3)
 OPERATOR_PLUS_RIGHT_DECL(Vector4)

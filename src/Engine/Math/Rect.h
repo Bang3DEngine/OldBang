@@ -2,9 +2,9 @@
 #define RECT_H
 
 #include "Bang/List.h"
+#include "Bang/Vector2.h"
 #include "Bang/IToString.h"
 
-class Vector2;
 class Rect : public IToString
 {
 public:

@@ -501,12 +501,7 @@ String String::ToString(const Color &v)
 
 String String::ToString(const String &v)
 {
-    // .ToCString() to avoid COW so it's thread safe
     return String(v.ToCString());
-}
-String String::ToString(const Vector2 &v)
-{
-    return v.ToString();
 }
 String String::ToString(const Vector3 &v)
 {
@@ -537,8 +532,6 @@ String String::ToString(const IToString &v)
 //  If not, this will give compile errors.)
 OPERATOR_PLUS_RIGHT_DEF(Color)
  OPERATOR_PLUS_LEFT_DEF(Color)
-OPERATOR_PLUS_RIGHT_DEF(Vector2)
- OPERATOR_PLUS_LEFT_DEF(Vector2)
 OPERATOR_PLUS_RIGHT_DEF(Vector3)
  OPERATOR_PLUS_LEFT_DEF(Vector3)
 OPERATOR_PLUS_RIGHT_DEF(Vector4)
