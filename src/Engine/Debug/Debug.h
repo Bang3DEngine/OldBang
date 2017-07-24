@@ -11,11 +11,11 @@
 #include "Bang/Array.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 #include "Bang/OStreamOperators.h"
 
 class String;
-class Vector3;
-class Vector4;
 class Matrix4;
 class IToString;
 class Quaternion;

@@ -1,13 +1,13 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
+#include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 
 #include "Bang/glm/glm.hpp"
 #include "Bang/glm/gtx/transform.hpp"
 
 class String;
-class Vector3;
 class Quaternion;
 class Matrix4
 {

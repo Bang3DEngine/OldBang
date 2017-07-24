@@ -494,56 +494,12 @@ String String::ToString(const void *v)
     return String(log.str());
 }
 
-String String::ToString(const Color &v)
-{
-    return String(v.ToString());
-}
-
 String String::ToString(const String &v)
 {
-    return String(v.ToCString());
-}
-String String::ToString(const Vector3 &v)
-{
-    return v.ToString();
-}
-String String::ToString(const Vector4 &v)
-{
-    return v.ToString();
-}
-String String::ToString(const Matrix4 &v)
-{
-    return v.ToString();
-}
-String String::ToString(const Quaternion &v)
-{
-    return v.ToString();
+    return v;
 }
 
 String String::ToString(const IToString &v)
 {
     return v.ToString();
 }
-
-// OPERATORS
-
-// Operator+ using String::ToString(v)
-// (so String::ToString(const T &v) must be explicitely defined for T
-//  If not, this will give compile errors.)
-OPERATOR_PLUS_RIGHT_DEF(Color)
- OPERATOR_PLUS_LEFT_DEF(Color)
-OPERATOR_PLUS_RIGHT_DEF(Vector3)
- OPERATOR_PLUS_LEFT_DEF(Vector3)
-OPERATOR_PLUS_RIGHT_DEF(Vector4)
- OPERATOR_PLUS_LEFT_DEF(Vector4)
-OPERATOR_PLUS_RIGHT_DEF(Matrix4)
- OPERATOR_PLUS_LEFT_DEF(Matrix4)
-OPERATOR_PLUS_RIGHT_DEF(Quaternion)
- OPERATOR_PLUS_LEFT_DEF(Quaternion)
-/*
-OPERATOR_PLUS_RIGHT_PRIMITIVE_DEF(int)
- OPERATOR_PLUS_LEFT_PRIMITIVE_DEF(int)
-OPERATOR_PLUS_RIGHT_PRIMITIVE_DEF(float)
- OPERATOR_PLUS_LEFT_PRIMITIVE_DEF(float)
- */
-//

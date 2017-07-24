@@ -3,6 +3,7 @@
 
 #include "Bang/List.h"
 #include "Bang/Vector2.h"
+#include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 
 class Rect : public IToString

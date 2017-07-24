@@ -15,9 +15,12 @@ void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
     sp->SetMat4("B_Model",    m_modelMatrix);
     sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
 
-    glm::mat3 normalMatrix = glm::mat3(m_modelMatrix.c0.xyz(),
-                                       m_modelMatrix.c1.xyz(),
-                                       m_modelMatrix.c2.xyz());
+    Vector3 col0 = m_modelMatrix.c0.xyz();
+    Vector3 col1 = m_modelMatrix.c1.xyz();
+    Vector3 col2 = m_modelMatrix.c2.xyz();
+    glm::mat3 normalMatrix = glm::mat3(glm::vec3(col0.x, col0.y, col0.z),
+                                       glm::vec3(col1.x, col1.y, col1.z),
+                                       glm::vec3(col2.x, col2.y, col2.z));
     normalMatrix = glm::inverse( glm::transpose(normalMatrix) );
     sp->SetMat3("B_Normal",    normalMatrix);
     sp->SetMat3("B_NormalInv", glm::inverse( normalMatrix ));

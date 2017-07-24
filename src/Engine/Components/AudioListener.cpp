@@ -39,7 +39,7 @@ void AudioListener::UpdateALProperties() const
     Vector3 up = transform->GetUp();
     ALfloat listenerOri[] = { at.x, at.y, at.z, up.x, up.y, up.z };
     alListenerfv(AL_ORIENTATION, listenerOri);
-    //alListenerfv(AL_DIRECTION, transform->GetEuler().Values());
-    alListenerfv(AL_POSITION,    transform->GetPosition().Values());
-    alListenerfv(AL_VELOCITY,    Vector3::Zero.Values());
+    //alListenerfv(AL_DIRECTION, transform->GetEuler().Data());
+    alListenerfv(AL_POSITION,    transform->GetPosition().Data());
+    alListenerfv(AL_VELOCITY,    Vector3::Zero.Data());
 }

@@ -6,11 +6,11 @@
 #include "Bang/Asset.h"
 #include "Bang/Sphere.h"
 #include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
 
 class G_VAO;
 class G_VBO;
 class Sphere;
-class Vector3;
 class XMLNode;
 class FileReader;
 class SerializableObject;

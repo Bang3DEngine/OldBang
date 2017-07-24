@@ -221,8 +221,8 @@ void AudioSource::UpdateALProperties() const
     alSourcef(m_alSourceId,  AL_PITCH,        m_pitch);
     alSourcei(m_alSourceId,  AL_LOOPING,      m_looping);
     Vector3 position = gameObject? transform->GetPosition() : Vector3::Zero;
-    alSourcefv(m_alSourceId, AL_POSITION, position.Values());
-    alSourcefv(m_alSourceId, AL_VELOCITY, Vector3::Zero.Values());
+    alSourcefv(m_alSourceId, AL_POSITION, position.Data());
+    alSourcefv(m_alSourceId, AL_VELOCITY, Vector3::Zero.Data());
 
     alSourcef(m_alSourceId,  AL_MAX_DISTANCE, m_range);
     alSourcef(m_alSourceId,  AL_REFERENCE_DISTANCE, m_range * 0.5f);

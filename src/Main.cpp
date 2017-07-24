@@ -161,8 +161,9 @@ int main(int argc, char **argv)
     app.CreateWindow();
     proj->OpenFirstFoundScene();
 
+    // SceneManager::LoadScene( Path("Scenes/InGame2.bscene") );
+    /*
     Scene *scene = SceneManager::GetActiveScene();
-
     for (GameObject *go : scene->GetChildren())
     {
         for (Renderer *rend : go->GetComponents<Renderer>())
@@ -174,7 +175,7 @@ int main(int argc, char **argv)
     }
     BackPanel *go = new BackPanel();
     go->SetParent(scene);
-
+    */
 
     app.MainLoop();
 

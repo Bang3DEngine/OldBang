@@ -4,10 +4,10 @@
 #include <QColor>
 
 #include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 
 class String;
-class Vector3;
-class Vector4;
 class Color
 {
 public:

@@ -229,7 +229,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     //m_hasChanged = beforeHasChanged;
     m_localToParentMatrix = //rotScaleTransform *
                             moveToAnchorCenter *
-                            anchorScaling;// *
+                            anchorScaling *
                             moveToPivot;
     m_hasChanged = false;
     return m_localToParentMatrix;

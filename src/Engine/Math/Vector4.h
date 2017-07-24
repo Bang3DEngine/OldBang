@@ -2,12 +2,12 @@
 #define VECTOR4_H
 
 #include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
 #include "Bang/glm/glm.hpp"
 
 class Color;
 class String;
 class Matrix4;
-class Vector3;
 class Quaternion;
 class Vector4 : public glm::vec4
 {

@@ -259,7 +259,7 @@ Matrix4 Matrix4::Ortho(float left, float right, float bottom, float top, float z
 
 Matrix4 Matrix4::TranslateMatrix(const Vector3 &v)
 {
-    return Matrix4(glm::translate(glm::mat4(1.0f), v));
+    return Matrix4(glm::translate(glm::mat4(1.0f), glm::vec3(v.x, v.y, v.z)));
 }
 
 Matrix4 Matrix4::RotateMatrix(const Quaternion &q)
@@ -269,7 +269,7 @@ Matrix4 Matrix4::RotateMatrix(const Quaternion &q)
 
 Matrix4 Matrix4::ScaleMatrix(const Vector3 &v)
 {
-    return Matrix4(glm::scale(glm::mat4(1.0f), v));
+    return Matrix4(glm::scale(glm::mat4(1.0f), glm::vec3(v.x, v.y, v.z)));
 }
 
 Vector4& Matrix4::operator[](int i) const

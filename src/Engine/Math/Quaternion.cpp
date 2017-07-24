@@ -111,19 +111,22 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward,
         return Quaternion::Identity;
     }
 
-    Vector3 eye(0.0f);
+    glm::vec3 eye(0.0f);
+    glm::vec3 gforward(forward.x, forward.y, forward.z);
+    glm::vec3 gup(up.x, up.y, up.z);
     return Quaternion( glm::quat_cast(
-                           glm::inverse( glm::lookAt(eye, forward, up)) ) );
+                           glm::inverse( glm::lookAt(eye, gforward, gup)) ) );
 }
 
 Vector3 Quaternion::EulerAngles(const Quaternion &q)
 {
-    return Vector3(glm::eulerAngles(q));
+    glm::vec3 res = glm::eulerAngles(q);
+    return Vector3(res.x, res.y, res.z);
 }
 
 Quaternion Quaternion::AngleAxis(float angleRads, const Vector3 &axis)
 {
-    glm::quat q = glm::angleAxis(angleRads, axis);
+    glm::quat q = glm::angleAxis(angleRads, glm::vec3(axis.x, axis.y, axis.z));
     return Quaternion(q);
 }
 

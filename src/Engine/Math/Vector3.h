@@ -4,133 +4,107 @@
 #include "Bang/Vector2.h"
 #include "Bang/glm/glm.hpp"
 
-class String;
-class Quaternion;
-class Vector3 : public glm::vec3
-{
-public:
-    Vector3();
-    explicit Vector3(const glm::vec3 &v);
-    explicit Vector3(float a);
-    explicit Vector3(float x, float y, float z);
-    explicit Vector3(const Vector2 &v, float z);
+#define XYZ_MEMBERS x,y,z
+#define EXTRA_DECLARATIONS \
+template <class OtherT1, class OtherT2, class OtherT3>\
+explicit Vector3G(const OtherT1 &_x, \
+                  const OtherT2 &_y, \
+                  const OtherT3 &_z) : x( SCAST<T>(_x) ),\
+                                       y( SCAST<T>(_y) ),\
+                                       z( SCAST<T>(_z) ) {}\
+\
+template <class OtherT1, class OtherT2>\
+explicit Vector3G(const Vector2G<OtherT1> &v, const OtherT2 &_z)\
+                        : x( SCAST<T>(v.x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(_z) ) {}\
+\
+template <class OtherT1, class OtherT2>\
+explicit Vector3G(const OtherT1 &_x, const Vector2G<OtherT2> &v)\
+                        : x( SCAST<T>(_x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(v.z) ) {}\
+\
+\
+\
+Vector3G ProjectedOnPlane(const Vector3G& planeNormal, \
+                          const Vector3G& planePoint) const \
+{ \
+    Vector3G n = planeNormal.Normalized(); \
+    return (*this) - n * Vector3G<T>::Dot(n, *this - planePoint); \
+} \
+template<class OtherT1, class OtherT2> \
+static Vector3G<T> Cross(const Vector3G<OtherT1> &v1, \
+                         const Vector3G<OtherT2> &v2) \
+{ \
+    glm::vec3 res = glm::cross(glm::vec3(v1.x, v1.y, v1.z), \
+                               glm::vec3(v2.x, v2.y, v2.z)); \
+    return Vector3G<T>(res.x, res.y, res.z); \
+} \
+template<class OtherT1, class OtherT2> \
+static Vector3G<T> Reflect(const Vector3G<OtherT1> &incident, \
+                           const Vector3G<OtherT2> &normal) \
+{ \
+    Vector3G<T> n = normal.Normalized(); \
+    return incident - 2 * ( Vector3G<T>::Dot(incident, n) ) * n; \
+} \
+\
+Vector2G<T> xy() \
+{ \
+    return Vector2G<T>(x,y); \
+} \
+\
+const static Vector3G Up; \
+const static Vector3G Down; \
+const static Vector3G Right; \
+const static Vector3G Left; \
+const static Vector3G Zero; \
+const static Vector3G One; \
+const static Vector3G Forward; \
+const static Vector3G Back; \
 
-    /**
-     * @brief Returns the length/magnitude of this Vector
-     */
-    float Length() const;
-    float LengthSquared() const;
+CLASS_VECTOR_T(Vector3G, 3)
 
-    Vector3 ProjectedOnPlane(const Vector3& planeNormal,
-                             const Vector3& planePoint) const;
+template<class T>
+const Vector3G<T> Vector3G<T>::Up = Vector3G<T>(SCAST<T>(0),
+                                                SCAST<T>(1),
+                                                SCAST<T>(0));
+template<class T>
+const Vector3G<T> Vector3G<T>::Down = Vector3G<T>(SCAST<T>(0),
+                                                  SCAST<T>(-1),
+                                                  SCAST<T>(0));
+template<class T>
+const Vector3G<T> Vector3G<T>::Right = Vector3G<T>(SCAST<T>(1),
+                                                   SCAST<T>(0),
+                                                   SCAST<T>(0));
+template<class T>
+const Vector3G<T> Vector3G<T>::Left = Vector3G<T>(SCAST<T>(-1),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(0));
+template<class T>
+const Vector3G<T> Vector3G<T>::Zero = Vector3G<T>(SCAST<T>(0),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(0));
+template<class T>
+const Vector3G<T> Vector3G<T>::One = Vector3G<T>(SCAST<T>(1),
+                                                 SCAST<T>(1),
+                                                 SCAST<T>(1));
+template<class T>
+const Vector3G<T> Vector3G<T>::Forward = Vector3G<T>(SCAST<T>(0),
+                                                     SCAST<T>(0),
+                                                     SCAST<T>(-1));
+template<class T>
+const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(SCAST<T>(0),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(1));
 
-    /**
-     * @brief Normalizes this Vector
-     */
-    void Normalize();
+using Vector3f = Vector3G<float>;
+using Vector3d = Vector3G<double>;
+using Vector3i = Vector3G<int>;
+using Vector3u = Vector3G<uint>;
+using Vector3  = Vector3f;
 
-    /**
-     * @brief Returns this Vector Normalized
-     * @return
-     */
-    Vector3 NormalizedSafe() const;
-    Vector3 Normalized() const;
-
-    /**
-     * @brief Returns this Vector with a rad->degrees conversion to all its components
-     * @return
-     */
-    Vector3 ToDegrees() const;
-
-    /**
-     * @brief Returns this Vector with a degrees->rad conversion to all its components
-     * @return
-     */
-    Vector3 ToRadians() const;
-
-    glm::vec3 ToGlmVec3() const;
-    String ToString() const;
-
-    float Distance(const Vector3 &p) const;
-    float DistanceSquared(const Vector3 &p) const;
-
-    /**
-     * @brief Makes v1 and v2 orthogonal and normalizes them.
-     * @param v1 First Vector
-     * @param v2 Second Vector
-     */
-    static void OrthoNormalize(Vector3 &v1, Vector3 &v2);
-
-    /**
-     * @brief If progression == 0, returns v1.
-     *        If progression == 1, returns v2.
-     *        If 0 < progression < 1, returns a linear interpolation between v1 and v2.
-     * @param v1 First Vector
-     * @param v2 Second Vector
-     * @param v2 A float between 0 and 1 indicating the progression.
-     * @return
-     */
-    static Vector3 Lerp(const Vector3 &v1,
-                        const Vector3 &v2,
-                        float progression);
-
-    Vector3 Abs() const;
-
-    float* Values() const;
-
-    static Vector3 Abs(const Vector3 &v);
-    static Vector3 Cross(const Vector3 &v1, const Vector3 &v2);
-    static float Dot(const Vector3 &v1, const Vector3 &v2);
-    static float Distance(const Vector3 &v1, const Vector3 &v2);
-    static float DistanceSquared(const Vector3 &v1, const Vector3 &v2);
-    static Vector3 Reflect(const Vector3 &incident, const Vector3 &normal);
-
-    static Vector3 Max(const Vector3 &v1, const Vector3 &v2);
-    static Vector3 Min(const Vector3 &v1, const Vector3 &v2);
-    static Vector3 Clamp(const Vector3 &v,
-                         const Vector3 &min,
-                         const Vector3 &max);
-
-    const static Vector3 Up;
-    const static Vector3 Down;
-    const static Vector3 Right;
-    const static Vector3 Left;
-    const static Vector3 Forward;
-    const static Vector3 Back;
-    const static Vector3 Zero;
-    const static Vector3 One;
-
-    // SWIZZLING
-    Vector2 xy() const;
-    //
-};
-
-Vector3 operator+(float a, const Vector3& v);
-Vector3 operator+(const Vector3& v, float a);
-Vector3 operator+(const Vector3& v1, const Vector3& v2);
-
-Vector3 operator-(const Vector3& v, float a);
-Vector3 operator-(float a, const Vector3& v);
-Vector3 operator-(const Vector3& v1, const Vector3& v2);
-Vector3 operator-(const Vector3& v);
-
-Vector3 operator*(Quaternion q, const Vector3& rhs);
-Vector3 operator*(const Vector3& lhs, Quaternion q);
-Vector3 operator*(float a, const Vector3& v);
-Vector3 operator*(const Vector3& v, float a);
-Vector3 operator*(const Vector3& v1, const Vector3& v2);
-
-Vector3 operator/(float a, const Vector3& v);
-Vector3 operator/(const Vector3& v, float a);
-Vector3 operator/(const Vector3& v1, const Vector3& v2);
-
-Vector3& operator+=(Vector3& lhs, const Vector3& rhs);
-Vector3& operator-=(Vector3& lhs, const Vector3& rhs);
-Vector3& operator*=(Vector3& lhs, const Vector3& rhs);
-Vector3& operator/=(Vector3& lhs, const Vector3& rhs);
-Vector3& operator+=(Vector3& lhs, float a);
-Vector3& operator-=(Vector3& lhs, float a);
-Vector3& operator*=(Vector3& lhs, float a);
-Vector3& operator/=(Vector3& lhs, float a);
+#undef XYZ_MEMBERS
+#undef EXTRA_DECLARATIONS
 
 #endif // VECTOR3_H

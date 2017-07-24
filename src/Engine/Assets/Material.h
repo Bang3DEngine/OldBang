@@ -2,6 +2,7 @@
 #define MATERIAL_H
 
 #include "Bang/Asset.h"
+#include "Bang/Color.h"
 #include "Bang/Vector2.h"
 
 class Texture2D;

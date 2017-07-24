@@ -81,7 +81,7 @@ AudioSource *AnonymousAudioPlayer::CreateAudioSource(const Vector3& position,
     audioSource->SetPitch(pitch);
     audioSource->SetRange(range);
     audioSource->SetLooping(looping);
-    alSourcefv(audioSource->GetALSourceId(), AL_POSITION, position.Values());
+    alSourcefv(audioSource->GetALSourceId(), AL_POSITION, position.Data());
     return audioSource;
 }
 
