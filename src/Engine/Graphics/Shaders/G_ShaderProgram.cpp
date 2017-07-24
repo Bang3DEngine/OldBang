@@ -164,7 +164,7 @@ bool G_ShaderProgram::SetVec4 (const String &name, const Vector4& v) const
 
 bool G_ShaderProgram::SetColor(const String &name, const Color &c) const
 {
-    return SetVec4(name, Vector4(c));
+    return SetVec4(name, Vector4(c.r, c.g, c.b, c.a));
 }
 
 bool G_ShaderProgram::SetMat3(const String &name, const glm::mat3 &m) const

@@ -21,7 +21,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/Rect.cpp \
     $$BANG_ROOT/src/Engine/Math/Quaternion.cpp \
     $$BANG_ROOT/src/Engine/Math/Matrix4.cpp \
-    $$BANG_ROOT/src/Engine/Math/Vector4.cpp \
     $$BANG_ROOT/src/Engine/Math/Color.cpp \
     $$BANG_ROOT/src/Engine/Math/Math.cpp \
     $$BANG_ROOT/src/Engine/Math/Random.cpp \

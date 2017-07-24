@@ -22,11 +22,12 @@ std::ostream& operator<<(std::ostream &log, const CLASS &v) { \
 }
 OPERATOR_OSTREAM_DECL(Path)
 OPERATOR_OSTREAM_DECL(Color)
-OPERATOR_OSTREAM_DECL(Vector4)
 OPERATOR_OSTREAM_DECL(Matrix4)
 OPERATOR_OSTREAM_DECL(IToString)
 OPERATOR_OSTREAM_DECL(Quaternion)
+std::ostream& operator<<(std::ostream &log, const Vector2 &v);
 std::ostream& operator<<(std::ostream &log, const Vector3 &v);
+std::ostream& operator<<(std::ostream &log, const Vector4 &v);
 std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);

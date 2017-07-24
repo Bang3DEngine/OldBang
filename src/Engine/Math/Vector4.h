@@ -1,126 +1,112 @@
 #ifndef VECTOR4_H
 #define VECTOR4_H
 
+#include "Bang/Vector.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/glm/glm.hpp"
 
-class Color;
-class String;
-class Matrix4;
-class Quaternion;
-class Vector4 : public glm::vec4
-{
-public:
-    Vector4();
-    explicit Vector4(const glm::vec4 &v);
-    explicit Vector4(float a);
-    explicit Vector4(float x, float y, float z, float w);
-    explicit Vector4(const Color &c);
-    explicit Vector4(const Vector3 &v, float w);
-    explicit Vector4(const Vector2 &v, float z, float w);
+#define XYZ_MEMBERS x,y,z,w
+#define EXTRA_DECLARATIONS \
+template <class OtherT1, class OtherT2, class OtherT3, class OtherT4>\
+explicit Vector4G(const OtherT1 &_x, \
+                  const OtherT2 &_y, \
+                  const OtherT3 &_z, \
+                  const OtherT4 &_w) : x( SCAST<T>(_x) ),\
+                                       y( SCAST<T>(_y) ),\
+                                       z( SCAST<T>(_z) ),\
+                                       w( SCAST<T>(_w) ) {}\
+\
+template <class OtherT1, class OtherT2, class OtherT3>\
+explicit Vector4G(const Vector2G<OtherT1> &v, const OtherT2 &_z, const OtherT3 &_w)\
+                        : x( SCAST<T>(v.x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(_z) ),\
+                          w( SCAST<T>(_w) ) {}\
+template <class OtherT1, class OtherT2, class OtherT3>\
+explicit Vector4G(const OtherT1 &_x, const Vector2G<OtherT2> &v, const OtherT3 &_w)\
+                        : x( SCAST<T>(_x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(v.z) ),\
+                          w( SCAST<T>(_w) ) {}\
+template <class OtherT1, class OtherT2, class OtherT3>\
+explicit Vector4G(const OtherT1 &_x, const OtherT2 &_y, const Vector2G<OtherT3> &v)\
+                        : x( SCAST<T>(_x) ),\
+                          y( SCAST<T>(_y) ),\
+                          z( SCAST<T>(v.z) ),\
+                          w( SCAST<T>(v.w) ) {}\
+template <class OtherT1, class OtherT2>\
+explicit Vector4G(const Vector3G<OtherT1> &v, const OtherT2 &_w)\
+                        : x( SCAST<T>(v.x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(v.z) ),\
+                          w( SCAST<T>(_w) ) {}\
+template <class OtherT1, class OtherT2>\
+explicit Vector4G(const OtherT1 &_x, const Vector3G<OtherT2> &v)\
+                        : x( SCAST<T>(_x) ),\
+                          y( SCAST<T>(v.y) ),\
+                          z( SCAST<T>(v.z) ),\
+                          w( SCAST<T>(v.w) ) {}\
+\
+\
+Vector2G<T> xy() { return Vector2G<T>(x,y); } \
+Vector3G<T> xyz() { return Vector3G<T>(x,y,z); } \
+\
+const static Vector4G Up; \
+const static Vector4G Down; \
+const static Vector4G Right; \
+const static Vector4G Left; \
+const static Vector4G Zero; \
+const static Vector4G One; \
+const static Vector4G Forward; \
+const static Vector4G Back; \
 
-    /**
-     * @brief Returns the length/magnitude of this Vector
-     */
-    float Length() const;
+CLASS_VECTOR_T(Vector4G, 4)
 
-    /**
-     * @brief Normalizes this Vector
-     */
-    void Normalize();
+template<class T>
+const Vector4G<T> Vector4G<T>::Up = Vector4G<T>(SCAST<T>(0),
+                                                SCAST<T>(1),
+                                                SCAST<T>(0),
+                                                SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Down = Vector4G<T>(SCAST<T>(0),
+                                                  SCAST<T>(-1),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Right = Vector4G<T>(SCAST<T>(1),
+                                                   SCAST<T>(0),
+                                                   SCAST<T>(0),
+                                                   SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Left = Vector4G<T>(SCAST<T>(-1),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Zero = Vector4G<T>(SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::One = Vector4G<T>(SCAST<T>(1));
+template<class T>
+const Vector4G<T> Vector4G<T>::Forward = Vector4G<T>(SCAST<T>(0),
+                                                     SCAST<T>(0),
+                                                     SCAST<T>(-1),
+                                                     SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(SCAST<T>(0),
+                                                  SCAST<T>(0),
+                                                  SCAST<T>(1),
+                                                  SCAST<T>(0));
 
-    /**
-     * @brief Returns this Vector Normalized
-     * @return
-     */
-    Vector4 NormalizedSafe() const;
-    Vector4 Normalized() const;
+using Vector4f = Vector4G<float>;
+using Vector4d = Vector4G<double>;
+using Vector4i = Vector4G<int>;
+using Vector4u = Vector4G<uint>;
+using Vector4  = Vector4f;
 
-    /**
-     * @brief Returns this Vector with a rad->degrees conversion to all its components
-     * @return
-     */
-    Vector4 ToDegrees() const;
+#undef XYZ_MEMBERS
+#undef EXTRA_DECLARATIONS
 
-    /**
-     * @brief Returns this Vector with a degrees->rad conversion to all its components
-     * @return
-     */
-    Vector4 ToRadians() const;
 
-    glm::vec4 ToGlmVec4() const;
-    String ToString() const;
-
-    float Distance(const Vector4 &p) const;
-
-    /**
-     * @brief If progression == 0, returns v1.
-     *        If progression == 1, returns v2.
-     *        If 0 < progression < 1, returns a linear interpolation between v1 and v2.
-     * @param v1 First Vector
-     * @param v2 Second Vector
-     * @param v2 A float between 0 and 1 indicating the progression.
-     * @return
-     */
-    static Vector4 Lerp(const Vector4 &v1,
-                        const Vector4 &v2,
-                        float progression);
-
-    Vector4 Abs() const;
-
-    float* Values() const;
-
-    static Vector4 Abs(const Vector4 &v);
-    static float Dot(const Vector4 &v1, const Vector4 &v2);
-    static float Distance(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 Max(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 Min(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 Clamp(const Vector4 &v,
-                         const Vector4 &min,
-                         const Vector4 &max);
-
-    const static Vector4 Up;
-    const static Vector4 Down;
-    const static Vector4 Right;
-    const static Vector4 Left;
-    const static Vector4 Forward;
-    const static Vector4 Back;
-    const static Vector4 Zero;
-    const static Vector4 One;
-
-    // SWIZZLING
-    Vector2  xy() const;
-    Vector3  xyz() const;
-    //
-};
-
-Vector4 operator+(float a, const Vector4& v);
-Vector4 operator+(const Vector4& v, float a);
-Vector4 operator+(const Vector4& v1, const Vector4& v2);
-
-Vector4 operator-(float a, const Vector4& v);
-Vector4 operator-(const Vector4& v, float a);
-Vector4 operator-(const Vector4& v1, const Vector4& v2);
-Vector4 operator-(const Vector4& v);
-
-Vector4 operator*(Quaternion q, const Vector4& rhs);
-Vector4 operator*(float a, const Vector4& v);
-Vector4 operator*(const Vector4& v, float a);
-Vector4 operator*(const Vector4& v1, const Vector4& v2);
-
-Vector4 operator/(float a, const Vector4& v);
-Vector4 operator/(const Vector4& v, float a);
-Vector4 operator/(const Vector4& v1, const Vector4& v2);
-Vector4 operator*(const Matrix4& m, const Vector4& v);
-
-Vector4& operator+=(Vector4& lhs, const Vector4& rhs);
-Vector4& operator-=(Vector4& lhs, const Vector4& rhs);
-Vector4& operator*=(Vector4& lhs, const Vector4& rhs);
-Vector4& operator/=(Vector4& lhs, const Vector4& rhs);
-Vector4& operator+=(Vector4& lhs, float a);
-Vector4& operator-=(Vector4& lhs, float a);
-Vector4& operator*=(Vector4& lhs, float a);
-Vector4& operator/=(Vector4& lhs, float a);
 
 #endif // VECTOR4_H

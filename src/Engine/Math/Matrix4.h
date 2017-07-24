@@ -55,4 +55,13 @@ public:
 
 Matrix4 operator*(const Matrix4 &m1, const Matrix4& m2);
 
+template<class T>
+Vector4G<T> operator*(const Matrix4 &m, const Vector4G<T> &v)
+{
+    return Vector4((m[0].x * v.x) + (m[1].x * v.y) + (m[2].x * v.z) + (m[3].x * v.w),
+                   (m[0].y * v.x) + (m[1].y * v.y) + (m[2].y * v.z) + (m[3].y * v.w),
+                   (m[0].z * v.x) + (m[1].z * v.y) + (m[2].z * v.z) + (m[3].z * v.w),
+                   (m[0].w * v.x) + (m[1].w * v.y) + (m[2].w * v.z) + (m[3].w * v.w));
+}
+
 #endif // MATRIX4_H

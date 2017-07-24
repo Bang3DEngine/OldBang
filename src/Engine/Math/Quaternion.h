@@ -6,6 +6,7 @@
 #include "Bang/glm/gtc/quaternion.hpp"
 
 #include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 
 class String;
 class Matrix4;
@@ -37,6 +38,12 @@ public:
 };
 
 Quaternion operator*(const Quaternion &q1, const Quaternion& q2);
+
+template<class T>
+Vector4G<T> operator*(Quaternion q, const Vector4G<T> &rhs)
+{
+    return Vector4G<T>(q * glm::vec4(rhs.x, rhs.y, rhs.z, rhs.w));
+}
 
 template<class T>
 Vector3G<T> operator*(const Quaternion& q, const Vector3G<T>& rhs)
