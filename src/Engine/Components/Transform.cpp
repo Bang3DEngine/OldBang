@@ -363,7 +363,7 @@ Quaternion Transform::GetRotationFromMatrix4(const Matrix4 &tm)
     rotMatrix.c2 = Vector4(tm.c2.xyz() / scale.z, 0);
     rotMatrix.c3 = Vector4(0, 0, 0, 1);
 
-    return Quaternion::FromRotationMatrix(rotMatrix);
+    return Matrix4::ToQuaternion(rotMatrix);
 }
 
 Vector3 Transform::GetScaleFromMatrix4(const Matrix4 &tm)

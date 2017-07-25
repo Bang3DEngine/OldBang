@@ -1,10 +1,8 @@
 #ifndef MATRIX3_H
 #define MATRIX3_H
 
-#include <sstream>
+#include <iostream>
 
-#include "Bang/Debug.h"
-#include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Quaternion.h"
 
@@ -16,15 +14,16 @@ class Matrix3G
 public:
     Vector3G<T> c0, c1, c2; // Matrix columns from left to right
 
-    Matrix3G() : Matrix3G<T>( SCAST<T>(1) )
+    Matrix3G() : Matrix3G<T>(1)
     {
     }
 
-    Matrix3G(const T& a)
+    template<class OtherT>
+    Matrix3G(const OtherT& a)
     {
-        c0 = Vector3(          a, SCAST<T>(0), SCAST<T>(0));
-        c1 = Vector3(SCAST<T>(0),           a, SCAST<T>(0));
-        c2 = Vector3(SCAST<T>(0), SCAST<T>(0),           a);
+        c0 = Vector3(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0));
+        c1 = Vector3(SCAST<T>(0), SCAST<T>(a), SCAST<T>(0));
+        c2 = Vector3(SCAST<T>(0), SCAST<T>(0), SCAST<T>(a));
     }
 
     Matrix3G(const Vector3G<T> &col0,
@@ -89,17 +88,7 @@ public:
     const T *Data() const { return SCAST<const T*>(&(c0.x)); }
     T *Data() { return SCAST<T*>(&(c0.x)); }
 
-    String ToString() const
-    {
-        std::ostringstream oss;
-        oss << "(" << c0[0] << ", " << c1[0] << ", " << c2[0] << "," << std::endl;
-        oss << " " << c0[1] << ", " << c1[1] << ", " << c2[1] << "," << std::endl;
-        oss << " " << c0[2] << ", " << c1[2] << ", " << c2[2] << "," << std::endl;
-        oss << " " << c0[3] << ", " << c1[3] << ", " << c2[3] << ")" << std::endl;
-        return String(oss.str());
-    }
-
-    Vector3G<T>& operator[](int i)
+    Vector3G<T>& operator[](std::size_t i)
     {
         switch (i)
         {
@@ -107,10 +96,10 @@ public:
             case 1: return c1;
             case 2: return c2;
         }
-        Debug_Warn("Matrix3G<T> index " << i << " too big");
+        std::cerr << "Matrix3G<T> index " << i << " too big" << std::endl;
         return c2;
     }
-    const Vector3G<T>& operator[](int i) const
+    const Vector3G<T>& operator[](std::size_t i) const
     {
         return const_cast< Matrix3G<T>* >(this)->operator[](i);
     }

@@ -10,6 +10,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
@@ -22,7 +23,6 @@ std::ostream& operator<<(std::ostream &log, const CLASS &v) { \
 }
 OPERATOR_OSTREAM_DECL(Path)
 OPERATOR_OSTREAM_DECL(Color)
-OPERATOR_OSTREAM_DECL(Matrix4)
 OPERATOR_OSTREAM_DECL(IToString)
 OPERATOR_OSTREAM_DECL(Quaternion)
 std::ostream& operator<<(std::ostream &log, const Vector2 &v);
@@ -39,6 +39,37 @@ std::ostream& operator<<(std::ostream &log, const Vector2G<T> &v)
     log << "(" << v.x << ", " << v.y << ")";
     return log;
 }
+template<class T>
+std::ostream& operator<<(std::ostream &log, const Vector3G<T> &v)
+{
+    log << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+    return log;
+}
+template<class T>
+std::ostream& operator<<(std::ostream &log, const Vector4G<T> &v)
+{
+    log << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+    return log;
+}
+template<class T>
+std::ostream& operator<<(std::ostream &log, const Matrix3G<T> &m)
+{
+    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << "," << std::endl;
+    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << "," << std::endl;
+    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << "," << std::endl;
+    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ")" << std::endl;
+    return log;
+}
+template<class T>
+std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
+{
+    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << ", " << m.c3[0] << "," << std::endl;
+    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << ", " << m.c3[1] << "," << std::endl;
+    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << ", " << m.c3[2] << "," << std::endl;
+    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ", " << m.c3[3] << ")" << std::endl;
+    return log;
+}
+
 
 // List
 template <class T>

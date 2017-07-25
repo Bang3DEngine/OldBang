@@ -198,7 +198,7 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward,
         Debug_Warn("LookDirection: Forward and up aligned. Returning identity");
         return Quaternion::Identity;
     }
-    return Quaternion::FromRotationMatrix(
+    return Matrix4::ToQuaternion(
                 Matrix4::LookAt(Vector3::Zero, forward, up).Inversed());
 }
 
@@ -214,68 +214,6 @@ Quaternion Quaternion::AngleAxis(float angleRads, const Vector3 &axis)
                       axis.y * s,
                       axis.z * s,
                       Math::Cos(angleRads * SCAST<float>(0.5)));
-}
-
-Quaternion Quaternion::FromRotationMatrix(const Matrix4 &m)
-{
-    float fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2];
-    float fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2];
-    float fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1];
-    float fourWSquaredMinus1 = m[0][0] + m[1][1] + m[2][2];
-
-    int biggestIndex = 0;
-    float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
-    if (fourXSquaredMinus1 > fourBiggestSquaredMinus1)
-    {
-        fourBiggestSquaredMinus1 = fourXSquaredMinus1;
-        biggestIndex = 1;
-    }
-    if (fourYSquaredMinus1 > fourBiggestSquaredMinus1)
-    {
-        fourBiggestSquaredMinus1 = fourYSquaredMinus1;
-        biggestIndex = 2;
-    }
-    if (fourZSquaredMinus1 > fourBiggestSquaredMinus1)
-    {
-        fourBiggestSquaredMinus1 = fourZSquaredMinus1;
-        biggestIndex = 3;
-    }
-
-    float biggestVal = Math::Sqrt(fourBiggestSquaredMinus1 + SCAST<float>(1)) *
-                       SCAST<float>(0.5);
-    float mult = SCAST<float>(0.25)/biggestVal;
-
-    Quaternion res;
-    switch (biggestIndex)
-    {
-        case 0:
-            res.x = (m[1][2] - m[2][1]) * mult;
-            res.y = (m[2][0] - m[0][2]) * mult;
-            res.z = (m[0][1] - m[1][0]) * mult;
-            res.w = biggestVal;
-            break;
-        case 1:
-            res.x = biggestVal;
-            res.y = (m[0][1] + m[1][0]) * mult;
-            res.z = (m[2][0] + m[0][2]) * mult;
-            res.w = (m[1][2] - m[2][1]) * mult;
-            break;
-        case 2:
-            res.x = (m[0][1] + m[1][0]) * mult;
-            res.y = biggestVal;
-            res.z = (m[1][2] + m[2][1]) * mult;
-            res.w = (m[2][0] - m[0][2]) * mult;
-            break;
-        case 3:
-            res.x = (m[2][0] + m[0][2]) * mult;
-            res.y = (m[1][2] + m[2][1]) * mult;
-            res.z = biggestVal;
-            res.w = (m[0][1] - m[1][0]) * mult;
-            break;
-
-        default: break;
-    }
-    return res;
 }
 
 

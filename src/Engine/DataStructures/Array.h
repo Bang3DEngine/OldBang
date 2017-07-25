@@ -188,11 +188,11 @@ public:
     operator CollectionRange<Iterator>() { return GetRangeAll(); }
     operator CollectionRange<Iterator>() const { return GetRangeAll(); }
 
-    T& operator[](int i)
+    T& operator[](std::size_t i)
     {
         return std::vector<T>::operator [](i);
     }
-    const T& operator[](int i) const
+    const T& operator[](std::size_t i) const
     {
         return std::vector<T>::operator [](i);
     }

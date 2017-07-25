@@ -7,12 +7,12 @@
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Component.h"
 
 class Mesh;
-class G_Screen;
-class Matrix4;
 class XMLNode;
+class G_Screen;
 class ICloneable;
 class MeshRenderer;
 class ShaderProgram;

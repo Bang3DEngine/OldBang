@@ -48,10 +48,7 @@ static Vector3G<T> Reflect(const Vector3G<OtherT1> &incident, \
     return incident - 2 * ( Vector3G<T>::Dot(incident, n) ) * n; \
 } \
 \
-Vector2G<T> xy() \
-{ \
-    return Vector2G<T>(x,y); \
-} \
+Vector2G<T> xy() const { return Vector2G<T>(x,y); } \
 \
 const static Vector3G Up; \
 const static Vector3G Down; \

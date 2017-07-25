@@ -48,8 +48,8 @@ explicit Vector4G(const OtherT1 &_x, const Vector3G<OtherT2> &v)\
                           w( SCAST<T>(v.w) ) {}\
 \
 \
-Vector2G<T> xy() { return Vector2G<T>(x,y); } \
-Vector3G<T> xyz() { return Vector3G<T>(x,y,z); } \
+Vector2G<T> xy()  const { return Vector2G<T>(x,y); } \
+Vector3G<T> xyz() const { return Vector3G<T>(x,y,z); } \
 \
 const static Vector4G Up; \
 const static Vector4G Down; \
