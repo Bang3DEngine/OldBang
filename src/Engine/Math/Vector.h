@@ -55,14 +55,14 @@ public: \
  \
     VECTOR_G ToDegrees() const \
     { \
-        VECTOR_G res; \
+        VECTOR_G res(*this); \
         for (int i = 0; i < N; ++i) { res[i] = Math::Rad2Deg( res[i] ); } \
         return res; \
     } \
  \
     VECTOR_G ToRadians() const \
     { \
-        VECTOR_G res; \
+        VECTOR_G res(*this); \
         for (int i = 0; i < N; ++i) { res[i] = Math::Deg2Rad( res[i] ); } \
         return res; \
     } \
@@ -97,7 +97,7 @@ public: \
  \
     VECTOR_G<T> Abs() const \
     { \
-        VECTOR_G res; \
+        VECTOR_G res(*this); \
         for (int i = 0; i < N; ++i) { res[i] = Math::Abs( res[i] ); } \
         return res; \
     } \
@@ -141,9 +141,9 @@ public: \
     template<class OtherT> \
     static VECTOR_G<T> Min(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
     { \
-    VECTOR_G res; \
-    for (int i = 0; i < N; ++i) { res[i] = Math::Min(v1[i], SCAST<T>(v2[i])); } \
-    return res; \
+        VECTOR_G res; \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Min(v1[i], SCAST<T>(v2[i])); } \
+        return res; \
     } \
  \
     template<class OtherT1, class OtherT2> \
@@ -282,7 +282,7 @@ template<class T, class OtherT> \
 VECTOR_G<T> operator-(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = v1[i] - v2[i]; }  \
+    for (int i = 0; i < N; ++i) { res[i] = v1[i] - SCAST<T>(v2[i]); }  \
     return res; \
 } \
 \

@@ -48,16 +48,14 @@ Vector4G<T> operator*(Quaternion q, const Vector4G<T> &rhs)
 template<class T>
 Vector3G<T> operator*(const Quaternion& q, const Vector3G<T>& rhs)
 {
-    glm::vec3 res = glm::quat(q.x, q.y, q.z, q.w) *
-                    glm::vec3(rhs.x, rhs.y, rhs.z);
+    glm::vec3 res = glm::quat(q) * glm::vec3(rhs.x, rhs.y, rhs.z);
     return Vector3G<T>(res.x, res.y, res.z);
 }
 
 template<class T>
 Vector3G<T> operator*(const Vector3G<T>& lhs, const Quaternion& q)
 {
-    glm::vec3 res = glm::vec3(lhs.x, lhs.y, lhs.z) *
-                    glm::quat(q.x, q.y, q.z, q.w);
+    glm::vec3 res = glm::vec3(lhs.x, lhs.y, lhs.z) * glm::quat(q);
     return Vector3G<T>(res.x, res.y, res.z);
 }
 
