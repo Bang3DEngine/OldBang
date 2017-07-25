@@ -1,42 +1,45 @@
 #include "Bang/Quaternion.h"
 
-#include <iostream>
-
+#include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
 
-#include "Bang/glm/glm.hpp"
-#include "Bang/glm/gtx/transform.hpp"
-#include "Bang/glm/gtc/quaternion.hpp"
-
 Quaternion Quaternion::Identity = Quaternion();
 
-Quaternion::Quaternion() : glm::quat()
+Quaternion::Quaternion() : x(0), y(0), z(0), w(1)
 {
 }
 
-Quaternion::Quaternion(const glm::quat &q) : glm::quat(q)
+Quaternion::Quaternion(float _x, float _y, float _z, float _w) :
+    x(_x), y(_y), z(_z), w(_w)
 {
 }
 
-Quaternion::Quaternion(float w, float x, float y, float z) : glm::quat(w,x,y,z)
+float Quaternion::Length() const
 {
+    return Math::Sqrt(SqLength());
+}
+
+float Quaternion::SqLength() const
+{
+    return (x*x + y*y + z*z + w*w);
 }
 
 Quaternion Quaternion::Conjugated() const
 {
-    return Quaternion(glm::conjugate(glm::quat(*this)));
+    return Quaternion(-x, -y, -z, w);
 }
 
 Quaternion Quaternion::Normalized() const
 {
-    return Quaternion(glm::normalize(glm::quat(*this)));
+    float length = Length();
+    return Quaternion(x/length, y/length, z/length, w/length);
 }
 
 Quaternion Quaternion::Inversed() const
 {
-    return Quaternion(glm::inverse(glm::quat(*this)));
+    return Conjugated()/Quaternion::Dot(*this, *this);
 }
 
 Vector3 Quaternion::EulerAngles() const
@@ -49,12 +52,109 @@ String Quaternion::ToString() const
     return "(" + String::ToString(x) + ", " +
                  String::ToString(y) + ", " +
                  String::ToString(z) + ", " +
-                 String::ToString(w) + ")";
+            String::ToString(w) + ")";
 }
 
-Quaternion Quaternion::Slerp(const Quaternion &from, const Quaternion &to, float progression)
+float Quaternion::Pitch() const
 {
-    return Quaternion(glm::mix(glm::quat(from), glm::quat(to), progression));
+    return SCAST<float>(
+                Math::ATan2(
+                    (SCAST<float>(2) * (y * z + w * x)),
+                    (w * w - x * x - y * y + z * z)
+                )
+           );
+}
+
+float Quaternion::Yaw() const
+{
+    return Math::ASin(
+                Math::Clamp(
+                    SCAST<float>(-2) * (x * z - w * y),
+                    SCAST<float>(-1),
+                    SCAST<float>(1)
+                )
+            );
+}
+
+float Quaternion::Roll() const
+{
+    return SCAST<float>(
+                Math::ATan2(
+                    (SCAST<float>(2) * (x * y + w * z)),
+                    (w * w + x * x - y * y - z * z)
+                )
+           );
+}
+
+float Quaternion::Dot(const Quaternion &q1, const Quaternion &q2)
+{
+    return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
+}
+
+Quaternion Quaternion::Cross(const Quaternion &q1, const Quaternion &q2)
+{
+    return Quaternion(q1.w*q2.x + q1.x*q2.w + q1.y*q2.z - q1.z*q2.y,
+                      q1.w*q2.y + q1.y*q2.w + q1.z*q2.x - q1.x*q2.z,
+                      q1.w*q2.z + q1.z*q2.w + q1.x*q2.y - q1.y*q2.x,
+                      q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z);
+}
+
+Quaternion Quaternion::Lerp(const Quaternion &from,
+                            const Quaternion &to,
+                            float t)
+{
+    float cosTheta = Quaternion::Dot(from, to);
+
+    if(cosTheta > SCAST<float>(1) - SCAST<float>(0.01))
+    {
+        return Quaternion(Math::Lerp(from.x, to.x, t),
+                          Math::Lerp(from.y, to.y, t),
+                          Math::Lerp(from.z, to.z, t),
+                          Math::Lerp(from.w, to.w, t));
+    }
+    else
+    {
+        float angle = Math::ACos(cosTheta);
+        return (
+                 Math::Sin((SCAST<float>(1) - t) * angle) * from +
+                 Math::Sin(t * angle) * to
+                ) /
+                Math::Sin(angle);
+    }
+}
+
+Quaternion Quaternion::SLerp(const Quaternion &from,
+                             const Quaternion &_to,
+                             float t)
+{
+    Quaternion to = _to;
+
+    float cosTheta = Quaternion::Dot(from, _to);
+
+    // If cosTheta < 0, the interpolation will take the long way around the sphere.
+    // To fix this, one quat must be negated.
+    if (cosTheta < SCAST<float>(0))
+    {
+        to       = -_to;
+        cosTheta = -cosTheta;
+    }
+
+    if(cosTheta > SCAST<float>(1) - SCAST<float>(0.01))
+    {
+        return Quaternion( Math::Lerp(from.x, to.x, t),
+                           Math::Lerp(from.y, to.y, t),
+                           Math::Lerp(from.z, to.z, t),
+                           Math::Lerp(from.w, to.w, t));
+    }
+    else
+    {
+        float angle = Math::ACos(cosTheta);
+        return (
+                    Math::Sin((SCAST<float>(1) - t) * angle) * from +
+                    Math::Sin(t * angle) * to
+                ) /
+                Math::Sin(angle);
+    }
 }
 
 Quaternion Quaternion::FromTo(const Vector3 &from, const Vector3 &to)
@@ -67,21 +167,21 @@ Quaternion Quaternion::FromTo(const Vector3 &from, const Vector3 &to)
     {
         return Quaternion();
     }
-    else if (d <= -1.0f) // exactly opposite
+    else if (d <= -1.0f)
     {
         Vector3 axis(1,0,0);
         axis = Vector3::Cross(axis, v0);
         if (axis.Length() == 0)
         {
-            axis = Vector3(0,1,0);
+            axis = Vector3(0, 1, 0);
             axis = Vector3::Cross(axis, v0);
         }
-        // same as fromAngleAxis(core::PI, axis).normalize();
+
         return Quaternion(0.0f, axis.x, axis.y, axis.z).Normalized();
     }
 
-    const float s = float(std::sqrt( (1+d)*2 )); // optimize inv_sqrt
-    const float invs = 1.0f / s;
+    const float s = float(Math::Sqrt( (1+d)*2 ));
+    const float invs = 1.0f/s;
     const Vector3 c = Vector3::Cross(v0, v1) * invs;
     return Quaternion(s * 0.5f, c.x, c.y, c.z).Normalized();
 }
@@ -91,52 +191,145 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward,
 {
     Vector3 forward = _forward.Normalized();
     Vector3 up      = _up.Normalized();
-/*
-    Vector3::OrthoNormalize(up, forward);
-    Vector3 right = Vector3::Cross(up, forward);
 
-    Quaternion ret;
-    ret.w = Math::Sqrt(1.0f + right.x + up.y + forward.z) * 0.5f;
-    float w4_recip = 1.0f / (4.0f * ret.w);
-    ret.x = (up.z - forward.y) * w4_recip;
-    ret.y = (forward.x - right.z) * w4_recip;
-    ret.z = (right.y - up.x) * w4_recip;
-    return ret;
-*/
     if (Vector3::Dot(forward,  up) >= 0.99f ||
         Vector3::Dot(forward, -up) >= 0.99f)
     {
-        std::cerr << "LookDirection: Forward and up aligned. Returning identity"
-                  << std::endl;
+        Debug_Warn("LookDirection: Forward and up aligned. Returning identity");
         return Quaternion::Identity;
     }
-
-    glm::vec3 eye(0.0f);
-    glm::vec3 gforward(forward.x, forward.y, forward.z);
-    glm::vec3 gup(up.x, up.y, up.z);
-    return Quaternion( glm::quat_cast(
-                           glm::inverse( glm::lookAt(eye, gforward, gup)) ) );
+    return Quaternion::FromRotationMatrix(
+                Matrix4::LookAt(Vector3::Zero, forward, up).Inversed());
 }
 
 Vector3 Quaternion::EulerAngles(const Quaternion &q)
 {
-    glm::vec3 res = glm::eulerAngles(q);
-    return Vector3(res.x, res.y, res.z);
+    return Vector3(q.Pitch(), q.Yaw(), q.Roll());
 }
 
 Quaternion Quaternion::AngleAxis(float angleRads, const Vector3 &axis)
 {
-    glm::quat q = glm::angleAxis(angleRads, glm::vec3(axis.x, axis.y, axis.z));
-    return Quaternion(q);
+    const float s = Math::Sin(angleRads * SCAST<float>(0.5));
+    return Quaternion(axis.x * s,
+                      axis.y * s,
+                      axis.z * s,
+                      Math::Cos(angleRads * SCAST<float>(0.5)));
 }
 
-Quaternion Quaternion::FromRotationMatrix(const Matrix4 &rm)
+Quaternion Quaternion::FromRotationMatrix(const Matrix4 &m)
 {
-    return Quaternion(glm::quat_cast(rm.ToGlmMat4()));
+    float fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2];
+    float fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2];
+    float fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1];
+    float fourWSquaredMinus1 = m[0][0] + m[1][1] + m[2][2];
+
+    int biggestIndex = 0;
+    float fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+    if (fourXSquaredMinus1 > fourBiggestSquaredMinus1)
+    {
+        fourBiggestSquaredMinus1 = fourXSquaredMinus1;
+        biggestIndex = 1;
+    }
+    if (fourYSquaredMinus1 > fourBiggestSquaredMinus1)
+    {
+        fourBiggestSquaredMinus1 = fourYSquaredMinus1;
+        biggestIndex = 2;
+    }
+    if (fourZSquaredMinus1 > fourBiggestSquaredMinus1)
+    {
+        fourBiggestSquaredMinus1 = fourZSquaredMinus1;
+        biggestIndex = 3;
+    }
+
+    float biggestVal = Math::Sqrt(fourBiggestSquaredMinus1 + SCAST<float>(1)) *
+                       SCAST<float>(0.5);
+    float mult = SCAST<float>(0.25)/biggestVal;
+
+    Quaternion res;
+    switch (biggestIndex)
+    {
+        case 0:
+            res.x = (m[1][2] - m[2][1]) * mult;
+            res.y = (m[2][0] - m[0][2]) * mult;
+            res.z = (m[0][1] - m[1][0]) * mult;
+            res.w = biggestVal;
+            break;
+        case 1:
+            res.x = biggestVal;
+            res.y = (m[0][1] + m[1][0]) * mult;
+            res.z = (m[2][0] + m[0][2]) * mult;
+            res.w = (m[1][2] - m[2][1]) * mult;
+            break;
+        case 2:
+            res.x = (m[0][1] + m[1][0]) * mult;
+            res.y = biggestVal;
+            res.z = (m[1][2] + m[2][1]) * mult;
+            res.w = (m[2][0] - m[0][2]) * mult;
+            break;
+        case 3:
+            res.x = (m[2][0] + m[0][2]) * mult;
+            res.y = (m[1][2] + m[2][1]) * mult;
+            res.z = biggestVal;
+            res.w = (m[0][1] - m[1][0]) * mult;
+            break;
+
+        default: break;
+    }
+    return res;
 }
 
 
 Quaternion operator*(const Quaternion &q1, const Quaternion &q2)
 {
-    return Quaternion(glm::quat(q1) * glm::quat(q2));
+    Quaternion res = q1;
+    res *= q2;
+    return res;
+}
+
+Quaternion &operator*=(Quaternion &lhs, const Quaternion &rhs)
+{
+    const Quaternion p(lhs);
+    const Quaternion q(rhs);
+
+    lhs.x = p.w * q.x + p.x * q.w + p.y * q.z - p.z * q.y;
+    lhs.y = p.w * q.y + p.y * q.w + p.z * q.x - p.x * q.z;
+    lhs.z = p.w * q.z + p.z * q.w + p.x * q.y - p.y * q.x;
+    lhs.w = p.w * q.w - p.x * q.x - p.y * q.y - p.z * q.z;
+    return lhs;
+}
+
+Quaternion operator*(const Quaternion &q, float a)
+{
+    return Quaternion(q.x*a, q.y*a, q.z*a, q.w*a);
+}
+Quaternion operator*(float a, const Quaternion &q) { return q * a; }
+
+Quaternion operator/(const Quaternion &q, float a)
+{
+    return Quaternion(q.x/a, q.y/a, q.z/a, q.w/a);
+}
+Quaternion operator/(float a, const Quaternion &q)
+{
+    return Quaternion(a/q.x, a/q.y, a/q.z, a/q.w);
+}
+
+Quaternion operator-(const Quaternion &q)
+{
+    return Quaternion(-q.x, -q.y, -q.z, -q.w);
+}
+
+Quaternion operator+(const Quaternion &q1, const Quaternion &q2)
+{
+    Quaternion res = q1;
+    res += q2;
+    return res;
+}
+
+Quaternion &operator+=(Quaternion &lhs, const Quaternion &rhs)
+{
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    lhs.z += rhs.z;
+    lhs.w += rhs.w;
+    return lhs;
 }

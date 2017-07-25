@@ -1,21 +1,23 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
-#include "Bang/glm/glm.hpp"
-#include "Bang/glm/gtx/transform.hpp"
-#include "Bang/glm/gtc/quaternion.hpp"
-
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 
+// Most of it almost copied from glm
+
 class String;
 class Matrix4;
-class Quaternion : public glm::quat
+class Quaternion
 {
 public:
+    float x, y, z, w;
+
     Quaternion();
-    explicit Quaternion(const glm::quat &q);
-    Quaternion(float w, float x, float y, float z);
+    Quaternion(float x, float y, float z, float w);
+
+    float Length() const;
+    float SqLength() const;
 
     Quaternion Conjugated() const;
     Quaternion Normalized() const;
@@ -24,10 +26,19 @@ public:
     Vector3 EulerAngles() const;
     String ToString() const;
 
+    float Pitch() const;
+    float Yaw() const;
+    float Roll() const;
+
+    static float Dot(const Quaternion &q1, const Quaternion &q2);
+    static Quaternion Cross(const Quaternion &q1, const Quaternion &q2);
     static Vector3 EulerAngles(const Quaternion &q);
-    static Quaternion Slerp(const Quaternion &from,
+    static Quaternion Lerp(const Quaternion &from,
                             const Quaternion &to,
-                            float progression);
+                            float t);
+    static Quaternion SLerp(const Quaternion &from,
+                            const Quaternion &to,
+                            float t);
     static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
     static Quaternion LookDirection(const Vector3 &_forward,
                                     const Vector3 &_up = Vector3::Up);
@@ -37,26 +48,40 @@ public:
     static Quaternion Identity;
 };
 
+Quaternion operator+(const Quaternion &q1, const Quaternion &q2);
+Quaternion& operator+=(Quaternion& lhs, const Quaternion &rhs);
+Quaternion operator*(const Quaternion &q, float a);
+Quaternion operator*(float a, const Quaternion &q);
+Quaternion operator/(const Quaternion &q, float a);
+Quaternion operator/(float a, const Quaternion &q);
+Quaternion& operator*=(Quaternion &lhs, const Quaternion &rhs);
 Quaternion operator*(const Quaternion &q1, const Quaternion& q2);
+Quaternion operator-(const Quaternion &q);
 
 template<class T>
 Vector4G<T> operator*(Quaternion q, const Vector4G<T> &rhs)
 {
-    return Vector4G<T>(q * glm::vec4(rhs.x, rhs.y, rhs.z, rhs.w));
+    return Vector4G<T>(q * Vector3G<T>(rhs.x, rhs.y, rhs.w), rhs.w);
+}
+template<class T>
+Vector4G<T> operator*(const Vector4G<T> &lhs, Quaternion q)
+{
+    return q.Inversed() * lhs;
 }
 
 template<class T>
 Vector3G<T> operator*(const Quaternion& q, const Vector3G<T>& rhs)
 {
-    glm::vec3 res = glm::quat(q) * glm::vec3(rhs.x, rhs.y, rhs.z);
-    return Vector3G<T>(res.x, res.y, res.z);
-}
+    const Vector3G<T> qVector(q.x, q.y, q.z);
+    const Vector3G<T> uv (Vector3::Cross(qVector, rhs));
+    const Vector3G<T> uuv(Vector3::Cross(qVector, uv));
 
+    return rhs + ((uv * q.w) + uuv) * SCAST<T>(2);
+}
 template<class T>
 Vector3G<T> operator*(const Vector3G<T>& lhs, const Quaternion& q)
 {
-    glm::vec3 res = glm::vec3(lhs.x, lhs.y, lhs.z) * glm::quat(q);
-    return Vector3G<T>(res.x, res.y, res.z);
+    return q.Inversed() * lhs;
 }
 
 #endif // QUATERNION_H

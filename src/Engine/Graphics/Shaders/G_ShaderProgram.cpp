@@ -1,8 +1,5 @@
 #include "Bang/G_ShaderProgram.h"
 
-#include "Bang/glm/glm.hpp"
-#include "Bang/glm/gtc/type_ptr.hpp"
-
 #include "Bang/Debug.h"
 #include "Bang/G_Shader.h"
 #include "Bang/G_Texture.h"
@@ -167,13 +164,13 @@ bool G_ShaderProgram::SetColor(const String &name, const Color &c) const
     return SetVec4(name, Vector4(c.r, c.g, c.b, c.a));
 }
 
-bool G_ShaderProgram::SetMat3(const String &name, const glm::mat3 &m) const
+bool G_ShaderProgram::SetMat3(const String &name, const Matrix3 &m) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        glUniformMatrix3fv(location, 1, GL_FALSE, &m[0][0]);
+        glUniformMatrix3fv(location, 1, GL_FALSE, m.Data());
     }
     return (location >= 0);
 }
@@ -184,7 +181,7 @@ bool G_ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        glUniformMatrix4fv(location, 1, GL_FALSE, m.GetFirstAddress());
+        glUniformMatrix4fv(location, 1, GL_FALSE, m.Data());
     }
     return (location >= 0);
 }

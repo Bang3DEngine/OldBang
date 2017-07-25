@@ -4,7 +4,6 @@
 #include "Bang/Vector.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
-#include "Bang/glm/glm.hpp"
 
 #define XYZ_MEMBERS x,y,z,w
 #define EXTRA_DECLARATIONS \

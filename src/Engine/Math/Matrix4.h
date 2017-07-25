@@ -4,8 +4,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 
-#include "Bang/glm/glm.hpp"
-#include "Bang/glm/gtx/transform.hpp"
+// Part of it copied from glm
 
 class String;
 class Quaternion;
@@ -16,7 +15,6 @@ public:
 
     Matrix4();
     Matrix4(float a);
-    Matrix4(const glm::mat4 &m);
     Matrix4(const Vector4 &col0,
             const Vector4 &col1,
             const Vector4 &col2,
@@ -29,16 +27,21 @@ public:
     Matrix4 Inversed() const;
     Matrix4 Transposed() const;
 
-    float *GetFirstAddress() const;
+    float *Data() const;
 
     void SetTranslate(const Vector3 &translate);
     void SetScale(const Vector3 &scale);
 
-    glm::mat4 ToGlmMat4() const;
     String ToString() const;
 
-    static Matrix4 Perspective(float fovY, float aspect,
-                               float zNear, float zFar);
+    static Matrix4 LookAt(const Vector3 &eyePosition,
+                          const Vector3 &focusPoint,
+                          const Vector3 &up);
+
+    static Matrix4 Perspective(float fovYRads,
+                               float aspect,
+                               float zNear,
+                               float zFar);
 
     static Matrix4 Ortho(float left, float right,
                          float bottom, float top,

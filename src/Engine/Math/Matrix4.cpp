@@ -1,7 +1,6 @@
 #include "Bang/Matrix4.h"
 
-#include <sstream>
-
+#include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Quaternion.h"
@@ -10,14 +9,6 @@ Matrix4 Matrix4::Identity = Matrix4();
 
 Matrix4::Matrix4() : Matrix4(1.0f)
 {
-}
-
-Matrix4::Matrix4(const glm::mat4 &m)
-{
-    c0 = Vector4(m[0][0], m[0][1], m[0][2], m[0][3]);
-    c1 = Vector4(m[1][0], m[1][1], m[1][2], m[1][3]);
-    c2 = Vector4(m[2][0], m[2][1], m[2][2], m[2][3]);
-    c3 = Vector4(m[3][0], m[3][1], m[3][2], m[3][3]);
 }
 
 Matrix4::Matrix4(float a)
@@ -208,9 +199,9 @@ Matrix4 Matrix4::Transposed() const
     return trans;
 }
 
-float *Matrix4::GetFirstAddress() const
+float *Matrix4::Data() const
 {
-    return static_cast<float*>(&(c0.x));
+    return SCAST<float*>(&(c0.x));
 }
 
 void Matrix4::SetTranslate(const Vector3 &translate)
@@ -227,16 +218,6 @@ void Matrix4::SetScale(const Vector3 &scale)
     c2.z = scale.z;
 }
 
-glm::mat4 Matrix4::ToGlmMat4() const
-{
-    glm::mat4 m;
-    m[0] = glm::vec4(c0.x, c0.y, c0.z, c0.w);
-    m[1] = glm::vec4(c1.x, c1.y, c1.z, c1.w);
-    m[2] = glm::vec4(c2.x, c2.y, c2.z, c2.w);
-    m[3] = glm::vec4(c3.x, c3.y, c3.z, c3.w);
-    return m;
-}
-
 String Matrix4::ToString() const
 {
     std::ostringstream oss;
@@ -247,36 +228,116 @@ String Matrix4::ToString() const
     return String(oss.str());
 }
 
-Matrix4 Matrix4::Perspective(float fovY, float aspect, float zNear, float zFar)
+Matrix4 Matrix4::LookAt(const Vector3 &eyePosition,
+                        const Vector3 &focusPoint,
+                        const Vector3 &up)
 {
-    return Matrix4(glm::perspective(fovY, aspect, zNear, zFar));
+    const Vector3 f( (focusPoint - eyePosition).Normalized() );
+    const Vector3 s( (Vector3::Cross(f, up)).Normalized() );
+    const Vector3 u(  Vector3::Cross(s, f) );
+
+    Matrix4 res(1.0f);
+    res[0][0] =  s.x;
+    res[1][0] =  s.y;
+    res[2][0] =  s.z;
+    res[0][1] =  u.x;
+    res[1][1] =  u.y;
+    res[2][1] =  u.z;
+    res[0][2] = -f.x;
+    res[1][2] = -f.y;
+    res[2][2] = -f.z;
+    res[3][0] = -Vector3::Dot(s, eyePosition);
+    res[3][1] = -Vector3::Dot(u, eyePosition);
+    res[3][2] =  Vector3::Dot(f, eyePosition);
+    return res;
 }
 
-Matrix4 Matrix4::Ortho(float left, float right, float bottom, float top, float zNear, float zFar)
+Matrix4 Matrix4::Perspective(float fovYRads,
+                             float aspect,
+                             float zNear,
+                             float zFar)
 {
-    return Matrix4(glm::ortho(left, right, bottom, top, zNear, zFar));
+    float const tanHalfFovy = Math::Tan(fovYRads / SCAST<float>(2));
+
+    Matrix4 res(SCAST<float>(0));
+    res[0][0] = SCAST<float>(1) / (aspect * tanHalfFovy);
+    res[1][1] = SCAST<float>(1) / (tanHalfFovy);
+    res[2][2] = -(zFar + zNear) / (zFar - zNear);
+    res[2][3] = -SCAST<float>(1);
+    res[3][2] = -(SCAST<float>(2) * zFar * zNear) / (zFar - zNear);
+
+    return res;
+}
+
+Matrix4 Matrix4::Ortho(float left, float right,
+                       float bottom, float top,
+                       float zNear, float zFar)
+{
+    Matrix4 res(1);
+    res[0][0] = SCAST<float>(2) / (right - left);
+    res[1][1] = SCAST<float>(2) / (top - bottom);
+    res[2][2] = -SCAST<float>(2) / (zFar - zNear);
+    res[3][0] = -(right + left) / (right - left);
+    res[3][1] = -(top + bottom) / (top - bottom);
+    res[3][2] = -(zFar + zNear) / (zFar - zNear);
+    return res;
 }
 
 Matrix4 Matrix4::TranslateMatrix(const Vector3 &v)
 {
-    return Matrix4(glm::translate(glm::mat4(1.0f), glm::vec3(v.x, v.y, v.z)));
+    return Matrix4(1, 0, 0, v.x,
+                   0, 1, 0, v.y,
+                   0, 0, 1, v.z,
+                   0, 0, 0, 1);
 }
 
 Matrix4 Matrix4::RotateMatrix(const Quaternion &q)
 {
-    return Matrix4(glm::mat4_cast(q));
+    float qxx(q.x * q.x);
+    float qyy(q.y * q.y);
+    float qzz(q.z * q.z);
+    float qxz(q.x * q.z);
+    float qxy(q.x * q.y);
+    float qyz(q.y * q.z);
+    float qwx(q.w * q.x);
+    float qwy(q.w * q.y);
+    float qwz(q.w * q.z);
+
+    Matrix4 res(SCAST<float>(1));
+
+    res[0][0] = 1 - 2 * (qyy +  qzz);
+    res[0][1] = 2 * (qxy + qwz);
+    res[0][2] = 2 * (qxz - qwy);
+
+    res[1][0] = 2 * (qxy - qwz);
+    res[1][1] = 1 - 2 * (qxx +  qzz);
+    res[1][2] = 2 * (qyz + qwx);
+
+    res[2][0] = 2 * (qxz + qwy);
+    res[2][1] = 2 * (qyz - qwx);
+    res[2][2] = 1 - 2 * (qxx +  qyy);
+
+    return res;
 }
 
 Matrix4 Matrix4::ScaleMatrix(const Vector3 &v)
 {
-    return Matrix4(glm::scale(glm::mat4(1.0f), glm::vec3(v.x, v.y, v.z)));
+    return Matrix4(v.x,   0,   0,  0,
+                     0, v.y,   0,  0,
+                     0,   0, v.z,  0,
+                     0,   0,   0,  1);
 }
 
 Vector4& Matrix4::operator[](int i) const
 {
-    if (i == 0) return c0;
-    if (i == 1) return c1;
-    if (i == 2) return c2;
+    switch (i)
+    {
+        case 0: return c0;
+        case 1: return c1;
+        case 2: return c2;
+        case 3: return c3;
+    }
+    Debug_Warn("Matrix4 index " << i << " too big");
     return c3;
 }
 

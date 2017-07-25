@@ -20,6 +20,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/DataStructures/Collection.cpp \
     $$BANG_ROOT/src/Engine/Math/Rect.cpp \
     $$BANG_ROOT/src/Engine/Math/Quaternion.cpp \
+    $$BANG_ROOT/src/Engine/Math/Matrix3.cpp \
     $$BANG_ROOT/src/Engine/Math/Matrix4.cpp \
     $$BANG_ROOT/src/Engine/Math/Color.cpp \
     $$BANG_ROOT/src/Engine/Math/Math.cpp \
@@ -49,5 +50,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/DataStructures/String.h \
     $$BANG_ROOT/src/Engine/DataStructures/NamedEnum.h \
     $$BANG_ROOT/src/Engine/Math/Quaternion.h \
+    $$BANG_ROOT/src/Engine/Math/Matrix3.h \
     $$BANG_ROOT/src/Engine/Math/Matrix4.h \
     $$BANG_ROOT/src/Engine/IO/Files/File.h

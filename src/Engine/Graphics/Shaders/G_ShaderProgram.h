@@ -6,6 +6,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/GLObject.h"
 
@@ -39,7 +40,7 @@ public:
     bool SetVec3(const String &name, const Vector3& v) const;
     bool SetVec4(const String &name, const Vector4& v) const;
     bool SetColor(const String &name, const Color& c) const;
-    bool SetMat3(const String &name, const glm::mat3& m) const;
+    bool SetMat3(const String &name, const Matrix3& m) const;
     bool SetMat4(const String &name, const Matrix4& m) const;
     bool SetTexture(const String &name, const G_Texture *texture) const;
 
