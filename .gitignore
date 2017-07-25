@@ -43,6 +43,7 @@ ui_*
 src/Qt_MOCs/*
 /.qmake.cache
 /.qmake.stash
+/proj/.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user

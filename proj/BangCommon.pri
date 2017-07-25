@@ -74,6 +74,9 @@ QMAKE_LFLAGS           -= $$ALL_OPTS
 QMAKE_LFLAGS_DEBUG     -= $$ALL_OPTS
 QMAKE_LFLAGS_RELEASE   -= $$ALL_OPTS
 
+# Fix for "fatal error: stdlib.h: No such file or directory"
+QMAKE_CFLAGS_ISYSTEM    =
+
 QMAKE_LFLAGS           += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 QMAKE_CXXFLAGS         += $$OTHER_OPTS $$DEBUG_OPT $$OPTIMIZATION_OPT
 ###################################################
