@@ -2,8 +2,9 @@
 #define VECTOR4_H
 
 #include "Bang/Vector.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
+
+template<class T> class Vector2G;
+template<class T> class Vector3G;
 
 #define XYZ_MEMBERS x,y,z,w
 #define EXTRA_DECLARATIONS \

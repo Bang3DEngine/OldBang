@@ -14,7 +14,6 @@
 class Rect;
 class Sphere;
 class Camera;
-class Quaternion;
 class AABox : public IToString
 {
 private:

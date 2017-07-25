@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "Bang/Vector3.h"
-#include "Bang/Quaternion.h"
+template<class T> class Vector3G;
+template<class T> class QuaternionG;
 
 // Part of it copied from glm
 

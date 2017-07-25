@@ -5,11 +5,11 @@
 #include "Bang/Vector3.h"
 
 class Mesh;
+class String;
 class Material;
 class GameObject;
 class MeshRenderer;
 class AssetsManager;
-class GameObject;
 
 class MeshFactory
 {

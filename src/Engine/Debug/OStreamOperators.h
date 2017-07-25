@@ -1,33 +1,25 @@
 #ifndef OSTREAMOPERATORS_H
 #define OSTREAMOPERATORS_H
 
-#include "Bang/Set.h"
-#include "Bang/Map.h"
-#include "Bang/List.h"
-#include "Bang/Path.h"
-#include "Bang/Array.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
-#include "Bang/Matrix3.h"
-#include "Bang/Matrix4.h"
-#include "Bang/IToString.h"
-#include "Bang/Quaternion.h"
+#include <sstream>
 
-#define OPERATOR_OSTREAM_DECL(CLASS) \
-std::ostream& operator<<(std::ostream &log, const CLASS &v);
-#define OPERATOR_OSTREAM_DEF(CLASS) \
-std::ostream& operator<<(std::ostream &log, const CLASS &v) { \
-    log << v.ToString(); return log; \
-}
-OPERATOR_OSTREAM_DECL(Path)
-OPERATOR_OSTREAM_DECL(Color)
-OPERATOR_OSTREAM_DECL(IToString)
-OPERATOR_OSTREAM_DECL(Quaternion)
-std::ostream& operator<<(std::ostream &log, const Vector2 &v);
-std::ostream& operator<<(std::ostream &log, const Vector3 &v);
-std::ostream& operator<<(std::ostream &log, const Vector4 &v);
+#include "Bang/String.h"
+
+class Color;
+class IToString;
+template<class T> class Set;
+template<class T> class List;
+template<class T> class Array;
+template<class T> class Vector2G;
+template<class T> class Vector3G;
+template<class T> class Vector4G;
+template<class T> class Matrix3G;
+template<class T> class Matrix4G;
+template<class T> class QuaternionG;
+template<class K, class V> class Map;
+
+std::ostream& operator<<(std::ostream &log, const Color &v);
+std::ostream& operator<<(std::ostream &log, const IToString &v);
 std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
@@ -39,18 +31,28 @@ std::ostream& operator<<(std::ostream &log, const Vector2G<T> &v)
     log << "(" << v.x << ", " << v.y << ")";
     return log;
 }
+
 template<class T>
 std::ostream& operator<<(std::ostream &log, const Vector3G<T> &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     return log;
 }
+
 template<class T>
 std::ostream& operator<<(std::ostream &log, const Vector4G<T> &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
     return log;
 }
+
+template<class T>
+std::ostream& operator<<(std::ostream &log, const QuaternionG<T> &q)
+{
+    log << "(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
+    return log;
+}
+
 template<class T>
 std::ostream& operator<<(std::ostream &log, const Matrix3G<T> &m)
 {
@@ -60,6 +62,7 @@ std::ostream& operator<<(std::ostream &log, const Matrix3G<T> &m)
     log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ")" << std::endl;
     return log;
 }
+
 template<class T>
 std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
 {
@@ -69,7 +72,6 @@ std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
     log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ", " << m.c3[3] << ")" << std::endl;
     return log;
 }
-
 
 // List
 template <class T>

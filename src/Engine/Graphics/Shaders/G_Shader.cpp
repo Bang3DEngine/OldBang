@@ -6,6 +6,7 @@
 
 #include "Bang/File.h"
 #include "Bang/Path.h"
+#include "Bang/Array.h"
 #include "Bang/Debug.h"
 
 G_Shader::G_Shader(G_Shader::Type t)

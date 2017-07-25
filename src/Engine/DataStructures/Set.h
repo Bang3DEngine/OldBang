@@ -3,8 +3,7 @@
 
 #include <set>
 
-#include "Bang/List.h"
-#include "Bang/String.h"
+template<class T> class List;
 
 template<class Key>
 class Set : private std::set<Key>
@@ -79,21 +78,6 @@ public:
     Iterator end() { return this->std::set<Key>::end(); }
     Const_Iterator begin() const { return this->std::set<Key>::begin(); }
     Const_Iterator end() const { return this->std::set<Key>::end(); }
-
-    String ToString()
-    {
-        std::ostringstream oss;
-        oss << "{";
-        bool first = true;
-        for (Key &k : *this)
-        {
-            if (!first) { oss << ", "; }
-            oss << k;
-            first = false;
-        }
-        oss << "}";
-        return oss.str();
-    }
 };
 
 #endif // SET_H

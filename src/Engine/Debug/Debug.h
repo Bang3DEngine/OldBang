@@ -5,20 +5,11 @@
 #include <sstream>
 #include <iostream>
 
-#include "Bang/Map.h"
-#include "Bang/Set.h"
-#include "Bang/List.h"
-#include "Bang/Array.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
-#include "Bang/Matrix4.h"
+#include "Bang/String.h"
 #include "Bang/OStreamOperators.h"
 
 class String;
 class IToString;
-class Quaternion;
 class Debug
 {
 public:

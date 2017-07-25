@@ -1,7 +1,9 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-#include "Bang/Vector2.h"
+#include "Bang/Vector.h"
+
+template<class T> class Vector2G;
 
 #define XYZ_MEMBERS x,y,z
 #define EXTRA_DECLARATIONS \

@@ -4,7 +4,6 @@
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
-#include "Bang/Property.h"
 #include "Bang/Component.h"
 #include "Bang/Quaternion.h"
 

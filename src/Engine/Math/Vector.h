@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <cstdlib>
+#include "Bang/Math.h"
 
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS

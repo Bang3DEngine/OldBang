@@ -4,12 +4,10 @@
 #include <vector>
 #include <functional>
 
-#include "Bang/IToString.h"
 #include "Bang/Collection.h"
 
 template <class T>
-class Array  : public IToString,
-               public std::vector<T>
+class Array  : public std::vector<T>
 {
 public:
     typedef typename std::vector<T>::iterator               Iterator;
@@ -178,11 +176,6 @@ public:
     CollectionRange<Const_Iterator> GetRangeAll() const
     {
         return CollectionRange<Const_Iterator>(this->Begin(), this->End());
-    }
-
-    virtual String ToString() const override
-    {
-        return Collection::ToString(GetRangeAll(), "[", "]");
     }
 
     operator CollectionRange<Iterator>() { return GetRangeAll(); }

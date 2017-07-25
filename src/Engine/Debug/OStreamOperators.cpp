@@ -1,26 +1,18 @@
 #include "Bang/OStreamOperators.h"
 
-// ostream operators
-OPERATOR_OSTREAM_DEF(Path)
-OPERATOR_OSTREAM_DEF(Color)
-OPERATOR_OSTREAM_DEF(IToString)
-OPERATOR_OSTREAM_DEF(Quaternion)
+#include "Bang/Color.h"
+#include "Bang/IToString.h"
 
-std::ostream& operator<<(std::ostream &log, const Vector2 &v)
+std::ostream& operator<<(std::ostream &log, const Color &c)
 {
-    log << "(" << v.x << ", " << v.y << ")"; return log;
+    log << "(" << c.r << ", " << c.g << ", " << c.b << ", " << c.a << ")";
+    return log;
 }
-std::ostream& operator<<(std::ostream &log, const Vector3 &v)
-{
-    log << "(" << v.x << ", " << v.y << ", " << v.z << ")"; return log;
-}
-std::ostream& operator<<(std::ostream &log, const Vector4 &v)
-{
-    log << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")"; return log;
-}
+
 std::ostream& operator<<(std::ostream &log, const String &str)
 {
-    log << str.ToCString(); return log;
+    log << str.ToCString();
+    return log;
 }
 
 std::ostream &operator<<(std::ostream &log, const IToString *s)
@@ -40,5 +32,12 @@ std::ostream &operator<<(std::ostream &log, const IToString *s)
 
 std::ostream &operator<<(std::ostream &log, const QString &str)
 {
-    log << str.toStdString(); return log;
+    log << str.toStdString();
+    return log;
+}
+
+std::ostream &operator<<(std::ostream &log, const IToString &v)
+{
+    log << (&v);
+    return log;
 }

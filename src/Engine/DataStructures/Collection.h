@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <functional>
 
-#include "Bang/IToString.h"
-
 template <class Iterator>
 class CollectionRange
 {
@@ -48,25 +46,6 @@ public:
             if (x == *it) { ++count; }
         }
         return count;
-    }
-
-    template<class Iterator>
-    static String ToString(const CollectionRange<Iterator> &col,
-                           const String &openingTag,
-                           const String &closingTag)
-    {
-        std::ostringstream oss;
-        oss << openingTag;
-
-        bool first = true;
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            if (!first) { oss << ", "; } else { first = false; }
-            oss << &(*it);
-        }
-        oss << closingTag;
-
-        return String(oss.str());
     }
 
 private:

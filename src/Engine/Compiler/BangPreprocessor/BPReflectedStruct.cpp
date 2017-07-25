@@ -1,7 +1,6 @@
 #include "Bang/BPReflectedStruct.h"
 
-#include <regex>
-
+#include "Bang/OStreamOperators.h"
 #include "Bang/BangPreprocessor.h"
 
 typedef BangPreprocessor BP;
@@ -15,9 +14,9 @@ BPReflectedStruct::~BPReflectedStruct()
 }
 
 void BPReflectedStruct::FromString(String::Iterator structBegin,
-                          String::Iterator structEnd,
-                          BPReflectedStruct *outStruct,
-                          bool *success)
+                                   String::Iterator structEnd,
+                                   BPReflectedStruct *outStruct,
+                                   bool *success)
 {
     *success = false;
 
@@ -213,9 +212,11 @@ const Array<BPReflectedVariable> &BPReflectedStruct::GetVariables() const
 
 String BPReflectedStruct::ToString() const
 {
-    return "{ " +
-           GetStructName() + ", " +
-           GetStructVariableName() + ", " +
-           GetVariables().ToString() +
+    std::ostringstream oss;
+    oss << "{ " <<
+           GetStructName() << ", " <<
+           GetStructVariableName() << ", " <<
+           GetVariables() <<
            " }";
+    return String(oss.str());
 }

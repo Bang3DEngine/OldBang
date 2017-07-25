@@ -2,10 +2,8 @@
 #define MAP_H
 
 #include <map>
-#include <sstream>
 
-#include "Bang/List.h"
-#include "Bang/String.h"
+template<class T> class List;
 
 template <class Key, class Value>
 class Map : public std::map<Key, Value>
@@ -140,19 +138,6 @@ public:
     Iterator end() { return this->std::map<Key,Value>::end(); }
     Const_Iterator begin() const { return this->std::map<Key,Value>::begin(); }
     Const_Iterator end() const { return this->std::map<Key,Value>::end(); }
-
-    String ToString()
-    {
-        std::ostringstream oss;
-        oss << "{";
-        for (auto it = this->Begin(); it != this->End(); ++it)
-        {
-            if (it != this->Begin()) oss << ", ";
-            oss << (it->first) << ": " << (it->second);
-        }
-        oss << "}";
-        return oss.str();
-    }
 
     Value& operator[](const Key &k)
     {

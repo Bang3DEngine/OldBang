@@ -3,9 +3,10 @@
 
 #include <iostream>
 
-#include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
-#include "Bang/Quaternion.h"
+
+template<class T> class Vector3G;
+template<class T> class QuaternionG;
 
 // Part of it copied from glm
 
@@ -13,7 +14,7 @@ template<class T>
 class Matrix4G
 {
 public:
-    Vector4 c0, c1, c2, c3; // Matrix columns from left to right
+    Vector4G<T> c0, c1, c2, c3; // Matrix columns from left to right
 
     Matrix4G() : Matrix4G(1)
     {
@@ -285,7 +286,7 @@ public:
                            0, 0, 0, 1);
     }
 
-    static Quaternion ToQuaternion(const Matrix4G<T> &m)
+    static QuaternionG<T> ToQuaternion(const Matrix4G<T> &m)
     {
         T fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2];
         T fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2];
@@ -314,7 +315,7 @@ public:
                            SCAST<T>(0.5);
         float mult = SCAST<T>(0.25)/biggestVal;
 
-        Quaternion res;
+        QuaternionG<T> res;
         switch (biggestIndex)
         {
             case 0:
@@ -347,7 +348,7 @@ public:
         return res;
     }
 
-    static Matrix4G<T> RotateMatrix(const Quaternion &q)
+    static Matrix4G<T> RotateMatrix(const QuaternionG<T> &q)
     {
         T qxx(q.x * q.x);
         T qyy(q.y * q.y);
@@ -375,7 +376,7 @@ public:
 
         return res;
     }
-    static Matrix4G<T> ScaleMatrix(const Vector3 &v)
+    static Matrix4G<T> ScaleMatrix(const Vector3G<T> &v)
     {
         return Matrix4G<T>(v.x, 0,   0,  0,
                            0, v.y,   0,  0,
