@@ -23,6 +23,12 @@ public: \
         for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(a); } \
     } \
  \
+    template<class OtherT> \
+    explicit VECTOR_G(const VECTOR_G<OtherT>& v) \
+    { \
+        for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(v[i]); } \
+    } \
+ \
     T Length() const \
     { \
         return Math::Sqrt(SqLength()); \
@@ -30,7 +36,7 @@ public: \
  \
     T SqLength() const \
     { \
-        T res; \
+        T res = SCAST<T>(0); \
         for (int i = 0; i < N; ++i) { res += At(i) * At(i); } \
         return res; \
     } \
@@ -41,9 +47,8 @@ public: \
  \
     VECTOR_G NormalizedSafe() const \
     { \
-        VECTOR_G<T> v(*this); \
-        if (v == VECTOR_G<T>::Zero) { return VECTOR_G<T>::Zero; } \
-        return v.Normalized(); \
+        if (*this == VECTOR_G<T>::Zero) { return VECTOR_G<T>::Zero; } \
+        return (*this).Normalized(); \
     } \
  \
     VECTOR_G Normalized() const \
@@ -310,7 +315,7 @@ VECTOR_G<T> &operator+=(VECTOR_G<T> &lhs, const OtherT &a) \
 } \
 \
 template<class T, class OtherT> \
-VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, const T &a) \
+VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, const OtherT &a) \
 { \
     for (int i = 0; i < N; ++i) { lhs[i] -= SCAST<T>(a); }  \
     return lhs; \
