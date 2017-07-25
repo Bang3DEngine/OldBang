@@ -1,6 +1,7 @@
 #include "Bang/OStreamOperators.h"
 
 #include "Bang/Color.h"
+#include "Bang/String.h"
 #include "Bang/IToString.h"
 
 std::ostream& operator<<(std::ostream &log, const Color &c)

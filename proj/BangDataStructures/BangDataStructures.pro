@@ -10,7 +10,6 @@ TARGET = $$BIN_DIR/lib/BangDataStructures
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/DataStructures/String.cpp \
-    $$BANG_ROOT/src/Engine/Math/Rect.cpp \
     $$BANG_ROOT/src/Engine/Math/Color.cpp \
     $$BANG_ROOT/src/Engine/Math/Math.cpp \
     $$BANG_ROOT/src/Engine/Math/Random.cpp \

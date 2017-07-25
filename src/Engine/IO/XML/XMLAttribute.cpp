@@ -195,10 +195,10 @@ void XMLAttribute::SetRect(const Rect &value,
                            const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
-    oss << "(" << value.m_minx << ", " <<
-                  value.m_miny << ", " <<
-                  value.m_maxx << ", " <<
-                  value.m_maxy << ")";
+    oss << "(" << value.GetMin().x << ", " <<
+                  value.GetMin().y << ", " <<
+                  value.GetMax().x << ", " <<
+                  value.GetMax().y << ")";
     Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
 }
 

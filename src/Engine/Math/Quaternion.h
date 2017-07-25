@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "Bang/Debug.h"
+
 template<class T> class Vector3G;
 template<class T> class Vector4G;
 template<class T> class Matrix4G;
@@ -203,8 +205,8 @@ public:
         if (Vector3G<T>::Dot(forward,  up) >= SCAST<T>(0.99) ||
             Vector3G<T>::Dot(forward, -up) >= SCAST<T>(0.99))
         {
-            std::cerr << "LookDirection: Forward and up aligned."
-                         " Returning identity" << std::endl;
+            Debug_Warn("LookDirection: Forward and up aligned."
+                         " Returning identity");
             return QuaternionG<T>::Identity;
         }
         return Matrix4G<T>::ToQuaternion(

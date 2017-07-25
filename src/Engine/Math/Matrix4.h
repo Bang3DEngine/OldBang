@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "Bang/Debug.h"
 #include "Bang/Vector4.h"
 
 template<class T> class Vector3G;
@@ -393,7 +394,7 @@ public:
             case 2: return c2;
             case 3: return c3;
         }
-        std::cerr << "Matrix4G<T> index " << i << " too big" << std::endl;
+        Debug_Warn("Matrix4G<T> index " << i << " too big");
         return c3;
     }
     const Vector4G<T>& operator[](std::size_t i) const

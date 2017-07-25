@@ -4,14 +4,13 @@
 #include <cmath>
 
 #include "Bang/List.h"
+#include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 
-
-class Rect;
 class Sphere;
 class Camera;
 class AABox : public IToString

@@ -1,87 +1,286 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/Vector2.h"
-#include "Bang/Matrix4.h"
-#include "Bang/IToString.h"
+#include "Bang/Vector4.h"
 
-class Rect : public IToString
+template <class T> class List;
+template <class T> class Array;
+template <class T> class Matrix4G;
+
+template<class T>
+class RectG
 {
 public:
-    static Rect ScreenRect;
-    static Rect Empty;
+    const static RectG<T> ScreenRect;
+    const static RectG<T> Empty;
 
-    float m_minx = 0.0f;
-    float m_maxx = 0.0f;
-    float m_miny = 0.0f;
-    float m_maxy = 0.0f;
+    Vector2G<T> m_min = Vector2::Zero;
+    Vector2G<T> m_max = Vector2::Zero;
 
-    Rect();
-    explicit Rect(float minx, float maxx,
-                  float miny, float maxy);
-    explicit Rect(const Vector2 &p1, const Vector2 &p2);
+    RectG()
+    {
+    }
 
-    void InvertY();
+    explicit RectG(T minx, T maxx, T miny, T maxy)
+    {
+        m_min = Vector2G<T>( Math::Min(minx, maxx), Math::Min(miny, maxy) );
+        m_max = Vector2G<T>( Math::Max(minx, maxx), Math::Max(miny, maxy) );
+    }
 
-    Vector2 GetTopLeft() const;
-    Vector2 GetTopRight() const;
-    Vector2 GetBotLeft() const;
-    Vector2 GetBotRight() const;
+    explicit RectG(const Vector2G<T> &p1, const Vector2G<T> &p2)
+    {
+        m_min = Vector2G<T>::Min(p1, p2);
+        m_max = Vector2G<T>::Max(p1, p2);
+    }
 
-    Vector2 GetMin() const;
-    Vector2 GetMax() const;
+    Vector2G<T> GetMinXMaxY() const
+    {
+        return Vector2G<T>(m_min.x, m_max.y);
+    }
 
-    float GetWidth() const;
-    float GetHeight() const;
-    float GetArea() const;
-    Vector2 GetSize() const;
-    Vector2 GetCenter() const;
+    Vector2G<T> GetMaxXMaxY() const
+    {
+        return Vector2G<T>(m_max.x, m_max.y);
+    }
 
-    bool Contains(const Vector2 &p) const;
+    Vector2G<T> GetMinXMinY() const
+    {
+        return Vector2G<T>(m_min.x, m_min.y);
+    }
 
-    /**
-     * @brief Makes a union of the 2 rects into a single one.
-     * It returns the minimum bounding Rect that contains r1 and r2.
-     * @param r1
-     * @param r2
-     * @return The unified Rect
-     */
-    static Rect Union(const Rect &r1, const Rect &r2);
+    Vector2G<T> GetMaxXMinY() const
+    {
+        return Vector2G<T>(m_max.x, m_min.y);
+    }
 
-    /**
-     * @brief Makes an intersection of the 2 rects.
-     * It returns the intersecting rect between r1 and r2.
-     * @param r1
-     * @param r2
-     * @return The unified Rect
-     */
-    static Rect Intersection(const Rect &r1, const Rect &r2);
+    const Vector2G<T>& GetMin() const
+    {
+        return m_min;
+    }
 
-    static Rect GetBoundingRectFromPositions(const Array<Vector2> &positions);
+    const Vector2G<T>& GetMax() const
+    {
+        return m_max;
+    }
 
-    String ToString() const override;
+    T GetWidth() const
+    {
+        return (m_max.x - m_min.x);
+    }
+
+    T GetHeight() const
+    {
+        return (m_max.y - m_min.y);
+    }
+
+    T GetArea() const
+    {
+        return GetWidth() * GetHeight();
+    }
+
+    Vector2G<T> GetSize() const
+    {
+        return Vector2(GetWidth(), GetHeight());
+    }
+
+    Vector2G<T> GetCenter() const
+    {
+        return (GetMin() + GetMax()) * 0.5f;
+    }
+
+    bool Contains(const Vector2G<T> &p) const
+    {
+        return p.x >= m_min.x && p.x <= m_max.x &&
+               p.y >= m_min.y && p.y <= m_max.y;
+    }
+
+    static RectG<T> Union(const RectG<T> &r1, const RectG<T> &r2)
+    {
+        if (r1 == RectG<T>::Empty) { return r2; }
+        if (r2 == RectG<T>::Empty) { return r1; }
+        return RectG<T>(Math::Min(r1.m_min.x, r2.m_min.x),
+                        Math::Max(r1.m_max.x, r2.m_max.x),
+                        Math::Min(r1.m_min.y, r2.m_min.y),
+                        Math::Max(r1.m_max.y, r2.m_max.y));
+    }
+
+    static RectG<T> Intersection(const RectG<T> &r1, const RectG<T> &r2)
+    {
+        float minx = Math::Max(r1.m_min.x, r2.m_min.x);
+        float miny = Math::Max(r1.m_min.y, r2.m_min.y);
+        float maxx = Math::Min(r1.m_max.x, r2.m_max.x);
+        float maxy = Math::Min(r1.m_max.y, r2.m_max.y);
+
+        if (minx > maxx || miny > maxy)
+        {
+            return RectG<T>::Empty;
+        }
+
+        return RectG<T>(minx, maxx, miny, maxy);
+    }
+
+    static RectG<T> GetBoundingRectFromPositions(
+                            const Array<Vector2> &positions)
+    {
+        if (positions.IsEmpty()) { return RectG<T>::Empty; }
+
+        Vector2 minv = positions.Front(), maxv = positions.Front();
+        for (const Vector2 &p : positions)
+        {
+            minv = Vector2::Min(p, minv);
+            maxv = Vector2::Max(p, maxv);
+        }
+        return RectG<T>(minv, maxv);
+    }
 };
 
-Rect operator*(const Matrix4 &m, const Rect &r);
-void operator*=(Rect &r, float a);
-void operator/=(Rect &r, float a);
-Rect operator/(float a, const Rect &r);
-Rect operator/(const Rect &r, float a);
-Rect operator+(const Vector2 &v, const Rect &r);
-Rect operator+(const Rect &r, const Vector2 &v);
-Rect operator+(float a, const Rect &r);
-Rect operator+(const Rect &r, float a);
-Rect operator/(const Vector2 &v, const Rect &r);
-Rect operator/(const Rect &r, const Vector2 &v);
-Rect operator*(float a, const Rect &r);
-Rect operator*(const Rect &r, float a);
-Rect operator*(const Vector2 &v, const Rect &r);
-Rect operator*(const Rect &r, const Vector2 &v);
-void operator+=(Rect &r, const Vector2 &v);
-void operator*=(Rect &r, const Vector2 &v);
-void operator/=(Rect &r, const Vector2 &v);
-bool operator==(const Rect &r1, const Rect &r2);
-bool operator!=(const Rect &r1, const Rect &r2);
+using Rectf = RectG<float>;
+using Rectd = RectG<double>;
+using Recti = RectG<int>;
+using Rectu = RectG<uint>;
+using Rect  = Rectf;
+
+template<class T>
+const RectG<T> RectG<T>::ScreenRect = RectG<T>(Vector2G<T>(-1),
+                                               Vector2G<T>(1));
+
+template<class T>
+const RectG<T> RectG<T>::Empty = RectG<T>(0, 0, 0, 0);
+
+template<class T>
+bool operator==(const RectG<T> &r1, const RectG<T> &r2)
+{
+    return r1.GetMin() == r2.GetMin() &&
+           r1.GetMax() == r2.GetMax();
+}
+
+
+template<class T>
+bool operator!=(const RectG<T> &r1, const RectG<T> &r2)
+{
+    return !(r1 == r2);
+}
+
+template<class T>
+void operator*=(RectG<T> &r, T a)
+{
+    r.m_min *= a;
+    r.m_max *= a;
+}
+
+template<class T>
+void operator/=(RectG<T> &r, T a)
+{
+    r.m_min /= a;
+    r.m_max /= a;
+}
+
+template<class T>
+void operator*=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_min *= v;
+    r.m_max *= v;
+}
+
+template<class T>
+void operator/=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_min /= v;
+    r.m_max /= v;
+}
+
+template<class T>
+RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
+{
+    return RectG<T>( (m * Vector4G<T>(r.GetMin(), 0, 1) ).xy(),
+                     (m * Vector4G<T>(r.GetMax(), 0, 1) ).xy() );
+}
+
+template<class T>
+RectG<T> operator/(T a, const RectG<T> &r)
+{
+    return RectG<T>(a / r.GetMin(), a / r.GetMax());
+}
+
+template<class T>
+RectG<T> operator/(const RectG<T> &r, T a)
+{
+    return RectG<T>(r.GetMin() / a, r.GetMax() / a);
+}
+
+template<class T>
+RectG<T> operator*(T a, const RectG<T> &r)
+{
+    return RectG<T>(a * r.GetMin(), a * r.GetMax());
+}
+
+template<class T>
+RectG<T> operator*(const RectG<T> &r, T a)
+{
+    return a * r;
+}
+
+template<class T>
+RectG<T> operator*(const Vector2G<T> &v, const RectG<T> &r)
+{
+    return RectG<T>(v * r.GetMin().x, v * r.GetMax());
+}
+
+template<class T>
+RectG<T> operator*(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return v * r;
+}
+
+template<class T>
+RectG<T> operator/(const Vector2G<T> &v, const RectG<T> &r)
+{
+    RectG<T> res = RectG<T>(v / r.GetMin(), v / v.GetMax());
+    return res;
+}
+
+template<class T>
+RectG<T> operator/(const RectG<T> &r, const Vector2G<T> &v)
+{
+    RectG<T> res = r;
+    res /= v;
+    return res;
+}
+
+template<class T>
+RectG<T> operator+(float a, const RectG<T> &r)
+{
+    return Vector2(a) + r;
+}
+
+template<class T>
+RectG<T> operator+(const RectG<T> &r, float a)
+{
+    return Vector2(a) + r;
+}
+
+template<class T>
+RectG<T> operator+(const Vector2G<T> &v, const RectG<T> &r)
+{
+    RectG<T> res = r;
+    res += v;
+    return res;
+}
+
+template<class T>
+RectG<T> operator+(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return v + r;
+}
+
+template<class T>
+void operator+=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_min += v;
+    r.m_max += v;
+}
+
 
 #endif // RECT_H

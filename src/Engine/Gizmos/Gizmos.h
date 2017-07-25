@@ -1,6 +1,7 @@
 #ifndef GIZMOS_H
 #define GIZMOS_H
 
+#include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Color.h"
 #include "Bang/Vector3.h"
@@ -9,7 +10,6 @@
 #include "Bang/Quaternion.h"
 
 class Mesh;
-class Rect;
 class Material;
 class Renderer;
 class Transform;

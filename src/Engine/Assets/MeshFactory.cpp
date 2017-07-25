@@ -1,7 +1,6 @@
 #include "Bang/MeshFactory.h"
 
 #include "Bang/Mesh.h"
-#include "Bang/Vector3.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshRenderer.h"

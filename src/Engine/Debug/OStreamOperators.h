@@ -3,9 +3,9 @@
 
 #include <sstream>
 
-#include "Bang/String.h"
-
 class Color;
+class String;
+class QString;
 class IToString;
 template<class T> class Set;
 template<class T> class List;

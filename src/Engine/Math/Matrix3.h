@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "Bang/Debug.h"
+
 template<class T> class Vector3G;
 template<class T> class QuaternionG;
 
@@ -96,7 +98,7 @@ public:
             case 1: return c1;
             case 2: return c2;
         }
-        std::cerr << "Matrix3G<T> index " << i << " too big" << std::endl;
+        Debug_Warn("Matrix3G<T> index " << i << " too big");
         return c2;
     }
     const Vector3G<T>& operator[](std::size_t i) const

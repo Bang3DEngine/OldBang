@@ -1,9 +1,6 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
-#include "Bang/Array.h"
-#include "Bang/Vector3.h"
-
 class Mesh;
 class String;
 class Material;

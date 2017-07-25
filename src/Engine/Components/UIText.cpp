@@ -66,20 +66,20 @@ void UIText::RefreshMesh()
         Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
 
-        textQuadPositions2D.PushBack(cr.rect.GetBotLeft());
-        textQuadPositions3D.PushBack( Vector3(cr.rect.GetBotLeft(), 0) );
+        textQuadPositions2D.PushBack(cr.rect.GetMinXMinY());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetMinXMinY(), 0) );
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
 
-        textQuadPositions2D.PushBack(cr.rect.GetBotRight());
-        textQuadPositions3D.PushBack( Vector3(cr.rect.GetBotRight(), 0) );
+        textQuadPositions2D.PushBack(cr.rect.GetMaxXMinY());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetMaxXMinY(), 0) );
         textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
 
-        textQuadPositions2D.PushBack(cr.rect.GetTopRight());
-        textQuadPositions3D.PushBack( Vector3(cr.rect.GetTopRight(), 0) );
+        textQuadPositions2D.PushBack(cr.rect.GetMaxXMaxY());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetMaxXMaxY(), 0) );
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
 
-        textQuadPositions2D.PushBack(cr.rect.GetTopLeft());
-        textQuadPositions3D.PushBack( Vector3(cr.rect.GetTopLeft(), 0) );
+        textQuadPositions2D.PushBack(cr.rect.GetMinXMaxY());
+        textQuadPositions3D.PushBack( Vector3(cr.rect.GetMinXMaxY(), 0) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
     }
 

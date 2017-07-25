@@ -112,7 +112,7 @@ public:
     {
         T *c = new T();
         if (!AddComponent(c)) { return nullptr; }
-        if (IsStarted()) { std::cerr << "============   c->_OnStart()" << std::endl; c->_OnStart(); }
+        if (IsStarted()) { c->_OnStart(); }
         return c;
     }
 
