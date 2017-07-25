@@ -2,7 +2,6 @@
 
 #include "Bang/Math.h"
 #include "Bang/Debug.h"
-#include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Vector4.h"
@@ -233,30 +232,6 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                             moveToPivot;
     m_hasChanged = false;
     return m_localToParentMatrix;
-}
-
-void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
-{
-    Transform::OnDrawGizmos(gizmosPassType);
-
-    Vector2 size(0.05f);
-    Color col = gameObject->name.Contains("ack") ? Color::Red : Color::Green;
-
-    Vector2 amin = GetAnchorMin(), amax = GetAnchorMax();
-    Gizmos::SetColor(col);
-    Vector2 p = Vector2(amin.x, amin.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amin.x, amax.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amax.x, amax.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amax.x, amin.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    Gizmos::RenderRect( GetScreenSpaceRect() );
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

@@ -2,7 +2,6 @@
 #define VECTOR3_H
 
 #include "Bang/Vector2.h"
-#include "Bang/glm/glm.hpp"
 
 #define XYZ_MEMBERS x,y,z
 #define EXTRA_DECLARATIONS \
@@ -37,9 +36,9 @@ template<class OtherT1, class OtherT2> \
 static Vector3G<T> Cross(const Vector3G<OtherT1> &v1, \
                          const Vector3G<OtherT2> &v2) \
 { \
-    glm::vec3 res = glm::cross(glm::vec3(v1.x, v1.y, v1.z), \
-                               glm::vec3(v2.x, v2.y, v2.z)); \
-    return Vector3G<T>(res.x, res.y, res.z); \
+    return Vector3G<T>(v1.y*v2.z - v1.z*v2.y,  \
+                       v1.z*v2.x - v1.x*v2.z,  \
+                       v1.x*v2.y - v1.y*v2.x); \
 } \
 template<class OtherT1, class OtherT2> \
 static Vector3G<T> Reflect(const Vector3G<OtherT1> &incident, \
@@ -82,13 +81,9 @@ const Vector3G<T> Vector3G<T>::Left = Vector3G<T>(SCAST<T>(-1),
                                                   SCAST<T>(0),
                                                   SCAST<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::Zero = Vector3G<T>(SCAST<T>(0),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Zero = Vector3G<T>(SCAST<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::One = Vector3G<T>(SCAST<T>(1),
-                                                 SCAST<T>(1),
-                                                 SCAST<T>(1));
+const Vector3G<T> Vector3G<T>::One = Vector3G<T>(SCAST<T>(1));
 template<class T>
 const Vector3G<T> Vector3G<T>::Forward = Vector3G<T>(SCAST<T>(0),
                                                      SCAST<T>(0),

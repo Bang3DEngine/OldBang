@@ -48,8 +48,6 @@ public:
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
-    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
-
 private:
     Vector2 m_anchorScale = Vector2(1.0f, -1.0f);
 
