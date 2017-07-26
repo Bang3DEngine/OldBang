@@ -2,7 +2,7 @@
 
 #include "Bang/Scene.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/PostProcessEffect.h"
 
@@ -14,9 +14,6 @@ GPPass_SP_PostProcessEffects::GPPass_SP_PostProcessEffects(
 {
     m_type = type;
 }
-
-template<class T>
-struct PointerComparison { bool operator()(T* a, T* b) { return *a < *b; } };
 
 void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
                                           const List<GameObject *> &sceneChildren)
@@ -31,7 +28,7 @@ void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
         if (!postProcessEffect->IsEnabled() ||
              postProcessEffect->GetType() != m_type) { continue; }
 
-        G_ShaderProgram *postProcessShaderProgram =
+        ShaderProgram *postProcessShaderProgram =
                          postProcessEffect->GetPostProcessShaderProgram();
         if (postProcessShaderProgram)
         {

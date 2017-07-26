@@ -15,13 +15,6 @@ class G_Texture;
 class G_ShaderProgram : public GLObject
 {
 public:
-    enum Type
-    {
-        GBuffer,
-        PostProcess,
-        Other
-    };
-
     G_ShaderProgram();
     virtual ~G_ShaderProgram();
 
@@ -45,14 +38,11 @@ public:
     bool SetTexture(const String &name, const G_Texture *texture) const;
 
     void Refresh();
-    void SetType(Type type);
     virtual void SetVertexShader(G_Shader *vertexShader);
     virtual void SetFragmentShader(G_Shader *fragmentShader);
 
     void SetVertexInputBinding(const String& inputName, uint location);
     void SetFragmentInputBinding(const String& inputName, uint location);
-
-    Type GetType() const;
 
     G_Shader* GetVertexShader() const;
     G_Shader* GetFragmentShader() const;
@@ -61,7 +51,6 @@ public:
     GLint GetAttribLocation(const String &name) const;
 
 protected:
-    Type m_type         = Type::GBuffer;
     G_Shader *p_vshader = nullptr;
     G_Shader *p_fshader = nullptr;
 
@@ -72,7 +61,7 @@ protected:
                                     const G_Texture *texture) const;
     void UpdateTextureBindings() const;
 
-    void RetrieveType(const Path &fshaderPath);
+    virtual void OnPreLink();
 };
 
 #endif // G_SHADERPROGRAM_H

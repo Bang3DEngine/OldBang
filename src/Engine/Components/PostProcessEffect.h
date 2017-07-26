@@ -4,7 +4,7 @@
 #include "Bang/Component.h"
 
 class G_Shader;
-class G_ShaderProgram;
+class ShaderProgram;
 class PostProcessEffect : public Component
 {
     OBJECT(PostProcessEffect)
@@ -27,7 +27,7 @@ public:
 
     Type GetType() const;
     int GetPriority() const;
-    G_ShaderProgram* GetPostProcessShaderProgram() const;
+    ShaderProgram* GetPostProcessShaderProgram() const;
     G_Shader* GetPostProcessShader() const;
     Path GetPostProcessShaderFilepath() const;
 
@@ -38,7 +38,7 @@ public:
                           const PostProcessEffect& rhs);
 
 private:
-    G_ShaderProgram *m_shaderProgram = nullptr;
+    ShaderProgram *m_shaderProgram = nullptr;
     G_Shader *p_postProcessShader    = nullptr;
     Type m_type = Type::AfterScene;
     int m_priority = 0;

@@ -12,8 +12,6 @@ G_ShaderProgram::G_ShaderProgram()
 
 void G_ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
-    RetrieveType(fshaderPath);
-
     G_Shader *vs = new G_Shader(G_Shader::Type::Vertex);
     vs->LoadFromFile(vshaderPath);
     SetVertexShader(vs);
@@ -49,22 +47,7 @@ bool G_ShaderProgram::Link()
     glAttachShader(m_idGL, p_vshader->GetGLId());
     glAttachShader(m_idGL, p_fshader->GetGLId());
 
-    if (m_type == Type::GBuffer)
-    {
-        SetVertexInputBinding("B_In_PositionObject", 0);
-        SetVertexInputBinding("B_In_NormalObject",   1);
-        SetVertexInputBinding("B_In_Uv",             2);
-        SetFragmentInputBinding("B_GIn_NormalDepth", 0);
-        SetFragmentInputBinding("B_GIn_DiffColor",   1);
-        SetFragmentInputBinding("B_GIn_Misc",        2);
-        SetFragmentInputBinding("B_GIn_Color",       3);
-    }
-    else if (m_type == Type::PostProcess)
-    {
-        SetVertexInputBinding("B_In_PositionObject", 0);
-        SetFragmentInputBinding("B_GIn_Color",       0);
-    }
-
+    OnPreLink();
     glLinkProgram(m_idGL);
 
     GLint linked;
@@ -196,24 +179,10 @@ bool G_ShaderProgram::SetTexture(const String &name, const G_Texture *texture) c
     return uniformIsUsed;
 }
 
-void G_ShaderProgram::RetrieveType(const Path &fshaderPath)
-{
-    String fShaderExt = fshaderPath.GetExtension();
-    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
-    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
-    else { m_type = Type::Other; }
-}
-
 void G_ShaderProgram::Refresh()
 {
     ENSURE(p_vshader && p_fshader);
     Link();
-}
-
-void G_ShaderProgram::SetType(G_ShaderProgram::Type type)
-{
-    m_type = type;
-    Refresh();
 }
 
 void G_ShaderProgram::SetVertexShader(G_Shader *vertexShader)
@@ -244,11 +213,6 @@ void G_ShaderProgram::SetVertexInputBinding(const String &inputName, uint locati
 void G_ShaderProgram::SetFragmentInputBinding(const String &inputName, uint location)
 {
     glBindFragDataLocation(m_idGL, location, inputName.ToCString());
-}
-
-G_ShaderProgram::Type G_ShaderProgram::GetType() const
-{
-    return m_type;
 }
 
 G_Shader *G_ShaderProgram::GetVertexShader() const
@@ -309,4 +273,8 @@ void G_ShaderProgram::UpdateTextureBindings() const
     {
         BindTextureToAvailableUnit(it->first, it->second);
     }
+}
+
+void G_ShaderProgram::OnPreLink()
+{
 }

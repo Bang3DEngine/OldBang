@@ -11,6 +11,13 @@ class ShaderProgram : public G_ShaderProgram,
     OBJECT(ShaderProgram)
 
 public:
+    enum Type
+    {
+        GBuffer,
+        PostProcess,
+        Other
+    };
+
     ShaderProgram();
     virtual ~ShaderProgram();
 
@@ -18,8 +25,17 @@ public:
     void SetVertexShader(G_Shader *vertexShader) override;
     void SetFragmentShader(G_Shader *fragmentShader) override;
 
+    void SetType(Type type);
+    Type GetType() const;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
+
+protected:
+    Type m_type = Type::GBuffer;
+
+    void OnPreLink() override;
+    void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
 };
 
 #endif // SHADERPROGRAM_H

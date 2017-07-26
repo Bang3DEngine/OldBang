@@ -37,7 +37,7 @@ void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
     p_postProcessShader = postProcessShader;
     ENSURE(p_postProcessShader);
 
-    m_shaderProgram->SetType(G_ShaderProgram::Type::PostProcess);
+    m_shaderProgram->SetType(ShaderProgram::Type::PostProcess);
     m_shaderProgram->SetFragmentShader( p_postProcessShader );
 }
 
@@ -60,7 +60,7 @@ int PostProcessEffect::GetPriority() const
     return m_priority;
 }
 
-G_ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
+ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
 {
     return m_shaderProgram;
 }

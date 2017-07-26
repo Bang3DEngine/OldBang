@@ -17,7 +17,7 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
-    RetrieveType(fshaderPath);
+    RetrieveType(vshaderPath, fshaderPath);
 
     G_Shader *vs = ShaderManager::Load(G_Shader::Type::Vertex, vshaderPath);
     SetVertexShader(vs);
@@ -38,6 +38,45 @@ void ShaderProgram::SetFragmentShader(G_Shader *fragmentShader)
     if (p_fshader) { ShaderManager::UnRegisterUsageOfShader(this, p_fshader); }
     G_ShaderProgram::SetFragmentShader(fragmentShader);
     if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
+}
+
+void ShaderProgram::SetType(ShaderProgram::Type type)
+{
+    m_type = type;
+    Refresh();
+}
+
+ShaderProgram::Type ShaderProgram::GetType() const
+{
+    return m_type;
+}
+
+void ShaderProgram::OnPreLink()
+{
+    if (m_type == Type::GBuffer)
+    {
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetVertexInputBinding("B_In_NormalObject",   1);
+        SetVertexInputBinding("B_In_Uv",             2);
+        SetFragmentInputBinding("B_GIn_NormalDepth", 0);
+        SetFragmentInputBinding("B_GIn_DiffColor",   1);
+        SetFragmentInputBinding("B_GIn_Misc",        2);
+        SetFragmentInputBinding("B_GIn_Color",       3);
+    }
+    else if (m_type == Type::PostProcess)
+    {
+        SetVertexInputBinding("B_In_PositionObject", 0);
+        SetFragmentInputBinding("B_GIn_Color",       0);
+    }
+}
+
+void ShaderProgram::RetrieveType(const Path &vshaderPath,
+                                 const Path &fshaderPath)
+{
+    String fShaderExt = fshaderPath.GetExtension();
+    if      (fShaderExt.EndsWith("_g"))   { m_type = Type::GBuffer; }
+    else if (fShaderExt.EndsWith("_pp"))  { m_type = Type::PostProcess; }
+    else { m_type = Type::Other; }
 }
 
 void ShaderProgram::Read(const XMLNode &xmlInfo)
