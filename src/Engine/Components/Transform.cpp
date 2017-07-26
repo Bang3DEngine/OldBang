@@ -291,7 +291,7 @@ void Transform::LookAt(GameObject *target, const Vector3 &up)
 
 void Transform::LookInDirection(const Vector3 &dir, const Vector3 &up)
 {
-    LookAt(GetPosition() + dir * 99, up);
+    LookAt(GetPosition() + dir * 99.0f, up);
 }
 
 Vector3 Transform::GetLocalPosition() const

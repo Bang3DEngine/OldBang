@@ -179,7 +179,7 @@ Recti RectTransform::GetScreenSpaceRectPx() const
 {
     Matrix4 localToWorld;
     GetLocalToWorldMatrix(&localToWorld);
-    return Recti( GetScreenSpaceRect() * Screen::GetSize() );
+    return Recti( GetScreenSpaceRect() * Vector2f(Screen::GetSize()) );
 }
 
 Rect RectTransform::GetScreenSpaceRect() const

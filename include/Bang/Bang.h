@@ -13,9 +13,8 @@ typedef const char* QSlot;
 } while (false)
 
 
-// #define SCALAR_TYPE(TYPE) typename std::enable_if<std::is_arithmetic<TYPE>::value, TYPE>::type
-#define SCALAR_TYPE(TYPE) typename std::enable_if<true, TYPE>::type
-#define SCALAR_TYPE_H(TYPE) typename std::enable_if<true, TYPE>::type
+#define T_SCALAR(T) typename std::enable_if<std::is_scalar<T>::value, T>::type
+#define T_FLOATING(T) typename std::enable_if<std::is_floating_point<T>::value, T>::type
 
 #define DCAST dynamic_cast
 #define SCAST static_cast

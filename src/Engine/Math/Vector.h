@@ -94,10 +94,10 @@ public: \
         return (*this)[i]; \
     } \
  \
-    template<class OtherT1, class OtherT2, class Real> \
-    static VECTOR_G<T> Lerp(const VECTOR_G<OtherT1> &v1, \
-                            const VECTOR_G<OtherT2> &v2, \
-                            SCALAR_TYPE(Real) t) \
+    template<class Real> \
+    static VECTOR_G<T> Lerp(const VECTOR_G<T> &v1, \
+                            const VECTOR_G<T> &v2, \
+                            Real t) \
     { \
         return v1 + (v2 - v1) * t; \
     } \
@@ -117,46 +117,40 @@ public: \
         return v.Abs(); \
     } \
  \
-    template<class OtherT> \
-    static T Dot(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
+    static T Dot(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
         T res = SCAST<T>(0); \
-        for (int i = 0; i < N; ++i) { res += v1[i] * SCAST<T>(v2[i]); } \
+        for (int i = 0; i < N; ++i) { res += v1[i] * v2[i]; } \
         return res; \
     } \
  \
-    template<class OtherT> \
-    static T Distance(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
+    static T Distance(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
         return (v1 - v2).Length(); \
     } \
  \
-    template<class OtherT> \
-    static T SqDistance(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
+    static T SqDistance(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
         return (v1 - v2).SqLength(); \
     } \
  \
-    template<class OtherT> \
-    static VECTOR_G<T> Max(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
+    static VECTOR_G<T> Max(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
         VECTOR_G res; \
-        for (int i = 0; i < N; ++i) { res[i] = Math::Max(v1[i], SCAST<T>(v2[i])); } \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Max(v1[i], v2[i]); } \
         return res; \
     } \
  \
-    template<class OtherT> \
-    static VECTOR_G<T> Min(const VECTOR_G<T> &v1, const VECTOR_G<OtherT> &v2) \
+    static VECTOR_G<T> Min(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
         VECTOR_G res; \
-        for (int i = 0; i < N; ++i) { res[i] = Math::Min(v1[i], SCAST<T>(v2[i])); } \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Min(v1[i], v2[i]); } \
         return res; \
     } \
  \
-    template<class OtherT1, class OtherT2> \
     static VECTOR_G<T> Clamp(const VECTOR_G<T> &v, \
-                             const VECTOR_G<OtherT1> &min, \
-                             const VECTOR_G<OtherT2> &max) \
+                             const VECTOR_G<T> &min, \
+                             const VECTOR_G<T> &max) \
     { \
         return VECTOR_G<T>::Min( VECTOR_G<T>::Max(v, max), min ); \
     } \
@@ -169,14 +163,12 @@ public: \
     { \
         return (reinterpret_cast<T*>(this))[i]; \
     } \
-    template<class OtherT> \
-    bool operator==(const VECTOR_G<OtherT> &rhs) const \
+    bool operator==(const VECTOR_G<T> &rhs) const \
     { \
         for (int i = 0; i < N; ++i) { if (At(i) != rhs[i]) { return false; } } \
         return true; \
     } \
-    template<class OtherT> \
-    bool operator!=(const VECTOR_G<OtherT> &rhs) const \
+    bool operator!=(const VECTOR_G<T> &rhs) const \
     { \
         return !(*this == rhs); \
     } \
@@ -201,35 +193,35 @@ VECTOR_G<T> operator*(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator*(SCALAR_TYPE(OtherT) a, const VECTOR_G<T> &v) \
+template<class T> \
+VECTOR_G<T> operator*(T a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = SCAST<T>(a) * v[i]; }  \
+    for (int i = 0; i < N; ++i) { res[i] = a * v[i]; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator*(const VECTOR_G<T> &v, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> operator*(const VECTOR_G<T> &v, T a) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = v[i] * SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { res[i] = v[i] * a; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator/(SCALAR_TYPE(OtherT) a, const VECTOR_G<T> &v) \
+template<class T> \
+VECTOR_G<T> operator/(T a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = SCAST<T>(a) / v[i]; }  \
+    for (int i = 0; i < N; ++i) { res[i] = a / v[i]; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator/(const VECTOR_G<T> &v, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> operator/(const VECTOR_G<T> &v, T a) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = v[i] / SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { res[i] = v[i] / a; }  \
     return res; \
 } \
 \
@@ -269,19 +261,19 @@ VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
     return lhs; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator+(SCALAR_TYPE(OtherT) a, const VECTOR_G<T> &v) \
+template<class T> \
+VECTOR_G<T> operator+(T a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = SCAST<T>(a) + v[i]; }  \
+    for (int i = 0; i < N; ++i) { res[i] = a + v[i]; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator+(const VECTOR_G<T> &v, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> operator+(const VECTOR_G<T> &v, T a) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = v[i] + SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { res[i] = v[i] + a; }  \
     return res; \
 } \
 \
@@ -293,54 +285,54 @@ VECTOR_G<T> operator-(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator-(SCALAR_TYPE(OtherT) a, const VECTOR_G<T> &v) \
+template<class T> \
+VECTOR_G<T> operator-(T a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = SCAST<T>(a) - v[i]; }  \
+    for (int i = 0; i < N; ++i) { res[i] = a - v[i]; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> operator-(const VECTOR_G<T> &v, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> operator-(const VECTOR_G<T> &v, T a) \
 { \
     VECTOR_G<T> res; \
-    for (int i = 0; i < N; ++i) { res[i] = v[i] - SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { res[i] = v[i] - a; }  \
     return res; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> &operator+=(VECTOR_G<T> &lhs, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> &operator+=(VECTOR_G<T> &lhs, T a) \
 { \
-    for (int i = 0; i < N; ++i) { lhs[i] += SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { lhs[i] += a; }  \
     return lhs; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, T a) \
 { \
-    for (int i = 0; i < N; ++i) { lhs[i] -= SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { lhs[i] -= a; }  \
     return lhs; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> &operator*=(VECTOR_G<T> &lhs, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> &operator*=(VECTOR_G<T> &lhs, T a) \
 { \
-    for (int i = 0; i < N; ++i) { lhs[i] *= SCAST<T>(a); }  \
+    for (int i = 0; i < N; ++i) { lhs[i] *= a; }  \
     return lhs; \
 } \
 \
-template<class T, class OtherT> \
-VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, SCALAR_TYPE(OtherT) a) \
+template<class T> \
+VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, T a) \
 { \
-    for (int i = 0; i < N; ++i) { lhs[i] /= SCAST<T>(a); } \
+    for (int i = 0; i < N; ++i) { lhs[i] /= a; } \
     return lhs; \
 } \
 \
 template<class T> \
 VECTOR_G<T> operator-(const VECTOR_G<T> &v) \
 { \
-    return v * -1; \
+    return v * SCAST<T>(-1); \
 }
 
 

@@ -94,7 +94,7 @@ public:
 
     Vector2G<T> GetCenter() const
     {
-        return (GetMin() + GetMax()) * 0.5f;
+        return (GetMin() + GetMax()) / SCAST<T>(2);
     }
 
     bool Contains(const Vector2G<T> &p) const
@@ -206,19 +206,19 @@ RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
 }
 
 template<class T>
-RectG<T> operator/(SCALAR_TYPE(T) a, const RectG<T> &r)
+RectG<T> operator/(T_SCALAR(T) a, const RectG<T> &r)
 {
     return RectG<T>(a / r.GetMin(), a / r.GetMax());
 }
 
 template<class T>
-RectG<T> operator/(const RectG<T> &r, SCALAR_TYPE(T) a)
+RectG<T> operator/(const RectG<T> &r, T_SCALAR(T) a)
 {
     return RectG<T>(r.GetMin() / a, r.GetMax() / a);
 }
 
 template<class T>
-RectG<T> operator*(SCALAR_TYPE(T) a, const RectG<T> &r)
+RectG<T> operator*(T_SCALAR(T) a, const RectG<T> &r)
 {
     return RectG<T>(a * r.GetMin(), a * r.GetMax());
 }
@@ -260,7 +260,7 @@ RectG<T> operator-(T a, const RectG<T> &r)
 }
 
 template<class T>
-RectG<T> operator-(const RectG<T> &r, SCALAR_TYPE(T) a)
+RectG<T> operator-(const RectG<T> &r, T_SCALAR(T) a)
 {
     return r - Vector2G<T>(a);
 }
@@ -285,13 +285,13 @@ void operator-=(RectG<T> &r, const Vector2G<T> &v)
 }
 
 template<class T>
-RectG<T> operator+(SCALAR_TYPE(T) a, const RectG<T> &r)
+RectG<T> operator+(T_SCALAR(T) a, const RectG<T> &r)
 {
     return Vector2G<T>(a) + r;
 }
 
 template<class T>
-RectG<T> operator+(const RectG<T> &r, SCALAR_TYPE(T) a)
+RectG<T> operator+(const RectG<T> &r, T_SCALAR(T) a)
 {
     return Vector2G<T>(a) + r;
 }
