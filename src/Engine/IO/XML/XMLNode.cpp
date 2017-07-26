@@ -103,57 +103,13 @@ void XMLNode::SetFloat(const String &attributeName, float value,
     SetAttribute(attr);
 }
 
-void XMLNode::SetVector2(const String &attributeName, const Vector2 &value,
-                         const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetVector2(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetVector3(const String &attributeName, const Vector3 &value,
-                         const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetVector3(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetVector4(const String &attributeName, const Vector4 &value,
-                         const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetVector4(value, properties);
-    SetAttribute(attr);
-}
-
 void XMLNode::SetColor(const String &attributeName, const Color &value,
                        const Array<XMLProperty> &properties)
+
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
     attr.SetColor(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetQuaternion(const String &attributeName, const Quaternion &value,
-                            const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetQuaternion(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetRect(const String &attributeName, const Rect &value,
-                      const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetRect(value, properties);
     SetAttribute(attr);
 }
 
@@ -238,40 +194,10 @@ float XMLNode::GetFloat(const String &attributeName) const
     return attr ? attr->GetFloat() : 0.0f;
 }
 
-Vector2 XMLNode::GetVector2(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector2() : Vector2::Zero;
-}
-
-Vector3 XMLNode::GetVector3(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector3() : Vector3::Zero;
-}
-
-Vector4 XMLNode::GetVector4(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector4() : Vector4::Zero;
-}
-
 Color XMLNode::GetColor(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
     return attr ? attr->GetColor() : Color(0);
-}
-
-Quaternion XMLNode::GetQuaternion(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetQuaternion() : Quaternion();
-}
-
-Rect XMLNode::GetRect(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetRect() : Rect();
 }
 
 const XMLNode *XMLNode::GetChild(const String &name) const

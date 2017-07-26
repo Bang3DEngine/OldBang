@@ -116,12 +116,12 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         // Get some metrics (they are given in 1/64 pixels...)
         // These are measurements relative to the full tex quad (size x size)
         G_Font::CharGlyphMetrics charMetrics;
-        charMetrics.width    =  face->glyph->metrics.width  / 64;
-        charMetrics.height   =  face->glyph->metrics.height / 64;
-        charMetrics.bearingX = (face->glyph->metrics.horiBearingX) / 64;
-        charMetrics.bearingY = (face->glyph->metrics.horiBearingY) / 64;
-        charMetrics.advance  = (face->glyph->metrics.horiAdvance)  / 64;
-        charMetrics.originY  =  origin.y / 64;
+        charMetrics.size.x    =  face->glyph->metrics.width  / 64;
+        charMetrics.size.y    =  face->glyph->metrics.height / 64;
+        charMetrics.bearing.x = (face->glyph->metrics.horiBearingX) / 64;
+        charMetrics.bearing.y = (face->glyph->metrics.horiBearingY) / 64;
+        charMetrics.advance   = (face->glyph->metrics.horiAdvance)  / 64;
+        charMetrics.originY   =  origin.y / 64;
         resultMetrics->Set(c, charMetrics);
 
         const uint charRow = i / charsPerRowCol;
@@ -129,15 +129,15 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
         Vector2 minPixel(Math::Infinity<float>());
         Vector2 maxPixel(Math::NegativeInfinity<float>());
-        if (charMetrics.width > 0 && charMetrics.height > 0)
+        if (charMetrics.size.x > 0 && charMetrics.size.y > 0)
         {
             const uint offX = charInAtlasSize * charCol;
             const uint offY = charInAtlasSize * charRow;
-            for(int y = 0; y < charMetrics.height; y++)
+            for(int y = 0; y < charMetrics.size.y; y++)
             {
-                for(int x = 0; x < charMetrics.width; x++)
+                for(int x = 0; x < charMetrics.size.x; x++)
                 {
-                    float pixelAlpha = bitmap.buffer[y * charMetrics.width + x];
+                    float pixelAlpha = bitmap.buffer[y * charMetrics.size.x + x];
                     Color pxColor = Color(1.0f, 1.0f, 1.0f,
                                           pixelAlpha / 255.0f);
                     minPixel.x = Math::Min(minPixel.x, float(offX + x));

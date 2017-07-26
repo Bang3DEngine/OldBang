@@ -61,7 +61,7 @@ int Screen::GetWidth()
     return screen->GetWidth();
 }
 
-Vector2 Screen::GetSize()
+Vector2i Screen::GetSize()
 {
     G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
     return screen->GetSize();

@@ -10,6 +10,7 @@ class IToString;
 template<class T> class Set;
 template<class T> class List;
 template<class T> class Array;
+template<class T> class RectG;
 template<class T> class Vector2G;
 template<class T> class Vector3G;
 template<class T> class Vector4G;
@@ -50,6 +51,16 @@ template<class T>
 std::ostream& operator<<(std::ostream &log, const QuaternionG<T> &q)
 {
     log << "(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
+    return log;
+}
+
+template<class T>
+std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
+{
+    log << "(" << r.GetMin().x << ", " <<
+                  r.GetMin().y << ", " <<
+                  r.GetMax().x << ", " <<
+                  r.GetMax().y << ")";
     return log;
 }
 

@@ -38,18 +38,59 @@ public:
                   const Array<XMLProperty>& properties = {});
     void SetString(const String &attributeName, const String &value,
                    const Array<XMLProperty>& properties = {});
-    void SetVector2(const String &attributeName, const Vector2 &value,
-                    const Array<XMLProperty>& properties = {});
-    void SetVector3(const String &attributeName, const Vector3 &value,
-                    const Array<XMLProperty>& properties = {});
-    void SetVector4(const String &attributeName, const Vector4 &value,
-                    const Array<XMLProperty>& properties = {});
+
+    template<class T>
+    void SetVector2(const String &attributeName, const Vector2G<T> &value,
+                    const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetVector2<T>(value, properties);
+        SetAttribute(attr);
+    }
+
+    template<class T>
+    void SetVector3(const String &attributeName, const Vector3G<T> &value,
+                    const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetVector3<T>(value, properties);
+        SetAttribute(attr);
+    }
+
+    template<class T>
+    void SetVector4(const String &attributeName, const Vector4G<T> &value,
+                    const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetVector4<T>(value, properties);
+        SetAttribute(attr);
+    }
+
+    template<class T>
+    void SetQuaternion(const String &attributeName, const QuaternionG<T> &value,
+                       const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetQuaternion<T>(value, properties);
+        SetAttribute(attr);
+    }
+
+    template<class T>
+    void SetRect(const String &attributeName, const RectG<T> &value,
+                 const Array<XMLProperty>& properties = {})
+    {
+        XMLAttribute attr;
+        attr.SetName(attributeName);
+        attr.SetRect<T>(value, properties);
+        SetAttribute(attr);
+    }
+
     void SetColor(const String &attributeName, const Color &value,
                   const Array<XMLProperty>& properties = {});
-    void SetQuaternion(const String &attributeName, const Quaternion &value,
-                       const Array<XMLProperty>& properties = {});
-    void SetRect(const String &attributeName, const Rect &value,
-                 const Array<XMLProperty>& properties = {});
     void SetFilepath(const String &attributeName,
                      const Path &filepath,
                      const Array<XMLProperty>& properties = {});
@@ -63,12 +104,43 @@ public:
     float GetFloat(const String& attributeName) const;
     Path GetFilepath(const String& attributeName) const;
     String GetString(const String& attributeName) const;
-    Vector2 GetVector2(const String& attributeName) const;
-    Vector3 GetVector3(const String& attributeName) const;
-    Vector4 GetVector4(const String& attributeName) const;
+
+    template<class T = float>
+    Vector2G<T> GetVector2(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->GetVector2<T>() : Vector2G<T>::Zero;
+    }
+
+    template<class T = float>
+    Vector3G<T> GetVector3(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->GetVector3<T>() : Vector3G<T>::Zero;
+    }
+
+    template<class T = float>
+    Vector4G<T> GetVector4(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->GetVector4<T>() : Vector4G<T>::Zero;
+    }
+
+    template<class T = float>
+    QuaternionG<T> GetQuaternion(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->GetQuaternion<T>() : QuaternionG<T>();
+    }
+
+    template<class T = float>
+    RectG<T> GetRect(const String& attributeName) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->GetRect<T>() : RectG<T>();
+    }
+
     Color GetColor(const String& attributeName) const;
-    Quaternion GetQuaternion(const String& attributeName) const;
-    Rect GetRect(const String& attributeName) const;
 
     template<class EnumClass>
     void SetEnum(const String &attributeName,

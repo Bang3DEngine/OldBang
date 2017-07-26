@@ -99,7 +99,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
         // renderRect = Rect::ScreenRect;
     }
-    ENSURE(renderRect != Rect::Empty);
+    ENSURE(renderRect != Rect::Zero);
 
     // We have marked from before the zone where we want to apply the effect
     m_gbuffer->SetStencilTest(true);
@@ -139,7 +139,7 @@ void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
     m_glContext->ApplyToShaderProgram(sp);
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
-    sp->SetVec2("B_ScreenSize", Screen::GetSize());
+    sp->SetVec2("B_ScreenSize", Vector2f(Screen::GetSize()));
     RenderScreenPlane();
     sp->UnBind();
 }

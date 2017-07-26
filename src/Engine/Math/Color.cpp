@@ -62,13 +62,13 @@ Color::Color(const Color &c, float a) : Color(c.r, c.g, c.b, a)
 
 Color Color::Lerp(const Color &c1,
                   const Color &c2,
-                  float progression)
+                  float t)
 {
     return Color(
              Vector4::Lerp(
                      Vector4(c1.r, c1.g, c1.b, c1.a),
                      Vector4(c2.r, c2.g, c2.b, c2.a),
-                     progression
+                     t
                     )
                 );
 }

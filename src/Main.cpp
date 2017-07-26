@@ -25,8 +25,8 @@ public:
     {
         ChangeTransformByRectTransform();
         rt = SCAST<RectTransform*>(transform);
-        rt->SetAnchors(Vector2(-0.7, -0.3), Vector2(0.7, 0.3));
-        // rt->SetMargins(10);
+        rt->SetAnchors(Vector2(-1), Vector2(1));
+        rt->SetMargins(10);
 
         text = AddComponent<UIText>();
         text->SetTextSize(20);
@@ -142,6 +142,28 @@ public:
         GOTest *gt = new GOTest();
         gt->SetParent(this);
     }
+
+    void OnUpdate() override
+    {
+        GameObject::OnUpdate();
+
+        if (!Input::GetKey(Input::Key::LControl)) { return; }
+
+        float delta = 0.1f;
+        Vector2 offset = Vector2::Zero;
+        if (Input::GetKeyDown(Input::Key::A)) { offset.x = -delta; }
+        if (Input::GetKeyDown(Input::Key::D)) { offset.x =  delta; }
+        if (Input::GetKeyDown(Input::Key::W)) { offset.y =  delta; }
+        if (Input::GetKeyDown(Input::Key::S)) { offset.y = -delta; }
+        if (!Input::GetKey(Input::Key::LShift))
+        {
+            rt->SetAnchorMin( rt->GetAnchorMin() + offset);
+        }
+        else
+        {
+            rt->SetAnchorMax( rt->GetAnchorMax() + offset);
+        }
+    }
 };
 
 int main(int argc, char **argv)
@@ -162,7 +184,6 @@ int main(int argc, char **argv)
     proj->OpenFirstFoundScene();
 
     // SceneManager::LoadScene( Path("Scenes/InGame2.bscene") );
-    /*
     Scene *scene = SceneManager::GetActiveScene();
     for (GameObject *go : scene->GetChildren())
     {
@@ -175,7 +196,6 @@ int main(int argc, char **argv)
     }
     BackPanel *go = new BackPanel();
     go->SetParent(scene);
-    */
 
     app.MainLoop();
 

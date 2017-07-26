@@ -118,6 +118,9 @@ public:
     static char ToUpper(char c);
     static char ToLower(char c);
 
+    template <class T>
+    static T To(const String &str, bool *ok = nullptr);
+
     static int ToInt(const String &str, bool *ok = nullptr);
     static float ToFloat(const String &str, bool *ok = nullptr);
 
@@ -132,6 +135,18 @@ public:
     static String ToString(const IToString &v);
 
 };
+
+template <>
+inline int String::To<int>(const String &str, bool *ok)
+{
+    return String::ToInt(str, ok);
+}
+
+template <>
+inline float String::To<float>(const String &str, bool *ok)
+{
+    return String::ToFloat(str, ok);
+}
 
 template <class T>
 String operator+(const char *str, const T &v)

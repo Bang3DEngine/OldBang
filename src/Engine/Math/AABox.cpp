@@ -212,7 +212,7 @@ Rect AABox::GetAABoundingScreenRect(Camera *cam) const
         Vector2 screenP = cam->WorldToScreenNDCPoint(p);
         screenPoints.PushBack(screenP);
     }
-    if (!somePointInFront) { return Rect::Empty; }
+    if (!somePointInFront) { return Rect::Zero; }
 
     Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints);
     return boundingRect;

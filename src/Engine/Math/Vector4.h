@@ -9,10 +9,11 @@ template<class T> class Vector3G;
 #define XYZ_MEMBERS x,y,z,w
 #define EXTRA_DECLARATIONS \
 template <class OtherT1, class OtherT2, class OtherT3, class OtherT4>\
-explicit Vector4G(const OtherT1 &_x, \
-                  const OtherT2 &_y, \
-                  const OtherT3 &_z, \
-                  const OtherT4 &_w) : x( SCAST<T>(_x) ),\
+explicit Vector4G(OtherT1 _x, \
+                  OtherT2 _y, \
+                  OtherT3 _z, \
+                  OtherT4 _w) : \
+                                       x( SCAST<T>(_x) ),\
                                        y( SCAST<T>(_y) ),\
                                        z( SCAST<T>(_z) ),\
                                        w( SCAST<T>(_w) ) {}\

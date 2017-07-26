@@ -20,7 +20,7 @@ public:
     float GetAspectRatio() const;
     int GetHeight() const;
     int GetWidth() const;
-    Vector2 GetSize() const;
+    Vector2i GetSize() const;
     Vector2 GetPixelClipSize() const;
 
 protected:

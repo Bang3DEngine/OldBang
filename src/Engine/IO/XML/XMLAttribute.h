@@ -13,6 +13,7 @@
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 #include "Bang/XMLProperty.h"
+#include "Bang/OStreamOperators.h"
 
 class XMLAttribute : public IToString
 {
@@ -58,12 +59,43 @@ public:
     void SetInt(int value, const Array<XMLProperty>& properties = {});
     void SetString(const String &value, const Array<XMLProperty>& properties = {});
     void SetFloat(float value, const Array<XMLProperty>& properties = {});
-    void SetVector2(const Vector2 &value, const Array<XMLProperty>& properties = {});
-    void SetVector3(const Vector3 &value, const Array<XMLProperty>& properties = {});
-    void SetVector4(const Vector4 &value, const Array<XMLProperty>& properties = {});
+
+    template<class T>
+    void SetVector2(const Vector2G<T> &value, const Array<XMLProperty>& properties = {})
+    {
+        std::ostringstream oss;
+        oss << value;
+        Set(m_name, oss.str(), XMLAttribute::Type::Vector2, properties);
+    }
+
+    template<class T>
+    void SetVector3(const Vector3G<T> &value, const Array<XMLProperty>& properties = {})
+    {
+        std::ostringstream oss; oss << value;
+        Set(m_name, oss.str(), XMLAttribute::Type::Vector3, properties);
+    }
+
+    template<class T>
+    void SetVector4(const Vector4G<T> &value, const Array<XMLProperty>& properties = {})
+    {
+        std::ostringstream oss; oss << value;
+        Set(m_name, oss.str(), XMLAttribute::Type::Vector4, properties);
+    }
+    template<class T>
+    void SetQuaternion(const QuaternionG<T> &value, const Array<XMLProperty>& properties = {})
+    {
+        std::ostringstream oss; oss << value;
+        Set(m_name, oss.str(), XMLAttribute::Type::Quaternion, properties);
+    }
+
+    template<class T>
+    void SetRect(const RectG<T> &value, const Array<XMLProperty>& properties = {})
+    {
+        std::ostringstream oss; oss << value;
+        Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
+    }
+
     void SetColor(const Color &value, const Array<XMLProperty>& properties = {});
-    void SetQuaternion(const Quaternion &value, const Array<XMLProperty>& properties = {});
-    void SetRect(const Rect &value, const Array<XMLProperty>& properties = {});
     void SetFilepath(const Path &filepath,
                      const Array<XMLProperty>& properties = {});
 
@@ -78,12 +110,64 @@ public:
     float GetFloat() const;
     Path GetFilepath() const;
     String GetString() const;
-    Vector2 GetVector2() const;
-    Vector3 GetVector3() const;
-    Vector4 GetVector4() const;
     Color GetColor() const;
-    Quaternion GetQuaternion() const;
-    Rect GetRect() const;
+
+    template<class T = float>
+    Vector2G<T> GetVector2() const
+    {
+        T x = 0, y = 0;
+        String insidePars = m_value.Split('(')[1];
+        insidePars =  insidePars.Split(')')[0];
+        Array<String> numbers = insidePars.Split(',');
+        x = String::To<T>(numbers[0]);
+        y = String::To<T>(numbers[1]);
+        return Vector2G<T>(x,y);
+    }
+
+    template<class T = float>
+    Vector3G<T> GetVector3() const
+    {
+        T x = 0, y = 0, z = 0;
+        String insidePars = m_value.Split('(')[1];
+        insidePars =  insidePars.Split(')')[0];
+        Array<String> numbers = insidePars.Split(',');
+        x = String::To<T>(numbers[0]);
+        y = String::To<T>(numbers[1]);
+        z = String::To<T>(numbers[2]);
+        return Vector3G<T>(x,y,z);
+    }
+
+    template<class T = float>
+    Vector4G<T> GetVector4() const
+    {
+        T x = 0, y = 0, z = 0, w = 0;
+        Array<String> arr = m_value.Split('(');
+        String insidePars = arr[1];
+        arr = insidePars.Split(')');
+        insidePars =  arr[0];
+        Array<String> numbers = insidePars.Split(',');
+        x = String::To<T>(numbers[0]);
+        y = String::To<T>(numbers[1]);
+        z = String::To<T>(numbers[2]);
+        w = String::To<T>(numbers[3]);
+        return Vector4G<T>(x,y,z,w);
+    }
+
+
+    template<class T = float>
+    QuaternionG<T> GetQuaternion() const
+    {
+        Vector4G<T> v = GetVector4<T>();
+        return QuaternionG<T>(v.w, v.x, v.y, v.z);
+    }
+
+    template<class T = float>
+    RectG<T> GetRect() const
+    {
+        Vector4G<T> v = GetVector4<T>();
+        return RectG<T>(v.x, v.y, v.z, v.w);
+    }
+
 
     template<class EnumClass>
     void SetEnum(EnumClass value, const Array<XMLProperty> &properties)

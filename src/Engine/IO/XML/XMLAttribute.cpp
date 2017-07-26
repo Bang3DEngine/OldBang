@@ -139,36 +139,6 @@ void XMLAttribute::SetFloat(float value,
     Set(m_name, oss.str(), XMLAttribute::Type::Float, properties);
 }
 
-void XMLAttribute::SetVector2(const Vector2 &value,
-                              const Array<XMLProperty> &properties)
-{
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::Vector2, properties);
-}
-
-void XMLAttribute::SetVector3(const Vector3 &value,
-                              const Array<XMLProperty> &properties)
-{
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::Vector3, properties);
-}
-
-void XMLAttribute::SetVector4(const Vector4 &value,
-                              const Array<XMLProperty> &properties)
-{
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ", " <<
-                  value.w << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::Vector4, properties);
-}
-
 void XMLAttribute::SetColor(const Color &value,
                             const Array<XMLProperty> &properties)
 {
@@ -178,28 +148,6 @@ void XMLAttribute::SetColor(const Color &value,
                   value.b << ", " <<
                   value.a << ")";
     Set(m_name, oss.str(), XMLAttribute::Type::Color, properties);
-}
-
-void XMLAttribute::SetQuaternion(const Quaternion &value,
-                                 const Array<XMLProperty> &properties)
-{
-    std::ostringstream oss;
-    oss << "(" << value.w << ", " <<
-                  value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::Quaternion, properties);
-}
-
-void XMLAttribute::SetRect(const Rect &value,
-                           const Array<XMLProperty> &properties)
-{
-    std::ostringstream oss;
-    oss << "(" << value.GetMin().x << ", " <<
-                  value.GetMin().y << ", " <<
-                  value.GetMax().x << ", " <<
-                  value.GetMax().y << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
 }
 
 void XMLAttribute::SetFilepath(const Path &filepath,
@@ -289,60 +237,10 @@ String XMLAttribute::GetString() const
     return m_value;
 }
 
-Vector2 XMLAttribute::GetVector2() const
-{
-    float x = 0, y = 0;
-    String insidePars = m_value.Split('(')[1];
-    insidePars =  insidePars.Split(')')[0];
-    Array<String> numbers = insidePars.Split(',');
-    x = String::ToFloat(numbers[0]);
-    y = String::ToFloat(numbers[1]);
-    return Vector2(x,y);
-}
-
-Vector3 XMLAttribute::GetVector3() const
-{
-    float x = 0, y = 0, z = 0;
-    String insidePars = m_value.Split('(')[1];
-    insidePars =  insidePars.Split(')')[0];
-    Array<String> numbers = insidePars.Split(',');
-    x = String::ToFloat(numbers[0]);
-    y = String::ToFloat(numbers[1]);
-    z = String::ToFloat(numbers[2]);
-    return Vector3(x,y,z);
-}
-
-Vector4 XMLAttribute::GetVector4() const
-{
-    float x = 0, y = 0, z = 0, w = 0;
-    Array<String> arr = m_value.Split('(');
-    String insidePars = arr[1];
-    arr = insidePars.Split(')');
-    insidePars =  arr[0];
-    Array<String> numbers = insidePars.Split(',');
-    x = String::ToFloat(numbers[0]);
-    y = String::ToFloat(numbers[1]);
-    z = String::ToFloat(numbers[2]);
-    w = String::ToFloat(numbers[3]);
-    return Vector4(x,y,z,w);
-}
-
 Color XMLAttribute::GetColor() const
 {
     Color v = Color(GetVector4());
     return Color(v);
-}
-
-Quaternion XMLAttribute::GetQuaternion() const
-{
-    Vector4 v = GetVector4();
-    return Quaternion(v.w, v.x, v.y, v.z);
-}
-
-Rect XMLAttribute::GetRect() const
-{
-    Vector4 v = GetVector4();
-    return Rect(v.x, v.y, v.z, v.w);
 }
 
 const Array<XMLProperty> &XMLAttribute::GetProperties() const

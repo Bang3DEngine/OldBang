@@ -40,10 +40,10 @@ public:
     WrapMode GetVerticalWrapMode() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
-    void SetSpacing(const Vector2 &spacing);
+    void SetSpacing(const Vector2i &spacing);
     const String& GetContent() const;
     int GetTextSize() const;
-    Vector2 GetSpacing() const;
+    Vector2i GetSpacing() const;
 
     Rect GetNDCRect() const;
 
@@ -54,12 +54,12 @@ public:
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 protected:
-    String m_content   = "";
-    Font *m_font       = nullptr;
-    int m_textSize     = 64;
-    Vector2 m_spacing  = Vector2(5, 200);
-    bool m_kerning     = false;
-    Rect m_textRectNDC = Rect::Empty;
+    String m_content    = "";
+    Font *m_font        = nullptr;
+    int m_textSize      = 64;
+    Vector2i m_spacing  = Vector2i(5, 200);
+    bool m_kerning      = false;
+    Rect m_textRectNDC  = Rect::Zero;
 
     WrapMode m_hWrapMode = WrapMode::Wrap;
     WrapMode m_vWrapMode = WrapMode::Hide;
@@ -67,8 +67,6 @@ protected:
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
     void RefreshMesh();
-
-    Vector2 GetAlignmentOffset(const Rect& contentRect) const;
 };
 
 #endif // UITEXT_H

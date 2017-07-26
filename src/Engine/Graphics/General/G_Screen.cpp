@@ -47,14 +47,15 @@ int G_Screen::GetWidth() const
     return m_width;
 }
 
-Vector2 G_Screen::GetSize() const
+Vector2i G_Screen::GetSize() const
 {
-    return Vector2(GetWidth(), GetHeight());
+    return Vector2i(GetWidth(), GetHeight());
 }
 
 Vector2 G_Screen::GetPixelClipSize() const
 {
-    return 1.0f / GetSize();
+    return 1.0f / Vector2(GetSize())
+            ;
 }
 
 int G_Screen::GetHeight() const

@@ -14,13 +14,20 @@ class RectG
 {
 public:
     const static RectG<T> ScreenRect;
-    const static RectG<T> Empty;
+    const static RectG<T> Zero;
 
-    Vector2G<T> m_min = Vector2::Zero;
-    Vector2G<T> m_max = Vector2::Zero;
+    Vector2G<T> m_min = Vector2G<T>::Zero;
+    Vector2G<T> m_max = Vector2G<T>::Zero;
 
     RectG()
     {
+    }
+
+    template<class OtherT>
+    explicit RectG(const RectG<OtherT> &r)
+    {
+        m_min = Vector2G<T>(r.GetMin());
+        m_min = Vector2G<T>(r.GetMax());
     }
 
     explicit RectG(T minx, T maxx, T miny, T maxy)
@@ -82,7 +89,7 @@ public:
 
     Vector2G<T> GetSize() const
     {
-        return Vector2(GetWidth(), GetHeight());
+        return Vector2G<T>(GetWidth(), GetHeight());
     }
 
     Vector2G<T> GetCenter() const
@@ -98,8 +105,8 @@ public:
 
     static RectG<T> Union(const RectG<T> &r1, const RectG<T> &r2)
     {
-        if (r1 == RectG<T>::Empty) { return r2; }
-        if (r2 == RectG<T>::Empty) { return r1; }
+        if (r1 == RectG<T>::Zero) { return r2; }
+        if (r2 == RectG<T>::Zero) { return r1; }
         return RectG<T>(Math::Min(r1.m_min.x, r2.m_min.x),
                         Math::Max(r1.m_max.x, r2.m_max.x),
                         Math::Min(r1.m_min.y, r2.m_min.y),
@@ -108,14 +115,14 @@ public:
 
     static RectG<T> Intersection(const RectG<T> &r1, const RectG<T> &r2)
     {
-        float minx = Math::Max(r1.m_min.x, r2.m_min.x);
-        float miny = Math::Max(r1.m_min.y, r2.m_min.y);
-        float maxx = Math::Min(r1.m_max.x, r2.m_max.x);
-        float maxy = Math::Min(r1.m_max.y, r2.m_max.y);
+        T minx = Math::Max(r1.m_min.x, r2.m_min.x);
+        T miny = Math::Max(r1.m_min.y, r2.m_min.y);
+        T maxx = Math::Min(r1.m_max.x, r2.m_max.x);
+        T maxy = Math::Min(r1.m_max.y, r2.m_max.y);
 
         if (minx > maxx || miny > maxy)
         {
-            return RectG<T>::Empty;
+            return RectG<T>::Zero;
         }
 
         return RectG<T>(minx, maxx, miny, maxy);
@@ -124,7 +131,7 @@ public:
     static RectG<T> GetBoundingRectFromPositions(
                             const Array<Vector2> &positions)
     {
-        if (positions.IsEmpty()) { return RectG<T>::Empty; }
+        if (positions.IsEmpty()) { return RectG<T>::Zero; }
 
         Vector2 minv = positions.Front(), maxv = positions.Front();
         for (const Vector2 &p : positions)
@@ -147,7 +154,7 @@ const RectG<T> RectG<T>::ScreenRect = RectG<T>(Vector2G<T>(-1),
                                                Vector2G<T>(1));
 
 template<class T>
-const RectG<T> RectG<T>::Empty = RectG<T>(0, 0, 0, 0);
+const RectG<T> RectG<T>::Zero = RectG<T>(0, 0, 0, 0);
 
 template<class T>
 bool operator==(const RectG<T> &r1, const RectG<T> &r2)
@@ -199,19 +206,19 @@ RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
 }
 
 template<class T>
-RectG<T> operator/(T a, const RectG<T> &r)
+RectG<T> operator/(SCALAR_TYPE(T) a, const RectG<T> &r)
 {
     return RectG<T>(a / r.GetMin(), a / r.GetMax());
 }
 
 template<class T>
-RectG<T> operator/(const RectG<T> &r, T a)
+RectG<T> operator/(const RectG<T> &r, SCALAR_TYPE(T) a)
 {
     return RectG<T>(r.GetMin() / a, r.GetMax() / a);
 }
 
 template<class T>
-RectG<T> operator*(T a, const RectG<T> &r)
+RectG<T> operator*(SCALAR_TYPE(T) a, const RectG<T> &r)
 {
     return RectG<T>(a * r.GetMin(), a * r.GetMax());
 }
@@ -237,28 +244,56 @@ RectG<T> operator*(const RectG<T> &r, const Vector2G<T> &v)
 template<class T>
 RectG<T> operator/(const Vector2G<T> &v, const RectG<T> &r)
 {
-    RectG<T> res = RectG<T>(v / r.GetMin(), v / v.GetMax());
-    return res;
+    return RectG<T>(v / r.GetMin(), v / v.GetMax());
 }
 
 template<class T>
 RectG<T> operator/(const RectG<T> &r, const Vector2G<T> &v)
 {
-    RectG<T> res = r;
-    res /= v;
-    return res;
+    return RectG<T>(r.GetMin() / v, r.GetMax() / v);
 }
 
 template<class T>
-RectG<T> operator+(float a, const RectG<T> &r)
+RectG<T> operator-(T a, const RectG<T> &r)
 {
-    return Vector2(a) + r;
+    return Vector2G<T>(a) - r;
 }
 
 template<class T>
-RectG<T> operator+(const RectG<T> &r, float a)
+RectG<T> operator-(const RectG<T> &r, SCALAR_TYPE(T) a)
 {
-    return Vector2(a) + r;
+    return r - Vector2G<T>(a);
+}
+
+template<class T>
+RectG<T> operator-(const Vector2G<T> &v, const RectG<T> &r)
+{
+    return RectG<T>(v - r.GetMin(), v - r.GetMax());
+}
+
+template<class T>
+RectG<T> operator-(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return RectG<T>(r.GetMin() - v, r.GetMax() - v);
+}
+
+template<class T>
+void operator-=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_min = r.m_min - v;
+    r.m_max = r.m_max - v;
+}
+
+template<class T>
+RectG<T> operator+(SCALAR_TYPE(T) a, const RectG<T> &r)
+{
+    return Vector2G<T>(a) + r;
+}
+
+template<class T>
+RectG<T> operator+(const RectG<T> &r, SCALAR_TYPE(T) a)
+{
+    return Vector2G<T>(a) + r;
 }
 
 template<class T>

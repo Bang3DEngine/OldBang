@@ -18,10 +18,8 @@ public:
      */
     struct CharGlyphMetrics
     {
-        int width    = 0; // Width of character (of the actual char pixels)
-        int height   = 0; // Height of character (of the actual char pixels)
-        int bearingY = 0; // Offset upwards from the baseline where the char pixels begin
-        int bearingX = 0; // Offset to right from the pen position where the char pixels begin
+        Vector2i size = Vector2i::Zero; // Size of character (of the actual char pixels)
+        Vector2i bearing = Vector2i::Zero; // Offset from the baseline where the char pixels begin
         int advance  = 0; // Distance to be moved in X to right when drawing the next character
         int originY  = 0;
     };

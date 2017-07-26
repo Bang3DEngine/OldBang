@@ -188,7 +188,7 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
                        !screenRect.Contains( Vector2(rMax.x, rMin.y) );
     allPointsOutside = allPointsOutside &&
                        !screenRect.Contains( Vector2(rMax.x, rMax.y) );
-    if (allPointsOutside) { return Rect::Empty; }
+    if (allPointsOutside) { return Rect::Zero; }
 
     // If there's one or more points behind the camera, return ScreenRect
     // because we don't know how to handle it properly
