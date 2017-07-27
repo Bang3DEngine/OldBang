@@ -252,6 +252,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
 void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
 {
+    /*
     Transform::OnDrawGizmos(gizmosPassType);
 
     Vector2 size(0.05f);
@@ -272,6 +273,7 @@ void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
     Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
     Gizmos::SetColor(col);
     Gizmos::RenderRect( GetScreenSpaceRect() );
+    */
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

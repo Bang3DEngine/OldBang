@@ -4,7 +4,6 @@
 #include "GL/glew.h"
 
 #include "Bang/G_VAO.h"
-#include "Bang/Debug.h"
 #include "Bang/Screen.h"
 #include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"

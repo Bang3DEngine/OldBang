@@ -3,7 +3,6 @@
 #include "Bang/Mesh.h"
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
-#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/Renderer.h"

@@ -1,6 +1,5 @@
 #include "Bang/PointLight.h"
 
-#include "Bang/Debug.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"

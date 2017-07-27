@@ -1,6 +1,5 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
-#include "Bang/Debug.h"
 #include "Bang/Application.h"
 #include "Bang/GameBuilder.h"
 #include "Bang/ProjectManager.h"

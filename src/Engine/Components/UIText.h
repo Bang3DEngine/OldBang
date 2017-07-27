@@ -46,7 +46,6 @@ public:
     Vector2i GetSpacing() const;
 
     Array<Rect> m_charRects;
-    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
 
     Rect GetNDCRect() const;
 

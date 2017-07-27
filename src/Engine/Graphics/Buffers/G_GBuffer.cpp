@@ -6,7 +6,6 @@
 #include "Bang/G_VAO.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
-#include "Bang/Debug.h"
 #include "Bang/G_Screen.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/G_RenderTexture.h"

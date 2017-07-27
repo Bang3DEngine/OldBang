@@ -210,16 +210,6 @@ const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
 
-#include "Bang/Gizmos.h"
-void UIText::OnDrawGizmos(GizmosPassType gizmosPassType)
-{
-    UIRenderer::OnDrawGizmos(gizmosPassType);
-    for (const Rect &r : m_charRects)
-    {
-        Gizmos::RenderRect(r);
-    }
-}
-
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }
 VerticalAlignment UIText::GetVerticalAlignment() const
 {
