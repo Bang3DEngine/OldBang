@@ -31,7 +31,8 @@ public:
 
     virtual void LoadFromTTF(const Path &m_assetFilepath);
 
-    G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c) const;
+    G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c,
+                                                 int textSize = 1) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
     G_Texture2D *GetAtlasTexture() const;
@@ -41,6 +42,13 @@ public:
      * leftChar and rightChar (kerning)
      */
     int GetKerningX(char leftChar, char rightChar);
+
+    template<class T>
+    static T ScaleMagnitude(const T &magnitude, int textSize)
+    {
+        const float fTextSize = float(textSize) / 128.0f;
+        return (magnitude * fTextSize);
+    }
 
 protected:
     FT_Face m_freetypeFace = nullptr;

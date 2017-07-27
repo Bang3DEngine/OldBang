@@ -27,7 +27,7 @@ public:
     explicit RectG(const RectG<OtherT> &r)
     {
         m_min = Vector2G<T>(r.GetMin());
-        m_min = Vector2G<T>(r.GetMax());
+        m_max = Vector2G<T>(r.GetMax());
     }
 
     explicit RectG(T minx, T maxx, T miny, T maxy)
@@ -206,19 +206,19 @@ RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
 }
 
 template<class T>
-RectG<T> operator/(T_SCALAR(T) a, const RectG<T> &r)
+RectG<T> operator/(T a, const RectG<T> &r)
 {
     return RectG<T>(a / r.GetMin(), a / r.GetMax());
 }
 
 template<class T>
-RectG<T> operator/(const RectG<T> &r, T_SCALAR(T) a)
+RectG<T> operator/(const RectG<T> &r, T a)
 {
     return RectG<T>(r.GetMin() / a, r.GetMax() / a);
 }
 
 template<class T>
-RectG<T> operator*(T_SCALAR(T) a, const RectG<T> &r)
+RectG<T> operator*(T a, const RectG<T> &r)
 {
     return RectG<T>(a * r.GetMin(), a * r.GetMax());
 }
@@ -232,7 +232,7 @@ RectG<T> operator*(const RectG<T> &r, T a)
 template<class T>
 RectG<T> operator*(const Vector2G<T> &v, const RectG<T> &r)
 {
-    return RectG<T>(v * r.GetMin().x, v * r.GetMax());
+    return RectG<T>(v * r.GetMin(), v * r.GetMax());
 }
 
 template<class T>
@@ -260,7 +260,7 @@ RectG<T> operator-(T a, const RectG<T> &r)
 }
 
 template<class T>
-RectG<T> operator-(const RectG<T> &r, T_SCALAR(T) a)
+RectG<T> operator-(const RectG<T> &r, T a)
 {
     return r - Vector2G<T>(a);
 }
@@ -285,13 +285,13 @@ void operator-=(RectG<T> &r, const Vector2G<T> &v)
 }
 
 template<class T>
-RectG<T> operator+(T_SCALAR(T) a, const RectG<T> &r)
+RectG<T> operator+(T a, const RectG<T> &r)
 {
     return Vector2G<T>(a) + r;
 }
 
 template<class T>
-RectG<T> operator+(const RectG<T> &r, T_SCALAR(T) a)
+RectG<T> operator+(const RectG<T> &r, T a)
 {
     return Vector2G<T>(a) + r;
 }

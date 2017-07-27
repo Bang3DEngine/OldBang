@@ -52,6 +52,7 @@ public:
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
+    virtual void OnParentSizeChanged() override;
     void OnDrawGizmos(GizmosPassType gizmosPassType);
 
 private:

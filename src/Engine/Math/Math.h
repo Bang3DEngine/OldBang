@@ -71,8 +71,8 @@ public:
         return value < 0 ? -value : value;
     }
 
-    template<class T>
-    static T Round(const T &value)
+    template<class T = int, class T2>
+    static T Round(const T2 &value)
     {
         return std::round(value);
     }

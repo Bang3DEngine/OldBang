@@ -25,12 +25,28 @@ public:
     {
         ChangeTransformByRectTransform();
         rt = SCAST<RectTransform*>(transform);
-        rt->SetAnchors(Vector2(-1), Vector2(1));
-        rt->SetMargins(10);
+        rt->SetAnchors(Vector2(-1), Vector2(-1));
+        rt->SetMargins(0, -500, -500, 0);
+
+        GameObject *child2 = new GameObject();
+        child2->ChangeTransformByRectTransform();
+        RectTransform *rt2 = child2->GetComponent<RectTransform>();
+        rt2->SetMargins(5);
+        rt2->SetAnchors(Vector2(-1), Vector2(1));
+        child2->SetParent(this);
+
+        GameObject *child3 = new GameObject();
+        child3->ChangeTransformByRectTransform();
+        RectTransform *rt3 = child3->GetComponent<RectTransform>();
+        rt3->SetMargins(10);
+        rt3->SetPivotPosition( Vector2(1) );
+        rt3->SetAnchors(Vector2(1), Vector2(1));
+        child3->SetParent(child2);
 
         text = AddComponent<UIText>();
         text->SetTextSize(20);
         text->SetContent("El veloz murcielago hindu comia feliz cardillo y kiwi. La ciguena tocaba el saxofon detras del palenque de paja.");
+        // text->SetContent("ABC");
         text->SetHorizontalWrapMode(WrapMode::Wrap);
         text->SetVerticalWrapMode(WrapMode::Hide);
         text->SetHorizontalAlign(HorizontalAlignment::Center);
@@ -40,6 +56,8 @@ public:
     void OnUpdate() override
     {
         GameObject::OnUpdate();
+
+        if (Input::GetKey(Input::Key::LControl)) { return; }
 
         if (Input::GetKeyDown(Input::Key::E))
         {
@@ -130,14 +148,15 @@ public:
         instructionsText->SetTint(Color::Black);
         instructionsText->SetHorizontalAlign(HorizontalAlignment::Right);
         instructionsText->SetVerticalAlign(VerticalAlignment::Bot);
-        instructionsText->SetContent("Instructions: \n"
+        instructionsText->SetContent("");
+        /*instructionsText->SetContent("Instructions: \n"
                                      " - WASD: Move lower left corner.\n"
                                      " - WASD + Shift: Move top right corner.\n"
                                      " - UP/DOWN: Change text size.\n"
                                      " - E: Change Horizontal Wrap Mode.\n"
                                      " - Q: Change Vertical Wrap Mode.\n"
                                      " - 1/2/3: Change Vertical Alignment.\n"
-                                     " - 4/5/6: Change Horizontal Alignment.\n");
+                                     " - 4/5/6: Change Horizontal Alignment.\n");*/
 
         GOTest *gt = new GOTest();
         gt->SetParent(this);

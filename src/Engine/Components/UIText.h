@@ -45,6 +45,9 @@ public:
     int GetTextSize() const;
     Vector2i GetSpacing() const;
 
+    Array<Rect> m_charRects;
+    void OnDrawGizmos(GizmosPassType gizmosPassType) override;
+
     Rect GetNDCRect() const;
 
     virtual void Bind() const override;

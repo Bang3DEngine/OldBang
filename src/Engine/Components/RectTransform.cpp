@@ -1,7 +1,6 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/Math.h"
-#include "Bang/Debug.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
@@ -177,9 +176,14 @@ const Vector2& RectTransform::GetAnchorMax() const
 
 Recti RectTransform::GetScreenSpaceRectPx() const
 {
-    Matrix4 localToWorld;
-    GetLocalToWorldMatrix(&localToWorld);
-    return Recti( GetScreenSpaceRect() * Vector2f(Screen::GetSize()) );
+    return Recti( ( GetScreenSpaceRect() * 0.5f + 0.5f) *
+                    Vector2f(Screen::GetSize()) );
+}
+
+Recti RectTransform::GetParentScreenRectPx() const
+{
+    return Recti( ( GetParentScreenRect() * 0.5f + 0.5f) *
+                  Vector2f(Screen::GetSize()) );
 }
 
 Rect RectTransform::GetScreenSpaceRect() const
@@ -187,21 +191,6 @@ Rect RectTransform::GetScreenSpaceRect() const
     Matrix4 localToWorld;
     GetLocalToWorldMatrix(&localToWorld);
     return localToWorld * Rect::ScreenRect;
-}
-
-Recti RectTransform::GetParentScreenRectPx() const
-{
-    Recti parentScreenRect = Recti::Zero;
-    if (gameObject->parent)
-    {
-        RectTransform *parentRectTransform =
-                gameObject->parent->GetComponent<RectTransform>();
-        if (parentRectTransform)
-        {
-            parentScreenRect = parentRectTransform->GetScreenSpaceRectPx();
-        }
-    }
-    return parentScreenRect;
 }
 
 Rect RectTransform::GetParentScreenRect() const
@@ -221,10 +210,17 @@ Rect RectTransform::GetParentScreenRect() const
 
 void RectTransform::OnChanged()
 {
-    m_hasChanged = true;
+    // Chain the messages.
+    // This will trigger the refresh of this RectTransform too
+    // (see OnParentSizeChanged in this same class)
+    if (gameObject) { gameObject->_OnParentSizeChanged(); }
+}
 
-    ENSURE(gameObject);
-    gameObject->_OnParentSizeChanged();
+void RectTransform::OnParentSizeChanged()
+{
+    Transform::OnParentSizeChanged();
+    m_hasChanged = true;
+    GetLocalToParentMatrix();
 }
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
@@ -232,35 +228,24 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     if (!IsEnabled(false)) { return Matrix4::Identity; }
     if (!m_hasChanged) { return m_localToParentMatrix; }
 
-    const Vector2i screenSize = Screen::GetSize();
-    Vector2i parentSizeInPx = GetParentScreenRectPx().GetSize();
-    Debug_Log("ParentRect Px: " << GetParentScreenRectPx());
-    parentSizeInPx = Vector2i::Max(Vector2i::One, parentSizeInPx);
+    Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
+    parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
+    Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
 
-    Vector2 pixelSizeInParent = (1.0f / Vector2f(parentSizeInPx)) * 4.0f;
-
-    Vector3 moveToPivotV(m_pivotPosition, 0);
-    Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
+    Vector3 moveToPivot(m_pivotPosition, 0);
 
     Vector2 minMarginedAnchor
-            (m_anchorMin + Vector2f(GetMarginLeftBot())  * pixelSizeInParent);
+            (m_anchorMin + Vector2f(GetMarginLeftBot())  * pixelNDCSize);
     Vector2 maxMarginedAnchor
-            (m_anchorMax - Vector2f(GetMarginRightTop()) * pixelSizeInParent);
-    Vector3 anchorScalingV
-            ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-    Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
+            (m_anchorMax - Vector2f(GetMarginRightTop()) * pixelNDCSize);
+    Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
-    Vector3 moveToAnchorCenterV(
+    Vector3 moveToAnchorCenter(
                 (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
-    Matrix4 moveToAnchorCenter = Matrix4::TranslateMatrix(moveToAnchorCenterV);
 
-    //bool beforeHasChanged = m_hasChanged;
-    //Matrix4 rotScaleTransform = Transform::GetLocalToParentMatrix();
-    //m_hasChanged = beforeHasChanged;
-    m_localToParentMatrix = //rotScaleTransform *
-                            moveToAnchorCenter *
-                            anchorScaling *
-                            moveToPivot;
+    m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
+                            Matrix4::ScaleMatrix(anchorScaling) *
+                            Matrix4::TranslateMatrix(moveToPivot);
     m_hasChanged = false;
     return m_localToParentMatrix;
 }
@@ -286,7 +271,6 @@ void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
     p = Vector2(amax.x, amin.y);
     Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
     Gizmos::SetColor(col);
-    Debug_Log( GetScreenSpaceRect() );
     Gizmos::RenderRect( GetScreenSpaceRect() );
 }
 

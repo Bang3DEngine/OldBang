@@ -24,14 +24,18 @@ void G_Font::LoadFromTTF(const Path &filepath)
         &m_freetypeFace);
 }
 
-G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c) const
+G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c,
+                                                     int textSize) const
 {
-    if (!m_charMetrics.ContainsKey(c))
-    {
-        G_Font::CharGlyphMetrics cgm; // Empty
-        return cgm;
-    }
-    return m_charMetrics.Get(c);
+    G_Font::CharGlyphMetrics cgm;
+    if (m_charMetrics.ContainsKey(c)) { cgm = m_charMetrics.Get(c); }
+
+    cgm.size    = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.size), textSize));
+    cgm.bearing = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.bearing), textSize));
+    cgm.advance = SCAST<int>(ScaleMagnitude(cgm.advance, textSize));
+    cgm.originY = SCAST<int>(ScaleMagnitude(cgm.originY, textSize));
+
+    return cgm;
 }
 
 Vector2 G_Font::GetCharMinUvInAtlas(char c) const

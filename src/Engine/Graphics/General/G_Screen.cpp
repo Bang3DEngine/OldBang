@@ -54,8 +54,7 @@ Vector2i G_Screen::GetSize() const
 
 Vector2 G_Screen::GetPixelClipSize() const
 {
-    return 1.0f / Vector2(GetSize())
-            ;
+    return 1.0f / Vector2(GetSize());
 }
 
 int G_Screen::GetHeight() const
