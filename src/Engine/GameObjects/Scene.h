@@ -40,7 +40,7 @@ protected:
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
-    virtual void _OnDrawGizmos(GizmosPassType gizmosPassType) override;
+    virtual void _OnDrawGizmos() override;
     virtual void _OnResize (int newWidth, int newHeight);
 
     void AddHiddenChild(GameObject *go);

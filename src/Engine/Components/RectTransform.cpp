@@ -250,10 +250,10 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     return m_localToParentMatrix;
 }
 
-void RectTransform::OnDrawGizmos(GizmosPassType gizmosPassType)
+void RectTransform::OnDrawGizmos()
 {
     /*
-    Transform::OnDrawGizmos(gizmosPassType);
+    Transform::OnDrawGizmos();
 
     Vector2 size(0.05f);
     Color col = gameObject->name.Contains("ack") ? Color::Red : Color::Green;

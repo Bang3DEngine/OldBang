@@ -6,6 +6,7 @@
 #include "Bang/Project.h"
 #include "Bang/ProjectManager.h"
 
+#include "Bang/SceneManager.h"
 int main(int argc, char **argv)
 {
     Application app(argc, argv);
@@ -22,6 +23,7 @@ int main(int argc, char **argv)
 
     app.CreateWindow();
     proj->OpenFirstFoundScene();
+    SceneManager::LoadScene( Path("Scenes/InGame2") );
     app.MainLoop();
 
     return 0;

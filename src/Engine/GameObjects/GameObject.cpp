@@ -261,11 +261,6 @@ bool GameObject::AddComponent(Component *c)
     return true;
 }
 
-Transform *GameObject::GetTransform() const
-{
-    return m_transform;
-}
-
 void GameObject::RemoveComponent(Component *c)
 {
     if (!m_iteratingComponents)
@@ -528,30 +523,6 @@ String GameObject::ToString() const
     return oss.str();
 }
 
-void GameObject::OnMouseEnter(bool fromChildren)
-{
-    if (p_parent)
-    {
-        p_parent->OnMouseEnter(true);
-    }
-}
-
-void GameObject::OnMouseOver(bool fromChildren)
-{
-    if (p_parent)
-    {
-        p_parent->OnMouseOver(true);
-    }
-}
-
-void GameObject::OnMouseExit(bool fromChildren)
-{
-    if (p_parent)
-    {
-        p_parent->OnMouseExit(true);
-    }
-}
-
 bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
 {
     if (!parent) { return false; }
@@ -575,7 +546,6 @@ void GameObject::_OnStart()
     ISceneEventListener::_OnStart();
 }
 
-
 void GameObject::_OnUpdate()
 {
     ISceneEventListener::_OnUpdate();
@@ -595,12 +565,12 @@ void GameObject::_OnParentSizeChanged()
     PROPAGATE_EVENT(_OnParentSizeChanged(), m_children);
 }
 
-void GameObject::_OnDrawGizmos(GizmosPassType gizmosPassType)
+void GameObject::_OnDrawGizmos()
 {
-    PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_components);
-    OnDrawGizmos(gizmosPassType);
+    PROPAGATE_EVENT(_OnDrawGizmos(), m_components);
+    OnDrawGizmos();
 
-    PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_children);
+    PROPAGATE_EVENT(_OnDrawGizmos(), m_children);
 }
 
 void GameObject::_OnDestroy()

@@ -11,6 +11,7 @@
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
 #include "Bang/GPPass_G.h"
+#include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/G_Texture.h"
@@ -23,8 +24,10 @@
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
 #include "Bang/GPPass_G_Gizmos.h"
+#include "Bang/GPPass_Selection.h"
 #include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
+#include "Bang/SelectionFramebuffer.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
 #include "Bang/GPPass_SP_PostProcessEffects.h"
 
@@ -33,7 +36,10 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_glContext = new GLContext();
     m_texUnitManager = new G_TextureUnitManager();
 
-    m_gbuffer = new G_GBuffer(screen->GetWidth(), screen->GetHeight());
+    m_gbuffer = new G_GBuffer(screen->GetWidth(),
+                              screen->GetHeight());
+    m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
+                                             screen->GetHeight());
 
     m_renderGBufferToScreenMaterial =
          AssetsManager::Load<Material>(
@@ -61,12 +67,19 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
                                        PostProcessEffect::Type::AfterCanvas)
      });
 
-    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
+    m_sceneSelectionPass = new GPPass_RenderLayer(this, RL::RLScene,
     {
-     new GPPass_G_Gizmos(this, GizmosPassType::Depth),  // Gizmos with depth
-     new GPPass_G_Gizmos(this, GizmosPassType::Overlay) // Gizmos normal
+      new GPPass_Selection(this)
+    });
+    m_canvasSelectionPass = new GPPass_RenderLayer(this, RL::RLCanvas,
+    {
+      new GPPass_Selection(this)
     });
 
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
+    {
+     new GPPass_G_Gizmos(this)
+    });
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
@@ -81,7 +94,10 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     if (camera) { camera->Bind(); }
 
     RenderGBuffer(renderers, sceneChildren);
-    m_gbuffer->RenderToScreen(G_GBuffer::AttColor);
+    RenderToScreen(m_gbuffer->GetAttachmentTexture(G_GBuffer::AttColor));
+
+    RenderSelectionBuffer(renderers, sceneChildren, scene);
+    // RenderToScreen(m_selectionFB->GetColorTexture());
 }
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
@@ -146,16 +162,14 @@ void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 
 void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 {
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
-    ENSURE(sp);
-
     m_renderGBufferToScreenMaterial->Bind();
-    m_gbuffer->BindTextureBuffersTo(sp, false);
-    GL::ApplyContextToShaderProgram(sp);
 
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    m_gbuffer->BindTextureBuffersTo(sp, false);
     sp->Set("B_GTex_Color", fullScreenTexture);
 
     GraphicPipeline::RenderScreenPlane();
+
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
@@ -181,6 +195,23 @@ void GraphicPipeline::Render(Renderer *renderer) const
     renderer->UnBind();
 }
 
+void GraphicPipeline::RenderSelectionBuffer(
+                        const List<Renderer*> &renderers,
+                        const List<GameObject*> &sceneChildren,
+                        Scene *scene)
+{
+    m_selectionFB->Bind();
+
+    m_selectionFB->ClearDepth();
+    m_selectionFB->ClearColor(Color::One);
+
+    m_selectionFB->PrepareForRender(scene);
+    m_sceneSelectionPass->Pass (renderers, sceneChildren);
+    m_canvasSelectionPass->Pass(renderers, sceneChildren);
+
+    m_selectionFB->UnBind();
+}
+
 GraphicPipeline* GraphicPipeline::GetActive()
 {
     Screen *screen = Screen::GetInstance();
@@ -190,6 +221,7 @@ GraphicPipeline* GraphicPipeline::GetActive()
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
+    m_selectionFB->Resize(newWidth, newHeight);
 }
 
 GLContext *GraphicPipeline::GetGLContext() const
@@ -202,6 +234,11 @@ G_GBuffer *GraphicPipeline::GetGBuffer()
     return m_gbuffer;
 }
 
+SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
+{
+    return m_selectionFB;
+}
+
 G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
@@ -210,6 +247,7 @@ G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
+    delete m_selectionFB;
     delete m_scenePass;
     delete m_canvasPass;
     delete m_gizmosPass;

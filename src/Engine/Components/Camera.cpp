@@ -20,17 +20,6 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-
-}
-
-void Camera::SetReplacementShaderProgram(ShaderProgram *replacementSP)
-{
-    m_replacementShaderProgram = replacementSP;
-}
-
-ShaderProgram *Camera::GetReplacementShaderProgram() const
-{
-    return m_replacementShaderProgram;
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const

@@ -80,6 +80,7 @@ bool Application::ProcessEvents()
     constexpr int THERE_ARE_MORE_EVENTS = 1;
     while (SDL_PollEvent(&event) == THERE_ARE_MORE_EVENTS)
     {
+        m_input->PeekEvent(event);
         switch (event.type)
         {
             case SDL_QUIT: return false;
@@ -96,9 +97,6 @@ bool Application::ProcessEvents()
                     break;
             }
             break;
-
-            default:
-                m_input->PeekEvent(event);
         }
     }
     return true;

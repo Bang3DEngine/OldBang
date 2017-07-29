@@ -30,10 +30,10 @@ void Scene::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate(), m_hiddenGameObjects);
 }
 
-void Scene::_OnDrawGizmos(GizmosPassType gizmosPassType)
+void Scene::_OnDrawGizmos()
 {
-    GameObject::_OnDrawGizmos(gizmosPassType);
-    PROPAGATE_EVENT(_OnDrawGizmos(gizmosPassType), m_hiddenGameObjects);
+    GameObject::_OnDrawGizmos();
+    PROPAGATE_EVENT(_OnDrawGizmos(), m_hiddenGameObjects);
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)

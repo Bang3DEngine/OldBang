@@ -112,7 +112,7 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
         return;
     }
 
-    m_mouseCoords = Vector2(ei.x, ei.y);
+    m_mouseCoords = Vector2i(ei.x, ei.y);
 
     if (m_lockMouseMovement)
     {
@@ -226,6 +226,14 @@ void Input::PeekEvent(const SDL_Event &event)
             eventInfo.y = event.motion.y;
         break;
 
+        case SDL_WINDOWEVENT:
+        switch (event.window.event)
+        {
+            case SDL_WINDOWEVENT_ENTER: m_isMouseInside = true; break;
+            case SDL_WINDOWEVENT_LEAVE: m_isMouseInside = false; break;
+        }
+        break;
+
         default:
             enqueue = false;
     }
@@ -304,6 +312,11 @@ bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
     return Input::GetMouseButtonDown(mb) && inp->m_isADoubleClick;
 }
 
+bool Input::IsMouseInsideScreen()
+{
+    return Input::GetInstance()->m_isMouseInside;
+}
+
 float Input::GetMouseAxisX()
 {
     return Input::GetMouseDeltaX() / Screen::GetWidth();
@@ -348,7 +361,7 @@ bool Input::IsLockMouseMovement()
     return inp->m_lockMouseMovement;
 }
 
-Vector2 Input::GetMouseCoords()
+Vector2i Input::GetMouseCoords()
 {
     Input *inp = Input::GetInstance();
     return inp->m_mouseCoords;
@@ -356,10 +369,11 @@ Vector2 Input::GetMouseCoords()
 
 Vector2 Input::GetMouseCoordsNDC()
 {
-    return Input::GetMouseCoords() * Screen::GetPixelClipSize() * 2.0f - 1.0f;
+    return Vector2f(Input::GetMouseCoords()) *
+           Screen::GetPixelClipSize() * 2.0f - 1.0f;
 }
 
-Vector2 Input::GetPreviousMouseCoords()
+Vector2i Input::GetPreviousMouseCoords()
 {
     Input *inp = Input::GetInstance();
     return inp->m_lastMouseCoords;

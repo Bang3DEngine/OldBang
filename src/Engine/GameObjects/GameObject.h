@@ -5,7 +5,6 @@
 
 #include "Bang/List.h"
 #include "Bang/IToString.h"
-#include "Bang/GizmosPassType.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
@@ -256,12 +255,6 @@ public:
         }
     }
 
-    Transform* GetTransform() const;
-
-    virtual void OnMouseEnter(bool fromChildren);
-    virtual void OnMouseOver(bool fromChildren);
-    virtual void OnMouseExit(bool fromChildren);
-
     bool IsChildOf(const GameObject *parent, bool recursive = true) const;
 
     static GameObject *Find(const String &name);
@@ -294,7 +287,7 @@ protected:
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
     virtual void _OnParentSizeChanged() override;
-    virtual void _OnDrawGizmos(GizmosPassType gizmosPassType) override;
+    virtual void _OnDrawGizmos() override;
     virtual void _OnDestroy() override;
 
     friend class Scene;

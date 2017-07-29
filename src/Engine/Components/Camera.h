@@ -19,9 +19,6 @@ public:
         Perspective
     };
 
-    void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
-    ShaderProgram *GetReplacementShaderProgram() const;
-
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
 
@@ -66,7 +63,6 @@ protected:
     virtual ~Camera();
 
 private:
-    ShaderProgram *m_replacementShaderProgram = nullptr;
     float m_orthoHeight  = 25.0f;
     bool m_identityMode = false;
     Mesh *p_camMesh = nullptr;

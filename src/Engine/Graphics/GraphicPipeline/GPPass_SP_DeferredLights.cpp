@@ -1,5 +1,6 @@
 #include "Bang/GPPass_SP_DeferredLights.h"
 
+#include "Bang/G_GBuffer.h"
 #include "Bang/GraphicPipeline.h"
 
 GPPass_SP_DeferredLights::GPPass_SP_DeferredLights(

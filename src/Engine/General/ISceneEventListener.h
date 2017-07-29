@@ -1,8 +1,6 @@
 #ifndef ISCENEEVENTLISTENER_H
 #define ISCENEEVENTLISTENER_H
 
-#include "Bang/GizmosPassType.h"
-
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
@@ -29,9 +27,9 @@ protected:
     virtual void _OnUpdate() { OnUpdate(); }
     virtual void _OnParentSizeChanged() { OnParentSizeChanged(); }
 
-    virtual void _OnDrawGizmos(GizmosPassType gizmosPassType)
+    virtual void _OnDrawGizmos()
     {
-        OnDrawGizmos(gizmosPassType);
+        OnDrawGizmos();
     }
 
     virtual void _OnDestroy() { OnDestroy(); }
@@ -41,7 +39,7 @@ protected:
     virtual void OnStart() {}
     virtual void OnUpdate() {}
     virtual void OnParentSizeChanged() {}
-    virtual void OnDrawGizmos(GizmosPassType gizmosPassType) {}
+    virtual void OnDrawGizmos() {}
     virtual void OnDestroy() {}
 
     // ========

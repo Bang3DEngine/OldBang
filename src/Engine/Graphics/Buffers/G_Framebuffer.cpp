@@ -100,7 +100,11 @@ Color G_Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
     G_RenderTexture *t = GetAttachmentTexture(attId);
     SetReadBuffer(attId);
     Color readColor;
-    glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLDataType(), &readColor);
+    glReadPixels(x, t->GetHeight() - y,
+                 1, 1,
+                 t->GetGLFormat(),
+                 t->GetGLDataType(),
+                 &readColor);
     UnBind();
     return readColor;
 }

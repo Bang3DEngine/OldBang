@@ -1,6 +1,7 @@
 #include "Bang/GPPass_SP_PostProcessEffects.h"
 
 #include "Bang/Scene.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"

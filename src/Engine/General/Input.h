@@ -83,6 +83,8 @@ public:
     static bool GetMouseButtonDown(MouseButton mb);
     static bool GetMouseButtonDoubleClick(MouseButton mb);
 
+    static bool IsMouseInsideScreen();
+
     /**
      * @brief GetMouseAxisX
      * @return Mouse movement in x divided by screen width [0.0f, 1.0f]
@@ -112,9 +114,9 @@ public:
     static void LockMouseMovement(bool lock);
     static bool IsLockMouseMovement();
 
-    static Vector2 GetMouseCoords();
+    static Vector2i GetMouseCoords();
     static Vector2 GetMouseCoordsNDC();
-    static Vector2 GetPreviousMouseCoords();
+    static Vector2i GetPreviousMouseCoords();
 
 private:
     Input();
@@ -174,52 +176,18 @@ private:
             }
     };
 
-    /**
-     * @brief For every Key, we have a ButtonInfo
-     * assigned to it
-     */
-    Map<Key, ButtonInfo> m_keyInfos;
-
-    /**
-     * @brief isADoubleClick will be true in the frame where
-     * there's the second click of a double click
-     */
     bool m_isADoubleClick = false;
-
-    /**
-     * @brief Used to handle double click timing
-     */
     float m_secsSinceLastMouseDown = 0.0f;
-
-    /**
-     * @brief Max time in seconds between 2 clicks to
-     * be considered double-click
-     */
     const float c_doubleClickMaxSeconds = 0.3f;
     float m_lastMouseWheelDelta = 0.0f;
     bool m_lockMouseMovement = false;
+    int m_framesMouseStopped = 0;
+    bool m_isMouseInside = false;
 
-    /**
-     * @brief Used to fix an issue with lockMouseMovement
-     */
-    int m_framesMouseStopped = 0  ;
+    Vector2i m_mouseCoords, m_lastMouseCoords;
 
-    /**
-     * @brief Mouse coordinates in Screen space.
-     */
-    Vector2 m_mouseCoords, m_lastMouseCoords;
-
-
-    /**
-     * @brief For every MouseButton, we have a ButtonInfo
-     * assigned to it
-     */
+    Map<Key, ButtonInfo> m_keyInfos;
     Map<MouseButton, ButtonInfo> m_mouseInfo;
-
-    /**
-     * @brief This map will contain the delayed key and mouse events, which will be processed in
-     * the next frame.
-     */
     Array<EventInfo> m_eventInfoQueue;
 
     static Input* GetInstance();

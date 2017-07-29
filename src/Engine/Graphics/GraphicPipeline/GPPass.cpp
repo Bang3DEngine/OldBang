@@ -1,6 +1,7 @@
 #include "Bang/GPPass.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Renderer.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GraphicPipeline.h"

@@ -34,8 +34,6 @@ public:
     void ApplyPass(G_ShaderProgram *sp,
                    bool prepareReadFromColorBuffer = false,
                    const Rect &mask = Rect::ScreenRect);
-    void RenderToScreen(AttachmentId attachmentId);
-    void RenderToScreen();
 
     void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);
 

@@ -63,18 +63,6 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
     SetStencilWrite(prevStencilWrite);
 }
 
-void G_GBuffer::RenderToScreen(G_GBuffer::AttachmentId attId)
-{
-    // Assumes gbuffer is not bound, hence directly writing to screen
-    G_Texture *tex = GetAttachmentTexture(attId); ENSURE(tex);
-    GraphicPipeline::GetActive()->RenderToScreen(tex);
-}
-
-void G_GBuffer::RenderToScreen()
-{
-    RenderToScreen(G_GBuffer::AttColor);
-}
-
 void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
 {
     PushDrawAttachmentIds();
