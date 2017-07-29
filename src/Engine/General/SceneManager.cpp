@@ -33,7 +33,7 @@ void SceneManager::Update()
     }
 }
 
-void SceneManager::SetActiveScene(Scene *scene)
+void SceneManager::LoadScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);
     ENSURE(sm->m_activeScene != scene);
@@ -131,11 +131,11 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
 
-    SceneManager::SetActiveScene(nullptr);
+    SceneManager::LoadScene(nullptr);
 
     if (scene)
     {
-        SceneManager::SetActiveScene(scene);
+        SceneManager::LoadScene(scene);
     }
 }
 

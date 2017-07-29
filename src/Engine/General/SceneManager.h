@@ -8,7 +8,7 @@ FORWARD class Scene;
 class SceneManager
 {
 public:
-    static void SetActiveScene(Scene *scene);
+    static void LoadScene(Scene *scene);
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
