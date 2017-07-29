@@ -32,12 +32,6 @@ const Vector2G<T> Vector2G<T>::Zero = Vector2G<T>(SCAST<T>(0));
 template<class T>
 const Vector2G<T> Vector2G<T>::One = Vector2G<T>(SCAST<T>(1));
 
-using Vector2f = Vector2G<float>;
-using Vector2d = Vector2G<double>;
-using Vector2i = Vector2G<int>;
-using Vector2u = Vector2G<uint>;
-using Vector2  = Vector2f;
-
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
 

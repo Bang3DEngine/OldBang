@@ -5,7 +5,6 @@
 
 #include "Bang/G_Screen.h"
 
-FORWARD class GameObject;
 FORWARD class GraphicPipeline;
 
 class Screen: public G_Screen

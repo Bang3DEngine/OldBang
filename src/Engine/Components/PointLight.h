@@ -4,9 +4,6 @@
 #include "Bang/Light.h"
 
 FORWARD class Camera;
-FORWARD class XMLNode;
-FORWARD class Material;
-FORWARD class ICloneable;
 
 class PointLight : public Light
 {
@@ -27,7 +24,7 @@ protected:
     PointLight();
     virtual ~PointLight();
 
-    RectG<float> GetRenderRect(Camera *cam) const override;
+    Rect GetRenderRect(Camera *cam) const override;
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 };
 

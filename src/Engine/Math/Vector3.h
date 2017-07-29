@@ -92,12 +92,6 @@ const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(SCAST<T>(0),
                                                   SCAST<T>(0),
                                                   SCAST<T>(1));
 
-using Vector3f = Vector3G<float>;
-using Vector3d = Vector3G<double>;
-using Vector3i = Vector3G<int>;
-using Vector3u = Vector3G<uint>;
-using Vector3  = Vector3f;
-
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
 

@@ -6,11 +6,6 @@
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
-FORWARD class String;
-FORWARD class XMLNode;
-FORWARD class Transform;
-FORWARD class GameObject;
-
 class Component : public ISceneEventListener,
                   public IToString,
                   public SerializableObject

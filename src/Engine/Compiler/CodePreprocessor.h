@@ -3,10 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD_T class List;
-FORWARD   class Path;
-FORWARD   class String;
-
 class CodePreprocessor
 {
 public:

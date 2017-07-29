@@ -6,7 +6,6 @@
 FORWARD class Scene;
 FORWARD class Renderer;
 FORWARD class G_GBuffer;
-FORWARD class GameObject;
 FORWARD class GraphicPipeline;
 
 class GPPass

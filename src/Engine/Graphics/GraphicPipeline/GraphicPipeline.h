@@ -4,13 +4,10 @@
 #include "Bang/Renderer.h"
 #include "Bang/G_GBuffer.h"
 
-FORWARD class Mesh;
 FORWARD class Scene;
-FORWARD class Material;
 FORWARD class G_Screen;
 FORWARD class G_Texture;
 FORWARD class GLContext;
-FORWARD class GameObject;
 FORWARD class G_Framebuffer;
 FORWARD class GPPass_RenderLayer;
 FORWARD class G_TextureUnitManager;

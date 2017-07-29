@@ -4,8 +4,6 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
-FORWARD class Path;
-
 class BangPreprocessor
 {
 public:

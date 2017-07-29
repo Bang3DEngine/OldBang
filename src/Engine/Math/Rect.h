@@ -5,11 +5,6 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector4.h"
 
-FORWARD_T class List;
-FORWARD_T class Array;
-FORWARD_T class Vector2G;
-FORWARD_T class Matrix4G;
-
 template<class T>
 class RectG
 {
@@ -143,12 +138,6 @@ public:
         return RectG<T>(minv, maxv);
     }
 };
-
-using Rectf = RectG<float>;
-using Rectd = RectG<double>;
-using Recti = RectG<int>;
-using Rectu = RectG<uint>;
-using Rect  = Rectf;
 
 template<class T>
 const RectG<T> RectG<T>::ScreenRect = RectG<T>(Vector2G<T>(-1),
@@ -317,6 +306,5 @@ void operator+=(RectG<T> &r, const Vector2G<T> &v)
     r.m_min += v;
     r.m_max += v;
 }
-
 
 #endif // RECT_H

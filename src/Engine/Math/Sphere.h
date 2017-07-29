@@ -4,8 +4,6 @@
 #include "Bang/AABox.h"
 #include "Bang/Vector3.h"
 
-FORWARD_T class Array;
-
 class Sphere
 {
 private:

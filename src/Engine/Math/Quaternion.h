@@ -5,10 +5,6 @@
 
 #include "Bang/Debug.h"
 
-FORWARD_T class Vector3G;
-FORWARD_T class Vector4G;
-FORWARD_T class Matrix4G;
-
 template<class T> // Most of it almost copied from glm
 class QuaternionG
 {
@@ -325,9 +321,5 @@ Vector3G<T> operator*(const Vector3G<T>& lhs, const QuaternionG<T>& q)
 {
     return q.Inversed() * lhs;
 }
-
-using Quaternionf = QuaternionG<float>;
-using Quaterniond = QuaternionG<double>;
-using Quaternion  = Quaternionf;
 
 #endif // QUATERNIONG_H

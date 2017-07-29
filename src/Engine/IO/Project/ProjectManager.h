@@ -3,8 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD class Path;
-FORWARD class String;
 FORWARD class Project;
 
 class ProjectManager

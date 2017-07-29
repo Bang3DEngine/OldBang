@@ -115,7 +115,7 @@ bool G_ShaderProgram::Set(const String &name, bool v) const
     return Set(name, v ? 1 : 0);
 }
 
-bool G_ShaderProgram::Set(const String &name, const Matrix3G<float> &m) const
+bool G_ShaderProgram::Set(const String &name, const Matrix3 &m) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -126,7 +126,7 @@ bool G_ShaderProgram::Set(const String &name, const Matrix3G<float> &m) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::Set(const String &name, const Matrix4G<float> &m) const
+bool G_ShaderProgram::Set(const String &name, const Matrix4 &m) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -137,7 +137,7 @@ bool G_ShaderProgram::Set(const String &name, const Matrix4G<float> &m) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::Set(const String &name, const Vector2G<float> &v) const
+bool G_ShaderProgram::Set(const String &name, const Vector2 &v) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -148,7 +148,7 @@ bool G_ShaderProgram::Set(const String &name, const Vector2G<float> &v) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::Set(const String &name, const Vector3G<float> &v) const
+bool G_ShaderProgram::Set(const String &name, const Vector3 &v) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -159,7 +159,7 @@ bool G_ShaderProgram::Set(const String &name, const Vector3G<float> &v) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::Set(const String &name, const Vector4G<float> &v) const
+bool G_ShaderProgram::Set(const String &name, const Vector4 &v) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);

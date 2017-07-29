@@ -65,7 +65,4 @@ private:
     Debug::_Status(log.str(), timeInSeconds); \
 } while (0)
 
-#define ASSERT(assertion) if ( !(assertion) ) {\
-    Debug_Error("Assertion '" << #assertion << "' failed!"); }
-
 #endif // DEBUG_H

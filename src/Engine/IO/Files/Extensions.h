@@ -3,9 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD_T class List;
-FORWARD   class String;
-
 class Extensions
 {
 public:

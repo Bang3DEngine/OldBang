@@ -4,7 +4,6 @@
 #include "Bang/Path.h"
 
 FORWARD class Scene;
-FORWARD class String;
 
 class SceneManager
 {

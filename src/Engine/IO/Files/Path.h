@@ -4,7 +4,6 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
-FORWARD_T class List;
 FORWARD   class QFileInfo;
 
 class Path : public IToString

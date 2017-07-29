@@ -3,12 +3,10 @@
 
 #include "Bang/Path.h"
 
-FORWARD_T class List;
-FORWARD   class String;
-FORWARD_T class Array;
 FORWARD   class QByteArray;
 FORWARD   class QModelIndex;
 FORWARD   class QFileSystemModel;
+
 class File
 {
 public:

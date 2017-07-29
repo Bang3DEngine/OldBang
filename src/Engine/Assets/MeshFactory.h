@@ -3,10 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD class Mesh;
-FORWARD class String;
-FORWARD class GameObject;
-
 class MeshFactory
 {
 public:

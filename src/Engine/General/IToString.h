@@ -3,8 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD class String;
-
 class IToString
 {
 protected:

@@ -10,13 +10,9 @@
 #include "Bang/ISceneEventListener.h"
 
 FORWARD   class Scene;
-FORWARD_T class RectG;
-FORWARD   class AABox;
 FORWARD   class Camera;
-FORWARD   class Sphere;
 FORWARD   class Material;
 FORWARD   class Component;
-FORWARD   class Transform;
 
 class GameObject : public ISceneEventListener,
                    public IToString,
@@ -71,8 +67,8 @@ public:
      * from the passed camera in NDC.
      * @return
      */
-    RectG<float> GetBoundingScreenRect(Camera *cam,
-                                       bool includeChildren = true) const;
+    Rect GetBoundingScreenRect(Camera *cam,
+                               bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box in Object space, without

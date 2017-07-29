@@ -3,9 +3,6 @@
 
 #include "Bang/Light.h"
 
-FORWARD class XMLNode;
-FORWARD class ICloneable;
-
 class DirectionalLight : public Light
 {
     OBJECT(DirectionalLight)

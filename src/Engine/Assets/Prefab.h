@@ -11,9 +11,6 @@
 //  ...
 //</GameObject>
 
-FORWARD class XMLNode;
-FORWARD class GameObject;
-
 class Prefab : public Asset
 {
 	OBJECT(Prefab)

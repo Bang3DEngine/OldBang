@@ -4,7 +4,6 @@
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 
-FORWARD_T class RectG;
 FORWARD   class Camera;
 FORWARD   class Material;
 FORWARD   class Renderer;
@@ -32,7 +31,7 @@ protected:
     Material *m_lightMaterialScreen = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(G_GBuffer *gbuffer, const RectG<float> &renderRect) const;
+    void ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const;
 
     /**
      * @brief Returns the rect where the Light range can apply.
@@ -42,7 +41,7 @@ protected:
      * of its spherical range.
      * @return
      */
-    virtual RectG<float> GetRenderRect(Camera *cam) const;
+    virtual Rect GetRenderRect(Camera *cam) const;
 
     Light();
     virtual ~Light();

@@ -7,9 +7,7 @@
 
 #include "Bang/Component.h"
 
-FORWARD class XMLNode;
 FORWARD class AudioClip;
-FORWARD class ICloneable;
 
 class AudioSource : public Component
 {

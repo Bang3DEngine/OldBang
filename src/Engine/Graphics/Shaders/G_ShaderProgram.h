@@ -4,14 +4,8 @@
 #include "Bang/Map.h"
 #include "Bang/GLObject.h"
 
-FORWARD   class Color;
 FORWARD   class G_Shader;
 FORWARD   class G_Texture;
-FORWARD_T class Vector2G;
-FORWARD_T class Vector3G;
-FORWARD_T class Vector4G;
-FORWARD_T class Matrix3G;
-FORWARD_T class Matrix4G;
 
 class G_ShaderProgram : public GLObject
 {
@@ -31,11 +25,11 @@ public:
     bool Set(const String &name, float v) const;
     bool Set(const String &name, bool v) const;
     bool Set(const String &name, const Color &c) const;
-    bool Set(const String &name, const Matrix3G<float> &m) const;
-    bool Set(const String &name, const Matrix4G<float>& m) const;
-    bool Set(const String &name, const Vector2G<float>& v) const;
-    bool Set(const String &name, const Vector3G<float>& v) const;
-    bool Set(const String &name, const Vector4G<float>& v) const;
+    bool Set(const String &name, const Matrix3& m) const;
+    bool Set(const String &name, const Matrix4& m) const;
+    bool Set(const String &name, const Vector2& v) const;
+    bool Set(const String &name, const Vector3& v) const;
+    bool Set(const String &name, const Vector4& v) const;
     bool Set(const String &name, const G_Texture *texture) const;
 
     void Refresh();

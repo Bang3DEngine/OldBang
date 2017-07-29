@@ -8,8 +8,6 @@
 #include "Bang/XMLProperty.h"
 #include "Bang/StreamOperators.h"
 
-FORWARD class Path;
-
 class XMLAttribute : public IToString
 {
 public:

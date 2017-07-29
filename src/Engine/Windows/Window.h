@@ -5,7 +5,6 @@
 #include "Bang/Vector2.h"
 
 FORWARD   class Screen;
-FORWARD_T class Vector2G;
 
 class Window
 {
@@ -18,7 +17,7 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
-    Vector2G<float> GetSize() const;
+    Vector2 GetSize() const;
 
     virtual Screen *GetScreen() const;
 

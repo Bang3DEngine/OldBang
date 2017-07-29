@@ -8,9 +8,7 @@
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 
-FORWARD   class Sphere;
 FORWARD   class Camera;
-FORWARD_T class Array;
 
 class AABox : public IToString
 {

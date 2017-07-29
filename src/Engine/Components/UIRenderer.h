@@ -4,10 +4,6 @@
 #include "Bang/Color.h"
 #include "Bang/MeshRenderer.h"
 
-FORWARD class XMLNode;
-FORWARD class Material;
-FORWARD class ICloneable;
-
 class UIRenderer : public MeshRenderer
 {
     OBJECT(UIRenderer)
@@ -15,7 +11,7 @@ class UIRenderer : public MeshRenderer
 public:
     virtual void Render() const override;
 
-    virtual RectG<float> GetBoundingRect(Camera *camera = nullptr) const override;
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     void SetTint(const Color &tint);
     const Color& GetTint() const;

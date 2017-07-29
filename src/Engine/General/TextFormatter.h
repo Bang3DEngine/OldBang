@@ -8,9 +8,6 @@
 #include "Bang/TextFormat.h"
 
 FORWARD   class Font;
-FORWARD_T class Array;
-FORWARD   class String;
-FORWARD_T class Vector2G;
 
 class TextFormatter
 {

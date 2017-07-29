@@ -4,9 +4,6 @@
 #include "Bang/Object.h"
 #include "Bang/IReflectable.h"
 
-FORWARD class Path;
-FORWARD class String;
-FORWARD class XMLNode;
 FORWARD class InspectorWidget;
 
 class SerializableObject : public Object,

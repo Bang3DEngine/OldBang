@@ -5,9 +5,6 @@
 #include "Bang/Color.h"
 #include "Bang/G_Framebuffer.h"
 
-FORWARD class Mesh;
-FORWARD class Material;
-
 class G_GBuffer : public G_Framebuffer
 {
 public:

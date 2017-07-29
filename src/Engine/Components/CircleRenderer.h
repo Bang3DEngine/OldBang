@@ -3,9 +3,6 @@
 
 #include "Bang/LineRenderer.h"
 
-FORWARD class XMLNode;
-FORWARD class ICloneable;
-
 class CircleRenderer : public LineRenderer
 {
     OBJECT(CircleRenderer)

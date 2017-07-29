@@ -99,12 +99,6 @@ const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(SCAST<T>(0),
                                                   SCAST<T>(1),
                                                   SCAST<T>(0));
 
-using Vector4f = Vector4G<float>;
-using Vector4d = Vector4G<double>;
-using Vector4i = Vector4G<int>;
-using Vector4u = Vector4G<uint>;
-using Vector4  = Vector4f;
-
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
 

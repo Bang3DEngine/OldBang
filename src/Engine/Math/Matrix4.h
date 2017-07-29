@@ -6,9 +6,6 @@
 #include "Bang/Debug.h"
 #include "Bang/Vector4.h"
 
-FORWARD_T class Vector3G;
-FORWARD_T class QuaternionG;
-
 template<class T> // Part of it copied from glm
 class Matrix4G
 {
@@ -441,9 +438,5 @@ Vector4G<T> operator*(const Matrix4G<T> &m, const Vector4G<T> &v)
                        (m[0].z * v.x) + (m[1].z * v.y) + (m[2].z * v.z) + (m[3].z * v.w),
                        (m[0].w * v.x) + (m[1].w * v.y) + (m[2].w * v.z) + (m[3].w * v.w));
 }
-
-using Matrix4f = Matrix4G<float>;
-using Matrix4d = Matrix4G<double>;
-using Matrix4 = Matrix4f;
 
 #endif // MATRIX4_H

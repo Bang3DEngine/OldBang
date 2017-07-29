@@ -7,8 +7,6 @@
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
 
-FORWARD   class AABox;
-FORWARD_T class RectG;
 FORWARD   class Camera;
 FORWARD   class Material;
 FORWARD   class SceneManager;
@@ -39,7 +37,7 @@ public:
      * @return Returns the bounding rect of the renderer relative to the
      * passed camera's screen space
      */
-    virtual RectG<float> GetBoundingRect(Camera *camera = nullptr) const;
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
 
     void SetCullMode(GL::CullMode m_cullMode);
     GL::CullMode GetCullMode() const;

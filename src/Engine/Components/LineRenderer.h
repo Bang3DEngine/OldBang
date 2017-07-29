@@ -5,12 +5,6 @@
 #include "Bang/Vector3.h"
 #include "Bang/MeshRenderer.h"
 
-FORWARD class Mesh;
-FORWARD class AABox;
-FORWARD class XMLNode;
-FORWARD class Material;
-FORWARD class ICloneable;
-
 class LineRenderer : public Renderer
 {
     OBJECT(LineRenderer)

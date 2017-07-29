@@ -4,9 +4,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIRenderer.h"
 
-FORWARD class XMLNode;
-FORWARD class ICloneable;
-
 class UIImage : public UIRenderer
 {
     OBJECT(UIImage)

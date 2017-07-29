@@ -6,9 +6,6 @@
 #include "Bang/Component.h"
 #include "Bang/Quaternion.h"
 
-FORWARD class XMLNode;
-FORWARD class ICloneable;
-
 class Transform : public Component
 {
     OBJECT(Transform)

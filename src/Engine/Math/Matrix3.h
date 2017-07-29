@@ -5,8 +5,6 @@
 
 #include "Bang/Vector3.h"
 
-FORWARD_T class QuaternionG;
-
 template<class T> // Part of it copied from glm
 class Matrix3G
 {
@@ -144,9 +142,5 @@ Matrix3G<T> operator*(const Matrix3G<T> &m1, const Matrix3G<OtherT> &m2)
     res[2][2] = vA02 * vB20 + vA12 * vB21 + vA22 * vB22;
     return res;
 }
-
-using Matrix3f = Matrix3G<float>;
-using Matrix3d = Matrix3G<double>;
-using Matrix3  = Matrix3f;
 
 #endif // MATRIX3_H

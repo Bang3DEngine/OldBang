@@ -3,9 +3,6 @@
 
 #include "Bang/Component.h"
 
-FORWARD class XMLNode;
-FORWARD class ICloneable;
-
 class Canvas : public Component
 {
     OBJECT(Canvas)

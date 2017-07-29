@@ -10,7 +10,6 @@
 
 FORWARD class G_VAO;
 FORWARD class G_VBO;
-FORWARD class XMLNode;
 
 class Mesh : public Asset
 {

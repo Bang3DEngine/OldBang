@@ -9,8 +9,6 @@
 #include "Bang/UIRenderer.h"
 
 FORWARD class Font;
-FORWARD class XMLNode;
-FORWARD class ICloneable;
 
 class UIText : public UIRenderer
 {
