@@ -243,6 +243,10 @@ void Input::PeekEvent(const SDL_Event &event)
         }
         break;
 
+        case SDL_TEXTINPUT:
+            m_inputText = String(event.text.text);
+        break;
+
         default:
             enqueue = false;
     }
@@ -406,4 +410,22 @@ Vector2i Input::GetPreviousMouseCoords()
 {
     Input *inp = Input::GetInstance();
     return inp->m_lastMouseCoords;
+}
+
+void Input::StartTextInput()
+{
+    SDL_StartTextInput();
+}
+
+String Input::PollInputText()
+{
+    Input *input = Input::GetInstance();
+    String res = input->m_inputText;
+    input->m_inputText = "";
+    return res;
+}
+
+void Input::StopTextInput()
+{
+    SDL_StopTextInput();
 }

@@ -72,7 +72,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
     String charactersToLoadStr = "";
     charactersToLoadStr += "abcdefghijklmnopqrstuvwxyz";
-    charactersToLoadStr += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    charactersToLoadStr += "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
     charactersToLoadStr += "0123456789()[]{}*.,;:-_=!<>+";
     charactersToLoadStr += "/\\$%&@\"'#¿?^";
 

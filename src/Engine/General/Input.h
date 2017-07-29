@@ -124,6 +124,10 @@ public:
     static Vector2 GetMouseCoordsNDC();
     static Vector2i GetPreviousMouseCoords();
 
+    static void StartTextInput();
+    static String PollInputText();
+    static void StopTextInput();
+
 private:
     Input();
     virtual ~Input();
@@ -189,6 +193,8 @@ private:
     bool m_lockMouseMovement = false;
     int m_framesMouseStopped = 0;
     bool m_isMouseInside = false;
+
+    String m_inputText = "";
 
     Vector2i m_mouseCoords, m_lastMouseCoords;
 

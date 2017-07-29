@@ -33,7 +33,7 @@ UIInputText::UIInputText() : GameObject("UIInputText")
     p_text->SetContent("Bang");
     p_text->SetHorizontalAlign(HorizontalAlignment::Center);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
-    p_text->SetHorizontalWrapMode(WrapMode::Wrap);
+    p_text->SetHorizontalWrapMode(WrapMode::Hide);
     p_text->SetVerticalWrapMode(WrapMode::Hide);
 
     m_cursorRenderer = m_textContainer->AddComponent<SingleLineRenderer>();
@@ -45,6 +45,7 @@ UIInputText::UIInputText() : GameObject("UIInputText")
     m_cursorIndex = p_text->GetContent().Length();
 
     SetCursorWidth(2.0f);
+    Input::StartTextInput();
 }
 
 UIInputText::~UIInputText()
@@ -98,28 +99,11 @@ const String &UIInputText::GetContent() const
 void UIInputText::HandleKeys()
 {
     // Key typing
-    for (Input::Key keyDown : Input::GetKeysDown())
-    {
-        String keyStr = Input::KeyToString(keyDown);
-        if (keyDown == Input::Key::Space) { keyStr = " "; }
-        if (keyStr.Length() == 1)
-        {
-            char c = keyStr[0];
-
-            if ( String::IsLetter(c) )
-            {
-                bool shift =  (Input::GetKey(Input::Key::LShift) ||
-                               Input::GetKey(Input::Key::RShift));
-                bool upperCase = shift;
-                c = upperCase ? String::ToUpper(c) : String::ToLower(c);
-            }
-
-            String content = p_text->GetContent();
-            content.Insert(m_cursorIndex, c);
-            p_text->SetContent(content);
-            m_cursorIndex++;
-        }
-    }
+    String content = p_text->GetContent();
+    String inputText = Input::PollInputText();
+    content.Insert(m_cursorIndex, inputText);
+    p_text->SetContent(content);
+    m_cursorIndex += inputText.Length();
 
     // BackSpace case
     if (!p_text->GetContent().Empty() &&
