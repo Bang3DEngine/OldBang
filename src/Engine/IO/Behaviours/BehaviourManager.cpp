@@ -3,16 +3,11 @@
 #include <QLibrary>
 
 #include "Bang/File.h"
-#include "Bang/Time.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
-#include "Bang/Scene.h"
 #include "Bang/Project.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Application.h"
-#include "Bang/SceneManager.h"
-#include "Bang/ProjectManager.h"
-#include "Bang/CodePreprocessor.h"
 
 BehaviourManager::BehaviourManager()
 {

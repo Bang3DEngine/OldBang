@@ -1,13 +1,14 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include <QModelIndex>
-#include <QFileSystemModel>
-#include <QCryptographicHash>
-
 #include "Bang/Path.h"
-#include "Bang/String.h"
 
+FORWARD_T class List;
+FORWARD   class String;
+FORWARD_T class Array;
+FORWARD   class QByteArray;
+FORWARD   class QModelIndex;
+FORWARD   class QFileSystemModel;
 class File
 {
 public:

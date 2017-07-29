@@ -4,7 +4,7 @@
 #include "Bang/GPPass.h"
 #include "Bang/PostProcessEffect.h"
 
-class G_ShaderProgram;
+FORWARD class G_ShaderProgram;
 class GPPass_SP_PostProcessEffects : public GPPass
 {
 public:

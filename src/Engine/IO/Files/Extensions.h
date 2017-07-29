@@ -1,8 +1,10 @@
 #ifndef EXTENSIONS_H
 #define EXTENSIONS_H
 
-#include "Bang/List.h"
-#include "Bang/String.h"
+#include "Bang.h"
+
+FORWARD_T class List;
+FORWARD   class String;
 
 class Extensions
 {

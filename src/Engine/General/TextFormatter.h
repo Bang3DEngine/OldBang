@@ -5,10 +5,12 @@
 
 #include "Bang/Font.h"
 #include "Bang/Rect.h"
-#include "Bang/Array.h"
-#include "Bang/String.h"
-#include "Bang/Vector2.h"
 #include "Bang/TextFormat.h"
+
+FORWARD   class Font;
+FORWARD_T class Array;
+FORWARD   class String;
+FORWARD_T class Vector2G;
 
 class TextFormatter
 {

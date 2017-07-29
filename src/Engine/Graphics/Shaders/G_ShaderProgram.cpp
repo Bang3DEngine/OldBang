@@ -1,6 +1,12 @@
 #include "Bang/G_ShaderProgram.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Matrix3.h"
+#include "Bang/Matrix4.h"
 #include "Bang/G_Shader.h"
 #include "Bang/G_Texture.h"
 #include "Bang/G_TextureUnitManager.h"
@@ -82,7 +88,7 @@ GL::BindTarget G_ShaderProgram::GetGLBindTarget() const
     return GL::BindTarget::ShaderProgram;
 }
 
-bool G_ShaderProgram::SetInt(const String &name, int v) const
+bool G_ShaderProgram::Set(const String &name, int v) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -93,7 +99,7 @@ bool G_ShaderProgram::SetInt(const String &name, int v) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::SetFloat(const String &name, float v) const
+bool G_ShaderProgram::Set(const String &name, float v) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -104,50 +110,12 @@ bool G_ShaderProgram::SetFloat(const String &name, float v) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::SetBool(const String &name, bool v) const
+bool G_ShaderProgram::Set(const String &name, bool v) const
 {
-    return SetInt(name, v ? 1 : 0);
+    return Set(name, v ? 1 : 0);
 }
 
-bool G_ShaderProgram::SetVec2 (const String &name, const Vector2& v) const
-{
-    ASSERT(GL::IsBound(this));
-    int location = GetUniformLocation(name);
-    if (location >= 0)
-    {
-        glUniform2fv(location, 1, &v.x);
-    }
-    return (location >= 0);
-}
-
-bool G_ShaderProgram::SetVec3 (const String &name, const Vector3& v) const
-{
-    ASSERT(GL::IsBound(this));
-    int location = GetUniformLocation(name);
-    if (location >= 0)
-    {
-        glUniform3fv(location, 1, &v.x);
-    }
-    return (location >= 0);
-}
-
-bool G_ShaderProgram::SetVec4 (const String &name, const Vector4& v) const
-{
-    ASSERT(GL::IsBound(this));
-    int location = GetUniformLocation(name);
-    if (location >= 0)
-    {
-        glUniform4fv(location, 1, &v.x);
-    }
-    return (location >= 0);
-}
-
-bool G_ShaderProgram::SetColor(const String &name, const Color &c) const
-{
-    return SetVec4(name, Vector4(c.r, c.g, c.b, c.a));
-}
-
-bool G_ShaderProgram::SetMat3(const String &name, const Matrix3 &m) const
+bool G_ShaderProgram::Set(const String &name, const Matrix3G<float> &m) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -158,7 +126,7 @@ bool G_ShaderProgram::SetMat3(const String &name, const Matrix3 &m) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
+bool G_ShaderProgram::Set(const String &name, const Matrix4G<float> &m) const
 {
     ASSERT(GL::IsBound(this));
     int location = GetUniformLocation(name);
@@ -169,7 +137,45 @@ bool G_ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
     return (location >= 0);
 }
 
-bool G_ShaderProgram::SetTexture(const String &name, const G_Texture *texture) const
+bool G_ShaderProgram::Set(const String &name, const Vector2G<float> &v) const
+{
+    ASSERT(GL::IsBound(this));
+    int location = GetUniformLocation(name);
+    if (location >= 0)
+    {
+        glUniform2fv(location, 1, v.Data());
+    }
+    return (location >= 0);
+}
+
+bool G_ShaderProgram::Set(const String &name, const Vector3G<float> &v) const
+{
+    ASSERT(GL::IsBound(this));
+    int location = GetUniformLocation(name);
+    if (location >= 0)
+    {
+        glUniform3fv(location, 1, v.Data());
+    }
+    return (location >= 0);
+}
+
+bool G_ShaderProgram::Set(const String &name, const Vector4G<float> &v) const
+{
+    ASSERT(GL::IsBound(this));
+    int location = GetUniformLocation(name);
+    if (location >= 0)
+    {
+        glUniform4fv(location, 1, v.Data());
+    }
+    return (location >= 0);
+}
+
+bool G_ShaderProgram::Set(const String &name, const Color &c) const
+{
+    return Set(name, Vector4(c.r, c.g, c.b, c.a));
+}
+
+bool G_ShaderProgram::Set(const String &name,  const G_Texture *texture) const
 {
     bool uniformIsUsed = BindTextureToAvailableUnit(name, texture);
     if (uniformIsUsed)

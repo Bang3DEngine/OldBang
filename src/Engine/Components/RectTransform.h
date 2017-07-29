@@ -1,12 +1,13 @@
 #ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
-#include "Bang/Rect.h"
 #include "Bang/Vector2.h"
-#include "Bang/Matrix4.h"
 #include "Bang/Transform.h"
 
-class XMLNode;
+FORWARD_T class RectG;
+FORWARD   class XMLNode;
+FORWARD_T class Matrix4G;
+
 class RectTransform : public Transform
 {
     OBJECT(RectTransform)
@@ -45,11 +46,11 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    Recti GetScreenSpaceRectPx() const;
-    Rect GetScreenSpaceRect() const;
+    RectG<int> GetScreenSpaceRectPx() const;
+    RectG<float> GetScreenSpaceRect() const;
 
-    Recti GetParentScreenRectPx() const;
-    Rect GetParentScreenRect() const;
+    RectG<int> GetParentScreenRectPx() const;
+    RectG<float> GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     virtual void OnParentSizeChanged() override;

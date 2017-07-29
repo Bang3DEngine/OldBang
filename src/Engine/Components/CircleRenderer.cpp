@@ -1,12 +1,7 @@
 #include "Bang/CircleRenderer.h"
 
-#include "Bang/Mesh.h"
 #include "Bang/Array.h"
-#include "Bang/Scene.h"
-#include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
-#include "Bang/Transform.h"
-#include "Bang/SceneManager.h"
 
 CircleRenderer::CircleRenderer()
 {
@@ -65,14 +60,14 @@ int CircleRenderer::GetSegments() const
 void CircleRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
-    SetRadius(xmlInfo.GetFloat("Radius"));
-    SetSegments(xmlInfo.GetFloat("Segments"));
+    SetRadius(xmlInfo.Get<float>("Radius"));
+    SetSegments(xmlInfo.Get<float>("Segments"));
 }
 
 void CircleRenderer::Write(XMLNode *xmlInfo) const
 {
     LineRenderer::Write(xmlInfo);
 
-    xmlInfo->SetFloat("Radius", GetRadius());
-    xmlInfo->SetInt("Segments", GetSegments());
+    xmlInfo->Set("Radius", GetRadius());
+    xmlInfo->Set("Segments", GetSegments());
 }

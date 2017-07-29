@@ -1,12 +1,11 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
-class Mesh;
-class String;
-class Material;
-class GameObject;
-class MeshRenderer;
-class AssetsManager;
+#include "Bang.h"
+
+FORWARD class Mesh;
+FORWARD class String;
+FORWARD class GameObject;
 
 class MeshFactory
 {

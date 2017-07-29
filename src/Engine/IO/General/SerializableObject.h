@@ -1,14 +1,14 @@
 #ifndef SERIALIZABLEOBJECT_H
 #define SERIALIZABLEOBJECT_H
 
-#include "Bang/Path.h"
 #include "Bang/Object.h"
-#include "Bang/String.h"
 #include "Bang/IReflectable.h"
 
-class String;
-class XMLNode;
-class InspectorWidget;
+FORWARD class Path;
+FORWARD class String;
+FORWARD class XMLNode;
+FORWARD class InspectorWidget;
+
 class SerializableObject : public Object,
                            public IReflectable
 {

@@ -5,9 +5,10 @@
 #include <sstream>
 #include <fstream>
 
+#include "Bang/Path.h"
 #include "Bang/File.h"
+#include "Bang/String.h"
 #include "Bang/XMLNode.h"
-#include "Bang/FileReader.h"
 
 SerializableObject::SerializableObject()
 {

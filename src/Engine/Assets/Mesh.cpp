@@ -7,7 +7,6 @@
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
-#include "Bang/SerializableObject.h"
 
 Mesh::Mesh()
 {
@@ -170,13 +169,13 @@ const Path &Mesh::GetModelFilepath() const
 void Mesh::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_modelFilepath = xmlInfo.GetFilepath("ModelFilepath");
+    m_modelFilepath = xmlInfo.Get<Path>("ModelFilepath");
     LoadFromFile(m_modelFilepath);
 }
 
 void Mesh::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("ModelFilepath", m_modelFilepath);
+    xmlInfo->Set("ModelFilepath", m_modelFilepath);
 }
 

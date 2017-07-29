@@ -1,9 +1,11 @@
 #ifndef CODEPREPROCESSOR_H
 #define CODEPREPROCESSOR_H
 
-#include "Bang/Path.h"
-#include "Bang/Array.h"
-#include "Bang/String.h"
+#include "Bang.h"
+
+FORWARD_T class List;
+FORWARD   class Path;
+FORWARD   class String;
 
 class CodePreprocessor
 {

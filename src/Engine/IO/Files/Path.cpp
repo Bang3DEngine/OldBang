@@ -2,7 +2,9 @@
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 
+#include "Bang/List.h"
 #include "Bang/Array.h"
 
 const Path Path::Empty;
@@ -49,6 +51,16 @@ bool Path::IsFile() const
 bool Path::Exists() const
 {
     return IsDir() || IsFile();
+}
+
+List<Path> Path::FindFiles() const
+{
+    return FindFiles(false, {});
+}
+
+List<Path> Path::FindFiles(bool recursively) const
+{
+    return FindFiles(recursively, {});
 }
 
 List<Path> Path::FindFiles(bool recursive, const List<String> &extensions) const

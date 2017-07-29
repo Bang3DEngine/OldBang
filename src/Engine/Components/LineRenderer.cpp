@@ -1,11 +1,7 @@
 #include "Bang/LineRenderer.h"
 
 #include "Bang/Mesh.h"
-#include "Bang/Math.h"
-#include "Bang/Material.h"
-#include "Bang/Transform.h"
-#include "Bang/ShaderProgram.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/AABox.h"
 
 LineRenderer::LineRenderer()
 {

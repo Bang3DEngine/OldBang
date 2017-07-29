@@ -1,10 +1,12 @@
 #ifndef PROJECTMANAGER_H
 #define PROJECTMANAGER_H
 
-#include "Bang/Path.h"
-#include "Bang/String.h"
+#include "Bang.h"
 
-class Project;
+FORWARD class Path;
+FORWARD class String;
+FORWARD class Project;
+
 class ProjectManager
 {
 public:

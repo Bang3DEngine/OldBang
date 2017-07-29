@@ -2,13 +2,12 @@
 #define UIRENDERER_H
 
 #include "Bang/Color.h"
-#include "Bang/String.h"
-#include "Bang/Matrix4.h"
 #include "Bang/MeshRenderer.h"
 
-class XMLNode;
-class Material;
-class ICloneable;
+FORWARD class XMLNode;
+FORWARD class Material;
+FORWARD class ICloneable;
+
 class UIRenderer : public MeshRenderer
 {
     OBJECT(UIRenderer)
@@ -16,7 +15,7 @@ class UIRenderer : public MeshRenderer
 public:
     virtual void Render() const override;
 
-    virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
+    virtual RectG<float> GetBoundingRect(Camera *camera = nullptr) const override;
 
     void SetTint(const Color &tint);
     const Color& GetTint() const;

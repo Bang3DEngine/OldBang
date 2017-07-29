@@ -2,16 +2,17 @@
 #define G_SHADERPROGRAM_H
 
 #include "Bang/Map.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
-#include "Bang/Matrix3.h"
-#include "Bang/Matrix4.h"
 #include "Bang/GLObject.h"
 
-class G_Shader;
-class G_Texture;
+FORWARD   class Color;
+FORWARD   class G_Shader;
+FORWARD   class G_Texture;
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
+FORWARD_T class Vector4G;
+FORWARD_T class Matrix3G;
+FORWARD_T class Matrix4G;
+
 class G_ShaderProgram : public GLObject
 {
 public:
@@ -26,16 +27,16 @@ public:
     void UnBind() const override;
     GL::BindTarget GetGLBindTarget() const override;
 
-    bool SetInt(const String &name, int v) const;
-    bool SetFloat(const String &name, float v) const;
-    bool SetBool(const String &name, bool v) const;
-    bool SetVec2(const String &name, const Vector2& v) const;
-    bool SetVec3(const String &name, const Vector3& v) const;
-    bool SetVec4(const String &name, const Vector4& v) const;
-    bool SetColor(const String &name, const Color& c) const;
-    bool SetMat3(const String &name, const Matrix3& m) const;
-    bool SetMat4(const String &name, const Matrix4& m) const;
-    bool SetTexture(const String &name, const G_Texture *texture) const;
+    bool Set(const String &name, int v) const;
+    bool Set(const String &name, float v) const;
+    bool Set(const String &name, bool v) const;
+    bool Set(const String &name, const Color &c) const;
+    bool Set(const String &name, const Matrix3G<float> &m) const;
+    bool Set(const String &name, const Matrix4G<float>& m) const;
+    bool Set(const String &name, const Vector2G<float>& v) const;
+    bool Set(const String &name, const Vector3G<float>& v) const;
+    bool Set(const String &name, const Vector4G<float>& v) const;
+    bool Set(const String &name, const G_Texture *texture) const;
 
     void Refresh();
     virtual void SetVertexShader(G_Shader *vertexShader);
@@ -63,5 +64,6 @@ protected:
 
     virtual void OnPreLink();
 };
+
 
 #endif // G_SHADERPROGRAM_H

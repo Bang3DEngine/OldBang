@@ -1,7 +1,6 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "Bang/Path.h"
 #include "Bang/G_Shader.h"
 #include "Bang/IToString.h"
 

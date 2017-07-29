@@ -1,12 +1,23 @@
 #include "Bang/FileReader.h"
 
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+#include <stdio.h>
+#include <cstring>
+#include <iostream>
+
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
+#include "Bang/Path.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
+#include "Bang/Array.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 

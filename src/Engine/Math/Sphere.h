@@ -1,9 +1,10 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "Bang/Array.h"
 #include "Bang/AABox.h"
 #include "Bang/Vector3.h"
+
+FORWARD_T class Array;
 
 class Sphere
 {

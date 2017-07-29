@@ -1,5 +1,6 @@
 #include "Bang/G_Font.h"
 
+#include "Bang/Path.h"
 #include "Bang/G_Texture2D.h"
 #include "Bang/G_FontSheetCreator.h"
 

@@ -1,13 +1,12 @@
 #include "Bang/AnonymousAudioPlayer.h"
 
-#include "Bang/Paths.h"
-#include "Bang/Scene.h"
+#include "Bang/Math.h"
+#include "Bang/Path.h"
 #include "Bang/Debug.h"
-#include "Bang/String.h"
+#include "Bang/Vector3.h"
 #include "Bang/AudioClip.h"
 #include "Bang/Application.h"
 #include "Bang/AudioSource.h"
-#include "Bang/SceneManager.h"
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
 

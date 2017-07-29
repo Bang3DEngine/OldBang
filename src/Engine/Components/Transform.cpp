@@ -3,7 +3,6 @@
 #include <sstream>
 #include <ostream>
 
-#include "Bang/Math.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 
@@ -413,15 +412,15 @@ Vector3 Transform::GetDown() const
 void Transform::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    SetLocalPosition(xmlInfo.GetVector3("Position"));
-    SetLocalEuler(xmlInfo.GetVector3("Rotation"));
-    SetLocalScale(xmlInfo.GetVector3("Scale"));
+    SetLocalPosition(xmlInfo.Get<Vector3>("Position"));
+    SetLocalEuler(xmlInfo.Get<Vector3>("Rotation"));
+    SetLocalScale(xmlInfo.Get<Vector3>("Scale"));
 }
 
 void Transform::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetVector3("Position", GetLocalPosition());
-    xmlInfo->SetVector3("Rotation", GetLocalEuler());
-    xmlInfo->SetVector3("Scale",    GetLocalScale());
+    xmlInfo->Set("Position", GetLocalPosition());
+    xmlInfo->Set("Rotation", GetLocalEuler());
+    xmlInfo->Set("Scale",    GetLocalScale());
 }

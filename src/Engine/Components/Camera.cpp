@@ -1,16 +1,15 @@
 #include "Bang/Camera.h"
 
 #include "Bang/GL.h"
+#include "Bang/Rect.h"
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
-#include "Bang/Scene.h"
+#include "Bang/AABox.h"
 #include "Bang/Screen.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Transform.h"
-#include "Bang/GLContext.h"
-#include "Bang/GameObject.h"
-#include "Bang/FileReader.h"
-#include "Bang/MeshRenderer.h"
-#include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 
@@ -207,24 +206,24 @@ void Camera::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    SetClearColor(xmlInfo.GetColor("ClearColor"));
-    SetFovDegrees(xmlInfo.GetFloat("FOVDegrees"));
-    SetZNear(xmlInfo.GetFloat("ZNear"));
-    SetZFar(xmlInfo.GetFloat("ZFar"));
-    SetProjectionMode( xmlInfo.GetEnum<ProjectionMode>("ProjectionMode") );
-    SetOrthoHeight( xmlInfo.GetFloat("OrthoHeight") );
+    SetClearColor(xmlInfo.Get<Color>("ClearColor"));
+    SetFovDegrees(xmlInfo.Get<float>("FOVDegrees"));
+    SetZNear(xmlInfo.Get<float>("ZNear"));
+    SetZFar(xmlInfo.Get<float>("ZFar"));
+    SetProjectionMode( xmlInfo.Get<ProjectionMode>("ProjectionMode") );
+    SetOrthoHeight( xmlInfo.Get<float>("OrthoHeight") );
 }
 
 void Camera::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    xmlInfo->SetColor("ClearColor", GetClearColor());
-    xmlInfo->SetFloat("ZNear", GetZNear());
-    xmlInfo->SetFloat("ZFar", GetZFar());
-    xmlInfo->SetEnum<ProjectionMode>("ProjectionMode", GetProjectionMode());
-    xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight());
-    xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
+    xmlInfo->Set("ClearColor", GetClearColor());
+    xmlInfo->Set("ZNear", GetZNear());
+    xmlInfo->Set("ZFar", GetZFar());
+    xmlInfo->Set("ProjectionMode", GetProjectionMode());
+    xmlInfo->Set("OrthoHeight", GetOrthoHeight());
+    xmlInfo->Set("FOVDegrees", GetFovDegrees());
 }
 
 void Camera::SetIdentityMode(bool identityMode)

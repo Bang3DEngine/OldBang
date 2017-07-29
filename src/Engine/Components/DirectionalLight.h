@@ -1,12 +1,11 @@
 #ifndef DIRECTIONALLIGHT_H
 #define DIRECTIONALLIGHT_H
 
-#include "Bang/Math.h"
 #include "Bang/Light.h"
-#include "Bang/String.h"
 
-class XMLNode;
-class ICloneable;
+FORWARD class XMLNode;
+FORWARD class ICloneable;
+
 class DirectionalLight : public Light
 {
     OBJECT(DirectionalLight)

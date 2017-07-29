@@ -249,20 +249,17 @@ void UIText::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
 
-    Path fontFilepath = xmlInfo.GetFilepath("Font");
+    Path fontFilepath = xmlInfo.Get<Path>("Font");
     SetFont( AssetsManager::Load<Font>(fontFilepath) );
-
-    SetContent(xmlInfo.GetString("Content"));
-
-    SetTint(xmlInfo.GetColor("Color"));
-    SetTextSize(xmlInfo.GetFloat("TextSize"));
-    SetSpacing(xmlInfo.GetVector2<int>("Spacing"));
-    SetKerning(xmlInfo.GetBool("Kerning"));
-
-    SetVerticalWrapMode( xmlInfo.GetEnum<WrapMode>("VWrapMode") );
-    SetHorizontalWrapMode( xmlInfo.GetEnum<WrapMode>("HWrapMode") );
-    SetVerticalAlign( xmlInfo.GetEnum<VerticalAlignment>("VerticalAlign") );
-    SetHorizontalAlign( xmlInfo.GetEnum<HorizontalAlignment>("HorizontalAlign"));
+    SetContent(xmlInfo.Get<String>("Content"));
+    SetTint(xmlInfo.Get<Color>("Color"));
+    SetTextSize(xmlInfo.Get<float>("TextSize"));
+    SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
+    SetKerning(xmlInfo.Get<bool>("Kerning"));
+    SetVerticalWrapMode( xmlInfo.Get<WrapMode>("VWrapMode") );
+    SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
+    SetVerticalAlign( xmlInfo.Get<VerticalAlignment>("VerticalAlign") );
+    SetHorizontalAlign( xmlInfo.Get<HorizontalAlignment>("HorizontalAlign"));
 
     RefreshMesh();
 }
@@ -271,17 +268,14 @@ void UIText::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("Font", GetFont() ? GetFont()->GetFilepath() :
-                                             Path::Empty);
-    xmlInfo->SetColor("Color", GetTint());
-    xmlInfo->SetString("Content", GetContent());
-    xmlInfo->SetFloat("TextSize", GetTextSize());
-    xmlInfo->SetVector2<int>("Spacing", GetSpacing());
-    xmlInfo->SetBool("Kerning", GetKerning());
-    xmlInfo->SetEnum<WrapMode>("VWrapMode", GetVerticalWrapMode());
-    xmlInfo->SetEnum<WrapMode>("HWrapMode", GetHorizontalWrapMode());
-    xmlInfo->SetEnum<VerticalAlignment>("VerticalAlign",
-                                        GetVerticalAlignment() );
-    xmlInfo->SetEnum<HorizontalAlignment>("HorizontalAlign",
-                                          GetHorizontalAlignment() );
+    xmlInfo->Set("Font", GetFont() ? GetFont()->GetFilepath() : Path::Empty);
+    xmlInfo->Set("Color", GetTint());
+    xmlInfo->Set("Content", GetContent());
+    xmlInfo->Set("TextSize", GetTextSize());
+    xmlInfo->Set("Spacing", GetSpacing());
+    xmlInfo->Set("Kerning", GetKerning());
+    xmlInfo->Set("VWrapMode", GetVerticalWrapMode());
+    xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());
+    xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
+    xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
 }

@@ -1,6 +1,6 @@
 #include "Bang/BPReflectedStruct.h"
 
-#include "Bang/OStreamOperators.h"
+#include "Bang/StreamOperators.h"
 #include "Bang/BangPreprocessor.h"
 
 typedef BangPreprocessor BP;
@@ -155,8 +155,7 @@ String BPReflectedStruct::GetWriteReflectionCode() const
 
         String varType = var.GetVariableType();
         if (varType.Empty()) { continue; }
-        varType[0] = String::ToUpper(varType[0]);
-        varSetSrc.ReplaceInSitu("SET_FUNC", "Set" + varType);
+        varSetSrc.ReplaceInSitu("SET_FUNC", "Set<" + varType + ">");
         varSetSrc.ReplaceInSitu("VAR_REFL_NAME", var.GetName());
         varSetSrc.ReplaceInSitu("VAR_NAME", var.GetVariableName());
 
@@ -184,8 +183,7 @@ String BPReflectedStruct::GetReadReflectionCode() const
 
         String varType = var.GetVariableType();
         if (varType.Empty()) { continue; }
-        varType[0] = String::ToUpper(varType[0]);
-        varGetSrc.ReplaceInSitu("GET_FUNC", "Get" + varType);
+        varGetSrc.ReplaceInSitu("GET_FUNC", "Get<" + varType + ">");
         varGetSrc.ReplaceInSitu("VAR_REFL_NAME", var.GetName());
         varGetSrc.ReplaceInSitu("VAR_NAME", var.GetVariableName());
 

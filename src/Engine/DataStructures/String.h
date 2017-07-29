@@ -6,10 +6,13 @@
 #include <sstream>
 #include <cstring>
 
-class QString;
-class IToString;
-template <class T> class List;
-template <class T> class Array;
+#include "Bang.h"
+
+FORWARD   class QString;
+FORWARD   class IToString;
+FORWARD_T class List;
+FORWARD_T class Array;
+
 class String : public std::string
 {
 public:

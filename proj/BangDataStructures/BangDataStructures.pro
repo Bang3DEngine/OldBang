@@ -14,11 +14,11 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/Math.cpp \
     $$BANG_ROOT/src/Engine/Math/Random.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/Path.cpp \
-    $$BANG_ROOT/src/Engine/Debug/OStreamOperators.cpp \
+    $$BANG_ROOT/src/Engine/Debug/StreamOperators.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/File.cpp
 
 HEADERS += \
-    $$BANG_ROOT/src/Engine/Debug/OStreamOperators.h \
+    $$BANG_ROOT/src/Engine/Debug/StreamOperators.h \
     $$BANG_ROOT/src/Engine/Math/Math.h \
     $$BANG_ROOT/src/Engine/Math/Random.h \
     $$BANG_ROOT/src/Engine/IO/Files/Path.h \

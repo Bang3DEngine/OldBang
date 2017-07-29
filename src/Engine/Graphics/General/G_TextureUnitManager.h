@@ -6,7 +6,8 @@
 #include "Bang/GL.h"
 #include "Bang/Map.h"
 
-class G_Texture;
+FORWARD class G_Texture;
+
 class G_TextureUnitManager
 {
 public:

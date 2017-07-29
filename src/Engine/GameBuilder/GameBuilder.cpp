@@ -1,5 +1,7 @@
 #include "Bang/GameBuilder.h"
 
+#include <QProgressDialog>
+
 #include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
@@ -14,7 +16,8 @@
 
 void GameBuilder::BuildGame(const Project *project,
                             const Path &outputExecutableFilepath,
-                            BinType binaryType)
+                            BinType binaryType,
+                            bool compileBehaviours)
 {
     Path executableDir = outputExecutableFilepath.GetDirectory();
 
@@ -40,11 +43,14 @@ void GameBuilder::BuildGame(const Project *project,
         return;
     }
 
-    Debug_Log("Compiling behaviours...");
-    if (!GameBuilder::CompileBehaviours(executableDir, binaryType))
+    if (compileBehaviours)
     {
-        Debug_Error("Could not compile the behaviours");
-        return;
+        Debug_Log("Compiling behaviours...");
+        if (!GameBuilder::CompileBehaviours(executableDir, binaryType))
+        {
+            Debug_Error("Could not compile the behaviours");
+            return;
+        }
     }
 
     Debug_Log("Moving the executable to '" <<outputExecutableFilepath  << "'...");

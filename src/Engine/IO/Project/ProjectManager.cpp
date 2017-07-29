@@ -2,11 +2,11 @@
 
 #include <string>
 
+#include "Bang/Path.h"
 #include "Bang/File.h"
-#include "Bang/List.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
-#include "Bang/Scene.h"
+#include "Bang/String.h"
 #include "Bang/Project.h"
 #include "Bang/XMLNode.h"
 #include "Bang/XMLParser.h"

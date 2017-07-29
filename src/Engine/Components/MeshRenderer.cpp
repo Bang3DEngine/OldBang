@@ -48,12 +48,11 @@ void MeshRenderer::Render() const
 void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
+    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.Get<Path>("Mesh") ) );
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-    xmlInfo->SetFilepath("Mesh",
-                         GetMesh() ? GetMesh()->GetFilepath() : Path::Empty);
+    xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetFilepath() : Path::Empty);
 }

@@ -3,8 +3,9 @@
 
 #include "Bang/Component.h"
 
-class G_Shader;
-class ShaderProgram;
+FORWARD class G_Shader;
+FORWARD class ShaderProgram;
+
 class PostProcessEffect : public Component
 {
     OBJECT(PostProcessEffect)

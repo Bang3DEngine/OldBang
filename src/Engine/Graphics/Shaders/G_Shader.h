@@ -3,6 +3,8 @@
 
 #include <GL/glew.h>
 
+#include "Bang/Path.h"
+#include "Bang/String.h"
 #include "Bang/GLObject.h"
 
 class G_Shader : public GLObject

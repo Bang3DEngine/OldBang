@@ -3,15 +3,15 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/Rect.h"
-#include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/TextFormat.h"
 #include "Bang/UIRenderer.h"
 
-class Font;
-class XMLNode;
-class ICloneable;
+FORWARD class Font;
+FORWARD class XMLNode;
+FORWARD class ICloneable;
+
 class UIText : public UIRenderer
 {
     OBJECT(UIText)

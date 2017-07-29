@@ -3,10 +3,11 @@
 
 #include "Bang/Light.h"
 
-class Camera;
-class XMLNode;
-class Material;
-class ICloneable;
+FORWARD class Camera;
+FORWARD class XMLNode;
+FORWARD class Material;
+FORWARD class ICloneable;
+
 class PointLight : public Light
 {
     OBJECT(PointLight)
@@ -26,7 +27,7 @@ protected:
     PointLight();
     virtual ~PointLight();
 
-    Rect GetRenderRect(Camera *cam) const override;
+    RectG<float> GetRenderRect(Camera *cam) const override;
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 };
 

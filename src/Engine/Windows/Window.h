@@ -4,7 +4,9 @@
 #include <SDL2/SDL.h>
 #include "Bang/Vector2.h"
 
-class Screen;
+FORWARD   class Screen;
+FORWARD_T class Vector2G;
+
 class Window
 {
 public:
@@ -16,7 +18,7 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
-    Vector2 GetSize() const;
+    Vector2G<float> GetSize() const;
 
     virtual Screen *GetScreen() const;
 

@@ -5,7 +5,6 @@
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"
-#include "Bang/String.h"
 #include "Bang/G_Shader.h"
 
 class ShaderManager : public QObject

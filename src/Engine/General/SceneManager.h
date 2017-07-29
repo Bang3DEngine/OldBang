@@ -1,11 +1,11 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
-#include "Bang/List.h"
 #include "Bang/Path.h"
-#include "Bang/String.h"
 
-class Scene;
+FORWARD class Scene;
+FORWARD class String;
+
 class SceneManager
 {
 public:

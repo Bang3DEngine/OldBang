@@ -40,7 +40,7 @@ void G_Material::SetTexture(const G_Texture2D *texture)
     if (m_texture)
     {
         G_ShaderProgram *sp = GetShaderProgram();
-        sp->SetTexture("B_Texture0", m_texture);
+        sp->Set("B_Texture0", m_texture);
     }
 }
 
@@ -94,17 +94,17 @@ void G_Material::Bind() const
     G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->SetVec2("B_ScreenSize", Vector2f(Screen::GetSize()));
+    sp->Set("B_ScreenSize", Vector2f(Screen::GetSize()));
 
-    sp->SetVec2( "B_UvMultiply",               GetUvMultiply());
-    sp->SetColor("B_MaterialDiffuseColor",     GetDiffuseColor());
-    sp->SetFloat("B_MaterialShininess",        GetShininess());
-    sp->SetFloat("B_MaterialReceivesLighting", ReceivesLighting() ? 1.0f : 0.0f);
+    sp->Set("B_UvMultiply",              GetUvMultiply());
+    sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
+    sp->Set("B_MaterialShininess",        GetShininess());
+    sp->Set("B_MaterialReceivesLighting", ReceivesLighting() ? 1.0f : 0.0f);
 
     float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
-    sp->SetTexture("B_Texture0",  GetTexture());
-    sp->SetFloat("B_AlphaCutoff", alphaCutoff);
-    sp->SetBool("B_HasTexture",   GetTexture() != nullptr);
+    sp->Set("B_Texture0",  GetTexture());
+    sp->Set("B_AlphaCutoff", alphaCutoff);
+    sp->Set("B_HasTexture",   GetTexture() != nullptr);
 
     GL::ApplyContextToShaderProgram(sp);
 }

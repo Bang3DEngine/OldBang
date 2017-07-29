@@ -1,6 +1,7 @@
 #include "Bang/Color.h"
 
 #include <sstream>
+#include <QColor>
 
 #include "Bang/Math.h"
 #include "Bang/String.h"

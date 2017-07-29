@@ -6,7 +6,9 @@
 #include <functional>
 #include <unordered_map>
 
-template<class T> class List;
+#include "Bang.h"
+
+FORWARD_T class List;
 
 template <class Key, class Value>
 class UMap : public std::unordered_map<Key, Value>

@@ -5,13 +5,11 @@
 
 #include "Bang/Debug.h"
 
-template<class T> class Vector3G;
-template<class T> class Vector4G;
-template<class T> class Matrix4G;
+FORWARD_T class Vector3G;
+FORWARD_T class Vector4G;
+FORWARD_T class Matrix4G;
 
-// Most of it almost copied from glm
-
-template<class T>
+template<class T> // Most of it almost copied from glm
 class QuaternionG
 {
 public:

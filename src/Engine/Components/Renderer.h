@@ -4,15 +4,15 @@
 #include <GL/glew.h>
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
-#include "Bang/Array.h"
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
 
-class AABox;
-class Camera;
-class Material;
-class SceneManager;
+FORWARD   class AABox;
+FORWARD_T class RectG;
+FORWARD   class Camera;
+FORWARD   class Material;
+FORWARD   class SceneManager;
+
 class Renderer : public GLObject, public Component
 {
 public:
@@ -39,7 +39,7 @@ public:
      * @return Returns the bounding rect of the renderer relative to the
      * passed camera's screen space
      */
-    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
+    virtual RectG<float> GetBoundingRect(Camera *camera = nullptr) const;
 
     void SetCullMode(GL::CullMode m_cullMode);
     GL::CullMode GetCullMode() const;

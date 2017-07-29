@@ -2,12 +2,13 @@
 #define MATERIAL_H
 
 #include "Bang/Asset.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
 
-class Texture2D;
-class G_Material;
-class ShaderProgram;
+FORWARD   class Color;
+FORWARD_T class Vector2G;
+FORWARD   class Texture2D;
+FORWARD   class G_Material;
+FORWARD   class ShaderProgram;
+
 class Material : public Asset
 {
 	OBJECT(Material)
@@ -19,14 +20,14 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    void SetUvMultiply(const Vector2& uvMultiply);
+    void SetUvMultiply(const Vector2G<float>& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *texture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
-    const Vector2& GetUvMultiply() const;
+    const Vector2G<float>& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
     const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;

@@ -1,13 +1,13 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
 
-
 #include <sstream>
 #include <fstream>
 
 #include "Bang/XMLNode.h"
 
-class SerializableObject;
+FORWARD class SerializableObject;
+
 class XMLParser
 {
 private:

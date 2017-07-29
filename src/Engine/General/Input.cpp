@@ -1,8 +1,6 @@
 #include "Bang/Input.h"
 
 #include "Bang/Time.h"
-#include "Bang/Object.h"
-#include "Bang/Window.h"
 #include "Bang/Screen.h"
 #include "Bang/Application.h"
 

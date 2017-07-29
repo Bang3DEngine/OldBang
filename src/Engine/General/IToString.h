@@ -1,7 +1,9 @@
 #ifndef ITOSTRING_H
 #define ITOSTRING_H
 
-#include "Bang/String.h"
+#include "Bang.h"
+
+FORWARD class String;
 
 class IToString
 {

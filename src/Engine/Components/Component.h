@@ -1,16 +1,16 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "Bang/Paths.h"
 #include "Bang/Object.h"
-#include "Bang/String.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
-class XMLNode;
-class Transform;
-class GameObject;
+FORWARD class String;
+FORWARD class XMLNode;
+FORWARD class Transform;
+FORWARD class GameObject;
+
 class Component : public ISceneEventListener,
                   public IToString,
                   public SerializableObject

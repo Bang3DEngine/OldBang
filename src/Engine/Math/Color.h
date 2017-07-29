@@ -1,13 +1,14 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <QColor>
+#include "Bang.h"
 
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
+FORWARD   class QColor;
+FORWARD   class String;
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
+FORWARD_T class Vector4G;
 
-class String;
 class Color
 {
 public:
@@ -15,9 +16,9 @@ public:
 
     Color();
     explicit Color(float m);
-    explicit Color(const Vector2 &v, float b = 0, float a = 1);
-    explicit Color(const Vector3 &v, float a = 1);
-    explicit Color(const Vector4 &v);
+    explicit Color(const Vector2G<float> &v, float b = 0, float a = 1);
+    explicit Color(const Vector3G<float> &v, float a = 1);
+    explicit Color(const Vector4G<float> &v);
     explicit Color(float r, float g, float b);
     explicit Color(float r, float g, float b, float a);
     explicit Color(const Color &c, float a);
@@ -43,13 +44,13 @@ public:
     static Color FromQColor(const QColor &c);
     QColor ToQColor() const;
     String ToString() const;
-    Vector3 ToVector3() const;
-    Vector4 ToVector4() const;
+    Vector3G<float> ToVector3() const;
+    Vector4G<float> ToVector4() const;
 
     void Ceil();
 
-    static Color FromVector3(const Vector3 &v);
-    static Color FromVector4(const Vector4 &v);
+    static Color FromVector3(const Vector3G<float> &v);
+    static Color FromVector4(const Vector4G<float> &v);
 
     const static Color Red;
     const static Color Orange;

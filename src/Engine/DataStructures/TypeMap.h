@@ -8,6 +8,7 @@
 #include "Bang/String.h"
 
 typedef String TypeId;
+
 template <class Value>
 class TypeMap : public Map<TypeId, Value>
 {

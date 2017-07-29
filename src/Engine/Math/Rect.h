@@ -5,9 +5,10 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector4.h"
 
-template <class T> class List;
-template <class T> class Array;
-template <class T> class Matrix4G;
+FORWARD_T class List;
+FORWARD_T class Array;
+FORWARD_T class Vector2G;
+FORWARD_T class Matrix4G;
 
 template<class T>
 class RectG

@@ -2,8 +2,9 @@
 #define MAP_H
 
 #include <map>
+#include "Bang.h"
 
-template<class T> class List;
+FORWARD_T class List;
 
 template <class Key, class Value>
 class Map : public std::map<Key, Value>

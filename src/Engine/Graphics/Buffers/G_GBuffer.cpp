@@ -1,12 +1,8 @@
 #include "Bang/G_GBuffer.h"
 
 #include "Bang/Math.h"
-#include "Bang/Mesh.h"
 #include "Bang/Rect.h"
-#include "Bang/G_VAO.h"
 #include "Bang/Color.h"
-#include "Bang/Array.h"
-#include "Bang/G_Screen.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/G_RenderTexture.h"
 #include "Bang/G_ShaderProgram.h"
@@ -41,10 +37,10 @@ void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
-    sp->SetTexture("B_GTex_NormalDepth", m_normalTexture);
-    sp->SetTexture("B_GTex_DiffColor",   m_diffuseTexture);
-    sp->SetTexture("B_GTex_Misc",        m_miscTexture);
-    sp->SetTexture("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
+    sp->Set("B_GTex_NormalDepth", m_normalTexture);
+    sp->Set("B_GTex_DiffColor",   m_diffuseTexture);
+    sp->Set("B_GTex_Misc",        m_miscTexture);
+    sp->Set("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
                                                        m_colorTexture);
 }
 

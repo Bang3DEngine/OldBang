@@ -2,6 +2,7 @@
 
 #include <QProcess>
 
+#include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/Array.h"
 #include "Bang/BPReflectedStruct.h"

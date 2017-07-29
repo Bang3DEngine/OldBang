@@ -122,14 +122,14 @@ const Path &AudioClip::GetSoundFilepath() const
 void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_audioFileFilepath = xmlInfo.GetFilepath("AudioFilepath");
+    m_audioFileFilepath = xmlInfo.Get<Path>("AudioFilepath");
     LoadFromFile( m_audioFileFilepath );
 }
 
 void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("AudioFilepath", m_audioFileFilepath);
+    xmlInfo->Set("AudioFilepath", m_audioFileFilepath);
 }
 
 void AudioClip::OnAudioSourceAttached(AudioSource *as)

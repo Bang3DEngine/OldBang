@@ -9,12 +9,11 @@
 #include <sys/types.h>
 
 #include "Bang/List.h"
-#include "Bang/Path.h"
-#include "Bang/Flags.h"
 #include "Bang/String.h"
 
-class QLibrary;
-class Behaviour;
+FORWARD class QLibrary;
+FORWARD class Behaviour;
+
 class SystemUtils
 {
 public:

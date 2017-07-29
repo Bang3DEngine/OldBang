@@ -1,13 +1,13 @@
 #ifndef GAMEBUILDER_H
 #define GAMEBUILDER_H
 
-#include <QProgressDialog>
+#include <QObject>
 
 #include "Bang/Path.h"
-#include "Bang/String.h"
 #include "Bang/BinType.h"
 
-class Project;
+FORWARD class Project;
+
 class GameBuilder : public QObject
 {
     Q_OBJECT
@@ -15,7 +15,8 @@ class GameBuilder : public QObject
 public:
     static void BuildGame(const Project *project,
                           const Path &outputExecutableFilepath,
-                          BinType binType);
+                          BinType binType,
+                          bool compileBehaviours = true);
 
 private:
     GameBuilder() = delete;

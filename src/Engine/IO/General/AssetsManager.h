@@ -6,7 +6,6 @@
 #include "Bang/Map.h"
 #include "Bang/Asset.h"
 #include "Bang/Paths.h"
-#include "Bang/Object.h"
 #include "Bang/XMLParser.h"
 
 class AssetsManager

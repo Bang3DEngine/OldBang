@@ -1,14 +1,8 @@
 ﻿#include "Bang/UIImage.h"
 
-#include "Bang/Rect.h"
-#include "Bang/G_GBuffer.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
-#include "Bang/GameObject.h"
-#include "Bang/MeshFactory.h"
-#include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/GraphicPipeline.h"
 
 UIImage::UIImage()
 {
@@ -45,7 +39,7 @@ Texture2D *UIImage::GetImageTexture() const
 void UIImage::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
-    Path texFilepath = xmlInfo.GetFilepath("Image");
+    Path texFilepath = xmlInfo.Get<Path>("Image");
     SetImage( AssetsManager::Load<Texture2D>(texFilepath) );
 }
 
@@ -55,6 +49,6 @@ void UIImage::Write(XMLNode *xmlInfo) const
 
     Texture2D *imgTex = GetImageTexture();
     Path texFilepath = imgTex ? imgTex->GetFilepath() : Path();
-    xmlInfo->SetFilepath("Image", texFilepath);
+    xmlInfo->Set("Image", texFilepath);
 }
 

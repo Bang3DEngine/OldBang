@@ -25,12 +25,22 @@ int main(int argc, char **argv)
     BinType binaryType = (debugOrRelease == "DEBUG") ? BinType::Debug :
                                                        BinType::Release;
 
+    bool compileBehaviours = true;
+    for (char **arg = argv; arg < argv + argc; ++arg)
+    {
+        if (strcmp(*arg, "NO_COMPILE_BEHAVIOURS") == 0)
+        {
+            compileBehaviours = false;
+        }
+    }
+
     Path projectPath(argv[1]);
     ProjectManager pm;
     Project *project = pm.OpenProject(projectPath);
     GameBuilder::BuildGame(project,
                            projectPath.GetDirectory().Append("Snake.exe"),
-                           binaryType);
+                           binaryType,
+                           compileBehaviours);
 
     return 0;
 }

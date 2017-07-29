@@ -79,7 +79,7 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    Path shaderFilepath = xmlInfo.GetFilepath("PostProcessShader");
+    Path shaderFilepath = xmlInfo.Get<Path>("PostProcessShader");
     if (!p_postProcessShader ||
         shaderFilepath != p_postProcessShader->GetFilepath())
     {
@@ -88,17 +88,17 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
         SetPostProcessShader(postProcessShader);
     }
 
-    SetPriority( xmlInfo.GetInt("Priority") );
-    SetType( xmlInfo.GetEnum<Type>("Type") );
+    SetPriority( xmlInfo.Get<int>("Priority") );
+    SetType( xmlInfo.Get<Type>("Type") );
 }
 
 void PostProcessEffect::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("PostProcessShader", GetPostProcessShaderFilepath());
-    xmlInfo->SetInt("Priority", GetPriority());
-    xmlInfo->SetEnum<Type>("Type", GetType());
+    xmlInfo->Set("PostProcessShader", GetPostProcessShaderFilepath());
+    xmlInfo->Set("Priority", GetPriority());
+    xmlInfo->Set("Type", GetType());
 }
 
 bool operator<(const PostProcessEffect& lhs, const PostProcessEffect& rhs)

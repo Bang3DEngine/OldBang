@@ -1,16 +1,16 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
 
-#include "Bang/AABox.h"
 #include "Bang/Array.h"
-#include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/MeshRenderer.h"
 
-class Mesh;
-class XMLNode;
-class Material;
-class ICloneable;
+FORWARD class Mesh;
+FORWARD class AABox;
+FORWARD class XMLNode;
+FORWARD class Material;
+FORWARD class ICloneable;
+
 class LineRenderer : public Renderer
 {
     OBJECT(LineRenderer)

@@ -2,8 +2,9 @@
 #define SET_H
 
 #include <set>
+#include "Bang.h"
 
-template<class T> class List;
+FORWARD_T class List;
 
 template<class Key>
 class Set : private std::set<Key>

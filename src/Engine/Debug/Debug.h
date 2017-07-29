@@ -6,10 +6,8 @@
 #include <iostream>
 
 #include "Bang/String.h"
-#include "Bang/OStreamOperators.h"
+#include "Bang/StreamOperators.h"
 
-class String;
-class IToString;
 class Debug
 {
 public:

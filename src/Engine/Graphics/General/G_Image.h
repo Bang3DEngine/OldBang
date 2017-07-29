@@ -6,7 +6,6 @@
 #include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/Color.h"
-#include "Bang/String.h"
 #include "Bang/Vector2.h"
 
 class G_Image

@@ -1,5 +1,5 @@
 
-
+#include "Bang/Path.h"
 #include "Bang/BangPreprocessor.h"
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"

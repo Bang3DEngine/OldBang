@@ -1,12 +1,6 @@
 #include "Bang/DirectionalLight.h"
 
-#include "Bang/Scene.h"
-#include "Bang/Camera.h"
 #include "Bang/Material.h"
-#include "Bang/Texture2D.h"
-#include "Bang/Transform.h"
-#include "Bang/GameObject.h"
-#include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 
 DirectionalLight::DirectionalLight()

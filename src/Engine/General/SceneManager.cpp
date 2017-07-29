@@ -4,6 +4,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/String.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Behaviour.h"
 #include "Bang/FileReader.h"

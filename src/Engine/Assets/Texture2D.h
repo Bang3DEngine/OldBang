@@ -1,7 +1,6 @@
 ﻿#ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
-#include "Bang/Array.h"
 #include "Bang/Asset.h"
 #include "Bang/G_Texture2D.h"
 

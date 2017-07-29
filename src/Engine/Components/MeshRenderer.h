@@ -3,9 +3,10 @@
 
 #include "Bang/Renderer.h"
 
-class G_VAO;
-class Mesh;
-class Material;
+FORWARD class Mesh;
+FORWARD class Material;
+FORWARD class G_VAO;
+
 class MeshRenderer : public Renderer
 {
     OBJECT(MeshRenderer)

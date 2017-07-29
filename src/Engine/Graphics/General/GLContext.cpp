@@ -12,25 +12,25 @@
 void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
-    sp->SetMat4("B_Model",    m_modelMatrix);
-    sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
+    sp->Set("B_Model",    m_modelMatrix);
+    sp->Set("B_ModelInv", m_modelMatrix.Inversed());
 
     Matrix3 normalMatrix = Matrix3(m_modelMatrix.c0.xyz(),
                                    m_modelMatrix.c1.xyz(),
                                    m_modelMatrix.c2.xyz()
                                ).Transposed().Inversed();
 
-    sp->SetMat3("B_Normal",    normalMatrix);
-    sp->SetMat3("B_NormalInv", normalMatrix.Inversed());
+    sp->Set("B_Normal",    normalMatrix);
+    sp->Set("B_NormalInv", normalMatrix.Inversed());
 
-    sp->SetMat4("B_View",    m_viewMatrix);
-    sp->SetMat4("B_ViewInv", m_viewMatrix.Inversed());
+    sp->Set("B_View",    m_viewMatrix);
+    sp->Set("B_ViewInv", m_viewMatrix.Inversed());
 
-    sp->SetMat4("B_Projection",    m_projectionMatrix);
-    sp->SetMat4("B_ProjectionInv", m_projectionMatrix.Inversed());
+    sp->Set("B_Projection",    m_projectionMatrix);
+    sp->Set("B_ProjectionInv", m_projectionMatrix.Inversed());
 
-    sp->SetFloat("B_Camera_Near", m_zNear);
-    sp->SetFloat("B_Camera_Far",  m_zFar);
+    sp->Set("B_Camera_Near", m_zNear);
+    sp->Set("B_Camera_Far",  m_zFar);
 
     Matrix4 pvmMatrix;
     if (m_viewProjMode == GL::ViewProjMode::UseBoth)
@@ -60,7 +60,7 @@ void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
         pvmMatrix = m_modelMatrix;
     }
 
-    sp->SetMat4("B_PVM", pvmMatrix);
+    sp->Set("B_PVM", pvmMatrix);
 }
 
 void GLContext::Render(const G_VAO* vao, GL::RenderMode renderMode,

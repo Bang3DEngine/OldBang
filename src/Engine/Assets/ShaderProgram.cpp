@@ -83,7 +83,7 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    Path vShaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    Path vShaderFilepath = xmlInfo.Get<Path>("VertexShader");
     if (vShaderFilepath.Exists())
     {
         G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex,
@@ -91,7 +91,7 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
         SetVertexShader(vShader);
     }
 
-    Path fShaderFilepath = xmlInfo.GetFilepath("FragmentShader");
+    Path fShaderFilepath = xmlInfo.Get<Path>("FragmentShader");
     if (fShaderFilepath.Exists())
     {
         G_Shader *fShader = ShaderManager::Load(G_Shader::Type::Fragment,
@@ -105,8 +105,8 @@ void ShaderProgram::Write(XMLNode *xmlInfo) const
     Asset::Write(xmlInfo);
 
     Path vShaderFilepath = p_vshader ? p_vshader->GetFilepath() : Path();
-    xmlInfo->SetFilepath("VertexShader",   vShaderFilepath);
+    xmlInfo->Set("VertexShader",   vShaderFilepath);
 
     Path fShaderFilepath = p_fshader ? p_fshader->GetFilepath() : Path();
-    xmlInfo->SetFilepath("FragmentShader", fShaderFilepath);
+    xmlInfo->Set("FragmentShader", fShaderFilepath);
 }

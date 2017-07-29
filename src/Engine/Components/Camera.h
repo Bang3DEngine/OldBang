@@ -1,21 +1,21 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Bang/Rect.h"
-#include "Bang/AABox.h"
 #include "Bang/Color.h"
-#include "Bang/String.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Matrix4.h"
 #include "Bang/Component.h"
 
-class Mesh;
-class XMLNode;
-class G_Screen;
-class ICloneable;
-class MeshRenderer;
-class ShaderProgram;
+FORWARD   class Mesh;
+FORWARD   class AABox;
+FORWARD_T class RectG;
+FORWARD   class XMLNode;
+FORWARD   class G_Screen;
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
+FORWARD_T class Matrix4G;
+FORWARD   class ICloneable;
+FORWARD   class MeshRenderer;
+FORWARD   class ShaderProgram;
+
 class Camera : public Component
 {
     OBJECT(Camera)
@@ -30,8 +30,8 @@ public:
     void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
     ShaderProgram *GetReplacementShaderProgram() const;
 
-    void GetViewMatrix(Matrix4 *view) const;
-    void GetProjectionMatrix(Matrix4 *proj) const;
+    void GetViewMatrix(Matrix4G<float> *view) const;
+    void GetProjectionMatrix(Matrix4G<float> *proj) const;
 
     void SetOrthoHeight(float orthoHeight);
 
@@ -56,12 +56,13 @@ public:
      * @brief Converts a point from world coods to Screen NDC.
      *        NDC: Normalized Device Coordinates [(-1,-1) -> (1,1)]
     **/
-    Vector2 WorldToScreenNDCPoint(const Vector3 &position);
-    Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera);
+    Vector2G<float> WorldToScreenNDCPoint(const Vector3G<float> &position);
+    Vector3G<float> ScreenNDCPointToWorld(const Vector2G<float> &screenNDCPos,
+                                          float zFromCamera);
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    Rect GetScreenBoundingRect(const AABox &bbox);
+    RectG<float> GetScreenBoundingRect(const AABox &bbox);
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

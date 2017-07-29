@@ -2,10 +2,11 @@
 
 #include <functional>
 
+#include "Bang/Rect.h"
+#include "Bang/AABox.h"
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
-#include "Bang/GameObject.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
 
@@ -149,10 +150,10 @@ void Renderer::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    Path materialFilepath = xmlInfo.GetFilepath("Material");
+    Path materialFilepath = xmlInfo.Get<Path>("Material");
     SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
-    SetLineWidth(xmlInfo.GetFloat("LineWidth"));
-    SetDrawWireframe(xmlInfo.GetBool("DrawWireframe"));
+    SetLineWidth(xmlInfo.Get<float>("LineWidth"));
+    SetDrawWireframe(xmlInfo.Get<bool>("DrawWireframe"));
 }
 
 void Renderer::Write(XMLNode *xmlInfo) const
@@ -160,8 +161,8 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
 
     Material *sharedMat = GetSharedMaterial();
-    xmlInfo->SetFilepath("Material", sharedMat ? sharedMat->GetFilepath() :
+    xmlInfo->Set("Material", sharedMat ? sharedMat->GetFilepath() :
                                                  Path::Empty);
-    xmlInfo->SetFloat("LineWidth", GetLineWidth());
-    xmlInfo->SetBool("DrawWireframe", GetDrawWireframe());
+    xmlInfo->Set("LineWidth", GetLineWidth());
+    xmlInfo->Set("DrawWireframe", GetDrawWireframe());
 }

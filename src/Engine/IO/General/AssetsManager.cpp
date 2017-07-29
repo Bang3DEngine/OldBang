@@ -1,11 +1,8 @@
 #include "Bang/AssetsManager.h"
 
 #include "Bang/File.h"
-#include "Bang/Scene.h"
 #include "Bang/Paths.h"
-#include "Bang/FileReader.h"
 #include "Bang/Application.h"
-#include "Bang/SceneManager.h"
 
 AssetsManager::AssetsManager()
 {

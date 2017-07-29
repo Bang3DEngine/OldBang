@@ -2,9 +2,13 @@
 
 #include <algorithm>
 
+#include "Bang/Path.h"
+#include "Bang/List.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/Paths.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,

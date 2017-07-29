@@ -2,7 +2,6 @@
 #define SHADERPROGRAM_H
 
 #include "Bang/Asset.h"
-#include "Bang/IToString.h"
 #include "Bang/G_ShaderProgram.h"
 
 class ShaderProgram : public G_ShaderProgram,

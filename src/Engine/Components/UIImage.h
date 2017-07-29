@@ -1,12 +1,12 @@
 #ifndef UIIMAGE_H
 #define UIIMAGE_H
 
-#include "Bang/String.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIRenderer.h"
 
-class XMLNode;
-class ICloneable;
+FORWARD class XMLNode;
+FORWARD class ICloneable;
+
 class UIImage : public UIRenderer
 {
     OBJECT(UIImage)

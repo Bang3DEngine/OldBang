@@ -3,19 +3,19 @@
 
 #include <chrono>
 
-#include "Bang/Map.h"
-#include "Bang/Array.h"
+#include "Bang.h"
 
-class Time;
-class Input;
-class Scene;
-class Paths;
-class Window;
-class AudioManager;
-class SceneManager;
-class AssetsManager;
-class ShaderManager;
-class BehaviourManager;
+FORWARD class Time;
+FORWARD class Input;
+FORWARD class Scene;
+FORWARD class Paths;
+FORWARD class Window;
+FORWARD class AudioManager;
+FORWARD class SceneManager;
+FORWARD class AssetsManager;
+FORWARD class ShaderManager;
+FORWARD class BehaviourManager;
+
 class Application
 {
 public:

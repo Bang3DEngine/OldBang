@@ -1,7 +1,9 @@
 #include "Bang/PointLight.h"
 
+#include "Bang/Rect.h"
+#include "Bang/AABox.h"
+#include "Bang/Sphere.h"
 #include "Bang/Material.h"
-#include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/AssetsManager.h"
@@ -32,7 +34,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 
     G_ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
-    sp->SetFloat("B_LightRange", m_range);
+    sp->Set("B_LightRange", m_range);
 }
 
 void PointLight::CloneInto(ICloneable *clone) const
@@ -55,11 +57,11 @@ float PointLight::GetRange() const
 void PointLight::Read(const XMLNode &xmlInfo)
 {
     Light::Read(xmlInfo);
-    SetRange(xmlInfo.GetFloat("Range"));
+    SetRange(xmlInfo.Get<float>("Range"));
 }
 
 void PointLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
-    xmlInfo->SetFloat("Range", m_range);
+    xmlInfo->Set("Range", m_range);
 }

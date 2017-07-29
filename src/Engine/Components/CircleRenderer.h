@@ -1,13 +1,11 @@
 #ifndef CIRCLERENDERER_H
 #define CIRCLERENDERER_H
 
-#include "Bang/Math.h"
-#include "Bang/String.h"
-#include "Bang/Vector2.h"
 #include "Bang/LineRenderer.h"
 
-class XMLNode;
-class ICloneable;
+FORWARD class XMLNode;
+FORWARD class ICloneable;
+
 class CircleRenderer : public LineRenderer
 {
     OBJECT(CircleRenderer)

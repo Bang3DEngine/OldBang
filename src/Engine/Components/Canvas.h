@@ -1,11 +1,11 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "Bang/String.h"
 #include "Bang/Component.h"
 
-class XMLNode;
-class ICloneable;
+FORWARD class XMLNode;
+FORWARD class ICloneable;
+
 class Canvas : public Component
 {
     OBJECT(Canvas)

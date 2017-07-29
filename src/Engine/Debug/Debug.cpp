@@ -1,5 +1,6 @@
 #include "Bang/Debug.h"
 
+#include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"

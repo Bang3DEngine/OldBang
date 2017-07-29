@@ -5,10 +5,11 @@
 #include FT_FREETYPE_H
 
 #include "Bang/Map.h"
-#include "Bang/Path.h"
 #include "Bang/Vector2.h"
 
-class G_Texture2D;
+FORWARD class Path;
+FORWARD class G_Texture2D;
+
 class G_Font
 {
 public:

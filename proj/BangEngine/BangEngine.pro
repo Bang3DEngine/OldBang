@@ -85,6 +85,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.cpp \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.cpp \
     $$BANG_ROOT/src/Engine/Audio/AnonymousAudioPlayer.cpp \
+    $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/IReflectable.cpp \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.cpp \
     $$BANG_ROOT/src/Engine/IO/General/Paths.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BangPreprocessor.cpp \

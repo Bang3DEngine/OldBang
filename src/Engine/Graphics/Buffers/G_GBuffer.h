@@ -3,11 +3,11 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
-#include "Bang/String.h"
 #include "Bang/G_Framebuffer.h"
 
-class Mesh;
-class Material;
+FORWARD class Mesh;
+FORWARD class Material;
+
 class G_GBuffer : public G_Framebuffer
 {
 public:

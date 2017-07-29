@@ -1,10 +1,10 @@
 #include "Bang/RectTransform.h"
 
-#include "Bang/Math.h"
+#include "Bang/Rect.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
-#include "Bang/Vector4.h"
+#include "Bang/Matrix4.h"
 #include "Bang/GameObject.h"
 
 RectTransform::RectTransform()
@@ -280,21 +280,21 @@ void RectTransform::Read(const XMLNode &xmlInfo)
 {
     Transform::Read(xmlInfo);
 
-    SetMargins (xmlInfo.GetVector2<int>("MarginLeftBot"),
-                xmlInfo.GetVector2<int>("MarginRightTop"));
-    SetPivotPosition( xmlInfo.GetVector2("PivotPosition") );
-    SetAnchorMin    ( xmlInfo.GetVector2("AnchorMin")     );
-    SetAnchorMax    ( xmlInfo.GetVector2("AnchorMax")     );
+    SetMargins (xmlInfo.Get<Vector2i>("MarginLeftBot"),
+                xmlInfo.Get<Vector2i>("MarginRightTop"));
+    SetPivotPosition( xmlInfo.Get<Vector2>("PivotPosition") );
+    SetAnchorMin    ( xmlInfo.Get<Vector2>("AnchorMin")     );
+    SetAnchorMax    ( xmlInfo.Get<Vector2>("AnchorMax")     );
 }
 
 void RectTransform::Write(XMLNode *xmlInfo) const
 {
     Transform::Write(xmlInfo);
 
-    xmlInfo->SetVector2("MarginLeftBot",  GetMarginLeftBot() );
-    xmlInfo->SetVector2("MarginRightTop", GetMarginRightTop());
+    xmlInfo->Set("MarginLeftBot",  GetMarginLeftBot() );
+    xmlInfo->Set("MarginRightTop", GetMarginRightTop());
 
-    xmlInfo->SetVector2("PivotPosition",  GetPivotPosition());
-    xmlInfo->SetVector2("AnchorMin",      GetAnchorMin()    );
-    xmlInfo->SetVector2("AnchorMax",      GetAnchorMax()    );
+    xmlInfo->Set("PivotPosition",  GetPivotPosition());
+    xmlInfo->Set("AnchorMin",      GetAnchorMin()    );
+    xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }

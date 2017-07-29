@@ -5,8 +5,9 @@
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
 
-class QLibrary;
-class Behaviour;
+FORWARD class QLibrary;
+FORWARD class Behaviour;
+
 /**
  * @brief Manages the compiling and loading of the Behaviour's Libraries.
  */

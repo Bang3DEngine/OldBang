@@ -1,5 +1,9 @@
 #include "Bang/TextFormatter.h"
 
+#include "Bang/Font.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+
 Array<TextFormatter::CharRect>
    TextFormatter::GetFormattedTextPositions(const String &content,
                                             const Font *font,

@@ -38,7 +38,7 @@ void Behaviour::Read(const XMLNode &xmlInfo)
     if (xmlInfo.GetTagName().Empty()) { return; }
 
     Component::Read(xmlInfo);
-    SetSourceFilepath( xmlInfo.GetFilepath("BehaviourScript") );
+    SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") );
 
     RefreshBehaviourLib(&xmlInfo);
 }
@@ -47,7 +47,7 @@ void Behaviour::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
-    xmlInfo->SetFilepath("BehaviourScript", GetSourceFilepath());
+    xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }
 
 Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,

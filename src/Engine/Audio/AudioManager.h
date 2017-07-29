@@ -5,16 +5,16 @@
 #include <QMutexLocker>
 
 #include "Bang/Math.h"
-#include "Bang/Path.h"
 #include "Bang/List.h"
-#include "Bang/String.h"
 #include "Bang/Vector3.h"
 
-class AudioClip;
-class GameObject;
-class AudioSource;
-class AudioPlayerRunnable;
-class AnonymousAudioPlayer;
+FORWARD   class Path;
+FORWARD   class AudioClip;
+FORWARD   class GameObject;
+FORWARD   class AudioSource;
+FORWARD   class AudioPlayerRunnable;
+FORWARD   class AnonymousAudioPlayer;
+
 class AudioManager
 {
 public:

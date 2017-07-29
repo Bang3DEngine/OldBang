@@ -44,7 +44,7 @@ void XMLNode::UpdateAttributeValue(const String &attributeName,
     }
 }
 
-void XMLNode::SetAttribute(const XMLAttribute &attribute)
+void XMLNode::Set(const XMLAttribute &attribute)
 {
     XMLAttribute *attr = GetAttribute(attribute.GetName());
     if (!attr)
@@ -58,94 +58,19 @@ void XMLNode::SetAttribute(const XMLAttribute &attribute)
     }
 }
 
-void XMLNode::SetGenericAttribute(const String &attributeName,
-                                  const String &attributeValue,
-                                  XMLAttribute::Type type,
-                                  const Array<XMLProperty>& properties)
+void XMLNode::Set(const String &attributeName,
+                  const String &attributeValue,
+                  const Array<XMLProperty>& properties)
 {
-    XMLAttribute attr(attributeName, attributeValue, type, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetPointer(const String &attributeName, const void *value,
-                         const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetPointer(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetBool(const String &attributeName, bool value,
-                      const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetBool(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetInt(const String &attributeName, int value,
-                     const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetInt(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetFloat(const String &attributeName, float value,
-                       const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetFloat(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetColor(const String &attributeName, const Color &value,
-                       const Array<XMLProperty> &properties)
-
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetColor(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetString(const String &attributeName, const String &value,
-                        const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetString(value, properties);
-    SetAttribute(attr);
-}
-
-void XMLNode::SetFilepath(const String &attributeName, const Path &filepath,
-                          const Array<XMLProperty>& properties)
-{
-    XMLAttribute attr;
-    attr.SetName(attributeName);
-    attr.SetFilepath(filepath, properties);
-    SetAttribute(attr);
-}
-
-XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
-{
-    XMLAttribute *attr = nullptr;
-    if (m_attributes.ContainsKey(attributeName))
-    {
-        attr = &(m_attributes[attributeName]);
-    }
-    return attr;
+    XMLAttribute attr(attributeName, attributeValue, properties);
+    Set(attr);
 }
 
 void XMLNode::RemoveAttribute(const String &attributeName)
 {
     for (auto it = m_attributes.Begin(); it != m_attributes.End();)
     {
-        XMLAttribute &attr = it->second;
+        const XMLAttribute &attr = it->second;
         if (attr.GetName() == attributeName)
         {
             m_attributes.Remove(it++);
@@ -155,49 +80,23 @@ void XMLNode::RemoveAttribute(const String &attributeName)
     }
 }
 
+XMLAttribute *XMLNode::GetAttribute(const String &attributeName) const
+{
+    for (auto& itPair : m_attributes)
+    {
+        XMLAttribute &attr = itPair.second;
+        if (attr.GetName() == attributeName) { return &attr; }
+    }
+    return nullptr;
+}
+
 String XMLNode::GetAttributeValue(const String &attributeName) const
 {
     if (m_attributes.ContainsKey(attributeName))
     {
-        return m_attributes[attributeName].GetValue();
+        return m_attributes[attributeName].GetStringValue();
     }
     return "";
-}
-
-bool XMLNode::GetBool(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetBool() : false;
-}
-
-int XMLNode::GetInt(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetInt() : 0;
-}
-
-String XMLNode::GetString(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetString() : "";
-}
-
-Path XMLNode::GetFilepath(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetFilepath() : Path();
-}
-
-float XMLNode::GetFloat(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetFloat() : 0.0f;
-}
-
-Color XMLNode::GetColor(const String &attributeName) const
-{
-    XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetColor() : Color(0);
 }
 
 const XMLNode *XMLNode::GetChild(const String &name) const
@@ -216,8 +115,8 @@ String XMLNode::ToString(const String& indent) const
     str += indent + "<" + m_tagName;
     for (auto itAttr : GetAttributesListInOrder())
     {
-        const XMLAttribute& attr = itAttr.second;
-        str += " " + attr.ToString() + "\n";
+        const XMLAttribute* attr = itAttr.second;
+        str += " " + attr->ToString() + "\n";
         for (int i = 0; i < m_tagName.Length() + indent.Length() + 1; ++i )
         {
             str += " ";
@@ -259,12 +158,12 @@ const List<String> &XMLNode::GetAttributesOrderList() const
     return m_attributeOrder;
 }
 
-List<std::pair<String, XMLAttribute> > XMLNode::GetAttributesListInOrder() const
+List<std::pair<String, XMLAttribute*> > XMLNode::GetAttributesListInOrder() const
 {
-    List< std::pair<String, XMLAttribute> > attributes;
+    List< std::pair<String, XMLAttribute*> > attributes;
     for (const String& attrName : m_attributeOrder)
     {
-        attributes.PushBack( std::make_pair(attrName, m_attributes[attrName]) );
+        attributes.PushBack( std::make_pair(attrName, &m_attributes[attrName]) );
     }
     return attributes;
 }

@@ -1,7 +1,6 @@
 #ifndef SHADERPREPROCESSOR_H
 #define SHADERPREPROCESSOR_H
 
-#include "Bang/List.h"
 #include "Bang/String.h"
 
 class ShaderPreprocessor

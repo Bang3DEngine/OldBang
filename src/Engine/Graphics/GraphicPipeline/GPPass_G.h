@@ -3,7 +3,8 @@
 
 #include "Bang/GPPass.h"
 
-class Renderer;
+FORWARD class Renderer;
+
 class G_GBuffer;
 /**
  * @brief The GPPass_G class is a GraphicPipeline pass that will

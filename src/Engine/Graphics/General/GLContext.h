@@ -5,15 +5,10 @@
 
 #include "Bang/GL.h"
 #include "Bang/Map.h"
-#include "Bang/List.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
 #include "Bang/Matrix4.h"
-#include "Bang/G_Texture.h"
 
-class G_VAO;
+FORWARD class G_VAO;
+
 class GLContext
 {
 public:

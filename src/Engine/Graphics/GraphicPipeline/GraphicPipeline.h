@@ -4,16 +4,17 @@
 #include "Bang/Renderer.h"
 #include "Bang/G_GBuffer.h"
 
-class Mesh;
-class Scene;
-class G_Screen;
-class G_Texture;
-class Material;
-class GLContext;
-class GameObject;
-class G_Framebuffer;
-class GPPass_RenderLayer;
-class G_TextureUnitManager;
+FORWARD class Mesh;
+FORWARD class Scene;
+FORWARD class Material;
+FORWARD class G_Screen;
+FORWARD class G_Texture;
+FORWARD class GLContext;
+FORWARD class GameObject;
+FORWARD class G_Framebuffer;
+FORWARD class GPPass_RenderLayer;
+FORWARD class G_TextureUnitManager;
+
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
  */

@@ -1,7 +1,6 @@
 #ifndef ISCENEEVENTLISTENER_H
 #define ISCENEEVENTLISTENER_H
 
-#include "Bang/List.h"
 #include "Bang/GizmosPassType.h"
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\

@@ -4,11 +4,11 @@
 #include <queue>
 
 #include "Bang/List.h"
-#include "Bang/Color.h"
 #include "Bang/GameObject.h"
 
-class Camera;
-class Gizmos;
+FORWARD class Camera;
+FORWARD class Gizmos;
+
 class Scene : public GameObject
 {
     OBJECT(Scene)

@@ -4,17 +4,15 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
+#include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
-#include "Bang/Camera.h"
-#include "Bang/Transform.h"
+#include "Bang/Vector3.h"
 #include "Bang/AudioClip.h"
 #include "Bang/GameObject.h"
-#include "Bang/AudioSource.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AudioListener.h"
-#include "Bang/AssetsManager.h"
 #include "Bang/AudioPlayerRunnable.h"
 #include "Bang/AnonymousAudioPlayer.h"
 

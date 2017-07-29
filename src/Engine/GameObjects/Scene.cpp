@@ -7,7 +7,6 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
 
 Scene::Scene() : GameObject("Scene")
 {
@@ -131,7 +130,7 @@ void Scene::Write(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Scene");
 
     Camera *cam = GetCamera();
-    xmlInfo->SetString("id", cam->GetInstanceId());
+    xmlInfo->Set("id", cam->GetInstanceId());
 }
 
 void Scene::PostRead(const XMLNode &xmlInfo)

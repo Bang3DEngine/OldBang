@@ -4,7 +4,6 @@
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AssetsManager.h"
 
 Prefab::Prefab()
 {

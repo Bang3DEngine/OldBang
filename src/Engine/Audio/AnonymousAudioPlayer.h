@@ -5,15 +5,15 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
-#include "Bang/Path.h"
-#include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/Time.h"
 #include "Bang/Vector3.h"
 
-class AudioClip;
-class GameObject;
-class AudioSource;
+FORWARD   class Path;
+FORWARD   class AudioClip;
+FORWARD   class GameObject;
+FORWARD   class AudioSource;
+
 class AnonymousAudioPlayer
 {
 public:

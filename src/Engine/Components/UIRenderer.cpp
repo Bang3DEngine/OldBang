@@ -4,9 +4,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/Rect.h"
 #include "Bang/Material.h"
-#include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
-#include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 
 UIRenderer::UIRenderer()
@@ -69,11 +67,11 @@ void UIRenderer::Render() const
 void UIRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetTint( xmlInfo.GetColor("Tint") );
+    SetTint( xmlInfo.Get<Color>("Tint") );
 }
 
 void UIRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-    xmlInfo->SetColor("Tint", GetTint());
+    xmlInfo->Set("Tint", GetTint());
 }

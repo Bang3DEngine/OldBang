@@ -1,31 +1,23 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
-#include "Bang/Array.h"
+#include "Bang.h"
 
-#include <fstream>
-#include <sstream>
-#include <cstdlib>
-#include <stdio.h>
-#include <iostream>
-#include <string.h>
+FORWARD   class Path;
+FORWARD_T class Array;
+FORWARD   class Scene;
+FORWARD   class GameObject;
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
 
-#include "Bang/Map.h"
-#include "Bang/Path.h"
-#include "Bang/Rect.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-
-class Scene;
-class GameObject;
 class FileReader
 {
 public:
     static int GetModelNumTriangles(const Path& filepath);
     static bool ReadModel(const Path& filepath,
-                          Array<Vector3> *vertexPos,
-                          Array<Vector3> *vertexNormals,
-                          Array<Vector2> *vertexUvs);
+                          Array< Vector3G<float> > *vertexPos,
+                          Array< Vector3G<float> > *vertexNormals,
+                          Array< Vector2G<float> > *vertexUvs);
 private:
     FileReader() {}
 };

@@ -1,7 +1,6 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-#include "Bang/Math.h"
 #include "Bang/Vector.h"
 
 #define XYZ_MEMBERS x,y

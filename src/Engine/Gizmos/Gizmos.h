@@ -1,30 +1,32 @@
 #ifndef GIZMOS_H
 #define GIZMOS_H
 
-#include "Bang/Rect.h"
-#include "Bang/AABox.h"
-#include "Bang/Color.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
 #include "Bang/GameObject.h"
-#include "Bang/Quaternion.h"
 
-class Mesh;
-class Material;
-class Renderer;
-class Transform;
-class Texture2D;
-class MeshRenderer;
-class CircleRenderer;
-class SingleLineRenderer;
+FORWARD   class Mesh;
+FORWARD   class AABox;
+FORWARD   class Color;
+FORWARD_T class RectG;
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
+FORWARD_T class Vector4G;
+FORWARD   class Material;
+FORWARD   class Renderer;
+FORWARD   class Transform;
+FORWARD   class Texture2D;
+FORWARD_T class QuaternionG;
+FORWARD   class MeshRenderer;
+FORWARD   class CircleRenderer;
+FORWARD   class SingleLineRenderer;
+
 class Gizmos : public GameObject
 {
 public:
     static void SetColor(const Color &color);
 
-    static void SetPosition(const Vector3 &position);
-    static void SetRotation(const Quaternion &rotation);
-    static void SetScale(const Vector3 &scale);
+    static void SetPosition(const Vector3G<float> &position);
+    static void SetRotation(const QuaternionG<float> &rotation);
+    static void SetScale(const Vector3G<float> &scale);
 
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
@@ -33,23 +35,28 @@ public:
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
-    static void RenderRect(const Rect &r);
-    static void RenderFillRect(const Rect &r);
+    static void RenderRect(const RectG<float> &r);
+    static void RenderFillRect(const RectG<float> &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
     static void RenderScreenIcon(const Texture2D *texture,
-                                 const Rect &screenRect,
+                                 const RectG<float> &screenRect,
                                  bool fixAspectRatio = false);
     static void RenderCircle(float radius);
-    static void RenderScreenLine(const Vector2 &origin, const Vector2 &destiny);
-    static void RenderLine(const Vector3 &origin, const Vector3 &destiny);
-    static void RenderRay(const Vector3 &origin, const Vector3 &rayDir);
-    static void RenderSphere(const Vector3 &origin, float radius);
-    static void RenderFrustum(const Vector3 &forward, const Vector3 &up,
-                              const Vector3 &origin,
+    static void RenderScreenLine(const Vector2G<float> &origin,
+                                 const Vector2G<float> &destiny);
+    static void RenderLine(const Vector3G<float> &origin,
+                           const Vector3G<float> &destiny);
+    static void RenderRay(const Vector3G<float> &origin,
+                          const Vector3G<float> &rayDir);
+    static void RenderSphere(const Vector3G<float> &origin, float radius);
+    static void RenderFrustum(const Vector3G<float> &forward,
+                              const Vector3G<float> &up,
+                              const Vector3G<float> &origin,
                               float zNear, float zFar,
                               float fovDegrees, float aspectRatio);
-    static void RenderSimpleSphere(const Vector3 &origin, float radius);
+    static void RenderSimpleSphere(const Vector3G<float> &origin,
+                                   float radius);
 
     static void Render(Renderer *rend);
 

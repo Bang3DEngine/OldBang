@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <type_traits>
+
 #include "Bang/Math.h"
 
 #undef XYZ_MEMBERS

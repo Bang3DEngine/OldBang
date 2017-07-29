@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 
 #include "Bang/XMLNode.h"
-#include "Bang/Texture2D.h"
 
 Font::Font()
 {
@@ -27,11 +26,11 @@ Path Font::GetTTFFilepath() const
 void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    LoadFromTTF( xmlInfo.GetFilepath("FontFilepath") );
+    LoadFromTTF( xmlInfo.Get<Path>("FontFilepath") );
 }
 
 void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetFilepath("FontFilepath", GetTTFFilepath());
+    xmlInfo->Set("FontFilepath", GetTTFFilepath());
 }

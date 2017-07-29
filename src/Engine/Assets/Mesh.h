@@ -8,12 +8,10 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 
-class G_VAO;
-class G_VBO;
-class Sphere;
-class XMLNode;
-class FileReader;
-class SerializableObject;
+FORWARD class G_VAO;
+FORWARD class G_VBO;
+FORWARD class XMLNode;
+
 class Mesh : public Asset
 {
 	OBJECT(Mesh)

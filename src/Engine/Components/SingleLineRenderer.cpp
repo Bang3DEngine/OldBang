@@ -47,15 +47,15 @@ void SingleLineRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
 
-    SetOrigin(xmlInfo.GetVector3("Origin"));
-    SetDestiny(xmlInfo.GetVector3("Destiny"));
+    SetOrigin(xmlInfo.Get<Vector3>("Origin"));
+    SetDestiny(xmlInfo.Get<Vector3>("Destiny"));
 }
 
 void SingleLineRenderer::Write(XMLNode *xmlInfo) const
 {
     LineRenderer::Write(xmlInfo);
 
-    xmlInfo->SetVector3("Origin", GetOrigin());
-    xmlInfo->SetVector3("Destiny", GetDestiny());
+    xmlInfo->Set("Origin", GetOrigin());
+    xmlInfo->Set("Destiny", GetDestiny());
 }
 

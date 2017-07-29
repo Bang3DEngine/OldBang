@@ -1,14 +1,15 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 
-class Camera;
-class G_GBuffer;
-class Material;
-class Renderer;
+FORWARD_T class RectG;
+FORWARD   class Camera;
+FORWARD   class Material;
+FORWARD   class Renderer;
+FORWARD   class G_GBuffer;
+
 class Light : public Component
 {
     OBJECT(Light)
@@ -31,8 +32,7 @@ protected:
     Material *m_lightMaterialScreen = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(G_GBuffer *gbuffer,
-                    const Rect &renderRect = Rect::ScreenRect) const;
+    void ApplyLight(G_GBuffer *gbuffer, const RectG<float> &renderRect) const;
 
     /**
      * @brief Returns the rect where the Light range can apply.
@@ -42,7 +42,7 @@ protected:
      * of its spherical range.
      * @return
      */
-    virtual Rect GetRenderRect(Camera *cam) const;
+    virtual RectG<float> GetRenderRect(Camera *cam) const;
 
     Light();
     virtual ~Light();

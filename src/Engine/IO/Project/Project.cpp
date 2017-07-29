@@ -19,13 +19,13 @@ Project::~Project()
 
 void Project::Read(const XMLNode &xmlInfo)
 {
-    m_randomId = xmlInfo.GetString("RandomID");
+    m_randomId = xmlInfo.Get<String>("RandomID");
 }
 
 void Project::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Project");
-    xmlInfo->SetString("RandomID", m_randomId);
+    xmlInfo->Set("RandomID", m_randomId);
 }
 
 const Path&  Project::GetProjectDirPath() const

@@ -5,7 +5,6 @@
 #include <GL/glew.h>
 
 #include "Bang/GL.h"
-#include "Bang/Map.h"
 
 class GLObject
 {

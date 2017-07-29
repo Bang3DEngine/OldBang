@@ -6,7 +6,8 @@
 #include "Bang/Array.h"
 #include "Bang/GLObject.h"
 
-class G_VBO;
+FORWARD class G_VBO;
+
 class G_VAO : public GLObject
 {
 public:

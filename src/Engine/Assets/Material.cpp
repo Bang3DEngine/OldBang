@@ -1,18 +1,11 @@
 #include "Bang/Material.h"
 
 #include "Bang/Paths.h"
-#include "Bang/Scene.h"
-#include "Bang/Camera.h"
-#include "Bang/Vector4.h"
-#include "Bang/G_Screen.h"
 #include "Bang/G_Shader.h"
-#include "Bang/G_Texture.h"
 #include "Bang/Texture2D.h"
 #include "Bang/G_Material.h"
-#include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
 
 Material::Material() : Asset()
 {
@@ -62,18 +55,18 @@ void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
-    SetShininess(xmlInfo.GetFloat("Shininess"));
-    SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
-    SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
+    SetDiffuseColor(xmlInfo.Get<Color>("DiffuseColor"));
+    SetShininess(xmlInfo.Get<float>("Shininess"));
+    SetReceivesLighting(xmlInfo.Get<bool>("ReceivesLighting"));
+    SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
 
-    Path texAssetFilepath = xmlInfo.GetFilepath("Texture");
+    Path texAssetFilepath = xmlInfo.Get<Path>("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 
     ShaderProgram *sp = GetShaderProgram();
-    Path vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
-    Path fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
+    Path vshaderFilepath = xmlInfo.Get<Path>("VertexShader");
+    Path fshaderFilepath = xmlInfo.Get<Path>("FragmentShader");
     if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
         vshaderFilepath != sp->GetVertexShader()->GetFilepath() ||
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
@@ -89,13 +82,13 @@ void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetColor("DiffuseColor",    GetDiffuseColor());
-    xmlInfo->SetFloat("Shininess",       GetShininess());
-    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
-    xmlInfo->SetVector2("UvMultiply",    GetUvMultiply());
+    xmlInfo->Set("DiffuseColor",    GetDiffuseColor());
+    xmlInfo->Set("Shininess",       GetShininess());
+    xmlInfo->Set("ReceivesLighting", ReceivesLighting());
+    xmlInfo->Set("UvMultiply",    GetUvMultiply());
 
     Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path::Empty;
-    xmlInfo->SetFilepath("Texture", texFilepath);
+    xmlInfo->Set("Texture", texFilepath);
 
     Path vsFile, fsFile;
     G_ShaderProgram *sp = GetShaderProgram();
@@ -111,8 +104,8 @@ void Material::Write(XMLNode *xmlInfo) const
             fsFile = sp->GetFragmentShader()->GetFilepath();
         }
     }
-    xmlInfo->SetFilepath("VertexShader", vsFile);
-    xmlInfo->SetFilepath("FragmentShader", fsFile);
+    xmlInfo->Set("VertexShader", vsFile);
+    xmlInfo->Set("FragmentShader", fsFile);
 }
 
 Material *Material::GetMissingMaterial()

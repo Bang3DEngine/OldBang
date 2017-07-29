@@ -1,9 +1,10 @@
 #ifndef BANGPREPROCESSOR_H
 #define BANGPREPROCESSOR_H
 
-#include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/String.h"
+
+FORWARD class Path;
 
 class BangPreprocessor
 {
@@ -48,7 +49,7 @@ public:
     static void SkipBlanks(String::Iterator *it,
                            String::Iterator end);
     static void SkipUntilNextBlank(String::Iterator *it,
-                                  String::Iterator end);
+                                   String::Iterator end);
     static void SkipUntilNext(String::Iterator *it,
                               String::Iterator end,
                               const Array<String> &particles);

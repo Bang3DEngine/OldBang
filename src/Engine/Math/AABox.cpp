@@ -1,11 +1,14 @@
 #include "Bang/AABox.h"
 
+#include "Bang/List.h"
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
+#include "Bang/Array.h"
 #include "Bang/Camera.h"
 #include "Bang/Sphere.h"
+#include "Bang/Vector2.h"
 #include "Bang/Transform.h"
-#include "Bang/OStreamOperators.h"
+#include "Bang/Transform.h"
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 

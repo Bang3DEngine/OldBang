@@ -3,8 +3,7 @@
 #include <QProcess>
 #include <QLibrary>
 
-#include "Bang/Paths.h"
-#include "Bang/Behaviour.h"
+#include "Bang/Debug.h"
 
 void SystemUtils::System(const String &command,
                          const List<String> &argsList,

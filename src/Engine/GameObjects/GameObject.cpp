@@ -3,8 +3,10 @@
 #include <iostream>
 
 #include "Bang/GL.h"
+#include "Bang/AABox.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/Sphere.h"
 #include "Bang/Canvas.h"
 #include "Bang/UIText.h"
 #include "Bang/Camera.h"
@@ -18,10 +20,8 @@
 #include "Bang/AudioSource.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
-#include "Bang/GraphicPipeline.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/PostProcessEffect.h"
 
@@ -353,8 +353,8 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled( xmlInfo.GetBool("enabled") );
-    SetName( xmlInfo.GetString("name") );
+    SetEnabled( xmlInfo.Get<bool>("enabled") );
+    SetName( xmlInfo.Get<String>("name") );
 
     // IMPORTANT: The order of the xmlNodes must match the order
     // of the children and components list, in order to update every child/comp
@@ -388,8 +388,8 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled( xmlInfo.GetBool("enabled") );
-    SetName( xmlInfo.GetString("name") );
+    SetEnabled( xmlInfo.Get<bool>("enabled") );
+    SetName( xmlInfo.Get<String>("name") );
 
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
@@ -483,9 +483,9 @@ void GameObject::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetString("id", GetInstanceId());
-    xmlInfo->SetBool("enabled", m_enabled);
-    xmlInfo->SetString("name", m_name);
+    xmlInfo->Set("id", GetInstanceId());
+    xmlInfo->Set("enabled", m_enabled);
+    xmlInfo->Set("name", m_name);
 
     for (Component *c : m_components)
     {

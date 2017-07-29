@@ -45,16 +45,16 @@ void AudioSource::Read(const XMLNode &xmlInfo)
 
     AudioClip *audioClip = GetAudioClip();
     Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path();
-    Path newAudioClipFilepath = xmlInfo.GetFilepath("AudioClip");
+    Path newAudioClipFilepath = xmlInfo.Get<Path>("AudioClip");
     if (audioClipFilepath != newAudioClipFilepath)
     {
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
     }
-    SetVolume(xmlInfo.GetFloat("Volume"));
-    SetPitch(xmlInfo.GetFloat("Pitch"));
-    SetRange(xmlInfo.GetFloat("Range"));
-    SetLooping(xmlInfo.GetBool("Looping"));
-    SetPlayOnStart(xmlInfo.GetBool("PlayOnStart"));
+    SetVolume(xmlInfo.Get<float>("Volume"));
+    SetPitch(xmlInfo.Get<float>("Pitch"));
+    SetRange(xmlInfo.Get<float>("Range"));
+    SetLooping(xmlInfo.Get<bool>("Looping"));
+    SetPlayOnStart(xmlInfo.Get<bool>("PlayOnStart"));
 }
 
 void AudioSource::Write(XMLNode *xmlInfo) const
@@ -63,12 +63,12 @@ void AudioSource::Write(XMLNode *xmlInfo) const
 
     AudioClip *audioClip = GetAudioClip();
     Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path::Empty;
-    xmlInfo->SetFilepath("AudioClip", audioClipFilepath);
-    xmlInfo->SetFloat("Volume",     m_volume);
-    xmlInfo->SetFloat("Pitch",      m_pitch);
-    xmlInfo->SetFloat("Range",      m_range);
-    xmlInfo->SetBool("Looping",     m_looping);
-    xmlInfo->SetBool("PlayOnStart", m_playOnStart);
+    xmlInfo->Set("AudioClip", audioClipFilepath);
+    xmlInfo->Set("Volume",     m_volume);
+    xmlInfo->Set("Pitch",      m_pitch);
+    xmlInfo->Set("Range",      m_range);
+    xmlInfo->Set("Looping",     m_looping);
+    xmlInfo->Set("PlayOnStart", m_playOnStart);
 }
 
 void AudioSource::Play(float delay)

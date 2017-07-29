@@ -1,8 +1,10 @@
 #include "Bang/Extensions.h"
 
+#include "Bang/List.h"
 #include "Bang/Mesh.h"
 #include "Bang/Font.h"
 #include "Bang/Scene.h"
+#include "Bang/String.h"
 #include "Bang/Prefab.h"
 #include "Bang/Project.h"
 #include "Bang/Material.h"

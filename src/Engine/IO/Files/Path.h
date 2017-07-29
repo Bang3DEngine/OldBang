@@ -1,11 +1,11 @@
 #ifndef PATH_H
 #define PATH_H
 
-#include <QFileInfo>
-
-#include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
+
+FORWARD_T class List;
+FORWARD   class QFileInfo;
 
 class Path : public IToString
 {
@@ -19,8 +19,10 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> FindFiles(bool recursively = false,
-                        const List<String>& extensions = {}) const;
+    List<Path> FindFiles() const;
+    List<Path> FindFiles(bool recursively) const;
+    List<Path> FindFiles(bool recursively,
+                         const List<String>& extensions) const;
     List<Path> FindSubDirectories(bool recursively = false) const;
 
     Path GetDirectory() const;
@@ -55,7 +57,7 @@ public:
     static const Path Empty;
 
 private:
-    String m_absolutePath   = "";
+    String m_absolutePath = "";
 
     static Path GetNextDuplicatePath(const Path &path);
 

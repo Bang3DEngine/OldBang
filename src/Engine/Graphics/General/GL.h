@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
-#include "Bang/Path.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Matrix4.h"
@@ -13,11 +12,12 @@
 
 typedef GLuint GLId;
 
-class G_VAO;
-class G_Texture;
-class GLObject;
-class GLContext;
-class G_ShaderProgram;
+FORWARD class G_VAO;
+FORWARD class GLObject;
+FORWARD class GLContext;
+FORWARD class G_Texture;
+FORWARD class G_ShaderProgram;
+
 class GL
 {
 public:

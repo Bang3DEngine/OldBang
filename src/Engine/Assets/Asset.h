@@ -1,13 +1,11 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "Bang/Paths.h"
 #include "Bang/Path.h"
 #include "Bang/Object.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
 
-class AssetsManager;
 class Asset : public IToString,
               public SerializableObject
 {

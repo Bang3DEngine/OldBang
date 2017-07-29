@@ -3,16 +3,15 @@
 
 #include <cmath>
 
-#include "Bang/List.h"
 #include "Bang/Rect.h"
-#include "Bang/Array.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
-#include "Bang/Quaternion.h"
 
-class Sphere;
-class Camera;
+FORWARD   class Sphere;
+FORWARD   class Camera;
+FORWARD_T class Array;
+
 class AABox : public IToString
 {
 private:

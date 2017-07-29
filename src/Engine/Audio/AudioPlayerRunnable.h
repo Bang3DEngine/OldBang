@@ -3,8 +3,6 @@
 
 #include <QRunnable>
 
-#include "Bang/Vector3.h"
-
 class AudioClip;
 class AudioPlayerRunnable : public QRunnable
 {

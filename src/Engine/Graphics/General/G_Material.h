@@ -4,8 +4,9 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 
-class G_Texture2D;
-class G_ShaderProgram;
+FORWARD class G_Texture2D;
+FORWARD class G_ShaderProgram;
+
 class G_Material
 {
 public:

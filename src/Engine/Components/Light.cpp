@@ -1,8 +1,8 @@
 #include "Bang/Light.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Scene.h"
 #include "Bang/XMLNode.h"
-#include "Bang/Renderer.h"
 #include "Bang/Material.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/Transform.h"
@@ -24,12 +24,12 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
     G_ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
-    sp->SetFloat("B_LightIntensity", m_intensity);
-    sp->SetColor("B_LightColor", m_color);
+    sp->Set("B_LightIntensity", m_intensity);
+    sp->Set("B_LightColor", m_color);
 
     Transform *t = gameObject->transform;
-    sp->SetVec3("B_LightForwardWorld",  t->GetForward());
-    sp->SetVec3("B_LightPositionWorld", t->GetPosition());
+    sp->Set("B_LightForwardWorld",  t->GetForward());
+    sp->Set("B_LightPositionWorld", t->GetPosition());
 }
 
 void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
@@ -83,14 +83,14 @@ float Light::GetIntensity() const
 void Light::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    SetIntensity(xmlInfo.GetFloat("Intensity"));
-    SetColor(xmlInfo.GetColor("Color"));
+    SetIntensity(xmlInfo.Get<float>("Intensity"));
+    SetColor(xmlInfo.Get<Color>("Color"));
 }
 
 void Light::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 
-    xmlInfo->SetFloat("Intensity", GetIntensity());
-    xmlInfo->SetColor("Color", GetColor());
+    xmlInfo->Set("Intensity", GetIntensity());
+    xmlInfo->Set("Color", GetColor());
 }

@@ -5,12 +5,12 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
-#include "Bang/Array.h"
+#include "Bang/Path.h"
+#include "Bang/List.h"
 #include "Bang/Asset.h"
-#include "Bang/String.h"
-#include "Bang/Paths.h"
 
-class AudioSource;
+FORWARD class AudioSource;
+
 class AudioClip : public Asset
 {
     OBJECT(AudioClip)

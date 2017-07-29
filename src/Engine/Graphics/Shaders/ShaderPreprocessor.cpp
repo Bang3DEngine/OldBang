@@ -1,5 +1,6 @@
 #include "Bang/ShaderPreprocessor.h"
 
+#include "Bang/List.h"
 #include "Bang/Paths.h"
 #include "Bang/CodePreprocessor.h"
 

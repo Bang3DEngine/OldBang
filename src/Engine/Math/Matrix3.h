@@ -3,14 +3,11 @@
 
 #include <iostream>
 
-#include "Bang/Debug.h"
+#include "Bang/Vector3.h"
 
-template<class T> class Vector3G;
-template<class T> class QuaternionG;
+FORWARD_T class QuaternionG;
 
-// Part of it copied from glm
-
-template<class T>
+template<class T> // Part of it copied from glm
 class Matrix3G
 {
 public:

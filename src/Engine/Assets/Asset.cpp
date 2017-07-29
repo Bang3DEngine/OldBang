@@ -1,7 +1,6 @@
 #include "Bang/Asset.h"
 
 #include "Bang/Paths.h"
-#include "Bang/FileReader.h"
 #include "Bang/AssetsManager.h"
 
 Asset::Asset() : SerializableObject()

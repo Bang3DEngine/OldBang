@@ -1,5 +1,6 @@
 #include "Bang/Component.h"
 
+#include "Bang/String.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
@@ -60,7 +61,7 @@ void Component::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled(xmlInfo.GetBool("enabled"));
+    SetEnabled(xmlInfo.Get<bool>("enabled"));
 }
 
 void Component::Write(XMLNode *xmlInfo) const
@@ -68,6 +69,6 @@ void Component::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
-    xmlInfo->SetString("id", GetInstanceId());
-    xmlInfo->SetBool("enabled", m_enabled);
+    xmlInfo->Set("id", GetInstanceId());
+    xmlInfo->Set("enabled", m_enabled);
 }

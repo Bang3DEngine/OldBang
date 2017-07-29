@@ -3,6 +3,13 @@
 #include <fstream>
 #include <iostream>
 
+#include <QModelIndex>
+#include <QFileSystemModel>
+#include <QCryptographicHash>
+
+#include "Bang/List.h"
+#include "Bang/String.h"
+
 File::File()
 {
 }

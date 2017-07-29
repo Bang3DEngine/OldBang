@@ -4,18 +4,20 @@
 #include <queue>
 
 #include "Bang/List.h"
-#include "Bang/AABox.h"
-#include "Bang/Object.h"
-#include "Bang/Sphere.h"
 #include "Bang/IToString.h"
 #include "Bang/GizmosPassType.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
-class Scene;
-class Material;
-class Component;
-class Transform;
+FORWARD   class Scene;
+FORWARD_T class RectG;
+FORWARD   class AABox;
+FORWARD   class Camera;
+FORWARD   class Sphere;
+FORWARD   class Material;
+FORWARD   class Component;
+FORWARD   class Transform;
+
 class GameObject : public ISceneEventListener,
                    public IToString,
                    public SerializableObject
@@ -69,8 +71,8 @@ public:
      * from the passed camera in NDC.
      * @return
      */
-    Rect GetBoundingScreenRect(Camera *cam,
-                               bool includeChildren = true) const;
+    RectG<float> GetBoundingScreenRect(Camera *cam,
+                                       bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box in Object space, without

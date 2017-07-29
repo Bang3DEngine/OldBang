@@ -22,19 +22,19 @@ void Texture2D::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    Path imageFilepath = xmlInfo.GetFilepath("ImageFilepath");
+    Path imageFilepath = xmlInfo.Get<Path>("ImageFilepath");
     LoadFromImage(imageFilepath);
 
-    SetFilterMode( xmlInfo.GetEnum<FilterMode>("FilterMode") );
-    SetAlphaCutoff( xmlInfo.GetFloat("AlphaCutoff") );
+    SetFilterMode( xmlInfo.Get<FilterMode>("FilterMode") );
+    SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") );
 }
 
 void Texture2D::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath);
+    xmlInfo->Set("ImageFilepath", m_imageFilepath);
 
-    xmlInfo->SetEnum<FilterMode>("FilterMode", GetFilterMode());
-    xmlInfo->SetFloat("AlphaCutoff", GetAlphaCutoff());
+    xmlInfo->Set("FilterMode", GetFilterMode());
+    xmlInfo->Set("AlphaCutoff", GetAlphaCutoff());
 }

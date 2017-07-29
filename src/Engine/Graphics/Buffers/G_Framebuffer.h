@@ -7,7 +7,8 @@
 #include "Bang/GLObject.h"
 #include "Bang/Texture2D.h"
 
-class G_RenderTexture;
+FORWARD class G_RenderTexture;
+
 class G_Framebuffer : public GLObject
 {
 public:

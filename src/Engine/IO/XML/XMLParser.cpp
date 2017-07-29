@@ -35,7 +35,6 @@ void XMLParser::GetFirstAttribute(const String &tag,
     if (attribute)
     {
         attribute->SetName("");
-        attribute->SetType(XMLAttribute::Type::Bool); // For example
         attribute->SetValue("");
     }
 
@@ -45,7 +44,7 @@ void XMLParser::GetFirstAttribute(const String &tag,
     String attrString = tag.SubString(startPosition, attrEnd);
 
     XMLAttribute attr = XMLAttribute::FromString(attrString);
-    if (attr.GetName() == "") { return; }
+    if (attr.GetName().Empty()) { return; }
 
     if (attributeEnd)
     {
@@ -199,8 +198,7 @@ XMLNode XMLParser::FromString(const String &xml)
         XMLAttribute attr;
         XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1) { break; }
-        root.SetGenericAttribute(attr.GetName(), attr.GetValue(),
-                                 attr.GetType(), attr.GetProperties());
+        root.Set(attr.GetName(), attr.GetStringValue(), attr.GetProperties());
     }
 
     //Read children
