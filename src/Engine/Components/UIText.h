@@ -43,7 +43,7 @@ public:
     int GetTextSize() const;
     Vector2i GetSpacing() const;
 
-    Array<Rect> m_charRects;
+    const Rect& GetCharRectNDC(uint charIndex) const;
 
     Rect GetNDCRect() const;
 
@@ -65,6 +65,8 @@ protected:
     WrapMode m_vWrapMode = WrapMode::Hide;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
+
+    Array<Rect> m_charRectsNDC;
 
     void RefreshMesh();
 };

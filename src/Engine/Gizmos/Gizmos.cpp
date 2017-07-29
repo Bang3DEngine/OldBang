@@ -183,7 +183,7 @@ void Gizmos::RenderFillRect(const Rect &r)
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
 
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_meshRenderer);
     g->Reset();
 }
@@ -227,8 +227,8 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 }
 
 void Gizmos::RenderScreenIcon(const Texture2D *texture,
-                                              const Rect &screenRect,
-                                              bool fixAspectRatio)
+                              const Rect &screenRect,
+                              bool fixAspectRatio)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->m_planeMesh);
@@ -239,14 +239,14 @@ void Gizmos::RenderScreenIcon(const Texture2D *texture,
     g->m_meshRenderer->SetDrawWireframe(false);
     SetReceivesLighting(false);
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
-    GL::SetViewProjMode(fixAspectRatio ? GL::ViewProjMode::OnlyFixAspectRatio :
-                                         GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(fixAspectRatio ?
+                                        GL::ViewProjMode::OnlyFixAspectRatio :
+                                        GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_meshRenderer);
     g->Reset();
 }
 
-void Gizmos::RenderLine(const Vector3 &origin,
-                                        const Vector3 &destiny)
+void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_singleLineRenderer->SetOrigin(origin);
@@ -259,8 +259,7 @@ void Gizmos::RenderLine(const Vector3 &origin,
     g->Reset();
 }
 
-void Gizmos::RenderScreenLine(const Vector2 &origin,
-                                              const Vector2 &destiny)
+void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
@@ -269,7 +268,7 @@ void Gizmos::RenderScreenLine(const Vector2 &origin,
     g->transform->SetPosition(Vector3::Zero);
     g->transform->SetScale(Vector3::One);
 
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_singleLineRenderer);
     g->Reset();
 }
@@ -375,7 +374,12 @@ void Gizmos::Reset()
     SetLineWidth(1.0f);
     SetReceivesLighting(false);
     SetDrawWireframe(false);
-    GL::SetViewProjMode(GL::ViewProjMode::UseBoth);
+
+    List<Renderer*> rends = g->GetComponents<Renderer>();
+    for (Renderer *rend : rends)
+    {
+        rend->SetViewProjMode(GL::ViewProjMode::UseBoth);
+    }
 
     g->m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }

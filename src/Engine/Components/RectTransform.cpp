@@ -25,6 +25,39 @@ void RectTransform::CloneInto(ICloneable *clone) const
     rt->SetPivotPosition( GetPivotPosition() );
 }
 
+Vector2 RectTransform::ToPixelsInLocalNDC(const Vector2i &pixels) const
+{
+    Vector2i sizeLocalPx = Vector2i( (GetAnchorMax() - GetAnchorMin()) *
+                                     Vector2f(Screen::GetSize()) );
+    sizeLocalPx = Vector2i::Max(Vector2i::One, sizeLocalPx);
+    Vector2f pixelNDCSize = (1.0f / Vector2f(sizeLocalPx)) * 2.0f;
+    return Vector2f(pixels) * pixelNDCSize;
+}
+
+Vector2 RectTransform::ToPixelsInGlobalNDC(const Vector2i &pixels) const
+{
+    Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
+    parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
+    Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
+    return Vector2f(pixels) * pixelNDCSize;
+}
+
+Vector2 RectTransform::ToLocalNDC(const Vector2 &globalNDCPoint) const
+{
+    Matrix4 localToWorld; GetLocalToWorldMatrix(&localToWorld);
+    Vector4 v = (localToWorld * Vector4(globalNDCPoint.x,
+                                        globalNDCPoint.y, 0, 1));
+    return v.xy();
+}
+
+Vector2 RectTransform::ToGlobalNDC(const Vector2 &localNDCPoint) const
+{
+    Matrix4 localToWorld; GetLocalToWorldMatrix(&localToWorld);
+    Vector4 v = (localToWorld.Inversed() * Vector4(localNDCPoint.x,
+                                                   localNDCPoint.y, 0, 1));
+    return v.xy();
+}
+
 void RectTransform::SetMarginLeft(int marginLeft)
 {
     if (GetMarginLeft() != marginLeft)
@@ -176,7 +209,7 @@ const Vector2& RectTransform::GetAnchorMax() const
 
 Recti RectTransform::GetScreenSpaceRectPx() const
 {
-    return Recti( ( GetScreenSpaceRect() * 0.5f + 0.5f) *
+    return Recti( ( GetScreenSpaceRectNDC() * 0.5f + 0.5f) *
                     Vector2f(Screen::GetSize()) );
 }
 
@@ -186,7 +219,7 @@ Recti RectTransform::GetParentScreenRectPx() const
                   Vector2f(Screen::GetSize()) );
 }
 
-Rect RectTransform::GetScreenSpaceRect() const
+Rect RectTransform::GetScreenSpaceRectNDC() const
 {
     Matrix4 localToWorld;
     GetLocalToWorldMatrix(&localToWorld);
@@ -202,7 +235,7 @@ Rect RectTransform::GetParentScreenRect() const
                 gameObject->parent->GetComponent<RectTransform>();
         if (parentRectTransform)
         {
-            parentScreenRect = parentRectTransform->GetScreenSpaceRect();
+            parentScreenRect = parentRectTransform->GetScreenSpaceRectNDC();
         }
     }
     return parentScreenRect;
@@ -228,20 +261,15 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     if (!IsEnabled(false)) { return Matrix4::Identity; }
     if (!m_hasChanged) { return m_localToParentMatrix; }
 
-    Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
-    parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
-    Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
 
-    Vector3 moveToPivot(m_pivotPosition, 0);
-
-    Vector2 minMarginedAnchor
-            (m_anchorMin + Vector2f(GetMarginLeftBot())  * pixelNDCSize);
-    Vector2 maxMarginedAnchor
-            (m_anchorMax - Vector2f(GetMarginRightTop()) * pixelNDCSize);
+    Vector2 minMarginedAnchor (m_anchorMin + ToPixelsInGlobalNDC(GetMarginLeftBot()));
+    Vector2 maxMarginedAnchor (m_anchorMax - ToPixelsInGlobalNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
-    Vector3 moveToAnchorCenter(
-                (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
+    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
+                                0);
+
+    Vector3 moveToPivot(m_pivotPosition, 0);
 
     m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
                             Matrix4::ScaleMatrix(anchorScaling) *

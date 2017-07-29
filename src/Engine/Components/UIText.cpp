@@ -62,12 +62,11 @@ void UIText::RefreshMesh()
     Array<Vector2> textQuadPositions2D;
     Array<Vector3> textQuadPositions3D;
 
-    m_charRects.Clear();
+    m_charRectsNDC.Clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         Rect charRectNDC = (  (Rect(cr.rect) / Vector2f(Screen::GetSize()) )
-                            * 2.0f - 1.0f
-                           );
+                            * 2.0f - 1.0f);
 
         textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
         textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
@@ -88,7 +87,7 @@ void UIText::RefreshMesh()
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
 
-        m_charRects.Add(charRectNDC);
+        m_charRectsNDC.Add(charRectNDC);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
@@ -209,6 +208,18 @@ WrapMode UIText::GetHorizontalWrapMode() const { return m_hWrapMode; }
 const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
+
+const Rect &UIText::GetCharRectNDC(uint charIndex) const
+{
+    if (charIndex < m_charRectsNDC.Size())
+    {
+        return m_charRectsNDC[charIndex];
+    }
+
+    Debug_Warn("Character index out of range ("
+               << charIndex << "/" <<  (m_charRectsNDC.Size()-1) << ")");
+    return Rect::Zero;
+}
 
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }
 VerticalAlignment UIText::GetVerticalAlignment() const

@@ -42,6 +42,9 @@ public:
     void SetCullMode(GL::CullMode m_cullMode);
     GL::CullMode GetCullMode() const;
 
+    void SetViewProjMode(GL::ViewProjMode viewProjMode);
+    GL::ViewProjMode GetViewProjMode() const;
+
     void SetRenderMode(GL::RenderMode m_renderMode);
     GL::RenderMode GetRenderMode() const;
 
@@ -65,6 +68,7 @@ protected:
     bool m_drawWireframe        = false;
     GL::CullMode m_cullMode     = GL::CullMode::Back;
     GL::RenderMode m_renderMode = GL::RenderMode::Triangles;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 
     Renderer();
     virtual ~Renderer();

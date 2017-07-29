@@ -20,11 +20,13 @@ void Input::OnFrameFinished()
         ButtonInfo &kInfo = it->second;
         if (kInfo.down)
         {
-            kInfo.down = false; //Not down anymore, just pressed.
+            kInfo.down = false; // Not down anymore, just pressed.
+            m_keysDown.Remove(it->first);
         }
 
-        if (kInfo.up) //After a frame where it was Up
+        if (kInfo.up) // After a frame where it was Up
         {
+            m_keysUp.Remove(it->first);
             m_keyInfos.Remove(it++);
         }
         else { ++it; }
@@ -173,6 +175,9 @@ void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
     m_keyInfos[k].down    = true;
     m_keyInfos[k].pressed = true;
 
+    m_pressedKeys.Add(k);
+    m_keysDown.Add(k);
+    m_keysUp.Remove(k);
 }
 
 void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
@@ -185,6 +190,10 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
         m_keyInfos[k] = ButtonInfo();
     }
     m_keyInfos[k].up = true;
+
+    m_pressedKeys.Remove(k);
+    m_keysDown.Remove(k);
+    m_keysUp.Add(k);
 }
 
 void Input::PeekEvent(const SDL_Event &event)
@@ -263,6 +272,11 @@ Input *Input::GetInstance()
     return Application::GetInstance()->GetInput();
 }
 
+String Input::KeyToString(Input::Key k)
+{
+    return String( SDL_GetKeyName( SCAST<SDL_Keycode>(k) ) );
+}
+
 bool Input::GetKey(Input::Key k)
 {
     Input *inp = Input::GetInstance();
@@ -279,6 +293,21 @@ bool Input::GetKeyDown(Input::Key k)
 {
     Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;
+}
+
+const Array<Input::Key> &Input::GetKeysUp()
+{
+    return Input::GetInstance()->m_keysUp;
+}
+
+const Array<Input::Key> &Input::GetKeysDown()
+{
+    return Input::GetInstance()->m_keysDown;
+}
+
+const Array<Input::Key>& Input::GetPressedKeys()
+{
+    return Input::GetInstance()->m_pressedKeys;
 }
 
 float Input::GetMouseWheel()
