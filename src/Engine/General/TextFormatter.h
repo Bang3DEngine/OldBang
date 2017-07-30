@@ -14,9 +14,11 @@ class TextFormatter
 public:
     struct CharRect
     {
-        char character;
         Recti rect;
-        CharRect(char _c, const Recti &_rect) : character(_c), rect(_rect) {}
+        bool visible;
+        char character;
+        CharRect(char _c, const Recti &_rect) :
+            rect(_rect), visible(true), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(

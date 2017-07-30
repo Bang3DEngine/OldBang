@@ -33,7 +33,7 @@ UIInputText::UIInputText() : UIGameObject("UIInputText")
     p_text->SetTint(Color::Blue);
     p_text->SetTextSize(20.0f);
     p_text->SetContent("Bangerinolol");
-    p_text->SetHorizontalAlign(HorizontalAlignment::Right);
+    p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
     p_text->SetHorizontalWrapMode(WrapMode::Hide);
     p_text->SetVerticalWrapMode(WrapMode::Hide);
@@ -181,8 +181,12 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 
     m_cursorIndex = Math::Clamp(m_cursorIndex + cursorIndexAdvance,
                                 0, p_text->GetContent().Length());
+    while ( m_cursorIndex > 0 && !p_text->IsCharVisible(m_cursorIndex-1) )
+    {
+        m_cursorIndex--;
+    }
 
-    // Selection indices
+    // Selection resetting
     bool doingSelection = Input::GetKey(Input::Key::LShift) ||
                           Input::GetKey(Input::Key::RShift) ||
                           m_selectingWithMouse;
@@ -216,6 +220,8 @@ void UIInputText::HandleMouseSelection()
     const Array<Rect>& charRectsNDC = p_text->GetCharRectsNDC();
     for (int i = 0; i < charRectsNDC.Size(); ++i)
     {
+        if (!p_text->IsCharVisible(i)) { continue; }
+
         const Rect &cr = charRectsNDC[i];
         float distToMinX = Math::Abs(mouseCoordsX_NDC - cr.GetMin().x);
         if (distToMinX < minDist)

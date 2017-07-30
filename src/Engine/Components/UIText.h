@@ -45,6 +45,7 @@ public:
 
     const Array<Rect>& GetCharRectsNDC() const;
     const Rect& GetCharRectNDC(uint charIndex) const;
+    bool IsCharVisible(int charIndex) const;
 
     Rect GetNDCRect() const;
 
@@ -68,6 +69,7 @@ protected:
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
     Array<Rect> m_charRectsNDC;
+    Array<bool> m_charVisibility;
 
     void RefreshMesh();
 };

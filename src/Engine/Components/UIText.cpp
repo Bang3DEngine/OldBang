@@ -63,31 +63,35 @@ void UIText::RefreshMesh()
     Array<Vector3> textQuadPositions3D;
 
     m_charRectsNDC.Clear();
+    m_charVisibility.Clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         Rect charRectNDC = (  (Rect(cr.rect) / Vector2f(Screen::GetSize()) )
                             * 2.0f - 1.0f);
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
+        if (cr.visible)
+        {
+            textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMaxXMinY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMinY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMaxXMaxY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMaxY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMinXMaxY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMinXMaxY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
 
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-
+            Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+            Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+            textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+            textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+            textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+            textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
+        }
         m_charRectsNDC.Add(charRectNDC);
+        m_charVisibility.Add(cr.visible);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
@@ -220,10 +224,12 @@ const Rect &UIText::GetCharRectNDC(uint charIndex) const
     {
         return m_charRectsNDC[charIndex];
     }
-
-    Debug_Warn("Character index out of range ("
-               << charIndex << "/" <<  (m_charRectsNDC.Size()-1) << ")");
     return Rect::Zero;
+}
+
+bool UIText::IsCharVisible(int charIndex) const
+{
+    return m_charVisibility.at(charIndex);
 }
 
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }
