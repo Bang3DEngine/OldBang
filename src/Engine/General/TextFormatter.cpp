@@ -12,6 +12,7 @@ Array<TextFormatter::CharRect>
                                             WrapMode hWrapMode,
                                             WrapMode vWrapMode,
                                             int textSize,
+                                            const Vector2i &scrollingPx,
                                             const Vector2i &_spacing,
                                             const Recti &limitsRect)
 {
@@ -36,6 +37,7 @@ Array<TextFormatter::CharRect>
 
     TextFormatter::ApplyAlignment(&linedCharRects, hAlignment,
                                   vAlignment, limitsRect);
+    TextFormatter::ApplyScrolling(&linedCharRects, scrollingPx);
 
     // Hide wrap must be applied after aligning...
     if (hWrapMode == WrapMode::Hide)
@@ -138,6 +140,18 @@ Array< Array<TextFormatter::CharRect> >
     }
 
     return linedCharRects;
+}
+
+void TextFormatter::ApplyScrolling(Array< Array<CharRect> > *linedCharRects,
+                                   const Vector2i &scrollingPx)
+{
+    for (Array<CharRect>& line : *linedCharRects)
+    {
+        for (CharRect &cr : line)
+        {
+            cr.rect += scrollingPx;
+        }
+    }
 }
 
 void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,

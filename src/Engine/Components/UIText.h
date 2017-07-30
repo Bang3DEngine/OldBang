@@ -31,6 +31,8 @@ public:
     void SetVerticalWrapMode(WrapMode wrapMode);
     void SetContent(const String &content);
     void SetTextSize(int size);
+    void SetSpacing(const Vector2i &spacing);
+    void SetScrollingPx(const Vector2i &scrollingPx);
 
     Font* GetFont() const;
     bool GetKerning() const;
@@ -38,10 +40,10 @@ public:
     WrapMode GetVerticalWrapMode() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
-    void SetSpacing(const Vector2i &spacing);
     const String& GetContent() const;
     int GetTextSize() const;
     Vector2i GetSpacing() const;
+    Vector2i GetScrollingPx() const;
 
     const Array<Rect>& GetCharRectsNDC() const;
     const Rect& GetCharRectNDC(uint charIndex) const;
@@ -56,12 +58,13 @@ public:
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 protected:
-    String m_content    = "";
-    Font *m_font        = nullptr;
-    int m_textSize      = 64;
-    Vector2i m_spacing  = Vector2i(5, 200);
-    bool m_kerning      = false;
-    Rect m_textRectNDC  = Rect::Zero;
+    String m_content       = "";
+    Font *m_font           = nullptr;
+    int m_textSize         = 64;
+    Vector2i m_spacing     = Vector2i(5, 200);
+    bool m_kerning         = false;
+    Rect m_textRectNDC     = Rect::Zero;
+    Vector2i m_scrollingPx = Vector2i::Zero;
 
     WrapMode m_hWrapMode = WrapMode::Wrap;
     WrapMode m_vWrapMode = WrapMode::Hide;

@@ -17,11 +17,6 @@ public:
 
     const String& GetContent() const;
 
-    void HandleTyping();
-    void HandleMouseSelection();
-    void HandleKeySelection(bool wasSelecting);
-    void HandleSelectionIndices(bool wasSelecting);
-
     void SetMargins(int left, int top, int right, int bot);
 
     void SetCursorWidth(float cursorWidth);
@@ -55,8 +50,16 @@ private:
 
     bool m_forceUpdateRenderers = false;
 
+    void HandleTyping();
+    void HandleTextScrolling();
+    void HandleMouseSelection();
+    void HandleKeySelection(bool wasSelecting);
+    void HandleCursorIndices(bool wasSelecting);
+
     float GetCursorX_NDC(int cursorIndex) const;
     void UpdateCursorRenderers();
+    bool IsShiftPressed() const;
+    int GetVisibilityFrontierCharIndex(bool right) const;
 };
 
 #endif // UIINPUTTEXT_H

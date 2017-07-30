@@ -54,6 +54,7 @@ void UIText::RefreshMesh()
                                         GetHorizontalWrapMode(),
                                         GetVerticalWrapMode(),
                                         GetTextSize(),
+                                        GetScrollingPx(),
                                         GetSpacing(),
                                         rt->GetScreenSpaceRectPx());
 
@@ -205,6 +206,15 @@ void UIText::SetSpacing(const Vector2i& spacing)
     }
 }
 
+void UIText::SetScrollingPx(const Vector2i &scrollingPx)
+{
+    if (m_scrollingPx != scrollingPx)
+    {
+        m_scrollingPx = scrollingPx;
+        RefreshMesh();
+    }
+}
+
 Font *UIText::GetFont() const { return m_font; }
 bool UIText::GetKerning() const { return m_kerning; }
 WrapMode UIText::GetVerticalWrapMode() const { return m_vWrapMode; }
@@ -212,6 +222,11 @@ WrapMode UIText::GetHorizontalWrapMode() const { return m_hWrapMode; }
 const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
+
+Vector2i UIText::GetScrollingPx() const
+{
+    return m_scrollingPx;
+}
 
 const Array<Rect> &UIText::GetCharRectsNDC() const
 {
@@ -277,6 +292,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetTint(xmlInfo.Get<Color>("Color"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
+    SetScrollingPx(xmlInfo.Get<Vector2i>("ScrollingPx"));
     SetKerning(xmlInfo.Get<bool>("Kerning"));
     SetVerticalWrapMode( xmlInfo.Get<WrapMode>("VWrapMode") );
     SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
@@ -295,6 +311,7 @@ void UIText::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());
+    xmlInfo->Set("ScrollingPx", GetScrollingPx());
     xmlInfo->Set("Kerning", GetKerning());
     xmlInfo->Set("VWrapMode", GetVerticalWrapMode());
     xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());

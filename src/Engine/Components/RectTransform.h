@@ -14,8 +14,9 @@ public:
 
     void CloneInto(ICloneable *clone) const;
 
-    Vector2 ToPixelsInLocalNDC(const Vector2i &pixels) const;
-    Vector2 ToPixelsInGlobalNDC(const Vector2i &pixels) const;
+    Vector2 FromPixelsInLocalNDC(const Vector2i &pixels) const;
+    Vector2 FromPixelsInGlobalNDC(const Vector2i &pixels) const;
+    Vector2i ToPixelsInGlobalNDC(const Vector2 &ndcAmount) const;
     Vector2 ToLocalNDC(const Vector2 &globalNDCPoint) const;
     Vector2 ToGlobalNDC(const Vector2 &localNDCPoint) const;
 

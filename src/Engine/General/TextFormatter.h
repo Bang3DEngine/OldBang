@@ -29,6 +29,7 @@ public:
                                             WrapMode hWrapMode,
                                             WrapMode vWrapMode,
                                             int textSize,
+                                            const Vector2i &scrollingPx,
                                             const Vector2i &spacing,
                                             const Recti &limitsRect);
 private:
@@ -42,6 +43,9 @@ private:
                                 const Vector2i &spacing,
                                 int textSize,
                                 WrapMode hWrapMode);
+
+    static void ApplyScrolling(Array< Array<CharRect> > *linedCharRects,
+                               const Vector2i &scrollingPx);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                HorizontalAlignment hAlignment,
