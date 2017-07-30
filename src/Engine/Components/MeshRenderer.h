@@ -9,8 +9,9 @@ class MeshRenderer : public Renderer
 {
     OBJECT(MeshRenderer)
 
+    friend class LineRenderer;
+
 public:
-    MeshRenderer();
     virtual ~MeshRenderer();
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -25,6 +26,8 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
+    MeshRenderer();
+
     mutable Mesh *p_mesh = nullptr;
 
     virtual void Render() const override;
