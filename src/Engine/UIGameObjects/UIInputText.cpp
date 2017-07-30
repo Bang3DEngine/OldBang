@@ -32,7 +32,7 @@ UIInputText::UIInputText() : UIGameObject("UIInputText")
     p_text = m_textContainer->AddComponent<UIText>();
     p_text->SetTint(Color::Blue);
     p_text->SetTextSize(20.0f);
-    p_text->SetContent("ABCDEFGHIJKLMN");
+    p_text->SetContent("A BC DEF GHIJ KLMNOP");
     p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
     p_text->SetHorizontalWrapMode(WrapMode::Hide);
@@ -58,19 +58,18 @@ UIInputText::~UIInputText()
 void UIInputText::OnUpdate()
 {
     GameObject::OnUpdate();
+
+    const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
+    HandleTyping();
+    HandleCursorIndices(wasSelecting);
+
     Update();
 }
 
 
 void UIInputText::Update()
 {
-    const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
-
-    HandleTyping();
-
-    HandleCursorIndices(wasSelecting);
     HandleTextScrolling();
-
     UpdateCursorRenderers();
 }
 
@@ -159,6 +158,12 @@ void UIInputText::HandleTyping()
         ResetSelection();
     }
 
+    if (Input::GetKeyDown(Input::Key::End))
+    {
+        m_cursorIndex = p_text->GetContent().Length();
+    }
+    else if (Input::GetKeyDown(Input::Key::Home)) { m_cursorIndex = 0; }
+
     p_text->SetContent(content);
 }
 
@@ -220,8 +225,8 @@ void UIInputText::HandleCursorIndices(bool wasSelecting)
         m_selectingWithMouse = false;
     }
 
-    if (m_selectingWithMouse) { HandleMouseSelection(); }
-    else { HandleKeySelection(wasSelecting); }
+    HandleMouseSelection();
+    HandleKeySelection(wasSelecting);
 }
 
 void UIInputText::HandleKeySelection(bool wasSelecting)
@@ -231,16 +236,20 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
     if (Input::GetKeyDown(Input::Key::Right)) { cursorIndexAdvance = 1; }
     if (Input::GetKeyDown(Input::Key::Left)) { cursorIndexAdvance = -1; }
 
+    if (cursorIndexAdvance != 0 &&
+        (Input::GetKey(Input::Key::LControl) ||
+         Input::GetKey(Input::Key::RControl))
+       )
+    {
+        bool fwd = (cursorIndexAdvance > 0);
+        int startIdx = m_cursorIndex + (fwd ? 0 : -1);
+        cursorIndexAdvance = GetWordSplitIndex(startIdx, fwd) - m_cursorIndex;
+        cursorIndexAdvance += (fwd ? 0 : 1);
+    }
+
     // Advance the the cursor index, and clamp it
     m_cursorIndex = Math::Clamp(m_cursorIndex + cursorIndexAdvance,
                                 0, p_text->GetContent().Length());
-
-    /* // No scrolling text
-    while ( m_cursorIndex > 0 && !p_text->IsCharVisible(m_cursorIndex-1) )
-    {
-        m_cursorIndex--;
-    }
-    */
 
     // Selection resetting handling
     bool doingSelection = IsShiftPressed() || m_selectingWithMouse;
@@ -269,35 +278,51 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 void UIInputText::HandleMouseSelection()
 {
     // Find the closest visible char bounds to the mouse position
-    float minDist = 2.0f;
-    int closestCharRectIndex = 0;
-    float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-    const Array<Rect>& charRectsNDC = p_text->GetCharRectsNDC();
-    for (int i = 0; i < charRectsNDC.Size(); ++i)
+    if (Input::GetMouseButton(Input::MouseButton::Left))
     {
-        const Rect &cr = charRectsNDC[i];
-        float distToMinX = Math::Abs(mouseCoordsX_NDC - cr.GetMin().x);
-        if (distToMinX < minDist)
+        float minDist = 2.0f;
+        int closestCharRectIndex = 0;
+        float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
+        const Array<Rect>& charRectsNDC = p_text->GetCharRectsNDC();
+        for (int i = 0; i < charRectsNDC.Size(); ++i)
         {
-            minDist = distToMinX;
-            closestCharRectIndex = i;
+            const Rect &cr = charRectsNDC[i];
+            float distToMinX = Math::Abs(mouseCoordsX_NDC - cr.GetMin().x);
+            if (distToMinX < minDist)
+            {
+                minDist = distToMinX;
+                closestCharRectIndex = i;
+            }
+
+            float distToMaxX = Math::Abs(mouseCoordsX_NDC - cr.GetMax().x);
+            if (distToMaxX < minDist)
+            {
+                minDist = distToMaxX;
+                closestCharRectIndex = i + 1;
+            }
         }
 
-        float distToMaxX = Math::Abs(mouseCoordsX_NDC - cr.GetMax().x);
-        if (distToMaxX < minDist)
+        m_cursorIndex = closestCharRectIndex;
+
+        // Move the selection index accordingly
+        if (Input::GetMouseButtonDown(Input::MouseButton::Left) &&
+            !IsShiftPressed())
         {
-            minDist = distToMaxX;
-            closestCharRectIndex = i + 1;
+           ResetSelection();
         }
     }
 
-    // Move the selection index accordingly
-    if (Input::GetMouseButtonDown(Input::MouseButton::Left) &&
-        !IsShiftPressed())
+    /*
+    if (Input::GetMouseButtonDoubleClick(Input::MouseButton::Left))
     {
-        m_selectionCursorIndex = closestCharRectIndex;
+        int prevIndex = GetWordSplitIndex(m_cursorIndex, false);
+        int nextIndex = GetWordSplitIndex(m_cursorIndex, true);
+        m_cursorIndex = nextIndex;
+        m_selectingWithMouse = true;
+        m_selectionCursorIndex = prevIndex;
+        m_forceUpdateRenderers = true;
     }
-    m_cursorIndex = closestCharRectIndex;
+    */
 }
 
 void UIInputText::SetMargins(int left, int top, int right, int bot)
@@ -451,5 +476,42 @@ float UIInputText::GetCursorX_NDC(int cursorIndex) const
         return contRT->ToGlobalNDC( Vector2(1.0f) ).x + cursorMarginNDC;
     }
     return p_text->GetCharRectsNDC().Back().GetMax().x + cursorMarginNDC;
+}
+
+bool UIInputText::IsDelimiter(char initialChar, char curr) const
+{
+    bool initialIsLetter = String::IsLetter(initialChar);
+    bool differentCase   = initialIsLetter &&
+                           (String::IsUpperCase(initialChar) !=
+                            String::IsUpperCase(curr));
+    return differentCase ||
+           (!String::IsLetter(curr) && !String::IsNumber(curr));
+}
+
+int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
+{
+    const String &content = p_text->GetContent();
+
+    if (startIndex <= 0 && !forward) { return startIndex; }
+    if (startIndex >= content.Length()-1 && forward) { return startIndex; }
+
+    int i = startIndex;
+    while ( i >= 0 && i < content.Length() &&
+            IsDelimiter(content[startIndex], content[i]) )
+    {
+        i += (forward ? 1 : -1);
+    }
+
+    for (;
+         (forward ? (i < content.Length()) : (i >= 0));
+         i += (forward ? 1 : -1))
+    {
+        if ( IsDelimiter(content[startIndex], content[i]) )
+        {
+            return i;
+        }
+    }
+
+    return i;
 }
 

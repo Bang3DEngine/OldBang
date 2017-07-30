@@ -188,7 +188,7 @@ private:
 
     bool m_isADoubleClick = false;
     float m_secsSinceLastMouseDown = 0.0f;
-    const float c_doubleClickMaxSeconds = 0.3f;
+    const float c_doubleClickMaxSeconds = 0.2f;
     float m_lastMouseWheelDelta = 0.0f;
     bool m_lockMouseMovement = false;
     int m_framesMouseStopped = 0;

@@ -27,7 +27,7 @@ void Input::OnFrameFinished()
         if (kInfo.up) // After a frame where it was Up
         {
             m_keysUp.Remove(it->first);
-            m_keyInfos.Remove(it++);
+            it = m_keyInfos.Remove(it);
         }
         else { ++it; }
     }
@@ -42,10 +42,11 @@ void Input::OnFrameFinished()
             mbInfo.down = false; // Not down anymore, just pressed.
         }
 
-        if (mbInfo.up) { m_mouseInfo.Remove(it++); }
+        if (mbInfo.up)
+        {
+            it = m_mouseInfo.Remove(it);
+        }
         else { ++it; }
-
-        m_isADoubleClick = false; // Reset double click
     }
     //
 
@@ -137,6 +138,7 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     {
         up = m_mouseInfo.Get(mb).up;
     }
+    m_isADoubleClick = false; // Reset double click
 
     m_mouseInfo.Set(mb, ButtonInfo(up, true, true));
     if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
@@ -154,11 +156,17 @@ void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
     MouseButton mb = ei.mouseButton;
     if (m_mouseInfo.ContainsKey(mb))
     {
-        // Only if it was pressed before
-        // We must respect the down and pressed, just in case they happen
+        // We use these ifs, because down & pressed & up can happen
         // in the same frame (this does happen sometimes)
-        m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
-                                       m_mouseInfo[mb].pressed));
+        if (m_mouseInfo[mb].down)
+        {
+            m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
+                                           m_mouseInfo[mb].pressed));
+        }
+        else
+        {
+            m_mouseInfo.Set(mb, ButtonInfo(true, false, false));
+        }
     }
 }
 
@@ -342,7 +350,7 @@ bool Input::GetMouseButtonDown(Input::MouseButton mb)
 bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return Input::GetMouseButtonDown(mb) && inp->m_isADoubleClick;
+    return Input::GetMouseButtonUp(mb) && inp->m_isADoubleClick;
 }
 
 bool Input::IsMouseInsideScreen()

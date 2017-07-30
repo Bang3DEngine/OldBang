@@ -63,6 +63,10 @@ private:
     void HandleCursorIndices(bool wasSelecting);
 
     float GetCursorX_NDC(int cursorIndex) const;
+
+    bool IsDelimiter(char initialChar, char currentChar) const;
+    int GetWordSplitIndex(int startingIndex, bool forward) const;
+
     void UpdateCursorRenderers();
     bool IsShiftPressed() const;
     Vector2 GetSideCursorMarginsNDC() const;
