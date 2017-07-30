@@ -25,16 +25,12 @@ void RectTransform::CloneInto(ICloneable *clone) const
     rt->SetPivotPosition( GetPivotPosition() );
 }
 
-Vector2 RectTransform::FromPixelsInLocalNDC(const Vector2i &pixels) const
+Vector2 RectTransform::FromPixelsToGlobalNDC(const Vector2i &pixels)
 {
-    Vector2i sizeLocalPx = Vector2i( (GetAnchorMax() - GetAnchorMin()) *
-                                     Vector2f(Screen::GetSize()) );
-    sizeLocalPx = Vector2i::Max(Vector2i::One, sizeLocalPx);
-    Vector2f pixelNDCSize = (1.0f / Vector2f(sizeLocalPx)) * 2.0f;
-    return Vector2f(pixels) * pixelNDCSize;
+    return (Vector2f(pixels) / Vector2f(Screen::GetSize())) * 2.0f;
 }
 
-Vector2 RectTransform::FromPixelsInGlobalNDC(const Vector2i &pixels) const
+Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
 {
     Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
     parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
@@ -42,10 +38,19 @@ Vector2 RectTransform::FromPixelsInGlobalNDC(const Vector2i &pixels) const
     return Vector2f(pixels) * pixelNDCSize;
 }
 
-Vector2i RectTransform::ToPixelsInGlobalNDC(const Vector2 &ndcAmount) const
+Vector2i RectTransform::FromGlobalNDCToPixels(const Vector2 &ndcAmount)
 {
-    return Vector2i(ndcAmount *
-                    (Vector2(GetScreenSpaceRectPx().GetSize()) * 0.5f));
+    return Vector2i(ndcAmount * Vector2f(Screen::GetSize()) * 0.5f);
+}
+
+Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
+{
+    return (Vector2(pixelsPoint) / Vector2(Screen::GetSize())) * 2.0f - 1.0f;
+}
+
+Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint)
+{
+    return Vector2i((ndcPoint * 0.5f + 0.5f)* Vector2(Screen::GetSize()));
 }
 
 Vector2 RectTransform::ToLocalNDC(const Vector2 &globalNDCPoint) const
@@ -262,8 +267,8 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     if (!m_hasChanged) { return m_localToParentMatrix; }
 
 
-    Vector2 minMarginedAnchor (m_anchorMin + FromPixelsInGlobalNDC(GetMarginLeftBot()));
-    Vector2 maxMarginedAnchor (m_anchorMax - FromPixelsInGlobalNDC(GetMarginRightTop()));
+    Vector2 minMarginedAnchor (m_anchorMin + FromPixelsToLocalNDC(GetMarginLeftBot()));
+    Vector2 maxMarginedAnchor (m_anchorMax - FromPixelsToLocalNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
     Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,

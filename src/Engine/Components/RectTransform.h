@@ -14,11 +14,13 @@ public:
 
     void CloneInto(ICloneable *clone) const;
 
-    Vector2 FromPixelsInLocalNDC(const Vector2i &pixels) const;
-    Vector2 FromPixelsInGlobalNDC(const Vector2i &pixels) const;
-    Vector2i ToPixelsInGlobalNDC(const Vector2 &ndcAmount) const;
     Vector2 ToLocalNDC(const Vector2 &globalNDCPoint) const;
     Vector2 ToGlobalNDC(const Vector2 &localNDCPoint) const;
+    Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
+    static Vector2 FromPixelsToGlobalNDC(const Vector2i &pixelsAmount);
+    static Vector2i FromGlobalNDCToPixels(const Vector2 &ndcAmount);
+    static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
+    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
 
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);

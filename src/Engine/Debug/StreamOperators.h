@@ -61,10 +61,8 @@ std::ostream& operator<<(std::ostream &log, const QuaternionG<T> &q)
 template<class T>
 std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
 {
-    log << "(" << r.GetMin().x << ", " <<
-                  r.GetMin().y << ", " <<
-                  r.GetMax().x << ", " <<
-                  r.GetMax().y << ")";
+    log << "(" << r.GetMin() << ", " <<
+                  r.GetMax() << ")";
     return log;
 }
 

@@ -235,11 +235,7 @@ const Array<Rect> &UIText::GetCharRectsNDC() const
 
 const Rect &UIText::GetCharRectNDC(uint charIndex) const
 {
-    if (charIndex < m_charRectsNDC.Size())
-    {
-        return m_charRectsNDC[charIndex];
-    }
-    return Rect::Zero;
+    return m_charRectsNDC[charIndex];
 }
 
 bool UIText::IsCharVisible(int charIndex) const

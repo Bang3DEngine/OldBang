@@ -59,6 +59,7 @@ private:
     float GetCursorX_NDC(int cursorIndex) const;
     void UpdateCursorRenderers();
     bool IsShiftPressed() const;
+    Vector2 GetSideCursorMarginsNDC() const;
     int GetVisibilityFrontierCharIndex(bool right) const;
 };
 
