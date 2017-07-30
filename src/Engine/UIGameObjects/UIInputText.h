@@ -19,6 +19,11 @@ public:
 
     void SetMargins(int left, int top, int right, int bot);
 
+    void SetCursorPosition(int index);
+    void SetSelection(int selectionBeginIndex,
+                      int selectionEndIndex);
+    String GetSelectedText() const;
+
     void SetCursorWidth(float cursorWidth);
     float GetCursorWidth() const;
 
@@ -50,6 +55,7 @@ private:
 
     bool m_forceUpdateRenderers = false;
 
+    void Update();
     void HandleTyping();
     void HandleTextScrolling();
     void HandleMouseSelection();

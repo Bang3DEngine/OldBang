@@ -58,7 +58,12 @@ UIInputText::~UIInputText()
 void UIInputText::OnUpdate()
 {
     GameObject::OnUpdate();
+    Update();
+}
 
+
+void UIInputText::Update()
+{
     const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
 
     HandleTyping();
@@ -159,10 +164,15 @@ void UIInputText::HandleTyping()
 
 void UIInputText::HandleTextScrolling()
 {
+    if (p_text->GetContent().Empty())
+    {
+        p_text->SetScrollingPx( Vector2i::Zero );
+        return;
+    }
+
     // If we have the cursorIndex on non-visible char, scroll the text so that
     // the charRect is visible
-    RectTransform *contRT = m_textContainer->rectTransform;
-    Rect limits = contRT->GetScreenSpaceRectNDC();
+    Rect limits = m_textContainer->rectTransform->GetScreenSpaceRectNDC();
     float cursorX = GetCursorX_NDC(m_cursorIndex);
     Rect bounds (limits.GetMin(), limits.GetMax());
     float boundsRight = bounds.GetMax().x;
@@ -170,11 +180,30 @@ void UIInputText::HandleTextScrolling()
     if ((cursorX < boundsLeft) || (cursorX > boundsRight))
     {
         float pivotXNDC = (cursorX > boundsRight) ? boundsRight : boundsLeft;
-
         Vector2 scrollNDC(cursorX - pivotXNDC, 0);
-        Vector2i offset( (cursorX > boundsRight) ? 5 : -5, 0 );
-        Vector2i scrollPx = RectTransform::FromGlobalNDCToPixels(scrollNDC) + offset;
+        Vector2i scrollPx = RectTransform::FromGlobalNDCToPixels(scrollNDC);
         p_text->SetScrollingPx(p_text->GetScrollingPx() - scrollPx);
+        m_forceUpdateRenderers = true;
+    }
+
+    // Handle scrolling when deleting too long text
+    float minCharX = p_text->GetCharRectsNDC().Front().GetMin().x;
+    float maxCharX = p_text->GetCharRectsNDC().Back().GetMax().x;
+    if ((maxCharX - minCharX) > (bounds.GetWidth()) &&
+         minCharX < boundsLeft &&
+         maxCharX <= boundsRight)
+    {
+        Vector2 scrollNDC(maxCharX - boundsRight, 0);
+        Vector2i scrollPx = RectTransform::FromGlobalNDCToPixels(scrollNDC) +
+                            Vector2i(3,0);
+        p_text->SetScrollingPx(p_text->GetScrollingPx() - scrollPx);
+        m_forceUpdateRenderers = true;
+    }
+
+    // Fix scrolling if text is smaller than textbox
+    if ((maxCharX - minCharX) < (bounds.GetWidth()))
+    {
+        p_text->SetScrollingPx(Vector2i::Zero);
         m_forceUpdateRenderers = true;
     }
 }
@@ -275,6 +304,30 @@ void UIInputText::SetMargins(int left, int top, int right, int bot)
 {
     RectTransform *contRT = m_textContainer->GetComponent<RectTransform>();
     contRT->SetMargins(left, top, right, bot);
+}
+
+void UIInputText::SetCursorPosition(int index)
+{
+    m_cursorIndex = index;
+    m_forceUpdateRenderers = true;
+    Update();
+}
+
+void UIInputText::SetSelection(int selectionBeginIndex,
+                               int selectionEndIndex)
+{
+    m_cursorIndex = selectionBeginIndex;
+    m_selectionCursorIndex = selectionEndIndex;
+    m_forceUpdateRenderers = true;
+    Update();
+}
+
+String UIInputText::GetSelectedText() const
+{
+    if (m_cursorIndex == m_selectionCursorIndex) { return ""; }
+    int minIndex = Math::Min(m_cursorIndex, m_selectionCursorIndex);
+    int maxIndex = Math::Max(m_cursorIndex, m_selectionCursorIndex);
+    return p_text->GetContent().SubString(minIndex, maxIndex);
 }
 
 void UIInputText::SetCursorWidth(float cursorWidth)
