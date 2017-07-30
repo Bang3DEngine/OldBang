@@ -43,6 +43,7 @@ public:
     int GetTextSize() const;
     Vector2i GetSpacing() const;
 
+    const Array<Rect>& GetCharRectsNDC() const;
     const Rect& GetCharRectNDC(uint charIndex) const;
 
     Rect GetNDCRect() const;

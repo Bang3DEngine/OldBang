@@ -1,13 +1,13 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
-#include "Bang/GameObject.h"
+#include "Bang/UIGameObject.h"
 
 FORWARD class UIText;
 FORWARD class UIImage;
 FORWARD class SingleLineRenderer;
 
-class UIInputText : public GameObject
+class UIInputText : public UIGameObject
 {
 public:
     UIInputText();
@@ -18,6 +18,8 @@ public:
     const String& GetContent() const;
 
     void HandleTyping();
+    void HandleMouseSelection();
+    void HandleKeySelection(bool wasSelecting);
     void HandleSelectionIndices(bool wasSelecting);
 
     void SetMargins(int left, int top, int right, int bot);
@@ -36,14 +38,15 @@ public:
 private:
     UIImage *p_background = nullptr;
 
-    GameObject *m_textContainer = nullptr;
+    UIGameObject *m_textContainer = nullptr;
     UIText *p_text = nullptr;
     SingleLineRenderer *m_cursorRenderer = nullptr;
 
-    GameObject *p_selectionGO = nullptr;
+    UIGameObject *p_selectionGO = nullptr;
     UIImage *p_selectionQuad = nullptr;
 
     int m_cursorIndex = 0;
+    bool m_selectingWithMouse = false;
     int m_latestCursorIndex = 1;
     int m_selectionCursorIndex = 0;
 

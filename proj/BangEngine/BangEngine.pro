@@ -26,6 +26,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/UIInputText.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.cpp \
     $$BANG_ROOT/src/Engine/Components/Transform.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \
     $$BANG_ROOT/src/Engine/GameBuilder/GameBuilder.h \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.h \

@@ -209,6 +209,11 @@ const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
 
+const Array<Rect> &UIText::GetCharRectsNDC() const
+{
+    return m_charRectsNDC;
+}
+
 const Rect &UIText::GetCharRectNDC(uint charIndex) const
 {
     if (charIndex < m_charRectsNDC.Size())

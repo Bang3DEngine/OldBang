@@ -44,18 +44,12 @@ Vector2 RectTransform::ToPixelsInGlobalNDC(const Vector2i &pixels) const
 
 Vector2 RectTransform::ToLocalNDC(const Vector2 &globalNDCPoint) const
 {
-    Matrix4 localToWorld; GetLocalToWorldMatrix(&localToWorld);
-    Vector4 v = (localToWorld * Vector4(globalNDCPoint.x,
-                                        globalNDCPoint.y, 0, 1));
-    return v.xy();
+    return WorldToLocalPoint( Vector3(globalNDCPoint, 0) ).xy();
 }
 
 Vector2 RectTransform::ToGlobalNDC(const Vector2 &localNDCPoint) const
 {
-    Matrix4 localToWorld; GetLocalToWorldMatrix(&localToWorld);
-    Vector4 v = (localToWorld.Inversed() * Vector4(localNDCPoint.x,
-                                                   localNDCPoint.y, 0, 1));
-    return v.xy();
+    return LocalToWorldPoint( Vector3(localNDCPoint, 0) ).xy();
 }
 
 void RectTransform::SetMarginLeft(int marginLeft)
