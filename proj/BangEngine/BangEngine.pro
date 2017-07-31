@@ -25,6 +25,8 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIInputText.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.cpp \
     $$BANG_ROOT/src/Engine/Components/Transform.cpp \
@@ -109,6 +111,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
     $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \
     $$BANG_ROOT/src/Engine/GameBuilder/GameBuilder.h \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.h \
@@ -130,6 +133,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/Renderer.h \
     $$BANG_ROOT/src/Engine/Math/Sphere.h \
     $$BANG_ROOT/src/Engine/General/SystemUtils.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIInputText.h \
     $$BANG_ROOT/src/Engine/Components/CircleRenderer.h \
     $$BANG_ROOT/src/Engine/Components/SingleLineRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/MeshFactory.h \
@@ -185,8 +189,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedVariable.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/BPReflectedStruct.h \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/IReflectable.h \
-    $$BANG_ROOT/src/Engine/Compiler/Compiler.h \
-    ../../res/EngineAssets/Shaders/SelectionBuffer.frag_sel
+    $$BANG_ROOT/src/Engine/Compiler/Compiler.h
 
 ######################################
 
@@ -195,6 +198,7 @@ HEADERS += \
 DISTFILES += \
     ../.gitignore \
     $$BANG_ROOT/src/Engine \
+    $$BANG_ROOT/res/EngineAssets/Shaders/SelectionBuffer.frag_sel \
     $$BANG_ROOT/res/EngineAssets/Shaders/RenderG_GBufferToScreen.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Template.frag_g \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.frag_g \

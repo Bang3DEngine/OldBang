@@ -14,9 +14,11 @@ class TextFormatter
 public:
     struct CharRect
     {
-        char character;
         Recti rect;
-        CharRect(char _c, const Recti &_rect) : character(_c), rect(_rect) {}
+        bool visible;
+        char character;
+        CharRect(char _c, const Recti &_rect) :
+            rect(_rect), visible(true), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(
@@ -27,6 +29,7 @@ public:
                                             WrapMode hWrapMode,
                                             WrapMode vWrapMode,
                                             int textSize,
+                                            const Vector2i &scrollingPx,
                                             const Vector2i &spacing,
                                             const Recti &limitsRect);
 private:
@@ -40,6 +43,9 @@ private:
                                 const Vector2i &spacing,
                                 int textSize,
                                 WrapMode hWrapMode);
+
+    static void ApplyScrolling(Array< Array<CharRect> > *linedCharRects,
+                               const Vector2i &scrollingPx);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                HorizontalAlignment hAlignment,

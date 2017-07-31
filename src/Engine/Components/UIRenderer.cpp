@@ -15,6 +15,7 @@ UIRenderer::UIRenderer()
     UseMaterialCopy();
     GetMaterial()->SetDiffuseColor(m_tint);
 
+    SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderLayer(Renderer::RenderLayer::RLCanvas);
 }
 
@@ -31,18 +32,6 @@ void UIRenderer::SetTint(const Color &tint)
 const Color &UIRenderer::GetTint() const
 {
     return m_tint;
-}
-
-void UIRenderer::Bind() const
-{
-    GL::SetViewProjMode( GL::ViewProjMode::IgnoreBoth );
-    Renderer::Bind();
-}
-
-void UIRenderer::UnBind() const
-{
-    GL::SetViewProjMode( GL::ViewProjMode::UseBoth );
-    MeshRenderer::UnBind();
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const

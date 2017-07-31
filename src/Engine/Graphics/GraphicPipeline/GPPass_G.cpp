@@ -7,7 +7,7 @@
 #include "Bang/GraphicPipeline.h"
 
 GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
-                   bool receiveLighting,
+                   ReceiveLightPass receiveLighting,
                    const List<GPPass*> &subPasses)
     : GPPass(graphicPipeline, subPasses)
 {
@@ -34,6 +34,9 @@ bool GPPass_G::CanRender(const Renderer *renderer) const
 {
     Material *rendMaterial = renderer->GetMaterial();
     bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
-    return GPPass::CanRender(renderer) &&
-           (m_receiveLighting == receivesLighting);
+    bool canRender =
+          (m_receiveLighting == ReceiveLightPass::Yes && receivesLighting) ||
+          (m_receiveLighting == ReceiveLightPass::No  && receivesLighting) ||
+           m_receiveLighting == ReceiveLightPass::Both;
+    return GPPass::CanRender(renderer) && canRender;
 }

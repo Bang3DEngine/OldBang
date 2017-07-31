@@ -14,6 +14,14 @@ public:
 
     void CloneInto(ICloneable *clone) const;
 
+    Vector2 ToLocalNDC(const Vector2 &globalNDCPoint) const;
+    Vector2 ToGlobalNDC(const Vector2 &localNDCPoint) const;
+    Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
+    static Vector2 FromPixelsToGlobalNDC(const Vector2i &pixelsAmount);
+    static Vector2i FromGlobalNDCToPixels(const Vector2 &ndcAmount);
+    static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
+    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
+
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);
     void SetMarginRight(int marginRight);
@@ -43,7 +51,7 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
     Recti GetScreenSpaceRectPx() const;
-    Rect GetScreenSpaceRect() const;
+    Rect GetScreenSpaceRectNDC() const;
 
     Recti GetParentScreenRectPx() const;
     Rect GetParentScreenRect() const;

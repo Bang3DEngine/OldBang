@@ -144,13 +144,13 @@ Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetLocalToWorldMatrix(&m);
-    return Vector3((m * Vector4(point, 1)).xyz());
+    return (m * Vector4(point, 1)).xyz();
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetLocalToWorldMatrix(&m);
-    return Vector3((m.Inversed() * Vector4(point, 1)).xyz());
+    return (m.Inversed() * Vector4(point, 1)).xyz();
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
@@ -164,13 +164,13 @@ Vector3 Transform::TransformVector(const Vector3 &dir) const
 {
     Matrix4 m;
     GetLocalToWorldMatrix(&m);
-    return Vector3((m * Vector4(dir, 0)).xyz());
+    return (m * Vector4(dir, 0)).xyz();
 }
 Vector3 Transform::InverseTransformVector(const Vector3 &dir) const
 {
     Matrix4 m;
     GetLocalToWorldMatrix(&m);
-    return Vector3((m.Inversed() * Vector4(dir, 0)).xyz());
+    return (m.Inversed() * Vector4(dir, 0)).xyz();
 }
 
 
@@ -178,14 +178,14 @@ Vector3 Transform::ParentToLocalPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetLocalToParentMatrix(&m);
-    return Vector3((m.Inversed() * Vector4(point, 1)).xyz());
+    return (m.Inversed() * Vector4(point, 1)).xyz();
 }
 
 Vector3 Transform::ParentToLocalVector(const Vector3 &vector) const
 {
     Matrix4 m;
     GetLocalToParentMatrix(&m);
-    return Vector3((m.Inversed() * Vector4(vector, 0)).xyz());
+    return (m.Inversed() * Vector4(vector, 0)).xyz();
 }
 Vector3 Transform::ParentToLocalDirection(const Vector3 &dir) const
 {
@@ -195,14 +195,14 @@ Vector3 Transform::LocalToParentPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetLocalToParentMatrix(&m);
-    return Vector3((m * Vector4(point, 1)).xyz());
+    return (m * Vector4(point, 1)).xyz();
 }
 
 Vector3 Transform::LocalToParentVector(const Vector3 &vector) const
 {
     Matrix4 m;
     GetLocalToParentMatrix(&m);
-    return Vector3((m * Vector4(vector, 0)).xyz());
+    return (m * Vector4(vector, 0)).xyz();
 }
 Vector3 Transform::LocalToParentDirection(const Vector3 &dir) const
 {

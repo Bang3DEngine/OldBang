@@ -54,6 +54,7 @@ void UIText::RefreshMesh()
                                         GetHorizontalWrapMode(),
                                         GetVerticalWrapMode(),
                                         GetTextSize(),
+                                        GetScrollingPx(),
                                         GetSpacing(),
                                         rt->GetScreenSpaceRectPx());
 
@@ -62,33 +63,36 @@ void UIText::RefreshMesh()
     Array<Vector2> textQuadPositions2D;
     Array<Vector3> textQuadPositions3D;
 
-    m_charRects.Clear();
+    m_charRectsNDC.Clear();
+    m_charVisibility.Clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         Rect charRectNDC = (  (Rect(cr.rect) / Vector2f(Screen::GetSize()) )
-                            * 2.0f - 1.0f
-                           );
+                            * 2.0f - 1.0f);
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
+        if (cr.visible)
+        {
+            textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMaxXMinY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMinY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMaxXMaxY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMaxY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
 
-        textQuadPositions2D.PushBack(charRectNDC.GetMinXMaxY());
-        textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
+            textQuadPositions2D.PushBack(charRectNDC.GetMinXMaxY());
+            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
 
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-
-        m_charRects.Add(charRectNDC);
+            Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+            Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+            textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+            textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+            textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+            textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
+        }
+        m_charRectsNDC.Add(charRectNDC);
+        m_charVisibility.Add(cr.visible);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
@@ -202,6 +206,15 @@ void UIText::SetSpacing(const Vector2i& spacing)
     }
 }
 
+void UIText::SetScrollingPx(const Vector2i &scrollingPx)
+{
+    if (m_scrollingPx != scrollingPx)
+    {
+        m_scrollingPx = scrollingPx;
+        RefreshMesh();
+    }
+}
+
 Font *UIText::GetFont() const { return m_font; }
 bool UIText::GetKerning() const { return m_kerning; }
 WrapMode UIText::GetVerticalWrapMode() const { return m_vWrapMode; }
@@ -209,6 +222,26 @@ WrapMode UIText::GetHorizontalWrapMode() const { return m_hWrapMode; }
 const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
+
+Vector2i UIText::GetScrollingPx() const
+{
+    return m_scrollingPx;
+}
+
+const Array<Rect> &UIText::GetCharRectsNDC() const
+{
+    return m_charRectsNDC;
+}
+
+const Rect &UIText::GetCharRectNDC(uint charIndex) const
+{
+    return m_charRectsNDC[charIndex];
+}
+
+bool UIText::IsCharVisible(int charIndex) const
+{
+    return m_charVisibility.at(charIndex);
+}
 
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }
 VerticalAlignment UIText::GetVerticalAlignment() const
@@ -255,6 +288,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetTint(xmlInfo.Get<Color>("Color"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
+    SetScrollingPx(xmlInfo.Get<Vector2i>("ScrollingPx"));
     SetKerning(xmlInfo.Get<bool>("Kerning"));
     SetVerticalWrapMode( xmlInfo.Get<WrapMode>("VWrapMode") );
     SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
@@ -273,6 +307,7 @@ void UIText::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());
+    xmlInfo->Set("ScrollingPx", GetScrollingPx());
     xmlInfo->Set("Kerning", GetKerning());
     xmlInfo->Set("VWrapMode", GetVerticalWrapMode());
     xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());

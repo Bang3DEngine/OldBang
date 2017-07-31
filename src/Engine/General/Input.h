@@ -72,9 +72,16 @@ public:
         XButton2         = SDL_BUTTON_X2
     };
 
+    static String KeyToString(Key k);
+
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);
     static bool GetKeyDown(Key k);
+    static bool GetKeyDownRepeat(Key k);
+
+    static const Array<Key>& GetKeysUp();
+    static const Array<Key>& GetKeysDown();
+    static const Array<Key>& GetPressedKeys();
 
     static float GetMouseWheel();
 
@@ -118,6 +125,10 @@ public:
     static Vector2 GetMouseCoordsNDC();
     static Vector2i GetPreviousMouseCoords();
 
+    static void StartTextInput();
+    static String PollInputText();
+    static void StopTextInput();
+
 private:
     Input();
     virtual ~Input();
@@ -155,9 +166,10 @@ private:
     class ButtonInfo : public IToString
     {
         public:
-            bool up;   //just one frame
-            bool down; //just one frame
-            bool pressed; //long duration
+            bool up;         // Just one frame
+            bool down;       // Just one frame
+            bool pressed;    // Long duration
+            bool autoRepeat;
 
             ButtonInfo() { up = down = pressed = false; }
             ButtonInfo(bool up, bool down, bool pressed)
@@ -178,13 +190,19 @@ private:
 
     bool m_isADoubleClick = false;
     float m_secsSinceLastMouseDown = 0.0f;
-    const float c_doubleClickMaxSeconds = 0.3f;
+    const float c_doubleClickMaxSeconds = 0.2f;
     float m_lastMouseWheelDelta = 0.0f;
     bool m_lockMouseMovement = false;
     int m_framesMouseStopped = 0;
     bool m_isMouseInside = false;
 
+    String m_inputText = "";
+
     Vector2i m_mouseCoords, m_lastMouseCoords;
+
+    Array<Key> m_keysUp;
+    Array<Key> m_keysDown;
+    Array<Key> m_pressedKeys;
 
     Map<Key, ButtonInfo> m_keyInfos;
     Map<MouseButton, ButtonInfo> m_mouseInfo;

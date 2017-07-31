@@ -20,12 +20,14 @@ void Input::OnFrameFinished()
         ButtonInfo &kInfo = it->second;
         if (kInfo.down)
         {
-            kInfo.down = false; //Not down anymore, just pressed.
+            kInfo.down = false; // Not down anymore, just pressed.
+            m_keysDown.Remove(it->first);
         }
 
-        if (kInfo.up) //After a frame where it was Up
+        if (kInfo.up) // After a frame where it was Up
         {
-            m_keyInfos.Remove(it++);
+            m_keysUp.Remove(it->first);
+            it = m_keyInfos.Remove(it);
         }
         else { ++it; }
     }
@@ -40,10 +42,11 @@ void Input::OnFrameFinished()
             mbInfo.down = false; // Not down anymore, just pressed.
         }
 
-        if (mbInfo.up) { m_mouseInfo.Remove(it++); }
+        if (mbInfo.up)
+        {
+            it = m_mouseInfo.Remove(it);
+        }
         else { ++it; }
-
-        m_isADoubleClick = false; // Reset double click
     }
     //
 
@@ -135,6 +138,7 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     {
         up = m_mouseInfo.Get(mb).up;
     }
+    m_isADoubleClick = false; // Reset double click
 
     m_mouseInfo.Set(mb, ButtonInfo(up, true, true));
     if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
@@ -152,27 +156,35 @@ void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
     MouseButton mb = ei.mouseButton;
     if (m_mouseInfo.ContainsKey(mb))
     {
-        // Only if it was pressed before
-        // We must respect the down and pressed, just in case they happen
+        // We use these ifs, because down & pressed & up can happen
         // in the same frame (this does happen sometimes)
-        m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
-                                       m_mouseInfo[mb].pressed));
+        if (m_mouseInfo[mb].down)
+        {
+            m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
+                                           m_mouseInfo[mb].pressed));
+        }
+        else
+        {
+            m_mouseInfo.Set(mb, ButtonInfo(true, false, false));
+        }
     }
 }
 
 
 void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
 {
-    if (ei.autoRepeat) return;
-
     Key k = ei.key;
     if (m_keyInfos.ContainsKey(k))
     {
         m_keyInfos[k] = ButtonInfo();
     }
-    m_keyInfos[k].down    = true;
-    m_keyInfos[k].pressed = true;
+    m_keyInfos[k].down       = true;
+    m_keyInfos[k].pressed    = true;
+    m_keyInfos[k].autoRepeat = ei.autoRepeat;
 
+    m_pressedKeys.Add(k);
+    m_keysDown.Add(k);
+    m_keysUp.Remove(k);
 }
 
 void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
@@ -185,6 +197,10 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
         m_keyInfos[k] = ButtonInfo();
     }
     m_keyInfos[k].up = true;
+
+    m_pressedKeys.Remove(k);
+    m_keysDown.Remove(k);
+    m_keysUp.Add(k);
 }
 
 void Input::PeekEvent(const SDL_Event &event)
@@ -234,6 +250,10 @@ void Input::PeekEvent(const SDL_Event &event)
         }
         break;
 
+        case SDL_TEXTINPUT:
+            m_inputText = String(event.text.text);
+        break;
+
         default:
             enqueue = false;
     }
@@ -263,6 +283,11 @@ Input *Input::GetInstance()
     return Application::GetInstance()->GetInput();
 }
 
+String Input::KeyToString(Input::Key k)
+{
+    return String( SDL_GetKeyName( SCAST<SDL_Keycode>(k) ) );
+}
+
 bool Input::GetKey(Input::Key k)
 {
     Input *inp = Input::GetInstance();
@@ -278,7 +303,29 @@ bool Input::GetKeyUp(Input::Key k)
 bool Input::GetKeyDown(Input::Key k)
 {
     Input *inp = Input::GetInstance();
+    return  inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down &&
+           !inp->m_keyInfos[k].autoRepeat;
+}
+
+bool Input::GetKeyDownRepeat(Input::Key k)
+{
+    Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;
+}
+
+const Array<Input::Key> &Input::GetKeysUp()
+{
+    return Input::GetInstance()->m_keysUp;
+}
+
+const Array<Input::Key> &Input::GetKeysDown()
+{
+    return Input::GetInstance()->m_keysDown;
+}
+
+const Array<Input::Key>& Input::GetPressedKeys()
+{
+    return Input::GetInstance()->m_pressedKeys;
 }
 
 float Input::GetMouseWheel()
@@ -309,7 +356,7 @@ bool Input::GetMouseButtonDown(Input::MouseButton mb)
 bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return Input::GetMouseButtonDown(mb) && inp->m_isADoubleClick;
+    return Input::GetMouseButtonUp(mb) && inp->m_isADoubleClick;
 }
 
 bool Input::IsMouseInsideScreen()
@@ -377,4 +424,22 @@ Vector2i Input::GetPreviousMouseCoords()
 {
     Input *inp = Input::GetInstance();
     return inp->m_lastMouseCoords;
+}
+
+void Input::StartTextInput()
+{
+    SDL_StartTextInput();
+}
+
+String Input::PollInputText()
+{
+    Input *input = Input::GetInstance();
+    String res = input->m_inputText;
+    input->m_inputText = "";
+    return res;
+}
+
+void Input::StopTextInput()
+{
+    SDL_StopTextInput();
 }

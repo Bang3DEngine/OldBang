@@ -12,6 +12,7 @@ Array<TextFormatter::CharRect>
                                             WrapMode hWrapMode,
                                             WrapMode vWrapMode,
                                             int textSize,
+                                            const Vector2i &scrollingPx,
                                             const Vector2i &_spacing,
                                             const Recti &limitsRect)
 {
@@ -36,6 +37,7 @@ Array<TextFormatter::CharRect>
 
     TextFormatter::ApplyAlignment(&linedCharRects, hAlignment,
                                   vAlignment, limitsRect);
+    TextFormatter::ApplyScrolling(&linedCharRects, scrollingPx);
 
     // Hide wrap must be applied after aligning...
     if (hWrapMode == WrapMode::Hide)
@@ -140,6 +142,18 @@ Array< Array<TextFormatter::CharRect> >
     return linedCharRects;
 }
 
+void TextFormatter::ApplyScrolling(Array< Array<CharRect> > *linedCharRects,
+                                   const Vector2i &scrollingPx)
+{
+    for (Array<CharRect>& line : *linedCharRects)
+    {
+        for (CharRect &cr : line)
+        {
+            cr.rect += scrollingPx;
+        }
+    }
+}
+
 void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
                                    HorizontalAlignment hAlignment,
                                    VerticalAlignment vAlignment,
@@ -206,16 +220,11 @@ void TextFormatter::ApplyHorizontalHideWrap(
                         const Recti &limitsRect)
 {
     Array<CharRect> *line = &linedCharRects->Front();
-    auto it = line->Begin();
-    while (it != line->End())
+    for (CharRect &cr : *line)
     {
-        const CharRect &charRect = *it;
-        if (charRect.rect.GetMin().x < limitsRect.GetMin().x ||
-            charRect.rect.GetMax().x > limitsRect.GetMax().x)
-        {
-            it = line->Remove(it);
-        }
-        else { ++it; }
+        cr.visible = cr.visible &&
+                     (cr.rect.GetMin().x >= limitsRect.GetMin().x &&
+                      cr.rect.GetMax().x <= limitsRect.GetMax().x);
     }
 }
 
@@ -223,19 +232,13 @@ void TextFormatter::ApplyVerticalHideWrap(
                         Array< Array<CharRect> > *linedCharRects,
                         const Recti &limitsRect)
 {
-    auto it = linedCharRects->Begin();
-    while (it != linedCharRects->End())
+    for (Array<CharRect> &line : *linedCharRects)
     {
-        constexpr int precisionOffset = 0; //0.001;
-        const Array<CharRect> &line = *it;
         Vector2i minCoord = TextFormatter::FindMinCoord(line);
         Vector2i maxCoord = TextFormatter::FindMaxCoord(line);
-        if (minCoord.y + precisionOffset < limitsRect.GetMin().y ||
-            maxCoord.y - precisionOffset > limitsRect.GetMax().y)
-        {
-            it = linedCharRects->Remove(it);
-        }
-        else { ++it; }
+        bool lineVisible = (minCoord.y >= limitsRect.GetMin().y &&
+                            maxCoord.y <= limitsRect.GetMax().y);
+        for (CharRect &cr : line) { cr.visible = cr.visible && lineVisible; }
     }
 }
 

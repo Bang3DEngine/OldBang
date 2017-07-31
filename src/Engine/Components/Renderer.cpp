@@ -61,6 +61,7 @@ Material *Renderer::GetSharedMaterial() const
 
 void Renderer::Bind() const
 {
+    GL::SetViewProjMode(m_viewProjMode);
     GL::SetWireframe(m_drawWireframe);
     GL::SetCullMode(m_cullMode);
     glLineWidth(m_lineWidth);
@@ -124,6 +125,16 @@ void Renderer::SetCullMode(GL::CullMode cullMode)
 GL::CullMode Renderer::GetCullMode() const
 {
     return m_cullMode;
+}
+
+void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
+{
+    m_viewProjMode = viewProjMode;
+}
+
+GL::ViewProjMode Renderer::GetViewProjMode() const
+{
+    return m_viewProjMode;
 }
 
 

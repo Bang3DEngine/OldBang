@@ -28,6 +28,8 @@ void G_Font::LoadFromTTF(const Path &filepath)
 G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c,
                                                      int textSize) const
 {
+    if (c == ' ') { return GetCharacterMetrics('A', textSize); }
+
     G_Font::CharGlyphMetrics cgm;
     if (m_charMetrics.ContainsKey(c)) { cgm = m_charMetrics.Get(c); }
 

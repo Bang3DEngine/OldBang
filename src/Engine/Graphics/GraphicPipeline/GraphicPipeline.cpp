@@ -52,9 +52,9 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_scenePass  =
      new GPPass_RenderLayer(this, RL::RLScene,
      {
-       new GPPass_G(this, true),            // Lighted G_Pass
-       new GPPass_SP_DeferredLights(this),  // Apply light
-       new GPPass_G(this, false),           // UnLighted G_Pass
+       new GPPass_G(this, GPPass_G::ReceiveLightPass::Yes), // Lighted G_Pass
+       new GPPass_SP_DeferredLights(this),                  // Apply light
+       new GPPass_G(this, GPPass_G::ReceiveLightPass::No),  // UnLighted G_Pass
        new GPPass_SP_PostProcessEffects(this,
                                         PostProcessEffect::Type::AfterScene)
      });
@@ -62,10 +62,15 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_canvasPass =
      new GPPass_RenderLayer(this, RL::RLCanvas,
      {
-      new GPPass_G(this, false),
+      new GPPass_G(this, GPPass_G::ReceiveLightPass::Both),
       new GPPass_SP_PostProcessEffects(this,
                                        PostProcessEffect::Type::AfterCanvas)
      });
+
+    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
+    {
+     new GPPass_G_Gizmos(this)
+    });
 
     m_sceneSelectionPass = new GPPass_RenderLayer(this, RL::RLScene,
     {
@@ -74,11 +79,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_canvasSelectionPass = new GPPass_RenderLayer(this, RL::RLCanvas,
     {
       new GPPass_Selection(this)
-    });
-
-    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
-    {
-     new GPPass_G_Gizmos(this)
     });
 }
 
@@ -143,7 +143,10 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_scenePass->Pass(renderers, sceneChildren);
     m_gbuffer->ClearStencil();
 
+    GL::SetTestDepth(false);
     m_canvasPass->Pass(renderers, sceneChildren);
+    GL::SetTestDepth(true);
+
     m_gizmosPass->Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();

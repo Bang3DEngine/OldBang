@@ -13,8 +13,10 @@ class G_GBuffer;
 class GPPass_G : public GPPass
 {
 public:
+    enum ReceiveLightPass { Yes, No, Both };
+
     GPPass_G(GraphicPipeline *graphicPipeline,
-             bool receiveLighting,
+             ReceiveLightPass receiveLighting,
              const List<GPPass*> &subPasses = {});
 
     virtual void InPass(const List<Renderer*> &renderers,
@@ -23,7 +25,7 @@ public:
     virtual bool CanRender(const Renderer *renderer) const override;
 
 private:
-    bool m_receiveLighting = false;
+    ReceiveLightPass m_receiveLighting;
 };
 
 #endif // GPPASS_G_H

@@ -57,8 +57,8 @@ public:
         return (a >= b) ? a : b;
     }
 
-    template<class T>
-    static T Clamp(const T &value, const T &min, const T &max)
+    template<class T, class T2, class T3>
+    static T Clamp(const T &value, const T2 &min, const T3 &max)
     {
         if (value < min) return min;
         if (value > max) return max;
