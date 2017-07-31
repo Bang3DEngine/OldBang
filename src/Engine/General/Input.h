@@ -77,6 +77,7 @@ public:
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);
     static bool GetKeyDown(Key k);
+    static bool GetKeyDownRepeat(Key k);
 
     static const Array<Key>& GetKeysUp();
     static const Array<Key>& GetKeysDown();
@@ -165,9 +166,10 @@ private:
     class ButtonInfo : public IToString
     {
         public:
-            bool up;      // Just one frame
-            bool down;    // Just one frame
-            bool pressed; // Long duration
+            bool up;         // Just one frame
+            bool down;       // Just one frame
+            bool pressed;    // Long duration
+            bool autoRepeat;
 
             ButtonInfo() { up = down = pressed = false; }
             ButtonInfo(bool up, bool down, bool pressed)

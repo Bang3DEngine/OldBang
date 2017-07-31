@@ -173,15 +173,14 @@ void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
 
 void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
 {
-    if (ei.autoRepeat) return;
-
     Key k = ei.key;
     if (m_keyInfos.ContainsKey(k))
     {
         m_keyInfos[k] = ButtonInfo();
     }
-    m_keyInfos[k].down    = true;
-    m_keyInfos[k].pressed = true;
+    m_keyInfos[k].down       = true;
+    m_keyInfos[k].pressed    = true;
+    m_keyInfos[k].autoRepeat = ei.autoRepeat;
 
     m_pressedKeys.Add(k);
     m_keysDown.Add(k);
@@ -302,6 +301,13 @@ bool Input::GetKeyUp(Input::Key k)
 }
 
 bool Input::GetKeyDown(Input::Key k)
+{
+    Input *inp = Input::GetInstance();
+    return  inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down &&
+           !inp->m_keyInfos[k].autoRepeat;
+}
+
+bool Input::GetKeyDownRepeat(Input::Key k)
 {
     Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;

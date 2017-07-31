@@ -134,8 +134,14 @@ void UIInputText::HandleTyping()
         int maxIndex = Math::Max(m_cursorIndex, m_selectionCursorIndex);
 
         int offset = 1;
-        if (Input::GetKeyDown(Input::Key::Delete)) { offset = (selecting ? -1 : 0); }
-        else if (Input::GetKeyDown(Input::Key::BackSpace)) { offset = -1; }
+        if (Input::GetKeyDownRepeat(Input::Key::Delete))
+        {
+            offset = (selecting ? -1 : 0);
+        }
+        else if (Input::GetKeyDownRepeat(Input::Key::BackSpace))
+        {
+            offset = -1;
+        }
         else if (selecting && !inputText.Empty()) { offset = -1; }
 
         minIndex += offset;
@@ -233,8 +239,8 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 {
     // Get cursor advance 1/-1
     int cursorIndexAdvance = 0;
-    if (Input::GetKeyDown(Input::Key::Right)) { cursorIndexAdvance = 1; }
-    if (Input::GetKeyDown(Input::Key::Left)) { cursorIndexAdvance = -1; }
+    if (Input::GetKeyDownRepeat(Input::Key::Right)) { cursorIndexAdvance = 1; }
+    if (Input::GetKeyDownRepeat(Input::Key::Left)) { cursorIndexAdvance = -1; }
 
     if (cursorIndexAdvance != 0 &&
         (Input::GetKey(Input::Key::LControl) ||
