@@ -25,7 +25,6 @@ std::istringstream& operator>>(std::istringstream& is, Path &p);
 std::istringstream& operator>>(std::istringstream& is, Color &c);
 std::ostream& operator<<(std::ostream &log, const Color &v);
 std::ostream& operator<<(std::ostream &log, const IToString &v);
-std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
 

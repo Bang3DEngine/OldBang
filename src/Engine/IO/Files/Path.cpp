@@ -136,7 +136,7 @@ String Path::GetNameExt() const
     if (IsEmpty()) { return ""; }
 
     String filename = GetAbsolute();
-    const size_t lastSlash = GetAbsolute().rfind('/');
+    const size_t lastSlash = GetAbsolute().RFind('/');
     if (lastSlash != String::npos)
     {
         filename = GetAbsolute().SubString(lastSlash + 1);
@@ -154,7 +154,7 @@ Path Path::GetDirectory() const
 {
     if (IsEmpty()) { return Path::Empty; }
 
-    const size_t lastSlash = GetAbsolute().rfind('/');
+    const size_t lastSlash = GetAbsolute().RFind('/');
     if (lastSlash != String::npos)
     {
         return Path(GetAbsolute().SubString(0, lastSlash-1));
@@ -285,10 +285,10 @@ Path Path::GetNextDuplicatePath(const Path &filepath)
             number = readNumber + 1;
             splitted.PopBack();
 
-            int lastUnderscorePos = fileName.rfind('_');
+            int lastUnderscorePos = fileName.RFind('_');
             if (lastUnderscorePos != -1) // Strip _[number] from fileName
             {
-                fileName = fileName.substr(0, lastUnderscorePos);
+                fileName = fileName.SubString(0, lastUnderscorePos-1);
             }
         }
     }

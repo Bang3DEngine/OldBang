@@ -64,7 +64,7 @@ void UIText::RefreshMesh()
     Array<Vector3> textQuadPositions3D;
 
     m_charRectsNDC.Clear();
-    m_charVisibility.Clear();
+    m_charVisibility.clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         Rect charRectNDC = (  (Rect(cr.rect) / Vector2f(Screen::GetSize()) )
@@ -92,7 +92,7 @@ void UIText::RefreshMesh()
             textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
         }
         m_charRectsNDC.Add(charRectNDC);
-        m_charVisibility.Add(cr.visible);
+        m_charVisibility.push_back(cr.visible);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
@@ -240,7 +240,7 @@ const Rect &UIText::GetCharRectNDC(uint charIndex) const
 
 bool UIText::IsCharVisible(int charIndex) const
 {
-    return m_charVisibility.At(charIndex);
+    return m_charVisibility.at(charIndex);
 }
 
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }

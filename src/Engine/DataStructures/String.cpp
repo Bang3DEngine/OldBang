@@ -10,29 +10,23 @@
 #include "Bang/Map.h"
 #include "Bang/List.h"
 #include "Bang/Array.h"
-#include "Bang/Color.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
-#include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
-#include "Bang/Quaternion.h"
 
-String::String() : std::string("")
+String::String() : m_str("")
 {
 }
 
-String::String(int v) : std::string("")
-{
-    *this = ToString(v);
-}
-
-String::String(float v)  : std::string("")
+String::String(int v) : m_str("")
 {
     *this = ToString(v);
 }
 
-String::String(const char *cstr) : std::string(cstr)
+String::String(float v)  : m_str("")
+{
+    *this = ToString(v);
+}
+
+String::String(const char *cstr) : m_str(cstr)
 {
 }
 
@@ -41,14 +35,13 @@ String::String(const QString &qstr)
     *this = String(qstr.toStdString());
 }
 
-// .c_str() guarrantees no CopyOnWrite so it's thread-safe (?)
-String::String(const std::string &stdstr) : std::string(stdstr.c_str())
+String::String(const std::string &stdstr) : m_str(stdstr)
 {
 }
 
 String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
                std::istreambuf_iterator<char, std::char_traits<char> > end) :
-    std::string(begin, end)
+    m_str(begin, end)
 {
 }
 
@@ -58,7 +51,7 @@ String::~String()
 
 char String::At(int index) const
 {
-    return at(index);
+    return m_str.at(index);
 }
 
 Array<String> String::Split(char splitter, bool trimResults) const
@@ -129,26 +122,26 @@ void String::Prepend(const String &str)
 
 String::Iterator String::Insert(Iterator it, char c)
 {
-    return insert(it, c);
+    return m_str.insert(it, c);
 }
 
 void String::Insert(int position, char c)
 {
     Iterator pos = begin();
     std::advance(pos, position);
-    insert(pos, c);
+    m_str.insert(pos, c);
 }
 
 void String::Insert(int position, const String &str)
 {
-    insert(position, str.ToCString());
+    m_str.insert(position, str.ToCString());
 }
 
 void String::Erase(String::Iterator it, int numberOfChars)
 {
     Iterator end = it;
     std::advance(end, numberOfChars);
-    erase(it, end);
+    m_str.erase(it, end);
 }
 
 void String::Erase(int beginIndex, int endIndexInclusive)
@@ -157,30 +150,30 @@ void String::Erase(int beginIndex, int endIndexInclusive)
     std::advance(begin, beginIndex);
     Iterator end = begin;
     std::advance(end, endIndexInclusive - beginIndex + 1);
-    erase(begin, end);
+    m_str.erase(begin, end);
 }
 
 long String::IndexOf(char c, long startingPos) const
 {
-    int index = find(c, startingPos);
+    int index = m_str.find(c, startingPos);
     return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOf(const String &str, long startingPos) const
 {
-    int index = find(str, startingPos);
+    int index = m_str.find(str, startingPos);
     return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOfOneOf(const String &charSet, long startingPos) const
 {
-    int index = find_first_of(charSet, startingPos);
+    int index = m_str.find_first_of(charSet, startingPos);
     return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 {
-    int index = find_first_not_of(charSet, startingPos);
+    int index = m_str.find_first_not_of(charSet, startingPos);
     return index == String::npos ? - 1 : index;
 }
 
@@ -191,15 +184,15 @@ String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 
     if (endIndexInclusive == String::npos)
     {
-        return substr(startIndexInclusive);
+        return m_str.substr(startIndexInclusive);
     }
-    return substr(startIndexInclusive,
-                  endIndexInclusive - startIndexInclusive + 1);
+    return m_str.substr(startIndexInclusive,
+                        endIndexInclusive - startIndexInclusive + 1);
 }
 
 const char *String::ToCString() const
 {
-    return c_str();
+    return m_str.c_str();
 }
 
 QString String::ToQString() const
@@ -207,11 +200,32 @@ QString String::ToQString() const
     return QString::fromStdString(*this);
 }
 
-int String::ReplaceInSitu(const String &from,
-                    const String &to,
-                    int maxNumberOfReplacements)
+std::size_t String::Find(char c, std::size_t toIndex) const
 {
-	if (from.Empty()) { return 0; }
+    return m_str.find(c, toIndex);
+}
+std::size_t String::RFind(char c, std::size_t toIndex) const
+{
+    return m_str.rfind(c, toIndex);
+}
+std::size_t String::Find(const char *str,
+                         std::size_t fromIndex,
+                         std::size_t length) const
+{
+    return m_str.find(str, fromIndex, length);
+}
+std::size_t String::RFind(const char *str,
+                          std::size_t fromIndex,
+                          std::size_t length) const
+{
+    return m_str.rfind(str, fromIndex, length);
+}
+
+int String::ReplaceInSitu(const String &from,
+                          const String &to,
+                          int maxNumberOfReplacements)
+{
+    if (from.Empty()) { return 0; }
 
     int lastIndex = 0;
     int numReplacements = 0;
@@ -379,7 +393,7 @@ float String::ToFloat(const String &str, bool *ok)
 
 long String::Length() const
 {
-    return length();
+    return m_str.length();
 }
 
 bool String::EqualsNoCase(const String &str) const
@@ -403,7 +417,7 @@ bool String::Contains(const String &str, bool caseSensitive) const
         );
         return (it != End() );
     }
-    return find(str) != String::npos;
+    return m_str.find(str) != String::npos;
 }
 
 bool String::BeginsWith(const String &str) const
@@ -434,18 +448,6 @@ String String::ToLower() const
         result[i] = String::ToLower(result[i]);
     }
     return result;
-}
-
-std::size_t String::operator()(const String &str) const
-{
-    return std::hash<std::string>()(str);
-}
-
-
-String& String::operator=(const char *cstr)
-{
-    std::string::operator=(cstr);
-    return *this;
 }
 
 String String::ToString(int i)
@@ -502,4 +504,77 @@ String String::ToString(const String &v)
 String String::ToString(const IToString &v)
 {
     return v.ToString();
+}
+
+std::ostream& operator<<(std::ostream &os, const String &str)
+{
+    return os << str.m_str;
+}
+
+char& String::operator[](std::size_t i)
+{
+    return m_str[i];
+}
+
+char String::operator[](std::size_t i) const
+{
+    return m_str[i];
+}
+
+std::istream& operator>>(std::istream &is, String &str)
+{
+    is >> str.m_str;
+    return is;
+}
+
+String& operator+=(String &str1, const String &str2)
+{
+    str1.m_str += str2.m_str;
+    return str1;
+}
+
+bool operator<(const String &str1, const String &str2)
+{
+    return str1.m_str < str2.m_str;
+}
+bool operator<=(const String &str1, const String &str2)
+{
+    return str1.m_str <= str2.m_str;
+}
+bool operator>(const String &str1, const String &str2)
+{
+    return str1.m_str > str2.m_str;
+}
+bool operator>=(const String &str1, const String &str2)
+{
+    return str1.m_str >= str2.m_str;
+}
+bool operator==(const String &str1, const String &str2)
+{
+    return str1.m_str == str2.m_str;
+}
+bool operator!=(const String &str1, const String &str2)
+{
+    return str1.m_str != str2.m_str;
+}
+
+String::operator std::string() const
+{
+    return m_str;
+}
+
+std::size_t String::operator()(const String &str) const
+{
+    return std::hash<std::string>()(str);
+}
+
+String& String::operator=(const char *cstr)
+{
+    m_str = cstr;
+    return *this;
+}
+
+String operator+(const String &str1, const String &str2)
+{
+    return String(str1.m_str + str2.m_str);
 }

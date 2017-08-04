@@ -44,7 +44,7 @@ XMLProperty XMLProperty::FromString(const String &string)
     if (parts.Size() > 1)
     {
         value = parts[1];
-        value = value.substr(1, value.Length() - 2); // Strip the "
+        value = value.SubString(1, value.Length() - 1); // Strip the "
     }
 
     return XMLProperty(name, value);

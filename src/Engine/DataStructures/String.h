@@ -13,7 +13,7 @@ FORWARD   class IToString;
 FORWARD_T class List;
 FORWARD_T class Array;
 
-class String : public std::string
+class String
 {
 public:
     using Iterator = typename std::string::iterator;
@@ -31,7 +31,7 @@ public:
            std::istreambuf_iterator<char, std::char_traits<char> > end);
 
     template<class Iterator>
-    String(Iterator begin, Iterator end) : std::string(begin, end) { }
+    String(Iterator begin, Iterator end) : m_str(begin, end) { }
 
     virtual ~String();
 
@@ -70,6 +70,13 @@ public:
     const char *ToCString() const;
     QString ToQString() const;
 
+    std::size_t Find(char c, std::size_t toIndex  = String::npos) const;
+    std::size_t RFind(char c, std::size_t toIndex = String::npos) const;
+    std::size_t
+    Find(const char *str, std::size_t fromIndex, std::size_t length) const;
+    std::size_t
+    RFind(const char *str, std::size_t fromIndex, std::size_t length) const;
+
     int ReplaceInSitu(const String &from, const String &to,
                 int maxNumberOfReplacements = -1);
     String Replace(const String &from, const String &to,
@@ -95,9 +102,6 @@ public:
     String ToUpper() const;
     String ToLower() const;
 
-    std::size_t operator()(const String &str) const;
-    String& operator=(const char *cstr);
-
     static bool IsNumber(char c);
     static bool IsLetter(char c);
     static bool IsUpperCase(char c);
@@ -121,20 +125,41 @@ public:
     static String ToString(const String &v);
     static String ToString(const IToString &v);
 
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    RIterator RBegin() { return this->rbegin(); }
-    RIterator REnd() { return this->rend(); }
-    Const_RIterator RBegin() const { return this->rbegin(); }
-    Const_RIterator REnd() const { return this->rend(); }
+    friend std::istream& operator>>(std::istream &is, String &str);
+    friend std::ostream& operator<<(std::ostream &os, const String &str);
+    friend String operator+(const String &str1, const String &str2);
+    friend bool operator<(const String &str1, const String &str2);
+    friend bool operator<=(const String &str1, const String &str2);
+    friend bool operator>(const String &str1, const String &str2);
+    friend bool operator>=(const String &str1, const String &str2);
+    friend bool operator==(const String &str1, const String &str2);
+    friend bool operator!=(const String &str1, const String &str2);
+    friend String& operator+=(String &str1, const String &str2);
+    char operator[](std::size_t i) const;
+    char& operator[](std::size_t i);
+    operator std::string() const;
+    std::size_t operator()(const String &str) const;
+    String& operator=(const char *cstr);
+
+    Iterator Begin() { return m_str.begin(); }
+    Iterator End() { return m_str.end(); }
+    Const_Iterator Begin() const { return m_str.begin(); }
+    Const_Iterator End() const { return m_str.end(); }
+    RIterator RBegin() { return m_str.rbegin(); }
+    RIterator REnd() { return m_str.rend(); }
+    Const_RIterator RBegin() const { return m_str.rbegin(); }
+    Const_RIterator REnd() const { return m_str.rend(); }
 
     // To allow range-based for loops
-    Iterator begin() { return this->std::string::begin(); }
-    Iterator end() { return this->std::string::end(); }
-    Const_Iterator begin() const { return this->std::string::begin(); }
-    Const_Iterator end() const { return this->std::string::end(); }
+    Iterator begin() { return m_str.begin(); }
+    Iterator end() { return m_str.end(); }
+    Const_Iterator begin() const { return m_str.begin(); }
+    Const_Iterator end() const { return m_str.end(); }
+
+    static constexpr std::size_t npos = std::string::npos;
+
+private:
+    std::string m_str;
 };
 
 template <>
@@ -149,10 +174,11 @@ inline float String::To<float>(const String &str, bool *ok)
     return String::ToFloat(str, ok);
 }
 
+String operator+(const String &str1, const String &str2);
+
 template <class T>
 String operator+(const char *str, const T &v)
 {
-    //return String(str) + String::ToString(v);
     return String(std::string(str) + std::string(String::ToString(v)));
 }
 template <class T>

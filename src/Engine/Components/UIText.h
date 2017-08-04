@@ -72,7 +72,7 @@ protected:
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
     Array<Rect> m_charRectsNDC;
-    Array<bool> m_charVisibility;
+    std::vector<bool> m_charVisibility;
 
     void RefreshMesh();
 };

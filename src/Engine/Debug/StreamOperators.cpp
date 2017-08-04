@@ -13,12 +13,6 @@ std::ostream& operator<<(std::ostream &log, const Color &c)
     return log;
 }
 
-std::ostream& operator<<(std::ostream &log, const String &str)
-{
-    log << str.ToCString();
-    return log;
-}
-
 std::ostream &operator<<(std::ostream &log, const IToString *s)
 {
     if (!s)
