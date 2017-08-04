@@ -11,6 +11,7 @@
 #include "Bang/UIInputText.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/UIHorizontalLayout.h"
 int main(int argc, char **argv)
 {
@@ -31,6 +32,9 @@ int main(int argc, char **argv)
     hLayout->Add(blue);
     hLayout->Add(inputText);
     hLayout->SetStretch(blue, 0.2f);
+
+    UIVerticalLayout *vLayout = new UIVerticalLayout();
+    hLayout->Add(vLayout);
 
     SceneManager::LoadScene(scene);
     app.MainLoop();

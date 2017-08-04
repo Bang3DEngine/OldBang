@@ -32,9 +32,9 @@ public:
 
     virtual ~GameObject();
 
-    void SetParent(GameObject *parent, bool keepWorldTransform = false,
-                   GameObject *aboveThisChild = nullptr);
+    void SetParent(GameObject *parent, int index = -1);
 
+    GameObject* GetChild(int index) const;
     GameObject* GetChild(const String &m_name) const;
 
     void SetName(const String &m_name);

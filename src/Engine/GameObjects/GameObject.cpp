@@ -81,67 +81,23 @@ GameObject::~GameObject()
     SetParent(nullptr);
 }
 
-void GameObject::SetParent(GameObject *newParent,
-                           bool keepWorldTransform,
-                           GameObject *aboveThisChild)
+void GameObject::SetParent(GameObject *newParent, int _index)
 {
-    if (p_parent)
-    {
-        p_parent->m_children.Remove(this);
-    }
-
-    if (keepWorldTransform)
-    {
-        // TODO: Not working yet (sometimes scaling breaks)
-
-        Matrix4 oldParentToWorld;
-        parent->transform->GetLocalToWorldMatrix(&oldParentToWorld);
-
-        Matrix4 worldToNewParent;
-        if (newParent)
-        {
-            newParent->transform->GetLocalToWorldMatrix(&worldToNewParent);
-            worldToNewParent = worldToNewParent.Inversed();
-        }
-
-        Matrix4 keepWorldTransformMatrix =
-                worldToNewParent * oldParentToWorld * transform->GetLocalToParentMatrix();
-
-        Transform t = Transform::FromTransformMatrix(keepWorldTransformMatrix);
-        transform->SetLocalPosition(t.GetLocalPosition());
-        transform->SetLocalRotation(t.GetLocalRotation());
-        transform->SetLocalScale   (t.GetLocalScale());
-    }
+    if (p_parent) { p_parent->m_children.Remove(this); }
 
     p_parent = newParent;
-
     if (p_parent)
     {
-        if (!aboveThisChild)
-        {
-            p_parent->m_children.PushBack(this); // Add it to the end
-        }
-        else
-        {
-            bool itemToBeAboveOfFound = false;
-            for (auto it = p_parent->m_children.Begin(); it != p_parent->m_children.End(); ++it)
-            {
-                if (aboveThisChild == *it)
-                {
-                    p_parent->m_children.InsertBefore(it, this);
-                    itemToBeAboveOfFound = true;
-                    break;
-                }
-            }
-
-            if (!itemToBeAboveOfFound)
-            {
-                p_parent->m_children.PushBack(this); // Just in case, add to the end
-            }
-        }
-
+        int index = (_index != -1 ? _index : p_parent->m_children.Size());
+        p_parent->m_children.Insert(index, this);
         _OnParentSizeChanged();
     }
+}
+
+GameObject *GameObject::GetChild(int index) const
+{
+    auto it = GetChildren().Begin(); std::advance(it, index);
+    return *it;
 }
 
 GameObject *GameObject::GetParent() const
