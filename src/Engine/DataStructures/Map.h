@@ -7,7 +7,7 @@
 FORWARD_T class List;
 
 template <class Key, class Value>
-class Map : public std::map<Key, Value>
+class Map
 {
 public:
     using Iterator = typename std::map<Key, Value>::iterator;
@@ -15,13 +15,8 @@ public:
     using Const_Iterator = typename std::map<Key, Value>::const_iterator;
     using Const_RIterator = typename std::map<Key, Value>::const_reverse_iterator;
 
-    Map()
-    {
-    }
-
-    Map(const std::map<Key, Value> &m) : std::map<Key, Value>(m)
-    {
-    }
+    Map() {}
+    Map(const std::map<Key, Value> &m) : m_map(m) {}
 
     void Set(const Key &key, const Value &value)
     {
@@ -30,22 +25,19 @@ public:
 
     void Remove(const Key &key)
     {
-        this->erase(key);
+        m_map.erase(key);
     }
 
     Iterator Remove(Iterator it)
     {
-        return this->erase(it);
+        return m_map.erase(it);
     }
 
     void RemoveValues(const Value &value)
     {
-        for (auto it = this->Begin(); it != this->End(); )
+        for (auto it = Begin(); it != End(); )
         {
-            if (it->second == value)
-            {
-                it = Remove(it);
-            }
+            if (it->second == value) { it = Remove(it); }
             else { ++it; }
         }
     }
@@ -57,17 +49,17 @@ public:
 
     const Value& Get(const Key &key) const
     {
-        return this->at(key);
+        return m_map.at(key);
     }
 
     void Clear()
     {
-        this->clear();
+        m_map.clear();
     }
 
     int Size() const
     {
-        return this->size();
+        return m_map.size();
     }
 
     bool Empty() const
@@ -77,12 +69,12 @@ public:
 
     bool ContainsKey(const Key &key) const
     {
-        return this->Find(key) != this->End();
+        return Find(key) != End();
     }
 
     bool ContainsValue(const Value &value) const
     {
-        for (auto it = this->Begin(); it != this->End(); ++it)
+        for (auto it = Begin(); it != End(); ++it)
         {
             if (it->second == value) return true;
         }
@@ -91,17 +83,17 @@ public:
 
     Iterator Find(const Key &key)
     {
-        return this->find(key);
+        return m_map.find(key);
     }
     Const_Iterator Find(const Key &key) const
     {
-        return this->find(key);
+        return m_map.find(key);
     }
 
     List<Key> GetKeysWithValue(const Value& v) const
     {
         List<Key> result;
-        for (auto it = this->Begin(); it != this->End(); ++it)
+        for (auto it = Begin(); it != End(); ++it)
         {
             if (it->second == v) { result.PushBack(it->first); }
         }
@@ -118,36 +110,32 @@ public:
     List<Value> GetValues() const
     {
         List<Value> result;
-        for (auto it = this->Begin(); it != this->End(); ++it)
+        for (auto it = Begin(); it != End(); ++it)
         {
             result.PushBack(it->second);
         }
         return result;
     }
 
-    Value& operator[](const Key &k)
-    {
-        return std::map<Key,Value>::operator[](k);
-    }
-    const Value& operator[](const Key &k) const
-    {
-        return std::map<Key,Value>::operator[](k);
-    }
+    Value& operator[](const Key &k) { return m_map[k]; }
+    const Value& operator[](const Key &k) const { return m_map[k]; }
 
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    RIterator RBegin() { return this->rbegin(); }
-    RIterator REnd() { return this->rend(); }
-    Const_RIterator RBegin() const { return this->rbegin(); }
-    Const_RIterator REnd() const { return this->rend(); }
+    Iterator Begin() { return m_map.begin(); }
+    Iterator End() { return m_map.end(); }
+    Const_Iterator Begin() const { return m_map.cbegin(); }
+    Const_Iterator End() const { return m_map.cend(); }
+    RIterator RBegin() { return m_map.rbegin(); }
+    RIterator REnd() { return m_map.rend(); }
+    Const_RIterator RBegin() const { return m_map.crbegin(); }
+    Const_RIterator REnd() const { return m_map.crend(); }
 
     // To allow range-based for loops
-    Iterator begin() { return this->std::map<Key,Value>::begin(); }
-    Iterator end() { return this->std::map<Key,Value>::end(); }
-    Const_Iterator begin() const { return this->std::map<Key,Value>::begin(); }
-    Const_Iterator end() const { return this->std::map<Key,Value>::end(); }
+    Iterator begin() { return m_map.begin(); }
+    Iterator end() { return m_map.end(); }
+    Const_Iterator cbegin() const { return m_map.cbegin(); }
+    Const_Iterator cend() const { return m_map.cend(); }
 
+private:
+    std::map<Key, Value> m_map;
 };
 #endif // MAP_H

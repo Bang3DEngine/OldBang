@@ -7,7 +7,7 @@
 FORWARD_T class List;
 
 template<class Key>
-class Set : private std::set<Key>
+class Set
 {
 public:
     using Iterator = typename std::set<Key>::iterator;
@@ -19,43 +19,43 @@ public:
     {
     }
 
-    Set(const std::set<Key> &s) : std::set<Key>(s)
+    Set(const std::set<Key> &s) : m_set(s)
     {
     }
 
     void Insert(const Key &key)
     {
-        this->insert(key);
+        m_set.insert(key);
     }
 
     void Remove(const Key &key)
     {
-        this->erase(key);
+        m_set.erase(key);
     }
 
     Iterator Remove(Iterator it)
     {
-        return this->erase(it);
+        return m_set.erase(it);
     }
 
     void Clear()
     {
-        this->clear();
+        m_set.clear();
     }
 
     int Size() const
     {
-        return this->size();
+        return m_set.size();
     }
 
     bool Empty() const
     {
-        return this->empty();
+        return m_set.empty();
     }
 
     bool Contains(const Key &key) const
     {
-        return this->find(key) != this->end();
+        return m_set.find(key) != m_set.end();
     }
 
     List<Key> GetKeys() const
@@ -65,20 +65,23 @@ public:
         return result;
     }
 
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    RIterator RBegin() { return this->rbegin(); }
-    RIterator REnd() { return this->rend(); }
-    Const_RIterator RBegin() const { return this->rbegin(); }
-    Const_RIterator REnd() const { return this->rend(); }
+    Iterator Begin() { return m_set.begin(); }
+    Iterator End() { return m_set.end(); }
+    Const_Iterator Begin() const { return m_set.cbegin(); }
+    Const_Iterator End() const { return m_set.cend(); }
+    RIterator RBegin() { return m_set.rbegin(); }
+    RIterator REnd() { return m_set.rend(); }
+    Const_RIterator RBegin() const { return m_set.crbegin(); }
+    Const_RIterator REnd() const { return m_set.crend(); }
 
     // To allow range-based for loops
-    Iterator begin() { return this->std::set<Key>::begin(); }
-    Iterator end() { return this->std::set<Key>::end(); }
-    Const_Iterator begin() const { return this->std::set<Key>::begin(); }
-    Const_Iterator end() const { return this->std::set<Key>::end(); }
+    Iterator begin() { return m_set.begin(); }
+    Iterator end() { return m_set.end(); }
+    Const_Iterator cbegin() const { return m_set.cbegin(); }
+    Const_Iterator cend() const { return m_set.cend(); }
+
+private:
+    std::set<Key> m_set;
 };
 
 #endif // SET_H
