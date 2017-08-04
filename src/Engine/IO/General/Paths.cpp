@@ -151,28 +151,28 @@ Path Paths::GetRelative(const Path &path)
     if (path.BeginsWith(engineAssets))
     {
         return Path(path.GetAbsolute()
-                        .SubString(engineAssets.GetAbsolute().Length() + 1));
+                        .SubString(engineAssets.GetAbsolute().Size() + 1));
     }
 
     const Path &projectAssets = Paths::ProjectAssets();
     if (path.BeginsWith(projectAssets))
     {
         return Path(path.GetAbsolute()
-                        .SubString(projectAssets.GetAbsolute().Length() + 1));
+                        .SubString(projectAssets.GetAbsolute().Size() + 1));
     }
 
     const Path &engineRoot = Paths::Engine();
     if (path.BeginsWith(engineRoot))
     {
         return Path(path.GetAbsolute()
-                        .SubString(engineRoot.GetAbsolute().Length() + 1));
+                        .SubString(engineRoot.GetAbsolute().Size() + 1));
     }
 
     const Path &projectRoot = Paths::Project();
     if (path.BeginsWith(projectRoot))
     {
         return Path(path.GetAbsolute()
-                        .SubString(projectRoot.GetAbsolute().Length() + 1));
+                        .SubString(projectRoot.GetAbsolute().Size() + 1));
     }
 
     return Path(path.GetAbsolute());

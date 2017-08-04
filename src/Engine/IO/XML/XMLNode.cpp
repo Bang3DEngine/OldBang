@@ -117,7 +117,7 @@ String XMLNode::ToString(const String& indent) const
     {
         const XMLAttribute* attr = itAttr.second;
         str += " " + attr->ToString() + "\n";
-        for (int i = 0; i < m_tagName.Length() + indent.Length() + 1; ++i )
+        for (int i = 0; i < m_tagName.Size() + indent.Size() + 1; ++i )
         {
             str += " ";
         }

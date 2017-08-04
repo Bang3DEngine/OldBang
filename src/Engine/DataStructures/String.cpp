@@ -67,7 +67,7 @@ Array<String> String::Split(char splitter, bool trimResults) const
         if (indexFound == -1)
         {
             lastParticle = true;
-            indexFound = Length();
+            indexFound = Size();
         }
 
         if (indexFound == lastIndexFound)
@@ -179,8 +179,8 @@ long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 
 String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 {
-    if (startIndexInclusive >= Length()) { return ""; }
-    if (endIndexInclusive   >= Length()) { endIndexInclusive = Length()-1; }
+    if (startIndexInclusive >= Size()) { return ""; }
+    if (endIndexInclusive   >= Size()) { endIndexInclusive = Size()-1; }
 
     if (endIndexInclusive == String::npos)
     {
@@ -229,14 +229,14 @@ int String::ReplaceInSitu(const String &from,
 
     int lastIndex = 0;
     int numReplacements = 0;
-    while (lastIndex != -1 && lastIndex + from.Length() <= Length())
+    while (lastIndex != -1 && lastIndex + from.Size() <= Size())
     {
         lastIndex = IndexOf(from, lastIndex);
         if (lastIndex >= 0)
         {
-            Erase(lastIndex, lastIndex + from.Length() - 1);
+            Erase(lastIndex, lastIndex + from.Size() - 1);
             Insert(lastIndex, to);
-            lastIndex += to.Length();
+            lastIndex += to.Size();
             ++numReplacements;
             if (maxNumberOfReplacements != -1 &&
                 numReplacements >= maxNumberOfReplacements)
@@ -258,12 +258,12 @@ String String::Replace(const String &from, const String &to,
 
 String String::Elide(int length, bool elideRight) const
 {
-    int maxLength = std::min(int(Length()), length);
+    int maxLength = std::min(int(Size()), length);
     String result = (*this);
-    if (result.Length() > length)
+    if (result.Size() > length)
     {
-        result = result.SubString(result.Length() - maxLength,
-                                  result.Length() - 1);
+        result = result.SubString(result.Size() - maxLength,
+                                  result.Size() - 1);
         if (elideRight) { result = result + "..."; }
         else            { result = "..." + result; }
     }
@@ -285,18 +285,18 @@ String String::TrimLeft(List<char> trimChars) const
     if(Empty()) { return ""; }
 
     int i = 0;
-    for (; i < Length(); ++i)
+    for (; i < Size(); ++i)
     {
         if (!trimChars.Contains( At(i) )) break;
     }
-    return (i == Length()) ? "" : SubString(i, Length());
+    return (i == Size()) ? "" : SubString(i, Size());
 }
 
 String String::TrimRight(List<char> trimChars) const
 {
     if (Empty()) { return ""; }
 
-    int i = Length() - 1;
+    int i = Size() - 1;
     for (; i >= 0; --i)
     {
         if (!trimChars.Contains( At(i) )) break;
@@ -329,7 +329,7 @@ String String::AddInFrontOfWords(String particle) const
     String result = *this;
     if (!result.Empty() && result.At(0) != ' ') { result.Insert(0, particle); }
 
-    for (int i = 0; i < result.Length() - 1; ++i)
+    for (int i = 0; i < result.Size() - 1; ++i)
     {
         if (result.At(i) == ' ' && result.At(i+1) != ' ')
         {
@@ -391,19 +391,19 @@ float String::ToFloat(const String &str, bool *ok)
     return v;
 }
 
-long String::Length() const
+long String::Size() const
 {
     return m_str.length();
 }
 
 bool String::EqualsNoCase(const String &str) const
 {
-    return Contains(str, false) && (Length() == str.Length());
+    return Contains(str, false) && (Size() == str.Size());
 }
 
 bool String::Empty() const
 {
-    return Length() == 0;
+    return Size() == 0;
 }
 
 bool String::Contains(const String &str, bool caseSensitive) const
@@ -427,13 +427,13 @@ bool String::BeginsWith(const String &str) const
 
 bool String::EndsWith(const String &str) const
 {
-    return this->IndexOf(str) == Length() - str.Length();
+    return this->IndexOf(str) == Size() - str.Size();
 }
 
 String String::ToUpper() const
 {
     String result = *this;
-    for (int i = 0; i < Length(); ++i)
+    for (int i = 0; i < Size(); ++i)
     {
         result[i] = String::ToUpper(result[i]);
     }
@@ -443,7 +443,7 @@ String String::ToUpper() const
 String String::ToLower() const
 {
     String result = *this;
-    for (int i = 0; i < Length(); ++i)
+    for (int i = 0; i < Size(); ++i)
     {
         result[i] = String::ToLower(result[i]);
     }

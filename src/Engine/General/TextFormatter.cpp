@@ -20,7 +20,7 @@ Array<TextFormatter::CharRect>
 
     // First create a list with all the character rects in the origin
     Array<CharRect> charRects;
-    for (int i = 0; i < content.Length(); ++i)
+    for (int i = 0; i < content.Size(); ++i)
     {
         const char c = content[i];
         Recti charRect = TextFormatter::GetCharRect(font, textSize, c);
@@ -73,7 +73,7 @@ Array< Array<TextFormatter::CharRect> >
         // Split the input char positions into the needed lines.
         // Each line will contain as many words as possible (split by spaces).
         Vector2i penPosition = limitsRect.GetMin();
-        for (int i = 0; i < content.Length(); ++i)
+        for (int i = 0; i < content.Size(); ++i)
         {
             const float charAdvX = GetCharAdvanceX(font, textSize, content, i);
             bool lineBreak = false;
@@ -87,7 +87,7 @@ Array< Array<TextFormatter::CharRect> >
                 // Does the following word (after this space) still fits in
                 // the current line?
                 float tmpAdvX = penPosition.x + charAdvX + spacing.x;
-                for (int j = i+1; j < content.Length(); ++j)
+                for (int j = i+1; j < content.Size(); ++j)
                 {
                     if (content[j] == ' ') { break; }
                     const float jCharAdvX = GetCharAdvanceX(font, textSize,
@@ -130,7 +130,7 @@ Array< Array<TextFormatter::CharRect> >
     else // Just add them in a single line
     {
         Vector2i advance = limitsRect.GetMin();
-        for (int i = 0; i < content.Length(); ++i)
+        for (int i = 0; i < content.Size(); ++i)
         {
             const float charAdvX = GetCharAdvanceX(font, textSize, content, i);
             CharRect cr(content[i], charRects[i].rect + advance);

@@ -48,7 +48,7 @@ void XMLParser::GetFirstAttribute(const String &tag,
 
     if (attributeEnd)
     {
-        *attributeEnd = startPosition + attrString.Length();
+        *attributeEnd = startPosition + attrString.Size();
     }
 
     if (attribute)

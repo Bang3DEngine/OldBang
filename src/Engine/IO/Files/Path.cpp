@@ -26,10 +26,10 @@ void Path::SetPath(const String &path)
 {
     m_absolutePath = path;
     if (!m_absolutePath.Empty() &&
-         m_absolutePath.At(m_absolutePath.Length()-1) == '/')
+         m_absolutePath.At(m_absolutePath.Size()-1) == '/')
     {
-        m_absolutePath.Erase(m_absolutePath.Length()-1,
-                             m_absolutePath.Length()-1);
+        m_absolutePath.Erase(m_absolutePath.Size()-1,
+                             m_absolutePath.Size()-1);
     }
 
     if (m_absolutePath.BeginsWith("./"))

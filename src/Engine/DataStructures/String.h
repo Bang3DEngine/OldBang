@@ -93,7 +93,7 @@ public:
     String Trim() const;
     String AddInFrontOfWords(String particle) const;
 
-    long Length() const;
+    long Size() const;
     bool EqualsNoCase(const String &str) const;
     bool Empty() const;
     bool Contains(const String& str, bool caseSensitive = true) const;

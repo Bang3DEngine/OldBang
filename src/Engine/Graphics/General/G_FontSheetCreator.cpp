@@ -77,7 +77,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     charactersToLoadStr += "/\\$%&@\"'#¿?^";
 
     // Generate the atlas, adding each char in a simple grid
-    uint numChars        = charactersToLoadStr.Length();
+    uint numChars        = charactersToLoadStr.Size();
     uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
     uint charInAtlasSize = G_Font::c_charLoadSize * 2;
     uint sideSize        = charsPerRowCol * charInAtlasSize;

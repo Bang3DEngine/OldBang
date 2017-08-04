@@ -42,7 +42,7 @@ UIInputText::UIInputText() : UIGameObject("UIInputText")
     m_cursorRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     m_cursorRenderer->SetRenderLayer(Renderer::RenderLayer::RLCanvas);
 
-    m_cursorIndex = p_text->GetContent().Length();
+    m_cursorIndex = p_text->GetContent().Size();
     m_selectionCursorIndex = m_cursorIndex;
 
     SetCursorWidth(2.0f);
@@ -144,7 +144,7 @@ void UIInputText::HandleTyping()
 
         minIndex += offset;
         maxIndex += offset;
-        if (offset != 1 && minIndex >= 0 && maxIndex <= content.Length()-1)
+        if (offset != 1 && minIndex >= 0 && maxIndex <= content.Size()-1)
         {
             content.Erase(minIndex, maxIndex);
             m_cursorIndex = minIndex;
@@ -157,14 +157,14 @@ void UIInputText::HandleTyping()
     if (!inputText.Empty())
     {
         content.Insert(m_cursorIndex, inputText);
-        m_cursorIndex += inputText.Length();
+        m_cursorIndex += inputText.Size();
         m_forceUpdateRenderers = true;
         ResetSelection();
     }
 
     if (Input::GetKeyDown(Input::Key::End))
     {
-        m_cursorIndex = p_text->GetContent().Length();
+        m_cursorIndex = p_text->GetContent().Size();
     }
     else if (Input::GetKeyDown(Input::Key::Home)) { m_cursorIndex = 0; }
 
@@ -253,7 +253,7 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 
     // Advance the the cursor index, and clamp it
     m_cursorIndex = Math::Clamp(m_cursorIndex + cursorIndexAdvance,
-                                0, p_text->GetContent().Length());
+                                0, p_text->GetContent().Size());
 
     // Selection resetting handling
     bool doingSelection = IsShiftPressed() || m_selectingWithMouse;
@@ -423,7 +423,7 @@ int UIInputText::GetVisibilityFrontierCharIndex(bool right) const
 
     int firstFoundFrontier  = -1;
     int secondFoundFrontier = -1;
-    for (int i = 0; i < p_text->GetContent().Length() - 1; ++i)
+    for (int i = 0; i < p_text->GetContent().Size() - 1; ++i)
     {
         if (p_text->IsCharVisible(i) != p_text->IsCharVisible(i+1))
         {
@@ -449,13 +449,13 @@ float UIInputText::GetCursorX_NDC(int cursorIndex) const
     // Returns the X in global NDC, for a given cursor index
 
     // In case we are between two characters
-    const int textLength = GetContent().Length();
+    const int textLength = GetContent().Size();
     if (cursorIndex > 0 && cursorIndex < textLength)
     {
         Rect charRect = p_text->GetCharRectNDC(cursorIndex - 1);
         float currentX = charRect.GetMax().x;
         float nextX;
-        if (cursorIndex < p_text->GetContent().Length())
+        if (cursorIndex < p_text->GetContent().Size())
         {
             Rect nextCharRect = p_text->GetCharRectNDC(cursorIndex);
             nextX = nextCharRect.GetMin().x;
@@ -503,17 +503,17 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
     const String &content = p_text->GetContent();
 
     if (startIndex <= 0 && !forward) { return startIndex; }
-    if (startIndex >= content.Length()-1 && forward) { return startIndex; }
+    if (startIndex >= content.Size()-1 && forward) { return startIndex; }
 
     int i = startIndex;
-    while ( i >= 0 && i < content.Length() &&
+    while ( i >= 0 && i < content.Size() &&
             IsDelimiter(content[startIndex], content[i]) )
     {
         i += (forward ? 1 : -1);
     }
 
     for (;
-         (forward ? (i < content.Length()) : (i >= 0));
+         (forward ? (i < content.Size()) : (i >= 0));
          i += (forward ? 1 : -1))
     {
         if ( IsDelimiter(content[startIndex], content[i]) )

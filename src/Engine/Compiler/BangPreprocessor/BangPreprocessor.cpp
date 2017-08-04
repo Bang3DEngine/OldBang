@@ -171,7 +171,7 @@ void BangPreprocessor::RemoveComments(String *source)
     gCompilerProcess.setReadChannel(QProcess::ProcessChannel::StandardOutput);
     gCompilerProcess.start("g++", {"-fpreprocessed", "-E", "-"});
 
-    gCompilerProcess.write( src.ToCString(), src.Length() );
+    gCompilerProcess.write( src.ToCString(), src.Size() );
     gCompilerProcess.closeWriteChannel();
 
     bool ok = gCompilerProcess.waitForFinished(999999);
