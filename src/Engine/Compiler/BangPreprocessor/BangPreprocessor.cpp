@@ -8,7 +8,7 @@
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"
 
-typedef BangPreprocessor BP;
+using BP = BangPreprocessor;
 
 const Array<String> BP::VarTypeInt     = {"int"};
 const Array<String> BP::VarTypeBool    = {"bool"};

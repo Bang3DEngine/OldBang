@@ -240,7 +240,7 @@ const Rect &UIText::GetCharRectNDC(uint charIndex) const
 
 bool UIText::IsCharVisible(int charIndex) const
 {
-    return m_charVisibility.at(charIndex);
+    return m_charVisibility.At(charIndex);
 }
 
 Rect UIText::GetNDCRect() const { return m_textRectNDC; }

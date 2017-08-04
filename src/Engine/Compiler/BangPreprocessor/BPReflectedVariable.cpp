@@ -5,7 +5,7 @@
 #include "Bang/List.h"
 #include "Bang/BangPreprocessor.h"
 
-typedef BangPreprocessor BP;
+using BP = BangPreprocessor;
 
 BPReflectedVariable::BPReflectedVariable()
 {

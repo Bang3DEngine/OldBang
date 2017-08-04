@@ -8,65 +8,46 @@
 #include "Bang/Collection.h"
 
 template <class T>
-class List : public std::list<T>
+class List
 {
 public:
-    typedef typename std::list<T>::iterator               Iterator;
-    typedef typename std::list<T>::const_iterator         Const_Iterator;
-    typedef typename std::list<T>::reverse_iterator       Reverse_Iterator;
-    typedef typename std::list<T>::const_reverse_iterator Const_Reverse_Iterator;
+    using Iterator = typename std::list<T>::iterator;
+    using RIterator = typename std::list<T>::reverse_iterator;
+    using Const_Iterator = typename std::list<T>::const_iterator;
+    using Const_RIterator = typename std::list<T>::const_reverse_iterator;
 
     List() { }
-    List(const std::list<T> &l)         : std::list<T>(l) { }
-    List(int size)                      : std::list<T>(size) { }
-    List(int size, const T& initValue)  : std::list<T>(size, initValue) { }
-    List(std::initializer_list<T> l)    : std::list<T>(l) { }
+    List(const std::list<T> &l)        : m_list(l) { }
+    List(int size)                     : m_list(size) { }
+    List(int size, const T& initValue) : m_list(size, initValue) { }
+    List(std::initializer_list<T> l)   : m_list(l) { }
 
     template <class OtherIterator>
-    List(OtherIterator begin, OtherIterator end)
-        : std::list<T>(begin, end()) {}
+    List(OtherIterator begin, OtherIterator end) : m_list(begin, end) {}
 
     template <class OtherIterator>
     List(const CollectionRange<OtherIterator> &col)
         : List(col.Begin(), col.End()) {}
 
-    virtual ~List() {}
-
-
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end();   }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
-
-    // To allow range-based for loops
-    Iterator begin() { return this->std::list<T>::begin(); }
-    Iterator end() { return this->std::list<T>::end(); }
-    Const_Iterator begin() const { return this->std::list<T>::begin(); }
-    Const_Iterator end() const { return this->std::list<T>::end(); }
-
     void Splice(Iterator insertAfter, List<T> &from)
     {
-        this->splice(insertAfter, from);
+        m_list.splice(insertAfter, from.m_list);
     }
 
     void Splice(Iterator insertAfter, List<T> &from, Iterator element)
     {
-        this->splice(insertAfter, from, element);
+        m_list.splice(insertAfter, from.m_list, element);
     }
 
     void Splice(Iterator insertAfter, List<T> &src,
                 Iterator srcRangeBegin, Iterator srcRangeEnd)
     {
-        this->splice(insertAfter, src, srcRangeBegin, srcRangeEnd);
+        m_list.splice(insertAfter, src.m_list, srcRangeBegin, srcRangeEnd);
     }
 
     void Insert(const Iterator& it, const T& x)
     {
-        this->insert(it, x);
+        m_list.insert(it, x);
     }
 
     void Insert(int index, const T& x)
@@ -78,14 +59,14 @@ public:
 
     void Insert(const Iterator& first, int count, const T& x)
     {
-        this->insert(first, count, x);
+        m_list.insert(first, count, x);
     }
 
-    void PushFront(const T& x) { this->push_front(x); }
+    void PushFront(const T& x) { m_list.push_front(x); }
     const T& PopFront()
     {
-        const T& front = this->Front();
-        this->pop_front();
+        const T& front = Front();
+        m_list.pop_front();
         return front;
     }
 
@@ -98,17 +79,17 @@ public:
 
     void Sort()
     {
-        this->sort();
+        m_list.sort();
     }
 
     template<class StrictWeakOrdering>
     void Sort(const StrictWeakOrdering &sortClass)
     {
-        this->sort(sortClass);
+        m_list.sort(sortClass);
     }
 
-    void Add(const T& x) { this->PushBack(x); }
-    void PushBack(const T& x)  { this->push_back(x);  }
+    void Add(const T& x) { PushBack(x); }
+    void PushBack(const T& x)  { m_list.push_back(x);  }
 
     template <template <class> class OtherCollection>
     void Add(const OtherCollection<T> &otherCol)
@@ -119,27 +100,24 @@ public:
     template <class Iterator>
     void Add(const CollectionRange<Iterator>& col)
     {
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            this->Add(*it);
-        }
+        for (Iterator it = col.Begin(); it != col.End(); ++it) { Add(*it); }
     }
 
-    const T* Data() const { return this->data(); }
+    const T* Data() const { return m_list.data(); }
 
     Const_Iterator Find(const T& x) const
     {
-        return Collection::Find(this->GetRangeAll(), x);
+        return Collection::Find(GetRangeAll(), x);
     }
 
     Iterator Find(const T& x)
     {
-        return Collection::Find(this->GetRangeAll(), x);
+        return Collection::Find(GetRangeAll(), x);
     }
 
     Iterator FindLast(const T& x)
     {
-        for (auto it = this->RBegin(); it != this->REnd(); ++it)
+        for (auto it = RBegin(); it != REnd(); ++it)
         {
             if (*it == x)
             {
@@ -148,15 +126,15 @@ public:
                 return res;
             }
         }
-        return this->End();
+        return End();
     }
 
-    bool Contains(const T &x) const { return this->Find(x) != this->End(); }
+    bool Contains(const T &x) const { return Find(x) != End(); }
 
-    const T& Front() const { return this->front(); }
-    const T& Back() const  { return this->back(); }
-    T& Front() { return this->front(); }
-    T& Back()  { return this->back(); }
+    const T& Front() const { return m_list.front(); }
+    const T& Back() const  { return m_list.back(); }
+    T& Front() { return m_list.front(); }
+    T& Back()  { return m_list.back(); }
 
     template < template <class> class OtherContainerClass, class OtherT = T >
     OtherContainerClass<OtherT> To() const
@@ -168,22 +146,22 @@ public:
 
     Iterator Remove(const Iterator &first, const Iterator &last)
     {
-        return this->erase(first, last);
+        return m_list.erase(first, last);
     }
-    Iterator Remove(Iterator it) { return this->erase(it); }
+    Iterator Remove(Iterator it) { return m_list.erase(it); }
     Iterator Remove(const T& x)
     {
-        Iterator it = this->Find(x);
-        if (it != this->End()) { return this->Remove(it); }
-        return this->End();
+        Iterator it = Find(x);
+        if (it != End()) { return Remove(it); }
+        return End();
     }
     void RemoveAll(const T& x)
     {
-        for (Iterator it = this->Begin(); it != this->End(); ++it)
+        for (Iterator it = Begin(); it != End(); ++it)
         {
             if (*it == x)
             {
-                it = this->Remove(it);
+                it = Remove(it);
                 --it;
             }
         }
@@ -192,7 +170,7 @@ public:
     T& PopBack()
     {
         T& back = Back();
-        this->pop_back();
+        m_list.pop_back();
         return back;
     }
 
@@ -207,31 +185,41 @@ public:
         return -1;
     }
 
-    uint Count(std::function< bool(const T&) > boolPredicate) const
-    {
-        return Collection::Count(GetRangeAll(), boolPredicate);
-    }
-    uint Count(const T& x) const
-    {
-        return Collection::Count(GetRangeAll(), x);
-    }
-
-    void Resize(int n) { this->resize(n); }
-    uint Size() const  { return this->size(); }
-    void Clear()       { this->clear(); }
-    bool IsEmpty() const { return this->Size() == 0; }
+    void Resize(int n) { m_list.resize(n); }
+    uint Size() const  { return m_list.size(); }
+    void Clear()       { m_list.clear(); }
+    bool IsEmpty() const { return Size() == 0; }
 
     CollectionRange<Iterator> GetRangeAll()
     {
-        return CollectionRange<Iterator>(this->Begin(), this->End());
+        return CollectionRange<Iterator>(Begin(), End());
     }
     CollectionRange<Const_Iterator> GetRangeAll() const
     {
-        return CollectionRange<Const_Iterator>(this->Begin(), this->End());
+        return CollectionRange<Const_Iterator>(Begin(), End());
     }
 
     operator CollectionRange<Iterator>() { return GetRangeAll(); }
     operator CollectionRange<Iterator>() const { return GetRangeAll(); }
+
+
+    Iterator Begin() { return m_list.begin(); }
+    Iterator End() { return m_list.end();   }
+    Const_Iterator Begin() const { return m_list.cbegin(); }
+    Const_Iterator End() const { return m_list.cend(); }
+    RIterator RBegin() { return m_list.rbegin(); }
+    RIterator REnd() { return m_list.rend(); }
+    Const_RIterator RBegin() const { return m_list.crbegin(); }
+    Const_RIterator REnd() const { return m_list.crend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return m_list.begin(); }
+    Iterator end() { return m_list.end(); }
+    Const_Iterator begin() const { return m_list.cbegin(); }
+    Const_Iterator end() const { return m_list.cend(); }
+
+private:
+    std::list<T> m_list;
 };
 
 #endif // LIST_H

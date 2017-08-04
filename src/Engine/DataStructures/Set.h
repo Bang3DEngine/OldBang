@@ -10,10 +10,10 @@ template<class Key>
 class Set : private std::set<Key>
 {
 public:
-    typedef typename std::set<Key>::iterator Iterator;
-    typedef typename std::set<Key>::const_iterator Const_Iterator;
-    typedef typename std::set<Key>::reverse_iterator Reverse_Iterator;
-    typedef typename std::set<Key>::const_reverse_iterator Const_Reverse_Iterator;
+    using Iterator = typename std::set<Key>::iterator;
+    using RIterator = typename std::set<Key>::reverse_iterator;
+    using Const_Iterator = typename std::set<Key>::const_iterator;
+    using Const_RIterator = typename std::set<Key>::const_reverse_iterator;
 
     Set()
     {
@@ -69,10 +69,10 @@ public:
     Iterator End() { return this->end(); }
     Const_Iterator Begin() const { return this->begin(); }
     Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
+    RIterator RBegin() { return this->rbegin(); }
+    RIterator REnd() { return this->rend(); }
+    Const_RIterator RBegin() const { return this->rbegin(); }
+    Const_RIterator REnd() const { return this->rend(); }
 
     // To allow range-based for loops
     Iterator begin() { return this->std::set<Key>::begin(); }

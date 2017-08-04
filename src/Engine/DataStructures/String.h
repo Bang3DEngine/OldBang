@@ -16,10 +16,10 @@ FORWARD_T class Array;
 class String : public std::string
 {
 public:
-    typedef typename std::string::iterator Iterator;
-    typedef typename std::string::const_iterator Const_Iterator;
-    typedef typename std::string::reverse_iterator Reverse_Iterator;
-    typedef typename std::string::const_reverse_iterator Const_Reverse_Iterator;
+    using Iterator = typename std::string::iterator;
+    using RIterator = typename std::string::reverse_iterator;
+    using Const_Iterator = typename std::string::const_iterator;
+    using Const_RIterator = typename std::string::const_reverse_iterator;
 
     String();
     explicit String(int v);
@@ -57,22 +57,6 @@ public:
     void Insert(int position, const String &str);
     void Erase(Iterator it, int numberOfChars);
     void Erase(int beginIndex, int endIndexInclusive);
-
-
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
-
-    // To allow range-based for loops
-    Iterator begin() { return this->std::string::begin(); }
-    Iterator end() { return this->std::string::end(); }
-    Const_Iterator begin() const { return this->std::string::begin(); }
-    Const_Iterator end() const { return this->std::string::end(); }
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;
@@ -137,6 +121,20 @@ public:
     static String ToString(const String &v);
     static String ToString(const IToString &v);
 
+    Iterator Begin() { return this->begin(); }
+    Iterator End() { return this->end(); }
+    Const_Iterator Begin() const { return this->begin(); }
+    Const_Iterator End() const { return this->end(); }
+    RIterator RBegin() { return this->rbegin(); }
+    RIterator REnd() { return this->rend(); }
+    Const_RIterator RBegin() const { return this->rbegin(); }
+    Const_RIterator REnd() const { return this->rend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return this->std::string::begin(); }
+    Iterator end() { return this->std::string::end(); }
+    Const_Iterator begin() const { return this->std::string::begin(); }
+    Const_Iterator end() const { return this->std::string::end(); }
 };
 
 template <>

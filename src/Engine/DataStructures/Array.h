@@ -7,23 +7,22 @@
 #include "Bang/Collection.h"
 
 template <class T>
-class Array  : public std::vector<T>
+class Array
 {
 public:
-    typedef typename std::vector<T>::iterator               Iterator;
-    typedef typename std::vector<T>::const_iterator         Const_Iterator;
-    typedef typename std::vector<T>::reverse_iterator       Reverse_Iterator;
-    typedef typename std::vector<T>::const_reverse_iterator Const_Reverse_Iterator;
+    using Iterator = typename std::vector<T>::iterator;
+    using RIterator = typename std::vector<T>::reverse_iterator;
+    using Const_Iterator = typename std::vector<T>::const_iterator;
+    using Const_RIterator = typename std::vector<T>::const_reverse_iterator;
 
     Array() { }
-    Array(const std::vector<T> &v)      : std::vector<T>(v) { }
-    Array(int size)                     : std::vector<T>(size) { }
-    Array(int size, const T& initValue) : std::vector<T>(size, initValue) { }
-    Array(std::initializer_list<T> l)   : std::vector<T>(l) { }
+    Array(const std::vector<T> &v)      : m_vector(v) { }
+    Array(int size)                     : m_vector(size) { }
+    Array(int size, const T& initValue) : m_vector(size, initValue) { }
+    Array(std::initializer_list<T> l)   : m_vector(l) { }
 
     template <class OtherIterator>
-    Array(OtherIterator begin, OtherIterator end)
-        : std::vector<T>(begin, end) {}
+    Array(OtherIterator begin, OtherIterator end) : m_vector(begin, end) {}
 
     template < template<class> class OtherContainer>
     Array(const OtherContainer<T> &container)
@@ -33,27 +32,8 @@ public:
     Array(const CollectionRange<OtherIterator> &col)
         : Array(col.Begin(), col.End()) {}
 
-    virtual ~Array() {}
-
-
-
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end();   }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
-
-    // To allow range-based for loops
-    Iterator begin() { return this->std::vector<T>::begin(); }
-    Iterator end() { return this->std::vector<T>::end(); }
-    Const_Iterator begin() const { return this->std::vector<T>::begin(); }
-    Const_Iterator end() const { return this->std::vector<T>::end(); }
-
-    void Add(const T& x) { this->PushBack(x); }
-    void PushBack(const T& x)  { this->push_back(x);  }
+    void Add(const T& x) { PushBack(x); }
+    void PushBack(const T& x)  { m_vector.push_back(x);  }
 
     template <template <class> class OtherCollection>
     void Add(const OtherCollection<T> &otherCol)
@@ -64,27 +44,24 @@ public:
     template <class Iterator>
     void Add(const CollectionRange<Iterator>& col)
     {
-        for (Iterator it = col.Begin(); it != col.End(); ++it)
-        {
-            this->Add(*it);
-        }
+        for (Iterator it = col.Begin(); it != col.End(); ++it) { Add(*it); }
     }
 
-    const T* Data() const { return this->data(); }
+    const T* Data() const { return m_vector.data(); }
 
     Const_Iterator Find(const T& x) const
     {
-        return Collection::Find(this->GetRangeAll(), x);
+        return Collection::Find(GetRangeAll(), x);
     }
 
     Iterator Find(const T& x)
     {
-        return Collection::Find(this->GetRangeAll(), x);
+        return Collection::Find(GetRangeAll(), x);
     }
 
     Iterator FindLast(const T& x)
     {
-        for (auto it = this->RBegin(); it != this->REnd(); ++it)
+        for (auto it = m_vector.RBegin(); it != m_vector.REnd(); ++it)
         {
             if (*it == x)
             {
@@ -93,7 +70,7 @@ public:
                 return res;
             }
         }
-        return this->End();
+        return m_vector.End();
     }
 
     bool Contains(const T &x) const
@@ -101,10 +78,10 @@ public:
         return Collection::Contains(GetRangeAll(), x);
     }
 
-    const T& Front() const { return this->front(); }
-    const T& Back() const  { return this->back(); }
-    T& Front() { return this->front(); }
-    T& Back()  { return this->back(); }
+    const T& Front() const { return m_vector.front(); }
+    const T& Back() const  { return m_vector.back(); }
+    T& Front() { return m_vector.front(); }
+    T& Back()  { return m_vector.back(); }
 
     template < template <class> class OtherContainerClass, class OtherT = T >
     OtherContainerClass<OtherT> To() const
@@ -116,22 +93,22 @@ public:
 
     Iterator Remove(const Iterator &first, const Iterator &last)
     {
-        return this->erase(first, last);
+        return m_vector.erase(first, last);
     }
-    Iterator Remove(Iterator it) { return this->erase(it); }
+    Iterator Remove(Iterator it) { return m_vector.erase(it); }
     Iterator Remove(const T& x)
     {
-        Iterator it = this->Find(x);
-        if (it != this->End()) { return this->Remove(it); }
-        return this->End();
+        Iterator it = Find(x);
+        if (it != End()) { return Remove(it); }
+        return End();
     }
     void RemoveAll(const T& x)
     {
-        for (Iterator it = this->Begin(); it != this->End(); ++it)
+        for (Iterator it = Begin(); it != End(); ++it)
         {
             if (*it == x)
             {
-                it = this->Remove(it);
+                it = Remove(it);
                 --it;
             }
         }
@@ -140,7 +117,7 @@ public:
     T& PopBack()
     {
         T& back = Back();
-        this->pop_back();
+        m_vector.pop_back();
         return back;
     }
 
@@ -155,40 +132,45 @@ public:
         return -1;
     }
 
-    uint Count(std::function< bool(const T&) > boolPredicate) const
-    {
-        return Collection::Count(GetRangeAll(), boolPredicate);
-    }
-    uint Count(const T& x) const
-    {
-        return Collection::Count(GetRangeAll(), x);
-    }
-
-    void Resize(int n)   { this->resize(n); }
-    uint Size() const    { return this->size(); }
-    void Clear()         { this->clear(); }
-    bool IsEmpty() const { return this->Size() == 0; }
+    void Resize(int n)   { m_vector.resize(n); }
+    uint Size() const    { return m_vector.size(); }
+    void Clear()         { m_vector.clear(); }
+    bool IsEmpty() const { return Size() == 0; }
 
     CollectionRange<Iterator> GetRangeAll()
     {
-        return CollectionRange<Iterator>(this->Begin(), this->End());
+        return CollectionRange<Iterator>(Begin(), End());
     }
     CollectionRange<Const_Iterator> GetRangeAll() const
     {
-        return CollectionRange<Const_Iterator>(this->Begin(), this->End());
+        return CollectionRange<Const_Iterator>(Begin(), End());
     }
 
     operator CollectionRange<Iterator>() { return GetRangeAll(); }
     operator CollectionRange<Iterator>() const { return GetRangeAll(); }
 
-    T& operator[](std::size_t i)
-    {
-        return std::vector<T>::operator [](i);
-    }
-    const T& operator[](std::size_t i) const
-    {
-        return std::vector<T>::operator [](i);
-    }
+    T& At(std::size_t i) { return m_vector.at(i); }
+    const T& At(std::size_t i) const { return m_vector.at(i); }
+    T& operator[](std::size_t i) { return m_vector[i]; }
+    const T& operator[](std::size_t i) const { return m_vector[i]; }
+
+    Iterator Begin() { return m_vector.begin(); }
+    Iterator End() { return m_vector.end();   }
+    Const_Iterator Begin() const { return m_vector.cbegin(); }
+    Const_Iterator End() const { return m_vector.cend(); }
+    RIterator RBegin() { return m_vector.rbegin(); }
+    RIterator REnd() { return m_vector.rend(); }
+    Const_RIterator RBegin() const { return m_vector.crbegin(); }
+    Const_RIterator REnd() const { return m_vector.crend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return m_vector.begin(); }
+    Iterator end() { return m_vector.end(); }
+    Const_Iterator begin() const { return m_vector.cbegin(); }
+    Const_Iterator end() const { return m_vector.cend(); }
+
+private:
+    std::vector<T> m_vector;
 };
 
 #endif // ARRAY_H

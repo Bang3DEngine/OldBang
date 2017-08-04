@@ -10,7 +10,7 @@
 
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 
-typedef GLuint GLId;
+using GLId = GLuint;
 
 FORWARD class G_VAO;
 FORWARD class GLObject;

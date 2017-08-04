@@ -48,7 +48,7 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
     // Set up graphic pipeline passes
-    typedef Renderer::RenderLayer RL;
+    using RL = Renderer::RenderLayer;
     m_scenePass  =
      new GPPass_RenderLayer(this, RL::RLScene,
      {

@@ -11,7 +11,7 @@ FORWARD class G_Texture;
 class G_TextureUnitManager
 {
 public:
-    typedef GLuint TexUnit;
+    using TexUnit = GLuint;
     G_TextureUnitManager();
 
     // Returns the texture unit it has been bound to
@@ -19,7 +19,7 @@ public:
     static void UnBindTexture(const G_Texture *tex);
 
 private:
-    typedef Map<const G_Texture*, TexUnit> TexUnitMap;
+    using TexUnitMap = Map<const G_Texture*, TexUnit>;
     TexUnitMap m_textureToUnit;
 
     // Ordered in time

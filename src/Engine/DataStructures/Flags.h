@@ -47,6 +47,6 @@ private:
     int m_flags = Flag::Default;
 };
 
-#define CREATE_FLAGS(FlagsName, FlagType) typedef Flags<FlagType> FlagsName
+#define CREATE_FLAGS(FlagsName, FlagType) using FlagsName = Flags<FlagType>
 
 #endif // FLAGS_H

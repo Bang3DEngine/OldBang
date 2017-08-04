@@ -3,7 +3,7 @@
 #include "Bang/StreamOperators.h"
 #include "Bang/BangPreprocessor.h"
 
-typedef BangPreprocessor BP;
+using BP = BangPreprocessor;
 
 BPReflectedStruct::BPReflectedStruct()
 {

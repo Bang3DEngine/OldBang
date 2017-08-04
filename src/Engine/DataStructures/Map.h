@@ -10,10 +10,10 @@ template <class Key, class Value>
 class Map : public std::map<Key, Value>
 {
 public:
-    typedef typename std::map<Key, Value>::iterator Iterator;
-    typedef typename std::map<Key, Value>::const_iterator Const_Iterator;
-    typedef typename std::map<Key, Value>::reverse_iterator Reverse_Iterator;
-    typedef typename std::map<Key, Value>::const_reverse_iterator Const_Reverse_Iterator;
+    using Iterator = typename std::map<Key, Value>::iterator;
+    using RIterator = typename std::map<Key, Value>::reverse_iterator;
+    using Const_Iterator = typename std::map<Key, Value>::const_iterator;
+    using Const_RIterator = typename std::map<Key, Value>::const_reverse_iterator;
 
     Map()
     {
@@ -125,21 +125,6 @@ public:
         return result;
     }
 
-    Iterator Begin() { return this->begin(); }
-    Iterator End() { return this->end(); }
-    Const_Iterator Begin() const { return this->begin(); }
-    Const_Iterator End() const { return this->end(); }
-    Reverse_Iterator RBegin() { return this->rbegin(); }
-    Reverse_Iterator REnd() { return this->rend(); }
-    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
-    Const_Reverse_Iterator REnd() const { return this->rend(); }
-
-    // To allow range-based for loops
-    Iterator begin() { return this->std::map<Key,Value>::begin(); }
-    Iterator end() { return this->std::map<Key,Value>::end(); }
-    Const_Iterator begin() const { return this->std::map<Key,Value>::begin(); }
-    Const_Iterator end() const { return this->std::map<Key,Value>::end(); }
-
     Value& operator[](const Key &k)
     {
         return std::map<Key,Value>::operator[](k);
@@ -148,5 +133,21 @@ public:
     {
         return std::map<Key,Value>::operator[](k);
     }
+
+    Iterator Begin() { return this->begin(); }
+    Iterator End() { return this->end(); }
+    Const_Iterator Begin() const { return this->begin(); }
+    Const_Iterator End() const { return this->end(); }
+    RIterator RBegin() { return this->rbegin(); }
+    RIterator REnd() { return this->rend(); }
+    Const_RIterator RBegin() const { return this->rbegin(); }
+    Const_RIterator REnd() const { return this->rend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return this->std::map<Key,Value>::begin(); }
+    Iterator end() { return this->std::map<Key,Value>::end(); }
+    Const_Iterator begin() const { return this->std::map<Key,Value>::begin(); }
+    Const_Iterator end() const { return this->std::map<Key,Value>::end(); }
+
 };
 #endif // MAP_H
