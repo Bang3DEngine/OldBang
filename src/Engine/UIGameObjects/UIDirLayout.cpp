@@ -12,31 +12,6 @@ UIDirLayout::~UIDirLayout()
 {
 }
 
-
-#include "Bang/Input.h"
-#include "Bang/Random.h"
-#include "Bang/UIImage.h"
-#include "Bang/UIInputText.h"
-void UIDirLayout::OnUpdate()
-{
-    if (Input::GetKeyDown(Input::Key::A))
-    {
-        UIGameObject *uig = new UIGameObject();
-        UIInputText *text = new UIInputText();
-        text->GetBackgroundImage()->SetTint(Random::GetColorOpaque());
-        text->SetParent(uig);
-        Add(uig, 0);
-    }
-    else if (Input::GetKeyDown(Input::Key::R))
-    {
-        Take(1);
-    }
-    else if (Input::GetKeyDown(Input::Key::M))
-    {
-        Move(0, GetChildren().Size()-1);
-    }
-}
-
 void UIDirLayout::Add(UIGameObject *gameObject, int _index)
 {
     m_childrenInfo.Set(gameObject, ChildInfo());

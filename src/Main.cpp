@@ -6,37 +6,22 @@
 #include "Bang/Project.h"
 #include "Bang/ProjectManager.h"
 
-#include "Bang/UIText.h"
-#include "Bang/UIImage.h"
-#include "Bang/UIInputText.h"
-#include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
-#include "Bang/UIVerticalLayout.h"
-#include "Bang/UIHorizontalLayout.h"
 int main(int argc, char **argv)
 {
     Application app(argc, argv);
 
+    if (argc <= 1)
+    {
+        Debug_Error("Please specify the project filepath as first parameter");
+        return 1;
+    }
+
+    Path projectPath(argv[1]);
+    ProjectManager pm;
+    Project *proj = pm.OpenProject(projectPath);
+
     app.CreateWindow();
-    Scene *scene = new Scene();
-
-    UIGameObject *blue = new UIGameObject();
-    UIImage *blueImg = blue->AddComponent<UIImage>();
-    blueImg->SetTint(Color::Blue);
-
-    UIInputText *inputText = new UIInputText();
-
-    UIHorizontalLayout *hLayout = new UIHorizontalLayout();
-    hLayout->SetParent(scene);
-    hLayout->rectTransform->SetAnchors(Vector2(-0.9, -0.5), Vector2(0.9, 0.5));
-    hLayout->Add(blue);
-    hLayout->Add(inputText);
-    hLayout->SetStretch(blue, 0.2f);
-
-    UIVerticalLayout *vLayout = new UIVerticalLayout();
-    hLayout->Add(vLayout);
-
-    SceneManager::LoadScene(scene);
+    proj->OpenFirstFoundScene();
     app.MainLoop();
 
     return 0;

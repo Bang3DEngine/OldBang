@@ -7,8 +7,6 @@
 class UIDirLayout : public UIGameObject
 {
 public:
-    void OnUpdate() override;
-
     void Add(UIGameObject *gameObject, int index = -1);
     void Move(int indexFrom, int indexTo);
     UIGameObject* Take(int index);
