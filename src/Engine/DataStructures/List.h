@@ -4,6 +4,7 @@
 #include <list>
 #include <functional>
 
+#include "Bang/Debug.h"
 #include "Bang/Collection.h"
 
 template <class T>
@@ -65,24 +66,19 @@ public:
 
     void Insert(const Iterator& it, const T& x)
     {
-        this->InsertBefore(it, x);
+        this->insert(it, x);
+    }
+
+    void Insert(int index, const T& x)
+    {
+        ASSERT(index >= 0 && index <= Size());
+        auto it = Begin(); std::advance(it, index);
+        Insert(it, x);
     }
 
     void Insert(const Iterator& first, int count, const T& x)
     {
         this->insert(first, count, x);
-    }
-
-    void InsertBefore(const Iterator& it, const T& x)
-    {
-        this->insert(it, x);
-    }
-
-    void InsertAfter(const Iterator& it, const T& x)
-    {
-        Iterator itAfter = it;
-        std::advance(itAfter, 1);
-        this->insert(itAfter, x);
     }
 
     void PushFront(const T& x) { this->push_front(x); }

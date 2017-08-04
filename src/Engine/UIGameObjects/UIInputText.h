@@ -16,6 +16,7 @@ public:
     void OnUpdate() override;
 
     const String& GetContent() const;
+    void SetContent(const String &content);
 
     void SetMargins(int left, int top, int right, int bot);
 
@@ -30,6 +31,7 @@ public:
     void SetCursorTickTime(float cursorTickTime);
     float GetCursorTickTime() const;
 
+    void Update();
     void ResetSelection();
 
     UIText *GetUIText() const;
@@ -55,7 +57,6 @@ private:
 
     bool m_forceUpdateRenderers = false;
 
-    void Update();
     void HandleTyping();
     void HandleTextScrolling();
     void HandleMouseSelection();

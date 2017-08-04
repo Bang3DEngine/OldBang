@@ -9,7 +9,7 @@
 } while (false)
 
 #define ASSERT(assertion) if ( !(assertion) ) {\
-    Debug_Error("Assertion '" << #assertion << "' failed!"); }
+    Debug_Error("Assertion '" << #assertion << "' failed!"); exit(1); }
 // =====================================================
 
 

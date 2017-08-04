@@ -26,6 +26,9 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/UIInputText.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIDirLayout.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIHorizontalLayout.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIVerticalLayout.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.cpp \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.cpp \
@@ -134,6 +137,9 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Math/Sphere.h \
     $$BANG_ROOT/src/Engine/General/SystemUtils.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/UIInputText.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIDirLayout.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIHorizontalLayout.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/UIVerticalLayout.h \
     $$BANG_ROOT/src/Engine/Components/CircleRenderer.h \
     $$BANG_ROOT/src/Engine/Components/SingleLineRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/MeshFactory.h \

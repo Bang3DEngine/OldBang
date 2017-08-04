@@ -10,8 +10,6 @@
 
 UIInputText::UIInputText() : UIGameObject("UIInputText")
 {
-    rectTransform->SetAnchors(Vector2(-0.6, -0.2), Vector2(0.6, 0.2));
-
     p_background = AddComponent<UIImage>();
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
@@ -32,7 +30,7 @@ UIInputText::UIInputText() : UIGameObject("UIInputText")
     p_text = m_textContainer->AddComponent<UIText>();
     p_text->SetTint(Color::Blue);
     p_text->SetTextSize(20.0f);
-    p_text->SetContent("A BC DEF GHIJ KLMNOP");
+    p_text->SetContent("Bang");
     p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
     p_text->SetHorizontalWrapMode(WrapMode::Hide);
@@ -399,6 +397,12 @@ UIImage *UIInputText::GetBackgroundImage() const
 const String &UIInputText::GetContent() const
 {
     return p_text->GetContent();
+}
+
+void UIInputText::SetContent(const String &content)
+{
+    p_text->SetContent(content);
+    Update();
 }
 
 bool UIInputText::IsShiftPressed() const
