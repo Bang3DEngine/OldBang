@@ -305,7 +305,7 @@ void RectTransform::OnDrawGizmos()
     p = Vector2(amax.x, amin.y);
     Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
     Gizmos::SetColor(col);
-    Gizmos::RenderRect( GetScreenSpaceRect() );
+    Gizmos::RenderRect( GetScreenSpaceRectNDC() );
     */
 }
 
