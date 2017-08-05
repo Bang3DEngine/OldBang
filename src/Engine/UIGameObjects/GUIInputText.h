@@ -7,18 +7,13 @@ FORWARD class UIText;
 FORWARD class UIImage;
 FORWARD class SingleLineRenderer;
 
-class UIInputText : public UIGameObject
+class GUIInputText : public UIGameObject
 {
 public:
-    UIInputText();
-    virtual ~UIInputText();
+    GUIInputText();
+    virtual ~GUIInputText();
 
     void OnUpdate() override;
-
-    const String& GetContent() const;
-    void SetContent(const String &content);
-
-    void SetMargins(int left, int top, int right, int bot);
 
     void SetCursorPosition(int index);
     void SetSelection(int selectionBeginIndex,
@@ -34,8 +29,9 @@ public:
     void Update();
     void ResetSelection();
 
-    UIText *GetUIText() const;
-    UIImage *GetBackgroundImage() const;
+    UIText *GetText() const;
+    UIGameObject *GetTextContainer() const;
+    UIImage *GetBackground() const;
 
 private:
     UIImage *p_background = nullptr;

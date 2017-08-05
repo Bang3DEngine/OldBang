@@ -35,8 +35,8 @@ bool GPPass_G::CanRender(const Renderer *renderer) const
     Material *rendMaterial = renderer->GetMaterial();
     bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
     bool canRender =
-          (m_receiveLighting == ReceiveLightPass::Yes && receivesLighting) ||
-          (m_receiveLighting == ReceiveLightPass::No  && receivesLighting) ||
+          (m_receiveLighting == ReceiveLightPass::Yes &&  receivesLighting) ||
+          (m_receiveLighting == ReceiveLightPass::No  && !receivesLighting) ||
            m_receiveLighting == ReceiveLightPass::Both;
     return GPPass::CanRender(renderer) && canRender;
 }

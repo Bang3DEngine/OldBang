@@ -117,6 +117,8 @@ public:
         return result;
     }
 
+    Value& At(const Key &k) { return m_map.at(k); }
+    const Value& At(const Key &k) const { return m_map.at(k); }
     Value& operator[](const Key &k) { return m_map[k]; }
     const Value& operator[](const Key &k) const { return m_map[k]; }
 

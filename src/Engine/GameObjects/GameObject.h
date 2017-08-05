@@ -98,17 +98,17 @@ public:
     /**
      * Adds the Component c to this.
      */
-    bool AddComponent(Component *c);
+    bool AddComponent(Component *c, int index = -1);
 
     /**
      * Creates a Component of type T, adds it to this,
      * and returns a pointer to it
      */
     template <class T>
-    T* AddComponent()
+    T* AddComponent(int index = -1)
     {
         T *c = new T();
-        if (!AddComponent(c)) { return nullptr; }
+        if (!AddComponent(c, index)) { return nullptr; }
         if (IsStarted()) { c->_OnStart(); }
         return c;
     }

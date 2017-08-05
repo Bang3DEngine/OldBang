@@ -193,7 +193,7 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
     return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
-bool GameObject::AddComponent(Component *c)
+bool GameObject::AddComponent(Component *c, int _index)
 {
     if (!c) { return false; }
     if (m_components.Contains(c)) { return false; }
@@ -212,8 +212,9 @@ bool GameObject::AddComponent(Component *c)
         }
     }
 
+    const int index = (_index != -1 ? _index : m_components.Size());
+    m_components.Insert(index, c);
     c->SetGameObject(this);
-    m_components.PushBack(c);
     return true;
 }
 

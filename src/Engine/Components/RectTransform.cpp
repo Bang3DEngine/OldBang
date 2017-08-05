@@ -1,7 +1,6 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/Rect.h"
-#include "Bang/Gizmos.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Matrix4.h"
@@ -283,6 +282,8 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     return m_localToParentMatrix;
 }
 
+#include "Bang/Color.h"
+#include "Bang/Gizmos.h"
 void RectTransform::OnDrawGizmos()
 {
     /*

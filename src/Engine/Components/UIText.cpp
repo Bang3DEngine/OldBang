@@ -24,7 +24,9 @@ UIText::UIText() : UIRenderer()
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
-    SetContent("");
+    SetContent("Bang");
+    SetTextSize(20.0f);
+    SetTint(Color::Black);
 
     SetRenderMode(GL::RenderMode::Quads);
 }

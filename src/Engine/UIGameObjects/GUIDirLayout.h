@@ -4,7 +4,7 @@
 #include "Bang/Map.h"
 #include "Bang/UIGameObject.h"
 
-class UIDirLayout : public UIGameObject
+class GUIDirLayout : public UIGameObject
 {
 public:
     void Add(UIGameObject *gameObject, int index = -1);
@@ -12,24 +12,31 @@ public:
     UIGameObject* Take(int index);
     UIGameObject* Take(UIGameObject *gameObject);
 
+    void SetSpacing(int spacingPx);
     void SetStretch(int index, float stretch);
     void SetStretch(UIGameObject *gameObject, float stretch);
 
 protected:
-    UIDirLayout(bool vertical);
-    virtual ~UIDirLayout();
+    GUIDirLayout(bool vertical);
+    virtual ~GUIDirLayout();
 
 private:
-    struct ChildInfo
+    class UIContainer : public UIGameObject
     {
+    public:
+        UIContainer(UIGameObject *child) : UIGameObject()
+        {
+            child->SetParent(this);
+        }
+
         float stretch = 1.0f;
     };
 
+    int m_spacingPx = 0;
     bool m_vertical = false;
-    Map<UIGameObject*, ChildInfo> m_childrenInfo;
+    Map<UIGameObject*, UIContainer*> m_childrenContainers;
 
     int GetIndexFromChild(UIGameObject *gameObject) const noexcept;
-    ChildInfo* GetChildInfoAt(int index);
     void UpdateChildrenRectTransforms();
 };
 
