@@ -46,7 +46,7 @@ GameObject *Prefab::Instantiate() const
 
 GameObject *Prefab::InstantiateWithoutStarting() const
 {
-    if (!m_gameObjectXMLInfoContent.Empty())
+    if (!m_gameObjectXMLInfoContent.IsEmpty())
     {
         XMLNode xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
 

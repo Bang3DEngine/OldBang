@@ -124,14 +124,15 @@ public:
         return RectG<T>(minx, maxx, miny, maxy);
     }
 
-    static RectG<T> GetBoundingRectFromPositions(
-                            const Array<Vector2> &positions)
+    template <class Iterator>
+    static RectG<T> GetBoundingRectFromPositions(Iterator begin, Iterator end)
     {
-        if (positions.IsEmpty()) { return RectG<T>::Zero; }
+        if (begin == end) { return RectG<T>::Zero; }
 
-        Vector2 minv = positions.Front(), maxv = positions.Front();
-        for (const Vector2 &p : positions)
+        Vector2 minv = *begin, maxv = *begin;
+        for (auto it = begin; it != end; ++it)
         {
+            const Vector2 &p = *it;
             minv = Vector2::Min(p, minv);
             maxv = Vector2::Max(p, maxv);
         }

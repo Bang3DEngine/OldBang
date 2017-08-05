@@ -217,7 +217,8 @@ Rect AABox::GetAABoundingScreenRect(Camera *cam) const
     }
     if (!somePointInFront) { return Rect::Zero; }
 
-    Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints);
+    Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints.Begin(),
+                                                           screenPoints.End());
     return boundingRect;
 }
 

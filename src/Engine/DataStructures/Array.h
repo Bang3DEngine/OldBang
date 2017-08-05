@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 
-#include "Bang/Collection.h"
+#include "Bang/Containers.h"
 
 template <class T>
 class Array
@@ -15,162 +15,74 @@ public:
     using Const_Iterator = typename std::vector<T>::const_iterator;
     using Const_RIterator = typename std::vector<T>::const_reverse_iterator;
 
-    Array() { }
-    Array(const std::vector<T> &v)      : m_vector(v) { }
-    Array(int size)                     : m_vector(size) { }
-    Array(int size, const T& initValue) : m_vector(size, initValue) { }
-    Array(std::initializer_list<T> l)   : m_vector(l) { }
-
+    Array();
+    Array(const std::vector<T> &v);
+    Array(int size);
+    Array(int size, const T& initValue);
+    Array(std::initializer_list<T> l);
     template <class OtherIterator>
-    Array(OtherIterator begin, OtherIterator end) : m_vector(begin, end) {}
+    explicit Array(OtherIterator begin, OtherIterator end);
+    template < template<class> class Container>
+    explicit Array(const Container<T> &container);
 
-    template < template<class> class OtherContainer>
-    Array(const OtherContainer<T> &container)
-        : Array(container.begin(), container.end()) {}
+    void PushBack(const T& x);
 
-    template <class OtherIterator>
-    Array(const CollectionRange<OtherIterator> &col)
-        : Array(col.Begin(), col.End()) {}
+    template <template <class OtherT> class Container, class OtherT>
+    void PushBack(const Container<OtherT>& container);
 
-    void Add(const T& x) { PushBack(x); }
-    void PushBack(const T& x)  { m_vector.push_back(x);  }
+    const T* Data() const;
 
-    template <template <class> class OtherCollection>
-    void Add(const OtherCollection<T> &otherCol)
-    {
-        Add (otherCol.GetRangeAll());
-    }
+    Const_Iterator Find(const T& x) const;
+    Iterator Find(const T& x);
+    Iterator FindLast(const T& x);
+    bool Contains(const T &x) const;
 
-    template <class Iterator>
-    void Add(const CollectionRange<Iterator>& col)
-    {
-        for (Iterator it = col.Begin(); it != col.End(); ++it) { Add(*it); }
-    }
+    const T& Front() const;
+    const T& Back() const;
+    T& Front();
+    T& Back();
 
-    const T* Data() const { return m_vector.data(); }
+    Iterator Remove(const Iterator &first, const Iterator &last);
+    Iterator Remove(Iterator it);
+    Iterator Remove(const T& x);
+    void RemoveAll(const T& x);
 
-    Const_Iterator Find(const T& x) const
-    {
-        return Collection::Find(GetRangeAll(), x);
-    }
+    T& PopBack();
 
-    Iterator Find(const T& x)
-    {
-        return Collection::Find(GetRangeAll(), x);
-    }
+    int IndexOf(const T& x) const;
 
-    Iterator FindLast(const T& x)
-    {
-        for (auto it = m_vector.RBegin(); it != m_vector.REnd(); ++it)
-        {
-            if (*it == x)
-            {
-                Iterator res = it.base();
-                std::advance(res, -1);
-                return res;
-            }
-        }
-        return m_vector.End();
-    }
+    void Resize(int n);
+    uint Size() const;
+    void Clear();
+    bool IsEmpty() const;
 
-    bool Contains(const T &x) const
-    {
-        return Collection::Contains(GetRangeAll(), x);
-    }
+    T& At(std::size_t i);
+    const T& At(std::size_t i) const;
+    T& operator[](std::size_t i);
+    const T& operator[](std::size_t i) const;
 
-    const T& Front() const { return m_vector.front(); }
-    const T& Back() const  { return m_vector.back(); }
-    T& Front() { return m_vector.front(); }
-    T& Back()  { return m_vector.back(); }
+    template< template <class> class Container, class OtherT = T>
+    Container<OtherT> To() const;
 
-    template < template <class> class OtherContainerClass, class OtherT = T >
-    OtherContainerClass<OtherT> To() const
-    {
-        OtherContainerClass<OtherT> cont;
-        for (const T &x : *this) { cont.Add( OtherT(x) ); }
-        return cont;
-    }
-
-    Iterator Remove(const Iterator &first, const Iterator &last)
-    {
-        return m_vector.erase(first, last);
-    }
-    Iterator Remove(Iterator it) { return m_vector.erase(it); }
-    Iterator Remove(const T& x)
-    {
-        Iterator it = Find(x);
-        if (it != End()) { return Remove(it); }
-        return End();
-    }
-    void RemoveAll(const T& x)
-    {
-        for (Iterator it = Begin(); it != End(); ++it)
-        {
-            if (*it == x)
-            {
-                it = Remove(it);
-                --it;
-            }
-        }
-    }
-
-    T& PopBack()
-    {
-        T& back = Back();
-        m_vector.pop_back();
-        return back;
-    }
-
-    int IndexOf(const T& x) const
-    {
-        int i = 0;
-        for (const T& y : *this)
-        {
-            if (x == y)  { return i; }
-            ++i;
-        }
-        return -1;
-    }
-
-    void Resize(int n)   { m_vector.resize(n); }
-    uint Size() const    { return m_vector.size(); }
-    void Clear()         { m_vector.clear(); }
-    bool IsEmpty() const { return Size() == 0; }
-
-    CollectionRange<Iterator> GetRangeAll()
-    {
-        return CollectionRange<Iterator>(Begin(), End());
-    }
-    CollectionRange<Const_Iterator> GetRangeAll() const
-    {
-        return CollectionRange<Const_Iterator>(Begin(), End());
-    }
-
-    operator CollectionRange<Iterator>() { return GetRangeAll(); }
-    operator CollectionRange<Iterator>() const { return GetRangeAll(); }
-
-    T& At(std::size_t i) { return m_vector.at(i); }
-    const T& At(std::size_t i) const { return m_vector.at(i); }
-    T& operator[](std::size_t i) { return m_vector[i]; }
-    const T& operator[](std::size_t i) const { return m_vector[i]; }
-
-    Iterator Begin() { return m_vector.begin(); }
-    Iterator End() { return m_vector.end();   }
-    Const_Iterator Begin() const { return m_vector.cbegin(); }
-    Const_Iterator End() const { return m_vector.cend(); }
-    RIterator RBegin() { return m_vector.rbegin(); }
-    RIterator REnd() { return m_vector.rend(); }
-    Const_RIterator RBegin() const { return m_vector.crbegin(); }
-    Const_RIterator REnd() const { return m_vector.crend(); }
+    Iterator Begin();
+    Iterator End();
+    Const_Iterator Begin() const;
+    Const_Iterator End() const;
+    RIterator RBegin();
+    RIterator REnd();
+    Const_RIterator RBegin() const;
+    Const_RIterator REnd() const;
 
     // To allow range-based for loops
-    Iterator begin() { return m_vector.begin(); }
-    Iterator end() { return m_vector.end(); }
-    Const_Iterator begin() const { return m_vector.cbegin(); }
-    Const_Iterator end() const { return m_vector.cend(); }
+    Iterator begin();
+    Iterator end();
+    Const_Iterator begin() const;
+    Const_Iterator end() const;
 
 private:
     std::vector<T> m_vector;
 };
+
+#include "Array.tcc"
 
 #endif // ARRAY_H

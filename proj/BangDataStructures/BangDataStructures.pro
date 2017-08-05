@@ -22,16 +22,20 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Math/Math.h \
     $$BANG_ROOT/src/Engine/Math/Random.h \
     $$BANG_ROOT/src/Engine/IO/Files/Path.h \
-    $$BANG_ROOT/src/Engine/DataStructures/Collection.h \
+    $$BANG_ROOT/src/Engine/DataStructures/Containers.h \
     $$BANG_ROOT/src/Engine/Math/Color.h \
     $$BANG_ROOT/src/Engine/Math/Rect.h \
     $$BANG_ROOT/src/Engine/Math/Vector3.h \
     $$BANG_ROOT/src/Engine/Math/Vector4.h \
     $$BANG_ROOT/src/Engine/Math/Vector2.h \
     $$BANG_ROOT/src/Engine/DataStructures/Set.h \
+    $$BANG_ROOT/src/Engine/DataStructures/Set.tcc \
     $$BANG_ROOT/src/Engine/DataStructures/Array.h \
+    $$BANG_ROOT/src/Engine/DataStructures/Array.tcc \
     $$BANG_ROOT/src/Engine/DataStructures/List.h \
+    $$BANG_ROOT/src/Engine/DataStructures/List.tcc \
     $$BANG_ROOT/src/Engine/DataStructures/Map.h \
+    $$BANG_ROOT/src/Engine/DataStructures/Map.tcc \
     $$BANG_ROOT/src/Engine/DataStructures/String.h \
     $$BANG_ROOT/src/Engine/Math/Quaternion.h \
     $$BANG_ROOT/src/Engine/Math/Matrix3.h \

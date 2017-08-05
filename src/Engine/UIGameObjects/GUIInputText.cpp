@@ -83,7 +83,7 @@ void GUIInputText::UpdateCursorRenderers()
     Rect limitsRect = m_textContainer->rectTransform->GetScreenSpaceRectNDC();
     float minX = limitsRect.GetMin().x;
     float maxX = limitsRect.GetMax().x;
-    if (!p_text->GetContent().Empty())
+    if (!p_text->GetContent().IsEmpty())
     {
         minX = Math::Max(minX, p_text->GetCharRectsNDC().Front().GetMin().x);
         maxX = Math::Min(maxX, p_text->GetCharRectsNDC().Back().GetMax().x);
@@ -132,7 +132,7 @@ void GUIInputText::HandleTyping()
     String inputText = Input::PollInputText();
 
     // First we handle text deletion
-    if (!p_text->GetContent().Empty())
+    if (!p_text->GetContent().IsEmpty())
     {
         bool selecting = (m_cursorIndex != m_selectionCursorIndex);
         int minIndex = Math::Min(m_cursorIndex, m_selectionCursorIndex) +
@@ -148,7 +148,7 @@ void GUIInputText::HandleTyping()
         {
             offset = -1;
         }
-        else if (selecting && !inputText.Empty()) { offset = -1; }
+        else if (selecting && !inputText.IsEmpty()) { offset = -1; }
 
         minIndex += offset;
         maxIndex += offset;
@@ -162,7 +162,7 @@ void GUIInputText::HandleTyping()
     }
 
     // Key typing handling
-    if (!inputText.Empty())
+    if (!inputText.IsEmpty())
     {
         content.Insert(m_cursorIndex, inputText);
         m_cursorIndex += inputText.Size();
@@ -181,7 +181,7 @@ void GUIInputText::HandleTyping()
 
 void GUIInputText::HandleTextScrolling()
 {
-    if (p_text->GetContent().Empty())
+    if (p_text->GetContent().IsEmpty())
     {
         p_text->SetScrollingPx( Vector2i::Zero );
         return;
@@ -411,7 +411,7 @@ Vector2 GUIInputText::GetSideCursorMarginsNDC() const
 
 int GUIInputText::GetVisibilityFrontierCharIndex(bool right) const
 {
-    if (p_text->GetContent().Empty()) { return 0; }
+    if (p_text->GetContent().IsEmpty()) { return 0; }
 
     int firstFoundFrontier  = -1;
     int secondFoundFrontier = -1;
@@ -476,7 +476,7 @@ float GUIInputText::GetCursorX_NDC(int cursorIndex) const
     float cursorMarginNDC = GetSideCursorMarginsNDC().x;
     if (cursorIndex == 0)
     {
-        if (!p_text->GetContent().Empty())
+        if (!p_text->GetContent().IsEmpty())
         {
             return p_text->GetCharRectNDC(0).GetMin().x - cursorMarginNDC;
         }

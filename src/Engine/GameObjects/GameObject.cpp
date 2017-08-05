@@ -35,12 +35,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
     GameObject *go = SCAST<GameObject*>(clone);
-    if (HasComponent<RectTransform>())
-    {
-        go->RemoveComponent<Transform>();
-        go->AddComponent<RectTransform>();
-    }
-
+    go->RemoveComponent<Transform>();
     go->SetName(m_name);
     go->SetParent(nullptr);
 
@@ -55,10 +50,6 @@ void GameObject::CloneInto(ICloneable *clone) const
         if (!DCAST<Transform*>(comp))
         {
             go->AddComponent(comp->Clone());
-        }
-        else
-        {
-            m_transform->CloneInto(go->transform);
         }
     }
 }
@@ -362,6 +353,7 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
             else if (tagName == "RectTransform")
             {
                 RemoveComponent<Transform>();
+                AddComponent<RectTransform>();
                 c = m_transform;
             }
             else if (tagName == "MeshRenderer")

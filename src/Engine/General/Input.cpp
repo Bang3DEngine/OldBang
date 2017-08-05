@@ -182,8 +182,8 @@ void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
     m_keyInfos[k].pressed    = true;
     m_keyInfos[k].autoRepeat = ei.autoRepeat;
 
-    m_pressedKeys.Add(k);
-    m_keysDown.Add(k);
+    m_pressedKeys.PushBack(k);
+    m_keysDown.PushBack(k);
     m_keysUp.Remove(k);
 }
 
@@ -200,7 +200,7 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
 
     m_pressedKeys.Remove(k);
     m_keysDown.Remove(k);
-    m_keysUp.Add(k);
+    m_keysUp.PushBack(k);
 }
 
 void Input::PeekEvent(const SDL_Event &event)

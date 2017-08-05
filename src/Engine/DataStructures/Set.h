@@ -15,73 +15,40 @@ public:
     using Const_Iterator = typename std::set<Key>::const_iterator;
     using Const_RIterator = typename std::set<Key>::const_reverse_iterator;
 
-    Set()
-    {
-    }
+    Set();
+    Set(const std::set<Key> &s);
 
-    Set(const std::set<Key> &s) : m_set(s)
-    {
-    }
+    void Insert(const Key &key);
 
-    void Insert(const Key &key)
-    {
-        m_set.insert(key);
-    }
+    void Remove(const Key &key);
+    Iterator Remove(Iterator it);
 
-    void Remove(const Key &key)
-    {
-        m_set.erase(key);
-    }
+    void Clear();
+    int Size() const;
+    bool IsEmpty() const;
+    bool Contains(const Key &key) const;
 
-    Iterator Remove(Iterator it)
-    {
-        return m_set.erase(it);
-    }
+    List<Key> GetKeys() const;
 
-    void Clear()
-    {
-        m_set.clear();
-    }
-
-    int Size() const
-    {
-        return m_set.size();
-    }
-
-    bool Empty() const
-    {
-        return m_set.empty();
-    }
-
-    bool Contains(const Key &key) const
-    {
-        return m_set.find(key) != m_set.end();
-    }
-
-    List<Key> GetKeys() const
-    {
-        List<Key> result;
-        for (Key &k : *this) { result.PushBack(k); }
-        return result;
-    }
-
-    Iterator Begin() { return m_set.begin(); }
-    Iterator End() { return m_set.end(); }
-    Const_Iterator Begin() const { return m_set.cbegin(); }
-    Const_Iterator End() const { return m_set.cend(); }
-    RIterator RBegin() { return m_set.rbegin(); }
-    RIterator REnd() { return m_set.rend(); }
-    Const_RIterator RBegin() const { return m_set.crbegin(); }
-    Const_RIterator REnd() const { return m_set.crend(); }
+    Iterator Begin();
+    Iterator End();
+    Const_Iterator Begin() const;
+    Const_Iterator End() const;
+    RIterator RBegin();
+    RIterator REnd();
+    Const_RIterator RBegin() const;
+    Const_RIterator REnd() const;
 
     // To allow range-based for loops
-    Iterator begin() { return m_set.begin(); }
-    Iterator end() { return m_set.end(); }
-    Const_Iterator cbegin() const { return m_set.cbegin(); }
-    Const_Iterator cend() const { return m_set.cend(); }
+    Iterator begin();
+    Iterator end();
+    Const_Iterator cbegin() const;
+    Const_Iterator cend() const;
 
 private:
     std::set<Key> m_set;
 };
+
+#include "Set.tcc"
 
 #endif // SET_H

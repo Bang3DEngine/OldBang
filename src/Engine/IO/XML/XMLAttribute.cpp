@@ -50,7 +50,7 @@ String XMLAttribute::ToString() const
     {
         if (!first) { str += ","; }
         str += prop.GetName();
-        if (!prop.GetValue().Empty())
+        if (!prop.GetValue().IsEmpty())
         {
             str += "=\"" + prop.GetValue() + "\"";
         }

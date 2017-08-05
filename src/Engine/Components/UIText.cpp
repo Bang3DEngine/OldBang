@@ -62,8 +62,8 @@ void UIText::RefreshMesh()
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;
-    Array<Vector2> textQuadPositions2D;
-    Array<Vector3> textQuadPositions3D;
+    Array<Vector2> textQuadPos2D;
+    Array<Vector3> textQuadPos3D;
 
     m_charRectsNDC.Clear();
     m_charVisibility.clear();
@@ -74,17 +74,17 @@ void UIText::RefreshMesh()
 
         if (cr.visible)
         {
-            textQuadPositions2D.PushBack(charRectNDC.GetMinXMinY());
-            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
+            textQuadPos2D.PushBack(charRectNDC.GetMinXMinY());
+            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
 
-            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMinY());
-            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
+            textQuadPos2D.PushBack(charRectNDC.GetMaxXMinY());
+            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
 
-            textQuadPositions2D.PushBack(charRectNDC.GetMaxXMaxY());
-            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
+            textQuadPos2D.PushBack(charRectNDC.GetMaxXMaxY());
+            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
 
-            textQuadPositions2D.PushBack(charRectNDC.GetMinXMaxY());
-            textQuadPositions3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
+            textQuadPos2D.PushBack(charRectNDC.GetMinXMaxY());
+            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
 
             Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
             Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
@@ -93,12 +93,13 @@ void UIText::RefreshMesh()
             textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
             textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
         }
-        m_charRectsNDC.Add(charRectNDC);
+        m_charRectsNDC.PushBack(charRectNDC);
         m_charVisibility.push_back(cr.visible);
     }
 
-    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPositions2D);
-    p_mesh->LoadPositions(textQuadPositions3D);
+    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
+                                                       textQuadPos2D.End());
+    p_mesh->LoadPositions(textQuadPos3D);
     p_mesh->LoadUvs(textQuadUvs);
     SetMesh(p_mesh);
 }

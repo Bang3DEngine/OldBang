@@ -91,7 +91,7 @@ void BPReflectedStruct::SetStructVariableName(const String &structVarName)
 
 void BPReflectedStruct::AddProperty(const BPReflectedVariable &prop)
 {
-    m_variables.Add(prop);
+    m_variables.PushBack(prop);
 }
 
 String BPReflectedStruct::GetInitializationCode() const
@@ -154,7 +154,7 @@ String BPReflectedStruct::GetWriteReflectionCode() const
             )VERBATIM";
 
         String varType = var.GetVariableType();
-        if (varType.Empty()) { continue; }
+        if (varType.IsEmpty()) { continue; }
         varSetSrc.ReplaceInSitu("SET_FUNC", "Set<" + varType + ">");
         varSetSrc.ReplaceInSitu("VAR_REFL_NAME", var.GetName());
         varSetSrc.ReplaceInSitu("VAR_NAME", var.GetVariableName());
@@ -182,7 +182,7 @@ String BPReflectedStruct::GetReadReflectionCode() const
             )VERBATIM";
 
         String varType = var.GetVariableType();
-        if (varType.Empty()) { continue; }
+        if (varType.IsEmpty()) { continue; }
         varGetSrc.ReplaceInSitu("GET_FUNC", "Get<" + varType + ">");
         varGetSrc.ReplaceInSitu("VAR_REFL_NAME", var.GetName());
         varGetSrc.ReplaceInSitu("VAR_NAME", var.GetVariableName());

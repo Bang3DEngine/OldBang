@@ -98,7 +98,7 @@ inline bool XMLAttribute::Get() const
 template<>
 inline Path XMLAttribute::Get() const
 {
-    if ( GetStringValue().Empty() ) { return Path::Empty; }
+    if ( GetStringValue().IsEmpty() ) { return Path::Empty; }
     return HasProperty(XMLProperty::IsEngineFile) ?
                 EPATH(GetStringValue()) :
                 PPATH(GetStringValue());

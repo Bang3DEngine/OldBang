@@ -25,7 +25,7 @@ Path::Path(const String &absolutePath)
 void Path::SetPath(const String &path)
 {
     m_absolutePath = path;
-    if (!m_absolutePath.Empty() &&
+    if (!m_absolutePath.IsEmpty() &&
          m_absolutePath.At(m_absolutePath.Size()-1) == '/')
     {
         m_absolutePath.Erase(m_absolutePath.Size()-1,
@@ -94,7 +94,7 @@ List<Path> Path::FindFiles(bool recursive, const List<String> &extensions) const
             Path filepath = Path(subdir).Append( String(qFilepath) );
             if (!filepath.IsFile()) { continue; }
 
-            filesList.Add(filepath);
+            filesList.PushBack(filepath);
         }
     }
     return filesList;
@@ -113,7 +113,7 @@ List<Path> Path::FindSubDirectories(bool recursive) const
         Path subdirPath = this->Append( String(qSubdir) );
         if (subdirPath.IsDir())
         {
-            subdirsList.Add(subdirPath);
+            subdirsList.PushBack(subdirPath);
             if (recursive)
             {
                 List<Path> subdirsListRecursive =
@@ -186,7 +186,7 @@ String Path::ToString() const
 
 bool Path::IsEmpty() const
 {
-    return GetAbsolute().Empty();
+    return GetAbsolute().IsEmpty();
 }
 
 bool Path::BeginsWith(const Path &path) const

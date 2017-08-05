@@ -65,7 +65,7 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     if (started)
     {
         QMutexLocker m(&am->m_mutex_currentAudios);
-        am->m_currentAudios.Add(player);
+        am->m_currentAudios.PushBack(player);
     }
 }
 

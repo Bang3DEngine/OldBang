@@ -35,7 +35,7 @@ void Behaviour::Update()
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
     // Needed to avoid a bug when creating new behaviours
-    if (xmlInfo.GetTagName().Empty()) { return; }
+    if (xmlInfo.GetTagName().IsEmpty()) { return; }
 
     Component::Read(xmlInfo);
     SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") );
@@ -136,7 +136,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
     ENSURE(!IsLoaded());
 
     String behaviourName = GetSourceFilepath().GetName();
-    ENSURE(!behaviourName.Empty());
+    ENSURE(!behaviourName.IsEmpty());
 
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically

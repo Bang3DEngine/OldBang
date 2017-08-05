@@ -8,33 +8,33 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
     List<String> args;
 
     // Output mode
-    if      (job.outputMode == OutputType::Object)     { args.Add("-c"); }
-    else if (job.outputMode == OutputType::SharedLib)  { args.Add("-shared"); }
-    else if (job.outputMode == OutputType::Executable) { args.Add("-c"); }
+    if      (job.outputMode == OutputType::Object)     { args.PushBack("-c"); }
+    else if (job.outputMode == OutputType::SharedLib)  { args.PushBack("-shared"); }
+    else if (job.outputMode == OutputType::Executable) { args.PushBack("-c"); }
 
     // Flags
-    args.Add(job.flags);
+    args.PushBack(job.flags);
 
     // Input Files
-    args.Add(job.inputFiles.To<List,String>());
+    args.PushBack(job.inputFiles.To<List,String>());
 
     // Include paths
     List<String> incPaths = job.includePaths.To<List,String>();
     for (String &incPath : incPaths) { incPath.Prepend("-I"); }
-    args.Add(incPaths);
+    args.PushBack(incPaths);
 
     // Library directories
     List<String> libDirs = job.libDirs.To<List,String>();
     for (String &libDir : libDirs) { libDir.Prepend("-L"); }
-    args.Add(libDirs);
+    args.PushBack(libDirs);
 
     // Libraries
     List<String> libs = job.libraries.To<List,String>();
     for (String &lib : libs) { lib.Prepend("-l"); }
-    args.Add(libs);
+    args.PushBack(libs);
 
     // Output file
-    args.Add( List<String>({"-o", job.outputFile.ToString()}) );
+    args.PushBack( List<String>({"-o", job.outputFile.ToString()}) );
 
 
     Result result;

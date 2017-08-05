@@ -57,7 +57,7 @@ char String::At(int index) const
 Array<String> String::Split(char splitter, bool trimResults) const
 {
     Array<String> result;
-    if (Empty()) { return result; }
+    if (IsEmpty()) { return result; }
 
     bool lastParticle = false;
     long lastIndexFound = 0;
@@ -225,7 +225,7 @@ int String::ReplaceInSitu(const String &from,
                           const String &to,
                           int maxNumberOfReplacements)
 {
-    if (from.Empty()) { return 0; }
+    if (from.IsEmpty()) { return 0; }
 
     int lastIndex = 0;
     int numReplacements = 0;
@@ -282,7 +282,7 @@ String String::ElideLeft(int length) const
 
 String String::TrimLeft(List<char> trimChars) const
 {
-    if(Empty()) { return ""; }
+    if(IsEmpty()) { return ""; }
 
     int i = 0;
     for (; i < Size(); ++i)
@@ -294,7 +294,7 @@ String String::TrimLeft(List<char> trimChars) const
 
 String String::TrimRight(List<char> trimChars) const
 {
-    if (Empty()) { return ""; }
+    if (IsEmpty()) { return ""; }
 
     int i = Size() - 1;
     for (; i >= 0; --i)
@@ -327,7 +327,7 @@ String String::Trim() const
 String String::AddInFrontOfWords(String particle) const
 {
     String result = *this;
-    if (!result.Empty() && result.At(0) != ' ') { result.Insert(0, particle); }
+    if (!result.IsEmpty() && result.At(0) != ' ') { result.Insert(0, particle); }
 
     for (int i = 0; i < result.Size() - 1; ++i)
     {
@@ -401,7 +401,7 @@ bool String::EqualsNoCase(const String &str) const
     return Contains(str, false) && (Size() == str.Size());
 }
 
-bool String::Empty() const
+bool String::IsEmpty() const
 {
     return Size() == 0;
 }

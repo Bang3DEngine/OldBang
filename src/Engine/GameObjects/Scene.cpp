@@ -44,7 +44,7 @@ void Scene::_OnResize(int newWidth, int newHeight)
 void Scene::AddHiddenChild(GameObject *go)
 {
     go->p_parent = this;
-    if (!m_hiddenGameObjects.Contains(go)) { m_hiddenGameObjects.Add(go); }
+    if (!m_hiddenGameObjects.Contains(go)) { m_hiddenGameObjects.PushBack(go); }
 }
 
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }

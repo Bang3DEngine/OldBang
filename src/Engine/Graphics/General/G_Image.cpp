@@ -82,7 +82,7 @@ void G_Image::SaveToFile(const Path &filepath) const
     }
 
     String ext = filepath.GetExtension();
-    if (ext.Empty()) { ext = "png"; }
+    if (ext.IsEmpty()) { ext = "png"; }
     qimg.save(filepath.GetAbsolute().ToQString(), ext.ToCString());
 }
 

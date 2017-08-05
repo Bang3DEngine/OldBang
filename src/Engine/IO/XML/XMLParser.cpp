@@ -44,7 +44,7 @@ void XMLParser::GetFirstAttribute(const String &tag,
     String attrString = tag.SubString(startPosition, attrEnd);
 
     XMLAttribute attr = XMLAttribute::FromString(attrString);
-    if (attr.GetName().Empty()) { return; }
+    if (attr.GetName().IsEmpty()) { return; }
 
     if (attributeEnd)
     {
@@ -173,7 +173,7 @@ XMLNode XMLParser::FromFile(const Path &filepath)
 
 XMLNode XMLParser::FromString(const String &xml)
 {
-    if (xml.Empty()) { return XMLNode(); }
+    if (xml.IsEmpty()) { return XMLNode(); }
 
     //Read name
     String tag;

@@ -16,7 +16,7 @@ Array<TextFormatter::CharRect>
                                             const Vector2i &_spacing,
                                             const Recti &limitsRect)
 {
-    if (content.Empty()) { return Array<CharRect>(); }
+    if (content.IsEmpty()) { return Array<CharRect>(); }
 
     // First create a list with all the character rects in the origin
     Array<CharRect> charRects;
@@ -53,7 +53,7 @@ Array<TextFormatter::CharRect>
     Array<CharRect> newCharRects; // Flattened result
     for (const Array<CharRect> &line : linedCharRects)
     {
-        newCharRects.Add(line);
+        newCharRects.PushBack(line);
     }
     return newCharRects;
 }
@@ -109,7 +109,7 @@ Array< Array<TextFormatter::CharRect> >
                 // Advance to next line! Add the current line to the result.
                 penPosition.y -= spacing.y;
                 penPosition.x  = limitsRect.GetMin().x;
-                linedCharRects.Add( Array<CharRect>() );
+                linedCharRects.PushBack( Array<CharRect>() );
 
                 // Skip all next ' '
                 if (content[i] == ' ')

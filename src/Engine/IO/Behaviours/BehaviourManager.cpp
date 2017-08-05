@@ -23,10 +23,10 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
 
     Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::Object;
-    job.includePaths.Add( Paths::GetAllEngineSubDirs() );
-    job.includePaths.Add( Paths::GetAllProjectSubDirs() );
-    job.includePaths.Add( Paths::GetQtIncludeDirs() );
-    job.inputFiles.Add(behaviourFilepath);
+    job.includePaths.PushBack( Paths::GetAllEngineSubDirs() );
+    job.includePaths.PushBack( Paths::GetAllProjectSubDirs() );
+    job.includePaths.PushBack( Paths::GetQtIncludeDirs() );
+    job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
     return Compiler::Compile(job);
@@ -41,7 +41,7 @@ Compiler::Result BehaviourManager::MergeBehaviourObjects(
 
     Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::SharedLib;
-    job.inputFiles.Add(behaviourObjectFilepaths);
+    job.inputFiles.PushBack(behaviourObjectFilepaths);
     job.outputFile = outputLibFilepath;;
 
     return Compiler::Compile(job);
@@ -77,8 +77,8 @@ void BehaviourManager::RemoveOldBehaviourLibraries(const Path &librariesDir)
 Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
-    job.libDirs.Add(Paths::EngineLibrariesDir(binaryType));
-    job.libraries.Add( List<String>({"GLEW",
+    job.libDirs.PushBack(Paths::EngineLibrariesDir(binaryType));
+    job.libraries.PushBack( List<String>({"GLEW",
                                      "GL",
                                      "pthread",
                                      "BangDataStructures",
@@ -91,11 +91,11 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
     job.flags =  {"-fPIC", "--std=c++11"};
     if (binaryType == BinType::Debug)
     {
-        job.flags.Add( List<String>({"-O0", "-g", "-Wl,-O0,--export-dynamic"}) );
+        job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0,--export-dynamic"}) );
     }
     else
     {
-        job.flags.Add( List<String>({"-O3", "-Wl,-O3,--export-dynamic"}) );
+        job.flags.PushBack( List<String>({"-O3", "-Wl,-O3,--export-dynamic"}) );
     }
 
     return job;

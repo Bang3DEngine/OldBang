@@ -95,7 +95,7 @@ public:
 
     long Size() const;
     bool EqualsNoCase(const String &str) const;
-    bool Empty() const;
+    bool IsEmpty() const;
     bool Contains(const String& str, bool caseSensitive = true) const;
     bool BeginsWith(const String& str) const;
     bool EndsWith(const String& str) const;
