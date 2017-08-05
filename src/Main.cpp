@@ -38,6 +38,7 @@ int main(int argc, char **argv)
 #include "Bang/UIImage.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
+#include "Bang/GUICanvas.h"
 #include "Bang/Application.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
@@ -179,7 +180,9 @@ int main(int argc, char **argv)
     mainHLayout->SetStretch(0, 0.6f);
     mainHLayout->SetStretch(1, 0.4f);
 
-    mainHLayout->SetParent(scene);
+    GUICanvas *canvas = new GUICanvas();
+    mainHLayout->SetParent(canvas);
+    canvas->SetParent(scene);
 
     SceneManager::LoadScene(scene);
     app.MainLoop();

@@ -416,8 +416,9 @@ Vector2i Input::GetMouseCoords()
 
 Vector2 Input::GetMouseCoordsNDC()
 {
-    return Vector2f(Input::GetMouseCoords()) *
-           Screen::GetPixelClipSize() * 2.0f - 1.0f;
+    Vector2f coordsNDC = Vector2f(Input::GetMouseCoords()) *
+                         Screen::GetPixelClipSize() * 2.0f - 1.0f;
+    return coordsNDC * Vector2f(1, -1);
 }
 
 Vector2i Input::GetPreviousMouseCoords()

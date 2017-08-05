@@ -2,7 +2,7 @@
 
 #include "Bang/UIImage.h"
 
-GUIImage::GUIImage(const Path &imagePath) : UIGameObject()
+GUIImage::GUIImage(const Path &imagePath) : UIGameObject("GUIImage")
 {
     m_texture = new Texture2D(imagePath);
 

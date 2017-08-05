@@ -21,7 +21,7 @@ void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
     p_gbuffer->SetStencilWrite(false);
 
     GL::SetWriteDepth(true);
-    p_scene->_OnDrawGizmos();
+    p_scene->DrawGizmos();
     // p_gbuffer->ClearStencil();
     p_gbuffer->ClearDepth();
 }

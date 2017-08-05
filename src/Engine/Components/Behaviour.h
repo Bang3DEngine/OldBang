@@ -36,8 +36,8 @@ public:
     Behaviour();
     virtual ~Behaviour();
 
-    virtual void _OnStart () override;
-    virtual void _OnUpdate() override;
+    virtual void Start () override;
+    virtual void Update() override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 

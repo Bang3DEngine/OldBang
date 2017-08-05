@@ -20,11 +20,9 @@ class GameObject : public ISceneEventListener,
     OBJECT_NO_FRIEND(GameObject)
 
 public:
-    // PROPERTIES
-    String const& name   = m_name;
+    String const& name = m_name;
     GameObject* const& parent = p_parent;
     Transform* const& transform = m_transform;
-    //
 
     GameObject(const String &m_name = "GameObject");
 
@@ -109,7 +107,7 @@ public:
     {
         T *c = new T();
         if (!AddComponent(c, index)) { return nullptr; }
-        if (IsStarted()) { c->_OnStart(); }
+        if (IsStarted()) { c->Start(); }
         return c;
     }
 
@@ -269,8 +267,6 @@ public:
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 
-    void ChangeTransformByRectTransform();
-
 protected:
     String m_name = "";
     List<Component*> m_components;
@@ -284,11 +280,11 @@ protected:
     bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
 
-    virtual void _OnStart() override;
-    virtual void _OnUpdate() override;
-    virtual void _OnParentSizeChanged() override;
-    virtual void _OnDrawGizmos() override;
-    virtual void _OnDestroy() override;
+    virtual void Start() override;
+    virtual void Update() override;
+    virtual void ParentSizeChanged() override;
+    virtual void DrawGizmos() override;
+    virtual void Destroy() override;
 
     friend class Scene;
     friend class Prefab;

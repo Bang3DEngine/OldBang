@@ -8,14 +8,32 @@ FORWARD class RectTransform;
 class UIGameObject : public GameObject
 {
 public:
-    UIGameObject(const String& name = "");
+    enum class FocusAction { TakeIt, PassToParent };
+
+    UIGameObject(const String& name = "UIGameObject");
 
     RectTransform *const& rectTransform = m_rectTransform;
 
     bool IsMouseOver() const;
+    bool HasFocus() const;
+
+    void SetDefaultFocusAction(FocusAction focusAction);
+
+protected:
+    virtual FocusAction OnFocusReceived();
 
 private:
+    FocusAction m_defaultFocusAction = FocusAction::PassToParent;
     RectTransform *m_rectTransform = nullptr;
+    bool m_hasFocus = false;
+
+    UIGameObject* ReceiveFocus();
+    UIGameObject* PropagateFocus(const Vector2 &mouseCoordsNDC);
+
+    virtual void OnFocusTaken();
+    virtual void OnFocusLost();
+
+    friend class GUICanvas;
 };
 
 #endif // UIGAMEOBJECT_H

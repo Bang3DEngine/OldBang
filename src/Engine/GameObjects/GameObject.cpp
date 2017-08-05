@@ -7,7 +7,6 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Sphere.h"
-#include "Bang/Canvas.h"
 #include "Bang/UIText.h"
 #include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
@@ -38,7 +37,8 @@ void GameObject::CloneInto(ICloneable *clone) const
     GameObject *go = SCAST<GameObject*>(clone);
     if (HasComponent<RectTransform>())
     {
-        go->ChangeTransformByRectTransform();
+        go->RemoveComponent<Transform>();
+        go->AddComponent<RectTransform>();
     }
 
     go->SetName(m_name);
@@ -90,7 +90,7 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     {
         int index = (_index != -1 ? _index : p_parent->m_children.Size());
         p_parent->m_children.Insert(index, this);
-        _OnParentSizeChanged();
+        ParentSizeChanged();
     }
 }
 
@@ -361,7 +361,7 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
             }
             else if (tagName == "RectTransform")
             {
-                ChangeTransformByRectTransform();
+                RemoveComponent<Transform>();
                 c = m_transform;
             }
             else if (tagName == "MeshRenderer")
@@ -391,10 +391,6 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
             else if (tagName == "PointLight")
             {
                 c = AddComponent<PointLight>();
-            }
-            else if (tagName == "Canvas")
-            {
-                c = AddComponent<Canvas>();
             }
             else if (tagName == "UIImage")
             {
@@ -454,15 +450,6 @@ void GameObject::Write(XMLNode *xmlInfo) const
     }
 }
 
-void GameObject::ChangeTransformByRectTransform()
-{
-    if (!HasComponent<RectTransform>())
-    {
-        RemoveComponent<Transform>();
-        AddComponent<RectTransform>();
-    }
-}
-
 void GameObject::SetEnabled(bool enabled)
 {
     m_enabled = enabled;
@@ -491,51 +478,51 @@ bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
     return parent == goParent;
 }
 
-void GameObject::_OnStart()
+void GameObject::Start()
 {
     m_iteratingComponents = true;
-    PROPAGATE_EVENT(_OnStart(), m_components);
+    PROPAGATE_EVENT(Start(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    PROPAGATE_EVENT(_OnStart(), m_children);
+    PROPAGATE_EVENT(Start(), m_children);
 
-    ISceneEventListener::_OnStart();
+    ISceneEventListener::Start();
 }
 
-void GameObject::_OnUpdate()
+void GameObject::Update()
 {
-    ISceneEventListener::_OnUpdate();
+    ISceneEventListener::Update();
 
     m_iteratingComponents = true;
-    PROPAGATE_EVENT(_OnUpdate(), m_components);
+    PROPAGATE_EVENT(Update(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    PROPAGATE_EVENT(_OnUpdate(), m_children);
+    PROPAGATE_EVENT(Update(), m_children);
 }
 
-void GameObject::_OnParentSizeChanged()
+void GameObject::ParentSizeChanged()
 {
-    ISceneEventListener::_OnParentSizeChanged();
-    PROPAGATE_EVENT(_OnParentSizeChanged(), m_components);
-    PROPAGATE_EVENT(_OnParentSizeChanged(), m_children);
+    ISceneEventListener::ParentSizeChanged();
+    PROPAGATE_EVENT(ParentSizeChanged(), m_components);
+    PROPAGATE_EVENT(ParentSizeChanged(), m_children);
 }
 
-void GameObject::_OnDrawGizmos()
+void GameObject::DrawGizmos()
 {
-    PROPAGATE_EVENT(_OnDrawGizmos(), m_components);
+    PROPAGATE_EVENT(DrawGizmos(), m_components);
     OnDrawGizmos();
 
-    PROPAGATE_EVENT(_OnDrawGizmos(), m_children);
+    PROPAGATE_EVENT(DrawGizmos(), m_children);
 }
 
-void GameObject::_OnDestroy()
+void GameObject::Destroy()
 {
-    PROPAGATE_EVENT(_OnDestroy(), m_children);
+    PROPAGATE_EVENT(Destroy(), m_children);
 
     m_iteratingComponents = true;
-    PROPAGATE_EVENT(_OnDestroy(), m_components);
+    PROPAGATE_EVENT(Destroy(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 

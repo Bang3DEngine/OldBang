@@ -8,7 +8,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/SingleLineRenderer.h"
 
-GUIInputText::GUIInputText() : UIGameObject("UIInputText")
+GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
 {
     p_background = AddComponent<UIImage>();
     p_background->UseMaterialCopy();
@@ -35,6 +35,7 @@ GUIInputText::GUIInputText() : UIGameObject("UIInputText")
 
     m_cursorRenderer = m_textContainer->AddComponent<SingleLineRenderer>();
     m_cursorRenderer->UseMaterialCopy();
+    m_cursorRenderer->SetEnabled(false);
     m_cursorRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
     m_cursorRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     m_cursorRenderer->SetRenderLayer(Renderer::RenderLayer::RLCanvas);
@@ -42,9 +43,11 @@ GUIInputText::GUIInputText() : UIGameObject("UIInputText")
     m_cursorIndex = p_text->GetContent().Size();
     m_selectionCursorIndex = m_cursorIndex;
 
+    ResetSelection();
     SetCursorWidth(2.0f);
     GetBackground()->SetTint(Color::White);
-    Input::StartTextInput();
+    SetDefaultFocusAction(FocusAction::TakeIt);
+    Refresh();
 }
 
 GUIInputText::~GUIInputText()
@@ -55,15 +58,21 @@ void GUIInputText::OnUpdate()
 {
     GameObject::OnUpdate();
 
-    const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
-    HandleTyping();
-    HandleCursorIndices(wasSelecting);
-
-    Update();
+    if (HasFocus())
+    {
+        const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
+        HandleTyping();
+        HandleCursorIndices(wasSelecting);
+        Refresh();
+    }
+    else
+    {
+        m_cursorRenderer->SetEnabled(false);
+    }
 }
 
 
-void GUIInputText::Update()
+void GUIInputText::Refresh()
 {
     HandleTextScrolling();
     UpdateCursorRenderers();
@@ -84,8 +93,9 @@ void GUIInputText::UpdateCursorRenderers()
     float cursorX = Math::Clamp( GetCursorX_NDC(m_cursorIndex), minX, maxX );
     if (m_latestCursorIndex != m_cursorIndex || m_forceUpdateRenderers)
     {
-        Vector2 minPoint(cursorX, limitsRect.GetMin().y);
-        Vector2 maxPoint(cursorX, limitsRect.GetMax().y);
+        Rect contentNDCRect = GetText()->GetContentNDCRect();
+        Vector2 minPoint(cursorX, contentNDCRect.GetMin().y);
+        Vector2 maxPoint(cursorX, contentNDCRect.GetMax().y);
         minPoint = m_textContainer->rectTransform->ToLocalNDC(minPoint);
         maxPoint = m_textContainer->rectTransform->ToLocalNDC(maxPoint);
 
@@ -206,9 +216,7 @@ void GUIInputText::HandleTextScrolling()
         p_text->SetScrollingPx(p_text->GetScrollingPx() - scrollPx);
         m_forceUpdateRenderers = true;
     }
-
-    // Fix scrolling if text is smaller than textbox
-    if ((maxCharX - minCharX) < (bounds.GetWidth()))
+    else if ((maxCharX - minCharX) < (bounds.GetWidth()))
     {
         p_text->SetScrollingPx(Vector2i::Zero);
         m_forceUpdateRenderers = true;
@@ -314,33 +322,26 @@ void GUIInputText::HandleMouseSelection()
         }
     }
 
-    /*
     if (Input::GetMouseButtonDoubleClick(Input::MouseButton::Left))
     {
-        int prevIndex = GetWordSplitIndex(m_cursorIndex, false);
-        int nextIndex = GetWordSplitIndex(m_cursorIndex, true);
-        m_cursorIndex = nextIndex;
-        m_selectingWithMouse = true;
-        m_selectionCursorIndex = prevIndex;
-        m_forceUpdateRenderers = true;
+        // SelectAll();
     }
-    */
 }
 
 void GUIInputText::SetCursorPosition(int index)
 {
     m_cursorIndex = index;
     m_forceUpdateRenderers = true;
-    Update();
+    Refresh();
 }
 
 void GUIInputText::SetSelection(int selectionBeginIndex,
-                               int selectionEndIndex)
+                                int selectionEndIndex)
 {
     m_cursorIndex = selectionBeginIndex;
     m_selectionCursorIndex = selectionEndIndex;
     m_forceUpdateRenderers = true;
-    Update();
+    Refresh();
 }
 
 String GUIInputText::GetSelectedText() const
@@ -374,6 +375,11 @@ float GUIInputText::GetCursorTickTime() const
 void GUIInputText::ResetSelection()
 {
     m_selectionCursorIndex = m_cursorIndex;
+}
+
+void GUIInputText::SelectAll()
+{
+    SetSelection(0, GetText()->GetContent().Size());
 }
 
 UIText *GUIInputText::GetText() const
@@ -429,6 +435,18 @@ int GUIInputText::GetVisibilityFrontierCharIndex(bool right) const
     }
     return firstFoundFrontier;
 }
+
+void GUIInputText::OnFocusTaken()
+{
+    Input::StartTextInput();
+}
+void GUIInputText::OnFocusLost()
+{
+    ResetSelection();
+    Input::StopTextInput();
+    m_selectingWithMouse = false;
+}
+
 
 float GUIInputText::GetCursorX_NDC(int cursorIndex) const
 {

@@ -3,7 +3,8 @@
 #include "Bang/Array.h"
 #include "Bang/RectTransform.h"
 
-GUIDirLayout::GUIDirLayout(bool vertical) :
+GUIDirLayout::GUIDirLayout(const String &name, bool vertical) :
+    UIGameObject(name),
     m_vertical(vertical)
 {
 }

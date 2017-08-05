@@ -12,16 +12,16 @@ Behaviour::~Behaviour()
 {
 }
 
-void Behaviour::_OnStart()
+void Behaviour::Start()
 {
     RefreshBehaviourLib();
     if (!IsStarted())
     {
-        Component::_OnStart();
+        Component::Start();
     }
 }
 
-void Behaviour::_OnUpdate()
+void Behaviour::Update()
 {
     RefreshBehaviourLib(); // For instances created in runtime
 
@@ -29,7 +29,7 @@ void Behaviour::_OnUpdate()
     Time::deltaTime = Time::GetDeltaTime();
     Time::time      = Time::GetNow();
 
-    Component::_OnUpdate();
+    Component::Update();
 }
 
 void Behaviour::Read(const XMLNode &xmlInfo)

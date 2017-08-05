@@ -28,7 +28,7 @@ void SceneManager::Update()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        activeScene->_OnUpdate();
+        activeScene->Update();
         activeScene->DestroyQueuedGameObjects();
     }
 }
@@ -44,7 +44,7 @@ void SceneManager::LoadScene(Scene *scene)
         bool setCamera = true;
 
         Time::ResetDeltaTime();
-        sm->m_activeScene->_OnStart();
+        sm->m_activeScene->Start();
         Time::ResetDeltaTime();
         if (setCamera)
         {

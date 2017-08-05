@@ -17,7 +17,7 @@ public:
     void SetStretch(UIGameObject *gameObject, float stretch);
 
 protected:
-    GUIDirLayout(bool vertical);
+    GUIDirLayout(const String &name, bool vertical);
     virtual ~GUIDirLayout();
 
 private:

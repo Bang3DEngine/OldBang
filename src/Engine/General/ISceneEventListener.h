@@ -15,24 +15,15 @@ class ISceneEventListener
 protected:
     ISceneEventListener () {}
 
-    virtual void _OnStart ()
+    virtual void Start ()
     {
-        if (!IsStarted())
-        {
-            OnStart();
-            m_started = true;
-        }
+        if (!IsStarted()) { OnStart(); m_started = true; }
     }
 
-    virtual void _OnUpdate() { OnUpdate(); }
-    virtual void _OnParentSizeChanged() { OnParentSizeChanged(); }
-
-    virtual void _OnDrawGizmos()
-    {
-        OnDrawGizmos();
-    }
-
-    virtual void _OnDestroy() { OnDestroy(); }
+    virtual void Update() { OnUpdate(); }
+    virtual void ParentSizeChanged() { OnParentSizeChanged(); }
+    virtual void DrawGizmos() { OnDrawGizmos(); }
+    virtual void Destroy() { OnDestroy(); }
 
     //========
 

@@ -250,7 +250,7 @@ void RectTransform::OnChanged()
     // Chain the messages.
     // This will trigger the refresh of this RectTransform too
     // (see OnParentSizeChanged in this same class)
-    if (gameObject) { gameObject->_OnParentSizeChanged(); }
+    if (gameObject) { gameObject->ParentSizeChanged(); }
 }
 
 void RectTransform::OnParentSizeChanged()

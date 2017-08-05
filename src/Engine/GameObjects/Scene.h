@@ -38,9 +38,9 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
-    virtual void _OnStart () override;
-    virtual void _OnUpdate () override;
-    virtual void _OnDrawGizmos() override;
+    virtual void Start () override;
+    virtual void Update () override;
+    virtual void DrawGizmos() override;
     virtual void _OnResize (int newWidth, int newHeight);
 
     void AddHiddenChild(GameObject *go);

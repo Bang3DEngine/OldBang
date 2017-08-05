@@ -3,7 +3,7 @@
 #include "Bang/UIText.h"
 #include "Bang/RectTransform.h"
 
-GUILabel::GUILabel(const String &content) : UIGameObject()
+GUILabel::GUILabel(const String &content) : UIGameObject("GUILabel")
 {
     p_text = AddComponent<UIText>();
     p_text->SetContent(content);

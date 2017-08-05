@@ -25,6 +25,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Math/AABox.cpp \
     $$BANG_ROOT/src/Engine/Math/Sphere.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUICanvas.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.cpp \
@@ -68,7 +69,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/Light.cpp \
     $$BANG_ROOT/src/Engine/Components/PointLight.cpp \
     $$BANG_ROOT/src/Engine/General/SceneManager.cpp \
-    $$BANG_ROOT/src/Engine/Components/Canvas.cpp \
     $$BANG_ROOT/src/Engine/Components/UIImage.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
@@ -138,6 +138,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/Renderer.h \
     $$BANG_ROOT/src/Engine/Math/Sphere.h \
     $$BANG_ROOT/src/Engine/General/SystemUtils.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUICanvas.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.h \
@@ -152,7 +153,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/Light.h \
     $$BANG_ROOT/src/Engine/Components/PointLight.h \
     $$BANG_ROOT/src/Engine/General/SceneManager.h \
-    $$BANG_ROOT/src/Engine/Components/Canvas.h \
     $$BANG_ROOT/src/Engine/Components/UIImage.h \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/Font.h \

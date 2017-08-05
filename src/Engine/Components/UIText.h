@@ -49,7 +49,7 @@ public:
     const Rect& GetCharRectNDC(uint charIndex) const;
     bool IsCharVisible(int charIndex) const;
 
-    Rect GetNDCRect() const;
+    Rect GetContentNDCRect() const;
 
     virtual void Bind() const override;
     virtual void UnBind() const override;

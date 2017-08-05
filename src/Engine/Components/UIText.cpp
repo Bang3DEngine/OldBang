@@ -245,7 +245,7 @@ bool UIText::IsCharVisible(int charIndex) const
     return m_charVisibility.at(charIndex);
 }
 
-Rect UIText::GetNDCRect() const { return m_textRectNDC; }
+Rect UIText::GetContentNDCRect() const { return m_textRectNDC; }
 VerticalAlignment UIText::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
@@ -277,7 +277,7 @@ void UIText::OnParentSizeChanged()
 
 Rect UIText::GetBoundingRect(Camera *camera) const
 {
-    return GetNDCRect();
+    return GetContentNDCRect();
 }
 
 void UIText::Read(const XMLNode &xmlInfo)

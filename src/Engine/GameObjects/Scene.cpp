@@ -18,27 +18,27 @@ Scene::~Scene()
 {
 }
 
-void Scene::_OnStart()
+void Scene::Start()
 {
-    GameObject::_OnStart();
-    PROPAGATE_EVENT(_OnStart(), m_hiddenGameObjects);
+    GameObject::Start();
+    PROPAGATE_EVENT(Start(), m_hiddenGameObjects);
 }
 
-void Scene::_OnUpdate()
+void Scene::Update()
 {
-    GameObject::_OnUpdate();
-    PROPAGATE_EVENT(_OnUpdate(), m_hiddenGameObjects);
+    GameObject::Update();
+    PROPAGATE_EVENT(Update(), m_hiddenGameObjects);
 }
 
-void Scene::_OnDrawGizmos()
+void Scene::DrawGizmos()
 {
-    GameObject::_OnDrawGizmos();
-    PROPAGATE_EVENT(_OnDrawGizmos(), m_hiddenGameObjects);
+    GameObject::DrawGizmos();
+    PROPAGATE_EVENT(DrawGizmos(), m_hiddenGameObjects);
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
-    _OnParentSizeChanged();
+    ParentSizeChanged();
 }
 
 void Scene::AddHiddenChild(GameObject *go)
@@ -105,7 +105,7 @@ void Scene::Destroy(GameObject *gameObject)
 
 void Scene::DestroyImmediate(GameObject *gameObject)
 {
-    gameObject->_OnDestroy();
+    gameObject->Destroy();
     delete gameObject;
 }
 

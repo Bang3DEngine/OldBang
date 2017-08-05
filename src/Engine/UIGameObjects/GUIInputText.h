@@ -26,8 +26,9 @@ public:
     void SetCursorTickTime(float cursorTickTime);
     float GetCursorTickTime() const;
 
-    void Update();
+    void Refresh();
     void ResetSelection();
+    void SelectAll();
 
     UIText *GetText() const;
     UIGameObject *GetTextContainer() const;
@@ -68,6 +69,9 @@ private:
     bool IsShiftPressed() const;
     Vector2 GetSideCursorMarginsNDC() const;
     int GetVisibilityFrontierCharIndex(bool right) const;
+
+    virtual void OnFocusTaken() override;
+    virtual void OnFocusLost() override;
 };
 
 #endif // UIINPUTTEXT_H
