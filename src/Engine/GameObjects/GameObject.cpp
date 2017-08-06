@@ -59,30 +59,6 @@ GameObject::~GameObject()
     SetParent(nullptr);
 }
 
-void GameObject::SetParent(GameObject *newParent, int _index)
-{
-    if (p_parent) { p_parent->m_children.Remove(this); }
-
-    p_parent = newParent;
-    if (p_parent)
-    {
-        int index = (_index != -1 ? _index : p_parent->m_children.Size());
-        p_parent->m_children.Insert(index, this);
-        ParentSizeChanged();
-    }
-}
-
-GameObject *GameObject::GetChild(int index) const
-{
-    auto it = GetChildren().Begin(); std::advance(it, index);
-    return *it;
-}
-
-GameObject *GameObject::GetParent() const
-{
-    return p_parent;
-}
-
 const String& GameObject::GetName() const
 {
     return m_name;
@@ -98,25 +74,7 @@ void GameObject::Destroy(GameObject *gameObject)
     SceneManager::GetActiveScene()->Destroy(gameObject);
 }
 
-const List<GameObject*>& GameObject::GetChildren() const
-{
-    return m_children;
-}
-
-List<GameObject*> GameObject::GetChildrenRecursively() const
-{
-    List<GameObject*> cc;
-    for (GameObject *c : m_children)
-    {
-        cc.PushBack(c);
-        List<GameObject*> childChildren = c->GetChildrenRecursively();
-        cc.Splice(cc.Begin(), childChildren);
-    }
-    return cc;
-}
-
-Rect GameObject::GetBoundingScreenRect(Camera *cam,
-                                       bool includeChildren) const
+Rect GameObject::GetBoundingScreenRect(Camera *cam, bool includeChildren) const
 {
     AABox bbox = GetAABBox(includeChildren);
     return cam->GetScreenBoundingRect(bbox);
@@ -396,17 +354,6 @@ String GameObject::ToString() const
     return oss.str();
 }
 
-bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
-{
-    if (!parent) { return false; }
-
-    if (recursive)
-    {
-        return parent == goParent || parent->IsChildOf(goParent);
-    }
-    return parent == goParent;
-}
-
 void GameObject::Start()
 {
     m_iteratingComponents = true;
@@ -414,48 +361,47 @@ void GameObject::Start()
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    PROPAGATE_EVENT(Start(), m_children);
-
-    ISceneEventListener::Start();
+    SceneNode<GameObject>::Start();
 }
 
 void GameObject::Update()
 {
-    ISceneEventListener::Update();
-
     m_iteratingComponents = true;
     PROPAGATE_EVENT(Update(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    PROPAGATE_EVENT(Update(), m_children);
+    SceneNode<GameObject>::Update();
 }
 
 void GameObject::ParentSizeChanged()
 {
-    ISceneEventListener::ParentSizeChanged();
+    m_iteratingComponents = true;
     PROPAGATE_EVENT(ParentSizeChanged(), m_components);
-    PROPAGATE_EVENT(ParentSizeChanged(), m_children);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::ParentSizeChanged();
 }
 
 void GameObject::DrawGizmos()
 {
+    m_iteratingComponents = true;
     PROPAGATE_EVENT(DrawGizmos(), m_components);
-    OnDrawGizmos();
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
 
-    PROPAGATE_EVENT(DrawGizmos(), m_children);
+    SceneNode<GameObject>::DrawGizmos();
 }
 
 void GameObject::Destroy()
 {
-    PROPAGATE_EVENT(Destroy(), m_children);
+    SceneNode<GameObject>::Destroy();
 
     m_iteratingComponents = true;
     PROPAGATE_EVENT(Destroy(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
-
-    OnDestroy();
 }
 
 String GameObject::GetInstanceId() const

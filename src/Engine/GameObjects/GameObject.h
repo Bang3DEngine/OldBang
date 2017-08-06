@@ -4,25 +4,24 @@
 #include <queue>
 
 #include "Bang/List.h"
+#include "Bang/SceneNode.h"
 #include "Bang/IToString.h"
 #include "Bang/ComponentFactory.h"
 #include "Bang/SerializableObject.h"
-#include "Bang/ISceneEventListener.h"
 
 FORWARD class Scene;
 FORWARD class Camera;
 FORWARD class Material;
 FORWARD class Component;
 
-class GameObject : public ISceneEventListener,
-                   public IToString,
-                   public SerializableObject
+class GameObject : public SerializableObject,
+                   public SceneNode<GameObject>,
+                   public IToString
 {
     OBJECT(GameObject)
 
 public:
     String const& name = m_name;
-    GameObject* const& parent = p_parent;
     Transform* const& transform = m_transform;
 
     GameObject(const String &m_name = "GameObject");
@@ -31,24 +30,18 @@ public:
 
     virtual ~GameObject();
 
-    void SetParent(GameObject *parent, int index = -1);
-
-    GameObject* GetChild(int index) const;
-    GameObject* GetChild(const String &m_name) const;
-
     void SetName(const String &m_name);
 
     void Print(const String& indent = "") const;
     String ToString() const;
 
-    GameObject* GetParent() const;
     const String& GetName() const;
     const List<Component*>& GetComponents() const;
 
     static void Destroy(GameObject *gameObject);
 
-    const List<GameObject*>& GetChildren() const;
-    List<GameObject*> GetChildrenRecursively() const;
+    using SceneNode<GameObject>::GetChild;
+    GameObject* GetChild(const String &name) const;
 
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
 
@@ -186,8 +179,6 @@ public:
         }
     }
 
-    bool IsChildOf(const GameObject *parent, bool recursive = true) const;
-
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
@@ -200,24 +191,22 @@ public:
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 
+    virtual void Start() override;
+    virtual void Update() override;
+    virtual void ParentSizeChanged() override;
+    virtual void DrawGizmos() override;
+    virtual void Destroy() override;
+
 protected:
     String m_name = "";
     List<Component*> m_components;
-    List<GameObject*> m_children;
     Transform *m_transform = nullptr;
-    GameObject *p_parent = nullptr;
 
     std::queue<Component*> m_componentsToBeRemoved;
 
     bool m_enabled = true;
     bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
-
-    virtual void Start() override;
-    virtual void Update() override;
-    virtual void ParentSizeChanged() override;
-    virtual void DrawGizmos() override;
-    virtual void Destroy() override;
 
     friend class Scene;
     friend class Prefab;

@@ -2,15 +2,15 @@
 #define COMPONENT_H
 
 #include "Bang/Object.h"
+#include "Bang/SceneNode.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
-#include "Bang/ISceneEventListener.h"
 
 #define COMPONENT(ClassName) \
     OBJECT(ClassName) \
     friend class ComponentFactory;
 
-class Component : public ISceneEventListener,
+class Component : public SceneNode<Component>,
                   public IToString,
                   public SerializableObject
 {

@@ -17,12 +17,12 @@
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/AudioClip.h"
+#include "Bang/SceneNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/ISceneEventListener.h"
 
 /**
  * @brief The Behaviour class is a base class which will be inherited by all

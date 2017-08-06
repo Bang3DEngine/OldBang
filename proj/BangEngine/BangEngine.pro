@@ -116,7 +116,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/Application.h \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
-    $$BANG_ROOT/src/Engine/General/ISceneEventListener.h \
+    $$BANG_ROOT/src/Engine/General/SceneNode.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/UIGameObject.h \
     $$BANG_ROOT/src/Engine/GameObjects/GameObject.h \
     $$BANG_ROOT/src/Engine/GameBuilder/GameBuilder.h \
