@@ -148,7 +148,7 @@ Component* GameObject::AddComponent(Component *c, int _index)
     if (IsStarted()) { c->Start(); }
 
     Transform *trans = DCAST<Transform*>(c);
-    if (trans) { m_transform = trans; }
+    if (trans) { p_transform = trans; }
 
     return c;
 }
@@ -167,7 +167,7 @@ void GameObject::RemoveComponent(Component *c)
 
 void GameObject::RemoveComponentInstantly(Component *c)
 {
-    if (m_transform == c) { m_transform = nullptr; }
+    if (p_transform == c) { p_transform = nullptr; }
     m_components.Remove(c);
     delete c;
 }

@@ -12,6 +12,7 @@ Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
     AddHiddenChild(m_gizmos);
+    AddComponent<Transform>();
 }
 
 Scene::~Scene()
@@ -77,6 +78,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     {
         Debug_Warn("No camera was found. Creating default camera...");
         m_defaultCamera = new GameObject("DefaultCamera");
+        m_defaultCamera->AddComponent<Transform>();
         m_defaultCamera->transform->SetPosition(Vector3(90));
         m_defaultCamera->transform->LookAt(Vector3::Zero);
         AddHiddenChild(m_defaultCamera);

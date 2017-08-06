@@ -22,7 +22,7 @@ class GameObject : public SerializableObject,
 
 public:
     String const& name = m_name;
-    Transform* const& transform = m_transform;
+    Transform* const& transform = p_transform;
 
     GameObject(const String &m_name = "GameObject");
 
@@ -197,7 +197,7 @@ public:
 protected:
     String m_name = "";
     List<Component*> m_components;
-    Transform *m_transform = nullptr;
+    Transform *p_transform = nullptr;
 
     std::queue<Component*> m_componentsToBeRemoved;
 
