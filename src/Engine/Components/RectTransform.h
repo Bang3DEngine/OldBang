@@ -6,7 +6,7 @@
 
 class RectTransform : public Transform
 {
-    OBJECT(RectTransform)
+    COMPONENT(RectTransform)
 
 public:
     RectTransform();

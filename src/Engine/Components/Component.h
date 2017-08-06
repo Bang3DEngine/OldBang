@@ -6,11 +6,15 @@
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
+#define COMPONENT(ClassName) \
+    OBJECT(ClassName) \
+    friend class ComponentFactory;
+
 class Component : public ISceneEventListener,
                   public IToString,
                   public SerializableObject
 {
-    OBJECT(Component)
+    COMPONENT(Component)
 
 public:
     GameObject *m_gameObject = nullptr;
@@ -36,6 +40,8 @@ protected:
 
     Component();
     virtual ~Component();
+
+    friend class GameObject;
 };
 
 #endif // COMPONENT_H

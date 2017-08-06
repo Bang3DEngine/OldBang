@@ -12,7 +12,7 @@ FORWARD class Font;
 
 class UIText : public UIRenderer
 {
-    OBJECT(UIText)
+    COMPONENT(UIText)
 
 public:
     UIText();

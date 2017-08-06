@@ -8,7 +8,7 @@ FORWARD class ShaderProgram;
 
 class PostProcessEffect : public Component
 {
-    OBJECT(PostProcessEffect)
+    COMPONENT(PostProcessEffect)
 
 public:
     enum Type

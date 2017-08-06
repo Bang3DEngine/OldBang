@@ -7,7 +7,7 @@
 
 class LineRenderer : public Renderer
 {
-    OBJECT(LineRenderer)
+    COMPONENT(LineRenderer)
 
 public:
     virtual ~LineRenderer();

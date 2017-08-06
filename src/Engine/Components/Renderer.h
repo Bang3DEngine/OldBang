@@ -13,6 +13,8 @@ FORWARD   class SceneManager;
 
 class Renderer : public GLObject, public Component
 {
+    COMPONENT(Renderer)
+
 public:
     enum RenderLayer
     {
@@ -28,7 +30,7 @@ public:
     void SetDrawWireframe(bool m_drawWireframe);
     bool GetDrawWireframe() const;
 
-    virtual AABox GetAABBox() const = 0;
+    virtual AABox GetAABBox() const;
 
     /**
      * @brief GetBoundingRect
@@ -51,7 +53,7 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    virtual void Render() const = 0;
+    virtual void Render() const;
 
     void UseMaterialCopy();
 

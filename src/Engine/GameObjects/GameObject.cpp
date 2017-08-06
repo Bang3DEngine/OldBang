@@ -7,22 +7,15 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Sphere.h"
-#include "Bang/UIText.h"
 #include "Bang/Camera.h"
+#include "Bang/Renderer.h"
 #include "Bang/XMLNode.h"
-#include "Bang/UIImage.h"
 #include "Bang/Material.h"
-#include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
-#include "Bang/PointLight.h"
-#include "Bang/AudioSource.h"
-#include "Bang/MeshRenderer.h"
+#include "Bang/UIGameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AudioListener.h"
-#include "Bang/DirectionalLight.h"
-#include "Bang/PostProcessEffect.h"
 
 GameObject::GameObject(const String &name)
     : m_name(name)
@@ -339,67 +332,36 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
         String tagName = xmlChild.GetTagName();
         if (tagName.Contains("GameObject"))
         {
-            GameObject *child = new GameObject();
+            GameObject *child = tagName.BeginsWith("UI") ? new UIGameObject() :
+                                                           new GameObject();
             child->SetParent(this);
             child->Read(xmlChild);
         }
-        else // It's a Component
+        else
         {
-            Component *c = nullptr;
+            Component *newComponent = nullptr;
             if (tagName == "Transform")
             {
-                c = m_transform;
+                newComponent = m_transform;
             }
             else if (tagName == "RectTransform")
             {
                 RemoveComponent<Transform>();
                 AddComponent<RectTransform>();
-                c = m_transform;
+                newComponent = m_transform;
             }
-            else if (tagName == "MeshRenderer")
+            else
             {
-                c = AddComponent<MeshRenderer>();
-            }
-            else if (tagName == "Camera")
-            {
-                c = AddComponent<Camera>();
-            }
-            else if (tagName == "Behaviour")
-            {
-                c = AddComponent<Behaviour>();
-            }
-            else if (tagName == "AudioSource")
-            {
-                c = AddComponent<AudioSource>();
-            }
-            else if (tagName == "AudioListener")
-            {
-                c = AddComponent<AudioListener>();
-            }
-            else if (tagName == "DirectionalLight")
-            {
-                c = AddComponent<DirectionalLight>();
-            }
-            else if (tagName == "PointLight")
-            {
-                c = AddComponent<PointLight>();
-            }
-            else if (tagName == "UIImage")
-            {
-                c = AddComponent<UIImage>();
-            }
-            else if (tagName == "UIText")
-            {
-                c = AddComponent<UIText>();
-            }
-            else if (tagName == "PostProcessEffect")
-            {
-                c = AddComponent<PostProcessEffect>();
+                newComponent = ComponentFactory::CreateComponent(tagName);
+                AddComponent(newComponent);
             }
 
-            if (c)
+            if (newComponent) { newComponent->Read(xmlChild); }
+            else
             {
-                c->Read(xmlChild);
+                Debug_Error("Please register '" << tagName
+                            << "' in ComponentFactory");
+                ASSERT(false);
             }
         }
     }

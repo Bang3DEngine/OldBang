@@ -37,6 +37,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.cpp \
     $$BANG_ROOT/src/Engine/Components/Transform.cpp \
     $$BANG_ROOT/src/Engine/Components/Component.cpp \
+    $$BANG_ROOT/src/Engine/Components/ComponentFactory.cpp \
     $$BANG_ROOT/src/Engine/Components/MeshRenderer.cpp \
     $$BANG_ROOT/src/Engine/Components/Camera.cpp \
     $$BANG_ROOT/src/Engine/Assets/Asset.cpp \
@@ -122,6 +123,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/GameObjects/Scene.h \
     $$BANG_ROOT/src/Engine/Components/Transform.h \
     $$BANG_ROOT/src/Engine/Components/Component.h \
+    $$BANG_ROOT/src/Engine/Components/ComponentFactory.h \
     $$BANG_ROOT/src/Engine/Components/MeshRenderer.h \
     $$BANG_ROOT/src/Engine/Components/Camera.h \
     $$BANG_ROOT/src/Engine/Assets/Asset.h \

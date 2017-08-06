@@ -7,7 +7,7 @@ FORWARD_T class Vector3G;
 
 class SingleLineRenderer : public LineRenderer
 {
-    OBJECT(SingleLineRenderer)
+    COMPONENT(SingleLineRenderer)
 
 public:
     virtual ~SingleLineRenderer();

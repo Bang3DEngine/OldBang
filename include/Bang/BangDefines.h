@@ -15,9 +15,14 @@
 
 
 // SFINAE ===============================================
-#define T_SCALAR(T) typename std::enable_if<std::is_scalar<T>::value, T>::type
-#define T_FLOATING(T) typename std::enable_if<std::is_floating_point<T>::value, T>::type
-#define T_ENUM(T) typename std::enable_if< std::is_enum<T>::value, T>::type
+#define T_SCALAR(T) \
+    typename std::enable_if<std::is_scalar<T>::value, T>::type
+#define T_FLOATING(T) \
+    typename std::enable_if<std::is_floating_point<T>::value, T>::type
+#define T_ENUM(T) \
+    typename std::enable_if< std::is_enum<T>::value, T>::type
+#define T_SUBCLASS(T, BASE_CLASS) \
+    typename std::enable_if< std::is_base_of<BASE_CLASS, T>::value, T>::type
 // =====================================================
 
 

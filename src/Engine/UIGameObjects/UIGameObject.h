@@ -7,6 +7,8 @@ FORWARD class RectTransform;
 
 class UIGameObject : public GameObject
 {
+    OBJECT(UIGameObject)
+
 public:
     enum class FocusAction { TakeIt, PassToParent };
 

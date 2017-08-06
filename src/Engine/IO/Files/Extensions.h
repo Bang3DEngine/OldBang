@@ -15,7 +15,6 @@ public:
     static List<String> GetVertexShaderList();
     static List<String> GetFragmentShaderList();
 
-private:
     Extensions() = delete;
 };
 

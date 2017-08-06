@@ -11,7 +11,7 @@ FORWARD class AudioClip;
 
 class AudioSource : public Component
 {
-    OBJECT(AudioSource)
+    COMPONENT(AudioSource)
 
 public:
     enum State

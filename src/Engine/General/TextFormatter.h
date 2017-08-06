@@ -32,9 +32,9 @@ public:
                                             const Vector2i &scrollingPx,
                                             const Vector2i &spacing,
                                             const Recti &limitsRect);
-private:
     TextFormatter() = delete;
 
+private:
     static Array< Array<CharRect> > SplitCharRectsInLines(
                                 const String &content,
                                 const Font *font,

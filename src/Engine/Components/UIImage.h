@@ -6,7 +6,7 @@
 
 class UIImage : public UIRenderer
 {
-    OBJECT(UIImage)
+    COMPONENT(UIImage)
 
 public:
     UIImage();

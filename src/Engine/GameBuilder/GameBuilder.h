@@ -18,9 +18,9 @@ public:
                           BinType binType,
                           bool compileBehaviours = true);
 
-private:
     GameBuilder() = delete;
 
+private:
     static bool     CompileGameExecutable(BinType binType);
     static bool     CreateDataDirectory(const Path &executableDir);
     static Project* CreateGameProject(const Path &executableDir);

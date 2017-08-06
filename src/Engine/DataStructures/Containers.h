@@ -48,7 +48,6 @@ public:
     }
 
     Containers() = delete;
-    virtual ~Containers() = delete;
 };
 
 #endif // COLLECTION_H

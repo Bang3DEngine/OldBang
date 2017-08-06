@@ -12,9 +12,7 @@
 
 class ISceneEventListener
 {
-protected:
-    ISceneEventListener () {}
-
+public:
     virtual void Start ()
     {
         if (!IsStarted()) { OnStart(); m_started = true; }
@@ -25,17 +23,17 @@ protected:
     virtual void DrawGizmos() { OnDrawGizmos(); }
     virtual void Destroy() { OnDestroy(); }
 
-    //========
+    bool IsStarted() const { return m_started; }
+
+protected:
+    ISceneEventListener () {}
+    virtual ~ISceneEventListener() {}
 
     virtual void OnStart() {}
     virtual void OnUpdate() {}
     virtual void OnParentSizeChanged() {}
     virtual void OnDrawGizmos() {}
     virtual void OnDestroy() {}
-
-    // ========
-
-    bool IsStarted() const { return m_started; }
 
 private:
     bool m_started = false;

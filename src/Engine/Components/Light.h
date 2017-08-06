@@ -11,7 +11,7 @@ FORWARD   class G_GBuffer;
 
 class Light : public Component
 {
-    OBJECT(Light)
+    COMPONENT(Light)
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

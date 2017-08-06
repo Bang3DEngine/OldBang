@@ -30,7 +30,7 @@
  */
 class Behaviour : public Component
 {
-    OBJECT(Behaviour)
+    COMPONENT(Behaviour)
 
 public:
     Behaviour();

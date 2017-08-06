@@ -5,6 +5,7 @@
 
 #include "Bang/List.h"
 #include "Bang/IToString.h"
+#include "Bang/ComponentFactory.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
@@ -17,7 +18,7 @@ class GameObject : public ISceneEventListener,
                    public IToString,
                    public SerializableObject
 {
-    OBJECT_NO_FRIEND(GameObject)
+    OBJECT(GameObject)
 
 public:
     String const& name = m_name;
@@ -38,7 +39,6 @@ public:
     void SetName(const String &m_name);
 
     void Print(const String& indent = "") const;
-
     String ToString() const;
 
     GameObject* GetParent() const;
@@ -47,74 +47,28 @@ public:
 
     static void Destroy(GameObject *gameObject);
 
-    /**
-     * @brief GetChildren
-     * @return
-     */
     const List<GameObject*>& GetChildren() const;
-
-    /**
-     * @brief GetChildrenRecursively
-     * @return
-     */
     List<GameObject*> GetChildrenRecursively() const;
 
-    /**
-     * @brief Returns the bounding screen rect of the gameObject rendered
-     * from the passed camera in NDC.
-     * @return
-     */
-    Rect GetBoundingScreenRect(Camera *cam,
-                               bool includeChildren = true) const;
+    Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
 
-    /**
-     * @brief Returns this GameObject's bounding box in Object space, without
-     * applying any Transform (equivalent to Mesh->GetBoundingBox())
-     * @return
-     */
     AABox GetObjectAABBox(bool includeChildren = true) const;
-
-    /**
-     * @brief Returns this GameObject's bounding box in world space
-     * @return
-     */
     AABox GetAABBox(bool includeChildren = true) const;
-
-    /**
-     * @brief Returns this GameObject's bounding sphere in Object space, without
-     * applying any Transform (equivalent to Mesh->GetBoundingBox())
-     * @return
-     */
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
-
-    /**
-     * @brief Returns this GameObject's bounding sphere in world space
-     * @return
-     */
     Sphere GetBoundingSphere(bool includeChildren = true) const;
 
-    /**
-     * Adds the Component c to this.
-     */
     bool AddComponent(Component *c, int index = -1);
 
-    /**
-     * Creates a Component of type T, adds it to this,
-     * and returns a pointer to it
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     T* AddComponent(int index = -1)
     {
-        T *c = new T();
+        T *c = ComponentFactory::CreateComponent<T>();
         if (!AddComponent(c, index)) { return nullptr; }
         if (IsStarted()) { c->Start(); }
         return c;
     }
 
-    /**
-     * Returns the first Component<T> found in this
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     T* GetComponent() const
     {
         for (Component *comp : m_components)
@@ -125,9 +79,6 @@ public:
         return nullptr;
     }
 
-    /**
-     * Returns all the Components<T> in this
-     */
     template <class T>
     List<T*> GetComponents() const
     {
@@ -192,10 +143,7 @@ public:
         return comps_l;
     }
 
-    /**
-     * Returns all the Components<T> of it and its children
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     List<T*> GetComponentsInThisAndChildren() const
     {
         List<T*> comps = GetComponentsInChildren<T>();
@@ -204,20 +152,13 @@ public:
         return thisComps;
     }
 
-    /**
-     * Returns whether this has one or more Components of type T or not
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     bool HasComponent() const
     {
         return GetComponent<T>() ;
     }
 
-
-    /**
-     * Returns the number of Components of type T
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     int CountComponents() const
     {
         int count = 0;
@@ -229,17 +170,11 @@ public:
         return count;
     }
 
-    /**
-     * Removes the Component c
-     */
     void RemoveComponent(Component *c);
     void RemoveComponentInstantly(Component *c);
     void RemoveQueuedComponents();
 
-    /**
-     * Removes the first found Component of type T
-     */
-    template <class T>
+    template <class T, class=T_SUBCLASS(T, Component)>
     void RemoveComponent()
     {
         for (Component *comp : m_components)

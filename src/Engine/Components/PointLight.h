@@ -7,7 +7,7 @@ FORWARD class Camera;
 
 class PointLight : public Light
 {
-    OBJECT(PointLight)
+    COMPONENT(PointLight)
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

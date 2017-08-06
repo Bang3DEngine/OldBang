@@ -9,11 +9,10 @@ class Selection
 {
 public:
     static GameObject *GetOveredGameObject();
+    Selection() = delete;
 
 private:
     static SelectionFramebuffer* GetSelectionFramebuffer();
-
-    Selection() = delete;
 };
 
 #endif // SELECTION_H

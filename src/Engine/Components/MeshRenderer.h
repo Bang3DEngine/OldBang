@@ -7,7 +7,7 @@ FORWARD class G_VAO;
 
 class MeshRenderer : public Renderer
 {
-    OBJECT(MeshRenderer)
+    COMPONENT(MeshRenderer)
 
     friend class LineRenderer;
 

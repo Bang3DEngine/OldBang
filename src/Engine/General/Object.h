@@ -5,15 +5,11 @@
 #include "Bang/String.h"
 #include "Bang/ICloneable.h"
 
-#define OBJECT_NO_FRIEND(CLASS) \
+#define OBJECT(CLASS) \
         ICLONEABLE(CLASS)\
         public: \
         virtual String GetClassName() const override { return #CLASS; } \
         static String GetClassNameStatic() { return #CLASS; }
-
-#define OBJECT(CLASS) \
-        OBJECT_NO_FRIEND(CLASS) \
-        friend class GameObject;
 
 class Object : public ICloneable
 {

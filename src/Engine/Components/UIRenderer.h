@@ -6,7 +6,7 @@
 
 class UIRenderer : public MeshRenderer
 {
-    OBJECT(UIRenderer)
+    COMPONENT(UIRenderer)
 
 public:
     virtual void Render() const override;

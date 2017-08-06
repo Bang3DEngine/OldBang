@@ -112,6 +112,11 @@ bool Renderer::GetDrawWireframe() const
     return m_drawWireframe;
 }
 
+AABox Renderer::GetAABBox() const
+{
+    return AABox();
+}
+
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     return camera->GetScreenBoundingRect(GetAABBox());
@@ -156,6 +161,8 @@ float Renderer::GetLineWidth() const
 {
     return m_lineWidth;
 }
+
+void Renderer::Render() const {}
 
 void Renderer::Read(const XMLNode &xmlInfo)
 {

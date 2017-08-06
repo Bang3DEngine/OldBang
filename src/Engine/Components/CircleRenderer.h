@@ -5,7 +5,7 @@
 
 class CircleRenderer : public LineRenderer
 {
-    OBJECT(CircleRenderer)
+    COMPONENT(CircleRenderer)
 
 public:
     virtual ~CircleRenderer();

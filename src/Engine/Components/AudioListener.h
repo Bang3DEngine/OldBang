@@ -5,7 +5,7 @@
 
 class AudioListener : public Component
 {
-    OBJECT(AudioListener)
+    COMPONENT(AudioListener)
 
 public:
     AudioListener();

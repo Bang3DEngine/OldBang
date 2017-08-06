@@ -10,7 +10,7 @@ FORWARD   class ShaderProgram;
 
 class Camera : public Component
 {
-    OBJECT(Camera)
+    COMPONENT(Camera)
 
 public:
     enum ProjectionMode

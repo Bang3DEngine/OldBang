@@ -8,7 +8,7 @@
 
 class Transform : public Component
 {
-    OBJECT(Transform)
+    COMPONENT(Transform)
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

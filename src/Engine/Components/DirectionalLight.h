@@ -5,7 +5,7 @@
 
 class DirectionalLight : public Light
 {
-    OBJECT(DirectionalLight)
+    COMPONENT(DirectionalLight)
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;
