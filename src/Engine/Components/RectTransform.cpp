@@ -247,9 +247,6 @@ Rect RectTransform::GetParentScreenRect() const
 
 void RectTransform::OnChanged()
 {
-    // Chain the messages.
-    // This will trigger the refresh of this RectTransform too
-    // (see OnParentSizeChanged in this same class)
     if (gameObject) { gameObject->ParentSizeChanged(); }
 }
 
@@ -257,14 +254,12 @@ void RectTransform::OnParentSizeChanged()
 {
     Transform::OnParentSizeChanged();
     m_hasChanged = true;
-    GetLocalToParentMatrix();
 }
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled(false)) { return Matrix4::Identity; }
     if (!m_hasChanged) { return m_localToParentMatrix; }
-
 
     Vector2 minMarginedAnchor (m_anchorMin + FromPixelsToLocalNDC(GetMarginLeftBot()));
     Vector2 maxMarginedAnchor (m_anchorMax - FromPixelsToLocalNDC(GetMarginRightTop()));
@@ -280,34 +275,6 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                             Matrix4::TranslateMatrix(moveToPivot);
     m_hasChanged = false;
     return m_localToParentMatrix;
-}
-
-#include "Bang/Color.h"
-#include "Bang/Gizmos.h"
-void RectTransform::OnDrawGizmos()
-{
-    /*
-    Transform::OnDrawGizmos();
-
-    Vector2 size(0.05f);
-    Color col = gameObject->name.Contains("ack") ? Color::Red : Color::Green;
-
-    Vector2 amin = GetAnchorMin(), amax = GetAnchorMax();
-    Gizmos::SetColor(col);
-    Vector2 p = Vector2(amin.x, amin.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amin.x, amax.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amax.x, amax.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    p = Vector2(amax.x, amin.y);
-    Gizmos::RenderFillRect( Rect(p-size/2.0f, p+size/2.0f) );
-    Gizmos::SetColor(col);
-    Gizmos::RenderRect( GetScreenSpaceRectNDC() );
-    */
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

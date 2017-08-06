@@ -25,8 +25,11 @@ Transform::~Transform()
 
 void Transform::SetLocalPosition(const Vector3 &p)
 {
-    m_localPosition = p;
-    m_hasChanged = true;
+    if (GetLocalPosition() != p)
+    {
+        m_localPosition = p;
+        m_hasChanged = true;
+    }
 }
 void Transform::SetPosition(const Vector3 &p)
 {
@@ -49,9 +52,11 @@ void Transform::Translate(const Vector3 &translation)
 
 void Transform::SetLocalRotation(const Quaternion &q)
 {
-    m_localRotation = q.Normalized();
-    m_localEuler = Quaternion::EulerAngles(m_localRotation).ToDegrees();
-    m_hasChanged = true;
+    if (GetLocalRotation() != q)
+    {
+        m_localRotation = q.Normalized();
+        m_hasChanged = true;
+    }
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
@@ -60,14 +65,11 @@ void Transform::SetLocalEuler(const Vector3 &degreesEuler)
     eulers.y = std::fmod(eulers.y, 360.0f);
     eulers.z = std::fmod(eulers.z, 360.0f);
 
-    m_localEuler = eulers;
-
-    Vector3 rads = m_localEuler.ToRadians();
+    Vector3 rads = eulers.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::Right);
     Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::Up);
     Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::Forward);
-    m_localRotation = (qz * qy * qx).Normalized();
-    m_hasChanged = true;
+    SetLocalRotation( (qz * qy * qx).Normalized() );
 }
 void Transform::SetLocalEuler(float x, float y, float z)
 {
@@ -134,8 +136,11 @@ void Transform::SetLocalScale(float s)
 
 void Transform::SetLocalScale(const Vector3 &s)
 {
-    m_localScale = s;
-    m_hasChanged = true;
+    if (GetLocalScale() != s)
+    {
+        m_localScale = s;
+        m_hasChanged = true;
+    }
 }
 
 
@@ -240,16 +245,14 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled(false)) { return Matrix4::Identity; }
+    if (!m_hasChanged) { return m_localToParentMatrix; }
+    m_hasChanged = false;
 
-    if (m_hasChanged)
-    {
-        Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
-        Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
-        Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
+    Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
+    Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
+    Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-        m_localToParentMatrix = T * R * S;
-        m_hasChanged = false;
-    }
+    m_localToParentMatrix = T * R * S;
     return m_localToParentMatrix;
 }
 
@@ -273,7 +276,7 @@ void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
 {
-    if(target == m_localPosition) { return; }
+    if(target == GetLocalPosition()) { return; }
     Vector3 up = _up.Normalized();
     SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
 }
@@ -293,7 +296,7 @@ void Transform::LookInDirection(const Vector3 &dir, const Vector3 &up)
     LookAt(GetPosition() + dir * 99.0f, up);
 }
 
-Vector3 Transform::GetLocalPosition() const
+const Vector3& Transform::GetLocalPosition() const
 {
     return m_localPosition;
 }
@@ -310,7 +313,7 @@ Vector3 Transform::GetPosition() const
     }
 }
 
-Quaternion Transform::GetLocalRotation() const
+const Quaternion& Transform::GetLocalRotation() const
 {
     return m_localRotation;
 }
@@ -329,7 +332,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return m_localEuler;
+    return GetLocalRotation().EulerAngles();
 }
 
 Vector3 Transform::GetEuler() const
@@ -337,7 +340,7 @@ Vector3 Transform::GetEuler() const
     return LocalToWorldDirection( GetLocalEuler() );
 }
 
-Vector3 Transform::GetLocalScale() const
+const Vector3& Transform::GetLocalScale() const
 {
     return m_localScale;
 }

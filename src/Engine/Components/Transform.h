@@ -110,13 +110,13 @@ public:
     Vector3 GetUp() const;
     Vector3 GetDown() const;
 
-    Vector3 GetLocalPosition() const;
+    const Vector3& GetLocalPosition() const;
     Vector3 GetPosition() const;
-    Quaternion GetLocalRotation() const;
+    const Quaternion& GetLocalRotation() const;
     Quaternion GetRotation() const;
     Vector3 GetLocalEuler() const;
-    Vector3 GetEuler() const; // Gets rotation in euler angles
-    Vector3 GetLocalScale() const;
+    Vector3 GetEuler() const;
+    const Vector3& GetLocalScale() const;
     Vector3 GetScale() const;
 
     static Vector3    GetPositionFromMatrix4(const Matrix4 &transformMatrix);
@@ -135,9 +135,6 @@ protected:
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3 m_localScale = Vector3::One;
-
-    // Used in inspector too
-    Vector3 m_localEuler = Vector3::Zero;
 };
 
 #endif // TRANSFORM_H

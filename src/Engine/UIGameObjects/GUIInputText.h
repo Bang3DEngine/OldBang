@@ -46,7 +46,7 @@ private:
 
     int m_cursorIndex = 0;
     bool m_selectingWithMouse = false;
-    int m_latestCursorIndex = 1;
+    int m_latestCursorX = 1;
     int m_selectionCursorIndex = 0;
 
     float m_cursorTickTime = 0.25f;
@@ -61,6 +61,7 @@ private:
     void HandleCursorIndices(bool wasSelecting);
 
     float GetCursorX_NDC(int cursorIndex) const;
+    // Returns the X in global NDC, for a given cursor index
 
     bool IsDelimiter(char initialChar, char currentChar) const;
     int GetWordSplitIndex(int startingIndex, bool forward) const;

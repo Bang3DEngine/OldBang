@@ -224,6 +224,18 @@ template<class T>
 QuaternionG<T> QuaternionG<T>::Identity = QuaternionG<T>();
 
 template<class T>
+bool operator==(const QuaternionG<T> &q1, const QuaternionG<T> &q2)
+{
+    return (q1.x == q2.x) && (q1.y == q2.y) && (q1.z == q2.z) && (q1.w == q2.w);
+}
+
+template<class T>
+bool operator!=(const QuaternionG<T> &q1, const QuaternionG<T> &q2)
+{
+    return !(q1 == q2);
+}
+
+template<class T>
 QuaternionG<T> operator+(const QuaternionG<T> &q1, const QuaternionG<T> &q2)
 {
     QuaternionG<T> res = q1;

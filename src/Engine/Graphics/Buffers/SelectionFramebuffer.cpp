@@ -21,7 +21,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_selectionMaterial = new Material();
     m_selectionMaterial->SetShaderProgram(selectionProgram);
 
-    CreateColorAttachment(AttColor, G_Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttColor, G_Texture::Format::RGBA_Byte8);
     CreateDepthRenderbufferAttachment();
 
     m_colorTexture = GetAttachmentTexture(AttColor);

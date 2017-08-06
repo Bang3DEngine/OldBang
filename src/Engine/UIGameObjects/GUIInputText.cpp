@@ -41,7 +41,6 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     m_cursorRenderer->SetRenderLayer(Renderer::RenderLayer::RLCanvas);
 
     m_cursorIndex = p_text->GetContent().Size();
-    m_selectionCursorIndex = m_cursorIndex;
 
     ResetSelection();
     SetCursorWidth(2.0f);
@@ -58,6 +57,7 @@ void GUIInputText::OnUpdate()
 {
     GameObject::OnUpdate();
 
+    p_text->RefreshMesh();
     if (HasFocus())
     {
         const bool wasSelecting = (m_selectionCursorIndex != m_cursorIndex);
@@ -74,6 +74,7 @@ void GUIInputText::OnUpdate()
 
 void GUIInputText::Refresh()
 {
+    p_text->RefreshMesh();
     HandleTextScrolling();
     UpdateCursorRenderers();
 }
@@ -89,9 +90,9 @@ void GUIInputText::UpdateCursorRenderers()
         maxX = Math::Min(maxX, p_text->GetCharRectsNDC().Back().GetMax().x);
     }
 
-    // Cursor "I" position update, depending on the cursor index
+    // Cursor "I" position update
     float cursorX = Math::Clamp( GetCursorX_NDC(m_cursorIndex), minX, maxX );
-    if (m_latestCursorIndex != m_cursorIndex || m_forceUpdateRenderers)
+    if (m_latestCursorX != cursorX)
     {
         Rect contentNDCRect = GetText()->GetContentNDCRect();
         Vector2 minPoint(cursorX, contentNDCRect.GetMin().y);
@@ -102,8 +103,7 @@ void GUIInputText::UpdateCursorRenderers()
         m_cursorRenderer->SetOrigin(  Vector3(minPoint, 0) );
         m_cursorRenderer->SetDestiny( Vector3(maxPoint, 0) );
 
-        m_latestCursorIndex = m_cursorIndex;
-        m_forceUpdateRenderers = false;
+        m_latestCursorX = cursorX;
     }
 
     // Selection quad rendering, depending on the selection indices
@@ -156,7 +156,6 @@ void GUIInputText::HandleTyping()
         {
             content.Erase(minIndex, maxIndex);
             m_cursorIndex = minIndex;
-            m_forceUpdateRenderers = true;
             ResetSelection();
         }
     }
@@ -166,7 +165,6 @@ void GUIInputText::HandleTyping()
     {
         content.Insert(m_cursorIndex, inputText);
         m_cursorIndex += inputText.Size();
-        m_forceUpdateRenderers = true;
         ResetSelection();
     }
 
@@ -177,6 +175,7 @@ void GUIInputText::HandleTyping()
     else if (Input::GetKeyDown(Input::Key::Home)) { m_cursorIndex = 0; }
 
     p_text->SetContent(content);
+    p_text->RefreshMesh();
 }
 
 void GUIInputText::HandleTextScrolling()
@@ -184,6 +183,7 @@ void GUIInputText::HandleTextScrolling()
     if (p_text->GetContent().IsEmpty())
     {
         p_text->SetScrollingPx( Vector2i::Zero );
+        p_text->RefreshMesh();
         return;
     }
 
@@ -200,7 +200,6 @@ void GUIInputText::HandleTextScrolling()
         Vector2 scrollNDC(cursorX - pivotXNDC, 0);
         Vector2i scrollPx = RectTransform::FromGlobalNDCToPixels(scrollNDC);
         p_text->SetScrollingPx(p_text->GetScrollingPx() - scrollPx);
-        m_forceUpdateRenderers = true;
     }
 
     // Handle scrolling when deleting too long text
@@ -214,13 +213,13 @@ void GUIInputText::HandleTextScrolling()
         Vector2i scrollPx = RectTransform::FromGlobalNDCToPixels(scrollNDC) +
                             Vector2i(3,0);
         p_text->SetScrollingPx(p_text->GetScrollingPx() - scrollPx);
-        m_forceUpdateRenderers = true;
     }
     else if ((maxCharX - minCharX) < (bounds.GetWidth()))
     {
         p_text->SetScrollingPx(Vector2i::Zero);
-        m_forceUpdateRenderers = true;
     }
+
+    p_text->RefreshMesh();
 }
 
 void GUIInputText::HandleCursorIndices(bool wasSelecting)
@@ -331,7 +330,6 @@ void GUIInputText::HandleMouseSelection()
 void GUIInputText::SetCursorPosition(int index)
 {
     m_cursorIndex = index;
-    m_forceUpdateRenderers = true;
     Refresh();
 }
 
@@ -340,7 +338,6 @@ void GUIInputText::SetSelection(int selectionBeginIndex,
 {
     m_cursorIndex = selectionBeginIndex;
     m_selectionCursorIndex = selectionEndIndex;
-    m_forceUpdateRenderers = true;
     Refresh();
 }
 
@@ -449,9 +446,7 @@ void GUIInputText::OnFocusLost()
 
 
 float GUIInputText::GetCursorX_NDC(int cursorIndex) const
-{
-    // Returns the X in global NDC, for a given cursor index
-
+{    
     // In case we are between two characters
     const int textLength = GetText()->GetContent().Size();
     if (cursorIndex > 0 && cursorIndex < textLength)

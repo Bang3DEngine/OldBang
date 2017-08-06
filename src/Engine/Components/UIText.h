@@ -54,8 +54,11 @@ public:
     virtual void Bind() const override;
     virtual void UnBind() const override;
 
-    void OnParentSizeChanged() override;
+    virtual void OnUpdate() override;
+    virtual void OnParentSizeChanged() override;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
+
+    void RefreshMesh();
 
 protected:
     String m_content       = "";
@@ -66,6 +69,8 @@ protected:
     Rect m_textRectNDC     = Rect::Zero;
     Vector2i m_scrollingPx = Vector2i::Zero;
 
+    bool m_hasChanged      = false;
+
     WrapMode m_hWrapMode = WrapMode::Wrap;
     WrapMode m_vWrapMode = WrapMode::Hide;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
@@ -73,8 +78,6 @@ protected:
 
     Array<Rect> m_charRectsNDC;
     std::vector<bool> m_charVisibility;
-
-    void RefreshMesh();
 };
 
 #endif // UITEXT_H

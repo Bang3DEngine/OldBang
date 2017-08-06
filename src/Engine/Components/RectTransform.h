@@ -58,7 +58,6 @@ public:
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     virtual void OnParentSizeChanged() override;
-    void OnDrawGizmos();
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;

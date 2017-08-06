@@ -29,6 +29,7 @@ UIText::UIText() : UIRenderer()
     SetTint(Color::Black);
 
     SetRenderMode(GL::RenderMode::Quads);
+    RefreshMesh();
 }
 
 UIText::~UIText()
@@ -38,6 +39,9 @@ UIText::~UIText()
 
 void UIText::RefreshMesh()
 {
+    if (!m_hasChanged) { return; }
+    m_hasChanged = false;
+
     if (!m_font)
     {
         p_mesh->LoadPositions({});
@@ -118,7 +122,6 @@ void UIText::CloneInto(ICloneable *clone) const
     text->SetVerticalWrapMode( GetVerticalWrapMode() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
-    text->RefreshMesh();
 }
 
 void UIText::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
@@ -126,7 +129,7 @@ void UIText::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
     if (m_horizontalAlignment != horizontalAlignment)
     {
         m_horizontalAlignment = horizontalAlignment;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -135,7 +138,7 @@ void UIText::SetVerticalAlign(VerticalAlignment verticalAlignment)
     if (m_verticalAlignment != verticalAlignment)
     {
         m_verticalAlignment = verticalAlignment;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -144,13 +147,13 @@ void UIText::SetFont(Font *font)
     if (m_font != font)
     {
         m_font = font;
-        RefreshMesh();
         if (m_font)
         {
             // TODO MEMLEAK
             Texture2D *tex = new Texture2D(m_font->GetAtlasTexture());
             GetMaterial()->SetTexture(tex);
         }
+        m_hasChanged = true;
     }
 }
 
@@ -159,7 +162,7 @@ void UIText::SetKerning(bool kerning)
     if (m_kerning != kerning)
     {
         m_kerning = kerning;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -168,7 +171,7 @@ void UIText::SetHorizontalWrapMode(WrapMode wrapMode)
     if (m_hWrapMode != wrapMode)
     {
         m_hWrapMode = wrapMode;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -177,7 +180,7 @@ void UIText::SetVerticalWrapMode(WrapMode wrapMode)
     if (m_vWrapMode != wrapMode)
     {
         m_vWrapMode = wrapMode;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -187,7 +190,7 @@ void UIText::SetContent(const String &content)
     if (m_content != content)
     {
         m_content = content;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -196,7 +199,7 @@ void UIText::SetTextSize(int size)
     if (m_textSize != size)
     {
         m_textSize = size;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -205,7 +208,7 @@ void UIText::SetSpacing(const Vector2i& spacing)
     if (m_spacing != spacing)
     {
         m_spacing = spacing;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -214,7 +217,7 @@ void UIText::SetScrollingPx(const Vector2i &scrollingPx)
     if (m_scrollingPx != scrollingPx)
     {
         m_scrollingPx = scrollingPx;
-        RefreshMesh();
+        m_hasChanged = true;
     }
 }
 
@@ -225,17 +228,11 @@ WrapMode UIText::GetHorizontalWrapMode() const { return m_hWrapMode; }
 const String &UIText::GetContent() const { return m_content; }
 int UIText::GetTextSize() const { return m_textSize; }
 Vector2i UIText::GetSpacing() const { return m_spacing; }
-
-Vector2i UIText::GetScrollingPx() const
-{
-    return m_scrollingPx;
-}
-
+Vector2i UIText::GetScrollingPx() const { return m_scrollingPx; }
 const Array<Rect> &UIText::GetCharRectsNDC() const
 {
     return m_charRectsNDC;
 }
-
 const Rect &UIText::GetCharRectNDC(uint charIndex) const
 {
     return m_charRectsNDC[charIndex];
@@ -270,10 +267,19 @@ void UIText::UnBind() const
     transform->SetEnabled(true);
 }
 
+void UIText::OnUpdate()
+{
+    UIRenderer::OnUpdate();
+    if (m_hasChanged)
+    {
+        RefreshMesh();
+    }
+}
+
 void UIText::OnParentSizeChanged()
 {
     UIRenderer::OnParentSizeChanged();
-    RefreshMesh();
+    m_hasChanged = true;
 }
 
 Rect UIText::GetBoundingRect(Camera *camera) const
@@ -297,8 +303,6 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
     SetVerticalAlign( xmlInfo.Get<VerticalAlignment>("VerticalAlign") );
     SetHorizontalAlign( xmlInfo.Get<HorizontalAlignment>("HorizontalAlign"));
-
-    RefreshMesh();
 }
 
 void UIText::Write(XMLNode *xmlInfo) const
