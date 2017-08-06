@@ -23,8 +23,7 @@ protected:
      * @return The String that the include directive
      * should be replaced with.
      */
-    static String GetIncludeReplacementString(const String &includeDirective,
-                                              int includeDirectiveLine,
+    static String GetIncludeContents(const String &includeDirective,
                                               const List<Path> &includePaths);
 
 private:

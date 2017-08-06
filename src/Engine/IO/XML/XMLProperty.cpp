@@ -36,7 +36,7 @@ const String &XMLProperty::GetValue() const
 XMLProperty XMLProperty::FromString(const String &string)
 {
     String propString = string.Trim();
-    Array<String> parts = propString.Split('=');
+    Array<String> parts = propString.Split<Array>('=');
 
     String name = parts[0];
 

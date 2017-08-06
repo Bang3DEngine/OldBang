@@ -30,16 +30,21 @@ public:
         return Containers::Find(cont, x) != cont.End();
     }
 
-    template <template <class T> class Container, class T>
-    static uint Count(const Container<T> &cont, const T& x)
+    template <class Iterator, class T>
+    static uint Count(Iterator begin, Iterator end, const T& x)
     {
         int count = 0;
-        for (typename Container<T>::Iterator it = cont.Begin();
-             it != cont.End(); ++it)
+        for (Iterator it = begin; it != end; ++it)
         {
             if (x == *it) { ++count; }
         }
         return count;
+    }
+
+    template <template <class T> class Container, class T>
+    static uint Count(const Container<T> &cont, const T& x)
+    {
+        return Containers::Count(cont.Begin(), cont.End(), x);
     }
 
     Containers() = delete;

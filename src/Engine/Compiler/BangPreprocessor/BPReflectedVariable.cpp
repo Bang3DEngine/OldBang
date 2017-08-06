@@ -26,7 +26,7 @@ void BPReflectedVariable::FromString(
 
     // Process property list
     String propertyListStr(propListBegin + 1, propListEnd - 1);
-    Array<String> propertyList = propertyListStr.Split(',', true);
+    Array<String> propertyList = propertyListStr.Split<Array>(',', true);
     if (propertyList.Size() == 0)
     {
         std::cerr << "BP Error: BP_REFLECT_VARIABLE has 0 properties,"

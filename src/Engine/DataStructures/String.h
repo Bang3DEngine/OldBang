@@ -10,8 +10,6 @@
 
 FORWARD   class QString;
 FORWARD   class IToString;
-FORWARD_T class List;
-FORWARD_T class Array;
 
 class String
 {
@@ -37,10 +35,8 @@ public:
 
     char At(int index) const;
 
-    Array<String> Split(char splitter, bool trimResults = false) const;
-
-    static String Join(const Array<String> &parts, String joiner = "");
-    static String Join(const List<String>  &parts, String joiner = "");
+    template < template <class String> class Container >
+    static String Join(const Container<String> &parts, String joiner = "");
 
     void Append(const String &str);
     void Prepend(const String &str);
@@ -85,9 +81,16 @@ public:
     String Elide(int length, bool elideRight) const;
     String ElideRight(int length) const;
     String ElideLeft(int length) const;
-    String TrimLeft(List<char> trimChars) const;
-    String TrimRight(List<char> trimChars) const;
-    String Trim(List<char> trimChars) const;
+
+    template < template <class String> class Container = Array >
+    String TrimLeft(Container<char> trimChars) const;
+
+    template < template <class String> class Container = Array >
+    String TrimRight(Container<char> trimChars) const;
+
+    template < template <class String> class Container = Array >
+    String Trim(Container<char> trimChars) const;
+
     String TrimLeft() const;
     String TrimRight() const;
     String Trim() const;
@@ -158,9 +161,62 @@ public:
 
     static constexpr std::size_t npos = std::string::npos;
 
+    template< template <class String> class Container>
+    Container<String> Split(char splitter, bool trimResults = false) const;
+
 private:
     std::string m_str;
 };
+
+template < template <class String> class Container >
+String String::Trim(Container<char> trimChars) const
+{
+    if(IsEmpty()) { return ""; }
+
+    int i = 0;
+    for (; i < Size(); ++i)
+    {
+        if (!trimChars.Contains( At(i) )) break;
+    }
+    return (i == Size()) ? "" : SubString(i, Size());
+}
+
+template < template <class String> class Container >
+String String::TrimRight(Container<char> trimChars) const
+{
+    if (IsEmpty()) { return ""; }
+
+    int i = Size() - 1;
+    for (; i >= 0; --i)
+    {
+        if (!trimChars.Contains( At(i) )) break;
+    }
+    return (i < 0) ? "" : SubString(0, i);
+}
+
+template < template <class String> class Container >
+String String::TrimLeft(Container<char> trimChars) const
+{
+    return (*this).TrimLeft(trimChars).TrimRight(trimChars);
+}
+
+template < template <class String> class Container >
+String String::Join(const Container<String> &parts, String joiner)
+{
+    int i = 0;
+    String all = "";
+    for (auto it = parts.Begin(); it != parts.End(); ++it)
+    {
+        const String &part = *it;
+        all += part;
+        if (i < parts.Size() - 1)
+        {
+            all += joiner;
+        }
+        ++i;
+    }
+    return all;
+}
 
 template <>
 inline int String::To<int>(const String &str, bool *ok)
@@ -186,5 +242,40 @@ String operator+(const T &v, const char *str)
 {
     return String(std::string(String::ToString(v)) + std::string(str));
 }  
+
+template< template <class String> class Container>
+Container<String> String::Split(char splitter, bool trimResults) const
+{
+    Container<String> result;
+    if (IsEmpty()) { return result; }
+
+    bool lastParticle = false;
+    long lastIndexFound = 0;
+    while (!lastParticle)
+    {
+        long indexFound = IndexOf(splitter, lastIndexFound);
+        if (indexFound == -1)
+        {
+            lastParticle = true;
+            indexFound = Size();
+        }
+
+        if (indexFound == lastIndexFound)
+        {
+            result.PushBack("");
+        }
+        else
+        {
+            String particle = SubString(lastIndexFound, indexFound - 1);
+            if (trimResults)
+            {
+                particle = particle.Trim();
+            }
+            result.PushBack(particle);
+        }
+        lastIndexFound = indexFound + 1;
+    }
+    return result;
+}
 
 #endif // STRING_H

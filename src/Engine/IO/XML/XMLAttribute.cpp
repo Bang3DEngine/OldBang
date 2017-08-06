@@ -92,7 +92,7 @@ XMLAttribute XMLAttribute::FromString(const String &string)
     attribute.SetValue(value);
 
     String propertiesString = str.SubString(propertiesBegin, propertiesEnd-1);
-    Array<String> properties = propertiesString.Split(',');
+    Array<String> properties = propertiesString.Split<Array>(',');
     for (const String& propString : properties)
     {
         XMLProperty prop = XMLProperty::FromString(propString);

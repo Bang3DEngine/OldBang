@@ -54,62 +54,6 @@ char String::At(int index) const
     return m_str.at(index);
 }
 
-Array<String> String::Split(char splitter, bool trimResults) const
-{
-    Array<String> result;
-    if (IsEmpty()) { return result; }
-
-    bool lastParticle = false;
-    long lastIndexFound = 0;
-    while (!lastParticle)
-    {
-        long indexFound = IndexOf(splitter, lastIndexFound);
-        if (indexFound == -1)
-        {
-            lastParticle = true;
-            indexFound = Size();
-        }
-
-        if (indexFound == lastIndexFound)
-        {
-            result.PushBack("");
-        }
-        else
-        {
-            String particle = SubString(lastIndexFound, indexFound - 1);
-            if (trimResults)
-            {
-                particle = particle.Trim();
-            }
-            result.PushBack(particle);
-        }
-        lastIndexFound = indexFound + 1;
-    }
-    return result;
-}
-
-String String::Join(const Array<String> &parts, String joiner)
-{
-    return String::Join(parts.To<List>(), joiner);
-}
-
-String String::Join(const List<String> &parts, String joiner)
-{
-    int i = 0;
-    String all = "";
-    for (auto it = parts.Begin(); it != parts.End(); ++it)
-    {
-        const String &part = *it;
-        all += part;
-        if (i < parts.Size() - 1)
-        {
-            all += joiner;
-        }
-        ++i;
-    }
-    return all;
-}
-
 void String::Append(const String &str)
 {
     *this = *this + str;
@@ -280,48 +224,19 @@ String String::ElideLeft(int length) const
     return Elide(length, false);
 }
 
-String String::TrimLeft(List<char> trimChars) const
-{
-    if(IsEmpty()) { return ""; }
-
-    int i = 0;
-    for (; i < Size(); ++i)
-    {
-        if (!trimChars.Contains( At(i) )) break;
-    }
-    return (i == Size()) ? "" : SubString(i, Size());
-}
-
-String String::TrimRight(List<char> trimChars) const
-{
-    if (IsEmpty()) { return ""; }
-
-    int i = Size() - 1;
-    for (; i >= 0; --i)
-    {
-        if (!trimChars.Contains( At(i) )) break;
-    }
-    return (i < 0) ? "" : SubString(0, i);
-}
-
-String String::Trim(List<char> trimChars) const
-{
-    return (*this).TrimLeft(trimChars).TrimRight(trimChars);
-}
-
 String String::TrimLeft() const
 {
-    return TrimLeft({' ', '\t'});
+    return TrimLeft( Array<char>({' ', '\t'}) );
 }
 
 String String::TrimRight() const
 {
-    return TrimRight({' ', '\t'});
+    return TrimRight( Array<char>({' ', '\t'}) );
 }
 
 String String::Trim() const
 {
-    return Trim({' ', '\t'});
+    return Trim( Array<char>({' ', '\t'}) );
 }
 
 String String::AddInFrontOfWords(String particle) const

@@ -28,7 +28,7 @@ void BPReflectedStruct::FromString(String::Iterator structBegin,
 
     String propertyListStr(structPropertyListBegin + 1,
                            structPropertyListEnd - 1);
-    Array<String> propertyList = propertyListStr.Split(',', true);
+    Array<String> propertyList = propertyListStr.Split<Array>(',', true);
     if (propertyList.Size() == 0)
     {
         std::cerr << "BP Error: BP_CLASS has 0 properties, but must have at"

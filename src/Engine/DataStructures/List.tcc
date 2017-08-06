@@ -148,13 +148,10 @@ T &List<T>::PopBack()
 template<class T>
 void List<T>::RemoveAll(const T &x)
 {
-    for (Iterator it = Begin(); it != End(); ++it)
+    for (Iterator it = Begin(); it != End(); )
     {
-        if (*it == x)
-        {
-            it = Remove(it);
-            --it;
-        }
+        if (*it == x) { it = Remove(it); }
+        else { ++it; }
     }
 }
 

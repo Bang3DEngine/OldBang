@@ -127,7 +127,7 @@ List<Path> Path::FindSubDirectories(bool recursive) const
 
 String Path::GetName() const
 {
-    Array<String> parts = GetNameExt().Split('.');
+    Array<String> parts = GetNameExt().Split<Array>('.');
     return parts.Size() >= 1 ? parts[0] : "";
 }
 
@@ -146,7 +146,7 @@ String Path::GetNameExt() const
 
 String Path::GetExtension() const
 {
-    Array<String> parts = GetNameExt().Split('.');
+    Array<String> parts = GetNameExt().Split<Array>('.');
     return parts.Size() >= 2 ? parts[1] : "";
 }
 
@@ -231,7 +231,7 @@ Path Path::ChangeExtension(const String &extension) const
 
 bool Path::HasExtension(const String &extensions) const
 {
-    List<String> extensionsList = extensions.Split(' ', true).To<List,String>();
+    List<String> extensionsList = extensions.Split<List>(' ', true);
     return HasExtension(extensionsList);
 }
 
@@ -273,7 +273,7 @@ Path Path::GetNextDuplicatePath(const Path &filepath)
     String fileName      = filepath.GetName();
     String fileExtension = filepath.GetExtension();
 
-    Array<String> splitted = fileName.Split('_');
+    Array<String> splitted = fileName.Split<Array>('_');
     int number = 1;
     if (splitted.Size() > 1)
     {

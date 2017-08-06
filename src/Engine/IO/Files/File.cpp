@@ -8,6 +8,7 @@
 #include <QCryptographicHash>
 
 #include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/String.h"
 
 File::File()
