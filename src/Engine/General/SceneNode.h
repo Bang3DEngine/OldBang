@@ -3,6 +3,39 @@
 
 #include "Bang/List.h"
 
+class SceneAgent
+{
+public:
+    virtual void Start()
+    {
+        if (!IsStarted()) { OnStart(); m_started = true; }
+    }
+    virtual void Update() { OnUpdate(); }
+    virtual void ParentSizeChanged() { OnParentSizeChanged(); }
+    virtual void DrawGizmos() { OnDrawGizmos(); }
+    virtual void Destroy() { OnDestroy(); }
+
+    void SetEnabled(bool enabled) { m_enabled = enabled; }
+
+    bool IsEnabled() const { return m_enabled; }
+    bool IsStarted() const { return m_started; }
+
+protected:
+    SceneAgent() {}
+    virtual ~SceneAgent() {}
+
+    virtual void OnStart() {}
+    virtual void OnUpdate() {}
+    virtual void OnParentSizeChanged() {}
+    virtual void OnDrawGizmos() {}
+    virtual void OnDestroy() {}
+
+private:
+    bool m_enabled = true;
+    bool m_started = false;
+};
+
+
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
@@ -13,47 +46,41 @@
 } while (0)
 
 template<class T>
-class SceneNode
+class SceneNode : public SceneAgent
 {
 public:
     T* const& parent = p_parent;
 
-    virtual void Start ()
+    virtual void Start() override
     {
-        PROPAGATE_EVENT(Start(), m_children);
-        if (!IsStarted()) { OnStart(); m_started = true; }
+        PROPAGATE_EVENT(Start(), GetChildren());
+        SceneAgent::Start();
     }
 
-    virtual void Update()
+    virtual void Update() override
     {
-        PROPAGATE_EVENT(Update(), m_children);
-        OnUpdate();
+        PROPAGATE_EVENT(Update(), GetChildren());
+        SceneAgent::Update();
     }
 
-    virtual void ParentSizeChanged()
+    virtual void ParentSizeChanged() override
     {
-        PROPAGATE_EVENT(ParentSizeChanged(), m_children);
-        OnParentSizeChanged();
+        PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
+        SceneAgent::ParentSizeChanged();
     }
 
-    virtual void DrawGizmos()
+    virtual void DrawGizmos()  override
     {
-        PROPAGATE_EVENT(DrawGizmos(), m_children);
-        OnDrawGizmos();
+        PROPAGATE_EVENT(DrawGizmos(), GetChildren());
+        SceneAgent::DrawGizmos();
     }
 
-    virtual void Destroy()
+    virtual void Destroy() override
     {
-        PROPAGATE_EVENT(Destroy(), m_children);
-        OnDestroy();
+        PROPAGATE_EVENT(Destroy(), GetChildren());
+        SceneAgent::Destroy();
     }
 
-    bool IsStarted() const
-    {
-        return m_started;
-    }
-
-    // Children functions
     const List<T*>& GetChildren() const
     {
         return m_children;
@@ -68,7 +95,7 @@ public:
     List<T*> GetChildrenRecursively() const
     {
         List<T*> cc;
-        for (T *c : m_children)
+        for (T *c : GetChildren())
         {
             cc.PushBack(c);
             List<T*> childChildren = c->GetChildrenRecursively();
@@ -95,28 +122,22 @@ public:
         p_parent = SCAST<T*>(newParent);
         if (parent)
         {
-            int index = (_index != -1 ? _index : parent->m_children.Size());
-            parent->m_children.Insert(index, SCAST<T*>(this));
+            int index = (_index != -1 ? _index : parent->GetChildren().Size());
+            p_parent->m_children.Insert(index, SCAST<T*>(this));
             SceneNode<T>::ParentSizeChanged();
         }
     }
 
-    T* GetParent() const { return p_parent; }
+    T* GetParent() { return p_parent; }
+    const T* GetParent() const { return p_parent; }
 
 protected:
     SceneNode () {}
     virtual ~SceneNode() {}
 
-    virtual void OnStart() {}
-    virtual void OnUpdate() {}
-    virtual void OnParentSizeChanged() {}
-    virtual void OnDrawGizmos() {}
-    virtual void OnDestroy() {}
-
-protected:
+private:
     List<T*> m_children;
     T* p_parent = nullptr;
-    bool m_started = false;
 };
 
 #endif // SCENEEVENTLISTENER_H

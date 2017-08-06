@@ -76,3 +76,8 @@ bool SerializableObject::WriteToFile(const Path &path) const
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
+
+String SerializableObject::GetInstanceId() const
+{
+    return String::ToString( static_cast<const void*>(this) );
+}

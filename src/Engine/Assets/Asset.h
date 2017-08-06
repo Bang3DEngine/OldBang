@@ -2,14 +2,13 @@
 #define ASSET_H
 
 #include "Bang/Path.h"
-#include "Bang/Object.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
 
 class Asset : public IToString,
               public SerializableObject
 {
-    OBJECT(Asset)
+    SOBJECT(Asset)
 
 public:
     const Path& GetFilepath() const;

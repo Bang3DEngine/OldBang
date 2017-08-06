@@ -258,7 +258,7 @@ void RectTransform::OnParentSizeChanged()
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled(false)) { return Matrix4::Identity; }
+    if (!IsEnabled()) { return Matrix4::Identity; }
     if (!m_hasChanged) { return m_localToParentMatrix; }
 
     Vector2 minMarginedAnchor (m_anchorMin + FromPixelsToLocalNDC(GetMarginLeftBot()));

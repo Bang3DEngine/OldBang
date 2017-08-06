@@ -13,7 +13,7 @@ FORWARD class AudioSource;
 
 class AudioClip : public Asset
 {
-    OBJECT(AudioClip)
+    SOBJECT(AudioClip)
 
 public:
     AudioClip();

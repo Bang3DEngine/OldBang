@@ -13,7 +13,7 @@ FORWARD class G_VBO;
 
 class Mesh : public Asset
 {
-	OBJECT(Mesh)
+	SOBJECT(Mesh)
 
 public:
     static constexpr uint DefaultPositionsVBOLocation = 0;

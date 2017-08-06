@@ -24,12 +24,12 @@ GameObject::GameObject(const String &name)
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
-    Object::CloneInto(clone);
+    SerializableObject::CloneInto(clone);
     GameObject *go = SCAST<GameObject*>(clone);
     go->SetName(m_name);
     go->SetParent(nullptr);
 
-    for (GameObject *child : m_children)
+    for (GameObject *child : GetChildren())
     {
         GameObject *childClone = child->Clone();
         childClone->SetParent(go);
@@ -43,9 +43,9 @@ void GameObject::CloneInto(ICloneable *clone) const
 
 GameObject::~GameObject()
 {
-    while (!m_children.IsEmpty())
+    while (!GetChildren().IsEmpty())
     {
-        GameObject *child = m_children.Front();
+        GameObject *child = GetChildren().Front();
         delete child;
     }
 
@@ -94,7 +94,7 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
 
     if (includeChildren)
     {
-        for (GameObject *child : m_children)
+        for (GameObject *child : GetChildren())
         {
             AABox aabBoxChild = child->GetObjectAABBox(true);
             Matrix4 mat;
@@ -184,7 +184,7 @@ void GameObject::RemoveQueuedComponents()
 
 GameObject *GameObject::GetChild(const String &name) const
 {
-    for (auto it = m_children.Begin(); it != m_children.End(); ++it)
+    for (auto it = GetChildren().Begin(); it != GetChildren().End(); ++it)
     {
         GameObject *child = (*it);
         if (child->m_name == name)
@@ -204,7 +204,7 @@ void GameObject::Print(const String &indent) const
 {
     String indent2 = indent; indent2 += "   ";
     Debug_Log(indent << this);
-    for (GameObject *child : m_children)
+    for (GameObject *child : GetChildren())
     {
         child->Print(indent2);
     }
@@ -319,7 +319,7 @@ void GameObject::Write(XMLNode *xmlInfo) const
 
     xmlInfo->SetTagName("GameObject");
     xmlInfo->Set("id", GetInstanceId());
-    xmlInfo->Set("enabled", m_enabled);
+    xmlInfo->Set("enabled", IsEnabled());
     xmlInfo->Set("name", m_name);
 
     for (Component *c : m_components)
@@ -329,22 +329,12 @@ void GameObject::Write(XMLNode *xmlInfo) const
         xmlInfo->AddChild(xmlComp);
     }
 
-    for (GameObject *child : m_children)
+    for (GameObject *child : GetChildren())
     {
         XMLNode xmlChild;
         child->Write(&xmlChild);
         xmlInfo->AddChild(xmlChild);
     }
-}
-
-void GameObject::SetEnabled(bool enabled)
-{
-    m_enabled = enabled;
-}
-
-bool GameObject::IsEnabled() const
-{
-    return m_enabled && (!p_parent ? true : p_parent->IsEnabled());
 }
 
 String GameObject::ToString() const

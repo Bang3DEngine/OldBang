@@ -18,7 +18,7 @@ class GameObject : public SerializableObject,
                    public SceneNode<GameObject>,
                    public IToString
 {
-    OBJECT(GameObject)
+    SOBJECT(GameObject)
 
 public:
     String const& name = m_name;
@@ -108,7 +108,7 @@ public:
     template <class T>
     T* GetComponentInChildren() const
     {
-        for (auto c = m_children.Begin(); c != m_children.End(); ++c)
+        for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
         {
             T *comp = (*c)->GetComponent<T>();
             if (comp) return comp;
@@ -125,7 +125,7 @@ public:
     List<T*> GetComponentsInChildren() const
     {
         List<T*> comps_l;
-        for (auto c = m_children.Begin(); c != m_children.End(); ++c)
+        for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
         {
             List<T*> childComps = (*c)->GetComponents<T>();
             comps_l.Splice(comps_l.End(), childComps); //concat
@@ -188,9 +188,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void SetEnabled(bool m_enabled);
-    bool IsEnabled() const;
-
     virtual void Start() override;
     virtual void Update() override;
     virtual void ParentSizeChanged() override;
@@ -204,7 +201,6 @@ protected:
 
     std::queue<Component*> m_componentsToBeRemoved;
 
-    bool m_enabled = true;
     bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
 

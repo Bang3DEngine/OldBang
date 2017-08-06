@@ -5,7 +5,7 @@
 
 class GUICanvas : public UIGameObject
 {
-    OBJECT(GUICanvas)
+    SOBJECT(GUICanvas)
 
 public:
     GUICanvas();

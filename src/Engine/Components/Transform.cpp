@@ -123,7 +123,7 @@ void Transform::SetScale(float s)
 
 void Transform::SetScale(const Vector3 &v)
 {
-    GameObject *p = gameObject->parent ;
+    GameObject *p = gameObject->parent;
     Vector3 parentScale = p ? p->transform->GetScale() : Vector3::One;
     parentScale = Vector3::Max( Vector3(0.0001f), parentScale );
     SetLocalScale(1.0f / parentScale * v);
@@ -244,7 +244,7 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled(false)) { return Matrix4::Identity; }
+    if (!IsEnabled()) { return Matrix4::Identity; }
     if (!m_hasChanged) { return m_localToParentMatrix; }
     m_hasChanged = false;
 
@@ -263,7 +263,7 @@ void Transform::GetLocalToParentMatrix(Matrix4 *m) const
 
 void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
 {
-    if (!IsEnabled(false)) { *m = Matrix4::Identity; return; }
+    if (!IsEnabled()) { *m = Matrix4::Identity; return; }
 
     GetLocalToParentMatrix(m);
     if (gameObject->parent)

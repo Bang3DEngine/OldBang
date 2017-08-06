@@ -3,7 +3,6 @@
 #include <iostream>
 #include <functional>
 
-#include "Bang/Object.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"

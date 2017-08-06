@@ -7,7 +7,7 @@
 class Texture2D : public G_Texture2D,
                   public Asset
 {
-	OBJECT(Texture2D)
+	SOBJECT(Texture2D)
 
 public:
     Texture2D();

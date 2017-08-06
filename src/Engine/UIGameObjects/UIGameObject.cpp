@@ -36,7 +36,7 @@ UIGameObject* UIGameObject::ReceiveFocus()
     }
     else if (focusAction == FocusAction::PassToParent && parent)
     {
-        UIGameObject *parentUigo = DCAST<UIGameObject*>(parent);
+        UIGameObject *parentUigo = DCAST<UIGameObject*>( parent );
         if (parentUigo)
         {
             return parentUigo->ReceiveFocus();

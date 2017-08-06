@@ -1,45 +1,42 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "Bang/Object.h"
 #include "Bang/SceneNode.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
 
 #define COMPONENT(ClassName) \
-    OBJECT(ClassName) \
+    SOBJECT(ClassName) \
     friend class ComponentFactory;
 
-class Component : public SceneNode<Component>,
+class Component : public SceneAgent,
                   public IToString,
                   public SerializableObject
 {
     COMPONENT(Component)
 
 public:
-    GameObject *m_gameObject = nullptr;
-    Transform *m_gameObjectTransform = nullptr;
     GameObject* const& gameObject = m_gameObject;
-    Transform* const& transform = m_gameObjectTransform; // shortcut
+    Transform* const& transform = m_gameObjectTransform;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual String ToString() const override;
 
+    GameObject *GetGameObject() const;
     void SetGameObject(GameObject *gameObject);
-
-    void SetEnabled(bool enabled);
-    bool IsEnabled(bool recursive = true) const;
 
     virtual String GetInstanceId() const override;
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    bool m_enabled = true;
-
     Component();
     virtual ~Component();
+
+private:
+    GameObject *m_gameObject = nullptr;
+    Transform *m_gameObjectTransform = nullptr;
 
     friend class GameObject;
 };

@@ -11,7 +11,7 @@ FORWARD class Gizmos;
 
 class Scene : public GameObject
 {
-    OBJECT(Scene)
+    SOBJECT(Scene)
 
 public:
     Scene();

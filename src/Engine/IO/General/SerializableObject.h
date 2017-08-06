@@ -1,16 +1,19 @@
 #ifndef SERIALIZABLEOBJECT_H
 #define SERIALIZABLEOBJECT_H
 
-#include "Bang/Object.h"
+#include "Bang/String.h"
+#include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
-FORWARD class InspectorWidget;
+#define SOBJECT(CLASS) \
+        ICLONEABLE(CLASS)\
+        public: \
+        virtual String GetClassName() const override { return #CLASS; } \
+        static String GetClassNameStatic() { return #CLASS; }
 
-class SerializableObject : public Object,
+class SerializableObject : public ICloneable,
                            public IReflectable
 {
-    OBJECT(SerializableObject)
-
 public:
     virtual ~SerializableObject();
 
@@ -27,13 +30,11 @@ public:
     virtual bool ReadFromFile(const Path &path);
     virtual bool WriteToFile(const Path &path) const;
 
-    /**
-      This Post stuff is basically for the SerializableObject that need info
-      contained in other xmlNodes in the file.
-      For example, a Scene might need to access to its main Camera. If the
-      Camera hasnt been read yet, then Scene wont be able to set it.
-     */
     virtual void PostRead(const XMLNode &xmlInfo);
+
+    virtual void CloneInto(ICloneable*) const override {}
+    virtual String GetClassName() const = 0;
+    virtual String GetInstanceId() const;
 
 protected:
     SerializableObject();

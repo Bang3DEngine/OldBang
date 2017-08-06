@@ -15,9 +15,9 @@ Component::~Component()
 
 void Component::CloneInto(ICloneable *clone) const
 {
-    Object::CloneInto(clone);
+    SerializableObject::CloneInto(clone);
     Component *c = SCAST<Component*>(clone);
-    c->SetEnabled( IsEnabled(false) );
+    c->SetEnabled( IsEnabled() );
 }
 
 String Component::ToString() const
@@ -27,21 +27,15 @@ String Component::ToString() const
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
 }
 
+GameObject *Component::GetGameObject() const
+{
+    return m_gameObject;
+}
+
 void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
     m_gameObjectTransform = m_gameObject->transform;
-}
-
-void Component::SetEnabled(bool enabled)
-{
-    m_enabled = enabled;
-}
-
-bool Component::IsEnabled(bool recursive) const
-{
-    return recursive ? m_enabled && gameObject && gameObject->IsEnabled() :
-                       m_enabled;
 }
 
 String Component::GetInstanceId() const
@@ -60,7 +54,6 @@ String Component::GetInstanceId() const
 void Component::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
-
     SetEnabled(xmlInfo.Get<bool>("enabled"));
 }
 
@@ -70,5 +63,5 @@ void Component::Write(XMLNode *xmlInfo) const
 
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set("id", GetInstanceId());
-    xmlInfo->Set("enabled", m_enabled);
+    xmlInfo->Set("enabled", IsEnabled());
 }

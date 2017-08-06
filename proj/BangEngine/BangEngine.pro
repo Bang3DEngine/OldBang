@@ -88,7 +88,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/IO/XML/XMLProperty.cpp \
     $$BANG_ROOT/src/Engine/Components/AudioListener.cpp \
     $$BANG_ROOT/src/Engine/Components/RectTransform.cpp \
-    $$BANG_ROOT/src/Engine/General/Object.cpp \
     $$BANG_ROOT/src/Engine/Debug/GraphicPipelineDebugger.cpp \
     $$BANG_ROOT/src/Engine/Compiler/CodePreprocessor.cpp \
     $$BANG_ROOT/src/Engine/IO/Project/ProjectManager.cpp \
@@ -179,7 +178,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/AudioListener.h \
     $$BANG_ROOT/src/Engine/Components/RectTransform.h \
     $$BANG_ROOT/src/Engine/Debug/GraphicPipelineDebugger.h \
-    $$BANG_ROOT/src/Engine/General/Object.h \
     $$BANG_ROOT/src/Engine/Compiler/CodePreprocessor.h \
     $$BANG_ROOT/src/Engine/IO/Project/Project.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \

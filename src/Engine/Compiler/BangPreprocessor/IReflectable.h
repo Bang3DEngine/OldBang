@@ -17,6 +17,7 @@ public:
 
 protected:
     IReflectable() {}
+    virtual ~IReflectable() {}
 };
 
 #endif // IREFLECTABLE_H

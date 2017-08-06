@@ -7,7 +7,7 @@
 class Font : public G_Font,
              public Asset
 {
-	OBJECT(Font)
+	SOBJECT(Font)
 
 public:
     Font();

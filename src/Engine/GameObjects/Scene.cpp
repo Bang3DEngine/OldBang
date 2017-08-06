@@ -43,7 +43,7 @@ void Scene::_OnResize(int newWidth, int newHeight)
 
 void Scene::AddHiddenChild(GameObject *go)
 {
-    go->p_parent = this;
+    go->SetParent(this);
     if (!m_hiddenGameObjects.Contains(go)) { m_hiddenGameObjects.PushBack(go); }
 }
 

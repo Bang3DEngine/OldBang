@@ -7,6 +7,8 @@
 
 class Project : public SerializableObject
 {
+    SOBJECT(Project)
+
 public:
     Project();
     virtual ~Project();
