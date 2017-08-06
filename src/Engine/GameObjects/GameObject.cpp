@@ -15,12 +15,10 @@
 #include "Bang/Transform.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
 
 GameObject::GameObject(const String &name)
     : m_name(name)
 {
-    AddComponent<Transform>();
 }
 
 
@@ -28,7 +26,6 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
     GameObject *go = SCAST<GameObject*>(clone);
-    go->RemoveComponent<Transform>();
     go->SetName(m_name);
     go->SetParent(nullptr);
 
@@ -40,10 +37,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (Component *comp : m_components)
     {
-        if (!DCAST<Transform*>(comp))
-        {
-            go->AddComponent(comp->Clone());
-        }
+        go->AddComponent(comp->Clone());
     }
 }
 
@@ -177,29 +171,28 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
     return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
-bool GameObject::AddComponent(Component *c, int _index)
+Component *GameObject::AddComponent(const String &componentClassName,
+                                    int _index)
 {
-    if (!c) { return false; }
-    if (m_components.Contains(c)) { return false; }
+    Component *c = ComponentFactory::CreateComponent(componentClassName);
+    return AddComponent(c, _index);
+}
 
-    if (DCAST<Transform*>(c))
-    {
-        if (!HasComponent<Transform>())
-        {
-            m_transform = DCAST<Transform*>(c);
-        }
-        else
-        {
-            Debug_Error("A gameObject must contain one and only one Transform.");
-            delete c;
-            return false;
-        }
-    }
+Component* GameObject::AddComponent(Component *c, int _index)
+{
+    if (!c) { return nullptr; }
+    if (m_components.Contains(c)) { return c; }
 
     const int index = (_index != -1 ? _index : m_components.Size());
     m_components.Insert(index, c);
+
     c->SetGameObject(this);
-    return true;
+    if (IsStarted()) { c->Start(); }
+
+    Transform *trans = DCAST<Transform*>(c);
+    if (trans) { m_transform = trans; }
+
+    return c;
 }
 
 void GameObject::RemoveComponent(Component *c)
@@ -339,29 +332,11 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
         }
         else
         {
-            Component *newComponent = nullptr;
-            if (tagName == "Transform")
+            const String &componentClassName = tagName;
+            Component *newComponent = AddComponent(componentClassName);
+            if (newComponent)
             {
-                newComponent = m_transform;
-            }
-            else if (tagName == "RectTransform")
-            {
-                RemoveComponent<Transform>();
-                AddComponent<RectTransform>();
-                newComponent = m_transform;
-            }
-            else
-            {
-                newComponent = ComponentFactory::CreateComponent(tagName);
-                AddComponent(newComponent);
-            }
-
-            if (newComponent) { newComponent->Read(xmlChild); }
-            else
-            {
-                Debug_Error("Please register '" << tagName
-                            << "' in ComponentFactory");
-                ASSERT(false);
+                newComponent->Read(xmlChild);
             }
         }
     }

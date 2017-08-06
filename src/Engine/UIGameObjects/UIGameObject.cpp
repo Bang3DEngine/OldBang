@@ -6,7 +6,6 @@
 
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
 {
-    RemoveComponent<Transform>();
     AddComponent<RectTransform>();
     m_rectTransform = GetComponent<RectTransform>();
 }
@@ -67,6 +66,6 @@ UIGameObject::FocusAction UIGameObject::OnFocusReceived()
 {
     return m_defaultFocusAction;
 }
-void UIGameObject::OnFocusTaken() { }
-void UIGameObject::OnFocusLost() { }
+void UIGameObject::OnFocusTaken() {}
+void UIGameObject::OnFocusLost() {}
 

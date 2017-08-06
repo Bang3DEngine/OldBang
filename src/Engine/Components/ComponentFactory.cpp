@@ -44,5 +44,8 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     HANDLE_COMPONENT(componentClassName, UIImage);
     HANDLE_COMPONENT(componentClassName, UIRenderer);
     HANDLE_COMPONENT(componentClassName, UIText);
+
+    Debug_Error("Please register class '" << componentClassName << "' in "
+                "ComponentFactory"); ASSERT(false);
     return nullptr;
 }

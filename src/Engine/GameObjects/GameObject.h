@@ -9,10 +9,10 @@
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
-FORWARD   class Scene;
-FORWARD   class Camera;
-FORWARD   class Material;
-FORWARD   class Component;
+FORWARD class Scene;
+FORWARD class Camera;
+FORWARD class Material;
+FORWARD class Component;
 
 class GameObject : public ISceneEventListener,
                    public IToString,
@@ -57,18 +57,17 @@ public:
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
     Sphere GetBoundingSphere(bool includeChildren = true) const;
 
-    bool AddComponent(Component *c, int index = -1);
-
-    template <class T, class=T_SUBCLASS(T, Component)>
+    Component* AddComponent(const String &componentClassName, int _index = -1);
+    Component* AddComponent(Component *c, int index = -1);
+    template <class T>
     T* AddComponent(int index = -1)
     {
         T *c = ComponentFactory::CreateComponent<T>();
-        if (!AddComponent(c, index)) { return nullptr; }
-        if (IsStarted()) { c->Start(); }
+        this->AddComponent(c, index);
         return c;
     }
 
-    template <class T, class=T_SUBCLASS(T, Component)>
+    template <class T>
     T* GetComponent() const
     {
         for (Component *comp : m_components)
@@ -143,7 +142,7 @@ public:
         return comps_l;
     }
 
-    template <class T, class=T_SUBCLASS(T, Component)>
+    template <class T>
     List<T*> GetComponentsInThisAndChildren() const
     {
         List<T*> comps = GetComponentsInChildren<T>();
@@ -152,13 +151,13 @@ public:
         return thisComps;
     }
 
-    template <class T, class=T_SUBCLASS(T, Component)>
+    template <class T>
     bool HasComponent() const
     {
         return GetComponent<T>() ;
     }
 
-    template <class T, class=T_SUBCLASS(T, Component)>
+    template <class T>
     int CountComponents() const
     {
         int count = 0;
@@ -173,8 +172,7 @@ public:
     void RemoveComponent(Component *c);
     void RemoveComponentInstantly(Component *c);
     void RemoveQueuedComponents();
-
-    template <class T, class=T_SUBCLASS(T, Component)>
+    template <class T>
     void RemoveComponent()
     {
         for (Component *comp : m_components)
@@ -182,7 +180,7 @@ public:
             T *compT = DCAST<T*>(comp);
             if (compT)
             {
-                RemoveComponent(compT);
+                this->RemoveComponent(compT);
                 break;
             }
         }
