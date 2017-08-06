@@ -3,8 +3,8 @@
 
 #include "Bang/UIGameObject.h"
 
-FORWARD class UIText;
-FORWARD class UIImage;
+FORWARD class UITextRenderer;
+FORWARD class UIImageRenderer;
 FORWARD class SingleLineRenderer;
 
 class GUIInputText : public UIGameObject
@@ -30,19 +30,19 @@ public:
     void ResetSelection();
     void SelectAll();
 
-    UIText *GetText() const;
+    UITextRenderer *GetText() const;
     UIGameObject *GetTextContainer() const;
-    UIImage *GetBackground() const;
+    UIImageRenderer *GetBackground() const;
 
 private:
-    UIImage *p_background = nullptr;
+    UIImageRenderer *p_background = nullptr;
 
     UIGameObject *m_textContainer = nullptr;
-    UIText *p_text = nullptr;
+    UITextRenderer *p_text = nullptr;
     SingleLineRenderer *m_cursorRenderer = nullptr;
 
     UIGameObject *p_selectionGO = nullptr;
-    UIImage *p_selectionQuad = nullptr;
+    UIImageRenderer *p_selectionQuad = nullptr;
 
     int m_cursorIndex = 0;
     bool m_selectingWithMouse = false;

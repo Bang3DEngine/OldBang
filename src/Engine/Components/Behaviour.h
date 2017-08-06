@@ -9,10 +9,8 @@
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Prefab.h"
-#include "Bang/UIText.h"
 #include "Bang/Random.h"
 #include "Bang/Camera.h"
-#include "Bang/UIImage.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -23,6 +21,8 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 
 /**
  * @brief The Behaviour class is a base class which will be inherited by all

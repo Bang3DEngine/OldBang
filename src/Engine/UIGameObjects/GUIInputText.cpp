@@ -2,15 +2,15 @@
 
 #include "Bang/Time.h"
 #include "Bang/Input.h"
-#include "Bang/UIText.h"
-#include "Bang/UIImage.h"
 #include "Bang/Material.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/SingleLineRenderer.h"
 
 GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
 {
-    p_background = AddComponent<UIImage>();
+    p_background = AddComponent<UIImageRenderer>();
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
@@ -18,7 +18,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     p_selectionGO->SetParent(this);
     p_selectionGO->rectTransform->SetAnchors( Vector2(-1), Vector2(1) );
 
-    p_selectionQuad = p_selectionGO->AddComponent<UIImage>();
+    p_selectionQuad = p_selectionGO->AddComponent<UIImageRenderer>();
     p_selectionQuad->UseMaterialCopy();
     p_selectionQuad->GetMaterial()->SetDiffuseColor(Color::LightBlue);
 
@@ -27,7 +27,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     m_textContainer->rectTransform->SetMargins(10, 4, 4, 10);
     m_textContainer->SetParent(this);
 
-    p_text = m_textContainer->AddComponent<UIText>();
+    p_text = m_textContainer->AddComponent<UITextRenderer>();
     p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
     p_text->SetHorizontalWrapMode(WrapMode::Hide);
@@ -379,7 +379,7 @@ void GUIInputText::SelectAll()
     SetSelection(0, GetText()->GetContent().Size());
 }
 
-UIText *GUIInputText::GetText() const
+UITextRenderer *GUIInputText::GetText() const
 {
     return p_text;
 }
@@ -389,7 +389,7 @@ UIGameObject *GUIInputText::GetTextContainer() const
     return m_textContainer;
 }
 
-UIImage *GUIInputText::GetBackground() const
+UIImageRenderer *GUIInputText::GetBackground() const
 {
     return p_background;
 }

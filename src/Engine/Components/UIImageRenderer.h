@@ -1,16 +1,16 @@
-#ifndef UIIMAGE_H
-#define UIIMAGE_H
+#ifndef UIIMAGERENDERER_H
+#define UIIMAGERENDERER_H
 
 #include "Bang/Texture2D.h"
 #include "Bang/UIRenderer.h"
 
-class UIImage : public UIRenderer
+class UIImageRenderer : public UIRenderer
 {
-    COMPONENT(UIImage)
+    COMPONENT(UIImageRenderer)
 
 public:
-    UIImage();
-    virtual ~UIImage();
+    UIImageRenderer();
+    virtual ~UIImageRenderer();
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -25,4 +25,4 @@ private:
     Texture2D *m_imageTexture = nullptr;
 };
 
-#endif // UIIMAGE_H
+#endif // UIIMAGERENDERER_H

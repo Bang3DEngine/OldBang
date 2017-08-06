@@ -1,10 +1,10 @@
-﻿#include "Bang/UIImage.h"
+﻿#include "Bang/UIImageRenderer.h"
 
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/AssetsManager.h"
 
-UIImage::UIImage()
+UIImageRenderer::UIImageRenderer()
 {
     SetMaterial(AssetsManager::Load<Material>(
                     EPATH("Materials/UI/G_UIImage.bmat") ) );
@@ -14,36 +14,36 @@ UIImage::UIImage()
     m_imageTexture->CreateEmpty(1,1);
 }
 
-UIImage::~UIImage()
+UIImageRenderer::~UIImageRenderer()
 {
 }
 
-void UIImage::CloneInto(ICloneable *clone) const
+void UIImageRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
-    UIImage *img = SCAST<UIImage*>(clone);
+    UIImageRenderer *img = SCAST<UIImageRenderer*>(clone);
     img->SetImage( GetImageTexture() );
 }
 
-void UIImage::SetImage(Texture2D *imageTexture)
+void UIImageRenderer::SetImage(Texture2D *imageTexture)
 {
     m_imageTexture = imageTexture;
     GetMaterial()->SetTexture(m_imageTexture);
 }
 
-Texture2D *UIImage::GetImageTexture() const
+Texture2D *UIImageRenderer::GetImageTexture() const
 {
     return m_imageTexture;
 }
 
-void UIImage::Read(const XMLNode &xmlInfo)
+void UIImageRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
     Path texFilepath = xmlInfo.Get<Path>("Image");
     SetImage( AssetsManager::Load<Texture2D>(texFilepath) );
 }
 
-void UIImage::Write(XMLNode *xmlInfo) const
+void UIImageRenderer::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 

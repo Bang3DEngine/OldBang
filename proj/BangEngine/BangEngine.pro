@@ -70,10 +70,10 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/Light.cpp \
     $$BANG_ROOT/src/Engine/Components/PointLight.cpp \
     $$BANG_ROOT/src/Engine/General/SceneManager.cpp \
-    $$BANG_ROOT/src/Engine/Components/UIImage.cpp \
+    $$BANG_ROOT/src/Engine/Components/UIImageRenderer.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
-    $$BANG_ROOT/src/Engine/Components/UIText.cpp \
+    $$BANG_ROOT/src/Engine/Components/UITextRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/AudioClip.cpp \
     $$BANG_ROOT/src/Engine/Components/AudioSource.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioManager.cpp \
@@ -154,11 +154,11 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/Light.h \
     $$BANG_ROOT/src/Engine/Components/PointLight.h \
     $$BANG_ROOT/src/Engine/General/SceneManager.h \
-    $$BANG_ROOT/src/Engine/Components/UIImage.h \
+    $$BANG_ROOT/src/Engine/Components/UIImageRenderer.h \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/Font.h \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.h \
-    $$BANG_ROOT/src/Engine/Components/UIText.h \
+    $$BANG_ROOT/src/Engine/Components/UITextRenderer.h \
     $$BANG_ROOT/src/Engine/Math/AABox.h \
     $$BANG_ROOT/src/Engine/Assets/AudioClip.h \
     $$BANG_ROOT/src/Engine/Assets/Material.h \

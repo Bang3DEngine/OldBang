@@ -2,8 +2,6 @@
 
 #include "Bang/Light.h"
 #include "Bang/Camera.h"
-#include "Bang/UIText.h"
-#include "Bang/UIImage.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/Component.h"
@@ -16,6 +14,8 @@
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
 #include "Bang/CircleRenderer.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
@@ -41,9 +41,9 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     HANDLE_COMPONENT(componentClassName, Renderer);
     HANDLE_COMPONENT(componentClassName, SingleLineRenderer);
     HANDLE_COMPONENT(componentClassName, Transform);
-    HANDLE_COMPONENT(componentClassName, UIImage);
+    HANDLE_COMPONENT(componentClassName, UIImageRenderer);
     HANDLE_COMPONENT(componentClassName, UIRenderer);
-    HANDLE_COMPONENT(componentClassName, UIText);
+    HANDLE_COMPONENT(componentClassName, UITextRenderer);
 
     Debug_Error("Please register class '" << componentClassName << "' in "
                 "ComponentFactory"); ASSERT(false);

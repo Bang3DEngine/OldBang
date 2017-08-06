@@ -32,8 +32,6 @@ int main(int argc, char **argv)
 
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
-#include "Bang/UIText.h"
-#include "Bang/UIImage.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
 #include "Bang/GUICanvas.h"
@@ -41,6 +39,8 @@ int main(int argc, char **argv)
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/GUIVerticalLayout.h"
 #include "Bang/GUIHorizontalLayout.h"
 
@@ -58,7 +58,7 @@ public:
 
         String name = SCAST<GUIInputText*>(nameGo)->GetText()->GetContent();
         String surname = SCAST<GUIInputText*>(surnameGo)->GetText()->GetContent();
-        resultGo->GetComponent<UIText>()->SetContent("Hello " + name + " " + surname);
+        resultGo->GetComponent<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
     }
 };
 
@@ -87,17 +87,17 @@ int main(int argc, char **argv)
     rightVLayout->Add(rightLabel);
 
     GUILabel *uiLabel0 = new GUILabel();
-    UIImage *img0 = uiLabel0->AddComponent<UIImage>(0);
+    UIImageRenderer *img0 = uiLabel0->AddComponent<UIImageRenderer>(0);
     img0->SetTint(Color::Black);
     uiLabel0->GetText()->SetContent("Play");
 
     GUILabel *uiLabel1 = new GUILabel();
-    UIImage *img1 = uiLabel1->AddComponent<UIImage>(0);
+    UIImageRenderer *img1 = uiLabel1->AddComponent<UIImageRenderer>(0);
     img1->SetTint(Color::Black);
     uiLabel1->GetText()->SetContent("Instructions");
 
     GUILabel *uiLabel2 = new GUILabel();
-    UIImage *img2 = uiLabel2->AddComponent<UIImage>(0);
+    UIImageRenderer *img2 = uiLabel2->AddComponent<UIImageRenderer>(0);
     img2->SetTint(Color::Black);
     uiLabel2->GetText()->SetContent("Credits");
 
@@ -130,18 +130,18 @@ int main(int argc, char **argv)
     namesResult->GetText()->SetHorizontalWrapMode(WrapMode::Hide);
 
     GUIVerticalLayout *namesVLayout = new GUIVerticalLayout();
-    UIImage *img4 = namesVLayout->AddComponent<UIImage>(0);
+    UIImageRenderer *img4 = namesVLayout->AddComponent<UIImageRenderer>(0);
     img4->SetTint(Color::LightGray);
     namesVLayout->Add(nameVLayout);
     namesVLayout->Add(namesResult);
 
     GUILabel *uiLabel3 = new GUILabel();
-    UIImage *img3 = uiLabel3->AddComponent<UIImage>(0);
+    UIImageRenderer *img3 = uiLabel3->AddComponent<UIImageRenderer>(0);
     img3->SetTint(Color::Black);
     uiLabel3->GetText()->SetContent("Exit");
 
     UIGameObject *uiVContainer = new UIGameObject();
-    UIImage *uiImg = uiVContainer->AddComponent<UIImage>(0);
+    UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiVContainer->rectTransform->SetMargins(20);
     uiImg->SetTint(Color::White);
 
@@ -154,8 +154,8 @@ int main(int argc, char **argv)
     menuVLayout->Add(uiLabel3);
     menuVLayout->SetParent(uiVContainer);
 
-    List<UIText*> txts = menuVLayout->GetComponentsInChildren<UIText>();
-    for (UIText *txt : txts)
+    List<UITextRenderer*> txts = menuVLayout->GetComponentsInChildren<UITextRenderer>();
+    for (UITextRenderer *txt : txts)
     {
         txt->SetTextSize(20);
         txt->SetTint(Color::White);

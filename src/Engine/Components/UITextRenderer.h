@@ -1,5 +1,5 @@
-#ifndef UITEXT_H
-#define UITEXT_H
+#ifndef UITEXTRENDERER_H
+#define UITEXTRENDERER_H
 
 #include "Bang/Mesh.h"
 #include "Bang/Rect.h"
@@ -10,13 +10,13 @@
 
 FORWARD class Font;
 
-class UIText : public UIRenderer
+class UITextRenderer : public UIRenderer
 {
-    COMPONENT(UIText)
+    COMPONENT(UITextRenderer)
 
 public:
-    UIText();
-    virtual ~UIText();
+    UITextRenderer();
+    virtual ~UITextRenderer();
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -80,4 +80,4 @@ protected:
     std::vector<bool> m_charVisibility;
 };
 
-#endif // UITEXT_H
+#endif // UITEXTRENDERER_H

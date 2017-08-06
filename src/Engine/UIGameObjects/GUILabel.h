@@ -3,18 +3,18 @@
 
 #include "Bang/UIGameObject.h"
 
-FORWARD class UIText;
+FORWARD class UITextRenderer;
 
 class GUILabel : public UIGameObject
 {
 public:
     GUILabel(const String &content = "");
 
-    UIText *GetText();
-    const UIText *GetText() const;
+    UITextRenderer *GetText();
+    const UITextRenderer *GetText() const;
 
 private:
-    UIText *p_text = nullptr;
+    UITextRenderer *p_text = nullptr;
 };
 
 #endif // GUILABEL_H

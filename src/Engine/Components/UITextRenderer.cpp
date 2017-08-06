@@ -1,4 +1,4 @@
-#include "Bang/UIText.h"
+#include "Bang/UITextRenderer.h"
 
 #include "Bang/Math.h"
 #include "Bang/Font.h"
@@ -16,7 +16,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
 
-UIText::UIText() : UIRenderer()
+UITextRenderer::UITextRenderer() : UIRenderer()
 {
     SetMesh( new Mesh() );
     SetMaterial(
@@ -32,12 +32,12 @@ UIText::UIText() : UIRenderer()
     RefreshMesh();
 }
 
-UIText::~UIText()
+UITextRenderer::~UITextRenderer()
 {
     if (p_mesh) { delete p_mesh; }
 }
 
-void UIText::RefreshMesh()
+void UITextRenderer::RefreshMesh()
 {
     if (!m_hasChanged) { return; }
     m_hasChanged = false;
@@ -108,11 +108,11 @@ void UIText::RefreshMesh()
     SetMesh(p_mesh);
 }
 
-void UIText::CloneInto(ICloneable *clone) const
+void UITextRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
 
-    UIText *text = SCAST<UIText*>(clone);
+    UITextRenderer *text = SCAST<UITextRenderer*>(clone);
     text->SetMesh( new Mesh() );
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
@@ -124,7 +124,7 @@ void UIText::CloneInto(ICloneable *clone) const
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
 
-void UIText::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
+void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
 {
     if (m_horizontalAlignment != horizontalAlignment)
     {
@@ -133,7 +133,7 @@ void UIText::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
     }
 }
 
-void UIText::SetVerticalAlign(VerticalAlignment verticalAlignment)
+void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
 {
     if (m_verticalAlignment != verticalAlignment)
     {
@@ -142,7 +142,7 @@ void UIText::SetVerticalAlign(VerticalAlignment verticalAlignment)
     }
 }
 
-void UIText::SetFont(Font *font)
+void UITextRenderer::SetFont(Font *font)
 {
     if (m_font != font)
     {
@@ -157,7 +157,7 @@ void UIText::SetFont(Font *font)
     }
 }
 
-void UIText::SetKerning(bool kerning)
+void UITextRenderer::SetKerning(bool kerning)
 {
     if (m_kerning != kerning)
     {
@@ -166,7 +166,7 @@ void UIText::SetKerning(bool kerning)
     }
 }
 
-void UIText::SetHorizontalWrapMode(WrapMode wrapMode)
+void UITextRenderer::SetHorizontalWrapMode(WrapMode wrapMode)
 {
     if (m_hWrapMode != wrapMode)
     {
@@ -175,7 +175,7 @@ void UIText::SetHorizontalWrapMode(WrapMode wrapMode)
     }
 }
 
-void UIText::SetVerticalWrapMode(WrapMode wrapMode)
+void UITextRenderer::SetVerticalWrapMode(WrapMode wrapMode)
 {
     if (m_vWrapMode != wrapMode)
     {
@@ -185,7 +185,7 @@ void UIText::SetVerticalWrapMode(WrapMode wrapMode)
 }
 
 
-void UIText::SetContent(const String &content)
+void UITextRenderer::SetContent(const String &content)
 {
     if (m_content != content)
     {
@@ -194,7 +194,7 @@ void UIText::SetContent(const String &content)
     }
 }
 
-void UIText::SetTextSize(int size)
+void UITextRenderer::SetTextSize(int size)
 {
     if (m_textSize != size)
     {
@@ -203,7 +203,7 @@ void UIText::SetTextSize(int size)
     }
 }
 
-void UIText::SetSpacing(const Vector2i& spacing)
+void UITextRenderer::SetSpacing(const Vector2i& spacing)
 {
     if (m_spacing != spacing)
     {
@@ -212,7 +212,7 @@ void UIText::SetSpacing(const Vector2i& spacing)
     }
 }
 
-void UIText::SetScrollingPx(const Vector2i &scrollingPx)
+void UITextRenderer::SetScrollingPx(const Vector2i &scrollingPx)
 {
     if (m_scrollingPx != scrollingPx)
     {
@@ -221,39 +221,39 @@ void UIText::SetScrollingPx(const Vector2i &scrollingPx)
     }
 }
 
-Font *UIText::GetFont() const { return m_font; }
-bool UIText::GetKerning() const { return m_kerning; }
-WrapMode UIText::GetVerticalWrapMode() const { return m_vWrapMode; }
-WrapMode UIText::GetHorizontalWrapMode() const { return m_hWrapMode; }
-const String &UIText::GetContent() const { return m_content; }
-int UIText::GetTextSize() const { return m_textSize; }
-Vector2i UIText::GetSpacing() const { return m_spacing; }
-Vector2i UIText::GetScrollingPx() const { return m_scrollingPx; }
-const Array<Rect> &UIText::GetCharRectsNDC() const
+Font *UITextRenderer::GetFont() const { return m_font; }
+bool UITextRenderer::GetKerning() const { return m_kerning; }
+WrapMode UITextRenderer::GetVerticalWrapMode() const { return m_vWrapMode; }
+WrapMode UITextRenderer::GetHorizontalWrapMode() const { return m_hWrapMode; }
+const String &UITextRenderer::GetContent() const { return m_content; }
+int UITextRenderer::GetTextSize() const { return m_textSize; }
+Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
+Vector2i UITextRenderer::GetScrollingPx() const { return m_scrollingPx; }
+const Array<Rect> &UITextRenderer::GetCharRectsNDC() const
 {
     return m_charRectsNDC;
 }
-const Rect &UIText::GetCharRectNDC(uint charIndex) const
+const Rect &UITextRenderer::GetCharRectNDC(uint charIndex) const
 {
     return m_charRectsNDC[charIndex];
 }
 
-bool UIText::IsCharVisible(int charIndex) const
+bool UITextRenderer::IsCharVisible(int charIndex) const
 {
     return m_charVisibility.at(charIndex);
 }
 
-Rect UIText::GetContentNDCRect() const { return m_textRectNDC; }
-VerticalAlignment UIText::GetVerticalAlignment() const
+Rect UITextRenderer::GetContentNDCRect() const { return m_textRectNDC; }
+VerticalAlignment UITextRenderer::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
 }
-HorizontalAlignment UIText::GetHorizontalAlignment() const
+HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
 {
     return m_horizontalAlignment;
 }
 
-void UIText::Bind() const
+void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
@@ -261,13 +261,13 @@ void UIText::Bind() const
     UIRenderer::Bind();
 }
 
-void UIText::UnBind() const
+void UITextRenderer::UnBind() const
 {
     UIRenderer::UnBind();
     transform->SetEnabled(true);
 }
 
-void UIText::OnUpdate()
+void UITextRenderer::OnUpdate()
 {
     UIRenderer::OnUpdate();
     if (m_hasChanged)
@@ -276,18 +276,18 @@ void UIText::OnUpdate()
     }
 }
 
-void UIText::OnParentSizeChanged()
+void UITextRenderer::OnParentSizeChanged()
 {
     UIRenderer::OnParentSizeChanged();
     m_hasChanged = true;
 }
 
-Rect UIText::GetBoundingRect(Camera *camera) const
+Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
     return GetContentNDCRect();
 }
 
-void UIText::Read(const XMLNode &xmlInfo)
+void UITextRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
 
@@ -305,7 +305,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetHorizontalAlign( xmlInfo.Get<HorizontalAlignment>("HorizontalAlign"));
 }
 
-void UIText::Write(XMLNode *xmlInfo) const
+void UITextRenderer::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 
