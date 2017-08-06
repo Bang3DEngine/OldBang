@@ -32,10 +32,10 @@ int main(int argc, char **argv)
 
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
-#include "Bang/UIButton.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
 #include "Bang/GUICanvas.h"
+#include "Bang/GUIButton.h"
 #include "Bang/Application.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
@@ -60,33 +60,6 @@ public:
         String name = SCAST<GUIInputText*>(nameGo)->GetText()->GetContent();
         String surname = SCAST<GUIInputText*>(surnameGo)->GetText()->GetContent();
         resultGo->GetComponent<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
-    }
-};
-
-class GUIButton : public UIGameObject
-{
-public:
-    GUIButton(const String &labelText = "Bang")
-    {
-        UIImageRenderer *bg = AddComponent<UIImageRenderer>(0);
-        bg->SetTint(Color::Black);
-
-        GUILabel *uiLabel = new GUILabel();
-        uiLabel->GetText()->SetContent(labelText);
-
-        uiLabel->SetParent(this);
-
-        UIButton *btn = AddComponent<UIButton>();
-        btn->AddAgent(this);
-
-        btn->AddMouseEnterCallback([labelText](UIButton*){ Debug_Log("Enter " << labelText); });
-        btn->AddMouseExitCallback([labelText](UIButton*){ Debug_Log("Exit " << labelText); });
-        btn->AddMouseDownCallback(
-                    [labelText](UIButton*, Input::MouseButton mb)
-                    { Debug_Log("Down " << labelText); });
-        btn->AddMouseUpCallback(
-                    [labelText](UIButton*, Input::MouseButton mb)
-                    { Debug_Log("Up " << labelText); });
     }
 };
 
@@ -154,9 +127,9 @@ int main(int argc, char **argv)
     namesVLayout->Add(namesResult);
 
     UIGameObject *uiVContainer = new UIGameObject();
-    UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiVContainer->rectTransform->SetMargins(20);
-    uiImg->SetTint(Color::White);
+    UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
+    uiImg->SetTint(Color::Red);
 
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
@@ -171,7 +144,6 @@ int main(int argc, char **argv)
     for (UITextRenderer *txt : txts)
     {
         txt->SetTextSize(20);
-        txt->SetTint(Color::White);
         txt->SetHorizontalAlign(HorizontalAlignment::Center);
         txt->SetVerticalAlign(VerticalAlignment::Center);
     }

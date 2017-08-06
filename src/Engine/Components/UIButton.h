@@ -12,6 +12,8 @@ FORWARD class UIButtonListener;
 
 class UIButton : public Component
 {
+    COMPONENT(UIButton)
+
 public:
     UIButton();
     virtual ~UIButton();
@@ -49,10 +51,8 @@ class UIButtonListener
 protected:
     virtual void OnButton_MouseEnter(UIButton *btn) {}
     virtual void OnButton_MouseExit(UIButton *btn) {}
-    virtual void OnButton_MouseDown(UIButton *btn,
-                                    Input::MouseButton mouseButton) {}
-    virtual void OnButton_MouseUp(UIButton *btn,
-                                  Input::MouseButton mouseButton) {}
+    virtual void OnButton_MouseDown(UIButton *btn, Input::MouseButton mb) {}
+    virtual void OnButton_MouseUp(UIButton *btn, Input::MouseButton mb) {}
 
     friend class UIButton;
 };

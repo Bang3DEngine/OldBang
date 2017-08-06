@@ -29,21 +29,8 @@ void UIButton::OnUpdate()
         }
     }
 
-    // Mouse Enter & Exit events
-    if (!m_mouseOver && mouseOverSomeAgent)
-    {
-        PROPAGATE_EVENT_RAW(OnButton_MouseEnter(this), p_listeners);
-        for (auto f : m_mouseEnterCallbacks) { f(this); }
-    }
-    else if (m_mouseOver && !mouseOverSomeAgent)
-    {
-        PROPAGATE_EVENT_RAW(OnButton_MouseExit(this), p_listeners);
-        for (auto f : m_mouseExitCallbacks) { f(this); }
-    }
-    m_mouseOver = mouseOverSomeAgent;
-
     // Mouse Down & Up events
-    if (m_mouseOver)
+    if (mouseOverSomeAgent)
     {
         Array<Input::MouseButton> buttonsDown = Input::GetMouseButtonsDown();
         for (Input::MouseButton mb : buttonsDown)
@@ -59,11 +46,28 @@ void UIButton::OnUpdate()
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
+
+    // Mouse Enter & Exit events
+    if (!m_mouseOver && mouseOverSomeAgent)
+    {
+        PROPAGATE_EVENT_RAW(OnButton_MouseEnter(this), p_listeners);
+        for (auto f : m_mouseEnterCallbacks) { f(this); }
+    }
+    else if (m_mouseOver && !mouseOverSomeAgent)
+    {
+        PROPAGATE_EVENT_RAW(OnButton_MouseExit(this), p_listeners);
+        for (auto f : m_mouseExitCallbacks) { f(this); }
+    }
+    m_mouseOver = mouseOverSomeAgent;
 }
 
 void UIButton::AddAgent(GameObject *agent)
 {
-    p_agents.Add(agent);
+    List<GameObject*> recChildren = agent->GetChildrenRecursively();
+    for (GameObject *rChild : recChildren)
+    {
+        p_agents.Add(rChild);
+    }
 }
 void UIButton::RemoveAgent(GameObject *agent)
 {

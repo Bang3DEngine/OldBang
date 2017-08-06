@@ -1,7 +1,6 @@
 #include "Bang/GUILabel.h"
 
 #include "Bang/RectTransform.h"
-#include "Bang/UITextRenderer.h"
 
 GUILabel::GUILabel(const String &content) : UIGameObject("GUILabel")
 {

@@ -3,6 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/UIGameObject.h"
+#include "Bang/UIImageRenderer.h"
 
 FORWARD class UIImageRenderer;
 FORWARD class Texture2D;
