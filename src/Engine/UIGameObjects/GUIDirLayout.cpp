@@ -16,7 +16,7 @@ GUIDirLayout::~GUIDirLayout()
 void GUIDirLayout::Add(UIGameObject *gameObject, int _index)
 {
     UIContainer *cont = new UIContainer(gameObject);
-    m_childrenContainers.Set(gameObject, cont);
+    m_childrenContainers.Add(gameObject, cont);
     int index = (_index != -1 ? _index : GetChildren().Size());
     cont->SetParent(this, index);
     UpdateChildrenRectTransforms();

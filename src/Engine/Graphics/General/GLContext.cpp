@@ -198,7 +198,7 @@ void GLContext::OnBind(GL::BindTarget bindTarget, GLId glId)
 {
     if (!m_glBoundIds.ContainsKey(bindTarget))
     {
-        m_glBoundIds.Set(bindTarget, std::stack<GLId>());
+        m_glBoundIds.Add(bindTarget, std::stack<GLId>());
     }
     m_glBoundIds[bindTarget].push(glId);
 }

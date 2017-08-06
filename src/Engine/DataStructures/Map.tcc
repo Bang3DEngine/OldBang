@@ -10,7 +10,7 @@ template<class Key, class Value>
 Map<Key,Value>::Map(const std::map<Key, Value> &m) : m_map(m) {}
 
 template<class Key, class Value>
-void Map<Key,Value>::Set(const Key &key, const Value &value)
+void Map<Key,Value>::Add(const Key &key, const Value &value)
 {
     (*this)[key] = value;
 }

@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/UIButton.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
 #include "Bang/GUICanvas.h"
@@ -62,6 +63,33 @@ public:
     }
 };
 
+class GUIButton : public UIGameObject
+{
+public:
+    GUIButton(const String &labelText = "Bang")
+    {
+        UIImageRenderer *bg = AddComponent<UIImageRenderer>(0);
+        bg->SetTint(Color::Black);
+
+        GUILabel *uiLabel = new GUILabel();
+        uiLabel->GetText()->SetContent(labelText);
+
+        uiLabel->SetParent(this);
+
+        UIButton *btn = AddComponent<UIButton>();
+        btn->AddAgent(this);
+
+        btn->AddMouseEnterCallback([labelText](UIButton*){ Debug_Log("Enter " << labelText); });
+        btn->AddMouseExitCallback([labelText](UIButton*){ Debug_Log("Exit " << labelText); });
+        btn->AddMouseDownCallback(
+                    [labelText](UIButton*, Input::MouseButton mb)
+                    { Debug_Log("Down " << labelText); });
+        btn->AddMouseUpCallback(
+                    [labelText](UIButton*, Input::MouseButton mb)
+                    { Debug_Log("Up " << labelText); });
+    }
+};
+
 int main(int argc, char **argv)
 {
     Application app(argc, argv);
@@ -86,20 +114,10 @@ int main(int argc, char **argv)
     rightVLayout->Add(uiImgGo);
     rightVLayout->Add(rightLabel);
 
-    GUILabel *uiLabel0 = new GUILabel();
-    UIImageRenderer *img0 = uiLabel0->AddComponent<UIImageRenderer>(0);
-    img0->SetTint(Color::Black);
-    uiLabel0->GetText()->SetContent("Play");
-
-    GUILabel *uiLabel1 = new GUILabel();
-    UIImageRenderer *img1 = uiLabel1->AddComponent<UIImageRenderer>(0);
-    img1->SetTint(Color::Black);
-    uiLabel1->GetText()->SetContent("Instructions");
-
-    GUILabel *uiLabel2 = new GUILabel();
-    UIImageRenderer *img2 = uiLabel2->AddComponent<UIImageRenderer>(0);
-    img2->SetTint(Color::Black);
-    uiLabel2->GetText()->SetContent("Credits");
+    GUIButton *buttonPlay = new GUIButton("Play");
+    GUIButton *buttonInstructions = new GUIButton("Instructions");
+    GUIButton *buttonCredits = new GUIButton("Credits");
+    GUIButton *buttonExit = new GUIButton("Exit");
 
     GUILabel *nameLabel = new GUILabel();
     nameLabel->GetText()->SetContent("Name:");
@@ -135,11 +153,6 @@ int main(int argc, char **argv)
     namesVLayout->Add(nameVLayout);
     namesVLayout->Add(namesResult);
 
-    GUILabel *uiLabel3 = new GUILabel();
-    UIImageRenderer *img3 = uiLabel3->AddComponent<UIImageRenderer>(0);
-    img3->SetTint(Color::Black);
-    uiLabel3->GetText()->SetContent("Exit");
-
     UIGameObject *uiVContainer = new UIGameObject();
     UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiVContainer->rectTransform->SetMargins(20);
@@ -148,10 +161,10 @@ int main(int argc, char **argv)
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
-    menuVLayout->Add(uiLabel0);
-    menuVLayout->Add(uiLabel1);
-    menuVLayout->Add(uiLabel2);
-    menuVLayout->Add(uiLabel3);
+    menuVLayout->Add(buttonPlay);
+    menuVLayout->Add(buttonInstructions);
+    menuVLayout->Add(buttonCredits);
+    menuVLayout->Add(buttonExit);
     menuVLayout->SetParent(uiVContainer);
 
     List<UITextRenderer*> txts = menuVLayout->GetComponentsInChildren<UITextRenderer>();

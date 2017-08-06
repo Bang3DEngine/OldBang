@@ -69,9 +69,9 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(
         const Vector2i &screenCoords)
 {
-    Color mouseOverColor = ReadColor(screenCoords.x, screenCoords.y, AttColor);
-    int id = MapColorToId(mouseOverColor);
-    if (mouseOverColor != Color::Zero && m_id_To_GameObject.ContainsKey(id))
+    Color colorUnderMouse = ReadColor(screenCoords.x, screenCoords.y, AttColor);
+    int id = MapColorToId(colorUnderMouse);
+    if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }

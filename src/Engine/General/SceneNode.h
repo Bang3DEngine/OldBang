@@ -37,12 +37,11 @@ private:
 
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
-    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
-    {\
-        if ((*it)->IsEnabled()) { \
-            (*it)->FUNCTION;   \
-        } \
-    }\
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it )  \
+        if ((*it)->IsEnabled()) { (*it)->FUNCTION; } \
+} while (0)
+#define PROPAGATE_EVENT_RAW(FUNCTION, ITERABLE) do {\
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) (*it)->FUNCTION; \
 } while (0)
 
 template<class T>

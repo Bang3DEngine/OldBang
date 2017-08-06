@@ -22,7 +22,7 @@ G_Shader *ShaderManager::Load(G_Shader::Type type, const Path &filepath)
     {
         shader = new Shader(type);
         shader->LoadFromFile(filepath);
-        sm->m_filepathToShaders.Set(filepath, shader);
+        sm->m_filepathToShaders.Add(filepath, shader);
     }
     else
     {
@@ -40,9 +40,9 @@ void ShaderManager::RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
     ShaderManager *sm = ShaderManager::GetInstance();
     if (!sm->m_shaderUsages.ContainsKey(shaderBeingUsed))
     {
-        sm->m_shaderUsages.Set(shaderBeingUsed, Set<G_ShaderProgram*>());
+        sm->m_shaderUsages.Add(shaderBeingUsed, Set<G_ShaderProgram*>());
     }
-    sm->m_shaderUsages.Get(shaderBeingUsed).Insert(shaderProgram);
+    sm->m_shaderUsages.Get(shaderBeingUsed).Add(shaderProgram);
 }
 
 void ShaderManager::UnRegisterUsageOfShader(G_ShaderProgram *shaderProgram,

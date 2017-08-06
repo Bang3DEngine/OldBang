@@ -18,7 +18,7 @@ public:
     Set();
     Set(const std::set<Key> &s);
 
-    void Insert(const Key &key);
+    void Add(const Key &key);
 
     void Remove(const Key &key);
     Iterator Remove(Iterator it);

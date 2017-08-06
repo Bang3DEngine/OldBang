@@ -85,6 +85,9 @@ public:
 
     static float GetMouseWheel();
 
+    static Array<MouseButton> GetMouseButtons();
+    static Array<MouseButton> GetMouseButtonsUp();
+    static Array<MouseButton> GetMouseButtonsDown();
     static bool GetMouseButton(MouseButton mb);
     static bool GetMouseButtonUp(MouseButton mb);
     static bool GetMouseButtonDown(MouseButton mb);

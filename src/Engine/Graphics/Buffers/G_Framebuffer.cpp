@@ -35,7 +35,7 @@ void G_Framebuffer::CreateColorAttachment(AttachmentId attId,
     tex->CreateEmpty(GetWidth(), GetHeight());
 
     m_colorAttachmentIds.PushBack(attId);
-    m_attachmentId_To_Texture.Set(attId, tex);
+    m_attachmentId_To_Texture.Add(attId, tex);
 
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
                            tex->GetGLId(), 0);
@@ -100,11 +100,18 @@ Color G_Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
     G_RenderTexture *t = GetAttachmentTexture(attId);
     SetReadBuffer(attId);
     Color readColor;
-    glReadPixels(x, t->GetHeight() - y,
-                 1, 1,
-                 t->GetGLFormat(),
-                 t->GetGLDataType(),
-                 &readColor);
+    if (t->GetGLDataType() == GL_FLOAT)
+    {
+        glReadPixels(x, t->GetHeight() - y, 1, 1, t->GetGLFormat(),
+                     t->GetGLDataType(), &readColor);
+    }
+    else
+    {
+        byte bColor[4];
+        glReadPixels(x, t->GetHeight() - y, 1, 1, t->GetGLFormat(),
+                     t->GetGLDataType(), &bColor);
+        readColor = Color(bColor[0], bColor[1], bColor[2], bColor[3]) / 255.0f;
+    }
     UnBind();
     return readColor;
 }

@@ -140,7 +140,7 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     }
     m_isADoubleClick = false; // Reset double click
 
-    m_mouseInfo.Set(mb, ButtonInfo(up, true, true));
+    m_mouseInfo.Add(mb, ButtonInfo(up, true, true));
     if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
         m_secsSinceLastMouseDown != 0)
         // Reject clicks in the same frame as double-clicking (secs... != 0)
@@ -160,12 +160,12 @@ void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
         // in the same frame (this does happen sometimes)
         if (m_mouseInfo[mb].down)
         {
-            m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
+            m_mouseInfo.Add(mb, ButtonInfo(true, m_mouseInfo[mb].down,
                                            m_mouseInfo[mb].pressed));
         }
         else
         {
-            m_mouseInfo.Set(mb, ButtonInfo(true, false, false));
+            m_mouseInfo.Add(mb, ButtonInfo(true, false, false));
         }
     }
 }
@@ -332,6 +332,37 @@ float Input::GetMouseWheel()
 {
     Input *inp = Input::GetInstance();
     return inp->m_lastMouseWheelDelta;
+}
+
+Array<Input::MouseButton> Input::GetMouseButtons()
+{
+    Array<Input::MouseButton> mouseButtons;
+    Input *inp = Input::GetInstance();
+    for (auto it : inp->m_mouseInfo)
+    {
+        if (it.second.pressed) { mouseButtons.PushBack(it.first); }
+    }
+    return mouseButtons;
+}
+Array<Input::MouseButton> Input::GetMouseButtonsUp()
+{
+    Array<Input::MouseButton> mouseButtons;
+    Input *inp = Input::GetInstance();
+    for (auto it : inp->m_mouseInfo)
+    {
+        if (it.second.up) { mouseButtons.PushBack(it.first); }
+    }
+    return mouseButtons;
+}
+Array<Input::MouseButton> Input::GetMouseButtonsDown()
+{
+    Array<Input::MouseButton> mouseButtons;
+    Input *inp = Input::GetInstance();
+    for (auto it : inp->m_mouseInfo)
+    {
+        if (it.second.down) { mouseButtons.PushBack(it.first); }
+    }
+    return mouseButtons;
 }
 
 

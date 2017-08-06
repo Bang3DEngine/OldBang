@@ -14,7 +14,7 @@ Set<Key>::Set(const std::set<Key> &s) : m_set(s)
 }
 
 template<class Key>
-void Set<Key>::Insert(const Key &key)
+void Set<Key>::Add(const Key &key)
 {
     m_set.insert(key);
 }

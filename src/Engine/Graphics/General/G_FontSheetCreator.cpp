@@ -122,7 +122,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         charMetrics.bearing.y = (face->glyph->metrics.horiBearingY) / 64;
         charMetrics.advance   = (face->glyph->metrics.horiAdvance)  / 64;
         charMetrics.originY   =  origin.y / 64;
-        resultMetrics->Set(c, charMetrics);
+        resultMetrics->Add(c, charMetrics);
 
         const uint charRow = i / charsPerRowCol;
         const uint charCol = i % charsPerRowCol;
@@ -153,7 +153,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         Vector2 uvMax = maxPixel / atlasImage.GetSize();
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
-        charAtlasUvs->Set(c, std::make_pair(uvMin, uvMax) );
+        charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) );
 
         FT_Done_Glyph(glyph);
     }

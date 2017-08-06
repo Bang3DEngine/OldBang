@@ -18,7 +18,7 @@ public:
     Map();
     Map(const std::map<Key, Value> &m);
 
-    void Set(const Key &key, const Value &value);
+    void Add(const Key &key, const Value &value);
 
     void Remove(const Key &key);
     Iterator Remove(Iterator it);

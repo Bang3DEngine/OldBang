@@ -71,6 +71,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/PointLight.cpp \
     $$BANG_ROOT/src/Engine/General/SceneManager.cpp \
     $$BANG_ROOT/src/Engine/Components/UIImageRenderer.cpp \
+    $$BANG_ROOT/src/Engine/Components/UIButton.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
     $$BANG_ROOT/src/Engine/Components/UITextRenderer.cpp \
@@ -155,6 +156,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/PointLight.h \
     $$BANG_ROOT/src/Engine/General/SceneManager.h \
     $$BANG_ROOT/src/Engine/Components/UIImageRenderer.h \
+    $$BANG_ROOT/src/Engine/Components/UIButton.h \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/Font.h \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.h \

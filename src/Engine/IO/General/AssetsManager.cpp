@@ -85,7 +85,7 @@ void AssetsManager::SaveAssetToMap(const Path &filepath, Asset *asset)
     AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
     if (!filepath.IsEmpty() && asset)
     {
-        am->m_pathsToAssets.Set(filepath, asset);
+        am->m_pathsToAssets.Add(filepath, asset);
     }
 }
 
