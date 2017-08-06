@@ -20,7 +20,8 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 {
     SetMesh( new Mesh() );
     SetMaterial(
-        AssetsManager::Load<Material>( EPATH("Materials/UI/G_UIText.bmat") ));
+        AssetsManager::Load<Material>(
+                    EPATH("Materials/UI/G_UITextRenderer.bmat") ));
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));

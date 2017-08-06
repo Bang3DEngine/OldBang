@@ -7,7 +7,7 @@
 UIImageRenderer::UIImageRenderer()
 {
     SetMaterial(AssetsManager::Load<Material>(
-                    EPATH("Materials/UI/G_UIImage.bmat") ) );
+                    EPATH("Materials/UI/G_UIImageRenderer.bmat") ) );
     UseMaterialCopy();
 
     m_imageTexture = new Texture2D();
