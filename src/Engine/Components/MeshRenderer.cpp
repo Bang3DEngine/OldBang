@@ -10,7 +10,7 @@
 
 MeshRenderer::MeshRenderer()
 {
-    SetRenderMode( GL::RenderMode::Triangles );
+    SetRenderPrimitive( GL::RenderPrimitive::Triangles );
 }
 
 MeshRenderer::~MeshRenderer()
@@ -41,9 +41,8 @@ Mesh *MeshRenderer::GetMesh() const
 
 void MeshRenderer::OnRender()
 {
-    Renderer::OnRender();
-    ENSURE(p_mesh);
-    GL::Render(p_mesh->GetVAO(), GetRenderMode(), p_mesh->GetVertexCount());
+    Renderer::OnRender(); ENSURE(p_mesh);
+    GL::Render(p_mesh->GetVAO(), GetRenderPrimitive(), p_mesh->GetVertexCount());
 }
 
 void MeshRenderer::Read(const XMLNode &xmlInfo)

@@ -5,7 +5,7 @@
 
 CircleRenderer::CircleRenderer()
 {
-    SetRenderMode(GL::RenderMode::LineStrip);
+    SetRenderPrimitive(GL::RenderPrimitive::LineStrip);
 }
 
 CircleRenderer::~CircleRenderer()

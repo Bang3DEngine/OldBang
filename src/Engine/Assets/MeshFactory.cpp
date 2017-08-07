@@ -41,7 +41,7 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
             AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") );
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderMode(GL::RenderMode::Triangles);
+    r->SetRenderPrimitive(GL::RenderPrimitive::Triangles);
     r->SetMaterial(mat);
     r->SetMesh(m);
 

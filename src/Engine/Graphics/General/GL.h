@@ -21,7 +21,7 @@ FORWARD class G_ShaderProgram;
 class GL
 {
 public:
-    enum class RenderMode
+    enum class RenderPrimitive
     {
         Points    = GL_POINTS,
         Lines     = GL_LINES,
@@ -84,7 +84,7 @@ public:
 
     static void ApplyContextToShaderProgram(G_ShaderProgram *sp);
     static void Render(const G_VAO* vao,
-                       GL::RenderMode renderMode,
+                       GL::RenderPrimitive renderMode,
                        int elementsCount,
                        int startElementIndex = 0);
 

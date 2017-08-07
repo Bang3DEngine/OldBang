@@ -33,7 +33,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetMaterial(GetSharedMaterial());
     r->SetRenderWireframe(GetRenderWireframe());
     r->SetCullMode(GetCullMode());
-    r->SetRenderMode(GetRenderMode());
+    r->SetRenderPrimitive(GetRenderPrimitive());
     r->SetLineWidth(GetLineWidth());
 }
 
@@ -146,11 +146,11 @@ GL::ViewProjMode Renderer::GetViewProjMode() const
 }
 
 
-void Renderer::SetRenderMode(GL::RenderMode renderMode)
+void Renderer::SetRenderPrimitive(GL::RenderPrimitive renderMode)
 {
     m_renderMode = renderMode;
 }
-GL::RenderMode Renderer::GetRenderMode() const
+GL::RenderPrimitive Renderer::GetRenderPrimitive() const
 {
     return m_renderMode;
 }
@@ -184,6 +184,7 @@ void Renderer::Read(const XMLNode &xmlInfo)
 
     Path materialFilepath = xmlInfo.Get<Path>("Material");
     SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
+    SetRenderPass( xmlInfo.Get<RenderPass>("RenderPass") );
     SetLineWidth(xmlInfo.Get<float>("LineWidth"));
     SetRenderWireframe(xmlInfo.Get<bool>("RenderWireframe"));
 }
@@ -195,6 +196,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Material *sharedMat = GetSharedMaterial();
     xmlInfo->Set("Material", sharedMat ? sharedMat->GetFilepath() :
                                                  Path::Empty);
+    xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", GetRenderWireframe());
 }

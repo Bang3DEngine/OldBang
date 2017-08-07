@@ -29,7 +29,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextSize(20.0f);
     SetTint(Color::Black);
 
-    SetRenderMode(GL::RenderMode::Quads);
+    SetRenderPrimitive(GL::RenderPrimitive::Quads);
     RefreshMesh();
 }
 

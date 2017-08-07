@@ -17,7 +17,7 @@ public:
 
     virtual void ApplyToShaderProgram(G_ShaderProgram *sp) const;
 
-    void Render(const G_VAO* vao, GL::RenderMode renderMode,
+    void Render(const G_VAO* vao, GL::RenderPrimitive renderMode,
                 int elementsCount, int startIndex) const;
 
     void SetViewProjMode(GL::ViewProjMode mode);

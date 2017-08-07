@@ -13,7 +13,7 @@ UIRenderer::UIRenderer()
     SetMaterial(
         AssetsManager::Load<Material>( EPATH("Materials/G_DefaultNoSP.bmat")) );
     UseMaterialCopy();
-    GetMaterial()->SetDiffuseColor(m_tint);
+    GetMaterial()->SetDiffuseColor( GetTint() );
 
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderPass(RenderPass::Canvas);

@@ -131,7 +131,7 @@ void GL::ApplyContextToShaderProgram(G_ShaderProgram *sp)
     GL::GetGLContext()->ApplyToShaderProgram(sp);
 }
 
-void GL::Render(const G_VAO *vao, GL::RenderMode renderMode, int elementsCount,
+void GL::Render(const G_VAO *vao, GL::RenderPrimitive renderMode, int elementsCount,
                 int startIdx)
 {
     return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);

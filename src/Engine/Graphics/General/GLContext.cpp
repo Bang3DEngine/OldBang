@@ -63,7 +63,7 @@ void GLContext::ApplyToShaderProgram(G_ShaderProgram *sp) const
     sp->Set("B_PVM", pvmMatrix);
 }
 
-void GLContext::Render(const G_VAO* vao, GL::RenderMode renderMode,
+void GLContext::Render(const G_VAO* vao, GL::RenderPrimitive renderMode,
                        int elementsCount, int startIndex) const
 {
     vao->Bind();

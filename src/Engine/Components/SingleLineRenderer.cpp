@@ -6,7 +6,7 @@
 SingleLineRenderer::SingleLineRenderer()
 {
     SetPoints( {Vector3::Zero, Vector3::One} );
-    SetRenderMode(GL::RenderMode::Lines);
+    SetRenderPrimitive(GL::RenderPrimitive::Lines);
 }
 
 SingleLineRenderer::~SingleLineRenderer()

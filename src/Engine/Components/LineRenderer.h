@@ -27,7 +27,7 @@ protected:
     virtual void OnRender() override;
 
 private:
-    MeshRenderer  *m_meshRenderer = nullptr;
+    MeshRenderer  *p_meshRenderer = nullptr;
     Array<Vector3> m_points;
 };
 

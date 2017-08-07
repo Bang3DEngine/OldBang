@@ -11,6 +11,7 @@ Component::Component()
 
 Component::~Component()
 {
+    for (Component *c : m_delegates) { delete c; }
 }
 
 void Component::CloneInto(ICloneable *clone) const

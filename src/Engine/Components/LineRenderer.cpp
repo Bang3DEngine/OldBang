@@ -8,18 +8,26 @@
 
 LineRenderer::LineRenderer()
 {
-    m_meshRenderer = ComponentFactory::CreateComponent<MeshRenderer>();
-    m_meshRenderer->SetMesh( new Mesh() );
-    m_meshRenderer->SetMaterial(
+    p_meshRenderer = ComponentFactory::CreateComponent<MeshRenderer>();
+    p_meshRenderer->SetMesh( new Mesh() ); // TODO: MEMLEAK
+    p_meshRenderer->SetMaterial(
          AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
     GetMaterial()->SetReceivesLighting(false);
-    SetRenderMode(GL::RenderMode::Lines);
+    AddDelegate(p_meshRenderer);
+
+    SetRenderPrimitive(GL::RenderPrimitive::Lines);
 }
 
 LineRenderer::~LineRenderer()
 {
-    delete m_meshRenderer->GetMesh();
-    delete m_meshRenderer;
+}
+
+void LineRenderer::OnRender()
+{
+    Renderer::OnRender();
+    Mesh *mesh = p_meshRenderer->GetMesh();
+    ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);
+    GL::Render(mesh->GetVAO(), GetRenderPrimitive(), mesh->GetVertexCount());
 }
 
 void LineRenderer::CloneInto(ICloneable *clone) const
@@ -51,15 +59,7 @@ void LineRenderer::SetPoint(int i, const Vector3 &point)
 void LineRenderer::SetPoints(const Array<Vector3> &points)
 {
     m_points = points;
-    m_meshRenderer->GetMesh()->LoadPositions(m_points);
-}
-
-void LineRenderer::OnRender()
-{
-    Renderer::OnRender();
-    Mesh *mesh = m_meshRenderer->GetMesh();
-    ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);
-    GL::Render(mesh->GetVAO(), GetRenderMode(), mesh->GetVertexCount());
+    p_meshRenderer->GetMesh()->LoadPositions(m_points);
 }
 
 AABox LineRenderer::GetAABBox() const
