@@ -49,7 +49,7 @@ void LineRenderer::SetPoints(const Array<Vector3> &points)
     m_meshRenderer->GetMesh()->LoadPositions(m_points);
 }
 
-void LineRenderer::Render() const
+void LineRenderer::OnRender()
 {
     Mesh *mesh = m_meshRenderer->GetMesh();
     ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);

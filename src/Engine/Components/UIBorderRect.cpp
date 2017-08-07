@@ -14,6 +14,7 @@ UIBorderRect::UIBorderRect()
     // Work in NDC space
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
+    AddDelegate(p_lineRenderer);
     SetLineWidth(2.0f);
 }
 

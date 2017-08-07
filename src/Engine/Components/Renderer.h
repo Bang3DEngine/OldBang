@@ -11,7 +11,8 @@ FORWARD   class Camera;
 FORWARD   class Material;
 FORWARD   class SceneManager;
 
-class Renderer : public GLObject, public Component
+class Renderer : public GLObject,
+                 public Component
 {
     COMPONENT(Renderer)
 
@@ -53,7 +54,7 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    virtual void Render() const;
+    virtual void OnRender() override;
 
     void UseMaterialCopy();
 

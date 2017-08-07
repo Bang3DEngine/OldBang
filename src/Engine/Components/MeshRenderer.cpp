@@ -39,8 +39,9 @@ Mesh *MeshRenderer::GetMesh() const
     return p_mesh;
 }
 
-void MeshRenderer::Render() const
+void MeshRenderer::OnRender()
 {
+    Renderer::OnRender();
     ENSURE(p_mesh);
     GL::Render(p_mesh->GetVAO(), GetRenderMode(), p_mesh->GetVertexCount());
 }

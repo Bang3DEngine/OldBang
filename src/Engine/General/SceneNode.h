@@ -12,6 +12,7 @@ public:
     }
     virtual void Update() { OnUpdate(); }
     virtual void ParentSizeChanged() { OnParentSizeChanged(); }
+    virtual void Render() { OnRender(); }
     virtual void RenderGizmos() { OnRenderGizmos(); }
     virtual void Destroy() { OnDestroy(); }
 
@@ -27,6 +28,7 @@ protected:
     virtual void OnStart() {}
     virtual void OnUpdate() {}
     virtual void OnParentSizeChanged() {}
+    virtual void OnRender() {}
     virtual void OnRenderGizmos() {}
     virtual void OnDestroy() {}
 
@@ -60,6 +62,12 @@ public:
     {
         PROPAGATE_EVENT(Update(), GetChildren());
         SceneAgent::Update();
+    }
+
+    virtual void Render() override
+    {
+        PROPAGATE_EVENT(Render(), GetChildren());
+        SceneAgent::OnRender();
     }
 
     virtual void ParentSizeChanged() override

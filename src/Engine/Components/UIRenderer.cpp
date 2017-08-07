@@ -46,10 +46,10 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
     return MeshRenderer::GetBoundingRect(camera);
 }
 
-void UIRenderer::Render() const
+void UIRenderer::OnRender()
 {
     GL::SetTestDepth(false);
-    MeshRenderer::Render();
+    MeshRenderer::OnRender();
     GL::SetTestDepth(true);
 }
 

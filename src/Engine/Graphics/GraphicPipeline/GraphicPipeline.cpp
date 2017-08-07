@@ -194,7 +194,7 @@ void GraphicPipeline::Render(Renderer *renderer) const
     renderer->Bind();
     m_gbuffer->BindTextureBuffersTo(
                 renderer->GetMaterial()->GetShaderProgram(), false);
-    renderer->Render();
+    renderer->OnRender();
     renderer->UnBind();
 }
 

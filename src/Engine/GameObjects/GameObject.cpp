@@ -374,6 +374,16 @@ void GameObject::ParentSizeChanged()
     SceneNode<GameObject>::ParentSizeChanged();
 }
 
+void GameObject::Render()
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(Render(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::Render();
+}
+
 void GameObject::RenderGizmos()
 {
     m_iteratingComponents = true;

@@ -23,6 +23,10 @@ public:
 
     virtual String ToString() const override;
 
+    void AddDelegate(Component *delegate);
+    void RemoveDelegate(Component *delegate);
+    const List<Component*>& GetDelegates() const;
+
     GameObject *GetGameObject() const;
     void SetGameObject(GameObject *gameObject);
 
@@ -34,7 +38,15 @@ protected:
     Component();
     virtual ~Component();
 
+    virtual void Start();
+    virtual void Update();
+    virtual void ParentSizeChanged();
+    virtual void Render();
+    virtual void RenderGizmos();
+    virtual void Destroy();
+
 private:
+    List<Component*> m_delegates;
     GameObject *m_gameObject = nullptr;
     Transform *m_gameObjectTransform = nullptr;
 

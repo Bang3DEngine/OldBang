@@ -24,7 +24,7 @@ public:
 
 protected:
     LineRenderer();
-    virtual void Render() const override;
+    virtual void OnRender() override;
 
 private:
     MeshRenderer  *m_meshRenderer = nullptr;

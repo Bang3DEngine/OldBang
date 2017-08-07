@@ -27,6 +27,24 @@ String Component::ToString() const
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
 }
 
+void Component::AddDelegate(Component *delegate)
+{
+    if (!m_delegates.Contains(delegate))
+    {
+        m_delegates.PushBack(delegate);
+    }
+}
+
+void Component::RemoveDelegate(Component *delegate)
+{
+    m_delegates.Remove(delegate);
+}
+
+const List<Component *> &Component::GetDelegates() const
+{
+    return m_delegates;
+}
+
 GameObject *Component::GetGameObject() const
 {
     return m_gameObject;
@@ -36,6 +54,38 @@ void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
     m_gameObjectTransform = m_gameObject->transform;
+}
+
+
+void Component::Start()
+{
+    PROPAGATE_EVENT(Start(), m_delegates);
+    SceneAgent::Start();
+}
+void Component::Update()
+{
+    PROPAGATE_EVENT(Update(), m_delegates);
+    SceneAgent::Update();
+}
+void Component::ParentSizeChanged()
+{
+    PROPAGATE_EVENT(ParentSizeChanged(), m_delegates);
+    SceneAgent::ParentSizeChanged();
+}
+void Component::Render()
+{
+    PROPAGATE_EVENT(Render(), m_delegates);
+    SceneAgent::Render();
+}
+void Component::RenderGizmos()
+{
+    PROPAGATE_EVENT(RenderGizmos(), m_delegates);
+    SceneAgent::RenderGizmos();
+}
+void Component::Destroy()
+{
+    SceneAgent::Destroy();
+    PROPAGATE_EVENT(Destroy(), m_delegates);
 }
 
 String Component::GetInstanceId() const

@@ -27,7 +27,7 @@ protected:
     mutable Mesh *p_mesh = nullptr;
 
     MeshRenderer();
-    virtual void Render() const override;
+    virtual void OnRender() override;
 };
 
 #endif // MESHRENDERER_H

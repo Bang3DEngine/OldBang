@@ -162,7 +162,10 @@ float Renderer::GetLineWidth() const
     return m_lineWidth;
 }
 
-void Renderer::Render() const {}
+void Renderer::OnRender()
+{
+    Component::OnRender();
+}
 
 void Renderer::Read(const XMLNode &xmlInfo)
 {

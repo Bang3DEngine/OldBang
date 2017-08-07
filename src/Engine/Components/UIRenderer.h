@@ -9,7 +9,7 @@ class UIRenderer : public MeshRenderer
     COMPONENT(UIRenderer)
 
 public:
-    virtual void Render() const override;
+    virtual void OnRender() override;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
