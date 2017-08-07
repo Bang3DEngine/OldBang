@@ -20,6 +20,8 @@ public:
     UIButtonTinter *GetLabelTinter() const;
     UIButtonTinter *GetBackgroundTinter() const;
 
+    void AddClickedCallback(UIButton::ClickedCallback callback);
+
 private:
     GUILabel *p_label = nullptr;
     GUIImage *p_bgImage = nullptr;

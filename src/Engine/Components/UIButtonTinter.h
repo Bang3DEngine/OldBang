@@ -13,6 +13,8 @@ public:
     UIButtonTinter();
     virtual ~UIButtonTinter();
 
+    virtual void OnUpdate() override;
+
     void AddGameObjectToTint(GameObject *go);
 
     void SetOverTintColor(const Color &tintColor);
@@ -36,6 +38,8 @@ private:
     Color m_idleTintColor    = Color::White;
     Color m_overTintColor    = Color::LightBlue;
     Color m_pressedTintColor = Color::DarkBlue;
+
+    Color m_currentTintColor = m_idleTintColor;
 
     void ApplyTintToGameObjects(const Color &tintColor);
 };

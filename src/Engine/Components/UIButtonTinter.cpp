@@ -12,6 +12,17 @@ UIButtonTinter::~UIButtonTinter()
 {
 }
 
+void UIButtonTinter::OnUpdate()
+{
+    UIButton::OnUpdate();
+    if ( (m_currentTintColor == m_pressedTintColor) &&
+         Input::GetMouseButtonUp(Input::MouseButton::Left) )
+    {
+        ApplyTintToGameObjects( IsMouseOverSomeAgent() ? m_overTintColor :
+                                                         m_idleTintColor);
+    }
+}
+
 void UIButtonTinter::AddGameObjectToTint(GameObject *go)
 {
     p_gameObjectsToTint.Add(go);
@@ -46,13 +57,15 @@ const Color &UIButtonTinter::GetPressedTintColor() const
 void UIButtonTinter::OnButton_MouseEnter(UIButton *btn)
 {
     UIButtonListener::OnButton_MouseEnter(btn);
-    ApplyTintToGameObjects(m_overTintColor);
+    ApplyTintToGameObjects( IsBeingPressed() ? m_pressedTintColor :
+                                               m_overTintColor);
 }
 
 void UIButtonTinter::OnButton_MouseExit(UIButton *btn)
 {
     UIButtonListener::OnButton_MouseExit(btn);
-    ApplyTintToGameObjects(m_idleTintColor);
+    ApplyTintToGameObjects( IsBeingPressed() ? m_pressedTintColor :
+                                               m_idleTintColor);
 }
 
 void UIButtonTinter::OnButton_MouseDown(UIButton *btn, Input::MouseButton mb)
@@ -77,4 +90,5 @@ void UIButtonTinter::ApplyTintToGameObjects(const Color &tintColor)
             uiRend->SetTint(tintColor);
         }
     }
+    m_currentTintColor = tintColor;
 }

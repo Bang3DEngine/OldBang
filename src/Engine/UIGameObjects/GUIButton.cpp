@@ -36,3 +36,8 @@ GUILabel *GUIButton::GetLabel() const { return p_label; }
 GUIImage *GUIButton::GetImage() const { return p_bgImage; }
 UIButtonTinter *GUIButton::GetLabelTinter() const { return p_labelTinter; }
 UIButtonTinter *GUIButton::GetBackgroundTinter() const { return p_bgTinter; }
+
+void GUIButton::AddClickedCallback(UIButton::ClickedCallback callback)
+{
+    p_bgTinter->AddClickedCallback(callback);
+}

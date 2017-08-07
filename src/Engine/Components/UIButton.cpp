@@ -18,16 +18,7 @@ void UIButton::OnUpdate()
     Component::OnUpdate();
 
     // Is mouse currently over some agent?
-    bool mouseOverSomeAgent = false;
-    GameObject *overedGameObject = Selection::GetOveredGameObject();
-    for (GameObject *agent : p_agents)
-    {
-        if (overedGameObject == agent)
-        {
-            mouseOverSomeAgent = true;
-            break;
-        }
-    }
+    bool mouseOverSomeAgent = IsMouseOverSomeAgent();
 
     // Mouse Down & Up events
     if (mouseOverSomeAgent)
@@ -46,6 +37,20 @@ void UIButton::OnUpdate()
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
+
+    // Clicked event and pressed tracking
+    if (mouseOverSomeAgent)
+    {
+        m_beingPressed = m_beingPressed ||
+                         Input::GetMouseButtonDown(Input::MouseButton::Left);
+        if (m_beingPressed && Input::GetMouseButtonUp(Input::MouseButton::Left))
+         {
+             PROPAGATE_EVENT_RAW(OnButton_Clicked(this), p_listeners);
+             for (auto f : m_clickedCallbacks) { f(this); }
+         }
+    }
+    m_beingPressed = ( m_beingPressed &&
+                       Input::GetMouseButton(Input::MouseButton::Left) );
 
     // Mouse Enter & Exit events
     if (!m_mouseOver && mouseOverSomeAgent)
@@ -98,4 +103,23 @@ void UIButton::AddMouseDownCallback(UIButton::DownUpCallback callback)
 void UIButton::AddMouseUpCallback(UIButton::DownUpCallback callback)
 {
     m_mouseUpCallbacks.PushBack(callback);
+}
+void UIButton::AddClickedCallback(UIButton::ClickedCallback callback)
+{
+    m_clickedCallbacks.PushBack(callback);
+}
+
+bool UIButton::IsMouseOverSomeAgent() const
+{
+    GameObject *overedGameObject = Selection::GetOveredGameObject();
+    for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+    {
+        if (overedGameObject == *it) { return true; }
+    }
+    return false;
+}
+
+bool UIButton::IsBeingPressed() const
+{
+    return m_beingPressed;
 }

@@ -91,6 +91,10 @@ int main(int argc, char **argv)
     GUIButton *buttonInstructions = new GUIButton("Instructions");
     GUIButton *buttonCredits = new GUIButton("Credits");
     GUIButton *buttonExit = new GUIButton("Exit");
+    buttonPlay->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Play"); });
+    buttonInstructions->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Instructions"); });
+    buttonCredits->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Credits"); });
+    buttonExit->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Exit"); });
 
     GUILabel *nameLabel = new GUILabel();
     nameLabel->GetText()->SetContent("Name:");
