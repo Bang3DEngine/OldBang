@@ -31,10 +31,10 @@ void Scene::Update()
     PROPAGATE_EVENT(Update(), m_hiddenGameObjects);
 }
 
-void Scene::DrawGizmos()
+void Scene::RenderGizmos()
 {
-    GameObject::DrawGizmos();
-    PROPAGATE_EVENT(DrawGizmos(), m_hiddenGameObjects);
+    GameObject::RenderGizmos();
+    PROPAGATE_EVENT(RenderGizmos(), m_hiddenGameObjects);
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)

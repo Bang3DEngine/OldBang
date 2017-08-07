@@ -20,7 +20,7 @@ public:
     static void SetScale(const Vector3 &scale);
 
     static void SetLineWidth(float lineWidth);
-    static void SetDrawWireframe(bool wireframe);
+    static void SetRenderWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void SetBillboard();
     static void RenderCustomMesh(Mesh *m);

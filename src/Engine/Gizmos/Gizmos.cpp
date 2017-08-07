@@ -86,12 +86,12 @@ void Gizmos::SetLineWidth(float lineWidth)
     }
 }
 
-void Gizmos::SetDrawWireframe(bool wireframe)
+void Gizmos::SetRenderWireframe(bool wireframe)
 {
     Gizmos *g = Gizmos::GetInstance();
     for (Renderer *rend : g->m_renderers)
     {
-        rend->SetDrawWireframe(wireframe);
+        rend->SetRenderWireframe(wireframe);
     }
 }
 
@@ -202,7 +202,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->m_planeMesh);
 
-    SetDrawWireframe(false);
+    SetRenderWireframe(false);
     SetReceivesLighting(false);
     if (billboard)
     {
@@ -236,7 +236,7 @@ void Gizmos::RenderScreenIcon(const Texture2D *texture,
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
 
-    g->m_meshRenderer->SetDrawWireframe(false);
+    g->m_meshRenderer->SetRenderWireframe(false);
     SetReceivesLighting(false);
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
     g->m_meshRenderer->SetViewProjMode(fixAspectRatio ?
@@ -373,7 +373,7 @@ void Gizmos::Reset()
     SetColor(Color::Green);
     SetLineWidth(1.0f);
     SetReceivesLighting(false);
-    SetDrawWireframe(false);
+    SetRenderWireframe(false);
 
     List<Renderer*> rends = g->GetComponents<Renderer>();
     for (Renderer *rend : rends)

@@ -27,8 +27,8 @@ public:
     virtual Material* GetMaterial() const;
     virtual Material* GetSharedMaterial() const;
 
-    void SetDrawWireframe(bool m_drawWireframe);
-    bool GetDrawWireframe() const;
+    void SetRenderWireframe(bool m_drawWireframe);
+    bool GetRenderWireframe() const;
 
     virtual AABox GetAABBox() const;
 

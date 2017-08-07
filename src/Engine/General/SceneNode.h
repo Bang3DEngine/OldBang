@@ -12,7 +12,7 @@ public:
     }
     virtual void Update() { OnUpdate(); }
     virtual void ParentSizeChanged() { OnParentSizeChanged(); }
-    virtual void DrawGizmos() { OnDrawGizmos(); }
+    virtual void RenderGizmos() { OnRenderGizmos(); }
     virtual void Destroy() { OnDestroy(); }
 
     void SetEnabled(bool enabled) { m_enabled = enabled; }
@@ -27,7 +27,7 @@ protected:
     virtual void OnStart() {}
     virtual void OnUpdate() {}
     virtual void OnParentSizeChanged() {}
-    virtual void OnDrawGizmos() {}
+    virtual void OnRenderGizmos() {}
     virtual void OnDestroy() {}
 
 private:
@@ -68,10 +68,10 @@ public:
         SceneAgent::ParentSizeChanged();
     }
 
-    virtual void DrawGizmos()  override
+    virtual void RenderGizmos()  override
     {
-        PROPAGATE_EVENT(DrawGizmos(), GetChildren());
-        SceneAgent::DrawGizmos();
+        PROPAGATE_EVENT(RenderGizmos(), GetChildren());
+        SceneAgent::RenderGizmos();
     }
 
     virtual void Destroy() override

@@ -29,7 +29,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Renderer *r = SCAST<Renderer*>(clone);
     r->SetMaterial(GetSharedMaterial());
-    r->SetDrawWireframe(GetDrawWireframe());
+    r->SetRenderWireframe(GetRenderWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
@@ -103,11 +103,11 @@ Renderer::RenderLayer Renderer::GetRenderLayer() const
     return m_renderLayer;
 }
 
-void Renderer::SetDrawWireframe(bool drawWireframe)
+void Renderer::SetRenderWireframe(bool drawWireframe)
 {
     m_drawWireframe = drawWireframe;
 }
-bool Renderer::GetDrawWireframe() const
+bool Renderer::GetRenderWireframe() const
 {
     return m_drawWireframe;
 }
@@ -171,7 +171,7 @@ void Renderer::Read(const XMLNode &xmlInfo)
     Path materialFilepath = xmlInfo.Get<Path>("Material");
     SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
     SetLineWidth(xmlInfo.Get<float>("LineWidth"));
-    SetDrawWireframe(xmlInfo.Get<bool>("DrawWireframe"));
+    SetRenderWireframe(xmlInfo.Get<bool>("RenderWireframe"));
 }
 
 void Renderer::Write(XMLNode *xmlInfo) const
@@ -182,5 +182,5 @@ void Renderer::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Material", sharedMat ? sharedMat->GetFilepath() :
                                                  Path::Empty);
     xmlInfo->Set("LineWidth", GetLineWidth());
-    xmlInfo->Set("DrawWireframe", GetDrawWireframe());
+    xmlInfo->Set("RenderWireframe", GetRenderWireframe());
 }

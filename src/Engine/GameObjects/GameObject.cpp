@@ -374,14 +374,14 @@ void GameObject::ParentSizeChanged()
     SceneNode<GameObject>::ParentSizeChanged();
 }
 
-void GameObject::DrawGizmos()
+void GameObject::RenderGizmos()
 {
     m_iteratingComponents = true;
-    PROPAGATE_EVENT(DrawGizmos(), m_components);
+    PROPAGATE_EVENT(RenderGizmos(), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    SceneNode<GameObject>::DrawGizmos();
+    SceneNode<GameObject>::RenderGizmos();
 }
 
 void GameObject::Destroy()
