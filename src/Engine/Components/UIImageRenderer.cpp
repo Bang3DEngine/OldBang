@@ -10,7 +10,7 @@ UIImageRenderer::UIImageRenderer()
                     EPATH("Materials/UI/G_UIImageRenderer.bmat") ) );
     UseMaterialCopy();
 
-    m_imageTexture = new Texture2D();
+    m_imageTexture = new Texture2D(); // TODO: MEMLEAK
     m_imageTexture->CreateEmpty(1,1);
 }
 

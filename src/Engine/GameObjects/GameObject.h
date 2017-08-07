@@ -191,7 +191,7 @@ public:
     virtual void Start() override;
     virtual void Update() override;
     virtual void ParentSizeChanged() override;
-    virtual void Render() override;
+    virtual void Render(RenderPass renderPass) override;
     virtual void RenderGizmos() override;
     virtual void Destroy() override;
 

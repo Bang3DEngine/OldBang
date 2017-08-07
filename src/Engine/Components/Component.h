@@ -34,6 +34,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
+    virtual void Render(RenderPass renderPass);
+
 protected:
     Component();
     virtual ~Component();
@@ -41,7 +43,6 @@ protected:
     virtual void Start();
     virtual void Update();
     virtual void ParentSizeChanged();
-    virtual void Render();
     virtual void RenderGizmos();
     virtual void Destroy();
 

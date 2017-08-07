@@ -48,7 +48,7 @@ public:
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
-    static void OnRender(Renderer *rend);
+    static void Render(Renderer *rend);
 
 private:
     Mesh *m_boxMesh      = nullptr;

@@ -51,6 +51,7 @@ void LineRenderer::SetPoints(const Array<Vector3> &points)
 
 void LineRenderer::OnRender()
 {
+    Renderer::OnRender();
     Mesh *mesh = m_meshRenderer->GetMesh();
     ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);
     GL::Render(mesh->GetVAO(), GetRenderMode(), mesh->GetVertexCount());

@@ -7,8 +7,10 @@
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/GraphicPipeline.h"
 
 Renderer::Renderer()
 {
@@ -66,7 +68,8 @@ void Renderer::Bind() const
     GL::SetCullMode(m_cullMode);
     glLineWidth(m_lineWidth);
 
-    Matrix4 model; transform->GetLocalToWorldMatrix(&model);
+    Matrix4 model;
+    if (transform) { transform->GetLocalToWorldMatrix(&model); }
     GL::SetModelMatrix(model);
 
     Material *mat = GetMaterial();
@@ -93,14 +96,14 @@ void Renderer::UnBind() const
     GetMaterial()->UnBind();
 }
 
-void Renderer::SetRenderLayer(Renderer::RenderLayer rl)
+void Renderer::SetRenderPass(RenderPass rp)
 {
-    m_renderLayer = rl;
+    m_renderPass = rp;
 }
 
-Renderer::RenderLayer Renderer::GetRenderLayer() const
+RenderPass Renderer::GetRenderPass() const
 {
-    return m_renderLayer;
+    return m_renderPass;
 }
 
 void Renderer::SetRenderWireframe(bool drawWireframe)
@@ -162,9 +165,17 @@ float Renderer::GetLineWidth() const
     return m_lineWidth;
 }
 
+void Renderer::OnRender(RenderPass renderPass)
+{
+    Component::OnRender(renderPass);
+    if (renderPass == GetRenderPass())
+    {
+        GraphicPipeline::GetActive()->Render(this);
+    }
+}
+
 void Renderer::OnRender()
 {
-    Component::OnRender();
 }
 
 void Renderer::Read(const XMLNode &xmlInfo)

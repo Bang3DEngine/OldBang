@@ -14,7 +14,7 @@ GPPass_RenderLayer::GPPass_RenderLayer(GraphicPipeline *graphicPipeline,
 bool GPPass_RenderLayer::CanRender(const Renderer *renderer) const
 {
     return GPPass::CanRender(renderer) &&
-           renderer->GetRenderLayer() == m_renderLayer;
+           renderer->GetRenderPass() == m_renderLayer;
 }
 
 Renderer::RenderLayer GPPass_RenderLayer::GetRenderLayer() const

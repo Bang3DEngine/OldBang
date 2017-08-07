@@ -6,6 +6,7 @@
 #include "Bang/GL.h"
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
+#include "Bang/RenderPass.h"
 
 FORWARD   class Camera;
 FORWARD   class Material;
@@ -17,11 +18,6 @@ class Renderer : public GLObject,
     COMPONENT(Renderer)
 
 public:
-    enum RenderLayer
-    {
-        RLScene, RLCanvas, RLGizmos
-    };
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void SetMaterial(Material *m);
@@ -33,13 +29,6 @@ public:
 
     virtual AABox GetAABBox() const;
 
-    /**
-     * @brief GetBoundingRect
-     * @param camera The camera whose screen space you want the bounding rect
-     * to be relative to. By default, it will take the active scene's camera.
-     * @return Returns the bounding rect of the renderer relative to the
-     * passed camera's screen space
-     */
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
 
     void SetCullMode(GL::CullMode m_cullMode);
@@ -54,7 +43,8 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    virtual void OnRender() override;
+    virtual void OnRender(RenderPass renderPass) override;
+    virtual void OnRender();
 
     void UseMaterialCopy();
 
@@ -64,8 +54,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void SetRenderLayer(RenderLayer dl);
-    RenderLayer GetRenderLayer() const;
+    void SetRenderPass(RenderPass rp);
+    RenderPass GetRenderPass() const;
 
 protected:
     bool m_drawWireframe        = false;
@@ -77,16 +67,10 @@ protected:
     virtual ~Renderer();
 
 private:
+    float m_lineWidth = 1.0f;
     Material *m_material     = nullptr;
     Material *m_materialCopy = nullptr;
-
-    RenderLayer m_renderLayer = RLScene;
-
-    /**
-     * @brief Width of the lines if rendering with Lines RenderMode
-     * or if rendering with wireframe.
-     */
-    float m_lineWidth = 1.0f;
+    RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
     friend class GraphicPipeline;
 };

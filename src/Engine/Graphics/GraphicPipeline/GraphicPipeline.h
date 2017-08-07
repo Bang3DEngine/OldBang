@@ -11,7 +11,6 @@ FORWARD class GLContext;
 FORWARD class G_GBuffer;
 FORWARD class G_Framebuffer;
 FORWARD class G_ShaderProgram;
-FORWARD class GPPass_RenderLayer;
 FORWARD class G_TextureUnitManager;
 FORWARD class SelectionFramebuffer;
 
@@ -33,19 +32,17 @@ public:
                          const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();
 
-    void Render(Renderer *renderer) const;
     void OnResize(int newWidth, int newHeight);
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
+
+    void Render(Renderer *rend);
 
     GLContext *GetGLContext() const;
     G_GBuffer *GetGBuffer();
     SelectionFramebuffer *GetSelectionFramebuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
 
-    /**
-     * @brief Apply all the scene lights over the current gbuffer.
-     */
     void ApplyDeferredLights(Renderer *rend = nullptr);
 
 private:
@@ -55,12 +52,6 @@ private:
     G_GBuffer *m_gbuffer = nullptr;
     SelectionFramebuffer *m_selectionFB = nullptr;
 
-    GPPass_RenderLayer *m_scenePass  = nullptr;
-    GPPass_RenderLayer *m_canvasPass = nullptr;
-    GPPass_RenderLayer *m_gizmosPass = nullptr;
-    GPPass_RenderLayer *m_sceneSelectionPass  = nullptr;
-    GPPass_RenderLayer *m_canvasSelectionPass = nullptr;
-
     // Rendering for the Game Screen or the Scene screen
     bool m_renderingInGame = false;
 
@@ -69,11 +60,8 @@ private:
 
     Scene *p_scene = nullptr;
 
-    void RenderGBuffer(const List<Renderer*> &renderers,
-                       const List<GameObject*> &sceneChildren);
-    void RenderSelectionBuffer(const List<Renderer *> &renderers,
-                               const List<GameObject *> &sceneChildren,
-                               Scene *scene);
+    void RenderGBuffer(Scene *scene);
+    void RenderSelectionBuffer(Scene *scene);
 };
 
 #endif // GRAPHICPIPELINE_H

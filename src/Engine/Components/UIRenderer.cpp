@@ -16,7 +16,7 @@ UIRenderer::UIRenderer()
     GetMaterial()->SetDiffuseColor(m_tint);
 
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    SetRenderLayer(Renderer::RenderLayer::RLCanvas);
+    SetRenderPass(RenderPass::Canvas);
 }
 
 UIRenderer::~UIRenderer()
@@ -48,9 +48,7 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
 
 void UIRenderer::OnRender()
 {
-    GL::SetTestDepth(false);
     MeshRenderer::OnRender();
-    GL::SetTestDepth(true);
 }
 
 void UIRenderer::Read(const XMLNode &xmlInfo)

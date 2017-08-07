@@ -10,7 +10,6 @@
 #include "Bang/Camera.h"
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
-#include "Bang/GPPass_G.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
@@ -23,13 +22,8 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/G_RenderTexture.h"
-#include "Bang/GPPass_G_Gizmos.h"
-#include "Bang/GPPass_Selection.h"
-#include "Bang/GPPass_RenderLayer.h"
 #include "Bang/G_TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
-#include "Bang/GPPass_SP_DeferredLights.h"
-#include "Bang/GPPass_SP_PostProcessEffects.h"
 
 GraphicPipeline::GraphicPipeline(G_Screen *screen)
 {
@@ -46,40 +40,6 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
                 EPATH("Materials/RenderGBufferToScreen.bmat") );
 
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
-
-    // Set up graphic pipeline passes
-    using RL = Renderer::RenderLayer;
-    m_scenePass  =
-     new GPPass_RenderLayer(this, RL::RLScene,
-     {
-       new GPPass_G(this, GPPass_G::ReceiveLightPass::Yes), // Lighted G_Pass
-       new GPPass_SP_DeferredLights(this),                  // Apply light
-       new GPPass_G(this, GPPass_G::ReceiveLightPass::No),  // UnLighted G_Pass
-       new GPPass_SP_PostProcessEffects(this,
-                                        PostProcessEffect::Type::AfterScene)
-     });
-
-    m_canvasPass =
-     new GPPass_RenderLayer(this, RL::RLCanvas,
-     {
-      new GPPass_G(this, GPPass_G::ReceiveLightPass::Both),
-      new GPPass_SP_PostProcessEffects(this,
-                                       PostProcessEffect::Type::AfterCanvas)
-     });
-
-    m_gizmosPass = new GPPass_RenderLayer(this, RL::RLGizmos,
-    {
-     new GPPass_G_Gizmos(this)
-    });
-
-    m_sceneSelectionPass = new GPPass_RenderLayer(this, RL::RLScene,
-    {
-      new GPPass_Selection(this)
-    });
-    m_canvasSelectionPass = new GPPass_RenderLayer(this, RL::RLCanvas,
-    {
-      new GPPass_Selection(this)
-    });
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
@@ -87,16 +47,13 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     p_scene = scene; ENSURE(p_scene);
     m_renderingInGame = inGame;
 
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    List<GameObject*> sceneChildren = scene->GetChildren();
-
     Camera *camera = scene->GetCamera();
     if (camera) { camera->Bind(); }
 
-    RenderGBuffer(renderers, sceneChildren);
+    RenderGBuffer(scene);
     RenderToScreen(m_gbuffer->GetAttachmentTexture(G_GBuffer::AttColor));
 
-    RenderSelectionBuffer(renderers, sceneChildren, scene);
+    RenderSelectionBuffer(scene);
     // RenderToScreen(m_selectionFB->GetColorTexture());
 }
 
@@ -132,25 +89,47 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
 }
 
-void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
-                                    const List<GameObject*> &sceneChildren)
+void GraphicPipeline::RenderGBuffer(Scene *scene)
 {
     m_gbuffer->Bind();
-
     Color bgColor = p_scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
+    m_gbuffer->SetAllDrawBuffers();
 
-    m_scenePass->Pass(renderers, sceneChildren);
+    // GBuffer Scene rendering
+    scene->Render(RenderPass::Scene_Lighted);
+    ApplyDeferredLights();
+    scene->Render(RenderPass::Scene_UnLighted);
+    scene->Render(RenderPass::Scene_PostProcess);
     m_gbuffer->ClearStencil();
 
+    // GBuffer Canvas rendering
     GL::SetTestDepth(false);
-    m_canvasPass->Pass(renderers, sceneChildren);
+    scene->Render(RenderPass::Canvas);
+    scene->Render(RenderPass::Canvas_PostProcess);
     GL::SetTestDepth(true);
 
-    m_gizmosPass->Pass(renderers, sceneChildren);
+    // GBuffer Gizmos rendering
+    scene->RenderGizmos();
 
     m_gbuffer->UnBind();
 }
+void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
+{
+    m_selectionFB->Bind();
+    m_selectionFB->ClearDepth();
+    m_selectionFB->ClearColor(Color::One);
+
+    // Selection rendering
+    m_selectionFB->PrepareForRender(scene);
+    scene->Render(RenderPass::Scene_Lighted);
+    scene->Render(RenderPass::Scene_UnLighted);
+    scene->Render(RenderPass::Canvas);
+    scene->RenderGizmos();
+
+    m_selectionFB->UnBind();
+}
+
 
 void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 {
@@ -188,33 +167,6 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetTestDepth(true);
 }
 
-void GraphicPipeline::Render(Renderer *renderer) const
-{
-    ENSURE(renderer && renderer->IsEnabled());
-    renderer->Bind();
-    m_gbuffer->BindTextureBuffersTo(
-                renderer->GetMaterial()->GetShaderProgram(), false);
-    renderer->OnRender();
-    renderer->UnBind();
-}
-
-void GraphicPipeline::RenderSelectionBuffer(
-                        const List<Renderer*> &renderers,
-                        const List<GameObject*> &sceneChildren,
-                        Scene *scene)
-{
-    m_selectionFB->Bind();
-
-    m_selectionFB->ClearDepth();
-    m_selectionFB->ClearColor(Color::One);
-
-    m_selectionFB->PrepareForRender(scene);
-    m_sceneSelectionPass->Pass (renderers, sceneChildren);
-    m_canvasSelectionPass->Pass(renderers, sceneChildren);
-
-    m_selectionFB->UnBind();
-}
-
 GraphicPipeline* GraphicPipeline::GetActive()
 {
     Screen *screen = Screen::GetInstance();
@@ -225,6 +177,22 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
     m_selectionFB->Resize(newWidth, newHeight);
+}
+
+void GraphicPipeline::Render(Renderer *rend)
+{
+    if (GL::IsBound(m_gbuffer))
+    {
+        rend->Bind();
+        Material *rendMat = rend->GetMaterial();
+        m_gbuffer->BindTextureBuffersTo(rendMat->GetShaderProgram(), false);
+        rend->OnRender();
+        rend->UnBind();
+    }
+    else if (GL::IsBound(m_selectionFB))
+    {
+        m_selectionFB->RenderForSelectionBuffer(rend);
+    }
 }
 
 GLContext *GraphicPipeline::GetGLContext() const
@@ -251,9 +219,6 @@ GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
     delete m_selectionFB;
-    delete m_scenePass;
-    delete m_canvasPass;
-    delete m_gizmosPass;
     delete m_texUnitManager;
     delete m_glContext;
 }

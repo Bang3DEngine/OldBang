@@ -2,6 +2,7 @@
 #define ISCENEEVENTLISTENER_H
 
 #include "Bang/List.h"
+#include "Bang/RenderPass.h"
 
 class SceneAgent
 {
@@ -12,7 +13,7 @@ public:
     }
     virtual void Update() { OnUpdate(); }
     virtual void ParentSizeChanged() { OnParentSizeChanged(); }
-    virtual void Render() { OnRender(); }
+    virtual void Render(RenderPass renderPass) { OnRender(renderPass); }
     virtual void RenderGizmos() { OnRenderGizmos(); }
     virtual void Destroy() { OnDestroy(); }
 
@@ -28,7 +29,7 @@ protected:
     virtual void OnStart() {}
     virtual void OnUpdate() {}
     virtual void OnParentSizeChanged() {}
-    virtual void OnRender() {}
+    virtual void OnRender(RenderPass renderPass) {}
     virtual void OnRenderGizmos() {}
     virtual void OnDestroy() {}
 
@@ -60,26 +61,26 @@ public:
 
     virtual void Update() override
     {
-        PROPAGATE_EVENT(Update(), GetChildren());
         SceneAgent::Update();
+        PROPAGATE_EVENT(Update(), GetChildren());
     }
 
-    virtual void Render() override
+    virtual void Render(RenderPass renderPass) override
     {
-        PROPAGATE_EVENT(Render(), GetChildren());
-        SceneAgent::OnRender();
+        SceneAgent::OnRender(renderPass);
+        PROPAGATE_EVENT(Render(renderPass), GetChildren());
     }
 
     virtual void ParentSizeChanged() override
     {
-        PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
         SceneAgent::ParentSizeChanged();
+        PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
     }
 
     virtual void RenderGizmos()  override
     {
-        PROPAGATE_EVENT(RenderGizmos(), GetChildren());
         SceneAgent::RenderGizmos();
+        PROPAGATE_EVENT(RenderGizmos(), GetChildren());
     }
 
     virtual void Destroy() override

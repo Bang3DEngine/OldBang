@@ -72,10 +72,10 @@ void Component::ParentSizeChanged()
     PROPAGATE_EVENT(ParentSizeChanged(), m_delegates);
     SceneAgent::ParentSizeChanged();
 }
-void Component::Render()
+void Component::Render(RenderPass renderPass)
 {
-    PROPAGATE_EVENT(Render(), m_delegates);
-    SceneAgent::Render();
+    PROPAGATE_EVENT(Render(renderPass), m_delegates);
+    SceneAgent::Render(renderPass);
 }
 void Component::RenderGizmos()
 {

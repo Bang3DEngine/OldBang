@@ -16,7 +16,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Gizmos/Gizmos.cpp \
     $$BANG_ROOT/src/Engine/General/TextFormatter.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Buffers/SelectionFramebuffer.cpp \
-    $$BANG_ROOT/src/Engine/Gizmos/GPPass_G_Gizmos.cpp \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.cpp \
     $$BANG_ROOT/src/Engine/Graphics/ShaderManager.cpp \
     $$BANG_ROOT/src/Engine/General/Application.cpp \
@@ -45,12 +44,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/General/Selection.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.cpp \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GraphicPipeline.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_Selection.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.cpp \
     $$BANG_ROOT/src/Engine/Components/Behaviour.cpp \
     $$BANG_ROOT/src/Engine/Assets/Texture2D.cpp \
     $$BANG_ROOT/src/Engine/Assets/Prefab.cpp \
@@ -111,7 +104,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/IToString.h \
     $$BANG_ROOT/src/Engine/Gizmos/Gizmos.h \
     $$BANG_ROOT/src/Engine/General/TextFormatter.h \
-    $$BANG_ROOT/src/Engine/Gizmos/GPPass_G_Gizmos.h \
     $$BANG_ROOT/src/Engine/General/Selection.h \
     $$BANG_ROOT/src/Engine/Graphics/Buffers/SelectionFramebuffer.h \
     $$BANG_ROOT/src/Engine/IO/Behaviours/BehaviourManager.h \
@@ -188,13 +180,8 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Debug/GraphicPipelineDebugger.h \
     $$BANG_ROOT/src/Engine/Compiler/CodePreprocessor.h \
     $$BANG_ROOT/src/Engine/IO/Project/Project.h \
+    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/RenderPass.h \
     $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GraphicPipeline.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_G.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_Selection.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
-    $$BANG_ROOT/src/Engine/Graphics/GraphicPipeline/GPPass_RenderLayer.h \
     $$BANG_ROOT/src/Engine/IO/Project/ProjectManager.h \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.h \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.h \

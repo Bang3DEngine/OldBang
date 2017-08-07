@@ -38,7 +38,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     m_cursorRenderer->SetEnabled(false);
     m_cursorRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
     m_cursorRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    m_cursorRenderer->SetRenderLayer(Renderer::RenderLayer::RLCanvas);
+    m_cursorRenderer->SetRenderPass(RenderPass::Canvas);
 
     m_cursorIndex = p_text->GetContent().Size();
 
