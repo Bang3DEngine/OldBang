@@ -18,7 +18,7 @@
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
-    SetMesh( new Mesh() );
+    m_mesh = new Mesh();
     SetMaterial(
         AssetsManager::Load<Material>(
                     EPATH("Materials/UI/G_UITextRenderer.bmat") ));
@@ -27,7 +27,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
     SetContent("Bang");
     SetTextSize(20.0f);
-    SetTint(Color::Black);
+    SetTextColor(Color::Black);
 
     SetRenderPrimitive(GL::RenderPrimitive::Quads);
     RefreshMesh();
@@ -35,7 +35,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
 UITextRenderer::~UITextRenderer()
 {
-    if (p_mesh) { delete p_mesh; }
+    if (m_mesh) { delete m_mesh; }
 }
 
 void UITextRenderer::RefreshMesh()
@@ -45,8 +45,8 @@ void UITextRenderer::RefreshMesh()
 
     if (!m_font)
     {
-        p_mesh->LoadPositions({});
-        p_mesh->LoadUvs({});
+        m_mesh->LoadPositions({});
+        m_mesh->LoadUvs({});
         return;
     }
 
@@ -104,9 +104,8 @@ void UITextRenderer::RefreshMesh()
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
                                                        textQuadPos2D.End());
-    p_mesh->LoadPositions(textQuadPos3D);
-    p_mesh->LoadUvs(textQuadUvs);
-    SetMesh(p_mesh);
+    m_mesh->LoadPositions(textQuadPos3D);
+    m_mesh->LoadUvs(textQuadUvs);
 }
 
 void UITextRenderer::CloneInto(ICloneable *clone) const
@@ -114,7 +113,6 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     UIRenderer::CloneInto(clone);
 
     UITextRenderer *text = SCAST<UITextRenderer*>(clone);
-    text->SetMesh( new Mesh() );
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
@@ -123,6 +121,12 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetVerticalWrapMode( GetVerticalWrapMode() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
+}
+
+void UITextRenderer::OnRender()
+{
+    Renderer::OnRender();
+    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
 }
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
@@ -295,11 +299,11 @@ void UITextRenderer::Read(const XMLNode &xmlInfo)
     Path fontFilepath = xmlInfo.Get<Path>("Font");
     SetFont( AssetsManager::Load<Font>(fontFilepath) );
     SetContent(xmlInfo.Get<String>("Content"));
-    SetTint(xmlInfo.Get<Color>("Color"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
     SetScrollingPx(xmlInfo.Get<Vector2i>("ScrollingPx"));
     SetKerning(xmlInfo.Get<bool>("Kerning"));
+    SetTextColor( xmlInfo.Get<Color>("TextColor") );
     SetVerticalWrapMode( xmlInfo.Get<WrapMode>("VWrapMode") );
     SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
     SetVerticalAlign( xmlInfo.Get<VerticalAlignment>("VerticalAlign") );
@@ -311,14 +315,24 @@ void UITextRenderer::Write(XMLNode *xmlInfo) const
     UIRenderer::Write(xmlInfo);
 
     xmlInfo->Set("Font", GetFont() ? GetFont()->GetFilepath() : Path::Empty);
-    xmlInfo->Set("Color", GetTint());
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());
+    xmlInfo->Set("TextColor", GetTextColor());
     xmlInfo->Set("ScrollingPx", GetScrollingPx());
     xmlInfo->Set("Kerning", GetKerning());
     xmlInfo->Set("VWrapMode", GetVerticalWrapMode());
     xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
+}
+
+void UITextRenderer::SetTextColor(const Color &textColor)
+{
+    GetMaterial()->SetDiffuseColor( textColor );
+}
+
+const Color &UITextRenderer::GetTextColor() const
+{
+    return GetMaterial()->GetDiffuseColor();
 }

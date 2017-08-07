@@ -17,11 +17,16 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
+    virtual void OnRender() override;
     void SetImage(Texture2D *imageTexture);
+
+    void SetTint(const Color& tint);
+    const Color& GetTint() const;
 
     Texture2D *GetImageTexture() const;
 
 private:
+    Mesh *p_quadMesh = nullptr;
     Texture2D *m_imageTexture = nullptr;
 };
 

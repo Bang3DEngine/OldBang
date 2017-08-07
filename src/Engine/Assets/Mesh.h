@@ -66,8 +66,6 @@ private:
     Sphere m_bSphere;
 
     bool m_trisModel = false;
-
-    friend class MeshRenderer;
 };
 
 #endif // MESH_H

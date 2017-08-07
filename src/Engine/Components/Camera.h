@@ -5,7 +5,6 @@
 #include "Bang/Component.h"
 
 FORWARD   class G_Screen;
-FORWARD   class MeshRenderer;
 FORWARD   class ShaderProgram;
 
 class Camera : public Component

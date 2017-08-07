@@ -10,7 +10,7 @@ GUIButton::GUIButton(const String &labelText) : UIGameObject("GUIButton")
     p_bgImage->SetParent(this);
 
     p_label = new GUILabel(labelText);
-    p_label->GetText()->SetTint(Color::Black);
+    p_label->GetText()->SetTextColor(Color::Black);
     p_label->SetParent(this);
 
     // Create aux UIGo to be able to render border rect after bg
@@ -22,7 +22,7 @@ GUIButton::GUIButton(const String &labelText) : UIGameObject("GUIButton")
     p_labelTinter = AddComponent<UIButtonTinter>();
     p_labelTinter->AddAgent(this);
     p_labelTinter->AddGameObjectToTint(p_label);
-    p_labelTinter->SetIdleTintColor(p_label->GetText()->GetTint());
+    p_labelTinter->SetIdleTintColor(p_label->GetText()->GetTextColor());
     p_labelTinter->SetOverTintColor(Color::Black);
     p_labelTinter->SetPressedTintColor(Color::White);
 

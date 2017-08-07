@@ -20,10 +20,13 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
+    virtual void OnRender() override;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetFont (Font *font);
+    void SetTextColor(const Color &textColor);
     void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     void SetKerning(bool kerning);
@@ -36,6 +39,7 @@ public:
 
     Font* GetFont() const;
     bool GetKerning() const;
+    const Color& GetTextColor() const;
     WrapMode GetHorizontalWrapMode() const;
     WrapMode GetVerticalWrapMode() const;
     VerticalAlignment GetVerticalAlignment() const;
@@ -78,6 +82,9 @@ protected:
 
     Array<Rect> m_charRectsNDC;
     std::vector<bool> m_charVisibility;
+
+private:
+    Mesh *m_mesh = nullptr;
 };
 
 #endif // UITEXTRENDERER_H

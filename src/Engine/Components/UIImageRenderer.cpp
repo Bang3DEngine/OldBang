@@ -1,7 +1,9 @@
 ﻿#include "Bang/UIImageRenderer.h"
 
+#include "Bang/Mesh.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
+#include "Bang/MeshFactory.h"
 #include "Bang/AssetsManager.h"
 
 UIImageRenderer::UIImageRenderer()
@@ -9,6 +11,8 @@ UIImageRenderer::UIImageRenderer()
     SetMaterial(AssetsManager::Load<Material>(
                     EPATH("Materials/UI/G_UIImageRenderer.bmat") ) );
     UseMaterialCopy();
+
+    p_quadMesh = MeshFactory::GetUIPlane();
 
     m_imageTexture = new Texture2D(); // TODO: MEMLEAK
     m_imageTexture->CreateEmpty(1,1);
@@ -31,6 +35,16 @@ void UIImageRenderer::SetImage(Texture2D *imageTexture)
     GetMaterial()->SetTexture(m_imageTexture);
 }
 
+void UIImageRenderer::SetTint(const Color &tint)
+{
+    GetMaterial()->SetDiffuseColor(tint);
+}
+
+const Color &UIImageRenderer::GetTint() const
+{
+    return GetMaterial()->GetDiffuseColor();
+}
+
 Texture2D *UIImageRenderer::GetImageTexture() const
 {
     return m_imageTexture;
@@ -50,5 +64,13 @@ void UIImageRenderer::Write(XMLNode *xmlInfo) const
     Texture2D *imgTex = GetImageTexture();
     Path texFilepath = imgTex ? imgTex->GetFilepath() : Path();
     xmlInfo->Set("Image", texFilepath);
+}
+
+void UIImageRenderer::OnRender()
+{
+    UIRenderer::OnRender();
+    GL::Render(p_quadMesh->GetVAO(),
+               GetRenderPrimitive(),
+               p_quadMesh->GetVertexCount());
 }
 

@@ -1,5 +1,6 @@
 #include "Bang/UIButtonTinter.h"
 
+#include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIRenderer.h"
 
@@ -87,7 +88,8 @@ void UIButtonTinter::ApplyTintToGameObjects(const Color &tintColor)
         List<UIRenderer*> uiRenderers = go->GetComponents<UIRenderer>();
         for (UIRenderer *uiRend : uiRenderers)
         {
-            uiRend->SetTint(tintColor);
+            Material *mat = uiRend->GetMaterial();
+            if (mat) { mat->SetDiffuseColor(tintColor); }
         }
     }
     m_currentTintColor = tintColor;

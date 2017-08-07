@@ -76,7 +76,7 @@ int main(int argc, char **argv)
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
                                         "detras del palenque de paja");
-    rightLabel->GetText()->SetTint(Color::White);
+    rightLabel->GetText()->SetTextColor(Color::White);
     rightLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
     rightLabel->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     rightLabel->GetText()->SetVerticalWrapMode(WrapMode::Hide);
