@@ -87,6 +87,8 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
             light->ApplyLight(m_gbuffer, renderRect);
         }
     }
+
+    m_gbuffer->SetStencilTest(false);
 }
 
 void GraphicPipeline::RenderGBuffer(Scene *scene)
@@ -97,7 +99,9 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->SetAllDrawBuffers();
 
     // GBuffer Scene rendering
+    m_gbuffer->SetStencilWrite(true);
     scene->Render(RenderPass::Scene_Lighted);
+    m_gbuffer->SetStencilWrite(false);
     ApplyDeferredLights();
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
