@@ -3,8 +3,10 @@
 #include "Bang/Paths.h"
 #include "Bang/XMLNode.h"
 #include "Bang/G_Shader.h"
+#include "Bang/G_GBuffer.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderManager.h"
+#include "Bang/GraphicPipeline.h"
 
 PostProcessEffect::PostProcessEffect()
 {
@@ -18,6 +20,24 @@ PostProcessEffect::PostProcessEffect()
 PostProcessEffect::~PostProcessEffect()
 {
     if (m_shaderProgram) { delete m_shaderProgram; }
+}
+
+void PostProcessEffect::OnRender(RenderPass renderPass)
+{
+    Component::OnRender(renderPass);
+
+    bool scenePostProcess = (GetType() == Type::AfterScene &&
+                             renderPass == RenderPass::Scene_PostProcess);
+    bool canvasPostProcess = (GetType() == Type::AfterCanvas &&
+                              renderPass == RenderPass::Canvas_PostProcess);
+
+    if (scenePostProcess || canvasPostProcess)
+    {
+        m_shaderProgram->Bind();
+        G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
+        gbuffer->ApplyPass(m_shaderProgram, true);
+        m_shaderProgram->UnBind();
+    }
 }
 
 void PostProcessEffect::SetType(PostProcessEffect::Type type)

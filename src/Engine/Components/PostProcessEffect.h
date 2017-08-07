@@ -20,6 +20,8 @@ public:
     PostProcessEffect();
     virtual ~PostProcessEffect();
 
+    virtual void OnRender(RenderPass renderPass) override;
+
     void SetType(Type type);
     void SetPriority(int priority);
     void SetPostProcessShader(G_Shader *postProcessShader);

@@ -104,6 +104,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->ClearStencil();
 
     // GBuffer Canvas rendering
+    m_gbuffer->SetAllDrawBuffers();
     GL::SetTestDepth(false);
     scene->Render(RenderPass::Canvas);
     scene->Render(RenderPass::Canvas_PostProcess);

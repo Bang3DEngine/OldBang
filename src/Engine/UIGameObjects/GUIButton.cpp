@@ -13,8 +13,11 @@ GUIButton::GUIButton(const String &labelText) : UIGameObject("GUIButton")
     p_label->GetText()->SetTint(Color::Black);
     p_label->SetParent(this);
 
-    p_borderRect = AddComponent<UIBorderRect>();
-    p_borderRect->SetLineColor(Color::Green);
+    // Create aux UIGo to be able to render border rect after bg
+    UIGameObject *aux = new UIGameObject("GUIButton_Aux");
+    p_borderRect = aux->AddComponent<UIBorderRect>();
+    p_borderRect->SetLineColor(Color::Purple);
+    aux->SetParent(this);
 
     p_labelTinter = AddComponent<UIButtonTinter>();
     p_labelTinter->AddAgent(this);

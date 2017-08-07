@@ -2,12 +2,17 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
+#include "Bang/Material.h"
+#include "Bang/AssetsManager.h"
 #include "Bang/ComponentFactory.h"
 
 LineRenderer::LineRenderer()
 {
     m_meshRenderer = ComponentFactory::CreateComponent<MeshRenderer>();
     m_meshRenderer->SetMesh( new Mesh() );
+    m_meshRenderer->SetMaterial(
+         AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
+    GetMaterial()->SetReceivesLighting(false);
     SetRenderMode(GL::RenderMode::Lines);
 }
 

@@ -10,12 +10,15 @@ UIBorderRect::UIBorderRect()
     p_lineRenderer = ComponentFactory::CreateComponent<LineRenderer>();
     p_lineRenderer->SetPoints({});
     p_lineRenderer->UseMaterialCopy();
+    p_lineRenderer->SetRenderMode(GL::RenderMode::LineStrip);
 
-    // Work in NDC space
+    // Work in Canvas and NDC space
+    p_lineRenderer->SetRenderPass(RenderPass::Canvas);
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     AddDelegate(p_lineRenderer);
-    SetLineWidth(2.0f);
+    SetLineColor(Color::Black);
+    SetLineWidth(5.0f);
 }
 
 UIBorderRect::~UIBorderRect()
@@ -36,7 +39,8 @@ void UIBorderRect::OnUpdate()
            {Vector3(boundingRectNDC.GetMinXMinY(), 0),
             Vector3(boundingRectNDC.GetMinXMaxY(), 0),
             Vector3(boundingRectNDC.GetMaxXMaxY(), 0),
-            Vector3(boundingRectNDC.GetMaxXMinY(), 0)} );
+            Vector3(boundingRectNDC.GetMaxXMinY(), 0),
+            Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
         m_latestBoundingRectNDC = boundingRectNDC;
     }
 }
