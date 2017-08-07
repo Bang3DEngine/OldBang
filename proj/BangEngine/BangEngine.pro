@@ -243,8 +243,6 @@ DISTFILES += \
     $$BANG_ROOT/res/EngineAssets/Sphere.bmesh \
     $$BANG_ROOT/res/EngineAssets/UIPlane.bmesh \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.vert_pp \
-    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
-    $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
     $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIText.bmat \
     $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.frag_pp \

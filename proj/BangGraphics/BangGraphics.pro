@@ -106,8 +106,6 @@ DISTFILES += \
     $$BANG_ROOT/src/res/EngineAssets/Textures/PointLightIcon.btex2d \
     $$BANG_ROOT/src/res/EngineAssets/Textures/RectTransformAnchor.btex2d \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.vert_pp \
-    $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
-    $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText_Pass2.frag_g \
     $$BANG_ROOT/src/res/EngineAssets/Materials/UI/G_UIText.bmat \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
     $$BANG_ROOT/src/res/EngineAssets/Shaders/SP_Default.frag_pp \
