@@ -3,7 +3,9 @@
 
 #include "Bang/Array.h"
 #include "Bang/Vector3.h"
-#include "Bang/MeshRenderer.h"
+#include "Bang/Renderer.h"
+
+FORWARD class Mesh;
 
 class LineRenderer : public Renderer
 {
@@ -27,7 +29,7 @@ protected:
     virtual void OnRender() override;
 
 private:
-    MeshRenderer  *p_meshRenderer = nullptr;
+    Mesh  *m_mesh = nullptr;
     Array<Vector3> m_points;
 };
 

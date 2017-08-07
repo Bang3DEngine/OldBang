@@ -4,30 +4,24 @@
 #include "Bang/AABox.h"
 #include "Bang/Material.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/ComponentFactory.h"
 
 LineRenderer::LineRenderer()
 {
-    p_meshRenderer = ComponentFactory::CreateComponent<MeshRenderer>();
-    p_meshRenderer->SetMesh( new Mesh() ); // TODO: MEMLEAK
-    p_meshRenderer->SetMaterial(
-         AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
-    GetMaterial()->SetReceivesLighting(false);
-    AddDelegate(p_meshRenderer);
+    m_mesh = new Mesh();
+    SetMaterial( AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
 
     SetRenderPrimitive(GL::RenderPrimitive::Lines);
 }
 
 LineRenderer::~LineRenderer()
 {
+    delete m_mesh;
 }
 
 void LineRenderer::OnRender()
 {
-    Renderer::OnRender();
-    Mesh *mesh = p_meshRenderer->GetMesh();
-    ENSURE(mesh && mesh->GetVAO() && mesh->GetVertexCount() > 0);
-    GL::Render(mesh->GetVAO(), GetRenderPrimitive(), mesh->GetVertexCount());
+    Renderer::OnRender(); ENSURE(m_mesh->GetVertexCount() > 0);
+    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
 }
 
 void LineRenderer::CloneInto(ICloneable *clone) const
@@ -59,7 +53,7 @@ void LineRenderer::SetPoint(int i, const Vector3 &point)
 void LineRenderer::SetPoints(const Array<Vector3> &points)
 {
     m_points = points;
-    p_meshRenderer->GetMesh()->LoadPositions(m_points);
+    m_mesh->LoadPositions(m_points);
 }
 
 AABox LineRenderer::GetAABBox() const
