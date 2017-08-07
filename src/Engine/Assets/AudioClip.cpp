@@ -65,6 +65,16 @@ bool AudioClip::LoadFromFile(const Path &filepath)
     return !hasError;
 }
 
+void AudioClip::OnAudioSourceAttached(AudioSource *as)
+{
+    m_audioSourcesUsingThis.PushBack(as);
+}
+
+void AudioClip::OnAudioSourceDettached(AudioSource *as)
+{
+    m_audioSourcesUsingThis.RemoveAll(as);
+}
+
 int AudioClip::GetChannels() const
 {
     if (!IsLoaded()) { return 0; }
@@ -130,16 +140,6 @@ void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
     xmlInfo->Set("AudioFilepath", m_audioFileFilepath);
-}
-
-void AudioClip::OnAudioSourceAttached(AudioSource *as)
-{
-    m_audioSourcesUsingThis.PushBack(as);
-}
-
-void AudioClip::OnAudioSourceDettached(AudioSource *as)
-{
-    m_audioSourcesUsingThis.RemoveAll(as);
 }
 
 ALuint AudioClip::GetALBufferId() const

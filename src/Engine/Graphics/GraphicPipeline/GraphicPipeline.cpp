@@ -78,7 +78,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     m_gbuffer->SetStencilTest(true);
 
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
-    if ( !rend || (rendMat && rendMat->ReceivesLighting()) )
+    if ( !rend || (rendMat && rendMat->GetReceivesLighting()) )
     {
         List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
         for (Light *light : lights)

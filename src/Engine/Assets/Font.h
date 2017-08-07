@@ -16,6 +16,7 @@ public:
     void LoadFromTTF(const Path &ttfFilepath) override;
     Path GetTTFFilepath() const;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

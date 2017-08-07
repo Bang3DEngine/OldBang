@@ -13,6 +13,7 @@ public:
     UIButtonTinter();
     virtual ~UIButtonTinter();
 
+    // Component
     virtual void OnUpdate() override;
 
     void AddGameObjectToTint(GameObject *go);

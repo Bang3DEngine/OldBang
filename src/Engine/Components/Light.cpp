@@ -10,27 +10,14 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 
-Light::Light()
-{
-}
+Light::Light() { }
+Light::~Light() { }
 
-Light::~Light()
-{
+void Light::SetColor(const Color &color) { m_color = color; }
+void Light::SetIntensity(float intensity) { m_intensity = intensity; }
 
-}
-
-void Light::SetUniformsBeforeApplyingLight(Material *mat) const
-{
-    G_ShaderProgram *sp = mat->GetShaderProgram();
-    ENSURE(sp); ASSERT(GL::IsBound(sp));
-
-    sp->Set("B_LightIntensity", m_intensity);
-    sp->Set("B_LightColor", m_color);
-
-    Transform *t = gameObject->transform;
-    sp->Set("B_LightForwardWorld",  t->GetForward());
-    sp->Set("B_LightPositionWorld", t->GetPosition());
-}
+Color Light::GetColor() const { return m_color; }
+float Light::GetIntensity() const { return m_intensity; }
 
 void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
 {
@@ -46,6 +33,19 @@ void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
     m_lightMaterialScreen->UnBind();
 }
 
+void Light::SetUniformsBeforeApplyingLight(Material *mat) const
+{
+    G_ShaderProgram *sp = mat->GetShaderProgram();
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
+
+    sp->Set("B_LightIntensity", m_intensity);
+    sp->Set("B_LightColor", m_color);
+
+    Transform *t = gameObject->transform;
+    sp->Set("B_LightForwardWorld",  t->GetForward());
+    sp->Set("B_LightPositionWorld", t->GetPosition());
+}
+
 Rect Light::GetRenderRect(Camera *cam) const
 {
     // Well implemented for each kind of light
@@ -58,26 +58,6 @@ void Light::CloneInto(ICloneable *clone) const
     Light *l = SCAST<Light*>(clone);
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
-}
-
-void Light::SetColor(const Color &color)
-{
-    m_color = color;
-}
-
-void Light::SetIntensity(float intensity)
-{
-    m_intensity = intensity;
-}
-
-Color Light::GetColor() const
-{
-    return m_color;
-}
-
-float Light::GetIntensity() const
-{
-    return m_intensity;
 }
 
 void Light::Read(const XMLNode &xmlInfo)

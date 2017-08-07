@@ -18,6 +18,7 @@ public:
     UIButton();
     virtual ~UIButton();
 
+    // Component
     virtual void OnUpdate() override;
 
     void AddAgent(GameObject *agent);

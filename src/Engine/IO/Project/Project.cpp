@@ -17,17 +17,6 @@ Project::~Project()
 {
 }
 
-void Project::Read(const XMLNode &xmlInfo)
-{
-    m_randomId = xmlInfo.Get<String>("RandomID");
-}
-
-void Project::Write(XMLNode *xmlInfo) const
-{
-    xmlInfo->SetTagName("Project");
-    xmlInfo->Set("RandomID", m_randomId);
-}
-
 const Path&  Project::GetProjectDirPath() const
 {
     return m_projectRootFilepath;
@@ -72,3 +61,16 @@ bool Project::OpenFirstFoundScene() const
 
     return foundSceneFile;
 }
+
+
+void Project::Read(const XMLNode &xmlInfo)
+{
+    m_randomId = xmlInfo.Get<String>("RandomID");
+}
+
+void Project::Write(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetTagName("Project");
+    xmlInfo->Set("RandomID", m_randomId);
+}
+

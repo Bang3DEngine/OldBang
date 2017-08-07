@@ -20,46 +20,18 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    if (m_materialCopy)
+    if (m_materialCopy) { delete m_materialCopy; }
+}
+
+void Renderer::OnRender(RenderPass renderPass)
+{
+    Component::OnRender(renderPass);
+    if (renderPass == GetRenderPass())
     {
-        delete m_materialCopy;
+        GraphicPipeline::GetActive()->Render(this);
     }
 }
-
-void Renderer::CloneInto(ICloneable *clone) const
-{
-    Component::CloneInto(clone);
-    Renderer *r = SCAST<Renderer*>(clone);
-    r->SetMaterial(GetSharedMaterial());
-    r->SetRenderWireframe(GetRenderWireframe());
-    r->SetCullMode(GetCullMode());
-    r->SetRenderPrimitive(GetRenderPrimitive());
-    r->SetLineWidth(GetLineWidth());
-}
-
-void Renderer::SetMaterial(Material *m)
-{
-    if (m_material != m)
-    {
-        m_material = m;
-        if (m_materialCopy)
-        {
-            delete m_materialCopy;
-            m_materialCopy = nullptr;
-        }
-    }
-}
-
-Material *Renderer::GetMaterial() const
-{
-    if (m_materialCopy) { return m_materialCopy; }
-    return m_material ? m_material : Material::GetMissingMaterial();
-}
-
-Material *Renderer::GetSharedMaterial() const
-{
-    return m_material;
-}
+void Renderer::OnRender() { }
 
 void Renderer::Bind() const
 {
@@ -74,6 +46,11 @@ void Renderer::Bind() const
 
     Material *mat = GetMaterial();
     mat->Bind();
+}
+
+void Renderer::UnBind() const
+{
+    GetMaterial()->UnBind();
 }
 
 void Renderer::UseMaterialCopy()
@@ -91,91 +68,62 @@ void Renderer::UseMaterialCopy()
     }
 }
 
-void Renderer::UnBind() const
-{
-    GetMaterial()->UnBind();
-}
 
-void Renderer::SetRenderPass(RenderPass rp)
+void Renderer::SetMaterial(Material *m)
 {
-    m_renderPass = rp;
+    if (m_material != m)
+    {
+        m_material = m;
+        if (m_materialCopy)
+        {
+            delete m_materialCopy;
+            m_materialCopy = nullptr;
+        }
+    }
 }
-
-RenderPass Renderer::GetRenderPass() const
-{
-    return m_renderPass;
-}
-
+void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
+RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
+bool Renderer::GetRenderWireframe() const { return m_drawWireframe; }
+AABox Renderer::GetAABBox() const { return AABox(); }
+void Renderer::SetCullMode(GL::CullMode cullMode) { m_cullMode = cullMode; }
+GL::CullMode Renderer::GetCullMode() const { return m_cullMode; }
+void Renderer::SetLineWidth(float w) { m_lineWidth = w; }
 void Renderer::SetRenderWireframe(bool drawWireframe)
 {
     m_drawWireframe = drawWireframe;
 }
-bool Renderer::GetRenderWireframe() const
+void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
 {
-    return m_drawWireframe;
+    m_viewProjMode = viewProjMode;
+}
+void Renderer::SetRenderPrimitive(GL::RenderPrimitive renderMode)
+{
+    m_renderMode = renderMode;
 }
 
-AABox Renderer::GetAABBox() const
+GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
+GL::RenderPrimitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
+float Renderer::GetLineWidth() const { return m_lineWidth; }
+Material *Renderer::GetSharedMaterial() const { return m_material; }
+Material *Renderer::GetMaterial() const
 {
-    return AABox();
+    if (m_materialCopy) { return m_materialCopy; }
+    return m_material ? m_material : Material::GetMissingMaterial();
 }
-
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     return camera->GetScreenBoundingRect(GetAABBox());
 }
 
-
-void Renderer::SetCullMode(GL::CullMode cullMode)
+void Renderer::CloneInto(ICloneable *clone) const
 {
-    m_cullMode = cullMode;
-}
-GL::CullMode Renderer::GetCullMode() const
-{
-    return m_cullMode;
-}
-
-void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
-{
-    m_viewProjMode = viewProjMode;
-}
-
-GL::ViewProjMode Renderer::GetViewProjMode() const
-{
-    return m_viewProjMode;
-}
-
-
-void Renderer::SetRenderPrimitive(GL::RenderPrimitive renderMode)
-{
-    m_renderMode = renderMode;
-}
-GL::RenderPrimitive Renderer::GetRenderPrimitive() const
-{
-    return m_renderMode;
-}
-
-
-void Renderer::SetLineWidth(float w)
-{
-    m_lineWidth = w;
-}
-float Renderer::GetLineWidth() const
-{
-    return m_lineWidth;
-}
-
-void Renderer::OnRender(RenderPass renderPass)
-{
-    Component::OnRender(renderPass);
-    if (renderPass == GetRenderPass())
-    {
-        GraphicPipeline::GetActive()->Render(this);
-    }
-}
-
-void Renderer::OnRender()
-{
+    Component::CloneInto(clone);
+    Renderer *r = SCAST<Renderer*>(clone);
+    r->SetMaterial(GetSharedMaterial());
+    r->SetRenderWireframe(GetRenderWireframe());
+    r->SetCullMode(GetCullMode());
+    r->SetRenderPrimitive(GetRenderPrimitive());
+    r->SetLineWidth(GetLineWidth());
 }
 
 void Renderer::Read(const XMLNode &xmlInfo)

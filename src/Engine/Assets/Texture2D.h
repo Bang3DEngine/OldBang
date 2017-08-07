@@ -15,6 +15,7 @@ public:
     explicit Texture2D(const G_Texture2D *gTexture);
     virtual ~Texture2D();
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 };

@@ -27,6 +27,97 @@ AudioSource::~AudioSource()
     alDeleteSources(1, &m_alSourceId);
 }
 
+void AudioSource::Play(float delay)
+{
+    ENSURE(m_audioClip);
+    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(), delay);
+}
+
+void AudioSource::Pause()
+{
+    ENSURE(m_audioClip);
+    alSourcePause(m_alSourceId);
+}
+
+void AudioSource::Stop()
+{
+    ENSURE(m_audioClip);
+    alSourceStop(m_alSourceId);
+}
+
+void AudioSource::SetAudioClip(AudioClip *audioClip)
+{
+    if (m_audioClip)
+    {
+        m_audioClip->OnAudioSourceDettached(this);
+    }
+
+    SetAudioClipNoDettachAttach(audioClip);
+
+    if (m_audioClip)
+    {
+        m_audioClip->OnAudioSourceAttached(this);
+    }
+}
+void AudioSource::SetVolume(float volume)
+{
+    m_volume = volume;
+    alSourcef(GetALSourceId(), AL_GAIN, m_volume);
+}
+void AudioSource::SetPitch(float pitch)
+{
+    m_pitch = Math::Max(pitch, 0.01f);
+    alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
+}
+void AudioSource::SetRange(float range)
+{
+    m_range = range;
+    alSourcef(GetALSourceId(), AL_MAX_DISTANCE, m_range);
+}
+void AudioSource::SetLooping(bool looping)
+{
+    m_looping = looping;
+    alSourcef(GetALSourceId(), AL_LOOPING, m_looping);
+}
+void AudioSource::SetPlayOnStart(bool playOnStart)
+{
+    m_playOnStart = playOnStart;
+}
+
+
+void AudioSource::OnStart()
+{
+    Component::OnStart();
+    if (IsPlayOnStart())
+    {
+        Play();
+    }
+}
+
+bool AudioSource::IsPlaying() const { return GetState() == State::Playing; }
+bool AudioSource::IsPaused() const { return GetState() == State::Paused; }
+bool AudioSource::IsStopped() const { return GetState() == State::Stopped; }
+float AudioSource::GetVolume() const { return m_volume; }
+float AudioSource::GetPitch() const { return m_pitch; }
+float AudioSource::GetRange() const { return m_range; }
+bool AudioSource::IsLooping() const { return m_looping; }
+bool AudioSource::IsPlayOnStart() const { return m_playOnStart; }
+AudioClip *AudioSource::GetAudioClip() const { return m_audioClip; }
+float AudioSource::GetPlayProgress() const
+{
+    if (!m_audioClip) { return 0.0f; }
+
+    float secondsOffset;
+    alGetSourcef(m_alSourceId, AL_SEC_OFFSET, &secondsOffset);
+    return secondsOffset / m_audioClip->GetLength();
+}
+AudioSource::State AudioSource::GetState() const
+{
+    ALint state;
+    alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
+    return static_cast<State>(state);
+}
+
 void AudioSource::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -69,138 +160,6 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Range",      m_range);
     xmlInfo->Set("Looping",     m_looping);
     xmlInfo->Set("PlayOnStart", m_playOnStart);
-}
-
-void AudioSource::Play(float delay)
-{
-    ENSURE(m_audioClip);
-    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(), delay);
-}
-
-void AudioSource::Pause()
-{
-    ENSURE(m_audioClip);
-    alSourcePause(m_alSourceId);
-}
-
-void AudioSource::Stop()
-{
-    ENSURE(m_audioClip);
-    alSourceStop(m_alSourceId);
-}
-
-AudioClip *AudioSource::GetAudioClip() const
-{
-    return m_audioClip;
-}
-
-void AudioSource::SetAudioClip(AudioClip *audioClip)
-{
-    if (m_audioClip)
-    {
-        m_audioClip->OnAudioSourceDettached(this);
-    }
-
-    SetAudioClipNoDettachAttach(audioClip);
-
-    if (m_audioClip)
-    {
-        m_audioClip->OnAudioSourceAttached(this);
-    }
-}
-
-void AudioSource::SetVolume(float volume)
-{
-    m_volume = volume;
-    alSourcef(GetALSourceId(), AL_GAIN, m_volume);
-}
-
-void AudioSource::SetPitch(float pitch)
-{
-    m_pitch = Math::Max(pitch, 0.01f);
-    alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
-}
-
-void AudioSource::SetRange(float range)
-{
-    m_range = range;
-    alSourcef(GetALSourceId(), AL_MAX_DISTANCE, m_range);
-}
-
-void AudioSource::SetLooping(bool looping)
-{
-    m_looping = looping;
-    alSourcef(GetALSourceId(), AL_LOOPING, m_looping);
-}
-
-void AudioSource::SetPlayOnStart(bool playOnStart)
-{
-    m_playOnStart = playOnStart;
-}
-
-bool AudioSource::IsPlaying() const
-{
-    return GetState() == State::Playing;
-}
-
-bool AudioSource::IsPaused() const
-{
-    return GetState() == State::Paused;
-}
-
-bool AudioSource::IsStopped() const
-{
-    return GetState() == State::Stopped;
-}
-
-AudioSource::State AudioSource::GetState() const
-{
-    ALint state;
-    alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
-    return static_cast<State>(state);
-}
-
-void AudioSource::OnStart()
-{
-    Component::OnStart();
-    if (IsPlayOnStart())
-    {
-        Play();
-    }
-}
-
-float AudioSource::GetPlayProgress() const
-{
-	if (!m_audioClip) { return 0.0f; }
-
-    float secondsOffset;
-    alGetSourcef(m_alSourceId, AL_SEC_OFFSET, &secondsOffset);
-    return secondsOffset / m_audioClip->GetLength();
-}
-
-float AudioSource::GetVolume() const
-{
-    return m_volume;
-}
-
-float AudioSource::GetPitch() const
-{
-    return m_pitch;
-}
-
-float AudioSource::GetRange() const
-{
-    return m_range;
-}
-
-bool AudioSource::IsLooping() const
-{
-    return m_looping;
-}
-
-bool AudioSource::IsPlayOnStart() const
-{
-    return m_playOnStart;
 }
 
 void AudioSource::OnUpdate()

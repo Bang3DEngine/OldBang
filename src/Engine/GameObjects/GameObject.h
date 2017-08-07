@@ -25,26 +25,17 @@ public:
     Transform* const& transform = p_transform;
 
     GameObject(const String &m_name = "GameObject");
-
-    virtual void CloneInto(ICloneable *clone) const override;
-
     virtual ~GameObject();
-
-    void SetName(const String &m_name);
-
-    void Print(const String& indent = "") const;
-    String ToString() const;
-
-    const String& GetName() const;
-    const List<Component*>& GetComponents() const;
 
     static void Destroy(GameObject *gameObject);
 
+    void SetName(const String &m_name);
+
+    const String& GetName() const;
+    const List<Component*>& GetComponents() const;
     using SceneNode<GameObject>::GetChild;
     GameObject* GetChild(const String &name) const;
-
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
-
     AABox GetObjectAABBox(bool includeChildren = true) const;
     AABox GetAABBox(bool includeChildren = true) const;
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
@@ -101,10 +92,6 @@ public:
         return result.Concat(parent->GetComponentsInParent<T>());
     }
 
-
-    /**
-     * Returns the first Component<T> found in children
-     */
     template <class T>
     T* GetComponentInChildren() const
     {
@@ -118,9 +105,6 @@ public:
         return nullptr;
     }
 
-    /**
-     * Returns all the Components<T> of its children
-     */
     template <class T>
     List<T*> GetComponentsInChildren() const
     {
@@ -182,18 +166,27 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
-    void UpdateXMLInfo(const XMLNode &xmlInfo);
-    void ReadFirstTime(const XMLNode &xmlInfo);
-    virtual String GetInstanceId() const override;
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-
+    // SceneNode
     virtual void Start() override;
     virtual void Update() override;
     virtual void ParentSizeChanged() override;
     virtual void Render(RenderPass renderPass) override;
     virtual void RenderGizmos() override;
     virtual void Destroy() override;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // IToString
+    void Print(const String& indent = "") const;
+    String ToString() const;
+
+    // SerializableObject
+    virtual String GetInstanceId() const override;
+    void UpdateXMLInfo(const XMLNode &xmlInfo);
+    void ReadFirstTime(const XMLNode &xmlInfo);
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     String m_name = "";

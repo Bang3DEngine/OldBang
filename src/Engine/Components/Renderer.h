@@ -18,44 +18,44 @@ class Renderer : public GLObject,
     COMPONENT(Renderer)
 
 public:
-    virtual void CloneInto(ICloneable *clone) const override;
-
-    virtual void SetMaterial(Material *m);
-    virtual Material* GetMaterial() const;
-    virtual Material* GetSharedMaterial() const;
-
-    void SetRenderWireframe(bool m_drawWireframe);
-    bool GetRenderWireframe() const;
-
-    virtual AABox GetAABBox() const;
-
-    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
-
-    void SetCullMode(GL::CullMode m_cullMode);
-    GL::CullMode GetCullMode() const;
-
-    void SetViewProjMode(GL::ViewProjMode viewProjMode);
-    GL::ViewProjMode GetViewProjMode() const;
-
-    void SetRenderPrimitive(GL::RenderPrimitive m_renderMode);
-    GL::RenderPrimitive GetRenderPrimitive() const;
-
-    void SetLineWidth(float w);
-    float GetLineWidth() const;
-
-    virtual void OnRender(RenderPass renderPass) override;
     virtual void OnRender();
 
-    void UseMaterialCopy();
-
+    // GLObject
     virtual void Bind() const override;
     virtual void UnBind() const override;
 
+    // Component
+    virtual void OnRender(RenderPass renderPass) override;
+
+    void UseMaterialCopy();
+
+    void SetMaterial(Material *m);
+    void SetRenderWireframe(bool m_drawWireframe);
+    void SetCullMode(GL::CullMode m_cullMode);
+    void SetViewProjMode(GL::ViewProjMode viewProjMode);
+    void SetRenderPrimitive(GL::RenderPrimitive m_renderMode);
+    void SetLineWidth(float w);
+    void SetRenderPass(RenderPass rp);
+
+    Material* GetMaterial() const;
+    Material* GetSharedMaterial() const;
+    bool GetRenderWireframe() const;
+    GL::CullMode GetCullMode() const;
+    GL::ViewProjMode GetViewProjMode() const;
+    GL::RenderPrimitive GetRenderPrimitive() const;
+    float GetLineWidth() const;
+    RenderPass GetRenderPass() const;
+
+    // Renderer
+    virtual AABox GetAABBox() const;
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    void SetRenderPass(RenderPass rp);
-    RenderPass GetRenderPass() const;
 
 protected:
     bool m_drawWireframe        = false;

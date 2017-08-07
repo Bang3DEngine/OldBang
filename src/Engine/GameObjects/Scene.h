@@ -20,13 +20,13 @@ public:
     void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
 
-    static Scene *GetActiveScene();
-
     void Destroy(GameObject *gameObject);
     void DestroyImmediate(GameObject *gameObject);
 
+    static Scene *GetActiveScene();
     virtual Camera *GetCamera() const;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
     virtual void PostRead(const XMLNode &xmlInfo) override;
@@ -38,15 +38,16 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
+    // GameObject
     virtual void Start () override;
     virtual void Update () override;
     virtual void RenderGizmos() override;
     virtual void _OnResize (int newWidth, int newHeight);
 
     void AddHiddenChild(GameObject *go);
+    void DestroyQueuedGameObjects();
 
     Gizmos *GetGizmos() const;
-    void DestroyQueuedGameObjects();
 
     friend class Screen;
     friend class Gizmos;

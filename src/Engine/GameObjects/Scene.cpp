@@ -47,7 +47,6 @@ void Scene::AddHiddenChild(GameObject *go)
     go->SetParent(this);
     if (!m_hiddenGameObjects.Contains(go)) { m_hiddenGameObjects.PushBack(go); }
 }
-
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 
 void Scene::SetCamera(Camera *cam)
@@ -90,16 +89,6 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     }
 }
 
-Scene *Scene::GetActiveScene()
-{
-    return SceneManager::GetActiveScene();
-}
-
-Camera *Scene::GetCamera() const
-{
-    return p_camera;
-}
-
 void Scene::Destroy(GameObject *gameObject)
 {
     m_gameObjectsToBeDestroyed.push(gameObject);
@@ -120,6 +109,10 @@ void Scene::DestroyQueuedGameObjects()
         m_gameObjectsToBeDestroyed.pop();
     }
 }
+
+
+Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
+Camera *Scene::GetCamera() const { return p_camera; }
 
 void Scene::Read(const XMLNode &xmlInfo)
 {

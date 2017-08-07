@@ -24,7 +24,8 @@ void Asset::CloneInto(ICloneable * clone) const
 String Asset::ToString() const
 {
     String res = GetClassName();
-    res +=  " '" + m_assetFilepath + "'. (" + String::ToString((void*)this) + ")";
+    res +=  " '" + m_assetFilepath + "'. (" +
+            String::ToString((void*)this) + ")";
     return res;
 }
 

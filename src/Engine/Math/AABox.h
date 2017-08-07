@@ -38,44 +38,22 @@ public:
     Vector3 GetDimensions() const;
     float GetArea() const;
     float GetVolume() const;
-
+    Rect GetAABoundingScreenRect(Camera *cam) const;
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
+    Array<Vector3> GetPoints() const;
+
     bool CheckCollision(const Sphere &sphere,
                         Vector3 *point  = nullptr,
                         Vector3 *normal = nullptr) const;
     bool CheckCollision(const AABox &aabox) const;
     bool Contains(const Vector3 &point) const;
 
-    /**
-     * @brief For every coord, it gets the max and min values of b1 and b2.
-     * For example
-     * Union( b1(-1,-99,-1, 1,1,99),
-     * b2(-99,-99,-2, 2,0,1) ) = b(-99,-99,-2, 2,1,99)
-     * @param b1
-     * @param b2
-     * @return
-     */
     static AABox Union(const AABox &b1, const AABox &b2);
-
-    /**
-     * @brief This Box fills its values with the
-     * Bounding Box of the positions vector.
-     * @param positions
-     */
     void FillFromPositions(const Array<Vector3> &positions);
 
     static AABox FromSphere(const Sphere &sphere);
 
-    Array<Vector3> GetPoints() const;
-
-    /**
-     * @brief Returns the minimum 2D rect in screen NDC space that contains
-     * this box rendered from the passed camera.
-     * @param cam
-     * @return
-     */
-    Rect GetAABoundingScreenRect(Camera *cam) const;
-
+    // IToString
     String ToString() const override;
 };
 

@@ -6,22 +6,20 @@
 
 class Sphere
 {
-private:
-
-    Vector3 m_center = Vector3(0.0f);
-    float m_radius = 0.0f;
-
 public:
-
     Sphere();
     Sphere(float m_radius);
     Sphere(const Vector3 &m_center, float m_radius);
 
-    Array<Vector3> GetPoints() const;
+    void SetCenter(const Vector3 &m_center);
+    void SetRadius(float m_radius);
 
+    Array<Vector3> GetPoints() const;
     float GetDiameter() const;
     float GetArea() const;
     float GetVolume() const;
+    const Vector3 & GetCenter() const;
+    float GetRadius() const;
 
     bool Contains(const Vector3 &point) const;
     bool CheckCollision(const Sphere &sphere) const;
@@ -29,20 +27,13 @@ public:
                         Vector3 *point  = nullptr,
                         Vector3 *normal = nullptr) const;
 
-    /**
-     * @brief Converts this sphere to a boundingSphere
-     * wrapping the box passed as parameter.
-     * @param box
-     */
     void FillFromBox(const AABox &box);
 
     static Sphere FromBox(const AABox &box);
 
-    void SetCenter(const Vector3 &m_center);
-    const Vector3 & GetCenter() const;
-
-    void SetRadius(float m_radius);
-    float GetRadius() const;
+private:
+    Vector3 m_center = Vector3(0.0f);
+    float m_radius = 0.0f;
 };
 
 #endif // SPHERE_H

@@ -8,9 +8,6 @@
 FORWARD class QLibrary;
 FORWARD class Behaviour;
 
-/**
- * @brief Manages the compiling and loading of the Behaviour's Libraries.
- */
 class BehaviourManager
 {
 public:

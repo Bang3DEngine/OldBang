@@ -22,62 +22,6 @@ Camera::~Camera()
 {
 }
 
-void Camera::GetViewMatrix(Matrix4 *view) const
-{
-    if (m_identityMode) { *view = Matrix4::Identity; return; }
-
-    transform->GetLocalToWorldMatrix(view);
-    *view = view->Inversed();
-}
-
-void Camera::GetProjectionMatrix(Matrix4 *proj) const
-{
-    if (m_identityMode) { *proj = Matrix4::Identity; return; }
-
-    if (m_projMode == ProjectionMode::Perspective)
-    {
-        *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatio(),
-                    m_zNear, m_zFar);
-    }
-    else //Ortho
-    {
-        *proj = Matrix4::Ortho(-GetOrthoWidth(),  GetOrthoWidth(),
-                               -GetOrthoHeight(), GetOrthoHeight(),
-                                GetZNear(),       GetZFar());
-    }
-}
-
-void Camera::SetOrthoHeight(float orthoHeight)
-{
-    m_orthoHeight = orthoHeight;
-}
-
-void Camera::SetClearColor(const Color &color)
-{
-    m_clearColor = color;
-}
-
-void Camera::SetFovDegrees(float fovDegrees)
-{
-    this->m_fovDegrees = fovDegrees;
-}
-
-void Camera::SetZNear(float zNear)
-{
-    this->m_zNear = zNear;
-}
-
-void Camera::SetZFar(float zFar)
-{
-    this->m_zFar = zFar;
-}
-
-void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
-{
-    this->m_projMode = projMode;
-}
-
 void Camera::Bind() const
 {
     Matrix4 view, projection;
@@ -86,42 +30,6 @@ void Camera::Bind() const
     GL::SetZNearFar(GetZNear(), GetZFar());
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
-}
-
-const Color &Camera::GetClearColor() const
-{
-    return m_clearColor;
-}
-
-float Camera::GetOrthoWidth() const
-{
-    return GetOrthoHeight() * Screen::GetAspectRatio();
-}
-
-float Camera::GetOrthoHeight() const
-{
-    return m_orthoHeight;
-}
-
-
-float Camera::GetFovDegrees() const
-{
-    return m_fovDegrees;
-}
-
-float Camera::GetZNear() const
-{
-    return m_zNear;
-}
-
-float Camera::GetZFar() const
-{
-    return m_zFar;
-}
-
-Camera::ProjectionMode Camera::GetProjectionMode() const
-{
-    return m_projMode;
 }
 
 Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
@@ -148,18 +56,6 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
     Vector3 res = res4.xyz();
     res = (v.Inversed() * Vector4(res, 1.0f)).xyz();
     return res;
-}
-
-void Camera::CloneInto(ICloneable *clone) const
-{
-    Component::CloneInto(clone);
-    Camera *cam = SCAST<Camera*>(clone);
-    cam->SetZFar(GetZFar());
-    cam->SetZNear(GetZNear());
-    cam->SetClearColor(GetClearColor());
-    cam->SetFovDegrees(GetFovDegrees());
-    cam->SetOrthoHeight(GetOrthoHeight());
-    cam->SetProjectionMode(GetProjectionMode());
 }
 
 Rect Camera::GetScreenBoundingRect(const AABox &bbox)
@@ -191,6 +87,62 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     return screenRect;
 }
 
+void Camera::SetOrthoHeight(float orthoHeight) { m_orthoHeight = orthoHeight; }
+void Camera::SetClearColor(const Color &color) { m_clearColor = color; }
+void Camera::SetFovDegrees(float fovDegrees) { this->m_fovDegrees = fovDegrees; }
+void Camera::SetZNear(float zNear) { this->m_zNear = zNear; }
+void Camera::SetZFar(float zFar) { this->m_zFar = zFar; }
+void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
+{
+    this->m_projMode = projMode;
+}
+
+const Color &Camera::GetClearColor() const { return m_clearColor; }
+float Camera::GetOrthoHeight() const { return m_orthoHeight; }
+float Camera::GetFovDegrees() const { return m_fovDegrees; }
+float Camera::GetZNear() const { return m_zNear; }
+float Camera::GetZFar() const { return m_zFar; }
+Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
+
+float Camera::GetOrthoWidth() const
+{
+   return GetOrthoHeight() * Screen::GetAspectRatio();
+}
+
+void Camera::GetViewMatrix(Matrix4 *view) const
+{
+    transform->GetLocalToWorldMatrix(view);
+    *view = view->Inversed();
+}
+
+void Camera::GetProjectionMatrix(Matrix4 *proj) const
+{
+    if (m_projMode == ProjectionMode::Perspective)
+    {
+        *proj = Matrix4::Perspective(
+                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatio(),
+                    m_zNear, m_zFar);
+    }
+    else //Ortho
+    {
+        *proj = Matrix4::Ortho(-GetOrthoWidth(),  GetOrthoWidth(),
+                               -GetOrthoHeight(), GetOrthoHeight(),
+                                GetZNear(),       GetZFar());
+    }
+}
+
+void Camera::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Camera *cam = SCAST<Camera*>(clone);
+    cam->SetZFar(GetZFar());
+    cam->SetZNear(GetZNear());
+    cam->SetClearColor(GetClearColor());
+    cam->SetFovDegrees(GetFovDegrees());
+    cam->SetOrthoHeight(GetOrthoHeight());
+    cam->SetProjectionMode(GetProjectionMode());
+}
+
 void Camera::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
@@ -213,14 +165,4 @@ void Camera::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("ProjectionMode", GetProjectionMode());
     xmlInfo->Set("OrthoHeight", GetOrthoHeight());
     xmlInfo->Set("FOVDegrees", GetFovDegrees());
-}
-
-void Camera::SetIdentityMode(bool identityMode)
-{
-    m_identityMode = identityMode;
-}
-
-bool Camera::IsInIdentityMode() const
-{
-    return m_identityMode;
 }

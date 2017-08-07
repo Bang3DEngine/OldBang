@@ -12,14 +12,6 @@ CircleRenderer::~CircleRenderer()
 {
 }
 
-void CircleRenderer::CloneInto(ICloneable *clone) const
-{
-    LineRenderer::CloneInto(clone);
-    CircleRenderer *cr = SCAST<CircleRenderer*>(clone);
-    cr->SetRadius(GetRadius());
-    cr->SetSegments(GetSegments());
-}
-
 void CircleRenderer::ReloadPoints()
 {
     Array<Vector3> points;
@@ -47,14 +39,15 @@ void CircleRenderer::SetSegments(int segments)
     ReloadPoints();
 }
 
-float CircleRenderer::GetRadius() const
-{
-    return m_radius;
-}
+float CircleRenderer::GetRadius() const { return m_radius; }
+int CircleRenderer::GetSegments() const { return m_segments; }
 
-int CircleRenderer::GetSegments() const
+void CircleRenderer::CloneInto(ICloneable *clone) const
 {
-    return m_segments;
+    LineRenderer::CloneInto(clone);
+    CircleRenderer *cr = SCAST<CircleRenderer*>(clone);
+    cr->SetRadius(GetRadius());
+    cr->SetSegments(GetSegments());
 }
 
 void CircleRenderer::Read(const XMLNode &xmlInfo)

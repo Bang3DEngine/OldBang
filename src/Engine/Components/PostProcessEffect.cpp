@@ -40,16 +40,8 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     }
 }
 
-void PostProcessEffect::SetType(PostProcessEffect::Type type)
-{
-    m_type = type;
-}
-
-void PostProcessEffect::SetPriority(int priority)
-{
-    m_priority = priority;
-}
-
+void PostProcessEffect::SetType(PostProcessEffect::Type type) { m_type = type; }
+void PostProcessEffect::SetPriority(int priority) { m_priority = priority; }
 void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
 {
     ENSURE(p_postProcessShader != postProcessShader);
@@ -61,6 +53,21 @@ void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
     m_shaderProgram->SetFragmentShader( p_postProcessShader );
 }
 
+PostProcessEffect::Type PostProcessEffect::GetType() const { return m_type; }
+int PostProcessEffect::GetPriority() const { return m_priority; }
+ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
+{
+    return m_shaderProgram;
+}
+G_Shader *PostProcessEffect::GetPostProcessShader() const
+{
+    return p_postProcessShader;
+}
+Path PostProcessEffect::GetPostProcessShaderFilepath() const
+{
+    return p_postProcessShader ? p_postProcessShader->GetFilepath() : Path();
+}
+
 void PostProcessEffect::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -68,31 +75,6 @@ void PostProcessEffect::CloneInto(ICloneable *clone) const
     ppe->SetPostProcessShader( GetPostProcessShader() );
     ppe->SetType( GetType() );
     ppe->SetPriority( GetPriority() );
-}
-
-PostProcessEffect::Type PostProcessEffect::GetType() const
-{
-    return m_type;
-}
-
-int PostProcessEffect::GetPriority() const
-{
-    return m_priority;
-}
-
-ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
-{
-    return m_shaderProgram;
-}
-
-G_Shader *PostProcessEffect::GetPostProcessShader() const
-{
-    return p_postProcessShader;
-}
-
-Path PostProcessEffect::GetPostProcessShaderFilepath() const
-{
-    return p_postProcessShader ? p_postProcessShader->GetFilepath() : Path();
 }
 
 void PostProcessEffect::Read(const XMLNode &xmlInfo)

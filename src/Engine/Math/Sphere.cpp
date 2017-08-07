@@ -20,6 +20,9 @@ Sphere::Sphere(const Vector3 & center, float radius) :
 
 }
 
+void Sphere::SetCenter(const Vector3 &center) { m_center = center; }
+void Sphere::SetRadius(float radius) { m_radius = radius; }
+
 Array<Vector3> Sphere::GetPoints() const
 {
     Array<Vector3> points;
@@ -36,21 +39,11 @@ Array<Vector3> Sphere::GetPoints() const
     }
     return points;
 }
-
-float Sphere::GetDiameter() const
-{
-    return 2 * m_radius;
-}
-
-float Sphere::GetArea() const
-{
-    return 2 * Math::PI * m_radius;
-}
-
-float Sphere::GetVolume() const
-{
-    return Math::PI * m_radius * m_radius;
-}
+float Sphere::GetDiameter() const { return 2 * m_radius; }
+float Sphere::GetArea() const { return 2 * Math::PI * m_radius; }
+float Sphere::GetVolume() const { return Math::PI * m_radius * m_radius; }
+const Vector3 & Sphere::GetCenter() const { return m_center; }
+float Sphere::GetRadius() const { return m_radius; }
 
 bool Sphere::Contains(const Vector3 &point) const
 {
@@ -82,24 +75,4 @@ Sphere Sphere::FromBox(const AABox &box)
     Sphere s;
     s.FillFromBox(box);
     return s;
-}
-
-void Sphere::SetCenter(const Vector3 &center)
-{
-    this->m_center = center;
-}
-
-const Vector3 & Sphere::GetCenter() const
-{
-    return m_center;
-}
-
-void Sphere::SetRadius(float radius)
-{
-    this->m_radius = radius;
-}
-
-float Sphere::GetRadius() const
-{
-    return m_radius;
 }

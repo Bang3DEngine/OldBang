@@ -14,20 +14,6 @@ Component::~Component()
     for (Component *c : m_delegates) { delete c; }
 }
 
-void Component::CloneInto(ICloneable *clone) const
-{
-    SerializableObject::CloneInto(clone);
-    Component *c = SCAST<Component*>(clone);
-    c->SetEnabled( IsEnabled() );
-}
-
-String Component::ToString() const
-{
-    std::ostringstream msg;
-    msg << "";
-    return GetClassName() + "(" + String::ToString((void*)this) + ")";
-}
-
 void Component::AddDelegate(Component *delegate)
 {
     if (!m_delegates.Contains(delegate))
@@ -41,22 +27,27 @@ void Component::RemoveDelegate(Component *delegate)
     m_delegates.Remove(delegate);
 }
 
-const List<Component *> &Component::GetDelegates() const
-{
-    return m_delegates;
-}
-
-GameObject *Component::GetGameObject() const
-{
-    return m_gameObject;
-}
-
 void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
     m_gameObjectTransform = m_gameObject->transform;
 }
 
+GameObject *Component::GetGameObject() const { return m_gameObject; }
+
+void Component::CloneInto(ICloneable *clone) const
+{
+    SerializableObject::CloneInto(clone);
+    Component *c = SCAST<Component*>(clone);
+    c->SetEnabled( IsEnabled() );
+}
+
+String Component::ToString() const
+{
+    std::ostringstream msg;
+    msg << "";
+    return GetClassName() + "(" + String::ToString((void*)this) + ")";
+}
 
 void Component::Start()
 {

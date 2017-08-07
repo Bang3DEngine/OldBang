@@ -14,16 +14,6 @@ RectTransform::~RectTransform()
 {
 }
 
-void RectTransform::CloneInto(ICloneable *clone) const
-{
-    Transform::CloneInto(clone);
-    RectTransform *rt = SCAST<RectTransform*>(clone);
-
-    rt->SetMargins( GetMarginRightTop(), GetMarginLeftBot() );
-    rt->SetAnchors( GetAnchorMin(), GetAnchorMax() );
-    rt->SetPivotPosition( GetPivotPosition() );
-}
-
 Vector2 RectTransform::FromPixelsToGlobalNDC(const Vector2i &pixels)
 {
     return (Vector2f(pixels) / Vector2f(Screen::GetSize())) * 2.0f;
@@ -166,50 +156,15 @@ void RectTransform::SetAnchors(const Vector2 &anchorMin,
     }
 }
 
-int RectTransform::GetMarginLeft() const
-{
-    return m_marginLeftBot.x;
-}
-
-int RectTransform::GetMarginTop() const
-{
-    return m_marginRightTop.y;
-}
-
-int RectTransform::GetMarginRight() const
-{
-    return m_marginRightTop.x;
-}
-
-int RectTransform::GetMarginBot() const
-{
-    return m_marginLeftBot.y;
-}
-
-const Vector2i& RectTransform::GetMarginLeftBot() const
-{
-    return m_marginLeftBot;
-}
-
-const Vector2i& RectTransform::GetMarginRightTop() const
-{
-    return m_marginRightTop;
-}
-
-const Vector2& RectTransform::GetPivotPosition() const
-{
-    return m_pivotPosition;
-}
-
-const Vector2& RectTransform::GetAnchorMin() const
-{
-    return m_anchorMin;
-}
-
-const Vector2& RectTransform::GetAnchorMax() const
-{
-    return m_anchorMax;
-}
+int RectTransform::GetMarginLeft() const { return m_marginLeftBot.x; }
+int RectTransform::GetMarginTop() const { return m_marginRightTop.y; }
+int RectTransform::GetMarginRight() const { return m_marginRightTop.x; }
+int RectTransform::GetMarginBot() const { return m_marginLeftBot.y; }
+const Vector2i& RectTransform::GetMarginLeftBot() const { return m_marginLeftBot; }
+const Vector2i& RectTransform::GetMarginRightTop() const { return m_marginRightTop; }
+const Vector2& RectTransform::GetPivotPosition() const { return m_pivotPosition; }
+const Vector2& RectTransform::GetAnchorMin() const { return m_anchorMin; }
+const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
 Recti RectTransform::GetScreenSpaceRectPx() const
 {
@@ -245,17 +200,6 @@ Rect RectTransform::GetParentScreenRect() const
     return parentScreenRect;
 }
 
-void RectTransform::OnChanged()
-{
-    if (gameObject) { gameObject->ParentSizeChanged(); }
-}
-
-void RectTransform::OnParentSizeChanged()
-{
-    Transform::OnParentSizeChanged();
-    m_hasChanged = true;
-}
-
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled()) { return Matrix4::Identity; }
@@ -275,6 +219,27 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                             Matrix4::TranslateMatrix(moveToPivot);
     m_hasChanged = false;
     return m_localToParentMatrix;
+}
+
+void RectTransform::OnChanged()
+{
+    if (gameObject) { gameObject->ParentSizeChanged(); }
+}
+
+void RectTransform::OnParentSizeChanged()
+{
+    Transform::OnParentSizeChanged();
+    m_hasChanged = true;
+}
+
+void RectTransform::CloneInto(ICloneable *clone) const
+{
+    Transform::CloneInto(clone);
+    RectTransform *rt = SCAST<RectTransform*>(clone);
+
+    rt->SetMargins( GetMarginRightTop(), GetMarginLeftBot() );
+    rt->SetAnchors( GetAnchorMin(), GetAnchorMax() );
+    rt->SetPivotPosition( GetPivotPosition() );
 }
 
 void RectTransform::Read(const XMLNode &xmlInfo)

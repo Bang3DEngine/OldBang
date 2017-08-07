@@ -18,12 +18,6 @@ class SystemUtils
 {
 public:
 
-    /**
-     * @brief Executes a system command.
-     * @param The command to be executed.
-     * @param The output of the command.
-     * @param Whether it's been successful or not
-     */
     static void System(const String &command,
                        const List<String> &argsList = {},
                        String *output = nullptr,

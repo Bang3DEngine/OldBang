@@ -32,23 +32,22 @@ public:
                  const Array<Vector3>& normals,
                  const Array<Vector2>& uvs);
 
+    void BindPositionsVBOToLocation(int positionsVBOLocation);
+    void BindNormalsVBOToLocation(int normalsVBOLocation);
+    void BindUvsVBOToLocation(int uvsVBOLocation);
+
     G_VAO *GetVAO() const;
     int GetVertexCount() const;
     const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
-
     const Array<Vector3>& GetPositions();
     const Array<Vector3>& GetNormals();
     const Array<Vector2>& GetUvs();
-
     const Path &GetModelFilepath() const;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    void BindPositionsVBOToLocation(int positionsVBOLocation);
-    void BindNormalsVBOToLocation(int normalsVBOLocation);
-    void BindUvsVBOToLocation(int uvsVBOLocation);
 
 private:
     Path m_modelFilepath;

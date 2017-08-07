@@ -49,17 +49,15 @@ void UIBorderRect::SetLineColor(const Color &lineColor)
 {
     p_lineRenderer->GetMaterial()->SetDiffuseColor(lineColor);
 }
-
-const Color &UIBorderRect::GetLineColor() const
-{
-    return p_lineRenderer->GetMaterial()->GetDiffuseColor();
-}
-
 void UIBorderRect::SetLineWidth(float lineWidth)
 {
     p_lineRenderer->SetLineWidth(lineWidth);
 }
 
+const Color &UIBorderRect::GetLineColor() const
+{
+    return p_lineRenderer->GetMaterial()->GetDiffuseColor();
+}
 float UIBorderRect::GetLineWidth() const
 {
     return p_lineRenderer->GetLineWidth();

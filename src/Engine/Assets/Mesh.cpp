@@ -126,45 +126,15 @@ void Mesh::BindUvsVBOToLocation(int uvsVBOLocation)
     m_vao->BindVBO(m_vertexUvsVBO, uvsVBOLocation, 2);
 }
 
-G_VAO *Mesh::GetVAO() const
-{
-    return m_vao;
-}
+G_VAO *Mesh::GetVAO() const { return m_vao; }
+int Mesh::GetVertexCount() const { return m_positions.Size(); }
+const AABox &Mesh::GetAABBox() const { return m_bBox; }
+const Sphere &Mesh::GetBoundingSphere() const { return m_bSphere; }
+ const Array<Vector3> &Mesh::GetPositions() { return m_positions; }
+ const Array<Vector3> &Mesh::GetNormals() { return m_normals; }
+ const Array<Vector2> &Mesh::GetUvs() { return m_uvs; }
+ const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
 
-int Mesh::GetVertexCount() const
-{
-    return m_positions.Size();
-}
-
-const AABox &Mesh::GetAABBox() const
-{
-    return m_bBox;
-}
-
-const Sphere &Mesh::GetBoundingSphere() const
-{
-    return m_bSphere;
-}
-
-const Array<Vector3> &Mesh::GetPositions()
-{
-    return m_positions;
-}
-
-const Array<Vector3> &Mesh::GetNormals()
-{
-    return m_normals;
-}
-
-const Array<Vector2> &Mesh::GetUvs()
-{
-    return m_uvs;
-}
-
-const Path &Mesh::GetModelFilepath() const
-{
-    return m_modelFilepath;
-}
 
 void Mesh::Read(const XMLNode &xmlInfo)
 {

@@ -18,19 +18,17 @@ public:
         Perspective
     };
 
-    void GetViewMatrix(Matrix4 *view) const;
-    void GetProjectionMatrix(Matrix4 *proj) const;
+
+    virtual void Bind() const;
+    Vector2 WorldToScreenNDCPoint(const Vector3 &position);
+    Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCam);
 
     void SetOrthoHeight(float orthoHeight);
-
     void SetClearColor(const Color& color);
     void SetFovDegrees(float fovDegrees);
     void SetZNear(float zNear);
     void SetZFar(float zFar);
-
     void SetProjectionMode(ProjectionMode projMode);
-
-    virtual void Bind() const;
 
     const Color& GetClearColor() const;
     float GetOrthoWidth() const;
@@ -38,24 +36,18 @@ public:
     float GetFovDegrees() const;
     float GetZNear() const;
     float GetZFar() const;
+    void GetViewMatrix(Matrix4 *view) const;
+    void GetProjectionMatrix(Matrix4 *proj) const;
     ProjectionMode GetProjectionMode() const;
-
-    /**
-     * @brief Converts a point from world coods to Screen NDC.
-     *        NDC: Normalized Device Coordinates [(-1,-1) -> (1,1)]
-    **/
-    Vector2 WorldToScreenNDCPoint(const Vector3 &position);
-    Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCam);
-
-    virtual void CloneInto(ICloneable *clone) const override;
-
     Rect GetScreenBoundingRect(const AABox &bbox);
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void SetIdentityMode(bool identityMode);
-    bool IsInIdentityMode() const;
 
 protected:
     Camera();
@@ -63,7 +55,6 @@ protected:
 
 private:
     float m_orthoHeight  = 25.0f;
-    bool m_identityMode = false;
     Mesh *p_camMesh = nullptr;
 
     Color m_clearColor = Color(Color(0.3f), 1);

@@ -17,32 +17,24 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::CloneInto(ICloneable *clone) const
-{
-    Renderer::CloneInto(clone);
-    MeshRenderer *mr = SCAST<MeshRenderer*>(clone);
-    mr->SetMesh( GetMesh() );
-}
-
-void MeshRenderer::SetMesh(Mesh *m)
-{
-    p_mesh = m;
-}
-
+void MeshRenderer::SetMesh(Mesh *m) { p_mesh = m; }
+Mesh *MeshRenderer::GetMesh() const { return p_mesh; }
 AABox MeshRenderer::GetAABBox() const
 {
     return p_mesh ? p_mesh->GetAABBox() : AABox::Empty;
-}
-
-Mesh *MeshRenderer::GetMesh() const
-{
-    return p_mesh;
 }
 
 void MeshRenderer::OnRender()
 {
     Renderer::OnRender(); ENSURE(p_mesh);
     GL::Render(p_mesh->GetVAO(), GetRenderPrimitive(), p_mesh->GetVertexCount());
+}
+
+void MeshRenderer::CloneInto(ICloneable *clone) const
+{
+    Renderer::CloneInto(clone);
+    MeshRenderer *mr = SCAST<MeshRenderer*>(clone);
+    mr->SetMesh( GetMesh() );
 }
 
 void MeshRenderer::Read(const XMLNode &xmlInfo)

@@ -19,7 +19,6 @@ public:
     void RenderForSelectionBuffer(Renderer *renderer);
 
     G_RenderTexture *GetColorTexture() const;
-
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:

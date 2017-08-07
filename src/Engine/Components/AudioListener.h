@@ -11,10 +11,12 @@ public:
     AudioListener();
     virtual ~AudioListener();
 
+    // Component
+    virtual void OnUpdate() override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    virtual void OnUpdate() override;
 
 private:
 

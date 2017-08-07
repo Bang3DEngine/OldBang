@@ -16,7 +16,8 @@ public:
     Material(const Material &m);
     virtual ~Material();
 
-    virtual void CloneInto(ICloneable *clone) const override;
+    void Bind() const;
+    void UnBind() const;
 
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
@@ -28,13 +29,14 @@ public:
     const Vector2& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
     const Texture2D* GetTexture() const;
-    bool ReceivesLighting() const;
+    bool GetReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
-    void Bind() const;
-    void UnBind() const;
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -45,8 +47,6 @@ private:
     ShaderProgram *m_shaderProgram = nullptr;
 
     G_Material *m_gMaterial = nullptr; // Material delegate
-
-    friend class Renderer;
 };
 
 #endif // MATERIAL_H

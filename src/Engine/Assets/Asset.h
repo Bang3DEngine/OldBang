@@ -13,10 +13,13 @@ class Asset : public IToString,
 public:
     const Path& GetFilepath() const;
 
+    // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
+    // IToString
     virtual String ToString() const override;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

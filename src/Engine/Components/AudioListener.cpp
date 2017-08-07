@@ -14,6 +14,12 @@ AudioListener::~AudioListener()
 
 }
 
+void AudioListener::OnUpdate()
+{
+    Component::OnUpdate();
+    UpdateALProperties();
+}
+
 void AudioListener::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
@@ -22,12 +28,6 @@ void AudioListener::Read(const XMLNode &xmlInfo)
 void AudioListener::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-}
-
-void AudioListener::OnUpdate()
-{
-    Component::OnUpdate();
-    UpdateALProperties();
 }
 
 void AudioListener::UpdateALProperties() const

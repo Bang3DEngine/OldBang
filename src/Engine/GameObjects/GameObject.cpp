@@ -21,26 +21,6 @@ GameObject::GameObject(const String &name)
 {
 }
 
-
-void GameObject::CloneInto(ICloneable *clone) const
-{
-    SerializableObject::CloneInto(clone);
-    GameObject *go = SCAST<GameObject*>(clone);
-    go->SetName(m_name);
-    go->SetParent(nullptr);
-
-    for (GameObject *child : GetChildren())
-    {
-        GameObject *childClone = child->Clone();
-        childClone->SetParent(go);
-    }
-
-    for (Component *comp : m_components)
-    {
-        go->AddComponent(comp->Clone());
-    }
-}
-
 GameObject::~GameObject()
 {
     while (!GetChildren().IsEmpty())
@@ -200,16 +180,6 @@ void GameObject::SetName(const String &name)
     m_name = name;
 }
 
-void GameObject::Print(const String &indent) const
-{
-    String indent2 = indent; indent2 += "   ";
-    Debug_Log(indent << this);
-    for (GameObject *child : GetChildren())
-    {
-        child->Print(indent2);
-    }
-}
-
 GameObject *GameObject::Find(const String &name)
 {
     Scene *scene = SceneManager::GetActiveScene();
@@ -235,6 +205,116 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
     }
     return nullptr;
 }
+
+void GameObject::Start()
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(Start(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::Start();
+}
+
+void GameObject::Update()
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(Update(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::Update();
+}
+
+void GameObject::ParentSizeChanged()
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(ParentSizeChanged(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::ParentSizeChanged();
+}
+
+void GameObject::Render(RenderPass renderPass)
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(Render(renderPass), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::Render(renderPass);
+}
+
+void GameObject::RenderGizmos()
+{
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(RenderGizmos(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    SceneNode<GameObject>::RenderGizmos();
+}
+
+void GameObject::Destroy()
+{
+    SceneNode<GameObject>::Destroy();
+
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(Destroy(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+}
+
+void GameObject::CloneInto(ICloneable *clone) const
+{
+    SerializableObject::CloneInto(clone);
+    GameObject *go = SCAST<GameObject*>(clone);
+    go->SetName(m_name);
+    go->SetParent(nullptr);
+
+    for (GameObject *child : GetChildren())
+    {
+        GameObject *childClone = child->Clone();
+        childClone->SetParent(go);
+    }
+
+    for (Component *comp : m_components)
+    {
+        go->AddComponent(comp->Clone());
+    }
+}
+
+void GameObject::Print(const String &indent) const
+{
+    String indent2 = indent; indent2 += "   ";
+    Debug_Log(indent << this);
+    for (GameObject *child : GetChildren())
+    {
+        child->Print(indent2);
+    }
+}
+
+String GameObject::ToString() const
+{
+    std::ostringstream oss;
+    oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";
+    return oss.str();
+}
+
+String GameObject::GetInstanceId() const
+{
+    String instanceId = name;
+    if (parent)
+    {
+        instanceId.Prepend( parent->GetInstanceId() + "_");
+        GameObject *ncThis = const_cast<GameObject*>(this);
+        int indexInParent = parent->GetChildren().IndexOf(ncThis);
+        instanceId.Append( String::ToString(indexInParent) );
+    }
+    return instanceId;
+}
+
 
 void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
 {
@@ -335,84 +415,4 @@ void GameObject::Write(XMLNode *xmlInfo) const
         child->Write(&xmlChild);
         xmlInfo->AddChild(xmlChild);
     }
-}
-
-String GameObject::ToString() const
-{
-    std::ostringstream oss;
-    oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";
-    return oss.str();
-}
-
-void GameObject::Start()
-{
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Start(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    SceneNode<GameObject>::Start();
-}
-
-void GameObject::Update()
-{
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Update(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    SceneNode<GameObject>::Update();
-}
-
-void GameObject::ParentSizeChanged()
-{
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(ParentSizeChanged(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    SceneNode<GameObject>::ParentSizeChanged();
-}
-
-void GameObject::Render(RenderPass renderPass)
-{
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Render(renderPass), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    SceneNode<GameObject>::Render(renderPass);
-}
-
-void GameObject::RenderGizmos()
-{
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(RenderGizmos(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
-    SceneNode<GameObject>::RenderGizmos();
-}
-
-void GameObject::Destroy()
-{
-    SceneNode<GameObject>::Destroy();
-
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Destroy(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-}
-
-String GameObject::GetInstanceId() const
-{
-    String instanceId = name;
-    if (parent)
-    {
-        instanceId.Prepend( parent->GetInstanceId() + "_");
-        GameObject *ncThis = const_cast<GameObject*>(this);
-        int indexInParent = parent->GetChildren().IndexOf(ncThis);
-        instanceId.Append( String::ToString(indexInParent) );
-    }
-    return instanceId;
 }

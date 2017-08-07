@@ -10,22 +10,24 @@ class CircleRenderer : public LineRenderer
 public:
     virtual ~CircleRenderer();
 
-    virtual void CloneInto(ICloneable *clone) const override;
-
     void SetRadius(float m_radius);
     void SetSegments(int m_segments);
 
     float GetRadius() const;
     int GetSegments() const;
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    CircleRenderer();
-
     float m_radius = 1.0f;
     int m_segments = 32;
+
+    CircleRenderer();
 
     virtual void ReloadPoints();
 };

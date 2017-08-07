@@ -14,14 +14,16 @@ class Light : public Component
     COMPONENT(Light)
 
 public:
-    virtual void CloneInto(ICloneable *clone) const override;
-
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
 
     Color GetColor() const;
     float GetIntensity() const;
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -30,21 +32,14 @@ protected:
     Color m_color = Color::White;
     Material *m_lightMaterialScreen = nullptr;
 
-    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const;
-
-    /**
-     * @brief Returns the rect where the Light range can apply.
-     * This is for performance, the deferred light will only be applied
-     * to the intersection of this rect and the object/s we are applying
-     * the light to. For example, a point light must return a bounding rect
-     * of its spherical range.
-     * @return
-     */
-    virtual Rect GetRenderRect(Camera *cam) const;
-
     Light();
     virtual ~Light();
+
+    void ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const;
+
+    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
+
+    virtual Rect GetRenderRect(Camera *cam) const;
 
     friend class GraphicPipeline;
 };

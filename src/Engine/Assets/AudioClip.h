@@ -20,6 +20,8 @@ public:
     virtual ~AudioClip();
 
     bool LoadFromFile(const Path &filepath);
+    void OnAudioSourceAttached(AudioSource *as);
+    void OnAudioSourceDettached(AudioSource *as);
 
     int GetChannels() const;
     int GetBufferSize() const;
@@ -27,14 +29,11 @@ public:
     int GetFrequency() const;
     float GetLength() const;
     bool IsLoaded() const;
-
     const Path &GetSoundFilepath() const;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    void OnAudioSourceAttached(AudioSource *as);
-    void OnAudioSourceDettached(AudioSource *as);
 
 private:
     ALuint m_alBufferId = 0;

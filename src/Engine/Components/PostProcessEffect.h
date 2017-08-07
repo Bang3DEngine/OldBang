@@ -11,22 +11,17 @@ class PostProcessEffect : public Component
     COMPONENT(PostProcessEffect)
 
 public:
-    enum Type
-    {
-        AfterScene = 0,
-        AfterCanvas
-    };
+    enum Type { AfterScene = 0, AfterCanvas };
 
     PostProcessEffect();
     virtual ~PostProcessEffect();
 
+    // Renderer
     virtual void OnRender(RenderPass renderPass) override;
 
     void SetType(Type type);
     void SetPriority(int priority);
     void SetPostProcessShader(G_Shader *postProcessShader);
-
-    virtual void CloneInto(ICloneable *clone) const override;
 
     Type GetType() const;
     int GetPriority() const;
@@ -34,6 +29,10 @@ public:
     G_Shader* GetPostProcessShader() const;
     Path GetPostProcessShaderFilepath() const;
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

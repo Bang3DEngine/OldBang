@@ -12,9 +12,6 @@ class AssetsManager
 {
 public:
 
-    /** For every id, it contains a pointer to the asset
-      * created when the assets were loaded.
-    **/
     Map<Path, Asset*> m_pathsToAssets;
 
     AssetsManager();
@@ -30,10 +27,6 @@ public:
 
     static Asset* GetAsset(const Path &filepath);
 
-
-    /** Reads a specific asset file (btex2d, bmesh, etc.)
-      * from a filepath.
-    **/
     template <class T>
     static T* ReadAssetFile(const Path &filepath)
     {

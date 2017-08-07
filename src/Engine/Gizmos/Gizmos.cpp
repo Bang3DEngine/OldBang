@@ -386,8 +386,7 @@ void Gizmos::Reset()
 
 void Gizmos::Render(Renderer *rend)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    rend->Render(RenderPass::Gizmos);
+    // rend->Render(RenderPass::Gizmos);
 }
 
 Gizmos *Gizmos::GetInstance()

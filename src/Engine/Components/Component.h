@@ -19,29 +19,31 @@ public:
     GameObject* const& gameObject = m_gameObject;
     Transform* const& transform = m_gameObjectTransform;
 
-    virtual void CloneInto(ICloneable *clone) const override;
-
-    virtual String ToString() const override;
-
     void AddDelegate(Component *delegate);
     void RemoveDelegate(Component *delegate);
-    const List<Component*>& GetDelegates() const;
-
-    GameObject *GetGameObject() const;
     void SetGameObject(GameObject *gameObject);
 
+    GameObject *GetGameObject() const;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // IToString
+    virtual String ToString() const override;
+
+    // SerializableObject
     virtual String GetInstanceId() const override;
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-
-    virtual void Render(RenderPass renderPass);
 
 protected:
     Component();
     virtual ~Component();
 
+    // SceneAgent
     virtual void Start();
     virtual void Update();
+    virtual void Render(RenderPass renderPass);
     virtual void ParentSizeChanged();
     virtual void RenderGizmos();
     virtual void Destroy();

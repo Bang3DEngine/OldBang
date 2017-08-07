@@ -17,11 +17,6 @@ public:
     static double GetTime();
 
     static void ResetDeltaTime();
-
-    /**
-     * @brief GetNow
-     * @return Returns the epoch time in ms.
-     */
     static unsigned long long GetNow();
 
 private:

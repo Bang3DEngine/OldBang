@@ -11,9 +11,9 @@ class Transform : public Component
     COMPONENT(Transform)
 
 public:
-    virtual void CloneInto(ICloneable *clone) const override;
-
     virtual ~Transform();
+
+    virtual const Matrix4& GetLocalToParentMatrix() const;
 
     void LookAt(const Vector3 &target,
                 const Vector3 &up = Vector3::Up);
@@ -23,7 +23,6 @@ public:
                 const Vector3 &up = Vector3::Up);
     void LookInDirection(const Vector3 &dir,
                          const Vector3 &up = Vector3::Up);
-
 
     void SetLocalPosition(const Vector3 &p);
     void SetPosition(const Vector3 &p);
@@ -48,40 +47,11 @@ public:
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
 
-    /**
-     * @brief Transforms the point from local space to world space.
-     * @return
-     */
     Vector3 TransformPoint(const Vector3 &point) const;
-
-    /**
-     * @brief Transforms the point from world space to local space.
-     * @return
-     */
     Vector3 InverseTransformPoint(const Vector3 &point) const;
-
-    /**
-     * @brief Transforms the direction from local space to world space.
-     * @return
-     */
     Vector3 TransformDirection(const Vector3 &dir) const;
-
-    /**
-     * @brief Transforms the vector from world space to local space.
-     * @return
-     */
     Vector3 InverseTransformDirection(const Vector3 &dir) const;
-
-    /**
-     * @brief Transforms the vector from local space to world space.
-     * @return
-     */
     Vector3 TransformVector(const Vector3 &vector) const;
-
-    /**
-     * @brief Transforms the vector from world space to local space.
-     * @return
-     */
     Vector3 InverseTransformVector(const Vector3 &vector) const;
 
     Vector3 ParentToLocalPoint(const Vector3 &point) const;
@@ -98,8 +68,6 @@ public:
     Vector3 WorldToLocalVector(const Vector3 &vector) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
-
-    virtual const Matrix4& GetLocalToParentMatrix() const;
     void GetLocalToParentMatrix(Matrix4 *m) const;
     void GetLocalToWorldMatrix(Matrix4 *m) const;
 
@@ -124,6 +92,10 @@ public:
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
     static Transform  FromTransformMatrix(const Matrix4 &transformMatrix);
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

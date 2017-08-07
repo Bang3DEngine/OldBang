@@ -20,14 +20,6 @@ PointLight::~PointLight()
 
 }
 
-Rect PointLight::GetRenderRect(Camera *cam) const
-{
-    Sphere sphere(gameObject->transform->GetPosition(), m_range);
-    AABox bbox = AABox::FromSphere(sphere);
-    return bbox.GetAABoundingScreenRect(cam);
-}
-
-
 void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 {
     Light::SetUniformsBeforeApplyingLight(mat);
@@ -37,21 +29,21 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->Set("B_LightRange", m_range);
 }
 
+Rect PointLight::GetRenderRect(Camera *cam) const
+{
+    Sphere sphere(gameObject->transform->GetPosition(), m_range);
+    AABox bbox = AABox::FromSphere(sphere);
+    return bbox.GetAABoundingScreenRect(cam);
+}
+
+void PointLight::SetRange(float range) { m_range = range; }
+float PointLight::GetRange() const { return m_range; }
+
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
     PointLight *pl = SCAST<PointLight*>(clone);
     pl->SetRange(GetRange());
-}
-
-void PointLight::SetRange(float range)
-{
-    m_range = range;
-}
-
-float PointLight::GetRange() const
-{
-    return m_range;
 }
 
 void PointLight::Read(const XMLNode &xmlInfo)

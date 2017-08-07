@@ -10,15 +10,6 @@ Transform::Transform()
 {
 }
 
-void Transform::CloneInto(ICloneable *clone) const
-{
-    Component::CloneInto(clone);
-    Transform *t = SCAST<Transform*>(clone);
-    t->SetLocalPosition(GetLocalPosition());
-    t->SetLocalRotation(GetLocalRotation());
-    t->SetLocalScale(GetLocalScale());
-}
-
 Transform::~Transform()
 {
 }
@@ -410,6 +401,15 @@ Vector3 Transform::GetUp() const
 Vector3 Transform::GetDown() const
 {
     return -GetUp();
+}
+
+void Transform::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Transform *t = SCAST<Transform*>(clone);
+    t->SetLocalPosition(GetLocalPosition());
+    t->SetLocalRotation(GetLocalRotation());
+    t->SetLocalScale(GetLocalScale());
 }
 
 void Transform::Read(const XMLNode &xmlInfo)

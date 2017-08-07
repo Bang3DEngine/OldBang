@@ -36,39 +36,26 @@ public:
     Behaviour();
     virtual ~Behaviour();
 
-    virtual void Start () override;
-    virtual void Update() override;
-
-    virtual void CloneInto(ICloneable *clone) const override;
-
-    const Path& GetSourceFilepath() const;
     void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
-
-    bool IsLoaded() const;
-
-    /**
-     * @brief Creates a Behaviour from its QLibrary passed as parameter.
-     * This will try to call the function CreateDynamically, loading the library
-     * passed as parameter. This method CreateDynamically should be defined
-     * in the XXXBehaviour.cpp file, as extern "C".
-     * @param The dynamic library of the Behaviour that you must have opened before.
-     * @return The created Behaviour.
-     */
     static Behaviour* CreateDynamicBehaviour(const String &behaviourName,
                                              QLibrary *openLibrary);
-
-    /**
-     * @brief Delete dynamic Behaviour from a sharedObject passed as parameter.
-     * @param The Behaviour you want to delete
-     * @param The library that has been opened for the Behaviour you want to delete.
-     * @return Success or not.
-     */
     static bool DeleteDynamicBehaviour(const String &behaviourName,
                                        Behaviour *behaviour,
                                        QLibrary *openLibrary);
 
     void SetSourceFilepath(const Path &sourceFilepath);
 
+    const Path& GetSourceFilepath() const;
+    bool IsLoaded() const;
+
+    // Component
+    virtual void Start () override;
+    virtual void Update() override;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

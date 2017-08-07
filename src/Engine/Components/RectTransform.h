@@ -12,8 +12,6 @@ public:
     RectTransform();
     virtual ~RectTransform();
 
-    void CloneInto(ICloneable *clone) const;
-
     Vector2 ToLocalNDC(const Vector2 &globalNDCPoint) const;
     Vector2 ToGlobalNDC(const Vector2 &localNDCPoint) const;
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
@@ -30,7 +28,6 @@ public:
     void SetMargins(const Vector2i& marginRightTop,
                     const Vector2i& marginLeftBot);
     void SetMargins(int left, int top, int right, int bot);
-
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
     void SetAnchorMax(const Vector2 &anchorMax);
@@ -42,22 +39,24 @@ public:
     int GetMarginBot()   const;
     const Vector2i& GetMarginRightTop() const;
     const Vector2i& GetMarginLeftBot() const;
-
     const Vector2& GetPivotPosition()  const;
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
-
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-
     Recti GetScreenSpaceRectPx() const;
     Rect GetScreenSpaceRectNDC() const;
-
     Recti GetParentScreenRectPx() const;
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
+    // Component
     virtual void OnParentSizeChanged() override;
+
+    // ICloneable
+    void CloneInto(ICloneable *clone) const;
+
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;

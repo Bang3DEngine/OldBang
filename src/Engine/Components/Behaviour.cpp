@@ -12,42 +12,34 @@ Behaviour::~Behaviour()
 {
 }
 
-void Behaviour::Start()
+void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 {
-    RefreshBehaviourLib();
-    if (!IsStarted())
+    ENSURE(gameObject);
+    ENSURE(!IsLoaded());
+
+    String behaviourName = GetSourceFilepath().GetName();
+    ENSURE(!behaviourName.IsEmpty());
+
+    // Create new Behaviour, and replace in the parent gameObject this old
+    // behaviour with the new one created dynamically
+    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
+    p_behavioursLibraryBeingUsed = behavioursLib;
+    ENSURE(behavioursLib && behavioursLib->isLoaded());
+
+    Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
+                                                         behavioursLib);
+    if (createdBehaviour)
     {
-        Component::Start();
+        if (gameObject->AddComponent(createdBehaviour))
+        {
+            CloneInto(createdBehaviour);
+            if (xmlInfoForNewBehaviour)
+            {
+                createdBehaviour->Read(*xmlInfoForNewBehaviour);
+            }
+            gameObject->RemoveComponent(this);
+        }
     }
-}
-
-void Behaviour::Update()
-{
-    RefreshBehaviourLib(); // For instances created in runtime
-
-    // Update static local Times
-    Time::deltaTime = Time::GetDeltaTime();
-    Time::time      = Time::GetNow();
-
-    Component::Update();
-}
-
-void Behaviour::Read(const XMLNode &xmlInfo)
-{
-    // Needed to avoid a bug when creating new behaviours
-    if (xmlInfo.GetTagName().IsEmpty()) { return; }
-
-    Component::Read(xmlInfo);
-    SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") );
-
-    RefreshBehaviourLib(&xmlInfo);
-}
-
-void Behaviour::Write(XMLNode *xmlInfo) const
-{
-    Component::Write(xmlInfo);
-    xmlInfo->SetTagName("Behaviour");
-    xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }
 
 Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
@@ -113,8 +105,38 @@ bool Behaviour::DeleteDynamicBehaviour(const String &behaviourName,
 void Behaviour::SetSourceFilepath(const Path &sourceFilepath)
 {
     ENSURE(GetSourceFilepath() != sourceFilepath);
-
     m_sourceFilepath = sourceFilepath;
+}
+
+const Path &Behaviour::GetSourceFilepath() const { return m_sourceFilepath; }
+bool Behaviour::IsLoaded() const
+{
+    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
+    return GetSourceFilepath().Exists() &&
+           p_behavioursLibraryBeingUsed == behavioursLib &&
+           GetSourceFilepath().GetName() == GetClassName();
+}
+
+
+
+void Behaviour::Start()
+{
+    RefreshBehaviourLib();
+    if (!IsStarted())
+    {
+        Component::Start();
+    }
+}
+
+void Behaviour::Update()
+{
+    RefreshBehaviourLib(); // For instances created in runtime
+
+    // Update static local Times
+    Time::deltaTime = Time::GetDeltaTime();
+    Time::time      = Time::GetNow();
+
+    Component::Update();
 }
 
 void Behaviour::CloneInto(ICloneable *clone) const
@@ -125,45 +147,20 @@ void Behaviour::CloneInto(ICloneable *clone) const
     b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
-const Path &Behaviour::GetSourceFilepath() const
+void Behaviour::Read(const XMLNode &xmlInfo)
 {
-    return m_sourceFilepath;
+    // Needed to avoid a bug when creating new behaviours
+    if (xmlInfo.GetTagName().IsEmpty()) { return; }
+
+    Component::Read(xmlInfo);
+    SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") );
+
+    RefreshBehaviourLib(&xmlInfo);
 }
 
-void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
+void Behaviour::Write(XMLNode *xmlInfo) const
 {
-    ENSURE(gameObject);
-    ENSURE(!IsLoaded());
-
-    String behaviourName = GetSourceFilepath().GetName();
-    ENSURE(!behaviourName.IsEmpty());
-
-    // Create new Behaviour, and replace in the parent gameObject this old
-    // behaviour with the new one created dynamically
-    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
-    p_behavioursLibraryBeingUsed = behavioursLib;
-    ENSURE(behavioursLib && behavioursLib->isLoaded());
-
-    Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
-                                                         behavioursLib);
-    if (createdBehaviour)
-    {
-        if (gameObject->AddComponent(createdBehaviour))
-        {
-            CloneInto(createdBehaviour);
-            if (xmlInfoForNewBehaviour)
-            {
-                createdBehaviour->Read(*xmlInfoForNewBehaviour);
-            }
-            gameObject->RemoveComponent(this);
-        }
-    }
-}
-
-bool Behaviour::IsLoaded() const
-{
-    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
-    return GetSourceFilepath().Exists() &&
-           p_behavioursLibraryBeingUsed == behavioursLib &&
-           GetSourceFilepath().GetName() == GetClassName();
+    Component::Write(xmlInfo);
+    xmlInfo->SetTagName("Behaviour");
+    xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }

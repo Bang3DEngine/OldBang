@@ -23,6 +23,7 @@ Path Font::GetTTFFilepath() const
     return m_ttfFilepath;
 }
 
+// SerializableObject
 void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);

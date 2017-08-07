@@ -13,9 +13,6 @@ public:
     Project();
     virtual ~Project();
 
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-
     const Path& GetProjectDirPath() const;
     Path GetProjectAssetsRootFilepath() const;
     Path GetProjectFileFilepath() const;
@@ -25,6 +22,11 @@ public:
     void SetProjectRootFilepath(const Path &projectDir);
 
     virtual bool OpenFirstFoundScene() const;
+
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
+
 private:
     String m_randomId = "";
     Path m_projectRootFilepath;

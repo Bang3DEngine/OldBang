@@ -22,11 +22,12 @@ UIImageRenderer::~UIImageRenderer()
 {
 }
 
-void UIImageRenderer::CloneInto(ICloneable *clone) const
+void UIImageRenderer::OnRender()
 {
-    UIRenderer::CloneInto(clone);
-    UIImageRenderer *img = SCAST<UIImageRenderer*>(clone);
-    img->SetImage( GetImageTexture() );
+    UIRenderer::OnRender();
+    GL::Render(p_quadMesh->GetVAO(),
+               GetRenderPrimitive(),
+               p_quadMesh->GetVertexCount());
 }
 
 void UIImageRenderer::SetImage(Texture2D *imageTexture)
@@ -50,6 +51,13 @@ Texture2D *UIImageRenderer::GetImageTexture() const
     return m_imageTexture;
 }
 
+void UIImageRenderer::CloneInto(ICloneable *clone) const
+{
+    UIRenderer::CloneInto(clone);
+    UIImageRenderer *img = SCAST<UIImageRenderer*>(clone);
+    img->SetImage( GetImageTexture() );
+}
+
 void UIImageRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
@@ -65,12 +73,3 @@ void UIImageRenderer::Write(XMLNode *xmlInfo) const
     Path texFilepath = imgTex ? imgTex->GetFilepath() : Path();
     xmlInfo->Set("Image", texFilepath);
 }
-
-void UIImageRenderer::OnRender()
-{
-    UIRenderer::OnRender();
-    GL::Render(p_quadMesh->GetVAO(),
-               GetRenderPrimitive(),
-               p_quadMesh->GetVertexCount());
-}
-

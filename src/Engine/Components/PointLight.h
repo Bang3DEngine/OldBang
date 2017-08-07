@@ -10,11 +10,13 @@ class PointLight : public Light
     COMPONENT(PointLight)
 
 public:
-    virtual void CloneInto(ICloneable *clone) const override;
-
     void SetRange(float range);
     float GetRange() const;
 
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -24,8 +26,11 @@ protected:
     PointLight();
     virtual ~PointLight();
 
-    Rect GetRenderRect(Camera *cam) const override;
+    // Light
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
+
+    // Renderer
+    Rect GetRenderRect(Camera *cam) const override;
 };
 
 #endif // POINTLIGHT_H

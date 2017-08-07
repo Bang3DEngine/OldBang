@@ -23,8 +23,6 @@ public:
     GraphicPipeline(G_Screen *screen);
     virtual ~GraphicPipeline();
 
-    static GraphicPipeline* GetActive();
-
     void RenderScene(Scene *scene, bool inGame);
     void RenderRenderer(Renderer *rend);
     void RenderToScreen(G_Texture *fullScreenTexture);
@@ -32,16 +30,16 @@ public:
                          const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();
 
-    void OnResize(int newWidth, int newHeight);
-
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
 
     void Render(Renderer *rend);
+    void OnResize(int newWidth, int newHeight);
 
     GLContext *GetGLContext() const;
     G_GBuffer *GetGBuffer();
     SelectionFramebuffer *GetSelectionFramebuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
+    static GraphicPipeline* GetActive();
 
     void ApplyDeferredLights(Renderer *rend = nullptr);
 

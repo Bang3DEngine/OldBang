@@ -18,12 +18,16 @@ public:
     UITextRenderer();
     virtual ~UITextRenderer();
 
-    virtual void CloneInto(ICloneable *clone) const override;
-
+    // UIRenderer
     virtual void OnRender() override;
+    virtual void OnUpdate() override;
+    virtual void OnParentSizeChanged() override;
 
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    // UIRenderer
+    virtual void Bind() const override;
+    virtual void UnBind() const override;
+
+    void RefreshMesh();
 
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);
@@ -48,21 +52,18 @@ public:
     int GetTextSize() const;
     Vector2i GetSpacing() const;
     Vector2i GetScrollingPx() const;
-
     const Array<Rect>& GetCharRectsNDC() const;
     const Rect& GetCharRectNDC(uint charIndex) const;
     bool IsCharVisible(int charIndex) const;
-
     Rect GetContentNDCRect() const;
-
-    virtual void Bind() const override;
-    virtual void UnBind() const override;
-
-    virtual void OnUpdate() override;
-    virtual void OnParentSizeChanged() override;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
-    void RefreshMesh();
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     String m_content       = "";

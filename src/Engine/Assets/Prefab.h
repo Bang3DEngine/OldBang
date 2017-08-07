@@ -25,6 +25,7 @@ public:
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

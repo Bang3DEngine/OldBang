@@ -23,7 +23,6 @@ public:
     static int GetWidth();
     static Vector2i GetSize();
     static Vector2 GetPixelClipSize();
-
     static Screen *GetInstance();
     GraphicPipeline *GetGraphicPipeline() const;
 

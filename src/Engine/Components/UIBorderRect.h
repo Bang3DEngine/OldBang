@@ -11,12 +11,13 @@ public:
     UIBorderRect();
     virtual ~UIBorderRect();
 
+    // Component
     virtual void OnUpdate() override;
 
     void SetLineColor(const Color& lineColor);
-    const Color& GetLineColor() const;
-
     void SetLineWidth(float lineWidth);
+
+    const Color& GetLineColor() const;
     float GetLineWidth() const;
 
 private:

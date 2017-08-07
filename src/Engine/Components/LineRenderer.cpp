@@ -8,7 +8,8 @@
 LineRenderer::LineRenderer()
 {
     m_mesh = new Mesh();
-    SetMaterial( AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
+    SetMaterial(
+        AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
 
     SetRenderPrimitive(GL::RenderPrimitive::Lines);
 }
@@ -22,18 +23,6 @@ void LineRenderer::OnRender()
 {
     Renderer::OnRender(); ENSURE(m_mesh->GetVertexCount() > 0);
     GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
-}
-
-void LineRenderer::CloneInto(ICloneable *clone) const
-{
-    Renderer::CloneInto(clone);
-    LineRenderer *lr = SCAST<LineRenderer*>(clone);
-    lr->SetPoints( GetPoints() );
-}
-
-const Array<Vector3> &LineRenderer::GetPoints() const
-{
-    return m_points;
 }
 
 void LineRenderer::SetPoint(int i, const Vector3 &point)
@@ -56,6 +45,7 @@ void LineRenderer::SetPoints(const Array<Vector3> &points)
     m_mesh->LoadPositions(m_points);
 }
 
+const Array<Vector3> &LineRenderer::GetPoints() const { return m_points; }
 AABox LineRenderer::GetAABBox() const
 {
     if (m_points.IsEmpty()) { return AABox::Empty; }
@@ -74,6 +64,13 @@ AABox LineRenderer::GetAABBox() const
     maxp += Vector3(strokeAdd);
     return AABox(minp, maxp);
 
+}
+
+void LineRenderer::CloneInto(ICloneable *clone) const
+{
+    Renderer::CloneInto(clone);
+    LineRenderer *lr = SCAST<LineRenderer*>(clone);
+    lr->SetPoints( GetPoints() );
 }
 
 void LineRenderer::Read(const XMLNode &xmlInfo)

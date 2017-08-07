@@ -38,6 +38,41 @@ UITextRenderer::~UITextRenderer()
     if (m_mesh) { delete m_mesh; }
 }
 
+void UITextRenderer::OnRender()
+{
+    Renderer::OnRender();
+    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
+}
+
+void UITextRenderer::OnUpdate()
+{
+    UIRenderer::OnUpdate();
+    if (m_hasChanged)
+    {
+        RefreshMesh();
+    }
+}
+
+void UITextRenderer::OnParentSizeChanged()
+{
+    UIRenderer::OnParentSizeChanged();
+    m_hasChanged = true;
+}
+
+void UITextRenderer::Bind() const
+{
+    // Nullify RectTransform model, since we control its position and size
+    // directly from the VBO creation...
+    transform->SetEnabled(false);
+    UIRenderer::Bind();
+}
+
+void UITextRenderer::UnBind() const
+{
+    UIRenderer::UnBind();
+    transform->SetEnabled(true);
+}
+
 void UITextRenderer::RefreshMesh()
 {
     if (!m_hasChanged) { return; }
@@ -106,27 +141,6 @@ void UITextRenderer::RefreshMesh()
                                                        textQuadPos2D.End());
     m_mesh->LoadPositions(textQuadPos3D);
     m_mesh->LoadUvs(textQuadUvs);
-}
-
-void UITextRenderer::CloneInto(ICloneable *clone) const
-{
-    UIRenderer::CloneInto(clone);
-
-    UITextRenderer *text = SCAST<UITextRenderer*>(clone);
-    text->SetFont ( GetFont() );
-    text->SetContent( GetContent() );
-    text->SetTextSize( GetTextSize() );
-    text->SetSpacing( GetSpacing() );
-    text->SetHorizontalWrapMode( GetHorizontalWrapMode() );
-    text->SetVerticalWrapMode( GetVerticalWrapMode() );
-    text->SetHorizontalAlign( GetHorizontalAlignment() );
-    text->SetVerticalAlign( GetVerticalAlignment() );
-}
-
-void UITextRenderer::OnRender()
-{
-    Renderer::OnRender();
-    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
 }
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
@@ -226,6 +240,11 @@ void UITextRenderer::SetScrollingPx(const Vector2i &scrollingPx)
     }
 }
 
+void UITextRenderer::SetTextColor(const Color &textColor)
+{
+    GetMaterial()->SetDiffuseColor( textColor );
+}
+
 Font *UITextRenderer::GetFont() const { return m_font; }
 bool UITextRenderer::GetKerning() const { return m_kerning; }
 WrapMode UITextRenderer::GetVerticalWrapMode() const { return m_vWrapMode; }
@@ -258,38 +277,30 @@ HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
     return m_horizontalAlignment;
 }
 
-void UITextRenderer::Bind() const
-{
-    // Nullify RectTransform model, since we control its position and size
-    // directly from the VBO creation...
-    transform->SetEnabled(false);
-    UIRenderer::Bind();
-}
-
-void UITextRenderer::UnBind() const
-{
-    UIRenderer::UnBind();
-    transform->SetEnabled(true);
-}
-
-void UITextRenderer::OnUpdate()
-{
-    UIRenderer::OnUpdate();
-    if (m_hasChanged)
-    {
-        RefreshMesh();
-    }
-}
-
-void UITextRenderer::OnParentSizeChanged()
-{
-    UIRenderer::OnParentSizeChanged();
-    m_hasChanged = true;
-}
-
 Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
     return GetContentNDCRect();
+}
+
+const Color &UITextRenderer::GetTextColor() const
+{
+    return GetMaterial()->GetDiffuseColor();
+}
+
+
+void UITextRenderer::CloneInto(ICloneable *clone) const
+{
+    UIRenderer::CloneInto(clone);
+
+    UITextRenderer *text = SCAST<UITextRenderer*>(clone);
+    text->SetFont ( GetFont() );
+    text->SetContent( GetContent() );
+    text->SetTextSize( GetTextSize() );
+    text->SetSpacing( GetSpacing() );
+    text->SetHorizontalWrapMode( GetHorizontalWrapMode() );
+    text->SetVerticalWrapMode( GetVerticalWrapMode() );
+    text->SetHorizontalAlign( GetHorizontalAlignment() );
+    text->SetVerticalAlign( GetVerticalAlignment() );
 }
 
 void UITextRenderer::Read(const XMLNode &xmlInfo)
@@ -325,14 +336,4 @@ void UITextRenderer::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
-}
-
-void UITextRenderer::SetTextColor(const Color &textColor)
-{
-    GetMaterial()->SetDiffuseColor( textColor );
-}
-
-const Color &UITextRenderer::GetTextColor() const
-{
-    return GetMaterial()->GetDiffuseColor();
 }

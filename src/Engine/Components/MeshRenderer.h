@@ -12,14 +12,16 @@ class MeshRenderer : public Renderer
 public:
     virtual ~MeshRenderer();
 
-    virtual void CloneInto(ICloneable *clone) const override;
+    void SetMesh(Mesh *m);
+    Mesh* GetMesh() const;
 
-    virtual void SetMesh(Mesh *m);
-
+    // Renderer
     virtual AABox GetAABBox() const override;
 
-    virtual Mesh* GetMesh() const;
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
 
+    // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -27,6 +29,8 @@ protected:
     mutable Mesh *p_mesh = nullptr;
 
     MeshRenderer();
+
+    // Renderer
     virtual void OnRender() override;
 };
 
