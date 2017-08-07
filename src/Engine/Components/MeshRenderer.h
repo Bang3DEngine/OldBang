@@ -9,8 +9,6 @@ class MeshRenderer : public Renderer
 {
     COMPONENT(MeshRenderer)
 
-    friend class LineRenderer;
-
 public:
     virtual ~MeshRenderer();
 
@@ -26,10 +24,9 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    MeshRenderer();
-
     mutable Mesh *p_mesh = nullptr;
 
+    MeshRenderer();
     virtual void Render() const override;
 };
 

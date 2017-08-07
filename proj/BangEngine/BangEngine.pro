@@ -72,6 +72,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/General/SceneManager.cpp \
     $$BANG_ROOT/src/Engine/Components/UIImageRenderer.cpp \
     $$BANG_ROOT/src/Engine/Components/UIButton.cpp \
+    $$BANG_ROOT/src/Engine/Components/UIBorderRect.cpp \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
@@ -159,6 +160,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/SceneManager.h \
     $$BANG_ROOT/src/Engine/Components/UIImageRenderer.h \
     $$BANG_ROOT/src/Engine/Components/UIButton.h \
+    $$BANG_ROOT/src/Engine/Components/UIBorderRect.h \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.h \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.h \

@@ -2,10 +2,11 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
+#include "Bang/ComponentFactory.h"
 
 LineRenderer::LineRenderer()
 {
-    m_meshRenderer = new MeshRenderer();
+    m_meshRenderer = ComponentFactory::CreateComponent<MeshRenderer>();
     m_meshRenderer->SetMesh( new Mesh() );
     SetRenderMode(GL::RenderMode::Lines);
 }

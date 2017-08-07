@@ -13,6 +13,9 @@ GUIButton::GUIButton(const String &labelText) : UIGameObject("GUIButton")
     p_label->GetText()->SetTint(Color::Black);
     p_label->SetParent(this);
 
+    p_borderRect = AddComponent<UIBorderRect>();
+    p_borderRect->SetLineColor(Color::Green);
+
     p_labelTinter = AddComponent<UIButtonTinter>();
     p_labelTinter->AddAgent(this);
     p_labelTinter->AddGameObjectToTint(p_label);
@@ -34,6 +37,8 @@ GUIButton::~GUIButton()
 
 GUILabel *GUIButton::GetLabel() const { return p_label; }
 GUIImage *GUIButton::GetImage() const { return p_bgImage; }
+
+UIBorderRect *GUIButton::GetUIBorderRect() const { return p_borderRect; }
 UIButtonTinter *GUIButton::GetLabelTinter() const { return p_labelTinter; }
 UIButtonTinter *GUIButton::GetBackgroundTinter() const { return p_bgTinter; }
 

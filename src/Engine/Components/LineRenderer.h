@@ -24,7 +24,6 @@ public:
 
 protected:
     LineRenderer();
-
     virtual void Render() const override;
 
 private:
