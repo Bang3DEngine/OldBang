@@ -12,38 +12,16 @@
 
 AudioSource::AudioSource()
 {
-    alGenSources(1, &m_alSourceId);
 }
 
 AudioSource::~AudioSource()
 {
-    Stop();
-
     if (m_audioClip)
     {
         m_audioClip->OnAudioSourceDettached(this);
     }
-
-    alDeleteSources(1, &m_alSourceId);
 }
 
-void AudioSource::Play(float delay)
-{
-    ENSURE(m_audioClip);
-    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(), delay);
-}
-
-void AudioSource::Pause()
-{
-    ENSURE(m_audioClip);
-    alSourcePause(m_alSourceId);
-}
-
-void AudioSource::Stop()
-{
-    ENSURE(m_audioClip);
-    alSourceStop(m_alSourceId);
-}
 
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
@@ -59,26 +37,7 @@ void AudioSource::SetAudioClip(AudioClip *audioClip)
         m_audioClip->OnAudioSourceAttached(this);
     }
 }
-void AudioSource::SetVolume(float volume)
-{
-    m_volume = volume;
-    alSourcef(GetALSourceId(), AL_GAIN, m_volume);
-}
-void AudioSource::SetPitch(float pitch)
-{
-    m_pitch = Math::Max(pitch, 0.01f);
-    alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
-}
-void AudioSource::SetRange(float range)
-{
-    m_range = range;
-    alSourcef(GetALSourceId(), AL_MAX_DISTANCE, m_range);
-}
-void AudioSource::SetLooping(bool looping)
-{
-    m_looping = looping;
-    alSourcef(GetALSourceId(), AL_LOOPING, m_looping);
-}
+
 void AudioSource::SetPlayOnStart(bool playOnStart)
 {
     m_playOnStart = playOnStart;
@@ -94,28 +53,14 @@ void AudioSource::OnStart()
     }
 }
 
-bool AudioSource::IsPlaying() const { return GetState() == State::Playing; }
-bool AudioSource::IsPaused() const { return GetState() == State::Paused; }
-bool AudioSource::IsStopped() const { return GetState() == State::Stopped; }
-float AudioSource::GetVolume() const { return m_volume; }
-float AudioSource::GetPitch() const { return m_pitch; }
-float AudioSource::GetRange() const { return m_range; }
-bool AudioSource::IsLooping() const { return m_looping; }
 bool AudioSource::IsPlayOnStart() const { return m_playOnStart; }
 AudioClip *AudioSource::GetAudioClip() const { return m_audioClip; }
 float AudioSource::GetPlayProgress() const
 {
-    if (!m_audioClip) { return 0.0f; }
-
     float secondsOffset;
-    alGetSourcef(m_alSourceId, AL_SEC_OFFSET, &secondsOffset);
+    alGetSourcef(GetALSourceId(), AL_SEC_OFFSET, &secondsOffset);
+    alGetSourcef(GetALSourceId(), AL_SEC_OFFSET, &secondsOffset);
     return secondsOffset / m_audioClip->GetLength();
-}
-AudioSource::State AudioSource::GetState() const
-{
-    ALint state;
-    alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
-    return static_cast<State>(state);
 }
 
 void AudioSource::CloneInto(ICloneable *clone) const
@@ -155,45 +100,25 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     AudioClip *audioClip = GetAudioClip();
     Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path::Empty;
     xmlInfo->Set("AudioClip", audioClipFilepath);
-    xmlInfo->Set("Volume",     m_volume);
-    xmlInfo->Set("Pitch",      m_pitch);
-    xmlInfo->Set("Range",      m_range);
-    xmlInfo->Set("Looping",     m_looping);
-    xmlInfo->Set("PlayOnStart", m_playOnStart);
+    xmlInfo->Set("Volume",      GetVolume());
+    xmlInfo->Set("Pitch",       GetPitch());
+    xmlInfo->Set("Range",       GetRange());
+    xmlInfo->Set("Looping",     IsLooping());
+    xmlInfo->Set("PlayOnStart", IsPlayOnStart());
 }
 
 void AudioSource::OnUpdate()
 {
     Component::OnUpdate();
 
-    UpdateALProperties();
-}
-
-ALuint AudioSource::GetALSourceId() const
-{
-    return m_alSourceId;
-}
-
-void AudioSource::UpdateALProperties() const
-{
-    alSourcef(m_alSourceId,  AL_GAIN,         m_volume);
-    alSourcef(m_alSourceId,  AL_PITCH,        m_pitch);
-    alSourcei(m_alSourceId,  AL_LOOPING,      m_looping);
-    Vector3 position = gameObject? transform->GetPosition() : Vector3::Zero;
-    alSourcefv(m_alSourceId, AL_POSITION, position.Data());
-    alSourcefv(m_alSourceId, AL_VELOCITY, Vector3::Zero.Data());
-
-    alSourcef(m_alSourceId,  AL_MAX_DISTANCE, m_range);
-    alSourcef(m_alSourceId,  AL_REFERENCE_DISTANCE, m_range * 0.5f);
-
-    //Vector3 at = -transform->GetForward(), up = transform->GetUp();
-    //ALfloat listenerOri[] = { at.x, at.y, at.z, up.x, up.y, up.z };
-    //alSourcefv(m_alSourceId, AL_ORIENTATION, listenerOri);
+    if (transform)
+    {
+        ALAudioSource::SetPosition(transform->GetPosition());
+    }
 }
 
 void AudioSource::SetAudioClipNoDettachAttach(AudioClip *audioClip)
 {
     m_audioClip = audioClip;
-    alSourcei(m_alSourceId, AL_BUFFER,
-              audioClip ? m_audioClip->GetALBufferId() : 0);
+    SetALBufferId(audioClip->GetALBufferId());
 }

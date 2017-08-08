@@ -139,9 +139,9 @@ template <class T, class S>
 std::ostream &operator<<(std::ostream &log, const Map<T,S> *m)
 {
     log << "{";
-    for (auto it = m->Begin(); it != m->End(); ++it)
+    for (auto it = m->CBegin(); it != m->CEnd(); ++it)
     {
-        if (it != m->begin()) log << ", ";
+        if (it != m->cbegin()) log << ", ";
         log << (it->first) << ": " << (it->second);
     }
     log << "}";
@@ -158,9 +158,9 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const Set<T> *s)
 {
     log << "{";
-    for (auto it = s->begin(); it != s->end(); ++it)
+    for (auto it = s->cbegin(); it != s->cend(); ++it)
     {
-        if (it != s->begin()) log << ", ";
+        if (it != s->cbegin()) log << ", ";
         log << (*it);
     }
     log << "}";

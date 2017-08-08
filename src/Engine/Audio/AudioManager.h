@@ -4,44 +4,31 @@
 #include <QThreadPool>
 #include <QMutexLocker>
 
+#include "Bang/Set.h"
 #include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/Vector3.h"
+#include "Bang/AudioParams.h"
 
-FORWARD   class Path;
-FORWARD   class AudioClip;
-FORWARD   class GameObject;
-FORWARD   class AudioSource;
-FORWARD   class AudioPlayerRunnable;
-FORWARD   class AnonymousAudioPlayer;
+FORWARD class Path;
+FORWARD class AudioClip;
+FORWARD class GameObject;
+FORWARD class AudioSource;
+FORWARD class ALAudioSource;
+FORWARD class AudioPlayerRunnable;
 
 class AudioManager
 {
 public:
-    static AudioManager *GetInstance();
-
-    static void PlayAudioClip(AudioClip *audioClip,
-                              int alSourceId,
-                              float delay = 0.0f);
-
-
-    static void PlayAnonymousAudioClip(
-                              const Path& audioClipFilepath,
-                              const Vector3& position = Vector3::Zero,
-                              float volume            = 1.0f,
-                              bool  looping           = false,
-                              float delay             = 0.0f,
-                              float pitch             = 1.0f,
-                              float range             = Math::Infinity<float>()
-                              );
-
-    static void PlaySound(const Path &soundFilepath,
-                          const Vector3& position = Vector3::Zero,
-                          float volume            = 1.0f,
-                          bool  looping           = false,
-                          float delay             = 0.0f,
-                          float pitch             = 1.0f,
-                          float range             = Math::Infinity<float>());
+    static void Play(AudioClip *audioClip,
+                     ALAudioSource *alAudioSource,
+                     float delay = 0.0f);
+    static void Play(AudioClip *audioClip,
+                     const AudioParams &params,
+                     float delay = 0.0f);
+    static void Play(const Path& audioClipFilepath,
+                     const AudioParams &params,
+                     float delay = 0.0f);
 
     static void PauseAllSounds();
     static void ResumeAllSounds();
@@ -50,22 +37,20 @@ public:
     static void ClearALErrors();
     static bool CheckALError();
 
+    static AudioManager *GetInstance();
+
 private:
     AudioManager();
     virtual ~AudioManager();
 
     QThreadPool m_threadPool;
     QMutex m_mutex_currentAudios;
-    List<AudioPlayerRunnable*> m_currentAudios;
-    AnonymousAudioPlayer *m_anonymousAudioPlayer = nullptr;
-
-    AnonymousAudioPlayer *GetAnonymousAudioPlayer() const;
+    Set<AudioPlayerRunnable*> m_currentAudioPlayers;
 
     void OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer);
 
     friend class Application;
     friend class AudioPlayerRunnable;
-    friend class AnonymousAudioPlayer;
 };
 
 #endif // AUDIOMANAGER_H

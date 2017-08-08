@@ -12,91 +12,62 @@
 #include "Bang/GameObject.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
+#include "Bang/ALAudioSource.h"
+#include "Bang/AssetsManager.h"
 #include "Bang/AudioListener.h"
 #include "Bang/AudioPlayerRunnable.h"
-#include "Bang/AnonymousAudioPlayer.h"
 
 AudioManager::AudioManager()
 {
     alutInit(0, NULL);
     m_threadPool.setMaxThreadCount(256);
-    m_anonymousAudioPlayer = new AnonymousAudioPlayer();
 }
 
 AudioManager::~AudioManager()
 {
-    for (AudioPlayerRunnable *ap : m_currentAudios)
-    {
-        ap->OnAudioManagerDelete();
-    }
-    delete m_anonymousAudioPlayer;
+    for (AudioPlayerRunnable *ap : m_currentAudioPlayers) { ap->Destroy(); }
     alutExit();
 }
 
-AnonymousAudioPlayer *AudioManager::GetAnonymousAudioPlayer() const
-{
-    return GetInstance()->m_anonymousAudioPlayer;
-}
-
-void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
-{
-    QMutexLocker m(&m_mutex_currentAudios);
-    m_currentAudios.Remove(audioPlayer);
-}
-
-void AudioManager::PlayAudioClip(AudioClip *audioClip,
-                                 int alSourceId,
-                                 float delay)
+void AudioManager::Play(AudioClip *audioClip,
+                        ALAudioSource *aas,
+                        float delay)
 {
     ENSURE(audioClip);
-
-    AudioListener *listener = SceneManager::GetActiveScene()->
-            GetComponentInChildren<AudioListener>();
-    if (!listener)
-    {
-        Debug_Warn ("The scene does not contain an AudioListener");
-    }
-
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
-                                                          alSourceId,
-                                                          delay);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, aas, delay);
     AudioManager *am = AudioManager::GetInstance();
     bool started = am->m_threadPool.tryStart(player);
     if (started)
     {
         QMutexLocker m(&am->m_mutex_currentAudios);
-        am->m_currentAudios.PushBack(player);
+        am->m_currentAudioPlayers.Add(player);
     }
 }
 
-void AudioManager::PlayAnonymousAudioClip(const Path &audioClipFilepath,
-                                          const Vector3& position,
-                                          float volume,
-                                          bool  looping,
-                                          float delay,
-                                          float pitch,
-                                          float range)
+void AudioManager::Play(AudioClip *audioClip,
+                        const AudioParams &params,
+                        float delay)
 {
-    AnonymousAudioPlayer::PlayAudioClip(audioClipFilepath, position, volume,
-                                        looping, delay, pitch, range);
+    ENSURE(audioClip);
+    ALAudioSource *aas = new ALAudioSource();
+    aas->SetALBufferId(audioClip->GetALBufferId());
+    aas->SetParams(params);
+    aas->m_autoDelete = true;
+    AudioManager::Play(audioClip, aas, delay);
 }
 
-void AudioManager::PlaySound(const Path &soundFilepath,
-                             const Vector3& position,
-                             float volume,
-                             bool  looping,
-                             float delay,
-                             float pitch,
-                             float range)
+void AudioManager::Play(const Path &audioClipFilepath,
+                        const AudioParams &params,
+                        float delay)
 {
-    AnonymousAudioPlayer::PlaySound(soundFilepath, position, volume, looping,
-                                    delay, pitch, range);
+    AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath);
+    AudioManager::Play(audioClip, params, delay);
 }
 
 void AudioManager::PauseAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
     {
         audioPlayer->Pause();
     }
@@ -105,7 +76,7 @@ void AudioManager::PauseAllSounds()
 void AudioManager::ResumeAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
     {
         audioPlayer->Resume();
     }
@@ -114,13 +85,19 @@ void AudioManager::ResumeAllSounds()
 void AudioManager::StopAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
     {
         audioPlayer->Stop();
     }
 
     QMutexLocker m(&am->m_mutex_currentAudios);
-    am->m_currentAudios.Clear();
+    am->m_currentAudioPlayers.Clear();
+}
+
+void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
+{
+    QMutexLocker m(&m_mutex_currentAudios);
+    m_currentAudioPlayers.Remove(audioPlayer);
 }
 
 void AudioManager::ClearALErrors()

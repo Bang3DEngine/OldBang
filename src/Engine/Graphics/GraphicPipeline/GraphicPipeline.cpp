@@ -42,6 +42,14 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
+GraphicPipeline::~GraphicPipeline()
+{
+    delete m_gbuffer;
+    delete m_selectionFB;
+    delete m_texUnitManager;
+    delete m_glContext;
+}
+
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
     p_scene = scene; ENSURE(p_scene);
@@ -99,6 +107,8 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->SetAllDrawBuffers();
 
     // GBuffer Scene rendering
+    GL::SetWriteDepth(true);
+    GL::SetTestDepth(true);
     m_gbuffer->SetStencilWrite(true);
     scene->Render(RenderPass::Scene_Lighted);
     m_gbuffer->SetStencilWrite(false);
@@ -109,12 +119,15 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
 
     // GBuffer Canvas rendering
     m_gbuffer->SetAllDrawBuffers();
+    GL::SetWriteDepth(false);
     GL::SetTestDepth(false);
     scene->Render(RenderPass::Canvas);
     scene->Render(RenderPass::Canvas_PostProcess);
     GL::SetTestDepth(true);
 
     // GBuffer Gizmos rendering
+    GL::SetWriteDepth(true);
+    GL::SetTestDepth(true);
     scene->RenderGizmos();
 
     m_gbuffer->UnBind();
@@ -200,30 +213,14 @@ void GraphicPipeline::Render(Renderer *rend)
     }
 }
 
-GLContext *GraphicPipeline::GetGLContext() const
-{
-    return m_glContext;
-}
-
-G_GBuffer *GraphicPipeline::GetGBuffer()
-{
-    return m_gbuffer;
-}
-
+GLContext *GraphicPipeline::GetGLContext() const { return m_glContext; }
+G_GBuffer *GraphicPipeline::GetGBuffer() { return m_gbuffer; }
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {
     return m_selectionFB;
 }
-
 G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }
 
-GraphicPipeline::~GraphicPipeline()
-{
-    delete m_gbuffer;
-    delete m_selectionFB;
-    delete m_texUnitManager;
-    delete m_glContext;
-}

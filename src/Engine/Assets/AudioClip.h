@@ -19,7 +19,7 @@ public:
     AudioClip();
     virtual ~AudioClip();
 
-    bool LoadFromFile(const Path &filepath);
+    bool LoadFromSoundFile(const Path &filepath);
     void OnAudioSourceAttached(AudioSource *as);
     void OnAudioSourceDettached(AudioSource *as);
 
@@ -43,6 +43,7 @@ private:
     ALuint GetALBufferId() const;
 
     friend class AudioSource;
+    friend class AudioManager;
     friend class AudioPlayerRunnable;
 };
 

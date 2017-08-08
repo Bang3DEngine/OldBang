@@ -4,19 +4,21 @@
 
 #include "Bang/AudioClip.h"
 #include "Bang/AudioManager.h"
+#include "Bang/ALAudioSource.h"
 
 AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
-                                         int alSourceId,
+                                         ALAudioSource *alAudioSource,
                                          float delayInSeconds)
 {
     m_audioClip = clip;
-    m_alSourceId = alSourceId;
+    m_alAudioSource = alAudioSource;
     m_delayInSeconds = delayInSeconds;
     setAutoDelete(true);
 }
 
 AudioPlayerRunnable::~AudioPlayerRunnable()
 {
+    if (m_alAudioSource->m_autoDelete) { delete m_alAudioSource; }
 }
 
 void AudioPlayerRunnable::Resume()
@@ -34,7 +36,7 @@ void AudioPlayerRunnable::Stop()
     m_stopped = true;
 }
 
-void AudioPlayerRunnable::OnAudioManagerDelete()
+void AudioPlayerRunnable::Destroy()
 {
     m_exited = true;
 }
@@ -51,24 +53,21 @@ void AudioPlayerRunnable::run()
     AudioManager::ClearALErrors();
     AudioManager::CheckALError();
 
-    alSourcePlay(m_alSourceId);
-    alSourceStop(m_alSourceId); // So we can assume initial state is AL_STOPPED
-
-    ALint state;
+    m_alAudioSource->Play();
+    m_alAudioSource->Stop(); // So we can assume initial state is AL_STOPPED
     do
     {
-        if (m_stopped || m_exited) { alSourceStop (m_alSourceId); break; }
-        if (m_paused)  { alSourcePause(m_alSourceId); }
+        if (m_stopped || m_exited) { m_alAudioSource->Stop(); break; }
+        if (m_paused)  { m_alAudioSource->Pause(); }
 
-        alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
-        if (!m_paused && state != AL_PLAYING)
+        if (!m_paused && !m_alAudioSource->IsPlaying())
         {
-            alSourcePlay(m_alSourceId); // Resume
+            m_alAudioSource->Play(); // Resume
         }
 
         QThread::currentThread()->msleep(100);
     }
-    while ( state != AL_STOPPED && !m_exited );
+    while ( !m_alAudioSource->IsStopped() && !m_exited );
 
     if (!m_exited)
     {

@@ -18,7 +18,7 @@ AudioClip::~AudioClip()
     }
 }
 
-bool AudioClip::LoadFromFile(const Path &filepath)
+bool AudioClip::LoadFromSoundFile(const Path &filepath)
 {
     if (!filepath.Exists() || !filepath.IsFile()) { return false; }
 
@@ -119,6 +119,11 @@ float AudioClip::GetLength() const
     return (float(GetBufferSize()) / bitChannels) / GetFrequency();
 }
 
+ALuint AudioClip::GetALBufferId() const
+{
+    return m_alBufferId;
+}
+
 bool AudioClip::IsLoaded() const
 {
     return m_alBufferId != 0;
@@ -133,7 +138,7 @@ void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
     m_audioFileFilepath = xmlInfo.Get<Path>("AudioFilepath");
-    LoadFromFile( m_audioFileFilepath );
+    LoadFromSoundFile( m_audioFileFilepath );
 }
 
 void AudioClip::Write(XMLNode *xmlInfo) const
@@ -141,9 +146,3 @@ void AudioClip::Write(XMLNode *xmlInfo) const
     Asset::Write(xmlInfo);
     xmlInfo->Set("AudioFilepath", m_audioFileFilepath);
 }
-
-ALuint AudioClip::GetALBufferId() const
-{
-    return m_alBufferId;
-}
-

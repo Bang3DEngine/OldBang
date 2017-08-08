@@ -36,7 +36,9 @@ int main(int argc, char **argv)
 #include "Bang/GUIImage.h"
 #include "Bang/GUICanvas.h"
 #include "Bang/GUIButton.h"
+#include "Bang/AudioClip.h"
 #include "Bang/Application.h"
+#include "Bang/AudioManager.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
@@ -88,13 +90,9 @@ int main(int argc, char **argv)
     rightVLayout->Add(rightLabel);
 
     GUIButton *buttonPlay = new GUIButton("Play");
-    GUIButton *buttonInstructions = new GUIButton("Instructions");
-    GUIButton *buttonCredits = new GUIButton("Credits");
+    GUIButton *buttonPause= new GUIButton("Pause");
+    GUIButton *buttonStop = new GUIButton("Stop");
     GUIButton *buttonExit = new GUIButton("Exit");
-    buttonPlay->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Play"); });
-    buttonInstructions->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Instructions"); });
-    buttonCredits->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Credits"); });
-    buttonExit->AddClickedCallback([](UIButton*){ Debug_Log("Pressed Exit"); });
 
     GUILabel *nameLabel = new GUILabel();
     nameLabel->GetText()->SetContent("Name:");
@@ -139,8 +137,8 @@ int main(int argc, char **argv)
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
     menuVLayout->Add(buttonPlay);
-    menuVLayout->Add(buttonInstructions);
-    menuVLayout->Add(buttonCredits);
+    menuVLayout->Add(buttonPause);
+    menuVLayout->Add(buttonStop);
     menuVLayout->Add(buttonExit);
     menuVLayout->SetParent(uiVContainer);
 
@@ -170,6 +168,42 @@ int main(int argc, char **argv)
     GUICanvas *canvas = new GUICanvas();
     mainHLayout->SetParent(canvas);
     canvas->SetParent(scene);
+
+    buttonPlay->AddClickedCallback([](UIButton*)
+    {
+        AudioClip *ac = new AudioClip();
+        if (Input::GetKey(Input::Key::A))
+        {
+            ac->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/AppleSound.wav") );
+        }
+        else
+        {
+            ac->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/GameMusic.wav") );
+        }
+        AudioParams ap;
+        AudioManager::Play(ac, ap);
+    });
+    buttonPause->AddClickedCallback([&buttonPause](UIButton*)
+    {
+        if (buttonPause->GetLabel()->GetText()->GetContent().Contains("ause"))
+        {
+            AudioManager::PauseAllSounds();
+            buttonPause->GetLabel()->GetText()->SetContent("Resume");
+        }
+        else
+        {
+            AudioManager::ResumeAllSounds();
+            buttonPause->GetLabel()->GetText()->SetContent("Pause");
+        }
+    });
+    buttonStop->AddClickedCallback([](UIButton*)
+    {
+        AudioManager::StopAllSounds();
+    });
+    buttonExit->AddClickedCallback([](UIButton*)
+    {
+        exit(0);
+    });
 
     SceneManager::LoadScene(scene);
     app.MainLoop();

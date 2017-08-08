@@ -74,6 +74,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Assets/AudioClip.cpp \
     $$BANG_ROOT/src/Engine/Components/AudioSource.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioManager.cpp \
+    $$BANG_ROOT/src/Engine/Audio/ALAudioSource.cpp \
     $$BANG_ROOT/src/Engine/Audio/AudioPlayerRunnable.cpp \
     $$BANG_ROOT/src/Engine/Debug/Debug.cpp \
     $$BANG_ROOT/src/Engine/Debug/Chrono.cpp \
@@ -91,7 +92,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/IO/Project/Project.cpp \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.cpp \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.cpp \
-    $$BANG_ROOT/src/Engine/Audio/AnonymousAudioPlayer.cpp \
     $$BANG_ROOT/src/Engine/Compiler/BangPreprocessor/IReflectable.cpp \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.cpp \
     $$BANG_ROOT/src/Engine/IO/General/Paths.cpp \
@@ -164,6 +164,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Assets/Material.h \
     $$BANG_ROOT/src/Engine/Components/AudioSource.h \
     $$BANG_ROOT/src/Engine/Audio/AudioManager.h \
+    $$BANG_ROOT/src/Engine/Audio/ALAudioSource.h \
     $$BANG_ROOT/src/Engine/Audio/AudioPlayerRunnable.h \
     $$BANG_ROOT/src/Engine/Debug/Chrono.h \
     $$BANG_ROOT/src/Engine/Debug/Debug.h \
@@ -186,7 +187,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Debug/ChronoGL.h \
     $$BANG_ROOT/src/Engine/IO/General/SerializableObject.h \
     $$BANG_ROOT/src/Engine/IO/Files/Extensions.h \
-    $$BANG_ROOT/src/Engine/Audio/AnonymousAudioPlayer.h \
     $$BANG_ROOT/src/Engine/DataStructures/Flags.h \
     $$BANG_ROOT/src/Engine/Components/PostProcessEffect.h \
     $$BANG_ROOT/src/Engine/IO/General/Paths.h \
