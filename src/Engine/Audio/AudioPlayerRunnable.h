@@ -26,6 +26,7 @@ public:
     void run() override;
 
 private:
+    bool m_forceExit = false;
     AudioClip *m_audioClip = nullptr;
     ALAudioSource *m_alAudioSource = 0;
     float m_delayInSeconds = 0.0f;

@@ -78,7 +78,7 @@ protected:
     WrapMode m_wrapMode = WrapMode::Repeat;
     int m_textureUnit = 0;
 
-    byte *m_data = nullptr;
+    Byte *m_data = nullptr;
 
     Format m_format = Format::RGBA_Float32;
     Target m_target = Target::Texture2D;

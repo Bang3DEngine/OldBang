@@ -9,15 +9,13 @@ G_Image::G_Image()
 
 G_Image::G_Image(int width, int height)
 {
-    Create(width, height, Color::Zero);
+    Create(width, height);
 }
 
 void G_Image::Create(int width, int height)
 {
-    m_width = width;
-    m_height = height;
-    m_pixels.Resize(m_width * m_height);
-    m_pixels8.Resize(m_width * m_height * 4);
+    m_size = Vector2i(width, height);
+    m_pixels.Resize(m_size.x * m_size.y * 4);
 }
 
 void G_Image::Create(int width, int height, const Color &backgroundColor)
@@ -34,39 +32,46 @@ void G_Image::Create(int width, int height, const Color &backgroundColor)
 
 void G_Image::SetPixel(int x, int y, const Color& color)
 {
-    if (x < 0 || x >= m_width || y < 0 || y >= m_height) { return; }
-    int coord = y * m_width + x;
-    m_pixels [coord]         = color;
-    m_pixels8[coord * 4 + 0] = static_cast<byte>(color.r * 255);
-    m_pixels8[coord * 4 + 1] = static_cast<byte>(color.g * 255);
-    m_pixels8[coord * 4 + 2] = static_cast<byte>(color.b * 255);
-    m_pixels8[coord * 4 + 3] = static_cast<byte>(color.a * 255);
+    if (x < 0 || x >= GetWidth() || y < 0 || y >= GetHeight()) { return; }
+    int coord = y * GetWidth() + x;
+    m_pixels[coord * 4 + 0] = static_cast<Byte>(color.r * 255);
+    m_pixels[coord * 4 + 1] = static_cast<Byte>(color.g * 255);
+    m_pixels[coord * 4 + 2] = static_cast<Byte>(color.b * 255);
+    m_pixels[coord * 4 + 3] = static_cast<Byte>(color.a * 255);
 }
 
-const byte *G_Image::GetData8() const
+const Byte *G_Image::GetData() const
 {
-    return &m_pixels8[0];
+    return &m_pixels[0];
 }
 
-const Color &G_Image::GetPixel(int x, int y) const
+Color G_Image::GetPixel(int x, int y) const
 {
-    if (x < 0 || x >= m_width || y < 0 || y >= m_height) { return Color::Zero; }
-    return m_pixels[y * m_width + x];
+    if (x < 0 || x >= GetWidth() || y < 0 || y >= GetHeight())
+    {
+        Debug_Warn("Pixel (" << x << ", " << y << ") out of range.");
+        return Color::Zero;
+    }
+
+    return Color(m_pixels[y * GetWidth() + x + 0] / 255.0f,
+                 m_pixels[y * GetWidth() + x + 1] / 255.0f,
+                 m_pixels[y * GetWidth() + x + 2] / 255.0f,
+                 m_pixels[y * GetWidth() + x + 3] / 255.0f);
 }
 
 uint G_Image::GetWidth() const
 {
-    return m_width;
+    return m_size.x;
 }
 
 uint G_Image::GetHeight() const
 {
-    return m_height;
+    return m_size.y;
 }
 
-Vector2 G_Image::GetSize() const
+const Vector2i& G_Image::GetSize() const
 {
-    return Vector2(GetWidth(), GetHeight());
+    return m_size;
 }
 
 void G_Image::SaveToFile(const Path &filepath) const
@@ -103,12 +108,11 @@ G_Image G_Image::FromFile(const Path &filepath)
                 int b = qBlue(rgb);
                 int a = qAlpha(rgb);
 
-                int coord = i * img.m_width + j;
-                img.m_pixels8 [coord * 4 + 0] = r;
-                img.m_pixels8 [coord * 4 + 1] = g;
-                img.m_pixels8 [coord * 4 + 2] = b;
-                img.m_pixels8 [coord * 4 + 3] = a;
-                img.m_pixels  [coord]         = Color(r, g, b, a) / 255.0f;
+                int coord = i * img.GetWidth() + j;
+                img.m_pixels [coord * 4 + 0] = r;
+                img.m_pixels [coord * 4 + 1] = g;
+                img.m_pixels [coord * 4 + 2] = b;
+                img.m_pixels [coord * 4 + 3] = a;
             }
         }
     }

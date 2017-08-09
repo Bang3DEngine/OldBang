@@ -18,21 +18,19 @@ public:
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
-    const byte* GetData8() const;
-    const Color& GetPixel(int x, int y) const;
+    const Byte* GetData() const;
+    Color GetPixel(int x, int y) const;
     uint GetWidth() const;
     uint GetHeight() const;
-    Vector2 GetSize() const;
+    const Vector2i& GetSize() const;
 
     void SaveToFile(const Path &filepath) const;
     static G_Image FromFile(const Path &filepath);
     static G_Image FromQImage(const QImage &qImage);
 
 private:
-    int m_width  = 0;
-    int m_height = 0;
-    Array<byte> m_pixels8;
-    Array<Color> m_pixels;
+    Vector2i m_size;
+    Array<Byte> m_pixels;
 };
 
 #endif // IMAGE_H

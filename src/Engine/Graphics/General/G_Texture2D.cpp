@@ -29,13 +29,13 @@ void G_Texture2D::LoadFromImage(const Path &imageFilepath)
 
 void G_Texture2D::LoadFromImage(const G_Image &image)
 {
-    if (image.GetData8())
+    if (image.GetData())
     {
         m_width  = image.GetWidth();
         m_height = image.GetHeight();
 
         SetFormat(G_Texture::Format::RGBA_Byte8);
-        Fill(image.GetData8(), m_width, m_height, G_Texture::Format::RGBA_Byte8);
+        Fill(image.GetData(), m_width, m_height, G_Texture::Format::RGBA_Byte8);
     }
 
 }
@@ -43,7 +43,7 @@ void G_Texture2D::LoadFromImage(const G_Image &image)
 void G_Texture2D::CreateEmpty(int width, int height)
 {
     int dataSize = width * height * G_Texture::GetPixelBytesSize(m_format);
-    byte *data = new byte[dataSize];
+    Byte *data = new Byte[dataSize];
     memset(data, 0, dataSize);
     Fill(data, width, height, dataSize, true);
     delete[] data;
@@ -54,14 +54,14 @@ void G_Texture2D::Resize(int width, int height)
     CreateEmpty(width, height);
 }
 
-void G_Texture2D::Fill(const byte *newData, int width, int height,
+void G_Texture2D::Fill(const Byte *newData, int width, int height,
                      int sizeOfNewData, bool genMipMaps)
 {
     if (m_data) { delete[] m_data; }
 
     uint dataSize = sizeOfNewData >= 0 ?
                                     sizeOfNewData : (width * height * 16);
-    m_data = new byte[dataSize];
+    m_data = new Byte[dataSize];
     memcpy(m_data, newData, dataSize); // Copy data
     m_width = width;
     m_height = height;
@@ -84,7 +84,7 @@ void G_Texture2D::GenerateMipMaps() const
     UnBind();
 }
 
-void G_Texture2D::Fill(const byte *newData, int width, int height,
+void G_Texture2D::Fill(const Byte *newData, int width, int height,
                      G_Texture::Format imageFormat,
                      bool genMipMaps)
 {
@@ -105,7 +105,7 @@ G_Image G_Texture2D::ToImage(bool invertY)
     const int width  = GetWidth();
     const int height = GetHeight();
     const uint bytesSize = GetBytesSize();
-    byte *pixels = new byte[bytesSize];
+    Byte *pixels = new Byte[bytesSize];
 
     glBindTexture(GL_TEXTURE_2D, GetGLId());
     glGetTexImage(GL_TEXTURE_2D,
@@ -115,7 +115,7 @@ G_Image G_Texture2D::ToImage(bool invertY)
                   pixels);
     if (invertY)
     {
-        byte *pixelsCpy = new byte[bytesSize];
+        Byte *pixelsCpy = new Byte[bytesSize];
         memcpy(pixelsCpy, pixels, bytesSize);
         for (int i = 0; i < height; ++i)
         {

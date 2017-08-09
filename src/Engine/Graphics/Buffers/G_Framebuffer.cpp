@@ -107,7 +107,7 @@ Color G_Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
     }
     else
     {
-        byte bColor[4];
+        Byte bColor[4];
         glReadPixels(x, t->GetHeight() - y, 1, 1, t->GetGLFormat(),
                      t->GetGLDataType(), &bColor);
         readColor = Color(bColor[0], bColor[1], bColor[2], bColor[3]) / 255.0f;

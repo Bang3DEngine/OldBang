@@ -149,8 +149,8 @@ bool G_FontSheetCreator::LoadAtlasTexture(
             }
         }
 
-        Vector2 uvMin = minPixel / atlasImage.GetSize();
-        Vector2 uvMax = maxPixel / atlasImage.GetSize();
+        Vector2 uvMin = minPixel / Vector2(atlasImage.GetSize());
+        Vector2 uvMax = maxPixel / Vector2(atlasImage.GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
         charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) );

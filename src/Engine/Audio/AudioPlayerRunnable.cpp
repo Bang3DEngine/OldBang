@@ -24,7 +24,11 @@ AudioPlayerRunnable::~AudioPlayerRunnable()
 
 void AudioPlayerRunnable::Resume() { m_alAudioSource->Play(); }
 void AudioPlayerRunnable::Pause() { m_alAudioSource->Pause(); }
-void AudioPlayerRunnable::Stop() { m_alAudioSource->Stop(); }
+void AudioPlayerRunnable::Stop()
+{
+    m_forceExit = true;
+    m_alAudioSource->Stop();
+}
 AudioClip *AudioPlayerRunnable::GetAudioClip() const { return m_audioClip; }
 ALAudioSource *AudioPlayerRunnable::GetALAudioSource() const
 {
@@ -44,6 +48,6 @@ void AudioPlayerRunnable::run()
     AudioManager::CheckALError();
 
     m_alAudioSource->Play(); // Play and wait until source is stopped
-    do { QThread::currentThread()->msleep(1000); }
-    while ( !m_alAudioSource->IsStopped() );
+    do { QThread::currentThread()->msleep(300); }
+    while ( !m_forceExit && !m_alAudioSource->IsStopped() );
 }

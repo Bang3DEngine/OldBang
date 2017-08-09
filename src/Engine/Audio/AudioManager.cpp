@@ -25,7 +25,7 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-    for (AudioPlayerRunnable *ap : m_currentAudioPlayers) { ap->Stop(); }
+    StopAllSounds();
     alutExit();
 }
 

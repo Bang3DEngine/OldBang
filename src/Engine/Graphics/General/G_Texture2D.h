@@ -16,10 +16,10 @@ public:
     void LoadFromImage(const G_Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(const byte *newData, int width, int height,
+    void Fill(const Byte *newData, int width, int height,
               G_Texture::Format imageFormat,
               bool genMipMaps = true);
-    void Fill(const byte *newData, int width, int height,
+    void Fill(const Byte *newData, int width, int height,
               int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 

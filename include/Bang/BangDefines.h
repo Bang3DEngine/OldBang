@@ -70,7 +70,7 @@ FORWARD_T class QuaternionG;
 
 // Types ================================================
 using uint        = unsigned int;
-using byte        = unsigned char;
+using Byte        = unsigned char;
 using EpochTime   = long long;
 
 using Vector2i    = Vector2G<int>;
