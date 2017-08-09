@@ -16,33 +16,8 @@ AudioSource::AudioSource()
 
 AudioSource::~AudioSource()
 {
-    if (m_audioClip)
-    {
-        m_audioClip->OnAudioSourceDettached(this);
-    }
+    Stop();
 }
-
-
-void AudioSource::SetAudioClip(AudioClip *audioClip)
-{
-    if (m_audioClip)
-    {
-        m_audioClip->OnAudioSourceDettached(this);
-    }
-
-    SetAudioClipNoDettachAttach(audioClip);
-
-    if (m_audioClip)
-    {
-        m_audioClip->OnAudioSourceAttached(this);
-    }
-}
-
-void AudioSource::SetPlayOnStart(bool playOnStart)
-{
-    m_playOnStart = playOnStart;
-}
-
 
 void AudioSource::OnStart()
 {
@@ -51,6 +26,43 @@ void AudioSource::OnStart()
     {
         Play();
     }
+}
+
+void AudioSource::OnUpdate()
+{
+    Component::OnUpdate();
+
+    if (m_currentAudioClipALBufferId != m_audioClip->GetALBufferId())
+    {
+        SetAudioClip(m_audioClip);
+    }
+
+    if (transform)
+    {
+        ALAudioSource::SetPosition(transform->GetPosition());
+    }
+}
+
+void AudioSource::SetAudioClip(AudioClip *audioClip)
+{
+    m_audioClip = audioClip;
+    SetALBufferId(audioClip->GetALBufferId());
+    m_currentAudioClipALBufferId = audioClip->GetALBufferId();
+}
+
+void AudioSource::SetPlayOnStart(bool playOnStart)
+{
+    m_playOnStart = playOnStart;
+}
+
+void AudioSource::Play()
+{
+    Play(0.0f);
+}
+
+void AudioSource::Play(float delay)
+{
+    AudioManager::Play(m_audioClip, this, delay);
 }
 
 bool AudioSource::IsPlayOnStart() const { return m_playOnStart; }
@@ -105,20 +117,4 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Range",       GetRange());
     xmlInfo->Set("Looping",     IsLooping());
     xmlInfo->Set("PlayOnStart", IsPlayOnStart());
-}
-
-void AudioSource::OnUpdate()
-{
-    Component::OnUpdate();
-
-    if (transform)
-    {
-        ALAudioSource::SetPosition(transform->GetPosition());
-    }
-}
-
-void AudioSource::SetAudioClipNoDettachAttach(AudioClip *audioClip)
-{
-    m_audioClip = audioClip;
-    SetALBufferId(audioClip->GetALBufferId());
 }

@@ -169,19 +169,25 @@ int main(int argc, char **argv)
     mainHLayout->SetParent(canvas);
     canvas->SetParent(scene);
 
-    buttonPlay->AddClickedCallback([](UIButton*)
+    AudioClip *gameAc = new AudioClip();
+    AudioClip *appleAc = new AudioClip();
+    gameAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/GameMusic.wav") );
+    appleAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/AppleSound.wav") );
+    buttonPlay->AddClickedCallback([gameAc, appleAc](UIButton*)
     {
-        AudioClip *ac = new AudioClip();
+        AudioParams ap;
         if (Input::GetKey(Input::Key::A))
         {
-            ac->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/AppleSound.wav") );
+            AudioManager::Play(appleAc, ap);
+        }
+        else if (Input::GetKey(Input::Key::X))
+        {
+            gameAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/MenuMusic.wav") );
         }
         else
         {
-            ac->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/GameMusic.wav") );
+            AudioManager::Play(gameAc, ap);
         }
-        AudioParams ap;
-        AudioManager::Play(ac, ap);
     });
     buttonPause->AddClickedCallback([&buttonPause](UIButton*)
     {

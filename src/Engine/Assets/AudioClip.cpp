@@ -30,49 +30,30 @@ bool AudioClip::LoadFromSoundFile(const Path &filepath)
     }
 
     AudioManager::ClearALErrors();
+    AudioManager::DettachSourcesFromAudioClip(this);
+    alDeleteBuffers(1, &m_alBufferId);
+    alGenBuffers(1, &m_alBufferId);
+    AudioManager::CheckALError();
 
-    // First unbind all sources from the buffer
-    // OpenAL does not let changing a buffer dynamically
-    // if one or more sources are attached to it
-    for (AudioSource *as : m_audioSourcesUsingThis)
-    {
-        as->Stop();
-        as->SetAudioClipNoDettachAttach(nullptr);
-    }
-
+    AudioManager::ClearALErrors();
     ALsizei size; ALfloat freq; ALenum format;
     ALvoid *data = alutLoadMemoryFromFile(filepath.GetAbsolute().ToCString(),
                                           &format, &size, &freq);
+    AudioManager::CheckALError();
 
     AudioManager::ClearALErrors();
     bool hasError = AudioManager::CheckALError();
     if (!hasError)
     {
         alBufferData(m_alBufferId, format, data, size, freq);
-        m_audioFileFilepath = filepath;
+        m_soundFilepath = filepath;
         free(data);
 
         hasError = AudioManager::CheckALError();
     }
-    else { m_audioFileFilepath = Path(); }
-
-    // Rebind all previously dettached sources
-    for (AudioSource *as : m_audioSourcesUsingThis)
-    {
-        as->SetAudioClipNoDettachAttach(hasError ? nullptr : this);
-    }
+    else { m_soundFilepath = Path(); }
 
     return !hasError;
-}
-
-void AudioClip::OnAudioSourceAttached(AudioSource *as)
-{
-    m_audioSourcesUsingThis.PushBack(as);
-}
-
-void AudioClip::OnAudioSourceDettached(AudioSource *as)
-{
-    m_audioSourcesUsingThis.RemoveAll(as);
 }
 
 int AudioClip::GetChannels() const
@@ -131,18 +112,18 @@ bool AudioClip::IsLoaded() const
 
 const Path &AudioClip::GetSoundFilepath() const
 {
-    return m_audioFileFilepath;
+    return m_soundFilepath;
 }
 
 void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_audioFileFilepath = xmlInfo.Get<Path>("AudioFilepath");
-    LoadFromSoundFile( m_audioFileFilepath );
+    m_soundFilepath = xmlInfo.Get<Path>("AudioFilepath");
+    LoadFromSoundFile( m_soundFilepath );
 }
 
 void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->Set("AudioFilepath", m_audioFileFilepath);
+    xmlInfo->Set("AudioFilepath", m_soundFilepath);
 }

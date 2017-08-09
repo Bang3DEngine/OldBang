@@ -18,6 +18,9 @@ public:
     void SetAudioClip(AudioClip *audioClip);
     void SetPlayOnStart(bool playOnStart);
 
+    void Play(); // Hides ALAudioSource::Play()
+    void Play(float delay);
+
     bool IsPlayOnStart() const;
     float GetPlayProgress() const;
     AudioClip* GetAudioClip() const;
@@ -42,7 +45,7 @@ private:
     AudioClip *m_audioClip = nullptr;
     bool m_playOnStart = true;
 
-    void SetAudioClipNoDettachAttach(AudioClip *audioClip);
+    uint m_currentAudioClipALBufferId = 0;
 
     friend class AudioClip;
     friend class AudioManager;

@@ -20,8 +20,6 @@ public:
     virtual ~AudioClip();
 
     bool LoadFromSoundFile(const Path &filepath);
-    void OnAudioSourceAttached(AudioSource *as);
-    void OnAudioSourceDettached(AudioSource *as);
 
     int GetChannels() const;
     int GetBufferSize() const;
@@ -37,8 +35,7 @@ public:
 
 private:
     ALuint m_alBufferId = 0;
-    Path m_audioFileFilepath;
-    List<AudioSource*> m_audioSourcesUsingThis;
+    Path m_soundFilepath;
 
     ALuint GetALBufferId() const;
 

@@ -47,8 +47,12 @@ private:
     QMutex m_mutex_currentAudios;
     Set<AudioPlayerRunnable*> m_currentAudioPlayers;
 
+    // Handling of real-time buffer change
+    static void DettachSourcesFromAudioClip(AudioClip *ac);
+
     void OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer);
 
+    friend class AudioClip;
     friend class Application;
     friend class AudioPlayerRunnable;
 };

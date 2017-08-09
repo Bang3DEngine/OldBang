@@ -19,7 +19,9 @@ public:
     void Resume();
     void Pause();
     void Stop();
-    void Destroy();
+
+    AudioClip* GetAudioClip() const;
+    ALAudioSource* GetALAudioSource() const;
 
     void run() override;
 
@@ -27,10 +29,6 @@ private:
     AudioClip *m_audioClip = nullptr;
     ALAudioSource *m_alAudioSource = 0;
     float m_delayInSeconds = 0.0f;
-
-    volatile bool m_paused  = false;
-    volatile bool m_stopped = false;
-    volatile bool m_exited  = false;
 };
 
 #endif // AUDIOPLAYERRUNNABLE_H

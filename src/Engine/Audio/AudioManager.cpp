@@ -25,7 +25,7 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-    for (AudioPlayerRunnable *ap : m_currentAudioPlayers) { ap->Destroy(); }
+    for (AudioPlayerRunnable *ap : m_currentAudioPlayers) { ap->Stop(); }
     alutExit();
 }
 
@@ -98,6 +98,21 @@ void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
 {
     QMutexLocker m(&m_mutex_currentAudios);
     m_currentAudioPlayers.Remove(audioPlayer);
+}
+
+void AudioManager::DettachSourcesFromAudioClip(AudioClip *ac)
+{
+    // Dettach all audioSources using this AudioClip.
+    // Otherwise OpenAL throws error.
+    AudioManager *am = AudioManager::GetInstance();
+    for (AudioPlayerRunnable *ap : am->m_currentAudioPlayers)
+    {
+        if (ap->GetAudioClip() == ac)
+        {
+            ap->Stop();
+            ap->GetALAudioSource()->SetALBufferId(0);
+        }
+    }
 }
 
 void AudioManager::ClearALErrors()
