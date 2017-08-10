@@ -24,7 +24,7 @@ public:
         int originY  = 0;
     };
 
-    constexpr static int c_charLoadSize = 256;
+    constexpr static int CharLoadSize = 256;
 
     G_Font();
     virtual ~G_Font();

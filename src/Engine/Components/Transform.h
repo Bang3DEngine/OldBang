@@ -1,6 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include "Bang/Cached.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/Component.h"
@@ -102,8 +103,7 @@ public:
 protected:
     Transform();
 
-    mutable bool m_hasChanged = false;
-    mutable Matrix4 m_localToParentMatrix;
+    mutable Cached<Matrix4> m_localToParentMatrix;
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3 m_localScale = Vector3::One;

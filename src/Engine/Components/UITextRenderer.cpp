@@ -107,10 +107,10 @@ void UITextRenderer::RefreshMesh()
 
     m_charRectsNDC.Clear();
     m_charVisibility.clear();
+    const Vector2f pixelSize = 1.0f / Vector2f(Screen::GetSize());
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
-        Rect charRectNDC = (  (Rect(cr.rect) / Vector2f(Screen::GetSize()) )
-                            * 2.0f - 1.0f);
+        Rect charRectNDC = ( (Rect(cr.rect) * pixelSize) * 2.0f - 1.0f );
 
         if (cr.visible)
         {

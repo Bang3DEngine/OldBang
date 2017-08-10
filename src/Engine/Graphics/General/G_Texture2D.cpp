@@ -23,7 +23,7 @@ void G_Texture2D::LoadFromImage(const Path &imageFilepath)
     ENSURE(!imageFilepath.IsEmpty());
 
     m_imageFilepath = imageFilepath;
-    G_Image img = G_Image::FromFile(m_imageFilepath);
+    G_Image img = G_Image::LoadFromFile(m_imageFilepath);
     LoadFromImage(img);
 }
 

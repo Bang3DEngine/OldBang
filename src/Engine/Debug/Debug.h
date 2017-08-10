@@ -8,6 +8,9 @@
 #include "Bang/String.h"
 #include "Bang/StreamOperators.h"
 
+#define ASSERT(assertion) if ( !(assertion) ) {\
+    Debug_Error("Assertion '" << #assertion << "' failed!"); exit(1); }
+
 class Debug
 {
 public:

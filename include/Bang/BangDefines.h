@@ -7,9 +7,6 @@
 #define ENSURE(mustBeTrue) do{\
     if (!(mustBeTrue)) { return; }\
 } while (false)
-
-#define ASSERT(assertion) if ( !(assertion) ) {\
-    Debug_Error("Assertion '" << #assertion << "' failed!"); exit(1); }
 // =====================================================
 
 

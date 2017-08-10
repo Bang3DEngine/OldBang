@@ -68,6 +68,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/UIBorderRect.cpp \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.cpp \
+    $$BANG_ROOT/src/Engine/General/DistanceFielder.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
     $$BANG_ROOT/src/Engine/Components/UITextRenderer.cpp \
@@ -152,6 +153,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/SceneManager.h \
     $$BANG_ROOT/src/Engine/Components/UIImageRenderer.h \
     $$BANG_ROOT/src/Engine/Components/UIButton.h \
+    $$BANG_ROOT/src/Engine/General/DistanceFielder.h \
     $$BANG_ROOT/src/Engine/Components/UIBorderRect.h \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.h \
@@ -209,7 +211,7 @@ DISTFILES += \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.frag_g \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Template.vert_g \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.vert_g \
-    $$BANG_ROOT/res/EngineAssets/Shaders/UI/SP_UIImage.frag_pp \
+    $$BANG_ROOT/res/EngineAssets/Shaders/UI/SP_UIImageRenderer.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Shaders/Include/PointLight.glsl \
     $$BANG_ROOT/res/EngineAssets/Shaders/Include/Main.glsl \
     $$BANG_ROOT/res/EngineAssets/Shaders/Include/DirectionalLight.glsl \
@@ -217,7 +219,7 @@ DISTFILES += \
     $$BANG_ROOT/res/EngineAssets/Shaders/Include/G.vert_g \
     $$BANG_ROOT/res/EngineAssets/Materials/RenderG_GBufferToScreen.bmat \
     $$BANG_ROOT/res/EngineAssets/Materials/G_Default.bmat \
-    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImage.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImageRenderer.bmat \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Missing.frag \
     $$BANG_ROOT/res/EngineAssets/Materials/Missing.bmat \
     $$BANG_ROOT/res/EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
@@ -230,8 +232,8 @@ DISTFILES += \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_PointLight.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_Template.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Materials/G_DefaultNoSP.bmat \
-    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImage.bmat \
-    $$BANG_ROOT/res/EngineAssets/Materials/UI/SP_UIImage.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIImageRenderer.bmat \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/SP_UIImageRenderer.bmat \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_FXAA.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Shaders/Include/Common.glsl \
     $$BANG_ROOT/res/EngineAssets/Fonts/UbuntuFont.bfont \
@@ -243,8 +245,8 @@ DISTFILES += \
     $$BANG_ROOT/res/EngineAssets/Sphere.bmesh \
     $$BANG_ROOT/res/EngineAssets/UIPlane.bmesh \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.vert_pp \
-    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UIText.bmat \
-    $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UIText.frag_g \
+    $$BANG_ROOT/res/EngineAssets/Materials/UI/G_UITextRenderer.bmat \
+    $$BANG_ROOT/res/EngineAssets/Shaders/UI/G_UITextRenderer.frag_g \
     $$BANG_ROOT/res/EngineAssets/Shaders/SP_Default.frag_pp \
     $$BANG_ROOT/res/EngineAssets/Shaders/G_Default.bshaderprogram \
     $$BANG_ROOT/res/EngineAssets/Shaders/Cartoon.frag_pp \

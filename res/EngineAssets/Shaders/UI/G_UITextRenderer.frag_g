@@ -4,10 +4,6 @@ void Main()
 {
     vec2 charAtlasUv = B_FragIn_Uv;
     vec4 charColor   = texture2D(B_Texture0, charAtlasUv);
-
-    //B_Out_DiffColor = vec4(charAtlasUv, 0, 1);
-    //return;
-
-    if (charColor.a == 0.0) { discard; }
-    B_Out_Color = charColor;
+    if (charColor.a < 0.1) { discard; }
+    B_Out_Color = vec4( vec3(1), charColor.a );
 }

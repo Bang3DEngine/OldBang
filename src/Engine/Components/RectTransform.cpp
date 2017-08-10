@@ -203,7 +203,7 @@ Rect RectTransform::GetParentScreenRect() const
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled()) { return Matrix4::Identity; }
-    if (!m_hasChanged) { return m_localToParentMatrix; }
+    if (m_localToParentMatrix.IsValid()) { return m_localToParentMatrix.Get(); }
 
     Vector2 minMarginedAnchor (m_anchorMin + FromPixelsToLocalNDC(GetMarginLeftBot()));
     Vector2 maxMarginedAnchor (m_anchorMax - FromPixelsToLocalNDC(GetMarginRightTop()));
@@ -214,11 +214,10 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
     Vector3 moveToPivot(m_pivotPosition, 0);
 
-    m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
-                            Matrix4::ScaleMatrix(anchorScaling) *
-                            Matrix4::TranslateMatrix(moveToPivot);
-    m_hasChanged = false;
-    return m_localToParentMatrix;
+    m_localToParentMatrix.Set(Matrix4::TranslateMatrix(moveToAnchorCenter) *
+                              Matrix4::ScaleMatrix(anchorScaling) *
+                              Matrix4::TranslateMatrix(moveToPivot));
+    return m_localToParentMatrix.Get();
 }
 
 void RectTransform::OnChanged()
@@ -229,7 +228,7 @@ void RectTransform::OnChanged()
 void RectTransform::OnParentSizeChanged()
 {
     Transform::OnParentSizeChanged();
-    m_hasChanged = true;
+    m_localToParentMatrix.Invalidate();
 }
 
 void RectTransform::CloneInto(ICloneable *clone) const

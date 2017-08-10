@@ -5,6 +5,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/G_Texture2D.h"
+#include "Bang/DistanceFielder.h"
 
 #include FT_GLYPH_H
 
@@ -63,6 +64,10 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
     // Set the pixel size ( rasterize (?) )
     error = FT_Set_Pixel_Sizes(face, glyphSizePx, glyphSizePx);
+    //SDL_DisplayMode dm;
+    //SDL_GetCurrentDisplayMode(0, &dm);
+    //error = FT_Set_Char_Size(face, glyphSizePx, glyphSizePx,
+    //                         dm.w, dm.h);
     if (error)
     {
         Debug_Error("Failed to set font pixel size of '" << fontFilepath
@@ -79,8 +84,9 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     // Generate the atlas, adding each char in a simple grid
     uint numChars        = charactersToLoadStr.Size();
     uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
-    uint charInAtlasSize = G_Font::c_charLoadSize * 2;
-    uint sideSize        = charsPerRowCol * charInAtlasSize;
+    uint charInAtlasSize = G_Font::CharLoadSize * 1.1f;
+    uint margin          = 5;
+    uint sideSize        = charsPerRowCol * charInAtlasSize + margin * 2;
     G_Image atlasImage(sideSize, sideSize);
     for (int i = 0; i < numChars; ++i)
     {
@@ -127,12 +133,12 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         const uint charRow = i / charsPerRowCol;
         const uint charCol = i % charsPerRowCol;
 
-        Vector2 minPixel(Math::Infinity<float>());
-        Vector2 maxPixel(Math::NegativeInfinity<float>());
+        Vector2i minPixel(std::numeric_limits<int>::max());
+        Vector2i maxPixel(std::numeric_limits<int>::min());
         if (charMetrics.size.x > 0 && charMetrics.size.y > 0)
         {
-            const uint offX = charInAtlasSize * charCol;
-            const uint offY = charInAtlasSize * charRow;
+            const int offX = charInAtlasSize * charCol + margin;
+            const int offY = charInAtlasSize * charRow + margin;
             for(int y = 0; y < charMetrics.size.y; y++)
             {
                 for(int x = 0; x < charMetrics.size.x; x++)
@@ -140,17 +146,17 @@ bool G_FontSheetCreator::LoadAtlasTexture(
                     float pixelAlpha = bitmap.buffer[y * charMetrics.size.x + x];
                     Color pxColor = Color(1.0f, 1.0f, 1.0f,
                                           pixelAlpha / 255.0f);
-                    minPixel.x = Math::Min(minPixel.x, float(offX + x));
-                    minPixel.y = Math::Min(minPixel.y, float(offY + y));
-                    maxPixel.x = Math::Max(maxPixel.x, float(offX + x));
-                    maxPixel.y = Math::Max(maxPixel.y, float(offY + y));
+                    minPixel.x = Math::Min(minPixel.x, (offX + x));
+                    minPixel.y = Math::Min(minPixel.y, (offY + y));
+                    maxPixel.x = Math::Max(maxPixel.x, (offX + x));
+                    maxPixel.y = Math::Max(maxPixel.y, (offY + y));
                     atlasImage.SetPixel(offX + x, offY + y, pxColor);
                 }
             }
         }
 
-        Vector2 uvMin = minPixel / Vector2(atlasImage.GetSize());
-        Vector2 uvMax = maxPixel / Vector2(atlasImage.GetSize());
+        Vector2 uvMin = Vector2(minPixel) / Vector2(atlasImage.GetSize());
+        Vector2 uvMax = Vector2(maxPixel) / Vector2(atlasImage.GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
         charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) );
@@ -158,9 +164,15 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         FT_Done_Glyph(glyph);
     }
 
+    // atlasImage.SaveToFile( Path("original.png") );
+    // G_Image distFieldImg;
+    // DistanceFielder::CreateDistanceField(atlasImage, &distFieldImg, distRadius);
+    // distFieldImg.SaveToFile( Path("distField.png") );
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     *atlasTexture = new G_Texture2D();
     (*atlasTexture)->LoadFromImage(atlasImage);
+    // (*atlasTexture)->LoadFromImage(distFieldImg);
     (*atlasTexture)->SetWrapMode(G_Texture::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(G_Texture::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);

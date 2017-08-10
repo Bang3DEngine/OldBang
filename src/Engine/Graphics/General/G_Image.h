@@ -20,13 +20,12 @@ public:
 
     const Byte* GetData() const;
     Color GetPixel(int x, int y) const;
-    uint GetWidth() const;
-    uint GetHeight() const;
+    int GetWidth() const;
+    int GetHeight() const;
     const Vector2i& GetSize() const;
 
     void SaveToFile(const Path &filepath) const;
-    static G_Image FromFile(const Path &filepath);
-    static G_Image FromQImage(const QImage &qImage);
+    static G_Image LoadFromFile(const Path &filepath);
 
 private:
     Vector2i m_size;
