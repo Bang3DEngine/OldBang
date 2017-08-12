@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-#include <QModelIndex>
-#include <QFileSystemModel>
+#include <QDir>
+#include <QFile>
 #include <QCryptographicHash>
 
 #include "Bang/List.h"
@@ -25,19 +25,13 @@ File::File(const String &filepath) : File( Path(filepath) )
 {
 }
 
-File::File(const QFileSystemModel *model, const QModelIndex &index)
-{
-    String pathStr(model->filePath(index).toStdString());
-    m_path = Path(pathStr);
-}
-
 File::~File()
 {
 }
 
 bool File::DuplicateFile(const Path &fromFilepath,
-                             const Path &toFilepath,
-                             bool overwrite)
+                         const Path &toFilepath,
+                         bool overwrite)
 {
     if (!fromFilepath.IsFile()) { return false; }
     if (overwrite) { File::Remove(toFilepath); }

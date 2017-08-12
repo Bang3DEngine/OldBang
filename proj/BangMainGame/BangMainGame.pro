@@ -3,7 +3,6 @@ system(rm -f Makefile)
 
 TEMPLATE = app
 CONFIG -= console
-QT = core gui opengl widgets
 
 SOURCES += \
     $$BANG_ROOT/src/MainGame.cpp

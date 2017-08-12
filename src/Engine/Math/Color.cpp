@@ -1,7 +1,6 @@
 #include "Bang/Color.h"
 
 #include <sstream>
-#include <QColor>
 
 #include "Bang/Math.h"
 #include "Bang/String.h"
@@ -106,19 +105,6 @@ String Color::ToStringRgba255() const
                   int(b * 255) << ", " <<
                   int(a * 255) << ")";
     return oss.str();
-}
-
-Color Color::FromQColor(const QColor &c)
-{
-    return Color(c.red()   / 255.0f,
-                 c.green() / 255.0f,
-                 c.blue()  / 255.0f,
-                 c.alpha() / 255.0f);
-}
-
-QColor Color::ToQColor() const
-{
-    return QColor(r * 255, g * 255, b * 255, a * 255);
 }
 
 String Color::ToString() const

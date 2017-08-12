@@ -4,7 +4,6 @@ system(cd $$BANG_ROOT ; sh ./scripts/preprocessHeaders.sh)
 
 TEMPLATE = lib
 CONFIG += staticlib
-QT += core gui opengl widgets
 
 INCLUDEPATH += \
     $$BANG_ROOT/include/Bang/BangGraphics

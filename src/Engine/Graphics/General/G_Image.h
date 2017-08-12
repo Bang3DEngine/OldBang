@@ -1,8 +1,6 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <QImage>
-
 #include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/Color.h"

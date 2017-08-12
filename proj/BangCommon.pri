@@ -1,5 +1,6 @@
 TEMPLATE = lib
 QT_VERSION = 5
+QT = core gui
 
 # PARAMETERS CATCHING
 COMPILER=$$(BANG_BUILD_COMPILER)
@@ -22,6 +23,7 @@ CONFIG += qt
 LIBS += \
     -lGLEW            \ # GLEW
     -lGLU             \
+    -lGL              \
     -ldl              \ # To load libraries and stuff
     -lalut -lopenal   \ # Alut and OpenAL
     -lassimp          \

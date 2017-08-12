@@ -3,7 +3,6 @@ system(rm -f Makefile)
 
 TEMPLATE = lib
 CONFIG += staticlib
-QT += core gui opengl widgets
 
 INCLUDEPATH += \
     $$BANG_ROOT/include/Bang/BangGraphics

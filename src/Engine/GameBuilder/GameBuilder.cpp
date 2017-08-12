@@ -1,7 +1,5 @@
 #include "Bang/GameBuilder.h"
 
-#include <QProgressDialog>
-
 #include "Bang/File.h"
 #include "Bang/Time.h"
 #include "Bang/Paths.h"

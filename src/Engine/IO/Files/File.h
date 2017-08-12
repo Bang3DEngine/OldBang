@@ -4,8 +4,6 @@
 #include "Bang/Path.h"
 
 FORWARD   class QByteArray;
-FORWARD   class QModelIndex;
-FORWARD   class QFileSystemModel;
 
 class File
 {
@@ -13,7 +11,6 @@ public:
     File();
     File(const Path &filepath);
     File(const String &filepath);
-    File(const QFileSystemModel *model, const QModelIndex &index);
     virtual ~File();
 
     String GetContents() const;

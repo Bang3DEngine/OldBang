@@ -5,7 +5,6 @@ TEMPLATE = app
 CONFIG -= app app_bundle
 CONFIG += console
 OBJECTS -= moc_*
-QT = core gui widgets
 
 TARGET = $$BIN_DIR/BangPreprocessor
 

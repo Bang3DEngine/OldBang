@@ -3,8 +3,6 @@
 
 #include "Bang.h"
 
-FORWARD   class QColor;
-
 class Color
 {
 public:
@@ -37,8 +35,6 @@ public:
     String ToStringRgba() const;
     String ToStringRgba255() const;
 
-    static Color FromQColor(const QColor &c);
-    QColor ToQColor() const;
     String ToString() const;
     Vector3 ToVector3() const;
     Vector4 ToVector4() const;

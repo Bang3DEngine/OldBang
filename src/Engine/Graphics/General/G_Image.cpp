@@ -1,5 +1,7 @@
 #include "G_Image.h"
 
+#include <QImage>
+
 #include "Bang/Debug.h"
 
 G_Image::G_Image()
