@@ -11,7 +11,7 @@
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterialScreen = MaterialFactory::GetPointLight();
+    SetLightMaterial( MaterialFactory::GetPointLight() );
 }
 
 PointLight::~PointLight()
@@ -25,12 +25,12 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 
     G_ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
-    sp->Set("B_LightRange", m_range);
+    sp->Set("B_LightRange", GetRange());
 }
 
 Rect PointLight::GetRenderRect(Camera *cam) const
 {
-    Sphere sphere(gameObject->transform->GetPosition(), m_range);
+    Sphere sphere(gameObject->transform->GetPosition(), GetRange());
     AABox bbox = AABox::FromSphere(sphere);
     return bbox.GetAABoundingScreenRect(cam);
 }
@@ -54,5 +54,5 @@ void PointLight::Read(const XMLNode &xmlInfo)
 void PointLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
-    xmlInfo->Set("Range", m_range);
+    xmlInfo->Set("Range", GetRange());
 }

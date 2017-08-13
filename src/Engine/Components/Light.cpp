@@ -46,9 +46,13 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->Set("B_LightPositionWorld", t->GetPosition());
 }
 
+void Light::SetLightMaterial(Material *lightMat)
+{
+    m_lightMaterialScreen = lightMat;
+}
+
 Rect Light::GetRenderRect(Camera *cam) const
 {
-    // Well implemented for each kind of light
     return Rect::ScreenRect;
 }
 

@@ -5,7 +5,7 @@
 
 DirectionalLight::DirectionalLight()
 {
-    m_lightMaterialScreen = MaterialFactory::GetDirectionalLight();
+    SetLightMaterial( MaterialFactory::GetDirectionalLight() );
 }
 
 DirectionalLight::~DirectionalLight()
