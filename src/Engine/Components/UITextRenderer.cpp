@@ -15,13 +15,12 @@
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
+#include "Bang/MaterialFactory.h"
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
     m_mesh = new Mesh();
-    SetMaterial(
-        AssetsManager::Load<Material>(
-                    EPATH("Materials/UI/G_UITextRenderer.bmat") ));
+    SetMaterial( MaterialFactory::GetUIText() );
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));

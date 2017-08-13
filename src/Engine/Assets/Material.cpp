@@ -6,6 +6,7 @@
 #include "Bang/G_Material.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/MaterialFactory.h"
 
 Material::Material() : Asset()
 {
@@ -39,11 +40,6 @@ void Material::UnBind() const
 void Material::SetUvMultiply(const Vector2 &uvMultiply)
 {
     m_gMaterial->SetUvMultiply(uvMultiply);
-}
-
-Material *Material::GetMissingMaterial()
-{
-    return AssetsManager::Load<Material>( EPATH("Materials/Missing.bmat") );
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

@@ -1,12 +1,11 @@
 #include "Bang/DirectionalLight.h"
 
-#include "Bang/Material.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/XMLNode.h"
+#include "Bang/MaterialFactory.h"
 
 DirectionalLight::DirectionalLight()
 {
-    m_lightMaterialScreen = AssetsManager::Load<Material>(
-                EPATH("Materials/SP_DirectionalLight_Screen.bmat") );
+    m_lightMaterialScreen = MaterialFactory::GetDirectionalLight();
 }
 
 DirectionalLight::~DirectionalLight()

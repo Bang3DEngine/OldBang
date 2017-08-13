@@ -3,16 +3,15 @@
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Sphere.h"
-#include "Bang/Material.h"
+#include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
-#include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/MaterialFactory.h"
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterialScreen = AssetsManager::Load<Material>(
-                EPATH("Materials/SP_PointLight_Screen.bmat") );
+    m_lightMaterialScreen = MaterialFactory::GetPointLight();
 }
 
 PointLight::~PointLight()

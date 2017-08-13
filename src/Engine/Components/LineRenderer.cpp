@@ -3,13 +3,12 @@
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
 #include "Bang/Material.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/MaterialFactory.h"
 
 LineRenderer::LineRenderer()
 {
     m_mesh = new Mesh();
-    SetMaterial(
-        AssetsManager::Load<Material>(EPATH("Materials/G_DefaultNoSP.bmat")));
+    SetMaterial(MaterialFactory::GetDefaultUnLighted());
 
     SetRenderPrimitive(GL::RenderPrimitive::Lines);
 }

@@ -5,17 +5,16 @@
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Camera.h"
-#include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
 
 Renderer::Renderer()
 {
-    SetMaterial(
-           AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") ));
+    SetMaterial( MaterialFactory::GetDefault() );
 }
 
 Renderer::~Renderer()
@@ -108,7 +107,7 @@ Material *Renderer::GetSharedMaterial() const { return m_material; }
 Material *Renderer::GetMaterial() const
 {
     if (m_materialCopy) { return m_materialCopy; }
-    return m_material ? m_material : Material::GetMissingMaterial();
+    return m_material ? m_material : MaterialFactory::GetMissing();
 }
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {

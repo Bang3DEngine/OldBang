@@ -40,8 +40,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    static Material* GetMissingMaterial();
-
 private:
     const Texture2D *m_texture = nullptr;
     ShaderProgram *m_shaderProgram = nullptr;

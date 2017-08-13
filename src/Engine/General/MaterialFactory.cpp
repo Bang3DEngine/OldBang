@@ -1,11 +1,46 @@
 #include "Bang/MaterialFactory.h"
 
-const Material *MaterialFactory::GetDefault()
+#include "Bang/Paths.h"
+#include "Bang/AssetsManager.h"
+
+Material *MaterialFactory::GetDefault()
 {
-    return nullptr;
+    return MaterialFactory::Load("Materials/G_Default.bmat");
+}
+Material *MaterialFactory::GetDefaultUnLighted()
+{
+    return MaterialFactory::Load("Materials/G_DefaultNoSP.bmat");
 }
 
-const Material *MaterialFactory::GetMissing()
+Material *MaterialFactory::GetMissing()
 {
-    return nullptr;
+    return MaterialFactory::Load("Materials/Missing.bmat");
+}
+
+Material *MaterialFactory::GetPointLight()
+{
+    return MaterialFactory::Load("Materials/SP_PointLight_Screen.bmat");
+}
+Material *MaterialFactory::GetDirectionalLight()
+{
+    return MaterialFactory::Load("Materials/SP_DirectionalLight_Screen.bmat");
+}
+
+Material *MaterialFactory::GetUIText()
+{
+    return MaterialFactory::Load("Materials/UI/G_UITextRenderer.bmat");
+}
+Material *MaterialFactory::GetUIImage()
+{
+    return MaterialFactory::Load("Materials/UI/G_UIImageRenderer.bmat");
+}
+
+Material *MaterialFactory::GetRenderGBufferToScreen()
+{
+    return MaterialFactory::Load("Materials/RenderGBufferToScreen.bmat");
+}
+
+Material *MaterialFactory::Load(const String &enginePath)
+{
+    return AssetsManager::Load<Material>( EPATH(enginePath) );
 }

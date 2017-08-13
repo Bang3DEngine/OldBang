@@ -21,8 +21,8 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/AssetsManager.h"
 #include "Bang/CircleRenderer.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/SingleLineRenderer.h"
 
@@ -32,9 +32,8 @@ Gizmos::Gizmos() : GameObject("GizmosGameObject")
     m_planeMesh  = MeshFactory::GetPlane();
     m_sphereMesh = MeshFactory::GetSphere();
 
-    Path matPath = EPATH("./Materials/G_DefaultNoSP.bmat");
-    m_material   = AssetsManager::Load<Material>(matPath);
-    m_material   = new Material(*m_material);
+    m_material   = new Material();
+    MaterialFactory::GetDefaultUnLighted()->CloneInto(m_material);
 
     m_singleLineRenderer = AddComponent<SingleLineRenderer>();
     m_circleRenderer     = AddComponent<CircleRenderer>();

@@ -18,9 +18,9 @@
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/G_RenderTexture.h"
 #include "Bang/G_TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
@@ -35,10 +35,7 @@ GraphicPipeline::GraphicPipeline(G_Screen *screen)
     m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
                                              screen->GetHeight());
 
-    m_renderGBufferToScreenMaterial =
-         AssetsManager::Load<Material>(
-                EPATH("Materials/RenderGBufferToScreen.bmat") );
-
+    m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 

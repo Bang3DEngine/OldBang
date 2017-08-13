@@ -5,11 +5,11 @@
 #include "Bang/Texture2D.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/MaterialFactory.h"
 
 UIImageRenderer::UIImageRenderer()
 {
-    SetMaterial(AssetsManager::Load<Material>(
-                    EPATH("Materials/UI/G_UIImageRenderer.bmat") ) );
+    SetMaterial( MaterialFactory::GetUIImage() );
     UseMaterialCopy();
 
     p_quadMesh = MeshFactory::GetUIPlane();

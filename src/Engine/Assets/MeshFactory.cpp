@@ -5,6 +5,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/MaterialFactory.h"
 
 Mesh* MeshFactory::GetPlane()
 {
@@ -37,9 +38,7 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
 {
     GameObject *go = new GameObject(name);
 
-    Material *mat =
-            AssetsManager::Load<Material>( EPATH("Materials/G_Default.bmat") );
-
+    Material *mat = MaterialFactory::GetDefault();
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderPrimitive(GL::RenderPrimitive::Triangles);
     r->SetMaterial(mat);
