@@ -104,15 +104,6 @@ void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    SetDiffuseColor(xmlInfo.Get<Color>("DiffuseColor"));
-    SetShininess(xmlInfo.Get<float>("Shininess"));
-    SetReceivesLighting(xmlInfo.Get<bool>("ReceivesLighting"));
-    SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
-
-    Path texAssetFilepath = xmlInfo.Get<Path>("Texture");
-    Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
-    SetTexture(texture);
-
     ShaderProgram *sp = GetShaderProgram();
     Path vshaderFilepath = xmlInfo.Get<Path>("VertexShader");
     Path fshaderFilepath = xmlInfo.Get<Path>("FragmentShader");
@@ -125,6 +116,15 @@ void Material::Read(const XMLNode &xmlInfo)
         newSp->Load(vshaderFilepath, fshaderFilepath);
         SetShaderProgram(newSp);
     }
+
+    SetDiffuseColor(xmlInfo.Get<Color>("DiffuseColor"));
+    SetShininess(xmlInfo.Get<float>("Shininess"));
+    SetReceivesLighting(xmlInfo.Get<bool>("ReceivesLighting"));
+    SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
+
+    Path texAssetFilepath = xmlInfo.Get<Path>("Texture");
+    Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
+    SetTexture(texture);
 }
 
 void Material::Write(XMLNode *xmlInfo) const

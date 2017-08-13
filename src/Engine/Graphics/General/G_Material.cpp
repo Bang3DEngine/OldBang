@@ -40,7 +40,7 @@ void G_Material::SetTexture(const G_Texture2D *texture)
     if (m_texture)
     {
         G_ShaderProgram *sp = GetShaderProgram();
-        sp->Set("B_Texture0", m_texture);
+        if (sp) { sp->Set("B_Texture0", m_texture); }
     }
 }
 
