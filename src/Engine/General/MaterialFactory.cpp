@@ -1,7 +1,7 @@
 #include "Bang/MaterialFactory.h"
 
 #include "Bang/Paths.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 
 Material *MaterialFactory::GetDefault()
 {
@@ -42,5 +42,5 @@ Material *MaterialFactory::GetRenderGBufferToScreen()
 
 Material *MaterialFactory::Load(const String &enginePath)
 {
-    return AssetsManager::Load<Material>( EPATH(enginePath) );
+    return Resources::Load<Material>( EPATH(enginePath) );
 }

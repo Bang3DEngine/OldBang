@@ -1,15 +1,15 @@
 #include "Bang/Asset.h"
 
 #include "Bang/Paths.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 
-Asset::Asset() : SerializableObject()
+Asset::Asset()
 {
 }
 
 Asset::~Asset()
 {
-    AssetsManager::Unload(this);
+    Resources::Unload(this);
 }
 
 const Path& Asset::GetFilepath() const

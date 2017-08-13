@@ -13,7 +13,7 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ALAudioSource.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/AudioListener.h"
 #include "Bang/AudioPlayerRunnable.h"
 
@@ -60,7 +60,7 @@ void AudioManager::Play(const Path &audioClipFilepath,
                         const AudioParams &params,
                         float delay)
 {
-    AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath);
+    AudioClip *audioClip = Resources::Load<AudioClip>(audioClipFilepath);
     AudioManager::Play(audioClip, params, delay);
 }
 

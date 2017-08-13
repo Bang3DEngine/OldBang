@@ -20,7 +20,7 @@
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 

@@ -20,6 +20,8 @@
     typename std::enable_if< std::is_enum<T>::value, T>::type
 #define T_SUBCLASS(T, BASE_CLASS) \
     typename std::enable_if< std::is_base_of<BASE_CLASS, T>::value, T>::type
+#define T_NOT_SUBCLASS(T, BASE_CLASS) \
+    typename std::enable_if< std::__not_< std::is_base_of<BASE_CLASS, T> >::value, T>::type
 // =====================================================
 
 

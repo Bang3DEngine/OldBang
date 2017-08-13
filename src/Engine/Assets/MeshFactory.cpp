@@ -4,32 +4,32 @@
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/MaterialFactory.h"
 
 Mesh* MeshFactory::GetPlane()
 {
-    return AssetsManager::Load<Mesh>( EPATH("Meshes/Plane.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Plane.bmesh") );
 }
 
 Mesh *MeshFactory::GetUIPlane()
 {
-    return AssetsManager::Load<Mesh>( EPATH("Meshes/UIPlane.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/UIPlane.bmesh") );
 }
 
 Mesh* MeshFactory::GetCube()
 {
-    return AssetsManager::Load<Mesh>( EPATH("Meshes/Cube.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Cube.bmesh") );
 }
 
 Mesh *MeshFactory::GetSphere()
 {
-    return AssetsManager::Load<Mesh>( EPATH("Meshes/Sphere.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Sphere.bmesh") );
 }
 
 Mesh *MeshFactory::GetCone()
 {
-    return AssetsManager::Load<Mesh>( EPATH("Meshes/Cone.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Cone.bmesh") );
 }
 
 MeshFactory::MeshFactory() {}

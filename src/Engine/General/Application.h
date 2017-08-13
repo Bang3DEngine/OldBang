@@ -12,7 +12,7 @@ FORWARD class Paths;
 FORWARD class Window;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
-FORWARD class AssetsManager;
+FORWARD class Resources;
 FORWARD class ShaderManager;
 FORWARD class BehaviourManager;
 
@@ -32,7 +32,7 @@ public:
     SceneManager     *GetSceneManager() const;
     ShaderManager    *GetShaderManager() const;
     AudioManager     *GetAudioManager() const;
-    AssetsManager    *GetAssetsManager() const;
+    Resources    *GetResources() const;
     BehaviourManager *GetBehaviourManager() const;
     Window           *GetMainWindow() const;
 
@@ -50,7 +50,7 @@ protected:
     ShaderManager    *m_shaderManager    = nullptr;
     AudioManager     *m_audioManager     = nullptr;
     SceneManager     *m_sceneManager     = nullptr;
-    AssetsManager    *m_assetsManager    = nullptr;
+    Resources    *m_assetsManager    = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;
 
 private:

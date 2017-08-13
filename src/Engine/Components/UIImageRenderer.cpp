@@ -4,7 +4,7 @@
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/MeshFactory.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/MaterialFactory.h"
 
 UIImageRenderer::UIImageRenderer()
@@ -62,7 +62,7 @@ void UIImageRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
     Path texFilepath = xmlInfo.Get<Path>("Image");
-    SetImage( AssetsManager::Load<Texture2D>(texFilepath) );
+    SetImage( Resources::Load<Texture2D>(texFilepath) );
 }
 
 void UIImageRenderer::Write(XMLNode *xmlInfo) const

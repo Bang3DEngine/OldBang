@@ -11,7 +11,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
@@ -23,7 +23,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetMaterial( MaterialFactory::GetUIText() );
     UseMaterialCopy();
 
-    SetFont( AssetsManager::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
+    SetFont( Resources::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
     SetContent("Bang");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
@@ -307,7 +307,7 @@ void UITextRenderer::Read(const XMLNode &xmlInfo)
     UIRenderer::Read(xmlInfo);
 
     Path fontFilepath = xmlInfo.Get<Path>("Font");
-    SetFont( AssetsManager::Load<Font>(fontFilepath) );
+    SetFont( Resources::Load<Font>(fontFilepath) );
     SetContent(xmlInfo.Get<String>("Content"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));

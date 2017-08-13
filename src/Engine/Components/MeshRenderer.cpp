@@ -6,7 +6,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/FileReader.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 
 MeshRenderer::MeshRenderer()
 {
@@ -40,7 +40,7 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.Get<Path>("Mesh") ) );
+    SetMesh( Resources::Load<Mesh>( xmlInfo.Get<Path>("Mesh") ) );
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const

@@ -48,7 +48,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Assets/Texture2D.cpp \
     $$BANG_ROOT/src/Engine/Assets/Prefab.cpp \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.cpp \
-    $$BANG_ROOT/src/Engine/IO/General/AssetsManager.cpp \
+    $$BANG_ROOT/src/Engine/IO/General/Resources.cpp \
     $$BANG_ROOT/src/Engine/General/Input.cpp \
     $$BANG_ROOT/src/Engine/Assets/Material.cpp \
     $$BANG_ROOT/src/Engine/Components/LineRenderer.cpp \
@@ -131,7 +131,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Assets/Prefab.h \
     $$BANG_ROOT/include/Bang/Bang.h \
     $$BANG_ROOT/include/Bang/BangDefines.h \
-    $$BANG_ROOT/src/Engine/IO/General/AssetsManager.h \
+    $$BANG_ROOT/src/Engine/IO/General/Resources.h \
     $$BANG_ROOT/src/Engine/General/Input.h \
     $$BANG_ROOT/src/Engine/Components/LineRenderer.h \
     $$BANG_ROOT/src/Engine/Components/Renderer.h \

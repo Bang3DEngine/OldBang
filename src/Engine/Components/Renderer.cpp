@@ -7,7 +7,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
@@ -130,7 +130,7 @@ void Renderer::Read(const XMLNode &xmlInfo)
     Component::Read(xmlInfo);
 
     Path materialFilepath = xmlInfo.Get<Path>("Material");
-    SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
+    SetMaterial( Resources::Load<Material>(materialFilepath) );
     SetRenderPass( xmlInfo.Get<RenderPass>("RenderPass") );
     SetLineWidth(xmlInfo.Get<float>("LineWidth"));
     SetRenderWireframe(xmlInfo.Get<bool>("RenderWireframe"));

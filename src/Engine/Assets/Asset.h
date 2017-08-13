@@ -2,10 +2,12 @@
 #define ASSET_H
 
 #include "Bang/Path.h"
+#include "Bang/Resource.h"
 #include "Bang/IToString.h"
 #include "Bang/SerializableObject.h"
 
-class Asset : public IToString,
+class Asset : public Resource,
+              public IToString,
               public SerializableObject
 {
     SOBJECT(Asset)
@@ -29,7 +31,7 @@ protected:
     Asset();
     virtual ~Asset();
 
-    friend class AssetsManager;
+    friend class Resources;
 };
 
 #endif // ASSET_H

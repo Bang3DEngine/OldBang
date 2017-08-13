@@ -11,11 +11,11 @@
 #include "Bang/Matrix4.h"
 #include "Bang/Transform.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 
 Camera::Camera()
 {
-    p_camMesh = AssetsManager::Load<Mesh>( EPATH("Meshes/Camera.bmesh") );
+    p_camMesh = Resources::Load<Mesh>( EPATH("Meshes/Camera.bmesh") );
 }
 
 Camera::~Camera()

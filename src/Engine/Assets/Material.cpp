@@ -4,7 +4,7 @@
 #include "Bang/G_Shader.h"
 #include "Bang/Texture2D.h"
 #include "Bang/G_Material.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 
@@ -119,7 +119,7 @@ void Material::Read(const XMLNode &xmlInfo)
     SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
 
     Path texAssetFilepath = xmlInfo.Get<Path>("Texture");
-    Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
+    Texture2D *texture = Resources::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 }
 

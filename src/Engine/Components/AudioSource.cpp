@@ -8,7 +8,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/ICloneable.h"
 #include "Bang/AudioManager.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 
 AudioSource::AudioSource()
 {
@@ -96,7 +96,7 @@ void AudioSource::Read(const XMLNode &xmlInfo)
     Path newAudioClipFilepath = xmlInfo.Get<Path>("AudioClip");
     if (audioClipFilepath != newAudioClipFilepath)
     {
-        SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
+        SetAudioClip( Resources::Load<AudioClip>(newAudioClipFilepath) );
     }
     SetVolume(xmlInfo.Get<float>("Volume"));
     SetPitch(xmlInfo.Get<float>("Pitch"));

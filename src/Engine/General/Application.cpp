@@ -14,7 +14,7 @@
 #include "Bang/ShaderManager.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
-#include "Bang/AssetsManager.h"
+#include "Bang/Resources.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/G_FontSheetCreator.h"
 
@@ -30,7 +30,7 @@ Application::Application(int argc, char **argv)
     m_sceneManager     = new SceneManager();
     m_shaderManager    = new ShaderManager();
     m_audioManager     = new AudioManager();
-    m_assetsManager    = new AssetsManager();
+    m_assetsManager    = new Resources();
     m_behaviourManager = new BehaviourManager();
 }
 
@@ -127,7 +127,7 @@ AudioManager *Application::GetAudioManager() const
     return m_audioManager;
 }
 
-AssetsManager *Application::GetAssetsManager() const
+Resources *Application::GetResources() const
 {
     return m_assetsManager;
 }
