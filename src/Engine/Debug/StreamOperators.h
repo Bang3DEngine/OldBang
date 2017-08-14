@@ -198,7 +198,7 @@ std::istringstream& operator>>(std::istringstream &is, Vector4G<T>& v)
     return is;
 }
 
-template<class EnumClass, class=T_ENUM(EnumClass)>
+template<class EnumClass, class=TT_ENUM(EnumClass)>
 std::istringstream& operator>>(std::istringstream &is, EnumClass& e)
 {
     int x;

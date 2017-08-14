@@ -131,6 +131,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Assets/Prefab.h \
     $$BANG_ROOT/include/Bang/Bang.h \
     $$BANG_ROOT/include/Bang/BangDefines.h \
+    $$BANG_ROOT/src/Engine/IO/General/Resource.h \
     $$BANG_ROOT/src/Engine/IO/General/Resources.h \
     $$BANG_ROOT/src/Engine/General/Input.h \
     $$BANG_ROOT/src/Engine/Components/LineRenderer.h \

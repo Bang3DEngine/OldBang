@@ -12,16 +12,19 @@
 
 
 // SFINAE ===============================================
-#define T_SCALAR(T) \
-    typename std::enable_if<std::is_scalar<T>::value, T>::type
-#define T_FLOATING(T) \
-    typename std::enable_if<std::is_floating_point<T>::value, T>::type
-#define T_ENUM(T) \
-    typename std::enable_if< std::is_enum<T>::value, T>::type
-#define T_SUBCLASS(T, BASE_CLASS) \
-    typename std::enable_if< std::is_base_of<BASE_CLASS, T>::value, T>::type
-#define T_NOT_SUBCLASS(T, BASE_CLASS) \
-    typename std::enable_if< std::__not_< std::is_base_of<BASE_CLASS, T> >::value, T>::type
+#define T_SCALAR(T) std::is_scalar<T>::value
+#define T_FLOATING(T) std::is_floating_point<T>::value
+#define T_ENUM(T) std::is_enum<T>::value
+#define T_SUBCLASS(T, BASE_CLASS) std::is_base_of<BASE_CLASS, T>::value
+
+#define TT_SCALAR(T) \
+    typename std::enable_if<T_SCALAR(T), T>::type
+#define TT_FLOATING(T) \
+    typename std::enable_if<T_FLOATING(T), T>::type
+#define TT_ENUM(T) \
+    typename std::enable_if<T_ENUM(T), T>::type
+#define TT_SUBCLASS(T, BASE_CLASS) \
+    typename std::enable_if<T_SUBCLASS(T, BASE_CLASS), T>::type
 // =====================================================
 
 
