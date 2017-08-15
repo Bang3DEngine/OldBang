@@ -69,6 +69,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Components/UIBorderRect.cpp \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUIScrollArea.cpp \
     $$BANG_ROOT/src/Engine/General/DistanceFielder.cpp \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.cpp \
     $$BANG_ROOT/src/Engine/Assets/Font.cpp \
@@ -161,6 +162,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Components/UIBorderRect.h \
     $$BANG_ROOT/src/Engine/Components/UIButtonTinter.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIButton.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUIScrollArea.h \
     $$BANG_ROOT/src/Engine/Components/UIRenderer.h \
     $$BANG_ROOT/src/Engine/Assets/Font.h \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.h \

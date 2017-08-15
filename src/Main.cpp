@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 #include "Bang/AudioManager.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
+#include "Bang/GUIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -63,6 +64,19 @@ public:
         String name = SCAST<GUIInputText*>(nameGo)->GetText()->GetContent();
         String surname = SCAST<GUIInputText*>(surnameGo)->GetText()->GetContent();
         resultGo->GetComponent<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
+
+        GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>( FindInChildren("ScrollArea") );
+        Vector2i scroll = scrollArea->GetScrolling();
+        if (Input::GetKeyDownRepeat(Input::Key::Left)) {
+            scrollArea->SetScrolling(scroll + Vector2i::Left); }
+        else if (Input::GetKeyDownRepeat(Input::Key::Right)) {
+            scrollArea->SetScrolling(scroll + Vector2i::Right); }
+
+        scroll = scrollArea->GetScrolling();
+        if (Input::GetKeyDownRepeat(Input::Key::Up)) {
+            scrollArea->SetScrolling(scroll + Vector2i::Up); }
+        else if (Input::GetKeyDownRepeat(Input::Key::Down)) {
+            scrollArea->SetScrolling(scroll + Vector2i::Down); }
     }
 };
 
@@ -74,11 +88,17 @@ int main(int argc, char **argv)
 
     Scene *scene = new Scene();
 
-    GUIImage *uiImgGo = new GUIImage( Path("/home/sephirot47/BangUITest/test.png") );
+    GUIImage *rightImg = new GUIImage( Path("/home/sephirot47/BangUITest/test.png") );
     GUILabel *rightLabel = new GUILabel("Lorem ipsum dolor sit amet. El veloz "
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
                                         "detras del palenque de paja");
+
+    GUIScrollArea *rightScrollArea = new GUIScrollArea();
+    rightScrollArea->SetName("ScrollArea");
+    rightScrollArea->AddChild(rightLabel);
+    rightScrollArea->SetScrollingY(30);
+
     rightLabel->GetText()->SetTextColor(Color::White);
     rightLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
     rightLabel->GetText()->SetVerticalAlign(VerticalAlignment::Center);
@@ -87,8 +107,8 @@ int main(int argc, char **argv)
 
     GUIVerticalLayout *rightVLayout = new GUIVerticalLayout();
     rightVLayout->rectTransform->SetMargins(50, 10, 10, 10);
-    rightVLayout->Add(uiImgGo);
-    rightVLayout->Add(rightLabel);
+    rightVLayout->Add(rightImg);
+    rightVLayout->Add(rightScrollArea);
 
     GUIButton *buttonPlay = new GUIButton("Play");
     GUIButton *buttonPause= new GUIButton("Pause");
