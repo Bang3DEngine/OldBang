@@ -50,8 +50,8 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
                           const Rect &mask)
 {
     ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
-    bool prevStencilWrite = m_stencilWrite;
-    SetStencilWrite(false);
+    bool prevStencilWrite = GL::IsStencilWrite();
+    GL::SetStencilWrite(false);
 
     BindTextureBuffersTo(sp, prepareReadFromColorBuffer);
 
@@ -60,7 +60,7 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
 
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
-    SetStencilWrite(prevStencilWrite);
+    GL::SetStencilWrite(prevStencilWrite);
 }
 
 void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
@@ -94,30 +94,6 @@ void G_GBuffer::SetColorDrawBuffer()
     SetDrawBuffers({G_GBuffer::AttColor});
 }
 
-void G_GBuffer::SetStencilWrite(bool writeEnabled)
-{
-    // Replace is to ref value 1
-    if (m_stencilWrite != writeEnabled)
-    {
-        glStencilOp(writeEnabled ? GL_REPLACE : GL_KEEP, GL_KEEP, GL_KEEP);
-    }
-    m_stencilWrite = writeEnabled;
-}
-
-void G_GBuffer::SetStencilTest(bool testEnabled)
-{
-    if (m_stencilTest != testEnabled)
-    {
-        glStencilFunc(testEnabled ? GL_GEQUAL : GL_ALWAYS, 1, 0xFF);
-    }
-    m_stencilTest = testEnabled;
-}
-
-void G_GBuffer::ClearStencil()
-{
-    GL::ClearStencilBuffer();
-}
-
 void G_GBuffer::ClearDepth(float clearDepth)
 {
     G_Framebuffer::ClearDepth(clearDepth); // Clear typical depth buffer
@@ -132,7 +108,7 @@ void G_GBuffer::ClearDepth(float clearDepth)
 
 void G_GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
 {
-    ClearStencil();
+    GL::ClearStencilBuffer();
     SetDrawBuffers({G_GBuffer::AttNormalDepth});
     GL::ClearColorBuffer(Color::Zero, true, true, false, false);
 

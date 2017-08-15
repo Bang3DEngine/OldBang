@@ -27,7 +27,6 @@ void GUICanvas::OnUpdate()
 void GUICanvas::CloneInto(ICloneable *clone) const
 {
     UIGameObject::CloneInto(clone);
-    GUICanvas *c = SCAST<GUICanvas*>(clone);
 }
 
 void GUICanvas::Read(const XMLNode &xmlInfo)

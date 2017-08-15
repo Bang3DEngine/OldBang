@@ -67,7 +67,7 @@ public:
 
     virtual void Render(RenderPass renderPass) override
     {
-        SceneAgent::OnRender(renderPass);
+        SceneAgent::Render(renderPass);
         PROPAGATE_EVENT(Render(renderPass), GetChildren());
     }
 

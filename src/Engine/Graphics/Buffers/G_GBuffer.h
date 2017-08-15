@@ -45,9 +45,6 @@ public:
     void SetAllDrawBuffersExceptColor();
     void SetColorDrawBuffer();
 
-    void SetStencilWrite(bool writeEnabled);
-    void SetStencilTest(bool testEnabled);
-    void ClearStencil();
     void ClearDepth(float clearDepth = 1.0f) override;
 
     void ClearBuffersAndBackground(const ::Color &backgroundColor);
@@ -60,8 +57,6 @@ private:
     G_RenderTexture *m_colorReadTexture = nullptr;
 
     mutable bool m_willReadFromColorRead = false;
-    bool m_stencilWrite = false;
-    bool m_stencilTest  = false;
 
     void RenderScreenPlane();
 

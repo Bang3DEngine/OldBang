@@ -26,6 +26,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/Shader.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUICanvas.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUIMask.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIDirLayout.cpp \
@@ -140,6 +141,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/SystemUtils.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUICanvas.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUIMask.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIDirLayout.h \

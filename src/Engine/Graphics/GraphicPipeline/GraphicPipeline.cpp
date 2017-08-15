@@ -80,7 +80,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     ENSURE(renderRect != Rect::Zero);
 
     // We have marked from before the zone where we want to apply the effect
-    m_gbuffer->SetStencilTest(true);
+    GL::SetStencilTest(true);
 
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->GetReceivesLighting()) )
@@ -93,7 +93,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         }
     }
 
-    m_gbuffer->SetStencilTest(false);
+    GL::SetStencilTest(false);
 }
 
 void GraphicPipeline::RenderGBuffer(Scene *scene)
@@ -104,27 +104,27 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->SetAllDrawBuffers();
 
     // GBuffer Scene rendering
-    GL::SetWriteDepth(true);
-    GL::SetTestDepth(true);
-    m_gbuffer->SetStencilWrite(true);
+    GL::SetDepthWrite(true);
+    GL::SetDepthTest(true);
+    GL::SetStencilWrite(true);
     scene->Render(RenderPass::Scene_Lighted);
-    m_gbuffer->SetStencilWrite(false);
+    GL::SetStencilWrite(false);
     ApplyDeferredLights();
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
-    m_gbuffer->ClearStencil();
+    GL::ClearStencilBuffer();
 
     // GBuffer Canvas rendering
     m_gbuffer->SetAllDrawBuffers();
-    GL::SetWriteDepth(false);
-    GL::SetTestDepth(false);
+    GL::SetDepthWrite(false);
+    GL::SetDepthTest(false);
     scene->Render(RenderPass::Canvas);
     scene->Render(RenderPass::Canvas_PostProcess);
-    GL::SetTestDepth(true);
+    GL::SetDepthTest(true);
 
     // GBuffer Gizmos rendering
-    GL::SetWriteDepth(true);
-    GL::SetTestDepth(true);
+    GL::SetDepthWrite(true);
+    GL::SetDepthTest(true);
     scene->RenderGizmos();
 
     m_gbuffer->UnBind();
@@ -173,13 +173,13 @@ void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 void GraphicPipeline::RenderScreenPlane()
 {
     GL::SetWireframe(false);
-    GL::SetTestDepth(false);
-    GL::SetWriteDepth(false);
+    GL::SetDepthTest(false);
+    GL::SetDepthWrite(false);
     GL::SetCullMode(GL::CullMode::None);
     GL::Render(m_screenPlaneMesh->GetVAO(), GL::RenderPrimitive::Triangles,
                m_screenPlaneMesh->GetVertexCount());
-    GL::SetWriteDepth(true);
-    GL::SetTestDepth(true);
+    GL::SetDepthWrite(true);
+    GL::SetDepthTest(true);
 }
 
 GraphicPipeline* GraphicPipeline::GetActive()

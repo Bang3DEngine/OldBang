@@ -72,9 +72,12 @@ public:
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
 
+    static void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     static void SetViewProjMode(ViewProjMode mode);
-    static void SetWriteDepth(bool writeDepth);
-    static void SetTestDepth(bool testDepth);
+    static void SetStencilWrite(bool writeStencil);
+    static void SetStencilTest(bool testStencil);
+    static void SetDepthWrite(bool writeDepth);
+    static void SetDepthTest(bool testDepth);
     static void SetWireframe(bool wireframe);
     static void SetCullMode(const GL::CullMode cullMode);
     static void SetModelMatrix(const Matrix4 &model);
@@ -88,8 +91,14 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
-    static bool IsWriteDepth();
-    static bool IsTestDepth();
+    static bool IsColorMaskR();
+    static bool IsColorMaskG();
+    static bool IsColorMaskB();
+    static bool IsColorMaskA();
+    static bool IsStencilWrite();
+    static bool IsStencilTest();
+    static bool IsDepthWrite();
+    static bool IsDepthTest();
     static bool IsWireframe();
     static GL::CullMode GetCullMode();
     static const Matrix4 &GetModelMatrix();

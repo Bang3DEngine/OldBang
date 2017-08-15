@@ -85,6 +85,13 @@ std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
     return log;
 }
 
+template <class EnumClass, class=TT_ENUM(EnumClass)>
+std::ostream& operator<<(std::ostream &log, const EnumClass &e)
+{
+    log << SCAST<int>(e);
+    return log;
+}
+
 // List
 template <class T>
 std::ostream &operator<<(std::ostream &log, const List<T> *l)

@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
 #include "Bang/GUICanvas.h"
@@ -128,6 +129,13 @@ int main(int argc, char **argv)
     namesVLayout->Add(nameVLayout);
     namesVLayout->Add(namesResult);
 
+    GUIMask *mask = new GUIMask();
+    UIImageRenderer *maskImg = mask->AddComponent<UIImageRenderer>();
+    maskImg->SetImage(
+             new Texture2D( Path("/home/sephirot47/BangUITest/test.png") ) );
+    buttonPlay->rectTransform->SetMargins(10);
+    buttonPlay->SetParent(mask);
+
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
     UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
@@ -136,7 +144,7 @@ int main(int argc, char **argv)
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
-    menuVLayout->Add(buttonPlay);
+    menuVLayout->Add(mask);
     menuVLayout->Add(buttonPause);
     menuVLayout->Add(buttonStop);
     menuVLayout->Add(buttonExit);

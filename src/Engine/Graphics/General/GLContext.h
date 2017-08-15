@@ -20,9 +20,12 @@ public:
     void Render(const G_VAO* vao, GL::RenderPrimitive renderMode,
                 int elementsCount, int startIndex) const;
 
+    void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     void SetViewProjMode(GL::ViewProjMode mode);
-    void SetWriteDepth(bool writeDepth);
-    void SetTestDepth(bool testDepth);
+    void SetStencilWrite(bool writeStencil);
+    void SetStencilTest(bool testStencil);
+    void SetDepthWrite(bool writeDepth);
+    void SetDepthTest(bool testDepth);
     void SetWireframe(bool wireframe);
     void SetCullMode(GL::CullMode cullMode);
     void SetModelMatrix(const Matrix4 &model);
@@ -30,8 +33,14 @@ public:
     void SetProjectionMatrix(const Matrix4 &projection);
     void SetZNearFar(float zNear, float zFar);
 
-    bool IsWriteDepth() const;
-    bool IsTestDepth() const;
+    bool IsColorMaskR() const;
+    bool IsColorMaskG() const;
+    bool IsColorMaskB() const;
+    bool IsColorMaskA() const;
+    bool IsStencilWrite() const;
+    bool IsStencilTest() const;
+    bool IsDepthWrite() const;
+    bool IsDepthTest() const;
     bool IsWireframe() const;
     bool IsBound(GL::BindTarget bindTarget, GLId glId) const;
 
@@ -43,7 +52,11 @@ public:
     GLId GetBoundId(GL::BindTarget bindTarget) const;
 
 private:
-    bool m_writeDepth = true, m_testDepth = true, m_wireframe = false;
+    bool m_colorMaskR = true, m_colorMaskG = true,
+         m_colorMaskB = true, m_colorMaskA = true;
+    bool m_writeDepth = true, m_testDepth = true;
+    bool m_writeStencil = false, m_testStencil = false;
+    bool m_wireframe = false;
     GL::CullMode m_cullMode = GL::CullMode::None;
     Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
@@ -51,6 +64,7 @@ private:
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;
 
+    void _SetStencilTest(bool testStencil);
     void OnBind(GL::BindTarget bindTarget, GLId glId);
     void OnUnBind(GL::BindTarget bindTarget);
 

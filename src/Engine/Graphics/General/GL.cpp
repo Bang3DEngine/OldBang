@@ -44,10 +44,10 @@ bool GL::CheckFramebufferError()
 void GL::ClearColorBuffer(const Color &clearColor,
                           bool clearR, bool clearG, bool clearB, bool clearA)
 {
-    glColorMask(clearR, clearG, clearB, clearA);
+    GL::SetColorMask(clearR, clearG, clearB, clearA);
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
-    glColorMask(true, true, true, true);
+    GL::SetColorMask(true, true, true, true);
 }
 
 void GL::ClearDepthBuffer(float clearDepth)
@@ -58,6 +58,7 @@ void GL::ClearDepthBuffer(float clearDepth)
 
 void GL::ClearStencilBuffer()
 {
+    glClearStencil(0);
     glClear(GL_STENCIL_BUFFER_BIT);
 }
 
@@ -81,19 +82,34 @@ void GL::SetLineWidth(float lineWidth)
     glLineWidth(lineWidth);
 }
 
+void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
+{
+    GL::GetGLContext()->SetColorMask(maskR, maskG, maskB, maskA);
+}
+
 void GL::SetViewProjMode(GL::ViewProjMode mode)
 {
     GL::GetGLContext()->SetViewProjMode(mode);
 }
 
-void GL::SetWriteDepth(bool writeDepth)
+void GL::SetStencilWrite(bool writeStencil)
 {
-    GL::GetGLContext()->SetWriteDepth(writeDepth);
+    GL::GetGLContext()->SetStencilWrite(writeStencil);
 }
 
-void GL::SetTestDepth(bool testDepth)
+void GL::SetStencilTest(bool testStencil)
 {
-    GL::GetGLContext()->SetTestDepth(testDepth);
+    GL::GetGLContext()->SetStencilTest(testStencil);
+}
+
+void GL::SetDepthWrite(bool writeDepth)
+{
+    GL::GetGLContext()->SetDepthWrite(writeDepth);
+}
+
+void GL::SetDepthTest(bool testDepth)
+{
+    GL::GetGLContext()->SetDepthTest(testDepth);
 }
 
 void GL::SetWireframe(bool wireframe)
@@ -137,14 +153,44 @@ void GL::Render(const G_VAO *vao, GL::RenderPrimitive renderMode, int elementsCo
     return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);
 }
 
-bool GL::IsWriteDepth()
+bool GL::IsColorMaskR()
 {
-    return GL::GetGLContext()->IsWriteDepth();
+    return GL::GetGLContext()->IsColorMaskR();
 }
 
-bool GL::IsTestDepth()
+bool GL::IsColorMaskG()
 {
-    return GL::GetGLContext()->IsTestDepth();
+    return GL::GetGLContext()->IsColorMaskG();
+}
+
+bool GL::IsColorMaskB()
+{
+    return GL::GetGLContext()->IsColorMaskB();
+}
+
+bool GL::IsColorMaskA()
+{
+    return GL::GetGLContext()->IsColorMaskA();
+}
+
+bool GL::IsStencilWrite()
+{
+    return GL::GetGLContext()->IsStencilWrite();
+}
+
+bool GL::IsStencilTest()
+{
+    return GL::GetGLContext()->IsStencilTest();
+}
+
+bool GL::IsDepthWrite()
+{
+    return GL::GetGLContext()->IsDepthWrite();
+}
+
+bool GL::IsDepthTest()
+{
+    return GL::GetGLContext()->IsDepthTest();
 }
 
 bool GL::IsWireframe()

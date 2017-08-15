@@ -71,21 +71,54 @@ void GLContext::Render(const G_VAO* vao, GL::RenderPrimitive renderMode,
     vao->UnBind();
 }
 
+void GLContext::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
+{
+    m_colorMaskR = maskR;
+    m_colorMaskG = maskG;
+    m_colorMaskB = maskB;
+    m_colorMaskA = maskA;
+    glColorMask(maskR, maskG, maskB, maskA);
+}
+
 void GLContext::SetViewProjMode(GL::ViewProjMode mode)
 {
     m_viewProjMode = mode;
 }
 
-void GLContext::SetWriteDepth(bool writeDepth)
+void GLContext::SetStencilWrite(bool writeStencil)
 {
-    if (writeDepth != m_writeDepth)
+    // Replace is to ref value 1
+    if (m_writeStencil != writeStencil)
+    {
+        m_writeStencil = writeStencil;
+        // _SetStencilTest(m_testStencil);
+        glStencilOp(GL_KEEP, GL_KEEP, (writeStencil ? GL_REPLACE : GL_KEEP) );
+    }
+}
+
+void GLContext::SetStencilTest(bool testStencil)
+{
+    if (m_testStencil != testStencil)
+    {
+        m_testStencil = testStencil;
+        _SetStencilTest(m_testStencil);
+    }
+}
+void GLContext::_SetStencilTest(bool testStencil)
+{
+    glStencilFunc(testStencil ? GL_EQUAL : GL_ALWAYS, 1, 0xFF);
+}
+
+void GLContext::SetDepthWrite(bool writeDepth)
+{
+    if (m_writeDepth != writeDepth)
     {
         m_writeDepth = writeDepth;
         glDepthMask(m_writeDepth ? GL_TRUE : GL_FALSE);
     }
 }
 
-void GLContext::SetTestDepth(bool testDepth)
+void GLContext::SetDepthTest(bool testDepth)
 {
     if (m_testDepth != testDepth)
     {
@@ -138,23 +171,15 @@ void GLContext::SetZNearFar(float zNear, float zFar)
     m_zFar  = zFar;
 }
 
-
-
-
-bool GLContext::IsWriteDepth() const
-{
-    return m_writeDepth;
-}
-
-bool GLContext::IsTestDepth() const
-{
-    return m_testDepth;
-}
-
-bool GLContext::IsWireframe() const
-{
-    return m_wireframe;
-}
+bool GLContext::IsColorMaskR() const { return m_colorMaskR; }
+bool GLContext::IsColorMaskG() const { return m_colorMaskG; }
+bool GLContext::IsColorMaskB() const { return m_colorMaskB; }
+bool GLContext::IsColorMaskA() const { return m_colorMaskA; }
+bool GLContext::IsStencilWrite() const { return m_writeStencil; }
+bool GLContext::IsStencilTest() const { return m_testStencil; }
+bool GLContext::IsDepthWrite() const { return m_writeDepth; }
+bool GLContext::IsDepthTest() const { return m_testDepth; }
+bool GLContext::IsWireframe() const { return m_wireframe; }
 
 bool GLContext::IsBound(GL::BindTarget bindTarget, GLId glId) const
 {
