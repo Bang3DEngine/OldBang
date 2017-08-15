@@ -4,6 +4,7 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/UITextRenderer.h"
 
+FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 
 class GUILabel : public UIGameObject
@@ -16,6 +17,8 @@ public:
 
 private:
     UITextRenderer *p_text = nullptr;
+    GUIScrollArea *m_scrollArea = nullptr;
+    UIGameObject *m_textContainer = nullptr;
 };
 
 #endif // GUILABEL_H

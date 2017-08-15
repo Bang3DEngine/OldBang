@@ -132,6 +132,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
 void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
 {
     m_selectionFB->Bind();
+    GL::ClearStencilBuffer();
     m_selectionFB->ClearDepth();
     m_selectionFB->ClearColor(Color::One);
 
@@ -139,6 +140,7 @@ void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
     m_selectionFB->PrepareForRender(scene);
     scene->Render(RenderPass::Scene_Lighted);
     scene->Render(RenderPass::Scene_UnLighted);
+    GL::ClearStencilBuffer();
     scene->Render(RenderPass::Canvas);
     scene->RenderGizmos();
 

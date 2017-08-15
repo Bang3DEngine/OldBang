@@ -10,10 +10,7 @@ enum class RenderPass
     Canvas,
     Canvas_PostProcess,
 
-    Gizmos,
-
-    Scene_Selection,
-    Canvas_Selection
+    Gizmos
 };
 
 #endif // RENDERPASS_H

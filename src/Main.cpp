@@ -59,11 +59,11 @@ public:
         UIGameObject::OnUpdate();
         GameObject *nameGo = GameObject::Find("nameGameObject");
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
-        GameObject *resultGo = GameObject::Find("resultGameObject");
+        GUILabel *resultGo = SCAST<GUILabel*>(GameObject::Find("resultGameObject"));
 
         String name = SCAST<GUIInputText*>(nameGo)->GetText()->GetContent();
         String surname = SCAST<GUIInputText*>(surnameGo)->GetText()->GetContent();
-        resultGo->GetComponent<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
+        resultGo->GetText()->SetContent("Hello " + name + " " + surname);
 
         GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>( FindInChildren("ScrollArea") );
         Vector2i scroll = scrollArea->GetScrolling();

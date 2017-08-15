@@ -7,7 +7,7 @@ GUIMask::~GUIMask() {}
 
 void GUIMask::Render(RenderPass renderPass)
 {
-    bool canvasPass = IsCanvasPass(renderPass);
+    bool canvasPass = (renderPass == RenderPass::Canvas);
     if  (canvasPass) { BeforeThisRender(); }
 
     UIGameObject::Render(renderPass); // Inside here, OnRender(below) is called
@@ -18,9 +18,7 @@ void GUIMask::Render(RenderPass renderPass)
 void GUIMask::OnRender(RenderPass renderPass)
 {
     UIGameObject::OnRender(renderPass);
-
-    bool canvasPass = IsCanvasPass(renderPass);
-    if (canvasPass) { BeforeChildrenRender(); }
+    if (renderPass == RenderPass::Canvas) { BeforeChildrenRender(); }
 }
 
 void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
@@ -35,9 +33,12 @@ void GUIMask::BeforeThisRender()
     m_maskABefore = GL::IsColorMaskA();
     m_stencilTestBefore  = GL::IsStencilTest();
     m_stencilWriteBefore = GL::IsStencilWrite();
+    m_stencilOpBefore = GL::GetStencilOp();
 
     // Will this mask be drawn?
     GL::SetColorMask(m_drawMask, m_drawMask, m_drawMask, m_drawMask);
+    GL::SetStencilOp( GL_INCR );
+    GL::SetStencilTest(true);  // Only increment once
     GL::SetStencilWrite(true); // This rendering will write to the stencil
 }
 
@@ -45,18 +46,16 @@ void GUIMask::BeforeChildrenRender()
 {
     // Restore color mask for children
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
-    GL::SetStencilTest(true); // Make sure children use stencil test
+
+    // Test and write for current stencil value + 1
+    GL::SetStencilValue( GL::GetStencilValue() + 1 );
+    GL::SetStencilOp(m_stencilOpBefore);
+    GL::SetStencilWrite(m_stencilWriteBefore); // Restore stencil write
 }
 
 void GUIMask::AfterChildrenRender()
 {
-    // Restore stencil write/test as it was before
+    // Restore stencil as it was before
+    GL::SetStencilValue( GL::GetStencilValue() - 1 );
     GL::SetStencilTest(m_stencilTestBefore);
-    GL::SetStencilWrite(m_stencilWriteBefore);
-    GL::ClearStencilBuffer();
-}
-
-bool GUIMask::IsCanvasPass(RenderPass rp)
-{
-    return (rp == RenderPass::Canvas || rp == RenderPass::Canvas_Selection);
 }

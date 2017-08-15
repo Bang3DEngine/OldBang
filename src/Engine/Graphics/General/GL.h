@@ -75,6 +75,8 @@ public:
     static void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     static void SetViewProjMode(ViewProjMode mode);
     static void SetStencilWrite(bool writeStencil);
+    static void SetStencilOp(GLenum zPassOp);
+    static void SetStencilValue(Byte value);
     static void SetStencilTest(bool testStencil);
     static void SetDepthWrite(bool writeDepth);
     static void SetDepthTest(bool testDepth);
@@ -91,6 +93,8 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
+    static GLenum GetStencilOp();
+    static Byte GetStencilValue();
     static bool IsColorMaskR();
     static bool IsColorMaskG();
     static bool IsColorMaskB();

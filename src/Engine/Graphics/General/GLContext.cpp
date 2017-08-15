@@ -85,15 +85,33 @@ void GLContext::SetViewProjMode(GL::ViewProjMode mode)
     m_viewProjMode = mode;
 }
 
+void GLContext::SetStencilOp(GLenum zPassOp)
+{
+    if (m_stencilOp != zPassOp)
+    {
+        m_stencilOp = zPassOp;
+        glStencilOp(GL_KEEP, GL_KEEP, zPassOp);
+    }
+}
+
+void GLContext::SetStencilValue(Byte value)
+{
+    if (m_stencilValue != value)
+    {
+        m_stencilValue = value;
+        glStencilFunc(IsStencilTest() ? GL_EQUAL : GL_ALWAYS,
+                      m_stencilValue, 0xFF);
+    }
+}
+
 void GLContext::SetStencilWrite(bool writeStencil)
 {
-    // Replace is to ref value 1
-    if (m_writeStencil != writeStencil)
+    if (writeStencil)
     {
-        m_writeStencil = writeStencil;
-        // _SetStencilTest(m_testStencil);
-        glStencilOp(GL_KEEP, GL_KEEP, (writeStencil ? GL_REPLACE : GL_KEEP) );
+        if (GetStencilOp() == GL_KEEP) { SetStencilOp(GL_REPLACE); }
+        else { SetStencilOp(GetStencilOp()); }
     }
+    else { SetStencilOp(GL_KEEP); }
 }
 
 void GLContext::SetStencilTest(bool testStencil)
@@ -101,14 +119,10 @@ void GLContext::SetStencilTest(bool testStencil)
     if (m_testStencil != testStencil)
     {
         m_testStencil = testStencil;
-        _SetStencilTest(m_testStencil);
+        glStencilFunc(testStencil ? GL_EQUAL : GL_ALWAYS,
+                      GetStencilValue(), 0xFF);
     }
 }
-void GLContext::_SetStencilTest(bool testStencil)
-{
-    glStencilFunc(testStencil ? GL_EQUAL : GL_ALWAYS, 1, 0xFF);
-}
-
 void GLContext::SetDepthWrite(bool writeDepth)
 {
     if (m_writeDepth != writeDepth)
@@ -171,11 +185,21 @@ void GLContext::SetZNearFar(float zNear, float zFar)
     m_zFar  = zFar;
 }
 
+GLenum GLContext::GetStencilOp() const
+{
+    return m_stencilOp;
+}
+
+Byte GLContext::GetStencilValue() const
+{
+    return m_stencilValue;
+}
+
 bool GLContext::IsColorMaskR() const { return m_colorMaskR; }
 bool GLContext::IsColorMaskG() const { return m_colorMaskG; }
 bool GLContext::IsColorMaskB() const { return m_colorMaskB; }
 bool GLContext::IsColorMaskA() const { return m_colorMaskA; }
-bool GLContext::IsStencilWrite() const { return m_writeStencil; }
+bool GLContext::IsStencilWrite() const { return GetStencilOp() != GL_KEEP; }
 bool GLContext::IsStencilTest() const { return m_testStencil; }
 bool GLContext::IsDepthWrite() const { return m_writeDepth; }
 bool GLContext::IsDepthTest() const { return m_testDepth; }

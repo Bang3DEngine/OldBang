@@ -45,12 +45,13 @@ void SelectionFramebuffer::PrepareForRender(const Scene *scene)
         m_id_To_GameObject[id] = go;
         ++id;
     }
+
+    SetAllDrawBuffers();
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
-    SetAllDrawBuffers();
 
     GameObject *go = rend->gameObject;
 

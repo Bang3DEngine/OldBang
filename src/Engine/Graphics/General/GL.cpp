@@ -97,6 +97,16 @@ void GL::SetStencilWrite(bool writeStencil)
     GL::GetGLContext()->SetStencilWrite(writeStencil);
 }
 
+void GL::SetStencilOp(GLenum zPassOp)
+{
+    GL::GetGLContext()->SetStencilOp(zPassOp);
+}
+
+void GL::SetStencilValue(Byte value)
+{
+    GL::GetGLContext()->SetStencilValue(value);
+}
+
 void GL::SetStencilTest(bool testStencil)
 {
     GL::GetGLContext()->SetStencilTest(testStencil);
@@ -151,6 +161,16 @@ void GL::Render(const G_VAO *vao, GL::RenderPrimitive renderMode, int elementsCo
                 int startIdx)
 {
     return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);
+}
+
+GLenum GL::GetStencilOp()
+{
+    return GL::GetGLContext()->GetStencilOp();
+}
+
+Byte GL::GetStencilValue()
+{
+    return GL::GetGLContext()->GetStencilValue();
 }
 
 bool GL::IsColorMaskR()

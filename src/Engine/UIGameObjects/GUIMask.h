@@ -1,6 +1,7 @@
 #ifndef UIMASK_H
 #define UIMASK_H
 
+#include "Bang/GL.h"
 #include "Bang/UIGameObject.h"
 
 class GUIMask : public UIGameObject
@@ -18,6 +19,7 @@ public:
 private:
     bool m_drawMask = false;
 
+    GLenum m_stencilOpBefore;
     bool m_maskRBefore = true, m_maskGBefore = true,
          m_maskBBefore = true, m_maskABefore = true;
     bool m_stencilTestBefore = false;
@@ -26,7 +28,6 @@ private:
     void BeforeThisRender();
     void BeforeChildrenRender();
     void AfterChildrenRender();
-    static bool IsCanvasPass(RenderPass rp);
 };
 
 #endif // UIMASK_H

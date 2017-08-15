@@ -22,6 +22,8 @@ public:
 
     void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     void SetViewProjMode(GL::ViewProjMode mode);
+    void SetStencilOp(GLenum zPassOp);
+    void SetStencilValue(Byte refValue);
     void SetStencilWrite(bool writeStencil);
     void SetStencilTest(bool testStencil);
     void SetDepthWrite(bool writeDepth);
@@ -33,6 +35,8 @@ public:
     void SetProjectionMatrix(const Matrix4 &projection);
     void SetZNearFar(float zNear, float zFar);
 
+    GLenum GetStencilOp() const;
+    Byte GetStencilValue() const;
     bool IsColorMaskR() const;
     bool IsColorMaskG() const;
     bool IsColorMaskB() const;
@@ -52,10 +56,12 @@ public:
     GLId GetBoundId(GL::BindTarget bindTarget) const;
 
 private:
+    Byte m_stencilValue = 0;
+    GLenum m_stencilOp = GL_KEEP;
     bool m_colorMaskR = true, m_colorMaskG = true,
          m_colorMaskB = true, m_colorMaskA = true;
     bool m_writeDepth = true, m_testDepth = true;
-    bool m_writeStencil = false, m_testStencil = false;
+    bool m_testStencil = false;
     bool m_wireframe = false;
     GL::CullMode m_cullMode = GL::CullMode::None;
     Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
@@ -64,7 +70,6 @@ private:
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;
 
-    void _SetStencilTest(bool testStencil);
     void OnBind(GL::BindTarget bindTarget, GLId glId);
     void OnUnBind(GL::BindTarget bindTarget);
 

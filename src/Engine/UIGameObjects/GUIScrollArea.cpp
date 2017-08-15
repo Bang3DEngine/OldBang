@@ -51,8 +51,8 @@ void GUIScrollArea::RefreshChildren()
 {
     int marginLeft  =  GetScrolling().x;
     int marginRight = -GetScrolling().x;
-    int marginTop   =  GetScrolling().y;
-    int marginBot   = -GetScrolling().y;
+    int marginTop   = -GetScrolling().y;
+    int marginBot   =  GetScrolling().y;
 
     m_childrenContainer->rectTransform->SetMargins(marginLeft, marginTop,
                                                    marginRight, marginBot);
