@@ -3,6 +3,7 @@
 
 #include "Bang/UIGameObject.h"
 
+FORWARD class GUILabel;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class SingleLineRenderer;
@@ -21,9 +22,10 @@ public:
     String GetSelectedText() const;
 
     void SetCursorWidth(float cursorWidth);
-    float GetCursorWidth() const;
-
     void SetCursorTickTime(float cursorTickTime);
+
+    bool GetMasking() const;
+    float GetCursorWidth() const;
     float GetCursorTickTime() const;
 
     void Refresh();
@@ -37,8 +39,8 @@ public:
 private:
     UIImageRenderer *p_background = nullptr;
 
+    GUILabel *m_label = nullptr;
     UIGameObject *m_textContainer = nullptr;
-    UITextRenderer *p_text = nullptr;
     SingleLineRenderer *m_cursorRenderer = nullptr;
 
     UIGameObject *p_selectionGO = nullptr;
@@ -69,7 +71,6 @@ private:
     void UpdateCursorRenderers();
     bool IsShiftPressed() const;
     Vector2 GetSideCursorMarginsNDC() const;
-    int GetVisibilityFrontierCharIndex(bool right) const;
 
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;

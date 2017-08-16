@@ -26,6 +26,11 @@ void GUIScrollArea::AddChild(UIGameObject *child) noexcept
     child->SetParent(m_childrenContainer);
 }
 
+void GUIScrollArea::SetMasking(bool masking)
+{
+    m_mask->SetMaskEnabled(masking);
+}
+
 void GUIScrollArea::SetScrolling(const Vector2i &scrollPx) noexcept
 {
     m_scrollingPx = scrollPx;
@@ -42,6 +47,7 @@ void GUIScrollArea::SetScrollingY(int scrollPxY) noexcept
     SetScrolling( Vector2i(GetScrolling().x, scrollPxY) );
 }
 
+bool GUIScrollArea::GetMasking() const { return m_mask->GetMaskEnabled(); }
 const Vector2i &GUIScrollArea::GetScrolling() const noexcept
 {
     return m_scrollingPx;

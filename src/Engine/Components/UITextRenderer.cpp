@@ -92,10 +92,8 @@ void UITextRenderer::RefreshMesh()
                                         GetFont(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
-                                        GetHorizontalWrapMode(),
-                                        GetVerticalWrapMode(),
+                                        GetWrapping(),
                                         GetTextSize(),
-                                        GetScrollingPx(),
                                         GetSpacing(),
                                         rt->GetScreenSpaceRectPx());
 
@@ -105,35 +103,31 @@ void UITextRenderer::RefreshMesh()
     Array<Vector3> textQuadPos3D;
 
     m_charRectsNDC.Clear();
-    m_charVisibility.clear();
     const Vector2f pixelSize = 1.0f / Vector2f(Screen::GetSize());
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         Rect charRectNDC = ( (Rect(cr.rect) * pixelSize) * 2.0f - 1.0f );
 
-        if (cr.visible)
-        {
-            textQuadPos2D.PushBack(charRectNDC.GetMinXMinY());
-            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
 
-            textQuadPos2D.PushBack(charRectNDC.GetMaxXMinY());
-            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectNDC.GetMaxXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
 
-            textQuadPos2D.PushBack(charRectNDC.GetMaxXMaxY());
-            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
 
-            textQuadPos2D.PushBack(charRectNDC.GetMinXMaxY());
-            textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectNDC.GetMinXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
 
-            Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-            Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-            textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-            textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-            textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-            textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        }
+        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
+
         m_charRectsNDC.PushBack(charRectNDC);
-        m_charVisibility.push_back(cr.visible);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
@@ -144,7 +138,7 @@ void UITextRenderer::RefreshMesh()
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
 {
-    if (m_horizontalAlignment != horizontalAlignment)
+    if (GetHorizontalAlignment() != horizontalAlignment)
     {
         m_horizontalAlignment = horizontalAlignment;
         m_hasChanged = true;
@@ -153,7 +147,7 @@ void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
 
 void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
 {
-    if (m_verticalAlignment != verticalAlignment)
+    if (GetVerticalAlignment() != verticalAlignment)
     {
         m_verticalAlignment = verticalAlignment;
         m_hasChanged = true;
@@ -162,7 +156,7 @@ void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
 
 void UITextRenderer::SetFont(Font *font)
 {
-    if (m_font != font)
+    if (GetFont() != font)
     {
         m_font = font;
         if (m_font)
@@ -177,35 +171,25 @@ void UITextRenderer::SetFont(Font *font)
 
 void UITextRenderer::SetKerning(bool kerning)
 {
-    if (m_kerning != kerning)
+    if (GetKerning() != kerning)
     {
         m_kerning = kerning;
         m_hasChanged = true;
     }
 }
 
-void UITextRenderer::SetHorizontalWrapMode(WrapMode wrapMode)
+void UITextRenderer::SetWrapping(bool wrapping)
 {
-    if (m_hWrapMode != wrapMode)
+    if (GetWrapping() != wrapping)
     {
-        m_hWrapMode = wrapMode;
+        m_wrapping = wrapping;
         m_hasChanged = true;
     }
 }
-
-void UITextRenderer::SetVerticalWrapMode(WrapMode wrapMode)
-{
-    if (m_vWrapMode != wrapMode)
-    {
-        m_vWrapMode = wrapMode;
-        m_hasChanged = true;
-    }
-}
-
 
 void UITextRenderer::SetContent(const String &content)
 {
-    if (m_content != content)
+    if (GetContent() != content)
     {
         m_content = content;
         m_hasChanged = true;
@@ -214,7 +198,7 @@ void UITextRenderer::SetContent(const String &content)
 
 void UITextRenderer::SetTextSize(int size)
 {
-    if (m_textSize != size)
+    if (GetTextSize() != size)
     {
         m_textSize = size;
         m_hasChanged = true;
@@ -223,18 +207,9 @@ void UITextRenderer::SetTextSize(int size)
 
 void UITextRenderer::SetSpacing(const Vector2i& spacing)
 {
-    if (m_spacing != spacing)
+    if (GetSpacing() != spacing)
     {
         m_spacing = spacing;
-        m_hasChanged = true;
-    }
-}
-
-void UITextRenderer::SetScrollingPx(const Vector2i &scrollingPx)
-{
-    if (m_scrollingPx != scrollingPx)
-    {
-        m_scrollingPx = scrollingPx;
         m_hasChanged = true;
     }
 }
@@ -246,12 +221,10 @@ void UITextRenderer::SetTextColor(const Color &textColor)
 
 Font *UITextRenderer::GetFont() const { return m_font; }
 bool UITextRenderer::GetKerning() const { return m_kerning; }
-WrapMode UITextRenderer::GetVerticalWrapMode() const { return m_vWrapMode; }
-WrapMode UITextRenderer::GetHorizontalWrapMode() const { return m_hWrapMode; }
+bool UITextRenderer::GetWrapping() const { return m_wrapping; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
-Vector2i UITextRenderer::GetScrollingPx() const { return m_scrollingPx; }
 const Array<Rect> &UITextRenderer::GetCharRectsNDC() const
 {
     return m_charRectsNDC;
@@ -259,11 +232,6 @@ const Array<Rect> &UITextRenderer::GetCharRectsNDC() const
 const Rect &UITextRenderer::GetCharRectNDC(uint charIndex) const
 {
     return m_charRectsNDC[charIndex];
-}
-
-bool UITextRenderer::IsCharVisible(int charIndex) const
-{
-    return m_charVisibility.at(charIndex);
 }
 
 Rect UITextRenderer::GetContentNDCRect() const { return m_textRectNDC; }
@@ -286,7 +254,6 @@ const Color &UITextRenderer::GetTextColor() const
     return GetMaterial()->GetDiffuseColor();
 }
 
-
 void UITextRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
@@ -296,8 +263,7 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
     text->SetSpacing( GetSpacing() );
-    text->SetHorizontalWrapMode( GetHorizontalWrapMode() );
-    text->SetVerticalWrapMode( GetVerticalWrapMode() );
+    text->SetWrapping( GetWrapping() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
@@ -311,11 +277,9 @@ void UITextRenderer::Read(const XMLNode &xmlInfo)
     SetContent(xmlInfo.Get<String>("Content"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
-    SetScrollingPx(xmlInfo.Get<Vector2i>("ScrollingPx"));
     SetKerning(xmlInfo.Get<bool>("Kerning"));
     SetTextColor( xmlInfo.Get<Color>("TextColor") );
-    SetVerticalWrapMode( xmlInfo.Get<WrapMode>("VWrapMode") );
-    SetHorizontalWrapMode( xmlInfo.Get<WrapMode>("HWrapMode") );
+    SetWrapping( xmlInfo.Get<bool>("Wrapping") );
     SetVerticalAlign( xmlInfo.Get<VerticalAlignment>("VerticalAlign") );
     SetHorizontalAlign( xmlInfo.Get<HorizontalAlignment>("HorizontalAlign"));
 }
@@ -329,10 +293,8 @@ void UITextRenderer::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());
     xmlInfo->Set("TextColor", GetTextColor());
-    xmlInfo->Set("ScrollingPx", GetScrollingPx());
     xmlInfo->Set("Kerning", GetKerning());
-    xmlInfo->Set("VWrapMode", GetVerticalWrapMode());
-    xmlInfo->Set("HWrapMode", GetHorizontalWrapMode());
+    xmlInfo->Set("Wrapping", GetWrapping());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
 }

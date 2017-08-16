@@ -13,9 +13,12 @@ public:
 
     void AddChild(UIGameObject *child) noexcept;
 
+    void SetMasking(bool masking);
     void SetScrolling(const Vector2i &scrollPx) noexcept;
     void SetScrollingX(int scrollPxX) noexcept;
     void SetScrollingY(int scrollPxY) noexcept;
+
+    bool GetMasking() const;
     const Vector2i& GetScrolling() const noexcept;
 
 private:

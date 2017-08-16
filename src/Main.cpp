@@ -102,8 +102,7 @@ int main(int argc, char **argv)
     rightLabel->GetText()->SetTextColor(Color::White);
     rightLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
     rightLabel->GetText()->SetVerticalAlign(VerticalAlignment::Center);
-    rightLabel->GetText()->SetVerticalWrapMode(WrapMode::Hide);
-    rightLabel->GetText()->SetHorizontalWrapMode(WrapMode::Wrap);
+    rightLabel->GetText()->SetWrapping(true);
 
     GUIVerticalLayout *rightVLayout = new GUIVerticalLayout();
     rightVLayout->rectTransform->SetMargins(50, 10, 10, 10);
@@ -141,7 +140,7 @@ int main(int argc, char **argv)
 
     GUILabel *namesResult = new GUILabel("RESULT");
     namesResult->SetName("resultGameObject");
-    namesResult->GetText()->SetHorizontalWrapMode(WrapMode::Hide);
+    namesResult->GetText()->SetWrapping(false);
 
     GUIVerticalLayout *namesVLayout = new GUIVerticalLayout();
     UIImageRenderer *img4 = namesVLayout->AddComponent<UIImageRenderer>(0);
@@ -161,6 +160,9 @@ int main(int argc, char **argv)
     UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiImg->SetTint(Color::Red);
 
+    GUIMask *leftMask = new GUIMask();
+    UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
+    img->SetImage( new Texture2D( Path("/home/sephirot47/test2.png") ) );
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
@@ -168,7 +170,8 @@ int main(int argc, char **argv)
     menuVLayout->Add(buttonPause);
     menuVLayout->Add(buttonStop);
     menuVLayout->Add(buttonExit);
-    menuVLayout->SetParent(uiVContainer);
+    menuVLayout->SetParent(leftMask);
+    leftMask->SetParent(uiVContainer);
 
     List<UITextRenderer*> txts = menuVLayout->GetComponentsInChildren<UITextRenderer>();
     for (UITextRenderer *txt : txts)

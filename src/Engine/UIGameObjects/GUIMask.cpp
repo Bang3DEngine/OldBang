@@ -21,7 +21,10 @@ void GUIMask::OnRender(RenderPass renderPass)
     if (renderPass == RenderPass::Canvas) { BeforeChildrenRender(); }
 }
 
+void GUIMask::SetMaskEnabled(bool maskEnabled) { m_maskEnabled = maskEnabled; }
 void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
+
+bool GUIMask::GetMaskEnabled() const { return m_maskEnabled; }
 bool GUIMask::GetDrawMask() const { return m_drawMask; }
 
 void GUIMask::BeforeThisRender()
@@ -37,9 +40,13 @@ void GUIMask::BeforeThisRender()
 
     // Will this mask be drawn?
     GL::SetColorMask(m_drawMask, m_drawMask, m_drawMask, m_drawMask);
-    GL::SetStencilOp( GL_INCR );
-    GL::SetStencilTest(true);  // Only increment once
-    GL::SetStencilWrite(true); // This rendering will write to the stencil
+
+    if (GetMaskEnabled())
+    {
+        GL::SetStencilOp( GL_INCR );
+        GL::SetStencilTest(true);  // Only increment once
+        GL::SetStencilWrite(true); // This rendering will write to the stencil
+    }
 }
 
 void GUIMask::BeforeChildrenRender()
@@ -48,14 +55,20 @@ void GUIMask::BeforeChildrenRender()
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
 
     // Test and write for current stencil value + 1
-    GL::SetStencilValue( GL::GetStencilValue() + 1 );
-    GL::SetStencilOp(m_stencilOpBefore);
-    GL::SetStencilWrite(m_stencilWriteBefore); // Restore stencil write
+    if (GetMaskEnabled())
+    {
+        GL::SetStencilValue( GL::GetStencilValue() + 1 );
+        GL::SetStencilOp(m_stencilOpBefore);
+        GL::SetStencilWrite(m_stencilWriteBefore); // Restore stencil write
+    }
 }
 
 void GUIMask::AfterChildrenRender()
 {
-    // Restore stencil as it was before
-    GL::SetStencilValue( GL::GetStencilValue() - 1 );
-    GL::SetStencilTest(m_stencilTestBefore);
+    if (GetMaskEnabled())
+    {
+        // Restore stencil as it was before
+        GL::SetStencilValue( GL::GetStencilValue() - 1 );
+        GL::SetStencilTest(m_stencilTestBefore);
+    }
 }

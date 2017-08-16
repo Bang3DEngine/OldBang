@@ -15,10 +15,9 @@ public:
     struct CharRect
     {
         Recti rect;
-        bool visible;
         char character;
         CharRect(char _c, const Recti &_rect) :
-            rect(_rect), visible(true), character(_c) {}
+            rect(_rect), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(
@@ -26,10 +25,8 @@ public:
                                             const Font *font,
                                             HorizontalAlignment hAlignment,
                                             VerticalAlignment vAlignment,
-                                            WrapMode hWrapMode,
-                                            WrapMode vWrapMode,
+                                            bool wrapping,
                                             int textSize,
-                                            const Vector2i &scrollingPx,
                                             const Vector2i &spacing,
                                             const Recti &limitsRect);
     TextFormatter() = delete;
@@ -42,20 +39,12 @@ private:
                                 const Recti &limitsRect,
                                 const Vector2i &spacing,
                                 int textSize,
-                                WrapMode hWrapMode);
-
-    static void ApplyScrolling(Array< Array<CharRect> > *linedCharRects,
-                               const Vector2i &scrollingPx);
+                                bool wrapping);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment,
                                const Recti &limitsRect);
-
-    static void ApplyHorizontalHideWrap(Array< Array<CharRect> > *linedCharRects,
-                                        const Recti &limitsRect);
-    static void ApplyVerticalHideWrap(Array< Array<CharRect> > *linedCharRects,
-                                      const Recti &limitsRect);
 
     static Recti GetCharRect(const Font *font,
                              int textSize,
@@ -64,11 +53,6 @@ private:
                                int textSize,
                                const String &content,
                                int currentCharIndex);
-
-    static Vector2i FindMinCoord(const Array<CharRect>& rects);
-    static Vector2i FindMaxCoord(const Array<CharRect>& rects);
-    static Vector2i FindMinCoord(const Array< Array<CharRect> >& rects);
-    static Vector2i FindMaxCoord(const Array< Array<CharRect> >& rects);
 };
 
 #endif // TEXTFORMATTER_H

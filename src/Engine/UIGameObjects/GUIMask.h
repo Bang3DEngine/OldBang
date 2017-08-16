@@ -13,10 +13,14 @@ public:
     virtual void Render(RenderPass renderPass) override;
     virtual void OnRender(RenderPass renderPass) override;
 
+    void SetMaskEnabled(bool maskEnabled);
     void SetDrawMask(bool drawMask);
+
+    bool GetMaskEnabled() const;
     bool GetDrawMask() const;
 
 private:
+    bool m_maskEnabled = true;
     bool m_drawMask = false;
 
     GLenum m_stencilOpBefore;

@@ -12,6 +12,7 @@ class GUILabel : public UIGameObject
 public:
     GUILabel(const String &content = "Bang");
 
+    GUIScrollArea *GetScrollArea();
     UITextRenderer *GetText();
     const UITextRenderer *GetText() const;
 
