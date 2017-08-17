@@ -74,7 +74,7 @@ protected:
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
-    Array<Rect> m_charRectsNDC;
+    Array<Rect> m_charRectsLocalNDC;
 
 private:
     Mesh *m_mesh = nullptr;

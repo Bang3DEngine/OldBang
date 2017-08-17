@@ -11,12 +11,11 @@ GUILabel::GUILabel(const String &content) : UIGameObject("GUILabel")
 
     m_textContainer = new UIGameObject("GUILabel_TextContainer");
     m_scrollArea->AddChild(m_textContainer);
-    m_scrollArea->SetMasking(false);
+    m_scrollArea->SetMasking(true);
 
     p_text = m_textContainer->AddComponent<UITextRenderer>();
     p_text->SetContent(content);
     p_text->SetWrapping(false);
-    m_textContainer->rectTransform->SetMargins(5);
 }
 
 GUIScrollArea *GUILabel::GetScrollArea() { return m_scrollArea; }

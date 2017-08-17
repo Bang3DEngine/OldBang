@@ -47,7 +47,7 @@ public:
     static T ScaleMagnitude(const T &magnitude, int textSize)
     {
         const float fTextSize = float(textSize) / 128.0f;
-        return (magnitude * fTextSize);
+        return SCAST<T>(magnitude * fTextSize);
     }
 
 protected:

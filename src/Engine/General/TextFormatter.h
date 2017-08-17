@@ -7,17 +7,17 @@
 #include "Bang/Rect.h"
 #include "Bang/TextFormat.h"
 
-FORWARD   class Font;
+FORWARD class Font;
+FORWARD class RectTransform;
 
 class TextFormatter
 {
 public:
     struct CharRect
     {
-        Recti rect;
+        Rectf rectLocalNDC;
         char character;
-        CharRect(char _c, const Recti &_rect) :
-            rect(_rect), character(_c) {}
+        CharRect(char _c, const Rectf &_rect) : rectLocalNDC(_rect), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(
@@ -26,9 +26,9 @@ public:
                                             HorizontalAlignment hAlignment,
                                             VerticalAlignment vAlignment,
                                             bool wrapping,
-                                            int textSize,
-                                            const Vector2i &spacing,
-                                            const Recti &limitsRect);
+                                            int textSizePx,
+                                            const RectTransform *rt,
+                                            const Vector2i &spacingPx);
     TextFormatter() = delete;
 
 private:
@@ -36,23 +36,24 @@ private:
                                 const String &content,
                                 const Font *font,
                                 const Array<CharRect> &charRects,
-                                const Recti &limitsRect,
-                                const Vector2i &spacing,
-                                int textSize,
+                                const Vector2f &spacingLocalNDC,
+                                const RectTransform *rt,
+                                int textSizePx,
                                 bool wrapping);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                HorizontalAlignment hAlignment,
-                               VerticalAlignment vAlignment,
-                               const Recti &limitsRect);
+                               VerticalAlignment vAlignment);
 
-    static Recti GetCharRect(const Font *font,
-                             int textSize,
+    static Rectf GetCharRect(const Font *font,
+                             const RectTransform *rt,
+                             int textSizePx,
                              char c);
-    static int GetCharAdvanceX(const Font *font,
-                               int textSize,
-                               const String &content,
-                               int currentCharIndex);
+    static float GetCharAdvanceXNDC(const Font *font,
+                                    const RectTransform *rt,
+                                    const String &content,
+                                    int textSizePx,
+                                    int currentCharIndex);
 };
 
 #endif // TEXTFORMATTER_H

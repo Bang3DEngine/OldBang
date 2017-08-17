@@ -12,14 +12,6 @@ public:
     RectTransform();
     virtual ~RectTransform();
 
-    Vector2 ToLocalNDC(const Vector2 &globalNDCPoint) const;
-    Vector2 ToGlobalNDC(const Vector2 &localNDCPoint) const;
-    Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
-    static Vector2 FromPixelsToGlobalNDC(const Vector2i &pixelsAmount);
-    static Vector2i FromGlobalNDCToPixels(const Vector2 &ndcAmount);
-    static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
-    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
-
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);
     void SetMarginRight(int marginRight);
@@ -47,6 +39,19 @@ public:
     Recti GetParentScreenRectPx() const;
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
+
+    // Conversion functions
+    Vector2 FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const;
+    Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
+    Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
+    Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;
+    static Vector2 FromPixelsAmountToGlobalNDC(const Vector2i &pixelsAmount);
+    Vector2i FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
+    static Vector2i FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
+    Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
+    static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
+    Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
+    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
 
     // Component
     virtual void OnParentSizeChanged() override;

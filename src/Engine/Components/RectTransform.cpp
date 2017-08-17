@@ -14,7 +14,7 @@ RectTransform::~RectTransform()
 {
 }
 
-Vector2 RectTransform::FromPixelsToGlobalNDC(const Vector2i &pixels)
+Vector2 RectTransform::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
 {
     return (Vector2f(pixels) / Vector2f(Screen::GetSize())) * 2.0f;
 }
@@ -27,27 +27,49 @@ Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
     return Vector2f(pixels) * pixelNDCSize;
 }
 
-Vector2i RectTransform::FromGlobalNDCToPixels(const Vector2 &ndcAmount)
+Vector2 RectTransform::FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const
+{
+    return (Vector2f(pixelsAmount) / Vector2f(GetScreenSpaceRectPx().GetSize()))
+            * 2.0f;
+}
+
+Vector2i RectTransform::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
 {
     return Vector2i(ndcAmount * Vector2f(Screen::GetSize()) * 0.5f);
 }
+Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
+{
+    return Vector2i(ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize())
+                    * 0.5f);
+}
 
+Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const
+{
+    return FromGlobalNDCToLocalNDC( FromPixelsPointToGlobalNDC(pixelsPoint) );
+}
 Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
 {
-    return (Vector2(pixelsPoint) / Vector2(Screen::GetSize())) * 2.0f - 1.0f;
+    Vector2 res =  Vector2f(pixelsPoint) /
+                   Vector2f( Screen::GetSize() ) * 2.0f - 1.0f;
+    res.y = 1.0f - res.y;
+    return res;
 }
 
+Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
+{
+    return FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
+}
 Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint)
 {
-    return Vector2i((ndcPoint * 0.5f + 0.5f)* Vector2(Screen::GetSize()));
+    return Vector2i((ndcPoint * 0.5f + 0.5f) * Vector2(Screen::GetSize()));
 }
 
-Vector2 RectTransform::ToLocalNDC(const Vector2 &globalNDCPoint) const
+Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const
 {
     return WorldToLocalPoint( Vector3(globalNDCPoint, 0) ).xy();
 }
 
-Vector2 RectTransform::ToGlobalNDC(const Vector2 &localNDCPoint) const
+Vector2 RectTransform::FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const
 {
     return LocalToWorldPoint( Vector3(localNDCPoint, 0) ).xy();
 }

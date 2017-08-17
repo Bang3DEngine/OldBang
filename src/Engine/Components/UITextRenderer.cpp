@@ -86,6 +86,8 @@ void UITextRenderer::RefreshMesh()
 
     // Get the quad positions of the rects of each char
     RectTransform *rt = SCAST<RectTransform*>(transform); ENSURE(rt);
+    Vector2i sizedSpacingPx = Vector2i(
+                G_Font::ScaleMagnitude(Vector2f(GetSpacing()), GetTextSize()));
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
@@ -94,31 +96,32 @@ void UITextRenderer::RefreshMesh()
                                         GetVerticalAlignment(),
                                         GetWrapping(),
                                         GetTextSize(),
-                                        GetSpacing(),
-                                        rt->GetScreenSpaceRectPx());
+                                        rt,
+                                        sizedSpacingPx);
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;
     Array<Vector2> textQuadPos2D;
     Array<Vector3> textQuadPos3D;
 
-    m_charRectsNDC.Clear();
-    const Vector2f pixelSize = 1.0f / Vector2f(Screen::GetSize());
+    m_charRectsLocalNDC.Clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
-        Rect charRectNDC = ( (Rect(cr.rect) * pixelSize) * 2.0f - 1.0f );
+        Vector2f minGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMin());
+        Vector2f maxGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMax());
+        Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
 
-        textQuadPos2D.PushBack(charRectNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
 
-        textQuadPos2D.PushBack(charRectNDC.GetMaxXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMinY(), 0) );
 
-        textQuadPos2D.PushBack(charRectNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
 
-        textQuadPos2D.PushBack(charRectNDC.GetMinXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectNDC.GetMinXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
 
         Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
@@ -127,7 +130,7 @@ void UITextRenderer::RefreshMesh()
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
 
-        m_charRectsNDC.PushBack(charRectNDC);
+        m_charRectsLocalNDC.PushBack(cr.rectLocalNDC);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
@@ -227,11 +230,11 @@ int UITextRenderer::GetTextSize() const { return m_textSize; }
 Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
 const Array<Rect> &UITextRenderer::GetCharRectsNDC() const
 {
-    return m_charRectsNDC;
+    return m_charRectsLocalNDC;
 }
 const Rect &UITextRenderer::GetCharRectNDC(uint charIndex) const
 {
-    return m_charRectsNDC[charIndex];
+    return m_charRectsLocalNDC[charIndex];
 }
 
 Rect UITextRenderer::GetContentNDCRect() const { return m_textRectNDC; }
