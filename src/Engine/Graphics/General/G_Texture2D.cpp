@@ -113,24 +113,6 @@ G_Image G_Texture2D::ToImage(bool invertY)
                   GL_RGBA,
                   GL_UNSIGNED_BYTE,
                   pixels);
-    if (invertY)
-    {
-        Byte *pixelsCpy = new Byte[bytesSize];
-        memcpy(pixelsCpy, pixels, bytesSize);
-        for (int i = 0; i < height; ++i)
-        {
-            for (int j = 0; j < width; ++j)
-            {
-                const int coords    = (i * width + j) * 4;
-                const int invCoords = ((height - i - 1) * width + j) * 4;
-                pixels[coords + 0] = pixelsCpy[invCoords + 0];
-                pixels[coords + 1] = pixelsCpy[invCoords + 1];
-                pixels[coords + 2] = pixelsCpy[invCoords + 2];
-                pixels[coords + 3] = pixelsCpy[invCoords + 3];
-            }
-        }
-        delete[] pixelsCpy;
-    }
 
     G_Image img(width, height);
     for (int i = 0; i < height; ++i)
@@ -145,6 +127,7 @@ G_Image G_Texture2D::ToImage(bool invertY)
             img.SetPixel(j, i, pixelColor);
         }
     }
+    if (invertY) { img.InvertVertically(); }
 
     delete[] pixels;
 

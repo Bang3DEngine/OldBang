@@ -11,6 +11,8 @@ public:
     static void TakeGBufferShot(G_GBuffer *gbuffer,
                                 G_GBuffer::AttachmentId att,
                                 const String &screenshotName);
+    static void TakeGBufferShotStencil(G_GBuffer *gbuffer,
+                                       const String &screenshotName);
 
 private:
     GraphicPipelineDebugger();

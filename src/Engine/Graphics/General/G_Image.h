@@ -22,7 +22,11 @@ public:
     int GetHeight() const;
     const Vector2i& GetSize() const;
 
+    void InvertVertically();
+
     void SaveToFile(const Path &filepath) const;
+    static G_Image LoadFromData(int width, int height,
+                                const Array<Byte> &rgbaByteData);
     static G_Image LoadFromFile(const Path &filepath);
 
 private:

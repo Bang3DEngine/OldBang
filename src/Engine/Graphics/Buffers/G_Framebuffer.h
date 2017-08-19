@@ -57,6 +57,7 @@ public:
 
     void SaveToImage(AttachmentId attachmentId, const Path &filepath,
                      bool invertY = true) const;
+    void SaveStencilToImage(const Path &filepath) const;
 
 protected:
     int m_width = 0;

@@ -228,16 +228,16 @@ bool UITextRenderer::GetWrapping() const { return m_wrapping; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
-const Array<Rect> &UITextRenderer::GetCharRectsNDC() const
+const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 {
     return m_charRectsLocalNDC;
 }
-const Rect &UITextRenderer::GetCharRectNDC(uint charIndex) const
+const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
     return m_charRectsLocalNDC[charIndex];
 }
 
-Rect UITextRenderer::GetContentNDCRect() const { return m_textRectNDC; }
+Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }
 VerticalAlignment UITextRenderer::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
@@ -249,7 +249,7 @@ HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
 
 Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
-    return GetContentNDCRect();
+    return GetContentGlobalNDCRect();
 }
 
 const Color &UITextRenderer::GetTextColor() const

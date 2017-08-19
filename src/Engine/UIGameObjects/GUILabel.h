@@ -4,7 +4,7 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/UITextRenderer.h"
 
-FORWARD class GUIScrollArea;
+FORWARD class GUIMask;
 FORWARD class UITextRenderer;
 
 class GUILabel : public UIGameObject
@@ -12,13 +12,13 @@ class GUILabel : public UIGameObject
 public:
     GUILabel(const String &content = "Bang");
 
-    GUIScrollArea *GetScrollArea();
+    GUIMask *GetMask();
     UITextRenderer *GetText();
     const UITextRenderer *GetText() const;
 
 private:
     UITextRenderer *p_text = nullptr;
-    GUIScrollArea *m_scrollArea = nullptr;
+    GUIMask *m_mask = nullptr;
     UIGameObject *m_textContainer = nullptr;
 };
 

@@ -4,6 +4,7 @@
 #include "Bang/UIGameObject.h"
 
 FORWARD class GUILabel;
+FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class SingleLineRenderer;
@@ -40,6 +41,7 @@ private:
     UIImageRenderer *p_background = nullptr;
 
     GUILabel *m_label = nullptr;
+    GUIScrollArea *m_boxScrollArea = nullptr;
     UIGameObject *m_textContainer = nullptr;
     SingleLineRenderer *m_cursorRenderer = nullptr;
 
@@ -57,20 +59,21 @@ private:
     bool m_forceUpdateRenderers = false;
 
     void HandleTyping();
-    void HandleTextScrolling();
     void HandleMouseSelection();
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
 
-    float GetCursorX_NDC(int cursorIndex) const;
+    float GetCursorXGlobalNDC(int cursorIndex, bool clamped) const;
     // Returns the X in global NDC, for a given cursor index
+
+    float GetCursorXLocalNDC(int cursorIndex) const;
+    // Returns the X in local NDC, for a given cursor index
 
     bool IsDelimiter(char initialChar, char currentChar) const;
     int GetWordSplitIndex(int startingIndex, bool forward) const;
 
-    void UpdateCursorRenderers();
+    void UpdateCursorRenderersAndScrolling();
     bool IsShiftPressed() const;
-    Vector2 GetSideCursorMarginsNDC() const;
 
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;

@@ -148,12 +148,13 @@ int main(int argc, char **argv)
     namesVLayout->Add(nameVLayout);
     namesVLayout->Add(namesResult);
 
-    GUIMask *mask = new GUIMask();
-    UIImageRenderer *maskImg = mask->AddComponent<UIImageRenderer>();
+    GUIMask *buttonPlayMask = new GUIMask();
+    buttonPlayMask->SetMasking(false);
+    UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
     maskImg->SetImage(
              new Texture2D( Path("/home/sephirot47/BangUITest/test.png") ) );
     buttonPlay->rectTransform->SetMargins(10);
-    buttonPlay->SetParent(mask);
+    buttonPlay->SetParent(buttonPlayMask);
 
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
@@ -161,16 +162,18 @@ int main(int argc, char **argv)
     uiImg->SetTint(Color::Red);
 
     GUIMask *leftMask = new GUIMask();
+    leftMask->SetMasking(false);
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
     img->SetImage( new Texture2D( Path("/home/sephirot47/test2.png") ) );
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
-    menuVLayout->Add(mask);
+    menuVLayout->Add(buttonPlayMask);
     menuVLayout->Add(buttonPause);
     menuVLayout->Add(buttonStop);
     menuVLayout->Add(buttonExit);
     menuVLayout->SetParent(leftMask);
+    uiVContainer->SetEnabled(false);
     leftMask->SetParent(uiVContainer);
 
     List<UITextRenderer*> txts = menuVLayout->GetComponentsInChildren<UITextRenderer>();

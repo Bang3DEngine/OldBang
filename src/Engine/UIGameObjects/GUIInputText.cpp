@@ -1,7 +1,8 @@
-#include "Bang/GUIInputText.h"
+﻿#include "Bang/GUIInputText.h"
 
 #include "Bang/Time.h"
 #include "Bang/Input.h"
+#include "Bang/GUIMask.h"
 #include "Bang/Material.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIScrollArea.h"
@@ -16,7 +17,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    p_selectionGO = new UIGameObject("UIInputText_SelectionQuad");
+    p_selectionGO = new UIGameObject("GUIInputText_SelectionQuad");
     p_selectionGO->SetParent(this);
     p_selectionGO->rectTransform->SetAnchors( Vector2(-1), Vector2(1) );
 
@@ -24,12 +25,16 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     p_selectionQuad->UseMaterialCopy();
     p_selectionQuad->GetMaterial()->SetDiffuseColor(Color::LightBlue);
 
-    m_textContainer = new UIGameObject("UIInputText_Container");
-    m_textContainer->rectTransform->SetAnchors( Vector2(-1), Vector2(1) );
-    m_textContainer->SetParent(this);
+    m_textContainer = new UIGameObject("GUIInputText_Container");
+
+    m_boxScrollArea = new GUIScrollArea();
+    m_boxScrollArea->SetName("GUIInputText_BoxMask");
+    m_boxScrollArea->AddChild(m_textContainer);
+    m_boxScrollArea->SetMasking(true);
+    m_boxScrollArea->SetParent(this);
 
     m_label = new GUILabel();
-    m_label->GetScrollArea()->SetMasking(true);
+    m_label->GetMask()->SetMasking(false);
     m_label->SetParent(m_textContainer);
 
     GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
@@ -78,50 +83,62 @@ void GUIInputText::OnUpdate()
 void GUIInputText::Refresh()
 {
     GetText()->RefreshMesh();
-    HandleTextScrolling();
-    UpdateCursorRenderers();
+    UpdateCursorRenderersAndScrolling();
 }
 
-void GUIInputText::UpdateCursorRenderers()
+void GUIInputText::UpdateCursorRenderersAndScrolling()
 {
-    Rect limitsRect = m_textContainer->rectTransform->GetScreenSpaceRectNDC();
-    float minX = limitsRect.GetMin().x;
-    float maxX = limitsRect.GetMax().x;
-    if (!GetText()->GetContent().IsEmpty())
+    RectTransform *rt = m_label->rectTransform;
+    Rect limitsRect = rt->GetScreenSpaceRectNDC();
+
+    // Text Scrolling
     {
-        minX = Math::Max(minX, GetText()->GetCharRectsNDC().Front().GetMin().x);
-        maxX = Math::Min(maxX, GetText()->GetCharRectsNDC().Back().GetMax().x);
+        /*
+        if (GetText()->GetContent().IsEmpty())
+        {
+            m_label->GetScrollArea()->SetScrolling( Vector2i::Zero );
+            return;
+        }
+        */
+
+        float cursorX = GetCursorXGlobalNDC(m_cursorIndex, false);
+
+        float boundsRight = limitsRect.GetMax().x;
+        float scrollDestXNDC = Math::Min(cursorX, boundsRight);
+        Vector2 scrollNDC(cursorX - scrollDestXNDC, 0);
+        Vector2i scrollPx = RectTransform::FromGlobalNDCToPixelsAmount(scrollNDC);
+        m_boxScrollArea->SetScrolling(-scrollPx);
     }
 
-    // Cursor "I" position update
-    float cursorX = Math::Clamp( GetCursorX_NDC(m_cursorIndex), minX, maxX );
-    if (m_latestCursorX != cursorX)
+    // Cursor "I" position update and Selection quad rendering
     {
-        Rect contentNDCRect = GetText()->GetContentNDCRect();
-        Vector2 minPoint(cursorX, contentNDCRect.GetMin().y);
-        Vector2 maxPoint(cursorX, contentNDCRect.GetMax().y);
-        minPoint = m_textContainer->rectTransform->FromGlobalNDCToLocalNDC(minPoint);
-        maxPoint = m_textContainer->rectTransform->FromGlobalNDCToLocalNDC(maxPoint);
+        float cursorX = GetCursorXGlobalNDC(m_cursorIndex, true);
+        if (m_latestCursorX != cursorX)
+        {
+            Rect contentGlobalNDCRect = GetText()->GetContentGlobalNDCRect();
+            Vector2 minPoint(cursorX, contentGlobalNDCRect.GetMin().y);
+            Vector2 maxPoint(cursorX, contentGlobalNDCRect.GetMax().y);
+            minPoint = rt->FromGlobalNDCToLocalNDC(minPoint);
+            maxPoint = rt->FromGlobalNDCToLocalNDC(maxPoint);
 
-        m_cursorRenderer->SetOrigin(  Vector3(minPoint, 0) );
-        m_cursorRenderer->SetDestiny( Vector3(maxPoint, 0) );
+            m_cursorRenderer->SetOrigin(  Vector3(minPoint, 0) );
+            m_cursorRenderer->SetDestiny( Vector3(maxPoint, 0) );
 
-        m_latestCursorX = cursorX;
-    }
+            m_latestCursorX = cursorX;
+        }
 
-    // Selection quad rendering, depending on the selection indices
-    {
-        float selectionX = Math::Clamp( GetCursorX_NDC(m_selectionCursorIndex),
-                                        minX, maxX);
+        // Selection quad
+        {
+            float selectionX = GetCursorXGlobalNDC(m_selectionCursorIndex, false);
+            Rect totalLimitsRect = rectTransform->GetScreenSpaceRectNDC();
+            Vector2 p1(cursorX,    totalLimitsRect.GetMin().y);
+            Vector2 p2(selectionX, totalLimitsRect.GetMax().y);
+            p1 = rectTransform->FromGlobalNDCToLocalNDC(p1);
+            p2 = rectTransform->FromGlobalNDCToLocalNDC(p2);
 
-        Rect totalLimitsRect = rectTransform->GetScreenSpaceRectNDC();
-        Vector2 p1(cursorX,    totalLimitsRect.GetMin().y);
-        Vector2 p2(selectionX, totalLimitsRect.GetMax().y);
-        p1 = rectTransform->FromGlobalNDCToLocalNDC(p1);
-        p2 = rectTransform->FromGlobalNDCToLocalNDC(p2);
-
-        p_selectionGO->rectTransform->SetAnchorMin( Vector2::Min(p1, p2) );
-        p_selectionGO->rectTransform->SetAnchorMax( Vector2::Max(p1, p2) );
+            p_selectionGO->rectTransform->SetAnchorMin( Vector2::Min(p1, p2) );
+            p_selectionGO->rectTransform->SetAnchorMax( Vector2::Max(p1, p2) );
+        }
     }
 
     m_cursorTime += Time::deltaTime;
@@ -181,36 +198,6 @@ void GUIInputText::HandleTyping()
     GetText()->RefreshMesh();
 }
 
-void GUIInputText::HandleTextScrolling()
-{
-    /*
-    if (GetText()->GetContent().IsEmpty())
-    {
-        m_label->GetScrollArea()->SetScrolling( Vector2i::Zero );
-        return;
-    }
-    */
-
-    Rect limits = m_textContainer->rectTransform->GetScreenSpaceRectNDC();
-    float cursorX = GetCursorX_NDC(m_cursorIndex);
-    Rect bounds (limits.GetMin(), limits.GetMax());
-    float boundsRight = bounds.GetMax().x;
-
-    float scrollDestXNDC = Math::Min(cursorX, boundsRight);
-    Vector2 scrollNDC(cursorX - scrollDestXNDC, 0);
-    Vector2i scrollPx = RectTransform::FromGlobalNDCToPixelsAmount(scrollNDC);
-    m_label->GetScrollArea()->SetScrolling(-scrollPx);
-
-    // DO_THIS
-    /*
-    Flickering when going to the right is because we move the UITextRenderer
-    bounding rect when we do the SetScrolling. Then all charRects change (since
-    they are in global coords). We need to pass charRects to local NDC, and thus
-    TextFormatter should do everything in local NDC, rather than global. Enjoy
-    your refactor.
-    */
-}
-
 void GUIInputText::HandleCursorIndices(bool wasSelecting)
 {
     // Here we will move the selection indices either by mouse or arrows...
@@ -225,6 +212,35 @@ void GUIInputText::HandleCursorIndices(bool wasSelecting)
 
     HandleMouseSelection();
     HandleKeySelection(wasSelecting);
+}
+
+float GUIInputText::GetCursorXGlobalNDC(int cursorIndex, bool clamped) const
+{
+    RectTransform *rt = m_label->rectTransform;
+
+    float cursorXLocalNDC = GetCursorXLocalNDC(cursorIndex);
+    if (!clamped)
+    {
+        return rt->FromLocalNDCToGlobalNDC( Vector2(cursorXLocalNDC, 0) ).x;
+    }
+    else
+    {
+        Rect limitsRect = rt->GetScreenSpaceRectNDC();
+
+        float minX = limitsRect.GetMin().x;
+        float maxX = limitsRect.GetMax().x;
+        if (!GetText()->GetContent().IsEmpty())
+        {
+            minX = Math::Max(minX,
+                             rt->FromLocalNDCToGlobalNDC(
+                                 GetText()->GetCharRectsLocalNDC().Front().GetMin()).x);
+            maxX = Math::Min(maxX,
+                             rt->FromLocalNDCToGlobalNDC(
+                                 GetText()->GetCharRectsLocalNDC().Back().GetMax()).x);
+        }
+        float cursorX = rt->FromLocalNDCToGlobalNDC( Vector2(cursorXLocalNDC, 0) ).x;
+        return Math::Clamp(cursorX, minX, maxX);
+    }
 }
 
 void GUIInputText::HandleKeySelection(bool wasSelecting)
@@ -281,7 +297,10 @@ void GUIInputText::HandleMouseSelection()
         float minDist = 2.0f;
         int closestCharRectIndex = 0;
         float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-        const Array<Rect>& charRectsNDC = GetText()->GetCharRectsNDC();
+        mouseCoordsX_NDC = m_label->rectTransform->FromGlobalNDCToLocalNDC(
+                                        Vector2(mouseCoordsX_NDC, 0) ).x;
+
+        const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
         for (int i = 0; i < charRectsNDC.Size(); ++i)
         {
             const Rect &cr = charRectsNDC[i];
@@ -389,11 +408,6 @@ bool GUIInputText::IsShiftPressed() const
             Input::GetKey(Input::Key::RShift);
 }
 
-Vector2 GUIInputText::GetSideCursorMarginsNDC() const
-{
-    return m_textContainer->rectTransform->
-                FromPixelsToLocalNDC( Vector2i(5,0) );
-}
 
 void GUIInputText::OnFocusTaken()
 {
@@ -407,19 +421,18 @@ void GUIInputText::OnFocusLost()
 }
 
 
-float GUIInputText::GetCursorX_NDC(int cursorIndex) const
+float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
 {    
     // In case we are between two characters
     const int textLength = GetText()->GetContent().Size();
     if (cursorIndex > 0 && cursorIndex < textLength)
     {
-        Rect charRect = GetText()->GetCharRectNDC(cursorIndex - 1);
-        Debug_Log("CharRect: " << charRect);
+        Rect charRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
         float currentX = charRect.GetMax().x;
         float nextX;
         if (cursorIndex < GetText()->GetContent().Size())
         {
-            Rect nextCharRect = GetText()->GetCharRectNDC(cursorIndex);
+            Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
             nextX = nextCharRect.GetMin().x;
         }
         else { nextX = currentX; }
@@ -432,7 +445,7 @@ float GUIInputText::GetCursorX_NDC(int cursorIndex) const
     {
         if (!GetText()->GetContent().IsEmpty())
         {
-            return GetText()->GetCharRectNDC(0).GetMin().x;
+            return GetText()->GetCharRectLocalNDC(0).GetMin().x;
         }
 
         if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Left)
@@ -443,7 +456,7 @@ float GUIInputText::GetCursorX_NDC(int cursorIndex) const
 
         return contRT->FromLocalNDCToGlobalNDC( Vector2(1.0f) ).x;
     }
-    return GetText()->GetCharRectsNDC().Back().GetMax().x;
+    return GetText()->GetCharRectsLocalNDC().Back().GetMax().x;
 }
 
 bool GUIInputText::IsDelimiter(char initialChar, char curr) const

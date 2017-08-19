@@ -48,9 +48,9 @@ public:
     const String& GetContent() const;
     int GetTextSize() const;
     Vector2i GetSpacing() const;
-    const Array<Rect>& GetCharRectsNDC() const;
-    const Rect& GetCharRectNDC(uint charIndex) const;
-    Rect GetContentNDCRect() const;
+    const Array<Rect>& GetCharRectsLocalNDC() const;
+    const Rect& GetCharRectLocalNDC(uint charIndex) const;
+    Rect GetContentGlobalNDCRect() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // ICloneable

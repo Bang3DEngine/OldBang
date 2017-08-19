@@ -191,10 +191,34 @@ void G_Framebuffer::UnBind() const
 }
 
 void G_Framebuffer::SaveToImage(AttachmentId attId, const Path &filepath,
-                              bool invertY) const
+                                bool invertY) const
 {
+    glFlush(); glFinish();
     G_Image img = GetAttachmentTexture(attId)->ToImage(invertY);
     img.SaveToFile(filepath);
+}
+
+void G_Framebuffer::SaveStencilToImage(const Path &filepath) const
+{
+    glFlush(); glFinish();
+    Byte *stencilData = new Byte[GetWidth() * GetHeight()];
+    glReadPixels(0, 0, GetWidth(), GetHeight(),
+                 GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stencilData);
+
+    Array<Byte> bytes(GetWidth() * GetHeight() * 4);
+    for (int i = 0; i < GetWidth() * GetHeight(); ++i)
+    {
+        bytes[i * 4 + 0] = stencilData[i];
+        bytes[i * 4 + 1] = stencilData[i];
+        bytes[i * 4 + 2] = stencilData[i];
+        bytes[i * 4 + 3] = 255;
+    }
+
+    G_Image img = G_Image::LoadFromData(GetWidth(), GetHeight(), bytes);
+    img.InvertVertically();
+    img.SaveToFile(filepath);
+
+    delete stencilData;
 }
 
 void G_Framebuffer::PushDrawAttachmentIds()

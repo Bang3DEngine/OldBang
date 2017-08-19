@@ -71,6 +71,19 @@ int G_Image::GetWidth() const { return m_size.x; }
 int G_Image::GetHeight() const { return m_size.y; }
 const Vector2i& G_Image::GetSize() const { return m_size; }
 
+void G_Image::InvertVertically()
+{
+    G_Image img = *this;
+    for (int y = 0; y < GetHeight(); ++y)
+    {
+        for (int x = 0; x < GetWidth(); ++x)
+        {
+            Color c = img.GetPixel(x, y);
+            SetPixel(x, GetHeight() - y - 1, c);
+        }
+    }
+}
+
 void G_Image::SaveToFile(const Path &filepath) const
 {
     QImage qimg (GetWidth(), GetHeight(), QImage::Format::Format_ARGB32);
@@ -89,6 +102,15 @@ void G_Image::SaveToFile(const Path &filepath) const
     String ext = filepath.GetExtension();
     if (ext.IsEmpty()) { ext = "png"; }
     qimg.save(filepath.GetAbsolute().ToQString(), ext.ToCString());
+}
+
+G_Image G_Image::LoadFromData(int width, int height,
+                              const Array<Byte> &rgbaByteData)
+{
+    G_Image img(width, height);
+    img.m_pixels = rgbaByteData;
+    ASSERT(rgbaByteData.Size() == (img.GetWidth() * img.GetHeight() * 4));
+    return img;
 }
 
 G_Image G_Image::LoadFromFile(const Path &filepath)

@@ -12,23 +12,29 @@ void GUIMask::Render(RenderPass renderPass)
 
     UIGameObject::Render(renderPass); // Inside here, OnRender(below) is called
 
-    if (canvasPass) { AfterChildrenRender(); }
+    if (canvasPass) { AfterChildrenRender(renderPass); }
 }
 
 void GUIMask::OnRender(RenderPass renderPass)
 {
     UIGameObject::OnRender(renderPass);
-    if (renderPass == RenderPass::Canvas) { BeforeChildrenRender(); }
+    bool canvasPass = (renderPass == RenderPass::Canvas);
+    if (canvasPass) { BeforeChildrenRender(); }
 }
 
-void GUIMask::SetMaskEnabled(bool maskEnabled) { m_maskEnabled = maskEnabled; }
+void GUIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
 void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
-bool GUIMask::GetMaskEnabled() const { return m_maskEnabled; }
+bool GUIMask::GetMasking() const { return m_masking; }
 bool GUIMask::GetDrawMask() const { return m_drawMask; }
 
+#include "Bang/G_GBuffer.h"
+#include "Bang/GraphicPipeline.h"
 void GUIMask::BeforeThisRender()
 {
+    GraphicPipeline::GetActive()->GetGBuffer()->SaveStencilToImage(
+                Path("/home/sephirot47/Bang/tmp/" + GetInstanceId() + "_A.png"));
+
     // Save values for later restoring
     m_maskRBefore = GL::IsColorMaskR();
     m_maskGBefore = GL::IsColorMaskG();
@@ -36,12 +42,12 @@ void GUIMask::BeforeThisRender()
     m_maskABefore = GL::IsColorMaskA();
     m_stencilTestBefore  = GL::IsStencilTest();
     m_stencilWriteBefore = GL::IsStencilWrite();
-    m_stencilOpBefore = GL::GetStencilOp();
+    m_stencilOpBefore    = GL::GetStencilOp();
 
     // Will this mask be drawn?
     GL::SetColorMask(m_drawMask, m_drawMask, m_drawMask, m_drawMask);
 
-    if (GetMaskEnabled())
+    if (GetMasking())
     {
         GL::SetStencilOp( GL_INCR );
         GL::SetStencilTest(true);  // Only increment once
@@ -54,21 +60,39 @@ void GUIMask::BeforeChildrenRender()
     // Restore color mask for children
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
 
-    // Test and write for current stencil value + 1
-    if (GetMaskEnabled())
+    if (GetMasking())
     {
+        // Test and write for current stencil value + 1
         GL::SetStencilValue( GL::GetStencilValue() + 1 );
         GL::SetStencilOp(m_stencilOpBefore);
+        GL::SetStencilTest(true);
         GL::SetStencilWrite(m_stencilWriteBefore); // Restore stencil write
     }
 }
 
-void GUIMask::AfterChildrenRender()
+void GUIMask::AfterChildrenRender(RenderPass renderPass)
 {
-    if (GetMaskEnabled())
+    if (GetMasking())
     {
-        // Restore stencil as it was before
+        GraphicPipeline::GetActive()->GetGBuffer()->SaveStencilToImage(
+                    Path("/home/sephirot47/Bang/tmp/" + GetInstanceId() + "_B.png"));
+
+        // Restore stencil as it was before, decrementing marked mask pixels
+        GL::SetColorMask(false, false, false, false);
+        GL::SetStencilTest(false);
+        GL::SetStencilWrite(true);
+        GL::SetStencilOp(GL_DECR);
+
+        UIGameObject::OnRender(renderPass);
+
+        GraphicPipeline::GetActive()->GetGBuffer()->SaveStencilToImage(
+                    Path("/home/sephirot47/Bang/tmp/" + GetInstanceId() + "_C.png"));
+
+        GL::SetColorMask(m_maskRBefore, m_maskGBefore,
+                         m_maskBBefore, m_maskABefore);
         GL::SetStencilValue( GL::GetStencilValue() - 1 );
+        GL::SetStencilOp(m_stencilOpBefore);
+        GL::SetStencilWrite(m_stencilWriteBefore);
         GL::SetStencilTest(m_stencilTestBefore);
     }
 }
