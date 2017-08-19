@@ -13,7 +13,7 @@ public:
     }
     virtual void Update() { OnUpdate(); }
     virtual void ParentSizeChanged() { OnParentSizeChanged(); }
-    virtual void Render(RenderPass renderPass) { OnRender(renderPass); }
+    virtual void Render(RenderPass renderPass, bool propagate) { OnRender(renderPass); }
     virtual void RenderGizmos() { OnRenderGizmos(); }
     virtual void Destroy() { OnDestroy(); }
 
@@ -65,10 +65,13 @@ public:
         PROPAGATE_EVENT(Update(), GetChildren());
     }
 
-    virtual void Render(RenderPass renderPass) override
+    virtual void Render(RenderPass renderPass, bool renderChildren) override
     {
-        SceneAgent::Render(renderPass);
-        PROPAGATE_EVENT(Render(renderPass), GetChildren());
+        SceneAgent::Render(renderPass, renderChildren);
+        if (renderChildren)
+        {
+            PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
+        }
     }
 
     virtual void ParentSizeChanged() override

@@ -122,9 +122,6 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     scene->Render(RenderPass::Canvas_PostProcess);
     GL::SetDepthTest(true);
 
-    static int x = 0;
-    if (++x == 2) exit(0);
-
     // GBuffer Gizmos rendering
     GL::SetDepthWrite(true);
     GL::SetDepthTest(true);

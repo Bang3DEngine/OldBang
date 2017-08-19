@@ -41,12 +41,12 @@ protected:
     virtual ~Component();
 
     // SceneAgent
-    virtual void Start();
-    virtual void Update();
-    virtual void Render(RenderPass renderPass);
-    virtual void ParentSizeChanged();
-    virtual void RenderGizmos();
-    virtual void Destroy();
+    virtual void Start() override;
+    virtual void Update() override;
+    virtual void Render(RenderPass renderPass, bool propagate) override;
+    virtual void ParentSizeChanged() override;
+    virtual void RenderGizmos() override;
+    virtual void Destroy() override;
 
 private:
     List<Component*> m_delegates;

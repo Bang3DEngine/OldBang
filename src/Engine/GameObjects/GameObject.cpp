@@ -236,14 +236,14 @@ void GameObject::ParentSizeChanged()
     SceneNode<GameObject>::ParentSizeChanged();
 }
 
-void GameObject::Render(RenderPass renderPass)
+void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
     m_iteratingComponents = true;
-    PROPAGATE_EVENT(Render(renderPass), m_components);
+    PROPAGATE_EVENT(Render(renderPass, renderChildren), m_components);
     m_iteratingComponents = false;
     RemoveQueuedComponents();
 
-    SceneNode<GameObject>::Render(renderPass);
+    SceneNode<GameObject>::Render(renderPass, renderChildren);
 }
 
 void GameObject::RenderGizmos()

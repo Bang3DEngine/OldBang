@@ -10,7 +10,7 @@ public:
     GUIMask();
     virtual ~GUIMask();
 
-    virtual void Render(RenderPass renderPass) override;
+    virtual void Render(RenderPass renderPass, bool renderChildren) override;
     virtual void OnRender(RenderPass renderPass) override;
 
     void SetMasking(bool maskEnabled);
@@ -22,6 +22,7 @@ public:
 private:
     bool m_masking = true;
     bool m_drawMask = false;
+    bool m_restoringStencil = false;
 
     GLenum m_stencilOpBefore;
     bool m_maskRBefore = true, m_maskGBefore = true,
