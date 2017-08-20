@@ -7,6 +7,7 @@
 #include "Bang/GUILabel.h"
 #include "Bang/GUIScrollArea.h"
 #include "Bang/RectTransform.h"
+#include "Bang/GUITextCursor.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/SingleLineRenderer.h"
@@ -32,6 +33,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
 
     m_boxScrollArea = new GUIScrollArea();
     m_boxScrollArea->SetName("GUIInputText_BoxMask");
+    m_boxScrollArea->SetMasking(true);
     m_boxScrollArea->AddChild(m_label);
     m_boxScrollArea->SetParent(this);
 
@@ -39,17 +41,12 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
     GetText()->SetVerticalAlign(VerticalAlignment::Center);
     GetText()->SetWrapping(false);
 
-    m_cursorRenderer = m_label->AddComponent<SingleLineRenderer>();
-    m_cursorRenderer->UseMaterialCopy();
-    m_cursorRenderer->SetEnabled(false);
-    m_cursorRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
-    m_cursorRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    m_cursorRenderer->SetRenderPass(RenderPass::Canvas);
+    m_cursor = new GUITextCursor();
+    m_cursor->SetParent(m_label);
 
     m_cursorIndex = GetText()->GetContent().Size();
 
     ResetSelection();
-    SetCursorWidth(2.0f);
     GetBackground()->SetTint(Color::White);
     SetDefaultFocusAction(FocusAction::TakeIt);
     GetText()->RefreshMesh();
@@ -71,10 +68,7 @@ void GUIInputText::OnUpdate()
         HandleCursorIndices(wasSelecting);
         UpdateCursorRenderersAndScrolling();
     }
-    else
-    {
-        m_cursorRenderer->SetEnabled(false);
-    }
+    m_cursor->SetEnabled( HasFocus() );
 }
 
 void GUIInputText::UpdateCursorRenderersAndScrolling()
@@ -86,19 +80,19 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
 
     // Cursor "I" position update and Selection quad rendering
     {
-        float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
         {
-            Rect contentGlobalNDCRect = GetText()->GetContentGlobalNDCRect();
-            Vector2 minPoint(cursorX, contentGlobalNDCRect.GetMin().y);
-            Vector2 maxPoint(cursorX, contentGlobalNDCRect.GetMax().y);
-            minPoint = m_label->rectTransform->FromGlobalNDCToLocalNDC(minPoint);
-            maxPoint = m_label->rectTransform->FromGlobalNDCToLocalNDC(maxPoint);
-            m_cursorRenderer->SetOrigin(  Vector3(minPoint, 0) );
-            m_cursorRenderer->SetDestiny( Vector3(maxPoint, 0) );
+            float cursorX = GetCursorXLocalNDC(m_cursorIndex);
+            Vector2 minPoint(cursorX, -1);
+            Vector2 maxPoint(cursorX,  1);
+            const Vector2 cursorSize =
+              m_label->rectTransform->FromPixelsAmountToLocalNDC(Vector2i(3,0));
+            m_cursor->rectTransform->SetAnchors(minPoint - cursorSize,
+                                                maxPoint + cursorSize);
         }
 
         // Selection quad
         {
+            float cursorX    = GetCursorXGlobalNDC(m_cursorIndex);
             float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
             Vector2 p1(cursorX,    limits.GetMin().y);
             Vector2 p2(selectionX, limits.GetMax().y);
@@ -147,10 +141,6 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
             m_boxScrollArea->SetScrolling(prevScrolling + scrollPx);
         }
     }
-
-    m_cursorTime += Time::deltaTime;
-    m_cursorRenderer->SetEnabled( m_cursorTime <= m_cursorTickTime);
-    if (m_cursorTime >= m_cursorTickTime * 2) { m_cursorTime = 0.0f; }
 }
 
 void GUIInputText::HandleTyping()
@@ -335,32 +325,21 @@ void GUIInputText::SetSelection(int selectionBeginIndex,
     UpdateCursorRenderersAndScrolling();
 }
 
+int GUIInputText::GetSelectionBeginIndex() const
+{
+    return Math::Min(m_cursorIndex, m_selectionIndex);
+}
+
+int GUIInputText::GetSelectionEndIndex() const
+{
+    return Math::Max(m_cursorIndex, m_selectionIndex);
+}
+
 String GUIInputText::GetSelectedText() const
 {
     if (m_cursorIndex == m_selectionIndex) { return ""; }
-    int minIndex = Math::Min(m_cursorIndex, m_selectionIndex);
-    int maxIndex = Math::Max(m_cursorIndex, m_selectionIndex);
-    return GetText()->GetContent().SubString(minIndex, maxIndex);
-}
-
-void GUIInputText::SetCursorWidth(float cursorWidth)
-{
-    m_cursorRenderer->SetLineWidth(cursorWidth);
-}
-
-float GUIInputText::GetCursorWidth() const
-{
-    return m_cursorRenderer->GetLineWidth();
-}
-
-void GUIInputText::SetCursorTickTime(float cursorTickTime)
-{
-    m_cursorTickTime = cursorTickTime;
-}
-
-float GUIInputText::GetCursorTickTime() const
-{
-    return m_cursorTickTime;
+    return GetText()->GetContent().SubString(GetSelectionBeginIndex(),
+                                             GetSelectionEndIndex());
 }
 
 void GUIInputText::ResetSelection()
@@ -371,6 +350,11 @@ void GUIInputText::ResetSelection()
 void GUIInputText::SelectAll()
 {
     SetSelection(0, GetText()->GetContent().Size());
+}
+
+GUITextCursor *GUIInputText::GetCursor() const
+{
+    return m_cursor;
 }
 
 UITextRenderer *GUIInputText::GetText() const

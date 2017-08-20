@@ -4,6 +4,7 @@
 #include "Bang/UIGameObject.h"
 
 FORWARD class GUILabel;
+FORWARD class GUITextCursor;
 FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
@@ -20,18 +21,15 @@ public:
     void SetCursorPosition(int index);
     void SetSelection(int selectionBeginIndex,
                       int selectionEndIndex);
+
+    int GetSelectionBeginIndex() const;
+    int GetSelectionEndIndex() const;
     String GetSelectedText() const;
-
-    void SetCursorWidth(float cursorWidth);
-    void SetCursorTickTime(float cursorTickTime);
-
-    bool GetMasking() const;
-    float GetCursorWidth() const;
-    float GetCursorTickTime() const;
 
     void ResetSelection();
     void SelectAll();
 
+    GUITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
     UIImageRenderer *GetBackground() const;
 
@@ -41,8 +39,8 @@ private:
     UIImageRenderer *p_background = nullptr;
 
     GUILabel *m_label = nullptr;
+    GUITextCursor *m_cursor = nullptr;
     GUIScrollArea *m_boxScrollArea = nullptr;
-    SingleLineRenderer *m_cursorRenderer = nullptr;
 
     UIGameObject *p_selectionQuad = nullptr;
 
@@ -50,9 +48,6 @@ private:
     bool m_selectingWithMouse = false;
     int m_latestCursorX = 1;
     int m_selectionIndex = 0;
-
-    float m_cursorTickTime = 0.25f;
-    float m_cursorTime = 0.0f;
 
     bool m_forceUpdateRenderers = false;
 

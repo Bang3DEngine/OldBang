@@ -28,6 +28,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIMask.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.cpp \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUITextCursor.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIDirLayout.cpp \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIHorizontalLayout.cpp \
@@ -144,6 +145,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUILabel.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIMask.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIImage.h \
+    $$BANG_ROOT/src/Engine/UIGameObjects/GUITextCursor.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIInputText.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIDirLayout.h \
     $$BANG_ROOT/src/Engine/UIGameObjects/GUIHorizontalLayout.h \
