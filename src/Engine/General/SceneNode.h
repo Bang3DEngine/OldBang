@@ -126,8 +126,9 @@ public:
         return parent == _parent;
     }
 
-    void SetParent(SceneNode<T> *newParent, int _index = -1)
+    void SetParent(T *newParent, int _index = -1)
     {
+        ASSERT( !newParent->IsChildOf( SCAST<const T*>(this) ) );
         if (parent) { parent->m_children.Remove( SCAST<T*>(this) ); }
 
         p_parent = SCAST<T*>(newParent);

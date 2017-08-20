@@ -29,12 +29,10 @@ public:
     float GetCursorWidth() const;
     float GetCursorTickTime() const;
 
-    void Refresh();
     void ResetSelection();
     void SelectAll();
 
     UITextRenderer *GetText() const;
-    UIGameObject *GetTextContainer() const;
     UIImageRenderer *GetBackground() const;
 
 private:
@@ -42,16 +40,14 @@ private:
 
     GUILabel *m_label = nullptr;
     GUIScrollArea *m_boxScrollArea = nullptr;
-    UIGameObject *m_textContainer = nullptr;
     SingleLineRenderer *m_cursorRenderer = nullptr;
 
-    UIGameObject *p_selectionGO = nullptr;
-    UIImageRenderer *p_selectionQuad = nullptr;
+    UIGameObject *p_selectionQuad = nullptr;
 
     int m_cursorIndex = 0;
     bool m_selectingWithMouse = false;
     int m_latestCursorX = 1;
-    int m_selectionCursorIndex = 0;
+    int m_selectionIndex = 0;
 
     float m_cursorTickTime = 0.25f;
     float m_cursorTime = 0.0f;
