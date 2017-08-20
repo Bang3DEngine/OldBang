@@ -25,6 +25,7 @@ LIBS += \
     -lGLU             \
     -lGL              \
     -lpng             \
+    -ljpeg            \
     -ldl              \ # To load libraries and stuff
     -lalut -lopenal   \ # Alut and OpenAL
     -lassimp          \

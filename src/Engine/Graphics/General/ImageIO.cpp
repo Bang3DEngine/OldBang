@@ -4,13 +4,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <setjmp.h>
+#include <jpeglib.h>
+
+#include "Bang/List.h"
 #include "Bang/Debug.h"
 
 void ImageIO::Write(const Path &filepath, const G_Image &img)
 {
-    if (filepath.GetExtension().EqualsNoCase("png"))
+    if (filepath.HasExtension("png"))
     {
         ImageIO::WritePNG(filepath, img);
+    }
+    else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
+    {
+        ImageIO::WriteJPG(filepath, img, 10);
     }
     else
     {
@@ -22,9 +30,13 @@ void ImageIO::Read(const Path &filepath, G_Image *img, bool *_ok)
 {
     bool ok = false;
 
-    if (filepath.GetExtension().EqualsNoCase("png"))
+    if (filepath.HasExtension("png"))
     {
         ImageIO::ReadPNG(filepath, img, &ok);
+    }
+    else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
+    {
+        ImageIO::ReadJPG(filepath, img, &ok);
     }
     else
     {
@@ -37,15 +49,19 @@ void ImageIO::Read(const Path &filepath, G_Image *img, bool *_ok)
 void ImageIO::WritePNG(const Path &filepath, const G_Image &img)
 {
     FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "wb");
-    ENSURE(fp);
+    if (!fp) { return; }
 
     png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING,
                                               NULL, NULL, NULL);
-    ENSURE(png);
+    if (!png) { fclose(fp); return; }
 
     png_infop info = png_create_info_struct(png);
-    ENSURE(info);
-    ENSURE ( !setjmp(png_jmpbuf(png)) );
+    if (!info) { png_destroy_read_struct(&png, NULL, NULL); fclose(fp); return; }
+
+    if ( setjmp(png_jmpbuf(png)) )
+    {
+        png_destroy_read_struct(&png, &info, NULL); fclose(fp); return;
+    }
 
     png_init_io(png, fp);
 
@@ -67,7 +83,7 @@ void ImageIO::WritePNG(const Path &filepath, const G_Image &img)
     for (int y = 0; y < img.GetHeight(); y++)
     {
         rowPointers[y] =
-                new png_byte[ png_get_rowbytes(png, info) / sizeof(png_byte)];
+            new png_byte[ png_get_rowbytes(png, info) / sizeof(png_byte)];
         for (int x = 0; x < img.GetWidth(); ++x)
         {
             rowPointers[y][x * 4 + 0] = SCAST<Byte>(img.GetPixel(x, y).r * 255);
@@ -94,16 +110,20 @@ void ImageIO::ReadPNG(const Path &filepath, G_Image *img, bool *ok)
     *ok = false;
 
     FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "rb");
-    ENSURE(fp);
+    if (!fp) { return; }
 
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING,
                                              NULL, NULL, NULL);
-    ENSURE(png);
+    if (!png) { fclose(fp); return; }
 
     png_infop info = png_create_info_struct(png);
-    ENSURE(info);
+    if (!info) { png_destroy_read_struct(&png, NULL, NULL); fclose(fp); return; }
 
-    ENSURE( !setjmp( png_jmpbuf(png) ) );
+    if ( setjmp(png_jmpbuf(png)) )
+    {
+        png_destroy_read_struct(&png, &info, NULL); fclose(fp); return;
+    }
+
 
     png_init_io(png, fp);
     png_read_info(png, info);
@@ -144,7 +164,7 @@ void ImageIO::ReadPNG(const Path &filepath, G_Image *img, bool *ok)
     for (int y = 0; y < height; y++)
     {
         rowPointers[y] =
-                new png_byte[ png_get_rowbytes(png, info) / sizeof(png_byte)];
+            new png_byte[ png_get_rowbytes(png, info) / sizeof(png_byte)];
     }
     png_read_image(png, rowPointers);
 
@@ -170,3 +190,95 @@ void ImageIO::ReadPNG(const Path &filepath, G_Image *img, bool *ok)
 
     *ok = true;
 }
+
+void ImageIO::WriteJPG(const Path &filepath, const G_Image &img, int quality)
+{
+    struct jpeg_error_mgr jerr;
+    struct jpeg_compress_struct cinfo;
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_compress(&cinfo);
+
+    FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "wb");
+    if (!fp) { return; }
+
+    jpeg_stdio_dest(&cinfo, fp);
+
+    cinfo.image_width = img.GetWidth();
+    cinfo.image_height = img.GetHeight();
+    cinfo.input_components = 4;
+    cinfo.in_color_space = JCS_EXT_RGBA;
+
+    jpeg_set_defaults(&cinfo);
+    jpeg_set_quality(&cinfo, quality, TRUE);
+    jpeg_start_compress(&cinfo, TRUE);
+
+    const int rowStride = img.GetWidth() * 4;
+    while (cinfo.next_scanline < img.GetHeight())
+    {
+        const Byte *rowPointer = &(img.GetData()[cinfo.next_scanline *
+                                                 rowStride]);
+        Byte *_rowPointer = const_cast<Byte*>(rowPointer);
+        jpeg_write_scanlines(&cinfo, &_rowPointer, 1);
+    }
+
+    jpeg_finish_compress(&cinfo);
+    fclose(fp);
+    jpeg_destroy_compress(&cinfo);
+}
+
+void ImageIO::ReadJPG(const Path &filepath, G_Image *img, bool *ok)
+{
+    *ok = false;
+
+    FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "rb");
+    if (!fp) { return; }
+
+    jmp_buf setjmp_buffer;
+    struct jpeg_error_mgr jerr;
+    struct jpeg_decompress_struct cinfo;
+    cinfo.err = jpeg_std_error(&jerr);
+    if ( setjmp(setjmp_buffer) )
+    {
+        jpeg_destroy_decompress(&cinfo);
+        fclose(fp);
+        return;
+    }
+    jpeg_create_decompress(&cinfo);
+
+    jpeg_stdio_src(&cinfo, fp);
+
+    jpeg_read_header(&cinfo, TRUE);
+
+    jpeg_start_decompress(&cinfo);
+    const int numComponents = cinfo.output_components;
+    const int rowStride = cinfo.output_width * numComponents;
+    JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
+                        ((j_common_ptr) &cinfo, JPOOL_IMAGE, rowStride, 1);
+
+    img->Create(cinfo.output_width, cinfo.output_height);
+    while (cinfo.output_scanline < img->GetHeight())
+    {
+        const int y = cinfo.output_scanline;
+        jpeg_read_scanlines(&cinfo, buffer, 1);
+        for (int x = 0; x < img->GetWidth(); ++x)
+        {
+            float a = numComponents == 4 ?
+                                buffer[0][x * numComponents + 3] / 255.0f :
+                                1.0f;
+            Color c(buffer[0][x * numComponents + 0] / 255.0f,
+                    buffer[0][x * numComponents + 1] / 255.0f,
+                    buffer[0][x * numComponents + 2] / 255.0f,
+                    a);
+            img->SetPixel(x, y, c);
+        }
+    }
+
+    jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
+    fclose(fp);
+
+    *ok = true;
+}
+
+
+

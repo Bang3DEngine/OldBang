@@ -16,6 +16,7 @@ public:
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
+    Byte* GetData();
     const Byte* GetData() const;
     Color GetPixel(int x, int y) const;
     int GetWidth() const;

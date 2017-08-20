@@ -46,10 +46,8 @@ void G_Image::SetPixel(int x, int y, const Color& color)
     m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
 }
 
-const Byte *G_Image::GetData() const
-{
-    return &m_pixels[0];
-}
+Byte *G_Image::GetData() { return &m_pixels[0]; }
+const Byte *G_Image::GetData() const { return &m_pixels[0]; }
 
 Color G_Image::GetPixel(int x, int y) const
 {

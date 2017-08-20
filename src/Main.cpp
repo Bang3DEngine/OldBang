@@ -160,7 +160,7 @@ int main(int argc, char **argv)
     buttonPlay->SetParent(buttonPlayMask);
 
     G_Image image = G_Image::LoadFromFile(Path("/home/sephirot47/BangUITest/test.png"));
-    image.SaveToFile( Path("/home/sephirot47/Bang/tmp/lol.png") );
+    image.SaveToFile( Path("/home/sephirot47/Bang/tmp/lol.jpg") );
 
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
