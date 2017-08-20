@@ -93,6 +93,7 @@ int main(int argc, char **argv)
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
                                         "detras del palenque de paja");
+    rightLabel->GetMask()->SetMasking(false);
 
     GUIScrollArea *rightScrollArea = new GUIScrollArea();
     rightScrollArea->SetName("ScrollArea");

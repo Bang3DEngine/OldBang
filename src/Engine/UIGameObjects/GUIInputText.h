@@ -36,6 +36,8 @@ public:
     UIImageRenderer *GetBackground() const;
 
 private:
+    static const Vector2i LookAheadOffsetPx;
+
     UIImageRenderer *p_background = nullptr;
 
     GUILabel *m_label = nullptr;
@@ -59,7 +61,7 @@ private:
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
 
-    float GetCursorXGlobalNDC(int cursorIndex, bool clamped) const;
+    float GetCursorXGlobalNDC(int cursorIndex) const;
     // Returns the X in global NDC, for a given cursor index
 
     float GetCursorXLocalNDC(int cursorIndex) const;
