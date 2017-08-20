@@ -21,6 +21,7 @@ GUIInputText::GUIInputText() : UIGameObject("GUIInputText")
 
     m_label = new GUILabel();
     m_label->GetMask()->SetMasking(false);
+    m_label->rectTransform->SetMargins(5, 2, 5, 2);
 
     p_selectionQuad = new UIGameObject("GUIInputText_SelectionQuad");
     UIImageRenderer *selectionImg =
@@ -78,8 +79,7 @@ void GUIInputText::OnUpdate()
 
 void GUIInputText::UpdateCursorRenderersAndScrolling()
 {
-    RectTransform *rt = rectTransform;
-    Rect limits = rt->GetScreenSpaceRectNDC();
+    Rect limits = rectTransform->GetScreenSpaceRectNDC();
 
     Vector2i prevScrolling = m_boxScrollArea->GetScrolling();
     m_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
@@ -91,8 +91,8 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
             Rect contentGlobalNDCRect = GetText()->GetContentGlobalNDCRect();
             Vector2 minPoint(cursorX, contentGlobalNDCRect.GetMin().y);
             Vector2 maxPoint(cursorX, contentGlobalNDCRect.GetMax().y);
-            minPoint = rt->FromGlobalNDCToLocalNDC(minPoint);
-            maxPoint = rt->FromGlobalNDCToLocalNDC(maxPoint);
+            minPoint = m_label->rectTransform->FromGlobalNDCToLocalNDC(minPoint);
+            maxPoint = m_label->rectTransform->FromGlobalNDCToLocalNDC(maxPoint);
             m_cursorRenderer->SetOrigin(  Vector3(minPoint, 0) );
             m_cursorRenderer->SetDestiny( Vector3(maxPoint, 0) );
         }
@@ -102,8 +102,8 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
             float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
             Vector2 p1(cursorX,    limits.GetMin().y);
             Vector2 p2(selectionX, limits.GetMax().y);
-            p1 = rt->FromGlobalNDCToLocalNDC(p1);
-            p2 = rt->FromGlobalNDCToLocalNDC(p2);
+            p1 = m_label->rectTransform->FromGlobalNDCToLocalNDC(p1);
+            p2 = m_label->rectTransform->FromGlobalNDCToLocalNDC(p2);
 
             p_selectionQuad->rectTransform->SetAnchorMin( Vector2::Min(p1, p2) );
             p_selectionQuad->rectTransform->SetAnchorMax( Vector2::Max(p1, p2) );
@@ -113,8 +113,10 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
     // Text Scrolling
     {
         Vector2 scrollNDC = Vector2::Zero;
+        Rect labelLimits = m_label->rectTransform->GetScreenSpaceRectNDC();
         Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
-        if (contentRectNDC.GetWidth() < limits.GetWidth() || m_cursorIndex == 0)
+        if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
+            m_cursorIndex == 0)
         {
             m_boxScrollArea->SetScrolling( Vector2i::Zero );
         }
@@ -124,20 +126,21 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
             float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
             float lookAheadNDC =
                 RectTransform::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
-            if (cursorX < limits.GetMin().x)
+            if (cursorX < labelLimits.GetMin().x)
             {
-                scrollNDC.x = limits.GetMin().x - cursorX + lookAheadNDC;
+                scrollNDC.x = labelLimits.GetMin().x - cursorX + lookAheadNDC;
             }
-            else if (cursorX > limits.GetMax().x)
+            else if (cursorX > labelLimits.GetMax().x)
             {
-                scrollNDC.x = limits.GetMax().x - cursorX - lookAheadNDC;
+                scrollNDC.x = labelLimits.GetMax().x - cursorX - lookAheadNDC;
             }
             else
             {
-                if (contentRectNDC.GetMin().x < limits.GetMin().x &&
-                    contentRectNDC.GetMax().x < limits.GetMax().x)
+                if (contentRectNDC.GetMin().x < labelLimits.GetMin().x &&
+                    contentRectNDC.GetMax().x < labelLimits.GetMax().x)
                 {
-                    scrollNDC.x = limits.GetMax().x - contentRectNDC.GetMax().x;
+                    scrollNDC.x = labelLimits.GetMax().x -
+                                  contentRectNDC.GetMax().x;
                 }
             }
             Vector2i scrollPx = RectTransform::FromGlobalNDCToPixelsAmount(scrollNDC);
