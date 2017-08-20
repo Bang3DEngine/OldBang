@@ -277,7 +277,7 @@ void GUIInputText::HandleMouseSelection()
     // Find the closest visible char bounds to the mouse position
     if (Input::GetMouseButton(Input::MouseButton::Left))
     {
-        float minDist = 2.0f;
+        float minDist = Math::Infinity<float>();
         int closestCharRectIndex = 0;
         float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
         mouseCoordsX_NDC = m_label->rectTransform->FromGlobalNDCToLocalNDC(
@@ -301,7 +301,6 @@ void GUIInputText::HandleMouseSelection()
                 closestCharRectIndex = i + 1;
             }
         }
-
         m_cursorIndex = closestCharRectIndex;
 
         // Move the selection index accordingly
