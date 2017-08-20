@@ -1,6 +1,5 @@
 #include "Paths.h"
 
-#include <QDir>
 #include <limits.h>
 #include <unistd.h>
 
@@ -17,11 +16,6 @@ Paths::Paths()
   c_engineRoot = Path(strPath).GetDirectory()
                               .GetDirectory()
                               .GetDirectory();
-}
-
-Path Paths::Home()
-{
-    return Path(QDir::homePath());
 }
 
 const Path &Paths::Engine()

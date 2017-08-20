@@ -1,11 +1,12 @@
 #include "Bang/File.h"
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 
-#include <QDir>
-#include <QFile>
-#include <QCryptographicHash>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "Bang/List.h"
 #include "Bang/Array.h"
@@ -34,26 +35,34 @@ bool File::DuplicateFile(const Path &fromFilepath,
                          bool overwrite)
 {
     if (!fromFilepath.IsFile()) { return false; }
+    if (!overwrite && toFilepath.Exists()) { return false; }
+
+    std::ifstream src(fromFilepath.GetAbsolute().ToCString(), std::ios::binary);
+    if (!src) { return false; }
+
     if (overwrite) { File::Remove(toFilepath); }
-    bool ok = QFile::copy(fromFilepath.GetAbsolute().ToQString(),
-                          toFilepath.GetAbsolute().ToQString());
-    return ok;
+    std::ofstream dst(toFilepath.GetAbsolute().ToCString(),   std::ios::binary);
+    if (!dst) { return false; }
+
+    dst << src.rdbuf();
+    return true;
 }
 
 bool File::DuplicateDir(const Path &fromDirpath,
-                            const Path &toDirpath,
-                            bool overwrite)
+                        const Path &toDirpath,
+                        bool overwrite)
 {
     if (!fromDirpath.IsDir()) { return false; }
+    if (!overwrite && toDirpath.Exists()) { return false; }
+    if (!File::CreateDirectory(toDirpath)) { return false; }
 
-    if (!File::CreateDirectory( Path(toDirpath) )) { return false; }
     List<Path> filepaths = fromDirpath.FindFiles(false);
     for(const Path& filepath : filepaths)
     {
         String fileName = filepath.GetNameExt();
         bool ok = File::DuplicateFile(fromDirpath.Append(fileName),
-                                          toDirpath.Append(fileName),
-                                          overwrite);
+                                      toDirpath.Append(fileName),
+                                      overwrite);
         if (!ok) { return false; }
     }
 
@@ -61,8 +70,8 @@ bool File::DuplicateDir(const Path &fromDirpath,
     for (const Path &subdir : subdirs)
     {
         bool ok = File::DuplicateDir(subdir,
-                                   toDirpath.Append(subdir.GetName()),
-                                   overwrite);
+                                     toDirpath.Append(subdir.GetName()),
+                                     overwrite);
         if (!ok) { return false; }
     }
     return true;
@@ -73,8 +82,7 @@ bool File::Remove(const Path &path)
     if (!path.Exists()) { return false; }
     if (path.IsFile())
     {
-        QFile f(path.GetAbsolute().ToQString());
-        return f.remove();
+        return std::remove(path.GetAbsolute().ToCString()) == 0;
     }
     else
     {
@@ -82,28 +90,21 @@ bool File::Remove(const Path &path)
         for (const Path &subDir : subDirs) { File::Remove(subDir); }
         List<Path> subFiles = path.FindFiles(false);
         for (const Path &subFile : subFiles) { File::Remove(subFile); }
-        QDir().rmdir(path.GetAbsolute().ToQString());
+        return std::remove(path.GetAbsolute().ToCString()) == 0;
     }
-    return false;
 }
 
 bool File::CreateDirectory(const Path &dirPath)
 {
-    if (dirPath.IsEmpty()) { return false; }
-    if (dirPath.IsDir()) { return true; }
-    return QDir().mkdir(dirPath.GetAbsolute().ToQString());
+    if (dirPath.Exists()) { return true; }
+    return mkdir(dirPath.GetAbsolute().ToCString(), 0700) == 0;
 }
 
-bool File::Move(const Path &oldPath, const Path &newPath)
+bool File::Rename(const Path &oldPath, const Path &newPath)
 {
     if (!oldPath.Exists()) { return false; }
-    if (oldPath.IsDir())
-    {
-        return QDir().rename(oldPath.GetAbsolute().ToQString(),
-                             newPath.GetAbsolute().ToQString());
-    }
-    return QFile().rename(oldPath.GetAbsolute().ToQString(),
-                          newPath.GetAbsolute().ToQString());
+    return rename(oldPath.GetAbsolute().ToCString(),
+                  newPath.GetAbsolute().ToCString());
 }
 
 bool File::Duplicate(const Path &fromPath, const Path &toPath)
@@ -157,32 +158,6 @@ String File::GetContents(const Path &filepath)
                      std::strerror(errno) << std::endl;
     }
     return contents;
-}
-
-String File::GetHash(const Path &filepath)
-{
-    if (!filepath.IsFile()) { return ""; }
-
-    String result = "";
-    QFile file(filepath.GetAbsolute().ToQString());
-    if(file.open(QIODevice::ReadOnly))
-    {
-        result = File::GetHashFromByteArray(file.readAll());
-        file.close();
-    }
-    return result;
-}
-
-String File::GetHashFromString(const String &str)
-{
-    return File::GetHashFromByteArray( str.ToQString().toUtf8() );
-}
-
-String File::GetHashFromByteArray(const QByteArray &byteArray)
-{
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    QByteArray hashBytes = hash.hash(byteArray, QCryptographicHash::Sha1);
-    return String( QString(hashBytes.toHex()) );
 }
 
 String File::GetContents() const

@@ -1,8 +1,10 @@
 #include "Path.h"
 
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
+#include <cstdio>
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "Bang/List.h"
 #include "Bang/Array.h"
@@ -40,22 +42,19 @@ void Path::SetPath(const String &path)
 
 bool Path::IsDir() const
 {
-    return QFileInfo(GetAbsolute().ToQString()).isDir();
+    return !IsFile();
 }
 
 bool Path::IsFile() const
 {
-    return QFileInfo(GetAbsolute().ToQString()).isFile();
+    struct stat path_stat;
+    stat(GetAbsolute().ToCString(), &path_stat);
+    return S_ISREG(path_stat.st_mode);
 }
 
 bool Path::Exists() const
 {
-    return IsDir() || IsFile();
-}
-
-List<Path> Path::FindFiles() const
-{
-    return FindFiles(false, {});
+    return access(GetAbsolute().ToCString(), F_OK) != -1;
 }
 
 List<Path> Path::FindFiles(bool recursively) const
@@ -67,62 +66,84 @@ List<Path> Path::FindFiles(bool recursive, const List<String> &extensions) const
 {
     if (!IsDir()) { return {}; }
 
-    QStringList extensionList;
-    for (String ext : extensions)
+    if (!recursive)
     {
-        if (!ext.BeginsWith("*.")) { ext.Prepend("*."); }
-        extensionList.append(ext.ToQString());
-    }
-
-    List<Path> subdirs;
-    if (recursive)
-    {
-        List<Path> subdirsRecursive = FindSubDirectories(recursive);
-        subdirs.Splice(subdirs.Begin(), subdirsRecursive);
-    }
-    subdirs.PushFront(*this);
-
-    List<Path> filesList;
-    for (const Path &subdir : subdirs)
-    {
-        QStringList filepathList = QDir(subdir.GetAbsolute().ToQString())
-                                   .entryList(extensionList);
-        for (const QString &qFilepath : filepathList)
+        List<Path> subFilesList;
+        List<Path> subPathsList = FindSubPaths();
+        for (const Path &subPath : subPathsList)
         {
-            if (qFilepath == "." || qFilepath == "..") { continue; }
-
-            Path filepath = Path(subdir).Append( String(qFilepath) );
-            if (!filepath.IsFile()) { continue; }
-
-            filesList.PushBack(filepath);
+            if ( subPath.IsFile() &&
+                (extensions.IsEmpty() || subPath.HasExtension(extensions)) )
+            {
+                subFilesList.PushBack(subPath);
+            }
         }
+        return subFilesList;
     }
-    return filesList;
+    else
+    {
+        List<Path> filesList;
+        filesList.PushBack( FindFiles(false, extensions) );
+
+        List<Path> subDirs = FindSubDirectories(true);
+        for (const Path &subdir : subDirs)
+        {
+            List<Path> subFilesList = subdir.FindFiles(true, extensions);
+            filesList.PushBack(subFilesList);
+        }
+        return filesList;
+    }
 }
 
 List<Path> Path::FindSubDirectories(bool recursive) const
 {
     if (!IsDir()) { return {}; }
 
-    List<Path> subdirsList;
-    QStringList subdirs =  QDir(GetAbsolute().ToQString()).entryList();
-    for (QString qSubdir : subdirs)
+    if (!recursive)
     {
-        if (qSubdir == "." || qSubdir == "..") { continue; }
-
-        Path subdirPath = this->Append( String(qSubdir) );
-        if (subdirPath.IsDir())
+        List<Path> subDirsList;
+        List<Path> subPathsList = FindSubPaths();
+        for (const Path &subPath : subPathsList)
         {
-            subdirsList.PushBack(subdirPath);
+            if (subPath.IsDir()) { subDirsList.PushBack(subPath); }
+        }
+        return subDirsList;
+    }
+    else
+    {
+        List<Path> subdirsList = FindSubDirectories(false);
+        for (Path subdirPath : subdirsList)
+        {
             if (recursive)
             {
                 List<Path> subdirsListRecursive =
-                        subdirPath.FindSubDirectories(recursive);
+                        subdirPath.FindSubDirectories(true);
                 subdirsList.Splice(subdirsList.End(), subdirsListRecursive);
             }
         }
+        return subdirsList;
     }
-    return subdirsList;
+}
+
+List<Path> Path::FindSubPaths() const
+{
+    struct dirent *dir;
+    DIR *d = opendir(GetAbsolute().ToCString());
+    if (!d) { return {}; }
+
+    List<Path> subPathsList;
+    while ((dir = readdir(d)) != NULL)
+    {
+        String subName(dir->d_name);
+        if (subName != "." && subName != "..")
+        {
+            Path subPath = this->Append(subName);
+            subPathsList.PushBack(subPath);
+        }
+    }
+    closedir(d);
+
+    return subPathsList;
 }
 
 String Path::GetName() const

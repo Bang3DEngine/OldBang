@@ -51,7 +51,7 @@ void Project::SetProjectRootFilepath(const Path &projectDir)
 bool Project::OpenFirstFoundScene() const
 {
     List<Path> sceneFilepaths = GetProjectDirPath()
-            .FindFiles(true, {"*." + Extensions::Get<Scene>()});
+            .FindFiles(true, {Extensions::Get<Scene>()});
 
     bool foundSceneFile = !sceneFilepaths.IsEmpty();
     if (foundSceneFile)

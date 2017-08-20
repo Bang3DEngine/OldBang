@@ -30,6 +30,7 @@ int main(int argc, char **argv)
 */
 #include <iostream>
 
+#include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/GUIMask.h"

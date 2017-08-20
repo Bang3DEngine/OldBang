@@ -27,7 +27,17 @@ int main(int argc, char **argv)
 
     // Find and load Behaviours library
     Path libsDir = gameProjectFilepath.GetDirectory().Append("Libraries");
-    List<Path> behavioursLibs = libsDir.FindFiles(false, {"*.so.*"});
+    List<Path> behavioursLibs = libsDir.FindFiles(false);
+    for (auto it = behavioursLibs.Begin(); it != behavioursLibs.End(); )
+    {
+        const Path &behaviourLib = *it;
+        if (!behaviourLib.GetAbsolute().Contains(".so."))
+        {
+            it = behavioursLibs.Remove(it);
+        }
+        else { ++it; }
+    }
+
     if (behavioursLibs.IsEmpty())
     {
         Debug_Error("Behaviours library could not be found.");

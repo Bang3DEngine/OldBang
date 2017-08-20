@@ -18,7 +18,7 @@ public:
 
     static bool Remove(const Path &path);
     static bool CreateDirectory(const Path &dirPath);
-    static bool Move(const Path &oldPath, const Path &newPath);
+    static bool Rename(const Path &oldPath, const Path &newPath);
 
     static bool Duplicate(const Path &fromPath, const Path &toPath);
     static bool DuplicateFile(const Path &fromFilepath,
@@ -32,10 +32,6 @@ public:
     static void Write(const Path &filepath, const String &contents);
     static void Write(const Path &filepath, const Array<String> &lines);
     static void Write(const Path &filepath, const List<String> &lines);
-
-    static String GetHash(const Path &filepath);
-    static String GetHashFromString(const String &str);
-    static String GetHashFromByteArray(const QByteArray &byteArray);
 
 protected:
     Path m_path;

@@ -70,8 +70,14 @@ void BehaviourManager::LoadBehavioursLibrary(const Path &behavioursLibrary)
 void BehaviourManager::RemoveOldBehaviourLibraries(const Path &librariesDir)
 {
     // Remove old library filepaths
-    List<Path> libFilepaths = librariesDir.FindFiles(true, {"*.so.*"});
-    for (const Path &libFilepath : libFilepaths) { File::Remove(libFilepath); }
+    List<Path> libFilepaths = librariesDir.FindFiles(true);
+    for (const Path &libFilepath : libFilepaths)
+    {
+        if (libFilepath.GetAbsolute().Contains(".so."))
+        {
+            File::Remove(libFilepath);
+        }
+    }
 }
 
 Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)

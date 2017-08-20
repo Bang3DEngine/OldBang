@@ -4,8 +4,6 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
-FORWARD   class QFileInfo;
-
 class Path : public IToString
 {
 public:
@@ -18,11 +16,11 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> FindFiles() const;
-    List<Path> FindFiles(bool recursively) const;
+    List<Path> FindFiles(bool recursively = false) const;
     List<Path> FindFiles(bool recursively,
                          const List<String>& extensions) const;
     List<Path> FindSubDirectories(bool recursively = false) const;
+    List<Path> FindSubPaths() const;
 
     Path GetDirectory() const;
     String GetName() const;

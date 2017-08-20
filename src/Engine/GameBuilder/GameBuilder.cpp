@@ -54,17 +54,17 @@ void GameBuilder::BuildGame(const Project *project,
     Debug_Log("Moving the executable to '" <<outputExecutableFilepath  << "'...");
     const Path c_initialOutputDir = Paths::GameExecutableOutputFile(binaryType);
     File::Remove(outputExecutableFilepath);
-    File::Move(c_initialOutputDir, outputExecutableFilepath);
+    File::Rename(c_initialOutputDir, outputExecutableFilepath);
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
     List<Path> sceneFiles = Paths::ProjectAssets().FindFiles(
-                                true, {"*." + Extensions::Get<Scene>()});
+                                true, {Extensions::Get<Scene>()});
     if (sceneFiles.IsEmpty())
     {
-        Debug_Error("Please save at least one scene in the \
-                     Assets directory to build the game");
+        Debug_Error("Please save at least one scene in the "
+                     "Assets directory to build the game");
         return false;
     }
 
@@ -155,7 +155,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     //
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = libsDir.FindFiles(false, {"*.o"});
+    List<Path> behaviourObjectsPaths = libsDir.FindFiles(false, {"o"});
     Path outputLibPath =
                 libsDir.Append("Behaviours")
                        .AppendExtension("so")
