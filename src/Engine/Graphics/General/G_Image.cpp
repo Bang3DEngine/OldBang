@@ -1,8 +1,7 @@
 #include "G_Image.h"
 
-#include <QImage>
-
 #include "Bang/Debug.h"
+#include "Bang/ImageIO.h"
 
 G_Image::G_Image()
 {
@@ -86,22 +85,7 @@ void G_Image::InvertVertically()
 
 void G_Image::SaveToFile(const Path &filepath) const
 {
-    QImage qimg (GetWidth(), GetHeight(), QImage::Format::Format_ARGB32);
-    for (int i = 0; i < GetHeight(); ++i)
-    {
-        for (int j = 0; j < GetWidth(); ++j)
-        {
-            Color px = GetPixel(j, i);
-            qimg.setPixel(j, i, qRgba(SCAST<Byte>(px.r * 255),
-                                      SCAST<Byte>(px.g * 255),
-                                      SCAST<Byte>(px.b * 255),
-                                      SCAST<Byte>(px.a * 255)));
-        }
-    }
-
-    String ext = filepath.GetExtension();
-    if (ext.IsEmpty()) { ext = "png"; }
-    qimg.save(filepath.GetAbsolute().ToQString(), ext.ToCString());
+    ImageIO::Write(filepath, *this);
 }
 
 G_Image G_Image::LoadFromData(int width, int height,
@@ -115,30 +99,11 @@ G_Image G_Image::LoadFromData(int width, int height,
 
 G_Image G_Image::LoadFromFile(const Path &filepath)
 {
+    bool ok;
     G_Image img;
-    QImage qimg(filepath.GetAbsolute().ToQString());
-    if (!qimg.isNull())
-    {
-        img.Create(qimg.width(), qimg.height());
-        for (int y = 0; y < img.GetHeight(); ++y)
-        {
-            for (int x = 0; x < img.GetWidth(); ++x)
-            {
-                QRgb rgba = qimg.pixel(x, y);
-                const int r = qRed(rgba);
-                const int g = qGreen(rgba);
-                const int b = qBlue(rgba);
-                const int a = qAlpha(rgba);
+    ImageIO::Read(filepath, &img, &ok);
 
-                int coord = (y * img.GetWidth() + x) * 4;
-                img.m_pixels [coord + 0] = r;
-                img.m_pixels [coord + 1] = g;
-                img.m_pixels [coord + 2] = b;
-                img.m_pixels [coord + 3] = a;
-            }
-        }
-    }
-    else
+    if (!ok)
     {
         Debug_Error("Error loading the image '" << filepath <<
                      "', couldn't open/read the file.");

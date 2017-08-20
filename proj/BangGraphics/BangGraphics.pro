@@ -26,6 +26,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/General/GLContext.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/GL.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/GLObject.cpp \
+    $$BANG_ROOT/src/Engine/Graphics/General/ImageIO.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Image.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Texture2D.cpp
 
@@ -47,6 +48,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Texture2D.h \
     $$BANG_ROOT/src/Engine/Graphics/General/GLObject.h \
     $$BANG_ROOT/src/Engine/Graphics/General/G_TextureUnitManager.h \
+    $$BANG_ROOT/src/Engine/Graphics/General/ImageIO.h \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Image.h
 
 ######################################

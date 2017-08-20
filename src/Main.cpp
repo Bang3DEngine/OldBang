@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/G_Image.h"
 #include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
@@ -157,6 +158,9 @@ int main(int argc, char **argv)
              new Texture2D( Path("/home/sephirot47/BangUITest/test.png") ) );
     buttonPlay->rectTransform->SetMargins(10);
     buttonPlay->SetParent(buttonPlayMask);
+
+    G_Image image = G_Image::LoadFromFile(Path("/home/sephirot47/BangUITest/test.png"));
+    image.SaveToFile( Path("/home/sephirot47/Bang/tmp/lol.png") );
 
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
