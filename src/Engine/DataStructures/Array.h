@@ -27,6 +27,9 @@ public:
 
     void PushBack(const T& x);
 
+    template<class IteratorClass>
+    void PushBack(IteratorClass itBegin, IteratorClass itEnd);
+
     template <template <class OtherT> class Container, class OtherT>
     void PushBack(const Container<OtherT>& container);
 

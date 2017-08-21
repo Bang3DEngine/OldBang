@@ -1,6 +1,9 @@
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 
+#include <AL/al.h>
+#include <AL/alc.h>
+
 #include "Bang/Set.h"
 #include "Bang/Math.h"
 #include "Bang/List.h"
@@ -39,8 +42,13 @@ public:
     static AudioManager *GetInstance();
 
 private:
+    ALCdevice *m_alDevice = nullptr;
+    ALCcontext *m_alContext = nullptr;
+
     AudioManager();
     virtual ~AudioManager();
+
+    bool InitAL();
 
     ThreadPool m_threadPool;
     Mutex m_mutex_currentAudios;

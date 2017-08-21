@@ -1,32 +1,45 @@
 #include "Bang/AudioManager.h"
 
-#include <AL/al.h>
-#include <AL/alc.h>
-#include <AL/alut.h>
-
 #include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/Vector3.h"
+#include "Bang/Resources.h"
 #include "Bang/AudioClip.h"
 #include "Bang/GameObject.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ALAudioSource.h"
-#include "Bang/Resources.h"
 #include "Bang/AudioListener.h"
 #include "Bang/AudioPlayerRunnable.h"
 
 AudioManager::AudioManager()
 {
-    alutInit(0, NULL);
+    InitAL();
     m_threadPool.SetMaxThreadCount(256);
 }
 
 AudioManager::~AudioManager()
 {
     StopAllSounds();
-    alutExit();
+    alcDestroyContext(m_alContext);
+    alcCloseDevice(m_alDevice);
+}
+
+bool AudioManager::InitAL()
+{
+    m_alDevice = alcOpenDevice(NULL);
+    if(!m_alDevice) { Debug_Error("Could not start OpenAL Device");
+                      return false; }
+
+    m_alContext = alcCreateContext(m_alDevice, NULL);
+    if(!m_alContext) { Debug_Error("Could not start OpenAL Context");
+                       return false; }
+
+    alcMakeContextCurrent(m_alContext);
+    ClearALErrors();
+
+    return true;
 }
 
 void AudioManager::Play(AudioClip *audioClip,
@@ -127,7 +140,7 @@ bool AudioManager::CheckALError()
     if (hasError)
     {
         const char *errorStr = alGetString(error);
-        Debug_Error("OpenAL error: " << errorStr);
+        Debug_Error("OpenAL error(" << error << "): " << errorStr);
     }
     return hasError;
 }

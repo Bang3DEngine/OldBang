@@ -87,17 +87,6 @@ public:
 
 int main(int argc, char **argv)
 {
-    SystemProcess process;
-    process.Start("toilet");
-    process.Write("HOLA");
-    process.CloseWriteChannel();
-    process.WaitUntilFinished();
-    Debug_Log(process.ReadStandardOutput());
-    Debug_Log(process.ReadStandardError());
-    Debug_Log("SystemProcess exit code: " << process.GetExitCode());
-    process.Close();
-    exit(0);
-
     Application app(argc, argv);
     Paths::SetEngineRoot( Path("/home/sephirot47/Bang") );
     app.CreateWindow();

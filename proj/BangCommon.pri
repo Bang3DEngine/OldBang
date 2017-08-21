@@ -19,13 +19,14 @@ CONFIG += c++11
 CONFIG -= qt
 
 LIBS += \
-    -lGLEW            \ # GLEW
+    -lGLEW            \
     -lGLU             \
     -lGL              \
     -lpng             \
     -ljpeg            \
-    -ldl              \ # To load libraries and stuff
-    -lalut -lopenal   \ # Alut and OpenAL
+    -lsndfile         \
+    -ldl              \
+    -lopenal          \
     -lassimp          \
     -lfreetype
 

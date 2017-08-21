@@ -217,4 +217,16 @@ template<class T>
 typename Array<T>::Const_Iterator
 Array<T>::end() const { return m_vector.cend(); }
 
+template<class T>
+template<class IteratorClass>
+void Array<T>::PushBack(IteratorClass itBegin, IteratorClass itEnd)
+{
+    IteratorClass it = itBegin;
+    while (it != itEnd)
+    {
+        PushBack(*it);
+        ++it;
+    }
+}
+
 #endif // ARRAY_TCC

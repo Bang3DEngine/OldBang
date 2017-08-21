@@ -1,5 +1,7 @@
 #include "Bang/AudioClip.h"
 
+#include <sndfile.h>
+
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/AudioSource.h"
@@ -36,18 +38,36 @@ bool AudioClip::LoadFromSoundFile(const Path &filepath)
     AudioManager::CheckALError();
 
     AudioManager::ClearALErrors();
-    ALsizei size; ALfloat freq; ALenum format;
-    ALvoid *data = alutLoadMemoryFromFile(filepath.GetAbsolute().ToCString(),
-                                          &format, &size, &freq);
+
+    SF_INFO soundInfo;
+    SNDFILE *soundFile = sf_open(filepath.GetAbsolute().ToCString(),
+                                 SFM_READ,
+                                 &soundInfo);
+
+    constexpr int bufferSize = 4096;
+    Array<short> buffer(bufferSize);
+    Array<short> readData;
+    while (true)
+    {
+        size_t readSize = sf_read_short(soundFile,
+                                        &buffer.Front(),
+                                        bufferSize);
+        if (readSize <= 0) { break; }
+        readData.PushBack(buffer.begin(), buffer.begin() + readSize);
+    }
     AudioManager::CheckALError();
 
     AudioManager::ClearALErrors();
     bool hasError = AudioManager::CheckALError();
     if (!hasError)
     {
-        alBufferData(m_alBufferId, format, data, size, freq);
+        alBufferData(m_alBufferId,
+                     soundInfo.channels == 1? AL_FORMAT_MONO16 :
+                                              AL_FORMAT_STEREO16,
+                     &readData.Front(),
+                     readData.Size() * sizeof(short),
+                     soundInfo.samplerate);
         m_soundFilepath = filepath;
-        free(data);
 
         hasError = AudioManager::CheckALError();
     }
