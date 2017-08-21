@@ -20,8 +20,7 @@ public:
     bool HasFinished() const;
 
     void SetName(const String &threadName);
-    void SetRunnable(ThreadRunnable *runnable,
-                     bool destroyWhenFinished = true);
+    void SetRunnable(ThreadRunnable *runnable);
 
     const String &GetName() const;
     ThreadRunnable *GetRunnable() const;
@@ -35,7 +34,6 @@ private:
     ThreadRunnable *p_runnable = nullptr;
 
     bool m_hasFinished = false;
-    bool m_destroyRunnable = true;
 
     friend int ThreadFunc(ThreadRunnable *runnable, Thread *thread);
 };

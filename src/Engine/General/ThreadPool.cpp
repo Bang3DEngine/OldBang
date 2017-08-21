@@ -9,6 +9,7 @@ ThreadPool::~ThreadPool()
     while (!m_threadList.IsEmpty())
     {
         Thread *thread = m_threadList.PopBack();
+        thread->Join();
         delete thread;
     }
 }
@@ -21,6 +22,7 @@ bool ThreadPool::TryStart(ThreadRunnable *runnable)
         Thread *thread = *it;
         if (thread->HasFinished())
         {
+            thread->Join();
             delete thread;
             it = m_threadList.Remove(it);
         }

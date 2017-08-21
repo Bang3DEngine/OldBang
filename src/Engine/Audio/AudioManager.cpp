@@ -39,7 +39,7 @@ void AudioManager::Play(AudioClip *audioClip,
     bool started = am->m_threadPool.TryStart(player);
     if (started)
     {
-        QMutexLocker m(&am->m_mutex_currentAudios);
+        MutexLocker m(&am->m_mutex_currentAudios);
         am->m_currentAudioPlayers.Add(player);
     }
 }
@@ -90,13 +90,13 @@ void AudioManager::StopAllSounds()
         audioPlayer->Stop();
     }
 
-    QMutexLocker m(&am->m_mutex_currentAudios);
+    MutexLocker m(&am->m_mutex_currentAudios);
     am->m_currentAudioPlayers.Clear();
 }
 
 void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
 {
-    QMutexLocker m(&m_mutex_currentAudios);
+    MutexLocker m(&m_mutex_currentAudios);
     m_currentAudioPlayers.Remove(audioPlayer);
 }
 

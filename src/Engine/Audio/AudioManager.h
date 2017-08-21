@@ -1,13 +1,12 @@
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 
-#include <QMutexLocker>
-
 #include "Bang/Set.h"
 #include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/Vector3.h"
 #include "Bang/ThreadPool.h"
+#include "Bang/MutexLocker.h"
 #include "Bang/AudioParams.h"
 
 FORWARD class Path;
@@ -44,7 +43,7 @@ private:
     virtual ~AudioManager();
 
     ThreadPool m_threadPool;
-    QMutex m_mutex_currentAudios;
+    Mutex m_mutex_currentAudios;
     Set<AudioPlayerRunnable*> m_currentAudioPlayers;
 
     // Handling of real-time buffer change

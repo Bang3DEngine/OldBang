@@ -10,7 +10,7 @@ Thread::Thread()
 
 Thread::Thread(ThreadRunnable *runnable) : Thread()
 {
-    SetRunnable(runnable, true);
+    SetRunnable(runnable);
 }
 
 Thread::Thread(ThreadRunnable *runnable,
@@ -21,7 +21,6 @@ Thread::Thread(ThreadRunnable *runnable,
 
 Thread::~Thread()
 {
-    if (m_destroyRunnable && p_runnable) { delete p_runnable; }
 }
 
 void Thread::Start()
@@ -43,15 +42,9 @@ bool Thread::HasFinished() const
     return m_hasFinished;
 }
 
-void Thread::SetName(const String &threadName)
-{
-    m_threadName = threadName;
-}
-void Thread::SetRunnable(ThreadRunnable *runnable, bool destroyWhenFinished)
-{
-    p_runnable = runnable;
-    m_destroyRunnable = destroyWhenFinished;
-}
+void Thread::SetName(const String &threadName) { m_threadName = threadName; }
+void Thread::SetRunnable(ThreadRunnable *runnable) { p_runnable = runnable; }
+
 const String &Thread::GetName() const { return m_threadName; }
 ThreadRunnable *Thread::GetRunnable() const { return p_runnable; }
 
@@ -76,7 +69,6 @@ int ThreadFunc(ThreadRunnable *runnable, Thread *thread)
     }
     if (runnable->GetAutoDelete()) { delete runnable; }
 
-    thread->Join();
     thread->m_hasFinished = true;
 
     return 0;
