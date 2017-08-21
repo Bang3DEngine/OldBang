@@ -3,7 +3,9 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
+#include <stack>
 
+#include "Bang/Map.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Matrix4.h"
@@ -14,14 +16,13 @@ using GLId = GLuint;
 
 FORWARD class G_VAO;
 FORWARD class GLObject;
-FORWARD class GLContext;
 FORWARD class G_Texture;
 FORWARD class G_ShaderProgram;
 
 class GL
 {
 public:
-    enum class RenderPrimitive
+    enum class Primitives
     {
         Points    = GL_POINTS,
         Lines     = GL_LINES,
@@ -87,9 +88,9 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static void ApplyContextToShaderProgram(G_ShaderProgram *sp);
+    static void ApplyToShaderProgram(G_ShaderProgram *sp);
     static void Render(const G_VAO* vao,
-                       GL::RenderPrimitive renderMode,
+                       GL::Primitives renderMode,
                        int elementsCount,
                        int startElementIndex = 0);
 
@@ -113,17 +114,34 @@ public:
     static void Bind(BindTarget bindTarget, GLId glId);
     static void UnBind(const GLObject *bindable);
     static void UnBind(BindTarget bindTarget);
+    static GLId GetBoundId(GL::BindTarget bindTarget);
     static bool IsBound(const GLObject *bindable);
     static bool IsBound(BindTarget bindTarget, GLId glId);
 
-    static GLContext* GetGLContext();
+    static GL* GetActive();
 
-private:
     GL();
 
-    static void _Bind(BindTarget bindTarget, GLId glId);
+private:
+    Byte m_stencilValue = 0;
+    GLenum m_stencilOp = GL_KEEP;
+    bool m_colorMaskR = true, m_colorMaskG = true,
+         m_colorMaskB = true, m_colorMaskA = true;
+    bool m_writeDepth = true, m_testDepth = true;
+    bool m_testStencil = false;
+    bool m_wireframe = false;
+    GL::CullMode m_cullMode = GL::CullMode::None;
+    Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
-    friend class GLContext;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
+    Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
+    float m_zNear, m_zFar;
+
+    static void _Bind(BindTarget bindTarget, GLId glId);
+    void OnBind(GL::BindTarget bindTarget, GLId glId);
+    void OnUnBind(GL::BindTarget bindTarget);
+
+    friend class GraphicPipeline;
 };
 
 #endif // GL_H

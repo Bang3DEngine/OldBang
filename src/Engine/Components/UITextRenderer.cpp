@@ -28,7 +28,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
 
-    SetRenderPrimitive(GL::RenderPrimitive::Quads);
+    SetRenderPrimitive(GL::Primitives::Quads);
     RefreshMesh();
 }
 

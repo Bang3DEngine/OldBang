@@ -106,7 +106,7 @@ void G_Material::Bind() const
     sp->Set("B_AlphaCutoff", alphaCutoff);
     sp->Set("B_HasTexture",   GetTexture() != nullptr);
 
-    GL::ApplyContextToShaderProgram(sp);
+    GL::ApplyToShaderProgram(sp);
 }
 
 void G_Material::UnBind() const

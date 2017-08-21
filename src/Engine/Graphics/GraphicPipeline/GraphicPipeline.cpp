@@ -1,5 +1,6 @@
 ﻿#include "Bang/GraphicPipeline.h"
 
+#include "Bang/GL.h"
 #include "Bang/Mesh.h"
 #include "Bang/G_VAO.h"
 #include "Bang/G_VBO.h"
@@ -14,7 +15,6 @@
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/G_Texture.h"
-#include "Bang/GLContext.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
@@ -27,11 +27,10 @@
 
 GraphicPipeline::GraphicPipeline(G_Screen *screen)
 {
-    m_glContext = new GLContext();
+    m_gl = new GL();
     m_texUnitManager = new G_TextureUnitManager();
 
-    m_gbuffer = new G_GBuffer(screen->GetWidth(),
-                              screen->GetHeight());
+    m_gbuffer = new G_GBuffer(screen->GetWidth(), screen->GetHeight());
     m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
                                              screen->GetHeight());
 
@@ -44,7 +43,7 @@ GraphicPipeline::~GraphicPipeline()
     delete m_gbuffer;
     delete m_selectionFB;
     delete m_texUnitManager;
-    delete m_glContext;
+    delete m_gl;
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
@@ -151,7 +150,7 @@ void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
 void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
-    m_glContext->ApplyToShaderProgram(sp);
+    m_gl->ApplyToShaderProgram(sp);
     sp->Set("B_rectMinCoord", mask.GetMin());
     sp->Set("B_rectMaxCoord", mask.GetMax());
     sp->Set("B_ScreenSize", Vector2f(Screen::GetSize()));
@@ -178,7 +177,7 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetDepthTest(false);
     GL::SetDepthWrite(false);
     GL::SetCullMode(GL::CullMode::None);
-    GL::Render(m_screenPlaneMesh->GetVAO(), GL::RenderPrimitive::Triangles,
+    GL::Render(m_screenPlaneMesh->GetVAO(), GL::Primitives::Triangles,
                m_screenPlaneMesh->GetVertexCount());
     GL::SetDepthWrite(true);
     GL::SetDepthTest(true);
@@ -212,7 +211,7 @@ void GraphicPipeline::Render(Renderer *rend)
     }
 }
 
-GLContext *GraphicPipeline::GetGLContext() const { return m_glContext; }
+GL *GraphicPipeline::GetGL() const { return m_gl; }
 G_GBuffer *GraphicPipeline::GetGBuffer() { return m_gbuffer; }
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {

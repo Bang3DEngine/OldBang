@@ -3,11 +3,11 @@
 
 #include "Bang/Rect.h"
 
+FORWARD class GL;
 FORWARD class Scene;
 FORWARD class G_Screen;
 FORWARD class Renderer;
 FORWARD class G_Texture;
-FORWARD class GLContext;
 FORWARD class G_GBuffer;
 FORWARD class G_Framebuffer;
 FORWARD class G_ShaderProgram;
@@ -35,7 +35,7 @@ public:
     void Render(Renderer *rend);
     void OnResize(int newWidth, int newHeight);
 
-    GLContext *GetGLContext() const;
+    GL *GetGL() const;
     G_GBuffer *GetGBuffer();
     SelectionFramebuffer *GetSelectionFramebuffer();
     G_TextureUnitManager *GetTextureUnitManager() const;
@@ -45,7 +45,7 @@ public:
 
 private:
     G_TextureUnitManager *m_texUnitManager = nullptr;
-    GLContext *m_glContext = nullptr;
+    GL *m_gl = nullptr;
 
     G_GBuffer *m_gbuffer = nullptr;
     SelectionFramebuffer *m_selectionFB = nullptr;

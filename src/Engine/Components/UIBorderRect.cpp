@@ -10,7 +10,7 @@ UIBorderRect::UIBorderRect()
     p_lineRenderer = ComponentFactory::CreateComponent<LineRenderer>();
     p_lineRenderer->SetPoints({});
     p_lineRenderer->UseMaterialCopy();
-    p_lineRenderer->SetRenderPrimitive(GL::RenderPrimitive::LineStrip);
+    p_lineRenderer->SetRenderPrimitive(GL::Primitives::LineStrip);
 
     // Work in Canvas and NDC space
     p_lineRenderer->SetRenderPass(RenderPass::Canvas);

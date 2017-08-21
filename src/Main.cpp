@@ -155,7 +155,7 @@ int main(int argc, char **argv)
     namesVLayout->Add(namesResult);
 
     GUIMask *buttonPlayMask = new GUIMask();
-    buttonPlayMask->SetMasking(false);
+    buttonPlayMask->SetMasking(true);
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
     maskImg->SetImage(
              new Texture2D( Path("/home/sephirot47/BangUITest/test.png") ) );
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
     uiImg->SetTint(Color::Red);
 
     GUIMask *leftMask = new GUIMask();
-    leftMask->SetMasking(false);
+    leftMask->SetMasking(true);
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
     img->SetImage( new Texture2D( Path("/home/sephirot47/test2.png") ) );
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();

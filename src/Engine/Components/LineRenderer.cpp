@@ -10,7 +10,7 @@ LineRenderer::LineRenderer()
     m_mesh = new Mesh();
     SetMaterial(MaterialFactory::GetDefaultUnLighted());
 
-    SetRenderPrimitive(GL::RenderPrimitive::Lines);
+    SetRenderPrimitive(GL::Primitives::Lines);
 }
 
 LineRenderer::~LineRenderer()

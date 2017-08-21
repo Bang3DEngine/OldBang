@@ -23,7 +23,6 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/G_Shader.cpp \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/G_ShaderProgram.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/G_RenderTexture.cpp \
-    $$BANG_ROOT/src/Engine/Graphics/General/GLContext.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/GL.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/GLObject.cpp \
     $$BANG_ROOT/src/Engine/Graphics/General/ImageIO.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/G_Shader.h \
     $$BANG_ROOT/src/Engine/Graphics/Shaders/G_ShaderProgram.h \
     $$BANG_ROOT/src/Engine/Graphics/General/G_RenderTexture.h \
-    $$BANG_ROOT/src/Engine/Graphics/General/GLContext.h \
     $$BANG_ROOT/src/Engine/Graphics/General/GL.h \
     $$BANG_ROOT/src/Engine/Graphics/General/G_Texture2D.h \
     $$BANG_ROOT/src/Engine/Graphics/General/GLObject.h \

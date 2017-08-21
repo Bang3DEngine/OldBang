@@ -1,9 +1,11 @@
 #include "Bang/GL.h"
 
+#include "Bang/G_VAO.h"
 #include "Bang/Debug.h"
+#include "Bang/Screen.h"
+#include "Bang/Matrix3.h"
 #include "Bang/GLObject.h"
 #include "Bang/G_Texture.h"
-#include "Bang/GLContext.h"
 #include "Bang/G_ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
 
@@ -82,160 +84,13 @@ void GL::SetLineWidth(float lineWidth)
     glLineWidth(lineWidth);
 }
 
-void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
+void GL::Render(const G_VAO *vao, GL::Primitives primitivesMode,
+                int elementsCount, int startIndex)
 {
-    GL::GetGLContext()->SetColorMask(maskR, maskG, maskB, maskA);
-}
-
-void GL::SetViewProjMode(GL::ViewProjMode mode)
-{
-    GL::GetGLContext()->SetViewProjMode(mode);
-}
-
-void GL::SetStencilWrite(bool writeStencil)
-{
-    GL::GetGLContext()->SetStencilWrite(writeStencil);
-}
-
-void GL::SetStencilOp(GLenum zPassOp)
-{
-    GL::GetGLContext()->SetStencilOp(zPassOp);
-}
-
-void GL::SetStencilValue(Byte value)
-{
-    GL::GetGLContext()->SetStencilValue(value);
-}
-
-void GL::SetStencilTest(bool testStencil)
-{
-    GL::GetGLContext()->SetStencilTest(testStencil);
-}
-
-void GL::SetDepthWrite(bool writeDepth)
-{
-    GL::GetGLContext()->SetDepthWrite(writeDepth);
-}
-
-void GL::SetDepthTest(bool testDepth)
-{
-    GL::GetGLContext()->SetDepthTest(testDepth);
-}
-
-void GL::SetWireframe(bool wireframe)
-{
-    GL::GetGLContext()->SetWireframe(wireframe);
-}
-
-void GL::SetCullMode(const GL::CullMode cullMode)
-{
-    GL::GetGLContext()->SetCullMode(cullMode);
-}
-
-void GL::SetModelMatrix(const Matrix4 &model)
-{
-    GL::GetGLContext()->SetModelMatrix(model);
-}
-
-void GL::SetViewMatrix(const Matrix4 &view)
-{
-    GL::GetGLContext()->SetViewMatrix(view);
-}
-
-void GL::SetProjectionMatrix(const Matrix4 &projection)
-{
-    GL::GetGLContext()->SetProjectionMatrix(projection);
-}
-
-void GL::SetZNearFar(float zNear, float zFar)
-{
-    GL::GetGLContext()->SetZNearFar(zNear, zFar);
-}
-
-void GL::ApplyContextToShaderProgram(G_ShaderProgram *sp)
-{
-    GL::GetGLContext()->ApplyToShaderProgram(sp);
-}
-
-void GL::Render(const G_VAO *vao, GL::RenderPrimitive renderMode, int elementsCount,
-                int startIdx)
-{
-    return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);
-}
-
-GLenum GL::GetStencilOp()
-{
-    return GL::GetGLContext()->GetStencilOp();
-}
-
-Byte GL::GetStencilValue()
-{
-    return GL::GetGLContext()->GetStencilValue();
-}
-
-bool GL::IsColorMaskR()
-{
-    return GL::GetGLContext()->IsColorMaskR();
-}
-
-bool GL::IsColorMaskG()
-{
-    return GL::GetGLContext()->IsColorMaskG();
-}
-
-bool GL::IsColorMaskB()
-{
-    return GL::GetGLContext()->IsColorMaskB();
-}
-
-bool GL::IsColorMaskA()
-{
-    return GL::GetGLContext()->IsColorMaskA();
-}
-
-bool GL::IsStencilWrite()
-{
-    return GL::GetGLContext()->IsStencilWrite();
-}
-
-bool GL::IsStencilTest()
-{
-    return GL::GetGLContext()->IsStencilTest();
-}
-
-bool GL::IsDepthWrite()
-{
-    return GL::GetGLContext()->IsDepthWrite();
-}
-
-bool GL::IsDepthTest()
-{
-    return GL::GetGLContext()->IsDepthTest();
-}
-
-bool GL::IsWireframe()
-{
-    return GL::GetGLContext()->IsWireframe();
-}
-
-GL::CullMode GL::GetCullMode()
-{
-    return GL::GetGLContext()->GetCullMode();
-}
-
-const Matrix4 &GL::GetModelMatrix()
-{
-    return GL::GetGLContext()->GetModelMatrix();
-}
-
-const Matrix4 &GL::GetViewMatrix()
-{
-    return GL::GetGLContext()->GetViewMatrix();
-}
-
-const Matrix4 &GL::GetProjectionMatrix()
-{
-    return GL::GetGLContext()->GetProjectionMatrix();
+    vao->Bind();
+    glDrawArrays( static_cast<GLint>(primitivesMode),
+                  startIndex, elementsCount);
+    vao->UnBind();
 }
 
 void GL::Bind(const GLObject *bindable)
@@ -245,9 +100,9 @@ void GL::Bind(const GLObject *bindable)
 
 void GL::Bind(GL::BindTarget bindTarget, GLId glId)
 {
-    GLContext *glContext = GL::GetGLContext();
-    if (glContext) { glContext->OnBind(bindTarget, glId); }
     GL::_Bind(bindTarget, glId);
+    GL *gl = GL::GetActive();
+    if (gl) { gl->OnBind(bindTarget, glId); }
 }
 
 void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
@@ -281,15 +136,9 @@ void GL::UnBind(const GLObject *bindable)
 
 void GL::UnBind(GL::BindTarget bindTarget)
 {
-    GLContext *glc = GL::GetGLContext();
-    if (glc)
-    {
-        glc->OnUnBind(bindTarget);
-    }
-    else
-    {
-        GL::_Bind(bindTarget, 0);
-    }
+    GL *gl = GL::GetActive();
+    if (gl) { gl->OnUnBind(bindTarget); }
+    else { gl->_Bind(bindTarget, 0); }
 }
 
 bool GL::IsBound(const GLObject *bindable)
@@ -297,19 +146,257 @@ bool GL::IsBound(const GLObject *bindable)
     return GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId());
 }
 
+void GL::ApplyToShaderProgram(G_ShaderProgram *sp)
+{
+    ENSURE(sp); ASSERT(GL::IsBound(sp));
+    const Matrix4& modelMatrix = GL::GetModelMatrix();
+    sp->Set("B_Model",    modelMatrix);
+    sp->Set("B_ModelInv", modelMatrix.Inversed());
+
+    Matrix3 normalMatrix = Matrix3(modelMatrix.c0.xyz(),
+                                   modelMatrix.c1.xyz(),
+                                   modelMatrix.c2.xyz()
+                               ).Transposed().Inversed();
+    sp->Set("B_Normal",    normalMatrix);
+    sp->Set("B_NormalInv", normalMatrix.Inversed());
+
+    const Matrix4& viewMatrix = GL::GetViewMatrix();
+    sp->Set("B_View",    viewMatrix);
+    sp->Set("B_ViewInv", viewMatrix.Inversed());
+
+    const Matrix4& projectionMatrix = GL::GetProjectionMatrix();
+    sp->Set("B_Projection",    projectionMatrix);
+    sp->Set("B_ProjectionInv", projectionMatrix.Inversed());
+
+    GL *gl = GL::GetActive();
+    sp->Set("B_Camera_Near", gl->m_zNear);
+    sp->Set("B_Camera_Far",  gl->m_zFar);
+
+    Matrix4 pvmMatrix;
+    if (gl->m_viewProjMode == GL::ViewProjMode::UseBoth)
+    {
+        pvmMatrix = projectionMatrix * viewMatrix * modelMatrix;
+    }
+    else if (gl->m_viewProjMode == GL::ViewProjMode::OnlyFixAspectRatio)
+    {
+        Matrix4 modelTranslate( Vector4(1,0,0,0),
+                                Vector4(0,1,0,0),
+                                Vector4(0,0,1,0),
+                                modelMatrix.c3);
+
+        Matrix4 modelNoTranslate = modelMatrix;
+        modelNoTranslate.SetTranslate( Vector3(0,0,0) );
+
+        float ar = 1.0f / Screen::GetAspectRatio();
+        Matrix4 fixAR(ar, 0, 0, 0,
+                       0, 1, 0, 0,
+                       0, 0, 1, 0,
+                       0, 0, 0, 1);
+
+        pvmMatrix = modelTranslate * fixAR * modelNoTranslate;
+    }
+    else if (gl->m_viewProjMode == GL::ViewProjMode::IgnoreBoth)
+    {
+        pvmMatrix = modelMatrix;
+    }
+
+    sp->Set("B_PVM", pvmMatrix);
+}
+
+void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
+{
+    GL *gl = GL::GetActive();
+    gl->m_colorMaskR = maskR;
+    gl->m_colorMaskG = maskG;
+    gl->m_colorMaskB = maskB;
+    gl->m_colorMaskA = maskA;
+    glColorMask(maskR, maskG, maskB, maskA);
+}
+
+void GL::SetViewProjMode(GL::ViewProjMode mode)
+{
+    GL *gl = GL::GetActive();
+    gl->m_viewProjMode = mode;
+}
+
+void GL::SetStencilOp(GLenum zPassOp)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_stencilOp != zPassOp)
+    {
+        gl->m_stencilOp = zPassOp;
+        glStencilOp(GL_KEEP, GL_KEEP, zPassOp);
+    }
+}
+
+void GL::SetStencilValue(Byte value)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_stencilValue != value)
+    {
+        gl->m_stencilValue = value;
+        glStencilFunc(IsStencilTest() ? GL_EQUAL : GL_ALWAYS,
+                      gl->m_stencilValue, 0xFF);
+    }
+}
+
+void GL::SetStencilWrite(bool writeStencil)
+{
+    if (writeStencil)
+    {
+        if (GetStencilOp() == GL_KEEP) { SetStencilOp(GL_REPLACE); }
+        else { SetStencilOp(GetStencilOp()); }
+    }
+    else { SetStencilOp(GL_KEEP); }
+}
+
+void GL::SetStencilTest(bool testStencil)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_testStencil != testStencil)
+    {
+        gl->m_testStencil = testStencil;
+        glStencilFunc(testStencil ? GL_EQUAL : GL_ALWAYS,
+                      GetStencilValue(), 0xFF);
+    }
+}
+void GL::SetDepthWrite(bool writeDepth)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_writeDepth != writeDepth)
+    {
+        gl->m_writeDepth = writeDepth;
+        glDepthMask(gl->m_writeDepth ? GL_TRUE : GL_FALSE);
+    }
+}
+
+void GL::SetDepthTest(bool testDepth)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_testDepth != testDepth)
+    {
+        gl->m_testDepth = testDepth;
+        glDepthFunc(gl->m_testDepth ? GL_LEQUAL : GL_ALWAYS);
+    }
+}
+
+void GL::SetWireframe(bool wireframe)
+{
+    GL *gl = GL::GetActive();
+    if (gl->m_wireframe != wireframe)
+    {
+        gl->m_wireframe = wireframe;
+        glPolygonMode(GL_FRONT_AND_BACK, gl->m_wireframe ? GL_LINE : GL_FILL);
+    }
+}
+
+void GL::SetCullMode(GL::CullMode cullMode)
+{
+    GL *gl = GL::GetActive();
+    if (cullMode != gl->m_cullMode)
+    {
+        gl->m_cullMode = cullMode;
+        if (gl->m_cullMode != GL::CullMode::None)
+        {
+            GL::Enable(GL_CULL_FACE);
+            glCullFace(GLint(gl->m_cullMode));
+        }
+        else { GL::Disable(GL_CULL_FACE); }
+    }
+}
+
+void GL::SetModelMatrix(const Matrix4 &model)
+{
+    GL::GetActive()->m_modelMatrix = model;
+}
+
+void GL::SetViewMatrix(const Matrix4 &view)
+{
+    GL::GetActive()->m_viewMatrix = view;
+}
+
+void GL::SetProjectionMatrix(const Matrix4 &projection)
+{
+    GL::GetActive()->m_projectionMatrix = projection;
+}
+
+void GL::SetZNearFar(float zNear, float zFar)
+{
+    GL *gl = GL::GetActive();
+    gl->m_zNear = zNear;
+    gl->m_zFar  = zFar;
+}
+
+GLenum GL::GetStencilOp() { return GL::GetActive()->m_stencilOp; }
+Byte GL::GetStencilValue() { return GL::GetActive()->m_stencilValue; }
+bool GL::IsColorMaskR() { return GL::GetActive()->m_colorMaskR; }
+bool GL::IsColorMaskG() { return GL::GetActive()->m_colorMaskG; }
+bool GL::IsColorMaskB() { return GL::GetActive()->m_colorMaskB; }
+bool GL::IsColorMaskA() { return GL::GetActive()->m_colorMaskA; }
+bool GL::IsStencilWrite()
+{
+    return GL::GetActive()->GetStencilOp() != GL_KEEP;
+}
+bool GL::IsStencilTest() { return GL::GetActive()->m_testStencil; }
+bool GL::IsDepthWrite() { return GL::GetActive()->m_writeDepth; }
+bool GL::IsDepthTest() { return GL::GetActive()->m_testDepth; }
+bool GL::IsWireframe() { return GL::GetActive()->m_wireframe; }
+GL::CullMode GL::GetCullMode() { return GL::GetActive()->m_cullMode; }
 bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
 {
-    GLContext *glc = GL::GetGLContext();
-    if (glc) { return glc->IsBound(bindTarget, glId); }
+    GL *gl = GL::GetActive();
+    auto it = gl->m_glBoundIds.Find(bindTarget);
+    if (it != gl->m_glBoundIds.End())
+    {
+        const std::stack<GLId>& boundIds = it->second;
+        return !boundIds.empty() && boundIds.top() == glId;
+    }
     return false;
 }
-
-GL::GL()
+const Matrix4&
+GL::GetModelMatrix() { return GL::GetActive()->m_modelMatrix; }
+const Matrix4&
+GL::GetViewMatrix() { return GL::GetActive()->m_viewMatrix; }
+const Matrix4&
+GL::GetProjectionMatrix() { return GL::GetActive()->m_projectionMatrix; }
+GLId GL::GetBoundId(GL::BindTarget bindTarget)
 {
+    GL *gl = GL::GetActive();
+    if (!gl->m_glBoundIds.ContainsKey(bindTarget)) { return 0; }
+    const std::stack<GLId> &boundIds = gl->m_glBoundIds.Get(bindTarget);
+    return boundIds.empty() ? 0 : boundIds.top();
 }
 
-GLContext *GL::GetGLContext()
+void GL::OnBind(GL::BindTarget bindTarget, GLId glId)
+{
+    if (!m_glBoundIds.ContainsKey(bindTarget))
+    {
+        m_glBoundIds.Add(bindTarget, std::stack<GLId>());
+    }
+    m_glBoundIds[bindTarget].push(glId);
+}
+
+void GL::OnUnBind(GL::BindTarget bindTarget)
+{
+    if (!m_glBoundIds.ContainsKey(bindTarget)) { return; }
+
+    std::stack<GLId> &boundIds = m_glBoundIds.Get(bindTarget);
+    if (!boundIds.empty())
+    {
+        const GLId currentId = GL::GetBoundId(bindTarget);
+        boundIds.pop();
+        const GLId previousBoundId = GetBoundId(bindTarget);
+        if (currentId != previousBoundId)
+        {
+            GL::_Bind(bindTarget, previousBoundId);
+        }
+    }
+}
+
+GL *GL::GetActive()
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive();
-    return gp ? gp->GetGLContext() : nullptr;
+    return gp ? gp->GetGL() : nullptr;
 }
+
+GL::GL() {}

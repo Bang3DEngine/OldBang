@@ -10,7 +10,7 @@
 
 MeshRenderer::MeshRenderer()
 {
-    SetRenderPrimitive( GL::RenderPrimitive::Triangles );
+    SetRenderPrimitive( GL::Primitives::Triangles );
 }
 
 MeshRenderer::~MeshRenderer()

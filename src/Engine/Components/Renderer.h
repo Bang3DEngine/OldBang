@@ -33,7 +33,7 @@ public:
     void SetRenderWireframe(bool m_drawWireframe);
     void SetCullMode(GL::CullMode m_cullMode);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
-    void SetRenderPrimitive(GL::RenderPrimitive m_renderMode);
+    void SetRenderPrimitive(GL::Primitives m_renderMode);
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
@@ -42,7 +42,7 @@ public:
     bool GetRenderWireframe() const;
     GL::CullMode GetCullMode() const;
     GL::ViewProjMode GetViewProjMode() const;
-    GL::RenderPrimitive GetRenderPrimitive() const;
+    GL::Primitives GetRenderPrimitive() const;
     float GetLineWidth() const;
     RenderPass GetRenderPass() const;
 
@@ -60,7 +60,7 @@ public:
 protected:
     bool m_drawWireframe        = false;
     GL::CullMode m_cullMode     = GL::CullMode::Back;
-    GL::RenderPrimitive m_renderMode = GL::RenderPrimitive::Triangles;
+    GL::Primitives m_renderMode = GL::Primitives::Triangles;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 
     Renderer();
