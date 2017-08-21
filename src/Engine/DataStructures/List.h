@@ -4,7 +4,6 @@
 #include <list>
 #include <functional>
 
-#include "Bang/Debug.h"
 #include "Bang/Containers.h"
 
 template <class T>

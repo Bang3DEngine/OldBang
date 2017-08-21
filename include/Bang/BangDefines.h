@@ -1,12 +1,17 @@
 #ifndef BANGFORWARD_H
 #define BANGFORWARD_H
 
+#include <iostream>
 #include <type_traits>
 
 // Asserts ==============================================
 #define ENSURE(mustBeTrue) do{\
     if (!(mustBeTrue)) { return; }\
 } while (false)
+
+#define ASSERT(assertion) if ( !(assertion) ) {\
+  std::cerr << "ASSERTION FAILED: '" << #assertion << "' failed!"; abort(); \
+}
 // =====================================================
 
 

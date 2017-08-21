@@ -1,5 +1,7 @@
 # C++ objects and libs
 *.trace
+build
+*.user
 *.gen.h
 *.refl.h
 *refactor-cpp-class-name.sh

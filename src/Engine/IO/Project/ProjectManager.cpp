@@ -81,8 +81,8 @@ void ProjectManager::SaveProject(const Project *project)
     bool ok = project->WriteToFile(project->GetProjectFileFilepath());
     if (ok)
     {
-        Debug_Status("Project '" << project->GetProjectName() <<
-                     "' successfully saved.", 5.0f);
+        Debug_Log("Project '" << project->GetProjectName() <<
+                  "' successfully saved.");
     }
     else
     {
