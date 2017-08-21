@@ -5,8 +5,6 @@
 #include <iomanip>
 #include <iostream>
 
-#include <QString>
-
 #include "Bang/Map.h"
 #include "Bang/List.h"
 #include "Bang/Array.h"
@@ -28,11 +26,6 @@ String::String(float v)  : m_str("")
 
 String::String(const char *cstr) : m_str(cstr)
 {
-}
-
-String::String(const QString &qstr)
-{
-    *this = String(qstr.toStdString());
 }
 
 String::String(const std::string &stdstr) : m_str(stdstr)
@@ -137,11 +130,6 @@ String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 const char *String::ToCString() const
 {
     return m_str.c_str();
-}
-
-QString String::ToQString() const
-{
-    return QString::fromStdString(*this);
 }
 
 std::size_t String::Find(char c, std::size_t toIndex) const

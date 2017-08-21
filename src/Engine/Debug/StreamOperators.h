@@ -12,7 +12,6 @@ FORWARD    class Color;
 FORWARD_T  class Array;
 FORWARD_T  class RectG;
 FORWARD    class String;
-FORWARD    class QString;
 FORWARD_T  class Vector2G;
 FORWARD_T  class Vector3G;
 FORWARD_T  class Vector4G;
@@ -25,7 +24,6 @@ std::istringstream& operator>>(std::istringstream& is, Path &p);
 std::istringstream& operator>>(std::istringstream& is, Color &c);
 std::ostream& operator<<(std::ostream &log, const Color &v);
 std::ostream& operator<<(std::ostream &log, const IToString &v);
-std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
 
 // Templated ostream operators

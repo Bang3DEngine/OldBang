@@ -8,8 +8,7 @@
 
 #include "Bang.h"
 
-FORWARD   class QString;
-FORWARD   class IToString;
+FORWARD class IToString;
 
 class String
 {
@@ -23,7 +22,6 @@ public:
     explicit String(int v);
     explicit String(float v);
     String(const char *cstr);
-    String(const QString &qstr);
     String(const std::string &stdstr);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
@@ -64,7 +62,6 @@ public:
                      long endIndexInclusive = String::npos) const;
 
     const char *ToCString() const;
-    QString ToQString() const;
 
     std::size_t Find(char c, std::size_t toIndex  = String::npos) const;
     std::size_t RFind(char c, std::size_t toIndex = String::npos) const;

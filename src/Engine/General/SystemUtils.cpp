@@ -1,9 +1,8 @@
 #include "Bang/SystemUtils.h"
 
-#include <QProcess>
-
 #include "Bang/Debug.h"
 #include "Bang/Library.h"
+#include "Bang/SystemProcess.h"
 
 void SystemUtils::System(const String &command,
                          const List<String> &argsList,
@@ -25,27 +24,21 @@ void SystemUtils::_System(const String &command,
                           bool *success,
                           bool background)
 {
-    QStringList argsListQ;
-    for (const String &arg : argsList) { argsListQ.push_back(arg.ToQString()); }
-
-    QProcess process;
-    process.setReadChannel(QProcess::ProcessChannel::StandardOutput);
-    process.start(command.ToQString(), argsListQ);
+    SystemProcess process;
+    process.Start(command, argsList);
     if (!background)
     {
-        bool ok = process.waitForFinished(999999);
-        ok = ok && (process.exitCode() == 0);
+        bool ok = process.WaitUntilFinished();
+        ok = ok && (process.GetExitCode() == 0);
 
-        QString out;
-        out = QString( process.readAllStandardOutput() ) +
-              QString( process.readAllStandardError() );
-        if (output) { *output = String(out) ; }
+        String out = process.ReadStandardOutput();
+        if (output) { *output = out ; }
         if (success) { *success = ok; }
-        process.close();
+        process.Close();
     }
     else
     {
-        bool ok = process.startDetached(command.ToQString(), argsListQ);
+        bool ok = process.StartDettached(command, argsList);
         if (!ok)
         {
             Debug_Error("Could not start background process " << command);

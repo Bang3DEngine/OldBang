@@ -135,7 +135,7 @@ List<Path> Path::FindSubPaths() const
     while ((dir = readdir(d)) != NULL)
     {
         String subName(dir->d_name);
-        if (subName != "." && subName != "..")
+        if (!subName.BeginsWith("."))
         {
             Path subPath = this->Append(subName);
             subPathsList.PushBack(subPath);

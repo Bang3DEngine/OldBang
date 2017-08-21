@@ -15,11 +15,11 @@ POST_TARGETDEPS += PreprocessTargetName
 
 LIBS = \
      -L$$BIN_DIR/lib/ \
-    -lBangDataStructures \
+    -lBangCore \
     $$LIBS
 
 PRE_TARGETDEPS += \
-    $$BIN_DIR/lib/libBangDataStructures.a
+    $$BIN_DIR/lib/libBangCore.a
 
 SOURCES += \
     ./MainBangPreprocessor.cpp \

@@ -1,16 +1,12 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
 
-#include <QObject>
-
 #include "Bang/Map.h"
 #include "Bang/Set.h"
 #include "Bang/G_Shader.h"
 
-class ShaderManager : public QObject
+class ShaderManager
 {
-    Q_OBJECT
-
 public:
     ShaderManager();
     static ShaderManager *GetInstance();
@@ -25,8 +21,6 @@ public:
 private:
     Map<Path, G_Shader*> m_filepathToShaders;
     Map<G_Shader*, Set<G_ShaderProgram*> > m_shaderUsages;
-
-private slots:
     void Refresh();
 };
 

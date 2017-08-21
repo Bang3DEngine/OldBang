@@ -1,6 +1,4 @@
 TEMPLATE = lib
-QT_VERSION = 5
-QT = core gui
 
 # PARAMETERS CATCHING
 COMPILER=$$(BANG_BUILD_COMPILER)
@@ -18,7 +16,7 @@ QMAKE_CXX  = $$COMPILER
 QMAKE_LINK = $$COMPILER
 CONFIG += $$RELEASE_OR_DEBUG
 CONFIG += c++11
-CONFIG += qt
+CONFIG -= qt
 
 LIBS += \
     -lGLEW            \ # GLEW
@@ -37,7 +35,7 @@ INCLUDEPATH +=                               \
     /usr/include                             \
     $$BANG_ROOT/include                         \
     $$BANG_ROOT/include/Bang                    \
-    $$BANG_ROOT/include/Bang/BangDataStructures \
+    $$BANG_ROOT/include/Bang/BangCore \
     $$BANG_ROOT/include/Bang/BangPreprocessor   \
     $$BANG_ROOT/include/Bang/BangEngine         \
     $$BANG_ROOT/include/freetype

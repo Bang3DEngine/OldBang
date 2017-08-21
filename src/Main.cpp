@@ -41,10 +41,12 @@ int main(int argc, char **argv)
 #include "Bang/GUICanvas.h"
 #include "Bang/GUIButton.h"
 #include "Bang/AudioClip.h"
+#include "Bang/SystemUtils.h"
 #include "Bang/Application.h"
 #include "Bang/AudioManager.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
+#include "Bang/SystemProcess.h"
 #include "Bang/GUIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -85,6 +87,17 @@ public:
 
 int main(int argc, char **argv)
 {
+    SystemProcess process;
+    process.Start("toilet");
+    process.Write("HOLA");
+    process.CloseWriteChannel();
+    process.WaitUntilFinished();
+    Debug_Log(process.ReadStandardOutput());
+    Debug_Log(process.ReadStandardError());
+    Debug_Log("SystemProcess exit code: " << process.GetExitCode());
+    process.Close();
+    exit(0);
+
     Application app(argc, argv);
     Paths::SetEngineRoot( Path("/home/sephirot47/Bang") );
     app.CreateWindow();

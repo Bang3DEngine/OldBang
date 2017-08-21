@@ -35,6 +35,7 @@ bool ThreadPool::TryStart(ThreadRunnable *runnable)
                                 "BANG_PooledThread" + m_threadList.Size());
     thread->Start();
     m_threadList.PushBack(thread);
+    return true;
 }
 
 void ThreadPool::SetMaxThreadCount(int maxThreadCount)

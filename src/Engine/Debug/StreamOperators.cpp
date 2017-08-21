@@ -1,7 +1,5 @@
 #include "Bang/StreamOperators.h"
 
-#include <QString>
-
 #include "Bang/Path.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
@@ -26,13 +24,6 @@ std::ostream &operator<<(std::ostream &log, const IToString *s)
     return log;
 }
 //
-
-
-std::ostream &operator<<(std::ostream &log, const QString &str)
-{
-    log << str.toStdString();
-    return log;
-}
 
 std::ostream &operator<<(std::ostream &log, const IToString &v)
 {

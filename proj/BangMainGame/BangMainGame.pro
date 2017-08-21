@@ -20,10 +20,10 @@ CONFIG += no_lflags_merge
 LIBS = -L$$BIN_DIR/lib/ \
     -lBangEngine \
     -lBangGraphics \
-    -lBangDataStructures \
+    -lBangCore \
     -lBangEngine \
     -lBangGraphics \
-    -lBangDataStructures \
+    -lBangCore \
     -lSDL2 \
     $$LIBS
 
@@ -31,4 +31,4 @@ LIBS = -L$$BIN_DIR/lib/ \
 PRE_TARGETDEPS += \
     $$BIN_DIR/lib/libBangEngine.a \
     $$BIN_DIR/lib/libBangGraphics.a \
-    $$BIN_DIR/lib/libBangDataStructures.a
+    $$BIN_DIR/lib/libBangCore.a

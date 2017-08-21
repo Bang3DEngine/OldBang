@@ -3,8 +3,6 @@
 
 #include "Bang/Path.h"
 
-FORWARD   class QByteArray;
-
 class File
 {
 public:

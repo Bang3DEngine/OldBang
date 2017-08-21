@@ -2,17 +2,18 @@ include(../BangCommon.pri)
 system(rm -f Makefile)
 
 TEMPLATE = lib
-QT = core
+QT = # No QT
 
 CONFIG += staticlib
 
-TARGET = $$BIN_DIR/lib/BangDataStructures
+TARGET = $$BIN_DIR/lib/BangCore
 
 SOURCES += \
     $$BANG_ROOT/src/Engine/DataStructures/String.cpp \
     $$BANG_ROOT/src/Engine/Math/Color.cpp \
     $$BANG_ROOT/src/Engine/Math/Math.cpp \
     $$BANG_ROOT/src/Engine/Math/Random.cpp \
+    $$BANG_ROOT/src/Engine/General/SystemProcess.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/Path.cpp \
     $$BANG_ROOT/src/Engine/Debug/StreamOperators.cpp \
     $$BANG_ROOT/src/Engine/IO/Files/File.cpp
@@ -22,6 +23,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/Math/Math.h \
     $$BANG_ROOT/src/Engine/Math/Random.h \
     $$BANG_ROOT/src/Engine/IO/Files/Path.h \
+    $$BANG_ROOT/src/Engine/General/SystemProcess.h \
     $$BANG_ROOT/src/Engine/DataStructures/Containers.h \
     $$BANG_ROOT/src/Engine/Math/Color.h \
     $$BANG_ROOT/src/Engine/Math/Rect.h \

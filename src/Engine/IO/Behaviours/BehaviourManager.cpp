@@ -25,7 +25,6 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
     job.outputMode = Compiler::OutputType::Object;
     job.includePaths.PushBack( Paths::GetAllEngineSubDirs() );
     job.includePaths.PushBack( Paths::GetAllProjectSubDirs() );
-    job.includePaths.PushBack( Paths::GetQtIncludeDirs() );
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
@@ -86,10 +85,10 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
     job.libraries.PushBack( List<String>({"GLEW",
                                      "GL",
                                      "pthread",
-                                     "BangDataStructures",
+                                     "BangCore",
                                      "BangGraphics",
                                      "BangEngine",
-                                     "BangDataStructures",
+                                     "BangCore",
                                      "BangGraphics",
                                      "BangEngine"}) );
 

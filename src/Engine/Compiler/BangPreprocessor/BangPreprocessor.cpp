@@ -1,10 +1,11 @@
 #include "BangPreprocessor.h"
 
-#include <QProcess>
+#include <iostream>
 
 #include "Bang/Path.h"
 #include "Bang/File.h"
 #include "Bang/Array.h"
+#include "Bang/SystemProcess.h"
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"
 
@@ -167,22 +168,19 @@ void BangPreprocessor::RemoveComments(String *source)
 {
     String &src = *source;
 
-    QProcess gCompilerProcess;
-    gCompilerProcess.setReadChannel(QProcess::ProcessChannel::StandardOutput);
-    gCompilerProcess.start("g++", {"-fpreprocessed", "-E", "-"});
+    SystemProcess gCompilerProcess;
+    gCompilerProcess.Start("g++", {"-fpreprocessed", "-E", "-"});
 
-    gCompilerProcess.write( src.ToCString(), src.Size() );
-    gCompilerProcess.closeWriteChannel();
+    gCompilerProcess.Write(src);
+    gCompilerProcess.CloseWriteChannel();
 
-    bool ok = gCompilerProcess.waitForFinished(999999);
-    ok = ok && (gCompilerProcess.exitCode() == 0);
+    bool ok = gCompilerProcess.WaitUntilFinished();
+    ok = ok && (gCompilerProcess.GetExitCode() == 0);
 
-    String output = String(
-                       QString( gCompilerProcess.readAllStandardOutput() ).toStdString()
-                    );
-    gCompilerProcess.close();
+    String output = gCompilerProcess.ReadStandardOutput();
+    gCompilerProcess.Close();
 
-    output.Erase(output.Begin(), output.Find('\n')+1); // Erase first line
+    output.Erase(output.Begin(), output.Find('\n') + 1); // Erase first line
     *source = output;
 }
 

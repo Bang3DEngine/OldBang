@@ -119,14 +119,6 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 
     if (m_lockMouseMovement)
     {
-        /*
-        QPoint glob = QPoint(m_lastMouseCoords.x,
-                             m_lastMouseCoords.y);
-        glob = Screen::GetInstance()->mapToGlobal(glob);
-
-        fakeMoveEvent = true;
-        QCursor::setPos(glob);
-        */
     }
 }
 

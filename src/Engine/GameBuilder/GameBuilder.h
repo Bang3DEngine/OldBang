@@ -1,17 +1,13 @@
 #ifndef GAMEBUILDER_H
 #define GAMEBUILDER_H
 
-#include <QObject>
-
 #include "Bang/Path.h"
 #include "Bang/BinType.h"
 
 FORWARD class Project;
 
-class GameBuilder : public QObject
+class GameBuilder
 {
-    Q_OBJECT
-
 public:
     static void BuildGame(const Project *project,
                           const Path &outputExecutableFilepath,

@@ -24,8 +24,6 @@ public:
 
     static List<Path> GetAllProjectSubDirs();
     static List<Path> GetAllEngineSubDirs();
-    static const List<Path>& GetQtIncludeDirs();
-    static const List<Path>& GetQtLibrariesDirs();
     static List<Path> GetBehavioursSourcesFilepaths();
 
     static Path GetRelative(const Path &path);

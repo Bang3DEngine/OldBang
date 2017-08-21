@@ -10,7 +10,7 @@ DISTFILES += \
 $$PWD/../res/.astylerc
 
 SUBDIRS = \
-BangDataStructures \
+BangCore \
 BangGraphics \
 BangPreprocessor \
 BangEngine \
@@ -18,9 +18,9 @@ BangMainGameBuilder \
 BangMainGame \
 BangMain
 
-BangPreprocessor.depends    += BangDataStructures
-BangGraphics.depends        += BangDataStructures
-BangEngine.depends          += BangDataStructures BangPreprocessor BangGraphics
-BangMain.depends            += BangDataStructures BangPreprocessor BangGraphics BangEngine
-BangMainGameBuilder.depends += BangDataStructures BangPreprocessor BangGraphics BangEngine
-BangMainGame.depends        += BangDataStructures BangPreprocessor BangGraphics BangEngine
+BangPreprocessor.depends    += BangCore
+BangGraphics.depends        += BangCore
+BangEngine.depends          += BangCore BangPreprocessor BangGraphics
+BangMain.depends            += BangCore BangPreprocessor BangGraphics BangEngine
+BangMainGameBuilder.depends += BangCore BangPreprocessor BangGraphics BangEngine
+BangMainGame.depends        += BangCore BangPreprocessor BangGraphics BangEngine
