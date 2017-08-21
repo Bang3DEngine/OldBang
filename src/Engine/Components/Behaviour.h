@@ -1,8 +1,6 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-#include <QLibrary>
-
 #include "Bang/Paths.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
@@ -11,8 +9,10 @@
 #include "Bang/Prefab.h"
 #include "Bang/Random.h"
 #include "Bang/Camera.h"
+#include "Bang/Library.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/AudioClip.h"
 #include "Bang/SceneNode.h"
@@ -20,7 +20,6 @@
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/Resources.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 
@@ -38,10 +37,10 @@ public:
 
     void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
     static Behaviour* CreateDynamicBehaviour(const String &behaviourName,
-                                             QLibrary *openLibrary);
+                                             Library *openLibrary);
     static bool DeleteDynamicBehaviour(const String &behaviourName,
                                        Behaviour *behaviour,
-                                       QLibrary *openLibrary);
+                                       Library *openLibrary);
 
     void SetSourceFilepath(const Path &sourceFilepath);
 
@@ -61,7 +60,7 @@ public:
 
 private:
     Path m_sourceFilepath;
-    QLibrary *p_behavioursLibraryBeingUsed = nullptr;
+    Library *p_behavioursLibraryBeingUsed = nullptr;
 };
 
 // DEFINES

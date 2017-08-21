@@ -1,10 +1,10 @@
 #include "Bang/BehaviourManager.h"
 
-#include <QLibrary>
 
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
+#include "Bang/Library.h"
 #include "Bang/Project.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Application.h"
@@ -47,23 +47,22 @@ Compiler::Result BehaviourManager::MergeBehaviourObjects(
     return Compiler::Compile(job);
 }
 
-QLibrary *BehaviourManager::GetBehavioursLibrary()
+Library *BehaviourManager::GetBehavioursLibrary()
 {
     return BehaviourManager::GetInstance()->m_behavioursLibrary;
 }
 
 void BehaviourManager::LoadBehavioursLibrary(const Path &behavioursLibrary)
 {
-    QLibrary *behLib = new QLibrary(behavioursLibrary.ToString().ToQString());
-    behLib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
+    Library *behLib = new Library(behavioursLibrary);
 
-    bool success = behLib->load();
+    bool success = behLib->Load();
     BehaviourManager *bm = BehaviourManager::GetInstance();
     bm->m_behavioursLibrary = success ? behLib : nullptr;
     if (!success)
     {
         Debug_Error("There was an error when loading the library '" <<
-                     behavioursLibrary << "': " << behLib->errorString());
+                     behavioursLibrary << "': " << behLib->GetErrorString());
     }
 }
 

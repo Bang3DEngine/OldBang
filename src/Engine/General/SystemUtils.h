@@ -11,7 +11,7 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 
-FORWARD class QLibrary;
+FORWARD class Library;
 FORWARD class Behaviour;
 
 class SystemUtils
@@ -26,7 +26,7 @@ public:
     static void SystemBackground(const String &command,
                                  const List<String> &argsList = {});
 
-    static void CloseLibrary(QLibrary *library);
+    static void CloseLibrary(Library *library);
 
 private:
     SystemUtils() {}

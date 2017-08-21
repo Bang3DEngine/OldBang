@@ -22,9 +22,9 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically
-    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
+    Library *behavioursLib = BehaviourManager::GetBehavioursLibrary();
     p_behavioursLibraryBeingUsed = behavioursLib;
-    ENSURE(behavioursLib && behavioursLib->isLoaded());
+    ENSURE(behavioursLib && behavioursLib->IsLoaded());
 
     Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
                                                          behavioursLib);
@@ -43,19 +43,18 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 }
 
 Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
-                                             QLibrary *openLibrary)
+                                             Library *openLibrary)
 {
-    QLibrary *lib = openLibrary;
+    Library *lib = openLibrary;
     if (!lib) { return nullptr; }
 
     String errorString = "";
-    if (lib->isLoaded())
+    if (lib->IsLoaded())
     {
         // Get the pointer to the CreateDynamically function
         String funcName = "CreateDynamically_" + behaviourName;
         Behaviour* (*createFunction)(Application*) =
-                (Behaviour* (*)(Application*)) (
-                    lib->resolve(funcName.ToCString()));
+            lib->Get< Behaviour*(*)(Application*) >(funcName.ToCString());
 
         if (createFunction)
         {
@@ -64,31 +63,25 @@ Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
             // of this main binary, so it can link it.
             return createFunction(Application::GetInstance());
         }
-        else
-        {
-            errorString = lib->errorString();
-        }
+        else { errorString = lib->GetErrorString(); }
     }
-    else
-    {
-        errorString = lib->errorString();
-    }
+    else { errorString = lib->GetErrorString(); }
 
-    Debug_Error("Error loading the library " << openLibrary->fileName()
+    Debug_Error("Error loading the library " << openLibrary->GetLibraryPath()
                 << "." << errorString);
     return nullptr;
 }
 
 bool Behaviour::DeleteDynamicBehaviour(const String &behaviourName,
                                        Behaviour *behaviour,
-                                       QLibrary *openLibrary)
+                                       Library *openLibrary)
 {
     if (!openLibrary) { return false; }
 
     // Get the pointer to the DeleteDynamically function
     String funcName = "DeleteDinamically_" + behaviourName;
     void (*deleteFunction)(Behaviour*) =
-            (void (*)(Behaviour*)) (openLibrary->resolve(funcName.ToCString()));
+            (openLibrary->Get<void (*)(Behaviour*)>(funcName.ToCString()));
 
     if (deleteFunction)
     {
@@ -97,7 +90,7 @@ bool Behaviour::DeleteDynamicBehaviour(const String &behaviourName,
     }
     else
     {
-        Debug_Error(openLibrary->errorString());
+        Debug_Error(openLibrary->GetErrorString());
         return false;
     }
 }
@@ -111,7 +104,7 @@ void Behaviour::SetSourceFilepath(const Path &sourceFilepath)
 const Path &Behaviour::GetSourceFilepath() const { return m_sourceFilepath; }
 bool Behaviour::IsLoaded() const
 {
-    QLibrary *behavioursLib = BehaviourManager::GetBehavioursLibrary();
+    Library *behavioursLib = BehaviourManager::GetBehavioursLibrary();
     return GetSourceFilepath().Exists() &&
            p_behavioursLibraryBeingUsed == behavioursLib &&
            GetSourceFilepath().GetName() == GetClassName();

@@ -5,7 +5,7 @@
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
 
-FORWARD class QLibrary;
+FORWARD class Library;
 FORWARD class Behaviour;
 
 class BehaviourManager
@@ -23,13 +23,13 @@ public:
                                     const List<Path> &behaviourObjectFilepaths,
                                     BinType binaryType);
 
-    static QLibrary *GetBehavioursLibrary();
+    static Library *GetBehavioursLibrary();
     static void LoadBehavioursLibrary(const Path &behavioursLibrary);
 
     static void RemoveOldBehaviourLibraries(const Path& librariesDir);
 
 private:
-    QLibrary *m_behavioursLibrary = nullptr;
+    Library *m_behavioursLibrary = nullptr;
 
     static Compiler::Job CreateBaseJob(BinType binaryType);
 

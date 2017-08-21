@@ -50,6 +50,7 @@ SOURCES += \
     $$BANG_ROOT/src/Engine/Assets/Texture2D.cpp \
     $$BANG_ROOT/src/Engine/Assets/Prefab.cpp \
     $$BANG_ROOT/src/Engine/Assets/ShaderProgram.cpp \
+    $$BANG_ROOT/src/Engine/General/Library.cpp \
     $$BANG_ROOT/src/Engine/General/Mutex.cpp \
     $$BANG_ROOT/src/Engine/General/MutexLocker.cpp \
     $$BANG_ROOT/src/Engine/General/Thread.cpp \
@@ -120,6 +121,7 @@ HEADERS += \
     $$BANG_ROOT/src/Engine/General/Application.h \
     $$BANG_ROOT/src/Engine/Windows/Window.h \
     $$BANG_ROOT/src/Engine/Graphics/General/Screen.h \
+    $$BANG_ROOT/src/Engine/General/Library.h \
     $$BANG_ROOT/src/Engine/General/Mutex.h \
     $$BANG_ROOT/src/Engine/General/MutexLocker.h \
     $$BANG_ROOT/src/Engine/General/Thread.h \

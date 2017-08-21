@@ -1,9 +1,9 @@
 #include "Bang/SystemUtils.h"
 
 #include <QProcess>
-#include <QLibrary>
 
 #include "Bang/Debug.h"
+#include "Bang/Library.h"
 
 void SystemUtils::System(const String &command,
                          const List<String> &argsList,
@@ -53,11 +53,11 @@ void SystemUtils::_System(const String &command,
     }
 }
 
-void SystemUtils::CloseLibrary(QLibrary *library)
+void SystemUtils::CloseLibrary(Library *library)
 {
-    if (!library->unload())
+    if (!library->UnLoad())
     {
-        Debug_Error(library->errorString());
+        Debug_Error(library->GetErrorString());
     }
 }
 
