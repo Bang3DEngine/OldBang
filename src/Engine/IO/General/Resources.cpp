@@ -39,15 +39,24 @@ bool Resources::Contains(const String &id)
     return am->m_idToResource.ContainsKey(id);
 }
 
-void Resources::Unload(const String &id)
+void Resources::UnLoad(const String &id, bool deleteResource)
 {
-    Resources *am = Resources::GetInstance();
-    am->m_idToResource.Remove(id);
+    Resources *rs = Resources::GetInstance();
+    Resource *res = rs->m_idToResource.Get(id);
+    if (deleteResource) { delete res; }
+    rs->m_idToResource.Remove(id);
 }
 
-void Resources::Unload(Resource *res)
+void Resources::UnLoad(Resource *res, bool deleteResource)
 {
-    Resources *ress = Resources::GetInstance();
-    ress->m_idToResource.RemoveValues(res);
+    Resources *rs = Resources::GetInstance();
+    if (deleteResource)
+    {
+        for (const auto& itPair : rs->m_idToResource)
+        {
+            if ( itPair.second == res) { delete res; }
+        }
+    }
+    rs->m_idToResource.RemoveValues(res);
 
 }

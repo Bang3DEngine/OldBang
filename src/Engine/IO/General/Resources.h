@@ -44,8 +44,21 @@ public:
     template <class T>
     static T* Get(const String &id) { return DCAST<T*>( Get(id) ); }
 
-    static void Unload(const String &id);
-    static void Unload(Resource *res);
+    template <class T>
+    static Array<T*> GetAll()
+    {
+        Array<T*> result;
+        Resources *rs =  Resources::GetInstance();
+        for (auto &itPair : rs->m_idToResource)
+        {
+            T *resourceT = DCAST<T*>(itPair.second);
+            if (resourceT) { result.PushBack(resourceT); }
+        }
+        return result;
+    }
+
+    static void UnLoad(const String &id, bool deleteResource = false);
+    static void UnLoad(Resource *res, bool deleteResource = false);
 
 private:
     Map<String, Resource*> m_idToResource;

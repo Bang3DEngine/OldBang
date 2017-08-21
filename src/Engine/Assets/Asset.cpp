@@ -9,7 +9,7 @@ Asset::Asset()
 
 Asset::~Asset()
 {
-    Resources::Unload(this);
+    Resources::UnLoad(this);
 }
 
 const Path& Asset::GetFilepath() const

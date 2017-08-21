@@ -21,7 +21,16 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
+    for (AudioPlayerRunnable *audioPlayer : m_currentAudioPlayers)
+    {
+        ALuint sourceId = audioPlayer->GetALAudioSource()->GetALSourceId();
+        alDeleteSources(1, &sourceId);
+    }
     StopAllSounds();
+
+    Array<AudioClip*> allAudioClips = Resources::GetAll<AudioClip>();
+    for (AudioClip *ac : allAudioClips) { Resources::UnLoad(ac, true); }
+
     alcDestroyContext(m_alContext);
     alcCloseDevice(m_alDevice);
 }
