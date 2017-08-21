@@ -42,11 +42,14 @@ void Path::SetPath(const String &path)
 
 bool Path::IsDir() const
 {
+    if (!Exists()) { return false; }
     return !IsFile();
 }
 
 bool Path::IsFile() const
 {
+    if (!Exists()) { return false; }
+
     struct stat path_stat;
     stat(GetAbsolute().ToCString(), &path_stat);
     return S_ISREG(path_stat.st_mode);

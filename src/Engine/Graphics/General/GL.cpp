@@ -46,10 +46,17 @@ bool GL::CheckFramebufferError()
 void GL::ClearColorBuffer(const Color &clearColor,
                           bool clearR, bool clearG, bool clearB, bool clearA)
 {
+    bool colorMaskRBefore = GL::IsColorMaskR();
+    bool colorMaskGBefore = GL::IsColorMaskG();
+    bool colorMaskBBefore = GL::IsColorMaskB();
+    bool colorMaskABefore = GL::IsColorMaskA();
     GL::SetColorMask(clearR, clearG, clearB, clearA);
+
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
-    GL::SetColorMask(true, true, true, true);
+
+    GL::SetColorMask(colorMaskRBefore, colorMaskGBefore,
+                     colorMaskBBefore, colorMaskABefore);
 }
 
 void GL::ClearDepthBuffer(float clearDepth)

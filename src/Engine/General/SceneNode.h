@@ -129,8 +129,10 @@ public:
     void SetParent(T *newParent, int _index = -1)
     {
         if (parent) { parent->m_children.Remove( SCAST<T*>(this) ); }
-        ENSURE( newParent );
-        ASSERT( !newParent->IsChildOf( SCAST<const T*>(this) ) );
+        if (newParent)
+        {
+            ASSERT( !newParent->IsChildOf( SCAST<const T*>(this) ) );
+        }
 
         p_parent = SCAST<T*>(newParent);
         if (parent)

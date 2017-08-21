@@ -111,6 +111,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     ApplyDeferredLights();
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
+    GL::ClearDepthBuffer();
     GL::ClearStencilBuffer();
 
     // GBuffer Canvas rendering
@@ -120,6 +121,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     scene->Render(RenderPass::Canvas);
     scene->Render(RenderPass::Canvas_PostProcess);
     GL::SetDepthTest(true);
+    GL::ClearStencilBuffer();
 
     // GBuffer Gizmos rendering
     GL::SetDepthWrite(true);
