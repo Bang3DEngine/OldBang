@@ -66,6 +66,7 @@ OTHER_OPTS = --std=c++14 \
              -Wno-sign-compare \
              -Wswitch \
              -Wl,--export-dynamic  \
+             -pthread \
              -fPIC
 ALL_OPTS = -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS           -= $$ALL_OPTS

@@ -1,14 +1,14 @@
 #ifndef AUDIOPLAYERRUNNABLE_H
 #define AUDIOPLAYERRUNNABLE_H
 
-#include <QRunnable>
+#include "Bang/Thread.h"
 
 #include "Bang.h"
 
 FORWARD class AudioClip;
 FORWARD class ALAudioSource;
 
-class AudioPlayerRunnable : public QRunnable
+class AudioPlayerRunnable : public ThreadRunnable
 {
 public:
     AudioPlayerRunnable(AudioClip *clip,
@@ -23,7 +23,7 @@ public:
     AudioClip* GetAudioClip() const;
     ALAudioSource* GetALAudioSource() const;
 
-    void run() override;
+    void Run() override;
 
 private:
     bool m_forceExit = false;

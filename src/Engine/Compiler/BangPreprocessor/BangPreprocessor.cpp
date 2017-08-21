@@ -178,7 +178,7 @@ void BangPreprocessor::RemoveComments(String *source)
     ok = ok && (gCompilerProcess.exitCode() == 0);
 
     String output = String(
-                       QString( gCompilerProcess.readAllStandardOutput() )
+                       QString( gCompilerProcess.readAllStandardOutput() ).toStdString()
                     );
     gCompilerProcess.close();
 

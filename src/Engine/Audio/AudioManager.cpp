@@ -20,7 +20,7 @@
 AudioManager::AudioManager()
 {
     alutInit(0, NULL);
-    m_threadPool.setMaxThreadCount(256);
+    m_threadPool.SetMaxThreadCount(256);
 }
 
 AudioManager::~AudioManager()
@@ -36,7 +36,7 @@ void AudioManager::Play(AudioClip *audioClip,
     ENSURE(audioClip);
     AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, aas, delay);
     AudioManager *am = AudioManager::GetInstance();
-    bool started = am->m_threadPool.tryStart(player);
+    bool started = am->m_threadPool.TryStart(player);
     if (started)
     {
         QMutexLocker m(&am->m_mutex_currentAudios);

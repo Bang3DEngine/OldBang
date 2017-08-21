@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/Thread.h"
 #include "Bang/G_Image.h"
 #include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"

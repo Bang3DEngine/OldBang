@@ -1,7 +1,5 @@
 #include "Bang/AudioPlayerRunnable.h"
 
-#include <QThread>
-
 #include "Bang/AudioClip.h"
 #include "Bang/AudioManager.h"
 #include "Bang/ALAudioSource.h"
@@ -13,7 +11,7 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
     m_audioClip = clip;
     m_alAudioSource = alAudioSource;
     m_delayInSeconds = delayInSeconds;
-    setAutoDelete(true);
+    SetAutoDelete(true);
 }
 
 AudioPlayerRunnable::~AudioPlayerRunnable()
@@ -35,19 +33,19 @@ ALAudioSource *AudioPlayerRunnable::GetALAudioSource() const
     return m_alAudioSource;
 }
 
-void AudioPlayerRunnable::run()
+void AudioPlayerRunnable::Run()
 {
     ENSURE(m_audioClip->IsLoaded());
 
     if (m_delayInSeconds > 0.0f) // Wait delay
     {
-        QThread::currentThread()->msleep(m_delayInSeconds * 1000);
+        Thread::SleepCurrentThread(m_delayInSeconds);
     }
 
     AudioManager::ClearALErrors();
     AudioManager::CheckALError();
 
     m_alAudioSource->Play(); // Play and wait until source is stopped
-    do { QThread::currentThread()->msleep(300); }
+    do { Thread::SleepCurrentThread(0.3f); }
     while ( !m_forceExit && !m_alAudioSource->IsStopped() );
 }
