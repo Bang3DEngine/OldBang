@@ -88,7 +88,6 @@ public:
 int main(int argc, char **argv)
 {
     Application app(argc, argv);
-    Paths::SetEngineRoot( Path("/home/sephirot47/Bang") );
     app.CreateWindow();
 
     Scene *scene = new Scene();
