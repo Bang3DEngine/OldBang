@@ -6,6 +6,8 @@
 
 class GUIMask : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUIMask)
+
 public:
     GUIMask();
     virtual ~GUIMask();

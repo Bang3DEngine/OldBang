@@ -91,13 +91,7 @@ void AudioSource::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    AudioClip *audioClip = GetAudioClip();
-    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path();
-    Path newAudioClipFilepath = xmlInfo.Get<Path>("AudioClip");
-    if (audioClipFilepath != newAudioClipFilepath)
-    {
-        SetAudioClip( Resources::Load<AudioClip>(newAudioClipFilepath) );
-    }
+    SetAudioClip( Resources::Load<AudioClip>( xmlInfo.Get<GUID>("AudioClip") ) );
     SetVolume(xmlInfo.Get<float>("Volume"));
     SetPitch(xmlInfo.Get<float>("Pitch"));
     SetRange(xmlInfo.Get<float>("Range"));
@@ -110,8 +104,8 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
 
     AudioClip *audioClip = GetAudioClip();
-    Path audioClipFilepath = audioClip ? audioClip->GetFilepath() : Path::Empty;
-    xmlInfo->Set("AudioClip", audioClipFilepath);
+    GUID audioClipGUID = audioClip ? audioClip->GetGUID() : GUID::Empty();
+    xmlInfo->Set("AudioClip",   audioClipGUID);
     xmlInfo->Set("Volume",      GetVolume());
     xmlInfo->Set("Pitch",       GetPitch());
     xmlInfo->Set("Range",       GetRange());

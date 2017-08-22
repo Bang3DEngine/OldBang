@@ -34,6 +34,7 @@ int main(int argc, char **argv)
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Thread.h"
+#include "Bang/Project.h"
 #include "Bang/G_Image.h"
 #include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"
@@ -49,6 +50,7 @@ int main(int argc, char **argv)
 #include "Bang/SystemProcess.h"
 #include "Bang/GUIScrollArea.h"
 #include "Bang/RectTransform.h"
+#include "Bang/ProjectManager.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GUIVerticalLayout.h"
@@ -89,6 +91,13 @@ int main(int argc, char **argv)
 {
     Application app(argc, argv);
     app.CreateWindow();
+
+    /*
+    ProjectManager pm;
+    pm.OpenProject( Path("/home/sephirot47/Snake/Snake.bproject") );
+    pm.GetCurrentProject()->OpenFirstFoundScene();
+    exit(0);
+    */
 
     Scene *scene = new Scene();
 

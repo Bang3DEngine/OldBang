@@ -61,8 +61,7 @@ void UIImageRenderer::CloneInto(ICloneable *clone) const
 void UIImageRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
-    Path texFilepath = xmlInfo.Get<Path>("Image");
-    SetImage( Resources::Load<Texture2D>(texFilepath) );
+    SetImage( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) );
 }
 
 void UIImageRenderer::Write(XMLNode *xmlInfo) const
@@ -70,6 +69,5 @@ void UIImageRenderer::Write(XMLNode *xmlInfo) const
     UIRenderer::Write(xmlInfo);
 
     Texture2D *imgTex = GetImageTexture();
-    Path texFilepath = imgTex ? imgTex->GetFilepath() : Path();
-    xmlInfo->Set("Image", texFilepath);
+    xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
 }

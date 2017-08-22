@@ -1,11 +1,12 @@
 #ifndef SERIALIZABLEOBJECT_H
 #define SERIALIZABLEOBJECT_H
 
+#include "Bang/GUID.h"
 #include "Bang/String.h"
 #include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
-#define SOBJECT(CLASS) \
+#define SERIALIZABLE_OBJECT(CLASS) \
         ICLONEABLE(CLASS)\
         public: \
         virtual String GetClassName() const override { return #CLASS; } \
@@ -16,6 +17,7 @@ class SerializableObject : public ICloneable,
 {
 public:
     virtual ~SerializableObject();
+    SerializableObject(const SerializableObject &rhs);
 
     XMLNode GetXMLInfo() const;
     String GetSerializedString() const;
@@ -32,12 +34,21 @@ public:
 
     virtual void PostRead(const XMLNode &xmlInfo);
 
-    virtual void CloneInto(ICloneable*) const override {}
+    virtual void CloneInto(ICloneable*) const override;
     virtual String GetClassName() const = 0;
     virtual String GetInstanceId() const;
 
+    const GUID& GetGUID() const;
+
 protected:
     SerializableObject();
+
+private:
+    GUID m_GUID;
+
+    void SetGUID(const GUID &guid);
+
+    friend class Resources;
 };
 
 #endif // SERIALIZABLEOBJECT_H

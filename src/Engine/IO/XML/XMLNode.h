@@ -6,11 +6,12 @@
 #include "Bang/Debug.h"
 #include "Bang/IToString.h"
 #include "Bang/XMLAttribute.h"
+#include "Bang/StreamOperators.h"
 
 class XMLNode : public IToString
 {
 public:
-    XMLNode(const String &tagName = "");
+    XMLNode(const String &tagName = "NoTag");
     virtual ~XMLNode();
 
     void CloneInto(XMLNode *xmlNode) const;
@@ -29,7 +30,9 @@ public:
     void Set(const String &attributeName, const T& value,
              const Array<XMLProperty>& properties = {})
     {
-        Debug_Warn("Set type not supported for '" << attributeName << "'");
+        std::ostringstream oss;
+        oss << value;
+        Set(attributeName, String(oss.str()), properties);
     }
 
     template<class T>
@@ -58,7 +61,7 @@ public:
     static XMLNode FromString(const String &xml);
 
 private:
-    String m_tagName = "";
+    String m_tagName;
     mutable List<String> m_attributeOrder;
     mutable Map<String, XMLAttribute> m_attributes;
     List<XMLNode> m_children;

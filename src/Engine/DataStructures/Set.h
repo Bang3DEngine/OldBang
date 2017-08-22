@@ -20,6 +20,9 @@ public:
 
     void Add(const Key &key);
 
+    template<class OtherIterator>
+    void Add(OtherIterator itBegin, OtherIterator itEnd);
+
     void Remove(const Key &key);
     Iterator Remove(Iterator it);
 

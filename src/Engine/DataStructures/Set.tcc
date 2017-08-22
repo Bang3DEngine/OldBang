@@ -20,6 +20,13 @@ void Set<Key>::Add(const Key &key)
 }
 
 template<class Key>
+template<class OtherIterator>
+void Set<Key>::Add(OtherIterator itBegin, OtherIterator itEnd)
+{
+    m_set.insert(itBegin, itEnd);
+}
+
+template<class Key>
 void Set<Key>::Remove(const Key &key)
 {
     m_set.erase(key);

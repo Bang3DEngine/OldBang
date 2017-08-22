@@ -10,7 +10,7 @@ class ProjectManager
 public:
     ProjectManager();
 
-    virtual Project* OpenProject(const Path &projectFilepath) const;
+    static Project* OpenProject(const Path &projectFilepath);
 
     static Project* CreateNewProject(const Path &projectDirPath,
                                      const String &projectName);

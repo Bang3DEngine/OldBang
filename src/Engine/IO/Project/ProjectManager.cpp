@@ -11,6 +11,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Extensions.h"
+#include "Bang/ImportFilesManager.h"
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -18,11 +19,11 @@ ProjectManager::ProjectManager()
 {
 }
 
-Project* ProjectManager::OpenProject(const Path &projectFilepath) const
+Project* ProjectManager::OpenProject(const Path &projectFilepath)
 {
     XMLNode xmlInfo = XMLParser::FromFile(projectFilepath);
 
-    CloseCurrentProject();
+    ProjectManager::CloseCurrentProject();
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
@@ -30,6 +31,9 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath) const
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
     Paths::SetProjectRoot(currentProject->GetProjectDirPath());
+
+    ImportFilesManager::CreateMissingProjectImportFiles();
+    ImportFilesManager::LoadImportFilepathGUIDs();
 
     return currentProject;
 }

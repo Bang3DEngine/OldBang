@@ -1,20 +1,5 @@
 #include "Bang/Random.h"
 
-float Random::Range(float minIncluded, float maxIncluded)
-{
-    return Value() * (maxIncluded-minIncluded) + minIncluded;
-}
-
-int Random::Range(int minIncluded, int maxExcluded)
-{
-    return (rand() % (maxExcluded-minIncluded)) + minIncluded;
-}
-
-float Random::Value()
-{
-    return float(rand()) / RAND_MAX;
-}
-
 Vector2 Random::InsideUnitCircle()
 {
     return Vector2(Random::Range(-1.0f, 1.0f),

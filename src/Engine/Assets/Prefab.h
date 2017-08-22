@@ -13,7 +13,7 @@
 
 class Prefab : public Asset
 {
-	SOBJECT(Prefab)
+    ASSET(Prefab)
 
 public:
     Prefab();

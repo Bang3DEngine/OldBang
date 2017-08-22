@@ -11,12 +11,13 @@
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
 #include "Bang/G_Screen.h"
-#include "Bang/ShaderManager.h"
+#include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
-#include "Bang/Resources.h"
+#include "Bang/ShaderManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/G_FontSheetCreator.h"
+#include "Bang/ImportFilesManager.h"
 
 Application* Application::s_appSingleton = nullptr;
 
@@ -24,14 +25,18 @@ Application::Application(int argc, char **argv)
 {
     Application::s_appSingleton = this;
 
-    m_paths            = new Paths();
-    m_input            = new Input();
-    m_time             = new Time();
-    m_sceneManager     = new SceneManager();
-    m_shaderManager    = new ShaderManager();
-    m_audioManager     = new AudioManager();
-    m_assetsManager    = new Resources();
-    m_behaviourManager = new BehaviourManager();
+    m_paths              = new Paths();
+    m_input              = new Input();
+    m_time               = new Time();
+    m_sceneManager       = new SceneManager();
+    m_shaderManager      = new ShaderManager();
+    m_audioManager       = new AudioManager();
+    m_resources          = new Resources();
+    m_behaviourManager   = new BehaviourManager();
+    m_importFilesManager = new ImportFilesManager();
+
+    ImportFilesManager::CreateMissingProjectImportFiles();
+    ImportFilesManager::LoadImportFilepathGUIDs();
 }
 
 Application::~Application()
@@ -39,10 +44,10 @@ Application::~Application()
     delete m_paths;
     delete m_input;
     delete m_window;
+    delete m_resources;
     delete m_shaderManager;
     delete m_audioManager;
     delete m_sceneManager;
-    delete m_assetsManager;
     delete m_behaviourManager;
 }
 
@@ -129,7 +134,12 @@ AudioManager *Application::GetAudioManager() const
 
 Resources *Application::GetResources() const
 {
-    return m_assetsManager;
+    return m_resources;
+}
+
+ImportFilesManager *Application::GetImportFilesManager() const
+{
+    return m_importFilesManager;
 }
 
 BehaviourManager *Application::GetBehaviourManager() const

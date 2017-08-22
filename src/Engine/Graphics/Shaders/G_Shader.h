@@ -5,10 +5,14 @@
 
 #include "Bang/Path.h"
 #include "Bang/String.h"
+#include "Bang/Resource.h"
 #include "Bang/GLObject.h"
 
-class G_Shader : public GLObject
+class G_Shader : public GLObject,
+                 public Resource
 {
+    RESOURCE(G_Shader)
+
 public:
     enum class Type
     {
@@ -16,6 +20,7 @@ public:
         Fragment = GL_FRAGMENT_SHADER
     };
 
+    G_Shader();
     G_Shader(G_Shader::Type t);
 
     bool LoadFromFile(const Path &filepath);

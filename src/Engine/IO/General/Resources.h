@@ -1,13 +1,13 @@
-#ifndef ASSETSMANAGER_H
-#define ASSETSMANAGER_H
+#ifndef RESOURCES_H
+#define RESOURCES_H
 
 #include <sstream>
 
 #include "Bang/Map.h"
-#include "Bang/Asset.h"
 #include "Bang/Paths.h"
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
+#include "Bang/ImportFilesManager.h"
 #include "Bang/SerializableObject.h"
 
 class Resources
@@ -16,40 +16,42 @@ public:
     Resources();
     virtual ~Resources();
 
-    static void Add(const String& id, Resource *x);
+    static void Add(const GUID& id, Resource *x);
 
-    template <class T>
-    static
-    typename std::enable_if<!T_SUBCLASS(T, Asset) &&
-                             T_SUBCLASS(T, Resource) &&
-                             T_SUBCLASS(T, SerializableObject), T>::type*
+    template <class ResourceSubClass>
+    static TT_SUBCLASS(ResourceSubClass, Resource)*
     Load(const Path &filepath)
     {
-        return Resources::_Load<T>(filepath);
+        const GUID &guid = ImportFilesManager::GetGUIDFromFilepath(filepath);
+        if (!Resources::Contains(guid))
+        {
+            Resource *res = new ResourceSubClass();
+            Path importFile = ImportFilesManager::GetImportFilePath(filepath);
+            res->Read( XMLParser::FromFile(importFile) );
+            Resources::Add(guid, res);
+        }
+        return Resources::GetCached<ResourceSubClass>(guid);
     }
-    // Loads Non-Asset resources
-
-    template <class AssetClass>
-    static TT_SUBCLASS(AssetClass, Asset)* Load(const Path &filepath)
-    {
-        AssetClass *a = _Load<AssetClass>(filepath);
-        if (a) { a->m_assetFilepath = filepath; }
-        return a;
-    }
-    // Loads Asset resources
 
     template <class T>
     static T* Load(const String &filepath) { return Load<T>(PPATH(filepath)); }
 
     template <class T>
-    static T* Get(const String &id) { return DCAST<T*>( Get(id) ); }
+    static T* Load(const GUID &guid)
+    {
+        if (!Resources::Contains(guid))
+        {
+            Resources::Load<T>( ImportFilesManager::GetFilepath(guid) );
+        }
+        return Resources::GetCached<T>(guid);
+    }
 
     template <class T>
     static Array<T*> GetAll()
     {
         Array<T*> result;
         Resources *rs =  Resources::GetInstance();
-        for (auto &itPair : rs->m_idToResource)
+        for (auto &itPair : rs->m_GUIDToResource)
         {
             T *resourceT = DCAST<T*>(itPair.second);
             if (resourceT) { result.PushBack(resourceT); }
@@ -57,28 +59,23 @@ public:
         return result;
     }
 
-    static void UnLoad(const String &id, bool deleteResource = false);
+    static void UnLoad(const GUID &guid, bool deleteResource = false);
     static void UnLoad(Resource *res, bool deleteResource = false);
 
 private:
-    Map<String, Resource*> m_idToResource;
+    Map<GUID, Resource*> m_GUIDToResource;
 
-    template <class T>
-    static T* _Load(const Path &filepath)
+    static bool Contains(const GUID &guid);
+
+    template<class T>
+    static T* GetCached(const GUID &guid)
     {
-        const String id = filepath.GetAbsolute();
-        if (!Resources::Contains(id))
-        {
-            T *res = new T();
-            res->Read( XMLParser::FromFile(filepath) );
-            Resources::Add(id, SCAST<Resource*>(res));
-        }
-        return Resources::Get<T>(id);
+        Resource *res = GetCached(guid);
+        return res ? DCAST<T*>(res) : nullptr;
     }
 
-    static bool Contains(const String &id);
-    static Resource* Get(const String &id);
+    static Resource* GetCached(const GUID &guid);
     static Resources* GetInstance();
 };
 
-#endif // ASSETSMANAGER_H
+#endif // RESOURCES_H

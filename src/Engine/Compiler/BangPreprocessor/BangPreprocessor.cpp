@@ -178,7 +178,7 @@ void BangPreprocessor::RemoveComments(String *source)
     String output = gCompilerProcess.ReadStandardOutput();
     gCompilerProcess.Close();
 
-    output.Erase(output.Begin(), output.Find('\n') + 1); // Erase first line
+    output.Remove(output.Begin(), output.Find('\n') + 1); // Remove first line
     *source = output;
 }
 

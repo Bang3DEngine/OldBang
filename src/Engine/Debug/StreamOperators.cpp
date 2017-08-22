@@ -1,5 +1,6 @@
 #include "Bang/StreamOperators.h"
 
+#include "Bang/GUID.h"
 #include "Bang/Path.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"

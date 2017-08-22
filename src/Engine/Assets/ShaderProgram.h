@@ -7,7 +7,7 @@
 class ShaderProgram : public G_ShaderProgram,
                       public Asset
 {
-    SOBJECT(ShaderProgram)
+    ASSET(ShaderProgram)
 
 public:
     enum Type

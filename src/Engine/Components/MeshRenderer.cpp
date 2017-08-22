@@ -46,5 +46,5 @@ void MeshRenderer::Read(const XMLNode &xmlInfo)
 void MeshRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-    xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetFilepath() : Path::Empty);
+    xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetGUID() : GUID::Empty());
 }

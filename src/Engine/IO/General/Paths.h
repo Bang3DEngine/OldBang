@@ -23,8 +23,8 @@ public:
     static Path ProjectLibrariesDir();
 
     static List<Path> GetAllProjectSubDirs();
-    static List<Path> GetProjectIncludeDirs();
     static List<Path> GetEngineIncludeDirs();
+    static List<Path> GetProjectIncludeDirs();
     static List<Path> GetBehavioursSourcesFilepaths();
 
     static Path GetRelative(const Path &path);

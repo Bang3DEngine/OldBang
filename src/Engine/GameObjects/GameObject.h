@@ -18,7 +18,7 @@ class GameObject : public SerializableObject,
                    public SceneNode<GameObject>,
                    public IToString
 {
-    SOBJECT(GameObject)
+    SERIALIZABLE_OBJECT(GameObject)
 
 public:
     String const& name = m_name;

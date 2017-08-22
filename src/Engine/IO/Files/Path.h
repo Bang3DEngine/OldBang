@@ -26,6 +26,7 @@ public:
     String GetName() const;
     String GetNameExt() const;
     String GetExtension() const;
+    Array<String> GetExtensions() const;
     const String& GetAbsolute() const;
     Path GetDuplicate() const;
 
@@ -40,6 +41,7 @@ public:
     Path AppendRaw(const String& str) const;
     Path AppendExtension(const String& extension) const;
 
+    Path ChangeHidden(bool hidden) const;
     Path ChangeExtension(const String& extension) const;
 
     // "*.jpg *.so.*"

@@ -3,6 +3,10 @@
 #include "Bang/Array.h"
 #include "Bang/RectTransform.h"
 
+GUIDirLayout::GUIDirLayout() : GUIDirLayout("GUIDirLayout", false)
+{
+}
+
 GUIDirLayout::GUIDirLayout(const String &name, bool vertical) :
     UIGameObject(name),
     m_vertical(vertical)

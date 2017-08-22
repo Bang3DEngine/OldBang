@@ -74,14 +74,14 @@ void String::Insert(int position, const String &str)
     m_str.insert(position, str.ToCString());
 }
 
-void String::Erase(String::Iterator it, int numberOfChars)
+void String::Remove(String::Iterator it, int numberOfChars)
 {
     Iterator end = it;
     std::advance(end, numberOfChars);
     m_str.erase(it, end);
 }
 
-void String::Erase(int beginIndex, int endIndexInclusive)
+void String::Remove(int beginIndex, int endIndexInclusive)
 {
     Iterator begin = Begin();
     std::advance(begin, beginIndex);
@@ -166,7 +166,7 @@ int String::ReplaceInSitu(const String &from,
         lastIndex = IndexOf(from, lastIndex);
         if (lastIndex >= 0)
         {
-            Erase(lastIndex, lastIndex + from.Size() - 1);
+            Remove(lastIndex, lastIndex + from.Size() - 1);
             Insert(lastIndex, to);
             lastIndex += to.Size();
             ++numReplacements;

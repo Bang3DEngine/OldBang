@@ -11,6 +11,8 @@ FORWARD class UIImageRenderer;
 
 class GUIButton : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUIButton)
+
 public:
     GUIButton(const String &labelText = "Bang");
     virtual ~GUIButton();
