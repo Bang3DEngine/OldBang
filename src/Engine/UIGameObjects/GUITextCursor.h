@@ -7,6 +7,8 @@ FORWARD class LineRenderer;
 
 class GUITextCursor : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUITextCursor)
+
 public:
     GUITextCursor();
     virtual ~GUITextCursor();

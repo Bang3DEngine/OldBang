@@ -100,56 +100,44 @@ void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    ShaderProgram *sp = GetShaderProgram();
-    Path vshaderFilepath = xmlInfo.Get<Path>("VertexShader");
-    Path fshaderFilepath = xmlInfo.Get<Path>("FragmentShader");
-    if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
-        vshaderFilepath != sp->GetVertexShader()->GetFilepath() ||
-        fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
-       )
-    {
-        ShaderProgram *newSp = new ShaderProgram();
-        newSp->Load(vshaderFilepath, fshaderFilepath);
-        SetShaderProgram(newSp);
-    }
-
     SetDiffuseColor(xmlInfo.Get<Color>("DiffuseColor"));
     SetShininess(xmlInfo.Get<float>("Shininess"));
     SetReceivesLighting(xmlInfo.Get<bool>("ReceivesLighting"));
     SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
+    SetTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Texture") ) );
 
-    Path texAssetFilepath = xmlInfo.Get<Path>("Texture");
-    Texture2D *texture = Resources::Load<Texture2D>(texAssetFilepath);
-    SetTexture(texture);
+    ShaderProgram *sp = GetShaderProgram();
+    Path vsPath = xmlInfo.Get<Path>("VertexShader");
+    Path fsPath = xmlInfo.Get<Path>("FragmentShader");
+    if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
+        vsPath != sp->GetVertexShader()->GetFilepath()  ||
+        fsPath != sp->GetFragmentShader()->GetFilepath()
+       )
+    {
+        ShaderProgram *newSp = new ShaderProgram();
+        newSp->Load(vsPath, fsPath);
+        SetShaderProgram(newSp);
+    }
 }
 
 void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->Set("DiffuseColor",    GetDiffuseColor());
-    xmlInfo->Set("Shininess",       GetShininess());
+    xmlInfo->Set("DiffuseColor",     GetDiffuseColor());
+    xmlInfo->Set("Shininess",        GetShininess());
     xmlInfo->Set("ReceivesLighting", GetReceivesLighting());
-    xmlInfo->Set("UvMultiply",    GetUvMultiply());
+    xmlInfo->Set("UvMultiply",       GetUvMultiply());
+    xmlInfo->Set("Texture", GetTexture()->GetGUID());
 
-    Path texFilepath = GetTexture() ? GetTexture()->GetFilepath() : Path::Empty;
-    xmlInfo->Set("Texture", texFilepath);
-
-    Path vsFile, fsFile;
+    Path vsPath, fsPath;
     G_ShaderProgram *sp = GetShaderProgram();
     if (sp)
     {
-        if (sp->GetVertexShader())
-        {
-            vsFile = sp->GetVertexShader()->GetFilepath();
-        }
-
-        if (sp->GetFragmentShader())
-        {
-            fsFile = sp->GetFragmentShader()->GetFilepath();
-        }
+        if (sp->GetVertexShader()) { vsPath = sp->GetVertexShader()->GetFilepath(); }
+        if (sp->GetFragmentShader()) { fsPath = sp->GetFragmentShader()->GetFilepath(); }
     }
-    xmlInfo->Set("VertexShader", vsFile);
-    xmlInfo->Set("FragmentShader", fsFile);
+    xmlInfo->Set("VertexShader",   vsPath);
+    xmlInfo->Set("FragmentShader", fsPath);
 }
 

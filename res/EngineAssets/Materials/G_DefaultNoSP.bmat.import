@@ -1,0 +1,7 @@
+<Material DiffuseColor="(1, 1, 1, 1)"{}
+          ReceivesLighting="false"{}
+          VertexShader="./Shaders/G_Default.vert_g"{FileExtension="vert"",IsEngineFile}
+          FragmentShader="./Shaders/G_Default.frag_g"{FileExtension="frag"",IsEngineFile}
+          GUID="14728619060547813377"{}
+         >
+</Material>

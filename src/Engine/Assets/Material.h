@@ -9,7 +9,7 @@ FORWARD   class ShaderProgram;
 
 class Material : public Asset
 {
-	SOBJECT(Material)
+    ASSET(Material)
 
 public:
     Material();

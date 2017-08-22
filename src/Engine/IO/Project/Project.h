@@ -7,7 +7,7 @@
 
 class Project : public SerializableObject
 {
-    SOBJECT(Project)
+    SERIALIZABLE_OBJECT(Project)
 
 public:
     Project();

@@ -5,9 +5,12 @@
 #include "Bang/Array.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
+#include "Bang/Resource.h"
 
-class G_Image
+class G_Image : public Resource
 {
+    RESOURCE(G_Image)
+
 public:
     G_Image();
     G_Image(int width, int height);

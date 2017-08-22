@@ -10,9 +10,12 @@
 class Random
 {
 public:
-    static float Range(float minIncluded, float maxIncluded);
-    static int   Range(int minIncluded, int maxExcluded);
-    static float Value();
+    template<class T = float>
+    static T Value();
+
+    template<class T>
+    static T Range(T minIncluded, T maxExcluded);
+
     static Vector2 InsideUnitCircle();
     static Vector3 InsideUnitSphere();
     static Vector4 RandomVector4();
@@ -23,5 +26,17 @@ public:
 private:
     Random();
 };
+
+template<class T>
+T Random::Value()
+{
+    return float(rand()) / RAND_MAX;
+}
+
+template<class T>
+T Random::Range(T minIncluded, T maxExcluded)
+{
+    return SCAST<T>(Random::Value() * (maxExcluded-minIncluded)) + minIncluded;
+}
 
 #endif // RANDOM_H

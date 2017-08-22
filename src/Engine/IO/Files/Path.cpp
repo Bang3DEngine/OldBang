@@ -30,13 +30,13 @@ void Path::SetPath(const String &path)
     if (!m_absolutePath.IsEmpty() &&
          m_absolutePath.At(m_absolutePath.Size()-1) == '/')
     {
-        m_absolutePath.Erase(m_absolutePath.Size()-1,
+        m_absolutePath.Remove(m_absolutePath.Size()-1,
                              m_absolutePath.Size()-1);
     }
 
     if (m_absolutePath.BeginsWith("./"))
     {
-        m_absolutePath.Erase(0, 1);
+        m_absolutePath.Remove(0, 1);
     }
 }
 
@@ -170,8 +170,19 @@ String Path::GetNameExt() const
 
 String Path::GetExtension() const
 {
-    Array<String> parts = GetNameExt().Split<Array>('.');
-    return parts.Size() >= 2 ? parts[1] : "";
+    if (IsEmpty()) { return ""; }
+    List<String> parts = GetNameExt().Split<List>('.');
+    if (parts.IsEmpty()) { return ""; }
+    parts.PopFront();
+    return String::Join(parts, ".");
+}
+
+Array<String> Path::GetExtensions() const
+{
+    if (IsEmpty()) { return {}; }
+    List<String> parts = GetNameExt().Split<List>('.');
+    parts.PopFront();
+    return parts.To<Array>();
 }
 
 Path Path::GetDirectory() const
@@ -226,8 +237,8 @@ bool Path::BeginsWith(const String &path) const
 Path Path::Append(const Path &pathRHS) const
 {
     String str = pathRHS.GetAbsolute();
-    if (str.BeginsWith("./")) { str.Erase(0, 0); }
-    while (str.BeginsWith("/")) { str.Erase(0, 0); }
+    if (str.BeginsWith("./")) { str.Remove(0, 0); }
+    while (str.BeginsWith("/")) { str.Remove(0, 0); }
     return this->AppendRaw("/" + str);
 }
 
@@ -261,10 +272,13 @@ bool Path::HasExtension(const String &extensions) const
 
 bool Path::HasExtension(const List<String> &extensions) const
 {
-    String ext = GetExtension();
+    Array<String> thisExtensions = GetExtensions();
     for (const String &extension : extensions)
     {
-        if (extension.EqualsNoCase(ext)) { return true; }
+        for (const String &thisExtension : thisExtensions)
+        {
+            if (extension.EqualsNoCase(thisExtension)) { return true; }
+        }
     }
     return false;
 }

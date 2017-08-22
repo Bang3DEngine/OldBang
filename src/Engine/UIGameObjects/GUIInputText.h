@@ -12,6 +12,8 @@ FORWARD class SingleLineRenderer;
 
 class GUIInputText : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUIInputText)
+
 public:
     GUIInputText();
     virtual ~GUIInputText();

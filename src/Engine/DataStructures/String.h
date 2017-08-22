@@ -56,8 +56,8 @@ public:
 
     void Insert(int position, char c);
     void Insert(int position, const String &str);
-    void Erase(Iterator it, int numberOfChars);
-    void Erase(int beginIndex, int endIndexInclusive);
+    void Remove(Iterator it, int numberOfChars);
+    void Remove(int beginIndex, int endIndexInclusive);
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;

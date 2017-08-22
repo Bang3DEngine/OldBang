@@ -5,6 +5,8 @@
 
 class GUIVerticalLayout : public GUIDirLayout
 {
+    SERIALIZABLE_OBJECT(GUIVerticalLayout)
+
 public:
     GUIVerticalLayout();
 };

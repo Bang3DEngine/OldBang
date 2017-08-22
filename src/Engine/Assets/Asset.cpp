@@ -12,11 +12,6 @@ Asset::~Asset()
     Resources::UnLoad(this);
 }
 
-const Path& Asset::GetFilepath() const
-{
-    return m_assetFilepath;
-}
-
 void Asset::CloneInto(ICloneable * clone) const
 {
 }
@@ -24,8 +19,7 @@ void Asset::CloneInto(ICloneable * clone) const
 String Asset::ToString() const
 {
     String res = GetClassName();
-    res +=  " '" + m_assetFilepath + "'. (" +
-            String::ToString((void*)this) + ")";
+    res +=  "Asset(" + String::ToString((void*)this) + ")";
     return res;
 }
 

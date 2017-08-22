@@ -129,8 +129,7 @@ void Renderer::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    Path materialFilepath = xmlInfo.Get<Path>("Material");
-    SetMaterial( Resources::Load<Material>(materialFilepath) );
+    SetMaterial( Resources::Load<Material>( xmlInfo.Get<GUID>("Material") ) );
     SetRenderPass( xmlInfo.Get<RenderPass>("RenderPass") );
     SetLineWidth(xmlInfo.Get<float>("LineWidth"));
     SetRenderWireframe(xmlInfo.Get<bool>("RenderWireframe"));
@@ -141,8 +140,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
 
     Material *sharedMat = GetSharedMaterial();
-    xmlInfo->Set("Material", sharedMat ? sharedMat->GetFilepath() :
-                                                 Path::Empty);
+    xmlInfo->Set("Material", sharedMat ? sharedMat->GetGUID() : GUID::Empty());
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", GetRenderWireframe());

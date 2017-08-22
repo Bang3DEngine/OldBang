@@ -9,6 +9,8 @@ FORWARD class UITextRenderer;
 
 class GUILabel : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUILabel)
+
 public:
     GUILabel(const String &content = "Bang");
 

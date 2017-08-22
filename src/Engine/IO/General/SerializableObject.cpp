@@ -9,13 +9,20 @@
 #include "Bang/File.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
+#include "Bang/GUIDManager.h"
 
 SerializableObject::SerializableObject()
 {
+    SetGUID( GUIDManager::GetNewGUID() );
 }
 
 SerializableObject::~SerializableObject()
 {
+}
+
+SerializableObject::SerializableObject(const SerializableObject &rhs)
+{
+    // Don't copy GUID, intentionally left in blank
 }
 
 XMLNode SerializableObject::GetXMLInfo() const
@@ -50,12 +57,14 @@ void SerializableObject::WriteReflection(XMLNode *xmlInfo) const
 void SerializableObject::Read(const XMLNode &xmlInfo)
 {
     ReadReflection(xmlInfo);
+    SetGUID(xmlInfo.Get<GUID>("GUID"));
 }
 
 void SerializableObject::Write(XMLNode *xmlInfo) const
 {
     WriteReflection(xmlInfo);
     xmlInfo->SetTagName( GetClassName() );
+    xmlInfo->Set<GUID>( "GUID", GetGUID() );
 }
 
 bool SerializableObject::ReadFromFile(const Path &path)
@@ -77,7 +86,22 @@ bool SerializableObject::WriteToFile(const Path &path) const
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
 
+void SerializableObject::CloneInto(ICloneable *) const
+{
+}
+
 String SerializableObject::GetInstanceId() const
 {
     return String::ToString( static_cast<const void*>(this) );
+}
+
+void SerializableObject::SetGUID(const GUID &guid)
+{
+    m_GUID = guid;
+    GUIDManager::RemoveGUID( GetGUID() );
+}
+
+const GUID &SerializableObject::GetGUID() const
+{
+    return m_GUID;
 }

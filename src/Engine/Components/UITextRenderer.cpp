@@ -275,8 +275,7 @@ void UITextRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
 
-    Path fontFilepath = xmlInfo.Get<Path>("Font");
-    SetFont( Resources::Load<Font>(fontFilepath) );
+    SetFont( Resources::Load<Font>( xmlInfo.Get<GUID>("Font") ) );
     SetContent(xmlInfo.Get<String>("Content"));
     SetTextSize(xmlInfo.Get<float>("TextSize"));
     SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
@@ -291,7 +290,7 @@ void UITextRenderer::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
 
-    xmlInfo->Set("Font", GetFont() ? GetFont()->GetFilepath() : Path::Empty);
+    xmlInfo->Set("Font", GetFont() ? GetFont()->GetGUID() : GUID::Empty());
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());

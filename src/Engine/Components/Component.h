@@ -6,7 +6,7 @@
 #include "Bang/SerializableObject.h"
 
 #define COMPONENT(ClassName) \
-    SOBJECT(ClassName) \
+    SERIALIZABLE_OBJECT(ClassName) \
     friend class ComponentFactory;
 
 class Component : public SceneAgent,

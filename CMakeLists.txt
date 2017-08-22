@@ -191,6 +191,9 @@ ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
 ${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
+${ENGINE_SRC_DIR}/ImportFiles/GUID.h
+${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
+${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${ENGINE_SRC_DIR}/IO/General/Resources.cpp

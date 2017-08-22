@@ -26,6 +26,7 @@ public:
     String GetName() const;
     String GetNameExt() const;
     String GetExtension() const;
+    Array<String> GetExtensions() const;
     const String& GetAbsolute() const;
     Path GetDuplicate() const;
 

@@ -11,7 +11,7 @@ FORWARD class Gizmos;
 
 class Scene : public GameObject
 {
-    SOBJECT(Scene)
+    SERIALIZABLE_OBJECT(Scene)
 
 public:
     Scene();

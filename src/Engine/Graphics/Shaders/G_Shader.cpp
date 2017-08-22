@@ -9,6 +9,8 @@
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
 
+G_Shader::G_Shader() : G_Shader(G_Shader::Type::Vertex) { }
+
 G_Shader::G_Shader(G_Shader::Type t)
     : m_sourceCode(""), m_type(t)
 {

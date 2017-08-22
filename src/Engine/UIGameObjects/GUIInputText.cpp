@@ -171,7 +171,7 @@ void GUIInputText::HandleTyping()
         maxIndex += offset;
         if (offset != 1 && minIndex >= 0 && maxIndex <= content.Size()-1)
         {
-            content.Erase(minIndex, maxIndex);
+            content.Remove(minIndex, maxIndex);
             m_cursorIndex = minIndex;
             ResetSelection();
         }

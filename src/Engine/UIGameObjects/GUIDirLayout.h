@@ -6,6 +6,8 @@
 
 class GUIDirLayout : public UIGameObject
 {
+    SERIALIZABLE_OBJECT(GUIDirLayout)
+
 public:
     void Add(UIGameObject *gameObject, int index = -1);
     void Move(int indexFrom, int indexTo);
@@ -17,6 +19,7 @@ public:
     void SetStretch(UIGameObject *gameObject, float stretch);
 
 protected:
+    GUIDirLayout();
     GUIDirLayout(const String &name, bool vertical);
     virtual ~GUIDirLayout();
 

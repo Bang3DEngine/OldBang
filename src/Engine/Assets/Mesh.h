@@ -13,7 +13,7 @@ FORWARD class G_VBO;
 
 class Mesh : public Asset
 {
-	SOBJECT(Mesh)
+    ASSET(Mesh)
 
 public:
     static constexpr uint DefaultPositionsVBOLocation = 0;
@@ -24,7 +24,7 @@ public:
     Mesh(const Mesh& m);
     virtual ~Mesh();
 
-    void LoadFromFile(const Path &m_assetFilepath);
+    void LoadFromFile(const Path &m_resourceFilepath);
     void LoadPositions(const Array<Vector3>& positions);
     void LoadNormals(const Array<Vector3>& normals);
     void LoadUvs(const Array<Vector2>& uvs);

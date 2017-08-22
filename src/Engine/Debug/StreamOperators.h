@@ -7,6 +7,7 @@
 FORWARD_T  class Set;
 FORWARD_TT class Map;
 FORWARD    class Path;
+FORWARD    class GUID;
 FORWARD_T  class List;
 FORWARD    class Color;
 FORWARD_T  class Array;
@@ -20,6 +21,7 @@ FORWARD_T  class Matrix4G;
 FORWARD    class IToString;
 FORWARD_T  class QuaternionG;
 
+std::istringstream& operator>>(std::istringstream& is, GUID &guid);
 std::istringstream& operator>>(std::istringstream& is, Path &p);
 std::istringstream& operator>>(std::istringstream& is, Color &c);
 std::ostream& operator<<(std::ostream &log, const Color &v);

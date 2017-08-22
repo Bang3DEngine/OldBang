@@ -4,17 +4,15 @@
 #include "Bang/Path.h"
 #include "Bang/Resource.h"
 #include "Bang/IToString.h"
-#include "Bang/SerializableObject.h"
+
+#define ASSET(CLASS_NAME) RESOURCE(CLASS_NAME)
 
 class Asset : public Resource,
-              public IToString,
-              public SerializableObject
+              public IToString
 {
-    SOBJECT(Asset)
+    RESOURCE(Asset)
 
 public:
-    const Path& GetFilepath() const;
-
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -26,8 +24,6 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    Path m_assetFilepath;
-
     Asset();
     virtual ~Asset();
 

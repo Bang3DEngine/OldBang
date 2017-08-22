@@ -5,6 +5,8 @@
 
 class GUIHorizontalLayout : public GUIDirLayout
 {
+    SERIALIZABLE_OBJECT(GUIHorizontalLayout)
+
 public:
     GUIHorizontalLayout();
 };
