@@ -23,8 +23,8 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
 
     Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::Object;
-    job.includePaths.PushBack( Paths::GetAllEngineSubDirs() );
-    job.includePaths.PushBack( Paths::GetAllProjectSubDirs() );
+    job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
+    job.includePaths.PushBack( Paths::GetProjectIncludeDirs() );
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
@@ -82,7 +82,8 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
     job.libDirs.PushBack(Paths::EngineLibrariesDir(binaryType));
-    job.libraries.PushBack( List<String>({"GLEW",
+    job.libraries.PushBack( List<String>({
+                                     "GLEW",
                                      "GL",
                                      "pthread",
                                      "BangCore",

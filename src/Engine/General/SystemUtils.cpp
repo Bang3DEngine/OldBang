@@ -31,8 +31,9 @@ void SystemUtils::_System(const String &command,
         bool ok = process.WaitUntilFinished();
         ok = ok && (process.GetExitCode() == 0);
 
-        String out = process.ReadStandardOutput();
-        if (output) { *output = out ; }
+        String out = process.ReadStandardOutput() +
+                     process.ReadStandardError();
+        if (output) { *output = out; }
         if (success) { *success = ok; }
         process.Close();
     }

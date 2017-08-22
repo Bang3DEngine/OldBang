@@ -41,7 +41,8 @@ private:
     int m_exitCode = 0;
 
     FileDescriptor m_oldFileDescriptors[3];
-    FileDescriptor m_childToParentFD[2];
+    FileDescriptor m_childToParentOutFD[2];
+    FileDescriptor m_childToParentErrFD[2];
     FileDescriptor m_parentToChildFD[2];
 };
 

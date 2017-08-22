@@ -53,10 +53,18 @@ List<Path> Paths::GetAllProjectSubDirs()
     return subdirs;
 }
 
-List<Path> Paths::GetAllEngineSubDirs()
+List<Path> Paths::GetProjectIncludeDirs()
 {
-    List<Path> subdirs = Paths::Engine().FindSubDirectories(true);
-    subdirs.PushFront(Paths::Engine());
+    List<Path> subdirs = Paths::ProjectAssets().FindSubDirectories(true);
+    return subdirs;
+}
+
+List<Path> Paths::GetEngineIncludeDirs()
+{
+    Path incPath = Paths::Engine().Append("include");
+    List<Path> subdirs;
+    subdirs.PushBack(incPath.FindSubDirectories(false));
+    subdirs.PushBack(incPath.Append("Bang").FindSubDirectories(false));
     return subdirs;
 }
 

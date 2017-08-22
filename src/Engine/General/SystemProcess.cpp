@@ -3,10 +3,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 constexpr int IN = 0, OUT = 1, ERR = 2;
 constexpr int WRITE = OUT, READ = IN;
@@ -26,42 +27,45 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     m_oldFileDescriptors[OUT] = dup(Channel::StandardOut);
     m_oldFileDescriptors[ERR] = dup(Channel::StandardError);
 
-    if (pipe(m_childToParentFD) != 0 ||
+    if (pipe(m_childToParentOutFD) != 0 ||
+        pipe(m_childToParentErrFD) != 0 ||
         pipe(m_parentToChildFD) != 0)  { m_exitCode = -1; return false; }
 
     int pid = fork();
     if (pid == 0) // Child process
     {
-        close(Channel::StandardIn);
-        close(Channel::StandardOut);
-        close(Channel::StandardError);
-
         // Set up parent to child(this) input
         // Input from stdin now will go to our pipe m_parentToChildFD[READ]
         close(m_parentToChildFD[WRITE]);
         dup2(m_parentToChildFD[READ],  Channel::StandardIn);
 
-        // Set up child(this) to parent output
-        // Output to stdout/stderr now will go to our
-        // pipe m_childToParentFD[WRITE]
-        close(m_childToParentFD[READ]);
-        dup2(m_childToParentFD[WRITE], Channel::StandardOut);
-        // dup2(m_childToParentFD[WRITE], Channel::StandardError);
+        // Set up child(this) to parent output && err
+        // stdout/stderr now will go to our pipe m_childToParentXXXFD[WRITE]
+        close(m_childToParentOutFD[READ]);
+        dup2(m_childToParentOutFD[WRITE], Channel::StandardOut);
+
+        close(m_childToParentErrFD[READ]);
+        dup2(m_childToParentErrFD[WRITE], Channel::StandardError);
 
         // Execute the program, and its in/out will come to our pipes
         String fullCommand = command + " " + String::Join(extraArgs, " ");
         int result = system(fullCommand.ToCString());
 
         // Close channels
+        close(m_childToParentOutFD[WRITE]);
+        close(m_childToParentErrFD[WRITE]);
         close(m_parentToChildFD[READ]);
-        close(m_childToParentFD[WRITE]);
+        close(Channel::StandardIn);
+        close(Channel::StandardOut);
+        close(Channel::StandardError);
 
-        if(result > 0) { exit(1); }
-        exit(0);
+        if (result < 0) { exit(-1); }
+        exit( WEXITSTATUS(result) );
     }
     else if (pid != -1) // Parent process
     {
-        close(m_childToParentFD[WRITE]); // We won't write this
+        close(m_childToParentOutFD[WRITE]); // We won't write this
+        close(m_childToParentErrFD[WRITE]); // We won't write this
         close(m_parentToChildFD[READ]);  // We won't read this
     }
     else
@@ -93,8 +97,10 @@ bool SystemProcess::WaitUntilFinished()
 void SystemProcess::Close()
 {
     // Close channels
-    close(m_childToParentFD[READ]);
-    close(m_childToParentFD[WRITE]);
+    close(m_childToParentOutFD[READ]);
+    close(m_childToParentOutFD[WRITE]);
+    close(m_childToParentErrFD[READ]);
+    close(m_childToParentErrFD[WRITE]);
     close(m_parentToChildFD[READ]);
     close(m_parentToChildFD[WRITE]);
 
@@ -121,25 +127,30 @@ void SystemProcess::CloseWriteChannel()
 
 String SystemProcess::ReadStandardOutput()
 {
-    return ReadFileDescriptor(m_childToParentFD[READ]);
+    return ReadFileDescriptor(m_childToParentOutFD[READ]);
 }
 
 String SystemProcess::ReadStandardError()
 {
-    return ReadFileDescriptor(m_childToParentFD[READ]);
+    return ReadFileDescriptor(m_childToParentErrFD[READ]);
 }
 
 String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
 {
     String output = "";
 
-    constexpr int bufferSize = 1024 * 512;
+    constexpr int bufferSize = 4096;
     char buffer[bufferSize];
     memset(buffer, 0, bufferSize);
-    while ( read(fd, buffer, bufferSize) )
+    int readBytes = 0;
+    while ( (readBytes = read(fd, buffer, bufferSize)) >= 0 )
     {
-        output.Append(buffer);
+        String readChunk(buffer);
+        output.Insert(output.End(),
+                      readChunk.Begin(),
+                      readChunk.Begin() + readBytes);
         memset(buffer, 0, bufferSize);
+        if (readBytes == 0) { break ; }
     }
 
     return output;

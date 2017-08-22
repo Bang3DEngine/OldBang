@@ -73,10 +73,13 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
 
     bool ok = false;
     String output = "";
-    String debugRelease = (binaryType == BinType::Debug) ? "DEBUG" : "RELEASE";
+    String debugRelease = "-DMODE=" +
+            String((binaryType == BinType::Debug) ? "DEBUG" : "RELEASE");
 
-    String cmd = Paths::Engine() + "/scripts/compile.sh";
-    SystemUtils::System(cmd.ToCString(), {debugRelease}, &output, &ok);
+    // String cmd = Paths::Engine() + "/scripts/compile.sh";
+    String cmd = "(cd " + Paths::Engine() + " && mkdir -p build && cd build &&"
+                 " cmake .. " + debugRelease + " && make -j4)";
+    SystemUtils::System(cmd.ToCString(), {}, &output, &ok);
     Debug_Log(cmd);
     ok = ok && gameOutputFilepath.IsFile();
     if (!ok)

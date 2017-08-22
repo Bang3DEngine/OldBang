@@ -41,10 +41,17 @@ public:
 
     Iterator Insert(Iterator it, char c);
 
+    template<class TIterator, class TIteratorOther>
+    Iterator
+    Insert(TIterator it, TIteratorOther itBegin, TIteratorOther itEnd)
+    {
+        return m_str.insert(it, itBegin, itEnd);
+    }
+
     template<class TIterator>
     Iterator Insert(TIterator it, const String &str)
     {
-        return insert(it, str.Begin(), str.End());
+        return Insert(it, str.Begin(), str.End());
     }
 
     void Insert(int position, char c);
