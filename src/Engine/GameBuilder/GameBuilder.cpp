@@ -94,7 +94,9 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
            process.ReadStandardError();
     process.Close();
 
-    if (!process.FinishedOk()) { Debug_Error(out); return false; }
+    if (!process.FinishedOk()) {
+        Debug_Error(out); return false;
+    }
     return true;
 }
 

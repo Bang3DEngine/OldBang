@@ -61,7 +61,7 @@ void Library::ClearError()
 void Library::FetchError()
 {
     const char *error = dlerror();
-    if (error) { m_errorString = String( dlerror() ); }
+    if (error) { m_errorString = String(error); }
     else { m_errorString = ""; }
 }
 

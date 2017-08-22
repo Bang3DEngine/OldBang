@@ -67,8 +67,7 @@ Behaviour *Behaviour::CreateDynamicBehaviour(const String &behaviourName,
     }
     else { errorString = lib->GetErrorString(); }
 
-    Debug_Error("Error loading the library " << openLibrary->GetLibraryPath()
-                << "." << errorString);
+    Debug_Error(errorString);
     return nullptr;
 }
 

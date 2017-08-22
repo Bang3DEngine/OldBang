@@ -40,8 +40,8 @@ public:
     bool FinishedOk() const;
 
 private:
-    int m_exitCode = 0;
     int m_childPID = 0;
+    int m_exitCode = -1;
 
     FileDescriptor m_oldFileDescriptors[3];
     FileDescriptor m_childToParentOutFD[2];

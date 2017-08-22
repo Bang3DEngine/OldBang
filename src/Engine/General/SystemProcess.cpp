@@ -108,12 +108,16 @@ bool SystemProcess::WaitUntilFinished(float seconds)
 
     // Get its return value
     int status;
+    bool exited = false;
+    bool signaled = false;
     bool finished = false;
     while ( (GetNow() - beginning) / 1000.0f < seconds )
     {
         status = -1;
-        waitpid(m_childPID, &status, WNOHANG); // Get child process info
-        if ( status >= 0 && (status == 0 || WIFEXITED(status)) )
+        waitpid(m_childPID, &status, WNOHANG);
+        exited = WIFEXITED(status);
+        signaled = WIFSIGNALED(status);
+        if (status >= 0 && (exited || signaled))
         {
             finished = true;
             break;
@@ -123,8 +127,11 @@ bool SystemProcess::WaitUntilFinished(float seconds)
 
     if (finished)
     {
-        if (m_exitCode == 0) { m_exitCode = 0; }
-        else if (m_exitCode > 0) { WEXITSTATUS(status); }
+        if (status >= 0)
+        {
+            if (exited) { m_exitCode = WEXITSTATUS(status); }
+            if (signaled) { m_exitCode = -2; }
+        }
         else { m_exitCode = -1; }
     }
     return finished;

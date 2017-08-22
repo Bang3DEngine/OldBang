@@ -92,12 +92,10 @@ int main(int argc, char **argv)
     Application app(argc, argv);
     app.CreateWindow();
 
-    /*
     ProjectManager pm;
     pm.OpenProject( Path("/home/sephirot47/Snake/Snake.bproject") );
     pm.GetCurrentProject()->OpenFirstFoundScene();
     exit(0);
-    */
 
     Scene *scene = new Scene();
 

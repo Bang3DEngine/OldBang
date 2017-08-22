@@ -1,6 +1,7 @@
 #include "Bang/Texture2D.h"
 
 #include "Bang/XMLNode.h"
+#include "Bang/Resources.h"
 
 Texture2D::Texture2D() : G_Texture2D()
 {
@@ -22,8 +23,8 @@ void Texture2D::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    Path imageFilepath = xmlInfo.Get<Path>("ImageFilepath");
-    LoadFromImage(imageFilepath);
+    G_Image *img = Resources::Load<G_Image>( xmlInfo.Get<GUID>("Image") );
+    if (img) { LoadFromImage(*img); }
 
     SetFilterMode( xmlInfo.Get<FilterMode>("FilterMode") );
     SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") );
@@ -33,7 +34,7 @@ void Texture2D::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->Set("ImageFilepath", m_imageFilepath);
+    xmlInfo->Set("Image", p_image ? p_image->GetGUID() : GUID::Empty());
 
     xmlInfo->Set("FilterMode", GetFilterMode());
     xmlInfo->Set("AlphaCutoff", GetAlphaCutoff());

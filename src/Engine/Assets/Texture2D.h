@@ -18,6 +18,9 @@ public:
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
+
+private:
+    G_Image *p_image = nullptr;
 };
 
 #endif // TEXTURE2D_H

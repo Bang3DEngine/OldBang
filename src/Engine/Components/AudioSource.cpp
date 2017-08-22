@@ -32,9 +32,12 @@ void AudioSource::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (m_currentAudioClipALBufferId != m_audioClip->GetALBufferId())
+    if (m_audioClip)
     {
-        SetAudioClip(m_audioClip);
+        if (m_currentAudioClipALBufferId != m_audioClip->GetALBufferId())
+        {
+            SetAudioClip(m_audioClip);
+        }
     }
 
     if (transform)
@@ -46,8 +49,16 @@ void AudioSource::OnUpdate()
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
     m_audioClip = audioClip;
-    SetALBufferId(audioClip->GetALBufferId());
-    m_currentAudioClipALBufferId = audioClip->GetALBufferId();
+    if (m_audioClip)
+    {
+        SetALBufferId(audioClip->GetALBufferId());
+        m_currentAudioClipALBufferId = audioClip->GetALBufferId();
+    }
+    else
+    {
+        SetALBufferId(0);
+        m_currentAudioClipALBufferId = 0;
+    }
 }
 
 void AudioSource::SetPlayOnStart(bool playOnStart)
