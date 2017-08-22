@@ -1,6 +1,6 @@
 # C++ objects and libs
 *.trace
-build
+build*/
 *.user
 *.gen.h
 *.refl.h

@@ -7,7 +7,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
 #include "Bang/Extensions.h"
-#include "Bang/SystemUtils.h"
+#include "Bang/SystemProcess.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourManager.h"
@@ -71,22 +71,30 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
     const Path gameOutputFilepath = Paths::GameExecutableOutputFile(binaryType);
     File::Remove(gameOutputFilepath);
 
-    bool ok = false;
-    String output = "";
-    String debugRelease = "-DMODE=" +
-            String((binaryType == BinType::Debug) ? "DEBUG" : "RELEASE");
+    String debugRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
+    String cmd = Paths::Engine().GetAbsolute() + "/scripts/compile.sh " +
+                 debugRelease;
 
-    // String cmd = Paths::Engine() + "/scripts/compile.sh";
-    String cmd = "(cd " + Paths::Engine() + " && mkdir -p build && cd build &&"
-                 " cmake .. " + debugRelease + " && make -j4)";
-    SystemUtils::System(cmd.ToCString(), {}, &output, &ok);
-    Debug_Log(cmd);
-    ok = ok && gameOutputFilepath.IsFile();
-    if (!ok)
+    SystemProcess process;
+    process.Start(cmd);
+
+    String out = "";
+    while (!process.WaitUntilFinished(0.1f))
     {
-        Debug_Error(output);
-        return false;
+        String partialOut = process.ReadStandardOutput() +
+                            process.ReadStandardError();
+        if (!partialOut.IsEmpty())
+        {
+            out += partialOut;
+            Debug_Log(partialOut);
+        }
     }
+
+    out += process.ReadStandardOutput() +
+           process.ReadStandardError();
+    process.Close();
+
+    if (!process.FinishedOk()) { Debug_Error(out); return false; }
     return true;
 }
 

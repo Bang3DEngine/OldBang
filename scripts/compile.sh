@@ -1,40 +1,31 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
-cd ../proj # Go to root directory
-
-export QT_SELECT=5
+cd .. # Go to root directory
 
 NUM_THREADS=6
-RELEASE_OR_DEBUG=$1
 
-echo "-----"
+source "scripts/captureArgs.sh"
 
-ERROR=0
+VERBOSE=1
+# if [ "$2" == "VERBOSE" ] ; then VERBOSE=1 ; fi
 
-if [ "${RELEASE_OR_DEBUG}" != "DEBUG" ] && [ "${RELEASE_OR_DEBUG}" != "RELEASE" ]
+# CMake && Make Bang
+
+RD=${RELEASE_OR_DEBUG}
+
+mkdir -p build${RD} && \
+cd build${RD} && \
+cmake -DCMAKE_BUILD_TYPE=${RD} .. && \
+make --no-print-directory \
+     VERBOSE=${VERBOSE} \
+     -j${NUM_THREADS}
+
+if [[ $? != 0 ]]
 then
-	echo "Option '${RELEASE_OR_DEBUG}' for the first parameter not recognised. Valid options are:"
-	echo "   - 'DEBUG'"
-	echo "   - 'RELEASE'"
-	ERROR=1
+	echo "==============================================================="
+	echo "ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	echo "==============================================================="
+	exit 2
 fi
-
-if [ $ERROR -eq 1 ]
-then
-	echo ""; echo "Please fix the errors."; echo ""	
-	echo "-----"
-	exit 1
-fi
-
-
-# Make and run Bang
-echo "RELEASE_OR_DEBUG on compile.sh: '${RELEASE_OR_DEBUG}'"
-echo "-----"
-sleep 2
-
-export BANG_BUILD_RELEASE_OR_DEBUG="${RELEASE_OR_DEBUG}"
-
-# QMAKE & MAKE !!!
-qmake
-make -j${NUM_THREADS}
+exit 0

@@ -8,9 +8,12 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <chrono>
 
-constexpr int IN = 0, OUT = 1, ERR = 2;
-constexpr int WRITE = OUT, READ = IN;
+#include "Bang/Thread.h"
+
+enum { IN = 0, OUT = 1, ERR = 2 };
+enum { WRITE = OUT, READ = IN };
 
 SystemProcess::SystemProcess()
 {
@@ -47,9 +50,9 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
         close(m_childToParentErrFD[READ]);
         dup2(m_childToParentErrFD[WRITE], Channel::StandardError);
 
-        // Execute the program, and its in/out will come to our pipes
+        // Execute the command, and its in/out will come to our pipes
         String fullCommand = command + " " + String::Join(extraArgs, " ");
-        int result = system(fullCommand.ToCString());
+        int result = system(fullCommand.ToCString()); // EXECUTE!
 
         // Close channels
         close(m_childToParentOutFD[WRITE]);
@@ -64,9 +67,16 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     }
     else if (pid != -1) // Parent process
     {
+        m_childPID = pid;
         close(m_childToParentOutFD[WRITE]); // We won't write this
         close(m_childToParentErrFD[WRITE]); // We won't write this
         close(m_parentToChildFD[READ]);  // We won't read this
+
+        // Specify NonBlocking read
+        fcntl(m_childToParentOutFD[READ], F_SETFL,
+              fcntl(m_childToParentOutFD[READ], F_GETFL) | O_NONBLOCK);
+        fcntl(m_childToParentErrFD[READ], F_SETFL,
+              fcntl(m_childToParentErrFD[READ], F_GETFL) | O_NONBLOCK);
     }
     else
     {
@@ -86,12 +96,38 @@ bool SystemProcess::StartDettached(const String &command,
     return Start(command, args);
 }
 
-bool SystemProcess::WaitUntilFinished()
+long long unsigned int GetNow()
 {
+    return std::chrono::duration_cast< std::chrono::milliseconds >(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+bool SystemProcess::WaitUntilFinished(float seconds)
+{
+    auto beginning = GetNow();
+
     // Get its return value
-    wait(&m_exitCode); // Wait for child process to finish
-    m_exitCode = WEXITSTATUS(m_exitCode);
-    return m_exitCode == 0;
+    int status;
+    bool finished = false;
+    while ( (GetNow() - beginning) / 1000.0f < seconds )
+    {
+        status = -1;
+        waitpid(m_childPID, &status, WNOHANG); // Get child process info
+        if ( status >= 0 && (status == 0 || WIFEXITED(status)) )
+        {
+            finished = true;
+            break;
+        }
+        Thread::SleepCurrentThread(0.05f);
+    }
+
+    if (finished)
+    {
+        if (m_exitCode == 0) { m_exitCode = 0; }
+        else if (m_exitCode > 0) { WEXITSTATUS(status); }
+        else { m_exitCode = -1; }
+    }
+    return finished;
 }
 
 void SystemProcess::Close()
@@ -156,7 +192,12 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
     return output;
 }
 
-int SystemProcess::GetExitCode()
+int SystemProcess::GetExitCode() const
 {
     return m_exitCode;
+}
+
+bool SystemProcess::FinishedOk() const
+{
+    return GetExitCode() == 0;
 }

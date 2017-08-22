@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 
+#include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
 
@@ -25,7 +26,7 @@ public:
                const List<String> &extraArgs = {});
     bool StartDettached(const String &command,
                         const List<String> &extraArgs = {});
-    bool WaitUntilFinished();
+    bool WaitUntilFinished(float seconds = Math::Infinity<float>());
     void Close();
 
     void Write(const String &str);
@@ -35,10 +36,12 @@ public:
     String ReadStandardError();
     String ReadFileDescriptor(FileDescriptor fd);
 
-    int GetExitCode();
+    int GetExitCode() const;
+    bool FinishedOk() const;
 
 private:
     int m_exitCode = 0;
+    int m_childPID = 0;
 
     FileDescriptor m_oldFileDescriptors[3];
     FileDescriptor m_childToParentOutFD[2];

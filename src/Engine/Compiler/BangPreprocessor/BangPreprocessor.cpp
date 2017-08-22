@@ -173,9 +173,7 @@ void BangPreprocessor::RemoveComments(String *source)
 
     gCompilerProcess.Write(src);
     gCompilerProcess.CloseWriteChannel();
-
-    bool ok = gCompilerProcess.WaitUntilFinished();
-    ok = ok && (gCompilerProcess.GetExitCode() == 0);
+    gCompilerProcess.WaitUntilFinished();
 
     String output = gCompilerProcess.ReadStandardOutput();
     gCompilerProcess.Close();

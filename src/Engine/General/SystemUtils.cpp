@@ -28,8 +28,8 @@ void SystemUtils::_System(const String &command,
     process.Start(command, argsList);
     if (!background)
     {
-        bool ok = process.WaitUntilFinished();
-        ok = ok && (process.GetExitCode() == 0);
+        process.WaitUntilFinished();
+        bool ok = process.FinishedOk();
 
         String out = process.ReadStandardOutput() +
                      process.ReadStandardError();

@@ -9,7 +9,7 @@ void Usage()
     std::cerr <<
      "Usage:" << std::endl <<
      "   ./BangGameBuilder Path/To/Project.bproject DebugOrRelease" << std::endl <<
-     "    (where DebugOrRelease can be 'DEBUG' or 'RELEASE')"  << std::endl <<
+     "    (where DebugOrRelease can be 'Debug' or 'Release')"  << std::endl <<
      std::endl;
     exit(1);
 }
@@ -21,8 +21,8 @@ int main(int argc, char **argv)
     if (argc <= 2) { Usage(); }
 
     String debugOrRelease(argv[2]);
-    if (debugOrRelease != "DEBUG" && debugOrRelease != "RELEASE") { Usage(); }
-    BinType binaryType = (debugOrRelease == "DEBUG") ? BinType::Debug :
+    if (debugOrRelease != "Debug" && debugOrRelease != "Release") { Usage(); }
+    BinType binaryType = (debugOrRelease == "Debug") ? BinType::Debug :
                                                        BinType::Release;
 
     bool compileBehaviours = true;

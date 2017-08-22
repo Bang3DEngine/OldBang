@@ -1,6 +1,6 @@
 # CMake Options
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_VERBOSE_MAKEFILE on)
+# set(CMAKE_VERBOSE_MAKEFILE off)
 
 project(Bang C CXX)
 
@@ -9,26 +9,11 @@ set(SRC_DIR ${ROOT}/src)
 set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
 
 set(CMAKE_BINARY_DIR ${ROOT}/bin)
-set(CMAKE_BINARY_DIR ${ROOT}/bin)
-string(COMPARE EQUAL "${MODE}" "DEBUG" IS_DEBUG)
-string(COMPARE EQUAL "${MODE}" "RELEASE" IS_RELEASE)
-if (IS_DEBUG)
 
-    message(STATUS "Building Bang in DEBUG mode")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wl,-O0 -g ")
-    set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/Debug)
-
-elseif (IS_RELEASE)
-
-    message(STATUS "Building Bang in RELEASE mode")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O3")
-    set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/Release)
-
-else ()
-
-    message(FATAL_ERROR "Please set -DMODE=DEBUG or -DMODE=RELEASE")
-
-endif ()
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
+set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
+message(" =============== Building in ${CMAKE_BUILD_TYPE} mode...")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -49,58 +34,46 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 link_libraries(${GLEW_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${GLEW_LIBRARIES}")
 
 # GL Dependency
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 link_libraries(${OPENGL_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${OPENGL_LIBRARIES}")
 
 # png Dependency
 find_package(PNG REQUIRED)
 include_directories(${PNG_INCLUDE_DIRS})
 link_libraries(${PNG_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${PNG_LIBRARIES}")
 
 # jpeg Dependency
 find_package(JPEG REQUIRED)
 include_directories(${JPEG_INCLUDE_DIRS})
 link_libraries(${JPEG_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${JPEG_LIBRARIES}")
 
 # DL Dependency
 link_libraries("dl")
-set(COMMON_LIBS "${COMMON_LIBS} dl")
 
 # SndFile Dependency
 link_libraries("sndfile")
-set(COMMON_LIBS "${COMMON_LIBS} sndfile")
 
 # Assimp Dependency
 link_libraries("assimp")
-set(COMMON_LIBS "${COMMON_LIBS} assimp")
 
 # Freetype Dependency
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})
 link_libraries(${FREETYPE_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${FREETYPE_LIBRARIES}")
 
 # SDL Dependency
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 link_libraries(${SDL2_LIBRARIES})
-set(COMMON_LIBS "${COMMON_LIBS} ${SDL2_LIBRARIES}")
 
 # OpenAL Dependency
 find_package(OpenAL REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIRS})
 link_libraries(${OPENAL_LIBRARY})
-set(COMMON_LIBS "${COMMON_LIBS} ${OPENAL_LIBRARY}")
-
-string(STRIP "${COMMON_LIBS}" COMMON_LIBS)
 
 # BangCore Library
 include_directories(${ROOT}/include)
@@ -110,8 +83,13 @@ include_directories(${ROOT}/include/Bang/BangCore)
 add_library(
 BangCore
 ${ENGINE_SRC_DIR}/DataStructures/String.cpp
+${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
+${ENGINE_SRC_DIR}/General/Mutex.cpp
+${ENGINE_SRC_DIR}/General/MutexLocker.cpp
 ${ENGINE_SRC_DIR}/General/SystemProcess.cpp
+${ENGINE_SRC_DIR}/General/Thread.cpp
+${ENGINE_SRC_DIR}/General/ThreadPool.cpp
 ${ENGINE_SRC_DIR}/IO/Files/File.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Path.cpp
 ${ENGINE_SRC_DIR}/Math/Color.cpp
@@ -198,14 +176,10 @@ ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
 ${ENGINE_SRC_DIR}/General/Library.cpp
 ${ENGINE_SRC_DIR}/General/MaterialFactory.cpp
-${ENGINE_SRC_DIR}/General/Mutex.cpp
-${ENGINE_SRC_DIR}/General/MutexLocker.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/General/TextFormatter.cpp
-${ENGINE_SRC_DIR}/General/Thread.cpp
-${ENGINE_SRC_DIR}/General/ThreadPool.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
@@ -216,7 +190,6 @@ ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
-${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
@@ -274,7 +247,7 @@ Game.exe
 ${SRC_DIR}/MainGame.cpp
 )
 target_link_libraries(Game.exe
--Wl,--start-group  BangCore BangGraphics BangEngine -Wl,--end-group
+BangEngine BangGraphics BangCore
 )
 
 # BangMainGameBuilder Executable
@@ -283,14 +256,5 @@ BangGameBuilder
 ${SRC_DIR}/MainGameBuilder.cpp
 )
 target_link_libraries(BangGameBuilder
--Wl,--start-group  BangCore BangGraphics BangEngine -Wl,--end-group
+BangEngine BangGraphics BangCore
 )
-
-# Dependencies tree
-add_dependencies(BangCore ${COMMON_LIBS})
-add_dependencies(BangGraphics BangCore)
-add_dependencies(BangEngine BangCore BangGraphics)
-
-add_dependencies(Bang BangCore BangGraphics BangEngine)
-add_dependencies(Game.exe BangCore BangGraphics BangEngine)
-add_dependencies(BangGameBuilder BangCore BangGraphics BangEngine)
