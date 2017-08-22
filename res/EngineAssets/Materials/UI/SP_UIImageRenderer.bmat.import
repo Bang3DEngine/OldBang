@@ -1,0 +1,6 @@
+<Material DiffuseColor="(1, 1, 1, 1)"{}
+          FragmentShader="./Shaders/UI/SP_UIImageRenderer.frag_pp"{FileExtension="frag"",IsEngineFile}
+          VertexShader="./Shaders/SP_ScreenPass.vert_pp"{FileExtension="vert"",IsEngineFile}
+          GUID="8806421284683513857"{}
+         >
+</Material>
