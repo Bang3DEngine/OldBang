@@ -14,11 +14,13 @@ FORWARD class Camera;
 FORWARD class Material;
 FORWARD class Component;
 
+#define GAMEOBJECT(ClassName) SERIALIZABLE_OBJECT(ClassName)
+
 class GameObject : public SerializableObject,
                    public SceneNode<GameObject>,
                    public IToString
 {
-    SERIALIZABLE_OBJECT(GameObject)
+    GAMEOBJECT(GameObject)
 
 public:
     String const& name = m_name;
@@ -50,6 +52,10 @@ public:
         this->AddComponent(c, index);
         return c;
     }
+
+    GameObject* GetChild(const GUID &guid) const;
+
+    Component* GetComponent(const GUID &guid) const;
 
     template <class T>
     T* GetComponent() const
@@ -184,8 +190,6 @@ public:
 
     // SerializableObject
     virtual String GetInstanceId() const override;
-    void UpdateXMLInfo(const XMLNode &xmlInfo);
-    void ReadFirstTime(const XMLNode &xmlInfo);
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -196,7 +200,6 @@ protected:
 
     std::queue<Component*> m_componentsToBeRemoved;
 
-    bool m_hasBeenReadOnce = false;
     bool m_iteratingComponents = false;
 
     friend class Scene;

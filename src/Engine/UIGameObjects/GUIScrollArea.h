@@ -7,7 +7,7 @@
 
 class GUIScrollArea : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIScrollArea)
+    UIGAMEOBJECT(GUIScrollArea)
 
 public:
     GUIScrollArea() noexcept;

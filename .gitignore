@@ -4,6 +4,7 @@ build*/
 *.user
 *.gen.h
 *.refl.h
+res/EngineAssets/tmp
 *refactor-cpp-class-name.sh
 tmp
 *.exe
@@ -33,40 +34,14 @@ Bang.tgz
 *.swp
 .vs/*
 
-
 # CMake
 *CMakeCache.txt
 *CMakeFiles/*
 objs*/*
 build/*
 
-# Qt-es
-ui_*
-src/Qt_MOCs/*
-/.qmake.cache
-/.qmake.stash
-/proj/.qmake.stash
-*.pro.user
-*.pro.user.*
-*.qbs.user
-*.qbs.user.*
-*.moc
-moc_*.cpp
-qrc_*.cpp
-ui_*.h
-Makefile*
-*build-*
-*build*
-*cache*
-
 # QtCreator
-
 *.autosave
-
-# QtCtreator Qml
-*.qmlproject.user
-*.qmlproject.user.*
-
 
 # Freetype
 !include/freetype/*.h

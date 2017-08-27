@@ -23,35 +23,67 @@
 #include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
 
-#define HANDLE_COMPONENT(className, ComponentClass) \
+#define CREATE_COMPONENT(className, ComponentClass) \
     if (className == ComponentClass::GetClassNameStatic()) \
     { return new ComponentClass(); }
 
 Component* ComponentFactory::CreateComponent(const String &componentClassName)
 {
-    HANDLE_COMPONENT(componentClassName, AudioListener);
-    HANDLE_COMPONENT(componentClassName, AudioSource);
-    HANDLE_COMPONENT(componentClassName, Behaviour);
-    HANDLE_COMPONENT(componentClassName, Camera);
-    HANDLE_COMPONENT(componentClassName, CircleRenderer);
-    HANDLE_COMPONENT(componentClassName, DirectionalLight);
-    HANDLE_COMPONENT(componentClassName, Light);
-    HANDLE_COMPONENT(componentClassName, LineRenderer);
-    HANDLE_COMPONENT(componentClassName, MeshRenderer);
-    HANDLE_COMPONENT(componentClassName, PointLight);
-    HANDLE_COMPONENT(componentClassName, PostProcessEffect);
-    HANDLE_COMPONENT(componentClassName, RectTransform);
-    HANDLE_COMPONENT(componentClassName, Renderer);
-    HANDLE_COMPONENT(componentClassName, SingleLineRenderer);
-    HANDLE_COMPONENT(componentClassName, Transform);
-    HANDLE_COMPONENT(componentClassName, UIImageRenderer);
-    HANDLE_COMPONENT(componentClassName, UIRenderer);
-    HANDLE_COMPONENT(componentClassName, UIButton);
-    HANDLE_COMPONENT(componentClassName, UIBorderRect);
-    HANDLE_COMPONENT(componentClassName, UIButtonTinter);
-    HANDLE_COMPONENT(componentClassName, UITextRenderer);
+    CREATE_COMPONENT(componentClassName, AudioListener);
+    CREATE_COMPONENT(componentClassName, AudioSource);
+    CREATE_COMPONENT(componentClassName, Behaviour);
+    CREATE_COMPONENT(componentClassName, Camera);
+    CREATE_COMPONENT(componentClassName, CircleRenderer);
+    CREATE_COMPONENT(componentClassName, DirectionalLight);
+    CREATE_COMPONENT(componentClassName, Light);
+    CREATE_COMPONENT(componentClassName, LineRenderer);
+    CREATE_COMPONENT(componentClassName, MeshRenderer);
+    CREATE_COMPONENT(componentClassName, PointLight);
+    CREATE_COMPONENT(componentClassName, PostProcessEffect);
+    CREATE_COMPONENT(componentClassName, RectTransform);
+    CREATE_COMPONENT(componentClassName, Renderer);
+    CREATE_COMPONENT(componentClassName, SingleLineRenderer);
+    CREATE_COMPONENT(componentClassName, Transform);
+    CREATE_COMPONENT(componentClassName, UIImageRenderer);
+    CREATE_COMPONENT(componentClassName, UIRenderer);
+    CREATE_COMPONENT(componentClassName, UIButton);
+    CREATE_COMPONENT(componentClassName, UIBorderRect);
+    CREATE_COMPONENT(componentClassName, UIButtonTinter);
+    CREATE_COMPONENT(componentClassName, UITextRenderer);
 
     Debug_Error("Please register class '" << componentClassName << "' in "
                 "ComponentFactory"); ASSERT(false);
+
     return nullptr;
+}
+
+#define EXISTS_COMPONENT(componentClassName, ComponentClass) \
+    if (componentClassName == ComponentClass::GetClassNameStatic()) \
+    { return true; }
+
+bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
+{
+    EXISTS_COMPONENT(componentClassName, AudioListener);
+    EXISTS_COMPONENT(componentClassName, AudioSource);
+    EXISTS_COMPONENT(componentClassName, Behaviour);
+    EXISTS_COMPONENT(componentClassName, Camera);
+    EXISTS_COMPONENT(componentClassName, CircleRenderer);
+    EXISTS_COMPONENT(componentClassName, DirectionalLight);
+    EXISTS_COMPONENT(componentClassName, Light);
+    EXISTS_COMPONENT(componentClassName, LineRenderer);
+    EXISTS_COMPONENT(componentClassName, MeshRenderer);
+    EXISTS_COMPONENT(componentClassName, PointLight);
+    EXISTS_COMPONENT(componentClassName, PostProcessEffect);
+    EXISTS_COMPONENT(componentClassName, RectTransform);
+    EXISTS_COMPONENT(componentClassName, Renderer);
+    EXISTS_COMPONENT(componentClassName, SingleLineRenderer);
+    EXISTS_COMPONENT(componentClassName, Transform);
+    EXISTS_COMPONENT(componentClassName, UIImageRenderer);
+    EXISTS_COMPONENT(componentClassName, UIRenderer);
+    EXISTS_COMPONENT(componentClassName, UIButton);
+    EXISTS_COMPONENT(componentClassName, UIBorderRect);
+    EXISTS_COMPONENT(componentClassName, UIButtonTinter);
+    EXISTS_COMPONENT(componentClassName, UITextRenderer);
+
+    return false;
 }

@@ -1,4 +1,4 @@
-#include "UIGameObject.h"
+#include "Bang/UIGameObject.h"
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
@@ -6,8 +6,7 @@
 
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
 {
-    AddComponent<RectTransform>();
-    m_rectTransform = GetComponent<RectTransform>();
+    m_rectTransform = AddComponent<RectTransform>();
 }
 
 bool UIGameObject::IsMouseOver() const

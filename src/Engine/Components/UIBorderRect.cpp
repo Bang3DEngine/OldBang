@@ -16,7 +16,6 @@ UIBorderRect::UIBorderRect()
     p_lineRenderer->SetRenderPass(RenderPass::Canvas);
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
-    AddDelegate(p_lineRenderer);
     SetLineColor(Color::Black);
     SetLineWidth(5.0f);
 }
@@ -24,6 +23,18 @@ UIBorderRect::UIBorderRect()
 UIBorderRect::~UIBorderRect()
 {
 
+}
+
+void UIBorderRect::OnStart()
+{
+    Component::OnStart();
+    p_lineRenderer->Start();
+}
+
+void UIBorderRect::OnRender(RenderPass rp)
+{
+    Component::OnRender(rp);
+    p_lineRenderer->Render(rp, true);
 }
 
 void UIBorderRect::OnUpdate()
@@ -43,6 +54,8 @@ void UIBorderRect::OnUpdate()
             Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
         m_latestBoundingRectNDC = boundingRectNDC;
     }
+
+    p_lineRenderer->Update();
 }
 
 void UIBorderRect::SetLineColor(const Color &lineColor)

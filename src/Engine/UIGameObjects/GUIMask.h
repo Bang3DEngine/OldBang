@@ -6,7 +6,7 @@
 
 class GUIMask : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIMask)
+    UIGAMEOBJECT(GUIMask)
 
 public:
     GUIMask();

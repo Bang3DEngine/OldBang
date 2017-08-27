@@ -21,8 +21,8 @@ GUIButton::GUIButton(const String &labelText) : UIGameObject("GUIButton")
 
     p_labelTinter = AddComponent<UIButtonTinter>();
     p_labelTinter->AddAgent(this);
-    p_labelTinter->AddGameObjectToTint(p_label);
-    p_labelTinter->SetIdleTintColor(p_label->GetText()->GetTextColor());
+    p_labelTinter->AddGameObjectToTint( GetLabel() );
+    p_labelTinter->SetIdleTintColor(GetLabel()->GetText()->GetTextColor());
     p_labelTinter->SetOverTintColor(Color::Black);
     p_labelTinter->SetPressedTintColor(Color::White);
 
@@ -40,10 +40,6 @@ GUIButton::~GUIButton()
 
 GUILabel *GUIButton::GetLabel() const { return p_label; }
 GUIImage *GUIButton::GetImage() const { return p_bgImage; }
-
-UIBorderRect *GUIButton::GetUIBorderRect() const { return p_borderRect; }
-UIButtonTinter *GUIButton::GetLabelTinter() const { return p_labelTinter; }
-UIButtonTinter *GUIButton::GetBackgroundTinter() const { return p_bgTinter; }
 
 void GUIButton::AddClickedCallback(UIButton::ClickedCallback callback)
 {

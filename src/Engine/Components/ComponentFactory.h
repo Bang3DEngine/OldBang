@@ -9,6 +9,7 @@ class ComponentFactory
 {
 public:
     static Component* CreateComponent(const String &componentClassName);
+    static bool ExistsComponentClass(const String &componentClassName);
 
     template<class T>
     static T* CreateComponent();

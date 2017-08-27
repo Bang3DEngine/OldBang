@@ -3,6 +3,7 @@
 
 #include "Bang/GUID.h"
 #include "Bang/String.h"
+#include "Bang/HideFlags.h"
 #include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
@@ -38,6 +39,8 @@ public:
     virtual String GetClassName() const = 0;
     virtual String GetInstanceId() const;
 
+    HideFlags& GetHideFlags();
+    const HideFlags& GetHideFlags() const;
     const GUID& GetGUID() const;
 
 protected:
@@ -45,6 +48,7 @@ protected:
 
 private:
     GUID m_GUID;
+    HideFlags m_hideFlags;
 
     void SetGUID(const GUID &guid);
 

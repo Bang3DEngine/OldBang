@@ -5,7 +5,7 @@
 
 class GUICanvas : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUICanvas)
+    UIGAMEOBJECT(GUICanvas)
 
 public:
     GUICanvas();

@@ -11,7 +11,7 @@ FORWARD class UIImageRenderer;
 
 class GUIInputText : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIInputText)
+    UIGAMEOBJECT(GUIInputText)
 
 public:
     GUIInputText();

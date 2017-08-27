@@ -5,9 +5,11 @@
 
 FORWARD class RectTransform;
 
+#define UIGAMEOBJECT(ClassName) GAMEOBJECT(ClassName)
+
 class UIGameObject : public GameObject
 {
-    SERIALIZABLE_OBJECT(UIGameObject)
+    UIGAMEOBJECT(UIGameObject)
 
 public:
     enum class FocusAction { TakeIt, PassToParent };

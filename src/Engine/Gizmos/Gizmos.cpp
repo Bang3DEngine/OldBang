@@ -45,6 +45,8 @@ Gizmos::Gizmos() : GameObject("GizmosGameObject")
         rend->SetMaterial(m_material);
         rend->SetRenderPass(RenderPass::Gizmos);
     }
+
+    GetHideFlags().SetOn(HideFlag::DontSave);
 }
 
 void Gizmos::SetResetAllowed(bool allowed)

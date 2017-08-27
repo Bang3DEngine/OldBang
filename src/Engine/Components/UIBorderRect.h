@@ -12,6 +12,8 @@ public:
     virtual ~UIBorderRect();
 
     // Component
+    virtual void OnStart() override;
+    virtual void OnRender(RenderPass rp) override;
     virtual void OnUpdate() override;
 
     void SetLineColor(const Color& lineColor);

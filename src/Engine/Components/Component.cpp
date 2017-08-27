@@ -11,20 +11,6 @@ Component::Component()
 
 Component::~Component()
 {
-    for (Component *c : m_delegates) { delete c; }
-}
-
-void Component::AddDelegate(Component *delegate)
-{
-    if (!m_delegates.Contains(delegate))
-    {
-        m_delegates.PushBack(delegate);
-    }
-}
-
-void Component::RemoveDelegate(Component *delegate)
-{
-    m_delegates.Remove(delegate);
 }
 
 void Component::SetGameObject(GameObject *gameObject)
@@ -47,37 +33,6 @@ String Component::ToString() const
     std::ostringstream msg;
     msg << "";
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
-}
-
-void Component::Start()
-{
-    PROPAGATE_EVENT(Start(), m_delegates);
-    SceneAgent::Start();
-}
-void Component::Update()
-{
-    PROPAGATE_EVENT(Update(), m_delegates);
-    SceneAgent::Update();
-}
-void Component::ParentSizeChanged()
-{
-    PROPAGATE_EVENT(ParentSizeChanged(), m_delegates);
-    SceneAgent::ParentSizeChanged();
-}
-void Component::Render(RenderPass renderPass, bool propagate)
-{
-    PROPAGATE_EVENT(Render(renderPass, propagate), m_delegates);
-    SceneAgent::Render(renderPass, propagate);
-}
-void Component::RenderGizmos()
-{
-    PROPAGATE_EVENT(RenderGizmos(), m_delegates);
-    SceneAgent::RenderGizmos();
-}
-void Component::Destroy()
-{
-    SceneAgent::Destroy();
-    PROPAGATE_EVENT(Destroy(), m_delegates);
 }
 
 String Component::GetInstanceId() const

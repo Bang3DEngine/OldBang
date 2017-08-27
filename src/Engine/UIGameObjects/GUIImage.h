@@ -10,7 +10,7 @@ FORWARD class Texture2D;
 
 class GUIImage : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIImage)
+    UIGAMEOBJECT(GUIImage)
 
 public:
     GUIImage(const Path &imagePath = Path::Empty);

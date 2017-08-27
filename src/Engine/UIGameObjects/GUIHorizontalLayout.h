@@ -5,7 +5,7 @@
 
 class GUIHorizontalLayout : public GUIDirLayout
 {
-    SERIALIZABLE_OBJECT(GUIHorizontalLayout)
+    UIGAMEOBJECT(GUIHorizontalLayout)
 
 public:
     GUIHorizontalLayout();

@@ -5,7 +5,7 @@
 
 class GUIVerticalLayout : public GUIDirLayout
 {
-    SERIALIZABLE_OBJECT(GUIVerticalLayout)
+    UIGAMEOBJECT(GUIVerticalLayout)
 
 public:
     GUIVerticalLayout();

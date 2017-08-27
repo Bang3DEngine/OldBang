@@ -19,8 +19,6 @@ public:
     GameObject* const& gameObject = m_gameObject;
     Transform* const& transform = m_gameObjectTransform;
 
-    void AddDelegate(Component *delegate);
-    void RemoveDelegate(Component *delegate);
     void SetGameObject(GameObject *gameObject);
 
     GameObject *GetGameObject() const;
@@ -40,16 +38,7 @@ protected:
     Component();
     virtual ~Component();
 
-    // SceneAgent
-    virtual void Start() override;
-    virtual void Update() override;
-    virtual void Render(RenderPass renderPass, bool propagate) override;
-    virtual void ParentSizeChanged() override;
-    virtual void RenderGizmos() override;
-    virtual void Destroy() override;
-
 private:
-    List<Component*> m_delegates;
     GameObject *m_gameObject = nullptr;
     Transform *m_gameObjectTransform = nullptr;
 

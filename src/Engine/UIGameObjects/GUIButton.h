@@ -11,7 +11,7 @@ FORWARD class UIImageRenderer;
 
 class GUIButton : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIButton)
+    UIGAMEOBJECT(GUIButton)
 
 public:
     GUIButton(const String &labelText = "Bang");
@@ -19,10 +19,6 @@ public:
 
     GUILabel *GetLabel() const;
     GUIImage *GetImage() const;
-
-    UIBorderRect   *GetUIBorderRect() const;
-    UIButtonTinter *GetLabelTinter() const;
-    UIButtonTinter *GetBackgroundTinter() const;
 
     void AddClickedCallback(UIButton::ClickedCallback callback);
 

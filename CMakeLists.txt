@@ -82,6 +82,7 @@ include_directories(${ROOT}/include/freetype)
 include_directories(${ROOT}/include/Bang/BangCore)
 add_library(
 BangCore
+${ENGINE_SRC_DIR}/DataStructures/Flags.h
 ${ENGINE_SRC_DIR}/DataStructures/String.cpp
 ${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
@@ -152,6 +153,7 @@ ${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
 ${ENGINE_SRC_DIR}/Components/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
+${ENGINE_SRC_DIR}/GameObjects/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/Components/Light.cpp
 ${ENGINE_SRC_DIR}/Components/LineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/MeshRenderer.cpp

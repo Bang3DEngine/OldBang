@@ -6,7 +6,7 @@
 
 class GUIDirLayout : public UIGameObject
 {
-    SERIALIZABLE_OBJECT(GUIDirLayout)
+    UIGAMEOBJECT(GUIDirLayout)
 
 public:
     void Add(UIGameObject *gameObject, int index = -1);

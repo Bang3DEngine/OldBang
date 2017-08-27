@@ -17,6 +17,8 @@ public:
 
     bool IsOn(int f)  const { return (m_flags & f) > 0; }
     bool IsOn(Flag f) const { return IsOn(static_cast<int>(f)); }
+    bool IsOff(int f)  const { return !IsOn(f); }
+    bool IsOff(Flag f) const { return !IsOn(f); }
 
     inline Flags operator|(Flag f)
     {

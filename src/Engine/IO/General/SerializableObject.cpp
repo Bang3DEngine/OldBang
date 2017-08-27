@@ -96,6 +96,9 @@ String SerializableObject::GetInstanceId() const
     return String::ToString( static_cast<const void*>(this) );
 }
 
+HideFlags &SerializableObject::GetHideFlags() { return m_hideFlags; }
+const HideFlags &SerializableObject::GetHideFlags() const { return m_hideFlags; }
+
 void SerializableObject::SetGUID(const GUID &guid)
 {
     m_GUID = guid;
