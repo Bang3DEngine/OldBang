@@ -1,19 +1,19 @@
 #ifndef UIGAMEOBJECT_H
 #define UIGAMEOBJECT_H
 
+#include "Bang/IFocusable.h"
 #include "Bang/GameObject.h"
 
 FORWARD class RectTransform;
 
 #define UIGAMEOBJECT(ClassName) GAMEOBJECT(ClassName)
 
-class UIGameObject : public GameObject
+class UIGameObject : public GameObject,
+                     public IFocusable
 {
     UIGAMEOBJECT(UIGameObject)
 
 public:
-    enum class FocusAction { TakeIt, PassToParent };
-
     UIGameObject(const String& name = "UIGameObject");
 
     RectTransform *const& rectTransform = m_rectTransform;
@@ -34,8 +34,9 @@ private:
     UIGameObject* ReceiveFocus();
     UIGameObject* PropagateFocus(const Vector2 &mouseCoordsNDC);
 
-    virtual void OnFocusTaken();
-    virtual void OnFocusLost();
+    // IFocusable
+    virtual void OnFocusTaken() override;
+    virtual void OnFocusLost() override;
 
     friend class GUICanvas;
 };

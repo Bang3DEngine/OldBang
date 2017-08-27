@@ -153,7 +153,7 @@ ${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
 ${ENGINE_SRC_DIR}/Components/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
-${ENGINE_SRC_DIR}/GameObjects/GameObjectFactory.cpp
+${ENGINE_SRC_DIR}/Components/UIComponent.cpp
 ${ENGINE_SRC_DIR}/Components/Light.cpp
 ${ENGINE_SRC_DIR}/Components/LineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/MeshRenderer.cpp
@@ -171,6 +171,7 @@ ${ENGINE_SRC_DIR}/Components/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
+${ENGINE_SRC_DIR}/GameObjects/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
 ${ENGINE_SRC_DIR}/General/DistanceFielder.cpp
@@ -222,6 +223,7 @@ ${ENGINE_SRC_DIR}/UIGameObjects/GUIMask.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIVerticalLayout.cpp
+${ENGINE_SRC_DIR}/UIGameObjects/IFocusable.h
 ${ENGINE_SRC_DIR}/UIGameObjects/UIGameObject.cpp
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
 )

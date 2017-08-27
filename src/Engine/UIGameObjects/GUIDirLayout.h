@@ -2,9 +2,9 @@
 #define UIDIRLAYOUT_H
 
 #include "Bang/Map.h"
-#include "Bang/Component.h"
+#include "Bang/UIComponent.h"
 
-class GUIDirLayout : public Component
+class GUIDirLayout : public UIComponent
 {
     COMPONENT(GUIDirLayout)
 

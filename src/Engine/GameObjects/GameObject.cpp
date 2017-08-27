@@ -344,37 +344,20 @@ void GameObject::Read(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Name"))
     { SetName( xmlInfo.Get<String>("Name") ); }
 
-    List<SerializableObject*> objectsToBeRead;
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
-        GUID guid = xmlChild.Get<GUID>("GUID");
         const String tagName = xmlChild.GetTagName();
         if (GameObjectFactory::ExistsGameObjectClass(tagName))
         {
-            GameObject *child = GetChild(guid);
-            if (!child)
-            {
-                child = GameObjectFactory::CreateGameObject(tagName);
-                child->SetParent(this);
-            }
-            objectsToBeRead.PushBack(child);
+            GameObject *child = GameObjectFactory::CreateGameObject(tagName);
+            child->SetParent(this);
+            child->Read(xmlChild);
         }
         else
         {
-            Component *comp = GetComponent(guid);
-            if (!comp) { comp = AddComponent(tagName); }
-            objectsToBeRead.PushBack(comp);
+            Component *comp = AddComponent(tagName);
+            comp->Read(xmlChild);
         }
-    }
-
-    auto itObj = objectsToBeRead.Begin();
-    auto itXML = xmlInfo.GetChildren().Begin();
-    while (itObj != objectsToBeRead.End() &&
-           itXML != xmlInfo.GetChildren().End())
-    {
-        (*itObj)->Read( *itXML );
-        ++itXML;
-        ++itObj;
     }
 }
 

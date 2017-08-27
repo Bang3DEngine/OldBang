@@ -5,12 +5,15 @@
 #include "Bang/String.h"
 
 FORWARD class GameObject;
+FORWARD class UIGameObject;
 
 class GameObjectFactory
 {
 public:
     static GameObject* CreateGameObject(const String &gameObjectClassName);
     static bool ExistsGameObjectClass(const String &gameObjectClassName);
+
+    static UIGameObject* CreateGUIInputText();
 
     template<class T>
     static T* CreateGameObject();

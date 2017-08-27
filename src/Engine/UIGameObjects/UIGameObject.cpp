@@ -2,6 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/UIComponent.h"
 #include "Bang/RectTransform.h"
 
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
@@ -20,8 +21,7 @@ bool UIGameObject::HasFocus() const
     return m_hasFocus;
 }
 
-void UIGameObject::SetDefaultFocusAction(
-                            UIGameObject::FocusAction defaultFocusAction)
+void UIGameObject::SetDefaultFocusAction(FocusAction defaultFocusAction)
 {
     m_defaultFocusAction = defaultFocusAction;
 }
@@ -58,13 +58,30 @@ UIGameObject* UIGameObject::PropagateFocus(const Vector2 &mouseCoordsNDC)
             return uiChild->PropagateFocus(mouseCoordsNDC);
         }
     }
+
     return ReceiveFocus();
 }
 
-UIGameObject::FocusAction UIGameObject::OnFocusReceived()
+FocusAction UIGameObject::OnFocusReceived()
 {
     return m_defaultFocusAction;
 }
-void UIGameObject::OnFocusTaken() {}
-void UIGameObject::OnFocusLost() {}
+void UIGameObject::OnFocusTaken()
+{
+    IFocusable::OnFocusTaken();
+    for (Component *comp : GetComponents())
+    {
+        UIComponent *uiComp = DCAST<UIComponent*>(comp);
+        if (uiComp) { uiComp->OnFocusTaken(); }
+    }
+}
+void UIGameObject::OnFocusLost()
+{
+    IFocusable::OnFocusLost();
+    for (Component *comp : GetComponents())
+    {
+        UIComponent *uiComp = DCAST<UIComponent*>(comp);
+        if (uiComp) { uiComp->OnFocusLost(); }
+    }
+}
 

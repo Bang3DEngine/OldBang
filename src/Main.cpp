@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 #include "Bang/UIImageRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GUIVerticalLayout.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/GUIHorizontalLayout.h"
 
 class Menu : public UIGameObject
@@ -78,8 +79,8 @@ public:
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
         GUILabel *resultGo = SCAST<GUILabel*>(GameObject::Find("resultGameObject"));
 
-        String name = SCAST<GUIInputText*>(nameGo)->GetText()->GetContent();
-        String surname = SCAST<GUIInputText*>(surnameGo)->GetText()->GetContent();
+        String name = nameGo->GetComponent<GUIInputText>()->GetText()->GetContent();
+        String surname = surnameGo->GetComponent<GUIInputText>()->GetText()->GetContent();
         resultGo->GetText()->SetContent("Hello " + name + " " + surname);
 
         GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>( FindInChildren("ScrollArea") );
@@ -136,9 +137,9 @@ int main(int argc, char **argv)
     GUILabel *nameLabel = new GUILabel();
     nameLabel->GetText()->SetContent("Name:");
     nameLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
-    GUIInputText *nameInput = new GUIInputText();
+    UIGameObject *nameInput = GameObjectFactory::CreateGUIInputText();
     nameInput->SetName("nameGameObject");
-    nameInput->GetText()->SetContent("Your name here...");
+    nameInput->GetComponent<GUIInputText>()->GetText()->SetContent("Your name here...");
     UIGameObject *nameSubHLayout = new UIGameObject();
     nameSubHLayout->AddComponent<GUIHorizontalLayout>();
     nameLabel->SetParent(nameSubHLayout);
@@ -147,9 +148,9 @@ int main(int argc, char **argv)
     GUILabel *surnameLabel = new GUILabel();
     surnameLabel->GetText()->SetContent("Surname:");
     surnameLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
-    GUIInputText *surnameInput = new GUIInputText();
+    UIGameObject *surnameInput = GameObjectFactory::CreateGUIInputText();
     surnameInput->SetName("surnameGameObject");
-    surnameInput->GetText()->SetContent("Your surname here...");
+    surnameInput->GetComponent<GUIInputText>()->GetText()->SetContent("Your surname here...");
     UIGameObject *surnameSubHLayout = new UIGameObject();
     surnameSubHLayout->AddComponent<GUIHorizontalLayout>();
     surnameLabel->SetParent(surnameSubHLayout);
@@ -211,8 +212,8 @@ int main(int argc, char **argv)
     int s = 10;
     nameLabel->GetText()->SetTextSize(s);
     surnameLabel->GetText()->SetTextSize(s);
-    nameInput->GetText()->SetTextSize(s);
-    surnameInput->GetText()->SetTextSize(s);
+    nameInput->GetComponent<GUIInputText>()->GetText()->SetTextSize(s);
+    surnameInput->GetComponent<GUIInputText>()->GetText()->SetTextSize(s);
 
     Menu *mainHLayout = new Menu();
     mainHLayout->GetComponent<GUIDirLayout>()->SetSpacing(0);

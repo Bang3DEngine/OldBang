@@ -1,17 +1,18 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
-#include "Bang/UIGameObject.h"
+#include "Bang/UIComponent.h"
 
 FORWARD class GUILabel;
+FORWARD class UIGameObject;
 FORWARD class GUITextCursor;
 FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
-class GUIInputText : public UIGameObject
+class GUIInputText : public UIComponent
 {
-    UIGAMEOBJECT(GUIInputText)
+    COMPONENT(GUIInputText)
 
 public:
     GUIInputText();
@@ -30,6 +31,10 @@ public:
     void ResetSelection();
     void SelectAll();
 
+    // IFocusable
+    virtual void OnFocusTaken() override;
+    virtual void OnFocusLost() override;
+
     GUITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
     UIImageRenderer *GetBackground() const;
@@ -39,9 +44,9 @@ private:
 
     UIImageRenderer *p_background = nullptr;
 
-    GUILabel *m_label = nullptr;
-    GUITextCursor *m_cursor = nullptr;
-    GUIScrollArea *m_boxScrollArea = nullptr;
+    GUILabel *p_label = nullptr;
+    GUITextCursor *p_cursor = nullptr;
+    GUIScrollArea *p_boxScrollArea = nullptr;
 
     UIGameObject *p_selectionQuad = nullptr;
 
@@ -52,6 +57,7 @@ private:
 
     bool m_forceUpdateRenderers = false;
 
+    void RetrieveReferences();
     void HandleTyping();
     void HandleMouseSelection();
     void HandleKeySelection(bool wasSelecting);
@@ -69,8 +75,9 @@ private:
     void UpdateCursorRenderersAndScrolling();
     bool IsShiftPressed() const;
 
-    virtual void OnFocusTaken() override;
-    virtual void OnFocusLost() override;
+    void Init();
+
+    friend class GameObjectFactory;
 };
 
 #endif // UIINPUTTEXT_H
