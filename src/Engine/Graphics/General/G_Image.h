@@ -31,7 +31,9 @@ public:
     void SaveToFile(const Path &filepath) const;
     static G_Image LoadFromData(int width, int height,
                                 const Array<Byte> &rgbaByteData);
-    static G_Image LoadFromFile(const Path &filepath);
+
+    // Resource
+    virtual void Import(const Path &imageFilepath) override;
 
 private:
     Vector2i m_size;

@@ -21,13 +21,11 @@ ProjectManager::ProjectManager()
 
 Project* ProjectManager::OpenProject(const Path &projectFilepath)
 {
-    XMLNode xmlInfo = XMLParser::FromFile(projectFilepath);
-
     ProjectManager::CloseCurrentProject();
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
-    currentProject->Read(xmlInfo);
+    currentProject->ReadFromFile(projectFilepath);
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
     Paths::SetProjectRoot(currentProject->GetProjectDirPath());

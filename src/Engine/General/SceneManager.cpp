@@ -41,15 +41,10 @@ void SceneManager::LoadScene(Scene *scene)
     sm->m_activeScene = scene;
     if (sm->m_activeScene)
     {
-        bool setCamera = true;
-
         Time::ResetDeltaTime();
         sm->m_activeScene->Start();
+        sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
         Time::ResetDeltaTime();
-        if (setCamera)
-        {
-            sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
-        }
     }
 }
 
@@ -84,7 +79,7 @@ void SceneManager::TryToLoadQueuedScene()
     if (sm->m_queuedSceneFilepath.IsFile())
     {
         SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
-        sm->m_queuedSceneFilepath = Path();
+        sm->m_queuedSceneFilepath = Path::Empty;
     }
 }
 

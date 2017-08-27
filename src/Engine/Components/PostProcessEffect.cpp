@@ -65,7 +65,7 @@ G_Shader *PostProcessEffect::GetPostProcessShader() const
 }
 Path PostProcessEffect::GetPostProcessShaderFilepath() const
 {
-    return p_postProcessShader ? p_postProcessShader->GetFilepath() : Path();
+    return p_postProcessShader ? p_postProcessShader->GetResourceFilepath() : Path();
 }
 
 void PostProcessEffect::CloneInto(ICloneable *clone) const
@@ -81,17 +81,23 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    Path shaderFilepath = xmlInfo.Get<Path>("PostProcessShader");
-    if (!p_postProcessShader ||
-        shaderFilepath != p_postProcessShader->GetFilepath())
-    {
-        G_Shader *postProcessShader =
-                ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
-        SetPostProcessShader(postProcessShader);
-    }
+    if (xmlInfo.Contains("Priority"))
+    { SetPriority( xmlInfo.Get<int>("Priority") ); }
 
-    SetPriority( xmlInfo.Get<int>("Priority") );
-    SetType( xmlInfo.Get<Type>("Type") );
+    if (xmlInfo.Contains("Type"))
+    { SetType( xmlInfo.Get<Type>("Type") ); }
+
+    if (xmlInfo.Contains("PostProcessShader"))
+    {
+        Path shaderFilepath = xmlInfo.Get<Path>("PostProcessShader");
+        if (!p_postProcessShader ||
+            shaderFilepath != p_postProcessShader->GetResourceFilepath())
+        {
+            G_Shader *postProcessShader =
+                    ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
+            SetPostProcessShader(postProcessShader);
+        }
+    }
 }
 
 void PostProcessEffect::Write(XMLNode *xmlInfo) const

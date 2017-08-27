@@ -15,7 +15,7 @@
 
 Camera::Camera()
 {
-    p_camMesh = Resources::Load<Mesh>( EPATH("Meshes/Camera.bmesh") );
+    p_camMesh = Resources::Load<Mesh>( EPATH("Meshes/Camera.obj") );
 }
 
 Camera::~Camera()
@@ -147,12 +147,23 @@ void Camera::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    SetClearColor(xmlInfo.Get<Color>("ClearColor"));
-    SetFovDegrees(xmlInfo.Get<float>("FOVDegrees"));
-    SetZNear(xmlInfo.Get<float>("ZNear"));
-    SetZFar(xmlInfo.Get<float>("ZFar"));
-    SetProjectionMode( xmlInfo.Get<ProjectionMode>("ProjectionMode") );
-    SetOrthoHeight( xmlInfo.Get<float>("OrthoHeight") );
+    if (xmlInfo.Contains("ClearColor"))
+    { SetClearColor(xmlInfo.Get<Color>("ClearColor")); }
+
+    if (xmlInfo.Contains("FOVDegrees"))
+    { SetFovDegrees(xmlInfo.Get<float>("FOVDegrees")); }
+
+    if (xmlInfo.Contains("ZNear"))
+    { SetZNear(xmlInfo.Get<float>("ZNear")); }
+
+    if (xmlInfo.Contains("ZFar"))
+    { SetZFar(xmlInfo.Get<float>("ZFar")); }
+
+    if (xmlInfo.Contains("ProjectionMode"))
+    { SetProjectionMode( xmlInfo.Get<ProjectionMode>("ProjectionMode") ); }
+
+    if (xmlInfo.Contains("OrthoHeight"))
+    { SetOrthoHeight( xmlInfo.Get<float>("OrthoHeight") ); }
 }
 
 void Camera::Write(XMLNode *xmlInfo) const

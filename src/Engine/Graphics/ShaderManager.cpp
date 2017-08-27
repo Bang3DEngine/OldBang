@@ -21,7 +21,7 @@ G_Shader *ShaderManager::Load(G_Shader::Type type, const Path &filepath)
     if (!sm->m_filepathToShaders.ContainsKey(filepath))
     {
         shader = new Shader(type);
-        shader->LoadFromFile(filepath);
+        shader->Import(filepath);
         sm->m_filepathToShaders.Add(filepath, shader);
     }
     else

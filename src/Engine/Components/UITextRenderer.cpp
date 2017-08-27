@@ -23,7 +23,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetMaterial( MaterialFactory::GetUIText() );
     UseMaterialCopy();
 
-    SetFont( Resources::Load<Font>( EPATH("Fonts/UbuntuFont.bfont") ));
+    SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ));
     SetContent("Bang");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
@@ -271,19 +271,36 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
 
-void UITextRenderer::Read(const XMLNode &xmlInfo)
+void UITextRenderer::Read(const XMLNode &xml)
 {
-    UIRenderer::Read(xmlInfo);
+    UIRenderer::Read(xml);
 
-    SetFont( Resources::Load<Font>( xmlInfo.Get<GUID>("Font") ) );
-    SetContent(xmlInfo.Get<String>("Content"));
-    SetTextSize(xmlInfo.Get<float>("TextSize"));
-    SetSpacing(xmlInfo.Get<Vector2i>("Spacing"));
-    SetKerning(xmlInfo.Get<bool>("Kerning"));
-    SetTextColor( xmlInfo.Get<Color>("TextColor") );
-    SetWrapping( xmlInfo.Get<bool>("Wrapping") );
-    SetVerticalAlign( xmlInfo.Get<VerticalAlignment>("VerticalAlign") );
-    SetHorizontalAlign( xmlInfo.Get<HorizontalAlignment>("HorizontalAlign"));
+    if (xml.Contains("Font"))
+    { SetFont( Resources::Load<Font>( xml.Get<GUID>("Font") ) ); }
+
+    if (xml.Contains("Content"))
+    { SetContent(xml.Get<String>("Content")); }
+
+    if (xml.Contains("TextSize"))
+    { SetTextSize(xml.Get<float>("TextSize")); }
+
+    if (xml.Contains("Spacing"))
+    { SetSpacing(xml.Get<Vector2i>("Spacing")); }
+
+    if (xml.Contains("Kerning"))
+    { SetKerning(xml.Get<bool>("Kerning")); }
+
+    if (xml.Contains("TextColor"))
+    { SetTextColor( xml.Get<Color>("TextColor") ); }
+
+    if (xml.Contains("Wrapping"))
+    { SetWrapping( xml.Get<bool>("Wrapping") ); }
+
+    if (xml.Contains("VerticalAlign"))
+    { SetVerticalAlign( xml.Get<VerticalAlignment>("VerticalAlign") ); }
+
+    if (xml.Contains("HorizontalAlign"))
+    { SetHorizontalAlign( xml.Get<HorizontalAlignment>("HorizontalAlign")); }
 }
 
 void UITextRenderer::Write(XMLNode *xmlInfo) const

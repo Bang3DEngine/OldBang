@@ -10,7 +10,6 @@
 #include "Bang/GUITextCursor.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/SingleLineRenderer.h"
 
 const Vector2i GUIInputText::LookAheadOffsetPx = Vector2i(5);
 
@@ -407,22 +406,22 @@ float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
 
     // In case we are at the beginning or at the end of the text
     RectTransform *contRT = m_boxScrollArea->rectTransform;
-    if (cursorIndex == 0)
+    if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
     {
-        if (!GetText()->GetContent().IsEmpty())
+        if (cursorIndex == 0)
         {
-            return GetText()->GetCharRectLocalNDC(0).GetMin().x;
+            return GetText()->GetCharRectsLocalNDC().Front().GetMin().x;
         }
-
-        if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Left)
-            return contRT->FromLocalNDCToGlobalNDC( Vector2(-1.0f) ).x;
-
-        if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Center)
-            return contRT->FromLocalNDCToGlobalNDC( Vector2(0.0f) ).x;
-
-        return contRT->FromLocalNDCToGlobalNDC( Vector2(1.0f) ).x;
+        return GetText()->GetCharRectsLocalNDC().Back().GetMax().x;
     }
-    return GetText()->GetCharRectsLocalNDC().Back().GetMax().x;
+
+    if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Left)
+        return contRT->FromLocalNDCToGlobalNDC( Vector2(-1.0f) ).x;
+
+    if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Center)
+        return contRT->FromLocalNDCToGlobalNDC( Vector2(0.0f) ).x;
+
+    return contRT->FromLocalNDCToGlobalNDC( Vector2(1.0f) ).x;
 }
 
 bool GUIInputText::IsDelimiter(char initialChar, char curr) const

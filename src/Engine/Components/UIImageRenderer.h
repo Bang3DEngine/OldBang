@@ -15,7 +15,7 @@ public:
     // UIRenderer
     virtual void OnRender() override;
 
-    void SetImage(Texture2D *imageTexture);
+    void SetTexture(Texture2D *imageTexture);
     void SetTint(const Color& tint);
 
     const Color& GetTint() const;

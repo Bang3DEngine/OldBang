@@ -10,15 +10,15 @@
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 
-void ImageIO::Write(const Path &filepath, const G_Image &img)
+void ImageIO::Export(const Path &filepath, const G_Image &img)
 {
     if (filepath.HasExtension("png"))
     {
-        ImageIO::WritePNG(filepath, img);
+        ImageIO::ExportPNG(filepath, img);
     }
     else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
     {
-        ImageIO::WriteJPG(filepath, img, 10);
+        ImageIO::ExportJPG(filepath, img, 10);
     }
     else
     {
@@ -26,17 +26,17 @@ void ImageIO::Write(const Path &filepath, const G_Image &img)
     }
 }
 
-void ImageIO::Read(const Path &filepath, G_Image *img, bool *_ok)
+void ImageIO::Import(const Path &filepath, G_Image *img, bool *_ok)
 {
     bool ok = false;
 
     if (filepath.HasExtension("png"))
     {
-        ImageIO::ReadPNG(filepath, img, &ok);
+        ImageIO::ImportPNG(filepath, img, &ok);
     }
     else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
     {
-        ImageIO::ReadJPG(filepath, img, &ok);
+        ImageIO::ImportJPG(filepath, img, &ok);
     }
     else
     {
@@ -46,7 +46,7 @@ void ImageIO::Read(const Path &filepath, G_Image *img, bool *_ok)
     if (_ok) { *_ok = ok; }
 }
 
-void ImageIO::WritePNG(const Path &filepath, const G_Image &img)
+void ImageIO::ExportPNG(const Path &filepath, const G_Image &img)
 {
     FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "wb");
     if (!fp) { return; }
@@ -105,7 +105,7 @@ void ImageIO::WritePNG(const Path &filepath, const G_Image &img)
     fclose(fp);
 }
 
-void ImageIO::ReadPNG(const Path &filepath, G_Image *img, bool *ok)
+void ImageIO::ImportPNG(const Path &filepath, G_Image *img, bool *ok)
 {
     *ok = false;
 
@@ -191,7 +191,7 @@ void ImageIO::ReadPNG(const Path &filepath, G_Image *img, bool *ok)
     *ok = true;
 }
 
-void ImageIO::WriteJPG(const Path &filepath, const G_Image &img, int quality)
+void ImageIO::ExportJPG(const Path &filepath, const G_Image &img, int quality)
 {
     struct jpeg_error_mgr jerr;
     struct jpeg_compress_struct cinfo;
@@ -226,7 +226,7 @@ void ImageIO::WriteJPG(const Path &filepath, const G_Image &img, int quality)
     jpeg_destroy_compress(&cinfo);
 }
 
-void ImageIO::ReadJPG(const Path &filepath, G_Image *img, bool *ok)
+void ImageIO::ImportJPG(const Path &filepath, G_Image *img, bool *ok)
 {
     *ok = false;
 

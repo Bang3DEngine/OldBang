@@ -23,6 +23,8 @@ Application* Application::s_appSingleton = nullptr;
 
 Application::Application(int argc, char **argv)
 {
+    srand(time(NULL));
+
     Application::s_appSingleton = this;
 
     m_paths              = new Paths();

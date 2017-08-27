@@ -40,7 +40,8 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetMesh( Resources::Load<Mesh>( xmlInfo.Get<Path>("Mesh") ) );
+    if (xmlInfo.Contains("Mesh"))
+    { SetMesh( Resources::Load<Mesh>( xmlInfo.Get<GUID>("Mesh") ) ); }
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const

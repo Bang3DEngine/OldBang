@@ -39,11 +39,16 @@ int main(int argc, char **argv)
 #include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"
 #include "Bang/GUIImage.h"
+#include "Bang/Material.h"
 #include "Bang/GUICanvas.h"
 #include "Bang/GUIButton.h"
 #include "Bang/AudioClip.h"
+#include "Bang/Resources.h"
+#include "Bang/PointLight.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/Application.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/AudioManager.h"
 #include "Bang/GUIInputText.h"
 #include "Bang/SceneManager.h"
@@ -53,6 +58,7 @@ int main(int argc, char **argv)
 #include "Bang/ProjectManager.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/GUIVerticalLayout.h"
 #include "Bang/GUIHorizontalLayout.h"
 
@@ -92,14 +98,63 @@ int main(int argc, char **argv)
     Application app(argc, argv);
     app.CreateWindow();
 
+    {
+        Scene *scene = new Scene();
+
+        Material *mat = new Material( *MaterialFactory::GetDefault() );
+        mat->SetDiffuseColor(Color::Blue);
+        mat->SetTexture( Resources::Load<Texture2D>( EPATH("res/EngineAssets/Images/LogoBang_B_512.png") ) );
+        mat->WriteToFile( Path("/home/sephirot47/Bang/res/EngineAssets/Materials/test.bmat") );
+        Material *mat2 = Resources::Load<Material>( Path("/home/sephirot47/Bang/res/EngineAssets/Materials/test.bmat") );
+        Debug_Log(mat2->GetSerializedString());
+
+        GameObject *sphere = new GameObject("SPHERE");
+        Transform *trans = sphere->AddComponent<Transform>();
+        trans->SetScale(10.0f);
+        MeshRenderer *mr = sphere->AddComponent<MeshRenderer>();
+        mr->SetMesh( MeshFactory::GetSphere() );
+        mr->UseMaterialCopy();
+        mr->GetMaterial()->SetDiffuseColor(Color::Pink);
+        mr->SetMaterial( mat2 );
+        sphere->SetParent(scene);
+
+        GameObject *sphere2 = sphere->Clone();
+        sphere2->transform->SetPosition( Vector3(20.0f, 0.0f, 0.0f) );
+        sphere2->transform->SetScale(5.0f);
+        sphere2->SetParent(scene);
+
+        GameObject *pointLightGo = new GameObject();
+        Transform *transPl = pointLightGo->AddComponent<Transform>();
+        PointLight *pointLight = pointLightGo->AddComponent<PointLight>();
+        transPl->SetPosition( Vector3(20.0f) );
+        pointLight->SetColor( Color::White );
+        pointLight->SetRange(100.0f);
+        pointLightGo->SetParent(scene);
+
+        scene->WriteToFile( Path("Test.bscene") );
+        SceneManager::LoadScene( Path("Test.bscene") );
+        // SceneManager::LoadScene(scene);
+    }
+    app.MainLoop();
+    return 0;
+
+    /*
     ProjectManager pm;
     pm.OpenProject( Path("/home/sephirot47/Snake/Snake.bproject") );
     pm.GetCurrentProject()->OpenFirstFoundScene();
     exit(0);
+    */
 
     Scene *scene = new Scene();
 
     GUIImage *rightImg = new GUIImage( Path("/home/sephirot47/BangUITest/test.png") );
+    {
+    G_Image *image = Resources::Load<G_Image>( Path("/home/sephirot47/BangUITest/test.png") );
+    Texture2D *tex = Resources::Load<Texture2D>(
+                Path("/home/sephirot47/BangUITest/test.png") );
+    Debug_Log(image->GetSize());
+    }
+
     GUILabel *rightLabel = new GUILabel("Lorem ipsum dolor sit amet. El veloz "
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
@@ -163,13 +218,13 @@ int main(int argc, char **argv)
     GUIMask *buttonPlayMask = new GUIMask();
     buttonPlayMask->SetMasking(true);
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
-    maskImg->SetImage(
+    maskImg->SetTexture(
              new Texture2D( Path("/home/sephirot47/BangUITest/test.png") ) );
     buttonPlay->rectTransform->SetMargins(10);
     buttonPlay->SetParent(buttonPlayMask);
 
-    G_Image image = G_Image::LoadFromFile(Path("/home/sephirot47/BangUITest/test.png"));
-    image.SaveToFile( Path("/home/sephirot47/Bang/tmp/lol.jpg") );
+    G_Image *image = Resources::Load<G_Image>(Path("/home/sephirot47/BangUITest/test.png"));
+    if (image) { image->SaveToFile( Path("/home/sephirot47/Bang/tmp/lol.jpg") ); }
 
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
@@ -179,7 +234,7 @@ int main(int argc, char **argv)
     GUIMask *leftMask = new GUIMask();
     leftMask->SetMasking(true);
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
-    img->SetImage( new Texture2D( Path("/home/sephirot47/test2.png") ) );
+    img->SetTexture( new Texture2D( Path("/home/sephirot47/test2.png") ) );
     GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->SetSpacing(10);
@@ -219,8 +274,8 @@ int main(int argc, char **argv)
 
     AudioClip *gameAc = new AudioClip();
     AudioClip *appleAc = new AudioClip();
-    gameAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/GameMusic.wav") );
-    appleAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/AppleSound.wav") );
+    gameAc->Import( Path("/home/sephirot47/Snake/Assets/Music/GameMusic.wav") );
+    appleAc->Import( Path("/home/sephirot47/Snake/Assets/Music/AppleSound.wav") );
     buttonPlay->AddClickedCallback([gameAc, appleAc](UIButton*)
     {
         AudioParams ap;
@@ -230,7 +285,7 @@ int main(int argc, char **argv)
         }
         else if (Input::GetKey(Input::Key::X))
         {
-            gameAc->LoadFromSoundFile( Path("/home/sephirot47/Snake/Assets/Music/MenuMusic.wav") );
+            gameAc->Import( Path("/home/sephirot47/Snake/Assets/Music/MenuMusic.wav") );
         }
         else
         {
@@ -260,6 +315,7 @@ int main(int argc, char **argv)
     });
 
     SceneManager::LoadScene(scene);
+    scene->WriteToFile( Path("Test.bscene") );
     app.MainLoop();
 
     return 0;

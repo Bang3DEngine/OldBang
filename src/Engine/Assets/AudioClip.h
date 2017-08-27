@@ -18,8 +18,6 @@ public:
     AudioClip();
     virtual ~AudioClip();
 
-    bool LoadFromSoundFile(const Path &filepath);
-
     int GetChannels() const;
     int GetBufferSize() const;
     int GetBitDepth() const;
@@ -27,6 +25,9 @@ public:
     float GetLength() const;
     bool IsLoaded() const;
     const Path &GetSoundFilepath() const;
+
+    // Resource
+    void Import(const Path &soundFilepath) override;
 
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;

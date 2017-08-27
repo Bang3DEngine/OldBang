@@ -20,7 +20,7 @@ public:
     const UIImageRenderer *GetImage() const;
 
 private:
-    UIImageRenderer *p_image = nullptr;
+    UIImageRenderer *p_imageRend = nullptr;
     Texture2D *m_texture = nullptr;
 };
 

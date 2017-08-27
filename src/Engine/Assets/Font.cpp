@@ -12,7 +12,7 @@ Font::~Font()
 {
 }
 
-void Font::LoadFromTTF(const Path &ttfFilepath)
+void Font::Import(const Path &ttfFilepath)
 {
     m_ttfFilepath = ttfFilepath;
     G_Font::LoadFromTTF(ttfFilepath);
@@ -27,11 +27,9 @@ Path Font::GetTTFFilepath() const
 void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    LoadFromTTF( xmlInfo.Get<Path>("FontFilepath") );
 }
 
 void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->Set("FontFilepath", GetTTFFilepath());
 }

@@ -2,6 +2,7 @@
 
 #include "Bang/Debug.h"
 #include "Bang/ImageIO.h"
+#include "Bang/ImportFilesManager.h"
 
 G_Image::G_Image()
 {
@@ -83,7 +84,7 @@ void G_Image::InvertVertically()
 
 void G_Image::SaveToFile(const Path &filepath) const
 {
-    ImageIO::Write(filepath, *this);
+    ImageIO::Export(filepath, *this);
 }
 
 G_Image G_Image::LoadFromData(int width, int height,
@@ -95,16 +96,14 @@ G_Image G_Image::LoadFromData(int width, int height,
     return img;
 }
 
-G_Image G_Image::LoadFromFile(const Path &filepath)
+void G_Image::Import(const Path &imageFilepath)
 {
     bool ok;
-    G_Image img;
-    ImageIO::Read(filepath, &img, &ok);
+    ImageIO::Import(imageFilepath, this, &ok);
 
     if (!ok)
     {
-        Debug_Error("Error loading the image '" << filepath <<
+        Debug_Error("Error loading the image '" << imageFilepath <<
                      "', couldn't open/read the file.");
     }
-    return img;
 }

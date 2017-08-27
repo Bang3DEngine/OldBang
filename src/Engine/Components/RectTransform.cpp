@@ -267,11 +267,20 @@ void RectTransform::Read(const XMLNode &xmlInfo)
 {
     Transform::Read(xmlInfo);
 
-    SetMargins (xmlInfo.Get<Vector2i>("MarginLeftBot"),
-                xmlInfo.Get<Vector2i>("MarginRightTop"));
-    SetPivotPosition( xmlInfo.Get<Vector2>("PivotPosition") );
-    SetAnchorMin    ( xmlInfo.Get<Vector2>("AnchorMin")     );
-    SetAnchorMax    ( xmlInfo.Get<Vector2>("AnchorMax")     );
+    if (xmlInfo.Contains("MarginLeftBot"))
+    {
+        SetMargins (xmlInfo.Get<Vector2i>("MarginLeftBot"),
+                    xmlInfo.Get<Vector2i>("MarginRightTop"));
+    }
+
+    if (xmlInfo.Contains("PivotPosition"))
+    { SetPivotPosition( xmlInfo.Get<Vector2>("PivotPosition") ); }
+
+    if (xmlInfo.Contains("AnchorMin"))
+    { SetAnchorMin( xmlInfo.Get<Vector2>("AnchorMin") ); }
+
+    if (xmlInfo.Contains("AnchorMax"))
+    { SetAnchorMax( xmlInfo.Get<Vector2>("AnchorMax") ); }
 }
 
 void RectTransform::Write(XMLNode *xmlInfo) const

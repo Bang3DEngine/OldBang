@@ -13,8 +13,10 @@ public:
     Font();
     virtual ~Font();
 
-    void LoadFromTTF(const Path &ttfFilepath) override;
     Path GetTTFFilepath() const;
+
+    // Resource
+    void Import(const Path &ttfFilepath) override;
 
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;

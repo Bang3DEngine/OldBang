@@ -19,11 +19,11 @@ G_ShaderProgram::G_ShaderProgram()
 void G_ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
     G_Shader *vs = new G_Shader(G_Shader::Type::Vertex);
-    vs->LoadFromFile(vshaderPath);
+    vs->Import(vshaderPath);
     SetVertexShader(vs);
 
     G_Shader *fs = new G_Shader(G_Shader::Type::Fragment);
-    vs->LoadFromFile(fshaderPath);
+    vs->Import(fshaderPath);
     SetFragmentShader(fs);
 }
 

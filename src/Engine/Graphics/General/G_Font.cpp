@@ -13,11 +13,11 @@ G_Font::~G_Font()
     Free();
 }
 
-void G_Font::LoadFromTTF(const Path &filepath)
+void G_Font::LoadFromTTF(const Path &ttfFilepath)
 {
     Free();
     G_FontSheetCreator::LoadAtlasTexture(
-        filepath,
+        ttfFilepath,
         G_Font::CharLoadSize,
         &m_atlasTexture,
         &m_charUvsInAtlas,

@@ -36,6 +36,9 @@ public:
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
+    // Resource
+    void Import(const Path &materialFilepath) override;
+
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

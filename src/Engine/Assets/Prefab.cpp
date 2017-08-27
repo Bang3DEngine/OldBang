@@ -58,6 +58,11 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     return nullptr;
 }
 
+void Prefab::Import(const Path &prefabFilepath)
+{
+    ReadFromFile(prefabFilepath);
+}
+
 void Prefab::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
@@ -74,5 +79,4 @@ void Prefab::Write(XMLNode *xmlInfo) const
 
     XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
     goInfo.CloneInto(xmlInfo);
-    xmlInfo->SetTagName("Prefab");
 }

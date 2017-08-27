@@ -1,30 +1,14 @@
 #include "Bang/G_Texture2D.h"
 
+#include "Bang/Resources.h"
+
 G_Texture2D::G_Texture2D() : G_Texture(Target::Texture2D)
 {
     CreateEmpty(1,1);
 }
 
-G_Texture2D::G_Texture2D(const Path &imageFilepath) : G_Texture2D()
-{
-    LoadFromImage(imageFilepath);
-}
-
-G_Texture2D::G_Texture2D(const G_Texture2D &t) : G_Texture(t)
-{
-}
-
 G_Texture2D::~G_Texture2D()
 {
-}
-
-void G_Texture2D::LoadFromImage(const Path &imageFilepath)
-{
-    ENSURE(!imageFilepath.IsEmpty());
-
-    m_imageFilepath = imageFilepath;
-    G_Image img = G_Image::LoadFromFile(m_imageFilepath);
-    LoadFromImage(img);
 }
 
 void G_Texture2D::LoadFromImage(const G_Image &image)
@@ -37,7 +21,6 @@ void G_Texture2D::LoadFromImage(const G_Image &image)
         SetFormat(G_Texture::Format::RGBA_Byte8);
         Fill(image.GetData(), m_width, m_height, G_Texture::Format::RGBA_Byte8);
     }
-
 }
 
 void G_Texture2D::CreateEmpty(int width, int height)
@@ -93,11 +76,6 @@ void G_Texture2D::Fill(const Byte *newData, int width, int height,
     int sizeOfNewData =
             width * height * G_Texture::GetPixelBytesSize(imageFormat);
     Fill(newData, width, height, sizeOfNewData, genMipMaps);
-}
-
-const Path& G_Texture2D::GetImageFilepath() const
-{
-    return m_imageFilepath;
 }
 
 G_Image G_Texture2D::ToImage(bool invertY)

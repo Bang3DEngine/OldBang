@@ -10,8 +10,6 @@
 class Asset : public Resource,
               public IToString
 {
-    RESOURCE(Asset)
-
 public:
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

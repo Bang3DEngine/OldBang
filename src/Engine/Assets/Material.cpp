@@ -88,7 +88,7 @@ void Material::CloneInto(ICloneable *clone) const
         G_Shader *vshader = sp->GetVertexShader();
         G_Shader *fshader = sp->GetFragmentShader();
         sp = new ShaderProgram();
-        sp->Load(vshader->GetFilepath(), fshader->GetFilepath());
+        sp->Load(vshader->GetResourceFilepath(), fshader->GetResourceFilepath());
     }
     matClone->m_gMaterial->SetShaderProgram(sp);
 
@@ -96,27 +96,45 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetTexture(GetTexture());
 }
 
-void Material::Read(const XMLNode &xmlInfo)
+void Material::Import(const Path &materialFilepath)
 {
-    Asset::Read(xmlInfo);
+    Debug_Log("***************Import MATERIAL: " << materialFilepath);
+    ReadFromFile(materialFilepath);
+}
 
-    SetDiffuseColor(xmlInfo.Get<Color>("DiffuseColor"));
-    SetShininess(xmlInfo.Get<float>("Shininess"));
-    SetReceivesLighting(xmlInfo.Get<bool>("ReceivesLighting"));
-    SetUvMultiply(xmlInfo.Get<Vector2>("UvMultiply"));
-    SetTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Texture") ) );
+void Material::Read(const XMLNode &xml)
+{
+    Asset::Read(xml);
 
-    ShaderProgram *sp = GetShaderProgram();
-    Path vsPath = xmlInfo.Get<Path>("VertexShader");
-    Path fsPath = xmlInfo.Get<Path>("FragmentShader");
-    if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
-        vsPath != sp->GetVertexShader()->GetFilepath()  ||
-        fsPath != sp->GetFragmentShader()->GetFilepath()
-       )
+    if (xml.Contains("DiffuseColor"))
+    { SetDiffuseColor(xml.Get<Color>("DiffuseColor")); }
+
+    if (xml.Contains("Shininess"))
+    { SetShininess(xml.Get<float>("Shininess")); }
+
+    if (xml.Contains("ReceivesLighting"))
+    { SetReceivesLighting(xml.Get<bool>("ReceivesLighting")); }
+
+    if (xml.Contains("UvMultiply"))
+    { SetUvMultiply(xml.Get<Vector2>("UvMultiply")); }
+
+    if (xml.Contains("Texture"))
+    { SetTexture( Resources::Load<Texture2D>( xml.Get<GUID>("Texture") ) ); }
+
+    if (xml.Contains("VertexShader") && xml.Contains("FragmentShader"))
     {
-        ShaderProgram *newSp = new ShaderProgram();
-        newSp->Load(vsPath, fsPath);
-        SetShaderProgram(newSp);
+        ShaderProgram *sp = GetShaderProgram();
+        Path vsPath = xml.Get<Path>("VertexShader");
+        Path fsPath = xml.Get<Path>("FragmentShader");
+        if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
+            vsPath != sp->GetVertexShader()->GetResourceFilepath()  ||
+            fsPath != sp->GetFragmentShader()->GetResourceFilepath()
+           )
+        {
+            ShaderProgram *newSp = new ShaderProgram();
+            newSp->Load(vsPath, fsPath);
+            SetShaderProgram(newSp);
+        }
     }
 }
 
@@ -128,14 +146,16 @@ void Material::Write(XMLNode *xmlInfo) const
     xmlInfo->Set("Shininess",        GetShininess());
     xmlInfo->Set("ReceivesLighting", GetReceivesLighting());
     xmlInfo->Set("UvMultiply",       GetUvMultiply());
-    xmlInfo->Set("Texture", GetTexture()->GetGUID());
+
+    const Texture2D *tex = GetTexture();
+    xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());
 
     Path vsPath, fsPath;
     G_ShaderProgram *sp = GetShaderProgram();
     if (sp)
     {
-        if (sp->GetVertexShader()) { vsPath = sp->GetVertexShader()->GetFilepath(); }
-        if (sp->GetFragmentShader()) { fsPath = sp->GetFragmentShader()->GetFilepath(); }
+        if (sp->GetVertexShader()) { vsPath = sp->GetVertexShader()->GetResourceFilepath(); }
+        if (sp->GetFragmentShader()) { fsPath = sp->GetFragmentShader()->GetResourceFilepath(); }
     }
     xmlInfo->Set("VertexShader",   vsPath);
     xmlInfo->Set("FragmentShader", fsPath);

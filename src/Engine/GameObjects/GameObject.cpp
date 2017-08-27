@@ -320,8 +320,11 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled( xmlInfo.Get<bool>("enabled") );
-    SetName( xmlInfo.Get<String>("name") );
+    if (xmlInfo.Contains("Enabled"))
+    { SetEnabled( xmlInfo.Get<bool>("Enabled") ); }
+
+    if (xmlInfo.Contains("Name"))
+    { SetName( xmlInfo.Get<String>("Name") ); }
 
     // IMPORTANT: The order of the xmlNodes must match the order
     // of the children and components list, in order to update every child/comp
@@ -354,9 +357,6 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
 void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
-
-    SetEnabled( xmlInfo.Get<bool>("enabled") );
-    SetName( xmlInfo.Get<String>("name") );
 
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
@@ -398,11 +398,10 @@ void GameObject::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->Set("id", GetInstanceId());
-    xmlInfo->Set("enabled", IsEnabled());
-    xmlInfo->Set("name", m_name);
+    xmlInfo->Set("Enabled", IsEnabled());
+    xmlInfo->Set("Name", GetName());
 
-    for (Component *c : m_components)
+    for (Component *c : GetComponents())
     {
         XMLNode xmlComp;
         c->Write(&xmlComp);

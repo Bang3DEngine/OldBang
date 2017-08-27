@@ -196,6 +196,7 @@ ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
+${ENGINE_SRC_DIR}/IO/General/Resource.cpp
 ${ENGINE_SRC_DIR}/IO/General/Resources.cpp
 ${ENGINE_SRC_DIR}/IO/General/SerializableObject.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
@@ -241,7 +242,7 @@ Bang
 ${SRC_DIR}/Main.cpp
 )
 target_link_libraries(Bang
-BangEngine BangGraphics BangCore
+-Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
 )
 
 # BangMainGame Executable
@@ -250,7 +251,7 @@ Game.exe
 ${SRC_DIR}/MainGame.cpp
 )
 target_link_libraries(Game.exe
-BangEngine BangGraphics BangCore
+-Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
 )
 
 # BangMainGameBuilder Executable
@@ -259,5 +260,5 @@ BangGameBuilder
 ${SRC_DIR}/MainGameBuilder.cpp
 )
 target_link_libraries(BangGameBuilder
-BangEngine BangGraphics BangCore
+-Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
 )

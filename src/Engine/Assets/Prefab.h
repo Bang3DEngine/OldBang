@@ -25,6 +25,9 @@ public:
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
+    // Resource
+    void Import(const Path& prefabFilepath) override;
+
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

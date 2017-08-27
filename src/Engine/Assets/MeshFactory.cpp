@@ -9,27 +9,27 @@
 
 Mesh* MeshFactory::GetPlane()
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/Plane.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Plane.obj") );
 }
 
 Mesh *MeshFactory::GetUIPlane()
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/UIPlane.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/UIPlane.obj") );
 }
 
 Mesh* MeshFactory::GetCube()
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/Cube.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Cube.obj") );
 }
 
 Mesh *MeshFactory::GetSphere()
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/Sphere.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Sphere.obj") );
 }
 
 Mesh *MeshFactory::GetCone()
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/Cone.bmesh") );
+    return Resources::Load<Mesh>( EPATH("Meshes/Cone.obj") );
 }
 
 MeshFactory::MeshFactory() {}

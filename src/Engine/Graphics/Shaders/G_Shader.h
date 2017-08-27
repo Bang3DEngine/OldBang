@@ -23,15 +23,17 @@ public:
     G_Shader();
     G_Shader(G_Shader::Type t);
 
-    bool LoadFromFile(const Path &filepath);
 
     GL::BindTarget GetGLBindTarget() const override;
 
     const String& GetSourceCode() const;
-    const Path& GetFilepath() const;
+    const Path& GetResourceFilepath() const;
     Type GetType() const;
 
     virtual void PreprocessCode(String *shaderSrc) const;
+
+    // Resource
+    virtual void Import(const Path &shaderFilepath) override;
 
 protected:
     String m_sourceCode = "";

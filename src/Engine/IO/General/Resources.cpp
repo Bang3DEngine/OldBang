@@ -17,8 +17,8 @@ Resources::~Resources()
 
 void Resources::Add(const GUID &guid, Resource *x)
 {
-    Resources *am = Resources::GetInstance();
-    if (!guid.IsEmpty()) { am->m_GUIDToResource.Add(guid, x); }
+    ENSURE(x && !guid.IsEmpty());
+    Resources::GetInstance()->m_GUIDToResource.Add(guid, x);
 }
 
 Resources *Resources::GetInstance()

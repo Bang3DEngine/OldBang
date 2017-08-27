@@ -19,8 +19,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-private:
-    G_Image *p_image = nullptr;
+    // Resource
+    virtual void Import(const Path &imageFilepath) override;
 };
 
 #endif // TEXTURE2D_H

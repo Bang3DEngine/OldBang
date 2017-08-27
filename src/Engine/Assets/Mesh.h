@@ -24,7 +24,6 @@ public:
     Mesh(const Mesh& m);
     virtual ~Mesh();
 
-    void LoadFromFile(const Path &m_resourceFilepath);
     void LoadPositions(const Array<Vector3>& positions);
     void LoadNormals(const Array<Vector3>& normals);
     void LoadUvs(const Array<Vector2>& uvs);
@@ -44,6 +43,9 @@ public:
     const Array<Vector3>& GetNormals();
     const Array<Vector2>& GetUvs();
     const Path &GetModelFilepath() const;
+
+    // Resource
+    void Import(const Path &meshFilepath) override;
 
     // SerializableObject
     virtual void Read(const XMLNode &xmlInfo) override;

@@ -23,6 +23,9 @@ public:
     void SetType(Type type);
     Type GetType() const;
 
+    // Resource
+    void Import(const Path &shaderProgramFilepath) override;
+
     // G_ShaderProgram
     void Load(const Path &vshaderPath, const Path &fshaderPath) override;
     void SetVertexShader(G_Shader *vertexShader) override;

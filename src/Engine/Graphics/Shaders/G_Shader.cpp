@@ -16,15 +16,15 @@ G_Shader::G_Shader(G_Shader::Type t)
 {
 }
 
-bool G_Shader::LoadFromFile(const Path& filepath)
+void G_Shader::Import(const Path& shaderFilepath)
 {
-    if (!filepath.Exists())
+    if (!shaderFilepath.Exists())
     {
-        Debug_Error("Shader '" << filepath << "' does not exist.");
-        return false;
+        Debug_Error("Shader '" << shaderFilepath << "' does not exist.");
+        return;
     }
 
-    m_filepath = filepath;
+    m_filepath = shaderFilepath;
     m_sourceCode = File::GetContents(m_filepath);
     PreprocessCode(&m_sourceCode);
 
@@ -49,10 +49,10 @@ bool G_Shader::LoadFromFile(const Path& filepath)
         Debug_Error("Failed to compile shader: '"  << m_filepath
                     << "': " << errorStr);
         glDeleteShader(m_idGL);
-        return false;
+        return;
     }
 
-    return true;
+    return;
 }
 
 GL::BindTarget G_Shader::GetGLBindTarget() const
@@ -65,7 +65,7 @@ const String& G_Shader::GetSourceCode() const
     return m_sourceCode;
 }
 
-const Path& G_Shader::GetFilepath() const
+const Path& G_Shader::GetResourceFilepath() const
 {
     return m_filepath;
 }

@@ -6,6 +6,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Vector2.h"
+#include "Bang/Resource.h"
 
 FORWARD class G_Texture2D;
 
@@ -29,8 +30,6 @@ public:
     G_Font();
     virtual ~G_Font();
 
-    virtual void LoadFromTTF(const Path &m_assetFilepath);
-
     G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c,
                                                  int textSize = 1) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
@@ -52,21 +51,12 @@ public:
 
 protected:
     FT_Face m_freetypeFace = nullptr;
-
-    // A big texture with all the chars in it
     G_Texture2D *m_atlasTexture = nullptr;
 
-    /**
-     * @brief Char c => the character glyph metrics for the character c.
-     * This is, the bearingX, bearingY, height, width, etc.
-     */
     Map<char, CharGlyphMetrics> m_charMetrics;
-
-    /**
-     * @brief Char c => the <min,max> uvs in the atlas texture
-     * corresponding to the character c.
-     */
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+
+    void LoadFromTTF(const Path &ttfFilepath);
 
     void Free();
 };

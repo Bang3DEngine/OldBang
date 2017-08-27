@@ -123,9 +123,6 @@ void Scene::Write(XMLNode *xmlInfo) const
 {
     GameObject::Write(xmlInfo);
     xmlInfo->SetTagName("Scene");
-
-    Camera *cam = GetCamera();
-    xmlInfo->Set("id", cam->GetInstanceId());
 }
 
 void Scene::PostRead(const XMLNode &xmlInfo)

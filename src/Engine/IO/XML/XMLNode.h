@@ -21,6 +21,7 @@ public:
     void UpdateAttributeValue(const String &attributeName,
                               const String &newAttributeValue);
 
+    bool Contains(const String &attrName) const;
     void Set(const XMLAttribute &attribute);
     void Set(const String &attributeName,
              const String &attributeValue,
@@ -30,16 +31,22 @@ public:
     void Set(const String &attributeName, const T& value,
              const Array<XMLProperty>& properties = {})
     {
-        std::ostringstream oss;
-        oss << value;
-        Set(attributeName, String(oss.str()), properties);
+        XMLAttribute attr;
+        attr.Set<T>(attributeName, value, properties);
+        Set(attr);
+    }
+
+    template<class T>
+    T Get(const String &attributeName, const T& defaultValue) const
+    {
+        XMLAttribute *attr = GetAttribute(attributeName);
+        return attr ? attr->Get<T>() : defaultValue;
     }
 
     template<class T>
     T Get(const String &attributeName) const
     {
-        XMLAttribute *attr = GetAttribute(attributeName);
-        return attr ? attr->Get<T>() : T();
+        return Get<T>(attributeName, T());
     }
 
     void RemoveAttribute(const String& attributeName);

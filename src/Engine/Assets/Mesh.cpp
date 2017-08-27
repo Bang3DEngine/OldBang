@@ -5,8 +5,9 @@
 #include "Bang/G_VAO.h"
 #include "Bang/G_VBO.h"
 #include "Bang/Debug.h"
-#include "Bang/XMLNode.h"
+#include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
+#include "Bang/ImportFilesManager.h"
 
 Mesh::Mesh()
 {
@@ -33,25 +34,6 @@ Mesh::~Mesh()
     if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
     if (m_vertexNormalsVBO)   { delete m_vertexNormalsVBO;   }
     if (m_vertexUvsVBO)       { delete m_vertexUvsVBO;       }
-}
-
-void Mesh::LoadFromFile(const Path &filepath)
-{
-    m_uvs.Clear();
-    m_normals.Clear();
-    m_positions.Clear();
-    if ( FileReader::ReadModel(filepath, &m_positions, &m_normals, &m_uvs))
-    {
-        LoadPositions(m_positions);
-        LoadNormals(m_normals);
-        LoadUvs(m_uvs);
-        m_modelFilepath = filepath;
-    }
-    else
-    {
-        Debug_Error("There was an error when reading mesh file '" <<
-                    filepath << "'.");
-    }
 }
 
 void Mesh::LoadPositions(const Array<Vector3>& positions)
@@ -130,22 +112,38 @@ G_VAO *Mesh::GetVAO() const { return m_vao; }
 int Mesh::GetVertexCount() const { return m_positions.Size(); }
 const AABox &Mesh::GetAABBox() const { return m_bBox; }
 const Sphere &Mesh::GetBoundingSphere() const { return m_bSphere; }
- const Array<Vector3> &Mesh::GetPositions() { return m_positions; }
- const Array<Vector3> &Mesh::GetNormals() { return m_normals; }
- const Array<Vector2> &Mesh::GetUvs() { return m_uvs; }
- const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
+const Array<Vector3> &Mesh::GetPositions() { return m_positions; }
+const Array<Vector3> &Mesh::GetNormals() { return m_normals; }
+const Array<Vector2> &Mesh::GetUvs() { return m_uvs; }
+const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
+
+void Mesh::Import(const Path &meshFilepath)
+{
+    m_uvs.Clear();
+    m_normals.Clear();
+    m_positions.Clear();
+    if ( FileReader::ReadModel(meshFilepath, &m_positions, &m_normals, &m_uvs))
+    {
+        LoadPositions(m_positions);
+        LoadNormals(m_normals);
+        LoadUvs(m_uvs);
+        m_modelFilepath = meshFilepath;
+    }
+    else
+    {
+        Debug_Error("There was an error when reading mesh file '" <<
+                     meshFilepath << "'.");
+    }
+}
 
 
 void Mesh::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_modelFilepath = xmlInfo.Get<Path>("ModelFilepath");
-    LoadFromFile(m_modelFilepath);
 }
 
 void Mesh::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->Set("ModelFilepath", m_modelFilepath);
 }
 

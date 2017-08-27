@@ -96,7 +96,8 @@ String Component::GetInstanceId() const
 void Component::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
-    SetEnabled(xmlInfo.Get<bool>("enabled"));
+    if (xmlInfo.Contains("Enabled"))
+    { SetEnabled(xmlInfo.Get<bool>("Enabled", true)); }
 }
 
 void Component::Write(XMLNode *xmlInfo) const
@@ -104,6 +105,5 @@ void Component::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
-    xmlInfo->Set("id", GetInstanceId());
-    xmlInfo->Set("enabled", IsEnabled());
+    xmlInfo->Set("Enabled", IsEnabled());
 }

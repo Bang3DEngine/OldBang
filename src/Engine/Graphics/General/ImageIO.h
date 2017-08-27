@@ -7,17 +7,17 @@
 class ImageIO
 {
 public:
-    static void Write(const Path& filepath, const G_Image &img);
-    static void Read(const Path& filepath, G_Image *img, bool *ok = nullptr);
+    static void Export(const Path& filepath, const G_Image &img);
+    static void Import(const Path& filepath, G_Image *img, bool *ok = nullptr);
 
     ImageIO() = delete;
 
 private:
-    static void WritePNG(const Path& filepath, const G_Image &img);
-    static void ReadPNG(const Path& filepath, G_Image *img, bool *ok);
+    static void ExportPNG(const Path& filepath, const G_Image &img);
+    static void ImportPNG(const Path& filepath, G_Image *img, bool *ok);
 
-    static void WriteJPG(const Path& filepath, const G_Image &img, int quality);
-    static void ReadJPG(const Path& filepath, G_Image *img, bool *ok);
+    static void ExportJPG(const Path& filepath, const G_Image &img, int quality);
+    static void ImportJPG(const Path& filepath, G_Image *img, bool *ok);
 };
 
 #endif // IMAGEREADER_H

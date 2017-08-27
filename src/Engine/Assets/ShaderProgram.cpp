@@ -1,7 +1,7 @@
 #include "Bang/ShaderProgram.h"
 
-#include "Bang/XMLNode.h"
 #include "Bang/G_Shader.h"
+#include "Bang/XMLParser.h"
 #include "Bang/ShaderManager.h"
 
 ShaderProgram::ShaderProgram() : G_ShaderProgram()
@@ -51,6 +51,11 @@ ShaderProgram::Type ShaderProgram::GetType() const
     return m_type;
 }
 
+void ShaderProgram::Import(const Path &shaderProgramFilepath)
+{
+    ReadFromFile(shaderProgramFilepath);
+}
+
 void ShaderProgram::OnPreLink()
 {
     if (m_type == Type::GBuffer)
@@ -83,20 +88,26 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    Path vShaderFilepath = xmlInfo.Get<Path>("VertexShader");
-    if (vShaderFilepath.Exists())
+    if (xmlInfo.Contains("VertexShader"))
     {
-        G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex,
-                                              vShaderFilepath);
-        SetVertexShader(vShader);
+        Path vShaderFilepath = xmlInfo.Get<Path>("VertexShader");
+        if (vShaderFilepath.Exists())
+        {
+            G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex,
+                                                  vShaderFilepath);
+            SetVertexShader(vShader);
+        }
     }
 
-    Path fShaderFilepath = xmlInfo.Get<Path>("FragmentShader");
-    if (fShaderFilepath.Exists())
+    if (xmlInfo.Contains("FragmentShader"))
     {
-        G_Shader *fShader = ShaderManager::Load(G_Shader::Type::Fragment,
-                                              fShaderFilepath);
-        SetFragmentShader(fShader);
+        Path fShaderFilepath = xmlInfo.Get<Path>("FragmentShader");
+        if (fShaderFilepath.Exists())
+        {
+            G_Shader *fShader = ShaderManager::Load(G_Shader::Type::Fragment,
+                                                  fShaderFilepath);
+            SetFragmentShader(fShader);
+        }
     }
 }
 
@@ -104,9 +115,9 @@ void ShaderProgram::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    Path vShaderFilepath = p_vshader ? p_vshader->GetFilepath() : Path();
-    xmlInfo->Set("VertexShader",   vShaderFilepath);
+    Path vShaderFilepath = p_vshader ? p_vshader->GetResourceFilepath() : Path();
+    xmlInfo->Set("VertexShader", vShaderFilepath);
 
-    Path fShaderFilepath = p_fshader ? p_fshader->GetFilepath() : Path();
+    Path fShaderFilepath = p_fshader ? p_fshader->GetResourceFilepath() : Path();
     xmlInfo->Set("FragmentShader", fShaderFilepath);
 }

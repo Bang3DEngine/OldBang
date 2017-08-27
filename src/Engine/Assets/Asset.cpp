@@ -14,6 +14,7 @@ Asset::~Asset()
 
 void Asset::CloneInto(ICloneable * clone) const
 {
+    SerializableObject::CloneInto(clone);
 }
 
 String Asset::ToString() const
@@ -25,10 +26,10 @@ String Asset::ToString() const
 
 void Asset::Read(const XMLNode &xmlInfo)
 {
-    SerializableObject::Read(xmlInfo);
+    Resource::Read(xmlInfo);
 }
 
 void Asset::Write(XMLNode *xmlInfo) const
 {
-    SerializableObject::Write(xmlInfo);
+    Resource::Write(xmlInfo);
 }

@@ -57,7 +57,8 @@ void SerializableObject::WriteReflection(XMLNode *xmlInfo) const
 void SerializableObject::Read(const XMLNode &xmlInfo)
 {
     ReadReflection(xmlInfo);
-    SetGUID(xmlInfo.Get<GUID>("GUID"));
+    if (xmlInfo.Contains("GUID"))
+    { SetGUID(xmlInfo.Get<GUID>("GUID")); }
 }
 
 void SerializableObject::Write(XMLNode *xmlInfo) const

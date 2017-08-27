@@ -2,9 +2,9 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/MeshFactory.h"
-#include "Bang/Resources.h"
 #include "Bang/MaterialFactory.h"
 
 UIImageRenderer::UIImageRenderer()
@@ -30,7 +30,7 @@ void UIImageRenderer::OnRender()
                p_quadMesh->GetVertexCount());
 }
 
-void UIImageRenderer::SetImage(Texture2D *imageTexture)
+void UIImageRenderer::SetTexture(Texture2D *imageTexture)
 {
     m_imageTexture = imageTexture;
     GetMaterial()->SetTexture(m_imageTexture);
@@ -55,13 +55,18 @@ void UIImageRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
     UIImageRenderer *img = SCAST<UIImageRenderer*>(clone);
-    img->SetImage( GetImageTexture() );
+    img->SetTexture( GetImageTexture() );
 }
 
 void UIImageRenderer::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
-    SetImage( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) );
+
+    if (xmlInfo.Contains("Image"))
+    { SetTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) ); }
+
+    if (xmlInfo.Contains("Tint"))
+    { SetTint( xmlInfo.Get<Color>("Tint", Color::White) ); }
 }
 
 void UIImageRenderer::Write(XMLNode *xmlInfo) const
@@ -70,4 +75,5 @@ void UIImageRenderer::Write(XMLNode *xmlInfo) const
 
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
+    xmlInfo->Set("Tint", GetTint());
 }

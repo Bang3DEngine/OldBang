@@ -44,6 +44,11 @@ void XMLNode::UpdateAttributeValue(const String &attributeName,
     }
 }
 
+bool XMLNode::Contains(const String &attrName) const
+{
+    return m_attributes.ContainsKey(attrName);
+}
+
 void XMLNode::Set(const XMLAttribute &attribute)
 {
     XMLAttribute *attr = GetAttribute(attribute.GetName());

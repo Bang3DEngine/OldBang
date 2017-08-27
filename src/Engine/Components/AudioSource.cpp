@@ -98,16 +98,27 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetPlayOnStart( IsPlayOnStart() );
 }
 
-void AudioSource::Read(const XMLNode &xmlInfo)
+void AudioSource::Read(const XMLNode &xml)
 {
-    Component::Read(xmlInfo);
+    Component::Read(xml);
 
-    SetAudioClip( Resources::Load<AudioClip>( xmlInfo.Get<GUID>("AudioClip") ) );
-    SetVolume(xmlInfo.Get<float>("Volume"));
-    SetPitch(xmlInfo.Get<float>("Pitch"));
-    SetRange(xmlInfo.Get<float>("Range"));
-    SetLooping(xmlInfo.Get<bool>("Looping"));
-    SetPlayOnStart(xmlInfo.Get<bool>("PlayOnStart"));
+    if (xml.Contains("AudioClip"))
+    { SetAudioClip( Resources::Load<AudioClip>( xml.Get<GUID>("AudioClip") ) ); }
+
+    if (xml.Contains("Volume"))
+    { SetVolume(xml.Get<float>("Volume")); }
+
+    if (xml.Contains("Pitch"))
+    { SetPitch(xml.Get<float>("Pitch")); }
+
+    if (xml.Contains("Range"))
+    { SetRange(xml.Get<float>("Range")); }
+
+    if (xml.Contains("Looping"))
+    { SetLooping(xml.Get<bool>("Looping")); }
+
+    if (xml.Contains("PlayOnStart"))
+    { SetPlayOnStart(xml.Get<bool>("PlayOnStart")); }
 }
 
 void AudioSource::Write(XMLNode *xmlInfo) const

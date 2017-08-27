@@ -20,15 +20,15 @@ AudioClip::~AudioClip()
     }
 }
 
-bool AudioClip::LoadFromSoundFile(const Path &filepath)
+void AudioClip::Import(const Path &soundFilepath)
 {
-    if (!filepath.Exists() || !filepath.IsFile()) { return false; }
+    if (!soundFilepath.Exists() || !soundFilepath.IsFile()) { return; }
 
-    if (filepath.HasExtension("ogg"))
+    if (soundFilepath.HasExtension("ogg"))
     {
-        Debug_Error("OGG audio file format for " << filepath.GetAbsolute()
+        Debug_Error("OGG audio file format for " << soundFilepath.GetAbsolute()
                     << " not supported.");
-        return false;
+        return;
     }
 
     AudioManager::ClearALErrors();
@@ -40,7 +40,7 @@ bool AudioClip::LoadFromSoundFile(const Path &filepath)
     AudioManager::ClearALErrors();
 
     SF_INFO soundInfo;
-    SNDFILE *soundFile = sf_open(filepath.GetAbsolute().ToCString(),
+    SNDFILE *soundFile = sf_open(soundFilepath.GetAbsolute().ToCString(),
                                  SFM_READ,
                                  &soundInfo);
 
@@ -67,13 +67,13 @@ bool AudioClip::LoadFromSoundFile(const Path &filepath)
                      &readData.Front(),
                      readData.Size() * sizeof(short),
                      soundInfo.samplerate);
-        m_soundFilepath = filepath;
+        m_soundFilepath = soundFilepath;
 
         hasError = AudioManager::CheckALError();
     }
-    else { m_soundFilepath = Path(); }
+    else { m_soundFilepath = Path::Empty; }
 
-    return !hasError;
+    return;
 }
 
 int AudioClip::GetChannels() const
@@ -138,12 +138,9 @@ const Path &AudioClip::GetSoundFilepath() const
 void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_soundFilepath = xmlInfo.Get<Path>("AudioFilepath");
-    LoadFromSoundFile( m_soundFilepath );
 }
 
 void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->Set("AudioFilepath", m_soundFilepath);
 }

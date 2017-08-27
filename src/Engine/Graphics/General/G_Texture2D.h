@@ -8,11 +8,8 @@ class G_Texture2D : public G_Texture
 {
 public:
     G_Texture2D();
-    G_Texture2D(const Path &imageFilepath);
-    G_Texture2D(const G_Texture2D &t);
     virtual ~G_Texture2D();
 
-    void LoadFromImage(const Path &imageFilepath);
     void LoadFromImage(const G_Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
@@ -23,16 +20,12 @@ public:
               int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 
-    const Path& GetImageFilepath() const;
-
     G_Image ToImage(bool invertY = false);
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 
 protected:
-    G_Image m_image;
-    Path m_imageFilepath;
     float m_alphaCutoff = 0.1f;
 };
 

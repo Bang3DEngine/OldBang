@@ -145,7 +145,9 @@ void Behaviour::Read(const XMLNode &xmlInfo)
     if (xmlInfo.GetTagName().IsEmpty()) { return; }
 
     Component::Read(xmlInfo);
-    SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") );
+
+    if (xmlInfo.Contains("BehaviourScript"))
+    { SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") ); }
 
     RefreshBehaviourLib(&xmlInfo);
 }

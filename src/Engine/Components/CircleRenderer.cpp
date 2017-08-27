@@ -53,8 +53,12 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
 void CircleRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
-    SetRadius(xmlInfo.Get<float>("Radius"));
-    SetSegments(xmlInfo.Get<float>("Segments"));
+
+    if (xmlInfo.Contains("Radius"))
+    { SetRadius(xmlInfo.Get<float>("Radius")); }
+
+    if (xmlInfo.Contains("Segments"))
+    { SetSegments(xmlInfo.Get<float>("Segments")); }
 }
 
 void CircleRenderer::Write(XMLNode *xmlInfo) const

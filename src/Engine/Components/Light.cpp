@@ -67,8 +67,12 @@ void Light::CloneInto(ICloneable *clone) const
 void Light::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    SetIntensity(xmlInfo.Get<float>("Intensity"));
-    SetColor(xmlInfo.Get<Color>("Color"));
+
+    if (xmlInfo.Contains("Intensity"))
+    { SetIntensity(xmlInfo.Get<float>("Intensity")); }
+
+    if (xmlInfo.Contains("Color"))
+    { SetColor(xmlInfo.Get<Color>("Color")); }
 }
 
 void Light::Write(XMLNode *xmlInfo) const

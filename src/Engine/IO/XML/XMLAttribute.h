@@ -44,7 +44,7 @@ public:
              const Array<XMLProperty> &properties = {})
     {
         std::ostringstream oss; oss << value;
-        Set(name, oss.str(), properties);
+        Set(name, String(oss.str()), properties);
     }
 
     template<class T>
@@ -86,7 +86,7 @@ inline void XMLAttribute::Set(const String &name,
                               const bool& value,
                               const Array<XMLProperty> &properties)
 {
-    Set(m_name, value ? "True" : "False", properties);
+    Set(name, value ? "True" : "False", properties);
 }
 
 template<>

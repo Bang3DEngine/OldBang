@@ -65,7 +65,8 @@ bool Project::OpenFirstFoundScene() const
 
 void Project::Read(const XMLNode &xmlInfo)
 {
-    m_randomId = xmlInfo.Get<String>("RandomID");
+    if (xmlInfo.Contains("RandomID"))
+    { m_randomId = xmlInfo.Get<String>("RandomID"); }
 }
 
 void Project::Write(XMLNode *xmlInfo) const

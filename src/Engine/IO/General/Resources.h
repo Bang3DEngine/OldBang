@@ -22,15 +22,26 @@ public:
     static TT_SUBCLASS(ResourceSubClass, Resource)*
     Load(const Path &filepath)
     {
-        const GUID &guid = ImportFilesManager::GetGUIDFromFilepath(filepath);
-        if (!Resources::Contains(guid))
+        if (!filepath.IsFile()) { return nullptr; }
+
+        Resource *res = Resources::GetCached<ResourceSubClass>(
+                    ImportFilesManager::GetGUIDFromFilepath(filepath) );
+        Debug_Log("Load filepath: " << filepath << ", res: " << res);
+        if (!res)
         {
-            Resource *res = new ResourceSubClass();
-            Path importFile = ImportFilesManager::GetImportFilePath(filepath);
-            res->Read( XMLParser::FromFile(importFile) );
-            Resources::Add(guid, res);
+            res = new ResourceSubClass();
+            res->Import(filepath);
+
+            Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);
+            res->ReadFromFile(importFilepath);
+            if (res->GetGUID().IsEmpty())
+            {
+                res->SetGUID( GUIDManager::GetNewGUID() );
+            }
+            Resources::Add(res->GetGUID(), res);
         }
-        return Resources::GetCached<ResourceSubClass>(guid);
+        Debug_Log("Returning resource " << filepath << ": " << res->GetGUID());
+        return DCAST<ResourceSubClass*>(res);
     }
 
     template <class T>
@@ -39,8 +50,11 @@ public:
     template <class T>
     static T* Load(const GUID &guid)
     {
+        if (guid.IsEmpty()) { return nullptr; }
+
         if (!Resources::Contains(guid))
         {
+            Debug_Log(guid << ": " << ImportFilesManager::GetFilepath(guid));
             Resources::Load<T>( ImportFilesManager::GetFilepath(guid) );
         }
         return Resources::GetCached<T>(guid);

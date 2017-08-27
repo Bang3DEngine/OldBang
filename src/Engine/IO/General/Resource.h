@@ -8,10 +8,13 @@
 class Resource : public SerializableObject
 {
 public:
-    virtual ~Resource() {}
+    virtual ~Resource();
+
+    Path GetResourceFilepath() const;
+    virtual void Import(const Path &resourceFilepath) = 0;
 
 protected:
-    Resource() {}
+    Resource();
 };
 
 #endif // RESOURCE_H

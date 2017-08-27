@@ -8,7 +8,6 @@ FORWARD class GUITextCursor;
 FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
-FORWARD class SingleLineRenderer;
 
 class GUIInputText : public UIGameObject
 {
