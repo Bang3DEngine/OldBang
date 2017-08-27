@@ -5,7 +5,6 @@
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIButtonTinter.h"
 
-FORWARD class GUILabel;
 FORWARD class UIImageRenderer;
 
 class GUIButton : public UIComponent
@@ -16,13 +15,13 @@ public:
     GUIButton();
     virtual ~GUIButton();
 
-    GUILabel *GetLabel() const;
+    UIGameObject *GetLabel() const;
     UIImageRenderer *GetImage() const;
 
     void AddClickedCallback(UIButton::ClickedCallback callback);
 
 private:
-    GUILabel *p_label = nullptr;
+    UIGameObject *p_label = nullptr;
     UIImageRenderer *p_bgImage = nullptr;
 
     UIBorderRect *p_borderRect = nullptr;

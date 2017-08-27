@@ -3,7 +3,6 @@
 
 #include "Bang/UIComponent.h"
 
-FORWARD class GUILabel;
 FORWARD class UIGameObject;
 FORWARD class GUITextCursor;
 FORWARD class GUIScrollArea;
@@ -44,7 +43,7 @@ private:
 
     UIImageRenderer *p_background = nullptr;
 
-    GUILabel *p_label = nullptr;
+    UIGameObject *p_label = nullptr;
     GUITextCursor *p_cursor = nullptr;
     GUIScrollArea *p_boxScrollArea = nullptr;
 

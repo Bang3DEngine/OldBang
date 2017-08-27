@@ -4,13 +4,13 @@
 #include "Bang/Input.h"
 #include "Bang/GUIMask.h"
 #include "Bang/Material.h"
-#include "Bang/GUILabel.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/GUIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/GUITextCursor.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 const Vector2i GUIInputText::LookAheadOffsetPx = Vector2i(5);
 
@@ -327,7 +327,7 @@ GUITextCursor *GUIInputText::GetCursor() const
 
 UITextRenderer *GUIInputText::GetText() const
 {
-    return p_label->GetText();
+    return p_label->GetComponentInChildren<UITextRenderer>();
 }
 
 UIImageRenderer *GUIInputText::GetBackground() const
@@ -339,7 +339,7 @@ void GUIInputText::RetrieveReferences()
 {
     GameObject *go = GetGameObject(); ENSURE(go);
     p_background = go->GetComponent<UIImageRenderer>();
-    p_label = SCAST<GUILabel*>(go->FindInChildren("GUIInputText_Label"));
+    p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_Label"));
     p_cursor = SCAST<GUITextCursor*>(go->FindInChildren("GUIInputText_GUITextCursor"));
     p_selectionQuad = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_SelectionQuad"));
     p_boxScrollArea = SCAST<GUIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask"));
@@ -359,7 +359,7 @@ UIGameObject *GUIInputText::CreateGameObject()
     imgRenderer->UseMaterialCopy();
     imgRenderer->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    GUILabel *label = new GUILabel();
+    UIGameObject *label = GameObjectFactory::CreateGUILabel();
     label->SetName("GUIInputText_Label");
     label->SetParent(go);
 
@@ -390,7 +390,7 @@ void GUIInputText::InitGameObject()
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    p_label->GetMask()->SetMasking(false);
+    SCAST<GUIMask*>(p_label->GetChild("GUILabel_Mask"))->SetMasking(false);
     p_label->rectTransform->SetMargins(5, 2, 5, 2);
 
     UIImageRenderer *selectionImg =

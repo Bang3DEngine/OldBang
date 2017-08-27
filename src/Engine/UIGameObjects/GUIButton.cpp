@@ -1,7 +1,9 @@
 #include "Bang/GUIButton.h"
 
-#include "Bang/GUILabel.h"
+#include "Bang/UIGameObject.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 GUIButton::GUIButton()
 {
@@ -11,7 +13,7 @@ GUIButton::~GUIButton()
 {
 }
 
-GUILabel *GUIButton::GetLabel() const { return p_label; }
+UIGameObject *GUIButton::GetLabel() const { return p_label; }
 UIImageRenderer *GUIButton::GetImage() const { return p_bgImage; }
 
 void GUIButton::AddClickedCallback(UIButton::ClickedCallback callback)
@@ -27,7 +29,7 @@ UIGameObject *GUIButton::CreateGameObject()
     bg->AddComponent<UIImageRenderer>();
     bg->SetParent(go);
 
-    GUILabel *label = new GUILabel();
+    UIGameObject *label = GameObjectFactory::CreateGUILabel();
     label->SetName("GUIButton_Label");
     label->SetParent(go);
 
@@ -41,7 +43,7 @@ void GUIButton::RetrieveReferences()
 {
     UIGameObject *go = GetGameObject(); ENSURE(go);
     p_bgImage = go->FindInChildren("GUIButton_Background")->GetComponent<UIImageRenderer>();
-    p_label = SCAST<GUILabel*>(go->FindInChildren("GUIButton_Label"));
+    p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIButton_Label"));
     p_borderRect = go->GetComponent<UIBorderRect>();
     p_labelTinter = go->GetComponent<UIButtonTinter>();
     p_bgTinter = go->GetComponent<UIButtonTinter>();
@@ -53,7 +55,7 @@ void GUIButton::InitGameObject()
 
     p_bgImage->SetTint(Color::White);
 
-    p_label->GetText()->SetTextColor(Color::Black);
+    p_label->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::Black);
 
     p_borderRect = GetGameObject()->AddComponent<UIBorderRect>();
     p_borderRect->SetLineColor(Color::Purple);
@@ -61,7 +63,9 @@ void GUIButton::InitGameObject()
     p_labelTinter = GetGameObject()->AddComponent<UIButtonTinter>();
     p_labelTinter->AddAgent(GetGameObject());
     p_labelTinter->AddGameObjectToTint( GetLabel() );
-    p_labelTinter->SetIdleTintColor(GetLabel()->GetText()->GetTextColor());
+    p_labelTinter->SetIdleTintColor(GetLabel()->
+                                    GetComponentInChildren<UITextRenderer>()->
+                                    GetTextColor());
     p_labelTinter->SetOverTintColor(Color::Black);
     p_labelTinter->SetPressedTintColor(Color::White);
 

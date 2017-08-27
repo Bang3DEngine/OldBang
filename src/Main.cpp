@@ -37,7 +37,6 @@ int main(int argc, char **argv)
 #include "Bang/Project.h"
 #include "Bang/G_Image.h"
 #include "Bang/GUIMask.h"
-#include "Bang/GUILabel.h"
 #include "Bang/Material.h"
 #include "Bang/GUICanvas.h"
 #include "Bang/GUIButton.h"
@@ -76,11 +75,11 @@ public:
 
         GameObject *nameGo = GameObject::Find("nameGameObject");
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
-        GUILabel *resultGo = SCAST<GUILabel*>(GameObject::Find("resultGameObject"));
+        GameObject *resultGo = GameObject::Find("resultGameObject");
 
         String name = nameGo->GetComponent<GUIInputText>()->GetText()->GetContent();
         String surname = surnameGo->GetComponent<GUIInputText>()->GetText()->GetContent();
-        resultGo->GetText()->SetContent("Hello " + name + " " + surname);
+        resultGo->GetComponentInChildren<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
 
         GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>( FindInChildren("ScrollArea") );
         Vector2i scroll = scrollArea->GetScrolling();
@@ -107,21 +106,22 @@ int main(int argc, char **argv)
 
     UIGameObject *rightImg = new UIGameObject();
     rightImg->AddComponent<UIImageRenderer>()->SetTexture( EPATH("tmp/test.png") );
-    GUILabel *rightLabel = new GUILabel("Lorem ipsum dolor sit amet. El veloz "
+    UIGameObject *rightLabel = GameObjectFactory::CreateGUILabel(
+                                        "Lorem ipsum dolor sit amet. El veloz "
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
                                         "detras del palenque de paja");
-    rightLabel->GetMask()->SetMasking(false);
+    SCAST<GUIMask*>(rightLabel->GetChild("GUILabel_Mask"))->SetMasking(false);
 
     GUIScrollArea *rightScrollArea = new GUIScrollArea();
     rightScrollArea->SetName("ScrollArea");
     rightScrollArea->AddChild(rightLabel);
     rightScrollArea->SetScrollingY(30);
 
-    rightLabel->GetText()->SetTextColor(Color::White);
-    rightLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
-    rightLabel->GetText()->SetVerticalAlign(VerticalAlignment::Center);
-    rightLabel->GetText()->SetWrapping(true);
+    rightLabel->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::White);
+    rightLabel->GetComponentInChildren<UITextRenderer>()->SetHorizontalAlign(HorizontalAlignment::Center);
+    rightLabel->GetComponentInChildren<UITextRenderer>()->SetVerticalAlign(VerticalAlignment::Center);
+    rightLabel->GetComponentInChildren<UITextRenderer>()->SetWrapping(true);
 
     UIGameObject *rightVLayout = new UIGameObject();
     rightVLayout->AddComponent<GUIVerticalLayout>();
@@ -130,17 +130,17 @@ int main(int argc, char **argv)
     rightScrollArea->SetParent(rightVLayout);
 
     GUIButton *buttonPlay  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
-    buttonPlay->GetLabel()->GetText()->SetContent("Play");
+    buttonPlay->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Play");
     GUIButton *buttonPause = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
-    buttonPause->GetLabel()->GetText()->SetContent("Pause");
+    buttonPause->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Pause");
     GUIButton *buttonStop  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
-    buttonStop->GetLabel()->GetText()->SetContent("Stop");
+    buttonStop->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Stop");
     GUIButton *buttonExit  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
-    buttonExit->GetLabel()->GetText()->SetContent("Exit");
+    buttonExit->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Exit");
 
-    GUILabel *nameLabel = new GUILabel();
-    nameLabel->GetText()->SetContent("Name:");
-    nameLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
+    UIGameObject *nameLabel = GameObjectFactory::CreateGUILabel();
+    nameLabel->GetComponentInChildren<UITextRenderer>()->SetContent("Name:");
+    nameLabel->GetComponentInChildren<UITextRenderer>()->SetHorizontalAlign(HorizontalAlignment::Right);
     UIGameObject *nameInput = GameObjectFactory::CreateGUIInputText();
     nameInput->SetName("nameGameObject");
     nameInput->GetComponent<GUIInputText>()->GetText()->SetContent("Your name here...");
@@ -149,9 +149,9 @@ int main(int argc, char **argv)
     nameLabel->SetParent(nameSubHLayout);
     nameInput->SetParent(nameSubHLayout);
 
-    GUILabel *surnameLabel = new GUILabel();
-    surnameLabel->GetText()->SetContent("Surname:");
-    surnameLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
+    UIGameObject *surnameLabel = GameObjectFactory::CreateGUILabel();
+    surnameLabel->GetComponentInChildren<UITextRenderer>()->SetContent("Surname:");
+    surnameLabel->GetComponentInChildren<UITextRenderer>()->SetHorizontalAlign(HorizontalAlignment::Right);
     UIGameObject *surnameInput = GameObjectFactory::CreateGUIInputText();
     surnameInput->SetName("surnameGameObject");
     surnameInput->GetComponent<GUIInputText>()->GetText()->SetContent("Your surname here...");
@@ -165,9 +165,9 @@ int main(int argc, char **argv)
     nameSubHLayout->SetParent(nameVLayout);
     surnameSubHLayout->SetParent(nameVLayout);
 
-    GUILabel *namesResult = new GUILabel("RESULT");
+    UIGameObject *namesResult = GameObjectFactory::CreateGUILabel("RESULT");
     namesResult->SetName("resultGameObject");
-    namesResult->GetText()->SetWrapping(false);
+    namesResult->GetComponentInChildren<UITextRenderer>()->SetWrapping(false);
 
     UIGameObject *namesVLayout = new UIGameObject();
     namesVLayout->AddComponent<GUIVerticalLayout>();
@@ -214,8 +214,8 @@ int main(int argc, char **argv)
     namesVLayout->SetParent(menuVLayout);
 
     int s = 10;
-    nameLabel->GetText()->SetTextSize(s);
-    surnameLabel->GetText()->SetTextSize(s);
+    nameLabel->GetComponentInChildren<UITextRenderer>()->SetTextSize(s);
+    surnameLabel->GetComponentInChildren<UITextRenderer>()->SetTextSize(s);
     nameInput->GetComponent<GUIInputText>()->GetText()->SetTextSize(s);
     surnameInput->GetComponent<GUIInputText>()->GetText()->SetTextSize(s);
 
@@ -254,15 +254,15 @@ int main(int argc, char **argv)
     });
     buttonPause->AddClickedCallback([&buttonPause](UIButton*)
     {
-        if (buttonPause->GetLabel()->GetText()->GetContent().Contains("ause"))
+        if (buttonPause->GetLabel()->GetComponentInChildren<UITextRenderer>()->GetContent().Contains("ause"))
         {
             AudioManager::PauseAllSounds();
-            buttonPause->GetLabel()->GetText()->SetContent("Resume");
+            buttonPause->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Resume");
         }
         else
         {
             AudioManager::ResumeAllSounds();
-            buttonPause->GetLabel()->GetText()->SetContent("Pause");
+            buttonPause->GetLabel()->GetComponentInChildren<UITextRenderer>()->SetContent("Pause");
         }
     });
     buttonStop->AddClickedCallback([](UIButton*)
