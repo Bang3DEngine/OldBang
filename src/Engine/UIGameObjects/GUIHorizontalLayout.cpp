@@ -1,6 +1,5 @@
 #include "Bang/GUIHorizontalLayout.h"
 
-GUIHorizontalLayout::GUIHorizontalLayout()
-    : GUIDirLayout("GUIHorizontalLayout", false)
+GUIHorizontalLayout::GUIHorizontalLayout() : GUIDirLayout(false)
 {
 }

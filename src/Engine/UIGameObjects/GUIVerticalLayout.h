@@ -5,7 +5,7 @@
 
 class GUIVerticalLayout : public GUIDirLayout
 {
-    UIGAMEOBJECT(GUIVerticalLayout)
+    COMPONENT(GUIVerticalLayout)
 
 public:
     GUIVerticalLayout();

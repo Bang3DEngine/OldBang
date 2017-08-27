@@ -62,14 +62,18 @@ int main(int argc, char **argv)
 #include "Bang/GUIVerticalLayout.h"
 #include "Bang/GUIHorizontalLayout.h"
 
-class Menu : public GUIHorizontalLayout
+class Menu : public UIGameObject
 {
 public:
-    Menu() : GUIHorizontalLayout() {}
+    Menu()
+    {
+        AddComponent<GUIHorizontalLayout>();
+    }
 
     void OnUpdate() override
     {
         UIGameObject::OnUpdate();
+
         GameObject *nameGo = GameObject::Find("nameGameObject");
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
         GUILabel *resultGo = SCAST<GUILabel*>(GameObject::Find("resultGameObject"));
@@ -98,7 +102,7 @@ int main(int argc, char **argv)
     Application app(argc, argv);
     app.CreateWindow();
 
-    /*
+    //*
     Scene *scene = new Scene();
 
     GUIImage *rightImg = new GUIImage( EPATH("tmp/test.png") );
@@ -118,10 +122,11 @@ int main(int argc, char **argv)
     rightLabel->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     rightLabel->GetText()->SetWrapping(true);
 
-    GUIVerticalLayout *rightVLayout = new GUIVerticalLayout();
+    UIGameObject *rightVLayout = new UIGameObject();
+    rightVLayout->AddComponent<GUIVerticalLayout>();
     rightVLayout->rectTransform->SetMargins(50, 10, 10, 10);
-    rightVLayout->Add(rightImg);
-    rightVLayout->Add(rightScrollArea);
+    rightImg->SetParent(rightVLayout);
+    rightScrollArea->SetParent(rightVLayout);
 
     GUIButton *buttonPlay = new GUIButton("Play");
     GUIButton *buttonPause= new GUIButton("Pause");
@@ -134,9 +139,10 @@ int main(int argc, char **argv)
     GUIInputText *nameInput = new GUIInputText();
     nameInput->SetName("nameGameObject");
     nameInput->GetText()->SetContent("Your name here...");
-    GUIHorizontalLayout *nameSubHLayout = new GUIHorizontalLayout();
-    nameSubHLayout->Add(nameLabel);
-    nameSubHLayout->Add(nameInput);
+    UIGameObject *nameSubHLayout = new UIGameObject();
+    nameSubHLayout->AddComponent<GUIHorizontalLayout>();
+    nameLabel->SetParent(nameSubHLayout);
+    nameInput->SetParent(nameSubHLayout);
 
     GUILabel *surnameLabel = new GUILabel();
     surnameLabel->GetText()->SetContent("Surname:");
@@ -144,23 +150,26 @@ int main(int argc, char **argv)
     GUIInputText *surnameInput = new GUIInputText();
     surnameInput->SetName("surnameGameObject");
     surnameInput->GetText()->SetContent("Your surname here...");
-    GUIHorizontalLayout *surnameSubHLayout = new GUIHorizontalLayout();
-    surnameSubHLayout->Add(surnameLabel);
-    surnameSubHLayout->Add(surnameInput);
+    UIGameObject *surnameSubHLayout = new UIGameObject();
+    surnameSubHLayout->AddComponent<GUIHorizontalLayout>();
+    surnameLabel->SetParent(surnameSubHLayout);
+    surnameInput->SetParent(surnameSubHLayout);
 
-    GUIVerticalLayout *nameVLayout = new GUIVerticalLayout();
-    nameVLayout->Add(nameSubHLayout);
-    nameVLayout->Add(surnameSubHLayout);
+    UIGameObject *nameVLayout = new UIGameObject();
+    nameVLayout->AddComponent<GUIVerticalLayout>();
+    nameSubHLayout->SetParent(nameVLayout);
+    surnameSubHLayout->SetParent(nameVLayout);
 
     GUILabel *namesResult = new GUILabel("RESULT");
     namesResult->SetName("resultGameObject");
     namesResult->GetText()->SetWrapping(false);
 
-    GUIVerticalLayout *namesVLayout = new GUIVerticalLayout();
+    UIGameObject *namesVLayout = new UIGameObject();
+    namesVLayout->AddComponent<GUIVerticalLayout>();
     UIImageRenderer *img4 = namesVLayout->AddComponent<UIImageRenderer>(0);
     img4->SetTint(Color::LightGray);
-    namesVLayout->Add(nameVLayout);
-    namesVLayout->Add(namesResult);
+    nameVLayout->SetParent(namesVLayout);
+    namesResult->SetParent(namesVLayout);
 
     GUIMask *buttonPlayMask = new GUIMask();
     buttonPlayMask->SetMasking(true);
@@ -179,13 +188,14 @@ int main(int argc, char **argv)
     leftMask->SetMasking(true);
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
     img->SetTexture( new Texture2D( EPATH("tmp/test2.png") ) );
-    GUIVerticalLayout *menuVLayout = new GUIVerticalLayout();
+    UIGameObject *menuVLayout = new UIGameObject();
+    menuVLayout->AddComponent<GUIVerticalLayout>();
     menuVLayout->rectTransform->SetMargins(30);
-    menuVLayout->SetSpacing(10);
-    menuVLayout->Add(buttonPlayMask);
-    menuVLayout->Add(buttonPause);
-    menuVLayout->Add(buttonStop);
-    menuVLayout->Add(buttonExit);
+    menuVLayout->GetComponent<GUIVerticalLayout>()->SetSpacing(10);
+    buttonPlayMask->SetParent(menuVLayout);
+    buttonPause->SetParent(menuVLayout);
+    buttonStop->SetParent(menuVLayout);
+    buttonExit->SetParent(menuVLayout);
     menuVLayout->SetParent(leftMask);
     leftMask->SetParent(uiVContainer);
 
@@ -196,7 +206,7 @@ int main(int argc, char **argv)
         txt->SetHorizontalAlign(HorizontalAlignment::Center);
         txt->SetVerticalAlign(VerticalAlignment::Center);
     }
-    menuVLayout->Add(namesVLayout);
+    namesVLayout->SetParent(menuVLayout);
 
     int s = 10;
     nameLabel->GetText()->SetTextSize(s);
@@ -205,12 +215,12 @@ int main(int argc, char **argv)
     surnameInput->GetText()->SetTextSize(s);
 
     Menu *mainHLayout = new Menu();
-    mainHLayout->SetSpacing(0);
-    mainHLayout->Add(rightVLayout);
-    mainHLayout->Add(uiVContainer, 0);
+    mainHLayout->GetComponent<GUIDirLayout>()->SetSpacing(0);
+    rightVLayout->SetParent(mainHLayout);
+    uiVContainer->SetParent(mainHLayout, 0);
 
-    mainHLayout->SetStretch(0, 0.6f);
-    mainHLayout->SetStretch(1, 0.4f);
+    mainHLayout->GetComponent<GUIDirLayout>()->SetStretch(0, 0.6f);
+    mainHLayout->GetComponent<GUIDirLayout>()->SetStretch(1, 0.4f);
 
     GUICanvas *canvas = new GUICanvas();
     mainHLayout->SetParent(canvas);

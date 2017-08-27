@@ -10,8 +10,6 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/GUIScrollArea.h"
 #include "Bang/GUITextCursor.h"
-#include "Bang/GUIVerticalLayout.h"
-#include "Bang/GUIHorizontalLayout.h"
 
 #define CREATE_GAMEOBJECT(className, GameObjectClass) \
     if (className == GameObjectClass::GetClassNameStatic()) \
@@ -30,8 +28,6 @@ GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
     CREATE_GAMEOBJECT(gameObjectClassName, GUIInputText);
     CREATE_GAMEOBJECT(gameObjectClassName, GUIScrollArea);
     CREATE_GAMEOBJECT(gameObjectClassName, GUITextCursor);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIVerticalLayout);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIHorizontalLayout);
 
     Debug_Error("Please register class '" << gameObjectClassName << "' in "
                 "GameObjectFactory"); ASSERT(false);
@@ -55,8 +51,6 @@ bool GameObjectFactory::ExistsGameObjectClass(const String &gameObjectClassName)
     EXISTS_GAMEOBJECT(gameObjectClassName, GUIInputText);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUIScrollArea);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUITextCursor);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIVerticalLayout);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIHorizontalLayout);
 
     return false;
 }

@@ -5,7 +5,7 @@
 
 class GUIHorizontalLayout : public GUIDirLayout
 {
-    UIGAMEOBJECT(GUIHorizontalLayout)
+    COMPONENT(GUIHorizontalLayout)
 
 public:
     GUIHorizontalLayout();

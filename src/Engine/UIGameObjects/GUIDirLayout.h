@@ -2,45 +2,36 @@
 #define UIDIRLAYOUT_H
 
 #include "Bang/Map.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/Component.h"
 
-class GUIDirLayout : public UIGameObject
+class GUIDirLayout : public Component
 {
-    UIGAMEOBJECT(GUIDirLayout)
+    COMPONENT(GUIDirLayout)
 
 public:
-    void Add(UIGameObject *gameObject, int index = -1);
-    void Move(int indexFrom, int indexTo);
-    UIGameObject* Take(int index);
-    UIGameObject* Take(UIGameObject *gameObject);
+
+    // Component
+    virtual void OnUpdate() override;
 
     void SetSpacing(int spacingPx);
     void SetStretch(int index, float stretch);
-    void SetStretch(UIGameObject *gameObject, float stretch);
+    void SetStretch(GameObject *gameObject, float stretch);
+
+    float GetStretch(int index) const;
+
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     GUIDirLayout();
-    GUIDirLayout(const String &name, bool vertical);
+    GUIDirLayout(bool vertical);
     virtual ~GUIDirLayout();
 
 private:
-    class UIContainer : public UIGameObject
-    {
-    public:
-        UIContainer(UIGameObject *child) : UIGameObject()
-        {
-            child->SetParent(this);
-        }
-
-        float stretch = 1.0f;
-    };
-
     int m_spacingPx = 0;
     bool m_vertical = false;
-    Map<UIGameObject*, UIContainer*> m_childrenContainers;
-
-    int GetIndexFromChild(UIGameObject *gameObject) const noexcept;
-    void UpdateChildrenRectTransforms();
+    Map<int, float> m_stretches;
 };
 
 #endif // UIDIRLAYOUT_H
