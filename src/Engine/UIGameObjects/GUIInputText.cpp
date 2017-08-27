@@ -342,7 +342,8 @@ void GUIInputText::RetrieveReferences()
     p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_Label"));
     p_cursor = SCAST<GUITextCursor*>(go->FindInChildren("GUIInputText_GUITextCursor"));
     p_selectionQuad = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_SelectionQuad"));
-    p_boxScrollArea = SCAST<GUIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask"));
+    p_boxScrollArea = SCAST<GUIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
+                                            GetComponent<GUIScrollArea>());
 }
 
 bool GUIInputText::IsShiftPressed() const
@@ -366,7 +367,7 @@ UIGameObject *GUIInputText::CreateGameObject()
     UIGameObject *selectionQuad = new UIGameObject("GUIInputText_SelectionQuad");
     selectionQuad->SetParent(label, 0);
 
-    GUIScrollArea *boxScrollArea = new GUIScrollArea();
+    UIGameObject *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
     boxScrollArea->SetName("GUIInputText_BoxMask");
     boxScrollArea->SetParent(go);
 
@@ -399,9 +400,8 @@ void GUIInputText::InitGameObject()
     selectionImg->GetMaterial()->SetDiffuseColor(Color::LightBlue);
     p_selectionQuad->SetParent(p_label, 0);
 
-    p_boxScrollArea->SetName("GUIInputText_BoxMask");
     p_boxScrollArea->SetMasking(true);
-    p_boxScrollArea->AddChild(p_label);
+    p_label->SetParent(p_boxScrollArea->GetContainer());
 
     GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     GetText()->SetVerticalAlign(VerticalAlignment::Center);
@@ -434,7 +434,7 @@ float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
     }
 
     // In case we are at the beginning or at the end of the text
-    RectTransform *contRT = p_boxScrollArea->rectTransform;
+    RectTransform *contRT = p_boxScrollArea->GetGameObject()->rectTransform;
     if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
     {
         if (cursorIndex == 0)

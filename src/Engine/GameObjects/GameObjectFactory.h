@@ -15,6 +15,7 @@ public:
     static UIGameObject* CreateGUIInputText();
     static UIGameObject* CreateGUIButton();
     static UIGameObject* CreateGUILabel(const String &content = "Bang");
+    static UIGameObject* CreateGUIScrollArea();
 
     template<class T>
     static T* CreateGameObject();

@@ -81,7 +81,8 @@ public:
         String surname = surnameGo->GetComponent<GUIInputText>()->GetText()->GetContent();
         resultGo->GetComponentInChildren<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
 
-        GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>( FindInChildren("ScrollArea") );
+        GUIScrollArea *scrollArea = SCAST<GUIScrollArea*>(
+                 FindInChildren("ScrollArea")->GetComponent<GUIScrollArea>() );
         Vector2i scroll = scrollArea->GetScrolling();
         if (Input::GetKeyDownRepeat(Input::Key::Left)) {
             scrollArea->SetScrolling(scroll + Vector2i::Left); }
@@ -113,10 +114,11 @@ int main(int argc, char **argv)
                                         "detras del palenque de paja");
     SCAST<GUIMask*>(rightLabel->GetChild("GUILabel_Mask"))->SetMasking(false);
 
-    GUIScrollArea *rightScrollArea = new GUIScrollArea();
+    UIGameObject *rightScrollArea = GameObjectFactory::CreateGUIScrollArea();
     rightScrollArea->SetName("ScrollArea");
-    rightScrollArea->AddChild(rightLabel);
-    rightScrollArea->SetScrollingY(30);
+    rightLabel->SetParent(rightScrollArea->GetComponent<GUIScrollArea>()->
+                          GetContainer());
+    rightScrollArea->GetComponent<GUIScrollArea>()->SetScrollingY(30);
 
     rightLabel->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::White);
     rightLabel->GetComponentInChildren<UITextRenderer>()->SetHorizontalAlign(HorizontalAlignment::Center);

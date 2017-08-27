@@ -85,3 +85,8 @@ UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
 
     return label;
 }
+
+UIGameObject *GameObjectFactory::CreateGUIScrollArea()
+{
+    return GUIScrollArea::CreateGameObject();
+}

@@ -3,17 +3,17 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/GUIMask.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/UIComponent.h"
 
-class GUIScrollArea : public UIGameObject
+class GUIScrollArea : public UIComponent
 {
-    UIGAMEOBJECT(GUIScrollArea)
+    UICOMPONENT(GUIScrollArea)
 
 public:
     GUIScrollArea() noexcept;
     virtual ~GUIScrollArea() noexcept;
 
-    void AddChild(UIGameObject *child) noexcept;
+    void OnUpdate() override;
 
     void SetMasking(bool masking);
     void SetScrolling(const Vector2i &scrollPx) noexcept;
@@ -21,15 +21,22 @@ public:
     void SetScrollingY(int scrollPxY) noexcept;
 
     bool GetMasking() const;
+    UIGameObject* GetContainer() const;
     const Vector2i& GetScrolling() const noexcept;
 
 private:
-    GUIMask *m_mask = nullptr;
-    UIGameObject *m_childrenContainer = nullptr;
+    GUIMask *p_mask = nullptr;
+    UIGameObject *p_childrenContainer = nullptr;
 
     Vector2i m_scrollingPx = Vector2i::Zero;
 
-    void RefreshChildren();
+    void UpdateChildrenMargins();
+
+    static UIGameObject* CreateGameObject();
+    void RetrieveReferences();
+    void InitGameObject();
+
+    friend class GameObjectFactory;
 };
 
 #endif // GUISCROLLAREA_H
