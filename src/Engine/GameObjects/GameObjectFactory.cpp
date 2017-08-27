@@ -1,7 +1,6 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "Bang/GUIMask.h"
-#include "Bang/GUIImage.h"
 #include "Bang/GUILabel.h"
 #include "Bang/Material.h"
 #include "Bang/GUIButton.h"
@@ -25,7 +24,6 @@ GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
     /*
     CREATE_GAMEOBJECT(gameObjectClassName, UIGameObject);
     CREATE_GAMEOBJECT(gameObjectClassName, GUIMask);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIImage);
     CREATE_GAMEOBJECT(gameObjectClassName, GUILabel);
     CREATE_GAMEOBJECT(gameObjectClassName, GUIButton);
     CREATE_GAMEOBJECT(gameObjectClassName, GUICanvas);
@@ -49,7 +47,6 @@ bool GameObjectFactory::ExistsGameObjectClass(const String &gameObjectClassName)
     EXISTS_GAMEOBJECT(gameObjectClassName, GameObject);
     EXISTS_GAMEOBJECT(gameObjectClassName, UIGameObject);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUIMask);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIImage);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUILabel);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUIButton);
     EXISTS_GAMEOBJECT(gameObjectClassName, GUICanvas);

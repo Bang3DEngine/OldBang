@@ -6,7 +6,6 @@
 #include "Bang/UIButtonTinter.h"
 
 FORWARD class GUILabel;
-FORWARD class GUIImage;
 FORWARD class UIImageRenderer;
 
 class GUIButton : public UIComponent
@@ -18,13 +17,13 @@ public:
     virtual ~GUIButton();
 
     GUILabel *GetLabel() const;
-    GUIImage *GetImage() const;
+    UIImageRenderer *GetImage() const;
 
     void AddClickedCallback(UIButton::ClickedCallback callback);
 
 private:
     GUILabel *p_label = nullptr;
-    GUIImage *p_bgImage = nullptr;
+    UIImageRenderer *p_bgImage = nullptr;
 
     UIBorderRect *p_borderRect = nullptr;
     UIButtonTinter *p_bgTinter = nullptr;

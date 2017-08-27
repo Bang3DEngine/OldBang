@@ -30,6 +30,12 @@ void UIImageRenderer::OnRender()
                p_quadMesh->GetVertexCount());
 }
 
+void UIImageRenderer::SetTexture(const Path &imagePath)
+{
+    Texture2D *tex = Resources::Load<Texture2D>(imagePath);
+    SetTexture(tex);
+}
+
 void UIImageRenderer::SetTexture(Texture2D *imageTexture)
 {
     m_imageTexture = imageTexture;

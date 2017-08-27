@@ -38,7 +38,6 @@ int main(int argc, char **argv)
 #include "Bang/G_Image.h"
 #include "Bang/GUIMask.h"
 #include "Bang/GUILabel.h"
-#include "Bang/GUIImage.h"
 #include "Bang/Material.h"
 #include "Bang/GUICanvas.h"
 #include "Bang/GUIButton.h"
@@ -106,7 +105,8 @@ int main(int argc, char **argv)
     //*
     Scene *scene = new Scene();
 
-    GUIImage *rightImg = new GUIImage( EPATH("tmp/test.png") );
+    UIGameObject *rightImg = new UIGameObject();
+    rightImg->AddComponent<UIImageRenderer>()->SetTexture( EPATH("tmp/test.png") );
     GUILabel *rightLabel = new GUILabel("Lorem ipsum dolor sit amet. El veloz "
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "

@@ -1,7 +1,6 @@
 #ifndef GAMEOBJECTFACTORY_H
 #define GAMEOBJECTFACTORY_H
 
-
 #include "Bang/String.h"
 
 FORWARD class GameObject;

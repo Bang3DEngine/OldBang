@@ -216,7 +216,6 @@ ${ENGINE_SRC_DIR}/UIGameObjects/GUIButton.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUICanvas.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIDirLayout.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIHorizontalLayout.cpp
-${ENGINE_SRC_DIR}/UIGameObjects/GUIImage.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIInputText.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUILabel.cpp
 ${ENGINE_SRC_DIR}/UIGameObjects/GUIMask.cpp
