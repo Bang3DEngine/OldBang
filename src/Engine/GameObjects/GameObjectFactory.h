@@ -14,6 +14,7 @@ public:
     static bool ExistsGameObjectClass(const String &gameObjectClassName);
 
     static UIGameObject* CreateGUIInputText();
+    static UIGameObject* CreateGUIButton();
 
     template<class T>
     static T* CreateGameObject();

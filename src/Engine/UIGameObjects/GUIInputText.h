@@ -12,7 +12,7 @@ FORWARD class UIImageRenderer;
 
 class GUIInputText : public UIComponent
 {
-    COMPONENT(GUIInputText)
+    UICOMPONENT(GUIInputText)
 
 public:
     GUIInputText();
@@ -57,7 +57,6 @@ private:
 
     bool m_forceUpdateRenderers = false;
 
-    void RetrieveReferences();
     void HandleTyping();
     void HandleMouseSelection();
     void HandleKeySelection(bool wasSelecting);
@@ -75,7 +74,9 @@ private:
     void UpdateCursorRenderersAndScrolling();
     bool IsShiftPressed() const;
 
-    void Init();
+    static UIGameObject *CreateGameObject();
+    void RetrieveReferences();
+    void InitGameObject();
 
     friend class GameObjectFactory;
 };

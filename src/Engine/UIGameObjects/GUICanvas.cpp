@@ -2,8 +2,9 @@
 
 #include "Bang/Input.h"
 #include "Bang/XMLNode.h"
+#include "Bang/UIGameObject.h"
 
-GUICanvas::GUICanvas() : UIGameObject("Canvas")
+GUICanvas::GUICanvas()
 {
 }
 
@@ -13,30 +14,30 @@ GUICanvas::~GUICanvas()
 
 void GUICanvas::OnUpdate()
 {
-    UIGameObject::OnUpdate();
+    UIComponent::OnUpdate();
 
     if (Input::GetMouseButtonDown(Input::MouseButton::Left) ||
         Input::GetMouseButtonDown(Input::MouseButton::Right) )
     {
         Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
-        UIGameObject *focusTaker = PropagateFocus(mouseCoordsNDC);
+        UIGameObject *focusTaker = GetGameObject()->PropagateFocus(mouseCoordsNDC);
         GiveFocusTo(focusTaker);
     }
 }
 
 void GUICanvas::CloneInto(ICloneable *clone) const
 {
-    UIGameObject::CloneInto(clone);
+    UIComponent::CloneInto(clone);
 }
 
 void GUICanvas::Read(const XMLNode &xmlInfo)
 {
-    UIGameObject::Read(xmlInfo);
+    UIComponent::Read(xmlInfo);
 }
 
 void GUICanvas::Write(XMLNode *xmlInfo) const
 {
-    UIGameObject::Write(xmlInfo);
+    UIComponent::Write(xmlInfo);
 }
 
 UIGameObject *GUICanvas::GetFocusedGameObject() const

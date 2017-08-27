@@ -6,7 +6,7 @@
 
 class GUIDirLayout : public UIComponent
 {
-    COMPONENT(GUIDirLayout)
+    UICOMPONENT(GUIDirLayout)
 
 public:
 

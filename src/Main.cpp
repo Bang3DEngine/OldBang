@@ -129,10 +129,14 @@ int main(int argc, char **argv)
     rightImg->SetParent(rightVLayout);
     rightScrollArea->SetParent(rightVLayout);
 
-    GUIButton *buttonPlay = new GUIButton("Play");
-    GUIButton *buttonPause= new GUIButton("Pause");
-    GUIButton *buttonStop = new GUIButton("Stop");
-    GUIButton *buttonExit = new GUIButton("Exit");
+    GUIButton *buttonPlay  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
+    buttonPlay->GetLabel()->GetText()->SetContent("Play");
+    GUIButton *buttonPause = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
+    buttonPause->GetLabel()->GetText()->SetContent("Pause");
+    GUIButton *buttonStop  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
+    buttonStop->GetLabel()->GetText()->SetContent("Stop");
+    GUIButton *buttonExit  = GameObjectFactory::CreateGUIButton()->GetComponent<GUIButton>();
+    buttonExit->GetLabel()->GetText()->SetContent("Exit");
 
     GUILabel *nameLabel = new GUILabel();
     nameLabel->GetText()->SetContent("Name:");
@@ -177,8 +181,8 @@ int main(int argc, char **argv)
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
     maskImg->SetTexture(
              new Texture2D( EPATH("tmp/test.png") ) );
-    buttonPlay->rectTransform->SetMargins(10);
-    buttonPlay->SetParent(buttonPlayMask);
+    buttonPlay->GetGameObject()->rectTransform->SetMargins(10);
+    buttonPlay->GetGameObject()->SetParent(buttonPlayMask);
 
     UIGameObject *uiVContainer = new UIGameObject();
     uiVContainer->rectTransform->SetMargins(20);
@@ -194,9 +198,9 @@ int main(int argc, char **argv)
     menuVLayout->rectTransform->SetMargins(30);
     menuVLayout->GetComponent<GUIVerticalLayout>()->SetSpacing(10);
     buttonPlayMask->SetParent(menuVLayout);
-    buttonPause->SetParent(menuVLayout);
-    buttonStop->SetParent(menuVLayout);
-    buttonExit->SetParent(menuVLayout);
+    buttonPause->GetGameObject()->SetParent(menuVLayout);
+    buttonStop->GetGameObject()->SetParent(menuVLayout);
+    buttonExit->GetGameObject()->SetParent(menuVLayout);
     menuVLayout->SetParent(leftMask);
     leftMask->SetParent(uiVContainer);
 
@@ -223,7 +227,8 @@ int main(int argc, char **argv)
     mainHLayout->GetComponent<GUIDirLayout>()->SetStretch(0, 0.6f);
     mainHLayout->GetComponent<GUIDirLayout>()->SetStretch(1, 0.4f);
 
-    GUICanvas *canvas = new GUICanvas();
+    UIGameObject *canvas = new UIGameObject();
+    canvas->AddComponent<GUICanvas>();
     mainHLayout->SetParent(canvas);
     canvas->SetParent(scene);
 

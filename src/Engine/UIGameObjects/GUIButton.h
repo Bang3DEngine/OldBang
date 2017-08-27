@@ -1,20 +1,20 @@
 #ifndef GUIBUTTON_H
 #define GUIBUTTON_H
 
+#include "Bang/UIComponent.h"
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIGameObject.h"
 #include "Bang/UIButtonTinter.h"
 
 FORWARD class GUILabel;
 FORWARD class GUIImage;
 FORWARD class UIImageRenderer;
 
-class GUIButton : public UIGameObject
+class GUIButton : public UIComponent
 {
-    UIGAMEOBJECT(GUIButton)
+    UICOMPONENT(GUIButton)
 
 public:
-    GUIButton(const String &labelText = "Bang");
+    GUIButton();
     virtual ~GUIButton();
 
     GUILabel *GetLabel() const;
@@ -29,6 +29,12 @@ private:
     UIBorderRect *p_borderRect = nullptr;
     UIButtonTinter *p_bgTinter = nullptr;
     UIButtonTinter *p_labelTinter = nullptr;
+
+    static UIGameObject *CreateGameObject();
+    void RetrieveReferences();
+    void InitGameObject();
+
+    friend class GameObjectFactory;
 };
 
 #endif // GUIBUTTON_H

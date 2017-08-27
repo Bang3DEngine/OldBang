@@ -351,7 +351,39 @@ bool GUIInputText::IsShiftPressed() const
             Input::GetKey(Input::Key::RShift);
 }
 
-void GUIInputText::Init()
+UIGameObject *GUIInputText::CreateGameObject()
+{
+    UIGameObject *go = new UIGameObject();
+
+    UIImageRenderer *imgRenderer = go->AddComponent<UIImageRenderer>();
+    imgRenderer->UseMaterialCopy();
+    imgRenderer->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
+
+    GUILabel *label = new GUILabel();
+    label->SetName("GUIInputText_Label");
+    label->SetParent(go);
+
+    UIGameObject *selectionQuad = new UIGameObject("GUIInputText_SelectionQuad");
+    selectionQuad->SetParent(label, 0);
+
+    GUIScrollArea *boxScrollArea = new GUIScrollArea();
+    boxScrollArea->SetName("GUIInputText_BoxMask");
+    boxScrollArea->SetParent(go);
+
+    GUITextCursor *cursor = new GUITextCursor();
+    cursor->SetName("GUIInputText_GUITextCursor");
+    cursor->SetParent(label);
+
+    GUIInputText *inputText = new GUIInputText();
+    go->AddComponent(inputText);
+    go->SetDefaultFocusAction(FocusAction::TakeIt);
+
+    inputText->InitGameObject();
+
+    return go;
+}
+
+void GUIInputText::InitGameObject()
 {
     RetrieveReferences();
 

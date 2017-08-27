@@ -6,6 +6,8 @@
 
 FORWARD class UIGameObject;
 
+#define UICOMPONENT(ClassName) COMPONENT(ClassName)
+
 class UIComponent : public Component,
                     public IFocusable
 {
