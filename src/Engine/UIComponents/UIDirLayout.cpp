@@ -1,24 +1,24 @@
-#include "Bang/GUIDirLayout.h"
+#include "Bang/UIDirLayout.h"
 
 #include "Bang/Array.h"
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 
-GUIDirLayout::GUIDirLayout() : GUIDirLayout(false)
+UIDirLayout::UIDirLayout() : UIDirLayout(false)
 {
 }
 
-GUIDirLayout::GUIDirLayout(bool vertical) :
+UIDirLayout::UIDirLayout(bool vertical) :
     m_vertical(vertical)
 {
 }
 
-GUIDirLayout::~GUIDirLayout()
+UIDirLayout::~UIDirLayout()
 {
 }
 
-void GUIDirLayout::OnUpdate()
+void UIDirLayout::OnUpdate()
 {
     Component::OnUpdate();
 
@@ -66,23 +66,23 @@ void GUIDirLayout::OnUpdate()
     }
 }
 
-void GUIDirLayout::SetSpacing(int spacingPx)
+void UIDirLayout::SetSpacing(int spacingPx)
 {
     m_spacingPx = spacingPx;
 }
 
-void GUIDirLayout::SetStretch(int index, float stretch)
+void UIDirLayout::SetStretch(int index, float stretch)
 {
     m_stretches[index] = stretch;
 }
 
-float GUIDirLayout::GetStretch(int index) const
+float UIDirLayout::GetStretch(int index) const
 {
     if (!m_stretches.ContainsKey(index)) { return 1.0f; }
     return m_stretches.At(index);
 }
 
-void GUIDirLayout::Read(const XMLNode &xmlInfo)
+void UIDirLayout::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
@@ -97,7 +97,7 @@ void GUIDirLayout::Read(const XMLNode &xmlInfo)
     }
 }
 
-void GUIDirLayout::Write(XMLNode *xmlInfo) const
+void UIDirLayout::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 

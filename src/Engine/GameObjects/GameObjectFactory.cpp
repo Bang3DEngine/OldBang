@@ -1,69 +1,77 @@
 #include "Bang/GameObjectFactory.h"
 
-#include "Bang/GUIMask.h"
+#include "Bang/UIMask.h"
 #include "Bang/Material.h"
-#include "Bang/GUIButton.h"
-#include "Bang/GUICanvas.h"
+#include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
-#include "Bang/GUIInputText.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UIBorderRect.h"
 #include "Bang/UIGameObject.h"
-#include "Bang/GUIScrollArea.h"
-#include "Bang/GUITextCursor.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIButtonTinter.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
-
-#define CREATE_GAMEOBJECT(className, GameObjectClass) \
-    if (className == GameObjectClass::GetClassNameStatic()) \
-    { return new GameObjectClass(); }
 
 GameObject*
 GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
 {
-    CREATE_GAMEOBJECT(gameObjectClassName, GameObject);
+    if (gameObjectClassName == GameObject::GetClassNameStatic())
+    {
+        return new GameObject();
+    }
     return new UIGameObject();
-    /*
-    CREATE_GAMEOBJECT(gameObjectClassName, UIGameObject);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIMask);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIButton);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUICanvas);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIInputText);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUIScrollArea);
-    CREATE_GAMEOBJECT(gameObjectClassName, GUITextCursor);
-
-    Debug_Error("Please register class '" << gameObjectClassName << "' in "
-                "GameObjectFactory"); ASSERT(false);
-
-                */
-    return nullptr;
 }
-
-#define EXISTS_GAMEOBJECT(gameObjectClassName, GameObjectClass) \
-    if (gameObjectClassName == GameObjectClass::GetClassNameStatic()) \
-    { return true; }
 
 bool GameObjectFactory::ExistsGameObjectClass(const String &gameObjectClassName)
 {
-    EXISTS_GAMEOBJECT(gameObjectClassName, GameObject);
-    EXISTS_GAMEOBJECT(gameObjectClassName, UIGameObject);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIMask);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIButton);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUICanvas);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIInputText);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUIScrollArea);
-    EXISTS_GAMEOBJECT(gameObjectClassName, GUITextCursor);
-
-    return false;
+    return gameObjectClassName == GameObject::GetClassNameStatic() ||
+           gameObjectClassName == UIGameObject::GetClassNameStatic();
 }
 
 UIGameObject *GameObjectFactory::CreateGUIInputText()
 {
-    return GUIInputText::CreateGameObject();
+    return UIInputText::CreateGameObject();
 }
 
 UIGameObject *GameObjectFactory::CreateGUIButton()
 {
-    return GUIButton::CreateGameObject();
+    UIGameObject *go = new UIGameObject("GUIButton");
+
+    UIGameObject *bg = new UIGameObject("GUIButton_Background");
+    UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
+    bgImg->SetTint(Color::White);
+    bg->SetParent(go);
+
+    UIGameObject *label = GameObjectFactory::CreateGUILabel();
+    label->SetName("GUIButton_Label");
+    label->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::Black);
+    label->SetParent(go);
+
+    UIBorderRect *borderRect = go->AddComponent<UIBorderRect>();
+    borderRect->SetLineColor(Color::Purple);
+
+    UIButtonTinter *labelTinter = go->AddComponent<UIButtonTinter>();
+    labelTinter->AddAgent(go);
+    labelTinter->AddGameObjectToTint(label);
+    labelTinter->SetIdleTintColor(label->
+                                  GetComponentInChildren<UITextRenderer>()->
+                                  GetTextColor());
+    labelTinter->SetOverTintColor(Color::Black);
+    labelTinter->SetPressedTintColor(Color::White);
+
+    UIButtonTinter *bgTinter = go->AddComponent<UIButtonTinter>();
+    bgTinter->AddGameObjectToTint(bg);
+    bgTinter->SetIdleTintColor(bgImg->GetTint());
+    bgTinter->SetOverTintColor(Color::Gray);
+    bgTinter->SetPressedTintColor(Color::Black);
+    bgTinter->AddAgent(go);
+
+    go->AddComponent<UIButton>();
+
+    return go;
 }
 
 UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
@@ -71,12 +79,12 @@ UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
     UIGameObject *label = new UIGameObject("GUILabel");
 
     UIGameObject *mask = new UIGameObject();
-    mask->SetName("GUILabel_Mask");
-    mask->AddComponent<GUIMask>();
+    mask->SetName("Mask");
+    mask->AddComponent<UIMask>();
     mask->AddComponent<UIImageRenderer>(); // Quad mask
     mask->SetParent(label);
 
-    UIGameObject *textContainer = new UIGameObject("GUILabel_TextContainer");
+    UIGameObject *textContainer = new UIGameObject("TextContainer");
     textContainer->SetParent(mask);
 
     UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
@@ -88,5 +96,5 @@ UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
 
 UIGameObject *GameObjectFactory::CreateGUIScrollArea()
 {
-    return GUIScrollArea::CreateGameObject();
+    return UIScrollArea::CreateGameObject();
 }

@@ -20,10 +20,10 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
-#include "Bang/GUIVerticalLayout.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
-#include "Bang/GUIHorizontalLayout.h"
+#include "Bang/UIHorizontalLayout.h"
 
 #define CREATE_COMPONENT(className, ComponentClass) \
     if (className == ComponentClass::GetClassNameStatic()) \
@@ -52,8 +52,8 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, UIBorderRect);
     CREATE_COMPONENT(componentClassName, UIButtonTinter);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
-    CREATE_COMPONENT(componentClassName, GUIVerticalLayout);
-    CREATE_COMPONENT(componentClassName, GUIHorizontalLayout);
+    CREATE_COMPONENT(componentClassName, UIVerticalLayout);
+    CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
 
     Debug_Error("Please register class '" << componentClassName << "' in "
                 "ComponentFactory"); ASSERT(false);
@@ -88,8 +88,8 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, UIBorderRect);
     EXISTS_COMPONENT(componentClassName, UIButtonTinter);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
-    EXISTS_COMPONENT(componentClassName, GUIVerticalLayout);
-    EXISTS_COMPONENT(componentClassName, GUIHorizontalLayout);
+    EXISTS_COMPONENT(componentClassName, UIVerticalLayout);
+    EXISTS_COMPONENT(componentClassName, UIHorizontalLayout);
 
     return false;
 }

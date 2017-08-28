@@ -4,13 +4,13 @@
 #include "Bang/GL.h"
 #include "Bang/Component.h"
 
-class GUIMask : public Component
+class UIMask : public Component
 {
-    COMPONENT(GUIMask)
+    COMPONENT(UIMask)
 
 public:
-    GUIMask();
-    virtual ~GUIMask();
+    UIMask();
+    virtual ~UIMask();
 
     virtual void OnRender(RenderPass renderPass) override;
     virtual void OnBeforeChildrenRender(RenderPass renderPass) override;

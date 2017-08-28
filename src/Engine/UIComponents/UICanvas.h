@@ -5,13 +5,13 @@
 
 FORWARD class UIGameObject;
 
-class GUICanvas : public Component
+class UICanvas : public Component
 {
-    COMPONENT(GUICanvas)
+    COMPONENT(UICanvas)
 
 public:
-    GUICanvas();
-    virtual ~GUICanvas();
+    UICanvas();
+    virtual ~UICanvas();
 
     virtual void OnUpdate() override;
 

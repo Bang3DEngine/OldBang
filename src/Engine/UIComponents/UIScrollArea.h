@@ -1,19 +1,19 @@
-#ifndef GUISCROLLAREA_H
-#define GUISCROLLAREA_H
+#ifndef UISCROLLAREA_H
+#define UISCROLLAREA_H
 
 #include "Bang/Vector2.h"
-#include "Bang/GUIMask.h"
+#include "Bang/UIMask.h"
 #include "Bang/Component.h"
 
 FORWARD class UIGameObject;
 
-class GUIScrollArea : public Component
+class UIScrollArea : public Component
 {
-    COMPONENT(GUIScrollArea)
+    COMPONENT(UIScrollArea)
 
 public:
-    GUIScrollArea() noexcept;
-    virtual ~GUIScrollArea() noexcept;
+    UIScrollArea() noexcept;
+    virtual ~UIScrollArea() noexcept;
 
     void OnUpdate() override;
 
@@ -27,7 +27,7 @@ public:
     const Vector2i& GetScrolling() const noexcept;
 
 private:
-    GUIMask *p_mask = nullptr;
+    UIMask *p_mask = nullptr;
     UIGameObject *p_childrenContainer = nullptr;
 
     Vector2i m_scrollingPx = Vector2i::Zero;
@@ -41,4 +41,4 @@ private:
     friend class GameObjectFactory;
 };
 
-#endif // GUISCROLLAREA_H
+#endif // UISCROLLAREA_H

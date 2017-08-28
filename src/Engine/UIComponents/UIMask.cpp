@@ -1,19 +1,13 @@
-#include "Bang/GUIMask.h"
+#include "Bang/UIMask.h"
 
 #include "Bang/GL.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/UIGameObject.h"
 
+UIMask::UIMask() {}
+UIMask::~UIMask() {}
 
-#include "Bang/Paths.h"
-#include "Bang/G_GBuffer.h"
-#include "Bang/GraphicPipeline.h"
-
-
-GUIMask::GUIMask() {}
-GUIMask::~GUIMask() {}
-
-void GUIMask::OnRender(RenderPass renderPass)
+void UIMask::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
     if  (!m_restoringStencil &&
@@ -23,7 +17,7 @@ void GUIMask::OnRender(RenderPass renderPass)
     }
 }
 
-void GUIMask::OnBeforeChildrenRender(RenderPass renderPass)
+void UIMask::OnBeforeChildrenRender(RenderPass renderPass)
 {
     Component::OnBeforeChildrenRender(renderPass);
     if (renderPass == RenderPass::Canvas)
@@ -32,7 +26,7 @@ void GUIMask::OnBeforeChildrenRender(RenderPass renderPass)
     }
 }
 
-void GUIMask::OnChildrenRendered(RenderPass renderPass)
+void UIMask::OnChildrenRendered(RenderPass renderPass)
 {
     Component::OnChildrenRendered(renderPass);
     if (renderPass == RenderPass::Canvas)
@@ -41,7 +35,7 @@ void GUIMask::OnChildrenRendered(RenderPass renderPass)
     }
 }
 
-void GUIMask::PrepareStencilToDrawMask()
+void UIMask::PrepareStencilToDrawMask()
 {
     // Save values for later restoring
     m_maskRBefore = GL::IsColorMaskR();
@@ -63,7 +57,7 @@ void GUIMask::PrepareStencilToDrawMask()
     }
 }
 
-void GUIMask::PrepareStencilToDrawChildren()
+void UIMask::PrepareStencilToDrawChildren()
 {
     // Restore color mask for children
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
@@ -78,7 +72,7 @@ void GUIMask::PrepareStencilToDrawChildren()
     }
 }
 
-void GUIMask::RestoreStencilBuffer(RenderPass renderPass)
+void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 {
     if (!GetMasking()) { return; }
 
@@ -100,8 +94,8 @@ void GUIMask::RestoreStencilBuffer(RenderPass renderPass)
     GL::SetStencilTest(m_stencilTestBefore);
 }
 
-void GUIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
-void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
+void UIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
+void UIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
-bool GUIMask::GetMasking() const { return m_masking; }
-bool GUIMask::GetDrawMask() const { return m_drawMask; }
+bool UIMask::GetMasking() const { return m_masking; }
+bool UIMask::GetDrawMask() const { return m_drawMask; }

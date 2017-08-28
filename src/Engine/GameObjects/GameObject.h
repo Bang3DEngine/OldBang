@@ -126,15 +126,6 @@ public:
     }
 
     template <class T>
-    List<T*> GetComponentsInThisAndChildren() const
-    {
-        List<T*> comps = GetComponentsInChildren<T>();
-        List<T*> thisComps = GetComponents<T>();
-        thisComps.Splice(thisComps.End(), comps);
-        return thisComps;
-    }
-
-    template <class T>
     bool HasComponent() const
     {
         return GetComponent<T>() ;

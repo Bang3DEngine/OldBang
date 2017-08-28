@@ -38,7 +38,7 @@ private:
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;
 
-    friend class GUICanvas;
+    friend class UICanvas;
 };
 
 #endif // UIGAMEOBJECT_H

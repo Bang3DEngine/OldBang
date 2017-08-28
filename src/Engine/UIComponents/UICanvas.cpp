@@ -1,18 +1,18 @@
-#include "Bang/GUICanvas.h"
+#include "Bang/UICanvas.h"
 
 #include "Bang/Input.h"
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
 
-GUICanvas::GUICanvas()
+UICanvas::UICanvas()
 {
 }
 
-GUICanvas::~GUICanvas()
+UICanvas::~UICanvas()
 {
 }
 
-void GUICanvas::OnUpdate()
+void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
 
@@ -26,27 +26,27 @@ void GUICanvas::OnUpdate()
     }
 }
 
-void GUICanvas::CloneInto(ICloneable *clone) const
+void UICanvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
 }
 
-void GUICanvas::Read(const XMLNode &xmlInfo)
+void UICanvas::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 }
 
-void GUICanvas::Write(XMLNode *xmlInfo) const
+void UICanvas::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
 }
 
-UIGameObject *GUICanvas::GetFocusedGameObject() const
+UIGameObject *UICanvas::GetFocusedGameObject() const
 {
     return p_focus;
 }
 
-void GUICanvas::GiveFocusTo(UIGameObject *focusTaker) const
+void UICanvas::GiveFocusTo(UIGameObject *focusTaker) const
 {
     if (p_focus)
     {

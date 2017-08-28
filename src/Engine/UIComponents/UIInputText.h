@@ -5,19 +5,19 @@
 #include "Bang/IFocusListener.h"
 
 FORWARD class UIGameObject;
-FORWARD class GUITextCursor;
-FORWARD class GUIScrollArea;
+FORWARD class UITextCursor;
+FORWARD class UIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
-class GUIInputText : public Component,
-                     public IFocusListener
+class UIInputText : public Component,
+                    public IFocusListener
 {
-    COMPONENT(GUIInputText)
+    COMPONENT(UIInputText)
 
 public:
-    GUIInputText();
-    virtual ~GUIInputText();
+    UIInputText();
+    virtual ~UIInputText();
 
     void OnUpdate() override;
 
@@ -36,7 +36,7 @@ public:
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;
 
-    GUITextCursor *GetCursor() const;
+    UITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
     UIImageRenderer *GetBackground() const;
 
@@ -46,8 +46,8 @@ private:
     UIImageRenderer *p_background = nullptr;
 
     UIGameObject *p_label = nullptr;
-    GUITextCursor *p_cursor = nullptr;
-    GUIScrollArea *p_boxScrollArea = nullptr;
+    UITextCursor *p_cursor = nullptr;
+    UIScrollArea *p_boxScrollArea = nullptr;
 
     UIGameObject *p_selectionQuad = nullptr;
 

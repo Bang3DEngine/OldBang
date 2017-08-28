@@ -1,28 +1,28 @@
-﻿#include "Bang/GUIInputText.h"
+﻿#include "Bang/UIInputText.h"
 
 #include "Bang/Time.h"
 #include "Bang/Input.h"
-#include "Bang/GUIMask.h"
+#include "Bang/UIMask.h"
 #include "Bang/Material.h"
 #include "Bang/UIGameObject.h"
-#include "Bang/GUIScrollArea.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
-#include "Bang/GUITextCursor.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-const Vector2i GUIInputText::LookAheadOffsetPx = Vector2i(5);
+const Vector2i UIInputText::LookAheadOffsetPx = Vector2i(5);
 
-GUIInputText::GUIInputText()
+UIInputText::UIInputText()
 {
 }
 
-GUIInputText::~GUIInputText()
+UIInputText::~UIInputText()
 {
 }
 
-void GUIInputText::OnUpdate()
+void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
@@ -39,7 +39,7 @@ void GUIInputText::OnUpdate()
     p_cursor->SetEnabled( uiGo->HasFocus() );
 }
 
-void GUIInputText::UpdateCursorRenderersAndScrolling()
+void UIInputText::UpdateCursorRenderersAndScrolling()
 {
     UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
     Rect limits = uiGo->rectTransform->GetScreenSpaceRectNDC();
@@ -112,7 +112,7 @@ void GUIInputText::UpdateCursorRenderersAndScrolling()
     }
 }
 
-void GUIInputText::HandleTyping()
+void UIInputText::HandleTyping()
 {
     String content = GetText()->GetContent();
     String inputText = Input::PollInputText();
@@ -167,7 +167,7 @@ void GUIInputText::HandleTyping()
     }
 }
 
-void GUIInputText::HandleCursorIndices(bool wasSelecting)
+void UIInputText::HandleCursorIndices(bool wasSelecting)
 {
     // Here we will move the selection indices either by mouse or arrows...
     UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
@@ -186,13 +186,13 @@ void GUIInputText::HandleCursorIndices(bool wasSelecting)
     HandleKeySelection(wasSelecting);
 }
 
-float GUIInputText::GetCursorXGlobalNDC(int cursorIndex) const
+float UIInputText::GetCursorXGlobalNDC(int cursorIndex) const
 {
     return p_label->rectTransform->FromLocalNDCToGlobalNDC(
                             Vector2(GetCursorXLocalNDC(cursorIndex), 0) ).x;
 }
 
-void GUIInputText::HandleKeySelection(bool wasSelecting)
+void UIInputText::HandleKeySelection(bool wasSelecting)
 {
     // Get cursor advance 1/-1
     int cursorIndexAdvance = 0;
@@ -236,7 +236,7 @@ void GUIInputText::HandleKeySelection(bool wasSelecting)
     if (!doingSelection && !wasSelecting) { ResetSelection(); }
 }
 
-void GUIInputText::HandleMouseSelection()
+void UIInputText::HandleMouseSelection()
 {
     // Find the closest visible char bounds to the mouse position
     if (Input::GetMouseButton(Input::MouseButton::Left))
@@ -282,13 +282,13 @@ void GUIInputText::HandleMouseSelection()
     }
 }
 
-void GUIInputText::SetCursorPosition(int index)
+void UIInputText::SetCursorPosition(int index)
 {
     m_cursorIndex = index;
     UpdateCursorRenderersAndScrolling();
 }
 
-void GUIInputText::SetSelection(int selectionBeginIndex,
+void UIInputText::SetSelection(int selectionBeginIndex,
                                 int selectionEndIndex)
 {
     m_cursorIndex = selectionBeginIndex;
@@ -296,66 +296,66 @@ void GUIInputText::SetSelection(int selectionBeginIndex,
     UpdateCursorRenderersAndScrolling();
 }
 
-int GUIInputText::GetSelectionBeginIndex() const
+int UIInputText::GetSelectionBeginIndex() const
 {
     return Math::Min(m_cursorIndex, m_selectionIndex);
 }
 
-int GUIInputText::GetSelectionEndIndex() const
+int UIInputText::GetSelectionEndIndex() const
 {
     return Math::Max(m_cursorIndex, m_selectionIndex);
 }
 
-String GUIInputText::GetSelectedText() const
+String UIInputText::GetSelectedText() const
 {
     if (m_cursorIndex == m_selectionIndex) { return ""; }
     return GetText()->GetContent().SubString(GetSelectionBeginIndex(),
                                              GetSelectionEndIndex());
 }
 
-void GUIInputText::ResetSelection()
+void UIInputText::ResetSelection()
 {
     m_selectionIndex = m_cursorIndex;
 }
 
-void GUIInputText::SelectAll()
+void UIInputText::SelectAll()
 {
     SetSelection(0, GetText()->GetContent().Size());
 }
 
-GUITextCursor *GUIInputText::GetCursor() const
+UITextCursor *UIInputText::GetCursor() const
 {
     return p_cursor;
 }
 
-UITextRenderer *GUIInputText::GetText() const
+UITextRenderer *UIInputText::GetText() const
 {
     return p_label->GetComponentInChildren<UITextRenderer>();
 }
 
-UIImageRenderer *GUIInputText::GetBackground() const
+UIImageRenderer *UIInputText::GetBackground() const
 {
     return p_background;
 }
 
-void GUIInputText::RetrieveReferences()
+void UIInputText::RetrieveReferences()
 {
     GameObject *go = GetGameObject(); ENSURE(go);
     p_background = go->GetComponent<UIImageRenderer>();
     p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_Label"));
-    p_cursor = SCAST<GUITextCursor*>(go->FindInChildren("GUIInputText_GUITextCursor"));
+    p_cursor = SCAST<UITextCursor*>(go->FindInChildren("GUIInputText_GUITextCursor"));
     p_selectionQuad = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_SelectionQuad"));
-    p_boxScrollArea = SCAST<GUIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
-                                            GetComponent<GUIScrollArea>());
+    p_boxScrollArea = SCAST<UIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
+                                            GetComponent<UIScrollArea>());
 }
 
-bool GUIInputText::IsShiftPressed() const
+bool UIInputText::IsShiftPressed() const
 {
     return Input::GetKey(Input::Key::LShift) ||
             Input::GetKey(Input::Key::RShift);
 }
 
-UIGameObject *GUIInputText::CreateGameObject()
+UIGameObject *UIInputText::CreateGameObject()
 {
     UIGameObject *go = new UIGameObject();
 
@@ -374,11 +374,11 @@ UIGameObject *GUIInputText::CreateGameObject()
     boxScrollArea->SetName("GUIInputText_BoxMask");
     boxScrollArea->SetParent(go);
 
-    GUITextCursor *cursor = new GUITextCursor();
+    UITextCursor *cursor = new UITextCursor();
     cursor->SetName("GUIInputText_GUITextCursor");
     cursor->SetParent(label);
 
-    GUIInputText *inputText = new GUIInputText();
+    UIInputText *inputText = new UIInputText();
     go->AddComponent(inputText);
     go->SetDefaultFocusAction(FocusAction::TakeIt);
 
@@ -387,14 +387,14 @@ UIGameObject *GUIInputText::CreateGameObject()
     return go;
 }
 
-void GUIInputText::InitGameObject()
+void UIInputText::InitGameObject()
 {
     RetrieveReferences();
 
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    p_label->GetComponentInChildren<GUIMask>()->SetMasking(false);
+    p_label->GetComponentInChildren<UIMask>()->SetMasking(false);
     p_label->rectTransform->SetMargins(5, 2, 5, 2);
 
     UIImageRenderer *selectionImg =
@@ -418,7 +418,7 @@ void GUIInputText::InitGameObject()
     UpdateCursorRenderersAndScrolling();
 }
 
-float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
+float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
 {    
     // In case we are between two characters
     const int textLength = GetText()->GetContent().Size();
@@ -457,7 +457,7 @@ float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
     return contRT->FromLocalNDCToGlobalNDC( Vector2(1.0f) ).x;
 }
 
-bool GUIInputText::IsDelimiter(char initialChar, char curr) const
+bool UIInputText::IsDelimiter(char initialChar, char curr) const
 {
     bool initialIsLetter = String::IsLetter(initialChar);
     bool differentCase   = initialIsLetter &&
@@ -467,7 +467,7 @@ bool GUIInputText::IsDelimiter(char initialChar, char curr) const
            (!String::IsLetter(curr) && !String::IsNumber(curr));
 }
 
-int GUIInputText::GetWordSplitIndex(int startIndex, bool forward) const
+int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
 {
     const String &content = GetText()->GetContent();
 
@@ -494,13 +494,13 @@ int GUIInputText::GetWordSplitIndex(int startIndex, bool forward) const
     return i;
 }
 
-void GUIInputText::OnFocusTaken()
+void UIInputText::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
     Input::StartTextInput();
 }
 
-void GUIInputText::OnFocusLost()
+void UIInputText::OnFocusLost()
 {
     IFocusListener::OnFocusLost();
     ResetSelection();

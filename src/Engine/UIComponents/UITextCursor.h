@@ -1,17 +1,17 @@
-#ifndef GUITEXTCURSOR_H
-#define GUITEXTCURSOR_H
+#ifndef UITEXTCURSOR_H
+#define UITEXTCURSOR_H
 
 #include "Bang/UIGameObject.h"
 
 FORWARD class LineRenderer;
 
-class GUITextCursor : public UIGameObject
+class UITextCursor : public UIGameObject
 {
-    UIGAMEOBJECT(GUITextCursor)
+    UIGAMEOBJECT(UITextCursor)
 
 public:
-    GUITextCursor();
-    virtual ~GUITextCursor();
+    UITextCursor();
+    virtual ~UITextCursor();
 
     virtual void OnUpdate() override;
 
@@ -27,4 +27,4 @@ private:
     LineRenderer *m_lineRenderer = nullptr;
 };
 
-#endif // GUITEXTCURSOR_H
+#endif // UITEXTCURSOR_H

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../../../src/Engine/Components/UITextRenderer.h"
+#include "../../../src/Engine/UIComponents/UITextRenderer.h"

@@ -1,11 +1,11 @@
-#include "Bang/GUITextCursor.h"
+#include "Bang/UITextCursor.h"
 
 #include "Bang/Time.h"
 #include "Bang/Material.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/RectTransform.h"
 
-GUITextCursor::GUITextCursor() : UIGameObject("GUITextCursor")
+UITextCursor::UITextCursor() : UIGameObject("GUITextCursor")
 {
     m_lineRenderer = AddComponent<LineRenderer>();
     m_lineRenderer->UseMaterialCopy();
@@ -27,12 +27,12 @@ GUITextCursor::GUITextCursor() : UIGameObject("GUITextCursor")
                               });
 }
 
-GUITextCursor::~GUITextCursor()
+UITextCursor::~UITextCursor()
 {
 
 }
 
-void GUITextCursor::OnUpdate()
+void UITextCursor::OnUpdate()
 {
     UIGameObject::OnUpdate();
 
@@ -41,22 +41,22 @@ void GUITextCursor::OnUpdate()
     if (m_cursorTime >= m_cursorTickTime * 2) { m_cursorTime = 0.0f; }
 }
 
-void GUITextCursor::SetStroke(float cursorWidth)
+void UITextCursor::SetStroke(float cursorWidth)
 {
     m_lineRenderer->SetLineWidth(cursorWidth);
 }
 
-void GUITextCursor::SetTickTime(float cursorTickTime)
+void UITextCursor::SetTickTime(float cursorTickTime)
 {
     m_cursorTickTime = cursorTickTime;
 }
 
-float GUITextCursor::GetStroke() const
+float UITextCursor::GetStroke() const
 {
     return m_lineRenderer->GetLineWidth();
 }
 
-float GUITextCursor::GetTickTime() const
+float UITextCursor::GetTickTime() const
 {
     return m_cursorTickTime;
 }

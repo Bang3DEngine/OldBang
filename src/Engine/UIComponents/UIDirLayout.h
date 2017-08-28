@@ -4,9 +4,9 @@
 #include "Bang/Map.h"
 #include "Bang/Component.h"
 
-class GUIDirLayout : public Component
+class UIDirLayout : public Component
 {
-    COMPONENT(GUIDirLayout)
+    COMPONENT(UIDirLayout)
 
 public:
 
@@ -24,9 +24,9 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
-    GUIDirLayout();
-    GUIDirLayout(bool vertical);
-    virtual ~GUIDirLayout();
+    UIDirLayout();
+    UIDirLayout(bool vertical);
+    virtual ~UIDirLayout();
 
 private:
     int m_spacingPx = 0;
