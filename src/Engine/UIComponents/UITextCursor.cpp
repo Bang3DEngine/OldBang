@@ -4,46 +4,45 @@
 #include "Bang/Material.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/RectTransform.h"
+#include "Bang/ComponentFactory.h"
 
-UITextCursor::UITextCursor() : UIGameObject("GUITextCursor")
+UITextCursor::UITextCursor()
 {
-    m_lineRenderer = AddComponent<LineRenderer>();
-    m_lineRenderer->UseMaterialCopy();
-    m_lineRenderer->SetEnabled(false);
-    m_lineRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
-    m_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    m_lineRenderer->SetRenderPass(RenderPass::Canvas);
+    UseMaterialCopy();
+    GetMaterial()->SetDiffuseColor(Color::Black);
+    SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    SetRenderPass(RenderPass::Canvas);
     SetStroke(1.5f);
 
-    m_lineRenderer->SetPoints({
-                               Vector3(0.0f, -1.0f, 0.0f),
-                               Vector3(0.0f,  1.0f, 0.0f),
+    constexpr float limit = 1.0f;
+    SetPoints({
+               Vector3(0.0f, -limit, 0.0f),
+               Vector3(0.0f,  limit, 0.0f),
 
-                               Vector3(-1.0f, -1.0f, 0.0f),
-                               Vector3( 1.0f, -1.0f, 0.0f),
+               Vector3(-limit, -limit, 0.0f),
+               Vector3( limit, -limit, 0.0f),
 
-                               Vector3(-1.0f,  1.0f, 0.0f),
-                               Vector3( 1.0f,  1.0f, 0.0f),
-                              });
+               Vector3(-limit,  limit, 0.0f),
+               Vector3( limit,  limit, 0.0f),
+              });
 }
 
 UITextCursor::~UITextCursor()
 {
-
 }
 
 void UITextCursor::OnUpdate()
 {
-    UIGameObject::OnUpdate();
+    Component::OnUpdate();
 
     m_cursorTime += Time::GetDeltaTime();
-    m_lineRenderer->SetEnabled( m_cursorTime <= m_cursorTickTime );
+    SetVisible( m_cursorTime <= m_cursorTickTime );
     if (m_cursorTime >= m_cursorTickTime * 2) { m_cursorTime = 0.0f; }
 }
 
 void UITextCursor::SetStroke(float cursorWidth)
 {
-    m_lineRenderer->SetLineWidth(cursorWidth);
+    SetLineWidth(cursorWidth);
 }
 
 void UITextCursor::SetTickTime(float cursorTickTime)
@@ -53,7 +52,7 @@ void UITextCursor::SetTickTime(float cursorTickTime)
 
 float UITextCursor::GetStroke() const
 {
-    return m_lineRenderer->GetLineWidth();
+    return GetLineWidth();
 }
 
 float UITextCursor::GetTickTime() const

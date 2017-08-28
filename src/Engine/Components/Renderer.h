@@ -29,6 +29,7 @@ public:
 
     void UseMaterialCopy();
 
+    void SetVisible(bool visible);
     void SetMaterial(Material *m);
     void SetRenderWireframe(bool m_drawWireframe);
     void SetCullMode(GL::CullMode m_cullMode);
@@ -37,6 +38,7 @@ public:
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
+    bool GetVisible() const;
     Material* GetMaterial() const;
     Material* GetSharedMaterial() const;
     bool GetRenderWireframe() const;
@@ -67,6 +69,7 @@ protected:
     virtual ~Renderer();
 
 private:
+    bool m_visible = true;
     float m_lineWidth = 1.0f;
     Material *m_material     = nullptr;
     Material *m_materialCopy = nullptr;

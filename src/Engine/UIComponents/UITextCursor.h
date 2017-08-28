@@ -1,13 +1,11 @@
 #ifndef UITEXTCURSOR_H
 #define UITEXTCURSOR_H
 
-#include "Bang/UIGameObject.h"
+#include "Bang/LineRenderer.h"
 
-FORWARD class LineRenderer;
-
-class UITextCursor : public UIGameObject
+class UITextCursor : public LineRenderer
 {
-    UIGAMEOBJECT(UITextCursor)
+    COMPONENT(UITextCursor)
 
 public:
     UITextCursor();
@@ -24,7 +22,6 @@ public:
 private:
     float m_cursorTime = 0.0f;
     float m_cursorTickTime = 0.25f;
-    LineRenderer *m_lineRenderer = nullptr;
 };
 
 #endif // UITEXTCURSOR_H

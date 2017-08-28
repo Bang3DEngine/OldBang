@@ -55,8 +55,8 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             Vector2 maxPoint(cursorX,  1);
             const Vector2 cursorSize =
               p_label->rectTransform->FromPixelsAmountToLocalNDC(Vector2i(3,0));
-            p_cursor->rectTransform->SetAnchors(minPoint - cursorSize,
-                                                maxPoint + cursorSize);
+            p_cursor->gameObject->GetComponent<RectTransform>()
+                    ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
         }
 
         // Selection quad
@@ -343,7 +343,7 @@ void UIInputText::RetrieveReferences()
     GameObject *go = GetGameObject(); ENSURE(go);
     p_background = go->GetComponent<UIImageRenderer>();
     p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_Label"));
-    p_cursor = SCAST<UITextCursor*>(go->FindInChildren("GUIInputText_GUITextCursor"));
+    p_cursor = p_label->GetComponentInChildren<UITextCursor>();
     p_selectionQuad = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_SelectionQuad"));
     p_boxScrollArea = SCAST<UIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
                                             GetComponent<UIScrollArea>());
@@ -358,6 +358,7 @@ bool UIInputText::IsShiftPressed() const
 UIGameObject *UIInputText::CreateGameObject()
 {
     UIGameObject *go = new UIGameObject();
+    go->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIImageRenderer *imgRenderer = go->AddComponent<UIImageRenderer>();
     imgRenderer->UseMaterialCopy();
@@ -374,14 +375,11 @@ UIGameObject *UIInputText::CreateGameObject()
     boxScrollArea->SetName("GUIInputText_BoxMask");
     boxScrollArea->SetParent(go);
 
-    UITextCursor *cursor = new UITextCursor();
-    cursor->SetName("GUIInputText_GUITextCursor");
+    UIGameObject *cursor = new UIGameObject("GUIInputText_GUITextCursor");
+    cursor->AddComponent<UITextCursor>();
     cursor->SetParent(label);
 
-    UIInputText *inputText = new UIInputText();
-    go->AddComponent(inputText);
-    go->SetDefaultFocusAction(FocusAction::TakeIt);
-
+    UIInputText *inputText = go->AddComponent<UIInputText>();
     inputText->InitGameObject();
 
     return go;

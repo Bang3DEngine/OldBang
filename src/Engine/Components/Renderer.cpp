@@ -25,7 +25,7 @@ Renderer::~Renderer()
 void Renderer::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
-    if (renderPass == GetRenderPass())
+    if (GetVisible() && renderPass == GetRenderPass())
     {
         GraphicPipeline::GetActive()->Render(this);
     }
@@ -67,6 +67,11 @@ void Renderer::UseMaterialCopy()
     }
 }
 
+void Renderer::SetVisible(bool visible)
+{
+    m_visible = visible;
+}
+
 
 void Renderer::SetMaterial(Material *m)
 {
@@ -81,6 +86,8 @@ void Renderer::SetMaterial(Material *m)
     }
 }
 void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
+
+bool Renderer::GetVisible() const { return m_visible; }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::GetRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
