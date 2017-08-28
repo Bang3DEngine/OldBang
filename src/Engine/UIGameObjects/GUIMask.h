@@ -2,18 +2,19 @@
 #define UIMASK_H
 
 #include "Bang/GL.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/Component.h"
 
-class GUIMask : public UIGameObject
+class GUIMask : public Component
 {
-    UIGAMEOBJECT(GUIMask)
+    COMPONENT(GUIMask)
 
 public:
     GUIMask();
     virtual ~GUIMask();
 
-    virtual void Render(RenderPass renderPass, bool renderChildren) override;
     virtual void OnRender(RenderPass renderPass) override;
+    virtual void OnBeforeChildrenRender(RenderPass renderPass) override;
+    virtual void OnChildrenRendered(RenderPass renderPass) override;
 
     void SetMasking(bool maskEnabled);
     void SetDrawMask(bool drawMask);
@@ -32,9 +33,9 @@ private:
     bool m_stencilTestBefore = false;
     bool m_stencilWriteBefore = false;
 
-    void BeforeThisRender();
-    void BeforeChildrenRender();
-    void AfterChildrenRender(RenderPass renderPass);
+    void PrepareStencilToDrawMask();
+    void PrepareStencilToDrawChildren();
+    void RestoreStencilBuffer(RenderPass renderPass);
 };
 
 #endif // UIMASK_H

@@ -28,19 +28,21 @@ void GUIInputText::OnUpdate()
 
     RetrieveReferences();
 
-    if ( GetGameObject()->HasFocus() )
+    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
+    if ( uiGo->HasFocus() )
     {
         const bool wasSelecting = (m_selectionIndex != m_cursorIndex);
         HandleTyping();
         HandleCursorIndices(wasSelecting);
         UpdateCursorRenderersAndScrolling();
     }
-    p_cursor->SetEnabled( GetGameObject()->HasFocus() );
+    p_cursor->SetEnabled( uiGo->HasFocus() );
 }
 
 void GUIInputText::UpdateCursorRenderersAndScrolling()
 {
-    Rect limits = GetGameObject()->rectTransform->GetScreenSpaceRectNDC();
+    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
+    Rect limits = uiGo->rectTransform->GetScreenSpaceRectNDC();
 
     Vector2i prevScrolling = p_boxScrollArea->GetScrolling();
     p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
@@ -168,7 +170,8 @@ void GUIInputText::HandleTyping()
 void GUIInputText::HandleCursorIndices(bool wasSelecting)
 {
     // Here we will move the selection indices either by mouse or arrows...
-    if (GetGameObject()->IsMouseOver() &&
+    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
+    if (uiGo->IsMouseOver() &&
         Input::GetMouseButtonDown(Input::MouseButton::Left))
     {
         ResetSelection();
@@ -391,7 +394,7 @@ void GUIInputText::InitGameObject()
     p_background->UseMaterialCopy();
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    SCAST<GUIMask*>(p_label->GetChild("GUILabel_Mask"))->SetMasking(false);
+    p_label->GetComponentInChildren<GUIMask>()->SetMasking(false);
     p_label->rectTransform->SetMargins(5, 2, 5, 2);
 
     UIImageRenderer *selectionImg =
@@ -434,7 +437,8 @@ float GUIInputText::GetCursorXLocalNDC(int cursorIndex) const
     }
 
     // In case we are at the beginning or at the end of the text
-    RectTransform *contRT = p_boxScrollArea->GetGameObject()->rectTransform;
+    UIGameObject *uiGo = SCAST<UIGameObject*>(p_boxScrollArea->GetGameObject());
+    RectTransform *contRT = uiGo->rectTransform;
     if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
     {
         if (cursorIndex == 0)
@@ -492,12 +496,13 @@ int GUIInputText::GetWordSplitIndex(int startIndex, bool forward) const
 
 void GUIInputText::OnFocusTaken()
 {
-    UIComponent::OnFocusTaken();
+    IFocusListener::OnFocusTaken();
     Input::StartTextInput();
 }
+
 void GUIInputText::OnFocusLost()
 {
-    UIComponent::OnFocusLost();
+    IFocusListener::OnFocusLost();
     ResetSelection();
     Input::StopTextInput();
     m_selectingWithMouse = false;

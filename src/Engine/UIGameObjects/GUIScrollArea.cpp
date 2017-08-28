@@ -1,5 +1,6 @@
 #include "Bang/GUIScrollArea.h"
 
+#include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 
@@ -13,7 +14,7 @@ GUIScrollArea::~GUIScrollArea() noexcept
 
 void GUIScrollArea::OnUpdate()
 {
-    UIComponent::OnUpdate();
+    Component::OnUpdate();
     RetrieveReferences();
     UpdateChildrenMargins();
 }
@@ -65,7 +66,8 @@ UIGameObject *GUIScrollArea::CreateGameObject()
 {
     UIGameObject *go = new UIGameObject();
 
-    GUIMask *mask = new GUIMask();
+    UIGameObject *mask = new UIGameObject();
+    mask->AddComponent<GUIMask>();
     mask->SetName("Mask");
     mask->SetParent(go);
 
@@ -80,15 +82,16 @@ UIGameObject *GUIScrollArea::CreateGameObject()
 
 void GUIScrollArea::RetrieveReferences()
 {
-    UIGameObject *go = GetGameObject(); ENSURE(go);
-    p_mask = SCAST<GUIMask*>(go->GetChild("Mask"));
-    p_childrenContainer = SCAST<UIGameObject*>(p_mask->GetChild("ChildrenContainer"));
+    UIGameObject *go = SCAST<UIGameObject*>(GetGameObject()); ENSURE(go);
+    p_mask = go->GetChild("Mask")->GetComponent<GUIMask>();
+    p_childrenContainer = SCAST<UIGameObject*>(p_mask->GetGameObject()->
+                                               GetChild("ChildrenContainer"));
 }
 
 void GUIScrollArea::InitGameObject()
 {
     RetrieveReferences();
     p_mask->SetDrawMask(false);
-    UIImageRenderer *quad = p_mask->AddComponent<UIImageRenderer>();
+    UIImageRenderer *quad = p_mask->GetGameObject()->AddComponent<UIImageRenderer>();
     quad->SetTint(Color::White);
 }

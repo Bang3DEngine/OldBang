@@ -5,7 +5,7 @@
 
 class GUIHorizontalLayout : public GUIDirLayout
 {
-    UICOMPONENT(GUIHorizontalLayout)
+    COMPONENT(GUIHorizontalLayout)
 
 public:
     GUIHorizontalLayout();

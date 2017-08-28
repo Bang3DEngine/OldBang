@@ -1,15 +1,15 @@
 #ifndef UIGAMEOBJECT_H
 #define UIGAMEOBJECT_H
 
-#include "Bang/IFocusable.h"
 #include "Bang/GameObject.h"
+#include "Bang/IFocusListener.h"
 
 FORWARD class RectTransform;
 
 #define UIGAMEOBJECT(ClassName) GAMEOBJECT(ClassName)
 
 class UIGameObject : public GameObject,
-                     public IFocusable
+                     public IFocusListener
 {
     UIGAMEOBJECT(UIGameObject)
 

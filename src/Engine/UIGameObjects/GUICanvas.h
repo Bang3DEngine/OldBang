@@ -1,11 +1,13 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "Bang/UIComponent.h"
+#include "Bang/Component.h"
 
-class GUICanvas : public UIComponent
+FORWARD class UIGameObject;
+
+class GUICanvas : public Component
 {
-    UICOMPONENT(GUICanvas)
+    COMPONENT(GUICanvas)
 
 public:
     GUICanvas();

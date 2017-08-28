@@ -41,7 +41,7 @@ UIGameObject *GUIButton::CreateGameObject()
 
 void GUIButton::RetrieveReferences()
 {
-    UIGameObject *go = GetGameObject(); ENSURE(go);
+    UIGameObject *go = SCAST<UIGameObject*>(GetGameObject()); ENSURE(go);
     p_bgImage = go->FindInChildren("GUIButton_Background")->GetComponent<UIImageRenderer>();
     p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIButton_Label"));
     p_borderRect = go->GetComponent<UIBorderRect>();

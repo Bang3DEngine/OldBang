@@ -70,10 +70,10 @@ UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
 {
     UIGameObject *label = new UIGameObject("GUILabel");
 
-    GUIMask *mask = new GUIMask();
+    UIGameObject *mask = new UIGameObject();
     mask->SetName("GUILabel_Mask");
+    mask->AddComponent<GUIMask>();
     mask->AddComponent<UIImageRenderer>(); // Quad mask
-    mask->SetMasking(true);
     mask->SetParent(label);
 
     UIGameObject *textContainer = new UIGameObject("GUILabel_TextContainer");

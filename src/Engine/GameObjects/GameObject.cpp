@@ -17,6 +17,12 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
+#define PROPAGATE_EVENT_TO_COMPONENTS(Event, Components) \
+    m_iteratingComponents = true; \
+    PROPAGATE_EVENT(Event, Components); \
+    m_iteratingComponents = false; \
+    RemoveQueuedComponents();
+
 GameObject::GameObject(const String &name)
     : m_name(name)
 {
@@ -227,62 +233,52 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
 
 void GameObject::Start()
 {
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Start(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
+    PROPAGATE_EVENT_TO_COMPONENTS(Start(), m_components);
     SceneNode<GameObject>::Start();
 }
 
 void GameObject::Update()
 {
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Update(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
+    PROPAGATE_EVENT_TO_COMPONENTS(Update(), m_components);
     SceneNode<GameObject>::Update();
 }
 
 void GameObject::ParentSizeChanged()
 {
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(ParentSizeChanged(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
+    PROPAGATE_EVENT_TO_COMPONENTS(ParentSizeChanged(), m_components);
     SceneNode<GameObject>::ParentSizeChanged();
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Render(renderPass, renderChildren), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
+    PROPAGATE_EVENT_TO_COMPONENTS(Render(renderPass, renderChildren),
+                                  m_components);
     SceneNode<GameObject>::Render(renderPass, renderChildren);
+}
+
+void GameObject::BeforeChildrenRender(RenderPass renderPass)
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(BeforeChildrenRender(renderPass),
+                                  m_components);
+    SceneNode<GameObject>::BeforeChildrenRender(renderPass);
+}
+
+void GameObject::ChildrenRendered(RenderPass renderPass)
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(ChildrenRendered(renderPass), m_components);
+    SceneNode<GameObject>::ChildrenRendered(renderPass);
 }
 
 void GameObject::RenderGizmos()
 {
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(RenderGizmos(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
-
+    PROPAGATE_EVENT_TO_COMPONENTS(RenderGizmos(), m_components);
     SceneNode<GameObject>::RenderGizmos();
 }
 
 void GameObject::Destroy()
 {
     SceneNode<GameObject>::Destroy();
-
-    m_iteratingComponents = true;
-    PROPAGATE_EVENT(Destroy(), m_components);
-    m_iteratingComponents = false;
-    RemoveQueuedComponents();
+    PROPAGATE_EVENT_TO_COMPONENTS(Destroy(), m_components);
 }
 
 void GameObject::CloneInto(ICloneable *clone) const

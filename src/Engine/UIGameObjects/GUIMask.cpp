@@ -1,36 +1,47 @@
 #include "Bang/GUIMask.h"
 
 #include "Bang/GL.h"
+#include "Bang/UIRenderer.h"
+#include "Bang/UIGameObject.h"
 
-GUIMask::GUIMask() : UIGameObject("GUIMask") {}
+
+#include "Bang/Paths.h"
+#include "Bang/G_GBuffer.h"
+#include "Bang/GraphicPipeline.h"
+
+
+GUIMask::GUIMask() {}
 GUIMask::~GUIMask() {}
-
-void GUIMask::Render(RenderPass renderPass, bool renderChildren)
-{
-    bool canvasPass = (renderPass == RenderPass::Canvas);
-    if  (canvasPass) { BeforeThisRender(); }
-
-    // Inside here, OnRender(below) is called
-    m_restoringStencil = false;
-    UIGameObject::Render(renderPass, renderChildren);
-
-    if (canvasPass) { AfterChildrenRender(renderPass); }
-}
 
 void GUIMask::OnRender(RenderPass renderPass)
 {
-    UIGameObject::OnRender(renderPass);
-    bool canvasPass = (renderPass == RenderPass::Canvas);
-    if (!m_restoringStencil && canvasPass) { BeforeChildrenRender(); }
+    Component::OnRender(renderPass);
+    if  (!m_restoringStencil &&
+         renderPass == RenderPass::Canvas)
+    {
+        PrepareStencilToDrawMask();
+    }
 }
 
-void GUIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
-void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
+void GUIMask::OnBeforeChildrenRender(RenderPass renderPass)
+{
+    Component::OnBeforeChildrenRender(renderPass);
+    if (renderPass == RenderPass::Canvas)
+    {
+        PrepareStencilToDrawChildren();
+    }
+}
 
-bool GUIMask::GetMasking() const { return m_masking; }
-bool GUIMask::GetDrawMask() const { return m_drawMask; }
+void GUIMask::OnChildrenRendered(RenderPass renderPass)
+{
+    Component::OnChildrenRendered(renderPass);
+    if (renderPass == RenderPass::Canvas)
+    {
+        RestoreStencilBuffer(renderPass);
+    }
+}
 
-void GUIMask::BeforeThisRender()
+void GUIMask::PrepareStencilToDrawMask()
 {
     // Save values for later restoring
     m_maskRBefore = GL::IsColorMaskR();
@@ -52,7 +63,7 @@ void GUIMask::BeforeThisRender()
     }
 }
 
-void GUIMask::BeforeChildrenRender()
+void GUIMask::PrepareStencilToDrawChildren()
 {
     // Restore color mask for children
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
@@ -67,24 +78,30 @@ void GUIMask::BeforeChildrenRender()
     }
 }
 
-void GUIMask::AfterChildrenRender(RenderPass renderPass)
+void GUIMask::RestoreStencilBuffer(RenderPass renderPass)
 {
-    if (GetMasking())
-    {
-        // Restore stencil as it was before, decrementing marked mask pixels
-        GL::SetColorMask(false, false, false, false);
-        GL::SetStencilTest(true);
-        GL::SetStencilWrite(true);
-        GL::SetStencilOp(GL_DECR);
-        m_restoringStencil = true;
+    if (!GetMasking()) { return; }
 
-        UIGameObject::Render(renderPass, false);
+    // Restore stencil as it was before, decrementing marked mask pixels
+    GL::SetColorMask(false, false, false, false);
+    GL::SetStencilTest(true);
+    GL::SetStencilWrite(true);
+    GL::SetStencilOp(GL_DECR);
 
-        GL::SetStencilValue( GL::GetStencilValue() - 1 );
-        GL::SetColorMask(m_maskRBefore, m_maskGBefore,
-                         m_maskBBefore, m_maskABefore);
-        GL::SetStencilOp(m_stencilOpBefore);
-        GL::SetStencilWrite(m_stencilWriteBefore);
-        GL::SetStencilTest(m_stencilTestBefore);
-    }
+    m_restoringStencil = true;
+    GetGameObject()->Render(renderPass, false);
+    m_restoringStencil = false;
+
+    GL::SetStencilValue( GL::GetStencilValue() - 1 );
+    GL::SetColorMask(m_maskRBefore, m_maskGBefore,
+                     m_maskBBefore, m_maskABefore);
+    GL::SetStencilOp(m_stencilOpBefore);
+    GL::SetStencilWrite(m_stencilWriteBefore);
+    GL::SetStencilTest(m_stencilTestBefore);
 }
+
+void GUIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
+void GUIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
+
+bool GUIMask::GetMasking() const { return m_masking; }
+bool GUIMask::GetDrawMask() const { return m_drawMask; }

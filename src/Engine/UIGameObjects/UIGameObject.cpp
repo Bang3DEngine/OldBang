@@ -2,7 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
-#include "Bang/UIComponent.h"
+#include "Bang/Component.h"
 #include "Bang/RectTransform.h"
 
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
@@ -66,22 +66,24 @@ FocusAction UIGameObject::OnFocusReceived()
 {
     return m_defaultFocusAction;
 }
+
 void UIGameObject::OnFocusTaken()
 {
-    IFocusable::OnFocusTaken();
-    for (Component *comp : GetComponents())
+    IFocusListener::OnFocusTaken();
+    List<IFocusListener*> focusListeners = GetComponents<IFocusListener>();
+    for (IFocusListener *focusListener : focusListeners)
     {
-        UIComponent *uiComp = DCAST<UIComponent*>(comp);
-        if (uiComp) { uiComp->OnFocusTaken(); }
+        focusListener->OnFocusTaken();
     }
 }
+
 void UIGameObject::OnFocusLost()
 {
-    IFocusable::OnFocusLost();
-    for (Component *comp : GetComponents())
+    IFocusListener::OnFocusLost();
+    List<IFocusListener*> focusListeners = GetComponents<IFocusListener>();
+    for (IFocusListener *focusListener : focusListeners)
     {
-        UIComponent *uiComp = DCAST<UIComponent*>(comp);
-        if (uiComp) { uiComp->OnFocusLost(); }
+        focusListener->OnFocusLost();
     }
 }
 

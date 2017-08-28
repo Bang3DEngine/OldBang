@@ -178,6 +178,8 @@ public:
     virtual void ParentSizeChanged() override;
     virtual void Render(RenderPass renderPass,
                         bool renderChildren = true) override;
+    virtual void BeforeChildrenRender(RenderPass renderPass) override;
+    virtual void ChildrenRendered(RenderPass renderPass) override;
     virtual void RenderGizmos() override;
     virtual void Destroy() override;
 

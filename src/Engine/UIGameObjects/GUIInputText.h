@@ -1,7 +1,8 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
-#include "Bang/UIComponent.h"
+#include "Bang/Component.h"
+#include "Bang/IFocusListener.h"
 
 FORWARD class UIGameObject;
 FORWARD class GUITextCursor;
@@ -9,9 +10,10 @@ FORWARD class GUIScrollArea;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
-class GUIInputText : public UIComponent
+class GUIInputText : public Component,
+                     public IFocusListener
 {
-    UICOMPONENT(GUIInputText)
+    COMPONENT(GUIInputText)
 
 public:
     GUIInputText();
@@ -30,7 +32,7 @@ public:
     void ResetSelection();
     void SelectAll();
 
-    // IFocusable
+    // IFocusListener
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;
 

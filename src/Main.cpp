@@ -46,6 +46,7 @@ int main(int argc, char **argv)
 #include "Bang/SystemUtils.h"
 #include "Bang/Application.h"
 #include "Bang/MeshFactory.h"
+#include "Bang/UIGameObject.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/AudioManager.h"
 #include "Bang/GUIInputText.h"
@@ -112,7 +113,8 @@ int main(int argc, char **argv)
                                         "murcielago hindu comia feliz cardillo "
                                         "y kiwi. La ciguena tocaba el saxofon "
                                         "detras del palenque de paja");
-    SCAST<GUIMask*>(rightLabel->GetChild("GUILabel_Mask"))->SetMasking(false);
+    rightLabel->GetChild("GUILabel_Mask")->GetComponent<GUIMask>()
+              ->SetMasking(false);
 
     UIGameObject *rightScrollArea = GameObjectFactory::CreateGUIScrollArea();
     rightScrollArea->SetName("ScrollArea");
@@ -178,12 +180,12 @@ int main(int argc, char **argv)
     nameVLayout->SetParent(namesVLayout);
     namesResult->SetParent(namesVLayout);
 
-    GUIMask *buttonPlayMask = new GUIMask();
-    buttonPlayMask->SetMasking(true);
+    UIGameObject *buttonPlayMask = new UIGameObject();
+    buttonPlayMask->AddComponent<GUIMask>();
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
     maskImg->SetTexture(
              new Texture2D( EPATH("tmp/test.png") ) );
-    buttonPlay->GetGameObject()->rectTransform->SetMargins(10);
+    buttonPlay->GetGameObject()->GetComponent<RectTransform>()->SetMargins(10);
     buttonPlay->GetGameObject()->SetParent(buttonPlayMask);
 
     UIGameObject *uiVContainer = new UIGameObject();
@@ -191,8 +193,8 @@ int main(int argc, char **argv)
     UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiImg->SetTint(Color::Red);
 
-    GUIMask *leftMask = new GUIMask();
-    leftMask->SetMasking(true);
+    UIGameObject *leftMask = new UIGameObject();
+    leftMask->AddComponent<GUIMask>();
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
     img->SetTexture( new Texture2D( EPATH("tmp/test2.png") ) );
     UIGameObject *menuVLayout = new UIGameObject();

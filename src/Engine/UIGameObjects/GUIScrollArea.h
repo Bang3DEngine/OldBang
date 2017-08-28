@@ -3,11 +3,13 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/GUIMask.h"
-#include "Bang/UIComponent.h"
+#include "Bang/Component.h"
 
-class GUIScrollArea : public UIComponent
+FORWARD class UIGameObject;
+
+class GUIScrollArea : public Component
 {
-    UICOMPONENT(GUIScrollArea)
+    COMPONENT(GUIScrollArea)
 
 public:
     GUIScrollArea() noexcept;

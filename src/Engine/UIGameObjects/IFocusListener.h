@@ -1,13 +1,13 @@
-#ifndef IFOCUSABLE_H
-#define IFOCUSABLE_H
+#ifndef IFOCUSLISTENER_H
+#define IFOCUSLISTENER_H
 
 enum class FocusAction { TakeIt, PassToParent };
 
-class IFocusable
+class IFocusListener
 {
 public:
     virtual void OnFocusTaken() {}
     virtual void OnFocusLost()  {}
 };
 
-#endif // IFOCUSABLE_H
+#endif // IFOCUSLISTENER_H

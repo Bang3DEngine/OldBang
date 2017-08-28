@@ -14,30 +14,31 @@ GUICanvas::~GUICanvas()
 
 void GUICanvas::OnUpdate()
 {
-    UIComponent::OnUpdate();
+    Component::OnUpdate();
 
     if (Input::GetMouseButtonDown(Input::MouseButton::Left) ||
         Input::GetMouseButtonDown(Input::MouseButton::Right) )
     {
         Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
-        UIGameObject *focusTaker = GetGameObject()->PropagateFocus(mouseCoordsNDC);
+        UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
+        UIGameObject *focusTaker = uiGo->PropagateFocus(mouseCoordsNDC);
         GiveFocusTo(focusTaker);
     }
 }
 
 void GUICanvas::CloneInto(ICloneable *clone) const
 {
-    UIComponent::CloneInto(clone);
+    Component::CloneInto(clone);
 }
 
 void GUICanvas::Read(const XMLNode &xmlInfo)
 {
-    UIComponent::Read(xmlInfo);
+    Component::Read(xmlInfo);
 }
 
 void GUICanvas::Write(XMLNode *xmlInfo) const
 {
-    UIComponent::Write(xmlInfo);
+    Component::Write(xmlInfo);
 }
 
 UIGameObject *GUICanvas::GetFocusedGameObject() const

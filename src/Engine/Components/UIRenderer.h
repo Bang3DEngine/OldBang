@@ -3,6 +3,7 @@
 
 #include "Bang/Color.h"
 #include "Bang/Renderer.h"
+#include "Bang/Component.h"
 
 class UIRenderer : public Renderer
 {

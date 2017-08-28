@@ -1,15 +1,16 @@
 #ifndef GUIBUTTON_H
 #define GUIBUTTON_H
 
-#include "Bang/UIComponent.h"
+#include "Bang/Component.h"
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIButtonTinter.h"
 
+FORWARD class UIGameObject;
 FORWARD class UIImageRenderer;
 
-class GUIButton : public UIComponent
+class GUIButton : public Component
 {
-    UICOMPONENT(GUIButton)
+    COMPONENT(GUIButton)
 
 public:
     GUIButton();
