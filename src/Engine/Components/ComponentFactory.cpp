@@ -1,18 +1,23 @@
 #include "Bang/ComponentFactory.h"
 
 #include "Bang/Light.h"
+#include "Bang/UIMask.h"
 #include "Bang/Camera.h"
 #include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/Component.h"
 #include "Bang/Behaviour.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/PointLight.h"
+#include "Bang/UIInputText.h"
 #include "Bang/AudioSource.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIBorderRect.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
 #include "Bang/UIButtonTinter.h"
@@ -31,28 +36,33 @@
 
 Component* ComponentFactory::CreateComponent(const String &componentClassName)
 {
-    CREATE_COMPONENT(componentClassName, AudioListener);
-    CREATE_COMPONENT(componentClassName, AudioSource);
-    CREATE_COMPONENT(componentClassName, Behaviour);
-    CREATE_COMPONENT(componentClassName, Camera);
-    CREATE_COMPONENT(componentClassName, CircleRenderer);
-    CREATE_COMPONENT(componentClassName, DirectionalLight);
     CREATE_COMPONENT(componentClassName, Light);
+    CREATE_COMPONENT(componentClassName, Camera);
+    CREATE_COMPONENT(componentClassName, UIMask);
+    CREATE_COMPONENT(componentClassName, Renderer);
+    CREATE_COMPONENT(componentClassName, UIButton);
+    CREATE_COMPONENT(componentClassName, UICanvas);
+    CREATE_COMPONENT(componentClassName, Behaviour);
+    CREATE_COMPONENT(componentClassName, Transform);
+    CREATE_COMPONENT(componentClassName, PointLight);
+    CREATE_COMPONENT(componentClassName, UIRenderer);
+    CREATE_COMPONENT(componentClassName, AudioSource);
+    CREATE_COMPONENT(componentClassName, UIInputText);
     CREATE_COMPONENT(componentClassName, LineRenderer);
     CREATE_COMPONENT(componentClassName, MeshRenderer);
-    CREATE_COMPONENT(componentClassName, PointLight);
-    CREATE_COMPONENT(componentClassName, PostProcessEffect);
-    CREATE_COMPONENT(componentClassName, RectTransform);
-    CREATE_COMPONENT(componentClassName, Renderer);
-    CREATE_COMPONENT(componentClassName, SingleLineRenderer);
-    CREATE_COMPONENT(componentClassName, Transform);
-    CREATE_COMPONENT(componentClassName, UIImageRenderer);
-    CREATE_COMPONENT(componentClassName, UIRenderer);
-    CREATE_COMPONENT(componentClassName, UIButton);
     CREATE_COMPONENT(componentClassName, UIBorderRect);
+    CREATE_COMPONENT(componentClassName, UIScrollArea);
+    CREATE_COMPONENT(componentClassName, UITextCursor);
+    CREATE_COMPONENT(componentClassName, AudioListener);
+    CREATE_COMPONENT(componentClassName, RectTransform);
+    CREATE_COMPONENT(componentClassName, CircleRenderer);
     CREATE_COMPONENT(componentClassName, UIButtonTinter);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
+    CREATE_COMPONENT(componentClassName, UIImageRenderer);
+    CREATE_COMPONENT(componentClassName, DirectionalLight);
     CREATE_COMPONENT(componentClassName, UIVerticalLayout);
+    CREATE_COMPONENT(componentClassName, PostProcessEffect);
+    CREATE_COMPONENT(componentClassName, SingleLineRenderer);
     CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
 
     Debug_Error("Please register class '" << componentClassName << "' in "

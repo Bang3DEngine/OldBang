@@ -14,12 +14,10 @@ class UIGameObject : public GameObject,
     UIGAMEOBJECT(UIGameObject)
 
 public:
-    UIGameObject(const String& name = "UIGameObject");
-
-    RectTransform *const& rectTransform = m_rectTransform;
-
     bool IsMouseOver() const;
     bool HasFocus() const;
+
+    RectTransform* GetRectTransform() const;
 
     void SetDefaultFocusAction(FocusAction focusAction);
 
@@ -28,17 +26,23 @@ protected:
 
 private:
     FocusAction m_defaultFocusAction = FocusAction::PassToParent;
-    RectTransform *m_rectTransform = nullptr;
     bool m_hasFocus = false;
 
     UIGameObject* ReceiveFocus();
     UIGameObject* PropagateFocus(const Vector2 &mouseCoordsNDC);
 
+    UIGameObject(const String& name = "UIGameObject");
+
     // IFocusable
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;
 
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
+
     friend class UICanvas;
+    friend class GameObjectFactory;
 };
 
 #endif // UIGAMEOBJECT_H

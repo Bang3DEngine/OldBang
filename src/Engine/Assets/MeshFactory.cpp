@@ -2,10 +2,11 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/Resources.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/GameObjectFactory.h"
 
 Mesh* MeshFactory::GetPlane()
 {
@@ -36,7 +37,8 @@ MeshFactory::MeshFactory() {}
 
 GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
 {
-    GameObject *go = new GameObject(name);
+    GameObject *go = GameObjectFactory::CreateGameObject(true);
+    go->SetName(name);
 
     Material *mat = MaterialFactory::GetDefault();
     MeshRenderer *r = go->AddComponent<MeshRenderer>();

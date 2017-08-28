@@ -2,23 +2,28 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/XMLNode.h"
 #include "Bang/Component.h"
 #include "Bang/RectTransform.h"
 
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
 {
-    m_rectTransform = AddComponent<RectTransform>();
 }
 
 bool UIGameObject::IsMouseOver() const
 {
     Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
-    return rectTransform->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC);
+    return GetRectTransform()->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC);
 }
 
 bool UIGameObject::HasFocus() const
 {
     return m_hasFocus;
+}
+
+RectTransform *UIGameObject::GetRectTransform() const
+{
+    return transform ? DCAST<RectTransform*>(transform) : nullptr;
 }
 
 void UIGameObject::SetDefaultFocusAction(FocusAction defaultFocusAction)
@@ -52,7 +57,7 @@ UIGameObject* UIGameObject::PropagateFocus(const Vector2 &mouseCoordsNDC)
         UIGameObject *uiChild = DCAST<UIGameObject*>(child);
         if (!uiChild) { continue; }
 
-        Rect ndcRect = uiChild->rectTransform->GetScreenSpaceRectNDC();
+        Rect ndcRect = uiChild->GetRectTransform()->GetScreenSpaceRectNDC();
         if (ndcRect.Contains(mouseCoordsNDC))
         {
             return uiChild->PropagateFocus(mouseCoordsNDC);
@@ -85,5 +90,21 @@ void UIGameObject::OnFocusLost()
     {
         focusListener->OnFocusLost();
     }
+}
+
+void UIGameObject::Read(const XMLNode &xmlInfo)
+{
+    GameObject::Read(xmlInfo);
+
+    if (xmlInfo.Contains("FocusAction"))
+    { SetDefaultFocusAction( xmlInfo.Get<FocusAction>("FocusAction") ); }
+}
+
+void UIGameObject::Write(XMLNode *xmlInfo) const
+{
+    GameObject::Write(xmlInfo);
+    xmlInfo->SetTagName(UIGameObject::GetClassNameStatic());
+
+    xmlInfo->Set("FocusAction", m_defaultFocusAction);
 }
 

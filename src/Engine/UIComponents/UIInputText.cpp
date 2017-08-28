@@ -42,7 +42,7 @@ void UIInputText::OnUpdate()
 void UIInputText::UpdateCursorRenderersAndScrolling()
 {
     UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
-    Rect limits = uiGo->rectTransform->GetScreenSpaceRectNDC();
+    Rect limits = uiGo->GetRectTransform()->GetScreenSpaceRectNDC();
 
     Vector2i prevScrolling = p_boxScrollArea->GetScrolling();
     p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
@@ -54,7 +54,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             Vector2 minPoint(cursorX, -1);
             Vector2 maxPoint(cursorX,  1);
             const Vector2 cursorSize =
-              p_label->rectTransform->FromPixelsAmountToLocalNDC(Vector2i(3,0));
+              p_label->GetRectTransform()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
             p_cursor->gameObject->GetComponent<RectTransform>()
                     ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
         }
@@ -65,18 +65,18 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
             Vector2 p1(cursorX,    limits.GetMin().y);
             Vector2 p2(selectionX, limits.GetMax().y);
-            p1 = p_label->rectTransform->FromGlobalNDCToLocalNDC(p1);
-            p2 = p_label->rectTransform->FromGlobalNDCToLocalNDC(p2);
+            p1 = p_label->GetRectTransform()->FromGlobalNDCToLocalNDC(p1);
+            p2 = p_label->GetRectTransform()->FromGlobalNDCToLocalNDC(p2);
 
-            p_selectionQuad->rectTransform->SetAnchorMin( Vector2::Min(p1, p2) );
-            p_selectionQuad->rectTransform->SetAnchorMax( Vector2::Max(p1, p2) );
+            p_selectionQuad->GetRectTransform()->SetAnchorMin( Vector2::Min(p1, p2) );
+            p_selectionQuad->GetRectTransform()->SetAnchorMax( Vector2::Max(p1, p2) );
         }
     }
 
     // Text Scrolling
     {
         Vector2 scrollNDC = Vector2::Zero;
-        Rect labelLimits = p_label->rectTransform->GetScreenSpaceRectNDC();
+        Rect labelLimits = p_label->GetRectTransform()->GetScreenSpaceRectNDC();
         Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
         if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
             m_cursorIndex == 0)
@@ -188,7 +188,7 @@ void UIInputText::HandleCursorIndices(bool wasSelecting)
 
 float UIInputText::GetCursorXGlobalNDC(int cursorIndex) const
 {
-    return p_label->rectTransform->FromLocalNDCToGlobalNDC(
+    return p_label->GetRectTransform()->FromLocalNDCToGlobalNDC(
                             Vector2(GetCursorXLocalNDC(cursorIndex), 0) ).x;
 }
 
@@ -244,7 +244,7 @@ void UIInputText::HandleMouseSelection()
         float minDist = Math::Infinity<float>();
         int closestCharRectIndex = 0;
         float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-        mouseCoordsX_NDC = p_label->rectTransform->FromGlobalNDCToLocalNDC(
+        mouseCoordsX_NDC = p_label->GetRectTransform()->FromGlobalNDCToLocalNDC(
                                         Vector2(mouseCoordsX_NDC) ).x;
 
         const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
@@ -357,7 +357,7 @@ bool UIInputText::IsShiftPressed() const
 
 UIGameObject *UIInputText::CreateGameObject()
 {
-    UIGameObject *go = new UIGameObject();
+    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
     go->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIImageRenderer *imgRenderer = go->AddComponent<UIImageRenderer>();
@@ -368,14 +368,16 @@ UIGameObject *UIInputText::CreateGameObject()
     label->SetName("GUIInputText_Label");
     label->SetParent(go);
 
-    UIGameObject *selectionQuad = new UIGameObject("GUIInputText_SelectionQuad");
+    UIGameObject *selectionQuad = GameObjectFactory::CreateUIGameObject(true);
+    selectionQuad->SetName("GUIInputText_SelectionQuad");
     selectionQuad->SetParent(label, 0);
 
     UIGameObject *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
     boxScrollArea->SetName("GUIInputText_BoxMask");
     boxScrollArea->SetParent(go);
 
-    UIGameObject *cursor = new UIGameObject("GUIInputText_GUITextCursor");
+    UIGameObject *cursor = GameObjectFactory::CreateUIGameObject(true);
+    cursor->SetName("GUIInputText_GUITextCursor");
     cursor->AddComponent<UITextCursor>();
     cursor->SetParent(label);
 
@@ -393,7 +395,7 @@ void UIInputText::InitGameObject()
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
     p_label->GetComponentInChildren<UIMask>()->SetMasking(false);
-    p_label->rectTransform->SetMargins(5, 2, 5, 2);
+    p_label->GetRectTransform()->SetMargins(5, 2, 5, 2);
 
     UIImageRenderer *selectionImg =
             p_selectionQuad->AddComponent<UIImageRenderer>();
@@ -414,6 +416,7 @@ void UIInputText::InitGameObject()
     GetBackground()->SetTint(Color::White);
     GetText()->RefreshMesh();
     UpdateCursorRenderersAndScrolling();
+    RetrieveReferences();
 }
 
 float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
@@ -436,7 +439,7 @@ float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
 
     // In case we are at the beginning or at the end of the text
     UIGameObject *uiGo = SCAST<UIGameObject*>(p_boxScrollArea->GetGameObject());
-    RectTransform *contRT = uiGo->rectTransform;
+    RectTransform *contRT = uiGo->GetRectTransform();
     if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
     {
         if (cursorIndex == 0)

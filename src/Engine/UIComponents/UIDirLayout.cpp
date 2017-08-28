@@ -95,6 +95,7 @@ void UIDirLayout::Read(const XMLNode &xmlInfo)
         SetStretch(i, xmlInfo.Get<float>("Stretch" + String(i)));
         ++i;
     }
+    Debug_Log("STRETCHES: " << m_stretches);
 }
 
 void UIDirLayout::Write(XMLNode *xmlInfo) const

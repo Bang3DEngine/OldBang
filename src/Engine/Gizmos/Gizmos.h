@@ -10,7 +10,7 @@ FORWARD   class MeshRenderer;
 FORWARD   class CircleRenderer;
 FORWARD   class SingleLineRenderer;
 
-class Gizmos : public GameObject
+class Gizmos
 {
 public:
     static void SetColor(const Color &color);
@@ -51,6 +51,8 @@ public:
     static void Render(Renderer *rend);
 
 private:
+    GameObject *m_gizmosGo = nullptr;
+
     Mesh *m_boxMesh      = nullptr;
     Mesh *m_sphereMesh   = nullptr;
     Mesh *m_planeMesh    = nullptr;
@@ -68,6 +70,7 @@ private:
     void SetResetAllowed(bool allowed);
     void Reset();
 
+    static GameObject *GetGizmosGameObject();
     static Gizmos *GetInstance();
 
     friend class Scene;

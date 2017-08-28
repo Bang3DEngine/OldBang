@@ -18,7 +18,7 @@ public:
     Map();
     Map(const std::map<Key, Value> &m);
 
-    void Add(const Key &key, const Value &value);
+    void Add(const Key &key, const Value &value = Value());
 
     void Remove(const Key &key);
     Iterator Remove(Iterator it);
@@ -48,10 +48,12 @@ public:
     Iterator End();
     Const_Iterator Begin() const;
     Const_Iterator End() const;
+    Const_Iterator CBegin() const;
+    Const_Iterator CEnd() const;
     RIterator RBegin();
     RIterator REnd();
-    Const_RIterator RBegin() const;
-    Const_RIterator REnd() const;
+    Const_RIterator CRBegin() const;
+    Const_RIterator CREnd() const;
 
     // To allow range-based for loops
     Iterator begin();

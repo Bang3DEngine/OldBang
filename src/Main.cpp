@@ -62,17 +62,14 @@ int main(int argc, char **argv)
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
-class Menu : public UIGameObject
+class Menu : public Component
 {
 public:
-    Menu()
-    {
-        AddComponent<UIHorizontalLayout>();
-    }
+    Menu() { }
 
     void OnUpdate() override
     {
-        UIGameObject::OnUpdate();
+        Component::OnUpdate();
 
         GameObject *nameGo = GameObject::Find("nameGameObject");
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
@@ -83,7 +80,8 @@ public:
         resultGo->GetComponentInChildren<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
 
         UIScrollArea *scrollArea = SCAST<UIScrollArea*>(
-                 FindInChildren("ScrollArea")->GetComponent<UIScrollArea>() );
+             gameObject->FindInChildren("ScrollArea")
+                    ->GetComponent<UIScrollArea>() );
         Vector2i scroll = scrollArea->GetScrolling();
         if (Input::GetKeyDownRepeat(Input::Key::Left)) {
             scrollArea->SetScrolling(scroll + Vector2i::Left); }
@@ -103,10 +101,38 @@ int main(int argc, char **argv)
     Application app(argc, argv);
     app.CreateWindow();
 
+    /*
+    Scene *scene = new Scene();
+    UIGameObject *canvas = GameObjectFactory::CreateUIGameObject(true);
+    canvas->AddComponent<UICanvas>();
+    UIImageRenderer *bg = canvas->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::Green);
+    canvas->SetParent(scene);
+    UIGameObject *vLayout = GameObjectFactory::CreateUIGameObject();
+    UIVerticalLayout *vlComp = vLayout->AddComponent<UIVerticalLayout>();
+
+    UIGameObject *labelGo = GameObjectFactory::CreateUIGameObject();
+    labelGo->GetRectTransform()->SetAnchors(Vector2(-0.5), Vector2(0.5));
+    UITextRenderer *text = labelGo->AddComponent<UITextRenderer>();
+    text->SetContent("Hola");
+    labelGo->SetParent(vLayout);
+
+    UIGameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
+    UIInputText *inputTextComp = inputTextGo->GetComponent<UIInputText>();
+    inputTextComp->GetText()->SetContent("Test 1234");
+    inputTextGo->SetParent(vLayout);
+
+    vLayout->SetParent(canvas);
+    SceneManager::LoadScene(scene);
+    scene->WriteToFile( EPATH("tmp/TestSimple.bscene") );
+    SceneManager::LoadScene( EPATH("tmp/TestSimple.bscene") );
+    */
+
     //*
     Scene *scene = new Scene();
 
-    UIGameObject *rightImg = new UIGameObject();
+    UIGameObject *rightImg = GameObjectFactory::CreateUIGameObject(true);
+    rightImg->SetName("RightImage");
     rightImg->AddComponent<UIImageRenderer>()->SetTexture( EPATH("tmp/test.png") );
     UIGameObject *rightLabel = GameObjectFactory::CreateGUILabel(
                                         "Lorem ipsum dolor sit amet. El veloz "
@@ -127,9 +153,9 @@ int main(int argc, char **argv)
     rightLabel->GetComponentInChildren<UITextRenderer>()->SetVerticalAlign(VerticalAlignment::Center);
     rightLabel->GetComponentInChildren<UITextRenderer>()->SetWrapping(true);
 
-    UIGameObject *rightVLayout = new UIGameObject();
+    UIGameObject *rightVLayout = GameObjectFactory::CreateUIGameObject(true);
     rightVLayout->AddComponent<UIVerticalLayout>();
-    rightVLayout->rectTransform->SetMargins(50, 10, 10, 10);
+    rightVLayout->GetRectTransform()->SetMargins(50, 10, 10, 10);
     rightImg->SetParent(rightVLayout);
     rightScrollArea->SetParent(rightVLayout);
 
@@ -148,7 +174,7 @@ int main(int argc, char **argv)
     UIGameObject *nameInput = GameObjectFactory::CreateGUIInputText();
     nameInput->SetName("nameGameObject");
     nameInput->GetComponent<UIInputText>()->GetText()->SetContent("Your name here...");
-    UIGameObject *nameSubHLayout = new UIGameObject();
+    UIGameObject *nameSubHLayout = GameObjectFactory::CreateUIGameObject(true);
     nameSubHLayout->AddComponent<UIHorizontalLayout>();
     nameLabel->SetParent(nameSubHLayout);
     nameInput->SetParent(nameSubHLayout);
@@ -159,12 +185,12 @@ int main(int argc, char **argv)
     UIGameObject *surnameInput = GameObjectFactory::CreateGUIInputText();
     surnameInput->SetName("surnameGameObject");
     surnameInput->GetComponent<UIInputText>()->GetText()->SetContent("Your surname here...");
-    UIGameObject *surnameSubHLayout = new UIGameObject();
+    UIGameObject *surnameSubHLayout = GameObjectFactory::CreateUIGameObject(true);
     surnameSubHLayout->AddComponent<UIHorizontalLayout>();
     surnameLabel->SetParent(surnameSubHLayout);
     surnameInput->SetParent(surnameSubHLayout);
 
-    UIGameObject *nameVLayout = new UIGameObject();
+    UIGameObject *nameVLayout = GameObjectFactory::CreateUIGameObject(true);
     nameVLayout->AddComponent<UIVerticalLayout>();
     nameSubHLayout->SetParent(nameVLayout);
     surnameSubHLayout->SetParent(nameVLayout);
@@ -173,14 +199,14 @@ int main(int argc, char **argv)
     namesResult->SetName("resultGameObject");
     namesResult->GetComponentInChildren<UITextRenderer>()->SetWrapping(false);
 
-    UIGameObject *namesVLayout = new UIGameObject();
+    UIGameObject *namesVLayout = GameObjectFactory::CreateUIGameObject(true);
     namesVLayout->AddComponent<UIVerticalLayout>();
     UIImageRenderer *img4 = namesVLayout->AddComponent<UIImageRenderer>(0);
     img4->SetTint(Color::LightGray);
     nameVLayout->SetParent(namesVLayout);
     namesResult->SetParent(namesVLayout);
 
-    UIGameObject *buttonPlayMask = new UIGameObject();
+    UIGameObject *buttonPlayMask = GameObjectFactory::CreateUIGameObject(true);
     buttonPlayMask->AddComponent<UIMask>();
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
     maskImg->SetTexture(
@@ -188,18 +214,18 @@ int main(int argc, char **argv)
     buttonPlay->GetGameObject()->GetComponent<RectTransform>()->SetMargins(10);
     buttonPlay->GetGameObject()->SetParent(buttonPlayMask);
 
-    UIGameObject *uiVContainer = new UIGameObject();
-    uiVContainer->rectTransform->SetMargins(20);
+    UIGameObject *uiVContainer = GameObjectFactory::CreateUIGameObject(true);
+    uiVContainer->GetRectTransform()->SetMargins(20);
     UIImageRenderer *uiImg = uiVContainer->AddComponent<UIImageRenderer>(0);
     uiImg->SetTint(Color::Red);
 
-    UIGameObject *leftMask = new UIGameObject();
+    UIGameObject *leftMask = GameObjectFactory::CreateUIGameObject(true);
     leftMask->AddComponent<UIMask>();
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
     img->SetTexture( new Texture2D( EPATH("tmp/test2.png") ) );
-    UIGameObject *menuVLayout = new UIGameObject();
+    UIGameObject *menuVLayout = GameObjectFactory::CreateUIGameObject(true);
     menuVLayout->AddComponent<UIVerticalLayout>();
-    menuVLayout->rectTransform->SetMargins(30);
+    menuVLayout->GetRectTransform()->SetMargins(30);
     menuVLayout->GetComponent<UIVerticalLayout>()->SetSpacing(10);
     buttonPlayMask->SetParent(menuVLayout);
     buttonPause->GetGameObject()->SetParent(menuVLayout);
@@ -223,7 +249,9 @@ int main(int argc, char **argv)
     nameInput->GetComponent<UIInputText>()->GetText()->SetTextSize(s);
     surnameInput->GetComponent<UIInputText>()->GetText()->SetTextSize(s);
 
-    Menu *mainHLayout = new Menu();
+    UIGameObject *mainHLayout = GameObjectFactory::CreateUIGameObject(true);
+    mainHLayout->AddComponent<Menu>();
+    mainHLayout->AddComponent<UIHorizontalLayout>();
     mainHLayout->GetComponent<UIDirLayout>()->SetSpacing(0);
     rightVLayout->SetParent(mainHLayout);
     uiVContainer->SetParent(mainHLayout, 0);
@@ -231,7 +259,7 @@ int main(int argc, char **argv)
     mainHLayout->GetComponent<UIDirLayout>()->SetStretch(0, 0.6f);
     mainHLayout->GetComponent<UIDirLayout>()->SetStretch(1, 0.4f);
 
-    UIGameObject *canvas = new UIGameObject();
+    UIGameObject *canvas = GameObjectFactory::CreateUIGameObject(true);
     canvas->AddComponent<UICanvas>();
     mainHLayout->SetParent(canvas);
     canvas->SetParent(scene);
@@ -280,7 +308,7 @@ int main(int argc, char **argv)
 
     SceneManager::LoadScene(scene);
     scene->WriteToFile( EPATH("tmp/Test.bscene") );
-    /*/
+    //*/
     SceneManager::LoadScene( EPATH("tmp/Test.bscene") );
     //*/
     app.MainLoop();

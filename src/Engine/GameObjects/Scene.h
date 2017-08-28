@@ -33,18 +33,14 @@ public:
 
 protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;
-    List<GameObject*> m_hiddenGameObjects;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
     // GameObject
-    virtual void Start () override;
-    virtual void Update () override;
     virtual void RenderGizmos() override;
     virtual void _OnResize (int newWidth, int newHeight);
 
-    void AddHiddenChild(GameObject *go);
     void DestroyQueuedGameObjects();
 
     Gizmos *GetGizmos() const;

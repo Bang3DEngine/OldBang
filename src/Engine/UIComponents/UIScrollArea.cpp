@@ -3,6 +3,7 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 UIScrollArea::UIScrollArea() noexcept
 {
@@ -58,20 +59,21 @@ void UIScrollArea::UpdateChildrenMargins()
     int marginTop   = -GetScrolling().y;
     int marginBot   =  GetScrolling().y;
 
-    p_childrenContainer->rectTransform->SetMargins(marginLeft, marginTop,
+    p_childrenContainer->GetRectTransform()->SetMargins(marginLeft, marginTop,
                                                    marginRight, marginBot);
 }
 
 UIGameObject *UIScrollArea::CreateGameObject()
 {
-    UIGameObject *go = new UIGameObject();
+    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
 
-    UIGameObject *mask = new UIGameObject();
+    UIGameObject *mask = GameObjectFactory::CreateUIGameObject(true);
     mask->AddComponent<UIMask>();
     mask->SetName("Mask");
     mask->SetParent(go);
 
-    UIGameObject *childrenCont = new UIGameObject("ChildrenContainer");
+    UIGameObject *childrenCont = GameObjectFactory::CreateUIGameObject(true);
+    childrenCont->SetName("ChildrenContainer");
     childrenCont->SetParent(mask);
 
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
@@ -94,4 +96,5 @@ void UIScrollArea::InitGameObject()
     p_mask->SetDrawMask(false);
     UIImageRenderer *quad = p_mask->GetGameObject()->AddComponent<UIImageRenderer>();
     quad->SetTint(Color::White);
+    RetrieveReferences();
 }

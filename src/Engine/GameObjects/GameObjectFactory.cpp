@@ -3,7 +3,7 @@
 #include "Bang/UIMask.h"
 #include "Bang/Material.h"
 #include "Bang/UIButton.h"
-#include "Bang/UICanvas.h"
+#include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIBorderRect.h"
@@ -20,15 +20,29 @@ GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
 {
     if (gameObjectClassName == GameObject::GetClassNameStatic())
     {
-        return new GameObject();
+        return GameObjectFactory::CreateGameObject(false);
     }
-    return new UIGameObject();
+    return GameObjectFactory::CreateUIGameObject(false);
 }
 
 bool GameObjectFactory::ExistsGameObjectClass(const String &gameObjectClassName)
 {
     return gameObjectClassName == GameObject::GetClassNameStatic() ||
            gameObjectClassName == UIGameObject::GetClassNameStatic();
+}
+
+GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
+{
+    GameObject *go = new GameObject();
+    if (addTransform) { go->AddComponent<Transform>(); }
+    return go;
+}
+
+UIGameObject *GameObjectFactory::CreateUIGameObject(bool addRectTransform)
+{
+    UIGameObject *go = new UIGameObject();
+    if (addRectTransform) { go->AddComponent<RectTransform>(); }
+    return go;
 }
 
 UIGameObject *GameObjectFactory::CreateGUIInputText()
@@ -38,9 +52,11 @@ UIGameObject *GameObjectFactory::CreateGUIInputText()
 
 UIGameObject *GameObjectFactory::CreateGUIButton()
 {
-    UIGameObject *go = new UIGameObject("GUIButton");
+    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    go->SetName("GUIButton");
 
-    UIGameObject *bg = new UIGameObject("GUIButton_Background");
+    UIGameObject *bg = GameObjectFactory::CreateUIGameObject(true);
+    bg->SetName("GUIButton_Background");
     UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
     bg->SetParent(go);
@@ -76,15 +92,17 @@ UIGameObject *GameObjectFactory::CreateGUIButton()
 
 UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
 {
-    UIGameObject *label = new UIGameObject("GUILabel");
+    UIGameObject *label = GameObjectFactory::CreateUIGameObject(true);
+    label->SetName("GUILabel");
 
-    UIGameObject *mask = new UIGameObject();
+    UIGameObject *mask = GameObjectFactory::CreateUIGameObject(true);
     mask->SetName("Mask");
     mask->AddComponent<UIMask>();
     mask->AddComponent<UIImageRenderer>(); // Quad mask
     mask->SetParent(label);
 
-    UIGameObject *textContainer = new UIGameObject("TextContainer");
+    UIGameObject *textContainer = GameObjectFactory::CreateUIGameObject(true);
+    textContainer->SetName("TextContainer");
     textContainer->SetParent(mask);
 
     UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();

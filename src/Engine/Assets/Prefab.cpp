@@ -4,6 +4,7 @@
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/GameObjectFactory.h"
 
 Prefab::Prefab()
 {
@@ -50,7 +51,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     {
         XMLNode xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
 
-        GameObject *go = new GameObject();
+        GameObject *go = GameObjectFactory::CreateGameObject(false);
         go->Read(xmlInfo);
         go->SetEnabled(true);
         return go;

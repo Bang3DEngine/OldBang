@@ -5,6 +5,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Paths.h"
+#include "Bang/TypeMap.h"
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
 #include "Bang/ImportFilesManager.h"
@@ -16,80 +17,38 @@ public:
     Resources();
     virtual ~Resources();
 
-    static void Add(const GUID& id, Resource *x);
+    template <class ResourceClass>
+    static void Add(const GUID& guid, Resource *x);
 
-    template <class ResourceSubClass>
-    static TT_SUBCLASS(ResourceSubClass, Resource)*
-    Load(const Path &filepath)
-    {
-        if (!filepath.IsFile()) { return nullptr; }
+    template <class ResourceClass>
+    static TT_SUBCLASS(ResourceClass, Resource)* Load(const Path &filepath);
 
-        Resource *res = Resources::GetCached<ResourceSubClass>(
-                    ImportFilesManager::GetGUIDFromFilepath(filepath) );
-        Debug_Log("Load filepath: " << filepath << ", res: " << res);
-        if (!res)
-        {
-            res = new ResourceSubClass();
-            res->Import(filepath);
+    template <class ResourceClass>
+    static ResourceClass* Load(const String &filepath);
 
-            Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);
-            res->ReadFromFile(importFilepath);
-            if (res->GetGUID().IsEmpty())
-            {
-                res->SetGUID( GUIDManager::GetNewGUID() );
-            }
-            Resources::Add(res->GetGUID(), res);
-        }
-        Debug_Log("Returning resource " << filepath << ": " << res->GetGUID());
-        return DCAST<ResourceSubClass*>(res);
-    }
+    template <class ResourceClass>
+    static ResourceClass* Load(const GUID &guid);
 
-    template <class T>
-    static T* Load(const String &filepath) { return Load<T>(PPATH(filepath)); }
-
-    template <class T>
-    static T* Load(const GUID &guid)
-    {
-        if (guid.IsEmpty()) { return nullptr; }
-
-        if (!Resources::Contains(guid))
-        {
-            Debug_Log(guid << ": " << ImportFilesManager::GetFilepath(guid));
-            Resources::Load<T>( ImportFilesManager::GetFilepath(guid) );
-        }
-        return Resources::GetCached<T>(guid);
-    }
-
-    template <class T>
-    static Array<T*> GetAll()
-    {
-        Array<T*> result;
-        Resources *rs =  Resources::GetInstance();
-        for (auto &itPair : rs->m_GUIDToResource)
-        {
-            T *resourceT = DCAST<T*>(itPair.second);
-            if (resourceT) { result.PushBack(resourceT); }
-        }
-        return result;
-    }
+    template <class ResourceClass>
+    static Array<ResourceClass*> GetAll();
+    static Array<Resource*> GetAllResources();
 
     static void UnLoad(const GUID &guid, bool deleteResource = false);
     static void UnLoad(Resource *res, bool deleteResource = false);
 
 private:
-    Map<GUID, Resource*> m_GUIDToResource;
+    using GUIDToResourceMap = Map<GUID, Resource*>;
+    TypeMap<GUIDToResourceMap> m_GUIDToResource;
 
+    template<class ResourceClass>
     static bool Contains(const GUID &guid);
 
-    template<class T>
-    static T* GetCached(const GUID &guid)
-    {
-        Resource *res = GetCached(guid);
-        return res ? DCAST<T*>(res) : nullptr;
-    }
+    template<class ResourceClass>
+    static ResourceClass* GetCached(const GUID &guid);
 
-    static Resource* GetCached(const GUID &guid);
     static Resources* GetInstance();
 };
+
+#include "Resources.tcc"
 
 #endif // RESOURCES_H

@@ -71,7 +71,7 @@ bool Map<Key,Value>::IsEmpty() const
 template<class Key, class Value>
 bool Map<Key,Value>::ContainsKey(const Key &key) const
 {
-    return Find(key) != End();
+    return Find(key) != CEnd();
 }
 
 template<class Key, class Value>
@@ -141,16 +141,24 @@ typename Map<Key,Value>::Iterator
 Map<Key,Value>::Begin() { return m_map.begin(); }
 
 template<class Key, class Value>
+typename Map<Key,Value>::Const_Iterator
+Map<Key,Value>::Begin() const { return CBegin(); }
+
+template<class Key, class Value>
+typename Map<Key,Value>::Const_Iterator
+Map<Key,Value>::CBegin() const { return m_map.cbegin(); }
+
+template<class Key, class Value>
 typename Map<Key,Value>::Iterator
 Map<Key,Value>::End() { return m_map.end(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Const_Iterator
-Map<Key,Value>::Begin() const { return m_map.cbegin(); }
+Map<Key,Value>::End() const { return CEnd(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Const_Iterator
-Map<Key,Value>::End() const { return m_map.cend(); }
+Map<Key,Value>::CEnd() const { return m_map.cend(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::RIterator
@@ -162,11 +170,11 @@ Map<Key,Value>::REnd() { return m_map.rend(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Const_RIterator
-Map<Key,Value>::RBegin() const { return m_map.crbegin(); }
+Map<Key,Value>::CRBegin() const { return m_map.crbegin(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Const_RIterator
-Map<Key,Value>::REnd() const { return m_map.crend(); }
+Map<Key,Value>::CREnd() const { return m_map.crend(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Iterator

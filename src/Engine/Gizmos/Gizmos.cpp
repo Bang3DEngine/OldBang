@@ -24,10 +24,13 @@
 #include "Bang/CircleRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/SingleLineRenderer.h"
 
-Gizmos::Gizmos() : GameObject("GizmosGameObject")
+Gizmos::Gizmos()
 {
+    m_gizmosGo = GameObjectFactory::CreateGameObject(true);
+
     m_boxMesh    = MeshFactory::GetCube();
     m_planeMesh  = MeshFactory::GetPlane();
     m_sphereMesh = MeshFactory::GetSphere();
@@ -35,10 +38,10 @@ Gizmos::Gizmos() : GameObject("GizmosGameObject")
     m_material   = new Material();
     MaterialFactory::GetDefaultUnLighted()->CloneInto(m_material);
 
-    m_singleLineRenderer = AddComponent<SingleLineRenderer>();
-    m_circleRenderer     = AddComponent<CircleRenderer>();
-    m_meshRenderer       = AddComponent<MeshRenderer>();
-    m_renderers          = GetComponents<Renderer>();
+    m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
+    m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();
+    m_meshRenderer       = m_gizmosGo->AddComponent<MeshRenderer>();
+    m_renderers          = m_gizmosGo->GetComponents<Renderer>();
 
     for (Renderer *rend : m_renderers)
     {
@@ -46,7 +49,7 @@ Gizmos::Gizmos() : GameObject("GizmosGameObject")
         rend->SetRenderPass(RenderPass::Gizmos);
     }
 
-    GetHideFlags().SetOn(HideFlag::DontSave);
+    m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSave);
 }
 
 void Gizmos::SetResetAllowed(bool allowed)
@@ -63,19 +66,19 @@ void Gizmos::SetColor(const Color &color)
 void Gizmos::SetPosition(const Vector3 &position)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->transform->SetLocalPosition(position);
+    g->m_gizmosGo->transform->SetLocalPosition(position);
 }
 
 void Gizmos::SetRotation(const Quaternion &rotation)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->transform->SetLocalRotation(rotation);
+    g->m_gizmosGo->transform->SetLocalRotation(rotation);
 }
 
 void Gizmos::SetScale(const Vector3 &scale)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->transform->SetLocalScale(scale);
+    g->m_gizmosGo->transform->SetLocalScale(scale);
 }
 
 void Gizmos::SetLineWidth(float lineWidth)
@@ -111,7 +114,8 @@ void Gizmos::SetBillboard()
     Gizmos *g = Gizmos::GetInstance();
     Scene *scene = SceneManager::GetActiveScene();
     GameObject *cam = scene->GetCamera()->gameObject;
-    Vector3 lookDir = (cam->transform->GetPosition() - g->transform->GetPosition());
+    Vector3 lookDir = (cam->transform->GetPosition() -
+                       g->m_gizmosGo->transform->GetPosition());
     lookDir.Normalize();
     Gizmos::SetRotation( Quaternion::LookDirection(lookDir) );
 }
@@ -128,7 +132,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 void Gizmos::RenderSimpleBox(const AABox &b)
 {
     Gizmos *g = Gizmos::GetInstance();
-    const Quaternion &r = g->transform->GetLocalRotation();
+    const Quaternion &r = g->m_gizmosGo->transform->GetLocalRotation();
     const Vector3& bMin = b.GetMin();
     const Vector3& bMax = b.GetMax();
 
@@ -158,8 +162,9 @@ void Gizmos::RenderBox(const AABox &b)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->m_boxMesh);
-    g->transform->SetPosition(b.GetCenter());
-    g->transform->SetScale(g->transform->GetScale() * b.GetDimensions());
+    g->m_gizmosGo->transform->SetPosition(b.GetCenter());
+    g->m_gizmosGo->transform->SetScale(g->m_gizmosGo->transform->GetScale() *
+                                       b.GetDimensions());
     g->Render(g->m_meshRenderer);
     g->Reset();
 }
@@ -213,14 +218,14 @@ void Gizmos::RenderIcon(const Texture2D *texture,
         float distScale = 1.0f;
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
-           Vector3 pos = g->transform->GetPosition();
+           Vector3 pos = g->m_gizmosGo->transform->GetPosition();
            distScale = Vector3::Distance(camPos, pos);
         }
-        Vector3 scale = g->transform->GetScale();
-        g->transform->SetScale(distScale * scale * 8.0f);
+        Vector3 scale = g->m_gizmosGo->transform->GetScale();
+        g->m_gizmosGo->transform->SetScale(distScale * scale * 8.0f);
 
-        g->transform->LookInDirection(cam->transform->GetForward(),
-                                        cam->transform->GetUp());
+        g->m_gizmosGo->transform->LookInDirection(cam->transform->GetForward(),
+                                                  cam->transform->GetUp());
     }
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
     g->Render(g->m_meshRenderer);
@@ -253,8 +258,8 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->m_singleLineRenderer->SetOrigin(origin);
     g->m_singleLineRenderer->SetDestiny(destiny);
 
-    g->transform->SetPosition(Vector3::Zero);
-    g->transform->SetScale(Vector3::One);
+    g->m_gizmosGo->transform->SetPosition(Vector3::Zero);
+    g->m_gizmosGo->transform->SetScale(Vector3::One);
 
     g->Render(g->m_singleLineRenderer);
     g->Reset();
@@ -266,8 +271,8 @@ void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
     g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
     g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
 
-    g->transform->SetPosition(Vector3::Zero);
-    g->transform->SetScale(Vector3::One);
+    g->m_gizmosGo->transform->SetPosition(Vector3::Zero);
+    g->m_gizmosGo->transform->SetScale(Vector3::One);
 
     g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_singleLineRenderer);
@@ -285,8 +290,8 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->m_sphereMesh);
-    g->transform->SetPosition(origin);
-    g->transform->SetScale(radius);
+    g->m_gizmosGo->transform->SetPosition(origin);
+    g->m_gizmosGo->transform->SetScale(radius);
     g->Render(g->m_meshRenderer);
     g->Reset();
 }
@@ -351,13 +356,13 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin,
     Gizmos *g = Gizmos::GetInstance();
     g->m_circleRenderer->SetRadius(radius);
 
-    g->transform->SetPosition(origin);
+    g->m_gizmosGo->transform->SetPosition(origin);
 
-    g->transform->SetLocalEuler(0, 0, 0);
+    g->m_gizmosGo->transform->SetLocalEuler(0, 0, 0);
     g->Render(g->m_circleRenderer);
-    g->transform->SetLocalEuler(0, 90, 0);
+    g->m_gizmosGo->transform->SetLocalEuler(0, 90, 0);
     g->Render(g->m_circleRenderer);
-    g->transform->SetLocalEuler(90, 0, 0);
+    g->m_gizmosGo->transform->SetLocalEuler(90, 0, 0);
     Render(g->m_circleRenderer);
 
     g->Reset();
@@ -376,7 +381,7 @@ void Gizmos::Reset()
     SetReceivesLighting(false);
     SetRenderWireframe(false);
 
-    List<Renderer*> rends = g->GetComponents<Renderer>();
+    List<Renderer*> rends = g->m_gizmosGo->GetComponents<Renderer>();
     for (Renderer *rend : rends)
     {
         rend->SetViewProjMode(GL::ViewProjMode::UseBoth);
@@ -385,16 +390,19 @@ void Gizmos::Reset()
     g->m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }
 
+GameObject *Gizmos::GetGizmosGameObject()
+{
+    return Gizmos::GetInstance()->m_gizmosGo;
+}
+
 void Gizmos::Render(Renderer *rend)
 {
     // rend->Render(RenderPass::Gizmos);
 }
 
-Gizmos *Gizmos::GetInstance()
+Gizmos* Gizmos::GetInstance()
 {
     Scene *scene = SceneManager::GetActiveScene();
     if (!scene) { return nullptr; }
-
-    Gizmos *gizmos = scene->GetGizmos();
-    return gizmos;
+    return scene->GetGizmos();
 }

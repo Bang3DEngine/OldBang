@@ -22,6 +22,10 @@ public:
     bool GetMasking() const;
     bool GetDrawMask() const;
 
+    // SerializableObject
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
+
 private:
     bool m_masking = true;
     bool m_drawMask = false;

@@ -26,7 +26,6 @@ public:
     String const& name = m_name;
     Transform* const& transform = p_transform;
 
-    GameObject(const String &m_name = "GameObject");
     virtual ~GameObject();
 
     static void Destroy(GameObject *gameObject);
@@ -195,11 +194,16 @@ protected:
 
     bool m_iteratingComponents = false;
 
+private:
+    GameObject(const String &m_name = "GameObject");
+
     friend class Scene;
     friend class Prefab;
+    friend class UIGameObject;
     friend class SceneManager;
     friend class RectTransform;
     friend class GraphicPipeline;
+    friend class GameObjectFactory;
 };
 
 #endif // GAMEOBJECT_H

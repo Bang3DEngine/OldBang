@@ -1,6 +1,7 @@
 #include "Bang/UIMask.h"
 
 #include "Bang/GL.h"
+#include "Bang/XMLNode.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/UIGameObject.h"
 
@@ -99,3 +100,21 @@ void UIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
 bool UIMask::GetMasking() const { return m_masking; }
 bool UIMask::GetDrawMask() const { return m_drawMask; }
+
+void UIMask::Read(const XMLNode &xmlInfo)
+{
+    Component::Read(xmlInfo);
+
+    if (xmlInfo.Contains("Masking"))
+    { SetMasking( xmlInfo.Get<bool>("Masking") ); }
+
+    if (xmlInfo.Contains("DrawMask"))
+    { SetDrawMask( xmlInfo.Get<bool>("DrawMask") ); }
+}
+
+void UIMask::Write(XMLNode *xmlInfo) const
+{
+    Component::Write(xmlInfo);
+    xmlInfo->Set("Masking", GetMasking());
+    xmlInfo->Set("DrawMask", GetDrawMask());
+}

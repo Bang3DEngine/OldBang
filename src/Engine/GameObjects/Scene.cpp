@@ -7,11 +7,11 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/GameObjectFactory.h"
 
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
-    AddHiddenChild(m_gizmos);
     AddComponent<Transform>();
 }
 
@@ -19,22 +19,10 @@ Scene::~Scene()
 {
 }
 
-void Scene::Start()
-{
-    GameObject::Start();
-    PROPAGATE_EVENT(Start(), m_hiddenGameObjects);
-}
-
-void Scene::Update()
-{
-    GameObject::Update();
-    PROPAGATE_EVENT(Update(), m_hiddenGameObjects);
-}
-
 void Scene::RenderGizmos()
 {
     GameObject::RenderGizmos();
-    PROPAGATE_EVENT(RenderGizmos(), m_hiddenGameObjects);
+    // GetGizmos()->m_gizmosGo->RenderGizmos();
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
@@ -42,11 +30,6 @@ void Scene::_OnResize(int newWidth, int newHeight)
     ParentSizeChanged();
 }
 
-void Scene::AddHiddenChild(GameObject *go)
-{
-    go->SetParent(this);
-    if (!m_hiddenGameObjects.Contains(go)) { m_hiddenGameObjects.PushBack(go); }
-}
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 
 void Scene::SetCamera(Camera *cam)
@@ -76,11 +59,12 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     if (!cameraFound) // Create default camera
     {
         Debug_Warn("No camera was found. Creating default camera...");
-        m_defaultCamera = new GameObject("DefaultCamera");
-        m_defaultCamera->AddComponent<Transform>();
+        m_defaultCamera = GameObjectFactory::CreateGameObject(true);
+        m_defaultCamera->SetName("DefaultCamera");
         m_defaultCamera->transform->SetPosition(Vector3(90));
         m_defaultCamera->transform->LookAt(Vector3::Zero);
-        AddHiddenChild(m_defaultCamera);
+        m_defaultCamera->SetParent(this);
+        m_defaultCamera->GetHideFlags().SetOn(HideFlag::DontSave);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);

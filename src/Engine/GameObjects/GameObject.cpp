@@ -123,20 +123,20 @@ Component *GameObject::AddComponent(const String &componentClassName,
     return AddComponent(c, _index);
 }
 
-Component* GameObject::AddComponent(Component *c, int _index)
+Component* GameObject::
+AddComponent(Component *c, int _index)
 {
-    if (!c) { return nullptr; }
-    if (m_components.Contains(c)) { return c; }
+    if (c && !m_components.Contains(c))
+    {
+        const int index = (_index != -1 ? _index : m_components.Size());
+        m_components.Insert(index, c);
 
-    const int index = (_index != -1 ? _index : m_components.Size());
-    m_components.Insert(index, c);
+        c->SetGameObject(this);
+        if (IsStarted()) { c->Start(); }
 
-    c->SetGameObject(this);
-    if (IsStarted()) { c->Start(); }
-
-    Transform *trans = DCAST<Transform*>(c);
-    if (trans) { p_transform = trans; }
-
+        Transform *trans = DCAST<Transform*>(c);
+        if (trans) { p_transform = trans; }
+    }
     return c;
 }
 

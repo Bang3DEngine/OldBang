@@ -96,6 +96,12 @@ inline bool XMLAttribute::Get() const
 }
 
 template<>
+inline String XMLAttribute::Get() const
+{
+    return GetStringValue();
+}
+
+template<>
 inline Path XMLAttribute::Get() const
 {
     if ( GetStringValue().IsEmpty() ) { return Path::Empty; }

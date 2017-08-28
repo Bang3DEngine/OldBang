@@ -82,8 +82,13 @@ include_directories(${ROOT}/include/freetype)
 include_directories(${ROOT}/include/Bang/BangCore)
 add_library(
 BangCore
+${ENGINE_SRC_DIR}/DataStructures/Array.h
 ${ENGINE_SRC_DIR}/DataStructures/Flags.h
+${ENGINE_SRC_DIR}/DataStructures/List.h
+${ENGINE_SRC_DIR}/DataStructures/Map.h
+${ENGINE_SRC_DIR}/DataStructures/Set.h
 ${ENGINE_SRC_DIR}/DataStructures/String.cpp
+${ENGINE_SRC_DIR}/DataStructures/TypeMap.h
 ${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
 ${ENGINE_SRC_DIR}/General/Mutex.cpp

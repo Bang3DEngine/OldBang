@@ -11,57 +11,57 @@ Resources::Resources()
 
 Resources::~Resources()
 {
-    List<Resource*> resources = m_GUIDToResource.GetValues();
+    Array<Resource*> resources = Resources::GetAllResources();
     for (Resource *res : resources) { delete res; }
 }
 
-void Resources::Add(const GUID &guid, Resource *x)
+Array<Resource *> Resources::GetAllResources()
 {
-    ENSURE(x && !guid.IsEmpty());
-    Resources::GetInstance()->m_GUIDToResource.Add(guid, x);
+    Array<Resource*> result;
+    Resources *rs = Resources::GetInstance();
+    for (auto& itTypeMap : rs->m_GUIDToResource)
+    {
+        result.PushBack(itTypeMap.second.GetValues());
+    }
+    return result;
+}
+
+void Resources::UnLoad(const GUID &guid, bool deleteResource)
+{
+    Resources *rs = Resources::GetInstance();
+    for (auto& itTypeMap : rs->m_GUIDToResource)
+    {
+        if (deleteResource)
+        {
+            for (const auto& itGUIDRes : itTypeMap.second)
+            {
+                if (itGUIDRes.first == guid) { delete itGUIDRes.second; }
+            }
+        }
+        (itTypeMap.second).Remove(guid);
+    }
+}
+
+void Resources::UnLoad(Resource *res, bool deleteResource)
+{
+    Resources *rs = Resources::GetInstance();
+    for (auto& itTypeMap : rs->m_GUIDToResource)
+    {
+        if (deleteResource)
+        {
+            for (const auto& itGUIDRes : itTypeMap.second)
+            {
+                if (itGUIDRes.second == res ) { delete res; }
+            }
+        }
+        (itTypeMap.second).RemoveValues(res);
+    }
 }
 
 Resources *Resources::GetInstance()
 {
     Application *app = Application::GetInstance();
     return  app ? app->GetResources() : nullptr;
-}
-
-Resource *Resources::GetCached(const GUID &guid)
-{
-    Resources *ress = Resources::GetInstance();
-    if (Resources::Contains(guid)) { return ress->m_GUIDToResource.Get(guid); }
-    return nullptr;
-}
-
-bool Resources::Contains(const GUID &guid)
-{
-    if (guid.IsEmpty()) { return false; }
-
-    Resources *am = Resources::GetInstance();
-    return am->m_GUIDToResource.ContainsKey(guid);
-}
-
-void Resources::UnLoad(const GUID &guid, bool deleteResource)
-{
-    Resources *rs = Resources::GetInstance();
-    Resource *res = rs->m_GUIDToResource.Get(guid);
-    if (deleteResource) { delete res; }
-    rs->m_GUIDToResource.Remove(guid);
-}
-
-void Resources::UnLoad(Resource *res, bool deleteResource)
-{
-    Resources *rs = Resources::GetInstance();
-    if (deleteResource)
-    {
-        for (const auto& itPair : rs->m_GUIDToResource)
-        {
-            if ( itPair.second == res) { delete res; }
-        }
-    }
-    rs->m_GUIDToResource.RemoveValues(res);
-
 }
 
 
