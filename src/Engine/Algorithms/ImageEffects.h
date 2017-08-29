@@ -12,6 +12,12 @@ public:
     static void CreateDistanceField(const G_Image &inputImageBW,
                                     G_Image *distanceFieldOutputImage,
                                     int distanceRadius);
+
+    static bool Diff(const G_Image &inputImage1,
+                     const G_Image &inputImage2,
+                     G_Image *diffOutputImage,
+                     bool diffAlpha = false);
+
     ImageEffects() = delete;
 };
 

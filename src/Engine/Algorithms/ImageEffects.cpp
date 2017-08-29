@@ -48,3 +48,30 @@ void ImageEffects::CreateDistanceField(const G_Image &inputImageBW,
         }
     }
 }
+
+bool ImageEffects::Diff(const G_Image &inputImage1,
+                        const G_Image &inputImage2,
+                        G_Image *diffOutputImage,
+                        bool diffAlpha)
+{
+    diffOutputImage->Create(inputImage1.GetWidth(),
+                            inputImage1.GetHeight());
+
+    bool diff = false;
+    for (int y = 0; y < inputImage1.GetHeight(); ++y)
+    {
+        for (int x = 0; x < inputImage1.GetWidth(); ++x)
+        {
+            Color c1 = inputImage1.GetPixel(x, y);
+            Color c2 = inputImage2.GetPixel(x, y);
+            Color diffColor( Math::Abs(c1.r-c2.r), Math::Abs(c1.g-c2.g),
+                             Math::Abs(c1.b-c2.b), Math::Abs(c1.a-c2.a) );
+            if (!diffAlpha) { diffColor.a = 1.0f; }
+
+            diffOutputImage->SetPixel(x, y, diffColor);
+
+            if (diffColor != Color::Zero) { diff = true; }
+        }
+    }
+    return diff;
+}
