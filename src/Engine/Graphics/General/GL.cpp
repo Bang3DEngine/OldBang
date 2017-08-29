@@ -265,6 +265,85 @@ void GL::DeleteProgram(GLId programId)
     GL_CheckError();
 }
 
+void GL::FramebufferTexture2D(GL::FramebufferTarget target,
+                              GL::Attachment attachment,
+                              GL::TextureTarget texTarget,
+                              GLId textureId)
+{
+    GL::ClearError();
+    glFramebufferTexture2D(GLCAST(target),
+                           GLCAST(attachment),
+                           GLCAST(texTarget),
+                           textureId,
+                           0);
+    GL_CheckError();
+}
+
+void GL::BindRenderbuffer(GL::RenderbufferTarget target, GLId renderbufferId)
+{
+    GL::ClearError();
+    glBindRenderbuffer(GLCAST(target), renderbufferId);
+    GL_CheckError();
+}
+
+void GL::RenderbufferStorage(GL::RenderbufferTarget target,
+                             GL::RenderbufferFormat format,
+                             int width, int height)
+{
+    GL::ClearError();
+    glRenderbufferStorage(GLCAST(target),
+                          GLCAST(format),
+                          width, height);
+    GL_CheckError();
+}
+
+void GL::FramebufferRenderbuffer(GL::FramebufferTarget target,
+                                 GL::Attachment attachment,
+                                 GL::RenderbufferTarget rbTarget,
+                                 GLId renderbufferId)
+{
+    GL::ClearError();
+    glFramebufferRenderbuffer(GLCAST(target),
+                              GLCAST(attachment),
+                              GLCAST(rbTarget),
+                              renderbufferId);
+    GL_CheckError();
+}
+
+void GL::DrawBuffers(const Array<GL::Attachment> &attachments)
+{
+    GL::ClearError();
+    glDrawBuffers(attachments.Size(), (const GLenum*)(&attachments[0]));
+    GL_CheckError();
+}
+
+void GL::ReadBuffer(GL::Attachment readAttachment)
+{
+    GL::ClearError();
+    glReadBuffer( GLCAST(readAttachment) );
+    GL_CheckError();
+}
+
+void GL::ReadPixels(int x, int y, int width, int height,
+                    GL::ColorComp inputComp, GL::DataType inputDataType,
+                    void *pixels)
+{
+    GL::ClearError();
+    glReadPixels(x, y, width, height,
+                 GLCAST(inputComp),
+                 GLCAST(inputDataType),
+                 pixels);
+    GL_CheckError();
+}
+
+void GL::ReadPixels(const Recti &readRect, GL::ColorComp inputComp,
+                    GL::DataType inputDataType, void *pixels)
+{
+    GL::ReadPixels(readRect.GetMin().x, readRect.GetMin().y,
+                   readRect.GetWidth(), readRect.GetHeight(),
+                   inputComp, inputDataType, pixels);
+}
+
 void GL::Finish() { glFinish(); }
 void GL::Flush() { glFlush(); }
 

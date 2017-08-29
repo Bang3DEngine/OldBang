@@ -89,14 +89,15 @@ public:
     enum class ColorComp
     {
         RGB  = GL_RGB,
-        RGBA = GL_RGBA
+        RGBA = GL_RGBA,
+        StencilIndex = GL_STENCIL_INDEX
     };
 
     enum class ColorFormat
     {
-        RGBA_UByte8   = GL_RGBA8,
+        RGBA_UByte8  = GL_RGBA8,
         RGBA_Float16 = GL_RGBA16F,
-        RGBA_Float32 = GL_RGBA32F,
+        RGBA_Float32 = GL_RGBA32F
     };
 
     enum class ViewProjMode
@@ -112,6 +113,24 @@ public:
         Texture2D = GL_TEXTURE_2D,
         Texture3D = GL_TEXTURE_3D,
         TextureCubeMap = GL_TEXTURE_CUBE_MAP
+    };
+
+    enum class FramebufferTarget
+    {
+        Draw = GL_DRAW_FRAMEBUFFER,
+        Read = GL_READ_FRAMEBUFFER,
+        ReadDraw = GL_FRAMEBUFFER
+    };
+    enum class RenderbufferTarget
+    {
+        Renderbuffer = GL_RENDERBUFFER
+    };
+
+    enum class RenderbufferFormat
+    {
+        Depth = GL_DEPTH,
+        Stencil = GL_STENCIL,
+        Depth24_Stencil8 = GL_DEPTH24_STENCIL8
     };
 
     enum class BufferBit
@@ -221,6 +240,31 @@ public:
                                        const String &fragDataName);
     static int    GetUniformLocation(GLId programId, const String &uniformName);
     static void   DeleteProgram(GLId programId);
+
+    static void FramebufferTexture2D(GL::FramebufferTarget target,
+                                     GL::Attachment attachment,
+                                     GL::TextureTarget texTarget,
+                                     GLId textureId);
+    static void BindRenderbuffer(GL::RenderbufferTarget target,
+                                 GLId renderbufferId);
+    static void RenderbufferStorage(GL::RenderbufferTarget target,
+                                    GL::RenderbufferFormat format,
+                                    int width, int height);
+    static void FramebufferRenderbuffer(GL::FramebufferTarget target,
+                                        GL::Attachment attachment,
+                                        GL::RenderbufferTarget rbTarget,
+                                        GLId renderbufferId);
+    static void DrawBuffers(const Array<GL::Attachment> &attachments);
+    static void ReadBuffer(GL::Attachment readAttachment);
+
+    static void ReadPixels(int x, int y, int width, int height,
+                           GL::ColorComp inputComp,
+                           GL::DataType inputDataType,
+                           void *pixels);
+    static void ReadPixels(const Recti &readRect,
+                           GL::ColorComp inputComp,
+                           GL::DataType inputDataType,
+                           void *pixels);
 
     static void Finish();
     static void Flush();

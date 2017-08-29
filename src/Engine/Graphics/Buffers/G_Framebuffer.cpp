@@ -37,11 +37,10 @@ void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
     m_colorAttachmentIds.PushBack(attachment);
     m_attachmentId_To_Texture.Add(attachment, tex);
 
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER,
-                           GLCAST(attachment),
-                           GLCAST(GL::TextureTarget::Texture2D),
-                           tex->GetGLId(),
-                           0);
+    GL::FramebufferTexture2D(GL::FramebufferTarget::Draw,
+                             attachment,
+                             GL::TextureTarget::Texture2D,
+                             tex->GetGLId());
     GL::CheckFramebufferError();
     GL_CheckError();
     tex->UnBind();
@@ -51,18 +50,18 @@ void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
 void G_Framebuffer::CreateDepthRenderbufferAttachment()
 {
     Bind();
-    GL::ClearError();
     GL::GenRenderBuffers(1, &m_depthRenderBufferId);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-                          m_width, m_height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                              GLCAST(GL::Attachment::DepthStencil),
-                              GL_RENDERBUFFER, m_depthRenderBufferId);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
+    GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer,
+                         m_depthRenderBufferId);
+    GL::RenderbufferStorage(GL::RenderbufferTarget::Renderbuffer,
+                            GL::RenderbufferFormat::Depth24_Stencil8,
+                            m_width, m_height);
+    GL::FramebufferRenderbuffer(GL::FramebufferTarget::ReadDraw,
+                                GL::Attachment::DepthStencil,
+                                GL::RenderbufferTarget::Renderbuffer,
+                                m_depthRenderBufferId);
+    GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer, 0);
     GL::CheckFramebufferError();
-    GL_CheckError();
     UnBind();
 }
 
@@ -79,17 +78,15 @@ void G_Framebuffer::SetAllDrawBuffers() const
 
 void G_Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
 {
-    GL::ClearError();
-    glDrawBuffers(attachments.Size(), (const GLenum*)(&attachments[0]));
+    ASSERT(GL::IsBound(this));
+    GL::DrawBuffers(attachments);
     m_currentDrawAttachmentIds = attachments;
-    GL_CheckError();
 }
 
 void G_Framebuffer::SetReadBuffer(GL::Attachment attachment) const
 {
-    GL::ClearError();
-    glReadBuffer( GLCAST(attachment) );
-    GL_CheckError();
+    ASSERT(GL::IsBound(this));
+    GL::ReadBuffer(attachment);
 }
 
 const Array<GL::Attachment>& G_Framebuffer::GetCurrentDrawAttachmentIds() const
@@ -103,11 +100,10 @@ Color G_Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     G_RenderTexture *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
     Byte color[4];
-    glReadPixels(x, t->GetHeight() - y,
-                 1, 1,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-                 &color);
+    GL::ReadPixels(x, t->GetHeight() - y, 1, 1,
+                   GL::GetColorCompFrom(t->GetInternalFormat()),
+                   t->GetInternalDataType(),
+                   SCAST<void*>(&color));
     Color readColor = Color(color[0], color[1], color[2], color[3]) / 255.0f;
     UnBind();
     return readColor;
@@ -133,10 +129,12 @@ void G_Framebuffer::Resize(int width, int height)
     {
         GL::ClearError();
         //TODO:  respect former bindings of renderbuffers
-        glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-                              m_width, m_height);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer,
+                             m_depthRenderBufferId);
+        GL::RenderbufferStorage(GL::RenderbufferTarget::Renderbuffer,
+                                GL::RenderbufferFormat::Depth24_Stencil8,
+                                m_width, m_height);
+        GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer, 0);
     }
 }
 
@@ -201,8 +199,9 @@ void G_Framebuffer::SaveStencilToImage(const Path &filepath,
 {
     GL::Flush(); GL::Finish();
     Byte *stencilData = new Byte[GetWidth() * GetHeight()];
-    glReadPixels(0, 0, GetWidth(), GetHeight(),
-                 GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stencilData);
+    GL::ReadPixels(0, 0, GetWidth(), GetHeight(),
+                   GL::ColorComp::StencilIndex,
+                   GL::DataType::UnsignedByte, stencilData);
 
     Array<Byte> bytes(GetWidth() * GetHeight() * 4);
     for (int i = 0; i < GetWidth() * GetHeight(); ++i)
