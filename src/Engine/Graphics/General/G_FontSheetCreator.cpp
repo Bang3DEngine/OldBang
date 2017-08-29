@@ -5,7 +5,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/G_Texture2D.h"
-#include "Bang/DistanceFielder.h"
+#include "Bang/ImageEffects.h"
 
 #include FT_GLYPH_H
 
@@ -166,7 +166,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
     // atlasImage.SaveToFile( Path("original.png") );
     // G_Image distFieldImg;
-    // DistanceFielder::CreateDistanceField(atlasImage, &distFieldImg, distRadius);
+    // ImageEffects::CreateDistanceField(atlasImage, &distFieldImg, distRadius);
     // distFieldImg.SaveToFile( Path("distField.png") );
 
     GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);

@@ -1,9 +1,9 @@
-#ifndef DISTANCEFIELDER_H
-#define DISTANCEFIELDER_H
+#ifndef IMAGEEFFECTS_H
+#define IMAGEEFFECTS_H
 
 #include "Bang/G_Image.h"
 
-class DistanceFielder
+class ImageEffects
 {
 public:
 
@@ -12,7 +12,7 @@ public:
     static void CreateDistanceField(const G_Image &inputImageBW,
                                     G_Image *distanceFieldOutputImage,
                                     int distanceRadius);
-    DistanceFielder() = delete;
+    ImageEffects() = delete;
 };
 
 #endif // DISTANCEFIELDER_H

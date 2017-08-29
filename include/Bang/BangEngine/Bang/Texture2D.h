@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Engine/Assets/Texture2D.h"
+#include "../.././src/Engine/Resources/Texture2D.h"

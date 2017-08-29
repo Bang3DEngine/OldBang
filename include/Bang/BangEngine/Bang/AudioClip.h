@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Engine/Assets/AudioClip.h"
+#include "../.././src/Engine/Resources/AudioClip.h"

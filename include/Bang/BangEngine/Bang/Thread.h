@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../../../src/Engine/General/Thread.h"
+#include "../../../src/Engine/System/Thread.h"

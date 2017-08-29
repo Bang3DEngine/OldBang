@@ -1,10 +1,10 @@
-#include "Bang/DistanceFielder.h"
+#include "Bang/ImageEffects.h"
 
 #include "Bang/Debug.h"
 
-void DistanceFielder::CreateDistanceField(const G_Image &inputImageBW,
-                                          G_Image *outImg,
-                                          int radius)
+void ImageEffects::CreateDistanceField(const G_Image &inputImageBW,
+                                       G_Image *outImg,
+                                       int radius)
 {
     outImg->Create(inputImageBW.GetWidth(), inputImageBW.GetHeight(),
                    Color(1,1,1,0));

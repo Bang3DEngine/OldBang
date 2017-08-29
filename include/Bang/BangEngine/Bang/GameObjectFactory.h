@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../../../src/Engine/GameObjects/GameObjectFactory.h"
+#include "../../../src/Engine/Factory/GameObjectFactory.h"

@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Engine/Assets/Mesh.h"
+#include "../.././src/Engine/Resources/Mesh.h"

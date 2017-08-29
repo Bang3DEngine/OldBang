@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../../../src/Engine/General/TextFormatter.h"
+#include "../../../src/Engine/Text/TextFormatter.h"

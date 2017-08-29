@@ -6,7 +6,7 @@ project(Bang C CXX)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
 set(SRC_DIR ${ROOT}/src)
-set(ENGINE_ASSETS_DIR ${ROOT}/res/EngineAssets)
+set(ENGINE_Resources_DIR ${ROOT}/res/EngineResources)
 set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
 
 set(CMAKE_BINARY_DIR ${ROOT}/bin)
@@ -92,16 +92,16 @@ ${ENGINE_SRC_DIR}/DataStructures/String.cpp
 ${ENGINE_SRC_DIR}/DataStructures/TypeMap.h
 ${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
-${ENGINE_SRC_DIR}/General/Mutex.cpp
-${ENGINE_SRC_DIR}/General/MutexLocker.cpp
-${ENGINE_SRC_DIR}/General/SystemProcess.cpp
-${ENGINE_SRC_DIR}/General/Thread.cpp
-${ENGINE_SRC_DIR}/General/ThreadPool.cpp
 ${ENGINE_SRC_DIR}/IO/Files/File.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Path.cpp
 ${ENGINE_SRC_DIR}/Math/Color.cpp
 ${ENGINE_SRC_DIR}/Math/Math.cpp
 ${ENGINE_SRC_DIR}/Math/Random.cpp
+${ENGINE_SRC_DIR}/System/Mutex.cpp
+${ENGINE_SRC_DIR}/System/MutexLocker.cpp
+${ENGINE_SRC_DIR}/System/SystemProcess.cpp
+${ENGINE_SRC_DIR}/System/Thread.cpp
+${ENGINE_SRC_DIR}/System/ThreadPool.cpp
 )
 
 # BangGraphics Library
@@ -152,15 +152,7 @@ include_directories(${ROOT}/include/Bang/BangEngine)
 include_directories(${ROOT}/include/Bang/BangPreprocessor)
 add_library(
 BangEngine
-${ENGINE_SRC_DIR}/Assets/Asset.cpp
-${ENGINE_SRC_DIR}/Assets/AudioClip.cpp
-${ENGINE_SRC_DIR}/Assets/Font.cpp
-${ENGINE_SRC_DIR}/Assets/Material.cpp
-${ENGINE_SRC_DIR}/Assets/Mesh.cpp
-${ENGINE_SRC_DIR}/Assets/MeshFactory.cpp
-${ENGINE_SRC_DIR}/Assets/Prefab.cpp
-${ENGINE_SRC_DIR}/Assets/ShaderProgram.cpp
-${ENGINE_SRC_DIR}/Assets/Texture2D.cpp
+${ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${ENGINE_SRC_DIR}/Audio/AudioManager.cpp
 ${ENGINE_SRC_DIR}/Audio/AudioPlayerRunnable.cpp
@@ -176,7 +168,6 @@ ${ENGINE_SRC_DIR}/Components/Behaviour.cpp
 ${ENGINE_SRC_DIR}/Components/Camera.cpp
 ${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
-${ENGINE_SRC_DIR}/Components/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
 ${ENGINE_SRC_DIR}/Components/Light.cpp
 ${ENGINE_SRC_DIR}/Components/LineRenderer.cpp
@@ -190,22 +181,20 @@ ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
 ${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
+${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
+${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
+${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
+${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
 ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
-${ENGINE_SRC_DIR}/GameObjects/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/GameObjects/UIGameObject.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
-${ENGINE_SRC_DIR}/General/DistanceFielder.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
-${ENGINE_SRC_DIR}/General/Library.cpp
-${ENGINE_SRC_DIR}/General/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${ENGINE_SRC_DIR}/General/Object.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
-${ENGINE_SRC_DIR}/General/SystemUtils.cpp
-${ENGINE_SRC_DIR}/General/TextFormatter.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
@@ -219,9 +208,6 @@ ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
-${ENGINE_SRC_DIR}/IO/General/Resource.cpp
-${ENGINE_SRC_DIR}/IO/General/Resources.cpp
-${ENGINE_SRC_DIR}/IO/General/Serializable.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
 ${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
 ${ENGINE_SRC_DIR}/IO/Project/Project.cpp
@@ -232,6 +218,20 @@ ${ENGINE_SRC_DIR}/IO/XML/XMLParser.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLProperty.cpp
 ${ENGINE_SRC_DIR}/Math/AABox.cpp
 ${ENGINE_SRC_DIR}/Math/Sphere.cpp
+${ENGINE_SRC_DIR}/Resources/Asset.cpp
+${ENGINE_SRC_DIR}/Resources/AudioClip.cpp
+${ENGINE_SRC_DIR}/Resources/Font.cpp
+${ENGINE_SRC_DIR}/Resources/Material.cpp
+${ENGINE_SRC_DIR}/Resources/Mesh.cpp
+${ENGINE_SRC_DIR}/Resources/Prefab.cpp
+${ENGINE_SRC_DIR}/Resources/Resource.cpp
+${ENGINE_SRC_DIR}/Resources/Resources.cpp
+${ENGINE_SRC_DIR}/Resources/Serializable.cpp
+${ENGINE_SRC_DIR}/Resources/ShaderProgram.cpp
+${ENGINE_SRC_DIR}/Resources/Texture2D.cpp
+${ENGINE_SRC_DIR}/System/Library.cpp
+${ENGINE_SRC_DIR}/System/SystemUtils.cpp
+${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButtonTinter.cpp

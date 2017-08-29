@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../../../src/Engine/IO/General/Resource.h"
+#include "../../../src/Engine/Resources/Resource.h"
