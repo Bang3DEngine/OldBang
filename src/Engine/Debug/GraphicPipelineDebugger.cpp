@@ -22,7 +22,7 @@ void GraphicPipelineDebugger::Reset()
 }
 
 void GraphicPipelineDebugger::TakeGBufferShot(G_GBuffer *gbuffer,
-                                              G_GBuffer::AttachmentId att,
+                                              GL::Attachment att,
                                               const String &screenshotName)
 {
     if (Input::GetKeyDown(Input::Key::Q))

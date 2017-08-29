@@ -95,8 +95,8 @@ bool Renderer::IsVisible() const { return m_visible; }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
-void Renderer::SetCullMode(GL::CullMode cullMode) { m_cullMode = cullMode; }
-GL::CullMode Renderer::GetCullMode() const { return m_cullMode; }
+void Renderer::SetCullMode(GL::Face cullMode) { m_cullMode = cullMode; }
+GL::Face Renderer::GetCullMode() const { return m_cullMode; }
 void Renderer::SetLineWidth(float w) { m_lineWidth = w; }
 void Renderer::SetRenderWireframe(bool drawWireframe)
 {

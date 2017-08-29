@@ -178,7 +178,7 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetWireframe(false);
     GL::SetDepthTest(false);
     GL::SetDepthWrite(false);
-    GL::SetCullMode(GL::CullMode::None);
+    GL::SetCullMode(GL::Face::None);
     GL::Render(m_screenPlaneMesh->GetVAO(), GL::Primitives::Triangles,
                m_screenPlaneMesh->GetVertexCount());
     GL::SetDepthWrite(true);

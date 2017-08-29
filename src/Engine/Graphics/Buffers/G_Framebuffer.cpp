@@ -24,21 +24,24 @@ G_Framebuffer::~G_Framebuffer()
     glDeleteFramebuffers(1, &m_idGL);
 }
 
-void G_Framebuffer::CreateColorAttachment(AttachmentId attId,
-                                        Texture2D::Format texFormat)
+void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
+                                          GL::ColorInternalFormat texFormat)
 {
     Bind();
     GL::ClearError();
     G_RenderTexture *tex = new G_RenderTexture();
-    tex->SetFormat(texFormat);
+    tex->SetInternalFormat(texFormat);
     tex->Bind();
     tex->CreateEmpty(GetWidth(), GetHeight());
 
-    m_colorAttachmentIds.PushBack(attId);
-    m_attachmentId_To_Texture.Add(attId, tex);
+    m_colorAttachmentIds.PushBack(attachment);
+    m_attachmentId_To_Texture.Add(attachment, tex);
 
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
-                           tex->GetGLId(), 0);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER,
+                           GLCAST(attachment),
+                           GLCAST(GL::TextureTarget::Texture2D),
+                           tex->GetGLId(),
+                           0);
     GL::CheckFramebufferError();
     GL_CheckError();
     tex->UnBind();
@@ -53,7 +56,8 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
                           m_width, m_height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+                              GLCAST(GL::Attachment::DepthStencil),
                               GL_RENDERBUFFER, m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
@@ -62,10 +66,10 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
     UnBind();
 }
 
-G_RenderTexture *G_Framebuffer::GetAttachmentTexture(AttachmentId attId) const
+G_RenderTexture *G_Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
 {
-    if (!m_attachmentId_To_Texture.ContainsKey(attId)) { return nullptr; }
-    return m_attachmentId_To_Texture.Get(attId);
+    if (!m_attachmentId_To_Texture.ContainsKey(attachment)) { return nullptr; }
+    return m_attachmentId_To_Texture.Get(attachment);
 }
 
 void G_Framebuffer::SetAllDrawBuffers() const
@@ -73,43 +77,48 @@ void G_Framebuffer::SetAllDrawBuffers() const
     SetDrawBuffers(m_colorAttachmentIds);
 }
 
-void G_Framebuffer::SetDrawBuffers(const Array<AttachmentId> &attIds) const
+void G_Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
 {
     GL::ClearError();
-    glDrawBuffers(attIds.Size(), (const GLenum*)(&attIds[0]));
-    m_currentDrawAttachmentIds = attIds;
+    glDrawBuffers(attachments.Size(), (const GLenum*)(&attachments[0]));
+    m_currentDrawAttachmentIds = attachments;
     GL_CheckError();
 }
 
-void G_Framebuffer::SetReadBuffer(AttachmentId attId) const
+void G_Framebuffer::SetReadBuffer(GL::Attachment attachment) const
 {
     GL::ClearError();
-    glReadBuffer(attId);
+    glReadBuffer( GLCAST(attachment) );
     GL_CheckError();
 }
 
-const Array<G_Framebuffer::AttachmentId>
-        &G_Framebuffer::GetCurrentDrawAttachmentIds() const
+const Array<GL::Attachment>& G_Framebuffer::GetCurrentDrawAttachmentIds() const
 {
     return m_currentDrawAttachmentIds;
 }
 
-Color G_Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
+Color G_Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     Bind();
-    G_RenderTexture *t = GetAttachmentTexture(attId);
-    SetReadBuffer(attId);
+    G_RenderTexture *t = GetAttachmentTexture(attachment);
+    SetReadBuffer(attachment);
     Color readColor;
-    if (t->GetGLDataType() == GL_FLOAT)
+    if (t->GetInternalDataType() == GL::DataType::Float)
     {
-        glReadPixels(x, t->GetHeight() - y, 1, 1, t->GetGLFormat(),
-                     t->GetGLDataType(), &readColor);
+        glReadPixels(x, t->GetHeight() - y,
+                     1, 1,
+                     GLCAST(t->GetInternalFormat()),
+                     GLCAST(t->GetInternalDataType()),
+                     &readColor);
     }
     else
     {
         Byte bColor[4];
-        glReadPixels(x, t->GetHeight() - y, 1, 1, t->GetGLFormat(),
-                     t->GetGLDataType(), &bColor);
+        glReadPixels(x, t->GetHeight() - y,
+                     1, 1,
+                     GLCAST(t->GetInternalFormat()),
+                     GLCAST(t->GetInternalDataType()),
+                     &bColor);
         readColor = Color(bColor[0], bColor[1], bColor[2], bColor[3]) / 255.0f;
     }
     UnBind();
@@ -190,11 +199,12 @@ void G_Framebuffer::UnBind() const
     GL::UnBind(this);
 }
 
-void G_Framebuffer::SaveToImage(AttachmentId attId, const Path &filepath,
+void G_Framebuffer::SaveToImage(GL::Attachment attachment,
+                                const Path &filepath,
                                 bool invertY) const
 {
     glFlush(); glFinish();
-    G_Image img = GetAttachmentTexture(attId)->ToImage(invertY);
+    G_Image img = GetAttachmentTexture(attachment)->ToImage(invertY);
     img.SaveToFile(filepath);
 }
 

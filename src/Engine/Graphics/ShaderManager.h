@@ -11,7 +11,7 @@ public:
     ShaderManager();
     static ShaderManager *GetInstance();
 
-    static G_Shader* Load(G_Shader::Type type, const Path& filepath);
+    static G_Shader* Load(GL::ShaderType type, const Path& filepath);
 
     static void RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
                                       G_Shader *shaderBeingUsed);

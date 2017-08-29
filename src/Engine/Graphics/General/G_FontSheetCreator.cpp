@@ -173,8 +173,8 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     *atlasTexture = new G_Texture2D();
     (*atlasTexture)->LoadFromImage(atlasImage);
     // (*atlasTexture)->LoadFromImage(distFieldImg);
-    (*atlasTexture)->SetWrapMode(G_Texture::WrapMode::ClampToEdge);
-    (*atlasTexture)->SetFilterMode(G_Texture::FilterMode::Trilinear_LL);
+    (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
+    (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);
     (*atlasTexture)->GenerateMipMaps();
 

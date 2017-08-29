@@ -18,11 +18,11 @@ G_ShaderProgram::G_ShaderProgram()
 
 void G_ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
-    G_Shader *vs = new G_Shader(G_Shader::Type::Vertex);
+    G_Shader *vs = new G_Shader(GL::ShaderType::Vertex);
     vs->Import(vshaderPath);
     SetVertexShader(vs);
 
-    G_Shader *fs = new G_Shader(G_Shader::Type::Fragment);
+    G_Shader *fs = new G_Shader(GL::ShaderType::Fragment);
     vs->Import(fshaderPath);
     SetFragmentShader(fs);
 }
@@ -121,7 +121,7 @@ bool G_ShaderProgram::Set(const String &name, const Matrix3 &m) const
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        glUniformMatrix3fv(location, 1, GL_FALSE, m.Data());
+        glUniformMatrix3fv(location, 1, false, m.Data());
     }
     return (location >= 0);
 }
@@ -132,7 +132,7 @@ bool G_ShaderProgram::Set(const String &name, const Matrix4 &m) const
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        glUniformMatrix4fv(location, 1, GL_FALSE, m.Data());
+        glUniformMatrix4fv(location, 1, false, m.Data());
     }
     return (location >= 0);
 }
@@ -193,7 +193,7 @@ void G_ShaderProgram::Refresh()
 
 void G_ShaderProgram::SetVertexShader(G_Shader *vertexShader)
 {
-    if (vertexShader->GetType() != G_Shader::Type::Vertex)
+    if (vertexShader->GetType() != GL::ShaderType::Vertex)
     {
         Debug_Error("You are trying to set as vertex shader a non-vertex shader");
     }
@@ -203,7 +203,7 @@ void G_ShaderProgram::SetVertexShader(G_Shader *vertexShader)
 
 void G_ShaderProgram::SetFragmentShader(G_Shader *fragmentShader)
 {
-    if (fragmentShader->GetType() != G_Shader::Type::Fragment)
+    if (fragmentShader->GetType() != GL::ShaderType::Fragment)
     {
         Debug_Error("You are trying to set as fragment shader a non-fragment shader");
     }

@@ -24,14 +24,19 @@ class GL
 public:
     enum class Primitives
     {
-        Points    = GL_POINTS,
-        Lines     = GL_LINES,
-        LineStrip = GL_LINE_STRIP,
-        Triangles = GL_TRIANGLES,
-        Quads     = GL_QUADS
+        Points        = GL_POINTS,
+        Lines         = GL_LINES,
+        LineStrip     = GL_LINE_STRIP,
+        LineLoop      = GL_LINE_LOOP,
+        Triangles     = GL_TRIANGLES,
+        TriangleStrip = GL_TRIANGLE_STRIP,
+        TriangleFan   = GL_TRIANGLE_FAN,
+        Quads         = GL_QUADS,
+        QuadStrip     = GL_QUAD_STRIP,
+        Polygon       = GL_POLYGON
     };
 
-    enum class CullMode
+    enum class Face
     {
         Front        = GL_FRONT,
         Back         = GL_BACK,
@@ -43,10 +48,41 @@ public:
     {
         None           = 0,
         Texture2D      = GL_TEXTURE_2D,
-        ShaderProgram  ,
+        ShaderProgram  = GL_SHADER,
         Framebuffer    = GL_FRAMEBUFFER,
-        VAO            ,
-        VBO
+        VAO            = GL_VERTEX_ARRAY,
+        VBO            = GL_BUFFER
+    };
+
+    enum class DataType
+    {
+        Byte          = GL_BYTE,
+        UnsignedByte  = GL_UNSIGNED_BYTE,
+        Short         = GL_SHORT,
+        UnsignedShort = GL_UNSIGNED_SHORT,
+        Int           = GL_INT,
+        UnsignedInt   = GL_UNSIGNED_INT,
+        Float         = GL_FLOAT,
+        Double        = GL_DOUBLE
+    };
+
+    enum class ShaderType
+    {
+        Vertex   = GL_VERTEX_SHADER,
+        Fragment = GL_FRAGMENT_SHADER
+    };
+
+    enum class ColorOrder
+    {
+        RGB  = GL_RGB,
+        RGBA = GL_RGBA
+    };
+
+    enum class ColorInternalFormat
+    {
+        RGBA_UByte8   = GL_RGBA8,
+        RGBA_Float16 = GL_RGBA16F,
+        RGBA_Float32 = GL_RGBA32F,
     };
 
     enum class ViewProjMode
@@ -54,6 +90,54 @@ public:
         UseBoth            = 0,
         OnlyFixAspectRatio = 1,
         IgnoreBoth         = 2
+    };
+
+    enum class TextureTarget
+    {
+        Texture1D = GL_TEXTURE_1D,
+        Texture2D = GL_TEXTURE_2D,
+        Texture3D = GL_TEXTURE_3D,
+        TextureCubeMap = GL_TEXTURE_CUBE_MAP
+    };
+
+    enum class WrapMode
+    {
+        Repeat = GL_REPEAT,
+        Clamp = GL_CLAMP,
+        ClampToEdge = GL_CLAMP_TO_EDGE
+    };
+
+    enum class FilterMode
+    {
+        Nearest = GL_NEAREST,
+        Linear = GL_LINEAR,
+        Trilinear_NN = GL_NEAREST_MIPMAP_NEAREST,
+        Trilinear_NL = GL_NEAREST_MIPMAP_LINEAR,
+        Trilinear_LN = GL_LINEAR_MIPMAP_NEAREST,
+        Trilinear_LL = GL_LINEAR_MIPMAP_LINEAR
+    };
+
+    enum class Operation
+    {
+        Keep = GL_KEEP,
+        Replace = GL_REPLACE,
+        Incr = GL_INCR,
+        Decr = GL_DECR,
+    };
+
+    enum class Attachment
+    {
+        Color0       = GL_COLOR_ATTACHMENT0,
+        Color1       = GL_COLOR_ATTACHMENT1,
+        Color2       = GL_COLOR_ATTACHMENT2,
+        Color3       = GL_COLOR_ATTACHMENT3,
+        Color4       = GL_COLOR_ATTACHMENT4,
+        Color5       = GL_COLOR_ATTACHMENT5,
+        Color6       = GL_COLOR_ATTACHMENT6,
+        Color7       = GL_COLOR_ATTACHMENT7,
+        DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT,
+        Stencil      = GL_STENCIL_ATTACHMENT,
+        Depth        = GL_DEPTH_ATTACHMENT
     };
 
     static void ClearError();
@@ -82,7 +166,7 @@ public:
     static void SetDepthWrite(bool writeDepth);
     static void SetDepthTest(bool testDepth);
     static void SetWireframe(bool wireframe);
-    static void SetCullMode(const GL::CullMode cullMode);
+    static void SetCullMode(const GL::Face cullMode);
     static void SetModelMatrix(const Matrix4 &model);
     static void SetViewMatrix(const Matrix4 &view);
     static void SetProjectionMatrix(const Matrix4 &projection);
@@ -105,7 +189,7 @@ public:
     static bool IsDepthWrite();
     static bool IsDepthTest();
     static bool IsWireframe();
-    static GL::CullMode GetCullMode();
+    static GL::Face GetCullMode();
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
     static const Matrix4 &GetProjectionMatrix();
@@ -117,6 +201,10 @@ public:
     static GLId GetBoundId(GL::BindTarget bindTarget);
     static bool IsBound(const GLObject *bindable);
     static bool IsBound(BindTarget bindTarget, GLId glId);
+
+    static uint GetPixelBytesSize(GL::ColorInternalFormat texFormat);
+    static GL::DataType GetDataTypeFrom(GL::ColorInternalFormat internalFormat);
+    static GL::ColorOrder GetColorOrderFrom(GL::ColorInternalFormat internalFormat);
 
     static GL* GetActive();
 
@@ -130,7 +218,7 @@ private:
     bool m_writeDepth = true, m_testDepth = true;
     bool m_testStencil = false;
     bool m_wireframe = false;
-    GL::CullMode m_cullMode = GL::CullMode::None;
+    GL::Face m_cullMode = GL::Face::None;
     Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;

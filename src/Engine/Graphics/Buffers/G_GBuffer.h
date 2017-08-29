@@ -11,19 +11,19 @@ public:
 
     // normal.z doesnt need to be stored since we assume normal is normalized.
     // (normal.x, normal.y, depth_high, depth_low)
-    static const AttachmentId AttNormalDepth = AttachmentId::ColorAttachment0;
+    static const GL::Attachment AttNormalDepth = GL::Attachment::Color0;
 
     // (diffColor.r, diffColor.g, diffColor.b, diffColor.a)
-    static const AttachmentId AttDiffuse     = AttachmentId::ColorAttachment1;
+    static const GL::Attachment AttDiffuse     = GL::Attachment::Color1;
 
     // (receivesLighting, shininess, flags, ---)
-    static const AttachmentId AttMisc        = AttachmentId::ColorAttachment2;
+    static const GL::Attachment AttMisc        = GL::Attachment::Color2;
 
     // We need 2 color textures to PingPong them. This is to be able to do
     // screen passes, avoiding writing and reading to the same texture at
     // the same time
-    static const AttachmentId AttColor     = AttachmentId::ColorAttachment3;
-    static const AttachmentId AttColorRead = AttachmentId::ColorAttachment4;
+    static const GL::Attachment AttColor     = GL::Attachment::Color3;
+    static const GL::Attachment AttColorRead = GL::Attachment::Color4;
 
     G_GBuffer(int width, int height);
     virtual ~G_GBuffer();
@@ -47,7 +47,7 @@ public:
 
     void ClearDepth(float clearDepth = 1.0f) override;
 
-    void ClearBuffersAndBackground(const ::Color &backgroundColor);
+    void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
     G_RenderTexture *m_normalTexture    = nullptr;

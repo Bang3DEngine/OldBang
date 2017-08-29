@@ -19,10 +19,10 @@ void ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
     RetrieveType(vshaderPath, fshaderPath);
 
-    G_Shader *vs = ShaderManager::Load(G_Shader::Type::Vertex, vshaderPath);
+    G_Shader *vs = ShaderManager::Load(GL::ShaderType::Vertex, vshaderPath);
     SetVertexShader(vs);
 
-    G_Shader *fs = ShaderManager::Load(G_Shader::Type::Fragment, fshaderPath);
+    G_Shader *fs = ShaderManager::Load(GL::ShaderType::Fragment, fshaderPath);
     SetFragmentShader(fs);
 }
 
@@ -93,7 +93,7 @@ void ShaderProgram::ImportXML(const XMLNode &xmlInfo)
         Path vShaderFilepath = xmlInfo.Get<Path>("VertexShader");
         if (vShaderFilepath.Exists())
         {
-            G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex,
+            G_Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex,
                                                   vShaderFilepath);
             SetVertexShader(vShader);
         }
@@ -104,7 +104,7 @@ void ShaderProgram::ImportXML(const XMLNode &xmlInfo)
         Path fShaderFilepath = xmlInfo.Get<Path>("FragmentShader");
         if (fShaderFilepath.Exists())
         {
-            G_Shader *fShader = ShaderManager::Load(G_Shader::Type::Fragment,
+            G_Shader *fShader = ShaderManager::Load(GL::ShaderType::Fragment,
                                                   fShaderFilepath);
             SetFragmentShader(fShader);
         }

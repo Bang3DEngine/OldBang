@@ -13,7 +13,7 @@ ShaderManager *ShaderManager::GetInstance()
     return Application::GetInstance()->GetShaderManager();
 }
 
-G_Shader *ShaderManager::Load(G_Shader::Type type, const Path &filepath)
+G_Shader *ShaderManager::Load(GL::ShaderType type, const Path &filepath)
 {
     ShaderManager *sm = ShaderManager::GetInstance();
 

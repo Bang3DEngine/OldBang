@@ -9,16 +9,16 @@
 
 G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
 {
-    CreateColorAttachment( AttachmentId( AttNormalDepth  ),
-                           G_Texture::Format::RGBA_Float16 );
-    CreateColorAttachment( AttachmentId( AttDiffuse ),
-                           G_Texture::Format::RGBA_Byte8 );
-    CreateColorAttachment( AttachmentId( AttMisc    ),
-                           G_Texture::Format::RGBA_Byte8 );
-    CreateColorAttachment( AttachmentId( AttColor  ),
-                           G_Texture::Format::RGBA_Byte8 );
-    CreateColorAttachment( AttachmentId( AttColorRead  ),
-                           G_Texture::Format::RGBA_Byte8 );
+    CreateColorAttachment(AttNormalDepth,
+                          GL::ColorInternalFormat::RGBA_Float16);
+    CreateColorAttachment(AttDiffuse,
+                          GL::ColorInternalFormat::RGBA_UByte8);
+    CreateColorAttachment(AttMisc,
+                          GL::ColorInternalFormat::RGBA_UByte8);
+    CreateColorAttachment(AttColor,
+                          GL::ColorInternalFormat::RGBA_UByte8);
+    CreateColorAttachment(AttColorRead,
+                          GL::ColorInternalFormat::RGBA_UByte8);
     CreateDepthRenderbufferAttachment();
 
     m_normalTexture    = GetAttachmentTexture(AttNormalDepth);

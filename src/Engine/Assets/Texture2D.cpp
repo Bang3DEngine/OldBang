@@ -25,7 +25,7 @@ void Texture2D::ImportXML(const XMLNode &xmlInfo)
     Asset::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("FilterMode"))
-    { SetFilterMode( xmlInfo.Get<FilterMode>("FilterMode") ); }
+    { SetFilterMode( xmlInfo.Get<GL::FilterMode>("FilterMode") ); }
 
     if (xmlInfo.Contains("AlphaCuttoff"))
     { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }

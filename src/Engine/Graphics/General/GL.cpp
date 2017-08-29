@@ -117,7 +117,7 @@ void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
     switch (bindTarget)
     {
         case BindTarget::Texture2D:
-            glBindTexture(GL_TEXTURE_2D, glId);
+            glBindTexture(GLCAST(GL::TextureTarget::Texture2D), glId);
         break;
         case BindTarget::ShaderProgram:
             glUseProgram(glId);
@@ -297,13 +297,13 @@ void GL::SetWireframe(bool wireframe)
     }
 }
 
-void GL::SetCullMode(GL::CullMode cullMode)
+void GL::SetCullMode(GL::Face cullMode)
 {
     GL *gl = GL::GetActive();
     if (cullMode != gl->m_cullMode)
     {
         gl->m_cullMode = cullMode;
-        if (gl->m_cullMode != GL::CullMode::None)
+        if (gl->m_cullMode != GL::Face::None)
         {
             GL::Enable(GL_CULL_FACE);
             glCullFace(GLint(gl->m_cullMode));
@@ -348,7 +348,7 @@ bool GL::IsStencilTest() { return GL::GetActive()->m_testStencil; }
 bool GL::IsDepthWrite() { return GL::GetActive()->m_writeDepth; }
 bool GL::IsDepthTest() { return GL::GetActive()->m_testDepth; }
 bool GL::IsWireframe() { return GL::GetActive()->m_wireframe; }
-GL::CullMode GL::GetCullMode() { return GL::GetActive()->m_cullMode; }
+GL::Face GL::GetCullMode() { return GL::GetActive()->m_cullMode; }
 bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
 {
     GL *gl = GL::GetActive();
@@ -398,6 +398,46 @@ void GL::OnUnBind(GL::BindTarget bindTarget)
             GL::_Bind(bindTarget, previousBoundId);
         }
     }
+}
+
+uint GL::GetPixelBytesSize(GL::ColorInternalFormat texFormat)
+{
+    GL::ColorOrder colorOrder = GL::GetColorOrderFrom(texFormat);
+    GL::DataType glDataType   = GL::GetDataTypeFrom(texFormat);
+
+    uint numComps = 1;
+    if (colorOrder == GL::ColorOrder::RGBA) { numComps = 4; }
+    else if (colorOrder == GL::ColorOrder::RGB) { numComps = 3; }
+
+    uint dataSize = 1;
+    if (glDataType == GL::DataType::Float) { dataSize = 4; }
+
+    return numComps * dataSize;
+}
+
+GL::DataType GL::GetDataTypeFrom(GL::ColorInternalFormat texFormat)
+{
+    if (texFormat == GL::ColorInternalFormat::RGBA_UByte8)
+    {
+        return GL::DataType::UnsignedByte;
+    }
+    else if (texFormat == GL::ColorInternalFormat::RGBA_Float16 ||
+             texFormat == GL::ColorInternalFormat::RGBA_Float32)
+    {
+        return GL::DataType::Float;
+    }
+    return GL::DataType::Float;
+}
+
+GL::ColorOrder GL::GetColorOrderFrom(GL::ColorInternalFormat texFormat)
+{
+    if (texFormat == GL::ColorInternalFormat::RGBA_UByte8   ||
+        texFormat == GL::ColorInternalFormat::RGBA_Float16 ||
+        texFormat == GL::ColorInternalFormat::RGBA_Float32)
+    {
+        return GL::ColorOrder::RGBA;
+    }
+    return GL::ColorOrder::RGB;
 }
 
 GL *GL::GetActive()

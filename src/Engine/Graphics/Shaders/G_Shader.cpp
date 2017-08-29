@@ -9,9 +9,9 @@
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
 
-G_Shader::G_Shader() : G_Shader(G_Shader::Type::Vertex) { }
+G_Shader::G_Shader() : G_Shader(GL::ShaderType::Vertex) { }
 
-G_Shader::G_Shader(G_Shader::Type t)
+G_Shader::G_Shader(GL::ShaderType t)
     : m_sourceCode(""), m_type(t)
 {
 }
@@ -70,7 +70,7 @@ const Path& G_Shader::GetResourceFilepath() const
     return m_filepath;
 }
 
-G_Shader::Type G_Shader::GetType() const
+GL::ShaderType G_Shader::GetType() const
 {
     return m_type;
 }

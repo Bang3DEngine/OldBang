@@ -32,7 +32,7 @@ public:
     void SetVisible(bool visible);
     void SetMaterial(Material *m);
     void SetRenderWireframe(bool m_drawWireframe);
-    void SetCullMode(GL::CullMode m_cullMode);
+    void SetCullMode(GL::Face m_cullMode);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     void SetRenderPrimitive(GL::Primitives m_renderMode);
     void SetLineWidth(float w);
@@ -42,7 +42,7 @@ public:
     Material* GetMaterial() const;
     Material* GetSharedMaterial() const;
     bool IsRenderWireframe() const;
-    GL::CullMode GetCullMode() const;
+    GL::Face GetCullMode() const;
     GL::ViewProjMode GetViewProjMode() const;
     GL::Primitives GetRenderPrimitive() const;
     float GetLineWidth() const;
@@ -61,7 +61,7 @@ public:
 
 protected:
     bool m_drawWireframe        = false;
-    GL::CullMode m_cullMode     = GL::CullMode::Back;
+    GL::Face m_cullMode     = GL::Face::Back;
     GL::Primitives m_renderMode = GL::Primitives::Triangles;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 

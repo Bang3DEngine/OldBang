@@ -22,8 +22,8 @@ public:
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
-    static const AttachmentId AttColor = AttachmentId::ColorAttachment0;
-    G_RenderTexture *m_colorTexture    = nullptr;
+    static const GL::Attachment AttColor = GL::Attachment::Color0;
+    G_RenderTexture *m_colorTexture = nullptr;
 
     Material *m_selectionMaterial = nullptr;
 

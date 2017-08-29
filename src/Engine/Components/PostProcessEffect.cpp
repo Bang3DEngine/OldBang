@@ -13,7 +13,7 @@ PostProcessEffect::PostProcessEffect()
     m_shaderProgram = new ShaderProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
-    G_Shader *vShader = ShaderManager::Load(G_Shader::Type::Vertex, vShaderPath);
+    G_Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex, vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }
 
@@ -94,7 +94,7 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
             shaderFilepath != p_postProcessShader->GetResourceFilepath())
         {
             G_Shader *postProcessShader =
-                    ShaderManager::Load(G_Shader::Type::Fragment, shaderFilepath);
+                    ShaderManager::Load(GL::ShaderType::Fragment, shaderFilepath);
             SetPostProcessShader(postProcessShader);
         }
     }

@@ -14,7 +14,7 @@ public:
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const Byte *newData, int width, int height,
-              G_Texture::Format imageFormat,
+              GL::ColorInternalFormat imageFormat,
               bool genMipMaps = true);
     void Fill(const Byte *newData, int width, int height,
               int sizeOfNewData, bool genMipMaps = true);

@@ -41,6 +41,7 @@
 #define SCAST static_cast
 #define DCAST dynamic_cast
 #define RCAST reinterpret_cast
+#define GLCAST(x) SCAST<GLenum>(x)
 // =====================================================
 
 

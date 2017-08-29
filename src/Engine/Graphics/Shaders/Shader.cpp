@@ -2,7 +2,7 @@
 
 #include "Bang/ShaderPreprocessor.h"
 
-Shader::Shader(G_Shader::Type t) : G_Shader(t)
+Shader::Shader(GL::ShaderType t) : G_Shader(t)
 {
 }
 
@@ -13,7 +13,7 @@ void Shader::PreprocessCode(String *shaderSrc) const
 
 String Shader::ToString() const
 {
-    if (m_type == Type::Vertex)
+    if (m_type == GL::ShaderType::Vertex)
     {
         return "Vertex Shader: '" + m_filepath + "'";
     }
