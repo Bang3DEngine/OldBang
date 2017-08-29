@@ -16,7 +16,6 @@ Component::~Component()
 void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
-    m_gameObjectTransform = m_gameObject->transform;
 }
 
 GameObject *Component::GetGameObject() const { return m_gameObject; }

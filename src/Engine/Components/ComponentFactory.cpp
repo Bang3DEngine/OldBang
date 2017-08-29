@@ -77,28 +77,33 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
 
 bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
 {
-    EXISTS_COMPONENT(componentClassName, AudioListener);
-    EXISTS_COMPONENT(componentClassName, AudioSource);
-    EXISTS_COMPONENT(componentClassName, Behaviour);
-    EXISTS_COMPONENT(componentClassName, Camera);
-    EXISTS_COMPONENT(componentClassName, CircleRenderer);
-    EXISTS_COMPONENT(componentClassName, DirectionalLight);
     EXISTS_COMPONENT(componentClassName, Light);
+    EXISTS_COMPONENT(componentClassName, Camera);
+    EXISTS_COMPONENT(componentClassName, UIMask);
+    EXISTS_COMPONENT(componentClassName, Renderer);
+    EXISTS_COMPONENT(componentClassName, UIButton);
+    EXISTS_COMPONENT(componentClassName, UICanvas);
+    EXISTS_COMPONENT(componentClassName, Behaviour);
+    EXISTS_COMPONENT(componentClassName, Transform);
+    EXISTS_COMPONENT(componentClassName, PointLight);
+    EXISTS_COMPONENT(componentClassName, UIRenderer);
+    EXISTS_COMPONENT(componentClassName, AudioSource);
+    EXISTS_COMPONENT(componentClassName, UIInputText);
     EXISTS_COMPONENT(componentClassName, LineRenderer);
     EXISTS_COMPONENT(componentClassName, MeshRenderer);
-    EXISTS_COMPONENT(componentClassName, PointLight);
-    EXISTS_COMPONENT(componentClassName, PostProcessEffect);
-    EXISTS_COMPONENT(componentClassName, RectTransform);
-    EXISTS_COMPONENT(componentClassName, Renderer);
-    EXISTS_COMPONENT(componentClassName, SingleLineRenderer);
-    EXISTS_COMPONENT(componentClassName, Transform);
-    EXISTS_COMPONENT(componentClassName, UIImageRenderer);
-    EXISTS_COMPONENT(componentClassName, UIRenderer);
-    EXISTS_COMPONENT(componentClassName, UIButton);
     EXISTS_COMPONENT(componentClassName, UIBorderRect);
+    EXISTS_COMPONENT(componentClassName, UIScrollArea);
+    EXISTS_COMPONENT(componentClassName, UITextCursor);
+    EXISTS_COMPONENT(componentClassName, AudioListener);
+    EXISTS_COMPONENT(componentClassName, RectTransform);
+    EXISTS_COMPONENT(componentClassName, CircleRenderer);
     EXISTS_COMPONENT(componentClassName, UIButtonTinter);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
+    EXISTS_COMPONENT(componentClassName, UIImageRenderer);
+    EXISTS_COMPONENT(componentClassName, DirectionalLight);
     EXISTS_COMPONENT(componentClassName, UIVerticalLayout);
+    EXISTS_COMPONENT(componentClassName, PostProcessEffect);
+    EXISTS_COMPONENT(componentClassName, SingleLineRenderer);
     EXISTS_COMPONENT(componentClassName, UIHorizontalLayout);
 
     return false;

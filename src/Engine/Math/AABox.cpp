@@ -8,7 +8,7 @@
 #include "Bang/Sphere.h"
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
-#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -200,13 +200,13 @@ Array<Vector3> AABox::GetPoints() const
 
 Rect AABox::GetAABoundingScreenRect(Camera *cam) const
 {
-    Vector3 camPosition = cam->transform->GetPosition();
+    Vector3 camPosition = cam->gameObject->transform->GetPosition();
     if ( Contains(camPosition) ) { return Rect::ScreenRect; }
     Array<Vector3> boxPoints = (*this).GetPoints();
 
     List<Vector2> screenPoints;
     bool somePointInFront = false;
-    Vector3 camForward = cam->transform->GetForward();
+    Vector3 camForward = cam->gameObject->transform->GetForward();
     for (const Vector3 &p : boxPoints)
     {
         somePointInFront = somePointInFront ||

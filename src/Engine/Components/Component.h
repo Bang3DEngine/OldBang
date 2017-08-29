@@ -17,7 +17,6 @@ class Component : public SceneAgent,
 
 public:
     GameObject* const& gameObject = m_gameObject;
-    Transform* const& transform = m_gameObjectTransform;
 
     void SetGameObject(GameObject *gameObject);
 
@@ -40,7 +39,6 @@ protected:
 
 private:
     GameObject *m_gameObject = nullptr;
-    Transform *m_gameObjectTransform = nullptr;
 
     friend class GameObject;
 };

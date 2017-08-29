@@ -239,6 +239,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     m_localToParentMatrix.Set(Matrix4::TranslateMatrix(moveToAnchorCenter) *
                               Matrix4::ScaleMatrix(anchorScaling) *
                               Matrix4::TranslateMatrix(moveToPivot));
+
     return m_localToParentMatrix.Get();
 }
 

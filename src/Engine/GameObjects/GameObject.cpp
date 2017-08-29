@@ -123,8 +123,7 @@ Component *GameObject::AddComponent(const String &componentClassName,
     return AddComponent(c, _index);
 }
 
-Component* GameObject::
-AddComponent(Component *c, int _index)
+Component* GameObject::AddComponent(Component *c, int _index)
 {
     if (c && !m_components.Contains(c))
     {
@@ -342,7 +341,7 @@ void GameObject::Read(const XMLNode &xmlInfo)
 
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
-        const String tagName = xmlChild.GetTagName();
+        const String& tagName = xmlChild.GetTagName();
         if (GameObjectFactory::ExistsGameObjectClass(tagName))
         {
             GameObject *child = GameObjectFactory::CreateGameObject(tagName);

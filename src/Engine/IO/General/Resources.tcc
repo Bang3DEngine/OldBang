@@ -19,7 +19,6 @@ TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
 
     Resource *res = Resources::GetCached<ResourceClass>(
                 ImportFilesManager::GetGUIDFromFilepath(filepath) );
-    Debug_Log("Load filepath: " << filepath << ", res: " << res);
     if (!res)
     {
         res = new ResourceClass();
@@ -33,7 +32,6 @@ TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
         }
         Resources::Add<ResourceClass>(res->GetGUID(), res);
     }
-    Debug_Log("Returning resource " << filepath << ": " << res->GetGUID());
     return DCAST<ResourceClass*>(res);
 }
 
@@ -50,7 +48,6 @@ ResourceClass* Resources::Load(const GUID &guid)
 
     if (!Resources::Contains<ResourceClass>(guid))
     {
-        Debug_Log(guid << ": " << ImportFilesManager::GetFilepath(guid));
         Resources::Load<ResourceClass>( ImportFilesManager::GetFilepath(guid) );
     }
     return Resources::GetCached<ResourceClass>(guid);

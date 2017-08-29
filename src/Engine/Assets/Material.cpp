@@ -98,7 +98,6 @@ void Material::CloneInto(ICloneable *clone) const
 
 void Material::Import(const Path &materialFilepath)
 {
-    Debug_Log("***************Import MATERIAL: " << materialFilepath);
     ReadFromFile(materialFilepath);
 }
 

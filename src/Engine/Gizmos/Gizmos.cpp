@@ -214,7 +214,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
     {
         Camera *cam = SceneManager::GetActiveScene()->GetCamera();
 
-        Vector3 camPos = cam->transform->GetPosition();
+        Vector3 camPos = cam->gameObject->transform->GetPosition();
         float distScale = 1.0f;
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
@@ -224,8 +224,9 @@ void Gizmos::RenderIcon(const Texture2D *texture,
         Vector3 scale = g->m_gizmosGo->transform->GetScale();
         g->m_gizmosGo->transform->SetScale(distScale * scale * 8.0f);
 
-        g->m_gizmosGo->transform->LookInDirection(cam->transform->GetForward(),
-                                                  cam->transform->GetUp());
+        g->m_gizmosGo->transform->LookInDirection(
+                    cam->gameObject->transform->GetForward(),
+                    cam->gameObject->transform->GetUp());
     }
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
     g->Render(g->m_meshRenderer);

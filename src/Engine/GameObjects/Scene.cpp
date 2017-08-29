@@ -12,7 +12,6 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
-    AddComponent<Transform>();
 }
 
 Scene::~Scene()

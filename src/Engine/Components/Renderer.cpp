@@ -8,6 +8,7 @@
 #include "Bang/Transform.h"
 #include "Bang/G_GBuffer.h"
 #include "Bang/Resources.h"
+#include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
@@ -40,7 +41,10 @@ void Renderer::Bind() const
     glLineWidth(m_lineWidth);
 
     Matrix4 model;
-    if (transform) { transform->GetLocalToWorldMatrix(&model); }
+    if (gameObject && gameObject->transform)
+    {
+        gameObject->transform->GetLocalToWorldMatrix(&model);
+    }
     GL::SetModelMatrix(model);
 
     Material *mat = GetMaterial();
@@ -154,12 +158,6 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Component::Write(xmlInfo);
 
     Material *sharedMat = GetSharedMaterial();
-    Debug_Log("MaterialFactory::GetDefaultUnLighted()->GetGUID(): " << MaterialFactory::GetDefaultUnLighted()->GetGUID());
-    if (sharedMat) {
-        Debug_Log("sharedMat->GetGUID(): " << sharedMat->GetGUID());
-        GUID matGUID = sharedMat->GetGUID();
-        Debug_Log("Saving " << GetClassName() << " with materialGUID: " << sharedMat->GetGUID());
-    }
     xmlInfo->Set("Material", sharedMat ? sharedMat->GetGUID() : GUID::Empty());
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());

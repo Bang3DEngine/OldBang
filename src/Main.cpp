@@ -75,6 +75,7 @@ public:
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
         GameObject *resultGo = GameObject::Find("resultGameObject");
 
+        /*
         String name = nameGo->GetComponent<UIInputText>()->GetText()->GetContent();
         String surname = surnameGo->GetComponent<UIInputText>()->GetText()->GetContent();
         resultGo->GetComponentInChildren<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
@@ -93,6 +94,7 @@ public:
             scrollArea->SetScrolling(scroll + Vector2i::Up); }
         else if (Input::GetKeyDownRepeat(Input::Key::Down)) {
             scrollArea->SetScrolling(scroll + Vector2i::Down); }
+            */
     }
 };
 
@@ -130,9 +132,9 @@ int main(int argc, char **argv)
 
     //*
     Scene *scene = new Scene();
+    scene->AddComponent<Transform>();
 
     UIGameObject *rightImg = GameObjectFactory::CreateUIGameObject(true);
-    rightImg->SetName("RightImage");
     rightImg->AddComponent<UIImageRenderer>()->SetTexture( EPATH("tmp/test.png") );
     UIGameObject *rightLabel = GameObjectFactory::CreateGUILabel(
                                         "Lorem ipsum dolor sit amet. El veloz "
@@ -209,8 +211,7 @@ int main(int argc, char **argv)
     UIGameObject *buttonPlayMask = GameObjectFactory::CreateUIGameObject(true);
     buttonPlayMask->AddComponent<UIMask>();
     UIImageRenderer *maskImg = buttonPlayMask->AddComponent<UIImageRenderer>();
-    maskImg->SetTexture(
-             new Texture2D( EPATH("tmp/test.png") ) );
+    maskImg->SetTexture( Resources::Load<Texture2D>( EPATH("tmp/test.png") ) );
     buttonPlay->GetGameObject()->GetComponent<RectTransform>()->SetMargins(10);
     buttonPlay->GetGameObject()->SetParent(buttonPlayMask);
 
@@ -220,9 +221,10 @@ int main(int argc, char **argv)
     uiImg->SetTint(Color::Red);
 
     UIGameObject *leftMask = GameObjectFactory::CreateUIGameObject(true);
+    leftMask->SetName("LeftMask");
     leftMask->AddComponent<UIMask>();
     UIImageRenderer *img = leftMask->AddComponent<UIImageRenderer>();
-    img->SetTexture( new Texture2D( EPATH("tmp/test2.png") ) );
+    img->SetTexture( Resources::Load<Texture2D>( EPATH("tmp/test2.png") ) );
     UIGameObject *menuVLayout = GameObjectFactory::CreateUIGameObject(true);
     menuVLayout->AddComponent<UIVerticalLayout>();
     menuVLayout->GetRectTransform()->SetMargins(30);
@@ -250,9 +252,11 @@ int main(int argc, char **argv)
     surnameInput->GetComponent<UIInputText>()->GetText()->SetTextSize(s);
 
     UIGameObject *mainHLayout = GameObjectFactory::CreateUIGameObject(true);
+    mainHLayout->SetName("MainHLayout");
     mainHLayout->AddComponent<Menu>();
     mainHLayout->AddComponent<UIHorizontalLayout>();
     mainHLayout->GetComponent<UIDirLayout>()->SetSpacing(0);
+    rightImg->SetName("RightImg");
     rightVLayout->SetParent(mainHLayout);
     uiVContainer->SetParent(mainHLayout, 0);
 
@@ -307,10 +311,8 @@ int main(int argc, char **argv)
     });
 
     SceneManager::LoadScene(scene);
-    scene->WriteToFile( EPATH("tmp/Test.bscene") );
-    //*/
-    SceneManager::LoadScene( EPATH("tmp/Test.bscene") );
-    //*/
+    scene->WriteToFile( EPATH("tmp/Test2.bscene") );
+    SceneManager::LoadScene( EPATH("tmp/Test2.bscene") );
     app.MainLoop();
 
     return 0;

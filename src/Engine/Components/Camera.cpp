@@ -9,9 +9,10 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
-#include "Bang/Transform.h"
-#include "Bang/ShaderProgram.h"
 #include "Bang/Resources.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/ShaderProgram.h"
 
 Camera::Camera()
 {
@@ -77,10 +78,10 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     // If there's one or more points behind the camera, return ScreenRect
     // because we don't know how to handle it properly
     Array<Vector3> points = bbox.GetPoints();
-    Vector3 camForward = transform->GetForward();
+    Vector3 camForward = gameObject->transform->GetForward();
     for (const Vector3 &p : points)
     {
-        Vector3 dirToP = p - transform->GetPosition();
+        Vector3 dirToP = p - gameObject->transform->GetPosition();
         if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
     }
 
@@ -111,7 +112,7 @@ float Camera::GetOrthoWidth() const
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
-    transform->GetLocalToWorldMatrix(view);
+    gameObject->transform->GetLocalToWorldMatrix(view);
     *view = view->Inversed();
 }
 

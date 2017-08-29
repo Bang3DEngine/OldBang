@@ -49,7 +49,6 @@ void ImportFilesManager::LoadImportFilepathGUIDs()
         XMLNode info = XMLParser::FromFile(importFilepath);
 
         GUID guid = info.Get<GUID>("GUID");
-        Debug_Log(importFilepath << ": " << guid);
         ifm->m_GUIDToImportFilepath.Add(guid, importFilepath);
         ifm->m_importFilepathToGUID.Add(importFilepath, guid);
     }
@@ -86,14 +85,12 @@ GUIDManager* ImportFilesManager::GetGUIDManager()
 GUID ImportFilesManager::GetGUIDFromFilepath(const Path& filepath)
 {
     Path importFilepath = GetImportFilePath(filepath);
-    Debug_Log("GUID for " << filepath << ": " << GetGUIDFromImportFilepath(importFilepath));
     return GetGUIDFromImportFilepath(importFilepath);
 }
 
 GUID ImportFilesManager::GetGUIDFromImportFilepath(const Path& importFilepath)
 {
     XMLNode xmlNode = XMLParser::FromFile(importFilepath);
-    Debug_Log("GUID for " << importFilepath << ": " << xmlNode.Get<GUID>("GUID"));
     return xmlNode.Get<GUID>("GUID");
 }
 

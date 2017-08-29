@@ -40,9 +40,9 @@ void AudioSource::OnUpdate()
         }
     }
 
-    if (transform)
+    if (gameObject->transform)
     {
-        ALAudioSource::SetPosition(transform->GetPosition());
+        ALAudioSource::SetPosition(gameObject->transform->GetPosition());
     }
 }
 

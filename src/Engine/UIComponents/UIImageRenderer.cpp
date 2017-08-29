@@ -72,7 +72,7 @@ void UIImageRenderer::Read(const XMLNode &xmlInfo)
     { SetTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) ); }
 
     if (xmlInfo.Contains("Tint"))
-    { SetTint( xmlInfo.Get<Color>("Tint", Color::White) ); }
+    { SetTint( xmlInfo.Get<Color>("Tint") ); }
 }
 
 void UIImageRenderer::Write(XMLNode *xmlInfo) const

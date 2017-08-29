@@ -62,18 +62,19 @@ void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
-    transform->SetEnabled(false);
+    gameObject->transform->SetEnabled(false);
     UIRenderer::Bind();
 }
 
 void UITextRenderer::UnBind() const
 {
     UIRenderer::UnBind();
-    transform->SetEnabled(true);
+    gameObject->transform->SetEnabled(true);
 }
 
 void UITextRenderer::RefreshMesh()
 {
+    ENSURE(gameObject); ENSURE(gameObject->transform);
     if (!m_hasChanged) { return; }
     m_hasChanged = false;
 
@@ -85,7 +86,7 @@ void UITextRenderer::RefreshMesh()
     }
 
     // Get the quad positions of the rects of each char
-    RectTransform *rt = SCAST<RectTransform*>(transform); ENSURE(rt);
+    RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
     Vector2i sizedSpacingPx = Vector2i(
                 G_Font::ScaleMagnitude(Vector2f(GetSpacing()), GetTextSize()));
     Array<TextFormatter::CharRect> textCharRects =
