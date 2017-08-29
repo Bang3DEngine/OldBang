@@ -13,9 +13,6 @@ UIImageRenderer::UIImageRenderer()
     UseMaterialCopy();
 
     p_quadMesh = MeshFactory::GetUIPlane();
-
-    m_imageTexture = new Texture2D(); // TODO: MEMLEAK
-    m_imageTexture->CreateEmpty(1,1);
 }
 
 UIImageRenderer::~UIImageRenderer()

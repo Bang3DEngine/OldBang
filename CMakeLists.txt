@@ -6,6 +6,7 @@ project(Bang C CXX)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
 set(SRC_DIR ${ROOT}/src)
+set(ENGINE_ASSETS_DIR ${ROOT}/res/EngineAssets)
 set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
 
 set(CMAKE_BINARY_DIR ${ROOT}/bin)
@@ -127,6 +128,25 @@ ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 )
 
+macro(add_info_files)
+     foreach(_it ${ARGN})
+         if(NOT IS_DIRECTORY ${_it})
+             get_filename_component(name ${_it} NAME)
+             if(NOT ${_it} MATCHES "^/\\\\..*$;~$")
+                set_source_files_properties(${_it} PROPERTIES HEADER_FILE_ONLY TRUE)
+             endif()
+         endif()
+     endforeach()
+endmacro()
+file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag_g" "[^.]*.frag_pp"
+                               "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
+                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat")
+set(OTHER_FILES
+    README.md
+    "${OTHER_FILES}"
+    )
+add_info_files(${OTHER_FILES})
+
 # BangEngine Library
 include_directories(${ROOT}/include/Bang/BangEngine)
 include_directories(${ROOT}/include/Bang/BangPreprocessor)
@@ -228,6 +248,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/IFocusListener.h
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
+${OTHER_FILES}
 )
 
 # BangPreprocessor Executable

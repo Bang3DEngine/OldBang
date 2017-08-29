@@ -75,7 +75,6 @@ public:
         GameObject *surnameGo = GameObject::Find("surnameGameObject");
         GameObject *resultGo = GameObject::Find("resultGameObject");
 
-        /*
         String name = nameGo->GetComponent<UIInputText>()->GetText()->GetContent();
         String surname = surnameGo->GetComponent<UIInputText>()->GetText()->GetContent();
         resultGo->GetComponentInChildren<UITextRenderer>()->SetContent("Hello " + name + " " + surname);
@@ -94,7 +93,6 @@ public:
             scrollArea->SetScrolling(scroll + Vector2i::Up); }
         else if (Input::GetKeyDownRepeat(Input::Key::Down)) {
             scrollArea->SetScrolling(scroll + Vector2i::Down); }
-            */
     }
 };
 
