@@ -12,20 +12,20 @@
 G_Framebuffer::G_Framebuffer(int width, int height) : m_width(width),
                                                       m_height(height)
 {
-    glGenFramebuffers(1, &m_idGL);
+    GL::GenFramebuffers(1, &m_idGL);
 }
 
 G_Framebuffer::~G_Framebuffer()
 {
     if (m_depthRenderBufferId != 0)
     {
-        glDeleteRenderbuffers(1, &m_depthRenderBufferId);
+        GL::DeleteRenderBuffers(1, &m_depthRenderBufferId);
     }
-    glDeleteFramebuffers(1, &m_idGL);
+    GL::DeleteFramebuffers(1, &m_idGL);
 }
 
 void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
-                                          GL::ColorInternalFormat texFormat)
+                                          GL::ColorFormat texFormat)
 {
     Bind();
     GL::ClearError();
@@ -52,7 +52,7 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
 {
     Bind();
     GL::ClearError();
-    glGenRenderbuffers(1, &m_depthRenderBufferId);
+    GL::GenRenderBuffers(1, &m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
                           m_width, m_height);
@@ -102,25 +102,13 @@ Color G_Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     Bind();
     G_RenderTexture *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
-    Color readColor;
-    if (t->GetInternalDataType() == GL::DataType::Float)
-    {
-        glReadPixels(x, t->GetHeight() - y,
-                     1, 1,
-                     GLCAST(t->GetInternalFormat()),
-                     GLCAST(t->GetInternalDataType()),
-                     &readColor);
-    }
-    else
-    {
-        Byte bColor[4];
-        glReadPixels(x, t->GetHeight() - y,
-                     1, 1,
-                     GLCAST(t->GetInternalFormat()),
-                     GLCAST(t->GetInternalDataType()),
-                     &bColor);
-        readColor = Color(bColor[0], bColor[1], bColor[2], bColor[3]) / 255.0f;
-    }
+    Byte color[4];
+    glReadPixels(x, t->GetHeight() - y,
+                 1, 1,
+                 GL_RGBA,
+                 GL_UNSIGNED_BYTE,
+                 &color);
+    Color readColor = Color(color[0], color[1], color[2], color[3]) / 255.0f;
     UnBind();
     return readColor;
 }

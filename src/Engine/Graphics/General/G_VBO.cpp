@@ -2,12 +2,12 @@
 
 G_VBO::G_VBO()
 {
-    glGenBuffers(1, &m_idGL);
+    GL::GenBuffers(1, &m_idGL);
 }
 
 G_VBO::~G_VBO()
 {
-    glDeleteBuffers(1, &m_idGL);
+    GL::DeleteBuffers(1, &m_idGL);
 }
 
 void G_VBO::Fill(const void *data, int dataSize, GLenum usage)

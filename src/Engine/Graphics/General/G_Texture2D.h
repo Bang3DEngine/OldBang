@@ -13,11 +13,11 @@ public:
     void LoadFromImage(const G_Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(const Byte *newData, int width, int height,
-              GL::ColorInternalFormat imageFormat,
+    void Fill(const Byte *newData,
+              int width, int height,
+              GL::ColorComp inputDataColorComp,
+              GL::DataType inputDataType,
               bool genMipMaps = true);
-    void Fill(const Byte *newData, int width, int height,
-              int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 
     G_Image ToImage(bool invertY = false);

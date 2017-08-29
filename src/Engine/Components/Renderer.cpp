@@ -38,7 +38,7 @@ void Renderer::Bind() const
     GL::SetViewProjMode(m_viewProjMode);
     GL::SetWireframe(m_drawWireframe);
     GL::SetCullMode(m_cullMode);
-    glLineWidth(m_lineWidth);
+    GL::LineWidth(m_lineWidth);
 
     Matrix4 model;
     if (gameObject && gameObject->transform)

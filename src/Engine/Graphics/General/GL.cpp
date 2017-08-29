@@ -81,6 +81,141 @@ void GL::Disable(GLenum glEnum)
     glDisable(glEnum);
 }
 
+void GL::GenerateMipMap(GL::TextureTarget textureTarget)
+{
+    GL::ClearError();
+    glGenerateMipmap( GLCAST(textureTarget) );
+    GL_CheckError();
+}
+
+void GL::TexImage2D(GL::TextureTarget textureTarget,
+                    int textureWidth,
+                    int textureHeight,
+                    GL::ColorFormat textureInternalColorFormat,
+                    GL::ColorComp inputDataColorComp,
+                    GL::DataType inputDataType,
+                    const void *data)
+{
+    GL::ClearError();
+
+    glTexImage2D(GLCAST(textureTarget),
+                 0,
+                 GLCAST(textureInternalColorFormat),
+                 textureWidth,
+                 textureHeight,
+                 0,
+                 GLCAST(inputDataColorComp),
+                 GLCAST(inputDataType),
+                 data);
+
+    GL_CheckError();
+}
+
+void GL::TexParameterFilter(GL::TextureTarget textureTarget,
+                            GL::FilterMagMin filterMagMin,
+                            GL::FilterMode filterMode)
+{
+    glTexParameteri(GLCAST(textureTarget),
+                    GLCAST(filterMagMin),
+                    GLCAST(filterMode));
+}
+
+void GL::TexParameterWrap(GL::TextureTarget textureTarget,
+                          GL::WrapCoord wrapCoord,
+                          GL::WrapMode wrapMode)
+{
+    glTexParameteri(GLCAST(textureTarget),
+                    GLCAST(wrapCoord),
+                    GLCAST(wrapMode));
+}
+
+void GL::GetTexImage(GL::TextureTarget textureTarget,
+                     Byte *pixels)
+{
+    GL::ClearError();
+
+    glGetTexImage(GLCAST(textureTarget),
+                  0,
+                  GLCAST(GL::ColorComp::RGBA),
+                  GLCAST(GL::DataType::UnsignedByte),
+                  SCAST<void*>(pixels));
+
+    GL_CheckError();
+}
+
+void GL::GetInteger(GL::Enum glEnum, int *values)
+{
+    glGetIntegerv(glEnum, values);
+}
+
+int GL::GetInteger(GL::Enum glEnum)
+{
+    GLint result;
+    GL::GetInteger(glEnum, &result);
+    return result;
+}
+
+void GL::ActiveTexture(int activeTexture)
+{
+    ASSERT(activeTexture >= GL_TEXTURE0);
+    glActiveTexture(activeTexture);
+}
+
+void GL::LineWidth(float lineWidth)
+{
+    glLineWidth(lineWidth);
+}
+
+void GL::GenFramebuffers(int n, GLId *glIds)
+{
+    glGenFramebuffers(n, glIds);
+}
+
+void GL::GenRenderBuffers(int n, GLId *glIds)
+{
+    glGenRenderbuffers(n, glIds);
+}
+
+void GL::GenTextures(int n, GLId *glIds)
+{
+    glGenTextures(n, glIds);
+}
+
+void GL::GenVertexArrays(int n, GLId *glIds)
+{
+    glGenVertexArrays(n, glIds);
+}
+
+void GL::GenBuffers(int n, GLId *glIds)
+{
+    glGenBuffers(n, glIds);
+}
+
+void GL::DeleteFramebuffers(int n, const GLId *glIds)
+{
+    glDeleteFramebuffers(n, glIds);
+}
+
+void GL::DeleteRenderBuffers(int n, const GLId *glIds)
+{
+    glDeleteRenderbuffers(n, glIds);
+}
+
+void GL::DeleteTextures(int n, const GLId *glIds)
+{
+    glDeleteTextures(n, glIds);
+}
+
+void GL::DeleteVertexArrays(int n, const GLId *glIds)
+{
+    glDeleteVertexArrays(n, glIds);
+}
+
+void GL::DeleteBuffers(int n, const GLId *glIds)
+{
+    glDeleteBuffers(n, glIds);
+}
+
 void GL::SetViewport(int x, int y, int width, int height)
 {
     glViewport(x, y, width, height);
@@ -106,13 +241,6 @@ void GL::Bind(const GLObject *bindable)
 }
 
 void GL::Bind(GL::BindTarget bindTarget, GLId glId)
-{
-    GL::_Bind(bindTarget, glId);
-    GL *gl = GL::GetActive();
-    if (gl) { gl->OnBind(bindTarget, glId); }
-}
-
-void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
 {
     switch (bindTarget)
     {
@@ -143,9 +271,7 @@ void GL::UnBind(const GLObject *bindable)
 
 void GL::UnBind(GL::BindTarget bindTarget)
 {
-    GL *gl = GL::GetActive();
-    if (gl) { gl->OnUnBind(bindTarget); }
-    else { gl->_Bind(bindTarget, 0); }
+    GL::Bind(bindTarget, 0);
 }
 
 bool GL::IsBound(const GLObject *bindable)
@@ -336,10 +462,21 @@ void GL::SetZNearFar(float zNear, float zFar)
 
 GLenum GL::GetStencilOp() { return GL::GetActive()->m_stencilOp; }
 Byte GL::GetStencilValue() { return GL::GetActive()->m_stencilValue; }
-bool GL::IsColorMaskR() { return GL::GetActive()->m_colorMaskR; }
-bool GL::IsColorMaskG() { return GL::GetActive()->m_colorMaskG; }
-bool GL::IsColorMaskB() { return GL::GetActive()->m_colorMaskB; }
-bool GL::IsColorMaskA() { return GL::GetActive()->m_colorMaskA; }
+
+Array<BoolByte> GL::GetColorMask()
+{
+    int colorMask[4];
+    GL::GetInteger(GL_COLOR_WRITEMASK, &colorMask[0]);
+    return {SCAST<BoolByte>(colorMask[0]),
+            SCAST<BoolByte>(colorMask[1]),
+            SCAST<BoolByte>(colorMask[2]),
+            SCAST<BoolByte>(colorMask[3])};
+}
+bool GL::IsColorMaskR()  { return GL::GetColorMask().At(0) == 1;  }
+bool GL::IsColorMaskG()  { return GL::GetColorMask().At(1) == 1;  }
+bool GL::IsColorMaskB()  { return GL::GetColorMask().At(2) == 1;  }
+bool GL::IsColorMaskA()  { return GL::GetColorMask().At(3) == 1;  }
+
 bool GL::IsStencilWrite()
 {
     return GL::GetActive()->GetStencilOp() != GL_KEEP;
@@ -349,95 +486,95 @@ bool GL::IsDepthWrite() { return GL::GetActive()->m_writeDepth; }
 bool GL::IsDepthTest() { return GL::GetActive()->m_testDepth; }
 bool GL::IsWireframe() { return GL::GetActive()->m_wireframe; }
 GL::Face GL::GetCullMode() { return GL::GetActive()->m_cullMode; }
-bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
-{
-    GL *gl = GL::GetActive();
-    auto it = gl->m_glBoundIds.Find(bindTarget);
-    if (it != gl->m_glBoundIds.End())
-    {
-        const std::stack<GLId>& boundIds = it->second;
-        return !boundIds.empty() && boundIds.top() == glId;
-    }
-    return false;
-}
-const Matrix4&
-GL::GetModelMatrix() { return GL::GetActive()->m_modelMatrix; }
-const Matrix4&
-GL::GetViewMatrix() { return GL::GetActive()->m_viewMatrix; }
-const Matrix4&
-GL::GetProjectionMatrix() { return GL::GetActive()->m_projectionMatrix; }
+
+const Matrix4& GL::GetModelMatrix()
+{ return GL::GetActive()->m_modelMatrix; }
+
+const Matrix4& GL::GetViewMatrix()
+{ return GL::GetActive()->m_viewMatrix; }
+
+const Matrix4& GL::GetProjectionMatrix()
+{ return GL::GetActive()->m_projectionMatrix; }
+
 GLId GL::GetBoundId(GL::BindTarget bindTarget)
 {
-    GL *gl = GL::GetActive();
-    if (!gl->m_glBoundIds.ContainsKey(bindTarget)) { return 0; }
-    const std::stack<GLId> &boundIds = gl->m_glBoundIds.Get(bindTarget);
-    return boundIds.empty() ? 0 : boundIds.top();
-}
-
-void GL::OnBind(GL::BindTarget bindTarget, GLId glId)
-{
-    if (!m_glBoundIds.ContainsKey(bindTarget))
+    switch(bindTarget)
     {
-        m_glBoundIds.Add(bindTarget, std::stack<GLId>());
+        case GL::BindTarget::Texture2D:
+            return GL::GetInteger(GL_TEXTURE_BINDING_2D);
+        case GL::BindTarget::Framebuffer:
+            return GL::GetInteger(GL_FRAMEBUFFER_BINDING);
+        case GL::BindTarget::VAO:
+            return GL::GetInteger(GL_VERTEX_ARRAY_BINDING);
+        case GL::BindTarget::VBO:
+            return GL::GetInteger(GL_BUFFER_BINDING);
+        case GL::BindTarget::ShaderProgram:
+            return GL::GetInteger(GL_CURRENT_PROGRAM);
+        default: return 0;
     }
-    m_glBoundIds[bindTarget].push(glId);
+    return 0;
 }
 
-void GL::OnUnBind(GL::BindTarget bindTarget)
+bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
 {
-    if (!m_glBoundIds.ContainsKey(bindTarget)) { return; }
-
-    std::stack<GLId> &boundIds = m_glBoundIds.Get(bindTarget);
-    if (!boundIds.empty())
-    {
-        const GLId currentId = GL::GetBoundId(bindTarget);
-        boundIds.pop();
-        const GLId previousBoundId = GetBoundId(bindTarget);
-        if (currentId != previousBoundId)
-        {
-            GL::_Bind(bindTarget, previousBoundId);
-        }
-    }
+    return GL::GetBoundId(bindTarget) == glId;
 }
 
-uint GL::GetPixelBytesSize(GL::ColorInternalFormat texFormat)
+uint GL::GetPixelBytesSize(GL::ColorFormat texFormat)
 {
-    GL::ColorOrder colorOrder = GL::GetColorOrderFrom(texFormat);
-    GL::DataType glDataType   = GL::GetDataTypeFrom(texFormat);
-
-    uint numComps = 1;
-    if (colorOrder == GL::ColorOrder::RGBA) { numComps = 4; }
-    else if (colorOrder == GL::ColorOrder::RGB) { numComps = 3; }
-
-    uint dataSize = 1;
-    if (glDataType == GL::DataType::Float) { dataSize = 4; }
-
-    return numComps * dataSize;
+    GL::ColorComp colorOrder = GL::GetColorCompFrom(texFormat);
+    GL::DataType dataType    = GL::GetDataTypeFrom(texFormat);
+    return GL::GetPixelBytesSize(colorOrder, dataType);
 }
 
-GL::DataType GL::GetDataTypeFrom(GL::ColorInternalFormat texFormat)
+uint GL::GetPixelBytesSize(GL::ColorComp colorComp, GL::DataType dataType)
 {
-    if (texFormat == GL::ColorInternalFormat::RGBA_UByte8)
+    return GL::GetNumComponents(colorComp) * GL::GetBytesSize(dataType);
+}
+
+uint GL::GetBytesSize(GL::DataType dataType)
+{
+    if (dataType == GL::DataType::Byte)   { return sizeof(Byte); }
+    if (dataType == GL::DataType::UnsignedByte) { return sizeof(Byte); }
+    if (dataType == GL::DataType::Short) { return sizeof(short); }
+    if (dataType == GL::DataType::UnsignedShort) { return sizeof(unsigned short); }
+    if (dataType == GL::DataType::Int) { return sizeof(int); }
+    if (dataType == GL::DataType::UnsignedInt) { return sizeof(uint); }
+    if (dataType == GL::DataType::Float)  { return sizeof(float); }
+    if (dataType == GL::DataType::Double) { return sizeof(double); }
+    return 1;
+}
+
+uint GL::GetNumComponents(GL::ColorComp colorComp)
+{
+    if (colorComp == GL::ColorComp::RGBA) { return 4; }
+    if (colorComp == GL::ColorComp::RGB)  { return 3; }
+    return 3;
+}
+
+GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)
+{
+    if (format == GL::ColorFormat::RGBA_UByte8)
     {
         return GL::DataType::UnsignedByte;
     }
-    else if (texFormat == GL::ColorInternalFormat::RGBA_Float16 ||
-             texFormat == GL::ColorInternalFormat::RGBA_Float32)
+    else if (format == GL::ColorFormat::RGBA_Float16 ||
+             format == GL::ColorFormat::RGBA_Float32)
     {
         return GL::DataType::Float;
     }
     return GL::DataType::Float;
 }
 
-GL::ColorOrder GL::GetColorOrderFrom(GL::ColorInternalFormat texFormat)
+GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
 {
-    if (texFormat == GL::ColorInternalFormat::RGBA_UByte8   ||
-        texFormat == GL::ColorInternalFormat::RGBA_Float16 ||
-        texFormat == GL::ColorInternalFormat::RGBA_Float32)
+    if (format == GL::ColorFormat::RGBA_UByte8   ||
+        format == GL::ColorFormat::RGBA_Float16 ||
+        format == GL::ColorFormat::RGBA_Float32)
     {
-        return GL::ColorOrder::RGBA;
+        return GL::ColorComp::RGBA;
     }
-    return GL::ColorOrder::RGB;
+    return GL::ColorComp::RGB;
 }
 
 GL *GL::GetActive()

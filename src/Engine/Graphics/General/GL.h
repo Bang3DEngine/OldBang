@@ -3,7 +3,6 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <stack>
 
 #include "Bang/Map.h"
 #include "Bang/Color.h"
@@ -22,6 +21,8 @@ FORWARD class G_ShaderProgram;
 class GL
 {
 public:
+    using Enum = GLenum;
+
     enum class Primitives
     {
         Points        = GL_POINTS,
@@ -72,13 +73,13 @@ public:
         Fragment = GL_FRAGMENT_SHADER
     };
 
-    enum class ColorOrder
+    enum class ColorComp
     {
         RGB  = GL_RGB,
         RGBA = GL_RGBA
     };
 
-    enum class ColorInternalFormat
+    enum class ColorFormat
     {
         RGBA_UByte8   = GL_RGBA8,
         RGBA_Float16 = GL_RGBA16F,
@@ -106,6 +107,12 @@ public:
         Clamp = GL_CLAMP,
         ClampToEdge = GL_CLAMP_TO_EDGE
     };
+    enum class WrapCoord
+    {
+        WrapS = GL_TEXTURE_WRAP_S,
+        WrapT = GL_TEXTURE_WRAP_T,
+        WrapR = GL_TEXTURE_WRAP_R
+    };
 
     enum class FilterMode
     {
@@ -115,6 +122,11 @@ public:
         Trilinear_NL = GL_NEAREST_MIPMAP_LINEAR,
         Trilinear_LN = GL_LINEAR_MIPMAP_NEAREST,
         Trilinear_LL = GL_LINEAR_MIPMAP_LINEAR
+    };
+    enum class FilterMagMin
+    {
+        Mag = GL_TEXTURE_MAG_FILTER,
+        Min = GL_TEXTURE_MIN_FILTER
     };
 
     enum class Operation
@@ -154,6 +166,38 @@ public:
     static void Enable (GLenum glEnum);
     static void Disable(GLenum glEnum);
 
+    static void GenerateMipMap(GL::TextureTarget textureTarget);
+    static void TexImage2D(GL::TextureTarget textureTarget,
+                           int textureWidth,
+                           int textureHeight,
+                           GL::ColorFormat textureInternalColorFormat,
+                           GL::ColorComp inputDataColorComp,
+                           GL::DataType inputDataType,
+                           const void *data);
+    static void TexParameterFilter(GL::TextureTarget textureTarget,
+                                   GL::FilterMagMin filterMagMin,
+                                   GL::FilterMode filterMode);
+    static void TexParameterWrap(GL::TextureTarget textureTarget,
+                                 GL::WrapCoord wrapCoord,
+                                 GL::WrapMode wrapMode);
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            Byte *pixels);
+    static int GetInteger(GL::Enum glEnum);
+    static void GetInteger(GL::Enum glEnum, int *values);
+    static void ActiveTexture(int activeTexture);
+    static void LineWidth(float lineWidth);
+
+    static void GenFramebuffers(int n, GLId *glIds);
+    static void GenRenderBuffers(int n, GLId *glIds);
+    static void GenTextures(int n, GLId *glIds);
+    static void GenVertexArrays(int n, GLId *glIds);
+    static void GenBuffers(int n, GLId *glIds);
+    static void DeleteFramebuffers(int n, const GLId *glIds);
+    static void DeleteRenderBuffers(int n, const GLId *glIds);
+    static void DeleteTextures(int n, const GLId *glIds);
+    static void DeleteVertexArrays(int n, const GLId *glIds);
+    static void DeleteBuffers(int n, const GLId *glIds);
+
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
 
@@ -184,6 +228,7 @@ public:
     static bool IsColorMaskG();
     static bool IsColorMaskB();
     static bool IsColorMaskA();
+    static Array<BoolByte> GetColorMask();
     static bool IsStencilWrite();
     static bool IsStencilTest();
     static bool IsDepthWrite();
@@ -202,9 +247,13 @@ public:
     static bool IsBound(const GLObject *bindable);
     static bool IsBound(BindTarget bindTarget, GLId glId);
 
-    static uint GetPixelBytesSize(GL::ColorInternalFormat texFormat);
-    static GL::DataType GetDataTypeFrom(GL::ColorInternalFormat internalFormat);
-    static GL::ColorOrder GetColorOrderFrom(GL::ColorInternalFormat internalFormat);
+    static uint GetPixelBytesSize(GL::ColorFormat format);
+    static uint GetPixelBytesSize(GL::ColorComp colorComp,
+                                  GL::DataType dataType);
+    static uint GetBytesSize(GL::DataType dataType);
+    static uint GetNumComponents(GL::ColorComp colorComp);
+    static GL::DataType GetDataTypeFrom(GL::ColorFormat format);
+    static GL::ColorComp GetColorCompFrom(GL::ColorFormat format);
 
     static GL* GetActive();
 
@@ -219,15 +268,10 @@ private:
     bool m_testStencil = false;
     bool m_wireframe = false;
     GL::Face m_cullMode = GL::Face::None;
-    Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;
-
-    static void _Bind(BindTarget bindTarget, GLId glId);
-    void OnBind(GL::BindTarget bindTarget, GLId glId);
-    void OnUnBind(GL::BindTarget bindTarget);
 
     friend class GraphicPipeline;
 };

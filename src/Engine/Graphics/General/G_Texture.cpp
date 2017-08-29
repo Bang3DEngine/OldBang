@@ -2,7 +2,7 @@
 
 G_Texture::G_Texture()
 {
-    glGenTextures(1, &m_idGL);
+    GL::GenTextures(1, &m_idGL);
     SetFilterMode(m_filterMode);
     SetWrapMode(m_wrapMode);
     SetInternalFormat(m_internalFormat);
@@ -22,16 +22,14 @@ G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
     m_textureUnit = t.m_textureUnit;
     m_internalFormat = t.m_internalFormat;
     m_target = t.m_target;
-    m_data = t.m_data;
 }
 
 G_Texture::~G_Texture()
 {
-    if (m_data) { delete[] m_data; }
-    glDeleteTextures(1, &m_idGL);
+    GL::DeleteTextures(1, &m_idGL);
 }
 
-void G_Texture::SetInternalFormat(GL::ColorInternalFormat internalFormat)
+void G_Texture::SetInternalFormat(GL::ColorFormat internalFormat)
 {
     m_internalFormat = internalFormat;
 }
@@ -45,12 +43,8 @@ void G_Texture::SetFilterMode(GL::FilterMode filterMode)
 {
     m_filterMode = filterMode;
     Bind();
-    glTexParameteri(GLCAST(m_target),
-                    GL_TEXTURE_MAG_FILTER,
-                    GLCAST(filterMode));
-    glTexParameteri(GLCAST(m_target),
-                    GL_TEXTURE_MIN_FILTER,
-                    GLCAST(filterMode));
+    GL::TexParameterFilter(m_target, GL::FilterMagMin::Mag, filterMode);
+    GL::TexParameterFilter(m_target, GL::FilterMagMin::Min, filterMode);
     UnBind();
 }
 
@@ -58,15 +52,9 @@ void G_Texture::SetWrapMode(GL::WrapMode wrapMode)
 {
     m_wrapMode = wrapMode;
     Bind();
-    glTexParameteri(GLCAST(m_target),
-                    GL_TEXTURE_WRAP_S,
-                    GLint(wrapMode));
-    glTexParameteri(GLCAST(m_target),
-                    GL_TEXTURE_WRAP_T,
-                    GLCAST(wrapMode));
-    glTexParameteri(GLCAST(m_target),
-                    GL_TEXTURE_WRAP_R,
-                    GLCAST(wrapMode));
+    GL::TexParameterWrap(m_target, GL::WrapCoord::WrapS, wrapMode);
+    GL::TexParameterWrap(m_target, GL::WrapCoord::WrapT, wrapMode);
+    GL::TexParameterWrap(m_target, GL::WrapCoord::WrapR, wrapMode);
     UnBind();
 }
 
@@ -90,7 +78,7 @@ GL::DataType G_Texture::GetInternalDataType() const
     return GL::GetDataTypeFrom( GetInternalFormat() );
 }
 
-GL::ColorInternalFormat G_Texture::GetInternalFormat() const
+GL::ColorFormat G_Texture::GetInternalFormat() const
 {
     return m_internalFormat;
 }
@@ -117,7 +105,7 @@ int G_Texture::GetTextureUnit() const
 
 void G_Texture::BindToTextureUnit(int textureUnit) const
 {
-    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    GL::ActiveTexture(GL_TEXTURE0 + textureUnit);
     Bind();
 }
 

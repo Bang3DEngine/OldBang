@@ -5,7 +5,7 @@
 
 G_TextureUnitManager::G_TextureUnitManager()
 {
-    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &c_numTextureUnits);
+    c_numTextureUnits = GL::GetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
 }
 
 G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture *tex)
@@ -33,7 +33,7 @@ G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture 
         }
         tm->m_usedUnits.push(unitToUse);
 
-        glActiveTexture(GL_TEXTURE0 + unitToUse);
+        GL::ActiveTexture(GL_TEXTURE0 + unitToUse);
         tex->Bind();
     }
 
@@ -51,7 +51,7 @@ void G_TextureUnitManager::UnBindTexture(const G_Texture *tex)
         const TexUnit unit = it->second;
         tm->m_textureToUnit.Remove(tex);
 
-        glActiveTexture(GL_TEXTURE0 + unit);
+        GL::ActiveTexture(GL_TEXTURE0 + unit);
         tex->UnBind();
     }
 }

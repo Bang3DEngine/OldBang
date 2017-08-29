@@ -176,7 +176,9 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);
+    (*atlasTexture)->Bind();
     (*atlasTexture)->GenerateMipMaps();
+    (*atlasTexture)->UnBind();
 
     *fontFace = face;
     FT_Done_Face(face);

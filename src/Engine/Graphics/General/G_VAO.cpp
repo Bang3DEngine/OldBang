@@ -5,12 +5,12 @@
 
 G_VAO::G_VAO()
 {
-    glGenVertexArrays(1, &m_idGL);
+    GL::GenVertexArrays(1, &m_idGL);
 }
 
 G_VAO::~G_VAO()
 {
-    glDeleteVertexArrays(1, &m_idGL);
+    GL::DeleteVertexArrays(1, &m_idGL);
 }
 
 void G_VAO::BindVBO(const G_VBO *vbo,

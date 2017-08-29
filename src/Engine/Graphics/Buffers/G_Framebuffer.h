@@ -16,7 +16,7 @@ public:
     virtual ~G_Framebuffer();
 
     void CreateColorAttachment(GL::Attachment attachment,
-                               GL::ColorInternalFormat texFormat);
+                               GL::ColorFormat texFormat);
     void CreateDepthRenderbufferAttachment();
 
     G_RenderTexture* GetAttachmentTexture(GL::Attachment attachment) const;
