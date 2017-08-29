@@ -5,9 +5,9 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/String.h"
+#include "Bang/MeshIO.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Behaviour.h"
-#include "Bang/FileReader.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
 
@@ -139,7 +139,7 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
     Scene *scene = new Scene();
 
     SceneManager::SetActiveSceneFilepath( sceneFilepath );
-    if (scene->ReadFromFile(sceneFilepath))
+    if (scene->ImportXMLFromFile(sceneFilepath))
     {
         scene->SetName(sceneFilepath.GetName());
         SceneManager::LoadSceneInstantly(scene);

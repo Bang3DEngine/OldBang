@@ -144,9 +144,9 @@ void Camera::CloneInto(ICloneable *clone) const
     cam->SetProjectionMode(GetProjectionMode());
 }
 
-void Camera::Read(const XMLNode &xmlInfo)
+void Camera::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("ClearColor"))
     { SetClearColor(xmlInfo.Get<Color>("ClearColor")); }
@@ -167,9 +167,9 @@ void Camera::Read(const XMLNode &xmlInfo)
     { SetOrthoHeight( xmlInfo.Get<float>("OrthoHeight") ); }
 }
 
-void Camera::Write(XMLNode *xmlInfo) const
+void Camera::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 
     xmlInfo->Set("ClearColor", GetClearColor());
     xmlInfo->Set("ZNear", GetZNear());

@@ -1,11 +1,11 @@
-#ifndef FILEREADER_H
-#define FILEREADER_H
+#ifndef MESHIO_H
+#define MESHIO_H
 
 #include "Bang.h"
 
 FORWARD   class Scene;
 
-class FileReader
+class MeshIO
 {
 public:
     static int GetModelNumTriangles(const Path& filepath);
@@ -14,7 +14,7 @@ public:
                           Array<Vector3> *vertexNormals,
                           Array<Vector2> *vertexUvs);
 private:
-    FileReader() {}
+    MeshIO() {}
 };
 
-#endif // FILEREADER_H
+#endif // MESHIO_H

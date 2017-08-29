@@ -202,7 +202,7 @@ ${ENGINE_SRC_DIR}/IO/General/Resource.cpp
 ${ENGINE_SRC_DIR}/IO/General/Resources.cpp
 ${ENGINE_SRC_DIR}/IO/General/SerializableObject.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
-${ENGINE_SRC_DIR}/IO/Files/FileReader.cpp
+${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
 ${ENGINE_SRC_DIR}/IO/Project/Project.cpp
 ${ENGINE_SRC_DIR}/IO/Project/ProjectManager.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp

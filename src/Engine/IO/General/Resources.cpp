@@ -28,8 +28,8 @@ Array<Resource *> Resources::GetAllResources()
 
 void Resources::UnLoad(const GUID &guid, bool deleteResource)
 {
-    Resources *rs = Resources::GetInstance();
-    for (auto& itTypeMap : rs->m_GUIDToResource)
+    Resources *imp = Resources::GetInstance();
+    for (auto& itTypeMap : imp->m_GUIDToResource)
     {
         if (deleteResource)
         {

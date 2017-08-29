@@ -29,7 +29,7 @@ public:
     const Vector2& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
     const Texture2D* GetTexture() const;
-    bool GetReceivesLighting() const;
+    bool IsReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
@@ -40,8 +40,8 @@ public:
     void Import(const Path &materialFilepath) override;
 
     // SerializableObject
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
     const Texture2D *m_texture = nullptr;

@@ -31,14 +31,14 @@ void UICanvas::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
 }
 
-void UICanvas::Read(const XMLNode &xmlInfo)
+void UICanvas::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 }
 
-void UICanvas::Write(XMLNode *xmlInfo) const
+void UICanvas::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 }
 
 UIGameObject *UICanvas::GetFocusedGameObject() const

@@ -67,7 +67,7 @@ int ThreadFunc(ThreadRunnable *runnable, Thread *thread)
     {
         runnable->Run();
     }
-    if (runnable->GetAutoDelete()) { delete runnable; }
+    if (runnable->IsAutoDelete()) { delete runnable; }
 
     thread->m_hasFinished = true;
 
@@ -89,7 +89,7 @@ void ThreadRunnable::SetAutoDelete(bool autoDelete)
     m_autoDelete = autoDelete;
 }
 
-bool ThreadRunnable::GetAutoDelete() const
+bool ThreadRunnable::IsAutoDelete() const
 {
     return m_autoDelete;
 }

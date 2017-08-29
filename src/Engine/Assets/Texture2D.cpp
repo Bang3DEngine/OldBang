@@ -20,9 +20,9 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::Read(const XMLNode &xmlInfo)
+void Texture2D::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("FilterMode"))
     { SetFilterMode( xmlInfo.Get<FilterMode>("FilterMode") ); }
@@ -31,9 +31,9 @@ void Texture2D::Read(const XMLNode &xmlInfo)
     { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }
 }
 
-void Texture2D::Write(XMLNode *xmlInfo) const
+void Texture2D::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 
     xmlInfo->Set("FilterMode", GetFilterMode());
     xmlInfo->Set("AlphaCutoff", GetAlphaCutoff());
@@ -45,5 +45,5 @@ void Texture2D::Import(const Path &imageFilepath)
     if (img) { LoadFromImage(*img); }
 
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
-    ReadFromFile(importFilepath);
+    ImportXMLFromFile(importFilepath);
 }

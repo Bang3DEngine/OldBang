@@ -50,9 +50,9 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
     cr->SetSegments(GetSegments());
 }
 
-void CircleRenderer::Read(const XMLNode &xmlInfo)
+void CircleRenderer::ImportXML(const XMLNode &xmlInfo)
 {
-    LineRenderer::Read(xmlInfo);
+    LineRenderer::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Radius"))
     { SetRadius(xmlInfo.Get<float>("Radius")); }
@@ -61,9 +61,9 @@ void CircleRenderer::Read(const XMLNode &xmlInfo)
     { SetSegments(xmlInfo.Get<float>("Segments")); }
 }
 
-void CircleRenderer::Write(XMLNode *xmlInfo) const
+void CircleRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    LineRenderer::Write(xmlInfo);
+    LineRenderer::ExportXML(xmlInfo);
 
     xmlInfo->Set("Radius", GetRadius());
     xmlInfo->Set("Segments", GetSegments());

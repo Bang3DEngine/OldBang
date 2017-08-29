@@ -36,9 +36,9 @@ void SingleLineRenderer::CloneInto(ICloneable *clone) const
     slr->SetDestiny(GetDestiny());
 }
 
-void SingleLineRenderer::Read(const XMLNode &xmlInfo)
+void SingleLineRenderer::ImportXML(const XMLNode &xmlInfo)
 {
-    LineRenderer::Read(xmlInfo);
+    LineRenderer::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Origin"))
     { SetOrigin(xmlInfo.Get<Vector3>("Origin")); }
@@ -47,9 +47,9 @@ void SingleLineRenderer::Read(const XMLNode &xmlInfo)
     { SetDestiny(xmlInfo.Get<Vector3>("Destiny")); }
 }
 
-void SingleLineRenderer::Write(XMLNode *xmlInfo) const
+void SingleLineRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    LineRenderer::Write(xmlInfo);
+    LineRenderer::ExportXML(xmlInfo);
 
     xmlInfo->Set("Origin", GetOrigin());
     xmlInfo->Set("Destiny", GetDestiny());

@@ -95,7 +95,7 @@ void UITextRenderer::RefreshMesh()
                                         GetFont(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
-                                        GetWrapping(),
+                                        IsWrapping(),
                                         GetTextSize(),
                                         rt,
                                         sizedSpacingPx);
@@ -175,7 +175,7 @@ void UITextRenderer::SetFont(Font *font)
 
 void UITextRenderer::SetKerning(bool kerning)
 {
-    if (GetKerning() != kerning)
+    if (IsKerning() != kerning)
     {
         m_kerning = kerning;
         m_hasChanged = true;
@@ -184,7 +184,7 @@ void UITextRenderer::SetKerning(bool kerning)
 
 void UITextRenderer::SetWrapping(bool wrapping)
 {
-    if (GetWrapping() != wrapping)
+    if (IsWrapping() != wrapping)
     {
         m_wrapping = wrapping;
         m_hasChanged = true;
@@ -224,8 +224,8 @@ void UITextRenderer::SetTextColor(const Color &textColor)
 }
 
 Font *UITextRenderer::GetFont() const { return m_font; }
-bool UITextRenderer::GetKerning() const { return m_kerning; }
-bool UITextRenderer::GetWrapping() const { return m_wrapping; }
+bool UITextRenderer::IsKerning() const { return m_kerning; }
+bool UITextRenderer::IsWrapping() const { return m_wrapping; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
@@ -267,14 +267,14 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
     text->SetSpacing( GetSpacing() );
-    text->SetWrapping( GetWrapping() );
+    text->SetWrapping( IsWrapping() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
 
-void UITextRenderer::Read(const XMLNode &xml)
+void UITextRenderer::ImportXML(const XMLNode &xml)
 {
-    UIRenderer::Read(xml);
+    UIRenderer::ImportXML(xml);
 
     if (xml.Contains("Font"))
     { SetFont( Resources::Load<Font>( xml.Get<GUID>("Font") ) ); }
@@ -304,17 +304,17 @@ void UITextRenderer::Read(const XMLNode &xml)
     { SetHorizontalAlign( xml.Get<HorizontalAlignment>("HorizontalAlign")); }
 }
 
-void UITextRenderer::Write(XMLNode *xmlInfo) const
+void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    UIRenderer::Write(xmlInfo);
+    UIRenderer::ExportXML(xmlInfo);
 
     xmlInfo->Set("Font", GetFont() ? GetFont()->GetGUID() : GUID::Empty());
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("Spacing", GetSpacing());
     xmlInfo->Set("TextColor", GetTextColor());
-    xmlInfo->Set("Kerning", GetKerning());
-    xmlInfo->Set("Wrapping", GetWrapping());
+    xmlInfo->Set("Kerning", IsKerning());
+    xmlInfo->Set("Wrapping", IsWrapping());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
 }

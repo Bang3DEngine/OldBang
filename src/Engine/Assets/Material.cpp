@@ -72,7 +72,7 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
 ShaderProgram *Material::GetShaderProgram() const { return m_shaderProgram; }
 const Texture2D *Material::GetTexture() const { return m_texture; }
 const Vector2& Material::GetUvMultiply() const { return m_gMaterial->GetUvMultiply(); }
-bool Material::GetReceivesLighting() const { return m_gMaterial->ReceivesLighting(); }
+bool Material::IsReceivesLighting() const { return m_gMaterial->ReceivesLighting(); }
  float Material::GetShininess() const { return m_gMaterial->GetShininess(); }
  const Color& Material::GetDiffuseColor() const { return m_gMaterial->GetDiffuseColor(); }
 
@@ -98,12 +98,12 @@ void Material::CloneInto(ICloneable *clone) const
 
 void Material::Import(const Path &materialFilepath)
 {
-    ReadFromFile(materialFilepath);
+    ImportXMLFromFile(materialFilepath);
 }
 
-void Material::Read(const XMLNode &xml)
+void Material::ImportXML(const XMLNode &xml)
 {
-    Asset::Read(xml);
+    Asset::ImportXML(xml);
 
     if (xml.Contains("DiffuseColor"))
     { SetDiffuseColor(xml.Get<Color>("DiffuseColor")); }
@@ -137,13 +137,13 @@ void Material::Read(const XMLNode &xml)
     }
 }
 
-void Material::Write(XMLNode *xmlInfo) const
+void Material::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 
     xmlInfo->Set("DiffuseColor",     GetDiffuseColor());
     xmlInfo->Set("Shininess",        GetShininess());
-    xmlInfo->Set("ReceivesLighting", GetReceivesLighting());
+    xmlInfo->Set("ReceivesLighting", IsReceivesLighting());
     xmlInfo->Set("UvMultiply",       GetUvMultiply());
 
     const Texture2D *tex = GetTexture();

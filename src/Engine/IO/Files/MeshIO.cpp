@@ -1,4 +1,4 @@
-#include "Bang/FileReader.h"
+#include "Bang/MeshIO.h"
 
 #include <fstream>
 #include <sstream>
@@ -21,7 +21,7 @@
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 
-int FileReader::GetModelNumTriangles(const Path &filepath)
+int MeshIO::GetModelNumTriangles(const Path &filepath)
 {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(filepath.GetAbsolute().ToCString(),
@@ -33,7 +33,7 @@ int FileReader::GetModelNumTriangles(const Path &filepath)
 
 Vector3 AIVectorToVec3(const aiVector3D &v) { return Vector3(v.x, v.y, v.z); }
 
-bool FileReader::ReadModel(const Path& filepath,
+bool MeshIO::ReadModel(const Path& filepath,
                            Array<Vector3> *vertexPos,
                            Array<Vector3> *vertexNormals,
                            Array<Vector2> *vertexUvs)

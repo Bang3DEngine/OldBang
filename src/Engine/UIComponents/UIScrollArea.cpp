@@ -41,7 +41,7 @@ void UIScrollArea::SetScrollingY(int scrollPxY) noexcept
     SetScrolling( Vector2i(GetScrolling().x, scrollPxY) );
 }
 
-bool UIScrollArea::GetMasking() const { return p_mask->GetMasking(); }
+bool UIScrollArea::IsMasking() const { return p_mask->IsMasking(); }
 
 UIGameObject *UIScrollArea::GetContainer() const
 {

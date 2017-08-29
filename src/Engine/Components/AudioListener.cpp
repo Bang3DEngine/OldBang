@@ -21,14 +21,14 @@ void AudioListener::OnUpdate()
     UpdateALProperties();
 }
 
-void AudioListener::Read(const XMLNode &xmlInfo)
+void AudioListener::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 }
 
-void AudioListener::Write(XMLNode *xmlInfo) const
+void AudioListener::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 }
 
 void AudioListener::UpdateALProperties() const

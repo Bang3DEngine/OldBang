@@ -18,12 +18,12 @@ void DirectionalLight::CloneInto(ICloneable *clone) const
     Light::CloneInto(clone);
 }
 
-void DirectionalLight::Read(const XMLNode &xmlInfo)
+void DirectionalLight::ImportXML(const XMLNode &xmlInfo)
 {
-    Light::Read(xmlInfo);
+    Light::ImportXML(xmlInfo);
 }
 
-void DirectionalLight::Write(XMLNode *xmlInfo) const
+void DirectionalLight::ExportXML(XMLNode *xmlInfo) const
 {
-    Light::Write(xmlInfo);
+    Light::ExportXML(xmlInfo);
 }

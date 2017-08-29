@@ -20,8 +20,8 @@ public:
     float GetStretch(int index) const;
 
     // SerializableObject
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
     UIDirLayout();

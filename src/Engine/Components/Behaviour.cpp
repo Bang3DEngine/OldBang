@@ -35,7 +35,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
             CloneInto(createdBehaviour);
             if (xmlInfoForNewBehaviour)
             {
-                createdBehaviour->Read(*xmlInfoForNewBehaviour);
+                createdBehaviour->ImportXML(*xmlInfoForNewBehaviour);
             }
             gameObject->RemoveComponent(this);
         }
@@ -139,12 +139,12 @@ void Behaviour::CloneInto(ICloneable *clone) const
     b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
-void Behaviour::Read(const XMLNode &xmlInfo)
+void Behaviour::ImportXML(const XMLNode &xmlInfo)
 {
     // Needed to avoid a bug when creating new behaviours
     if (xmlInfo.GetTagName().IsEmpty()) { return; }
 
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("BehaviourScript"))
     { SetSourceFilepath( xmlInfo.Get<Path>("BehaviourScript") ); }
@@ -152,9 +152,9 @@ void Behaviour::Read(const XMLNode &xmlInfo)
     RefreshBehaviourLib(&xmlInfo);
 }
 
-void Behaviour::Write(XMLNode *xmlInfo) const
+void Behaviour::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
     xmlInfo->SetTagName("Behaviour");
     xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }

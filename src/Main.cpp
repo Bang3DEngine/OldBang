@@ -311,7 +311,7 @@ int main(int argc, char **argv)
     });
 
     SceneManager::LoadScene(scene);
-    scene->WriteToFile( EPATH("tmp/Test2.bscene") );
+    scene->ExportXMLToFile( EPATH("tmp/Test2.bscene") );
     SceneManager::LoadScene( EPATH("tmp/Test2.bscene") );
     app.MainLoop();
 

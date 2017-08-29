@@ -92,17 +92,17 @@ void UIGameObject::OnFocusLost()
     }
 }
 
-void UIGameObject::Read(const XMLNode &xmlInfo)
+void UIGameObject::ImportXML(const XMLNode &xmlInfo)
 {
-    GameObject::Read(xmlInfo);
+    GameObject::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("FocusAction"))
     { SetDefaultFocusAction( xmlInfo.Get<FocusAction>("FocusAction") ); }
 }
 
-void UIGameObject::Write(XMLNode *xmlInfo) const
+void UIGameObject::ExportXML(XMLNode *xmlInfo) const
 {
-    GameObject::Write(xmlInfo);
+    GameObject::ExportXML(xmlInfo);
     xmlInfo->SetTagName(UIGameObject::GetClassNameStatic());
 
     xmlInfo->Set("FocusAction", m_defaultFocusAction);

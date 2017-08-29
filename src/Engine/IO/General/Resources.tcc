@@ -25,7 +25,7 @@ TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
         res->Import(filepath);
 
         Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);
-        res->ReadFromFile(importFilepath);
+        res->ImportXMLFromFile(importFilepath);
         if (res->GetGUID().IsEmpty())
         {
             res->SetGUID( GUIDManager::GetNewGUID() );

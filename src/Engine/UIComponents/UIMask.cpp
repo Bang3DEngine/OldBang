@@ -50,7 +50,7 @@ void UIMask::PrepareStencilToDrawMask()
     // Will this mask be drawn?
     GL::SetColorMask(m_drawMask, m_drawMask, m_drawMask, m_drawMask);
 
-    if (GetMasking())
+    if (IsMasking())
     {
         GL::SetStencilOp( GL_INCR );
         GL::SetStencilTest(true);  // Only increment once
@@ -63,7 +63,7 @@ void UIMask::PrepareStencilToDrawChildren()
     // Restore color mask for children
     GL::SetColorMask(m_maskRBefore, m_maskGBefore, m_maskBBefore, m_maskABefore);
 
-    if (GetMasking())
+    if (IsMasking())
     {
         // Test and write for current stencil value + 1
         GL::SetStencilValue( GL::GetStencilValue() + 1 );
@@ -75,7 +75,7 @@ void UIMask::PrepareStencilToDrawChildren()
 
 void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 {
-    if (!GetMasking()) { return; }
+    if (!IsMasking()) { return; }
 
     // Restore stencil as it was before, decrementing marked mask pixels
     GL::SetColorMask(false, false, false, false);
@@ -98,12 +98,12 @@ void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 void UIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
 void UIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
-bool UIMask::GetMasking() const { return m_masking; }
-bool UIMask::GetDrawMask() const { return m_drawMask; }
+bool UIMask::IsMasking() const { return m_masking; }
+bool UIMask::IsDrawMask() const { return m_drawMask; }
 
-void UIMask::Read(const XMLNode &xmlInfo)
+void UIMask::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Masking"))
     { SetMasking( xmlInfo.Get<bool>("Masking") ); }
@@ -112,9 +112,9 @@ void UIMask::Read(const XMLNode &xmlInfo)
     { SetDrawMask( xmlInfo.Get<bool>("DrawMask") ); }
 }
 
-void UIMask::Write(XMLNode *xmlInfo) const
+void UIMask::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
-    xmlInfo->Set("Masking", GetMasking());
-    xmlInfo->Set("DrawMask", GetDrawMask());
+    Component::ExportXML(xmlInfo);
+    xmlInfo->Set("Masking", IsMasking());
+    xmlInfo->Set("DrawMask", IsDrawMask());
 }

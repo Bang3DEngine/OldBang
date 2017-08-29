@@ -53,7 +53,7 @@ ShaderProgram::Type ShaderProgram::GetType() const
 
 void ShaderProgram::Import(const Path &shaderProgramFilepath)
 {
-    ReadFromFile(shaderProgramFilepath);
+    ImportXMLFromFile(shaderProgramFilepath);
 }
 
 void ShaderProgram::OnPreLink()
@@ -84,9 +84,9 @@ void ShaderProgram::RetrieveType(const Path &vshaderPath,
     else { m_type = Type::Other; }
 }
 
-void ShaderProgram::Read(const XMLNode &xmlInfo)
+void ShaderProgram::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("VertexShader"))
     {
@@ -111,9 +111,9 @@ void ShaderProgram::Read(const XMLNode &xmlInfo)
     }
 }
 
-void ShaderProgram::Write(XMLNode *xmlInfo) const
+void ShaderProgram::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 
     Path vShaderFilepath = p_vshader ? p_vshader->GetResourceFilepath() : Path();
     xmlInfo->Set("VertexShader", vShaderFilepath);

@@ -20,24 +20,25 @@ public:
     virtual ~SerializableObject();
     SerializableObject(const SerializableObject &rhs);
 
-    XMLNode GetXMLInfo() const;
-    String GetSerializedString() const;
-    void ReadFromString(const String &xmlInfoString);
+    void ImportXML(const String &xmlInfoString);
 
-    virtual void ReadReflection(const XMLNode &xmlInfo);
-    virtual void WriteReflection(XMLNode *xmlInfo) const;
+    virtual void ImportXMLReflection(const XMLNode &xmlInfo);
+    virtual void ExportXMLReflection(XMLNode *xmlInfo) const;
 
-    virtual void Read(const XMLNode &xmlInfo);
-    virtual void Write(XMLNode *xmlInfo) const;
+    virtual void ImportXML(const XMLNode &xmlInfo);
+    virtual void ExportXML(XMLNode *xmlInfo) const;
 
-    virtual bool ReadFromFile(const Path &path);
-    virtual bool WriteToFile(const Path &path) const;
+    virtual bool ImportXMLFromFile(const Path &path);
+    virtual bool ExportXMLToFile(const Path &path) const;
 
-    virtual void PostRead(const XMLNode &xmlInfo);
+    virtual void PostImportXML(const XMLNode &xmlInfo);
 
     virtual void CloneInto(ICloneable*) const override;
     virtual String GetClassName() const = 0;
     virtual String GetInstanceId() const;
+
+    XMLNode GetXMLInfo() const;
+    String GetSerializedString() const;
 
     HideFlags& GetHideFlags();
     const HideFlags& GetHideFlags() const;

@@ -64,9 +64,9 @@ void UIImageRenderer::CloneInto(ICloneable *clone) const
     img->SetTexture( GetImageTexture() );
 }
 
-void UIImageRenderer::Read(const XMLNode &xmlInfo)
+void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
 {
-    UIRenderer::Read(xmlInfo);
+    UIRenderer::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Image"))
     { SetTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) ); }
@@ -75,9 +75,9 @@ void UIImageRenderer::Read(const XMLNode &xmlInfo)
     { SetTint( xmlInfo.Get<Color>("Tint") ); }
 }
 
-void UIImageRenderer::Write(XMLNode *xmlInfo) const
+void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    UIRenderer::Write(xmlInfo);
+    UIRenderer::ExportXML(xmlInfo);
 
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());

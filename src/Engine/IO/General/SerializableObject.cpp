@@ -28,64 +28,64 @@ SerializableObject::SerializableObject(const SerializableObject &rhs)
 XMLNode SerializableObject::GetXMLInfo() const
 {
     XMLNode xmlInfo;
-    Write(&xmlInfo);
+    ExportXML(&xmlInfo);
     return xmlInfo;
 }
 
 String SerializableObject::GetSerializedString() const
 {
     XMLNode xmlInfo;
-    Write(&xmlInfo);
+    ExportXML(&xmlInfo);
     return xmlInfo.ToString();
 }
 
-void SerializableObject::ReadFromString(const String &xmlInfoString)
+void SerializableObject::ImportXML(const String &xmlInfoString)
 {
     XMLNode xmlInfo = XMLNode::FromString(xmlInfoString);
-    Read(xmlInfo);
-    PostRead(xmlInfo);
+    ImportXML(xmlInfo);
+    PostImportXML(xmlInfo);
 }
 
-void SerializableObject::ReadReflection(const XMLNode &xmlInfo)
+void SerializableObject::ImportXMLReflection(const XMLNode &xmlInfo)
 {
 }
 
-void SerializableObject::WriteReflection(XMLNode *xmlInfo) const
+void SerializableObject::ExportXMLReflection(XMLNode *xmlInfo) const
 {
 }
 
-void SerializableObject::Read(const XMLNode &xmlInfo)
+void SerializableObject::ImportXML(const XMLNode &xmlInfo)
 {
-    ReadReflection(xmlInfo);
+    ImportXMLReflection(xmlInfo);
     if (xmlInfo.Contains("GUID"))
     { SetGUID(xmlInfo.Get<GUID>("GUID")); }
 }
 
-void SerializableObject::Write(XMLNode *xmlInfo) const
+void SerializableObject::ExportXML(XMLNode *xmlInfo) const
 {
-    WriteReflection(xmlInfo);
+    ExportXMLReflection(xmlInfo);
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set<GUID>( "GUID", GetGUID() );
 }
 
-bool SerializableObject::ReadFromFile(const Path &path)
+bool SerializableObject::ImportXMLFromFile(const Path &path)
 {
     if (path.Exists())
     {
         String fileContents = File::GetContents(path);
-        ReadFromString(fileContents);
+        ImportXML(fileContents);
         return true;
     }
     return false;
 }
 
-bool SerializableObject::WriteToFile(const Path &path) const
+bool SerializableObject::ExportXMLToFile(const Path &path) const
 {
     File::Write(path, GetSerializedString());
     return true;
 }
 
-void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
+void SerializableObject::PostImportXML(const XMLNode &xmlInfo) {}
 
 void SerializableObject::CloneInto(ICloneable *) const
 {

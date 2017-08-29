@@ -45,15 +45,15 @@ void PointLight::CloneInto(ICloneable *clone) const
     pl->SetRange(GetRange());
 }
 
-void PointLight::Read(const XMLNode &xmlInfo)
+void PointLight::ImportXML(const XMLNode &xmlInfo)
 {
-    Light::Read(xmlInfo);
+    Light::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Range"))
     { SetRange(xmlInfo.Get<float>("Range")); }
 }
 
-void PointLight::Write(XMLNode *xmlInfo) const
+void PointLight::ExportXML(XMLNode *xmlInfo) const
 {
-    Light::Write(xmlInfo);
+    Light::ExportXML(xmlInfo);
     xmlInfo->Set("Range", GetRange());
 }

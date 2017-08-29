@@ -52,7 +52,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
         XMLNode xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
 
         GameObject *go = GameObjectFactory::CreateGameObject(false);
-        go->Read(xmlInfo);
+        go->ImportXML(xmlInfo);
         go->SetEnabled(true);
         return go;
     }
@@ -61,12 +61,12 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 
 void Prefab::Import(const Path &prefabFilepath)
 {
-    ReadFromFile(prefabFilepath);
+    ImportXMLFromFile(prefabFilepath);
 }
 
-void Prefab::Read(const XMLNode &xmlInfo)
+void Prefab::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
     String newXMLInfo = xmlInfo.ToString();
     if (m_gameObjectXMLInfoContent != newXMLInfo)
     {
@@ -74,9 +74,9 @@ void Prefab::Read(const XMLNode &xmlInfo)
     }
 }
 
-void Prefab::Write(XMLNode *xmlInfo) const
+void Prefab::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 
     XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
     goInfo.CloneInto(xmlInfo);

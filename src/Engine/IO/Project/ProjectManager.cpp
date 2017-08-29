@@ -25,7 +25,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
-    currentProject->ReadFromFile(projectFilepath);
+    currentProject->ImportXMLFromFile(projectFilepath);
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
     Paths::SetProjectRoot(currentProject->GetProjectDirPath());
@@ -73,14 +73,14 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
 Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 {
     Project *proj = new Project();
-    proj->WriteToFile(projectFilepath);
+    proj->ExportXMLToFile(projectFilepath);
     return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)
 {
     ENSURE(project);
-    bool ok = project->WriteToFile(project->GetProjectFileFilepath());
+    bool ok = project->ExportXMLToFile(project->GetProjectFileFilepath());
     if (ok)
     {
         Debug_Log("Project '" << project->GetProjectName() <<

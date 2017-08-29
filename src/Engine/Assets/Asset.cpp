@@ -24,12 +24,12 @@ String Asset::ToString() const
     return res;
 }
 
-void Asset::Read(const XMLNode &xmlInfo)
+void Asset::ImportXML(const XMLNode &xmlInfo)
 {
-    Resource::Read(xmlInfo);
+    Resource::ImportXML(xmlInfo);
 }
 
-void Asset::Write(XMLNode *xmlInfo) const
+void Asset::ExportXML(XMLNode *xmlInfo) const
 {
-    Resource::Write(xmlInfo);
+    Resource::ExportXML(xmlInfo);
 }

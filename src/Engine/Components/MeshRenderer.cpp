@@ -2,11 +2,11 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/G_VAO.h"
+#include "Bang/MeshIO.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
-#include "Bang/GameObject.h"
-#include "Bang/FileReader.h"
 #include "Bang/Resources.h"
+#include "Bang/GameObject.h"
 
 MeshRenderer::MeshRenderer()
 {
@@ -37,15 +37,15 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
     mr->SetMesh( GetMesh() );
 }
 
-void MeshRenderer::Read(const XMLNode &xmlInfo)
+void MeshRenderer::ImportXML(const XMLNode &xmlInfo)
 {
-    Renderer::Read(xmlInfo);
+    Renderer::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Mesh"))
     { SetMesh( Resources::Load<Mesh>( xmlInfo.Get<GUID>("Mesh") ) ); }
 }
 
-void MeshRenderer::Write(XMLNode *xmlInfo) const
+void MeshRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    Renderer::Write(xmlInfo);
+    Renderer::ExportXML(xmlInfo);
     xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetGUID() : GUID::Empty());
 }

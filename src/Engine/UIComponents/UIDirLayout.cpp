@@ -82,9 +82,9 @@ float UIDirLayout::GetStretch(int index) const
     return m_stretches.At(index);
 }
 
-void UIDirLayout::Read(const XMLNode &xmlInfo)
+void UIDirLayout::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("SpacingPx"))
     { SetSpacing( xmlInfo.Get<int>("SpacingPx") ); }
@@ -97,9 +97,9 @@ void UIDirLayout::Read(const XMLNode &xmlInfo)
     }
 }
 
-void UIDirLayout::Write(XMLNode *xmlInfo) const
+void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 
     xmlInfo->Set("SpacingPx", m_spacingPx);
 

@@ -26,7 +26,7 @@ Renderer::~Renderer()
 void Renderer::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
-    if (GetVisible() && renderPass == GetRenderPass())
+    if (IsVisible() && renderPass == GetRenderPass())
     {
         GraphicPipeline::GetActive()->Render(this);
     }
@@ -91,9 +91,9 @@ void Renderer::SetMaterial(Material *m)
 }
 void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
 
-bool Renderer::GetVisible() const { return m_visible; }
+bool Renderer::IsVisible() const { return m_visible; }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
-bool Renderer::GetRenderWireframe() const { return m_drawWireframe; }
+bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
 void Renderer::SetCullMode(GL::CullMode cullMode) { m_cullMode = cullMode; }
 GL::CullMode Renderer::GetCullMode() const { return m_cullMode; }
@@ -130,15 +130,15 @@ void Renderer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Renderer *r = SCAST<Renderer*>(clone);
     r->SetMaterial(GetSharedMaterial());
-    r->SetRenderWireframe(GetRenderWireframe());
+    r->SetRenderWireframe(IsRenderWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderPrimitive(GetRenderPrimitive());
     r->SetLineWidth(GetLineWidth());
 }
 
-void Renderer::Read(const XMLNode &xml)
+void Renderer::ImportXML(const XMLNode &xml)
 {
-    Component::Read(xml);
+    Component::ImportXML(xml);
 
     if (xml.Contains("Material"))
     { SetMaterial( Resources::Load<Material>( xml.Get<GUID>("Material") ) ); }
@@ -153,13 +153,13 @@ void Renderer::Read(const XMLNode &xml)
     { SetRenderWireframe(xml.Get<bool>("RenderWireframe")); }
 }
 
-void Renderer::Write(XMLNode *xmlInfo) const
+void Renderer::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 
     Material *sharedMat = GetSharedMaterial();
     xmlInfo->Set("Material", sharedMat ? sharedMat->GetGUID() : GUID::Empty());
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
-    xmlInfo->Set("RenderWireframe", GetRenderWireframe());
+    xmlInfo->Set("RenderWireframe", IsRenderWireframe());
 }

@@ -32,8 +32,8 @@ public:
     void SetFragmentShader(G_Shader *fragmentShader) override;
 
     // SerializableObject
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
     Type m_type = Type::GBuffer;

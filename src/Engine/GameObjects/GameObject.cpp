@@ -329,9 +329,9 @@ String GameObject::GetInstanceId() const
     return instanceId;
 }
 
-void GameObject::Read(const XMLNode &xmlInfo)
+void GameObject::ImportXML(const XMLNode &xmlInfo)
 {
-    SerializableObject::Read(xmlInfo);
+    SerializableObject::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Enabled"))
     { SetEnabled( xmlInfo.Get<bool>("Enabled") ); }
@@ -346,19 +346,19 @@ void GameObject::Read(const XMLNode &xmlInfo)
         {
             GameObject *child = GameObjectFactory::CreateGameObject(tagName);
             child->SetParent(this);
-            child->Read(xmlChild);
+            child->ImportXML(xmlChild);
         }
         else
         {
             Component *comp = AddComponent(tagName);
-            comp->Read(xmlChild);
+            comp->ImportXML(xmlChild);
         }
     }
 }
 
-void GameObject::Write(XMLNode *xmlInfo) const
+void GameObject::ExportXML(XMLNode *xmlInfo) const
 {
-    SerializableObject::Write(xmlInfo);
+    SerializableObject::ExportXML(xmlInfo);
 
     xmlInfo->Set("Enabled", IsEnabled());
     xmlInfo->Set("Name", GetName());
@@ -368,7 +368,7 @@ void GameObject::Write(XMLNode *xmlInfo) const
         if (c->GetHideFlags().IsOff(HideFlag::DontSave))
         {
             XMLNode xmlComp;
-            c->Write(&xmlComp);
+            c->ExportXML(&xmlComp);
             xmlInfo->AddChild(xmlComp);
         }
     }
@@ -378,7 +378,7 @@ void GameObject::Write(XMLNode *xmlInfo) const
         if (child->GetHideFlags().IsOff(HideFlag::DontSave))
         {
             XMLNode xmlChild;
-            child->Write(&xmlChild);
+            child->ExportXML(&xmlChild);
             xmlInfo->AddChild(xmlChild);
         }
     }

@@ -97,18 +97,18 @@ void Scene::DestroyQueuedGameObjects()
 Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
 Camera *Scene::GetCamera() const { return p_camera; }
 
-void Scene::Read(const XMLNode &xmlInfo)
+void Scene::ImportXML(const XMLNode &xmlInfo)
 {
-    GameObject::Read(xmlInfo);
+    GameObject::ImportXML(xmlInfo);
 }
 
-void Scene::Write(XMLNode *xmlInfo) const
+void Scene::ExportXML(XMLNode *xmlInfo) const
 {
-    GameObject::Write(xmlInfo);
+    GameObject::ExportXML(xmlInfo);
     xmlInfo->SetTagName("Scene");
 }
 
-void Scene::PostRead(const XMLNode &xmlInfo)
+void Scene::PostImportXML(const XMLNode &xmlInfo)
 {
-    GameObject::PostRead(xmlInfo);
+    GameObject::PostImportXML(xmlInfo);
 }

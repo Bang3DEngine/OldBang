@@ -24,12 +24,12 @@ Path Font::GetTTFFilepath() const
 }
 
 // SerializableObject
-void Font::Read(const XMLNode &xmlInfo)
+void Font::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
 }
 
-void Font::Write(XMLNode *xmlInfo) const
+void Font::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 }

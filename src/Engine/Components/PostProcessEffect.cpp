@@ -77,9 +77,9 @@ void PostProcessEffect::CloneInto(ICloneable *clone) const
     ppe->SetPriority( GetPriority() );
 }
 
-void PostProcessEffect::Read(const XMLNode &xmlInfo)
+void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Priority"))
     { SetPriority( xmlInfo.Get<int>("Priority") ); }
@@ -100,9 +100,9 @@ void PostProcessEffect::Read(const XMLNode &xmlInfo)
     }
 }
 
-void PostProcessEffect::Write(XMLNode *xmlInfo) const
+void PostProcessEffect::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 
     xmlInfo->Set("PostProcessShader", GetPostProcessShaderFilepath());
     xmlInfo->Set("Priority", GetPriority());

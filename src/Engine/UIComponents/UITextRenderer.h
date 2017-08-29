@@ -40,9 +40,9 @@ public:
     void SetSpacing(const Vector2i &spacing);
 
     Font* GetFont() const;
-    bool GetKerning() const;
+    bool IsKerning() const;
     const Color& GetTextColor() const;
-    bool GetWrapping() const;
+    bool IsWrapping() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
@@ -57,8 +57,8 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
 
     // SerializableObject
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
     String m_content       = "";

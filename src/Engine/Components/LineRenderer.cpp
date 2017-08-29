@@ -72,12 +72,12 @@ void LineRenderer::CloneInto(ICloneable *clone) const
     lr->SetPoints( GetPoints() );
 }
 
-void LineRenderer::Read(const XMLNode &xmlInfo)
+void LineRenderer::ImportXML(const XMLNode &xmlInfo)
 {
-    Renderer::Read(xmlInfo);
+    Renderer::ImportXML(xmlInfo);
 }
 
-void LineRenderer::Write(XMLNode *xmlInfo) const
+void LineRenderer::ExportXML(XMLNode *xmlInfo) const
 {
-    Renderer::Write(xmlInfo);
+    Renderer::ExportXML(xmlInfo);
 }

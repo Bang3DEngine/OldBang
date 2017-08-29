@@ -22,7 +22,7 @@ public:
     void SetScrollingX(int scrollPxX) noexcept;
     void SetScrollingY(int scrollPxY) noexcept;
 
-    bool GetMasking() const;
+    bool IsMasking() const;
     UIGameObject* GetContainer() const;
     const Vector2i& GetScrolling() const noexcept;
 

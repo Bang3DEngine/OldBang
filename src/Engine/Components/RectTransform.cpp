@@ -264,9 +264,9 @@ void RectTransform::CloneInto(ICloneable *clone) const
     rt->SetPivotPosition( GetPivotPosition() );
 }
 
-void RectTransform::Read(const XMLNode &xmlInfo)
+void RectTransform::ImportXML(const XMLNode &xmlInfo)
 {
-    Transform::Read(xmlInfo);
+    Transform::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("MarginLeftBot"))
     {
@@ -284,9 +284,9 @@ void RectTransform::Read(const XMLNode &xmlInfo)
     { SetAnchorMax( xmlInfo.Get<Vector2>("AnchorMax") ); }
 }
 
-void RectTransform::Write(XMLNode *xmlInfo) const
+void RectTransform::ExportXML(XMLNode *xmlInfo) const
 {
-    Transform::Write(xmlInfo);
+    Transform::ExportXML(xmlInfo);
 
     xmlInfo->Set("MarginLeftBot",  GetMarginLeftBot() );
     xmlInfo->Set("MarginRightTop", GetMarginRightTop());

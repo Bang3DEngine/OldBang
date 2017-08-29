@@ -2,7 +2,6 @@
 
 #include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
-#include "Bang/FileReader.h"
 
 XMLNode::XMLNode(const String &tagName)
 {

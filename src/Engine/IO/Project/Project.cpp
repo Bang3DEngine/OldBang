@@ -63,13 +63,13 @@ bool Project::OpenFirstFoundScene() const
 }
 
 
-void Project::Read(const XMLNode &xmlInfo)
+void Project::ImportXML(const XMLNode &xmlInfo)
 {
     if (xmlInfo.Contains("RandomID"))
     { m_randomId = xmlInfo.Get<String>("RandomID"); }
 }
 
-void Project::Write(XMLNode *xmlInfo) const
+void Project::ExportXML(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Project");
     xmlInfo->Set("RandomID", m_randomId);

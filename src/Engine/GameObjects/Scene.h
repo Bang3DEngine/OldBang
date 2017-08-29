@@ -27,9 +27,9 @@ public:
     virtual Camera *GetCamera() const;
 
     // SerializableObject
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
-    virtual void PostRead(const XMLNode &xmlInfo) override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
+    virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
     std::queue<GameObject*> m_gameObjectsToBeDestroyed;

@@ -135,12 +135,12 @@ const Path &AudioClip::GetSoundFilepath() const
     return m_soundFilepath;
 }
 
-void AudioClip::Read(const XMLNode &xmlInfo)
+void AudioClip::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
 }
 
-void AudioClip::Write(XMLNode *xmlInfo) const
+void AudioClip::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 }

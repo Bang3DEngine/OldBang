@@ -46,7 +46,7 @@ public:
     virtual ~ThreadRunnable();
 
     void SetAutoDelete(bool autoDelete);
-    bool GetAutoDelete() const;
+    bool IsAutoDelete() const;
 
     virtual void Run() = 0;
 

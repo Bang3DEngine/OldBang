@@ -98,9 +98,9 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetPlayOnStart( IsPlayOnStart() );
 }
 
-void AudioSource::Read(const XMLNode &xml)
+void AudioSource::ImportXML(const XMLNode &xml)
 {
-    Component::Read(xml);
+    Component::ImportXML(xml);
 
     if (xml.Contains("AudioClip"))
     { SetAudioClip( Resources::Load<AudioClip>( xml.Get<GUID>("AudioClip") ) ); }
@@ -121,9 +121,9 @@ void AudioSource::Read(const XMLNode &xml)
     { SetPlayOnStart(xml.Get<bool>("PlayOnStart")); }
 }
 
-void AudioSource::Write(XMLNode *xmlInfo) const
+void AudioSource::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
 
     AudioClip *audioClip = GetAudioClip();
     GUID audioClipGUID = audioClip ? audioClip->GetGUID() : GUID::Empty();

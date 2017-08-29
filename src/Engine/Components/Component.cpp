@@ -47,16 +47,16 @@ String Component::GetInstanceId() const
     return instanceId;
 }
 
-void Component::Read(const XMLNode &xmlInfo)
+void Component::ImportXML(const XMLNode &xmlInfo)
 {
-    SerializableObject::Read(xmlInfo);
+    SerializableObject::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Enabled"))
     { SetEnabled(xmlInfo.Get<bool>("Enabled", true)); }
 }
 
-void Component::Write(XMLNode *xmlInfo) const
+void Component::ExportXML(XMLNode *xmlInfo) const
 {
-    SerializableObject::Write(xmlInfo);
+    SerializableObject::ExportXML(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set("Enabled", IsEnabled());

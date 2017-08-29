@@ -411,9 +411,9 @@ void Transform::CloneInto(ICloneable *clone) const
     t->SetLocalScale(GetLocalScale());
 }
 
-void Transform::Read(const XMLNode &xmlInfo)
+void Transform::ImportXML(const XMLNode &xmlInfo)
 {
-    Component::Read(xmlInfo);
+    Component::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Position"))
     { SetLocalPosition(xmlInfo.Get<Vector3>("Position")); }
@@ -425,9 +425,9 @@ void Transform::Read(const XMLNode &xmlInfo)
     { SetLocalScale(xmlInfo.Get<Vector3>("Scale")); }
 }
 
-void Transform::Write(XMLNode *xmlInfo) const
+void Transform::ExportXML(XMLNode *xmlInfo) const
 {
-    Component::Write(xmlInfo);
+    Component::ExportXML(xmlInfo);
     xmlInfo->Set("Position", GetLocalPosition());
     xmlInfo->Set("Rotation", GetLocalEuler());
     xmlInfo->Set("Scale",    GetLocalScale());

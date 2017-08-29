@@ -17,8 +17,8 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    virtual void Read(const XMLNode &xmlInfo) override;
-    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
     UIGameObject *GetFocusedGameObject() const;
     void GiveFocusTo(UIGameObject *focusTaker) const;

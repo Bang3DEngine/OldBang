@@ -5,8 +5,8 @@
 #include "Bang/G_VAO.h"
 #include "Bang/G_VBO.h"
 #include "Bang/Debug.h"
+#include "Bang/MeshIO.h"
 #include "Bang/XMLParser.h"
-#include "Bang/FileReader.h"
 #include "Bang/ImportFilesManager.h"
 
 Mesh::Mesh()
@@ -122,7 +122,7 @@ void Mesh::Import(const Path &meshFilepath)
     m_uvs.Clear();
     m_normals.Clear();
     m_positions.Clear();
-    if ( FileReader::ReadModel(meshFilepath, &m_positions, &m_normals, &m_uvs))
+    if ( MeshIO::ReadModel(meshFilepath, &m_positions, &m_normals, &m_uvs))
     {
         LoadPositions(m_positions);
         LoadNormals(m_normals);
@@ -137,13 +137,13 @@ void Mesh::Import(const Path &meshFilepath)
 }
 
 
-void Mesh::Read(const XMLNode &xmlInfo)
+void Mesh::ImportXML(const XMLNode &xmlInfo)
 {
-    Asset::Read(xmlInfo);
+    Asset::ImportXML(xmlInfo);
 }
 
-void Mesh::Write(XMLNode *xmlInfo) const
+void Mesh::ExportXML(XMLNode *xmlInfo) const
 {
-    Asset::Write(xmlInfo);
+    Asset::ExportXML(xmlInfo);
 }
 
