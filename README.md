@@ -6,7 +6,7 @@
 
 # Bang
 <br/>
-<img src="/res/EngineAssets/Logos/LogoBang_512.png" width="512">
+<img src="https://github.com/Bang3DEngine/Bang/blob/TFG/EngineAssets/Logos/LogoBang_512.png" width="512">
 <br/> <br/>
 Bang 3D game engine and editor, using C++. <br/> 
 
@@ -21,6 +21,7 @@ In order to install Bang do the following:
 ``` Bash
 git clone https://github.com/Bang3DEngine/Bang
 cd Bang
+git checkout TFG
 ./scripts/fullCompile.sh EDITOR RELEASE
 ./scripts/fullCompile.sh GAME   RELEASE
 ```
@@ -30,7 +31,7 @@ If something fails, check the [Dependencies](#dependencies) section below.
 # Execute Bang
 Once [installed](#install), you can start Bang using:
 ```Bash
-./bin/Bang
+./bin/EditorRelease/Bang
 ```
 
 # Dependencies
