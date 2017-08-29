@@ -33,7 +33,7 @@ private:
     bool m_restoringStencil = false;
 
     Array<BoolByte> m_maskBefore;
-    GL::StencilFunction  m_stencilFuncBefore;
+    GL::Function  m_stencilFuncBefore;
     GL::StencilOperation m_stencilOpBefore;
 
     void PrepareStencilToDrawMask();

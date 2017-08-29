@@ -37,7 +37,7 @@ void Renderer::Bind() const
 {
     GL::SetViewProjMode(m_viewProjMode);
     GL::SetWireframe(m_drawWireframe);
-    GL::SetCullMode(m_cullMode);
+    GL::SetCullFace(m_cullMode);
     GL::LineWidth(m_lineWidth);
 
     Matrix4 model;

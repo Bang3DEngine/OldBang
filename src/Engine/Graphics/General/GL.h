@@ -190,7 +190,7 @@ public:
         Invert   = GL_INVERT
     };
 
-    enum class StencilFunction
+    enum class Function
     {
         Never    = GL_NEVER,
         Less     = GL_LESS,
@@ -327,6 +327,8 @@ public:
                             Byte *pixels);
     static int GetInteger(GL::Enum glEnum);
     static void GetInteger(GL::Enum glEnum, int *values);
+    static bool GetBoolean(GL::Enum glEnum);
+    static void GetBoolean(GL::Enum glEnum, bool *values);
     static void ActiveTexture(int activeTexture);
     static void LineWidth(float lineWidth);
 
@@ -352,14 +354,14 @@ public:
     static void SetStencilOp(GL::StencilOperation fail,
                           GL::StencilOperation zFail,
                           GL::StencilOperation zPass);
-    static void SetStencilFunc(GL::StencilFunction stencilFunction,
+    static void SetStencilFunc(GL::Function stencilFunction,
                             Byte stencilValue = GL::GetStencilValue(),
                             uint mask = 0xFF);
     static void SetStencilValue(Byte value);
-    static void SetDepthWrite(bool writeDepth);
-    static void SetDepthTest(bool testDepth);
+    static void SetDepthMask(bool writeDepth);
+    static void SetDepthFunc(GL::Function testDepth);
     static void SetWireframe(bool wireframe);
-    static void SetCullMode(const GL::Face cullMode);
+    static void SetCullFace(const GL::Face cullFace);
     static void SetModelMatrix(const Matrix4 &model);
     static void SetViewMatrix(const Matrix4 &view);
     static void SetProjectionMatrix(const Matrix4 &projection);
@@ -372,7 +374,7 @@ public:
                        int startElementIndex = 0);
 
     static uint GetStencilMask();
-    static GL::StencilFunction GetStencilFunc();
+    static GL::Function GetStencilFunc();
     static GL::StencilOperation GetStencilOp();
     static Byte GetStencilValue();
     static bool IsColorMaskR();
@@ -380,10 +382,10 @@ public:
     static bool IsColorMaskB();
     static bool IsColorMaskA();
     static Array<BoolByte> GetColorMask();
-    static bool IsDepthWrite();
-    static bool IsDepthTest();
+    static bool GetDepthMask();
+    static GL::Function GetDepthFunc();
     static bool IsWireframe();
-    static GL::Face GetCullMode();
+    static GL::Face GetCullFace();
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
     static const Matrix4 &GetProjectionMatrix();
@@ -409,11 +411,6 @@ public:
     GL();
 
 private:
-    Byte m_stencilValue = 0;
-    bool m_writeDepth = true, m_testDepth = true;
-    bool m_wireframe = false;
-    GL::Face m_cullMode = GL::Face::None;
-
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;

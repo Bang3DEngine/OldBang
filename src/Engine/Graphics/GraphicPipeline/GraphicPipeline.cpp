@@ -79,7 +79,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     ENSURE(renderRect != Rect::Zero);
 
     // We have marked from before the zone where we want to apply the effect
-    GL::SetStencilFunc(GL::StencilFunction::Equal);
+    GL::SetStencilFunc(GL::Function::Equal);
 
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->IsReceivesLighting()) )
@@ -92,7 +92,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         }
     }
 
-    GL::SetStencilFunc(GL::StencilFunction::Always);
+    GL::SetStencilFunc(GL::Function::Always);
 }
 
 void GraphicPipeline::RenderGBuffer(Scene *scene)
@@ -103,8 +103,8 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->SetAllDrawBuffers();
 
     // GBuffer Scene rendering
-    GL::SetDepthWrite(true);
-    GL::SetDepthTest(true);
+    GL::SetDepthMask(true); // Write depth
+    GL::SetDepthFunc(GL::Function::LEqual);
 
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     scene->Render(RenderPass::Scene_Lighted);
@@ -118,16 +118,16 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
 
     // GBuffer Canvas rendering
     m_gbuffer->SetAllDrawBuffers();
-    GL::SetDepthWrite(false);
-    GL::SetDepthTest(false);
+    GL::SetDepthMask(false);
+    GL::SetDepthFunc(GL::Function::Always);
     scene->Render(RenderPass::Canvas);
     scene->Render(RenderPass::Canvas_PostProcess);
-    GL::SetDepthTest(true);
+    GL::SetDepthFunc(GL::Function::LEqual);
     GL::ClearStencilBuffer();
 
     // GBuffer Gizmos rendering
-    GL::SetDepthWrite(true);
-    GL::SetDepthTest(true);
+    GL::SetDepthMask(true);
+    GL::SetDepthFunc(GL::Function::LEqual);
     scene->RenderGizmos();
 
     m_gbuffer->UnBind();
@@ -178,13 +178,13 @@ void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
 void GraphicPipeline::RenderScreenPlane()
 {
     GL::SetWireframe(false);
-    GL::SetDepthTest(false);
-    GL::SetDepthWrite(false);
-    GL::SetCullMode(GL::Face::None);
+    GL::SetDepthFunc(GL::Function::Always);
+    GL::SetDepthMask(false);
+    GL::SetCullFace(GL::Face::None);
     GL::Render(m_screenPlaneMesh->GetVAO(), GL::Primitives::Triangles,
                m_screenPlaneMesh->GetVertexCount());
-    GL::SetDepthWrite(true);
-    GL::SetDepthTest(true);
+    GL::SetDepthMask(true);
+    GL::SetDepthFunc(GL::Function::LEqual);
 }
 
 GraphicPipeline* GraphicPipeline::GetActive()

@@ -450,16 +450,28 @@ void GL::GetTexImage(GL::TextureTarget textureTarget,
     GL_CheckError();
 }
 
-void GL::GetInteger(GL::Enum glEnum, int *values)
+bool GL::GetBoolean(GL::Enum glEnum)
 {
-    glGetIntegerv(glEnum, values);
+    bool result;
+    GL::GetBoolean(glEnum, &result);
+    return result;
+}
+void GL::GetBoolean(GL::Enum glEnum, bool *values)
+{
+    GLboolean result;
+    glGetBooleanv(GLCAST(glEnum), &result);
+    *values = result;
 }
 
 int GL::GetInteger(GL::Enum glEnum)
 {
-    GLint result;
+    int result;
     GL::GetInteger(glEnum, &result);
     return result;
+}
+void GL::GetInteger(GL::Enum glEnum, int *values)
+{
+    glGetIntegerv(glEnum, values);
 }
 
 void GL::ActiveTexture(int activeTexture)
@@ -552,9 +564,9 @@ uint GL::GetStencilMask()
     return SCAST<uint>(GL::GetInteger(GL_STENCIL_VALUE_MASK));
 }
 
-GL::StencilFunction GL::GetStencilFunc()
+GL::Function GL::GetStencilFunc()
 {
-    return SCAST<GL::StencilFunction>(GL::GetInteger(GL_STENCIL_FUNC));
+    return SCAST<GL::Function>(GL::GetInteger(GL_STENCIL_FUNC));
 }
 
 void GL::Bind(const GLObject *bindable)
@@ -676,9 +688,9 @@ void GL::SetStencilOp(GL::StencilOperation fail,
     glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass));
 }
 
-void GL::SetStencilFunc(GL::StencilFunction stencilFunction,
-                     Byte stencilValue,
-                     uint mask)
+void GL::SetStencilFunc(GL::Function stencilFunction,
+                        Byte stencilValue,
+                        uint mask)
 {
     glStencilFunc(GLCAST(stencilFunction), stencilValue, mask);
 }
@@ -695,49 +707,24 @@ void GL::SetStencilValue(Byte value)
     GL::SetStencilFunc(GetStencilFunc(), value, GetStencilMask());
 }
 
-void GL::SetDepthWrite(bool writeDepth)
+void GL::SetDepthMask(bool writeDepth)
 {
-    GL *gl = GL::GetActive();
-    if (gl->m_writeDepth != writeDepth)
-    {
-        gl->m_writeDepth = writeDepth;
-        glDepthMask(gl->m_writeDepth ? GL_TRUE : GL_FALSE);
-    }
+    glDepthMask(writeDepth);
 }
 
-void GL::SetDepthTest(bool testDepth)
+void GL::SetDepthFunc(GL::Function depthFunc)
 {
-    GL *gl = GL::GetActive();
-    if (gl->m_testDepth != testDepth)
-    {
-        gl->m_testDepth = testDepth;
-        glDepthFunc(gl->m_testDepth ? GL_LEQUAL : GL_ALWAYS);
-    }
+    glDepthFunc( GLCAST(depthFunc) );
 }
 
 void GL::SetWireframe(bool wireframe)
 {
-    GL *gl = GL::GetActive();
-    if (gl->m_wireframe != wireframe)
-    {
-        gl->m_wireframe = wireframe;
-        glPolygonMode(GL_FRONT_AND_BACK, gl->m_wireframe ? GL_LINE : GL_FILL);
-    }
+    glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 }
 
-void GL::SetCullMode(GL::Face cullMode)
+void GL::SetCullFace(GL::Face cullFace)
 {
-    GL *gl = GL::GetActive();
-    if (cullMode != gl->m_cullMode)
-    {
-        gl->m_cullMode = cullMode;
-        if (gl->m_cullMode != GL::Face::None)
-        {
-            GL::Enable(GL_CULL_FACE);
-            glCullFace(GLint(gl->m_cullMode));
-        }
-        else { GL::Disable(GL_CULL_FACE); }
-    }
+    glCullFace( GLCAST(cullFace) );
 }
 
 void GL::SetModelMatrix(const Matrix4 &model)
@@ -786,10 +773,20 @@ bool GL::IsColorMaskG()  { return GL::GetColorMask().At(1) == 1;  }
 bool GL::IsColorMaskB()  { return GL::GetColorMask().At(2) == 1;  }
 bool GL::IsColorMaskA()  { return GL::GetColorMask().At(3) == 1;  }
 
-bool GL::IsDepthWrite() { return GL::GetActive()->m_writeDepth; }
-bool GL::IsDepthTest() { return GL::GetActive()->m_testDepth; }
-bool GL::IsWireframe() { return GL::GetActive()->m_wireframe; }
-GL::Face GL::GetCullMode() { return GL::GetActive()->m_cullMode; }
+bool GL::GetDepthMask()  {  return GL::GetBoolean(GL_DEPTH_WRITEMASK);  }
+GL::Function GL::GetDepthFunc()
+{
+    return SCAST<GL::Function>(GL::GetInteger(GL_DEPTH_FUNC));
+}
+
+bool GL::IsWireframe()
+{
+    return GL::GetInteger(GL_POLYGON_MODE) == GL_LINE;
+}
+GL::Face GL::GetCullFace()
+{
+    return SCAST<GL::Face>(GL::GetInteger(GL_CULL_FACE_MODE));
+}
 
 const Matrix4& GL::GetModelMatrix()
 { return GL::GetActive()->m_modelMatrix; }
