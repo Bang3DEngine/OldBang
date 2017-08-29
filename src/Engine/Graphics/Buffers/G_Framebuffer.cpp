@@ -42,7 +42,6 @@ void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
                              GL::TextureTarget::Texture2D,
                              tex->GetGLId());
     GL::CheckFramebufferError();
-    GL_CheckError();
     tex->UnBind();
     UnBind();
 }

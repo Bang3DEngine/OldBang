@@ -43,6 +43,11 @@ bool GL::CheckFramebufferError()
     return error;
 }
 
+void GL::Clear(GL::BufferBit bufferBit)
+{
+    glClear( GLCAST(bufferBit) );
+}
+
 void GL::ClearColorBuffer(const Color &clearColor,
                           bool clearR, bool clearG, bool clearB, bool clearA)
 {
@@ -53,7 +58,7 @@ void GL::ClearColorBuffer(const Color &clearColor,
     GL::SetColorMask(clearR, clearG, clearB, clearA);
 
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    GL::Clear(GL::BufferBit::Color);
 
     GL::SetColorMask(colorMaskRBefore, colorMaskGBefore,
                      colorMaskBBefore, colorMaskABefore);
@@ -62,13 +67,13 @@ void GL::ClearColorBuffer(const Color &clearColor,
 void GL::ClearDepthBuffer(float clearDepth)
 {
     glClearDepth(clearDepth);
-    glClear(GL_DEPTH_BUFFER_BIT);
+    GL::Clear(GL::BufferBit::Depth);
 }
 
-void GL::ClearStencilBuffer()
+void GL::ClearStencilBuffer(int stencilValue)
 {
-    glClearStencil(0);
-    glClear(GL_STENCIL_BUFFER_BIT);
+    glClearStencil(stencilValue);
+    GL::Clear(GL::BufferBit::Stencil);
 }
 
 void GL::EnableVertexAttribArray(int location)
@@ -542,6 +547,16 @@ void GL::Render(const G_VAO *vao, GL::Primitives primitivesMode,
     vao->UnBind();
 }
 
+uint GL::GetStencilMask()
+{
+    return SCAST<uint>(GL::GetInteger(GL_STENCIL_VALUE_MASK));
+}
+
+GL::StencilFunction GL::GetStencilFunc()
+{
+    return SCAST<GL::StencilFunction>(GL::GetInteger(GL_STENCIL_FUNC));
+}
+
 void GL::Bind(const GLObject *bindable)
 {
     GL::Bind(bindable->GetGLBindTarget(), bindable->GetGLId());
@@ -645,11 +660,6 @@ void GL::ApplyToShaderProgram(G_ShaderProgram *sp)
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
 {
-    GL *gl = GL::GetActive();
-    gl->m_colorMaskR = maskR;
-    gl->m_colorMaskG = maskG;
-    gl->m_colorMaskB = maskB;
-    gl->m_colorMaskA = maskA;
     glColorMask(maskR, maskG, maskB, maskA);
 }
 
@@ -659,47 +669,32 @@ void GL::SetViewProjMode(GL::ViewProjMode mode)
     gl->m_viewProjMode = mode;
 }
 
-void GL::SetStencilOp(GL::Enum zPassOp)
+void GL::SetStencilOp(GL::StencilOperation fail,
+                   GL::StencilOperation zFail,
+                   GL::StencilOperation zPass)
 {
-    GL *gl = GL::GetActive();
-    if (gl->m_stencilOp != zPassOp)
-    {
-        gl->m_stencilOp = zPassOp;
-        glStencilOp(GL_KEEP, GL_KEEP, zPassOp);
-    }
+    glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass));
+}
+
+void GL::SetStencilFunc(GL::StencilFunction stencilFunction,
+                     Byte stencilValue,
+                     uint mask)
+{
+    glStencilFunc(GLCAST(stencilFunction), stencilValue, mask);
+}
+
+void GL::SetStencilOp(GL::StencilOperation zPass)
+{
+    GL::SetStencilOp(GL::StencilOperation::Keep,
+                  GL::StencilOperation::Keep,
+                  zPass);
 }
 
 void GL::SetStencilValue(Byte value)
 {
-    GL *gl = GL::GetActive();
-    if (gl->m_stencilValue != value)
-    {
-        gl->m_stencilValue = value;
-        glStencilFunc(IsStencilTest() ? GL_EQUAL : GL_ALWAYS,
-                      gl->m_stencilValue, 0xFF);
-    }
+    GL::SetStencilFunc(GetStencilFunc(), value, GetStencilMask());
 }
 
-void GL::SetStencilWrite(bool writeStencil)
-{
-    if (writeStencil)
-    {
-        if (GetStencilOp() == GL_KEEP) { SetStencilOp(GL_REPLACE); }
-        else { SetStencilOp(GetStencilOp()); }
-    }
-    else { SetStencilOp(GL_KEEP); }
-}
-
-void GL::SetStencilTest(bool testStencil)
-{
-    GL *gl = GL::GetActive();
-    if (gl->m_testStencil != testStencil)
-    {
-        gl->m_testStencil = testStencil;
-        glStencilFunc(testStencil ? GL_EQUAL : GL_ALWAYS,
-                      GetStencilValue(), 0xFF);
-    }
-}
 void GL::SetDepthWrite(bool writeDepth)
 {
     GL *gl = GL::GetActive();
@@ -767,8 +762,15 @@ void GL::SetZNearFar(float zNear, float zFar)
     gl->m_zFar  = zFar;
 }
 
-GL::Enum GL::GetStencilOp() { return GL::GetActive()->m_stencilOp; }
-Byte GL::GetStencilValue() { return GL::GetActive()->m_stencilValue; }
+GL::StencilOperation GL::GetStencilOp()
+{
+    return SCAST<GL::StencilOperation>(
+                        GL::GetInteger(GL_STENCIL_PASS_DEPTH_PASS));
+}
+Byte GL::GetStencilValue()
+{
+    return SCAST<Byte>(GL::GetInteger(GL_STENCIL_REF));
+}
 
 Array<BoolByte> GL::GetColorMask()
 {
@@ -784,11 +786,6 @@ bool GL::IsColorMaskG()  { return GL::GetColorMask().At(1) == 1;  }
 bool GL::IsColorMaskB()  { return GL::GetColorMask().At(2) == 1;  }
 bool GL::IsColorMaskA()  { return GL::GetColorMask().At(3) == 1;  }
 
-bool GL::IsStencilWrite()
-{
-    return GL::GetActive()->GetStencilOp() != GL_KEEP;
-}
-bool GL::IsStencilTest() { return GL::GetActive()->m_testStencil; }
 bool GL::IsDepthWrite() { return GL::GetActive()->m_writeDepth; }
 bool GL::IsDepthTest() { return GL::GetActive()->m_testDepth; }
 bool GL::IsWireframe() { return GL::GetActive()->m_wireframe; }

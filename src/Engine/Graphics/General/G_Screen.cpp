@@ -17,7 +17,7 @@ void G_Screen::Render()
 
 void G_Screen::Initialize()
 {
-    glewExperimental = GL_TRUE;
+    glewExperimental = true;
 
     GLenum glewError = glewInit();
     if (glewError != GLEW_OK)
@@ -25,9 +25,9 @@ void G_Screen::Initialize()
         Debug_Error("Glew init error: " << glewGetErrorString(glewError));
     }
 
-    GL::Enable(GL_DEPTH_TEST);
-    GL::Enable(GL_STENCIL_TEST);
-    GL::Enable(GL_CULL_FACE);
+    GL::Enable(GL::Test::Depth);
+    GL::Enable(GL::Test::Stencil);
+    GL::Enable(GL::Test::CullFace);
 }
 
 void G_Screen::OnResize(int w, int h)

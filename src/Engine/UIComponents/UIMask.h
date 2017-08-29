@@ -2,6 +2,7 @@
 #define UIMASK_H
 
 #include "Bang/GL.h"
+#include "Bang/Array.h"
 #include "Bang/Component.h"
 
 class UIMask : public Component
@@ -31,11 +32,9 @@ private:
     bool m_drawMask = false;
     bool m_restoringStencil = false;
 
-    GLenum m_stencilOpBefore;
-    bool m_maskRBefore = true, m_maskGBefore = true,
-         m_maskBBefore = true, m_maskABefore = true;
-    bool m_stencilTestBefore = false;
-    bool m_stencilWriteBefore = false;
+    Array<BoolByte> m_maskBefore;
+    GL::StencilFunction  m_stencilFuncBefore;
+    GL::StencilOperation m_stencilOpBefore;
 
     void PrepareStencilToDrawMask();
     void PrepareStencilToDrawChildren();

@@ -79,7 +79,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     ENSURE(renderRect != Rect::Zero);
 
     // We have marked from before the zone where we want to apply the effect
-    GL::SetStencilTest(true);
+    GL::SetStencilFunc(GL::StencilFunction::Equal);
 
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->IsReceivesLighting()) )
@@ -92,7 +92,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         }
     }
 
-    GL::SetStencilTest(false);
+    GL::SetStencilFunc(GL::StencilFunction::Always);
 }
 
 void GraphicPipeline::RenderGBuffer(Scene *scene)
@@ -105,10 +105,12 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     // GBuffer Scene rendering
     GL::SetDepthWrite(true);
     GL::SetDepthTest(true);
-    GL::SetStencilWrite(true);
+
+    GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     scene->Render(RenderPass::Scene_Lighted);
-    GL::SetStencilWrite(false);
+    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
     ApplyDeferredLights();
+
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
     GL::ClearDepthBuffer();

@@ -37,6 +37,15 @@ public:
         Polygon       = GL_POLYGON
     };
 
+    enum Test
+    {
+        Depth    = GL_DEPTH_TEST,
+        Stencil  = GL_STENCIL_TEST,
+        Scissor  = GL_SCISSOR_TEST,
+        Alpha    = GL_ALPHA_TEST,
+        CullFace = GL_CULL_FACE
+    };
+
     enum class UsageHint
     {
         StreamDraw  = GL_STREAM_DRAW,
@@ -135,9 +144,10 @@ public:
 
     enum class BufferBit
     {
-        ColorBufferBit   = GL_COLOR_BUFFER_BIT,
-        DepthBufferBit   = GL_DEPTH_BUFFER_BIT,
-        StencilBufferBit = GL_STENCIL_BUFFER_BIT
+        Color    = GL_COLOR_BUFFER_BIT,
+        Depth    = GL_DEPTH_BUFFER_BIT,
+        Stencil  = GL_STENCIL_BUFFER_BIT,
+        Scissor  = GL_SCISSOR_BIT
     };
 
     enum class WrapMode
@@ -168,12 +178,29 @@ public:
         Min = GL_TEXTURE_MIN_FILTER
     };
 
-    enum class Operation
+    enum class StencilOperation
     {
-        Keep = GL_KEEP,
-        Replace = GL_REPLACE,
-        Incr = GL_INCR,
-        Decr = GL_DECR,
+        Zero     = GL_ZERO,
+        Keep     = GL_KEEP,
+        Replace  = GL_REPLACE,
+        Incr     = GL_INCR,
+        IncrWrap = GL_INCR_WRAP,
+        Decr     = GL_DECR,
+        DecrWrap = GL_DECR_WRAP,
+        Invert   = GL_INVERT
+    };
+
+    enum class StencilFunction
+    {
+        Never    = GL_NEVER,
+        Less     = GL_LESS,
+        LEqual   = GL_LEQUAL,
+        Greater  = GL_GREATER,
+        GEqual   = GL_GEQUAL,
+        Equal    = GL_EQUAL,
+        NotEqual = GL_NOTEQUAL,
+        Always   = GL_ALWAYS
+
     };
 
     enum class Attachment
@@ -196,11 +223,12 @@ public:
                            const String &file = "");
     static bool CheckFramebufferError();
 
+    static void Clear(GL::BufferBit bufferBit);
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,
                                  bool clearB = true, bool clearA = true);
     static void ClearDepthBuffer(float clearDepth = 1.0f);
-    static void ClearStencilBuffer();
+    static void ClearStencilBuffer(int stencilValue = 0);
 
     static void Enable (GL::Enum glEnum);
     static void Disable(GL::Enum glEnum);
@@ -320,10 +348,14 @@ public:
                               GL::UsageHint usageHint);
     static void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     static void SetViewProjMode(ViewProjMode mode);
-    static void SetStencilWrite(bool writeStencil);
-    static void SetStencilOp(GL::Enum zPassOp);
+    static void SetStencilOp(GL::StencilOperation zPass);
+    static void SetStencilOp(GL::StencilOperation fail,
+                          GL::StencilOperation zFail,
+                          GL::StencilOperation zPass);
+    static void SetStencilFunc(GL::StencilFunction stencilFunction,
+                            Byte stencilValue = GL::GetStencilValue(),
+                            uint mask = 0xFF);
     static void SetStencilValue(Byte value);
-    static void SetStencilTest(bool testStencil);
     static void SetDepthWrite(bool writeDepth);
     static void SetDepthTest(bool testDepth);
     static void SetWireframe(bool wireframe);
@@ -339,15 +371,15 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
-    static GL::Enum GetStencilOp();
+    static uint GetStencilMask();
+    static GL::StencilFunction GetStencilFunc();
+    static GL::StencilOperation GetStencilOp();
     static Byte GetStencilValue();
     static bool IsColorMaskR();
     static bool IsColorMaskG();
     static bool IsColorMaskB();
     static bool IsColorMaskA();
     static Array<BoolByte> GetColorMask();
-    static bool IsStencilWrite();
-    static bool IsStencilTest();
     static bool IsDepthWrite();
     static bool IsDepthTest();
     static bool IsWireframe();
@@ -378,11 +410,7 @@ public:
 
 private:
     Byte m_stencilValue = 0;
-    GLenum m_stencilOp = GL_KEEP;
-    bool m_colorMaskR = true, m_colorMaskG = true,
-         m_colorMaskB = true, m_colorMaskA = true;
     bool m_writeDepth = true, m_testDepth = true;
-    bool m_testStencil = false;
     bool m_wireframe = false;
     GL::Face m_cullMode = GL::Face::None;
 

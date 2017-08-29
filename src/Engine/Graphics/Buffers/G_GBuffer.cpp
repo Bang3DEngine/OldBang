@@ -50,8 +50,9 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
                           const Rect &mask)
 {
     ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
-    bool prevStencilWrite = GL::IsStencilWrite();
-    GL::SetStencilWrite(false);
+
+    GL::StencilOperation prevStencilOp = GL::GetStencilOp();
+    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
 
     BindTextureBuffersTo(sp, prepareReadFromColorBuffer);
 
@@ -60,7 +61,7 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
 
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
-    GL::SetStencilWrite(prevStencilWrite);
+    GL::SetStencilOp(prevStencilOp);
 }
 
 void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
@@ -70,7 +71,7 @@ void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     SetDrawBuffers({AttColorRead});
     Recti r = Recti((readNDCRect * 0.5f + 0.5f) * GetSize());
     GL::BlitFramebuffer(r, r, GL::FilterMode::Nearest,
-                        GL::BufferBit::ColorBufferBit);
+                        GL::BufferBit::Color);
     PopDrawAttachmentIds();
 }
 
