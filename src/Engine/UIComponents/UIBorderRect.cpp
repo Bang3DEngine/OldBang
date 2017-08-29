@@ -28,13 +28,13 @@ UIBorderRect::~UIBorderRect()
 void UIBorderRect::OnStart()
 {
     Component::OnStart();
-    p_lineRenderer->Start();
+    p_lineRenderer->OnStart();
 }
 
 void UIBorderRect::OnRender(RenderPass rp)
 {
     Component::OnRender(rp);
-    p_lineRenderer->Render(rp, true);
+    p_lineRenderer->Renderer::OnRender(rp);
 }
 
 void UIBorderRect::OnUpdate()
@@ -55,7 +55,7 @@ void UIBorderRect::OnUpdate()
         m_latestBoundingRectNDC = boundingRectNDC;
     }
 
-    p_lineRenderer->Update();
+    p_lineRenderer->OnUpdate();
 }
 
 void UIBorderRect::SetLineColor(const Color &lineColor)

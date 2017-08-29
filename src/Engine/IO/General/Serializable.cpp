@@ -1,4 +1,4 @@
-#include "Bang/SerializableObject.h"
+#include "Bang/Serializable.h"
 
 #include <istream>
 #include <ostream>
@@ -11,64 +11,64 @@
 #include "Bang/XMLNode.h"
 #include "Bang/GUIDManager.h"
 
-SerializableObject::SerializableObject()
+Serializable::Serializable()
 {
     SetGUID( GUIDManager::GetNewGUID() );
 }
 
-SerializableObject::~SerializableObject()
+Serializable::~Serializable()
 {
 }
 
-SerializableObject::SerializableObject(const SerializableObject &rhs)
+Serializable::Serializable(const Serializable &rhs)
 {
     // Don't copy GUID, intentionally left in blank
 }
 
-XMLNode SerializableObject::GetXMLInfo() const
+XMLNode Serializable::GetXMLInfo() const
 {
     XMLNode xmlInfo;
     ExportXML(&xmlInfo);
     return xmlInfo;
 }
 
-String SerializableObject::GetSerializedString() const
+String Serializable::GetSerializedString() const
 {
     XMLNode xmlInfo;
     ExportXML(&xmlInfo);
     return xmlInfo.ToString();
 }
 
-void SerializableObject::ImportXML(const String &xmlInfoString)
+void Serializable::ImportXML(const String &xmlInfoString)
 {
     XMLNode xmlInfo = XMLNode::FromString(xmlInfoString);
     ImportXML(xmlInfo);
     PostImportXML(xmlInfo);
 }
 
-void SerializableObject::ImportXMLReflection(const XMLNode &xmlInfo)
+void Serializable::ImportXMLReflection(const XMLNode &xmlInfo)
 {
 }
 
-void SerializableObject::ExportXMLReflection(XMLNode *xmlInfo) const
+void Serializable::ExportXMLReflection(XMLNode *xmlInfo) const
 {
 }
 
-void SerializableObject::ImportXML(const XMLNode &xmlInfo)
+void Serializable::ImportXML(const XMLNode &xmlInfo)
 {
     ImportXMLReflection(xmlInfo);
     if (xmlInfo.Contains("GUID"))
     { SetGUID(xmlInfo.Get<GUID>("GUID")); }
 }
 
-void SerializableObject::ExportXML(XMLNode *xmlInfo) const
+void Serializable::ExportXML(XMLNode *xmlInfo) const
 {
     ExportXMLReflection(xmlInfo);
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set<GUID>( "GUID", GetGUID() );
 }
 
-bool SerializableObject::ImportXMLFromFile(const Path &path)
+bool Serializable::ImportXMLFromFile(const Path &path)
 {
     if (path.Exists())
     {
@@ -79,33 +79,33 @@ bool SerializableObject::ImportXMLFromFile(const Path &path)
     return false;
 }
 
-bool SerializableObject::ExportXMLToFile(const Path &path) const
+bool Serializable::ExportXMLToFile(const Path &path) const
 {
     File::Write(path, GetSerializedString());
     return true;
 }
 
-void SerializableObject::PostImportXML(const XMLNode &xmlInfo) {}
+void Serializable::PostImportXML(const XMLNode &xmlInfo) {}
 
-void SerializableObject::CloneInto(ICloneable *) const
+void Serializable::CloneInto(ICloneable *) const
 {
 }
 
-String SerializableObject::GetInstanceId() const
+String Serializable::GetInstanceId() const
 {
     return String::ToString( static_cast<const void*>(this) );
 }
 
-HideFlags &SerializableObject::GetHideFlags() { return m_hideFlags; }
-const HideFlags &SerializableObject::GetHideFlags() const { return m_hideFlags; }
+HideFlags &Serializable::GetHideFlags() { return m_hideFlags; }
+const HideFlags &Serializable::GetHideFlags() const { return m_hideFlags; }
 
-void SerializableObject::SetGUID(const GUID &guid)
+void Serializable::SetGUID(const GUID &guid)
 {
     m_GUID = guid;
     GUIDManager::RemoveGUID( GetGUID() );
 }
 
-const GUID &SerializableObject::GetGUID() const
+const GUID &Serializable::GetGUID() const
 {
     return m_GUID;
 }

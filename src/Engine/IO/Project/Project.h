@@ -3,11 +3,11 @@
 
 #include "Bang/Path.h"
 #include "Bang/String.h"
-#include "Bang/SerializableObject.h"
+#include "Bang/Serializable.h"
 
-class Project : public SerializableObject
+class Project : public Serializable
 {
-    SERIALIZABLE_OBJECT(Project)
+    SERIALIZABLE(Project)
 
 public:
     Project();
@@ -23,7 +23,7 @@ public:
 
     virtual bool OpenFirstFoundScene() const;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

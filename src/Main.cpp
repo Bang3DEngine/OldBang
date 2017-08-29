@@ -268,10 +268,8 @@ int main(int argc, char **argv)
     mainHLayout->SetParent(canvas);
     canvas->SetParent(scene);
 
-    AudioClip *gameAc = new AudioClip();
-    AudioClip *appleAc = new AudioClip();
-    gameAc->Import( EPATH("tmp/GameMusic.wav") );
-    appleAc->Import( EPATH("tmp/AppleSound.wav") );
+    AudioClip *gameAc = Resources::Load<AudioClip>(  EPATH("tmp/GameMusic.wav") );
+    AudioClip *appleAc = Resources::Load<AudioClip>(  EPATH("tmp/AppleSound.wav") );
     buttonPlay->AddClickedCallback([gameAc, appleAc](UIButton*)
     {
         AudioParams ap;
@@ -312,7 +310,7 @@ int main(int argc, char **argv)
 
     SceneManager::LoadScene(scene);
     scene->ExportXMLToFile( EPATH("tmp/Test2.bscene") );
-    SceneManager::LoadScene( EPATH("tmp/Test2.bscene") );
+    // SceneManager::LoadScene( EPATH("tmp/Test2.bscene") );
     app.MainLoop();
 
     return 0;

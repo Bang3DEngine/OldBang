@@ -167,6 +167,9 @@ ${ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
+${ENGINE_SRC_DIR}/Debug/Chrono.cpp
+${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
+${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
 ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObjectFactory.cpp
@@ -179,6 +182,7 @@ ${ENGINE_SRC_DIR}/General/Input.cpp
 ${ENGINE_SRC_DIR}/General/Library.cpp
 ${ENGINE_SRC_DIR}/General/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
+${ENGINE_SRC_DIR}/General/Object.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/General/TextFormatter.cpp
@@ -190,9 +194,6 @@ ${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
 ${ENGINE_SRC_DIR}/Graphics/ShaderManager.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
-${ENGINE_SRC_DIR}/Debug/Chrono.cpp
-${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
-${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/GUID.h
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
@@ -200,7 +201,7 @@ ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${ENGINE_SRC_DIR}/IO/General/Resource.cpp
 ${ENGINE_SRC_DIR}/IO/General/Resources.cpp
-${ENGINE_SRC_DIR}/IO/General/SerializableObject.cpp
+${ENGINE_SRC_DIR}/IO/General/Serializable.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
 ${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
 ${ENGINE_SRC_DIR}/IO/Project/Project.cpp

@@ -1,11 +1,11 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include "Bang/SerializableObject.h"
+#include "Bang/Serializable.h"
 
-#define RESOURCE(CLASSNAME) SERIALIZABLE_OBJECT(CLASSNAME)
+#define RESOURCE(CLASSNAME) SERIALIZABLE(CLASSNAME)
 
-class Resource : public SerializableObject
+class Resource : public Serializable
 {
 public:
     virtual ~Resource();

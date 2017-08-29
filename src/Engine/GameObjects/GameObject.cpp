@@ -23,6 +23,11 @@
     m_iteratingComponents = false; \
     RemoveQueuedComponents();
 
+#define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it )  \
+        if ((*it)->IsEnabled()) { (*it)->FUNCTION; } \
+} while (0)
+
 GameObject::GameObject(const String &name)
     : m_name(name)
 {
@@ -230,59 +235,114 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
     return nullptr;
 }
 
+const List<GameObject *> &GameObject::GetChildren() const
+{
+    return m_children;
+}
+
+GameObject *GameObject::GetChild(int index) const
+{
+    auto it = GetChildren().Begin(); std::advance(it, index);
+    return *it;
+}
+
+List<GameObject *> GameObject::GetChildrenRecursively() const
+{
+    List<GameObject*> cc;
+    for (GameObject *c : GetChildren())
+    {
+        cc.PushBack(c);
+        List<GameObject*> childChildren = c->GetChildrenRecursively();
+        cc.Splice(cc.Begin(), childChildren);
+    }
+    return cc;
+}
+
+bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
+{
+    if (!parent) { return false; }
+
+    if (recursive)
+    {
+        return parent == _parent || parent->IsChildOf(_parent);
+    }
+    return parent == _parent;
+}
+
+void GameObject::SetParent(GameObject *newParent, int _index)
+{
+    if (parent) { parent->m_children.Remove(this); }
+    if (newParent) { ASSERT( !newParent->IsChildOf(this) ); }
+
+    p_parent = newParent;
+    if (parent)
+    {
+        int index = (_index != -1 ? _index : parent->GetChildren().Size());
+        p_parent->m_children.Insert(index, this);
+        ParentSizeChanged();
+    }
+}
+
+GameObject *GameObject::GetParent() { return p_parent; }
+
+const GameObject *GameObject::GetParent() const { return p_parent; }
+
 void GameObject::Start()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(Start(), m_components);
-    SceneNode<GameObject>::Start();
+    PROPAGATE_EVENT_TO_COMPONENTS(OnStart(), m_components);
+    Object::Start();
+    PROPAGATE_EVENT(Start(), GetChildren());
 }
 
 void GameObject::Update()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(Update(), m_components);
-    SceneNode<GameObject>::Update();
+    PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
+    PROPAGATE_EVENT(Update(), GetChildren());
 }
 
 void GameObject::ParentSizeChanged()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(ParentSizeChanged(), m_components);
-    SceneNode<GameObject>::ParentSizeChanged();
+    PROPAGATE_EVENT_TO_COMPONENTS(OnParentSizeChanged(), m_components);
+    PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(Render(renderPass, renderChildren),
-                                  m_components);
-    SceneNode<GameObject>::Render(renderPass, renderChildren);
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
+    if (renderChildren)
+    {
+        BeforeChildrenRender(renderPass);
+        PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
+        ChildrenRendered(renderPass);
+    }
 }
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(BeforeChildrenRender(renderPass),
+    PROPAGATE_EVENT_TO_COMPONENTS(OnBeforeChildrenRender(renderPass),
                                   m_components);
-    SceneNode<GameObject>::BeforeChildrenRender(renderPass);
 }
 
 void GameObject::ChildrenRendered(RenderPass renderPass)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(ChildrenRendered(renderPass), m_components);
-    SceneNode<GameObject>::ChildrenRendered(renderPass);
+    PROPAGATE_EVENT_TO_COMPONENTS(OnChildrenRendered(renderPass), m_components);
 }
 
 void GameObject::RenderGizmos()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(RenderGizmos(), m_components);
-    SceneNode<GameObject>::RenderGizmos();
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRenderGizmos(), m_components);
+    PROPAGATE_EVENT(RenderGizmos(), GetChildren());
 }
 
 void GameObject::Destroy()
 {
-    SceneNode<GameObject>::Destroy();
-    PROPAGATE_EVENT_TO_COMPONENTS(Destroy(), m_components);
+    PROPAGATE_EVENT(Destroy(), GetChildren());
+    PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
 }
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
-    SerializableObject::CloneInto(clone);
+    Serializable::CloneInto(clone);
     GameObject *go = SCAST<GameObject*>(clone);
     go->SetName(m_name);
     go->SetParent(nullptr);
@@ -331,7 +391,7 @@ String GameObject::GetInstanceId() const
 
 void GameObject::ImportXML(const XMLNode &xmlInfo)
 {
-    SerializableObject::ImportXML(xmlInfo);
+    Serializable::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Enabled"))
     { SetEnabled( xmlInfo.Get<bool>("Enabled") ); }
@@ -358,7 +418,7 @@ void GameObject::ImportXML(const XMLNode &xmlInfo)
 
 void GameObject::ExportXML(XMLNode *xmlInfo) const
 {
-    SerializableObject::ExportXML(xmlInfo);
+    Serializable::ExportXML(xmlInfo);
 
     xmlInfo->Set("Enabled", IsEnabled());
     xmlInfo->Set("Name", GetName());

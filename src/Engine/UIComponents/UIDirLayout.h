@@ -19,7 +19,7 @@ public:
 
     float GetStretch(int index) const;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

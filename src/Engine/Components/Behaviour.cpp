@@ -111,16 +111,13 @@ bool Behaviour::IsLoaded() const
 
 
 
-void Behaviour::Start()
+void Behaviour::OnStart()
 {
     RefreshBehaviourLib();
-    if (!IsStarted())
-    {
-        Component::Start();
-    }
+    Component::OnStart();
 }
 
-void Behaviour::Update()
+void Behaviour::OnUpdate()
 {
     RefreshBehaviourLib(); // For instances created in runtime
 
@@ -128,7 +125,7 @@ void Behaviour::Update()
     Time::deltaTime = Time::GetDeltaTime();
     Time::time      = Time::GetNow();
 
-    Component::Update();
+    Component::OnUpdate();
 }
 
 void Behaviour::CloneInto(ICloneable *clone) const

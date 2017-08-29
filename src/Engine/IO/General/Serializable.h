@@ -1,5 +1,5 @@
-#ifndef SERIALIZABLEOBJECT_H
-#define SERIALIZABLEOBJECT_H
+#ifndef SERIALIZABLE_H
+#define SERIALIZABLE_H
 
 #include "Bang/GUID.h"
 #include "Bang/String.h"
@@ -7,18 +7,18 @@
 #include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
-#define SERIALIZABLE_OBJECT(CLASS) \
+#define SERIALIZABLE(CLASS) \
         ICLONEABLE(CLASS)\
         public: \
         virtual String GetClassName() const override { return #CLASS; } \
         static String GetClassNameStatic() { return #CLASS; }
 
-class SerializableObject : public ICloneable,
-                           public IReflectable
+class Serializable : public ICloneable,
+                     public IReflectable
 {
 public:
-    virtual ~SerializableObject();
-    SerializableObject(const SerializableObject &rhs);
+    virtual ~Serializable();
+    Serializable(const Serializable &rhs);
 
     void ImportXML(const String &xmlInfoString);
 
@@ -45,7 +45,7 @@ public:
     const GUID& GetGUID() const;
 
 protected:
-    SerializableObject();
+    Serializable();
 
 private:
     GUID m_GUID;
@@ -56,4 +56,4 @@ private:
     friend class Resources;
 };
 
-#endif // SERIALIZABLEOBJECT_H
+#endif // SERIALIZABLE_H

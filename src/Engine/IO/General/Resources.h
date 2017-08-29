@@ -9,7 +9,7 @@
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
 #include "Bang/ImportFilesManager.h"
-#include "Bang/SerializableObject.h"
+#include "Bang/Serializable.h"
 
 class Resources
 {

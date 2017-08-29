@@ -15,7 +15,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/AudioClip.h"
-#include "Bang/SceneNode.h"
+#include "Bang/Object.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
@@ -48,13 +48,13 @@ public:
     bool IsLoaded() const;
 
     // Component
-    virtual void Start () override;
-    virtual void Update() override;
+    virtual void OnStart () override;
+    virtual void OnUpdate() override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

@@ -20,9 +20,18 @@ void Component::SetGameObject(GameObject *gameObject)
 
 GameObject *Component::GetGameObject() const { return m_gameObject; }
 
+void Component::OnStart() {}
+void Component::OnUpdate() {}
+void Component::OnParentSizeChanged() {}
+void Component::OnRender(RenderPass renderPass) {}
+void Component::OnBeforeChildrenRender(RenderPass renderPass) {}
+void Component::OnChildrenRendered(RenderPass renderPass) {}
+void Component::OnRenderGizmos() {}
+void Component::OnDestroy() {}
+
 void Component::CloneInto(ICloneable *clone) const
 {
-    SerializableObject::CloneInto(clone);
+    Serializable::CloneInto(clone);
     Component *c = SCAST<Component*>(clone);
     c->SetEnabled( IsEnabled() );
 }
@@ -49,14 +58,14 @@ String Component::GetInstanceId() const
 
 void Component::ImportXML(const XMLNode &xmlInfo)
 {
-    SerializableObject::ImportXML(xmlInfo);
+    Serializable::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Enabled"))
     { SetEnabled(xmlInfo.Get<bool>("Enabled", true)); }
 }
 
 void Component::ExportXML(XMLNode *xmlInfo) const
 {
-    SerializableObject::ExportXML(xmlInfo);
+    Serializable::ExportXML(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set("Enabled", IsEnabled());

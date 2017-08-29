@@ -11,7 +11,7 @@ FORWARD class Gizmos;
 
 class Scene : public GameObject
 {
-    SERIALIZABLE_OBJECT(Scene)
+    SERIALIZABLE(Scene)
 
 public:
     Scene();
@@ -26,7 +26,7 @@ public:
     static Scene *GetActiveScene();
     virtual Camera *GetCamera() const;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
     virtual void PostImportXML(const XMLNode &xmlInfo) override;

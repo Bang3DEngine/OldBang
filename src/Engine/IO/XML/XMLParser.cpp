@@ -2,7 +2,7 @@
 
 #include "Bang/Paths.h"
 #include "Bang/File.h"
-#include "Bang/SerializableObject.h"
+#include "Bang/Serializable.h"
 
 
 XMLParser::XMLParser()

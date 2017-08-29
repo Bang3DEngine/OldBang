@@ -18,7 +18,7 @@ public:
     // Resource
     void Import(const Path &ttfFilepath) override;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

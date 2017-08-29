@@ -31,7 +31,7 @@ public:
     void SetVertexShader(G_Shader *vertexShader) override;
     void SetFragmentShader(G_Shader *fragmentShader) override;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

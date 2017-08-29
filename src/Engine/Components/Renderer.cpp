@@ -140,6 +140,9 @@ void Renderer::ImportXML(const XMLNode &xml)
 {
     Component::ImportXML(xml);
 
+    if (xml.Contains("Visible"))
+    { SetVisible( xml.Get<bool>("Visible") ); }
+
     if (xml.Contains("Material"))
     { SetMaterial( Resources::Load<Material>( xml.Get<GUID>("Material") ) ); }
 
@@ -158,6 +161,7 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
     Component::ExportXML(xmlInfo);
 
     Material *sharedMat = GetSharedMaterial();
+    xmlInfo->Set("Visible", IsVisible());
     xmlInfo->Set("Material", sharedMat ? sharedMat->GetGUID() : GUID::Empty());
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());

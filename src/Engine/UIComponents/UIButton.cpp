@@ -26,14 +26,14 @@ void UIButton::OnUpdate()
         Array<Input::MouseButton> buttonsDown = Input::GetMouseButtonsDown();
         for (Input::MouseButton mb : buttonsDown)
         {
-            PROPAGATE_EVENT_RAW(OnButton_MouseDown(this, mb), p_listeners);
+            PROPAGATE(OnButton_MouseDown(this, mb), p_listeners);
             for (auto f : m_mouseDownCallbacks) { f(this, mb); }
         }
 
         Array<Input::MouseButton> buttonsUp = Input::GetMouseButtonsUp();
         for (Input::MouseButton mb : buttonsUp)
         {
-            PROPAGATE_EVENT_RAW(OnButton_MouseUp(this, mb), p_listeners);
+            PROPAGATE(OnButton_MouseUp(this, mb), p_listeners);
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
@@ -45,7 +45,7 @@ void UIButton::OnUpdate()
                          Input::GetMouseButtonDown(Input::MouseButton::Left);
         if (m_beingPressed && Input::GetMouseButtonUp(Input::MouseButton::Left))
          {
-             PROPAGATE_EVENT_RAW(OnButton_Clicked(this), p_listeners);
+             PROPAGATE(OnButton_Clicked(this), p_listeners);
              for (auto f : m_clickedCallbacks) { f(this); }
          }
     }
@@ -55,12 +55,12 @@ void UIButton::OnUpdate()
     // Mouse Enter & Exit events
     if (!m_mouseOver && mouseOverSomeAgent)
     {
-        PROPAGATE_EVENT_RAW(OnButton_MouseEnter(this), p_listeners);
+        PROPAGATE(OnButton_MouseEnter(this), p_listeners);
         for (auto f : m_mouseEnterCallbacks) { f(this); }
     }
     else if (m_mouseOver && !mouseOverSomeAgent)
     {
-        PROPAGATE_EVENT_RAW(OnButton_MouseExit(this), p_listeners);
+        PROPAGATE(OnButton_MouseExit(this), p_listeners);
         for (auto f : m_mouseExitCallbacks) { f(this); }
     }
     m_mouseOver = mouseOverSomeAgent;

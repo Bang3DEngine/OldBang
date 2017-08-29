@@ -4,29 +4,40 @@
 #include <queue>
 
 #include "Bang/List.h"
-#include "Bang/SceneNode.h"
+#include "Bang/Object.h"
 #include "Bang/IToString.h"
+#include "Bang/RenderPass.h"
+#include "Bang/Serializable.h"
 #include "Bang/ComponentFactory.h"
-#include "Bang/SerializableObject.h"
 
 FORWARD class Scene;
 FORWARD class Camera;
 FORWARD class Material;
 FORWARD class Component;
 
-#define GAMEOBJECT(ClassName) SERIALIZABLE_OBJECT(ClassName)
+#define GAMEOBJECT(ClassName) SERIALIZABLE(ClassName)
 
-class GameObject : public SerializableObject,
-                   public SceneNode<GameObject>,
+class GameObject : public Object,
+                   public Serializable,
                    public IToString
 {
     GAMEOBJECT(GameObject)
 
 public:
     String const& name = m_name;
+    GameObject* const& parent = p_parent;
     Transform* const& transform = p_transform;
 
     virtual ~GameObject();
+
+    virtual void Start() override;
+    virtual void Update();
+    virtual void BeforeChildrenRender(RenderPass renderPass);
+    virtual void ChildrenRendered(RenderPass renderPass);
+    virtual void Render(RenderPass renderPass, bool renderChildren = true);
+    virtual void ParentSizeChanged();
+    virtual void RenderGizmos();
+    virtual void Destroy();
 
     static void Destroy(GameObject *gameObject);
 
@@ -34,7 +45,6 @@ public:
 
     const String& GetName() const;
     const List<Component*>& GetComponents() const;
-    using SceneNode<GameObject>::GetChild;
     GameObject* GetChild(const String &name) const;
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
     AABox GetObjectAABBox(bool includeChildren = true) const;
@@ -162,16 +172,18 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
-    // SceneNode
-    virtual void Start() override;
-    virtual void Update() override;
-    virtual void ParentSizeChanged() override;
-    virtual void Render(RenderPass renderPass,
-                        bool renderChildren = true) override;
-    virtual void BeforeChildrenRender(RenderPass renderPass) override;
-    virtual void ChildrenRendered(RenderPass renderPass) override;
-    virtual void RenderGizmos() override;
-    virtual void Destroy() override;
+    const List<GameObject*>& GetChildren() const;
+
+    GameObject* GetChild(int index) const;
+
+    List<GameObject*> GetChildrenRecursively() const;
+
+    bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
+
+    void SetParent(GameObject *newParent, int _index = -1);
+
+    GameObject* GetParent();
+    const GameObject* GetParent() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -180,15 +192,19 @@ public:
     void Print(const String& indent = "") const;
     String ToString() const;
 
-    // SerializableObject
+    // Serializable
     virtual String GetInstanceId() const override;
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    String m_name = "";
+    List<GameObject*> m_children;
     List<Component*> m_components;
+
+    String m_name = "";
+
     Transform *p_transform = nullptr;
+    GameObject* p_parent = nullptr;
 
     std::queue<Component*> m_componentsToBeRemoved;
 

@@ -55,7 +55,7 @@ public:
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
-    // SerializableObject
+    // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

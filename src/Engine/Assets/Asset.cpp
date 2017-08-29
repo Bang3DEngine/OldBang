@@ -14,7 +14,7 @@ Asset::~Asset()
 
 void Asset::CloneInto(ICloneable * clone) const
 {
-    SerializableObject::CloneInto(clone);
+    Serializable::CloneInto(clone);
 }
 
 String Asset::ToString() const

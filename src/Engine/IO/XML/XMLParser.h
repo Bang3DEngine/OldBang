@@ -6,7 +6,7 @@
 
 #include "Bang/XMLNode.h"
 
-FORWARD class SerializableObject;
+FORWARD class Serializable;
 
 class XMLParser
 {

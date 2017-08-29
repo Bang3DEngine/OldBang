@@ -23,7 +23,7 @@ Path Font::GetTTFFilepath() const
     return m_ttfFilepath;
 }
 
-// SerializableObject
+// Serializable
 void Font::ImportXML(const XMLNode &xmlInfo)
 {
     Asset::ImportXML(xmlInfo);

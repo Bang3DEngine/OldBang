@@ -115,4 +115,13 @@ using Recti       = RectG<int>;
 using Rect        = Rectf;
 // ======================================================
 
+// Others =================================
+
+#define PROPAGATE(FUNCTION, ITERABLE) do {\
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
+        (*it)->FUNCTION; \
+} while (0)
+
+// ======================================================
+
 #endif // BANGFORWARD_H
