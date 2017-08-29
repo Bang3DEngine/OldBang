@@ -8,11 +8,8 @@
 #include "Bang/IToString.h"
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
-#include "Bang/ComponentFactory.h"
 
-FORWARD class Scene;
 FORWARD class Camera;
-FORWARD class Material;
 FORWARD class Component;
 
 #define GAMEOBJECT(ClassName) SERIALIZABLE(ClassName)
@@ -42,148 +39,66 @@ public:
     static void Destroy(GameObject *gameObject);
 
     void SetName(const String &m_name);
-
     const String& GetName() const;
-    const List<Component*>& GetComponents() const;
-    GameObject* GetChild(const String &name) const;
-    Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
-    AABox GetObjectAABBox(bool includeChildren = true) const;
-    AABox GetAABBox(bool includeChildren = true) const;
-    Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
-    Sphere GetBoundingSphere(bool includeChildren = true) const;
 
+    template <class T>
+    T* AddComponent(int index = -1);
     Component* AddComponent(const String &componentClassName, int _index = -1);
     Component* AddComponent(Component *c, int index = -1);
-    template <class T>
-    T* AddComponent(int index = -1)
-    {
-        T *c = ComponentFactory::CreateComponent<T>();
-        this->AddComponent(c, index);
-        return c;
-    }
-
-    GameObject* GetChild(const GUID &guid) const;
-
-    Component* GetComponent(const GUID &guid) const;
-
-    template <class T>
-    T* GetComponent() const
-    {
-        for (Component *comp : m_components)
-        {
-            T *tp = DCAST<T*>(comp);
-            if (tp) { return tp; }
-        }
-        return nullptr;
-    }
-
-    template <class T>
-    List<T*> GetComponents() const
-    {
-        List<T*> comps_l;
-        for (Component *comp : m_components)
-        {
-            T *tp = DCAST<T*>(comp);
-            if (tp) { comps_l.PushBack(tp); }
-        }
-        return comps_l;
-    }
-
-    template <class T>
-    T* GetComponentInParent() const
-    {
-        if (!parent) { return nullptr; }
-        T* comp = parent->GetComponent<T>();
-        if (comp) { return comp; }
-        return parent->GetComponentInParent<T>();
-    }
-
-    template <class T>
-    List<T*> GetComponentsInParent() const
-    {
-        List<T*> result;
-        if (!parent) { return result; }
-        result = parent->GetComponents<T>();
-        return result.Concat(parent->GetComponentsInParent<T>());
-    }
-
-    template <class T>
-    T* GetComponentInChildren() const
-    {
-        for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
-        {
-            T *comp = (*c)->GetComponent<T>();
-            if (comp) return comp;
-            comp = (*c)->GetComponentInChildren<T>();
-            if (comp) return comp;
-        }
-        return nullptr;
-    }
-
-    template <class T>
-    List<T*> GetComponentsInChildren() const
-    {
-        List<T*> comps_l;
-        for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
-        {
-            List<T*> childComps = (*c)->GetComponents<T>();
-            comps_l.Splice(comps_l.End(), childComps); //concat
-            List<T*> childChildrenComps = (*c)->GetComponentsInChildren<T>();
-            comps_l.Splice(comps_l.End(), childChildrenComps); //concat
-        }
-        return comps_l;
-    }
-
-    template <class T>
-    bool HasComponent() const
-    {
-        return GetComponent<T>() ;
-    }
-
-    template <class T>
-    int CountComponents() const
-    {
-        int count = 0;
-        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
-        {
-            T *tp = DCAST<T*>(comp);
-            if (tp) { ++count; }
-        }
-        return count;
-    }
-
-    void RemoveComponent(Component *c);
-    void RemoveComponentInstantly(Component *c);
-    void RemoveQueuedComponents();
-    template <class T>
-    void RemoveComponent()
-    {
-        for (Component *comp : m_components)
-        {
-            T *compT = DCAST<T*>(comp);
-            if (compT)
-            {
-                this->RemoveComponent(compT);
-                break;
-            }
-        }
-    }
 
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
     const List<GameObject*>& GetChildren() const;
-
-    GameObject* GetChild(int index) const;
-
     List<GameObject*> GetChildrenRecursively() const;
 
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 
-    void SetParent(GameObject *newParent, int _index = -1);
+    GameObject* GetChild(int index) const;
+    GameObject* GetChild(const GUID &guid) const;
+    GameObject* GetChild(const String &name) const;
 
+    template <class T>
+    T* GetComponent() const;
+    Component* GetComponent(const GUID &guid) const;
+
+    template <class T>
+    List<T*> GetComponents() const;
+    const List<Component*>& GetComponents() const;
+
+    template <class T>
+    T* GetComponentInParent() const;
+
+    template <class T>
+    List<T*> GetComponentsInParent() const;
+
+    template <class T>
+    T* GetComponentInChildren() const;
+
+    template <class T>
+    List<T*> GetComponentsInChildren() const;
+
+    template <class T>
+    bool HasComponent() const;
+
+    template <class T>
+    int CountComponents() const;
+
+    template <class T>
+    void RemoveComponent();
+    void RemoveComponent(Component *c);
+    void RemoveComponentInstantly(Component *c);
+    void RemoveQueuedComponents();
+
+    void SetParent(GameObject *newParent, int _index = -1);
     GameObject* GetParent();
     const GameObject* GetParent() const;
+
+    Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
+    AABox GetObjectAABBox(bool includeChildren = true) const;
+    AABox GetAABBox(bool includeChildren = true) const;
+    Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
+    Sphere GetBoundingSphere(bool includeChildren = true) const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -221,5 +136,7 @@ private:
     friend class GraphicPipeline;
     friend class GameObjectFactory;
 };
+
+#include "GameObject.tcc"
 
 #endif // GAMEOBJECT_H

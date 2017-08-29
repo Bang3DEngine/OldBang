@@ -51,74 +51,62 @@ GameObject::~GameObject()
     SetParent(nullptr);
 }
 
-const String& GameObject::GetName() const
+void GameObject::Start()
 {
-    return m_name;
+    PROPAGATE_EVENT_TO_COMPONENTS(OnStart(), m_components);
+    Object::Start();
+    PROPAGATE_EVENT(Start(), GetChildren());
 }
 
-const List<Component *> &GameObject::GetComponents() const
+void GameObject::Update()
 {
-    return m_components;
+    PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
+    PROPAGATE_EVENT(Update(), GetChildren());
+}
+
+void GameObject::ParentSizeChanged()
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnParentSizeChanged(), m_components);
+    PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
+}
+
+void GameObject::Render(RenderPass renderPass, bool renderChildren)
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
+    if (renderChildren)
+    {
+        BeforeChildrenRender(renderPass);
+        PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
+        ChildrenRendered(renderPass);
+    }
+}
+
+void GameObject::BeforeChildrenRender(RenderPass renderPass)
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnBeforeChildrenRender(renderPass),
+                                  m_components);
+}
+
+void GameObject::ChildrenRendered(RenderPass renderPass)
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnChildrenRendered(renderPass), m_components);
+}
+
+void GameObject::RenderGizmos()
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRenderGizmos(), m_components);
+    PROPAGATE_EVENT(RenderGizmos(), GetChildren());
+}
+
+void GameObject::Destroy()
+{
+    PROPAGATE_EVENT(Destroy(), GetChildren());
+    PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
 }
 
 void GameObject::Destroy(GameObject *gameObject)
 {
     SceneManager::GetActiveScene()->Destroy(gameObject);
-}
-
-Rect GameObject::GetBoundingScreenRect(Camera *cam, bool includeChildren) const
-{
-    AABox bbox = GetAABBox(includeChildren);
-    return cam->GetScreenBoundingRect(bbox);
-}
-
-AABox GameObject::GetObjectAABBox(bool includeChildren) const
-{
-    List<Renderer*> rends = GetComponents<Renderer>();
-    AABox aabBox = AABox::Empty;
-    for (Renderer *rend : rends)
-    {
-        if (rend && rend->IsEnabled())
-        {
-            aabBox = AABox::Union(aabBox, rend->GetAABBox());
-        }
-    }
-
-    if (includeChildren)
-    {
-        for (GameObject *child : GetChildren())
-        {
-            AABox aabBoxChild = child->GetObjectAABBox(true);
-            Matrix4 mat;
-            if (child->transform)
-            {
-                mat = child->transform->GetLocalToParentMatrix();
-            }
-            aabBoxChild = mat * aabBoxChild;
-            aabBox = AABox::Union(aabBox, aabBoxChild);
-        }
-    }
-
-    return aabBox;
-}
-
-AABox GameObject::GetAABBox(bool includeChildren) const
-{
-    AABox b = GetObjectAABBox(includeChildren);
-    Matrix4 mat;
-    if (transform) { transform->GetLocalToWorldMatrix(&mat); }
-    b = mat * b;
-    return b;
-}
-
-Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
-{
-    return Sphere::FromBox(GetObjectAABBox(includeChildren));
-}
-
-Sphere GameObject::GetBoundingSphere(bool includeChildren) const
-{
-    return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
 Component *GameObject::AddComponent(const String &componentClassName,
@@ -144,13 +132,9 @@ Component* GameObject::AddComponent(Component *c, int _index)
     return c;
 }
 
-GameObject *GameObject::GetChild(const GUID &guid) const
+const List<Component *> &GameObject::GetComponents() const
 {
-    for (GameObject *go : GetChildren())
-    {
-        if (go->GetGUID() == guid) { return go; }
-    }
-    return nullptr;
+    return m_components;
 }
 
 Component *GameObject::GetComponent(const GUID &guid) const
@@ -191,23 +175,8 @@ void GameObject::RemoveQueuedComponents()
     }
 }
 
-GameObject *GameObject::GetChild(const String &name) const
-{
-    for (auto it = GetChildren().Begin(); it != GetChildren().End(); ++it)
-    {
-        GameObject *child = (*it);
-        if (child->m_name == name)
-        {
-            return child;
-        }
-    }
-    return nullptr;
-}
-
-void GameObject::SetName(const String &name)
-{
-    m_name = name;
-}
+void GameObject::SetName(const String &name) { m_name = name; }
+const String& GameObject::GetName() const { return m_name; }
 
 GameObject *GameObject::Find(const String &name)
 {
@@ -230,6 +199,28 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
             {
                 return found;
             }
+        }
+    }
+    return nullptr;
+}
+
+GameObject *GameObject::GetChild(const GUID &guid) const
+{
+    for (GameObject *go : GetChildren())
+    {
+        if (go->GetGUID() == guid) { return go; }
+    }
+    return nullptr;
+}
+
+GameObject *GameObject::GetChild(const String &name) const
+{
+    for (auto it = GetChildren().Begin(); it != GetChildren().End(); ++it)
+    {
+        GameObject *child = (*it);
+        if (child->m_name == name)
+        {
+            return child;
         }
     }
     return nullptr;
@@ -287,57 +278,59 @@ GameObject *GameObject::GetParent() { return p_parent; }
 
 const GameObject *GameObject::GetParent() const { return p_parent; }
 
-void GameObject::Start()
+Rect GameObject::GetBoundingScreenRect(Camera *cam, bool includeChildren) const
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnStart(), m_components);
-    Object::Start();
-    PROPAGATE_EVENT(Start(), GetChildren());
+    AABox bbox = GetAABBox(includeChildren);
+    return cam->GetScreenBoundingRect(bbox);
 }
 
-void GameObject::Update()
+AABox GameObject::GetObjectAABBox(bool includeChildren) const
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
-    PROPAGATE_EVENT(Update(), GetChildren());
-}
-
-void GameObject::ParentSizeChanged()
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(OnParentSizeChanged(), m_components);
-    PROPAGATE_EVENT(ParentSizeChanged(), GetChildren());
-}
-
-void GameObject::Render(RenderPass renderPass, bool renderChildren)
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
-    if (renderChildren)
+    List<Renderer*> rends = GetComponents<Renderer>();
+    AABox aabBox = AABox::Empty;
+    for (Renderer *rend : rends)
     {
-        BeforeChildrenRender(renderPass);
-        PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
-        ChildrenRendered(renderPass);
+        if (rend && rend->IsEnabled())
+        {
+            aabBox = AABox::Union(aabBox, rend->GetAABBox());
+        }
     }
+
+    if (includeChildren)
+    {
+        for (GameObject *child : GetChildren())
+        {
+            AABox aabBoxChild = child->GetObjectAABBox(true);
+            Matrix4 mat;
+            if (child->transform)
+            {
+                mat = child->transform->GetLocalToParentMatrix();
+            }
+            aabBoxChild = mat * aabBoxChild;
+            aabBox = AABox::Union(aabBox, aabBoxChild);
+        }
+    }
+
+    return aabBox;
 }
 
-void GameObject::BeforeChildrenRender(RenderPass renderPass)
+AABox GameObject::GetAABBox(bool includeChildren) const
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnBeforeChildrenRender(renderPass),
-                                  m_components);
+    AABox b = GetObjectAABBox(includeChildren);
+    Matrix4 mat;
+    if (transform) { transform->GetLocalToWorldMatrix(&mat); }
+    b = mat * b;
+    return b;
 }
 
-void GameObject::ChildrenRendered(RenderPass renderPass)
+Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnChildrenRendered(renderPass), m_components);
+    return Sphere::FromBox(GetObjectAABBox(includeChildren));
 }
 
-void GameObject::RenderGizmos()
+Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRenderGizmos(), m_components);
-    PROPAGATE_EVENT(RenderGizmos(), GetChildren());
-}
-
-void GameObject::Destroy()
-{
-    PROPAGATE_EVENT(Destroy(), GetChildren());
-    PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
+    return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
 void GameObject::CloneInto(ICloneable *clone) const
