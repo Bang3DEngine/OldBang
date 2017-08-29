@@ -11,7 +11,8 @@ public:
     G_VBO();
     virtual ~G_VBO();
 
-    void Fill(const void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
+    void Fill(const void *data, int dataSize,
+              GL::UsageHint usage = GL::UsageHint::StaticDraw);
 
     GL::BindTarget GetGLBindTarget() const override;
     void Bind() const override;

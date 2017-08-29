@@ -21,29 +21,28 @@ public:
     void UnBind() const override;
     GL::BindTarget GetGLBindTarget() const override;
 
-    bool Set(const String &name, int v) const;
-    bool Set(const String &name, float v) const;
-    bool Set(const String &name, bool v) const;
-    bool Set(const String &name, const Color &c) const;
-    bool Set(const String &name, const Matrix3& m) const;
-    bool Set(const String &name, const Matrix4& m) const;
-    bool Set(const String &name, const Vector2& v) const;
-    bool Set(const String &name, const Vector3& v) const;
-    bool Set(const String &name, const Vector4& v) const;
+    template<class T, class=TT_NOT_POINTER(T)>
+    bool Set(const String &name, const T &v) const
+    {
+        ASSERT(GL::IsBound(this));
+        int location = GetUniformLocation(name);
+        if (location >= 0) { GL::Uniform(location, v); }
+        return (location >= 0);
+    }
+
     bool Set(const String &name, const G_Texture *texture) const;
 
     void Refresh();
     virtual void SetVertexShader(G_Shader *vertexShader);
     virtual void SetFragmentShader(G_Shader *fragmentShader);
 
-    void SetVertexInputBinding(const String& inputName, uint location);
-    void SetFragmentInputBinding(const String& inputName, uint location);
+    void SetVertexInputBinding(const String& vertexInputName, uint location);
+    void SetFragmentInputBinding(const String& fragInputName, uint location);
 
     G_Shader* GetVertexShader() const;
     G_Shader* GetFragmentShader() const;
 
     GLint GetUniformLocation(const String &name) const;
-    GLint GetAttribLocation(const String &name) const;
 
 protected:
     G_Shader *p_vshader = nullptr;

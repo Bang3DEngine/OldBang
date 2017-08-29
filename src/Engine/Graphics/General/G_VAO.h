@@ -15,12 +15,12 @@ public:
     virtual ~G_VAO();
 
     void BindVBO(const G_VBO *vbo,
-                 GLint location,
-                 GLint dataComponentsCount = -1,
-                 GLenum dataType           = GL_FLOAT,
-                 GLboolean dataNormalized  = GL_FALSE,
-                 GLsizei dataStride        = 0,
-                 GLuint dataOffset         = 0);
+                 int location,
+                 int dataComponentsCount,
+                 GL::DataType dataType = GL::DataType::Float,
+                 bool dataNormalized   = false,
+                 int dataStride        = 0,
+                 int dataOffset        = 0);
 
     void UnBindVBO(GLint location);
 

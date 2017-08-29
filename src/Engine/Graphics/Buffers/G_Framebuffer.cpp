@@ -191,7 +191,7 @@ void G_Framebuffer::SaveToImage(GL::Attachment attachment,
                                 const Path &filepath,
                                 bool invertY) const
 {
-    glFlush(); glFinish();
+    GL::Flush(); GL::Finish();
     G_Image img = GetAttachmentTexture(attachment)->ToImage(invertY);
     img.SaveToFile(filepath);
 }
@@ -199,7 +199,7 @@ void G_Framebuffer::SaveToImage(GL::Attachment attachment,
 void G_Framebuffer::SaveStencilToImage(const Path &filepath,
                                        int stencilValueMultiplier) const
 {
-    glFlush(); glFinish();
+    GL::Flush(); GL::Finish();
     Byte *stencilData = new Byte[GetWidth() * GetHeight()];
     glReadPixels(0, 0, GetWidth(), GetHeight(),
                  GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stencilData);

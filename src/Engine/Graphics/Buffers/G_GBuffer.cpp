@@ -68,11 +68,9 @@ void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     PushDrawAttachmentIds();
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
-    Rect r = (readNDCRect * 0.5f + 0.5f) * GetSize();
-    glBlitFramebuffer(r.GetMin().x, r.GetMin().x, r.GetMax().x,
-                      r.GetMax().y, r.GetMin().x, r.GetMin().x,
-                      r.GetMax().x, r.GetMax().y,
-                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    Recti r = Recti((readNDCRect * 0.5f + 0.5f) * GetSize());
+    GL::BlitFramebuffer(r, r, GL::FilterMode::Nearest,
+                        GL::BufferBit::ColorBufferBit);
     PopDrawAttachmentIds();
 }
 

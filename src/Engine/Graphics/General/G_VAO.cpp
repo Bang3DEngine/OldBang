@@ -14,12 +14,12 @@ G_VAO::~G_VAO()
 }
 
 void G_VAO::BindVBO(const G_VBO *vbo,
-                  GLint location,
-                  GLint dataComponentsCount,
-                  GLenum dataType,
-                  GLboolean dataNormalized,
-                  GLsizei dataStride,
-                  GLuint dataOffset)
+                    int location,
+                    int dataComponentsCount,
+                    GL::DataType dataType,
+                    bool dataNormalized,
+                    int dataStride,
+                    int dataOffset)
 {
     UnBindVBO(location); // unbind in case its a vbo replacement
 
@@ -28,11 +28,11 @@ void G_VAO::BindVBO(const G_VBO *vbo,
     Bind();
 
     vbo->Bind();
-    glEnableVertexAttribArray(location);
-    glVertexAttribPointer(location,
-                          dataComponentsCount, dataType,
-                          dataNormalized, dataStride,
-                          reinterpret_cast<void*>(dataOffset));
+    GL::EnableVertexAttribArray(location);
+    GL::VertexAttribPointer(location,
+                            dataComponentsCount, dataType,
+                            dataNormalized, dataStride,
+                            dataOffset);
     vbo->UnBind();
 
     UnBind();
@@ -46,7 +46,7 @@ void G_VAO::UnBindVBO(GLint location)
     if (location >= 0 && location < m_vbos.Size())
     {
         this->Bind();
-        glDisableVertexAttribArray(location);
+        GL::DisableVertexAttribArray(location);
         this->UnBind();
         m_vbos[location] = nullptr;
     }

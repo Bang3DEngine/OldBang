@@ -71,14 +71,237 @@ void GL::ClearStencilBuffer()
     glClear(GL_STENCIL_BUFFER_BIT);
 }
 
-void GL::Enable(GLenum glEnum)
+void GL::EnableVertexAttribArray(int location)
+{
+    GL::ClearError();
+    glEnableVertexAttribArray(location);
+    GL_CheckError();
+}
+
+void GL::DisableVertexAttribArray(int location)
+{
+    GL::ClearError();
+    glDisableVertexAttribArray(location);
+    GL_CheckError();
+}
+
+void GL::VertexAttribPointer(int location,
+                             int dataComponentsCount,
+                             GL::DataType dataType,
+                             bool dataNormalized,
+                             int dataStride,
+                             int dataOffset)
+{
+    GL::ClearError();
+    glVertexAttribPointer(location,
+                          dataComponentsCount,
+                          GLCAST(dataType),
+                          dataNormalized,
+                          dataStride,
+                          RCAST<void*>(dataOffset));
+    GL_CheckError();
+}
+
+void GL::Enable(GL::Enum glEnum)
 {
     glEnable(glEnum);
 }
 
-void GL::Disable(GLenum glEnum)
+void GL::Disable(GL::Enum glEnum)
 {
     glDisable(glEnum);
+}
+
+void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
+                         int dstX0, int dstY0, int dstX1, int dstY1,
+                         GL::FilterMode filterMode,
+                         GL::BufferBit bufferBitMask)
+{
+    GL::ClearError();
+    glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1,
+                      dstX0, dstY0, dstX1, dstY1,
+                      GLCAST(bufferBitMask),
+                      GLCAST(filterMode));
+    GL_CheckError();
+}
+
+void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
+                         GL::FilterMode filterMode,
+                         GL::BufferBit bufferBitMask)
+{
+    GL::BlitFramebuffer(srcRect.GetMin().x, srcRect.GetMin().y,
+                        srcRect.GetMax().x, srcRect.GetMax().y,
+                        dstRect.GetMin().x, dstRect.GetMin().y,
+                        dstRect.GetMax().x, dstRect.GetMax().y,
+                        filterMode, bufferBitMask);
+}
+
+GLId GL::CreateShader(GL::ShaderType shaderType)
+{
+    GL::ClearError();
+    GLId id = glCreateShader( GLCAST(shaderType) );
+    GL_CheckError();
+    return id;
+}
+
+void GL::ShaderSource(GLId shaderId, const String &sourceCode)
+{
+    GL::ClearError();
+    int sourceSize = sourceCode.Size();
+    const char *src = sourceCode.ToCString();
+    glShaderSource(shaderId, 1, &src, &sourceSize);
+    GL_CheckError();
+}
+
+bool GL::CompileShader(GLId shaderId)
+{
+    GL::ClearError();
+    glCompileShader(shaderId);
+    GL_CheckError();
+    bool ok = GL::GetShaderInteger(shaderId, GL_COMPILE_STATUS);
+    GL_CheckError();
+    return ok;
+}
+
+int GL::GetShaderInteger(GLId shaderId, GL::Enum glEnum)
+{
+    int v = false;
+    GL::ClearError();
+    glGetShaderiv(shaderId, glEnum, &v);
+    GL_CheckError();
+    return v;
+}
+
+String GL::GetShaderErrorMsg(GLId shaderId)
+{
+    int maxLength = GL::GetShaderInteger(shaderId, GL_INFO_LOG_LENGTH);
+
+    GL::ClearError();
+    Array<char> v(maxLength);
+    glGetShaderInfoLog(shaderId, maxLength, &maxLength, &v[0]);
+    GL_CheckError();
+
+    return String(v.begin(), v.end());
+}
+
+void GL::DeleteShader(GLId shaderId)
+{
+    GL::ClearError();
+    glDeleteShader(shaderId);
+    GL_CheckError();
+}
+
+GLId GL::CreateProgram()
+{
+    return glCreateProgram();
+}
+
+void GL::AttachShader(GLId programId, GLId shaderId)
+{
+    GL::ClearError();
+    glAttachShader(programId, shaderId);
+    GL_CheckError();
+}
+
+bool GL::LinkProgram(GLId programId)
+{
+    GL::ClearError();
+    glLinkProgram(programId);
+    GL_CheckError();
+    int linked = GL::GetProgramInteger(programId, GL_LINK_STATUS);
+    return linked;
+}
+
+String GL::GetProgramLinkErrorMsg(GLId programId)
+{
+    GLint errorLength = GL::GetProgramInteger(programId, GL_INFO_LOG_LENGTH);
+    if (errorLength > 1)
+    {
+       char* errorLog = new char[errorLength];
+       glGetProgramInfoLog(programId, errorLength, NULL, errorLog);
+       delete[] errorLog;
+       return String(errorLog);
+    }
+    return String();
+}
+
+int GL::GetProgramInteger(GLId programId, GL::Enum glEnum)
+{
+    int result = 0;
+    GL::ClearError();
+    glGetProgramiv(programId, glEnum, &result);
+    GL_CheckError();
+    return result;
+}
+
+void GL::BindAttribLocation(GLId programId, int location,
+                            const String &attribName)
+{
+    GL::ClearError();
+    glBindAttribLocation(programId, location, attribName.ToCString());
+    GL_CheckError();
+}
+
+void GL::BindFragDataLocation(GLId programId, int location,
+                              const String &fragDataName)
+{
+    GL::ClearError();
+    glBindFragDataLocation(programId, location, fragDataName.ToCString());
+    GL_CheckError();
+}
+
+int GL::GetUniformLocation(GLId programId, const String &uniformName)
+{
+    GL::ClearError();
+    int location = glGetUniformLocation(programId, uniformName.ToCString());
+    GL_CheckError();
+    return location;
+}
+
+void GL::DeleteProgram(GLId programId)
+{
+    GL::ClearError();
+    glDeleteProgram(programId);
+    GL_CheckError();
+}
+
+void GL::Finish() { glFinish(); }
+void GL::Flush() { glFlush(); }
+
+void GL::Uniform(int location, int value) { glUniform1i(location, value); }
+void GL::Uniform(int location, float value) { glUniform1f(location, value); }
+void GL::Uniform(int location, bool value)
+{
+    glUniform1i(location, value ? 1 : 0);
+}
+void GL::Uniform(int location, const Matrix3f& value)
+{
+    glUniformMatrix3fv(location, 1, false, value.Data());
+}
+void GL::Uniform(int location, const Matrix4f& value)
+{
+    glUniformMatrix4fv(location, 1, false, value.Data());
+}
+void GL::Uniform(int location, const Color &value)
+{
+    GL::Uniform(location, value.ToVector4());
+}
+void GL::Uniform(int location, const Vector2 &value)
+{
+    glUniform2fv(location, 1, value.Data());
+}
+void GL::Uniform(int location, const Vector3 &value)
+{
+    glUniform3fv(location, 1, value.Data());
+}
+void GL::Uniform(int location, const Vector4 &value)
+{
+    glUniform4fv(location, 1, value.Data());
+}
+
+void GL::PixelStore(GL::Enum pixelStoreEnum, int n)
+{
+    glPixelStorei(pixelStoreEnum, n);
 }
 
 void GL::GenerateMipMap(GL::TextureTarget textureTarget)
@@ -226,6 +449,11 @@ void GL::SetLineWidth(float lineWidth)
     glLineWidth(lineWidth);
 }
 
+void GL::BufferDataVBO(int dataSize, const void *data, GL::UsageHint usageHint)
+{
+    glBufferData(GL_ARRAY_BUFFER, dataSize, data, GLCAST(usageHint));
+}
+
 void GL::Render(const G_VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {
@@ -352,7 +580,7 @@ void GL::SetViewProjMode(GL::ViewProjMode mode)
     gl->m_viewProjMode = mode;
 }
 
-void GL::SetStencilOp(GLenum zPassOp)
+void GL::SetStencilOp(GL::Enum zPassOp)
 {
     GL *gl = GL::GetActive();
     if (gl->m_stencilOp != zPassOp)
@@ -460,7 +688,7 @@ void GL::SetZNearFar(float zNear, float zFar)
     gl->m_zFar  = zFar;
 }
 
-GLenum GL::GetStencilOp() { return GL::GetActive()->m_stencilOp; }
+GL::Enum GL::GetStencilOp() { return GL::GetActive()->m_stencilOp; }
 Byte GL::GetStencilValue() { return GL::GetActive()->m_stencilValue; }
 
 Array<BoolByte> GL::GetColorMask()

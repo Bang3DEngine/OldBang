@@ -169,7 +169,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     // DistanceFielder::CreateDistanceField(atlasImage, &distFieldImg, distRadius);
     // distFieldImg.SaveToFile( Path("distField.png") );
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
     *atlasTexture = new G_Texture2D();
     (*atlasTexture)->LoadFromImage(atlasImage);
     // (*atlasTexture)->LoadFromImage(distFieldImg);

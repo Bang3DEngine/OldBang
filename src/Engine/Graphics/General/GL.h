@@ -37,6 +37,19 @@ public:
         Polygon       = GL_POLYGON
     };
 
+    enum class UsageHint
+    {
+        StreamDraw  = GL_STREAM_DRAW,
+        StreamRead  = GL_STREAM_READ,
+        StreamCopy  = GL_STREAM_COPY,
+        StaticDraw  = GL_STATIC_DRAW,
+        StaticRead  = GL_STATIC_READ,
+        StaticCopy  = GL_STATIC_COPY,
+        DynamicDraw = GL_DYNAMIC_DRAW,
+        DynamicRead = GL_DYNAMIC_READ,
+        DynamicCopy = GL_DYNAMIC_COPY
+    };
+
     enum class Face
     {
         Front        = GL_FRONT,
@@ -101,6 +114,13 @@ public:
         TextureCubeMap = GL_TEXTURE_CUBE_MAP
     };
 
+    enum class BufferBit
+    {
+        ColorBufferBit   = GL_COLOR_BUFFER_BIT,
+        DepthBufferBit   = GL_DEPTH_BUFFER_BIT,
+        StencilBufferBit = GL_STENCIL_BUFFER_BIT
+    };
+
     enum class WrapMode
     {
         Repeat = GL_REPEAT,
@@ -163,8 +183,59 @@ public:
     static void ClearDepthBuffer(float clearDepth = 1.0f);
     static void ClearStencilBuffer();
 
-    static void Enable (GLenum glEnum);
-    static void Disable(GLenum glEnum);
+    static void Enable (GL::Enum glEnum);
+    static void Disable(GL::Enum glEnum);
+
+    static void EnableVertexAttribArray(int location);
+    static void DisableVertexAttribArray(int location);
+    static void VertexAttribPointer(int location,
+                                    int dataComponentsCount,
+                                    GL::DataType dataType,
+                                    bool dataNormalized,
+                                    int dataStride,
+                                    int dataOffset);
+
+    static void BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
+                                int dstX0, int dstY0, int dstX1, int dstY1,
+                                GL::FilterMode filterMode,
+                                GL::BufferBit bufferBitMask);
+    static void BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
+                                GL::FilterMode filterMode,
+                                GL::BufferBit bufferBitMask);
+
+    static GLId CreateShader(GL::ShaderType shaderType);
+    static void ShaderSource(GLId shaderId, const String &sourceCode);
+    static bool CompileShader(GLId shaderId);
+    static int  GetShaderInteger(GLId shaderId, GL::Enum glEnum);
+    static String GetShaderErrorMsg(GLId shaderId);
+    static void DeleteShader(GLId shaderId);
+
+    static GLId   CreateProgram();
+    static void   AttachShader(GLId programId, GLId shaderId);
+    static bool   LinkProgram(GLId programId);
+    static String GetProgramLinkErrorMsg(GLId programId);
+    static int    GetProgramInteger(GLId programId, GL::Enum glEnum);
+    static void   BindAttribLocation(GLId programId, int location,
+                                     const String &attribName);
+    static void   BindFragDataLocation(GLId programId, int location,
+                                       const String &fragDataName);
+    static int    GetUniformLocation(GLId programId, const String &uniformName);
+    static void   DeleteProgram(GLId programId);
+
+    static void Finish();
+    static void Flush();
+
+    static void Uniform(int location, int value);
+    static void Uniform(int location, float value);
+    static void Uniform(int location, bool value);
+    static void Uniform(int location, const Matrix3f &value);
+    static void Uniform(int location, const Matrix4f &value);
+    static void Uniform(int location, const Color &value);
+    static void Uniform(int location, const Vector2 &value);
+    static void Uniform(int location, const Vector3 &value);
+    static void Uniform(int location, const Vector4 &value);
+
+    static void PixelStore(GL::Enum pixelStoreEnum, int n);
 
     static void GenerateMipMap(GL::TextureTarget textureTarget);
     static void TexImage2D(GL::TextureTarget textureTarget,
@@ -201,10 +272,12 @@ public:
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
 
+    static void BufferDataVBO(int dataSize, const void *data,
+                              GL::UsageHint usageHint);
     static void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     static void SetViewProjMode(ViewProjMode mode);
     static void SetStencilWrite(bool writeStencil);
-    static void SetStencilOp(GLenum zPassOp);
+    static void SetStencilOp(GL::Enum zPassOp);
     static void SetStencilValue(Byte value);
     static void SetStencilTest(bool testStencil);
     static void SetDepthWrite(bool writeDepth);
@@ -222,7 +295,7 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
-    static GLenum GetStencilOp();
+    static GL::Enum GetStencilOp();
     static Byte GetStencilValue();
     static bool IsColorMaskR();
     static bool IsColorMaskG();

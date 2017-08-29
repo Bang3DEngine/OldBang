@@ -10,10 +10,10 @@ G_VBO::~G_VBO()
     GL::DeleteBuffers(1, &m_idGL);
 }
 
-void G_VBO::Fill(const void *data, int dataSize, GLenum usage)
+void G_VBO::Fill(const void *data, int dataSize, GL::UsageHint usage)
 {
     Bind();
-    glBufferData(GL_ARRAY_BUFFER, dataSize, data, usage);
+    GL::BufferDataVBO(dataSize, data, usage);
     UnBind();
 }
 
