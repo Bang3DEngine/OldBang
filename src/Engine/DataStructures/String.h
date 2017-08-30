@@ -51,7 +51,7 @@ public:
     template<class TIterator>
     Iterator Insert(TIterator it, const String &str)
     {
-        return Insert(it, str.Begin(), str.End());
+        return m_str.insert(it, str.ToCString());
     }
 
     void Insert(int position, char c);
