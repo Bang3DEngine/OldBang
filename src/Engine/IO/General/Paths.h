@@ -10,6 +10,7 @@
 class Paths
 {
 public:
+    static Path ExecutablePath();
     static const Path& Engine();
     static Path EngineAssets();
     static Path EngineBinaryDir(BinType binaryType);

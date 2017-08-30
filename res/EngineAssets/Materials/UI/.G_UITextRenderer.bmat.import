@@ -1,8 +1,3 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          Shininess="0"{}
-          ReceivesLighting="false"{}
-          FragmentShader="./Shaders/UI/G_UITextRenderer.frag_g"{FileExtension="frag"",IsEngineFile}
-          VertexShader="./Shaders/G_Default.vert_g"{FileExtension="vert"",IsEngineFile}
-          GUID="10218942432410599425"{}
-         >
-</Material>
+<NoTag GUID="4875661717826174977"{}
+      >
+</NoTag>

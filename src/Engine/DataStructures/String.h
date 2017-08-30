@@ -142,6 +142,7 @@ public:
     friend bool operator==(const String &str1, const String &str2);
     friend bool operator!=(const String &str1, const String &str2);
     friend String& operator+=(String &str1, const String &str2);
+    friend String& operator+=(String &str1, char c);
     char operator[](std::size_t i) const;
     char& operator[](std::size_t i);
     operator std::string() const;

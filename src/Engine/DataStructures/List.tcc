@@ -72,12 +72,7 @@ template<class T>
 void List<T>::PushFront(const T &x) { m_list.push_front(x); }
 
 template<class T>
-const T &List<T>::PopFront()
-{
-    const T& front = Front();
-    m_list.pop_front();
-    return front;
-}
+void List<T>::PopFront() { m_list.pop_front(); }
 
 template<class T>
 List<T> List<T>::Concat(const List<T> &l) const
@@ -138,12 +133,7 @@ int List<T>::IndexOf(const T &x) const
 }
 
 template<class T>
-T &List<T>::PopBack()
-{
-    T& back = Back();
-    m_list.pop_back();
-    return back;
-}
+void List<T>::PopBack() { m_list.pop_back(); }
 
 template<class T>
 void List<T>::RemoveAll(const T &x)

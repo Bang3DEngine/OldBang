@@ -123,15 +123,39 @@ void SceneManager::OnActiveSceneSavedAs(const Path &filepath)
 
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
+    List<GameObject*> dontDestroyOnLoadGameObjects;
     Scene *oldScene = SceneManager::GetActiveScene();
-    if (oldScene) { delete oldScene; }
+    if (oldScene)
+    {
+        dontDestroyOnLoadGameObjects = FindDontDestroyOnLoadGameObjects(oldScene);
+        for (GameObject *ddolGo : dontDestroyOnLoadGameObjects)
+        {
+            ddolGo->SetParent(nullptr); // Dont let them be destroyed now!
+        }
+        delete oldScene;
+    }
 
     SceneManager::LoadScene(nullptr);
 
     if (scene)
     {
+        for (GameObject *ddolGo : dontDestroyOnLoadGameObjects)
+        {
+            ddolGo->SetParent(scene);
+        }
         SceneManager::LoadScene(scene);
     }
+}
+
+List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go)
+{
+    List<GameObject*> result;
+    for (GameObject *child : go->GetChildren())
+    {
+        if (child->IsDontDestroyOnLoad()) { result.PushBack(child); }
+        else { result.PushBack(FindDontDestroyOnLoadGameObjects(child)); }
+    }
+    return result;
 }
 
 void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
@@ -148,5 +172,6 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
     {
         Debug_Error("Scene from file '" << sceneFilepath <<
                     "' could not be loaded.");
+        delete scene;
     }
 }

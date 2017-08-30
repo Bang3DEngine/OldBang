@@ -22,6 +22,10 @@ public:
     const Color& GetLineColor() const;
     float GetLineWidth() const;
 
+    // Serializable
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
+
 private:
     Rect m_latestBoundingRectNDC = Rect::Zero;
     LineRenderer *p_lineRenderer = nullptr;

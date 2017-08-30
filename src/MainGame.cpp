@@ -12,7 +12,8 @@ int main(int argc, char **argv)
     Application app(argc, argv);
 
     // Load game project
-    Path gameProjectFilepath("GameData/Game.bproject");
+    Path gameProjectFilepath(Paths::ExecutablePath().GetDirectory()
+                             .Append("GameData/Game.bproject"));
     if (!gameProjectFilepath.Exists())
     {
         Debug_Error("Could not find " << gameProjectFilepath);
@@ -27,7 +28,7 @@ int main(int argc, char **argv)
 
     // Find and load Behaviours library
     Path libsDir = gameProjectFilepath.GetDirectory().Append("Libraries");
-    List<Path> behavioursLibs = libsDir.FindFiles(false);
+    List<Path> behavioursLibs = libsDir.FindFiles(Path::FindFlag::Simple);
     for (auto it = behavioursLibs.Begin(); it != behavioursLibs.End(); )
     {
         const Path &behaviourLib = *it;
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
 
     if (behavioursLibs.IsEmpty())
     {
-        Debug_Error("Behaviours library could not be found.");
+        Debug_Error("Behaviours library could not be found in '" << libsDir << "'");
         return 2;
     }
     Path behavioursLib = behavioursLibs.Front();

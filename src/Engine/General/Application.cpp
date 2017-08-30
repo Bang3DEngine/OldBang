@@ -159,6 +159,11 @@ void Application::SetApplicationSingleton(Application *app)
     Application::s_appSingleton = app;
 }
 
+void Application::Exit(int returnCode)
+{
+    exit(returnCode);
+}
+
 Window *Application::GetMainWindow() const
 {
     return m_window;

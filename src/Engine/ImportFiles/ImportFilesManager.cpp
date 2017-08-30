@@ -21,8 +21,10 @@ void ImportFilesManager::CreateMissingProjectImportFiles()
     // with duplicated GUIDs.
     ImportFilesManager::LoadImportFilepathGUIDs();
 
-    List<Path> projectFilesList = Paths::ProjectAssets().FindFiles(true);
-    projectFilesList.PushBack( Paths::EngineAssets().FindFiles(true) );
+    List<Path> projectFilesList = Paths::ProjectAssets()
+                                        .FindFiles(Path::FindFlag::Recursive);
+    projectFilesList.PushBack( Paths::EngineAssets()
+                                      .FindFiles(Path::FindFlag::Recursive) );
 
     Set<Path> files;
     files.Add(projectFilesList.Begin(), projectFilesList.End());
@@ -38,17 +40,40 @@ void ImportFilesManager::CreateMissingProjectImportFiles()
 
 void ImportFilesManager::LoadImportFilepathGUIDs()
 {
-    List<Path> importFilepaths =
-            Paths::ProjectAssets().FindFiles(true, {GetImportExtension()});
+    List<String> extensions = {GetImportExtension()};
+    List<Path> importFilepaths = Paths::ProjectAssets()
+                                   .FindFiles(Path::FindFlag::RecursiveHidden,
+                                              extensions);
     importFilepaths.PushBack( Paths::EngineAssets()
-                              .FindFiles(true, {GetImportExtension()}) );
+                                .FindFiles(Path::FindFlag::RecursiveHidden,
+                                           extensions) );
 
+    // Clean alone .import files
+    for (const Path &importFilepath : importFilepaths)
+    {
+        if ( IsImportFile(importFilepath) &&
+            !GetFilepath(importFilepath).IsFile())
+        {
+            File::Remove(importFilepath);
+        }
+    }
+
+    // Load GUID's of import files!
     ImportFilesManager *ifm = ImportFilesManager::GetInstance();
     for (const Path &importFilepath : importFilepaths)
     {
+        if (!IsImportFile(importFilepath)) { continue; }
+
         XMLNode info = XMLParser::FromFile(importFilepath);
 
         GUID guid = info.Get<GUID>("GUID");
+        if (ifm->m_GUIDToImportFilepath.ContainsKey(guid) &&
+            ifm->m_GUIDToImportFilepath.Get(guid) != importFilepath)
+        {
+            Debug_Error("Found conflicting GUID: " << guid <<
+                        "(Files '" << importFilepath << "' and '" <<
+                        ifm->m_GUIDToImportFilepath.Get(guid) << "'");
+        }
         ifm->m_GUIDToImportFilepath.Add(guid, importFilepath);
         ifm->m_importFilepathToGUID.Add(importFilepath, guid);
     }
@@ -74,7 +99,8 @@ bool ImportFilesManager::HasImportFile(const Path &filepath)
 
 bool ImportFilesManager::IsImportFile(const Path &filepath)
 {
-    return filepath.HasExtension( GetImportExtension() );
+    return filepath.IsHiddenFile() &&
+           filepath.HasExtension( GetImportExtension() );
 }
 
 GUIDManager* ImportFilesManager::GetGUIDManager()
@@ -102,7 +128,9 @@ Path ImportFilesManager::GetFilepath(const GUID &guid)
 
 Path ImportFilesManager::GetFilepath(const Path &importFilepath)
 {
-    String strPath = importFilepath.GetAbsolute();
+    Path filepath = importFilepath.ChangeHidden(false);
+
+    String strPath = filepath.GetAbsolute();
     if (strPath.BeginsWith(".")) { strPath.Remove(0, 0); }
 
     String ending = "." + GetImportExtension();

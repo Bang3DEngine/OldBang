@@ -1,7 +1,0 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          ReceivesLighting="false"{}
-          FragmentShader="./Shaders/RenderGBufferToScreen.frag_pp"{FileExtension="frag"",IsEngineFile}
-          VertexShader="./Shaders/SP_ScreenPass.vert_pp"{FileExtension="vert"",IsEngineFile}
-          GUID="3644179557658918913"{}
-         >
-</Material>

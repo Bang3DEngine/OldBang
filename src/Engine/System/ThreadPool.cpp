@@ -8,7 +8,8 @@ ThreadPool::~ThreadPool()
 {
     while (!m_threadList.IsEmpty())
     {
-        Thread *thread = m_threadList.PopBack();
+        Thread *thread = m_threadList.Back();
+        m_threadList.PopBack();
         thread->Join();
         delete thread;
     }

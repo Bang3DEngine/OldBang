@@ -7,7 +7,7 @@ class Flags
 public:
     Flags() { }
     Flags(int flagsOn) { m_flags = Flag::None; SetOn(flagsOn); }
-    Flags(Flag flagsOn) : Flags( static_cast<int>(flagsOn) ) { }
+    Flags(Flag flagsOn) { m_flags = Flag::None; SetOn(flagsOn); }
 
     void SetOn(int f)  { m_flags = m_flags | f; }
     void SetOn(Flag f) { SetOn(static_cast<int>(f)); }

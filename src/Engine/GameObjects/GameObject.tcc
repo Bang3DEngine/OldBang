@@ -13,7 +13,7 @@ T* GameObject::AddComponent(int index)
 }
 
 template <class T>
-T* GameObject::GetComponent() const
+T* GameObject::_GetComponent() const
 {
     for (Component *comp : m_components)
     {

@@ -1,12 +1,27 @@
 #ifndef PATH_H
 #define PATH_H
 
+#include "Bang/List.h"
+#include "Bang/Flags.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
 class Path : public IToString
 {
 public:
+    enum FindFlag
+    {
+        None      = 0,
+        Recursive = 1,
+        Hidden    = 2,
+
+        Simple          = FindFlag::None,
+        SimpleHidden    = FindFlag::Simple | FindFlag::Hidden,
+        RecursiveHidden = FindFlag::Recursive | FindFlag::Hidden,
+        Default         = FindFlag::SimpleHidden
+    };
+    CREATE_FLAGS(FindFlags, FindFlag);
+
     Path();
     Path(const Path &path);
     explicit Path(const String &absolutePath);
@@ -16,11 +31,10 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> FindFiles(bool recursively = false) const;
-    List<Path> FindFiles(bool recursively,
-                         const List<String>& extensions) const;
-    List<Path> FindSubDirectories(bool recursively = false) const;
-    List<Path> FindSubPaths() const;
+    List<Path> FindFiles(FindFlags findFlags,
+                         const List<String> &extensions = {}) const;
+    List<Path> FindSubDirectories(FindFlags findFlags) const;
+    List<Path> FindSubPaths(FindFlags findFlags) const;
 
     Path GetDirectory() const;
     String GetName() const;
@@ -40,6 +54,8 @@ public:
     Path Append(const String& str) const;
     Path AppendRaw(const String& str) const;
     Path AppendExtension(const String& extension) const;
+
+    bool IsHiddenFile() const;
 
     Path ChangeHidden(bool hidden) const;
     Path ChangeExtension(const String& extension) const;

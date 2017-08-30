@@ -1,8 +1,3 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          ReceivesLighting="false"{}
-          FragmentShader="./Shaders/SP_PointLight.frag_pp"{FileExtension="frag"",IsEngineFile}
-          TextureCount="0"{}
-          VertexShader="./Shaders/SP_ScreenPass.vert_pp"{FileExtension="vert"",IsEngineFile}
-          GUID="14171334890544431105"{}
-         >
-</Material>
+<NoTag GUID="896948394432397313"{}
+      >
+</NoTag>

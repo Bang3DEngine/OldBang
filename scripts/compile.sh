@@ -10,8 +10,6 @@ source "scripts/captureArgs.sh"
 VERBOSE=1
 # if [ "$2" == "VERBOSE" ] ; then VERBOSE=1 ; fi
 
-# CMake && Make Bang
-
 RD=${RELEASE_OR_DEBUG}
 
 CMAKE_CMD="cmake -DCMAKE_BUILD_TYPE=${RD} .."

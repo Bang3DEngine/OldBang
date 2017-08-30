@@ -256,7 +256,7 @@ void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
     if (!IsEnabled()) { *m = Matrix4::Identity; return; }
 
     GetLocalToParentMatrix(m);
-    if (gameObject->parent)
+    if (gameObject->parent && gameObject->parent->transform)
     {
         Matrix4 mp;
         gameObject->parent->transform->GetLocalToWorldMatrix(&mp);

@@ -53,7 +53,7 @@ GameObject::~GameObject()
 
 void GameObject::Start()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnStart(), m_components);
+    PROPAGATE_EVENT_TO_COMPONENTS(Start(), m_components);
     Object::Start();
     PROPAGATE_EVENT(Start(), GetChildren());
 }
@@ -137,7 +137,7 @@ const List<Component *> &GameObject::GetComponents() const
     return m_components;
 }
 
-Component *GameObject::GetComponent(const GUID &guid) const
+Component *GameObject::GetComponentByGUID(const GUID &guid) const
 {
     for (Component *comp : GetComponents())
     {
@@ -278,6 +278,16 @@ GameObject *GameObject::GetParent() { return p_parent; }
 
 const GameObject *GameObject::GetParent() const { return p_parent; }
 
+void GameObject::SetDontDestroyOnLoad(bool dontDestroyOnLoad)
+{
+    m_dontDestroyOnLoad = dontDestroyOnLoad;
+}
+
+bool GameObject::IsDontDestroyOnLoad() const
+{
+    return m_dontDestroyOnLoad;
+}
+
 Rect GameObject::GetBoundingScreenRect(Camera *cam, bool includeChildren) const
 {
     AABox bbox = GetAABBox(includeChildren);
@@ -392,6 +402,9 @@ void GameObject::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Name"))
     { SetName( xmlInfo.Get<String>("Name") ); }
 
+    if (xmlInfo.Contains("DontDestroyOnLoad"))
+    { SetDontDestroyOnLoad( xmlInfo.Get<bool>("DontDestroyOnLoad") ); }
+
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
         const String& tagName = xmlChild.GetTagName();
@@ -415,6 +428,7 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("Enabled", IsEnabled());
     xmlInfo->Set("Name", GetName());
+    xmlInfo->Set("DontDestroyOnLoad", IsDontDestroyOnLoad());
 
     for (Component *c : GetComponents())
     {

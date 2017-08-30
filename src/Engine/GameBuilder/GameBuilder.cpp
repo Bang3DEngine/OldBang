@@ -59,8 +59,9 @@ void GameBuilder::BuildGame(const Project *project,
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
-    List<Path> sceneFiles = Paths::ProjectAssets().FindFiles(
-                                true, {Extensions::Get<Scene>()});
+    List<Path> sceneFiles = Paths::ProjectAssets()
+                                    .FindFiles(Path::FindFlag::Recursive,
+                                               {Extensions::Get<Scene>()});
     if (sceneFiles.IsEmpty())
     {
         Debug_Error("Please save at least one scene in the "
@@ -139,8 +140,8 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     File::CreateDirectory(libsDir);
 
     // Compile every behaviour into its .o
-    List<Path> behavioursSourceFiles =
-            Paths::ProjectAssets().FindFiles(true,
+    List<Path> behavioursSourceFiles = Paths::ProjectAssets()
+                                  .FindFiles(Path::FindFlag::Recursive,
                                              Extensions::GetSourceFileList());
 
     // Preprocess behaviours before
@@ -168,7 +169,8 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     //
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = libsDir.FindFiles(false, {"o"});
+    List<Path> behaviourObjectsPaths = libsDir.FindFiles(Path::FindFlag::Simple,
+                                                         {"o"});
     Path outputLibPath =
                 libsDir.Append("Behaviours")
                        .AppendExtension("so")

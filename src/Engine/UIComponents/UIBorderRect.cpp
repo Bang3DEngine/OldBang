@@ -1,5 +1,6 @@
 #include "Bang/UIBorderRect.h"
 
+#include "Bang/XMLNode.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
@@ -74,4 +75,19 @@ const Color &UIBorderRect::GetLineColor() const
 float UIBorderRect::GetLineWidth() const
 {
     return p_lineRenderer->GetLineWidth();
+}
+
+void UIBorderRect::ImportXML(const XMLNode &xmlInfo)
+{
+    Component::ImportXML(xmlInfo);
+
+    if (xmlInfo.Contains("LineColor"))
+    { SetLineColor( xmlInfo.Get<Color>("LineColor") ); }
+}
+
+void UIBorderRect::ExportXML(XMLNode *xmlInfo) const
+{
+    Component::ExportXML(xmlInfo);
+
+    xmlInfo->Set("LineColor", GetLineColor());
 }

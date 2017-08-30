@@ -1,5 +1,3 @@
-<ShaderProgram VertexShader="Shaders/G_Default.vert_g"{FileExtension="vert glsl"",IsEngineFile}
-               FragmentShader="./Shaders/G_Default.frag_g"{FileExtension="frag glsl"",IsEngineFile}
-               GUID="2007168097231831041"{}
-              >
-</ShaderProgram>
+<NoTag GUID="3631099217579081729"{}
+      >
+</NoTag>

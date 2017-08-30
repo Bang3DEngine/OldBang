@@ -26,6 +26,8 @@ private:
     Path m_queuedSceneFilepath;
     Path m_activeSceneFilepath;
 
+    static List<GameObject *>
+    FindDontDestroyOnLoadGameObjects(GameObject *go);
     static void TryToLoadQueuedScene();
     static void OpenScene(const Path &filepath);
     static void SetActiveSceneFilepath(const Path &sceneFilepath);

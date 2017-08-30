@@ -58,9 +58,9 @@ public:
     GameObject* GetChild(const GUID &guid) const;
     GameObject* GetChild(const String &name) const;
 
-    template <class T>
-    T* GetComponent() const;
-    Component* GetComponent(const GUID &guid) const;
+    template <class T> // To enable auto-complete
+    T* GetComponent() const { return _GetComponent<T>(); }
+    Component* GetComponentByGUID(const GUID &guid) const;
 
     template <class T>
     List<T*> GetComponents() const;
@@ -94,6 +94,9 @@ public:
     GameObject* GetParent();
     const GameObject* GetParent() const;
 
+    void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
+
+    bool IsDontDestroyOnLoad() const;
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
     AABox GetObjectAABBox(bool includeChildren = true) const;
     AABox GetAABBox(bool includeChildren = true) const;
@@ -117,6 +120,7 @@ protected:
     List<Component*> m_components;
 
     String m_name = "";
+    bool m_dontDestroyOnLoad = false;
 
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
@@ -127,6 +131,8 @@ protected:
 
 private:
     GameObject(const String &m_name = "GameObject");
+
+    template <class T> T* _GetComponent() const;
 
     friend class Scene;
     friend class Prefab;

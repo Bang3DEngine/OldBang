@@ -37,8 +37,9 @@ int main(int argc, char **argv)
     Path projectPath(argv[1]);
     ProjectManager pm;
     Project *project = pm.OpenProject(projectPath);
+    String exeName = projectPath.GetName() + ".exe";
     GameBuilder::BuildGame(project,
-                           projectPath.GetDirectory().Append("Snake.exe"),
+                           projectPath.GetDirectory().Append(exeName),
                            binaryType,
                            compileBehaviours);
 

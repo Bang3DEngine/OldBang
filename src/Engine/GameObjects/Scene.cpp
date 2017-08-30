@@ -57,7 +57,6 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
 
     if (!cameraFound) // Create default camera
     {
-        Debug_Warn("No camera was found. Creating default camera...");
         m_defaultCamera = GameObjectFactory::CreateGameObject(true);
         m_defaultCamera->SetName("DefaultCamera");
         m_defaultCamera->transform->SetPosition(Vector3(90));

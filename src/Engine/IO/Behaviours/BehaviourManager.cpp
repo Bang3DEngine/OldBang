@@ -68,7 +68,7 @@ void BehaviourManager::LoadBehavioursLibrary(const Path &behavioursLibrary)
 void BehaviourManager::RemoveOldBehaviourLibraries(const Path &librariesDir)
 {
     // Remove old library filepaths
-    List<Path> libFilepaths = librariesDir.FindFiles(true);
+    List<Path> libFilepaths = librariesDir.FindFiles(Path::FindFlag::Recursive);
     for (const Path &libFilepath : libFilepaths)
     {
         if (libFilepath.GetAbsolute().Contains(".so."))

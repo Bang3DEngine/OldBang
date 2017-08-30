@@ -36,7 +36,7 @@ public:
     void Insert(const Iterator& first, int count, const T& x);
 
     void PushFront(const T& x);
-    const T& PopFront();
+    void PopFront();
 
     List<T> Concat(const List<T> &l) const;
 
@@ -65,7 +65,7 @@ public:
     Iterator Remove(const T& x);
     void RemoveAll(const T& x);
 
-    T& PopBack();
+    void PopBack();
     int IndexOf(const T& x) const;
 
     void Resize(int n);

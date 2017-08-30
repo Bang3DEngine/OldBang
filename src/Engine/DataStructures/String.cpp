@@ -436,6 +436,12 @@ String& operator+=(String &str1, const String &str2)
     return str1;
 }
 
+String& operator+=(String &str1, char c)
+{
+    str1.m_str += c;
+    return str1;
+}
+
 bool operator<(const String &str1, const String &str2)
 {
     return str1.m_str < str2.m_str;

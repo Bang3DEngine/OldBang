@@ -41,6 +41,8 @@ public:
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);
 
+    static void Exit(int returnCode);
+
 protected:
     const int RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;

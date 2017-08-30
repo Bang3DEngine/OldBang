@@ -10,12 +10,17 @@
 
 Paths::Paths()
 {
-  char result[PATH_MAX];
-  ssize_t count = readlink("/proc/self/exe", result, PATH_MAX );
-  String strPath( std::string(result, (count > 0) ? count : 0) );
-  c_engineRoot = Path(strPath).GetDirectory()
-                              .GetDirectory()
-                              .GetDirectory();
+  c_engineRoot = Paths::ExecutablePath().GetDirectory()
+                                        .GetDirectory()
+                                        .GetDirectory();
+}
+
+Path Paths::ExecutablePath()
+{
+    char result[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", result, PATH_MAX );
+    String exePath( std::string(result, (count > 0) ? count : 0) );
+    return Path(exePath);
 }
 
 const Path &Paths::Engine()
@@ -43,19 +48,21 @@ Path Paths::GameExecutableOutputFile(BinType binaryType)
 
 List<Path> Paths::GetBehavioursSourcesFilepaths()
 {
-    return Paths::ProjectAssets().FindFiles(true, {"cpp"});
+    return Paths::ProjectAssets().FindFiles(Path::FindFlag::Recursive, {"cpp"});
 }
 
 List<Path> Paths::GetAllProjectSubDirs()
 {
-    List<Path> subdirs = Paths::Project().FindSubDirectories(true);
+    List<Path> subdirs = Paths::Project()
+                         .FindSubDirectories(Path::FindFlag::Recursive);
     subdirs.PushFront(Paths::Project());
     return subdirs;
 }
 
 List<Path> Paths::GetProjectIncludeDirs()
 {
-    List<Path> subdirs = Paths::ProjectAssets().FindSubDirectories(true);
+    List<Path> subdirs = Paths::ProjectAssets()
+                        .FindSubDirectories(Path::FindFlag::Recursive);
     return subdirs;
 }
 
@@ -63,8 +70,9 @@ List<Path> Paths::GetEngineIncludeDirs()
 {
     Path incPath = Paths::Engine().Append("include");
     List<Path> subdirs;
-    subdirs.PushBack(incPath.FindSubDirectories(false));
-    subdirs.PushBack(incPath.Append("Bang").FindSubDirectories(false));
+    subdirs.PushBack(incPath.FindSubDirectories(Path::FindFlag::Simple));
+    subdirs.PushBack(incPath.Append("Bang")
+                     .FindSubDirectories(Path::FindFlag::Simple));
     return subdirs;
 }
 

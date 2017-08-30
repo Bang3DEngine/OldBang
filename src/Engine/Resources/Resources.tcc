@@ -45,7 +45,6 @@ template <class ResourceClass>
 ResourceClass* Resources::Load(const GUID &guid)
 {
     if (guid.IsEmpty()) { return nullptr; }
-
     if (!Resources::Contains<ResourceClass>(guid))
     {
         Resources::Load<ResourceClass>( ImportFilesManager::GetFilepath(guid) );
