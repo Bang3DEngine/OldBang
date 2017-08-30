@@ -19,6 +19,7 @@ message(" =============== Building in ${CMAKE_BUILD_TYPE} mode...")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(PROJECT_SOURCE_DIR ${SRC_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};scripts)
 
 # CXX_FLAGS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -67,8 +68,11 @@ link_libraries(${FREETYPE_LIBRARIES})
 
 # SDL Dependency
 find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIRS})
+string(STRIP "${SDL2_LIBRARY}" SDL2_LIBRARY)
 string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
+link_libraries(${SDL2_LIBRARY})
 link_libraries(${SDL2_LIBRARIES})
 
 # OpenAL Dependency
