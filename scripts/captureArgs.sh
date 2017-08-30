@@ -9,3 +9,4 @@ then
         exit 1
 fi
 
+BANG_COMPILER="${BANG_COMPILER}"

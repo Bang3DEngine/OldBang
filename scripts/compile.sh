@@ -14,9 +14,15 @@ VERBOSE=1
 
 RD=${RELEASE_OR_DEBUG}
 
+CMAKE_CMD="cmake -DCMAKE_BUILD_TYPE=${RD} .."
+if [ "${BANG_COMPILER}" != "" ]
+then
+	CMAKE_CMD="${CMAKE_CMD} -DCMAKE_CXX_COMPILER=${BANG_COMPILER}"
+fi
+
 mkdir -p build${RD} && \
 cd build${RD} && \
-cmake -DCMAKE_BUILD_TYPE=${RD} .. && \
+${CMAKE_CMD} && \
 make --no-print-directory \
      VERBOSE=${VERBOSE} \
      -j${NUM_THREADS}
