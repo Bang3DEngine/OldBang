@@ -24,15 +24,14 @@ before_install:
 install:
 - sudo apt-get update
 - sudo apt-get install build-essential
-- sudo apt-get install qtbase5-dev
 - sudo apt-get install libglew-dev
 - sudo apt-get install libfreetype6-dev
 - sudo apt-get install libopenal-dev
-- sudo apt-get install libalut-dev
+- sudo apt-get install libsndfile1-dev
+- sudo apt-get install libsdl2-dev
 - sudo apt-get install libassimp-dev
 - sudo apt-get install -qq g++-5
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
-- export QT_SELECT=5
 
 addons:
   coverity_scan:
@@ -41,11 +40,9 @@ addons:
       description: "Description"
     notification_email: ""
     build_command_prepend: ""
-    build_command: "./scripts/fullCompile.sh EDITOR DEBUG"
+    build_command: "./scripts/fullCompile.sh Debug"
     branch_pattern: coverity_scan
 
 script:
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR DEBUG
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh EDITOR RELEASE
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   DEBUG
-- export BANG_BUILD_COMPILER="g++-5" && ./scripts/fullCompile.sh GAME   RELEASE
+- ./scripts/fullCompile.sh Debug
+- ./scripts/fullCompile.sh Release
