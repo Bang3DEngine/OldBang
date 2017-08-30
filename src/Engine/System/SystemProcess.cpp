@@ -188,7 +188,12 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
     int readBytes = 0;
     while ( (readBytes = read(fd, buffer, bufferSize)) >= 0 )
     {
-        output += String(buffer);
+        String readChunk(buffer);
+        String::Iterator readChunkEnd = readChunk.Begin();
+        std::advance(readChunkEnd, readBytes);
+        output.Insert(output.End(),
+                      readChunk.Begin(),
+                      readChunkEnd);
         memset(buffer, 0, bufferSize);
         if (readBytes == 0) { break ; }
     }
