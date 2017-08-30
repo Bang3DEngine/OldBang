@@ -24,7 +24,7 @@ public:
     virtual ~Application();
 
     virtual void CreateWindow();
-    virtual void MainLoop();
+    virtual int MainLoop();
     bool ProcessEvents();
 
     Input              *GetInput() const;
@@ -41,7 +41,7 @@ public:
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);
 
-    static void Exit(int returnCode);
+    static void Exit(int returnCode, bool immediate = false);
 
 protected:
     const int RedrawDelay_ms = 10;
@@ -60,6 +60,9 @@ protected:
 
 private:
     static Application *s_appSingleton;
+
+    bool m_exit = false;
+    int m_exitCode = 0;
 };
 
 #endif // APPLICATION_H

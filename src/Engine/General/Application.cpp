@@ -58,10 +58,10 @@ void Application::CreateWindow()
     m_window = new Window();
 }
 
-void Application::MainLoop()
+int Application::MainLoop()
 {
     bool quit = false;
-    while (!quit)
+    while (!quit && !m_exit)
     {
         m_time->OnFrameStarted();
 
@@ -79,6 +79,7 @@ void Application::MainLoop()
 
         SDL_Delay(RedrawDelay_ms);
     }
+    return m_exitCode;
 }
 
 bool Application::ProcessEvents()
@@ -159,9 +160,15 @@ void Application::SetApplicationSingleton(Application *app)
     Application::s_appSingleton = app;
 }
 
-void Application::Exit(int returnCode)
+void Application::Exit(int returnCode, bool immediate)
 {
-    exit(returnCode);
+    if (immediate) { exit(returnCode); }
+    else
+    {
+        Application *app = Application::GetInstance();
+        app->m_exit = true;
+        app->m_exitCode = returnCode;
+    }
 }
 
 Window *Application::GetMainWindow() const

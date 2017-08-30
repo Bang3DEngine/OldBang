@@ -85,8 +85,7 @@ include_directories(${ROOT}/include)
 include_directories(${ROOT}/include/Bang)
 include_directories(${ROOT}/include/freetype)
 include_directories(${ROOT}/include/Bang/BangCore)
-add_library(
-BangCore
+set(CORE_SRC_FILES
 ${ENGINE_SRC_DIR}/DataStructures/Array.h
 ${ENGINE_SRC_DIR}/DataStructures/Flags.h
 ${ENGINE_SRC_DIR}/DataStructures/List.h
@@ -107,11 +106,13 @@ ${ENGINE_SRC_DIR}/System/SystemProcess.cpp
 ${ENGINE_SRC_DIR}/System/Thread.cpp
 ${ENGINE_SRC_DIR}/System/ThreadPool.cpp
 )
+add_library(BangCoreObjects OBJECT ${CORE_SRC_FILES})
+add_library(BangCoreStatic  STATIC $<TARGET_OBJECTS:BangCoreObjects>)
+add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
 
 # BangGraphics Library
 include_directories(${ROOT}/include/Bang/BangGraphics)
-add_library(
-BangGraphics
+set(GRAPHICS_SRC_FILES
 ${ENGINE_SRC_DIR}/Graphics/Buffers/G_GBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/G_Framebuffer.cpp
@@ -131,6 +132,9 @@ ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 )
+add_library(BangGraphicsObjects OBJECT ${GRAPHICS_SRC_FILES})
+add_library(BangGraphicsStatic  STATIC $<TARGET_OBJECTS:BangGraphicsObjects>)
+add_library(BangGraphics        SHARED $<TARGET_OBJECTS:BangGraphicsObjects>)
 
 macro(add_info_files)
      foreach(_it ${ARGN})
@@ -154,8 +158,7 @@ add_info_files(${OTHER_FILES})
 # BangEngine Library
 include_directories(${ROOT}/include/Bang/BangEngine)
 include_directories(${ROOT}/include/Bang/BangPreprocessor)
-add_library(
-BangEngine
+set (ENGINE_SRC_FILES
 ${ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${ENGINE_SRC_DIR}/Audio/AudioManager.cpp
@@ -254,42 +257,45 @@ ${ENGINE_SRC_DIR}/UIComponents/IFocusListener.h
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
 ${OTHER_FILES}
 )
+add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
+add_library(BangEngineStatic  STATIC $<TARGET_OBJECTS:BangEngineObjects>)
+add_library(BangEngine        SHARED $<TARGET_OBJECTS:BangEngineObjects>)
+
+list(APPEND ALL_SRC_FILES ${CORE_SRC_FILES})
+list(APPEND ALL_SRC_FILES ${GRAPHICS_SRC_FILES})
+list(APPEND ALL_SRC_FILES ${ENGINE_SRC_FILES})
+add_library(BangStatic STATIC $<TARGET_OBJECTS:BangCoreObjects>
+                              $<TARGET_OBJECTS:BangGraphicsObjects>
+                              $<TARGET_OBJECTS:BangEngineObjects>)
+add_library(BangShared SHARED $<TARGET_OBJECTS:BangCoreObjects>
+                              $<TARGET_OBJECTS:BangGraphicsObjects>
+                              $<TARGET_OBJECTS:BangEngineObjects>)
+set_target_properties(BangShared PROPERTIES OUTPUT_NAME Bang)
 
 # BangPreprocessor Executable
-add_executable(
-BangPreprocessor
+set(PREPROCESSOR_SRC_FILES
 ${SRC_DIR}/MainBangPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 )
-target_link_libraries(BangPreprocessor
-BangCore
-)
+add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
+target_link_libraries(BangPreprocessor BangCoreStatic)
 
 # BangMain Executable
-add_executable(
-Bang
-${SRC_DIR}/Main.cpp
-)
+add_executable(Bang ${SRC_DIR}/Main.cpp)
 target_link_libraries(Bang
--Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
+-Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
 )
 
 # BangMainGame Executable
-add_executable(
-Game.exe
-${SRC_DIR}/MainGame.cpp
-)
+add_executable(Game.exe ${SRC_DIR}/MainGame.cpp)
 target_link_libraries(Game.exe
--Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
+-Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
 )
 
 # BangMainGameBuilder Executable
-add_executable(
-BangGameBuilder
-${SRC_DIR}/MainGameBuilder.cpp
-)
+add_executable(BangGameBuilder ${SRC_DIR}/MainGameBuilder.cpp)
 target_link_libraries(BangGameBuilder
--Wl,--start-group BangEngine BangGraphics BangCore -Wl,--end-group
+-Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
 )

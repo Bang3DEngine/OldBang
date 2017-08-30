@@ -49,8 +49,6 @@ int main(int argc, char **argv)
 
     app.CreateWindow();
     project->OpenFirstFoundScene();
-    app.MainLoop();
-
-    return 0;
+    return app.MainLoop();
 }
 
