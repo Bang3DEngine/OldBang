@@ -1,8 +1,17 @@
 #include "G.frag_g"
 
+uniform float B_textBlurriness;
+uniform float B_textAlphaThreshold;
+
 void Main()
 {
     vec2 charAtlasUv = B_FragIn_Uv;
     vec4 charColor   = texture2D(B_Texture0, charAtlasUv);
-    B_Out_Color = vec4( vec3(1), charColor.a );
+
+    float dist = 1.0f - charColor.r;
+    B_Out_Color = vec4(vec3(1),
+                       smoothstep(B_textAlphaThreshold - B_textBlurriness,
+                                  B_textAlphaThreshold + B_textBlurriness,
+                                  dist));
+    // B_Out_Color = vec4(charColor.rgb, 1);
 }

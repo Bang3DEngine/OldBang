@@ -6,6 +6,7 @@
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
+#include "Bang/Resources.h"
 #include "Bang/G_Texture2D.h"
 #include "Bang/ImageEffects.h"
 
@@ -43,6 +44,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 {
     if (!G_FontSheetCreator::Init()) { return false; }
 
+    constexpr uint distFieldRadius = 10;
     constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
 
     charAtlasUvs->Clear();
@@ -57,7 +59,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         return false;
     }
 
-    String charactersToLoadStr = "";
+    String charactersToLoadStr;
     charactersToLoadStr += "abcdefghijklmnopqrstuvwxyz";
     charactersToLoadStr += "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
     charactersToLoadStr += "0123456789()[]{}*.,;:-_=!<>+";
@@ -67,9 +69,14 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     uint numChars        = charactersToLoadStr.Size();
     uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
     uint charInAtlasSize = G_Font::CharLoadSize;
-    uint margin          = 5;
-    uint sideSize        = charsPerRowCol * charInAtlasSize + margin * 2;
-    G_Image atlasImage(sideSize, sideSize);
+    uint margin          = 2 + distFieldRadius;
+    charInAtlasSize = Math::Max(charInAtlasSize,
+                                SCAST<uint>(TTF_FontLineSkip(*ttfFont)));
+    charInAtlasSize += margin * 2;
+    uint sideSize        = charsPerRowCol * charInAtlasSize;
+
+    G_Image atlasImage;
+    atlasImage.Create(sideSize, sideSize, Color::Zero);
     for (int i = 0; i < numChars; ++i)
     {
         const char c = charactersToLoadStr[i];
@@ -95,7 +102,8 @@ bool G_FontSheetCreator::LoadAtlasTexture(
             // Create bitmap
             // SDL_Surface *charBitmap = TTF_RenderGlyph_Solid(*ttfFont, c, WhiteColor);
             // Uint8 *charPixels = SCAST<Uint8*>(charBitmap->pixels);
-            SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(*ttfFont, c, WhiteColor);
+            SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(*ttfFont, c,
+                                                              WhiteColor);
             SDL_PixelFormat *fmt = charBitmap->format;
             Uint32 *charPixels = SCAST<Uint32*>(charBitmap->pixels);
             const int offX = charInAtlasSize * charCol + margin;
@@ -109,7 +117,8 @@ bool G_FontSheetCreator::LoadAtlasTexture(
                     Uint32 color32 = charPixels[y * charBitmap->w + x];
                     Uint32 alpha = ((color32 & fmt->Amask) >> fmt->Ashift)
                                     << fmt->Aloss;
-                    Color pxColor = Color(1.0f, 1.0f, 1.0f, alpha / 255.0f);
+                    Color pxColor = Color::Zero;
+                    pxColor.a = (alpha / 255.0f);
                     if (pxColor.a > 0.0f)
                     {
                         minPixel.x = Math::Min(minPixel.x, (offX + x));
@@ -123,7 +132,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
             SDL_FreeSurface(charBitmap);
         }
 
-        Vector2i securityOffset(3);
+        Vector2i securityOffset(3 + distFieldRadius);
         minPixel -= securityOffset;
         maxPixel += securityOffset;
 
@@ -136,10 +145,16 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     }
 
     atlasImage.SaveToFile( Path("font.png") );
+    Debug_Peek(atlasImage.GetSize());
+    // G_Image distField;
+    // ImageEffects::SignedDistanceField(atlasImage, &distField, distFieldRadius);
+    // distField.SaveToFile( Path("distField.png") );
+    G_Image distField = *( Resources::Load<G_Image>( Path("distField.png") ) );
 
     GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
     *atlasTexture = new G_Texture2D();
-    (*atlasTexture)->LoadFromImage(atlasImage);
+    // (*atlasTexture)->LoadFromImage(atlasImage);
+    (*atlasTexture)->LoadFromImage(distField);
     (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);

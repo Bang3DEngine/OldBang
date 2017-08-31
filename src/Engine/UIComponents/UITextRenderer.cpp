@@ -64,6 +64,11 @@ void UITextRenderer::Bind() const
     // directly from the VBO creation...
     gameObject->transform->SetEnabled(false);
     UIRenderer::Bind();
+
+    const float blurriness = GetBlurriness() + (0.5f / GetTextSize());
+    const float alphaThresh = GetAlphaThreshold();
+    GL::Uniform("B_textBlurriness",     blurriness,  false);
+    GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
 }
 
 void UITextRenderer::UnBind() const
@@ -192,6 +197,16 @@ void UITextRenderer::SetWrapping(bool wrapping)
     }
 }
 
+void UITextRenderer::SetAlphaThreshold(float alphaThreshold)
+{
+    m_alphaThreshold = alphaThreshold;
+}
+
+void UITextRenderer::SetBlurriness(float blurriness)
+{
+    m_blurriness = blurriness;
+}
+
 void UITextRenderer::SetContent(const String &content)
 {
     if (GetContent() != content)
@@ -205,7 +220,7 @@ void UITextRenderer::SetTextSize(int size)
 {
     if (GetTextSize() != size)
     {
-        m_textSize = size;
+        m_textSize = Math::Max(size, 1);
         m_hasChanged = true;
     }
 }
@@ -227,6 +242,9 @@ void UITextRenderer::SetTextColor(const Color &textColor)
 Font *UITextRenderer::GetFont() const { return m_font; }
 bool UITextRenderer::IsKerning() const { return m_kerning; }
 bool UITextRenderer::IsWrapping() const { return m_wrapping; }
+
+float UITextRenderer::GetBlurriness() const { return m_blurriness; }
+float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 Vector2i UITextRenderer::GetExtraSpacing() const { return m_extraSpacing; }
@@ -295,6 +313,9 @@ void UITextRenderer::ImportXML(const XMLNode &xml)
     if (xml.Contains("TextColor"))
     { SetTextColor( xml.Get<Color>("TextColor") ); }
 
+    if (xml.Contains("AlphaThreshold"))
+    { SetWrapping( xml.Get<bool>("AlphaThreshold") ); }
+
     if (xml.Contains("Wrapping"))
     { SetWrapping( xml.Get<bool>("Wrapping") ); }
 
@@ -314,6 +335,7 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("TextSize", GetTextSize());
     xmlInfo->Set("ExtraSpacing", GetExtraSpacing());
     xmlInfo->Set("TextColor", GetTextColor());
+    xmlInfo->Set("AlphaThreshold", GetAlphaThreshold());
     xmlInfo->Set("Kerning", IsKerning());
     xmlInfo->Set("Wrapping", IsWrapping());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );

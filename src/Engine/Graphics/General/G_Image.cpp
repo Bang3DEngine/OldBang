@@ -34,12 +34,6 @@ void G_Image::Create(int width, int height, const Color &backgroundColor)
 
 void G_Image::SetPixel(int x, int y, const Color& color)
 {
-    if (x < 0 || x >= GetWidth() || y < 0 || y >= GetHeight())
-    {
-        Debug_Warn("Pixel (" << x << ", " << y << ") out of range.");
-        return;
-    }
-
     const int coord = (y * GetWidth() + x) * 4;
     m_pixels[coord + 0] = SCAST<Byte>(color.r * 255);
     m_pixels[coord + 1] = SCAST<Byte>(color.g * 255);
@@ -52,12 +46,6 @@ const Byte *G_Image::GetData() const { return &m_pixels[0]; }
 
 Color G_Image::GetPixel(int x, int y) const
 {
-    if (x < 0 || x >= GetWidth() || y < 0 || y >= GetHeight())
-    {
-        Debug_Warn("Pixel (" << x << ", " << y << ") out of range.");
-        return Color::Zero;
-    }
-
     const int coord = (y * GetWidth() + x) * 4;
     return Color(m_pixels[coord + 0] / 255.0f,
                  m_pixels[coord + 1] / 255.0f,

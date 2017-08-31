@@ -23,7 +23,7 @@ public:
         int advance  = 0; // Distance to be moved in X to right when drawing the next character
     };
 
-    constexpr static int CharLoadSize = 128;
+    constexpr static int CharLoadSize = 64;
 
     G_Font();
     virtual ~G_Font();

@@ -7,11 +7,16 @@ class ImageEffects
 {
 public:
 
-    // Black:  background
-    // White: foreground
-    static void CreateDistanceField(const G_Image &inputImageBW,
+    // Zero  Color (0,0,0,0): background
+    // Other Color:           foreground
+    static void SignedDistanceField(const G_Image &inputImageBW,
                                     G_Image *distanceFieldOutputImage,
                                     int distanceRadius);
+
+    // Zero  Color (0,0,0,0): background
+    // Other Color:           foreground
+    static bool Outline(const G_Image &inputImageBW,
+                        G_Image *outlineOutputImageBW);
 
     static bool Diff(const G_Image &inputImage1,
                      const G_Image &inputImage2,

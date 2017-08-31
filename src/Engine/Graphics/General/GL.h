@@ -297,6 +297,9 @@ public:
     static void Finish();
     static void Flush();
 
+    template <class T>
+    static bool Uniform(const String &uniformName, const T& value,
+                        bool warn = true);
     static void Uniform(int location, int value);
     static void Uniform(int location, float value);
     static void Uniform(int location, bool value);
@@ -417,5 +420,7 @@ private:
 
     friend class GraphicPipeline;
 };
+
+#include "GL.tcc"
 
 #endif // GL_H

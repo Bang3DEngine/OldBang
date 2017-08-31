@@ -36,6 +36,8 @@ public:
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     void SetKerning(bool kerning);
     void SetWrapping(bool wrapping);
+    void SetAlphaThreshold(float alphaThreshold);
+    void SetBlurriness(float blurriness);
     void SetContent(const String &content);
     void SetTextSize(int size);
     void SetExtraSpacing(const Vector2i &extraSpacing);
@@ -44,6 +46,8 @@ public:
     bool IsKerning() const;
     const Color& GetTextColor() const;
     bool IsWrapping() const;
+    float GetBlurriness() const;
+    float GetAlphaThreshold() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
@@ -68,6 +72,9 @@ protected:
     Vector2i m_extraSpacing = Vector2i::Zero;
     bool m_kerning          = false;
     Rect m_textRectNDC      = Rect::Zero;
+
+    float m_blurriness      = 0.05f;
+    float m_alphaThreshold  = 0.6f;
 
     bool m_hasChanged       = false;
 
