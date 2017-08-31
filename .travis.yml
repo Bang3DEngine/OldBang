@@ -50,4 +50,4 @@ script:
 - export BANG_COMPILER=/usr/bin/g++-5 && ./scripts/fullCompile.sh Debug
 - git clone https://github.com/Bang3DEngine/BangTests ~/BangTests
 - ./bin/Debug/BangGameBuilder ~/BangTests/BangTests.bproject Debug
-- cd ~/BangTests && ./BangTests.exe
+#- cd ~/BangTests && ./BangTests.exe # Disabled, because I have to enable somehow GL&AL context in Travis...
