@@ -51,7 +51,7 @@ void GameBuilder::BuildGame(const Project *project,
         }
     }
 
-    Debug_Log("Moving the executable to '" <<outputExecutableFilepath  << "'...");
+    Debug_Log("Moving the executable to '" << outputExecutableFilepath  << "'...");
     const Path c_initialOutputDir = Paths::GameExecutableOutputFile(binaryType);
     File::Remove(outputExecutableFilepath);
     File::Rename(c_initialOutputDir, outputExecutableFilepath);
@@ -73,7 +73,8 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
     File::Remove(gameOutputFilepath);
 
     String debugRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
-    String cmd = Paths::Engine().GetAbsolute() + "/scripts/compile.sh " +
+    String cmd = Paths::Engine().GetAbsolute() +
+                 "/scripts/compileExecutables.sh " +
                  debugRelease;
 
     SystemProcess process;

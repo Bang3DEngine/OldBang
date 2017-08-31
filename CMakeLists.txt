@@ -14,7 +14,7 @@ set(CMAKE_BINARY_DIR ${ROOT}/bin)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
 set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
-message(" =============== Building in ${CMAKE_BUILD_TYPE} mode...")
+message("Building in ${CMAKE_BUILD_TYPE} mode...")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -272,7 +272,10 @@ add_library(BangShared SHARED $<TARGET_OBJECTS:BangCoreObjects>
                               $<TARGET_OBJECTS:BangEngineObjects>)
 set_target_properties(BangShared PROPERTIES OUTPUT_NAME Bang)
 
-# BangPreprocessor Executable
+
+# Executables ===========================
+link_directories(${LIBRARY_OUTPUT_PATH})
+link_libraries("Bang") # Use installed lib from now on
 set(PREPROCESSOR_SRC_FILES
 ${SRC_DIR}/MainBangPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
@@ -280,22 +283,10 @@ ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 )
 add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
-target_link_libraries(BangPreprocessor BangCoreStatic)
-
-# BangMain Executable
-add_executable(Bang ${SRC_DIR}/Main.cpp)
-target_link_libraries(Bang
--Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
-)
-
-# BangMainGame Executable
+add_executable(BangMain ${SRC_DIR}/Main.cpp)
 add_executable(Game.exe ${SRC_DIR}/MainGame.cpp)
-target_link_libraries(Game.exe
--Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
-)
-
-# BangMainGameBuilder Executable
 add_executable(BangGameBuilder ${SRC_DIR}/MainGameBuilder.cpp)
-target_link_libraries(BangGameBuilder
--Wl,--start-group BangEngineStatic BangGraphicsStatic BangCoreStatic -Wl,--end-group
-)
+add_dependencies(BangPreprocessor BangShared)
+add_dependencies(BangMain BangShared)
+add_dependencies(Game.exe BangShared)
+add_dependencies(BangGameBuilder BangShared)

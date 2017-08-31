@@ -1,4 +1,5 @@
 # C++ objects and libs
+*.cbp
 *.trace
 build*/
 *.user

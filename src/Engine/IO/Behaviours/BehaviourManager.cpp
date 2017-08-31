@@ -82,16 +82,7 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
     job.libDirs.PushBack(Paths::EngineLibrariesDir(binaryType));
-    job.libraries.PushBack( List<String>({
-                                     "GLEW",
-                                     "GL",
-                                     "pthread",
-                                     "BangCore",
-                                     "BangGraphics",
-                                     "BangEngine",
-                                     "BangCore",
-                                     "BangGraphics",
-                                     "BangEngine"}) );
+    job.libraries.PushBack( List<String>({"Bang"}) );
 
     job.flags =  {"-fPIC", "--std=c++11"};
     if (binaryType == BinType::Debug)
