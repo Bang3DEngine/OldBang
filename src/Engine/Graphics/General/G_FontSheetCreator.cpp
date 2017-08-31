@@ -1,5 +1,7 @@
 #include "Bang/G_FontSheetCreator.h"
 
+#include <SDL2/SDL_ttf.h>
+
 #include "Bang/Math.h"
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
@@ -7,21 +9,20 @@
 #include "Bang/G_Texture2D.h"
 #include "Bang/ImageEffects.h"
 
-#include FT_GLYPH_H
-
 G_FontSheetCreator *G_FontSheetCreator::m_singleton = nullptr;
 
 G_FontSheetCreator::G_FontSheetCreator()
 {
-    FT_Error error = FT_Init_FreeType( &m_ftLibrary );
-    if (error)
+    if ( TTF_Init() )
     {
-        Debug_Error("Could not init FreeType library: Error(" << error <<  ")");
+        Debug_Error("Could not init FreeType library: Error(" <<
+                    TTF_GetError() <<  ")");
     }
 }
 
 G_FontSheetCreator::~G_FontSheetCreator()
 {
+    TTF_Quit();
 }
 
 bool G_FontSheetCreator::Init()
@@ -32,46 +33,25 @@ bool G_FontSheetCreator::Init()
     return true;
 }
 
-int G_FontSheetCreator::GetGlyphIndex(FT_Face face, char c)
-{
-    int glyph_index = FT_Get_Char_Index(face, c);
-    return glyph_index;
-}
-
 bool G_FontSheetCreator::LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
                          G_Texture2D **atlasTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
                          Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
-                         FT_Face *fontFace)
+                         TTF_Font **ttfFont)
 {
     if (!G_FontSheetCreator::Init()) { return false; }
 
     charAtlasUvs->Clear();
     resultMetrics->Clear();
 
-    FT_Face face;
-    int error = FT_New_Face(m_singleton->m_ftLibrary,
-                            fontFilepath.GetAbsolute().ToCString(),
-                            0, &face);
-    if (error)
+    *ttfFont = TTF_OpenFont(fontFilepath.GetAbsolute().ToCString(),
+                            glyphSizePx);
+    if (!*ttfFont)
     {
-        Debug_Error("Failed to load font '" << fontFilepath << "': Error("
-                    << error << ")");
-        return false;
-    }
-
-    // Set the pixel size ( rasterize (?) )
-    error = FT_Set_Pixel_Sizes(face, glyphSizePx, glyphSizePx);
-    //SDL_DisplayMode dm;
-    //SDL_GetCurrentDisplayMode(0, &dm);
-    //error = FT_Set_Char_Size(face, glyphSizePx, glyphSizePx,
-    //                         dm.w, dm.h);
-    if (error)
-    {
-        Debug_Error("Failed to set font pixel size of '" << fontFilepath
-                    << "': Error(" << error << ")");
+        Debug_Error("Error opening font " << fontFilepath << ". " <<
+                    TTF_GetError());
         return false;
     }
 
@@ -92,87 +72,68 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     {
         const char c = charactersToLoadStr[i];
 
-        error = FT_Load_Glyph(face, G_FontSheetCreator::GetGlyphIndex(face, c),
-                              FT_LOAD_DEFAULT);
-        if (error)
-        {
-            Debug_Error("Failed to load glyph '" << c <<
-                        "': Error(" << error << ")");
-            continue;
-        }
-
-        // Move the face's glyph into a glyph object.
-        FT_Glyph glyph;
-        error = FT_Get_Glyph( face->glyph, &glyph );
-        if (error)
-        {
-            Debug_Error("Failed to get glyph '" << c << "' for font '"
-                        << fontFilepath << "': Error(" << error << ")");
-            continue;
-        }
-
-
-        // Convert the glyph to a bitmap.
-        FT_Vector  origin; origin.x = origin.y = 0;
-        FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, &origin, true);
-        FT_BitmapGlyph bitmap_glyph = FT_BitmapGlyph(glyph);
-        FT_Bitmap &bitmap = bitmap_glyph->bitmap;
-
-
-        // Get some metrics (they are given in 1/64 pixels...)
+        // Get some metrics
         // These are measurements relative to the full tex quad (size x size)
         G_Font::CharGlyphMetrics charMetrics;
-        charMetrics.size.x    =  face->glyph->metrics.width  / 64;
-        charMetrics.size.y    =  face->glyph->metrics.height / 64;
-        charMetrics.bearing.x = (face->glyph->metrics.horiBearingX) / 64;
-        charMetrics.bearing.y = (face->glyph->metrics.horiBearingY) / 64;
-        charMetrics.advance   = (face->glyph->metrics.horiAdvance)  / 64;
-        charMetrics.originY   =  origin.y / 64;
+
+        int xmin, xmax, ymin, ymax, advance;
+        TTF_GlyphMetrics(*ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);
+        charMetrics.size.x    = (xmax - xmin);
+        charMetrics.size.y    = (ymax - ymin);
+        charMetrics.advance   = advance;
+        charMetrics.bearing.x = xmin;
+        charMetrics.bearing.y = ymax;
         resultMetrics->Add(c, charMetrics);
 
         const uint charRow = i / charsPerRowCol;
         const uint charCol = i % charsPerRowCol;
 
-        Vector2i minPixel(std::numeric_limits<int>::max());
-        Vector2i maxPixel(std::numeric_limits<int>::min());
+        Vector2i minPixel(Math::Max<int>());
+        Vector2i maxPixel(Math::Min<int>());
         if (charMetrics.size.x > 0 && charMetrics.size.y > 0)
         {
+            // Create bitmap
+            SDL_Color white; white.r = white.b = white.g = white.a = 255;
+            SDL_Surface *charBitmap = TTF_RenderGlyph_Solid(*ttfFont, c, white);
+            Uint8 *charPixels = SCAST<Uint8*>(charBitmap->pixels);
             const int offX = charInAtlasSize * charCol + margin;
             const int offY = charInAtlasSize * charRow + margin;
-            for(int y = 0; y < charMetrics.size.y; y++)
+            for(int y = 0; y < charBitmap->h; ++y)
             {
-                for(int x = 0; x < charMetrics.size.x; x++)
+                for(int x = 0; x < charBitmap->w; ++x)
                 {
-                    float pixelAlpha = bitmap.buffer[y * charMetrics.size.x + x];
-                    Color pxColor = Color(1.0f, 1.0f, 1.0f,
-                                          pixelAlpha / 255.0f);
-                    minPixel.x = Math::Min(minPixel.x, (offX + x));
-                    minPixel.y = Math::Min(minPixel.y, (offY + y));
-                    maxPixel.x = Math::Max(maxPixel.x, (offX + x));
-                    maxPixel.y = Math::Max(maxPixel.y, (offY + y));
-                    atlasImage.SetPixel(offX + x, offY + y, pxColor);
+                    Uint8 colorIdx = charPixels[y * charBitmap->w + x];
+                    SDL_Color color = charBitmap->format->palette->colors[colorIdx];
+                    Color pxColor = Color(1.0f, 1.0f, 1.0f, color.a / 255.0f);
+                    if (color.a > 0)
+                    {
+                        minPixel.x = Math::Min(minPixel.x, (offX + x));
+                        minPixel.y = Math::Min(minPixel.y, (offY + y));
+                        maxPixel.x = Math::Max(maxPixel.x, (offX + x));
+                        maxPixel.y = Math::Max(maxPixel.y, (offY + y));
+                        atlasImage.SetPixel(offX + x, offY + y, pxColor);
+                    }
                 }
             }
+            SDL_FreeSurface(charBitmap);
         }
+
+        Vector2i securityOffset(3);
+        minPixel -= securityOffset;
+        maxPixel += securityOffset;
 
         Vector2 uvMin = Vector2(minPixel) / Vector2(atlasImage.GetSize());
         Vector2 uvMax = Vector2(maxPixel) / Vector2(atlasImage.GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
         charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) );
-
-        FT_Done_Glyph(glyph);
     }
 
-    // atlasImage.SaveToFile( Path("original.png") );
-    // G_Image distFieldImg;
-    // ImageEffects::CreateDistanceField(atlasImage, &distFieldImg, distRadius);
-    // distFieldImg.SaveToFile( Path("distField.png") );
+    atlasImage.SaveToFile( Path("font.png") );
 
     GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
     *atlasTexture = new G_Texture2D();
     (*atlasTexture)->LoadFromImage(atlasImage);
-    // (*atlasTexture)->LoadFromImage(distFieldImg);
     (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);
@@ -180,7 +141,5 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     (*atlasTexture)->GenerateMipMaps();
     (*atlasTexture)->UnBind();
 
-    *fontFace = face;
-    FT_Done_Face(face);
     return true;
 }

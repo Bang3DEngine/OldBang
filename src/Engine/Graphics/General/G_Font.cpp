@@ -22,7 +22,7 @@ void G_Font::LoadFromTTF(const Path &ttfFilepath)
         &m_atlasTexture,
         &m_charUvsInAtlas,
         &m_charMetrics,
-        &m_freetypeFace);
+        &m_ttfFont);
 }
 
 G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c,
@@ -33,10 +33,9 @@ G_Font::CharGlyphMetrics G_Font::GetCharacterMetrics(unsigned char c,
     G_Font::CharGlyphMetrics cgm;
     if (m_charMetrics.ContainsKey(c)) { cgm = m_charMetrics.Get(c); }
 
-    cgm.size    = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.size), textSize));
-    cgm.bearing = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.bearing), textSize));
-    cgm.advance = SCAST<int>(ScaleMagnitude(cgm.advance, textSize));
-    cgm.originY = SCAST<int>(ScaleMagnitude(cgm.originY, textSize));
+    cgm.size     = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.size), textSize));
+    cgm.bearing  = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.bearing), textSize));
+    cgm.advance  = SCAST<int>(ScaleMagnitude(cgm.advance, textSize));
 
     return cgm;
 }
@@ -60,25 +59,13 @@ G_Texture2D *G_Font::GetAtlasTexture() const
 
 int G_Font::GetKerningX(char leftChar, char rightChar)
 {
-    if (!FT_HAS_KERNING(m_freetypeFace)) { return -1; }
-
-    FT_Vector kerning;
-    int leftGlyphIndex  = G_FontSheetCreator::GetGlyphIndex(m_freetypeFace,
-                                                            leftChar);
-    int rightGlyphIndex = G_FontSheetCreator::GetGlyphIndex(m_freetypeFace,
-                                                            rightChar);
-    int error = FT_Get_Kerning(m_freetypeFace,
-                               leftGlyphIndex, rightGlyphIndex,
-                               FT_KERNING_DEFAULT, &kerning);
-    if (!error)
-    {
-        return kerning.x / 64;
-    }
-    return -1;
+    if (!m_ttfFont || !TTF_GetFontKerning(m_ttfFont)) { return -1; }
+    return TTF_GetFontKerningSizeGlyphs(m_ttfFont, leftChar, rightChar);
 }
 
 void G_Font::Free()
 {
     m_charMetrics.Clear();
     m_charUvsInAtlas.Clear();
+    if (m_ttfFont) { TTF_CloseFont(m_ttfFont); }
 }

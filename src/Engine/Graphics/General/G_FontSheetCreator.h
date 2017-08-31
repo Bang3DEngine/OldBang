@@ -1,9 +1,6 @@
 #ifndef FONTSHEETCREATOR_H
 #define FONTSHEETCREATOR_H
 
-#include "freetype/ft2build.h"
-#include FT_FREETYPE_H
-
 #include "Bang/G_Font.h"
 
 /**
@@ -17,19 +14,16 @@ FORWARD class G_Texture2D;
 class G_FontSheetCreator
 {
 public:
-    static int GetGlyphIndex(FT_Face face, char c);
-
     static bool LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
                          G_Texture2D **resultTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
                          Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
-                         FT_Face *fontFace);
+                         TTF_Font **fontFace);
 private:
     G_FontSheetCreator();
     virtual ~G_FontSheetCreator();
-    FT_Library m_ftLibrary;
 
     static bool Init();
 

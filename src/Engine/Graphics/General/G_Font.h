@@ -1,8 +1,7 @@
 #ifndef G_FONT_H
 #define G_FONT_H
 
-#include "freetype/ft2build.h"
-#include FT_FREETYPE_H
+#include <SDL2/SDL_ttf.h>
 
 #include "Bang/Map.h"
 #include "Bang/Vector2.h"
@@ -22,7 +21,6 @@ public:
         Vector2i size = Vector2i::Zero; // Size of character (of the actual char pixels)
         Vector2i bearing = Vector2i::Zero; // Offset from the baseline where the char pixels begin
         int advance  = 0; // Distance to be moved in X to right when drawing the next character
-        int originY  = 0;
     };
 
     constexpr static int CharLoadSize = 256;
@@ -50,7 +48,7 @@ public:
     }
 
 protected:
-    FT_Face m_freetypeFace = nullptr;
+    TTF_Font *m_ttfFont = nullptr;
     G_Texture2D *m_atlasTexture = nullptr;
 
     Map<char, CharGlyphMetrics> m_charMetrics;

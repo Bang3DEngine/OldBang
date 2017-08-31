@@ -61,11 +61,6 @@ link_libraries("sndfile")
 # Assimp Dependency
 link_libraries("assimp")
 
-# Freetype Dependency
-find_package(Freetype REQUIRED)
-include_directories(${FREETYPE_INCLUDE_DIRS})
-link_libraries(${FREETYPE_LIBRARIES})
-
 # SDL Dependency
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
@@ -74,6 +69,7 @@ string(STRIP "${SDL2_LIBRARY}" SDL2_LIBRARY)
 string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 link_libraries(${SDL2_LIBRARY})
 link_libraries(${SDL2_LIBRARIES})
+link_libraries("SDL2_ttf")
 
 # OpenAL Dependency
 find_package(OpenAL REQUIRED)
@@ -83,7 +79,6 @@ link_libraries(${OPENAL_LIBRARY})
 # BangCore Library
 include_directories(${ROOT}/include)
 include_directories(${ROOT}/include/Bang)
-include_directories(${ROOT}/include/freetype)
 include_directories(${ROOT}/include/Bang/BangCore)
 set(CORE_SRC_FILES
 ${ENGINE_SRC_DIR}/DataStructures/Array.h
