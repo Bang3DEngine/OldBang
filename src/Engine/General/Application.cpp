@@ -46,11 +46,11 @@ Application::~Application()
     delete m_paths;
     delete m_input;
     delete m_window;
-    delete m_resources;
     delete m_shaderManager;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_behaviourManager;
+    delete m_resources;
 }
 
 void Application::CreateWindow()

@@ -19,7 +19,7 @@ Array<Resource *> Resources::GetAllResources()
 {
     Array<Resource*> result;
     Resources *rs = Resources::GetInstance();
-    for (auto& itTypeMap : rs->m_GUIDToResource)
+    for (const auto& itTypeMap : rs->m_GUIDToResource)
     {
         result.PushBack(itTypeMap.second.GetValues());
     }
