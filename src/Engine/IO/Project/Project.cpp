@@ -50,10 +50,9 @@ void Project::SetProjectRootFilepath(const Path &projectDir)
 
 bool Project::OpenFirstFoundScene() const
 {
-    List<Path> sceneFilepaths = GetProjectDirPath()
+    List<Path> sceneFilepaths = GetProjectAssetsRootFilepath()
                                 .FindFiles(Path::FindFlag::Recursive,
                                            {Extensions::Get<Scene>()});
-
     bool foundSceneFile = !sceneFilepaths.IsEmpty();
     if (foundSceneFile)
     {

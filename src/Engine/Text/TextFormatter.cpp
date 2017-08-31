@@ -229,11 +229,7 @@ float TextFormatter::GetCharAdvanceXNDC(const Font *font,
     {
         const char c = content[currentCharIndex];
         Font::GlyphMetrics charMetrics = font->GetCharacterMetrics(c, textSizePx);
-        if (c != ' ' && charMetrics.size.x > 0 )
-        {
-            advance = charMetrics.advance;
-        }
-        else { advance = font->GetCharacterMetrics('A', textSizePx).advance; }
+        advance = charMetrics.advance;
     }
 
     return rt->FromPixelsAmountToLocalNDC( Vector2i(advance, 0) ).x;

@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 
     app.CreateWindow();
     proj->OpenFirstFoundScene();
+    SceneManager::LoadScene("Tests/Test0/Test0.bscene");
 
     return app.MainLoop();
 }

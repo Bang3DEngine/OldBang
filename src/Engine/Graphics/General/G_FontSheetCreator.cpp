@@ -43,6 +43,8 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 {
     if (!G_FontSheetCreator::Init()) { return false; }
 
+    constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
+
     charAtlasUvs->Clear();
     resultMetrics->Clear();
 
@@ -64,7 +66,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     // Generate the atlas, adding each char in a simple grid
     uint numChars        = charactersToLoadStr.Size();
     uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
-    uint charInAtlasSize = G_Font::CharLoadSize * 1.1f;
+    uint charInAtlasSize = G_Font::CharLoadSize;
     uint margin          = 5;
     uint sideSize        = charsPerRowCol * charInAtlasSize + margin * 2;
     G_Image atlasImage(sideSize, sideSize);
@@ -78,11 +80,9 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
         int xmin, xmax, ymin, ymax, advance;
         TTF_GlyphMetrics(*ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);
-        charMetrics.size.x    = (xmax - xmin);
-        charMetrics.size.y    = (ymax - ymin);
-        charMetrics.advance   = advance;
-        charMetrics.bearing.x = xmin;
-        charMetrics.bearing.y = ymax;
+        charMetrics.size    = Vector2i((xmax - xmin), (ymax - ymin));
+        charMetrics.bearing = Vector2i(xmin, ymax);
+        charMetrics.advance = advance;
         resultMetrics->Add(c, charMetrics);
 
         const uint charRow = i / charsPerRowCol;
@@ -93,26 +93,31 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         if (charMetrics.size.x > 0 && charMetrics.size.y > 0)
         {
             // Create bitmap
-            SDL_Color white; white.r = white.b = white.g = white.a = 255;
-            SDL_Surface *charBitmap = TTF_RenderGlyph_Solid(*ttfFont, c, white);
-            Uint8 *charPixels = SCAST<Uint8*>(charBitmap->pixels);
+            // SDL_Surface *charBitmap = TTF_RenderGlyph_Solid(*ttfFont, c, WhiteColor);
+            // Uint8 *charPixels = SCAST<Uint8*>(charBitmap->pixels);
+            SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(*ttfFont, c, WhiteColor);
+            SDL_PixelFormat *fmt = charBitmap->format;
+            Uint32 *charPixels = SCAST<Uint32*>(charBitmap->pixels);
             const int offX = charInAtlasSize * charCol + margin;
             const int offY = charInAtlasSize * charRow + margin;
             for(int y = 0; y < charBitmap->h; ++y)
             {
                 for(int x = 0; x < charBitmap->w; ++x)
                 {
-                    Uint8 colorIdx = charPixels[y * charBitmap->w + x];
-                    SDL_Color color = charBitmap->format->palette->colors[colorIdx];
-                    Color pxColor = Color(1.0f, 1.0f, 1.0f, color.a / 255.0f);
-                    if (color.a > 0)
+                    // Uint8 colorIdx = charPixels[y * charBitmap->w + x];
+                    // SDL_Color color = charBitmap->format->palette->colors[colorIdx];
+                    Uint32 color32 = charPixels[y * charBitmap->w + x];
+                    Uint32 alpha = ((color32 & fmt->Amask) >> fmt->Ashift)
+                                    << fmt->Aloss;
+                    Color pxColor = Color(1.0f, 1.0f, 1.0f, alpha / 255.0f);
+                    if (pxColor.a > 0.0f)
                     {
                         minPixel.x = Math::Min(minPixel.x, (offX + x));
                         minPixel.y = Math::Min(minPixel.y, (offY + y));
                         maxPixel.x = Math::Max(maxPixel.x, (offX + x));
                         maxPixel.y = Math::Max(maxPixel.y, (offY + y));
-                        atlasImage.SetPixel(offX + x, offY + y, pxColor);
                     }
+                    atlasImage.SetPixel(offX + x, offY + y, pxColor);
                 }
             }
             SDL_FreeSurface(charBitmap);
@@ -126,6 +131,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         Vector2 uvMax = Vector2(maxPixel) / Vector2(atlasImage.GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
+        if (c == ' ') { uvMin = uvMax = Vector2::Zero; }
         charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) );
     }
 
