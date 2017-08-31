@@ -1,3 +1,4 @@
+
 #ifndef UITEXTRENDERER_H
 #define UITEXTRENDERER_H
 
@@ -37,7 +38,7 @@ public:
     void SetWrapping(bool wrapping);
     void SetContent(const String &content);
     void SetTextSize(int size);
-    void SetSpacing(const Vector2i &spacing);
+    void SetExtraSpacing(const Vector2i &extraSpacing);
 
     Font* GetFont() const;
     bool IsKerning() const;
@@ -47,7 +48,7 @@ public:
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
     int GetTextSize() const;
-    Vector2i GetSpacing() const;
+    Vector2i GetExtraSpacing() const;
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
@@ -61,14 +62,14 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    String m_content       = "";
-    Font *m_font           = nullptr;
-    int m_textSize         = 64;
-    Vector2i m_spacing     = Vector2i(5, 200);
-    bool m_kerning         = false;
-    Rect m_textRectNDC     = Rect::Zero;
+    String m_content        = "";
+    Font *m_font            = nullptr;
+    int m_textSize          = 64;
+    Vector2i m_extraSpacing = Vector2i::Zero;
+    bool m_kerning          = false;
+    Rect m_textRectNDC      = Rect::Zero;
 
-    bool m_hasChanged      = false;
+    bool m_hasChanged       = false;
 
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;

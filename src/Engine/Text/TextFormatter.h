@@ -28,7 +28,7 @@ public:
                                             bool wrapping,
                                             int textSizePx,
                                             const RectTransform *rt,
-                                            const Vector2i &spacingPx);
+                                            const Vector2i &extraSpacingPx);
     TextFormatter() = delete;
 
 private:
@@ -36,7 +36,7 @@ private:
                                 const String &content,
                                 const Font *font,
                                 const Array<CharRect> &charRects,
-                                const Vector2f &spacingLocalNDC,
+                                const Vector2f &extraSpacingLocalNDC,
                                 const RectTransform *rt,
                                 int textSizePx,
                                 bool wrapping);
@@ -49,6 +49,9 @@ private:
                              const RectTransform *rt,
                              int textSizePx,
                              char c);
+    static float GetLineSkipNDC(const Font *font,
+                                const RectTransform *rt,
+                                int textSizePx);
     static float GetCharAdvanceXNDC(const Font *font,
                                     const RectTransform *rt,
                                     const String &content,

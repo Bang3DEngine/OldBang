@@ -16,7 +16,7 @@ public:
      * @brief Structure to hold metrics for a character glyph.
      * They are all relative to the baseline.
      */
-    struct CharGlyphMetrics
+    struct GlyphMetrics
     {
         Vector2i size = Vector2i::Zero; // Size of character (of the actual char pixels)
         Vector2i bearing = Vector2i::Zero; // Offset from the baseline where the char pixels begin
@@ -28,7 +28,8 @@ public:
     G_Font();
     virtual ~G_Font();
 
-    G_Font::CharGlyphMetrics GetCharacterMetrics(unsigned char c,
+
+    G_Font::GlyphMetrics GetCharacterMetrics(unsigned char c,
                                                  int textSize = 1) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
@@ -38,7 +39,8 @@ public:
      * @brief Returns the distance that the pen position must be moved between
      * leftChar and rightChar (kerning)
      */
-    int GetKerningX(char leftChar, char rightChar);
+    int GetKerningXPx(char leftChar, char rightChar) const;
+    int GetLineSkipPx() const;
 
     template<class T>
     static T ScaleMagnitude(const T &magnitude, int textSize)
@@ -51,7 +53,7 @@ protected:
     TTF_Font *m_ttfFont = nullptr;
     G_Texture2D *m_atlasTexture = nullptr;
 
-    Map<char, CharGlyphMetrics> m_charMetrics;
+    Map<char, GlyphMetrics> m_charMetrics;
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
 
     void LoadFromTTF(const Path &ttfFilepath);

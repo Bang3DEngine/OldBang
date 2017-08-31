@@ -87,8 +87,9 @@ void UITextRenderer::RefreshMesh()
 
     // Get the quad positions of the rects of each char
     RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
-    Vector2i sizedSpacingPx = Vector2i(
-                G_Font::ScaleMagnitude(Vector2f(GetSpacing()), GetTextSize()));
+    Vector2i sizedExtraSpacingPx = Vector2i(
+                G_Font::ScaleMagnitude(Vector2f(GetExtraSpacing()),
+                                                GetTextSize()));
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
@@ -98,7 +99,7 @@ void UITextRenderer::RefreshMesh()
                                         IsWrapping(),
                                         GetTextSize(),
                                         rt,
-                                        sizedSpacingPx);
+                                        sizedExtraSpacingPx);
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;
@@ -209,11 +210,11 @@ void UITextRenderer::SetTextSize(int size)
     }
 }
 
-void UITextRenderer::SetSpacing(const Vector2i& spacing)
+void UITextRenderer::SetExtraSpacing(const Vector2i& extraSpacing)
 {
-    if (GetSpacing() != spacing)
+    if (GetExtraSpacing() != extraSpacing)
     {
-        m_spacing = spacing;
+        m_extraSpacing = extraSpacing;
         m_hasChanged = true;
     }
 }
@@ -228,7 +229,7 @@ bool UITextRenderer::IsKerning() const { return m_kerning; }
 bool UITextRenderer::IsWrapping() const { return m_wrapping; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
-Vector2i UITextRenderer::GetSpacing() const { return m_spacing; }
+Vector2i UITextRenderer::GetExtraSpacing() const { return m_extraSpacing; }
 const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 {
     return m_charRectsLocalNDC;
@@ -266,7 +267,7 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
-    text->SetSpacing( GetSpacing() );
+    text->SetExtraSpacing( GetExtraSpacing() );
     text->SetWrapping( IsWrapping() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
@@ -285,8 +286,8 @@ void UITextRenderer::ImportXML(const XMLNode &xml)
     if (xml.Contains("TextSize"))
     { SetTextSize(xml.Get<float>("TextSize")); }
 
-    if (xml.Contains("Spacing"))
-    { SetSpacing(xml.Get<Vector2i>("Spacing")); }
+    if (xml.Contains("ExtraSpacing"))
+    { SetExtraSpacing(xml.Get<Vector2i>("ExtraSpacing")); }
 
     if (xml.Contains("Kerning"))
     { SetKerning(xml.Get<bool>("Kerning")); }
@@ -311,7 +312,7 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Font", GetFont() ? GetFont()->GetGUID() : GUID::Empty());
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
-    xmlInfo->Set("Spacing", GetSpacing());
+    xmlInfo->Set("ExtraSpacing", GetExtraSpacing());
     xmlInfo->Set("TextColor", GetTextColor());
     xmlInfo->Set("Kerning", IsKerning());
     xmlInfo->Set("Wrapping", IsWrapping());

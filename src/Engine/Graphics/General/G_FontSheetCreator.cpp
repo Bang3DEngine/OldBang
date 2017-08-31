@@ -38,7 +38,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
                          int glyphSizePx,
                          G_Texture2D **atlasTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
-                         Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
+                         Map<char, G_Font::GlyphMetrics> *resultMetrics,
                          TTF_Font **ttfFont)
 {
     if (!G_FontSheetCreator::Init()) { return false; }
@@ -74,7 +74,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
         // Get some metrics
         // These are measurements relative to the full tex quad (size x size)
-        G_Font::CharGlyphMetrics charMetrics;
+        G_Font::GlyphMetrics charMetrics;
 
         int xmin, xmax, ymin, ymax, advance;
         TTF_GlyphMetrics(*ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);

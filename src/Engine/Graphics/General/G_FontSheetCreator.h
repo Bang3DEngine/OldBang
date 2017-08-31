@@ -19,7 +19,7 @@ public:
                          int glyphSizePx,
                          G_Texture2D **resultTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
-                         Map<char, G_Font::CharGlyphMetrics> *resultMetrics,
+                         Map<char, G_Font::GlyphMetrics> *resultMetrics,
                          TTF_Font **fontFace);
 private:
     G_FontSheetCreator();

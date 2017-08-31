@@ -13,7 +13,7 @@ Array<TextFormatter::CharRect>
                                             bool wrapping,
                                             int textSizePx,
                                             const RectTransform *rt,
-                                            const Vector2i &spacingPx)
+                                            const Vector2i &extraSpacingPx)
 {
     if (content.IsEmpty()) { return Array<CharRect>(); }
 
@@ -27,11 +27,11 @@ Array<TextFormatter::CharRect>
         charRects.PushBack( CharRect(c, charRectLocalNDC) );
     }
 
-    Vector2f spacingLocalNDC = rt->FromPixelsAmountToLocalNDC(spacingPx);
+    Vector2f extraSpacingLocalNDC = rt->FromPixelsAmountToLocalNDC(extraSpacingPx);
 
     Array< Array<CharRect> >
     linedCharRects = SplitCharRectsInLines(content, font, charRects,
-                                           spacingLocalNDC, rt, textSizePx,
+                                           extraSpacingLocalNDC, rt, textSizePx,
                                            wrapping);
 
     TextFormatter::ApplyAlignment(&linedCharRects, hAlignment, vAlignment);
@@ -48,7 +48,7 @@ Array< Array<TextFormatter::CharRect> >
 TextFormatter::SplitCharRectsInLines(const String &content,
                                      const Font *font,
                                      const Array<CharRect> &charRects,
-                                     const Vector2f &spacingLocalNDC,
+                                     const Vector2f &extraSpacingLocalNDC,
                                      const RectTransform *rt,
                                      int textSizePx,
                                      bool wrapping)
@@ -56,6 +56,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
     Array< Array<CharRect> > linedCharRects(1); // Result
 
     Vector2 penPosition(-1.0f);
+    const float lineSkipNDC = GetLineSkipNDC(font, rt, textSizePx);
     for (int i = 0; i < content.Size(); ++i)
     {
         const float charAdvX = GetCharAdvanceXNDC(font, rt, content,
@@ -74,7 +75,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
                 // We have arrived to a space.
                 // Does the following word (after this space) still fits in
                 // the current line?
-                float tmpAdvX = penPosition.x + charAdvX + spacingLocalNDC.x;
+                float tmpAdvX = penPosition.x + charAdvX + extraSpacingLocalNDC.x;
                 for (int j = i+1; j < content.Size(); ++j)
                 {
                     if (content[j] == ' ') { break; }
@@ -86,7 +87,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
                         lineBreak = true;
                         break;
                     }
-                    tmpAdvX += (jCharAdvX + spacingLocalNDC.x);
+                    tmpAdvX += (jCharAdvX + extraSpacingLocalNDC.x);
                 }
             }
             lineBreak = lineBreak || content[i] == '\n';
@@ -96,7 +97,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
             if (lineBreak)
             {
                 // Advance to next line! Add the current line to the result.
-                penPosition.y -= spacingLocalNDC.y;
+                penPosition.y -= (lineSkipNDC + extraSpacingLocalNDC.y);
                 penPosition.x  = -1.0f;
                 linedCharRects.PushBack( Array<CharRect>() );
 
@@ -112,14 +113,14 @@ TextFormatter::SplitCharRectsInLines(const String &content,
             {
                 CharRect cr(content[i], charRects[i].rectLocalNDC + penPosition);
                 linedCharRects.Back().PushBack(cr);
-                penPosition.x += (charAdvX + spacingLocalNDC.x);
+                penPosition.x += (charAdvX + extraSpacingLocalNDC.x);
             }
         }
         else // Just add them in a single line
         {
             CharRect cr(content[i], penPosition + charRects[i].rectLocalNDC);
             linedCharRects.Back().PushBack(cr);
-            penPosition.x += (charAdvX + spacingLocalNDC.x);
+            penPosition.x += (charAdvX + extraSpacingLocalNDC.x);
         }
     }
     return linedCharRects;
@@ -193,7 +194,7 @@ Rectf TextFormatter::GetCharRect
 {
     if (!font) { return Rectf::Zero; }
 
-    Font::CharGlyphMetrics
+    Font::GlyphMetrics
     charMetrics = font->GetCharacterMetrics(c, textSizePx);
 
     Vector2i charMin(charMetrics.bearing.x,
@@ -204,18 +205,36 @@ Rectf TextFormatter::GetCharRect
                  rt->FromPixelsAmountToLocalNDC(charMax));
 }
 
-float TextFormatter::GetCharAdvanceXNDC
-(const Font *font, const RectTransform *rt, const String &content,
- int textSizePx, int currentCharIndex)
+float TextFormatter::GetLineSkipNDC(const Font *font, const RectTransform *rt,
+                                    int textSizePx)
+{
+    const int lineSkipScaled = G_Font::ScaleMagnitude(font->GetLineSkipPx(),
+                                                      textSizePx);
+    return rt->FromPixelsAmountToLocalNDC( Vector2i(0, lineSkipScaled) ).y;
+}
+
+float TextFormatter::GetCharAdvanceXNDC(const Font *font,
+                                        const RectTransform *rt,
+                                        const String &content, int textSizePx,
+                                        int currentCharIndex)
 {
     int advance = 0;
-    const char c = content[currentCharIndex];
-    Font::CharGlyphMetrics charMetrics = font->GetCharacterMetrics(c, textSizePx);
-    if (c != ' ' && charMetrics.size.x > 0 )
+    if (currentCharIndex < content.Size()-1)
     {
-        advance = charMetrics.advance;
+        advance = font->GetKerningXPx(content[currentCharIndex],
+                                      content[currentCharIndex + 1]);
     }
-    else { advance = font->GetCharacterMetrics('A', textSizePx).advance; }
+
+    if (advance <= 0)
+    {
+        const char c = content[currentCharIndex];
+        Font::GlyphMetrics charMetrics = font->GetCharacterMetrics(c, textSizePx);
+        if (c != ' ' && charMetrics.size.x > 0 )
+        {
+            advance = charMetrics.advance;
+        }
+        else { advance = font->GetCharacterMetrics('A', textSizePx).advance; }
+    }
 
     return rt->FromPixelsAmountToLocalNDC( Vector2i(advance, 0) ).x;
 }
