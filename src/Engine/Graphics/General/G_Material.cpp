@@ -1,4 +1,4 @@
-#include "G_Material.h"
+#include "Bang/G_Material.h"
 
 #include "Bang/Screen.h"
 #include "Bang/Vector4.h"

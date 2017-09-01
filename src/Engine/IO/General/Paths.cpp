@@ -1,4 +1,4 @@
-#include "Paths.h"
+#include "Bang/Paths.h"
 
 #include <limits.h>
 #include <unistd.h>

@@ -65,9 +65,14 @@ void UITextRenderer::Bind() const
     gameObject->transform->SetEnabled(false);
     UIRenderer::Bind();
 
-    const float blurriness = GetBlurriness() + (0.5f / GetTextSize());
-    const float alphaThresh = GetAlphaThreshold();
-    GL::Uniform("B_textBlurriness",     blurriness,  false);
+    const int textSize = GetTextSize();
+
+    float blurriness = GetBlurriness() * (1.4142f / textSize);
+    blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
+    GL::Uniform("B_textBlurriness", blurriness,  false);
+
+    float alphaThresh = GetAlphaThreshold(); // + (200.0f / textSize2);
+    alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
     GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
 }
 

@@ -67,12 +67,12 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
     // Generate the atlas, adding each char in a simple grid
     uint numChars        = charactersToLoadStr.Size();
-    uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
+    uint charsPerRowCol  = Math::Sqrt(numChars)+ 1;
     uint charInAtlasSize = G_Font::CharLoadSize;
     uint margin          = 2 + distFieldRadius;
-    charInAtlasSize = Math::Max(charInAtlasSize,
-                                SCAST<uint>(TTF_FontLineSkip(*ttfFont)));
-    charInAtlasSize += margin * 2;
+    charInAtlasSize      = Math::Max(charInAtlasSize,
+                                     SCAST<uint>(TTF_FontLineSkip(*ttfFont)));
+    charInAtlasSize     += margin * 2;
     uint sideSize        = charsPerRowCol * charInAtlasSize;
 
     G_Image atlasImage;
@@ -146,15 +146,17 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
     atlasImage.SaveToFile( Path("font.png") );
     Debug_Peek(atlasImage.GetSize());
-    // G_Image distField;
-    // ImageEffects::SignedDistanceField(atlasImage, &distField, distFieldRadius);
-    // distField.SaveToFile( Path("distField.png") );
+    /*
+    G_Image distField;
+    ImageEffects::SignedDistanceField(atlasImage, &distField, distFieldRadius);
+    distField.SaveToFile( Path("distField.png") );
     G_Image distField = *( Resources::Load<G_Image>( Path("distField.png") ) );
+    */
 
     GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
     *atlasTexture = new G_Texture2D();
-    // (*atlasTexture)->LoadFromImage(atlasImage);
-    (*atlasTexture)->LoadFromImage(distField);
+    (*atlasTexture)->LoadFromImage(atlasImage);
+    // (*atlasTexture)->LoadFromImage(distField);
     (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
     (*atlasTexture)->SetAlphaCutoff(0.0f);

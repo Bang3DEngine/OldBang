@@ -1,4 +1,4 @@
-#include "G_Image.h"
+#include "Bang/G_Image.h"
 
 #include "Bang/Debug.h"
 #include "Bang/ImageIO.h"

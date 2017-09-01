@@ -10,13 +10,17 @@ BeginHeader "UNINSTALLING"
 if [ ! -f /usr/lib/libBang.so ]; then
    	Warning "Bang was not installed, so not uninstalling it..."
 else
-	echo "Removing libBang.so from /usr/lib..."
-	rm /usr/lib/libBang.so
+	echo "Removing include files from /usr/include..."
+	rm  -rf /usr/include/Bang
+
 	if [ $? != 0 ] ; then 
 	Error "Could not uninstall. Need sudo! Please rerun with sudo!"
 	else
 	Error "Successfully uninstalled!"
 	fi
+
+	echo "Removing libBang.so from /usr/lib..."
+	rm /usr/lib/libBang.so
 fi
 
 EndHeader

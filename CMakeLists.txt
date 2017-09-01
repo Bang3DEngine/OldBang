@@ -76,18 +76,20 @@ find_package(OpenAL REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIRS})
 link_libraries(${OPENAL_LIBRARY})
 
+# Bang include's
+SET(BANG_INCLUDE_DIR_ROOT ${ROOT}/include)
+SET(BANG_INCLUDE_DIR ${BANG_INCLUDE_DIR_ROOT}/Bang)
+include_directories(${BANG_INCLUDE_DIR_ROOT})
+
 # BangCore Library
-include_directories(${ROOT}/include)
-include_directories(${ROOT}/include/Bang)
-include_directories(${ROOT}/include/Bang/BangCore)
 set(CORE_SRC_FILES
-${ENGINE_SRC_DIR}/DataStructures/Array.h
-${ENGINE_SRC_DIR}/DataStructures/Flags.h
-${ENGINE_SRC_DIR}/DataStructures/List.h
-${ENGINE_SRC_DIR}/DataStructures/Map.h
-${ENGINE_SRC_DIR}/DataStructures/Set.h
+${BANG_INCLUDE_DIR}/Array.h
+${BANG_INCLUDE_DIR}/Flags.h
+${BANG_INCLUDE_DIR}/List.h
+${BANG_INCLUDE_DIR}/Map.h
+${BANG_INCLUDE_DIR}/Set.h
+${BANG_INCLUDE_DIR}/TypeMap.h
 ${ENGINE_SRC_DIR}/DataStructures/String.cpp
-${ENGINE_SRC_DIR}/DataStructures/TypeMap.h
 ${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
 ${ENGINE_SRC_DIR}/IO/Files/File.cpp
@@ -106,7 +108,6 @@ add_library(BangCoreStatic  STATIC $<TARGET_OBJECTS:BangCoreObjects>)
 add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
 
 # BangGraphics Library
-include_directories(${ROOT}/include/Bang/BangGraphics)
 set(GRAPHICS_SRC_FILES
 ${ENGINE_SRC_DIR}/Graphics/Buffers/G_GBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
@@ -151,9 +152,9 @@ set(OTHER_FILES
 add_info_files(${OTHER_FILES})
 
 # BangEngine Library
-include_directories(${ROOT}/include/Bang/BangEngine)
-include_directories(${ROOT}/include/Bang/BangPreprocessor)
 set (ENGINE_SRC_FILES
+${BANG_INCLUDE_DIR}/GUID.h
+${BANG_INCLUDE_DIR}/IFocusListener.h
 ${ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${ENGINE_SRC_DIR}/Audio/AudioManager.cpp
@@ -205,7 +206,6 @@ ${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
 ${ENGINE_SRC_DIR}/Graphics/ShaderManager.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
-${ENGINE_SRC_DIR}/ImportFiles/GUID.h
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
@@ -248,7 +248,6 @@ ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/IFocusListener.h
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
 ${OTHER_FILES}
 )

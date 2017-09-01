@@ -1,4 +1,4 @@
-#include "BangPreprocessor.h"
+#include "Bang/BangPreprocessor.h"
 
 #include <iostream>
 

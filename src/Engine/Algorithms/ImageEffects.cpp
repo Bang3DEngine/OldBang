@@ -17,11 +17,11 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
 
     for (int y = 0; y < inputImageBW.GetHeight(); ++y)
     {
+        Debug_Peek(y);
         const int minY = Math::Max(0, y - radius);
         const int maxY = Math::Min(inputImageBW.GetHeight()-1, y + radius);
         for (int x = 0; x < inputImageBW.GetWidth(); ++x)
         {
-
             const int minX = Math::Max(0, x - radius);
             const int maxX = Math::Min(inputImageBW.GetWidth()-1, x + radius);
 
@@ -42,7 +42,7 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
             if (minDist <= radius)
             {
                 minDist /= radius;
-                const bool isInterior = (inputImageBW.GetPixel(x,y) != Color::Zero);
+                const bool isInterior = (inputImageBW.GetPixel(x,y).r != 0.0f);
                 if (isInterior) { minDist = -minDist; }
                 minDist += negativeOffset;
                 minDist = Math::Clamp(minDist, 0.0f, 1.0f);
@@ -52,7 +52,7 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
     }
 }
 
-bool ImageEffects::Outline(const G_Image &imgBW,
+void ImageEffects::Outline(const G_Image &imgBW,
                            G_Image *outlineOutputImageBW)
 {
     outlineOutputImageBW->Create(imgBW.GetWidth(), imgBW.GetHeight());
