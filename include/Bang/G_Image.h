@@ -7,26 +7,27 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
-class G_Image : public Resource
+template<class T>
+class G_ImageG : public Resource
 {
-    RESOURCE(G_Image)
+    RESOURCE(G_ImageG)
 
 public:
-    enum class ResizeMode { Nearest, Linear };
+    enum class ResizeMode {Nearest, Linear};
 
-    G_Image();
-    G_Image(int width, int height);
+    G_ImageG();
+    G_ImageG(int width, int height);
 
     void Create(int width, int height);
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
-    G_Image GetSubImage(const Recti &subImageCoordsPx) const;
-    void Copy(const G_Image &image, const Vector2i& pos);
-    void Copy(const G_Image &image,
+    G_ImageG<T> GetSubImage(const Recti &subImageCoordsPx) const;
+    void Copy(const G_ImageG<T> &image, const Vector2i& pos);
+    void Copy(const G_ImageG<T> &image,
               const Recti& dstRect,
               ResizeMode resizeMode = ResizeMode::Linear);
-    void Copy(const G_Image &image,
+    void Copy(const G_ImageG<T> &image,
               const Recti& srcCopyRect,
               const Recti& dstCopyRect,
               ResizeMode resizeMode = ResizeMode::Linear);
@@ -36,8 +37,8 @@ public:
     void Resize(const int newWidth, int newHeight,
                 ResizeMode resizeMode = ResizeMode::Linear);
 
-    Byte* GetData();
-    const Byte* GetData() const;
+    T* GetData();
+    const T* GetData() const;
     Color GetPixel(int x, int y) const;
     int GetWidth() const;
     int GetHeight() const;
@@ -45,16 +46,25 @@ public:
 
     void InvertVertically();
 
-    void SaveToFile(const Path &filepath) const;
-    static G_Image LoadFromData(int width, int height,
-                                const Array<Byte> &rgbaByteData);
+    template<class OtherT>
+    G_ImageG<OtherT> To() const;
+    void Export(const Path &filepath) const;
+    static G_ImageG<T> LoadFromData(int width, int height,
+                                    const Array<T> &rgbaByteData);
 
     // Resource
     virtual void Import(const Path &imageFilepath) override;
 
 private:
     Vector2i m_size;
-    Array<Byte> m_pixels;
+    Array<T> m_pixels;
 };
+
+template class G_ImageG<Byte>;
+template class G_ImageG<float>;
+
+using G_Imageb = G_ImageG<Byte>;
+using G_Imagef = G_ImageG<float>;
+using G_Image  = G_Imageb;
 
 #endif // IMAGE_H

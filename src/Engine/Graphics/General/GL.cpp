@@ -353,8 +353,14 @@ void GL::ReadPixels(const Recti &readRect, GL::ColorComp inputComp,
 void GL::Finish() { glFinish(); }
 void GL::Flush() { glFlush(); }
 
-void GL::Uniform(int location, int value) { glUniform1i(location, value); }
-void GL::Uniform(int location, float value) { glUniform1f(location, value); }
+void GL::Uniform(int location, int value)
+{
+    glUniform1i(location, value);
+}
+void GL::Uniform(int location, float value)
+{
+    glUniform1f(location, value);
+}
 void GL::Uniform(int location, bool value)
 {
     glUniform1i(location, value ? 1 : 0);
@@ -446,6 +452,19 @@ void GL::GetTexImage(GL::TextureTarget textureTarget,
                   0,
                   GLCAST(GL::ColorComp::RGBA),
                   GLCAST(GL::DataType::UnsignedByte),
+                  SCAST<void*>(pixels));
+
+    GL_CheckError();
+}
+
+void GL::GetTexImage(GL::TextureTarget textureTarget, float *pixels)
+{
+    GL::ClearError();
+
+    glGetTexImage(GLCAST(textureTarget),
+                  0,
+                  GLCAST(GL::ColorComp::RGBA),
+                  GLCAST(GL::DataType::Float),
                   SCAST<void*>(pixels));
 
     GL_CheckError();
@@ -852,6 +871,11 @@ uint GL::GetNumComponents(GL::ColorComp colorComp)
     if (colorComp == GL::ColorComp::RGBA) { return 4; }
     if (colorComp == GL::ColorComp::RGB)  { return 3; }
     return 3;
+}
+
+uint GL::GetNumComponents(GL::ColorFormat colorFormat)
+{
+    return GL::GetNumComponents( GL::GetColorCompFrom(colorFormat) );
 }
 
 GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)

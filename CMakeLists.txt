@@ -104,10 +104,10 @@ add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
 # BangGraphics Library
 set(GRAPHICS_SRC_FILES
 ${ENGINE_SRC_DIR}/Graphics/Buffers/G_GBuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/G_Framebuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Font.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_FontSheetCreator.cpp
+${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Material.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_RenderTexture.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Screen.cpp

@@ -9,6 +9,7 @@
 
 #include "Bang/List.h"
 #include "Bang/Debug.h"
+#include "Bang/G_Image.h"
 
 void ImageIO::Export(const Path &filepath, const G_Image &img)
 {

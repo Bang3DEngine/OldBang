@@ -13,7 +13,7 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
 
     G_Image outline;
     ImageEffects::Outline(inputImageBW, &outline);
-    outline.SaveToFile( Path("outline.png") );
+    // outline.Export( Path("outline.png") );
 
     for (int y = 0; y < inputImageBW.GetHeight(); ++y)
     {

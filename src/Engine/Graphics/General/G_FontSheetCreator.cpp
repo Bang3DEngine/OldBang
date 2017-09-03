@@ -132,7 +132,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(
     G_Image atlasImage = G_FontSheetCreator::PackImages(charImages,
                                                         2 + extraMargin,
                                                         &packedRects);
-    // atlasImage.SaveToFile(Path("font.png"));
+    // atlasImage.Export(Path("font.png"));
 
     if (charAtlasUvs)
     {

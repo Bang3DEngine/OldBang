@@ -11,7 +11,7 @@ G_Texture2D::~G_Texture2D()
 {
 }
 
-void G_Texture2D::LoadFromImage(const G_Image &image)
+void G_Texture2D::LoadFromImage(const G_ImageG<Byte> &image)
 {
     if (image.GetData())
     {
@@ -77,37 +77,6 @@ void G_Texture2D::GenerateMipMaps() const
     GL::GenerateMipMap( m_target );
 }
 
-G_Image G_Texture2D::ToImage(bool invertY)
-{
-    const int width  = GetWidth();
-    const int height = GetHeight();
-    const uint bytesSize = GetBytesSize();
-    Byte *pixels = new Byte[bytesSize];
-
-    Bind();
-    GL::GetTexImage(m_target, pixels);
-    UnBind();
-
-    G_Image img(width, height);
-    for (int i = 0; i < height; ++i)
-    {
-        for (int j = 0; j < width; ++j)
-        {
-            const int coords = (i * width + j) * 4;
-            Color pixelColor = Color(pixels[coords + 0] / 255.0f,
-                                     pixels[coords + 1] / 255.0f,
-                                     pixels[coords + 2] / 255.0f,
-                                     pixels[coords + 3] / 255.0f);
-            img.SetPixel(j, i, pixelColor);
-        }
-    }
-    if (invertY) { img.InvertVertically(); }
-
-    delete[] pixels;
-
-    return img;
-}
-
 void G_Texture2D::SetAlphaCutoff(float alphaCutoff)
 {
     m_alphaCutoff = alphaCutoff;
@@ -116,4 +85,15 @@ void G_Texture2D::SetAlphaCutoff(float alphaCutoff)
 float G_Texture2D::GetAlphaCutoff() const
 {
     return m_alphaCutoff;
+}
+
+Color G_Texture2D::GetColorFromArray(const float *pixels, int i)
+{
+    return Color(pixels[i+0], pixels[i+1], pixels[i+2], pixels[i+3]);
+}
+
+Color G_Texture2D::GetColorFromArray(const Byte *pixels, int i)
+{
+    return Color(pixels[i+0] / 255.0f, pixels[i+1] / 255.0f,
+                 pixels[i+2] / 255.0f, pixels[i+3] / 255.0f);
 }

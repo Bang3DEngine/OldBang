@@ -37,7 +37,7 @@ void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
     m_colorAttachmentIds.PushBack(attachment);
     m_attachmentId_To_Texture.Add(attachment, tex);
 
-    GL::FramebufferTexture2D(GL::FramebufferTarget::Draw,
+    GL::FramebufferTexture2D(GL::FramebufferTarget::ReadDraw,
                              attachment,
                              GL::TextureTarget::Texture2D,
                              tex->GetGLId());
@@ -190,7 +190,7 @@ void G_Framebuffer::SaveToImage(GL::Attachment attachment,
 {
     GL::Flush(); GL::Finish();
     G_Image img = GetAttachmentTexture(attachment)->ToImage(invertY);
-    img.SaveToFile(filepath);
+    img.Export(filepath);
 }
 
 void G_Framebuffer::SaveStencilToImage(const Path &filepath,
@@ -213,7 +213,7 @@ void G_Framebuffer::SaveStencilToImage(const Path &filepath,
 
     G_Image img = G_Image::LoadFromData(GetWidth(), GetHeight(), bytes);
     img.InvertVertically();
-    img.SaveToFile(filepath);
+    img.Export(filepath);
 
     delete stencilData;
 }

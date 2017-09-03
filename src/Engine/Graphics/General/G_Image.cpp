@@ -5,23 +5,27 @@
 #include "Bang/ImageIO.h"
 #include "Bang/ImportFilesManager.h"
 
-G_Image::G_Image()
+template<class T>
+G_ImageG<T>::G_ImageG()
 {
 
 }
 
-G_Image::G_Image(int width, int height)
+template<class T>
+G_ImageG<T>::G_ImageG(int width, int height)
 {
     Create(width, height);
 }
 
-void G_Image::Create(int width, int height)
+template<class T>
+void G_ImageG<T>::Create(int width, int height)
 {
     m_size = Vector2i(width, height);
     m_pixels.Resize(m_size.x * m_size.y * 4);
 }
 
-void G_Image::Create(int width, int height, const Color &backgroundColor)
+template<class T>
+void G_ImageG<T>::Create(int width, int height, const Color &backgroundColor)
 {
     Create(width, height);
     for (int i = 0; i < GetHeight(); ++i)
@@ -33,21 +37,11 @@ void G_Image::Create(int width, int height, const Color &backgroundColor)
     }
 }
 
-void G_Image::SetPixel(int x, int y, const Color& color)
-{
-    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
-               "Pixel (" << x << ", " << y << ") out of bounds");
-    const int coord = (y * GetWidth() + x) * 4;
-    m_pixels[coord + 0] = SCAST<Byte>(color.r * 255);
-    m_pixels[coord + 1] = SCAST<Byte>(color.g * 255);
-    m_pixels[coord + 2] = SCAST<Byte>(color.b * 255);
-    m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
-}
-
-G_Image G_Image::GetSubImage(const Recti &subCoords) const
+template<class T>
+G_ImageG<T> G_ImageG<T>::GetSubImage(const Recti &subCoords) const
 {
     Vector2i subSize = subCoords.GetSize();
-    G_Image subImage(subSize.x, subSize.y);
+    G_ImageG<T> subImage(subSize.x, subSize.y);
     for (int y = 0; y < subSize.y; ++y)
     {
         for (int x = 0; x < subSize.x; ++x)
@@ -59,16 +53,18 @@ G_Image G_Image::GetSubImage(const Recti &subCoords) const
     return subImage;
 }
 
-void G_Image::Copy(const G_Image &image, const Vector2i &pos)
+template<class T>
+void G_ImageG<T>::Copy(const G_ImageG<T> &image, const Vector2i &pos)
 {
     Copy(image, Recti(pos, pos + image.GetSize()));
 }
 
-void G_Image::Copy(const G_Image &image,
-                   const Recti &dstRect,
-                   ResizeMode resizeMode)
+template<class T>
+void G_ImageG<T>::Copy(const G_ImageG<T> &image,
+                       const Recti &dstRect,
+                       ResizeMode resizeMode)
 {
-    G_Image resizedImage = image;
+    G_ImageG<T> resizedImage = image;
 
     Vector2i dstSize = dstRect.GetSize();
     resizedImage.Resize(dstSize, resizeMode);
@@ -83,25 +79,29 @@ void G_Image::Copy(const G_Image &image,
     }
 }
 
-void G_Image::Copy(const G_Image &image,
-                   const Recti &srcCopyRect,
-                   const Recti &dstCopyRect,
-                   ResizeMode resizeMode)
+template<class T>
+void G_ImageG<T>::Copy(const G_ImageG<T> &image,
+                       const Recti &srcCopyRect,
+                       const Recti &dstCopyRect,
+                       ResizeMode resizeMode)
 {
-    G_Image subImageSrc = image.GetSubImage(srcCopyRect);
+    G_ImageG<T> subImageSrc = image.GetSubImage(srcCopyRect);
     subImageSrc.Resize(dstCopyRect.GetSize(), resizeMode);
     Copy(subImageSrc, dstCopyRect);
 }
 
-void G_Image::Resize(const Vector2i &newSize, ResizeMode resizeMode)
+template<class T>
+void G_ImageG<T>::Resize(const Vector2i &newSize, ResizeMode resizeMode)
 {
     Resize(newSize.x, newSize.y, resizeMode);
 }
-void G_Image::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
+
+template<class T>
+void G_ImageG<T>::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
 {
     if (newWidth == GetWidth() && newHeight == GetHeight()) { return; }
 
-    G_Image original = *this;
+    G_ImageG<T> original = *this;
 
     Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newWidth),
                      original.GetHeight() / SCAST<float>(newHeight));
@@ -146,27 +146,38 @@ void G_Image::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
     }
 }
 
-Byte *G_Image::GetData() { return &m_pixels[0]; }
-const Byte *G_Image::GetData() const { return &m_pixels[0]; }
+template<class T>
+T *G_ImageG<T>::GetData() { return &m_pixels[0]; }
 
-Color G_Image::GetPixel(int x, int y) const
+template<class T>
+const T *G_ImageG<T>::GetData() const { return &m_pixels[0]; }
+
+template<class T>
+void G_ImageG<T>::SetPixel(int x, int y, const Color& color)
 {
-    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
-               "Pixel (" << x << ", " << y << ") out of bounds");
-    const int coord = (y * GetWidth() + x) * 4;
-    return Color(m_pixels[coord + 0] / 255.0f,
-                 m_pixels[coord + 1] / 255.0f,
-                 m_pixels[coord + 2] / 255.0f,
-                 m_pixels[coord + 3] / 255.0f);
+    ASSERT_MSG(false, "Please specialize this method!");
 }
 
-int G_Image::GetWidth() const { return m_size.x; }
-int G_Image::GetHeight() const { return m_size.y; }
-const Vector2i& G_Image::GetSize() const { return m_size; }
-
-void G_Image::InvertVertically()
+template<class T>
+Color G_ImageG<T>::GetPixel(int x, int y) const
 {
-    G_Image img = *this;
+    ASSERT_MSG(false, "Please specialize this method!");
+    return Color::Zero;
+}
+
+template<class T>
+int G_ImageG<T>::GetWidth() const { return m_size.x; }
+
+template<class T>
+int G_ImageG<T>::GetHeight() const { return m_size.y; }
+
+template<class T>
+const Vector2i& G_ImageG<T>::GetSize() const { return m_size; }
+
+template<class T>
+void G_ImageG<T>::InvertVertically()
+{
+    G_ImageG<T> img = *this;
     for (int y = 0; y < GetHeight(); ++y)
     {
         for (int x = 0; x < GetWidth(); ++x)
@@ -177,28 +188,117 @@ void G_Image::InvertVertically()
     }
 }
 
-void G_Image::SaveToFile(const Path &filepath) const
+template<class T>
+G_ImageG<T> G_ImageG<T>::LoadFromData(int width, int height,
+                              const Array<T> &rgbaByteData)
 {
-    ImageIO::Export(filepath, *this);
-}
-
-G_Image G_Image::LoadFromData(int width, int height,
-                              const Array<Byte> &rgbaByteData)
-{
-    G_Image img(width, height);
+    G_ImageG<T> img(width, height);
     img.m_pixels = rgbaByteData;
     ASSERT(rgbaByteData.Size() == (img.GetWidth() * img.GetHeight() * 4));
     return img;
 }
 
-void G_Image::Import(const Path &imageFilepath)
+template<class T>
+template<class OtherT>
+G_ImageG<OtherT> G_ImageG<T>::To() const
+{
+    G_ImageG<OtherT> otherImg(GetWidth(), GetHeight());
+    for (int y = 0; y < GetHeight(); ++y)
+    {
+        for (int x = 0; x < GetWidth(); ++x)
+        {
+            otherImg.SetPixel(x, y, GetPixel(x,y));
+        }
+    }
+    return otherImg;
+}
+
+
+template<class T>
+void G_ImageG<T>::Export(const Path &filepath) const
+{
+    ASSERT_MSG(false, "Please implement this method!");
+}
+
+template<>
+void G_ImageG<Byte>::Export(const Path &filepath) const
+{
+    ImageIO::Export(filepath, *this);
+}
+
+template<>
+void G_ImageG<float>::Export(const Path &filepath) const
+{
+    G_ImageG<Byte> byteImg = this->To<Byte>();
+    ImageIO::Export(filepath, byteImg);
+}
+
+template<class T>
+void G_ImageG<T>::Import(const Path &imageFilepath)
+{
+    ASSERT_MSG(false, "Please implement this method!");
+}
+
+template<>
+void G_ImageG<Byte>::Import(const Path &imageFilepath)
+{
+    bool ok; ImageIO::Import(imageFilepath, this, &ok);
+}
+
+template<>
+void G_ImageG<float>::Import(const Path &imageFilepath)
 {
     bool ok;
-    ImageIO::Import(imageFilepath, this, &ok);
+    G_ImageG<Byte> byteImg;
+    ImageIO::Import(imageFilepath, &byteImg, &ok);
+    *this = byteImg.To<float>();
+}
 
-    if (!ok)
-    {
-        Debug_Error("Error loading the image '" << imageFilepath <<
-                     "', couldn't open/read the file.");
-    }
+// Specializations
+template<>
+void G_ImageG<Byte>::SetPixel(int x, int y, const Color &color)
+{
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
+    const int coord = (y * GetWidth() + x) * 4;
+    m_pixels[coord + 0] = SCAST<Byte>(color.r * 255);
+    m_pixels[coord + 1] = SCAST<Byte>(color.g * 255);
+    m_pixels[coord + 2] = SCAST<Byte>(color.b * 255);
+    m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
+}
+
+template<>
+void G_ImageG<float>::SetPixel(int x, int y, const Color &color)
+{
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
+    const int coord = (y * GetWidth() + x) * 4;
+    m_pixels[coord + 0] = color.r;
+    m_pixels[coord + 1] = color.g;
+    m_pixels[coord + 2] = color.b;
+    m_pixels[coord + 3] = color.a;
+}
+
+template<>
+Color G_ImageG<Byte>::GetPixel(int x, int y) const
+{
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
+    const int coord = (y * GetWidth() + x) * 4;
+    return Color(m_pixels[coord + 0] / 255.0f,
+                 m_pixels[coord + 1] / 255.0f,
+                 m_pixels[coord + 2] / 255.0f,
+                 m_pixels[coord + 3] / 255.0f);
+}
+
+template<>
+Color G_ImageG<float>::GetPixel(int x, int y) const
+{
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
+    const int coord = (y * GetWidth() + x) * 4;
+    return Color(m_pixels[coord + 0],
+                 m_pixels[coord + 1],
+                 m_pixels[coord + 2],
+                 m_pixels[coord + 3]);
 }

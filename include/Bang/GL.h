@@ -328,6 +328,8 @@ public:
                                  GL::WrapMode wrapMode);
     static void GetTexImage(GL::TextureTarget textureTarget,
                             Byte *pixels);
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            float *pixels);
     static int GetInteger(GL::Enum glEnum);
     static void GetInteger(GL::Enum glEnum, int *values);
     static bool GetBoolean(GL::Enum glEnum);
@@ -406,6 +408,7 @@ public:
                                   GL::DataType dataType);
     static uint GetBytesSize(GL::DataType dataType);
     static uint GetNumComponents(GL::ColorComp colorComp);
+    static uint GetNumComponents(GL::ColorFormat colorFormat);
     static GL::DataType GetDataTypeFrom(GL::ColorFormat format);
     static GL::ColorComp GetColorCompFrom(GL::ColorFormat format);
 

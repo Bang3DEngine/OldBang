@@ -10,7 +10,7 @@ public:
     G_Texture2D();
     virtual ~G_Texture2D();
 
-    void LoadFromImage(const G_Image &image);
+    void LoadFromImage(const G_ImageG<Byte> &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const Color &fillColor,
@@ -23,13 +23,41 @@ public:
               bool genMipMaps = true);
     void GenerateMipMaps() const;
 
-    G_Image ToImage(bool invertY = false);
+    template<class T = Byte>
+    G_ImageG<T> ToImage(bool invertY = false)
+    {
+        const int width  = GetWidth(), height = GetHeight();
+        const int numComps = GL::GetNumComponents(GetInternalFormat());
+        T *pixels = new T[width * height * numComps];
+
+        Bind(); GL::GetTexImage(m_target, pixels); UnBind();
+
+        G_ImageG<T> img(width, height);
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                const int coords = (y * width + x) * 4;
+                Color pixelColor = GetColorFromArray(pixels, coords);
+                img.SetPixel(x, y, pixelColor);
+            }
+        }
+        if (invertY) { img.InvertVertically(); }
+
+        delete[] pixels;
+
+        return img;
+    }
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 
 protected:
     float m_alphaCutoff = 0.1f;
+
+private:
+    static Color GetColorFromArray(const float *pixels, int i);
+    static Color GetColorFromArray(const Byte *pixels, int i);
 };
 
 #endif // G_TEXTURE2D_H
