@@ -73,8 +73,10 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
         ++originalLineNum;
     }
 
+    if (lines.Front().BeginsWith("#version")) { lines.Insert(1, "#line 1\n"); }
+    else { lines.Insert(0, "#line 0\n"); }
+
     outputCode = String::Join(lines, "\n");
-    outputCode.Prepend("#line 0\n");
 }
 
 

@@ -23,7 +23,7 @@ void G_ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
     SetVertexShader(vs);
 
     G_Shader *fs = new G_Shader(GL::ShaderType::Fragment);
-    vs->Import(fshaderPath);
+    fs->Import(fshaderPath);
     SetFragmentShader(fs);
 }
 

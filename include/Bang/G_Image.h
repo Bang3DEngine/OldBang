@@ -12,12 +12,24 @@ class G_Image : public Resource
     RESOURCE(G_Image)
 
 public:
+    enum class ResizeMode { Nearest, Linear };
+
     G_Image();
     G_Image(int width, int height);
 
     void Create(int width, int height);
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
+
+    void Copy(const G_Image &image,
+              const Recti& srcCopyRect,
+              const Recti& dstCopyRect,
+              ResizeMode resizeMode);
+
+    void Resize(const Vector2i &newSize,
+                ResizeMode resizeMode = ResizeMode::Linear);
+    void Resize(const int newWidth, int newHeight,
+                ResizeMode resizeMode = ResizeMode::Linear);
 
     Byte* GetData();
     const Byte* GetData() const;

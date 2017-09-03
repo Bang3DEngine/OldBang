@@ -24,6 +24,11 @@ String::String(float v)  : m_str("")
     *this = ToString(v);
 }
 
+String::String(char c)
+{
+    *this = ToString(c);
+}
+
 String::String(const char *cstr) : m_str(cstr)
 {
 }
@@ -365,6 +370,13 @@ String String::ToString(long v)
 String String::ToString(bool v)
 {
     return v ? "True" : "False";
+}
+
+String String::ToString(char c)
+{
+    std::string str = "";
+    str += c;
+    return String(str);
 }
 String String::ToString(long long unsigned v)
 {

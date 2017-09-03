@@ -21,6 +21,7 @@ public:
     String();
     explicit String(int v);
     explicit String(float v);
+    explicit String(char c);
     String(const char *cstr);
     String(const std::string &stdstr);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
@@ -125,6 +126,7 @@ public:
     static String ToString(int i);
     static String ToString(long v);
     static String ToString(bool v);
+    static String ToString(char c);
     static String ToString(long long unsigned v);
     static String ToString(float f, int decimalPlaces = -1);
     static String ToString(double f, int decimalPlaces = -1);

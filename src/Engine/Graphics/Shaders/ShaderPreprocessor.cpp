@@ -8,12 +8,15 @@ const String ShaderPreprocessor::GLSLVersionString = "#version 130";
 
 void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 {
+    bool addVersion = !shaderSourceCode->BeginsWith("#version");
     CodePreprocessor::PreprocessCode(shaderSourceCode,
                                      {EPATH("Shaders/Include")});
 
     String &code = *shaderSourceCode;
-
-    code.Prepend(ShaderPreprocessor::GLSLVersionString + "\n");
+    if (addVersion)
+    {
+        code.Prepend(ShaderPreprocessor::GLSLVersionString + "\n");
+    }
 }
 
 ShaderPreprocessor::ShaderPreprocessor()

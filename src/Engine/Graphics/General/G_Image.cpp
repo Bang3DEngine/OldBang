@@ -41,6 +41,69 @@ void G_Image::SetPixel(int x, int y, const Color& color)
     m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
 }
 
+void G_Image::Copy(const G_Image &image,
+                   const Recti &srcCopyRect,
+                   const Recti &dstCopyRect,
+                   ResizeMode resizeMode)
+{
+
+}
+
+void G_Image::Resize(const Vector2i &newSize, ResizeMode resizeMode)
+{
+    Resize(newSize.x, newSize.y, resizeMode);
+}
+void G_Image::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
+{
+    if (newWidth == GetWidth() && newHeight == GetHeight()) { return; }
+
+    G_Image original = *this;
+
+    Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newWidth),
+                     original.GetHeight() / SCAST<float>(newHeight));
+
+    Create(newWidth, newHeight);
+    for (int y = 0; y < newHeight; ++y)
+    {
+        for (int x = 0; x < newWidth; ++x)
+        {
+            Color newColor;
+            if (resizeMode == ResizeMode::Nearest)
+            {
+                Vector2 oriCoord = Vector2(x,y) * sizeProp;
+                int nearestX = Math::Round(oriCoord.x);
+                int nearestY = Math::Round(oriCoord.y);
+                newColor = original.GetPixel(nearestX, nearestY);
+            }
+            else
+            {
+                Vector2 oriTopLeftF  = Vector2(  x,   y) * sizeProp;
+                Vector2 oriBotRightF = Vector2(x+1, y+1) * sizeProp;
+                Vector2i oriTopLeft(Math::Floor(oriTopLeftF.x),
+                                    Math::Floor(oriTopLeftF.y));
+                Vector2i oriBotRight(Math::Ceil(oriBotRightF.x),
+                                     Math::Ceil(oriBotRightF.y));
+
+                // Debug_Log( Vector2(x,y) << " maps to: [" << oriTopLeft << ", "
+                //            << oriBotRight << "]");
+                newColor = Color::Zero;
+                for (int oriY = oriTopLeft.y; oriY < oriBotRight.y; ++oriY)
+                {
+                    for (int oriX = oriTopLeft.x; oriX < oriBotRight.x; ++oriX)
+                    {
+                        newColor += original.GetPixel(oriX, oriY);
+                    }
+                }
+
+                int pixels = (oriBotRight.x-oriTopLeft.x) *
+                             (oriBotRight.y-oriTopLeft.y);
+                newColor /= Math::Max(pixels, 1);
+            }
+            SetPixel(x, y, newColor);
+        }
+    }
+}
+
 Byte *G_Image::GetData() { return &m_pixels[0]; }
 const Byte *G_Image::GetData() const { return &m_pixels[0]; }
 

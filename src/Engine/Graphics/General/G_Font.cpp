@@ -18,7 +18,7 @@ void G_Font::LoadFromTTF(const Path &ttfFilepath)
     Free();
     G_FontSheetCreator::LoadAtlasTexture(
         ttfFilepath,
-        G_Font::CharLoadSize,
+        128,
         &m_atlasTexture,
         &m_charUvsInAtlas,
         &m_charMetrics,

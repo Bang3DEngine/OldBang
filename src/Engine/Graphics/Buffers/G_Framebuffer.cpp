@@ -88,7 +88,7 @@ void G_Framebuffer::SetReadBuffer(GL::Attachment attachment) const
     GL::ReadBuffer(attachment);
 }
 
-const Array<GL::Attachment>& G_Framebuffer::GetCurrentDrawAttachmentIds() const
+const Array<GL::Attachment>& G_Framebuffer::GetCurrentDrawAttachments() const
 {
     return m_currentDrawAttachmentIds;
 }

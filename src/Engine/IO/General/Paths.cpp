@@ -10,9 +10,33 @@
 
 Paths::Paths()
 {
-  c_engineRoot = Paths::ExecutablePath().GetDirectory()
-                                        .GetDirectory()
-                                        .GetDirectory();
+}
+
+void Paths::InitPaths(const Path &engineRootPath)
+{
+    if (!engineRootPath.IsEmpty())
+    {
+        c_engineRoot = engineRootPath;
+    }
+
+    if (!EngineAssets().IsDir())
+    {
+        c_engineRoot = Paths::ExecutablePath().GetDirectory()
+                                              .GetDirectory()
+                                              .GetDirectory();
+        if (!EngineAssets().IsDir())
+        {
+            c_engineRoot = Path("/opt/Bang");
+            if (!EngineAssets().IsDir())
+            {
+                Debug_Error("Bang is not properly installed. "
+                            "Can't find it in /opt.");
+                Application::Exit(1, true);
+            }
+        }
+    }
+
+    Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
 }
 
 Path Paths::ExecutablePath()

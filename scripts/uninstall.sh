@@ -16,7 +16,7 @@ else
 	if [ $? != 0 ] ; then 
 	Error "Could not uninstall. Need sudo! Please rerun with sudo!"
 	else
-	Error "Successfully uninstalled!"
+	Success "Successfully uninstalled!"
 	fi
 
 	echo "Removing libBang.so from /usr/lib..."

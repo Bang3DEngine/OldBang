@@ -83,12 +83,6 @@ include_directories(${BANG_INCLUDE_DIR_ROOT})
 
 # BangCore Library
 set(CORE_SRC_FILES
-${BANG_INCLUDE_DIR}/Array.h
-${BANG_INCLUDE_DIR}/Flags.h
-${BANG_INCLUDE_DIR}/List.h
-${BANG_INCLUDE_DIR}/Map.h
-${BANG_INCLUDE_DIR}/Set.h
-${BANG_INCLUDE_DIR}/TypeMap.h
 ${ENGINE_SRC_DIR}/DataStructures/String.cpp
 ${ENGINE_SRC_DIR}/Debug/Debug.cpp
 ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
@@ -144,7 +138,9 @@ macro(add_info_files)
 endmacro()
 file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag_g" "[^.]*.frag_pp"
                                "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
-                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat")
+                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
+                               "${BANG_INCLUDE_DIR}/*.h"
+                               "${BANG_INCLUDE_DIR}/*.tcc")
 set(OTHER_FILES
     README.md
     "${OTHER_FILES}"
@@ -153,8 +149,6 @@ add_info_files(${OTHER_FILES})
 
 # BangEngine Library
 set (ENGINE_SRC_FILES
-${BANG_INCLUDE_DIR}/GUID.h
-${BANG_INCLUDE_DIR}/IFocusListener.h
 ${ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${ENGINE_SRC_DIR}/Audio/AudioManager.cpp

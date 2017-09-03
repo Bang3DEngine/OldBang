@@ -37,11 +37,12 @@ make ${TARGETS} \
      VERBOSE=${VERBOSE} \
      -j${NUM_THREADS}
 
-EndHeader
-
 if [[ $? != 0 ]]
 then
 	Error "ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	EndHeader
 	exit 3
 fi
+
+EndHeader
 exit 0

@@ -31,7 +31,7 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> FindFiles(FindFlags findFlags,
+    List<Path> FindFiles(FindFlags findFlags = FindFlag::Default,
                          const List<String> &extensions = {}) const;
     List<Path> FindSubDirectories(FindFlags findFlags) const;
     List<Path> FindSubPaths(FindFlags findFlags) const;

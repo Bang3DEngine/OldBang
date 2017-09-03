@@ -41,6 +41,7 @@ private:
     Path c_projectRoot = Path::Empty;
 
     Paths();
+    void InitPaths(const Path &engineRootPath);
 
     static Paths* GetInstance();
 

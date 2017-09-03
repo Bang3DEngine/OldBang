@@ -224,8 +224,9 @@ String GL::GetProgramLinkErrorMsg(GLId programId)
     {
        char* errorLog = new char[errorLength];
        glGetProgramInfoLog(programId, errorLength, NULL, errorLog);
+       String error = String(errorLog);
        delete[] errorLog;
-       return String(errorLog);
+       return error;
     }
     return String();
 }

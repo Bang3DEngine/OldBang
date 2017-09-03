@@ -21,13 +21,15 @@
 
 Application* Application::s_appSingleton = nullptr;
 
-Application::Application(int argc, char **argv)
+Application::Application(int argc, char **argv, const Path &engineRootPath)
 {
     srand(time(NULL));
 
     Application::s_appSingleton = this;
 
-    m_paths              = new Paths();
+    m_paths = new Paths();
+    m_paths->InitPaths(engineRootPath);
+
     m_input              = new Input();
     m_time               = new Time();
     m_sceneManager       = new SceneManager();
@@ -70,7 +72,7 @@ int Application::MainLoop()
         // Lost events in between Update and Render will be delayed by Input.
         m_input->ProcessEnqueuedEvents();
         m_sceneManager->Update();
-        m_window->Render();
+        if (m_window) { m_window->Render(); }
 
         m_input->OnFrameFinished();
         m_time->OnFrameFinished();

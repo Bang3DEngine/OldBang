@@ -25,7 +25,7 @@ public:
     void SetDrawBuffers(const Array<GL::Attachment> &attachments) const;
     void SetReadBuffer(GL::Attachment attachment) const;
 
-    const Array<GL::Attachment>& GetCurrentDrawAttachmentIds() const;
+    const Array<GL::Attachment>& GetCurrentDrawAttachments() const;
 
     Color ReadColor(int x, int y, GL::Attachment attachment) const;
     void Resize(int width, int height);

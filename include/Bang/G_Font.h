@@ -23,14 +23,12 @@ public:
         int advance  = 0; // Distance to be moved in X to right when drawing the next character
     };
 
-    constexpr static int CharLoadSize = 128;
-
     G_Font();
     virtual ~G_Font();
 
 
     G_Font::GlyphMetrics GetCharacterMetrics(unsigned char c,
-                                                 int textSize = 1) const;
+                                             int textSize = 1) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
     G_Texture2D *GetAtlasTexture() const;

@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include "Bang/Bang.h"
+#include "Bang/Path.h"
 
 FORWARD class Time;
 FORWARD class Input;
@@ -20,7 +21,8 @@ FORWARD class ImportFilesManager;
 class Application
 {
 public:
-    Application(int argc, char **argv);
+    Application(int argc, char **argv,
+                const Path &engineRootPath = Path::Empty);
     virtual ~Application();
 
     virtual void CreateWindow();

@@ -41,6 +41,15 @@ void G_Texture2D::Resize(int width, int height)
     CreateEmpty(width, height);
 }
 
+void G_Texture2D::Fill(const Color &fillColor,
+                       int width, int height,
+                       bool genMipMaps)
+{
+    Array<Color> inputData = Array<Color>(width * height, fillColor);
+    Fill( RCAST<const Byte*>(inputData.Data()), width, height,
+          GL::ColorComp::RGBA, GL::DataType::Float, genMipMaps);
+}
+
 void G_Texture2D::Fill(const Byte *newData,
                        int width, int height,
                        GL::ColorComp inputDataColorComp,
