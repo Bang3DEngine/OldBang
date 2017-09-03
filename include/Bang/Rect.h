@@ -26,7 +26,7 @@ public:
         m_max = Vector2G<T>(r.GetMax());
     }
 
-    explicit RectG(T minx, T maxx, T miny, T maxy)
+    explicit RectG(T minx, T miny, T maxx, T maxy)
     {
         m_min = Vector2G<T>( Math::Min(minx, maxx), Math::Min(miny, maxy) );
         m_max = Vector2G<T>( Math::Max(minx, maxx), Math::Max(miny, maxy) );

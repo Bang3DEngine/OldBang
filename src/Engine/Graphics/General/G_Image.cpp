@@ -1,5 +1,6 @@
 #include "Bang/G_Image.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Debug.h"
 #include "Bang/ImageIO.h"
 #include "Bang/ImportFilesManager.h"
@@ -34,6 +35,8 @@ void G_Image::Create(int width, int height, const Color &backgroundColor)
 
 void G_Image::SetPixel(int x, int y, const Color& color)
 {
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
     const int coord = (y * GetWidth() + x) * 4;
     m_pixels[coord + 0] = SCAST<Byte>(color.r * 255);
     m_pixels[coord + 1] = SCAST<Byte>(color.g * 255);
@@ -41,12 +44,53 @@ void G_Image::SetPixel(int x, int y, const Color& color)
     m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
 }
 
+G_Image G_Image::GetSubImage(const Recti &subCoords) const
+{
+    Vector2i subSize = subCoords.GetSize();
+    G_Image subImage(subSize.x, subSize.y);
+    for (int y = 0; y < subSize.y; ++y)
+    {
+        for (int x = 0; x < subSize.x; ++x)
+        {
+            subImage.SetPixel(x, y, GetPixel(x + subCoords.GetMin().x,
+                                             y + subCoords.GetMin().y));
+        }
+    }
+    return subImage;
+}
+
+void G_Image::Copy(const G_Image &image, const Vector2i &pos)
+{
+    Copy(image, Recti(pos, pos + image.GetSize()));
+}
+
+void G_Image::Copy(const G_Image &image,
+                   const Recti &dstRect,
+                   ResizeMode resizeMode)
+{
+    G_Image resizedImage = image;
+
+    Vector2i dstSize = dstRect.GetSize();
+    resizedImage.Resize(dstSize, resizeMode);
+    for (int y = 0; y < dstSize.y; ++y)
+    {
+        for (int x = 0; x < dstSize.x; ++x)
+        {
+            SetPixel(dstRect.GetMin().x + x,
+                     dstRect.GetMin().y + y,
+                     resizedImage.GetPixel(x, y));
+        }
+    }
+}
+
 void G_Image::Copy(const G_Image &image,
                    const Recti &srcCopyRect,
                    const Recti &dstCopyRect,
                    ResizeMode resizeMode)
 {
-
+    G_Image subImageSrc = image.GetSubImage(srcCopyRect);
+    subImageSrc.Resize(dstCopyRect.GetSize(), resizeMode);
+    Copy(subImageSrc, dstCopyRect);
 }
 
 void G_Image::Resize(const Vector2i &newSize, ResizeMode resizeMode)
@@ -84,8 +128,6 @@ void G_Image::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
                 Vector2i oriBotRight(Math::Ceil(oriBotRightF.x),
                                      Math::Ceil(oriBotRightF.y));
 
-                // Debug_Log( Vector2(x,y) << " maps to: [" << oriTopLeft << ", "
-                //            << oriBotRight << "]");
                 newColor = Color::Zero;
                 for (int oriY = oriTopLeft.y; oriY < oriBotRight.y; ++oriY)
                 {
@@ -109,6 +151,8 @@ const Byte *G_Image::GetData() const { return &m_pixels[0]; }
 
 Color G_Image::GetPixel(int x, int y) const
 {
+    ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
+               "Pixel (" << x << ", " << y << ") out of bounds");
     const int coord = (y * GetWidth() + x) * 4;
     return Color(m_pixels[coord + 0] / 255.0f,
                  m_pixels[coord + 1] / 255.0f,

@@ -21,10 +21,15 @@ public:
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
+    G_Image GetSubImage(const Recti &subImageCoordsPx) const;
+    void Copy(const G_Image &image, const Vector2i& pos);
+    void Copy(const G_Image &image,
+              const Recti& dstRect,
+              ResizeMode resizeMode = ResizeMode::Linear);
     void Copy(const G_Image &image,
               const Recti& srcCopyRect,
               const Recti& dstCopyRect,
-              ResizeMode resizeMode);
+              ResizeMode resizeMode = ResizeMode::Linear);
 
     void Resize(const Vector2i &newSize,
                 ResizeMode resizeMode = ResizeMode::Linear);

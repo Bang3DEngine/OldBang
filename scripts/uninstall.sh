@@ -21,6 +21,7 @@ else
 
 	echo "Removing libBang.so from /usr/lib..."
 	rm /usr/lib/libBang.so
+	rm /usr/lib/libBangd.so
 fi
 
 EndHeader

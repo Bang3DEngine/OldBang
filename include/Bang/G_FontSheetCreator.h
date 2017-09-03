@@ -18,7 +18,7 @@ public:
     static bool LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
-                         G_Texture2D **resultTexture,
+                         G_Texture2D *resultTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs = nullptr,
                          Map<char, G_Font::GlyphMetrics> *resultMetrics = nullptr,
                          TTF_Font **fontFace = nullptr,
@@ -27,7 +27,7 @@ public:
 
     static G_Image PackImages(const Array<G_Image> &images,
                               int margin,
-                              Array<Vector2i> *imagesCoordsPx);
+                              Array<Recti> *imagesOutputRects);
 private:
     G_FontSheetCreator();
     virtual ~G_FontSheetCreator();

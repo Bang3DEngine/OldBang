@@ -16,10 +16,11 @@ G_Font::~G_Font()
 void G_Font::LoadFromTTF(const Path &ttfFilepath)
 {
     Free();
+    m_atlasTexture = new G_Texture2D();
     G_FontSheetCreator::LoadAtlasTexture(
         ttfFilepath,
         128,
-        &m_atlasTexture,
+        m_atlasTexture,
         &m_charUvsInAtlas,
         &m_charMetrics,
         &m_ttfFont);

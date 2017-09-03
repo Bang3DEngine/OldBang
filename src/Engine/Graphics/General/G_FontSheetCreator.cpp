@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#include "Bang/Rect.h"
 #include "Bang/Math.h"
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
@@ -37,7 +38,7 @@ bool G_FontSheetCreator::Init()
 bool G_FontSheetCreator::LoadAtlasTexture(
                          const Path &fontFilepath,
                          int glyphSizePx,
-                         G_Texture2D **atlasTexture,
+                         G_Texture2D *atlasTexture,
                          Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
                          Map<char, G_Font::GlyphMetrics> *resultMetrics,
                          TTF_Font **ttfFont,
@@ -69,62 +70,36 @@ bool G_FontSheetCreator::LoadAtlasTexture(
         charactersToLoadStr += "/\\$%&@\"'#¿?^";
     }
 
-    // Generate the atlas, adding each char in a simple grid
-    int numChars        = charactersToLoadStr.Size();
-    int charsPerRowCol  = Math::Sqrt(numChars) + 1;
-    int charInAtlasSize = glyphSizePx;
-    int margin          = 2 + extraMargin;
-    charInAtlasSize      = Math::Max(charInAtlasSize, TTF_FontLineSkip(font));
-    charInAtlasSize     += margin * 2;
-    int sideSize        = charsPerRowCol * charInAtlasSize;
-
-    Debug_Peek(charInAtlasSize);
-    Debug_Peek(TTF_FontLineSkip(font));
-    Debug_Peek(margin);
-    Debug_Peek(sideSize);
-
-    G_Image atlasImage;
-    atlasImage.Create(sideSize, sideSize, Color::Zero);
-    Vector2i penPosTopLeft(margin);
-    Vector2i minPixel( Math::Max<int>() );
-    Vector2i maxPixel( Math::Min<int>() );
-    for (int i = 0; i < numChars; ++i)
+    Array<G_Image> charImages;
+    for (const char c : charactersToLoadStr)
     {
-        const char c = charactersToLoadStr[i];
-
         // Get some metrics
         // These are measurements relative to the full tex quad (size x size)
-        G_Font::GlyphMetrics charMetrics;
 
         int xmin, xmax, ymin, ymax, advance;
         TTF_GlyphMetrics(font, c, &xmin, &xmax, &ymin, &ymax, &advance);
+
+        G_Font::GlyphMetrics charMetrics;
         charMetrics.size    = Vector2i((xmax - xmin), (ymax - ymin));
         charMetrics.bearing = Vector2i(xmin, ymax);
         charMetrics.advance = advance;
         if (resultMetrics) { resultMetrics->Add(c, charMetrics); }
 
-        Vector2i localMinPixel( Math::Max<int>() );
-        Vector2i localMaxPixel( Math::Min<int>() );
         if (charMetrics.size.x > 0 && charMetrics.size.y > 0)
         {
-            if (penPosTopLeft.x + glyphSizePx + margin >= sideSize)
-            {
-                penPosTopLeft.x = margin;       // Go to next line
-                penPosTopLeft.y += glyphSizePx + margin * 2;
-            }
+            Vector2i localMinPixel(Math::Max<int>());
+            Vector2i localMaxPixel(Math::Min<int>());
+
             // Create bitmap
-            // SDL_Surface *charBitmap = TTF_RenderGlyph_Solid(font, c, WhiteColor);
-            // Uint8 *charPixels = SCAST<Uint8*>(charBitmap->pixels);
             SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(font, c,
                                                               WhiteColor);
             SDL_PixelFormat *fmt = charBitmap->format;
             Uint32 *charPixels = SCAST<Uint32*>(charBitmap->pixels);
+            G_Image charImage(charBitmap->w, charBitmap->h);
             for(int y = 0; y < charBitmap->h; ++y)
             {
                 for(int x = 0; x < charBitmap->w; ++x)
                 {
-                    // Uint8 colorIdx = charPixels[y * charBitmap->w + x];
-                    // SDL_Color color = charBitmap->format->palette->colors[colorIdx];
                     Uint32 color32 = charPixels[y * charBitmap->w + x];
                     Uint32 alpha = ((color32 & fmt->Amask) >> fmt->Ashift)
                                     << fmt->Aloss;
@@ -132,61 +107,60 @@ bool G_FontSheetCreator::LoadAtlasTexture(
                     pxColor.a = (alpha / 255.0f);
                     if (pxColor.a > 0.0f)
                     {
-                        const Vector2i xy = penPosTopLeft + Vector2i(x,y);
+                        const Vector2i xy(x,y);
                         localMinPixel = Vector2i::Min(localMinPixel, xy);
                         localMaxPixel = Vector2i::Max(localMaxPixel, xy);
                     }
-                    atlasImage.SetPixel(penPosTopLeft.x + x,
-                                        penPosTopLeft.y + y,
-                                        pxColor);
+                    charImage.SetPixel(x, y, pxColor);
                 }
             }
+
+            Vector2i actualCharSize = localMaxPixel - localMinPixel;
+
+            G_Image fittedCharImage(actualCharSize.x, actualCharSize.y);
+            fittedCharImage.Copy(charImage,
+                                 Recti(localMinPixel, localMaxPixel),
+                                 Recti(Vector2i::Zero, actualCharSize));
+            // fittedCharImage.SaveToFile( Path("Char_" + String(int(c)) + ".png"));
+            charImages.PushBack(fittedCharImage);
             SDL_FreeSurface(charBitmap);
         }
-
-        penPosTopLeft.x = localMaxPixel.x + margin * 2;
-
-        Vector2i securityOffset(3);
-        localMinPixel -= securityOffset;
-        localMaxPixel += securityOffset;
-
-        Vector2 uvMin = Vector2(localMinPixel) / Vector2(atlasImage.GetSize());
-        Vector2 uvMax = Vector2(localMaxPixel) / Vector2(atlasImage.GetSize());
-        uvMin.y       = 1.0 - uvMin.y;
-        uvMax.y       = 1.0 - uvMax.y;
-        if (c == ' ') { uvMin = uvMax = Vector2::Zero; }
-        if (charAtlasUvs) { charAtlasUvs->Add(c, std::make_pair(uvMin, uvMax) ); }
-
-        minPixel = Vector2i::Min(minPixel, localMinPixel);
-        maxPixel = Vector2i::Max(maxPixel, localMaxPixel);
     }
 
-    minPixel -= margin;
-    maxPixel += margin;
-
     // Resize the atlas to fit only the used area
-    Vector2i fittedSize = maxPixel - minPixel;
-    G_Image fittedAtlasImage;
-    fittedAtlasImage.Create(fittedSize.x, fittedSize.y, Color::Zero);
-    for(int y = 0; y < fittedSize.y; ++y)
+    Array<Recti> packedRects;
+    G_Image atlasImage = G_FontSheetCreator::PackImages(charImages,
+                                                        2 + extraMargin,
+                                                        &packedRects);
+    // atlasImage.SaveToFile(Path("font.png"));
+
+    if (charAtlasUvs)
     {
-        for(int x = 0; x < fittedSize.x; ++x)
+        for (int i = 0; i < packedRects.Size(); ++i)
         {
-            Vector2i originalXY = minPixel + Vector2i(x,y);
-            fittedAtlasImage.SetPixel(x, y, atlasImage.GetPixel(originalXY.x,
-                                                                originalXY.y));
+            const Recti &packedRect = packedRects[i];
+            Vector2 uvMin = Vector2(packedRect.GetMin()) /
+                            Vector2(atlasImage.GetSize());
+            Vector2 uvMax = Vector2(packedRect.GetMax()) /
+                            Vector2(atlasImage.GetSize());
+            uvMin.y       = 1.0 - uvMin.y;
+            uvMax.y       = 1.0 - uvMax.y;
+            charAtlasUvs->Add(charactersToLoadStr[i],
+                              std::make_pair(uvMin, uvMax) );
         }
     }
 
-    GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
-    *atlasTexture = new G_Texture2D();
-    (*atlasTexture)->LoadFromImage(fittedAtlasImage);
-    (*atlasTexture)->SetWrapMode(GL::WrapMode::ClampToEdge);
-    (*atlasTexture)->SetFilterMode(GL::FilterMode::Trilinear_LL);
-    (*atlasTexture)->SetAlphaCutoff(0.0f);
-    (*atlasTexture)->Bind();
-    (*atlasTexture)->GenerateMipMaps();
-    (*atlasTexture)->UnBind();
+    if (atlasTexture)
+    {
+        GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
+        atlasTexture->LoadFromImage(atlasImage);
+        atlasTexture->SetWrapMode(GL::WrapMode::ClampToEdge);
+        atlasTexture->SetFilterMode(GL::FilterMode::Trilinear_LL);
+        atlasTexture->SetAlphaCutoff(0.0f);
+        atlasTexture->Bind();
+        atlasTexture->GenerateMipMaps();
+        atlasTexture->UnBind();
+    }
 
     if (ttfFont) { *ttfFont = font; }
 
@@ -195,7 +169,61 @@ bool G_FontSheetCreator::LoadAtlasTexture(
 
 G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
                                        int margin,
-                                       Array<Vector2i> *imagesCoordsPx)
+                                       Array<Recti> *imagesOutputRects)
 {
+    int maxImgWidth  = 0;
+    int maxImgHeight = 0;
+    for (const G_Image &img : images)
+    {
+        maxImgWidth  = Math::Max(maxImgWidth,  img.GetWidth());
+        maxImgHeight = Math::Max(maxImgHeight, img.GetHeight());
+    }
 
+    int imagesPerSide = Math::Sqrt(images.Size());
+    int totalWidth  = (imagesPerSide+1) * (maxImgWidth  + (margin * 2));
+    int totalHeight = (imagesPerSide+1) * (maxImgHeight + (margin * 2));
+
+    G_Image result;
+    result.Create(totalWidth, totalHeight, Color::Zero);
+
+    Vector2i penPosTopLeft(0, margin);
+    for (const G_Image &img : images)
+    {
+        if (penPosTopLeft.x + img.GetWidth() + margin * 2 > totalWidth)
+        {
+            penPosTopLeft.x = 0; // Go to next line
+            penPosTopLeft.y += maxImgHeight + margin * 2;
+        }
+        penPosTopLeft.x += margin;
+
+        Recti imgRect = Recti(penPosTopLeft, penPosTopLeft + img.GetSize());
+        imagesOutputRects->PushBack(imgRect);
+        result.Copy(img, imgRect);
+
+        penPosTopLeft.x += img.GetWidth() + margin;
+    }
+
+    Vector2i minPixel(Math::Max<int>());
+    Vector2i maxPixel(Math::Min<int>());
+    for (int y = 0; y < result.GetHeight(); ++y)
+    {
+        for (int x = 0; x < result.GetWidth(); ++x)
+        {
+            if ( result.GetPixel(x,y).a > 0 )
+            {
+                Vector2i xy(x,y);
+                minPixel = Vector2i::Min(minPixel, xy);
+                maxPixel = Vector2i::Max(maxPixel, xy);
+            }
+        }
+    }
+
+    Vector2i fittedSize = (maxPixel - minPixel);
+    Vector2i fittedSizeMargined = fittedSize +Vector2i(margin * 2);
+    G_Image fittedResult(fittedSizeMargined.x, fittedSizeMargined.y);
+    fittedResult.Copy(result, Recti(minPixel, maxPixel),
+                      Vector2i(margin) + Recti(Vector2i::Zero, fittedSize));
+
+    return fittedResult;
 }
+

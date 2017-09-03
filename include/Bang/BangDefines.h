@@ -4,14 +4,24 @@
 #include <iostream>
 #include <type_traits>
 
+#ifndef NDEBUG
+#define DEBUG
+#endif
+
 // Asserts ==============================================
 #define ENSURE(mustBeTrue) do{\
     if (!(mustBeTrue)) { return; }\
 } while (false)
 
-#define ASSERT(assertion) if ( !(assertion) ) {\
-  std::cerr << "ASSERTION FAILED: '" << #assertion << "' failed!"; abort(); \
+#ifdef DEBUG
+#define ASSERT_MSG(assertion, msg) if ( !(assertion) ) {\
+  std::cerr << "ASSERTION FAILED: '" << msg; abort(); \
 }
+#else
+#define ASSERT_MSG(assertion, msg) // No Assert in release
+#endif
+
+#define ASSERT(assertion) ASSERT_MSG(assertion, #assertion)
 // =====================================================
 
 

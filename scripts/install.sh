@@ -3,12 +3,14 @@
 cd "$(dirname "$0")"
 cd .. # Go to root directory
 
-source "scripts/captureArgs.sh"
+source "scripts/messages.sh"
 
-./scripts/compileLibs.sh ${RELEASE_OR_DEBUG} $*
+./scripts/compileLibs.sh Debug $*
+./scripts/compileLibs.sh Release $*
 if [ $? != 0 ] ; then exit 1 ; fi
 
-./scripts/compileExecutables.sh ${RELEASE_OR_DEBUG} $*
+./scripts/compileExecutables.sh Debug $*
+./scripts/compileExecutables.sh Release $*
 if [ $? != 0 ] ; then exit 1 ; fi
 
 echo;echo
@@ -22,7 +24,8 @@ echo "Copying include's into /usr/include..."
 cp -r include /usr/include
 
 echo "Copying libBang.so into /usr/lib..."
-cp bin/${RELEASE_OR_DEBUG}/lib/libBang.so /usr/lib
+cp bin/Release/lib/libBang.so /usr/lib/libBang.so
+cp bin/Debug/lib/libBang.so /usr/lib/libBangd.so
 if [ $? != 0 ] ; then 
 Error "Could not install. Need sudo! Please rerun with sudo!"
 else
