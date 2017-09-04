@@ -446,25 +446,24 @@ void GL::TexParameterWrap(GL::TextureTarget textureTarget,
 void GL::GetTexImage(GL::TextureTarget textureTarget,
                      Byte *pixels)
 {
-    GL::ClearError();
-
-    glGetTexImage(GLCAST(textureTarget),
-                  0,
-                  GLCAST(GL::ColorComp::RGBA),
-                  GLCAST(GL::DataType::UnsignedByte),
-                  SCAST<void*>(pixels));
-
-    GL_CheckError();
+    GL::GetTexImage(textureTarget, GL::DataType::UnsignedByte, pixels);
 }
 
 void GL::GetTexImage(GL::TextureTarget textureTarget, float *pixels)
+{
+    GL::GetTexImage(textureTarget, GL::DataType::Float, pixels);
+}
+
+void GL::GetTexImage(GL::TextureTarget textureTarget,
+                     GL::DataType dataType,
+                     void *pixels)
 {
     GL::ClearError();
 
     glGetTexImage(GLCAST(textureTarget),
                   0,
                   GLCAST(GL::ColorComp::RGBA),
-                  GLCAST(GL::DataType::Float),
+                  GLCAST(dataType),
                   SCAST<void*>(pixels));
 
     GL_CheckError();

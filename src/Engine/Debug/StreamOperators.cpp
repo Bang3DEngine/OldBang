@@ -32,14 +32,14 @@ std::ostream &operator<<(std::ostream &log, const IToString &v)
     return log;
 }
 
-std::istringstream &operator>>(std::istringstream &is, Color &c)
+std::istream &operator>>(std::istream &is, Color &c)
 {
     char _;
     is >> _ >> c.r >> _ >> c.g >> _ >> c.b >> _ >> c.a >> _;
     return is;
 }
 
-std::istringstream &operator>>(std::istringstream &is, Path &p)
+std::istream &operator>>(std::istream &is, Path &p)
 {
     String str;
     is >> str;

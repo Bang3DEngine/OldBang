@@ -21,9 +21,9 @@ FORWARD_T  class Matrix4G;
 FORWARD    class IToString;
 FORWARD_T  class QuaternionG;
 
-std::istringstream& operator>>(std::istringstream& is, GUID &guid);
-std::istringstream& operator>>(std::istringstream& is, Path &p);
-std::istringstream& operator>>(std::istringstream& is, Color &c);
+std::istream& operator>>(std::istream& is, GUID &guid);
+std::istream& operator>>(std::istream& is, Path &p);
+std::istream& operator>>(std::istream& is, Color &c);
 std::ostream& operator<<(std::ostream &log, const Color &v);
 std::ostream& operator<<(std::ostream &log, const IToString &v);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
@@ -182,7 +182,7 @@ std::ostream &operator<<(std::ostream &log, const Set<T> &m)
 
 // Templated istream operators
 template<class T>
-std::istringstream& operator>>(std::istringstream &is, Vector2G<T>& v)
+std::istream& operator>>(std::istream &is, Vector2G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _;
@@ -190,7 +190,7 @@ std::istringstream& operator>>(std::istringstream &is, Vector2G<T>& v)
 }
 
 template<class T>
-std::istringstream& operator>>(std::istringstream &is, Vector3G<T>& v)
+std::istream& operator>>(std::istream &is, Vector3G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _ >> v.z >> _;
@@ -198,15 +198,26 @@ std::istringstream& operator>>(std::istringstream &is, Vector3G<T>& v)
 }
 
 template<class T>
-std::istringstream& operator>>(std::istringstream &is, Vector4G<T>& v)
+std::istream& operator>>(std::istream &is, Vector4G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _ >> v.z >> _ >> v.w >> _;
     return is;
 }
 
+template<class T>
+std::istream& operator>>(std::istream &is, RectG<T>& r)
+{
+    char _;
+    Vector2G<T> minv, maxv;
+    is >> _ >> minv >> _ >> maxv >> _;
+    r.SetMin(minv);
+    r.SetMax(maxv);
+    return is;
+}
+
 template<class EnumClass, class=TT_ENUM(EnumClass)>
-std::istringstream& operator>>(std::istringstream &is, EnumClass& e)
+std::istream& operator>>(std::istream &is, EnumClass& e)
 {
     int x;
     is >> x;

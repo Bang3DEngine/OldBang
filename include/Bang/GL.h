@@ -330,6 +330,9 @@ public:
                             Byte *pixels);
     static void GetTexImage(GL::TextureTarget textureTarget,
                             float *pixels);
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            GL::DataType dataType,
+                            void *pixels);
     static int GetInteger(GL::Enum glEnum);
     static void GetInteger(GL::Enum glEnum, int *values);
     static bool GetBoolean(GL::Enum glEnum);

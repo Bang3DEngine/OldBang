@@ -148,7 +148,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     // Preprocess behaviours before
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
-        Path behaviourHeader = behaviourSourcePath.ChangeExtension("h");
+        Path behaviourHeader = behaviourSourcePath.WithExtension("h");
         BangPreprocessor::Preprocess(behaviourHeader);
     }
 

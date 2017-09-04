@@ -15,8 +15,7 @@ G_Texture::G_Texture(GL::TextureTarget texTarget) : G_Texture()
 
 G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
 {
-    m_width = t.m_width;
-    m_height = t.m_height;
+    m_size = Vector2i(t.GetWidth(), t.GetHeight());
     m_filterMode = t.m_filterMode;
     m_wrapMode = t.m_wrapMode;
     m_textureUnit = t.m_textureUnit;
@@ -65,12 +64,17 @@ void G_Texture::SetTextureUnit(int textureSlot)
 
 int G_Texture::GetWidth() const
 {
-    return m_width;
+    return m_size.x;
 }
 
 int G_Texture::GetHeight() const
 {
-    return m_height;
+    return m_size.y;
+}
+
+const Vector2i &G_Texture::GetSize() const
+{
+    return m_size;
 }
 
 GL::DataType G_Texture::GetInternalDataType() const
@@ -85,7 +89,12 @@ GL::ColorFormat G_Texture::GetInternalFormat() const
 
 uint G_Texture::GetBytesSize() const
 {
-    return m_width * m_height * GL::GetPixelBytesSize(m_internalFormat);
+    return GetWidth() * GetHeight() * GL::GetPixelBytesSize(m_internalFormat);
+}
+
+GL::TextureTarget G_Texture::GetTextureTarget() const
+{
+    return m_target;
 }
 
 GL::FilterMode G_Texture::GetFilterMode() const
@@ -108,6 +117,9 @@ void G_Texture::BindToTextureUnit(int textureUnit) const
     GL::ActiveTexture(GL_TEXTURE0 + textureUnit);
     Bind();
 }
+
+void G_Texture::SetWidth(int width) { m_size.x = width; }
+void G_Texture::SetHeight(int height) { m_size.y = height; }
 
 GL::BindTarget G_Texture::GetGLBindTarget() const
 {

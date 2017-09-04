@@ -57,8 +57,9 @@ public:
 
     bool IsHiddenFile() const;
 
-    Path ChangeHidden(bool hidden) const;
-    Path ChangeExtension(const String& extension) const;
+    Path WithHidden(bool hidden) const;
+    Path WithNameExt(const String& name, const String& extension = "") const;
+    Path WithExtension(const String& extension) const;
 
     // "*.jpg *.so.*"
     bool HasExtension(const String &extension) const;

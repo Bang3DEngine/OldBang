@@ -67,7 +67,7 @@ void UITextRenderer::Bind() const
 
     const int textSize = GetTextSize();
 
-    float blurriness = GetBlurriness() * (1.4142f / textSize);
+    float blurriness = GetBlurriness() * 50.0f * (1.4142f / textSize);
     blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
     GL::Uniform("B_textBlurriness", blurriness,  false);
 

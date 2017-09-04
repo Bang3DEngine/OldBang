@@ -195,7 +195,7 @@ Rectf TextFormatter::GetCharRect
     if (!font) { return Rectf::Zero; }
 
     Font::GlyphMetrics
-    charMetrics = font->GetCharacterMetrics(c, textSizePx);
+    charMetrics = font->GetCharMetrics(c, textSizePx);
 
     Vector2i charMin(charMetrics.bearing.x,
                      charMetrics.bearing.y - charMetrics.size.y);
@@ -228,7 +228,7 @@ float TextFormatter::GetCharAdvanceXNDC(const Font *font,
     if (advance <= 0)
     {
         const char c = content[currentCharIndex];
-        Font::GlyphMetrics charMetrics = font->GetCharacterMetrics(c, textSizePx);
+        Font::GlyphMetrics charMetrics = font->GetCharMetrics(c, textSizePx);
         advance = charMetrics.advance;
     }
 

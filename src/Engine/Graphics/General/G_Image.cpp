@@ -62,7 +62,7 @@ void G_ImageG<T>::Copy(const G_ImageG<T> &image, const Vector2i &pos)
 template<class T>
 void G_ImageG<T>::Copy(const G_ImageG<T> &image,
                        const Recti &dstRect,
-                       ResizeMode resizeMode)
+                       ImageResizeMode resizeMode)
 {
     G_ImageG<T> resizedImage = image;
 
@@ -83,7 +83,7 @@ template<class T>
 void G_ImageG<T>::Copy(const G_ImageG<T> &image,
                        const Recti &srcCopyRect,
                        const Recti &dstCopyRect,
-                       ResizeMode resizeMode)
+                       ImageResizeMode resizeMode)
 {
     G_ImageG<T> subImageSrc = image.GetSubImage(srcCopyRect);
     subImageSrc.Resize(dstCopyRect.GetSize(), resizeMode);
@@ -91,13 +91,14 @@ void G_ImageG<T>::Copy(const G_ImageG<T> &image,
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const Vector2i &newSize, ResizeMode resizeMode)
+void G_ImageG<T>::Resize(const Vector2i &newSize, ImageResizeMode resizeMode)
 {
     Resize(newSize.x, newSize.y, resizeMode);
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const int newWidth, int newHeight, ResizeMode resizeMode)
+void G_ImageG<T>::Resize(const int newWidth, int newHeight,
+                         ImageResizeMode resizeMode)
 {
     if (newWidth == GetWidth() && newHeight == GetHeight()) { return; }
 
@@ -112,7 +113,7 @@ void G_ImageG<T>::Resize(const int newWidth, int newHeight, ResizeMode resizeMod
         for (int x = 0; x < newWidth; ++x)
         {
             Color newColor;
-            if (resizeMode == ResizeMode::Nearest)
+            if (resizeMode == ImageResizeMode::Nearest)
             {
                 Vector2 oriCoord = Vector2(x,y) * sizeProp;
                 int nearestX = Math::Round(oriCoord.x);

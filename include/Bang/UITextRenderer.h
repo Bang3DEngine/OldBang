@@ -74,7 +74,7 @@ protected:
     Rect m_textRectNDC      = Rect::Zero;
 
     float m_blurriness      = 0.1f;
-    float m_alphaThreshold  = 0.7f;
+    float m_alphaThreshold  = 0.75f;
 
     bool m_hasChanged       = false;
 

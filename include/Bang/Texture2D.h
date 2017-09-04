@@ -20,6 +20,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
     // Resource
+    using G_Texture2D::Import;
     virtual void Import(const Path &imageFilepath) override;
 };
 

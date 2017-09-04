@@ -264,7 +264,7 @@ Path Path::AppendRaw(const String &str) const
 
 Path Path::AppendExtension(const String &extension) const
 {
-    if (HasExtension(extension)) { return Path(*this); }
+    if (HasExtension(extension) || extension.IsEmpty()) { return Path(*this); }
     return Path(GetAbsolute() + "." + extension);
 }
 
@@ -273,7 +273,7 @@ bool Path::IsHiddenFile() const
     return IsFile() && GetName().BeginsWith(".");
 }
 
-Path Path::ChangeHidden(bool hidden) const
+Path Path::WithHidden(bool hidden) const
 {
     String nameExt = GetNameExt();
     if ( hidden && !nameExt.BeginsWith(".")) { nameExt.Insert(0,"."); }
@@ -281,7 +281,12 @@ Path Path::ChangeHidden(bool hidden) const
     return GetDirectory().Append(nameExt);
 }
 
-Path Path::ChangeExtension(const String &extension) const
+Path Path::WithNameExt(const String &name, const String &extension) const
+{
+    return GetDirectory().Append(name).AppendExtension(extension);
+}
+
+Path Path::WithExtension(const String &extension) const
 {
     return Path( GetDirectory().Append(GetName())
                                .AppendExtension(extension) );

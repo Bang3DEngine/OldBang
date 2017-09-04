@@ -32,7 +32,7 @@ public:
         return String::ToString(m_guid);
     }
 
-    friend  std::istringstream &operator>>(std::istringstream &is, GUID &guid);
+    friend  std::istream &operator>>(std::istream &is, GUID &guid);
     friend bool operator==(const GUID &lhs, const GUID &rhs);
     friend bool operator!=(const GUID &lhs, const GUID &rhs);
     friend bool operator<(const GUID &lhs, const GUID &rhs);
@@ -41,7 +41,7 @@ private:
     GUIDType m_guid = GUID::EmptyGUID;
 };
 
-inline std::istringstream &operator>>(std::istringstream &is, GUID &guid)
+inline std::istream &operator>>(std::istream &is, GUID &guid)
 {
     is >> guid.m_guid;
     return is;

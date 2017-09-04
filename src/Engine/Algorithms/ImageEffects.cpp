@@ -76,7 +76,6 @@ void ImageEffects::Outline(const G_Image &imgBW,
                         if (imgBW.GetPixel(rx,ry) != Color::Zero)
                         {
                             isFrontier = true;
-                            // Debug_Log(currentColor << ", " << imgBW.GetPixel(rx,ry));
                         }
                     }
                 }

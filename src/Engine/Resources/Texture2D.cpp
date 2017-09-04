@@ -42,7 +42,7 @@ void Texture2D::ExportXML(XMLNode *xmlInfo) const
 void Texture2D::Import(const Path &imageFilepath)
 {
     G_Image *img = Resources::Load<G_Image>(imageFilepath);
-    if (img) { LoadFromImage(*img); }
+    if (img) { Import(*img); }
 
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
     ImportXMLFromFile(importFilepath);

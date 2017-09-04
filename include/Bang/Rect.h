@@ -38,6 +38,9 @@ public:
         m_max = Vector2G<T>::Max(p1, p2);
     }
 
+    void SetMin(const Vector2G<T> &minv) { m_min = minv; }
+    void SetMax(const Vector2G<T> &maxv) { m_max = maxv; }
+
     Vector2G<T> GetMinXMaxY() const
     {
         return Vector2G<T>(m_min.x, m_max.y);

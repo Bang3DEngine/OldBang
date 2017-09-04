@@ -7,14 +7,14 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
+enum class ImageResizeMode {Nearest, Linear};
+
 template<class T>
 class G_ImageG : public Resource
 {
     RESOURCE(G_ImageG)
 
 public:
-    enum class ResizeMode {Nearest, Linear};
-
     G_ImageG();
     G_ImageG(int width, int height);
 
@@ -26,16 +26,16 @@ public:
     void Copy(const G_ImageG<T> &image, const Vector2i& pos);
     void Copy(const G_ImageG<T> &image,
               const Recti& dstRect,
-              ResizeMode resizeMode = ResizeMode::Linear);
+              ImageResizeMode resizeMode = ImageResizeMode::Linear);
     void Copy(const G_ImageG<T> &image,
               const Recti& srcCopyRect,
               const Recti& dstCopyRect,
-              ResizeMode resizeMode = ResizeMode::Linear);
+              ImageResizeMode resizeMode = ImageResizeMode::Linear);
 
     void Resize(const Vector2i &newSize,
-                ResizeMode resizeMode = ResizeMode::Linear);
+                ImageResizeMode resizeMode = ImageResizeMode::Linear);
     void Resize(const int newWidth, int newHeight,
-                ResizeMode resizeMode = ResizeMode::Linear);
+                ImageResizeMode resizeMode = ImageResizeMode::Linear);
 
     T* GetData();
     const T* GetData() const;

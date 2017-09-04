@@ -11,16 +11,16 @@ G_Texture2D::~G_Texture2D()
 {
 }
 
-void G_Texture2D::LoadFromImage(const G_ImageG<Byte> &image)
+void G_Texture2D::Import(const G_ImageG<Byte> &image)
 {
     if (image.GetData())
     {
-        m_width  = image.GetWidth();
-        m_height = image.GetHeight();
+        SetWidth(image.GetWidth());
+        SetHeight(image.GetHeight());
 
         SetInternalFormat(GL::ColorFormat::RGBA_UByte8);
         Fill(image.GetData(),
-             m_width, m_height,
+             GetWidth(), GetHeight(),
              GL::ColorComp::RGBA,
              GL::DataType::UnsignedByte);
     }
@@ -56,15 +56,15 @@ void G_Texture2D::Fill(const Byte *newData,
                        GL::DataType inputDataType,
                        bool genMipMaps)
 {
-    m_width = width;
-    m_height = height;
+    SetWidth(width);
+    SetHeight(height);
 
     Bind();
-    GL::TexImage2D(m_target, GetWidth(), GetHeight(),
+    GL::TexImage2D(GetTextureTarget(), GetWidth(), GetHeight(),
                    GetInternalFormat(),
                    inputDataColorComp, inputDataType,
                    newData);
-    if (genMipMaps && m_width > 0 && m_height > 0)
+    if (genMipMaps && GetWidth() > 0 && GetHeight() > 0)
     {
         GenerateMipMaps();
     }
@@ -74,7 +74,7 @@ void G_Texture2D::Fill(const Byte *newData,
 void G_Texture2D::GenerateMipMaps() const
 {
     ASSERT(GL::IsBound(this));
-    GL::GenerateMipMap( m_target );
+    GL::GenerateMipMap( GetTextureTarget() );
 }
 
 void G_Texture2D::SetAlphaCutoff(float alphaCutoff)

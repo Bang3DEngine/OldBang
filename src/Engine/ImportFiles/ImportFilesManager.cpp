@@ -128,7 +128,7 @@ Path ImportFilesManager::GetFilepath(const GUID &guid)
 
 Path ImportFilesManager::GetFilepath(const Path &importFilepath)
 {
-    Path filepath = importFilepath.ChangeHidden(false);
+    Path filepath = importFilepath.WithHidden(false);
 
     String strPath = filepath.GetAbsolute();
     if (strPath.BeginsWith(".")) { strPath.Remove(0, 0); }
@@ -145,7 +145,7 @@ Path ImportFilesManager::GetFilepath(const Path &importFilepath)
 
 Path ImportFilesManager::GetImportFilePath(const Path &filepath)
 {
-    return filepath.AppendExtension( GetImportExtension() ).ChangeHidden(true);
+    return filepath.AppendExtension( GetImportExtension() ).WithHidden(true);
 }
 
 const Path &ImportFilesManager::GetImportFilepath(const GUID &guid)

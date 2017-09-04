@@ -1,6 +1,9 @@
 #include "Bang/G_Font.h"
 
 #include "Bang/Path.h"
+#include "Bang/Rect.h"
+#include "Bang/Vector2.h"
+#include "Bang/XMLParser.h"
 #include "Bang/G_Texture2D.h"
 #include "Bang/G_FontSheetCreator.h"
 
@@ -13,32 +16,98 @@ G_Font::~G_Font()
     Free();
 }
 
-void G_Font::LoadFromTTF(const Path &ttfFilepath)
+void G_Font::Import(const Path &ttfFilepath)
 {
     Free();
+
+    m_ttfFont = TTF_OpenFont(ttfFilepath.GetAbsolute().ToCString(),
+                             GetLoadSize());
+    if (!GetTTFFont())
+    {
+        Debug_Error("Error opening font " << ttfFilepath << ". " <<
+                    TTF_GetError());
+        return;
+    }
+
+    String fileName = ttfFilepath.GetName() + "_DistField";
+    Path distFieldImgPath = ttfFilepath.WithNameExt(fileName, "png");
+    Path distFieldInfoPath = ttfFilepath.WithNameExt(fileName, "info");
+
+    String loadedChars = "";
+    Array<Recti> charPxRects;
     m_atlasTexture = new G_Texture2D();
-    G_FontSheetCreator::LoadAtlasTexture(
-        ttfFilepath,
-        128,
-        m_atlasTexture,
-        &m_charUvsInAtlas,
-        &m_charMetrics,
-        &m_ttfFont);
+    if (distFieldImgPath.IsFile() && distFieldInfoPath.IsFile())
+    {
+        G_Image distFieldImg;
+        distFieldImg.Import(distFieldImgPath);
+        m_atlasTexture->Import(distFieldImg);
+        XMLNode distFieldInfo = XMLParser::FromFile(distFieldInfoPath);
+        for (int i = 0; i < 255; ++i)
+        {
+            String attrName = "CharRect_" + String(i);
+            if (distFieldInfo.Contains(attrName))
+            {
+                loadedChars.Append( String(char(i)) );
+                Recti charPxRect = distFieldInfo.Get<Recti>(attrName);
+                charPxRects.PushBack(charPxRect);
+            }
+        }
+    }
+    else
+    {
+        loadedChars += "abcdefghijklmnopqrstuvwxyz";
+        loadedChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+        loadedChars += "0123456789()[]{}*.,;:-_=!<>+";
+        loadedChars += "/\\$%&@\"'#¿?^";
+        G_FontSheetCreator::LoadAtlasTexture(m_ttfFont, m_atlasTexture,
+                                             loadedChars, &charPxRects);
+    }
+
+    for (int i = 0; i < loadedChars.Size(); ++i)
+    {
+        const char c = loadedChars[i];
+        Recti charPxRect = charPxRects[i];
+        Vector2 uvMin = Vector2(charPxRect.GetMin()) /
+                             Vector2(m_atlasTexture->GetSize());
+        Vector2 uvMax = Vector2(charPxRect.GetMax()) /
+                             Vector2(m_atlasTexture->GetSize());
+        uvMin.y       = 1.0 - uvMin.y;
+        uvMax.y       = 1.0 - uvMax.y;
+        m_charUvsInAtlas.Add(c, std::make_pair(uvMin, uvMax));
+    }
 }
 
-G_Font::GlyphMetrics G_Font::GetCharacterMetrics(unsigned char c,
-                                                     int textSize) const
+void G_Font::SetLoadSize(int loadSize)
 {
-    if (c == ' ') { return GetCharacterMetrics('A', textSize); }
+    m_ttfLoadSize = loadSize;
+}
 
-    G_Font::GlyphMetrics cgm;
-    if (m_charMetrics.ContainsKey(c)) { cgm = m_charMetrics.Get(c); }
+const int G_Font::GetLoadSize() const
+{
+    return m_ttfLoadSize;
+}
 
-    cgm.size     = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.size), textSize));
-    cgm.bearing  = SCAST<Vector2i>(ScaleMagnitude(Vector2f(cgm.bearing), textSize));
-    cgm.advance  = SCAST<int>(ScaleMagnitude(cgm.advance, textSize));
+G_Font::GlyphMetrics G_Font::GetCharMetrics(unsigned char c, int fontSize) const
+{
+    G_Font::GlyphMetrics charMetrics;
+    if (!m_ttfFont) { return charMetrics; }
 
-    return cgm;
+    int xmin, xmax, ymin, ymax, advance;
+    TTF_GlyphMetrics(m_ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);
+    charMetrics.size    = Vector2i((xmax - xmin), (ymax - ymin));
+    charMetrics.bearing = Vector2i(xmin, ymax);
+    charMetrics.advance = advance;
+
+    charMetrics.size = SCAST<Vector2i>(
+                                ScaleMagnitude(Vector2f(charMetrics.size),
+                                                        fontSize));
+    charMetrics.bearing = SCAST<Vector2i>(
+                                ScaleMagnitude(Vector2f(charMetrics.bearing),
+                                                        fontSize));
+    charMetrics.advance = SCAST<int>(ScaleMagnitude(charMetrics.advance,
+                                                    fontSize));
+
+    return charMetrics;
 }
 
 Vector2 G_Font::GetCharMinUvInAtlas(char c) const
@@ -53,6 +122,11 @@ Vector2 G_Font::GetCharMaxUvInAtlas(char c) const
     return m_charUvsInAtlas.Get(c).second;
 }
 
+bool G_Font::HasCharacter(char c) const
+{
+    return GetTTFFont() && TTF_GlyphIsProvided(GetTTFFont(), c);
+}
+
 G_Texture2D *G_Font::GetAtlasTexture() const
 {
     return m_atlasTexture;
@@ -60,19 +134,23 @@ G_Texture2D *G_Font::GetAtlasTexture() const
 
 int G_Font::GetKerningXPx(char leftChar, char rightChar) const
 {
-    if (!m_ttfFont || !TTF_GetFontKerning(m_ttfFont)) { return -1; }
-    return TTF_GetFontKerningSizeGlyphs(m_ttfFont, leftChar, rightChar);
+    if (!GetTTFFont() || !TTF_GetFontKerning(GetTTFFont())) { return -1; }
+    return TTF_GetFontKerningSizeGlyphs(GetTTFFont(), leftChar, rightChar);
 }
 
 int G_Font::GetLineSkipPx() const
 {
-    if (!m_ttfFont) { return 0; }
-    return TTF_FontLineSkip(m_ttfFont);
+    if (!GetTTFFont()) { return 0; }
+    return TTF_FontLineSkip(GetTTFFont());
+}
+
+TTF_Font *G_Font::GetTTFFont() const
+{
+    return m_ttfFont;
 }
 
 void G_Font::Free()
 {
-    m_charMetrics.Clear();
     m_charUvsInAtlas.Clear();
-    if (m_ttfFont) { TTF_CloseFont(m_ttfFont); }
+    if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }

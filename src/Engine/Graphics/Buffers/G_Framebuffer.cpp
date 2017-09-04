@@ -27,28 +27,29 @@ G_Framebuffer::~G_Framebuffer()
 void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
                                           GL::ColorFormat texFormat)
 {
-    Bind();
+    ASSERT(GL::IsBound(this));
     GL::ClearError();
     G_RenderTexture *tex = new G_RenderTexture();
     tex->SetInternalFormat(texFormat);
     tex->Bind();
     tex->CreateEmpty(GetWidth(), GetHeight());
+    GL_CheckError();
 
     m_colorAttachmentIds.PushBack(attachment);
     m_attachmentId_To_Texture.Add(attachment, tex);
 
+    GL::ClearError();
     GL::FramebufferTexture2D(GL::FramebufferTarget::ReadDraw,
                              attachment,
                              GL::TextureTarget::Texture2D,
                              tex->GetGLId());
     GL::CheckFramebufferError();
     tex->UnBind();
-    UnBind();
 }
 
 void G_Framebuffer::CreateDepthRenderbufferAttachment()
 {
-    Bind();
+    ASSERT(GL::IsBound(this));
     GL::GenRenderBuffers(1, &m_depthRenderBufferId);
     GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer,
                          m_depthRenderBufferId);
@@ -61,7 +62,6 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
                                 m_depthRenderBufferId);
     GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer, 0);
     GL::CheckFramebufferError();
-    UnBind();
 }
 
 G_RenderTexture *G_Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
@@ -177,7 +177,7 @@ GL::BindTarget G_Framebuffer::GetGLBindTarget() const
 void G_Framebuffer::Bind() const
 {
     GL::Bind(this);
-    GL::SetViewport(0, 0, m_width, m_height);
+    GL::SetViewport(0, 0, GetWidth(), GetHeight());
 }
 void G_Framebuffer::UnBind() const
 {

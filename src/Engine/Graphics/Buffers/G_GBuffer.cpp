@@ -9,6 +9,7 @@
 
 G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
 {
+    Bind();
     CreateColorAttachment(AttNormalDepth,
                           GL::ColorFormat::RGBA_Float16);
     CreateColorAttachment(AttDiffuse,
@@ -20,6 +21,7 @@ G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
     CreateColorAttachment(AttColorRead,
                           GL::ColorFormat::RGBA_UByte8);
     CreateDepthRenderbufferAttachment();
+    UnBind();
 
     m_normalTexture    = GetAttachmentTexture(AttNormalDepth);
     m_diffuseTexture   = GetAttachmentTexture(AttDiffuse);

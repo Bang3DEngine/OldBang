@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 
+#include "Bang/Vector2.h"
 #include "Bang/GLObject.h"
 
 class G_Texture : public GLObject
@@ -25,6 +26,7 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
+    const Vector2i& GetSize() const;
     GL::FilterMode GetFilterMode() const;
     GL::WrapMode GetWrapMode() const;
     int GetTextureUnit() const;
@@ -33,12 +35,16 @@ public:
     GL::ColorFormat GetInternalFormat() const;
     uint GetBytesSize() const;
 
+    GL::TextureTarget GetTextureTarget() const;
     GL::BindTarget GetGLBindTarget() const override;
     void BindToTextureUnit(int textureUnit) const;
 
 protected:
-    int m_width = 0;
-    int m_height = 0;
+    void SetWidth(int width);
+    void SetHeight(int height);
+
+private:
+    Vector2i m_size = Vector2i::Zero;
 
     GL::FilterMode m_filterMode = GL::FilterMode::Nearest;
     GL::WrapMode m_wrapMode     = GL::WrapMode::Repeat;

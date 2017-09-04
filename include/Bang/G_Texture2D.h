@@ -10,7 +10,7 @@ public:
     G_Texture2D();
     virtual ~G_Texture2D();
 
-    void LoadFromImage(const G_ImageG<Byte> &image);
+    void Import(const G_ImageG<Byte> &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const Color &fillColor,
@@ -30,7 +30,10 @@ public:
         const int numComps = GL::GetNumComponents(GetInternalFormat());
         T *pixels = new T[width * height * numComps];
 
-        Bind(); GL::GetTexImage(m_target, pixels); UnBind();
+        GLId prevBound = GL::GetBoundId(GL::BindTarget::Texture2D);
+        Bind();
+        GL::GetTexImage(GetTextureTarget(), pixels);
+        GL::Bind(GL::BindTarget::Texture2D, prevBound);
 
         G_ImageG<T> img(width, height);
         for (int y = 0; y < height; ++y)

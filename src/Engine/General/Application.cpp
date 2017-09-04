@@ -2,6 +2,8 @@
 
 #include <thread>
 
+#include <SDL2/SDL_ttf.h>
+
 #include "Bang/Math.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
@@ -41,6 +43,12 @@ Application::Application(int argc, char **argv, const Path &engineRootPath)
 
     ImportFilesManager::CreateMissingProjectImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
+
+    if ( TTF_Init() )
+    {
+        Debug_Error("Could not init FreeType library: Error(" <<
+                    TTF_GetError() <<  ")");
+    }
 }
 
 Application::~Application()
@@ -53,6 +61,8 @@ Application::~Application()
     delete m_sceneManager;
     delete m_behaviourManager;
     delete m_resources;
+
+    TTF_Quit();
 }
 
 void Application::CreateWindow()

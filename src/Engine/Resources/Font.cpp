@@ -15,7 +15,7 @@ Font::~Font()
 void Font::Import(const Path &ttfFilepath)
 {
     m_ttfFilepath = ttfFilepath;
-    G_Font::LoadFromTTF(ttfFilepath);
+    G_Font::Import(ttfFilepath);
 }
 
 Path Font::GetTTFFilepath() const

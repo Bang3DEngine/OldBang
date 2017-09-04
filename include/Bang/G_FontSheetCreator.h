@@ -15,27 +15,18 @@ FORWARD class G_Texture2D;
 class G_FontSheetCreator
 {
 public:
-    static bool LoadAtlasTexture(
-                         const Path &fontFilepath,
-                         int glyphSizePx,
-                         G_Texture2D *resultTexture,
-                         Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs = nullptr,
-                         Map<char, G_Font::GlyphMetrics> *resultMetrics = nullptr,
-                         TTF_Font **fontFace = nullptr,
-                         const String &charsToLoad = "",
-                         int extraMargin = 0);
+    static bool LoadAtlasTexture(TTF_Font *fontFace,
+                                 G_Texture2D *resultTexture,
+                                 const String &charsToLoad,
+                                 Array<Recti> *imagesOutputRects = nullptr,
+                                 int extraMargin = 0);
 
     static G_Image PackImages(const Array<G_Image> &images,
                               int margin,
-                              Array<Recti> *imagesOutputRects);
-private:
-    G_FontSheetCreator();
-    virtual ~G_FontSheetCreator();
+                              Array<Recti> *imagesOutputRects = nullptr,
+                              const Color &bgColor = Color::Zero);
 
-    static bool Init();
-
-    static G_FontSheetCreator *m_singleton;
-
+    G_FontSheetCreator() = delete;
 };
 
 #endif // FONTSHEETCREATOR_H
