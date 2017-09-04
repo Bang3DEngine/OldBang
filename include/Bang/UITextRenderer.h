@@ -40,7 +40,7 @@ public:
     void SetBlurriness(float blurriness);
     void SetContent(const String &content);
     void SetTextSize(int size);
-    void SetExtraSpacing(const Vector2i &extraSpacing);
+    void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
 
     Font* GetFont() const;
     bool IsKerning() const;
@@ -52,7 +52,7 @@ public:
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
     int GetTextSize() const;
-    Vector2i GetExtraSpacing() const;
+    Vector2 GetSpacingMultiplier() const;
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
@@ -66,14 +66,14 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    String m_content        = "";
-    Font *m_font            = nullptr;
-    int m_textSize          = 64;
-    Vector2i m_extraSpacing = Vector2i::Zero;
-    bool m_kerning          = false;
-    Rect m_textRectNDC      = Rect::Zero;
+    String m_content            = "";
+    Font *m_font                = nullptr;
+    int m_textSize              = 64;
+    Vector2 m_spacingMultiplier = Vector2::One;
+    bool m_kerning              = false;
+    Rect m_textRectNDC          = Rect::Zero;
 
-    float m_blurriness      = 0.1f;
+    float m_blurriness      = 5.0f;
     float m_alphaThreshold  = 0.8f;
 
     bool m_hasChanged       = false;

@@ -17,6 +17,12 @@ G_Framebuffer::G_Framebuffer(int width, int height) : m_width(width),
 
 G_Framebuffer::~G_Framebuffer()
 {
+    for (auto itPair : m_attachmentId_To_Texture)
+    {
+        Texture2D *tex = itPair.second;
+        delete tex;
+    }
+
     if (m_depthRenderBufferId != 0)
     {
         GL::DeleteRenderBuffers(1, &m_depthRenderBufferId);

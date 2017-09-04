@@ -13,7 +13,7 @@ Array<TextFormatter::CharRect>
                                             bool wrapping,
                                             int textSizePx,
                                             const RectTransform *rt,
-                                            const Vector2i &extraSpacingPx)
+                                            const Vector2 &spacingMultiplier)
 {
     if (content.IsEmpty()) { return Array<CharRect>(); }
 
@@ -27,12 +27,10 @@ Array<TextFormatter::CharRect>
         charRects.PushBack( CharRect(c, charRectLocalNDC) );
     }
 
-    Vector2f extraSpacingLocalNDC = rt->FromPixelsAmountToLocalNDC(extraSpacingPx);
-
     Array< Array<CharRect> >
     linedCharRects = SplitCharRectsInLines(content, font, charRects,
-                                           extraSpacingLocalNDC, rt, textSizePx,
-                                           wrapping);
+                                           spacingMultiplier, rt,
+                                           textSizePx, wrapping);
 
     TextFormatter::ApplyAlignment(&linedCharRects, hAlignment, vAlignment);
 
@@ -48,7 +46,7 @@ Array< Array<TextFormatter::CharRect> >
 TextFormatter::SplitCharRectsInLines(const String &content,
                                      const Font *font,
                                      const Array<CharRect> &charRects,
-                                     const Vector2f &extraSpacingLocalNDC,
+                                     const Vector2f &spacingMultiplier,
                                      const RectTransform *rt,
                                      int textSizePx,
                                      bool wrapping)
@@ -75,7 +73,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
                 // We have arrived to a space.
                 // Does the following word (after this space) still fits in
                 // the current line?
-                float tmpAdvX = penPosition.x + charAdvX + extraSpacingLocalNDC.x;
+                float tmpAdvX = penPosition.x + charAdvX * spacingMultiplier.x;
                 for (int j = i+1; j < content.Size(); ++j)
                 {
                     if (content[j] == ' ') { break; }
@@ -87,7 +85,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
                         lineBreak = true;
                         break;
                     }
-                    tmpAdvX += (jCharAdvX + extraSpacingLocalNDC.x);
+                    tmpAdvX += (jCharAdvX * spacingMultiplier.x);
                 }
             }
             lineBreak = lineBreak || content[i] == '\n';
@@ -97,7 +95,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
             if (lineBreak)
             {
                 // Advance to next line! Add the current line to the result.
-                penPosition.y -= (lineSkipNDC + extraSpacingLocalNDC.y);
+                penPosition.y -= (lineSkipNDC * spacingMultiplier.y);
                 penPosition.x  = -1.0f;
                 linedCharRects.PushBack( Array<CharRect>() );
 
@@ -113,14 +111,14 @@ TextFormatter::SplitCharRectsInLines(const String &content,
             {
                 CharRect cr(content[i], charRects[i].rectLocalNDC + penPosition);
                 linedCharRects.Back().PushBack(cr);
-                penPosition.x += (charAdvX + extraSpacingLocalNDC.x);
+                penPosition.x += (charAdvX * spacingMultiplier.x);
             }
         }
         else // Just add them in a single line
         {
             CharRect cr(content[i], penPosition + charRects[i].rectLocalNDC);
             linedCharRects.Back().PushBack(cr);
-            penPosition.x += (charAdvX + extraSpacingLocalNDC.x);
+            penPosition.x += (charAdvX * spacingMultiplier.x);
         }
     }
     return linedCharRects;

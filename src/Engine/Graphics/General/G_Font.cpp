@@ -57,6 +57,11 @@ void G_Font::Import(const Path &ttfFilepath)
                 charPxRects.PushBack(charPxRect);
             }
         }
+        m_atlasTexture->Bind();
+        m_atlasTexture->GenerateMipMaps();
+        m_atlasTexture->SetFilterMode(GL::FilterMode::Linear);
+        m_atlasTexture->SetWrapMode(GL::WrapMode::Clamp);
+        m_atlasTexture->UnBind();
         m_usingDistanceField = true;
     }
     else

@@ -53,6 +53,10 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                 }
             }
 
+            const Vector2i off(2);
+            localMinPixel = Vector2i::Max(Vector2i::Zero, localMinPixel - off);
+            localMaxPixel = Vector2i::Min(charImage.GetSize(), localMaxPixel + off);
+
             // Fit image to the actual character size
             // (eliminate all margins/paddings)
             Vector2i actualCharSize = localMaxPixel - localMinPixel;
@@ -65,11 +69,16 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
             charImages.PushBack(fittedCharImage);
             SDL_FreeSurface(charBitmap);
         }
+        else
+        {
+            G_Image empty; empty.Create(1, 1, Color::Zero);
+            charImages.PushBack(empty);
+        }
     }
 
     // Resize the atlas to fit only the used area
     G_Image atlasImage = G_FontSheetCreator::PackImages(charImages,
-                                                        2 + extraMargin,
+                                                        5 + extraMargin,
                                                         imagesOutputRects);
     // atlasImage.Export(Path("font.png"));
 
@@ -144,7 +153,7 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
     }
 
     Vector2i fittedSize = (maxPixel - minPixel);
-    Vector2i fittedSizeMargined = fittedSize +Vector2i(margin * 2);
+    Vector2i fittedSizeMargined = fittedSize + Vector2i(margin * 2);
     G_Image fittedResult(fittedSizeMargined.x, fittedSizeMargined.y);
     fittedResult.Copy(result, Recti(minPixel, maxPixel),
                       Vector2i(margin) + Recti(Vector2i::Zero, fittedSize));

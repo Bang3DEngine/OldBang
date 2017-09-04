@@ -67,17 +67,20 @@ void UITextRenderer::Bind() const
 
     if (GetFont())
     {
-        const int textSize = GetTextSize();
+        const int textSize = Math::Max(GetTextSize(), 1);
+
+        Vector2 atlasSize = Vector2(GetFont()->GetAtlasTexture()->GetSize());
+        GL::Uniform("B_fontAtlasSize", atlasSize, false);
 
         bool usingDistField = GetFont()->IsUsingDistanceField();
         GL::Uniform("B_usingDistField", usingDistField,  false);
         if (usingDistField)
         {
-            float blurriness = GetBlurriness() * 50.0f * (1.4142f / textSize);
+            float blurriness = GetBlurriness() / textSize;
             blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
             GL::Uniform("B_textBlurriness", blurriness, false);
 
-            float alphaThresh = GetAlphaThreshold(); // + (200.0f / textSize2);
+            float alphaThresh = GetAlphaThreshold() - (1.0f / textSize);
             alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
             GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
         }
@@ -105,9 +108,7 @@ void UITextRenderer::RefreshMesh()
 
     // Get the quad positions of the rects of each char
     RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
-    Vector2i sizedExtraSpacingPx = Vector2i(
-                G_Font::ScaleMagnitude(Vector2f(GetExtraSpacing()),
-                                                GetTextSize()));
+
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
@@ -117,7 +118,7 @@ void UITextRenderer::RefreshMesh()
                                         IsWrapping(),
                                         GetTextSize(),
                                         rt,
-                                        sizedExtraSpacingPx);
+                                        GetSpacingMultiplier());
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;
@@ -127,6 +128,8 @@ void UITextRenderer::RefreshMesh()
     m_charRectsLocalNDC.Clear();
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
+        if (!GetFont()->HasCharacter(cr.character)) { continue; }
+
         Vector2f minGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMin());
         Vector2f maxGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMax());
         Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
@@ -238,11 +241,11 @@ void UITextRenderer::SetTextSize(int size)
     }
 }
 
-void UITextRenderer::SetExtraSpacing(const Vector2i& extraSpacing)
+void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
 {
-    if (GetExtraSpacing() != extraSpacing)
+    if (GetSpacingMultiplier() != spacingMultiplier)
     {
-        m_extraSpacing = extraSpacing;
+        m_spacingMultiplier = spacingMultiplier;
         m_hasChanged = true;
     }
 }
@@ -260,7 +263,7 @@ float UITextRenderer::GetBlurriness() const { return m_blurriness; }
 float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
-Vector2i UITextRenderer::GetExtraSpacing() const { return m_extraSpacing; }
+Vector2 UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
 const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 {
     return m_charRectsLocalNDC;
@@ -298,7 +301,7 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
-    text->SetExtraSpacing( GetExtraSpacing() );
+    text->SetSpacingMultiplier( GetSpacingMultiplier() );
     text->SetWrapping( IsWrapping() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
@@ -317,8 +320,8 @@ void UITextRenderer::ImportXML(const XMLNode &xml)
     if (xml.Contains("TextSize"))
     { SetTextSize(xml.Get<float>("TextSize")); }
 
-    if (xml.Contains("ExtraSpacing"))
-    { SetExtraSpacing(xml.Get<Vector2i>("ExtraSpacing")); }
+    if (xml.Contains("SpacingMultiplier"))
+    { SetSpacingMultiplier(xml.Get<Vector2>("SpacingMultiplier")); }
 
     if (xml.Contains("Kerning"))
     { SetKerning(xml.Get<bool>("Kerning")); }
@@ -346,7 +349,7 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Font", GetFont() ? GetFont()->GetGUID() : GUID::Empty());
     xmlInfo->Set("Content", GetContent());
     xmlInfo->Set("TextSize", GetTextSize());
-    xmlInfo->Set("ExtraSpacing", GetExtraSpacing());
+    xmlInfo->Set("SpacingMultiplier", GetSpacingMultiplier());
     xmlInfo->Set("TextColor", GetTextColor());
     xmlInfo->Set("AlphaThreshold", GetAlphaThreshold());
     xmlInfo->Set("Kerning", IsKerning());

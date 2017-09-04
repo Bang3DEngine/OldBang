@@ -28,7 +28,7 @@ public:
                                             bool wrapping,
                                             int textSizePx,
                                             const RectTransform *rt,
-                                            const Vector2i &extraSpacingPx);
+                                            const Vector2 &spacingMultiplier);
     TextFormatter() = delete;
 
 private:
@@ -36,7 +36,7 @@ private:
                                 const String &content,
                                 const Font *font,
                                 const Array<CharRect> &charRects,
-                                const Vector2f &extraSpacingLocalNDC,
+                                const Vector2 &spacingMultiplier,
                                 const RectTransform *rt,
                                 int textSizePx,
                                 bool wrapping);

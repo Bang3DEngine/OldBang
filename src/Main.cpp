@@ -91,9 +91,6 @@ int main(int argc, char **argv)
     UITextRenderer *botText1 = botGo1->AddComponent<UITextRenderer>();
     UITextRenderer *botText2 = botGo2->AddComponent<UITextRenderer>();
 
-    topText0->SetContent("hindu");
-    topText0->SetTextSize(80);
-
     all->SetParent(scene);
     topHLGo->SetParent(all);
     midHLGo->SetParent(all);
@@ -107,6 +104,30 @@ int main(int argc, char **argv)
     botGo0->SetParent(botHLGo);
     botGo1->SetParent(botHLGo);
     botGo2->SetParent(botHLGo);
+
+    int size = 10;
+    String sampleString = "A Lorem ipsum dolor sit amet. 123456789!?#+-/-_";
+    for (UITextRenderer *text : scene->GetComponentsInChildren<UITextRenderer>())
+    {
+        text->SetContent(sampleString);
+        text->SetWrapping(true);
+        text->SetHorizontalAlign(HorizontalAlignment::Center);
+        text->SetVerticalAlign(VerticalAlignment::Center);
+        text->SetTextSize(size);
+        size *= 1.1f;
+    }
+    topText0->SetTextColor(Color::White);
+
+    topText1->SetTextSize(12);
+    topText1->SetTextColor(Color::Black);
+
+    botText0->SetTextColor(Color::White);
+
+    botText1->SetContent("KXpMB");
+    botText1->SetTextSize(90);
+    botText1->SetSpacingMultiplier( Vector2(1, 0.9f) );
+    botText2->SetContent("#");
+    botText2->SetTextSize(300);
 
     SceneManager::LoadScene(scene);
 

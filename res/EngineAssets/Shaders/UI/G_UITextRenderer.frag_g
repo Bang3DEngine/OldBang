@@ -1,5 +1,6 @@
 #include "G.frag_g"
 
+uniform vec2  B_fontAtlasSize;
 uniform bool  B_usingDistField;
 uniform float B_textBlurriness;
 uniform float B_textAlphaThreshold;
@@ -7,18 +8,11 @@ uniform float B_textAlphaThreshold;
 void Main()
 {
     vec2 charAtlasUv = B_FragIn_Uv;
+    vec2 uvStep = 1.0f / B_fontAtlasSize;
+    vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)
     {
-        vec2 uvStep = B_ScreenStep;
-
-        float meanDist =
-                (texture2D(B_Texture0, charAtlasUv + uvStep * vec2( 0, 0) ).r +
-                 texture2D(B_Texture0, charAtlasUv + uvStep * vec2( 1, 0) ).r +
-                 texture2D(B_Texture0, charAtlasUv + uvStep * vec2(-1, 0) ).r +
-                 texture2D(B_Texture0, charAtlasUv + uvStep * vec2( 0, 1) ).r +
-                 texture2D(B_Texture0, charAtlasUv + uvStep * vec2( 0,-1) ).r) / 5;
-
-        float dist = 1.0f - meanDist;
+        float dist = 1.0f - thisColor.r;
         B_Out_Color = vec4(vec3(1),
                            smoothstep(B_textAlphaThreshold - B_textBlurriness,
                                       B_textAlphaThreshold + B_textBlurriness,
@@ -27,7 +21,6 @@ void Main()
     }
     else
     {
-        vec4 charColor = texture2D(B_Texture0, charAtlasUv);
-        B_Out_Color = charColor;
+        B_Out_Color = vec4(1, 1, 1, thisColor.a);
     }
 }

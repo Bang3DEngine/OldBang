@@ -8,6 +8,11 @@ G_Texture::G_Texture()
     SetInternalFormat(m_internalFormat);
 }
 
+G_Texture::~G_Texture()
+{
+    GL::DeleteTextures(1, &m_idGL);
+}
+
 G_Texture::G_Texture(GL::TextureTarget texTarget) : G_Texture()
 {
     m_target = texTarget;
@@ -21,11 +26,6 @@ G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
     m_textureUnit = t.m_textureUnit;
     m_internalFormat = t.m_internalFormat;
     m_target = t.m_target;
-}
-
-G_Texture::~G_Texture()
-{
-    GL::DeleteTextures(1, &m_idGL);
 }
 
 void G_Texture::SetInternalFormat(GL::ColorFormat internalFormat)
