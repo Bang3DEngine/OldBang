@@ -7,6 +7,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
+enum class ImageAspectRatioMode {Ignore, Keep, KeepExceeding};
 enum class ImageResizeMode {Nearest, Linear};
 
 template<class T>
@@ -33,9 +34,11 @@ public:
               ImageResizeMode resizeMode = ImageResizeMode::Linear);
 
     void Resize(const Vector2i &newSize,
-                ImageResizeMode resizeMode = ImageResizeMode::Linear);
+                ImageResizeMode resizeMode = ImageResizeMode::Linear,
+                ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
     void Resize(const int newWidth, int newHeight,
-                ImageResizeMode resizeMode = ImageResizeMode::Linear);
+                ImageResizeMode resizeMode = ImageResizeMode::Linear,
+                ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
 
     T* GetData();
     const T* GetData() const;

@@ -65,15 +65,23 @@ void UITextRenderer::Bind() const
     gameObject->transform->SetEnabled(false);
     UIRenderer::Bind();
 
-    const int textSize = GetTextSize();
+    if (GetFont())
+    {
+        const int textSize = GetTextSize();
 
-    float blurriness = GetBlurriness() * 50.0f * (1.4142f / textSize);
-    blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
-    GL::Uniform("B_textBlurriness", blurriness,  false);
+        bool usingDistField = GetFont()->IsUsingDistanceField();
+        GL::Uniform("B_usingDistField", usingDistField,  false);
+        if (usingDistField)
+        {
+            float blurriness = GetBlurriness() * 50.0f * (1.4142f / textSize);
+            blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
+            GL::Uniform("B_textBlurriness", blurriness, false);
 
-    float alphaThresh = GetAlphaThreshold(); // + (200.0f / textSize2);
-    alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
-    GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
+            float alphaThresh = GetAlphaThreshold(); // + (200.0f / textSize2);
+            alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
+            GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
+        }
+    }
 }
 
 void UITextRenderer::UnBind() const

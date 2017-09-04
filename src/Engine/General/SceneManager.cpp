@@ -38,6 +38,11 @@ void SceneManager::LoadScene(Scene *scene)
     SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);
     ENSURE(sm->m_activeScene != scene);
 
+    if (!scene->HasComponent<Transform>())
+    {
+        Debug_Warn("Loading scene without Transform...");
+    }
+
     sm->m_activeScene = scene;
     if (sm->m_activeScene)
     {

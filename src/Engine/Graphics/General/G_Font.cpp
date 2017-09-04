@@ -41,7 +41,12 @@ void G_Font::Import(const Path &ttfFilepath)
         G_Image distFieldImg;
         distFieldImg.Import(distFieldImgPath);
         m_atlasTexture->Import(distFieldImg);
+
         XMLNode distFieldInfo = XMLParser::FromFile(distFieldInfoPath);
+
+        if (distFieldInfo.Contains("LoadSize"))
+        { SetLoadSize( distFieldInfo.Get<int>("LoadSize") ); }
+
         for (int i = 0; i < 255; ++i)
         {
             String attrName = "CharRect_" + String(i);
@@ -52,6 +57,7 @@ void G_Font::Import(const Path &ttfFilepath)
                 charPxRects.PushBack(charPxRect);
             }
         }
+        m_usingDistanceField = true;
     }
     else
     {
@@ -61,6 +67,7 @@ void G_Font::Import(const Path &ttfFilepath)
         loadedChars += "/\\$%&@\"'#¿?^";
         G_FontSheetCreator::LoadAtlasTexture(m_ttfFont, m_atlasTexture,
                                              loadedChars, &charPxRects);
+        m_usingDistanceField = false;
     }
 
     for (int i = 0; i < loadedChars.Size(); ++i)
@@ -82,7 +89,12 @@ void G_Font::SetLoadSize(int loadSize)
     m_ttfLoadSize = loadSize;
 }
 
-const int G_Font::GetLoadSize() const
+bool G_Font::IsUsingDistanceField() const
+{
+    return m_usingDistanceField;
+}
+
+int G_Font::GetLoadSize() const
 {
     return m_ttfLoadSize;
 }

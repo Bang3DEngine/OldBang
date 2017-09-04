@@ -28,7 +28,8 @@ public:
 
     void SetLoadSize(int loadSize);
 
-    const int GetLoadSize() const;
+    int GetLoadSize() const;
+    bool IsUsingDistanceField() const;
     G_Font::GlyphMetrics GetCharMetrics(unsigned char c, int fontSize = 1) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
@@ -42,8 +43,8 @@ public:
     template<class T>
     static T ScaleMagnitude(const T &magnitude, int fontSize)
     {
-        const float fFontSize = float(fontSize) / 128.0f;
-        return SCAST<T>(magnitude * fFontSize);
+        const float proportion = float(fontSize) / 128.0f;
+        return SCAST<T>(magnitude * proportion);
     }
 
     void Import(const Path &ttfFilepath);
@@ -51,6 +52,7 @@ public:
 protected:
     int m_ttfLoadSize = 128;
     TTF_Font *m_ttfFont = nullptr;
+    bool m_usingDistanceField = false;
     G_Texture2D *m_atlasTexture = nullptr;
 
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;

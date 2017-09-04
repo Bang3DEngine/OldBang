@@ -108,6 +108,7 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
     G_Image result;
     result.Create(totalWidth, totalHeight, bgColor);
 
+    maxImgHeight = 0;
     Vector2i penPosTopLeft(0, margin);
     for (const G_Image &img : images)
     {
@@ -115,11 +116,13 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
         {
             penPosTopLeft.x = 0; // Go to next line
             penPosTopLeft.y += maxImgHeight + margin * 2;
+            maxImgHeight = 0;
         }
         penPosTopLeft.x += margin;
 
         Recti imgRect = Recti(penPosTopLeft, penPosTopLeft + img.GetSize());
         if (imagesOutputRects) { imagesOutputRects->PushBack(imgRect); }
+        maxImgHeight = Math::Max(maxImgHeight, imgRect.GetSize().y);
         result.Copy(img, imgRect);
 
         penPosTopLeft.x += img.GetWidth() + margin;

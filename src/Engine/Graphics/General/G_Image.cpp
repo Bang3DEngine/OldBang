@@ -91,17 +91,37 @@ void G_ImageG<T>::Copy(const G_ImageG<T> &image,
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const Vector2i &newSize, ImageResizeMode resizeMode)
+void G_ImageG<T>::Resize(const Vector2i &newSize,
+                         ImageResizeMode resizeMode,
+                         ImageAspectRatioMode arMode)
 {
-    Resize(newSize.x, newSize.y, resizeMode);
+    Resize(newSize.x, newSize.y, resizeMode, arMode);
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const int newWidth, int newHeight,
-                         ImageResizeMode resizeMode)
+void G_ImageG<T>::Resize(const int _newWidth, int _newHeight,
+                         ImageResizeMode resizeMode,
+                         ImageAspectRatioMode arMode)
 {
+    int newWidth = _newWidth, newHeight = _newHeight;
+
+    // First pick the new (width,height), depending on the AspectRatioMode
+    if (arMode != ImageAspectRatioMode::Ignore)
+    {
+        Vector2 aspectRatio(SCAST<float>(newWidth)  / GetWidth(),
+                            SCAST<float>(newHeight) / GetHeight());
+
+        bool keepExc = (arMode == ImageAspectRatioMode::KeepExceeding);
+        float ar =  (aspectRatio.x < aspectRatio.y) ?
+                    (keepExc ? aspectRatio.y : aspectRatio.x) :
+                    (keepExc ? aspectRatio.x : aspectRatio.y);
+        newHeight = Math::Round(GetHeight() * ar);
+        newWidth  = Math::Round(GetWidth()  * ar);
+    }
+
     if (newWidth == GetWidth() && newHeight == GetHeight()) { return; }
 
+    // Now do the resizing
     G_ImageG<T> original = *this;
 
     Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newWidth),
@@ -115,6 +135,7 @@ void G_ImageG<T>::Resize(const int newWidth, int newHeight,
             Color newColor;
             if (resizeMode == ImageResizeMode::Nearest)
             {
+                // Pick nearest original pixel
                 Vector2 oriCoord = Vector2(x,y) * sizeProp;
                 int nearestX = Math::Round(oriCoord.x);
                 int nearestY = Math::Round(oriCoord.y);
@@ -122,12 +143,15 @@ void G_ImageG<T>::Resize(const int newWidth, int newHeight,
             }
             else
             {
+                // Average all the original pixels mapping to this resized px
                 Vector2 oriTopLeftF  = Vector2(  x,   y) * sizeProp;
                 Vector2 oriBotRightF = Vector2(x+1, y+1) * sizeProp;
                 Vector2i oriTopLeft(Math::Floor(oriTopLeftF.x),
                                     Math::Floor(oriTopLeftF.y));
+                oriTopLeft = Vector2i::Max(oriTopLeft, Vector2i::Zero);
                 Vector2i oriBotRight(Math::Ceil(oriBotRightF.x),
                                      Math::Ceil(oriBotRightF.y));
+                oriBotRight = Vector2i::Min(oriBotRight, original.GetSize());
 
                 newColor = Color::Zero;
                 for (int oriY = oriTopLeft.y; oriY < oriBotRight.y; ++oriY)
