@@ -47,12 +47,16 @@ Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) co
 {
     return FromGlobalNDCToLocalNDC( FromPixelsPointToGlobalNDC(pixelsPoint) );
 }
-Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
+Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint)
 {
     Vector2 res =  Vector2f(pixelsPoint) /
                    Vector2f( Screen::GetSize() ) * 2.0f - 1.0f;
     res.y = 1.0f - res.y;
     return res;
+}
+Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
+{
+    return RectTransform::FromPixelsPointToGlobalNDC( Vector2f(pixelsPoint) );
 }
 
 Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const

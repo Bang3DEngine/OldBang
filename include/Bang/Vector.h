@@ -149,6 +149,27 @@ public: \
         return res; \
     } \
  \
+    static VECTOR_G<T> Floor(const VECTOR_G<T> &v1) \
+    { \
+        VECTOR_G res; \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Floor(v1[i]); } \
+        return res; \
+    } \
+ \
+    static VECTOR_G<T> Ceil(const VECTOR_G<T> &v1) \
+    { \
+        VECTOR_G res; \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Ceil(v1[i]); } \
+        return res; \
+    } \
+ \
+    static VECTOR_G<T> Round(const VECTOR_G<T> &v1) \
+    { \
+        VECTOR_G res; \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Round(v1[i]); } \
+        return res; \
+    } \
+ \
     static VECTOR_G<T> Clamp(const VECTOR_G<T> &v, \
                              const VECTOR_G<T> &min, \
                              const VECTOR_G<T> &max) \

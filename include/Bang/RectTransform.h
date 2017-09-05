@@ -49,6 +49,7 @@ public:
     Vector2i FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
     static Vector2i FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
+    static Vector2 FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint);
     static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
     static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
