@@ -123,9 +123,10 @@ int main(int argc, char **argv)
 
     botText0->SetTextColor(Color::White);
 
-    botText1->SetContent("ud");
-    botText1->SetTextSize(150);
+    botText1->SetContent("dolor");
+    botText1->SetTextSize(50);
     botText2->SetContent("#");
+    botText2->SetContent("/");
     botText2->SetTextSize(300);
 
     SceneManager::LoadScene(scene);

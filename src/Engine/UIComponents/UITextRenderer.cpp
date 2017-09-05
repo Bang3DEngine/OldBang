@@ -138,13 +138,17 @@ void UITextRenderer::RefreshMesh()
 
         if (m_font->IsUsingDistanceField())
         {
+            // Scale the character quad and uvs so that the character is as
+            // large as if we weren't using SDF. If we dont compensate
+            // this size, we would get all the distance field in the same quad,
+            // and consequently the character itself would be smaller
             Vector2 spOffsetPx = Vector2(m_font->GetSDFSpreadOffsetPx(cr.character));
             Vector2 spOffsetUv( Vector2(spOffsetPx) /
                                 Vector2(m_font->GetAtlasTexture()->GetSize()) );
 
             Vector2 uvSize = (maxUv-minUv);
             Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
-            Vector2 globalNDCCharSize = (maxGlobalNDC - minGlobalNDC);
+            Vector2 globalNDCCharSize  = (maxGlobalNDC - minGlobalNDC);
             Vector2 globalNDCPosCenter = (maxGlobalNDC + minGlobalNDC) / 2.0f;
             Vector2 scaledSize = (globalNDCCharSize * uvScaling);
             minGlobalNDC = globalNDCPosCenter - scaledSize * 0.5f;
