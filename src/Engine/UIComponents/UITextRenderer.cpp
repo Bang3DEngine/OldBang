@@ -126,30 +126,34 @@ void UITextRenderer::RefreshMesh()
     Array<Vector3> textQuadPos3D;
 
     m_charRectsLocalNDC.Clear();
-    Vector2 screenSize( Screen::GetSize() );
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
 
         Vector2f minGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMin());
         Vector2f maxGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMax());
-        Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
 
         Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
 
         if (m_font->IsUsingDistanceField())
         {
-            Vector2i spOffsetPx = m_font->GetSDFSpreadOffsetPx(cr.character);
-            Vector2 spOffsetNDC( Vector2(spOffsetPx) / screenSize );
+            Vector2 spOffsetPx = Vector2(m_font->GetSDFSpreadOffsetPx(cr.character));
             Vector2 spOffsetUv( Vector2(spOffsetPx) /
                                 Vector2(m_font->GetAtlasTexture()->GetSize()) );
 
-            charRectGlobalNDC.SetMin(charRectGlobalNDC.GetMin() - spOffsetNDC);
-            charRectGlobalNDC.SetMax(charRectGlobalNDC.GetMax() + spOffsetNDC);
+            Vector2 uvSize = (maxUv-minUv);
+            Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
+            Vector2 globalNDCCharSize = (maxGlobalNDC - minGlobalNDC);
+            Vector2 globalNDCPosCenter = (maxGlobalNDC + minGlobalNDC) / 2.0f;
+            Vector2 scaledSize = (globalNDCCharSize * uvScaling);
+            minGlobalNDC = globalNDCPosCenter - scaledSize * 0.5f;
+            maxGlobalNDC = globalNDCPosCenter + scaledSize * 0.5f;
             minUv -= spOffsetUv;
             maxUv += spOffsetUv;
         }
+
+        Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
 
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );

@@ -73,8 +73,8 @@ protected:
     bool m_kerning              = false;
     Rect m_textRectNDC          = Rect::Zero;
 
-    float m_blurriness      = 5.0f;
-    float m_alphaThreshold  = 0.8f;
+    float m_blurriness      = 1.0f;
+    float m_alphaThreshold  = 0.775f;
 
     bool m_hasChanged       = false;
 

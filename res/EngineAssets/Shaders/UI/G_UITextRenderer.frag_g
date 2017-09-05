@@ -8,16 +8,15 @@ uniform float B_textAlphaThreshold;
 void Main()
 {
     vec2 charAtlasUv = B_FragIn_Uv;
-    vec2 uvStep = 1.0f / B_fontAtlasSize;
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)
     {
-        float dist = 1.0f - thisColor.r;
-        B_Out_Color = vec4(vec3(1),
-                           smoothstep(B_textAlphaThreshold - B_textBlurriness,
-                                      B_textAlphaThreshold + B_textBlurriness,
-                                      dist));
-        B_Out_Color = vec4(vec3(dist), 1);
+        float closeness = 1.0f - thisColor.r;
+        float lowerLimit = B_textAlphaThreshold - B_textBlurriness;
+        if (closeness < lowerLimit) { discard; }
+        float upperLimit = B_textAlphaThreshold + B_textBlurriness;
+        B_Out_Color = vec4(vec3(1), smoothstep(lowerLimit, upperLimit, closeness));
+        // B_Out_Color = vec4(vec3(closeness), 1);
     }
     else
     {

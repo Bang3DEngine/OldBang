@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     botGo2->SetParent(botHLGo);
 
     int size = 10;
-    String sampleString = "A Lorem ipsum dolor sit amet. 123456789!?#+-/-_";
+    String sampleString = "Lorem ipsum dolor sit amet. 123456789!?#+-/\\_";
     for (UITextRenderer *text : scene->GetComponentsInChildren<UITextRenderer>())
     {
         text->SetContent(sampleString);
@@ -125,7 +125,6 @@ int main(int argc, char **argv)
 
     botText1->SetContent("ud");
     botText1->SetTextSize(150);
-    botText1->SetSpacingMultiplier( Vector2(0.8f, 0.9f) );
     botText2->SetContent("#");
     botText2->SetTextSize(300);
 
