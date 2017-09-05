@@ -47,13 +47,13 @@ float Sphere::GetRadius() const { return m_radius; }
 
 bool Sphere::Contains(const Vector3 &point) const
 {
-    return Vector3::SqDistance(point, GetCenter()) <
+    return Vector::SqDistance(point, GetCenter()) <
             GetRadius() * GetRadius();
 }
 
 bool Sphere::CheckCollision(const Sphere &sphere) const
 {
-    return Vector3::SqDistance(GetCenter(), sphere.GetCenter()) <
+    return Vector::SqDistance(GetCenter(), sphere.GetCenter()) <
            ( GetRadius()*GetRadius() + sphere.GetRadius()*sphere.GetRadius() );
 }
 

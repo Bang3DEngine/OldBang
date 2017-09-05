@@ -240,7 +240,7 @@ Vector2f FindMinCoord(const Array<TextFormatter::CharRect> &rects)
     for (const TextFormatter::CharRect &cr : rects)
     {
         if (first) { first = false; result = cr.rectLocalNDC.GetMin(); }
-        else { result = Vector2f::Min(result, cr.rectLocalNDC.GetMin()); }
+        else { result = Vector::Min(result, cr.rectLocalNDC.GetMin()); }
     }
     return result;
 }
@@ -252,7 +252,7 @@ Vector2f FindMaxCoord(const Array<TextFormatter::CharRect> &rects)
     for (const TextFormatter::CharRect &cr : rects)
     {
         if (first) { first = false; result = cr.rectLocalNDC.GetMax(); }
-        else { result = Vector2f::Max(result, cr.rectLocalNDC.GetMax()); }
+        else { result = Vector::Max(result, cr.rectLocalNDC.GetMax()); }
     }
     return result;
 }
@@ -264,7 +264,7 @@ Vector2f FindMinCoord(const Array< Array<TextFormatter::CharRect> > &rects)
     for (const Array<TextFormatter::CharRect> &line : rects)
     {
         if (first) { first = false; result = FindMinCoord(line); }
-        else { result = Vector2f::Min(result, FindMinCoord(line)); }
+        else { result = Vector::Min(result, FindMinCoord(line)); }
     }
     return result;
 }
@@ -276,7 +276,7 @@ Vector2f FindMaxCoord(const Array< Array<TextFormatter::CharRect> > &rects)
     for (const Array<TextFormatter::CharRect> &line : rects)
     {
         if (first) { first = false; result = FindMaxCoord(line); }
-        else { result = Vector2f::Max(result, FindMaxCoord(line)); }
+        else { result = Vector::Max(result, FindMaxCoord(line)); }
     }
     return result;
 }

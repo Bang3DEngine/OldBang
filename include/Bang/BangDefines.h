@@ -86,12 +86,10 @@ FORWARD_T  class Array;
 
 FORWARD   class File;
 FORWARD_T class RectG;
-FORWARD_T class Vector2G;
-FORWARD_T class Vector3G;
-FORWARD_T class Vector4G;
 FORWARD_T class Matrix3G;
 FORWARD_T class Matrix4G;
 FORWARD_T class QuaternionG;
+template<uint,class> class VectorG;
 //====================================================
 
 
@@ -101,16 +99,22 @@ using Byte        = unsigned char;
 using BoolByte    = Byte;
 using EpochTime   = long long;
 
+template <class T>
+using Vector2G    = VectorG<2,T>;
 using Vector2i    = Vector2G<int>;
 using Vector2f    = Vector2G<float>;
 using Vector2d    = Vector2G<double>;
 using Vector2     = Vector2f;
 
+template <class T>
+using Vector3G    = VectorG<3,T>;
 using Vector3i    = Vector3G<int>;
 using Vector3f    = Vector3G<float>;
 using Vector3d    = Vector3G<double>;
 using Vector3     = Vector3f;
 
+template <class T>
+using Vector4G    = VectorG<4,T>;
 using Vector4i    = Vector4G<int>;
 using Vector4f    = Vector4G<float>;
 using Vector4d    = Vector4G<double>;

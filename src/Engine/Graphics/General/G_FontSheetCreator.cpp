@@ -6,7 +6,7 @@
 #include "Bang/Math.h"
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
-#include "Bang/Vector2.h"
+#include "Bang/Vector.h"
 #include "Bang/Resources.h"
 #include "Bang/G_Texture2D.h"
 #include "Bang/ImageEffects.h"
@@ -46,16 +46,16 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                     if (pxColor.a > 0.0f)
                     {
                         const Vector2i xy(x,y);
-                        localMinPixel = Vector2i::Min(localMinPixel, xy);
-                        localMaxPixel = Vector2i::Max(localMaxPixel, xy);
+                        localMinPixel = Vector::Min(localMinPixel, xy);
+                        localMaxPixel = Vector::Max(localMaxPixel, xy);
                     }
                     charImage.SetPixel(x, y, pxColor);
                 }
             }
 
             const Vector2i off(2);
-            localMinPixel = Vector2i::Max(Vector2i::Zero, localMinPixel - off);
-            localMaxPixel = Vector2i::Min(charImage.GetSize(), localMaxPixel + off);
+            localMinPixel = Vector::Max(Vector2i::Zero, localMinPixel - off);
+            localMaxPixel = Vector::Min(charImage.GetSize(), localMaxPixel + off);
 
             // Fit image to the actual character size
             // (eliminate all margins/paddings)
@@ -150,8 +150,8 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
             if ( result.GetPixel(x,y).a > 0 )
             {
                 Vector2i xy(x,y);
-                minPixel = Vector2i::Min(minPixel, xy);
-                maxPixel = Vector2i::Max(maxPixel, xy);
+                minPixel = Vector::Min(minPixel, xy);
+                maxPixel = Vector::Max(maxPixel, xy);
             }
         }
     }

@@ -1,8 +1,7 @@
 #ifndef QUATERNIONG_H
 #define QUATERNIONG_H
 
-#include <iostream>
-
+#include "Bang/Vector.h"
 #include "Bang/Debug.h"
 
 template<class T> // Most of it almost copied from glm
@@ -196,8 +195,8 @@ public:
         Vector3G<T> forward = _forward.Normalized();
         Vector3G<T> up      = _up.Normalized();
 
-        if (Vector3G<T>::Dot(forward,  up) >= SCAST<T>(0.99) ||
-            Vector3G<T>::Dot(forward, -up) >= SCAST<T>(0.99))
+        if (Vector::Dot(forward,  up) >= SCAST<T>(0.99) ||
+            Vector::Dot(forward, -up) >= SCAST<T>(0.99))
         {
             Debug_Warn("LookDirection: Forward and up aligned."
                          " Returning identity");

@@ -1,8 +1,6 @@
 #include "Bang/Transform.h"
 
-#include <sstream>
-#include <ostream>
-
+#include "Bang/Vector.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 
@@ -116,7 +114,7 @@ void Transform::SetScale(const Vector3 &v)
 {
     GameObject *p = gameObject->parent;
     Vector3 parentScale = p ? p->transform->GetScale() : Vector3::One;
-    parentScale = Vector3::Max( Vector3(0.0001f), parentScale );
+    parentScale = Vector::Max( Vector3(0.0001f), parentScale );
     SetLocalScale(1.0f / parentScale * v);
 }
 

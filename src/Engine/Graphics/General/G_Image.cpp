@@ -2,6 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
+#include "Bang/Vector.h"
 #include "Bang/ImageIO.h"
 #include "Bang/ImportFilesManager.h"
 
@@ -200,10 +201,10 @@ void G_ImageG<T>::Resize(int _newWidth, int _newHeight,
                 Vector2 oriBotRightF = Vector2(x+1, y+1) * sizeProp;
                 Vector2i oriTopLeft(Math::Floor(oriTopLeftF.x),
                                     Math::Floor(oriTopLeftF.y));
-                oriTopLeft = Vector2i::Max(oriTopLeft, Vector2i::Zero);
+                oriTopLeft = Vector::Max(oriTopLeft, Vector2i::Zero);
                 Vector2i oriBotRight(Math::Ceil(oriBotRightF.x),
                                      Math::Ceil(oriBotRightF.y));
-                oriBotRight = Vector2i::Min(oriBotRight, original.GetSize());
+                oriBotRight = Vector::Min(oriBotRight, original.GetSize());
 
                 newColor = Color::Zero;
                 for (int oriY = oriTopLeft.y; oriY < oriBotRight.y; ++oriY)

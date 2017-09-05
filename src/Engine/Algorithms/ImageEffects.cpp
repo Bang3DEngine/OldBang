@@ -1,6 +1,7 @@
 #include "Bang/ImageEffects.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Vector.h"
 
 void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
                                        G_Image *outImg,
@@ -32,8 +33,8 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
                 {
                     if (outline.GetPixel(rx,ry).r == 1.0f)
                     {
-                        float dist  = Vector2::Distance(Vector2(x,y),
-                                                        Vector2(rx,ry));
+                        float dist  = Vector::Distance(Vector2(x,y),
+                                                       Vector2(rx,ry));
                         minDist = Math::Min(minDist, dist);
                     }
                 }

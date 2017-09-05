@@ -4,9 +4,7 @@
 
 #include "Bang/Math.h"
 #include "Bang/String.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
+#include "Bang/Vector.h"
 
 const Color Color::Red         = Color(1,     0,   0,  1);
 const Color Color::Orange      = Color(1,   0.5,   0,  1);
@@ -66,7 +64,7 @@ Color Color::Lerp(const Color &c1,
                   float t)
 {
     return Color(
-             Vector4::Lerp(
+             Vector::Lerp(
                      Vector4(c1.r, c1.g, c1.b, c1.a),
                      Vector4(c2.r, c2.g, c2.b, c2.a),
                      t

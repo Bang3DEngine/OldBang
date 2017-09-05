@@ -121,7 +121,7 @@ bool AABox::CheckCollision(const Sphere &sphere,
 
     float sRadius = sphere.GetRadius();
     const Vector3 &sCenter = sphere.GetCenter();
-    float dCenterClosest = Vector3::Distance(closestPointToAABox, sCenter);
+    float dCenterClosest = Vector::Distance(closestPointToAABox, sCenter);
     bool collides = ( dCenterClosest <= sRadius * sRadius );
     if (collides)
     {
@@ -210,7 +210,7 @@ Rect AABox::GetAABoundingScreenRect(Camera *cam) const
     for (const Vector3 &p : boxPoints)
     {
         somePointInFront = somePointInFront ||
-                           Vector3::Dot(p-camPosition, camForward) > 0;
+                           Vector::Dot(p-camPosition, camForward) > 0;
 
         Vector2 screenP = cam->WorldToScreenNDCPoint(p);
         screenPoints.PushBack(screenP);

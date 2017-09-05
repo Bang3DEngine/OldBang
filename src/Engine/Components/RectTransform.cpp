@@ -22,7 +22,7 @@ Vector2 RectTransform::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
 {
     Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
-    parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
+    parentSizePx = Vector::Max(Vector2i::One, parentSizePx);
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
     return Vector2f(pixels) * pixelNDCSize;
 }

@@ -219,7 +219,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
            Vector3 pos = g->m_gizmosGo->transform->GetPosition();
-           distScale = Vector3::Distance(camPos, pos);
+           distScale = Vector::Distance(camPos, pos);
         }
         Vector3 scale = g->m_gizmosGo->transform->GetScale();
         g->m_gizmosGo->transform->SetScale(distScale * scale * 8.0f);

@@ -3,8 +3,6 @@
 
 #include "Bang/LineRenderer.h"
 
-FORWARD_T class Vector3G;
-
 class SingleLineRenderer : public LineRenderer
 {
     COMPONENT(SingleLineRenderer)

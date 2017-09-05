@@ -2,8 +2,7 @@
 #define RECT_H
 
 #include "Bang/Array.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector4.h"
+#include "Bang/Vector.h"
 
 template<class T>
 class RectG
@@ -34,8 +33,8 @@ public:
 
     explicit RectG(const Vector2G<T> &p1, const Vector2G<T> &p2)
     {
-        m_min = Vector2G<T>::Min(p1, p2);
-        m_max = Vector2G<T>::Max(p1, p2);
+        m_min = Vector::Min(p1, p2);
+        m_max = Vector::Max(p1, p2);
     }
 
     void SetMin(const Vector2G<T> &minv) { m_min = minv; }
@@ -136,8 +135,8 @@ public:
         for (auto it = begin; it != end; ++it)
         {
             const Vector2 &p = *it;
-            minv = Vector2::Min(p, minv);
-            maxv = Vector2::Max(p, maxv);
+            minv = Vector::Min(p, minv);
+            maxv = Vector::Max(p, maxv);
         }
         return RectG<T>(minv, maxv);
     }

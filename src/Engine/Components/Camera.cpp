@@ -6,8 +6,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
 #include "Bang/Screen.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
+#include "Bang/Vector.h"
 #include "Bang/Matrix4.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
@@ -82,7 +81,7 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     for (const Vector3 &p : points)
     {
         Vector3 dirToP = p - gameObject->transform->GetPosition();
-        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
+        if (Vector::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
     }
 
     return screenRect;

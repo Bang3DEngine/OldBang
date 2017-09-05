@@ -68,8 +68,8 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             p1 = p_label->GetRectTransform()->FromGlobalNDCToLocalNDC(p1);
             p2 = p_label->GetRectTransform()->FromGlobalNDCToLocalNDC(p2);
 
-            p_selectionQuad->GetRectTransform()->SetAnchorMin( Vector2::Min(p1, p2) );
-            p_selectionQuad->GetRectTransform()->SetAnchorMax( Vector2::Max(p1, p2) );
+            p_selectionQuad->GetRectTransform()->SetAnchorMin( Vector::Min(p1, p2) );
+            p_selectionQuad->GetRectTransform()->SetAnchorMax( Vector::Max(p1, p2) );
         }
     }
 

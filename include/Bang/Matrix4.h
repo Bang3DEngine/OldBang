@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Bang/Debug.h"
-#include "Bang/Vector4.h"
+#include "Bang/Vector.h"
 
 template<class T> // Part of it copied from glm
 class Matrix4G
@@ -235,9 +235,9 @@ public:
         res[0][2] = -f.x;
         res[1][2] = -f.y;
         res[2][2] = -f.z;
-        res[3][0] = -Vector3G<T>::Dot(s, eyePosition);
-        res[3][1] = -Vector3G<T>::Dot(u, eyePosition);
-        res[3][2] =  Vector3G<T>::Dot(f, eyePosition);
+        res[3][0] = -Vector::Dot(s, eyePosition);
+        res[3][1] = -Vector::Dot(u, eyePosition);
+        res[3][2] =  Vector::Dot(f, eyePosition);
         return res;
     }
 

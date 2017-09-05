@@ -53,8 +53,8 @@ AABox LineRenderer::GetAABBox() const
     Vector3 maxp = m_points.Front();
     for (const Vector3 &p : m_points)
     {
-       minp = Vector3::Min(minp, p);
-       maxp = Vector3::Max(maxp, p);
+       minp = Vector::Min(minp, p);
+       maxp = Vector::Max(maxp, p);
     }
 
     // Add a bit in every dimensions, to avoid flattened Rects
