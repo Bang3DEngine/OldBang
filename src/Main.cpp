@@ -123,9 +123,9 @@ int main(int argc, char **argv)
 
     botText0->SetTextColor(Color::White);
 
-    botText1->SetContent("KXpMB");
-    botText1->SetTextSize(90);
-    botText1->SetSpacingMultiplier( Vector2(1, 0.9f) );
+    botText1->SetContent("ud");
+    botText1->SetTextSize(150);
+    botText1->SetSpacingMultiplier( Vector2(0.8f, 0.9f) );
     botText2->SetContent("#");
     botText2->SetTextSize(300);
 

@@ -33,12 +33,34 @@ public:
               const Recti& dstCopyRect,
               ImageResizeMode resizeMode = ImageResizeMode::Linear);
 
+    void AddMargins(const Vector2i& margins,
+                    const Color &marginColor = Color::Zero,
+                    ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
+
+    void AddMarginsToMatchAspectRatio(const Vector2i &aspectRatioSizes,
+                                      const Color &marginColor = Color::Zero);
+    void AddMarginsToMatchAspectRatio(float aspectRatio,
+                                      const Color &marginColor = Color::Zero);
+
+    void ResizeToMatchAspectRatio(
+               const Vector2i &aspectRatioSizes,
+               bool makeBigger = false,
+               ImageResizeMode resizeMode = ImageResizeMode::Linear);
+    void ResizeToMatchAspectRatio(
+            float aspectRatio,
+            bool makeBigger = false,
+            ImageResizeMode resizeMode = ImageResizeMode::Linear);
+
+    float GetAspectRatio() const;
+
     void Resize(const Vector2i &newSize,
                 ImageResizeMode resizeMode = ImageResizeMode::Linear,
                 ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
-    void Resize(const int newWidth, int newHeight,
+    void Resize(int newWidth, int newHeight,
                 ImageResizeMode resizeMode = ImageResizeMode::Linear,
                 ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
+
+    void FillTransparentPixels(const Color &color);
 
     T* GetData();
     const T* GetData() const;
@@ -59,8 +81,12 @@ public:
     virtual void Import(const Path &imageFilepath) override;
 
 private:
-    Vector2i m_size;
+    Vector2i m_size = Vector2i::Zero;
     Array<T> m_pixels;
+
+    static Vector2i GetAspectRatioedSize(const Vector2i& targetSize,
+                                         const Vector2i& currentSize,
+                                         ImageAspectRatioMode aspectRatioMode);
 };
 
 template class G_ImageG<Byte>;

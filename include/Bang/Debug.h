@@ -30,7 +30,7 @@ private:
     Debug::_Log(log.str(), __LINE__, __FILE__); \
 } while (0)
 
-#define Debug_Peek(varName) Debug_Log(#varName": " << varName)
+#define Debug_Peek(varName) Debug_Log(#varName << ": " << (varName))
 
 #define Debug_Warn(msg) do{\
     std::ostringstream log;\

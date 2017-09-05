@@ -17,7 +17,7 @@ void Main()
                            smoothstep(B_textAlphaThreshold - B_textBlurriness,
                                       B_textAlphaThreshold + B_textBlurriness,
                                       dist));
-        // B_Out_Color = vec4(vec3(dist), 1);
+        B_Out_Color = vec4(vec3(dist), 1);
     }
     else
     {

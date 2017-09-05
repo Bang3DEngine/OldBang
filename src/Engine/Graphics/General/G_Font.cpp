@@ -49,18 +49,26 @@ void G_Font::Import(const Path &ttfFilepath)
 
         for (int i = 0; i < 255; ++i)
         {
+            const char c = SCAST<char>(i);
             String attrName = "CharRect_" + String(i);
             if (distFieldInfo.Contains(attrName))
             {
-                loadedChars.Append( String(char(i)) );
+                loadedChars.Append( String(c) );
                 Recti charPxRect = distFieldInfo.Get<Recti>(attrName);
                 charPxRects.PushBack(charPxRect);
+            }
+
+            attrName = "SpreadOffset_" + String(i);
+            if (distFieldInfo.Contains(attrName))
+            {
+                Vector2i spreadOffsetPx = distFieldInfo.Get<Vector2i>(attrName);
+                m_sdfSpreadOffsetPxInAtlas.Add(c, spreadOffsetPx);
             }
         }
         m_atlasTexture->Bind();
         m_atlasTexture->GenerateMipMaps();
         m_atlasTexture->SetFilterMode(GL::FilterMode::Linear);
-        m_atlasTexture->SetWrapMode(GL::WrapMode::Clamp);
+        m_atlasTexture->SetWrapMode(GL::WrapMode::ClampToEdge);
         m_atlasTexture->UnBind();
         m_usingDistanceField = true;
     }
@@ -85,6 +93,7 @@ void G_Font::Import(const Path &ttfFilepath)
                              Vector2(m_atlasTexture->GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
+        std::swap(uvMin.y, uvMax.y);
         m_charUvsInAtlas.Add(c, std::make_pair(uvMin, uvMax));
     }
 }
@@ -161,6 +170,12 @@ int G_Font::GetLineSkipPx() const
     return TTF_FontLineSkip(GetTTFFont());
 }
 
+Vector2i G_Font::GetSDFSpreadOffsetPx(char c) const
+{
+    if (!m_sdfSpreadOffsetPxInAtlas.ContainsKey(c)) { return Vector2i::Zero; }
+    return m_sdfSpreadOffsetPxInAtlas.At(c);
+}
+
 TTF_Font *G_Font::GetTTFFont() const
 {
     return m_ttfFont;
@@ -169,5 +184,6 @@ TTF_Font *G_Font::GetTTFFont() const
 void G_Font::Free()
 {
     m_charUvsInAtlas.Clear();
+    if (m_atlasTexture) { delete m_atlasTexture; }
     if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }

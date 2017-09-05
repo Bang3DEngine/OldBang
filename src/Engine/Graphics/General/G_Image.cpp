@@ -91,6 +91,71 @@ void G_ImageG<T>::Copy(const G_ImageG<T> &image,
 }
 
 template<class T>
+void G_ImageG<T>::AddMargins(const Vector2i &margins,
+                             const Color &marginColor,
+                             ImageAspectRatioMode arMode)
+{
+    G_ImageG<T> original = *this;
+
+    Vector2i newSize = GetAspectRatioedSize( (margins * 2) + GetSize(),
+                                            GetSize(),
+                                            arMode);
+    Create(newSize.x, newSize.y, marginColor);
+    Copy(original,
+         Recti(Vector2i::Zero, original.GetSize()),
+         Recti(newSize / 2 -  original.GetSize() / 2,
+               newSize / 2 + (original.GetSize()+1) / 2));
+}
+
+template<class T>
+void G_ImageG<T>::AddMarginsToMatchAspectRatio(const Vector2i &arSizes,
+                                               const Color &marginColor)
+{
+    AddMarginsToMatchAspectRatio(arSizes.x / float(arSizes.y), marginColor);
+}
+
+template<class T>
+void G_ImageG<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
+                                               const Color &marginColor)
+{
+    Vector2i newSize = GetSize();
+    if (aspectRatio > 1.0f) { newSize.x = (GetHeight() * aspectRatio); }
+    else { newSize.y = GetWidth() / aspectRatio; }
+    Vector2i margins = (newSize - GetSize());
+    AddMargins(margins/2, marginColor, ImageAspectRatioMode::Ignore);
+}
+
+template<class T>
+void G_ImageG<T>::ResizeToMatchAspectRatio(const Vector2i &arSizes,
+                                           bool makeBigger,
+                                           ImageResizeMode resizeMode)
+{
+    ResizeToMatchAspectRatio(arSizes.x / float(arSizes.y), makeBigger, resizeMode);
+}
+
+template<class T>
+void G_ImageG<T>::ResizeToMatchAspectRatio(float aspectRatio,
+                                           bool makeBigger,
+                                           ImageResizeMode resizeMode)
+{
+    Vector2i newSize = GetSize();
+    bool modifyWidth = ((aspectRatio > 1.0f) == makeBigger);
+    if (modifyWidth) { newSize.x = (GetHeight() * aspectRatio); }
+    else { newSize.y = GetWidth() / aspectRatio; }
+    Debug_Peek(aspectRatio);
+    Debug_Peek(GetSize());
+    Debug_Peek(newSize);
+    Debug_Peek(modifyWidth);
+    Resize(newSize, resizeMode, ImageAspectRatioMode::Ignore);
+}
+
+template<class T>
+float G_ImageG<T>::GetAspectRatio() const
+{
+    return GetWidth() / SCAST<float>(Math::Max(GetHeight(), 1));
+}
+
+template<class T>
 void G_ImageG<T>::Resize(const Vector2i &newSize,
                          ImageResizeMode resizeMode,
                          ImageAspectRatioMode arMode)
@@ -99,38 +164,25 @@ void G_ImageG<T>::Resize(const Vector2i &newSize,
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const int _newWidth, int _newHeight,
+void G_ImageG<T>::Resize(int _newWidth, int _newHeight,
                          ImageResizeMode resizeMode,
                          ImageAspectRatioMode arMode)
 {
-    int newWidth = _newWidth, newHeight = _newHeight;
-
     // First pick the new (width,height), depending on the AspectRatioMode
-    if (arMode != ImageAspectRatioMode::Ignore)
-    {
-        Vector2 aspectRatio(SCAST<float>(newWidth)  / GetWidth(),
-                            SCAST<float>(newHeight) / GetHeight());
-
-        bool keepExc = (arMode == ImageAspectRatioMode::KeepExceeding);
-        float ar =  (aspectRatio.x < aspectRatio.y) ?
-                    (keepExc ? aspectRatio.y : aspectRatio.x) :
-                    (keepExc ? aspectRatio.x : aspectRatio.y);
-        newHeight = Math::Round(GetHeight() * ar);
-        newWidth  = Math::Round(GetWidth()  * ar);
-    }
-
-    if (newWidth == GetWidth() && newHeight == GetHeight()) { return; }
+    Vector2i newSize = GetAspectRatioedSize(Vector2i(_newWidth, _newHeight),
+                                            GetSize(), arMode);
+    if (newSize.x == GetWidth() && newSize.y == GetHeight()) { return; }
 
     // Now do the resizing
     G_ImageG<T> original = *this;
 
-    Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newWidth),
-                     original.GetHeight() / SCAST<float>(newHeight));
+    Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newSize.x),
+                     original.GetHeight() / SCAST<float>(newSize.y));
 
-    Create(newWidth, newHeight);
-    for (int y = 0; y < newHeight; ++y)
+    Create(newSize.x, newSize.y);
+    for (int y = 0; y < newSize.y; ++y)
     {
-        for (int x = 0; x < newWidth; ++x)
+        for (int x = 0; x < newSize.x; ++x)
         {
             Color newColor;
             if (resizeMode == ImageResizeMode::Nearest)
@@ -167,6 +219,18 @@ void G_ImageG<T>::Resize(const int _newWidth, int _newHeight,
                 newColor /= Math::Max(pixels, 1);
             }
             SetPixel(x, y, newColor);
+        }
+    }
+}
+
+template<class T>
+void G_ImageG<T>::FillTransparentPixels(const Color &color)
+{
+    for (int y = 0; y < GetHeight(); ++y)
+    {
+        for (int x = 0; x < GetWidth(); ++x)
+        {
+            if (GetPixel(x,y).a == 0) { SetPixel(x,y,color); }
         }
     }
 }
@@ -277,6 +341,27 @@ void G_ImageG<float>::Import(const Path &imageFilepath)
     G_ImageG<Byte> byteImg;
     ImageIO::Import(imageFilepath, &byteImg, &ok);
     *this = byteImg.To<float>();
+}
+
+template<class T>
+Vector2i G_ImageG<T>::GetAspectRatioedSize(const Vector2i &targetSize,
+                                           const Vector2i &currentSize,
+                                           ImageAspectRatioMode aspectRatioMode)
+{
+    Vector2i finalSize = targetSize;
+    if (aspectRatioMode != ImageAspectRatioMode::Ignore)
+    {
+        Vector2 aspectRatio(SCAST<float>(targetSize.x) / currentSize.x,
+                            SCAST<float>(targetSize.y) / currentSize.y);
+
+        bool keepExc = (aspectRatioMode == ImageAspectRatioMode::KeepExceeding);
+        float ar =  (aspectRatio.x < aspectRatio.y) ?
+                    (keepExc ? aspectRatio.y : aspectRatio.x) :
+                    (keepExc ? aspectRatio.x : aspectRatio.y);
+        finalSize.x = Math::Round(currentSize.x * ar);
+        finalSize.y = Math::Round(currentSize.y * ar);
+    }
+    return finalSize;
 }
 
 // Specializations

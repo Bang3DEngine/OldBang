@@ -126,6 +126,7 @@ void UITextRenderer::RefreshMesh()
     Array<Vector3> textQuadPos3D;
 
     m_charRectsLocalNDC.Clear();
+    Vector2 screenSize( Screen::GetSize() );
     for (const TextFormatter::CharRect &cr : textCharRects)
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
@@ -133,6 +134,22 @@ void UITextRenderer::RefreshMesh()
         Vector2f minGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMin());
         Vector2f maxGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMax());
         Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
+
+        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+
+        if (m_font->IsUsingDistanceField())
+        {
+            Vector2i spOffsetPx = m_font->GetSDFSpreadOffsetPx(cr.character);
+            Vector2 spOffsetNDC( Vector2(spOffsetPx) / screenSize );
+            Vector2 spOffsetUv( Vector2(spOffsetPx) /
+                                Vector2(m_font->GetAtlasTexture()->GetSize()) );
+
+            charRectGlobalNDC.SetMin(charRectGlobalNDC.GetMin() - spOffsetNDC);
+            charRectGlobalNDC.SetMax(charRectGlobalNDC.GetMax() + spOffsetNDC);
+            minUv -= spOffsetUv;
+            maxUv += spOffsetUv;
+        }
 
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
@@ -146,12 +163,10 @@ void UITextRenderer::RefreshMesh()
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
 
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
 
         m_charRectsLocalNDC.PushBack(cr.rectLocalNDC);
     }

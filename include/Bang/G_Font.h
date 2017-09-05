@@ -37,6 +37,7 @@ public:
     G_Texture2D *GetAtlasTexture() const;
     int GetKerningXPx(char leftChar, char rightChar) const;
     int GetLineSkipPx() const;
+    Vector2i GetSDFSpreadOffsetPx(char c) const;
 
     TTF_Font *GetTTFFont() const;
 
@@ -55,6 +56,7 @@ protected:
     bool m_usingDistanceField = false;
     G_Texture2D *m_atlasTexture = nullptr;
 
+    Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
     void Free();
 };

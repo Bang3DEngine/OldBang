@@ -78,7 +78,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
 
     // Resize the atlas to fit only the used area
     G_Image atlasImage = G_FontSheetCreator::PackImages(charImages,
-                                                        5 + extraMargin,
+                                                        extraMargin,
                                                         imagesOutputRects);
     // atlasImage.Export(Path("font.png"));
 
@@ -110,35 +110,39 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
         maxImgHeight = Math::Max(maxImgHeight, img.GetHeight());
     }
 
-    int imagesPerSide = Math::Sqrt(images.Size());
-    int totalWidth  = (imagesPerSide+1) * (maxImgWidth  + (margin * 2));
-    int totalHeight = (imagesPerSide+1) * (maxImgHeight + (margin * 2));
+    int imagesPerSide = Math::Sqrt(images.Size())+1;
+    int totalWidth  = (imagesPerSide) * (maxImgWidth  + (margin * 2));
+    int totalHeight = (imagesPerSide) * (maxImgHeight + (margin * 2));
 
     G_Image result;
-    result.Create(totalWidth, totalHeight, bgColor);
+    result.Create(totalWidth, totalHeight, Color::Zero);
 
     maxImgHeight = 0;
+    int currentRowImages = 0;
     Vector2i penPosTopLeft(0, margin);
     for (const G_Image &img : images)
     {
-        if (penPosTopLeft.x + img.GetWidth() + margin * 2 > totalWidth)
+        if (penPosTopLeft.x + img.GetWidth() + margin * 2 > totalWidth ||
+            currentRowImages >= imagesPerSide)
         {
             penPosTopLeft.x = 0; // Go to next line
             penPosTopLeft.y += maxImgHeight + margin * 2;
+            currentRowImages = 0;
             maxImgHeight = 0;
         }
+        ++currentRowImages;
         penPosTopLeft.x += margin;
 
         Recti imgRect = Recti(penPosTopLeft, penPosTopLeft + img.GetSize());
         if (imagesOutputRects) { imagesOutputRects->PushBack(imgRect); }
-        maxImgHeight = Math::Max(maxImgHeight, imgRect.GetSize().y);
         result.Copy(img, imgRect);
 
+        maxImgHeight = Math::Max(maxImgHeight, imgRect.GetSize().y);
         penPosTopLeft.x += img.GetWidth() + margin;
     }
 
-    Vector2i minPixel(Math::Max<int>());
-    Vector2i maxPixel(Math::Min<int>());
+    Vector2i minPixel = result.GetSize();
+    Vector2i maxPixel = Vector2i::Zero;
     for (int y = 0; y < result.GetHeight(); ++y)
     {
         for (int x = 0; x < result.GetWidth(); ++x)
@@ -153,11 +157,13 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
     }
 
     Vector2i fittedSize = (maxPixel - minPixel);
-    Vector2i fittedSizeMargined = fittedSize + Vector2i(margin * 2);
-    G_Image fittedResult(fittedSizeMargined.x, fittedSizeMargined.y);
-    fittedResult.Copy(result, Recti(minPixel, maxPixel),
-                      Vector2i(margin) + Recti(Vector2i::Zero, fittedSize));
+    G_Image fittedResult(fittedSize.x, fittedSize.y);
+    fittedResult = result.GetSubImage( Recti(minPixel, maxPixel) );
+    fittedResult.FillTransparentPixels(bgColor);
 
-    return fittedResult;
+    G_Image fittedResultMargined = fittedResult;
+    fittedResultMargined.AddMargins(Vector2i(margin), bgColor,
+                                    ImageAspectRatioMode::Ignore);
+    return fittedResultMargined;
 }
 
