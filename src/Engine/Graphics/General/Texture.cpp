@@ -1,6 +1,6 @@
-#include "Bang/G_Texture.h"
+#include "Bang/Texture.h"
 
-G_Texture::G_Texture()
+Texture::Texture()
 {
     GL::GenTextures(1, &m_idGL);
     SetFilterMode(m_filterMode);
@@ -8,17 +8,17 @@ G_Texture::G_Texture()
     SetInternalFormat(m_internalFormat);
 }
 
-G_Texture::~G_Texture()
+Texture::~Texture()
 {
     GL::DeleteTextures(1, &m_idGL);
 }
 
-G_Texture::G_Texture(GL::TextureTarget texTarget) : G_Texture()
+Texture::Texture(GL::TextureTarget texTarget) : Texture()
 {
     m_target = texTarget;
 }
 
-G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
+Texture::Texture(const Texture &t) : GLObject(t)
 {
     m_size = Vector2i(t.GetWidth(), t.GetHeight());
     m_filterMode = t.m_filterMode;
@@ -28,17 +28,17 @@ G_Texture::G_Texture(const G_Texture &t) : GLObject(t)
     m_target = t.m_target;
 }
 
-void G_Texture::SetInternalFormat(GL::ColorFormat internalFormat)
+void Texture::SetInternalFormat(GL::ColorFormat internalFormat)
 {
     m_internalFormat = internalFormat;
 }
 
-void G_Texture::SetTarget(GL::TextureTarget target)
+void Texture::SetTarget(GL::TextureTarget target)
 {
     m_target = target;
 }
 
-void G_Texture::SetFilterMode(GL::FilterMode filterMode)
+void Texture::SetFilterMode(GL::FilterMode filterMode)
 {
     m_filterMode = filterMode;
     Bind();
@@ -47,7 +47,7 @@ void G_Texture::SetFilterMode(GL::FilterMode filterMode)
     UnBind();
 }
 
-void G_Texture::SetWrapMode(GL::WrapMode wrapMode)
+void Texture::SetWrapMode(GL::WrapMode wrapMode)
 {
     m_wrapMode = wrapMode;
     Bind();
@@ -57,71 +57,71 @@ void G_Texture::SetWrapMode(GL::WrapMode wrapMode)
     UnBind();
 }
 
-void G_Texture::SetTextureUnit(int textureSlot)
+void Texture::SetTextureUnit(int textureSlot)
 {
     m_textureUnit = textureSlot;
 }
 
-int G_Texture::GetWidth() const
+int Texture::GetWidth() const
 {
     return m_size.x;
 }
 
-int G_Texture::GetHeight() const
+int Texture::GetHeight() const
 {
     return m_size.y;
 }
 
-const Vector2i &G_Texture::GetSize() const
+const Vector2i &Texture::GetSize() const
 {
     return m_size;
 }
 
-GL::DataType G_Texture::GetInternalDataType() const
+GL::DataType Texture::GetInternalDataType() const
 {
     return GL::GetDataTypeFrom( GetInternalFormat() );
 }
 
-GL::ColorFormat G_Texture::GetInternalFormat() const
+GL::ColorFormat Texture::GetInternalFormat() const
 {
     return m_internalFormat;
 }
 
-uint G_Texture::GetBytesSize() const
+uint Texture::GetBytesSize() const
 {
     return GetWidth() * GetHeight() * GL::GetPixelBytesSize(m_internalFormat);
 }
 
-GL::TextureTarget G_Texture::GetTextureTarget() const
+GL::TextureTarget Texture::GetTextureTarget() const
 {
     return m_target;
 }
 
-GL::FilterMode G_Texture::GetFilterMode() const
+GL::FilterMode Texture::GetFilterMode() const
 {
     return m_filterMode;
 }
 
-GL::WrapMode G_Texture::GetWrapMode() const
+GL::WrapMode Texture::GetWrapMode() const
 {
     return m_wrapMode;
 }
 
-int G_Texture::GetTextureUnit() const
+int Texture::GetTextureUnit() const
 {
     return m_textureUnit;
 }
 
-void G_Texture::BindToTextureUnit(int textureUnit) const
+void Texture::BindToTextureUnit(int textureUnit) const
 {
     GL::ActiveTexture(GL_TEXTURE0 + textureUnit);
     Bind();
 }
 
-void G_Texture::SetWidth(int width) { m_size.x = width; }
-void G_Texture::SetHeight(int height) { m_size.y = height; }
+void Texture::SetWidth(int width) { m_size.x = width; }
+void Texture::SetHeight(int height) { m_size.y = height; }
 
-GL::BindTarget G_Texture::GetGLBindTarget() const
+GL::BindTarget Texture::GetGLBindTarget() const
 {
     return GL::BindTarget::Texture2D;
 }

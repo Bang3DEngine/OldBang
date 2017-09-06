@@ -389,12 +389,12 @@ bool Input::IsMouseInsideScreen()
 
 float Input::GetMouseAxisX()
 {
-    return Input::GetMouseDeltaX() / Screen::GetWidth();
+    return Input::GetMouseDeltaX() / Screen::GetWidthS();
 }
 
 float Input::GetMouseAxisY()
 {
-    return Input::GetMouseDeltaY() / Screen::GetHeight();
+    return Input::GetMouseDeltaY() / Screen::GetHeightS();
 }
 
 Vector2 Input::GetMouseAxis()
@@ -440,7 +440,7 @@ Vector2i Input::GetMouseCoords()
 Vector2 Input::GetMouseCoordsNDC()
 {
     Vector2f coordsNDC = Vector2f(Input::GetMouseCoords()) *
-                         Screen::GetPixelClipSize() * 2.0f - 1.0f;
+                         Screen::GetPixelClipSizeS() * 2.0f - 1.0f;
     return coordsNDC * Vector2f(1, -1);
 }
 

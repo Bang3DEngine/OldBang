@@ -15,16 +15,14 @@ UITextCursor::UITextCursor()
     SetStroke(1.5f);
 
     constexpr float limit = 1.0f;
-    SetPoints({
-               Vector3(0.0f, -limit, 0.0f),
-               Vector3(0.0f,  limit, 0.0f),
+    SetPoints({Vector3(0, -limit, 0),
+               Vector3(0,  limit, 0),
 
-               Vector3(-limit, -limit, 0.0f),
-               Vector3( limit, -limit, 0.0f),
+               Vector3(-limit, -limit, 0),
+               Vector3( limit, -limit, 0),
 
-               Vector3(-limit,  limit, 0.0f),
-               Vector3( limit,  limit, 0.0f),
-              });
+               Vector3(-limit,  limit, 0),
+               Vector3( limit,  limit, 0),});
 }
 
 UITextCursor::~UITextCursor()

@@ -3,9 +3,9 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
-#include "Bang/G_Framebuffer.h"
+#include "Bang/Framebuffer.h"
 
-class G_GBuffer : public G_Framebuffer
+class GBuffer : public Framebuffer
 {
 public:
 
@@ -25,13 +25,13 @@ public:
     static const GL::Attachment AttColor     = GL::Attachment::Color3;
     static const GL::Attachment AttColorRead = GL::Attachment::Color4;
 
-    G_GBuffer(int width, int height);
-    virtual ~G_GBuffer();
+    GBuffer(int width, int height);
+    virtual ~GBuffer();
 
-    virtual void BindTextureBuffersTo(G_ShaderProgram *sp,
+    virtual void BindTextureBuffersTo(ShaderProgram *sp,
                                       bool willReadFromColor = false) const;
 
-    void ApplyPass(G_ShaderProgram *sp,
+    void ApplyPass(ShaderProgram *sp,
                    bool prepareReadFromColorBuffer = false,
                    const Rect &mask = Rect::ScreenRect);
 
@@ -39,7 +39,7 @@ public:
 
     void SetAllDrawBuffers() const override;
     /**
-     * @brief Sets all G_GBuffer's draw buffers, except for the color one.
+     * @brief Sets all GBuffer's draw buffers, except for the color one.
      * This is useful for G render pass.
      */
     void SetAllDrawBuffersExceptColor();
@@ -50,11 +50,11 @@ public:
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
-    G_RenderTexture *m_normalTexture    = nullptr;
-    G_RenderTexture *m_diffuseTexture   = nullptr;
-    G_RenderTexture *m_miscTexture      = nullptr;
-    G_RenderTexture *m_colorTexture     = nullptr;
-    G_RenderTexture *m_colorReadTexture = nullptr;
+    RenderTexture *m_normalTexture    = nullptr;
+    RenderTexture *m_diffuseTexture   = nullptr;
+    RenderTexture *m_miscTexture      = nullptr;
+    RenderTexture *m_colorTexture     = nullptr;
+    RenderTexture *m_colorReadTexture = nullptr;
 
     mutable bool m_willReadFromColorRead = false;
 

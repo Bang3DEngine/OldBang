@@ -8,11 +8,11 @@
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/Resources.h"
-#include "Bang/G_Texture2D.h"
+#include "Bang/Texture2D.h"
 #include "Bang/ImageEffects.h"
 
 bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
-                                          G_Texture2D *atlasTexture,
+                                          Texture2D *atlasTexture,
                                           const String &charsToLoad,
                                           Array<Recti> *imagesOutputRects,
                                           int extraMargin)

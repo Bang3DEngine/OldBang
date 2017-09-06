@@ -1,7 +1,7 @@
 #include "Bang/Material.h"
 
 #include "Bang/Paths.h"
-#include "Bang/G_Shader.h"
+#include "Bang/Shader.h"
 #include "Bang/Texture2D.h"
 #include "Bang/G_Material.h"
 #include "Bang/Resources.h"
@@ -85,8 +85,8 @@ void Material::CloneInto(ICloneable *clone) const
     ShaderProgram *sp = GetShaderProgram();
     if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
     {
-        G_Shader *vshader = sp->GetVertexShader();
-        G_Shader *fshader = sp->GetFragmentShader();
+        Shader *vshader = sp->GetVertexShader();
+        Shader *fshader = sp->GetFragmentShader();
         sp = new ShaderProgram();
         sp->Load(vshader->GetResourceFilepath(), fshader->GetResourceFilepath());
     }
@@ -150,7 +150,7 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());
 
     Path vsPath, fsPath;
-    G_ShaderProgram *sp = GetShaderProgram();
+    ShaderProgram *sp = GetShaderProgram();
     if (sp)
     {
         if (sp->GetVertexShader()) { vsPath = sp->GetVertexShader()->GetResourceFilepath(); }

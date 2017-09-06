@@ -5,11 +5,11 @@
 
 #include "Bang/GLObject.h"
 
-class G_VBO : public GLObject
+class VBO : public GLObject
 {
 public:
-    G_VBO();
-    virtual ~G_VBO();
+    VBO();
+    virtual ~VBO();
 
     void Fill(const void *data, int dataSize,
               GL::UsageHint usage = GL::UsageHint::StaticDraw);

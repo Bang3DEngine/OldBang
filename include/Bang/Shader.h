@@ -1,17 +1,36 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "Bang/G_Shader.h"
-#include "Bang/IToString.h"
+#include <GL/glew.h>
 
-class Shader : public G_Shader,
-               public IToString
+#include "Bang/Path.h"
+#include "Bang/String.h"
+#include "Bang/Resource.h"
+#include "Bang/GLObject.h"
+
+class Shader : public GLObject,
+               public Resource
 {
+    RESOURCE(Shader)
+
 public:
+    Shader();
     Shader(GL::ShaderType t);
 
-    void PreprocessCode(String *shaderSrc) const override;
-    String ToString() const override;
+
+    GL::BindTarget GetGLBindTarget() const override;
+
+    const String& GetSourceCode() const;
+    const Path& GetResourceFilepath() const;
+    GL::ShaderType GetType() const;
+
+    // Resource
+    virtual void Import(const Path &shaderFilepath) override;
+
+protected:
+    String m_sourceCode = "";
+    Path m_filepath;
+    GL::ShaderType m_type;
 };
 
 #endif // SHADER_H

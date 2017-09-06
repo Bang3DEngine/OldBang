@@ -1,17 +1,17 @@
-#include "Bang/G_Texture2D.h"
+#include "Bang/Texture2D.h"
 
 #include "Bang/Resources.h"
 
-G_Texture2D::G_Texture2D() : G_Texture(GL::TextureTarget::Texture2D)
+Texture2D::Texture2D() : Texture(GL::TextureTarget::Texture2D)
 {
     CreateEmpty(1,1);
 }
 
-G_Texture2D::~G_Texture2D()
+Texture2D::~Texture2D()
 {
 }
 
-void G_Texture2D::Import(const G_ImageG<Byte> &image)
+void Texture2D::Import(const G_ImageG<Byte> &image)
 {
     if (image.GetData())
     {
@@ -26,7 +26,7 @@ void G_Texture2D::Import(const G_ImageG<Byte> &image)
     }
 }
 
-void G_Texture2D::CreateEmpty(int width, int height)
+void Texture2D::CreateEmpty(int width, int height)
 {
     int dataSize = width * height * GL::GetPixelBytesSize(GL::ColorComp::RGB,
                                                           GL::DataType::Byte);
@@ -36,12 +36,12 @@ void G_Texture2D::CreateEmpty(int width, int height)
     delete[] data;
 }
 
-void G_Texture2D::Resize(int width, int height)
+void Texture2D::Resize(int width, int height)
 {
     CreateEmpty(width, height);
 }
 
-void G_Texture2D::Fill(const Color &fillColor,
+void Texture2D::Fill(const Color &fillColor,
                        int width, int height,
                        bool genMipMaps)
 {
@@ -50,7 +50,7 @@ void G_Texture2D::Fill(const Color &fillColor,
           GL::ColorComp::RGBA, GL::DataType::Float, genMipMaps);
 }
 
-void G_Texture2D::Fill(const Byte *newData,
+void Texture2D::Fill(const Byte *newData,
                        int width, int height,
                        GL::ColorComp inputDataColorComp,
                        GL::DataType inputDataType,
@@ -71,29 +71,59 @@ void G_Texture2D::Fill(const Byte *newData,
     UnBind();
 }
 
-void G_Texture2D::GenerateMipMaps() const
+void Texture2D::GenerateMipMaps() const
 {
     ASSERT(GL::IsBound(this));
     GL::GenerateMipMap( GetTextureTarget() );
 }
 
-void G_Texture2D::SetAlphaCutoff(float alphaCutoff)
+void Texture2D::SetAlphaCutoff(float alphaCutoff)
 {
     m_alphaCutoff = alphaCutoff;
 }
 
-float G_Texture2D::GetAlphaCutoff() const
+float Texture2D::GetAlphaCutoff() const
 {
     return m_alphaCutoff;
 }
 
-Color G_Texture2D::GetColorFromArray(const float *pixels, int i)
+Color Texture2D::GetColorFromArray(const float *pixels, int i)
 {
     return Color(pixels[i+0], pixels[i+1], pixels[i+2], pixels[i+3]);
 }
 
-Color G_Texture2D::GetColorFromArray(const Byte *pixels, int i)
+Color Texture2D::GetColorFromArray(const Byte *pixels, int i)
 {
     return Color(pixels[i+0] / 255.0f, pixels[i+1] / 255.0f,
                  pixels[i+2] / 255.0f, pixels[i+3] / 255.0f);
 }
+
+
+void Texture2D::ImportXML(const XMLNode &xmlInfo)
+{
+    Asset::ImportXML(xmlInfo);
+
+    if (xmlInfo.Contains("FilterMode"))
+    { SetFilterMode( xmlInfo.Get<GL::FilterMode>("FilterMode") ); }
+
+    if (xmlInfo.Contains("AlphaCuttoff"))
+    { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }
+}
+
+void Texture2D::ExportXML(XMLNode *xmlInfo) const
+{
+    Asset::ExportXML(xmlInfo);
+
+    xmlInfo->Set("FilterMode", GetFilterMode());
+    xmlInfo->Set("AlphaCutoff", GetAlphaCutoff());
+}
+
+void Texture2D::Import(const Path &imageFilepath)
+{
+    G_Image *img = Resources::Load<G_Image>(imageFilepath);
+    if (img) { Import(*img); }
+
+    Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
+    ImportXMLFromFile(importFilepath);
+}
+

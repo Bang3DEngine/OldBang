@@ -4,7 +4,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Vector2.h"
 #include "Bang/XMLParser.h"
-#include "Bang/G_Texture2D.h"
+#include "Bang/Texture2D.h"
 #include "Bang/G_FontSheetCreator.h"
 
 G_Font::G_Font()
@@ -35,7 +35,7 @@ void G_Font::Import(const Path &ttfFilepath)
 
     String loadedChars = "";
     Array<Recti> charPxRects;
-    m_atlasTexture = new G_Texture2D();
+    m_atlasTexture = new Texture2D();
     if (distFieldImgPath.IsFile() && distFieldInfoPath.IsFile())
     {
         G_Image distFieldImg;
@@ -153,7 +153,7 @@ bool G_Font::HasCharacter(char c) const
     return GetTTFFont() && TTF_GlyphIsProvided(GetTTFFont(), c);
 }
 
-G_Texture2D *G_Font::GetAtlasTexture() const
+Texture2D *G_Font::GetAtlasTexture() const
 {
     return m_atlasTexture;
 }

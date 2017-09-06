@@ -2,14 +2,14 @@
 #define SELECTIONFRAMEBUFFER_H
 
 #include "Bang/Map.h"
-#include "Bang/G_Framebuffer.h"
+#include "Bang/Framebuffer.h"
 
 FORWARD class Scene;
 FORWARD class Renderer;
 FORWARD class G_Material;
 FORWARD class ShaderProgram;
 
-class SelectionFramebuffer : public G_Framebuffer
+class SelectionFramebuffer : public Framebuffer
 {
 public:
     SelectionFramebuffer(int width, int height);
@@ -18,12 +18,12 @@ public:
     void PrepareForRender(const Scene *scene);
     void RenderForSelectionBuffer(Renderer *renderer);
 
-    G_RenderTexture *GetColorTexture() const;
+    RenderTexture *GetColorTexture() const;
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
     static const GL::Attachment AttColor = GL::Attachment::Color0;
-    G_RenderTexture *m_colorTexture = nullptr;
+    RenderTexture *m_colorTexture = nullptr;
 
     Material *m_selectionMaterial = nullptr;
 

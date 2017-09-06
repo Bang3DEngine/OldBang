@@ -10,13 +10,13 @@
  * which contains the set of glyphs of the font.
  */
 FORWARD class G_Font;
-FORWARD class G_Texture2D;
+FORWARD class Texture2D;
 
 class G_FontSheetCreator
 {
 public:
     static bool LoadAtlasTexture(TTF_Font *fontFace,
-                                 G_Texture2D *resultTexture,
+                                 Texture2D *resultTexture,
                                  const String &charsToLoad,
                                  Array<Recti> *imagesOutputRects = nullptr,
                                  int extraMargin = 0);

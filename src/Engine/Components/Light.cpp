@@ -4,7 +4,7 @@
 #include "Bang/Scene.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Material.h"
-#include "Bang/G_GBuffer.h"
+#include "Bang/GBuffer.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
@@ -19,7 +19,7 @@ void Light::SetIntensity(float intensity) { m_intensity = intensity; }
 Color Light::GetColor() const { return m_color; }
 float Light::GetIntensity() const { return m_intensity; }
 
-void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
+void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 {
     m_lightMaterialScreen->Bind();
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
@@ -35,7 +35,7 @@ void Light::ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const
 
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
-    G_ShaderProgram *sp = mat->GetShaderProgram();
+    ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
     sp->Set("B_LightIntensity", m_intensity);

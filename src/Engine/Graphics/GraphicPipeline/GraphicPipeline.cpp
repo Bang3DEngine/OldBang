@@ -2,8 +2,8 @@
 
 #include "Bang/GL.h"
 #include "Bang/Mesh.h"
-#include "Bang/G_VAO.h"
-#include "Bang/G_VBO.h"
+#include "Bang/VAO.h"
+#include "Bang/VBO.h"
 #include "Bang/Scene.h"
 #include "Bang/Light.h"
 #include "Bang/Input.h"
@@ -13,24 +13,24 @@
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
-#include "Bang/G_GBuffer.h"
-#include "Bang/G_Texture.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Texture.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/G_RenderTexture.h"
-#include "Bang/G_TextureUnitManager.h"
+#include "Bang/RenderTexture.h"
+#include "Bang/TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
-GraphicPipeline::GraphicPipeline(G_Screen *screen)
+GraphicPipeline::GraphicPipeline(Screen *screen)
 {
     m_gl = new GL();
-    m_texUnitManager = new G_TextureUnitManager();
+    m_texUnitManager = new TextureUnitManager();
 
-    m_gbuffer = new G_GBuffer(screen->GetWidth(), screen->GetHeight());
+    m_gbuffer = new GBuffer(screen->GetWidth(), screen->GetHeight());
     m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
                                              screen->GetHeight());
 
@@ -55,7 +55,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     if (camera) { camera->Bind(); }
 
     RenderGBuffer(scene);
-    RenderToScreen(m_gbuffer->GetAttachmentTexture(G_GBuffer::AttColor));
+    RenderToScreen(m_gbuffer->GetAttachmentTexture(GBuffer::AttColor));
 
     RenderSelectionBuffer(scene);
     // RenderToScreen(m_selectionFB->GetColorTexture());
@@ -151,18 +151,18 @@ void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
 }
 
 
-void GraphicPipeline::ApplyScreenPass(G_ShaderProgram *sp, const Rect &mask)
+void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
     m_gl->ApplyToShaderProgram(sp);
     sp->Set("B_rectMinCoord", mask.GetMin());
     sp->Set("B_rectMaxCoord", mask.GetMax());
-    sp->Set("B_ScreenSize", Vector2f(Screen::GetSize()));
+    sp->Set("B_ScreenSize", Vector2f(Screen::GetSizeS()));
     RenderScreenPlane();
     sp->UnBind();
 }
 
-void GraphicPipeline::RenderToScreen(G_Texture *fullScreenTexture)
+void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 {
     m_renderGBufferToScreenMaterial->Bind();
 
@@ -216,12 +216,12 @@ void GraphicPipeline::Render(Renderer *rend)
 }
 
 GL *GraphicPipeline::GetGL() const { return m_gl; }
-G_GBuffer *GraphicPipeline::GetGBuffer() { return m_gbuffer; }
+GBuffer *GraphicPipeline::GetGBuffer() { return m_gbuffer; }
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {
     return m_selectionFB;
 }
-G_TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
+TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }

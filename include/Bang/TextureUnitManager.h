@@ -6,20 +6,20 @@
 #include "Bang/GL.h"
 #include "Bang/Map.h"
 
-FORWARD class G_Texture;
+FORWARD class Texture;
 
-class G_TextureUnitManager
+class TextureUnitManager
 {
 public:
     using TexUnit = GLuint;
-    G_TextureUnitManager();
+    TextureUnitManager();
 
     // Returns the texture unit it has been bound to
-    static TexUnit BindTexture(const G_Texture *tex);
-    static void UnBindTexture(const G_Texture *tex);
+    static TexUnit BindTexture(const Texture *tex);
+    static void UnBindTexture(const Texture *tex);
 
 private:
-    using TexUnitMap = Map<const G_Texture*, TexUnit>;
+    using TexUnitMap = Map<const Texture*, TexUnit>;
     TexUnitMap m_textureToUnit;
 
     // Ordered in time

@@ -77,7 +77,7 @@ Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
     return proj;
 }
 
-void ProjectManager::SaveProject(const Project *project)
+void ProjectManager::ExportProject(const Project *project)
 {
     ENSURE(project);
     bool ok = project->ExportXMLToFile(project->GetProjectFileFilepath());
@@ -92,9 +92,9 @@ void ProjectManager::SaveProject(const Project *project)
     }
 }
 
-void ProjectManager::SaveCurrentProject()
+void ProjectManager::ExportCurrentProject()
 {
-    ProjectManager::SaveProject( ProjectManager::GetCurrentProject() );
+    ProjectManager::ExportProject( ProjectManager::GetCurrentProject() );
 }
 
 void ProjectManager::CloseCurrentProject()

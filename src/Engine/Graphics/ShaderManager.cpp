@@ -2,7 +2,7 @@
 
 #include "Bang/Shader.h"
 #include "Bang/Application.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/ShaderProgram.h"
 
 ShaderManager::ShaderManager()
 {
@@ -13,11 +13,11 @@ ShaderManager *ShaderManager::GetInstance()
     return Application::GetInstance()->GetShaderManager();
 }
 
-G_Shader *ShaderManager::Load(GL::ShaderType type, const Path &filepath)
+Shader *ShaderManager::Load(GL::ShaderType type, const Path &filepath)
 {
     ShaderManager *sm = ShaderManager::GetInstance();
 
-    G_Shader* shader = nullptr;
+    Shader* shader = nullptr;
     if (!sm->m_filepathToShaders.ContainsKey(filepath))
     {
         shader = new Shader(type);
@@ -32,21 +32,21 @@ G_Shader *ShaderManager::Load(GL::ShaderType type, const Path &filepath)
     return shader;
 }
 
-void ShaderManager::RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
-                                          G_Shader *shaderBeingUsed)
+void ShaderManager::RegisterUsageOfShader(ShaderProgram *shaderProgram,
+                                          Shader *shaderBeingUsed)
 {
     ENSURE(shaderProgram); ENSURE(shaderBeingUsed);
 
     ShaderManager *sm = ShaderManager::GetInstance();
     if (!sm->m_shaderUsages.ContainsKey(shaderBeingUsed))
     {
-        sm->m_shaderUsages.Add(shaderBeingUsed, Set<G_ShaderProgram*>());
+        sm->m_shaderUsages.Add(shaderBeingUsed, Set<ShaderProgram*>());
     }
     sm->m_shaderUsages.Get(shaderBeingUsed).Add(shaderProgram);
 }
 
-void ShaderManager::UnRegisterUsageOfShader(G_ShaderProgram *shaderProgram,
-                                            G_Shader *shaderBeingUsed)
+void ShaderManager::UnRegisterUsageOfShader(ShaderProgram *shaderProgram,
+                                            Shader *shaderBeingUsed)
 {
     ENSURE(shaderProgram); ENSURE(shaderBeingUsed);
 

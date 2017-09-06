@@ -68,9 +68,9 @@ private:
     Vector2i m_marginRightTop = Vector2i::Zero;
     Vector2i m_marginLeftBot  = Vector2i::Zero;
 
-    Vector2 m_pivotPosition = Vector2::Zero;
-    Vector2 m_anchorMin     = Vector2(-1);
-    Vector2 m_anchorMax     = Vector2(1);
+    Vector2 m_pivotPosition =  Vector2::Zero;
+    Vector2 m_anchorMin     = -Vector2::One;
+    Vector2 m_anchorMax     =  Vector2::One;
 
     void OnChanged();
 

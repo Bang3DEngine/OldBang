@@ -1,16 +1,20 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
+#include "Bang/Map.h"
 #include "Bang/Asset.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/GLObject.h"
 
-class ShaderProgram : public G_ShaderProgram,
+FORWARD   class Shader;
+FORWARD   class Texture;
+
+class ShaderProgram : public GLObject,
                       public Asset
 {
     ASSET(ShaderProgram)
 
 public:
-    enum Type
+    enum InputType
     {
         GBuffer,
         PostProcess,
@@ -20,28 +24,61 @@ public:
     ShaderProgram();
     virtual ~ShaderProgram();
 
-    void SetType(Type type);
-    Type GetType() const;
+    virtual void Load(const Path &vshaderPath, const Path &fshaderPath);
+
+    bool Link();
+
+    void Bind() const override;
+    void UnBind() const override;
+    GL::BindTarget GetGLBindTarget() const override;
+
+    template<class T, class=TT_NOT_POINTER(T)>
+    bool Set(const String &name, const T &v) const
+    {
+        ASSERT(GL::IsBound(this));
+        int location = GetUniformLocation(name);
+        if (location >= 0) { GL::Uniform(location, v); }
+        return (location >= 0);
+    }
+
+    bool Set(const String &name, const Texture *texture) const;
+
+    void Refresh();
+    void SetInputType(InputType type);
+    void SetVertexShader(Shader *vertexShader);
+    void SetFragmentShader(Shader *fragmentShader);
+
+    void SetVertexInputBinding(const String& vertexInputName, uint location);
+    void SetFragmentInputBinding(const String& fragInputName, uint location);
+
+    InputType GetInputType() const;
+    Shader* GetVertexShader() const;
+    Shader* GetFragmentShader() const;
+
+    GLint GetUniformLocation(const String &name) const;
+
+    void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
 
     // Resource
     void Import(const Path &shaderProgramFilepath) override;
-
-    // G_ShaderProgram
-    void Load(const Path &vshaderPath, const Path &fshaderPath) override;
-    void SetVertexShader(G_Shader *vertexShader) override;
-    void SetFragmentShader(G_Shader *fragmentShader) override;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-protected:
-    Type m_type = Type::GBuffer;
+private:
+    Shader *p_vshader = nullptr;
+    Shader *p_fshader = nullptr;
 
-    void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
+    InputType m_inputType = InputType::GBuffer;
 
-    // G_ShaderProgram
-    void OnPreLink() override;
+    mutable Map<String, GLuint> m_nameToLocationCache;
+    mutable Map<String, const Texture*> m_namesToTexture;
+
+    bool BindTextureToAvailableUnit(const String &texName,
+                                    const Texture *texture) const;
+    void UpdateTextureBindings() const;
 };
+
 
 #endif // SHADERPROGRAM_H

@@ -12,7 +12,7 @@
 #include "Bang/Screen.h"
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
-#include "Bang/G_Screen.h"
+#include "Bang/Screen.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"

@@ -9,10 +9,10 @@
 #include "Bang/Renderer.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/G_RenderTexture.h"
+#include "Bang/RenderTexture.h"
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
-    G_Framebuffer(width, height)
+    Framebuffer(width, height)
 {
     ShaderProgram *selectionProgram = new ShaderProgram();
     selectionProgram->Load( EPATH("Shaders/G_Default.vert_g"),
@@ -108,7 +108,7 @@ long SelectionFramebuffer::MapColorToId(const Color &color)
            long(color.a * C * C * C * C);
 }
 
-G_RenderTexture *SelectionFramebuffer::GetColorTexture() const
+RenderTexture *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }

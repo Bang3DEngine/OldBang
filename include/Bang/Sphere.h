@@ -32,7 +32,7 @@ public:
     static Sphere FromBox(const AABox &box);
 
 private:
-    Vector3 m_center = Vector3(0.0f);
+    Vector3 m_center = Vector3::Zero;
     float m_radius = 0.0f;
 };
 

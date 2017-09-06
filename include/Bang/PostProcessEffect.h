@@ -3,7 +3,7 @@
 
 #include "Bang/Component.h"
 
-FORWARD class G_Shader;
+FORWARD class Shader;
 FORWARD class ShaderProgram;
 
 class PostProcessEffect : public Component
@@ -21,12 +21,12 @@ public:
 
     void SetType(Type type);
     void SetPriority(int priority);
-    void SetPostProcessShader(G_Shader *postProcessShader);
+    void SetPostProcessShader(Shader *postProcessShader);
 
     Type GetType() const;
     int GetPriority() const;
     ShaderProgram* GetPostProcessShaderProgram() const;
-    G_Shader* GetPostProcessShader() const;
+    Shader* GetPostProcessShader() const;
     Path GetPostProcessShaderFilepath() const;
 
     // ICloneable
@@ -41,7 +41,7 @@ public:
 
 private:
     ShaderProgram *m_shaderProgram = nullptr;
-    G_Shader *p_postProcessShader    = nullptr;
+    Shader *p_postProcessShader    = nullptr;
     Type m_type = Type::AfterScene;
     int m_priority = 0;
 };

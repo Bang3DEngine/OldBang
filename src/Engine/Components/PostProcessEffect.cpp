@@ -1,9 +1,9 @@
 #include "Bang/PostProcessEffect.h"
 
 #include "Bang/Paths.h"
+#include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
-#include "Bang/G_Shader.h"
-#include "Bang/G_GBuffer.h"
+#include "Bang/GBuffer.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderManager.h"
 #include "Bang/GraphicPipeline.h"
@@ -13,7 +13,7 @@ PostProcessEffect::PostProcessEffect()
     m_shaderProgram = new ShaderProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
-    G_Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex, vShaderPath);
+    Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex, vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }
 
@@ -34,7 +34,7 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     if (scenePostProcess || canvasPostProcess)
     {
         m_shaderProgram->Bind();
-        G_GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
+        GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
         gbuffer->ApplyPass(m_shaderProgram, true);
         m_shaderProgram->UnBind();
     }
@@ -42,14 +42,14 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
 
 void PostProcessEffect::SetType(PostProcessEffect::Type type) { m_type = type; }
 void PostProcessEffect::SetPriority(int priority) { m_priority = priority; }
-void PostProcessEffect::SetPostProcessShader(G_Shader *postProcessShader)
+void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
 {
     ENSURE(p_postProcessShader != postProcessShader);
 
     p_postProcessShader = postProcessShader;
     ENSURE(p_postProcessShader);
 
-    m_shaderProgram->SetType(ShaderProgram::Type::PostProcess);
+    m_shaderProgram->SetInputType(ShaderProgram::InputType::PostProcess);
     m_shaderProgram->SetFragmentShader( p_postProcessShader );
 }
 
@@ -59,7 +59,7 @@ ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
 {
     return m_shaderProgram;
 }
-G_Shader *PostProcessEffect::GetPostProcessShader() const
+Shader *PostProcessEffect::GetPostProcessShader() const
 {
     return p_postProcessShader;
 }
@@ -93,7 +93,7 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
         if (!p_postProcessShader ||
             shaderFilepath != p_postProcessShader->GetResourceFilepath())
         {
-            G_Shader *postProcessShader =
+            Shader *postProcessShader =
                     ShaderManager::Load(GL::ShaderType::Fragment, shaderFilepath);
             SetPostProcessShader(postProcessShader);
         }

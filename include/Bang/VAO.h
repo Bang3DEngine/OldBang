@@ -6,15 +6,15 @@
 #include "Bang/Array.h"
 #include "Bang/GLObject.h"
 
-FORWARD class G_VBO;
+FORWARD class VBO;
 
-class G_VAO : public GLObject
+class VAO : public GLObject
 {
 public:
-    G_VAO();
-    virtual ~G_VAO();
+    VAO();
+    virtual ~VAO();
 
-    void BindVBO(const G_VBO *vbo,
+    void BindVBO(const VBO *vbo,
                  int location,
                  int dataComponentsCount,
                  GL::DataType dataType = GL::DataType::Float,
@@ -29,12 +29,12 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    const G_VBO *GetVBOByLocation(int location) const;
+    const VBO *GetVBOByLocation(int location) const;
 
     int GetVBOCount() const;
 
 private:
-    Array<const G_VBO*> m_vbos;
+    Array<const VBO*> m_vbos;
 };
 
 #endif // VAO_H

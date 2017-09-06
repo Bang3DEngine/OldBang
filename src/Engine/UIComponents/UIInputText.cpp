@@ -450,12 +450,12 @@ float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
     }
 
     if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Left)
-        return contRT->FromLocalNDCToGlobalNDC( Vector2(-1.0f) ).x;
+        return contRT->FromLocalNDCToGlobalNDC( Vector2(-1) ).x;
 
     if (GetText()->GetHorizontalAlignment() == HorizontalAlignment::Center)
-        return contRT->FromLocalNDCToGlobalNDC( Vector2(0.0f) ).x;
+        return contRT->FromLocalNDCToGlobalNDC( Vector2(0) ).x;
 
-    return contRT->FromLocalNDCToGlobalNDC( Vector2(1.0f) ).x;
+    return contRT->FromLocalNDCToGlobalNDC( Vector2(1) ).x;
 }
 
 bool UIInputText::IsDelimiter(char initialChar, char curr) const

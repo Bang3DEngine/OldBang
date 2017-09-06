@@ -7,19 +7,19 @@
 #include "Bang/GLObject.h"
 #include "Bang/Texture2D.h"
 
-FORWARD class G_RenderTexture;
+FORWARD class RenderTexture;
 
-class G_Framebuffer : public GLObject
+class Framebuffer : public GLObject
 {
 public:
-    G_Framebuffer(int width, int height);
-    virtual ~G_Framebuffer();
+    Framebuffer(int width, int height);
+    virtual ~Framebuffer();
 
     void CreateColorAttachment(GL::Attachment attachment,
                                GL::ColorFormat texFormat);
     void CreateDepthRenderbufferAttachment();
 
-    G_RenderTexture* GetAttachmentTexture(GL::Attachment attachment) const;
+    RenderTexture* GetAttachmentTexture(GL::Attachment attachment) const;
 
     virtual void SetAllDrawBuffers() const;
     void SetDrawBuffers(const Array<GL::Attachment> &attachments) const;
@@ -42,17 +42,17 @@ public:
     virtual void Bind() const override;
     virtual void UnBind() const override;
 
-    void SaveToImage(GL::Attachment attachmentId, const Path &filepath,
-                     bool invertY = true) const;
-    void SaveStencilToImage(const Path &filepath,
-                            int stencilValueMultiplier = 1) const;
+    void Export(GL::Attachment attachmentId, const Path &filepath,
+                bool invertY = true) const;
+    void ExportStencil(const Path &filepath,
+                       int stencilValueMultiplier = 1) const;
 
 protected:
     int m_width = 0;
     int m_height = 0;
     GLuint m_depthRenderBufferId = 0;
     Array<GL::Attachment> m_colorAttachmentIds;
-    Map<GL::Attachment, G_RenderTexture*> m_attachmentId_To_Texture;
+    Map<GL::Attachment, RenderTexture*> m_attachmentId_To_Texture;
 
     void PushDrawAttachmentIds();
     void PopDrawAttachmentIds();

@@ -6,7 +6,7 @@
 #include "Bang/AABox.h"
 #include "Bang/Camera.h"
 #include "Bang/Transform.h"
-#include "Bang/G_GBuffer.h"
+#include "Bang/GBuffer.h"
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"

@@ -1,12 +1,12 @@
 #include "Bang/GL.h"
 
-#include "Bang/G_VAO.h"
+#include "Bang/VAO.h"
 #include "Bang/Debug.h"
 #include "Bang/Screen.h"
 #include "Bang/Matrix3.h"
 #include "Bang/GLObject.h"
-#include "Bang/G_Texture.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/Texture.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
 
 void GL::ClearError()
@@ -569,7 +569,7 @@ void GL::BufferDataVBO(int dataSize, const void *data, GL::UsageHint usageHint)
     glBufferData(GL_ARRAY_BUFFER, dataSize, data, GLCAST(usageHint));
 }
 
-void GL::Render(const G_VAO *vao, GL::Primitives primitivesMode,
+void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();
@@ -632,7 +632,7 @@ bool GL::IsBound(const GLObject *bindable)
     return GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId());
 }
 
-void GL::ApplyToShaderProgram(G_ShaderProgram *sp)
+void GL::ApplyToShaderProgram(ShaderProgram *sp)
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
     const Matrix4& modelMatrix = GL::GetModelMatrix();
@@ -673,7 +673,7 @@ void GL::ApplyToShaderProgram(G_ShaderProgram *sp)
         Matrix4 modelNoTranslate = modelMatrix;
         modelNoTranslate.SetTranslate( Vector3(0,0,0) );
 
-        float ar = 1.0f / Screen::GetAspectRatio();
+        float ar = 1.0f / Screen::GetAspectRatioS();
         Matrix4 fixAR(ar, 0, 0, 0,
                        0, 1, 0, 0,
                        0, 0, 1, 0,

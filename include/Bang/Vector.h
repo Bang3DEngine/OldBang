@@ -21,7 +21,7 @@ public: \
         for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(0); } \
     } \
  \
-    explicit VECTOR_G(T a) \
+    explicit VECTOR_G(const T& a) \
     { \
         for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(a); } \
     } \
@@ -216,7 +216,7 @@ VECTOR_G<T> operator*(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator*(T a, const VECTOR_G<T> &v) \
+VECTOR_G<T> operator*(const T& a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = a * v[i]; }  \
@@ -224,7 +224,7 @@ VECTOR_G<T> operator*(T a, const VECTOR_G<T> &v) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator*(const VECTOR_G<T> &v, T a) \
+VECTOR_G<T> operator*(const VECTOR_G<T> &v, const T& a) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = v[i] * a; }  \
@@ -232,7 +232,7 @@ VECTOR_G<T> operator*(const VECTOR_G<T> &v, T a) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator/(T a, const VECTOR_G<T> &v) \
+VECTOR_G<T> operator/(const T& a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = a / v[i]; }  \
@@ -240,7 +240,7 @@ VECTOR_G<T> operator/(T a, const VECTOR_G<T> &v) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator/(const VECTOR_G<T> &v, T a) \
+VECTOR_G<T> operator/(const VECTOR_G<T> &v, const T& a) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = v[i] / a; }  \
@@ -284,7 +284,7 @@ VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator+(T a, const VECTOR_G<T> &v) \
+VECTOR_G<T> operator+(const T& a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = a + v[i]; }  \
@@ -292,7 +292,7 @@ VECTOR_G<T> operator+(T a, const VECTOR_G<T> &v) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator+(const VECTOR_G<T> &v, T a) \
+VECTOR_G<T> operator+(const VECTOR_G<T> &v, const T& a) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = v[i] + a; }  \
@@ -308,7 +308,7 @@ VECTOR_G<T> operator-(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator-(T a, const VECTOR_G<T> &v) \
+VECTOR_G<T> operator-(const T& a, const VECTOR_G<T> &v) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = a - v[i]; }  \
@@ -316,7 +316,7 @@ VECTOR_G<T> operator-(T a, const VECTOR_G<T> &v) \
 } \
 \
 template<class T> \
-VECTOR_G<T> operator-(const VECTOR_G<T> &v, T a) \
+VECTOR_G<T> operator-(const VECTOR_G<T> &v, const T& a) \
 { \
     VECTOR_G<T> res; \
     for (int i = 0; i < N; ++i) { res[i] = v[i] - a; }  \
@@ -324,28 +324,28 @@ VECTOR_G<T> operator-(const VECTOR_G<T> &v, T a) \
 } \
 \
 template<class T> \
-VECTOR_G<T> &operator+=(VECTOR_G<T> &lhs, T a) \
+VECTOR_G<T> &operator+=(VECTOR_G<T> &lhs, const T& a) \
 { \
     for (int i = 0; i < N; ++i) { lhs[i] += a; }  \
     return lhs; \
 } \
 \
 template<class T> \
-VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, T a) \
+VECTOR_G<T> &operator-=(VECTOR_G<T> &lhs, const T& a) \
 { \
     for (int i = 0; i < N; ++i) { lhs[i] -= a; }  \
     return lhs; \
 } \
 \
 template<class T> \
-VECTOR_G<T> &operator*=(VECTOR_G<T> &lhs, T a) \
+VECTOR_G<T> &operator*=(VECTOR_G<T> &lhs, const T& a) \
 { \
     for (int i = 0; i < N; ++i) { lhs[i] *= a; }  \
     return lhs; \
 } \
 \
 template<class T> \
-VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, T a) \
+VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, const T& a) \
 { \
     for (int i = 0; i < N; ++i) { lhs[i] /= a; } \
     return lhs; \

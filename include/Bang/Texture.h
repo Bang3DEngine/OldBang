@@ -6,14 +6,14 @@
 #include "Bang/Vector2.h"
 #include "Bang/GLObject.h"
 
-class G_Texture : public GLObject
+class Texture : public GLObject
 {
 public:
 
-    G_Texture();
-    G_Texture(GL::TextureTarget texTarget);
-    G_Texture(const G_Texture &t);
-    virtual ~G_Texture();
+    Texture();
+    Texture(GL::TextureTarget texTarget);
+    Texture(const Texture &t);
+    virtual ~Texture();
 
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;

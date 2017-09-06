@@ -11,7 +11,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Renderer.h"
-#include "Bang/G_Screen.h"
+#include "Bang/Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"

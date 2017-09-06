@@ -1,13 +1,13 @@
-#include "Bang/G_GBuffer.h"
+#include "Bang/GBuffer.h"
 
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
-#include "Bang/G_RenderTexture.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/RenderTexture.h"
 
-G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
+GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     Bind();
     CreateColorAttachment(AttNormalDepth,
@@ -30,12 +30,12 @@ G_GBuffer::G_GBuffer(int width, int height) : G_Framebuffer(width, height)
     m_colorReadTexture = GetAttachmentTexture(AttColorRead);
 }
 
-G_GBuffer::~G_GBuffer()
+GBuffer::~GBuffer()
 {
 }
 
-void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
-                                     bool willReadFromColor) const
+void GBuffer::BindTextureBuffersTo(ShaderProgram *sp,
+                                   bool willReadFromColor) const
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
@@ -47,9 +47,9 @@ void G_GBuffer::BindTextureBuffersTo(G_ShaderProgram *sp,
 }
 
 
-void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
-                          bool prepareReadFromColorBuffer,
-                          const Rect &mask)
+void GBuffer::ApplyPass(ShaderProgram *sp,
+                        bool prepareReadFromColorBuffer,
+                        const Rect &mask)
 {
     ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
 
@@ -66,7 +66,7 @@ void G_GBuffer::ApplyPass(G_ShaderProgram *sp,
     GL::SetStencilOp(prevStencilOp);
 }
 
-void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
+void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
 {
     PushDrawAttachmentIds();
     SetReadBuffer(AttColor);
@@ -77,45 +77,45 @@ void G_GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     PopDrawAttachmentIds();
 }
 
-void G_GBuffer::SetAllDrawBuffers() const
+void GBuffer::SetAllDrawBuffers() const
 {
-    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse,
-                    G_GBuffer::AttMisc, G_GBuffer::AttColor
+    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse,
+                    GBuffer::AttMisc, GBuffer::AttColor
                    });
 }
 
-void G_GBuffer::SetAllDrawBuffersExceptColor()
+void GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({G_GBuffer::AttNormalDepth, G_GBuffer::AttDiffuse,
-                    G_GBuffer::AttMisc});
+    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse,
+                    GBuffer::AttMisc});
 }
 
-void G_GBuffer::SetColorDrawBuffer()
+void GBuffer::SetColorDrawBuffer()
 {
-    SetDrawBuffers({G_GBuffer::AttColor});
+    SetDrawBuffers({GBuffer::AttColor});
 }
 
-void G_GBuffer::ClearDepth(float clearDepth)
+void GBuffer::ClearDepth(float clearDepth)
 {
-    G_Framebuffer::ClearDepth(clearDepth); // Clear typical depth buffer
+    Framebuffer::ClearDepth(clearDepth); // Clear typical depth buffer
 
     const float encodedDepthHigh = Math::Floor(clearDepth * 1024);
     const float encodedDepthLow  = Math::Fract(clearDepth * 1024);
 
-    SetDrawBuffers({G_GBuffer::AttNormalDepth});
+    SetDrawBuffers({GBuffer::AttNormalDepth});
     GL::ClearColorBuffer(Color(0, 0, encodedDepthHigh, encodedDepthLow),
                          false, false, true, true);
 }
 
-void G_GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
+void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
 {
     GL::ClearStencilBuffer();
-    SetDrawBuffers({G_GBuffer::AttNormalDepth});
+    SetDrawBuffers({GBuffer::AttNormalDepth});
     GL::ClearColorBuffer(Color::Zero, true, true, false, false);
 
     ClearDepth(1.0f);
 
-    SetDrawBuffers({G_GBuffer::AttDiffuse, G_GBuffer::AttMisc});
+    SetDrawBuffers({GBuffer::AttDiffuse, GBuffer::AttMisc});
     GL::ClearColorBuffer(Color::Zero);
 
     SetColorDrawBuffer();

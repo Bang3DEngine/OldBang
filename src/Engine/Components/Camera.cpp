@@ -41,7 +41,7 @@ Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
     Vector4 v4 = p * v * Vector4(position, 1);
     v4 /= v4.w;
 
-    return Vector2(v4.xy());
+    return v4.xy();
 }
 
 Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
@@ -52,10 +52,10 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
     GetViewMatrix(&v);
 
     // Pass coordinates to clip space, to invert them using projInversed
-    Vector4 clipCoords = Vector4(screenNDCPos, 1.0, 1.0) * zFromCamera;
+    Vector4 clipCoords = Vector4(screenNDCPos, 1, 1) * zFromCamera;
     Vector4 res4 = p.Inversed() * clipCoords;
     Vector3 res = res4.xyz();
-    res = (v.Inversed() * Vector4(res, 1.0f)).xyz();
+    res = (v.Inversed() * Vector4(res, 1)).xyz();
     return res;
 }
 
@@ -107,7 +107,7 @@ Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 
 float Camera::GetOrthoWidth() const
 {
-   return GetOrthoHeight() * Screen::GetAspectRatio();
+   return GetOrthoHeight() * Screen::GetAspectRatioS();
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const
@@ -121,7 +121,7 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     if (m_projMode == ProjectionMode::Perspective)
     {
         *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatio(),
+                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatioS(),
                     m_zNear, m_zFar);
     }
     else //Ortho

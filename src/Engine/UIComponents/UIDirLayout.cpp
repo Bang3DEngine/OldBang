@@ -47,8 +47,8 @@ void UIDirLayout::OnUpdate()
         int marginLeft = 0, marginTop = 0, marginRight = 0, marginBot = 0;
         if (m_vertical)
         {
-            rt->SetAnchorMin( Vector2(-1.0f, latestAnchor - sizeNDC) );
-            rt->SetAnchorMax( Vector2(1.0f, latestAnchor) );
+            rt->SetAnchorMin( Vector2(-1, latestAnchor - sizeNDC) );
+            rt->SetAnchorMax( Vector2(1, latestAnchor) );
             marginTop = last ? spacing : ((spacing+1) / 2);
             marginBot = first ? spacing : (spacing / 2);
         }

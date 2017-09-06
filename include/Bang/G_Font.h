@@ -7,7 +7,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
-FORWARD class G_Texture2D;
+FORWARD class Texture2D;
 
 class G_Font
 {
@@ -34,7 +34,7 @@ public:
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
     bool HasCharacter(char c) const;
-    G_Texture2D *GetAtlasTexture() const;
+    Texture2D *GetAtlasTexture() const;
     int GetKerningXPx(char leftChar, char rightChar) const;
     int GetLineSkipPx() const;
     Vector2i GetSDFSpreadOffsetPx(char c) const;
@@ -54,7 +54,7 @@ protected:
     int m_ttfLoadSize = 128;
     TTF_Font *m_ttfFont = nullptr;
     bool m_usingDistanceField = false;
-    G_Texture2D *m_atlasTexture = nullptr;
+    Texture2D *m_atlasTexture = nullptr;
 
     Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;

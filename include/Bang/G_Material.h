@@ -4,8 +4,8 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 
-FORWARD class G_Texture2D;
-FORWARD class G_ShaderProgram;
+FORWARD class Texture2D;
+FORWARD class ShaderProgram;
 
 class G_Material
 {
@@ -15,15 +15,15 @@ public:
     virtual ~G_Material();
 
     void SetUvMultiply(const Vector2& uvMultiply);
-    void SetShaderProgram(G_ShaderProgram *program);
-    void SetTexture(const G_Texture2D *mtexture);
+    void SetShaderProgram(ShaderProgram *program);
+    void SetTexture(const Texture2D *mtexture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
     const Vector2&     GetUvMultiply() const;
-    G_ShaderProgram*   GetShaderProgram() const;
-    const G_Texture2D* GetTexture() const;
+    ShaderProgram*   GetShaderProgram() const;
+    const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
@@ -37,8 +37,8 @@ protected:
     bool m_receivesLighting = true;
     Vector2 m_uvMultiply    = Vector2::One;
 
-    G_ShaderProgram *m_shaderProgram = nullptr;
-    const G_Texture2D *m_texture     = nullptr;
+    ShaderProgram *m_shaderProgram = nullptr;
+    const Texture2D *m_texture     = nullptr;
 };
 
 #endif // G_MATERIAL_H

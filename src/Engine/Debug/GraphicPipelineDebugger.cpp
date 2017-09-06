@@ -21,7 +21,7 @@ void GraphicPipelineDebugger::Reset()
     }
 }
 
-void GraphicPipelineDebugger::TakeGBufferShot(G_GBuffer *gbuffer,
+void GraphicPipelineDebugger::TakeGBufferShot(GBuffer *gbuffer,
                                               GL::Attachment att,
                                               const String &screenshotName)
 {
@@ -31,11 +31,11 @@ void GraphicPipelineDebugger::TakeGBufferShot(G_GBuffer *gbuffer,
                           + screenshotName;
         Path filepath = GraphicPipelineDebugger::c_debugDir
                             .Append(fileName).AppendExtension("bmp");
-        gbuffer->SaveToImage(att, filepath, true);
+        gbuffer->Export(att, filepath, true);
     }
 }
 
-void GraphicPipelineDebugger::TakeGBufferShotStencil(G_GBuffer *gbuffer,
+void GraphicPipelineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
                                                      const String &screenshotName)
 {
 }

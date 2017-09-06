@@ -1,4 +1,4 @@
-#include "Bang/G_Framebuffer.h"
+#include "Bang/Framebuffer.h"
 
 #include <GL/glew.h>
 #include <GL/glu.h>
@@ -7,15 +7,15 @@
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Vector2.h"
-#include "Bang/G_RenderTexture.h"
+#include "Bang/RenderTexture.h"
 
-G_Framebuffer::G_Framebuffer(int width, int height) : m_width(width),
-                                                      m_height(height)
+Framebuffer::Framebuffer(int width, int height) : m_width(width),
+                                                  m_height(height)
 {
     GL::GenFramebuffers(1, &m_idGL);
 }
 
-G_Framebuffer::~G_Framebuffer()
+Framebuffer::~Framebuffer()
 {
     for (auto itPair : m_attachmentId_To_Texture)
     {
@@ -30,12 +30,12 @@ G_Framebuffer::~G_Framebuffer()
     GL::DeleteFramebuffers(1, &m_idGL);
 }
 
-void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
-                                          GL::ColorFormat texFormat)
+void Framebuffer::CreateColorAttachment(GL::Attachment attachment,
+                                        GL::ColorFormat texFormat)
 {
     ASSERT(GL::IsBound(this));
     GL::ClearError();
-    G_RenderTexture *tex = new G_RenderTexture();
+    RenderTexture *tex = new RenderTexture();
     tex->SetInternalFormat(texFormat);
     tex->Bind();
     tex->CreateEmpty(GetWidth(), GetHeight());
@@ -53,7 +53,7 @@ void G_Framebuffer::CreateColorAttachment(GL::Attachment attachment,
     tex->UnBind();
 }
 
-void G_Framebuffer::CreateDepthRenderbufferAttachment()
+void Framebuffer::CreateDepthRenderbufferAttachment()
 {
     ASSERT(GL::IsBound(this));
     GL::GenRenderBuffers(1, &m_depthRenderBufferId);
@@ -70,39 +70,39 @@ void G_Framebuffer::CreateDepthRenderbufferAttachment()
     GL::CheckFramebufferError();
 }
 
-G_RenderTexture *G_Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
+RenderTexture *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
 {
     if (!m_attachmentId_To_Texture.ContainsKey(attachment)) { return nullptr; }
     return m_attachmentId_To_Texture.Get(attachment);
 }
 
-void G_Framebuffer::SetAllDrawBuffers() const
+void Framebuffer::SetAllDrawBuffers() const
 {
     SetDrawBuffers(m_colorAttachmentIds);
 }
 
-void G_Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
+void Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
 {
     ASSERT(GL::IsBound(this));
     GL::DrawBuffers(attachments);
     m_currentDrawAttachmentIds = attachments;
 }
 
-void G_Framebuffer::SetReadBuffer(GL::Attachment attachment) const
+void Framebuffer::SetReadBuffer(GL::Attachment attachment) const
 {
     ASSERT(GL::IsBound(this));
     GL::ReadBuffer(attachment);
 }
 
-const Array<GL::Attachment>& G_Framebuffer::GetCurrentDrawAttachments() const
+const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
 {
     return m_currentDrawAttachmentIds;
 }
 
-Color G_Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
+Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     Bind();
-    G_RenderTexture *t = GetAttachmentTexture(attachment);
+    RenderTexture *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
     Byte color[4];
     GL::ReadPixels(x, t->GetHeight() - y, 1, 1,
@@ -115,14 +115,14 @@ Color G_Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 }
 
 
-void G_Framebuffer::Resize(int width, int height)
+void Framebuffer::Resize(int width, int height)
 {
     m_width  = Math::Max(width,  1);
     m_height = Math::Max(height, 1);
 
     for (auto it : m_attachmentId_To_Texture)
     {
-        G_RenderTexture *t = it.second;
+        RenderTexture *t = it.second;
         if (t)
         {
             GL::ClearError();
@@ -143,64 +143,64 @@ void G_Framebuffer::Resize(int width, int height)
     }
 }
 
-int G_Framebuffer::GetWidth() const
+int Framebuffer::GetWidth() const
 {
     return m_width;
 }
 
-int G_Framebuffer::GetHeight() const
+int Framebuffer::GetHeight() const
 {
     return m_height;
 }
 
-Vector2 G_Framebuffer::GetSize() const
+Vector2 Framebuffer::GetSize() const
 {
     return Vector2(GetWidth(), GetHeight());
 }
 
-void G_Framebuffer::Clear()
+void Framebuffer::Clear()
 {
     ClearDepth(1.0f);
     ClearColor(Color::Zero);
 }
 
-void G_Framebuffer::ClearDepth(float clearDepth)
+void Framebuffer::ClearDepth(float clearDepth)
 {
     GL::ClearDepthBuffer(clearDepth);
 }
 
-void G_Framebuffer::ClearColor(const Color &clearColor)
+void Framebuffer::ClearColor(const Color &clearColor)
 {
     SetAllDrawBuffers();
     GL::ClearColorBuffer(clearColor);
 }
 
-GL::BindTarget G_Framebuffer::GetGLBindTarget() const
+GL::BindTarget Framebuffer::GetGLBindTarget() const
 {
     return GL::BindTarget::Framebuffer;
 }
 
-void G_Framebuffer::Bind() const
+void Framebuffer::Bind() const
 {
     GL::Bind(this);
     GL::SetViewport(0, 0, GetWidth(), GetHeight());
 }
-void G_Framebuffer::UnBind() const
+void Framebuffer::UnBind() const
 {
     GL::UnBind(this);
 }
 
-void G_Framebuffer::SaveToImage(GL::Attachment attachment,
-                                const Path &filepath,
-                                bool invertY) const
+void Framebuffer::Export(GL::Attachment attachment,
+                         const Path &filepath,
+                         bool invertY) const
 {
     GL::Flush(); GL::Finish();
     G_Image img = GetAttachmentTexture(attachment)->ToImage(invertY);
     img.Export(filepath);
 }
 
-void G_Framebuffer::SaveStencilToImage(const Path &filepath,
-                                       int stencilValueMultiplier) const
+void Framebuffer::ExportStencil(const Path &filepath,
+                                int stencilValueMultiplier) const
 {
     GL::Flush(); GL::Finish();
     Byte *stencilData = new Byte[GetWidth() * GetHeight()];
@@ -224,12 +224,12 @@ void G_Framebuffer::SaveStencilToImage(const Path &filepath,
     delete stencilData;
 }
 
-void G_Framebuffer::PushDrawAttachmentIds()
+void Framebuffer::PushDrawAttachmentIds()
 {
     m_latestDrawAttachmentIds = m_currentDrawAttachmentIds;
 }
 
-void G_Framebuffer::PopDrawAttachmentIds()
+void Framebuffer::PopDrawAttachmentIds()
 {
     SetDrawBuffers(m_latestDrawAttachmentIds);
 }

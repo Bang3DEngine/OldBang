@@ -6,7 +6,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
-#include "Bang/G_Screen.h"
+#include "Bang/Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
@@ -210,9 +210,7 @@ void UITextRenderer::SetFont(Font *font)
         m_font = font;
         if (m_font)
         {
-            // TODO MEMLEAK
-            Texture2D *tex = new Texture2D(m_font->GetAtlasTexture());
-            GetMaterial()->SetTexture(tex);
+            GetMaterial()->SetTexture(m_font->GetAtlasTexture());
         }
         m_hasChanged = true;
     }

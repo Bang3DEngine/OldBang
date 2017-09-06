@@ -4,7 +4,7 @@
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 
-FORWARD   class G_Screen;
+FORWARD   class Screen;
 FORWARD   class ShaderProgram;
 
 class Camera : public Component

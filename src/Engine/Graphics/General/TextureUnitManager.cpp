@@ -1,17 +1,17 @@
-#include "Bang/G_TextureUnitManager.h"
+#include "Bang/TextureUnitManager.h"
 
-#include "Bang/G_Texture.h"
+#include "Bang/Texture.h"
 #include "Bang/GraphicPipeline.h"
 
-G_TextureUnitManager::G_TextureUnitManager()
+TextureUnitManager::TextureUnitManager()
 {
     c_numTextureUnits = GL::GetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
 }
 
-G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture *tex)
+TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const Texture *tex)
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive();
-    G_TextureUnitManager *tm = gp->GetTextureUnitManager();
+    TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnit unitToUse = 0;
     TexUnitMap::Iterator it = tm->m_textureToUnit.Find(tex);
@@ -40,10 +40,10 @@ G_TextureUnitManager::TexUnit G_TextureUnitManager::BindTexture(const G_Texture 
     return unitToUse;
 }
 
-void G_TextureUnitManager::UnBindTexture(const G_Texture *tex)
+void TextureUnitManager::UnBindTexture(const Texture *tex)
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive();
-    G_TextureUnitManager *tm = gp->GetTextureUnitManager();
+    TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnitMap::Iterator it = tm->m_textureToUnit.Find(tex);
     if (it != tm->m_textureToUnit.End())

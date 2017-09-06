@@ -13,10 +13,10 @@
 
 using GLId = GLuint;
 
-FORWARD class G_VAO;
+FORWARD class VAO;
 FORWARD class GLObject;
-FORWARD class G_Texture;
-FORWARD class G_ShaderProgram;
+FORWARD class Texture;
+FORWARD class ShaderProgram;
 
 class GL
 {
@@ -375,8 +375,8 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static void ApplyToShaderProgram(G_ShaderProgram *sp);
-    static void Render(const G_VAO* vao,
+    static void ApplyToShaderProgram(ShaderProgram *sp);
+    static void Render(const VAO* vao,
                        GL::Primitives renderMode,
                        int elementsCount,
                        int startElementIndex = 0);

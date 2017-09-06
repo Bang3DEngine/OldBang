@@ -8,8 +8,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 
-FORWARD class G_VAO;
-FORWARD class G_VBO;
+FORWARD class VAO;
+FORWARD class VBO;
 
 class Mesh : public Asset
 {
@@ -35,7 +35,7 @@ public:
     void BindNormalsVBOToLocation(int normalsVBOLocation);
     void BindUvsVBOToLocation(int uvsVBOLocation);
 
-    G_VAO *GetVAO() const;
+    VAO *GetVAO() const;
     int GetVertexCount() const;
     const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
@@ -58,10 +58,10 @@ private:
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;
 
-    mutable G_VAO *m_vao = nullptr;
-    G_VBO *m_vertexPositionsVBO = nullptr;
-    G_VBO *m_vertexNormalsVBO = nullptr;
-    G_VBO *m_vertexUvsVBO = nullptr;
+    mutable VAO *m_vao = nullptr;
+    VBO *m_vertexPositionsVBO = nullptr;
+    VBO *m_vertexNormalsVBO = nullptr;
+    VBO *m_vertexUvsVBO = nullptr;
 
     AABox m_bBox;
     Sphere m_bSphere;

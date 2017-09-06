@@ -7,7 +7,7 @@
 FORWARD   class Camera;
 FORWARD   class Material;
 FORWARD   class Renderer;
-FORWARD   class G_GBuffer;
+FORWARD   class GBuffer;
 
 class Light : public Component
 {
@@ -40,7 +40,7 @@ private:
     Color m_color = Color::White;
     Material *m_lightMaterialScreen = nullptr;
 
-    void ApplyLight(G_GBuffer *gbuffer, const Rect &renderRect) const;
+    void ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const;
     virtual Rect GetRenderRect(Camera *cam) const;
 
     friend class GraphicPipeline;

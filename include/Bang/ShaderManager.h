@@ -3,7 +3,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"
-#include "Bang/G_Shader.h"
+#include "Bang/Shader.h"
 
 class ShaderManager
 {
@@ -11,16 +11,16 @@ public:
     ShaderManager();
     static ShaderManager *GetInstance();
 
-    static G_Shader* Load(GL::ShaderType type, const Path& filepath);
+    static Shader* Load(GL::ShaderType type, const Path& filepath);
 
-    static void RegisterUsageOfShader(G_ShaderProgram *shaderProgram,
-                                      G_Shader *shaderBeingUsed);
-    static void UnRegisterUsageOfShader(G_ShaderProgram *shaderProgram,
-                                        G_Shader *shaderBeingUsed);
+    static void RegisterUsageOfShader(ShaderProgram *shaderProgram,
+                                      Shader *shaderBeingUsed);
+    static void UnRegisterUsageOfShader(ShaderProgram *shaderProgram,
+                                        Shader *shaderBeingUsed);
 
 private:
-    Map<Path, G_Shader*> m_filepathToShaders;
-    Map<G_Shader*, Set<G_ShaderProgram*> > m_shaderUsages;
+    Map<Path, Shader*> m_filepathToShaders;
+    Map<Shader*, Set<ShaderProgram*> > m_shaderUsages;
     void Refresh();
 };
 

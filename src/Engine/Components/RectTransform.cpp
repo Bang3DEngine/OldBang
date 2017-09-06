@@ -16,7 +16,7 @@ RectTransform::~RectTransform()
 
 Vector2 RectTransform::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
 {
-    return (Vector2f(pixels) / Vector2f(Screen::GetSize())) * 2.0f;
+    return (Vector2f(pixels) / Vector2f(Screen::GetSizeS())) * 2.0f;
 }
 
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
@@ -35,7 +35,7 @@ Vector2 RectTransform::FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) 
 
 Vector2i RectTransform::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
 {
-    return Vector2i(ndcAmount * Vector2f(Screen::GetSize()) * 0.5f);
+    return Vector2i(ndcAmount * Vector2f(Screen::GetSizeS()) * 0.5f);
 }
 Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
 {
@@ -50,7 +50,7 @@ Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) co
 Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint)
 {
     Vector2 res =  Vector2f(pixelsPoint) /
-                   Vector2f( Screen::GetSize() ) * 2.0f - 1.0f;
+                   Vector2f( Screen::GetSizeS() ) * 2.0f - 1.0f;
     res.y = 1.0f - res.y;
     return res;
 }
@@ -65,7 +65,7 @@ Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 }
 Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint)
 {
-    return Vector2i((ndcPoint * 0.5f + 0.5f) * Vector2(Screen::GetSize()));
+    return Vector2i((ndcPoint * 0.5f + 0.5f) * Vector2(Screen::GetSizeS()));
 }
 
 Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const
@@ -195,13 +195,13 @@ const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 Recti RectTransform::GetScreenSpaceRectPx() const
 {
     return Recti( ( GetScreenSpaceRectNDC() * 0.5f + 0.5f) *
-                    Vector2f(Screen::GetSize()) );
+                    Vector2f(Screen::GetSizeS()) );
 }
 
 Recti RectTransform::GetParentScreenRectPx() const
 {
     return Recti( ( GetParentScreenRect() * 0.5f + 0.5f) *
-                  Vector2f(Screen::GetSize()) );
+                  Vector2f(Screen::GetSizeS()) );
 }
 
 Rect RectTransform::GetScreenSpaceRectNDC() const

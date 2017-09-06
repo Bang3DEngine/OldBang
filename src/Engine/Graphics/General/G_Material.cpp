@@ -1,11 +1,11 @@
 #include "Bang/G_Material.h"
 
 #include "Bang/Screen.h"
+#include "Bang/Shader.h"
 #include "Bang/Vector4.h"
-#include "Bang/G_Shader.h"
-#include "Bang/G_Texture.h"
-#include "Bang/G_Texture2D.h"
-#include "Bang/G_ShaderProgram.h"
+#include "Bang/Texture.h"
+#include "Bang/Texture2D.h"
+#include "Bang/ShaderProgram.h"
 
 G_Material::G_Material()
 {
@@ -29,17 +29,17 @@ void G_Material::SetUvMultiply(const Vector2 &uvMultiply)
     m_uvMultiply = uvMultiply;
 }
 
-void G_Material::SetShaderProgram(G_ShaderProgram *program)
+void G_Material::SetShaderProgram(ShaderProgram *program)
 {
     m_shaderProgram = program;
 }
 
-void G_Material::SetTexture(const G_Texture2D *texture)
+void G_Material::SetTexture(const Texture2D *texture)
 {
     m_texture = texture;
     if (m_texture)
     {
-        G_ShaderProgram *sp = GetShaderProgram();
+        ShaderProgram *sp = GetShaderProgram();
         if (sp) { sp->Set("B_Texture0", m_texture); }
     }
 }
@@ -64,12 +64,12 @@ const Vector2 &G_Material::GetUvMultiply() const
     return m_uvMultiply;
 }
 
-G_ShaderProgram *G_Material::GetShaderProgram() const
+ShaderProgram *G_Material::GetShaderProgram() const
 {
     return m_shaderProgram;
 }
 
-const G_Texture2D *G_Material::GetTexture() const
+const Texture2D *G_Material::GetTexture() const
 {
     return m_texture;
 }
@@ -91,10 +91,10 @@ const Color& G_Material::GetDiffuseColor() const
 
 void G_Material::Bind() const
 {
-    G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
+    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->Set("B_ScreenSize", Vector2f(Screen::GetSize()));
+    sp->Set("B_ScreenSize", Vector2f(Screen::GetSizeS()));
 
     sp->Set("B_UvMultiply",              GetUvMultiply());
     sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
@@ -111,6 +111,6 @@ void G_Material::Bind() const
 
 void G_Material::UnBind() const
 {
-    G_ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
+    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->UnBind();
 }

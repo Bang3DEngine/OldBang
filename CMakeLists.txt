@@ -103,21 +103,22 @@ add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
 
 # BangGraphics Library
 set(GRAPHICS_SRC_FILES
-${ENGINE_SRC_DIR}/Graphics/Buffers/G_GBuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/G_Framebuffer.cpp
+${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Font.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_FontSheetCreator.cpp
+${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/G_Material.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_RenderTexture.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Screen.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/G_Shader.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/G_ShaderProgram.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Texture.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Texture2D.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_TextureUnitManager.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_VAO.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_VBO.cpp
+${ENGINE_SRC_DIR}/Graphics/General/RenderTexture.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Screen.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
+${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
+${ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
+${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
@@ -195,11 +196,8 @@ ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Screen.cpp
 ${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
 ${ENGINE_SRC_DIR}/Graphics/ShaderManager.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
@@ -223,8 +221,6 @@ ${ENGINE_SRC_DIR}/Resources/Prefab.cpp
 ${ENGINE_SRC_DIR}/Resources/Resource.cpp
 ${ENGINE_SRC_DIR}/Resources/Resources.cpp
 ${ENGINE_SRC_DIR}/Resources/Serializable.cpp
-${ENGINE_SRC_DIR}/Resources/ShaderProgram.cpp
-${ENGINE_SRC_DIR}/Resources/Texture2D.cpp
 ${ENGINE_SRC_DIR}/System/Library.cpp
 ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp

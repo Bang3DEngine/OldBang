@@ -1,5 +1,6 @@
 #include "Bang/Screen.h"
 
+#include "Bang/GL.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/Application.h"
@@ -17,7 +18,18 @@ Screen::~Screen()
 
 void Screen::Initialize()
 {
-    G_Screen::Initialize();
+    glewExperimental = true;
+
+    GLenum glewError = glewInit();
+    if (glewError != GLEW_OK)
+    {
+        Debug_Error("Glew init error: " << glewGetErrorString(glewError));
+    }
+
+    GL::Enable(GL::Test::Depth);
+    GL::Enable(GL::Test::Stencil);
+    GL::Enable(GL::Test::CullFace);
+
     m_gPipeline = new GraphicPipeline(this);
 }
 
@@ -32,7 +44,10 @@ void Screen::Render() const
 
 void Screen::OnResize(int w, int h)
 {
-    G_Screen::OnResize(w,h);
+    GL::SetViewport(0, 0, w, h);
+    m_size.x = w;
+    m_size.y = h;
+
     ENSURE(m_gPipeline);
 
     m_gPipeline->OnResize(w, h);
@@ -43,34 +58,54 @@ void Screen::OnResize(int w, int h)
     }
 }
 
-float Screen::GetAspectRatio()
+float Screen::GetAspectRatio() const
 {
-    G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
-    return screen->GetAspectRatio();
+    return float(GetWidth()) / GetHeight();
 }
 
-int Screen::GetHeight()
+int Screen::GetWidth() const
 {
-    G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
-    return screen->GetHeight();
+    return m_size.x;
 }
 
-int Screen::GetWidth()
+const Vector2i& Screen::GetSize() const
 {
-    G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
-    return screen->GetWidth();
+    return m_size;
 }
 
-Vector2i Screen::GetSize()
+Vector2 Screen::GetPixelClipSize() const
 {
-    G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
-    return screen->GetSize();
+    return 1.0f / Vector2(GetSize());
 }
 
-Vector2 Screen::GetPixelClipSize()
+int Screen::GetHeight() const
 {
-    G_Screen *screen = static_cast<G_Screen*>(Screen::GetInstance());
-    return screen->GetPixelClipSize();
+    return m_size.y;
+}
+
+float Screen::GetAspectRatioS()
+{
+    return Screen::GetInstance()->GetAspectRatio();
+}
+
+int Screen::GetHeightS()
+{
+    return Screen::GetInstance()->GetHeight();
+}
+
+int Screen::GetWidthS()
+{
+    return Screen::GetInstance()->GetWidth();
+}
+
+const Vector2i& Screen::GetSizeS()
+{
+    return Screen::GetInstance()->GetSize();
+}
+
+Vector2 Screen::GetPixelClipSizeS()
+{
+    return Screen::GetInstance()->GetPixelClipSize();
 }
 
 Screen *Screen::GetInstance()
