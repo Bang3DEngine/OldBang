@@ -9,6 +9,8 @@
 #include "Bang/TextFormat.h"
 #include "Bang/UIRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Font;
 
 class UITextRenderer : public UIRenderer
@@ -87,5 +89,7 @@ protected:
 private:
     Mesh *m_mesh = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UITEXTRENDERER_H

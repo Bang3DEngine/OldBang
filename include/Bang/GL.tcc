@@ -3,6 +3,8 @@
 
 #include "Bang/GL.h"
 
+NAMESPACE_BANG_BEGIN
+
 template <class T>
 bool GL::Uniform(const String &uniformName, const T& value, bool warn)
 {
@@ -28,5 +30,7 @@ bool GL::Uniform(const String &uniformName, const T& value, bool warn)
     GL::Uniform(location, value);
     return true;
 }
+
+NAMESPACE_BANG_END
 
 #endif // GL_TCC

@@ -4,10 +4,8 @@
 #include "Bang/Path.h"
 #include "Bang/String.h"
 
-/**
- * @brief The QtProjectManager class handles the creation of the .pro file that
- * will let the user edit the code with auto-completion using QtCreator.
- */
+NAMESPACE_BANG_BEGIN
+
 class QtProjectManager
 {
 public:
@@ -22,5 +20,7 @@ private:
     static Path GetQtProjectDir();
     static bool IsQtCreatorOpenedCurrentProject();
 };
+
+NAMESPACE_BANG_END
 
 #endif // QTPROJECTMANAGER_H

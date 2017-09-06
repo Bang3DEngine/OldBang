@@ -5,6 +5,8 @@
 #include "Bang/Color.h"
 #include "Bang/Framebuffer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class GBuffer : public Framebuffer
 {
 public:
@@ -62,5 +64,7 @@ private:
 
     friend class GraphicPipeline;
 };
+
+NAMESPACE_BANG_END
 
 #endif // GBUFFER_H

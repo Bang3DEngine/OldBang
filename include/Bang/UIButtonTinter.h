@@ -4,6 +4,8 @@
 #include "Bang/Color.h"
 #include "Bang/UIButton.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIButtonTinter : public UIButton,
                        public UIButtonListener
 {
@@ -44,5 +46,7 @@ private:
 
     void ApplyTintToGameObjects(const Color &tintColor);
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIBUTTONTINTER_H

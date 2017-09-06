@@ -30,6 +30,8 @@
 #include "Bang/SingleLineRenderer.h"
 #include "Bang/UIHorizontalLayout.h"
 
+USING_NAMESPACE_BANG
+
 #define CREATE_COMPONENT(className, ComponentClass) \
     if (className == ComponentClass::GetClassNameStatic()) \
     { return new ComponentClass(); }
@@ -108,3 +110,5 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
 
     return false;
 }
+
+

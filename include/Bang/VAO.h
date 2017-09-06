@@ -6,6 +6,8 @@
 #include "Bang/Array.h"
 #include "Bang/GLObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class VBO;
 
 class VAO : public GLObject
@@ -36,5 +38,7 @@ public:
 private:
     Array<const VBO*> m_vbos;
 };
+
+NAMESPACE_BANG_END
 
 #endif // VAO_H

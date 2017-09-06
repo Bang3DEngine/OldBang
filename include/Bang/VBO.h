@@ -5,6 +5,8 @@
 
 #include "Bang/GLObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 class VBO : public GLObject
 {
 public:
@@ -18,5 +20,7 @@ public:
     void Bind() const override;
     void UnBind() const override;
 };
+
+NAMESPACE_BANG_END
 
 #endif // VBO_H

@@ -7,6 +7,8 @@
 #include "Bang/Rect.h"
 #include "Bang/TextFormat.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Font;
 FORWARD class RectTransform;
 
@@ -58,5 +60,7 @@ private:
                                     int textSizePx,
                                     int currentCharIndex);
 };
+
+NAMESPACE_BANG_END
 
 #endif // TEXTFORMATTER_H

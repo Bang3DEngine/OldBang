@@ -3,6 +3,8 @@
 
 #include "Bang/Material.h"
 
+NAMESPACE_BANG_BEGIN
+
 class MaterialFactory
 {
 public:
@@ -24,5 +26,7 @@ public:
 private:
     static Material* Load(const String &enginePath);
 };
+
+NAMESPACE_BANG_END
 
 #endif // MATERIALFACTORY_H

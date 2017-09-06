@@ -13,6 +13,8 @@
 #include "Bang/MaterialFactory.h"
 #include "Bang/GraphicPipeline.h"
 
+USING_NAMESPACE_BANG
+
 Renderer::Renderer()
 {
     SetMaterial( MaterialFactory::GetDefault() );
@@ -167,3 +169,5 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", IsRenderWireframe());
 }
+
+

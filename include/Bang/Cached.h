@@ -3,6 +3,8 @@
 
 #include "Bang/Debug.h"
 
+NAMESPACE_BANG_BEGIN
+
 template <class T>
 class Cached
 {
@@ -16,5 +18,7 @@ private:
     T m_value;
     bool m_isValid = false;
 };
+
+NAMESPACE_BANG_END
 
 #endif // CACHED_H

@@ -3,6 +3,8 @@
 
 #include "Bang/GBuffer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class GraphicPipelineDebugger
 {
 public:
@@ -17,5 +19,7 @@ public:
 private:
     GraphicPipelineDebugger();
 };
+
+NAMESPACE_BANG_END
 
 #endif // GRAPHICPIPELINEDEBUGGER_H

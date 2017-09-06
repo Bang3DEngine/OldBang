@@ -3,6 +3,8 @@
 
 #include "Bang/LineRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class CircleRenderer : public LineRenderer
 {
     COMPONENT(CircleRenderer)
@@ -31,5 +33,7 @@ protected:
 
     virtual void ReloadPoints();
 };
+
+NAMESPACE_BANG_END
 
 #endif // CIRCLERENDERER_H

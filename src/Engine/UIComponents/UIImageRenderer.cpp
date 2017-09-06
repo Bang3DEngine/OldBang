@@ -7,6 +7,8 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/MaterialFactory.h"
 
+USING_NAMESPACE_BANG
+
 UIImageRenderer::UIImageRenderer()
 {
     SetMaterial( MaterialFactory::GetUIImage() );
@@ -80,3 +82,5 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
 }
+
+

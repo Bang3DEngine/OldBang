@@ -11,6 +11,8 @@
 #include "Bang/Debug.h"
 #include "Bang/Image.h"
 
+USING_NAMESPACE_BANG
+
 void ImageIO::Export(const Path &filepath, const Imageb &img)
 {
     if (filepath.HasExtension("png"))
@@ -280,6 +282,5 @@ void ImageIO::ImportJPG(const Path &filepath, Imageb *img, bool *ok)
 
     *ok = true;
 }
-
 
 

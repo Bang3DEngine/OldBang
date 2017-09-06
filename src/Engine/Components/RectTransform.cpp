@@ -6,6 +6,8 @@
 #include "Bang/Matrix4.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 RectTransform::RectTransform()
 {
 }
@@ -300,3 +302,5 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("AnchorMin",      GetAnchorMin()    );
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }
+
+

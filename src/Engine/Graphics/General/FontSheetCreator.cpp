@@ -11,6 +11,8 @@
 #include "Bang/Texture2D.h"
 #include "Bang/ImageEffects.h"
 
+USING_NAMESPACE_BANG
+
 bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                                         Texture2D *atlasTexture,
                                         const String &charsToLoad,
@@ -166,4 +168,5 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
                                     ImageAspectRatioMode::Ignore);
     return fittedResultMargined;
 }
+
 

@@ -4,6 +4,8 @@
 #include "Bang/Path.h"
 #include "Bang/BinType.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define EPATH(path) Paths::MakeEnginePath(path)  // Engine assets path
 #define PPATH(path) Paths::MakeProjectPath(path) // Project assets path
 
@@ -47,5 +49,7 @@ private:
 
     friend class Application;
 };
+
+NAMESPACE_BANG_END
 
 #endif // PATHS_H

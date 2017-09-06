@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Extensions
 {
 public:
@@ -17,5 +19,7 @@ public:
 
     Extensions() = delete;
 };
+
+NAMESPACE_BANG_END
 
 #endif // EXTENSIONS_H

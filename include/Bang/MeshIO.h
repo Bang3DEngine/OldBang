@@ -3,7 +3,9 @@
 
 #include "Bang/Bang.h"
 
-FORWARD   class Scene;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Scene;
 
 class MeshIO
 {
@@ -16,5 +18,7 @@ public:
 private:
     MeshIO() {}
 };
+
+NAMESPACE_BANG_END
 
 #endif // MESHIO_H

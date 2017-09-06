@@ -5,6 +5,8 @@
 #include "Bang/Vector3.h"
 #include "Bang/Renderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Mesh;
 
 class LineRenderer : public Renderer
@@ -37,5 +39,7 @@ private:
     Mesh  *m_mesh = nullptr;
     Array<Vector3> m_points;
 };
+
+NAMESPACE_BANG_END
 
 #endif // LINERENDERER_H

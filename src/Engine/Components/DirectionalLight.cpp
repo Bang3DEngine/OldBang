@@ -3,6 +3,8 @@
 #include "Bang/XMLNode.h"
 #include "Bang/MaterialFactory.h"
 
+USING_NAMESPACE_BANG
+
 DirectionalLight::DirectionalLight()
 {
     SetLightMaterial( MaterialFactory::GetDirectionalLight() );
@@ -27,3 +29,5 @@ void DirectionalLight::ExportXML(XMLNode *xmlInfo) const
 {
     Light::ExportXML(xmlInfo);
 }
+
+

@@ -4,6 +4,8 @@
 #include "Bang/Map.h"
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIDirLayout : public Component
 {
     COMPONENT(UIDirLayout)
@@ -33,5 +35,7 @@ private:
     bool m_vertical = false;
     Map<int, float> m_stretches;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIDIRLAYOUT_H

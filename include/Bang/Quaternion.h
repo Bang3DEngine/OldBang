@@ -5,6 +5,8 @@
 
 #include "Bang/Debug.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class T> // Most of it almost copied from glm
 class QuaternionG
 {
@@ -333,5 +335,7 @@ Vector3G<T> operator*(const Vector3G<T>& lhs, const QuaternionG<T>& q)
 {
     return q.Inversed() * lhs;
 }
+
+NAMESPACE_BANG_END
 
 #endif // QUATERNIONG_H

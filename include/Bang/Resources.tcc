@@ -1,5 +1,7 @@
 #include "Bang/Resources.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class ResourceClass>
 void Resources::Add(const GUID& guid, Resource *x)
 {
@@ -80,3 +82,5 @@ ResourceClass* Resources::GetCached(const GUID &guid)
     Resource *res = rs->m_GUIDToResource.Get<ResourceClass>().Get(guid);
     return res ? DCAST<ResourceClass*>(res) : nullptr;
 }
+
+NAMESPACE_BANG_END

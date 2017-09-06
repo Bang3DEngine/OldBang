@@ -3,6 +3,8 @@
 #include "Bang/Texture.h"
 #include "Bang/GraphicPipeline.h"
 
+USING_NAMESPACE_BANG
+
 TextureUnitManager::TextureUnitManager()
 {
     c_numTextureUnits = GL::GetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
@@ -55,3 +57,5 @@ void TextureUnitManager::UnBindTexture(const Texture *tex)
         tex->UnBind();
     }
 }
+
+

@@ -5,6 +5,8 @@
 #include "Bang/AudioManager.h"
 #include "Bang/ALAudioSource.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class AudioClip;
 
 class AudioSource : public Component,
@@ -50,5 +52,7 @@ private:
     friend class AudioClip;
     friend class AudioManager;
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOSOURCE_H

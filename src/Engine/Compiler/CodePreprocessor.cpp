@@ -10,6 +10,8 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
+USING_NAMESPACE_BANG
+
 String
 CodePreprocessor::GetIncludeContents(const String &includeDirective,
                                      const List<Path> &includePaths)
@@ -66,7 +68,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
                          contentLines,
                          contentLines.Begin(),
                          contentLines.End());
-            std::advance(it, contentLines.Size());
+            ::std::advance(it, contentLines.Size());
         }
         else { ++it; }
 
@@ -83,3 +85,5 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
 CodePreprocessor::CodePreprocessor()
 {
 }
+
+

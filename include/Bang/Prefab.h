@@ -4,12 +4,7 @@
 #include "Bang/Asset.h"
 #include "Bang/String.h"
 
-//Represents an GameObject that can be saved as an asset, and
-//can be instantiated.
-//In fact its asset file will be of the form
-//<GameObject>
-//  ...
-//</GameObject>
+NAMESPACE_BANG_BEGIN
 
 class Prefab : public Asset
 {
@@ -35,5 +30,7 @@ public:
 private:
     String m_gameObjectXMLInfoContent = "";
 };
+
+NAMESPACE_BANG_END
 
 #endif // BANGFAB_H

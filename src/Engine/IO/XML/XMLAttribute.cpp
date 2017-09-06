@@ -7,6 +7,8 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 
+USING_NAMESPACE_BANG
+
 XMLAttribute::XMLAttribute()
 {
 }
@@ -180,3 +182,5 @@ const Array<XMLProperty> &XMLAttribute::GetProperties() const
 {
     return m_properties;
 }
+
+

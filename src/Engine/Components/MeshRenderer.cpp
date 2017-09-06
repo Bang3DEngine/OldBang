@@ -8,6 +8,8 @@
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 MeshRenderer::MeshRenderer()
 {
     SetRenderPrimitive( GL::Primitives::Triangles );
@@ -49,3 +51,5 @@ void MeshRenderer::ExportXML(XMLNode *xmlInfo) const
     Renderer::ExportXML(xmlInfo);
     xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetGUID() : GUID::Empty());
 }
+
+

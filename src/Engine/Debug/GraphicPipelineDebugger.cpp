@@ -5,6 +5,8 @@
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 
+USING_NAMESPACE_BANG
+
 Path GraphicPipelineDebugger::c_debugDir = Path("/home/sephirot47/Bang/tmp");
 
 GraphicPipelineDebugger::GraphicPipelineDebugger()
@@ -39,4 +41,5 @@ void GraphicPipelineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
                                                      const String &screenshotName)
 {
 }
+
 

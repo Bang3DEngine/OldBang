@@ -6,6 +6,8 @@
 #include "Bang/Path.h"
 #include "Bang/GUIDManager.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ImportFilesManager
 {
 public:
@@ -39,5 +41,7 @@ private:
 
     friend class Application;
 };
+
+NAMESPACE_BANG_END
 
 #endif // IMPORTFILESMANAGER_H

@@ -3,6 +3,8 @@
 
 #include "Bang/Path.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Library
 {
 public:
@@ -33,5 +35,7 @@ private:
     void FetchError();
     bool TheresError() const;
 };
+
+NAMESPACE_BANG_END
 
 #endif // LIBRARY_H

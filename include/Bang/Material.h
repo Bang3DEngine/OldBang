@@ -5,6 +5,8 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Texture2D;
 FORWARD class ShaderProgram;
 
@@ -52,5 +54,7 @@ protected:
     bool m_receivesLighting = true;
     Vector2 m_uvMultiply    = Vector2::One;
 };
+
+NAMESPACE_BANG_END
 
 #endif // MATERIAL_H

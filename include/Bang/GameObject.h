@@ -9,6 +9,8 @@
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Camera;
 FORWARD class Component;
 
@@ -125,7 +127,7 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
-    std::queue<Component*> m_componentsToBeRemoved;
+    ::std::queue<Component*> m_componentsToBeRemoved;
 
     bool m_iteratingComponents = false;
 
@@ -142,6 +144,8 @@ private:
     friend class GraphicPipeline;
     friend class GameObjectFactory;
 };
+
+NAMESPACE_BANG_END
 
 #include "GameObject.tcc"
 

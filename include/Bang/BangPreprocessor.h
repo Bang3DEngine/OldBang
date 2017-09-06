@@ -4,6 +4,8 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 class BangPreprocessor
 {
 public:
@@ -59,5 +61,7 @@ public:
 
     BangPreprocessor();
 };
+
+NAMESPACE_BANG_END
 
 #endif // BANGPREPROCESSOR_H

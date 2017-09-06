@@ -10,6 +10,8 @@
 #include "Bang/Debug.h"
 #include "Bang/ShaderPreprocessor.h"
 
+USING_NAMESPACE_BANG
+
 Shader::Shader() : Shader(GL::ShaderType::Vertex)
 {
 }
@@ -61,3 +63,5 @@ GL::ShaderType Shader::GetType() const
 {
     return m_type;
 }
+
+

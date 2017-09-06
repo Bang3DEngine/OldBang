@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 class CodePreprocessor
 {
 public:
@@ -28,7 +30,8 @@ protected:
 
 private:
     CodePreprocessor();
-
 };
+
+NAMESPACE_BANG_END
 
 #endif // CODEPREPROCESSOR_H

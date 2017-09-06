@@ -4,6 +4,8 @@
 #include "Bang/Path.h"
 #include "Bang/BinType.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Project;
 
 class GameBuilder
@@ -23,5 +25,7 @@ private:
     static bool     CompileBehaviours(const Path &executableDir,
                                       BinType binType);
 };
+
+NAMESPACE_BANG_END
 
 #endif // GAMEBUILDER_H

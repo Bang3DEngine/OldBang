@@ -4,19 +4,21 @@
 #include <map>
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD_T class List;
 
 template <class Key, class Value>
 class Map
 {
 public:
-    using Iterator = typename std::map<Key, Value>::iterator;
-    using RIterator = typename std::map<Key, Value>::reverse_iterator;
-    using Const_Iterator = typename std::map<Key, Value>::const_iterator;
-    using Const_RIterator = typename std::map<Key, Value>::const_reverse_iterator;
+    using Iterator = typename ::std::map<Key, Value>::iterator;
+    using RIterator = typename ::std::map<Key, Value>::reverse_iterator;
+    using Const_Iterator = typename ::std::map<Key, Value>::const_iterator;
+    using Const_RIterator = typename ::std::map<Key, Value>::const_reverse_iterator;
 
     Map();
-    Map(const std::map<Key, Value> &m);
+    Map(const ::std::map<Key, Value> &m);
 
     void Add(const Key &key, const Value &value = Value());
 
@@ -62,8 +64,10 @@ public:
     Const_Iterator cend() const;
 
 private:
-    std::map<Key, Value> m_map;
+    ::std::map<Key, Value> m_map;
 };
+
+NAMESPACE_BANG_END
 
 #include "Map.tcc"
 

@@ -5,6 +5,8 @@
 #include "Bang/Renderer.h"
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIRenderer : public Renderer
 {
     COMPONENT(UIRenderer)
@@ -13,5 +15,7 @@ protected:
     UIRenderer();
     virtual ~UIRenderer();
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIRENDERER_H

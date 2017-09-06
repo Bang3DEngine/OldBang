@@ -3,6 +3,8 @@
 #include "Bang/Math.h"
 #include "Bang/Array.h"
 
+USING_NAMESPACE_BANG
+
 Sphere::Sphere()
 {
 
@@ -76,3 +78,5 @@ Sphere Sphere::FromBox(const AABox &box)
     s.FillFromBox(box);
     return s;
 }
+
+

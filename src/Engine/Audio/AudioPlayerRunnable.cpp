@@ -4,6 +4,8 @@
 #include "Bang/AudioManager.h"
 #include "Bang/ALAudioSource.h"
 
+USING_NAMESPACE_BANG
+
 AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
                                          ALAudioSource *alAudioSource,
                                          float delayInSeconds)
@@ -49,3 +51,5 @@ void AudioPlayerRunnable::Run()
     do { Thread::SleepCurrentThread(0.3f); }
     while ( !m_forceExit && !m_alAudioSource->IsStopped() );
 }
+
+

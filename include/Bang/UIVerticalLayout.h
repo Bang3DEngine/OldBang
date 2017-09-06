@@ -3,6 +3,8 @@
 
 #include "Bang/UIDirLayout.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIVerticalLayout : public UIDirLayout
 {
     COMPONENT(UIVerticalLayout)
@@ -10,5 +12,7 @@ class UIVerticalLayout : public UIDirLayout
 public:
     UIVerticalLayout();
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIVERTICALLAYOUT_H

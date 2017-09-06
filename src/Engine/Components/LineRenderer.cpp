@@ -5,6 +5,8 @@
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
 
+USING_NAMESPACE_BANG
+
 LineRenderer::LineRenderer()
 {
     m_mesh = new Mesh();
@@ -81,3 +83,5 @@ void LineRenderer::ExportXML(XMLNode *xmlInfo) const
 {
     Renderer::ExportXML(xmlInfo);
 }
+
+

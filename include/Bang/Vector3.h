@@ -3,7 +3,9 @@
 
 #include "Bang/Vector.h"
 
-template<class T> class Vector2G;
+NAMESPACE_BANG_BEGIN
+
+FORWARD_T class Vector2G;
 
 #define XYZ_MEMBERS x,y,z
 #define EXTRA_DECLARATIONS \
@@ -94,5 +96,7 @@ const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(SCAST<T>(0),
 
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
+
+NAMESPACE_BANG_END
 
 #endif // VECTOR3_H

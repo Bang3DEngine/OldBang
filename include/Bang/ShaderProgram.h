@@ -5,8 +5,10 @@
 #include "Bang/Asset.h"
 #include "Bang/GLObject.h"
 
-FORWARD   class Shader;
-FORWARD   class Texture;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Shader;
+FORWARD class Texture;
 
 class ShaderProgram : public GLObject,
                       public Asset
@@ -80,5 +82,6 @@ private:
     void UpdateTextureBindings() const;
 };
 
+NAMESPACE_BANG_END
 
 #endif // SHADERPROGRAM_H

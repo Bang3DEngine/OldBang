@@ -7,6 +7,8 @@
 #include "Bang/Vector4.h"
 #include "Bang/Quaternion.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Random
 {
 public:
@@ -38,5 +40,7 @@ T Random::Range(T minIncluded, T maxExcluded)
 {
     return SCAST<T>(Random::Value() * (maxExcluded-minIncluded)) + minIncluded;
 }
+
+NAMESPACE_BANG_END
 
 #endif // RANDOM_H

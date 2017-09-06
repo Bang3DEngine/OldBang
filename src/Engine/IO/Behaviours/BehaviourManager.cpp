@@ -9,6 +9,8 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 BehaviourManager::BehaviourManager()
 {
 }
@@ -101,3 +103,5 @@ BehaviourManager *BehaviourManager::GetInstance()
 {
     return Application::GetInstance()->GetBehaviourManager();
 }
+
+

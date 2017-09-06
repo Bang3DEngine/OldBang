@@ -7,6 +7,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GraphicPipeline.h"
 
+USING_NAMESPACE_BANG
+
 Screen::Screen()
 {
 }
@@ -118,3 +120,5 @@ GraphicPipeline *Screen::GetGraphicPipeline() const
 {
     return m_gPipeline;
 }
+
+

@@ -8,6 +8,8 @@
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 Mesh* MeshFactory::GetPlane()
 {
     return Resources::Load<Mesh>( EPATH("Meshes/Plane.obj") );
@@ -68,3 +70,5 @@ GameObject *MeshFactory::GetConeGameObject()
 {
     return CreatePrimitiveGameObject(GetCone(), "Cone");
 }
+
+

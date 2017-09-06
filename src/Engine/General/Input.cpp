@@ -4,6 +4,8 @@
 #include "Bang/Screen.h"
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 Input::Input()
 {
 }
@@ -467,3 +469,5 @@ void Input::StopTextInput()
 {
     SDL_StopTextInput();
 }
+
+

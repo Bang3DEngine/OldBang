@@ -3,6 +3,8 @@
 
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class UIGameObject;
 
 class UICanvas : public Component
@@ -26,5 +28,7 @@ public:
 private:
     mutable UIGameObject *p_focus = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // CANVAS_H

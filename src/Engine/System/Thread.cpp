@@ -2,6 +2,8 @@
 
 #include "Bang/Debug.h"
 
+NAMESPACE_BANG_BEGIN
+
 int ThreadFunc(ThreadRunnable *runnable, Thread *thread);
 
 Thread::Thread()
@@ -27,7 +29,7 @@ void Thread::Start()
 {
     if (p_runnable)
     {
-        m_thread = std::thread(ThreadFunc, p_runnable, this);
+        m_thread = ::std::thread(ThreadFunc, p_runnable, this);
     }
     else { Debug_Error("Trying to start Thread with no ThreadRunnable set."); }
 }
@@ -51,13 +53,13 @@ ThreadRunnable *Thread::GetRunnable() const { return p_runnable; }
 void Thread::SleepCurrentThread(float seconds)
 {
     int millis = SCAST<int>(seconds * 1000);
-    std::this_thread::sleep_for( std::chrono::milliseconds(millis) );
+    ::std::this_thread::sleep_for( ::std::chrono::milliseconds(millis) );
 }
 
 String Thread::GetCurrentThreadId()
 {
-    std::stringstream ss;
-    ss << std::this_thread::get_id();
+    ::std::stringstream ss;
+    ss << ::std::this_thread::get_id();
     return String(ss.str());
 }
 
@@ -73,8 +75,6 @@ int ThreadFunc(ThreadRunnable *runnable, Thread *thread)
 
     return 0;
 }
-
-
 
 ThreadRunnable::ThreadRunnable()
 {
@@ -93,3 +93,5 @@ bool ThreadRunnable::IsAutoDelete() const
 {
     return m_autoDelete;
 }
+
+NAMESPACE_BANG_END

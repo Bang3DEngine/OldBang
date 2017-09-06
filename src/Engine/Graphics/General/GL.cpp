@@ -9,6 +9,8 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/GraphicPipeline.h"
 
+USING_NAMESPACE_BANG
+
 void GL::ClearError()
 {
     glGetError();
@@ -909,3 +911,5 @@ GL *GL::GetActive()
 }
 
 GL::GL() {}
+
+

@@ -3,6 +3,8 @@
 
 #include "Bang/LineRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UITextCursor : public LineRenderer
 {
     COMPONENT(UITextCursor)
@@ -23,5 +25,7 @@ private:
     float m_cursorTime = 0.0f;
     float m_cursorTickTime = 0.25f;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UITEXTCURSOR_H

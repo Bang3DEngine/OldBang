@@ -10,6 +10,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 
+USING_NAMESPACE_BANG
+
 Light::Light() { }
 Light::~Light() { }
 
@@ -82,3 +84,5 @@ void Light::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Intensity", GetIntensity());
     xmlInfo->Set("Color", GetColor());
 }
+
+

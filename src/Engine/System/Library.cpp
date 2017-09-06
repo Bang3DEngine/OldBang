@@ -2,6 +2,8 @@
 
 #include <dlfcn.h>
 
+USING_NAMESPACE_BANG
+
 Library::Library(const Path &libPath)
 {
     m_libPath = libPath;
@@ -69,3 +71,5 @@ bool Library::TheresError() const
 {
     return !m_errorString.IsEmpty();
 }
+
+

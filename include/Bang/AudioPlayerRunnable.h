@@ -3,6 +3,8 @@
 
 #include "Bang/Thread.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class AudioClip;
 FORWARD class ALAudioSource;
 
@@ -29,5 +31,7 @@ private:
     ALAudioSource *m_alAudioSource = 0;
     float m_delayInSeconds = 0.0f;
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOPLAYERRUNNABLE_H

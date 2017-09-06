@@ -4,6 +4,8 @@
 #include "Bang/List.h"
 #include "Bang/Thread.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ThreadPool
 {
 public:
@@ -20,5 +22,7 @@ private:
 
     int m_maxThreadCount = 32;
 };
+
+NAMESPACE_BANG_END
 
 #endif // THREADPOOL_H

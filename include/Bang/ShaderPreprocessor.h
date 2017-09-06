@@ -3,6 +3,8 @@
 
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ShaderPreprocessor
 {
 public:
@@ -14,5 +16,7 @@ protected:
 private:
     ShaderPreprocessor();
 };
+
+NAMESPACE_BANG_END
 
 #endif // SHADERPREPROCESSOR_H

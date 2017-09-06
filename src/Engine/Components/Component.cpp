@@ -5,6 +5,8 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 Component::Component()
 {
 }
@@ -38,7 +40,7 @@ void Component::CloneInto(ICloneable *clone) const
 
 String Component::ToString() const
 {
-    std::ostringstream msg;
+    ::std::ostringstream msg;
     msg << "";
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
 }
@@ -70,3 +72,5 @@ void Component::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set("Enabled", IsEnabled());
 }
+
+

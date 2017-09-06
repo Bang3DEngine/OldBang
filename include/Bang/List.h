@@ -6,20 +6,22 @@
 
 #include "Bang/Containers.h"
 
+NAMESPACE_BANG_BEGIN
+
 template <class T>
 class List
 {
 public:
-    using Iterator = typename std::list<T>::iterator;
-    using RIterator = typename std::list<T>::reverse_iterator;
-    using Const_Iterator = typename std::list<T>::const_iterator;
-    using Const_RIterator = typename std::list<T>::const_reverse_iterator;
+    using Iterator = typename ::std::list<T>::iterator;
+    using RIterator = typename ::std::list<T>::reverse_iterator;
+    using Const_Iterator = typename ::std::list<T>::const_iterator;
+    using Const_RIterator = typename ::std::list<T>::const_reverse_iterator;
 
     List();
-    List(const std::list<T> &l);
+    List(const ::std::list<T> &l);
     List(int size);
     List(int size, const T& initValue);
-    List(std::initializer_list<T> l);
+    List(::std::initializer_list<T> l);
 
     template <class OtherIterator>
     List(OtherIterator begin, OtherIterator end);
@@ -92,8 +94,10 @@ public:
     Container<OtherT> To() const;
 
 private:
-    std::list<T> m_list;
+    ::std::list<T> m_list;
 };
+
+NAMESPACE_BANG_END
 
 #include "List.tcc"
 

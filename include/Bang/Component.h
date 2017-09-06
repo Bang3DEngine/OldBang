@@ -6,6 +6,8 @@
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define COMPONENT(ClassName) \
     SERIALIZABLE(ClassName) \
     friend class ComponentFactory;
@@ -52,5 +54,7 @@ private:
 
     friend class GameObject;
 };
+
+NAMESPACE_BANG_END
 
 #endif // COMPONENT_H

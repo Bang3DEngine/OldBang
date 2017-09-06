@@ -4,6 +4,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
 
+NAMESPACE_BANG_BEGIN
+
 class RectTransform : public Transform
 {
     COMPONENT(RectTransform)
@@ -76,5 +78,7 @@ private:
 
     friend class Screen;
 };
+
+NAMESPACE_BANG_END
 
 #endif // RECTTRANSFORM_H

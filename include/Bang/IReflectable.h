@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define BP_REFLECT_VARIABLE(args...)
 #define BP_REFLECT_CLASS(args...)
 #define BP_REFLECT_STRUCT(args...)
@@ -19,5 +21,7 @@ protected:
     IReflectable() {}
     virtual ~IReflectable() {}
 };
+
+NAMESPACE_BANG_END
 
 #endif // IREFLECTABLE_H

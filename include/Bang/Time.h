@@ -1,6 +1,10 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include "Bang/Bang.h"
+
+NAMESPACE_BANG_BEGIN
+
 class Time
 {
 public:
@@ -32,5 +36,7 @@ private:
 
     friend class Application;
 };
+
+NAMESPACE_BANG_END
 
 #endif // TIME_H

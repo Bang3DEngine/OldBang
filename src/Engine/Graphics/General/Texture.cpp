@@ -1,5 +1,7 @@
 #include "Bang/Texture.h"
 
+USING_NAMESPACE_BANG
+
 Texture::Texture()
 {
     GL::GenTextures(1, &m_idGL);
@@ -125,3 +127,5 @@ GL::BindTarget Texture::GetGLBindTarget() const
 {
     return GL::BindTarget::Texture2D;
 }
+
+

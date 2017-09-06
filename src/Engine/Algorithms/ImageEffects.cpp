@@ -2,6 +2,8 @@
 
 #include "Bang/Debug.h"
 
+USING_NAMESPACE_BANG
+
 void ImageEffects::SignedDistanceField(const Imageb &inputImageBW,
                                        Imageb *outImg,
                                        int radius)
@@ -113,3 +115,5 @@ bool ImageEffects::Diff(const Imageb &inputImage1,
     }
     return diff;
 }
+
+

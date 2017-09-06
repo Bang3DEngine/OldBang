@@ -11,6 +11,8 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/RenderTexture.h"
 
+USING_NAMESPACE_BANG
+
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
@@ -112,3 +114,5 @@ RenderTexture *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }
+
+

@@ -5,6 +5,8 @@
 #include "Bang/UIMask.h"
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class UIGameObject;
 
 class UIScrollArea : public Component
@@ -40,5 +42,7 @@ private:
 
     friend class GameObjectFactory;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UISCROLLAREA_H

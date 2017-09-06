@@ -3,6 +3,8 @@
 #include "Bang/Debug.h"
 #include "Bang/Screen.h"
 
+USING_NAMESPACE_BANG
+
 Window::Window()
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -62,4 +64,5 @@ Screen *Window::GetScreen() const
 {
     return m_screen;
 }
+
 

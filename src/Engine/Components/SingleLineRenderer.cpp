@@ -3,6 +3,8 @@
 #include "Bang/Mesh.h"
 #include "Bang/XMLNode.h"
 
+USING_NAMESPACE_BANG
+
 SingleLineRenderer::SingleLineRenderer()
 {
     SetPoints( {Vector3::Zero, Vector3::One} );
@@ -54,4 +56,5 @@ void SingleLineRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Origin", GetOrigin());
     xmlInfo->Set("Destiny", GetDestiny());
 }
+
 

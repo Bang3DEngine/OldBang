@@ -9,6 +9,8 @@
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"
 
+USING_NAMESPACE_BANG
+
 using BP = BangPreprocessor;
 
 const Array<String> BP::VarTypeInt     = {"int"};
@@ -16,7 +18,7 @@ const Array<String> BP::VarTypeBool    = {"bool"};
 const Array<String> BP::VarTypeColor   = {"Color"};
 const Array<String> BP::VarTypeFloat   = {"float"};
 const Array<String> BP::VarTypeDouble  = {"double"};
-const Array<String> BP::VarTypeString  = {"std::string", "string", "String"};
+const Array<String> BP::VarTypeString  = {"::std::string", "string", "String"};
 const Array<String> BP::VarTypeVector2 = {"Vector2"};
 const Array<String> BP::VarTypeVector3 = {"Vector3"};
 const Array<String> BP::VarTypeVector4 = {"Vector4"};
@@ -89,10 +91,10 @@ void BangPreprocessor::Preprocess(const Path &filepath)
 
         if (preprocessedSomething)
         {
-            std::cout << "  File '" << filepath.ToString().ToCString()
+            ::std::cout << "  File '" << filepath.ToString().ToCString()
                       << "' successfully preprocessed into '"
                       << reflFilepath.ToString().ToCString()
-                      << "'" << std::endl;
+                      << "'" << ::std::endl;
         }
     }
 }
@@ -188,7 +190,7 @@ String::Iterator BangPreprocessor::Find(String::Iterator begin,
 {
     for (const String &toFind : toFindList)
     {
-        String::Iterator itFound = std::search(begin, end,
+        String::Iterator itFound = ::std::search(begin, end,
                                                toFind.Begin(), toFind.End());
         if (itFound != end) { return itFound; }
     }
@@ -247,12 +249,12 @@ void BangPreprocessor::SkipUntilNext(String::Iterator *it,
                                      String::Iterator end,
                                      const Array<String> &particles)
 {
-    String c( std::string(1, *(*it)) );
+    String c( ::std::string(1, *(*it)) );
     while ( !particles.Contains(c) )
     {
         ++(*it);
         if (*it == end) { break; }
-        c = String( std::string(1, *(*it)) );
+        c = String( ::std::string(1, *(*it)) );
     }
 }
 
@@ -277,3 +279,5 @@ void BangPreprocessor::FindNextWord(String::Iterator begin,
 BangPreprocessor::BangPreprocessor()
 {
 }
+
+

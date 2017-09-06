@@ -4,8 +4,10 @@
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 
-FORWARD   class Screen;
-FORWARD   class ShaderProgram;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Screen;
+FORWARD class ShaderProgram;
 
 class Camera : public Component
 {
@@ -64,5 +66,7 @@ private:
 
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 };
+
+NAMESPACE_BANG_END
 
 #endif // CAMERA_H

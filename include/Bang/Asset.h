@@ -5,6 +5,8 @@
 #include "Bang/Resource.h"
 #include "Bang/IToString.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define ASSET(CLASS_NAME) RESOURCE(CLASS_NAME)
 
 class Asset : public Resource,
@@ -27,5 +29,7 @@ protected:
 
     friend class Resources;
 };
+
+NAMESPACE_BANG_END
 
 #endif // ASSET_H

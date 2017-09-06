@@ -5,6 +5,8 @@
 #include "Bang/Set.h"
 #include "Bang/Shader.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ShaderManager
 {
 public:
@@ -23,5 +25,7 @@ private:
     Map<Shader*, Set<ShaderProgram*> > m_shaderUsages;
     void Refresh();
 };
+
+NAMESPACE_BANG_END
 
 #endif // SHADERMANAGER_H

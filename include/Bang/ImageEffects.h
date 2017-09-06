@@ -3,6 +3,8 @@
 
 #include "Bang/Image.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ImageEffects
 {
 public:
@@ -25,5 +27,7 @@ public:
 
     ImageEffects() = delete;
 };
+
+NAMESPACE_BANG_END
 
 #endif // DISTANCEFIELDER_H

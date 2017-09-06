@@ -6,6 +6,8 @@
 
 #include "Bang/Math.h"
 
+NAMESPACE_BANG_BEGIN
+
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
 
@@ -86,11 +88,11 @@ public: \
     } \
  \
     \
-    T &At(std::size_t i) \
+    T &At(::std::size_t i) \
     { \
         return (*this)[i]; \
     } \
-    const T &At(std::size_t i) const \
+    const T &At(::std::size_t i) const \
     { \
         return (*this)[i]; \
     } \
@@ -177,11 +179,11 @@ public: \
         return VECTOR_G<T>::Min( VECTOR_G<T>::Max(v, max), min ); \
     } \
  \
-    const T& operator[](std::size_t i) const \
+    const T& operator[](::std::size_t i) const \
     { \
         return (reinterpret_cast<const T*>(this))[i]; \
     } \
-    T& operator[](std::size_t i) \
+    T& operator[](::std::size_t i) \
     { \
         return (reinterpret_cast<T*>(this))[i]; \
     } \
@@ -357,5 +359,6 @@ VECTOR_G<T> operator-(const VECTOR_G<T> &v) \
     return v * SCAST<T>(-1); \
 }
 
+NAMESPACE_BANG_END
 
 #endif // VECTOR_H

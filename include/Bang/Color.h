@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Color
 {
 public:
@@ -89,5 +91,7 @@ Color& operator+=(Color& lhs, float m);
 Color& operator-=(Color& lhs, float m);
 Color& operator*=(Color& lhs, float m);
 Color& operator/=(Color& lhs, float m);
+
+NAMESPACE_BANG_END
 
 #endif // COLOR_H

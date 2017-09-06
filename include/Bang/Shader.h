@@ -8,6 +8,8 @@
 #include "Bang/Resource.h"
 #include "Bang/GLObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Shader : public GLObject,
                public Resource
 {
@@ -32,5 +34,7 @@ protected:
     Path m_filepath;
     GL::ShaderType m_type;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SHADER_H

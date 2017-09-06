@@ -14,6 +14,8 @@
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 
+USING_NAMESPACE_BANG
+
 Camera::Camera()
 {
     p_camMesh = Resources::Load<Mesh>( EPATH("Meshes/Camera.obj") );
@@ -178,3 +180,5 @@ void Camera::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("OrthoHeight", GetOrthoHeight());
     xmlInfo->Set("FOVDegrees", GetFovDegrees());
 }
+
+

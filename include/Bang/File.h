@@ -3,6 +3,8 @@
 
 #include "Bang/Path.h"
 
+NAMESPACE_BANG_BEGIN
+
 class File
 {
 public:
@@ -34,5 +36,7 @@ public:
 protected:
     Path m_path;
 };
+
+NAMESPACE_BANG_END
 
 #endif // FILE_H

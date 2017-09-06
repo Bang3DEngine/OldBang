@@ -1,6 +1,10 @@
 #ifndef FLAGS_H
 #define FLAGS_H
 
+#include "Bang/Bang.h"
+
+NAMESPACE_BANG_BEGIN
+
 template <class Flag>
 class Flags
 {
@@ -50,5 +54,7 @@ private:
 };
 
 #define CREATE_FLAGS(FlagsName, FlagType) using FlagsName = Flags<FlagType>
+
+NAMESPACE_BANG_END
 
 #endif // FLAGS_H

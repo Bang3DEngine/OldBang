@@ -6,6 +6,8 @@
 #include "Bang/List.h"
 #include "Bang/GameObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Camera;
 FORWARD class Gizmos;
 
@@ -32,7 +34,7 @@ public:
     virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
-    std::queue<GameObject*> m_gameObjectsToBeDestroyed;
+    ::std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
@@ -52,5 +54,7 @@ protected:
     friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SCENE_H

@@ -4,6 +4,8 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Chrono
 {
 public:
@@ -23,5 +25,7 @@ private:
     String m_chronoName = "";
     Array<ChronoEvent> m_events = {};
 };
+
+NAMESPACE_BANG_END
 
 #endif // CHRONO_H

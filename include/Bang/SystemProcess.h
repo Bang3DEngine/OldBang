@@ -7,6 +7,8 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 class SystemProcess
 {
 public:
@@ -48,5 +50,7 @@ private:
     FileDescriptor m_childToParentErrFD[2];
     FileDescriptor m_parentToChildFD[2];
 };
+
+NAMESPACE_BANG_END
 
 #endif // SYSTEMPROCESS_H

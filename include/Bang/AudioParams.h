@@ -3,6 +3,8 @@
 
 #include "Bang/Vector3.h"
 
+NAMESPACE_BANG_BEGIN
+
 struct AudioParams
 {
     Vector3 position;
@@ -18,5 +20,7 @@ struct AudioParams
     {
     }
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOPARAMS_H

@@ -4,6 +4,7 @@
 #include "Bang/File.h"
 #include "Bang/Serializable.h"
 
+USING_NAMESPACE_BANG
 
 XMLParser::XMLParser()
 {
@@ -227,3 +228,5 @@ XMLNode XMLParser::FromString(const String &xml)
 
     return root;
 }
+
+

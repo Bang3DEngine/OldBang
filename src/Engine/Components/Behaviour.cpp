@@ -4,6 +4,8 @@
 #include "Bang/Application.h"
 #include "Bang/BehaviourManager.h"
 
+USING_NAMESPACE_BANG
+
 Behaviour::Behaviour()
 {
 }
@@ -155,3 +157,5 @@ void Behaviour::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Behaviour");
     xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }
+
+

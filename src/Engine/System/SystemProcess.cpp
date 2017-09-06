@@ -12,6 +12,8 @@
 
 #include "Bang/Thread.h"
 
+USING_NAMESPACE_BANG
+
 enum { IN = 0, OUT = 1, ERR = 2 };
 enum { WRITE = OUT, READ = IN };
 
@@ -80,8 +82,8 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     }
     else
     {
-        std::cerr << "There was an error forking to execute SystemProcess." <<
-                     std::endl;
+        ::std::cerr << "There was an error forking to execute SystemProcess." <<
+                     ::std::endl;
         return false;
     }
 
@@ -98,8 +100,8 @@ bool SystemProcess::StartDettached(const String &command,
 
 long long unsigned int GetNow()
 {
-    return std::chrono::duration_cast< std::chrono::milliseconds >(
-            std::chrono::system_clock::now().time_since_epoch()).count();
+    return ::std::chrono::duration_cast< ::std::chrono::milliseconds >(
+            ::std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
 bool SystemProcess::WaitUntilFinished(float seconds)
@@ -190,7 +192,7 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
     {
         String readChunk(buffer);
         String::Iterator readChunkEnd = readChunk.Begin();
-        std::advance(readChunkEnd, readBytes);
+        ::std::advance(readChunkEnd, readBytes);
         String readChunkN(readChunk.Begin(), readChunkEnd);
         output += readChunkN;
         memset(buffer, 0, bufferSize);
@@ -209,3 +211,5 @@ bool SystemProcess::FinishedOk() const
 {
     return GetExitCode() == 0;
 }
+
+

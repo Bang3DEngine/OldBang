@@ -5,6 +5,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 UIScrollArea::UIScrollArea() noexcept
 {
 }
@@ -98,3 +100,5 @@ void UIScrollArea::InitGameObject()
     quad->SetTint(Color::White);
     RetrieveReferences();
 }
+
+

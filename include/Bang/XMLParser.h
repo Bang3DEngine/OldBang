@@ -6,6 +6,8 @@
 
 #include "Bang/XMLNode.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Serializable;
 
 class XMLParser
@@ -47,5 +49,7 @@ public:
     static XMLNode FromFile(const Path &filepath);
     static XMLNode FromString(const String &xml);
 };
+
+NAMESPACE_BANG_END
 
 #endif // XMLPARSER_H

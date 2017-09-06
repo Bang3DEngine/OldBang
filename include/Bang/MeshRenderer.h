@@ -3,6 +3,8 @@
 
 #include "Bang/Renderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class VAO;
 
 class MeshRenderer : public Renderer
@@ -33,5 +35,7 @@ protected:
     // Renderer
     virtual void OnRender() override;
 };
+
+NAMESPACE_BANG_END
 
 #endif // MESHRENDERER_H

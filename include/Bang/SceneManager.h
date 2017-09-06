@@ -3,6 +3,8 @@
 
 #include "Bang/Path.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Scene;
 
 class SceneManager
@@ -40,5 +42,7 @@ private:
     friend class Project;
     friend class Application;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SCENEMANAGER_H

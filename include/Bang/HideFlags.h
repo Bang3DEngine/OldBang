@@ -3,6 +3,8 @@
 
 #include "Bang/Flags.h"
 
+NAMESPACE_BANG_BEGIN
+
 enum HideFlag
 {
     Default,
@@ -10,5 +12,7 @@ enum HideFlag
 };
 
 CREATE_FLAGS(HideFlags, HideFlag);
+
+NAMESPACE_BANG_END
 
 #endif // HIDEFLAGS_H

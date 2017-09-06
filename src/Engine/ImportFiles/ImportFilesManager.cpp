@@ -7,6 +7,8 @@
 #include "Bang/XMLParser.h"
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 ImportFilesManager::ImportFilesManager()
 {
 }
@@ -167,3 +169,5 @@ String ImportFilesManager::GetImportExtension()
 {
     return "import";
 }
+
+

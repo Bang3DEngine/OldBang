@@ -8,6 +8,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class VAO;
 FORWARD class VBO;
 
@@ -68,5 +70,7 @@ private:
 
     bool m_trisModel = false;
 };
+
+NAMESPACE_BANG_END
 
 #endif // MESH_H

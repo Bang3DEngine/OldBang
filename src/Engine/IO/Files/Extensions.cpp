@@ -12,6 +12,8 @@
 #include "Bang/AudioClip.h"
 #include "Bang/Texture2D.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<> String Extensions::Get<Mesh>() { return "bmesh"; }
 template<> String Extensions::Get<Font>() { return "bfont"; }
 template<> String Extensions::Get<Prefab>() { return "bprefab"; }
@@ -52,3 +54,5 @@ List<String> Extensions::GetFragmentShaderList()
 {
     return {"frag", "frag_*"};
 }
+
+NAMESPACE_BANG_END

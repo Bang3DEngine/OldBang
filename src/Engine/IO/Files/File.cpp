@@ -12,6 +12,8 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
+USING_NAMESPACE_BANG
+
 File::File()
 {
 }
@@ -37,11 +39,11 @@ bool File::DuplicateFile(const Path &fromFilepath,
     if (!fromFilepath.IsFile()) { return false; }
     if (!overwrite && toFilepath.Exists()) { return false; }
 
-    std::ifstream src(fromFilepath.GetAbsolute().ToCString(), std::ios::binary);
+    ::std::ifstream src(fromFilepath.GetAbsolute().ToCString(), ::std::ios::binary);
     if (!src) { return false; }
 
     if (overwrite) { File::Remove(toFilepath); }
-    std::ofstream dst(toFilepath.GetAbsolute().ToCString(),   std::ios::binary);
+    ::std::ofstream dst(toFilepath.GetAbsolute().ToCString(),   ::std::ios::binary);
     if (!dst) { return false; }
 
     dst << src.rdbuf();
@@ -82,7 +84,7 @@ bool File::Remove(const Path &path)
     if (!path.Exists()) { return false; }
     if (path.IsFile())
     {
-        return std::remove(path.GetAbsolute().ToCString()) == 0;
+        return ::std::remove(path.GetAbsolute().ToCString()) == 0;
     }
     else
     {
@@ -91,7 +93,7 @@ bool File::Remove(const Path &path)
 
         List<Path> subFiles = path.FindFiles(Path::FindFlag::SimpleHidden);
         for (const Path &subFile : subFiles) { File::Remove(subFile); }
-        return std::remove(path.GetAbsolute().ToCString()) == 0;
+        return ::std::remove(path.GetAbsolute().ToCString()) == 0;
     }
 }
 
@@ -123,7 +125,7 @@ bool File::Duplicate(const Path &fromPath, const Path &toPath)
 
 void File::Write(const Path &filepath, const String &contents)
 {
-    std::ofstream out(filepath.GetAbsolute());
+    ::std::ofstream out(filepath.GetAbsolute());
     if (out)
     {
         out << contents;
@@ -146,17 +148,17 @@ String File::GetContents(const Path &filepath)
     if (!filepath.IsFile()) { return ""; }
 
     String contents = "";
-    std::ifstream ifs(filepath.GetAbsolute().ToCString());
+    ::std::ifstream ifs(filepath.GetAbsolute().ToCString());
     if (ifs)
     {
-        contents = String((std::istreambuf_iterator<char>(ifs)),
-                           std::istreambuf_iterator<char>());
+        contents = String((::std::istreambuf_iterator<char>(ifs)),
+                           ::std::istreambuf_iterator<char>());
         ifs.close();
     }
     else
     {
-        std::cerr << "Can't open file '" << filepath.ToString() << "': " <<
-                     std::strerror(errno) << std::endl;
+        ::std::cerr << "Can't open file '" << filepath.ToString() << "': " <<
+                     ::std::strerror(errno) << ::std::endl;
     }
     return contents;
 }
@@ -170,3 +172,5 @@ const Path &File::GetPath() const
 {
     return m_path;
 }
+
+

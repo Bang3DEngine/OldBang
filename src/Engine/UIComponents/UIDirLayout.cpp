@@ -5,6 +5,8 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 
+USING_NAMESPACE_BANG
+
 UIDirLayout::UIDirLayout() : UIDirLayout(false)
 {
 }
@@ -110,4 +112,5 @@ void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
         xmlInfo->Set("Stretch" + String(it->first), stretch);
     }
 }
+
 

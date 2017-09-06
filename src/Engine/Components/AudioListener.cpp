@@ -6,6 +6,8 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 AudioListener::AudioListener()
 {
 }
@@ -44,3 +46,5 @@ void AudioListener::UpdateALProperties() const
     alListenerfv(AL_POSITION, gameObject->transform->GetPosition().Data());
     alListenerfv(AL_VELOCITY, Vector3::Zero.Data());
 }
+
+

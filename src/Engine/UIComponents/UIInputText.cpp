@@ -12,6 +12,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 const Vector2i UIInputText::LookAheadOffsetPx = Vector2i(5);
 
 UIInputText::UIInputText()
@@ -509,3 +511,5 @@ void UIInputText::OnFocusLost()
     m_selectingWithMouse = false;
     UpdateCursorRenderersAndScrolling();
 }
+
+

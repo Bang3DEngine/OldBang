@@ -10,6 +10,8 @@
 #include "Bang/AudioManager.h"
 #include "Bang/Resources.h"
 
+USING_NAMESPACE_BANG
+
 AudioSource::AudioSource()
 {
 }
@@ -134,3 +136,5 @@ void AudioSource::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Looping",     IsLooping());
     xmlInfo->Set("PlayOnStart", IsPlayOnStart());
 }
+
+

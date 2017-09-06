@@ -1,6 +1,10 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "Bang/Bang.h"
+
+NAMESPACE_BANG_BEGIN
+
 class Object
 {
 public:
@@ -21,5 +25,7 @@ private:
     bool m_enabled = true;
     bool m_started = false;
 };
+
+NAMESPACE_BANG_END
 
 #endif // OBJECT_H

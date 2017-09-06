@@ -1,5 +1,7 @@
 #include "Bang/Object.h"
 
+USING_NAMESPACE_BANG
+
 Object::Object() {}
 Object::~Object() {}
 
@@ -14,3 +16,5 @@ void Object::SetEnabled(bool enabled) { m_enabled = enabled; }
 
 bool Object::IsEnabled() const { return m_enabled; }
 bool Object::IsStarted() const { return m_started; }
+
+

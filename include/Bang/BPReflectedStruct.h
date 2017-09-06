@@ -6,6 +6,8 @@
 #include "Bang/IToString.h"
 #include "Bang/BPReflectedVariable.h"
 
+NAMESPACE_BANG_BEGIN
+
 class BPReflectedStruct : public IToString
 {
 public:
@@ -40,5 +42,7 @@ private:
 
     friend class BangPreprocessor;
 };
+
+NAMESPACE_BANG_END
 
 #endif // BPSTRUCT_H

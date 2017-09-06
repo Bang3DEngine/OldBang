@@ -3,6 +3,8 @@
 #include "Bang/Paths.h"
 #include "Bang/Resources.h"
 
+USING_NAMESPACE_BANG
+
 Material *MaterialFactory::GetDefault()
 {
     return MaterialFactory::Load("Materials/G_Default.bmat");
@@ -44,3 +46,5 @@ Material *MaterialFactory::Load(const String &enginePath)
 {
     return Resources::Load<Material>( EPATH(enginePath) );
 }
+
+

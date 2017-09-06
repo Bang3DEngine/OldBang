@@ -2,6 +2,8 @@
 
 #include "Bang/Array.h"
 
+USING_NAMESPACE_BANG
+
 const XMLProperty XMLProperty::IsEngineFile("IsEngineFile");
 
 XMLProperty::XMLProperty()
@@ -10,6 +12,10 @@ XMLProperty::XMLProperty()
 
 XMLProperty::XMLProperty(const String &name, const String &value) :
     m_name(name), m_value(value)
+{
+}
+
+XMLProperty::~XMLProperty()
 {
 }
 
@@ -59,3 +65,5 @@ bool XMLProperty::operator==(const XMLProperty &rhs) const
 {
     return m_name == rhs.m_name && m_value == rhs.m_value;
 }
+
+

@@ -4,6 +4,8 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
+NAMESPACE_BANG_BEGIN
+
 class BPReflectedVariable : public IToString
 {
 public:
@@ -39,5 +41,7 @@ private:
 
     String ToString() const override;
 };
+
+NAMESPACE_BANG_END
 
 #endif // BPPROPERTY_H

@@ -9,6 +9,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/RenderTexture.h"
 
+USING_NAMESPACE_BANG
+
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height)
 {
@@ -233,7 +235,5 @@ void Framebuffer::PopDrawAttachmentIds()
 {
     SetDrawBuffers(m_latestDrawAttachmentIds);
 }
-
-
 
 

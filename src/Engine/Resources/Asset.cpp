@@ -3,6 +3,8 @@
 #include "Bang/Paths.h"
 #include "Bang/Resources.h"
 
+USING_NAMESPACE_BANG
+
 Asset::Asset()
 {
 }
@@ -33,3 +35,5 @@ void Asset::ExportXML(XMLNode *xmlInfo) const
 {
     Resource::ExportXML(xmlInfo);
 }
+
+

@@ -1,5 +1,7 @@
 #include "Bang/GLObject.h"
 
+USING_NAMESPACE_BANG
+
 GLObject::GLObject() {}
 
 GLId GLObject::GetGLId() const
@@ -20,3 +22,5 @@ void GLObject::UnBind() const
 {
     GL::UnBind(this);
 }
+
+

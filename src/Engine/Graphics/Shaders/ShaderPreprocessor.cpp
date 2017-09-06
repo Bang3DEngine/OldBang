@@ -4,6 +4,8 @@
 #include "Bang/Paths.h"
 #include "Bang/CodePreprocessor.h"
 
+USING_NAMESPACE_BANG
+
 const String ShaderPreprocessor::GLSLVersionString = "#version 130";
 
 void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
@@ -22,4 +24,5 @@ void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 ShaderPreprocessor::ShaderPreprocessor()
 {
 }
+
 

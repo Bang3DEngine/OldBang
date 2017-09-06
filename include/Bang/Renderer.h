@@ -8,9 +8,11 @@
 #include "Bang/Component.h"
 #include "Bang/RenderPass.h"
 
-FORWARD   class Camera;
-FORWARD   class Material;
-FORWARD   class SceneManager;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Camera;
+FORWARD class Material;
+FORWARD class SceneManager;
 
 class Renderer : public GLObject,
                  public Component
@@ -77,5 +79,7 @@ private:
 
     friend class GraphicPipeline;
 };
+
+NAMESPACE_BANG_END
 
 #endif // RENDERER_H

@@ -5,6 +5,8 @@
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Library;
 FORWARD class Behaviour;
 
@@ -35,5 +37,7 @@ private:
 
     static BehaviourManager* GetInstance();
 };
+
+NAMESPACE_BANG_END
 
 #endif // BEHAVIOURMANAGER_H

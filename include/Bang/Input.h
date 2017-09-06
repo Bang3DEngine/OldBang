@@ -10,9 +10,10 @@
 #include "Bang/Vector2.h"
 #include "Bang/IToString.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Input
 {
-
 public:
     enum class Key
     {
@@ -184,7 +185,7 @@ private:
 
             String ToString() const override
             {
-                std::ostringstream oss;
+                ::std::ostringstream oss;
                 oss << "(Up: " << up << ", Down: " << down <<
                        ", Pressed: " << pressed << ")";
                 return String(oss.str());
@@ -230,5 +231,7 @@ private:
     friend class Screen;
     friend class Application;
 };
+
+NAMESPACE_BANG_END
 
 #endif // INPUT_H

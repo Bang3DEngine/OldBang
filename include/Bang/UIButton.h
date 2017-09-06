@@ -7,6 +7,8 @@
 #include "Bang/Input.h"
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class GameObject;
 FORWARD class UIButtonListener;
 
@@ -27,9 +29,9 @@ public:
     void AddListener(UIButtonListener *listener);
     void RemoveListener(UIButtonListener *listener);
 
-    using EnterExitCallback = std::function<void(UIButton*)>;
+    using EnterExitCallback = ::std::function<void(UIButton*)>;
     using ClickedCallback = EnterExitCallback;
-    using DownUpCallback = std::function<void(UIButton*, Input::MouseButton)>;
+    using DownUpCallback = ::std::function<void(UIButton*, Input::MouseButton)>;
 
     void AddMouseEnterCallback(EnterExitCallback callback);
     void AddMouseExitCallback(EnterExitCallback callback);
@@ -65,5 +67,7 @@ protected:
 
     friend class UIButton;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIBUTTON_H

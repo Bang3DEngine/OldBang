@@ -4,6 +4,8 @@
 
 #include "Bang/Time.h"
 
+USING_NAMESPACE_BANG
+
 ChronoGL::ChronoGL(const String &chronoName)
 {
     m_chronoName = chronoName;
@@ -51,17 +53,19 @@ void ChronoGL::Log()
 
     MarkEvent("EmptyEvent"); // To get the last timer time
 
-    std::cerr << "ChronoGL " <<  m_chronoName
-              << " -------------------" << std::endl;
+    ::std::cerr << "ChronoGL " <<  m_chronoName
+              << " -------------------" << ::std::endl;
     long totalTime = 0;
     for (int i = 0; i < m_events.Size() - 1; ++i)
     {
         ChronoGLEvent &cge = m_events[i];
         double intervalSecs = cge.timeSinceLastEvent / 1000000000.0;
         totalTime += cge.timeSinceLastEvent;
-        std::cerr << "  " <<
-                     cge.eventName << ": " <<  intervalSecs << " s." << std::endl;
+        ::std::cerr << "  " <<
+                     cge.eventName << ": " <<  intervalSecs << " s." << ::std::endl;
     }
-    std::cerr << "  Total: " << totalTime / 1000000000.0 <<
-                 " s. ----------------" << std::endl << std::endl;
+    ::std::cerr << "  Total: " << totalTime / 1000000000.0 <<
+                 " s. ----------------" << ::std::endl << ::std::endl;
 }
+
+

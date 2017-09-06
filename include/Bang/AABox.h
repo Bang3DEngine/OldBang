@@ -8,7 +8,9 @@
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
 
-FORWARD   class Camera;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Camera;
 
 class AABox : public IToString
 {
@@ -59,5 +61,7 @@ public:
 
 AABox operator*(const Matrix4 &m, const AABox &b);
 bool operator==(const AABox &b1, const AABox &b2);
+
+NAMESPACE_BANG_END
 
 #endif // BOX_H

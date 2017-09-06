@@ -3,6 +3,8 @@
 
 #include "Bang/Serializable.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define RESOURCE(CLASSNAME) SERIALIZABLE(CLASSNAME)
 
 class Resource : public Serializable
@@ -16,5 +18,7 @@ public:
 protected:
     Resource();
 };
+
+NAMESPACE_BANG_END
 
 #endif // RESOURCE_H

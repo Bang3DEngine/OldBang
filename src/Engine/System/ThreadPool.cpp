@@ -1,5 +1,7 @@
 #include "Bang/ThreadPool.h"
 
+USING_NAMESPACE_BANG
+
 ThreadPool::ThreadPool()
 {
 }
@@ -48,3 +50,5 @@ int ThreadPool::GetMaxThreadCount() const
 {
     return m_maxThreadCount;
 }
+
+

@@ -8,6 +8,8 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 
+NAMESPACE_BANG_BEGIN
+
 const Color Color::Red         = Color(1,     0,   0,  1);
 const Color Color::Orange      = Color(1,   0.5,   0,  1);
 const Color Color::Yellow      = Color(1,     1,   0,  1);
@@ -76,14 +78,14 @@ Color Color::Lerp(const Color &c1,
 
 String Color::ToStringRgb() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ")";
     return oss.str();
 }
 
 String Color::ToStringRgb255() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<
                   int(g * 255) << ", " <<
                   int(b * 255) << ")";
@@ -92,14 +94,14 @@ String Color::ToStringRgb255() const
 
 String Color::ToStringRgba() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ", " << a << ")";
     return oss.str();
 }
 
 String Color::ToStringRgba255() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<
                   int(g * 255) << ", " <<
                   int(b * 255) << ", " <<
@@ -148,48 +150,40 @@ Color operator+(const Color & c1, const Color &c2)
     return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a * c2.a);
 }
 
-
 Color operator*(const Color &c1, const Color &c2)
 {
     return Color(c1.r * c2.r, c1.g * c2.g, c1.b * c2.b, c1.a * c2.a);
 }
-
 
 Color operator-(const Color &c)
 {
     return Color(-c.r, -c.g, -c.b, -c.a);
 }
 
+Color operator*(const Color &c, float m)
+{
+    return m * c;
+}
 
 Color operator*(float m, const Color &c)
 {
     return Color(m * c.r, m * c.g, m * c.b, m * c.a);
 }
 
-
-Color operator*(const Color &c, float m)
-{
-    return m * c;
-}
-
-
 Color operator/(float m, const Color &c)
 {
     return Color(m / c.r, m / c.g, m / c.b, m / c.a);
 }
-
 
 Color operator/(const Color &c, float m)
 {
     return Color(c.r / m, c.g / m, c.b / m, c.a / m);
 }
 
-
 Color operator/(const Color &c1, const Color &c2)
 {
     return Color(c1.r / c2.r, c1.g / c2.g, c1.b / c2.b, c1.a / c2.a);
 }
-
 
 Color &operator+=(Color &lhs, const Color &rhs)
 {
@@ -199,7 +193,6 @@ Color &operator+=(Color &lhs, const Color &rhs)
     lhs.a += rhs.a;
     return lhs;
 }
-
 
 Color &operator-=(Color &lhs, const Color &rhs)
 {
@@ -219,7 +212,6 @@ Color &operator*=(Color &lhs, const Color &rhs)
     return lhs;
 }
 
-
 Color &operator/=(Color &lhs, const Color &rhs)
 {
     lhs.r /= rhs.r;
@@ -229,30 +221,25 @@ Color &operator/=(Color &lhs, const Color &rhs)
     return lhs;
 }
 
-
 Color operator+(float m, const Color &c)
 {
     return Color(m + c.r, m + c.g, m + c.b, m + c.a);
 }
-
 
 Color operator+(const Color &c, float m)
 {
     return m + c;
 }
 
-
 Color operator-(const Color &c1, const Color &c2)
 {
     return Color(c1.r - c2.r, c1.g - c2.g, c1.b - c2.b, c1.a - c2.a);
 }
 
-
 Color operator-(float m, const Color &c)
 {
     return Color(m - c.r, m - c.g, m - c.b, m - c.a);
 }
-
 
 Color operator-(const Color &c, float m)
 {
@@ -268,7 +255,6 @@ Color &operator+=(Color &lhs, float m)
     return lhs;
 }
 
-
 Color &operator-=(Color &lhs, float m)
 {
     lhs.r -= m;
@@ -277,7 +263,6 @@ Color &operator-=(Color &lhs, float m)
     lhs.a -= m;
     return lhs;
 }
-
 
 Color &operator*=(Color &lhs, float m)
 {
@@ -288,7 +273,6 @@ Color &operator*=(Color &lhs, float m)
     return lhs;
 }
 
-
 Color &operator/=(Color &lhs, float m)
 {
     lhs.r /= m;
@@ -298,7 +282,6 @@ Color &operator/=(Color &lhs, float m)
     return lhs;
 }
 
-
 bool operator==(const Color &lhs, const Color &rhs)
 {
     return lhs.r == rhs.r &&
@@ -307,8 +290,9 @@ bool operator==(const Color &lhs, const Color &rhs)
            lhs.a == rhs.a;
 }
 
-
 bool operator!=(const Color &lhs, const Color &rhs)
 {
     return !(lhs == rhs);
 }
+
+NAMESPACE_BANG_END

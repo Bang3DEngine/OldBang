@@ -4,6 +4,8 @@
 #include "Bang/AABox.h"
 #include "Bang/Vector3.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Sphere
 {
 public:
@@ -35,5 +37,7 @@ private:
     Vector3 m_center = Vector3::Zero;
     float m_radius = 0.0f;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SPHERE_H

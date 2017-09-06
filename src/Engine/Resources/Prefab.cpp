@@ -6,6 +6,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 Prefab::Prefab()
 {
 
@@ -81,3 +83,5 @@ void Prefab::ExportXML(XMLNode *xmlInfo) const
     XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
     goInfo.CloneInto(xmlInfo);
 }
+
+

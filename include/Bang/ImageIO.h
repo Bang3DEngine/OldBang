@@ -4,6 +4,8 @@
 #include "Bang/Path.h"
 #include "Bang/Image.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ImageIO
 {
 public:
@@ -19,5 +21,7 @@ private:
     static void ExportJPG(const Path& filepath, const Imageb &img, int quality);
     static void ImportJPG(const Path& filepath, Imageb *img, bool *ok);
 };
+
+NAMESPACE_BANG_END
 
 #endif // IMAGEREADER_H

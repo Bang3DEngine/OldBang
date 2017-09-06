@@ -3,6 +3,8 @@
 
 #include "Bang/LineRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD_T class Vector3G;
 
 class SingleLineRenderer : public LineRenderer
@@ -28,5 +30,7 @@ public:
 protected:
     SingleLineRenderer();
 };
+
+NAMESPACE_BANG_END
 
 #endif // SINGLELINERENDERER_H

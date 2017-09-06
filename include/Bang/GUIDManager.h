@@ -4,6 +4,8 @@
 #include "Bang/Set.h"
 #include "Bang/GUID.h"
 
+NAMESPACE_BANG_BEGIN
+
 class GUIDManager
 {
 public:
@@ -21,5 +23,6 @@ private:
     friend class ImportFilesManager;
 };
 
+NAMESPACE_BANG_END
 
 #endif // IMPORTFILESMANAGER_H

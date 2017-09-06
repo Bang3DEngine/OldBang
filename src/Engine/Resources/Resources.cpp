@@ -5,6 +5,8 @@
 #include "Bang/Random.h"
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 Resources::Resources()
 {
 }

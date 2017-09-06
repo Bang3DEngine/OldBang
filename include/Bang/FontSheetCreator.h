@@ -4,6 +4,8 @@
 #include "Bang/Font.h"
 #include "Bang/Image.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Texture2D;
 
 class FontSheetCreator
@@ -21,5 +23,7 @@ public:
 
     FontSheetCreator() = delete;
 };
+
+NAMESPACE_BANG_END
 
 #endif // FONTSHEETCREATOR_H

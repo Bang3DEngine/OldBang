@@ -4,6 +4,8 @@
 #include "Bang/GameObject.h"
 #include "Bang/ComponentFactory.h"
 
+NAMESPACE_BANG_BEGIN
+
 template <class T>
 T* GameObject::AddComponent(int index)
 {
@@ -109,5 +111,7 @@ void GameObject::RemoveComponent()
         }
     }
 }
+
+NAMESPACE_BANG_END
 
 #endif // GAMEOBJECT_TCC

@@ -7,6 +7,8 @@
 #include "Bang/Texture2D.h"
 #include "Bang/FontSheetCreator.h"
 
+USING_NAMESPACE_BANG
+
 Font::Font()
 {
 }
@@ -93,8 +95,8 @@ void Font::Import(const Path &ttfFilepath)
                              Vector2(m_atlasTexture->GetSize());
         uvMin.y       = 1.0 - uvMin.y;
         uvMax.y       = 1.0 - uvMax.y;
-        std::swap(uvMin.y, uvMax.y);
-        m_charUvsInAtlas.Add(c, std::make_pair(uvMin, uvMax));
+        ::std::swap(uvMin.y, uvMax.y);
+        m_charUvsInAtlas.Add(c, ::std::make_pair(uvMin, uvMax));
     }
 }
 
@@ -197,3 +199,5 @@ void Font::Free()
     if (m_atlasTexture) { delete m_atlasTexture; }
     if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }
+
+

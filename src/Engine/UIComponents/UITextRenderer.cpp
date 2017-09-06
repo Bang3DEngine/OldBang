@@ -10,12 +10,14 @@
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
-#include "Bang/SceneManager.h"
 #include "Bang/Resources.h"
+#include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
 #include "Bang/MaterialFactory.h"
+
+USING_NAMESPACE_BANG
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
@@ -378,3 +380,5 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
 }
+
+

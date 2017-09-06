@@ -1,5 +1,7 @@
 #include "Bang/RenderTexture.h"
 
+USING_NAMESPACE_BANG
+
 RenderTexture::RenderTexture() : Texture2D()
 {
     SetFilterMode(GL::FilterMode::Linear);
@@ -11,3 +13,5 @@ RenderTexture::~RenderTexture()
 {
 
 }
+
+

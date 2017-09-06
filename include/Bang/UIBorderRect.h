@@ -5,6 +5,8 @@
 #include "Bang/Component.h"
 #include "Bang/LineRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIBorderRect : public Component
 {
 public:
@@ -30,5 +32,7 @@ private:
     Rect m_latestBoundingRectNDC = Rect::Zero;
     LineRenderer *p_lineRenderer = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIBORDERRECT_H

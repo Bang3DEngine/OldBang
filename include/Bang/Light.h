@@ -4,10 +4,12 @@
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 
-FORWARD   class Camera;
-FORWARD   class Material;
-FORWARD   class Renderer;
-FORWARD   class GBuffer;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Camera;
+FORWARD class Material;
+FORWARD class Renderer;
+FORWARD class GBuffer;
 
 class Light : public Component
 {
@@ -45,5 +47,7 @@ private:
 
     friend class GraphicPipeline;
 };
+
+NAMESPACE_BANG_END
 
 #endif // LIGHT_H

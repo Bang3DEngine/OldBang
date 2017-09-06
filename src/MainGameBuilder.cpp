@@ -1,16 +1,19 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/String.h"
 #include "Bang/Application.h"
 #include "Bang/GameBuilder.h"
 #include "Bang/ProjectManager.h"
 
+USING_NAMESPACE_BANG
+
 void Usage()
 {
-    std::cerr <<
-     "Usage:" << std::endl <<
-     "   ./BangGameBuilder Path/To/Project.bproject DebugOrRelease" << std::endl <<
-     "    (where DebugOrRelease can be 'Debug' or 'Release')"  << std::endl <<
-     std::endl;
+    ::std::cerr <<
+     "Usage:" << ::std::endl <<
+     "   ./BangGameBuilder Path/To/Project.bproject DebugOrRelease" << ::std::endl <<
+     "    (where DebugOrRelease can be 'Debug' or 'Release')"  << ::std::endl <<
+     ::std::endl;
     exit(1);
 }
 

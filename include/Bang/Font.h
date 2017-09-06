@@ -8,6 +8,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Texture2D;
 
 class Font : public Asset
@@ -65,8 +67,10 @@ protected:
     Texture2D *m_atlasTexture = nullptr;
 
     Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
-    Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+    Map<char, ::std::pair<Vector2, Vector2> > m_charUvsInAtlas;
     void Free();
 };
+
+NAMESPACE_BANG_END
 
 #endif // FONT_H

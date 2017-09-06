@@ -8,6 +8,8 @@
 #include "Bang/ShaderManager.h"
 #include "Bang/GraphicPipeline.h"
 
+USING_NAMESPACE_BANG
+
 PostProcessEffect::PostProcessEffect()
 {
     m_shaderProgram = new ShaderProgram();
@@ -113,3 +115,5 @@ bool operator<(const PostProcessEffect& lhs, const PostProcessEffect& rhs)
 {
     return lhs.GetPriority() < rhs.GetPriority();
 }
+
+

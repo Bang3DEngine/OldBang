@@ -6,6 +6,8 @@
 
 #include "Bang/AudioParams.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ALAudioSource
 {
 public:
@@ -51,5 +53,7 @@ private:
     friend class AudioManager;
     friend class AudioPlayerRunnable;
 };
+
+NAMESPACE_BANG_END
 
 #endif // ALAUDIOSOURCE_H

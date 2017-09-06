@@ -3,6 +3,8 @@
 
 #include "Bang/GameObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD   class Material;
 FORWARD   class Renderer;
 FORWARD   class Texture2D;
@@ -75,5 +77,7 @@ private:
 
     friend class Scene;
 };
+
+NAMESPACE_BANG_END
 
 #endif // GIZMOS_H

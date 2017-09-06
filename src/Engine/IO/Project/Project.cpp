@@ -8,9 +8,11 @@
 #include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"
 
+USING_NAMESPACE_BANG
+
 Project::Project()
 {
-    m_randomId = std::to_string(Time::GetNow());
+    m_randomId = ::std::to_string(Time::GetNow());
 }
 
 Project::~Project()
@@ -74,4 +76,5 @@ void Project::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Project");
     xmlInfo->Set("RandomID", m_randomId);
 }
+
 

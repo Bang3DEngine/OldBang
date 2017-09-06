@@ -4,6 +4,8 @@
 #include "Bang/Component.h"
 #include "Bang/IFocusListener.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class UIGameObject;
 FORWARD class UITextCursor;
 FORWARD class UIScrollArea;
@@ -81,5 +83,7 @@ private:
 
     friend class GameObjectFactory;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIINPUTTEXT_H

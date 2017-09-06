@@ -4,6 +4,8 @@
 #include <sstream>
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD_T  class Set;
 FORWARD_TT class Map;
 FORWARD    class Path;
@@ -21,44 +23,44 @@ FORWARD_T  class Matrix4G;
 FORWARD    class IToString;
 FORWARD_T  class QuaternionG;
 
-std::istream& operator>>(std::istream& is, GUID &guid);
-std::istream& operator>>(std::istream& is, Path &p);
-std::istream& operator>>(std::istream& is, Color &c);
-std::ostream& operator<<(std::ostream &log, const Color &v);
-std::ostream& operator<<(std::ostream &log, const IToString &v);
-std::ostream& operator<<(std::ostream &log, const IToString *s);
+::std::istream& operator>>(::std::istream& is, GUID &guid);
+::std::istream& operator>>(::std::istream& is, Path &p);
+::std::istream& operator>>(::std::istream& is, Color &c);
+::std::ostream& operator<<(::std::ostream &log, const Color &v);
+::std::ostream& operator<<(::std::ostream &log, const IToString &v);
+::std::ostream& operator<<(::std::ostream &log, const IToString *s);
 
 // Templated ostream operators
 template<class T>
-std::ostream& operator<<(std::ostream &log, const Vector2G<T> &v)
+::std::ostream& operator<<(::std::ostream &log, const Vector2G<T> &v)
 {
     log << "(" << v.x << ", " << v.y << ")";
     return log;
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const Vector3G<T> &v)
+::std::ostream& operator<<(::std::ostream &log, const Vector3G<T> &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     return log;
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const Vector4G<T> &v)
+::std::ostream& operator<<(::std::ostream &log, const Vector4G<T> &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
     return log;
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const QuaternionG<T> &q)
+::std::ostream& operator<<(::std::ostream &log, const QuaternionG<T> &q)
 {
     log << "(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
     return log;
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
+::std::ostream& operator<<(::std::ostream &log, const RectG<T> &r)
 {
     log << "(" << r.GetMin() << ", " <<
                   r.GetMax() << ")";
@@ -66,27 +68,27 @@ std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const Matrix3G<T> &m)
+::std::ostream& operator<<(::std::ostream &log, const Matrix3G<T> &m)
 {
-    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << "," << std::endl;
-    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << "," << std::endl;
-    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << "," << std::endl;
-    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ")" << std::endl;
+    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << "," << ::std::endl;
+    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << "," << ::std::endl;
+    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << "," << ::std::endl;
+    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ")" << ::std::endl;
     return log;
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
+::std::ostream& operator<<(::std::ostream &log, const Matrix4G<T> &m)
 {
-    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << ", " << m.c3[0] << "," << std::endl;
-    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << ", " << m.c3[1] << "," << std::endl;
-    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << ", " << m.c3[2] << "," << std::endl;
-    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ", " << m.c3[3] << ")" << std::endl;
+    log << "(" << m.c0[0] << ", " << m.c1[0] << ", " << m.c2[0] << ", " << m.c3[0] << "," << ::std::endl;
+    log << " " << m.c0[1] << ", " << m.c1[1] << ", " << m.c2[1] << ", " << m.c3[1] << "," << ::std::endl;
+    log << " " << m.c0[2] << ", " << m.c1[2] << ", " << m.c2[2] << ", " << m.c3[2] << "," << ::std::endl;
+    log << " " << m.c0[3] << ", " << m.c1[3] << ", " << m.c2[3] << ", " << m.c3[3] << ")" << ::std::endl;
     return log;
 }
 
 template <class EnumClass, class=TT_ENUM(EnumClass)>
-std::ostream& operator<<(std::ostream &log, const EnumClass &e)
+::std::ostream& operator<<(::std::ostream &log, const EnumClass &e)
 {
     log << SCAST<int>(e);
     return log;
@@ -94,7 +96,7 @@ std::ostream& operator<<(std::ostream &log, const EnumClass &e)
 
 // List
 template <class T>
-std::ostream &operator<<(std::ostream &log, const List<T> *l)
+::std::ostream &operator<<(::std::ostream &log, const List<T> *l)
 {
     log << "("; bool first = true;
     for (auto it = l->Begin(); it != l->End(); ++it)
@@ -108,7 +110,7 @@ std::ostream &operator<<(std::ostream &log, const List<T> *l)
 }
 
 template <class T, class M>
-std::ostream &operator<<(std::ostream &log, const std::pair<T,M>& p)
+::std::ostream &operator<<(::std::ostream &log, const ::std::pair<T,M>& p)
 {
     log << "<";
     log << p.first << ", " << p.second;
@@ -117,14 +119,14 @@ std::ostream &operator<<(std::ostream &log, const std::pair<T,M>& p)
 }
 
 template <class T>
-std::ostream &operator<<(std::ostream &log, const List<T> &l)
+::std::ostream &operator<<(::std::ostream &log, const List<T> &l)
 {
     return log << (&l);
 }
 
 // Vector
 template <class T>
-std::ostream &operator<<(std::ostream &log, const Array<T> *v)
+::std::ostream &operator<<(::std::ostream &log, const Array<T> *v)
 {
     log << "[";
     for (int i = 0; i < v->Size(); ++i)
@@ -136,14 +138,14 @@ std::ostream &operator<<(std::ostream &log, const Array<T> *v)
     return log;
 }
 template <class T>
-std::ostream &operator<<(std::ostream &log, const Array<T> &v)
+::std::ostream &operator<<(::std::ostream &log, const Array<T> &v)
 {
     return log << (&v);
 }
 
 // Map
 template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const Map<T,S> *m)
+::std::ostream &operator<<(::std::ostream &log, const Map<T,S> *m)
 {
     log << "{";
     for (auto it = m->CBegin(); it != m->CEnd(); ++it)
@@ -155,14 +157,14 @@ std::ostream &operator<<(std::ostream &log, const Map<T,S> *m)
     return log;
 }
 template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const Map<T,S> &m)
+::std::ostream &operator<<(::std::ostream &log, const Map<T,S> &m)
 {
     return log << (&m);
 }
 
 // Set
 template <class T>
-std::ostream &operator<<(std::ostream &log, const Set<T> *s)
+::std::ostream &operator<<(::std::ostream &log, const Set<T> *s)
 {
     log << "{";
     for (auto it = s->cbegin(); it != s->cend(); ++it)
@@ -175,14 +177,14 @@ std::ostream &operator<<(std::ostream &log, const Set<T> *s)
 }
 
 template <class T>
-std::ostream &operator<<(std::ostream &log, const Set<T> &m)
+::std::ostream &operator<<(::std::ostream &log, const Set<T> &m)
 {
     return log << (&m);
 }
 
 // Templated istream operators
 template<class T>
-std::istream& operator>>(std::istream &is, Vector2G<T>& v)
+::std::istream& operator>>(::std::istream &is, Vector2G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _;
@@ -190,7 +192,7 @@ std::istream& operator>>(std::istream &is, Vector2G<T>& v)
 }
 
 template<class T>
-std::istream& operator>>(std::istream &is, Vector3G<T>& v)
+::std::istream& operator>>(::std::istream &is, Vector3G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _ >> v.z >> _;
@@ -198,7 +200,7 @@ std::istream& operator>>(std::istream &is, Vector3G<T>& v)
 }
 
 template<class T>
-std::istream& operator>>(std::istream &is, Vector4G<T>& v)
+::std::istream& operator>>(::std::istream &is, Vector4G<T>& v)
 {
     char _;
     is >> _ >> v.x >> _ >> v.y >> _ >> v.z >> _ >> v.w >> _;
@@ -206,7 +208,7 @@ std::istream& operator>>(std::istream &is, Vector4G<T>& v)
 }
 
 template<class T>
-std::istream& operator>>(std::istream &is, RectG<T>& r)
+::std::istream& operator>>(::std::istream &is, RectG<T>& r)
 {
     char _;
     Vector2G<T> minv, maxv;
@@ -217,7 +219,7 @@ std::istream& operator>>(std::istream &is, RectG<T>& r)
 }
 
 template<class EnumClass, class=TT_ENUM(EnumClass)>
-std::istream& operator>>(std::istream &is, EnumClass& e)
+::std::istream& operator>>(::std::istream &is, EnumClass& e)
 {
     int x;
     is >> x;
@@ -225,5 +227,6 @@ std::istream& operator>>(std::istream &is, EnumClass& e)
     return is;
 }
 
+NAMESPACE_BANG_END
 
 #endif // STREAMOPERATORS_H

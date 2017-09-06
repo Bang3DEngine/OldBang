@@ -17,6 +17,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 #define PROPAGATE_EVENT_TO_COMPONENTS(Event, Components) \
     m_iteratingComponents = true; \
     PROPAGATE_EVENT(Event, Components); \
@@ -233,7 +235,7 @@ const List<GameObject *> &GameObject::GetChildren() const
 
 GameObject *GameObject::GetChild(int index) const
 {
-    auto it = GetChildren().Begin(); std::advance(it, index);
+    auto it = GetChildren().Begin(); ::std::advance(it, index);
     return *it;
 }
 
@@ -374,7 +376,7 @@ void GameObject::Print(const String &indent) const
 
 String GameObject::ToString() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";
     return oss.str();
 }
@@ -450,3 +452,5 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
         }
     }
 }
+
+

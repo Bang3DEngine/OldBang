@@ -9,6 +9,8 @@
 #include "Bang/XMLParser.h"
 #include "Bang/ImportFilesManager.h"
 
+USING_NAMESPACE_BANG
+
 Mesh::Mesh()
 {
     m_vao = new VAO();
@@ -146,4 +148,5 @@ void Mesh::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 }
+
 

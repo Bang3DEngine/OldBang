@@ -9,6 +9,8 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 
+USING_NAMESPACE_BANG
+
 PointLight::PointLight() : Light()
 {
     SetLightMaterial( MaterialFactory::GetPointLight() );
@@ -57,3 +59,5 @@ void PointLight::ExportXML(XMLNode *xmlInfo) const
     Light::ExportXML(xmlInfo);
     xmlInfo->Set("Range", GetRange());
 }
+
+

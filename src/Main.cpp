@@ -19,6 +19,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
 
+USING_NAMESPACE_BANG
+
 int main(int argc, char **argv)
 {
     Application app(argc, argv);

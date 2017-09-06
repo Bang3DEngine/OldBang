@@ -1,5 +1,7 @@
 #include "Bang/MutexLocker.h"
 
+USING_NAMESPACE_BANG
+
 MutexLocker::MutexLocker(Mutex *mutex)
 {
     p_mutex = mutex;
@@ -10,3 +12,5 @@ MutexLocker::~MutexLocker()
 {
     p_mutex->UnLock();
 }
+
+

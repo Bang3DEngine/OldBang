@@ -8,6 +8,8 @@
 #include "Bang/String.h"
 #include "Bang/StreamOperators.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Debug
 {
 public:
@@ -24,8 +26,8 @@ private:
 };
 
 #define Debug_Log(msg) do{\
-    std::ostringstream log;\
-    log << std::boolalpha << msg;\
+    ::std::ostringstream log;\
+    log << ::std::boolalpha << msg;\
     log.flush();\
     Debug::_Log(log.str(), __LINE__, __FILE__); \
 } while (0)
@@ -33,17 +35,19 @@ private:
 #define Debug_Peek(varName) Debug_Log(#varName << ": " << (varName))
 
 #define Debug_Warn(msg) do{\
-    std::ostringstream log;\
-    log << std::boolalpha << msg;\
+    ::std::ostringstream log;\
+    log << ::std::boolalpha << msg;\
     log.flush();\
     Debug::_Warn(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error(msg) do{\
-    std::ostringstream log;\
-    log << std::boolalpha << msg;\
+    ::std::ostringstream log;\
+    log << ::std::boolalpha << msg;\
     log.flush();\
     Debug::_Error(log.str(), __LINE__, __FILE__); \
 } while (0)
+
+NAMESPACE_BANG_END
 
 #endif // DEBUG_H

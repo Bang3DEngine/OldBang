@@ -3,6 +3,8 @@
 #include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 UIButton::UIButton() : Component()
 {
 
@@ -123,3 +125,5 @@ bool UIButton::IsBeingPressed() const
 {
     return m_beingPressed;
 }
+
+

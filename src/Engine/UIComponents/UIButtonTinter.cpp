@@ -4,6 +4,8 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIRenderer.h"
 
+USING_NAMESPACE_BANG
+
 UIButtonTinter::UIButtonTinter()
 {
     AddListener(this);
@@ -94,3 +96,5 @@ void UIButtonTinter::ApplyTintToGameObjects(const Color &tintColor)
     }
     m_currentTintColor = tintColor;
 }
+
+

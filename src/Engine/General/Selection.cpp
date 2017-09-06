@@ -5,6 +5,8 @@
 #include "Bang/GraphicPipeline.h"
 #include "Bang/SelectionFramebuffer.h"
 
+USING_NAMESPACE_BANG
+
 GameObject *Selection::GetOveredGameObject()
 {
     if (!Input::IsMouseInsideScreen()) { return nullptr; }
@@ -18,3 +20,5 @@ SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 {
     return GraphicPipeline::GetActive()->GetSelectionFramebuffer();
 }
+
+

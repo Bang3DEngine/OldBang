@@ -3,6 +3,8 @@
 
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Component;
 
 class ComponentFactory
@@ -22,5 +24,7 @@ T* ComponentFactory::CreateComponent()
 {
     return new T();
 }
+
+NAMESPACE_BANG_END
 
 #endif // COMPONENTFACTORY_H

@@ -7,6 +7,8 @@
 #include "Bang/Component.h"
 #include "Bang/Quaternion.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Transform : public Component
 {
     COMPONENT(Transform)
@@ -109,5 +111,7 @@ protected:
 
     Transform();
 };
+
+NAMESPACE_BANG_END
 
 #endif // TRANSFORM_H

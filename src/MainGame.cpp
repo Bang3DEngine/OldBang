@@ -7,6 +7,8 @@
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourManager.h"
 
+USING_NAMESPACE_BANG
+
 int main(int argc, char **argv)
 {
     Application app(argc, argv);

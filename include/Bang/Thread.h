@@ -5,6 +5,8 @@
 
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class ThreadRunnable;
 
 class Thread
@@ -29,7 +31,7 @@ public:
     static String GetCurrentThreadId();
 
 private:
-    std::thread m_thread;
+    ::std::thread m_thread;
     String m_threadName = "BANG_Thread";
     ThreadRunnable *p_runnable = nullptr;
 
@@ -54,5 +56,6 @@ private:
     bool m_autoDelete = true;
 };
 
+NAMESPACE_BANG_END
 
 #endif // THREAD_H

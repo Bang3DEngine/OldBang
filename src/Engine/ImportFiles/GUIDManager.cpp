@@ -2,6 +2,8 @@
 
 #include "Bang/ImportFilesManager.h"
 
+USING_NAMESPACE_BANG
+
 GUIDManager::GUIDManager()
 {
 }
@@ -31,3 +33,5 @@ GUIDManager *GUIDManager::GetInstance()
 {
     return ImportFilesManager::GetGUIDManager();
 }
+
+

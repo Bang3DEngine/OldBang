@@ -3,6 +3,8 @@
 
 #include "Bang/Mutex.h"
 
+NAMESPACE_BANG_BEGIN
+
 class MutexLocker
 {
 public:
@@ -12,5 +14,7 @@ public:
 private:
     Mutex *p_mutex;
 };
+
+NAMESPACE_BANG_END
 
 #endif // MUTEXLOCKER_H

@@ -6,6 +6,8 @@
 #include "Bang/RectTransform.h"
 #include "Bang/ComponentFactory.h"
 
+USING_NAMESPACE_BANG
+
 UITextCursor::UITextCursor()
 {
     UseMaterialCopy();
@@ -57,3 +59,5 @@ float UITextCursor::GetTickTime() const
 {
     return m_cursorTickTime;
 }
+
+

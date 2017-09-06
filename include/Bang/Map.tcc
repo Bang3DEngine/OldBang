@@ -3,11 +3,14 @@
 
 #include "Bang/Map.h"
 
+
+NAMESPACE_BANG_BEGIN
+
 template<class Key, class Value>
 Map<Key, Value>::Map() {}
 
 template<class Key, class Value>
-Map<Key,Value>::Map(const std::map<Key, Value> &m) : m_map(m) {}
+Map<Key,Value>::Map(const ::std::map<Key, Value> &m) : m_map(m) {}
 
 template<class Key, class Value>
 void Map<Key,Value>::Add(const Key &key, const Value &value)
@@ -194,6 +197,8 @@ Map<Key,Value>::cend() const { return m_map.cend(); }
 
 template<class Key, class Value>
 Value &Map<Key,Value>::operator[](const Key &k) { return m_map[k]; }
+
+NAMESPACE_BANG_END
 
 #endif // MAP_TCC
 

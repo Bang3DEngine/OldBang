@@ -9,6 +9,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
+USING_NAMESPACE_BANG
+
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
@@ -111,3 +113,5 @@ void Scene::PostImportXML(const XMLNode &xmlInfo)
 {
     GameObject::PostImportXML(xmlInfo);
 }
+
+

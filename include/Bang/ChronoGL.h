@@ -6,6 +6,8 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 class ChronoGL
 {
 public:
@@ -26,5 +28,7 @@ private:
     String m_chronoName = "";
     Array<ChronoGLEvent> m_events = {};
 };
+
+NAMESPACE_BANG_END
 
 #endif // CHRONOGL_H

@@ -4,6 +4,8 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIRenderer.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIImageRenderer : public UIRenderer
 {
     COMPONENT(UIImageRenderer)
@@ -33,5 +35,7 @@ private:
     Mesh *p_quadMesh = nullptr;
     Texture2D *m_imageTexture = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIIMAGERENDERER_H

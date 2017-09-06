@@ -4,6 +4,8 @@
 #include "Bang/Library.h"
 #include "Bang/SystemProcess.h"
 
+USING_NAMESPACE_BANG
+
 void SystemUtils::System(const String &command,
                          const List<String> &argsList,
                          String *output,
@@ -54,4 +56,5 @@ void SystemUtils::CloseLibrary(Library *library)
         Debug_Error(library->GetErrorString());
     }
 }
+
 

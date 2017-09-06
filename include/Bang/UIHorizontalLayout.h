@@ -3,6 +3,8 @@
 
 #include "Bang/UIDirLayout.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIHorizontalLayout : public UIDirLayout
 {
     COMPONENT(UIHorizontalLayout)
@@ -10,5 +12,7 @@ class UIHorizontalLayout : public UIDirLayout
 public:
     UIHorizontalLayout();
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIHORIZONTALLAYOUT_H

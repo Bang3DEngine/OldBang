@@ -3,6 +3,8 @@
 
 #include "Bang/Light.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Camera;
 
 class PointLight : public Light
@@ -32,5 +34,7 @@ protected:
     // Renderer
     Rect GetRenderRect(Camera *cam) const override;
 };
+
+NAMESPACE_BANG_END
 
 #endif // POINTLIGHT_H

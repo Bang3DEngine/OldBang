@@ -5,6 +5,8 @@
 #include "Bang/UIRenderer.h"
 #include "Bang/UIGameObject.h"
 
+USING_NAMESPACE_BANG
+
 UIMask::UIMask() {}
 UIMask::~UIMask() {}
 
@@ -111,3 +113,5 @@ void UIMask::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Masking", IsMasking());
     xmlInfo->Set("DrawMask", IsDrawMask());
 }
+
+

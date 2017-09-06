@@ -3,13 +3,15 @@
 
 #include "Bang/Set.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class Key>
 Set<Key>::Set()
 {
 }
 
 template<class Key>
-Set<Key>::Set(const std::set<Key> &s) : m_set(s)
+Set<Key>::Set(const ::std::set<Key> &s) : m_set(s)
 {
 }
 
@@ -117,5 +119,7 @@ Set<Key>::cbegin() const { return m_set.cbegin(); }
 template<class Key>
 typename Set<Key>::Const_Iterator
 Set<Key>::cend() const { return m_set.cend(); }
+
+NAMESPACE_BANG_END
 
 #endif // SET_TCC

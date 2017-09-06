@@ -3,6 +3,8 @@
 
 #include "Bang/Light.h"
 
+NAMESPACE_BANG_BEGIN
+
 class DirectionalLight : public Light
 {
     COMPONENT(DirectionalLight)
@@ -19,5 +21,7 @@ protected:
     DirectionalLight();
     virtual ~DirectionalLight();
 };
+
+NAMESPACE_BANG_END
 
 #endif // DIRECTIONALLIGHT_H

@@ -21,6 +21,9 @@
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
 
+
+USING_NAMESPACE_BANG
+
 Application* Application::s_appSingleton = nullptr;
 
 Application::Application(int argc, char **argv, const Path &engineRootPath)
@@ -192,3 +195,5 @@ ShaderManager *Application::GetShaderManager() const
 {
     return m_shaderManager;
 }
+
+

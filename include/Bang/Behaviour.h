@@ -6,6 +6,7 @@
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Object.h"
 #include "Bang/Prefab.h"
 #include "Bang/Random.h"
 #include "Bang/Camera.h"
@@ -15,7 +16,6 @@
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/AudioClip.h"
-#include "Bang/Object.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
@@ -23,10 +23,9 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 
-/**
- * @brief The Behaviour class is a base class which will be inherited by all
- * the User Behaviour classes. This lets the engine handle Behaviours uniformly.
- */
+
+NAMESPACE_BANG_BEGIN
+
 class Behaviour : public Component
 {
     COMPONENT(Behaviour)
@@ -84,5 +83,7 @@ extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b) \
 { \
     delete b; \
 }
+
+NAMESPACE_BANG_END
 
 #endif

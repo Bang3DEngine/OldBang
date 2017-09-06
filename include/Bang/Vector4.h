@@ -3,8 +3,10 @@
 
 #include "Bang/Vector.h"
 
-template<class T> class Vector2G;
-template<class T> class Vector3G;
+NAMESPACE_BANG_BEGIN
+
+FORWARD_T class Vector2G;
+FORWARD_T class Vector3G;
 
 #define XYZ_MEMBERS x,y,z,w
 #define EXTRA_DECLARATIONS \
@@ -102,6 +104,6 @@ const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(SCAST<T>(0),
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
 
-
+NAMESPACE_BANG_END
 
 #endif // VECTOR4_H

@@ -10,6 +10,8 @@
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
 
+USING_NAMESPACE_BANG
+
 Material::Material()
 {
     ShaderProgram *sp = new ShaderProgram();
@@ -200,3 +202,5 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("VertexShader",   vsPath);
     xmlInfo->Set("FragmentShader", fsPath);
 }
+
+

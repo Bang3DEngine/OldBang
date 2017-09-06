@@ -11,6 +11,8 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Library;
 FORWARD class Behaviour;
 
@@ -38,5 +40,7 @@ private:
                         bool background);
 
 };
+
+NAMESPACE_BANG_END
 
 #endif // SYSTEMUTILS_H

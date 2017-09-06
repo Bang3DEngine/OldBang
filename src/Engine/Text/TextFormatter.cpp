@@ -5,6 +5,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/RectTransform.h"
 
+USING_NAMESPACE_BANG
+
 Array<TextFormatter::CharRect>
    TextFormatter::GetFormattedTextPositions(const String &content,
                                             const Font *font,
@@ -280,3 +282,5 @@ Vector2f FindMaxCoord(const Array< Array<TextFormatter::CharRect> > &rects)
     }
     return result;
 }
+
+

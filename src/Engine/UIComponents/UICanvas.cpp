@@ -4,6 +4,8 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
 
+USING_NAMESPACE_BANG
+
 UICanvas::UICanvas()
 {
 }
@@ -61,3 +63,5 @@ void UICanvas::GiveFocusTo(UIGameObject *focusTaker) const
         p_focus->OnFocusTaken();
     }
 }
+
+

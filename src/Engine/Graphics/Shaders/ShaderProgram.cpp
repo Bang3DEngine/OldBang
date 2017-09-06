@@ -13,6 +13,8 @@
 #include "Bang/ShaderManager.h"
 #include "Bang/TextureUnitManager.h"
 
+USING_NAMESPACE_BANG
+
 ShaderProgram::ShaderProgram()
 {
     m_idGL = GL::CreateProgram();
@@ -259,3 +261,5 @@ void ShaderProgram::UpdateTextureBindings() const
         BindTextureToAvailableUnit(it->first, it->second);
     }
 }
+
+

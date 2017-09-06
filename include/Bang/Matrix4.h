@@ -6,6 +6,8 @@
 #include "Bang/Debug.h"
 #include "Bang/Vector4.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class T> // Part of it copied from glm
 class Matrix4G
 {
@@ -380,7 +382,7 @@ public:
                            0,   0,   0,  1);
     }
 
-    Vector4G<T>& operator[](std::size_t i)
+    Vector4G<T>& operator[](::std::size_t i)
     {
         switch (i)
         {
@@ -392,7 +394,7 @@ public:
         Debug_Warn("Matrix4G<T> index " << i << " too big");
         return c3;
     }
-    const Vector4G<T>& operator[](std::size_t i) const
+    const Vector4G<T>& operator[](::std::size_t i) const
     {
         return const_cast< Matrix4G<T>* >(this)->operator[](i);
     }
@@ -438,5 +440,7 @@ Vector4G<T> operator*(const Matrix4G<T> &m, const Vector4G<T> &v)
                        (m[0].z * v.x) + (m[1].z * v.y) + (m[2].z * v.z) + (m[3].z * v.w),
                        (m[0].w * v.x) + (m[1].w * v.y) + (m[2].w * v.z) + (m[3].w * v.w));
 }
+
+NAMESPACE_BANG_END
 
 #endif // MATRIX4_H

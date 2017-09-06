@@ -27,6 +27,8 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SingleLineRenderer.h"
 
+USING_NAMESPACE_BANG
+
 Gizmos::Gizmos()
 {
     m_gizmosGo = GameObjectFactory::CreateGameObject(true);
@@ -407,3 +409,5 @@ Gizmos* Gizmos::GetInstance()
     if (!scene) { return nullptr; }
     return scene->GetGizmos();
 }
+
+

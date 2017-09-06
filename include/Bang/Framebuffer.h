@@ -7,6 +7,8 @@
 #include "Bang/GLObject.h"
 #include "Bang/Texture2D.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class RenderTexture;
 
 class Framebuffer : public GLObject
@@ -61,5 +63,7 @@ private:
     mutable Array<GL::Attachment> m_currentDrawAttachmentIds;
     mutable Array<GL::Attachment> m_latestDrawAttachmentIds;
 };
+
+NAMESPACE_BANG_END
 
 #endif // FRAMEBUFFER_H

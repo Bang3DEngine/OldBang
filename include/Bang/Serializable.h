@@ -7,6 +7,8 @@
 #include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define SERIALIZABLE(CLASS) \
         ICLONEABLE(CLASS)\
         public: \
@@ -55,5 +57,7 @@ private:
 
     friend class Resources;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SERIALIZABLE_H

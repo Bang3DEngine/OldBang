@@ -4,6 +4,8 @@
 #include "Bang/GameObject.h"
 #include "Bang/IFocusListener.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class RectTransform;
 
 #define UIGAMEOBJECT(ClassName) GAMEOBJECT(ClassName)
@@ -44,5 +46,7 @@ private:
     friend class UICanvas;
     friend class GameObjectFactory;
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIGAMEOBJECT_H

@@ -3,6 +3,8 @@
 
 #include "Bang/String.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class GameObject;
 FORWARD class UIGameObject;
 
@@ -22,5 +24,7 @@ public:
 
     GameObjectFactory() = delete;
 };
+
+NAMESPACE_BANG_END
 
 #endif // GAMEOBJECTFACTORY_H

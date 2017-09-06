@@ -6,6 +6,8 @@
 #include "Bang/GL.h"
 #include "Bang/Map.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Texture;
 
 class TextureUnitManager
@@ -23,9 +25,11 @@ private:
     TexUnitMap m_textureToUnit;
 
     // Ordered in time
-    std::queue<TexUnit> m_usedUnits;
+    ::std::queue<TexUnit> m_usedUnits;
 
     int c_numTextureUnits = 0;
 };
+
+NAMESPACE_BANG_END
 
 #endif // TEXTUREUNITMANAGER_H

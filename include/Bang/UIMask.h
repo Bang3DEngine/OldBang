@@ -5,6 +5,8 @@
 #include "Bang/Array.h"
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 class UIMask : public Component
 {
     COMPONENT(UIMask)
@@ -40,5 +42,7 @@ private:
     void PrepareStencilToDrawChildren();
     void RestoreStencilBuffer(RenderPass renderPass);
 };
+
+NAMESPACE_BANG_END
 
 #endif // UIMASK_H

@@ -4,6 +4,8 @@
 #include "Bang/Map.h"
 #include "Bang/Framebuffer.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Scene;
 FORWARD class Renderer;
 FORWARD class Material;
@@ -39,6 +41,6 @@ private:
     friend class GraphicPipeline;
 };
 
-
+NAMESPACE_BANG_END
 
 #endif // SELECTIONFRAMEBUFFER_H

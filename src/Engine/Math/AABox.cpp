@@ -10,6 +10,8 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
 AABox::AABox()
@@ -165,14 +167,14 @@ void AABox::FillFromPositions(const Array<Vector3> &positions)
     m_minv = m_maxv = positions[0];
     for (const Vector3 &v : positions)
     {
-        m_minv.x = std::min(m_minv.x, v.x);
-        m_maxv.x = std::max(m_maxv.x, v.x);
+        m_minv.x = ::std::min(m_minv.x, v.x);
+        m_maxv.x = ::std::max(m_maxv.x, v.x);
 
-        m_minv.y = std::min(m_minv.y, v.y);
-        m_maxv.y = std::max(m_maxv.y, v.y);
+        m_minv.y = ::std::min(m_minv.y, v.y);
+        m_maxv.y = ::std::max(m_maxv.y, v.y);
 
-        m_minv.z = std::min(m_minv.z, v.z);
-        m_maxv.z = std::max(m_maxv.z, v.z);
+        m_minv.z = ::std::min(m_minv.z, v.z);
+        m_maxv.z = ::std::max(m_maxv.z, v.z);
     }
 }
 
@@ -246,8 +248,8 @@ AABox operator*(const Matrix4 &m, const AABox &b)
 
 String AABox::ToString() const
 {
-    std::ostringstream oss;
-    oss << "Box(" << m_minv << ", " << m_maxv << ")" << std::endl;
+    ::std::ostringstream oss;
+    oss << "Box(" << m_minv << ", " << m_maxv << ")" << ::std::endl;
     return oss.str();
 }
 
@@ -257,3 +259,5 @@ bool operator==(const AABox &b1, const AABox &b2)
     return b1.GetMin() == b2.GetMin() &&
            b1.GetMax() == b2.GetMax();
 }
+
+NAMESPACE_BANG_END

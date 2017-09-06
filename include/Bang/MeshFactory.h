@@ -3,10 +3,11 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 class MeshFactory
 {
 public:
-
     static Mesh* GetPlane();
     static Mesh* GetUIPlane();
     static Mesh* GetCube();
@@ -22,5 +23,7 @@ private:
     MeshFactory();
     static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
 };
+
+NAMESPACE_BANG_END
 
 #endif // MESHFACTORY_H

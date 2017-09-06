@@ -12,6 +12,8 @@
 #include "Bang/MutexLocker.h"
 #include "Bang/AudioParams.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Path;
 FORWARD class AudioClip;
 FORWARD class GameObject;
@@ -63,5 +65,7 @@ private:
     friend class Application;
     friend class AudioPlayerRunnable;
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOMANAGER_H

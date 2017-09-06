@@ -3,6 +3,8 @@
 
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 class AudioListener : public Component
 {
     COMPONENT(AudioListener)
@@ -22,5 +24,7 @@ private:
 
    void UpdateALProperties() const;
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOLISTENER_H

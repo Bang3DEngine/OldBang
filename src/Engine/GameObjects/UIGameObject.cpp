@@ -6,6 +6,8 @@
 #include "Bang/Component.h"
 #include "Bang/RectTransform.h"
 
+USING_NAMESPACE_BANG
+
 UIGameObject::UIGameObject(const String& name) : GameObject(name)
 {
 }
@@ -107,4 +109,5 @@ void UIGameObject::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("FocusAction", m_defaultFocusAction);
 }
+
 

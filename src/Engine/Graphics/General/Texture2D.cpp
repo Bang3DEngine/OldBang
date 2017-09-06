@@ -2,6 +2,8 @@
 
 #include "Bang/Resources.h"
 
+USING_NAMESPACE_BANG
+
 Texture2D::Texture2D() : Texture(GL::TextureTarget::Texture2D)
 {
     CreateEmpty(1,1);
@@ -126,4 +128,5 @@ void Texture2D::Import(const Path &imageFilepath)
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
     ImportXMLFromFile(importFilepath);
 }
+
 

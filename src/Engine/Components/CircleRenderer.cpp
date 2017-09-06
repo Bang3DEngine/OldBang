@@ -3,6 +3,8 @@
 #include "Bang/Array.h"
 #include "Bang/XMLNode.h"
 
+USING_NAMESPACE_BANG
+
 CircleRenderer::CircleRenderer()
 {
     SetRenderPrimitive(GL::Primitives::LineStrip);
@@ -68,3 +70,5 @@ void CircleRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Radius", GetRadius());
     xmlInfo->Set("Segments", GetSegments());
 }
+
+

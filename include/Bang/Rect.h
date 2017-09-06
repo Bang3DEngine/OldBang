@@ -5,6 +5,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector4.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class T>
 class RectG
 {
@@ -310,5 +312,7 @@ void operator+=(RectG<T> &r, const Vector2G<T> &v)
     r.m_min += v;
     r.m_max += v;
 }
+
+NAMESPACE_BANG_END
 
 #endif // RECT_H

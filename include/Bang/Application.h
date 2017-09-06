@@ -6,6 +6,8 @@
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Time;
 FORWARD class Input;
 FORWARD class Scene;
@@ -66,5 +68,7 @@ private:
     bool m_exit = false;
     int m_exitCode = 0;
 };
+
+NAMESPACE_BANG_END
 
 #endif // APPLICATION_H

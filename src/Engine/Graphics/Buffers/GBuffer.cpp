@@ -7,6 +7,8 @@
 #include "Bang/GraphicPipeline.h"
 #include "Bang/RenderTexture.h"
 
+USING_NAMESPACE_BANG
+
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     Bind();
@@ -121,3 +123,5 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);
 }
+
+

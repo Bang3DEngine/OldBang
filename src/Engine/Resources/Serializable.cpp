@@ -11,6 +11,8 @@
 #include "Bang/XMLNode.h"
 #include "Bang/GUIDManager.h"
 
+USING_NAMESPACE_BANG
+
 Serializable::Serializable()
 {
     SetGUID( GUIDManager::GetNewGUID() );
@@ -109,3 +111,5 @@ const GUID &Serializable::GetGUID() const
 {
     return m_GUID;
 }
+
+

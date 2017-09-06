@@ -3,6 +3,8 @@
 
 #include "Bang/Vector.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define XYZ_MEMBERS x,y
 #define EXTRA_DECLARATIONS \
 template <class OtherT1, class OtherT2>\
@@ -34,5 +36,7 @@ const Vector2G<T> Vector2G<T>::One = Vector2G<T>(SCAST<T>(1));
 
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS
+
+NAMESPACE_BANG_END
 
 #endif // VECTOR2_H

@@ -7,6 +7,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
+NAMESPACE_BANG_BEGIN
+
 enum class ImageAspectRatioMode {Ignore, Keep, KeepExceeding};
 enum class ImageResizeMode {Nearest, Linear};
 
@@ -94,5 +96,7 @@ template class Image<float>;
 
 using Imageb = Image<Byte>;
 using Imagef = Image<float>;
+
+NAMESPACE_BANG_END
 
 #endif // IMAGE_H

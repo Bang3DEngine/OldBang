@@ -21,6 +21,8 @@
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 
+USING_NAMESPACE_BANG
+
 int MeshIO::GetModelNumTriangles(const Path &filepath)
 {
     Assimp::Importer importer;
@@ -96,3 +98,5 @@ bool MeshIO::ReadModel(const Path& filepath,
 
     return ok;
 }
+
+

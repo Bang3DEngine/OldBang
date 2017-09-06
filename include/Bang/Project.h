@@ -5,6 +5,8 @@
 #include "Bang/String.h"
 #include "Bang/Serializable.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Project : public Serializable
 {
     SERIALIZABLE(Project)
@@ -31,5 +33,7 @@ private:
     String m_randomId = "";
     Path m_projectRootFilepath;
 };
+
+NAMESPACE_BANG_END
 
 #endif // PROJECT_H

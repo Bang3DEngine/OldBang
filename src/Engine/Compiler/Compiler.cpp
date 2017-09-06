@@ -3,6 +3,8 @@
 #include "Bang/SystemUtils.h"
 #include "Bang/BangPreprocessor.h"
 
+USING_NAMESPACE_BANG
+
 Compiler::Result Compiler::Compile(const Compiler::Job &job)
 {
     List<String> args;
@@ -49,3 +51,5 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
 Compiler::Compiler()
 {
 }
+
+

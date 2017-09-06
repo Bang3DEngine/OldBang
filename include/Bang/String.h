@@ -8,24 +8,26 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class IToString;
 
 class String
 {
 public:
-    using Iterator = typename std::string::iterator;
-    using RIterator = typename std::string::reverse_iterator;
-    using Const_Iterator = typename std::string::const_iterator;
-    using Const_RIterator = typename std::string::const_reverse_iterator;
+    using Iterator = typename ::std::string::iterator;
+    using RIterator = typename ::std::string::reverse_iterator;
+    using Const_Iterator = typename ::std::string::const_iterator;
+    using Const_RIterator = typename ::std::string::const_reverse_iterator;
 
     String();
     explicit String(int v);
     explicit String(float v);
     explicit String(char c);
     String(const char *cstr);
-    String(const std::string &stdstr);
-    String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
-           std::istreambuf_iterator<char, std::char_traits<char> > end);
+    String(const ::std::string &stdstr);
+    String(::std::istreambuf_iterator<char, ::std::char_traits<char> > begin,
+           ::std::istreambuf_iterator<char, ::std::char_traits<char> > end);
 
     template<class Iterator>
     String(Iterator begin, Iterator end) : m_str(begin, end) { }
@@ -71,12 +73,12 @@ public:
 
     const char *ToCString() const;
 
-    std::size_t Find(char c, std::size_t toIndex  = String::npos) const;
-    std::size_t RFind(char c, std::size_t toIndex = String::npos) const;
-    std::size_t
-    Find(const char *str, std::size_t fromIndex, std::size_t length) const;
-    std::size_t
-    RFind(const char *str, std::size_t fromIndex, std::size_t length) const;
+    ::std::size_t Find(char c, ::std::size_t toIndex  = String::npos) const;
+    ::std::size_t RFind(char c, ::std::size_t toIndex = String::npos) const;
+    ::std::size_t
+    Find(const char *str, ::std::size_t fromIndex, ::std::size_t length) const;
+    ::std::size_t
+    RFind(const char *str, ::std::size_t fromIndex, ::std::size_t length) const;
 
     int ReplaceInSitu(const String &from, const String &to,
                 int maxNumberOfReplacements = -1);
@@ -134,8 +136,8 @@ public:
     static String ToString(const String &v);
     static String ToString(const IToString &v);
 
-    friend std::istream& operator>>(std::istream &is, String &str);
-    friend std::ostream& operator<<(std::ostream &os, const String &str);
+    friend ::std::istream& operator>>(::std::istream &is, String &str);
+    friend ::std::ostream& operator<<(::std::ostream &os, const String &str);
     friend String operator+(const String &str1, const String &str2);
     friend bool operator<(const String &str1, const String &str2);
     friend bool operator<=(const String &str1, const String &str2);
@@ -145,10 +147,10 @@ public:
     friend bool operator!=(const String &str1, const String &str2);
     friend String& operator+=(String &str1, const String &str2);
     friend String& operator+=(String &str1, char c);
-    char operator[](std::size_t i) const;
-    char& operator[](std::size_t i);
-    operator std::string() const;
-    std::size_t operator()(const String &str) const;
+    char operator[](::std::size_t i) const;
+    char& operator[](::std::size_t i);
+    operator ::std::string() const;
+    ::std::size_t operator()(const String &str) const;
     String& operator=(const char *cstr);
 
     Iterator Begin() { return m_str.begin(); }
@@ -166,13 +168,13 @@ public:
     Const_Iterator begin() const { return m_str.begin(); }
     Const_Iterator end() const { return m_str.end(); }
 
-    static constexpr std::size_t npos = std::string::npos;
+    static constexpr ::std::size_t npos = ::std::string::npos;
 
     template< template <class String> class Container>
     Container<String> Split(char splitter, bool trimResults = false) const;
 
 private:
-    std::string m_str;
+    ::std::string m_str;
 };
 
 template < template <class String> class Container >
@@ -237,19 +239,6 @@ inline float String::To<float>(const String &str, bool *ok)
     return String::ToFloat(str, ok);
 }
 
-String operator+(const String &str1, const String &str2);
-
-template <class T>
-String operator+(const char *str, const T &v)
-{
-    return String(std::string(str) + std::string(String::ToString(v)));
-}
-template <class T>
-String operator+(const T &v, const char *str)
-{
-    return String(std::string(String::ToString(v)) + std::string(str));
-}  
-
 template< template <class String> class Container>
 Container<String> String::Split(char splitter, bool trimResults) const
 {
@@ -284,5 +273,18 @@ Container<String> String::Split(char splitter, bool trimResults) const
     }
     return result;
 }
+
+template <class T>
+String operator+(const char *str, const T &v)
+{
+    return String(::std::string(str) + ::std::string(String::ToString(v)));
+}
+template <class T>
+String operator+(const T &v, const char *str)
+{
+    return String(::std::string(String::ToString(v)) + ::std::string(str));
+}
+
+NAMESPACE_BANG_END
 
 #endif // STRING_H

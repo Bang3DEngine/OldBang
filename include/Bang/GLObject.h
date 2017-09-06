@@ -6,6 +6,8 @@
 
 #include "Bang/GL.h"
 
+NAMESPACE_BANG_BEGIN
+
 class GLObject
 {
 public:
@@ -20,5 +22,7 @@ protected:
 
     GLId m_idGL = 0;
 };
+
+NAMESPACE_BANG_END
 
 #endif // GLOBJECT_H

@@ -8,7 +8,10 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 
-typedef String TypeId;
+NAMESPACE_BANG_BEGIN
+
+using TypeId = String;
+
 template <class Value>
 class TypeMap : public Map<TypeId, Value>
 {
@@ -75,8 +78,10 @@ public:
     template<class Class>
     const Value& operator[](const Class &k) const
     {
-        return std::map<TypeId,Value>::operator[]( typeid(Class).name() );
+        return ::std::map<TypeId,Value>::operator[]( typeid(Class).name() );
     }
 };
+
+NAMESPACE_BANG_END
 
 #endif // TYPEMAP_H

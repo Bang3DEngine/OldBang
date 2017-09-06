@@ -7,6 +7,8 @@
 #include "Bang/AudioSource.h"
 #include "Bang/AudioManager.h"
 
+USING_NAMESPACE_BANG
+
 AudioClip::AudioClip()
 {
     alGenBuffers(1, &m_alBufferId);
@@ -144,3 +146,5 @@ void AudioClip::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 }
+
+

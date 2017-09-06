@@ -1,5 +1,7 @@
 #include "Bang/VBO.h"
 
+USING_NAMESPACE_BANG
+
 VBO::VBO()
 {
     GL::GenBuffers(1, &m_idGL);
@@ -30,3 +32,5 @@ void VBO::UnBind() const
 {
     GL::UnBind(this);
 }
+
+

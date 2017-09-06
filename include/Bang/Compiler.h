@@ -4,6 +4,8 @@
 #include "Bang/List.h"
 #include "Bang/Path.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Compiler
 {
 public:
@@ -37,5 +39,7 @@ public:
 private:
     Compiler();
 };
+
+NAMESPACE_BANG_END
 
 #endif // COMPILER_H

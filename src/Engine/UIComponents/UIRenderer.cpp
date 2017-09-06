@@ -1,5 +1,7 @@
 #include "Bang/UIRenderer.h"
 
+USING_NAMESPACE_BANG
+
 UIRenderer::UIRenderer()
 {
     SetRenderPass(RenderPass::Canvas);
@@ -9,3 +11,5 @@ UIRenderer::UIRenderer()
 UIRenderer::~UIRenderer()
 {
 }
+
+

@@ -6,6 +6,8 @@
 #include "Bang/String.h"
 #include "Bang/IToString.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Path : public IToString
 {
 public:
@@ -76,7 +78,8 @@ private:
     String m_absolutePath = "";
 
     static Path GetNextDuplicatePath(const Path &path);
-
 };
+
+NAMESPACE_BANG_END
 
 #endif // PATH_H

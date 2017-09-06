@@ -5,6 +5,8 @@
 
 #include "Bang/Vector3.h"
 
+NAMESPACE_BANG_BEGIN
+
 template<class T> // Part of it copied from glm
 class Matrix3G
 {
@@ -85,7 +87,7 @@ public:
     const T *Data() const { return SCAST<const T*>(&(c0.x)); }
     T *Data() { return SCAST<T*>(&(c0.x)); }
 
-    Vector3G<T>& operator[](std::size_t i)
+    Vector3G<T>& operator[](::std::size_t i)
     {
         switch (i)
         {
@@ -96,7 +98,7 @@ public:
         Debug_Warn("Matrix3G<T> index " << i << " too big");
         return c2;
     }
-    const Vector3G<T>& operator[](std::size_t i) const
+    const Vector3G<T>& operator[](::std::size_t i) const
     {
         return const_cast< Matrix3G<T>* >(this)->operator[](i);
     }
@@ -142,5 +144,7 @@ Matrix3G<T> operator*(const Matrix3G<T> &m1, const Matrix3G<OtherT> &m2)
     res[2][2] = vA02 * vB20 + vA12 * vB21 + vA22 * vB22;
     return res;
 }
+
+NAMESPACE_BANG_END
 
 #endif // MATRIX3_H

@@ -3,6 +3,8 @@
 #include "Bang/VBO.h"
 #include "Bang/ShaderProgram.h"
 
+USING_NAMESPACE_BANG
+
 VAO::VAO()
 {
     GL::GenVertexArrays(1, &m_idGL);
@@ -76,3 +78,5 @@ int VAO::GetVBOCount() const
 {
     return m_vbos.Size();
 }
+
+

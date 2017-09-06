@@ -25,6 +25,8 @@
 #include "Bang/TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
+USING_NAMESPACE_BANG
+
 GraphicPipeline::GraphicPipeline(Screen *screen)
 {
     m_gl = new GL();
@@ -225,4 +227,5 @@ TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }
+
 

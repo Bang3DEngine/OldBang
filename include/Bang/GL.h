@@ -9,6 +9,8 @@
 #include "Bang/String.h"
 #include "Bang/Matrix4.h"
 
+NAMESPACE_BANG_BEGIN
+
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 
 using GLId = GLuint;
@@ -426,6 +428,8 @@ private:
 
     friend class GraphicPipeline;
 };
+
+NAMESPACE_BANG_END
 
 #include "GL.tcc"
 

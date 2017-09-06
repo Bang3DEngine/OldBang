@@ -4,6 +4,8 @@
 #include "Bang/Application.h"
 #include "Bang/ShaderProgram.h"
 
+USING_NAMESPACE_BANG
+
 ShaderManager::ShaderManager()
 {
 }
@@ -59,3 +61,5 @@ void ShaderManager::UnRegisterUsageOfShader(ShaderProgram *shaderProgram,
 void ShaderManager::Refresh()
 {
 }
+
+

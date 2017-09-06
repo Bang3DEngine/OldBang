@@ -3,6 +3,8 @@
 
 #include "Bang/Component.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Shader;
 FORWARD class ShaderProgram;
 
@@ -45,5 +47,7 @@ private:
     Type m_type = Type::AfterScene;
     int m_priority = 0;
 };
+
+NAMESPACE_BANG_END
 
 #endif // POSTPROCESSEFFECT_H

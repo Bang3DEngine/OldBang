@@ -3,6 +3,8 @@
 
 #include "Bang/Rect.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class GL;
 FORWARD class Scene;
 FORWARD class Screen;
@@ -61,5 +63,7 @@ private:
     void RenderGBuffer(Scene *scene);
     void RenderSelectionBuffer(Scene *scene);
 };
+
+NAMESPACE_BANG_END
 
 #endif // GRAPHICPIPELINE_H

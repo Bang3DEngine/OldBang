@@ -13,6 +13,8 @@
 #include "Bang/Extensions.h"
 #include "Bang/ImportFilesManager.h"
 
+USING_NAMESPACE_BANG
+
 Project *ProjectManager::s_currentProject = nullptr;
 
 ProjectManager::ProjectManager()
@@ -111,3 +113,5 @@ Project *ProjectManager::GetCurrentProject()
 {
     return ProjectManager::s_currentProject;
 }
+
+

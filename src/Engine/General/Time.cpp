@@ -4,6 +4,8 @@
 
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 double Time::time      = 0.0;
 float  Time::deltaTime = 0.0f;
 
@@ -19,8 +21,8 @@ double Time::GetTime()
 
 unsigned long long Time::GetNow()
 {
-    return std::chrono::system_clock::now().time_since_epoch() /
-           std::chrono::milliseconds(1);
+    return ::std::chrono::system_clock::now().time_since_epoch() /
+           ::std::chrono::milliseconds(1);
 }
 
 Time::Time()
@@ -51,3 +53,5 @@ Time *Time::GetInstance()
 {
     return Application::GetInstance()->GetTime();
 }
+
+

@@ -7,6 +7,8 @@
 #include "Bang/Random.h"
 #include "Bang/IToString.h"
 
+NAMESPACE_BANG_BEGIN
+
 class GUID : public IToString
 {
 private:
@@ -32,7 +34,7 @@ public:
         return String::ToString(m_guid);
     }
 
-    friend  std::istream &operator>>(std::istream &is, GUID &guid);
+    friend  ::std::istream &operator>>(::std::istream &is, GUID &guid);
     friend bool operator==(const GUID &lhs, const GUID &rhs);
     friend bool operator!=(const GUID &lhs, const GUID &rhs);
     friend bool operator<(const GUID &lhs, const GUID &rhs);
@@ -41,7 +43,7 @@ private:
     GUIDType m_guid = GUID::EmptyGUID;
 };
 
-inline std::istream &operator>>(std::istream &is, GUID &guid)
+inline ::std::istream &operator>>(::std::istream &is, GUID &guid)
 {
     is >> guid.m_guid;
     return is;
@@ -59,5 +61,7 @@ inline bool operator<(const GUID &lhs, const GUID &rhs)
 {
     return lhs.m_guid < rhs.m_guid;
 }
+
+NAMESPACE_BANG_END
 
 #endif // GUID_H

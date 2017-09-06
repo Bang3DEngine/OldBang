@@ -3,6 +3,8 @@
 #include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
 
+USING_NAMESPACE_BANG
+
 XMLNode::XMLNode(const String &tagName)
 {
     SetTagName(tagName);
@@ -162,12 +164,12 @@ const List<String> &XMLNode::GetAttributesOrderList() const
     return m_attributeOrder;
 }
 
-List<std::pair<String, XMLAttribute*> > XMLNode::GetAttributesListInOrder() const
+List<::std::pair<String, XMLAttribute*> > XMLNode::GetAttributesListInOrder() const
 {
-    List< std::pair<String, XMLAttribute*> > attributes;
+    List< ::std::pair<String, XMLAttribute*> > attributes;
     for (const String& attrName : m_attributeOrder)
     {
-        attributes.PushBack( std::make_pair(attrName, &m_attributes[attrName]) );
+        attributes.PushBack( ::std::make_pair(attrName, &m_attributes[attrName]) );
     }
     return attributes;
 }
@@ -186,3 +188,5 @@ XMLNode XMLNode::FromString(const String &xml)
 {
     return XMLParser::FromString(xml);
 }
+
+

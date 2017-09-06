@@ -5,6 +5,8 @@
 #include "Bang/Image.h"
 #include "Bang/Texture.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Texture2D : public Texture,
                   public Asset
 {
@@ -75,5 +77,7 @@ private:
     static Color GetColorFromArray(const float *pixels, int i);
     static Color GetColorFromArray(const Byte *pixels, int i);
 };
+
+NAMESPACE_BANG_END
 
 #endif // TEXTURE2D_H

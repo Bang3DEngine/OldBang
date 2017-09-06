@@ -11,6 +11,8 @@
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
 
+USING_NAMESPACE_BANG
+
 SceneManager::SceneManager()
 {
 }
@@ -180,3 +182,5 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
         delete scene;
     }
 }
+
+

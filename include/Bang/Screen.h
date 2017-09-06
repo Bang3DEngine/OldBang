@@ -7,6 +7,8 @@
 #include "Bang/Screen.h"
 #include "Bang/Vector2.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class GraphicPipeline;
 
 class Screen
@@ -38,5 +40,7 @@ protected:
 
     GraphicPipeline *m_gPipeline = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // SCREEN_H

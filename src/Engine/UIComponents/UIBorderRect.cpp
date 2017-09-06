@@ -6,6 +6,8 @@
 #include "Bang/RectTransform.h"
 #include "Bang/ComponentFactory.h"
 
+USING_NAMESPACE_BANG
+
 UIBorderRect::UIBorderRect()
 {
     p_lineRenderer = ComponentFactory::CreateComponent<LineRenderer>();
@@ -91,3 +93,5 @@ void UIBorderRect::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("LineColor", GetLineColor());
 }
+
+

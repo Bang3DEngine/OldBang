@@ -1,5 +1,7 @@
 #include "Bang/Random.h"
 
+USING_NAMESPACE_BANG
+
 Vector2 Random::InsideUnitCircle()
 {
     return Vector2(Random::Range(-1.0f, 1.0f),
@@ -45,4 +47,5 @@ Color Random::GetColorOpaque()
 Random::Random()
 {
 }
+
 

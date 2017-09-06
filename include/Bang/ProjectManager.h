@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class Project;
 
 class ProjectManager
@@ -24,5 +26,7 @@ public:
 private:
     static Project *s_currentProject;
 };
+
+NAMESPACE_BANG_END
 
 #endif // PROJECTMANAGER_H

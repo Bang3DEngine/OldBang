@@ -9,6 +9,8 @@
 #include "Bang/List.h"
 #include "Bang/Array.h"
 
+USING_NAMESPACE_BANG
+
 const Path Path::Empty;
 
 Path::Path()
@@ -363,3 +365,5 @@ Path Path::GetNextDuplicatePath(const Path &filepath)
                          .AppendExtension(fileExtension);
     return result;
 }
+
+

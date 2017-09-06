@@ -4,7 +4,9 @@
 #include <SDL2/SDL.h>
 #include "Bang/Vector2.h"
 
-FORWARD   class Screen;
+NAMESPACE_BANG_BEGIN
+
+FORWARD class Screen;
 
 class Window
 {
@@ -26,5 +28,7 @@ protected:
     SDL_GLContext m_sdlGLContext;
     Screen *m_screen = nullptr;
 };
+
+NAMESPACE_BANG_END
 
 #endif // IWINDOW_H

@@ -8,6 +8,8 @@
 #include "Bang/XMLAttribute.h"
 #include "Bang/StreamOperators.h"
 
+NAMESPACE_BANG_BEGIN
+
 class XMLNode : public IToString
 {
 public:
@@ -61,7 +63,7 @@ public:
     const String& GetTagName() const;
     const Map<String, XMLAttribute>& GetAttributes() const;
     const List<String>& GetAttributesOrderList() const;
-    List< std::pair<String, XMLAttribute*> > GetAttributesListInOrder() const;
+    List< ::std::pair<String, XMLAttribute*> > GetAttributesListInOrder() const;
     const List<XMLNode>& GetChildren() const;
     List<XMLNode>& GetChildren();
 
@@ -73,5 +75,7 @@ private:
     mutable Map<String, XMLAttribute> m_attributes;
     List<XMLNode> m_children;
 };
+
+NAMESPACE_BANG_END
 
 #endif // XMLNODE_H

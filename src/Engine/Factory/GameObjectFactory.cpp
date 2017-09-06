@@ -15,6 +15,8 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 
+USING_NAMESPACE_BANG
+
 GameObject*
 GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
 {
@@ -116,3 +118,5 @@ UIGameObject *GameObjectFactory::CreateGUIScrollArea()
 {
     return UIScrollArea::CreateGameObject();
 }
+
+

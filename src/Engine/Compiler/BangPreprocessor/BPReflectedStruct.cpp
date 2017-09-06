@@ -3,6 +3,8 @@
 #include "Bang/StreamOperators.h"
 #include "Bang/BangPreprocessor.h"
 
+USING_NAMESPACE_BANG
+
 using BP = BangPreprocessor;
 
 BPReflectedStruct::BPReflectedStruct()
@@ -31,8 +33,8 @@ void BPReflectedStruct::FromString(String::Iterator structBegin,
     Array<String> propertyList = propertyListStr.Split<Array>(',', true);
     if (propertyList.Size() == 0)
     {
-        std::cerr << "BP Error: BP_CLASS has 0 properties, but must have at"
-                     "least a name" << std::endl;
+        ::std::cerr << "BP Error: BP_CLASS has 0 properties, but must have at"
+                     "least a name" << ::std::endl;
         return;
     }
     outStruct->SetStructName(propertyList[0]);
@@ -44,8 +46,8 @@ void BPReflectedStruct::FromString(String::Iterator structBegin,
     String keyword(structKeywordBegin, structKeywordEnd);
     if (keyword != "class" && keyword != "struct")
     {
-        std::cerr << "BP Error: 'class' or 'struct' keyword expected after"
-                     " BANG_CLASS(...)" << std::endl;
+        ::std::cerr << "BP Error: 'class' or 'struct' keyword expected after"
+                     " BANG_CLASS(...)" << ::std::endl;
         return;
     }
 
@@ -210,7 +212,7 @@ const Array<BPReflectedVariable> &BPReflectedStruct::GetVariables() const
 
 String BPReflectedStruct::ToString() const
 {
-    std::ostringstream oss;
+    ::std::ostringstream oss;
     oss << "{ " <<
            GetStructName() << ", " <<
            GetStructVariableName() << ", " <<
@@ -218,3 +220,5 @@ String BPReflectedStruct::ToString() const
            " }";
     return String(oss.str());
 }
+
+

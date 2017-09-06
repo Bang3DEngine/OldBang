@@ -1,5 +1,7 @@
 #include "Bang/ALAudioSource.h"
 
+USING_NAMESPACE_BANG
+
 ALAudioSource::ALAudioSource()
 {
     alGenSources(1, &m_alSourceId);
@@ -105,3 +107,5 @@ ALAudioSource::State ALAudioSource::GetState() const
     alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
     return static_cast<State>(state);
 }
+
+

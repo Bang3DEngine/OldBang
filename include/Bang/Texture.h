@@ -6,6 +6,8 @@
 #include "Bang/Vector2.h"
 #include "Bang/GLObject.h"
 
+NAMESPACE_BANG_BEGIN
+
 class Texture : public GLObject
 {
 public:
@@ -53,5 +55,7 @@ private:
     GL::ColorFormat m_internalFormat = GL::ColorFormat::RGBA_Float32;
     GL::TextureTarget m_target = GL::TextureTarget::Texture2D;
 };
+
+NAMESPACE_BANG_END
 
 #endif // TEXTURE_H

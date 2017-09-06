@@ -13,6 +13,8 @@
 #include "Bang/AudioListener.h"
 #include "Bang/AudioPlayerRunnable.h"
 
+USING_NAMESPACE_BANG
+
 AudioManager::AudioManager()
 {
     InitAL();
@@ -158,3 +160,5 @@ AudioManager *AudioManager::GetInstance()
 {
     return Application::GetInstance()->GetAudioManager();
 }
+
+

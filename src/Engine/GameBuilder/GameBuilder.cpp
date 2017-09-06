@@ -12,6 +12,8 @@
 #include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourManager.h"
 
+USING_NAMESPACE_BANG
+
 void GameBuilder::BuildGame(const Project *project,
                             const Path &outputExecutableFilepath,
                             BinType binaryType,
@@ -187,3 +189,5 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
 
     return true;
 }
+
+

@@ -8,6 +8,8 @@
 #include "Bang/List.h"
 #include "Bang/Asset.h"
 
+NAMESPACE_BANG_BEGIN
+
 FORWARD class AudioSource;
 
 class AudioClip : public Asset
@@ -43,5 +45,7 @@ private:
     friend class AudioManager;
     friend class AudioPlayerRunnable;
 };
+
+NAMESPACE_BANG_END
 
 #endif // AUDIOCLIP_H
