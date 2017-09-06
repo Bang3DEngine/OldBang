@@ -206,7 +206,7 @@ Rectf TextFormatter::GetCharRect
 float TextFormatter::GetLineSkipNDC(const Font *font, const RectTransform *rt,
                                     int textSizePx)
 {
-    const int lineSkipScaled = G_Font::ScaleMagnitude(font->GetLineSkipPx(),
+    const int lineSkipScaled = Font::ScaleMagnitude(font->GetLineSkipPx(),
                                                       textSizePx);
     return rt->FromPixelsAmountToLocalNDC( Vector2i(0, lineSkipScaled) ).y;
 }

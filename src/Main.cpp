@@ -1,6 +1,6 @@
 #include "Bang/Application.h"
 
-#include "Bang/G_Image.h"
+#include "Bang/Image.h"
 #include "Bang/Transform.h"
 #include "Bang/Resources.h"
 #include "Bang/UIGameObject.h"

@@ -195,7 +195,7 @@ void Framebuffer::Export(GL::Attachment attachment,
                          bool invertY) const
 {
     GL::Flush(); GL::Finish();
-    G_Image img = GetAttachmentTexture(attachment)->ToImage(invertY);
+    Imageb img = GetAttachmentTexture(attachment)->ToImage(invertY);
     img.Export(filepath);
 }
 
@@ -217,7 +217,7 @@ void Framebuffer::ExportStencil(const Path &filepath,
         bytes[i * 4 + 3] = 255;
     }
 
-    G_Image img = G_Image::LoadFromData(GetWidth(), GetHeight(), bytes);
+    Imageb img = Imageb::LoadFromData(GetWidth(), GetHeight(), bytes);
     img.InvertVertically();
     img.Export(filepath);
 

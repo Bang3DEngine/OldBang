@@ -101,32 +101,6 @@ add_library(BangCoreObjects OBJECT ${CORE_SRC_FILES})
 add_library(BangCoreStatic  STATIC $<TARGET_OBJECTS:BangCoreObjects>)
 add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
 
-# BangGraphics Library
-set(GRAPHICS_SRC_FILES
-${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Font.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_FontSheetCreator.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Image.cpp
-${ENGINE_SRC_DIR}/Graphics/General/G_Material.cpp
-${ENGINE_SRC_DIR}/Graphics/General/RenderTexture.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Screen.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
-${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
-${ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
-${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
-${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
-${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
-${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
-)
-add_library(BangGraphicsObjects OBJECT ${GRAPHICS_SRC_FILES})
-add_library(BangGraphicsStatic  STATIC $<TARGET_OBJECTS:BangGraphicsObjects>)
-add_library(BangGraphics        SHARED $<TARGET_OBJECTS:BangGraphicsObjects>)
-
 macro(add_info_files)
      foreach(_it ${ARGN})
          if(NOT IS_DIRECTORY ${_it})
@@ -195,9 +169,28 @@ ${ENGINE_SRC_DIR}/General/Object.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
+${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
+${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Font.cpp
+${ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Image.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Material.cpp
+${ENGINE_SRC_DIR}/Graphics/General/RenderTexture.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Screen.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
+${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
+${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
+${ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
+${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
+${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
+${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
+${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 ${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
 ${ENGINE_SRC_DIR}/Graphics/ShaderManager.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
@@ -214,8 +207,6 @@ ${ENGINE_SRC_DIR}/Math/AABox.cpp
 ${ENGINE_SRC_DIR}/Math/Sphere.cpp
 ${ENGINE_SRC_DIR}/Resources/Asset.cpp
 ${ENGINE_SRC_DIR}/Resources/AudioClip.cpp
-${ENGINE_SRC_DIR}/Resources/Font.cpp
-${ENGINE_SRC_DIR}/Resources/Material.cpp
 ${ENGINE_SRC_DIR}/Resources/Mesh.cpp
 ${ENGINE_SRC_DIR}/Resources/Prefab.cpp
 ${ENGINE_SRC_DIR}/Resources/Resource.cpp
@@ -249,10 +240,8 @@ list(APPEND ALL_SRC_FILES ${CORE_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${GRAPHICS_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${ENGINE_SRC_FILES})
 add_library(BangStatic STATIC $<TARGET_OBJECTS:BangCoreObjects>
-                              $<TARGET_OBJECTS:BangGraphicsObjects>
                               $<TARGET_OBJECTS:BangEngineObjects>)
 add_library(BangShared SHARED $<TARGET_OBJECTS:BangCoreObjects>
-                              $<TARGET_OBJECTS:BangGraphicsObjects>
                               $<TARGET_OBJECTS:BangEngineObjects>)
 set_target_properties(BangShared PROPERTIES OUTPUT_NAME Bang)
 

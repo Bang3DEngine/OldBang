@@ -2,7 +2,7 @@
 #define TEXTURE2D_H
 
 #include "Bang/Asset.h"
-#include "Bang/G_Image.h"
+#include "Bang/Image.h"
 #include "Bang/Texture.h"
 
 class Texture2D : public Texture,
@@ -28,7 +28,7 @@ public:
     void GenerateMipMaps() const;
 
     template<class T = Byte>
-    G_ImageG<T> ToImage(bool invertY = false) const
+    Image<T> ToImage(bool invertY = false) const
     {
         const int width  = GetWidth(), height = GetHeight();
         const int numComps = GL::GetNumComponents(GetInternalFormat());
@@ -39,7 +39,7 @@ public:
         GL::GetTexImage(GetTextureTarget(), pixels);
         GL::Bind(GL::BindTarget::Texture2D, prevBound);
 
-        G_ImageG<T> img(width, height);
+        Image<T> img(width, height);
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
@@ -59,7 +59,7 @@ public:
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 
-    void Import(const G_ImageG<Byte> &image);
+    void Import(const Image<Byte> &image);
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

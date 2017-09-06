@@ -2,8 +2,8 @@
 
 #include "Bang/Debug.h"
 
-void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
-                                       G_Image *outImg,
+void ImageEffects::SignedDistanceField(const Imageb &inputImageBW,
+                                       Imageb *outImg,
                                        int radius)
 {
     outImg->Create(inputImageBW.GetWidth(), inputImageBW.GetHeight(),
@@ -11,7 +11,7 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
 
     constexpr float negativeOffset = 0.25f;
 
-    G_Image outline;
+    Imageb outline;
     ImageEffects::Outline(inputImageBW, &outline);
     // outline.Export( Path("outline.png") );
 
@@ -52,8 +52,8 @@ void ImageEffects::SignedDistanceField(const G_Image &inputImageBW,
     }
 }
 
-void ImageEffects::Outline(const G_Image &imgBW,
-                           G_Image *outlineOutputImageBW)
+void ImageEffects::Outline(const Imageb &imgBW,
+                           Imageb *outlineOutputImageBW)
 {
     outlineOutputImageBW->Create(imgBW.GetWidth(), imgBW.GetHeight());
     for (int y = 0; y < imgBW.GetHeight(); ++y)
@@ -86,9 +86,9 @@ void ImageEffects::Outline(const G_Image &imgBW,
     }
 }
 
-bool ImageEffects::Diff(const G_Image &inputImage1,
-                        const G_Image &inputImage2,
-                        G_Image *diffOutputImage,
+bool ImageEffects::Diff(const Imageb &inputImage1,
+                        const Imageb &inputImage2,
+                        Imageb *diffOutputImage,
                         bool diffAlpha)
 {
     diffOutputImage->Create(inputImage1.GetWidth(),

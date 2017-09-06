@@ -11,7 +11,7 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::Import(const G_ImageG<Byte> &image)
+void Texture2D::Import(const Image<Byte> &image)
 {
     if (image.GetData())
     {
@@ -120,7 +120,7 @@ void Texture2D::ExportXML(XMLNode *xmlInfo) const
 
 void Texture2D::Import(const Path &imageFilepath)
 {
-    G_Image *img = Resources::Load<G_Image>(imageFilepath);
+    Imageb *img = Resources::Load<Imageb>(imageFilepath);
     if (img) { Import(*img); }
 
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);

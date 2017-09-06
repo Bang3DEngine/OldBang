@@ -6,7 +6,7 @@
 
 FORWARD class Scene;
 FORWARD class Renderer;
-FORWARD class G_Material;
+FORWARD class Material;
 FORWARD class ShaderProgram;
 
 class SelectionFramebuffer : public Framebuffer

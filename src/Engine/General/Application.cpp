@@ -18,7 +18,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderManager.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/G_FontSheetCreator.h"
+#include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
 
 Application* Application::s_appSingleton = nullptr;

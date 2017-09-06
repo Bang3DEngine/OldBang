@@ -1,4 +1,4 @@
-#include "Bang/G_FontSheetCreator.h"
+#include "Bang/FontSheetCreator.h"
 
 #include <SDL2/SDL_ttf.h>
 
@@ -11,15 +11,15 @@
 #include "Bang/Texture2D.h"
 #include "Bang/ImageEffects.h"
 
-bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
-                                          Texture2D *atlasTexture,
-                                          const String &charsToLoad,
-                                          Array<Recti> *imagesOutputRects,
-                                          int extraMargin)
+bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
+                                        Texture2D *atlasTexture,
+                                        const String &charsToLoad,
+                                        Array<Recti> *imagesOutputRects,
+                                        int extraMargin)
 {
     if (!ttfFont) { return false; }
 
-    Array<G_Image> charImages;
+    Array<Imageb> charImages;
     for (const char c : charsToLoad)
     {
         if (TTF_GlyphIsProvided(ttfFont, c))
@@ -33,7 +33,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                                                               WhiteColor);
             SDL_PixelFormat *fmt = charBitmap->format;
             Uint32 *charPixels = SCAST<Uint32*>(charBitmap->pixels);
-            G_Image charImage(charBitmap->w, charBitmap->h);
+            Imageb charImage(charBitmap->w, charBitmap->h);
             for(int y = 0; y < charBitmap->h; ++y)
             {
                 for(int x = 0; x < charBitmap->w; ++x)
@@ -61,7 +61,7 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
             // (eliminate all margins/paddings)
             Vector2i actualCharSize = localMaxPixel - localMinPixel;
 
-            G_Image fittedCharImage(actualCharSize.x, actualCharSize.y);
+            Imageb fittedCharImage(actualCharSize.x, actualCharSize.y);
             fittedCharImage.Copy(charImage,
                                  Recti(localMinPixel, localMaxPixel),
                                  Recti(Vector2i::Zero, actualCharSize));
@@ -71,15 +71,15 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
         }
         else
         {
-            G_Image empty; empty.Create(1, 1, Color::Zero);
+            Imageb empty; empty.Create(1, 1, Color::Zero);
             charImages.PushBack(empty);
         }
     }
 
     // Resize the atlas to fit only the used area
-    G_Image atlasImage = G_FontSheetCreator::PackImages(charImages,
-                                                        extraMargin,
-                                                        imagesOutputRects);
+    Imageb atlasImage = FontSheetCreator::PackImages(charImages,
+                                                     extraMargin,
+                                                     imagesOutputRects);
     // atlasImage.Export(Path("font.png"));
 
     if (atlasTexture) // Create final atlas texture
@@ -97,14 +97,14 @@ bool G_FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
     return true;
 }
 
-G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
-                                       int margin,
-                                       Array<Recti> *imagesOutputRects,
-                                       const Color &bgColor)
+Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
+                                    int margin,
+                                    Array<Recti> *imagesOutputRects,
+                                    const Color &bgColor)
 {
     int maxImgWidth  = 0;
     int maxImgHeight = 0;
-    for (const G_Image &img : images)
+    for (const Imageb &img : images)
     {
         maxImgWidth  = Math::Max(maxImgWidth,  img.GetWidth());
         maxImgHeight = Math::Max(maxImgHeight, img.GetHeight());
@@ -114,13 +114,13 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
     int totalWidth  = (imagesPerSide) * (maxImgWidth  + (margin * 2));
     int totalHeight = (imagesPerSide) * (maxImgHeight + (margin * 2));
 
-    G_Image result;
+    Imageb result;
     result.Create(totalWidth, totalHeight, Color::Zero);
 
     maxImgHeight = 0;
     int currentRowImages = 0;
     Vector2i penPosTopLeft(0, margin);
-    for (const G_Image &img : images)
+    for (const Imageb &img : images)
     {
         if (penPosTopLeft.x + img.GetWidth() + margin * 2 > totalWidth ||
             currentRowImages >= imagesPerSide)
@@ -157,11 +157,11 @@ G_Image G_FontSheetCreator::PackImages(const Array<G_Image> &images,
     }
 
     Vector2i fittedSize = (maxPixel - minPixel);
-    G_Image fittedResult(fittedSize.x, fittedSize.y);
+    Imageb fittedResult(fittedSize.x, fittedSize.y);
     fittedResult = result.GetSubImage( Recti(minPixel, maxPixel) );
     fittedResult.FillTransparentPixels(bgColor);
 
-    G_Image fittedResultMargined = fittedResult;
+    Imageb fittedResultMargined = fittedResult;
     fittedResultMargined.AddMargins(Vector2i(margin), bgColor,
                                     ImageAspectRatioMode::Ignore);
     return fittedResultMargined;

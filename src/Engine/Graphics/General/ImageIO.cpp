@@ -9,9 +9,9 @@
 
 #include "Bang/List.h"
 #include "Bang/Debug.h"
-#include "Bang/G_Image.h"
+#include "Bang/Image.h"
 
-void ImageIO::Export(const Path &filepath, const G_Image &img)
+void ImageIO::Export(const Path &filepath, const Imageb &img)
 {
     if (filepath.HasExtension("png"))
     {
@@ -27,7 +27,7 @@ void ImageIO::Export(const Path &filepath, const G_Image &img)
     }
 }
 
-void ImageIO::Import(const Path &filepath, G_Image *img, bool *_ok)
+void ImageIO::Import(const Path &filepath, Imageb *img, bool *_ok)
 {
     bool ok = false;
 
@@ -47,7 +47,7 @@ void ImageIO::Import(const Path &filepath, G_Image *img, bool *_ok)
     if (_ok) { *_ok = ok; }
 }
 
-void ImageIO::ExportPNG(const Path &filepath, const G_Image &img)
+void ImageIO::ExportPNG(const Path &filepath, const Imageb &img)
 {
     FILE *fp = fopen(filepath.GetAbsolute().ToCString(), "wb");
     if (!fp) { return; }
@@ -106,7 +106,7 @@ void ImageIO::ExportPNG(const Path &filepath, const G_Image &img)
     fclose(fp);
 }
 
-void ImageIO::ImportPNG(const Path &filepath, G_Image *img, bool *ok)
+void ImageIO::ImportPNG(const Path &filepath, Imageb *img, bool *ok)
 {
     *ok = false;
 
@@ -192,7 +192,7 @@ void ImageIO::ImportPNG(const Path &filepath, G_Image *img, bool *ok)
     *ok = true;
 }
 
-void ImageIO::ExportJPG(const Path &filepath, const G_Image &img, int quality)
+void ImageIO::ExportJPG(const Path &filepath, const Imageb &img, int quality)
 {
     struct jpeg_error_mgr jerr;
     struct jpeg_compress_struct cinfo;
@@ -227,7 +227,7 @@ void ImageIO::ExportJPG(const Path &filepath, const G_Image &img, int quality)
     jpeg_destroy_compress(&cinfo);
 }
 
-void ImageIO::ImportJPG(const Path &filepath, G_Image *img, bool *ok)
+void ImageIO::ImportJPG(const Path &filepath, Imageb *img, bool *ok)
 {
     *ok = false;
 

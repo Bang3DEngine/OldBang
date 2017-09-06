@@ -1,4 +1,4 @@
-#include "Bang/G_Image.h"
+#include "Bang/Image.h"
 
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
@@ -6,26 +6,26 @@
 #include "Bang/ImportFilesManager.h"
 
 template<class T>
-G_ImageG<T>::G_ImageG()
+Image<T>::Image()
 {
 
 }
 
 template<class T>
-G_ImageG<T>::G_ImageG(int width, int height)
+Image<T>::Image(int width, int height)
 {
     Create(width, height);
 }
 
 template<class T>
-void G_ImageG<T>::Create(int width, int height)
+void Image<T>::Create(int width, int height)
 {
     m_size = Vector2i(width, height);
     m_pixels.Resize(m_size.x * m_size.y * 4);
 }
 
 template<class T>
-void G_ImageG<T>::Create(int width, int height, const Color &backgroundColor)
+void Image<T>::Create(int width, int height, const Color &backgroundColor)
 {
     Create(width, height);
     for (int i = 0; i < GetHeight(); ++i)
@@ -38,10 +38,10 @@ void G_ImageG<T>::Create(int width, int height, const Color &backgroundColor)
 }
 
 template<class T>
-G_ImageG<T> G_ImageG<T>::GetSubImage(const Recti &subCoords) const
+Image<T> Image<T>::GetSubImage(const Recti &subCoords) const
 {
     Vector2i subSize = subCoords.GetSize();
-    G_ImageG<T> subImage(subSize.x, subSize.y);
+    Image<T> subImage(subSize.x, subSize.y);
     for (int y = 0; y < subSize.y; ++y)
     {
         for (int x = 0; x < subSize.x; ++x)
@@ -54,17 +54,17 @@ G_ImageG<T> G_ImageG<T>::GetSubImage(const Recti &subCoords) const
 }
 
 template<class T>
-void G_ImageG<T>::Copy(const G_ImageG<T> &image, const Vector2i &pos)
+void Image<T>::Copy(const Image<T> &image, const Vector2i &pos)
 {
     Copy(image, Recti(pos, pos + image.GetSize()));
 }
 
 template<class T>
-void G_ImageG<T>::Copy(const G_ImageG<T> &image,
+void Image<T>::Copy(const Image<T> &image,
                        const Recti &dstRect,
                        ImageResizeMode resizeMode)
 {
-    G_ImageG<T> resizedImage = image;
+    Image<T> resizedImage = image;
 
     Vector2i dstSize = dstRect.GetSize();
     resizedImage.Resize(dstSize, resizeMode);
@@ -80,22 +80,22 @@ void G_ImageG<T>::Copy(const G_ImageG<T> &image,
 }
 
 template<class T>
-void G_ImageG<T>::Copy(const G_ImageG<T> &image,
+void Image<T>::Copy(const Image<T> &image,
                        const Recti &srcCopyRect,
                        const Recti &dstCopyRect,
                        ImageResizeMode resizeMode)
 {
-    G_ImageG<T> subImageSrc = image.GetSubImage(srcCopyRect);
+    Image<T> subImageSrc = image.GetSubImage(srcCopyRect);
     subImageSrc.Resize(dstCopyRect.GetSize(), resizeMode);
     Copy(subImageSrc, dstCopyRect);
 }
 
 template<class T>
-void G_ImageG<T>::AddMargins(const Vector2i &margins,
+void Image<T>::AddMargins(const Vector2i &margins,
                              const Color &marginColor,
                              ImageAspectRatioMode arMode)
 {
-    G_ImageG<T> original = *this;
+    Image<T> original = *this;
 
     Vector2i newSize = GetAspectRatioedSize( (margins * 2) + GetSize(),
                                             GetSize(),
@@ -108,14 +108,14 @@ void G_ImageG<T>::AddMargins(const Vector2i &margins,
 }
 
 template<class T>
-void G_ImageG<T>::AddMarginsToMatchAspectRatio(const Vector2i &arSizes,
+void Image<T>::AddMarginsToMatchAspectRatio(const Vector2i &arSizes,
                                                const Color &marginColor)
 {
     AddMarginsToMatchAspectRatio(arSizes.x / float(arSizes.y), marginColor);
 }
 
 template<class T>
-void G_ImageG<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
+void Image<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
                                                const Color &marginColor)
 {
     Vector2i newSize = GetSize();
@@ -126,7 +126,7 @@ void G_ImageG<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
 }
 
 template<class T>
-void G_ImageG<T>::ResizeToMatchAspectRatio(const Vector2i &arSizes,
+void Image<T>::ResizeToMatchAspectRatio(const Vector2i &arSizes,
                                            bool makeBigger,
                                            ImageResizeMode resizeMode)
 {
@@ -134,7 +134,7 @@ void G_ImageG<T>::ResizeToMatchAspectRatio(const Vector2i &arSizes,
 }
 
 template<class T>
-void G_ImageG<T>::ResizeToMatchAspectRatio(float aspectRatio,
+void Image<T>::ResizeToMatchAspectRatio(float aspectRatio,
                                            bool makeBigger,
                                            ImageResizeMode resizeMode)
 {
@@ -150,13 +150,13 @@ void G_ImageG<T>::ResizeToMatchAspectRatio(float aspectRatio,
 }
 
 template<class T>
-float G_ImageG<T>::GetAspectRatio() const
+float Image<T>::GetAspectRatio() const
 {
     return GetWidth() / SCAST<float>(Math::Max(GetHeight(), 1));
 }
 
 template<class T>
-void G_ImageG<T>::Resize(const Vector2i &newSize,
+void Image<T>::Resize(const Vector2i &newSize,
                          ImageResizeMode resizeMode,
                          ImageAspectRatioMode arMode)
 {
@@ -164,7 +164,7 @@ void G_ImageG<T>::Resize(const Vector2i &newSize,
 }
 
 template<class T>
-void G_ImageG<T>::Resize(int _newWidth, int _newHeight,
+void Image<T>::Resize(int _newWidth, int _newHeight,
                          ImageResizeMode resizeMode,
                          ImageAspectRatioMode arMode)
 {
@@ -174,7 +174,7 @@ void G_ImageG<T>::Resize(int _newWidth, int _newHeight,
     if (newSize.x == GetWidth() && newSize.y == GetHeight()) { return; }
 
     // Now do the resizing
-    G_ImageG<T> original = *this;
+    Image<T> original = *this;
 
     Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newSize.x),
                      original.GetHeight() / SCAST<float>(newSize.y));
@@ -224,7 +224,7 @@ void G_ImageG<T>::Resize(int _newWidth, int _newHeight,
 }
 
 template<class T>
-void G_ImageG<T>::FillTransparentPixels(const Color &color)
+void Image<T>::FillTransparentPixels(const Color &color)
 {
     for (int y = 0; y < GetHeight(); ++y)
     {
@@ -236,37 +236,37 @@ void G_ImageG<T>::FillTransparentPixels(const Color &color)
 }
 
 template<class T>
-T *G_ImageG<T>::GetData() { return &m_pixels[0]; }
+T *Image<T>::GetData() { return &m_pixels[0]; }
 
 template<class T>
-const T *G_ImageG<T>::GetData() const { return &m_pixels[0]; }
+const T *Image<T>::GetData() const { return &m_pixels[0]; }
 
 template<class T>
-void G_ImageG<T>::SetPixel(int x, int y, const Color& color)
+void Image<T>::SetPixel(int x, int y, const Color& color)
 {
     ASSERT_MSG(false, "Please specialize this method!");
 }
 
 template<class T>
-Color G_ImageG<T>::GetPixel(int x, int y) const
+Color Image<T>::GetPixel(int x, int y) const
 {
     ASSERT_MSG(false, "Please specialize this method!");
     return Color::Zero;
 }
 
 template<class T>
-int G_ImageG<T>::GetWidth() const { return m_size.x; }
+int Image<T>::GetWidth() const { return m_size.x; }
 
 template<class T>
-int G_ImageG<T>::GetHeight() const { return m_size.y; }
+int Image<T>::GetHeight() const { return m_size.y; }
 
 template<class T>
-const Vector2i& G_ImageG<T>::GetSize() const { return m_size; }
+const Vector2i& Image<T>::GetSize() const { return m_size; }
 
 template<class T>
-void G_ImageG<T>::InvertVertically()
+void Image<T>::InvertVertically()
 {
-    G_ImageG<T> img = *this;
+    Image<T> img = *this;
     for (int y = 0; y < GetHeight(); ++y)
     {
         for (int x = 0; x < GetWidth(); ++x)
@@ -278,10 +278,10 @@ void G_ImageG<T>::InvertVertically()
 }
 
 template<class T>
-G_ImageG<T> G_ImageG<T>::LoadFromData(int width, int height,
+Image<T> Image<T>::LoadFromData(int width, int height,
                               const Array<T> &rgbaByteData)
 {
-    G_ImageG<T> img(width, height);
+    Image<T> img(width, height);
     img.m_pixels = rgbaByteData;
     ASSERT(rgbaByteData.Size() == (img.GetWidth() * img.GetHeight() * 4));
     return img;
@@ -289,9 +289,9 @@ G_ImageG<T> G_ImageG<T>::LoadFromData(int width, int height,
 
 template<class T>
 template<class OtherT>
-G_ImageG<OtherT> G_ImageG<T>::To() const
+Image<OtherT> Image<T>::To() const
 {
-    G_ImageG<OtherT> otherImg(GetWidth(), GetHeight());
+    Image<OtherT> otherImg(GetWidth(), GetHeight());
     for (int y = 0; y < GetHeight(); ++y)
     {
         for (int x = 0; x < GetWidth(); ++x)
@@ -304,47 +304,47 @@ G_ImageG<OtherT> G_ImageG<T>::To() const
 
 
 template<class T>
-void G_ImageG<T>::Export(const Path &filepath) const
+void Image<T>::Export(const Path &filepath) const
 {
     ASSERT_MSG(false, "Please implement this method!");
 }
 
 template<>
-void G_ImageG<Byte>::Export(const Path &filepath) const
+void Image<Byte>::Export(const Path &filepath) const
 {
     ImageIO::Export(filepath, *this);
 }
 
 template<>
-void G_ImageG<float>::Export(const Path &filepath) const
+void Image<float>::Export(const Path &filepath) const
 {
-    G_ImageG<Byte> byteImg = this->To<Byte>();
+    Image<Byte> byteImg = this->To<Byte>();
     ImageIO::Export(filepath, byteImg);
 }
 
 template<class T>
-void G_ImageG<T>::Import(const Path &imageFilepath)
+void Image<T>::Import(const Path &imageFilepath)
 {
     ASSERT_MSG(false, "Please implement this method!");
 }
 
 template<>
-void G_ImageG<Byte>::Import(const Path &imageFilepath)
+void Image<Byte>::Import(const Path &imageFilepath)
 {
     bool ok; ImageIO::Import(imageFilepath, this, &ok);
 }
 
 template<>
-void G_ImageG<float>::Import(const Path &imageFilepath)
+void Image<float>::Import(const Path &imageFilepath)
 {
     bool ok;
-    G_ImageG<Byte> byteImg;
+    Image<Byte> byteImg;
     ImageIO::Import(imageFilepath, &byteImg, &ok);
     *this = byteImg.To<float>();
 }
 
 template<class T>
-Vector2i G_ImageG<T>::GetAspectRatioedSize(const Vector2i &targetSize,
+Vector2i Image<T>::GetAspectRatioedSize(const Vector2i &targetSize,
                                            const Vector2i &currentSize,
                                            ImageAspectRatioMode aspectRatioMode)
 {
@@ -366,7 +366,7 @@ Vector2i G_ImageG<T>::GetAspectRatioedSize(const Vector2i &targetSize,
 
 // Specializations
 template<>
-void G_ImageG<Byte>::SetPixel(int x, int y, const Color &color)
+void Image<Byte>::SetPixel(int x, int y, const Color &color)
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
@@ -378,7 +378,7 @@ void G_ImageG<Byte>::SetPixel(int x, int y, const Color &color)
 }
 
 template<>
-void G_ImageG<float>::SetPixel(int x, int y, const Color &color)
+void Image<float>::SetPixel(int x, int y, const Color &color)
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
@@ -390,7 +390,7 @@ void G_ImageG<float>::SetPixel(int x, int y, const Color &color)
 }
 
 template<>
-Color G_ImageG<Byte>::GetPixel(int x, int y) const
+Color Image<Byte>::GetPixel(int x, int y) const
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
@@ -402,7 +402,7 @@ Color G_ImageG<Byte>::GetPixel(int x, int y) const
 }
 
 template<>
-Color G_ImageG<float>::GetPixel(int x, int y) const
+Color Image<float>::GetPixel(int x, int y) const
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");

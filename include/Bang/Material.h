@@ -1,11 +1,12 @@
-﻿#ifndef MATERIAL_H
+#ifndef MATERIAL_H
 #define MATERIAL_H
 
 #include "Bang/Asset.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
 
-FORWARD   class Texture2D;
-FORWARD   class G_Material;
-FORWARD   class ShaderProgram;
+FORWARD class Texture2D;
+FORWARD class ShaderProgram;
 
 class Material : public Asset
 {
@@ -13,15 +14,11 @@ class Material : public Asset
 
 public:
     Material();
-    Material(const Material &m);
     virtual ~Material();
-
-    void Bind() const;
-    void UnBind() const;
 
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(const Texture2D *texture);
+    void SetTexture(const Texture2D *mtexture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
@@ -33,6 +30,9 @@ public:
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
+    virtual void Bind() const;
+    virtual void UnBind() const;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -43,11 +43,14 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-private:
-    const Texture2D *m_texture = nullptr;
+protected:
+    const Texture2D *m_texture     = nullptr;
     ShaderProgram *m_shaderProgram = nullptr;
 
-    G_Material *m_gMaterial = nullptr; // Material delegate
+    Color m_diffuseColor    = Color::White;
+    float m_shininess       = 60.0f;
+    bool m_receivesLighting = true;
+    Vector2 m_uvMultiply    = Vector2::One;
 };
 
 #endif // MATERIAL_H
