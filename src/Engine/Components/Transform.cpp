@@ -19,7 +19,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
     if (GetLocalPosition() != p)
     {
         m_localPosition = p;
-        m_localToParentMatrix.Invalidate();
+        m_hasChanged = true;
     }
 }
 void Transform::SetPosition(const Vector3 &p)
@@ -46,7 +46,7 @@ void Transform::SetLocalRotation(const Quaternion &q)
     if (GetLocalRotation() != q)
     {
         m_localRotation = q.Normalized();
-        m_localToParentMatrix.Invalidate();
+        m_hasChanged = true;
     }
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
@@ -130,7 +130,7 @@ void Transform::SetLocalScale(const Vector3 &s)
     if (GetLocalScale() != s)
     {
         m_localScale = s;
-        m_localToParentMatrix.Invalidate();
+        m_hasChanged = true;
     }
 }
 
@@ -236,14 +236,14 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled()) { return Matrix4::Identity; }
-    if (m_localToParentMatrix.IsValid()) { return m_localToParentMatrix.Get(); }
+    if (!m_hasChanged) { return m_localToParentMatrix; }
 
     Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-    m_localToParentMatrix.Set(T * R * S);
-    return m_localToParentMatrix.Get();
+    m_localToParentMatrix = (T * R * S);
+    return m_localToParentMatrix;
 }
 
 void Transform::GetLocalToParentMatrix(Matrix4 *m) const

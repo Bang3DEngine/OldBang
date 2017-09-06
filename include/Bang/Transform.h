@@ -101,12 +101,13 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    Transform();
-
-    mutable Cached<Matrix4> m_localToParentMatrix;
+    bool m_hasChanged = false;
+    mutable Matrix4 m_localToParentMatrix;
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3 m_localScale = Vector3::One;
+
+    Transform();
 };
 
 #endif // TRANSFORM_H
