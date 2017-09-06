@@ -160,5 +160,3 @@ AudioManager *AudioManager::GetInstance()
 {
     return Application::GetInstance()->GetAudioManager();
 }
-
-

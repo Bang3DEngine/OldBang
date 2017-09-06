@@ -71,5 +71,3 @@ bool Library::TheresError() const
 {
     return !m_errorString.IsEmpty();
 }
-
-

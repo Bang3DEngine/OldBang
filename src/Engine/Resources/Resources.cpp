@@ -65,5 +65,3 @@ Resources *Resources::GetInstance()
     Application *app = Application::GetInstance();
     return  app ? app->GetResources() : nullptr;
 }
-
-

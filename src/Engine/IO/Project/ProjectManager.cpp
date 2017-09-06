@@ -113,5 +113,3 @@ Project *ProjectManager::GetCurrentProject()
 {
     return ProjectManager::s_currentProject;
 }
-
-

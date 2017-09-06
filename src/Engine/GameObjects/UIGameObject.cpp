@@ -109,5 +109,3 @@ void UIGameObject::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("FocusAction", m_defaultFocusAction);
 }
-
-

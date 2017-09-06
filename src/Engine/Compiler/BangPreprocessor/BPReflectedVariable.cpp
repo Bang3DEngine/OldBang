@@ -162,5 +162,3 @@ String BPReflectedVariable::ToString() const
                  GetVariableInitValue() +
             ")";
 }
-
-

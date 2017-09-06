@@ -188,5 +188,3 @@ XMLNode XMLNode::FromString(const String &xml)
 {
     return XMLParser::FromString(xml);
 }
-
-

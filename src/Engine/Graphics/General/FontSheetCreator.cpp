@@ -168,5 +168,3 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
                                     ImageAspectRatioMode::Ignore);
     return fittedResultMargined;
 }
-
-

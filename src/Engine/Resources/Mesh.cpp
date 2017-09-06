@@ -148,5 +148,3 @@ void Mesh::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 }
-
-

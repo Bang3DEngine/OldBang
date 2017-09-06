@@ -261,5 +261,3 @@ void ShaderProgram::UpdateTextureBindings() const
         BindTextureToAvailableUnit(it->first, it->second);
     }
 }
-
-

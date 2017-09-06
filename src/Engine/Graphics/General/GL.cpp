@@ -911,5 +911,3 @@ GL *GL::GetActive()
 }
 
 GL::GL() {}
-
-

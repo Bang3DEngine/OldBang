@@ -123,5 +123,3 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);
 }
-
-

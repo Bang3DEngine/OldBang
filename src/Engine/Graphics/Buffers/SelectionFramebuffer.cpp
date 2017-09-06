@@ -114,5 +114,3 @@ RenderTexture *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }
-
-

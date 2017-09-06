@@ -11,5 +11,3 @@ UIRenderer::UIRenderer()
 UIRenderer::~UIRenderer()
 {
 }
-
-

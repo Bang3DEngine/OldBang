@@ -84,5 +84,3 @@ void Light::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Intensity", GetIntensity());
     xmlInfo->Set("Color", GetColor());
 }
-
-

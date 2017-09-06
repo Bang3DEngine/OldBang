@@ -103,5 +103,3 @@ BehaviourManager *BehaviourManager::GetInstance()
 {
     return Application::GetInstance()->GetBehaviourManager();
 }
-
-

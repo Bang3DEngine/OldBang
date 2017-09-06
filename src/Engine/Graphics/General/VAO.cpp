@@ -78,5 +78,3 @@ int VAO::GetVBOCount() const
 {
     return m_vbos.Size();
 }
-
-

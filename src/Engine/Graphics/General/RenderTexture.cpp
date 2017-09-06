@@ -13,5 +13,3 @@ RenderTexture::~RenderTexture()
 {
 
 }
-
-

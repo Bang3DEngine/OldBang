@@ -235,5 +235,3 @@ void Framebuffer::PopDrawAttachmentIds()
 {
     SetDrawBuffers(m_latestDrawAttachmentIds);
 }
-
-

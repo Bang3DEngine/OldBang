@@ -20,5 +20,3 @@ void Mutex::UnLock()
 {
     m_mutex.unlock();
 }
-
-

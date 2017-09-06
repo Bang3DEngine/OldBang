@@ -46,5 +46,3 @@ Material *MaterialFactory::Load(const String &enginePath)
 {
     return Resources::Load<Material>( EPATH(enginePath) );
 }
-
-

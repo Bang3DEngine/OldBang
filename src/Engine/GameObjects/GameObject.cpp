@@ -452,5 +452,3 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
         }
     }
 }
-
-

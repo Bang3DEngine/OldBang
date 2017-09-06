@@ -41,5 +41,3 @@ void GraphicPipelineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
                                                      const String &screenshotName)
 {
 }
-
-

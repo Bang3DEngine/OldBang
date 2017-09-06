@@ -6,5 +6,3 @@ UIVerticalLayout::UIVerticalLayout() : UIDirLayout(true)
 {
 
 }
-
-

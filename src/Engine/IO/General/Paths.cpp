@@ -179,5 +179,3 @@ Paths *Paths::GetInstance()
 {
     return Application::GetInstance()->GetPaths();
 }
-
-

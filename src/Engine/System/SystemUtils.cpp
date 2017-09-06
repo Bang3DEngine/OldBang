@@ -56,5 +56,3 @@ void SystemUtils::CloseLibrary(Library *library)
         Debug_Error(library->GetErrorString());
     }
 }
-
-

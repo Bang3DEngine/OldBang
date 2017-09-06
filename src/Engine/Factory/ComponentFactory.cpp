@@ -110,5 +110,3 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
 
     return false;
 }
-
-

@@ -63,5 +63,3 @@ void UICanvas::GiveFocusTo(UIGameObject *focusTaker) const
         p_focus->OnFocusTaken();
     }
 }
-
-

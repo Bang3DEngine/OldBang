@@ -365,5 +365,3 @@ Path Path::GetNextDuplicatePath(const Path &filepath)
                          .AppendExtension(fileExtension);
     return result;
 }
-
-

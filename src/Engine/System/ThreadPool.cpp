@@ -50,5 +50,3 @@ int ThreadPool::GetMaxThreadCount() const
 {
     return m_maxThreadCount;
 }
-
-

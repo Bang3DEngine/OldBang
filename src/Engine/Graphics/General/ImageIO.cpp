@@ -282,5 +282,3 @@ void ImageIO::ImportJPG(const Path &filepath, Imageb *img, bool *ok)
 
     *ok = true;
 }
-
-

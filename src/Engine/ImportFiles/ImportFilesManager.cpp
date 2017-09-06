@@ -169,5 +169,3 @@ String ImportFilesManager::GetImportExtension()
 {
     return "import";
 }
-
-

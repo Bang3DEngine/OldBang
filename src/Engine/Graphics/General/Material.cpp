@@ -202,5 +202,3 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("VertexShader",   vsPath);
     xmlInfo->Set("FragmentShader", fsPath);
 }
-
-

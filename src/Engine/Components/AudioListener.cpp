@@ -46,5 +46,3 @@ void AudioListener::UpdateALProperties() const
     alListenerfv(AL_POSITION, gameObject->transform->GetPosition().Data());
     alListenerfv(AL_VELOCITY, Vector3::Zero.Data());
 }
-
-

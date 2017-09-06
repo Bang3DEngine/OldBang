@@ -12,5 +12,3 @@ MutexLocker::~MutexLocker()
 {
     p_mutex->UnLock();
 }
-
-

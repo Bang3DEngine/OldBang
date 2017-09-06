@@ -172,5 +172,3 @@ const Path &File::GetPath() const
 {
     return m_path;
 }
-
-

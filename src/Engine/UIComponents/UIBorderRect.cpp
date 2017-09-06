@@ -93,5 +93,3 @@ void UIBorderRect::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("LineColor", GetLineColor());
 }
-
-

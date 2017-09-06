@@ -111,5 +111,3 @@ const GUID &Serializable::GetGUID() const
 {
     return m_GUID;
 }
-
-

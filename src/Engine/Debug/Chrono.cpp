@@ -44,5 +44,3 @@ void Chrono::Log()
     ::std::cerr << "  Total: " << totalTime / 1000.0 <<
                  " s.  ----------------" << ::std::endl << ::std::endl;
 }
-
-

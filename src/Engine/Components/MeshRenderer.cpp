@@ -51,5 +51,3 @@ void MeshRenderer::ExportXML(XMLNode *xmlInfo) const
     Renderer::ExportXML(xmlInfo);
     xmlInfo->Set("Mesh", GetMesh() ? GetMesh()->GetGUID() : GUID::Empty());
 }
-
-

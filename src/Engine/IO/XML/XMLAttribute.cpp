@@ -182,5 +182,3 @@ const Array<XMLProperty> &XMLAttribute::GetProperties() const
 {
     return m_properties;
 }
-
-

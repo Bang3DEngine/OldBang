@@ -47,5 +47,3 @@ Color Random::GetColorOpaque()
 Random::Random()
 {
 }
-
-

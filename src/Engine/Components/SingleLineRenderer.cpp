@@ -56,5 +56,3 @@ void SingleLineRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Origin", GetOrigin());
     xmlInfo->Set("Destiny", GetDestiny());
 }
-
-

@@ -112,5 +112,3 @@ void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
         xmlInfo->Set("Stretch" + String(it->first), stretch);
     }
 }
-
-

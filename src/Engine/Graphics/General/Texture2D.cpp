@@ -128,5 +128,3 @@ void Texture2D::Import(const Path &imageFilepath)
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
     ImportXMLFromFile(importFilepath);
 }
-
-

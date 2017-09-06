@@ -35,5 +35,3 @@ void Debug::_Error(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << ::std::endl;
     ::std::cerr.flush();
 }
-
-

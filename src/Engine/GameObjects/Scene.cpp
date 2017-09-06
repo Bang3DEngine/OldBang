@@ -113,5 +113,3 @@ void Scene::PostImportXML(const XMLNode &xmlInfo)
 {
     GameObject::PostImportXML(xmlInfo);
 }
-
-

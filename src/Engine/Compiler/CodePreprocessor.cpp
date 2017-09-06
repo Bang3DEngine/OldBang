@@ -85,5 +85,3 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
 CodePreprocessor::CodePreprocessor()
 {
 }
-
-

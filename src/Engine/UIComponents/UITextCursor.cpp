@@ -59,5 +59,3 @@ float UITextCursor::GetTickTime() const
 {
     return m_cursorTickTime;
 }
-
-

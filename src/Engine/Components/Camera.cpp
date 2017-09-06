@@ -180,5 +180,3 @@ void Camera::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("OrthoHeight", GetOrthoHeight());
     xmlInfo->Set("FOVDegrees", GetFovDegrees());
 }
-
-

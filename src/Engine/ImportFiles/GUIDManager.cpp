@@ -33,5 +33,3 @@ GUIDManager *GUIDManager::GetInstance()
 {
     return ImportFilesManager::GetGUIDManager();
 }
-
-

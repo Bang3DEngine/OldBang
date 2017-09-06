@@ -98,5 +98,3 @@ bool MeshIO::ReadModel(const Path& filepath,
 
     return ok;
 }
-
-

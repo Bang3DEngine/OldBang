@@ -51,5 +51,3 @@ void AudioPlayerRunnable::Run()
     do { Thread::SleepCurrentThread(0.3f); }
     while ( !m_forceExit && !m_alAudioSource->IsStopped() );
 }
-
-

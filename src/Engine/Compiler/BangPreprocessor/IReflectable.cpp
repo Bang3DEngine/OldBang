@@ -9,5 +9,3 @@ const BPReflectedStruct &IReflectable::GetReflectionInfo() const
     static BPReflectedStruct empty;
     return empty;
 }
-
-

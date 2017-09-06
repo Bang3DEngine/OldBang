@@ -64,5 +64,3 @@ Screen *Window::GetScreen() const
 {
     return m_screen;
 }
-
-

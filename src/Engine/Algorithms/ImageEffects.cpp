@@ -115,5 +115,3 @@ bool ImageEffects::Diff(const Imageb &inputImage1,
     }
     return diff;
 }
-
-

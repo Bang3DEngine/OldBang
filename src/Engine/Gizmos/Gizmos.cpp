@@ -409,5 +409,3 @@ Gizmos* Gizmos::GetInstance()
     if (!scene) { return nullptr; }
     return scene->GetGizmos();
 }
-
-

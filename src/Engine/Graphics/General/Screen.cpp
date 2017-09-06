@@ -120,5 +120,3 @@ GraphicPipeline *Screen::GetGraphicPipeline() const
 {
     return m_gPipeline;
 }
-
-

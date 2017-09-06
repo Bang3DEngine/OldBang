@@ -24,5 +24,3 @@ void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 ShaderPreprocessor::ShaderPreprocessor()
 {
 }
-
-

@@ -83,5 +83,3 @@ void LineRenderer::ExportXML(XMLNode *xmlInfo) const
 {
     Renderer::ExportXML(xmlInfo);
 }
-
-

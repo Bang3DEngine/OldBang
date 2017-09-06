@@ -115,5 +115,3 @@ bool operator<(const PostProcessEffect& lhs, const PostProcessEffect& rhs)
 {
     return lhs.GetPriority() < rhs.GetPriority();
 }
-
-

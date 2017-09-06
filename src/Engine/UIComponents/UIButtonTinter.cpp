@@ -96,5 +96,3 @@ void UIButtonTinter::ApplyTintToGameObjects(const Color &tintColor)
     }
     m_currentTintColor = tintColor;
 }
-
-

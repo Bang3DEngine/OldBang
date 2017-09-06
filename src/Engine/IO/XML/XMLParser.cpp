@@ -228,5 +228,3 @@ XMLNode XMLParser::FromString(const String &xml)
 
     return root;
 }
-
-

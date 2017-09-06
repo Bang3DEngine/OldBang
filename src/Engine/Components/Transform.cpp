@@ -434,5 +434,3 @@ void Transform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Rotation", GetLocalEuler());
     xmlInfo->Set("Scale",    GetLocalScale());
 }
-
-

@@ -35,5 +35,3 @@ void Asset::ExportXML(XMLNode *xmlInfo) const
 {
     Resource::ExportXML(xmlInfo);
 }
-
-

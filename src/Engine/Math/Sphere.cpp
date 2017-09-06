@@ -78,5 +78,3 @@ Sphere Sphere::FromBox(const AABox &box)
     s.FillFromBox(box);
     return s;
 }
-
-

@@ -83,5 +83,3 @@ void Prefab::ExportXML(XMLNode *xmlInfo) const
     XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
     goInfo.CloneInto(xmlInfo);
 }
-
-

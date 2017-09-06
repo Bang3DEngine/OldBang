@@ -136,5 +136,3 @@ void AudioSource::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Looping",     IsLooping());
     xmlInfo->Set("PlayOnStart", IsPlayOnStart());
 }
-
-

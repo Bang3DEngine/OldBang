@@ -279,5 +279,3 @@ void BangPreprocessor::FindNextWord(String::Iterator begin,
 BangPreprocessor::BangPreprocessor()
 {
 }
-
-

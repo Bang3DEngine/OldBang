@@ -63,5 +63,3 @@ GL::ShaderType Shader::GetType() const
 {
     return m_type;
 }
-
-

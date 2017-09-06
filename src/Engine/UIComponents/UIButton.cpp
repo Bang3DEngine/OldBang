@@ -125,5 +125,3 @@ bool UIButton::IsBeingPressed() const
 {
     return m_beingPressed;
 }
-
-

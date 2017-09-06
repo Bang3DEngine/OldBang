@@ -169,5 +169,3 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", IsRenderWireframe());
 }
-
-

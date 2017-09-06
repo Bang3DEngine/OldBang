@@ -53,5 +53,3 @@ Time *Time::GetInstance()
 {
     return Application::GetInstance()->GetTime();
 }
-
-

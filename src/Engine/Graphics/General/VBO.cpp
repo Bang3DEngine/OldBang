@@ -32,5 +32,3 @@ void VBO::UnBind() const
 {
     GL::UnBind(this);
 }
-
-

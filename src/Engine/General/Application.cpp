@@ -195,5 +195,3 @@ ShaderManager *Application::GetShaderManager() const
 {
     return m_shaderManager;
 }
-
-

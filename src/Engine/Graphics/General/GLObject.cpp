@@ -22,5 +22,3 @@ void GLObject::UnBind() const
 {
     GL::UnBind(this);
 }
-
-

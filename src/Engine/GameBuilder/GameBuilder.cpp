@@ -189,5 +189,3 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
 
     return true;
 }
-
-

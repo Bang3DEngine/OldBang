@@ -82,5 +82,3 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
 }
-
-

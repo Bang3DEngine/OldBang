@@ -72,5 +72,3 @@ void Component::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set("Enabled", IsEnabled());
 }
-
-

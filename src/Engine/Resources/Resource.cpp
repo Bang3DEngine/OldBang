@@ -11,5 +11,3 @@ Path Resource::GetResourceFilepath() const
 {
     return ImportFilesManager::GetFilepath( GetGUID() );
 }
-
-

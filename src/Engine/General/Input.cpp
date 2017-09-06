@@ -469,5 +469,3 @@ void Input::StopTextInput()
 {
     SDL_StopTextInput();
 }
-
-

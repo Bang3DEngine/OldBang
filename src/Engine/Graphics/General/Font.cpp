@@ -199,5 +199,3 @@ void Font::Free()
     if (m_atlasTexture) { delete m_atlasTexture; }
     if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }
-
-

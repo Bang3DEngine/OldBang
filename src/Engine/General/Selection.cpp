@@ -20,5 +20,3 @@ SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 {
     return GraphicPipeline::GetActive()->GetSelectionFramebuffer();
 }
-
-

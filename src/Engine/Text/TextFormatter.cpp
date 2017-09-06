@@ -282,5 +282,3 @@ Vector2f FindMaxCoord(const Array< Array<TextFormatter::CharRect> > &rects)
     }
     return result;
 }
-
-

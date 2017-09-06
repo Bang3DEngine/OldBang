@@ -211,5 +211,3 @@ bool SystemProcess::FinishedOk() const
 {
     return GetExitCode() == 0;
 }
-
-

@@ -76,5 +76,3 @@ void Project::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Project");
     xmlInfo->Set("RandomID", m_randomId);
 }
-
-

@@ -118,5 +118,3 @@ UIGameObject *GameObjectFactory::CreateGUIScrollArea()
 {
     return UIScrollArea::CreateGameObject();
 }
-
-

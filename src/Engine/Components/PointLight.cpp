@@ -59,5 +59,3 @@ void PointLight::ExportXML(XMLNode *xmlInfo) const
     Light::ExportXML(xmlInfo);
     xmlInfo->Set("Range", GetRange());
 }
-
-

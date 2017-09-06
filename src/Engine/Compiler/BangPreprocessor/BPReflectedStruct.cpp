@@ -220,5 +220,3 @@ String BPReflectedStruct::ToString() const
            " }";
     return String(oss.str());
 }
-
-

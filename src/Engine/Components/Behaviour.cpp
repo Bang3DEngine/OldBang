@@ -157,5 +157,3 @@ void Behaviour::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Behaviour");
     xmlInfo->Set("BehaviourScript", GetSourceFilepath());
 }
-
-

@@ -113,5 +113,3 @@ void UIMask::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Masking", IsMasking());
     xmlInfo->Set("DrawMask", IsDrawMask());
 }
-
-

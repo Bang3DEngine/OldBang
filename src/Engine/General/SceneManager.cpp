@@ -182,5 +182,3 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
         delete scene;
     }
 }
-
-

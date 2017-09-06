@@ -127,5 +127,3 @@ GL::BindTarget Texture::GetGLBindTarget() const
 {
     return GL::BindTarget::Texture2D;
 }
-
-

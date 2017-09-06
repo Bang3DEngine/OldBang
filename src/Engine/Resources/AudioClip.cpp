@@ -146,5 +146,3 @@ void AudioClip::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 }
-
-

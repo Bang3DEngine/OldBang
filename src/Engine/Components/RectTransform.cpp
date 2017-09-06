@@ -302,5 +302,3 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("AnchorMin",      GetAnchorMin()    );
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }
-
-

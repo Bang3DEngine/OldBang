@@ -29,5 +29,3 @@ void DirectionalLight::ExportXML(XMLNode *xmlInfo) const
 {
     Light::ExportXML(xmlInfo);
 }
-
-

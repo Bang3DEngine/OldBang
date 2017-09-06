@@ -511,5 +511,3 @@ void UIInputText::OnFocusLost()
     m_selectingWithMouse = false;
     UpdateCursorRenderersAndScrolling();
 }
-
-

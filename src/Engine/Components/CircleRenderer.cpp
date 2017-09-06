@@ -70,5 +70,3 @@ void CircleRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Radius", GetRadius());
     xmlInfo->Set("Segments", GetSegments());
 }
-
-

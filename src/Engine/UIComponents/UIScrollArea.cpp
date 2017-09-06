@@ -100,5 +100,3 @@ void UIScrollArea::InitGameObject()
     quad->SetTint(Color::White);
     RetrieveReferences();
 }
-
-

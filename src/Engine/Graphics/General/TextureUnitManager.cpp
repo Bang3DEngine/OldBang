@@ -57,5 +57,3 @@ void TextureUnitManager::UnBindTexture(const Texture *tex)
         tex->UnBind();
     }
 }
-
-

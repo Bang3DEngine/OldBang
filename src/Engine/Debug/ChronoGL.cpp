@@ -67,5 +67,3 @@ void ChronoGL::Log()
     ::std::cerr << "  Total: " << totalTime / 1000000000.0 <<
                  " s. ----------------" << ::std::endl << ::std::endl;
 }
-
-

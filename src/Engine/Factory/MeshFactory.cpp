@@ -70,5 +70,3 @@ GameObject *MeshFactory::GetConeGameObject()
 {
     return CreatePrimitiveGameObject(GetCone(), "Cone");
 }
-
-

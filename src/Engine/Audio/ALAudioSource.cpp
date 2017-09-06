@@ -107,5 +107,3 @@ ALAudioSource::State ALAudioSource::GetState() const
     alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
     return static_cast<State>(state);
 }
-
-

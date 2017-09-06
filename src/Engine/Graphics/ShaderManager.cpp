@@ -61,5 +61,3 @@ void ShaderManager::UnRegisterUsageOfShader(ShaderProgram *shaderProgram,
 void ShaderManager::Refresh()
 {
 }
-
-

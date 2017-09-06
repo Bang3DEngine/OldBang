@@ -227,5 +227,3 @@ TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }
-
-
