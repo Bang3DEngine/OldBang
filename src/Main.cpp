@@ -126,8 +126,10 @@ int main(int argc, char **argv)
 
     botText0->SetTextColor(Color::White);
 
+    botText1->SetOutlineWidth(1.0f);
+    botText1->SetOutlineColor(Color::Green);
     botText1->SetContent("dolor");
-    botText1->SetTextSize(50);
+    botText1->SetTextSize(200);
     botText2->SetContent("#");
     botText2->SetContent("/");
     botText2->SetTextSize(300);

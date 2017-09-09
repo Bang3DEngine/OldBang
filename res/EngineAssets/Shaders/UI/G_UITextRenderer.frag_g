@@ -1,9 +1,16 @@
 #include "G.frag_g"
 
 uniform vec2  B_fontAtlasSize;
+
 uniform bool  B_usingDistField;
+
 uniform float B_textBlurriness;
 uniform float B_textAlphaThreshold;
+
+uniform float B_outlineWidth;
+uniform vec4  B_outlineColor;
+uniform float B_outlineBlurriness;
+
 
 void Main()
 {
@@ -11,12 +18,36 @@ void Main()
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)
     {
-        float closeness = 1.0f - thisColor.r;
-        float lowerLimit = B_textAlphaThreshold - B_textBlurriness;
-        if (closeness < lowerLimit) { discard; }
+        float dist = thisColor.r;
         float upperLimit = B_textAlphaThreshold + B_textBlurriness;
-        B_Out_Color = vec4(vec3(1), smoothstep(lowerLimit, upperLimit, closeness));
-        // B_Out_Color = vec4(vec3(closeness), 1);
+        if (dist > upperLimit) { discard; }
+
+        float lowerLimit = B_textAlphaThreshold - B_textBlurriness;
+        /*if (B_outlineWidth > 0.0f)
+        {
+            // float outlineThresh = B_textAlphaThreshold + B_outlineWidth;
+            float outlineThresh = B_outlineWidth;
+            float outlineLowerLimit = outlineThresh - B_outlineBlurriness;
+            float outlineUpperLimit = outlineThresh + B_outlineBlurriness;
+            if (closeness < outlineLowerLimit && closeness > outlineUpperLimit)
+            {
+                float alpha = smoothstep(outlineLowerLimit,
+                                         outlineUpperLimit,
+                                         closeness);
+                B_Out_Color = vec4(1,0,0,1);//vec4(B_outlineColor.rgb, B_outlineColor.a * alpha);
+            }
+            else
+            {
+                B_Out_Color = vec4(vec3(1), 1);//smoothstep(lowerLimit, upperLimit,
+                                               //        closeness));
+            }
+        }
+        else
+        */
+        {
+            float alpha = smoothstep(lowerLimit, upperLimit, dist);
+            B_Out_Color = vec4(vec3(1), 1.0f - alpha);
+        }
     }
     else
     {

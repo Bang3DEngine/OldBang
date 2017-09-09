@@ -29,9 +29,9 @@ void EndMain()
     B_GIn_NormalDepth.w  = depthLow;
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-    vec3 outColor      = ambientLight * B_Out_DiffColor.rgb;
+    vec3 outColor      = ambientLight * B_Out_DiffColor.rgb * B_Out_Color.rgb;
     B_Out_Color        = vec4( mix(B_SampleColor().rgb,
-                                   outColor, B_Out_Color.a), 1);
+                                   B_Out_Color.rgb, B_Out_Color.a), 1);
     B_GIn_Color        = B_Out_Color;
 }
 

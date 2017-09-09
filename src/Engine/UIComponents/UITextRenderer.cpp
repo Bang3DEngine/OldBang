@@ -78,7 +78,14 @@ void UITextRenderer::Bind() const
         GL::Uniform("B_usingDistField", usingDistField,  false);
         if (usingDistField)
         {
-            float blurriness = GetBlurriness() / textSize;
+            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
+            if (GetOutlineWidth() > 0.0f)
+            {
+                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
+                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
+            }
+
+            float blurriness = GetBlurriness(); // / textSize;
             blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
             GL::Uniform("B_textBlurriness", blurriness, false);
 
@@ -264,6 +271,21 @@ void UITextRenderer::SetTextSize(int size)
     }
 }
 
+void UITextRenderer::SetOutlineWidth(float outlineWidth)
+{
+    m_outlineWidth = outlineWidth;
+}
+
+void UITextRenderer::SetOutlineColor(const Color &color)
+{
+    m_outlineColor = color;
+}
+
+void UITextRenderer::SetOutlineBlurriness(float outlineBlurriness)
+{
+    m_outlineBlurriness = outlineBlurriness;
+}
+
 void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
 {
     if (GetSpacingMultiplier() != spacingMultiplier)
@@ -286,7 +308,12 @@ float UITextRenderer::GetBlurriness() const { return m_blurriness; }
 float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
-Vector2 UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
+
+float UITextRenderer::GetOutlineWidth() const { return m_outlineWidth; }
+const Color &UITextRenderer::GetOutlineColor() const { return m_outlineColor; }
+
+float UITextRenderer::GetOutlineBlurriness() const { return m_outlineBlurriness; }
+const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
 const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 {
     return m_charRectsLocalNDC;

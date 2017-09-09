@@ -42,6 +42,9 @@ public:
     void SetBlurriness(float blurriness);
     void SetContent(const String &content);
     void SetTextSize(int size);
+    void SetOutlineWidth(float outlineWidth);
+    void SetOutlineColor(const Color &color);
+    void SetOutlineBlurriness(float outlineBlurriness);
     void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
 
     Font* GetFont() const;
@@ -54,7 +57,10 @@ public:
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
     int GetTextSize() const;
-    Vector2 GetSpacingMultiplier() const;
+    float GetOutlineWidth() const;
+    const Color& GetOutlineColor() const;
+    float GetOutlineBlurriness() const;
+    const Vector2& GetSpacingMultiplier() const;
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
@@ -75,8 +81,12 @@ protected:
     bool m_kerning              = false;
     Rect m_textRectNDC          = Rect::Zero;
 
-    float m_blurriness      = 1.0f;
-    float m_alphaThreshold  = 0.775f;
+    float m_blurriness      = 0.005f;
+    float m_alphaThreshold  = 0.25f;
+
+    float m_outlineWidth        = 0.0f;
+    Color m_outlineColor        = Color::Red;
+    float m_outlineBlurriness   = 1.0f;
 
     bool m_hasChanged       = false;
 
