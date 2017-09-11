@@ -126,7 +126,9 @@ int main(int argc, char **argv)
 
     botText0->SetTextColor(Color::White);
 
-    botText1->SetOutlineWidth(1.0f);
+    botText1->SetBlurriness(5.0f);
+    botText1->SetOutlineWidth(0.3f);
+    botText1->SetOutlineBlurriness(0.05f);
     botText1->SetOutlineColor(Color::Green);
     botText1->SetContent("dolor");
     botText1->SetTextSize(200);

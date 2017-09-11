@@ -47,6 +47,7 @@ public:
     void SetOutlineBlurriness(float outlineBlurriness);
     void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
 
+    virtual bool NeedsReadingColorBuffer() const override;
     Font* GetFont() const;
     bool IsKerning() const;
     const Color& GetTextColor() const;
@@ -81,12 +82,12 @@ protected:
     bool m_kerning              = false;
     Rect m_textRectNDC          = Rect::Zero;
 
-    float m_blurriness      = 0.005f;
-    float m_alphaThreshold  = 0.25f;
+    float m_blurriness      = 2.0f;
+    float m_alphaThreshold  = 0.3f;
 
     float m_outlineWidth        = 0.0f;
     Color m_outlineColor        = Color::Red;
-    float m_outlineBlurriness   = 1.0f;
+    float m_outlineBlurriness   = 0.01f;
 
     bool m_hasChanged       = false;
 

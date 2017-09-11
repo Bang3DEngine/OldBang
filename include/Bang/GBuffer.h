@@ -30,11 +30,10 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    virtual void BindTextureBuffersTo(ShaderProgram *sp,
-                                      bool willReadFromColor = false) const;
+    virtual void PrepareForRender(ShaderProgram *sp);
 
     void ApplyPass(ShaderProgram *sp,
-                   bool prepareReadFromColorBuffer = false,
+                   bool willReadFromColor = false,
                    const Rect &mask = Rect::ScreenRect);
 
     void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);

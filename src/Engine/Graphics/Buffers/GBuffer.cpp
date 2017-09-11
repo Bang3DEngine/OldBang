@@ -36,21 +36,19 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::BindTextureBuffersTo(ShaderProgram *sp,
-                                   bool willReadFromColor) const
+void GBuffer::PrepareForRender(ShaderProgram *sp)
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
     sp->Set("B_GTex_NormalDepth", m_normalTexture);
     sp->Set("B_GTex_DiffColor",   m_diffuseTexture);
     sp->Set("B_GTex_Misc",        m_miscTexture);
-    sp->Set("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
-                                                       m_colorTexture);
+    sp->Set("B_GTex_Color",       m_colorReadTexture);
 }
 
 
 void GBuffer::ApplyPass(ShaderProgram *sp,
-                        bool prepareReadFromColorBuffer,
+                        bool willReadFromColor,
                         const Rect &mask)
 {
     ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
@@ -58,9 +56,10 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     GL::StencilOperation prevStencilOp = GL::GetStencilOp();
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
 
-    BindTextureBuffersTo(sp, prepareReadFromColorBuffer);
+    if (willReadFromColor) { PrepareColorReadBuffer(mask); }
 
-    if (prepareReadFromColorBuffer) { PrepareColorReadBuffer(); }
+    PrepareForRender(sp);
+
     SetColorDrawBuffer();
 
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
@@ -73,7 +72,9 @@ void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     PushDrawAttachmentIds();
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
-    Recti r = Recti((readNDCRect * 0.5f + 0.5f) * GetSize());
+    Rect rf (readNDCRect * 0.5f + 0.5f);
+    Recti r ( Rect(Vector2::Floor(rf.GetMin()),
+                   Vector2::Ceil(rf.GetMax())) * GetSize() );
     GL::BlitFramebuffer(r, r, GL::FilterMode::Nearest,
                         GL::BufferBit::Color);
     PopDrawAttachmentIds();

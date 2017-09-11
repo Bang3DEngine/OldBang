@@ -169,7 +169,7 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
-    m_gbuffer->BindTextureBuffersTo(sp, false);
+    m_gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", fullScreenTexture);
 
     GraphicPipeline::RenderScreenPlane();
@@ -207,7 +207,13 @@ void GraphicPipeline::Render(Renderer *rend)
     {
         rend->Bind();
         Material *rendMat = rend->GetMaterial();
-        m_gbuffer->BindTextureBuffersTo(rendMat->GetShaderProgram(), false);
+
+        if (rend->NeedsReadingColorBuffer())
+        {
+            Camera *cam = p_scene->GetCamera();
+            m_gbuffer->PrepareColorReadBuffer(rend->GetBoundingRect(cam));
+        }
+        m_gbuffer->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();
         rend->UnBind();
     }

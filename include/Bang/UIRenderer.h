@@ -14,6 +14,8 @@ class UIRenderer : public Renderer
 protected:
     UIRenderer();
     virtual ~UIRenderer();
+
+    virtual Rect GetBoundingRect(Camera *camera) const override;
 };
 
 NAMESPACE_BANG_END

@@ -85,11 +85,11 @@ void UITextRenderer::Bind() const
                 GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
             }
 
-            float blurriness = GetBlurriness(); // / textSize;
+            float blurriness = GetBlurriness() / textSize;
             blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
             GL::Uniform("B_textBlurriness", blurriness, false);
 
-            float alphaThresh = GetAlphaThreshold() - (1.0f / textSize);
+            float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
             alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
             GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
         }
@@ -294,6 +294,8 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
         m_hasChanged = true;
     }
 }
+
+bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
 
 void UITextRenderer::SetTextColor(const Color &textColor)
 {

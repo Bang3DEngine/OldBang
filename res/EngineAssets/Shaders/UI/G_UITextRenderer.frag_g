@@ -11,7 +11,6 @@ uniform float B_outlineWidth;
 uniform vec4  B_outlineColor;
 uniform float B_outlineBlurriness;
 
-
 void Main()
 {
     vec2 charAtlasUv = B_FragIn_Uv;
@@ -19,34 +18,51 @@ void Main()
     if (B_usingDistField)
     {
         float dist = thisColor.r;
-        float upperLimit = B_textAlphaThreshold + B_textBlurriness;
-        if (dist > upperLimit) { discard; }
 
-        float lowerLimit = B_textAlphaThreshold - B_textBlurriness;
-        /*if (B_outlineWidth > 0.0f)
+        float lowerCharLimit = B_textAlphaThreshold - B_textBlurriness;
+        if (dist <= lowerCharLimit)
         {
-            // float outlineThresh = B_textAlphaThreshold + B_outlineWidth;
-            float outlineThresh = B_outlineWidth;
-            float outlineLowerLimit = outlineThresh - B_outlineBlurriness;
-            float outlineUpperLimit = outlineThresh + B_outlineBlurriness;
-            if (closeness < outlineLowerLimit && closeness > outlineUpperLimit)
+            B_Out_Color = vec4(vec3(1), 1.0f); // Just opaque character
+        }
+        else
+        {
+            // Outside opaque character zone
+
+            float upperCharLimit = B_textAlphaThreshold + B_textBlurriness;
+            if (B_outlineWidth > 0)
             {
-                float alpha = smoothstep(outlineLowerLimit,
-                                         outlineUpperLimit,
-                                         closeness);
-                B_Out_Color = vec4(1,0,0,1);//vec4(B_outlineColor.rgb, B_outlineColor.a * alpha);
+                // Outline zone
+                float outlineBlur  = B_outlineBlurriness;
+                float outlineLimit = B_textAlphaThreshold + B_outlineWidth;
+                float outlineLowerLimit = outlineLimit - outlineBlur;
+                float outlineUpperLimit = outlineLimit + outlineBlur;
+
+                if (dist > outlineUpperLimit) { discard; }
+
+                float outlineAlpha = 1.0f - smoothstep(outlineLowerLimit,
+                                                       outlineUpperLimit,
+                                                       dist);
+                B_Out_Color = vec4(B_outlineColor.rgb,
+                                   B_outlineColor.a * outlineAlpha);
+
+
+                if (dist <= upperCharLimit)
+                {
+                    // Blend outline color with character color
+                    float charAlpha = 1.0f-smoothstep(lowerCharLimit, upperCharLimit, dist);
+                    vec4 charColor = vec4(vec3(1), charAlpha);
+                    B_Out_Color = vec4(mix(B_Out_Color.rgb, charColor.rgb, charAlpha),
+                                       max(charAlpha, outlineAlpha));
+                }
             }
             else
             {
-                B_Out_Color = vec4(vec3(1), 1);//smoothstep(lowerLimit, upperLimit,
-                                               //        closeness));
+                // No outline, but character has smoothstep alpha
+                if (dist > upperCharLimit) { discard; }
+
+                float charAlpha = 1.0f-smoothstep(lowerCharLimit, upperCharLimit, dist);
+                B_Out_Color = vec4(vec3(1), charAlpha);
             }
-        }
-        else
-        */
-        {
-            float alpha = smoothstep(lowerLimit, upperLimit, dist);
-            B_Out_Color = vec4(vec3(1), 1.0f - alpha);
         }
     }
     else

@@ -33,14 +33,15 @@ public:
 
     void SetVisible(bool visible);
     void SetMaterial(Material *m);
-    void SetRenderWireframe(bool m_drawWireframe);
-    void SetCullMode(GL::Face m_cullMode);
+    void SetRenderWireframe(bool drawWireframe);
+    void SetCullMode(GL::Face cullMode);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
-    void SetRenderPrimitive(GL::Primitives m_renderMode);
+    void SetRenderPrimitive(GL::Primitives renderMode);
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
     bool IsVisible() const;
+    virtual bool NeedsReadingColorBuffer() const;
     Material* GetMaterial() const;
     Material* GetSharedMaterial() const;
     bool IsRenderWireframe() const;
@@ -52,7 +53,7 @@ public:
 
     // Renderer
     virtual AABox GetAABBox() const;
-    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
+    virtual Rect GetBoundingRect(Camera *camera) const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -62,8 +63,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    bool m_drawWireframe        = false;
-    GL::Face m_cullMode     = GL::Face::Back;
+    bool m_drawWireframe = false;
+    GL::Face m_cullMode = GL::Face::Back;
     GL::Primitives m_renderMode = GL::Primitives::Triangles;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 
@@ -73,7 +74,7 @@ protected:
 private:
     bool m_visible = true;
     float m_lineWidth = 1.0f;
-    Material *m_material     = nullptr;
+    Material *m_material = nullptr;
     Material *m_materialCopy = nullptr;
     RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
