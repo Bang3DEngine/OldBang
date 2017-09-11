@@ -49,11 +49,11 @@ Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) co
 {
     return FromGlobalNDCToLocalNDC( FromPixelsPointToGlobalNDC(pixelsPoint) );
 }
-Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint)
+Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
 {
-    Vector2 res =  Vector2f(pixelsPoint) /
-                   Vector2f( Screen::GetSizeS() ) * 2.0f - 1.0f;
-    res.y = 1.0f - res.y;
+    Vector2i screenSize( Screen::GetSizeS() );
+    Vector2i pixelsPoint(_pixelsPoint.x, screenSize.y - _pixelsPoint.y);
+    Vector2 res =  (Vector2f(pixelsPoint) / Vector2f(screenSize) ) * 2.0f - 1.0f;
     return res;
 }
 Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
@@ -65,9 +65,12 @@ Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 {
     return FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
 }
-Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint)
+Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
 {
-    return Vector2i((ndcPoint * 0.5f + 0.5f) * Vector2(Screen::GetSizeS()));
+    Vector2 ndcPoint(_ndcPoint.x,  _ndcPoint.y);
+    Vector2 screenSize( Screen::GetSizeS() );
+    Vector2i resultPx( Vector2::Round(ndcPoint * 0.5f + 0.5f) * screenSize );
+    return Vector2i(resultPx.x, screenSize.y - resultPx.y);
 }
 
 Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const

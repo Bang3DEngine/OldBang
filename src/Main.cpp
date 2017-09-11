@@ -118,6 +118,7 @@ int main(int argc, char **argv)
         text->SetVerticalAlign(VerticalAlignment::Center);
         text->SetTextSize(size);
         size *= 1.1f;
+        text->SetContent("");
     }
     topText0->SetTextColor(Color::White);
 
@@ -126,14 +127,13 @@ int main(int argc, char **argv)
 
     botText0->SetTextColor(Color::White);
 
-    botText1->SetBlurriness(5.0f);
-    botText1->SetOutlineWidth(0.3f);
-    botText1->SetOutlineBlurriness(0.05f);
-    botText1->SetOutlineColor(Color::Green);
-    botText1->SetContent("dolor");
-    botText1->SetTextSize(200);
-    botText2->SetContent("#");
-    botText2->SetContent("/");
+    // botText1->SetBlurriness(5.0f);
+    // botText1->SetOutlineWidth(0.3f);
+    // botText1->SetOutlineBlurriness(0.05f);
+    // botText1->SetOutlineColor(Color::Green);
+    botText1->SetContent("!");
+    botText1->SetTextSize(15);
+    // botText2->SetContent("#");
     botText2->SetTextSize(300);
 
     SceneManager::LoadScene(scene);
