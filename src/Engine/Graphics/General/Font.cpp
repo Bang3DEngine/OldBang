@@ -171,7 +171,14 @@ Texture2D *Font::GetAtlasTexture() const
 float Font::GetKerning(char leftChar, char rightChar) const
 {
     if (!GetTTFFont() || !TTF_GetFontKerning(GetTTFFont())) { return -1; }
-    return TTF_GetFontKerningSizeGlyphs(GetTTFFont(), leftChar, rightChar);
+    #if (SDL_TTF_MAJOR_VERSION >= 2 && \
+         SDL_TTF_MINOR_VERSION >= 0 && \
+         SDL_TTF_PATCHLEVEL >= 14)
+        return TTF_GetFontKerningSize(GetTTFFont(),
+                                      leftChar, rightChar);
+    #else
+    return -1;
+    #endif
 }
 
 float Font::GetLineSkip() const
