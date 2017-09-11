@@ -25,6 +25,7 @@ public:
     virtual void OnRender() override;
     virtual void OnUpdate() override;
     virtual void OnParentSizeChanged() override;
+    virtual void OnRender(RenderPass renderPass) override;
 
     // UIRenderer
     virtual void Bind() const override;
@@ -38,6 +39,7 @@ public:
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     void SetKerning(bool kerning);
     void SetWrapping(bool wrapping);
+    void SetOverlapping(bool overlapping);
     void SetAlphaThreshold(float alphaThreshold);
     void SetBlurriness(float blurriness);
     void SetContent(const String &content);
@@ -58,6 +60,7 @@ public:
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
     int GetTextSize() const;
+    bool IsOverlapping() const;
     float GetOutlineWidth() const;
     const Color& GetOutlineColor() const;
     float GetOutlineBlurriness() const;
@@ -74,7 +77,7 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-protected:
+private:
     String m_content            = "";
     Font *m_font                = nullptr;
     int m_textSize              = 64;
@@ -89,16 +92,17 @@ protected:
     Color m_outlineColor        = Color::Red;
     float m_outlineBlurriness   = 0.01f;
 
-    bool m_hasChanged       = false;
+    bool m_isOverlapping = false;
+    bool m_hasChanged    = false;
 
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
 
+    Mesh *m_mesh = nullptr;
+    uint m_currentRenderingChar = 0;
     Array<Rect> m_charRectsLocalNDC;
 
-private:
-    Mesh *m_mesh = nullptr;
 };
 
 NAMESPACE_BANG_END

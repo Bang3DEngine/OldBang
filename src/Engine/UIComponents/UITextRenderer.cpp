@@ -41,8 +41,29 @@ UITextRenderer::~UITextRenderer()
 
 void UITextRenderer::OnRender()
 {
-    Renderer::OnRender();
-    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
+    int vertCount = (IsOverlapping() ? 4 : m_mesh->GetVertexCount());
+    int startVert = (IsOverlapping() ? m_currentRenderingChar * 4 : 0);
+    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(),
+               vertCount, startVert);
+}
+
+void UITextRenderer::OnRender(RenderPass renderPass)
+{
+    if (!IsOverlapping())
+    {
+        // Render all quads at the same time
+        m_currentRenderingChar = 0;
+        Renderer::OnRender(renderPass);
+    }
+    else
+    {
+        // Render character by character
+        for (int i = 0; i < GetContent().Size(); ++i)
+        {
+            m_currentRenderingChar = i;
+            Renderer::OnRender(renderPass);
+        }
+    }
 }
 
 void UITextRenderer::OnUpdate()
@@ -166,7 +187,7 @@ void UITextRenderer::RefreshMesh()
             maxUv += spOffsetUv;
         }
 
-        Rect charRectGlobalNDC = Rect(minGlobalNDC, maxGlobalNDC);
+        Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
 
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
@@ -243,6 +264,11 @@ void UITextRenderer::SetWrapping(bool wrapping)
     }
 }
 
+void UITextRenderer::SetOverlapping(bool overlapping)
+{
+    m_isOverlapping = overlapping;
+}
+
 void UITextRenderer::SetAlphaThreshold(float alphaThreshold)
 {
     m_alphaThreshold = alphaThreshold;
@@ -311,6 +337,7 @@ float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
 const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 
+bool UITextRenderer::IsOverlapping() const { return m_isOverlapping; }
 float UITextRenderer::GetOutlineWidth() const { return m_outlineWidth; }
 const Color &UITextRenderer::GetOutlineColor() const { return m_outlineColor; }
 
@@ -337,7 +364,13 @@ HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
 
 Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
-    return GetContentGlobalNDCRect();
+    if (!IsOverlapping()) { return GetContentGlobalNDCRect(); }
+    else
+    {
+        Vector2 p1 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 0].xy();
+        Vector2 p2 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 2].xy();
+        return Rect(Vector2::Min(p1,p2), Vector2::Max(p1,p2));
+    }
 }
 
 const Color &UITextRenderer::GetTextColor() const
