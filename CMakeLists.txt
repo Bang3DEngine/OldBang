@@ -187,7 +187,6 @@ ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 ${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
-${ENGINE_SRC_DIR}/Graphics/ShaderManager.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp

@@ -4,8 +4,8 @@
 #include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GBuffer.h"
+#include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ShaderManager.h"
 #include "Bang/GraphicPipeline.h"
 
 USING_NAMESPACE_BANG
@@ -15,7 +15,7 @@ PostProcessEffect::PostProcessEffect()
     m_shaderProgram = new ShaderProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
-    Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex, vShaderPath);
+    Shader *vShader = Resources::Load<Shader>(vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }
 
@@ -95,8 +95,7 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
         if (!p_postProcessShader ||
             shaderFilepath != p_postProcessShader->GetResourceFilepath())
         {
-            Shader *postProcessShader =
-                    ShaderManager::Load(GL::ShaderType::Fragment, shaderFilepath);
+            Shader *postProcessShader = Resources::Load<Shader>(shaderFilepath);
             SetPostProcessShader(postProcessShader);
         }
     }

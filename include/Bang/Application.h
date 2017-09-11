@@ -16,7 +16,6 @@ FORWARD class Window;
 FORWARD class Resources;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
-FORWARD class ShaderManager;
 FORWARD class BehaviourManager;
 FORWARD class ImportFilesManager;
 
@@ -35,7 +34,6 @@ public:
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     SceneManager       *GetSceneManager() const;
-    ShaderManager      *GetShaderManager() const;
     AudioManager       *GetAudioManager() const;
     Resources          *GetResources() const;
     ImportFilesManager *GetImportFilesManager() const;
@@ -55,7 +53,6 @@ protected:
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
     Input              *m_input              = nullptr;
-    ShaderManager      *m_shaderManager      = nullptr;
     AudioManager       *m_audioManager       = nullptr;
     SceneManager       *m_sceneManager       = nullptr;
     Resources          *m_resources          = nullptr;

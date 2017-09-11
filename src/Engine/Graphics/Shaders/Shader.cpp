@@ -16,7 +16,7 @@ Shader::Shader() : Shader(GL::ShaderType::Vertex)
 {
 }
 
-Shader::Shader(GL::ShaderType t) : m_sourceCode(""), m_type(t)
+Shader::Shader(GL::ShaderType t) : m_type(t)
 {
 }
 
@@ -28,8 +28,8 @@ void Shader::Import(const Path& shaderFilepath)
         return;
     }
 
-    m_filepath = shaderFilepath;
-    m_sourceCode = File::GetContents(m_filepath);
+    RetrieveType(shaderFilepath);
+    m_sourceCode = File::GetContents(shaderFilepath);
     ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
     m_idGL = GL::CreateShader(m_type);
@@ -37,11 +37,20 @@ void Shader::Import(const Path& shaderFilepath)
     GL::ShaderSource(m_idGL, m_sourceCode);
     if ( !GL::CompileShader(m_idGL) )
     {
-        Debug_Error("Failed to compile shader: '"  << m_filepath
+        Debug_Error("Failed to compile shader: '"  << shaderFilepath
                     << "': " << GL::GetShaderErrorMsg(m_idGL));
         GL::DeleteShader(m_idGL);
         return;
     }
+}
+
+void Shader::RetrieveType(const Path &shaderPath)
+{
+    if (shaderPath.GetExtension().Contains("vert"))
+    {
+        m_type = GL::ShaderType::Vertex;
+    }
+    else { m_type = GL::ShaderType::Fragment; }
 }
 
 GL::BindTarget Shader::GetGLBindTarget() const
@@ -52,11 +61,6 @@ GL::BindTarget Shader::GetGLBindTarget() const
 const String& Shader::GetSourceCode() const
 {
     return m_sourceCode;
-}
-
-const Path& Shader::GetResourceFilepath() const
-{
-    return m_filepath;
 }
 
 GL::ShaderType Shader::GetType() const

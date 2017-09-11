@@ -19,20 +19,19 @@ public:
     Shader();
     Shader(GL::ShaderType t);
 
-
     GL::BindTarget GetGLBindTarget() const override;
 
     const String& GetSourceCode() const;
-    const Path& GetResourceFilepath() const;
     GL::ShaderType GetType() const;
 
     // Resource
     virtual void Import(const Path &shaderFilepath) override;
 
-protected:
-    String m_sourceCode = "";
-    Path m_filepath;
+private:
     GL::ShaderType m_type;
+    String m_sourceCode = "";
+
+    void RetrieveType(const Path &shaderPath);
 };
 
 NAMESPACE_BANG_END

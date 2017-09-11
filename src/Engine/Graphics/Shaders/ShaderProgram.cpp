@@ -10,7 +10,7 @@
 #include "Bang/Matrix4.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Texture.h"
-#include "Bang/ShaderManager.h"
+#include "Bang/Resources.h"
 #include "Bang/TextureUnitManager.h"
 
 USING_NAMESPACE_BANG
@@ -20,34 +20,41 @@ ShaderProgram::ShaderProgram()
     m_idGL = GL::CreateProgram();
 }
 
-void ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
+bool ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
-    RetrieveType(vshaderPath, fshaderPath);
+    return Load(Resources::Load<Shader>(vshaderPath),
+                Resources::Load<Shader>(fshaderPath));
+}
 
-    Shader *vs = ShaderManager::Load(GL::ShaderType::Vertex, vshaderPath);
-    SetVertexShader(vs);
+bool ShaderProgram::Load(Shader *vShader, Shader *fShader)
+{
+    if(!vShader || !fShader ||
+       (vShader && vShader == GetVertexShader()) ||
+       (fShader && fShader == GetFragmentShader())) { return false; }
 
-    Shader *fs = ShaderManager::Load(GL::ShaderType::Fragment, fshaderPath);
-    SetFragmentShader(fs);
+    RetrieveType(vShader->GetResourceFilepath(),
+                 fShader->GetResourceFilepath());
+
+    SetVertexShader(vShader);
+    SetFragmentShader(fShader);
+    return Refresh();
 }
 
 
 ShaderProgram::~ShaderProgram()
 {
-    if (p_vshader) { ShaderManager::UnRegisterUsageOfShader(this, p_vshader); }
-    if (p_fshader) { ShaderManager::UnRegisterUsageOfShader(this, p_fshader); }
     GL::DeleteProgram(m_idGL);
 }
 
 bool ShaderProgram::Link()
 {
-    if (!p_vshader)
+    if (!GetVertexShader())
     {
         Debug_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
-    if (!p_fshader)
+    if (!GetFragmentShader())
     {
         Debug_Error("Fragment shader not set. Can't link shader program.");
         return false;
@@ -56,8 +63,8 @@ bool ShaderProgram::Link()
     if (m_idGL > 0) { GL::DeleteProgram(m_idGL); }
     m_idGL = GL::CreateProgram();
 
-    GL::AttachShader(m_idGL, p_vshader->GetGLId());
-    GL::AttachShader(m_idGL, p_fshader->GetGLId());
+    GL::AttachShader(m_idGL, GetVertexShader()->GetGLId());
+    GL::AttachShader(m_idGL, GetFragmentShader()->GetGLId());
 
     if (GetInputType() == InputType::GBuffer)
     {
@@ -102,34 +109,33 @@ bool ShaderProgram::Set(const String &name, const Texture *texture) const
     return uniformIsUsed;
 }
 
-void ShaderProgram::Refresh()
+bool ShaderProgram::Refresh()
 {
-    ENSURE(p_vshader && p_fshader);
-    Link();
+    return Link();
 }
 
-void ShaderProgram::SetVertexShader(Shader *vertexShader)
+bool ShaderProgram::SetVertexShader(Shader *vertexShader)
 {
-    if (p_vshader) { ShaderManager::UnRegisterUsageOfShader(this, p_vshader); }
     if (vertexShader->GetType() != GL::ShaderType::Vertex)
     {
-        Debug_Error("You are trying to set as vertex shader a non-vertex shader");
+        Debug_Error("You are trying to set as vertex shader a "
+                    "non-vertex shader");
+        return false;
     }
     p_vshader = vertexShader;
-    if (p_vshader) { ShaderManager::RegisterUsageOfShader(this, p_vshader); }
-    Refresh();
+    return true;
 }
 
-void ShaderProgram::SetFragmentShader(Shader *fragmentShader)
+bool ShaderProgram::SetFragmentShader(Shader *fragmentShader)
 {
-    if (p_fshader) { ShaderManager::UnRegisterUsageOfShader(this, p_fshader); }
     if (fragmentShader->GetType() != GL::ShaderType::Fragment)
     {
-        Debug_Error("You are trying to set as fragment shader a non-fragment shader");
+        Debug_Error("You are trying to set as fragment shader a "
+                    "non-fragment shader");
+        return false;
     }
     p_fshader = fragmentShader;
-    if (p_fshader) { ShaderManager::RegisterUsageOfShader(this, p_fshader); }
-    Refresh();
+    return true;
 }
 
 void ShaderProgram::SetInputType(ShaderProgram::InputType inputType)
@@ -175,11 +181,6 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
     return location;
 }
 
-void ShaderProgram::Import(const Path &shaderProgramFilepath)
-{
-    ImportXMLFromFile(shaderProgramFilepath);
-}
-
 void ShaderProgram::RetrieveType(const Path &vshaderPath,
                                  const Path &fshaderPath)
 {
@@ -187,44 +188,6 @@ void ShaderProgram::RetrieveType(const Path &vshaderPath,
     if      (fShaderExt.EndsWith("_g"))   { m_inputType = InputType::GBuffer; }
     else if (fShaderExt.EndsWith("_pp"))  { m_inputType = InputType::PostProcess; }
     else { m_inputType = InputType::Other; }
-}
-
-void ShaderProgram::ImportXML(const XMLNode &xmlInfo)
-{
-    Asset::ImportXML(xmlInfo);
-
-    if (xmlInfo.Contains("VertexShader"))
-    {
-        Path vShaderFilepath = xmlInfo.Get<Path>("VertexShader");
-        if (vShaderFilepath.Exists())
-        {
-            Shader *vShader = ShaderManager::Load(GL::ShaderType::Vertex,
-                                                  vShaderFilepath);
-            SetVertexShader(vShader);
-        }
-    }
-
-    if (xmlInfo.Contains("FragmentShader"))
-    {
-        Path fShaderFilepath = xmlInfo.Get<Path>("FragmentShader");
-        if (fShaderFilepath.Exists())
-        {
-            Shader *fShader = ShaderManager::Load(GL::ShaderType::Fragment,
-                                                  fShaderFilepath);
-            SetFragmentShader(fShader);
-        }
-    }
-}
-
-void ShaderProgram::ExportXML(XMLNode *xmlInfo) const
-{
-    Asset::ExportXML(xmlInfo);
-
-    Path vShaderFilepath = p_vshader ? p_vshader->GetResourceFilepath() : Path();
-    xmlInfo->Set("VertexShader", vShaderFilepath);
-
-    Path fShaderFilepath = p_fshader ? p_fshader->GetResourceFilepath() : Path();
-    xmlInfo->Set("FragmentShader", fShaderFilepath);
 }
 
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,

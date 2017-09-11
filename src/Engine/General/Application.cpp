@@ -16,7 +16,6 @@
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ShaderManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
@@ -38,7 +37,6 @@ Application::Application(int argc, char **argv, const Path &engineRootPath)
     m_input              = new Input();
     m_time               = new Time();
     m_sceneManager       = new SceneManager();
-    m_shaderManager      = new ShaderManager();
     m_audioManager       = new AudioManager();
     m_resources          = new Resources();
     m_behaviourManager   = new BehaviourManager();
@@ -59,7 +57,6 @@ Application::~Application()
     delete m_paths;
     delete m_input;
     delete m_window;
-    delete m_shaderManager;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_behaviourManager;
@@ -189,9 +186,4 @@ void Application::Exit(int returnCode, bool immediate)
 Window *Application::GetMainWindow() const
 {
     return m_window;
-}
-
-ShaderManager *Application::GetShaderManager() const
-{
-    return m_shaderManager;
 }

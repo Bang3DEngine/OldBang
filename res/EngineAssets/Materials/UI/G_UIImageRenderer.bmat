@@ -1,6 +1,6 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           ReceivesLighting:Bool="false"{}
-          VertexShader:File="./Shaders/G_Default.vert_g"{FileExtension="vert",IsEngineFile}
-          FragmentShader:File="./Shaders/G_Default.frag_g"{FileExtension="frag",IsEngineFile}
+          VertexShader:File="15484445343713591297"{FileExtension="vert",IsEngineFile}
+          FragmentShader:File="10339828238326431745"{FileExtension="frag",IsEngineFile}
          >
 </Material>

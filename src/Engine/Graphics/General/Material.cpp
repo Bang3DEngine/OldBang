@@ -15,13 +15,14 @@ USING_NAMESPACE_BANG
 Material::Material()
 {
     ShaderProgram *sp = new ShaderProgram();
-    sp->Load(EPATH("Shaders/G_Default.vert_g"),
-             EPATH("Shaders/G_Default.frag_g"));
+    sp->Load(Resources::Load<Shader>( EPATH("Shaders/G_Default.vert_g") ),
+             Resources::Load<Shader>( EPATH("Shaders/G_Default.frag_g") ));
     SetShaderProgram(sp);
 }
 
 Material::~Material()
 {
+    if (m_shaderProgram) { delete m_shaderProgram; }
 }
 
 void Material::SetUvMultiply(const Vector2 &uvMultiply)
@@ -163,20 +164,21 @@ void Material::ImportXML(const XMLNode &xml)
     if (xml.Contains("Texture"))
     { SetTexture( Resources::Load<Texture2D>( xml.Get<GUID>("Texture") ) ); }
 
-    if (xml.Contains("VertexShader") && xml.Contains("FragmentShader"))
+    Shader *vShader = nullptr;
+    if (xml.Contains("VertexShader"))
+    { vShader = Resources::Load<Shader>(xml.Get<GUID>("VertexShader")); }
+
+    Shader *fShader = nullptr;
+    if (xml.Contains("FragmentShader"))
+    { fShader = Resources::Load<Shader>(xml.Get<GUID>("FragmentShader")); }
+
+    ShaderProgram *sp = GetShaderProgram();
+    ShaderProgram *newSp = new ShaderProgram();
+    bool successLoadingSp = newSp->Load(vShader, fShader);
+    if (successLoadingSp)
     {
-        ShaderProgram *sp = GetShaderProgram();
-        Path vsPath = xml.Get<Path>("VertexShader");
-        Path fsPath = xml.Get<Path>("FragmentShader");
-        if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
-            vsPath != sp->GetVertexShader()->GetResourceFilepath()  ||
-            fsPath != sp->GetFragmentShader()->GetResourceFilepath()
-           )
-        {
-            ShaderProgram *newSp = new ShaderProgram();
-            newSp->Load(vsPath, fsPath);
-            SetShaderProgram(newSp);
-        }
+        if (sp) { delete sp; }
+        SetShaderProgram(newSp);
     }
 }
 
@@ -192,13 +194,9 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     const Texture2D *tex = GetTexture();
     xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());
 
-    Path vsPath, fsPath;
     ShaderProgram *sp = GetShaderProgram();
-    if (sp)
-    {
-        if (sp->GetVertexShader()) { vsPath = sp->GetVertexShader()->GetResourceFilepath(); }
-        if (sp->GetFragmentShader()) { fsPath = sp->GetFragmentShader()->GetResourceFilepath(); }
-    }
-    xmlInfo->Set("VertexShader",   vsPath);
-    xmlInfo->Set("FragmentShader", fsPath);
+    Shader *vShader = (sp ? sp->GetVertexShader()   : nullptr);
+    Shader *fShader = (sp ? sp->GetFragmentShader() : nullptr);
+    xmlInfo->Set("VertexShader",   vShader);
+    xmlInfo->Set("FragmentShader", fShader);
 }

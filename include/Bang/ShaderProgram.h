@@ -2,7 +2,6 @@
 #define SHADERPROGRAM_H
 
 #include "Bang/Map.h"
-#include "Bang/Asset.h"
 #include "Bang/GLObject.h"
 
 NAMESPACE_BANG_BEGIN
@@ -10,11 +9,8 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Shader;
 FORWARD class Texture;
 
-class ShaderProgram : public GLObject,
-                      public Asset
+class ShaderProgram : public GLObject
 {
-    ASSET(ShaderProgram)
-
 public:
     enum InputType
     {
@@ -26,7 +22,8 @@ public:
     ShaderProgram();
     virtual ~ShaderProgram();
 
-    virtual void Load(const Path &vshaderPath, const Path &fshaderPath);
+    bool Load(const Path &vshaderPath, const Path &fshaderPath);
+    bool Load(Shader *vShader, Shader *fShader);
 
     bool Link();
 
@@ -45,10 +42,10 @@ public:
 
     bool Set(const String &name, const Texture *texture) const;
 
-    void Refresh();
+    bool Refresh();
     void SetInputType(InputType type);
-    void SetVertexShader(Shader *vertexShader);
-    void SetFragmentShader(Shader *fragmentShader);
+    bool SetVertexShader(Shader *vertexShader);
+    bool SetFragmentShader(Shader *fragmentShader);
 
     void SetVertexInputBinding(const String& vertexInputName, uint location);
     void SetFragmentInputBinding(const String& fragInputName, uint location);
@@ -60,13 +57,6 @@ public:
     GLint GetUniformLocation(const String &name) const;
 
     void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
-
-    // Resource
-    void Import(const Path &shaderProgramFilepath) override;
-
-    // Serializable
-    virtual void ImportXML(const XMLNode &xmlInfo) override;
-    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
     Shader *p_vshader = nullptr;

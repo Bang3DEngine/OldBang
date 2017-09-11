@@ -1,7 +1,7 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           Shininess:Float="0"{}
           ReceivesLighting:Bool="false"{}
-          FragmentShader:File="./Shaders/UI/G_UITextRenderer.frag_g"{FileExtension="frag",IsEngineFile}
-          VertexShader:File="./Shaders/G_Default.vert_g"{FileExtension="vert",IsEngineFile}
+          VertexShader:File="15484445343713591297"{FileExtension="vert",IsEngineFile}
+          FragmentShader:File="12700904114649825281"{FileExtension="frag",IsEngineFile}
          >
 </Material>
