@@ -115,20 +115,14 @@ float Font::GetScaleProportion() const
     return GetMetricsSize() / 128.0f;
 }
 
-int Font::Scale(int magnitude, bool ceil) const
+float Font::Scale(float magnitude) const
 {
-    return ceil ? SCAST<int>( Math::Ceil (magnitude * GetScaleProportion())) :
-                  SCAST<int>( Math::Round(magnitude * GetScaleProportion()));
+    return magnitude * GetScaleProportion();
 }
 
 Vector2 Font::Scale(const Vector2 &magnitude) const
 {
     return magnitude * GetScaleProportion();
-}
-
-Vector2i Font::Scale(const Vector2i &magnitude) const
-{
-    return Vector2i( Vector2::Round( Scale( Vector2(magnitude) ) ) );
 }
 
 void Font::SetLoadSize(int loadSize) { m_ttfLoadSize = loadSize; }
@@ -145,9 +139,9 @@ Font::GlyphMetrics Font::GetCharMetrics(char c) const
 
     int xmin, xmax, ymin, ymax, advance;
     TTF_GlyphMetrics(m_ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);
-    charMetrics.size    = Scale( Vector2i((xmax - xmin), (ymax - ymin)) );
-    charMetrics.bearing = Scale( Vector2i(xmin, ymax) );
-    charMetrics.advance = Scale( advance, false );
+    charMetrics.size    = Scale( Vector2((xmax - xmin), (ymax - ymin)) );
+    charMetrics.bearing = Scale( Vector2(xmin, ymax) );
+    charMetrics.advance = Scale( float(advance) );
 
     return charMetrics;
 }
@@ -174,16 +168,16 @@ Texture2D *Font::GetAtlasTexture() const
     return m_atlasTexture;
 }
 
-int Font::GetKerningXPx(char leftChar, char rightChar) const
+float Font::GetKerning(char leftChar, char rightChar) const
 {
     if (!GetTTFFont() || !TTF_GetFontKerning(GetTTFFont())) { return -1; }
     return TTF_GetFontKerningSizeGlyphs(GetTTFFont(), leftChar, rightChar);
 }
 
-int Font::GetLineSkip() const
+float Font::GetLineSkip() const
 {
     if (!GetTTFFont()) { return 0; }
-    return Scale( TTF_FontLineSkip(GetTTFFont()), false );
+    return Scale( float( TTF_FontLineSkip(GetTTFFont()) ) );
 }
 
 Vector2i Font::GetSDFSpreadOffsetPx(char c) const

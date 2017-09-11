@@ -23,7 +23,7 @@ Array<TextFormatter::CharRect>
     for (int i = 0; i < content.Size(); ++i)
     {
         const char c = content[i];
-        Recti charRect = TextFormatter::GetCharRect(c, font);
+        Rectf charRect = TextFormatter::GetCharRect(c, font);
         charRects.PushBack( CharRect(c, charRect) );
     }
 
@@ -53,7 +53,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
 {
     Array< Array<CharRect> > linedCharRects(1); // Result
 
-    Vector2i penPosition = limitsRect.GetMin();
+    Vector2 penPosition (limitsRect.GetMin());
     const int lineSkip = font->GetLineSkip();
     for (int i = 0; i < content.Size(); ++i)
     {
@@ -121,10 +121,10 @@ TextFormatter::SplitCharRectsInLines(const String &content,
     return linedCharRects;
 }
 
-Vector2i FindMinCoord(const Array<TextFormatter::CharRect>&);
-Vector2i FindMaxCoord(const Array<TextFormatter::CharRect>&);
-Vector2i FindMinCoord(const Array< Array<TextFormatter::CharRect> >&);
-Vector2i FindMaxCoord(const Array< Array<TextFormatter::CharRect> >&);
+Vector2 FindMinCoord(const Array<TextFormatter::CharRect>&);
+Vector2 FindMaxCoord(const Array<TextFormatter::CharRect>&);
+Vector2 FindMinCoord(const Array< Array<TextFormatter::CharRect> >&);
+Vector2 FindMaxCoord(const Array< Array<TextFormatter::CharRect> >&);
 
 void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
                                    const Recti &limitsRect,
@@ -135,8 +135,8 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     for (Array<CharRect> &line : *linesCharRects)
     {
         if (line.IsEmpty()) { continue; }
-        Vector2i lineMinCoord = FindMinCoord(line);
-        Vector2i lineMaxCoord = FindMaxCoord(line);
+        Vector2 lineMinCoord = FindMinCoord(line);
+        Vector2 lineMaxCoord = FindMaxCoord(line);
 
         int lineHorizontalOffset = 0;
         if (hAlignment == HorizontalAlignment::Left)
@@ -155,14 +155,14 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
 
         for (CharRect &cr : line)
         {
-            cr.rectPx += Vector2i(lineHorizontalOffset, 0);
+            cr.rectPx += Vector2(lineHorizontalOffset, 0);
         }
     }
 
     // Vertical align all the lines at once
     int textVerticalOffset = 0;
-    Vector2i textMinCoords = FindMinCoord(*linesCharRects);
-    Vector2i textMaxCoords = FindMaxCoord(*linesCharRects);
+    Vector2 textMinCoords = FindMinCoord(*linesCharRects);
+    Vector2 textMaxCoords = FindMaxCoord(*linesCharRects);
     if (vAlignment == VerticalAlignment::Top)
     {
         textVerticalOffset = limitsRect.GetMin().y - textMinCoords.y;
@@ -182,21 +182,21 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     {
         for (CharRect &cr : line)
         {
-            cr.rectPx += Vector2i(0, textVerticalOffset);
+            cr.rectPx += Vector2(0, textVerticalOffset);
         }
     }
 }
 
-Recti TextFormatter::GetCharRect(char c, const Font *font)
+Rectf TextFormatter::GetCharRect(char c, const Font *font)
 {
-    if (!font) { return Recti::Zero; }
+    if (!font) { return Rectf::Zero; }
 
     Font::GlyphMetrics charMetrics = font->GetCharMetrics(c);
 
-    Vector2i bearing(charMetrics.bearing.x, -charMetrics.bearing.y);
-    Vector2i charMin(bearing);
-    Vector2i charMax(bearing + charMetrics.size);
-    return Recti(charMin, charMax);
+    Vector2 bearing(charMetrics.bearing.x, -charMetrics.bearing.y);
+    Vector2 charMin(bearing);
+    Vector2 charMax(bearing + charMetrics.size);
+    return Rectf(charMin, charMax);
 }
 
 int TextFormatter::GetCharAdvanceX(const String &content,
@@ -206,7 +206,7 @@ int TextFormatter::GetCharAdvanceX(const String &content,
     int advance = 0;
     if (currentCharIndex < content.Size()-1)
     {
-        advance = font->GetKerningXPx(content[currentCharIndex],
+        advance = font->GetKerning(content[currentCharIndex],
                                       content[currentCharIndex + 1]);
     }
 
@@ -220,50 +220,50 @@ int TextFormatter::GetCharAdvanceX(const String &content,
     return advance + 1;
 }
 
-Vector2i FindMinCoord(const Array<TextFormatter::CharRect> &rects)
+Vector2 FindMinCoord(const Array<TextFormatter::CharRect> &rects)
 {
-    Vector2i result;
+    Vector2 result;
     bool first = true;
     for (const TextFormatter::CharRect &cr : rects)
     {
         if (first) { first = false; result = cr.rectPx.GetMin(); }
-        else { result = Vector2i::Min(result, cr.rectPx.GetMin()); }
+        else { result = Vector2::Min(result, cr.rectPx.GetMin()); }
     }
     return result;
 }
 
-Vector2i FindMaxCoord(const Array<TextFormatter::CharRect> &rects)
+Vector2 FindMaxCoord(const Array<TextFormatter::CharRect> &rects)
 {
-    Vector2i result;
+    Vector2 result;
     bool first = true;
     for (const TextFormatter::CharRect &cr : rects)
     {
         if (first) { first = false; result = cr.rectPx.GetMax(); }
-        else { result = Vector2i::Max(result, cr.rectPx.GetMax()); }
+        else { result = Vector2::Max(result, cr.rectPx.GetMax()); }
     }
     return result;
 }
 
-Vector2i FindMinCoord(const Array< Array<TextFormatter::CharRect> > &rects)
+Vector2 FindMinCoord(const Array< Array<TextFormatter::CharRect> > &rects)
 {
-    Vector2i result;
+    Vector2 result;
     bool first = true;
     for (const Array<TextFormatter::CharRect> &line : rects)
     {
         if (first) { first = false; result = FindMinCoord(line); }
-        else { result = Vector2i::Min(result, FindMinCoord(line)); }
+        else { result = Vector2::Min(result, FindMinCoord(line)); }
     }
     return result;
 }
 
-Vector2i FindMaxCoord(const Array< Array<TextFormatter::CharRect> > &rects)
+Vector2 FindMaxCoord(const Array< Array<TextFormatter::CharRect> > &rects)
 {
-    Vector2i result;
+    Vector2 result;
     bool first = true;
     for (const Array<TextFormatter::CharRect> &line : rects)
     {
         if (first) { first = false; result = FindMaxCoord(line); }
-        else { result = Vector2i::Max(result, FindMaxCoord(line)); }
+        else { result = Vector2::Max(result, FindMaxCoord(line)); }
     }
     return result;
 }

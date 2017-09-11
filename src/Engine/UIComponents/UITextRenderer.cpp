@@ -160,10 +160,8 @@ void UITextRenderer::RefreshMesh()
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
 
-        Vector2i minPx ( cr.rectPx.GetMin() );
-        Vector2i maxPx ( cr.rectPx.GetMax() );
-        Vector2 minPxPerf = Vector2(minPx) + 0.5f;
-        Vector2 maxPxPerf = Vector2(maxPx) + 0.5f;
+        Vector2 minPxPerf = Vector2::Round( cr.rectPx.GetMin() ) + 0.5f;
+        Vector2 maxPxPerf = Vector2::Round( cr.rectPx.GetMax() ) + 0.5f;
         Vector2f minGlobalNDC ( rt->FromPixelsPointToGlobalNDC(minPxPerf) );
         Vector2f maxGlobalNDC ( rt->FromPixelsPointToGlobalNDC(maxPxPerf) );
 
@@ -210,8 +208,9 @@ void UITextRenderer::RefreshMesh()
         textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
 
-        Rect charRectLocalNDC( rt->FromPixelsPointToLocalNDC(cr.rectPx.GetMin()),
-                               rt->FromPixelsPointToLocalNDC(cr.rectPx.GetMax()) );
+        Rect charRectLocalNDC(
+                    rt->FromPixelsPointToLocalNDC( Vector2i(minPxPerf) ),
+                    rt->FromPixelsPointToLocalNDC( Vector2i(maxPxPerf) )  );
         m_charRectsLocalNDC.PushBack( charRectLocalNDC );
     }
 

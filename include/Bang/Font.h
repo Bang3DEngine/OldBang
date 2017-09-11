@@ -23,9 +23,9 @@ public:
      */
     struct GlyphMetrics
     {
-        Vector2i size = Vector2i::Zero; // Size of character (of the actual char pixels)
-        Vector2i bearing = Vector2i::Zero; // Offset from the baseline where the char pixels begin
-        int advance  = 0; // Distance to be moved in X to right when drawing the next character
+        Vector2f size    = Vector2f::Zero;
+        Vector2f bearing = Vector2f::Zero;
+        float    advance = 0;
     };
 
     Font();
@@ -42,16 +42,15 @@ public:
     Vector2 GetCharMaxUvInAtlas(char c) const;
     bool HasCharacter(char c) const;
     Texture2D *GetAtlasTexture() const;
-    int GetKerningXPx(char leftChar, char rightChar) const;
-    int GetLineSkip() const;
+    float GetKerning(char leftChar, char rightChar) const;
+    float GetLineSkip() const;
     Vector2i GetSDFSpreadOffsetPx(char c) const;
 
     TTF_Font *GetTTFFont() const;
 
     float GetScaleProportion() const;
-    int Scale(int magnitude, bool ceil) const;
+    float Scale(float magnitude) const;
     Vector2 Scale(const Vector2 &magnitude) const;
-    Vector2i Scale(const Vector2i &magnitude) const;
 
     // Resource
     void Import(const Path &ttfFilepath) override;

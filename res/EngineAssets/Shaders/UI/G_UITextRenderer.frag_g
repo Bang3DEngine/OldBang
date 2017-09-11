@@ -13,6 +13,8 @@ uniform float B_outlineBlurriness;
 
 void Main()
 {
+    B_UseDiffuseColor = false;
+
     vec2 charAtlasUv = B_FragIn_Uv;
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)
@@ -22,7 +24,7 @@ void Main()
         float lowerCharLimit = B_textAlphaThreshold - B_textBlurriness;
         if (dist <= lowerCharLimit)
         {
-            B_Out_Color = vec4(vec3(1), 1.0f); // Just opaque character
+            B_Out_Color = B_Out_DiffColor; // Just opaque char
         }
         else
         {
@@ -49,10 +51,13 @@ void Main()
                 if (dist <= upperCharLimit)
                 {
                     // Blend outline color with character color
-                    float charAlpha = 1.0f-smoothstep(lowerCharLimit, upperCharLimit, dist);
-                    vec4 charColor = vec4(vec3(1), charAlpha);
-                    B_Out_Color = vec4(mix(B_Out_Color.rgb, charColor.rgb, charAlpha),
-                                       max(charAlpha, outlineAlpha));
+                    float charAlpha = 1.0f - smoothstep(lowerCharLimit,
+                                                        upperCharLimit, dist);
+                    vec4 charColor = vec4(B_Out_DiffColor.rgb, charAlpha);
+                    float blendAlpha = max(charAlpha, B_Out_Color.a);
+                    B_Out_Color = vec4(mix(B_Out_Color.rgb, charColor.rgb,
+                                           charAlpha),
+                                       blendAlpha);
                 }
             }
             else
@@ -60,13 +65,14 @@ void Main()
                 // No outline, but character has smoothstep alpha
                 if (dist > upperCharLimit) { discard; }
 
-                float charAlpha = 1.0f-smoothstep(lowerCharLimit, upperCharLimit, dist);
-                B_Out_Color = vec4(vec3(1), charAlpha);
+                float charAlpha = 1.0f-smoothstep(lowerCharLimit,
+                                                  upperCharLimit, dist);
+                B_Out_Color = vec4(B_Out_DiffColor.rgb, charAlpha);
             }
         }
     }
     else
     {
-        B_Out_Color = vec4(1, 1, 1, thisColor.a);
+        B_Out_Color = vec4(B_Out_DiffColor.rgb, thisColor.a);
     }
 }

@@ -17,9 +17,9 @@ class TextFormatter
 public:
     struct CharRect
     {
-        Recti rectPx;
+        Rectf rectPx;
         char character;
-        CharRect(char _c, const Recti &_rect) : rectPx(_rect), character(_c) {}
+        CharRect(char _c, const Rectf &_rect) : rectPx(_rect), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(
@@ -46,7 +46,7 @@ private:
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment);
 
-    static Recti GetCharRect(char c, const Font *font);
+    static Rectf GetCharRect(char c, const Font *font);
     static int GetCharAdvanceX(const String &content,
                                const Font *font,
                                int currentCharIndex);

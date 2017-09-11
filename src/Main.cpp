@@ -109,13 +109,14 @@ int main(int argc, char **argv)
     botGo2->SetParent(botHLGo);
 
     int size = 10;
-    String sampleString = "Lorem ipsum dolor sit amet. 123456789!?#+-/\\_";
+    String sampleString = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                          "0123456789 !?#+-.,;/\\_";
     for (UITextRenderer *text : scene->GetComponentsInChildren<UITextRenderer>())
     {
         text->SetContent(sampleString);
         text->SetWrapping(true);
-        text->SetHorizontalAlign(HorizontalAlignment::Left);
-        text->SetVerticalAlign(VerticalAlignment::Top);
+        text->SetHorizontalAlign(HorizontalAlignment::Center);
+        text->SetVerticalAlign(VerticalAlignment::Center);
         text->SetTextSize(size);
         size *= 1.1f;
         text->SetContent("");
@@ -128,11 +129,25 @@ int main(int argc, char **argv)
     botText0->SetTextColor(Color::White);
 
     // botText1->SetBlurriness(5.0f);
-    // botText1->SetOutlineWidth(0.3f);
-    // botText1->SetOutlineBlurriness(0.05f);
-    // botText1->SetOutlineColor(Color::Green);
+    botText0->SetTextSize(7);
+    botText0->SetContent(sampleString + sampleString + sampleString +
+                         sampleString + sampleString + sampleString);
+    botText1->SetSpacingMultiplier( Vector2(1.5f) );
+    botText1->SetOutlineWidth(0.3f);
+    botText1->SetOutlineBlurriness(0.05f);
+    botText1->SetOutlineColor(Color::Red);
     botText1->SetContent(sampleString);
-    botText1->SetTextSize(12);
+    // botText1->SetContent("0123456789");
+    botText1->SetContent("azX#*/)-=jmni@");
+    botText1->SetTextSize(50);
+
+    topText1->SetContent("Bang");
+    topText1->SetOutlineWidth(0.1f);
+    topText1->SetTextColor(Color::Orange);
+    topText1->SetOutlineBlurriness(0.02f);
+    topText1->SetOutlineColor(Color::Yellow);
+    topText1->SetTextSize(100);
+    topText1->SetOverlapping(true);
     // botText2->SetContent("#");
     // botText2->SetTextSize(300);
 
