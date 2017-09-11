@@ -69,7 +69,14 @@ string(STRIP "${SDL2_LIBRARY}" SDL2_LIBRARY)
 string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 link_libraries(${SDL2_LIBRARY})
 link_libraries(${SDL2_LIBRARIES})
-link_libraries("SDL2_ttf")
+
+find_package(SDL2_ttf REQUIRED)
+include_directories(${SDL2_TTF_INCLUDE_DIR})
+include_directories(${SDL2_TTF_INCLUDE_DIRS})
+string(STRIP "${SDL2_TTF_LIBRARY}" SDL2_LIBRARY)
+string(STRIP "${SDL2_TTF_LIBRARIES}" SDL2_LIBRARIES)
+link_libraries(${SDL2_TTF_LIBRARY})
+link_libraries(${SDL2_TTF_LIBRARIES})
 
 # OpenAL Dependency
 find_package(OpenAL REQUIRED)
