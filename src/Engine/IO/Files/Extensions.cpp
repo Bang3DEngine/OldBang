@@ -14,7 +14,6 @@
 
 NAMESPACE_BANG_BEGIN
 
-template<> String Extensions::Get<Mesh>() { return "bmesh"; }
 template<> String Extensions::Get<Font>() { return "bfont"; }
 template<> String Extensions::Get<Prefab>() { return "bprefab"; }
 template<> String Extensions::Get<Material>() { return "bmat"; }

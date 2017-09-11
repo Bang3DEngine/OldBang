@@ -1,7 +1,6 @@
-<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          ReceivesLighting:Bool="false"{}
-          FragmentShader:File="689165573233311745"{FileExtension="frag",IsEngineFile}
-          TextureCount:Int="0"{}
-          VertexShader:File="10184333104903094273"{FileExtension="vert",IsEngineFile}
+<Material DiffuseColor="(1, 1, 1, 1)"{}
+          ReceivesLighting="false"{}
+          FragmentShader="689165573233311745"{}
+          VertexShader="10184333104903094273"{}
          >
 </Material>

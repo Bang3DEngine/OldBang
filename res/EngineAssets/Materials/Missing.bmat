@@ -1,7 +1,7 @@
-<Material DiffuseColor:Color="(1, 0, 1, 1)"{}
-          Shininess:Float="60"{}
-          ReceivesLighting:Bool="True"{}
-          VertexShader:File="15484445343713591297"{FileExtension="vert",IsEngineFile}
-          FragmentShader:File="10524804577025327105"{FileExtension="frag",IsEngineFile}
+<Material DiffuseColor="(1, 0, 1, 1)"{}
+          Shininess="60"{}
+          ReceivesLighting="True"{}
+          VertexShader="15484445343713591297"{}
+          FragmentShader="10524804577025327105"{}
          >
 </Material>

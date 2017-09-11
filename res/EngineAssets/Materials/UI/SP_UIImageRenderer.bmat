@@ -1,5 +1,5 @@
-<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          FragmentShader:File="103711150822129665"{FileExtension="frag",IsEngineFile}
-          VertexShader:File="10184333104903094273"{FileExtension="vert",IsEngineFile}
+<Material DiffuseColor="(1, 1, 1, 1)"{}
+          FragmentShader="103711150822129665"{}
+          VertexShader="10184333104903094273"{}
          >
 </Material>
