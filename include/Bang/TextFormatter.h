@@ -17,48 +17,39 @@ class TextFormatter
 public:
     struct CharRect
     {
-        Rectf rectLocalNDC;
+        Recti rectPx;
         char character;
-        CharRect(char _c, const Rectf &_rect) : rectLocalNDC(_rect), character(_c) {}
+        CharRect(char _c, const Recti &_rect) : rectPx(_rect), character(_c) {}
     };
 
     static Array<CharRect> GetFormattedTextPositions(
-                                            const String &content,
-                                            const Font *font,
-                                            HorizontalAlignment hAlignment,
-                                            VerticalAlignment vAlignment,
-                                            bool wrapping,
-                                            int textSizePx,
-                                            const RectTransform *rt,
-                                            const Vector2 &spacingMultiplier);
+                                        const String &content,
+                                        const Font *font,
+                                        const Recti &limitsRect,
+                                        const Vector2 &spacingMultiplier,
+                                        HorizontalAlignment hAlignment,
+                                        VerticalAlignment vAlignment,
+                                        bool wrapping);
     TextFormatter() = delete;
 
 private:
     static Array< Array<CharRect> > SplitCharRectsInLines(
-                                const String &content,
-                                const Font *font,
-                                const Array<CharRect> &charRects,
-                                const Vector2 &spacingMultiplier,
-                                const RectTransform *rt,
-                                int textSizePx,
-                                bool wrapping);
+                                            const String &content,
+                                            const Font *font,
+                                            const Recti &limitsRect,
+                                            const Vector2 &spacingMultiplier,
+                                            const Array<CharRect> &charRects,
+                                            bool wrapping);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
+                               const Recti &limitsRect,
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment);
 
-    static Rectf GetCharRect(const Font *font,
-                             const RectTransform *rt,
-                             int textSizePx,
-                             char c);
-    static float GetLineSkipNDC(const Font *font,
-                                const RectTransform *rt,
-                                int textSizePx);
-    static float GetCharAdvanceXNDC(const Font *font,
-                                    const RectTransform *rt,
-                                    const String &content,
-                                    int textSizePx,
-                                    int currentCharIndex);
+    static Recti GetCharRect(char c, const Font *font);
+    static int GetCharAdvanceX(const String &content,
+                               const Font *font,
+                               int currentCharIndex);
 };
 
 NAMESPACE_BANG_END

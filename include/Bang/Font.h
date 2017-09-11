@@ -32,26 +32,26 @@ public:
     virtual ~Font();
 
     void SetLoadSize(int loadSize);
+    void SetMetricsSize(int metricsSize);
 
     int GetLoadSize() const;
+    int GetMetricsSize() const;
     bool IsUsingDistanceField() const;
-    Font::GlyphMetrics GetCharMetrics(unsigned char c, int fontSize = 1) const;
+    Font::GlyphMetrics GetCharMetrics(char c) const;
     Vector2 GetCharMinUvInAtlas(char c) const;
     Vector2 GetCharMaxUvInAtlas(char c) const;
     bool HasCharacter(char c) const;
     Texture2D *GetAtlasTexture() const;
     int GetKerningXPx(char leftChar, char rightChar) const;
-    int GetLineSkipPx() const;
+    int GetLineSkip() const;
     Vector2i GetSDFSpreadOffsetPx(char c) const;
 
     TTF_Font *GetTTFFont() const;
 
-    template<class T>
-    static T ScaleMagnitude(const T &magnitude, int fontSize)
-    {
-        const float proportion = float(fontSize) / 128.0f;
-        return SCAST<T>(magnitude * proportion);
-    }
+    float GetScaleProportion() const;
+    int Scale(int magnitude, bool ceil) const;
+    Vector2 Scale(const Vector2 &magnitude) const;
+    Vector2i Scale(const Vector2i &magnitude) const;
 
     // Resource
     void Import(const Path &ttfFilepath) override;
@@ -60,7 +60,8 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-protected:
+private:
+    int m_metricsSize = 0;
     int m_ttfLoadSize = 128;
     TTF_Font *m_ttfFont = nullptr;
     bool m_usingDistanceField = false;
@@ -68,6 +69,7 @@ protected:
 
     Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
     Map<char, ::std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+
     void Free();
 };
 

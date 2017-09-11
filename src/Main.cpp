@@ -114,8 +114,8 @@ int main(int argc, char **argv)
     {
         text->SetContent(sampleString);
         text->SetWrapping(true);
-        text->SetHorizontalAlign(HorizontalAlignment::Center);
-        text->SetVerticalAlign(VerticalAlignment::Center);
+        text->SetHorizontalAlign(HorizontalAlignment::Left);
+        text->SetVerticalAlign(VerticalAlignment::Top);
         text->SetTextSize(size);
         size *= 1.1f;
         text->SetContent("");
@@ -131,10 +131,10 @@ int main(int argc, char **argv)
     // botText1->SetOutlineWidth(0.3f);
     // botText1->SetOutlineBlurriness(0.05f);
     // botText1->SetOutlineColor(Color::Green);
-    botText1->SetContent("!");
-    botText1->SetTextSize(15);
+    botText1->SetContent(sampleString);
+    botText1->SetTextSize(12);
     // botText2->SetContent("#");
-    botText2->SetTextSize(300);
+    // botText2->SetTextSize(300);
 
     SceneManager::LoadScene(scene);
 

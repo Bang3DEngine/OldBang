@@ -110,40 +110,44 @@ void Font::ExportXML(XMLNode *xmlInfo) const
     Asset::ExportXML(xmlInfo);
 }
 
-void Font::SetLoadSize(int loadSize)
+float Font::GetScaleProportion() const
 {
-    m_ttfLoadSize = loadSize;
+    return GetMetricsSize() / 128.0f;
 }
 
-bool Font::IsUsingDistanceField() const
+int Font::Scale(int magnitude, bool ceil) const
 {
-    return m_usingDistanceField;
+    return ceil ? SCAST<int>( Math::Ceil (magnitude * GetScaleProportion())) :
+                  SCAST<int>( Math::Round(magnitude * GetScaleProportion()));
 }
 
-int Font::GetLoadSize() const
+Vector2 Font::Scale(const Vector2 &magnitude) const
 {
-    return m_ttfLoadSize;
+    return magnitude * GetScaleProportion();
 }
 
-Font::GlyphMetrics Font::GetCharMetrics(unsigned char c, int fontSize) const
+Vector2i Font::Scale(const Vector2i &magnitude) const
+{
+    return Vector2i( Vector2::Round( Scale( Vector2(magnitude) ) ) );
+}
+
+void Font::SetLoadSize(int loadSize) { m_ttfLoadSize = loadSize; }
+void Font::SetMetricsSize(int metricsSize) { m_metricsSize = metricsSize; }
+
+bool Font::IsUsingDistanceField() const { return m_usingDistanceField; }
+int Font::GetLoadSize() const { return m_ttfLoadSize; }
+int Font::GetMetricsSize() const { return m_metricsSize; }
+
+Font::GlyphMetrics Font::GetCharMetrics(char c) const
 {
     Font::GlyphMetrics charMetrics;
     if (!m_ttfFont) { return charMetrics; }
 
     int xmin, xmax, ymin, ymax, advance;
     TTF_GlyphMetrics(m_ttfFont, c, &xmin, &xmax, &ymin, &ymax, &advance);
-    charMetrics.size    = Vector2i((xmax - xmin), (ymax - ymin));
-    charMetrics.bearing = Vector2i(xmin, ymax);
-    charMetrics.advance = advance;
-
-    charMetrics.size = SCAST<Vector2i>(
-                                ScaleMagnitude(Vector2f(charMetrics.size),
-                                                        fontSize));
-    charMetrics.bearing = SCAST<Vector2i>(
-                                ScaleMagnitude(Vector2f(charMetrics.bearing),
-                                                        fontSize));
-    charMetrics.advance = SCAST<int>(ScaleMagnitude(charMetrics.advance,
-                                                    fontSize));
+    charMetrics.size    = Scale( Vector2i((xmax - xmin), (ymax - ymin)) );
+    charMetrics.bearing = Scale( Vector2i(xmin, ymax) );
+    charMetrics.advance = Scale( advance, false );
 
     return charMetrics;
 }
@@ -176,10 +180,10 @@ int Font::GetKerningXPx(char leftChar, char rightChar) const
     return TTF_GetFontKerningSizeGlyphs(GetTTFFont(), leftChar, rightChar);
 }
 
-int Font::GetLineSkipPx() const
+int Font::GetLineSkip() const
 {
     if (!GetTTFFont()) { return 0; }
-    return TTF_FontLineSkip(GetTTFFont());
+    return Scale( TTF_FontLineSkip(GetTTFFont()), false );
 }
 
 Vector2i Font::GetSDFSpreadOffsetPx(char c) const

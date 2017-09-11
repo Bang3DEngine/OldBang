@@ -139,16 +139,16 @@ void UITextRenderer::RefreshMesh()
     // Get the quad positions of the rects of each char
     RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
 
+    m_font->SetMetricsSize( GetTextSize() );
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
                                         GetFont(),
+                                        rt->GetScreenSpaceRectPx(),
+                                        GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
-                                        IsWrapping(),
-                                        GetTextSize(),
-                                        rt,
-                                        GetSpacingMultiplier());
+                                        IsWrapping());
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;
@@ -160,8 +160,12 @@ void UITextRenderer::RefreshMesh()
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
 
-        Vector2f minGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMin());
-        Vector2f maxGlobalNDC = rt->FromLocalNDCToGlobalNDC(cr.rectLocalNDC.GetMax());
+        Vector2i minPx ( cr.rectPx.GetMin() );
+        Vector2i maxPx ( cr.rectPx.GetMax() );
+        Vector2 minPxPerf = Vector2(minPx) + 0.5f;
+        Vector2 maxPxPerf = Vector2(maxPx) + 0.5f;
+        Vector2f minGlobalNDC ( rt->FromPixelsPointToGlobalNDC(minPxPerf) );
+        Vector2f maxGlobalNDC ( rt->FromPixelsPointToGlobalNDC(maxPxPerf) );
 
         Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
@@ -206,7 +210,9 @@ void UITextRenderer::RefreshMesh()
         textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
 
-        m_charRectsLocalNDC.PushBack(cr.rectLocalNDC);
+        Rect charRectLocalNDC( rt->FromPixelsPointToLocalNDC(cr.rectPx.GetMin()),
+                               rt->FromPixelsPointToLocalNDC(cr.rectPx.GetMax()) );
+        m_charRectsLocalNDC.PushBack( charRectLocalNDC );
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),

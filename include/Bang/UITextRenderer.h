@@ -86,7 +86,7 @@ private:
     Rect m_textRectNDC          = Rect::Zero;
 
     float m_blurriness      = 2.0f;
-    float m_alphaThreshold  = 0.3f;
+    float m_alphaThreshold  = 0.25f;
 
     float m_outlineWidth        = 0.0f;
     Color m_outlineColor        = Color::Red;
