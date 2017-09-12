@@ -34,6 +34,8 @@ public:
     virtual void OnRenderGizmos();
     virtual void OnDestroy();
 
+    bool IsEnabled(bool recursive = false) const;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

@@ -40,6 +40,8 @@ public:
 
     static void Destroy(GameObject *gameObject);
 
+    bool IsEnabled(bool recursive = false) const;
+
     void SetName(const String &m_name);
     const String& GetName() const;
 

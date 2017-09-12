@@ -27,11 +27,10 @@ USING_NAMESPACE_BANG
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it )  \
-        if ((*it)->IsEnabled()) { (*it)->FUNCTION; } \
+        if ((*it)->IsEnabled(true)) { (*it)->FUNCTION; } \
 } while (0)
 
-GameObject::GameObject(const String &name)
-    : m_name(name)
+GameObject::GameObject(const String &name) : m_name(name)
 {
 }
 
@@ -109,6 +108,12 @@ void GameObject::Destroy()
 void GameObject::Destroy(GameObject *gameObject)
 {
     SceneManager::GetActiveScene()->Destroy(gameObject);
+}
+
+bool GameObject::IsEnabled(bool recursive) const
+{
+    if (!recursive) { return Object::IsEnabled(); }
+    else { return IsEnabled(false) && (!parent || parent->IsEnabled(true)); }
 }
 
 Component *GameObject::AddComponent(const String &componentClassName,

@@ -31,6 +31,11 @@ void Component::OnChildrenRendered(RenderPass renderPass) {}
 void Component::OnRenderGizmos() {}
 void Component::OnDestroy() {}
 
+bool Component::IsEnabled(bool recursive) const
+{
+    return Object::IsEnabled() && gameObject->IsEnabled(recursive);
+}
+
 void Component::CloneInto(ICloneable *clone) const
 {
     Serializable::CloneInto(clone);

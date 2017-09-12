@@ -91,7 +91,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
         for (Light *light : lights)
         {
-            if (!light || !light->IsEnabled()) { continue; }
+            if (!light || !light->IsEnabled(true)) { continue; }
             light->ApplyLight(m_gbuffer, renderRect);
         }
     }
