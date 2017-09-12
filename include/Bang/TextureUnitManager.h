@@ -18,11 +18,13 @@ public:
 
     // Returns the texture unit it has been bound to
     static TexUnit BindTexture(const Texture *tex);
+    static TexUnit BindTexture(GLId textureId);
     static void UnBindTexture(const Texture *tex);
+    static void UnBindTexture(GLId textureId);
 
 private:
-    using TexUnitMap = Map<const Texture*, TexUnit>;
-    TexUnitMap m_textureToUnit;
+    using TexUnitMap = Map<const GLId, TexUnit>;
+    TexUnitMap m_textureIdToUnit;
 
     // Ordered in time
     ::std::queue<TexUnit> m_usedUnits;

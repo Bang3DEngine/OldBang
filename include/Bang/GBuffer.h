@@ -27,6 +27,8 @@ public:
     static const GL::Attachment AttColor     = GL::Attachment::Color3;
     static const GL::Attachment AttColorRead = GL::Attachment::Color4;
 
+    static const GL::Attachment AttDepthStencil = GL::Attachment::DepthStencil;
+
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
@@ -38,7 +40,7 @@ public:
 
     void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);
 
-    void SetAllDrawBuffers() const override;
+    void SetAllColorDrawBuffers() const override;
     /**
      * @brief Sets all GBuffer's draw buffers, except for the color one.
      * This is useful for G render pass.
@@ -51,11 +53,12 @@ public:
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
-    RenderTexture *m_normalTexture    = nullptr;
-    RenderTexture *m_diffuseTexture   = nullptr;
-    RenderTexture *m_miscTexture      = nullptr;
-    RenderTexture *m_colorTexture     = nullptr;
-    RenderTexture *m_colorReadTexture = nullptr;
+    RenderTexture *m_normalTexture       = nullptr;
+    RenderTexture *m_diffuseTexture      = nullptr;
+    RenderTexture *m_miscTexture         = nullptr;
+    RenderTexture *m_colorTexture        = nullptr;
+    RenderTexture *m_colorReadTexture    = nullptr;
+    RenderTexture *m_depthStencilTexture = nullptr;
 
     mutable bool m_willReadFromColorRead = false;
 

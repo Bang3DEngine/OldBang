@@ -104,7 +104,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     m_gbuffer->Bind();
     Color bgColor = p_scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->SetAllDrawBuffers();
+    m_gbuffer->SetAllColorDrawBuffers();
 
     // GBuffer Scene rendering
     GL::SetDepthMask(true); // Write depth
@@ -122,7 +122,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     GL::ClearStencilBuffer();
 
     // GBuffer Canvas rendering
-    m_gbuffer->SetAllDrawBuffers();
+    m_gbuffer->SetAllColorDrawBuffers();
     GL::SetDepthMask(false);
     GL::SetDepthFunc(GL::Function::Always);
     scene->Render(RenderPass::Canvas);

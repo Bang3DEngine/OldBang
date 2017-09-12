@@ -15,7 +15,6 @@ void EndMain()
     B_GIn_Color = B_Out_Color;
 }
 
-// Custom main that checks stencil for this case
 void Main();
 void main()
 {

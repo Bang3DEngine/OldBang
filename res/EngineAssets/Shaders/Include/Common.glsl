@@ -56,10 +56,11 @@ uniform vec3  B_LightPositionWorld;
 
 
 // GBuffer textures //////////////////////
-uniform sampler2D  B_GTex_NormalDepth;
+uniform sampler2D  B_GTex_Normal;
 uniform sampler2D  B_GTex_DiffColor;
 uniform sampler2D  B_GTex_Misc;
 uniform sampler2D  B_GTex_Color;
+uniform sampler2D  B_GTex_DepthStencil;
 // ///////////////////////////////////////
 
 
@@ -82,14 +83,12 @@ uniform sampler2D  B_GTex_Color;
         vec4  B_Out_Color;
         bool  B_Out_ReceivesLighting;
         float B_Out_Shininess;
-        float B_Out_Depth;
-        float B_Out_Stencil;
 
         in vec4 B_FragIn_PositionWorld;
         in vec3 B_FragIn_NormalWorld;
         in vec2 B_FragIn_Uv;
 
-        out vec4 B_GIn_NormalDepth;
+        out vec4 B_GIn_Normal;
         out vec4 B_GIn_DiffColor;
         out vec4 B_GIn_Misc;
         out vec4 B_GIn_Color;
@@ -108,7 +107,7 @@ uniform sampler2D  B_GTex_Color;
 // ///////////////////////////////////////
 
 // Util functions /////////////////
-float B_DepthToLinear(float d)
+float B_LinearizeDepth(float d)
 {
     return (2 * B_Camera_Near) / (B_Camera_Far + B_Camera_Near - d
                                   * (B_Camera_Far - B_Camera_Near));
@@ -120,32 +119,13 @@ float B_DepthToLinear(float d)
     vec4  B_SampleColor(vec2 uv) { return texture2D(B_GTex_Color, uv); }
     vec3  B_SampleNormal(vec2 uv)
     {
-        vec3 normXY   = texture2D(B_GTex_NormalDepth, uv).xyz;
-        float normalZSign = (normXY.z >= 0.0 ? 1.0 : -1.0);
-        float normalZ = sqrt(1.0f - dot(normXY.xy, normXY.xy));
-        return vec3(normXY.xy, normalZ * normalZSign);
+        return texture2D(B_GTex_Normal, uv).xyz * 2.0f - 1.0f;
     }
     vec4  B_SampleDiffColor(vec2 uv) { return texture2D(B_GTex_DiffColor, uv); }
-    bool  B_SampleReceivesLight (vec2 uv)
-    {
-        return texture2D(B_GTex_Misc, uv).r > 0;
-    }
-    float B_SampleShininess (vec2 uv)
-    {
-        return texture2D(B_GTex_Misc, uv).g;
-    }
-
-    float B_SampleDepth(vec2 uv)
-    {
-        float depthHigh = texture2D(B_GTex_NormalDepth, uv).z;
-        float depthLow  = texture2D(B_GTex_NormalDepth, uv).w;
-        float depth     = (abs(depthHigh) + depthLow) / 1024;
-        return depth;
-    }
-    float B_SampleFlags(vec2 uv)
-    {
-        return texture2D(B_GTex_Misc, uv).z;
-    }
+    bool  B_SampleReceivesLight (vec2 uv) { return texture2D(B_GTex_Misc, uv).r > 0; }
+    float B_SampleShininess (vec2 uv) { return texture2D(B_GTex_Misc, uv).g; }
+    float B_SampleDepth(vec2 uv) { return texture2D(B_GTex_DepthStencil, uv).r; }
+    float B_SampleFlags(vec2 uv) { return texture2D(B_GTex_Misc, uv).z; }
 
     vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }
     vec3  B_SampleNormal() { return B_SampleNormal(B_ScreenUv); }

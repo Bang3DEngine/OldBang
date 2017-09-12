@@ -19,17 +19,16 @@ void GL::ClearError()
 bool GL::CheckError(int line, const String &func, const String &file)
 {
     GLenum glError;
-    bool error = false;
-
+    bool ok = true;
     glError = glGetError();
     if (glError != GL_NO_ERROR)
     {
         const char *err = reinterpret_cast<const char*>(gluErrorString(glError));
         Debug_Error("OpenGL error: " << err << " At function " << func << " in "
                     << file << ":" << line);
-        error = true;
+        ok = false;
     }
-    return error;
+    return ok;
 }
 
 bool GL::CheckFramebufferError()
@@ -844,9 +843,15 @@ bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
 
 uint GL::GetPixelBytesSize(GL::ColorFormat texFormat)
 {
-    GL::ColorComp colorOrder = GL::GetColorCompFrom(texFormat);
-    GL::DataType dataType    = GL::GetDataTypeFrom(texFormat);
-    return GL::GetPixelBytesSize(colorOrder, dataType);
+    switch (texFormat)
+    {
+        case GL::ColorFormat::RGBA_UByte8:      return 8;
+        case GL::ColorFormat::RGBA_Float16:     return 16;
+        case GL::ColorFormat::Depth24_Stencil8: return 32;
+        case GL::ColorFormat::RGB10_A2_UByte:   return 32;
+        case GL::ColorFormat::RGBA_Float32:     return 128;
+    }
+    return 0;
 }
 
 uint GL::GetPixelBytesSize(GL::ColorComp colorComp, GL::DataType dataType)
@@ -869,8 +874,10 @@ uint GL::GetBytesSize(GL::DataType dataType)
 
 uint GL::GetNumComponents(GL::ColorComp colorComp)
 {
-    if (colorComp == GL::ColorComp::RGBA) { return 4; }
-    if (colorComp == GL::ColorComp::RGB)  { return 3; }
+    if (colorComp == GL::ColorComp::RGBA)          { return 4; }
+    if (colorComp == GL::ColorComp::RGB)           { return 3; }
+    if (colorComp == GL::ColorComp::DepthStencil)  { return 2; }
+    ASSERT(false);
     return 3;
 }
 
@@ -890,6 +897,11 @@ GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)
     {
         return GL::DataType::Float;
     }
+    else if (format == GL::ColorFormat::Depth24_Stencil8)
+    {
+        return GL::DataType::Float;
+    }
+    ASSERT(false);
     return GL::DataType::Float;
 }
 
@@ -901,6 +913,11 @@ GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
     {
         return GL::ColorComp::RGBA;
     }
+    else if (format == GL::ColorFormat::Depth24_Stencil8)
+    {
+        return GL::ColorComp::DepthStencil;
+    }
+    ASSERT(false);
     return GL::ColorComp::RGB;
 }
 

@@ -86,6 +86,10 @@ bool MeshIO::ReadModel(const Path& filepath,
                     vertexNormals->PushBack(norm0);
                     vertexNormals->PushBack(norm1);
                     vertexNormals->PushBack(norm2);
+
+                    ASSERT( Math::Abs(norm0.Length()-1.0f) < 0.05f  );
+                    ASSERT( Math::Abs(norm1.Length()-1.0f) < 0.05f  );
+                    ASSERT( Math::Abs(norm2.Length()-1.0f) < 0.05f  );
                 }
             }
         }

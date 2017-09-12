@@ -19,32 +19,27 @@ Framebuffer::Framebuffer(int width, int height) : m_width(width),
 
 Framebuffer::~Framebuffer()
 {
-    for (auto itPair : m_attachmentId_To_Texture)
+    for (auto itPair : m_attachments_To_Texture)
     {
         Texture2D *tex = itPair.second;
         delete tex;
     }
-
-    if (m_depthRenderBufferId != 0)
-    {
-        GL::DeleteRenderBuffers(1, &m_depthRenderBufferId);
-    }
     GL::DeleteFramebuffers(1, &m_idGL);
 }
 
-void Framebuffer::CreateColorAttachment(GL::Attachment attachment,
-                                        GL::ColorFormat texFormat)
+void Framebuffer::CreateAttachment(GL::Attachment attachment,
+                                   GL::ColorFormat texFormat)
 {
     ASSERT(GL::IsBound(this));
     GL::ClearError();
     RenderTexture *tex = new RenderTexture();
-    tex->SetInternalFormat(texFormat);
     tex->Bind();
+    tex->SetInternalFormat(texFormat);
     tex->CreateEmpty(GetWidth(), GetHeight());
     GL_CheckError();
 
-    m_colorAttachmentIds.PushBack(attachment);
-    m_attachmentId_To_Texture.Add(attachment, tex);
+    m_attachments.PushBack(attachment);
+    m_attachments_To_Texture.Add(attachment, tex);
 
     GL::ClearError();
     GL::FramebufferTexture2D(GL::FramebufferTarget::ReadDraw,
@@ -55,32 +50,17 @@ void Framebuffer::CreateColorAttachment(GL::Attachment attachment,
     tex->UnBind();
 }
 
-void Framebuffer::CreateDepthRenderbufferAttachment()
-{
-    ASSERT(GL::IsBound(this));
-    GL::GenRenderBuffers(1, &m_depthRenderBufferId);
-    GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer,
-                         m_depthRenderBufferId);
-    GL::RenderbufferStorage(GL::RenderbufferTarget::Renderbuffer,
-                            GL::RenderbufferFormat::Depth24_Stencil8,
-                            m_width, m_height);
-    GL::FramebufferRenderbuffer(GL::FramebufferTarget::ReadDraw,
-                                GL::Attachment::DepthStencil,
-                                GL::RenderbufferTarget::Renderbuffer,
-                                m_depthRenderBufferId);
-    GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer, 0);
-    GL::CheckFramebufferError();
-}
-
 RenderTexture *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
 {
-    if (!m_attachmentId_To_Texture.ContainsKey(attachment)) { return nullptr; }
-    return m_attachmentId_To_Texture.Get(attachment);
+    if (!m_attachments_To_Texture.ContainsKey(attachment)) { return nullptr; }
+    return m_attachments_To_Texture.Get(attachment);
 }
 
-void Framebuffer::SetAllDrawBuffers() const
+void Framebuffer::SetAllColorDrawBuffers() const
 {
-    SetDrawBuffers(m_colorAttachmentIds);
+    Array<GL::Attachment> colorAtts = m_attachments;
+    colorAtts.Remove(GL::Attachment::DepthStencil);
+    SetDrawBuffers(colorAtts);
 }
 
 void Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
@@ -122,7 +102,7 @@ void Framebuffer::Resize(int width, int height)
     m_width  = Math::Max(width,  1);
     m_height = Math::Max(height, 1);
 
-    for (auto it : m_attachmentId_To_Texture)
+    for (auto it : m_attachments_To_Texture)
     {
         RenderTexture *t = it.second;
         if (t)
@@ -130,18 +110,6 @@ void Framebuffer::Resize(int width, int height)
             GL::ClearError();
             t->Resize(m_width, m_height);
         }
-    }
-
-    if (m_depthRenderBufferId != 0)
-    {
-        GL::ClearError();
-        //TODO:  respect former bindings of renderbuffers
-        GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer,
-                             m_depthRenderBufferId);
-        GL::RenderbufferStorage(GL::RenderbufferTarget::Renderbuffer,
-                                GL::RenderbufferFormat::Depth24_Stencil8,
-                                m_width, m_height);
-        GL::BindRenderbuffer(GL::RenderbufferTarget::Renderbuffer, 0);
     }
 }
 
@@ -173,7 +141,7 @@ void Framebuffer::ClearDepth(float clearDepth)
 
 void Framebuffer::ClearColor(const Color &clearColor)
 {
-    SetAllDrawBuffers();
+    SetAllColorDrawBuffers();
     GL::ClearColorBuffer(clearColor);
 }
 

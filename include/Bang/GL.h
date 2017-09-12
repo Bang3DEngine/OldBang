@@ -11,7 +11,8 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+#define GL_CheckError() ASSERT(\
+                          GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 
 using GLId = GLuint;
 
@@ -101,14 +102,18 @@ public:
     {
         RGB  = GL_RGB,
         RGBA = GL_RGBA,
+        Depth = GL_DEPTH_COMPONENT,
+        DepthStencil = GL_DEPTH_STENCIL,
         StencilIndex = GL_STENCIL_INDEX
     };
 
     enum class ColorFormat
     {
-        RGBA_UByte8  = GL_RGBA8,
-        RGBA_Float16 = GL_RGBA16F,
-        RGBA_Float32 = GL_RGBA32F
+        RGBA_UByte8          = GL_RGBA8,
+        RGBA_Float16         = GL_RGBA16F,
+        RGB10_A2_UByte       = GL_RGB10_A2,
+        RGBA_Float32         = GL_RGBA32F,
+        Depth24_Stencil8     = GL_DEPTH24_STENCIL8
     };
 
     enum class ViewProjMode

@@ -11,25 +11,16 @@ void InitMain()
     B_Out_ReceivesLighting = B_MaterialReceivesLighting;
     B_Out_Shininess        = B_MaterialShininess;
     B_Out_DiffColor        = B_MaterialDiffuseColor;
-    B_Out_Depth            = gl_FragCoord.z;
     B_Out_Color            = B_MaterialDiffuseColor;
 }
 
 void EndMain()
 {
-    B_GIn_NormalDepth  = vec4(B_Out_NormalWorld.xy, 0, 0);
-    B_GIn_DiffColor    = B_Out_DiffColor;
-    B_GIn_Misc         = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
-                              B_Out_Shininess,
-                              0.0,
-                              0);
-
-    // Encode depth
-    float depthHigh      = floor(B_Out_Depth * 1024);
-    depthHigh           *= B_Out_NormalWorld.z >= 0.0 ? 1.0 : -1.0;
-    float depthLow       = fract(B_Out_Depth * 1024);
-    B_GIn_NormalDepth.z  = depthHigh;
-    B_GIn_NormalDepth.w  = depthLow;
+    B_GIn_Normal   = vec4(B_Out_NormalWorld.xyz * 0.5f + 0.5f, 0);
+    B_GIn_DiffColor = B_Out_DiffColor;
+    B_GIn_Misc      = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
+                           B_Out_Shininess,
+                           0, 0);
 
     vec4 outColor;
     if (B_UseDiffuseColor)

@@ -7,9 +7,9 @@ void Main()
 {
     vec4 StrokeColor = vec4( vec3(0.05), 1);
 
-    float fragDepth = B_DepthToLinear( B_SampleDepth() );
-    float depthN = B_DepthToLinear( B_SampleDepthOffset( vec2(0, 1) ) );
-    float depthS = B_DepthToLinear( B_SampleDepthOffset( vec2(0,-1) ) );
+    float fragDepth = B_LinearizeDepth( B_SampleDepth() );
+    float depthN = B_LinearizeDepth( B_SampleDepthOffset( vec2(0, 1) ) );
+    float depthS = B_LinearizeDepth( B_SampleDepthOffset( vec2(0,-1) ) );
     float diffN  = abs(fragDepth - depthN);
     float diffS  = abs(fragDepth - depthS);
     if ( abs(diffN - diffS) >= DepthThresh )
@@ -18,8 +18,8 @@ void Main()
         return;
     }
 
-    float depthW = B_DepthToLinear( B_SampleDepthOffset( vec2( 1,0) ) );
-    float depthE = B_DepthToLinear( B_SampleDepthOffset( vec2(-1,0) ) );
+    float depthW = B_LinearizeDepth( B_SampleDepthOffset( vec2( 1,0) ) );
+    float depthE = B_LinearizeDepth( B_SampleDepthOffset( vec2(-1,0) ) );
     float diffW  = abs(fragDepth - depthW);
     float diffE  = abs(fragDepth - depthE);
     if ( abs(diffE - diffW) >= DepthThresh )

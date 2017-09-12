@@ -24,8 +24,9 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_selectionMaterial->SetShaderProgram(selectionProgram);
 
     Bind();
-    CreateColorAttachment(AttColor, GL::ColorFormat::RGBA_UByte8);
-    CreateDepthRenderbufferAttachment();
+    CreateAttachment(AttColor, GL::ColorFormat::RGBA_UByte8);
+    CreateAttachment(GL::Attachment::DepthStencil,
+                     GL::ColorFormat::Depth24_Stencil8);
     UnBind();
 
     m_colorTexture = GetAttachmentTexture(AttColor);
@@ -50,7 +51,7 @@ void SelectionFramebuffer::PrepareForRender(const Scene *scene)
         ++id;
     }
 
-    SetAllDrawBuffers();
+    SetAllColorDrawBuffers();
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)

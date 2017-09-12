@@ -22,7 +22,7 @@ NAMESPACE_BANG_BEGIN
 
 #ifdef DEBUG
 #define ASSERT_MSG(assertion, msg) if ( !(assertion) ) {\
-  ::std::cerr << "ASSERTION FAILED: '" << msg; abort(); \
+  ::std::cerr << "BANG ASSERTION FAILED: '" << msg; abort(); \
 }
 #else
 #define ASSERT_MSG(assertion, msg) // No Assert in release

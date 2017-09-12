@@ -30,12 +30,10 @@ void Texture2D::Import(const Image<Byte> &image)
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    int dataSize = width * height * GL::GetPixelBytesSize(GL::ColorComp::RGB,
-                                                          GL::DataType::Byte);
-    Byte *data = new Byte[dataSize];
-    memset(data, 0, dataSize);
-    Fill(nullptr, width, height, GL::ColorComp::RGB, GL::DataType::Byte, true);
-    delete[] data;
+    GL::ColorComp colorComp =
+            (GetInternalFormat() == GL::ColorFormat::Depth24_Stencil8) ?
+                GL::ColorComp::Depth : GL::ColorComp::RGB;
+    Fill(nullptr, width, height, colorComp, GL::DataType::UnsignedByte, false);
 }
 
 void Texture2D::Resize(int width, int height)
@@ -44,8 +42,8 @@ void Texture2D::Resize(int width, int height)
 }
 
 void Texture2D::Fill(const Color &fillColor,
-                       int width, int height,
-                       bool genMipMaps)
+                     int width, int height,
+                     bool genMipMaps)
 {
     Array<Color> inputData = Array<Color>(width * height, fillColor);
     Fill( RCAST<const Byte*>(inputData.Data()), width, height,
@@ -53,18 +51,20 @@ void Texture2D::Fill(const Color &fillColor,
 }
 
 void Texture2D::Fill(const Byte *newData,
-                       int width, int height,
-                       GL::ColorComp inputDataColorComp,
-                       GL::DataType inputDataType,
-                       bool genMipMaps)
+                     int width, int height,
+                     GL::ColorComp inputDataColorComp,
+                     GL::DataType inputDataType,
+                     bool genMipMaps)
 {
     SetWidth(width);
     SetHeight(height);
 
     Bind();
-    GL::TexImage2D(GetTextureTarget(), GetWidth(), GetHeight(),
+    GL::TexImage2D(GetTextureTarget(),
+                   GetWidth(), GetHeight(),
                    GetInternalFormat(),
-                   inputDataColorComp, inputDataType,
+                   inputDataColorComp,
+                   inputDataType,
                    newData);
     if (genMipMaps && GetWidth() > 0 && GetHeight() > 0)
     {

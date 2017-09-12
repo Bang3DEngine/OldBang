@@ -71,7 +71,7 @@ bool ShaderProgram::Link()
         SetVertexInputBinding("B_In_PositionObject", 0);
         SetVertexInputBinding("B_In_NormalObject",   1);
         SetVertexInputBinding("B_In_Uv",             2);
-        SetFragmentInputBinding("B_GIn_NormalDepth", 0);
+        SetFragmentInputBinding("B_GIn_Normal", 0);
         SetFragmentInputBinding("B_GIn_DiffColor",   1);
         SetFragmentInputBinding("B_GIn_Misc",        2);
         SetFragmentInputBinding("B_GIn_Color",       3);
