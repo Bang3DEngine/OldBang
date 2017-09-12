@@ -121,6 +121,6 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
     SetDrawBuffers({GBuffer::AttDiffuse, GBuffer::AttMisc});
     GL::ClearColorBuffer(Color::Zero);
 
-    SetColorDrawBuffer();
+    SetDrawBuffers({GBuffer::AttColor, GBuffer::AttColorRead});
     GL::ClearColorBuffer(backgroundColor);
 }

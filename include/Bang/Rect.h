@@ -126,7 +126,7 @@ public:
             return RectG<T>::Zero;
         }
 
-        return RectG<T>(minx, maxx, miny, maxy);
+        return RectG<T>(minx, miny, maxx, maxy);
     }
 
     template <class Iterator>

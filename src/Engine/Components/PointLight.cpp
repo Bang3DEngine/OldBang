@@ -32,6 +32,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 
 Rect PointLight::GetRenderRect(Camera *cam) const
 {
+    return Rect::ScreenRect;
     Sphere sphere(gameObject->transform->GetPosition(), GetRange());
     AABox bbox = AABox::FromSphere(sphere);
     return bbox.GetAABoundingScreenRect(cam);

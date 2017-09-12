@@ -121,6 +121,7 @@ endmacro()
 file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag_g" "[^.]*.frag_pp"
                                "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
                                "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
+                               "[^.]*.glsl"
                                "${BANG_INCLUDE_DIR}/*.h"
                                "${BANG_INCLUDE_DIR}/*.tcc")
 set(OTHER_FILES

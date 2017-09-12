@@ -97,10 +97,10 @@ void Material::Bind() const
 
     sp->Set("B_ScreenSize", Vector2f(Screen::GetSizeS()));
 
-    sp->Set("B_UvMultiply",              GetUvMultiply());
+    sp->Set("B_UvMultiply",               GetUvMultiply());
     sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
     sp->Set("B_MaterialShininess",        GetShininess());
-    sp->Set("B_MaterialReceivesLighting", IsReceivesLighting() ? 1.0f : 0.0f);
+    sp->Set("B_MaterialReceivesLighting", IsReceivesLighting());
 
     float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
     sp->Set("B_Texture0",  GetTexture());

@@ -6,7 +6,7 @@ bool B_UseDiffuseColor;
 
 void InitMain()
 {
-    B_UseDiffuseColor      = false;
+    B_UseDiffuseColor      = true;
     B_Out_NormalWorld      = B_FragIn_NormalWorld;
     B_Out_ReceivesLighting = B_MaterialReceivesLighting;
     B_Out_Shininess        = B_MaterialShininess;
@@ -31,13 +31,21 @@ void EndMain()
     B_GIn_NormalDepth.z  = depthHigh;
     B_GIn_NormalDepth.w  = depthLow;
 
-    float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-    vec4 diffColor     = (B_UseDiffuseColor ? B_Out_DiffColor.rgba : vec4(1) );
-    vec4 outColor      = ambientLight * diffColor * B_Out_Color;
+    vec4 outColor;
+    if (B_UseDiffuseColor)
+    {
+        float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
+        outColor = vec4(B_Out_DiffColor.rgb * B_Out_Color.rgb * ambientLight,
+                        B_Out_DiffColor.a * B_Out_Color.a);
+    }
+    else
+    {
+        outColor = B_Out_Color;
+    }
 
-    B_Out_Color        = vec4( mix(B_SampleColor().rgb,
-                                   outColor.rgb, outColor.a), 1);
-    B_GIn_Color        = B_Out_Color;
+    B_Out_Color = vec4( mix(B_SampleColor().rgb,
+                            outColor.rgb, outColor.a), 1);
+    B_GIn_Color = B_Out_Color;
 }
 
 #include "Main.glsl"

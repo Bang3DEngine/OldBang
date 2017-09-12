@@ -30,8 +30,7 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
-                       true,
-                       improvedRenderRect);
+                       true, improvedRenderRect);
     m_lightMaterialScreen->UnBind();
 }
 

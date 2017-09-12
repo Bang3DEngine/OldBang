@@ -19,5 +19,6 @@ void Main()
                                       B_GetCameraPositionWorld() );
 
         B_Out_Color = vec4(B_SampleColor().rgb + pointLightApport, diffColor.a);
+        // B_Out_Color = vec4(vec3(B_SampleNormal().rgb), 1);
     }
 }

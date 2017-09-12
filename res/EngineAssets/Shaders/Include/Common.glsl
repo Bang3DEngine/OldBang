@@ -170,10 +170,7 @@ float B_DepthToLinear(float d)
     float B_SampleFlagsOffset(vec2 pixOffset)
       { return B_SampleFlags(B_ScreenUv + B_ScreenStep * pixOffset); }
 
-    vec3 B_GetCameraPositionWorld()
-    {
-        return B_ViewInv[3].xyz;
-    }
+    vec3 B_GetCameraPositionWorld() { return B_ViewInv[3].xyz; }
 
     vec3 B_ComputeWorldPosition(float depth)
     {

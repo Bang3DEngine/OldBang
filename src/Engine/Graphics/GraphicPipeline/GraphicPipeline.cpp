@@ -76,13 +76,15 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     {
         // Apply deferred lights to the whole scene
         renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
-        // renderRect = Rect::ScreenRect;
     }
+    renderRect = Rect::ScreenRect;
     ENSURE(renderRect != Rect::Zero);
 
     // We have marked from before the zone where we want to apply the effect
+    GL::SetStencilValue(1);
     GL::SetStencilFunc(GL::Function::Equal);
 
+    // m_gbuffer->ExportStencil(Path("stencil.png"), 64);
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->IsReceivesLighting()) )
     {
@@ -108,6 +110,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     GL::SetDepthMask(true); // Write depth
     GL::SetDepthFunc(GL::Function::LEqual);
 
+    GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     scene->Render(RenderPass::Scene_Lighted);
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
