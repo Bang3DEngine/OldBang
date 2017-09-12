@@ -3,7 +3,6 @@
 *.trace
 build*/
 *.user
-*.gen.h
 *.refl.h
 res/EngineAssets/tmp
 *refactor-cpp-class-name.sh
@@ -43,8 +42,3 @@ build/*
 
 # QtCreator
 *.autosave
-
-# Freetype
-!include/freetype/*.h
-include/freetype/ftcache.h
-

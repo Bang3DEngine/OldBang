@@ -9,10 +9,10 @@ NO_COLOR='\033[0m'
 LAST_HEADER_LENGTH=0
 
 function Success { 
-	echo -e "${GREEN}[ERROR]: $1${NO_COLOR}"
+	echo -e "${GREEN}[SUCCESS]: $1${NO_COLOR}"
 }
 function Warning { 
-	echo -e "${YELLOW}[ERROR]: $1${NO_COLOR}" 
+	echo -e "${YELLOW}[WARNING]: $1${NO_COLOR}" 
 }
 function Error {
 	echo -e "${RED}[ERROR]: $1${NO_COLOR}" 
