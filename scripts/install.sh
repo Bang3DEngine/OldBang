@@ -21,7 +21,7 @@ mkdir -p /opt/Bang
 cp -r res scripts /opt/Bang
 
 echo "Copying include's into /usr/include..."
-cp -r include /usr/include
+cp -r include/Bang /usr/include
 
 echo "Copying libBang.so into /usr/lib..."
 cp bin/Release/lib/libBang.so /usr/lib/libBang.so
