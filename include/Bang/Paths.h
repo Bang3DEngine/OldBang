@@ -12,6 +12,8 @@ NAMESPACE_BANG_BEGIN
 class Paths
 {
 public:
+    void InitPaths(const Path &engineRootPath);
+
     static Path ExecutablePath();
     static const Path& Engine();
     static Path EngineAssets();
@@ -43,7 +45,6 @@ private:
     Path c_projectRoot = Path::Empty;
 
     Paths();
-    void InitPaths(const Path &engineRootPath);
 
     static Paths* GetInstance();
 

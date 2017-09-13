@@ -9,32 +9,35 @@
 #include "Bang/SystemUtils.h"
 
 USING_NAMESPACE_BANG
-
 Paths::Paths()
 {
 }
 
 void Paths::InitPaths(const Path &engineRootPath)
 {
+    c_engineRoot = Path::Empty;
     if (!engineRootPath.IsEmpty())
     {
         c_engineRoot = engineRootPath;
     }
 
+    // Try current directory (some dirs up)
     if (!EngineAssets().IsDir())
     {
         c_engineRoot = Paths::ExecutablePath().GetDirectory()
                                               .GetDirectory()
                                               .GetDirectory();
+    }
+
+    // Try default installation path
+    if (!EngineAssets().IsDir())
+    {
+        c_engineRoot = Path("/opt/Bang");
         if (!EngineAssets().IsDir())
         {
-            c_engineRoot = Path("/opt/Bang");
-            if (!EngineAssets().IsDir())
-            {
-                Debug_Error("Bang is not properly installed. "
-                            "Can't find it in /opt.");
-                Application::Exit(1, true);
-            }
+            Debug_Error("Bang is not properly installed. "
+                        "Can't find it in /opt.");
+            Application::Exit(1, true);
         }
     }
 

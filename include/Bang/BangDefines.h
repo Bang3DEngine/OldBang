@@ -4,6 +4,9 @@
 #include <iostream>
 #include <type_traits>
 
+#define STRINGIFY_(s) #s
+#define STRINGIFY(s) STRINGIFY_(s)
+
 #define NAMESPACE_NAME       Bang
 #define USING_NAMESPACE_BANG using namespace NAMESPACE_NAME;
 #define NAMESPACE_BANG_BEGIN namespace NAMESPACE_NAME {

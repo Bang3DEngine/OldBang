@@ -14,8 +14,8 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
-#include "Bang/Project.h"
 #include "Bang/Image.h"
+#include "Bang/Project.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
 

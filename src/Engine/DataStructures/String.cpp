@@ -31,8 +31,9 @@ String::String(char c)
     *this = ToString(c);
 }
 
-String::String(const char *cstr) : m_str(cstr)
+String::String(const char *cstr)
 {
+    if (cstr != nullptr) { m_str = cstr; }
 }
 
 String::String(const ::std::string &stdstr) : m_str(stdstr)
