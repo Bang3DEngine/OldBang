@@ -184,7 +184,6 @@ ${ENGINE_SRC_DIR}/Graphics/General/Font.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Material.cpp
-${ENGINE_SRC_DIR}/Graphics/General/RenderSurface.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp

@@ -17,5 +17,5 @@ GameObject *Selection::GetOveredGameObject()
 
 SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 {
-    return GEngine::GetInstance()->GetCurrentSelectionFramebuffer();
+    return GEngine::GetInstance()->GetSelectionFramebuffer();
 }

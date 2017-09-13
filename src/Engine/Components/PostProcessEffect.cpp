@@ -36,7 +36,7 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     if (scenePostProcess || canvasPostProcess)
     {
         m_shaderProgram->Bind();
-        GBuffer *gbuffer = GEngine::GetInstance()->GetCurrentGBuffer();
+        GBuffer *gbuffer = GEngine::GetInstance()->GetGBuffer();
         gbuffer->ApplyPass(m_shaderProgram, true);
         m_shaderProgram->UnBind();
     }

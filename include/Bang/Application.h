@@ -29,7 +29,14 @@ public:
 
     virtual void CreateWindow();
     virtual int MainLoop();
+    virtual bool MainLoopIteration();
+
+    virtual void UpdateScene();
+    virtual void RenderScene();
+
     bool ProcessEvents();
+
+    void OnResize(int newWidth, int newHeight);
 
     GEngine            *GetGEngine() const;
     Input              *GetInput() const;

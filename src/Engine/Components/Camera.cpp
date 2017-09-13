@@ -10,6 +10,7 @@
 #include "Bang/Matrix4.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
+#include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 
@@ -94,6 +95,11 @@ void Camera::SetClearColor(const Color &color) { m_clearColor = color; }
 void Camera::SetFovDegrees(float fovDegrees) { this->m_fovDegrees = fovDegrees; }
 void Camera::SetZNear(float zNear) { this->m_zNear = zNear; }
 void Camera::SetZFar(float zFar) { this->m_zFar = zFar; }
+
+void Camera::SetRenderTexture(Texture2D *renderTexture)
+{
+    p_renderTexture = renderTexture;
+}
 void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
 {
     this->m_projMode = projMode;
@@ -104,6 +110,7 @@ float Camera::GetOrthoHeight() const { return m_orthoHeight; }
 float Camera::GetFovDegrees() const { return m_fovDegrees; }
 float Camera::GetZNear() const { return m_zNear; }
 float Camera::GetZFar() const { return m_zFar; }
+Texture2D *Camera::GetRenderTexture() const { return p_renderTexture; }
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 
 float Camera::GetOrthoWidth() const

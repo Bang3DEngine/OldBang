@@ -17,13 +17,11 @@ public:
 
     void CreateAttachment(GL::Attachment attachment, GL::ColorFormat texFormat);
 
-    Texture2D* GetAttachmentTexture(GL::Attachment attachment) const;
 
     virtual void SetAllColorDrawBuffers() const;
     void SetDrawBuffers(const Array<GL::Attachment> &attachments) const;
     void SetReadBuffer(GL::Attachment attachment) const;
-
-    const Array<GL::Attachment>& GetCurrentDrawAttachments() const;
+    void SetAttachmentTexture(Texture2D *tex, GL::Attachment attachment);
 
     Color ReadColor(int x, int y, GL::Attachment attachment) const;
     void Resize(int width, int height);
@@ -31,12 +29,14 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     Vector2 GetSize() const;
+    const Array<GL::Attachment>& GetCurrentDrawAttachments() const;
+    Texture2D* GetAttachmentTexture(GL::Attachment attachment) const;
+    GL::BindTarget GetGLBindTarget() const override;
 
     void Clear();
     virtual void ClearDepth(float clearDepth = 1.0f);
     void ClearColor(const Color &clearColor = Color::Zero);
 
-    GL::BindTarget GetGLBindTarget() const override;
     virtual void Bind() const override;
     virtual void UnBind() const override;
 

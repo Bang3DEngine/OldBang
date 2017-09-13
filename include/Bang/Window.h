@@ -6,7 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class RenderSurface;
+FORWARD class Texture2D;
 
 class Window
 {
@@ -16,26 +16,26 @@ public:
 
     void Initialize();
     void SwapBuffers() const;
-    void OnResize(int newWidth, int newHeight);
 
-    void Resize(int w, int h);
+    void Resize(int newWidth, int newHeight);
+    void OnResize(int newWidth, int newHeight);
 
     int GetWidth() const;
     int GetHeight() const;
     Vector2i GetSize() const;
+    Texture2D *GetScreenRenderTexture() const;
 
     static float GetAspectRatioS();
     static int GetHeightS();
     static int GetWidthS();
 
     static Window *GetInstance();
-    RenderSurface *GetRenderSurface() const;
 
 protected:
     SDL_Window *m_sdlWindow = nullptr;
     SDL_GLContext m_sdlGLContext;
 
-    RenderSurface *m_renderSurface = nullptr;
+    Texture2D *m_screenRenderTexture = nullptr;
 };
 
 NAMESPACE_BANG_END

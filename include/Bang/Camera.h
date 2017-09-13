@@ -6,6 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Texture2D;
 FORWARD class ShaderProgram;
 
 class Camera : public Component
@@ -29,6 +30,7 @@ public:
     void SetFovDegrees(float fovDegrees);
     void SetZNear(float zNear);
     void SetZFar(float zFar);
+    void SetRenderTexture(Texture2D *renderTexture);
     void SetProjectionMode(ProjectionMode projMode);
 
     const Color& GetClearColor() const;
@@ -41,6 +43,7 @@ public:
     void GetProjectionMatrix(Matrix4 *proj) const;
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
+    Texture2D *GetRenderTexture() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -55,10 +58,11 @@ protected:
     virtual ~Camera();
 
 private:
-    float m_orthoHeight  = 25.0f;
     Mesh *p_camMesh = nullptr;
+    Texture2D *p_renderTexture = nullptr;
 
     Color m_clearColor = Color(Color(0.3f), 1);
+    float m_orthoHeight  = 25.0f;
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;

@@ -3,9 +3,9 @@
 #include "Bang/GL.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/Texture2D.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/RenderSurface.h"
 
 USING_NAMESPACE_BANG
 
@@ -33,13 +33,13 @@ Window::Window()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     Initialize();
-    OnResize(GetWidth(), GetHeight());
+
+    m_screenRenderTexture = new Texture2D();
 }
 
 Window::~Window()
 {
     SDL_DestroyWindow(m_sdlWindow);
-    if (m_renderSurface) { delete m_renderSurface; }
 }
 
 void Window::Initialize()
@@ -55,9 +55,6 @@ void Window::Initialize()
     GL::Enable(GL::Test::Depth);
     GL::Enable(GL::Test::Stencil);
     GL::Enable(GL::Test::CullFace);
-
-    Vector2i windowSize = GetSize();
-    m_renderSurface = new RenderSurface(windowSize.x, windowSize.y);
 }
 
 void Window::SwapBuffers() const
@@ -70,16 +67,9 @@ void Window::Resize(int w, int h)
     SDL_SetWindowSize(m_sdlWindow, w, h);
 }
 
-void Window::OnResize(int w, int h)
+void Window::OnResize(int newWidth, int newHeight)
 {
-    GL::SetViewport(0, 0, w, h);
-
-    m_renderSurface->Resize(w, h);
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene)
-    {
-        activeScene->_OnResize(w,h);
-    }
+    m_screenRenderTexture->Resize(newWidth, newHeight);
 }
 
 int Window::GetWidth() const { return GetSize().x; }
@@ -89,6 +79,11 @@ Vector2i Window::GetSize() const
     int width, height;
     SDL_GetWindowSize(m_sdlWindow, &width, &height);
     return Vector2i(width, height);
+}
+
+Texture2D *Window::GetScreenRenderTexture() const
+{
+    return m_screenRenderTexture;
 }
 
 int Window::GetHeightS()
@@ -105,9 +100,3 @@ Window *Window::GetInstance()
 {
     return Application::GetInstance()->GetWindow();
 }
-
-RenderSurface *Window::GetRenderSurface() const
-{
-    return m_renderSurface;
-}
-

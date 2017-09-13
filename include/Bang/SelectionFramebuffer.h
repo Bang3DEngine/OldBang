@@ -14,6 +14,8 @@ FORWARD class ShaderProgram;
 class SelectionFramebuffer : public Framebuffer
 {
 public:
+    static const GL::Attachment AttColor = GL::Attachment::Color0;
+
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
@@ -24,7 +26,6 @@ public:
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
-    static const GL::Attachment AttColor = GL::Attachment::Color0;
     Texture2D *m_colorTexture = nullptr;
 
     Material *m_selectionMaterial = nullptr;

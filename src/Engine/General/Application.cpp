@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
@@ -69,6 +70,8 @@ void Application::CreateWindow()
 {
     m_window = new Window();
     m_gEngine = new GEngine();
+
+    m_window->Resize(m_window->GetWidth(), m_window->GetHeight());
 }
 
 int Application::MainLoop()
@@ -76,29 +79,40 @@ int Application::MainLoop()
     bool quit = false;
     while (!quit && !m_exit)
     {
-        m_time->OnFrameStarted();
 
-        // Process mouse and key events, so the Input is available in OnUpdate
-        // as accurate as possible.
-        // Lost events in between Update and Render will be delayed by Input.
-        m_input->ProcessEnqueuedEvents();
-        m_sceneManager->Update();
-
-        Scene *activeScene = SceneManager::GetActiveScene();
-        if (activeScene)
-        {
-            m_gEngine->Render(activeScene);
-        }
+        quit = MainLoopIteration();
         m_window->SwapBuffers();
-
-        m_input->OnFrameFinished();
-        m_time->OnFrameFinished();
-
-        quit = !ProcessEvents();
 
         SDL_Delay(RedrawDelay_ms);
     }
     return m_exitCode;
+}
+
+bool Application::MainLoopIteration()
+{
+    m_time->OnFrameStarted();
+
+    m_input->ProcessEnqueuedEvents();
+
+    UpdateScene();
+    RenderScene();
+
+    m_input->OnFrameFinished();
+    m_time->OnFrameFinished();
+
+    bool quit = !ProcessEvents();
+    return quit;
+}
+
+void Application::UpdateScene()
+{
+    m_sceneManager->Update();
+}
+
+void Application::RenderScene()
+{
+    Scene *activeScene = SceneManager::GetActiveScene();
+    if (activeScene) { m_gEngine->Render(activeScene); }
 }
 
 bool Application::ProcessEvents()
@@ -120,13 +134,22 @@ bool Application::ProcessEvents()
 
                 case SDL_WINDOWEVENT_RESIZED:
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    m_window->OnResize(event.window.data1, event.window.data2);
+                    OnResize(event.window.data1, event.window.data2);
                     break;
             }
             break;
         }
     }
     return true;
+}
+
+void Application::OnResize(int newWidth, int newHeight)
+{
+    m_gEngine->Resize(newWidth, newHeight);
+    m_window->OnResize(newWidth, newHeight);
+
+    Scene *activeScene = SceneManager::GetActiveScene();
+    if (activeScene) { activeScene->_OnResize(newWidth, newHeight); }
 }
 
 GEngine *Application::GetGEngine() const
