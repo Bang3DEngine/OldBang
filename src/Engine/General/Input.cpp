@@ -1,5 +1,6 @@
 #include "Bang/Input.h"
 
+#include "Bang/GL.h"
 #include "Bang/Time.h"
 #include "Bang/Screen.h"
 #include "Bang/Application.h"
@@ -391,12 +392,12 @@ bool Input::IsMouseInsideScreen()
 
 float Input::GetMouseAxisX()
 {
-    return Input::GetMouseDeltaX() / Screen::GetWidthS();
+    return Input::GetMouseDeltaX() / GL::GetViewportSize().x;
 }
 
 float Input::GetMouseAxisY()
 {
-    return Input::GetMouseDeltaY() / Screen::GetHeightS();
+    return Input::GetMouseDeltaY() / GL::GetViewportSize().y;
 }
 
 Vector2 Input::GetMouseAxis()
@@ -442,7 +443,7 @@ Vector2i Input::GetMouseCoords()
 Vector2 Input::GetMouseCoordsNDC()
 {
     Vector2f coordsNDC = Vector2f(Input::GetMouseCoords()) *
-                         Screen::GetPixelClipSizeS() * 2.0f - 1.0f;
+                         GL::GetViewportPixelSize() * 2.0f - 1.0f;
     return coordsNDC * Vector2f(1, -1);
 }
 

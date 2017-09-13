@@ -47,8 +47,8 @@ protected:
 
     Gizmos *GetGizmos() const;
 
-    friend class Screen;
     friend class Gizmos;
+    friend class Window;
     friend class Application;
     friend class SceneManager;
     friend class GPPass_G_Gizmos;

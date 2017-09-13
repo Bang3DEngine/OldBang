@@ -6,7 +6,6 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class Screen;
 FORWARD class ShaderProgram;
 
 class Camera : public Component

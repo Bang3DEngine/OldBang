@@ -1,40 +1,40 @@
 ﻿#include "Bang/GraphicPipeline.h"
 
 #include "Bang/GL.h"
-#include "Bang/Mesh.h"
 #include "Bang/VAO.h"
 #include "Bang/VBO.h"
+#include "Bang/Mesh.h"
 #include "Bang/Scene.h"
 #include "Bang/Light.h"
 #include "Bang/Input.h"
 #include "Bang/Screen.h"
 #include "Bang/Camera.h"
+#include "Bang/Window.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Texture.h"
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
-#include "Bang/GBuffer.h"
-#include "Bang/Texture.h"
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
-#include "Bang/MaterialFactory.h"
 #include "Bang/RenderTexture.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 
-GraphicPipeline::GraphicPipeline(Screen *screen)
+GraphicPipeline::GraphicPipeline(int width, int height)
 {
     m_gl = new GL();
     m_texUnitManager = new TextureUnitManager();
 
-    m_gbuffer = new GBuffer(screen->GetWidth(), screen->GetHeight());
-    m_selectionFB = new SelectionFramebuffer(screen->GetWidth(),
-                                             screen->GetHeight());
+    m_gbuffer = new GBuffer(width, height);
+    m_selectionFB = new SelectionFramebuffer(width, height);
 
     m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
@@ -48,10 +48,9 @@ GraphicPipeline::~GraphicPipeline()
     delete m_gl;
 }
 
-void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
+void GraphicPipeline::RenderScene(Scene *scene)
 {
     p_scene = scene; ENSURE(p_scene);
-    m_renderingInGame = inGame;
 
     Camera *camera = scene->GetCamera();
     if (camera) { camera->Bind(); }
@@ -162,7 +161,7 @@ void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     m_gl->ApplyToShaderProgram(sp);
     sp->Set("B_rectMinCoord", mask.GetMin());
     sp->Set("B_rectMaxCoord", mask.GetMax());
-    sp->Set("B_ScreenSize", Vector2f(Screen::GetSizeS()));
+    sp->Set("B_ScreenSize", Vector2f(GL::GetViewportSize()));
     RenderScreenPlane();
     sp->UnBind();
 }
@@ -194,8 +193,8 @@ void GraphicPipeline::RenderScreenPlane()
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
-    Screen *screen = Screen::GetInstance();
-    return screen ? screen->GetGraphicPipeline() : nullptr;
+    Window *win = Window::GetInstance();
+    return win ? win->GetGraphicPipeline() : nullptr;
 }
 
 void GraphicPipeline::OnResize(int newWidth, int newHeight)

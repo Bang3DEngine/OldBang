@@ -7,10 +7,9 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class GL;
 FORWARD class Scene;
-FORWARD class Screen;
-FORWARD class Renderer;
 FORWARD class Texture;
 FORWARD class GBuffer;
+FORWARD class Renderer;
 FORWARD class Framebuffer;
 FORWARD class ShaderProgram;
 FORWARD class TextureUnitManager;
@@ -22,10 +21,10 @@ FORWARD class SelectionFramebuffer;
 class GraphicPipeline
 {
 public:
-    GraphicPipeline(Screen *screen);
+    GraphicPipeline(int width, int height);
     virtual ~GraphicPipeline();
 
-    void RenderScene(Scene *scene, bool inGame);
+    void RenderScene(Scene *scene);
     void RenderRenderer(Renderer *rend);
     void RenderToScreen(Texture *fullScreenTexture);
     void ApplyScreenPass(ShaderProgram *sp,
@@ -51,9 +50,6 @@ private:
 
     GBuffer *m_gbuffer = nullptr;
     SelectionFramebuffer *m_selectionFB = nullptr;
-
-    // Rendering for the Game Screen or the Scene screen
-    bool m_renderingInGame = false;
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;

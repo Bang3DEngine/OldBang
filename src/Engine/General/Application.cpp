@@ -183,7 +183,7 @@ void Application::Exit(int returnCode, bool immediate)
     }
 }
 
-Window *Application::GetMainWindow() const
+Window *Application::GetWindow() const
 {
     return m_window;
 }

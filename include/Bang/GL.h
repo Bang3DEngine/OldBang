@@ -26,6 +26,11 @@ class GL
 public:
     using Enum = GLenum;
 
+    enum
+    {
+        Viewport = GL_VIEWPORT
+    };
+
     enum class Primitives
     {
         Points        = GL_POINTS,
@@ -360,6 +365,11 @@ public:
 
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
+
+    static Recti GetViewportRect();
+    static Vector2i GetViewportSize();
+    static float GetViewportAspectRatio();
+    static Vector2 GetViewportPixelSize();
 
     static void BufferDataVBO(int dataSize, const void *data,
                               GL::UsageHint usageHint);

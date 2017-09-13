@@ -109,7 +109,7 @@ Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 
 float Camera::GetOrthoWidth() const
 {
-   return GetOrthoHeight() * Screen::GetAspectRatioS();
+   return GetOrthoHeight() * GL::GetViewportAspectRatio();
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const
@@ -123,7 +123,7 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     if (m_projMode == ProjectionMode::Perspective)
     {
         *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatioS(),
+                    Math::Deg2Rad(m_fovDegrees), GL::GetViewportAspectRatio(),
                     m_zNear, m_zFar);
     }
     else //Ortho

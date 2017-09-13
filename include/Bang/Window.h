@@ -6,7 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class Screen;
+FORWARD class GraphicPipeline;
 
 class Window
 {
@@ -14,19 +14,29 @@ public:
     Window();
     virtual ~Window();
 
+
+    void Initialize();
     void Render() const;
-    void OnResize(int newWidth, int newHeight) const;
+    void OnResize(int newWidth, int newHeight);
+
+    void Resize(int w, int h);
 
     int GetWidth() const;
     int GetHeight() const;
-    Vector2 GetSize() const;
+    Vector2i GetSize() const;
 
-    virtual Screen *GetScreen() const;
+    static float GetAspectRatioS();
+    static int GetHeightS();
+    static int GetWidthS();
+
+    static Window *GetInstance();
+    GraphicPipeline *GetGraphicPipeline() const;
 
 protected:
     SDL_Window *m_sdlWindow = nullptr;
     SDL_GLContext m_sdlGLContext;
-    Screen *m_screen = nullptr;
+
+    GraphicPipeline *m_gPipeline = nullptr;
 };
 
 NAMESPACE_BANG_END

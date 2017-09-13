@@ -38,7 +38,7 @@ public:
     Resources          *GetResources() const;
     ImportFilesManager *GetImportFilesManager() const;
     BehaviourManager   *GetBehaviourManager() const;
-    Window             *GetMainWindow() const;
+    Window             *GetWindow() const;
 
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);

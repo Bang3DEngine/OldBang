@@ -565,6 +565,30 @@ void GL::SetLineWidth(float lineWidth)
     glLineWidth(lineWidth);
 }
 
+Recti GL::GetViewportRect()
+{
+    int viewportCoords[4];
+    GL::GetInteger(GL::Viewport, viewportCoords);
+    return Recti(viewportCoords[0], viewportCoords[1],
+                 viewportCoords[2], viewportCoords[3]);
+}
+
+Vector2i GL::GetViewportSize()
+{
+    return GL::GetViewportRect().GetSize();
+}
+
+float GL::GetViewportAspectRatio()
+{
+    Vector2i vpSize = GL::GetViewportSize();
+    return SCAST<float>(vpSize.x) / vpSize.y;
+}
+
+Vector2 GL::GetViewportPixelSize()
+{
+    return 1.0f / Vector2(GL::GetViewportSize());
+}
+
 void GL::BufferDataVBO(int dataSize, const void *data, GL::UsageHint usageHint)
 {
     glBufferData(GL_ARRAY_BUFFER, dataSize, data, GLCAST(usageHint));
@@ -674,7 +698,7 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
         Matrix4 modelNoTranslate = modelMatrix;
         modelNoTranslate.SetTranslate( Vector3(0,0,0) );
 
-        float ar = 1.0f / Screen::GetAspectRatioS();
+        float ar = 1.0f / GL::GetViewportAspectRatio();
         Matrix4 fixAR(ar, 0, 0, 0,
                        0, 1, 0, 0,
                        0, 0, 1, 0,
