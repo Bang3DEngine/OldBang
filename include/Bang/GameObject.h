@@ -143,7 +143,7 @@ private:
     friend class UIGameObject;
     friend class SceneManager;
     friend class RectTransform;
-    friend class GraphicPipeline;
+    friend class GEngine;
     friend class GameObjectFactory;
 };
 

@@ -1,4 +1,4 @@
-﻿#include "Bang/GraphicPipeline.h"
+﻿#include "Bang/GEngine.h"
 
 #include "Bang/GL.h"
 #include "Bang/VAO.h"
@@ -7,9 +7,8 @@
 #include "Bang/Scene.h"
 #include "Bang/Light.h"
 #include "Bang/Input.h"
-#include "Bang/Screen.h"
-#include "Bang/Camera.h"
 #include "Bang/Window.h"
+#include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/Texture.h"
 #include "Bang/ChronoGL.h"
@@ -17,64 +16,75 @@
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
+#include "Bang/Application.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
-#include "Bang/RenderTexture.h"
+#include "Bang/RenderSurface.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 
-GraphicPipeline::GraphicPipeline(int width, int height)
+GEngine::GEngine()
 {
     m_gl = new GL();
     m_texUnitManager = new TextureUnitManager();
-
-    m_gbuffer = new GBuffer(width, height);
-    m_selectionFB = new SelectionFramebuffer(width, height);
 
     m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
-GraphicPipeline::~GraphicPipeline()
+GEngine::~GEngine()
 {
-    delete m_gbuffer;
-    delete m_selectionFB;
     delete m_texUnitManager;
     delete m_gl;
 }
 
-void GraphicPipeline::RenderScene(Scene *scene)
+void GEngine::RenderCurrentScene(Camera *_camera)
 {
-    p_scene = scene; ENSURE(p_scene);
+    Scene *scene = GEngine::GetCurrentScene();
 
-    Camera *camera = scene->GetCamera();
+    Camera *camera = _camera;
+    if (!camera) { camera = scene->GetCamera(); }
     if (camera) { camera->Bind(); }
 
-    RenderGBuffer(scene);
-    RenderToScreen(m_gbuffer->GetAttachmentTexture(GBuffer::AttColor));
+    RenderSurface *currentRF = GEngine::GetCurrentRenderSurface();
+    if (!currentRF) { currentRF = Window::GetInstance()->GetRenderSurface(); }
+    GEngine::SetCurrentRenderSurface(currentRF);
 
-    RenderSelectionBuffer(scene);
-    // RenderToScreen(m_selectionFB->GetColorTexture());
+    GBuffer *gbuffer = GEngine::GetCurrentGBuffer();
+    RenderCurrentSceneToGBuffer(camera);
+    RenderToScreen(gbuffer->GetAttachmentTexture(GBuffer::AttColor));
+
+    SelectionFramebuffer *selFB = GEngine::GetCurrentSelectionFramebuffer();
+    RenderCurrentSceneToSelectionFramebuffer(camera);
+    // RenderToScreen(selFB->GetColorTexture());
 }
 
-void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
+void GEngine::Render(Scene *scene, Camera *camera)
 {
+    GEngine::SetCurrentScene(scene);
+    RenderCurrentScene(camera);
+}
+
+void GEngine::ApplyDeferredLights(Camera *camera, Renderer *rend)
+{
+    Scene *scene = GEngine::GetCurrentScene();
+    GBuffer *gbuffer = GEngine::GetCurrentGBuffer();
+
     // Limit rendering to the renderer visible rect
     Rect renderRect = Rect::ScreenRect;
-    Camera *sceneCam = p_scene->GetCamera();
     if (rend)
     {
-        renderRect = rend->gameObject->GetBoundingScreenRect(sceneCam, false);
+        renderRect = rend->gameObject->GetBoundingScreenRect(camera, false);
     }
     else
     {
         // Apply deferred lights to the whole scene
-        renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
+        renderRect = scene->GetBoundingScreenRect(camera, true);
     }
     renderRect = Rect::ScreenRect;
     ENSURE(renderRect != Rect::Zero);
@@ -87,23 +97,56 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->IsReceivesLighting()) )
     {
-        List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
+        List<Light*> lights = scene->GetComponentsInChildren<Light>();
         for (Light *light : lights)
         {
             if (!light || !light->IsEnabled(true)) { continue; }
-            light->ApplyLight(m_gbuffer, renderRect);
+            light->ApplyLight(gbuffer, renderRect);
         }
     }
 
     GL::SetStencilFunc(GL::Function::Always);
 }
 
-void GraphicPipeline::RenderGBuffer(Scene *scene)
+void GEngine::SetCurrentScene(Scene *scene)
 {
-    m_gbuffer->Bind();
-    Color bgColor = p_scene->GetCamera()->GetClearColor();
-    m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->SetAllColorDrawBuffers();
+    GEngine::GetInstance()->p_currentScene = scene;
+}
+
+void GEngine::SetCurrentRenderSurface(RenderSurface *renderSurface)
+{
+    GEngine::GetInstance()->p_currentRenderSurface = renderSurface;
+}
+
+Scene *GEngine::GetCurrentScene()
+{
+    return GEngine::GetInstance()->p_currentScene;
+}
+
+GBuffer *GEngine::GetCurrentGBuffer()
+{
+    return GEngine::GetCurrentRenderSurface()->GetGBuffer();
+}
+
+SelectionFramebuffer *GEngine::GetCurrentSelectionFramebuffer()
+{
+    return GEngine::GetCurrentRenderSurface()->GetSelectionFramebuffer();
+}
+
+RenderSurface *GEngine::GetCurrentRenderSurface()
+{
+    return GEngine::GetInstance()->p_currentRenderSurface;
+}
+
+void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
+{
+    Scene *scene = GEngine::GetCurrentScene();
+    GBuffer *gbuffer = GEngine::GetCurrentGBuffer();
+
+    gbuffer->Bind();
+    Color bgColor = camera->GetClearColor();
+    gbuffer->ClearBuffersAndBackground(bgColor);
+    gbuffer->SetAllColorDrawBuffers();
 
     // GBuffer Scene rendering
     GL::SetDepthMask(true); // Write depth
@@ -113,7 +156,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     scene->Render(RenderPass::Scene_Lighted);
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
-    ApplyDeferredLights();
+    ApplyDeferredLights(camera);
 
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
@@ -121,7 +164,7 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     GL::ClearStencilBuffer();
 
     // GBuffer Canvas rendering
-    m_gbuffer->SetAllColorDrawBuffers();
+    gbuffer->SetAllColorDrawBuffers();
     GL::SetDepthMask(false);
     GL::SetDepthFunc(GL::Function::Always);
     scene->Render(RenderPass::Canvas);
@@ -134,28 +177,32 @@ void GraphicPipeline::RenderGBuffer(Scene *scene)
     GL::SetDepthFunc(GL::Function::LEqual);
     scene->RenderGizmos();
 
-    m_gbuffer->UnBind();
+    gbuffer->UnBind();
 }
-void GraphicPipeline::RenderSelectionBuffer(Scene *scene)
+
+void GEngine::RenderCurrentSceneToSelectionFramebuffer(Camera *camera)
 {
-    m_selectionFB->Bind();
+    Scene *scene = GEngine::GetCurrentScene();
+    SelectionFramebuffer *selFB = GEngine::GetCurrentSelectionFramebuffer();
+
+    selFB->Bind();
     GL::ClearStencilBuffer();
-    m_selectionFB->ClearDepth();
-    m_selectionFB->ClearColor(Color::One);
+    selFB->ClearDepth();
+    selFB->ClearColor(Color::One);
 
     // Selection rendering
-    m_selectionFB->PrepareForRender(scene);
+    selFB->PrepareForRender(scene);
     scene->Render(RenderPass::Scene_Lighted);
     scene->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
     scene->Render(RenderPass::Canvas);
     scene->RenderGizmos();
 
-    m_selectionFB->UnBind();
+    selFB->UnBind();
 }
 
 
-void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
+void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
     m_gl->ApplyToShaderProgram(sp);
@@ -166,20 +213,20 @@ void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     sp->UnBind();
 }
 
-void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
+void GEngine::RenderToScreen(Texture *fullScreenTexture)
 {
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
-    m_gbuffer->PrepareForRender(sp);
+    // gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", fullScreenTexture);
 
-    GraphicPipeline::RenderScreenPlane();
+    GEngine::RenderScreenPlane();
 
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GraphicPipeline::RenderScreenPlane()
+void GEngine::RenderScreenPlane()
 {
     GL::SetWireframe(false);
     GL::SetDepthFunc(GL::Function::Always);
@@ -191,47 +238,39 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetDepthFunc(GL::Function::LEqual);
 }
 
-GraphicPipeline* GraphicPipeline::GetActive()
+GEngine* GEngine::GetInstance()
 {
-    Window *win = Window::GetInstance();
-    return win ? win->GetGraphicPipeline() : nullptr;
+    Application *app = Application::GetInstance();
+    return app ? app->GetGEngine() : nullptr;
 }
 
-void GraphicPipeline::OnResize(int newWidth, int newHeight)
+void GEngine::Render(Renderer *rend)
 {
-    m_gbuffer->Resize(newWidth, newHeight);
-    m_selectionFB->Resize(newWidth, newHeight);
-}
-
-void GraphicPipeline::Render(Renderer *rend)
-{
-    if (GL::IsBound(m_gbuffer))
+    Scene *scene = GEngine::GetCurrentScene();
+    GBuffer *gbuffer = GEngine::GetCurrentGBuffer();
+    SelectionFramebuffer *selFB = GEngine::GetCurrentSelectionFramebuffer();
+    if (GL::IsBound(gbuffer))
     {
         rend->Bind();
         Material *rendMat = rend->GetMaterial();
 
         if (rend->NeedsReadingColorBuffer())
         {
-            Camera *cam = p_scene->GetCamera();
-            m_gbuffer->PrepareColorReadBuffer(rend->GetBoundingRect(cam));
+            Camera *cam = scene->GetCamera();
+            gbuffer->PrepareColorReadBuffer(rend->GetBoundingRect(cam));
         }
-        m_gbuffer->PrepareForRender(rendMat->GetShaderProgram());
+        gbuffer->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();
         rend->UnBind();
     }
-    else if (GL::IsBound(m_selectionFB))
+    else if (GL::IsBound(selFB))
     {
-        m_selectionFB->RenderForSelectionBuffer(rend);
+        selFB->RenderForSelectionBuffer(rend);
     }
 }
 
-GL *GraphicPipeline::GetGL() const { return m_gl; }
-GBuffer *GraphicPipeline::GetGBuffer() { return m_gbuffer; }
-SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
-{
-    return m_selectionFB;
-}
-TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
+GL *GEngine::GetGL() const { return m_gl; }
+TextureUnitManager *GEngine::GetTextureUnitManager() const
 {
     return m_texUnitManager;
 }

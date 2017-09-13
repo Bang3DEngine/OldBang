@@ -45,7 +45,7 @@ private:
     void ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const;
     virtual Rect GetRenderRect(Camera *cam) const;
 
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

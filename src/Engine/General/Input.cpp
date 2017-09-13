@@ -2,7 +2,6 @@
 
 #include "Bang/GL.h"
 #include "Bang/Time.h"
-#include "Bang/Screen.h"
 #include "Bang/Application.h"
 
 USING_NAMESPACE_BANG

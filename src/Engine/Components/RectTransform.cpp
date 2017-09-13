@@ -2,7 +2,6 @@
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
-#include "Bang/Screen.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Matrix4.h"
 #include "Bang/GameObject.h"

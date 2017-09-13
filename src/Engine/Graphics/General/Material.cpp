@@ -1,7 +1,6 @@
 #include "Bang/Material.h"
 
 #include "Bang/Paths.h"
-#include "Bang/Screen.h"
 #include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Vector4.h"

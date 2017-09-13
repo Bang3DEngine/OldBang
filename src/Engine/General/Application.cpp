@@ -9,10 +9,9 @@
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Paths.h"
-#include "Bang/Screen.h"
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
-#include "Bang/Screen.h"
+#include "Bang/GEngine.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
@@ -57,6 +56,7 @@ Application::~Application()
     delete m_paths;
     delete m_input;
     delete m_window;
+    delete m_gEngine;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_behaviourManager;
@@ -68,6 +68,7 @@ Application::~Application()
 void Application::CreateWindow()
 {
     m_window = new Window();
+    m_gEngine = new GEngine();
 }
 
 int Application::MainLoop()
@@ -82,7 +83,13 @@ int Application::MainLoop()
         // Lost events in between Update and Render will be delayed by Input.
         m_input->ProcessEnqueuedEvents();
         m_sceneManager->Update();
-        if (m_window) { m_window->Render(); }
+
+        Scene *activeScene = SceneManager::GetActiveScene();
+        if (activeScene)
+        {
+            m_gEngine->Render(activeScene);
+        }
+        m_window->SwapBuffers();
 
         m_input->OnFrameFinished();
         m_time->OnFrameFinished();
@@ -120,6 +127,11 @@ bool Application::ProcessEvents()
         }
     }
     return true;
+}
+
+GEngine *Application::GetGEngine() const
+{
+    return m_gEngine;
 }
 
 Input *Application::GetInput() const

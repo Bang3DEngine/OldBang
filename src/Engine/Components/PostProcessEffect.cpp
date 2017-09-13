@@ -6,7 +6,7 @@
 #include "Bang/GBuffer.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 
 USING_NAMESPACE_BANG
 
@@ -36,7 +36,7 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     if (scenePostProcess || canvasPostProcess)
     {
         m_shaderProgram->Bind();
-        GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
+        GBuffer *gbuffer = GEngine::GetInstance()->GetCurrentGBuffer();
         gbuffer->ApplyPass(m_shaderProgram, true);
         m_shaderProgram->UnBind();
     }

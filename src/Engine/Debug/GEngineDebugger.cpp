@@ -1,4 +1,4 @@
-#include "Bang/GraphicPipelineDebugger.h"
+#include "Bang/GEngineDebugger.h"
 
 #include "Bang/Paths.h"
 #include "Bang/File.h"
@@ -7,23 +7,23 @@
 
 USING_NAMESPACE_BANG
 
-Path GraphicPipelineDebugger::c_debugDir = Path("/home/sephirot47/Bang/tmp");
+Path GEngineDebugger::c_debugDir = Path("/home/sephirot47/Bang/tmp");
 
-GraphicPipelineDebugger::GraphicPipelineDebugger()
+GEngineDebugger::GEngineDebugger()
 {
 
 }
 
-void GraphicPipelineDebugger::Reset()
+void GEngineDebugger::Reset()
 {
     if (Input::GetKeyDown(Input::Key::Q))
     {
-        File::Remove(GraphicPipelineDebugger::c_debugDir);
-        File::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
+        File::Remove(GEngineDebugger::c_debugDir);
+        File::CreateDirectory(GEngineDebugger::c_debugDir);
     }
 }
 
-void GraphicPipelineDebugger::TakeGBufferShot(GBuffer *gbuffer,
+void GEngineDebugger::TakeGBufferShot(GBuffer *gbuffer,
                                               GL::Attachment att,
                                               const String &screenshotName)
 {
@@ -31,13 +31,13 @@ void GraphicPipelineDebugger::TakeGBufferShot(GBuffer *gbuffer,
     {
         String fileName = String::ToString( int(Time::GetNow()) ) + "_"
                           + screenshotName;
-        Path filepath = GraphicPipelineDebugger::c_debugDir
+        Path filepath = GEngineDebugger::c_debugDir
                             .Append(fileName).AppendExtension("bmp");
         gbuffer->Export(att, filepath, true);
     }
 }
 
-void GraphicPipelineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
+void GEngineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
                                                      const String &screenshotName)
 {
 }

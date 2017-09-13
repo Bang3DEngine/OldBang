@@ -13,6 +13,7 @@ FORWARD class Input;
 FORWARD class Scene;
 FORWARD class Paths;
 FORWARD class Window;
+FORWARD class GEngine;
 FORWARD class Resources;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
@@ -30,6 +31,7 @@ public:
     virtual int MainLoop();
     bool ProcessEvents();
 
+    GEngine            *GetGEngine() const;
     Input              *GetInput() const;
     Time               *GetTime() const;
     Paths              *GetPaths() const;
@@ -49,6 +51,7 @@ protected:
     const int RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;
 
+    GEngine            *m_gEngine            = nullptr;
     Window             *m_window             = nullptr;
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;

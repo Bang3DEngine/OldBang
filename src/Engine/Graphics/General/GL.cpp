@@ -2,12 +2,11 @@
 
 #include "Bang/VAO.h"
 #include "Bang/Debug.h"
-#include "Bang/Screen.h"
 #include "Bang/Matrix3.h"
-#include "Bang/GLObject.h"
+#include "Bang/GEngine.h"
 #include "Bang/Texture.h"
+#include "Bang/GLObject.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
 
 USING_NAMESPACE_BANG
 
@@ -947,7 +946,7 @@ GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
 
 GL *GL::GetActive()
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    GEngine *gp = GEngine::GetInstance();
     return gp ? gp->GetGL() : nullptr;
 }
 

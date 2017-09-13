@@ -1,7 +1,7 @@
 #include "Bang/TextureUnitManager.h"
 
 #include "Bang/Texture.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 
 USING_NAMESPACE_BANG
 
@@ -12,7 +12,7 @@ TextureUnitManager::TextureUnitManager()
 
 TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    GEngine *gp = GEngine::GetInstance();
     TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnit unitToUse = 0;
@@ -54,7 +54,7 @@ void TextureUnitManager::UnBindTexture(const Texture *tex)
 
 void TextureUnitManager::UnBindTexture(GLId textureId)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    GEngine *gp = GEngine::GetInstance();
     TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnitMap::Iterator it = tm->m_textureIdToUnit.Find(textureId);

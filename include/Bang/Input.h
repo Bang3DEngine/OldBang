@@ -228,7 +228,6 @@ private:
     void ProcessEnqueuedEvents();
     void OnFrameFinished();
 
-    friend class Screen;
     friend class Application;
 };
 

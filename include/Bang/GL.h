@@ -441,7 +441,7 @@ private:
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;
 
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

@@ -11,7 +11,6 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Renderer.h"
-#include "Bang/Screen.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
@@ -23,7 +22,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SingleLineRenderer.h"
 

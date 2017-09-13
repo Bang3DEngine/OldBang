@@ -53,18 +53,18 @@ public:
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
-    RenderTexture *m_normalTexture       = nullptr;
-    RenderTexture *m_diffuseTexture      = nullptr;
-    RenderTexture *m_miscTexture         = nullptr;
-    RenderTexture *m_colorTexture        = nullptr;
-    RenderTexture *m_colorReadTexture    = nullptr;
-    RenderTexture *m_depthStencilTexture = nullptr;
+    Texture2D *m_normalTexture       = nullptr;
+    Texture2D *m_diffuseTexture      = nullptr;
+    Texture2D *m_miscTexture         = nullptr;
+    Texture2D *m_colorTexture        = nullptr;
+    Texture2D *m_colorReadTexture    = nullptr;
+    Texture2D *m_depthStencilTexture = nullptr;
 
     mutable bool m_willReadFromColorRead = false;
 
     void RenderScreenPlane();
 
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

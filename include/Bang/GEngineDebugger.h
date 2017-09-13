@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class GraphicPipelineDebugger
+class GEngineDebugger
 {
 public:
     static Path c_debugDir;
@@ -17,7 +17,7 @@ public:
                                        const String &screenshotName);
 
 private:
-    GraphicPipelineDebugger();
+    GEngineDebugger();
 };
 
 NAMESPACE_BANG_END

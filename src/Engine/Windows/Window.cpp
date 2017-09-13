@@ -5,7 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/RenderSurface.h"
 
 USING_NAMESPACE_BANG
 
@@ -32,8 +32,6 @@ Window::Window()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_SetWindowBrightness(m_sdlWindow, 0.5f);
-
     Initialize();
     OnResize(GetWidth(), GetHeight());
 }
@@ -41,7 +39,7 @@ Window::Window()
 Window::~Window()
 {
     SDL_DestroyWindow(m_sdlWindow);
-    if (m_gPipeline) { delete m_gPipeline; }
+    if (m_renderSurface) { delete m_renderSurface; }
 }
 
 void Window::Initialize()
@@ -59,17 +57,11 @@ void Window::Initialize()
     GL::Enable(GL::Test::CullFace);
 
     Vector2i windowSize = GetSize();
-    m_gPipeline = new GraphicPipeline(windowSize.x, windowSize.y);
+    m_renderSurface = new RenderSurface(windowSize.x, windowSize.y);
 }
 
-void Window::Render() const
+void Window::SwapBuffers() const
 {
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene)
-    {
-        m_gPipeline->RenderScene(activeScene);
-    }
-
     SDL_GL_SwapWindow(m_sdlWindow);
 }
 
@@ -80,11 +72,9 @@ void Window::Resize(int w, int h)
 
 void Window::OnResize(int w, int h)
 {
-    ENSURE(m_gPipeline);
-
     GL::SetViewport(0, 0, w, h);
 
-    m_gPipeline->OnResize(w, h);
+    m_renderSurface->Resize(w, h);
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -116,8 +106,8 @@ Window *Window::GetInstance()
     return Application::GetInstance()->GetWindow();
 }
 
-GraphicPipeline *Window::GetGraphicPipeline() const
+RenderSurface *Window::GetRenderSurface() const
 {
-    return m_gPipeline;
+    return m_renderSurface;
 }
 

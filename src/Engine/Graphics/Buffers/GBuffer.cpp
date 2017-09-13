@@ -3,9 +3,9 @@
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
-#include "Bang/RenderTexture.h"
+#include "Bang/Texture2D.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 #include "Bang/TextureUnitManager.h"
 
 USING_NAMESPACE_BANG
@@ -60,7 +60,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 
     SetColorDrawBuffer();
 
-    GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
+    GEngine::GetInstance()->ApplyScreenPass(sp, mask);
 
     GL::SetStencilOp(prevStencilOp);
 }

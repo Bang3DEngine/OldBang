@@ -160,7 +160,7 @@ ${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
-${ENGINE_SRC_DIR}/Debug/GraphicPipelineDebugger.cpp
+${ENGINE_SRC_DIR}/Debug/GEngineDebugger.cpp
 ${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
@@ -184,7 +184,7 @@ ${ENGINE_SRC_DIR}/Graphics/General/Font.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Image.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Material.cpp
-${ENGINE_SRC_DIR}/Graphics/General/RenderTexture.cpp
+${ENGINE_SRC_DIR}/Graphics/General/RenderSurface.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
@@ -193,7 +193,7 @@ ${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
-${ENGINE_SRC_DIR}/Graphics/GraphicPipeline/GraphicPipeline.cpp
+${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp

@@ -52,7 +52,7 @@ protected:
     friend class Application;
     friend class SceneManager;
     friend class GPPass_G_Gizmos;
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

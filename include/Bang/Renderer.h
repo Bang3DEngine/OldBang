@@ -78,7 +78,7 @@ private:
     Material *m_materialCopy = nullptr;
     RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

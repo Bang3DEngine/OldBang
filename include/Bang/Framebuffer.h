@@ -9,8 +9,6 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class RenderTexture;
-
 class Framebuffer : public GLObject
 {
 public:
@@ -19,7 +17,7 @@ public:
 
     void CreateAttachment(GL::Attachment attachment, GL::ColorFormat texFormat);
 
-    RenderTexture* GetAttachmentTexture(GL::Attachment attachment) const;
+    Texture2D* GetAttachmentTexture(GL::Attachment attachment) const;
 
     virtual void SetAllColorDrawBuffers() const;
     void SetDrawBuffers(const Array<GL::Attachment> &attachments) const;
@@ -51,7 +49,7 @@ protected:
     int m_width = 0;
     int m_height = 0;
     Array<GL::Attachment> m_attachments;
-    Map<GL::Attachment, RenderTexture*> m_attachments_To_Texture;
+    Map<GL::Attachment, Texture2D*> m_attachments_To_Texture;
 
     void PushDrawAttachmentIds();
     void PopDrawAttachmentIds();

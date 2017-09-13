@@ -20,12 +20,12 @@ public:
     void PrepareForRender(const Scene *scene);
     void RenderForSelectionBuffer(Renderer *renderer);
 
-    RenderTexture *GetColorTexture() const;
+    Texture2D *GetColorTexture() const;
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
     static const GL::Attachment AttColor = GL::Attachment::Color0;
-    RenderTexture *m_colorTexture = nullptr;
+    Texture2D *m_colorTexture = nullptr;
 
     Material *m_selectionMaterial = nullptr;
 
@@ -38,7 +38,7 @@ private:
     Color GetSelectionColor(GameObject *go) const;
 
     friend class Gizmos;
-    friend class GraphicPipeline;
+    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

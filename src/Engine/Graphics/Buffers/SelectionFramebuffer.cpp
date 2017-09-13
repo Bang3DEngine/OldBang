@@ -3,13 +3,12 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Input.h"
-#include "Bang/Screen.h"
 #include "Bang/Vector3.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
+#include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/RenderTexture.h"
 
 USING_NAMESPACE_BANG
 
@@ -93,12 +92,11 @@ Color SelectionFramebuffer::MapIdToColor(long id)
 {
     constexpr int C = 256;
     Color color =
-            Color(
-                    double(   id                % C),
-                    double(  (id / C)           % C),
-                    double( ((id / C) / C)      % C),
-                    double((((id / C) / C) / C) % C)
-                   );
+            Color(double(   id                % C),
+                  double(  (id / C)           % C),
+                  double( ((id / C) / C)      % C),
+                  double((((id / C) / C) / C) % C)
+                 );
    return color / float(C);
 }
 
@@ -111,7 +109,7 @@ long SelectionFramebuffer::MapColorToId(const Color &color)
            long(color.a * C * C * C * C);
 }
 
-RenderTexture *SelectionFramebuffer::GetColorTexture() const
+Texture2D *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }

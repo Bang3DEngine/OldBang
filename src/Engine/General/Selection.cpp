@@ -1,8 +1,7 @@
 #include "Bang/Selection.h"
 
 #include "Bang/Input.h"
-#include "Bang/Screen.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
@@ -18,5 +17,5 @@ GameObject *Selection::GetOveredGameObject()
 
 SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 {
-    return GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    return GEngine::GetInstance()->GetCurrentSelectionFramebuffer();
 }

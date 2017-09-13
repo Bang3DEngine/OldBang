@@ -11,7 +11,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/GraphicPipeline.h"
+#include "Bang/GEngine.h"
 
 USING_NAMESPACE_BANG
 
@@ -30,7 +30,7 @@ void Renderer::OnRender(RenderPass renderPass)
     Component::OnRender(renderPass);
     if (IsVisible() && renderPass == GetRenderPass())
     {
-        GraphicPipeline::GetActive()->Render(this);
+        GEngine::GetInstance()->Render(this);
     }
 }
 void Renderer::OnRender() { }

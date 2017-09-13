@@ -6,7 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class GraphicPipeline;
+FORWARD class RenderSurface;
 
 class Window
 {
@@ -14,9 +14,8 @@ public:
     Window();
     virtual ~Window();
 
-
     void Initialize();
-    void Render() const;
+    void SwapBuffers() const;
     void OnResize(int newWidth, int newHeight);
 
     void Resize(int w, int h);
@@ -30,13 +29,13 @@ public:
     static int GetWidthS();
 
     static Window *GetInstance();
-    GraphicPipeline *GetGraphicPipeline() const;
+    RenderSurface *GetRenderSurface() const;
 
 protected:
     SDL_Window *m_sdlWindow = nullptr;
     SDL_GLContext m_sdlGLContext;
 
-    GraphicPipeline *m_gPipeline = nullptr;
+    RenderSurface *m_renderSurface = nullptr;
 };
 
 NAMESPACE_BANG_END

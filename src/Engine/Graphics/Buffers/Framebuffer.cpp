@@ -7,7 +7,7 @@
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Vector2.h"
-#include "Bang/RenderTexture.h"
+#include "Bang/Texture2D.h"
 
 USING_NAMESPACE_BANG
 
@@ -32,7 +32,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
 {
     ASSERT(GL::IsBound(this));
     GL::ClearError();
-    RenderTexture *tex = new RenderTexture();
+    Texture2D *tex = new Texture2D();
     tex->Bind();
     tex->SetInternalFormat(texFormat);
     tex->CreateEmpty(GetWidth(), GetHeight());
@@ -50,7 +50,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
     tex->UnBind();
 }
 
-RenderTexture *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
+Texture2D *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
 {
     if (!m_attachments_To_Texture.ContainsKey(attachment)) { return nullptr; }
     return m_attachments_To_Texture.Get(attachment);
@@ -84,7 +84,7 @@ const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
 Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     Bind();
-    RenderTexture *t = GetAttachmentTexture(attachment);
+    Texture2D *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
     Byte color[4];
     GL::ReadPixels(x, t->GetHeight() - y, 1, 1,
@@ -104,7 +104,7 @@ void Framebuffer::Resize(int width, int height)
 
     for (auto it : m_attachments_To_Texture)
     {
-        RenderTexture *t = it.second;
+        Texture2D *t = it.second;
         if (t)
         {
             GL::ClearError();
