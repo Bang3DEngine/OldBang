@@ -82,6 +82,36 @@ void UIDirLayout::OnUpdate()
         ++i;
     }
 
+    // Apply flexibleSizes
+    i = 0;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
+        if (!cle) { continue; }
+
+        int pxToAdd = 0;
+        if (m_vertical)
+        {
+            float flexHeight = cle->GetFlexibleHeight();
+            float prefHeight = cle->GetPreferredHeight();
+            pxToAdd = Math::Min(pxSizeAvailableSize,
+                                Math::Round<int>(flexHeight * prefHeight));
+        }
+        else
+        {
+            float flexWidth = cle->GetFlexibleWidth();
+            float prefWidth = cle->GetPreferredWidth();
+            pxToAdd = Math::Min(pxSizeAvailableSize,
+                                Math::Round<int>(flexWidth * prefWidth));
+        }
+
+        pxToAdd = Math::Max(pxToAdd, 0);
+        childrenSizes[i]    += pxToAdd;
+        pxSizeAvailableSize -= pxToAdd;
+        ++i;
+    }
+
+    // Apply actual calculation to RectTransforms Margins
     i = 0;
     int marginUntilNow = 0;
     for (GameObject *child : gameObject->GetChildren())
