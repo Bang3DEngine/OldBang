@@ -47,6 +47,8 @@ void UITextRenderer::OnRender()
 
 void UITextRenderer::OnRender(RenderPass renderPass)
 {
+    if (m_hasChanged) { RefreshMesh(); }
+
     if (!IsOverlapping())
     {
         // Render all quads at the same time
@@ -61,15 +63,6 @@ void UITextRenderer::OnRender(RenderPass renderPass)
             m_currentRenderingChar = i;
             Renderer::OnRender(renderPass);
         }
-    }
-}
-
-void UITextRenderer::OnUpdate()
-{
-    UIRenderer::OnUpdate();
-    if (m_hasChanged)
-    {
-        RefreshMesh();
     }
 }
 
@@ -201,10 +194,10 @@ void UITextRenderer::RefreshMesh()
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
 
-        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
 
         Rect charRectLocalNDC(
                     rt->FromPixelsPointToLocalNDC( Vector2i(minPxPerf) ),
@@ -389,6 +382,13 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
+    text->SetTextColor( GetTextColor() );
+    text->SetBlurriness( GetBlurriness() );
+    text->SetAlphaThreshold( GetAlphaThreshold() );
+    text->SetOverlapping( IsOverlapping() );
+    text->SetOutlineWidth( GetOutlineWidth() );
+    text->SetOutlineColor( GetOutlineColor() );
+    text->SetOutlineBlurriness( GetOutlineBlurriness() );
     text->SetSpacingMultiplier( GetSpacingMultiplier() );
     text->SetWrapping( IsWrapping() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );

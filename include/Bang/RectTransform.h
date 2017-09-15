@@ -25,6 +25,7 @@ public:
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
     void SetAnchorMax(const Vector2 &anchorMax);
+    void SetAnchors(const Vector2 &anchorPoint);
     void SetAnchors(const Vector2 &anchorMin, const Vector2 &anchorMax);
 
     int GetMarginLeft()  const;

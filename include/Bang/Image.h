@@ -6,10 +6,10 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
+#include "Bang/AspectRatioMode.h"
 
 NAMESPACE_BANG_BEGIN
 
-enum class ImageAspectRatioMode {Ignore, Keep, KeepExceeding};
 enum class ImageResizeMode {Nearest, Linear};
 
 template<class T>
@@ -37,7 +37,7 @@ public:
 
     void AddMargins(const Vector2i& margins,
                     const Color &marginColor = Color::Zero,
-                    ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
+                    AspectRatioMode arMode = AspectRatioMode::Ignore);
 
     void AddMarginsToMatchAspectRatio(const Vector2i &aspectRatioSizes,
                                       const Color &marginColor = Color::Zero);
@@ -57,10 +57,10 @@ public:
 
     void Resize(const Vector2i &newSize,
                 ImageResizeMode resizeMode = ImageResizeMode::Linear,
-                ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
+                AspectRatioMode arMode = AspectRatioMode::Ignore);
     void Resize(int newWidth, int newHeight,
                 ImageResizeMode resizeMode = ImageResizeMode::Linear,
-                ImageAspectRatioMode arMode = ImageAspectRatioMode::Ignore);
+                AspectRatioMode arMode = AspectRatioMode::Ignore);
 
     void FillTransparentPixels(const Color &color);
 
@@ -85,10 +85,6 @@ public:
 private:
     Vector2i m_size = Vector2i::Zero;
     Array<T> m_pixels;
-
-    static Vector2i GetAspectRatioedSize(const Vector2i& targetSize,
-                                         const Vector2i& currentSize,
-                                         ImageAspectRatioMode aspectRatioMode);
 };
 
 template class Image<Byte>;

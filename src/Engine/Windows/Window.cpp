@@ -17,11 +17,12 @@ Window::Window()
         return;
     }
 
+    Vector2i winSize(512);
     m_sdlWindow = SDL_CreateWindow("Bang",
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
-                                   512, 512,
-                                   SDL_WINDOW_RESIZABLE |
+                                   winSize.x, winSize.y,
+                                   SDL_WINDOW_RESIZABLE  |
                                    SDL_WINDOW_OPENGL);
 
     m_sdlGLContext = SDL_GL_CreateContext(m_sdlWindow);

@@ -3,6 +3,7 @@
 
 #include "Bang/Texture2D.h"
 #include "Bang/UIRenderer.h"
+#include "Bang/AspectRatioMode.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -15,14 +16,17 @@ public:
     virtual ~UIImageRenderer();
 
     // UIRenderer
+    virtual void OnUpdate() override;
     virtual void OnRender() override;
 
-    void SetTexture(const Path &imagePath);
-    void SetTexture(Texture2D *imageTexture);
+    void SetImageTexture(const Path &imagePath);
+    void SetImageTexture(Texture2D *imageTexture);
     void SetTint(const Color& tint);
+    void SetAspectRatioMode(AspectRatioMode arMode);
 
     const Color& GetTint() const;
     Texture2D *GetImageTexture() const;
+    AspectRatioMode GetAspectRatioMode() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -34,6 +38,12 @@ public:
 private:
     Mesh *p_quadMesh = nullptr;
     Texture2D *m_imageTexture = nullptr;
+    AspectRatioMode m_aspectRatioMode = AspectRatioMode::Ignore;
+
+    Vector2i m_prevRectSize = Vector2i::Zero;
+    Vector2i m_prevImageTextureSize = Vector2i::Zero;
+
+    void UpdateQuadUvsToMatchAspectRatioMode();
 };
 
 NAMESPACE_BANG_END

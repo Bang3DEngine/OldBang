@@ -33,10 +33,10 @@ public:
 
     virtual void UpdateScene();
     virtual void RenderScene();
+    virtual void OnResize(int newWidth, int newHeight);
 
     bool ProcessEvents();
 
-    void OnResize(int newWidth, int newHeight);
 
     GEngine            *GetGEngine() const;
     Input              *GetInput() const;

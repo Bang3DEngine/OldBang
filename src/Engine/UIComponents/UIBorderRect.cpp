@@ -37,13 +37,6 @@ void UIBorderRect::OnStart()
 void UIBorderRect::OnRender(RenderPass rp)
 {
     Component::OnRender(rp);
-    p_lineRenderer->Renderer::OnRender(rp);
-}
-
-void UIBorderRect::OnUpdate()
-{
-    Component::OnUpdate();
-    ENSURE(gameObject);
 
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
     Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
@@ -57,8 +50,7 @@ void UIBorderRect::OnUpdate()
             Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
         m_latestBoundingRectNDC = boundingRectNDC;
     }
-
-    p_lineRenderer->OnUpdate();
+    p_lineRenderer->Renderer::OnRender(rp);
 }
 
 void UIBorderRect::SetLineColor(const Color &lineColor)

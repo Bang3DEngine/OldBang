@@ -141,7 +141,6 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
         }
         delete oldScene;
     }
-
     SceneManager::LoadScene(nullptr);
 
     if (scene)

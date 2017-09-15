@@ -176,6 +176,11 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     }
 }
 
+void RectTransform::SetAnchors(const Vector2 &anchorPoint)
+{
+    SetAnchors(anchorPoint, anchorPoint);
+}
+
 void RectTransform::SetAnchors(const Vector2 &anchorMin,
                                const Vector2 &anchorMax)
 {
@@ -250,6 +255,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                             Matrix4::ScaleMatrix(anchorScaling) *
                             Matrix4::TranslateMatrix(moveToPivot);
 
+    m_hasChanged = false;
     return m_localToParentMatrix;
 }
 

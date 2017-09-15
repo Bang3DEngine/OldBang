@@ -51,8 +51,8 @@ protected:
     Array<GL::Attachment> m_attachments;
     Map<GL::Attachment, Texture2D*> m_attachments_To_Texture;
 
-    void PushDrawAttachmentIds();
-    void PopDrawAttachmentIds();
+    void PushDrawAttachments();
+    void PopDrawAttachments();
 
 private:
     mutable Array<GL::Attachment> m_currentDrawAttachmentIds;

@@ -117,7 +117,7 @@ void Framebuffer::Resize(int width, int height)
     for (auto it : m_attachments_To_Texture)
     {
         Texture2D *t = it.second;
-        if (t)
+        if ( t && (t->GetWidth() != m_width || t->GetHeight() != m_height) )
         {
             GL::ClearError();
             t->Resize(m_width, m_height);
@@ -206,12 +206,12 @@ void Framebuffer::ExportStencil(const Path &filepath,
     delete stencilData;
 }
 
-void Framebuffer::PushDrawAttachmentIds()
+void Framebuffer::PushDrawAttachments()
 {
     m_latestDrawAttachmentIds = m_currentDrawAttachmentIds;
 }
 
-void Framebuffer::PopDrawAttachmentIds()
+void Framebuffer::PopDrawAttachments()
 {
     SetDrawBuffers(m_latestDrawAttachmentIds);
 }

@@ -165,6 +165,6 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
 
     Imageb fittedResultMargined = fittedResult;
     fittedResultMargined.AddMargins(Vector2i(margin), bgColor,
-                                    ImageAspectRatioMode::Ignore);
+                                    AspectRatioMode::Ignore);
     return fittedResultMargined;
 }

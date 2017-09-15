@@ -554,6 +554,12 @@ void GL::DeleteBuffers(int n, const GLId *glIds)
     glDeleteBuffers(n, glIds);
 }
 
+void GL::SetViewport(const Recti &viewport)
+{
+    GL::SetViewport(viewport.GetMin().x, viewport.GetMin().y,
+                    viewport.GetMax().x, viewport.GetMax().y);
+}
+
 void GL::SetViewport(int x, int y, int width, int height)
 {
     glViewport(x, y, width, height);
@@ -725,10 +731,15 @@ void GL::SetViewProjMode(GL::ViewProjMode mode)
 }
 
 void GL::SetStencilOp(GL::StencilOperation fail,
-                   GL::StencilOperation zFail,
-                   GL::StencilOperation zPass)
+                      GL::StencilOperation zFail,
+                      GL::StencilOperation zPass)
 {
     glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass));
+}
+
+void GL::SetStencilFunc(GL::Function stencilFunction, uint mask)
+{
+    GL::SetStencilFunc(stencilFunction, GL::GetStencilValue(), mask);
 }
 
 void GL::SetStencilFunc(GL::Function stencilFunction,
@@ -741,8 +752,8 @@ void GL::SetStencilFunc(GL::Function stencilFunction,
 void GL::SetStencilOp(GL::StencilOperation zPass)
 {
     GL::SetStencilOp(GL::StencilOperation::Keep,
-                  GL::StencilOperation::Keep,
-                  zPass);
+                     GL::StencilOperation::Keep,
+                     zPass);
 }
 
 void GL::SetStencilValue(Byte value)

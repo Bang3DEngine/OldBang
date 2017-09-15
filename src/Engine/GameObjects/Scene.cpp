@@ -26,11 +26,6 @@ void Scene::RenderGizmos()
     // GetGizmos()->m_gizmosGo->RenderGizmos();
 }
 
-void Scene::_OnResize(int newWidth, int newHeight)
-{
-    ParentSizeChanged();
-}
-
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 
 void Scene::SetCamera(Camera *cam)
@@ -93,7 +88,6 @@ void Scene::DestroyQueuedGameObjects()
         m_gameObjectsToBeDestroyed.pop();
     }
 }
-
 
 Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
 Camera *Scene::GetCamera() const { return p_camera; }

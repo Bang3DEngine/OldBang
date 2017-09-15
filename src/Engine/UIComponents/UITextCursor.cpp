@@ -14,17 +14,10 @@ UITextCursor::UITextCursor()
     GetMaterial()->SetDiffuseColor(Color::Black);
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderPass(RenderPass::Canvas);
-    SetStroke(1.5f);
+    SetStroke(0.5f);
 
     constexpr float limit = 1.0f;
-    SetPoints({Vector3(0, -limit, 0),
-               Vector3(0,  limit, 0),
-
-               Vector3(-limit, -limit, 0),
-               Vector3( limit, -limit, 0),
-
-               Vector3(-limit,  limit, 0),
-               Vector3( limit,  limit, 0),});
+    SetPoints({Vector3(0, -limit, 0), Vector3(0,  limit, 0)});
 }
 
 UITextCursor::~UITextCursor()

@@ -23,7 +23,6 @@ public:
 
     // UIRenderer
     virtual void OnRender() override;
-    virtual void OnUpdate() override;
     virtual void OnParentSizeChanged() override;
     virtual void OnRender(RenderPass renderPass) override;
 

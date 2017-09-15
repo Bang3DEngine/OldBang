@@ -58,6 +58,9 @@ List<T*> GameObject::GetComponentsInParent() const
 template <class T>
 T* GameObject::GetComponentInChildren() const
 {
+    T *compThis = GetComponent<T>();
+    if (compThis) { return compThis; }
+
     for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
     {
         T *comp = (*c)->GetComponent<T>();
@@ -72,6 +75,7 @@ template <class T>
 List<T*> GameObject::GetComponentsInChildren() const
 {
     List<T*> comps_l;
+    comps_l.PushBack( GetComponents<T>() );
     for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
     {
         List<T*> childComps = (*c)->GetComponents<T>();

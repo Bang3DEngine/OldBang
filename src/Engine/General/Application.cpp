@@ -13,6 +13,7 @@
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
 #include "Bang/GEngine.h"
+#include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
@@ -70,8 +71,7 @@ void Application::CreateWindow()
 {
     m_window = new Window();
     m_gEngine = new GEngine();
-
-    m_window->Resize(m_window->GetWidth(), m_window->GetHeight());
+    OnResize(m_window->GetWidth(), m_window->GetHeight());
 }
 
 int Application::MainLoop()
@@ -79,9 +79,14 @@ int Application::MainLoop()
     bool quit = false;
     while (!quit && !m_exit)
     {
-
         quit = MainLoopIteration();
+
+        Texture2D *screenRenderTexture = GetWindow()->GetScreenRenderTexture();
+        GEngine::GetInstance()->RenderToScreen(screenRenderTexture);
+
         m_window->SwapBuffers();
+
+        quit = !ProcessEvents() || quit;
 
         SDL_Delay(RedrawDelay_ms);
     }
@@ -100,8 +105,7 @@ bool Application::MainLoopIteration()
     m_input->OnFrameFinished();
     m_time->OnFrameFinished();
 
-    bool quit = !ProcessEvents();
-    return quit;
+    return false;
 }
 
 void Application::UpdateScene()
@@ -145,11 +149,13 @@ bool Application::ProcessEvents()
 
 void Application::OnResize(int newWidth, int newHeight)
 {
-    m_gEngine->Resize(newWidth, newHeight);
+    GL::SetViewport(0, 0, newWidth, newHeight);
+
     m_window->OnResize(newWidth, newHeight);
+    m_gEngine->Resize(newWidth, newHeight);
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene) { activeScene->_OnResize(newWidth, newHeight); }
+    if (activeScene) { activeScene->ParentSizeChanged(); }
 }
 
 GEngine *Application::GetGEngine() const

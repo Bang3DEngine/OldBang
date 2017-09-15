@@ -363,6 +363,7 @@ public:
     static void DeleteVertexArrays(int n, const GLId *glIds);
     static void DeleteBuffers(int n, const GLId *glIds);
 
+    static void SetViewport(const Recti &viewport);
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
 
@@ -377,11 +378,13 @@ public:
     static void SetViewProjMode(ViewProjMode mode);
     static void SetStencilOp(GL::StencilOperation zPass);
     static void SetStencilOp(GL::StencilOperation fail,
-                          GL::StencilOperation zFail,
-                          GL::StencilOperation zPass);
+                             GL::StencilOperation zFail,
+                             GL::StencilOperation zPass);
     static void SetStencilFunc(GL::Function stencilFunction,
-                            Byte stencilValue = GL::GetStencilValue(),
-                            uint mask = 0xFF);
+                               uint mask = 0xFF);
+    static void SetStencilFunc(GL::Function stencilFunction,
+                               Byte stencilValue,
+                               uint mask = 0xFF);
     static void SetStencilValue(Byte value);
     static void SetDepthMask(bool writeDepth);
     static void SetDepthFunc(GL::Function testDepth);

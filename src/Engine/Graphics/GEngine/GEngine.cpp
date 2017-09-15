@@ -49,20 +49,27 @@ GEngine::~GEngine()
 
 void GEngine::RenderCurrentScene(Camera *camera)
 {
-    Texture2D *camRenderTexture = camera->GetRenderTexture();
-    if (!camRenderTexture)
+    Scene *scene = GEngine::GetCurrentScene();
+
+    Texture2D *camRT = camera->GetRenderTexture();
+    if ((scene->GetCamera() == camera) && !camRT)
     {
-        camRenderTexture = Window::GetInstance()->GetScreenRenderTexture();
+        camRT = Window::GetInstance()->GetScreenRenderTexture();
     }
 
-    camera->Bind();
+    if (camRT)
+    {
+        Vector2i newVpSize = camRT->GetSize();
+        Vector2i prevVpSize = GL::GetViewportSize();
+        GL::SetViewport(0, 0, newVpSize.x, newVpSize.y);
+        if (prevVpSize != newVpSize) { scene->ParentSizeChanged(); }
 
-    GL::SetViewport(0, 0, camRenderTexture->GetWidth(),
-                    camRenderTexture->GetHeight());
-    m_gbuffer->SetAttachmentTexture(camRenderTexture, GBuffer::AttColor);
+        m_gbuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
+        m_gbuffer->SetAttachmentTexture(camRT, GBuffer::AttColor);
 
-    RenderCurrentSceneToGBuffer(camera);
-    RenderCurrentSceneToSelectionFramebuffer(camera);
+        RenderCurrentSceneToGBuffer(camera);
+        RenderCurrentSceneToSelectionFramebuffer(camera);
+    }
 }
 
 void GEngine::Render(Scene *scene)
@@ -143,6 +150,7 @@ SelectionFramebuffer *GEngine::GetSelectionFramebuffer()
 
 void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
 {
+    camera->Bind();
     Scene *scene = GEngine::GetCurrentScene();
 
     m_gbuffer->Bind();
@@ -153,20 +161,20 @@ void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
     // GBuffer Scene rendering
     GL::SetDepthMask(true); // Write depth
     GL::SetDepthFunc(GL::Function::LEqual);
-
     GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     scene->Render(RenderPass::Scene_Lighted);
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
     ApplyDeferredLights(camera);
+    GL::SetStencilValue(0);
 
     scene->Render(RenderPass::Scene_UnLighted);
     scene->Render(RenderPass::Scene_PostProcess);
-    GL::ClearDepthBuffer();
-    GL::ClearStencilBuffer();
 
     // GBuffer Canvas rendering
     m_gbuffer->SetAllColorDrawBuffers();
+    GL::ClearDepthBuffer();
+    GL::ClearStencilBuffer();
     GL::SetDepthMask(false);
     GL::SetDepthFunc(GL::Function::Always);
     scene->Render(RenderPass::Canvas);
@@ -184,6 +192,7 @@ void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
 
 void GEngine::RenderCurrentSceneToSelectionFramebuffer(Camera *camera)
 {
+    camera->Bind();
     Scene *scene = GEngine::GetCurrentScene();
 
     m_selectionFramebuffer->Bind();
@@ -216,6 +225,7 @@ void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 
 void GEngine::RenderToScreen(Texture *fullScreenTexture)
 {
+    ASSERT(fullScreenTexture);
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();

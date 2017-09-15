@@ -5,6 +5,11 @@
 #include "Bang/UIRenderer.h"
 #include "Bang/UIGameObject.h"
 
+
+#include "Bang/Image.h"
+#include "Bang/GEngine.h"
+#include "Bang/GBuffer.h"
+
 USING_NAMESPACE_BANG
 
 UIMask::UIMask() {}
@@ -23,25 +28,19 @@ void UIMask::OnRender(RenderPass renderPass)
 void UIMask::OnBeforeChildrenRender(RenderPass renderPass)
 {
     Component::OnBeforeChildrenRender(renderPass);
-    if (renderPass == RenderPass::Canvas)
-    {
-        PrepareStencilToDrawChildren();
-    }
+    if (renderPass == RenderPass::Canvas) { PrepareStencilToDrawChildren(); }
 }
 
 void UIMask::OnChildrenRendered(RenderPass renderPass)
 {
     Component::OnChildrenRendered(renderPass);
-    if (renderPass == RenderPass::Canvas)
-    {
-        RestoreStencilBuffer(renderPass);
-    }
+    if (renderPass == RenderPass::Canvas) { RestoreStencilBuffer(renderPass); }
 }
 
 void UIMask::PrepareStencilToDrawMask()
 {
     // Save values for later restoring
-    m_maskBefore = GL::GetColorMask();
+    m_maskBefore         = GL::GetColorMask();
     m_stencilFuncBefore  = GL::GetStencilFunc();
     m_stencilOpBefore    = GL::GetStencilOp();
 

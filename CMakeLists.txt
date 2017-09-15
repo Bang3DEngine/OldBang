@@ -119,15 +119,12 @@ macro(add_info_files)
      endforeach()
 endmacro()
 file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag_g" "[^.]*.frag_pp"
-                               "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
-                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
-                               "[^.]*.glsl"
-                               "${BANG_INCLUDE_DIR}/*.h"
-                               "${BANG_INCLUDE_DIR}/*.tcc")
-set(OTHER_FILES
-    README.md
-    "${OTHER_FILES}"
-    )
+                              "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
+                              "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
+                              "[^.]*.glsl"
+                              "${BANG_INCLUDE_DIR}/*.h"
+                              "${BANG_INCLUDE_DIR}/*.tcc")
+set(OTHER_FILES README.md "${OTHER_FILES}")
 add_info_files(${OTHER_FILES})
 
 # BangEngine Library
@@ -157,6 +154,7 @@ ${ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
 ${ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
+${ENGINE_SRC_DIR}/Components/SubScene.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
@@ -180,6 +178,7 @@ ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
+${ENGINE_SRC_DIR}/Graphics/General/AspectRatioMode.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Font.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Image.cpp

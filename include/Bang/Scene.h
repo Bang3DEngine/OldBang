@@ -41,7 +41,6 @@ protected:
 
     // GameObject
     virtual void RenderGizmos() override;
-    virtual void _OnResize (int newWidth, int newHeight);
 
     void DestroyQueuedGameObjects();
 

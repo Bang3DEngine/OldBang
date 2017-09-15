@@ -95,13 +95,12 @@ void Image<T>::Copy(const Image<T> &image,
 template<class T>
 void Image<T>::AddMargins(const Vector2i &margins,
                              const Color &marginColor,
-                             ImageAspectRatioMode arMode)
+                             AspectRatioMode arMode)
 {
     Image<T> original = *this;
 
-    Vector2i newSize = GetAspectRatioedSize( (margins * 2) + GetSize(),
-                                            GetSize(),
-                                            arMode);
+    Vector2i newSize = AspectRatio::GetAspectRatioedSize(
+                                (margins * 2) + GetSize(), GetSize(), arMode);
     Create(newSize.x, newSize.y, marginColor);
     Copy(original,
          Recti(Vector2i::Zero, original.GetSize()),
@@ -124,7 +123,7 @@ void Image<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
     if (aspectRatio > 1.0f) { newSize.x = (GetHeight() * aspectRatio); }
     else { newSize.y = GetWidth() / aspectRatio; }
     Vector2i margins = (newSize - GetSize());
-    AddMargins(margins/2, marginColor, ImageAspectRatioMode::Ignore);
+    AddMargins(margins/2, marginColor, AspectRatioMode::Ignore);
 }
 
 template<class T>
@@ -148,7 +147,7 @@ void Image<T>::ResizeToMatchAspectRatio(float aspectRatio,
     Debug_Peek(GetSize());
     Debug_Peek(newSize);
     Debug_Peek(modifyWidth);
-    Resize(newSize, resizeMode, ImageAspectRatioMode::Ignore);
+    Resize(newSize, resizeMode, AspectRatioMode::Ignore);
 }
 
 template<class T>
@@ -160,7 +159,7 @@ float Image<T>::GetAspectRatio() const
 template<class T>
 void Image<T>::Resize(const Vector2i &newSize,
                          ImageResizeMode resizeMode,
-                         ImageAspectRatioMode arMode)
+                         AspectRatioMode arMode)
 {
     Resize(newSize.x, newSize.y, resizeMode, arMode);
 }
@@ -168,10 +167,11 @@ void Image<T>::Resize(const Vector2i &newSize,
 template<class T>
 void Image<T>::Resize(int _newWidth, int _newHeight,
                          ImageResizeMode resizeMode,
-                         ImageAspectRatioMode arMode)
+                         AspectRatioMode arMode)
 {
     // First pick the new (width,height), depending on the AspectRatioMode
-    Vector2i newSize = GetAspectRatioedSize(Vector2i(_newWidth, _newHeight),
+    Vector2i newSize = AspectRatio::GetAspectRatioedSize(
+                                            Vector2i(_newWidth, _newHeight),
                                             GetSize(), arMode);
     if (newSize.x == GetWidth() && newSize.y == GetHeight()) { return; }
 
@@ -343,27 +343,6 @@ void Image<float>::Import(const Path &imageFilepath)
     Image<Byte> byteImg;
     ImageIO::Import(imageFilepath, &byteImg, &ok);
     *this = byteImg.To<float>();
-}
-
-template<class T>
-Vector2i Image<T>::GetAspectRatioedSize(const Vector2i &targetSize,
-                                           const Vector2i &currentSize,
-                                           ImageAspectRatioMode aspectRatioMode)
-{
-    Vector2i finalSize = targetSize;
-    if (aspectRatioMode != ImageAspectRatioMode::Ignore)
-    {
-        Vector2 aspectRatio(SCAST<float>(targetSize.x) / currentSize.x,
-                            SCAST<float>(targetSize.y) / currentSize.y);
-
-        bool keepExc = (aspectRatioMode == ImageAspectRatioMode::KeepExceeding);
-        float ar =  (aspectRatio.x < aspectRatio.y) ?
-                    (keepExc ? aspectRatio.y : aspectRatio.x) :
-                    (keepExc ? aspectRatio.x : aspectRatio.y);
-        finalSize.x = Math::Round(currentSize.x * ar);
-        finalSize.y = Math::Round(currentSize.y * ar);
-    }
-    return finalSize;
 }
 
 // Specializations

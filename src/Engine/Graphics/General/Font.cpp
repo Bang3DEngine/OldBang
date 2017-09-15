@@ -93,9 +93,6 @@ void Font::Import(const Path &ttfFilepath)
                              Vector2(m_atlasTexture->GetSize());
         Vector2 uvMax = Vector2(charPxRect.GetMax()) /
                              Vector2(m_atlasTexture->GetSize());
-        uvMin.y       = 1.0 - uvMin.y;
-        uvMax.y       = 1.0 - uvMax.y;
-        ::std::swap(uvMin.y, uvMax.y);
         m_charUvsInAtlas.Add(c, ::std::make_pair(uvMin, uvMax));
     }
 }

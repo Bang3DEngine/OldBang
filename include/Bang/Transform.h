@@ -103,7 +103,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    bool m_hasChanged = false;
+    mutable bool m_hasChanged = true;
     mutable Matrix4 m_localToParentMatrix;
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
