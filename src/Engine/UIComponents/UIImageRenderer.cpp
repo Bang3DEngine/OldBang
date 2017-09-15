@@ -18,6 +18,8 @@ UIImageRenderer::UIImageRenderer()
     UseMaterialCopy();
 
     m_quadMesh = new Mesh(*MeshFactory::GetUIPlane());
+    SetHorizontalAlignment( GetHorizontalAlignment() );
+    SetVerticalAlignment( GetVerticalAlignment() );
 }
 
 UIImageRenderer::~UIImageRenderer()
@@ -28,7 +30,7 @@ UIImageRenderer::~UIImageRenderer()
 void UIImageRenderer::OnUpdate()
 {
     UIRenderer::OnUpdate();
-    UpdateQuadUvsToMatchAspectRatioMode();
+    UpdateQuadUvsToMatchFormat();
 }
 
 void UIImageRenderer::OnRender()
@@ -61,6 +63,18 @@ void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
     m_aspectRatioMode = arMode;
 }
 
+void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
+{
+    m_verticalAlignment = verticalAlignment;
+    UpdateQuadUvsToMatchFormat(true);
+}
+
+void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
+{
+    m_horizontalAlignment = horizontalAlignment;
+    UpdateQuadUvsToMatchFormat(true);
+}
+
 const Color &UIImageRenderer::GetTint() const
 {
     return GetMaterial()->GetDiffuseColor();
@@ -74,6 +88,16 @@ Texture2D *UIImageRenderer::GetImageTexture() const
 AspectRatioMode UIImageRenderer::GetAspectRatioMode() const
 {
     return m_aspectRatioMode;
+}
+
+VerticalAlignment UIImageRenderer::GetVerticalAlignment() const
+{
+    return m_verticalAlignment;
+}
+
+HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
+{
+    return m_horizontalAlignment;
 }
 
 void UIImageRenderer::CloneInto(ICloneable *clone) const
@@ -94,6 +118,12 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Tint"))
     { SetTint( xmlInfo.Get<Color>("Tint") ); }
 
+    if (xmlInfo.Contains("HorizontalAlignment"))
+    { SetHorizontalAlignment( xmlInfo.Get<HorizontalAlignment>("HorizontalAlignment") ); }
+
+    if (xmlInfo.Contains("VerticalAlignment"))
+    { SetVerticalAlignment( xmlInfo.Get<VerticalAlignment>("VerticalAlignment") ); }
+
     if (xmlInfo.Contains("AspectRatioMode"))
     { SetAspectRatioMode( xmlInfo.Get<AspectRatioMode>("AspectRatioMode") ); }
 }
@@ -105,27 +135,46 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
+    xmlInfo->Set("HorizontalAlignment", GetHorizontalAlignment());
+    xmlInfo->Set("VerticalAlignment", GetVerticalAlignment());
     xmlInfo->Set("AspectRatioMode", GetAspectRatioMode());
 }
 
-void UIImageRenderer::UpdateQuadUvsToMatchAspectRatioMode()
+void UIImageRenderer::UpdateQuadUvsToMatchFormat(bool force)
 {
     ENSURE(m_imageTexture);
 
     RectTransform *rt = gameObject->GetComponent<RectTransform>();
     Recti rectPx = rt->GetScreenSpaceRectPx();
     Vector2i rectSize(rectPx.GetSize());
-    ENSURE(m_prevRectSize != rectSize);
+    ENSURE(!force && m_prevRectSize != rectSize);
 
     Vector2i texSize(m_imageTexture->GetSize());
     Vector2i texQuadSize =
             AspectRatio::GetAspectRatioedSize(rectSize, texSize,
                                               GetAspectRatioMode());
 
-    Vector2 uvs = Vector2(rectSize) / Vector2(texQuadSize);
-    Array<Vector2> quadUvs = {
-        Vector2(0, uvs.y), Vector2(uvs.x, uvs.y), Vector2(uvs.x, 0),
-        Vector2(0, uvs.y), Vector2(uvs.x,     0), Vector2(    0, 0)};
+    Vector2 uvSize = Vector2(rectSize) / Vector2(texQuadSize);
+
+    Vector2 uvMin = Vector2::Zero;
+    Vector2 margMult = Vector2::Zero;
+    const HorizontalAlignment hAlign = GetHorizontalAlignment();
+    if      (hAlign == HorizontalAlignment::Center) { margMult.x = 0.5f; }
+    else if (hAlign == HorizontalAlignment::Right)  { margMult.x = 1.0f; }
+
+    const VerticalAlignment vAlign = GetVerticalAlignment();
+    if      (vAlign == VerticalAlignment::Center) { margMult.y = 0.5f; }
+    else if (vAlign == VerticalAlignment::Top)    { margMult.y = 1.0f; }
+
+    uvMin += (1.0f-uvSize) * margMult;
+    Vector2 uvMax = uvMin + uvSize;
+    Array<Vector2> quadUvs = { Vector2(uvMin.x, uvMax.y),
+                               Vector2(uvMax.x, uvMax.y),
+                               Vector2(uvMax.x, uvMin.y),
+
+                               Vector2(uvMin.x, uvMax.y),
+                               Vector2(uvMax.x, uvMin.y),
+                               Vector2(uvMin.x, uvMin.y)};
 
     m_quadMesh->LoadUvs(quadUvs);
     m_prevImageTextureSize = m_imageTexture->GetSize();

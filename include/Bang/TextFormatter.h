@@ -5,7 +5,7 @@
 
 #include "Bang/Font.h"
 #include "Bang/Rect.h"
-#include "Bang/TextFormat.h"
+#include "Bang/Alignment.h"
 
 NAMESPACE_BANG_BEGIN
 

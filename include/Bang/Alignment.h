@@ -1,5 +1,5 @@
-#ifndef TEXTFORMAT_H
-#define TEXTFORMAT_H
+#ifndef ALIGNMENT_H
+#define ALIGNMENT_H
 
 #include "Bang/Bang.h"
 
@@ -10,4 +10,4 @@ enum class VerticalAlignment   { Top  = 0, Center, Bot   };
 
 NAMESPACE_BANG_END
 
-#endif // TEXTFORMAT_H
+#endif // ALIGNMENT_H

@@ -6,7 +6,7 @@
 #include "Bang/Rect.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
-#include "Bang/TextFormat.h"
+#include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
 
 NAMESPACE_BANG_BEGIN

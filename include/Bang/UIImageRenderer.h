@@ -2,6 +2,7 @@
 #define UIIMAGERENDERER_H
 
 #include "Bang/Texture2D.h"
+#include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/AspectRatioMode.h"
 
@@ -23,10 +24,14 @@ public:
     void SetImageTexture(Texture2D *imageTexture);
     void SetTint(const Color& tint);
     void SetAspectRatioMode(AspectRatioMode arMode);
+    void SetVerticalAlignment(VerticalAlignment verticalAlignment);
+    void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
 
     const Color& GetTint() const;
     Texture2D *GetImageTexture() const;
     AspectRatioMode GetAspectRatioMode() const;
+    VerticalAlignment GetVerticalAlignment() const;
+    HorizontalAlignment GetHorizontalAlignment() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -38,12 +43,15 @@ public:
 private:
     Mesh *m_quadMesh = nullptr;
     Texture2D *m_imageTexture = nullptr;
-    AspectRatioMode m_aspectRatioMode = AspectRatioMode::Ignore;
+
+    AspectRatioMode m_aspectRatioMode         = AspectRatioMode::Ignore;
+    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
+    HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
 
     Vector2i m_prevRectSize = Vector2i::Zero;
     Vector2i m_prevImageTextureSize = Vector2i::Zero;
 
-    void UpdateQuadUvsToMatchAspectRatioMode();
+    void UpdateQuadUvsToMatchFormat(bool force = false);
 };
 
 NAMESPACE_BANG_END
