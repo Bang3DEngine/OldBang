@@ -31,54 +31,33 @@ void UIDirLayout::OnUpdate()
     Recti layoutRect = rt->GetScreenSpaceRectPx();
     const int numChildren = gameObject->GetChildren().Size();
 
-    Array<int> childrenSizes(numChildren, 0);
+    Array<Vector2i> childrenSizes(numChildren, Vector2i::Zero);
 
     // Apply minSizes
     int i = 0;
-    int occupiedPixels = 0;
+    Vector2i pxAvailableSize = layoutRect.GetSize();
     for (GameObject *child : gameObject->GetChildren())
     {
         UILayoutElement *cle = child->GetComponent<UILayoutElement>();
         if (!cle) { continue; }
 
-        if (m_vertical)
-        {
-            childrenSizes[i] = cle->GetMinHeight();
-            occupiedPixels += cle->GetMinHeight();
-        }
-        else
-        {
-            childrenSizes[i] = cle->GetMinWidth();
-            occupiedPixels += cle->GetMinWidth();
-        }
+        childrenSizes[i]  = cle->GetMinSize();
+        pxAvailableSize  -= cle->GetMinSize();
         ++i;
     }
 
     // Apply preferredSizes
     i = 0;
-    int pxSizeAvailableSize = ( (m_vertical ? layoutRect.GetHeight() :
-                                              layoutRect.GetWidth() )
-                                 - occupiedPixels);
     for (GameObject *child : gameObject->GetChildren())
     {
         UILayoutElement *cle = child->GetComponent<UILayoutElement>();
         if (!cle) { continue; }
 
-        int pxToAdd = 0;
-        if (m_vertical)
-        {
-            pxToAdd = Math::Min(pxSizeAvailableSize,
-                                cle->GetPreferredHeight() - cle->GetMinHeight());
-        }
-        else
-        {
-            pxToAdd = Math::Min(pxSizeAvailableSize,
-                                cle->GetPreferredWidth() - cle->GetMinWidth());
-        }
+        Vector2i pxToAdd(cle->GetPreferredSize() - cle->GetMinSize());
+        pxToAdd = Vector2i::Clamp(pxToAdd, Vector2i::Zero, pxAvailableSize);
 
-        pxToAdd = Math::Max(pxToAdd, 0);
-        childrenSizes[i]    += pxToAdd;
-        pxSizeAvailableSize -= pxToAdd;
+        childrenSizes[i] += pxToAdd;
+        pxAvailableSize  -= pxToAdd;
         ++i;
     }
 
@@ -89,69 +68,47 @@ void UIDirLayout::OnUpdate()
         UILayoutElement *cle = child->GetComponent<UILayoutElement>();
         if (!cle) { continue; }
 
-        int pxToAdd = 0;
-        if (m_vertical)
-        {
-            float flexHeight = cle->GetFlexibleHeight();
-            float prefHeight = cle->GetPreferredHeight();
-            pxToAdd = Math::Min(pxSizeAvailableSize,
-                                Math::Round<int>(flexHeight * prefHeight));
-        }
-        else
-        {
-            float flexWidth = cle->GetFlexibleWidth();
-            float prefWidth = cle->GetPreferredWidth();
-            pxToAdd = Math::Min(pxSizeAvailableSize,
-                                Math::Round<int>(flexWidth * prefWidth));
-        }
+        Vector2i pxToAdd(Vector2::Round(cle->GetFlexibleSize() *
+                                        Vector2(cle->GetPreferredSize())));
+        pxToAdd = Vector2i::Clamp(pxToAdd, Vector2i::Zero, pxAvailableSize);
 
-        pxToAdd = Math::Max(pxToAdd, 0);
-        childrenSizes[i]    += pxToAdd;
-        pxSizeAvailableSize -= pxToAdd;
+        childrenSizes[i] += pxToAdd;
+        pxAvailableSize  -= pxToAdd;
         ++i;
     }
 
     // Apply actual calculation to RectTransforms Margins
     i = 0;
-    int marginUntilNow = 0;
+    Vector2i marginAccum = Vector2i::Zero;
+    const Vector2i dir = (m_vertical ? Vector2i::Up : Vector2i::Right);
     for (GameObject *child : gameObject->GetChildren())
     {
-        int childSize = childrenSizes[i];
+        const Vector2i& childSize = childrenSizes[i];
+        const Vector2i spacing = dir * (i > 0 ? GetSpacing() : 0);
         RectTransform *crt = child->GetComponent<RectTransform>();
         if (m_vertical)
         {
+            crt->SetMarginTop  (   spacing.y + marginAccum.y );
+            crt->SetMarginBot  ( -(spacing.y + marginAccum.y + childSize.y) );
             crt->SetAnchorMin( Vector2(crt->GetAnchorMin().x, -1.0f) );
             crt->SetAnchorMax( Vector2(crt->GetAnchorMax().x, -1.0f) );
-            crt->SetMarginTop(  marginUntilNow );
-            crt->SetMarginBot( -marginUntilNow - childSize );
         }
         else
         {
+            crt->SetMarginLeft (   spacing.x + marginAccum.x );
+            crt->SetMarginRight( -(spacing.x + marginAccum.x + childSize.x) );
             crt->SetAnchorMin( Vector2(-1.0f, crt->GetAnchorMin().y) );
             crt->SetAnchorMax( Vector2(-1.0f, crt->GetAnchorMax().y) );
-            crt->SetMarginLeft (  marginUntilNow );
-            crt->SetMarginRight( -marginUntilNow - childSize );
         }
-        marginUntilNow += childSize;
+
+        marginAccum += (Vector2i(spacing) + childSize);
         ++i;
     }
 }
 
-void UIDirLayout::SetSpacing(int spacingPx)
-{
-    m_spacingPx = spacingPx;
-}
+void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }
 
-void UIDirLayout::SetStretch(int index, float stretch)
-{
-    m_stretches[index] = stretch;
-}
-
-float UIDirLayout::GetStretch(int index) const
-{
-    if (!m_stretches.ContainsKey(index)) { return 1.0f; }
-    return m_stretches.At(index);
-}
+int UIDirLayout::GetSpacing() const { return m_spacingPx; }
 
 void UIDirLayout::ImportXML(const XMLNode &xmlInfo)
 {
@@ -159,13 +116,6 @@ void UIDirLayout::ImportXML(const XMLNode &xmlInfo)
 
     if (xmlInfo.Contains("SpacingPx"))
     { SetSpacing( xmlInfo.Get<int>("SpacingPx") ); }
-
-    int i = 0;
-    while (xmlInfo.Contains("Stretch" + String(i)))
-    {
-        SetStretch(i, xmlInfo.Get<float>("Stretch" + String(i)));
-        ++i;
-    }
 }
 
 void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
@@ -173,11 +123,4 @@ void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
     Component::ExportXML(xmlInfo);
 
     xmlInfo->Set("SpacingPx", m_spacingPx);
-
-    const Map<int, float> &stretches = m_stretches;
-    for (auto it = stretches.cbegin(); it != stretches.cend(); ++it)
-    {
-        float stretch = it->second;
-        xmlInfo->Set("Stretch" + String(it->first), stretch);
-    }
 }

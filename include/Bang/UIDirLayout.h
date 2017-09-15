@@ -16,10 +16,8 @@ public:
     virtual void OnUpdate() override;
 
     void SetSpacing(int spacingPx);
-    void SetStretch(int index, float stretch);
-    void SetStretch(GameObject *gameObject, float stretch);
 
-    float GetStretch(int index) const;
+    int GetSpacing() const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
@@ -33,7 +31,6 @@ protected:
 private:
     int m_spacingPx = 0;
     bool m_vertical = false;
-    Map<int, float> m_stretches;
 };
 
 NAMESPACE_BANG_END
