@@ -234,13 +234,13 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
 void RectTransform::OnChanged()
 {
-    if (gameObject) { gameObject->ParentSizeChanged(); }
+    if (gameObject) { gameObject->ParentLayoutChanged(); }
     m_hasChanged = true;
 }
 
-void RectTransform::OnParentSizeChanged()
+void RectTransform::OnParentLayoutChanged()
 {
-    Transform::OnParentSizeChanged();
+    Transform::OnParentLayoutChanged();
     m_hasChanged = true;
 }
 

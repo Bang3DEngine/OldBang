@@ -24,11 +24,12 @@ GameObject *Component::GetGameObject() const { return m_gameObject; }
 
 void Component::OnStart() {}
 void Component::OnUpdate() {}
-void Component::OnParentSizeChanged() {}
-void Component::OnRender(RenderPass renderPass) {}
 void Component::OnBeforeChildrenRender(RenderPass renderPass) {}
-void Component::OnChildrenRendered(RenderPass renderPass) {}
+void Component::OnRender(RenderPass renderPass) {}
 void Component::OnRenderGizmos() {}
+void Component::OnAfterChildrenRender(RenderPass renderPass) {}
+void Component::OnParentLayoutChanged() {}
+void Component::OnChildLayoutChanged() {}
 void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const

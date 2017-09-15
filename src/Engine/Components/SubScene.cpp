@@ -40,7 +40,7 @@ void SubScene::OnBeforeChildrenRender(RenderPass renderPass)
     if (newCamera) { newCamera->Bind(); }
 }
 
-void SubScene::OnChildrenRendered(RenderPass renderPass)
+void SubScene::OnAfterChildrenRender(RenderPass renderPass)
 {
     Scene *scene = DCAST<Scene*>(gameObject); ENSURE(scene);
     Scene *parentScene = GetParentScene(); ENSURE(parentScene);

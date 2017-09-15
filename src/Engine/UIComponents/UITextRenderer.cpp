@@ -66,9 +66,9 @@ void UITextRenderer::OnRender(RenderPass renderPass)
     }
 }
 
-void UITextRenderer::OnParentSizeChanged()
+void UITextRenderer::OnParentLayoutChanged()
 {
-    UIRenderer::OnParentSizeChanged();
+    UIRenderer::OnParentLayoutChanged();
     m_hasChanged = true;
 }
 
@@ -209,6 +209,8 @@ void UITextRenderer::RefreshMesh()
                                                        textQuadPos2D.End());
     m_mesh->LoadPositions(textQuadPos3D);
     m_mesh->LoadUvs(textQuadUvs);
+
+    gameObject->LayoutChanged();
 }
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)

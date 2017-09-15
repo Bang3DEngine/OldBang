@@ -155,7 +155,7 @@ void Application::OnResize(int newWidth, int newHeight)
     m_gEngine->Resize(newWidth, newHeight);
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene) { activeScene->ParentSizeChanged(); }
+    if (activeScene) { activeScene->ParentLayoutChanged(); }
 }
 
 GEngine *Application::GetGEngine() const

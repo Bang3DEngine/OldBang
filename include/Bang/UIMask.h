@@ -17,7 +17,7 @@ public:
 
     virtual void OnRender(RenderPass renderPass) override;
     virtual void OnBeforeChildrenRender(RenderPass renderPass) override;
-    virtual void OnChildrenRendered(RenderPass renderPass) override;
+    virtual void OnAfterChildrenRender(RenderPass renderPass) override;
 
     void SetMasking(bool maskEnabled);
     void SetDrawMask(bool drawMask);

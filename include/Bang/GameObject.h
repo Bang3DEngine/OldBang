@@ -32,10 +32,12 @@ public:
     virtual void Start() override;
     virtual void Update();
     virtual void BeforeChildrenRender(RenderPass renderPass);
-    virtual void ChildrenRendered(RenderPass renderPass);
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
-    virtual void ParentSizeChanged();
     virtual void RenderGizmos();
+    virtual void AfterChildrenRender(RenderPass renderPass);
+    virtual void ParentLayoutChanged();
+    virtual void ChildLayoutChanged();
+    virtual void LayoutChanged();
     virtual void Destroy();
 
     static void Destroy(GameObject *gameObject);

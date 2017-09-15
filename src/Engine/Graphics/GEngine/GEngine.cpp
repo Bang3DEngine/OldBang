@@ -62,7 +62,7 @@ void GEngine::RenderCurrentScene(Camera *camera)
         Vector2i newVpSize = camRT->GetSize();
         Vector2i prevVpSize = GL::GetViewportSize();
         GL::SetViewport(0, 0, newVpSize.x, newVpSize.y);
-        if (prevVpSize != newVpSize) { scene->ParentSizeChanged(); }
+        if (prevVpSize != newVpSize) { scene->ParentLayoutChanged(); }
 
         m_gbuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
         m_gbuffer->SetAttachmentTexture(camRT, GBuffer::AttColor);

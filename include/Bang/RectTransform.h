@@ -53,7 +53,7 @@ public:
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
     // Component
-    virtual void OnParentSizeChanged() override;
+    virtual void OnParentLayoutChanged() override;
 
     // ICloneable
     void CloneInto(ICloneable *clone) const;

@@ -31,9 +31,9 @@ void UIMask::OnBeforeChildrenRender(RenderPass renderPass)
     if (renderPass == RenderPass::Canvas) { PrepareStencilToDrawChildren(); }
 }
 
-void UIMask::OnChildrenRendered(RenderPass renderPass)
+void UIMask::OnAfterChildrenRender(RenderPass renderPass)
 {
-    Component::OnChildrenRendered(renderPass);
+    Component::OnAfterChildrenRender(renderPass);
     if (renderPass == RenderPass::Canvas) { RestoreStencilBuffer(renderPass); }
 }
 

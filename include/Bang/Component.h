@@ -27,11 +27,12 @@ public:
 
     virtual void OnStart();
     virtual void OnUpdate();
-    virtual void OnParentSizeChanged();
-    virtual void OnRender(RenderPass renderPass);
     virtual void OnBeforeChildrenRender(RenderPass renderPass);
-    virtual void OnChildrenRendered(RenderPass renderPass);
+    virtual void OnRender(RenderPass renderPass);
     virtual void OnRenderGizmos();
+    virtual void OnAfterChildrenRender(RenderPass renderPass);
+    virtual void OnParentLayoutChanged();
+    virtual void OnChildLayoutChanged();
     virtual void OnDestroy();
 
     bool IsEnabled(bool recursive = false) const;

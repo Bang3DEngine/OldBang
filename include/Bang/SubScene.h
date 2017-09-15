@@ -19,7 +19,7 @@ public:
 
     // Component
     virtual void OnBeforeChildrenRender(RenderPass renderPass) override;
-    virtual void OnChildrenRendered(RenderPass renderPass) override;
+    virtual void OnAfterChildrenRender(RenderPass renderPass) override;
 
     Scene *GetParentScene() const;
 

@@ -15,6 +15,7 @@ public:
 
     // Component
     virtual void OnUpdate() override;
+    virtual void OnChildLayoutChanged() override;
 
     void SetHorizontalSizeFit(SizeFit sizeFit);
     SizeFit GetHorizontalSizeFit() const;
