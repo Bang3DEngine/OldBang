@@ -22,6 +22,7 @@ const Color Color::Purple      = Color(0.5,   0,   1,  1);
 const Color Color::Pink        = Color(1,     0,   1,  1);
 const Color Color::Black       = Color(0,     0,   0,  1);
 const Color Color::LightGray   = Color(0.8, 0.8, 0.8,  1);
+const Color Color::DarkGray    = Color(0.3, 0.3, 0.3,  1);
 const Color Color::Gray        = Color(0.5, 0.5, 0.5,  1);
 const Color Color::White       = Color(1,     1,   1,  1);
 const Color Color::Zero        = Color(0,     0,   0,  0);

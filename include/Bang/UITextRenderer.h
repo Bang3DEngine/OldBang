@@ -85,7 +85,7 @@ private:
     Rect m_textRectNDC          = Rect::Zero;
 
     float m_blurriness      = 2.0f;
-    float m_alphaThreshold  = 0.25f;
+    float m_alphaThreshold  = 0.2f;
 
     float m_outlineWidth        = 0.0f;
     Color m_outlineColor        = Color::Red;
@@ -95,8 +95,8 @@ private:
     bool m_hasChanged    = false;
 
     bool m_wrapping = false;
-    HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
-    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Top;
+    HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
+    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
 
     Mesh *m_mesh = nullptr;
     uint m_currentRenderingChar = 0;

@@ -1,8 +1,10 @@
 #include "Bang/UIDirLayout.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
+#include "Bang/LayoutElement.h"
 #include "Bang/RectTransform.h"
 
 USING_NAMESPACE_BANG
@@ -24,46 +26,83 @@ void UIDirLayout::OnUpdate()
 {
     Component::OnUpdate();
 
-    const int numChildren = GetGameObject()->GetChildren().Size();
-    float latestAnchor = (m_vertical ? 1.0f : -1.0f);
-    const float balancedSize = (1.0f / numChildren);
+    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
-    float totalStretch = 0.0f;
-    for (int i = 0; i < GetGameObject()->GetChildren().Size(); ++i)
-    {
-        totalStretch += GetStretch(i);
-    }
+    Recti layoutRect = rt->GetScreenSpaceRectPx();
+    const int numChildren = gameObject->GetChildren().Size();
 
+    Array<int> childrenSizes(numChildren, 0);
+
+    // Apply minSizes
     int i = 0;
-    for (GameObject *child : GetGameObject()->GetChildren())
+    int occupiedPixels = 0;
+    for (GameObject *child : gameObject->GetChildren())
     {
-        float sizeNDC;
-        if (totalStretch > 0) { sizeNDC  = (GetStretch(i) / totalStretch); }
-        else { sizeNDC = balancedSize; }
-        sizeNDC *= 2.0f;
+        LayoutElement *cle = child->GetComponent<LayoutElement>();
+        if (!cle) { continue; }
 
-        const bool first = (i == 0);
-        const bool last  = (i == numChildren-1);
-        const int spacing = (first || last) ? m_spacingPx / 1.5 : m_spacingPx;
-        RectTransform *rt = child->GetComponent<RectTransform>();
-        int marginLeft = 0, marginTop = 0, marginRight = 0, marginBot = 0;
         if (m_vertical)
         {
-            rt->SetAnchorMin( Vector2(-1, latestAnchor - sizeNDC) );
-            rt->SetAnchorMax( Vector2(1, latestAnchor) );
-            marginTop = last ? spacing : ((spacing+1) / 2);
-            marginBot = first ? spacing : (spacing / 2);
+            childrenSizes[i] = cle->GetMinHeight();
+            occupiedPixels += cle->GetMinHeight();
         }
         else
         {
-            rt->SetAnchorMin( Vector2(latestAnchor, -1.0f) );
-            rt->SetAnchorMax( Vector2(latestAnchor + sizeNDC, 1.0f) );
-            marginLeft  = last ? spacing : ((spacing+1) / 2);
-            marginRight = first ? spacing : (spacing / 2);
+            childrenSizes[i] = cle->GetMinWidth();
+            occupiedPixels += cle->GetMinWidth();
         }
-        rt->SetMargins(marginLeft, marginTop, marginRight, marginBot);
+        ++i;
+    }
 
-        latestAnchor += sizeNDC * (m_vertical ? -1.0f : 1.0f);
+    // Apply preferredSizes
+    i = 0;
+    int pxSizeAvailableSize = ( (m_vertical ? layoutRect.GetHeight() :
+                                              layoutRect.GetWidth() )
+                                 - occupiedPixels);
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        LayoutElement *cle = child->GetComponent<LayoutElement>();
+        if (!cle) { continue; }
+
+        int pxToAdd = 0;
+        if (m_vertical)
+        {
+            pxToAdd = Math::Min(pxSizeAvailableSize,
+                                cle->GetPreferredHeight() - cle->GetMinHeight());
+        }
+        else
+        {
+            pxToAdd = Math::Min(pxSizeAvailableSize,
+                                cle->GetPreferredWidth() - cle->GetMinWidth());
+        }
+
+        pxToAdd = Math::Max(pxToAdd, 0);
+        childrenSizes[i]    += pxToAdd;
+        pxSizeAvailableSize -= pxToAdd;
+        ++i;
+    }
+
+    i = 0;
+    int marginUntilNow = 0;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        int childSize = childrenSizes[i];
+        RectTransform *crt = child->GetComponent<RectTransform>();
+        if (m_vertical)
+        {
+            crt->SetAnchorMin( Vector2(crt->GetAnchorMin().x, -1.0f) );
+            crt->SetAnchorMax( Vector2(crt->GetAnchorMax().x, -1.0f) );
+            crt->SetMarginTop(  marginUntilNow );
+            crt->SetMarginBot( -marginUntilNow - childSize );
+        }
+        else
+        {
+            crt->SetAnchorMin( Vector2(-1.0f, crt->GetAnchorMin().y) );
+            crt->SetAnchorMax( Vector2(-1.0f, crt->GetAnchorMax().y) );
+            crt->SetMarginLeft (  marginUntilNow );
+            crt->SetMarginRight( -marginUntilNow - childSize );
+        }
+        marginUntilNow += childSize;
         ++i;
     }
 }

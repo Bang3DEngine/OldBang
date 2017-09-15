@@ -59,6 +59,7 @@ public:
     const static Color Black;
     const static Color Gray;
     const static Color LightGray;
+    const static Color DarkGray;
     const static Color White;
     const static Color Zero;
     const static Color One;

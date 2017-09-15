@@ -24,6 +24,7 @@ public:
     void SetDefaultFocusAction(FocusAction focusAction);
 
 protected:
+    UIGameObject(const String& name = "UIGameObject");
     virtual FocusAction OnFocusReceived();
 
 private:
@@ -32,8 +33,6 @@ private:
 
     UIGameObject* ReceiveFocus();
     UIGameObject* PropagateFocus(const Vector2 &mouseCoordsNDC);
-
-    UIGameObject(const String& name = "UIGameObject");
 
     // IFocusable
     virtual void OnFocusTaken() override;

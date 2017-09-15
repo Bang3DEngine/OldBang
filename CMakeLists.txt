@@ -224,6 +224,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButtonTinter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
+${ENGINE_SRC_DIR}/UIComponents/LayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
