@@ -89,8 +89,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
         {
             p_boxScrollArea->SetScrolling(prevScrolling);
             float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
-            float lookAheadNDC =
-                RectTransform::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
+            float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
             if (cursorX < labelLimits.GetMin().x)
             {
                 scrollNDC.x = labelLimits.GetMin().x - cursorX + lookAheadNDC;
@@ -108,7 +107,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
                                   contentRectNDC.GetMax().x;
                 }
             }
-            Vector2i scrollPx = RectTransform::FromGlobalNDCToPixelsAmount(scrollNDC);
+            Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
             p_boxScrollArea->SetScrolling(prevScrolling + scrollPx);
         }
     }

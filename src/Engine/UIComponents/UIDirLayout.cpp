@@ -4,8 +4,8 @@
 #include "Bang/Array.h"
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
-#include "Bang/LayoutElement.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutElement.h"
 
 USING_NAMESPACE_BANG
 
@@ -38,7 +38,7 @@ void UIDirLayout::OnUpdate()
     int occupiedPixels = 0;
     for (GameObject *child : gameObject->GetChildren())
     {
-        LayoutElement *cle = child->GetComponent<LayoutElement>();
+        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
         if (!cle) { continue; }
 
         if (m_vertical)
@@ -61,7 +61,7 @@ void UIDirLayout::OnUpdate()
                                  - occupiedPixels);
     for (GameObject *child : gameObject->GetChildren())
     {
-        LayoutElement *cle = child->GetComponent<LayoutElement>();
+        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
         if (!cle) { continue; }
 
         int pxToAdd = 0;

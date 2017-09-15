@@ -16,11 +16,6 @@ RectTransform::~RectTransform()
 {
 }
 
-Vector2 RectTransform::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
-{
-    return (Vector2f(pixels) / Vector2f(GL::GetViewportSize())) * 2.0f;
-}
-
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
 {
     Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
@@ -35,10 +30,6 @@ Vector2 RectTransform::FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) 
             * 2.0f;
 }
 
-Vector2i RectTransform::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
-{
-    return Vector2i(ndcAmount * Vector2f(GL::GetViewportSize()) * 0.5f);
-}
 Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
 {
     return Vector2i(ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize())
@@ -47,30 +38,12 @@ Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) con
 
 Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const
 {
-    return FromGlobalNDCToLocalNDC( FromPixelsPointToGlobalNDC(pixelsPoint) );
-}
-Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
-{
-    Vector2i screenSize( GL::GetViewportSize() );
-    Vector2i pixelsPoint(_pixelsPoint.x, screenSize.y - _pixelsPoint.y);
-    Vector2 res = ( Vector2f(pixelsPoint) / Vector2f(screenSize) ) * 2.0f - 1.0f;
-    return res;
-}
-Vector2 RectTransform::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
-{
-    return RectTransform::FromPixelsPointToGlobalNDC( Vector2f(pixelsPoint) );
+    return FromGlobalNDCToLocalNDC( GL::FromPixelsPointToGlobalNDC(pixelsPoint) );
 }
 
 Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 {
-    return FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
-}
-Vector2i RectTransform::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
-{
-    Vector2 ndcPoint(_ndcPoint.x,  _ndcPoint.y);
-    Vector2 screenSize( GL::GetViewportSize() );
-    Vector2i resultPx( Vector2::Round( (ndcPoint * 0.5f + 0.5f) * screenSize) );
-    return Vector2i(resultPx.x, screenSize.y - resultPx.y);
+    return GL::FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
 }
 
 Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const
@@ -205,8 +178,8 @@ const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 Recti RectTransform::GetScreenSpaceRectPx() const
 {
     Rect rectNDC = GetScreenSpaceRectNDC();
-    return Recti(RectTransform::FromGlobalNDCToPixelsPoint(rectNDC.GetMin()),
-                 RectTransform::FromGlobalNDCToPixelsPoint(rectNDC.GetMax()));
+    return Recti(GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin()),
+                 GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMax()));
 }
 
 Recti RectTransform::GetParentScreenRectPx() const

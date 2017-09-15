@@ -153,8 +153,8 @@ void UITextRenderer::RefreshMesh()
 
         Vector2 minPxPerf = Vector2::Round( cr.rectPx.GetMin() ) + 0.5f;
         Vector2 maxPxPerf = Vector2::Round( cr.rectPx.GetMax() ) + 0.5f;
-        Vector2f minGlobalNDC ( rt->FromPixelsPointToGlobalNDC(minPxPerf) );
-        Vector2f maxGlobalNDC ( rt->FromPixelsPointToGlobalNDC(maxPxPerf) );
+        Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
+        Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
 
         Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);

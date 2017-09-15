@@ -23,6 +23,7 @@ public:
     void SetImageTexture(const Path &imagePath);
     void SetImageTexture(Texture2D *imageTexture);
     void SetTint(const Color& tint);
+    void SetIsBackground(bool isBackground);
     void SetAspectRatioMode(AspectRatioMode arMode);
     void SetVerticalAlignment(VerticalAlignment verticalAlignment);
     void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
@@ -32,6 +33,10 @@ public:
     AspectRatioMode GetAspectRatioMode() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
+    bool IsBackground() const;
+
+    // Renderer
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -42,6 +47,7 @@ public:
 
 private:
     Mesh *m_quadMesh = nullptr;
+    bool m_isBackground = false;
     Texture2D *m_imageTexture = nullptr;
 
     AspectRatioMode m_aspectRatioMode         = AspectRatioMode::Ignore;

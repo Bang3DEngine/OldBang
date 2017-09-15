@@ -48,14 +48,9 @@ public:
     Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
     Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;
-    static Vector2 FromPixelsAmountToGlobalNDC(const Vector2i &pixelsAmount);
     Vector2i FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
-    static Vector2i FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
-    static Vector2 FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint);
-    static Vector2 FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
-    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
 
     // Component
     virtual void OnParentSizeChanged() override;

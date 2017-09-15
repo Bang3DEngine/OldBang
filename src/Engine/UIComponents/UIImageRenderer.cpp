@@ -58,6 +58,11 @@ void UIImageRenderer::SetTint(const Color &tint)
     GetMaterial()->SetDiffuseColor(tint);
 }
 
+void UIImageRenderer::SetIsBackground(bool isBackground)
+{
+    m_isBackground = isBackground;
+}
+
 void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 {
     m_aspectRatioMode = arMode;
@@ -100,6 +105,19 @@ HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
     return m_horizontalAlignment;
 }
 
+bool UIImageRenderer::IsBackground() const
+{
+    return m_isBackground;
+}
+
+Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
+{
+    Rect boundingRect = UIRenderer::GetBoundingRect(camera);
+
+    if (!IsBackground()) { return  boundingRect; }
+    return Rect(boundingRect.GetCenter(), boundingRect.GetCenter());
+}
+
 void UIImageRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
@@ -118,6 +136,9 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Tint"))
     { SetTint( xmlInfo.Get<Color>("Tint") ); }
 
+    if (xmlInfo.Contains("IsBackground"))
+    { SetIsBackground( xmlInfo.Get<bool>("IsBackground") ); }
+
     if (xmlInfo.Contains("HorizontalAlignment"))
     { SetHorizontalAlignment( xmlInfo.Get<HorizontalAlignment>("HorizontalAlignment") ); }
 
@@ -135,6 +156,7 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
+    xmlInfo->Set("IsBackground", IsBackground());
     xmlInfo->Set("HorizontalAlignment", GetHorizontalAlignment());
     xmlInfo->Set("VerticalAlignment", GetVerticalAlignment());
     xmlInfo->Set("AspectRatioMode", GetAspectRatioMode());

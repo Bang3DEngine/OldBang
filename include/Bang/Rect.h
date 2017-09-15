@@ -106,16 +106,18 @@ public:
 
     static RectG<T> Union(const RectG<T> &r1, const RectG<T> &r2)
     {
-        if (r1 == RectG<T>::Zero) { return r2; }
-        if (r2 == RectG<T>::Zero) { return r1; }
+        if (r1.GetSize() == Vector2G<T>::Zero) { return r2; }
+        if (r2.GetSize() == Vector2G<T>::Zero) { return r1; }
         return RectG<T>(Math::Min(r1.m_min.x, r2.m_min.x),
-                        Math::Max(r1.m_max.x, r2.m_max.x),
                         Math::Min(r1.m_min.y, r2.m_min.y),
+                        Math::Max(r1.m_max.x, r2.m_max.x),
                         Math::Max(r1.m_max.y, r2.m_max.y));
     }
 
     static RectG<T> Intersection(const RectG<T> &r1, const RectG<T> &r2)
     {
+        if (r1.GetSize() == Vector2G<T>::Zero) { return r1; }
+        if (r2.GetSize() == Vector2G<T>::Zero) { return r2; }
         T minx = Math::Max(r1.m_min.x, r2.m_min.x);
         T miny = Math::Max(r1.m_min.y, r2.m_min.y);
         T maxx = Math::Min(r1.m_max.x, r2.m_max.x);
