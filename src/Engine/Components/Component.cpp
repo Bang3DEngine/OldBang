@@ -30,6 +30,7 @@ void Component::OnRenderGizmos() {}
 void Component::OnAfterChildrenRender(RenderPass renderPass) {}
 void Component::OnParentLayoutChanged() {}
 void Component::OnChildLayoutChanged() {}
+void Component::OnRecalculateLayout() {}
 void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const

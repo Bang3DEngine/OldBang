@@ -22,9 +22,9 @@ UIDirLayout::~UIDirLayout()
 {
 }
 
-void UIDirLayout::OnUpdate()
+void UIDirLayout::OnRecalculateLayout()
 {
-    Component::OnUpdate();
+    Component::OnRecalculateLayout();
 
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 

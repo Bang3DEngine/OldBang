@@ -13,7 +13,7 @@ class UIDirLayout : public Component
 public:
 
     // Component
-    virtual void OnUpdate() override;
+    virtual void OnRecalculateLayout() override;
 
     void SetSpacing(int spacingPx);
 

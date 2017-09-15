@@ -10,6 +10,7 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -51,6 +52,7 @@ void SceneManager::LoadScene(Scene *scene)
         Time::ResetDeltaTime();
         sm->m_activeScene->Start();
         sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
+        UILayoutManager::RebuildLayout(sm->m_activeScene, true);
         Time::ResetDeltaTime();
     }
 }

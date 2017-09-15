@@ -17,6 +17,7 @@
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
@@ -101,6 +102,7 @@ bool Application::MainLoopIteration()
 
     UpdateScene();
     RenderScene();
+    UILayoutManager::RebuildLayout( SceneManager::GetActiveScene() );
 
     m_input->OnFrameFinished();
     m_time->OnFrameFinished();

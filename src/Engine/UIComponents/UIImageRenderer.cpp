@@ -27,10 +27,10 @@ UIImageRenderer::~UIImageRenderer()
     delete m_quadMesh;
 }
 
-void UIImageRenderer::OnUpdate()
+void UIImageRenderer::OnRecalculateLayout()
 {
-    UIRenderer::OnUpdate();
-    UpdateQuadUvsToMatchFormat();
+    UIRenderer::OnRecalculateLayout();
+    UpdateQuadUvsToMatchFormat(true);
 }
 
 void UIImageRenderer::OnRender()
@@ -71,13 +71,15 @@ void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
 {
     m_verticalAlignment = verticalAlignment;
-    UpdateQuadUvsToMatchFormat(true);
+    OnParentLayoutChanged();
+    OnChildLayoutChanged();
 }
 
 void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 {
     m_horizontalAlignment = horizontalAlignment;
-    UpdateQuadUvsToMatchFormat(true);
+    OnParentLayoutChanged();
+    OnChildLayoutChanged();
 }
 
 const Color &UIImageRenderer::GetTint() const

@@ -164,7 +164,6 @@ void UIInputText::HandleTyping()
     if (content != GetText()->GetContent())
     {
         GetText()->SetContent(content);
-        GetText()->RefreshMesh();
     }
 }
 
@@ -415,7 +414,6 @@ void UIInputText::InitGameObject()
 
     ResetSelection();
     GetBackground()->SetTint(Color::White);
-    GetText()->RefreshMesh();
     UpdateCursorRenderersAndScrolling();
     RetrieveReferences();
 }

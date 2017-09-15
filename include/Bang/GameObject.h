@@ -35,9 +35,9 @@ public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
+    virtual void RecalculateLayout();
     virtual void ParentLayoutChanged();
     virtual void ChildLayoutChanged();
-    virtual void LayoutChanged();
     virtual void Destroy();
 
     static void Destroy(GameObject *gameObject);

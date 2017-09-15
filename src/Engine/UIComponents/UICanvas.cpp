@@ -28,6 +28,11 @@ void UICanvas::OnUpdate()
     }
 }
 
+void UICanvas::OnRecalculateLayout()
+{
+    Component::OnRecalculateLayout();
+}
+
 void UICanvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

@@ -77,12 +77,6 @@ void GameObject::ChildLayoutChanged()
     if (parent) { parent->ChildLayoutChanged(); }
 }
 
-void GameObject::LayoutChanged()
-{
-    ChildLayoutChanged();
-    ParentLayoutChanged();
-}
-
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
@@ -102,7 +96,15 @@ void GameObject::BeforeChildrenRender(RenderPass renderPass)
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass), m_components);
+    PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass),
+                                  m_components);
+}
+
+void GameObject::RecalculateLayout()
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRecalculateLayout(), m_components);
+    PROPAGATE_EVENT(RecalculateLayout(), GetChildren());
+    PROPAGATE_EVENT_TO_COMPONENTS(OnRecalculateLayout(), m_components);
 }
 
 void GameObject::RenderGizmos()

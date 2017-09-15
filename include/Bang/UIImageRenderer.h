@@ -17,7 +17,7 @@ public:
     virtual ~UIImageRenderer();
 
     // UIRenderer
-    virtual void OnUpdate() override;
+    virtual void OnRecalculateLayout() override;
     virtual void OnRender() override;
 
     void SetImageTexture(const Path &imagePath);

@@ -223,6 +223,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButtonTinter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
+${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp

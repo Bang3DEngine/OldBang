@@ -22,9 +22,9 @@ void UIContentSizeFitter::OnUpdate()
     Component::OnUpdate();
 }
 
-void UIContentSizeFitter::OnChildLayoutChanged()
+void UIContentSizeFitter::OnRecalculateLayout()
 {
-    Component::OnChildLayoutChanged();
+    Component::OnRecalculateLayout();
 
     UILayoutElement *layoutElm = gameObject->GetComponent<UILayoutElement>();
     ENSURE(layoutElm);

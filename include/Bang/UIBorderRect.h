@@ -16,6 +16,7 @@ public:
     // Component
     virtual void OnStart() override;
     virtual void OnRender(RenderPass rp) override;
+    virtual void OnRecalculateLayout() override;
 
     void SetLineColor(const Color& lineColor);
     void SetLineWidth(float lineWidth);

@@ -23,14 +23,12 @@ public:
 
     // UIRenderer
     virtual void OnRender() override;
-    virtual void OnParentLayoutChanged() override;
+    virtual void OnRecalculateLayout() override;
     virtual void OnRender(RenderPass renderPass) override;
 
     // UIRenderer
     virtual void Bind() const override;
     virtual void UnBind() const override;
-
-    void RefreshMesh();
 
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);
@@ -92,7 +90,6 @@ private:
     float m_outlineBlurriness   = 0.01f;
 
     bool m_isOverlapping = false;
-    bool m_hasChanged    = false;
 
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;

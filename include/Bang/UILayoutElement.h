@@ -11,6 +11,11 @@ class UILayoutElement : public Component
     COMPONENT(UILayoutElement)
 
 public:
+    // Component
+    virtual void OnParentLayoutChanged() override;
+    virtual void OnChildLayoutChanged() override;
+    virtual void OnRecalculateLayout() override;
+
     void SetMinWidth(int minWidth);
     void SetMinHeight(int minHeight);
     void SetMinSize(const Vector2i& minSize);
@@ -20,6 +25,7 @@ public:
     void SetFlexibleWidth(int flexibleWidth);
     void SetFlexibleHeight(int flexibleHeight);
     void SetFlexibleSize(const Vector2& flexibleSize);
+    void SetDirty(bool dirty);
 
     int GetMinWidth() const;
     int GetMinHeight() const;
@@ -30,6 +36,7 @@ public:
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
     const Vector2& GetFlexibleSize() const;
+    bool IsDirty() const;
 
 protected:
     UILayoutElement();
@@ -39,6 +46,8 @@ private:
     Vector2i m_minSize       = Vector2i(50);
     Vector2i m_preferredSize = Vector2i(100);
     Vector2  m_flexibleSize  = Vector2::Zero;
+
+    bool m_isDirty = false;
 };
 
 NAMESPACE_BANG_END
