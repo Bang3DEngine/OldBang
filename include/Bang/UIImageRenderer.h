@@ -36,7 +36,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    Mesh *p_quadMesh = nullptr;
+    Mesh *m_quadMesh = nullptr;
     Texture2D *m_imageTexture = nullptr;
     AspectRatioMode m_aspectRatioMode = AspectRatioMode::Ignore;
 

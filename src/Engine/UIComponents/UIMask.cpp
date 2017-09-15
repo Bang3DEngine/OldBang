@@ -93,7 +93,7 @@ void UIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
 void UIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
 bool UIMask::IsMasking() const { return m_masking; }
-bool UIMask::IsDrawMask() const { return m_drawMask; }
+bool UIMask::IsDrawMask() const { return true; } // m_drawMask; }
 
 void UIMask::ImportXML(const XMLNode &xmlInfo)
 {

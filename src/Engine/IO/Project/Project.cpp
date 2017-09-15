@@ -52,16 +52,21 @@ void Project::SetProjectRootFilepath(const Path &projectDir)
 
 bool Project::OpenFirstFoundScene() const
 {
+    Path firstFoundScene = GetFirstFoundScenePath();
+    if (firstFoundScene.IsFile())
+    {
+        SceneManager::OpenScene(firstFoundScene);
+    }
+
+    return (firstFoundScene.IsFile());
+}
+
+Path Project::GetFirstFoundScenePath() const
+{
     List<Path> sceneFilepaths = GetProjectAssetsRootFilepath()
                                 .FindFiles(Path::FindFlag::Recursive,
                                            {Extensions::Get<Scene>()});
-    bool foundSceneFile = !sceneFilepaths.IsEmpty();
-    if (foundSceneFile)
-    {
-        SceneManager::OpenScene(sceneFilepaths.Front());
-    }
-
-    return foundSceneFile;
+    return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Front() : Path::Empty;
 }
 
 

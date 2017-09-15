@@ -17,11 +17,12 @@ UIImageRenderer::UIImageRenderer()
     SetMaterial( MaterialFactory::GetUIImage() );
     UseMaterialCopy();
 
-    p_quadMesh = MeshFactory::GetUIPlane();
+    m_quadMesh = new Mesh(*MeshFactory::GetUIPlane());
 }
 
 UIImageRenderer::~UIImageRenderer()
 {
+    delete m_quadMesh;
 }
 
 void UIImageRenderer::OnUpdate()
@@ -33,9 +34,9 @@ void UIImageRenderer::OnUpdate()
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
-    GL::Render(p_quadMesh->GetVAO(),
+    GL::Render(m_quadMesh->GetVAO(),
                GetRenderPrimitive(),
-               p_quadMesh->GetVertexCount());
+               m_quadMesh->GetVertexCount());
 }
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
@@ -110,30 +111,22 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
 void UIImageRenderer::UpdateQuadUvsToMatchAspectRatioMode()
 {
     ENSURE(m_imageTexture);
-    ENSURE(m_imageTexture->GetSize() != m_prevImageTextureSize);
 
     RectTransform *rt = gameObject->GetComponent<RectTransform>();
     Recti rectPx = rt->GetScreenSpaceRectPx();
-    ENSURE(m_prevRectSize != rectPx.GetSize());
+    Vector2i rectSize(rectPx.GetSize());
+    ENSURE(m_prevRectSize != rectSize);
 
-    Array<Vector2> quadUvs;
+    Vector2i texSize(m_imageTexture->GetSize());
+    Vector2i texQuadSize =
+            AspectRatio::GetAspectRatioedSize(rectSize, texSize,
+                                              GetAspectRatioMode());
 
-    Vector2 texSize(m_imageTexture->GetSize());
-    Vector2 texTargetSize(AspectRatio::GetAspectRatioedSize(
-                                         rectPx.GetSize(), Vector2i(texSize),
-                                         GetAspectRatioMode())
-                          );
+    Vector2 uvs = Vector2(rectSize) / Vector2(texQuadSize);
+    Array<Vector2> quadUvs = {
+        Vector2(0, uvs.y), Vector2(uvs.x, uvs.y), Vector2(uvs.x, 0),
+        Vector2(0, uvs.y), Vector2(uvs.x,     0), Vector2(    0, 0)};
 
-    Vector2 uvs = texTargetSize / texSize;
-    quadUvs = {Vector2(    0, 0),
-               Vector2(uvs.x, 0),
-               Vector2(uvs.x, uvs.y),
-
-               Vector2(    0, 0),
-               Vector2(uvs.x, uvs.y),
-               Vector2(    0, uvs.y)};
-
-    p_quadMesh->LoadUvs(quadUvs);
-
+    m_quadMesh->LoadUvs(quadUvs);
     m_prevImageTextureSize = m_imageTexture->GetSize();
 }

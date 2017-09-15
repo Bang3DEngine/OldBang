@@ -24,6 +24,7 @@ public:
     void SetProjectRootFilepath(const Path &projectDir);
 
     virtual bool OpenFirstFoundScene() const;
+    Path GetFirstFoundScenePath() const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
