@@ -30,6 +30,11 @@ public:
                                         HorizontalAlignment hAlignment,
                                         VerticalAlignment vAlignment,
                                         bool wrapping);
+
+    static Vector2i GetTextSizeOneLined(const String &content,
+                                        const Font *font,
+                                        const Vector2 &spacingMultiplier);
+
     TextFormatter() = delete;
 
 private:

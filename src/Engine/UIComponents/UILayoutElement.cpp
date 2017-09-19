@@ -12,24 +12,6 @@ UILayoutElement::~UILayoutElement()
 
 }
 
-void UILayoutElement::OnParentLayoutChanged()
-{
-    Component::OnParentLayoutChanged();
-    SetDirty(true);
-}
-
-void UILayoutElement::OnChildLayoutChanged()
-{
-    Component::OnChildLayoutChanged();
-    SetDirty(true);
-}
-
-void UILayoutElement::OnRecalculateLayout()
-{
-    Component::OnRecalculateLayout();
-    SetDirty(false);
-}
-
 void UILayoutElement::SetMinWidth(int minWidth)
 {
     m_minSize.x = minWidth;
@@ -75,10 +57,6 @@ void UILayoutElement::SetFlexibleSize(const Vector2 &flexibleSize)
     m_flexibleSize = flexibleSize;
 }
 
-void UILayoutElement::SetDirty(bool dirty)
-{
-    m_isDirty = dirty;
-}
 
 int UILayoutElement::GetMinWidth() const
 {
@@ -125,9 +103,32 @@ const Vector2& UILayoutElement::GetFlexibleSize() const
     return m_flexibleSize;
 }
 
-bool UILayoutElement::IsDirty() const
+int UILayoutElement::GetFlexiblePxWidth() const
 {
-    return m_isDirty;
+    return GetFlexiblePxSize().x;
 }
 
+int UILayoutElement::GetFlexiblePxHeight() const
+{
+    return GetFlexiblePxSize().y;
+}
 
+Vector2i UILayoutElement::GetFlexiblePxSize() const
+{
+    return Vector2i(Vector2(GetPreferredSize()) * GetFlexibleSize());
+}
+
+Vector2i UILayoutElement::CalculateTotalFlexiblePxSize() const
+{
+    return GetFlexiblePxSize();
+}
+
+Vector2i UILayoutElement::CalculateTotalPreferredSize() const
+{
+    return GetPreferredSize();
+}
+
+Vector2i UILayoutElement::CalculateTotalMinSize() const
+{
+    return GetMinSize();
+}

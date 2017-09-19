@@ -8,6 +8,7 @@
 #include "Bang/Color.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/GEngine.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/Renderer.h"
@@ -22,7 +23,6 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/GEngine.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SingleLineRenderer.h"
 
@@ -399,7 +399,7 @@ GameObject *Gizmos::GetGizmosGameObject()
 
 void Gizmos::Render(Renderer *rend)
 {
-    // rend->Render(RenderPass::Gizmos);
+    rend->OnRender(RenderPass::Gizmos);
 }
 
 Gizmos* Gizmos::GetInstance()

@@ -7,6 +7,9 @@
 #include "Bang/Map.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 #include "Bang/Matrix4.h"
 
 NAMESPACE_BANG_BEGIN
@@ -321,6 +324,15 @@ public:
     static void Uniform(int location, const Vector2 &value);
     static void Uniform(int location, const Vector3 &value);
     static void Uniform(int location, const Vector4 &value);
+
+    template <class T>
+    static T GetUniform(GLId program, int uniformLocation);
+
+    template <class T>
+    static T GetUniform(GLId program, const String &uniformName);
+
+    template <class T>
+    static T GetUniform(const String &uniformName);
 
     static void PixelStore(GL::Enum pixelStoreEnum, int n);
 

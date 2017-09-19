@@ -35,9 +35,6 @@ public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
-    virtual void RecalculateLayout();
-    virtual void ParentLayoutChanged();
-    virtual void ChildLayoutChanged();
     virtual void Destroy();
 
     static void Destroy(GameObject *gameObject);
@@ -64,8 +61,8 @@ public:
     GameObject* GetChild(const GUID &guid) const;
     GameObject* GetChild(const String &name) const;
 
-    template <class T> // To enable auto-complete
-    T* GetComponent() const { return _GetComponent<T>(); }
+    template <class T>
+    T* GetComponent() const;
     Component* GetComponentByGUID(const GUID &guid) const;
 
     template <class T>
@@ -79,10 +76,15 @@ public:
     List<T*> GetComponentsInParent() const;
 
     template <class T>
-    T* GetComponentInChildren() const;
+    T* GetComponentInChildren(bool recursive = true) const;
 
     template <class T>
-    List<T*> GetComponentsInChildren() const;
+    List<T*> GetComponentsInChildren(bool recursive = true) const;
+
+    template <class T>
+    T* GetComponentInChildrenOnly(bool recursive = true) const;
+    template <class T>
+    List<T*> GetComponentsInChildrenOnly(bool recursive = true) const;
 
     template <class T>
     bool HasComponent() const;
@@ -137,8 +139,6 @@ protected:
 
 private:
     GameObject(const String &m_name = "GameObject");
-
-    template <class T> T* _GetComponent() const;
 
     friend class Scene;
     friend class Prefab;

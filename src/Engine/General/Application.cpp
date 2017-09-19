@@ -81,6 +81,7 @@ int Application::MainLoop()
     while (!quit && !m_exit)
     {
         quit = MainLoopIteration();
+        // Debug_Log(Time::GetNow());
 
         Texture2D *screenRenderTexture = GetWindow()->GetScreenRenderTexture();
         GEngine::GetInstance()->RenderToScreen(screenRenderTexture);
@@ -97,12 +98,11 @@ int Application::MainLoop()
 bool Application::MainLoopIteration()
 {
     m_time->OnFrameStarted();
-
     m_input->ProcessEnqueuedEvents();
 
     UpdateScene();
-    RenderScene();
     UILayoutManager::RebuildLayout( SceneManager::GetActiveScene() );
+    RenderScene();
 
     m_input->OnFrameFinished();
     m_time->OnFrameFinished();
@@ -157,7 +157,7 @@ void Application::OnResize(int newWidth, int newHeight)
     m_gEngine->Resize(newWidth, newHeight);
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene) { activeScene->ParentLayoutChanged(); }
+    if (activeScene) { UILayoutManager::ForceRebuildLayout(activeScene); }
 }
 
 GEngine *Application::GetGEngine() const

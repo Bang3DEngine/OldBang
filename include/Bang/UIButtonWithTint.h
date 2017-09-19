@@ -1,19 +1,19 @@
-#ifndef UIBUTTONTINTER_H
-#define UIBUTTONTINTER_H
+#ifndef UIBUTTONWITHTINT_H
+#define UIBUTTONWITHTINT_H
 
 #include "Bang/Color.h"
 #include "Bang/UIButton.h"
 
 NAMESPACE_BANG_BEGIN
 
-class UIButtonTinter : public UIButton,
-                       public UIButtonListener
+class UIButtonWithTint : public UIButton,
+                         public UIButtonListener
 {
-    COMPONENT(UIButtonTinter)
+    COMPONENT(UIButtonWithTint)
 
 public:
-    UIButtonTinter();
-    virtual ~UIButtonTinter();
+    UIButtonWithTint();
+    virtual ~UIButtonWithTint();
 
     // Component
     virtual void OnUpdate() override;
@@ -49,4 +49,4 @@ private:
 
 NAMESPACE_BANG_END
 
-#endif // UIBUTTONTINTER_H
+#endif // UIBUTTONWITHTINT_H

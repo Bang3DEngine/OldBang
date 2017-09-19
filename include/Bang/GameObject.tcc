@@ -15,7 +15,7 @@ T* GameObject::AddComponent(int index)
 }
 
 template <class T>
-T* GameObject::_GetComponent() const
+T* GameObject::GetComponent() const
 {
     for (Component *comp : m_components)
     {
@@ -56,34 +56,50 @@ List<T*> GameObject::GetComponentsInParent() const
 }
 
 template <class T>
-T* GameObject::GetComponentInChildren() const
+T* GameObject::GetComponentInChildren(bool recursive) const
 {
     T *compThis = GetComponent<T>();
     if (compThis) { return compThis; }
+    return GetComponentInChildrenOnly<T>(recursive);
+}
 
+template <class T>
+List<T*> GameObject::GetComponentsInChildren(bool recursive) const
+{
+    List<T*> comps_l;
+    comps_l.PushBack( GetComponents<T>() );
+    comps_l.PushBack( GetComponentsInChildrenOnly<T>(recursive) );
+    return comps_l;
+}
+
+template<class T>
+T *GameObject::GetComponentInChildrenOnly(bool recursive) const
+{
     for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
     {
         T *comp = (*c)->GetComponent<T>();
         if (comp) return comp;
-        comp = (*c)->GetComponentInChildren<T>();
-        if (comp) return comp;
+        if (recursive)
+        {
+            comp = (*c)->GetComponentInChildren<T>(true);
+            if (comp) return comp;
+        }
     }
     return nullptr;
 }
 
-template <class T>
-List<T*> GameObject::GetComponentsInChildren() const
+template<class T>
+List<T*> GameObject::GetComponentsInChildrenOnly(bool recursive) const
 {
-    List<T*> comps_l;
-    comps_l.PushBack( GetComponents<T>() );
+    List<T*> comps;
     for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
     {
-        List<T*> childComps = (*c)->GetComponents<T>();
-        comps_l.Splice(comps_l.End(), childComps); //concat
-        List<T*> childChildrenComps = (*c)->GetComponentsInChildren<T>();
-        comps_l.Splice(comps_l.End(), childChildrenComps); //concat
+        List<T*> childChildrenComps =
+                recursive ? (*c)->GetComponentsInChildren<T>() :
+                            (*c)->GetComponents<T>();
+        comps.Splice(comps.End(), childChildrenComps); //concat
     }
-    return comps_l;
+    return comps;
 }
 
 template <class T>

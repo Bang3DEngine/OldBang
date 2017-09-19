@@ -1,7 +1,9 @@
 #include "Bang/UIButton.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Selection.h"
 #include "Bang/GameObject.h"
+#include "Bang/RectTransform.h"
 
 USING_NAMESPACE_BANG
 
@@ -70,11 +72,7 @@ void UIButton::OnUpdate()
 
 void UIButton::AddAgent(GameObject *agent)
 {
-    List<GameObject*> recChildren = agent->GetChildrenRecursively();
-    for (GameObject *rChild : recChildren)
-    {
-        p_agents.Add(rChild);
-    }
+    p_agents.Add(agent);
 }
 void UIButton::RemoveAgent(GameObject *agent)
 {
@@ -111,12 +109,44 @@ void UIButton::AddClickedCallback(UIButton::ClickedCallback callback)
     m_clickedCallbacks.PushBack(callback);
 }
 
+void UIButton::SetMode(UIButtonMode mode)
+{
+    m_mode = mode;
+}
+
 bool UIButton::IsMouseOverSomeAgent() const
 {
-    GameObject *overedGameObject = Selection::GetOveredGameObject();
-    for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+    if (GetMode() == UIButtonMode::UseRender)
     {
-        if (overedGameObject == *it) { return true; }
+        GameObject *overedGameObject = Selection::GetOveredGameObject();
+        if (!overedGameObject) { return false; }
+        Debug_Log(overedGameObject->GetComponents());
+        for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+        {
+            const GameObject *agent = *it;
+            if (overedGameObject == agent || overedGameObject->IsChildOf(agent,
+                                                                         true))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    else
+    {
+        Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
+        for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+        {
+           const GameObject *agent = *it;
+           if (GetMode() == UIButtonMode::UseRectTransform)
+           {
+                RectTransform *rt = agent->GetComponent<RectTransform>();
+                if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC))
+                {
+                    return true;
+                }
+           }
+        }
     }
     return false;
 }
@@ -124,4 +154,9 @@ bool UIButton::IsMouseOverSomeAgent() const
 bool UIButton::IsBeingPressed() const
 {
     return m_beingPressed;
+}
+
+UIButtonMode UIButton::GetMode() const
+{
+    return m_mode;
 }

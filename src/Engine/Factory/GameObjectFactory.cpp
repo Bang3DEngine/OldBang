@@ -11,9 +11,9 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButtonTinter.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIButtonWithTint.h"
 
 USING_NAMESPACE_BANG
 
@@ -71,21 +71,21 @@ UIGameObject *GameObjectFactory::CreateGUIButton()
     UIBorderRect *borderRect = go->AddComponent<UIBorderRect>();
     borderRect->SetLineColor(Color::Purple);
 
-    UIButtonTinter *labelTinter = go->AddComponent<UIButtonTinter>();
-    labelTinter->AddAgent(go);
-    labelTinter->AddGameObjectToTint(label);
-    labelTinter->SetIdleTintColor(label->
+    UIButtonWithTint *labelBTint = go->AddComponent<UIButtonWithTint>();
+    labelBTint->AddAgent(go);
+    labelBTint->AddGameObjectToTint(label);
+    labelBTint->SetIdleTintColor(label->
                                   GetComponentInChildren<UITextRenderer>()->
                                   GetTextColor());
-    labelTinter->SetOverTintColor(Color::Black);
-    labelTinter->SetPressedTintColor(Color::White);
+    labelBTint->SetOverTintColor(Color::Black);
+    labelBTint->SetPressedTintColor(Color::White);
 
-    UIButtonTinter *bgTinter = go->AddComponent<UIButtonTinter>();
-    bgTinter->AddGameObjectToTint(bg);
-    bgTinter->SetIdleTintColor(bgImg->GetTint());
-    bgTinter->SetOverTintColor(Color::Gray);
-    bgTinter->SetPressedTintColor(Color::Black);
-    bgTinter->AddAgent(go);
+    UIButtonWithTint *bgWTint = go->AddComponent<UIButtonWithTint>();
+    bgWTint->AddGameObjectToTint(bg);
+    bgWTint->SetIdleTintColor(bgImg->GetTint());
+    bgWTint->SetOverTintColor(Color::Gray);
+    bgWTint->SetPressedTintColor(Color::Black);
+    bgWTint->AddAgent(go);
 
     go->AddComponent<UIButton>();
 

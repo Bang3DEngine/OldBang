@@ -52,7 +52,7 @@ void SceneManager::LoadScene(Scene *scene)
         Time::ResetDeltaTime();
         sm->m_activeScene->Start();
         sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
-        UILayoutManager::RebuildLayout(sm->m_activeScene, true);
+        UILayoutManager::ForceRebuildLayout(sm->m_activeScene);
         Time::ResetDeltaTime();
     }
 }

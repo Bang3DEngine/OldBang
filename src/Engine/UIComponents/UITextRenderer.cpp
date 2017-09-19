@@ -14,6 +14,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -29,7 +30,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextColor(Color::Black);
 
     SetRenderPrimitive(GL::Primitives::Quads);
-    OnRecalculateLayout();
+    OnRectTransformChanged();
 }
 
 UITextRenderer::~UITextRenderer()
@@ -45,10 +46,249 @@ void UITextRenderer::OnRender()
                vertCount, startVert);
 }
 
-void UITextRenderer::OnRecalculateLayout()
+void UITextRenderer::OnRender(RenderPass renderPass)
 {
-    UIRenderer::OnRecalculateLayout();
+    if (!IsOverlapping())
+    {
+        // Render all quads at the same time
+        m_currentRenderingChar = 0;
+        Renderer::OnRender(renderPass);
+    }
+    else
+    {
+        // Render character by character
+        for (int i = 0; i < GetContent().Size(); ++i)
+        {
+            m_currentRenderingChar = i;
+            Renderer::OnRender(renderPass);
+        }
+    }
+}
 
+Vector2i UITextRenderer::CalculateTotalMinSize() const
+{
+    return Vector2i::Zero;
+}
+
+Vector2i UITextRenderer::CalculateTotalPreferredSize() const
+{
+    if (!GetFont()) { return Vector2i::Zero; }
+
+    GetFont()->SetMetricsSize( GetTextSize() );
+    Vector2i prefSize =
+         TextFormatter::GetTextSizeOneLined(GetContent(),
+                                            GetFont(),
+                                            GetSpacingMultiplier());
+    return prefSize;
+}
+
+Vector2i UITextRenderer::CalculateTotalFlexiblePxSize() const
+{
+    return CalculateTotalPreferredSize();
+}
+
+void UITextRenderer::Bind() const
+{
+    // Nullify RectTransform model, since we control its position and size
+    // directly from the VBO creation...
+    gameObject->transform->SetEnabled(false);
+    UIRenderer::Bind();
+
+    if (GetFont())
+    {
+        const int textSize = Math::Max(GetTextSize(), 1);
+
+        Vector2 atlasSize = Vector2(GetFont()->GetAtlasTexture()->GetSize());
+        GL::Uniform("B_fontAtlasSize", atlasSize, false);
+
+        bool usingDistField = GetFont()->IsUsingDistanceField();
+        GL::Uniform("B_usingDistField", usingDistField,  false);
+        if (usingDistField)
+        {
+            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
+            if (GetOutlineWidth() > 0.0f)
+            {
+                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
+                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
+            }
+
+            float blurriness = GetBlurriness() / textSize;
+            blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
+            GL::Uniform("B_textBlurriness", blurriness, false);
+
+            float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
+            alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
+            GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
+        }
+    }
+}
+
+void UITextRenderer::UnBind() const
+{
+    UIRenderer::UnBind();
+    gameObject->transform->SetEnabled(true);
+}
+
+void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
+{
+    if (GetHorizontalAlignment() != horizontalAlignment)
+    {
+        m_horizontalAlignment = horizontalAlignment;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
+{
+    if (GetVerticalAlignment() != verticalAlignment)
+    {
+        m_verticalAlignment = verticalAlignment;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetFont(Font *font)
+{
+    if (GetFont() != font)
+    {
+        m_font = font;
+        if (m_font)
+        {
+            GetMaterial()->SetTexture(m_font->GetAtlasTexture());
+        }
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetKerning(bool kerning)
+{
+    if (IsKerning() != kerning)
+    {
+        m_kerning = kerning;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetWrapping(bool wrapping)
+{
+    if (IsWrapping() != wrapping)
+    {
+        m_wrapping = wrapping;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetOverlapping(bool overlapping)
+{
+    m_isOverlapping = overlapping;
+}
+
+void UITextRenderer::SetAlphaThreshold(float alphaThreshold)
+{
+    m_alphaThreshold = alphaThreshold;
+}
+
+void UITextRenderer::SetBlurriness(float blurriness)
+{
+    m_blurriness = blurriness;
+}
+
+void UITextRenderer::SetContent(const String &content)
+{
+    if (GetContent() != content)
+    {
+        m_content = content;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetTextSize(int size)
+{
+    if (GetTextSize() != size)
+    {
+        m_textSize = Math::Max(size, 1);
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+void UITextRenderer::SetOutlineWidth(float outlineWidth)
+{
+    m_outlineWidth = outlineWidth;
+}
+
+void UITextRenderer::SetOutlineColor(const Color &color)
+{
+    m_outlineColor = color;
+}
+
+void UITextRenderer::SetOutlineBlurriness(float outlineBlurriness)
+{
+    m_outlineBlurriness = outlineBlurriness;
+}
+
+void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
+{
+    if (GetSpacingMultiplier() != spacingMultiplier)
+    {
+        m_spacingMultiplier = spacingMultiplier;
+        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+    }
+}
+
+bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
+
+void UITextRenderer::SetTextColor(const Color &textColor)
+{
+    GetMaterial()->SetDiffuseColor( textColor );
+}
+
+Font *UITextRenderer::GetFont() const { return m_font; }
+bool UITextRenderer::IsKerning() const { return m_kerning; }
+bool UITextRenderer::IsWrapping() const { return m_wrapping; }
+
+float UITextRenderer::GetBlurriness() const { return m_blurriness; }
+float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
+const String &UITextRenderer::GetContent() const { return m_content; }
+int UITextRenderer::GetTextSize() const { return m_textSize; }
+
+bool UITextRenderer::IsOverlapping() const { return m_isOverlapping; }
+float UITextRenderer::GetOutlineWidth() const { return m_outlineWidth; }
+const Color &UITextRenderer::GetOutlineColor() const { return m_outlineColor; }
+
+float UITextRenderer::GetOutlineBlurriness() const { return m_outlineBlurriness; }
+const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
+const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
+{
+    return m_charRectsLocalNDC;
+}
+const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
+{
+    return m_charRectsLocalNDC[charIndex];
+}
+
+Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }
+VerticalAlignment UITextRenderer::GetVerticalAlignment() const
+{
+    return m_verticalAlignment;
+}
+HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
+{
+    return m_horizontalAlignment;
+}
+
+Rect UITextRenderer::GetBoundingRect(Camera *camera) const
+{
+    if (!IsOverlapping()) { return GetContentGlobalNDCRect(); }
+    else
+    {
+        Vector2 p1 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 0].xy();
+        Vector2 p2 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 2].xy();
+        return Rect(Vector2::Min(p1,p2), Vector2::Max(p1,p2));
+    }
+}
+
+void UITextRenderer::OnRectTransformChanged()
+{
     ENSURE(gameObject); ENSURE(gameObject->transform);
 
     if (!m_font)
@@ -140,233 +380,6 @@ void UITextRenderer::OnRecalculateLayout()
                                                        textQuadPos2D.End());
     m_mesh->LoadPositions(textQuadPos3D);
     m_mesh->LoadUvs(textQuadUvs);
-}
-
-void UITextRenderer::OnRender(RenderPass renderPass)
-{
-    if (!IsOverlapping())
-    {
-        // Render all quads at the same time
-        m_currentRenderingChar = 0;
-        Renderer::OnRender(renderPass);
-    }
-    else
-    {
-        // Render character by character
-        for (int i = 0; i < GetContent().Size(); ++i)
-        {
-            m_currentRenderingChar = i;
-            Renderer::OnRender(renderPass);
-        }
-    }
-}
-
-void UITextRenderer::Bind() const
-{
-    // Nullify RectTransform model, since we control its position and size
-    // directly from the VBO creation...
-    gameObject->transform->SetEnabled(false);
-    UIRenderer::Bind();
-
-    if (GetFont())
-    {
-        const int textSize = Math::Max(GetTextSize(), 1);
-
-        Vector2 atlasSize = Vector2(GetFont()->GetAtlasTexture()->GetSize());
-        GL::Uniform("B_fontAtlasSize", atlasSize, false);
-
-        bool usingDistField = GetFont()->IsUsingDistanceField();
-        GL::Uniform("B_usingDistField", usingDistField,  false);
-        if (usingDistField)
-        {
-            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
-            if (GetOutlineWidth() > 0.0f)
-            {
-                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
-                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
-            }
-
-            float blurriness = GetBlurriness() / textSize;
-            blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
-            GL::Uniform("B_textBlurriness", blurriness, false);
-
-            float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
-            alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
-            GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
-        }
-    }
-}
-
-void UITextRenderer::UnBind() const
-{
-    UIRenderer::UnBind();
-    gameObject->transform->SetEnabled(true);
-}
-
-void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
-{
-    if (GetHorizontalAlignment() != horizontalAlignment)
-    {
-        m_horizontalAlignment = horizontalAlignment;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
-{
-    if (GetVerticalAlignment() != verticalAlignment)
-    {
-        m_verticalAlignment = verticalAlignment;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetFont(Font *font)
-{
-    if (GetFont() != font)
-    {
-        m_font = font;
-        if (m_font)
-        {
-            GetMaterial()->SetTexture(m_font->GetAtlasTexture());
-        }
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetKerning(bool kerning)
-{
-    if (IsKerning() != kerning)
-    {
-        m_kerning = kerning;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetWrapping(bool wrapping)
-{
-    if (IsWrapping() != wrapping)
-    {
-        m_wrapping = wrapping;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetOverlapping(bool overlapping)
-{
-    m_isOverlapping = overlapping;
-}
-
-void UITextRenderer::SetAlphaThreshold(float alphaThreshold)
-{
-    m_alphaThreshold = alphaThreshold;
-}
-
-void UITextRenderer::SetBlurriness(float blurriness)
-{
-    m_blurriness = blurriness;
-}
-
-void UITextRenderer::SetContent(const String &content)
-{
-    if (GetContent() != content)
-    {
-        m_content = content;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetTextSize(int size)
-{
-    if (GetTextSize() != size)
-    {
-        m_textSize = Math::Max(size, 1);
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-void UITextRenderer::SetOutlineWidth(float outlineWidth)
-{
-    m_outlineWidth = outlineWidth;
-}
-
-void UITextRenderer::SetOutlineColor(const Color &color)
-{
-    m_outlineColor = color;
-}
-
-void UITextRenderer::SetOutlineBlurriness(float outlineBlurriness)
-{
-    m_outlineBlurriness = outlineBlurriness;
-}
-
-void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
-{
-    if (GetSpacingMultiplier() != spacingMultiplier)
-    {
-        m_spacingMultiplier = spacingMultiplier;
-        OnParentLayoutChanged();
-        OnChildLayoutChanged();
-    }
-}
-
-bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
-
-void UITextRenderer::SetTextColor(const Color &textColor)
-{
-    GetMaterial()->SetDiffuseColor( textColor );
-}
-
-Font *UITextRenderer::GetFont() const { return m_font; }
-bool UITextRenderer::IsKerning() const { return m_kerning; }
-bool UITextRenderer::IsWrapping() const { return m_wrapping; }
-
-float UITextRenderer::GetBlurriness() const { return m_blurriness; }
-float UITextRenderer::GetAlphaThreshold() const { return m_alphaThreshold; }
-const String &UITextRenderer::GetContent() const { return m_content; }
-int UITextRenderer::GetTextSize() const { return m_textSize; }
-
-bool UITextRenderer::IsOverlapping() const { return m_isOverlapping; }
-float UITextRenderer::GetOutlineWidth() const { return m_outlineWidth; }
-const Color &UITextRenderer::GetOutlineColor() const { return m_outlineColor; }
-
-float UITextRenderer::GetOutlineBlurriness() const { return m_outlineBlurriness; }
-const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
-const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
-{
-    return m_charRectsLocalNDC;
-}
-const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
-{
-    return m_charRectsLocalNDC[charIndex];
-}
-
-Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }
-VerticalAlignment UITextRenderer::GetVerticalAlignment() const
-{
-    return m_verticalAlignment;
-}
-HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
-{
-    return m_horizontalAlignment;
-}
-
-Rect UITextRenderer::GetBoundingRect(Camera *camera) const
-{
-    if (!IsOverlapping()) { return GetContentGlobalNDCRect(); }
-    else
-    {
-        Vector2 p1 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 0].xy();
-        Vector2 p2 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 2].xy();
-        return Rect(Vector2::Min(p1,p2), Vector2::Max(p1,p2));
-    }
 }
 
 const Color &UITextRenderer::GetTextColor() const

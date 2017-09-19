@@ -31,9 +31,6 @@ public:
     virtual void OnRender(RenderPass renderPass);
     virtual void OnRenderGizmos();
     virtual void OnAfterChildrenRender(RenderPass renderPass);
-    virtual void OnParentLayoutChanged();
-    virtual void OnChildLayoutChanged();
-    virtual void OnRecalculateLayout();
     virtual void OnDestroy();
 
     bool IsEnabled(bool recursive = false) const;

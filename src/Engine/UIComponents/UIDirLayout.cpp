@@ -5,7 +5,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutElement.h"
+#include "Bang/ILayoutElement.h"
 
 USING_NAMESPACE_BANG
 
@@ -22,58 +22,75 @@ UIDirLayout::~UIDirLayout()
 {
 }
 
-void UIDirLayout::OnRecalculateLayout()
+Vector2i UIDirLayout::GetTotalSpacing() const
 {
-    Component::OnRecalculateLayout();
+    const Vector2i dir = (m_vertical ? Vector2i::Up : Vector2i::Right);
+    const Vector2i spacing = dir * GetSpacing();
+    return spacing * SCAST<int>(gameObject->GetChildren().Size() - 1);
+}
 
+void UIDirLayout::ApplyLayoutToChildren()
+{
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
-
     Recti layoutRect = rt->GetScreenSpaceRectPx();
-    const int numChildren = gameObject->GetChildren().Size();
 
-    Array<Vector2i> childrenSizes(numChildren, Vector2i::Zero);
+    Vector2i pxAvailableSize = layoutRect.GetSize();
+    pxAvailableSize -= GetTotalSpacing();
+
+    Array<Vector2i> childrenSizes;
 
     // Apply minSizes
-    int i = 0;
-    Vector2i pxAvailableSize = layoutRect.GetSize();
     for (GameObject *child : gameObject->GetChildren())
     {
-        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
-        if (!cle) { continue; }
-
-        childrenSizes[i]  = cle->GetMinSize();
-        pxAvailableSize  -= cle->GetMinSize();
-        ++i;
+        Vector2i childSize = Vector2i::Zero;
+        List<ILayoutElement*> cles = child->GetComponents<ILayoutElement>();
+        for (ILayoutElement *cle : cles)
+        {
+            Vector2i pxToAdd = cle->GetTotalMinSize();
+            childSize = Vector2i::Max(childSize, pxToAdd);
+        }
+        pxAvailableSize -= childSize;
+        childrenSizes.PushBack(childSize);
     }
+    // Debug_Peek(pxAvailableSize);
+    // Debug_Log("MinSizes: " << childrenSizes);
 
     // Apply preferredSizes
-    i = 0;
+    uint i = 0;
     for (GameObject *child : gameObject->GetChildren())
     {
-        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
-        if (!cle) { continue; }
-
-        Vector2i pxToAdd(cle->GetPreferredSize() - cle->GetMinSize());
-        pxToAdd = Vector2i::Clamp(pxToAdd, Vector2i::Zero, pxAvailableSize);
-
-        childrenSizes[i] += pxToAdd;
-        pxAvailableSize  -= pxToAdd;
+        Vector2i childSize = childrenSizes[i];
+        List<ILayoutElement*> cles = child->GetComponents<ILayoutElement>();
+        for (ILayoutElement *cle : cles)
+        {
+            Vector2i pxToAdd(cle->GetTotalPreferredSize() - cle->GetTotalMinSize());
+            pxToAdd = Vector2i::Min(pxToAdd, pxAvailableSize);
+            pxToAdd = Vector2i::Max(pxToAdd, Vector2i::Zero);
+            childSize = Vector2i::Max(childSize, childSize + pxToAdd);
+        }
+        pxAvailableSize -= (childSize - childrenSizes[i]);
+        childrenSizes[i] = childSize;
         ++i;
     }
+    // Debug_Log("pxAvailableSize: " << pxAvailableSize);
+    // Debug_Log("PreferredSizes: " << childrenSizes);
 
     // Apply flexibleSizes
     i = 0;
     for (GameObject *child : gameObject->GetChildren())
     {
-        UILayoutElement *cle = child->GetComponent<UILayoutElement>();
-        if (!cle) { continue; }
-
-        Vector2i pxToAdd(Vector2::Round(cle->GetFlexibleSize() *
-                                        Vector2(cle->GetPreferredSize())));
-        pxToAdd = Vector2i::Clamp(pxToAdd, Vector2i::Zero, pxAvailableSize);
-
-        childrenSizes[i] += pxToAdd;
-        pxAvailableSize  -= pxToAdd;
+        Vector2i childSize = childrenSizes[i];
+        List<ILayoutElement*> cles = child->GetComponents<ILayoutElement>();
+        for (ILayoutElement *cle : cles)
+        {
+            Vector2i pxToAdd(cle->GetTotalFlexiblePxSize() -
+                             cle->GetTotalPreferredSize());
+            pxToAdd = Vector2i::Min(pxToAdd, pxAvailableSize);
+            pxToAdd = Vector2i::Max(pxToAdd, Vector2i::Zero);
+            childSize = Vector2i::Max(childSize, childSize + pxToAdd);
+        }
+        pxAvailableSize -= (childSize - childrenSizes[i]);
+        childrenSizes[i] = childSize;
         ++i;
     }
 
@@ -83,27 +100,97 @@ void UIDirLayout::OnRecalculateLayout()
     const Vector2i dir = (m_vertical ? Vector2i::Up : Vector2i::Right);
     for (GameObject *child : gameObject->GetChildren())
     {
+        Vector2i spacing = (i > 0) ? (dir * GetSpacing()) : Vector2i::Zero;
+        marginAccum += spacing;
+
         const Vector2i& childSize = childrenSizes[i];
-        const Vector2i spacing = dir * (i > 0 ? GetSpacing() : 0);
         RectTransform *crt = child->GetComponent<RectTransform>();
         if (m_vertical)
         {
-            crt->SetMarginTop  (   spacing.y + marginAccum.y );
-            crt->SetMarginBot  ( -(spacing.y + marginAccum.y + childSize.y) );
-            crt->SetAnchorMin( Vector2(crt->GetAnchorMin().x, -1.0f) );
-            crt->SetAnchorMax( Vector2(crt->GetAnchorMax().x, -1.0f) );
+            crt->SetMarginTop  ( marginAccum.y );
+            crt->SetMarginBot  ( -(marginAccum.y + childSize.y) );
+            crt->SetAnchorMin( Vector2(crt->GetAnchorMin().x, 1.0f) );
+            crt->SetAnchorMax( Vector2(crt->GetAnchorMax().x, 1.0f) );
         }
         else
         {
-            crt->SetMarginLeft (   spacing.x + marginAccum.x );
-            crt->SetMarginRight( -(spacing.x + marginAccum.x + childSize.x) );
+            crt->SetMarginLeft (   marginAccum.x );
+            crt->SetMarginRight( -(marginAccum.x + childSize.x) );
             crt->SetAnchorMin( Vector2(-1.0f, crt->GetAnchorMin().y) );
             crt->SetAnchorMax( Vector2(-1.0f, crt->GetAnchorMax().y) );
         }
 
-        marginAccum += (Vector2i(spacing) + childSize);
+        // Debug_Peek(crt->GetScreenSpaceRectPx());
+        marginAccum += childSize;
         ++i;
     }
+    // Debug_Log("================================");
+}
+
+Vector2i UIDirLayout::CalculateTotalMinSize() const
+{
+    Vector2i totalMinSize = Vector2i::Zero;
+    List<ILayoutElement*> cles =
+            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
+    for (ILayoutElement *cle : cles)
+    {
+        Vector2i childTotalMinSize = cle->GetTotalMinSize();
+        if (m_vertical)
+        {
+            totalMinSize.x = Math::Max(totalMinSize.x, childTotalMinSize.x);
+            totalMinSize.y += childTotalMinSize.y;
+        }
+        else
+        {
+            totalMinSize.x += childTotalMinSize.x;
+            totalMinSize.y = Math::Max(totalMinSize.y, childTotalMinSize.y);
+        }
+    }
+    return totalMinSize + GetTotalSpacing();
+}
+
+Vector2i UIDirLayout::CalculateTotalPreferredSize() const
+{
+    Vector2i totalPrefSize = Vector2i::Zero;
+    List<ILayoutElement*> cles =
+            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
+    for (ILayoutElement *cle : cles)
+    {
+        Vector2i cTotalPrefSize = cle->GetTotalPreferredSize();
+        if (m_vertical)
+        {
+            totalPrefSize.x = Math::Max(totalPrefSize.x, cTotalPrefSize.x);
+            totalPrefSize.y += cTotalPrefSize.y;
+        }
+        else
+        {
+            totalPrefSize.x += cTotalPrefSize.x;
+            totalPrefSize.y = Math::Max(totalPrefSize.y, cTotalPrefSize.y);
+        }
+    }
+    return totalPrefSize + GetTotalSpacing();
+}
+
+Vector2i UIDirLayout::CalculateTotalFlexiblePxSize() const
+{
+    Vector2i totalFlexSize = Vector2i::Zero;
+    List<ILayoutElement*> cles =
+            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
+    for (ILayoutElement *cle : cles)
+    {
+        Vector2i cTotalFlexSize = cle->GetTotalFlexiblePxSize();
+        if (m_vertical)
+        {
+            totalFlexSize.x = Math::Max(totalFlexSize.x, cTotalFlexSize.x);
+            totalFlexSize.y += cTotalFlexSize.y;
+        }
+        else
+        {
+            totalFlexSize.x += cTotalFlexSize.x;
+            totalFlexSize.y = Math::Max(totalFlexSize.y, cTotalFlexSize.y);
+        }
+    }
+    return totalFlexSize + GetTotalSpacing();
 }
 
 void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }

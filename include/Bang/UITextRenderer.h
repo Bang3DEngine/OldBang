@@ -8,12 +8,16 @@
 #include "Bang/Vector2.h"
 #include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
+#include "Bang/ILayoutElement.h"
+#include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Font;
 
-class UITextRenderer : public UIRenderer
+class UITextRenderer : public UIRenderer,
+                       public ILayoutElement,
+                       public IRectTransformListener
 {
     COMPONENT(UITextRenderer)
 
@@ -23,12 +27,14 @@ public:
 
     // UIRenderer
     virtual void OnRender() override;
-    virtual void OnRecalculateLayout() override;
-    virtual void OnRender(RenderPass renderPass) override;
-
-    // UIRenderer
     virtual void Bind() const override;
     virtual void UnBind() const override;
+    virtual void OnRender(RenderPass renderPass) override;
+
+    // ILayoutElement
+    virtual Vector2i CalculateTotalMinSize() const override;
+    virtual Vector2i CalculateTotalPreferredSize() const override;
+    virtual Vector2i CalculateTotalFlexiblePxSize() const override;
 
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);
@@ -66,6 +72,9 @@ public:
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
+
+    // IRectTransformListener
+    virtual void OnRectTransformChanged() override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

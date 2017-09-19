@@ -10,6 +10,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 FORWARD class Gizmos;
+FORWARD class UILayoutManager;
 
 class Scene : public GameObject
 {
@@ -26,6 +27,7 @@ public:
     void DestroyImmediate(GameObject *gameObject);
 
     static Scene *GetActiveScene();
+    UILayoutManager* GetUILayoutManager() const;
     virtual Camera *GetCamera() const;
 
     // Serializable
@@ -34,6 +36,7 @@ public:
     virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
+    UILayoutManager *m_uiLayoutManager = nullptr;
     ::std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;

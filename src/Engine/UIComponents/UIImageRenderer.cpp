@@ -8,6 +8,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/MaterialFactory.h"
 
 USING_NAMESPACE_BANG
@@ -27,18 +28,28 @@ UIImageRenderer::~UIImageRenderer()
     delete m_quadMesh;
 }
 
-void UIImageRenderer::OnRecalculateLayout()
-{
-    UIRenderer::OnRecalculateLayout();
-    UpdateQuadUvsToMatchFormat(true);
-}
-
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
     GL::Render(m_quadMesh->GetVAO(),
                GetRenderPrimitive(),
                m_quadMesh->GetVertexCount());
+}
+
+Vector2i UIImageRenderer::CalculateTotalMinSize() const
+{
+    return Vector2i::Zero;
+}
+
+Vector2i UIImageRenderer::CalculateTotalPreferredSize() const
+{
+    Texture2D *tex = GetImageTexture();
+    return tex ? tex->GetSize() : Vector2i::Zero;
+}
+
+Vector2i UIImageRenderer::CalculateTotalFlexiblePxSize() const
+{
+    return CalculateTotalPreferredSize();
 }
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
@@ -71,15 +82,13 @@ void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
 {
     m_verticalAlignment = verticalAlignment;
-    OnParentLayoutChanged();
-    OnChildLayoutChanged();
+    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }
 
 void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 {
     m_horizontalAlignment = horizontalAlignment;
-    OnParentLayoutChanged();
-    OnChildLayoutChanged();
+    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }
 
 const Color &UIImageRenderer::GetTint() const
@@ -110,6 +119,46 @@ HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
 bool UIImageRenderer::IsBackground() const
 {
     return m_isBackground;
+}
+
+void UIImageRenderer::OnRectTransformChanged()
+{
+    ENSURE(m_imageTexture);
+
+    RectTransform *rt = gameObject->GetComponent<RectTransform>();
+    Recti rectPx = rt->GetScreenSpaceRectPx();
+    Vector2i rectSize(rectPx.GetSize());
+    ENSURE(m_prevRectSize != rectSize);
+
+    Vector2i texSize(m_imageTexture->GetSize());
+    Vector2i texQuadSize =
+            AspectRatio::GetAspectRatioedSize(rectSize, texSize,
+                                              GetAspectRatioMode());
+
+    Vector2 uvSize = Vector2(rectSize) / Vector2(texQuadSize);
+
+    Vector2 uvMin = Vector2::Zero;
+    Vector2 margMult = Vector2::Zero;
+    const HorizontalAlignment hAlign = GetHorizontalAlignment();
+    if      (hAlign == HorizontalAlignment::Center) { margMult.x = 0.5f; }
+    else if (hAlign == HorizontalAlignment::Right)  { margMult.x = 1.0f; }
+
+    const VerticalAlignment vAlign = GetVerticalAlignment();
+    if      (vAlign == VerticalAlignment::Center) { margMult.y = 0.5f; }
+    else if (vAlign == VerticalAlignment::Top)    { margMult.y = 1.0f; }
+
+    uvMin += (1.0f-uvSize) * margMult;
+    Vector2 uvMax = uvMin + uvSize;
+    Array<Vector2> quadUvs = { Vector2(uvMin.x, uvMax.y),
+                               Vector2(uvMax.x, uvMax.y),
+                               Vector2(uvMax.x, uvMin.y),
+
+                               Vector2(uvMin.x, uvMax.y),
+                               Vector2(uvMax.x, uvMin.y),
+                               Vector2(uvMin.x, uvMin.y)};
+
+    m_quadMesh->LoadUvs(quadUvs);
+    m_prevImageTextureSize = m_imageTexture->GetSize();
 }
 
 Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
@@ -162,44 +211,4 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("HorizontalAlignment", GetHorizontalAlignment());
     xmlInfo->Set("VerticalAlignment", GetVerticalAlignment());
     xmlInfo->Set("AspectRatioMode", GetAspectRatioMode());
-}
-
-void UIImageRenderer::UpdateQuadUvsToMatchFormat(bool force)
-{
-    ENSURE(m_imageTexture);
-
-    RectTransform *rt = gameObject->GetComponent<RectTransform>();
-    Recti rectPx = rt->GetScreenSpaceRectPx();
-    Vector2i rectSize(rectPx.GetSize());
-    ENSURE(!force && m_prevRectSize != rectSize);
-
-    Vector2i texSize(m_imageTexture->GetSize());
-    Vector2i texQuadSize =
-            AspectRatio::GetAspectRatioedSize(rectSize, texSize,
-                                              GetAspectRatioMode());
-
-    Vector2 uvSize = Vector2(rectSize) / Vector2(texQuadSize);
-
-    Vector2 uvMin = Vector2::Zero;
-    Vector2 margMult = Vector2::Zero;
-    const HorizontalAlignment hAlign = GetHorizontalAlignment();
-    if      (hAlign == HorizontalAlignment::Center) { margMult.x = 0.5f; }
-    else if (hAlign == HorizontalAlignment::Right)  { margMult.x = 1.0f; }
-
-    const VerticalAlignment vAlign = GetVerticalAlignment();
-    if      (vAlign == VerticalAlignment::Center) { margMult.y = 0.5f; }
-    else if (vAlign == VerticalAlignment::Top)    { margMult.y = 1.0f; }
-
-    uvMin += (1.0f-uvSize) * margMult;
-    Vector2 uvMax = uvMin + uvSize;
-    Array<Vector2> quadUvs = { Vector2(uvMin.x, uvMax.y),
-                               Vector2(uvMax.x, uvMax.y),
-                               Vector2(uvMax.x, uvMin.y),
-
-                               Vector2(uvMin.x, uvMax.y),
-                               Vector2(uvMax.x, uvMin.y),
-                               Vector2(uvMin.x, uvMin.y)};
-
-    m_quadMesh->LoadUvs(quadUvs);
-    m_prevImageTextureSize = m_imageTexture->GetSize();
 }

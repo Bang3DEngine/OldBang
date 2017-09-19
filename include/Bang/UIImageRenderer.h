@@ -4,11 +4,15 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
+#include "Bang/ILayoutElement.h"
 #include "Bang/AspectRatioMode.h"
+#include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class UIImageRenderer : public UIRenderer
+class UIImageRenderer : public UIRenderer,
+                        public ILayoutElement,
+                        public IRectTransformListener
 {
     COMPONENT(UIImageRenderer)
 
@@ -17,8 +21,12 @@ public:
     virtual ~UIImageRenderer();
 
     // UIRenderer
-    virtual void OnRecalculateLayout() override;
     virtual void OnRender() override;
+
+    // ILayoutElement
+    virtual Vector2i CalculateTotalMinSize() const override;
+    virtual Vector2i CalculateTotalPreferredSize() const override;
+    virtual Vector2i CalculateTotalFlexiblePxSize() const override;
 
     void SetImageTexture(const Path &imagePath);
     void SetImageTexture(Texture2D *imageTexture);
@@ -34,6 +42,9 @@ public:
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
     bool IsBackground() const;
+
+    // IRectTransformListener
+    virtual void OnRectTransformChanged() override;
 
     // Renderer
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
@@ -56,8 +67,6 @@ private:
 
     Vector2i m_prevRectSize = Vector2i::Zero;
     Vector2i m_prevImageTextureSize = Vector2i::Zero;
-
-    void UpdateQuadUvsToMatchFormat(bool force = false);
 };
 
 NAMESPACE_BANG_END

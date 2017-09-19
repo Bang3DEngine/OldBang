@@ -21,6 +21,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/TextureUnitManager.h"
 #include "Bang/SelectionFramebuffer.h"
@@ -62,10 +63,12 @@ void GEngine::RenderCurrentScene(Camera *camera)
         Vector2i newVpSize = camRT->GetSize();
         Vector2i prevVpSize = GL::GetViewportSize();
         GL::SetViewport(0, 0, newVpSize.x, newVpSize.y);
-        if (prevVpSize != newVpSize) { scene->ParentLayoutChanged(); }
+        if (prevVpSize != newVpSize) { UILayoutManager::RebuildLayout(scene); }
 
         m_gbuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
+        m_selectionFramebuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
         m_gbuffer->SetAttachmentTexture(camRT, GBuffer::AttColor);
+        // m_selectionFramebuffer->SetAttachmentTexture(camRT, GL::Attachment::Color0);
 
         RenderCurrentSceneToGBuffer(camera);
         RenderCurrentSceneToSelectionFramebuffer(camera);

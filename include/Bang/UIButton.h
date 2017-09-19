@@ -12,6 +12,12 @@ NAMESPACE_BANG_BEGIN
 FORWARD class GameObject;
 FORWARD class UIButtonListener;
 
+enum UIButtonMode
+{
+    UseRectTransform,
+    UseRender
+};
+
 class UIButton : public Component
 {
     COMPONENT(UIButton)
@@ -39,12 +45,16 @@ public:
     void AddMouseUpCallback(DownUpCallback callback);
     void AddClickedCallback(ClickedCallback callback);
 
+    void SetMode(UIButtonMode mode);
+
     bool IsMouseOverSomeAgent() const;
     bool IsBeingPressed() const;
+    UIButtonMode GetMode() const;
 
 private:
-    bool m_mouseOver = false;
+    bool m_mouseOver    = false;
     bool m_beingPressed = false;
+    UIButtonMode m_mode = UIButtonMode::UseRender;
 
     Set<GameObject*> p_agents;
     Set<UIButtonListener*> p_listeners;

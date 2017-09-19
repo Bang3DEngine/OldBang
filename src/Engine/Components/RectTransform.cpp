@@ -2,9 +2,12 @@
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
+#include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Matrix4.h"
+#include "Bang/Transform.h"
 #include "Bang/GameObject.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -14,6 +17,14 @@ RectTransform::RectTransform()
 
 RectTransform::~RectTransform()
 {
+}
+
+void RectTransform::OnRenderGizmos()
+{
+    Transform::OnRenderGizmos();
+    Gizmos::SetLineWidth(2.0f);
+    Gizmos::SetColor(Color::Green);
+    Gizmos::RenderRect( GetScreenSpaceRectNDC() );
 }
 
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
@@ -32,8 +43,10 @@ Vector2 RectTransform::FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) 
 
 Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
 {
-    return Vector2i(ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize())
-                    * 0.5f);
+    Vector2 res = Vector2::Round(
+                        ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize())
+                                * 0.5f);
+    return Vector2i(res);
 }
 
 Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const
@@ -61,7 +74,7 @@ void RectTransform::SetMarginLeft(int marginLeft)
     if (GetMarginLeft() != marginLeft)
     {
         m_marginLeftBot.x = marginLeft;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -70,7 +83,7 @@ void RectTransform::SetMarginTop(int marginTop)
     if (GetMarginTop() != marginTop)
     {
         m_marginRightTop.y = marginTop;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -79,7 +92,7 @@ void RectTransform::SetMarginRight(int marginRight)
     if (GetMarginRight() != marginRight)
     {
         m_marginRightTop.x = marginRight;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -88,7 +101,7 @@ void RectTransform::SetMarginBot(int marginBot)
     if (GetMarginBot() != marginBot)
     {
         m_marginLeftBot.y = marginBot;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -105,7 +118,7 @@ void RectTransform::SetMargins(const Vector2i &marginRightTop,
     {
         m_marginRightTop = marginRightTop;
         m_marginLeftBot  = marginLeftBot;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -118,7 +131,7 @@ void RectTransform::SetMargins(int left, int top, int right, int bot)
         m_marginRightTop.y = top;
         m_marginRightTop.x = right;
         m_marginLeftBot.y  = bot;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -127,7 +140,7 @@ void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
     if (m_pivotPosition != pivotPosition)
     {
         m_pivotPosition = pivotPosition;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -136,7 +149,7 @@ void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
     if (m_anchorMin != anchorMin)
     {
         m_anchorMin = anchorMin;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -145,7 +158,7 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     if (m_anchorMax != anchorMax)
     {
         m_anchorMax = anchorMax;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -161,7 +174,7 @@ void RectTransform::SetAnchors(const Vector2 &anchorMin,
     {
         m_anchorMin = anchorMin;
         m_anchorMax = anchorMax;
-        OnChanged();
+        InvalidateDown();
     }
 }
 
@@ -212,11 +225,11 @@ Rect RectTransform::GetParentScreenRect() const
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled()) { return Matrix4::Identity; }
-    if (!m_hasChanged) { return m_localToParentMatrix; }
+    if (!IsEnabled(true)) { return Matrix4::Identity; }
+    if (!IsInvalid()) { return m_localToParentMatrix; }
 
-    Vector2 minMarginedAnchor (m_anchorMin + FromPixelsToLocalNDC(GetMarginLeftBot()));
-    Vector2 maxMarginedAnchor (m_anchorMax - FromPixelsToLocalNDC(GetMarginRightTop()));
+    Vector2 minMarginedAnchor (GetAnchorMin() + FromPixelsToLocalNDC(GetMarginLeftBot()));
+    Vector2 maxMarginedAnchor (GetAnchorMax() - FromPixelsToLocalNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
     Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
@@ -228,20 +241,16 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                             Matrix4::ScaleMatrix(anchorScaling) *
                             Matrix4::TranslateMatrix(moveToPivot);
 
-    m_hasChanged = false;
+    SetInvalid(false);
     return m_localToParentMatrix;
 }
 
-void RectTransform::OnChanged()
+void RectTransform::InvalidateDown()
 {
-    if (gameObject) { gameObject->ParentLayoutChanged(); }
-    m_hasChanged = true;
-}
-
-void RectTransform::OnParentLayoutChanged()
-{
-    Transform::OnParentLayoutChanged();
-    m_hasChanged = true;
+    if (!IsInvalid())
+    {
+        UILayoutManager::InvalidateDown(this);
+    }
 }
 
 void RectTransform::CloneInto(ICloneable *clone) const

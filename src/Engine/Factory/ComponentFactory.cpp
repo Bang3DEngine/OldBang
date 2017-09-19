@@ -20,10 +20,10 @@
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
-#include "Bang/UIButtonTinter.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIButtonWithTint.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/PostProcessEffect.h"
@@ -47,7 +47,6 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, Behaviour);
     CREATE_COMPONENT(componentClassName, Transform);
     CREATE_COMPONENT(componentClassName, PointLight);
-    CREATE_COMPONENT(componentClassName, UIRenderer);
     CREATE_COMPONENT(componentClassName, AudioSource);
     CREATE_COMPONENT(componentClassName, UIInputText);
     CREATE_COMPONENT(componentClassName, LineRenderer);
@@ -58,10 +57,10 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, AudioListener);
     CREATE_COMPONENT(componentClassName, RectTransform);
     CREATE_COMPONENT(componentClassName, CircleRenderer);
-    CREATE_COMPONENT(componentClassName, UIButtonTinter);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
     CREATE_COMPONENT(componentClassName, UIImageRenderer);
     CREATE_COMPONENT(componentClassName, DirectionalLight);
+    CREATE_COMPONENT(componentClassName, UIButtonWithTint);
     CREATE_COMPONENT(componentClassName, UIVerticalLayout);
     CREATE_COMPONENT(componentClassName, PostProcessEffect);
     CREATE_COMPONENT(componentClassName, SingleLineRenderer);
@@ -99,7 +98,7 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, AudioListener);
     EXISTS_COMPONENT(componentClassName, RectTransform);
     EXISTS_COMPONENT(componentClassName, CircleRenderer);
-    EXISTS_COMPONENT(componentClassName, UIButtonTinter);
+    EXISTS_COMPONENT(componentClassName, UIButtonWithTint);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
     EXISTS_COMPONENT(componentClassName, UIImageRenderer);
     EXISTS_COMPONENT(componentClassName, DirectionalLight);

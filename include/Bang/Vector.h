@@ -176,7 +176,22 @@ public: \
                              const VECTOR_G<T> &min, \
                              const VECTOR_G<T> &max) \
     { \
-        return VECTOR_G<T>::Min( VECTOR_G<T>::Max(v, max), min ); \
+        VECTOR_G res = v; \
+        for (int i = 0; i < N; ++i) { res[i] = Math::Clamp(res[i], min[i], max[i]); } \
+        return res; \
+    } \
+ \
+    static VECTOR_G<T> Clamp2(const VECTOR_G<T> &v, \
+                              const VECTOR_G<T> &bound1, \
+                              const VECTOR_G<T> &bound2) \
+    { \
+        VECTOR_G res = v; \
+        for (int i = 0; i < N; ++i) { \
+            res[i] = Math::Clamp(res[i], \
+                                 Math::Min(bound1[i], bound2[i]), \
+                                 Math::Max(bound1[i], bound2[i])); \
+        } \
+        return res; \
     } \
  \
     const T& operator[](::std::size_t i) const \

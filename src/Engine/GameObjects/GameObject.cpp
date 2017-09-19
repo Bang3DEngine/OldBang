@@ -65,18 +65,6 @@ void GameObject::Update()
     PROPAGATE_EVENT(Update(), GetChildren());
 }
 
-void GameObject::ParentLayoutChanged()
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(OnParentLayoutChanged(), m_components);
-    PROPAGATE_EVENT(ParentLayoutChanged(), GetChildren());
-}
-
-void GameObject::ChildLayoutChanged()
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(OnChildLayoutChanged(), m_components);
-    if (parent) { parent->ChildLayoutChanged(); }
-}
-
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
@@ -98,13 +86,6 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass),
                                   m_components);
-}
-
-void GameObject::RecalculateLayout()
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRecalculateLayout(), m_components);
-    PROPAGATE_EVENT(RecalculateLayout(), GetChildren());
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRecalculateLayout(), m_components);
 }
 
 void GameObject::RenderGizmos()
@@ -291,7 +272,6 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     {
         int index = (_index != -1 ? _index : parent->GetChildren().Size());
         p_parent->m_children.Insert(index, this);
-        ParentLayoutChanged();
     }
 }
 

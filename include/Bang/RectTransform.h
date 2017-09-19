@@ -14,6 +14,8 @@ public:
     RectTransform();
     virtual ~RectTransform();
 
+    void OnRenderGizmos() override;
+
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);
     void SetMarginRight(int marginRight);
@@ -52,15 +54,14 @@ public:
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
-    // Component
-    virtual void OnParentLayoutChanged() override;
-
     // ICloneable
     void CloneInto(ICloneable *clone) const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
+
+    void InvalidateDown();
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;
@@ -70,9 +71,7 @@ private:
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
 
-    void OnChanged();
-
-    friend class Screen;
+    friend class UILayoutManager;
 };
 
 NAMESPACE_BANG_END

@@ -121,6 +121,22 @@ TextFormatter::SplitCharRectsInLines(const String &content,
     return linedCharRects;
 }
 
+Vector2i TextFormatter::GetTextSizeOneLined(const String &content,
+                                            const Font *font,
+                                            const Vector2 &spacingMultiplier)
+{
+    Vector2i textSize = Vector2i::Zero;
+    for (int i = 0; i < content.Size(); ++i)
+    {
+        char c = content[i];
+        Rectf cr = TextFormatter::GetCharRect(c, font);
+        int charAdvX = GetCharAdvanceX(content, font, i);
+        textSize.x += Math::Round<int>(charAdvX * spacingMultiplier.x);
+        textSize.y =  Math::Max(textSize.y, Math::Round<int>(cr.GetHeight()));
+    }
+    return textSize;
+}
+
 Vector2 FindMinCoord(const Array<TextFormatter::CharRect>&);
 Vector2 FindMaxCoord(const Array<TextFormatter::CharRect>&);
 Vector2 FindMinCoord(const Array< Array<TextFormatter::CharRect> >&);

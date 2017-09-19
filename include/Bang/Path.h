@@ -63,7 +63,6 @@ public:
     Path WithNameExt(const String& name, const String& extension = "") const;
     Path WithExtension(const String& extension) const;
 
-    // "*.jpg *.so.*"
     bool HasExtension(const String &extension) const;
     bool HasExtension(const List<String> &extensions) const;
 

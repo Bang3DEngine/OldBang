@@ -9,8 +9,6 @@ NAMESPACE_BANG_BEGIN
 
 class UIRenderer : public Renderer
 {
-    COMPONENT(UIRenderer)
-
 public:
     virtual Rect GetBoundingRect(Camera *camera) const override;
 

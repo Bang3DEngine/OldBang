@@ -7,6 +7,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -14,6 +15,7 @@ USING_NAMESPACE_BANG
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
+    m_uiLayoutManager = new UILayoutManager();
 }
 
 Scene::~Scene()
@@ -23,7 +25,9 @@ Scene::~Scene()
 void Scene::RenderGizmos()
 {
     GameObject::RenderGizmos();
-    // GetGizmos()->m_gizmosGo->RenderGizmos();
+    m_gizmos->m_gizmosGo->SetParent(this);
+    GetGizmos()->m_gizmosGo->RenderGizmos();
+    m_gizmos->m_gizmosGo->SetParent(nullptr);
 }
 
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
@@ -90,6 +94,8 @@ void Scene::DestroyQueuedGameObjects()
 }
 
 Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
+
+UILayoutManager *Scene::GetUILayoutManager() const { return m_uiLayoutManager; }
 Camera *Scene::GetCamera() const { return p_camera; }
 
 void Scene::ImportXML(const XMLNode &xmlInfo)

@@ -4,6 +4,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/GameObject.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 
 USING_NAMESPACE_BANG
@@ -20,44 +21,38 @@ UIContentSizeFitter::~UIContentSizeFitter()
 void UIContentSizeFitter::OnUpdate()
 {
     Component::OnUpdate();
-}
 
-void UIContentSizeFitter::OnRecalculateLayout()
-{
-    Component::OnRecalculateLayout();
+    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
-    UILayoutElement *layoutElm = gameObject->GetComponent<UILayoutElement>();
-    ENSURE(layoutElm);
-
-    Recti boundingRect;
+    Recti boundingRectPx;
     bool firstRect = true;
     List<UIRenderer*> uiRenderers = gameObject->GetComponents<UIRenderer>();
     for (UIRenderer *uiRend : uiRenderers)
     {
-        Recti childBoundingRect =
+        Recti partBoundingRect =
              GL::FromGlobalNDCToPixels( uiRend->GetBoundingRect(nullptr) );
         if (!firstRect)
         {
-            boundingRect = Recti::Union(boundingRect, childBoundingRect);
+            boundingRectPx = Recti::Union(boundingRectPx, partBoundingRect);
         }
-        else { boundingRect = childBoundingRect; firstRect = false; }
+        else { boundingRectPx = partBoundingRect; firstRect = false; }
     }
 
-    if (GetHorizontalSizeFit() == SizeFit::Min ||
-        GetHorizontalSizeFit() == SizeFit::Both)
-    { layoutElm->SetMinWidth( boundingRect.GetWidth() ); }
+    Recti rtRectPx = rt->GetScreenSpaceRectPx();
+    rt->SetAnchors( Vector2(-1) );
+    rt->SetMarginLeft (  (rtRectPx.GetMin().x - boundingRectPx.GetMin().x) );
+    rt->SetMarginRight( -(rtRectPx.GetMin().x + boundingRectPx.GetWidth()) );
+    rt->SetMarginBot  (  (rtRectPx.GetMin().y - boundingRectPx.GetMin().y) );
+    rt->SetMarginTop  ( -(rtRectPx.GetMin().y + boundingRectPx.GetHeight()));
 
-    if (GetVerticalSizeFit() == SizeFit::Min ||
-        GetVerticalSizeFit() == SizeFit::Both)
-    { layoutElm->SetMinHeight( boundingRect.GetHeight() ); }
+    /*
+    rt->SetMarginLeft (  (boundingRectPx.GetMin().x) );
+    rt->SetMarginRight(  (-boundingRectPx.GetMax().x) );
+    rt->SetMarginBot  (  (boundingRectPx.GetMin().y) );
+    rt->SetMarginTop  (  (-boundingRectPx.GetMax().y) );
+    */
 
-    if (GetHorizontalSizeFit() == SizeFit::Preferred ||
-        GetHorizontalSizeFit() == SizeFit::Both)
-    { layoutElm->SetPreferredWidth( boundingRect.GetWidth() ); }
-
-    if (GetHorizontalSizeFit() == SizeFit::Preferred ||
-        GetHorizontalSizeFit() == SizeFit::Both)
-    { layoutElm->SetPreferredHeight( boundingRect.GetHeight() ); }
+    Debug_Peek(rt->GetScreenSpaceRectPx());
 }
 
 void UIContentSizeFitter::SetHorizontalSizeFit(SizeFit sizeFit)

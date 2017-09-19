@@ -16,13 +16,15 @@ public:
     // Component
     virtual void OnStart() override;
     virtual void OnRender(RenderPass rp) override;
-    virtual void OnRecalculateLayout() override;
 
     void SetLineColor(const Color& lineColor);
     void SetLineWidth(float lineWidth);
 
     const Color& GetLineColor() const;
     float GetLineWidth() const;
+
+    // ILayoutElement
+    virtual void OnSizesCalculated();
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

@@ -1,20 +1,19 @@
 #ifndef UILAYOUTELEMENT_H
 #define UILAYOUTELEMENT_H
 
-#include "Bang/Map.h"
 #include "Bang/Component.h"
+#include "Bang/ILayoutElement.h"
 
 NAMESPACE_BANG_BEGIN
 
-class UILayoutElement : public Component
+class UILayoutElement : public Component,
+                        public ILayoutElement
 {
-    COMPONENT(UILayoutElement)
+    COMPONENT(UILayoutElement);
 
 public:
-    // Component
-    virtual void OnParentLayoutChanged() override;
-    virtual void OnChildLayoutChanged() override;
-    virtual void OnRecalculateLayout() override;
+    UILayoutElement();
+    virtual ~UILayoutElement();
 
     void SetMinWidth(int minWidth);
     void SetMinHeight(int minHeight);
@@ -25,7 +24,6 @@ public:
     void SetFlexibleWidth(int flexibleWidth);
     void SetFlexibleHeight(int flexibleHeight);
     void SetFlexibleSize(const Vector2& flexibleSize);
-    void SetDirty(bool dirty);
 
     int GetMinWidth() const;
     int GetMinHeight() const;
@@ -36,18 +34,19 @@ public:
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
     const Vector2& GetFlexibleSize() const;
-    bool IsDirty() const;
+    int GetFlexiblePxWidth() const;
+    int GetFlexiblePxHeight() const;
+    Vector2i GetFlexiblePxSize() const;
 
 protected:
-    UILayoutElement();
-    virtual ~UILayoutElement();
+    Vector2i CalculateTotalMinSize() const override;
+    Vector2i CalculateTotalPreferredSize() const override;
+    Vector2i CalculateTotalFlexiblePxSize() const override;
 
 private:
-    Vector2i m_minSize       = Vector2i(50);
-    Vector2i m_preferredSize = Vector2i(100);
+    Vector2i m_minSize       = Vector2i::Zero;
+    Vector2i m_preferredSize = Vector2i::Zero;
     Vector2  m_flexibleSize  = Vector2::Zero;
-
-    bool m_isDirty = false;
 };
 
 NAMESPACE_BANG_END

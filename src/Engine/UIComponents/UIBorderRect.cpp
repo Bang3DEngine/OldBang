@@ -40,20 +40,6 @@ void UIBorderRect::OnRender(RenderPass rp)
     p_lineRenderer->Renderer::OnRender(rp);
 }
 
-void UIBorderRect::OnRecalculateLayout()
-{
-    Component::OnRecalculateLayout();
-
-    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
-    Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
-    p_lineRenderer->SetPoints(
-           {Vector3(boundingRectNDC.GetMinXMinY(), 0),
-            Vector3(boundingRectNDC.GetMinXMaxY(), 0),
-            Vector3(boundingRectNDC.GetMaxXMaxY(), 0),
-            Vector3(boundingRectNDC.GetMaxXMinY(), 0),
-            Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
-}
-
 void UIBorderRect::SetLineColor(const Color &lineColor)
 {
     p_lineRenderer->GetMaterial()->SetDiffuseColor(lineColor);
@@ -70,6 +56,18 @@ const Color &UIBorderRect::GetLineColor() const
 float UIBorderRect::GetLineWidth() const
 {
     return p_lineRenderer->GetLineWidth();
+}
+
+void UIBorderRect::OnSizesCalculated()
+{
+    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
+    Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
+    p_lineRenderer->SetPoints(
+           {Vector3(boundingRectNDC.GetMinXMinY(), 0),
+            Vector3(boundingRectNDC.GetMinXMaxY(), 0),
+            Vector3(boundingRectNDC.GetMaxXMaxY(), 0),
+            Vector3(boundingRectNDC.GetMaxXMinY(), 0),
+            Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
 }
 
 void UIBorderRect::ImportXML(const XMLNode &xmlInfo)
