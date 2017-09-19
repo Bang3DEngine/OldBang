@@ -120,7 +120,6 @@ bool UIButton::IsMouseOverSomeAgent() const
     {
         GameObject *overedGameObject = Selection::GetOveredGameObject();
         if (!overedGameObject) { return false; }
-        Debug_Log(overedGameObject->GetComponents());
         for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
         {
             const GameObject *agent = *it;

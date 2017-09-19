@@ -185,6 +185,7 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     }
     else if (vAlignment == VerticalAlignment::Center)
     {
+        // int textHeight = (linesCharRects->Size() * font->GetLineSkip() );
         textVerticalOffset = limitsRect.GetCenter().y -
                              (textMaxCoords.y + textMinCoords.y) / 2;
     }

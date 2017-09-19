@@ -24,7 +24,7 @@ void RectTransform::OnRenderGizmos()
     Transform::OnRenderGizmos();
     Gizmos::SetLineWidth(2.0f);
     Gizmos::SetColor(Color::Green);
-    Gizmos::RenderRect( GetScreenSpaceRectNDC() );
+    // Gizmos::RenderRect( GetScreenSpaceRectNDC() );
 }
 
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
