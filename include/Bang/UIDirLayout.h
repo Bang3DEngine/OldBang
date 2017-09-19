@@ -16,16 +16,19 @@ class UIDirLayout : public Component,
 public:
 
     // ILayoutController
-    virtual void ApplyLayoutToChildren() override;
+    virtual void ApplyLayout() override;
 
     // ILayoutElement
     virtual Vector2i CalculateTotalMinSize() const override;
     virtual Vector2i CalculateTotalPreferredSize() const override;
     virtual Vector2i CalculateTotalFlexiblePxSize() const override;
+    Vector2i CalculateTotalSize(LayoutSizeType sizeType) const;
 
     void SetSpacing(int spacingPx);
 
     int GetSpacing() const;
+    Vector2i GetDir() const;
+    Vector2i GetTotalSpacing() const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
@@ -36,11 +39,13 @@ protected:
     UIDirLayout(bool vertical);
     virtual ~UIDirLayout();
 
+    void FillChildrenSizes(Array<Vector2i> *childrenSizes,
+                           Vector2i *availableSize,
+                           LayoutSizeType sizeType);
+
 private:
     int m_spacingPx = 0;
     bool m_vertical = false;
-
-    Vector2i GetTotalSpacing() const;
 };
 
 NAMESPACE_BANG_END

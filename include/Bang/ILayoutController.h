@@ -8,7 +8,7 @@ NAMESPACE_BANG_BEGIN
 class ILayoutController
 {
 public:
-    virtual void ApplyLayoutToChildren() = 0;
+    virtual void ApplyLayout() = 0;
 
 protected:
     ILayoutController();

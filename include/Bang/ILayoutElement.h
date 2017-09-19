@@ -2,6 +2,7 @@
 #define ILAYOUTELEMENT_H
 
 #include "Bang/Vector2.h"
+#include "Bang/LayoutSizeType.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -20,6 +21,7 @@ public:
     virtual Vector2i GetTotalMinSize()        const;
     virtual Vector2i GetTotalPreferredSize()  const;
     virtual Vector2i GetTotalFlexiblePxSize() const;
+    Vector2i GetTotalSize(LayoutSizeType sizeType) const;
 
 protected:
     ILayoutElement();

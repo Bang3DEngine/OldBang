@@ -71,6 +71,14 @@ Vector2i ILayoutElement::GetTotalFlexiblePxSize() const
     return m_calculatedTotalFlexiblePxSize;
 }
 
+Vector2i ILayoutElement::GetTotalSize(LayoutSizeType sizeType) const
+{
+    if (sizeType == LayoutSizeType::Min) { return GetTotalMinSize(); }
+    if (sizeType == LayoutSizeType::Preferred) { return GetTotalPreferredSize(); }
+    if (sizeType == LayoutSizeType::Flexible) { return GetTotalFlexiblePxSize(); }
+    return Vector2i::Zero;
+}
+
 void ILayoutElement::CalculateTotalSizes() const
 {
     if (IsInvalid())

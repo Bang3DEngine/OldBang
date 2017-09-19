@@ -23,8 +23,24 @@ void RectTransform::OnRenderGizmos()
 {
     Transform::OnRenderGizmos();
     Gizmos::SetLineWidth(2.0f);
-    Gizmos::SetColor(Color::Green);
-    // Gizmos::RenderRect( GetScreenSpaceRectNDC() );
+
+    Color c = Color::Green; //Random::GetColorOpaque();
+    Gizmos::SetColor(c);
+    // Gizmos::RenderRect(GetScreenSpaceRectNDC());
+
+    /*
+    ENSURE(gameObject->parent);
+    RectTransform *parentRT = gameObject->parent->GetComponent<RectTransform>();
+    if (parentRT)
+    {
+        Vector2 size(0.02f);
+        Vector2 anchorMin = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMin());
+        Vector2 anchorMax = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMax());
+        Gizmos::RenderRect( Rect(anchorMin - size/2.0f, anchorMin + size/2.0f));
+        Gizmos::SetColor(c);
+        Gizmos::RenderRect( Rect(anchorMax - size/2.0f, anchorMax + size/2.0f));
+    }
+    */
 }
 
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
@@ -162,6 +178,26 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     }
 }
 
+void RectTransform::SetAnchorMinX(float anchorMinX)
+{
+    SetAnchorMin( Vector2(anchorMinX, GetAnchorMin().y) );
+}
+
+void RectTransform::SetAnchorMinY(float anchorMinY)
+{
+    SetAnchorMin( Vector2(GetAnchorMin().x, anchorMinY) );
+}
+
+void RectTransform::SetAnchorMaxX(float anchorMaxX)
+{
+    SetAnchorMax( Vector2(anchorMaxX, GetAnchorMax().y) );
+}
+
+void RectTransform::SetAnchorMaxY(float anchorMaxY)
+{
+    SetAnchorMax( Vector2(GetAnchorMax().x, anchorMaxY) );
+}
+
 void RectTransform::SetAnchors(const Vector2 &anchorPoint)
 {
     SetAnchors(anchorPoint, anchorPoint);
@@ -182,6 +218,7 @@ int RectTransform::GetMarginLeft() const { return m_marginLeftBot.x; }
 int RectTransform::GetMarginTop() const { return m_marginRightTop.y; }
 int RectTransform::GetMarginRight() const { return m_marginRightTop.x; }
 int RectTransform::GetMarginBot() const { return m_marginLeftBot.y; }
+
 const Vector2i& RectTransform::GetMarginLeftBot() const { return m_marginLeftBot; }
 const Vector2i& RectTransform::GetMarginRightTop() const { return m_marginRightTop; }
 const Vector2& RectTransform::GetPivotPosition() const { return m_pivotPosition; }

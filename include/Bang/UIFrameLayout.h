@@ -17,6 +17,10 @@ public:
     UIFrameLayout();
     virtual ~UIFrameLayout();
 
+    void SetPaddingLeft(int paddingLeft);
+    void SetPaddingBot(int paddingBot);
+    void SetPaddingRight(int paddingRight);
+    void SetPaddingTop(int paddingTop);
     void SetPaddings(int padding);
     void SetPaddings(int paddingLeft, int paddingBot,
                      int paddingRight, int paddingTop);
@@ -30,7 +34,7 @@ public:
     Vector2i GetPaddingSize() const;
 
     // ILayoutController
-    virtual void ApplyLayoutToChildren() override;
+    virtual void ApplyLayout() override;
 
     // ILayoutElement
     virtual Vector2i CalculateTotalMinSize() const override;

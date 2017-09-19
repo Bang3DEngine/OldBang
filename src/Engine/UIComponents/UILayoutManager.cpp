@@ -17,6 +17,11 @@ UILayoutManager::UILayoutManager()
 {
 }
 
+Vector2i UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
+{
+
+}
+
 void UILayoutManager::InvalidateDown(RectTransform *rt)
 {
     ENSURE(rt);
@@ -60,7 +65,7 @@ void UILayoutManager::RebuildLayout(GameObject *go)
                             go->GetComponentsInChildren<ILayoutController>();
     for (ILayoutController *layoutController : layoutControllers)
     {
-        layoutController->ApplyLayoutToChildren();
+        layoutController->ApplyLayout();
     }
     UILayoutManager::GetInstance()->OnFrameFinished(go);
 }

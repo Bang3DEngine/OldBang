@@ -27,6 +27,10 @@ public:
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
     void SetAnchorMax(const Vector2 &anchorMax);
+    void SetAnchorMinX(float anchorMinX);
+    void SetAnchorMinY(float anchorMinY);
+    void SetAnchorMaxX(float anchorMaxX);
+    void SetAnchorMaxY(float anchorMaxY);
     void SetAnchors(const Vector2 &anchorPoint);
     void SetAnchors(const Vector2 &anchorMin, const Vector2 &anchorMax);
 

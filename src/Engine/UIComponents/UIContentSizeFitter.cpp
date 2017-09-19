@@ -4,6 +4,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIDirLayout.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 
@@ -18,80 +19,72 @@ UIContentSizeFitter::~UIContentSizeFitter()
 
 }
 
-void UIContentSizeFitter::OnUpdate()
+void UIContentSizeFitter::ApplyLayout()
 {
-    Component::OnUpdate();
-
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
-    Recti boundingRectPx;
-    bool firstRect = true;
-    List<UIRenderer*> uiRenderers = gameObject->GetComponents<UIRenderer>();
-    for (UIRenderer *uiRend : uiRenderers)
+    List<ILayoutElement*> layoutElms =
+            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
+    Vector2i contentSize = Vector2i::Zero;
+    for (ILayoutElement *layoutElm : layoutElms)
     {
-        Recti partBoundingRect =
-             GL::FromGlobalNDCToPixels( uiRend->GetBoundingRect(nullptr) );
-        if (!firstRect)
-        {
-            boundingRectPx = Recti::Union(boundingRectPx, partBoundingRect);
-        }
-        else { boundingRectPx = partBoundingRect; firstRect = false; }
+        contentSize.x += layoutElm->GetTotalSize(GetHorizontalSizeType()).x;
+        contentSize.y += layoutElm->GetTotalSize(GetVerticalSizeType()).y;
     }
 
-    Recti rtRectPx = rt->GetScreenSpaceRectPx();
-    rt->SetAnchors( Vector2(-1) );
-    rt->SetMarginLeft (  (rtRectPx.GetMin().x - boundingRectPx.GetMin().x) );
-    rt->SetMarginRight( -(rtRectPx.GetMin().x + boundingRectPx.GetWidth()) );
-    rt->SetMarginBot  (  (rtRectPx.GetMin().y - boundingRectPx.GetMin().y) );
-    rt->SetMarginTop  ( -(rtRectPx.GetMin().y + boundingRectPx.GetHeight()));
+    UIDirLayout *dirLayout = gameObject->GetComponentInChildren<UIDirLayout>(false);
+    if (dirLayout) { contentSize += dirLayout->GetTotalSpacing(); }
 
-    /*
-    rt->SetMarginLeft (  (boundingRectPx.GetMin().x) );
-    rt->SetMarginRight(  (-boundingRectPx.GetMax().x) );
-    rt->SetMarginBot  (  (boundingRectPx.GetMin().y) );
-    rt->SetMarginTop  (  (-boundingRectPx.GetMax().y) );
-    */
+    if (GetHorizontalSizeType() != LayoutSizeType::None)
+    {
+        rt->SetMarginLeft (0);
+        rt->SetMarginRight(-contentSize.x);
+    }
 
-    Debug_Peek(rt->GetScreenSpaceRectPx());
+    if (GetVerticalSizeType() != LayoutSizeType::None)
+    {
+        rt->SetMarginTop(0);
+        rt->SetMarginBot(-contentSize.y);
+    }
 }
 
-void UIContentSizeFitter::SetHorizontalSizeFit(SizeFit sizeFit)
+void UIContentSizeFitter::SetHorizontalSizeType(LayoutSizeType sizeType)
 {
-    m_horizontalSizeFit = sizeFit;
+    m_horizontalSizeType = sizeType;
 }
 
-SizeFit UIContentSizeFitter::GetHorizontalSizeFit() const
+LayoutSizeType UIContentSizeFitter::GetHorizontalSizeType() const
 {
-    return m_horizontalSizeFit;
+    return m_horizontalSizeType;
 }
 
-void UIContentSizeFitter::SetVerticalSizeFit(SizeFit sizeFit)
+void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
 {
-    m_verticalSizeFit = sizeFit;
+    m_verticalSizeType = sizeType;
 }
 
-SizeFit UIContentSizeFitter::GetVerticalSizeFit() const
+LayoutSizeType UIContentSizeFitter::GetVerticalSizeType() const
 {
-    return m_verticalSizeFit;
+    return m_verticalSizeType;
 }
 
 void UIContentSizeFitter::ImportXML(const XMLNode &xmlInfo)
 {
     Component::ImportXML(xmlInfo);
 
-    if (xmlInfo.Contains("HorizontalSizeFit"))
-    { SetHorizontalSizeFit( xmlInfo.Get<SizeFit>("HorizontalSizeFit") ); }
+    if (xmlInfo.Contains("HorizontalSizeType"))
+    { SetHorizontalSizeType( xmlInfo.Get<LayoutSizeType>("HorizontalSizeType") ); }
 
-    if (xmlInfo.Contains("VerticalSizeFit"))
-    { SetVerticalSizeFit( xmlInfo.Get<SizeFit>("VerticalSizeFit") ); }
+    if (xmlInfo.Contains("VerticalSizeType"))
+    { SetVerticalSizeType( xmlInfo.Get<LayoutSizeType>("VerticalSizeType") ); }
 }
 
 void UIContentSizeFitter::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
 
-    xmlInfo->Set("HorizontalSizeFit", GetHorizontalSizeFit());
-    xmlInfo->Set("VerticalSizeFit", GetVerticalSizeFit());
+    xmlInfo->Set("HorizontalSizeType", GetHorizontalSizeType());
+    xmlInfo->Set("VerticalSizeType", GetVerticalSizeType());
 }
 
 
