@@ -6,6 +6,7 @@
 #include "Bang/Scene.h"
 #include "Bang/String.h"
 #include "Bang/MeshIO.h"
+#include "Bang/Window.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
@@ -20,8 +21,8 @@ SceneManager::SceneManager()
 
 SceneManager *SceneManager::GetInstance()
 {
-    Application *app = Application::GetInstance();
-    return app ? app->GetSceneManager() : nullptr;
+    Window *win = Window::GetCurrent();
+    return win ? win->GetSceneManager() : nullptr;
 }
 
 void SceneManager::Update()

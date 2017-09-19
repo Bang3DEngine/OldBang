@@ -39,8 +39,8 @@ private:
     static void LoadSceneInstantly(Scene *scene);
     static void LoadSceneInstantly(const Path &sceneFilepath);
 
+    friend class Window;
     friend class Project;
-    friend class Application;
 };
 
 NAMESPACE_BANG_END

@@ -6,10 +6,11 @@
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
 
+using SDL_GLContext = void*;
+
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Time;
-FORWARD class Input;
 FORWARD class Scene;
 FORWARD class Paths;
 FORWARD class Window;
@@ -27,27 +28,21 @@ public:
                 const Path &engineRootPath = Path::Empty);
     virtual ~Application();
 
-    virtual void CreateWindow();
-    virtual int MainLoop();
-    virtual bool MainLoopIteration();
-
-    virtual void UpdateScene();
-    virtual void RenderScene();
-    virtual void OnResize(int newWidth, int newHeight);
+    virtual Window* CreateWindow();
+    void RemoveWindow(Window *window);
+    int MainLoop();
 
     bool ProcessEvents();
 
-
-    GEngine            *GetGEngine() const;
-    Input              *GetInput() const;
+    SDL_GLContext       GetSharedGLContext() const;
     Time               *GetTime() const;
     Paths              *GetPaths() const;
-    SceneManager       *GetSceneManager() const;
-    AudioManager       *GetAudioManager() const;
     Resources          *GetResources() const;
     ImportFilesManager *GetImportFilesManager() const;
     BehaviourManager   *GetBehaviourManager() const;
-    Window             *GetWindow() const;
+    Window             *GetCurrentWindow() const;
+
+    const List<Window*>& GetWindows() const;
 
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);
@@ -55,22 +50,21 @@ public:
     static void Exit(int returnCode, bool immediate = false);
 
 protected:
-    const int RedrawDelay_ms = 10;
+    const uint RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;
 
-    GEngine            *m_gEngine            = nullptr;
-    Window             *m_window             = nullptr;
+    SDL_GLContext       m_sdlGLSharedContext = nullptr;
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
-    Input              *m_input              = nullptr;
-    AudioManager       *m_audioManager       = nullptr;
-    SceneManager       *m_sceneManager       = nullptr;
     Resources          *m_resources          = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
     BehaviourManager   *m_behaviourManager   = nullptr;
 
 private:
     static Application *s_appSingleton;
+
+    List<Window*> m_windows;
+    Window *p_currentWindow = nullptr;
 
     bool m_exit = false;
     int m_exitCode = 0;

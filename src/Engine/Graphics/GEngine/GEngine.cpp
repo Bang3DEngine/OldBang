@@ -16,7 +16,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
-#include "Bang/Application.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
@@ -55,7 +54,7 @@ void GEngine::RenderCurrentScene(Camera *camera)
     Texture2D *camRT = camera->GetRenderTexture();
     if ((scene->GetCamera() == camera) && !camRT)
     {
-        camRT = Window::GetInstance()->GetScreenRenderTexture();
+        camRT = Window::GetCurrent()->GetScreenRenderTexture();
     }
 
     if (camRT)
@@ -254,8 +253,8 @@ void GEngine::RenderScreenPlane()
 
 GEngine* GEngine::GetInstance()
 {
-    Application *app = Application::GetInstance();
-    return app ? app->GetGEngine() : nullptr;
+    Window *win = Window::GetCurrent();
+    return win ? win->GetGEngine() : nullptr;
 }
 
 void GEngine::Render(Renderer *rend)

@@ -3,6 +3,7 @@
 #include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
+#include "Bang/Window.h"
 #include "Bang/Vector3.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioClip.h"
@@ -158,5 +159,5 @@ bool AudioManager::CheckALError()
 
 AudioManager *AudioManager::GetInstance()
 {
-    return Application::GetInstance()->GetAudioManager();
+    return Window::GetCurrent()->GetAudioManager();
 }

@@ -12,6 +12,8 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Window;
+
 class Input
 {
 public:
@@ -221,14 +223,14 @@ private:
     void ProcessKeyDownEventInfo(const EventInfo &ei);
     void ProcessKeyUpEventInfo(const EventInfo &ei);
 
-    void PeekEvent(const SDL_Event &event);
+    void PeekEvent(const SDL_Event &event, const Window *window);
     void EnqueueEvent(const EventInfo &eventInfo);
     void ProcessEventInfo(const EventInfo &eventInfo);
 
     void ProcessEnqueuedEvents();
     void OnFrameFinished();
 
-    friend class Application;
+    friend class Window;
 };
 
 NAMESPACE_BANG_END

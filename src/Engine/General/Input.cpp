@@ -2,6 +2,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Time.h"
+#include "Bang/Window.h"
 #include "Bang/Application.h"
 
 USING_NAMESPACE_BANG
@@ -197,43 +198,26 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
     m_keysUp.PushBack(k);
 }
 
-void Input::PeekEvent(const SDL_Event &event)
+void Input::PeekEvent(const SDL_Event &event, const Window *window)
 {
-    bool enqueue = true;
+    if (!window->HasFocus()) { return; }
+
+    bool enqueue = false;
     EventInfo eventInfo;
     switch (event.type)
     {
         case SDL_KEYDOWN:
-            eventInfo.type = EventInfo::KeyDown;
+            eventInfo.type       = EventInfo::KeyDown;
             eventInfo.autoRepeat = event.key.repeat;
             eventInfo.key        = SCAST<Key>(event.key.keysym.sym);
+            enqueue = true;
         break;
 
         case SDL_KEYUP:
             eventInfo.type = EventInfo::KeyUp;
             eventInfo.autoRepeat = event.key.repeat;
             eventInfo.key        = SCAST<Key>(event.key.keysym.sym);
-        break;
-
-        case SDL_MOUSEBUTTONDOWN:
-            eventInfo.type = EventInfo::MouseDown;
-            eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
-        break;
-
-        case SDL_MOUSEBUTTONUP:
-            eventInfo.type = EventInfo::MouseUp;
-            eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
-        break;
-
-        case SDL_MOUSEWHEEL:
-            eventInfo.type = EventInfo::Wheel;
-            eventInfo.wheelDelta = float(event.wheel.y);
-        break;
-
-        case SDL_MOUSEMOTION:
-            eventInfo.type = EventInfo::MouseMove;
-            eventInfo.x = event.motion.x;
-            eventInfo.y = event.motion.y;
+            enqueue = true;
         break;
 
         case SDL_WINDOWEVENT:
@@ -247,15 +231,40 @@ void Input::PeekEvent(const SDL_Event &event)
         case SDL_TEXTINPUT:
             m_inputText = String(event.text.text);
         break;
-
-        default:
-            enqueue = false;
     }
 
-    if (enqueue)
+    if (window->IsMouseOver())
     {
-        EnqueueEvent(eventInfo);
+        switch(event.type)
+        {
+            case SDL_MOUSEBUTTONDOWN:
+                eventInfo.type = EventInfo::MouseDown;
+                eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
+                enqueue = true;
+            break;
+
+            case SDL_MOUSEBUTTONUP:
+                eventInfo.type = EventInfo::MouseUp;
+                eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
+                enqueue = true;
+            break;
+
+            case SDL_MOUSEWHEEL:
+                eventInfo.type = EventInfo::Wheel;
+                eventInfo.wheelDelta = float(event.wheel.y);
+                enqueue = true;
+            break;
+
+            case SDL_MOUSEMOTION:
+                eventInfo.type = EventInfo::MouseMove;
+                eventInfo.x = event.motion.x;
+                eventInfo.y = event.motion.y;
+                enqueue = true;
+            break;
+        }
     }
+
+    if (enqueue) { EnqueueEvent(eventInfo); }
 }
 
 void Input::EnqueueEvent(const EventInfo &eventInfo)
@@ -274,7 +283,7 @@ void Input::ProcessEnqueuedEvents()
 
 Input *Input::GetInstance()
 {
-    return Application::GetInstance()->GetInput();
+    return Window::GetCurrent()->GetInput();
 }
 
 String Input::KeyToString(Input::Key k)

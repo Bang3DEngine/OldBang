@@ -17,11 +17,6 @@ UILayoutManager::UILayoutManager()
 {
 }
 
-Vector2i UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
-{
-
-}
-
 void UILayoutManager::InvalidateDown(RectTransform *rt)
 {
     ENSURE(rt);

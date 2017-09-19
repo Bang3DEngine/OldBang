@@ -61,8 +61,8 @@ private:
 
     void OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer);
 
+    friend class Window;
     friend class AudioClip;
-    friend class Application;
     friend class AudioPlayerRunnable;
 };
 
