@@ -28,7 +28,7 @@ Window::~Window()
     SDL_DestroyWindow(m_sdlWindow);
 }
 
-void Window::Initialize()
+void Window::Create(uint flags)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -41,8 +41,7 @@ void Window::Initialize()
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
                                    winSize.x, winSize.y,
-                                   SDL_WINDOW_RESIZABLE  |
-                                   SDL_WINDOW_OPENGL);
+                                   flags);
 
     SDL_GLContext sharedContext = Application::GetInstance()->GetSharedGLContext();
     if (!sharedContext) { sharedContext = SDL_GL_CreateContext(m_sdlWindow); }
@@ -51,7 +50,6 @@ void Window::Initialize()
                         SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    // SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     SDL_GL_MakeCurrent(m_sdlWindow, sharedContext);
@@ -86,7 +84,7 @@ bool Window::MainLoopIteration()
 
     GetSceneManager()->Update();
     Scene *activeScene = GetSceneManager()->GetActiveScene();
-    UILayoutManager::ForceRebuildLayout(activeScene);
+    UILayoutManager::RebuildLayout(activeScene);
     if (activeScene) { GetGEngine()->Render(activeScene); }
 
     activeScene->GetUILayoutManager()->OnFrameFinished(activeScene);
@@ -110,17 +108,32 @@ bool Window::HandleEvent(const SDL_Event &sdlEvent)
         {
             switch (sdlEvent.window.event)
             {
-                case SDL_WINDOWEVENT_CLOSE:
-                    return false;
+                case SDL_WINDOWEVENT_CLOSE: return false;
 
                 case SDL_WINDOWEVENT_RESIZED:
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    OnResize(sdlEvent.window.data1, sdlEvent.window.data2);
+                    m_resizedSize = Vector2i(sdlEvent.window.data1,
+                                             sdlEvent.window.data2);
                     break;
             }
         }
     }
     return true;
+}
+
+void Window::OnHandleEventsFinished()
+{
+    OnResize(m_resizedSize.x, m_resizedSize.y);
+}
+
+void Window::SetBordered(bool bordered)
+{
+    SDL_SetWindowBordered(GetSDLWindow(), SCAST<SDL_bool>(bordered));
+}
+
+void Window::SetPosition(int newPosX, int newPosY)
+{
+    SDL_SetWindowPosition(GetSDLWindow(), newPosX, newPosY);
 }
 
 void Window::Resize(int w, int h)
@@ -130,6 +143,7 @@ void Window::Resize(int w, int h)
 
 void Window::OnResize(int newWidth, int newHeight)
 {
+    m_resizedSize = Vector2i(newWidth, newHeight);
     GL::SetViewport(0, 0, GetWidth(), GetHeight());
 
     GetScreenRenderTexture()->Resize(newWidth, newHeight);
@@ -142,26 +156,32 @@ void Window::OnResize(int newWidth, int newHeight)
 int Window::GetWidth() const { return GetSize().x; }
 int Window::GetHeight() const { return GetSize().y; }
 
-bool Window::HasFocus() const
-{
-    return (SDL_GetWindowFlags(GetSDLWindow()) & SDL_WINDOW_INPUT_FOCUS) > 0;
-}
-
-bool Window::IsMouseOver() const
-{
-    return (SDL_GetWindowFlags(GetSDLWindow()) & SDL_WINDOW_MOUSE_FOCUS) > 0;
-}
+bool Window::HasFocus() const { return HasFlags(SDL_WINDOW_INPUT_FOCUS); }
+bool Window::IsBordered() const { return !HasFlags(SDL_WINDOW_BORDERLESS); }
+bool Window::IsMouseOver() const { return HasFlags(SDL_WINDOW_MOUSE_FOCUS); }
 
 Vector2i Window::GetSize() const
 {
-    int width, height;
-    SDL_GetWindowSize(m_sdlWindow, &width, &height);
-    return Vector2i(width, height);
+    Vector2i size;
+    SDL_GetWindowSize(m_sdlWindow, &size.x, &size.y);
+    return size;
+}
+
+Vector2i Window::GetPosition() const
+{
+    Vector2i wpos;
+    SDL_GetWindowPosition(GetSDLWindow(), &wpos.x, &wpos.y);
+    return wpos;
 }
 
 Texture2D *Window::GetScreenRenderTexture() const
 {
     return m_screenRenderTexture;
+}
+
+bool Window::HasFlags(uint flags) const
+{
+    return (SDL_GetWindowFlags(GetSDLWindow()) & flags) > 0;
 }
 
 int Window::GetHeightS()

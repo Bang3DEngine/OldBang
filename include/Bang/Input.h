@@ -204,7 +204,8 @@ private:
 
     String m_inputText = "";
 
-    Vector2i m_mouseCoords, m_lastMouseCoords;
+    Vector2i m_mouseCoords     = Vector2i::Zero;
+    Vector2i m_lastMouseCoords = Vector2i::Zero;
 
     Array<Key> m_keysUp;
     Array<Key> m_keysDown;

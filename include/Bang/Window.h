@@ -21,11 +21,15 @@ public:
     Window();
     virtual ~Window();
 
-    void Initialize();
+    void Create(uint flags);
     void SwapBuffers() const;
     bool MainLoopIteration();
 
     bool HandleEvent(const SDL_Event &sdlEvent);
+    void OnHandleEventsFinished();
+
+    void SetBordered(bool bordered);
+    void SetPosition(int newPosX, int newPosY);
 
     void Resize(int newWidth, int newHeight);
     void OnResize(int newWidth, int newHeight);
@@ -33,9 +37,12 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     bool HasFocus() const;
+    bool IsBordered() const;
     bool IsMouseOver() const;
     Vector2i GetSize() const;
+    Vector2i GetPosition() const;
     Texture2D *GetScreenRenderTexture() const;
+    bool HasFlags(uint flags) const;
 
     static float GetAspectRatioS();
     static int GetHeightS();
@@ -52,6 +59,7 @@ public:
 
 protected:
     SDL_Window *m_sdlWindow = nullptr;
+    Vector2i m_resizedSize = Vector2i::Zero;
 
     GEngine *m_gEngine = nullptr;
     Input              *m_input              = nullptr;

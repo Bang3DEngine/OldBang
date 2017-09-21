@@ -201,6 +201,7 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
 void Input::PeekEvent(const SDL_Event &event, const Window *window)
 {
     if (!window->HasFocus()) { return; }
+    m_isMouseInside = window->HasFocus() && window->IsMouseOver();
 
     bool enqueue = false;
     EventInfo eventInfo;
@@ -218,14 +219,6 @@ void Input::PeekEvent(const SDL_Event &event, const Window *window)
             eventInfo.autoRepeat = event.key.repeat;
             eventInfo.key        = SCAST<Key>(event.key.keysym.sym);
             enqueue = true;
-        break;
-
-        case SDL_WINDOWEVENT:
-        switch (event.window.event)
-        {
-            case SDL_WINDOWEVENT_ENTER: m_isMouseInside = true; break;
-            case SDL_WINDOWEVENT_LEAVE: m_isMouseInside = false; break;
-        }
         break;
 
         case SDL_TEXTINPUT:

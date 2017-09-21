@@ -98,8 +98,8 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     Bind();
     Texture2D *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
-    Byte color[4];
-    GL::ReadPixels(x, t->GetHeight() - y, 1, 1,
+    Byte color[4] = {0,0,0,0};
+    GL::ReadPixels(x, t->GetHeight() - y - 1, 1, 1,
                    GL::GetColorCompFrom(t->GetInternalFormat()),
                    t->GetInternalDataType(),
                    SCAST<void*>(&color));

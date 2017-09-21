@@ -75,7 +75,7 @@ GameObject *SelectionFramebuffer::GetGameObjectInPosition(
         const Vector2i &screenCoords)
 {
     Color colorUnderMouse = ReadColor(screenCoords.x, screenCoords.y, AttColor);
-    int id = MapColorToId(colorUnderMouse);
+    long id = MapColorToId(colorUnderMouse);
     if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
@@ -92,10 +92,10 @@ Color SelectionFramebuffer::MapIdToColor(long id)
 {
     constexpr int C = 256;
     Color color =
-            Color(double(   id                % C),
-                  double(  (id / C)           % C),
-                  double( ((id / C) / C)      % C),
-                  double((((id / C) / C) / C) % C)
+            Color(float(   id                % C),
+                  float(  (id / C)           % C),
+                  float( ((id / C) / C)      % C),
+                  float((((id / C) / C) / C) % C)
                  );
    return color / float(C);
 }

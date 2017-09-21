@@ -63,7 +63,8 @@ Application::~Application()
 Window* Application::CreateWindow()
 {
     Window *window = new Window();
-    window->Initialize();
+    window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+
     if (!m_sdlGLSharedContext) { m_sdlGLSharedContext = SDL_GL_GetCurrentContext(); }
 
     p_currentWindow = window;
@@ -93,13 +94,13 @@ int Application::MainLoop()
         GetTime()->OnFrameFinished();
         SDL_Delay(RedrawDelay_ms);
 
-        if (!ProcessEvents())    { m_exit = true; }
+        if (!HandleEvents())     { m_exit = true; }
         if (m_windows.IsEmpty()) { m_exit = true; }
     }
     return m_exitCode;
 }
 
-bool Application::ProcessEvents()
+bool Application::HandleEvents()
 {
     SDL_Event sdlEvent;
     constexpr int THERE_ARE_MORE_EVENTS = 1;
@@ -113,8 +114,9 @@ bool Application::ProcessEvents()
                 for (auto itw = m_windows.Begin(); itw != m_windows.End(); )
                 {
                     Window *w = *itw;
-                    bool stillOpen = w->HandleEvent(sdlEvent);
-                    if (!stillOpen)
+                    p_currentWindow = w;
+                    bool hasNotClosed = w->HandleEvent(sdlEvent);
+                    if (!hasNotClosed)
                     {
                         delete w;
                         itw = m_windows.Remove(itw);
@@ -123,6 +125,13 @@ bool Application::ProcessEvents()
                 }
         }
     }
+
+    for (Window *w : GetWindows())
+    {
+        p_currentWindow = w;
+        w->OnHandleEventsFinished();
+    }
+
     return true;
 }
 
@@ -179,8 +188,7 @@ void Application::Exit(int returnCode, bool immediate)
 
 Window *Application::GetCurrentWindow() const
 {
-    return p_currentWindow ? p_currentWindow :
-             ((m_windows.Size() >= 1) ? m_windows.Front() : nullptr);
+    return p_currentWindow ? p_currentWindow : nullptr;
 }
 
 const List<Window *> &Application::GetWindows() const

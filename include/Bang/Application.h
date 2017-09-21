@@ -32,7 +32,7 @@ public:
     void RemoveWindow(Window *window);
     int MainLoop();
 
-    bool ProcessEvents();
+    bool HandleEvents();
 
     SDL_GLContext       GetSharedGLContext() const;
     Time               *GetTime() const;
