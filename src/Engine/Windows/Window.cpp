@@ -26,6 +26,7 @@ Window::~Window()
     delete m_sceneManager;
     delete m_audioManager;
     SDL_DestroyWindow(m_sdlWindow);
+    SetParent(nullptr);
 }
 
 void Window::Create(uint flags)
@@ -99,21 +100,36 @@ bool Window::MainLoopIteration()
 
 bool Window::HandleEvent(const SDL_Event &sdlEvent)
 {
-    GetInput()->PeekEvent(sdlEvent, this);
+    if (!IsBlockedByChildren())
+    {
+        GetInput()->PeekEvent(sdlEvent, this);
+    }
 
     switch (sdlEvent.type)
     {
         case SDL_WINDOWEVENT:
         if (sdlEvent.window.windowID == GetSDLWindowID())
         {
+            if (!IsBlockedByChildren())
+            {
+                switch (sdlEvent.window.event)
+                {
+                    case SDL_WINDOWEVENT_CLOSE: return false;
+                }
+            }
+
             switch (sdlEvent.window.event)
             {
-                case SDL_WINDOWEVENT_CLOSE: return false;
-
                 case SDL_WINDOWEVENT_RESIZED:
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
                     m_resizedSize = Vector2i(sdlEvent.window.data1,
                                              sdlEvent.window.data2);
+                    break;
+
+                case SDL_WINDOWEVENT_EXPOSED:
+                case SDL_WINDOWEVENT_FOCUS_GAINED:
+                    if (!p_children.IsEmpty())
+                    { p_children.Front()->MoveToFront(); }
                     break;
             }
         }
@@ -126,6 +142,12 @@ void Window::OnHandleEventsFinished()
     OnResize(m_resizedSize.x, m_resizedSize.y);
 }
 
+void Window::MoveToFront() const
+{
+    if (p_children.IsEmpty()) { SDL_RaiseWindow(GetSDLWindow()); }
+    else { p_children.Front()->MoveToFront(); }
+}
+
 void Window::SetBordered(bool bordered)
 {
     SDL_SetWindowBordered(GetSDLWindow(), SCAST<SDL_bool>(bordered));
@@ -134,6 +156,11 @@ void Window::SetBordered(bool bordered)
 void Window::SetPosition(int newPosX, int newPosY)
 {
     SDL_SetWindowPosition(GetSDLWindow(), newPosX, newPosY);
+}
+
+void Window::SetTitle(const String &title)
+{
+    SDL_SetWindowTitle(GetSDLWindow(), title.ToCString());
 }
 
 void Window::Resize(int w, int h)
@@ -158,6 +185,10 @@ int Window::GetHeight() const { return GetSize().y; }
 
 bool Window::HasFocus() const { return HasFlags(SDL_WINDOW_INPUT_FOCUS); }
 bool Window::IsBordered() const { return !HasFlags(SDL_WINDOW_BORDERLESS); }
+String Window::GetTitle() const
+{
+    return String(SDL_GetWindowTitle(GetSDLWindow()));
+}
 bool Window::IsMouseOver() const { return HasFlags(SDL_WINDOW_MOUSE_FOCUS); }
 
 Vector2i Window::GetSize() const
@@ -172,6 +203,11 @@ Vector2i Window::GetPosition() const
     Vector2i wpos;
     SDL_GetWindowPosition(GetSDLWindow(), &wpos.x, &wpos.y);
     return wpos;
+}
+
+bool Window::IsBlockedByChildren() const
+{
+    return !p_children.IsEmpty();
 }
 
 Texture2D *Window::GetScreenRenderTexture() const
@@ -228,4 +264,23 @@ Window *Window::GetCurrent()
 {
     Application *app = Application::GetInstance();
     return app ? app->GetCurrentWindow() : nullptr;
+}
+
+void Window::SetParent(Window *parentWindow)
+{
+    ASSERT(parentWindow != this);
+    ASSERT(!p_children.Contains(parentWindow));
+    ENSURE(p_parent != parentWindow);
+
+    if (p_parent)
+    {
+        p_parent->p_children.Remove(this);
+    }
+
+    p_parent = parentWindow;
+
+    if (p_parent)
+    {
+        p_parent->p_children.PushBack(this);
+    }
 }

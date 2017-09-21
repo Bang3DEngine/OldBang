@@ -1,6 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "Bang/List.h"
 #include "Bang/Vector2.h"
 
 FORWARD union  SDL_Event;
@@ -21,15 +22,17 @@ public:
     Window();
     virtual ~Window();
 
-    void Create(uint flags);
+    virtual void Create(uint flags);
     void SwapBuffers() const;
     bool MainLoopIteration();
 
-    bool HandleEvent(const SDL_Event &sdlEvent);
+    virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
 
+    void MoveToFront() const;
     void SetBordered(bool bordered);
     void SetPosition(int newPosX, int newPosY);
+    void SetTitle(const String &title);
 
     void Resize(int newWidth, int newHeight);
     void OnResize(int newWidth, int newHeight);
@@ -38,9 +41,11 @@ public:
     int GetHeight() const;
     bool HasFocus() const;
     bool IsBordered() const;
+    String GetTitle() const;
     bool IsMouseOver() const;
     Vector2i GetSize() const;
     Vector2i GetPosition() const;
+    bool IsBlockedByChildren() const;
     Texture2D *GetScreenRenderTexture() const;
     bool HasFlags(uint flags) const;
 
@@ -58,14 +63,23 @@ public:
     static Window *GetCurrent();
 
 protected:
+    void SetParent(Window *parentWindow);
+
+private:
     SDL_Window *m_sdlWindow = nullptr;
+
+    List<Window*> p_children;
+    Window* p_parent = nullptr;
+
+    GEngine      *m_gEngine      = nullptr;
+    Input        *m_input        = nullptr;
+    AudioManager *m_audioManager = nullptr;
+    SceneManager *m_sceneManager = nullptr;
+    Texture2D *m_screenRenderTexture = nullptr;
+
     Vector2i m_resizedSize = Vector2i::Zero;
 
-    GEngine *m_gEngine = nullptr;
-    Input              *m_input              = nullptr;
-    AudioManager       *m_audioManager       = nullptr;
-    SceneManager       *m_sceneManager       = nullptr;
-    Texture2D *m_screenRenderTexture = nullptr;
+    friend int EventFilter(void *userData, SDL_Event *event);
 };
 
 NAMESPACE_BANG_END

@@ -17,6 +17,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
+#include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/FontSheetCreator.h"
@@ -60,9 +61,22 @@ Application::~Application()
     TTF_Quit();
 }
 
-Window* Application::CreateWindow()
+Window *Application::CreateWindow()
 {
-    Window *window = new Window();
+    Window *w = new Window();
+    SetupWindow(w);
+    return w;
+}
+
+DialogWindow *Application::CreateDialogWindow(Window *parentWindow)
+{
+     DialogWindow *w = new DialogWindow(parentWindow);
+     SetupWindow(w);
+     return w;
+}
+
+void Application::SetupWindow(Window *window)
+{
     window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
     if (!m_sdlGLSharedContext) { m_sdlGLSharedContext = SDL_GL_GetCurrentContext(); }
@@ -70,8 +84,6 @@ Window* Application::CreateWindow()
     p_currentWindow = window;
     m_windows.PushBack(window);
     window->OnResize(window->GetWidth(), window->GetHeight());
-
-    return window;
 }
 
 void Application::RemoveWindow(Window *window)

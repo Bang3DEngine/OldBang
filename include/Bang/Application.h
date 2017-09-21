@@ -17,6 +17,7 @@ FORWARD class Window;
 FORWARD class GEngine;
 FORWARD class Resources;
 FORWARD class AudioManager;
+FORWARD class DialogWindow;
 FORWARD class SceneManager;
 FORWARD class BehaviourManager;
 FORWARD class ImportFilesManager;
@@ -28,7 +29,10 @@ public:
                 const Path &engineRootPath = Path::Empty);
     virtual ~Application();
 
-    virtual Window* CreateWindow();
+
+    Window* CreateWindow();
+    DialogWindow* CreateDialogWindow(Window *parentWindow);
+
     void RemoveWindow(Window *window);
     int MainLoop();
 
@@ -59,6 +63,8 @@ protected:
     Resources          *m_resources          = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
     BehaviourManager   *m_behaviourManager   = nullptr;
+
+    virtual void SetupWindow(Window *window);
 
 private:
     static Application *s_appSingleton;

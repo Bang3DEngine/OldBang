@@ -239,6 +239,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
+${ENGINE_SRC_DIR}/Windows/DialogWindow.cpp
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
 ${OTHER_FILES}
 )
