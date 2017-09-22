@@ -86,9 +86,12 @@ bool Window::MainLoopIteration()
     GetSceneManager()->Update();
     Scene *activeScene = GetSceneManager()->GetActiveScene();
     UILayoutManager::RebuildLayout(activeScene);
-    if (activeScene) { GetGEngine()->Render(activeScene); }
+    if (activeScene)
+    {
+        GetGEngine()->Render(activeScene);
+        activeScene->GetUILayoutManager()->OnFrameFinished(activeScene);
+    }
 
-    activeScene->GetUILayoutManager()->OnFrameFinished(activeScene);
     GetInput()->OnFrameFinished();
 
     GetGEngine()->RenderToScreen( GetScreenRenderTexture() );
@@ -144,8 +147,8 @@ void Window::OnHandleEventsFinished()
 
 void Window::MoveToFront() const
 {
-    if (p_children.IsEmpty()) { SDL_RaiseWindow(GetSDLWindow()); }
-    else { p_children.Front()->MoveToFront(); }
+    SDL_RaiseWindow(GetSDLWindow());
+    for (Window *childWindow : p_children) { childWindow->MoveToFront(); }
 }
 
 void Window::SetBordered(bool bordered)
@@ -163,7 +166,7 @@ void Window::SetTitle(const String &title)
     SDL_SetWindowTitle(GetSDLWindow(), title.ToCString());
 }
 
-void Window::Resize(int w, int h)
+void Window::SetSize(int w, int h)
 {
     SDL_SetWindowSize(m_sdlWindow, w, h);
 }

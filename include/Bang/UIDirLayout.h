@@ -1,15 +1,13 @@
 #ifndef UIDIRLAYOUT_H
 #define UIDIRLAYOUT_H
 
-#include "Bang/Component.h"
-#include "Bang/ILayoutElement.h"
-#include "Bang/ILayoutController.h"
+#include "Bang/UIGroupLayout.h"
 
 NAMESPACE_BANG_BEGIN
 
-class UIDirLayout : public Component,
-                    public ILayoutElement,
-                    public ILayoutController
+FORWARD class RectTransform;
+
+class UIDirLayout : public UIGroupLayout
 {
     COMPONENT(UIDirLayout)
 
@@ -39,13 +37,18 @@ protected:
     UIDirLayout(bool vertical);
     virtual ~UIDirLayout();
 
-    void FillChildrenSizes(Array<Vector2i> *childrenSizes,
-                           Vector2i *availableSize,
-                           LayoutSizeType sizeType);
-
 private:
     int m_spacingPx = 0;
     bool m_vertical = false;
+
+    void ApplyLayoutToChildRectTransform(RectTransform *childRT,
+                                         const Vector2i &position,
+                                         const Vector2i &childRTSize);
+    void ApplyStretchToChildRectTransform(RectTransform *childRT);
+
+    void FillChildrenSizes(Array<Vector2i> *childrenSizes,
+                           Vector2i *availableSize,
+                           LayoutSizeType sizeType);
 };
 
 NAMESPACE_BANG_END

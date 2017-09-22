@@ -34,7 +34,7 @@ public:
     void SetPosition(int newPosX, int newPosY);
     void SetTitle(const String &title);
 
-    void Resize(int newWidth, int newHeight);
+    void SetSize(int newWidth, int newHeight);
     void OnResize(int newWidth, int newHeight);
 
     int GetWidth() const;

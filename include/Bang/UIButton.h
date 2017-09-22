@@ -1,22 +1,13 @@
 #ifndef UIBUTTON_H
 #define UIBUTTON_H
 
-#include <functional>
-
-#include "Bang/Set.h"
-#include "Bang/Input.h"
 #include "Bang/Component.h"
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class GameObject;
-FORWARD class UIButtonListener;
-
-enum UIButtonMode
-{
-    UseRectTransform,
-    UseRender
-};
+FORWARD class UIBorderRect;
+FORWARD class UITextRenderer;
+FORWARD class UIImageRenderer;
 
 class UIButton : public Component
 {
@@ -26,56 +17,20 @@ public:
     UIButton();
     virtual ~UIButton();
 
-    // Component
-    virtual void OnUpdate() override;
-
-    void AddAgent(GameObject *agent);
-    void RemoveAgent(GameObject *agent);
-
-    void AddListener(UIButtonListener *listener);
-    void RemoveListener(UIButtonListener *listener);
-
-    using EnterExitCallback = ::std::function<void(UIButton*)>;
-    using ClickedCallback = EnterExitCallback;
-    using DownUpCallback = ::std::function<void(UIButton*, Input::MouseButton)>;
-
-    void AddMouseEnterCallback(EnterExitCallback callback);
-    void AddMouseExitCallback(EnterExitCallback callback);
-    void AddMouseDownCallback(DownUpCallback callback);
-    void AddMouseUpCallback(DownUpCallback callback);
-    void AddClickedCallback(ClickedCallback callback);
-
-    void SetMode(UIButtonMode mode);
-
-    bool IsMouseOverSomeAgent() const;
-    bool IsBeingPressed() const;
-    UIButtonMode GetMode() const;
+    UIBorderRect* GetBorder() const;
+    UITextRenderer* GetText() const;
+    UIImageRenderer* GetBackground() const;
 
 private:
-    bool m_mouseOver    = false;
-    bool m_beingPressed = false;
-    UIButtonMode m_mode = UIButtonMode::UseRender;
+    UIBorderRect    *p_border     = nullptr;
+    UITextRenderer  *p_text       = nullptr;
+    UIImageRenderer *p_background = nullptr;
 
-    Set<GameObject*> p_agents;
-    Set<UIButtonListener*> p_listeners;
+    void SetBorder(UIBorderRect *borderRect);
+    void SetText(UITextRenderer *textRenderer);
+    void SetBackground(UIImageRenderer *imgRenderer);
 
-    Array<EnterExitCallback> m_mouseEnterCallbacks;
-    Array<EnterExitCallback> m_mouseExitCallbacks;
-    Array<DownUpCallback> m_mouseDownCallbacks;
-    Array<DownUpCallback> m_mouseUpCallbacks;
-    Array<ClickedCallback> m_clickedCallbacks;
-};
-
-class UIButtonListener
-{
-protected:
-    virtual void OnButton_MouseEnter(UIButton *btn) {}
-    virtual void OnButton_MouseExit(UIButton *btn) {}
-    virtual void OnButton_MouseDown(UIButton *btn, Input::MouseButton mb) {}
-    virtual void OnButton_MouseUp(UIButton *btn, Input::MouseButton mb) {}
-    virtual void OnButton_Clicked(UIButton *btn) {}
-
-    friend class UIButton;
+    friend class GameObjectFactory;
 };
 
 NAMESPACE_BANG_END

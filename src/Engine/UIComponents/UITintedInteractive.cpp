@@ -1,4 +1,4 @@
-#include "Bang/UIButtonWithTint.h"
+#include "Bang/UITintedInteractive.h"
 
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
@@ -6,18 +6,18 @@
 
 USING_NAMESPACE_BANG
 
-UIButtonWithTint::UIButtonWithTint()
+UITintedInteractive::UITintedInteractive()
 {
     AddListener(this);
 }
 
-UIButtonWithTint::~UIButtonWithTint()
+UITintedInteractive::~UITintedInteractive()
 {
 }
 
-void UIButtonWithTint::OnUpdate()
+void UITintedInteractive::OnUpdate()
 {
-    UIButton::OnUpdate();
+    UIInteractive::OnUpdate();
     if ( (m_currentTintColor == m_pressedTintColor) &&
          Input::GetMouseButtonUp(Input::MouseButton::Left) )
     {
@@ -26,64 +26,64 @@ void UIButtonWithTint::OnUpdate()
     }
 }
 
-void UIButtonWithTint::AddGameObjectToTint(GameObject *go)
+void UITintedInteractive::AddGameObjectToTint(GameObject *go)
 {
     p_gameObjectsToTint.Add(go);
 }
 
-void UIButtonWithTint::SetIdleTintColor(const Color &tintColor)
+void UITintedInteractive::SetIdleTintColor(const Color &tintColor)
 {
     m_idleTintColor = tintColor;
 }
-void UIButtonWithTint::SetOverTintColor(const Color &tintColor)
+void UITintedInteractive::SetOverTintColor(const Color &tintColor)
 {
     m_overTintColor = tintColor;
 }
-void UIButtonWithTint::SetPressedTintColor(const Color &tintColor)
+void UITintedInteractive::SetPressedTintColor(const Color &tintColor)
 {
     m_pressedTintColor = tintColor;
 }
 
-const Color &UIButtonWithTint::GetIdleTintColor() const
+const Color &UITintedInteractive::GetIdleTintColor() const
 {
     return m_idleTintColor;
 }
-const Color &UIButtonWithTint::GetOverTintColor() const
+const Color &UITintedInteractive::GetOverTintColor() const
 {
     return m_overTintColor;
 }
-const Color &UIButtonWithTint::GetPressedTintColor() const
+const Color &UITintedInteractive::GetPressedTintColor() const
 {
     return m_pressedTintColor;
 }
 
-void UIButtonWithTint::OnButton_MouseEnter(UIButton *btn)
+void UITintedInteractive::OnButton_MouseEnter(UIInteractive *btn)
 {
-    UIButtonListener::OnButton_MouseEnter(btn);
+    UIInteractiveListener::OnButton_MouseEnter(btn);
     ApplyTintToGameObjects( IsBeingPressed() ? m_pressedTintColor :
                                                m_overTintColor);
 }
 
-void UIButtonWithTint::OnButton_MouseExit(UIButton *btn)
+void UITintedInteractive::OnButton_MouseExit(UIInteractive *btn)
 {
-    UIButtonListener::OnButton_MouseExit(btn);
+    UIInteractiveListener::OnButton_MouseExit(btn);
     ApplyTintToGameObjects( IsBeingPressed() ? m_pressedTintColor :
                                                m_idleTintColor);
 }
 
-void UIButtonWithTint::OnButton_MouseDown(UIButton *btn, Input::MouseButton mb)
+void UITintedInteractive::OnButton_MouseDown(UIInteractive *btn, Input::MouseButton mb)
 {
-    UIButtonListener::OnButton_MouseDown(btn, mb);
+    UIInteractiveListener::OnButton_MouseDown(btn, mb);
     ApplyTintToGameObjects(m_pressedTintColor);
 }
 
-void UIButtonWithTint::OnButton_MouseUp(UIButton *btn, Input::MouseButton mb)
+void UITintedInteractive::OnButton_MouseUp(UIInteractive *btn, Input::MouseButton mb)
 {
-    UIButtonListener::OnButton_MouseUp(btn, mb);
+    UIInteractiveListener::OnButton_MouseUp(btn, mb);
     ApplyTintToGameObjects(m_overTintColor);
 }
 
-void UIButtonWithTint::ApplyTintToGameObjects(const Color &tintColor)
+void UITintedInteractive::ApplyTintToGameObjects(const Color &tintColor)
 {
     for (GameObject *go : p_gameObjectsToTint)
     {

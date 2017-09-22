@@ -46,6 +46,7 @@ public:
     BehaviourManager   *GetBehaviourManager() const;
     Window             *GetCurrentWindow() const;
 
+    static Window* GetTopWindow();
     const List<Window*>& GetWindows() const;
 
     static Application *GetInstance();

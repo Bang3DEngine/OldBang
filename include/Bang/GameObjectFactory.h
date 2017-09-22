@@ -5,6 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIButton;
 FORWARD class GameObject;
 FORWARD class UIGameObject;
 
@@ -18,7 +19,7 @@ public:
     static UIGameObject* CreateUIGameObject(bool addRectTransform = true);
 
     static UIGameObject* CreateGUIInputText();
-    static UIGameObject* CreateGUIButton();
+    static UIButton*     CreateGUIButton();
     static UIGameObject* CreateGUILabel(const String &content = "Bang");
     static UIGameObject* CreateGUIScrollArea();
 

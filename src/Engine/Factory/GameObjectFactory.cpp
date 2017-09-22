@@ -11,9 +11,12 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIInteractive.h"
+#include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/UIButtonWithTint.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UITintedInteractive.h"
 
 USING_NAMESPACE_BANG
 
@@ -52,14 +55,23 @@ UIGameObject *GameObjectFactory::CreateGUIInputText()
     return UIInputText::CreateGameObject();
 }
 
-UIGameObject *GameObjectFactory::CreateGUIButton()
+UIButton* GameObjectFactory::CreateGUIButton()
 {
+    GameObject *container = GameObjectFactory::CreateUIGameObject();
+    UIFrameLayout *fl = container->AddComponent<UIFrameLayout>();
+    /*fl->SetPaddingBot(2);
+    fl->SetPaddingTop(2);
+    fl->SetPaddingRight(5);
+    fl->SetPaddingLeft (5);
+    */
+
     UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    go->AddComponent<UIFrameLayout>();
     go->SetName("GUIButton");
 
     UIGameObject *bg = GameObjectFactory::CreateUIGameObject(true);
     bg->SetName("GUIButton_Background");
-    UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
+    UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
     bg->SetParent(go);
 
@@ -71,7 +83,7 @@ UIGameObject *GameObjectFactory::CreateGUIButton()
     UIBorderRect *borderRect = go->AddComponent<UIBorderRect>();
     borderRect->SetLineColor(Color::Purple);
 
-    UIButtonWithTint *labelBTint = go->AddComponent<UIButtonWithTint>();
+    UITintedInteractive *labelBTint = go->AddComponent<UITintedInteractive>();
     labelBTint->AddAgent(go);
     labelBTint->AddGameObjectToTint(label);
     labelBTint->SetIdleTintColor(label->
@@ -80,34 +92,37 @@ UIGameObject *GameObjectFactory::CreateGUIButton()
     labelBTint->SetOverTintColor(Color::Black);
     labelBTint->SetPressedTintColor(Color::White);
 
-    UIButtonWithTint *bgWTint = go->AddComponent<UIButtonWithTint>();
+    UITintedInteractive *bgWTint = go->AddComponent<UITintedInteractive>();
     bgWTint->AddGameObjectToTint(bg);
     bgWTint->SetIdleTintColor(bgImg->GetTint());
     bgWTint->SetOverTintColor(Color::Gray);
     bgWTint->SetPressedTintColor(Color::Black);
     bgWTint->AddAgent(go);
 
-    go->AddComponent<UIButton>();
+    UIButton *button = container->AddComponent<UIButton>();
+    button->SetBackground(bgImg);
+    button->SetBorder(borderRect);
+    button->SetText(label->FindInChildren("TextContainer")->
+                    GetComponent<UITextRenderer>());
 
-    return go;
+    go->SetParent(container);
+
+    return button;
 }
 
 UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
 {
     UIGameObject *label = GameObjectFactory::CreateUIGameObject(true);
     label->SetName("GUILabel");
+    label->AddComponent<UIFrameLayout>();
+    label->AddComponent<UIMask>();
+    label->AddComponent<UIImageRenderer>(); // Quad mask
 
-    UIGameObject *mask = GameObjectFactory::CreateUIGameObject(true);
-    mask->SetName("Mask");
-    mask->AddComponent<UIMask>();
-    mask->AddComponent<UIImageRenderer>(); // Quad mask
-    mask->SetParent(label);
+    UIGameObject *textGo = GameObjectFactory::CreateUIGameObject(true);
+    textGo->SetName("TextContainer");
+    textGo->SetParent(label);
 
-    UIGameObject *textContainer = GameObjectFactory::CreateUIGameObject(true);
-    textContainer->SetName("TextContainer");
-    textContainer->SetParent(mask);
-
-    UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
+    UITextRenderer *text = textGo->AddComponent<UITextRenderer>();
     text->SetContent(content);
     text->SetWrapping(false);
 

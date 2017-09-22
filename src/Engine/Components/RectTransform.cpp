@@ -24,9 +24,19 @@ void RectTransform::OnRenderGizmos()
     Transform::OnRenderGizmos();
     Gizmos::SetLineWidth(2.0f);
 
+    Rect r = GetScreenSpaceRectNDC();
     Color c = Color::Green; //Random::GetColorOpaque();
     Gizmos::SetColor(c);
-    // Gizmos::RenderRect(GetScreenSpaceRectNDC());
+    Gizmos::RenderRect(r);
+
+    Gizmos::SetColor(c);
+    Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
+    Gizmos::SetColor(c);
+    Gizmos::RenderScreenLine(r.GetMinXMinY(), r.GetMaxXMaxY());
+    float size = 0.025f;
+    Gizmos::SetColor(c);
+    Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
+                            r.GetCenter() + Vector2(size)));
 
     /*
     ENSURE(gameObject->parent);
@@ -198,6 +208,18 @@ void RectTransform::SetAnchorMaxY(float anchorMaxY)
     SetAnchorMax( Vector2(GetAnchorMax().x, anchorMaxY) );
 }
 
+void RectTransform::SetAnchorX(const Vector2 &anchorX)
+{
+    SetAnchorMinX(anchorX.x);
+    SetAnchorMaxX(anchorX.y);
+}
+
+void RectTransform::SetAnchorY(const Vector2 &anchorY)
+{
+    SetAnchorMinY(anchorY.x);
+    SetAnchorMaxY(anchorY.y);
+}
+
 void RectTransform::SetAnchors(const Vector2 &anchorPoint)
 {
     SetAnchors(anchorPoint, anchorPoint);
@@ -269,14 +291,14 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Vector2 maxMarginedAnchor (GetAnchorMax() - FromPixelsToLocalNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
-    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
-                                0);
+    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
+    Vector3 moveToAnchorPos( (maxMarginedAnchor - minMarginedAnchor) *
+                             (-m_pivotPosition * 0.5f + 0.5f) + minMarginedAnchor,
+                             0);
 
-    Vector3 moveToPivot(m_pivotPosition, 0);
-
-    m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
+    m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorPos) *
                             Matrix4::ScaleMatrix(anchorScaling) *
-                            Matrix4::TranslateMatrix(moveToPivot);
+                            Matrix4::TranslateMatrix(moveToAnchorCenter);
 
     SetInvalid(false);
     return m_localToParentMatrix;

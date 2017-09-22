@@ -86,6 +86,18 @@ void Application::SetupWindow(Window *window)
     window->OnResize(window->GetWidth(), window->GetHeight());
 }
 
+Window *Application::GetTopWindow()
+{
+    Application *app = Application::GetInstance();
+    if (!app) { return nullptr; }
+
+    for (Window *w : app->m_windows)
+    {
+        if (w->HasFocus()) { return w; }
+    }
+    return nullptr;
+}
+
 void Application::RemoveWindow(Window *window)
 {
     for (Window *w : GetWindows()) { if (w == window) { delete w; break; } }

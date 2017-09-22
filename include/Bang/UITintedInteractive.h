@@ -1,19 +1,19 @@
-#ifndef UIBUTTONWITHTINT_H
-#define UIBUTTONWITHTINT_H
+#ifndef UITINTEDINTERACTIVE_H
+#define UITINTEDINTERACTIVE_H
 
 #include "Bang/Color.h"
-#include "Bang/UIButton.h"
+#include "Bang/UIInteractive.h"
 
 NAMESPACE_BANG_BEGIN
 
-class UIButtonWithTint : public UIButton,
-                         public UIButtonListener
+class UITintedInteractive : public UIInteractive,
+                            public UIInteractiveListener
 {
-    COMPONENT(UIButtonWithTint)
+    COMPONENT(UITintedInteractive)
 
 public:
-    UIButtonWithTint();
-    virtual ~UIButtonWithTint();
+    UITintedInteractive();
+    virtual ~UITintedInteractive();
 
     // Component
     virtual void OnUpdate() override;
@@ -29,12 +29,12 @@ public:
     const Color& GetPressedTintColor() const;
 
 protected:
-    virtual void OnButton_MouseEnter(UIButton *btn) override;
-    virtual void OnButton_MouseExit(UIButton *btn) override;
+    virtual void OnButton_MouseEnter(UIInteractive *btn) override;
+    virtual void OnButton_MouseExit(UIInteractive *btn) override;
     virtual void
-    OnButton_MouseDown(UIButton *btn, Input::MouseButton mb) override;
+    OnButton_MouseDown(UIInteractive *btn, Input::MouseButton mb) override;
     virtual void
-    OnButton_MouseUp(UIButton *btn, Input::MouseButton mb) override;
+    OnButton_MouseUp(UIInteractive *btn, Input::MouseButton mb) override;
 
 private:
     Set<GameObject*> p_gameObjectsToTint;
@@ -49,4 +49,4 @@ private:
 
 NAMESPACE_BANG_END
 
-#endif // UIBUTTONWITHTINT_H
+#endif // UITINTEDINTERACTIVE_H

@@ -31,6 +31,8 @@ public:
     void SetAnchorMinY(float anchorMinY);
     void SetAnchorMaxX(float anchorMaxX);
     void SetAnchorMaxY(float anchorMaxY);
+    void SetAnchorX(const Vector2& anchorX);
+    void SetAnchorY(const Vector2& anchorY);
     void SetAnchors(const Vector2 &anchorPoint);
     void SetAnchors(const Vector2 &anchorMin, const Vector2 &anchorMax);
 
