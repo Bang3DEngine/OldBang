@@ -41,10 +41,10 @@ private:
     int m_spacingPx = 0;
     bool m_vertical = false;
 
-    void ApplyLayoutToChildRectTransform(RectTransform *childRT,
+    void ApplyLayoutToChildRectTransform(const Recti &layoutRect,
+                                         RectTransform *childRT,
                                          const Vector2i &position,
                                          const Vector2i &childRTSize);
-    void ApplyStretchToChildRectTransform(RectTransform *childRT);
 
     void FillChildrenSizes(Array<Vector2i> *childrenSizes,
                            Vector2i *availableSize,

@@ -36,22 +36,6 @@ void UIImageRenderer::OnRender()
                m_quadMesh->GetVertexCount());
 }
 
-Vector2i UIImageRenderer::CalculateTotalMinSize() const
-{
-    return Vector2i::Zero;
-}
-
-Vector2i UIImageRenderer::CalculateTotalPreferredSize() const
-{
-    Texture2D *tex = GetImageTexture();
-    return tex ? tex->GetSize() : Vector2i::Zero;
-}
-
-Vector2i UIImageRenderer::CalculateTotalFlexiblePxSize() const
-{
-    return CalculateTotalPreferredSize();
-}
-
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
 {
     Texture2D *tex = Resources::Load<Texture2D>(imagePath);

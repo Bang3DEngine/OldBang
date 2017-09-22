@@ -53,70 +53,68 @@ void UIDirLayout::ApplyLayout()
 
         const Vector2i& childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetComponent<RectTransform>();
-        ApplyLayoutToChildRectTransform(crt, marginAccum, childRTSize);
+        ApplyLayoutToChildRectTransform(layoutRect, crt, marginAccum, childRTSize);
         marginAccum += childRTSize;
         ++i;
     }
 }
 
-void UIDirLayout::ApplyLayoutToChildRectTransform(RectTransform *crt,
+void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
+                                                  RectTransform *crt,
                                                   const Vector2i &position,
                                                   const Vector2i &childRTSize)
 {
-    if (m_vertical)
+    crt->SetAnchors( Vector2(-1, 1) );
+    if (m_vertical) // VERTICAL
     {
         if (GetChildrenHorizontalStretch() == Stretch::None)
         {
             HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
             if (hAlign == HorizontalAlignment::Left)
             {
-                crt->SetPivotPosition( Vector2(-1, -1) );
-                crt->SetAnchorX( Vector2(-1) );
+                crt->SetMarginLeft(0);
             }
             else if (hAlign == HorizontalAlignment::Center)
             {
-                crt->SetPivotPosition( Vector2(0, -1) );
-                crt->SetAnchorX( Vector2(0) );
+                crt->SetMarginLeft( (layoutRect.GetWidth() - childRTSize.x) / 2);
             }
             else if (hAlign == HorizontalAlignment::Right)
             {
-                crt->SetPivotPosition( Vector2(1, -1) );
-                crt->SetAnchorX( Vector2(1) );
+                crt->SetMarginLeft( (layoutRect.GetWidth() - childRTSize.x) );
             }
+            crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
         }
         else
         {
-            crt->SetPivotPosition( Vector2(0, 1) );
-            crt->SetAnchorX( Vector2(-1, 1) );
+            crt->SetMarginLeft(0);
+            crt->SetMarginRight(-layoutRect.GetWidth());
         }
         crt->SetMarginTop( position.y );
         crt->SetMarginBot( -(position.y + childRTSize.y) );
     }
-    else
+    else // HORIZONTAL
     {
         if (GetChildrenVerticalStretch() == Stretch::None)
         {
             VerticalAlignment vAlign = GetChildrenVerticalAlignment();
             if (vAlign == VerticalAlignment::Bot)
             {
-                crt->SetPivotPosition( Vector2(0, -1) );
-                crt->SetAnchorY( Vector2(-1) );
+                crt->SetMarginTop(0);
             }
             else if (vAlign == VerticalAlignment::Center)
             {
-                crt->SetPivotPosition( Vector2(0, 0) );
-                crt->SetAnchorY( Vector2(0) );
+                crt->SetMarginTop( (layoutRect.GetHeight() - childRTSize.y) / 2);
             }
             else if (vAlign == VerticalAlignment::Top)
             {
-                crt->SetPivotPosition( Vector2(0, 1) );
-                crt->SetAnchorY( Vector2(1) );
+                crt->SetMarginTop( (layoutRect.GetHeight() - childRTSize.y) );
             }
+            crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
         }
         else
         {
-            // crt->SetPivotPosition( Vector2(-1, 0) );
-            crt->SetAnchorY( Vector2(-1, 1) );
+            crt->SetMarginTop(0);
+            crt->SetMarginBot(-layoutRect.GetHeight());
         }
         crt->SetMarginLeft( position.x );
         crt->SetMarginRight( -(position.x + childRTSize.x) );
@@ -143,7 +141,15 @@ void UIDirLayout::FillChildrenSizes(Array<Vector2i> *childrenRTSizes,
             pxToAdd = Vector2i::Max(pxToAdd, Vector2i::Zero);
             childRTSize = Vector2i::Max(childRTSize, originalChildRTSize + pxToAdd);
         }
-        *availableSize -= (childRTSize - childrenRTSizes->At(i));
+
+        if (m_vertical)
+        {
+            availableSize->y -= (childRTSize.y - childrenRTSizes->At(i).y);
+        }
+        else
+        {
+            availableSize->x -= (childRTSize.x - childrenRTSizes->At(i).x);
+        }
         (*childrenRTSizes)[i] = childRTSize;
         ++i;
     }
