@@ -131,6 +131,26 @@ void RectTransform::SetMarginBot(int marginBot)
     }
 }
 
+void RectTransform::AddMarginLeft(int marginLeft)
+{
+    SetMarginLeft(GetMarginLeft() + marginLeft);
+}
+
+void RectTransform::AddMarginTop(int marginTop)
+{
+    SetMarginTop(GetMarginTop() + marginTop);
+}
+
+void RectTransform::AddMarginRight(int marginRight)
+{
+    SetMarginRight(GetMarginRight() + marginRight);
+}
+
+void RectTransform::AddMarginBot(int marginBot)
+{
+    SetMarginBot(GetMarginBot() + marginBot);
+}
+
 void RectTransform::SetMargins(int marginAll)
 {
     SetMargins(marginAll, marginAll, marginAll, marginAll);
@@ -234,6 +254,30 @@ void RectTransform::SetAnchors(const Vector2 &anchorMin,
         m_anchorMax = anchorMax;
         InvalidateDown();
     }
+}
+
+void RectTransform::SetWidthFromPivot(int width)
+{
+    SetMarginLeft(0); SetMarginRight(0);
+    AddWidthFromPivot(width);
+}
+
+void RectTransform::SetHeightFromPivot(int height)
+{
+    SetMarginBot(0); SetMarginTop(0);
+    AddHeightFromPivot(height);
+}
+
+void RectTransform::AddWidthFromPivot(int width)
+{
+    SetMarginLeft ( -(GetPivotPosition().x - (-1)) * width / 2 );
+    SetMarginRight(  (GetPivotPosition().x - ( 1)) * width / 2 );
+}
+
+void RectTransform::AddHeightFromPivot(int height)
+{
+    SetMarginBot( -(GetPivotPosition().y - (-1)) * height / 2 );
+    SetMarginTop(  (GetPivotPosition().y - ( 1)) * height / 2 );
 }
 
 int RectTransform::GetMarginLeft() const { return m_marginLeftBot.x; }

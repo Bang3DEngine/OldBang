@@ -49,13 +49,11 @@ void UIFrameLayout::ApplyLayout()
                 HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
                 if (hAlign == HorizontalAlignment::Center)
                 {
-                    crt->SetMarginLeft( crt->GetMarginLeft() +
-                                        (layoutRect.GetWidth() - childSize.x)/2 );
+                    crt->AddMarginLeft( (layoutRect.GetWidth() - childSize.x)/2 );
                 }
                 else if (hAlign == HorizontalAlignment::Right)
                 {
-                    crt->SetMarginLeft( crt->GetMarginLeft() +
-                                        (layoutRect.GetWidth() - childSize.x) );
+                    crt->AddMarginLeft( (layoutRect.GetWidth() - childSize.x) );
                 }
                 crt->SetMarginRight( -(crt->GetMarginLeft() + childSize.x) );
             }
@@ -70,13 +68,11 @@ void UIFrameLayout::ApplyLayout()
                 VerticalAlignment vAlign = GetChildrenVerticalAlignment();
                 if (vAlign == VerticalAlignment::Center)
                 {
-                    crt->SetMarginBot( crt->GetMarginBot() +
-                                        (layoutRect.GetHeight() - childSize.y)/2 );
+                    crt->AddMarginBot( (layoutRect.GetHeight() - childSize.y)/2 );
                 }
                 else if (vAlign == VerticalAlignment::Top)
                 {
-                    crt->SetMarginBot( crt->GetMarginBot() +
-                                        (layoutRect.GetHeight() - childSize.y) );
+                    crt->AddMarginBot( (layoutRect.GetHeight() - childSize.y) );
                 }
                 crt->SetMarginTop( -(crt->GetMarginBot() + childSize.y) );
             }

@@ -32,6 +32,8 @@ void UIDirLayout::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
     Recti layoutRect = rt->GetScreenSpaceRectPx();
+    layoutRect = Recti(layoutRect.GetMin() + GetPaddingLeft(),
+                       layoutRect.GetMax() - GetPaddingRight());
 
     Vector2i availableSize = layoutRect.GetSize();
     availableSize -= GetTotalSpacing();
@@ -67,54 +69,46 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
     crt->SetAnchors( Vector2(-1, 1) );
     if (m_vertical) // VERTICAL
     {
+        crt->SetMarginLeft( GetPaddingLeft() );
         if (GetChildrenHorizontalStretch() == Stretch::None)
         {
             HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
-            if (hAlign == HorizontalAlignment::Left)
+            if (hAlign == HorizontalAlignment::Center)
             {
-                crt->SetMarginLeft(0);
-            }
-            else if (hAlign == HorizontalAlignment::Center)
-            {
-                crt->SetMarginLeft( (layoutRect.GetWidth() - childRTSize.x) / 2);
+                crt->AddMarginLeft( (layoutRect.GetWidth() - childRTSize.x) / 2);
             }
             else if (hAlign == HorizontalAlignment::Right)
             {
-                crt->SetMarginLeft( (layoutRect.GetWidth() - childRTSize.x) );
+                crt->AddMarginLeft( (layoutRect.GetWidth() - childRTSize.x) );
             }
             crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
         }
         else
         {
-            crt->SetMarginLeft(0);
-            crt->SetMarginRight(-layoutRect.GetWidth());
+            crt->SetMarginRight( -(GetPaddingLeft() + layoutRect.GetWidth()) );
         }
         crt->SetMarginTop( position.y );
         crt->SetMarginBot( -(position.y + childRTSize.y) );
     }
     else // HORIZONTAL
     {
+        crt->SetMarginTop( GetPaddingTop() );
         if (GetChildrenVerticalStretch() == Stretch::None)
         {
             VerticalAlignment vAlign = GetChildrenVerticalAlignment();
-            if (vAlign == VerticalAlignment::Bot)
+            if (vAlign == VerticalAlignment::Center)
             {
-                crt->SetMarginTop(0);
-            }
-            else if (vAlign == VerticalAlignment::Center)
-            {
-                crt->SetMarginTop( (layoutRect.GetHeight() - childRTSize.y) / 2);
+                crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) / 2);
             }
             else if (vAlign == VerticalAlignment::Top)
             {
-                crt->SetMarginTop( (layoutRect.GetHeight() - childRTSize.y) );
+                crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) );
             }
             crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
         }
         else
         {
-            crt->SetMarginTop(0);
-            crt->SetMarginBot(-layoutRect.GetHeight());
+            crt->SetMarginBot( -(GetPaddingTop() + layoutRect.GetHeight()) );
         }
         crt->SetMarginLeft( position.x );
         crt->SetMarginRight( -(position.x + childRTSize.x) );

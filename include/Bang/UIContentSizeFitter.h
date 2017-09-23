@@ -7,6 +7,8 @@
 
 NAMESPACE_BANG_BEGIN
 
+enum class SizeFitMode { Sum, Max };
+
 class UIContentSizeFitter : public Component,
                             public ILayoutController
 {
@@ -14,10 +16,14 @@ public:
     UIContentSizeFitter();
     virtual ~UIContentSizeFitter();
 
+    void SetHorizontalSizeFitMode(SizeFitMode fitMode);
+    void SetVerticalSizeFitMode(SizeFitMode fitMode);
     void SetHorizontalSizeType(LayoutSizeType sizeType);
-    LayoutSizeType GetHorizontalSizeType() const;
-
     void SetVerticalSizeType(LayoutSizeType sizeType);
+
+    SizeFitMode GetHorizontalSizeFitMode() const;
+    SizeFitMode GetVerticalSizeFitMode() const;
+    LayoutSizeType GetHorizontalSizeType() const;
     LayoutSizeType GetVerticalSizeType() const;
 
     // ILayoutElement
@@ -28,6 +34,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    SizeFitMode m_verticalFitMode       = SizeFitMode::Sum;
+    SizeFitMode m_horizontalFitMode     = SizeFitMode::Sum;
     LayoutSizeType m_verticalSizeType   = LayoutSizeType::None;
     LayoutSizeType m_horizontalSizeType = LayoutSizeType::None;
 };
