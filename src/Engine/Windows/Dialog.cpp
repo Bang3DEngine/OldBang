@@ -50,8 +50,8 @@ DialogWindow *Bang::Dialog::Error(const String &title,
         UIGameObject *hLayoutGo = GameObjectFactory::CreateUIGameObject();
         hLayoutGo->SetName("HL");
         UIHorizontalLayout *hLayout = hLayoutGo->AddComponent<UIHorizontalLayout>();
-        hLayout->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
-        hLayout->SetChildrenVerticalAlignment(VerticalAlignment::Top);
+        hLayout->SetChildrenHorizontalAlignment(HorizontalAlignment::Center);
+        hLayout->SetChildrenVerticalAlignment(VerticalAlignment::Center);
         UILayoutElement *hLayoutLE = hLayoutGo->AddComponent<UILayoutElement>();
         hLayoutLE->SetPreferredSize( Vector2i::One );
         hLayoutLE->SetFlexibleSize( Vector2(999.9f) );
@@ -59,6 +59,7 @@ DialogWindow *Bang::Dialog::Error(const String &title,
         UIGameObject *msgGo = GameObjectFactory::CreateUIGameObject();
         msgGo->SetName("MSG");
         UITextRenderer *text = msgGo->AddComponent<UITextRenderer>();
+        text->SetWrapping(true);
         text->SetContent(msg);
         text->SetTextColor(Color::White);
         text->SetTextSize(12);

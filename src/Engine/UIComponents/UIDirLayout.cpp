@@ -104,7 +104,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
             {
                 crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) / 2);
             }
-            else if (vAlign == VerticalAlignment::Top)
+            else if (vAlign == VerticalAlignment::Bot)
             {
                 crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) );
             }
@@ -144,13 +144,14 @@ void UIDirLayout::FillChildrenSizes(const Recti &layoutRect,
         if (m_vertical)
         {
             availableSize->y -= (childRTSize.y - originalChildRTSize.y);
+            childRTSize.x = Math::Min(childRTSize.x, layoutRect.GetSize().x);
         }
         else
         {
             availableSize->x -= (childRTSize.x - originalChildRTSize.x);
+            childRTSize.y = Math::Min(childRTSize.y, layoutRect.GetSize().y);
         }
 
-        childRTSize = Vector2i::Min(childRTSize, layoutRect.GetSize());
         (*childrenRTSizes)[i] = childRTSize;
         ++i;
     }
