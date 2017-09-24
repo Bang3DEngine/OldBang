@@ -46,7 +46,8 @@ private:
                                          const Vector2i &position,
                                          const Vector2i &childRTSize);
 
-    void FillChildrenSizes(Array<Vector2i> *childrenSizes,
+    void FillChildrenSizes(const Recti &layoutRect,
+                           Array<Vector2i> *childrenSizes,
                            Vector2i *availableSize,
                            LayoutSizeType sizeType);
 };

@@ -115,7 +115,8 @@ int UILayoutElement::GetFlexiblePxHeight() const
 
 Vector2i UILayoutElement::GetFlexiblePxSize() const
 {
-    return Vector2i(Vector2(GetPreferredSize()) * GetFlexibleSize());
+    return Vector2i(Vector2(GetPreferredSize()) *
+                    (Vector2(1) + GetFlexibleSize()));
 }
 
 Vector2i UILayoutElement::CalculateTotalFlexiblePxSize() const

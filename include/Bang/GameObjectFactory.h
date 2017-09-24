@@ -22,6 +22,9 @@ public:
     static UIButton*     CreateGUIButton();
     static UIGameObject* CreateGUILabel(const String &content = "Bang");
     static UIGameObject* CreateGUIScrollArea();
+    static UIGameObject* CreateGUISpacer();
+    static UIGameObject* CreateGUIHSpacer();
+    static UIGameObject* CreateGUIVSpacer();
 
     GameObjectFactory() = delete;
 };

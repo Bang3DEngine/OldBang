@@ -53,16 +53,23 @@ void UILayoutManager::InvalidateAll(GameObject *go)
     for (ILayoutElement *le : layoutElms) { le->SetInvalid(true); }
 }
 
-void UILayoutManager::RebuildLayout(GameObject *go)
+void UILayoutManager::RebuildLayout(GameObject *_go)
 {
-    ENSURE(go);
-    List<ILayoutController*> layoutControllers =
-                            go->GetComponentsInChildren<ILayoutController>();
-    for (ILayoutController *layoutController : layoutControllers)
+    ENSURE(_go);
+    std::queue<GameObject*> goQueue; goQueue.push(_go);
+    while (!goQueue.empty())
     {
-        layoutController->ApplyLayout();
+        GameObject *go = goQueue.front();
+        List<ILayoutController*> layoutControllers =
+                         go->GetComponents<ILayoutController>();
+        for (ILayoutController *layoutController : layoutControllers)
+        {
+            layoutController->ApplyLayout();
+        }
+        goQueue.pop();
+        for (GameObject *child : go->GetChildren()) { goQueue.push(child); }
     }
-    UILayoutManager::GetInstance()->OnFrameFinished(go);
+    UILayoutManager::GetInstance()->OnFrameFinished(_go);
 }
 
 void UILayoutManager::ForceRebuildLayout(GameObject *go)

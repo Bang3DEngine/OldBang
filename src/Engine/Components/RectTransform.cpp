@@ -22,12 +22,11 @@ RectTransform::~RectTransform()
 void RectTransform::OnRenderGizmos()
 {
     Transform::OnRenderGizmos();
-    Gizmos::SetLineWidth(2.0f);
+    Gizmos::SetLineWidth(1.0f);
 
     Rect r = GetScreenSpaceRectNDC();
     Color c = Color::Green; //Random::GetColorOpaque();
     Gizmos::SetColor(c);
-    /*
     Gizmos::RenderRect(r);
 
     Gizmos::SetColor(Color::Yellow);
@@ -38,6 +37,7 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetColor(Color::Red);
     Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
                             r.GetCenter() + Vector2(size)));
+    /*
 
     ENSURE(gameObject->parent);
     RectTransform *parentRT = gameObject->parent->GetComponent<RectTransform>();

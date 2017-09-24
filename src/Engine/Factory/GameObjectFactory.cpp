@@ -133,3 +133,25 @@ UIGameObject *GameObjectFactory::CreateGUIScrollArea()
 {
     return UIScrollArea::CreateGameObject();
 }
+
+UIGameObject *GameObjectFactory::CreateGUISpacer()
+{
+    UIGameObject *uiGo = GameObjectFactory::CreateUIGameObject();
+    UILayoutElement *le = uiGo->AddComponent<UILayoutElement>();
+    le->SetMinSize( Vector2i(0) );
+    le->SetPreferredSize( Vector2i(1) );
+    le->SetFlexibleSize( Vector2(999999.9f) );
+    return uiGo;
+}
+UIGameObject *GameObjectFactory::CreateGUIHSpacer()
+{
+    UIGameObject *uiGo = GameObjectFactory::CreateGUISpacer();
+    uiGo->GetComponent<UILayoutElement>()->SetPreferredHeight(0);
+    return uiGo;
+}
+UIGameObject *GameObjectFactory::CreateGUIVSpacer()
+{
+    UIGameObject *uiGo = GameObjectFactory::CreateGUISpacer();
+    uiGo->GetComponent<UILayoutElement>()->SetPreferredWidth(0);
+    return uiGo;
+}

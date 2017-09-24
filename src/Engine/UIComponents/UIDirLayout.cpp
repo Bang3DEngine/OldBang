@@ -28,12 +28,13 @@ Vector2i UIDirLayout::GetTotalSpacing() const
     return spacing * SCAST<int>(gameObject->GetChildren().Size() - 1);
 }
 
+#include "Bang/GL.h"
 void UIDirLayout::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
     Recti layoutRect = rt->GetScreenSpaceRectPx();
-    layoutRect = Recti(layoutRect.GetMin() + GetPaddingLeft(),
-                       layoutRect.GetMax() - GetPaddingRight());
+    layoutRect = Recti(layoutRect.GetMin() + GetPaddingLeftBot(),
+                       layoutRect.GetMax() - GetPaddingRightTop());
 
     Vector2i availableSize = layoutRect.GetSize();
     availableSize -= GetTotalSpacing();
@@ -41,9 +42,12 @@ void UIDirLayout::ApplyLayout()
     Array<Vector2i> childrenRTSizes(gameObject->GetChildren().Size(),
                                     Vector2i::Zero);
 
-    FillChildrenSizes(&childrenRTSizes, &availableSize, LayoutSizeType::Min);
-    FillChildrenSizes(&childrenRTSizes, &availableSize, LayoutSizeType::Preferred);
-    FillChildrenSizes(&childrenRTSizes, &availableSize, LayoutSizeType::Flexible);
+    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
+                      LayoutSizeType::Min);
+    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
+                      LayoutSizeType::Preferred);
+    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
+                      LayoutSizeType::Flexible);
 
     // Apply actual calculation to RectTransforms Margins
     uint i = 0;
@@ -115,7 +119,8 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
     }
 }
 
-void UIDirLayout::FillChildrenSizes(Array<Vector2i> *childrenRTSizes,
+void UIDirLayout::FillChildrenSizes(const Recti &layoutRect,
+                                    Array<Vector2i> *childrenRTSizes,
                                     Vector2i *availableSize,
                                     LayoutSizeType sizeType)
 {
@@ -138,12 +143,14 @@ void UIDirLayout::FillChildrenSizes(Array<Vector2i> *childrenRTSizes,
 
         if (m_vertical)
         {
-            availableSize->y -= (childRTSize.y - childrenRTSizes->At(i).y);
+            availableSize->y -= (childRTSize.y - originalChildRTSize.y);
         }
         else
         {
-            availableSize->x -= (childRTSize.x - childrenRTSizes->At(i).x);
+            availableSize->x -= (childRTSize.x - originalChildRTSize.x);
         }
+
+        childRTSize = Vector2i::Min(childRTSize, layoutRect.GetSize());
         (*childrenRTSizes)[i] = childRTSize;
         ++i;
     }
@@ -183,7 +190,7 @@ Vector2i UIDirLayout::CalculateTotalSize(LayoutSizeType sizeType) const
             totalSize.y = Math::Max(totalSize.y, childTotalSize.y);
         }
     }
-    return totalSize + GetTotalSpacing();
+    return totalSize + GetTotalSpacing() + GetPaddingSize();
 }
 
 void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }

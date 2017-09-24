@@ -4,7 +4,6 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIDirLayout.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 
@@ -33,9 +32,8 @@ void UIContentSizeFitter::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
-    List<ILayoutElement*> layoutElms =
-            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
     Vector2i contentSize = Vector2i::Zero;
+    List<ILayoutElement*> layoutElms = gameObject->GetComponents<ILayoutElement>();
     for (ILayoutElement *layoutElm : layoutElms)
     {
         Vector2i hTotalSize = layoutElm->GetTotalSize(GetHorizontalSizeType());
@@ -58,9 +56,6 @@ void UIContentSizeFitter::ApplyLayout()
             contentSize.y = Math::Max(contentSize.y, vTotalSize.y);
         }
     }
-
-    UIDirLayout *dirLayout = gameObject->GetComponentInChildren<UIDirLayout>(false);
-    if (dirLayout) { contentSize += dirLayout->GetTotalSpacing(); }
 
     if (GetHorizontalSizeType() != LayoutSizeType::None)
     {
