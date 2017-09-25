@@ -19,40 +19,6 @@ RectTransform::~RectTransform()
 {
 }
 
-void RectTransform::OnRenderGizmos()
-{
-    Transform::OnRenderGizmos();
-    Gizmos::SetLineWidth(1.0f);
-
-    Rect r = GetScreenSpaceRectNDC();
-    Color c = Color::Green; //Random::GetColorOpaque();
-    Gizmos::SetColor(c);
-    Gizmos::RenderRect(r);
-
-    Gizmos::SetColor(Color::Yellow);
-    Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
-    Gizmos::SetColor(Color::Yellow);
-    Gizmos::RenderScreenLine(r.GetMinXMinY(), r.GetMaxXMaxY());
-    float size = GL::FromPixelsAmountToGlobalNDC(Vector2i(2)).x;
-    Gizmos::SetColor(Color::Red);
-    Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
-                            r.GetCenter() + Vector2(size)));
-    /*
-
-    ENSURE(gameObject->parent);
-    RectTransform *parentRT = gameObject->parent->GetComponent<RectTransform>();
-    if (parentRT)
-    {
-        Vector2 size(0.02f);
-        Vector2 anchorMin = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMin());
-        Vector2 anchorMax = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMax());
-        Gizmos::RenderRect( Rect(anchorMin - size/2.0f, anchorMin + size/2.0f));
-        Gizmos::SetColor(c);
-        Gizmos::RenderRect( Rect(anchorMax - size/2.0f, anchorMax + size/2.0f));
-    }
-    */
-}
-
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
 {
     Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
@@ -351,6 +317,40 @@ void RectTransform::InvalidateDown()
     {
         UILayoutManager::InvalidateDown(this);
     }
+}
+
+void RectTransform::OnRenderGizmos()
+{
+    Transform::OnRenderGizmos();
+    Gizmos::SetLineWidth(1.0f);
+
+    Rect r = GetScreenSpaceRectNDC();
+    Color c = Color::Green; //Random::GetColorOpaque();
+    Gizmos::SetColor(c);
+    /*
+    Gizmos::RenderRect(r);
+
+    Gizmos::SetColor(Color::Yellow);
+    Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
+    Gizmos::SetColor(Color::Yellow);
+    Gizmos::RenderScreenLine(r.GetMinXMinY(), r.GetMaxXMaxY());
+    float size = GL::FromPixelsAmountToGlobalNDC(Vector2i(2)).x;
+    Gizmos::SetColor(Color::Red);
+    Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
+                            r.GetCenter() + Vector2(size)));
+
+    ENSURE(gameObject->parent);
+    RectTransform *parentRT = gameObject->parent->GetComponent<RectTransform>();
+    if (parentRT)
+    {
+        Vector2 size(0.02f);
+        Vector2 anchorMin = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMin());
+        Vector2 anchorMax = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMax());
+        Gizmos::RenderRect( Rect(anchorMin - size/2.0f, anchorMin + size/2.0f));
+        Gizmos::SetColor(c);
+        Gizmos::RenderRect( Rect(anchorMax - size/2.0f, anchorMax + size/2.0f));
+    }
+    */
 }
 
 void RectTransform::CloneInto(ICloneable *clone) const

@@ -60,6 +60,8 @@ public:
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
+
+    static void Destroy(Window *win);
     static Window *GetCurrent();
 
 protected:

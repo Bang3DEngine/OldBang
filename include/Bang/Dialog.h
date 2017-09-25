@@ -5,7 +5,9 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Scene;
 FORWARD class DialogWindow;
+FORWARD class UIInteractive;
 
 class Dialog
 {
@@ -14,6 +16,11 @@ public:
                                const String &msg);
 
     Dialog() = delete;
+
+private:
+    static Scene* CreateScene(const String &msg);
+
+    static void OnButtonClicked(UIInteractive *interactive);
 };
 
 NAMESPACE_BANG_END

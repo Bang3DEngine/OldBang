@@ -62,6 +62,8 @@ const static Vector3G Zero; \
 const static Vector3G One; \
 const static Vector3G Forward; \
 const static Vector3G Back; \
+const static Vector3G Infinity; \
+const static Vector3G NInfinity;
 
 CLASS_VECTOR_T(Vector3G, 3)
 
@@ -93,6 +95,10 @@ template<class T>
 const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(SCAST<T>(0),
                                                   SCAST<T>(0),
                                                   SCAST<T>(1));
+template<class T>
+const Vector3G<T> Vector3G<T>::Infinity = Vector3G<T>(Math::Max<T>());
+template<class T>
+const Vector3G<T> Vector3G<T>::NInfinity = Vector3G<T>(Math::Min<T>());
 
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS

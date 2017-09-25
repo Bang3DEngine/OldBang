@@ -79,7 +79,10 @@ void Application::SetupWindow(Window *window)
 {
     window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-    if (!m_sdlGLSharedContext) { m_sdlGLSharedContext = SDL_GL_GetCurrentContext(); }
+    if (!m_sdlGLSharedContext)
+    {
+        m_sdlGLSharedContext = SDL_GL_GetCurrentContext();
+    }
 
     p_currentWindow = window;
     m_windows.PushBack(window);
@@ -98,12 +101,6 @@ Window *Application::GetTopWindow()
     return nullptr;
 }
 
-void Application::RemoveWindow(Window *window)
-{
-    for (Window *w : GetWindows()) { if (w == window) { delete w; break; } }
-    m_windows.Remove(window);
-}
-
 int Application::MainLoop()
 {
     while (!m_exit)
@@ -119,6 +116,7 @@ int Application::MainLoop()
         SDL_Delay(RedrawDelay_ms);
 
         if (!HandleEvents())     { m_exit = true; }
+        DestroyQueuedWindows();
         if (m_windows.IsEmpty()) { m_exit = true; }
     }
     return m_exitCode;
@@ -208,6 +206,20 @@ void Application::Exit(int returnCode, bool immediate)
         app->m_exit = true;
         app->m_exitCode = returnCode;
     }
+}
+
+void Application::DestroyWindow(Window *window)
+{
+    p_windowsToBeDestroyed.PushBack(window);
+}
+void Application::DestroyQueuedWindows()
+{
+    for (Window *w : p_windowsToBeDestroyed)
+    {
+        m_windows.Remove(w);
+        delete w;
+    }
+    p_windowsToBeDestroyed.Clear();
 }
 
 Window *Application::GetCurrentWindow() const

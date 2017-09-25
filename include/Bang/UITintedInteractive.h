@@ -6,6 +6,8 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Renderer;
+
 class UITintedInteractive : public UIInteractive,
                             public UIInteractiveListener
 {
@@ -18,7 +20,8 @@ public:
     // Component
     virtual void OnUpdate() override;
 
-    void AddGameObjectToTint(GameObject *go);
+    void AddToTint(Renderer *rnd);
+    void AddToTint(GameObject *go);
 
     void SetOverTintColor(const Color &tintColor);
     void SetIdleTintColor(const Color &tintColor);
@@ -37,6 +40,7 @@ protected:
     OnButton_MouseUp(UIInteractive *btn, Input::MouseButton mb) override;
 
 private:
+    Set<Renderer*>   p_renderersToTint;
     Set<GameObject*> p_gameObjectsToTint;
     Color m_idleTintColor    = Color::White;
     Color m_overTintColor    = Color::LightBlue;
@@ -44,7 +48,7 @@ private:
 
     Color m_currentTintColor = m_idleTintColor;
 
-    void ApplyTintToGameObjects(const Color &tintColor);
+    void ApplyTint(const Color &tintColor);
 };
 
 NAMESPACE_BANG_END

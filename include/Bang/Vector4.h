@@ -63,6 +63,8 @@ const static Vector4G Zero; \
 const static Vector4G One; \
 const static Vector4G Forward; \
 const static Vector4G Back; \
+const static Vector4G Infinity; \
+const static Vector4G NInfinity;
 
 CLASS_VECTOR_T(Vector4G, 4)
 
@@ -100,6 +102,10 @@ const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(SCAST<T>(0),
                                                   SCAST<T>(0),
                                                   SCAST<T>(1),
                                                   SCAST<T>(0));
+template<class T>
+const Vector4G<T> Vector4G<T>::Infinity = Vector4G<T>(Math::Max<T>());
+template<class T>
+const Vector4G<T> Vector4G<T>::NInfinity = Vector4G<T>(Math::Min<T>());
 
 #undef XYZ_MEMBERS
 #undef EXTRA_DECLARATIONS

@@ -55,6 +55,7 @@ public:
     const List<GameObject*>& GetChildren() const;
     List<GameObject*> GetChildrenRecursively() const;
 
+    void AddChild(GameObject *child);
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 
     GameObject* GetChild(int index) const;

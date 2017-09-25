@@ -42,12 +42,12 @@ void UILayoutElement::SetPreferredSize(const Vector2i &preferredSize)
     m_preferredSize = preferredSize;
 }
 
-void UILayoutElement::SetFlexibleWidth(int flexibleWidth)
+void UILayoutElement::SetFlexibleWidth(float flexibleWidth)
 {
     m_flexibleSize.x = flexibleWidth;
 }
 
-void UILayoutElement::SetFlexibleHeight(int flexibleHeight)
+void UILayoutElement::SetFlexibleHeight(float flexibleHeight)
 {
     m_flexibleSize.y = flexibleHeight;
 }

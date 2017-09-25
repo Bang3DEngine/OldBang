@@ -6,13 +6,15 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define EPATH(path) Paths::MakeEnginePath(path)  // Engine assets path
-#define PPATH(path) Paths::MakeProjectPath(path) // Project assets path
+#define EPATH(path)  Paths::MakeEnginePath(path)  // Engine assets path
+#define EDPATH(path) Paths::MakeEditorPath(path)  // Engine assets path
+#define PPATH(path)  Paths::MakeProjectPath(path) // Project assets path
 
 class Paths
 {
 public:
     void InitPaths(const Path &engineRootPath);
+    void InitEditorPath(const Path &editorRootPath);
 
     static Path ExecutablePath();
     static const Path& Engine();
@@ -27,6 +29,9 @@ public:
     static Path ProjectAssets();
     static Path ProjectLibrariesDir();
 
+    static const Path& Editor();
+    static Path EditorResources();
+
     static List<Path> GetAllProjectSubDirs();
     static List<Path> GetEngineIncludeDirs();
     static List<Path> GetProjectIncludeDirs();
@@ -35,13 +40,16 @@ public:
     static Path GetRelative(const Path &path);
 
     static Path MakeEnginePath(const String &path);
+    static Path MakeEditorPath(const String &path);
     static Path MakeProjectPath(const String &path);
 
     static void SetEngineRoot(const Path &engineRootDir);
+    static void SetEditorRoot(const Path &editorRootDir);
     static void SetProjectRoot(const Path &projectRootDir);
 
 private:
     Path c_engineRoot  = Path::Empty;
+    Path c_editorRoot  = Path::Empty;
     Path c_projectRoot = Path::Empty;
 
     Paths();

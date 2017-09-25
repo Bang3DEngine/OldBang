@@ -263,6 +263,11 @@ uint Window::GetSDLWindowID() const
     return SDL_GetWindowID(m_sdlWindow);
 }
 
+void Window::Destroy(Window *win)
+{
+    Application::GetInstance()->DestroyWindow(win);
+}
+
 Window *Window::GetCurrent()
 {
     Application *app = Application::GetInstance();

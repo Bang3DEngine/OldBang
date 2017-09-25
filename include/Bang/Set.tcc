@@ -68,7 +68,10 @@ template<class Key>
 List<Key> Set<Key>::GetKeys() const
 {
     List<Key> result;
-    for (Key &k : *this) { result.PushBack(k); }
+    for (Const_Iterator cit = this->Begin(); cit != this->End(); ++cit)
+    {
+        result.PushBack(*cit);
+    }
     return result;
 }
 

@@ -251,6 +251,11 @@ List<GameObject *> GameObject::GetChildrenRecursively() const
     return cc;
 }
 
+void GameObject::AddChild(GameObject *child)
+{
+    child->SetParent(this);
+}
+
 bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 {
     if (!parent) { return false; }

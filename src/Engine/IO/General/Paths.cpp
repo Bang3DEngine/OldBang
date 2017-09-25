@@ -44,6 +44,11 @@ void Paths::InitPaths(const Path &engineRootPath)
     Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
 }
 
+void Paths::InitEditorPath(const Path &editorRootPath)
+{
+    c_editorRoot = editorRootPath;
+}
+
 Path Paths::ExecutablePath()
 {
     char result[PATH_MAX];
@@ -120,6 +125,16 @@ Path Paths::ProjectLibrariesDir()
     return Project().Append("Libraries");
 }
 
+const Path &Paths::Editor()
+{
+    return Paths::GetInstance()->c_editorRoot;
+}
+
+Path Paths::EditorResources()
+{
+    return Editor().Append("res");
+}
+
 Path Paths::GetRelative(const Path &path)
 {
     const Path &engineAssets = Paths::EngineAssets();
@@ -161,6 +176,11 @@ bool Paths::IsEnginePath(const Path &path)
 Path Paths::MakeEnginePath(const String &path)
 {
     return Paths::EngineAssets().Append(path);
+}
+
+Path Paths::MakeEditorPath(const String &path)
+{
+    return Paths::EditorResources().Append(path);
 }
 
 Path Paths::MakeProjectPath(const String &path)

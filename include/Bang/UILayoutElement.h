@@ -21,8 +21,8 @@ public:
     void SetPreferredWidth(int preferredWidth);
     void SetPreferredHeight(int preferredHeight);
     void SetPreferredSize(const Vector2i& preferredSize);
-    void SetFlexibleWidth(int flexibleWidth);
-    void SetFlexibleHeight(int flexibleHeight);
+    void SetFlexibleWidth(float flexibleWidth);
+    void SetFlexibleHeight(float flexibleHeight);
     void SetFlexibleSize(const Vector2& flexibleSize);
 
     int GetMinWidth() const;

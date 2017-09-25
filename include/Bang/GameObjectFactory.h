@@ -2,6 +2,8 @@
 #define GAMEOBJECTFACTORY_H
 
 #include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/LayoutSizeType.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -22,11 +24,30 @@ public:
     static UIButton*     CreateGUIButton();
     static UIGameObject* CreateGUILabel(const String &content = "Bang");
     static UIGameObject* CreateGUIScrollArea();
-    static UIGameObject* CreateGUISpacer();
-    static UIGameObject* CreateGUIHSpacer();
-    static UIGameObject* CreateGUIVSpacer();
+
+    static UIGameObject* CreateGUIHSeparator(
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            int spaceY = 1);
+    static UIGameObject* CreateGUIVSeparator(
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            int spaceX = 1);
+
+    static UIGameObject* CreateGUISpacer(
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            const Vector2i &space = Vector2i::Infinity);
+    static UIGameObject* CreateGUIHSpacer(
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            int spaceX = Math::Max<int>());
+    static UIGameObject* CreateGUIVSpacer(
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            int spaceY = Math::Max<int>());
 
     GameObjectFactory() = delete;
+
+private:
+    static UIGameObject* CreateGUISeparator(LayoutSizeType sizeType,
+                                            const Vector2i &space);
+
 };
 
 NAMESPACE_BANG_END

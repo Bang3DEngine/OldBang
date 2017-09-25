@@ -33,7 +33,7 @@ public:
     Window* CreateWindow();
     DialogWindow* CreateDialogWindow(Window *parentWindow);
 
-    void RemoveWindow(Window *window);
+    void DestroyWindow(Window *window);
     int MainLoop();
 
     bool HandleEvents();
@@ -65,16 +65,20 @@ protected:
     ImportFilesManager *m_importFilesManager = nullptr;
     BehaviourManager   *m_behaviourManager   = nullptr;
 
+
     virtual void SetupWindow(Window *window);
 
 private:
     static Application *s_appSingleton;
 
     List<Window*> m_windows;
+    List<Window*> p_windowsToBeDestroyed;
     Window *p_currentWindow = nullptr;
 
     bool m_exit = false;
     int m_exitCode = 0;
+
+    void DestroyQueuedWindows();
 };
 
 NAMESPACE_BANG_END

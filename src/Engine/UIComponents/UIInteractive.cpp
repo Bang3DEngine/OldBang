@@ -1,4 +1,3 @@
-
 #include "Bang/UIInteractive.h"
 
 #include "Bang/Rect.h"
@@ -49,10 +48,10 @@ void UIInteractive::OnUpdate()
         m_beingPressed = m_beingPressed ||
                          Input::GetMouseButtonDown(Input::MouseButton::Left);
         if (m_beingPressed && Input::GetMouseButtonUp(Input::MouseButton::Left))
-         {
-             PROPAGATE(OnButton_Clicked(this), p_listeners);
-             for (auto f : m_clickedCallbacks) { f(this); }
-         }
+        {
+            PROPAGATE(OnButton_Clicked(this), p_listeners);
+            for (auto f : m_clickedCallbacks) { f(this); }
+        }
     }
     m_beingPressed = ( m_beingPressed &&
                        Input::GetMouseButton(Input::MouseButton::Left) );
@@ -124,8 +123,8 @@ bool UIInteractive::IsMouseOverSomeAgent() const
         for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
         {
             const GameObject *agent = *it;
-            if (overedGameObject == agent || overedGameObject->IsChildOf(agent,
-                                                                         true))
+            if (overedGameObject == agent ||
+                overedGameObject->IsChildOf(agent, true))
             {
                 return true;
             }
@@ -138,13 +137,10 @@ bool UIInteractive::IsMouseOverSomeAgent() const
         for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
         {
            const GameObject *agent = *it;
-           if (GetMode() == UIInteractiveMode::UseRectTransform)
+           RectTransform *rt = agent->GetComponent<RectTransform>();
+           if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC))
            {
-                RectTransform *rt = agent->GetComponent<RectTransform>();
-                if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC))
-                {
-                    return true;
-                }
+               return true;
            }
         }
     }
