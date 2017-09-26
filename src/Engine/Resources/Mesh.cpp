@@ -18,16 +18,13 @@ Mesh::Mesh()
 
 Mesh::Mesh(const Mesh &m)
 {
-    m_vao = m.GetVAO();
     m_bBox = m.m_bBox;
     m_bSphere = m.m_bSphere;
     m_modelFilepath = m.m_modelFilepath;
-    m_vertexPositionsVBO = m.m_vertexPositionsVBO;
-    m_vertexNormalsVBO = m.m_vertexNormalsVBO;
-    m_vertexUvsVBO = m.m_vertexUvsVBO;
-    m_positions = m.m_positions;
-    m_normals = m.m_normals;
-    m_uvs = m.m_uvs;
+
+    m_vao = new VAO();
+    LoadAll(m.m_positions, m.m_normals, m.m_uvs);
+
 }
 
 Mesh::~Mesh()

@@ -6,12 +6,14 @@
 
 FORWARD union  SDL_Event;
 FORWARD struct SDL_Window;
+using SDL_GLContext = void*;
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Time;
 FORWARD class Input;
 FORWARD class GEngine;
+FORWARD class Resources;
 FORWARD class Texture2D;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
@@ -24,6 +26,7 @@ public:
 
     virtual void Create(uint flags);
     void SwapBuffers() const;
+    void MakeCurrent() const;
     bool MainLoopIteration();
 
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
@@ -53,10 +56,12 @@ public:
     static int GetHeightS();
     static int GetWidthS();
 
-    GEngine      *GetGEngine() const;
-    Input        *GetInput() const;
-    AudioManager *GetAudioManager() const;
-    SceneManager *GetSceneManager() const;
+    SDL_GLContext  GetGLContext() const;
+    Resources     *GetResources() const;
+    GEngine       *GetGEngine() const;
+    Input         *GetInput() const;
+    AudioManager  *GetAudioManager() const;
+    SceneManager  *GetSceneManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -73,10 +78,12 @@ private:
     List<Window*> p_children;
     Window* p_parent = nullptr;
 
-    GEngine      *m_gEngine      = nullptr;
-    Input        *m_input        = nullptr;
-    AudioManager *m_audioManager = nullptr;
-    SceneManager *m_sceneManager = nullptr;
+    SDL_GLContext  m_sdlGLContext = nullptr;
+    Resources     *m_resources    = nullptr;
+    GEngine       *m_gEngine      = nullptr;
+    Input         *m_input        = nullptr;
+    AudioManager  *m_audioManager = nullptr;
+    SceneManager  *m_sceneManager = nullptr;
     Texture2D *m_screenRenderTexture = nullptr;
 
     Vector2i m_resizedSize = Vector2i::Zero;

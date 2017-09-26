@@ -60,7 +60,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     {
         m_defaultCamera = GameObjectFactory::CreateGameObject(true);
         m_defaultCamera->SetName("DefaultCamera");
-        m_defaultCamera->transform->SetPosition(Vector3(90));
+        m_defaultCamera->transform->SetPosition(Vector3(5));
         m_defaultCamera->transform->LookAt(Vector3::Zero);
         m_defaultCamera->SetParent(this);
         m_defaultCamera->GetHideFlags().SetOn(HideFlag::DontSave);

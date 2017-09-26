@@ -95,6 +95,7 @@ const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
 
 Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
+    GLId prevFBId = GL::GetBoundId(GL::BindTarget::Framebuffer);
     Bind();
     Texture2D *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
@@ -104,7 +105,7 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
                    t->GetInternalDataType(),
                    SCAST<void*>(&color));
     Color readColor = Color(color[0], color[1], color[2], color[3]) / 255.0f;
-    UnBind();
+    GL::Bind(GL::BindTarget::Framebuffer, prevFBId);
     return readColor;
 }
 
@@ -203,7 +204,7 @@ void Framebuffer::ExportStencil(const Path &filepath,
     img.InvertVertically();
     img.Export(filepath);
 
-    delete stencilData;
+    delete[] stencilData;
 }
 
 void Framebuffer::PushDrawAttachments()

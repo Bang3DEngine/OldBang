@@ -12,7 +12,8 @@ GameObject *Selection::GetOveredGameObject()
 
     Vector2i coords = Input::GetMouseCoords();
     SelectionFramebuffer *sfb = Selection::GetSelectionFramebuffer();
-    return sfb->GetGameObjectInPosition(coords);
+    GameObject *selGo = sfb->GetGameObjectInPosition(coords);
+    return selGo;
 }
 
 SelectionFramebuffer *Selection::GetSelectionFramebuffer()

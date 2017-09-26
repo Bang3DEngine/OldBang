@@ -149,7 +149,7 @@ Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
 {
     Rect boundingRect = UIRenderer::GetBoundingRect(camera);
 
-    if (!IsBackground()) { return  boundingRect; }
+    if (!IsBackground()) { return boundingRect; }
     return Rect(boundingRect.GetCenter(), boundingRect.GetCenter());
 }
 

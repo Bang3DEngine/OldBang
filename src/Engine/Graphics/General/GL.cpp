@@ -603,8 +603,7 @@ void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();
-    glDrawArrays( static_cast<GLint>(primitivesMode),
-                  startIndex, elementsCount);
+    glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
     vao->UnBind();
 }
 

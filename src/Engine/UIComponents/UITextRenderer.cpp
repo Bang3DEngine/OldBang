@@ -29,7 +29,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
 
-    SetRenderPrimitive(GL::Primitives::Quads);
+    SetRenderPrimitive(GL::Primitives::Triangles);
     OnRectTransformChanged();
 }
 
@@ -40,10 +40,11 @@ UITextRenderer::~UITextRenderer()
 
 void UITextRenderer::OnRender()
 {
+    UIRenderer::OnRender();
+
     int vertCount = (IsOverlapping() ? 4 : m_mesh->GetVertexCount());
     int startVert = (IsOverlapping() ? m_currentRenderingChar * 4 : 0);
-    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(),
-               vertCount, startVert);
+    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), vertCount, startVert);
 }
 
 void UITextRenderer::OnRender(RenderPass renderPass)
@@ -52,7 +53,7 @@ void UITextRenderer::OnRender(RenderPass renderPass)
     {
         // Render all quads at the same time
         m_currentRenderingChar = 0;
-        Renderer::OnRender(renderPass);
+        UIRenderer::OnRender(renderPass);
     }
     else
     {
@@ -60,7 +61,7 @@ void UITextRenderer::OnRender(RenderPass renderPass)
         for (int i = 0; i < GetContent().Size(); ++i)
         {
             m_currentRenderingChar = i;
-            Renderer::OnRender(renderPass);
+            UIRenderer::OnRender(renderPass);
         }
     }
 }
@@ -281,8 +282,8 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
     if (!IsOverlapping()) { return GetContentGlobalNDCRect(); }
     else
     {
-        Vector2 p1 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 0].xy();
-        Vector2 p2 = m_mesh->GetPositions()[m_currentRenderingChar * 4 + 2].xy();
+        Vector2 p1 = m_mesh->GetPositions()[m_currentRenderingChar * 6 + 0].xy();
+        Vector2 p2 = m_mesh->GetPositions()[m_currentRenderingChar * 6 + 3].xy();
         return Rect(Vector2::Min(p1,p2), Vector2::Max(p1,p2));
     }
 }
@@ -353,22 +354,25 @@ void UITextRenderer::OnRectTransformChanged()
 
         Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
 
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
-
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMinY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMinY(), 0) );
-
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
 
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
+        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
-
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
 
         Rect charRectLocalNDC(
                     rt->FromPixelsPointToLocalNDC( Vector2i(minPxPerf) ),

@@ -7,6 +7,7 @@
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/GEngine.h"
+#include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Application.h"
 #include "Bang/AudioManager.h"
@@ -23,29 +24,17 @@ Window::~Window()
 {
     delete m_input;
     delete m_gEngine;
-    delete m_sceneManager;
     delete m_audioManager;
+    delete m_sceneManager;
+    delete m_resources;
+    SDL_GL_DeleteContext(GetGLContext());
     SDL_DestroyWindow(m_sdlWindow);
     SetParent(nullptr);
 }
 
 void Window::Create(uint flags)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        Debug_Error("Failed to init SDL");
-        return;
-    }
-
     Vector2i winSize(512);
-    m_sdlWindow = SDL_CreateWindow("Bang",
-                                   SDL_WINDOWPOS_CENTERED,
-                                   SDL_WINDOWPOS_CENTERED,
-                                   winSize.x, winSize.y,
-                                   flags);
-
-    SDL_GLContext sharedContext = Application::GetInstance()->GetSharedGLContext();
-    if (!sharedContext) { sharedContext = SDL_GL_CreateContext(m_sdlWindow); }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                         SDL_GL_CONTEXT_PROFILE_CORE);
@@ -53,7 +42,15 @@ void Window::Create(uint flags)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_GL_MakeCurrent(m_sdlWindow, sharedContext);
+    m_sdlWindow = SDL_CreateWindow("Bang",
+                                   SDL_WINDOWPOS_CENTERED,
+                                   SDL_WINDOWPOS_CENTERED,
+                                   winSize.x, winSize.y,
+                                   flags);
+
+    m_sdlGLContext = SDL_GL_CreateContext(GetSDLWindow());
+    MakeCurrent();
+
 
     // Init GLEW
     glewExperimental = true;
@@ -67,6 +64,7 @@ void Window::Create(uint flags)
     GL::Enable(GL::Test::CullFace);
 
     m_input               = new Input();
+    m_resources           = new Resources();
     m_sceneManager        = new SceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
@@ -75,15 +73,22 @@ void Window::Create(uint flags)
 
 void Window::SwapBuffers() const
 {
-    SDL_GL_SwapWindow(m_sdlWindow);
+    SDL_GL_SwapWindow( GetSDLWindow() );
+}
+
+void Window::MakeCurrent() const
+{
+    GL::SetViewport(0, 0, GetWidth(), GetHeight());
+    SDL_GL_MakeCurrent(GetSDLWindow(), GetGLContext());
 }
 
 bool Window::MainLoopIteration()
 {
-    GL::SetViewport(0, 0, GetWidth(), GetHeight());
+    MakeCurrent();
     GetInput()->ProcessEnqueuedEvents();
 
     GetSceneManager()->Update();
+
     Scene *activeScene = GetSceneManager()->GetActiveScene();
     UILayoutManager::RebuildLayout(activeScene);
     if (activeScene)
@@ -231,6 +236,16 @@ int Window::GetHeightS()
 int Window::GetWidthS()
 {
     return Window::GetCurrent()->GetWidth();
+}
+
+SDL_GLContext Window::GetGLContext() const
+{
+    return m_sdlGLContext;
+}
+
+Resources *Window::GetResources() const
+{
+    return m_resources;
 }
 
 GEngine *Window::GetGEngine() const

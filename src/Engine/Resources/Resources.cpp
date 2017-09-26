@@ -3,7 +3,7 @@
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Random.h"
-#include "Bang/Application.h"
+#include "Bang/Window.h"
 
 USING_NAMESPACE_BANG
 
@@ -62,6 +62,6 @@ void Resources::UnLoad(Resource *res, bool deleteResource)
 
 Resources *Resources::GetInstance()
 {
-    Application *app = Application::GetInstance();
-    return  app ? app->GetResources() : nullptr;
+    Window *win = Window::GetCurrent();
+    return  win ? win->GetResources() : nullptr;
 }

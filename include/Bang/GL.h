@@ -14,8 +14,8 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define GL_CheckError() ASSERT(\
-                          GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+#define GL_CheckError() \
+    ASSERT(GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 
 using GLId = GLuint;
 

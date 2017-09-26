@@ -25,7 +25,6 @@ DialogWindow *Bang::Dialog::Error(const String &title,
                                   const String &msg)
 {
     DialogWindow *dialog = nullptr;
-
     Window *topWindow = Application::GetTopWindow();
     if (topWindow)
     {
@@ -33,13 +32,38 @@ DialogWindow *Bang::Dialog::Error(const String &title,
         dialog->SetTitle(title);
         dialog->SetSize(300, 150);
 
-        Scene *scene = CreateScene(msg);
+        Scene *scene = CreateMsgScene(msg);
         SceneManager::LoadScene(scene);
     }
     return dialog;
 }
 
-Scene *Dialog::CreateScene(const String &msg)
+Path Dialog::GetFile(const String &title)
+{
+    DialogWindow *dialog = nullptr;
+    Window *topWindow = Application::GetTopWindow();
+    if (topWindow)
+    {
+        dialog = Application::GetInstance()->CreateDialogWindow(topWindow);
+        dialog->SetTitle(title);
+        dialog->SetSize(500, 500);
+
+        Scene *scene = CreateOpenFileScene(title);
+        SceneManager::LoadScene(scene);
+
+        Application::GetInstance()->BlockingWait(dialog);
+    }
+    return Path::Empty;
+}
+
+Scene *Dialog::CreateOpenFileScene(const String &title)
+{
+    Scene *scene= new Scene();
+    scene->AddComponent<Transform>();
+    return scene;
+}
+
+Scene *Dialog::CreateMsgScene(const String &msg)
 {
     Scene *scene = new Scene();
     scene->AddComponent<Transform>();
@@ -108,7 +132,7 @@ Scene *Dialog::CreateScene(const String &msg)
        buttonsGo->AddChild(button0->gameObject);
        buttonsGo->AddChild(button1->gameObject);
 
-       return scene;
+    return scene;
 }
 
 void Dialog::OnButtonClicked(UIInteractive *interactive)

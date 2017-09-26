@@ -174,7 +174,7 @@ UIGameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
     UIGameObject *sepGo = GameObjectFactory::CreateGUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-
+    lr->SetRenderPass(RenderPass::Canvas);
 
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
     bool horizontal = (space.x == 0);

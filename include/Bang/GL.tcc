@@ -37,6 +37,11 @@ inline int GL::GetUniform(GLId program, int uniformLocation)
     int x[4]; glGetUniformiv(program, uniformLocation, x); return x[0];
 }
 template <>
+inline bool GL::GetUniform(GLId program, int uniformLocation)
+{
+    return (GL::GetUniform<int>(program, uniformLocation) != 0);
+}
+template <>
 inline float GL::GetUniform(GLId program, int uniformLocation)
 {
     float x[4]; glGetUniformfv(program, uniformLocation, x); return x[0];

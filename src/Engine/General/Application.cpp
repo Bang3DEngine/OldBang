@@ -31,24 +31,24 @@ Application::Application(int argc, char **argv, const Path &engineRootPath)
 {
     srand(time(NULL));
 
+    if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) { Debug_Error("Failed to init SDL"); }
+    if ( TTF_Init() )
+    {
+        Debug_Error("Could not init FreeType library: Error(" <<
+                    TTF_GetError() <<  ")");
+    }
+
     Application::s_appSingleton = this;
 
     m_time = new Time();
     m_paths = new Paths();
     m_paths->InitPaths(engineRootPath);
 
-    m_resources          = new Resources();
     m_behaviourManager   = new BehaviourManager();
     m_importFilesManager = new ImportFilesManager();
 
     ImportFilesManager::CreateMissingProjectImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
-
-    if ( TTF_Init() )
-    {
-        Debug_Error("Could not init FreeType library: Error(" <<
-                    TTF_GetError() <<  ")");
-    }
 }
 
 Application::~Application()
@@ -56,7 +56,6 @@ Application::~Application()
     delete m_time;
     delete m_paths;
     delete m_behaviourManager;
-    delete m_resources;
 
     TTF_Quit();
 }
@@ -77,16 +76,18 @@ DialogWindow *Application::CreateDialogWindow(Window *parentWindow)
 
 void Application::SetupWindow(Window *window)
 {
-    window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-
-    if (!m_sdlGLSharedContext)
-    {
-        m_sdlGLSharedContext = SDL_GL_GetCurrentContext();
-    }
-
-    p_currentWindow = window;
+    BindWindow(window);
     m_windows.PushBack(window);
+
+    window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
     window->OnResize(window->GetWidth(), window->GetHeight());
+}
+
+void Application::BindWindow(Window *window)
+{
+    p_latestCurrentWindow = p_currentWindow;
+    p_currentWindow = window;
+    window->MakeCurrent();
 }
 
 Window *Application::GetTopWindow()
@@ -103,23 +104,48 @@ Window *Application::GetTopWindow()
 
 int Application::MainLoop()
 {
-    while (!m_exit)
+    bool exit = false;
+    while (!exit && !m_forcedExit)
     {
-        GetTime()->OnFrameStarted();
-        for (Window *w : GetWindows())
-        {
-            p_currentWindow = w;
-            SDL_GL_MakeCurrent(w->GetSDLWindow(), GetSharedGLContext());
-            w->MainLoopIteration();
-        }
-        GetTime()->OnFrameFinished();
-        SDL_Delay(RedrawDelay_ms);
-
-        if (!HandleEvents())     { m_exit = true; }
-        DestroyQueuedWindows();
-        if (m_windows.IsEmpty()) { m_exit = true; }
+        exit = MainLoopIteration();
     }
     return m_exitCode;
+}
+
+bool Application::MainLoopIteration()
+{
+    GetTime()->OnFrameStarted();
+    List<Window*> windows = GetWindows();
+    for (Window *w : windows)
+    {
+        BindWindow(w);
+        w->MainLoopIteration();
+    }
+    GetTime()->OnFrameFinished();
+
+    bool exit = false;
+    if (!HandleEvents())     { exit = true; }
+    DestroyQueuedWindows();
+    if (m_windows.IsEmpty()) { exit = true; }
+
+    SDL_Delay(RedrawDelay_ms);
+
+    return exit;
+}
+
+void Application::BlockingWait(Window *win)
+{
+    Window *latestCurrentWindow = p_latestCurrentWindow;
+    List<Window*> allWindows = m_windows;
+
+    allWindows.Remove(win);
+    m_windows = {win};
+    BindWindow(win);
+
+    MainLoop();
+
+    BindWindow(latestCurrentWindow);
+    m_windows = allWindows;
 }
 
 bool Application::HandleEvents()
@@ -150,16 +176,11 @@ bool Application::HandleEvents()
 
     for (Window *w : GetWindows())
     {
-        p_currentWindow = w;
+        BindWindow(w);
         w->OnHandleEventsFinished();
     }
 
     return true;
-}
-
-SDL_GLContext Application::GetSharedGLContext() const
-{
-    return m_sdlGLSharedContext;
 }
 
 Time *Application::GetTime() const
@@ -170,11 +191,6 @@ Time *Application::GetTime() const
 Paths *Application::GetPaths() const
 {
     return m_paths;
-}
-
-Resources *Application::GetResources() const
-{
-    return m_resources;
 }
 
 ImportFilesManager *Application::GetImportFilesManager() const
@@ -203,7 +219,7 @@ void Application::Exit(int returnCode, bool immediate)
     else
     {
         Application *app = Application::GetInstance();
-        app->m_exit = true;
+        app->m_forcedExit = true;
         app->m_exitCode = returnCode;
     }
 }

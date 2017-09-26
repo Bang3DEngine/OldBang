@@ -6,8 +6,6 @@
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
 
-using SDL_GLContext = void*;
-
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Time;
@@ -15,7 +13,6 @@ FORWARD class Scene;
 FORWARD class Paths;
 FORWARD class Window;
 FORWARD class GEngine;
-FORWARD class Resources;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
@@ -29,19 +26,19 @@ public:
                 const Path &engineRootPath = Path::Empty);
     virtual ~Application();
 
-
     Window* CreateWindow();
     DialogWindow* CreateDialogWindow(Window *parentWindow);
 
     void DestroyWindow(Window *window);
     int MainLoop();
+    bool MainLoopIteration();
+
+    void BlockingWait(Window *win);
 
     bool HandleEvents();
 
-    SDL_GLContext       GetSharedGLContext() const;
     Time               *GetTime() const;
     Paths              *GetPaths() const;
-    Resources          *GetResources() const;
     ImportFilesManager *GetImportFilesManager() const;
     BehaviourManager   *GetBehaviourManager() const;
     Window             *GetCurrentWindow() const;
@@ -58,13 +55,10 @@ protected:
     const uint RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;
 
-    SDL_GLContext       m_sdlGLSharedContext = nullptr;
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
-    Resources          *m_resources          = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
     BehaviourManager   *m_behaviourManager   = nullptr;
-
 
     virtual void SetupWindow(Window *window);
 
@@ -74,10 +68,12 @@ private:
     List<Window*> m_windows;
     List<Window*> p_windowsToBeDestroyed;
     Window *p_currentWindow = nullptr;
+    Window *p_latestCurrentWindow = nullptr;
 
-    bool m_exit = false;
+    bool m_forcedExit = false;
     int m_exitCode = 0;
 
+    void BindWindow(Window *window);
     void DestroyQueuedWindows();
 };
 

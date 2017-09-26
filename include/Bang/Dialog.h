@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 
+#include "Bang/Path.h"
+
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
@@ -15,10 +17,13 @@ public:
     static DialogWindow* Error(const String &title,
                                const String &msg);
 
+    static Path GetFile(const String &title);
+
     Dialog() = delete;
 
 private:
-    static Scene* CreateScene(const String &msg);
+    static Scene* CreateOpenFileScene(const String &title);
+    static Scene* CreateMsgScene(const String &msg);
 
     static void OnButtonClicked(UIInteractive *interactive);
 };

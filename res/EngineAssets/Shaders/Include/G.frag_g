@@ -34,8 +34,7 @@ void EndMain()
         outColor = B_Out_Color;
     }
 
-    B_Out_Color = vec4( mix(B_SampleColor().rgb,
-                            outColor.rgb, outColor.a), 1);
+    B_Out_Color = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
     B_GIn_Color = B_Out_Color;
 }
 
