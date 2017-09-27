@@ -139,6 +139,10 @@ Font::GlyphMetrics Font::GetCharMetrics(char c) const
     charMetrics.size    = Scale( Vector2((xmax - xmin), (ymax - ymin)) );
     charMetrics.bearing = Scale( Vector2(xmin, ymax) );
     charMetrics.advance = Scale( float(advance) );
+    if (c == ' ')
+    {
+        charMetrics.size = Scale( Vector2(advance, GetLineSkip()) );
+    }
 
     return charMetrics;
 }

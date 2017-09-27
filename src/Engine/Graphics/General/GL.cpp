@@ -827,7 +827,7 @@ Vector2i GL::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
 Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
 {
     Vector2i screenSize( GL::GetViewportSize() );
-    Vector2i pixelsPoint(_pixelsPoint.x, (screenSize.y-1) - _pixelsPoint.y);
+    Vector2 pixelsPoint(_pixelsPoint.x, (screenSize.y-1) - _pixelsPoint.y);
     Vector2 res = ( Vector2f(pixelsPoint) / Vector2f(screenSize) ) * 2.0f - 1.0f;
     return res;
 }

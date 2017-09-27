@@ -36,6 +36,8 @@ public:
     virtual Vector2i CalculateTotalPreferredSize() const override;
     virtual Vector2i CalculateTotalFlexiblePxSize() const override;
 
+    void RegenerateCharQuads();
+
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);
     void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
@@ -91,8 +93,8 @@ private:
     bool m_kerning              = false;
     Rect m_textRectNDC          = Rect::Zero;
 
-    float m_blurriness      = 2.0f;
-    float m_alphaThreshold  = 0.2f;
+    float m_blurriness      = 1.3f;
+    float m_alphaThreshold  = 0.24f;
 
     float m_outlineWidth        = 0.0f;
     Color m_outlineColor        = Color::Red;

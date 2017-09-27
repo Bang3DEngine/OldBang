@@ -9,6 +9,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD class UIGameObject;
 FORWARD class UITextCursor;
 FORWARD class UIScrollArea;
+FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
@@ -30,6 +31,7 @@ public:
     int GetSelectionBeginIndex() const;
     int GetSelectionEndIndex() const;
     String GetSelectedText() const;
+    void ReplaceSelectedText(const String &replaceStr);
 
     void ResetSelection();
     void SelectAll();
@@ -64,6 +66,9 @@ private:
     void HandleMouseSelection();
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
+
+    RectTransform *GetTextRT() const;
+    RectTransform *GetLabelRT() const;
 
     float GetCursorXGlobalNDC(int cursorIndex) const;
     // Returns the X in global NDC, for a given cursor index

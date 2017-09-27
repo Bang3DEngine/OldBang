@@ -41,9 +41,14 @@ Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) con
     return Vector2i(res);
 }
 
-Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const
+Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2 &pixelsPoint) const
 {
     return FromGlobalNDCToLocalNDC( GL::FromPixelsPointToGlobalNDC(pixelsPoint) );
+}
+
+Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const
+{
+    return FromPixelsPointToLocalNDC( Vector2(pixelsPoint) );
 }
 
 Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const

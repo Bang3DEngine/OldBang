@@ -136,7 +136,7 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     m_isADoubleClick = false; // Reset double click
 
     m_mouseInfo.Add(mb, ButtonInfo(up, true, true));
-    if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
+    if (m_secsSinceLastMouseDown <= DoubleClickMaxSeconds &&
         m_secsSinceLastMouseDown != 0)
         // Reject clicks in the same frame as double-clicking (secs... != 0)
         // To avoid a delayed MouseEvent bug
@@ -200,7 +200,7 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
 
 void Input::PeekEvent(const SDL_Event &event, const Window *window)
 {
-    if (!window->HasFocus()) { return; }
+    if (!window->HasFocus()) { Reset(); return; }
     m_isMouseInside = window->HasFocus() && window->IsMouseOver();
 
     bool enqueue = false;
@@ -279,47 +279,47 @@ Input *Input::GetInstance()
     return Window::GetCurrent()->GetInput();
 }
 
-String Input::KeyToString(Input::Key k)
+String KeyToString(Key k)
 {
     return String( SDL_GetKeyName( SCAST<SDL_Keycode>(k) ) );
 }
 
-bool Input::GetKey(Input::Key k)
+bool Input::GetKey(Key k)
 {
     Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].pressed;
 }
 
-bool Input::GetKeyUp(Input::Key k)
+bool Input::GetKeyUp(Key k)
 {
     Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp-> m_keyInfos[k].up;
 }
 
-bool Input::GetKeyDown(Input::Key k)
+bool Input::GetKeyDown(Key k)
 {
     Input *inp = Input::GetInstance();
     return  inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down &&
            !inp->m_keyInfos[k].autoRepeat;
 }
 
-bool Input::GetKeyDownRepeat(Input::Key k)
+bool Input::GetKeyDownRepeat(Key k)
 {
     Input *inp = Input::GetInstance();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;
 }
 
-const Array<Input::Key> &Input::GetKeysUp()
+const Array<Key> &Input::GetKeysUp()
 {
     return Input::GetInstance()->m_keysUp;
 }
 
-const Array<Input::Key> &Input::GetKeysDown()
+const Array<Key> &Input::GetKeysDown()
 {
     return Input::GetInstance()->m_keysDown;
 }
 
-const Array<Input::Key>& Input::GetPressedKeys()
+const Array<Key>& Input::GetPressedKeys()
 {
     return Input::GetInstance()->m_pressedKeys;
 }
@@ -330,9 +330,9 @@ float Input::GetMouseWheel()
     return inp->m_lastMouseWheelDelta;
 }
 
-Array<Input::MouseButton> Input::GetMouseButtons()
+Array<MouseButton> Input::GetMouseButtons()
 {
-    Array<Input::MouseButton> mouseButtons;
+    Array<MouseButton> mouseButtons;
     Input *inp = Input::GetInstance();
     for (auto it : inp->m_mouseInfo)
     {
@@ -340,9 +340,9 @@ Array<Input::MouseButton> Input::GetMouseButtons()
     }
     return mouseButtons;
 }
-Array<Input::MouseButton> Input::GetMouseButtonsUp()
+Array<MouseButton> Input::GetMouseButtonsUp()
 {
-    Array<Input::MouseButton> mouseButtons;
+    Array<MouseButton> mouseButtons;
     Input *inp = Input::GetInstance();
     for (auto it : inp->m_mouseInfo)
     {
@@ -350,9 +350,9 @@ Array<Input::MouseButton> Input::GetMouseButtonsUp()
     }
     return mouseButtons;
 }
-Array<Input::MouseButton> Input::GetMouseButtonsDown()
+Array<MouseButton> Input::GetMouseButtonsDown()
 {
-    Array<Input::MouseButton> mouseButtons;
+    Array<MouseButton> mouseButtons;
     Input *inp = Input::GetInstance();
     for (auto it : inp->m_mouseInfo)
     {
@@ -362,25 +362,25 @@ Array<Input::MouseButton> Input::GetMouseButtonsDown()
 }
 
 
-bool Input::GetMouseButton(Input::MouseButton mb)
+bool Input::GetMouseButton(MouseButton mb)
 {
     Input *inp = Input::GetInstance();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].pressed;
 }
 
-bool Input::GetMouseButtonUp(Input::MouseButton mb)
+bool Input::GetMouseButtonUp(MouseButton mb)
 {
     Input *inp = Input::GetInstance();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].up;
 }
 
-bool Input::GetMouseButtonDown(Input::MouseButton mb)
+bool Input::GetMouseButtonDown(MouseButton mb)
 {
     Input *inp = Input::GetInstance();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].down;
 }
 
-bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
+bool Input::GetMouseButtonDoubleClick(MouseButton mb)
 {
     Input *inp = Input::GetInstance();
     return Input::GetMouseButtonUp(mb) && inp->m_isADoubleClick;
@@ -444,7 +444,7 @@ Vector2i Input::GetMouseCoords()
 Vector2 Input::GetMouseCoordsNDC()
 {
     Vector2f coordsNDC = Vector2f(Input::GetMouseCoords()) *
-                         GL::GetViewportPixelSize() * 2.0f - 1.0f;
+                                  GL::GetViewportPixelSize() * 2.0f - 1.0f;
     return coordsNDC * Vector2f(1, -1);
 }
 
@@ -470,4 +470,21 @@ String Input::PollInputText()
 void Input::StopTextInput()
 {
     SDL_StopTextInput();
+}
+
+void Input::Reset()
+{
+    m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
+    m_framesMouseStopped = 0;
+    m_lastMouseWheelDelta = m_secsSinceLastMouseDown = 0.0f;
+    m_mouseCoords = m_lastMouseCoords = Vector2i(-1);
+    m_inputText = "";
+
+    m_keysUp.Clear();
+    m_keysDown.Clear();
+    m_pressedKeys.Clear();
+
+    m_keyInfos.Clear();
+    m_mouseInfo.Clear();
+    m_eventInfoQueue.Clear();
 }

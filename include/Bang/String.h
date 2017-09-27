@@ -60,7 +60,7 @@ public:
     void Insert(int position, char c);
     void Insert(int position, const String &str);
     void Remove(Iterator it, int numberOfChars);
-    void Remove(int beginIndex, int endIndexInclusive);
+    void Remove(int beginIndex, int endIndexExclusive);
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;

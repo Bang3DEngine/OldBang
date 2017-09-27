@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
 FORWARD class DialogWindow;
-FORWARD class UIInteractive;
+FORWARD class UIButton;
 
 class Dialog
 {
@@ -17,15 +17,17 @@ public:
     static DialogWindow* Error(const String &title,
                                const String &msg);
 
-    static Path GetFile(const String &title);
+    static Path GetFilePath(const String &title);
 
     Dialog() = delete;
 
 private:
-    static Scene* CreateOpenFileScene(const String &title);
+    static Path s_resultPath;
+
+    static Scene* CreateGetFilePathScene(const String &title);
     static Scene* CreateMsgScene(const String &msg);
 
-    static void OnButtonClicked(UIInteractive *interactive);
+    static void OnButtonClicked(UIButton *button);
 };
 
 NAMESPACE_BANG_END

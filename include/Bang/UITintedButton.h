@@ -1,21 +1,21 @@
-#ifndef UITINTEDINTERACTIVE_H
-#define UITINTEDINTERACTIVE_H
+#ifndef UITINTEDBUTTON_H
+#define UITINTEDBUTTON_H
 
 #include "Bang/Color.h"
-#include "Bang/UIInteractive.h"
+#include "Bang/UIButton.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Renderer;
 
-class UITintedInteractive : public UIInteractive,
-                            public UIInteractiveListener
+class UITintedButton : public UIButton,
+                       public UIButtonListener
 {
-    COMPONENT(UITintedInteractive)
+    COMPONENT(UITintedButton)
 
 public:
-    UITintedInteractive();
-    virtual ~UITintedInteractive();
+    UITintedButton();
+    virtual ~UITintedButton();
 
     // Component
     virtual void OnUpdate() override;
@@ -32,12 +32,12 @@ public:
     const Color& GetPressedTintColor() const;
 
 protected:
-    virtual void OnButton_MouseEnter(UIInteractive *btn) override;
-    virtual void OnButton_MouseExit(UIInteractive *btn) override;
+    virtual void OnButton_MouseEnter(UIButton *btn) override;
+    virtual void OnButton_MouseExit(UIButton *btn) override;
     virtual void
-    OnButton_MouseDown(UIInteractive *btn, Input::MouseButton mb) override;
+    OnButton_MouseDown(UIButton *btn, MouseButton mb) override;
     virtual void
-    OnButton_MouseUp(UIInteractive *btn, Input::MouseButton mb) override;
+    OnButton_MouseUp(UIButton *btn, MouseButton mb) override;
 
 private:
     Set<Renderer*>   p_renderersToTint;
@@ -53,4 +53,4 @@ private:
 
 NAMESPACE_BANG_END
 
-#endif // UITINTEDINTERACTIVE_H
+#endif // UITINTEDBUTTON_H

@@ -34,8 +34,7 @@ int main(int argc, char **argv)
 
     app.CreateWindow();
 
-    Scene *scene = new Scene();
-    scene->AddComponent<Transform>();
+    Scene *scene = GameObjectFactory::CreateScene();
 
     UIGameObject *all = GameObjectFactory::CreateUIGameObject(true);
     UIGameObject *topHLGo  = GameObjectFactory::CreateUIGameObject(true);

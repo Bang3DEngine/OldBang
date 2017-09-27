@@ -19,7 +19,7 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIInteractive.h"
+#include "Bang/UIButton.h"
 #include "Bang/AudioListener.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/UITextRenderer.h"
@@ -29,7 +29,7 @@
 #include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
 #include "Bang/UIHorizontalLayout.h"
-#include "Bang/UITintedInteractive.h"
+#include "Bang/UITintedButton.h"
 
 USING_NAMESPACE_BANG
 
@@ -42,6 +42,7 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, Light);
     CREATE_COMPONENT(componentClassName, Camera);
     CREATE_COMPONENT(componentClassName, UIMask);
+    CREATE_COMPONENT(componentClassName, UIButton);
     CREATE_COMPONENT(componentClassName, Renderer);
     CREATE_COMPONENT(componentClassName, UIButton);
     CREATE_COMPONENT(componentClassName, UICanvas);
@@ -57,7 +58,7 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, UITextCursor);
     CREATE_COMPONENT(componentClassName, AudioListener);
     CREATE_COMPONENT(componentClassName, RectTransform);
-    CREATE_COMPONENT(componentClassName, UIInteractive);
+    CREATE_COMPONENT(componentClassName, UITintedButton);
     CREATE_COMPONENT(componentClassName, CircleRenderer);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
     CREATE_COMPONENT(componentClassName, UIImageRenderer);
@@ -66,7 +67,6 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, PostProcessEffect);
     CREATE_COMPONENT(componentClassName, SingleLineRenderer);
     CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
-    CREATE_COMPONENT(componentClassName, UITintedInteractive);
 
     Debug_Error("Please register class '" << componentClassName << "' in "
                 "ComponentFactory"); ASSERT(false);
@@ -84,7 +84,7 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, Camera);
     EXISTS_COMPONENT(componentClassName, UIMask);
     EXISTS_COMPONENT(componentClassName, Renderer);
-    EXISTS_COMPONENT(componentClassName, UIInteractive);
+    EXISTS_COMPONENT(componentClassName, UIButton);
     EXISTS_COMPONENT(componentClassName, UICanvas);
     EXISTS_COMPONENT(componentClassName, Behaviour);
     EXISTS_COMPONENT(componentClassName, Transform);
@@ -100,7 +100,7 @@ bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, AudioListener);
     EXISTS_COMPONENT(componentClassName, RectTransform);
     EXISTS_COMPONENT(componentClassName, CircleRenderer);
-    EXISTS_COMPONENT(componentClassName, UITintedInteractive);
+    EXISTS_COMPONENT(componentClassName, UITintedButton);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
     EXISTS_COMPONENT(componentClassName, UIImageRenderer);
     EXISTS_COMPONENT(componentClassName, DirectionalLight);

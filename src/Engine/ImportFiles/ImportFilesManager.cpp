@@ -133,13 +133,12 @@ Path ImportFilesManager::GetFilepath(const Path &importFilepath)
     Path filepath = importFilepath.WithHidden(false);
 
     String strPath = filepath.GetAbsolute();
-    if (strPath.BeginsWith(".")) { strPath.Remove(0, 0); }
+    if (strPath.BeginsWith(".")) { strPath.Remove(0, 1); }
 
     String ending = "." + GetImportExtension();
     if (strPath.EndsWith(ending))
     {
-        strPath.Remove(strPath.Size() - ending.Size(),
-                       strPath.Size()-1);
+        strPath.Remove(strPath.Size() - ending.Size(), strPath.Size());
     }
 
     return Path(strPath);

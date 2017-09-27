@@ -18,8 +18,8 @@ void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (Input::GetMouseButtonDown(Input::MouseButton::Left) ||
-        Input::GetMouseButtonDown(Input::MouseButton::Right) )
+    if (Input::GetMouseButtonDown(MouseButton::Left) ||
+        Input::GetMouseButtonDown(MouseButton::Right) )
     {
         Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
         UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
@@ -50,6 +50,8 @@ UIGameObject *UICanvas::GetFocusedGameObject() const
 
 void UICanvas::GiveFocusTo(UIGameObject *focusTaker) const
 {
+    if (p_focus == focusTaker) { return; }
+
     if (p_focus)
     {
         p_focus->m_hasFocus = false;

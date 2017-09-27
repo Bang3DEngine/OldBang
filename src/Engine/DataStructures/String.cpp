@@ -89,12 +89,12 @@ void String::Remove(String::Iterator it, int numberOfChars)
     m_str.erase(it, end);
 }
 
-void String::Remove(int beginIndex, int endIndexInclusive)
+void String::Remove(int beginIndex, int endIndexExclusive)
 {
     Iterator begin = Begin();
     ::std::advance(begin, beginIndex);
     Iterator end = begin;
-    ::std::advance(end, endIndexInclusive - beginIndex + 1);
+    ::std::advance(end, endIndexExclusive - beginIndex);
     m_str.erase(begin, end);
 }
 

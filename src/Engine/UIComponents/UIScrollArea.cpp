@@ -62,7 +62,7 @@ void UIScrollArea::UpdateChildrenMargins()
     int marginBot   =  GetScrolling().y;
 
     p_childrenContainer->GetRectTransform()->SetMargins(marginLeft, marginTop,
-                                                   marginRight, marginBot);
+                                                        marginRight, marginBot);
 }
 
 UIGameObject *UIScrollArea::CreateGameObject()

@@ -7,9 +7,10 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIButton;
+FORWARD class Scene;
 FORWARD class GameObject;
 FORWARD class UIGameObject;
+FORWARD class UIButtonDriver;
 
 class GameObjectFactory
 {
@@ -19,11 +20,13 @@ public:
 
     static GameObject* CreateGameObject(bool addTransform = true);
     static UIGameObject* CreateUIGameObject(bool addRectTransform = true);
+    static Scene* CreateScene();
+    static Scene* CreateUIScene();
 
-    static UIGameObject* CreateGUIInputText();
-    static UIButton*     CreateGUIButton();
-    static UIGameObject* CreateGUILabel(const String &content = "Bang");
-    static UIGameObject* CreateGUIScrollArea();
+    static UIGameObject*   CreateGUIInputText();
+    static UIButtonDriver* CreateGUIButton();
+    static UIGameObject*   CreateGUILabel(const String &content = "Bang");
+    static UIGameObject*   CreateGUIScrollArea();
 
     static UIGameObject* CreateGUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,

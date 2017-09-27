@@ -3,23 +3,26 @@
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
-#include "Bang/UIButton.h"
 #include "Bang/Transform.h"
+#include "Bang/UIInputText.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIFrameLayout.h"
+#include "Bang/UIButtonDriver.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
-#include "Bang/UITintedInteractive.h"
 
 USING_NAMESPACE_BANG
+
+Path Dialog::s_resultPath = Path::Empty;
 
 DialogWindow *Bang::Dialog::Error(const String &title,
                                   const String &msg)
@@ -38,7 +41,7 @@ DialogWindow *Bang::Dialog::Error(const String &title,
     return dialog;
 }
 
-Path Dialog::GetFile(const String &title)
+Path Dialog::GetFilePath(const String &title)
 {
     DialogWindow *dialog = nullptr;
     Window *topWindow = Application::GetTopWindow();
@@ -46,27 +49,59 @@ Path Dialog::GetFile(const String &title)
     {
         dialog = Application::GetInstance()->CreateDialogWindow(topWindow);
         dialog->SetTitle(title);
-        dialog->SetSize(500, 500);
+        dialog->SetSize(300, 100);
 
-        Scene *scene = CreateOpenFileScene(title);
+        Scene *scene = CreateGetFilePathScene(title);
         SceneManager::LoadScene(scene);
 
+        Dialog::s_resultPath = Path::Empty;
         Application::GetInstance()->BlockingWait(dialog);
     }
-    return Path::Empty;
+    return Dialog::s_resultPath;
 }
 
-Scene *Dialog::CreateOpenFileScene(const String &title)
+Scene *Dialog::CreateGetFilePathScene(const String &title)
 {
-    Scene *scene= new Scene();
-    scene->AddComponent<Transform>();
+    Scene *scene = GameObjectFactory::CreateUIScene();
+    UIFrameLayout *fl = scene->AddComponent<UIFrameLayout>();
+    fl->SetPaddings(10);
+
+    UIGameObject *vlGo = GameObjectFactory::CreateUIGameObject();
+    UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
+
+    UIGameObject *hlGo = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
+
+    UIGameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
+    UIInputText *inputText = inputTextGo->GetComponent<UIInputText>();
+    inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
+    UILayoutElement *itle = inputTextGo->AddComponent<UILayoutElement>();
+    itle->SetPreferredSize( Vector2i(1, 25) );
+    itle->SetFlexibleSize( Vector2(999999, 0) );
+
+    UIButtonDriver *openButton = GameObjectFactory::CreateGUIButton();
+    openButton->GetText()->SetContent("Open");
+    openButton->GetButton()->AddClickedCallback(
+        [inputText](UIButton *_)
+        {
+            Dialog::s_resultPath = Path(inputText->GetText()->GetContent());
+            Window::Destroy(Window::GetCurrent());
+        }
+    );
+
+    scene->AddChild(vlGo);
+    vlGo->AddChild(inputTextGo);
+    vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->AddChild(hlGo);
+    hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer());
+    hlGo->AddChild(openButton ->gameObject);
+
     return scene;
 }
 
 Scene *Dialog::CreateMsgScene(const String &msg)
 {
-    Scene *scene = new Scene();
-    scene->AddComponent<Transform>();
+    Scene *scene = GameObjectFactory::CreateUIScene();
 
     UIGameObject *container = GameObjectFactory::CreateUIGameObject();
     UIFrameLayout *containerL = container->AddComponent<UIFrameLayout>();
@@ -110,13 +145,13 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     buttonsHL->SetSpacing(20);
     buttonsHL->SetPaddings(5);
 
-    UIButton *button0 = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *button0 = GameObjectFactory::CreateGUIButton();
     button0->GetText()->SetContent("Cancel");
-    button0->GetInteractive()->AddClickedCallback(OnButtonClicked);
+    button0->GetButton()->AddClickedCallback(OnButtonClicked);
 
-    UIButton *button1 = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *button1 = GameObjectFactory::CreateGUIButton();
     button1->GetText()->SetContent("OK");
-    button1->GetInteractive()->AddClickedCallback(OnButtonClicked);
+    button1->GetButton()->AddClickedCallback(OnButtonClicked);
 
     scene->AddChild(container);
      container->AddChild(mainVLayoutGo);
@@ -135,7 +170,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     return scene;
 }
 
-void Dialog::OnButtonClicked(UIInteractive *interactive)
+void Dialog::OnButtonClicked(UIButton *button)
 {
     Window::Destroy( Window::GetCurrent() );
 }

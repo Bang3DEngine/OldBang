@@ -88,6 +88,104 @@ Vector2i UITextRenderer::CalculateTotalFlexiblePxSize() const
     return CalculateTotalPreferredSize();
 }
 
+void UITextRenderer::RegenerateCharQuads()
+{
+    ENSURE(gameObject); ENSURE(gameObject->transform);
+
+    if (!m_font)
+    {
+        m_mesh->LoadPositions({});
+        m_mesh->LoadUvs({});
+        return;
+    }
+
+    // Get the quad positions of the rects of each char
+    RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
+
+    m_font->SetMetricsSize( GetTextSize() );
+    Array<TextFormatter::CharRect> textCharRects =
+            TextFormatter::GetFormattedTextPositions(
+                                        GetContent(),
+                                        GetFont(),
+                                        rt->GetScreenSpaceRectPx(),
+                                        GetSpacingMultiplier(),
+                                        GetHorizontalAlignment(),
+                                        GetVerticalAlignment(),
+                                        IsWrapping());
+
+    // Generate quad positions and uvs for the mesh, and load them
+    Array<Vector2> textQuadUvs;
+    Array<Vector2> textQuadPos2D;
+    Array<Vector3> textQuadPos3D;
+
+    m_charRectsLocalNDC.Clear();
+    for (const TextFormatter::CharRect &cr : textCharRects)
+    {
+        if (!GetFont()->HasCharacter(cr.character)) { continue; }
+
+        Vector2 minPxPerf = cr.rectPx.GetMin(); // Vector2::Round( cr.rectPx.GetMin() ) + 0.5f;
+        Vector2 maxPxPerf = cr.rectPx.GetMax(); // Vector2::Round( cr.rectPx.GetMax() ) + 0.5f;
+        Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
+        Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
+
+        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
+        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
+
+        if (m_font->IsUsingDistanceField())
+        {
+            // Scale the character quad and uvs so that the character is as
+            // large as if we weren't using SDF. If we dont compensate
+            // this size, we would get all the distance field in the same quad,
+            // and consequently the character itself would be smaller
+            Vector2 spOffsetPx = Vector2(m_font->GetSDFSpreadOffsetPx(cr.character));
+            Vector2 spOffsetUv( Vector2(spOffsetPx) /
+                                Vector2(m_font->GetAtlasTexture()->GetSize()) );
+
+            Vector2 uvSize = (maxUv-minUv);
+            Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
+            Vector2 globalNDCCharSize  = (maxGlobalNDC - minGlobalNDC);
+            Vector2 globalNDCPosCenter = (maxGlobalNDC + minGlobalNDC) / 2.0f;
+            Vector2 scaledSize = (globalNDCCharSize * uvScaling);
+            minGlobalNDC = globalNDCPosCenter - scaledSize * 0.5f;
+            maxGlobalNDC = globalNDCPosCenter + scaledSize * 0.5f;
+            minUv -= spOffsetUv;
+            maxUv += spOffsetUv;
+        }
+
+        Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
+
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMinY(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
+
+        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
+        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
+        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
+        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
+
+        Rect charRectLocalNDC(
+                    rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMin() ),
+                    rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMax() ) );
+        m_charRectsLocalNDC.PushBack(charRectLocalNDC);
+    }
+
+    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
+                                                       textQuadPos2D.End());
+    m_mesh->LoadPositions(textQuadPos3D);
+    m_mesh->LoadUvs(textQuadUvs);
+}
+
 void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
@@ -290,100 +388,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 
 void UITextRenderer::OnRectTransformChanged()
 {
-    ENSURE(gameObject); ENSURE(gameObject->transform);
-
-    if (!m_font)
-    {
-        m_mesh->LoadPositions({});
-        m_mesh->LoadUvs({});
-        return;
-    }
-
-    // Get the quad positions of the rects of each char
-    RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
-
-    m_font->SetMetricsSize( GetTextSize() );
-    Array<TextFormatter::CharRect> textCharRects =
-            TextFormatter::GetFormattedTextPositions(
-                                        GetContent(),
-                                        GetFont(),
-                                        rt->GetScreenSpaceRectPx(),
-                                        GetSpacingMultiplier(),
-                                        GetHorizontalAlignment(),
-                                        GetVerticalAlignment(),
-                                        IsWrapping());
-
-    // Generate quad positions and uvs for the mesh, and load them
-    Array<Vector2> textQuadUvs;
-    Array<Vector2> textQuadPos2D;
-    Array<Vector3> textQuadPos3D;
-
-    m_charRectsLocalNDC.Clear();
-    for (const TextFormatter::CharRect &cr : textCharRects)
-    {
-        if (!GetFont()->HasCharacter(cr.character)) { continue; }
-
-        Vector2 minPxPerf = Vector2::Round( cr.rectPx.GetMin() ) + 0.5f;
-        Vector2 maxPxPerf = Vector2::Round( cr.rectPx.GetMax() ) + 0.5f;
-        Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
-        Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
-
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-
-        if (m_font->IsUsingDistanceField())
-        {
-            // Scale the character quad and uvs so that the character is as
-            // large as if we weren't using SDF. If we dont compensate
-            // this size, we would get all the distance field in the same quad,
-            // and consequently the character itself would be smaller
-            Vector2 spOffsetPx = Vector2(m_font->GetSDFSpreadOffsetPx(cr.character));
-            Vector2 spOffsetUv( Vector2(spOffsetPx) /
-                                Vector2(m_font->GetAtlasTexture()->GetSize()) );
-
-            Vector2 uvSize = (maxUv-minUv);
-            Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
-            Vector2 globalNDCCharSize  = (maxGlobalNDC - minGlobalNDC);
-            Vector2 globalNDCPosCenter = (maxGlobalNDC + minGlobalNDC) / 2.0f;
-            Vector2 scaledSize = (globalNDCCharSize * uvScaling);
-            minGlobalNDC = globalNDCPosCenter - scaledSize * 0.5f;
-            maxGlobalNDC = globalNDCPosCenter + scaledSize * 0.5f;
-            minUv -= spOffsetUv;
-            maxUv += spOffsetUv;
-        }
-
-        Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
-
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMinY(), 0) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
-
-        textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
-        textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
-        textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
-
-        Rect charRectLocalNDC(
-                    rt->FromPixelsPointToLocalNDC( Vector2i(minPxPerf) ),
-                    rt->FromPixelsPointToLocalNDC( Vector2i(maxPxPerf) )  );
-        m_charRectsLocalNDC.PushBack( charRectLocalNDC );
-    }
-
-    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
-                                                       textQuadPos2D.End());
-    m_mesh->LoadPositions(textQuadPos3D);
-    m_mesh->LoadUvs(textQuadUvs);
+    RegenerateCharQuads();
 }
 
 const Color &UITextRenderer::GetTextColor() const

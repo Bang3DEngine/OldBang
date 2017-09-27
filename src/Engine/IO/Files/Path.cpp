@@ -33,7 +33,7 @@ void Path::SetPath(const String &path)
          m_absolutePath.At(m_absolutePath.Size()-1) == '/')
     {
         m_absolutePath.Remove(m_absolutePath.Size()-1,
-                             m_absolutePath.Size()-1);
+                              m_absolutePath.Size());
     }
 
     if (m_absolutePath.BeginsWith("./"))
@@ -249,8 +249,8 @@ bool Path::BeginsWith(const String &path) const
 Path Path::Append(const Path &pathRHS) const
 {
     String str = pathRHS.GetAbsolute();
-    if (str.BeginsWith("./")) { str.Remove(0, 0); }
-    while (str.BeginsWith("/")) { str.Remove(0, 0); }
+    if (str.BeginsWith("./")) { str.Remove(0, 1); }
+    while (str.BeginsWith("/")) { str.Remove(0, 1); }
     return this->AppendRaw("/" + str);
 }
 
@@ -278,8 +278,8 @@ bool Path::IsHiddenFile() const
 Path Path::WithHidden(bool hidden) const
 {
     String nameExt = GetNameExt();
-    if ( hidden && !nameExt.BeginsWith(".")) { nameExt.Insert(0,"."); }
-    if (!hidden &&  nameExt.BeginsWith(".")) { nameExt.Remove(0,0); }
+    if ( hidden && !nameExt.BeginsWith(".")) { nameExt.Insert(0, "."); }
+    if (!hidden &&  nameExt.BeginsWith(".")) { nameExt.Remove(0, 1); }
     return GetDirectory().Append(nameExt);
 }
 

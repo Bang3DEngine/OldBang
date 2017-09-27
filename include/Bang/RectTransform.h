@@ -66,6 +66,7 @@ public:
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
     Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;
     Vector2i FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
+    Vector2 FromPixelsPointToLocalNDC(const Vector2 &pixelsPoint) const;
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
