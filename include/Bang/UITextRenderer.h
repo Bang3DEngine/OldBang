@@ -36,7 +36,7 @@ public:
     virtual Vector2i CalculateTotalPreferredSize() const override;
     virtual Vector2i CalculateTotalFlexiblePxSize() const override;
 
-    void RegenerateCharQuads();
+    void RegenerateCharQuadsVAO();
 
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);

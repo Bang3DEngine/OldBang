@@ -49,7 +49,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
 
     Vector2i prevScrolling = p_boxScrollArea->GetScrolling();
     p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
-    GetText()->RegenerateCharQuads();
+    GetText()->RegenerateCharQuadsVAO();
 
     // Cursor "I" position update and Selection quad rendering
     {
@@ -79,7 +79,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
     // Text Scrolling
     {
         Vector2 scrollNDC = Vector2::Zero;
-        Rect labelLimits = GetTextRT()->GetScreenSpaceRectNDC();
+        Rect labelLimits = GetLabelRT()->GetScreenSpaceRectNDC();
         Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
         if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
             m_cursorIndex == 0)
@@ -89,6 +89,8 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
         else
         {
             p_boxScrollArea->SetScrolling(prevScrolling);
+            GetText()->RegenerateCharQuadsVAO();
+            contentRectNDC = GetText()->GetContentGlobalNDCRect();
             float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
             float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
             if (cursorX < labelLimits.GetMin().x)
@@ -104,10 +106,10 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
                 if (contentRectNDC.GetMin().x < labelLimits.GetMin().x &&
                     contentRectNDC.GetMax().x < labelLimits.GetMax().x)
                 {
-                    scrollNDC.x = labelLimits.GetMax().x -
-                                  contentRectNDC.GetMax().x;
+                    scrollNDC.x = labelLimits.GetMax().x - contentRectNDC.GetMax().x - lookAheadNDC;
                 }
             }
+
             Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
             p_boxScrollArea->SetScrolling(prevScrolling + scrollPx);
         }

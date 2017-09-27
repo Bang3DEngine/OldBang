@@ -88,9 +88,9 @@ Vector2i UITextRenderer::CalculateTotalFlexiblePxSize() const
     return CalculateTotalPreferredSize();
 }
 
-void UITextRenderer::RegenerateCharQuads()
+void UITextRenderer::RegenerateCharQuadsVAO()
 {
-    ENSURE(gameObject); ENSURE(gameObject->transform);
+    ENSURE(gameObject);
 
     if (!m_font)
     {
@@ -100,7 +100,7 @@ void UITextRenderer::RegenerateCharQuads()
     }
 
     // Get the quad positions of the rects of each char
-    RectTransform *rt = DCAST<RectTransform*>(gameObject->transform); ENSURE(rt);
+    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
     m_font->SetMetricsSize( GetTextSize() );
     Array<TextFormatter::CharRect> textCharRects =
@@ -388,7 +388,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 
 void UITextRenderer::OnRectTransformChanged()
 {
-    RegenerateCharQuads();
+    RegenerateCharQuadsVAO();
 }
 
 const Color &UITextRenderer::GetTextColor() const
