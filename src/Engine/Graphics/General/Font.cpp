@@ -188,6 +188,24 @@ float Font::GetLineSkip() const
     return Scale( float( TTF_FontLineSkip(GetTTFFont()) ) );
 }
 
+float Font::GetFontAscent() const
+{
+    if (!GetTTFFont()) { return 0; }
+    return Scale( float( TTF_FontAscent(GetTTFFont()) ) );
+}
+
+float Font::GetFontDescent() const
+{
+    if (!GetTTFFont()) { return 0; }
+    return Scale( float( TTF_FontDescent(GetTTFFont()) ) );
+}
+
+float Font::GetFontHeight() const
+{
+    if (!GetTTFFont()) { return 0; }
+    return Scale( float( TTF_FontHeight(GetTTFFont()) ) );
+}
+
 Vector2i Font::GetSDFSpreadOffsetPx(char c) const
 {
     if (!m_sdfSpreadOffsetPxInAtlas.ContainsKey(c)) { return Vector2i::Zero; }

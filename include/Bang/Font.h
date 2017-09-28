@@ -44,6 +44,9 @@ public:
     Texture2D *GetAtlasTexture() const;
     float GetKerning(char leftChar, char rightChar) const;
     float GetLineSkip() const;
+    float GetFontAscent() const;
+    float GetFontDescent() const;
+    float GetFontHeight() const;
     Vector2i GetSDFSpreadOffsetPx(char c) const;
 
     TTF_Font *GetTTFFont() const;

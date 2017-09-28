@@ -55,7 +55,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
 
     Vector2 penPosition (limitsRect.GetMin());
     const float lineSkip = font->GetLineSkip();
-    penPosition.y += lineSkip;
+    // penPosition.y is baseline
     for (int i = 0; i < content.Size(); ++i)
     {
         const int charAdvX = GetCharAdvanceX(content, font, i);
@@ -155,7 +155,7 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
         Vector2 lineMinCoord = FindMinCoord(line);
         Vector2 lineMaxCoord = FindMaxCoord(line);
 
-        int lineHorizontalOffset = 0;
+        float lineHorizontalOffset = 0;
         if (hAlignment == HorizontalAlignment::Left)
         {
             lineHorizontalOffset = limitsRect.GetMin().x - lineMinCoord.x;
@@ -177,20 +177,21 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     }
 
     // Vertical align all the lines at once
-    int textVerticalOffset = 0;
-    const uint textHeight = (linesCharRects->Size() * font->GetLineSkip() );
+    float textVerticalOffset = 0;
+    const float textHeight = (linesCharRects->Size() * font->GetLineSkip());
     if (vAlignment == VerticalAlignment::Top)
     {
-        textVerticalOffset = 0;
+        textVerticalOffset = font->GetFontAscent();
     }
     else if (vAlignment == VerticalAlignment::Center)
     {
-        textVerticalOffset = limitsRect.GetSize().y / 2 - (textHeight/2);
-
+        textVerticalOffset = font->GetFontAscent() +
+                            (limitsRect.GetHeight()/2) - (textHeight/2);
     }
     else if (vAlignment == VerticalAlignment::Bot)
     {
-        textVerticalOffset = limitsRect.GetSize().y - textHeight;
+        textVerticalOffset = font->GetFontAscent() +
+                             limitsRect.GetHeight() - textHeight;
     }
 
     // Apply offsets
