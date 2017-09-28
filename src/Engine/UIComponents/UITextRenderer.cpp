@@ -49,6 +49,7 @@ void UITextRenderer::OnRender()
 
 void UITextRenderer::OnRender(RenderPass renderPass)
 {
+    if (m_hasToRegenerateVAO) { RegenerateCharQuadsVAO(); }
     if (!IsOverlapping())
     {
         // Render all quads at the same time
@@ -90,6 +91,7 @@ Vector2i UITextRenderer::CalculateTotalFlexiblePxSize() const
 
 void UITextRenderer::RegenerateCharQuadsVAO()
 {
+    m_hasToRegenerateVAO = false;
     ENSURE(gameObject);
 
     if (!m_font)
@@ -235,7 +237,7 @@ void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
     if (GetHorizontalAlignment() != horizontalAlignment)
     {
         m_horizontalAlignment = horizontalAlignment;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -244,7 +246,7 @@ void UITextRenderer::SetVerticalAlign(VerticalAlignment verticalAlignment)
     if (GetVerticalAlignment() != verticalAlignment)
     {
         m_verticalAlignment = verticalAlignment;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -257,7 +259,7 @@ void UITextRenderer::SetFont(Font *font)
         {
             GetMaterial()->SetTexture(m_font->GetAtlasTexture());
         }
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -266,7 +268,7 @@ void UITextRenderer::SetKerning(bool kerning)
     if (IsKerning() != kerning)
     {
         m_kerning = kerning;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -275,7 +277,7 @@ void UITextRenderer::SetWrapping(bool wrapping)
     if (IsWrapping() != wrapping)
     {
         m_wrapping = wrapping;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -299,7 +301,7 @@ void UITextRenderer::SetContent(const String &content)
     if (GetContent() != content)
     {
         m_content = content;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -308,7 +310,7 @@ void UITextRenderer::SetTextSize(int size)
     if (GetTextSize() != size)
     {
         m_textSize = Math::Max(size, 1);
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -332,7 +334,7 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
     if (GetSpacingMultiplier() != spacingMultiplier)
     {
         m_spacingMultiplier = spacingMultiplier;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
+        OnChanged();
     }
 }
 
@@ -390,6 +392,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 
 void UITextRenderer::OnRectTransformChanged()
 {
+    OnChanged();
     RegenerateCharQuadsVAO();
 }
 
@@ -468,4 +471,10 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Wrapping", IsWrapping());
     xmlInfo->Set("VerticalAlign", GetVerticalAlignment() );
     xmlInfo->Set("HorizontalAlign", GetHorizontalAlignment() );
+}
+
+void UITextRenderer::OnChanged()
+{
+    m_hasToRegenerateVAO = true;
+    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }

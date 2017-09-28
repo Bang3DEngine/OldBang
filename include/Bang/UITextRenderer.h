@@ -101,6 +101,7 @@ private:
     float m_outlineBlurriness   = 0.01f;
 
     bool m_isOverlapping = false;
+    bool m_hasToRegenerateVAO = true;
 
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
@@ -109,6 +110,8 @@ private:
     Mesh *m_mesh = nullptr;
     uint m_currentRenderingChar = 0;
     Array<Rect> m_charRectsLocalNDC;
+
+    void OnChanged();
 
 };
 

@@ -45,7 +45,7 @@ protected:
 
 private:
     Vector2i m_minSize       = Vector2i::Zero;
-    Vector2i m_preferredSize = Vector2i::Zero;
+    Vector2i m_preferredSize = Vector2i::One;
     Vector2  m_flexibleSize  = Vector2::Zero;
 };
 

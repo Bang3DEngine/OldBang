@@ -6,6 +6,7 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ILayoutElement.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -129,10 +130,10 @@ void UIDirLayout::FillChildrenSizes(const Recti &layoutRect,
     {
         Vector2i originalChildRTSize = childrenRTSizes->At(i);
         Vector2i childRTSize = originalChildRTSize;
-        List<ILayoutElement*> cles = child->GetComponents<ILayoutElement>();
-        for (ILayoutElement *cle : cles)
+        if (child->HasComponent<ILayoutElement>())
         {
-            Vector2i pxToAdd(cle->GetTotalSize(sizeType) - originalChildRTSize);
+            Vector2i pxToAdd(UILayoutManager::GetSize(child, sizeType) -
+                             originalChildRTSize);
             if (sizeType != LayoutSizeType::Min)
             {
                 pxToAdd = Vector2i::Min(pxToAdd, *availableSize);
@@ -175,20 +176,18 @@ Vector2i UIDirLayout::CalculateTotalFlexiblePxSize() const
 Vector2i UIDirLayout::CalculateTotalSize(LayoutSizeType sizeType) const
 {
     Vector2i totalSize = Vector2i::Zero;
-    List<ILayoutElement*> cles =
-            gameObject->GetComponentsInChildrenOnly<ILayoutElement>(false);
-    for (ILayoutElement *cle : cles)
+    for (GameObject *child : gameObject->GetChildren())
     {
-        Vector2i childTotalSize = cle->GetTotalSize(sizeType);
+        Vector2i childSize = UILayoutManager::GetSize(child, sizeType);
         if (m_vertical)
         {
-            totalSize.x = Math::Max(totalSize.x, childTotalSize.x);
-            totalSize.y += childTotalSize.y;
+            totalSize.x = Math::Max(totalSize.x, childSize.x);
+            totalSize.y += childSize.y;
         }
         else
         {
-            totalSize.x += childTotalSize.x;
-            totalSize.y = Math::Max(totalSize.y, childTotalSize.y);
+            totalSize.x += childSize.x;
+            totalSize.y = Math::Max(totalSize.y, childSize.y);
         }
     }
     return totalSize + GetTotalSpacing() + GetPaddingSize();

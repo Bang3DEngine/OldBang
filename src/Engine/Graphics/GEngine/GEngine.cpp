@@ -49,7 +49,13 @@ void GEngine::Render(GameObject *go, Camera *camera)
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
     _BindCamera(nullptr);
-    RenderToScreen(camera->GetGBuffer()->GetAttachmentTexture(GBuffer::AttColor));
+
+    // Render to screen
+    bool renderSelFB = false;
+    if (renderSelFB) { RenderToScreen(camera->GetSelectionFramebuffer()
+                       ->GetAttachmentTexture(GL::Attachment::Color0)); }
+    else { RenderToScreen(camera->GetGBuffer()
+           ->GetAttachmentTexture(GBuffer::AttColor)); }
 }
 
 void GEngine::Render(Scene *scene)
@@ -165,6 +171,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::ClearStencilBuffer();
 
     // GBuffer Gizmos rendering
+    GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     go->RenderGizmos();
@@ -194,13 +201,15 @@ void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     sp->UnBind();
 }
 
-void GEngine::RenderToScreen(Texture *fullScreenTexture)
+void GEngine::RenderToScreen(Texture *fullScreenTexture,
+                             const Color &discardColor)
 {
     ASSERT(fullScreenTexture);
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     sp->Set("B_GTex_Color", fullScreenTexture);
+    sp->Set("B_DiscardColor", discardColor);
 
     GEngine::RenderScreenPlane();
 

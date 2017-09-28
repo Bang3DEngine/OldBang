@@ -23,6 +23,16 @@ bool ILayoutElement::IsInvalid() const
     return m_isInvalid;
 }
 
+void ILayoutElement::SetPriority(int layoutPriority)
+{
+    m_layoutPriority = layoutPriority;
+}
+
+int ILayoutElement::GetPriority() const
+{
+    return m_layoutPriority;
+}
+
 int ILayoutElement::GetTotalMinWidth() const
 {
     return GetTotalMinSize().x;

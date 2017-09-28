@@ -5,12 +5,14 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Scene;
 FORWARD class SelectionFramebuffer;
 
 class Selection
 {
 public:
     static GameObject *GetOveredGameObject();
+    static GameObject *GetOveredGameObject(Scene *scene);
     Selection() = delete;
 };
 

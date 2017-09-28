@@ -17,6 +17,27 @@ UILayoutManager::UILayoutManager()
 {
 }
 
+Vector2i UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
+{
+    int maxPriorFound = -1; // If less than zero, ignore it
+    ILayoutElement *maxPriorLayoutElement = nullptr;
+    List<ILayoutElement*> les = go->GetComponents<ILayoutElement>();
+    for (ILayoutElement *le : les)
+    {
+        if (le->GetPriority() > maxPriorFound)
+        {
+            maxPriorFound = le->GetPriority();
+            maxPriorLayoutElement = le;
+        }
+    }
+
+    if (maxPriorLayoutElement)
+    {
+        return maxPriorLayoutElement->GetTotalSize(sizeType);
+    }
+    return Vector2i::Zero;
+}
+
 void UILayoutManager::InvalidateDown(RectTransform *rt)
 {
     ENSURE(rt);

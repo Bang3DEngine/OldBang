@@ -27,7 +27,8 @@ public:
     void Render(Scene *scene);
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
-    void RenderToScreen(Texture *fullScreenTexture);
+    void RenderToScreen(Texture *fullScreenTexture,
+                        const Color &discardColor = Color::Zero);
     void ApplyScreenPass(ShaderProgram *sp,
                          const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();

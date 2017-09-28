@@ -29,8 +29,9 @@ public:
     void BindGBuffer();
     void BindSelectionFramebuffer();
 
-    Vector2 WorldToScreenNDCPoint(const Vector3 &position);
-    Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCam);
+    Vector2i FromScreenPointToViewport(const Vector2i &screenPointPx);
+    Vector2 FromWorldPointToScreenNDC(const Vector3 &position);
+    Vector3 FromScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCam);
 
     void SetOrthoHeight(float orthoHeight);
     void SetClearColor(const Color& color);
@@ -83,7 +84,7 @@ private:
     Rect m_viewportRect = Rect::ScreenRect;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
-    mutable Recti m_prevViewportRect = Recti::Zero;
+    mutable Recti m_latestParentViewportRectPx = Recti::Zero;
 
     void SetGameObjectToRender(GameObject *go);
 

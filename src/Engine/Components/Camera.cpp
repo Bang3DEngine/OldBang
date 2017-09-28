@@ -5,6 +5,7 @@
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
+#include "Bang/Window.h"
 #include "Bang/GBuffer.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
@@ -39,15 +40,16 @@ void Camera::Bind() const
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
 
-    m_prevViewportRect = GL::GetViewportRect();
+    m_latestParentViewportRectPx = GL::GetViewportRect();
     Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
-    Recti renderViewport( vpRect * Vector2(GL::GetViewportSize()) );
-    GL::SetViewport(renderViewport);
+    Vector2i vpSize (vpRect.GetSize() *
+                     Vector2(m_latestParentViewportRectPx.GetSize()));
+    GL::SetViewport(0, 0, vpSize.x, vpSize.y);
 }
 
 void Camera::UnBind() const
 {
-    GL::SetViewport(m_prevViewportRect);
+    GL::SetViewport(m_latestParentViewportRectPx);
     GetGBuffer()->UnBind();
     GetSelectionFramebuffer()->UnBind();
 }
@@ -71,21 +73,33 @@ void Camera::BindSelectionFramebuffer()
     GetSelectionFramebuffer()->Bind();
     GL::ClearStencilBuffer();
     GetSelectionFramebuffer()->ClearDepth();
-    GetSelectionFramebuffer()->ClearColor(Color::One);
+    GetSelectionFramebuffer()->ClearColor(Color::Zero);
 }
 
-Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
+Vector2i Camera::FromScreenPointToViewport(const Vector2i &screenPointPx)
+{
+    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
+    Recti lvp = m_latestParentViewportRectPx;
+    Recti renderViewport( vpRect * Vector2(lvp.GetSize())
+                                 + Vector2(lvp.GetMin()) );
+    Vector2i res = screenPointPx;
+    res.y = (Window::GetCurrent()->GetHeight() - res.y - 1);
+    res.x -= renderViewport.GetMin().x;
+    res.y -= renderViewport.GetMin().y;
+    return res;
+}
+
+Vector2 Camera::FromWorldPointToScreenNDC(const Vector3 &position)
 {
     Matrix4 p, v;
     GetProjectionMatrix(&p);
     GetViewMatrix(&v);
     Vector4 v4 = p * v * Vector4(position, 1);
     v4 /= v4.w;
-
     return v4.xy();
 }
 
-Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
+Vector3 Camera::FromScreenNDCPointToWorld(const Vector2 &screenNDCPos,
                                       float zFromCamera)
 {
     Matrix4 p, v;

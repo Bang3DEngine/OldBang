@@ -11,6 +11,10 @@ class ILayoutElement
 public:
     bool IsInvalid() const;
 
+    void SetPriority(int layoutPriority);
+
+    int GetPriority() const;
+
     int GetTotalMinWidth()  const;
     int GetTotalMinHeight() const;
     int GetTotalPreferredWidth()  const;
@@ -33,6 +37,7 @@ protected:
     virtual Vector2i CalculateTotalFlexiblePxSize() const = 0;
 
 private:
+    int m_layoutPriority = 0;
     mutable Vector2i m_calculatedTotalMinSize        = Vector2i::Zero;
     mutable Vector2i m_calculatedTotalPreferredSize  = Vector2i::Zero;
     mutable Vector2i m_calculatedTotalFlexiblePxSize = Vector2i::Zero;

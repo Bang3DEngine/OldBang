@@ -88,11 +88,13 @@ void UIFrameLayout::ApplyLayout()
 Vector2i UIFrameLayout::CalculateTotalMinSize() const
 {
     Vector2i minSize = GetPaddingSize();
-    ILayoutElement* layoutElm =
-            gameObject->GetComponentInChildrenOnly<ILayoutElement>(false);
-    if (layoutElm)
+    for (GameObject *child : gameObject->GetChildren())
     {
-        minSize += layoutElm->GetTotalMinSize();
+        if (child->HasComponent<ILayoutElement>())
+        {
+            minSize += UILayoutManager::GetSize(child, LayoutSizeType::Min);
+            break;
+        }
     }
     return minSize;
 }
@@ -100,11 +102,13 @@ Vector2i UIFrameLayout::CalculateTotalMinSize() const
 Vector2i UIFrameLayout::CalculateTotalPreferredSize() const
 {
     Vector2i prefSize = GetPaddingSize();
-    ILayoutElement* layoutElm =
-            gameObject->GetComponentInChildrenOnly<ILayoutElement>(false);
-    if (layoutElm)
+    for (GameObject *child : gameObject->GetChildren())
     {
-        prefSize += layoutElm->GetTotalPreferredSize();
+        if (child->HasComponent<ILayoutElement>())
+        {
+            prefSize += UILayoutManager::GetSize(child, LayoutSizeType::Preferred);
+            break;
+        }
     }
     return prefSize;
 }
@@ -112,11 +116,13 @@ Vector2i UIFrameLayout::CalculateTotalPreferredSize() const
 Vector2i UIFrameLayout::CalculateTotalFlexiblePxSize() const
 {
     Vector2i flexSize = GetPaddingSize();
-    ILayoutElement* layoutElm =
-            gameObject->GetComponentInChildrenOnly<ILayoutElement>(false);
-    if (layoutElm)
+    for (GameObject *child : gameObject->GetChildren())
     {
-        flexSize += layoutElm->GetTotalFlexiblePxSize();
+        if (child->HasComponent<ILayoutElement>())
+        {
+            flexSize += UILayoutManager::GetSize(child, LayoutSizeType::Flexible);
+            break;
+        }
     }
     return flexSize;
 }

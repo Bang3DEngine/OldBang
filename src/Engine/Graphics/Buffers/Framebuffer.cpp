@@ -93,6 +93,7 @@ const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
     return m_currentDrawAttachmentIds;
 }
 
+#include "Bang/Input.h"
 Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     GLId prevFBId = GL::GetBoundId(GL::BindTarget::Framebuffer);
@@ -100,7 +101,7 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     Texture2D *t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
     Byte color[4] = {0,0,0,0};
-    GL::ReadPixels(x, t->GetHeight() - y - 1, 1, 1,
+    GL::ReadPixels(x, y, 1, 1,
                    GL::GetColorCompFrom(t->GetInternalFormat()),
                    t->GetInternalDataType(),
                    SCAST<void*>(&color));

@@ -48,6 +48,7 @@ private:
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                const Recti &limitsRect,
+                               const Font *font,
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment);
 
