@@ -45,8 +45,6 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
-    Camera *p_prevRenderCamera = nullptr;
-
     // GameObject
     virtual void RenderGizmos() override;
 

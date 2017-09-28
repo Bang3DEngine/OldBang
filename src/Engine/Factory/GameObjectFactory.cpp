@@ -71,13 +71,27 @@ Scene *GameObjectFactory::CreateUIScene()
     return scene;
 }
 
+#include "Bang/Time.h"
 Scene *GameObjectFactory::CreateDefaultScene()
 {
+    class Rotator : public Component
+    {
+    public:
+        Rotator() {}
+        void OnUpdate() override
+        {
+            gameObject->transform->Rotate(
+                        Quaternion::AngleAxis(0.5f * Time::GetDeltaTime(),
+                                              Vector3::Up) );
+        }
+    };
+
     Scene *scene = GameObjectFactory::CreateScene();
 
-    GameObject *sphere = GameObjectFactory::CreateGameObject();
-    MeshRenderer *mr = sphere->AddComponent<MeshRenderer>();
-    mr->SetMesh( MeshFactory::GetSphere() );
+    GameObject *cube = GameObjectFactory::CreateGameObject();
+    MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
+    mr->SetMesh( MeshFactory::GetCube() );
+    cube->AddComponent<Rotator>();
 
     GameObject *light = GameObjectFactory::CreateGameObject();
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
@@ -88,7 +102,7 @@ Scene *GameObjectFactory::CreateDefaultScene()
     scene->GetCamera()->SetClearColor(Color::LightBlue);
     scene->SetFirstFoundCameraOrDefaultOne();
 
-    scene->AddChild(sphere);
+    scene->AddChild(cube);
     scene->AddChild(light);
     return scene;
 }

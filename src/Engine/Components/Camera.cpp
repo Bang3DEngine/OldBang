@@ -5,6 +5,7 @@
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
+#include "Bang/GBuffer.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
@@ -13,16 +14,20 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 
 Camera::Camera()
 {
-    p_camMesh = Resources::Load<Mesh>( EPATH("Meshes/Camera.obj") );
+    m_gbuffer = new GBuffer(1,1);
+    m_selectionFramebuffer = new SelectionFramebuffer(1,1);
 }
 
 Camera::~Camera()
 {
+    delete m_gbuffer;
+    delete m_selectionFramebuffer;
 }
 
 void Camera::Bind() const
@@ -33,6 +38,40 @@ void Camera::Bind() const
     GL::SetZNearFar(GetZNear(), GetZFar());
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
+
+    m_prevViewportRect = GL::GetViewportRect();
+    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
+    Recti renderViewport( vpRect * Vector2(GL::GetViewportSize()) );
+    GL::SetViewport(renderViewport);
+}
+
+void Camera::UnBind() const
+{
+    GL::SetViewport(m_prevViewportRect);
+    GetGBuffer()->UnBind();
+    GetSelectionFramebuffer()->UnBind();
+}
+
+void Camera::BindGBuffer()
+{
+    Vector2i vpSize = GL::GetViewportSize();
+    GetGBuffer()->Resize(vpSize.x, vpSize.y);
+
+    GetGBuffer()->Bind();
+    Color bgColor = GetClearColor();
+    GetGBuffer()->ClearBuffersAndBackground(bgColor);
+    GetGBuffer()->SetAllDrawBuffers();
+}
+
+void Camera::BindSelectionFramebuffer()
+{
+    Vector2i vpSize = GL::GetViewportSize();
+    GetSelectionFramebuffer()->Resize(vpSize.x, vpSize.y);
+
+    GetSelectionFramebuffer()->Bind();
+    GL::ClearStencilBuffer();
+    GetSelectionFramebuffer()->ClearDepth();
+    GetSelectionFramebuffer()->ClearColor(Color::One);
 }
 
 Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
@@ -102,7 +141,12 @@ void Camera::SetRenderTexture(Texture2D *renderTexture)
 }
 void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
 {
-    this->m_projMode = projMode;
+    m_projMode = projMode;
+}
+
+void Camera::SetViewportRect(const Rect &viewportRectNDC)
+{
+    m_viewportRect = viewportRectNDC;
 }
 
 void Camera::SetGameObjectToRender(GameObject *go)
@@ -120,6 +164,21 @@ Texture2D *Camera::GetRenderTexture() const { return p_renderTexture; }
 GameObject *Camera::GetGameObjectToRender() const
 {
     return p_gameObjectToRender;
+}
+
+const Rect &Camera::GetViewportRect() const
+{
+    return m_viewportRect;
+}
+
+GBuffer *Camera::GetGBuffer() const
+{
+    return m_gbuffer;
+}
+
+SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
+{
+    return m_selectionFramebuffer;
 }
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 

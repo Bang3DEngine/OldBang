@@ -61,6 +61,7 @@ protected:
     ImportFilesManager *m_importFilesManager = nullptr;
     BehaviourManager   *m_behaviourManager   = nullptr;
 
+    virtual Window* _CreateWindow();
     virtual void SetupWindow(Window *window);
 
 private:

@@ -29,6 +29,10 @@ public:
     void MakeCurrent() const;
     bool MainLoopIteration();
 
+    void Clear();
+    virtual void Update();
+    virtual void Render();
+
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
 
@@ -49,7 +53,6 @@ public:
     Vector2i GetSize() const;
     Vector2i GetPosition() const;
     bool IsBlockedByChildren() const;
-    Texture2D *GetScreenRenderTexture() const;
     bool HasFlags(uint flags) const;
 
     static float GetAspectRatioS();
@@ -84,7 +87,6 @@ private:
     Input         *m_input        = nullptr;
     AudioManager  *m_audioManager = nullptr;
     SceneManager  *m_sceneManager = nullptr;
-    Texture2D *m_screenRenderTexture = nullptr;
 
     Vector2i m_prevSize    = Vector2i::Zero;
     Vector2i m_newSize = Vector2i::Zero;

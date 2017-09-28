@@ -78,7 +78,7 @@ void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     PopDrawAttachments();
 }
 
-void GBuffer::SetAllColorDrawBuffers() const
+void GBuffer::SetAllDrawBuffers() const
 {
     SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse,
                     GBuffer::AttMisc, GBuffer::AttColor
@@ -110,5 +110,4 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
     ClearAllBuffersExceptColor();
     SetDrawBuffers({GBuffer::AttColor, GBuffer::AttColorRead});
     GL::ClearColorBuffer(backgroundColor);
-    GL::ClearColorBuffer(Random::GetColorOpaque());
 }

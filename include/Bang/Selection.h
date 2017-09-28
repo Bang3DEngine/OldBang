@@ -12,9 +12,6 @@ class Selection
 public:
     static GameObject *GetOveredGameObject();
     Selection() = delete;
-
-private:
-    static SelectionFramebuffer* GetSelectionFramebuffer();
 };
 
 NAMESPACE_BANG_END

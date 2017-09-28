@@ -31,7 +31,8 @@ public:
 
     enum
     {
-        Viewport = GL_VIEWPORT
+        Viewport = GL_VIEWPORT,
+        Blend    = GL_BLEND
     };
 
     enum class Primitives
@@ -205,6 +206,21 @@ public:
         Invert   = GL_INVERT
     };
 
+    enum class BlendFactor
+    {
+        None             = GL_NONE,
+        Zero             = GL_ZERO,
+        One              = GL_ONE,
+        SrcColor         = GL_SRC_COLOR,
+        OneMinusSrcColor = GL_ONE_MINUS_SRC_COLOR,
+        DstColor         = GL_DST_COLOR,
+        OneMinusDstColor = GL_ONE_MINUS_DST_COLOR,
+        SrcAlpha         = GL_SRC_ALPHA,
+        OneMinusSrcAlpha = GL_ONE_MINUS_SRC_ALPHA,
+        DstAlpha         = GL_DST_ALPHA,
+        OneMinusDstAlpha = GL_ONE_MINUS_DST_ALPHA
+    };
+
     enum class Function
     {
         Never    = GL_NEVER,
@@ -215,7 +231,6 @@ public:
         Equal    = GL_EQUAL,
         NotEqual = GL_NOTEQUAL,
         Always   = GL_ALWAYS
-
     };
 
     enum class Attachment
@@ -256,6 +271,8 @@ public:
                                     bool dataNormalized,
                                     int dataStride,
                                     int dataOffset);
+
+    static void BlendFunc(BlendFactor srcFactor, BlendFactor dstFactor);
 
     static void BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
                                 int dstX0, int dstY0, int dstX1, int dstY1,

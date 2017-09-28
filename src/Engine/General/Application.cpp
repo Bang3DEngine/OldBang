@@ -62,7 +62,7 @@ Application::~Application()
 
 Window *Application::CreateWindow()
 {
-    Window *w = new Window();
+    Window *w = _CreateWindow();
     SetupWindow(w);
     return w;
 }
@@ -223,6 +223,8 @@ void Application::Exit(int returnCode, bool immediate)
         app->m_exitCode = returnCode;
     }
 }
+
+Window *Application::_CreateWindow() { return new Window(); }
 
 void Application::DestroyWindow(Window *window)
 {

@@ -51,7 +51,7 @@ Texture2D *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
     return m_attachments_To_Texture.Get(attachment);
 }
 
-void Framebuffer::SetAllColorDrawBuffers() const
+void Framebuffer::SetAllDrawBuffers() const
 {
     Array<GL::Attachment> colorAtts = m_attachments;
     colorAtts.Remove(GL::Attachment::DepthStencil);
@@ -118,7 +118,7 @@ void Framebuffer::Resize(int width, int height)
     for (auto it : m_attachments_To_Texture)
     {
         Texture2D *t = it.second;
-        if ( t && (t->GetWidth() != m_width || t->GetHeight() != m_height) )
+        if (t)
         {
             GL::ClearError();
             t->Resize(m_width, m_height);
@@ -154,7 +154,7 @@ void Framebuffer::ClearDepth(float clearDepth)
 
 void Framebuffer::ClearColor(const Color &clearColor)
 {
-    SetAllColorDrawBuffers();
+    SetAllDrawBuffers();
     GL::ClearColorBuffer(clearColor);
 }
 
@@ -166,7 +166,6 @@ GL::BindTarget Framebuffer::GetGLBindTarget() const
 void Framebuffer::Bind() const
 {
     GL::Bind(this);
-    GL::SetViewport(0, 0, GetWidth(), GetHeight());
 }
 void Framebuffer::UnBind() const
 {

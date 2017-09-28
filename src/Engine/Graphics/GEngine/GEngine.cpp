@@ -23,6 +23,7 @@
 #include "Bang/UILayoutManager.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/TextureUnitManager.h"
+#include "Bang/GBuffer.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
@@ -32,45 +33,36 @@ GEngine::GEngine()
     m_gl = new GL();
     m_texUnitManager = new TextureUnitManager();
 
-    m_gbuffer = new GBuffer(1,1);
-    m_selectionFramebuffer = new SelectionFramebuffer(1,1);
-
     m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
 GEngine::~GEngine()
 {
-    delete m_gbuffer;
-    delete m_selectionFramebuffer;
     delete m_texUnitManager;
     delete m_gl;
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)
 {
-    Texture2D *camRT = camera->GetRenderTexture();
-    if (camRT)
-    {
-        Vector2i newVpSize = camRT->GetSize();
-        Vector2i prevVpSize = GL::GetViewportSize();
-        GL::SetViewport(0, 0, newVpSize.x, newVpSize.y);
-        if (prevVpSize != newVpSize) { UILayoutManager::RebuildLayout(go); }
-
-        m_gbuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
-        m_selectionFramebuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
-        m_gbuffer->SetAttachmentTexture(camRT, GBuffer::AttColor);
-        // m_selectionFramebuffer->SetAttachmentTexture(camRT, GL::Attachment::Color0);
-
-        RenderToGBuffer(go, camera);
-        RenderToSelectionFramebuffer(go, camera);
-    }
+    _BindCamera(camera);
+    RenderToGBuffer(go, camera);
+    RenderToSelectionFramebuffer(go, camera);
+    _BindCamera(nullptr);
+    RenderToScreen(camera->GetGBuffer()->GetAttachmentTexture(GBuffer::AttColor));
 }
 
 void GEngine::Render(Scene *scene)
 {
-    Camera *sceneCam = scene->GetCamera();
-    if (sceneCam) { Render(scene, sceneCam); }
+    List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>();
+    for (Camera *camera : sceneCameras)
+    {
+        GameObject *gameObjectToRender = camera->GetGameObjectToRender();
+        if (gameObjectToRender)
+        {
+            Render(gameObjectToRender, camera);
+        }
+    }
 }
 
 void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
@@ -80,7 +72,7 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
     Rect maskRect = lightReceiver->gameObject->GetBoundingScreenRect(camera, false);
     maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
-    ApplyDeferredLightsToGBuffer(lightsContainer, maskRect);
+    ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }
 
 void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
@@ -90,10 +82,11 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
     Rect maskRect = lightReceiver->GetBoundingScreenRect(camera, true);
     maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
-    ApplyDeferredLightsToGBuffer(lightsContainer, maskRect);
+    ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }
 
 void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                           Camera *camera,
                                            const Rect &maskRectNDC)
 {
     // We have marked from before the zone where we want to apply the effect
@@ -104,21 +97,22 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
     for (Light *light : lights)
     {
         if (!light || !light->IsEnabled(true)) { continue; }
-        light->ApplyLight(m_gbuffer, maskRectNDC);
+        light->ApplyLight(camera->GetGBuffer(), maskRectNDC);
     }
     GL::SetStencilFunc(GL::Function::Always);
 }
 
 void GEngine::Resize(int newWidth, int newHeight)
 {
-    m_gbuffer->Resize(newWidth, newHeight);
-    m_selectionFramebuffer->Resize(newWidth, newHeight);
 }
 
 void GEngine::_BindCamera(Camera *cam)
 {
-    cam->Bind();
+    ENSURE(cam != p_boundCamera);
+    if (p_boundCamera) { p_boundCamera->UnBind(); }
+
     p_boundCamera = cam;
+    if (p_boundCamera) { p_boundCamera->Bind(); }
 }
 
 void GEngine::BindCamera(Camera *cam)
@@ -126,9 +120,10 @@ void GEngine::BindCamera(Camera *cam)
     GEngine::GetInstance()->_BindCamera(cam);
 }
 
-GBuffer *GEngine::GetGBuffer()
+GBuffer *GEngine::GetCurrentGBuffer()
 {
-    return GEngine::GetInstance()->m_gbuffer;
+    Camera *cam = GEngine::GetBoundCamera();
+    return cam ? cam->GetGBuffer() : nullptr;
 }
 
 Camera *GEngine::GetBoundCamera()
@@ -136,19 +131,15 @@ Camera *GEngine::GetBoundCamera()
     return GEngine::GetInstance()->p_boundCamera;
 }
 
-SelectionFramebuffer *GEngine::GetSelectionFramebuffer()
+SelectionFramebuffer *GEngine::GetCurrentSelectionFramebuffer()
 {
-    return GEngine::GetInstance()->m_selectionFramebuffer;
+    Camera *cam = GEngine::GetBoundCamera();
+    return cam ? cam->GetSelectionFramebuffer() : nullptr;
 }
 
 void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 {
-    m_gbuffer->Bind();
-    _BindCamera(camera);
-
-    Color bgColor = camera->GetClearColor();
-    m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->SetAllColorDrawBuffers();
+    camera->BindGBuffer();
 
     // GBuffer Scene rendering
     GL::SetDepthMask(true); // Write depth
@@ -164,7 +155,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_PostProcess);
 
     // GBuffer Canvas rendering
-    m_gbuffer->SetAllColorDrawBuffers();
+    camera->GetGBuffer()->SetAllDrawBuffers();
     GL::ClearDepthBuffer();
     GL::ClearStencilBuffer();
     GL::SetDepthMask(true);
@@ -177,28 +168,19 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     go->RenderGizmos();
-
-    m_gbuffer->UnBind();
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 {
-    camera->Bind();
-
-    m_selectionFramebuffer->Bind();
-    GL::ClearStencilBuffer();
-    m_selectionFramebuffer->ClearDepth();
-    m_selectionFramebuffer->ClearColor(Color::One);
+    camera->BindSelectionFramebuffer();
 
     // Selection rendering
-    m_selectionFramebuffer->PrepareForRender(go);
+    camera->GetSelectionFramebuffer()->PrepareForRender(go);
     go->Render(RenderPass::Scene_Lighted);
     go->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
     go->Render(RenderPass::Canvas);
     go->RenderGizmos();
-
-    m_selectionFramebuffer->UnBind();
 }
 
 
@@ -208,7 +190,6 @@ void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     m_gl->ApplyToShaderProgram(sp);
     sp->Set("B_rectMinCoord", mask.GetMin());
     sp->Set("B_rectMaxCoord", mask.GetMax());
-    sp->Set("B_ScreenSize", Vector2f(GL::GetViewportSize()));
     RenderScreenPlane();
     sp->UnBind();
 }
@@ -219,7 +200,6 @@ void GEngine::RenderToScreen(Texture *fullScreenTexture)
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
-    m_gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", fullScreenTexture);
 
     GEngine::RenderScreenPlane();
@@ -247,23 +227,24 @@ GEngine* GEngine::GetInstance()
 
 void GEngine::Render(Renderer *rend)
 {
-    if (GL::IsBound(m_gbuffer))
+    Camera *boundCamera = p_boundCamera; ENSURE(boundCamera);
+    if (GL::IsBound(boundCamera->GetGBuffer()))
     {
         rend->Bind();
         Material *rendMat = rend->GetMaterial();
 
         if (rend->NeedsReadingColorBuffer())
         {
-            m_gbuffer->PrepareColorReadBuffer(
-                        rend->GetBoundingRect(p_boundCamera));
+            boundCamera->GetGBuffer()->PrepareColorReadBuffer(
+                                        rend->GetBoundingRect(p_boundCamera));
         }
-        m_gbuffer->PrepareForRender(rendMat->GetShaderProgram());
+        boundCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();
         rend->UnBind();
     }
-    else if (GL::IsBound(m_selectionFramebuffer))
+    else if (GL::IsBound(boundCamera->GetSelectionFramebuffer()))
     {
-        m_selectionFramebuffer->RenderForSelectionBuffer(rend);
+        boundCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
     }
 }
 

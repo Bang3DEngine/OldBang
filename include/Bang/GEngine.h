@@ -40,6 +40,7 @@ public:
                              GameObject *lightReceiver,
                              Camera *camera);
     void ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                      Camera *camera,
                                       const Rect &maskRectNDC);
 
     void Resize(int newWidth, int newHeight);
@@ -47,9 +48,9 @@ public:
     void _BindCamera(Camera *cam);
     static void BindCamera(Camera *cam);
 
-    static GBuffer *GetGBuffer();
+    static GBuffer *GetCurrentGBuffer();
     static Camera *GetBoundCamera();
-    static SelectionFramebuffer *GetSelectionFramebuffer();
+    static SelectionFramebuffer *GetCurrentSelectionFramebuffer();
 
     GL *GetGL() const;
     TextureUnitManager *GetTextureUnitManager() const;
@@ -60,9 +61,7 @@ private:
     GL *m_gl = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
-    GBuffer *m_gbuffer = nullptr;
     Camera *p_boundCamera = nullptr;
-    SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;

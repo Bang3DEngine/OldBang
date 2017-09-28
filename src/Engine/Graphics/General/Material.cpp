@@ -94,7 +94,7 @@ void Material::Bind() const
     ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->Set("B_ScreenSize", Vector2f(GL::GetViewportSize()));
+    sp->Set("B_ViewportSize", Vector2f(GL::GetViewportSize()));
 
     sp->Set("B_UvMultiply",               GetUvMultiply());
     sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());

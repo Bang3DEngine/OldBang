@@ -49,7 +49,7 @@ void SelectionFramebuffer::PrepareForRender(const GameObject *go)
         ++id;
     }
 
-    SetAllColorDrawBuffers();
+    SetAllDrawBuffers();
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)

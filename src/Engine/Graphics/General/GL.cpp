@@ -107,6 +107,16 @@ void GL::VertexAttribPointer(int location,
     GL_CheckError();
 }
 
+void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
+{
+    ENSURE(srcFactor != GL::BlendFactor::None &&
+           dstFactor != GL::BlendFactor::None);
+
+    GL::ClearError();
+    glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) );
+    GL_CheckError();
+}
+
 void GL::Enable(GL::Enum glEnum)
 {
     glEnable(glEnum);
@@ -557,7 +567,7 @@ void GL::DeleteBuffers(int n, const GLId *glIds)
 void GL::SetViewport(const Recti &viewport)
 {
     GL::SetViewport(viewport.GetMin().x, viewport.GetMin().y,
-                    viewport.GetMax().x, viewport.GetMax().y);
+                    viewport.GetWidth(), viewport.GetHeight());
 }
 
 void GL::SetViewport(int x, int y, int width, int height)
@@ -572,10 +582,11 @@ void GL::SetLineWidth(float lineWidth)
 
 Recti GL::GetViewportRect()
 {
-    int viewportCoords[4];
-    GL::GetInteger(GL::Viewport, viewportCoords);
-    return Recti(viewportCoords[0], viewportCoords[1],
-                 viewportCoords[2], viewportCoords[3]);
+    int viewport[4];
+    GL::GetInteger(GL::Viewport, viewport);
+    return Recti( viewport[0], viewport[1],
+                 (viewport[0] + viewport[2]),
+                 (viewport[1] + viewport[3]));
 }
 
 Vector2i GL::GetViewportSize()
@@ -686,6 +697,9 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
     GL *gl = GL::GetActive();
     sp->Set("B_Camera_Near", gl->m_zNear);
     sp->Set("B_Camera_Far",  gl->m_zFar);
+
+    sp->Set("B_ViewportMinPos", Vector2(GL::GetViewportRect().GetMin()));
+    sp->Set("B_ViewportSize",   Vector2(GL::GetViewportSize()));
 
     Matrix4 pvmMatrix;
     if (gl->m_viewProjMode == GL::ViewProjMode::UseBoth)

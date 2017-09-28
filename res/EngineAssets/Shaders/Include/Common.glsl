@@ -35,11 +35,12 @@ uniform sampler2D B_Texture0;
 
 
 // Screen related /////////////////////////
-uniform vec2 B_ScreenSize;
+uniform vec2 B_ViewportSize;
+uniform vec2 B_ViewportMinPos;
 #ifdef BANG_FRAGMENT
-vec2 B_ScreenStep;
-vec2 B_ScreenPos;
-vec2 B_ScreenUv;
+vec2 B_ViewportStep;
+vec2 B_ViewportPos;
+vec2 B_ViewportUv;
 #endif
 // ///////////////////////////////////////
 
@@ -127,35 +128,35 @@ float B_LinearizeDepth(float d)
     float B_SampleDepth(vec2 uv) { return texture2D(B_GTex_DepthStencil, uv).r; }
     float B_SampleFlags(vec2 uv) { return texture2D(B_GTex_Misc, uv).z; }
 
-    vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }
-    vec3  B_SampleNormal() { return B_SampleNormal(B_ScreenUv); }
-    vec4  B_SampleDiffColor() { return B_SampleDiffColor(B_ScreenUv); }
-    bool  B_SampleReceivesLight() { return B_SampleReceivesLight(B_ScreenUv); }
-    float B_SampleShininess () { return B_SampleShininess(B_ScreenUv); }
-    float B_SampleDepth() { return B_SampleDepth(B_ScreenUv); }
-    float B_SampleFlags() { return B_SampleFlags(B_ScreenUv); }
+    vec4  B_SampleColor()  { return B_SampleColor(B_ViewportUv); }
+    vec3  B_SampleNormal() { return B_SampleNormal(B_ViewportUv); }
+    vec4  B_SampleDiffColor() { return B_SampleDiffColor(B_ViewportUv); }
+    bool  B_SampleReceivesLight() { return B_SampleReceivesLight(B_ViewportUv); }
+    float B_SampleShininess () { return B_SampleShininess(B_ViewportUv); }
+    float B_SampleDepth() { return B_SampleDepth(B_ViewportUv); }
+    float B_SampleFlags() { return B_SampleFlags(B_ViewportUv); }
 
     vec4  B_SampleColorOffset(vec2 pixOffset)
-      { return B_SampleColor(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleColor(B_ViewportUv + B_ViewportStep * pixOffset); }
     vec3  B_SampleNormalOffset(vec2 pixOffset)
-      { return B_SampleNormal(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleNormal(B_ViewportUv + B_ViewportStep * pixOffset); }
     vec4  B_SampleDiffColorOffset(vec2 pixOffset)
-      { return B_SampleDiffColor(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleDiffColor(B_ViewportUv + B_ViewportStep * pixOffset); }
     bool  B_SampleReceivesLightOffset(vec2 pixOffset)
-      { return B_SampleReceivesLight(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleReceivesLight(B_ViewportUv + B_ViewportStep * pixOffset); }
     float B_SampleShininessOffset(vec2 pixOffset)
-      { return B_SampleShininess(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleShininess(B_ViewportUv + B_ViewportStep * pixOffset); }
     float B_SampleDepthOffset(vec2 pixOffset)
-      { return B_SampleDepth(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleDepth(B_ViewportUv + B_ViewportStep * pixOffset); }
     float B_SampleFlagsOffset(vec2 pixOffset)
-      { return B_SampleFlags(B_ScreenUv + B_ScreenStep * pixOffset); }
+      { return B_SampleFlags(B_ViewportUv + B_ViewportStep * pixOffset); }
 
     vec3 B_GetCameraPositionWorld() { return B_ViewInv[3].xyz; }
 
     vec3 B_ComputeWorldPosition(float depth)
     {
-        float x = B_ScreenUv.x * 2.0 - 1.0;
-        float y = B_ScreenUv.y * 2.0 - 1.0;
+        float x = B_ViewportUv.x * 2.0 - 1.0;
+        float y = B_ViewportUv.y * 2.0 - 1.0;
         float z = depth * 2.0 - 1.0;
         vec4 projectedPos = vec4(x, y, z, 1);
         vec4 worldPos = (B_ProjectionInv * projectedPos);
@@ -168,9 +169,9 @@ float B_LinearizeDepth(float d)
 void InitCommon()
 {
     #ifdef BANG_FRAGMENT
-    B_ScreenStep = 1.0 / B_ScreenSize;
-    B_ScreenPos  = gl_FragCoord.xy;
-    B_ScreenUv   = B_ScreenPos / B_ScreenSize;
+    B_ViewportStep = 1.0 / B_ViewportSize;
+    B_ViewportPos  = (gl_FragCoord.xy - B_ViewportMinPos);
+    B_ViewportUv   = B_ViewportPos / B_ViewportSize;
     #endif
 }
 // ///////////////////////////////////////

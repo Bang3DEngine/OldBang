@@ -5,6 +5,7 @@
 void main()
 {
     InitCommon();
-    vec4 color   = B_SampleColor();
-    gl_FragColor = vec4(color.rgb, 1);
+    vec4 color = B_SampleColor();
+    if (color.a == 0) { discard; }
+    gl_FragColor = color;
 }

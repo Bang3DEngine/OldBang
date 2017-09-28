@@ -69,7 +69,6 @@ void Window::Create(uint flags)
     m_sceneManager        = Application::GetInstance()->CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
-    m_screenRenderTexture = new Texture2D();
     SetSize(winSize.x, winSize.y);
 }
 
@@ -89,27 +88,34 @@ bool Window::MainLoopIteration()
     MakeCurrent();
     GetInput()->ProcessEnqueuedEvents();
 
-    GetSceneManager()->Update();
+    Update();
+    Clear(); Render();
 
+    GetInput()->OnFrameFinished();
+    SwapBuffers();
+
+    return true;
+}
+
+void Window::Clear()
+{
+    GL::ClearColorBuffer(Color::Zero);
+}
+
+void Window::Update()
+{
+    GetSceneManager()->Update();
+}
+
+void Window::Render()
+{
     Scene *rootScene = GetSceneManager()->GetRootScene();
     UILayoutManager::RebuildLayout(rootScene);
     if (rootScene)
     {
         rootScene->GetUILayoutManager()->OnBeforeRender(rootScene);
-        Camera *rootSceneCam = rootScene->GetCamera();
-        if (rootSceneCam)
-        {
-            rootSceneCam->SetRenderTexture(m_screenRenderTexture);
-        }
         GetGEngine()->Render(rootScene);
     }
-
-    GetInput()->OnFrameFinished();
-    GetGEngine()->RenderToScreen( GetScreenRenderTexture() );
-
-    SwapBuffers();
-
-    return true;
 }
 
 bool Window::HandleEvent(const SDL_Event &sdlEvent)
@@ -192,9 +198,6 @@ void Window::OnResize(int newWidth, int newHeight)
         m_prevSize = m_newSize;
         GL::SetViewport(0, 0, GetWidth(), GetHeight());
 
-        GetScreenRenderTexture()->Resize(newWidth, newHeight);
-        GetGEngine()->Resize(newWidth, newHeight);
-
         Scene *activeScene = GetSceneManager()->GetRootScene();
         if (activeScene) { UILayoutManager::ForceRebuildLayout(activeScene); }
     }
@@ -228,11 +231,6 @@ Vector2i Window::GetPosition() const
 bool Window::IsBlockedByChildren() const
 {
     return !p_children.IsEmpty();
-}
-
-Texture2D *Window::GetScreenRenderTexture() const
-{
-    return m_screenRenderTexture;
 }
 
 bool Window::HasFlags(uint flags) const

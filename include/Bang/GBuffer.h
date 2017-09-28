@@ -36,7 +36,7 @@ public:
 
     void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);
 
-    void SetAllColorDrawBuffers() const override;
+    void SetAllDrawBuffers() const override;
     void SetAllDrawBuffersExceptColor();
     void SetColorDrawBuffer();
 

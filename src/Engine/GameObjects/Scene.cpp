@@ -26,15 +26,11 @@ Scene::~Scene()
 void Scene::BeforeChildrenRender(RenderPass rp)
 {
     GameObject::BeforeChildrenRender(rp);
-    p_prevRenderCamera = GEngine::GetBoundCamera();
-    Camera *cam = GetCamera();
-    if (cam) { GEngine::BindCamera(cam); }
 }
 
 void Scene::AfterChildrenRender(RenderPass rp)
 {
     GameObject::AfterChildrenRender(rp);
-    GEngine::BindCamera(p_prevRenderCamera);
 }
 
 void Scene::RenderGizmos()

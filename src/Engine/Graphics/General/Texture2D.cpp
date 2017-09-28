@@ -38,7 +38,10 @@ void Texture2D::CreateEmpty(int width, int height)
 
 void Texture2D::Resize(int width, int height)
 {
-    CreateEmpty(width, height);
+    if (width != GetWidth() || height != GetHeight())
+    {
+        CreateEmpty(width, height);
+    }
 }
 
 void Texture2D::Fill(const Color &fillColor,

@@ -18,7 +18,7 @@ public:
     void CreateAttachment(GL::Attachment attachment, GL::ColorFormat texFormat);
 
 
-    virtual void SetAllColorDrawBuffers() const;
+    virtual void SetAllDrawBuffers() const;
     void SetDrawBuffers(const Array<GL::Attachment> &attachments) const;
     void SetReadBuffer(GL::Attachment attachment) const;
     void SetAttachmentTexture(Texture2D *tex, GL::Attachment attachment);
