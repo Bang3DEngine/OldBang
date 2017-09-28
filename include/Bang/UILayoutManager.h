@@ -24,7 +24,7 @@ public:
     static void RebuildLayout(GameObject *gameObject);
     static void ForceRebuildLayout(GameObject *gameObject);
 
-    void OnFrameFinished(GameObject *go);
+    void OnBeforeRender(GameObject *go);
 
 private:
     Map<IRectTransformListener*, Recti> m_previousFrameRectTransforms;

@@ -1,6 +1,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
 #include "Bang/UIMask.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
@@ -8,6 +9,8 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIGameObject.h"
 #include "Bang/UIScrollArea.h"
@@ -19,6 +22,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/DirectionalLight.h"
 
 USING_NAMESPACE_BANG
 
@@ -64,6 +68,28 @@ Scene *GameObjectFactory::CreateUIScene()
     Scene *scene = new Scene();
     scene->AddComponent<RectTransform>();
     scene->AddComponent<UICanvas>();
+    return scene;
+}
+
+Scene *GameObjectFactory::CreateDefaultScene()
+{
+    Scene *scene = GameObjectFactory::CreateScene();
+
+    GameObject *sphere = GameObjectFactory::CreateGameObject();
+    MeshRenderer *mr = sphere->AddComponent<MeshRenderer>();
+    mr->SetMesh( MeshFactory::GetSphere() );
+
+    GameObject *light = GameObjectFactory::CreateGameObject();
+    DirectionalLight *dl = light->AddComponent<DirectionalLight>();
+    light->transform->SetPosition( Vector3(5,5,5) );
+    light->transform->LookAt( Vector3(0, 0, 0) );
+
+    scene->SetFirstFoundCameraOrDefaultOne();
+    scene->GetCamera()->SetClearColor(Color::LightBlue);
+    scene->SetFirstFoundCameraOrDefaultOne();
+
+    scene->AddChild(sphere);
+    scene->AddChild(light);
     return scene;
 }
 

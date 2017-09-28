@@ -14,6 +14,7 @@ public:
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
+    static Scene *GetRootScene();
     static Scene* GetActiveScene();
     static const Path& GetActiveSceneFilepath();
 
@@ -21,10 +22,17 @@ public:
 
     static void Update();
 
-private:
-    SceneManager();
-
+protected:
     Scene *m_activeScene = nullptr;
+
+    SceneManager();
+    virtual ~SceneManager();
+
+    virtual void _LoadScene(Scene *scene);
+    virtual Scene* _GetRootScene() const;
+    virtual Scene* _GetActiveScene() const;
+
+private:
     Path m_queuedSceneFilepath;
     Path m_activeSceneFilepath;
 
@@ -41,6 +49,7 @@ private:
 
     friend class Window;
     friend class Project;
+    friend class Application;
 };
 
 NAMESPACE_BANG_END

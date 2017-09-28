@@ -174,7 +174,7 @@ void UITextRenderer::RegenerateCharQuadsVAO()
         textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
 
-        Rect charRectLocalNDC(
+        Rect charRectLocalNDC (
                     rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMin() ),
                     rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMax() ) );
         m_charRectsLocalNDC.PushBack(charRectLocalNDC);
@@ -190,6 +190,8 @@ void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
+    Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
+    GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
     gameObject->transform->SetEnabled(false);
     UIRenderer::Bind();
 

@@ -4,6 +4,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
+#include "Bang/GEngine.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
@@ -22,6 +23,20 @@ Scene::~Scene()
 {
 }
 
+void Scene::BeforeChildrenRender(RenderPass rp)
+{
+    GameObject::BeforeChildrenRender(rp);
+    p_prevRenderCamera = GEngine::GetBoundCamera();
+    Camera *cam = GetCamera();
+    if (cam) { GEngine::BindCamera(cam); }
+}
+
+void Scene::AfterChildrenRender(RenderPass rp)
+{
+    GameObject::AfterChildrenRender(rp);
+    GEngine::BindCamera(p_prevRenderCamera);
+}
+
 void Scene::RenderGizmos()
 {
     GameObject::RenderGizmos();
@@ -34,14 +49,16 @@ Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 
 void Scene::SetCamera(Camera *cam)
 {
-    if (!cam)
+    if (p_camera)
     {
+        p_camera->SetGameObjectToRender(nullptr);
         p_camera = nullptr;
-        SetCamera(m_defaultCamera->GetComponent<Camera>());
     }
-    else
+
+    p_camera = cam;
+    if (p_camera)
     {
-        p_camera = cam;
+        p_camera->SetGameObjectToRender(this);
     }
 }
 

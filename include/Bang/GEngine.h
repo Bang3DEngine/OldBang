@@ -24,22 +24,31 @@ public:
     GEngine();
     virtual ~GEngine();
 
-    void Render(Renderer *rend);
     void Render(Scene *scene);
-    void RenderCurrentScene(Camera *camera);
+    void Render(Renderer *rend);
+    void Render(GameObject *go, Camera *camera);
     void RenderToScreen(Texture *fullScreenTexture);
     void ApplyScreenPass(ShaderProgram *sp,
                          const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
-    void ApplyDeferredLights(Camera *camera, Renderer *rend = nullptr);
+    void ApplyDeferredLights(GameObject *lightsContainer,
+                             Renderer *lightReceiver,
+                             Camera *camera);
+    void ApplyDeferredLights(GameObject *lightsContainer,
+                             GameObject *lightReceiver,
+                             Camera *camera);
+    void ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                      const Rect &maskRectNDC);
 
     void Resize(int newWidth, int newHeight);
-    static void SetCurrentScene(Scene *scene);
 
-    static Scene *GetCurrentScene();
+    void _BindCamera(Camera *cam);
+    static void BindCamera(Camera *cam);
+
     static GBuffer *GetGBuffer();
+    static Camera *GetBoundCamera();
     static SelectionFramebuffer *GetSelectionFramebuffer();
 
     GL *GetGL() const;
@@ -51,15 +60,15 @@ private:
     GL *m_gl = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
-    Scene *p_currentScene = nullptr;
     GBuffer *m_gbuffer = nullptr;
+    Camera *p_boundCamera = nullptr;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;
 
-    void RenderCurrentSceneToGBuffer(Camera *camera);
-    void RenderCurrentSceneToSelectionFramebuffer(Camera *camera);
+    void RenderToGBuffer(GameObject *go, Camera *camera);
+    void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
 };
 
 NAMESPACE_BANG_END

@@ -309,8 +309,9 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
                                 0);
 
-    m_localToParentMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
-                            Matrix4::ScaleMatrix(anchorScaling);
+    Matrix4 rtMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
+                       Matrix4::ScaleMatrix(anchorScaling);
+    m_localToParentMatrix = Transform::GetLocalToParentMatrix() * rtMatrix;
 
     SetInvalid(false);
     return m_localToParentMatrix;

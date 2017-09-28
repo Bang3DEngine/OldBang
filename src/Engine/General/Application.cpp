@@ -240,7 +240,12 @@ void Application::DestroyQueuedWindows()
 
 Window *Application::GetCurrentWindow() const
 {
-    return p_currentWindow ? p_currentWindow : nullptr;
+    return p_currentWindow;
+}
+
+SceneManager *Application::CreateSceneManager() const
+{
+    return new SceneManager();
 }
 
 const List<Window *> &Application::GetWindows() const

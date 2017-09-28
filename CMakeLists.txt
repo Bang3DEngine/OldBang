@@ -154,7 +154,6 @@ ${ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
 ${ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
-${ENGINE_SRC_DIR}/Components/SubScene.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp

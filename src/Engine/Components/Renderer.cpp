@@ -42,12 +42,12 @@ void Renderer::Bind() const
     GL::SetCullFace(m_cullMode);
     GL::LineWidth(m_lineWidth);
 
-    Matrix4 model;
-    if (gameObject && gameObject->transform)
+    if (gameObject && gameObject->transform && gameObject->transform->IsEnabled())
     {
+        Matrix4 model;
         gameObject->transform->GetLocalToWorldMatrix(&model);
+        GL::SetModelMatrix(model);
     }
-    GL::SetModelMatrix(model);
 
     Material *mat = GetMaterial();
     mat->Bind();

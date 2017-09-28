@@ -22,6 +22,7 @@ public:
     static UIGameObject* CreateUIGameObject(bool addRectTransform = true);
     static Scene* CreateScene();
     static Scene* CreateUIScene();
+    static Scene* CreateDefaultScene();
 
     static UIGameObject*   CreateGUIInputText();
     static UIButtonDriver* CreateGUIButton();

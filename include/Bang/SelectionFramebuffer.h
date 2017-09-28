@@ -6,9 +6,9 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class Scene;
 FORWARD class Renderer;
 FORWARD class Material;
+FORWARD class GameObject;
 FORWARD class ShaderProgram;
 
 class SelectionFramebuffer : public Framebuffer
@@ -19,7 +19,7 @@ public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
-    void PrepareForRender(const Scene *scene);
+    void PrepareForRender(const GameObject *go);
     void RenderForSelectionBuffer(Renderer *renderer);
 
     Texture2D *GetColorTexture() const;

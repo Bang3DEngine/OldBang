@@ -40,6 +40,7 @@ public:
     void SetAllDrawBuffersExceptColor();
     void SetColorDrawBuffer();
 
+    void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:

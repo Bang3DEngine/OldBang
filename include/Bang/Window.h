@@ -86,7 +86,8 @@ private:
     SceneManager  *m_sceneManager = nullptr;
     Texture2D *m_screenRenderTexture = nullptr;
 
-    Vector2i m_resizedSize = Vector2i::Zero;
+    Vector2i m_prevSize    = Vector2i::Zero;
+    Vector2i m_newSize = Vector2i::Zero;
 
     friend int EventFilter(void *userData, SDL_Event *event);
 };

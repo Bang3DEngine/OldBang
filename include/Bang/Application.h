@@ -43,6 +43,7 @@ public:
     BehaviourManager   *GetBehaviourManager() const;
     Window             *GetCurrentWindow() const;
 
+    virtual SceneManager* CreateSceneManager() const;
     static Window* GetTopWindow();
     const List<Window*>& GetWindows() const;
 

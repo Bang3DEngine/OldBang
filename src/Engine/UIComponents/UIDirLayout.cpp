@@ -28,7 +28,6 @@ Vector2i UIDirLayout::GetTotalSpacing() const
     return spacing * SCAST<int>(gameObject->GetChildren().Size() - 1);
 }
 
-#include "Bang/GL.h"
 void UIDirLayout::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
@@ -70,6 +69,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
                                                   const Vector2i &position,
                                                   const Vector2i &childRTSize)
 {
+    ENSURE(crt);
     crt->SetAnchors( Vector2(-1, 1) );
     if (m_vertical) // VERTICAL
     {

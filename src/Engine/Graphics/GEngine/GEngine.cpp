@@ -47,80 +47,65 @@ GEngine::~GEngine()
     delete m_gl;
 }
 
-void GEngine::RenderCurrentScene(Camera *camera)
+void GEngine::Render(GameObject *go, Camera *camera)
 {
-    Scene *scene = GEngine::GetCurrentScene();
-
     Texture2D *camRT = camera->GetRenderTexture();
-    if ((scene->GetCamera() == camera) && !camRT)
-    {
-        camRT = Window::GetCurrent()->GetScreenRenderTexture();
-    }
-
     if (camRT)
     {
         Vector2i newVpSize = camRT->GetSize();
         Vector2i prevVpSize = GL::GetViewportSize();
         GL::SetViewport(0, 0, newVpSize.x, newVpSize.y);
-        if (prevVpSize != newVpSize) { UILayoutManager::RebuildLayout(scene); }
+        if (prevVpSize != newVpSize) { UILayoutManager::RebuildLayout(go); }
 
         m_gbuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
         m_selectionFramebuffer->Resize(camRT->GetWidth(), camRT->GetHeight());
         m_gbuffer->SetAttachmentTexture(camRT, GBuffer::AttColor);
         // m_selectionFramebuffer->SetAttachmentTexture(camRT, GL::Attachment::Color0);
 
-        RenderCurrentSceneToGBuffer(camera);
-        RenderCurrentSceneToSelectionFramebuffer(camera);
+        RenderToGBuffer(go, camera);
+        RenderToSelectionFramebuffer(go, camera);
     }
 }
 
 void GEngine::Render(Scene *scene)
 {
-    Scene *prevScene = GEngine::GetCurrentScene();
-    GEngine::SetCurrentScene(scene);
-
-    List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>();
-    for (Camera *cam : sceneCameras)
-    {
-        RenderCurrentScene(cam);
-    }
-
-    GEngine::SetCurrentScene(prevScene);
+    Camera *sceneCam = scene->GetCamera();
+    if (sceneCam) { Render(scene, sceneCam); }
 }
 
-void GEngine::ApplyDeferredLights(Camera *camera, Renderer *rend)
+void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
+                                  Renderer *lightReceiver,
+                                  Camera *camera)
 {
-    Scene *scene = GEngine::GetCurrentScene();
+    Rect maskRect = lightReceiver->gameObject->GetBoundingScreenRect(camera, false);
+    maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
+    ENSURE(maskRect != Rect::Zero);
+    ApplyDeferredLightsToGBuffer(lightsContainer, maskRect);
+}
 
-    // Limit rendering to the renderer visible rect
-    Rect renderRect = Rect::ScreenRect;
-    if (rend)
-    {
-        renderRect = rend->gameObject->GetBoundingScreenRect(camera, false);
-    }
-    else
-    {
-        // Apply deferred lights to the whole scene
-        renderRect = scene->GetBoundingScreenRect(camera, true);
-    }
-    renderRect = Rect::ScreenRect;
-    ENSURE(renderRect != Rect::Zero);
+void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
+                                  GameObject *lightReceiver,
+                                  Camera *camera)
+{
+    Rect maskRect = lightReceiver->GetBoundingScreenRect(camera, true);
+    maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
+    ENSURE(maskRect != Rect::Zero);
+    ApplyDeferredLightsToGBuffer(lightsContainer, maskRect);
+}
 
+void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                           const Rect &maskRectNDC)
+{
     // We have marked from before the zone where we want to apply the effect
     GL::SetStencilValue(1);
     GL::SetStencilFunc(GL::Function::Equal);
 
-    Material *rendMat = rend ? rend->GetMaterial() : nullptr;
-    if ( !rend || (rendMat && rendMat->IsReceivesLighting()) )
+    List<Light*> lights = lightsContainer->GetComponentsInChildren<Light>();
+    for (Light *light : lights)
     {
-        List<Light*> lights = scene->GetComponentsInChildren<Light>();
-        for (Light *light : lights)
-        {
-            if (!light || !light->IsEnabled(true)) { continue; }
-            light->ApplyLight(m_gbuffer, renderRect);
-        }
+        if (!light || !light->IsEnabled(true)) { continue; }
+        light->ApplyLight(m_gbuffer, maskRectNDC);
     }
-
     GL::SetStencilFunc(GL::Function::Always);
 }
 
@@ -130,14 +115,15 @@ void GEngine::Resize(int newWidth, int newHeight)
     m_selectionFramebuffer->Resize(newWidth, newHeight);
 }
 
-void GEngine::SetCurrentScene(Scene *scene)
+void GEngine::_BindCamera(Camera *cam)
 {
-    GEngine::GetInstance()->p_currentScene = scene;
+    cam->Bind();
+    p_boundCamera = cam;
 }
 
-Scene *GEngine::GetCurrentScene()
+void GEngine::BindCamera(Camera *cam)
 {
-    return GEngine::GetInstance()->p_currentScene;
+    GEngine::GetInstance()->_BindCamera(cam);
 }
 
 GBuffer *GEngine::GetGBuffer()
@@ -145,17 +131,21 @@ GBuffer *GEngine::GetGBuffer()
     return GEngine::GetInstance()->m_gbuffer;
 }
 
+Camera *GEngine::GetBoundCamera()
+{
+    return GEngine::GetInstance()->p_boundCamera;
+}
+
 SelectionFramebuffer *GEngine::GetSelectionFramebuffer()
 {
     return GEngine::GetInstance()->m_selectionFramebuffer;
 }
 
-void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
+void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 {
-    camera->Bind();
-    Scene *scene = GEngine::GetCurrentScene();
-
     m_gbuffer->Bind();
+    _BindCamera(camera);
+
     Color bgColor = camera->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
     m_gbuffer->SetAllColorDrawBuffers();
@@ -165,37 +155,35 @@ void GEngine::RenderCurrentSceneToGBuffer(Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
-    scene->Render(RenderPass::Scene_Lighted);
+    go->Render(RenderPass::Scene_Lighted);
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
-    ApplyDeferredLights(camera);
+    ApplyDeferredLights(go, go, camera);
     GL::SetStencilValue(0);
 
-    scene->Render(RenderPass::Scene_UnLighted);
-    scene->Render(RenderPass::Scene_PostProcess);
+    go->Render(RenderPass::Scene_UnLighted);
+    go->Render(RenderPass::Scene_PostProcess);
 
     // GBuffer Canvas rendering
     m_gbuffer->SetAllColorDrawBuffers();
     GL::ClearDepthBuffer();
     GL::ClearStencilBuffer();
-    GL::SetDepthMask(false);
-    GL::SetDepthFunc(GL::Function::Always);
-    scene->Render(RenderPass::Canvas);
-    scene->Render(RenderPass::Canvas_PostProcess);
+    GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
+    go->Render(RenderPass::Canvas);
+    go->Render(RenderPass::Canvas_PostProcess);
     GL::ClearStencilBuffer();
 
     // GBuffer Gizmos rendering
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
-    scene->RenderGizmos();
+    go->RenderGizmos();
 
     m_gbuffer->UnBind();
 }
 
-void GEngine::RenderCurrentSceneToSelectionFramebuffer(Camera *camera)
+void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 {
     camera->Bind();
-    Scene *scene = GEngine::GetCurrentScene();
 
     m_selectionFramebuffer->Bind();
     GL::ClearStencilBuffer();
@@ -203,12 +191,12 @@ void GEngine::RenderCurrentSceneToSelectionFramebuffer(Camera *camera)
     m_selectionFramebuffer->ClearColor(Color::One);
 
     // Selection rendering
-    m_selectionFramebuffer->PrepareForRender(scene);
-    scene->Render(RenderPass::Scene_Lighted);
-    scene->Render(RenderPass::Scene_UnLighted);
+    m_selectionFramebuffer->PrepareForRender(go);
+    go->Render(RenderPass::Scene_Lighted);
+    go->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
-    scene->Render(RenderPass::Canvas);
-    scene->RenderGizmos();
+    go->Render(RenderPass::Canvas);
+    go->RenderGizmos();
 
     m_selectionFramebuffer->UnBind();
 }
@@ -259,7 +247,6 @@ GEngine* GEngine::GetInstance()
 
 void GEngine::Render(Renderer *rend)
 {
-    Scene *scene = GEngine::GetCurrentScene();
     if (GL::IsBound(m_gbuffer))
     {
         rend->Bind();
@@ -267,8 +254,8 @@ void GEngine::Render(Renderer *rend)
 
         if (rend->NeedsReadingColorBuffer())
         {
-            Camera *cam = scene->GetCamera();
-            m_gbuffer->PrepareColorReadBuffer(rend->GetBoundingRect(cam));
+            m_gbuffer->PrepareColorReadBuffer(
+                        rend->GetBoundingRect(p_boundCamera));
         }
         m_gbuffer->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();

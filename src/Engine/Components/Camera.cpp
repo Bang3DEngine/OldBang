@@ -105,12 +105,22 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
     this->m_projMode = projMode;
 }
 
+void Camera::SetGameObjectToRender(GameObject *go)
+{
+    p_gameObjectToRender = go;
+}
+
 const Color &Camera::GetClearColor() const { return m_clearColor; }
 float Camera::GetOrthoHeight() const { return m_orthoHeight; }
 float Camera::GetFovDegrees() const { return m_fovDegrees; }
 float Camera::GetZNear() const { return m_zNear; }
 float Camera::GetZFar() const { return m_zFar; }
 Texture2D *Camera::GetRenderTexture() const { return p_renderTexture; }
+
+GameObject *Camera::GetGameObjectToRender() const
+{
+    return p_gameObjectToRender;
+}
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 
 float Camera::GetOrthoWidth() const

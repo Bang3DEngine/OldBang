@@ -57,12 +57,14 @@ void GameObject::Start()
     PROPAGATE_EVENT_TO_COMPONENTS(Start(), m_components);
     Object::Start();
     PROPAGATE_EVENT(Start(), GetChildren());
+    PROPAGATE_EVENT(Start(), GetSiblings());
 }
 
 void GameObject::Update()
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
     PROPAGATE_EVENT(Update(), GetChildren());
+    PROPAGATE_EVENT(Update(), GetSiblings());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
@@ -72,6 +74,7 @@ void GameObject::Render(RenderPass renderPass, bool renderChildren)
     {
         BeforeChildrenRender(renderPass);
         PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
+        PROPAGATE_EVENT(Render(renderPass, true), GetSiblings());
         AfterChildrenRender(renderPass);
     }
 }
@@ -80,22 +83,26 @@ void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnBeforeChildrenRender(renderPass),
                                   m_components);
+    PROPAGATE_EVENT(BeforeChildrenRender(renderPass), GetSiblings());
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass),
                                   m_components);
+    PROPAGATE_EVENT(AfterChildrenRender(renderPass), GetSiblings());
 }
 
 void GameObject::RenderGizmos()
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnRenderGizmos(), m_components);
     PROPAGATE_EVENT(RenderGizmos(), GetChildren());
+    PROPAGATE_EVENT(RenderGizmos(), GetSiblings());
 }
 
 void GameObject::Destroy()
 {
+    PROPAGATE_EVENT(Destroy(), GetSiblings());
     PROPAGATE_EVENT(Destroy(), GetChildren());
     PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
 }
@@ -137,6 +144,21 @@ Component* GameObject::AddComponent(Component *c, int _index)
 const List<Component *> &GameObject::GetComponents() const
 {
     return m_components;
+}
+
+const List<GameObject*>& GameObject::GetSiblings() const
+{
+    return m_siblings;
+}
+
+void GameObject::AddSibling(GameObject *sibling)
+{
+    m_siblings.PushBack(sibling);
+}
+
+void GameObject::RemoveSibling(GameObject *sibling)
+{
+    m_siblings.Remove(sibling);
 }
 
 Component *GameObject::GetComponentByGUID(const GUID &guid) const

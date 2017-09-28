@@ -20,6 +20,9 @@ public:
     Scene();
     virtual ~Scene();
 
+    virtual void BeforeChildrenRender(RenderPass rp) override;
+    virtual void AfterChildrenRender(RenderPass rp) override;
+
     void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
 
@@ -42,6 +45,8 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
+    Camera *p_prevRenderCamera = nullptr;
+
     // GameObject
     virtual void RenderGizmos() override;
 
@@ -51,10 +56,9 @@ protected:
 
     friend class Gizmos;
     friend class Window;
+    friend class GEngine;
     friend class Application;
     friend class SceneManager;
-    friend class GPPass_G_Gizmos;
-    friend class GEngine;
 };
 
 NAMESPACE_BANG_END

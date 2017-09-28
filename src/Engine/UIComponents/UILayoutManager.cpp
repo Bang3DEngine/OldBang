@@ -51,6 +51,8 @@ void UILayoutManager::InvalidateAll(GameObject *go)
     List<ILayoutElement*> layoutElms =
                             go->GetComponentsInChildren<ILayoutElement>();
     for (ILayoutElement *le : layoutElms) { le->SetInvalid(true); }
+
+    UILayoutManager::GetInstance()->m_previousFrameRectTransforms.Clear();
 }
 
 void UILayoutManager::RebuildLayout(GameObject *_go)
@@ -69,7 +71,6 @@ void UILayoutManager::RebuildLayout(GameObject *_go)
         goQueue.pop();
         for (GameObject *child : go->GetChildren()) { goQueue.push(child); }
     }
-    UILayoutManager::GetInstance()->OnFrameFinished(_go);
 }
 
 void UILayoutManager::ForceRebuildLayout(GameObject *go)
@@ -78,7 +79,7 @@ void UILayoutManager::ForceRebuildLayout(GameObject *go)
     UILayoutManager::RebuildLayout(go);
 }
 
-void UILayoutManager::OnFrameFinished(GameObject *go)
+void UILayoutManager::OnBeforeRender(GameObject *go)
 {
     RectTransform *goRT = go->GetComponent<RectTransform>();
     if (goRT)
@@ -96,16 +97,17 @@ void UILayoutManager::OnFrameFinished(GameObject *go)
             const Recti &prevRect = m_previousFrameRectTransforms.Get(rtListener);
             if (prevRect != newRect)
             {
+                m_previousFrameRectTransforms.Add(rtListener, newRect);
                 rtListener->OnRectTransformChanged();
             }
         }
     }
 
-    for (GameObject *child : go->GetChildren()) { OnFrameFinished(child); }
+    for (GameObject *child : go->GetChildren()) { OnBeforeRender(child); }
 }
 
 UILayoutManager *UILayoutManager::GetInstance()
 {
-    Scene *scene = SceneManager::GetActiveScene();
+    Scene *scene = SceneManager::GetRootScene();
     return scene ? scene->GetUILayoutManager() : nullptr;
 }

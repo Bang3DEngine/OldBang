@@ -19,6 +19,10 @@ SceneManager::SceneManager()
 {
 }
 
+SceneManager::~SceneManager()
+{
+}
+
 SceneManager *SceneManager::GetInstance()
 {
     Window *win = Window::GetCurrent();
@@ -29,39 +33,54 @@ void SceneManager::Update()
 {
     SceneManager::TryToLoadQueuedScene();
 
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene)
+    Scene *rootScene = SceneManager::GetRootScene();
+    if (rootScene)
     {
-        activeScene->Update();
-        activeScene->DestroyQueuedGameObjects();
+        rootScene->Update();
+        rootScene->DestroyQueuedGameObjects();
+    }
+}
+
+void SceneManager::_LoadScene(Scene *scene)
+{
+    ENSURE(m_activeScene != scene);
+
+    m_activeScene = scene;
+    if (m_activeScene)
+    {
+        Time::ResetDeltaTime();
+        m_activeScene->Start();
+        m_activeScene->SetFirstFoundCameraOrDefaultOne();
+        UILayoutManager::ForceRebuildLayout(m_activeScene);
+        Time::ResetDeltaTime();
     }
 }
 
 void SceneManager::LoadScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);
-    ENSURE(sm->m_activeScene != scene);
+    sm->_LoadScene(scene);
+}
 
-    if (scene && !scene->HasComponent<Transform>())
-    {
-        Debug_Warn("Loading scene without Transform...");
-    }
-
-    sm->m_activeScene = scene;
-    if (sm->m_activeScene)
-    {
-        Time::ResetDeltaTime();
-        sm->m_activeScene->Start();
-        sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
-        UILayoutManager::ForceRebuildLayout(sm->m_activeScene);
-        Time::ResetDeltaTime();
-    }
+Scene *SceneManager::_GetRootScene() const
+{
+    return _GetActiveScene();
 }
 
 Scene *SceneManager::GetActiveScene()
 {
     SceneManager *sm = SceneManager::GetInstance();
-    return sm ? sm->m_activeScene : nullptr;
+    return sm ? sm->_GetActiveScene() : nullptr;
+}
+Scene *SceneManager::_GetActiveScene() const
+{
+    return m_activeScene;
+}
+
+Scene *SceneManager::GetRootScene()
+{
+    SceneManager *sm = SceneManager::GetInstance();
+    return sm ? sm->_GetRootScene() : nullptr;
 }
 
 void SceneManager::LoadScene(const Path &sceneFilepath)

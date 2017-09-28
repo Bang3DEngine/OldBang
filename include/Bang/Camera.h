@@ -44,6 +44,7 @@ public:
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
     Texture2D *GetRenderTexture() const;
+    GameObject *GetGameObjectToRender() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -52,7 +53,6 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-
 protected:
     Camera();
     virtual ~Camera();
@@ -60,6 +60,7 @@ protected:
 private:
     Mesh *p_camMesh = nullptr;
     Texture2D *p_renderTexture = nullptr;
+    GameObject *p_gameObjectToRender = nullptr;
 
     Color m_clearColor = Color(Color(0.3f), 1);
     float m_orthoHeight  = 25.0f;
@@ -68,6 +69,10 @@ private:
     float m_zFar = 100.0f;
 
     ProjectionMode m_projMode = ProjectionMode::Perspective;
+
+    void SetGameObjectToRender(GameObject *go);
+
+    friend class Scene;
 };
 
 NAMESPACE_BANG_END

@@ -1,7 +1,6 @@
 #include "Bang/SelectionFramebuffer.h"
 
 #include "Bang/Paths.h"
-#include "Bang/Scene.h"
 #include "Bang/Input.h"
 #include "Bang/Vector3.h"
 #include "Bang/Material.h"
@@ -36,13 +35,13 @@ SelectionFramebuffer::~SelectionFramebuffer()
     delete m_selectionMaterial;
 }
 
-void SelectionFramebuffer::PrepareForRender(const Scene *scene)
+void SelectionFramebuffer::PrepareForRender(const GameObject *go)
 {
     int id = 1;
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
 
-    List<GameObject*> gameObjects = scene->GetChildrenRecursively();
+    List<GameObject*> gameObjects = go->GetChildrenRecursively();
     for (GameObject *go : gameObjects)
     {
         m_gameObject_To_Id[go] = id;

@@ -6,6 +6,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
 #include "Bang/GEngine.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
@@ -65,10 +66,11 @@ void Window::Create(uint flags)
 
     m_input               = new Input();
     m_resources           = new Resources();
-    m_sceneManager        = new SceneManager();
+    m_sceneManager        = Application::GetInstance()->CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
     m_screenRenderTexture = new Texture2D();
+    SetSize(winSize.x, winSize.y);
 }
 
 void Window::SwapBuffers() const
@@ -89,16 +91,20 @@ bool Window::MainLoopIteration()
 
     GetSceneManager()->Update();
 
-    Scene *activeScene = GetSceneManager()->GetActiveScene();
-    UILayoutManager::RebuildLayout(activeScene);
-    if (activeScene)
+    Scene *rootScene = GetSceneManager()->GetRootScene();
+    UILayoutManager::RebuildLayout(rootScene);
+    if (rootScene)
     {
-        GetGEngine()->Render(activeScene);
-        activeScene->GetUILayoutManager()->OnFrameFinished(activeScene);
+        rootScene->GetUILayoutManager()->OnBeforeRender(rootScene);
+        Camera *rootSceneCam = rootScene->GetCamera();
+        if (rootSceneCam)
+        {
+            rootSceneCam->SetRenderTexture(m_screenRenderTexture);
+        }
+        GetGEngine()->Render(rootScene);
     }
 
     GetInput()->OnFrameFinished();
-
     GetGEngine()->RenderToScreen( GetScreenRenderTexture() );
 
     SwapBuffers();
@@ -128,10 +134,10 @@ bool Window::HandleEvent(const SDL_Event &sdlEvent)
 
             switch (sdlEvent.window.event)
             {
-                case SDL_WINDOWEVENT_RESIZED:
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    m_resizedSize = Vector2i(sdlEvent.window.data1,
-                                             sdlEvent.window.data2);
+                case SDL_WINDOWEVENT_RESIZED:
+                    m_newSize = Vector2i(sdlEvent.window.data1,
+                                         sdlEvent.window.data2);
                     break;
 
                 case SDL_WINDOWEVENT_EXPOSED:
@@ -147,7 +153,7 @@ bool Window::HandleEvent(const SDL_Event &sdlEvent)
 
 void Window::OnHandleEventsFinished()
 {
-    OnResize(m_resizedSize.x, m_resizedSize.y);
+    OnResize(m_newSize.x, m_newSize.y);
 }
 
 void Window::MoveToFront() const
@@ -174,18 +180,24 @@ void Window::SetTitle(const String &title)
 void Window::SetSize(int w, int h)
 {
     SDL_SetWindowSize(m_sdlWindow, w, h);
+    m_newSize = Vector2i(w, h);
+    OnResize(w, h);
 }
 
 void Window::OnResize(int newWidth, int newHeight)
 {
-    m_resizedSize = Vector2i(newWidth, newHeight);
-    GL::SetViewport(0, 0, GetWidth(), GetHeight());
+    if (m_newSize != m_prevSize)
+    {
+        m_newSize  = Vector2i(newWidth, newHeight);
+        m_prevSize = m_newSize;
+        GL::SetViewport(0, 0, GetWidth(), GetHeight());
 
-    GetScreenRenderTexture()->Resize(newWidth, newHeight);
-    GetGEngine()->Resize(newWidth, newHeight);
+        GetScreenRenderTexture()->Resize(newWidth, newHeight);
+        GetGEngine()->Resize(newWidth, newHeight);
 
-    Scene *activeScene = GetSceneManager()->GetActiveScene();
-    if (activeScene) { UILayoutManager::ForceRebuildLayout(activeScene); }
+        Scene *activeScene = GetSceneManager()->GetRootScene();
+        if (activeScene) { UILayoutManager::ForceRebuildLayout(activeScene); }
+    }
 }
 
 int Window::GetWidth() const { return GetSize().x; }
