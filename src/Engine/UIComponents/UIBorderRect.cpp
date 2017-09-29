@@ -16,11 +16,12 @@ UIBorderRect::UIBorderRect()
     p_lineRenderer->SetRenderPrimitive(GL::Primitives::LineStrip);
 
     // Work in Canvas and NDC space
+    SetRenderPass(RenderPass::Canvas);
     p_lineRenderer->SetRenderPass(RenderPass::Canvas);
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     SetLineColor(Color::Black);
-    SetLineWidth(5.0f);
+    SetLineWidth(1.0f);
 }
 
 UIBorderRect::~UIBorderRect()
@@ -34,11 +35,15 @@ void UIBorderRect::OnStart()
     p_lineRenderer->OnStart();
 }
 
-void UIBorderRect::OnRender(RenderPass rp)
+void UIBorderRect::OnRender()
 {
-    Component::OnRender(rp);
-    p_lineRenderer->Renderer::OnRender(rp);
+    Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
+    GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
+    gameObject->transform->SetEnabled(false);
+    p_lineRenderer->Renderer::OnRender(RenderPass::Canvas);
+    gameObject->transform->SetEnabled(true);
 }
+
 
 void UIBorderRect::SetLineColor(const Color &lineColor)
 {
@@ -47,6 +52,11 @@ void UIBorderRect::SetLineColor(const Color &lineColor)
 void UIBorderRect::SetLineWidth(float lineWidth)
 {
     p_lineRenderer->SetLineWidth(lineWidth);
+}
+
+void UIBorderRect::SetPadding(int paddingPx)
+{
+    m_padding = paddingPx;
 }
 
 const Color &UIBorderRect::GetLineColor() const
@@ -58,16 +68,23 @@ float UIBorderRect::GetLineWidth() const
     return p_lineRenderer->GetLineWidth();
 }
 
-void UIBorderRect::OnSizesCalculated()
+int UIBorderRect::GetPaddingPx() const
+{
+    return m_padding;
+}
+
+void UIBorderRect::OnRectTransformChanged()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
     Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
+
+    Vector2 pNDC = GL::FromPixelsAmountToGlobalNDC( Vector2i(m_padding) );
     p_lineRenderer->SetPoints(
-           {Vector3(boundingRectNDC.GetMinXMinY(), 0),
-            Vector3(boundingRectNDC.GetMinXMaxY(), 0),
-            Vector3(boundingRectNDC.GetMaxXMaxY(), 0),
-            Vector3(boundingRectNDC.GetMaxXMinY(), 0),
-            Vector3(boundingRectNDC.GetMinXMinY(), 0)} );
+      {Vector3(boundingRectNDC.GetMinXMinY() + Vector2( pNDC.x,  pNDC.y), 0),
+       Vector3(boundingRectNDC.GetMinXMaxY() + Vector2( pNDC.x, -pNDC.y), 0),
+       Vector3(boundingRectNDC.GetMaxXMaxY() + Vector2(-pNDC.x, -pNDC.y), 0),
+       Vector3(boundingRectNDC.GetMaxXMinY() + Vector2(-pNDC.x,  pNDC.y), 0),
+       Vector3(boundingRectNDC.GetMinXMinY() + Vector2( pNDC.x,  pNDC.y), 0),} );
 }
 
 void UIBorderRect::ImportXML(const XMLNode &xmlInfo)

@@ -321,7 +321,7 @@ void RectTransform::InvalidateDown()
 {
     if (!IsInvalid())
     {
-        UILayoutManager::InvalidateDown(this);
+        UILayoutManager::Invalidate(this);
     }
 }
 
@@ -333,8 +333,8 @@ void RectTransform::OnRenderGizmos()
     Rect r = GetScreenSpaceRectNDC();
     Color c = Color::Green; //Random::GetColorOpaque();
     Gizmos::SetColor(c);
-    Gizmos::RenderRect(r);
     /*
+    Gizmos::RenderRect(r);
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());

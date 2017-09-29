@@ -66,13 +66,11 @@ void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
 {
     m_verticalAlignment = verticalAlignment;
-    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }
 
 void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 {
     m_horizontalAlignment = horizontalAlignment;
-    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }
 
 const Color &UIImageRenderer::GetTint() const

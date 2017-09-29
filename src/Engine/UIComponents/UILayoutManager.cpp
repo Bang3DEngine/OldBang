@@ -19,26 +19,44 @@ UILayoutManager::UILayoutManager()
 
 Vector2i UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
 {
-    int maxPriorFound = -1; // If less than zero, ignore it
-    ILayoutElement *maxPriorLayoutElement = nullptr;
+    // Retrieve layout elements and their respective priority
+    Map<int, List<ILayoutElement*> > priorLayoutElements;
     List<ILayoutElement*> les = go->GetComponents<ILayoutElement>();
     for (ILayoutElement *le : les)
     {
-        if (le->GetPriority() > maxPriorFound)
+        int prior = le->GetPriority();
+        if (!priorLayoutElements.ContainsKey(prior))
         {
-            maxPriorFound = le->GetPriority();
-            maxPriorLayoutElement = le;
+            priorLayoutElements.Add(prior, List<ILayoutElement*>());
+        }
+        priorLayoutElements.Get(prior).PushBack(le);
+    }
+
+    // Get the list of layout elements with greatest priority
+    int maxPrior = -1;
+    const List<ILayoutElement*> *maxPriorLayoutElements = nullptr;
+    for (const auto& pair : priorLayoutElements)
+    {
+        if (pair.first > maxPrior)
+        {
+            maxPrior = pair.first;
+            maxPriorLayoutElements = &(pair.second);
         }
     }
 
-    if (maxPriorLayoutElement)
+    // Get the max size between the elements with greater priority
+    Vector2i size = Vector2i::Zero;
+    if (maxPriorLayoutElements)
     {
-        return maxPriorLayoutElement->GetTotalSize(sizeType);
+        for (ILayoutElement *le : *maxPriorLayoutElements)
+        {
+            size = Vector2i::Max(size, le->GetTotalSize(sizeType));
+        }
     }
-    return Vector2i::Zero;
+    return size;
 }
 
-void UILayoutManager::InvalidateDown(RectTransform *rt)
+void UILayoutManager::Invalidate(RectTransform *rt)
 {
     ENSURE(rt);
     if (!rt->IsInvalid())
@@ -48,18 +66,9 @@ void UILayoutManager::InvalidateDown(RectTransform *rt)
         for (GameObject *child : rtGo->GetChildren())
         {
             RectTransform *crt = child->GetComponent<RectTransform>();
-            UILayoutManager::InvalidateDown(crt);
+            UILayoutManager::Invalidate(crt);
         }
     }
-}
-
-void UILayoutManager::InvalidateLayoutUpwards(GameObject *go)
-{
-    ENSURE(go);
-    List<ILayoutElement*> layoutElms = go->GetComponents<ILayoutElement>();
-    for (ILayoutElement *layoutElm : layoutElms) { layoutElm->SetInvalid(true); }
-
-    if (go->parent) { UILayoutManager::InvalidateLayoutUpwards(go->parent); }
 }
 
 void UILayoutManager::InvalidateAll(GameObject *go)

@@ -30,7 +30,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextColor(Color::Black);
 
     SetRenderPrimitive(GL::Primitives::Triangles);
-    OnRectTransformChanged();
+    OnChanged();
 }
 
 UITextRenderer::~UITextRenderer()
@@ -393,7 +393,6 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 void UITextRenderer::OnRectTransformChanged()
 {
     OnChanged();
-    RegenerateCharQuadsVAO();
 }
 
 const Color &UITextRenderer::GetTextColor() const
@@ -476,5 +475,4 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
 void UITextRenderer::OnChanged()
 {
     m_hasToRegenerateVAO = true;
-    UILayoutManager::InvalidateLayoutUpwards(gameObject);
 }

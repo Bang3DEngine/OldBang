@@ -4,7 +4,7 @@ USING_NAMESPACE_BANG
 
 UILayoutElement::UILayoutElement()
 {
-
+    SetPriority(1);
 }
 
 UILayoutElement::~UILayoutElement()

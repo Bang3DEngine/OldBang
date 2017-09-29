@@ -44,8 +44,8 @@ public:
 private:
     HorizontalAlignment m_childrenHorizontalAlignment = HorizontalAlignment::Center;
     VerticalAlignment   m_childrenVerticalAlignment   = VerticalAlignment::Center;
-    Stretch m_childrenHorizontalStretch = Stretch::None;
-    Stretch m_childrenVerticalStretch   = Stretch::None;
+    Stretch m_childrenHorizontalStretch = Stretch::Full;
+    Stretch m_childrenVerticalStretch   = Stretch::Full;
 
     Vector2i m_paddingLeftBot  = Vector2i::Zero;
     Vector2i m_paddingRightTop = Vector2i::Zero;

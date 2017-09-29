@@ -129,7 +129,8 @@ public:
     {
         UseBoth            = 0,
         OnlyFixAspectRatio = 1,
-        IgnoreBoth         = 2
+        IgnoreBoth         = 2,
+        IgnoreBothAndModel = 3
     };
 
     enum class TextureTarget

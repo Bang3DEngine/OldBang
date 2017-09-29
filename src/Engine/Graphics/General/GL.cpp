@@ -728,6 +728,10 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
     {
         pvmMatrix = modelMatrix;
     }
+    else if (gl->m_viewProjMode == GL::ViewProjMode::IgnoreBothAndModel)
+    {
+        pvmMatrix = Matrix4::Identity;
+    }
 
     sp->Set("B_PVM", pvmMatrix);
 }

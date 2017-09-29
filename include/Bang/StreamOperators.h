@@ -94,21 +94,6 @@ template <class EnumClass, class=TT_ENUM(EnumClass)>
     return log;
 }
 
-// List
-template <class T>
-::std::ostream &operator<<(::std::ostream &log, const List<T> *l)
-{
-    log << "("; bool first = true;
-    for (auto it = l->Begin(); it != l->End(); ++it)
-    {
-        if (!first) log << ", ";
-        log << (*it);
-        first = false;
-    }
-    log <<")";
-    return log;
-}
-
 template <class T, class M>
 ::std::ostream &operator<<(::std::ostream &log, const ::std::pair<T,M>& p)
 {
@@ -121,65 +106,54 @@ template <class T, class M>
 template <class T>
 ::std::ostream &operator<<(::std::ostream &log, const List<T> &l)
 {
-    return log << (&l);
+    log << "("; bool first = true;
+    for (auto it = l.Begin(); it != l.End(); ++it)
+    {
+        if (!first) log << ", ";
+        log << (*it);
+        first = false;
+    }
+    log <<")";
+    return log;
 }
 
-// Vector
 template <class T>
-::std::ostream &operator<<(::std::ostream &log, const Array<T> *v)
+::std::ostream &operator<<(::std::ostream &log, const Array<T> &v)
 {
     log << "[";
-    for (int i = 0; i < v->Size(); ++i)
+    for (int i = 0; i < v.Size(); ++i)
     {
         if (i != 0) log << ", ";
-        log << (*v)[i];
+        log << v[i];
     }
     log << "]";
     return log;
 }
-template <class T>
-::std::ostream &operator<<(::std::ostream &log, const Array<T> &v)
-{
-    return log << (&v);
-}
 
-// Map
 template <class T, class S>
-::std::ostream &operator<<(::std::ostream &log, const Map<T,S> *m)
+::std::ostream &operator<<(::std::ostream &log, const Map<T,S> &m)
 {
     log << "{";
-    for (auto it = m->CBegin(); it != m->CEnd(); ++it)
+    for (auto it = m.CBegin(); it != m.CEnd(); ++it)
     {
-        if (it != m->cbegin()) log << ", ";
+        if (it != m.cbegin()) log << ", ";
         log << (it->first) << ": " << (it->second);
     }
     log << "}";
     return log;
 }
-template <class T, class S>
-::std::ostream &operator<<(::std::ostream &log, const Map<T,S> &m)
-{
-    return log << (&m);
-}
 
-// Set
 template <class T>
-::std::ostream &operator<<(::std::ostream &log, const Set<T> *s)
+::std::ostream &operator<<(::std::ostream &log, const Set<T> &s)
 {
     log << "{";
-    for (auto it = s->cbegin(); it != s->cend(); ++it)
+    for (auto it = s.cbegin(); it != s.cend(); ++it)
     {
-        if (it != s->cbegin()) log << ", ";
+        if (it != s.cbegin()) log << ", ";
         log << (*it);
     }
     log << "}";
     return log;
-}
-
-template <class T>
-::std::ostream &operator<<(::std::ostream &log, const Set<T> &m)
-{
-    return log << (&m);
 }
 
 // Templated istream operators

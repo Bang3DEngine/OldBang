@@ -231,17 +231,18 @@ UIGameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
 
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
     bool horizontal = (space.x == 0);
+    constexpr float s = 0.95f;
     if (horizontal)
     {
         le->SetPreferredWidth(1);
         le->SetFlexibleWidth(99999999);
-        lr->SetPoints( {Vector3(-1,0,0), Vector3(1,0,0)} );
+        lr->SetPoints( {Vector3(-s,0,0), Vector3(s,0,0)} );
     }
     else
     {
         le->SetPreferredHeight(1);
         le->SetFlexibleHeight(9999999);
-        lr->SetPoints( {Vector3(0,-1,0), Vector3(0,1,0)} );
+        lr->SetPoints( {Vector3(0,-s,0), Vector3(0,s,0)} );
     }
     return sepGo;
 }

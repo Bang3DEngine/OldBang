@@ -84,7 +84,7 @@ private:
     Rect m_viewportRect = Rect::ScreenRect;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
-    mutable Recti m_latestParentViewportRectPx = Recti::Zero;
+    mutable Recti m_latestViewportRect = Recti::Zero;
 
     void SetGameObjectToRender(GameObject *go);
 

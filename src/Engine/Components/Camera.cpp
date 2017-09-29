@@ -40,16 +40,16 @@ void Camera::Bind() const
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
 
-    m_latestParentViewportRectPx = GL::GetViewportRect();
     Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
-    Vector2i vpSize (vpRect.GetSize() *
-                     Vector2(m_latestParentViewportRectPx.GetSize()));
-    GL::SetViewport(0, 0, vpSize.x, vpSize.y);
+    Recti renderVP( vpRect * Vector2(GL::GetViewportSize())
+                           + Vector2(GL::GetViewportRect().GetMin()) );
+    m_latestViewportRect = renderVP;
+    GL::SetViewport(0, 0, renderVP.GetWidth(), renderVP.GetHeight());
 }
 
 void Camera::UnBind() const
 {
-    GL::SetViewport(m_latestParentViewportRectPx);
+    GL::SetViewport(m_latestViewportRect);
     GetGBuffer()->UnBind();
     GetSelectionFramebuffer()->UnBind();
 }
@@ -78,14 +78,10 @@ void Camera::BindSelectionFramebuffer()
 
 Vector2i Camera::FromScreenPointToViewport(const Vector2i &screenPointPx)
 {
-    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
-    Recti lvp = m_latestParentViewportRectPx;
-    Recti renderViewport( vpRect * Vector2(lvp.GetSize())
-                                 + Vector2(lvp.GetMin()) );
     Vector2i res = screenPointPx;
     res.y = (Window::GetCurrent()->GetHeight() - res.y - 1);
-    res.x -= renderViewport.GetMin().x;
-    res.y -= renderViewport.GetMin().y;
+    res.x -= m_latestViewportRect.GetMin().x;
+    res.y -= m_latestViewportRect.GetMin().y;
     return res;
 }
 

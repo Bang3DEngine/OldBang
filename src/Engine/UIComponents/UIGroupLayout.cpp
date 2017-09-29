@@ -50,7 +50,6 @@ void UIGroupLayout::SetPaddings(int paddingLeft, int paddingBot,
     {
         m_paddingLeftBot  = Vector2i(paddingLeft,  paddingBot);
         m_paddingRightTop = Vector2i(paddingRight, paddingTop);
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
     }
 }
 
@@ -59,7 +58,6 @@ void UIGroupLayout::SetChildrenHorizontalAlignment(HorizontalAlignment hAlignmen
     if (m_childrenHorizontalAlignment != hAlignment)
     {
         m_childrenHorizontalAlignment = hAlignment;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
     }
 }
 
@@ -68,7 +66,6 @@ void UIGroupLayout::SetChildrenVerticalAlignment(VerticalAlignment vAlignment)
     if (m_childrenVerticalAlignment != vAlignment)
     {
         m_childrenVerticalAlignment = vAlignment;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
     }
 }
 
@@ -77,7 +74,6 @@ void UIGroupLayout::SetChildrenHorizontalStretch(Stretch hStretch)
     if (m_childrenHorizontalStretch != hStretch)
     {
         m_childrenHorizontalStretch = hStretch;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
     }
 }
 
@@ -86,7 +82,6 @@ void UIGroupLayout::SetChildrenVerticalStretch(Stretch vStretch)
     if (m_childrenVerticalStretch != vStretch)
     {
         m_childrenVerticalStretch = vStretch;
-        UILayoutManager::InvalidateLayoutUpwards(gameObject);
     }
 }
 

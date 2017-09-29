@@ -20,9 +20,7 @@ public:
     static Vector2i GetSize(GameObject *go,
                             LayoutSizeType sizeType);
 
-    static void InvalidateDown(RectTransform *rt);
-
-    static void InvalidateLayoutUpwards(GameObject *go);
+    static void Invalidate(RectTransform *rt);
     static void InvalidateAll(GameObject *gameObject);
     static void RebuildLayout(GameObject *gameObject);
     static void ForceRebuildLayout(GameObject *gameObject);
