@@ -23,44 +23,14 @@ bool ILayoutElement::IsInvalid() const
     return m_isInvalid;
 }
 
-void ILayoutElement::SetPriority(int layoutPriority)
+void ILayoutElement::SetLayoutPriority(int layoutPriority)
 {
     m_layoutPriority = layoutPriority;
 }
 
-int ILayoutElement::GetPriority() const
+int ILayoutElement::GetLayoutPriority() const
 {
     return m_layoutPriority;
-}
-
-int ILayoutElement::GetTotalMinWidth() const
-{
-    return GetTotalMinSize().x;
-}
-
-int ILayoutElement::GetTotalMinHeight() const
-{
-    return GetTotalMinSize().y;
-}
-
-int ILayoutElement::GetTotalPreferredWidth() const
-{
-    return GetTotalPreferredSize().x;
-}
-
-int ILayoutElement::GetTotalPreferredHeight() const
-{
-    return GetTotalPreferredSize().y;
-}
-
-int ILayoutElement::GetTotalFlexibleWidth() const
-{
-    return GetTotalFlexiblePxSize().x;
-}
-
-int ILayoutElement::GetTotalFlexibleHeight() const
-{
-    return GetTotalFlexiblePxSize().y;
 }
 
 Vector2i ILayoutElement::GetTotalMinSize() const
@@ -75,18 +45,22 @@ Vector2i ILayoutElement::GetTotalPreferredSize() const
     return m_calculatedTotalPreferredSize;
 }
 
-Vector2i ILayoutElement::GetTotalFlexiblePxSize() const
+Vector2 ILayoutElement::GetFlexibleSize() const
 {
-    CalculateTotalSizes();
-    return m_calculatedTotalFlexiblePxSize;
+    return Vector2(1);
 }
 
-Vector2i ILayoutElement::GetTotalSize(LayoutSizeType sizeType) const
+Vector2 ILayoutElement::GetTotalSize(LayoutSizeType sizeType) const
 {
-    if (sizeType == LayoutSizeType::Min) { return GetTotalMinSize(); }
-    if (sizeType == LayoutSizeType::Preferred) { return GetTotalPreferredSize(); }
-    if (sizeType == LayoutSizeType::Flexible) { return GetTotalFlexiblePxSize(); }
-    return Vector2i::Zero;
+    if (sizeType == LayoutSizeType::Min)
+    { return Vector2( GetTotalMinSize() ); }
+
+    if (sizeType == LayoutSizeType::Preferred)
+    { return Vector2( GetTotalPreferredSize() ); }
+
+    if (sizeType == LayoutSizeType::Flexible)  { return GetFlexibleSize(); }
+
+    return Vector2::Zero;
 }
 
 void ILayoutElement::CalculateTotalSizes() const
@@ -95,7 +69,6 @@ void ILayoutElement::CalculateTotalSizes() const
     {
         m_calculatedTotalMinSize        = CalculateTotalMinSize();
         m_calculatedTotalPreferredSize  = CalculateTotalPreferredSize();
-        m_calculatedTotalFlexiblePxSize = CalculateTotalFlexiblePxSize();
 
         ILayoutElement *ncThis = const_cast<ILayoutElement*>(this);
         ncThis->SetInvalid(false);

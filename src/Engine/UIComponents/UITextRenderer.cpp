@@ -84,9 +84,9 @@ Vector2i UITextRenderer::CalculateTotalPreferredSize() const
     return prefSize;
 }
 
-Vector2i UITextRenderer::CalculateTotalFlexiblePxSize() const
+Vector2 UITextRenderer::GetFlexibleSize() const
 {
-    return CalculateTotalPreferredSize();
+    return Vector2(0);
 }
 
 void UITextRenderer::RegenerateCharQuadsVAO()

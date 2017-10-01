@@ -12,6 +12,9 @@ NAMESPACE_BANG_BEGIN
 class Random
 {
 public:
+    static void SetSeed(long seed);
+    static void SetSeed(const String &seed);
+
     template<class T = float>
     static T Value();
 

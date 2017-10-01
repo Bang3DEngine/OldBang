@@ -2,6 +2,18 @@
 
 USING_NAMESPACE_BANG
 
+void Random::SetSeed(long seed)
+{
+    srand(seed);
+}
+
+void Random::SetSeed(const String &seedStr)
+{
+    long seed = 0;
+    for (char c : seedStr) { seed += int(c); }
+    Random::SetSeed(seed);
+}
+
 Vector2 Random::InsideUnitCircle()
 {
     return Vector2(Random::Range(-1.0f, 1.0f),

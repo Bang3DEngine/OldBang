@@ -30,21 +30,21 @@ public:
     static UIGameObject*   CreateGUIScrollArea();
 
     static UIGameObject* CreateGUIHSeparator(
-                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceY = 1);
     static UIGameObject* CreateGUIVSeparator(
-                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
+                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceX = 1);
 
     static UIGameObject* CreateGUISpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            const Vector2i &space = Vector2i::Infinity);
+                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            const Vector2i &space = Vector2i(1));
     static UIGameObject* CreateGUIHSpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            int spaceX = Math::Max<int>());
+                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            int spaceX = 1);
     static UIGameObject* CreateGUIVSpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            int spaceY = Math::Max<int>());
+                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            int spaceY = 1);
 
     GameObjectFactory() = delete;
 

@@ -6,6 +6,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -18,42 +19,31 @@ UIContentSizeFitter::~UIContentSizeFitter()
 
 }
 
-void UIContentSizeFitter::SetHorizontalSizeFitMode(SizeFitMode fitMode)
-{
-    m_horizontalFitMode = fitMode;
-}
-
-void UIContentSizeFitter::SetVerticalSizeFitMode(SizeFitMode fitMode)
-{
-    m_verticalFitMode = fitMode;
-}
-
 void UIContentSizeFitter::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
     Vector2i contentSize = Vector2i::Zero;
-    List<ILayoutElement*> layoutElms = gameObject->GetComponents<ILayoutElement>();
-    for (ILayoutElement *layoutElm : layoutElms)
+    for (GameObject *child : gameObject->GetChildren())
     {
-        Vector2i hTotalSize = layoutElm->GetTotalSize(GetHorizontalSizeType());
+        Vector2i hSize (UILayoutManager::GetSize(child, GetHorizontalSizeType()));
         if (GetHorizontalSizeFitMode() == SizeFitMode::Sum)
         {
-            contentSize.x += hTotalSize.x;
+            contentSize.x += hSize.x;
         }
         else if (GetHorizontalSizeFitMode() == SizeFitMode::Max)
         {
-            contentSize.x = Math::Max(contentSize.x, hTotalSize.x);
+            contentSize.x = Math::Max(contentSize.x, hSize.x);
         }
 
-        Vector2i vTotalSize = layoutElm->GetTotalSize(GetVerticalSizeType());
+        Vector2i vSize (UILayoutManager::GetSize(child, GetVerticalSizeType()));
         if (GetVerticalSizeFitMode() == SizeFitMode::Sum)
         {
-            contentSize.y += vTotalSize.y;
+            contentSize.y += vSize.y;
         }
         else if (GetVerticalSizeFitMode() == SizeFitMode::Max)
         {
-            contentSize.y = Math::Max(contentSize.y, vTotalSize.y);
+            contentSize.y = Math::Max(contentSize.y, vSize.y);
         }
     }
 
@@ -68,13 +58,25 @@ void UIContentSizeFitter::ApplyLayout()
     }
 }
 
+void UIContentSizeFitter::SetHorizontalSizeFitMode(SizeFitMode fitMode)
+{
+    m_horizontalFitMode = fitMode;
+}
+
+void UIContentSizeFitter::SetVerticalSizeFitMode(SizeFitMode fitMode)
+{
+    m_verticalFitMode = fitMode;
+}
+
 void UIContentSizeFitter::SetHorizontalSizeType(LayoutSizeType sizeType)
 {
+    ASSERT(sizeType != LayoutSizeType::Flexible);
     m_horizontalSizeType = sizeType;
 }
 
 void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
 {
+    ASSERT(sizeType != LayoutSizeType::Flexible);
     m_verticalSizeType = sizeType;
 }
 

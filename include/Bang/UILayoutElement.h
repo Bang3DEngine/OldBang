@@ -33,20 +33,16 @@ public:
     const Vector2i& GetPreferredSize() const;
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
-    const Vector2& GetFlexibleSize() const;
-    int GetFlexiblePxWidth() const;
-    int GetFlexiblePxHeight() const;
-    Vector2i GetFlexiblePxSize() const;
+    Vector2 GetFlexibleSize() const override;
 
 protected:
     Vector2i CalculateTotalMinSize() const override;
     Vector2i CalculateTotalPreferredSize() const override;
-    Vector2i CalculateTotalFlexiblePxSize() const override;
 
 private:
     Vector2i m_minSize       = Vector2i::Zero;
     Vector2i m_preferredSize = Vector2i::One;
-    Vector2  m_flexibleSize  = Vector2::Zero;
+    Vector2  m_flexibleSize  = Vector2::One;
 };
 
 NAMESPACE_BANG_END

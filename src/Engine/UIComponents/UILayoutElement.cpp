@@ -4,7 +4,7 @@ USING_NAMESPACE_BANG
 
 UILayoutElement::UILayoutElement()
 {
-    SetPriority(1);
+    SetLayoutPriority(1);
 }
 
 UILayoutElement::~UILayoutElement()
@@ -60,12 +60,12 @@ void UILayoutElement::SetFlexibleSize(const Vector2 &flexibleSize)
 
 int UILayoutElement::GetMinWidth() const
 {
-    return m_minSize.x;
+    return GetMinSize().x;
 }
 
 int UILayoutElement::GetMinHeight() const
 {
-    return m_minSize.y;
+    return GetMinSize().y;
 }
 
 const Vector2i& UILayoutElement::GetMinSize() const
@@ -75,12 +75,12 @@ const Vector2i& UILayoutElement::GetMinSize() const
 
 int UILayoutElement::GetPreferredWidth() const
 {
-    return m_preferredSize.x;
+    return GetPreferredSize().x;
 }
 
 int UILayoutElement::GetPreferredHeight() const
 {
-    return m_preferredSize.y;
+    return GetPreferredSize().y;
 }
 
 const Vector2i& UILayoutElement::GetPreferredSize() const
@@ -90,38 +90,17 @@ const Vector2i& UILayoutElement::GetPreferredSize() const
 
 float UILayoutElement::GetFlexibleWidth() const
 {
-    return m_flexibleSize.x;
+    return GetFlexibleSize().x;
 }
 
 float UILayoutElement::GetFlexibleHeight() const
 {
-    return m_flexibleSize.y;
+    return GetFlexibleSize().y;
 }
 
-const Vector2& UILayoutElement::GetFlexibleSize() const
+Vector2 UILayoutElement::GetFlexibleSize() const
 {
     return m_flexibleSize;
-}
-
-int UILayoutElement::GetFlexiblePxWidth() const
-{
-    return GetFlexiblePxSize().x;
-}
-
-int UILayoutElement::GetFlexiblePxHeight() const
-{
-    return GetFlexiblePxSize().y;
-}
-
-Vector2i UILayoutElement::GetFlexiblePxSize() const
-{
-    return Vector2i(Vector2(GetPreferredSize()) *
-                    (Vector2(1) + GetFlexibleSize()));
-}
-
-Vector2i UILayoutElement::CalculateTotalFlexiblePxSize() const
-{
-    return GetFlexiblePxSize();
 }
 
 Vector2i UILayoutElement::CalculateTotalPreferredSize() const

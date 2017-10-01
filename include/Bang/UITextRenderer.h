@@ -34,7 +34,7 @@ public:
     // ILayoutElement
     virtual Vector2i CalculateTotalMinSize() const override;
     virtual Vector2i CalculateTotalPreferredSize() const override;
-    virtual Vector2i CalculateTotalFlexiblePxSize() const override;
+    virtual Vector2 GetFlexibleSize() const override;
 
     void RegenerateCharQuadsVAO();
 

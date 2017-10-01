@@ -17,43 +17,57 @@ UILayoutManager::UILayoutManager()
 {
 }
 
-Vector2i UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
+Vector2i UILayoutManager::GetMinSize(GameObject *go)
+{
+    return Vector2i( UILayoutManager::GetSize(go, LayoutSizeType::Min) );
+}
+
+Vector2i UILayoutManager::GetPreferredSize(GameObject *go)
+{
+    return Vector2i( UILayoutManager::GetSize(go, LayoutSizeType::Preferred) );
+}
+
+Vector2 UILayoutManager::GetFlexibleSize(GameObject *go)
+{
+    return UILayoutManager::GetSize(go, LayoutSizeType::Flexible);
+}
+
+Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
 {
     // Retrieve layout elements and their respective priority
     Map<int, List<ILayoutElement*> > priorLayoutElements;
     List<ILayoutElement*> les = go->GetComponents<ILayoutElement>();
     for (ILayoutElement *le : les)
     {
-        int prior = le->GetPriority();
+        int prior = le->GetLayoutPriority();
         if (!priorLayoutElements.ContainsKey(prior))
         {
             priorLayoutElements.Add(prior, List<ILayoutElement*>());
         }
         priorLayoutElements.Get(prior).PushBack(le);
     }
+    if (priorLayoutElements.IsEmpty()) { return Vector2::Zero; }
 
-    // Get the list of layout elements with greatest priority
-    int maxPrior = -1;
-    const List<ILayoutElement*> *maxPriorLayoutElements = nullptr;
-    for (const auto& pair : priorLayoutElements)
+    // Get the max size between the elements ordered by priority.
+    // Sizes less than zero will be ignored.
+    Vector2 size = Vector2(-1);
+    bool sizeXFound = false, sizeYFound = false;
+    for (auto it = priorLayoutElements.RBegin();
+         it != priorLayoutElements.REnd(); ++it)
     {
-        if (pair.first > maxPrior)
+        const List<ILayoutElement*> &les = (*it).second;
+        for (ILayoutElement *le : les)
         {
-            maxPrior = pair.first;
-            maxPriorLayoutElements = &(pair.second);
+            Vector2 leSize =  le->GetTotalSize(sizeType);
+            if (!sizeXFound) { size.x = Math::Max(size.x, leSize.x); }
+            if (!sizeYFound) { size.y = Math::Max(size.y, leSize.y); }
         }
-    }
 
-    // Get the max size between the elements with greater priority
-    Vector2i size = Vector2i::Zero;
-    if (maxPriorLayoutElements)
-    {
-        for (ILayoutElement *le : *maxPriorLayoutElements)
-        {
-            size = Vector2i::Max(size, le->GetTotalSize(sizeType));
-        }
+        if (size.x >= 0) { sizeXFound = true; }
+        if (size.y >= 0) { sizeYFound = true; }
+        if (sizeXFound && sizeYFound) { break; }
     }
-    return size;
+    return Vector2::Max(size, Vector2::Zero);
 }
 
 void UILayoutManager::Invalidate(RectTransform *rt)

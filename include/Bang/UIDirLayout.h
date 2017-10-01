@@ -19,7 +19,6 @@ public:
     // ILayoutElement
     virtual Vector2i CalculateTotalMinSize() const override;
     virtual Vector2i CalculateTotalPreferredSize() const override;
-    virtual Vector2i CalculateTotalFlexiblePxSize() const override;
     Vector2i CalculateTotalSize(LayoutSizeType sizeType) const;
 
     void SetSpacing(int spacingPx);
@@ -41,15 +40,20 @@ private:
     int m_spacingPx = 0;
     bool m_vertical = false;
 
-    void ApplyLayoutToChildRectTransform(const Recti &layoutRect,
+    void ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
                                          RectTransform *childRT,
                                          const Vector2i &position,
                                          const Vector2i &childRTSize);
 
-    void FillChildrenSizes(const Recti &layoutRect,
-                           Array<Vector2i> *childrenSizes,
-                           Vector2i *availableSize,
-                           LayoutSizeType sizeType);
+    void FillChildrenMinSizes(const Vector2i &layoutRectSize,
+                              Array<Vector2i> *childrenRTSizes,
+                              Vector2i *availableSpace);
+    void FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
+                                    Array<Vector2i> *childrenRTSizes,
+                                    Vector2i *availableSpace);
+    void FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
+                                   Array<Vector2i> *childrenRTSizes,
+                                   Vector2i *availableSpace);
 };
 
 NAMESPACE_BANG_END

@@ -22,24 +22,28 @@ void UIFrameLayout::ApplyLayout()
 {
     RectTransform *layoutRT = GetGameObject()->GetComponent<RectTransform>();
     ENSURE(layoutRT);
-    Recti layoutRect = layoutRT->GetScreenSpaceRectPx();
-    layoutRect = Recti(layoutRect.GetMin() + GetPaddingLeftBot(),
-                       layoutRect.GetMax() - GetPaddingRightTop());
-
-    Vector2i availablePx = layoutRect.GetSize();
+    Vector2i layoutRectSize = layoutRT->GetScreenSpaceRectPx().GetSize();
+    layoutRectSize -= GetPaddingSize();
+    Vector2i availablePx = layoutRectSize;
 
     for (GameObject *child : gameObject->GetChildren())
     {
         RectTransform *crt = child->GetComponent<RectTransform>();
-        ILayoutElement *layoutElm = child->GetComponent<ILayoutElement>();
-        if (crt && layoutElm)
+        if (crt && child->HasComponent<ILayoutElement>())
         {
-            Vector2i childSize = layoutElm->GetTotalMinSize();
-            availablePx -= childSize;
-            availablePx = Vector2i::Max(availablePx, Vector2i::Zero);
+            Vector2i childSize = UILayoutManager::GetMinSize(child);
+            availablePx = Vector2i::Max(Vector2i::Zero, availablePx - childSize);
 
-            Vector2i cFlexibleSize = layoutElm->GetTotalFlexiblePxSize();
-            childSize += Vector2i::Min(cFlexibleSize, availablePx);
+            Vector2i prefChildSize = UILayoutManager::GetPreferredSize(child);
+            Vector2i pxToAdd = Vector2i::Max(Vector2i::Zero,
+                                             prefChildSize - childSize);
+            childSize += Vector2i::Min(availablePx, pxToAdd);
+
+            if (UILayoutManager::GetFlexibleSize(child).x > 0)
+            { childSize.x = layoutRectSize.x; }
+
+            if (UILayoutManager::GetFlexibleSize(child).y > 0)
+            { childSize.y = layoutRectSize.y; }
 
             crt->SetAnchors(Vector2(-1));
 
@@ -49,17 +53,17 @@ void UIFrameLayout::ApplyLayout()
                 HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
                 if (hAlign == HorizontalAlignment::Center)
                 {
-                    crt->AddMarginLeft( (layoutRect.GetWidth() - childSize.x)/2 );
+                    crt->AddMarginLeft( (layoutRectSize.x - childSize.x)/2 );
                 }
                 else if (hAlign == HorizontalAlignment::Right)
                 {
-                    crt->AddMarginLeft( (layoutRect.GetWidth() - childSize.x) );
+                    crt->AddMarginLeft( (layoutRectSize.x - childSize.x) );
                 }
                 crt->SetMarginRight( -(crt->GetMarginLeft() + childSize.x) );
             }
             else
             {
-                crt->SetMarginRight( -(crt->GetMarginLeft() + layoutRect.GetWidth()) );
+                crt->SetMarginRight( -(crt->GetMarginLeft() + layoutRectSize.x) );
             }
 
             crt->SetMarginBot( GetPaddingBot() );
@@ -68,17 +72,17 @@ void UIFrameLayout::ApplyLayout()
                 VerticalAlignment vAlign = GetChildrenVerticalAlignment();
                 if (vAlign == VerticalAlignment::Center)
                 {
-                    crt->AddMarginBot( (layoutRect.GetHeight() - childSize.y)/2 );
+                    crt->AddMarginBot( (layoutRectSize.y - childSize.y)/2 );
                 }
                 else if (vAlign == VerticalAlignment::Top)
                 {
-                    crt->AddMarginBot( (layoutRect.GetHeight() - childSize.y) );
+                    crt->AddMarginBot( (layoutRectSize.y - childSize.y) );
                 }
                 crt->SetMarginTop( -(crt->GetMarginBot() + childSize.y) );
             }
             else
             {
-                crt->SetMarginTop( -(crt->GetMarginBot() + layoutRect.GetHeight()));
+                crt->SetMarginTop( -(crt->GetMarginBot() + layoutRectSize.y));
             }
             break;
         }
@@ -92,7 +96,7 @@ Vector2i UIFrameLayout::CalculateTotalMinSize() const
     {
         if (child->HasComponent<ILayoutElement>())
         {
-            minSize += UILayoutManager::GetSize(child, LayoutSizeType::Min);
+            minSize += UILayoutManager::GetMinSize(child);
             break;
         }
     }
@@ -106,23 +110,9 @@ Vector2i UIFrameLayout::CalculateTotalPreferredSize() const
     {
         if (child->HasComponent<ILayoutElement>())
         {
-            prefSize += UILayoutManager::GetSize(child, LayoutSizeType::Preferred);
+            prefSize += UILayoutManager::GetPreferredSize(child);
             break;
         }
     }
     return prefSize;
-}
-
-Vector2i UIFrameLayout::CalculateTotalFlexiblePxSize() const
-{
-    Vector2i flexSize = GetPaddingSize();
-    for (GameObject *child : gameObject->GetChildren())
-    {
-        if (child->HasComponent<ILayoutElement>())
-        {
-            flexSize += UILayoutManager::GetSize(child, LayoutSizeType::Flexible);
-            break;
-        }
-    }
-    return flexSize;
 }

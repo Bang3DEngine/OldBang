@@ -183,7 +183,6 @@ UIGameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
 {
     UIGameObject *spacerGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
-
     if (sizeType == LayoutSizeType::Min)
     {
         le->SetMinSize( Vector2i(space) );
@@ -199,7 +198,7 @@ UIGameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
     else // Flexible
     {
         le->SetMinSize( Vector2i(0) );
-        le->SetPreferredSize( Vector2i(1) );
+        le->SetPreferredSize( Vector2i(0) );
         le->SetFlexibleSize( Vector2(space) );
     }
     return spacerGo;
@@ -230,18 +229,17 @@ UIGameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
     lr->SetRenderPass(RenderPass::Canvas);
 
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
+    le->SetPreferredSize( Vector2i::Max(space, Vector2i::One) );
     bool horizontal = (space.x == 0);
     constexpr float s = 0.95f;
     if (horizontal)
     {
-        le->SetPreferredWidth(1);
-        le->SetFlexibleWidth(99999999);
+        le->SetFlexibleSize( Vector2(99999999, 0) );
         lr->SetPoints( {Vector3(-s,0,0), Vector3(s,0,0)} );
     }
     else
     {
-        le->SetPreferredHeight(1);
-        le->SetFlexibleHeight(9999999);
+        le->SetFlexibleSize( Vector2(0, 99999999) );
         lr->SetPoints( {Vector3(0,-s,0), Vector3(0,s,0)} );
     }
     return sepGo;

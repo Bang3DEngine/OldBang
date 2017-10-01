@@ -17,8 +17,10 @@ class UILayoutManager
 public:
     UILayoutManager();
 
-    static Vector2i GetSize(GameObject *go,
-                            LayoutSizeType sizeType);
+    static Vector2i GetMinSize(GameObject *go);
+    static Vector2i GetPreferredSize(GameObject *go);
+    static Vector2  GetFlexibleSize(GameObject *go);
+    static Vector2  GetSize(GameObject *go, LayoutSizeType sizeType);
 
     static void Invalidate(RectTransform *rt);
     static void InvalidateAll(GameObject *gameObject);

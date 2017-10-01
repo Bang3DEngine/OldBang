@@ -43,9 +43,9 @@ void UIGroupLayout::SetPaddings(int padding)
 void UIGroupLayout::SetPaddings(int paddingLeft, int paddingBot,
                                 int paddingRight, int paddingTop)
 {
-    if (m_paddingLeftBot.x != paddingLeft   ||
-        m_paddingLeftBot.y != paddingBot    ||
-        m_paddingRightTop.x != paddingRight ||
+    if (m_paddingLeftBot.x  != paddingLeft   ||
+        m_paddingLeftBot.y  != paddingBot    ||
+        m_paddingRightTop.x != paddingRight  ||
         m_paddingRightTop.y != paddingTop)
     {
         m_paddingLeftBot  = Vector2i(paddingLeft,  paddingBot);

@@ -241,13 +241,13 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
     if (!IsEnabled()) { return Matrix4::Identity; }
-    if (!m_isInvalid) { return m_localToParentMatrix; }
+    if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-    m_isInvalid = false;
+    SetInvalid(false);
     m_localToParentMatrix = (T * R * S);
     return m_localToParentMatrix;
 }

@@ -32,26 +32,23 @@ Vector2i UIDirLayout::GetTotalSpacing() const
 void UIDirLayout::ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
-    Recti layoutRect = rt->GetScreenSpaceRectPx();
-    layoutRect = Recti(layoutRect.GetMin() + GetPaddingLeftBot(),
-                       layoutRect.GetMax() - GetPaddingRightTop());
 
-    Vector2i availableSize = layoutRect.GetSize();
-    availableSize -= GetTotalSpacing();
+    Vector2i layoutRectSize = rt->GetScreenSpaceRectPx().GetSize();
+    layoutRectSize -= GetPaddingSize();
+
+    Vector2i availableSpace = layoutRectSize;
+    availableSpace -= GetTotalSpacing();
 
     Array<Vector2i> childrenRTSizes(gameObject->GetChildren().Size(),
                                     Vector2i::Zero);
 
-    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
-                      LayoutSizeType::Min);
-    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
-                      LayoutSizeType::Preferred);
-    FillChildrenSizes(layoutRect, &childrenRTSizes, &availableSize,
-                      LayoutSizeType::Flexible);
+    FillChildrenMinSizes      (layoutRectSize, &childrenRTSizes, &availableSpace);
+    FillChildrenPreferredSizes(layoutRectSize, &childrenRTSizes, &availableSpace);
+    FillChildrenFlexibleSizes (layoutRectSize, &childrenRTSizes, &availableSpace);
 
     // Apply actual calculation to RectTransforms Margins
     uint i = 0;
-    Vector2i marginAccum = Vector2i::Zero;
+    Vector2i marginAccum (GetPaddingLeft(), GetPaddingTop());
     for (GameObject *child : gameObject->GetChildren())
     {
         Vector2i spacing = (i > 0) ? (GetDir() * GetSpacing()) : Vector2i::Zero;
@@ -59,13 +56,14 @@ void UIDirLayout::ApplyLayout()
 
         const Vector2i& childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetComponent<RectTransform>();
-        ApplyLayoutToChildRectTransform(layoutRect, crt, marginAccum, childRTSize);
+        ApplyLayoutToChildRectTransform(layoutRectSize, crt, marginAccum,
+                                        childRTSize);
         marginAccum += childRTSize;
         ++i;
     }
 }
 
-void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
+void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
                                                   RectTransform *crt,
                                                   const Vector2i &position,
                                                   const Vector2i &childRTSize)
@@ -74,26 +72,25 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
     crt->SetAnchors( Vector2(-1, 1) );
     if (m_vertical) // VERTICAL
     {
-        crt->SetMarginLeft( GetPaddingLeft() );
         if (GetChildrenHorizontalStretch() == Stretch::None)
         {
             HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
             if (hAlign == HorizontalAlignment::Center)
             {
-                crt->AddMarginLeft( (layoutRect.GetWidth() - childRTSize.x) / 2);
+                crt->AddMarginLeft( (layoutRectSize.x - childRTSize.x) / 2);
             }
             else if (hAlign == HorizontalAlignment::Right)
             {
-                crt->AddMarginLeft( (layoutRect.GetWidth() - childRTSize.x) );
+                crt->AddMarginLeft( (layoutRectSize.x - childRTSize.x) );
             }
             crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
         }
         else
         {
-            crt->SetMarginRight( -(GetPaddingLeft() + layoutRect.GetWidth()) );
+            crt->SetMarginRight( -(GetPaddingLeft() + layoutRectSize.x) );
         }
-        crt->SetMarginTop( position.y );
-        crt->SetMarginBot( -(position.y + childRTSize.y) );
+        crt->SetMarginTop(  position.y );
+        crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
     }
     else // HORIZONTAL
     {
@@ -103,54 +100,120 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Recti &layoutRect,
             VerticalAlignment vAlign = GetChildrenVerticalAlignment();
             if (vAlign == VerticalAlignment::Center)
             {
-                crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) / 2);
+                crt->AddMarginTop( (layoutRectSize.y - childRTSize.y) / 2);
             }
             else if (vAlign == VerticalAlignment::Bot)
             {
-                crt->AddMarginTop( (layoutRect.GetHeight() - childRTSize.y) );
+                crt->AddMarginTop( (layoutRectSize.y - childRTSize.y) );
             }
             crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
         }
         else
         {
-            crt->SetMarginBot( -(GetPaddingTop() + layoutRect.GetHeight()) );
+            crt->SetMarginBot( -(GetPaddingTop() + layoutRectSize.y) );
         }
         crt->SetMarginLeft( position.x );
-        crt->SetMarginRight( -(position.x + childRTSize.x) );
+        crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
     }
 }
 
-void UIDirLayout::FillChildrenSizes(const Recti &layoutRect,
-                                    Array<Vector2i> *childrenRTSizes,
-                                    Vector2i *availableSize,
-                                    LayoutSizeType sizeType)
+void UIDirLayout::FillChildrenMinSizes(const Vector2i &layoutRectSize,
+                                       Array<Vector2i> *childrenRTSizes,
+                                       Vector2i *availableSpace)
 {
     uint i = 0;
     for (GameObject *child : gameObject->GetChildren())
     {
-        Vector2i originalChildRTSize = childrenRTSizes->At(i);
-        Vector2i childRTSize = originalChildRTSize;
-        if (child->HasComponent<ILayoutElement>())
-        {
-            Vector2i pxToAdd(UILayoutManager::GetSize(child, sizeType) -
-                             originalChildRTSize);
-            if (sizeType != LayoutSizeType::Min)
-            {
-                pxToAdd = Vector2i::Min(pxToAdd, *availableSize);
-            }
-            pxToAdd = Vector2i::Max(pxToAdd, Vector2i::Zero);
-            childRTSize = Vector2i::Max(childRTSize, originalChildRTSize + pxToAdd);
-        }
-
+        Vector2i childRTSize = UILayoutManager::GetMinSize(child);
         if (m_vertical)
         {
-            availableSize->y -= (childRTSize.y - originalChildRTSize.y);
-            childRTSize.x = Math::Min(childRTSize.x, layoutRect.GetSize().x);
+            availableSpace->y -= childRTSize.y;
+            childRTSize.x = Math::Min(childRTSize.x, layoutRectSize.x);
         }
         else
         {
-            availableSize->x -= (childRTSize.x - originalChildRTSize.x);
-            childRTSize.y = Math::Min(childRTSize.y, layoutRect.GetSize().y);
+            availableSpace->x -= childRTSize.x;
+            childRTSize.y = Math::Min(childRTSize.y, layoutRectSize.y);
+        }
+
+        (*childrenRTSizes)[i] = childRTSize;
+        ++i;
+    }
+}
+
+void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
+                                             Array<Vector2i> *childrenRTSizes,
+                                             Vector2i *availableSpace)
+{
+    uint i = 0;
+    Vector2i totalPrefPxToAdd = Vector2i::Zero;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        Vector2i minChildSize = (*childrenRTSizes)[i];
+        totalPrefPxToAdd += UILayoutManager::GetPreferredSize(child) -
+                            minChildSize;
+        ++i;
+    }
+    totalPrefPxToAdd = Vector2i::Max(totalPrefPxToAdd, Vector2i::One);
+
+    i = 0;
+    Vector2i originalAvailableSpace = *availableSpace;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        Vector2i minChildSize = (*childrenRTSizes)[i];
+        Vector2i childPrefSize = UILayoutManager::GetPreferredSize(child);
+        Vector2i childPrefPxToAdd = (childPrefSize - minChildSize);
+        Vector2  sizeProportion (Vector2(childPrefPxToAdd) / Vector2(totalPrefPxToAdd));
+        Vector2i prefAvailPxToAdd(
+                   Vector2::Round(sizeProportion * Vector2(originalAvailableSpace)));
+        Vector2i childRTSize = Vector2i::Max(minChildSize,
+                                             minChildSize + prefAvailPxToAdd);
+        childRTSize = Vector2i::Min(childRTSize, childPrefSize);
+
+        if (m_vertical)
+        {
+            availableSpace->y -= (childRTSize.y - minChildSize.y);
+            childRTSize.x = Math::Min(childRTSize.x, layoutRectSize.x);
+        }
+        else
+        {
+            availableSpace->x -= (childRTSize.x - minChildSize.x);
+            childRTSize.y = Math::Min(childRTSize.y, layoutRectSize.y);
+        }
+
+        (*childrenRTSizes)[i] = childRTSize;
+        ++i;
+    }
+}
+
+void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
+                                            Array<Vector2i> *childrenRTSizes,
+                                            Vector2i *availableSpace)
+{
+    Vector2 totalChildrenFlexSize = Vector2::Zero;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        totalChildrenFlexSize += UILayoutManager::GetFlexibleSize(child);
+    }
+    totalChildrenFlexSize = Vector2::Max(totalChildrenFlexSize, Vector2(0.0001));
+
+    uint i = 0;
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        Vector2i prefChildSize = (*childrenRTSizes)[i];
+        Vector2  childFlexSize = UILayoutManager::GetFlexibleSize(child);
+        Vector2  sizeProportion (childFlexSize / totalChildrenFlexSize);
+        Vector2i flexAvailPxToAdd (
+                    Vector2::Round(sizeProportion * Vector2(*availableSpace)) );
+        Vector2i childRTSize = Vector2i::Max(prefChildSize,
+                                             prefChildSize + flexAvailPxToAdd);
+        if (m_vertical)
+        {
+            childRTSize.x = Math::Min(childRTSize.x, layoutRectSize.x);
+        }
+        else
+        {
+            childRTSize.y = Math::Min(childRTSize.y, layoutRectSize.y);
         }
 
         (*childrenRTSizes)[i] = childRTSize;
@@ -168,17 +231,12 @@ Vector2i UIDirLayout::CalculateTotalPreferredSize() const
     return CalculateTotalSize(LayoutSizeType::Preferred);
 }
 
-Vector2i UIDirLayout::CalculateTotalFlexiblePxSize() const
-{
-    return CalculateTotalSize(LayoutSizeType::Flexible);
-}
-
 Vector2i UIDirLayout::CalculateTotalSize(LayoutSizeType sizeType) const
 {
     Vector2i totalSize = Vector2i::Zero;
     for (GameObject *child : gameObject->GetChildren())
     {
-        Vector2i childSize = UILayoutManager::GetSize(child, sizeType);
+        Vector2i childSize (UILayoutManager::GetSize(child, sizeType));
         if (m_vertical)
         {
             totalSize.x = Math::Max(totalSize.x, childSize.x);

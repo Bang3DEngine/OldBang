@@ -77,7 +77,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
     UILayoutElement *itle = inputTextGo->AddComponent<UILayoutElement>();
     itle->SetPreferredSize( Vector2i(1, 25) );
-    itle->SetFlexibleSize( Vector2(999999, 0) );
+    itle->SetFlexibleHeight(0);
 
     UIButtonDriver *openButton = GameObjectFactory::CreateGUIButton();
     openButton->GetText()->SetContent("Open");
@@ -124,7 +124,6 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     hLayout->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     UILayoutElement *hLayoutLE = hLayoutGo->AddComponent<UILayoutElement>();
     hLayoutLE->SetPreferredSize( Vector2i::One );
-    hLayoutLE->SetFlexibleSize( Vector2(999.9f) );
 
     UIGameObject *msgGo = GameObjectFactory::CreateUIGameObject();
     msgGo->SetName("MSG");
@@ -137,7 +136,6 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     text->SetVerticalAlign(VerticalAlignment::Center);
     UILayoutElement *textLE = msgGo->AddComponent<UILayoutElement>();
     textLE->SetPreferredSize( Vector2i::One );
-    textLE->SetFlexibleSize( Vector2(99999.9f) );
 
     UIGameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
     UIGameObject *hSpacer = GameObjectFactory::CreateGUIHSpacer();

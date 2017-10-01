@@ -299,7 +299,7 @@ Rect RectTransform::GetParentScreenRect() const
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled(true)) { return Matrix4::Identity; }
+    if (!IsEnabled()) { return Matrix4::Identity; }
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Vector2 minMarginedAnchor (GetAnchorMin() + FromPixelsToLocalNDC(GetMarginLeftBot()));
@@ -311,7 +311,8 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
     Matrix4 rtMatrix = Matrix4::TranslateMatrix(moveToAnchorCenter) *
                        Matrix4::ScaleMatrix(anchorScaling);
-    m_localToParentMatrix = Transform::GetLocalToParentMatrix() * rtMatrix;
+    Matrix4 transformMatrix = Transform::GetLocalToParentMatrix();
+    m_localToParentMatrix = transformMatrix * rtMatrix;
 
     SetInvalid(false);
     return m_localToParentMatrix;
@@ -331,7 +332,7 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetLineWidth(1.0f);
 
     Rect r = GetScreenSpaceRectNDC();
-    Color c = Color::Green; //Random::GetColorOpaque();
+    Color c = Color::Green; // Random::GetColorOpaque();
     Gizmos::SetColor(c);
     /*
     Gizmos::RenderRect(r);
@@ -344,18 +345,6 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetColor(Color::Red);
     Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
                             r.GetCenter() + Vector2(size)));
-
-    ENSURE(gameObject->parent);
-    RectTransform *parentRT = gameObject->parent->GetComponent<RectTransform>();
-    if (parentRT)
-    {
-        Vector2 size(0.02f);
-        Vector2 anchorMin = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMin());
-        Vector2 anchorMax = parentRT->FromLocalNDCToGlobalNDC(GetAnchorMax());
-        Gizmos::RenderRect( Rect(anchorMin - size/2.0f, anchorMin + size/2.0f));
-        Gizmos::SetColor(c);
-        Gizmos::RenderRect( Rect(anchorMax - size/2.0f, anchorMax + size/2.0f));
-    }
     */
 }
 
