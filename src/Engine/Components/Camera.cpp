@@ -40,11 +40,7 @@ void Camera::Bind() const
     GL::SetViewMatrix(view);
     GL::SetProjectionMatrix(projection);
 
-    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
-    Recti renderVP( vpRect * Vector2(GL::GetViewportSize())
-                           + Vector2(GL::GetViewportRect().GetMin()) );
-    m_latestViewportRect = renderVP;
-    GL::SetViewport(0, 0, renderVP.GetWidth(), renderVP.GetHeight());
+    SetViewportForRendering();
 }
 
 void Camera::UnBind() const
@@ -52,6 +48,22 @@ void Camera::UnBind() const
     GL::SetViewport(m_latestViewportRect);
     GetGBuffer()->UnBind();
     GetSelectionFramebuffer()->UnBind();
+}
+
+void Camera::SetViewportForBlitting() const
+{
+    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
+    Recti renderVP( vpRect * Vector2(GL::GetViewportSize())
+                           + Vector2(GL::GetViewportRect().GetMin()) );
+    m_latestViewportRect = renderVP;
+    GL::SetViewport(renderVP);
+}
+
+void Camera::SetViewportForRendering() const
+{
+    SetViewportForBlitting();
+    Recti vpRect = GL::GetViewportRect();
+    GL::SetViewport(0, 0, vpRect.GetWidth(), vpRect.GetHeight());
 }
 
 void Camera::BindGBuffer()

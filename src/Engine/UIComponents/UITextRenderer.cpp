@@ -1,5 +1,6 @@
 #include "Bang/UITextRenderer.h"
 
+#include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Font.h"
 #include "Bang/Scene.h"
@@ -21,6 +22,7 @@ USING_NAMESPACE_BANG
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
     m_mesh = new Mesh();
+
     SetMaterial( MaterialFactory::GetUIText() );
     UseMaterialCopy();
 

@@ -31,9 +31,15 @@ UIImageRenderer::~UIImageRenderer()
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
+    if (m_hasChanged) { RegenerateQuadVAO(); }
     GL::Render(m_quadMesh->GetVAO(),
                GetRenderPrimitive(),
                m_quadMesh->GetVertexCount());
+}
+
+void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
+{
+    GetMaterial()->SetUvMultiply(uvMultiply);
 }
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
@@ -56,21 +62,30 @@ void UIImageRenderer::SetTint(const Color &tint)
 void UIImageRenderer::SetIsBackground(bool isBackground)
 {
     m_isBackground = isBackground;
+    OnChanged();
 }
 
 void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 {
     m_aspectRatioMode = arMode;
+    OnChanged();
 }
 
 void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
 {
     m_verticalAlignment = verticalAlignment;
+    OnChanged();
 }
 
 void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 {
     m_horizontalAlignment = horizontalAlignment;
+    OnChanged();
+}
+
+const Vector2 &UIImageRenderer::GetUvMultiply() const
+{
+    return GetMaterial()->GetUvMultiply();
 }
 
 const Color &UIImageRenderer::GetTint() const
@@ -103,14 +118,19 @@ bool UIImageRenderer::IsBackground() const
     return m_isBackground;
 }
 
-void UIImageRenderer::OnRectTransformChanged()
+void UIImageRenderer::OnChanged()
 {
-    ENSURE(m_imageTexture);
+    m_hasChanged = true;
+}
 
+void UIImageRenderer::RegenerateQuadVAO()
+{
+    m_hasChanged = false;
     RectTransform *rt = gameObject->GetComponent<RectTransform>();
     Recti rectPx = rt->GetScreenSpaceRectPx();
     Vector2i rectSize(rectPx.GetSize());
     ENSURE(m_prevRectSize != rectSize);
+    ENSURE(m_imageTexture);
 
     Vector2i texSize(m_imageTexture->GetSize());
     Vector2i texQuadSize =
@@ -141,6 +161,12 @@ void UIImageRenderer::OnRectTransformChanged()
 
     m_quadMesh->LoadUvs(quadUvs);
     m_prevImageTextureSize = m_imageTexture->GetSize();
+}
+
+void UIImageRenderer::OnRectTransformChanged()
+{
+    ENSURE(m_imageTexture);
+    RegenerateQuadVAO();
 }
 
 Rect UIImageRenderer::GetBoundingRect(Camera *camera) const

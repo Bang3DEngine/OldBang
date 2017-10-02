@@ -21,6 +21,7 @@ public:
     // UIRenderer
     virtual void OnRender() override;
 
+    void SetUvMultiply(const Vector2 &uvMultiply);
     void SetImageTexture(const Path &imagePath);
     void SetImageTexture(Texture2D *imageTexture);
     void SetTint(const Color& tint);
@@ -29,12 +30,16 @@ public:
     void SetVerticalAlignment(VerticalAlignment verticalAlignment);
     void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
 
+    const Vector2& GetUvMultiply() const;
     const Color& GetTint() const;
     Texture2D *GetImageTexture() const;
     AspectRatioMode GetAspectRatioMode() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
     bool IsBackground() const;
+
+    void OnChanged();
+    void RegenerateQuadVAO();
 
     // IRectTransformListener
     virtual void OnRectTransformChanged() override;
@@ -50,6 +55,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    bool m_hasChanged = false;
     Mesh *m_quadMesh = nullptr;
     bool m_isBackground = false;
     Texture2D *m_imageTexture = nullptr;

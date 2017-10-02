@@ -29,7 +29,7 @@ Application* Application::s_appSingleton = nullptr;
 
 Application::Application(int argc, char **argv, const Path &engineRootPath)
 {
-    srand(time(NULL));
+    srand(1234);
 
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) { Debug_Error("Failed to init SDL"); }
     if ( TTF_Init() )

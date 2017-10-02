@@ -27,11 +27,11 @@ public:
     void Render(Scene *scene);
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
-    void RenderToScreen(Texture *fullScreenTexture,
-                        const Color &discardColor = Color::Zero);
+    void RenderToScreen(Camera *cam);
+    void RenderToScreen(Texture *fullScreenTexture);
     void ApplyScreenPass(ShaderProgram *sp,
                          const Rect &mask = Rect::ScreenRect);
-    void RenderScreenPlane();
+    void RenderScreenPlane(bool withDepth = false);
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
     void ApplyDeferredLights(GameObject *lightsContainer,

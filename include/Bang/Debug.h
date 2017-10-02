@@ -10,12 +10,18 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Shader;
+
 class Debug
 {
 public:
-    static void _Log(const String &str, int line, const String &fileName);
-    static void _Warn(const String &str, int line, const String &fileName);
-    static void _Error(const String &str, int line, const String &fileName);
+    static void Log(const String &str, int line, const String &fileName);
+    static void Warn(const String &str, int line, const String &fileName);
+    static void Error(const String &str, int line, const String &fileName);
+
+    static void PrintUniforms(Shader *shader);
+    static void PrintUniforms(uint shaderProgramId);
+    static void PrintUniforms();
 
 private:
     Debug();
@@ -29,7 +35,7 @@ private:
     ::std::ostringstream log;\
     log << ::std::boolalpha << msg;\
     log.flush();\
-    Debug::_Log(log.str(), __LINE__, __FILE__); \
+    Debug::Log(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Peek(varName) Debug_Log(#varName << ": " << (varName))
@@ -38,14 +44,14 @@ private:
     ::std::ostringstream log;\
     log << ::std::boolalpha << msg;\
     log.flush();\
-    Debug::_Warn(log.str(), __LINE__, __FILE__); \
+    Debug::Warn(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error(msg) do{\
     ::std::ostringstream log;\
     log << ::std::boolalpha << msg;\
     log.flush();\
-    Debug::_Error(log.str(), __LINE__, __FILE__); \
+    Debug::Error(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 NAMESPACE_BANG_END

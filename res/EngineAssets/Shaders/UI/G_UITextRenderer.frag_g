@@ -13,9 +13,10 @@ uniform float B_outlineBlurriness;
 
 void Main()
 {
-    B_UseDiffuseColor = false;
+    B_UsePlainDiffuseColor = true;
 
     vec2 charAtlasUv = B_FragIn_Uv;
+
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)
     {

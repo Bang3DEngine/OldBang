@@ -99,10 +99,10 @@ void UILayoutManager::InvalidateAll(GameObject *go)
     UILayoutManager::GetInstance()->m_previousFrameRectTransforms.Clear();
 }
 
-void UILayoutManager::RebuildLayout(GameObject *_go)
+void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
-    ENSURE(_go);
-    std::queue<GameObject*> goQueue; goQueue.push(_go);
+    ENSURE(rootGo);
+    std::queue<GameObject*> goQueue; goQueue.push(rootGo);
     while (!goQueue.empty())
     {
         GameObject *go = goQueue.front();

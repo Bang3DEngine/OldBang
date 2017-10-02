@@ -12,6 +12,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Time;
 FORWARD class Input;
+FORWARD class Camera;
 FORWARD class GEngine;
 FORWARD class Resources;
 FORWARD class Texture2D;
@@ -32,6 +33,7 @@ public:
     void Clear();
     virtual void Update();
     virtual void Render();
+    virtual void BlitToScreen(Camera *camera);
 
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();

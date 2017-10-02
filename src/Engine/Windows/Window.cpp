@@ -8,12 +8,14 @@
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/GEngine.h"
+#include "Bang/GBuffer.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Application.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UILayoutManager.h"
+#include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 
@@ -40,7 +42,8 @@ void Window::Create(uint flags)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                         SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     m_sdlWindow = SDL_CreateWindow("Bang",
@@ -89,7 +92,7 @@ bool Window::MainLoopIteration()
     GetInput()->ProcessEnqueuedEvents();
 
     Update();
-    Clear(); Render();
+    Render();
 
     GetInput()->OnFrameFinished();
     SwapBuffers();
@@ -99,7 +102,8 @@ bool Window::MainLoopIteration()
 
 void Window::Clear()
 {
-    GL::ClearColorBuffer(Color::Zero);
+    GL::ClearDepthBuffer();
+    GL::ClearColorBuffer(Color::Pink);
 }
 
 void Window::Update()
@@ -109,13 +113,28 @@ void Window::Update()
 
 void Window::Render()
 {
+    Clear();
+
     Scene *rootScene = GetSceneManager()->GetRootScene();
     UILayoutManager::RebuildLayout(rootScene);
     if (rootScene)
     {
         rootScene->GetUILayoutManager()->OnBeforeRender(rootScene);
         GetGEngine()->Render(rootScene);
+
+        Camera *camera = rootScene->GetCamera(); ENSURE(camera);
+        BlitToScreen(camera);
     }
+}
+
+void Window::BlitToScreen(Camera *camera)
+{
+    ENSURE (camera);
+
+    Recti prevVP = GL::GetViewportRect();
+    camera->SetViewportForBlitting();
+    GetGEngine()->RenderToScreen(camera);
+    GL::SetViewport(prevVP);
 }
 
 bool Window::HandleEvent(const SDL_Event &sdlEvent)

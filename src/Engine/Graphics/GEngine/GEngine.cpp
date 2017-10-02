@@ -49,13 +49,6 @@ void GEngine::Render(GameObject *go, Camera *camera)
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
     _BindCamera(nullptr);
-
-    // Render to screen
-    bool renderSelFB = false;
-    if (renderSelFB) { RenderToScreen(camera->GetSelectionFramebuffer()
-                       ->GetAttachmentTexture(GL::Attachment::Color0)); }
-    else { RenderToScreen(camera->GetGBuffer()
-           ->GetAttachmentTexture(GBuffer::AttColor)); }
 }
 
 void GEngine::Render(Scene *scene)
@@ -97,6 +90,7 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
 {
     // We have marked from before the zone where we want to apply the effect
     GL::SetStencilValue(1);
+    GL::Function latestStencilFunc = GL::GetStencilFunc();
     GL::SetStencilFunc(GL::Function::Equal);
 
     List<Light*> lights = lightsContainer->GetComponentsInChildren<Light>();
@@ -105,7 +99,7 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
         if (!light || !light->IsEnabled(true)) { continue; }
         light->ApplyLight(camera->GetGBuffer(), maskRectNDC);
     }
-    GL::SetStencilFunc(GL::Function::Always);
+    GL::SetStencilFunc(latestStencilFunc);
 }
 
 void GEngine::Resize(int newWidth, int newHeight)
@@ -168,11 +162,11 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     go->Render(RenderPass::Canvas);
     go->Render(RenderPass::Canvas_PostProcess);
-    GL::ClearStencilBuffer();
 
     // GBuffer Gizmos rendering
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
+    GL::ClearStencilBuffer();
     GL::SetDepthFunc(GL::Function::LEqual);
     go->RenderGizmos();
 }
@@ -201,31 +195,56 @@ void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     sp->UnBind();
 }
 
-void GEngine::RenderToScreen(Texture *fullScreenTexture,
-                             const Color &discardColor)
+void GEngine::RenderToScreen(Camera *cam)
+{
+    ENSURE(cam);
+    m_renderGBufferToScreenMaterial->Bind();
+
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    GBuffer *gbuffer = cam->GetGBuffer();
+    gbuffer->PrepareForRender(sp);
+
+    GEngine::RenderScreenPlane(true);
+
+    m_renderGBufferToScreenMaterial->UnBind();
+}
+
+void GEngine::RenderToScreen(Texture *fullScreenTexture)
 {
     ASSERT(fullScreenTexture);
     m_renderGBufferToScreenMaterial->Bind();
 
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     sp->Set("B_GTex_Color", fullScreenTexture);
-    sp->Set("B_DiscardColor", discardColor);
 
     GEngine::RenderScreenPlane();
 
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GEngine::RenderScreenPlane()
+void GEngine::RenderScreenPlane(bool withDepth)
 {
+    bool prevWireframe = GL::IsWireframe();
     GL::SetWireframe(false);
-    GL::SetDepthFunc(GL::Function::Always);
-    GL::SetDepthMask(false);
+
+    GL::Face prevCullFace = GL::GetCullFace();
+    bool prevDepthMask = GL::GetDepthMask();
+    GL::Function prevDepthFunc = GL::GetDepthFunc();
+
+    if (!withDepth)
+    {
+        GL::SetDepthFunc(GL::Function::Always);
+        GL::SetDepthMask(false);
+    }
     GL::SetCullFace(GL::Face::None);
+
     GL::Render(m_screenPlaneMesh->GetVAO(), GL::Primitives::Triangles,
                m_screenPlaneMesh->GetVertexCount());
-    GL::SetDepthMask(true);
-    GL::SetDepthFunc(GL::Function::LEqual);
+
+    GL::SetCullFace(prevCullFace);
+    GL::SetDepthMask(prevDepthMask);
+    GL::SetDepthFunc(prevDepthFunc);
+    GL::SetWireframe(prevWireframe);
 }
 
 GEngine* GEngine::GetInstance()

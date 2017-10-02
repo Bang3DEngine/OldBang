@@ -10,6 +10,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"
 
 NAMESPACE_BANG_BEGIN
@@ -98,7 +99,12 @@ public:
         Int           = GL_INT,
         UnsignedInt   = GL_UNSIGNED_INT,
         Float         = GL_FLOAT,
-        Double        = GL_DOUBLE
+        Double        = GL_DOUBLE,
+        Vector2       = GL_FLOAT_VEC2,
+        Vector3       = GL_FLOAT_VEC3,
+        Vector4       = GL_FLOAT_VEC4,
+        Matrix3       = GL_FLOAT_MAT3,
+        Matrix4       = GL_FLOAT_MAT4
     };
 
     enum class ShaderType
@@ -249,6 +255,15 @@ public:
         Depth        = GL_DEPTH_ATTACHMENT
     };
 
+    template <class T>
+    struct GLSLVar
+    {
+        String name = ""; T value;
+        GLSLVar(const String &_name, const T &_value)
+            : name(_name), value(_value) {}
+        GLSLVar() {}
+    };
+
     static void ClearError();
     static bool CheckError(int line = 0, const String &func = "",
                            const String &file = "");
@@ -273,6 +288,11 @@ public:
                                     int dataStride,
                                     int dataOffset);
 
+    static int GetUniformsListSize(GLId shaderProgramId);
+    template <class T>
+    static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
+    static DataType GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex);
+
     static void BlendFunc(BlendFactor srcFactor, BlendFactor dstFactor);
 
     static void BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
@@ -295,6 +315,7 @@ public:
     static bool   LinkProgram(GLId programId);
     static String GetProgramLinkErrorMsg(GLId programId);
     static int    GetProgramInteger(GLId programId, GL::Enum glEnum);
+    static void   GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints);
     static void   BindAttribLocation(GLId programId, int location,
                                      const String &attribName);
     static void   BindFragDataLocation(GLId programId, int location,
@@ -393,6 +414,7 @@ public:
     static void DeleteVertexArrays(int n, const GLId *glIds);
     static void DeleteBuffers(int n, const GLId *glIds);
 
+    static void SetViewport(const Rect &viewportNDC);
     static void SetViewport(const Recti &viewport);
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);

@@ -95,7 +95,7 @@ public:
             case 1: return c1;
             case 2: return c2;
         }
-        Debug_Warn("Matrix3G<T> index " << i << " too big");
+        std::cerr << "Matrix3G<T> index " << i << " too big" << std::endl;
         return c2;
     }
     const Vector3G<T>& operator[](::std::size_t i) const

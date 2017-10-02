@@ -1,6 +1,7 @@
 #include "Bang/GL.h"
 
 #include "Bang/VAO.h"
+#include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/Matrix3.h"
 #include "Bang/GEngine.h"
@@ -105,6 +106,29 @@ void GL::VertexAttribPointer(int location,
                           dataStride,
                           RCAST<void*>(dataOffset));
     GL_CheckError();
+}
+
+int GL::GetUniformsListSize(GLId shaderProgramId)
+{
+    return GL::GetProgramInteger(shaderProgramId, GL_ACTIVE_UNIFORMS);
+}
+
+GL::DataType GL::GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex)
+{
+    if (shaderProgramId == 0) { return DataType::Byte; }
+
+    GLint size;
+    GL::Enum type;
+    GLsizei length;
+    constexpr GLsizei bufSize = 128;
+    GLchar cname[bufSize];
+
+    glGetActiveUniform(shaderProgramId,
+                       SCAST<GLuint>(uniformIndex),
+                       bufSize, &length,
+                       &size, &type, cname);
+
+    return SCAST<GL::DataType>(type);
 }
 
 void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
@@ -244,10 +268,15 @@ String GL::GetProgramLinkErrorMsg(GLId programId)
 int GL::GetProgramInteger(GLId programId, GL::Enum glEnum)
 {
     int result = 0;
-    GL::ClearError();
-    glGetProgramiv(programId, glEnum, &result);
-    GL_CheckError();
+    GL::GetProgramIntegers(programId, glEnum, &result);
     return result;
+}
+
+void GL::GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints)
+{
+    GL::ClearError();
+    glGetProgramiv(programId, glEnum, ints);
+    GL_CheckError();
 }
 
 void GL::BindAttribLocation(GLId programId, int location,
@@ -365,23 +394,33 @@ void GL::Flush() { glFlush(); }
 
 void GL::Uniform(int location, int value)
 {
+    GL::ClearError();
     glUniform1i(location, value);
+    GL_CheckError();
 }
 void GL::Uniform(int location, float value)
 {
+    GL::ClearError();
     glUniform1f(location, value);
+    GL_CheckError();
 }
 void GL::Uniform(int location, bool value)
 {
+    GL::ClearError();
     glUniform1i(location, value ? 1 : 0);
+    GL_CheckError();
 }
 void GL::Uniform(int location, const Matrix3f& value)
 {
+    GL::ClearError();
     glUniformMatrix3fv(location, 1, false, value.Data());
+    GL_CheckError();
 }
 void GL::Uniform(int location, const Matrix4f& value)
 {
+    GL::ClearError();
     glUniformMatrix4fv(location, 1, false, value.Data());
+    GL_CheckError();
 }
 void GL::Uniform(int location, const Color &value)
 {
@@ -389,20 +428,28 @@ void GL::Uniform(int location, const Color &value)
 }
 void GL::Uniform(int location, const Vector2 &value)
 {
+    GL::ClearError();
     glUniform2fv(location, 1, value.Data());
+    GL_CheckError();
 }
 void GL::Uniform(int location, const Vector3 &value)
 {
+    GL::ClearError();
     glUniform3fv(location, 1, value.Data());
+    GL_CheckError();
 }
 void GL::Uniform(int location, const Vector4 &value)
 {
+    GL::ClearError();
     glUniform4fv(location, 1, value.Data());
+    GL_CheckError();
 }
 
 void GL::PixelStore(GL::Enum pixelStoreEnum, int n)
 {
+    GL::ClearError();
     glPixelStorei(pixelStoreEnum, n);
+    GL_CheckError();
 }
 
 void GL::GenerateMipMap(GL::TextureTarget textureTarget)
@@ -487,20 +534,24 @@ bool GL::GetBoolean(GL::Enum glEnum)
 }
 void GL::GetBoolean(GL::Enum glEnum, bool *values)
 {
+    GL::ClearError();
     GLboolean result;
     glGetBooleanv(GLCAST(glEnum), &result);
     *values = result;
+    GL_CheckError();
 }
 
 int GL::GetInteger(GL::Enum glEnum)
 {
-    int result;
+    GLint result;
     GL::GetInteger(glEnum, &result);
     return result;
 }
 void GL::GetInteger(GL::Enum glEnum, int *values)
 {
+    GL::ClearError();
     glGetIntegerv(glEnum, values);
+    GL_CheckError();
 }
 
 void GL::ActiveTexture(int activeTexture)
@@ -562,6 +613,13 @@ void GL::DeleteVertexArrays(int n, const GLId *glIds)
 void GL::DeleteBuffers(int n, const GLId *glIds)
 {
     glDeleteBuffers(n, glIds);
+}
+
+void GL::SetViewport(const Rect &viewportNDC)
+{
+    Vector2i minPx = GL::FromGlobalNDCToPixelsPoint(viewportNDC.GetMin());
+    Vector2i maxPx = GL::FromGlobalNDCToPixelsAmount(viewportNDC.GetMax());
+    GL::SetViewport( Recti(minPx.x, minPx.y, maxPx.x, maxPx.y) );
 }
 
 void GL::SetViewport(const Recti &viewport)
@@ -635,6 +693,7 @@ void GL::Bind(const GLObject *bindable)
 
 void GL::Bind(GL::BindTarget bindTarget, GLId glId)
 {
+    GL::ClearError();
     switch (bindTarget)
     {
         case BindTarget::Texture2D:
@@ -655,6 +714,7 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
         default:
         break;
     }
+    GL_CheckError();
 }
 
 void GL::UnBind(const GLObject *bindable)
@@ -897,7 +957,9 @@ GL::Function GL::GetDepthFunc()
 
 bool GL::IsWireframe()
 {
-    return GL::GetInteger(GL_POLYGON_MODE) == GL_LINE;
+    GLint result[2];
+    GL::GetInteger(GL_POLYGON_MODE, result);
+    return result[0] == GL_LINE;
 }
 GL::Face GL::GetCullFace()
 {

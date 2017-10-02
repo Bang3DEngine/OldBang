@@ -2,12 +2,10 @@
 #define BANG_FRAGMENT
 #include "Common.glsl"
 
-uniform vec4 B_DiscardColor;
-
 void main()
 {
     InitCommon();
     vec4 color = B_SampleColor();
-    if (color == B_DiscardColor) { discard; }
     gl_FragColor = color;
+    gl_FragDepth = B_SampleDepth();
 }

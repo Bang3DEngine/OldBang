@@ -20,13 +20,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateAttachment(AttColorRead,    GL::ColorFormat::RGBA_UByte8);
     CreateAttachment(AttDepthStencil, GL::ColorFormat::Depth24_Stencil8);
     UnBind();
-
-    m_normalTexture       = GetAttachmentTexture(AttNormal);
-    m_diffuseTexture      = GetAttachmentTexture(AttDiffuse);
-    m_miscTexture         = GetAttachmentTexture(AttMisc);
-    m_colorTexture        = GetAttachmentTexture(AttColor);
-    m_colorReadTexture    = GetAttachmentTexture(AttColorRead);
-    m_depthStencilTexture = GetAttachmentTexture(AttDepthStencil);
 }
 
 GBuffer::~GBuffer()
@@ -37,11 +30,11 @@ void GBuffer::PrepareForRender(ShaderProgram *sp)
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
-    sp->Set("B_GTex_Normal",       m_normalTexture);
-    sp->Set("B_GTex_DiffColor",    m_diffuseTexture);
-    sp->Set("B_GTex_Misc",         m_miscTexture);
-    sp->Set("B_GTex_Color",        m_colorReadTexture);
-    sp->Set("B_GTex_DepthStencil", m_depthStencilTexture);
+    sp->Set("B_GTex_Normal",       GetAttachmentTexture(AttNormal));
+    sp->Set("B_GTex_DiffColor",    GetAttachmentTexture(AttDiffuse));
+    sp->Set("B_GTex_Misc",         GetAttachmentTexture(AttMisc));
+    sp->Set("B_GTex_Color",        GetAttachmentTexture(AttColorRead));
+    sp->Set("B_GTex_DepthStencil", GetAttachmentTexture(AttDepthStencil));
 }
 
 

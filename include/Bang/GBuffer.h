@@ -44,15 +44,6 @@ public:
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
-    Texture2D *m_normalTexture       = nullptr;
-    Texture2D *m_diffuseTexture      = nullptr;
-    Texture2D *m_miscTexture         = nullptr;
-    Texture2D *m_colorTexture        = nullptr;
-    Texture2D *m_colorReadTexture    = nullptr;
-    Texture2D *m_depthStencilTexture = nullptr;
-
-    mutable bool m_willReadFromColorRead = false;
-
     void RenderScreenPlane();
 
     friend class GEngine;

@@ -2,11 +2,11 @@
 #define BANG_G
 #include "Common.glsl"
 
-bool B_UseDiffuseColor;
+bool B_UsePlainDiffuseColor;
 
 void InitMain()
 {
-    B_UseDiffuseColor      = true;
+    B_UsePlainDiffuseColor = false;
     B_Out_NormalWorld      = B_FragIn_NormalWorld;
     B_Out_ReceivesLighting = B_MaterialReceivesLighting;
     B_Out_Shininess        = B_MaterialShininess;
@@ -23,16 +23,13 @@ void EndMain()
                            0, 0);
 
     vec4 outColor;
-    if (B_UseDiffuseColor)
+    if (!B_UsePlainDiffuseColor)
     {
         float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
         outColor = vec4(B_Out_DiffColor.rgb * B_Out_Color.rgb * ambientLight,
                         B_Out_DiffColor.a * B_Out_Color.a);
     }
-    else
-    {
-        outColor = B_Out_Color;
-    }
+    else { outColor = B_Out_Color; }
 
     B_Out_Color = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
     B_GIn_Color = B_Out_Color;

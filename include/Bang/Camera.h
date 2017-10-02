@@ -26,6 +26,9 @@ public:
 
     virtual void Bind() const;
     virtual void UnBind() const;
+    void SetViewportForBlitting() const;
+    void SetViewportForRendering() const;
+
     void BindGBuffer();
     void BindSelectionFramebuffer();
 

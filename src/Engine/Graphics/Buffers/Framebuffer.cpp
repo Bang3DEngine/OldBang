@@ -76,6 +76,8 @@ void Framebuffer::SetAttachmentTexture(Texture2D *tex,
 {
     GLId prevId = GL::GetBoundId(GL::BindTarget::Framebuffer);
 
+    m_attachments_To_Texture.Remove(attachment);
+
     Bind();
     GL::ClearError();
     GL::FramebufferTexture2D(GL::FramebufferTarget::ReadDraw,
@@ -85,7 +87,9 @@ void Framebuffer::SetAttachmentTexture(Texture2D *tex,
     GL::CheckFramebufferError();
     UnBind();
 
-    if (prevId > 0) { GL::Bind(GL::BindTarget::Framebuffer, prevId); }
+    m_attachments_To_Texture.Add(attachment, tex);
+
+    GL::Bind(GL::BindTarget::Framebuffer, prevId);
 }
 
 const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const

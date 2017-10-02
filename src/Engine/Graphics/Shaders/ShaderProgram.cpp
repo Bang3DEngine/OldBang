@@ -101,12 +101,9 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
 
 bool ShaderProgram::Set(const String &name, const Texture *texture) const
 {
-    bool uniformIsUsed = BindTextureToAvailableUnit(name, texture);
-    if (uniformIsUsed)
-    {
-        m_namesToTexture[name] = texture;
-    }
-    return uniformIsUsed;
+    m_namesToTexture[name] = texture;
+    if (GL::IsBound(this)) { BindTextureToAvailableUnit(name, texture); }
+    return true;
 }
 
 bool ShaderProgram::Refresh()
@@ -191,7 +188,7 @@ void ShaderProgram::RetrieveType(const Path &vshaderPath,
 }
 
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
-                                                 const Texture *texture) const
+                                               const Texture *texture) const
 {
     int location = -1;
     if (texture)

@@ -37,6 +37,16 @@ inline int GL::GetUniform(GLId program, int uniformLocation)
     int x[4]; glGetUniformiv(program, uniformLocation, x); return x[0];
 }
 template <>
+inline short GL::GetUniform(GLId program, int uniformLocation)
+{
+    return (GL::GetUniform<int>(program, uniformLocation) != 0);
+}
+template <>
+inline Byte GL::GetUniform(GLId program, int uniformLocation)
+{
+    return (GL::GetUniform<int>(program, uniformLocation) != 0);
+}
+template <>
 inline bool GL::GetUniform(GLId program, int uniformLocation)
 {
     return (GL::GetUniform<int>(program, uniformLocation) != 0);
@@ -66,6 +76,16 @@ inline Color GL::GetUniform(GLId program, int uniformLocation)
 {
     Color c; glGetUniformfv(program, uniformLocation, &c.r); return c;
 }
+template <>
+inline Matrix3 GL::GetUniform(GLId program, int uniformLocation)
+{
+    Matrix3 m; glGetUniformfv(program, uniformLocation, m.Data()); return m;
+}
+template <>
+inline Matrix4 GL::GetUniform(GLId program, int uniformLocation)
+{
+    Matrix4 m; glGetUniformfv(program, uniformLocation, m.Data()); return m;
+}
 
 template <class T>
 T GL::GetUniform(GLId program, const String &uniformName)
@@ -80,6 +100,27 @@ T GL::GetUniform(const String &uniformName)
 {
     return GL::GetUniform<T>(GL::GetBoundId(GL::BindTarget::ShaderProgram),
                              uniformName);
+}
+
+template<class T>
+GL::GLSLVar<T> GL::GetUniformAt(GLId shaderProgramId, GLuint uniformIndex)
+{
+    if (shaderProgramId == 0) { return GL::GLSLVar<T>(); }
+
+    GLint size;
+    GL::Enum type;
+    GLsizei length;
+    constexpr GLsizei bufSize = 128;
+    GLchar cname[bufSize];
+
+    glGetActiveUniform(shaderProgramId,
+                       SCAST<GLuint>(uniformIndex),
+                       bufSize, &length,
+                       &size, &type, cname);
+
+    String name(cname);
+    T uniformValue = GL::GetUniform<T>(shaderProgramId, name);
+    return GL::GLSLVar<T>(name, uniformValue);
 }
 
 NAMESPACE_BANG_END
