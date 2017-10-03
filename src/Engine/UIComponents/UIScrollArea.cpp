@@ -2,6 +2,7 @@
 
 #include "Bang/UIGameObject.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -63,6 +64,7 @@ void UIScrollArea::UpdateChildrenMargins()
 
     p_childrenContainer->GetRectTransform()->SetMargins(marginLeft, marginTop,
                                                         marginRight, marginBot);
+    UILayoutManager::Invalidate(p_childrenContainer->GetRectTransform());
 }
 
 UIGameObject *UIScrollArea::CreateGameObject()

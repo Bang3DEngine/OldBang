@@ -121,6 +121,11 @@ UIButtonDriver* GameObjectFactory::CreateGUIButton()
     fl->SetPaddingRight(10);
     fl->SetPaddingLeft (10);
 
+    UILayoutElement *le = container->AddComponent<UILayoutElement>();
+    le->SetMinSize( Vector2i(-1) );
+    le->SetPreferredSize( Vector2i(-1) );
+    le->SetFlexibleSize( Vector2(0) );
+
     UIGameObject *bg = GameObjectFactory::CreateUIGameObject(true);
     bg->SetName("GUIButton_Background");
     UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();

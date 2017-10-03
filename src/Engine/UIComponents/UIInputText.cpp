@@ -48,7 +48,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
     UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
     Rect limits = uiGo->GetRectTransform()->GetScreenSpaceRectNDC();
 
-    Vector2i prevScrolling = p_boxScrollArea->GetScrolling();
+    Vector2i prevScrollPx = p_boxScrollArea->GetScrolling();
     p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
     GetText()->RegenerateCharQuadsVAO();
 
@@ -89,33 +89,32 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
         }
         else
         {
-            Vector2 prevScrollingNDC = GL::FromPixelsAmountToGlobalNDC(prevScrolling);
-            Rect labelLimitsScrolled    = labelLimits    + prevScrollingNDC;
-            Rect contentRectNDCScrolled = contentRectNDC + prevScrollingNDC;
-            // contentRectNDC = GetText()->GetContentGlobalNDCRect();
-            float cursorX = GetCursorXGlobalNDC(m_cursorIndex) + prevScrollingNDC.x;
+            p_boxScrollArea->SetScrolling(prevScrollPx);
+            GetText()->RegenerateCharQuadsVAO();
+            contentRectNDC = GetText()->GetContentGlobalNDCRect();
+            float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
             float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
-            if (cursorX < labelLimitsScrolled.GetMin().x)
+            if (cursorX < labelLimits.GetMin().x)
             {
-                scrollNDC.x = labelLimitsScrolled.GetMin().x - cursorX + lookAheadNDC;
+                scrollNDC.x = labelLimits.GetMin().x - cursorX + lookAheadNDC;
             }
-            else if (cursorX > labelLimitsScrolled.GetMax().x)
+            else if (cursorX > labelLimits.GetMax().x)
             {
-                scrollNDC.x = labelLimitsScrolled.GetMax().x - cursorX - lookAheadNDC;
+                scrollNDC.x = labelLimits.GetMax().x - cursorX - lookAheadNDC;
             }
             else
             {
-                if (contentRectNDCScrolled.GetMin().x < labelLimitsScrolled.GetMin().x &&
-                    contentRectNDCScrolled.GetMax().x < labelLimitsScrolled.GetMax().x)
+                if (contentRectNDC.GetMin().x < labelLimits.GetMin().x &&
+                    contentRectNDC.GetMax().x < labelLimits.GetMax().x)
                 {
-                    scrollNDC.x = labelLimitsScrolled.GetMax().x -
-                                  contentRectNDCScrolled.GetMax().x -
+                    scrollNDC.x = labelLimits.GetMax().x -
+                                  contentRectNDC.GetMax().x -
                                   lookAheadNDC;
                 }
             }
 
             Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
-            p_boxScrollArea->SetScrolling(scrollPx);
+            p_boxScrollArea->SetScrolling(prevScrollPx + scrollPx);
         }
     }
 }

@@ -37,13 +37,13 @@ public:
                             int spaceX = 1);
 
     static UIGameObject* CreateGUISpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             const Vector2i &space = Vector2i(1));
     static UIGameObject* CreateGUIHSpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             int spaceX = 1);
     static UIGameObject* CreateGUIVSpacer(
-                            LayoutSizeType sizeType = LayoutSizeType::Preferred,
+                            LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             int spaceY = 1);
 
     GameObjectFactory() = delete;

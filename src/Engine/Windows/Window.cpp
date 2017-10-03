@@ -103,7 +103,7 @@ bool Window::MainLoopIteration()
 void Window::Clear()
 {
     GL::ClearDepthBuffer();
-    GL::ClearColorBuffer(Color::Pink);
+    GL::ClearColorBuffer(Color::Zero);
 }
 
 void Window::Update()

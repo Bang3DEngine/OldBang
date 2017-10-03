@@ -93,10 +93,6 @@ public:
     template <class T>
     int CountComponents() const;
 
-    const List<GameObject*>& GetSiblings() const;
-    void AddSibling(GameObject *sibling);
-    void RemoveSibling(GameObject *sibling);
-
     template <class T>
     void RemoveComponent();
     void RemoveComponent(Component *c);
@@ -129,7 +125,6 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    List<GameObject*> m_siblings;
     List<GameObject*> m_children;
     List<Component*> m_components;
 

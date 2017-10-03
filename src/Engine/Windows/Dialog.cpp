@@ -68,9 +68,12 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
 
     UIGameObject *vlGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
+    vl->SetChildrenVerticalStretch(Stretch::None);
 
     UIGameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
+    hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
+    hl->SetChildrenVerticalStretch(Stretch::None);
 
     UIGameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
     UIInputText *inputText = inputTextGo->GetComponent<UIInputText>();
@@ -93,7 +96,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     vlGo->AddChild(inputTextGo);
     vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
     vlGo->AddChild(hlGo);
-    hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer());
+    hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer(LayoutSizeType::Flexible));
     hlGo->AddChild(openButton ->gameObject);
 
     return scene;
