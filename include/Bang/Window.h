@@ -40,6 +40,9 @@ public:
 
     void MoveToFront() const;
     void SetBordered(bool bordered);
+    void SetMinSize(int minSizeX, int minSizeY);
+    void SetMaxSize(int maxSizeX, int maxSizeY);
+    void SetResizable(bool resizable);
     void SetPosition(int newPosX, int newPosY);
     void SetTitle(const String &title);
 
@@ -53,6 +56,9 @@ public:
     String GetTitle() const;
     bool IsMouseOver() const;
     Vector2i GetSize() const;
+    Vector2i GetMinSize() const;
+    Vector2i GetMaxSize() const;
+    bool IsResizable() const;
     Vector2i GetPosition() const;
     bool IsBlockedByChildren() const;
     bool HasFlags(uint flags) const;
@@ -90,8 +96,17 @@ private:
     AudioManager  *m_audioManager = nullptr;
     SceneManager  *m_sceneManager = nullptr;
 
-    Vector2i m_prevSize    = Vector2i::Zero;
-    Vector2i m_newSize = Vector2i::Zero;
+    Vector2i m_minSize = Vector2i::Zero;
+    Vector2i m_maxSize = Vector2i(4096);
+    Vector2i m_prevSize = Vector2i::Zero;
+    Vector2i m_newSize  = Vector2i::Zero;
+    bool m_isResizable = true, m_resizableChanged = false;
+
+    void _SetMinSize(int minSizeX, int minSizeY);
+    void _SetMaxSize(int maxSizeX, int maxSizeY);
+    Vector2i _GetMinSize() const;
+    Vector2i _GetMaxSize() const;
+    bool IsParentWindow(int sdlWindowId) const;
 
     friend int EventFilter(void *userData, SDL_Event *event);
 };

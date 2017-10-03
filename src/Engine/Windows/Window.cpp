@@ -55,6 +55,8 @@ void Window::Create(uint flags)
     m_sdlGLContext = SDL_GL_CreateContext(GetSDLWindow());
     MakeCurrent();
 
+    SetMinSize(1, 1);
+    SetMaxSize(99999, 99999);
 
     // Init GLEW
     glewExperimental = true;
@@ -164,15 +166,24 @@ bool Window::HandleEvent(const SDL_Event &sdlEvent)
                     m_newSize = Vector2i(sdlEvent.window.data1,
                                          sdlEvent.window.data2);
                     break;
-
+            }
+        }
+        else
+        {
+            // Other window (not this) events
+            switch (sdlEvent.window.event)
+            {
                 case SDL_WINDOWEVENT_EXPOSED:
                 case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    if (!p_children.IsEmpty())
-                    { p_children.Front()->MoveToFront(); }
+                    if (IsParentWindow(sdlEvent.window.windowID))
+                    {
+                        MoveToFront();
+                    }
                     break;
             }
         }
     }
+
     return true;
 }
 
@@ -190,6 +201,37 @@ void Window::MoveToFront() const
 void Window::SetBordered(bool bordered)
 {
     SDL_SetWindowBordered(GetSDLWindow(), SCAST<SDL_bool>(bordered));
+}
+
+void Window::SetMinSize(int minSizeX, int minSizeY)
+{
+    m_minSize = Vector2i(minSizeX, minSizeY);
+    _SetMinSize(minSizeX, minSizeY);
+}
+
+void Window::SetMaxSize(int maxSizeX, int maxSizeY)
+{
+    m_maxSize = Vector2i(maxSizeX, maxSizeY);
+    _SetMaxSize(maxSizeX, maxSizeY);
+}
+
+void Window::SetResizable(bool resizable)
+{
+    ENSURE(m_isResizable != resizable);
+    m_isResizable = resizable;
+
+    if (IsResizable())
+    {
+        _SetMaxSize(GetMaxSize().x, GetMaxSize().y);
+        _SetMinSize(GetMinSize().x, GetMinSize().y);
+        SetSize(GetSize().x, GetSize().y);
+    }
+    else
+    {
+        Vector2i size = GetSize();
+        _SetMinSize(size.x,   size.y);
+        _SetMaxSize(size.x+1, size.y+1);
+    }
 }
 
 void Window::SetPosition(int newPosX, int newPosY)
@@ -238,6 +280,21 @@ Vector2i Window::GetSize() const
     Vector2i size;
     SDL_GetWindowSize(m_sdlWindow, &size.x, &size.y);
     return size;
+}
+
+Vector2i Window::GetMinSize() const
+{
+    return m_minSize;
+}
+
+Vector2i Window::GetMaxSize() const
+{
+    return m_maxSize;
+}
+
+bool Window::IsResizable() const
+{
+    return m_isResizable;
 }
 
 Vector2i Window::GetPosition() const
@@ -327,12 +384,44 @@ void Window::SetParent(Window *parentWindow)
     if (p_parent)
     {
         p_parent->p_children.Remove(this);
+        p_parent->SetResizable(true);
     }
 
     p_parent = parentWindow;
 
     if (p_parent)
     {
+        p_parent->SetResizable(false);
         p_parent->p_children.PushBack(this);
     }
+}
+
+void Window::_SetMinSize(int minSizeX, int minSizeY)
+{
+    SDL_SetWindowMinimumSize(GetSDLWindow(), minSizeX, minSizeY);
+}
+
+void Window::_SetMaxSize(int maxSizeX, int maxSizeY)
+{
+    SDL_SetWindowMaximumSize(GetSDLWindow(), maxSizeX, maxSizeY);
+}
+
+Vector2i Window::_GetMinSize() const
+{
+    Vector2i minSize;
+    SDL_GetWindowMinimumSize(GetSDLWindow(), &minSize.x, &minSize.y);
+    return minSize;
+}
+
+Vector2i Window::_GetMaxSize() const
+{
+    Vector2i maxSize;
+    SDL_GetWindowMaximumSize(GetSDLWindow(), &maxSize.x, &maxSize.y);
+    return maxSize;
+}
+
+bool Window::IsParentWindow(int sdlWindowId) const
+{
+    return p_parent ? (p_parent->GetSDLWindowID() == sdlWindowId ||
+                       p_parent->IsParentWindow(sdlWindowId)) : false;
 }
