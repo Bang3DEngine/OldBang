@@ -203,6 +203,7 @@ void GEngine::RenderToScreen(Camera *cam)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
+    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
 
     GEngine::RenderScreenPlane(true);
 

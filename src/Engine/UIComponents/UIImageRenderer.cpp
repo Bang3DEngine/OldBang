@@ -165,8 +165,7 @@ void UIImageRenderer::RegenerateQuadVAO()
 
 void UIImageRenderer::OnRectTransformChanged()
 {
-    ENSURE(m_imageTexture);
-    RegenerateQuadVAO();
+    OnChanged();
 }
 
 Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
