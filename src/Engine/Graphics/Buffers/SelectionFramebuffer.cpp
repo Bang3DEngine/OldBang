@@ -8,15 +8,17 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    ShaderProgram *selectionProgram = new ShaderProgram();
-    selectionProgram->Load( EPATH("Shaders/G_Default.vert_g"),
-                            EPATH("Shaders/SelectionBuffer.frag_sel") );
+    ShaderProgram *selectionProgram =
+            ShaderProgramFactory::GetShaderProgram(
+                EPATH("Shaders/G_Default.vert_g"),
+                EPATH("Shaders/SelectionBuffer.frag_sel") );
 
     m_selectionMaterial = new Material();
     m_selectionMaterial->SetShaderProgram(selectionProgram);

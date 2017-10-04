@@ -18,6 +18,6 @@ DialogWindow::~DialogWindow()
 void DialogWindow::Create(uint flags)
 {
     uint newFlags = flags;
-    newFlags &= ~SDL_WINDOW_RESIZABLE;
+    // newFlags &= ~SDL_WINDOW_RESIZABLE;
     Window::Create(newFlags);
 }

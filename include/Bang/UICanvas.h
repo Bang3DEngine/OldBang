@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIGameObject;
+FORWARD class GameObject;
 
 class UICanvas : public Component
 {
@@ -22,11 +22,11 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    UIGameObject *GetFocusedGameObject() const;
-    void GiveFocusTo(UIGameObject *focusTaker) const;
+    GameObject *GetFocusedGameObject() const;
+    void GiveFocusTo(GameObject *focusTakerGo) const;
 
 private:
-    mutable UIGameObject *p_focus = nullptr;
+    mutable GameObject *p_focusedGo = nullptr;
 };
 
 NAMESPACE_BANG_END

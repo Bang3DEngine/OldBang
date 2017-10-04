@@ -4,7 +4,8 @@
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/Material.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
+#include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
@@ -31,8 +32,8 @@ void UIInputText::OnUpdate()
 
     RetrieveReferences();
 
-    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
-    if ( uiGo->HasFocus() )
+    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
+    if ( ft->HasFocus() )
     {
         const bool wasSelecting = (m_selectionIndex != m_cursorIndex);
 
@@ -40,13 +41,12 @@ void UIInputText::OnUpdate()
         HandleCursorIndices(wasSelecting);
         UpdateCursorRenderersAndScrolling();
     }
-    p_cursor->SetEnabled( uiGo->HasFocus() );
+    p_cursor->SetEnabled( ft->HasFocus() );
 }
 
 void UIInputText::UpdateCursorRenderersAndScrolling()
 {
-    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
-    Rect limits = uiGo->GetRectTransform()->GetScreenSpaceRectNDC();
+    Rect limits = gameObject->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
 
     Vector2i prevScrollPx = p_boxScrollArea->GetScrolling();
     p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
@@ -72,8 +72,9 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             p1 = GetTextRT()->FromGlobalNDCToLocalNDC(p1);
             p2 = GetTextRT()->FromGlobalNDCToLocalNDC(p2);
 
-            p_selectionQuad->GetRectTransform()->SetAnchorMin( Vector2::Min(p1, p2) );
-            p_selectionQuad->GetRectTransform()->SetAnchorMax( Vector2::Max(p1, p2) );
+            RectTransform *selRT = p_selectionQuad->GetComponent<RectTransform>();
+            selRT->SetAnchorMin( Vector2::Min(p1, p2) );
+            selRT->SetAnchorMax( Vector2::Max(p1, p2) );
         }
     }
 
@@ -178,7 +179,7 @@ void UIInputText::HandleTyping()
             SystemClipboard::Set(selectedText);
             ReplaceSelectedText("");
         }
-        else if ( Input::GetKeyDown(Key::V) )
+        else if ( Input::GetKeyDownRepeat(Key::V) )
         {
             String clipboardText = SystemClipboard::Get();
             ReplaceSelectedText(clipboardText);
@@ -198,8 +199,8 @@ void UIInputText::HandleTyping()
 void UIInputText::HandleCursorIndices(bool wasSelecting)
 {
     // Here we will move the selection indices either by mouse or arrows...
-    UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
-    if (uiGo->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
+    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
+    if (ft->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
     {
         if (!IsShiftPressed()) { ResetSelection(); }
         m_selectingWithMouse = true;
@@ -397,9 +398,9 @@ void UIInputText::RetrieveReferences()
 {
     GameObject *go = GetGameObject(); ENSURE(go);
     p_background = go->GetComponent<UIImageRenderer>();
-    p_label = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_Label"));
+    p_label = gameObject->FindInChildren("GUIInputText_Label");
     p_cursor = p_label->GetComponentInChildren<UITextCursor>();
-    p_selectionQuad = SCAST<UIGameObject*>(go->FindInChildren("GUIInputText_SelectionQuad"));
+    p_selectionQuad = gameObject->FindInChildren("GUIInputText_SelectionQuad");
     p_boxScrollArea = SCAST<UIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
                                             GetComponent<UIScrollArea>());
 }
@@ -409,28 +410,29 @@ bool UIInputText::IsShiftPressed() const
     return Input::GetKey(Key::LShift) || Input::GetKey(Key::RShift);
 }
 
-UIGameObject *UIInputText::CreateGameObject()
+GameObject *UIInputText::CreateGameObject()
 {
-    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
-    go->SetDefaultFocusAction(FocusAction::TakeIt);
+    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    UIFocusTaker *ft = go->GetComponent<UIFocusTaker>();
+    ft->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIImageRenderer *imgRenderer = go->AddComponent<UIImageRenderer>();
     imgRenderer->UseMaterialCopy();
     imgRenderer->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
-    UIGameObject *label = GameObjectFactory::CreateGUILabel();
+    GameObject *label = GameObjectFactory::CreateGUILabel();
     label->SetName("GUIInputText_Label");
     label->SetParent(go);
 
-    UIGameObject *selectionQuad = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *selectionQuad = GameObjectFactory::CreateUIGameObject(true);
     selectionQuad->SetName("GUIInputText_SelectionQuad");
     selectionQuad->SetParent(label, 0);
 
-    UIGameObject *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
+    GameObject *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
     boxScrollArea->SetName("GUIInputText_BoxMask");
     boxScrollArea->SetParent(go);
 
-    UIGameObject *cursor = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *cursor = GameObjectFactory::CreateUIGameObject(true);
     cursor->SetName("GUIInputText_GUITextCursor");
     cursor->AddComponent<UITextCursor>();
     cursor->SetParent(label);
@@ -449,7 +451,7 @@ void UIInputText::InitGameObject()
     p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
 
     p_label->GetComponentInChildren<UIMask>()->SetMasking(false);
-    p_label->GetRectTransform()->SetMargins(5, 2, 5, 2);
+    p_label->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
 
     UIImageRenderer *selectionImg =
             p_selectionQuad->AddComponent<UIImageRenderer>();

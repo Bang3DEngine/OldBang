@@ -4,7 +4,7 @@
 #include "Bang/Window.h"
 #include "Bang/Transform.h"
 #include "Bang/Resources.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -36,19 +36,19 @@ int main(int argc, char **argv)
 
     Scene *scene = GameObjectFactory::CreateScene();
 
-    UIGameObject *all = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *topHLGo  = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *topGo0 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *topGo1 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *topGo2 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *midHLGo  = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *midGo0 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *midGo1 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *midGo2 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *botHLGo  = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *botGo0 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *botGo1 = GameObjectFactory::CreateUIGameObject(true);
-    UIGameObject *botGo2 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *all = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *topHLGo  = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *topGo0 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *topGo1 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *topGo2 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *midHLGo  = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *midGo0 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *midGo1 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *midGo2 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *botHLGo  = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *botGo0 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *botGo1 = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *botGo2 = GameObjectFactory::CreateUIGameObject(true);
     RectTransform *allRT = all->GetComponent<RectTransform>();
     UIVerticalLayout *allVL = all->AddComponent<UIVerticalLayout>();
     allRT->SetMargins(30);

@@ -162,10 +162,10 @@ ${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
+${ENGINE_SRC_DIR}/Factory/ShaderProgramFactory.cpp
 ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
-${ENGINE_SRC_DIR}/GameObjects/UIGameObject.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
@@ -219,6 +219,8 @@ ${ENGINE_SRC_DIR}/System/Library.cpp
 ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFocusTaker.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
@@ -234,6 +236,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIListDriver.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp

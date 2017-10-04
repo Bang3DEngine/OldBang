@@ -4,15 +4,16 @@
 #include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GEngine.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 PostProcessEffect::PostProcessEffect()
 {
-    m_shaderProgram = new ShaderProgram();
+    m_shaderProgram = ShaderProgramFactory::GetEmptyProgram();
 
     Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
     Shader *vShader = Resources::Load<Shader>(vShaderPath);
@@ -21,7 +22,6 @@ PostProcessEffect::PostProcessEffect()
 
 PostProcessEffect::~PostProcessEffect()
 {
-    if (m_shaderProgram) { delete m_shaderProgram; }
 }
 
 void PostProcessEffect::OnRender(RenderPass renderPass)

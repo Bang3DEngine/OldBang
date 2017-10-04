@@ -8,20 +8,20 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 Material::Material()
 {
-    ShaderProgram *sp = new ShaderProgram();
-    sp->Load(Resources::Load<Shader>( EPATH("Shaders/G_Default.vert_g") ),
-             Resources::Load<Shader>( EPATH("Shaders/G_Default.frag_g") ));
+    ShaderProgram *sp = ShaderProgramFactory::GetShaderProgram(
+                                    EPATH("Shaders/G_Default.vert_g"),
+                                    EPATH("Shaders/G_Default.frag_g"));
     SetShaderProgram(sp);
 }
 
 Material::~Material()
 {
-    if (m_shaderProgram) { delete m_shaderProgram; }
 }
 
 void Material::SetUvMultiply(const Vector2 &uvMultiply)
@@ -125,6 +125,7 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetShininess(GetShininess());
     matClone->SetTexture(GetTexture());
 
+    /*
     ShaderProgram *sp = GetShaderProgram();
     if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
     {
@@ -132,10 +133,8 @@ void Material::CloneInto(ICloneable *clone) const
         Shader *fshader = sp->GetFragmentShader();
         sp = new ShaderProgram();
         sp->Load(vshader->GetResourceFilepath(), fshader->GetResourceFilepath());
-    }
-    matClone->SetShaderProgram(sp);
-
-    matClone->SetShaderProgram(sp);
+    }*/
+    matClone->SetShaderProgram(GetShaderProgram());
     matClone->SetTexture(GetTexture());
 }
 
@@ -171,12 +170,10 @@ void Material::ImportXML(const XMLNode &xml)
     if (xml.Contains("FragmentShader"))
     { fShader = Resources::Load<Shader>(xml.Get<GUID>("FragmentShader")); }
 
-    ShaderProgram *sp = GetShaderProgram();
-    ShaderProgram *newSp = new ShaderProgram();
-    bool successLoadingSp = newSp->Load(vShader, fShader);
-    if (successLoadingSp)
+    if (vShader && fShader)
     {
-        if (sp) { delete sp; }
+        ShaderProgram *newSp = ShaderProgramFactory::GetShaderProgram(vShader,
+                                                                      fShader);
         SetShaderProgram(newSp);
     }
 }

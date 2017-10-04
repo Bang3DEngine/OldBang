@@ -13,7 +13,6 @@
 #include "Bang/Material.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
-#include "Bang/UIGameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -235,6 +234,8 @@ const List<GameObject *> &GameObject::GetChildren() const
 
 GameObject *GameObject::GetChild(int index) const
 {
+    if (index < 0 || index >= GetChildren().Size()) { return nullptr; }
+
     auto it = GetChildren().Begin(); ::std::advance(it, index);
     return *it;
 }
@@ -414,9 +415,9 @@ void GameObject::ImportXML(const XMLNode &xmlInfo)
     for (const XMLNode& xmlChild : xmlInfo.GetChildren() )
     {
         const String& tagName = xmlChild.GetTagName();
-        if (GameObjectFactory::ExistsGameObjectClass(tagName))
+        if (tagName == GameObject::GetClassNameStatic())
         {
-            GameObject *child = GameObjectFactory::CreateGameObject(tagName);
+            GameObject *child = GameObjectFactory::CreateGameObject(false);
             child->SetParent(this);
             child->ImportXML(xmlChild);
         }

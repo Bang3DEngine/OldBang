@@ -8,8 +8,8 @@
 #include "Bang/TypeMap.h"
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
-#include "Bang/ImportFilesManager.h"
 #include "Bang/Serializable.h"
+#include "Bang/ImportFilesManager.h"
 
 NAMESPACE_BANG_BEGIN
 

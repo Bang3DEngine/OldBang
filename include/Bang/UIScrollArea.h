@@ -7,7 +7,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIGameObject;
+FORWARD class GameObject;
 
 class UIScrollArea : public Component
 {
@@ -25,18 +25,18 @@ public:
     void SetScrollingY(int scrollPxY) noexcept;
 
     bool IsMasking() const;
-    UIGameObject* GetContainer() const;
+    GameObject* GetContainer() const;
     const Vector2i& GetScrolling() const noexcept;
 
 private:
     UIMask *p_mask = nullptr;
-    UIGameObject *p_childrenContainer = nullptr;
+    GameObject *p_childrenContainer = nullptr;
 
     Vector2i m_scrollingPx = Vector2i::Zero;
 
     void UpdateChildrenMargins();
 
-    static UIGameObject* CreateGameObject();
+    static GameObject* CreateGameObject();
     void RetrieveReferences();
     void InitGameObject();
 

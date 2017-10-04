@@ -125,6 +125,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
+    GameObject(const String &m_name = "GameObject");
+
     List<GameObject*> m_children;
     List<Component*> m_components;
 
@@ -138,15 +140,11 @@ protected:
 
     bool m_iteratingComponents = false;
 
-private:
-    GameObject(const String &m_name = "GameObject");
-
     friend class Scene;
     friend class Prefab;
-    friend class UIGameObject;
+    friend class GEngine;
     friend class SceneManager;
     friend class RectTransform;
-    friend class GEngine;
     friend class GameObjectFactory;
 };
 

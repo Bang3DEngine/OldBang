@@ -128,12 +128,16 @@ Vector4 Color::ToVector4() const
     return Vector4(r, g, b, a);
 }
 
-void Color::Ceil()
+Color Color::Saturated(float t) const
 {
-    r = Math::Ceil(r);
-    g = Math::Ceil(g);
-    b = Math::Ceil(b);
-    a = Math::Ceil(a);
+    Color c = *this;
+    float length = Math::Sqrt(c.r*c.r + c.g*c.g + c.b*c.b);
+
+    c.r = length + (c.r - length) * t;
+    c.g = length + (c.g - length) * t;
+    c.b = length + (c.b - length) * t;
+
+    return c;
 }
 
 Color Color::FromVector3(const Vector3 &v)

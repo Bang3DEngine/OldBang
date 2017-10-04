@@ -32,6 +32,8 @@ public:
                       const Color &v2,
                       float progression);
 
+    Color Saturated(float t) const;
+
     String ToStringRgb() const;
     String ToStringRgb255() const;
     String ToStringRgba() const;
@@ -40,8 +42,6 @@ public:
     String ToString() const;
     Vector3 ToVector3() const;
     Vector4 ToVector4() const;
-
-    void Ceil();
 
     static Color FromVector3(const Vector3 &v);
     static Color FromVector4(const Vector4 &v);

@@ -6,7 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIGameObject;
+FORWARD class GameObject;
 FORWARD class UITextCursor;
 FORWARD class UIScrollArea;
 FORWARD class RectTransform;
@@ -49,11 +49,11 @@ private:
 
     UIImageRenderer *p_background = nullptr;
 
-    UIGameObject *p_label = nullptr;
+    GameObject *p_label = nullptr;
     UITextCursor *p_cursor = nullptr;
     UIScrollArea *p_boxScrollArea = nullptr;
 
-    UIGameObject *p_selectionQuad = nullptr;
+    GameObject *p_selectionQuad = nullptr;
 
     int m_cursorIndex = 0;
     bool m_selectingWithMouse = false;
@@ -82,7 +82,7 @@ private:
     void UpdateCursorRenderersAndScrolling();
     bool IsShiftPressed() const;
 
-    static UIGameObject *CreateGameObject();
+    static GameObject *CreateGameObject();
     void RetrieveReferences();
     void InitGameObject();
 

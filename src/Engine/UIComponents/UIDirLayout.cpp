@@ -3,7 +3,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/XMLNode.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ILayoutElement.h"
 #include "Bang/UILayoutManager.h"
@@ -72,6 +72,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
     crt->SetAnchors( Vector2(-1, 1) );
     if (m_vertical) // VERTICAL
     {
+        crt->SetMarginLeft( GetPaddingLeft() );
         if (GetChildrenHorizontalStretch() == Stretch::None)
         {
             HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
@@ -150,8 +151,9 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
     for (GameObject *child : gameObject->GetChildren())
     {
         Vector2i minChildSize = (*childrenRTSizes)[i];
-        totalPrefPxToAdd += UILayoutManager::GetPreferredSize(child) -
-                            minChildSize;
+        Vector2i pxToAdd = UILayoutManager::GetPreferredSize(child) - minChildSize;
+        pxToAdd = Vector2i::Max(pxToAdd, Vector2i::Zero);
+        totalPrefPxToAdd += pxToAdd;
         ++i;
     }
     totalPrefPxToAdd = Vector2i::Max(totalPrefPxToAdd, Vector2i::One);
@@ -163,12 +165,13 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
         Vector2i minChildSize = (*childrenRTSizes)[i];
         Vector2i childPrefSize = UILayoutManager::GetPreferredSize(child);
         Vector2i childPrefPxToAdd = (childPrefSize - minChildSize);
+        childPrefPxToAdd = Vector2i::Max(childPrefPxToAdd, Vector2i::Zero);
         Vector2  sizeProportion (Vector2(childPrefPxToAdd) / Vector2(totalPrefPxToAdd));
         Vector2i prefAvailPxToAdd(
                    Vector2::Round(sizeProportion * Vector2(originalAvailableSpace)));
+        prefAvailPxToAdd = Vector2i::Min(prefAvailPxToAdd, childPrefPxToAdd);
         Vector2i childRTSize = Vector2i::Max(minChildSize,
                                              minChildSize + prefAvailPxToAdd);
-        childRTSize = Vector2i::Min(childRTSize, childPrefSize);
 
         if (m_vertical)
         {

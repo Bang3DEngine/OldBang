@@ -40,9 +40,9 @@ protected:
     Vector2i CalculateTotalPreferredSize() const override;
 
 private:
-    Vector2i m_minSize       = Vector2i::Zero;
-    Vector2i m_preferredSize = Vector2i::One;
-    Vector2  m_flexibleSize  = Vector2::One;
+    Vector2i m_minSize       = -Vector2i::One;
+    Vector2i m_preferredSize = -Vector2i::One;
+    Vector2  m_flexibleSize  = -Vector2::One;
 };
 
 NAMESPACE_BANG_END

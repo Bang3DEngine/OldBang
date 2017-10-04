@@ -61,6 +61,8 @@ bool ShaderProgram::Link()
     }
 
     if (m_idGL > 0) { GL::DeleteProgram(m_idGL); }
+    m_isLinked = false;
+
     m_idGL = GL::CreateProgram();
 
     GL::AttachShader(m_idGL, GetVertexShader()->GetGLId());
@@ -90,8 +92,14 @@ bool ShaderProgram::Link()
        return false;
     }
 
+    m_isLinked = true;
     m_nameToLocationCache.Clear(); // Invalidate cache
     return true;
+}
+
+bool ShaderProgram::IsLinked() const
+{
+    return m_isLinked;
 }
 
 GL::BindTarget ShaderProgram::GetGLBindTarget() const

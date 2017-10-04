@@ -1,14 +1,17 @@
 #include "Bang/Dialog.h"
 
+#include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/UIFileList.h"
 #include "Bang/UIInputText.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/UIButtonDriver.h"
@@ -49,7 +52,7 @@ Path Dialog::GetFilePath(const String &title)
     {
         dialog = Application::GetInstance()->CreateDialogWindow(topWindow);
         dialog->SetTitle(title);
-        dialog->SetSize(300, 100);
+        dialog->SetSize(500, 400);
 
         Scene *scene = CreateGetFilePathScene(title);
         SceneManager::LoadScene(scene);
@@ -63,19 +66,28 @@ Path Dialog::GetFilePath(const String &title)
 Scene *Dialog::CreateGetFilePathScene(const String &title)
 {
     Scene *scene = GameObjectFactory::CreateUIScene();
+
     UIFrameLayout *fl = scene->AddComponent<UIFrameLayout>();
     fl->SetPaddings(10);
 
-    UIGameObject *vlGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *vlGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::None);
+    vl->SetChildrenVerticalStretch(Stretch::Full);
+    UILayoutElement *vlLE = vlGo->AddComponent<UILayoutElement>();
+    vlLE->SetFlexibleHeight(1);
 
-    UIGameObject *hlGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
     hl->SetChildrenVerticalStretch(Stretch::None);
+    UILayoutElement *hlLE = hlGo->AddComponent<UILayoutElement>();
+    hlLE->SetFlexibleHeight(0);
 
-    UIGameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
+    UIListDriver *list = GameObjectFactory::CreateGUIList(true);
+    UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
+    fileList->SetCurrentPath(Paths::EngineAssets());
+
+    GameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
     UIInputText *inputText = inputTextGo->GetComponent<UIInputText>();
     inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA "
                                      "MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
@@ -96,9 +108,13 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     scene->AddChild(vlGo);
     vlGo->AddChild(inputTextGo);
     vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->AddChild(list->gameObject);
+    vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
     vlGo->AddChild(hlGo);
     hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer(LayoutSizeType::Flexible));
-    hlGo->AddChild(openButton ->gameObject);
+    hlGo->AddChild(openButton->gameObject);
+
+    scene->SetFirstFoundCameraOrDefaultOne();
 
     return scene;
 }
@@ -107,21 +123,21 @@ Scene *Dialog::CreateMsgScene(const String &msg)
 {
     Scene *scene = GameObjectFactory::CreateUIScene();
 
-    UIGameObject *container = GameObjectFactory::CreateUIGameObject();
+    GameObject *container = GameObjectFactory::CreateUIGameObject();
     UIFrameLayout *containerL = container->AddComponent<UIFrameLayout>();
     containerL->SetPaddings(20);
 
-    UIGameObject *mainVLayoutGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *mainVLayoutGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *mainVLayout = mainVLayoutGo->AddComponent<UIVerticalLayout>();
 
-    UIGameObject *iconGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
     iconLE->SetMinSize( Vector2i(45) );
     UIImageRenderer *icon = iconGo->AddComponent<UIImageRenderer>();
     icon->SetImageTexture( EDPATH("Icons/Error.png"));
     icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Linear );
 
-    UIGameObject *hLayoutGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObject();
     hLayoutGo->SetName("HL");
     UIHorizontalLayout *hLayout = hLayoutGo->AddComponent<UIHorizontalLayout>();
     hLayout->SetChildrenHorizontalAlignment(HorizontalAlignment::Center);
@@ -129,7 +145,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     UILayoutElement *hLayoutLE = hLayoutGo->AddComponent<UILayoutElement>();
     hLayoutLE->SetPreferredSize( Vector2i::One );
 
-    UIGameObject *msgGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *msgGo = GameObjectFactory::CreateUIGameObject();
     msgGo->SetName("MSG");
     UITextRenderer *text = msgGo->AddComponent<UITextRenderer>();
     text->SetWrapping(true);
@@ -141,8 +157,8 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     UILayoutElement *textLE = msgGo->AddComponent<UILayoutElement>();
     textLE->SetPreferredSize( Vector2i::One );
 
-    UIGameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
-    UIGameObject *hSpacer = GameObjectFactory::CreateGUIHSpacer();
+    GameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *hSpacer = GameObjectFactory::CreateGUIHSpacer();
     UIHorizontalLayout *buttonsHL = buttonsGo->AddComponent<UIHorizontalLayout>();
     buttonsHL->SetSpacing(20);
     buttonsHL->SetPaddings(5);

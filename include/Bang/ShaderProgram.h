@@ -19,13 +19,11 @@ public:
         Other
     };
 
-    ShaderProgram();
-    virtual ~ShaderProgram();
-
     bool Load(const Path &vshaderPath, const Path &fshaderPath);
     bool Load(Shader *vShader, Shader *fShader);
 
     bool Link();
+    bool IsLinked() const;
 
     void Bind() const override;
     void UnBind() const override;
@@ -59,6 +57,10 @@ public:
     void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
 
 private:
+    ShaderProgram();
+    virtual ~ShaderProgram();
+
+    bool m_isLinked = false;
     Shader *p_vshader = nullptr;
     Shader *p_fshader = nullptr;
 
@@ -70,6 +72,8 @@ private:
     bool BindTextureToAvailableUnit(const String &texName,
                                     const Texture *texture) const;
     void UpdateTextureBindings() const;
+
+    friend class ShaderProgramFactory;
 };
 
 NAMESPACE_BANG_END

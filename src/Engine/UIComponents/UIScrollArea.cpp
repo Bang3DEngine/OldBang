@@ -1,6 +1,6 @@
 #include "Bang/UIScrollArea.h"
 
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
@@ -46,7 +46,7 @@ void UIScrollArea::SetScrollingY(int scrollPxY) noexcept
 
 bool UIScrollArea::IsMasking() const { return p_mask->IsMasking(); }
 
-UIGameObject *UIScrollArea::GetContainer() const
+GameObject *UIScrollArea::GetContainer() const
 {
     return p_childrenContainer;
 }
@@ -62,21 +62,23 @@ void UIScrollArea::UpdateChildrenMargins()
     int marginTop   = -GetScrolling().y;
     int marginBot   =  GetScrolling().y;
 
-    p_childrenContainer->GetRectTransform()->SetMargins(marginLeft, marginTop,
-                                                        marginRight, marginBot);
-    UILayoutManager::Invalidate(p_childrenContainer->GetRectTransform());
+    p_childrenContainer->GetComponent<RectTransform>()->
+                          SetMargins(marginLeft, marginTop,
+                                     marginRight, marginBot);
+    UILayoutManager::Invalidate(p_childrenContainer->
+                                GetComponent<RectTransform>());
 }
 
-UIGameObject *UIScrollArea::CreateGameObject()
+GameObject *UIScrollArea::CreateGameObject()
 {
-    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
 
-    UIGameObject *mask = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *mask = GameObjectFactory::CreateUIGameObject(true);
     mask->AddComponent<UIMask>();
     mask->SetName("Mask");
     mask->SetParent(go);
 
-    UIGameObject *childrenCont = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *childrenCont = GameObjectFactory::CreateUIGameObject(true);
     childrenCont->SetName("ChildrenContainer");
     childrenCont->SetParent(mask);
 
@@ -88,10 +90,8 @@ UIGameObject *UIScrollArea::CreateGameObject()
 
 void UIScrollArea::RetrieveReferences()
 {
-    UIGameObject *go = SCAST<UIGameObject*>(GetGameObject()); ENSURE(go);
-    p_mask = go->GetChild("Mask")->GetComponent<UIMask>();
-    p_childrenContainer = SCAST<UIGameObject*>(p_mask->GetGameObject()->
-                                               GetChild("ChildrenContainer"));
+    p_mask = gameObject->GetChild("Mask")->GetComponent<UIMask>();
+    p_childrenContainer = p_mask->gameObject->GetChild("ChildrenContainer");
 }
 
 void UIScrollArea::InitGameObject()

@@ -2,8 +2,8 @@
 
 #include "Bang/GL.h"
 #include "Bang/XMLNode.h"
+#include "Bang/GameObject.h"
 #include "Bang/UIRenderer.h"
-#include "Bang/UIGameObject.h"
 
 
 #include "Bang/Image.h"

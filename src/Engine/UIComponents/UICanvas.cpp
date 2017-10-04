@@ -2,7 +2,8 @@
 
 #include "Bang/Input.h"
 #include "Bang/XMLNode.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
+#include "Bang/UIFocusTaker.h"
 
 USING_NAMESPACE_BANG
 
@@ -22,9 +23,12 @@ void UICanvas::OnUpdate()
         Input::GetMouseButtonDown(MouseButton::Right) )
     {
         Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
-        UIGameObject *uiGo = SCAST<UIGameObject*>(GetGameObject());
-        UIGameObject *focusTaker = uiGo->PropagateFocus(mouseCoordsNDC);
-        GiveFocusTo(focusTaker);
+        UIFocusTaker *canvasFocusTaker = gameObject->GetComponent<UIFocusTaker>();
+        if (canvasFocusTaker)
+        {
+            UIFocusTaker *focusTaker = canvasFocusTaker->PropagateFocus(mouseCoordsNDC);
+            if (focusTaker) { GiveFocusTo(focusTaker->gameObject); }
+        }
     }
 }
 
@@ -43,25 +47,27 @@ void UICanvas::ExportXML(XMLNode *xmlInfo) const
     Component::ExportXML(xmlInfo);
 }
 
-UIGameObject *UICanvas::GetFocusedGameObject() const
+GameObject *UICanvas::GetFocusedGameObject() const
 {
-    return p_focus;
+    return p_focusedGo;
 }
 
-void UICanvas::GiveFocusTo(UIGameObject *focusTaker) const
+void UICanvas::GiveFocusTo(GameObject *focusTakerGo) const
 {
-    if (p_focus == focusTaker) { return; }
+    if (p_focusedGo == focusTakerGo) { return; }
 
-    if (p_focus)
+    if (p_focusedGo)
     {
-        p_focus->m_hasFocus = false;
-        p_focus->OnFocusLost();
+        UIFocusTaker *focusTaker = p_focusedGo->GetComponent<UIFocusTaker>();
+        focusTaker->m_hasFocus = false;
+        focusTaker->OnFocusLost();
     }
 
-    p_focus = focusTaker;
-    if (p_focus)
+    p_focusedGo = focusTakerGo;
+    if (p_focusedGo)
     {
-        p_focus->m_hasFocus = true;
-        p_focus->OnFocusTaken();
+        UIFocusTaker *focusTaker = p_focusedGo->GetComponent<UIFocusTaker>();
+        focusTaker->m_hasFocus = true;
+        focusTaker->OnFocusTaken();
     }
 }

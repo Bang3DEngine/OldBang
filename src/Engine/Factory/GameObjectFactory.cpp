@@ -12,9 +12,10 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
+#include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UIFrameLayout.h"
@@ -22,25 +23,11 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/DirectionalLight.h"
+#include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
-
-GameObject*
-GameObjectFactory::CreateGameObject(const String &gameObjectClassName)
-{
-    if (gameObjectClassName == GameObject::GetClassNameStatic())
-    {
-        return GameObjectFactory::CreateGameObject(false);
-    }
-    return GameObjectFactory::CreateUIGameObject(false);
-}
-
-bool GameObjectFactory::ExistsGameObjectClass(const String &gameObjectClassName)
-{
-    return gameObjectClassName == GameObject::GetClassNameStatic() ||
-           gameObjectClassName == UIGameObject::GetClassNameStatic();
-}
 
 GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
 {
@@ -49,10 +36,11 @@ GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
     return go;
 }
 
-UIGameObject *GameObjectFactory::CreateUIGameObject(bool addRectTransform)
+GameObject *GameObjectFactory::CreateUIGameObject(bool addRectTransform)
 {
-    UIGameObject *go = new UIGameObject();
+    GameObject *go = new GameObject();
     if (addRectTransform) { go->AddComponent<RectTransform>(); }
+    go->AddComponent<UIFocusTaker>();
     return go;
 }
 
@@ -67,6 +55,7 @@ Scene *GameObjectFactory::CreateUIScene()
 {
     Scene *scene = new Scene();
     scene->AddComponent<RectTransform>();
+    scene->AddComponent<UIFocusTaker>();
     scene->AddComponent<UICanvas>();
     return scene;
 }
@@ -97,7 +86,17 @@ Scene *GameObjectFactory::CreateDefaultScene()
     return scene;
 }
 
-UIGameObject *GameObjectFactory::CreateGUIInputText()
+UIListDriver *GameObjectFactory::CreateGUIList(bool vertical)
+{
+    GameObject *listGo = GameObjectFactory::CreateUIGameObject();
+
+    UIListDriver *listDriver = listGo->AddComponent<UIListDriver>();
+    listDriver->Create();
+
+    return listDriver;
+}
+
+GameObject *GameObjectFactory::CreateGUIInputText()
 {
     return UIInputText::CreateGameObject();
 }
@@ -116,17 +115,17 @@ UIButtonDriver* GameObjectFactory::CreateGUIButton()
     le->SetPreferredSize( Vector2i(-1) );
     le->SetFlexibleSize( Vector2(0) );
 
-    UIGameObject *bg = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *bg = GameObjectFactory::CreateUIGameObject(true);
     bg->SetName("GUIButton_Background");
     UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
     bg->SetParent(container);
 
-    UIGameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
     go->AddComponent<UIFrameLayout>();
     go->SetName("GUIButton");
 
-    UIGameObject *label = GameObjectFactory::CreateGUILabel();
+    GameObject *label = GameObjectFactory::CreateGUILabel();
     label->SetName("GUIButton_Label");
     label->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::Black);
     label->SetParent(go);
@@ -149,15 +148,15 @@ UIButtonDriver* GameObjectFactory::CreateGUIButton()
     return buttonDriv;
 }
 
-UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
+GameObject *GameObjectFactory::CreateGUILabel(const String &content)
 {
-    UIGameObject *maskGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *maskGo = GameObjectFactory::CreateUIGameObject();
     maskGo->SetName("GUILabel_Mask");
     maskGo->AddComponent<UIFrameLayout>();
     UIMask *mask = maskGo->AddComponent<UIMask>();
     maskGo->AddComponent<UIImageRenderer>(); // Quad mask
 
-    UIGameObject *textContainer = GameObjectFactory::CreateUIGameObject();
+    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
     textContainer->SetName("GUILabel_TextContainer");
     textContainer->SetParent(maskGo);
     UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
@@ -168,57 +167,45 @@ UIGameObject *GameObjectFactory::CreateGUILabel(const String &content)
     return maskGo;
 }
 
-UIGameObject *GameObjectFactory::CreateGUIScrollArea()
+GameObject *GameObjectFactory::CreateGUIScrollArea()
 {
     return UIScrollArea::CreateGameObject();
 }
 
-UIGameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
-                                                 const Vector2i &space)
+GameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
+                                               const Vector2i &space)
 {
-    UIGameObject *spacerGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *spacerGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
-    if (sizeType == LayoutSizeType::Min)
-    {
-        le->SetMinSize( Vector2i(space) );
-        le->SetPreferredSize( Vector2i(0) );
-        le->SetFlexibleSize( Vector2(0) );
-    }
-    else if (sizeType == LayoutSizeType::Preferred)
-    {
-        le->SetMinSize( Vector2i(0) );
-        le->SetPreferredSize( Vector2i(space) );
-        le->SetFlexibleSize( Vector2(0) );
-    }
-    else // Flexible
-    {
-        le->SetMinSize( Vector2i(0) );
-        le->SetPreferredSize( Vector2i(0) );
-        le->SetFlexibleSize( Vector2(space) );
-    }
+
+    le->SetMinSize( Vector2i(0) );
+    le->SetPreferredSize( Vector2i(0) );
+    le->SetFlexibleSize( Vector2(0) );
+
+    if (sizeType == LayoutSizeType::Min) { le->SetMinSize(space); }
+    else if (sizeType == LayoutSizeType::Preferred) { le->SetPreferredSize(space); }
+    else { le->SetFlexibleSize( Vector2(space) ); }
     return spacerGo;
 }
-UIGameObject *GameObjectFactory::CreateGUIHSpacer(LayoutSizeType sizeType,
-                                                  int spaceX)
+GameObject *GameObjectFactory::CreateGUIHSpacer(LayoutSizeType sizeType,
+                                                int spaceX)
 {
-    UIGameObject *spacerGo =
+    GameObject *spacerGo =
             GameObjectFactory::CreateGUISpacer(sizeType, Vector2i(spaceX, 0) );
-    spacerGo->GetComponent<UILayoutElement>()->SetPreferredHeight(0);
     return spacerGo;
 }
-UIGameObject *GameObjectFactory::CreateGUIVSpacer(LayoutSizeType sizeType,
-                                                  int spaceY)
+GameObject *GameObjectFactory::CreateGUIVSpacer(LayoutSizeType sizeType,
+                                                int spaceY)
 {
-    UIGameObject *spacerGo =
+    GameObject *spacerGo =
             GameObjectFactory::CreateGUISpacer(sizeType, Vector2i(0, spaceY) );
-    spacerGo->GetComponent<UILayoutElement>()->SetPreferredWidth(0);
     return spacerGo;
 }
 
-UIGameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
-                                                    const Vector2i &space)
+GameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
+                                                  const Vector2i &space)
 {
-    UIGameObject *sepGo = GameObjectFactory::CreateGUISpacer(sizeType, space);
+    GameObject *sepGo = GameObjectFactory::CreateGUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);
@@ -240,17 +227,17 @@ UIGameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
     return sepGo;
 }
 
-UIGameObject *GameObjectFactory::CreateGUIHSeparator(LayoutSizeType sizeType,
-                                                     int spaceY)
+GameObject *GameObjectFactory::CreateGUIHSeparator(LayoutSizeType sizeType,
+                                                   int spaceY)
 {
-    UIGameObject *sepGo =
+    GameObject *sepGo =
             GameObjectFactory::CreateGUISeparator(sizeType, Vector2i(0, spaceY) );
     return sepGo;
 }
-UIGameObject *GameObjectFactory::CreateGUIVSeparator(LayoutSizeType sizeType,
-                                                     int spaceX)
+GameObject *GameObjectFactory::CreateGUIVSeparator(LayoutSizeType sizeType,
+                                                   int spaceX)
 {
-    UIGameObject *sepGo =
+    GameObject *sepGo =
             GameObjectFactory::CreateGUISeparator(sizeType, Vector2i(spaceX, 0) );
     return sepGo;
 }

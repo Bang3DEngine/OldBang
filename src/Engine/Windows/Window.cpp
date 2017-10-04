@@ -25,6 +25,8 @@ Window::Window()
 
 Window::~Window()
 {
+    SetParent(nullptr);
+
     delete m_input;
     delete m_gEngine;
     delete m_audioManager;
@@ -32,7 +34,6 @@ Window::~Window()
     delete m_resources;
     SDL_GL_DeleteContext(GetGLContext());
     SDL_DestroyWindow(m_sdlWindow);
-    SetParent(nullptr);
 }
 
 void Window::Create(uint flags)

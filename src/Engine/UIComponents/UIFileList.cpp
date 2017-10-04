@@ -1,0 +1,176 @@
+#include "Bang/UIFileList.h"
+
+#include "Bang/Paths.h"
+#include "Bang/Input.h"
+#include "Bang/Alignment.h"
+#include "Bang/GameObject.h"
+#include "Bang/UIFocusTaker.h"
+#include "Bang/UIListDriver.h"
+#include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/GameObjectFactory.h"
+
+USING_NAMESPACE_BANG
+
+UIFileList::UIFileList()
+{
+}
+
+UIFileList::~UIFileList()
+{
+}
+
+void UIFileList::OnStart()
+{
+    Component::OnStart();
+    SetCurrentPath( Paths::EngineAssets() );
+}
+
+void UIFileList::OnUpdate()
+{
+    Component::OnUpdate();
+    if (Input::GetKeyDownRepeat(Key::Left))
+    {
+        SetCurrentPath( GetCurrentPath().GetDirectory() );
+    }
+}
+
+void UIFileList::SetCurrentPath(const Path &currentPath)
+{
+    m_currentPath = currentPath;
+
+    List<Path> paths = GetCurrentPath().FindSubPaths(Path::FindFlag::Simple);
+    paths.PushFront( Path("..") );
+
+    UIListDriver *listDriver = gameObject->GetComponent<UIListDriver>();
+    listDriver->Clear();
+
+    for (const Path &path : paths)
+    {
+        UIFileListEntry *entry = new UIFileListEntry();
+        entry->SetPath(path);
+
+        listDriver->AddElement(entry);
+    }
+    listDriver->SetSelection(1);
+
+    listDriver->SetSelectionCallback(
+        [this, listDriver](GameObject *go, UIListDriver::Action action)
+        {
+            UIFileListEntry *entry = SCAST<UIFileListEntry*>(go);
+            if (action == UIListDriver::Action::SelectionIn)
+            {
+                entry->OnSelectionIn();
+            }
+            else if (action == UIListDriver::Action::SelectionOut)
+            {
+                entry->OnSelectionOut();
+            }
+            else if (action == UIListDriver::Action::MouseOver)
+            {
+                entry->OnMouseOver();
+            }
+            else if (action == UIListDriver::Action::MouseOut)
+            {
+                entry->OnMouseOut();
+            }
+            else if (action == UIListDriver::Action::Pressed ||
+                     action == UIListDriver::Action::DoubleClickedLeft)
+            {
+                Path entryPath = entry->GetPath();
+                if (entryPath.GetAbsolute() == "..")
+                {
+                    this->SetCurrentPath(GetCurrentPath().GetDirectory());
+                }
+                else if (entryPath.IsDir())
+                {
+                    this->SetCurrentPath(entry->GetPath());
+                }
+            }
+        }
+    );
+}
+
+const Path &UIFileList::GetCurrentPath() const
+{
+    return m_currentPath;
+}
+
+// UIFileListEntry
+UIFileListEntry::UIFileListEntry()
+{
+    AddComponent<RectTransform>();
+    AddComponent<UIFocusTaker>();
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinHeight(15);
+
+    m_bg = AddComponent<UIImageRenderer>();
+    m_bg->SetTint(Color::Zero);
+
+    m_text = AddComponent<UITextRenderer>();
+    m_text->SetTextSize(12);
+    m_text->SetHorizontalAlign(HorizontalAlignment::Left);
+}
+
+UIFileListEntry::~UIFileListEntry()
+{
+
+}
+
+void UIFileListEntry::OnMouseOver()
+{
+    m_isMouseOver = true;
+    UpdateColor();
+}
+
+void UIFileListEntry::OnMouseOut()
+{
+    m_isMouseOver = false;
+    UpdateColor();
+}
+
+void UIFileListEntry::OnSelectionOut()
+{
+    m_isSelected = false;
+    UpdateColor();
+}
+
+void UIFileListEntry::OnSelectionIn()
+{
+    m_isSelected = true;
+    UpdateColor();
+}
+
+void UIFileListEntry::SetPath(const Path &path)
+{
+    m_path = path;
+    m_text->SetContent( (path.IsFile() ? "File - " : "Dir  - ") +
+                         path.GetNameExt() );
+}
+
+const Path &UIFileListEntry::GetPath()
+{
+    return m_path;
+}
+
+void UIFileListEntry::UpdateColor()
+{
+    if (m_isSelected)
+    {
+        m_bg->SetTint(Color::LightBlue);
+    }
+    else
+    {
+        if (m_isMouseOver)
+        {
+            m_bg->SetTint(Color(0.9f, 0.95f, 1.0f));
+        }
+        else
+        {
+            m_bg->SetTint(Color::Zero);
+        }
+    }
+}
