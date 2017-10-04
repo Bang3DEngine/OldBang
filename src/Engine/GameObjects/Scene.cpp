@@ -23,14 +23,15 @@ Scene::~Scene()
 {
 }
 
-void Scene::BeforeChildrenRender(RenderPass rp)
+#include "Bang/Input.h"
+void Scene::Update()
 {
-    GameObject::BeforeChildrenRender(rp);
-}
-
-void Scene::AfterChildrenRender(RenderPass rp)
-{
-    GameObject::AfterChildrenRender(rp);
+    GameObject::Update();
+    if (Input::GetKey(Key::A))
+    {
+        Debug_Log(GetCamera()->GetGameObject()->transform->GetPosition());
+        Debug_Log(GetCamera()->GetGameObject()->transform->GetForward());
+    }
 }
 
 void Scene::RenderGizmos()
@@ -60,17 +61,12 @@ void Scene::SetCamera(Camera *cam)
 
 void Scene::SetFirstFoundCameraOrDefaultOne()
 {
+    Camera *sceneCamera = nullptr;
     List<Camera*> cameras = GetComponentsInChildren<Camera>();
-    bool cameraFound = false;
-    for (Camera *cam : cameras)
+    if (!cameras.IsEmpty()) { sceneCamera = cameras.Front(); }
+    else
     {
-        SetCamera(cam);
-        cameraFound = true;
-        break;
-    }
-
-    if (!cameraFound) // Create default camera
-    {
+        // Create default camera
         m_defaultCamera = GameObjectFactory::CreateGameObject(true);
         m_defaultCamera->SetName("DefaultCamera");
         m_defaultCamera->transform->SetPosition(Vector3(5));
@@ -81,8 +77,9 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
         cam->SetZFar(99999.0f);
-        SetCamera(cam);
     }
+
+    SetCamera(sceneCamera);
 }
 
 void Scene::Destroy(GameObject *gameObject)
@@ -114,6 +111,7 @@ Camera *Scene::GetCamera() const { return p_camera; }
 void Scene::ImportXML(const XMLNode &xmlInfo)
 {
     GameObject::ImportXML(xmlInfo);
+    SetFirstFoundCameraOrDefaultOne();
 }
 
 void Scene::ExportXML(XMLNode *xmlInfo) const

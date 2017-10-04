@@ -20,8 +20,7 @@ public:
     Scene();
     virtual ~Scene();
 
-    virtual void BeforeChildrenRender(RenderPass rp) override;
-    virtual void AfterChildrenRender(RenderPass rp) override;
+    void Update() override;
 
     void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();

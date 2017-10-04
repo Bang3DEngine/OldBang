@@ -182,6 +182,14 @@ template<class T>
 }
 
 template<class T>
+::std::istream& operator>>(::std::istream &is, QuaternionG<T>& q)
+{
+    char _;
+    is >> _ >> q.x >> _ >> q.y >> _ >> q.z >> _ >> q.w >> _;
+    return is;
+}
+
+template<class T>
 ::std::istream& operator>>(::std::istream &is, RectG<T>& r)
 {
     char _;

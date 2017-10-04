@@ -430,7 +430,7 @@ void Transform::ImportXML(const XMLNode &xmlInfo)
     { SetLocalPosition(xmlInfo.Get<Vector3>("Position")); }
 
     if (xmlInfo.Contains("Rotation"))
-    { SetLocalEuler(xmlInfo.Get<Vector3>("Rotation")); }
+    { SetLocalRotation(xmlInfo.Get<Quaternion>("Rotation")); }
 
     if (xmlInfo.Contains("Scale"))
     { SetLocalScale(xmlInfo.Get<Vector3>("Scale")); }
@@ -440,6 +440,6 @@ void Transform::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
     xmlInfo->Set("Position", GetLocalPosition());
-    xmlInfo->Set("Rotation", GetLocalEuler());
+    xmlInfo->Set("Rotation", GetLocalRotation());
     xmlInfo->Set("Scale",    GetLocalScale());
 }

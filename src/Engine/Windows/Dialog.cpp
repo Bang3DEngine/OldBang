@@ -77,7 +77,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
 
     UIGameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
     UIInputText *inputText = inputTextGo->GetComponent<UIInputText>();
-    inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
+    inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA "
+                                     "MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
     UILayoutElement *itle = inputTextGo->AddComponent<UILayoutElement>();
     itle->SetPreferredSize( Vector2i(1, 25) );
     itle->SetFlexibleHeight(0);

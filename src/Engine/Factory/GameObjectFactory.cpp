@@ -82,13 +82,18 @@ Scene *GameObjectFactory::CreateDefaultScene()
     GameObject *light = GameObjectFactory::CreateGameObject();
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
     light->transform->SetPosition( Vector3(5,4,3) );
-    light->transform->LookAt( Vector3(0, 0, 0) );
+    light->transform->LookAt( Vector3::Zero );
 
-    scene->SetFirstFoundCameraOrDefaultOne();
-    scene->GetCamera()->SetClearColor(Color::LightBlue);
+    GameObject *cameraGo = GameObjectFactory::CreateGameObject();
+    cameraGo->transform->SetPosition( Vector3(5,4,3) );
+    cameraGo->transform->LookAt( Vector3::Zero );
+    Camera *cam = cameraGo->AddComponent<Camera>();
+    cam->SetClearColor(Color::LightBlue);
+    scene->SetCamera(cam);
 
     scene->AddChild(cube);
     scene->AddChild(light);
+    scene->AddChild(cameraGo);
     return scene;
 }
 
