@@ -55,21 +55,7 @@ void Input::OnFrameFinished()
 
     m_lastMouseWheelDelta = 0.0f;
 
-    // MOUSE LOCK
-    if (!m_lockMouseMovement)
-    {
-        m_lastMouseCoords = m_mouseCoords;
-    }
-    else if (m_framesMouseStopped > 3)
-    {
-        //For the case of mouse movement locking, this
-        //avoids a bug of axisX/Y getting stuck when mouse
-        //does: lock/moving/stom_moving => axisX/Y think mouse is still moving
-        m_lastMouseCoords = m_mouseCoords;
-    }
     ++m_framesMouseStopped;
-    //
-
     m_secsSinceLastMouseDown += Time::GetDeltaTime();
 }
 
@@ -109,20 +95,7 @@ void Input::ProcessMouseWheelEventInfo(const EventInfo &ei)
 void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 {
     m_framesMouseStopped = 0;
-
-    //Used to ignore QCursor::setPos call to mouseMove event
-    static bool fakeMoveEvent = false;
-    if (fakeMoveEvent)
-    {
-        fakeMoveEvent = false;
-        return;
-    }
-
     m_mouseCoords = Vector2i(ei.x, ei.y);
-
-    if (m_lockMouseMovement)
-    {
-    }
 }
 
 void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
@@ -137,12 +110,13 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
 
     m_mouseInfo.Add(mb, ButtonInfo(up, true, true));
     if (m_secsSinceLastMouseDown <= DoubleClickMaxSeconds &&
+        Vector2::Distance(Vector2(GetMouseCoords()),
+                          Vector2(m_lastClickMouseCoords)) < 10.0f &&
         m_secsSinceLastMouseDown != 0)
-        // Reject clicks in the same frame as double-clicking (secs... != 0)
-        // To avoid a delayed MouseEvent bug
     {
         m_isADoubleClick = true;
     }
+    m_lastClickMouseCoords = GetMouseCoords();
     m_secsSinceLastMouseDown = 0; // Restart time since last click counter
 }
 
@@ -267,6 +241,8 @@ void Input::EnqueueEvent(const EventInfo &eventInfo)
 
 void Input::ProcessEnqueuedEvents()
 {
+    m_lastMouseCoords = m_mouseCoords;
+
     for (const EventInfo &ei : m_eventInfoQueue)
     {
         ProcessEventInfo(ei);

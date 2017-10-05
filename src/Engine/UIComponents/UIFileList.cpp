@@ -31,15 +31,25 @@ void UIFileList::OnStart()
 void UIFileList::OnUpdate()
 {
     Component::OnUpdate();
-    if (Input::GetKeyDownRepeat(Key::Left))
+
+    if (gameObject->GetComponent<UIFocusTaker>()->HasFocus())
     {
-        SetCurrentPath( GetCurrentPath().GetDirectory() );
+        if (Input::GetKeyDownRepeat(Key::Left))
+        {
+            SetCurrentPath( GetCurrentPath().GetDirectory() );
+        }
     }
+}
+
+void UIFileList::SetPathChangedCallback(UIFileList::PathChangedCallback callback)
+{
+    m_pathChangedCallback = callback;
 }
 
 void UIFileList::SetCurrentPath(const Path &currentPath)
 {
     m_currentPath = currentPath;
+    if (m_pathChangedCallback) { m_pathChangedCallback(m_currentPath); }
 
     List<Path> paths = GetCurrentPath().FindSubPaths(Path::FindFlag::Simple);
     paths.PushFront( Path("..") );

@@ -27,7 +27,7 @@ void UICanvas::OnUpdate()
         if (canvasFocusTaker)
         {
             UIFocusTaker *focusTaker = canvasFocusTaker->PropagateFocus(mouseCoordsNDC);
-            if (focusTaker) { GiveFocusTo(focusTaker->gameObject); }
+            GiveFocusTo(focusTaker ? focusTaker->gameObject : nullptr);
         }
     }
 }

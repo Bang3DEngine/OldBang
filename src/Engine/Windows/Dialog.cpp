@@ -87,13 +87,34 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
     fileList->SetCurrentPath(Paths::EngineAssets());
 
-    GameObject *inputTextGo = GameObjectFactory::CreateGUIInputText();
-    UIInputText *inputText = inputTextGo->GetComponent<UIInputText>();
-    inputText->GetText()->SetContent("BANGERINO PIZZERINO JODER FUNCIONA "
-                                     "MOTHAFUCKER MECAGONTO LJAKKDSJAKSDA");
-    UILayoutElement *itle = inputTextGo->AddComponent<UILayoutElement>();
-    itle->SetPreferredSize( Vector2i(1, 25) );
-    itle->SetFlexibleHeight(0);
+    GameObject *inputPathGo = GameObjectFactory::CreateGUIInputText();
+    UIInputText *inputText = inputPathGo->GetComponent<UIInputText>();
+    inputText->GetText()->SetContent("");
+    inputText->GetText()->SetTextSize(12);
+    inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    fileList->SetPathChangedCallback(
+        [inputText](const Path &newPath)
+        {
+            inputText->GetText()->SetContent(newPath.GetAbsolute());
+        }
+    );
+
+    UILayoutElement *itle = inputPathGo->AddComponent<UILayoutElement>();
+    itle->SetFlexibleSize(Vector2(1,1));
+
+    UIButtonDriver *goButton = GameObjectFactory::CreateGUIButton();
+    goButton->GetText()->SetContent("Go");
+    goButton->GetButton()->AddClickedCallback(
+        [inputText, fileList](UIButton *_)
+        {
+            Path inputPath(inputText->GetText()->GetContent());
+            if (inputPath.IsFile()) { inputPath = inputPath.GetDirectory(); }
+            if (inputPath.IsDir())
+            {
+                fileList->SetCurrentPath(inputPath);
+            }
+        }
+    );
 
     UIButtonDriver *openButton = GameObjectFactory::CreateGUIButton();
     openButton->GetText()->SetContent("Open");
@@ -105,11 +126,24 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
         }
     );
 
+    GameObject *inputPathCont = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *inputPathHL = inputPathCont->AddComponent<UIHorizontalLayout>();
+    inputPathHL->SetChildrenVerticalStretch(Stretch::None);
+    inputPathHL->SetSpacing(10);
+
+    UILayoutElement *inputHLLE = inputPathCont->AddComponent<UILayoutElement>();
+    inputHLLE->SetFlexibleHeight(0);
+
     scene->AddChild(vlGo);
-    vlGo->AddChild(inputTextGo);
+
+    vlGo->AddChild(inputPathCont);
+    inputPathCont->AddChild(inputPathGo);
+    inputPathCont->AddChild(goButton->gameObject);
+
     vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
     vlGo->AddChild(list->gameObject);
     vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
+
     vlGo->AddChild(hlGo);
     hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer(LayoutSizeType::Flexible));
     hlGo->AddChild(openButton->gameObject);

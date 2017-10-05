@@ -111,8 +111,6 @@ UIButtonDriver* GameObjectFactory::CreateGUIButton()
     fl->SetPaddingLeft (10);
 
     UILayoutElement *le = container->AddComponent<UILayoutElement>();
-    le->SetMinSize( Vector2i(-1) );
-    le->SetPreferredSize( Vector2i(-1) );
     le->SetFlexibleSize( Vector2(0) );
 
     GameObject *bg = GameObjectFactory::CreateUIGameObject(true);

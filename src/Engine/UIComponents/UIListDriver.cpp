@@ -24,62 +24,66 @@ UIListDriver::~UIListDriver()
 void UIListDriver::OnUpdate()
 {
     UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
+    ft->SetDefaultFocusAction(FocusAction::TakeIt);
 
-    // Selection In/Out
-    if (Input::GetKeyDownRepeat(Key::Down))
+    if (ft->HasFocus())
     {
-        SetSelection( GetSelectedIndex() + 1 );
-    }
-
-    if (Input::GetKeyDownRepeat(Key::Up))
-    {
-        SetSelection( GetSelectedIndex() - 1 );
-    }
-
-    // Mouse In/Out
-    GameObject *mouseOverGo = nullptr;
-    Vector2 mouseCoords = Input::GetMouseCoordsNDC();
-    for (GameObject *child : gameObject->GetChildren())
-    {
-        RectTransform *rt = child->GetComponent<RectTransform>();
-        if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoords))
+        // Selection In/Out
+        if (Input::GetKeyDownRepeat(Key::Down))
         {
-            mouseOverGo = child; break;
-        }
-    }
-
-    if (p_mouseOverGo != mouseOverGo)
-    {
-        if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
-
-        p_mouseOverGo = mouseOverGo;
-        if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOver); }
-    }
-
-    // Clicked
-    if (Input::GetKeyDownRepeat(Key::Right) ||
-        Input::GetKeyDownRepeat(Key::Enter))
-    {
-        GameObject *selectedGo = GetSelectedGameObject();
-        if (selectedGo) { Callback(selectedGo, Action::Pressed); }
-    }
-
-    if (p_mouseOverGo)
-    {
-        if (Input::GetMouseButtonDown(MouseButton::Left))
-        {
-            SetSelection(p_mouseOverGo);
-            Callback(p_mouseOverGo, Action::ClickedLeft);
+            SetSelection( GetSelectedIndex() + 1 );
         }
 
-        if (Input::GetMouseButtonDown(MouseButton::Right))
+        if (Input::GetKeyDownRepeat(Key::Up))
         {
-            Callback(p_mouseOverGo, Action::ClickedRight);
+            SetSelection( GetSelectedIndex() - 1 );
         }
 
-        if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
+        // Mouse In/Out
+        GameObject *mouseOverGo = nullptr;
+        Vector2 mouseCoords = Input::GetMouseCoordsNDC();
+        for (GameObject *child : gameObject->GetChildren())
         {
-            Callback(p_mouseOverGo, Action::DoubleClickedLeft);
+            RectTransform *rt = child->GetComponent<RectTransform>();
+            if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoords))
+            {
+                mouseOverGo = child; break;
+            }
+        }
+
+        if (p_mouseOverGo != mouseOverGo)
+        {
+            if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
+
+            p_mouseOverGo = mouseOverGo;
+            if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOver); }
+        }
+
+        // Clicked
+        if (Input::GetKeyDownRepeat(Key::Right) ||
+            Input::GetKeyDownRepeat(Key::Enter))
+        {
+            GameObject *selectedGo = GetSelectedGameObject();
+            if (selectedGo) { Callback(selectedGo, Action::Pressed); }
+        }
+
+        if (p_mouseOverGo)
+        {
+            if (Input::GetMouseButtonDown(MouseButton::Left))
+            {
+                SetSelection(p_mouseOverGo);
+                Callback(p_mouseOverGo, Action::ClickedLeft);
+            }
+
+            if (Input::GetMouseButtonDown(MouseButton::Right))
+            {
+                Callback(p_mouseOverGo, Action::ClickedRight);
+            }
+
+            if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
+            {
+                Callback(p_mouseOverGo, Action::DoubleClickedLeft);
+            }
         }
     }
 }

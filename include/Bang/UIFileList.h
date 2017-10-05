@@ -21,11 +21,16 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
+    using PathChangedCallback = std::function<void(const Path&)>;
+
+    void SetPathChangedCallback(PathChangedCallback callback);
+
     void SetCurrentPath(const Path &currentPath);
     const Path& GetCurrentPath() const;
 
 private:
     Path m_currentPath;
+    PathChangedCallback m_pathChangedCallback;
 };
 
 class UIFileListEntry : public GameObject
