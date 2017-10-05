@@ -7,6 +7,8 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIScrollArea;
+
 class UIListDriver : public Component
 {
     COMPONENT(UIListDriver);
@@ -26,6 +28,8 @@ public:
     void SetSelection(int i);
     void SetSelection(GameObject *go);
 
+    GameObject *GetContainer() const;
+
     int GetSelectedIndex() const;
     GameObject* GetSelectedGameObject() const;
 
@@ -37,7 +41,9 @@ private:
     GameObject *p_mouseOverGo = nullptr;
     SelectionCallback m_selectionCallback;
 
-    void Create();
+    UIScrollArea *p_scrollArea = nullptr;
+
+    static UIListDriver* CreateInto(GameObject *go);
     void Callback(GameObject *go, Action action);
 
     friend class GameObjectFactory;

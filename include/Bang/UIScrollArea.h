@@ -14,31 +14,29 @@ class UIScrollArea : public Component
     COMPONENT(UIScrollArea)
 
 public:
-    UIScrollArea() noexcept;
-    virtual ~UIScrollArea() noexcept;
+    virtual ~UIScrollArea();
 
     void OnUpdate() override;
 
-    void SetMasking(bool masking);
-    void SetScrolling(const Vector2i &scrollPx) noexcept;
-    void SetScrollingX(int scrollPxX) noexcept;
-    void SetScrollingY(int scrollPxY) noexcept;
+    void SetScrolling(const Vector2i &scrollPx);
+    void SetScrollingX(int scrollPxX);
+    void SetScrollingY(int scrollPxY);
 
-    bool IsMasking() const;
+    UIMask* GetMask() const;
     GameObject* GetContainer() const;
-    const Vector2i& GetScrolling() const noexcept;
+    const Vector2i& GetScrolling() const;
 
 private:
+    UIScrollArea();
+
     UIMask *p_mask = nullptr;
     GameObject *p_childrenContainer = nullptr;
 
     Vector2i m_scrollingPx = Vector2i::Zero;
 
-    void UpdateChildrenMargins();
+    void UpdatePaddings();
 
-    static GameObject* CreateGameObject();
-    void RetrieveReferences();
-    void InitGameObject();
+    static UIScrollArea* CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
 };

@@ -1,104 +1,87 @@
 #include "Bang/UIScrollArea.h"
 
 #include "Bang/GameObject.h"
+#include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 
-UIScrollArea::UIScrollArea() noexcept
+UIScrollArea::UIScrollArea()
 {
 }
 
-UIScrollArea::~UIScrollArea() noexcept
+UIScrollArea::~UIScrollArea()
 {
 }
 
 void UIScrollArea::OnUpdate()
 {
     Component::OnUpdate();
-    RetrieveReferences();
-    UpdateChildrenMargins();
+    UpdatePaddings();
 }
 
-void UIScrollArea::SetMasking(bool masking)
-{
-    p_mask->SetMasking(masking);
-}
-
-void UIScrollArea::SetScrolling(const Vector2i &scrollPx) noexcept
+void UIScrollArea::SetScrolling(const Vector2i &scrollPx)
 {
     m_scrollingPx = scrollPx;
-    UpdateChildrenMargins();
+    UpdatePaddings();
 }
 
-void UIScrollArea::SetScrollingX(int scrollPxX) noexcept
+void UIScrollArea::SetScrollingX(int scrollPxX)
 {
     SetScrolling( Vector2i(scrollPxX, GetScrolling().y) );
 }
 
-void UIScrollArea::SetScrollingY(int scrollPxY) noexcept
+void UIScrollArea::SetScrollingY(int scrollPxY)
 {
     SetScrolling( Vector2i(GetScrolling().x, scrollPxY) );
 }
 
-bool UIScrollArea::IsMasking() const { return p_mask->IsMasking(); }
+UIMask *UIScrollArea::GetMask() const
+{
+    return p_mask;
+}
 
 GameObject *UIScrollArea::GetContainer() const
 {
     return p_childrenContainer;
 }
-const Vector2i &UIScrollArea::GetScrolling() const noexcept
+const Vector2i &UIScrollArea::GetScrolling() const
 {
     return m_scrollingPx;
 }
 
-void UIScrollArea::UpdateChildrenMargins()
+void UIScrollArea::UpdatePaddings()
 {
-    int marginLeft  =  GetScrolling().x;
-    int marginRight = -GetScrolling().x;
-    int marginTop   = -GetScrolling().y;
-    int marginBot   =  GetScrolling().y;
+    int paddingLeft  =  GetScrolling().x;
+    int paddingRight = -GetScrolling().x;
+    int paddingTop   = -GetScrolling().y;
+    int paddingBot   =  GetScrolling().y;
 
-    p_childrenContainer->GetComponent<RectTransform>()->
-                          SetMargins(marginLeft, marginTop,
-                                     marginRight, marginBot);
-    UILayoutManager::Invalidate(p_childrenContainer->
-                                GetComponent<RectTransform>());
+    UIFrameLayout *fl = gameObject->GetComponent<UIFrameLayout>();
+    fl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 
-GameObject *UIScrollArea::CreateGameObject()
+UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 {
-    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
-
-    GameObject *mask = GameObjectFactory::CreateUIGameObject(true);
-    mask->AddComponent<UIMask>();
-    mask->SetName("Mask");
-    mask->SetParent(go);
-
-    GameObject *childrenCont = GameObjectFactory::CreateUIGameObject(true);
-    childrenCont->SetName("ChildrenContainer");
-    childrenCont->SetParent(mask);
-
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
-    scrollArea->InitGameObject();
+    go->AddComponent<UIFrameLayout>();
 
-    return go;
-}
+    UIMask *mask = go->AddComponent<UIMask>();
+    mask->SetDrawMask(false);
 
-void UIScrollArea::RetrieveReferences()
-{
-    p_mask = gameObject->GetChild("Mask")->GetComponent<UIMask>();
-    p_childrenContainer = p_mask->gameObject->GetChild("ChildrenContainer");
-}
+    UIImageRenderer *quad = go->AddComponent<UIImageRenderer>();
+    quad->SetTint(Color::Yellow);
 
-void UIScrollArea::InitGameObject()
-{
-    RetrieveReferences();
-    p_mask->SetDrawMask(false);
-    UIImageRenderer *quad = p_mask->GetGameObject()->AddComponent<UIImageRenderer>();
-    quad->SetTint(Color::White);
-    RetrieveReferences();
+    GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
+    childrenCont->SetName("ChildrenContainer");
+    go->AddChild(childrenCont);
+
+    scrollArea->p_mask = mask;
+    scrollArea->p_childrenContainer = childrenCont;
+
+    return scrollArea;
 }

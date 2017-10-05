@@ -10,6 +10,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
 FORWARD class GameObject;
 FORWARD class UIListDriver;
+FORWARD class UIScrollArea;
 FORWARD class UIButtonDriver;
 
 class GameObjectFactory
@@ -26,7 +27,8 @@ public:
     static GameObject*   CreateGUIInputText();
     static UIButtonDriver* CreateGUIButton();
     static GameObject*   CreateGUILabel(const String &content = "Bang");
-    static GameObject*   CreateGUIScrollArea();
+    static UIScrollArea* CreateGUIScrollAreaInto(GameObject *go);
+    static UIScrollArea* CreateGUIScrollArea();
 
     static GameObject* CreateGUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,

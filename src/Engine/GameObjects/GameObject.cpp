@@ -216,13 +216,9 @@ GameObject *GameObject::GetChild(const GUID &guid) const
 
 GameObject *GameObject::GetChild(const String &name) const
 {
-    for (auto it = GetChildren().Begin(); it != GetChildren().End(); ++it)
+    for (GameObject *child : GetChildren())
     {
-        GameObject *child = (*it);
-        if (child->m_name == name)
-        {
-            return child;
-        }
+        if (child->m_name == name) { return child; }
     }
     return nullptr;
 }
@@ -270,8 +266,9 @@ bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 
 void GameObject::SetParent(GameObject *newParent, int _index)
 {
+    ASSERT(newParent != this);
+    ASSERT( !newParent || !newParent->IsChildOf(this) );
     if (parent) { parent->m_children.Remove(this); }
-    if (newParent) { ASSERT( !newParent->IsChildOf(this) ); }
 
     p_parent = newParent;
     if (parent)

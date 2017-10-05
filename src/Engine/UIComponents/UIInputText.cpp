@@ -428,9 +428,9 @@ GameObject *UIInputText::CreateGameObject()
     selectionQuad->SetName("GUIInputText_SelectionQuad");
     selectionQuad->SetParent(label, 0);
 
-    GameObject *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
-    boxScrollArea->SetName("GUIInputText_BoxMask");
-    boxScrollArea->SetParent(go);
+    UIScrollArea *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
+    boxScrollArea->gameObject->SetName("GUIInputText_BoxMask");
+    boxScrollArea->gameObject->SetParent(go);
 
     GameObject *cursor = GameObjectFactory::CreateUIGameObject(true);
     cursor->SetName("GUIInputText_GUITextCursor");
@@ -459,7 +459,7 @@ void UIInputText::InitGameObject()
     selectionImg->GetMaterial()->SetDiffuseColor(Color::LightBlue);
     p_selectionQuad->SetParent(p_label, 0);
 
-    p_boxScrollArea->SetMasking(true);
+    p_boxScrollArea->GetMask()->SetMasking(true);
     p_label->SetParent(p_boxScrollArea->GetContainer());
 
     GetText()->SetHorizontalAlign(HorizontalAlignment::Left);

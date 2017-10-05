@@ -89,10 +89,7 @@ Scene *GameObjectFactory::CreateDefaultScene()
 UIListDriver *GameObjectFactory::CreateGUIList(bool vertical)
 {
     GameObject *listGo = GameObjectFactory::CreateUIGameObject();
-
-    UIListDriver *listDriver = listGo->AddComponent<UIListDriver>();
-    listDriver->Create();
-
+    UIListDriver *listDriver = UIListDriver::CreateInto(listGo);
     return listDriver;
 }
 
@@ -165,9 +162,15 @@ GameObject *GameObjectFactory::CreateGUILabel(const String &content)
     return maskGo;
 }
 
-GameObject *GameObjectFactory::CreateGUIScrollArea()
+UIScrollArea* GameObjectFactory::CreateGUIScrollAreaInto(GameObject *go)
 {
-    return UIScrollArea::CreateGameObject();
+    return UIScrollArea::CreateInto(go);
+}
+
+UIScrollArea *GameObjectFactory::CreateGUIScrollArea()
+{
+    GameObject *go = GameObjectFactory::CreateUIGameObject();
+    return GameObjectFactory::CreateGUIScrollAreaInto(go);
 }
 
 GameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
