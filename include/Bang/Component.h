@@ -8,6 +8,9 @@
 
 NAMESPACE_BANG_BEGIN
 
+#define REQUIRE_COMPONENT(gameObject, ComponentClass) \
+    ASSERT(gameObject->HasComponent<ComponentClass>())
+
 #define COMPONENT(ClassName) \
     SERIALIZABLE(ClassName) \
     friend class ComponentFactory;

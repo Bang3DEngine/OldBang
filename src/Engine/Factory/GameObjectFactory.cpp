@@ -3,6 +3,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/UIMask.h"
+#include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIButton.h"
@@ -86,95 +87,50 @@ Scene *GameObjectFactory::CreateDefaultScene()
     return scene;
 }
 
-UIListDriver *GameObjectFactory::CreateGUIList(bool vertical)
+UIListDriver *GameObjectFactory::CreateUIListInto(GameObject *go)
 {
-    GameObject *listGo = GameObjectFactory::CreateUIGameObject();
-    UIListDriver *listDriver = UIListDriver::CreateInto(listGo);
-    return listDriver;
+    return UIListDriver::CreateInto(go);
+}
+UIListDriver *GameObjectFactory::CreateUIList()
+{
+    return UIListDriver::CreateUI();
 }
 
-GameObject *GameObjectFactory::CreateGUIInputText()
+UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 {
-    return UIInputText::CreateGameObject();
+    return UIInputText::CreateInto(go);
+}
+UIInputText *GameObjectFactory::CreateUIInputText()
+{
+    return UIInputText::CreateUI();
 }
 
-UIButtonDriver* GameObjectFactory::CreateGUIButton()
+UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 {
-    GameObject *container = GameObjectFactory::CreateUIGameObject();
-    UIFrameLayout *fl = container->AddComponent<UIFrameLayout>();
-    fl->SetPaddings(5);
-    fl->SetPaddingTop(5);
-    fl->SetPaddingRight(10);
-    fl->SetPaddingLeft (10);
-
-    UILayoutElement *le = container->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(0) );
-
-    GameObject *bg = GameObjectFactory::CreateUIGameObject(true);
-    bg->SetName("GUIButton_Background");
-    UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
-    bgImg->SetTint(Color::White);
-    bg->SetParent(container);
-
-    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
-    go->AddComponent<UIFrameLayout>();
-    go->SetName("GUIButton");
-
-    GameObject *label = GameObjectFactory::CreateGUILabel();
-    label->SetName("GUIButton_Label");
-    label->GetComponentInChildren<UITextRenderer>()->SetTextColor(Color::Black);
-    label->SetParent(go);
-
-    UITintedButton *bgWTint = go->AddComponent<UITintedButton>();
-    bgWTint->SetMode(UIButtonMode::UseRectTransform);
-    bgWTint->AddToTint(bg);
-    bgWTint->SetIdleTintColor(bgImg->GetTint());
-    bgWTint->SetOverTintColor( Color(Vector3(0.95), 1) );
-    bgWTint->SetPressedTintColor( Color(Vector3(0.9), 1) );
-    bgWTint->AddAgent(bg);
-
-    UIButtonDriver *buttonDriv = container->AddComponent<UIButtonDriver>();
-    buttonDriv->SetBackground(bgImg);
-    buttonDriv->SetButton(bgWTint);
-    buttonDriv->SetText(label->GetComponentInChildren<UITextRenderer>());
-
-    go->SetParent(container);
-
-    return buttonDriv;
+    return UIButtonDriver::CreateInto(go);
+}
+UIButtonDriver* GameObjectFactory::CreateUIButton()
+{
+    return UIButtonDriver::CreateUI();
 }
 
-GameObject *GameObjectFactory::CreateGUILabel(const String &content)
+UILabel *GameObjectFactory::CreateUILabel() { return UILabel::CreateUI(); }
+UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)
 {
-    GameObject *maskGo = GameObjectFactory::CreateUIGameObject();
-    maskGo->SetName("GUILabel_Mask");
-    maskGo->AddComponent<UIFrameLayout>();
-    UIMask *mask = maskGo->AddComponent<UIMask>();
-    maskGo->AddComponent<UIImageRenderer>(); // Quad mask
-
-    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
-    textContainer->SetName("GUILabel_TextContainer");
-    textContainer->SetParent(maskGo);
-    UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
-    text->SetTextSize(12);
-    text->SetContent(content);
-    text->SetWrapping(false);
-
-    return maskGo;
+    return UILabel::CreateInto(go);
 }
 
-UIScrollArea* GameObjectFactory::CreateGUIScrollAreaInto(GameObject *go)
+UIScrollArea *GameObjectFactory::CreateUIScrollArea()
+{
+    return UIScrollArea::CreateUI();
+}
+UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
 {
     return UIScrollArea::CreateInto(go);
 }
 
-UIScrollArea *GameObjectFactory::CreateGUIScrollArea()
-{
-    GameObject *go = GameObjectFactory::CreateUIGameObject();
-    return GameObjectFactory::CreateGUIScrollAreaInto(go);
-}
-
-GameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
-                                               const Vector2i &space)
+GameObject *GameObjectFactory::CreateUISpacer(LayoutSizeType sizeType,
+                                              const Vector2i &space)
 {
     GameObject *spacerGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
@@ -188,25 +144,25 @@ GameObject *GameObjectFactory::CreateGUISpacer(LayoutSizeType sizeType,
     else { le->SetFlexibleSize( Vector2(space) ); }
     return spacerGo;
 }
-GameObject *GameObjectFactory::CreateGUIHSpacer(LayoutSizeType sizeType,
-                                                int spaceX)
+GameObject *GameObjectFactory::CreateUIHSpacer(LayoutSizeType sizeType,
+                                               int spaceX)
 {
     GameObject *spacerGo =
-            GameObjectFactory::CreateGUISpacer(sizeType, Vector2i(spaceX, 0) );
+            GameObjectFactory::CreateUISpacer(sizeType, Vector2i(spaceX, 0) );
     return spacerGo;
 }
-GameObject *GameObjectFactory::CreateGUIVSpacer(LayoutSizeType sizeType,
-                                                int spaceY)
+GameObject *GameObjectFactory::CreateUIVSpacer(LayoutSizeType sizeType,
+                                               int spaceY)
 {
     GameObject *spacerGo =
-            GameObjectFactory::CreateGUISpacer(sizeType, Vector2i(0, spaceY) );
+            GameObjectFactory::CreateUISpacer(sizeType, Vector2i(0, spaceY) );
     return spacerGo;
 }
 
 GameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
                                                   const Vector2i &space)
 {
-    GameObject *sepGo = GameObjectFactory::CreateGUISpacer(sizeType, space);
+    GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);
@@ -228,14 +184,14 @@ GameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
     return sepGo;
 }
 
-GameObject *GameObjectFactory::CreateGUIHSeparator(LayoutSizeType sizeType,
+GameObject *GameObjectFactory::CreateUIHSeparator(LayoutSizeType sizeType,
                                                    int spaceY)
 {
     GameObject *sepGo =
             GameObjectFactory::CreateGUISeparator(sizeType, Vector2i(0, spaceY) );
     return sepGo;
 }
-GameObject *GameObjectFactory::CreateGUIVSeparator(LayoutSizeType sizeType,
+GameObject *GameObjectFactory::CreateUIVSeparator(LayoutSizeType sizeType,
                                                    int spaceX)
 {
     GameObject *sepGo =

@@ -32,6 +32,8 @@ NAMESPACE_BANG_BEGIN
 #endif
 
 #define ASSERT(assertion) ASSERT_MSG(assertion, #assertion)
+
+#define SASSERT(assertion) static_assert(assertion)
 // =====================================================
 
 // SFINAE ===============================================

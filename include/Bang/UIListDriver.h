@@ -4,12 +4,14 @@
 #include <functional>
 
 #include "Bang/Component.h"
+#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UIScrollArea;
 
-class UIListDriver : public Component
+class UIListDriver : public IComponentDriver<UIListDriver>,
+                     public Component
 {
     COMPONENT(UIListDriver);
 
@@ -17,7 +19,6 @@ public:
     enum Action { SelectionIn, SelectionOut, MouseOver, MouseOut,
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
-    UIListDriver();
     virtual ~UIListDriver();
 
     void OnUpdate() override;
@@ -36,6 +37,9 @@ public:
     using SelectionCallback = std::function<void(GameObject *go, Action action)>;
     void SetSelectionCallback(SelectionCallback selectionCallback);
 
+protected:
+    UIListDriver();
+
 private:
     int m_selectionIndex = 0;
     GameObject *p_mouseOverGo = nullptr;
@@ -47,6 +51,7 @@ private:
     void Callback(GameObject *go, Action action);
 
     friend class GameObjectFactory;
+    friend class IComponentDriver<UIListDriver>;
 };
 
 NAMESPACE_BANG_END

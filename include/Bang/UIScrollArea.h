@@ -4,12 +4,14 @@
 #include "Bang/Vector2.h"
 #include "Bang/UIMask.h"
 #include "Bang/Component.h"
+#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
 
-class UIScrollArea : public Component
+class UIScrollArea : public IComponentDriver<UIScrollArea>,
+                     public Component
 {
     COMPONENT(UIScrollArea)
 
@@ -39,6 +41,7 @@ private:
     static UIScrollArea* CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
+    friend class IComponentDriver<UIScrollArea>;
 };
 
 NAMESPACE_BANG_END

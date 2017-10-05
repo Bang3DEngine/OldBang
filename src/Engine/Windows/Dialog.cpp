@@ -83,31 +83,30 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     UILayoutElement *hlLE = hlGo->AddComponent<UILayoutElement>();
     hlLE->SetFlexibleHeight(0);
 
-    UIListDriver *list = GameObjectFactory::CreateGUIList(true);
+    UIListDriver *list = GameObjectFactory::CreateUIList();
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
     fileList->SetCurrentPath(Paths::EngineAssets());
 
-    GameObject *inputPathGo = GameObjectFactory::CreateGUIInputText();
-    UIInputText *inputText = inputPathGo->GetComponent<UIInputText>();
-    inputText->GetText()->SetContent("");
-    inputText->GetText()->SetTextSize(12);
-    inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
+    inputPathText->GetText()->SetContent("");
+    inputPathText->GetText()->SetTextSize(12);
+    inputPathText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     fileList->SetPathChangedCallback(
-        [inputText](const Path &newPath)
+        [inputPathText](const Path &newPath)
         {
-            inputText->GetText()->SetContent(newPath.GetAbsolute());
+            inputPathText->GetText()->SetContent(newPath.GetAbsolute());
         }
     );
 
-    UILayoutElement *itle = inputPathGo->AddComponent<UILayoutElement>();
+    UILayoutElement *itle = inputPathText->gameObject->AddComponent<UILayoutElement>();
     itle->SetFlexibleSize(Vector2(1,1));
 
-    UIButtonDriver *goButton = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *goButton = GameObjectFactory::CreateUIButton();
     goButton->GetText()->SetContent("Go");
     goButton->GetButton()->AddClickedCallback(
-        [inputText, fileList](UIButton *_)
+        [inputPathText, fileList](UIButton *_)
         {
-            Path inputPath(inputText->GetText()->GetContent());
+            Path inputPath(inputPathText->GetText()->GetContent());
             if (inputPath.IsFile()) { inputPath = inputPath.GetDirectory(); }
             if (inputPath.IsDir())
             {
@@ -116,12 +115,12 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
         }
     );
 
-    UIButtonDriver *openButton = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *openButton = GameObjectFactory::CreateUIButton();
     openButton->GetText()->SetContent("Open");
     openButton->GetButton()->AddClickedCallback(
-        [inputText](UIButton *_)
+        [inputPathText](UIButton *_)
         {
-            Dialog::s_resultPath = Path(inputText->GetText()->GetContent());
+            Dialog::s_resultPath = Path(inputPathText->GetText()->GetContent());
             Window::Destroy(Window::GetCurrent());
         }
     );
@@ -137,15 +136,15 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     scene->AddChild(vlGo);
 
     vlGo->AddChild(inputPathCont);
-    inputPathCont->AddChild(inputPathGo);
+    inputPathCont->AddChild(inputPathText->gameObject);
     inputPathCont->AddChild(goButton->gameObject);
 
-    vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
     vlGo->AddChild(list->gameObject);
-    vlGo->AddChild(GameObjectFactory::CreateGUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
 
     vlGo->AddChild(hlGo);
-    hlGo->AddChild(GameObjectFactory::CreateGUIHSpacer(LayoutSizeType::Flexible));
+    hlGo->AddChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible));
     hlGo->AddChild(openButton->gameObject);
 
     scene->SetFirstFoundCameraOrDefaultOne();
@@ -192,16 +191,16 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     textLE->SetPreferredSize( Vector2i::One );
 
     GameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
-    GameObject *hSpacer = GameObjectFactory::CreateGUIHSpacer();
+    GameObject *hSpacer = GameObjectFactory::CreateUIHSpacer();
     UIHorizontalLayout *buttonsHL = buttonsGo->AddComponent<UIHorizontalLayout>();
     buttonsHL->SetSpacing(20);
     buttonsHL->SetPaddings(5);
 
-    UIButtonDriver *button0 = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *button0 = GameObjectFactory::CreateUIButton();
     button0->GetText()->SetContent("Cancel");
     button0->GetButton()->AddClickedCallback(OnButtonClicked);
 
-    UIButtonDriver *button1 = GameObjectFactory::CreateGUIButton();
+    UIButtonDriver *button1 = GameObjectFactory::CreateUIButton();
     button1->GetText()->SetContent("OK");
     button1->GetButton()->AddClickedCallback(OnButtonClicked);
 
@@ -210,10 +209,10 @@ Scene *Dialog::CreateMsgScene(const String &msg)
       mainVLayoutGo->AddChild(hLayoutGo);
        hLayoutGo->AddChild(iconGo);
        hLayoutGo->AddChild(
-          GameObjectFactory::CreateGUIHSpacer(LayoutSizeType::Min, 20));
+          GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Min, 20));
        hLayoutGo->AddChild(msgGo);
       mainVLayoutGo->AddChild(
-         GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 20));
+         GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 20));
       mainVLayoutGo->AddChild(buttonsGo);
        buttonsGo->AddChild(hSpacer);
        buttonsGo->AddChild(button0->gameObject);

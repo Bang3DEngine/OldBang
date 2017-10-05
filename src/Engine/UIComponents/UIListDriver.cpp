@@ -159,7 +159,10 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
 {
     UIListDriver *ld = go->AddComponent<UIListDriver>();
 
-    ld->p_scrollArea = GameObjectFactory::CreateGUIScrollAreaInto(go);
+    UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::White);
+
+    ld->p_scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
     GameObject *container = ld->p_scrollArea->GetContainer();
 
     UIDirLayout *dirLayout;
@@ -170,12 +173,6 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     dirLayout->SetSpacing(3);
     dirLayout->SetPaddings(3);
 
-    UIImageRenderer *bg = container->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White);
-
-    Debug_Peek(ld->p_scrollArea);
-    Debug_Peek(ld->p_scrollArea->gameObject);
-    Debug_Peek(ld->p_scrollArea->GetContainer());
     return ld;
 }
 

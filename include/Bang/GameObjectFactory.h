@@ -8,7 +8,9 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class UILabel;
 FORWARD class GameObject;
+FORWARD class UIInputText;
 FORWARD class UIListDriver;
 FORWARD class UIScrollArea;
 FORWARD class UIButtonDriver;
@@ -23,27 +25,31 @@ public:
     static Scene* CreateUIScene();
     static Scene* CreateDefaultScene();
 
-    static UIListDriver* CreateGUIList(bool vertical);
-    static GameObject*   CreateGUIInputText();
-    static UIButtonDriver* CreateGUIButton();
-    static GameObject*   CreateGUILabel(const String &content = "Bang");
-    static UIScrollArea* CreateGUIScrollAreaInto(GameObject *go);
-    static UIScrollArea* CreateGUIScrollArea();
+    static UIListDriver*   CreateUIListInto(GameObject *go);
+    static UIListDriver*   CreateUIList();
+    static UIInputText*    CreateUIInputTextInto(GameObject *go);
+    static UIInputText*    CreateUIInputText();
+    static UIButtonDriver* CreateUIButtonInto(GameObject *go);
+    static UIButtonDriver* CreateUIButton();
+    static UILabel*        CreateUILabel();
+    static UILabel*        CreateUILabelInto(GameObject *go);
+    static UIScrollArea*   CreateUIScrollAreaInto(GameObject *go);
+    static UIScrollArea*   CreateUIScrollArea();
 
-    static GameObject* CreateGUIHSeparator(
+    static GameObject* CreateUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceY = 1);
-    static GameObject* CreateGUIVSeparator(
+    static GameObject* CreateUIVSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceX = 1);
 
-    static GameObject* CreateGUISpacer(
+    static GameObject* CreateUISpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             const Vector2i &space = Vector2i(1));
-    static GameObject* CreateGUIHSpacer(
+    static GameObject* CreateUIHSpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             int spaceX = 1);
-    static GameObject* CreateGUIVSpacer(
+    static GameObject* CreateUIVSpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             int spaceY = 1);
 

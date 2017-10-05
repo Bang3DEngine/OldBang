@@ -1,8 +1,8 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
-#include "Bang/Component.h"
 #include "Bang/IFocusListener.h"
+#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -13,13 +13,13 @@ FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
-class UIInputText : public Component,
+class UIInputText : public IComponentDriver<UIInputText>,
+                    public Component,
                     public IFocusListener
 {
     COMPONENT(UIInputText)
 
 public:
-    UIInputText();
     virtual ~UIInputText();
 
     void OnUpdate() override;
@@ -49,9 +49,9 @@ private:
 
     UIImageRenderer *p_background = nullptr;
 
-    GameObject *p_label = nullptr;
+    UILabel *p_label = nullptr;
     UITextCursor *p_cursor = nullptr;
-    UIScrollArea *p_boxScrollArea = nullptr;
+    UIScrollArea *p_scrollArea = nullptr;
 
     GameObject *p_selectionQuad = nullptr;
 
@@ -61,6 +61,8 @@ private:
     int m_selectionIndex = 0;
 
     bool m_forceUpdateRenderers = false;
+
+    UIInputText();
 
     void HandleTyping();
     void HandleMouseSelection();
@@ -82,11 +84,11 @@ private:
     void UpdateCursorRenderersAndScrolling();
     bool IsShiftPressed() const;
 
-    static GameObject *CreateGameObject();
-    void RetrieveReferences();
-    void InitGameObject();
+    // IComponentDriver
+    static UIInputText *CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
+    friend class IComponentDriver<UIInputText>;
 };
 
 NAMESPACE_BANG_END

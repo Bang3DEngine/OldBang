@@ -3,6 +3,7 @@
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
+#include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFocusTaker.h"
@@ -30,8 +31,6 @@ void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    RetrieveReferences();
-
     UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
     if ( ft->HasFocus() )
     {
@@ -48,8 +47,8 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
 {
     Rect limits = gameObject->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
 
-    Vector2i prevScrollPx = p_boxScrollArea->GetScrolling();
-    p_boxScrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
+    Vector2i prevScrollPx = p_scrollArea->GetScrolling();
+    p_scrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
     GetText()->RegenerateCharQuadsVAO();
 
     // Cursor "I" position update and Selection quad rendering
@@ -86,11 +85,11 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
         if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
             m_cursorIndex == 0)
         {
-            p_boxScrollArea->SetScrolling( Vector2i::Zero );
+            p_scrollArea->SetScrolling( Vector2i::Zero );
         }
         else
         {
-            p_boxScrollArea->SetScrolling(prevScrollPx);
+            p_scrollArea->SetScrolling(prevScrollPx);
             GetText()->RegenerateCharQuadsVAO();
             contentRectNDC = GetText()->GetContentGlobalNDCRect();
             float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
@@ -115,7 +114,7 @@ void UIInputText::UpdateCursorRenderersAndScrolling()
             }
 
             Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
-            p_boxScrollArea->SetScrolling(prevScrollPx + scrollPx);
+            p_scrollArea->SetScrolling(prevScrollPx + scrollPx);
         }
     }
 }
@@ -221,7 +220,7 @@ RectTransform *UIInputText::GetTextRT() const
 
 RectTransform *UIInputText::GetLabelRT() const
 {
-    return p_label->GetComponent<RectTransform>();
+    return p_label->gameObject->GetComponent<RectTransform>();
 }
 
 float UIInputText::GetCursorXGlobalNDC(int cursorIndex) const
@@ -386,7 +385,7 @@ UITextCursor *UIInputText::GetCursor() const
 
 UITextRenderer *UIInputText::GetText() const
 {
-    return p_label->GetComponentInChildren<UITextRenderer>();
+    return p_label->GetText();
 }
 
 UIImageRenderer *UIInputText::GetBackground() const
@@ -394,84 +393,55 @@ UIImageRenderer *UIInputText::GetBackground() const
     return p_background;
 }
 
-void UIInputText::RetrieveReferences()
-{
-    GameObject *go = GetGameObject(); ENSURE(go);
-    p_background = go->GetComponent<UIImageRenderer>();
-    p_label = gameObject->FindInChildren("GUIInputText_Label");
-    p_cursor = p_label->GetComponentInChildren<UITextCursor>();
-    p_selectionQuad = gameObject->FindInChildren("GUIInputText_SelectionQuad");
-    p_boxScrollArea = SCAST<UIScrollArea*>(go->FindInChildren("GUIInputText_BoxMask")->
-                                            GetComponent<UIScrollArea>());
-}
-
 bool UIInputText::IsShiftPressed() const
 {
     return Input::GetKey(Key::LShift) || Input::GetKey(Key::RShift);
 }
 
-GameObject *UIInputText::CreateGameObject()
+UIInputText *UIInputText::CreateInto(GameObject *go)
 {
-    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    REQUIRE_COMPONENT(go, RectTransform);
+    REQUIRE_COMPONENT(go, UIFocusTaker);
+
+    UIInputText *inputText = go->AddComponent<UIInputText>();
+
     UIFocusTaker *ft = go->GetComponent<UIFocusTaker>();
     ft->SetDefaultFocusAction(FocusAction::TakeIt);
 
-    UIImageRenderer *imgRenderer = go->AddComponent<UIImageRenderer>();
-    imgRenderer->UseMaterialCopy();
-    imgRenderer->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
+    UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::White);
+    inputText->p_background = bg;
 
-    GameObject *label = GameObjectFactory::CreateGUILabel();
-    label->SetName("GUIInputText_Label");
-    label->SetParent(go);
+    UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
+    scrollArea->GetMask()->SetMasking(true);
+    inputText->p_scrollArea = scrollArea;
 
-    GameObject *selectionQuad = GameObjectFactory::CreateUIGameObject(true);
-    selectionQuad->SetName("GUIInputText_SelectionQuad");
-    selectionQuad->SetParent(label, 0);
+    GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
+    UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
+    selectionQuad->SetTint(Color::LightBlue);
+    inputText->p_selectionQuad = selectionQuadGo;
 
-    UIScrollArea *boxScrollArea = GameObjectFactory::CreateGUIScrollArea();
-    boxScrollArea->gameObject->SetName("GUIInputText_BoxMask");
-    boxScrollArea->gameObject->SetParent(go);
+    GameObject *cursorGo = GameObjectFactory::CreateUIGameObject();
+    UITextCursor *cursor = cursorGo->AddComponent<UITextCursor>();
+    inputText->p_cursor = cursor;
 
-    GameObject *cursor = GameObjectFactory::CreateUIGameObject(true);
-    cursor->SetName("GUIInputText_GUITextCursor");
-    cursor->AddComponent<UITextCursor>();
-    cursor->SetParent(label);
+    UILabel *label = GameObjectFactory::CreateUILabel();
+    label->GetMask()->SetMasking(false);
+    label->gameObject->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
+    inputText->p_label = label;
 
-    UIInputText *inputText = go->AddComponent<UIInputText>();
-    inputText->InitGameObject();
+    inputText->m_cursorIndex = inputText->GetText()->GetContent().Size();
+    inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    inputText->GetText()->SetVerticalAlign(VerticalAlignment::Center);
+    inputText->GetText()->SetWrapping(false);
+    inputText->ResetSelection();
+    inputText->UpdateCursorRenderersAndScrolling();
 
-    return go;
-}
+    scrollArea->GetContainer()->AddChild(cursorGo);
+    scrollArea->GetContainer()->AddChild(selectionQuadGo);
+    scrollArea->GetContainer()->AddChild(label->gameObject);
 
-void UIInputText::InitGameObject()
-{
-    RetrieveReferences();
-
-    p_background->UseMaterialCopy();
-    p_background->GetMaterial()->SetDiffuseColor(Color::Gray * 2.0f);
-
-    p_label->GetComponentInChildren<UIMask>()->SetMasking(false);
-    p_label->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
-
-    UIImageRenderer *selectionImg =
-            p_selectionQuad->AddComponent<UIImageRenderer>();
-    selectionImg->UseMaterialCopy();
-    selectionImg->GetMaterial()->SetDiffuseColor(Color::LightBlue);
-    p_selectionQuad->SetParent(p_label, 0);
-
-    p_boxScrollArea->GetMask()->SetMasking(true);
-    p_label->SetParent(p_boxScrollArea->GetContainer());
-
-    GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    GetText()->SetVerticalAlign(VerticalAlignment::Center);
-    GetText()->SetWrapping(false);
-
-    m_cursorIndex = GetText()->GetContent().Size();
-
-    ResetSelection();
-    GetBackground()->SetTint(Color::White);
-    UpdateCursorRenderersAndScrolling();
-    RetrieveReferences();
+    return inputText;
 }
 
 float UIInputText::GetCursorXLocalNDC(int cursorIndex) const

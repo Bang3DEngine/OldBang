@@ -55,7 +55,7 @@ public:
 
 NAMESPACE_BANG_END
 
-#endif 
+#endif // ${CLASS_INC}_H
 " > "${CLASS_HEADER}"
 
 echo "\
@@ -71,4 +71,7 @@ ${CLASS_NAME}::~${CLASS_NAME}()
 {
 }
 " > "${CLASS_SOURCE}"
+
+Success "Class header has been created in '${CLASS_HEADER}'"
+Success "Class source has been created in '${CLASS_SOURCE}'"
 
