@@ -10,6 +10,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
+#include "Bang/UIScrollBar.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIBorderRect.h"
@@ -17,6 +18,7 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/UIListDriver.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UIFrameLayout.h"
@@ -124,6 +126,25 @@ UIScrollArea *GameObjectFactory::CreateUIScrollArea()
 {
     return UIScrollArea::CreateUI();
 }
+
+UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
+{
+    return UIScrollBar::CreateInto(go);
+}
+UIScrollBar *GameObjectFactory::CreateUIScrollBar()
+{
+    return UIScrollBar::CreateUI();
+}
+
+UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
+{
+    return UIScrollPanel::CreateInto(go);
+}
+UIScrollPanel *GameObjectFactory::CreateUIScrollPanel()
+{
+    return UIScrollPanel::CreateUI();
+}
+
 UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
 {
     return UIScrollArea::CreateInto(go);
@@ -159,8 +180,8 @@ GameObject *GameObjectFactory::CreateUIVSpacer(LayoutSizeType sizeType,
     return spacerGo;
 }
 
-GameObject *GameObjectFactory::CreateGUISeparator(LayoutSizeType sizeType,
-                                                  const Vector2i &space)
+GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
+                                                 const Vector2i &space)
 {
     GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
@@ -188,13 +209,13 @@ GameObject *GameObjectFactory::CreateUIHSeparator(LayoutSizeType sizeType,
                                                    int spaceY)
 {
     GameObject *sepGo =
-            GameObjectFactory::CreateGUISeparator(sizeType, Vector2i(0, spaceY) );
+            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(0, spaceY) );
     return sepGo;
 }
 GameObject *GameObjectFactory::CreateUIVSeparator(LayoutSizeType sizeType,
                                                    int spaceX)
 {
     GameObject *sepGo =
-            GameObjectFactory::CreateGUISeparator(sizeType, Vector2i(spaceX, 0) );
+            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(spaceX, 0) );
     return sepGo;
 }

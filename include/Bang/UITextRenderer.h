@@ -1,4 +1,3 @@
-
 #ifndef UITEXTRENDERER_H
 #define UITEXTRENDERER_H
 
@@ -22,7 +21,14 @@ class UITextRenderer : public UIRenderer,
     COMPONENT(UITextRenderer)
 
 public:
-    UITextRenderer();
+    enum class LayoutMode
+    {
+        SingleLineMinPreferred,
+        MultiLineMinPreferred,
+        SingleLinePreferred,
+        MultiLinePreferred
+    };
+
     virtual ~UITextRenderer();
 
     // UIRenderer
@@ -32,9 +38,9 @@ public:
     virtual void OnRender(RenderPass renderPass) override;
 
     // ILayoutElement
-    virtual Vector2i CalculateTotalMinSize() const override;
-    virtual Vector2i CalculateTotalPreferredSize() const override;
-    virtual Vector2 GetFlexibleSize() const override;
+    virtual Vector2i _GetMinSize()       const override;
+    virtual Vector2i _GetPreferredSize() const override;
+    virtual Vector2  _GetFlexibleSize()  const override;
 
     void RegenerateCharQuadsVAO();
 
@@ -53,6 +59,7 @@ public:
     void SetOutlineColor(const Color &color);
     void SetOutlineBlurriness(float outlineBlurriness);
     void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
+    void SetLayoutMode(LayoutMode layoutMode);
 
     virtual bool NeedsReadingColorBuffer() const override;
     Font* GetFont() const;
@@ -73,6 +80,7 @@ public:
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
+    LayoutMode GetLayoutMode() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // IRectTransformListener
@@ -111,8 +119,13 @@ private:
     uint m_currentRenderingChar = 0;
     Array<Rect> m_charRectsLocalNDC;
 
+    LayoutMode m_layoutMode = LayoutMode::SingleLinePreferred;
+
+    UITextRenderer();
+
     void OnChanged();
 
+    friend class ComponentFactory;
 };
 
 NAMESPACE_BANG_END

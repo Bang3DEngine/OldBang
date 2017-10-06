@@ -98,17 +98,22 @@ float UILayoutElement::GetFlexibleHeight() const
     return GetFlexibleSize().y;
 }
 
-Vector2 UILayoutElement::GetFlexibleSize() const
+const Vector2 &UILayoutElement::GetFlexibleSize() const
 {
     return m_flexibleSize;
 }
 
-Vector2i UILayoutElement::CalculateTotalPreferredSize() const
+Vector2 UILayoutElement::_GetFlexibleSize() const
 {
-    return GetPreferredSize();
+    return GetFlexibleSize();
 }
 
-Vector2i UILayoutElement::CalculateTotalMinSize() const
+Vector2i UILayoutElement::_GetMinSize() const
 {
     return GetMinSize();
+}
+
+Vector2i UILayoutElement::_GetPreferredSize() const
+{
+    return GetPreferredSize();
 }

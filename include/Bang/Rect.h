@@ -112,6 +112,16 @@ public:
                         Math::Max(r1.m_max.y, r2.m_max.y));
     }
 
+    template <class Iterator>
+    static RectG<T> Union(Iterator begin, Iterator end)
+    {
+        if (begin == end) { return RectG<T>::Zero; }
+        RectG<T> unionRect = *begin;
+        for (auto it = begin; it != end; ++it)
+        { unionRect = RectG<T>::Union(unionRect, *it); }
+        return unionRect;
+    }
+
     static RectG<T> Intersection(const RectG<T> &r1, const RectG<T> &r2)
     {
         T minx = Math::Max(r1.m_min.x, r2.m_min.x);
@@ -128,16 +138,26 @@ public:
     }
 
     template <class Iterator>
+    static RectG<T> Intersection(Iterator begin, Iterator end)
+    {
+        if (begin == end) { return RectG<T>::Zero; }
+        RectG<T> intersectionRect = *begin;
+        for (auto it = begin; it != end; ++it)
+        { intersectionRect = RectG<T>::Intersection(intersectionRect, *it); }
+        return intersectionRect;
+    }
+
+    template <class Iterator>
     static RectG<T> GetBoundingRectFromPositions(Iterator begin, Iterator end)
     {
         if (begin == end) { return RectG<T>::Zero; }
 
-        Vector2 minv = *begin, maxv = *begin;
+        Vector2G<T> minv = *begin, maxv = *begin;
         for (auto it = begin; it != end; ++it)
         {
-            const Vector2 &p = *it;
-            minv = Vector2::Min(p, minv);
-            maxv = Vector2::Max(p, maxv);
+            const Vector2G<T> &p = *it;
+            minv = Vector2G<T>::Min(p, minv);
+            maxv = Vector2G<T>::Max(p, maxv);
         }
         return RectG<T>(minv, maxv);
     }

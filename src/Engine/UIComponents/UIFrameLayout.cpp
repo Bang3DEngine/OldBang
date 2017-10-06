@@ -89,7 +89,7 @@ void UIFrameLayout::ApplyLayout()
     }
 }
 
-Vector2i UIFrameLayout::CalculateTotalMinSize() const
+Vector2i UIFrameLayout::_GetMinSize() const
 {
     Vector2i minSize = GetPaddingSize();
     for (GameObject *child : gameObject->GetChildren())
@@ -103,7 +103,7 @@ Vector2i UIFrameLayout::CalculateTotalMinSize() const
     return minSize;
 }
 
-Vector2i UIFrameLayout::CalculateTotalPreferredSize() const
+Vector2i UIFrameLayout::_GetPreferredSize() const
 {
     Vector2i prefSize = GetPaddingSize();
     for (GameObject *child : gameObject->GetChildren())

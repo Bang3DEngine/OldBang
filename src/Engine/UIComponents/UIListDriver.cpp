@@ -3,8 +3,10 @@
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIFocusTaker.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -157,22 +159,25 @@ void UIListDriver::SetSelectionCallback(SelectionCallback selectionCallback)
 
 UIListDriver* UIListDriver::CreateInto(GameObject *go)
 {
-    UIListDriver *ld = go->AddComponent<UIListDriver>();
+    REQUIRE_COMPONENT(go, RectTransform);
+    REQUIRE_COMPONENT(go, UIFocusTaker);
 
-    UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White);
+    UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanelInto(go);
 
-    ld->p_scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
-    GameObject *container = ld->p_scrollArea->GetContainer();
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetMinHeight(10);
+
+    GameObject *container = scrollPanel->GetContainer();
 
     UIDirLayout *dirLayout;
     const bool vertical = true;
     if (vertical) { dirLayout = container->AddComponent<UIVerticalLayout>(); }
     else { dirLayout = container->AddComponent<UIHorizontalLayout>(); }
-
     dirLayout->SetSpacing(3);
     dirLayout->SetPaddings(3);
 
+    UIListDriver *ld = go->AddComponent<UIListDriver>();
+    ld->p_scrollArea = scrollPanel->GetScrollArea();
     return ld;
 }
 

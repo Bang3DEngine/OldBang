@@ -27,11 +27,6 @@ Scene::~Scene()
 void Scene::Update()
 {
     GameObject::Update();
-    if (Input::GetKey(Key::A))
-    {
-        Debug_Log(GetCamera()->GetGameObject()->transform->GetPosition());
-        Debug_Log(GetCamera()->GetGameObject()->transform->GetForward());
-    }
 }
 
 void Scene::RenderGizmos()

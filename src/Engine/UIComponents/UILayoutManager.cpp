@@ -58,7 +58,7 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
         const List<ILayoutElement*> &les = (*it).second;
         for (ILayoutElement *le : les)
         {
-            Vector2 leSize =  le->GetTotalSize(sizeType);
+            Vector2 leSize =  le->GetSize(sizeType);
             if (!sizeXFound) { size.x = Math::Max(size.x, leSize.x); }
             if (!sizeYFound) { size.y = Math::Max(size.y, leSize.y); }
         }

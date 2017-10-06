@@ -33,42 +33,57 @@ int ILayoutElement::GetLayoutPriority() const
     return m_layoutPriority;
 }
 
-Vector2i ILayoutElement::GetTotalMinSize() const
+Vector2i ILayoutElement::GetMinSize() const
 {
-    CalculateTotalSizes();
-    return m_calculatedTotalMinSize;
+    CalculateCachedSizes();
+    return m_cachedMinSize;
 }
 
-Vector2i ILayoutElement::GetTotalPreferredSize() const
+Vector2i ILayoutElement::GetPreferredSize() const
 {
-    CalculateTotalSizes();
-    return m_calculatedTotalPreferredSize;
+    CalculateCachedSizes();
+    return m_cachedPreferredSize;
 }
 
 Vector2 ILayoutElement::GetFlexibleSize() const
 {
-    return Vector2(1);
+    return _GetFlexibleSize();
 }
 
-Vector2 ILayoutElement::GetTotalSize(LayoutSizeType sizeType) const
+Vector2i ILayoutElement::_GetMinSize() const
+{
+    return Vector2i(-1);
+}
+
+Vector2i ILayoutElement::_GetPreferredSize() const
+{
+    return Vector2i(-1);
+}
+
+Vector2 ILayoutElement::_GetFlexibleSize() const
+{
+    return Vector2(-1);
+}
+
+Vector2 ILayoutElement::GetSize(LayoutSizeType sizeType) const
 {
     if (sizeType == LayoutSizeType::Min)
-    { return Vector2( GetTotalMinSize() ); }
+    { return Vector2( GetMinSize() ); }
 
     if (sizeType == LayoutSizeType::Preferred)
-    { return Vector2( GetTotalPreferredSize() ); }
+    { return Vector2( GetPreferredSize() ); }
 
     if (sizeType == LayoutSizeType::Flexible)  { return GetFlexibleSize(); }
 
     return Vector2::Zero;
 }
 
-void ILayoutElement::CalculateTotalSizes() const
+void ILayoutElement::CalculateCachedSizes() const
 {
     if (IsInvalid())
     {
-        m_calculatedTotalMinSize        = CalculateTotalMinSize();
-        m_calculatedTotalPreferredSize  = CalculateTotalPreferredSize();
+        m_cachedMinSize       = _GetMinSize();
+        m_cachedPreferredSize = _GetPreferredSize();
 
         ILayoutElement *ncThis = const_cast<ILayoutElement*>(this);
         ncThis->SetInvalid(false);

@@ -84,6 +84,9 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     hlLE->SetFlexibleHeight(0);
 
     UIListDriver *list = GameObjectFactory::CreateUIList();
+    UILayoutElement *listLE = list->gameObject->AddComponent<UILayoutElement>();
+    listLE->SetFlexibleSize( Vector2(1) );
+
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
     fileList->SetCurrentPath(Paths::EngineAssets());
 

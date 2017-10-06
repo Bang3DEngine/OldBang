@@ -11,8 +11,10 @@ FORWARD class Scene;
 FORWARD class UILabel;
 FORWARD class GameObject;
 FORWARD class UIInputText;
+FORWARD class UIScrollBar;
 FORWARD class UIListDriver;
 FORWARD class UIScrollArea;
+FORWARD class UIScrollPanel;
 FORWARD class UIButtonDriver;
 
 class GameObjectFactory
@@ -35,6 +37,10 @@ public:
     static UILabel*        CreateUILabelInto(GameObject *go);
     static UIScrollArea*   CreateUIScrollAreaInto(GameObject *go);
     static UIScrollArea*   CreateUIScrollArea();
+    static UIScrollBar*    CreateUIScrollBarInto(GameObject *go);
+    static UIScrollBar*    CreateUIScrollBar();
+    static UIScrollPanel*  CreateUIScrollPanelInto(GameObject *go);
+    static UIScrollPanel*  CreateUIScrollPanel();
 
     static GameObject* CreateUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
@@ -56,7 +62,7 @@ public:
     GameObjectFactory() = delete;
 
 private:
-    static GameObject* CreateGUISeparator(LayoutSizeType sizeType,
+    static GameObject* CreateUISeparator(LayoutSizeType sizeType,
                                           const Vector2i &space);
 
 };

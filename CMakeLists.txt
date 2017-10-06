@@ -241,6 +241,8 @@ ${ENGINE_SRC_DIR}/UIComponents/UIListDriver.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITintedButton.cpp

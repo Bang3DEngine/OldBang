@@ -1,8 +1,8 @@
 #include "Bang/UIScrollArea.h"
 
 #include "Bang/GameObject.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIFrameLayout.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
@@ -61,8 +61,8 @@ void UIScrollArea::UpdatePaddings()
     int paddingTop   = -GetScrolling().y;
     int paddingBot   =  GetScrolling().y;
 
-    UIFrameLayout *fl = gameObject->GetComponent<UIFrameLayout>();
-    fl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
+    UIGroupLayout *gl = gameObject->GetComponent<UIGroupLayout>();
+    gl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 
 UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
@@ -70,18 +70,19 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
     go->AddComponent<UIFrameLayout>();
 
+    UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::White);
+
     UIMask *mask = go->AddComponent<UIMask>();
+    UIImageRenderer *maskQuad = go->AddComponent<UIImageRenderer>();
     mask->SetDrawMask(false);
 
-    UIImageRenderer *quad = go->AddComponent<UIImageRenderer>();
-    quad->SetTint(Color::Yellow);
-
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
-    childrenCont->SetName("ChildrenContainer");
-    go->AddChild(childrenCont);
 
     scrollArea->p_mask = mask;
     scrollArea->p_childrenContainer = childrenCont;
+
+    go->AddChild(childrenCont);
 
     return scrollArea;
 }

@@ -69,24 +69,48 @@ void UITextRenderer::OnRender(RenderPass renderPass)
     }
 }
 
-Vector2i UITextRenderer::CalculateTotalMinSize() const
+Vector2i UITextRenderer::_GetMinSize() const
 {
-    return Vector2i::Zero;
+    switch (GetLayoutMode())
+    {
+        case LayoutMode::SingleLineMinPreferred:
+        case LayoutMode::MultiLineMinPreferred:
+            return _GetPreferredSize();
+
+        default: return Vector2i::Zero;
+    };
 }
 
-Vector2i UITextRenderer::CalculateTotalPreferredSize() const
+Vector2i UITextRenderer::_GetPreferredSize() const
 {
     if (!GetFont()) { return Vector2i::Zero; }
 
     GetFont()->SetMetricsSize( GetTextSize() );
-    Vector2i prefSize =
-         TextFormatter::GetTextSizeOneLined(GetContent(),
-                                            GetFont(),
-                                            GetSpacingMultiplier());
+
+    Vector2i prefSize;
+    switch (GetLayoutMode())
+    {
+        case LayoutMode::SingleLinePreferred:
+        case LayoutMode::SingleLineMinPreferred:
+            prefSize = TextFormatter::GetTextSizeOneLined(GetContent(),
+                                                          GetFont(),
+                                                          GetSpacingMultiplier());
+        break;
+
+        case LayoutMode::MultiLinePreferred:
+        case LayoutMode::MultiLineMinPreferred:
+        {
+            const Array<Rect> crs = GetCharRectsLocalNDC();
+            Rect boundingRect = Rect::Union(crs.Begin(), crs.End());
+            prefSize = Vector2i( Vector2::Ceil(boundingRect.GetSize()) );
+        }
+        break;
+    }
+
     return prefSize;
 }
 
-Vector2 UITextRenderer::GetFlexibleSize() const
+Vector2 UITextRenderer::_GetFlexibleSize() const
 {
     return Vector2(0);
 }
@@ -340,6 +364,11 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
     }
 }
 
+void UITextRenderer::SetLayoutMode(UITextRenderer::LayoutMode layoutMode)
+{
+    m_layoutMode = layoutMode;
+}
+
 bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
 
 void UITextRenderer::SetTextColor(const Color &textColor)
@@ -372,6 +401,11 @@ const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 }
 
 Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }
+
+UITextRenderer::LayoutMode UITextRenderer::GetLayoutMode() const
+{
+    return m_layoutMode;
+}
 VerticalAlignment UITextRenderer::GetVerticalAlignment() const
 {
     return m_verticalAlignment;

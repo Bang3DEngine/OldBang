@@ -17,8 +17,8 @@ public:
     virtual void ApplyLayout() override;
 
     // ILayoutElement
-    virtual Vector2i CalculateTotalMinSize() const override;
-    virtual Vector2i CalculateTotalPreferredSize() const override;
+    virtual Vector2i _GetMinSize() const override;
+    virtual Vector2i _GetPreferredSize() const override;
 };
 
 NAMESPACE_BANG_END

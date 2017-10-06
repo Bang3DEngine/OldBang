@@ -1,6 +1,8 @@
 #include "Bang/UIButtonDriver.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UIFocusTaker.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITintedButton.h"
@@ -35,43 +37,43 @@ void UIButtonDriver::SetButton(UITintedButton *button)
     p_button = button;
 }
 
-UIButtonDriver* UIButtonDriver::CreateInto(GameObject *container)
+UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
 {
-    UIFrameLayout *fl = container->AddComponent<UIFrameLayout>();
-    fl->SetPaddings(5);
+    REQUIRE_COMPONENT(go, RectTransform);
+    REQUIRE_COMPONENT(go, UIFocusTaker);
+
+    UIButtonDriver *buttonDriv = go->AddComponent<UIButtonDriver>();
+
+    UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
+    fl->SetPaddingBot(5);
     fl->SetPaddingTop(5);
     fl->SetPaddingRight(10);
     fl->SetPaddingLeft (10);
 
-    UILayoutElement *le = container->AddComponent<UILayoutElement>();
+    UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
+    bgImg->SetTint(Color::White);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
     le->SetFlexibleSize( Vector2(0) );
 
-    GameObject *bg = GameObjectFactory::CreateUIGameObject(true);
-    UIImageRenderer *bgImg = bg->AddComponent<UIImageRenderer>();
-    bgImg->SetTint(Color::White);
-    bg->SetParent(container);
-
-    GameObject *bgGo = GameObjectFactory::CreateUIGameObject(true);
-    bgGo->AddComponent<UIFrameLayout>();
-
-    UILabel *label = GameObjectFactory::CreateUILabel();
-    label->GetText()->SetTextColor(Color::Black);
-
-    UITintedButton *bgWTint = bgGo->AddComponent<UITintedButton>();
+    UITintedButton *bgWTint = go->AddComponent<UITintedButton>();
     bgWTint->SetMode(UIButtonMode::UseRectTransform);
-    bgWTint->AddToTint(bg);
+    bgWTint->AddToTint(go);
     bgWTint->SetIdleTintColor(bgImg->GetTint());
     bgWTint->SetOverTintColor( Color(Vector3(0.95), 1) );
     bgWTint->SetPressedTintColor( Color(Vector3(0.9), 1) );
-    bgWTint->AddAgent(bg);
+    bgWTint->AddAgent(go);
 
-    UIButtonDriver *buttonDriv = container->AddComponent<UIButtonDriver>();
+    UILabel *label = GameObjectFactory::CreateUILabel();
+    label->GetText()->SetLayoutMode(
+                UITextRenderer::LayoutMode::SingleLineMinPreferred);
+    label->GetText()->SetTextColor(Color::Black);
+
     buttonDriv->SetBackground(bgImg);
     buttonDriv->SetButton(bgWTint);
     buttonDriv->SetText(label->GetText());
 
-    container->AddChild(bgGo);
-    bgGo->AddChild(label->gameObject);
+    go->AddChild(label->gameObject);
 
     return buttonDriv;
 }

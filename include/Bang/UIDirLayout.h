@@ -12,14 +12,12 @@ class UIDirLayout : public UIGroupLayout
     COMPONENT(UIDirLayout)
 
 public:
-
     // ILayoutController
     virtual void ApplyLayout() override;
 
     // ILayoutElement
-    virtual Vector2i CalculateTotalMinSize() const override;
-    virtual Vector2i CalculateTotalPreferredSize() const override;
-    Vector2i CalculateTotalSize(LayoutSizeType sizeType) const;
+    virtual Vector2i _GetMinSize()       const override;
+    virtual Vector2i _GetPreferredSize() const override;
 
     void SetSpacing(int spacingPx);
 
@@ -39,6 +37,8 @@ protected:
 private:
     int m_spacingPx = 0;
     bool m_vertical = false;
+
+    Vector2i GetSize(LayoutSizeType sizeType) const;
 
     void ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
                                          RectTransform *childRT,

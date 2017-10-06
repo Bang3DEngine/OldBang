@@ -33,11 +33,12 @@ public:
     const Vector2i& GetPreferredSize() const;
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
-    Vector2 GetFlexibleSize() const override;
+    const Vector2& GetFlexibleSize() const;
 
 protected:
-    Vector2i CalculateTotalMinSize() const override;
-    Vector2i CalculateTotalPreferredSize() const override;
+    Vector2i _GetMinSize()       const override;
+    Vector2i _GetPreferredSize() const override;
+    Vector2  _GetFlexibleSize()  const override;
 
 private:
     Vector2i m_minSize       = -Vector2i::One;

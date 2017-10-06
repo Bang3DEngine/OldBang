@@ -27,6 +27,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UILabel *label = go->AddComponent<UILabel>();
 
     UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
+
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask
     label->p_mask = mask;

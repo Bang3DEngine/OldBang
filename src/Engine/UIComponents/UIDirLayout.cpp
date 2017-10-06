@@ -224,17 +224,17 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
     }
 }
 
-Vector2i UIDirLayout::CalculateTotalMinSize() const
+Vector2i UIDirLayout::_GetMinSize() const
 {
-    return CalculateTotalSize(LayoutSizeType::Min);
+    return GetSize(LayoutSizeType::Min);
 }
 
-Vector2i UIDirLayout::CalculateTotalPreferredSize() const
+Vector2i UIDirLayout::_GetPreferredSize() const
 {
-    return CalculateTotalSize(LayoutSizeType::Preferred);
+    return GetSize(LayoutSizeType::Preferred);
 }
 
-Vector2i UIDirLayout::CalculateTotalSize(LayoutSizeType sizeType) const
+Vector2i UIDirLayout::GetSize(LayoutSizeType sizeType) const
 {
     Vector2i totalSize = Vector2i::Zero;
     for (GameObject *child : gameObject->GetChildren())
