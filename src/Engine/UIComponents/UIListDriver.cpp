@@ -26,7 +26,7 @@ UIListDriver::~UIListDriver()
 
 void UIListDriver::OnUpdate()
 {
-    UIFocusTaker *ft = GetContainer()->GetComponent<UIFocusTaker>();
+    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
     ft->SetDefaultFocusAction(FocusAction::TakeIt);
 
     if (ft->HasFocus())
@@ -161,6 +161,7 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
     REQUIRE_COMPONENT(go, UIFocusTaker);
+    go->GetComponent<UIFocusTaker>()->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanelInto(go);
 
@@ -173,8 +174,8 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     const bool vertical = true;
     if (vertical) { dirLayout = container->AddComponent<UIVerticalLayout>(); }
     else { dirLayout = container->AddComponent<UIHorizontalLayout>(); }
-    dirLayout->SetSpacing(3);
-    dirLayout->SetPaddings(3);
+    dirLayout->SetSpacing(0);
+    dirLayout->SetPaddings(0);
 
     UIListDriver *ld = go->AddComponent<UIListDriver>();
     ld->p_scrollArea = scrollPanel->GetScrollArea();

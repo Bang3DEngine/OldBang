@@ -376,6 +376,19 @@ void GameObject::Print(const String &indent) const
     }
 }
 
+String GameObject::ToStringStructure(bool recursive, const String &indent)
+{
+    std::ostringstream oss;
+    oss << indent << " - " << GetName() << GetComponents();
+    if (recursive)
+    {
+        oss << "\n";
+        for (GameObject *child : GetChildren())
+        { oss << child->ToStringStructure(true, indent + "  "); }
+    }
+    return String(oss.str());
+}
+
 String GameObject::ToString() const
 {
     ::std::ostringstream oss;

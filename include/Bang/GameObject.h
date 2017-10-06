@@ -117,6 +117,7 @@ public:
 
     // IToString
     void Print(const String& indent = "") const;
+    String ToStringStructure(bool recursive = false, const String &indent = "");
     String ToString() const;
 
     // Serializable

@@ -7,6 +7,7 @@
 #include "Bang/UIFocusTaker.h"
 #include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -114,15 +115,21 @@ UIFileListEntry::UIFileListEntry()
     AddComponent<RectTransform>();
     AddComponent<UIFocusTaker>();
 
+    UIFrameLayout *fl = AddComponent<UIFrameLayout>();
+    fl->SetPaddings(5);
+
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(15);
 
     m_bg = AddComponent<UIImageRenderer>();
     m_bg->SetTint(Color::Zero);
 
-    m_text = AddComponent<UITextRenderer>();
+    GameObject *container = GameObjectFactory::CreateUIGameObject();
+    m_text = container->AddComponent<UITextRenderer>();
     m_text->SetTextSize(12);
     m_text->SetHorizontalAlign(HorizontalAlignment::Left);
+
+    AddChild(container);
 }
 
 UIFileListEntry::~UIFileListEntry()
