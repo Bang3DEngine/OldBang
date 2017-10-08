@@ -71,7 +71,7 @@ void RectTransform::SetMarginLeft(int marginLeft)
     if (GetMarginLeft() != marginLeft)
     {
         m_marginLeftBot.x = marginLeft;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -80,7 +80,7 @@ void RectTransform::SetMarginTop(int marginTop)
     if (GetMarginTop() != marginTop)
     {
         m_marginRightTop.y = marginTop;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -89,7 +89,7 @@ void RectTransform::SetMarginRight(int marginRight)
     if (GetMarginRight() != marginRight)
     {
         m_marginRightTop.x = marginRight;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -98,7 +98,7 @@ void RectTransform::SetMarginBot(int marginBot)
     if (GetMarginBot() != marginBot)
     {
         m_marginLeftBot.y = marginBot;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -135,7 +135,7 @@ void RectTransform::SetMargins(const Vector2i &marginRightTop,
     {
         m_marginRightTop = marginRightTop;
         m_marginLeftBot  = marginLeftBot;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -148,7 +148,7 @@ void RectTransform::SetMargins(int left, int top, int right, int bot)
         m_marginRightTop.y = top;
         m_marginRightTop.x = right;
         m_marginLeftBot.y  = bot;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -157,7 +157,7 @@ void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
     if (m_pivotPosition != pivotPosition)
     {
         m_pivotPosition = pivotPosition;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -166,7 +166,7 @@ void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
     if (m_anchorMin != anchorMin)
     {
         m_anchorMin = anchorMin;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -175,7 +175,7 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     if (m_anchorMax != anchorMax)
     {
         m_anchorMax = anchorMax;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -223,7 +223,7 @@ void RectTransform::SetAnchors(const Vector2 &anchorMin,
     {
         m_anchorMin = anchorMin;
         m_anchorMax = anchorMax;
-        InvalidateDown();
+        Invalidate();
     }
 }
 
@@ -314,16 +314,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Matrix4 transformMatrix = Transform::GetLocalToParentMatrix();
     m_localToParentMatrix = transformMatrix * rtMatrix;
 
-    SetInvalid(false);
     return m_localToParentMatrix;
-}
-
-void RectTransform::InvalidateDown()
-{
-    if (!IsInvalid())
-    {
-        UILayoutManager::Invalidate(this);
-    }
 }
 
 void RectTransform::OnRenderGizmos()
@@ -388,4 +379,15 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("PivotPosition",  GetPivotPosition());
     xmlInfo->Set("AnchorMin",      GetAnchorMin()    );
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
+}
+
+void RectTransform::Invalidate()
+{
+    if (!IsInvalid())
+    {
+        Transform::Invalidate();
+        List<Transform*> ts =
+                  gameObject->GetComponentsInChildrenOnly<Transform>(true);
+        for (Transform *t : ts) { t->Invalidate(); }
+    }
 }

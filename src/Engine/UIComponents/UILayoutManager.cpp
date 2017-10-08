@@ -1,5 +1,6 @@
 #include "Bang/UILayoutManager.h"
 
+#include "Bang/Set.h"
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
 #include "Bang/UICanvas.h"
@@ -70,33 +71,13 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
     return Vector2::Max(size, Vector2::Zero);
 }
 
-void UILayoutManager::Invalidate(RectTransform *rt)
-{
-    ENSURE(rt);
-    if (!rt->IsInvalid())
-    {
-        rt->SetInvalid(true);
-        GameObject *rtGo = rt->GetGameObject();
-        for (GameObject *child : rtGo->GetChildren())
-        {
-            RectTransform *crt = child->GetComponent<RectTransform>();
-            UILayoutManager::Invalidate(crt);
-        }
-    }
-}
-
 void UILayoutManager::InvalidateAll(GameObject *go)
 {
     ENSURE(go);
-    List<RectTransform*> rectTransforms =
-                            go->GetComponentsInChildren<RectTransform>();
-    for (RectTransform *rt : rectTransforms) { rt->InvalidateDown(); }
-
+    go->GetComponent<Transform>()->Invalidate();
     List<ILayoutElement*> layoutElms =
-                            go->GetComponentsInChildren<ILayoutElement>();
+                            go->GetComponentsInChildren<ILayoutElement>(true);
     for (ILayoutElement *le : layoutElms) { le->SetInvalid(true); }
-
-    UILayoutManager::GetInstance()->m_previousFrameRectTransforms.Clear();
 }
 
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
@@ -123,31 +104,32 @@ void UILayoutManager::ForceRebuildLayout(GameObject *go)
     UILayoutManager::RebuildLayout(go);
 }
 
-void UILayoutManager::OnBeforeRender(GameObject *go)
+void UILayoutManager::TriggerRectTransformListeners(GameObject *go)
 {
-    RectTransform *goRT = go->GetComponent<RectTransform>();
-    if (goRT)
+    List<IRectTransformListener*> rtLists =
+                     go->GetComponentsInChildren<IRectTransformListener>(true);
+    for (IRectTransformListener *rtList : rtLists)
     {
-        Recti newRect = goRT->GetScreenSpaceRectPx();
-        List<IRectTransformListener*> rectTransformListeners =
-                go->GetComponents<IRectTransformListener>();
-        for (IRectTransformListener *rtListener : rectTransformListeners)
-        {
-            if (!m_previousFrameRectTransforms.ContainsKey(rtListener))
-            {
-                m_previousFrameRectTransforms.Add(rtListener, Recti::Zero);
-            }
+        rtList->OnRectTransformChanged();
+    }
+    return;
 
-            const Recti &prevRect = m_previousFrameRectTransforms.Get(rtListener);
-            if (prevRect != newRect)
-            {
-                m_previousFrameRectTransforms.Add(rtListener, newRect);
-                rtListener->OnRectTransformChanged();
-            }
-        }
+    /* Set<GameObject*> invalidGameObjects;
+    List<RectTransform*> rtLists = go->GetComponentsInChildren<RectTransform>(true);
+    for (RectTransform *rt : rtLists)
+    {
+        if (rt->IsInvalid()) { invalidGameObjects.Add(rt->gameObject); }
     }
 
-    for (GameObject *child : go->GetChildren()) { OnBeforeRender(child); }
+    for (GameObject *changedGo : invalidGameObjects)
+    {
+        List<IRectTransformListener*> goTransformListeners =
+                changedGo->GetComponents<IRectTransformListener>();
+        for (IRectTransformListener *rtList : goTransformListeners)
+        {
+            rtList->OnRectTransformChanged();
+        }
+    }*/
 }
 
 UILayoutManager *UILayoutManager::GetInstance()

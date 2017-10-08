@@ -15,6 +15,8 @@ protected:
     ILayoutElement();
     virtual ~ILayoutElement();
 
+    void Invalidate();
+
 private:
     int m_layoutPriority = 0;
     mutable Vector2i m_cachedMinSize        = -Vector2i::One;

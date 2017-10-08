@@ -103,17 +103,20 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
+    virtual void Invalidate();
+
 protected:
     mutable Matrix4 m_localToParentMatrix;
 
     Transform();
-    void SetInvalid(bool invalid) const;
 
 private:
     mutable bool m_isInvalid = true;
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3 m_localScale = Vector3::One;
+
+    void SetInvalid(bool invalid) const;
 };
 
 NAMESPACE_BANG_END

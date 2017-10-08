@@ -21,7 +21,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
     if (GetLocalPosition() != p)
     {
         m_localPosition = p;
-        m_isInvalid = true;
+        Invalidate();
     }
 }
 void Transform::SetPosition(const Vector3 &p)
@@ -48,7 +48,7 @@ void Transform::SetLocalRotation(const Quaternion &q)
     if (GetLocalRotation() != q)
     {
         m_localRotation = q.Normalized();
-        m_isInvalid = true;
+        Invalidate();
     }
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
@@ -132,8 +132,13 @@ void Transform::SetLocalScale(const Vector3 &s)
     if (GetLocalScale() != s)
     {
         m_localScale = s;
-        m_isInvalid = true;
+        Invalidate();
     }
+}
+
+void Transform::Invalidate()
+{
+    SetInvalid(true);
 }
 
 void Transform::SetInvalid(bool invalid) const

@@ -77,7 +77,8 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    void InvalidateDown();
+protected:
+    virtual void Invalidate();
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;

@@ -1,5 +1,8 @@
 #include "Bang/UILayoutElement.h"
 
+#include "Bang/GameObject.h"
+#include "Bang/UILayoutManager.h"
+
 USING_NAMESPACE_BANG
 
 UILayoutElement::UILayoutElement()
@@ -14,47 +17,59 @@ UILayoutElement::~UILayoutElement()
 
 void UILayoutElement::SetMinWidth(int minWidth)
 {
-    m_minSize.x = minWidth;
+    SetMinSize( Vector2i(minWidth, GetMinHeight()) );
 }
 
 void UILayoutElement::SetMinHeight(int minHeight)
 {
-    m_minSize.y = minHeight;
+    SetMinSize( Vector2i(GetMinWidth(), minHeight) );
 }
 
 void UILayoutElement::SetMinSize(const Vector2i &minSize)
 {
-    m_minSize = minSize;
+    if (minSize != m_minSize)
+    {
+        m_minSize = minSize;
+        OnChanged();
+    }
 }
 
 void UILayoutElement::SetPreferredWidth(int preferredWidth)
 {
-    m_preferredSize.x = preferredWidth;
+    SetPreferredSize( Vector2i(preferredWidth, GetPreferredHeight()) );
 }
 
 void UILayoutElement::SetPreferredHeight(int preferredHeight)
 {
-    m_preferredSize.y = preferredHeight;
+    SetPreferredSize( Vector2i(GetPreferredWidth(), preferredHeight) );
 }
 
 void UILayoutElement::SetPreferredSize(const Vector2i &preferredSize)
 {
-    m_preferredSize = preferredSize;
+    if (preferredSize != m_preferredSize)
+    {
+        m_preferredSize = preferredSize;
+        OnChanged();
+    }
 }
 
 void UILayoutElement::SetFlexibleWidth(float flexibleWidth)
 {
-    m_flexibleSize.x = flexibleWidth;
+    SetFlexibleSize( Vector2(flexibleWidth, GetFlexibleHeight()) );
 }
 
 void UILayoutElement::SetFlexibleHeight(float flexibleHeight)
 {
-    m_flexibleSize.y = flexibleHeight;
+    SetFlexibleSize( Vector2(GetFlexibleWidth(), flexibleHeight) );
 }
 
 void UILayoutElement::SetFlexibleSize(const Vector2 &flexibleSize)
 {
-    m_flexibleSize = flexibleSize;
+    if (flexibleSize != m_flexibleSize)
+    {
+        m_flexibleSize = flexibleSize;
+        OnChanged();
+    }
 }
 
 
@@ -106,6 +121,11 @@ const Vector2 &UILayoutElement::GetFlexibleSize() const
 Vector2 UILayoutElement::_GetFlexibleSize() const
 {
     return GetFlexibleSize();
+}
+
+void UILayoutElement::OnChanged()
+{
+    Invalidate();
 }
 
 Vector2i UILayoutElement::_GetMinSize() const

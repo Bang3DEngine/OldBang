@@ -22,16 +22,13 @@ public:
     static Vector2  GetFlexibleSize(GameObject *go);
     static Vector2  GetSize(GameObject *go, LayoutSizeType sizeType);
 
-    static void Invalidate(RectTransform *rt);
     static void InvalidateAll(GameObject *gameObject);
     static void RebuildLayout(GameObject *gameObject);
     static void ForceRebuildLayout(GameObject *gameObject);
 
-    void OnBeforeRender(GameObject *go);
+    void TriggerRectTransformListeners(GameObject *go);
 
 private:
-    Map<IRectTransformListener*, Recti> m_previousFrameRectTransforms;
-
     static void OnLayoutRebuilt(GameObject *go);
     static UILayoutManager *GetInstance();
 };

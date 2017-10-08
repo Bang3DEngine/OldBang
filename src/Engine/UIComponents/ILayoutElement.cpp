@@ -1,5 +1,7 @@
 #include "Bang/ILayoutElement.h"
 
+#include "Bang/GameObject.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
@@ -12,6 +14,11 @@ ILayoutElement::ILayoutElement()
 ILayoutElement::~ILayoutElement()
 {
 
+}
+
+void ILayoutElement::Invalidate()
+{
+    SetInvalid(true);
 }
 
 void ILayoutElement::SetInvalid(bool invalid)
