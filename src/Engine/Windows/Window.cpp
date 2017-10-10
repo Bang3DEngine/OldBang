@@ -260,8 +260,8 @@ void Window::OnResize(int newWidth, int newHeight)
         m_prevSize = m_newSize;
         GL::SetViewport(0, 0, GetWidth(), GetHeight());
 
-        Scene *activeScene = GetSceneManager()->GetRootScene();
-        if (activeScene) { UILayoutManager::ForceRebuildLayout(activeScene); }
+        Scene *rootScene = GetSceneManager()->GetRootScene();
+        if (rootScene) { rootScene->OnResize(newWidth, newHeight); }
     }
 }
 

@@ -21,13 +21,15 @@ UIScrollArea::~UIScrollArea()
 void UIScrollArea::OnUpdate()
 {
     Component::OnUpdate();
-    UpdatePaddings();
 }
 
 void UIScrollArea::SetScrolling(const Vector2i &scrollPx)
 {
-    m_scrollingPx = scrollPx;
-    UpdatePaddings();
+    if (m_scrollingPx != scrollPx)
+    {
+        m_scrollingPx = scrollPx;
+        UpdatePaddings();
+    }
 }
 
 void UIScrollArea::SetScrollingX(int scrollPxX)
@@ -48,6 +50,11 @@ UIMask *UIScrollArea::GetMask() const
 GameObject *UIScrollArea::GetContainer() const
 {
     return p_childrenContainer;
+}
+
+UIImageRenderer *UIScrollArea::GetBackground() const
+{
+    return p_bg;
 }
 const Vector2i &UIScrollArea::GetScrolling() const
 {
@@ -79,6 +86,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
 
+    scrollArea->p_bg = bg;
     scrollArea->p_mask = mask;
     scrollArea->p_childrenContainer = childrenCont;
 

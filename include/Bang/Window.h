@@ -47,7 +47,7 @@ public:
     void SetTitle(const String &title);
 
     void SetSize(int newWidth, int newHeight);
-    void OnResize(int newWidth, int newHeight);
+    virtual void OnResize(int newWidth, int newHeight);
 
     int GetWidth() const;
     int GetHeight() const;

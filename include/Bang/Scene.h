@@ -20,7 +20,8 @@ public:
     Scene();
     virtual ~Scene();
 
-    void Update() override;
+    virtual void Update() override;
+    virtual void OnResize(int newWidth, int newHeight);
 
     void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();

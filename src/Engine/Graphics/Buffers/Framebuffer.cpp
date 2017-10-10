@@ -38,9 +38,6 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
     tex->CreateEmpty(GetWidth(), GetHeight());
     GL_CheckError();
 
-    m_attachments.PushBack(attachment);
-    m_attachments_To_Texture.Add(attachment, tex);
-
     SetAttachmentTexture(tex, attachment);
     tex->UnBind();
 }
@@ -87,6 +84,7 @@ void Framebuffer::SetAttachmentTexture(Texture2D *tex,
     GL::CheckFramebufferError();
     UnBind();
 
+    m_attachments.PushBack(attachment);
     m_attachments_To_Texture.Add(attachment, tex);
 
     GL::Bind(GL::BindTarget::Framebuffer, prevId);

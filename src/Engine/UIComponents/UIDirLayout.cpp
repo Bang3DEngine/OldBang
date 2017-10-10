@@ -158,8 +158,10 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
     }
     totalPrefPxToAdd = Vector2i::Max(totalPrefPxToAdd, Vector2i::One);
 
+    // Populate with new children sizes
     i = 0;
-    Vector2i originalAvailableSpace = *availableSpace;
+    Array<Vector2i> newChildRTSizes;
+    Array<Vector2i> childPreferredSizes;
     for (GameObject *child : gameObject->GetChildren())
     {
         Vector2i minChildSize = (*childrenRTSizes)[i];
@@ -168,25 +170,63 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
         childPrefPxToAdd = Vector2i::Max(childPrefPxToAdd, Vector2i::Zero);
         Vector2  sizeProportion (Vector2(childPrefPxToAdd) / Vector2(totalPrefPxToAdd));
         Vector2i prefAvailPxToAdd(
-                   Vector2::Round(sizeProportion * Vector2(originalAvailableSpace)));
+                   Vector2::Ceil(sizeProportion * Vector2(*availableSpace)));
         prefAvailPxToAdd = Vector2i::Min(prefAvailPxToAdd, childPrefPxToAdd);
         Vector2i childRTSize = Vector2i::Max(minChildSize,
                                              minChildSize + prefAvailPxToAdd);
 
+        newChildRTSizes.PushBack(childRTSize);
+        childPreferredSizes.PushBack(childPrefSize);
+        ++i;
+    }
+
+    // Apply children sizes populating the final array
+    for (i = 0; i < newChildRTSizes.Size(); ++i)
+    {
+        // Apply children sizes populating the final array
+        Vector2i newChildRTSize = newChildRTSizes[i];
+        Vector2i minChildSize = (*childrenRTSizes)[i];
         if (m_vertical)
         {
-            availableSpace->y -= (childRTSize.y - minChildSize.y);
-            childRTSize.x = Math::Min(childRTSize.x, layoutRectSize.x);
+            availableSpace->y -= (newChildRTSize.y - minChildSize.y);
+            newChildRTSize.x = Math::Min(newChildRTSize.x, layoutRectSize.x);
         }
         else
         {
-            availableSpace->x -= (childRTSize.x - minChildSize.x);
-            childRTSize.y = Math::Min(childRTSize.y, layoutRectSize.y);
+            availableSpace->x -= (newChildRTSize.x - minChildSize.x);
+            newChildRTSize.y = Math::Min(newChildRTSize.y, layoutRectSize.y);
         }
 
-        (*childrenRTSizes)[i] = childRTSize;
-        ++i;
+        newChildRTSizes[i] = newChildRTSize;
     }
+
+    // Make up for precision problems (make sure we havent missed any pixel)
+    for (i = 0; i < newChildRTSizes.Size(); ++i)
+    {
+        Vector2i childPrefSize = childPreferredSizes[i];
+        Vector2i newChildRTSize = newChildRTSizes[i];
+        Vector2i prefPxToFill = (childPrefSize - newChildRTSize);
+        if (m_vertical)
+        {
+            if(prefPxToFill.y > 0)
+            {
+                newChildRTSize.y  += prefPxToFill.y;
+                availableSpace->y -= prefPxToFill.y;
+            }
+        }
+        else
+        {
+            if(prefPxToFill.x > 0)
+            {
+                newChildRTSize.x  += prefPxToFill.x;
+                availableSpace->x -= prefPxToFill.x;
+            }
+        }
+
+        (*childrenRTSizes)[i] = newChildRTSize;
+    }
+
+    *childrenRTSizes = newChildRTSizes;
 }
 
 void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
@@ -200,28 +240,56 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
     }
     totalChildrenFlexSize = Vector2::Max(totalChildrenFlexSize, Vector2(0.0001));
 
+    // Populate with new children sizes
     uint i = 0;
+    Array<Vector2i> newChildRTSizes;
+    Array<Vector2>  childFlexibleSizes;
+    Vector2 originalAvailableSpace( *availableSpace );
     for (GameObject *child : gameObject->GetChildren())
     {
         Vector2i prefChildSize = (*childrenRTSizes)[i];
         Vector2  childFlexSize = UILayoutManager::GetFlexibleSize(child);
         Vector2  sizeProportion (childFlexSize / totalChildrenFlexSize);
         Vector2i flexAvailPxToAdd (
-                    Vector2::Round(sizeProportion * Vector2(*availableSpace)) );
+                    Vector2::Round(sizeProportion * originalAvailableSpace) );
         Vector2i childRTSize = Vector2i::Max(prefChildSize,
                                              prefChildSize + flexAvailPxToAdd);
         if (m_vertical)
         {
             childRTSize.x = Math::Min(childRTSize.x, layoutRectSize.x);
+            availableSpace->y -= flexAvailPxToAdd.y;
         }
         else
         {
             childRTSize.y = Math::Min(childRTSize.y, layoutRectSize.y);
+            availableSpace->x -= flexAvailPxToAdd.x;
         }
 
-        (*childrenRTSizes)[i] = childRTSize;
+        newChildRTSizes.PushBack(childRTSize);
+        childFlexibleSizes.PushBack(childFlexSize);
         ++i;
     }
+
+    // Make up for precision problems (make sure we havent missed any pixel)
+    for (i = 0; i < newChildRTSizes.Size(); ++i)
+    {
+        if (availableSpace->x == 0 && availableSpace->y == 0) { break; }
+
+        Vector2 childFlexSize = childFlexibleSizes[i];
+        if (m_vertical && childFlexSize.y > 0.0f && availableSpace->y != 0)
+        {
+            newChildRTSizes[i].y += availableSpace->y;
+            availableSpace->y = 0;
+        }
+
+        if (!m_vertical && childFlexSize.x > 0.0f && availableSpace->x != 0)
+        {
+            newChildRTSizes[i].x += availableSpace->x;
+            availableSpace->x = 0;
+        }
+    }
+
+    *childrenRTSizes = newChildRTSizes;
 }
 
 Vector2i UIDirLayout::_GetMinSize() const

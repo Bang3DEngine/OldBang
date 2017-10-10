@@ -46,7 +46,7 @@ public:
         {
             for (int x = 0; x < width; ++x)
             {
-                const int coords = (y * width + x) * 4;
+                const int coords = (y * width + x) * numComps;
                 Color pixelColor = GetColorFromArray(pixels, coords);
                 img.SetPixel(x, y, pixelColor);
             }

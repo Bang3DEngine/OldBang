@@ -114,14 +114,13 @@ void UIListDriver::Clear()
 {
     List<GameObject*> children = GetContainer()->GetChildren();
     for (GameObject *child : children) { RemoveElement(child); }
+    GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
 }
 
 void UIListDriver::SetSelection(int _i)
 {
     const int numChildren = GetContainer()->GetChildren().Size();
     ENSURE(numChildren > 0);
-
-    p_scrollArea->SetScrollingY( p_scrollArea->GetScrolling().y + 1 );
 
     int i = ((_i + numChildren) % numChildren);
     GameObject *prevSelectedGo = GetSelectedGameObject();
@@ -139,7 +138,7 @@ void UIListDriver::SetSelection(GameObject *go)
 
 GameObject *UIListDriver::GetContainer() const
 {
-    return p_scrollArea->GetContainer();
+    return GetScrollPanel()->GetContainer();
 }
 
 int UIListDriver::GetSelectedIndex() const
@@ -178,7 +177,7 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     dirLayout->SetPaddings(0);
 
     UIListDriver *ld = go->AddComponent<UIListDriver>();
-    ld->p_scrollArea = scrollPanel->GetScrollArea();
+    ld->p_scrollPanel = scrollPanel;
     return ld;
 }
 
@@ -186,3 +185,5 @@ void UIListDriver::Callback(GameObject *go, Action action)
 {
     if (m_selectionCallback) { m_selectionCallback(go, action); }
 }
+
+UIScrollPanel *UIListDriver::GetScrollPanel() const { return p_scrollPanel; }

@@ -16,15 +16,23 @@ public:
 
     void OnUpdate() override;
 
+    void SetScrolling(const Vector2i &scrolling);
+    void SetScrollingPercent(const Vector2 &scrollingPercent);
+
     GameObject   *GetContainer() const;
     UIScrollArea *GetScrollArea() const;
     UIScrollBar  *GetScrollBar() const;
 
 private:
-    UIScrollPanel();
+    constexpr static int WheelScrollSpeedPx = 10;
 
     UIScrollArea *p_scrollArea = nullptr;
     UIScrollBar  *p_scrollBar  = nullptr;
+
+    UIScrollPanel();
+
+    Vector2i GetContentSize() const;
+    Vector2i GetContainerSize() const;
 
     static UIScrollPanel* CreateInto(GameObject *go);
 

@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class Extensions
+class   Extensions
 {
 public:
     template<class T> static String Get();

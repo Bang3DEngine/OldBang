@@ -20,7 +20,7 @@ UIFrameLayout::~UIFrameLayout()
 
 void UIFrameLayout::ApplyLayout()
 {
-    RectTransform *layoutRT = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *layoutRT = gameObject->GetComponent<RectTransform>();
     ENSURE(layoutRT);
     Vector2i layoutRectSize = layoutRT->GetScreenSpaceRectPx().GetSize();
     layoutRectSize -= GetPaddingSize();

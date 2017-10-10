@@ -45,7 +45,9 @@ private:
     GameObject *p_mouseOverGo = nullptr;
     SelectionCallback m_selectionCallback;
 
-    UIScrollArea *p_scrollArea = nullptr;
+    UIScrollPanel *p_scrollPanel = nullptr;
+
+    UIScrollPanel *GetScrollPanel() const;
 
     static UIListDriver* CreateInto(GameObject *go);
     void Callback(GameObject *go, Action action);

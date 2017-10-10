@@ -14,14 +14,8 @@
 
 USING_NAMESPACE_BANG
 
-void ImageIO::Export(const Path &_filepath, const Imageb &img)
+void ImageIO::Export(const Path &filepath, const Imageb &img)
 {
-    Path filepath = _filepath;
-    if (!filepath.IsFile())
-    {
-        filepath = Paths::ExecutablePath().GetDirectory().Append(filepath);
-    }
-
     if (filepath.HasExtension("png"))
     {
         ImageIO::ExportPNG(filepath, img);

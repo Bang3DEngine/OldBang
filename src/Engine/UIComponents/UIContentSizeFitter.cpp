@@ -56,6 +56,11 @@ void UIContentSizeFitter::ApplyLayout()
     {
         rt->SetHeightFromPivot(contentSize.y);
     }
+
+    if (gameObject->GetName() == "A")
+    {
+        Debug_Peek(contentSize);
+    }
 }
 
 void UIContentSizeFitter::SetHorizontalSizeFitMode(SizeFitMode fitMode)

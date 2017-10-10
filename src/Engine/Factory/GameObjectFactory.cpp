@@ -89,6 +89,31 @@ Scene *GameObjectFactory::CreateDefaultScene()
     return scene;
 }
 
+UICanvas *GameObjectFactory::CreateUICanvas()
+{
+    GameObject *go = GameObjectFactory::CreateUIGameObject();
+    UICanvas *canvas = go->AddComponent<UICanvas>();
+    return canvas;
+}
+
+UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color)
+{
+    GameObject *go = GameObjectFactory::CreateUIGameObject();
+    UIImageRenderer *img = go->AddComponent<UIImageRenderer>();
+    img->SetTint(color);
+    return img;
+}
+
+UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
+                                                  const Vector2i &size)
+{
+    UIImageRenderer *img = GameObjectFactory::CreateUIImage(color);
+    UILayoutElement *le = img->gameObject->AddComponent<UILayoutElement>();
+    le->SetMinSize(size);
+    le->SetPreferredSize(size);
+    return img;
+}
+
 UIListDriver *GameObjectFactory::CreateUIListInto(GameObject *go)
 {
     return UIListDriver::CreateInto(go);

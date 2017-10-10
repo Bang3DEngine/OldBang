@@ -74,7 +74,10 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
 void UILayoutManager::InvalidateAll(GameObject *go)
 {
     ENSURE(go);
-    go->GetComponent<Transform>()->Invalidate();
+
+    List<Transform*> transforms = go->GetComponentsInChildren<Transform>(true);
+    for (Transform *tr : transforms) { tr->Invalidate(); }
+
     List<ILayoutElement*> layoutElms =
                             go->GetComponentsInChildren<ILayoutElement>(true);
     for (ILayoutElement *le : layoutElms) { le->SetInvalid(true); }

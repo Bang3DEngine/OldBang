@@ -20,17 +20,20 @@ public:
 
     void OnUpdate() override;
 
-    void ScrollTo(float percent);
+    void SetScrollingPercent(float percent);
     void SetLength(int lengthPx);
+    void SetLengthPercent(float lengthPercent);
     void SetThickness(int thickPx);
     void SetVertical(bool vertical);
 
+    float GetScrollingPercent() const;
     int GetLength() const;
     int GetThickness() const;
     bool IsVertical() const;
 
 private:
     bool m_wasGrabbed = false;
+    float m_scrollingPercent = 0.0f;
     Vector2i m_grabOffset = Vector2i::Zero;
 
     GameObject *p_bar = nullptr;

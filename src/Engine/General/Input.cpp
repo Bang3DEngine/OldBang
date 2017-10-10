@@ -116,8 +116,9 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     {
         m_isADoubleClick = true;
     }
+    m_secsSinceLastMouseDown = 0;
+
     m_lastClickMouseCoords = GetMouseCoords();
-    m_secsSinceLastMouseDown = 0; // Restart time since last click counter
 }
 
 void Input::ProcessMouseUpEventInfo(const EventInfo &ei)

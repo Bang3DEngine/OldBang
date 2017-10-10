@@ -29,6 +29,11 @@ void Scene::Update()
     GameObject::Update();
 }
 
+void Scene::OnResize(int newWidth, int newHeight)
+{
+    UILayoutManager::ForceRebuildLayout(this);
+}
+
 void Scene::RenderGizmos()
 {
     GameObject::RenderGizmos();
@@ -69,9 +74,10 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
         m_defaultCamera->SetParent(this);
         m_defaultCamera->GetHideFlags().SetOn(HideFlag::DontSave);
 
-        Camera *cam = m_defaultCamera->AddComponent<Camera>();
-        cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
-        cam->SetZFar(99999.0f);
+        sceneCamera = m_defaultCamera->AddComponent<Camera>();
+        sceneCamera->SetFovDegrees(60.0f);
+        sceneCamera->SetZNear(0.1f);
+        sceneCamera->SetZFar(99999.0f);
     }
 
     SetCamera(sceneCamera);

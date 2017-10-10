@@ -304,7 +304,7 @@ const Vector3& Transform::GetLocalPosition() const
 
 Vector3 Transform::GetPosition() const
 {
-    if (!gameObject->parent)
+    if (!gameObject->parent || !gameObject->parent->transform)
     {
         return GetLocalPosition();
     }
@@ -321,7 +321,7 @@ const Quaternion& Transform::GetLocalRotation() const
 
 Quaternion Transform::GetRotation() const
 {
-    if (!gameObject->parent)
+    if (!gameObject->parent || !gameObject->parent->transform)
     {
         return GetLocalRotation();
     }

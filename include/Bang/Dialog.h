@@ -17,15 +17,19 @@ public:
     static DialogWindow* Error(const String &title,
                                const String &msg);
 
-    static Path GetFilePath(const String &title);
+    static Path GetFilePath(const String &title,
+                            const List<String> &extensions = {});
 
     Dialog() = delete;
 
 private:
     static Path s_resultPath;
 
-    static Scene* CreateGetFilePathScene(const String &title);
+    static Scene* CreateGetFilePathScene(const String &title,
+                                         const List<String> &extensions);
     static Scene* CreateMsgScene(const String &msg);
+
+    static void FileAcceptedCallback(const Path &path);
 
     static void OnButtonClicked(UIButton *button);
 };

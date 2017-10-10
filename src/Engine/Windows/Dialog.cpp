@@ -44,7 +44,8 @@ DialogWindow *Bang::Dialog::Error(const String &title,
     return dialog;
 }
 
-Path Dialog::GetFilePath(const String &title)
+Path Dialog::GetFilePath(const String &title,
+                         const List<String> &extensions)
 {
     DialogWindow *dialog = nullptr;
     Window *topWindow = Application::GetTopWindow();
@@ -54,7 +55,7 @@ Path Dialog::GetFilePath(const String &title)
         dialog->SetTitle(title);
         dialog->SetSize(500, 400);
 
-        Scene *scene = CreateGetFilePathScene(title);
+        Scene *scene = CreateGetFilePathScene(title, extensions);
         SceneManager::LoadScene(scene);
 
         Dialog::s_resultPath = Path::Empty;
@@ -63,7 +64,8 @@ Path Dialog::GetFilePath(const String &title)
     return Dialog::s_resultPath;
 }
 
-Scene *Dialog::CreateGetFilePathScene(const String &title)
+Scene *Dialog::CreateGetFilePathScene(const String &title,
+                                      const List<String> &extensions)
 {
     Scene *scene = GameObjectFactory::CreateUIScene();
 
@@ -88,6 +90,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     listLE->SetFlexibleSize( Vector2(1) );
 
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
+    fileList->SetFileExtensions(extensions);
     fileList->SetCurrentPath(Paths::EngineAssets());
 
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
@@ -100,6 +103,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
             inputPathText->GetText()->SetContent(newPath.GetAbsolute());
         }
     );
+    fileList->SetFileAcceptedCallback( Dialog::FileAcceptedCallback );
 
     UILayoutElement *itle = inputPathText->gameObject->AddComponent<UILayoutElement>();
     itle->SetFlexibleSize(Vector2(1,1));
@@ -121,10 +125,10 @@ Scene *Dialog::CreateGetFilePathScene(const String &title)
     UIButtonDriver *openButton = GameObjectFactory::CreateUIButton();
     openButton->GetText()->SetContent("Open");
     openButton->GetButton()->AddClickedCallback(
-        [inputPathText](UIButton *_)
+        [fileList](UIButton *_)
         {
-            Dialog::s_resultPath = Path(inputPathText->GetText()->GetContent());
-            Window::Destroy(Window::GetCurrent());
+            Path path = fileList->GetCurrentPath();
+            FileAcceptedCallback(path);
         }
     );
 
@@ -221,7 +225,13 @@ Scene *Dialog::CreateMsgScene(const String &msg)
        buttonsGo->AddChild(button0->gameObject);
        buttonsGo->AddChild(button1->gameObject);
 
-    return scene;
+       return scene;
+}
+
+void Dialog::FileAcceptedCallback(const Path &path)
+{
+    Dialog::s_resultPath = path;
+    Window::Destroy(Window::GetCurrent());
 }
 
 void Dialog::OnButtonClicked(UIButton *button)
