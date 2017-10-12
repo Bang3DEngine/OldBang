@@ -39,9 +39,9 @@ void UIBorderRect::OnRender()
 {
     Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
     GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
-    gameObject->transform->SetEnabled(false);
+    gameObject->transform->SetIgnoreTransform(true);
     p_lineRenderer->Renderer::OnRender(RenderPass::Canvas);
-    gameObject->transform->SetEnabled(true);
+    gameObject->transform->SetIgnoreTransform(false);
 }
 
 

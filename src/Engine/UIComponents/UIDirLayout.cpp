@@ -31,8 +31,6 @@ Vector2i UIDirLayout::GetTotalSpacing() const
 
 void UIDirLayout::_ApplyLayout()
 {
-    Debug_Log("Applying layout..." << Random::Value());
-
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
     Vector2i layoutRectSize = rt->GetScreenSpaceRectPx().GetSize();

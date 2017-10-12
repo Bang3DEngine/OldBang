@@ -5,9 +5,11 @@
 #include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GEngine.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -23,7 +25,6 @@ Scene::~Scene()
 {
 }
 
-#include "Bang/Input.h"
 void Scene::Update()
 {
     GameObject::Update();
@@ -31,9 +32,7 @@ void Scene::Update()
 
 void Scene::OnResize(int newWidth, int newHeight)
 {
-    Transform *tr = GetComponent<Transform>();
-    if (tr) { tr->Invalidate(); }
-    // UILayoutManager::ForceRebuildLayout(this);
+    InvalidateCanvas();
 }
 
 void Scene::RenderGizmos()
@@ -103,6 +102,21 @@ void Scene::DestroyQueuedGameObjects()
         GameObject *go = m_gameObjectsToBeDestroyed.front();
         DestroyImmediate(go);
         m_gameObjectsToBeDestroyed.pop();
+    }
+}
+
+void Scene::InvalidateCanvas()
+{
+    List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
+    for (UICanvas *canvas : canvases)
+    {
+        canvas->GetGameObject()->GetComponent<RectTransform>()->Invalidate();
+    }
+
+    List<RectTransform*> rts = GetComponentsInChildren<RectTransform>(true);
+    for (RectTransform *rt : rts)
+    {
+        rt->Invalidate();
     }
 }
 

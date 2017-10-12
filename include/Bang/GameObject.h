@@ -39,6 +39,9 @@ public:
     virtual void ChildrenRemoved();
     virtual void Destroy();
 
+    virtual void OnEnabled() override;
+    virtual void OnDisabled() override;
+
     static void Destroy(GameObject *gameObject);
 
     bool IsEnabled(bool recursive = false) const;

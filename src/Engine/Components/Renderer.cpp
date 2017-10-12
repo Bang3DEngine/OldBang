@@ -5,13 +5,13 @@
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Camera.h"
-#include "Bang/Transform.h"
 #include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
+#include "Bang/Transform.h"
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/GEngine.h"
 
 USING_NAMESPACE_BANG
 
@@ -42,7 +42,7 @@ void Renderer::Bind() const
     GL::SetCullFace(m_cullMode);
     GL::LineWidth(m_lineWidth);
 
-    if (gameObject && gameObject->transform && gameObject->transform->IsEnabled())
+    if (gameObject && gameObject->transform)
     {
         Matrix4 model;
         gameObject->transform->GetLocalToWorldMatrix(&model);

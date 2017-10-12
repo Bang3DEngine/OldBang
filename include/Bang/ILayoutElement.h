@@ -2,12 +2,15 @@
 #define ILAYOUTELEMENT_H
 
 #include "Bang/Vector2.h"
+#include "Bang/IInvalidatable.h"
 #include "Bang/LayoutSizeType.h"
 
 NAMESPACE_BANG_BEGIN
 
-class ILayoutElement
+class ILayoutElement : public IInvalidatable<ILayoutElement>
 {
+    IINVALIDATABLE(ILayoutElement)
+
 public:
     void SetLayoutPriority(int layoutPriority);
 
@@ -15,17 +18,10 @@ protected:
     ILayoutElement();
     virtual ~ILayoutElement();
 
-    void Invalidate();
-
 private:
     int m_layoutPriority = 0;
     mutable Vector2i m_cachedMinSize        = -Vector2i::One;
     mutable Vector2i m_cachedPreferredSize  = -Vector2i::One;
-
-    bool m_isInvalid = true;
-
-    bool IsInvalid() const;
-    void SetInvalid(bool isInvalid);
 
     int GetLayoutPriority() const;
 

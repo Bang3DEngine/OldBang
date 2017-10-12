@@ -3,11 +3,13 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
+#include "Bang/IEnabledListener.h"
 #include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class RectTransform : public Transform,
+                      public IEnabledListener,
                       public IRectTransformListener
 {
     COMPONENT(RectTransform)
@@ -72,8 +74,11 @@ public:
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
+    // IEnabledListener
+    void OnEnabled() override;
+    void OnDisabled() override;
+
     // IRectTransformListener
-    void OnRectTransformChanged() override;
     void OnParentRectTransformChanged() override;
 
     // ICloneable

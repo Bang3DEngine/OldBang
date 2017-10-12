@@ -16,9 +16,11 @@ FORWARD class Font;
 
 class UITextRenderer : public UIRenderer,
                        public ILayoutElement,
-                       public IRectTransformListener
+                       public IRectTransformListener,
+                       public IInvalidatable<UITextRenderer>
 {
     COMPONENT(UITextRenderer)
+    IINVALIDATABLE(UITextRenderer)
 
 public:
     enum class LayoutMode
@@ -109,7 +111,6 @@ private:
     float m_outlineBlurriness   = 0.01f;
 
     bool m_isOverlapping = false;
-    bool m_hasToRegenerateVAO = true;
 
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;

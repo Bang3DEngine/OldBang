@@ -1,30 +1,18 @@
 #include "Bang/ILayoutController.h"
 
-void Bang::ILayoutController::ApplyLayout()
+USING_NAMESPACE_BANG
+
+#include "Bang/Random.h"
+void ILayoutController::ApplyLayout()
 {
     if (IsInvalid())
     {
+        Debug_Log("Applying layout..." << Random::Value());
+
         _ApplyLayout();
-        m_isInvalid = false;
+        Validate();
     }
 }
 
-void Bang::ILayoutController::Invalidate()
-{
-    m_isInvalid = true;
-}
-
-Bang::ILayoutController::ILayoutController()
-{
-
-}
-
-Bang::ILayoutController::~ILayoutController()
-{
-
-}
-
-bool Bang::ILayoutController::IsInvalid() const
-{
-    return m_isInvalid;
-}
+ILayoutController::ILayoutController() {}
+ILayoutController::~ILayoutController() {}

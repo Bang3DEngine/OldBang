@@ -14,6 +14,7 @@
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
+#include "Bang/IEnabledListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -97,7 +98,6 @@ void PropagateChildrenEvent(GameObject *go, bool added)
         else { childrenListener->OnChildrenRemoved(); }
     }
 }
-
 void GameObject::ChildrenAdded() { PropagateChildrenEvent(this, true); }
 void GameObject::ChildrenRemoved() { PropagateChildrenEvent(this, false); }
 
@@ -112,6 +112,22 @@ void GameObject::Destroy()
     PROPAGATE_EVENT(Destroy(), GetChildren());
     PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
 }
+
+void PropagateEnabledEvent(const GameObject *go, bool enabled)
+{
+    auto enabledListeners = go->GetComponents<IEnabledListener>();
+    for (IEnabledListener *eList : enabledListeners)
+    {
+        if (enabled) { eList->OnEnabled(); } else { eList->OnDisabled(); }
+    }
+
+    for (GameObject *child : go->GetChildren())
+    {
+        if (enabled) { child->OnEnabled(); } else { child->OnDisabled(); }
+    }
+}
+void GameObject::OnEnabled()  { PropagateEnabledEvent(this, true); }
+void GameObject::OnDisabled() { PropagateEnabledEvent(this, false); }
 
 void GameObject::Destroy(GameObject *gameObject)
 {

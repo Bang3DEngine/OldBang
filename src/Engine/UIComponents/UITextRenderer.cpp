@@ -51,7 +51,11 @@ void UITextRenderer::OnRender()
 
 void UITextRenderer::OnRender(RenderPass renderPass)
 {
-    if (m_hasToRegenerateVAO) { RegenerateCharQuadsVAO(); }
+    if (IInvalidatable<UITextRenderer>::IsInvalid())
+    {
+        RegenerateCharQuadsVAO();
+    }
+
     if (!IsOverlapping())
     {
         // Render all quads at the same time
@@ -118,7 +122,7 @@ Vector2 UITextRenderer::_GetFlexibleSize() const
 
 void UITextRenderer::RegenerateCharQuadsVAO()
 {
-    m_hasToRegenerateVAO = false;
+    IInvalidatable<UITextRenderer>::Validate();
     ENSURE(gameObject);
 
     if (!m_font)
@@ -221,7 +225,7 @@ void UITextRenderer::Bind() const
     // directly from the VBO creation...
     Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
     GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
-    gameObject->transform->SetEnabled(false);
+    gameObject->transform->SetIgnoreTransform(true);
     UIRenderer::Bind();
 
     if (GetFont())
@@ -256,7 +260,7 @@ void UITextRenderer::Bind() const
 void UITextRenderer::UnBind() const
 {
     UIRenderer::UnBind();
-    gameObject->transform->SetEnabled(true);
+    gameObject->transform->SetIgnoreTransform(false);
 }
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
@@ -431,10 +435,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
     }
 }
 
-void UITextRenderer::OnRectTransformChanged()
-{
-    OnChanged();
-}
+void UITextRenderer::OnRectTransformChanged() { Debug_Log("RT CHANGED FOR " << GetContent()); OnChanged(); }
 
 const Color &UITextRenderer::GetTextColor() const
 {
@@ -515,6 +516,5 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
 
 void UITextRenderer::OnChanged()
 {
-    m_hasToRegenerateVAO = true;
-    Invalidate();
+    IInvalidatable<UITextRenderer>::Invalidate();
 }

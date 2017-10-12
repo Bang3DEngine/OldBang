@@ -146,7 +146,6 @@ ${ENGINE_SRC_DIR}/Components/Camera.cpp
 ${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
-${ENGINE_SRC_DIR}/Components/IInvalidatable.cpp
 ${ENGINE_SRC_DIR}/Components/Light.cpp
 ${ENGINE_SRC_DIR}/Components/LineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/MeshRenderer.cpp

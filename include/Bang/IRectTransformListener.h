@@ -8,7 +8,7 @@ NAMESPACE_BANG_BEGIN
 class IRectTransformListener
 {
 public:
-    virtual void OnRectTransformChanged() = 0;
+    virtual void OnRectTransformChanged()       {}
     virtual void OnParentRectTransformChanged() {}
 };
 

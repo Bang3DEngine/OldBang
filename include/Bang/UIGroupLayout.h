@@ -13,9 +13,9 @@ NAMESPACE_BANG_BEGIN
 
 class UIGroupLayout : public Component,
                       public ILayoutElement,
+                      public ILayoutController,
                       public IChildrenListener,
-                      public IRectTransformListener,
-                      public ILayoutController
+                      public IRectTransformListener
 {
 public:
     UIGroupLayout();

@@ -110,6 +110,11 @@ void Transform::RotateEuler(const Vector3 &degreesEuler)
     SetEuler(GetEuler() + degreesEuler);
 }
 
+void Transform::SetIgnoreTransform(bool ignore)
+{
+    m_ignoreTransform = ignore;
+}
+
 void Transform::SetScale(float s)
 {
     SetScale(Vector3(s));
@@ -236,15 +241,16 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled()) { return Matrix4::Identity; }
+    if (GetIgnoreTransform()) { return Matrix4::Identity; }
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-    Validate();
     m_localToParentMatrix = (T * R * S);
+    Validate();
+
     return m_localToParentMatrix;
 }
 
@@ -255,7 +261,7 @@ void Transform::GetLocalToParentMatrix(Matrix4 *m) const
 
 void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
 {
-    if (!IsEnabled()) { *m = Matrix4::Identity; return; }
+    if (GetIgnoreTransform()) { *m = Matrix4::Identity; return; }
 
     GetLocalToParentMatrix(m);
     if (gameObject->parent && gameObject->parent->transform)
@@ -340,6 +346,11 @@ const Vector3& Transform::GetLocalScale() const
 Vector3 Transform::GetScale() const
 {
     return LocalToWorldVector(GetLocalScale());
+}
+
+bool Transform::GetIgnoreTransform() const
+{
+    return m_ignoreTransform;
 }
 
 Vector3 Transform::GetPositionFromMatrix4(const Matrix4 &tm)

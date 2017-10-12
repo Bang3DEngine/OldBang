@@ -33,6 +33,8 @@ public:
     UILayoutManager* GetUILayoutManager() const;
     virtual Camera *GetCamera() const;
 
+    void InvalidateCanvas();
+
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;

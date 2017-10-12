@@ -5,22 +5,43 @@
 
 NAMESPACE_BANG_BEGIN
 
+#define IINVALIDATABLE(CLASS) \
+        private: mutable bool m_invalid = true; \
+        friend class IInvalidatable<CLASS>;
+
+template <class T>
 class IInvalidatable
 {
 public:
-    void Invalidate();
+    void Invalidate()
+    {
+        if (!IsInvalid())
+        {
+            SetInvalid(true);
+            OnInvalidated();
+        }
+    }
 
 protected:
-	IInvalidatable();
-	virtual ~IInvalidatable();
+    IInvalidatable() {}
+    virtual ~IInvalidatable() {}
 
-    void Validate() const;
-    bool IsInvalid() const;
+    void Validate() const
+    {
+        SetInvalid(false);
+    }
+
+    bool IsInvalid() const
+    {
+        return SCAST<const T*>(this)->m_invalid;
+    }
 
 private:
-    mutable bool m_invalid = false;
+    void SetInvalid(bool invalid) const
+    {
+        SCAST<const T*>(this)->m_invalid = invalid;
+    }
 
-    void SetInvalid(bool invalid) const;
     virtual void OnInvalidated() {}
 };
 

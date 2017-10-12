@@ -297,7 +297,7 @@ Rect RectTransform::GetParentScreenRect() const
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    if (!IsEnabled()) { return Matrix4::Identity; }
+    if (GetIgnoreTransform()) { return Matrix4::Identity; }
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Vector2d minMarginedAnchor (GetAnchorMin() + FromPixelsToLocalNDC(GetMarginLeftBot()));
@@ -310,7 +310,9 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Matrix4d rtMatrix = Matrix4d::TranslateMatrix(moveToAnchorCenter) *
                         Matrix4d::ScaleMatrix(anchorScaling);
     Matrix4d transformMatrix ( Transform::GetLocalToParentMatrix() );
+
     m_localToParentMatrix = Matrix4f( transformMatrix * rtMatrix );
+    Validate();
 
     return m_localToParentMatrix;
 }
@@ -323,8 +325,8 @@ void RectTransform::OnRenderGizmos()
     Rect r = GetScreenSpaceRectNDC();
     Color c = Color::Green; // Random::GetColorOpaque();
     Gizmos::SetColor(c);
-    Gizmos::RenderRect(r);
     /*
+    Gizmos::RenderRect(r);
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
@@ -379,38 +381,30 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }
 
-
-void PropagateInvalidate(const RectTransform *tr)
+void RectTransform::OnInvalidated()
 {
     // Invalidate child RectTransforms
-    auto rts = tr->GetGameObject()->
-               GetComponentsInChildrenOnly<RectTransform>(false);
+    auto rts = GetGameObject()-> GetComponentsInChildrenOnly<RectTransform>(false);
     for (RectTransform *rt : rts) { rt->Invalidate(); }
 
     using IRTListener = IRectTransformListener;
 
     // Propagate to RectTransformListeners
-    auto rtListeners = tr->GetGameObject()->
-                       GetComponents<IRectTransformListener>();
+    auto rtListeners = GetGameObject()-> GetComponents<IRectTransformListener>();
     for (IRTListener *rtListener : rtListeners)
     {
         rtListener->OnRectTransformChanged();
     }
 
     auto rtChildrenListeners =
-                    tr->GetGameObject()->
-                    GetComponentsInChildrenOnly<IRectTransformListener>(false);
+    GetGameObject()->GetComponentsInChildrenOnly<IRectTransformListener>(false);
     for (IRTListener *rtListener : rtChildrenListeners)
     {
         rtListener->OnParentRectTransformChanged();
     }
 }
 
-void RectTransform::OnInvalidated()
-{
-    PropagateInvalidate(this);
-}
+void RectTransform::OnEnabled()  { Invalidate(); }
+void RectTransform::OnDisabled() { Invalidate(); }
 
-
-void RectTransform::OnRectTransformChanged() {}
 void RectTransform::OnParentRectTransformChanged() { Invalidate(); }

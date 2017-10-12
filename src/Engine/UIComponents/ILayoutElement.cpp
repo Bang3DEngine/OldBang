@@ -6,29 +6,8 @@
 
 USING_NAMESPACE_BANG
 
-ILayoutElement::ILayoutElement()
-{
-
-}
-
-ILayoutElement::~ILayoutElement()
-{
-
-}
-
-void ILayoutElement::Invalidate()
-{
-    SetInvalid(true);
-}
-
-void ILayoutElement::SetInvalid(bool invalid)
-{
-    m_isInvalid = invalid;
-}
-bool ILayoutElement::IsInvalid() const
-{
-    return m_isInvalid;
-}
+ILayoutElement::ILayoutElement() {}
+ILayoutElement::~ILayoutElement() {}
 
 void ILayoutElement::SetLayoutPriority(int layoutPriority)
 {
@@ -91,8 +70,6 @@ void ILayoutElement::CalculateCachedSizes() const
     {
         m_cachedMinSize       = _GetMinSize();
         m_cachedPreferredSize = _GetPreferredSize();
-
-        ILayoutElement *ncThis = const_cast<ILayoutElement*>(this);
-        ncThis->SetInvalid(false);
+        Validate();
     }
 }

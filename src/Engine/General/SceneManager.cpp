@@ -51,7 +51,7 @@ void SceneManager::_LoadScene(Scene *scene)
         Time::ResetDeltaTime();
         m_activeScene->Start();
         m_activeScene->SetFirstFoundCameraOrDefaultOne();
-        // UILayoutManager::ForceRebuildLayout(m_activeScene);
+        m_activeScene->InvalidateCanvas();
         Time::ResetDeltaTime();
     }
 }
