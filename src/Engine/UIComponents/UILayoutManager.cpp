@@ -11,6 +11,7 @@
 #include "Bang/ILayoutElement.h"
 #include "Bang/ILayoutController.h"
 #include "Bang/IRectTransformListener.h"
+#include "Bang/ILayoutSelfController.h"
 
 USING_NAMESPACE_BANG
 
@@ -71,18 +72,6 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
     return Vector2::Max(size, Vector2::Zero);
 }
 
-void UILayoutManager::InvalidateAll(GameObject *go)
-{
-    ENSURE(go);
-
-    List<Transform*> transforms = go->GetComponentsInChildren<Transform>(true);
-    for (Transform *tr : transforms) { tr->Invalidate(); }
-
-    List<ILayoutElement*> layoutElms =
-                            go->GetComponentsInChildren<ILayoutElement>(true);
-    for (ILayoutElement *le : layoutElms) { le->SetInvalid(true); }
-}
-
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
     ENSURE(rootGo);
@@ -90,49 +79,29 @@ void UILayoutManager::RebuildLayout(GameObject *rootGo)
     while (!goQueue.empty())
     {
         GameObject *go = goQueue.front();
-        List<ILayoutController*> layoutControllers =
-                         go->GetComponents<ILayoutController>();
+
+        List<ILayoutController*> nonSelfControllers;
+        auto layoutControllers = go->GetComponents<ILayoutController>();
+
+        // First SelfControllers
         for (ILayoutController *layoutController : layoutControllers)
+        {
+            if (DCAST<ILayoutSelfController*>(layoutController))
+            {
+                layoutController->ApplyLayout();
+            }
+            else { nonSelfControllers.PushBack(layoutController); }
+        }
+
+        // Then, "normal" controllers
+        for (ILayoutController *layoutController : nonSelfControllers)
         {
             layoutController->ApplyLayout();
         }
+
         goQueue.pop();
         for (GameObject *child : go->GetChildren()) { goQueue.push(child); }
     }
-}
-
-void UILayoutManager::ForceRebuildLayout(GameObject *go)
-{
-    UILayoutManager::InvalidateAll(go);
-    UILayoutManager::RebuildLayout(go);
-}
-
-void UILayoutManager::TriggerRectTransformListeners(GameObject *go)
-{
-    List<IRectTransformListener*> rtLists =
-                     go->GetComponentsInChildren<IRectTransformListener>(true);
-    for (IRectTransformListener *rtList : rtLists)
-    {
-        rtList->OnRectTransformChanged();
-    }
-    return;
-
-    /* Set<GameObject*> invalidGameObjects;
-    List<RectTransform*> rtLists = go->GetComponentsInChildren<RectTransform>(true);
-    for (RectTransform *rt : rtLists)
-    {
-        if (rt->IsInvalid()) { invalidGameObjects.Add(rt->gameObject); }
-    }
-
-    for (GameObject *changedGo : invalidGameObjects)
-    {
-        List<IRectTransformListener*> goTransformListeners =
-                changedGo->GetComponents<IRectTransformListener>();
-        for (IRectTransformListener *rtList : goTransformListeners)
-        {
-            rtList->OnRectTransformChanged();
-        }
-    }*/
 }
 
 UILayoutManager *UILayoutManager::GetInstance()

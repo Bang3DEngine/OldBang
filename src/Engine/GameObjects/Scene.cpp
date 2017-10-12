@@ -31,7 +31,9 @@ void Scene::Update()
 
 void Scene::OnResize(int newWidth, int newHeight)
 {
-    UILayoutManager::ForceRebuildLayout(this);
+    Transform *tr = GetComponent<Transform>();
+    if (tr) { tr->Invalidate(); }
+    // UILayoutManager::ForceRebuildLayout(this);
 }
 
 void Scene::RenderGizmos()

@@ -14,7 +14,7 @@ public:
     virtual ~UIFrameLayout();
 
     // ILayoutController
-    virtual void ApplyLayout() override;
+    virtual void _ApplyLayout() override;
 
     // ILayoutElement
     virtual Vector2i _GetMinSize() const override;

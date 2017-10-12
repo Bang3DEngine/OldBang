@@ -8,11 +8,18 @@ NAMESPACE_BANG_BEGIN
 class ILayoutController
 {
 public:
-    virtual void ApplyLayout() = 0;
+    void ApplyLayout();
+    void Invalidate();
 
 protected:
     ILayoutController();
     virtual ~ILayoutController();
+
+private:
+    bool m_isInvalid = true;
+
+    virtual void _ApplyLayout() = 0;
+    bool IsInvalid() const;
 };
 
 NAMESPACE_BANG_END

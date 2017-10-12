@@ -12,6 +12,8 @@ public:
 
     virtual void Start();
     virtual void OnStart();
+    virtual void OnEnabled();
+    virtual void OnDisabled();
 
     void SetEnabled(bool enabled);
 

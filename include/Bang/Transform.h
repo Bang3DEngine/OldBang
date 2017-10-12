@@ -6,10 +6,12 @@
 #include "Bang/Matrix4.h"
 #include "Bang/Component.h"
 #include "Bang/Quaternion.h"
+#include "Bang/IInvalidatable.h"
 
 NAMESPACE_BANG_BEGIN
 
-class Transform : public Component
+class Transform : public Component,
+                  public IInvalidatable
 {
     COMPONENT(Transform)
 
@@ -89,7 +91,6 @@ public:
     Vector3 GetEuler() const;
     const Vector3& GetLocalScale() const;
     Vector3 GetScale() const;
-    bool IsInvalid() const;
 
     static Vector3    GetPositionFromMatrix4(const Matrix4 &transformMatrix);
     static Quaternion GetRotationFromMatrix4(const Matrix4 &transformMatrix);
@@ -103,20 +104,15 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    virtual void Invalidate();
-
 protected:
     mutable Matrix4 m_localToParentMatrix;
 
     Transform();
 
 private:
-    mutable bool m_isInvalid = true;
-    Vector3 m_localPosition = Vector3::Zero;
+    Vector3   m_localPosition  = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
-    Vector3 m_localScale = Vector3::One;
-
-    void SetInvalid(bool invalid) const;
+    Vector3    m_localScale    = Vector3::One;
 };
 
 NAMESPACE_BANG_END

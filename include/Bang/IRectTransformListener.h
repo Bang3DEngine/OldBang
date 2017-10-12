@@ -9,6 +9,7 @@ class IRectTransformListener
 {
 public:
     virtual void OnRectTransformChanged() = 0;
+    virtual void OnParentRectTransformChanged() {}
 };
 
 NAMESPACE_BANG_END

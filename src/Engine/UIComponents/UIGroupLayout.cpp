@@ -14,7 +14,6 @@ Bang::UIGroupLayout::~UIGroupLayout()
 
 }
 
-
 void UIGroupLayout::SetPaddingLeft(int paddingLeft)
 {
     SetPaddings(paddingLeft, GetPaddingBot(), GetPaddingRight(), GetPaddingTop());
@@ -138,4 +137,14 @@ const Vector2i &UIGroupLayout::GetPaddingRightTop() const
 Vector2i UIGroupLayout::GetPaddingSize() const
 {
     return GetPaddingLeftBot() + GetPaddingRightTop();
+}
+
+void UIGroupLayout::OnChildrenAdded() { InvalidateBothILayouts(); }
+void UIGroupLayout::OnChildrenRemoved() { InvalidateBothILayouts(); }
+void UIGroupLayout::OnRectTransformChanged() { InvalidateBothILayouts(); }
+void UIGroupLayout::OnParentRectTransformChanged() { InvalidateBothILayouts(); }
+void UIGroupLayout::InvalidateBothILayouts()
+{
+    ILayoutElement::Invalidate();
+    ILayoutController::Invalidate();
 }

@@ -882,9 +882,9 @@ void GL::SetZNearFar(float zNear, float zFar)
 
 Recti GL::FromGlobalNDCToPixels(const Rect &rectNDC)
 {
-    Vector2i min  = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin());
-    Vector2i size = GL::FromGlobalNDCToPixelsAmount(rectNDC.GetSize());
-    return Recti(min, (min+size));
+    Vector2i min = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin());
+    Vector2i max = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMax());
+    return Recti(min, max);
 }
 
 Rect GL::FromPixelsToGlobalNDC(const Recti &rectPixels)
@@ -901,8 +901,8 @@ Vector2 GL::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
 
 Vector2i GL::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
 {
-    return Vector2i( Vector2::Floor(ndcAmount *
-                                    Vector2f(GL::GetViewportSize()) * 0.5f) );
+    return Vector2i(Vector2::Round(
+                       (ndcAmount * Vector2(GL::GetViewportSize())) * 0.5f) );
 }
 
 Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
@@ -921,7 +921,7 @@ Vector2i GL::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
 {
     Vector2 ndcPoint(_ndcPoint.x,  _ndcPoint.y);
     Vector2 screenSize( GL::GetViewportSize() );
-    Vector2i resultPx( Vector2::Floor((ndcPoint * 0.5f + 0.5f) * screenSize) );
+    Vector2i resultPx ( Vector2::Round((ndcPoint * 0.5f + 0.5f) * screenSize) );
     return Vector2i(resultPx.x, (screenSize.y-1) - resultPx.y);
 }
 

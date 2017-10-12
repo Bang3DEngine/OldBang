@@ -22,11 +22,8 @@ public:
     static Vector2  GetFlexibleSize(GameObject *go);
     static Vector2  GetSize(GameObject *go, LayoutSizeType sizeType);
 
-    static void InvalidateAll(GameObject *gameObject);
     static void RebuildLayout(GameObject *gameObject);
     static void ForceRebuildLayout(GameObject *gameObject);
-
-    void TriggerRectTransformListeners(GameObject *go);
 
 private:
     static void OnLayoutRebuilt(GameObject *go);

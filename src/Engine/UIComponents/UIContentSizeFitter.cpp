@@ -19,33 +19,17 @@ UIContentSizeFitter::~UIContentSizeFitter()
 
 }
 
-void UIContentSizeFitter::ApplyLayout()
+void UIContentSizeFitter::_ApplyLayout()
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
     Vector2i contentSize = Vector2i::Zero;
-    for (GameObject *child : gameObject->GetChildren())
-    {
-        Vector2i hSize (UILayoutManager::GetSize(child, GetHorizontalSizeType()));
-        if (GetHorizontalSizeFitMode() == SizeFitMode::Sum)
-        {
-            contentSize.x += hSize.x;
-        }
-        else if (GetHorizontalSizeFitMode() == SizeFitMode::Max)
-        {
-            contentSize.x = Math::Max(contentSize.x, hSize.x);
-        }
 
-        Vector2i vSize (UILayoutManager::GetSize(child, GetVerticalSizeType()));
-        if (GetVerticalSizeFitMode() == SizeFitMode::Sum)
-        {
-            contentSize.y += vSize.y;
-        }
-        else if (GetVerticalSizeFitMode() == SizeFitMode::Max)
-        {
-            contentSize.y = Math::Max(contentSize.y, vSize.y);
-        }
-    }
+    Vector2i hSize (UILayoutManager::GetSize(gameObject, GetHorizontalSizeType()));
+    contentSize.x = hSize.x;
+
+    Vector2i vSize (UILayoutManager::GetSize(gameObject, GetVerticalSizeType()));
+    contentSize.y = vSize.y;
 
     if (GetHorizontalSizeType() != LayoutSizeType::None)
     {
@@ -56,43 +40,20 @@ void UIContentSizeFitter::ApplyLayout()
     {
         rt->SetHeightFromPivot(contentSize.y);
     }
-
-    if (gameObject->GetName() == "A")
-    {
-        Debug_Peek(contentSize);
-    }
-}
-
-void UIContentSizeFitter::SetHorizontalSizeFitMode(SizeFitMode fitMode)
-{
-    m_horizontalFitMode = fitMode;
-}
-
-void UIContentSizeFitter::SetVerticalSizeFitMode(SizeFitMode fitMode)
-{
-    m_verticalFitMode = fitMode;
 }
 
 void UIContentSizeFitter::SetHorizontalSizeType(LayoutSizeType sizeType)
 {
-    ASSERT(sizeType != LayoutSizeType::Flexible);
+    ASSERT(sizeType == LayoutSizeType::Min ||
+           sizeType == LayoutSizeType::Preferred);
     m_horizontalSizeType = sizeType;
 }
 
 void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
 {
-    ASSERT(sizeType != LayoutSizeType::Flexible);
+    ASSERT(sizeType == LayoutSizeType::Min ||
+           sizeType == LayoutSizeType::Preferred);
     m_verticalSizeType = sizeType;
-}
-
-SizeFitMode UIContentSizeFitter::GetHorizontalSizeFitMode() const
-{
-    return m_horizontalFitMode;
-}
-
-SizeFitMode UIContentSizeFitter::GetVerticalSizeFitMode() const
-{
-    return m_verticalFitMode;
 }
 
 LayoutSizeType UIContentSizeFitter::GetHorizontalSizeType() const

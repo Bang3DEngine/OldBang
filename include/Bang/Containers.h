@@ -49,6 +49,12 @@ public:
         return Containers::Count(cont.Begin(), cont.End(), x);
     }
 
+    template <class Iterator0, class Iterator1>
+    static bool Equal(Iterator0 begin0, Iterator0 end0, Iterator1 begin1)
+    {
+        return std::equal(begin0, end0, begin1);
+    }
+
     Containers() = delete;
 };
 

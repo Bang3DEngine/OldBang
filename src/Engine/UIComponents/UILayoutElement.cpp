@@ -90,17 +90,17 @@ const Vector2i& UILayoutElement::GetMinSize() const
 
 int UILayoutElement::GetPreferredWidth() const
 {
-    return GetPreferredSize().x;
+    return Math::Max(GetMinWidth(), GetPreferredSize().x);
 }
 
 int UILayoutElement::GetPreferredHeight() const
 {
-    return GetPreferredSize().y;
+    return Math::Max(GetMinHeight(), GetPreferredSize().y);
 }
 
-const Vector2i& UILayoutElement::GetPreferredSize() const
+Vector2i UILayoutElement::GetPreferredSize() const
 {
-    return m_preferredSize;
+    return Vector2i::Max(GetMinSize(), m_preferredSize);
 }
 
 float UILayoutElement::GetFlexibleWidth() const
@@ -125,7 +125,7 @@ Vector2 UILayoutElement::_GetFlexibleSize() const
 
 void UILayoutElement::OnChanged()
 {
-    Invalidate();
+    ILayoutElement::Invalidate();
 }
 
 Vector2i UILayoutElement::_GetMinSize() const

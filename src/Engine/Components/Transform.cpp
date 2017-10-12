@@ -5,6 +5,7 @@
 
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
+#include "Bang/IRectTransformListener.h"
 
 USING_NAMESPACE_BANG
 
@@ -136,16 +137,6 @@ void Transform::SetLocalScale(const Vector3 &s)
     }
 }
 
-void Transform::Invalidate()
-{
-    SetInvalid(true);
-}
-
-void Transform::SetInvalid(bool invalid) const
-{
-    m_isInvalid = invalid;
-}
-
 Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
@@ -252,7 +243,7 @@ const Matrix4 &Transform::GetLocalToParentMatrix() const
     Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-    SetInvalid(false);
+    Validate();
     m_localToParentMatrix = (T * R * S);
     return m_localToParentMatrix;
 }
@@ -349,11 +340,6 @@ const Vector3& Transform::GetLocalScale() const
 Vector3 Transform::GetScale() const
 {
     return LocalToWorldVector(GetLocalScale());
-}
-
-bool Transform::IsInvalid() const
-{
-    return m_isInvalid;
 }
 
 Vector3 Transform::GetPositionFromMatrix4(const Matrix4 &tm)

@@ -30,7 +30,7 @@ public:
     const Vector2i& GetMinSize() const;
     int GetPreferredWidth() const;
     int GetPreferredHeight() const;
-    const Vector2i& GetPreferredSize() const;
+    Vector2i GetPreferredSize() const;
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
     const Vector2& GetFlexibleSize() const;

@@ -19,6 +19,15 @@ public:
     }
 
     template<class OtherT>
+    Matrix4G(const Matrix4G<OtherT>& m)
+    {
+        c0 = Vector4G<T>(m.c0);
+        c1 = Vector4G<T>(m.c1);
+        c2 = Vector4G<T>(m.c2);
+        c3 = Vector4G<T>(m.c3);
+    }
+
+    template<class OtherT>
     Matrix4G(const OtherT& a)
     {
         c0 = Vector4G<T>(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0), SCAST<T>(0));

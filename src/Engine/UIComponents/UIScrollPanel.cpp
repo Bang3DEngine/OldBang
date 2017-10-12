@@ -61,7 +61,23 @@ void UIScrollPanel::OnUpdate()
         scrollingPercent = Vector2(scrolling) / Vector2(scrollMaxAmount);
         GetScrollBar()->SetScrollingPercent( isVertical ? scrollingPercent.y :
                                                           scrollingPercent.x );
+
+        // Debug_Peek(sizeProp);
+        // Debug_Peek(scrolling);
+        Debug_Peek(contentSize);
+        // Debug_Peek(containerSize);
+        // Debug_Peek(scrollMaxAmount);
+        // Debug_Peek(GetScrollArea()->GetScrolling());
+        // Debug_Peek(GetScrollBar()->GetScrollingPercent());
+        // Debug_Log("=====================");
     }
+
+/*
+    if (Input::GetKeyDown(Key::E)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y - 10); }
+    if (Input::GetKeyDown(Key::R)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y + 10); }
+    Debug_Peek(contentSize);
+    Debug_Peek(GetScrollArea()->GetScrolling());
+    */
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
@@ -73,7 +89,8 @@ void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
 void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 {
     Vector2i contentSize = GetContentSize();
-    GetScrollArea()->SetScrolling( Vector2i(scrollPerc * Vector2(contentSize)) );
+    GetScrollArea()->SetScrolling(
+                Vector2i( Vector2::Round(scrollPerc * Vector2(contentSize))) );
 
     bool isVertical = GetScrollBar()->IsVertical();
     GetScrollBar()->SetScrollingPercent(isVertical ? scrollPerc.x : scrollPerc.y);
@@ -81,6 +98,11 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 
 Vector2i UIScrollPanel::GetContentSize() const
 {
+    return UILayoutManager::GetPreferredSize(GetContainer());
+
+    static List<Vector2i> previousSizes;
+    List<Vector2i> currentSizes;
+
     bool first = true;
     Recti contentUnionRect;
     List<RectTransform*> contentRTs =
@@ -93,8 +115,28 @@ Vector2i UIScrollPanel::GetContentSize() const
         {
             contentUnionRect = Recti::Union(contentUnionRect, rtRect);
         }
+        currentSizes.PushBack(rtRect.GetSize());
     }
-    Debug_Log(contentUnionRect.GetSize());
+
+    if (!previousSizes.IsEmpty() && previousSizes.Size() == currentSizes.Size())
+    {
+        int i = 0;
+        auto itPrev = previousSizes.Begin();
+        auto itCurr = currentSizes.Begin();
+        while (itPrev != previousSizes.End())
+        {
+            if ((*itPrev).y != (*itCurr).y)
+            {
+                Debug_Log("Differ " << *itPrev << " vs. " << *itCurr);
+                int a = 2;
+            }
+            ++i;
+            ++itPrev;
+            ++itCurr;
+        }
+    }
+    previousSizes = currentSizes;
+
     return contentUnionRect.GetSize();
 }
 

@@ -14,6 +14,7 @@
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
+#include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -86,6 +87,19 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
     PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass),
                                   m_components);
 }
+
+void PropagateChildrenEvent(GameObject *go, bool added)
+{
+    auto childrenListeners = go->GetComponents<IChildrenListener>();
+    for (IChildrenListener *childrenListener : childrenListeners)
+    {
+        if (added) { childrenListener->OnChildrenAdded(); }
+        else { childrenListener->OnChildrenRemoved(); }
+    }
+}
+
+void GameObject::ChildrenAdded() { PropagateChildrenEvent(this, true); }
+void GameObject::ChildrenRemoved() { PropagateChildrenEvent(this, false); }
 
 void GameObject::RenderGizmos()
 {
@@ -268,13 +282,18 @@ void GameObject::SetParent(GameObject *newParent, int _index)
 {
     ASSERT(newParent != this);
     ASSERT( !newParent || !newParent->IsChildOf(this) );
-    if (parent) { parent->m_children.Remove(this); }
+    if (parent)
+    {
+        parent->m_children.Remove(this);
+        parent->ChildrenRemoved();
+    }
 
     p_parent = newParent;
     if (parent)
     {
         int index = (_index != -1 ? _index : parent->GetChildren().Size());
         p_parent->m_children.Insert(index, this);
+        p_parent->ChildrenAdded();
     }
 }
 

@@ -5,12 +5,16 @@
 #include "Bang/Alignment.h"
 #include "Bang/Component.h"
 #include "Bang/ILayoutElement.h"
+#include "Bang/IChildrenListener.h"
 #include "Bang/ILayoutController.h"
+#include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class UIGroupLayout : public Component,
                       public ILayoutElement,
+                      public IChildrenListener,
+                      public IRectTransformListener,
                       public ILayoutController
 {
 public:
@@ -41,6 +45,14 @@ public:
     Stretch GetChildrenVerticalStretch() const;
     Stretch GetChildrenHorizontalStretch() const;
 
+    // IChildrenListener
+    void OnChildrenAdded() override;
+    void OnChildrenRemoved() override;
+
+    // IRectTransformListener
+    void OnRectTransformChanged() override;
+    void OnParentRectTransformChanged() override;
+
 private:
     HorizontalAlignment m_childrenHorizontalAlignment = HorizontalAlignment::Center;
     VerticalAlignment   m_childrenVerticalAlignment   = VerticalAlignment::Center;
@@ -49,6 +61,8 @@ private:
 
     Vector2i m_paddingLeftBot  = Vector2i::Zero;
     Vector2i m_paddingRightTop = Vector2i::Zero;
+
+    void InvalidateBothILayouts();
 };
 
 NAMESPACE_BANG_END

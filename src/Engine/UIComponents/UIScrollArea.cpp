@@ -7,6 +7,7 @@
 #include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIContentSizeFitter.h"
 
 USING_NAMESPACE_BANG
 
@@ -56,6 +57,7 @@ UIImageRenderer *UIScrollArea::GetBackground() const
 {
     return p_bg;
 }
+
 const Vector2i &UIScrollArea::GetScrolling() const
 {
     return m_scrollingPx;
@@ -75,7 +77,9 @@ void UIScrollArea::UpdatePaddings()
 UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 {
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
-    go->AddComponent<UIFrameLayout>();
+    UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
+    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
+    fl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);

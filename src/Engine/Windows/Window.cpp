@@ -122,7 +122,6 @@ void Window::Render()
     UILayoutManager::RebuildLayout(rootScene);
     if (rootScene)
     {
-        rootScene->GetUILayoutManager()->TriggerRectTransformListeners(rootScene);
         GetGEngine()->Render(rootScene);
 
         Camera *camera = rootScene->GetCamera(); ENSURE(camera);

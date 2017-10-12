@@ -100,9 +100,10 @@ Vector2i UITextRenderer::_GetPreferredSize() const
         case LayoutMode::MultiLinePreferred:
         case LayoutMode::MultiLineMinPreferred:
         {
-            const Array<Rect> crs = GetCharRectsLocalNDC();
+            const Array<Rect>& crs = GetCharRectsLocalNDC();
             Rect boundingRect = Rect::Union(crs.Begin(), crs.End());
-            prefSize = Vector2i( Vector2::Ceil(boundingRect.GetSize()) );
+            Recti boundingRectPx = GL::FromGlobalNDCToPixels(boundingRect);
+            prefSize = boundingRectPx.GetSize();
         }
         break;
     }
@@ -366,7 +367,11 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
 
 void UITextRenderer::SetLayoutMode(UITextRenderer::LayoutMode layoutMode)
 {
-    m_layoutMode = layoutMode;
+    if (GetLayoutMode() != layoutMode)
+    {
+        m_layoutMode = layoutMode;
+        OnChanged();
+    }
 }
 
 bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
@@ -511,4 +516,5 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
 void UITextRenderer::OnChanged()
 {
     m_hasToRegenerateVAO = true;
+    Invalidate();
 }

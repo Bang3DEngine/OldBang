@@ -10,6 +10,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
 FORWARD class UIImageRenderer;
+FORWARD class UIContentSizeFitter;
 
 class UIScrollArea : public IComponentDriver<UIScrollArea>,
                      public Component
@@ -27,7 +28,7 @@ public:
 
     UIMask* GetMask() const;
     GameObject* GetContainer() const;
-    UIImageRenderer *GetBackground() const;
+    UIImageRenderer* GetBackground() const;
     const Vector2i& GetScrolling() const;
 
 private:

@@ -18,13 +18,16 @@ UIFrameLayout::~UIFrameLayout()
 
 }
 
-void UIFrameLayout::ApplyLayout()
+void UIFrameLayout::_ApplyLayout()
 {
     RectTransform *layoutRT = gameObject->GetComponent<RectTransform>();
     ENSURE(layoutRT);
+
     Vector2i layoutRectSize = layoutRT->GetScreenSpaceRectPx().GetSize();
     layoutRectSize -= GetPaddingSize();
     Vector2i availablePx = layoutRectSize;
+
+    ENSURE(!gameObject->GetChildren().IsEmpty());
 
     for (GameObject *child : gameObject->GetChildren())
     {

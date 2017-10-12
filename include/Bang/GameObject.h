@@ -35,6 +35,8 @@ public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
+    virtual void ChildrenAdded();
+    virtual void ChildrenRemoved();
     virtual void Destroy();
 
     static void Destroy(GameObject *gameObject);

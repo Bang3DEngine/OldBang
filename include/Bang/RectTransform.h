@@ -3,10 +3,12 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
+#include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class RectTransform : public Transform
+class RectTransform : public Transform,
+                      public IRectTransformListener
 {
     COMPONENT(RectTransform)
 
@@ -70,6 +72,10 @@ public:
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
     Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
+    // IRectTransformListener
+    void OnRectTransformChanged() override;
+    void OnParentRectTransformChanged() override;
+
     // ICloneable
     void CloneInto(ICloneable *clone) const;
 
@@ -77,8 +83,8 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-protected:
-    virtual void Invalidate();
+    // IInvalidatable
+    void OnInvalidated() override;
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;

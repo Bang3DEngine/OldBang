@@ -129,8 +129,6 @@ Vector2i TextFormatter::GetTextSizeOneLined(const String &content,
     Vector2 textSize = Vector2::Zero;
     for (int i = 0; i < content.Size(); ++i)
     {
-        char c = content[i];
-        Rectf cr = TextFormatter::GetCharRect(c, font);
         int charAdvX = GetCharAdvanceX(content, font, i);
         textSize.x += charAdvX * spacingMultiplier.x;
         // textSize.y =  Math::Max(textSize.y, cr.GetHeight());

@@ -67,10 +67,8 @@ void UIScrollBar::SetScrollingPercent(float percent)
 void UIScrollBar::SetLength(int lengthPx)
 {
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    if (IsVertical())
-    { barLE->SetMinHeight(lengthPx); barLE->SetPreferredHeight(lengthPx); }
-    else
-    { barLE->SetMinWidth (lengthPx); barLE->SetPreferredWidth(lengthPx); }
+    if (IsVertical()) { barLE->SetPreferredHeight(lengthPx); }
+    else { barLE->SetPreferredWidth(lengthPx); }
 
     SetScrollingPercent( GetScrollingPercent() );
 }
@@ -85,10 +83,8 @@ void UIScrollBar::SetLengthPercent(float lengthPercent)
 void UIScrollBar::SetThickness(int thickPx)
 {
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    if (IsVertical())
-    { barLE->SetMinWidth(thickPx);  barLE->SetPreferredWidth(thickPx); }
-    else
-    { barLE->SetMinHeight(thickPx); barLE->SetPreferredHeight(thickPx); }
+    if (IsVertical()) { barLE->SetPreferredWidth(thickPx); }
+    else { barLE->SetPreferredHeight(thickPx); }
 }
 
 void UIScrollBar::SetVertical(bool vertical)
@@ -131,14 +127,14 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     le->SetFlexibleSize( Vector2::Zero );
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::LightGray);
+    bg->SetTint(Color::Yellow);
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
     GameObject *container = scrollArea->GetContainer();
     UIFrameLayout *contFL = container->AddComponent<UIFrameLayout>();
     contFL->SetChildrenVerticalStretch(Stretch::None);
     contFL->SetChildrenHorizontalStretch(Stretch::None);
-    contFL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    contFL->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
     contFL->SetChildrenVerticalAlignment(VerticalAlignment::Top);
     contFL->SetPaddings(0);
 
