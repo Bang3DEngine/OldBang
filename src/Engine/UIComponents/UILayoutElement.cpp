@@ -90,17 +90,17 @@ const Vector2i& UILayoutElement::GetMinSize() const
 
 int UILayoutElement::GetPreferredWidth() const
 {
-    return Math::Max(GetMinWidth(), GetPreferredSize().x);
+    return GetPreferredSize().x;
 }
 
 int UILayoutElement::GetPreferredHeight() const
 {
-    return Math::Max(GetMinHeight(), GetPreferredSize().y);
+    return GetPreferredSize().y;
 }
 
 Vector2i UILayoutElement::GetPreferredSize() const
 {
-    return Vector2i::Max(GetMinSize(), m_preferredSize);
+    return m_preferredSize;
 }
 
 float UILayoutElement::GetFlexibleWidth() const

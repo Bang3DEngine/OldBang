@@ -46,12 +46,13 @@ public:
     Stretch GetChildrenHorizontalStretch() const;
 
     // IChildrenListener
-    void OnChildrenAdded() override;
-    void OnChildrenRemoved() override;
+    void OnChildAdded(GameObject *addedChild) override;
+    void OnChildRemoved(GameObject *removedChild) override;
+    void OnParentChanged(GameObject *oldParent, GameObject *newParent) override;
 
     // IRectTransformListener
     void OnRectTransformChanged() override;
-    void OnParentRectTransformChanged() override;
+    void OnChildrenRectTransformChanged() override;
 
 private:
     HorizontalAlignment m_childrenHorizontalAlignment = HorizontalAlignment::Center;

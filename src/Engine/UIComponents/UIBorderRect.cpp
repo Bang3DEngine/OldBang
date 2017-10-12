@@ -35,16 +35,6 @@ void UIBorderRect::OnStart()
     p_lineRenderer->OnStart();
 }
 
-void UIBorderRect::OnRender()
-{
-    Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
-    GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
-    gameObject->transform->SetIgnoreTransform(true);
-    p_lineRenderer->Renderer::OnRender(RenderPass::Canvas);
-    gameObject->transform->SetIgnoreTransform(false);
-}
-
-
 void UIBorderRect::SetLineColor(const Color &lineColor)
 {
     p_lineRenderer->GetMaterial()->SetDiffuseColor(lineColor);

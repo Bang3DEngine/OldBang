@@ -186,31 +186,32 @@ void UITextRenderer::RegenerateCharQuadsVAO()
         }
 
         Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
+        Rect charRectLocalNDC = rt->FromGlobalNDCToLocalNDC(charRectGlobalNDC);
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMinY(), 0) );
         textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMinY(), 0) );
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMaxY(), 0) );
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMinY(), 0) );
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMaxY(), 0) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectGlobalNDC.GetMinXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectGlobalNDC.GetMinXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
 
-        Rect charRectLocalNDC (
+        Rect charRectLocalNDCRaw (
                     rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMin() ),
                     rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMax() ) );
-        m_charRectsLocalNDC.PushBack(charRectLocalNDC);
+        m_charRectsLocalNDC.PushBack(charRectLocalNDCRaw);
     }
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
@@ -225,7 +226,6 @@ void UITextRenderer::Bind() const
     // directly from the VBO creation...
     Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
     GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
-    gameObject->transform->SetIgnoreTransform(true);
     UIRenderer::Bind();
 
     if (GetFont())
@@ -260,7 +260,6 @@ void UITextRenderer::Bind() const
 void UITextRenderer::UnBind() const
 {
     UIRenderer::UnBind();
-    gameObject->transform->SetIgnoreTransform(false);
 }
 
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
@@ -435,7 +434,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
     }
 }
 
-void UITextRenderer::OnRectTransformChanged() { Debug_Log("RT CHANGED FOR " << GetContent()); OnChanged(); }
+void UITextRenderer::OnRectTransformChanged() { OnChanged(); }
 
 const Color &UITextRenderer::GetTextColor() const
 {

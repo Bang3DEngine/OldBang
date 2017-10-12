@@ -303,8 +303,6 @@ Vector2i UIDirLayout::_GetPreferredSize() const
 
 Vector2i UIDirLayout::GetSize(LayoutSizeType sizeType) const
 {
-    Debug_Log("Getting size..." << Random::Value());
-
     Vector2i totalSize = Vector2i::Zero;
     for (GameObject *child : gameObject->GetChildren())
     {

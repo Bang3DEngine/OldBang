@@ -61,10 +61,9 @@ void UIScrollPanel::OnUpdate()
         scrollingPercent = Vector2(scrolling) / Vector2(scrollMaxAmount);
         GetScrollBar()->SetScrollingPercent( isVertical ? scrollingPercent.y :
                                                           scrollingPercent.x );
-
         // Debug_Peek(sizeProp);
         // Debug_Peek(scrolling);
-        Debug_Peek(contentSize);
+        // Debug_Peek(contentSize);
         // Debug_Peek(containerSize);
         // Debug_Peek(scrollMaxAmount);
         // Debug_Peek(GetScrollArea()->GetScrolling());
@@ -99,7 +98,7 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 Vector2i UIScrollPanel::GetContentSize() const
 {
     return UILayoutManager::GetPreferredSize(GetContainer());
-
+/*
     static List<Vector2i> previousSizes;
     List<Vector2i> currentSizes;
 
@@ -138,6 +137,7 @@ Vector2i UIScrollPanel::GetContentSize() const
     previousSizes = currentSizes;
 
     return contentUnionRect.GetSize();
+    */
 }
 
 Vector2i UIScrollPanel::GetContainerSize() const

@@ -297,7 +297,6 @@ Rect RectTransform::GetParentScreenRect() const
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    if (GetIgnoreTransform()) { return Matrix4::Identity; }
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Vector2d minMarginedAnchor (GetAnchorMin() + FromPixelsToLocalNDC(GetMarginLeftBot()));
@@ -315,6 +314,12 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Validate();
 
     return m_localToParentMatrix;
+}
+
+Rect RectTransform::FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const
+{
+    return Rect( FromGlobalNDCToLocalNDC(globalNDCRect.GetMin()),
+                 FromGlobalNDCToLocalNDC(globalNDCRect.GetMax()) );
 }
 
 void RectTransform::OnRenderGizmos()
@@ -383,28 +388,44 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
 
 void RectTransform::OnInvalidated()
 {
-    // Invalidate child RectTransforms
-    auto rts = GetGameObject()-> GetComponentsInChildrenOnly<RectTransform>(false);
-    for (RectTransform *rt : rts) { rt->Invalidate(); }
-
-    using IRTListener = IRectTransformListener;
-
     // Propagate to RectTransformListeners
     auto rtListeners = GetGameObject()-> GetComponents<IRectTransformListener>();
-    for (IRTListener *rtListener : rtListeners)
+    for (IRectTransformListener *rtListener : rtListeners)
     {
         rtListener->OnRectTransformChanged();
     }
 
-    auto rtChildrenListeners =
-    GetGameObject()->GetComponentsInChildrenOnly<IRectTransformListener>(false);
-    for (IRTListener *rtListener : rtChildrenListeners)
-    {
-        rtListener->OnParentRectTransformChanged();
-    }
+    OnParentRectTransformChanged();
+    OnChildrenRectTransformChanged();
 }
 
 void RectTransform::OnEnabled()  { Invalidate(); }
 void RectTransform::OnDisabled() { Invalidate(); }
 
-void RectTransform::OnParentRectTransformChanged() { Invalidate(); }
+void RectTransform::OnParentRectTransformChanged()
+{
+    Invalidate();
+
+    // Propagate to children
+    auto rtChildrenListeners =
+    GetGameObject()->GetComponentsInChildrenOnly<IRectTransformListener>(false);
+    for (IRectTransformListener *rtListener : rtChildrenListeners)
+    {
+        rtListener->OnParentRectTransformChanged();
+    }
+
+}
+void RectTransform::OnChildrenRectTransformChanged()
+{
+    if (GetGameObject()->GetName() == "BARCONT")
+    {
+        Debug_Log("AAAAAAAAAAAAAAAAAAAAA OnChildrenRectTransformChanged");
+    }
+    // Propagate to parent
+    auto rtParentLists =
+            GetGameObject()->GetComponentsInParent<IRectTransformListener>(false);
+    for (IRectTransformListener *parentRTListener : rtParentLists)
+    {
+        parentRTListener->OnChildrenRectTransformChanged();
+    }
+}

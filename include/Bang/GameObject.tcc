@@ -38,21 +38,22 @@ List<T*> GameObject::GetComponents() const
 }
 
 template <class T>
-T* GameObject::GetComponentInParent() const
+T* GameObject::GetComponentInParent(bool recursive) const
 {
     if (!parent) { return nullptr; }
     T* comp = parent->GetComponent<T>();
     if (comp) { return comp; }
-    return parent->GetComponentInParent<T>();
+    return recursive ? parent->GetComponentInParent<T>() : nullptr;
 }
 
 template <class T>
-List<T*> GameObject::GetComponentsInParent() const
+List<T*> GameObject::GetComponentsInParent(bool recursive) const
 {
     List<T*> result;
     if (!parent) { return result; }
     result = parent->GetComponents<T>();
-    return result.Concat(parent->GetComponentsInParent<T>());
+    return recursive ? result.Concat(parent->GetComponentsInParent<T>()) :
+                       result;
 }
 
 template <class T>

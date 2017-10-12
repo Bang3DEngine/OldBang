@@ -1,5 +1,6 @@
 #include "Bang/UIGroupLayout.h"
 
+#include "Bang/GameObject.h"
 #include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
@@ -139,10 +140,25 @@ Vector2i UIGroupLayout::GetPaddingSize() const
     return GetPaddingLeftBot() + GetPaddingRightTop();
 }
 
-void UIGroupLayout::OnChildrenAdded() { InvalidateBothILayouts(); }
-void UIGroupLayout::OnChildrenRemoved() { InvalidateBothILayouts(); }
+void UIGroupLayout::OnChildAdded(GameObject *go)
+{
+    if (go->HasComponent<ILayoutElement>()) {InvalidateBothILayouts(); }
+}
+
+void UIGroupLayout::OnChildRemoved(GameObject *go)
+{
+    if (go->HasComponent<ILayoutElement>()) {InvalidateBothILayouts(); }
+}
+
+void UIGroupLayout::OnParentChanged(GameObject *oldParent, GameObject *newParent)
+{
+    Debug_Log("OnParentChanged: " << oldParent << ", " << newParent);
+    InvalidateBothILayouts();
+}
+
 void UIGroupLayout::OnRectTransformChanged() { InvalidateBothILayouts(); }
-void UIGroupLayout::OnParentRectTransformChanged() { InvalidateBothILayouts(); }
+void UIGroupLayout::OnChildrenRectTransformChanged() { InvalidateBothILayouts(); }
+
 void UIGroupLayout::InvalidateBothILayouts()
 {
     ILayoutElement::Invalidate();

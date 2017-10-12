@@ -65,6 +65,7 @@ public:
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
+    Rect FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const;
     Vector2 FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const;
     Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
@@ -80,6 +81,7 @@ public:
 
     // IRectTransformListener
     void OnParentRectTransformChanged() override;
+    void OnChildrenRectTransformChanged() override;
 
     // ICloneable
     void CloneInto(ICloneable *clone) const;
@@ -98,6 +100,8 @@ private:
     Vector2 m_pivotPosition =  Vector2::Zero;
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
+
+    void PropagateChildrenRectTransformChangedEvent() const;
 
     friend class UILayoutManager;
 };

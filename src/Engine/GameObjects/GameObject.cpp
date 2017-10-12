@@ -89,17 +89,46 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
                                   m_components);
 }
 
-void PropagateChildrenEvent(GameObject *go, bool added)
+void PropagateChildrenEvent(GameObject *go, int type,
+                            GameObject *dataGo1, GameObject *dataGo2)
 {
     auto childrenListeners = go->GetComponents<IChildrenListener>();
     for (IChildrenListener *childrenListener : childrenListeners)
     {
-        if (added) { childrenListener->OnChildrenAdded(); }
-        else { childrenListener->OnChildrenRemoved(); }
+        switch (type)
+        {
+            case 1: childrenListener->OnChildAdded(dataGo1); break;
+            case 2: childrenListener->OnChildRemoved(dataGo1); break;
+            case 3: childrenListener->OnParentChanged(dataGo1, dataGo2); break;
+            default: ASSERT(false);
+        }
+    }
+
+    switch (type)
+    {
+        case 1:
+            if (go->GetParent()) { go->GetParent()->ChildAdded(dataGo1); }
+        break;
+
+        case 2:
+            if (go->GetParent()) { go->GetParent()->ChildRemoved(dataGo1); }
+        break;
+
+        case 3:
+            PROPAGATE_EVENT(ParentChanged(dataGo1, dataGo2), go->GetChildren());
+        break;
+
+        default: ASSERT(false);
     }
 }
-void GameObject::ChildrenAdded() { PropagateChildrenEvent(this, true); }
-void GameObject::ChildrenRemoved() { PropagateChildrenEvent(this, false); }
+void GameObject::ChildAdded(GameObject *addedChild)
+{ PropagateChildrenEvent(this, 1, addedChild, nullptr); }
+
+void GameObject::ChildRemoved(GameObject *removedChild)
+{ PropagateChildrenEvent(this, 2, removedChild, nullptr); }
+
+void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
+{ PropagateChildrenEvent(this, 3, oldParent, newParent); }
 
 void GameObject::RenderGizmos()
 {
@@ -296,12 +325,14 @@ bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 
 void GameObject::SetParent(GameObject *newParent, int _index)
 {
-    ASSERT(newParent != this);
+    ASSERT( newParent != this );
     ASSERT( !newParent || !newParent->IsChildOf(this) );
+
+    GameObject *oldParent = p_parent;
     if (parent)
     {
         parent->m_children.Remove(this);
-        parent->ChildrenRemoved();
+        parent->ChildRemoved(this);
     }
 
     p_parent = newParent;
@@ -309,8 +340,10 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     {
         int index = (_index != -1 ? _index : parent->GetChildren().Size());
         p_parent->m_children.Insert(index, this);
-        p_parent->ChildrenAdded();
+        p_parent->ChildAdded(this);
     }
+
+    ParentChanged(oldParent, newParent);
 }
 
 GameObject *GameObject::GetParent() { return p_parent; }

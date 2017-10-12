@@ -66,6 +66,10 @@ void UIScrollBar::SetScrollingPercent(float percent)
 
 void UIScrollBar::SetLength(int lengthPx)
 {
+    if (lengthPx < 100)
+    {
+        int a  = 2;
+    }
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
     if (IsVertical()) { barLE->SetPreferredHeight(lengthPx); }
     else { barLE->SetPreferredWidth(lengthPx); }

@@ -52,7 +52,6 @@ public:
     void SetScale(const Vector3 &v);
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
-    void SetIgnoreTransform(bool ignore);
 
     Vector3 TransformPoint(const Vector3 &point) const;
     Vector3 InverseTransformPoint(const Vector3 &point) const;
@@ -94,8 +93,6 @@ public:
     const Vector3& GetLocalScale() const;
     Vector3 GetScale() const;
 
-    bool GetIgnoreTransform() const;
-
     static Vector3    GetPositionFromMatrix4(const Matrix4 &transformMatrix);
     static Quaternion GetRotationFromMatrix4(const Matrix4 &transformMatrix);
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
@@ -114,7 +111,6 @@ protected:
     Transform();
 
 private:
-    bool m_ignoreTransform = false;
     Vector3    m_localPosition  = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;

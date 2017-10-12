@@ -35,8 +35,9 @@ public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
-    virtual void ChildrenAdded();
-    virtual void ChildrenRemoved();
+    virtual void ChildAdded(GameObject *addedChild);
+    virtual void ChildRemoved(GameObject *removedChild);
+    virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
     virtual void Destroy();
 
     virtual void OnEnabled() override;
@@ -76,10 +77,10 @@ public:
     const List<Component*>& GetComponents() const;
 
     template <class T>
-    T* GetComponentInParent() const;
+    T* GetComponentInParent(bool recursive = true) const;
 
     template <class T>
-    List<T*> GetComponentsInParent() const;
+    List<T*> GetComponentsInParent(bool recursive = true) const;
 
     template <class T>
     T* GetComponentInChildren(bool recursive = true) const;
