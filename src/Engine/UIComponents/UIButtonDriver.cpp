@@ -3,11 +3,11 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIVerticalLayout.h"
 
 USING_NAMESPACE_BANG
 
@@ -44,11 +44,11 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
 
     UIButtonDriver *buttonDriv = go->AddComponent<UIButtonDriver>();
 
-    UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
-    fl->SetPaddingBot(5);
-    fl->SetPaddingTop(5);
-    fl->SetPaddingRight(10);
-    fl->SetPaddingLeft (10);
+    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
+    vl->SetPaddingBot(5);
+    vl->SetPaddingTop(5);
+    vl->SetPaddingRight(10);
+    vl->SetPaddingLeft (10);
 
     UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);

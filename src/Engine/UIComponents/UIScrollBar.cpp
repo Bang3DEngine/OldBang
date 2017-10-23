@@ -4,7 +4,7 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -66,13 +66,11 @@ void UIScrollBar::SetScrollingPercent(float percent)
 
 void UIScrollBar::SetLength(int lengthPx)
 {
-    if (lengthPx < 100)
-    {
-        int a  = 2;
-    }
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
     if (IsVertical()) { barLE->SetPreferredHeight(lengthPx); }
     else { barLE->SetPreferredWidth(lengthPx); }
+
+    barLE->IInvalidatable<ILayoutElement>::Invalidate();
 
     SetScrollingPercent( GetScrollingPercent() );
 }
@@ -135,12 +133,12 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
     GameObject *container = scrollArea->GetContainer();
-    UIFrameLayout *contFL = container->AddComponent<UIFrameLayout>();
-    contFL->SetChildrenVerticalStretch(Stretch::None);
-    contFL->SetChildrenHorizontalStretch(Stretch::None);
-    contFL->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
-    contFL->SetChildrenVerticalAlignment(VerticalAlignment::Top);
-    contFL->SetPaddings(0);
+    UIVerticalLayout *contVL = container->AddComponent<UIVerticalLayout>();
+    contVL->SetChildrenVerticalStretch(Stretch::None);
+    contVL->SetChildrenHorizontalStretch(Stretch::None);
+    contVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
+    contVL->SetChildrenVerticalAlignment(VerticalAlignment::Top);
+    contVL->SetPaddings(0);
 
     GameObject *bar = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *barLE = bar->AddComponent<UILayoutElement>();

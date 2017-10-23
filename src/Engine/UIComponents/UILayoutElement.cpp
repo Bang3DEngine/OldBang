@@ -2,6 +2,7 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/UILayoutManager.h"
+#include "Bang/ILayoutController.h"
 
 USING_NAMESPACE_BANG
 
@@ -126,6 +127,12 @@ Vector2 UILayoutElement::_GetFlexibleSize() const
 void UILayoutElement::OnChanged()
 {
     ILayoutElement::Invalidate();
+    auto parentLayoutControllers =
+                GetGameObject()->GetComponentsInParent<ILayoutController>();
+    for (ILayoutController *controller : parentLayoutControllers)
+    {
+        controller->Invalidate();
+    }
 }
 
 Vector2i UILayoutElement::_GetMinSize() const

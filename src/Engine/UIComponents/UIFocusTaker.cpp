@@ -49,11 +49,13 @@ UIFocusTaker* UIFocusTaker::PropagateFocus(const Vector2 &mouseCoordsNDC)
             if (ndcRect.Contains(mouseCoordsNDC))
             {
                 UIFocusTaker *ft = child->GetComponent<UIFocusTaker>();
+                if (ft) { Debug_Log(ft->GetInstanceId()); } else { Debug_Log(GetInstanceId()); }
                 if (ft) { return ft->PropagateFocus(mouseCoordsNDC); }
             }
         }
     }
 
+    Debug_Log(GetInstanceId() << ": " << this);
     return ReceiveFocus();
 }
 

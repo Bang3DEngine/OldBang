@@ -9,13 +9,19 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class Component;
 FORWARD class RectTransform;
+FORWARD class ILayoutElement;
+FORWARD class ILayoutController;
 FORWARD class IRectTransformListener;
 
 class UILayoutManager
 {
 public:
     UILayoutManager();
+
+    static void OnInvalidated(ILayoutElement    *element);
+    static void OnInvalidated(ILayoutController *controller);
 
     static Vector2i GetMinSize(GameObject *go);
     static Vector2i GetPreferredSize(GameObject *go);
@@ -25,8 +31,13 @@ public:
     static void RebuildLayout(GameObject *gameObject);
     static void ForceRebuildLayout(GameObject *gameObject);
 
+    static List<GameObject*> GetLayoutableChildrenList(GameObject *go);
+
 private:
     static void OnLayoutRebuilt(GameObject *go);
+    static void OnInvalidatedLayout(Component *comp,
+                                   bool isLayoutController);
+
     static UILayoutManager *GetInstance();
 };
 

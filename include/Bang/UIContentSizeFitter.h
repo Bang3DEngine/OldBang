@@ -27,6 +27,9 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
+    // IInvalidatable
+    void OnInvalidated() override;
+
 private:
     LayoutSizeType m_verticalSizeType   = LayoutSizeType::None;
     LayoutSizeType m_horizontalSizeType = LayoutSizeType::None;

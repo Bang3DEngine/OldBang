@@ -13,13 +13,18 @@ template <class T>
 class IInvalidatable
 {
 public:
-    void Invalidate()
+    virtual void Invalidate()
     {
         if (!IsInvalid())
         {
             SetInvalid(true);
             OnInvalidated();
         }
+    }
+
+    bool IsInvalid() const
+    {
+        return SCAST<const T*>(this)->T::m_invalid;
     }
 
 protected:
@@ -31,18 +36,14 @@ protected:
         SetInvalid(false);
     }
 
-    bool IsInvalid() const
-    {
-        return SCAST<const T*>(this)->m_invalid;
-    }
+    virtual void OnInvalidated() {}
 
 private:
     void SetInvalid(bool invalid) const
     {
-        SCAST<const T*>(this)->m_invalid = invalid;
+        SCAST<const T*>(this)->T::m_invalid = invalid;
     }
 
-    virtual void OnInvalidated() {}
 };
 
 NAMESPACE_BANG_END

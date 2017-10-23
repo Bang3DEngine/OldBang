@@ -23,33 +23,38 @@ UIDirLayout::~UIDirLayout()
 {
 }
 
-Vector2i UIDirLayout::GetTotalSpacing() const
+Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
 {
     const Vector2i spacing = GetDir() * GetSpacing();
-    return spacing * SCAST<int>(gameObject->GetChildren().Size() - 1);
+    return spacing * SCAST<int>(children.Size() - 1);
 }
 
 void UIDirLayout::_ApplyLayout()
 {
-    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>(); ENSURE(rt);
+    auto children = UILayoutManager::GetLayoutableChildrenList(GetGameObject());
+
+    // if (GetGameObject()->GetName() == "MenuBarItem") { Debug_Log(children); }
 
     Vector2i layoutRectSize = rt->GetScreenSpaceRectPx().GetSize();
     layoutRectSize -= GetPaddingSize();
 
     Vector2i availableSpace = layoutRectSize;
-    availableSpace -= GetTotalSpacing();
+    availableSpace -= GetTotalSpacing(children);
 
-    Array<Vector2i> childrenRTSizes(gameObject->GetChildren().Size(),
-                                    Vector2i::Zero);
+    Array<Vector2i> childrenRTSizes(children.Size(), Vector2i::Zero);
 
-    FillChildrenMinSizes      (layoutRectSize, &childrenRTSizes, &availableSpace);
-    FillChildrenPreferredSizes(layoutRectSize, &childrenRTSizes, &availableSpace);
-    FillChildrenFlexibleSizes (layoutRectSize, &childrenRTSizes, &availableSpace);
+    FillChildrenMinSizes(layoutRectSize, children,
+                         &childrenRTSizes, &availableSpace);
+    FillChildrenPreferredSizes(layoutRectSize, children,
+                               &childrenRTSizes, &availableSpace);
+    FillChildrenFlexibleSizes(layoutRectSize, children,
+                              &childrenRTSizes, &availableSpace);
 
     // Apply actual calculation to RectTransforms Margins
     uint i = 0;
     Vector2i marginAccum (GetPaddingLeft(), GetPaddingTop());
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i spacing = (i > 0) ? (GetDir() * GetSpacing()) : Vector2i::Zero;
         marginAccum += spacing;
@@ -119,11 +124,12 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
 }
 
 void UIDirLayout::FillChildrenMinSizes(const Vector2i &layoutRectSize,
+                                       const List<GameObject*> &children,
                                        Array<Vector2i> *childrenRTSizes,
                                        Vector2i *availableSpace)
 {
     uint i = 0;
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i childRTSize = UILayoutManager::GetMinSize(child);
         if (m_vertical)
@@ -143,12 +149,13 @@ void UIDirLayout::FillChildrenMinSizes(const Vector2i &layoutRectSize,
 }
 
 void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
+                                             const List<GameObject*> &children,
                                              Array<Vector2i> *childrenRTSizes,
                                              Vector2i *availableSpace)
 {
     uint i = 0;
     Vector2i totalPrefPxToAdd = Vector2i::Zero;
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i minChildSize = (*childrenRTSizes)[i];
         Vector2i pxToAdd = UILayoutManager::GetPreferredSize(child) - minChildSize;
@@ -162,7 +169,7 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
     i = 0;
     Array<Vector2i> newChildRTSizes;
     Array<Vector2i> childPreferredSizes;
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i minChildSize = (*childrenRTSizes)[i];
         Vector2i childPrefSize = UILayoutManager::GetPreferredSize(child);
@@ -200,41 +207,16 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
         newChildRTSizes[i] = newChildRTSize;
     }
 
-    // Make up for precision problems (make sure we havent missed any pixel)
-    /*for (i = 0; i < newChildRTSizes.Size(); ++i)
-    {
-        Vector2i childPrefSize = childPreferredSizes[i];
-        Vector2i newChildRTSize = newChildRTSizes[i];
-        Vector2i prefPxToFill = (childPrefSize - newChildRTSize);
-        if (m_vertical)
-        {
-            if(prefPxToFill.y > 0)
-            {
-                newChildRTSize.y  += prefPxToFill.y;
-                availableSpace->y -= prefPxToFill.y;
-            }
-        }
-        else
-        {
-            if(prefPxToFill.x > 0)
-            {
-                newChildRTSize.x  += prefPxToFill.x;
-                availableSpace->x -= prefPxToFill.x;
-            }
-        }
-
-        newChildRTSizes[i] = newChildRTSize;
-    }*/
-
     *childrenRTSizes = newChildRTSizes;
 }
 
 void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
+                                            const List<GameObject*> &children,
                                             Array<Vector2i> *childrenRTSizes,
                                             Vector2i *availableSpace)
 {
     Vector2d totalChildrenFlexSize = Vector2d::Zero;
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         totalChildrenFlexSize += Vector2d(UILayoutManager::GetFlexibleSize(child));
     }
@@ -245,7 +227,7 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
     Array<Vector2i> newChildRTSizes;
     Array<Vector2d> childFlexibleSizes;
     Vector2d originalAvailableSpace( *availableSpace );
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i prefChildSize    ( (*childrenRTSizes)[i] );
         Vector2d childFlexSize    ( UILayoutManager::GetFlexibleSize(child) );
@@ -269,42 +251,26 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
         ++i;
     }
 
-    // Make up for precision problems (make sure we havent missed any pixel)
-    /*for (i = 0; i < newChildRTSizes.Size(); ++i)
-    {
-        if (availableSpace->x == 0 && availableSpace->y == 0) { break; }
-
-        Vector2 childFlexSize = childFlexibleSizes[i];
-        if (m_vertical && childFlexSize.y > 0.0f && availableSpace->y != 0)
-        {
-            newChildRTSizes[i].y += availableSpace->y;
-            availableSpace->y = 0;
-        }
-
-        if (!m_vertical && childFlexSize.x > 0.0f && availableSpace->x != 0)
-        {
-            newChildRTSizes[i].x += availableSpace->x;
-            availableSpace->x = 0;
-        }
-    }*/
-
     *childrenRTSizes = newChildRTSizes;
 }
 
 Vector2i UIDirLayout::_GetMinSize() const
 {
-    return GetSize(LayoutSizeType::Min);
+    return GetSize(UILayoutManager::GetLayoutableChildrenList( GetGameObject() ),
+                   LayoutSizeType::Min);
 }
 
 Vector2i UIDirLayout::_GetPreferredSize() const
 {
-    return GetSize(LayoutSizeType::Preferred);
+    return GetSize(UILayoutManager::GetLayoutableChildrenList( GetGameObject() ),
+                   LayoutSizeType::Preferred);
 }
 
-Vector2i UIDirLayout::GetSize(LayoutSizeType sizeType) const
+Vector2i UIDirLayout::GetSize(const List<GameObject*> &children,
+                              LayoutSizeType sizeType) const
 {
     Vector2i totalSize = Vector2i::Zero;
-    for (GameObject *child : gameObject->GetChildren())
+    for (GameObject *child : children)
     {
         Vector2i childSize (UILayoutManager::GetSize(child, sizeType));
         if (m_vertical)
@@ -318,7 +284,7 @@ Vector2i UIDirLayout::GetSize(LayoutSizeType sizeType) const
             totalSize.y = Math::Max(totalSize.y, childSize.y);
         }
     }
-    return totalSize + GetTotalSpacing() + GetPaddingSize();
+    return totalSize + GetTotalSpacing(children) + GetPaddingSize();
 }
 
 void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }

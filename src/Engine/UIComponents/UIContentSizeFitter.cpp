@@ -85,4 +85,10 @@ void UIContentSizeFitter::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("VerticalSizeType", GetVerticalSizeType());
 }
 
+void UIContentSizeFitter::OnInvalidated()
+{
+    IInvalidatable<ILayoutController>::OnInvalidated();
+
+}
+
 

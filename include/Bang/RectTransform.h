@@ -80,6 +80,7 @@ public:
     void OnDisabled() override;
 
     // IRectTransformListener
+    void OnRectTransformChanged() override;
     void OnParentRectTransformChanged() override;
     void OnChildrenRectTransformChanged() override;
 
@@ -91,6 +92,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
     // IInvalidatable
+    void Invalidate() override;
     void OnInvalidated() override;
 
 private:
@@ -101,6 +103,7 @@ private:
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
 
+    void PropagateParentRectTransformChangedEvent() const;
     void PropagateChildrenRectTransformChangedEvent() const;
 
     friend class UILayoutManager;

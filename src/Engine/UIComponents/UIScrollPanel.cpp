@@ -71,9 +71,9 @@ void UIScrollPanel::OnUpdate()
         // Debug_Log("=====================");
     }
 
-/*
     if (Input::GetKeyDown(Key::E)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y - 10); }
     if (Input::GetKeyDown(Key::R)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y + 10); }
+    /*
     Debug_Peek(contentSize);
     Debug_Peek(GetScrollArea()->GetScrolling());
     */
@@ -98,46 +98,6 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 Vector2i UIScrollPanel::GetContentSize() const
 {
     return UILayoutManager::GetPreferredSize(GetContainer());
-/*
-    static List<Vector2i> previousSizes;
-    List<Vector2i> currentSizes;
-
-    bool first = true;
-    Recti contentUnionRect;
-    List<RectTransform*> contentRTs =
-                 GetContainer()->GetComponentsInChildrenOnly<RectTransform>();
-    for (RectTransform *rt : contentRTs)
-    {
-        Recti rtRect = rt->GetScreenSpaceRectPx();
-        if (first) { contentUnionRect = rtRect; first = false; }
-        else
-        {
-            contentUnionRect = Recti::Union(contentUnionRect, rtRect);
-        }
-        currentSizes.PushBack(rtRect.GetSize());
-    }
-
-    if (!previousSizes.IsEmpty() && previousSizes.Size() == currentSizes.Size())
-    {
-        int i = 0;
-        auto itPrev = previousSizes.Begin();
-        auto itCurr = currentSizes.Begin();
-        while (itPrev != previousSizes.End())
-        {
-            if ((*itPrev).y != (*itCurr).y)
-            {
-                Debug_Log("Differ " << *itPrev << " vs. " << *itCurr);
-                int a = 2;
-            }
-            ++i;
-            ++itPrev;
-            ++itCurr;
-        }
-    }
-    previousSizes = currentSizes;
-
-    return contentUnionRect.GetSize();
-    */
 }
 
 Vector2i UIScrollPanel::GetContainerSize() const

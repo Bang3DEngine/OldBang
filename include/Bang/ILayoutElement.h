@@ -12,13 +12,19 @@ class ILayoutElement : public IInvalidatable<ILayoutElement>
     IINVALIDATABLE(ILayoutElement)
 
 public:
+    virtual void OnInvalidated() override;
+
+    void SetIgnoreLayout(bool ignoreLayout);
     void SetLayoutPriority(int layoutPriority);
+
+    bool GetIgnoreLayout() const;
 
 protected:
     ILayoutElement();
     virtual ~ILayoutElement();
 
 private:
+    bool m_ignoreLayout = false;
     int m_layoutPriority = 0;
     mutable Vector2i m_cachedMinSize        = -Vector2i::One;
     mutable Vector2i m_cachedPreferredSize  = -Vector2i::One;

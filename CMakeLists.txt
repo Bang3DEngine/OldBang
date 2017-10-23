@@ -230,7 +230,6 @@ ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFrameLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp

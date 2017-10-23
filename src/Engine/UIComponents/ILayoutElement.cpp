@@ -9,9 +9,25 @@ USING_NAMESPACE_BANG
 ILayoutElement::ILayoutElement() {}
 ILayoutElement::~ILayoutElement() {}
 
+void ILayoutElement::SetIgnoreLayout(bool ignoreLayout)
+{
+    m_ignoreLayout = ignoreLayout;
+}
+
 void ILayoutElement::SetLayoutPriority(int layoutPriority)
 {
     m_layoutPriority = layoutPriority;
+}
+
+void ILayoutElement::OnInvalidated()
+{
+    IInvalidatable<ILayoutElement>::OnInvalidated();
+    UILayoutManager::OnInvalidated(this);
+}
+
+bool ILayoutElement::GetIgnoreLayout() const
+{
+    return m_ignoreLayout;
 }
 
 int ILayoutElement::GetLayoutPriority() const
@@ -66,7 +82,7 @@ Vector2 ILayoutElement::GetSize(LayoutSizeType sizeType) const
 
 void ILayoutElement::CalculateCachedSizes() const
 {
-    if (IsInvalid())
+    // if (IsInvalid())
     {
         m_cachedMinSize       = _GetMinSize();
         m_cachedPreferredSize = _GetPreferredSize();

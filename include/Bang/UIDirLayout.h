@@ -1,6 +1,7 @@
 #ifndef UIDIRLAYOUT_H
 #define UIDIRLAYOUT_H
 
+#include "Bang/List.h"
 #include "Bang/UIGroupLayout.h"
 
 NAMESPACE_BANG_BEGIN
@@ -23,7 +24,6 @@ public:
 
     int GetSpacing() const;
     Vector2i GetDir() const;
-    Vector2i GetTotalSpacing() const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
@@ -38,7 +38,9 @@ private:
     int m_spacingPx = 0;
     bool m_vertical = false;
 
-    Vector2i GetSize(LayoutSizeType sizeType) const;
+    Vector2i GetTotalSpacing(const List<GameObject*> &children) const;
+    Vector2i GetSize(const List<GameObject*> &children,
+                     LayoutSizeType sizeType) const;
 
     void ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
                                          RectTransform *childRT,
@@ -46,12 +48,15 @@ private:
                                          const Vector2i &childRTSize);
 
     void FillChildrenMinSizes(const Vector2i &layoutRectSize,
+                              const List<GameObject*> &children,
                               Array<Vector2i> *childrenRTSizes,
                               Vector2i *availableSpace);
     void FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
+                                    const List<GameObject*> &children,
                                     Array<Vector2i> *childrenRTSizes,
                                     Vector2i *availableSpace);
     void FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
+                                   const List<GameObject*> &children,
                                    Array<Vector2i> *childrenRTSizes,
                                    Vector2i *availableSpace);
 };

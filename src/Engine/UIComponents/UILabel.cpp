@@ -3,9 +3,9 @@
 #include "Bang/UIMask.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIVerticalLayout.h"
 
 USING_NAMESPACE_BANG
 
@@ -26,7 +26,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
 
     UILabel *label = go->AddComponent<UILabel>();
 
-    UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
+    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
 
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask

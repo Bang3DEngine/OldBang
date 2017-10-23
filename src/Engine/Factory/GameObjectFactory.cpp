@@ -21,7 +21,6 @@
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtonDriver.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -39,12 +38,20 @@ GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
     return go;
 }
 
-GameObject *GameObjectFactory::CreateUIGameObject(bool addRectTransform)
+GameObject *GameObjectFactory::CreateUIGameObject(bool addComponents)
 {
     GameObject *go = new GameObject();
-    if (addRectTransform) { go->AddComponent<RectTransform>(); }
-    go->AddComponent<UIFocusTaker>();
+    GameObjectFactory::CreateUIGameObjectInto(go, addComponents);
     return go;
+}
+
+void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
+{
+    if (addComps)
+    {
+        go->AddComponent<RectTransform>();
+        go->AddComponent<UIFocusTaker>();
+    }
 }
 
 Scene *GameObjectFactory::CreateScene()
@@ -57,9 +64,8 @@ Scene *GameObjectFactory::CreateScene()
 Scene *GameObjectFactory::CreateUIScene()
 {
     Scene *scene = new Scene();
-    scene->AddComponent<RectTransform>();
-    scene->AddComponent<UIFocusTaker>();
-    scene->AddComponent<UICanvas>();
+    GameObjectFactory::CreateUIGameObjectInto(scene);
+    GameObjectFactory::CreateUICanvasInto(scene);
     return scene;
 }
 
@@ -92,6 +98,11 @@ Scene *GameObjectFactory::CreateDefaultScene()
 UICanvas *GameObjectFactory::CreateUICanvas()
 {
     GameObject *go = GameObjectFactory::CreateUIGameObject();
+    return GameObjectFactory::CreateUICanvasInto(go);
+}
+
+UICanvas* GameObjectFactory::CreateUICanvasInto(GameObject *go)
+{
     UICanvas *canvas = go->AddComponent<UICanvas>();
     return canvas;
 }

@@ -24,13 +24,15 @@ class GameObjectFactory
 {
 public:
     static GameObject* CreateGameObject(bool addTransform = true);
-    static GameObject* CreateUIGameObject(bool addRectTransform = true);
+    static GameObject* CreateUIGameObject(bool addComponents = true);
+    static void CreateUIGameObjectInto(GameObject *go, bool addComponents = true);
 
     static Scene* CreateScene();
     static Scene* CreateUIScene();
     static Scene* CreateDefaultScene();
 
     static UICanvas*        CreateUICanvas();
+    static UICanvas*        CreateUICanvasInto(GameObject *go);
     static UIImageRenderer* CreateUIImage(const Color &color = Color::White);
     static UIImageRenderer* CreateUIImage(const Color &color,
                                           const Vector2i &size);

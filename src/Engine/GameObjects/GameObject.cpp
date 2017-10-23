@@ -466,12 +466,12 @@ String GameObject::ToString() const
 
 String GameObject::GetInstanceId() const
 {
-    String instanceId = name;
-    if (parent)
+    String instanceId = GetName();
+    if ( GetParent() )
     {
-        instanceId.Prepend( parent->GetInstanceId() + "_");
+        instanceId.Prepend( GetParent()->GetInstanceId() + "_");
         GameObject *ncThis = const_cast<GameObject*>(this);
-        int indexInParent = parent->GetChildren().IndexOf(ncThis);
+        int indexInParent = GetParent()->GetChildren().IndexOf(ncThis);
         instanceId.Append( String::ToString(indexInParent) );
     }
     return instanceId;

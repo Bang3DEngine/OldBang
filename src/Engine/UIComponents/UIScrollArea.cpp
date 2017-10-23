@@ -2,10 +2,10 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
@@ -22,6 +22,8 @@ UIScrollArea::~UIScrollArea()
 void UIScrollArea::OnUpdate()
 {
     Component::OnUpdate();
+
+    GetGameObject()->GetComponent<RectTransform>()->Invalidate();
 }
 
 void UIScrollArea::SetScrolling(const Vector2i &scrollPx)
@@ -77,9 +79,9 @@ void UIScrollArea::UpdatePaddings()
 UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 {
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
-    UIFrameLayout *fl = go->AddComponent<UIFrameLayout>();
-    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
-    fl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
+    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
+    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
+    vl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);

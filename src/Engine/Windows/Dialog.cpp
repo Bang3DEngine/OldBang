@@ -13,7 +13,6 @@
 #include "Bang/DialogWindow.h"
 #include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
@@ -40,6 +39,7 @@ DialogWindow *Bang::Dialog::Error(const String &title,
 
         Scene *scene = CreateMsgScene(msg);
         SceneManager::LoadScene(scene);
+        Application::GetInstance()->BlockingWait(dialog);
     }
     return dialog;
 }
@@ -69,8 +69,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
 {
     Scene *scene = GameObjectFactory::CreateUIScene();
 
-    UIFrameLayout *fl = scene->AddComponent<UIFrameLayout>();
-    fl->SetPaddings(10);
+    UIVerticalLayout *vlMain = scene->AddComponent<UIVerticalLayout>();
+    vlMain->SetPaddings(10);
 
     GameObject *vlGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
@@ -91,7 +91,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
 
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
     fileList->SetFileExtensions(extensions);
-    fileList->SetCurrentPath(Paths::EngineAssets());
+    // fileList->SetCurrentPath(Paths::EngineAssets());
+    fileList->SetCurrentPath(Path("/home/sephirot47"));
 
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
     inputPathText->GetText()->SetContent("");
@@ -105,8 +106,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     );
     fileList->SetFileAcceptedCallback( Dialog::FileAcceptedCallback );
 
-    UILayoutElement *itle = inputPathText->gameObject->AddComponent<UILayoutElement>();
-    itle->SetFlexibleSize(Vector2(1,1));
+    UILayoutElement *itLE = inputPathText->gameObject->AddComponent<UILayoutElement>();
+    itLE->SetFlexibleSize(Vector2(1));
 
     UIButtonDriver *goButton = GameObjectFactory::CreateUIButton();
     goButton->GetText()->SetContent("Go");
@@ -164,7 +165,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     Scene *scene = GameObjectFactory::CreateUIScene();
 
     GameObject *container = GameObjectFactory::CreateUIGameObject();
-    UIFrameLayout *containerL = container->AddComponent<UIFrameLayout>();
+    UIVerticalLayout *containerL = container->AddComponent<UIVerticalLayout>();
     containerL->SetPaddings(20);
 
     GameObject *mainVLayoutGo = GameObjectFactory::CreateUIGameObject();
@@ -225,7 +226,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
        buttonsGo->AddChild(button0->gameObject);
        buttonsGo->AddChild(button1->gameObject);
 
-       return scene;
+    return scene;
 }
 
 void Dialog::FileAcceptedCallback(const Path &path)

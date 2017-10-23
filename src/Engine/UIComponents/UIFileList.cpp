@@ -7,10 +7,10 @@
 #include "Bang/UIFocusTaker.h"
 #include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -148,11 +148,10 @@ void UIFileList::FilterPathsByExtension(List<Path> *paths) const
 // UIFileListEntry
 UIFileListEntry::UIFileListEntry()
 {
-    AddComponent<RectTransform>();
-    AddComponent<UIFocusTaker>();
+    GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIFrameLayout *fl = AddComponent<UIFrameLayout>();
-    fl->SetPaddings(5);
+    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
+    vl->SetPaddings(5);
 
     m_bg = AddComponent<UIImageRenderer>();
     m_bg->SetTint(Color::Zero);

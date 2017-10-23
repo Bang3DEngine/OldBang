@@ -51,7 +51,7 @@ String Component::ToString() const
 
 String Component::GetInstanceId() const
 {
-    String instanceId = "Component";
+    String instanceId = GetClassName();
     if (gameObject)
     {
         instanceId.Prepend(gameObject->GetInstanceId() + "_");

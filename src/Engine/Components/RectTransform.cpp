@@ -328,11 +328,18 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetLineWidth(1.0f);
 
     Rect r = GetScreenSpaceRectNDC();
-    Color c = Color::Green; // Random::GetColorOpaque();
+
+    Random::SetSeed(GetInstanceId());
+    Color bgColor = Random::GetColorOpaque();
+    Gizmos::SetColor(bgColor);
+
+    Color c = Color::Green;
     Gizmos::SetColor(c);
-    /*
+
+    // Gizmos::RenderFillRect(r);
     Gizmos::RenderRect(r);
 
+    /*
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
     Gizmos::SetColor(Color::Yellow);
@@ -386,26 +393,33 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }
 
+void RectTransform::Invalidate()
+{
+    IInvalidatable<Transform>::Invalidate();
+}
+
 void RectTransform::OnInvalidated()
 {
     // Propagate to RectTransformListeners
-    auto rtListeners = GetGameObject()-> GetComponents<IRectTransformListener>();
-    for (IRectTransformListener *rtListener : rtListeners)
-    {
-        rtListener->OnRectTransformChanged();
-    }
-
-    OnParentRectTransformChanged();
-    OnChildrenRectTransformChanged();
+    OnRectTransformChanged();
 }
 
 void RectTransform::OnEnabled()  { Invalidate(); }
 void RectTransform::OnDisabled() { Invalidate(); }
 
-void RectTransform::OnParentRectTransformChanged()
+void RectTransform::OnRectTransformChanged()
 {
-    Invalidate();
+    auto rtListeners = GetGameObject()->GetComponents<IRectTransformListener>();
+    for (IRectTransformListener *rtListener : rtListeners)
+    {
+        if (rtListener != this) { rtListener->OnRectTransformChanged(); }
+    }
+    PropagateParentRectTransformChangedEvent();
+    PropagateChildrenRectTransformChangedEvent();
+}
 
+void RectTransform::PropagateParentRectTransformChangedEvent() const
+{
     // Propagate to children
     auto rtChildrenListeners =
     GetGameObject()->GetComponentsInChildrenOnly<IRectTransformListener>(false);
@@ -413,14 +427,10 @@ void RectTransform::OnParentRectTransformChanged()
     {
         rtListener->OnParentRectTransformChanged();
     }
-
 }
-void RectTransform::OnChildrenRectTransformChanged()
+
+void RectTransform::PropagateChildrenRectTransformChangedEvent() const
 {
-    if (GetGameObject()->GetName() == "BARCONT")
-    {
-        Debug_Log("AAAAAAAAAAAAAAAAAAAAA OnChildrenRectTransformChanged");
-    }
     // Propagate to parent
     auto rtParentLists =
             GetGameObject()->GetComponentsInParent<IRectTransformListener>(false);
@@ -428,4 +438,14 @@ void RectTransform::OnChildrenRectTransformChanged()
     {
         parentRTListener->OnChildrenRectTransformChanged();
     }
+}
+
+void RectTransform::OnParentRectTransformChanged()
+{
+    Invalidate();
+}
+
+void RectTransform::OnChildrenRectTransformChanged()
+{
+    PropagateChildrenRectTransformChangedEvent();
 }
