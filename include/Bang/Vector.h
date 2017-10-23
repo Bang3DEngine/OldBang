@@ -5,6 +5,7 @@
 #include <type_traits>
 
 #include "Bang/Math.h"
+#include "Bang/Axis.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -194,6 +195,19 @@ public: \
         return res; \
     } \
  \
+    Axis GetAxis() const \
+    { \
+        return x == 1 ? Axis::Horizontal : Axis::Vertical; \
+    } \
+    const T& GetAxis(Axis axis) const \
+    { \
+        return (axis == Axis::Horizontal) ? x : y; \
+    } \
+    static VECTOR_G<T> FromAxis(Axis axis) \
+    { \
+        return (axis == Axis::Horizontal) ? VECTOR_G<T>::Right : VECTOR_G<T>::Up; \
+    } \
+    \
     const T& operator[](::std::size_t i) const \
     { \
         return (reinterpret_cast<const T*>(this))[i]; \

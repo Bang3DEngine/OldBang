@@ -82,7 +82,7 @@ Vector2 ILayoutElement::GetSize(LayoutSizeType sizeType) const
 
 void ILayoutElement::CalculateCachedSizes() const
 {
-    // if (IsInvalid())
+    if (IsInvalid())
     {
         m_cachedMinSize       = _GetMinSize();
         m_cachedPreferredSize = _GetPreferredSize();

@@ -108,7 +108,6 @@ Vector2i UITextRenderer::_GetPreferredSize() const
             Rect boundingRect = Rect::Union(crs.Begin(), crs.End());
             Recti boundingRectPx = GL::FromGlobalNDCToPixels(boundingRect);
             prefSize = boundingRectPx.GetSize();
-            Debug_Peek(prefSize);
         }
         break;
     }

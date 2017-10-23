@@ -7,7 +7,6 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/UIContentSizeFitter.h"
 
 USING_NAMESPACE_BANG
 

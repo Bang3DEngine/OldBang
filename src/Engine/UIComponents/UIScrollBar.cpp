@@ -40,7 +40,7 @@ void UIScrollBar::OnUpdate()
         Vector2 mousePercent = ((leftSpace != Vector2::Zero) ?
             Vector2(offsettedMouseCoords - scrollRectPx.GetMin()) / leftSpace :
             Vector2::Zero);
-        float scrollPercent = IsVertical() ? mousePercent.y : mousePercent.x;
+        float scrollPercent = mousePercent.GetAxis( GetAxis() );
         scrollPercent = Math::Clamp(scrollPercent, 0.0f, 1.0f);
 
         SetScrollingPercent(scrollPercent);
@@ -48,26 +48,25 @@ void UIScrollBar::OnUpdate()
     m_wasGrabbed = isBeingGrabbed;
 }
 
+void UIScrollBar::SetScrolling(int scrollingPx)
+{
+    m_scrollingPx = scrollingPx;
+
+    Vector2i scrolling = (GetAxis() == Axis::Vertical) ?
+                          Vector2i(0, scrollingPx) : Vector2i(scrollingPx, 0);
+    GetScrollArea()->SetScrolling(scrolling);
+}
+
 void UIScrollBar::SetScrollingPercent(float percent)
 {
-    m_scrollingPercent = percent;
-
-    Recti rectPx = GetScrollingRect();
-    int containerLength = (IsVertical() ? rectPx.GetHeight() : rectPx.GetWidth())
-                          - GetLength();
-
-    int scrollingPx = Math::Round<int>(percent * containerLength);
-
-    scrollingPx = -scrollingPx;
-    Vector2i scrolling = IsVertical() ? Vector2i(0, scrollingPx) :
-                                        Vector2i(scrollingPx, 0);
-    GetScrollArea()->SetScrolling(scrolling);
+    int scrollingPx = Math::Round<int>(percent * GetScrollingSpacePx());
+    SetScrolling(-scrollingPx);
 }
 
 void UIScrollBar::SetLength(int lengthPx)
 {
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    if (IsVertical()) { barLE->SetPreferredHeight(lengthPx); }
+    if (GetAxis() == Axis::Vertical) { barLE->SetPreferredHeight(lengthPx); }
     else { barLE->SetPreferredWidth(lengthPx); }
 
     barLE->IInvalidatable<ILayoutElement>::Invalidate();
@@ -79,45 +78,35 @@ void UIScrollBar::SetLengthPercent(float lengthPercent)
 {
     Vector2i length(
         Vector2::Round(Vector2(GetScrollingRect().GetSize()) * lengthPercent ) );
-    SetLength(IsVertical() ? length.y : length.x);
+    SetLength(GetAxis() == Axis::Vertical ? length.y : length.x);
 }
 
 void UIScrollBar::SetThickness(int thickPx)
 {
+    m_thickness = thickPx;
+
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    if (IsVertical()) { barLE->SetPreferredWidth(thickPx); }
+    if (GetAxis() == Axis::Vertical) { barLE->SetPreferredWidth(thickPx); }
     else { barLE->SetPreferredHeight(thickPx); }
 }
 
-void UIScrollBar::SetVertical(bool vertical)
+void UIScrollBar::SetAxis(Axis axis)
 {
     UILayoutElement *le = gameObject->GetComponent<UILayoutElement>();
-    le->SetFlexibleHeight(vertical ? 1 : 0);
-    le->SetFlexibleWidth (vertical ? 0 : 1);
+    le->SetFlexibleHeight(GetAxis() == Axis::Vertical ? 1 : 0);
+    le->SetFlexibleWidth (GetAxis() == Axis::Vertical ? 0 : 1);
+    m_axis = axis;
 }
 
+int UIScrollBar::GetScrolling() const { return m_scrollingPx; }
 float UIScrollBar::GetScrollingPercent() const
 {
-    return m_scrollingPercent;
+    return SCAST<float>(GetScrolling()) / GetScrollingSpacePx();
 }
 
-int UIScrollBar::GetLength() const
-{
-    UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    return IsVertical() ? barLE->GetMinHeight() : barLE->GetMinWidth();
-}
-
-int UIScrollBar::GetThickness() const
-{
-    UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
-    return IsVertical() ? barLE->GetMinWidth() : barLE->GetMinHeight();
-}
-
-bool UIScrollBar::IsVertical() const
-{
-    UILayoutElement *le = gameObject->GetComponent<UILayoutElement>();
-    return le->GetFlexibleHeight() == 1;
-}
+int UIScrollBar::GetLength() const { return m_length; }
+int UIScrollBar::GetThickness() const { return m_thickness; }
+Axis UIScrollBar::GetAxis() const { return m_axis; }
 
 UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 {
@@ -158,13 +147,18 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     scrollBar->p_bar = bar;
     scrollBar->p_button = btn;
     scrollBar->p_scrollArea = scrollArea;
-    scrollBar->SetVertical(true);
+    scrollBar->SetAxis(Axis::Vertical);
     scrollBar->SetLength(50);
     scrollBar->SetThickness(10);
 
     container->AddChild(bar);
 
     return scrollBar;
+}
+
+int UIScrollBar::GetScrollingSpacePx() const
+{
+    return GetScrollingRect().GetSize().GetAxis( GetAxis() );
 }
 
 Recti UIScrollBar::GetScrollingRect() const

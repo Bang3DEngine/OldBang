@@ -1,6 +1,7 @@
 #ifndef UIDIRLAYOUT_H
 #define UIDIRLAYOUT_H
 
+#include "Bang/Axis.h"
 #include "Bang/List.h"
 #include "Bang/UIGroupLayout.h"
 
@@ -23,6 +24,7 @@ public:
     void SetSpacing(int spacingPx);
 
     int GetSpacing() const;
+    Axis GetAxis() const;
     Vector2i GetDir() const;
 
     // Serializable
@@ -31,12 +33,12 @@ public:
 
 protected:
     UIDirLayout();
-    UIDirLayout(bool vertical);
+    UIDirLayout(Axis axis);
     virtual ~UIDirLayout();
 
 private:
     int m_spacingPx = 0;
-    bool m_vertical = false;
+    Axis m_axis = Axis::Horizontal;
 
     Vector2i GetTotalSpacing(const List<GameObject*> &children) const;
     Vector2i GetSize(const List<GameObject*> &children,

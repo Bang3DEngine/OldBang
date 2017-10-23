@@ -167,7 +167,7 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
     le->SetMinHeight(10);
 
-    GameObject *container = scrollPanel->GetContainer();
+    GameObject *container = GameObjectFactory::CreateUIGameObject();
 
     UIDirLayout *dirLayout;
     const bool vertical = true;
@@ -175,6 +175,8 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     else { dirLayout = container->AddComponent<UIHorizontalLayout>(); }
     dirLayout->SetSpacing(0);
     dirLayout->SetPaddings(0);
+
+    container->SetParent( scrollPanel->GetContainer() );
 
     UIListDriver *ld = go->AddComponent<UIListDriver>();
     ld->p_scrollPanel = scrollPanel;

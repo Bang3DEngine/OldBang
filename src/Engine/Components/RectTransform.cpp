@@ -126,6 +126,15 @@ void RectTransform::SetMargins(int marginAll)
     SetMargins(marginAll, marginAll, marginAll, marginAll);
 }
 
+void RectTransform::SetMarginMin(Axis axis, int marginMax)
+{
+    SetMargins(axis, GetMarginMin(axis), marginMax);
+}
+void RectTransform::SetMarginMax(Axis axis, int marginMin)
+{
+    SetMargins(axis, marginMin, GetMarginMax(axis));
+}
+
 void RectTransform::SetMargins(const Vector2i &marginRightTop,
                                const Vector2i &marginLeftBot)
 {
@@ -136,6 +145,19 @@ void RectTransform::SetMargins(const Vector2i &marginRightTop,
         m_marginLeftBot  = marginLeftBot;
         Invalidate();
     }
+}
+
+void RectTransform::SetMargins(Axis axis, const Vector2i &margins)
+{
+    SetMargins(axis, margins[0], margins[1]);
+}
+
+void RectTransform::SetMargins(Axis axis, int marginMin, int marginMax)
+{
+    if (axis == Axis::Vertical)
+    { SetMarginBot(marginMin); SetMarginTop(marginMax); }
+    if (axis == Axis::Horizontal)
+    { SetMarginLeft(marginMin); SetMarginRight(marginMax); }
 }
 
 void RectTransform::SetMargins(int left, int top, int right, int bot)
@@ -250,10 +272,19 @@ void RectTransform::AddHeightFromPivot(int height)
     SetMarginTop(  (GetPivotPosition().y - ( 1)) * height / 2 );
 }
 
-int RectTransform::GetMarginLeft() const { return m_marginLeftBot.x; }
-int RectTransform::GetMarginTop() const { return m_marginRightTop.y; }
-int RectTransform::GetMarginRight() const { return m_marginRightTop.x; }
-int RectTransform::GetMarginBot() const { return m_marginLeftBot.y; }
+int RectTransform::GetMarginLeft() const { return GetMarginLeftBot().x; }
+int RectTransform::GetMarginTop() const { return GetMarginRightTop().y; }
+int RectTransform::GetMarginRight() const { return GetMarginRightTop().x; }
+int RectTransform::GetMarginBot() const { return GetMarginLeftBot().y; }
+int RectTransform::GetMarginMin(Axis axis) const { return GetMargins(axis)[0]; }
+int RectTransform::GetMarginMax(Axis axis) const { return GetMargins(axis)[1]; }
+Vector2 RectTransform::GetMargins(Axis axis) const
+{
+    return axis == Axis::Horizontal ?
+                Vector2(GetMarginLeft(), GetMarginRight()) :
+                Vector2(GetMarginBot(),  GetMarginTop());
+
+}
 
 const Vector2i& RectTransform::GetMarginLeftBot() const { return m_marginLeftBot; }
 const Vector2i& RectTransform::GetMarginRightTop() const { return m_marginRightTop; }
@@ -337,7 +368,7 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetColor(c);
 
     // Gizmos::RenderFillRect(r);
-    Gizmos::RenderRect(r);
+    // Gizmos::RenderRect(r);
 
     /*
     Gizmos::SetColor(Color::Yellow);

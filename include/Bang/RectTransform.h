@@ -29,8 +29,12 @@ public:
     void AddMarginRight(int marginRight);
     void AddMarginBot(int marginBot);
     void SetMargins(int marginAll);
+    void SetMarginMin(Axis axis, int marginMax);
+    void SetMarginMax(Axis axis, int marginMin);
     void SetMargins(const Vector2i& marginRightTop,
                     const Vector2i& marginLeftBot);
+    void SetMargins(Axis axis, const Vector2i &margins);
+    void SetMargins(Axis axis, int marginMin, int marginMax);
     void SetMargins(int left, int top, int right, int bot);
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
@@ -53,6 +57,9 @@ public:
     int GetMarginTop()   const;
     int GetMarginRight() const;
     int GetMarginBot()   const;
+    int GetMarginMin(Axis axis) const;
+    int GetMarginMax(Axis axis) const;
+    Vector2 GetMargins(Axis axis) const;
     const Vector2i& GetMarginRightTop() const;
     const Vector2i& GetMarginLeftBot() const;
     const Vector2& GetPivotPosition()  const;

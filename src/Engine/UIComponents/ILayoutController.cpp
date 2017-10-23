@@ -11,10 +11,8 @@ USING_NAMESPACE_BANG
 #include "Bang/GameObject.h"
 void ILayoutController::ApplyLayout()
 {
-    // if (IsInvalid())
+    if (IsInvalid())
     {
-        // Debug_Log("Applying layout..." << DCAST<Component*>(this)->
-        //                                   GetGameObject()->GetName());
         _ApplyLayout();
         Validate();
     }

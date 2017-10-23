@@ -2,7 +2,7 @@
 
 USING_NAMESPACE_BANG
 
-UIVerticalLayout::UIVerticalLayout() : UIDirLayout(true)
+UIVerticalLayout::UIVerticalLayout() : UIDirLayout(Axis::Vertical)
 {
 
 }

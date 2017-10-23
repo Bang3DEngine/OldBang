@@ -10,7 +10,6 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
 FORWARD class UIImageRenderer;
-FORWARD class UIContentSizeFitter;
 
 class UIScrollArea : public IComponentDriver<UIScrollArea>,
                      public Component

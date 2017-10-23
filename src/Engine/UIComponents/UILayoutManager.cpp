@@ -84,9 +84,6 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
     ENSURE(rootGo);
-    // Debug_Log("\n\n\n\n\n\n\n\n");
-    // Debug_Log("======================");
-    // Debug_Log("RebuildLayout " << rootGo);
     std::queue<String> indentQueue; indentQueue.push("");
     std::queue<GameObject*> goQueue; goQueue.push(rootGo);
     while (!goQueue.empty())
@@ -112,11 +109,8 @@ void UILayoutManager::RebuildLayout(GameObject *rootGo)
         // Then, "normal" controllers
         for (ILayoutController *layoutController : nonSelfControllers)
         {
-            if (layoutController->IsInvalid()) { valid = false; }
             layoutController->ApplyLayout();
         }
-
-        // Debug_Log(currentIndent << go->ToStringStructure(false, "") << " ::: Invalid ? " <<  valid );
 
         goQueue.pop();
         indentQueue.pop();

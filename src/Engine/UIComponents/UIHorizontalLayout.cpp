@@ -2,6 +2,6 @@
 
 USING_NAMESPACE_BANG
 
-UIHorizontalLayout::UIHorizontalLayout() : UIDirLayout(false)
+UIHorizontalLayout::UIHorizontalLayout() : UIDirLayout(Axis::Horizontal)
 {
 }

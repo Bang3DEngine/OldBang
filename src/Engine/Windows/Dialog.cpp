@@ -91,8 +91,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
 
     UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
     fileList->SetFileExtensions(extensions);
-    // fileList->SetCurrentPath(Paths::EngineAssets());
-    fileList->SetCurrentPath(Path("/home/sephirot47"));
+    fileList->SetCurrentPath(Paths::EngineAssets());
 
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
     inputPathText->GetText()->SetContent("");

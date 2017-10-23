@@ -26,7 +26,7 @@ UIFileList::~UIFileList()
 void UIFileList::OnStart()
 {
     Component::OnStart();
-    SetCurrentPath( Paths::EngineAssets() );
+    SetCurrentPath( GetCurrentPath() );
 }
 
 void UIFileList::OnUpdate()
