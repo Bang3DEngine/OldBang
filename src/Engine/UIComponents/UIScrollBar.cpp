@@ -4,10 +4,10 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIVerticalLayout.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIVerticalLayout.h"
 
 USING_NAMESPACE_BANG
 
@@ -48,23 +48,27 @@ void UIScrollBar::OnUpdate()
     m_wasGrabbed = isBeingGrabbed;
 }
 
-void UIScrollBar::SetScrolling(int scrollingPx)
+void UIScrollBar::SetScrolling(int _scrollingPx)
 {
+    int scrollingPx = Math::Clamp(_scrollingPx, 0, GetScrollingSpacePx());
     m_scrollingPx = scrollingPx;
 
     Vector2i scrolling = (GetAxis() == Axis::Vertical) ?
-                          Vector2i(0, scrollingPx) : Vector2i(scrollingPx, 0);
+                          Vector2i(0, -scrollingPx) : Vector2i(scrollingPx, 0);
     GetScrollArea()->SetScrolling(scrolling);
 }
 
-void UIScrollBar::SetScrollingPercent(float percent)
+void UIScrollBar::SetScrollingPercent(float _percent)
 {
+    float percent = Math::Clamp(_percent, 0.0f, 1.0f);
     int scrollingPx = Math::Round<int>(percent * GetScrollingSpacePx());
-    SetScrolling(-scrollingPx);
+    SetScrolling(scrollingPx);
 }
 
 void UIScrollBar::SetLength(int lengthPx)
 {
+    m_length = lengthPx;
+
     UILayoutElement *barLE = GetBar()->GetComponent<UILayoutElement>();
     if (GetAxis() == Axis::Vertical) { barLE->SetPreferredHeight(lengthPx); }
     else { barLE->SetPreferredWidth(lengthPx); }
@@ -92,16 +96,18 @@ void UIScrollBar::SetThickness(int thickPx)
 
 void UIScrollBar::SetAxis(Axis axis)
 {
+    m_axis = axis;
+
     UILayoutElement *le = gameObject->GetComponent<UILayoutElement>();
     le->SetFlexibleHeight(GetAxis() == Axis::Vertical ? 1 : 0);
     le->SetFlexibleWidth (GetAxis() == Axis::Vertical ? 0 : 1);
-    m_axis = axis;
 }
 
 int UIScrollBar::GetScrolling() const { return m_scrollingPx; }
 float UIScrollBar::GetScrollingPercent() const
 {
-    return SCAST<float>(GetScrolling()) / GetScrollingSpacePx();
+    int scrollSpacePx = GetScrollingSpacePx();
+    return scrollSpacePx > 0 ? SCAST<float>(GetScrolling()) / scrollSpacePx : 0;
 }
 
 int UIScrollBar::GetLength() const { return m_length; }
@@ -158,7 +164,9 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 
 int UIScrollBar::GetScrollingSpacePx() const
 {
-    return GetScrollingRect().GetSize().GetAxis( GetAxis() );
+    int scrollingSpace = GetScrollingRect().GetSize().GetAxis( GetAxis() );
+    scrollingSpace -= GetLength();
+    return  Math::Max(scrollingSpace, 0);
 }
 
 Recti UIScrollBar::GetScrollingRect() const

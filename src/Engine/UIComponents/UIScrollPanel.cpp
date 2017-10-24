@@ -27,62 +27,36 @@ void UIScrollPanel::OnUpdate()
 {
     Component::OnUpdate();
 
-    Vector2i contentSize( GetContentSize() );
-    if (contentSize != Vector2i::Zero)
+    Axis axis = GetScrollBar()->GetAxis();
+    int contentSize = GetContentSize().GetAxis(axis);
+    if (contentSize > 0)
     {
-        Vector2i containerSize( GetContainerSize() );
+        int containerSize = GetContainerSize().GetAxis(axis);
 
+        // Set bar length
         Vector2 sizeProp = Vector2(containerSize) / Vector2(contentSize);
         sizeProp = Vector2::Clamp(sizeProp, Vector2(0.1f), Vector2::One);
-
-        Axis axis = GetScrollBar()->GetAxis();
         GetScrollBar()->SetLengthPercent( sizeProp.GetAxis(axis) );
 
-        int scrollBarLength = GetScrollBar()->GetLength();
-
-        Vector2 scrollingPercent = Vector2(GetScrollBar()->GetScrollingPercent());
-        scrollingPercent = Vector2::Clamp(scrollingPercent, Vector2::Zero,
-                                          Vector2::One);
-
-        Vector2i scrollMaxAmount(contentSize - containerSize - scrollBarLength);
-        scrollMaxAmount = Vector2i::Max(scrollMaxAmount, Vector2i::One);
-
-        Vector2i scrolling( Vector2::Round( scrollingPercent *
-                                            Vector2(scrollMaxAmount) ) );
+        // Get scrolling percent from the ScrollBar
+        float scrollingPercent = GetScrollBar()->GetScrollingPercent();
+        scrollingPercent = Math::Clamp(scrollingPercent, 0.0f, 1.0f);
 
         // MouseWheel scrolling
         if (GetGameObject()->GetComponent<UIFocusTaker>()->HasFocus())
         {
             int mouseWheelPx = Input::GetMouseWheel() * WheelScrollSpeedPx;
-            scrolling -= Vector2i(0, mouseWheelPx);
+            float mouseWheelPercent = float(mouseWheelPx) / contentSize;
+            scrollingPercent -= mouseWheelPercent;
         }
 
-        // Apply scrolling
-        scrolling = Vector2i::Clamp(scrolling, Vector2i::Zero, scrollMaxAmount);
+        // Apply scrollings
+        int scrollMaxAmount = (contentSize - containerSize);
+        Vector2i scrolling(scrollingPercent * scrollMaxAmount);
         scrolling *= (axis == Axis::Vertical ? Vector2i::Up : Vector2i::Right);
         GetScrollArea()->SetScrolling( scrolling );
-
-        scrollingPercent = Vector2(scrolling) / Vector2(scrollMaxAmount);
-        GetScrollBar()->SetScrollingPercent( scrollingPercent.GetAxis(axis) );
-
-        Debug_Peek(scrollMaxAmount);
-        Debug_Peek(scrollingPercent);
-        Debug_Peek(GetScrollArea()->GetScrolling());
-        // Debug_Peek(sizeProp);
-        // Debug_Peek(scrolling);
-        // Debug_Peek(contentSize);
-        // Debug_Peek(containerSize);
-        // Debug_Peek(scrollMaxAmount);
-        // Debug_Peek(GetScrollArea()->GetScrolling());
-        // Debug_Peek(GetScrollBar()->GetScrollingPercent());
-        // Debug_Log("=====================");
+        GetScrollBar()->SetScrollingPercent( scrollingPercent );
     }
-
-    if (Input::GetKeyDown(Key::E)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y - 10); }
-    if (Input::GetKeyDown(Key::R)) { GetScrollArea()->SetScrollingY( GetScrollArea()->GetScrolling().y + 10); }
-
-    // Debug_Peek(contentSize);
-    // Debug_Peek(GetContainerSize());
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
