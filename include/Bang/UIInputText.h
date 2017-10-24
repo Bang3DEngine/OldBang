@@ -69,19 +69,21 @@ private:
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
 
-    RectTransform *GetTextRT() const;
     RectTransform *GetLabelRT() const;
+    RectTransform *GetTextRT() const;
+    RectTransform *GetRT() const;
 
-    float GetCursorXGlobalNDC(int cursorIndex) const;
     // Returns the X in global NDC, for a given cursor index
+    float GetCursorXGlobalNDC(int cursorIndex) const;
 
-    float GetCursorXLocalNDC(int cursorIndex) const;
     // Returns the X in local NDC, for a given cursor index
+    float GetCursorXLocalNDC(int cursorIndex) const;
 
     bool IsDelimiter(char initialChar, char currentChar) const;
     int GetWordSplitIndex(int startingIndex, bool forward) const;
 
-    void UpdateCursorRenderersAndScrolling();
+    void UpdateCursorRenderers();
+    void UpdateTextScrolling();
     bool IsShiftPressed() const;
 
     // IComponentDriver

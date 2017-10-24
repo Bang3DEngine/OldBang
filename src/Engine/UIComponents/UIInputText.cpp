@@ -1,5 +1,6 @@
 ﻿#include "Bang/UIInputText.h"
 
+#include "Bang/Font.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
@@ -38,84 +39,85 @@ void UIInputText::OnUpdate()
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);
-        UpdateCursorRenderersAndScrolling();
+        UpdateCursorRenderers();
     }
     p_cursor->SetEnabled( ft->HasFocus() );
 }
 
-void UIInputText::UpdateCursorRenderersAndScrolling()
+void UIInputText::UpdateCursorRenderers()
 {
     Rect limits = gameObject->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
 
+    // Cursor "I" position update
+    {
+        float cursorX  = GetCursorXLocalNDC(m_cursorIndex);
+        float lineSkip = GetText()->GetFont()->GetLineSkip();
+        float lineSkipNDC = GetLabelRT()->FromPixelsAmountToLocalNDC(
+                                                  Vector2i(0, lineSkip)).y;
+        Vector2 minPoint(cursorX, 1 - lineSkipNDC);
+        Vector2 maxPoint(cursorX, 1);
+        const Vector2 cursorSize = GetLabelRT()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
+        p_cursor->gameObject->GetComponent<RectTransform>()
+                ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
+    }
+
+    // Selection quad
+    {
+        float cursorX    = GetCursorXGlobalNDC(m_cursorIndex);
+        float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
+        Vector2 p1(cursorX,    limits.GetMin().y);
+        Vector2 p2(selectionX, limits.GetMax().y);
+        p1 = GetRT()->FromGlobalNDCToLocalNDC(p1);
+        p2 = GetRT()->FromGlobalNDCToLocalNDC(p2);
+
+        RectTransform *selRT = p_selectionQuad->GetComponent<RectTransform>();
+        selRT->SetAnchorMin( Vector2::Min(p1, p2) );
+        selRT->SetAnchorMax( Vector2::Max(p1, p2) );
+    }
+}
+
+void UIInputText::UpdateTextScrolling()
+{
     Vector2i prevScrollPx = p_scrollArea->GetScrolling();
     p_scrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
     GetText()->RegenerateCharQuadsVAO();
 
-    // Cursor "I" position update and Selection quad rendering
+    Vector2 scrollNDC = Vector2::Zero;
+    Rect labelLimits = GetLabelRT()->GetScreenSpaceRectNDC();
+    Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
+    if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
+        m_cursorIndex == 0)
     {
-        {
-            float cursorX = GetCursorXLocalNDC(m_cursorIndex);
-            Vector2 minPoint(cursorX, -1);
-            Vector2 maxPoint(cursorX,  1);
-            const Vector2 cursorSize = GetTextRT()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
-            p_cursor->gameObject->GetComponent<RectTransform>()
-                    ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
-        }
-
-        // Selection quad
-        {
-            float cursorX    = GetCursorXGlobalNDC(m_cursorIndex);
-            float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
-            Vector2 p1(cursorX,    limits.GetMin().y);
-            Vector2 p2(selectionX, limits.GetMax().y);
-            p1 = GetTextRT()->FromGlobalNDCToLocalNDC(p1);
-            p2 = GetTextRT()->FromGlobalNDCToLocalNDC(p2);
-
-            RectTransform *selRT = p_selectionQuad->GetComponent<RectTransform>();
-            selRT->SetAnchorMin( Vector2::Min(p1, p2) );
-            selRT->SetAnchorMax( Vector2::Max(p1, p2) );
-        }
+        p_scrollArea->SetScrolling( Vector2i::Zero );
     }
-
-    // Text Scrolling
+    else
     {
-        Vector2 scrollNDC = Vector2::Zero;
-        Rect labelLimits = GetLabelRT()->GetScreenSpaceRectNDC();
-        Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
-        if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
-            m_cursorIndex == 0)
+        p_scrollArea->SetScrolling(prevScrollPx);
+        GetText()->RegenerateCharQuadsVAO();
+        contentRectNDC = GetText()->GetContentGlobalNDCRect();
+        float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
+        float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
+        if (cursorX < labelLimits.GetMin().x)
         {
-            p_scrollArea->SetScrolling( Vector2i::Zero );
+            scrollNDC.x = labelLimits.GetMin().x - cursorX + lookAheadNDC;
+        }
+        else if (cursorX > labelLimits.GetMax().x)
+        {
+            scrollNDC.x = labelLimits.GetMax().x - cursorX - lookAheadNDC;
         }
         else
         {
-            p_scrollArea->SetScrolling(prevScrollPx);
-            GetText()->RegenerateCharQuadsVAO();
-            contentRectNDC = GetText()->GetContentGlobalNDCRect();
-            float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
-            float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
-            if (cursorX < labelLimits.GetMin().x)
+            if (contentRectNDC.GetMin().x < labelLimits.GetMin().x &&
+                contentRectNDC.GetMax().x < labelLimits.GetMax().x)
             {
-                scrollNDC.x = labelLimits.GetMin().x - cursorX + lookAheadNDC;
+                scrollNDC.x = labelLimits.GetMax().x -
+                              contentRectNDC.GetMax().x -
+                              lookAheadNDC;
             }
-            else if (cursorX > labelLimits.GetMax().x)
-            {
-                scrollNDC.x = labelLimits.GetMax().x - cursorX - lookAheadNDC;
-            }
-            else
-            {
-                if (contentRectNDC.GetMin().x < labelLimits.GetMin().x &&
-                    contentRectNDC.GetMax().x < labelLimits.GetMax().x)
-                {
-                    scrollNDC.x = labelLimits.GetMax().x -
-                                  contentRectNDC.GetMax().x -
-                                  lookAheadNDC;
-                }
-            }
-
-            Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
-            p_scrollArea->SetScrolling(prevScrollPx + scrollPx);
         }
+
+        Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
+        p_scrollArea->SetScrolling(prevScrollPx + scrollPx);
     }
 }
 
@@ -213,14 +215,19 @@ void UIInputText::HandleCursorIndices(bool wasSelecting)
     HandleKeySelection(wasSelecting);
 }
 
+RectTransform *UIInputText::GetLabelRT() const
+{
+    return p_label->GetGameObject()->GetComponent<RectTransform>();
+}
+
 RectTransform *UIInputText::GetTextRT() const
 {
     return GetText()->gameObject->GetComponent<RectTransform>();
 }
 
-RectTransform *UIInputText::GetLabelRT() const
+RectTransform *UIInputText::GetRT() const
 {
-    return p_label->gameObject->GetComponent<RectTransform>();
+    return gameObject->GetComponent<RectTransform>();
 }
 
 float UIInputText::GetCursorXGlobalNDC(int cursorIndex) const
@@ -321,7 +328,7 @@ void UIInputText::HandleMouseSelection()
 void UIInputText::SetCursorPosition(int index)
 {
     m_cursorIndex = index;
-    UpdateCursorRenderersAndScrolling();
+    UpdateCursorRenderers();
 }
 
 void UIInputText::SetSelection(int selectionBeginIndex,
@@ -329,7 +336,7 @@ void UIInputText::SetSelection(int selectionBeginIndex,
 {
     m_cursorIndex = selectionBeginIndex;
     m_selectionIndex = selectionEndIndex;
-    UpdateCursorRenderersAndScrolling();
+    UpdateCursorRenderers();
 }
 
 int UIInputText::GetSelectionBeginIndex() const
@@ -435,11 +442,11 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     inputText->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     inputText->GetText()->SetWrapping(false);
     inputText->ResetSelection();
-    inputText->UpdateCursorRenderersAndScrolling();
+    inputText->UpdateCursorRenderers();
 
-    scrollArea->GetContainer()->AddChild(cursorGo);
     scrollArea->GetContainer()->AddChild(selectionQuadGo);
     scrollArea->GetContainer()->AddChild(label->gameObject);
+    label->GetGameObject()->AddChild(cursorGo);
 
     return inputText;
 }
@@ -451,8 +458,9 @@ float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
     if (cursorIndex > 0 && cursorIndex < textLength)
     {
         // In case we are between two characters
+        Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
         Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
-        localTextX = nextCharRect.GetMin().x;
+        localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
     }
     else if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
     {
@@ -522,5 +530,5 @@ void UIInputText::OnFocusLost()
     ResetSelection();
     Input::StopTextInput();
     m_selectingWithMouse = false;
-    UpdateCursorRenderersAndScrolling();
+    UpdateCursorRenderers();
 }

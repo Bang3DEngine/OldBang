@@ -360,14 +360,12 @@ void RectTransform::OnRenderGizmos()
 
     Rect r = GetScreenSpaceRectNDC();
 
-    Random::SetSeed(GetInstanceId());
-    Color bgColor = Random::GetColorOpaque();
-    Gizmos::SetColor(bgColor);
+    // Random::SetSeed(GetInstanceId());
+    Gizmos::SetColor(Random::GetColorOpaque());
+    // Gizmos::RenderFillRect(r);
 
     Color c = Color::Green;
     Gizmos::SetColor(c);
-
-    // Gizmos::RenderFillRect(r);
     // Gizmos::RenderRect(r);
 
     /*
