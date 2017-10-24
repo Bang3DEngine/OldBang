@@ -35,45 +35,27 @@ void UIInputText::OnUpdate()
     UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
     if ( ft->HasFocus() )
     {
-        const bool wasSelecting = (m_selectionIndex != m_cursorIndex);
+        const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);
-        UpdateCursorRenderers();
+        UpdateCursorRenderer();
     }
     p_cursor->SetEnabled( ft->HasFocus() );
 }
 
-void UIInputText::UpdateCursorRenderers()
+void UIInputText::UpdateCursorRenderer()
 {
-    Rect limits = gameObject->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
-
     // Cursor "I" position update
-    {
-        float cursorX  = GetCursorXLocalNDC(m_cursorIndex);
-        float lineSkip = GetText()->GetFont()->GetLineSkip();
-        float lineSkipNDC = GetLabelRT()->FromPixelsAmountToLocalNDC(
-                                                  Vector2i(0, lineSkip)).y;
-        Vector2 minPoint(cursorX, 1 - lineSkipNDC);
-        Vector2 maxPoint(cursorX, 1);
-        const Vector2 cursorSize = GetLabelRT()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
-        p_cursor->gameObject->GetComponent<RectTransform>()
-                ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
-    }
-
-    // Selection quad
-    {
-        float cursorX    = GetCursorXGlobalNDC(m_cursorIndex);
-        float selectionX = GetCursorXGlobalNDC(m_selectionIndex);
-        Vector2 p1(cursorX,    limits.GetMin().y);
-        Vector2 p2(selectionX, limits.GetMax().y);
-        p1 = GetRT()->FromGlobalNDCToLocalNDC(p1);
-        p2 = GetRT()->FromGlobalNDCToLocalNDC(p2);
-
-        RectTransform *selRT = p_selectionQuad->GetComponent<RectTransform>();
-        selRT->SetAnchorMin( Vector2::Min(p1, p2) );
-        selRT->SetAnchorMax( Vector2::Max(p1, p2) );
-    }
+    float cursorX  = GetLabel()->GetCursorXLocalNDC( GetCursorIndex() );
+    float lineSkip = GetText()->GetFont()->GetLineSkip();
+    float lineSkipNDC = GetLabelRT()->FromPixelsAmountToLocalNDC(
+                                              Vector2i(0, lineSkip)).y;
+    Vector2 minPoint(cursorX, 1 - lineSkipNDC);
+    Vector2 maxPoint(cursorX, 1);
+    const Vector2 cursorSize = GetLabelRT()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
+    p_cursor->gameObject->GetComponent<RectTransform>()
+            ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
 }
 
 void UIInputText::UpdateTextScrolling()
@@ -86,7 +68,7 @@ void UIInputText::UpdateTextScrolling()
     Rect labelLimits = GetLabelRT()->GetScreenSpaceRectNDC();
     Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
     if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
-        m_cursorIndex == 0)
+        GetCursorIndex() == 0)
     {
         p_scrollArea->SetScrolling( Vector2i::Zero );
     }
@@ -95,7 +77,7 @@ void UIInputText::UpdateTextScrolling()
         p_scrollArea->SetScrolling(prevScrollPx);
         GetText()->RegenerateCharQuadsVAO();
         contentRectNDC = GetText()->GetContentGlobalNDCRect();
-        float cursorX = GetCursorXGlobalNDC(m_cursorIndex);
+        float cursorX = GetLabel()->GetCursorXGlobalNDC( GetCursorIndex() );
         float lookAheadNDC = GL::FromPixelsAmountToGlobalNDC(LookAheadOffsetPx).x;
         if (cursorX < labelLimits.GetMin().x)
         {
@@ -147,11 +129,15 @@ void UIInputText::HandleTyping()
 
         if (removeText)
         {
-            if (m_cursorIndex > m_selectionIndex)
-            { std::swap(m_cursorIndex, m_selectionIndex); }
+            if (GetCursorIndex() > GetSelectionIndex())
+            {   // Swap indices
+                int oldSelectionIndex = GetSelectionIndex();
+                GetLabel()->SetSelectionIndex( GetCursorIndex() );
+                SetCursorIndex(oldSelectionIndex);
+            }
 
-            m_cursorIndex    += offsetCursor;
-            m_selectionIndex += offsetSelection;
+            SetCursorIndex( GetCursorIndex() + offsetCursor);
+            GetLabel()->SetSelectionIndex(GetSelectionIndex() + offsetSelection);
             ReplaceSelectedText("");
 
             resetSelection = true;
@@ -162,9 +148,9 @@ void UIInputText::HandleTyping()
     if (!inputText.IsEmpty())
     {
         String content = GetText()->GetContent();
-        content.Insert(m_cursorIndex, inputText);
+        content.Insert(GetCursorIndex(), inputText);
         GetText()->SetContent(content);
-        m_cursorIndex += inputText.Size();
+        SetCursorIndex( GetCursorIndex() + inputText.Size() );
         resetSelection = true;
     }
 
@@ -184,7 +170,7 @@ void UIInputText::HandleTyping()
         {
             String clipboardText = SystemClipboard::Get();
             ReplaceSelectedText(clipboardText);
-            m_cursorIndex += clipboardText.Size();
+            SetCursorIndex( GetCursorIndex() + clipboardText.Size());
             resetSelection = true;
         }
     }
@@ -192,9 +178,9 @@ void UIInputText::HandleTyping()
     if (resetSelection) { ResetSelection(); }
     if (Input::GetKeyDown(Key::End))
     {
-        m_cursorIndex = GetText()->GetContent().Size();
+        SetCursorIndex( GetText()->GetContent().Size() );
     }
-    else if (Input::GetKeyDown(Key::Home)) { m_cursorIndex = 0; }
+    else if (Input::GetKeyDown(Key::Home)) { SetCursorIndex(0); }
 }
 
 void UIInputText::HandleCursorIndices(bool wasSelecting)
@@ -215,9 +201,13 @@ void UIInputText::HandleCursorIndices(bool wasSelecting)
     HandleKeySelection(wasSelecting);
 }
 
+int UIInputText::GetCursorIndex() const { return GetLabel()->GetCursorIndex(); }
+int UIInputText::GetSelectionIndex() const { return GetLabel()->GetSelectionIndex(); }
+UILabel *UIInputText::GetLabel() const { return p_label; }
+
 RectTransform *UIInputText::GetLabelRT() const
 {
-    return p_label->GetGameObject()->GetComponent<RectTransform>();
+    return GetLabel()->GetGameObject()->GetComponent<RectTransform>();
 }
 
 RectTransform *UIInputText::GetTextRT() const
@@ -228,12 +218,6 @@ RectTransform *UIInputText::GetTextRT() const
 RectTransform *UIInputText::GetRT() const
 {
     return gameObject->GetComponent<RectTransform>();
-}
-
-float UIInputText::GetCursorXGlobalNDC(int cursorIndex) const
-{
-    return GetTextRT()->FromLocalNDCToGlobalNDC(
-                            Vector2(GetCursorXLocalNDC(cursorIndex), 0) ).x;
 }
 
 void UIInputText::HandleKeySelection(bool wasSelecting)
@@ -249,14 +233,14 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
        )
     {
         bool fwd = (cursorIndexAdvance > 0);
-        int startIdx = m_cursorIndex + (fwd ? 0 : -1);
-        cursorIndexAdvance = GetWordSplitIndex(startIdx, fwd) - m_cursorIndex;
+        int startIdx = GetCursorIndex() + (fwd ? 0 : -1);
+        cursorIndexAdvance = GetWordSplitIndex(startIdx, fwd) - GetCursorIndex();
         cursorIndexAdvance += (fwd ? 0 : 1);
     }
 
     // Advance the the cursor index, and clamp it
-    m_cursorIndex = Math::Clamp(m_cursorIndex + cursorIndexAdvance,
-                                0, GetText()->GetContent().Size());
+    SetCursorIndex(Math::Clamp(GetCursorIndex() + cursorIndexAdvance,
+                               0, GetText()->GetContent().Size()) );
 
     // Selection resetting handling
     bool doingSelection = IsShiftPressed() || m_selectingWithMouse;
@@ -265,14 +249,14 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
         if (wasSelecting && cursorIndexAdvance != 0)
         {
             bool moveCursorToSelectionBoundary =
-              (cursorIndexAdvance == -1 && m_cursorIndex > m_selectionIndex) ||
-              (cursorIndexAdvance ==  1 && m_cursorIndex < m_selectionIndex);
+              (cursorIndexAdvance == -1 && GetCursorIndex() > GetSelectionIndex()) ||
+              (cursorIndexAdvance ==  1 && GetCursorIndex() < GetSelectionIndex());
 
             if (moveCursorToSelectionBoundary)
             {
-                m_cursorIndex = m_selectionIndex;
+                SetCursorIndex( GetSelectionIndex() );
             }
-            else { m_cursorIndex -= cursorIndexAdvance; }
+            else { SetCursorIndex( GetCursorIndex() - cursorIndexAdvance); }
 
             if (!IsShiftPressed()) { ResetSelection(); }
         }
@@ -309,7 +293,7 @@ void UIInputText::HandleMouseSelection()
                 closestCharRectIndex = i + 1;
             }
         }
-        m_cursorIndex = closestCharRectIndex;
+        SetCursorIndex(closestCharRectIndex);
 
         // Move the selection index accordingly
         if (!IsShiftPressed() && Input::GetMouseButtonDown(MouseButton::Left))
@@ -325,43 +309,26 @@ void UIInputText::HandleMouseSelection()
     }
 }
 
-void UIInputText::SetCursorPosition(int index)
+void UIInputText::SetCursorIndex(int index)
 {
-    m_cursorIndex = index;
-    UpdateCursorRenderers();
+    GetLabel()->SetCursorIndex(index);
+    UpdateCursorRenderer();
 }
 
 void UIInputText::SetSelection(int selectionBeginIndex,
                                int selectionEndIndex)
 {
-    m_cursorIndex = selectionBeginIndex;
-    m_selectionIndex = selectionEndIndex;
-    UpdateCursorRenderers();
+    GetLabel()->SetSelection(selectionBeginIndex, selectionEndIndex);
+    UpdateCursorRenderer();
 }
 
-int UIInputText::GetSelectionBeginIndex() const
-{
-    return Math::Min(m_cursorIndex, m_selectionIndex);
-}
-
-int UIInputText::GetSelectionEndIndex() const
-{
-    return Math::Max(m_cursorIndex, m_selectionIndex);
-}
-
-String UIInputText::GetSelectedText() const
-{
-    if (m_cursorIndex == m_selectionIndex) { return ""; }
-    if (GetSelectionBeginIndex() >= GetSelectionEndIndex()) { return ""; }
-    return GetText()->GetContent().SubString(GetSelectionBeginIndex(),
-                                             GetSelectionEndIndex()-1);
-}
+String UIInputText::GetSelectedText() const { return GetLabel()->GetSelectedText(); }
 
 void UIInputText::ReplaceSelectedText(const String &replaceStr)
 {
     String content = GetText()->GetContent();
-    int minIndex = Math::Min(m_cursorIndex, m_selectionIndex);
-    int maxIndex = Math::Max(m_cursorIndex, m_selectionIndex);
+    int minIndex = GetLabel()->GetSelectionBeginIndex();
+    int maxIndex = GetLabel()->GetSelectionEndIndex();
 
     if (minIndex >= 0 && minIndex <= content.Size() &&
         maxIndex >= 0 && maxIndex <= content.Size())
@@ -371,15 +338,11 @@ void UIInputText::ReplaceSelectedText(const String &replaceStr)
         GetText()->SetContent(content);
     }
 
-    m_cursorIndex = minIndex;
+    SetCursorIndex(minIndex);
     ResetSelection();
 }
 
-void UIInputText::ResetSelection()
-{
-    m_selectionIndex = m_cursorIndex;
-}
-
+void UIInputText::ResetSelection() { GetLabel()->ResetSelection(); }
 void UIInputText::SelectAll()
 {
     SetSelection(0, GetText()->GetContent().Size());
@@ -423,62 +386,26 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     scrollArea->GetMask()->SetMasking(true);
     inputText->p_scrollArea = scrollArea;
 
-    GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
-    UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
-    selectionQuad->SetTint(Color::LightBlue);
-    inputText->p_selectionQuad = selectionQuadGo;
-
     GameObject *cursorGo = GameObjectFactory::CreateUIGameObject();
     UITextCursor *cursor = cursorGo->AddComponent<UITextCursor>();
     inputText->p_cursor = cursor;
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetMask()->SetMasking(false);
-    label->gameObject->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
+    label->GetGameObject()->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
     inputText->p_label = label;
 
-    inputText->m_cursorIndex = inputText->GetText()->GetContent().Size();
+    inputText->SetCursorIndex( inputText->GetText()->GetContent().Size() );
     inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     inputText->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     inputText->GetText()->SetWrapping(false);
     inputText->ResetSelection();
-    inputText->UpdateCursorRenderers();
+    inputText->UpdateCursorRenderer();
 
-    scrollArea->GetContainer()->AddChild(selectionQuadGo);
     scrollArea->GetContainer()->AddChild(label->gameObject);
     label->GetGameObject()->AddChild(cursorGo);
 
     return inputText;
-}
-
-float UIInputText::GetCursorXLocalNDC(int cursorIndex) const
-{
-    float localTextX = 0.0f;
-    const int textLength = GetText()->GetContent().Size();
-    if (cursorIndex > 0 && cursorIndex < textLength)
-    {
-        // In case we are between two characters
-        Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
-        Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
-        localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
-    }
-    else if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
-    {
-        // In case we are at the beginning or at the end of the text
-        localTextX = (cursorIndex == 0 ?
-                      GetText()->GetCharRectsLocalNDC().Front().GetMin().x :
-                      GetText()->GetCharRectsLocalNDC().Back() .GetMax().x);
-    }
-    else
-    {
-        HorizontalAlignment hAlign = GetText()->GetHorizontalAlignment();
-        if (hAlign == HorizontalAlignment::Left)   { return -1; }
-        if (hAlign == HorizontalAlignment::Center) { return  0; }
-        if (hAlign == HorizontalAlignment::Right)  { return  1; }
-    }
-
-    return GetLabelRT()->FromGlobalNDCToLocalNDC(
-                GetTextRT()->FromLocalNDCToGlobalNDC(Vector2(localTextX, 0))).x;
 }
 
 bool UIInputText::IsDelimiter(char initialChar, char curr) const
@@ -530,5 +457,5 @@ void UIInputText::OnFocusLost()
     ResetSelection();
     Input::StopTextInput();
     m_selectingWithMouse = false;
-    UpdateCursorRenderers();
+    UpdateCursorRenderer();
 }

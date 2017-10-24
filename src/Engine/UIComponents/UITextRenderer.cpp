@@ -120,7 +120,7 @@ Vector2 UITextRenderer::_GetFlexibleSize() const
     return Vector2(0);
 }
 
-void UITextRenderer::RegenerateCharQuadsVAO()
+void UITextRenderer::RegenerateCharQuadsVAO() const
 {
     IInvalidatable<UITextRenderer>::Validate();
     ENSURE(gameObject);
@@ -401,11 +401,12 @@ float UITextRenderer::GetOutlineBlurriness() const { return m_outlineBlurriness;
 const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
 const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 {
+    if (IInvalidatable<UITextRenderer>::IsInvalid()) { RegenerateCharQuadsVAO(); }
     return m_charRectsLocalNDC;
 }
 const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
-    return m_charRectsLocalNDC[charIndex];
+    return GetCharRectsLocalNDC()[charIndex];
 }
 
 Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }

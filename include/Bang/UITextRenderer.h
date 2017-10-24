@@ -44,7 +44,7 @@ public:
     virtual Vector2i _GetPreferredSize() const override;
     virtual Vector2  _GetFlexibleSize()  const override;
 
-    void RegenerateCharQuadsVAO();
+    void RegenerateCharQuadsVAO() const;
 
     void SetFont (Font *font);
     void SetTextColor(const Color &textColor);
@@ -101,7 +101,7 @@ private:
     int m_textSize              = 64;
     Vector2 m_spacingMultiplier = Vector2::One;
     bool m_kerning              = false;
-    Rect m_textRectNDC          = Rect::Zero;
+    mutable Rect m_textRectNDC  = Rect::Zero;
 
     float m_blurriness      = 1.2f;
     float m_alphaThreshold  = 0.24f;
@@ -118,7 +118,7 @@ private:
 
     Mesh *m_mesh = nullptr;
     uint m_currentRenderingChar = 0;
-    Array<Rect> m_charRectsLocalNDC;
+    mutable Array<Rect> m_charRectsLocalNDC;
 
     LayoutMode m_layoutMode = LayoutMode::SingleLinePreferred;
 

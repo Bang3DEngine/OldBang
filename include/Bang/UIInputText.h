@@ -24,12 +24,10 @@ public:
 
     void OnUpdate() override;
 
-    void SetCursorPosition(int index);
+    void SetCursorIndex(int index);
     void SetSelection(int selectionBeginIndex,
                       int selectionEndIndex);
 
-    int GetSelectionBeginIndex() const;
-    int GetSelectionEndIndex() const;
     String GetSelectedText() const;
     void ReplaceSelectedText(const String &replaceStr);
 
@@ -53,12 +51,8 @@ private:
     UITextCursor *p_cursor = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
 
-    GameObject *p_selectionQuad = nullptr;
-
-    int m_cursorIndex = 0;
     bool m_selectingWithMouse = false;
     int m_latestCursorX = 1;
-    int m_selectionIndex = 0;
 
     bool m_forceUpdateRenderers = false;
 
@@ -69,20 +63,18 @@ private:
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
 
+    int GetCursorIndex() const;
+    int GetSelectionIndex() const;
+
+    UILabel *GetLabel() const;
     RectTransform *GetLabelRT() const;
     RectTransform *GetTextRT() const;
     RectTransform *GetRT() const;
 
-    // Returns the X in global NDC, for a given cursor index
-    float GetCursorXGlobalNDC(int cursorIndex) const;
-
-    // Returns the X in local NDC, for a given cursor index
-    float GetCursorXLocalNDC(int cursorIndex) const;
-
     bool IsDelimiter(char initialChar, char currentChar) const;
     int GetWordSplitIndex(int startingIndex, bool forward) const;
 
-    void UpdateCursorRenderers();
+    void UpdateCursorRenderer();
     void UpdateTextScrolling();
     bool IsShiftPressed() const;
 
