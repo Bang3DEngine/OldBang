@@ -34,12 +34,15 @@ public:
     float GetCursorXGlobalNDC(int cursorIndex) const;
     float GetCursorXLocalNDC(int cursorIndex) const;
 
+    bool IsSelectingWithMouse() const;
+
     UIMask *GetMask() const;
     UITextRenderer *GetText() const;
 
 private:
     int m_cursorIndex = 0;
     int m_selectionIndex = 0;
+    bool m_selectingWithMouse = false;
 
     UIMask *p_mask = nullptr;
     UITextRenderer *p_text = nullptr;
@@ -47,6 +50,11 @@ private:
 
     UILabel();
 
+    void HandleClipboardCopy();
+    void HandleMouseSelection();
+    void UpdateSelectionQuadRenderer();
+
+    bool IsShiftPressed() const;
     RectTransform *GetParentRT() const;
 
     // IComponentDriver

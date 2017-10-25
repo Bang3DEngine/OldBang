@@ -51,15 +51,9 @@ private:
     UITextCursor *p_cursor = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
 
-    bool m_selectingWithMouse = false;
-    int m_latestCursorX = 1;
-
-    bool m_forceUpdateRenderers = false;
-
     UIInputText();
 
     void HandleTyping();
-    void HandleMouseSelection();
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
 

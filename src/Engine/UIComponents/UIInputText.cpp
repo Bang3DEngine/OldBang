@@ -157,11 +157,7 @@ void UIInputText::HandleTyping()
     if ( (Input::GetKey(Key::LControl) || Input::GetKey(Key::RControl)) )
     {
         String selectedText = GetSelectedText();
-        if ( Input::GetKeyDown(Key::C) && selectedText.Size() > 0 )
-        {
-            SystemClipboard::Set(selectedText);
-        }
-        else if ( Input::GetKeyDown(Key::X) && selectedText.Size() > 0 )
+        if ( Input::GetKeyDown(Key::X) && selectedText.Size() > 0 )
         {
             SystemClipboard::Set(selectedText);
             ReplaceSelectedText("");
@@ -185,19 +181,7 @@ void UIInputText::HandleTyping()
 
 void UIInputText::HandleCursorIndices(bool wasSelecting)
 {
-    // Here we will move the selection indices either by mouse or arrows...
-    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
-    if (ft->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
-    {
-        if (!IsShiftPressed()) { ResetSelection(); }
-        m_selectingWithMouse = true;
-    }
-    else if (Input::GetMouseButtonUp(MouseButton::Left))
-    {
-        m_selectingWithMouse = false;
-    }
-
-    HandleMouseSelection();
+    // Here we will move the selection indices either by arrows...
     HandleKeySelection(wasSelecting);
 }
 
@@ -243,7 +227,7 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
                                0, GetText()->GetContent().Size()) );
 
     // Selection resetting handling
-    bool doingSelection = IsShiftPressed() || m_selectingWithMouse;
+    bool doingSelection = IsShiftPressed() || GetLabel()->IsSelectingWithMouse();
     if (!doingSelection)
     {
         if (wasSelecting && cursorIndexAdvance != 0)
@@ -262,51 +246,6 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
         }
     }
     if (!doingSelection && !wasSelecting) { ResetSelection(); }
-}
-
-void UIInputText::HandleMouseSelection()
-{
-    // Find the closest visible char bounds to the mouse position
-    if (Input::GetMouseButton(MouseButton::Left))
-    {
-        float minDist = Math::Infinity<float>();
-        int closestCharRectIndex = 0;
-        float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-        mouseCoordsX_NDC = GetTextRT()->FromGlobalNDCToLocalNDC(
-                                          Vector2(mouseCoordsX_NDC) ).x;
-
-        const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
-        for (int i = 0; i < charRectsNDC.Size(); ++i)
-        {
-            const Rect &cr = charRectsNDC[i];
-            float distToMinX = Math::Abs(mouseCoordsX_NDC - cr.GetMin().x);
-            if (distToMinX < minDist)
-            {
-                minDist = distToMinX;
-                closestCharRectIndex = i;
-            }
-
-            float distToMaxX = Math::Abs(mouseCoordsX_NDC - cr.GetMax().x);
-            if (distToMaxX < minDist)
-            {
-                minDist = distToMaxX;
-                closestCharRectIndex = i + 1;
-            }
-        }
-        SetCursorIndex(closestCharRectIndex);
-
-        // Move the selection index accordingly
-        if (!IsShiftPressed() && Input::GetMouseButtonDown(MouseButton::Left))
-        {
-           ResetSelection();
-        }
-        if (!m_selectingWithMouse) { ResetSelection(); }
-    }
-
-    if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
-    {
-        // SelectAll();
-    }
 }
 
 void UIInputText::SetCursorIndex(int index)
@@ -456,6 +395,5 @@ void UIInputText::OnFocusLost()
     IFocusListener::OnFocusLost();
     ResetSelection();
     Input::StopTextInput();
-    m_selectingWithMouse = false;
     UpdateCursorRenderer();
 }
