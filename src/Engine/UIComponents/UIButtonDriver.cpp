@@ -47,8 +47,8 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
     vl->SetPaddingBot(5);
     vl->SetPaddingTop(5);
-    vl->SetPaddingRight(10);
-    vl->SetPaddingLeft (10);
+    vl->SetPaddingRight(40);
+    vl->SetPaddingLeft (2);
 
     UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);

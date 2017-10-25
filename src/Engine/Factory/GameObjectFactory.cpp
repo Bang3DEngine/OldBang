@@ -104,6 +104,7 @@ UICanvas *GameObjectFactory::CreateUICanvas()
 UICanvas* GameObjectFactory::CreateUICanvasInto(GameObject *go)
 {
     UICanvas *canvas = go->AddComponent<UICanvas>();
+    go->SetName("Canvas");
     return canvas;
 }
 
@@ -112,6 +113,7 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color)
     GameObject *go = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *img = go->AddComponent<UIImageRenderer>();
     img->SetTint(color);
+    go->SetName("Image");
     return img;
 }
 
@@ -127,58 +129,67 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
 
 UIListDriver *GameObjectFactory::CreateUIListInto(GameObject *go)
 {
+    go->SetName("List");
     return UIListDriver::CreateInto(go);
 }
 UIListDriver *GameObjectFactory::CreateUIList()
 {
-    return UIListDriver::CreateUI();
+    return UIListDriver::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
 UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 {
+    go->SetName("InputText");
     return UIInputText::CreateInto(go);
 }
 UIInputText *GameObjectFactory::CreateUIInputText()
 {
-    return UIInputText::CreateUI();
+    return UIInputText::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
 UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 {
+    go->SetName("Button");
     return UIButtonDriver::CreateInto(go);
 }
 UIButtonDriver* GameObjectFactory::CreateUIButton()
 {
-    return UIButtonDriver::CreateUI();
+    return UIButtonDriver::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
-UILabel *GameObjectFactory::CreateUILabel() { return UILabel::CreateUI(); }
+UILabel *GameObjectFactory::CreateUILabel()
+{
+    return UILabel::CreateInto( GameObjectFactory::CreateUIGameObject() );
+}
 UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)
 {
+    go->SetName("Label");
     return UILabel::CreateInto(go);
 }
 
 UIScrollArea *GameObjectFactory::CreateUIScrollArea()
 {
-    return UIScrollArea::CreateUI();
+    return UIScrollArea::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
 UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
 {
+    go->SetName("ScrollBar");
     return UIScrollBar::CreateInto(go);
 }
 UIScrollBar *GameObjectFactory::CreateUIScrollBar()
 {
-    return UIScrollBar::CreateUI();
+    return UIScrollBar::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
 {
+    go->SetName("ScrollPanel");
     return UIScrollPanel::CreateInto(go);
 }
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanel()
 {
-    return UIScrollPanel::CreateUI();
+    return UIScrollPanel::CreateInto( GameObjectFactory::CreateUIGameObject() );
 }
 
 UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)

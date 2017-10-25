@@ -12,8 +12,9 @@
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
 #include "Bang/SystemClipboard.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -28,6 +29,7 @@ UIInputText::~UIInputText()
 {
 }
 
+#include "Bang/UIGroupLayout.h"
 void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
@@ -35,11 +37,18 @@ void UIInputText::OnUpdate()
     UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
     if ( ft->HasFocus() )
     {
+        Debug_Peek(p_scrollArea->GetScrolling());
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);
+        // UpdateTextScrolling();
         UpdateCursorRenderer();
+
+        // Debug_Log(GetGameObject()->ToStringStructure(true));
+        p_scrollArea->SetScrolling( Vector2i(-300, 20) );
+        Debug_Log(p_scrollArea->GetGameObject()->
+                  GetComponent<UIGroupLayout>()->GetPaddingLeftBot());
     }
     p_cursor->SetEnabled( ft->HasFocus() );
 }
@@ -68,18 +77,13 @@ void UIInputText::UpdateCursorRenderer()
 void UIInputText::UpdateTextScrolling()
 {
     Vector2i prevScrollPx = p_scrollArea->GetScrolling();
-    p_scrollArea->SetScrolling( Vector2i::Zero ); // To make things easier
+    p_scrollArea->SetScrolling( Vector2i::Zero );
     GetText()->RegenerateCharQuadsVAO();
 
     Vector2 scrollNDC = Vector2::Zero;
     Rect labelLimits = GetLabelRT()->GetScreenSpaceRectNDC();
     Rect contentRectNDC = GetText()->GetContentGlobalNDCRect();
-    if (contentRectNDC.GetWidth() < labelLimits.GetWidth() ||
-        GetCursorIndex() == 0)
-    {
-        p_scrollArea->SetScrolling( Vector2i::Zero );
-    }
-    else
+    if (contentRectNDC.GetWidth() > labelLimits.GetWidth() && GetCursorIndex() > 0)
     {
         p_scrollArea->SetScrolling(prevScrollPx);
         GetText()->RegenerateCharQuadsVAO();
@@ -107,6 +111,7 @@ void UIInputText::UpdateTextScrolling()
 
         Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
         p_scrollArea->SetScrolling(prevScrollPx + scrollPx);
+        Debug_Peek(prevScrollPx + scrollPx);
     }
 }
 

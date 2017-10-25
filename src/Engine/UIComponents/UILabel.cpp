@@ -132,11 +132,11 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UILabel *label = go->AddComponent<UILabel>();
 
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::Full);
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
+    vl->SetChildrenVerticalStretch(Stretch::None);
+    vl->SetChildrenHorizontalStretch(Stretch::None);
 
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(1.0f) );
+    le->SetFlexibleSize( Vector2(0.0f) );
 
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask
@@ -148,7 +148,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     text->SetWrapping(false);
 
     UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2(1.0f) );
+    textLE->SetFlexibleSize( Vector2(0.0f) );
 
     label->p_text = text;
 

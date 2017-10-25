@@ -93,7 +93,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
         }
         else
         {
-            crt->SetMarginRight( -(GetPaddingLeft() + layoutRectSize.x) );
+            crt->SetMarginRight( -GetPaddingLeft() - layoutRectSize.x);
         }
         crt->SetMarginTop(  position.y );
         crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );

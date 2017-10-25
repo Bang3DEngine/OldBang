@@ -71,7 +71,9 @@ void UIScrollArea::UpdatePaddings()
     int paddingTop   = -GetScrolling().y;
     int paddingBot   =  GetScrolling().y;
 
-    UIGroupLayout *gl = gameObject->GetComponent<UIGroupLayout>();
+    UIGroupLayout *gl = GetGameObject()->GetComponent<UIGroupLayout>();
+    gl->SetChildrenHorizontalStretch(Stretch::None);
+    gl->SetChildrenVerticalStretch(Stretch::None);
     gl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 
@@ -79,7 +81,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 {
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
+    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
@@ -90,6 +92,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     mask->SetDrawMask(false);
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
+    childrenCont->SetName("ChildrenCont");
 
     scrollArea->p_bg = bg;
     scrollArea->p_mask = mask;

@@ -370,9 +370,8 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetColor(Random::GetColorOpaque());
     // Gizmos::RenderFillRect(r);
 
-    Color c = Color::Green;
-    Gizmos::SetColor(c);
-    // Gizmos::RenderRect(r);
+    Gizmos::SetColor(Color::Green);
+    Gizmos::RenderRect(r);
 
     /*
     Gizmos::SetColor(Color::Yellow);

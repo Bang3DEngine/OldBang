@@ -15,8 +15,7 @@ protected:
     virtual ~IComponentDriver() = default;
 
 private:
-    static T* Create();
-    static T* CreateUI();
+    static void EnsureCreateIntoExists() { T::CreateInto(nullptr); }
 
     friend class GameObjectFactory;
 };
