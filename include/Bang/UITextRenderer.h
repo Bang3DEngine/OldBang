@@ -37,6 +37,7 @@ public:
     virtual void OnRender() override;
     virtual void Bind() const override;
     virtual void UnBind() const override;
+    virtual void OnRenderGizmos() override;
     virtual void OnRender(RenderPass renderPass) override;
 
     // ILayoutElement

@@ -96,7 +96,6 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
     inputPathText->GetText()->SetContent("");
     inputPathText->GetText()->SetTextSize(12);
-    inputPathText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     fileList->SetPathChangedCallback(
         [inputPathText](const Path &newPath)
         {

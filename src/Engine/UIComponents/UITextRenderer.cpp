@@ -4,6 +4,7 @@
 #include "Bang/Math.h"
 #include "Bang/Font.h"
 #include "Bang/Scene.h"
+#include "Bang/Gizmos.h"
 #include "Bang/Camera.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Material.h"
@@ -262,6 +263,11 @@ void UITextRenderer::UnBind() const
     UIRenderer::UnBind();
 }
 
+void UITextRenderer::OnRenderGizmos()
+{
+    UIRenderer::OnRenderGizmos();
+}
+
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
 {
     if (GetHorizontalAlignment() != horizontalAlignment)
@@ -408,8 +414,11 @@ const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
     return GetCharRectsLocalNDC()[charIndex];
 }
-
-Rect UITextRenderer::GetContentGlobalNDCRect() const { return m_textRectNDC; }
+Rect UITextRenderer::GetContentGlobalNDCRect() const
+{
+    return GetGameObject()->GetComponent<RectTransform>()->
+            FromLocalNDCToGlobalNDC(m_textRectNDC);
+}
 
 UITextRenderer::LayoutMode UITextRenderer::GetLayoutMode() const
 {

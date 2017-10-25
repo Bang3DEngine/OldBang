@@ -60,6 +60,12 @@ Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) co
     return WorldToLocalPoint( Vector3(globalNDCPoint, 0) ).xy();
 }
 
+Rect RectTransform::FromLocalNDCToGlobalNDC(const Rect &localNDCRect) const
+{
+    return Rect( FromLocalNDCToGlobalNDC(localNDCRect.GetMin()),
+                 FromLocalNDCToGlobalNDC(localNDCRect.GetMax()));
+}
+
 Vector2 RectTransform::FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const
 {
     return LocalToWorldPoint( Vector3(localNDCPoint, 0) ).xy();

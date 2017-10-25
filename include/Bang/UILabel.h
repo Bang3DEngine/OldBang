@@ -22,10 +22,12 @@ public:
 
     void SetCursorIndex(int index);
     void SetSelectionIndex(int index);
+    void SetSelectable(bool selectable);
     void SetSelection(int beginIndex, int endIndex);
     String GetSelectedText() const;
     void ResetSelection();
 
+    bool IsSelectable() const;
     int GetCursorIndex() const;
     int GetSelectionIndex() const;
     int GetSelectionBeginIndex() const;
@@ -42,6 +44,7 @@ public:
 private:
     int m_cursorIndex = 0;
     int m_selectionIndex = 0;
+    bool m_selectable = false;
     bool m_selectingWithMouse = false;
 
     UIMask *p_mask = nullptr;
@@ -55,7 +58,7 @@ private:
     void UpdateSelectionQuadRenderer();
 
     bool IsShiftPressed() const;
-    RectTransform *GetParentRT() const;
+    RectTransform *GetTextParentRT() const;
 
     // IComponentDriver
     static UILabel *CreateInto(GameObject *go);

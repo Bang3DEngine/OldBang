@@ -1,5 +1,6 @@
 #include "Bang/UILabel.h"
 
+#include "Bang/Font.h"
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/GameObject.h"
@@ -7,6 +8,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 
@@ -24,13 +26,29 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    HandleMouseSelection();
-    HandleClipboardCopy();
-    UpdateSelectionQuadRenderer();
+    if (IsSelectable())
+    {
+        HandleMouseSelection();
+        HandleClipboardCopy();
+        UpdateSelectionQuadRenderer();
+    }
+    else
+    {
+        ResetSelection();
+        UpdateSelectionQuadRenderer();
+    }
 }
 
 void UILabel::SetCursorIndex(int index) { m_cursorIndex = index; }
 void UILabel::SetSelectionIndex(int index) { m_selectionIndex = index; }
+
+void UILabel::SetSelectable(bool selectable)
+{
+    if (selectable != IsSelectable())
+    {
+        m_selectable = selectable;
+    }
+}
 void UILabel::SetSelection(int beginIndex, int endIndex)
 {
     SetCursorIndex(beginIndex);
@@ -50,6 +68,11 @@ void UILabel::ResetSelection()
     SetSelectionIndex( GetCursorIndex() );
 }
 
+bool UILabel::IsSelectable() const
+{
+    return m_selectable;
+}
+
 int UILabel::GetSelectionBeginIndex() const
 {
     return Math::Min(GetCursorIndex(), GetSelectionIndex());
@@ -62,7 +85,7 @@ int UILabel::GetSelectionEndIndex() const
 
 float UILabel::GetCursorXGlobalNDC(int cursorIndex) const
 {
-    return GetParentRT()->FromLocalNDCToGlobalNDC(
+    return GetTextParentRT()->FromLocalNDCToGlobalNDC(
                             Vector2(GetCursorXLocalNDC(cursorIndex), 0) ).x;
 }
 
@@ -109,6 +132,11 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UILabel *label = go->AddComponent<UILabel>();
 
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
+    vl->SetChildrenVerticalStretch(Stretch::Full);
+    vl->SetChildrenHorizontalStretch(Stretch::Full);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2(1.0f) );
 
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask
@@ -118,6 +146,10 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
     text->SetTextSize(12);
     text->SetWrapping(false);
+
+    UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
+    textLE->SetFlexibleSize( Vector2(1.0f) );
+
     label->p_text = text;
 
     GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
@@ -131,9 +163,9 @@ UILabel *UILabel::CreateInto(GameObject *go)
     return label;
 }
 
-RectTransform *UILabel::GetParentRT() const
+RectTransform *UILabel::GetTextParentRT() const
 {
-    return GetGameObject()->GetParent()->GetComponent<RectTransform>();
+    return GetText()->GetGameObject()->GetParent()->GetComponent<RectTransform>();
 }
 bool UILabel::IsShiftPressed() const
 {
@@ -171,7 +203,7 @@ void UILabel::HandleMouseSelection()
         float minDist = Math::Infinity<float>();
         int closestCharRectIndex = 0;
         float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-        mouseCoordsX_NDC = GetParentRT()->FromGlobalNDCToLocalNDC(
+        mouseCoordsX_NDC = GetTextParentRT()->FromGlobalNDCToLocalNDC(
                                             Vector2(mouseCoordsX_NDC) ).x;
 
         const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
@@ -210,14 +242,19 @@ void UILabel::HandleMouseSelection()
 
 void UILabel::UpdateSelectionQuadRenderer()
 {
-    RectTransform *parentRT = GetParentRT();
-    Rect limits = parentRT->GetScreenSpaceRectNDC();
-    float cursorX    = GetCursorXGlobalNDC( GetCursorIndex() );
-    float selectionX = GetCursorXGlobalNDC( GetSelectionIndex() );
-    Vector2 p1(cursorX,    limits.GetMin().y);
-    Vector2 p2(selectionX, limits.GetMax().y);
-    p1 = parentRT->FromGlobalNDCToLocalNDC(p1);
-    p2 = parentRT->FromGlobalNDCToLocalNDC(p2);
+    float cursorX     = GetCursorXGlobalNDC( GetCursorIndex() );
+    float selectionX  = GetCursorXGlobalNDC( GetSelectionIndex() );
+
+    float lineSkipPx  = GetText()->GetFont()->GetLineSkip() + 1;
+    float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC( Vector2i(0, lineSkipPx) ).y;
+
+    Rect r = GetText()->GetContentGlobalNDCRect();
+    Vector2 p1(cursorX,    r.GetMax().y - lineSkipNDC);
+    Vector2 p2(selectionX, r.GetMax().y);
+
+    RectTransform *textParentRT = GetTextParentRT();
+    p1 = textParentRT->FromGlobalNDCToLocalNDC(p1);
+    p2 = textParentRT->FromGlobalNDCToLocalNDC(p2);
 
     RectTransform *quadRT = p_selectionQuad->GetComponent<RectTransform>();
     quadRT->SetAnchorMin( Vector2::Min(p1, p2) );

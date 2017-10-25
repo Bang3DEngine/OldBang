@@ -74,6 +74,7 @@ public:
     // Conversion functions
     Rect FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const;
     Vector2 FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const;
+    Rect FromLocalNDCToGlobalNDC(const Rect &localNDCRect) const;
     Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
     Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;

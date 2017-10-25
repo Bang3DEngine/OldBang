@@ -47,15 +47,22 @@ void UIInputText::OnUpdate()
 void UIInputText::UpdateCursorRenderer()
 {
     // Cursor "I" position update
-    float cursorX  = GetLabel()->GetCursorXLocalNDC( GetCursorIndex() );
-    float lineSkip = GetText()->GetFont()->GetLineSkip();
-    float lineSkipNDC = GetLabelRT()->FromPixelsAmountToLocalNDC(
-                                              Vector2i(0, lineSkip)).y;
-    Vector2 minPoint(cursorX, 1 - lineSkipNDC);
-    Vector2 maxPoint(cursorX, 1);
-    const Vector2 cursorSize = GetLabelRT()->FromPixelsAmountToLocalNDC(Vector2i(3,0));
-    p_cursor->gameObject->GetComponent<RectTransform>()
-            ->SetAnchors(minPoint - cursorSize, maxPoint + cursorSize);
+    float cursorX  = GetLabel()->GetCursorXGlobalNDC( GetCursorIndex() );
+    float lineSkip = GetText()->GetFont()->GetLineSkip() + 1;
+    float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC(Vector2i(0, lineSkip)).y;
+    Rect textRect = GetText()->GetContentGlobalNDCRect();
+    Vector2 minPoint(cursorX, textRect.GetMax().y - lineSkipNDC);
+    Vector2 maxPoint(cursorX, textRect.GetMax().y);
+
+    RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->
+                               GetComponent<RectTransform>();
+    const Vector2 cursorSizeLocalNDC = cParentRT->FromPixelsAmountToLocalNDC(Vector2i(3,0));
+    const Vector2 minPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(minPoint);
+    const Vector2 maxPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(maxPoint);
+
+    RectTransform *cRT = p_cursor->GetGameObject()->GetComponent<RectTransform>();
+    cRT->SetAnchors(minPointLocalNDC - cursorSizeLocalNDC,
+                    maxPointLocalNDC + cursorSizeLocalNDC);
 }
 
 void UIInputText::UpdateTextScrolling()
@@ -330,9 +337,13 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     inputText->p_cursor = cursor;
 
     UILabel *label = GameObjectFactory::CreateUILabel();
+    label->SetSelectable(true);
     label->GetMask()->SetMasking(false);
     label->GetGameObject()->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
     inputText->p_label = label;
+
+    scrollArea->GetContainer()->AddChild(label->gameObject);
+    label->GetGameObject()->AddChild(cursorGo);
 
     inputText->SetCursorIndex( inputText->GetText()->GetContent().Size() );
     inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
@@ -340,9 +351,6 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     inputText->GetText()->SetWrapping(false);
     inputText->ResetSelection();
     inputText->UpdateCursorRenderer();
-
-    scrollArea->GetContainer()->AddChild(label->gameObject);
-    label->GetGameObject()->AddChild(cursorGo);
 
     return inputText;
 }
