@@ -93,16 +93,14 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
 {
     float localTextX = 0.0f;
     const int textLength = GetText()->GetContent().Size();
-    if (cursorIndex > 0 && cursorIndex < textLength)
+    if (cursorIndex > 0 && cursorIndex < textLength - 1) // Between two chars
     {
-        // In case we are between two characters
         Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
         Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
         localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
     }
-    else if (!GetText()->GetCharRectsLocalNDC().IsEmpty())
+    else if (!GetText()->GetCharRectsLocalNDC().IsEmpty()) // Begin or end
     {
-        // In case we are at the beginning or at the end of the text
         localTextX = (cursorIndex == 0 ?
                       GetText()->GetCharRectsLocalNDC().Front().GetMin().x :
                       GetText()->GetCharRectsLocalNDC().Back() .GetMax().x);
@@ -132,11 +130,12 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UILabel *label = go->AddComponent<UILabel>();
 
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::None);
-    vl->SetChildrenHorizontalStretch(Stretch::None);
+    vl->SetChildrenVerticalStretch(Stretch::Full);
+    vl->SetChildrenHorizontalStretch(Stretch::Full);
+    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
 
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(0.0f) );
+    le->SetFlexibleSize( Vector2(1.0f) );
 
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask
@@ -148,7 +147,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     text->SetWrapping(false);
 
     UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2(0.0f) );
+    textLE->SetFlexibleSize( Vector2(1.0f) );
 
     label->p_text = text;
 

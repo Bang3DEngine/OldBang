@@ -82,6 +82,7 @@ public:
     const Vector2& GetSpacingMultiplier() const;
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
+    Rect GetCharRectGlobalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
     LayoutMode GetLayoutMode() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
@@ -120,6 +121,7 @@ private:
     Mesh *m_mesh = nullptr;
     uint m_currentRenderingChar = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
+    mutable Array<Rect> m_charRectsGlobalNDC;
 
     LayoutMode m_layoutMode = LayoutMode::SingleLinePreferred;
 

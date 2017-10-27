@@ -36,18 +36,18 @@ void UIDirLayout::_ApplyLayout()
     // if (GetGameObject()->GetName() == "MenuBarItem") { Debug_Log(children); }
 
     Vector2i layoutRectSize = rt->GetScreenSpaceRectPx().GetSize();
-    layoutRectSize -= GetPaddingSize();
+    Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
 
-    Vector2i availableSpace = layoutRectSize;
+    Vector2i availableSpace = paddedLayoutRectSize;
     availableSpace -= GetTotalSpacing(children);
 
     Array<Vector2i> childrenRTSizes(children.Size(), Vector2i::Zero);
 
-    FillChildrenMinSizes(layoutRectSize, children,
+    FillChildrenMinSizes(paddedLayoutRectSize, children,
                          &childrenRTSizes, &availableSpace);
-    FillChildrenPreferredSizes(layoutRectSize, children,
+    FillChildrenPreferredSizes(paddedLayoutRectSize, children,
                                &childrenRTSizes, &availableSpace);
-    FillChildrenFlexibleSizes(layoutRectSize, children,
+    FillChildrenFlexibleSizes(paddedLayoutRectSize, children,
                               &childrenRTSizes, &availableSpace);
 
     // Apply actual calculation to RectTransforms Margins
@@ -60,8 +60,8 @@ void UIDirLayout::_ApplyLayout()
 
         const Vector2i& childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetComponent<RectTransform>();
-        ApplyLayoutToChildRectTransform(layoutRectSize, crt, marginAccum,
-                                        childRTSize);
+        ApplyLayoutToChildRectTransform(layoutRectSize, crt,
+                                        marginAccum, childRTSize);
         marginAccum += childRTSize;
         ++i;
     }
@@ -75,6 +75,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
     ENSURE(crt);
     crt->SetAnchors( Vector2(-1, 1) );
 
+    Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
     if (GetAxis() == Axis::Vertical)
     {
         crt->SetMarginLeft( GetPaddingLeft() );
@@ -83,17 +84,17 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
             HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
             if (hAlign == HorizontalAlignment::Center)
             {
-                crt->AddMarginLeft( (layoutRectSize.x - childRTSize.x) / 2);
+                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) / 2);
             }
             else if (hAlign == HorizontalAlignment::Right)
             {
-                crt->AddMarginLeft( (layoutRectSize.x - childRTSize.x) );
+                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
             }
-            crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
+            crt->SetMarginRight( -crt->GetMarginLeft() - childRTSize.x );
         }
         else
         {
-            crt->SetMarginRight( -GetPaddingLeft() - layoutRectSize.x);
+            crt->SetMarginRight( -layoutRectSize.x + GetPaddingRight() );
         }
         crt->SetMarginTop(  position.y );
         crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
@@ -106,17 +107,17 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
             VerticalAlignment vAlign = GetChildrenVerticalAlignment();
             if (vAlign == VerticalAlignment::Center)
             {
-                crt->AddMarginTop( (layoutRectSize.y - childRTSize.y) / 2);
+                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) / 2);
             }
             else if (vAlign == VerticalAlignment::Bot)
             {
-                crt->AddMarginTop( (layoutRectSize.y - childRTSize.y) );
+                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
             }
-            crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
+            crt->SetMarginBot( -crt->GetMarginTop() - childRTSize.y );
         }
         else
         {
-            crt->SetMarginBot( -(GetPaddingTop() + layoutRectSize.y) );
+            crt->SetMarginBot( -layoutRectSize.y + GetPaddingBot() );
         }
         crt->SetMarginLeft( position.x );
         crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );

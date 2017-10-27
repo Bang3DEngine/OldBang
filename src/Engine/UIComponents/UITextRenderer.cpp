@@ -105,10 +105,10 @@ Vector2i UITextRenderer::_GetPreferredSize() const
         case LayoutMode::MultiLinePreferred:
         case LayoutMode::MultiLineMinPreferred:
         {
-            const Array<Rect>& crs = GetCharRectsLocalNDC();
-            Rect boundingRect = Rect::Union(crs.Begin(), crs.End());
-            Recti boundingRectPx = GL::FromGlobalNDCToPixels(boundingRect);
-            prefSize = boundingRectPx.GetSize();
+            RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+            Vector2i globalRectSizePx = rt->FromLocalNDCToPixelsAmount(
+                                                    m_textRectNDC.GetSize());
+            prefSize = globalRectSizePx;
         }
         break;
     }
@@ -209,9 +209,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
 
-        Rect charRectLocalNDCRaw (
-                    rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMin() ),
-                    rt->FromPixelsPointToLocalNDC( cr.rectPx.GetMax() ) );
+        Rect charRectLocalNDCRaw ( rt->FromPixelsPointToLocalNDC(minPxPerf),
+                                   rt->FromPixelsPointToLocalNDC(maxPxPerf) );
         m_charRectsLocalNDC.PushBack(charRectLocalNDCRaw);
     }
 
@@ -413,6 +412,12 @@ const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
 const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
     return GetCharRectsLocalNDC()[charIndex];
+}
+
+Rect UITextRenderer::GetCharRectGlobalNDC(uint charIndex) const
+{
+    return GetGameObject()->GetComponent<RectTransform>()->
+            FromLocalNDCToGlobalNDC(GetCharRectsLocalNDC()[charIndex]);
 }
 Rect UITextRenderer::GetContentGlobalNDCRect() const
 {

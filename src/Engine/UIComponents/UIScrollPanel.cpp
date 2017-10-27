@@ -57,6 +57,10 @@ void UIScrollPanel::OnUpdate()
         GetScrollArea()->SetScrolling( scrolling );
         GetScrollBar()->SetScrollingPercent( scrollingPercent );
     }
+    else
+    {
+        GetScrollBar()->SetLength( GetContainerSize().y );
+    }
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
@@ -77,7 +81,8 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 
 Vector2i UIScrollPanel::GetContentSize() const
 {
-    return UILayoutManager::GetPreferredSize(GetContainer());
+    return GetContainer()->GetComponent<RectTransform>()->
+           GetScreenSpaceRectPx().GetSize();
 }
 
 Vector2i UIScrollPanel::GetContainerSize() const

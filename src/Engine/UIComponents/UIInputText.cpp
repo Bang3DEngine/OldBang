@@ -37,18 +37,12 @@ void UIInputText::OnUpdate()
     UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
     if ( ft->HasFocus() )
     {
-        Debug_Peek(p_scrollArea->GetScrolling());
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);
-        // UpdateTextScrolling();
+        UpdateTextScrolling();
         UpdateCursorRenderer();
-
-        // Debug_Log(GetGameObject()->ToStringStructure(true));
-        p_scrollArea->SetScrolling( Vector2i(-300, 20) );
-        Debug_Log(p_scrollArea->GetGameObject()->
-                  GetComponent<UIGroupLayout>()->GetPaddingLeftBot());
     }
     p_cursor->SetEnabled( ft->HasFocus() );
 }
@@ -111,7 +105,6 @@ void UIInputText::UpdateTextScrolling()
 
         Vector2i scrollPx = GL::FromGlobalNDCToPixelsAmount(scrollNDC);
         p_scrollArea->SetScrolling(prevScrollPx + scrollPx);
-        Debug_Peek(prevScrollPx + scrollPx);
     }
 }
 

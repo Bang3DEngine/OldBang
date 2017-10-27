@@ -72,8 +72,6 @@ void UIScrollArea::UpdatePaddings()
     int paddingBot   =  GetScrolling().y;
 
     UIGroupLayout *gl = GetGameObject()->GetComponent<UIGroupLayout>();
-    gl->SetChildrenHorizontalStretch(Stretch::None);
-    gl->SetChildrenVerticalStretch(Stretch::None);
     gl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 
