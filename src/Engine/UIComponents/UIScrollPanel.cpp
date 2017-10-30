@@ -79,8 +79,7 @@ void UIScrollPanel::OnUpdate()
         GetScrollBar()->SetLength( GetContainerSize().y );
     }
 
-    if (Input::GetKey(Key::E)) { GetScrollBar()->SetScrolling(GetScrollBar()->GetScrolling() + 1); }
-    if (Input::GetKey(Key::R)) { GetScrollBar()->SetScrolling(GetScrollBar()->GetScrolling() - 1); }
+    Debug_Peek(GetContentSize());
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
@@ -103,15 +102,6 @@ Vector2 UIScrollPanel::GetContentSize() const
 {
     return GetScrollArea()->GetContainedGameObject()->
            GetComponent<RectTransform>()->GetScreenSpaceRectPx().GetSize();
-    /*List<Recti> childrenRects;
-    List<RectTransform*> childrenRTs = GetScrollArea()->GetContainer()->
-                            GetComponentsInChildrenOnly<RectTransform>(false);
-    for (RectTransform *rt : childrenRTs)
-    {
-        childrenRects.PushBack(rt->GetScreenSpaceRectPx());
-    }
-    Recti rectUnion = Recti::Union(childrenRects.Begin(), childrenRects.End());
-    return rectUnion.GetSize();*/
 }
 
 Vector2 UIScrollPanel::GetContainerSize() const

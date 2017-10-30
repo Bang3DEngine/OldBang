@@ -65,8 +65,6 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     bgWTint->AddAgent(go);
 
     UILabel *label = GameObjectFactory::CreateUILabel();
-    label->GetText()->SetLayoutMode(
-                UITextRenderer::LayoutMode::SingleLineMinPreferred);
     label->GetText()->SetTextColor(Color::Black);
 
     buttonDriv->SetBackground(bgImg);

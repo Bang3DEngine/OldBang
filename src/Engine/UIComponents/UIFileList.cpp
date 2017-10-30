@@ -160,7 +160,6 @@ UIFileListEntry::UIFileListEntry()
     m_text = container->AddComponent<UITextRenderer>();
     m_text->SetTextSize(12);
     m_text->SetHorizontalAlign(HorizontalAlignment::Left);
-    m_text->SetLayoutMode(UITextRenderer::LayoutMode::SingleLineMinPreferred);
 
     AddChild(container);
 }

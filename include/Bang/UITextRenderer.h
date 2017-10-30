@@ -23,14 +23,6 @@ class UITextRenderer : public UIRenderer,
     IINVALIDATABLE(UITextRenderer)
 
 public:
-    enum class LayoutMode
-    {
-        SingleLineMinPreferred,
-        MultiLineMinPreferred,
-        SingleLinePreferred,
-        MultiLinePreferred
-    };
-
     virtual ~UITextRenderer();
 
     // UIRenderer
@@ -60,7 +52,6 @@ public:
     void SetOutlineColor(const Color &color);
     void SetOutlineBlurriness(float outlineBlurriness);
     void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
-    void SetLayoutMode(LayoutMode layoutMode);
 
     virtual bool NeedsReadingColorBuffer() const override;
     Font* GetFont() const;
@@ -82,7 +73,6 @@ public:
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
     Rect GetCharRectGlobalNDC(uint charIndex) const;
     Rect GetContentGlobalNDCRect() const;
-    LayoutMode GetLayoutMode() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // IRectTransformListener
@@ -120,8 +110,6 @@ private:
     uint m_currentRenderingChar = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
     mutable Array<Rect> m_charRectsGlobalNDC;
-
-    LayoutMode m_layoutMode = LayoutMode::SingleLinePreferred;
 
     UITextRenderer();
 

@@ -78,41 +78,14 @@ void UITextRenderer::CalculateLayout(Axis axis)
 {
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
 
-    Vector2i minSize  = Vector2i::Zero;
-    Vector2i prefSize = Vector2i::Zero;
-
+    Vector2i minSize = Vector2i::Zero;
     GetFont()->SetMetricsSize( GetTextSize() );
-
-    // Pref Size
-    switch (GetLayoutMode())
-    {
-        case LayoutMode::SingleLinePreferred:
-        case LayoutMode::SingleLineMinPreferred:
-            prefSize = TextFormatter::GetTextSizeOneLined(GetContent(),
-                                                          GetFont(),
-                                                          GetSpacingMultiplier());
-        break;
-
-        case LayoutMode::MultiLinePreferred:
-        case LayoutMode::MultiLineMinPreferred:
-        {
-            RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-            Vector2 globalRectSizePx = rt->FromLocalNDCToPixelsAmount(
-                                                    m_textRectNDC.GetSize());
-            prefSize = Vector2i(globalRectSizePx);
-        }
-        break;
-    }
-
-    // Min Size
-    switch (GetLayoutMode())
-    {
-        case LayoutMode::SingleLineMinPreferred:
-        case LayoutMode::MultiLineMinPreferred:
-            minSize = prefSize;
-
-        default: minSize = Vector2i::Zero;
-    };
+    Vector2i prefSize = Vector2i::Zero;
+    prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
+                                                  GetSpacingMultiplier());
+    Vector2 contentGlobalNDCSize = GetContentGlobalNDCRect().GetSize();
+    prefSize.y = Math::Max<int>(
+         prefSize.y, GL::FromGlobalNDCToPixelsAmount(contentGlobalNDCSize).y);
 
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
@@ -369,15 +342,6 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
     }
 }
 
-void UITextRenderer::SetLayoutMode(UITextRenderer::LayoutMode layoutMode)
-{
-    if (GetLayoutMode() != layoutMode)
-    {
-        m_layoutMode = layoutMode;
-        OnChanged();
-    }
-}
-
 bool UITextRenderer::NeedsReadingColorBuffer() const { return true; }
 
 void UITextRenderer::SetTextColor(const Color &textColor)
@@ -421,10 +385,6 @@ Rect UITextRenderer::GetContentGlobalNDCRect() const
             FromLocalNDCToGlobalNDC(m_textRectNDC);
 }
 
-UITextRenderer::LayoutMode UITextRenderer::GetLayoutMode() const
-{
-    return m_layoutMode;
-}
 VerticalAlignment UITextRenderer::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
