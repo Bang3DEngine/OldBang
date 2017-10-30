@@ -271,7 +271,7 @@ QuaternionG<T> operator*(OtherT a, const QuaternionG<T> &q)
 }
 
 template<class T, class OtherT>
-QuaternionG<T> operator/(const QuaternionG<T> &q, OtherT a)
+QuaternionG<T> operator/(OtherT a, const QuaternionG<T> &q)
 {
     return QuaternionG<T>(SCAST<T>(a) / q.x,
                           SCAST<T>(a) / q.y,
@@ -280,7 +280,7 @@ QuaternionG<T> operator/(const QuaternionG<T> &q, OtherT a)
 }
 
 template<class T, class OtherT>
-QuaternionG<T> operator/(OtherT a, const QuaternionG<T> &q)
+QuaternionG<T> operator/(const QuaternionG<T> &q, OtherT a)
 {
     return QuaternionG<T>(q.x/a, q.y/a, q.z/a, q.w/a);
 }
