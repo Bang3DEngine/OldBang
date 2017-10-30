@@ -447,13 +447,13 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static Recti    FromGlobalNDCToPixels(const Rect &rectNDC);
-    static Rect     FromPixelsToGlobalNDC(const Recti &rectPixels);
-    static Vector2  FromPixelsAmountToGlobalNDC(const Vector2i &pixelsAmount);
-    static Vector2i FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
+    static Rect     FromGlobalNDCToPixels(const Rect &rectNDC);
+    static Rect     FromPixelsToGlobalNDC(const Rect &rectPixels);
+    static Vector2  FromPixelsAmountToGlobalNDC(const Vector2 &pixelsAmount);
+    static Vector2  FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
     static Vector2  FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint);
     static Vector2  FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
-    static Vector2i FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
+    static Vector2  FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
 
     static void ApplyToShaderProgram(ShaderProgram *sp);
     static void Render(const VAO* vao,

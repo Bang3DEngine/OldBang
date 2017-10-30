@@ -5,19 +5,6 @@
 
 USING_NAMESPACE_BANG
 
-#include "Bang/GL.h"
-#include "Bang/Random.h"
-#include "Bang/Component.h"
-#include "Bang/GameObject.h"
-void ILayoutController::ApplyLayout()
-{
-    if (IsInvalid())
-    {
-        _ApplyLayout();
-        Validate();
-    }
-}
-
 void ILayoutController::OnInvalidated()
 {
     IInvalidatable<ILayoutController>::OnInvalidated();

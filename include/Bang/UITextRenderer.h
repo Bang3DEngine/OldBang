@@ -41,9 +41,7 @@ public:
     virtual void OnRender(RenderPass renderPass) override;
 
     // ILayoutElement
-    virtual Vector2i _GetMinSize()       const override;
-    virtual Vector2i _GetPreferredSize() const override;
-    virtual Vector2  _GetFlexibleSize()  const override;
+    virtual void CalculateLayout(Axis axis) override;
 
     void RegenerateCharQuadsVAO() const;
 

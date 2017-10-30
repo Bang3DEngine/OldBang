@@ -19,39 +19,37 @@ UIContentSizeFitter::~UIContentSizeFitter()
 
 }
 
-void UIContentSizeFitter::_ApplyLayout()
+void UIContentSizeFitter::ApplyLayout(Axis axis)
 {
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
 
-    Vector2i contentSize = Vector2i::Zero;
-
-    Vector2i hSize (UILayoutManager::GetSize(gameObject, GetHorizontalSizeType()));
-    contentSize.x = hSize.x;
-
-    Vector2i vSize (UILayoutManager::GetSize(gameObject, GetVerticalSizeType()));
-    contentSize.y = vSize.y;
-
-    if (GetHorizontalSizeType() != LayoutSizeType::None)
+    if (axis == Axis::Horizontal &&
+        GetHorizontalSizeType() != LayoutSizeType::None)
     {
-        rt->SetWidthFromPivot(contentSize.x);
+        Vector2i hSize (UILayoutManager::GetSize(gameObject, GetHorizontalSizeType()));
+        rt->SetWidthFromPivot(hSize.x);
     }
 
-    if (GetVerticalSizeType() != LayoutSizeType::None)
+    if (axis == Axis::Vertical &&
+        GetVerticalSizeType() != LayoutSizeType::None)
     {
-        rt->SetHeightFromPivot(contentSize.y);
+        Vector2i vSize (UILayoutManager::GetSize(gameObject, GetVerticalSizeType()));
+        rt->SetHeightFromPivot(vSize.y);
     }
 }
 
 void UIContentSizeFitter::SetHorizontalSizeType(LayoutSizeType sizeType)
 {
-    ASSERT(sizeType == LayoutSizeType::Min ||
+    ASSERT(sizeType == LayoutSizeType::None ||
+           sizeType == LayoutSizeType::Min  ||
            sizeType == LayoutSizeType::Preferred);
     m_horizontalSizeType = sizeType;
 }
 
 void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
 {
-    ASSERT(sizeType == LayoutSizeType::Min ||
+    ASSERT(sizeType == LayoutSizeType::None ||
+           sizeType == LayoutSizeType::Min  ||
            sizeType == LayoutSizeType::Preferred);
     m_verticalSizeType = sizeType;
 }

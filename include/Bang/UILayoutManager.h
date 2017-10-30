@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 
 #include "Bang/Map.h"
+#include "Bang/Axis.h"
 #include "Bang/LayoutSizeType.h"
 
 NAMESPACE_BANG_BEGIN
@@ -29,11 +30,13 @@ public:
     static Vector2  GetSize(GameObject *go, LayoutSizeType sizeType);
 
     static void RebuildLayout(GameObject *gameObject);
-    static void ForceRebuildLayout(GameObject *gameObject);
 
     static List<GameObject*> GetLayoutableChildrenList(GameObject *go);
 
 private:
+    static void CalculateLayout(GameObject *gameObject, Axis axis);
+    static void ApplyLayout(GameObject *gameObject, Axis axis);
+
     static void OnLayoutRebuilt(GameObject *go);
     static void OnInvalidatedLayout(Component *comp,
                                    bool isLayoutController);

@@ -10,6 +10,8 @@ NAMESPACE_BANG_BEGIN
 class UIContentSizeFitter : public Component,
                             public ILayoutSelfController
 {
+    COMPONENT(UIContentSizeFitter)
+
 public:
     UIContentSizeFitter();
     virtual ~UIContentSizeFitter();
@@ -21,7 +23,7 @@ public:
     LayoutSizeType GetVerticalSizeType() const;
 
     // ILayoutElement
-    virtual void _ApplyLayout() override;
+    virtual void ApplyLayout(Axis axis) override;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

@@ -28,18 +28,14 @@ Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
     return spacing * SCAST<int>(children.Size() - 1);
 }
 
-void UIDirLayout::_ApplyLayout()
+void UIDirLayout::ApplyLayout(Axis axis)
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>(); ENSURE(rt);
     auto children = UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
-    // if (GetGameObject()->GetName() == "MenuBarItem") { Debug_Log(children); }
-
-    Vector2i layoutRectSize = rt->GetScreenSpaceRectPx().GetSize();
+    Vector2i layoutRectSize( Vector2::Round(rt->GetScreenSpaceRectPx().GetSize()) );
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
-
-    Vector2i availableSpace = paddedLayoutRectSize;
-    availableSpace -= GetTotalSpacing(children);
+    Vector2i availableSpace = paddedLayoutRectSize - GetTotalSpacing(children);
 
     Array<Vector2i> childrenRTSizes(children.Size(), Vector2i::Zero);
 
@@ -60,14 +56,15 @@ void UIDirLayout::_ApplyLayout()
 
         const Vector2i& childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetComponent<RectTransform>();
-        ApplyLayoutToChildRectTransform(layoutRectSize, crt,
+        ApplyLayoutToChildRectTransform(axis, layoutRectSize, crt,
                                         marginAccum, childRTSize);
         marginAccum += childRTSize;
         ++i;
     }
 }
 
-void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
+void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
+                                                  const Vector2i &layoutRectSize,
                                                   RectTransform *crt,
                                                   const Vector2i &position,
                                                   const Vector2i &childRTSize)
@@ -78,49 +75,61 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
     if (GetAxis() == Axis::Vertical)
     {
-        crt->SetMarginLeft( GetPaddingLeft() );
-        if (GetChildrenHorizontalStretch() == Stretch::None)
+        if (rebuildPassAxis == Axis::Horizontal)
         {
-            HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
-            if (hAlign == HorizontalAlignment::Center)
+            crt->SetMarginLeft( GetPaddingLeft() );
+            if (GetChildrenHorizontalStretch() == Stretch::None)
             {
-                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) / 2);
+                HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
+                if (hAlign == HorizontalAlignment::Center)
+                {
+                    crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) / 2);
+                }
+                else if (hAlign == HorizontalAlignment::Right)
+                {
+                    crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
+                }
+                crt->SetMarginRight( -crt->GetMarginLeft() - childRTSize.x );
             }
-            else if (hAlign == HorizontalAlignment::Right)
+            else
             {
-                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
+                crt->SetMarginRight( -layoutRectSize.x + GetPaddingRight() );
             }
-            crt->SetMarginRight( -crt->GetMarginLeft() - childRTSize.x );
         }
-        else
+        else // Axis::Vertical
         {
-            crt->SetMarginRight( -layoutRectSize.x + GetPaddingRight() );
+            crt->SetMarginTop(  position.y );
+            crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
         }
-        crt->SetMarginTop(  position.y );
-        crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
     }
     else // Axis::Horizontal
     {
-        crt->SetMarginTop( GetPaddingTop() );
-        if (GetChildrenVerticalStretch() == Stretch::None)
+        if (rebuildPassAxis == Axis::Vertical)
         {
-            VerticalAlignment vAlign = GetChildrenVerticalAlignment();
-            if (vAlign == VerticalAlignment::Center)
+            crt->SetMarginTop( GetPaddingTop() );
+            if (GetChildrenVerticalStretch() == Stretch::None)
             {
-                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) / 2);
+                VerticalAlignment vAlign = GetChildrenVerticalAlignment();
+                if (vAlign == VerticalAlignment::Center)
+                {
+                    crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) / 2);
+                }
+                else if (vAlign == VerticalAlignment::Bot)
+                {
+                    crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
+                }
+                crt->SetMarginBot( -crt->GetMarginTop() - childRTSize.y );
             }
-            else if (vAlign == VerticalAlignment::Bot)
+            else
             {
-                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
+                crt->SetMarginBot( -layoutRectSize.y + GetPaddingBot() );
             }
-            crt->SetMarginBot( -crt->GetMarginTop() - childRTSize.y );
         }
-        else
+        else // Axis::Horizontal
         {
-            crt->SetMarginBot( -layoutRectSize.y + GetPaddingBot() );
+            crt->SetMarginLeft( position.x );
+            crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
         }
-        crt->SetMarginLeft( position.x );
-        crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
     }
 }
 
@@ -176,8 +185,8 @@ void UIDirLayout::FillChildrenPreferredSizes(const Vector2i &layoutRectSize,
         Vector2i childPrefSize = UILayoutManager::GetPreferredSize(child);
         Vector2i childPrefPxToAdd = (childPrefSize - minChildSize);
         childPrefPxToAdd = Vector2i::Max(childPrefPxToAdd, Vector2i::Zero);
-        Vector2d  sizeProportion (Vector2d(childPrefPxToAdd) /
-                                  Vector2d(totalPrefPxToAdd));
+        Vector2d sizeProportion (Vector2d(childPrefPxToAdd) /
+                                 Vector2d(totalPrefPxToAdd));
         Vector2i prefAvailPxToAdd (sizeProportion * Vector2d(*availableSpace));
         prefAvailPxToAdd = Vector2i::Min(prefAvailPxToAdd, childPrefPxToAdd);
         Vector2i childRTSize = Vector2i::Max(minChildSize,
@@ -255,52 +264,43 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
     *childrenRTSizes = newChildRTSizes;
 }
 
-Vector2i UIDirLayout::_GetMinSize() const
+void UIDirLayout::CalculateLayout(Axis axis)
 {
-    return GetSize(UILayoutManager::GetLayoutableChildrenList( GetGameObject() ),
-                   LayoutSizeType::Min);
-}
-
-Vector2i UIDirLayout::_GetPreferredSize() const
-{
-    return GetSize(UILayoutManager::GetLayoutableChildrenList( GetGameObject() ),
-                   LayoutSizeType::Preferred);
-}
-
-Vector2i UIDirLayout::GetSize(const List<GameObject*> &children,
-                              LayoutSizeType sizeType) const
-{
-    Vector2i totalSize = Vector2i::Zero;
+    Vector2i minSize  = Vector2i::Zero;
+    Vector2i prefSize = Vector2i::Zero;
+    List<GameObject*> children =
+                UILayoutManager::GetLayoutableChildrenList( GetGameObject() );
     for (GameObject *child : children)
     {
-        Vector2i childSize (UILayoutManager::GetSize(child, sizeType));
+        Vector2i cMinSize (UILayoutManager::GetSize(child, LayoutSizeType::Min));
+        Vector2i cPrefSize(UILayoutManager::GetSize(child, LayoutSizeType::Preferred));
         if (GetAxis() == Axis::Vertical)
         {
-            totalSize.x = Math::Max(totalSize.x, childSize.x);
-            totalSize.y += childSize.y;
+            minSize.x  = Math::Max(minSize.x, cMinSize.x);
+            prefSize.x = Math::Max(prefSize.x, cPrefSize.x);
+            minSize.y  += cMinSize.y;
+            prefSize.y += cPrefSize.y;
         }
         else // Axis::Horizontal
         {
-            totalSize.x += childSize.x;
-            totalSize.y = Math::Max(totalSize.y, childSize.y);
+            minSize.x  += cMinSize.x;
+            prefSize.x += cPrefSize.x;
+            minSize.y  = Math::Max(minSize.y, cMinSize.y);
+            prefSize.y = Math::Max(prefSize.y, cPrefSize.y);
         }
     }
-    return totalSize + GetTotalSpacing(children) + GetPaddingSize();
+
+    Vector2i addedSize (GetTotalSpacing(children) + GetPaddingSize());
+    minSize  += addedSize;
+    prefSize += addedSize;
+
+    SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
 
 void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }
-
 int UIDirLayout::GetSpacing() const { return m_spacingPx; }
-
-Axis UIDirLayout::GetAxis() const
-{
-    return m_axis;
-}
-
-Vector2i UIDirLayout::GetDir() const
-{
-    return Vector2i::FromAxis(m_axis);
-}
+Axis UIDirLayout::GetAxis() const { return m_axis; }
+Vector2i UIDirLayout::GetDir() const { return Vector2i::FromAxis(m_axis); }
 
 void UIDirLayout::ImportXML(const XMLNode &xmlInfo)
 {

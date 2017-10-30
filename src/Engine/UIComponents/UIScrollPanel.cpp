@@ -2,16 +2,13 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/Color.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollArea.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutManager.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIVerticalLayout.h"
-#include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIImageRenderer.h"
 
 USING_NAMESPACE_BANG
 
@@ -26,6 +23,26 @@ UIScrollPanel::~UIScrollPanel()
 void UIScrollPanel::OnUpdate()
 {
     Component::OnUpdate();
+
+    RectTransform *scrollAreaRT =
+            GetScrollArea()->GetGameObject()->GetComponent<RectTransform>();
+    scrollAreaRT->SetMarginRight(GetScrollBar()->GetThickness());
+
+    GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
+    if (containedGo)
+    {
+        RectTransform *containedGoRT = containedGo->GetComponent<RectTransform>();
+        if (GetScrollBar()->GetAxis() == Axis::Vertical)
+        {
+            containedGoRT->SetAnchorX( Vector2(-1,1) );
+            containedGoRT->SetAnchorY( Vector2(1) );
+        }
+        else
+        {
+            containedGoRT->SetAnchorX( Vector2(-1) );
+            containedGoRT->SetAnchorY( Vector2(-1,1) );
+        }
+    }
 
     Axis axis = GetScrollBar()->GetAxis();
     int contentSize = GetContentSize().GetAxis(axis);
@@ -61,70 +78,59 @@ void UIScrollPanel::OnUpdate()
     {
         GetScrollBar()->SetLength( GetContainerSize().y );
     }
+
+    if (Input::GetKey(Key::E)) { GetScrollBar()->SetScrolling(GetScrollBar()->GetScrolling() + 1); }
+    if (Input::GetKey(Key::R)) { GetScrollBar()->SetScrolling(GetScrollBar()->GetScrolling() - 1); }
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
 {
-    Vector2i contentSize = GetContentSize();
-    SetScrollingPercent( Vector2(scrolling) / Vector2(contentSize) );
+    Vector2 contentSize = GetContentSize();
+    SetScrollingPercent( Vector2(scrolling) / contentSize );
 }
 
 void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 {
-    Vector2i contentSize = GetContentSize();
+    Vector2 contentSize = GetContentSize();
     GetScrollArea()->SetScrolling(
-                Vector2i( Vector2::Round(scrollPerc * Vector2(contentSize))) );
+                Vector2i( Vector2::Round(scrollPerc * contentSize)) );
 
     Axis axis = GetScrollBar()->GetAxis();
     GetScrollBar()->SetScrollingPercent( scrollPerc.GetAxis(axis) );
 }
 
-Vector2i UIScrollPanel::GetContentSize() const
+Vector2 UIScrollPanel::GetContentSize() const
 {
-    return GetContainer()->GetComponent<RectTransform>()->
-           GetScreenSpaceRectPx().GetSize();
+    return GetScrollArea()->GetContainedGameObject()->
+           GetComponent<RectTransform>()->GetScreenSpaceRectPx().GetSize();
+    /*List<Recti> childrenRects;
+    List<RectTransform*> childrenRTs = GetScrollArea()->GetContainer()->
+                            GetComponentsInChildrenOnly<RectTransform>(false);
+    for (RectTransform *rt : childrenRTs)
+    {
+        childrenRects.PushBack(rt->GetScreenSpaceRectPx());
+    }
+    Recti rectUnion = Recti::Union(childrenRects.Begin(), childrenRects.End());
+    return rectUnion.GetSize();*/
 }
 
-Vector2i UIScrollPanel::GetContainerSize() const
+Vector2 UIScrollPanel::GetContainerSize() const
 {
-    return GetContainer()->GetParent()->GetComponent<RectTransform>()->
-           GetScreenSpaceRectPx().GetSize();
+    return GetScrollArea()->GetContainer()->GetParent()->
+           GetComponent<RectTransform>()->GetScreenSpaceRectPx().GetSize();
 }
 
-GameObject *UIScrollPanel::GetContainer() const
-{
-    return GetScrollArea()->GetContainer();
-}
-
-UIScrollArea *UIScrollPanel::GetScrollArea() const
-{
-    return p_scrollArea;
-}
-
-UIScrollBar *UIScrollPanel::GetScrollBar() const
-{
-    return p_scrollBar;
-}
+UIScrollArea *UIScrollPanel::GetScrollArea() const { return p_scrollArea; }
+UIScrollBar *UIScrollPanel::GetScrollBar() const { return p_scrollBar; }
 
 UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
     REQUIRE_COMPONENT(go, UIFocusTaker);
 
-    UIHorizontalLayout *hl = go->AddComponent<UIHorizontalLayout>();
-
     UIScrollPanel *scrollPanel = go->AddComponent<UIScrollPanel>();
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollArea();
-    UIVerticalLayout *vl = scrollArea->GetContainer()->
-                                       AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::Full);
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
-
-    UILayoutElement *scrollAreaLE = scrollArea->GetGameObject()->
-                                    AddComponent<UILayoutElement>();
-    scrollAreaLE->SetFlexibleSize( Vector2(1) );
-
     UIScrollBar *scrollBar = GameObjectFactory::CreateUIScrollBar();
 
     go->AddChild(scrollArea->GetGameObject());

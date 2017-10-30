@@ -47,8 +47,10 @@ private:
 
     static UIScrollBar* CreateInto(GameObject *go);
 
+    void UpdateLengthThicknessMargins();
+
     int GetScrollingSpacePx() const;
-    Recti GetScrollingRect() const;
+    Rect GetScrollingRect() const;
     UIScrollArea *GetScrollArea() const;
     UIButton* GetButton() const;
     GameObject* GetBar() const;

@@ -114,14 +114,15 @@ float UILayoutElement::GetFlexibleHeight() const
     return GetFlexibleSize().y;
 }
 
-const Vector2 &UILayoutElement::GetFlexibleSize() const
+Vector2 UILayoutElement::GetFlexibleSize() const
 {
     return m_flexibleSize;
 }
 
-Vector2 UILayoutElement::_GetFlexibleSize() const
+void UILayoutElement::CalculateLayout(Axis axis)
 {
-    return GetFlexibleSize();
+    SetCalculatedLayout(axis, GetMinSize().GetAxis(axis),
+                        GetPreferredSize().GetAxis(axis));
 }
 
 void UILayoutElement::OnChanged()
@@ -133,14 +134,4 @@ void UILayoutElement::OnChanged()
     {
         controller->Invalidate();
     }
-}
-
-Vector2i UILayoutElement::_GetMinSize() const
-{
-    return GetMinSize();
-}
-
-Vector2i UILayoutElement::_GetPreferredSize() const
-{
-    return GetPreferredSize();
 }

@@ -233,6 +233,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
+${ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp

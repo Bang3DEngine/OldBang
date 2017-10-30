@@ -25,8 +25,11 @@ public:
     void SetScrollingX(int scrollPxX);
     void SetScrollingY(int scrollPxY);
 
+    void SetContainedGameObject(GameObject *go);
+
     UIMask* GetMask() const;
     GameObject* GetContainer() const;
+    GameObject* GetContainedGameObject() const;
     UIImageRenderer* GetBackground() const;
     const Vector2i& GetScrolling() const;
 
@@ -35,7 +38,8 @@ private:
 
     UIMask *p_mask = nullptr;
     UIImageRenderer *p_bg = nullptr;
-    GameObject *p_childrenContainer = nullptr;
+    GameObject *p_container = nullptr;
+    GameObject *p_containedGo = nullptr;
 
     Vector2i m_scrollingPx = Vector2i::Zero;
 

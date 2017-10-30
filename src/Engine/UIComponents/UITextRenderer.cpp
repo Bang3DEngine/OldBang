@@ -74,25 +74,16 @@ void UITextRenderer::OnRender(RenderPass renderPass)
     }
 }
 
-Vector2i UITextRenderer::_GetMinSize() const
+void UITextRenderer::CalculateLayout(Axis axis)
 {
-    switch (GetLayoutMode())
-    {
-        case LayoutMode::SingleLineMinPreferred:
-        case LayoutMode::MultiLineMinPreferred:
-            return _GetPreferredSize();
+    if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
 
-        default: return Vector2i::Zero;
-    };
-}
-
-Vector2i UITextRenderer::_GetPreferredSize() const
-{
-    if (!GetFont()) { return Vector2i::Zero; }
+    Vector2i minSize  = Vector2i::Zero;
+    Vector2i prefSize = Vector2i::Zero;
 
     GetFont()->SetMetricsSize( GetTextSize() );
 
-    Vector2i prefSize;
+    // Pref Size
     switch (GetLayoutMode())
     {
         case LayoutMode::SingleLinePreferred:
@@ -106,19 +97,24 @@ Vector2i UITextRenderer::_GetPreferredSize() const
         case LayoutMode::MultiLineMinPreferred:
         {
             RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-            Vector2i globalRectSizePx = rt->FromLocalNDCToPixelsAmount(
+            Vector2 globalRectSizePx = rt->FromLocalNDCToPixelsAmount(
                                                     m_textRectNDC.GetSize());
-            prefSize = globalRectSizePx;
+            prefSize = Vector2i(globalRectSizePx);
         }
         break;
     }
 
-    return prefSize;
-}
+    // Min Size
+    switch (GetLayoutMode())
+    {
+        case LayoutMode::SingleLineMinPreferred:
+        case LayoutMode::MultiLineMinPreferred:
+            minSize = prefSize;
 
-Vector2 UITextRenderer::_GetFlexibleSize() const
-{
-    return Vector2(0);
+        default: minSize = Vector2i::Zero;
+    };
+
+    SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
 
 void UITextRenderer::RegenerateCharQuadsVAO() const
@@ -141,7 +137,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
                                         GetFont(),
-                                        rt->GetScreenSpaceRectPx(),
+                                        Recti( rt->GetScreenSpaceRectPx() ),
                                         GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),

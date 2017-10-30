@@ -45,6 +45,7 @@ private:
     GameObject *p_mouseOverGo = nullptr;
     SelectionCallback m_selectionCallback;
 
+    GameObject *p_container = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
 
     UIScrollPanel *GetScrollPanel() const;

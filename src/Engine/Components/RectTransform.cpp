@@ -22,8 +22,8 @@ RectTransform::~RectTransform()
 
 Vector2 RectTransform::FromPixelsToLocalNDC(const Vector2i &pixels) const
 {
-    Vector2i parentSizePx = GetParentScreenRectPx().GetSize();
-    parentSizePx = Vector2i::Max(Vector2i::One, parentSizePx);
+    Vector2 parentSizePx = GetParentScreenRectPx().GetSize();
+    parentSizePx = Vector2::Max(Vector2::One, parentSizePx);
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
     return Vector2f(pixels) * pixelNDCSize;
 }
@@ -34,10 +34,9 @@ Vector2 RectTransform::FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) 
             * 2.0f;
 }
 
-Vector2i RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
+Vector2 RectTransform::FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const
 {
-    Vector2 res (ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize()) * 0.5f);
-    return Vector2i( Vector2::Round(res) );
+    return (ndcAmount * Vector2f(GetScreenSpaceRectPx().GetSize()) * 0.5f);
 }
 
 Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2 &pixelsPoint) const
@@ -50,7 +49,7 @@ Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) co
     return FromPixelsPointToLocalNDC( Vector2(pixelsPoint) );
 }
 
-Vector2i RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
+Vector2 RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 {
     return GL::FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
 }
@@ -256,23 +255,11 @@ void RectTransform::SetAnchors(const Vector2 &anchorMin,
 
 void RectTransform::SetWidthFromPivot(int width)
 {
-    SetMarginLeft(0); SetMarginRight(0);
-    AddWidthFromPivot(width);
-}
-
-void RectTransform::SetHeightFromPivot(int height)
-{
-    SetMarginBot(0); SetMarginTop(0);
-    AddHeightFromPivot(height);
-}
-
-void RectTransform::AddWidthFromPivot(int width)
-{
     SetMarginLeft ( -(GetPivotPosition().x - (-1)) * width / 2 );
     SetMarginRight(  (GetPivotPosition().x - ( 1)) * width / 2 );
 }
 
-void RectTransform::AddHeightFromPivot(int height)
+void RectTransform::SetHeightFromPivot(int height)
 {
     SetMarginBot( -(GetPivotPosition().y - (-1)) * height / 2 );
     SetMarginTop(  (GetPivotPosition().y - ( 1)) * height / 2 );
@@ -298,16 +285,14 @@ const Vector2& RectTransform::GetPivotPosition() const { return m_pivotPosition;
 const Vector2& RectTransform::GetAnchorMin() const { return m_anchorMin; }
 const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
-Recti RectTransform::GetScreenSpaceRectPx() const
+Rect RectTransform::GetScreenSpaceRectPx() const
 {
-    Rect rectNDC = GetScreenSpaceRectNDC();
-    return GL::FromGlobalNDCToPixels(rectNDC);
+    return GL::FromGlobalNDCToPixels( GetScreenSpaceRectNDC() );
 }
 
-Recti RectTransform::GetParentScreenRectPx() const
+Rect RectTransform::GetParentScreenRectPx() const
 {
-    return Recti( ( GetParentScreenRect() * 0.5f + 0.5f) *
-                  Vector2f(GL::GetViewportSize()) );
+    return (GetParentScreenRect() * 0.5f + 0.5f) * Vector2(GL::GetViewportSize());
 }
 
 Rect RectTransform::GetScreenSpaceRectNDC() const
@@ -371,9 +356,9 @@ void RectTransform::OnRenderGizmos()
     // Gizmos::RenderFillRect(r);
 
     Gizmos::SetColor(Color::Green);
+    /*
     Gizmos::RenderRect(r);
 
-    /*
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
     Gizmos::SetColor(Color::Yellow);
@@ -382,6 +367,11 @@ void RectTransform::OnRenderGizmos()
     Gizmos::SetColor(Color::Red);
     Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
                             r.GetCenter() + Vector2(size)));
+
+    Gizmos::SetColor(Color::Blue);
+    Rect anchorRect = FromLocalNDCToGlobalNDC(
+                                Rect(GetAnchorMin(), GetAnchorMax()));
+    Gizmos::RenderRect(anchorRect);
     */
 }
 

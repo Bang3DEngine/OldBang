@@ -9,9 +9,10 @@
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/ILayoutController.h"
-#include "Bang/IRectTransformListener.h"
 #include "Bang/ILayoutSelfController.h"
+#include "Bang/IRectTransformListener.h"
 
 USING_NAMESPACE_BANG
 
@@ -81,57 +82,85 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
     return Vector2::Max(size, Vector2::Zero);
 }
 
-void UILayoutManager::RebuildLayout(GameObject *rootGo)
-{
-    ENSURE(rootGo);
-    std::queue<String> indentQueue; indentQueue.push("");
-    std::queue<GameObject*> goQueue; goQueue.push(rootGo);
-    while (!goQueue.empty())
-    {
-        String currentIndent = indentQueue.front();
-        GameObject *go = goQueue.front();
-
-        List<ILayoutController*> nonSelfControllers;
-        auto layoutControllers = go->GetComponents<ILayoutController>();
-        bool valid = true;
-
-        // First SelfControllers
-        for (ILayoutController *layoutController : layoutControllers)
-        {
-            if (layoutController->IsInvalid()) { valid = false; }
-            if (DCAST<ILayoutSelfController*>(layoutController))
-            {
-                layoutController->ApplyLayout();
-            }
-            else { nonSelfControllers.PushBack(layoutController); }
-        }
-
-        // Then, "normal" controllers
-        for (ILayoutController *layoutController : nonSelfControllers)
-        {
-            layoutController->ApplyLayout();
-        }
-
-        goQueue.pop();
-        indentQueue.pop();
-        for (GameObject *child : go->GetChildren()) { goQueue.push(child); indentQueue.push(currentIndent + "  "); }
-    }
-}
-
 List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
 {
     List<GameObject*> childrenList;
     for (GameObject *child : go->GetChildren())
     {
-        bool addIt = false;
-        List<ILayoutElement*> lElms = child->GetComponents<ILayoutElement>();
-        for (ILayoutElement *le : lElms)
+        UILayoutIgnorer *ltIgnorer = child->GetComponent<UILayoutIgnorer>();
+        bool ignoreLayout = ltIgnorer ? ltIgnorer->IsIgnoreLayout() : false;
+        if (child->HasComponent<ILayoutElement>() && !ignoreLayout)
         {
-            if (!le->GetIgnoreLayout()) { addIt = true; break; }
+            childrenList.PushBack(child);
         }
-        if (addIt) { childrenList.PushBack(child); }
     }
     return childrenList;
+}
+
+void UILayoutManager::RebuildLayout(GameObject *rootGo)
+{
+    ENSURE(rootGo);
+    CalculateLayout(rootGo, Axis::Horizontal);
+    ApplyLayout(rootGo, Axis::Horizontal);
+    CalculateLayout(rootGo, Axis::Vertical);
+    ApplyLayout(rootGo, Axis::Vertical);
+}
+
+void UILayoutManager::CalculateLayout(GameObject *gameObject, Axis axis)
+{
+    const List<GameObject*> &children = gameObject->GetChildren();
+    for (GameObject *child : children)
+    {
+        CalculateLayout(child, axis);
+    }
+
+    List<ILayoutElement*> goLEs = gameObject->GetComponents<ILayoutElement>();
+    for (ILayoutElement *goLE : goLEs)
+    {
+        // if (goLE->IsInvalid())
+        {
+            goLE->CalculateLayout(axis);
+            // if (axis == Axis::Vertical) { goLE->Validate(); }
+        }
+    }
+}
+
+void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
+{
+    std::queue<String> indentQueue; indentQueue.push("");
+
+    std::queue<GameObject*> goQueue; goQueue.push(gameObject);
+    while (!goQueue.empty())
+    {
+        GameObject *go = goQueue.front(); goQueue.pop();
+
+        List<ILayoutController*> nonSelfControllers;
+        List<ILayoutController*> layoutControllers =
+                                        go->GetComponents<ILayoutController>();
+
+        // SelfLayoutControllers
+        for (ILayoutController *layoutController : layoutControllers)
+        {
+            ILayoutSelfController *selfController =
+                           DCAST<ILayoutSelfController*>(layoutController);
+            if (selfController)
+            {
+                selfController->ApplyLayout(axis);
+                // if (axis == Axis::Vertical) { layoutController->Validate(); }
+            }
+            else { nonSelfControllers.PushBack(layoutController); }
+        }
+
+        // Normal LayoutControllers
+        for (ILayoutController *layoutController : nonSelfControllers)
+        {
+            layoutController->ApplyLayout(axis);
+            // if (axis == Axis::Vertical) { layoutController->Validate(); }
+        }
+
+        const List<GameObject*> &children = go->GetChildren();
+        for (GameObject *child : children) { goQueue.push(child); }
+    }
 }
 
 void UILayoutManager::OnInvalidatedLayout(Component *comp,

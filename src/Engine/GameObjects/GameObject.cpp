@@ -460,7 +460,7 @@ String GameObject::ToStringStructure(bool recursive, const String &indent)
 String GameObject::ToString() const
 {
     ::std::ostringstream oss;
-    oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";
+    oss << "GameObject: " << GetName() << "(" << ((void*)this) << ")";
     return oss.str();
 }
 

@@ -68,7 +68,7 @@ void UIBorderRect::OnRectTransformChanged()
     RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
     Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
 
-    Vector2 pNDC = GL::FromPixelsAmountToGlobalNDC( Vector2i(m_padding) );
+    Vector2 pNDC = GL::FromPixelsAmountToGlobalNDC( Vector2(m_padding) );
     p_lineRenderer->SetPoints(
       {Vector3(boundingRectNDC.GetMinXMinY() + Vector2( pNDC.x,  pNDC.y), 0),
        Vector3(boundingRectNDC.GetMinXMaxY() + Vector2( pNDC.x, -pNDC.y), 0),

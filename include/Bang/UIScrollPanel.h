@@ -19,7 +19,6 @@ public:
     void SetScrolling(const Vector2i &scrolling);
     void SetScrollingPercent(const Vector2 &scrollingPercent);
 
-    GameObject   *GetContainer() const;
     UIScrollArea *GetScrollArea() const;
     UIScrollBar  *GetScrollBar() const;
 
@@ -31,8 +30,8 @@ private:
 
     UIScrollPanel();
 
-    Vector2i GetContentSize() const;
-    Vector2i GetContainerSize() const;
+    Vector2 GetContentSize() const;
+    Vector2 GetContainerSize() const;
 
     static UIScrollPanel* CreateInto(GameObject *go);
 

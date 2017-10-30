@@ -2,10 +2,7 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UILayoutManager.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -44,43 +41,43 @@ void UIScrollArea::SetScrollingY(int scrollPxY)
     SetScrolling( Vector2i(GetScrolling().x, scrollPxY) );
 }
 
-UIMask *UIScrollArea::GetMask() const
+void UIScrollArea::SetContainedGameObject(GameObject *go)
 {
-    return p_mask;
+    if (GetContainedGameObject() != go)
+    {
+        if (GetContainedGameObject())
+        {
+            GetContainedGameObject()->SetParent(nullptr);
+        }
+
+        p_containedGo = go;
+        if (GetContainedGameObject())
+        {
+            GetContainedGameObject()->SetParent( GetContainer() );
+        }
+    }
 }
 
-GameObject *UIScrollArea::GetContainer() const
-{
-    return p_childrenContainer;
-}
-
-UIImageRenderer *UIScrollArea::GetBackground() const
-{
-    return p_bg;
-}
-
-const Vector2i &UIScrollArea::GetScrolling() const
-{
-    return m_scrollingPx;
-}
+UIMask *UIScrollArea::GetMask() const { return p_mask; }
+GameObject *UIScrollArea::GetContainer() const { return p_container; }
+GameObject *UIScrollArea::GetContainedGameObject() const { return p_containedGo; }
+UIImageRenderer *UIScrollArea::GetBackground() const { return p_bg; }
+const Vector2i &UIScrollArea::GetScrolling() const { return m_scrollingPx; }
 
 void UIScrollArea::UpdatePaddings()
 {
     int paddingLeft  =  GetScrolling().x;
     int paddingRight = -GetScrolling().x;
-    int paddingTop   = -GetScrolling().y;
-    int paddingBot   =  GetScrolling().y;
+    int paddingTop   =  GetScrolling().y;
+    int paddingBot   = -GetScrolling().y;
 
-    UIGroupLayout *gl = GetGameObject()->GetComponent<UIGroupLayout>();
-    gl->SetPaddings(paddingLeft, paddingBot, paddingRight, paddingTop);
+    RectTransform *rt = GetContainer()->GetComponent<RectTransform>();
+    rt->SetMargins(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 
 UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
 {
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
-    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    vl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);
@@ -90,11 +87,11 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     mask->SetDrawMask(false);
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
-    childrenCont->SetName("ChildrenCont");
+    childrenCont->SetName("ScrollAreaChildrenContainer");
 
     scrollArea->p_bg = bg;
     scrollArea->p_mask = mask;
-    scrollArea->p_childrenContainer = childrenCont;
+    scrollArea->p_container = childrenCont;
 
     go->AddChild(childrenCont);
 

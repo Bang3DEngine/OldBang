@@ -33,12 +33,10 @@ public:
     Vector2i GetPreferredSize() const;
     float GetFlexibleWidth() const;
     float GetFlexibleHeight() const;
-    const Vector2& GetFlexibleSize() const;
+    Vector2 GetFlexibleSize() const override;
 
 protected:
-    Vector2i _GetMinSize()       const override;
-    Vector2i _GetPreferredSize() const override;
-    Vector2  _GetFlexibleSize()  const override;
+    virtual void CalculateLayout(Axis axis) override;
 
 private:
     Vector2i m_minSize       = -Vector2i::One;

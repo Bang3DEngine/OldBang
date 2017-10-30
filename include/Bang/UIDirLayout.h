@@ -15,11 +15,10 @@ class UIDirLayout : public UIGroupLayout
 
 public:
     // ILayoutController
-    virtual void _ApplyLayout() override;
+    virtual void ApplyLayout(Axis axis) override;
 
     // ILayoutElement
-    virtual Vector2i _GetMinSize()       const override;
-    virtual Vector2i _GetPreferredSize() const override;
+    virtual void CalculateLayout(Axis axis) override;
 
     void SetSpacing(int spacingPx);
 
@@ -41,10 +40,9 @@ private:
     Axis m_axis = Axis::Horizontal;
 
     Vector2i GetTotalSpacing(const List<GameObject*> &children) const;
-    Vector2i GetSize(const List<GameObject*> &children,
-                     LayoutSizeType sizeType) const;
 
-    void ApplyLayoutToChildRectTransform(const Vector2i &layoutRectSize,
+    void ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
+                                         const Vector2i &layoutRectSize,
                                          RectTransform *childRT,
                                          const Vector2i &position,
                                          const Vector2i &childRTSize);

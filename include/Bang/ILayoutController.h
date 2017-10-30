@@ -1,6 +1,7 @@
 #ifndef ILAYOUTCONTROLLER_H
 #define ILAYOUTCONTROLLER_H
 
+#include "Bang/Axis.h"
 #include "Bang/IInvalidatable.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/IRectTransformListener.h"
@@ -14,7 +15,6 @@ class ILayoutController : public IInvalidatable<ILayoutController>,
     IINVALIDATABLE(ILayoutController)
 
 public:
-    void ApplyLayout();
     virtual void OnInvalidated() override;
 
     // IChildrenListener
@@ -31,7 +31,9 @@ protected:
     virtual ~ILayoutController();
 
 private:
-    virtual void _ApplyLayout() = 0;
+    virtual void ApplyLayout(Axis axis) = 0;
+
+    friend class UILayoutManager;
 };
 
 NAMESPACE_BANG_END

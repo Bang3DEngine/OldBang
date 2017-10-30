@@ -10,9 +10,11 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIContentSizeFitter.h"
 
 USING_NAMESPACE_BANG
 
@@ -138,7 +140,7 @@ void UIListDriver::SetSelection(GameObject *go)
 
 GameObject *UIListDriver::GetContainer() const
 {
-    return GetScrollPanel()->GetContainer();
+    return p_container;
 }
 
 int UIListDriver::GetSelectedIndex() const
@@ -176,10 +178,17 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
     dirLayout->SetSpacing(0);
     dirLayout->SetPaddings(0);
 
-    container->SetParent( scrollPanel->GetContainer() );
+    container->GetComponent<RectTransform>()->SetPivotPosition(Vector2(-1,1));
+    UIContentSizeFitter *csf = container->AddComponent<UIContentSizeFitter>();
+    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
+    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+
+    scrollPanel->GetScrollArea()->SetContainedGameObject(container);
 
     UIListDriver *ld = go->AddComponent<UIListDriver>();
     ld->p_scrollPanel = scrollPanel;
+    ld->p_container = container;
+
     return ld;
 }
 

@@ -50,8 +50,6 @@ public:
 
     void SetWidthFromPivot(int width);
     void SetHeightFromPivot(int height);
-    void AddWidthFromPivot(int width);
-    void AddHeightFromPivot(int height);
 
     int GetMarginLeft()  const;
     int GetMarginTop()   const;
@@ -65,9 +63,9 @@ public:
     const Vector2& GetPivotPosition()  const;
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
-    Recti GetScreenSpaceRectPx() const;
+    Rect GetScreenSpaceRectPx() const;
     Rect GetScreenSpaceRectNDC() const;
-    Recti GetParentScreenRectPx() const;
+    Rect GetParentScreenRectPx() const;
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
@@ -78,10 +76,10 @@ public:
     Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
     Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
     Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;
-    Vector2i FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
+    Vector2 FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
     Vector2 FromPixelsPointToLocalNDC(const Vector2 &pixelsPoint) const;
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
-    Vector2i FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
+    Vector2 FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
     // IEnabledListener
     void OnEnabled() override;

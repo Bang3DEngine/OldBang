@@ -617,8 +617,8 @@ void GL::DeleteBuffers(int n, const GLId *glIds)
 
 void GL::SetViewport(const Rect &viewportNDC)
 {
-    Vector2i minPx = GL::FromGlobalNDCToPixelsPoint(viewportNDC.GetMin());
-    Vector2i maxPx = GL::FromGlobalNDCToPixelsAmount(viewportNDC.GetMax());
+    Vector2 minPx = GL::FromGlobalNDCToPixelsPoint(viewportNDC.GetMin());
+    Vector2 maxPx = GL::FromGlobalNDCToPixelsAmount(viewportNDC.GetMax());
     GL::SetViewport( Recti(minPx.x, minPx.y, maxPx.x, maxPx.y) );
 }
 
@@ -880,29 +880,28 @@ void GL::SetZNearFar(float zNear, float zFar)
     gl->m_zFar  = zFar;
 }
 
-Recti GL::FromGlobalNDCToPixels(const Rect &rectNDC)
+Rect GL::FromGlobalNDCToPixels(const Rect &rectNDC)
 {
-    Vector2i min = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin());
-    Vector2i max = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMax());
-    return Recti(min, max);
+    Vector2 min = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin());
+    Vector2 max = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMax());
+    return Rect(min, max);
 }
 
-Rect GL::FromPixelsToGlobalNDC(const Recti &rectPixels)
+Rect GL::FromPixelsToGlobalNDC(const Rect &rectPixels)
 {
     Vector2 min  = GL::FromPixelsPointToGlobalNDC(rectPixels.GetMin());
     Vector2 size = GL::FromPixelsAmountToGlobalNDC(rectPixels.GetSize());
     return Rect(min, (min+size));
 }
 
-Vector2 GL::FromPixelsAmountToGlobalNDC(const Vector2i &pixels)
+Vector2 GL::FromPixelsAmountToGlobalNDC(const Vector2 &pixels)
 {
-    return (Vector2f(pixels) / Vector2f(GL::GetViewportSize())) * 2.0f;
+    return (pixels / Vector2(GL::GetViewportSize())) * 2.0f;
 }
 
-Vector2i GL::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
+Vector2 GL::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
 {
-    return Vector2i(Vector2::Round(
-                       (ndcAmount * Vector2(GL::GetViewportSize())) * 0.5f) );
+    return Vector2::Round((ndcAmount * Vector2(GL::GetViewportSize())) * 0.5f);
 }
 
 Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
@@ -914,15 +913,15 @@ Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
 }
 Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
 {
-    return GL::FromPixelsPointToGlobalNDC( Vector2f(pixelsPoint) );
+    return GL::FromPixelsPointToGlobalNDC(pixelsPoint);
 }
 
-Vector2i GL::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
+Vector2 GL::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
 {
     Vector2 ndcPoint(_ndcPoint.x,  _ndcPoint.y);
     Vector2 screenSize( GL::GetViewportSize() );
-    Vector2i resultPx ( Vector2::Round((ndcPoint * 0.5f + 0.5f) * screenSize) );
-    return Vector2i(resultPx.x, (screenSize.y-1) - resultPx.y);
+    Vector2 resultPx ( Vector2::Round((ndcPoint * 0.5f + 0.5f) * screenSize) );
+    return Vector2(resultPx.x, (screenSize.y-1) - resultPx.y);
 }
 
 
