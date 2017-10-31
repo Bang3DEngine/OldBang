@@ -89,7 +89,8 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
     {
         UILayoutIgnorer *ltIgnorer = child->GetComponent<UILayoutIgnorer>();
         bool ignoreLayout = ltIgnorer ? ltIgnorer->IsIgnoreLayout() : false;
-        if (child->HasComponent<ILayoutElement>() && !ignoreLayout)
+        if (child->IsEnabled() &&
+            child->HasComponent<ILayoutElement>() && !ignoreLayout)
         {
             childrenList.PushBack(child);
         }

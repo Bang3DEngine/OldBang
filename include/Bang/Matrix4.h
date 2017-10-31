@@ -391,7 +391,7 @@ public:
                            0,   0,   0,  1);
     }
 
-    Vector4G<T>& operator[](::std::size_t i)
+    Vector4G<T>& operator[](std::size_t i)
     {
         switch (i)
         {
@@ -403,7 +403,7 @@ public:
         Debug_Warn("Matrix4G<T> index " << i << " too big");
         return c3;
     }
-    const Vector4G<T>& operator[](::std::size_t i) const
+    const Vector4G<T>& operator[](std::size_t i) const
     {
         return const_cast< Matrix4G<T>* >(this)->operator[](i);
     }

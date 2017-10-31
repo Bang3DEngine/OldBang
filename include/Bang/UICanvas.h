@@ -21,12 +21,6 @@ public:
 
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
-
-    GameObject *GetFocusedGameObject() const;
-    void GiveFocusTo(GameObject *focusTakerGo) const;
-
-private:
-    mutable GameObject *p_focusedGo = nullptr;
 };
 
 NAMESPACE_BANG_END

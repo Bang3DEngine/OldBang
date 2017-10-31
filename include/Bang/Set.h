@@ -12,13 +12,13 @@ template<class Key>
 class Set
 {
 public:
-    using Iterator = typename ::std::set<Key>::iterator;
-    using RIterator = typename ::std::set<Key>::reverse_iterator;
-    using Const_Iterator = typename ::std::set<Key>::const_iterator;
-    using Const_RIterator = typename ::std::set<Key>::const_reverse_iterator;
+    using Iterator = typename std::set<Key>::iterator;
+    using RIterator = typename std::set<Key>::reverse_iterator;
+    using Const_Iterator = typename std::set<Key>::const_iterator;
+    using Const_RIterator = typename std::set<Key>::const_reverse_iterator;
 
     Set();
-    Set(const ::std::set<Key> &s);
+    Set(const std::set<Key> &s);
 
     void Add(const Key &key);
 
@@ -51,7 +51,7 @@ public:
     Const_Iterator cend() const;
 
 private:
-    ::std::set<Key> m_set;
+    std::set<Key> m_set;
 };
 
 NAMESPACE_BANG_END

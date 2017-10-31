@@ -375,7 +375,7 @@ Color Image<Byte>::GetPixel(int x, int y) const
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
-    const ::std::size_t coord = (y * GetWidth() + x) * 4;
+    const std::size_t coord = (y * GetWidth() + x) * 4;
     return Color(m_pixels[coord + 0] / 255.0f,
                  m_pixels[coord + 1] / 255.0f,
                  m_pixels[coord + 2] / 255.0f,
@@ -387,7 +387,7 @@ Color Image<float>::GetPixel(int x, int y) const
 {
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
-    const ::std::size_t coord = (y * GetWidth() + x) * 4;
+    const std::size_t coord = (y * GetWidth() + x) * 4;
     return Color(m_pixels[coord + 0],
                  m_pixels[coord + 1],
                  m_pixels[coord + 2],

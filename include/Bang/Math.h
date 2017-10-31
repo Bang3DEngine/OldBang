@@ -16,37 +16,37 @@ public:
     template<class T>
     static T Min()
     {
-        return ::std::numeric_limits<T>::min();
+        return std::numeric_limits<T>::min();
     }
 
     template<class T>
     static T Max()
     {
-        return ::std::numeric_limits<T>::max();
+        return std::numeric_limits<T>::max();
     }
 
     template<class T>
     static T Infinity()
     {
-        return ::std::numeric_limits<T>::infinity();
+        return std::numeric_limits<T>::infinity();
     }
 
     template<class T>
     static T NegativeInfinity()
     {
-        return -::std::numeric_limits<T>::infinity();
+        return -std::numeric_limits<T>::infinity();
     }
 
     template<class T>
     static T IsInfinity(T value)
     {
-        return ::std::isinf(value);
+        return std::isinf(value);
     }
 
     template<class T>
     static T IsNaN(T value)
     {
-        return ::std::isnan(value);
+        return std::isnan(value);
     }
 
     template<class T>
@@ -78,19 +78,19 @@ public:
     template<class T = int, class T2>
     static T Round(const T2 &value)
     {
-        return ::std::round(value);
+        return std::round(value);
     }
 
     template<class T>
     static T Ceil(const T &value)
     {
-        return ::std::ceil(value);
+        return std::ceil(value);
     }
 
     template<class T>
     static T Floor(const T &value)
     {
-        return ::std::floor(value);
+        return std::floor(value);
     }
 
     template<class T>
@@ -103,115 +103,115 @@ public:
     template<class T>
     static T Pow(const T &base, const T &exponent)
     {
-        return ::std::pow(base, exponent);
+        return std::pow(base, exponent);
     }
 
     template<class T>
     static T Log(const T &value)
     {
-        return ::std::log(value);
+        return std::log(value);
     }
 
     template<class T>
     static T Log10(const T &value)
     {
-        return ::std::log10(value);
+        return std::log10(value);
     }
 
     template<class T>
     static T Exp(const T &x)
     {
-        return ::std::exp(x);
+        return std::exp(x);
     }
 
     template<class T>
     static T Sqrt(const T &x)
     {
-        return ::std::sqrt(x);
+        return std::sqrt(x);
     }
 
     template<class T>
     static T Sin(const T &rad)
     {
-        return ::std::sin(rad);
+        return std::sin(rad);
     }
 
     template<class T>
     static T Cos(const T &rad)
     {
-        return ::std::cos(rad);
+        return std::cos(rad);
     }
 
     template<class T>
     static T Tan(const T &rad)
     {
-        return ::std::tan(rad);
+        return std::tan(rad);
     }
 
     template<class T>
     static T Sinh(const T &rad)
     {
-        return ::std::sinh(rad);
+        return std::sinh(rad);
     }
 
     template<class T>
     static T Cosh(const T &rad)
     {
-        return ::std::cosh(rad);
+        return std::cosh(rad);
     }
 
     template<class T>
     static T Tanh(const T &rad)
     {
-        return ::std::tanh(rad);
+        return std::tanh(rad);
     }
 
     template<class T>
     static T ASin(const T &value)
     {
-        return ::std::asin(value);
+        return std::asin(value);
     }
 
     template<class T>
     static T ACos(const T &value)
     {
-        return ::std::acos(value);
+        return std::acos(value);
     }
 
     template<class T>
     static T ATan(const T &value)
     {
-        return ::std::atan(value);
+        return std::atan(value);
     }
 
     template<class T>
     static T ASinh(const T &value)
     {
-        return ::std::asinh(value);
+        return std::asinh(value);
     }
 
     template<class T>
     static T ACosh(const T &value)
     {
-        return ::std::acosh(value);
+        return std::acosh(value);
     }
 
     template<class T>
     static T ATanh(const T &value)
     {
-        return ::std::atanh(value);
+        return std::atanh(value);
     }
 
     template<class T>
     static T ATan2(const T &valueX, const T &valueY)
     {
-        return ::std::atan2(valueX, valueY);
+        return std::atan2(valueX, valueY);
     }
 
     template<class T>
     static T Modf(const T &value, const T &length)
     {
-        return ::std::fmod(value, length);
+        return std::fmod(value, length);
     }
 
     template<class T>

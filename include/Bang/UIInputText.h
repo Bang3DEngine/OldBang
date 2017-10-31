@@ -1,6 +1,7 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
+#include "Bang/ILayoutElement.h"
 #include "Bang/IFocusListener.h"
 #include "Bang/IComponentDriver.h"
 
@@ -15,7 +16,8 @@ FORWARD class UIImageRenderer;
 
 class UIInputText : public IComponentDriver<UIInputText>,
                     public Component,
-                    public IFocusListener
+                    public IFocusListener,
+                    public ILayoutElement
 {
     COMPONENT(UIInputText)
 
@@ -34,9 +36,14 @@ public:
     void ResetSelection();
     void SelectAll();
 
+    void SetAllowedCharacters(const String &allowedCharacters);
+
     // IFocusListener
     virtual void OnFocusTaken() override;
     virtual void OnFocusLost() override;
+
+    // ILayoutElement
+    virtual void CalculateLayout(Axis axis) override;
 
     UITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
@@ -44,18 +51,22 @@ public:
 
 private:
     static const Vector2i LookAheadOffsetPx;
+    static const int MarginX;
+    static const int MarginY;
 
     UIImageRenderer *p_background = nullptr;
 
     UILabel *p_label = nullptr;
     UITextCursor *p_cursor = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
+    String m_allowedCharacters = "";
 
     UIInputText();
 
     void HandleTyping();
     void HandleKeySelection(bool wasSelecting);
     void HandleCursorIndices(bool wasSelecting);
+    String FilterAllowedInputText(const String &inputText);
 
     int GetCursorIndex() const;
     int GetSelectionIndex() const;

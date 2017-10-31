@@ -79,14 +79,14 @@ Color Color::Lerp(const Color &c1,
 
 String Color::ToStringRgb() const
 {
-    ::std::ostringstream oss;
+    std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ")";
     return oss.str();
 }
 
 String Color::ToStringRgb255() const
 {
-    ::std::ostringstream oss;
+    std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<
                   int(g * 255) << ", " <<
                   int(b * 255) << ")";
@@ -95,14 +95,14 @@ String Color::ToStringRgb255() const
 
 String Color::ToStringRgba() const
 {
-    ::std::ostringstream oss;
+    std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ", " << a << ")";
     return oss.str();
 }
 
 String Color::ToStringRgba255() const
 {
-    ::std::ostringstream oss;
+    std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<
                   int(g * 255) << ", " <<
                   int(b * 255) << ", " <<

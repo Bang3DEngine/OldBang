@@ -2,6 +2,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
+#include "Bang/Input.h"
 #include "Bang/Gizmos.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Matrix4.h"
@@ -52,6 +53,11 @@ Vector2 RectTransform::FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) co
 Vector2 RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 {
     return GL::FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
+}
+
+bool RectTransform::IsMouseOver() const
+{
+    return GetScreenSpaceRectNDC().Contains( Input::GetMouseCoordsNDC() );
 }
 
 Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const
@@ -356,8 +362,8 @@ void RectTransform::OnRenderGizmos()
     // Gizmos::RenderFillRect(r);
 
     Gizmos::SetColor(Color::Green);
-    Gizmos::RenderRect(r);
     /*
+    Gizmos::RenderRect(r);
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());

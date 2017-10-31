@@ -18,6 +18,7 @@ class UILabel : public IComponentDriver<UILabel>,
 public:
 	virtual ~UILabel();
 
+    void OnStart() override;
     void OnUpdate() override;
 
     void SetCursorIndex(int index);

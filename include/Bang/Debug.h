@@ -32,8 +32,8 @@ private:
 };
 
 #define Debug_Log(msg) do{\
-    ::std::ostringstream log;\
-    log << ::std::boolalpha << msg;\
+    std::ostringstream log;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::Log(log.str(), __LINE__, __FILE__); \
 } while (0)
@@ -41,15 +41,15 @@ private:
 #define Debug_Peek(varName) Debug_Log(#varName << ": " << (varName))
 
 #define Debug_Warn(msg) do{\
-    ::std::ostringstream log;\
-    log << ::std::boolalpha << msg;\
+    std::ostringstream log;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::Warn(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error(msg) do{\
-    ::std::ostringstream log;\
-    log << ::std::boolalpha << msg;\
+    std::ostringstream log;\
+    log << std::boolalpha << msg;\
     log.flush();\
     Debug::Error(log.str(), __LINE__, __FILE__); \
 } while (0)

@@ -55,9 +55,9 @@ void Transform::SetLocalRotation(const Quaternion &q)
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
     Vector3 eulers = degreesEuler;
-    eulers.x = ::std::fmod(eulers.x, 360.0f);
-    eulers.y = ::std::fmod(eulers.y, 360.0f);
-    eulers.z = ::std::fmod(eulers.z, 360.0f);
+    eulers.x = std::fmod(eulers.x, 360.0f);
+    eulers.y = std::fmod(eulers.y, 360.0f);
+    eulers.z = std::fmod(eulers.z, 360.0f);
 
     Vector3 rads = eulers.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::Right);
@@ -322,7 +322,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return GetLocalRotation().EulerAngles();
+    return GetLocalRotation().GetEulerAngles();
 }
 
 Vector3 Transform::GetEuler() const

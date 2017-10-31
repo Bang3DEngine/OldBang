@@ -4,7 +4,6 @@
 #include "Bang/Input.h"
 #include "Bang/Alignment.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -33,7 +32,8 @@ void UIFileList::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (gameObject->GetComponent<UIFocusTaker>()->HasFocus())
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    if (rt->IsMouseOver())
     {
         if (Input::GetKeyDownRepeat(Key::Left))
         {

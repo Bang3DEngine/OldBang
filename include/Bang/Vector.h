@@ -89,11 +89,11 @@ public: \
     } \
  \
     \
-    T &At(::std::size_t i) \
+    T &At(std::size_t i) \
     { \
         return (*this)[i]; \
     } \
-    const T &At(::std::size_t i) const \
+    const T &At(std::size_t i) const \
     { \
         return (*this)[i]; \
     } \
@@ -208,11 +208,11 @@ public: \
         return (axis == Axis::Horizontal) ? VECTOR_G<T>::Right : VECTOR_G<T>::Up; \
     } \
     \
-    const T& operator[](::std::size_t i) const \
+    const T& operator[](std::size_t i) const \
     { \
         return (reinterpret_cast<const T*>(this))[i]; \
     } \
-    T& operator[](::std::size_t i) \
+    T& operator[](std::size_t i) \
     { \
         return (reinterpret_cast<T*>(this))[i]; \
     } \

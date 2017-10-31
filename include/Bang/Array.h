@@ -12,16 +12,16 @@ template <class T>
 class Array
 {
 public:
-    using Iterator = typename ::std::vector<T>::iterator;
-    using RIterator = typename ::std::vector<T>::reverse_iterator;
-    using Const_Iterator = typename ::std::vector<T>::const_iterator;
-    using Const_RIterator = typename ::std::vector<T>::const_reverse_iterator;
+    using Iterator = typename std::vector<T>::iterator;
+    using RIterator = typename std::vector<T>::reverse_iterator;
+    using Const_Iterator = typename std::vector<T>::const_iterator;
+    using Const_RIterator = typename std::vector<T>::const_reverse_iterator;
 
     Array();
-    Array(const ::std::vector<T> &v);
+    Array(const std::vector<T> &v);
     Array(int size);
     Array(int size, const T& initValue);
-    Array(::std::initializer_list<T> l);
+    Array(std::initializer_list<T> l);
     template <class OtherIterator>
     explicit Array(OtherIterator begin, OtherIterator end);
     template < template<class> class Container>
@@ -61,10 +61,10 @@ public:
     void Clear();
     bool IsEmpty() const;
 
-    T& At(::std::size_t i);
-    const T& At(::std::size_t i) const;
-    T& operator[](::std::size_t i);
-    const T& operator[](::std::size_t i) const;
+    T& At(std::size_t i);
+    const T& At(std::size_t i) const;
+    T& operator[](std::size_t i);
+    const T& operator[](std::size_t i) const;
 
     template< template <class> class Container, class OtherT = T>
     Container<OtherT> To() const;
@@ -85,7 +85,7 @@ public:
     Const_Iterator end() const;
 
 private:
-    ::std::vector<T> m_vector;
+    std::vector<T> m_vector;
 };
 
 NAMESPACE_BANG_END

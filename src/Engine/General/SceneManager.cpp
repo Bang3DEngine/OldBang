@@ -36,7 +36,9 @@ void SceneManager::Update()
     Scene *rootScene = SceneManager::GetRootScene();
     if (rootScene)
     {
+        rootScene->PreUpdate();
         rootScene->Update();
+        rootScene->PostUpdate();
         rootScene->DestroyQueuedGameObjects();
     }
 }

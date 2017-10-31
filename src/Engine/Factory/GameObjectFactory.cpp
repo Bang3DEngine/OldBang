@@ -14,12 +14,12 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/UIListDriver.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
@@ -64,7 +64,6 @@ void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
     if (addComps)
     {
         go->AddComponent<RectTransform>();
-        go->AddComponent<UIFocusTaker>();
     }
 }
 
@@ -156,7 +155,19 @@ UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 }
 UIInputText *GameObjectFactory::CreateUIInputText()
 {
-    return UIInputText::CreateInto( GameObjectFactory::CreateUIGameObject("InputText") );
+    return GameObjectFactory::CreateUIInputTextInto(
+                        GameObjectFactory::CreateUIGameObject("InputText") );
+}
+
+UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)
+{
+    return UIInputNumber::CreateInto(go);
+}
+
+UIInputNumber *GameObjectFactory::CreateUIInputNumber()
+{
+    return GameObjectFactory::CreateUIInputNumberInto(
+                    GameObjectFactory::CreateUIGameObject("InputNumber") );
 }
 
 UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
@@ -165,7 +176,8 @@ UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 }
 UIButtonDriver* GameObjectFactory::CreateUIButton()
 {
-    return UIButtonDriver::CreateInto( GameObjectFactory::CreateUIGameObject("Button") );
+    return UIButtonDriver::CreateInto(
+                            GameObjectFactory::CreateUIGameObject("Button") );
 }
 
 UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)
@@ -179,7 +191,8 @@ UILabel *GameObjectFactory::CreateUILabel()
 
 UIScrollArea *GameObjectFactory::CreateUIScrollArea()
 {
-    return UIScrollArea::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollArea") );
+    return UIScrollArea::CreateInto(
+                        GameObjectFactory::CreateUIGameObject("ScrollArea") );
 }
 
 UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
@@ -197,7 +210,8 @@ UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
 }
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanel()
 {
-    return UIScrollPanel::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollPanel") );
+    return GameObjectFactory::CreateUIScrollPanelInto(
+                GameObjectFactory::CreateUIGameObject("ScrollPanel") );
 }
 
 UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
@@ -208,7 +222,7 @@ UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
 GameObject *GameObjectFactory::CreateUISpacer(LayoutSizeType sizeType,
                                               const Vector2i &space)
 {
-    GameObject *spacerGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *spacerGo = GameObjectFactory::CreateUIGameObject("Separator");
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
 
     le->SetMinSize( Vector2i(0) );
@@ -236,7 +250,8 @@ GameObject *GameObjectFactory::CreateUIVSpacer(LayoutSizeType sizeType,
 }
 
 GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
-                                                 const Vector2i &space)
+                                                 const Vector2i &space,
+                                                 float linePercent)
 {
     GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
@@ -246,31 +261,34 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
     le->SetPreferredSize( Vector2i::Max(space, Vector2i::One) );
     bool horizontal = (space.x == 0);
-    constexpr float s = 0.95f;
     if (horizontal)
     {
         le->SetFlexibleSize( Vector2(99999999, 0) );
-        lr->SetPoints( {Vector3(-s,0,0), Vector3(s,0,0)} );
+        lr->SetPoints( {Vector3(-linePercent,0,0), Vector3(linePercent,0,0)} );
     }
     else
     {
         le->SetFlexibleSize( Vector2(0, 99999999) );
-        lr->SetPoints( {Vector3(0,-s,0), Vector3(0,s,0)} );
+        lr->SetPoints( {Vector3(0,-linePercent,0), Vector3(0,linePercent,0)} );
     }
     return sepGo;
 }
 
 GameObject *GameObjectFactory::CreateUIHSeparator(LayoutSizeType sizeType,
-                                                   int spaceY)
+                                                  int spaceY,
+                                                  float linePercent)
 {
     GameObject *sepGo =
-            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(0, spaceY) );
+            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(0, spaceY),
+                                                 linePercent);
     return sepGo;
 }
 GameObject *GameObjectFactory::CreateUIVSeparator(LayoutSizeType sizeType,
-                                                   int spaceX)
+                                                  int spaceX,
+                                                  float linePercent)
 {
     GameObject *sepGo =
-            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(spaceX, 0) );
+            GameObjectFactory::CreateUISeparator(sizeType, Vector2i(spaceX, 0),
+                                                 linePercent);
     return sepGo;
 }

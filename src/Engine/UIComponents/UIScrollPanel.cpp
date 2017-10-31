@@ -5,7 +5,6 @@
 #include "Bang/Color.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIScrollBar.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
@@ -59,7 +58,7 @@ void UIScrollPanel::OnUpdate()
         scrollingPercent = Math::Clamp(scrollingPercent, 0.0f, 1.0f);
 
         // MouseWheel scrolling
-        if (GetGameObject()->GetComponent<UIFocusTaker>()->IsMouseOver())
+        if (GetGameObject()->GetComponent<RectTransform>()->IsMouseOver())
         {
             int mouseWheelPx = Input::GetMouseWheel() * WheelScrollSpeedPx;
             float mouseWheelPercent = float(mouseWheelPx) / contentSize;
@@ -114,9 +113,6 @@ UIScrollBar *UIScrollPanel::GetScrollBar() const { return p_scrollBar; }
 UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
-    REQUIRE_COMPONENT(go, UIFocusTaker);
-
-    go->GetComponent<UIFocusTaker>()->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIScrollPanel *scrollPanel = go->AddComponent<UIScrollPanel>();
 

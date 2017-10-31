@@ -9,17 +9,21 @@ USING_NAMESPACE_BANG
 ILayoutElement::ILayoutElement() {}
 ILayoutElement::~ILayoutElement() {}
 
-void ILayoutElement::SetCalculatedLayout(Axis axis, int min, int preferred)
+void ILayoutElement::SetCalculatedLayout(Axis axis, int min,
+                                         int preferred,
+                                         int flexible)
 {
     if (axis == Axis::Horizontal)
     {
         m_calculatedMinSize.x       = min;
         m_calculatedPreferredSize.x = preferred;
+        m_calculatedFlexibleSize.x  = flexible;
     }
     else if (axis == Axis::Vertical)
     {
         m_calculatedMinSize.y       = min;
         m_calculatedPreferredSize.y = preferred;
+        m_calculatedFlexibleSize.y  = flexible;
     }
 }
 
@@ -51,7 +55,7 @@ Vector2i ILayoutElement::GetPreferredSize() const
 
 Vector2 ILayoutElement::GetFlexibleSize() const
 {
-    return Vector2(-1);
+    return m_calculatedFlexibleSize;
 }
 
 Vector2 ILayoutElement::GetSize(LayoutSizeType sizeType) const

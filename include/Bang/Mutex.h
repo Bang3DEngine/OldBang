@@ -17,7 +17,7 @@ public:
     void UnLock();
 
 private:
-    ::std::mutex m_mutex;
+    std::mutex m_mutex;
 };
 
 NAMESPACE_BANG_END

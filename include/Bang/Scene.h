@@ -42,7 +42,7 @@ public:
 
 protected:
     UILayoutManager *m_uiLayoutManager = nullptr;
-    ::std::queue<GameObject*> m_gameObjectsToBeDestroyed;
+    std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;

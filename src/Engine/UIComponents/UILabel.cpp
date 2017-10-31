@@ -4,7 +4,6 @@
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
@@ -20,6 +19,14 @@ UILabel::UILabel()
 
 UILabel::~UILabel()
 {
+}
+
+void UILabel::OnStart()
+{
+    Component::OnStart();
+
+    ResetSelection();
+    UpdateSelectionQuadRenderer();
 }
 
 void UILabel::OnUpdate()
@@ -123,44 +130,6 @@ bool UILabel::IsSelectingWithMouse() const { return m_selectingWithMouse; }
 UIMask *UILabel::GetMask() const { return p_mask; }
 UITextRenderer *UILabel::GetText() const { return p_text; }
 
-UILabel *UILabel::CreateInto(GameObject *go)
-{
-    REQUIRE_COMPONENT(go, RectTransform);
-
-    UILabel *label = go->AddComponent<UILabel>();
-
-    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::Full);
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
-    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(1.0f) );
-
-    UIMask *mask = go->AddComponent<UIMask>();
-    go->AddComponent<UIImageRenderer>(); // Quad mask
-    label->p_mask = mask;
-
-    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
-    text->SetTextSize(12);
-    text->SetWrapping(false);
-
-    UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2(1.0f) );
-
-    label->p_text = text;
-
-    GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
-    UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
-    selectionQuad->SetTint(Color::LightBlue);
-    label->p_selectionQuad = selectionQuadGo;
-
-    go->AddChild(selectionQuadGo);
-    go->AddChild(textContainer);
-
-    return label;
-}
 
 RectTransform *UILabel::GetTextParentRT() const
 {
@@ -185,8 +154,8 @@ void UILabel::HandleClipboardCopy()
 
 void UILabel::HandleMouseSelection()
 {
-    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
-    if (ft->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
     {
         if (!IsShiftPressed()) { ResetSelection(); }
         m_selectingWithMouse = true;
@@ -260,4 +229,45 @@ void UILabel::UpdateSelectionQuadRenderer()
     quadRT->SetAnchorMax( Vector2::Max(p1, p2) );
 }
 
+UILabel *UILabel::CreateInto(GameObject *go)
+{
+    REQUIRE_COMPONENT(go, RectTransform);
+
+    UILabel *label = go->AddComponent<UILabel>();
+
+    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
+    vl->SetChildrenVerticalStretch(Stretch::Full);
+    vl->SetChildrenHorizontalStretch(Stretch::Full);
+    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2(1.0f) );
+
+    UIMask *mask = go->AddComponent<UIMask>();
+    go->AddComponent<UIImageRenderer>(); // Quad mask
+    label->p_mask = mask;
+
+    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
+    text->SetTextSize(12);
+    text->SetWrapping(false);
+
+    UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
+    textLE->SetFlexibleSize( Vector2(1.0f) );
+
+    label->p_text = text;
+
+    GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
+    UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
+    selectionQuad->SetTint(Color::LightBlue);
+    label->p_selectionQuad = selectionQuadGo;
+
+    go->AddChild(selectionQuadGo);
+    go->AddChild(textContainer);
+
+    label->ResetSelection();
+    label->UpdateSelectionQuadRenderer();
+
+    return label;
+}
 

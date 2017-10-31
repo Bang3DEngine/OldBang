@@ -29,7 +29,7 @@ void Thread::Start()
 {
     if (p_runnable)
     {
-        m_thread = ::std::thread(ThreadFunc, p_runnable, this);
+        m_thread = std::thread(ThreadFunc, p_runnable, this);
     }
     else { Debug_Error("Trying to start Thread with no ThreadRunnable set."); }
 }
@@ -53,13 +53,13 @@ ThreadRunnable *Thread::GetRunnable() const { return p_runnable; }
 void Thread::SleepCurrentThread(float seconds)
 {
     int millis = SCAST<int>(seconds * 1000);
-    ::std::this_thread::sleep_for( ::std::chrono::milliseconds(millis) );
+    std::this_thread::sleep_for( std::chrono::milliseconds(millis) );
 }
 
 String Thread::GetCurrentThreadId()
 {
-    ::std::stringstream ss;
-    ss << ::std::this_thread::get_id();
+    std::stringstream ss;
+    ss << std::this_thread::get_id();
     return String(ss.str());
 }
 

@@ -220,7 +220,7 @@ ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFocusTaker.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
@@ -233,6 +233,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIInputNumber.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp

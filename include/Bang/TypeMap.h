@@ -78,7 +78,7 @@ public:
     template<class Class>
     const Value& operator[](const Class &k) const
     {
-        return ::std::map<TypeId,Value>::operator[]( typeid(Class).name() );
+        return std::map<TypeId,Value>::operator[]( typeid(Class).name() );
     }
 };
 

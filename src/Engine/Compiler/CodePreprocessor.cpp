@@ -68,7 +68,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
                          contentLines,
                          contentLines.Begin(),
                          contentLines.End());
-            ::std::advance(it, contentLines.Size());
+            std::advance(it, contentLines.Size());
         }
         else { ++it; }
 

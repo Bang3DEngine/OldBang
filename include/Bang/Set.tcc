@@ -11,7 +11,7 @@ Set<Key>::Set()
 }
 
 template<class Key>
-Set<Key>::Set(const ::std::set<Key> &s) : m_set(s)
+Set<Key>::Set(const std::set<Key> &s) : m_set(s)
 {
 }
 

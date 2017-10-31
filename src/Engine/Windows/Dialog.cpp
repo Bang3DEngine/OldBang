@@ -104,7 +104,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     );
     fileList->SetFileAcceptedCallback( Dialog::FileAcceptedCallback );
 
-    UILayoutElement *itLE = inputPathText->gameObject->AddComponent<UILayoutElement>();
+    UILayoutElement *itLE = inputPathText->GetGameObject()->
+                            AddComponent<UILayoutElement>();
     itLE->SetFlexibleSize(Vector2(1));
 
     UIButtonDriver *goButton = GameObjectFactory::CreateUIButton();

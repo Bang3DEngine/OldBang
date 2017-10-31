@@ -53,7 +53,7 @@ Path Paths::ExecutablePath()
 {
     char result[PATH_MAX];
     ssize_t count = readlink("/proc/self/exe", result, PATH_MAX );
-    String exePath( ::std::string(result, (count > 0) ? count : 0) );
+    String exePath( std::string(result, (count > 0) ? count : 0) );
     return Path(exePath);
 }
 

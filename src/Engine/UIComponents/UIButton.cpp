@@ -133,15 +133,11 @@ bool UIButton::IsMouseOverSomeAgent() const
     }
     else
     {
-        Vector2 mouseCoordsNDC = Input::GetMouseCoordsNDC();
         for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
         {
            const GameObject *agent = *it;
            RectTransform *rt = agent->GetComponent<RectTransform>();
-           if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoordsNDC))
-           {
-               return true;
-           }
+           if (rt && rt->IsMouseOver()) { return true; }
         }
     }
     return false;

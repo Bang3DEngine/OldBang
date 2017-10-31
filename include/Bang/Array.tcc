@@ -10,7 +10,7 @@ template<class T>
 Array<T>::Array() {}
 
 template<class T>
-Array<T>::Array(const ::std::vector<T> &v) : m_vector(v) {}
+Array<T>::Array(const std::vector<T> &v) : m_vector(v) {}
 
 template<class T>
 Array<T>::Array(int size) : m_vector(size) {}
@@ -19,7 +19,7 @@ template<class T>
 Array<T>::Array(int size, const T &initValue) : m_vector(size, initValue) {}
 
 template<class T>
-Array<T>::Array(::std::initializer_list<T> l) : m_vector(l) {}
+Array<T>::Array(std::initializer_list<T> l) : m_vector(l) {}
 
 template<class T>
 template <class OtherIterator>
@@ -68,7 +68,7 @@ typename Array<T>::Iterator Array<T>::FindLast(const T &x)
         if (*it == x)
         {
             Iterator res = it.base();
-            ::std::advance(res, -1);
+            std::advance(res, -1);
             return res;
         }
     }
@@ -157,13 +157,13 @@ template<class T>
 bool Array<T>::IsEmpty() const { return Size() == 0; }
 
 template<class T>
-T &Array<T>::At(::std::size_t i) { return m_vector.at(i); }
+T &Array<T>::At(std::size_t i) { return m_vector.at(i); }
 
 template<class T>
-const T &Array<T>::At(::std::size_t i) const { return m_vector.at(i); }
+const T &Array<T>::At(std::size_t i) const { return m_vector.at(i); }
 
 template<class T>
-const T &Array<T>::operator[](::std::size_t i) const { return m_vector[i]; }
+const T &Array<T>::operator[](std::size_t i) const { return m_vector[i]; }
 
 template <class T>
 template< template <class> class Container, class OtherT>
@@ -175,7 +175,7 @@ Container<OtherT> Array<T>::To() const
 }
 
 template<class T>
-T &Array<T>::operator[](::std::size_t i) { return m_vector[i]; }
+T &Array<T>::operator[](std::size_t i) { return m_vector[i]; }
 
 template<class T>
 typename Array<T>::Iterator Array<T>::Begin() { return m_vector.begin(); }

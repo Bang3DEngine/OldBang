@@ -12,7 +12,7 @@ USING_NAMESPACE_BANG
 
 Project::Project()
 {
-    m_randomId = ::std::to_string(Time::GetNow());
+    m_randomId = std::to_string(Time::GetNow());
 }
 
 Project::~Project()

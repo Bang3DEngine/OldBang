@@ -51,12 +51,12 @@ public:
         return Conjugated()/QuaternionG<T>::Dot(*this, *this);
     }
 
-    Vector3G<T> EulerAngles() const
+    Vector3G<T> GetEulerAngles() const
     {
-        return QuaternionG<T>::EulerAngles(*this);
+        return QuaternionG<T>::GetEulerAngles(*this);
     }
 
-    T Pitch() const
+    T GetPitch() const
     {
         return SCAST<T>(
                     Math::ATan2(
@@ -66,7 +66,7 @@ public:
                     );
     }
 
-    T Yaw() const
+    T GetYaw() const
     {
         return Math::ASin(
                     Math::Clamp(
@@ -77,7 +77,7 @@ public:
                     );
     }
 
-    T Roll() const
+    T GetRoll() const
     {
         return SCAST<T>(
                     Math::ATan2(
@@ -100,9 +100,9 @@ public:
                               q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z);
     }
 
-    static Vector3G<T> EulerAngles(const QuaternionG<T> &q)
+    static Vector3G<T> GetEulerAngles(const QuaternionG<T> &q)
     {
-        return Vector3G<T>(q.Pitch(), q.Yaw(), q.Roll());
+        return Vector3G<T>(q.GetPitch(), q.GetYaw(), q.GetRoll());
     }
 
     template<class Real>

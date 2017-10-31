@@ -35,9 +35,9 @@ public:
     void AddListener(UIButtonListener *listener);
     void RemoveListener(UIButtonListener *listener);
 
-    using EnterExitCallback = ::std::function<void(UIButton*)>;
+    using EnterExitCallback = std::function<void(UIButton*)>;
     using ClickedCallback = EnterExitCallback;
-    using DownUpCallback = ::std::function<void(UIButton*, MouseButton)>;
+    using DownUpCallback = std::function<void(UIButton*, MouseButton)>;
 
     void AddMouseEnterCallback(EnterExitCallback callback);
     void AddMouseExitCallback(EnterExitCallback callback);

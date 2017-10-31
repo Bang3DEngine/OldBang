@@ -31,8 +31,8 @@ void BPReflectedVariable::FromString(
     Array<String> propertyList = propertyListStr.Split<Array>(',', true);
     if (propertyList.Size() == 0)
     {
-        ::std::cerr << "BP Error: BP_REFLECT_VARIABLE has 0 properties,"
-                     " but must have at least a name" << ::std::endl;
+        std::cerr << "BP Error: BP_REFLECT_VARIABLE has 0 properties,"
+                     " but must have at least a name" << std::endl;
         return;
     }
     outProperty->m_name = propertyList[0];
@@ -51,8 +51,8 @@ void BPReflectedVariable::FromString(
     String variableType = nextWord;
     if (!BP::VarTypes.Contains(variableType))
     {
-        ::std::cerr << "BP Error: Expected a variable type,"
-                     "but got '" << variableType << "'" << ::std::endl;
+        std::cerr << "BP Error: Expected a variable type,"
+                     "but got '" << variableType << "'" << std::endl;
         return;
     }
 
@@ -62,12 +62,12 @@ void BPReflectedVariable::FromString(
     BP::FindNextWord(wordEnd, propEnd, &nameBegin, &nameEnd);
     if (nameBegin == propEnd || nameEnd == propEnd)
     {
-        ::std::cerr << "BP Error: Expected a variable name" << ::std::endl;
+        std::cerr << "BP Error: Expected a variable name" << std::endl;
         return;
     }
     outProperty->m_variableName = String(nameBegin, nameEnd);
 
-    String::Iterator assignBegin = ::std::find(nameEnd, propEnd, '=');
+    String::Iterator assignBegin = std::find(nameEnd, propEnd, '=');
     if (assignBegin != propEnd)
     {
         String initValue (assignBegin + 1, propEnd - 1);

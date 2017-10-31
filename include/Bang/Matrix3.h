@@ -87,7 +87,7 @@ public:
     const T *Data() const { return SCAST<const T*>(&(c0.x)); }
     T *Data() { return SCAST<T*>(&(c0.x)); }
 
-    Vector3G<T>& operator[](::std::size_t i)
+    Vector3G<T>& operator[](std::size_t i)
     {
         switch (i)
         {
@@ -98,7 +98,7 @@ public:
         std::cerr << "Matrix3G<T> index " << i << " too big" << std::endl;
         return c2;
     }
-    const Vector3G<T>& operator[](::std::size_t i) const
+    const Vector3G<T>& operator[](std::size_t i) const
     {
         return const_cast< Matrix3G<T>* >(this)->operator[](i);
     }

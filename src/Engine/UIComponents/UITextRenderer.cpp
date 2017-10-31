@@ -28,7 +28,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     UseMaterialCopy();
 
     SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ));
-    SetContent("Bang");
+    SetContent("");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
 

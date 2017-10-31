@@ -5,7 +5,6 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
@@ -28,10 +27,7 @@ UIListDriver::~UIListDriver()
 
 void UIListDriver::OnUpdate()
 {
-    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
-    ft->SetDefaultFocusAction(FocusAction::TakeIt);
-
-    if (ft->HasFocus())
+    if (GetGameObject()->GetComponent<RectTransform>()->IsMouseOver())
     {
         // Selection In/Out
         if (Input::GetKeyDownRepeat(Key::Down))
@@ -161,8 +157,6 @@ void UIListDriver::SetSelectionCallback(SelectionCallback selectionCallback)
 UIListDriver* UIListDriver::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
-    REQUIRE_COMPONENT(go, UIFocusTaker);
-    go->GetComponent<UIFocusTaker>()->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanelInto(go);
 

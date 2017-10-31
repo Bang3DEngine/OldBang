@@ -21,8 +21,8 @@ double Time::GetTime()
 
 unsigned long long Time::GetNow()
 {
-    return ::std::chrono::system_clock::now().time_since_epoch() /
-           ::std::chrono::milliseconds(1);
+    return std::chrono::system_clock::now().time_since_epoch() /
+           std::chrono::milliseconds(1);
 }
 
 Time::Time()

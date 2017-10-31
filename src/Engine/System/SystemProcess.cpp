@@ -82,8 +82,8 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     }
     else
     {
-        ::std::cerr << "There was an error forking to execute SystemProcess." <<
-                     ::std::endl;
+        std::cerr << "There was an error forking to execute SystemProcess." <<
+                     std::endl;
         return false;
     }
 
@@ -100,8 +100,8 @@ bool SystemProcess::StartDettached(const String &command,
 
 long long unsigned int GetNow()
 {
-    return ::std::chrono::duration_cast< ::std::chrono::milliseconds >(
-            ::std::chrono::system_clock::now().time_since_epoch()).count();
+    return std::chrono::duration_cast< std::chrono::milliseconds >(
+            std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
 bool SystemProcess::WaitUntilFinished(float seconds)
@@ -192,7 +192,7 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
     {
         String readChunk(buffer);
         String::Iterator readChunkEnd = readChunk.Begin();
-        ::std::advance(readChunkEnd, readBytes);
+        std::advance(readChunkEnd, readBytes);
         String readChunkN(readChunk.Begin(), readChunkEnd);
         output += readChunkN;
         memset(buffer, 0, bufferSize);

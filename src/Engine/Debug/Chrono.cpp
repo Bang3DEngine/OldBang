@@ -30,17 +30,17 @@ void Chrono::Log()
 
     MarkEvent("EmptyEvent"); // To get the last timer time
 
-    ::std::cerr << "Chrono " <<  m_chronoName
-              << " -------------------" << ::std::endl;
+    std::cerr << "Chrono " <<  m_chronoName
+              << " -------------------" << std::endl;
     long totalTime = 0;
     for (int i = 0; i < m_events.Size() - 1; ++i)
     {
         ChronoEvent &ce = m_events[i];
         double intervalSecs = ce.timeSinceLastEvent / 1000.0;
         totalTime += ce.timeSinceLastEvent;
-        ::std::cerr << "  " <<
-                     ce.eventName << ": " <<  intervalSecs << " s." << ::std::endl;
+        std::cerr << "  " <<
+                     ce.eventName << ": " <<  intervalSecs << " s." << std::endl;
     }
-    ::std::cerr << "  Total: " << totalTime / 1000.0 <<
-                 " s.  ----------------" << ::std::endl << ::std::endl;
+    std::cerr << "  Total: " << totalTime / 1000.0 <<
+                 " s.  ----------------" << std::endl << std::endl;
 }

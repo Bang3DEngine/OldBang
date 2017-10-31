@@ -27,7 +27,7 @@ private:
     TexUnitMap m_textureIdToUnit;
 
     // Ordered in time
-    ::std::queue<TexUnit> m_usedUnits;
+    std::queue<TexUnit> m_usedUnits;
 
     int c_numTextureUnits = 0;
 };

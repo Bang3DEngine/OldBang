@@ -45,7 +45,7 @@ public:
              const T& value,
              const Array<XMLProperty> &properties = {})
     {
-        ::std::ostringstream oss; oss << value;
+        std::ostringstream oss; oss << value;
         Set(name, String(oss.str()), properties);
     }
 
@@ -53,7 +53,7 @@ public:
     T Get() const
     {
         T t;
-        ::std::istringstream iss(GetStringValue());
+        std::istringstream iss(GetStringValue());
         iss >> t;
         return t;
     }

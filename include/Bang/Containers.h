@@ -16,14 +16,14 @@ public:
     static typename Container<T>::Iterator Find(Container<T> &cont,
                                                 const T &x)
     {
-        return ::std::find(cont.Begin(), cont.End(), x);
+        return std::find(cont.Begin(), cont.End(), x);
     }
 
     template <template <class T> class Container, class T>
     static typename Container<T>::Const_Iterator Find(const Container<T> &cont,
                                                       const T &x)
     {
-        return ::std::find(cont.Begin(), cont.End(), x);
+        return std::find(cont.Begin(), cont.End(), x);
     }
 
     template <template <class T> class Container, class T>

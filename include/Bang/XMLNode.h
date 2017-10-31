@@ -63,7 +63,7 @@ public:
     const String& GetTagName() const;
     const Map<String, XMLAttribute>& GetAttributes() const;
     const List<String>& GetAttributesOrderList() const;
-    List< ::std::pair<String, XMLAttribute*> > GetAttributesListInOrder() const;
+    List< std::pair<String, XMLAttribute*> > GetAttributesListInOrder() const;
     const List<XMLNode>& GetChildren() const;
     List<XMLNode>& GetChildren();
 

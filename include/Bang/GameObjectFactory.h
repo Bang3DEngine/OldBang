@@ -17,6 +17,7 @@ FORWARD class UIScrollBar;
 FORWARD class UIListDriver;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
+FORWARD class UIInputNumber;
 FORWARD class UIButtonDriver;
 FORWARD class UIImageRenderer;
 
@@ -42,6 +43,8 @@ public:
     static UIListDriver*    CreateUIList();
     static UIInputText*     CreateUIInputTextInto(GameObject *go);
     static UIInputText*     CreateUIInputText();
+    static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
+    static UIInputNumber*   CreateUIInputNumber();
     static UIButtonDriver*  CreateUIButtonInto(GameObject *go);
     static UIButtonDriver*  CreateUIButton();
     static UILabel*         CreateUILabel();
@@ -55,10 +58,12 @@ public:
 
     static GameObject* CreateUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
-                            int spaceY = 1);
+                            int spaceY = 1,
+                            float linePercent = 0.95f);
     static GameObject* CreateUIVSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
-                            int spaceX = 1);
+                            int spaceX = 1,
+                            float linePercent = 0.95f);
 
     static GameObject* CreateUISpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
@@ -74,7 +79,8 @@ public:
 
 private:
     static GameObject* CreateUISeparator(LayoutSizeType sizeType,
-                                          const Vector2i &space);
+                                         const Vector2i &space,
+                                         float linePercent);
 
 };
 

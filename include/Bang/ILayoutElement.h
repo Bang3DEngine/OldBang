@@ -20,12 +20,15 @@ protected:
     ILayoutElement();
     virtual ~ILayoutElement();
 
-    void SetCalculatedLayout(Axis axis, int min, int preferred);
+    void SetCalculatedLayout(Axis axis, int min,
+                             int preferred = -1,
+                             int flexible = -1);
 
 private:
     int m_layoutPriority = 0;
     mutable Vector2i m_calculatedMinSize       = -Vector2i::One;
     mutable Vector2i m_calculatedPreferredSize = -Vector2i::One;
+    mutable Vector2  m_calculatedFlexibleSize  = -Vector2::One;
 
     int GetLayoutPriority() const;
 

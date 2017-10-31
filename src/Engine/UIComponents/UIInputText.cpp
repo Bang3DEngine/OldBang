@@ -7,19 +7,21 @@
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusTaker.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutManager.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 
 const Vector2i UIInputText::LookAheadOffsetPx = Vector2i(5);
+const int UIInputText::MarginX = 5;
+const int UIInputText::MarginY = 2;
 
 UIInputText::UIInputText()
 {
@@ -29,13 +31,12 @@ UIInputText::~UIInputText()
 {
 }
 
-#include "Bang/UIGroupLayout.h"
 void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    UIFocusTaker *ft = gameObject->GetComponent<UIFocusTaker>();
-    if ( ft->HasFocus() )
+    bool hasFocus = GetGameObject()->GetComponent<UIFocusable>()->HasFocus();
+    if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
 
@@ -44,7 +45,7 @@ void UIInputText::OnUpdate()
         UpdateTextScrolling();
         UpdateCursorRenderer();
     }
-    p_cursor->SetEnabled( ft->HasFocus() );
+    p_cursor->SetEnabled(hasFocus);
 }
 
 void UIInputText::UpdateCursorRenderer()
@@ -53,9 +54,20 @@ void UIInputText::UpdateCursorRenderer()
     float cursorX  = GetLabel()->GetCursorXGlobalNDC( GetCursorIndex() );
     float lineSkip = GetText()->GetFont()->GetLineSkip() + 1;
     float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC(Vector2(0, lineSkip)).y;
-    Rect textRect = GetText()->GetContentGlobalNDCRect();
-    Vector2 minPoint(cursorX, textRect.GetMax().y - lineSkipNDC);
-    Vector2 maxPoint(cursorX, textRect.GetMax().y);
+
+    Vector2 minPoint, maxPoint;
+    if (!GetText()->GetContent().IsEmpty())
+    {
+        Rect textRect = GetText()->GetContentGlobalNDCRect();
+        minPoint = Vector2(cursorX, textRect.GetMax().y - lineSkipNDC);
+        maxPoint = Vector2(cursorX, textRect.GetMax().y);
+    }
+    else
+    {
+        Rect limitsRect = GetLabelRT()->GetScreenSpaceRectNDC();
+        minPoint = Vector2(cursorX, limitsRect.GetMin().y);
+        maxPoint = Vector2(cursorX, limitsRect.GetMax().y);
+    }
 
     RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->
                                GetComponent<RectTransform>();
@@ -112,6 +124,8 @@ void UIInputText::UpdateTextScrolling()
 void UIInputText::HandleTyping()
 {
     String inputText = Input::PollInputText();
+    inputText = FilterAllowedInputText(inputText);
+
     bool resetSelection = false;
 
     // First we handle text deletion
@@ -189,6 +203,18 @@ void UIInputText::HandleCursorIndices(bool wasSelecting)
 {
     // Here we will move the selection indices either by arrows...
     HandleKeySelection(wasSelecting);
+}
+
+String UIInputText::FilterAllowedInputText(const String &inputText)
+{
+    if (m_allowedCharacters.IsEmpty()) { return inputText; }
+
+    String allowedText = "";
+    for (char c : inputText)
+    {
+        if (m_allowedCharacters.Contains( String(c) )) { allowedText += c; }
+    }
+    return allowedText;
 }
 
 int UIInputText::GetCursorIndex() const { return GetLabel()->GetCursorIndex(); }
@@ -293,6 +319,11 @@ void UIInputText::SelectAll()
     SetSelection(0, GetText()->GetContent().Size());
 }
 
+void UIInputText::SetAllowedCharacters(const String &allowedCharacters)
+{
+    m_allowedCharacters = allowedCharacters;
+}
+
 UITextCursor *UIInputText::GetCursor() const
 {
     return p_cursor;
@@ -316,12 +347,9 @@ bool UIInputText::IsShiftPressed() const
 UIInputText *UIInputText::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
-    REQUIRE_COMPONENT(go, UIFocusTaker);
 
     UIInputText *inputText = go->AddComponent<UIInputText>();
-
-    UIFocusTaker *ft = go->GetComponent<UIFocusTaker>();
-    ft->SetDefaultFocusAction(FocusAction::TakeIt);
+    go->AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);
@@ -334,11 +362,13 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     GameObject *cursorGo = GameObjectFactory::CreateUIGameObject();
     UITextCursor *cursor = cursorGo->AddComponent<UITextCursor>();
     inputText->p_cursor = cursor;
+    cursor->SetEnabled(false);
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->SetSelectable(true);
     label->GetMask()->SetMasking(false);
-    label->GetGameObject()->GetComponent<RectTransform>()->SetMargins(5, 2, 5, 2);
+    label->GetGameObject()->GetComponent<RectTransform>()->
+                                SetMargins(MarginX, MarginY, MarginX, MarginY);
     inputText->p_label = label;
 
     scrollArea->GetContainer()->AddChild(label->gameObject);
@@ -394,13 +424,30 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
 void UIInputText::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
+    Input::PollInputText();
     Input::StartTextInput();
+    ResetSelection();
 }
 
 void UIInputText::OnFocusLost()
 {
     IFocusListener::OnFocusLost();
-    ResetSelection();
     Input::StopTextInput();
+    ResetSelection();
     UpdateCursorRenderer();
+}
+
+void UIInputText::CalculateLayout(Axis axis)
+{
+    GameObject *textGo = GetText()->GetGameObject();
+
+    Vector2i minSize = UILayoutManager::GetMinSize(textGo);
+    Vector2i prefSize = UILayoutManager::GetPreferredSize(textGo);
+    Vector2 flexSize = Vector2(1, 1);
+    minSize  += Vector2i(MarginX, MarginY) * 2;
+    prefSize += Vector2i(MarginX, MarginY) * 2;
+    minSize.x = prefSize.x = -1;
+
+    SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis),
+                        flexSize.GetAxis(axis));
 }

@@ -1,7 +1,6 @@
 #include "Bang/UIButtonDriver.h"
 
 #include "Bang/UILabel.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITintedButton.h"
@@ -40,7 +39,6 @@ void UIButtonDriver::SetButton(UITintedButton *button)
 UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
-    REQUIRE_COMPONENT(go, UIFocusTaker);
 
     UIButtonDriver *buttonDriv = go->AddComponent<UIButtonDriver>();
 

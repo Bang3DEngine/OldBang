@@ -213,7 +213,7 @@ private:
 
             String ToString() const override
             {
-                ::std::ostringstream oss;
+                std::ostringstream oss;
                 oss << "(Up: " << up << ", Down: " << down <<
                        ", Pressed: " << pressed << ")";
                 return String(oss.str());

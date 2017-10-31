@@ -29,7 +29,9 @@ public:
     GameObject *GetGameObject() const;
 
     virtual void OnStart();
+    virtual void OnPreUpdate();
     virtual void OnUpdate();
+    virtual void OnPostUpdate();
     virtual void OnBeforeChildrenRender(RenderPass renderPass);
     virtual void OnRender(RenderPass renderPass);
     virtual void OnRenderGizmos();

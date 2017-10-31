@@ -70,7 +70,7 @@ private:
     Texture2D *m_atlasTexture = nullptr;
 
     Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
-    Map<char, ::std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+    Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
 
     void Free();
 };

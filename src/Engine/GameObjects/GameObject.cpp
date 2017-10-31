@@ -60,10 +60,22 @@ void GameObject::Start()
     PROPAGATE_EVENT(Start(), GetChildren());
 }
 
+void GameObject::PreUpdate()
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnPreUpdate(), m_components);
+    PROPAGATE_EVENT(PreUpdate(), GetChildren());
+}
+
 void GameObject::Update()
 {
     PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
     PROPAGATE_EVENT(Update(), GetChildren());
+}
+
+void GameObject::PostUpdate()
+{
+    PROPAGATE_EVENT_TO_COMPONENTS(OnPostUpdate(), m_components);
+    PROPAGATE_EVENT(PostUpdate(), GetChildren());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
@@ -291,7 +303,7 @@ GameObject *GameObject::GetChild(int index) const
 {
     if (index < 0 || index >= GetChildren().Size()) { return nullptr; }
 
-    auto it = GetChildren().Begin(); ::std::advance(it, index);
+    auto it = GetChildren().Begin(); std::advance(it, index);
     return *it;
 }
 
@@ -459,7 +471,7 @@ String GameObject::ToStringStructure(bool recursive, const String &indent)
 
 String GameObject::ToString() const
 {
-    ::std::ostringstream oss;
+    std::ostringstream oss;
     oss << "GameObject: " << GetName() << "(" << ((void*)this) << ")";
     return oss.str();
 }

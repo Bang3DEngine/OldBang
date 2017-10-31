@@ -12,36 +12,12 @@
 
 NAMESPACE_BANG_BEGIN
 
-String::String() : m_str("")
-{
-}
+String::String() : m_str("") {}
+String::String(const char *cstr) { if (cstr != nullptr) { m_str = cstr; } }
+String::String(const std::string &stdstr) : m_str(stdstr) {}
 
-String::String(int v) : m_str("")
-{
-    *this = ToString(v);
-}
-
-String::String(float v)  : m_str("")
-{
-    *this = ToString(v);
-}
-
-String::String(char c)
-{
-    *this = ToString(c);
-}
-
-String::String(const char *cstr)
-{
-    if (cstr != nullptr) { m_str = cstr; }
-}
-
-String::String(const ::std::string &stdstr) : m_str(stdstr)
-{
-}
-
-String::String(::std::istreambuf_iterator<char, ::std::char_traits<char> > begin,
-               ::std::istreambuf_iterator<char, ::std::char_traits<char> > end) :
+String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
+               std::istreambuf_iterator<char, std::char_traits<char> > end) :
     m_str(begin, end)
 {
 }
@@ -73,7 +49,7 @@ String::Iterator String::Insert(Iterator it, char c)
 void String::Insert(int position, char c)
 {
     Iterator pos = begin();
-    ::std::advance(pos, position);
+    std::advance(pos, position);
     m_str.insert(pos, c);
 }
 
@@ -85,16 +61,16 @@ void String::Insert(int position, const String &str)
 void String::Remove(String::Iterator it, int numberOfChars)
 {
     Iterator end = it;
-    ::std::advance(end, numberOfChars);
+    std::advance(end, numberOfChars);
     m_str.erase(it, end);
 }
 
 void String::Remove(int beginIndex, int endIndexExclusive)
 {
     Iterator begin = Begin();
-    ::std::advance(begin, beginIndex);
+    std::advance(begin, beginIndex);
     Iterator end = begin;
-    ::std::advance(end, endIndexExclusive - beginIndex);
+    std::advance(end, endIndexExclusive - beginIndex);
     m_str.erase(begin, end);
 }
 
@@ -140,23 +116,23 @@ const char *String::ToCString() const
     return m_str.c_str();
 }
 
-::std::size_t String::Find(char c, ::std::size_t toIndex) const
+std::size_t String::Find(char c, std::size_t toIndex) const
 {
     return m_str.find(c, toIndex);
 }
-::std::size_t String::RFind(char c, ::std::size_t toIndex) const
+std::size_t String::RFind(char c, std::size_t toIndex) const
 {
     return m_str.rfind(c, toIndex);
 }
-::std::size_t String::Find(const char *str,
-                         ::std::size_t fromIndex,
-                         ::std::size_t length) const
+std::size_t String::Find(const char *str,
+                         std::size_t fromIndex,
+                         std::size_t length) const
 {
     return m_str.find(str, fromIndex, length);
 }
-::std::size_t String::RFind(const char *str,
-                          ::std::size_t fromIndex,
-                          ::std::size_t length) const
+std::size_t String::RFind(const char *str,
+                          std::size_t fromIndex,
+                          std::size_t length) const
 {
     return m_str.rfind(str, fromIndex, length);
 }
@@ -198,7 +174,7 @@ String String::Replace(const String &from, const String &to,
 
 String String::Elide(int length, bool elideRight) const
 {
-    int maxLength = ::std::min(int(Size()), length);
+    int maxLength = std::min(int(Size()), length);
     String result = (*this);
     if (result.Size() > length)
     {
@@ -285,7 +261,7 @@ char String::ToLower(char c)
 int String::ToInt(const String &str, bool *ok)
 {
     String number = str.Trim();
-    ::std::istringstream iss(number);
+    std::istringstream iss(number);
     int v;
     iss >> v;
     if (ok) *ok = !iss.fail();
@@ -295,7 +271,7 @@ int String::ToInt(const String &str, bool *ok)
 float String::ToFloat(const String &str, bool *ok)
 {
     String number = str.Trim();
-    ::std::istringstream iss(number);
+    std::istringstream iss(number);
     float v;
     iss >> v;
     if (ok) *ok = !iss.fail();
@@ -321,7 +297,7 @@ bool String::Contains(const String &str, bool caseSensitive) const
 {
     if (!caseSensitive)
     {
-        auto it = ::std::search(Begin(), End(), str.Begin(), str.End(),
+        auto it = std::search(Begin(), End(), str.Begin(), str.End(),
           [](char ch1, char ch2) {
             return String::ToUpper(ch1) == String::ToUpper(ch2);
           }
@@ -361,31 +337,6 @@ String String::ToLower() const
     return result;
 }
 
-String String::ToString(int i)
-{
-    return String(::std::to_string(i));
-}
-String String::ToString(long v)
-{
-    return String(::std::to_string(v));
-}
-
-String String::ToString(bool v)
-{
-    return v ? "True" : "False";
-}
-
-String String::ToString(char c)
-{
-    ::std::string str = "";
-    str += c;
-    return String(str);
-}
-String String::ToString(long long unsigned v)
-{
-    return String(::std::to_string(v));
-}
-
 String String::ToString(float f, int decimalPlaces)
 {
     return ToString(static_cast<double>(f), decimalPlaces);
@@ -396,51 +347,34 @@ String String::ToString(double f, int decimalPlaces)
     String str = "";
     if (decimalPlaces >= 0)
     {
-        ::std::ostringstream oss;
-        oss << ::std::fixed << ::std::setprecision(decimalPlaces) << f;
+        std::ostringstream oss;
+        oss << std::fixed << std::setprecision(decimalPlaces) << f;
         str = oss.str();
     }
     else
     {
-        str = String(::std::to_string(f));
+        str = String(std::to_string(f));
     }
     return str;
 }
 
-String String::ToString(const void *v)
-{
-    ::std::ostringstream log;
-    log << v;
-    return String(log.str());
-}
-
-String String::ToString(const String &v)
-{
-    return v;
-}
-
-String String::ToString(const IToString &v)
-{
-    return v.ToString();
-}
-
-char& String::operator[](::std::size_t i)
+char& String::operator[](std::size_t i)
 {
     return m_str[i];
 }
 
-char String::operator[](::std::size_t i) const
+char String::operator[](std::size_t i) const
 {
     return m_str[i];
 }
 
 
-::std::ostream& operator<<(::std::ostream &os, const String &str)
+std::ostream& operator<<(std::ostream &os, const String &str)
 {
     return os << str.m_str;
 }
 
-::std::istream& operator>>(::std::istream &is, String &str)
+std::istream& operator>>(std::istream &is, String &str)
 {
     is >> str.m_str;
     return is;
@@ -488,14 +422,14 @@ String operator+(const String &str1, const String &str2)
     return String(str1.m_str + str2.m_str);
 }
 
-String::operator ::std::string() const
+String::operator std::string() const
 {
     return m_str;
 }
 
-::std::size_t String::operator()(const String &str) const
+std::size_t String::operator()(const String &str) const
 {
-    return ::std::hash<::std::string>()(str);
+    return std::hash<std::string>()(str);
 }
 
 String& String::operator=(const char *cstr)

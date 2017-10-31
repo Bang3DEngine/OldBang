@@ -81,6 +81,8 @@ public:
     Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
     Vector2 FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
 
+    bool IsMouseOver() const;
+
     // IEnabledListener
     void OnEnabled() override;
     void OnDisabled() override;

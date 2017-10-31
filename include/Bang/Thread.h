@@ -31,7 +31,7 @@ public:
     static String GetCurrentThreadId();
 
 private:
-    ::std::thread m_thread;
+    std::thread m_thread;
     String m_threadName = "BANG_Thread";
     ThreadRunnable *p_runnable = nullptr;
 

@@ -23,7 +23,9 @@ void Component::SetGameObject(GameObject *gameObject)
 GameObject *Component::GetGameObject() const { return m_gameObject; }
 
 void Component::OnStart() {}
+void Component::OnPreUpdate() {}
 void Component::OnUpdate() {}
+void Component::OnPostUpdate() {}
 void Component::OnBeforeChildrenRender(RenderPass renderPass) {}
 void Component::OnRender(RenderPass renderPass) {}
 void Component::OnRenderGizmos() {}
@@ -44,7 +46,7 @@ void Component::CloneInto(ICloneable *clone) const
 
 String Component::ToString() const
 {
-    ::std::ostringstream msg;
+    std::ostringstream msg;
     msg << "";
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
 }

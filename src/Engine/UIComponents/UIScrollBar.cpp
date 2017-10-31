@@ -2,7 +2,6 @@
 
 #include "Bang/Rect.h"
 #include "Bang/UIScrollArea.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
@@ -133,7 +132,6 @@ void UIScrollBar::UpdateLengthThicknessMargins()
 UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
-    REQUIRE_COMPONENT(go, UIFocusTaker);
 
     go->SetName("ScrollBar");
     UIScrollBar *scrollBar = go->AddComponent<UIScrollBar>();

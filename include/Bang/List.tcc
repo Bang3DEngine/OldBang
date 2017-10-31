@@ -9,7 +9,7 @@ template<class T>
 List<T>::List() {}
 
 template<class T>
-List<T>::List(const ::std::list<T> &l) : m_list(l) {}
+List<T>::List(const std::list<T> &l) : m_list(l) {}
 
 template<class T>
 List<T>::List(int size) : m_list(size) {}
@@ -18,7 +18,7 @@ template<class T>
 List<T>::List(int size, const T &initValue) : m_list(size, initValue) {}
 
 template<class T>
-List<T>::List(::std::initializer_list<T> l) : m_list(l) {}
+List<T>::List(std::initializer_list<T> l) : m_list(l) {}
 
 template<class T>
 template <class OtherIterator>
@@ -58,7 +58,7 @@ template<class T>
 void List<T>::Insert(int index, const T &x)
 {
     ASSERT(index >= 0 && index <= Size());
-    auto it = Begin(); ::std::advance(it, index);
+    auto it = Begin(); std::advance(it, index);
     Insert(it, x);
 }
 
@@ -169,7 +169,7 @@ typename List<T>::Iterator List<T>::FindLast(const T &x)
         if (*it == x)
         {
             Iterator res = it.base();
-            ::std::advance(res, -1);
+            std::advance(res, -1);
             return res;
         }
     }

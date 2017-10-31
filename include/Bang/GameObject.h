@@ -30,7 +30,9 @@ public:
     virtual ~GameObject();
 
     virtual void Start() override;
+    virtual void PreUpdate();
     virtual void Update();
+    virtual void PostUpdate();
     virtual void BeforeChildrenRender(RenderPass renderPass);
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
@@ -143,7 +145,7 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
-    ::std::queue<Component*> m_componentsToBeRemoved;
+    std::queue<Component*> m_componentsToBeRemoved;
 
     bool m_iteratingComponents = false;
 

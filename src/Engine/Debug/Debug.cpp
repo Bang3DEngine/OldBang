@@ -22,25 +22,25 @@ Debug::Debug() { }
 void Debug::Log(const String &str, int line, const String &filePath)
 {
     String fileName = Path(filePath).GetNameExt();
-    ::std::cerr << c_logPrefix << str << " | " <<
-                 fileName << "(" << line << ")" <<  ::std::endl;
-    ::std::cerr.flush();
+    std::cerr << c_logPrefix << str << " | " <<
+                 fileName << "(" << line << ")" <<  std::endl;
+    std::cerr.flush();
 }
 
 void Debug::Warn(const String &str, int line, const String &filePath)
 {
     String fileName = Path(filePath).GetNameExt();
-    ::std::cerr << c_warnPrefix << str << " | " <<
-                 fileName << "(" << line << ")" << ::std::endl;
-    ::std::cerr.flush();
+    std::cerr << c_warnPrefix << str << " | " <<
+                 fileName << "(" << line << ")" << std::endl;
+    std::cerr.flush();
 }
 
 void Debug::Error(const String &str, int line, const String &filePath)
 {
     String fileName = Path(filePath).GetNameExt();
-    ::std::cerr << c_errorPrefix << str << " | " <<
-                 fileName << "(" << line << ")" << ::std::endl;
-    ::std::cerr.flush();
+    std::cerr << c_errorPrefix << str << " | " <<
+                 fileName << "(" << line << ")" << std::endl;
+    std::cerr.flush();
 }
 
 void Debug::PrintUniforms(Shader *shader)
