@@ -23,7 +23,7 @@ public:
     UIScrollBar  *GetScrollBar() const;
 
 private:
-    constexpr static int WheelScrollSpeedPx = 10;
+    constexpr static int WheelScrollSpeedPx = 50;
 
     UIScrollArea *p_scrollArea = nullptr;
     UIScrollBar  *p_scrollBar  = nullptr;

@@ -25,6 +25,8 @@ class GameObjectFactory
 public:
     static GameObject* CreateGameObject(bool addTransform = true);
     static GameObject* CreateUIGameObject(bool addComponents = true);
+    static GameObject* CreateGameObject(const String &name);
+    static GameObject* CreateUIGameObject(const String &name);
     static void CreateUIGameObjectInto(GameObject *go, bool addComponents = true);
 
     static Scene* CreateScene();

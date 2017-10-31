@@ -76,22 +76,25 @@ void UITextRenderer::OnRender(RenderPass renderPass)
 
 void UITextRenderer::CalculateLayout(Axis axis)
 {
+    RegenerateCharQuadsVAO();
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
 
     Vector2i minSize = Vector2i::Zero;
-    GetFont()->SetMetricsSize( GetTextSize() );
     Vector2i prefSize = Vector2i::Zero;
+
+    GetFont()->SetMetricsSize( GetTextSize() );
     prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
                                                   GetSpacingMultiplier());
-    Vector2 contentGlobalNDCSize = GetContentGlobalNDCRect().GetSize();
-    prefSize.y = Math::Max<int>(
-         prefSize.y, GL::FromGlobalNDCToPixelsAmount(contentGlobalNDCSize).y);
+    prefSize.y = Math::Max<int>(prefSize.y,
+                                m_numberOfLines * GetFont()->GetLineSkip());
 
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
 
 void UITextRenderer::RegenerateCharQuadsVAO() const
 {
+    if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
+
     IInvalidatable<UITextRenderer>::Validate();
     ENSURE(gameObject);
 
@@ -114,7 +117,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
                                         GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
-                                        IsWrapping());
+                                        IsWrapping(),
+                                        &m_numberOfLines);
 
     // Generate quad positions and uvs for the mesh, and load them
     Array<Vector2> textQuadUvs;

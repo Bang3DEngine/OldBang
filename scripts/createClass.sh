@@ -55,7 +55,7 @@ public:
 
 NAMESPACE_BANG_END
 
-#endif // ${CLASS_INC}_H
+#endif // ${CLASS_INC}
 " > "${CLASS_HEADER}"
 
 echo "\

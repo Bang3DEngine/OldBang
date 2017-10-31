@@ -29,7 +29,8 @@ public:
                                         const Vector2 &spacingMultiplier,
                                         HorizontalAlignment hAlignment,
                                         VerticalAlignment vAlignment,
-                                        bool wrapping);
+                                        bool wrapping,
+                                        uint *numberOfLines);
 
     static Vector2i GetTextSizeOneLined(const String &content,
                                         const Font *font,

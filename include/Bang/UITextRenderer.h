@@ -108,6 +108,7 @@ private:
 
     Mesh *m_mesh = nullptr;
     uint m_currentRenderingChar = 0;
+    mutable uint m_numberOfLines = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
     mutable Array<Rect> m_charRectsGlobalNDC;
 

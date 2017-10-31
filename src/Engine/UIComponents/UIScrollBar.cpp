@@ -135,12 +135,11 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     REQUIRE_COMPONENT(go, RectTransform);
     REQUIRE_COMPONENT(go, UIFocusTaker);
 
-    UIScrollBar *scrollBar = go->AddComponent<UIScrollBar>();
     go->SetName("ScrollBar");
+    UIScrollBar *scrollBar = go->AddComponent<UIScrollBar>();
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
-    GameObject *bar = GameObjectFactory::CreateUIGameObject();
-    bar->SetName("Bar");
+    GameObject *bar = GameObjectFactory::CreateUIGameObject("Bar");
 
     UIImageRenderer *barImg = bar->AddComponent<UIImageRenderer>();
     barImg->SetTint(Color::Black);

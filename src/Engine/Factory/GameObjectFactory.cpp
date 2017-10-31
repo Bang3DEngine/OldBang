@@ -45,6 +45,20 @@ GameObject *GameObjectFactory::CreateUIGameObject(bool addComponents)
     return go;
 }
 
+GameObject *GameObjectFactory::CreateGameObject(const String &name)
+{
+    GameObject *go = GameObjectFactory::CreateGameObject(true);
+    go->SetName(name);
+    return go;
+}
+
+GameObject *GameObjectFactory::CreateUIGameObject(const String &name)
+{
+    GameObject *go = GameObjectFactory::CreateUIGameObject(true);
+    go->SetName(name);
+    return go;
+}
+
 void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
 {
     if (addComps)
@@ -129,67 +143,61 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
 
 UIListDriver *GameObjectFactory::CreateUIListInto(GameObject *go)
 {
-    go->SetName("List");
     return UIListDriver::CreateInto(go);
 }
 UIListDriver *GameObjectFactory::CreateUIList()
 {
-    return UIListDriver::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIListDriver::CreateInto( GameObjectFactory::CreateUIGameObject("List") );
 }
 
 UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 {
-    go->SetName("InputText");
     return UIInputText::CreateInto(go);
 }
 UIInputText *GameObjectFactory::CreateUIInputText()
 {
-    return UIInputText::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIInputText::CreateInto( GameObjectFactory::CreateUIGameObject("InputText") );
 }
 
 UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 {
-    go->SetName("Button");
     return UIButtonDriver::CreateInto(go);
 }
 UIButtonDriver* GameObjectFactory::CreateUIButton()
 {
-    return UIButtonDriver::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIButtonDriver::CreateInto( GameObjectFactory::CreateUIGameObject("Button") );
 }
 
-UILabel *GameObjectFactory::CreateUILabel()
-{
-    return UILabel::CreateInto( GameObjectFactory::CreateUIGameObject() );
-}
 UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)
 {
-    go->SetName("Label");
     return UILabel::CreateInto(go);
+}
+UILabel *GameObjectFactory::CreateUILabel()
+{
+    return UILabel::CreateInto( GameObjectFactory::CreateUIGameObject("Label") );
 }
 
 UIScrollArea *GameObjectFactory::CreateUIScrollArea()
 {
-    return UIScrollArea::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIScrollArea::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollArea") );
 }
 
 UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
 {
-    go->SetName("ScrollBar");
     return UIScrollBar::CreateInto(go);
 }
 UIScrollBar *GameObjectFactory::CreateUIScrollBar()
 {
-    return UIScrollBar::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIScrollBar::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollBar") );
 }
 
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
 {
-    go->SetName("ScrollPanel");
     return UIScrollPanel::CreateInto(go);
 }
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanel()
 {
-    return UIScrollPanel::CreateInto( GameObjectFactory::CreateUIGameObject() );
+    return UIScrollPanel::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollPanel") );
 }
 
 UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)

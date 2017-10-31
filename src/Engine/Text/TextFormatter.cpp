@@ -14,7 +14,8 @@ Array<TextFormatter::CharRect>
                                             const Vector2 &spacingMultiplier,
                                             HorizontalAlignment hAlignment,
                                             VerticalAlignment vAlignment,
-                                            bool wrapping)
+                                            bool wrapping,
+                                            uint *numberOfLines)
 {
     if (content.IsEmpty()) { return Array<CharRect>(); }
 
@@ -31,6 +32,7 @@ Array<TextFormatter::CharRect>
     linedCharRects = SplitCharRectsInLines(content, font, limitsRect,
                                            spacingMultiplier,
                                            charRects, wrapping);
+    *numberOfLines = linedCharRects.Size();
 
     TextFormatter::ApplyAlignment(&linedCharRects, limitsRect, font,
                                    hAlignment, vAlignment);

@@ -46,10 +46,9 @@ void UIScrollPanel::OnUpdate()
 
     Axis axis = GetScrollBar()->GetAxis();
     int contentSize = GetContentSize().GetAxis(axis);
-    if (contentSize > 0)
+    int containerSize = GetContainerSize().GetAxis(axis);
+    if (contentSize > containerSize)
     {
-        int containerSize = GetContainerSize().GetAxis(axis);
-
         // Set bar length
         Vector2 sizeProp = Vector2(containerSize) / Vector2(contentSize);
         sizeProp = Vector2::Clamp(sizeProp, Vector2(0.1f), Vector2::One);
@@ -60,12 +59,13 @@ void UIScrollPanel::OnUpdate()
         scrollingPercent = Math::Clamp(scrollingPercent, 0.0f, 1.0f);
 
         // MouseWheel scrolling
-        if (GetGameObject()->GetComponent<UIFocusTaker>()->HasFocus())
+        if (GetGameObject()->GetComponent<UIFocusTaker>()->IsMouseOver())
         {
             int mouseWheelPx = Input::GetMouseWheel() * WheelScrollSpeedPx;
             float mouseWheelPercent = float(mouseWheelPx) / contentSize;
             scrollingPercent -= mouseWheelPercent;
         }
+        scrollingPercent = Math::Clamp(scrollingPercent, 0, 1);
 
         // Apply scrollings
         int scrollMaxAmount = (contentSize - containerSize);
@@ -78,8 +78,6 @@ void UIScrollPanel::OnUpdate()
     {
         GetScrollBar()->SetLength( GetContainerSize().y );
     }
-
-    Debug_Peek(GetContentSize());
 }
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
@@ -117,6 +115,8 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
     REQUIRE_COMPONENT(go, UIFocusTaker);
+
+    go->GetComponent<UIFocusTaker>()->SetDefaultFocusAction(FocusAction::TakeIt);
 
     UIScrollPanel *scrollPanel = go->AddComponent<UIScrollPanel>();
 
