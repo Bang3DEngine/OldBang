@@ -138,7 +138,7 @@ public:
     void Reset();
 
 private:
-    static constexpr float DoubleClickMaxSeconds = 0.2f;
+    static constexpr float DoubleClickMaxSeconds = 0.1f;
     bool m_isADoubleClick          = false;
     float m_secsSinceLastMouseDown = 0.0f;
     float m_lastMouseWheelDelta    = 0.0f;

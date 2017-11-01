@@ -4,6 +4,7 @@
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
@@ -26,6 +27,7 @@ void UILabel::OnStart()
     Component::OnStart();
 
     ResetSelection();
+    SetSelectAllOnFocus(true);
     UpdateSelectionQuadRenderer();
 }
 
@@ -33,15 +35,18 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (IsSelectable())
+    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
+    if (focusable->HasFocus())
     {
-        HandleMouseSelection();
-        HandleClipboardCopy();
-        UpdateSelectionQuadRenderer();
-    }
-    else
-    {
-        ResetSelection();
+        if (IsSelectable())
+        {
+            if (!focusable->HasJustFocusChanged()) { HandleMouseSelection(); }
+            HandleClipboardCopy();
+        }
+        else
+        {
+            ResetSelection();
+        }
         UpdateSelectionQuadRenderer();
     }
 }
@@ -69,11 +74,13 @@ String UILabel::GetSelectedText() const
     return GetText()->GetContent().SubString(GetSelectionBeginIndex(),
                                              GetSelectionEndIndex()-1);
 }
-
-void UILabel::ResetSelection()
+void UILabel::ResetSelection() { SetSelectionIndex( GetCursorIndex() ); }
+void UILabel::SelectAll() { SetSelection(0, GetText()->GetContent().Size()); }
+void UILabel::SetSelectAllOnFocus(bool selectAllOnFocus)
 {
-    SetSelectionIndex( GetCursorIndex() );
+    m_selectAllOnFocusTaken = selectAllOnFocus;
 }
+
 
 bool UILabel::IsSelectable() const
 {
@@ -100,7 +107,7 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
 {
     float localTextX = 0.0f;
     const int textLength = GetText()->GetContent().Size();
-    if (cursorIndex > 0 && cursorIndex < textLength - 1) // Between two chars
+    if (cursorIndex > 0 && cursorIndex < textLength) // Between two chars
     {
         Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
         Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
@@ -123,12 +130,53 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
     return Vector2(localTextX, 0).x;
 }
 
+int UILabel::GetClosestCharIndexTo(const Vector2 &coordsLocalNDC)
+{
+    int closestCharIndex = 0;
+    float minDist = Math::Infinity<float>();
+    const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
+    for (int i = 0; i < charRectsNDC.Size(); ++i)
+    {
+        const Rect &cr = charRectsNDC[i];
+        float distToMinX = Math::Abs(coordsLocalNDC.x - cr.GetMin().x);
+        if (distToMinX < minDist)
+        {
+            minDist = distToMinX;
+            closestCharIndex = i;
+        }
+
+        float distToMaxX = Math::Abs(coordsLocalNDC.x - cr.GetMax().x);
+        if (distToMaxX < minDist)
+        {
+            minDist = distToMaxX;
+            closestCharIndex = i + 1;
+        }
+    }
+    return closestCharIndex;
+}
+
 int UILabel::GetCursorIndex() const { return m_cursorIndex; }
 int UILabel::GetSelectionIndex() const { return m_selectionIndex; }
 bool UILabel::IsSelectingWithMouse() const { return m_selectingWithMouse; }
 
 UIMask *UILabel::GetMask() const { return p_mask; }
 UITextRenderer *UILabel::GetText() const { return p_text; }
+
+void UILabel::OnFocusTaken()
+{
+    IFocusListener::OnFocusTaken();
+    if (m_selectAllOnFocusTaken) { SelectAll(); }
+    else { ResetSelection(); }
+    UpdateSelectionQuadRenderer();
+}
+
+void UILabel::OnFocusLost()
+{
+    IFocusListener::OnFocusLost();
+    ResetSelection();
+    UpdateSelectionQuadRenderer();
+    m_selectingWithMouse = false;
+}
 
 
 RectTransform *UILabel::GetTextParentRT() const
@@ -157,7 +205,6 @@ void UILabel::HandleMouseSelection()
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
     if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
     {
-        if (!IsShiftPressed()) { ResetSelection(); }
         m_selectingWithMouse = true;
     }
     else if (Input::GetMouseButtonUp(MouseButton::Left))
@@ -168,31 +215,11 @@ void UILabel::HandleMouseSelection()
     // Find the closest visible char bounds to the mouse position
     if (Input::GetMouseButton(MouseButton::Left))
     {
-        float minDist = Math::Infinity<float>();
-        int closestCharRectIndex = 0;
-        float mouseCoordsX_NDC = Input::GetMouseCoordsNDC().x;
-        mouseCoordsX_NDC = GetTextParentRT()->FromGlobalNDCToLocalNDC(
-                                            Vector2(mouseCoordsX_NDC) ).x;
-
-        const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
-        for (int i = 0; i < charRectsNDC.Size(); ++i)
-        {
-            const Rect &cr = charRectsNDC[i];
-            float distToMinX = Math::Abs(mouseCoordsX_NDC - cr.GetMin().x);
-            if (distToMinX < minDist)
-            {
-                minDist = distToMinX;
-                closestCharRectIndex = i;
-            }
-
-            float distToMaxX = Math::Abs(mouseCoordsX_NDC - cr.GetMax().x);
-            if (distToMaxX < minDist)
-            {
-                minDist = distToMaxX;
-                closestCharRectIndex = i + 1;
-            }
-        }
-        SetCursorIndex(closestCharRectIndex);
+        Vector2 mouseCoordsLocalNDC = Input::GetMouseCoordsNDC();
+        mouseCoordsLocalNDC = GetTextParentRT()->FromGlobalNDCToLocalNDC(
+                                            Vector2(mouseCoordsLocalNDC) );
+        int closestCharIndex = GetClosestCharIndexTo(mouseCoordsLocalNDC);
+        SetCursorIndex(closestCharIndex);
 
         // Move the selection index accordingly
         if (!IsShiftPressed() && Input::GetMouseButtonDown(MouseButton::Left))
@@ -204,7 +231,7 @@ void UILabel::HandleMouseSelection()
 
     if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
     {
-        // SelectAll();
+        SelectAll();
     }
 }
 
@@ -234,6 +261,8 @@ UILabel *UILabel::CreateInto(GameObject *go)
     REQUIRE_COMPONENT(go, RectTransform);
 
     UILabel *label = go->AddComponent<UILabel>();
+
+    go->AddComponent<UIFocusable>();
 
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
     vl->SetChildrenVerticalStretch(Stretch::Full);

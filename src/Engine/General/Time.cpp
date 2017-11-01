@@ -6,17 +6,15 @@
 
 USING_NAMESPACE_BANG
 
-double Time::time      = 0.0;
-float  Time::deltaTime = 0.0f;
-
 float Time::GetDeltaTime()
 {
-    return Time::GetInstance()->m_deltaTime;
+    Time *time = Time::GetInstance();
+    return (Time::GetNow() - time->m_deltaTimeReference) / 1000.0f;
 }
 
 double Time::GetTime()
 {
-    return Time::GetInstance()->m_time;
+    return Time::GetNow() / 1000.0f;
 }
 
 unsigned long long Time::GetNow()
@@ -29,24 +27,9 @@ Time::Time()
 {
 }
 
-void Time::OnFrameStarted()
+void Time::EstablishDeltaTimeReferenceToNow()
 {
-    float deltaTime = (Time::GetNow() - m_lastRenderTime) / 1000.0f;
-    m_deltaTime = deltaTime;
-    m_time += deltaTime;
-
-    Time::deltaTime = m_deltaTime;
-    Time::time = m_time;
-}
-
-void Time::OnFrameFinished()
-{
-    m_lastRenderTime = Time::GetNow();
-}
-
-void Time::ResetDeltaTime()
-{
-    Time::GetInstance()->m_lastRenderTime = Time::GetNow();
+    m_deltaTimeReference = Time::GetNow();
 }
 
 Time *Time::GetInstance()

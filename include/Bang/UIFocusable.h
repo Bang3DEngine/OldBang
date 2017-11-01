@@ -17,11 +17,13 @@ public:
     void OnUpdate() override;
 
     bool HasFocus() const;
+    bool HasJustFocusChanged() const;
 
 private:
     bool m_hasFocus = false;
+    bool m_hasJustFocusChanged = false;
 
-    void HandleFocusing(bool focusTake);
+    void HandleFocusing(bool handleFocusTake);
 };
 
 NAMESPACE_BANG_END

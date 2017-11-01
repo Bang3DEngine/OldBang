@@ -34,7 +34,6 @@ public:
     void ReplaceSelectedText(const String &replaceStr);
 
     void ResetSelection();
-    void SelectAll();
 
     void SetAllowedCharacters(const String &allowedCharacters);
 

@@ -8,7 +8,6 @@
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
-#include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Paths.h"
 #include "Bang/Chrono.h"
@@ -114,14 +113,15 @@ int Application::MainLoop()
 
 bool Application::MainLoopIteration()
 {
-    GetTime()->OnFrameStarted();
     List<Window*> windows = GetWindows();
     for (Window *w : windows)
     {
         BindWindow(w);
         w->MainLoopIteration();
     }
-    GetTime()->OnFrameFinished();
+
+    // Debug_Log(Time::GetDeltaTime() << " " << Random::Value());
+    GetTime()->EstablishDeltaTimeReferenceToNow();
 
     bool exit = false;
     if (!HandleEvents())     { exit = true; }

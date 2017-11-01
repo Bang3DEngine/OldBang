@@ -15,6 +15,11 @@ UIInputNumber::~UIInputNumber()
 {
 }
 
+void UIInputNumber::OnUpdate()
+{
+    Component::OnUpdate();
+}
+
 void UIInputNumber::SetNumber(float v)
 {
     m_value = v;
@@ -23,6 +28,21 @@ void UIInputNumber::SetNumber(float v)
 }
 
 float UIInputNumber::GetNumber() const { return m_value; }
+
+void UIInputNumber::OnFocusTaken()
+{
+    IFocusListener::OnFocusTaken();
+}
+
+void UIInputNumber::OnFocusLost()
+{
+    IFocusListener::OnFocusLost();
+    std::istringstream iss( GetInputText()->GetText()->GetContent() );
+    float number = 0.0f;
+    iss >> number;
+    SetNumber(number);
+}
+
 UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
 
 UIInputNumber *UIInputNumber::CreateInto(GameObject *go)

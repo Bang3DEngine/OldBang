@@ -167,9 +167,10 @@ void UIInputText::HandleTyping()
     // Key typing handling
     if (!inputText.IsEmpty())
     {
-        String content = GetText()->GetContent();
-        content.Insert(GetCursorIndex(), inputText);
-        GetText()->SetContent(content);
+        // String content = GetText()->GetContent();
+        // content.Insert(GetCursorIndex(), inputText);
+        // GetText()->SetContent(content);
+        ReplaceSelectedText(inputText);
         SetCursorIndex( GetCursorIndex() + inputText.Size() );
         resetSelection = true;
     }
@@ -314,10 +315,6 @@ void UIInputText::ReplaceSelectedText(const String &replaceStr)
 }
 
 void UIInputText::ResetSelection() { GetLabel()->ResetSelection(); }
-void UIInputText::SelectAll()
-{
-    SetSelection(0, GetText()->GetContent().Size());
-}
 
 void UIInputText::SetAllowedCharacters(const String &allowedCharacters)
 {
@@ -425,16 +422,16 @@ void UIInputText::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
     Input::PollInputText();
-    Input::StartTextInput();
-    ResetSelection();
+
+    GetGameObject()->GetComponentInChildren<UILabel>()->OnFocusTaken();
 }
 
 void UIInputText::OnFocusLost()
 {
     IFocusListener::OnFocusLost();
-    Input::StopTextInput();
-    ResetSelection();
     UpdateCursorRenderer();
+
+    GetGameObject()->GetComponentInChildren<UILabel>()->OnFocusLost();
 }
 
 void UIInputText::CalculateLayout(Axis axis)

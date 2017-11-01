@@ -28,7 +28,7 @@ public:
 
     GameObject *GetGameObject() const;
 
-    virtual void OnStart();
+    virtual void OnStart() override;
     virtual void OnPreUpdate();
     virtual void OnUpdate();
     virtual void OnPostUpdate();

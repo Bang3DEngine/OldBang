@@ -1,6 +1,6 @@
 #include "Bang/UIFocusable.h"
 
-#include "Bang/List.h"
+#include "Bang/Rect.h"
 #include "Bang/List.h"
 #include "Bang/Input.h"
 #include "Bang/GameObject.h"
@@ -20,34 +20,39 @@ UIFocusable::~UIFocusable()
 void UIFocusable::OnPreUpdate()
 {
     Component::OnPreUpdate();
+
+    m_hasJustFocusChanged = false;
     HandleFocusing(false);
 }
 
 void UIFocusable::OnUpdate()
 {
     Component::OnUpdate();
+
     HandleFocusing(true);
 }
 
 bool UIFocusable::HasFocus() const { return m_hasFocus; }
+bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 
-void UIFocusable::HandleFocusing(bool focusTake)
+void UIFocusable::HandleFocusing(bool handleFocusTake)
 {
     bool mouseOver = GetGameObject()->GetComponent<RectTransform>()->IsMouseOver();
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
-        bool hasFocus = mouseOver;
-        bool triggerEvent = (HasFocus() != hasFocus);
-        if (triggerEvent)
+        bool gotFocus = mouseOver;
+        bool triggerEvent = (HasFocus() != gotFocus);
+        if (triggerEvent && (gotFocus == handleFocusTake))
         {
-            m_hasFocus = hasFocus;
+            m_hasFocus = gotFocus;
+            m_hasJustFocusChanged = true;
 
             List<IFocusListener*> focusListeners =
                             GetGameObject()->GetComponents<IFocusListener>();
             for (IFocusListener *fl : focusListeners)
             {
-                if ( HasFocus() &&  focusTake) { fl->OnFocusTaken(); }
-                if (!HasFocus() && !focusTake) { fl->OnFocusLost(); }
+                if (gotFocus) { fl->OnFocusTaken(); }
+                else { fl->OnFocusLost();  }
             }
         }
     }

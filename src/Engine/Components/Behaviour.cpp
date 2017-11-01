@@ -122,11 +122,6 @@ void Behaviour::OnStart()
 void Behaviour::OnUpdate()
 {
     RefreshBehaviourLib(); // For instances created in runtime
-
-    // Update static local Times
-    Time::deltaTime = Time::GetDeltaTime();
-    Time::time      = Time::GetNow();
-
     Component::OnUpdate();
 }
 

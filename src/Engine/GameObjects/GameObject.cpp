@@ -68,6 +68,8 @@ void GameObject::PreUpdate()
 
 void GameObject::Update()
 {
+    if (!Object::IsStarted()) { Start(); }
+
     PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
     PROPAGATE_EVENT(Update(), GetChildren());
 }

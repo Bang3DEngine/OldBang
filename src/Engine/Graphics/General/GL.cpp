@@ -668,11 +668,13 @@ void GL::BufferDataVBO(int dataSize, const void *data, GL::UsageHint usageHint)
     glBufferData(GL_ARRAY_BUFFER, dataSize, data, GLCAST(usageHint));
 }
 
+#include "Bang/Input.h"
 void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();
-    glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
+    if (!Input::GetKey(Key::X))
+        glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
     vao->UnBind();
 }
 

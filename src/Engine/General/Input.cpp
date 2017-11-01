@@ -9,6 +9,7 @@ USING_NAMESPACE_BANG
 
 Input::Input()
 {
+    Input::StartTextInput();
 }
 
 Input::~Input()

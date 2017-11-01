@@ -37,7 +37,11 @@ void SceneManager::Update()
     if (rootScene)
     {
         rootScene->PreUpdate();
+        rootScene->DestroyQueuedGameObjects();
+
         rootScene->Update();
+        rootScene->DestroyQueuedGameObjects();
+
         rootScene->PostUpdate();
         rootScene->DestroyQueuedGameObjects();
     }
@@ -50,11 +54,9 @@ void SceneManager::_LoadScene(Scene *scene)
     m_activeScene = scene;
     if (m_activeScene)
     {
-        Time::ResetDeltaTime();
         m_activeScene->Start();
         m_activeScene->SetFirstFoundCameraOrDefaultOne();
         m_activeScene->InvalidateCanvas();
-        Time::ResetDeltaTime();
     }
 }
 
