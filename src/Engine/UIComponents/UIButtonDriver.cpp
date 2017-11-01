@@ -69,7 +69,7 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     buttonDriv->SetButton(bgWTint);
     buttonDriv->SetText(label->GetText());
 
-    go->AddChild(label->gameObject);
+    go->AddChild(label->GetGameObject());
 
     return buttonDriv;
 }

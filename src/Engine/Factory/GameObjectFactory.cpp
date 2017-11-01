@@ -92,12 +92,12 @@ Scene *GameObjectFactory::CreateDefaultScene()
 
     GameObject *light = GameObjectFactory::CreateGameObject();
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
-    light->transform->SetPosition( Vector3(5,4,3) );
-    light->transform->LookAt( Vector3::Zero );
+    light->GetTransform()->SetPosition( Vector3(5,4,3) );
+    light->GetTransform()->LookAt( Vector3::Zero );
 
     GameObject *cameraGo = GameObjectFactory::CreateGameObject();
-    cameraGo->transform->SetPosition( Vector3(5,4,3) );
-    cameraGo->transform->LookAt( Vector3::Zero );
+    cameraGo->GetTransform()->SetPosition( Vector3(5,4,3) );
+    cameraGo->GetTransform()->LookAt( Vector3::Zero );
     Camera *cam = cameraGo->AddComponent<Camera>();
     cam->SetClearColor(Color::LightBlue);
     scene->SetCamera(cam);
@@ -134,7 +134,7 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
                                                   const Vector2i &size)
 {
     UIImageRenderer *img = GameObjectFactory::CreateUIImage(color);
-    UILayoutElement *le = img->gameObject->AddComponent<UILayoutElement>();
+    UILayoutElement *le = img->GetGameObject()->AddComponent<UILayoutElement>();
     le->SetMinSize(size);
     le->SetPreferredSize(size);
     return img;

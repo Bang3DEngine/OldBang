@@ -229,12 +229,12 @@ RectTransform *UIInputText::GetLabelRT() const
 
 RectTransform *UIInputText::GetTextRT() const
 {
-    return GetText()->gameObject->GetComponent<RectTransform>();
+    return GetText()->GetGameObject()->GetComponent<RectTransform>();
 }
 
 RectTransform *UIInputText::GetRT() const
 {
-    return gameObject->GetComponent<RectTransform>();
+    return GetGameObject()->GetComponent<RectTransform>();
 }
 
 void UIInputText::HandleKeySelection(bool wasSelecting)
@@ -368,7 +368,7 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
                                 SetMargins(MarginX, MarginY, MarginX, MarginY);
     inputText->p_label = label;
 
-    scrollArea->GetContainer()->AddChild(label->gameObject);
+    scrollArea->GetContainer()->AddChild(label->GetGameObject());
     label->GetGameObject()->AddChild(cursorGo);
 
     inputText->SetCursorIndex( inputText->GetText()->GetContent().Size() );

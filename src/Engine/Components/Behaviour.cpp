@@ -16,7 +16,6 @@ Behaviour::~Behaviour()
 
 void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
 {
-    ENSURE(gameObject);
     ENSURE(!IsLoaded());
 
     String behaviourName = GetSourceFilepath().GetName();
@@ -32,14 +31,14 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
                                                          behavioursLib);
     if (createdBehaviour)
     {
-        if (gameObject->AddComponent(createdBehaviour))
+        if (GetGameObject()->AddComponent(createdBehaviour))
         {
             CloneInto(createdBehaviour);
             if (xmlInfoForNewBehaviour)
             {
                 createdBehaviour->ImportXML(*xmlInfoForNewBehaviour);
             }
-            gameObject->RemoveComponent(this);
+            GetGameObject()->RemoveComponent(this);
         }
     }
 }

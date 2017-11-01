@@ -141,10 +141,11 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     // If there's one or more points behind the camera, return ScreenRect
     // because we don't know how to handle it properly
     Array<Vector3> points = bbox.GetPoints();
-    Vector3 camForward = gameObject->transform->GetForward();
+    Transform *tr = GetGameObject()->GetTransform();
+    Vector3 camForward = tr->GetForward();
     for (const Vector3 &p : points)
     {
-        Vector3 dirToP = p - gameObject->transform->GetPosition();
+        Vector3 dirToP = p - tr->GetPosition();
         if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
     }
 
@@ -211,7 +212,8 @@ float Camera::GetOrthoWidth() const
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
-    gameObject->transform->GetLocalToWorldMatrix(view);
+    Transform *tr = GetGameObject()->GetTransform();
+    tr->GetLocalToWorldMatrix(view);
     *view = view->Inversed();
 }
 

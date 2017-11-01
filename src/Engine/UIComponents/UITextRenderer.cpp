@@ -96,7 +96,6 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
 
     IInvalidatable<UITextRenderer>::Validate();
-    ENSURE(gameObject);
 
     if (!m_font)
     {
@@ -106,7 +105,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     }
 
     // Get the quad positions of the rects of each char
-    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    ENSURE(rt);
 
     m_font->SetMetricsSize( GetTextSize() );
     Array<TextFormatter::CharRect> textCharRects =
@@ -197,7 +197,7 @@ void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
-    Vector3 translate(0, 0, gameObject->transform->GetPosition().z);
+    Vector3 translate(0, 0, GetGameObject()->GetTransform()->GetPosition().z);
     GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
     UIRenderer::Bind();
 

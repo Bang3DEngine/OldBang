@@ -58,7 +58,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
 
-    GameObject *go = rend->gameObject;
+    GameObject *go = rend->GetGameObject();
 
     ShaderProgram *selSP = m_selectionMaterial->GetShaderProgram();
     ShaderProgram *prevSP = rend->GetMaterial()->GetShaderProgram();

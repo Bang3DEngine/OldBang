@@ -67,7 +67,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     if (!GetFileExtensions().IsEmpty()) { FilterPathsByExtension(&paths); }
     paths.PushFront( Path("..") );
 
-    UIListDriver *listDriver = gameObject->GetComponent<UIListDriver>();
+    UIListDriver *listDriver = GetGameObject()->GetComponent<UIListDriver>();
     listDriver->Clear();
 
     for (const Path &path : paths)

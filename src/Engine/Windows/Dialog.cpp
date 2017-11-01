@@ -86,10 +86,10 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     hlLE->SetFlexibleHeight(0);
 
     UIListDriver *list = GameObjectFactory::CreateUIList();
-    UILayoutElement *listLE = list->gameObject->AddComponent<UILayoutElement>();
+    UILayoutElement *listLE = list->GetGameObject()->AddComponent<UILayoutElement>();
     listLE->SetFlexibleSize( Vector2(1) );
 
-    UIFileList *fileList = list->gameObject->AddComponent<UIFileList>();
+    UIFileList *fileList = list->GetGameObject()->AddComponent<UIFileList>();
     fileList->SetFileExtensions(extensions);
     fileList->SetCurrentPath(Paths::EngineAssets());
 
@@ -143,16 +143,16 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     scene->AddChild(vlGo);
 
     vlGo->AddChild(inputPathCont);
-    inputPathCont->AddChild(inputPathText->gameObject);
-    inputPathCont->AddChild(goButton->gameObject);
+    inputPathCont->AddChild(inputPathText->GetGameObject());
+    inputPathCont->AddChild(goButton->GetGameObject());
 
     vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
-    vlGo->AddChild(list->gameObject);
+    vlGo->AddChild(list->GetGameObject());
     vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
 
     vlGo->AddChild(hlGo);
     hlGo->AddChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible));
-    hlGo->AddChild(openButton->gameObject);
+    hlGo->AddChild(openButton->GetGameObject());
 
     scene->SetFirstFoundCameraOrDefaultOne();
 
@@ -220,8 +220,8 @@ Scene *Dialog::CreateMsgScene(const String &msg)
          GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 20));
       mainVLayoutGo->AddChild(buttonsGo);
        buttonsGo->AddChild(hSpacer);
-       buttonsGo->AddChild(button0->gameObject);
-       buttonsGo->AddChild(button1->gameObject);
+       buttonsGo->AddChild(button0->GetGameObject());
+       buttonsGo->AddChild(button1->GetGameObject());
 
     return scene;
 }

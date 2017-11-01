@@ -180,7 +180,8 @@ void GameObject::Destroy(GameObject *gameObject)
 bool GameObject::IsEnabled(bool recursive) const
 {
     if (!recursive) { return Object::IsEnabled(); }
-    else { return IsEnabled(false) && (!parent || parent->IsEnabled(true)); }
+    else { return IsEnabled(false) &&
+                  (!GetParent() || GetParent()->IsEnabled(true)); }
 }
 
 Component *GameObject::AddComponent(const String &componentClassName,
@@ -249,6 +250,8 @@ void GameObject::RemoveQueuedComponents()
     }
 }
 
+Transform *GameObject::GetTransform() const { return p_transform; }
+
 void GameObject::SetName(const String &name) { m_name = name; }
 const String& GameObject::GetName() const { return m_name; }
 
@@ -262,7 +265,7 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
 {
     for (GameObject *child : GetChildren())
     {
-        if (child->name == name)
+        if (child->GetName() == name)
         {
             return child;
         }
@@ -328,13 +331,13 @@ void GameObject::AddChild(GameObject *child)
 
 bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 {
-    if (!parent) { return false; }
+    if (!GetParent()) { return false; }
 
     if (recursive)
     {
-        return parent == _parent || parent->IsChildOf(_parent);
+        return GetParent() == _parent || GetParent()->IsChildOf(_parent);
     }
-    return parent == _parent;
+    return GetParent() == _parent;
 }
 
 void GameObject::SetParent(GameObject *newParent, int _index)
@@ -343,16 +346,16 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     ASSERT( !newParent || !newParent->IsChildOf(this) );
 
     GameObject *oldParent = p_parent;
-    if (parent)
+    if (GetParent())
     {
-        parent->m_children.Remove(this);
-        parent->ChildRemoved(this);
+        GetParent()->m_children.Remove(this);
+        GetParent()->ChildRemoved(this);
     }
 
     p_parent = newParent;
-    if (parent)
+    if (GetParent())
     {
-        int index = (_index != -1 ? _index : parent->GetChildren().Size());
+        int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
         p_parent->m_children.Insert(index, this);
         p_parent->ChildAdded(this);
     }
@@ -398,9 +401,9 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
         {
             AABox aabBoxChild = child->GetObjectAABBox(true);
             Matrix4 mat;
-            if (child->transform)
+            if (child->GetTransform())
             {
-                mat = child->transform->GetLocalToParentMatrix();
+                mat = child->GetTransform()->GetLocalToParentMatrix();
             }
             aabBoxChild = mat * aabBoxChild;
             aabBox = AABox::Union(aabBox, aabBoxChild);
@@ -414,7 +417,7 @@ AABox GameObject::GetAABBox(bool includeChildren) const
 {
     AABox b = GetObjectAABBox(includeChildren);
     Matrix4 mat;
-    if (transform) { transform->GetLocalToWorldMatrix(&mat); }
+    if (GetTransform()) { GetTransform()->GetLocalToWorldMatrix(&mat); }
     b = mat * b;
     return b;
 }

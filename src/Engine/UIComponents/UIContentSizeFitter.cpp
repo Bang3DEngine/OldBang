@@ -21,19 +21,22 @@ UIContentSizeFitter::~UIContentSizeFitter()
 
 void UIContentSizeFitter::ApplyLayout(Axis axis)
 {
-    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    ENSURE(rt);
 
     if (axis == Axis::Horizontal &&
         GetHorizontalSizeType() != LayoutSizeType::None)
     {
-        Vector2i hSize (UILayoutManager::GetSize(gameObject, GetHorizontalSizeType()));
+        Vector2i hSize (UILayoutManager::GetSize(GetGameObject(),
+                                                 GetHorizontalSizeType()));
         rt->SetWidthFromPivot(hSize.x);
     }
 
     if (axis == Axis::Vertical &&
         GetVerticalSizeType() != LayoutSizeType::None)
     {
-        Vector2i vSize (UILayoutManager::GetSize(gameObject, GetVerticalSizeType()));
+        Vector2i vSize (UILayoutManager::GetSize(GetGameObject(),
+                                                 GetVerticalSizeType()));
         rt->SetHeightFromPivot(vSize.y);
     }
 }

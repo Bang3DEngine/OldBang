@@ -22,8 +22,6 @@ class Component : public Object,
     COMPONENT(Component)
 
 public:
-    GameObject* const& gameObject = m_gameObject;
-
     void SetGameObject(GameObject *gameObject);
 
     GameObject *GetGameObject() const;
@@ -56,7 +54,7 @@ protected:
     virtual ~Component();
 
 private:
-    GameObject *m_gameObject = nullptr;
+    GameObject *p_gameObject = nullptr;
 
     friend class GameObject;
 };

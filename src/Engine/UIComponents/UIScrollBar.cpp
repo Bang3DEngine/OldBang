@@ -171,7 +171,7 @@ int UIScrollBar::GetScrollingSpacePx() const
 
 Rect UIScrollBar::GetScrollingRect() const
 {
-    GameObject *cont = GetScrollArea()->gameObject;
+    GameObject *cont = GetScrollArea()->GetGameObject();
     RectTransform *rt = cont->GetComponent<RectTransform>();
     return rt->GetScreenSpaceRectPx();
 }

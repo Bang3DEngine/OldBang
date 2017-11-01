@@ -23,10 +23,6 @@ class GameObject : public Object,
     GAMEOBJECT(GameObject)
 
 public:
-    String const& name = m_name;
-    GameObject* const& parent = p_parent;
-    Transform* const& transform = p_transform;
-
     virtual ~GameObject();
 
     virtual void Start() override;
@@ -106,6 +102,8 @@ public:
     void RemoveComponent(Component *c);
     void RemoveComponentInstantly(Component *c);
     void RemoveQueuedComponents();
+
+    Transform *GetTransform() const;
 
     void SetParent(GameObject *newParent, int _index = -1);
     GameObject* GetParent();

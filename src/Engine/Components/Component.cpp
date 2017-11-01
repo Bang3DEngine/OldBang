@@ -17,10 +17,10 @@ Component::~Component()
 
 void Component::SetGameObject(GameObject *gameObject)
 {
-    m_gameObject = gameObject;
+    p_gameObject = gameObject;
 }
 
-GameObject *Component::GetGameObject() const { return m_gameObject; }
+GameObject *Component::GetGameObject() const { return p_gameObject; }
 
 void Component::OnStart() {}
 void Component::OnPreUpdate() {}
@@ -34,7 +34,7 @@ void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const
 {
-    return Object::IsEnabled() && gameObject->IsEnabled(recursive);
+    return Object::IsEnabled() && GetGameObject()->IsEnabled(recursive);
 }
 
 void Component::CloneInto(ICloneable *clone) const
@@ -54,11 +54,11 @@ String Component::ToString() const
 String Component::GetInstanceId() const
 {
     String instanceId = GetClassName();
-    if (gameObject)
+    if (GetGameObject())
     {
-        instanceId.Prepend(gameObject->GetInstanceId() + "_");
+        instanceId.Prepend(GetGameObject()->GetInstanceId() + "_");
         Component *ncThis = const_cast<Component*>(this);
-        int indInGameObject = gameObject->GetComponents().IndexOf(ncThis);
+        int indInGameObject = GetGameObject()->GetComponents().IndexOf(ncThis);
         instanceId.Append( String::ToString(indInGameObject) );
     }
     return instanceId;

@@ -42,9 +42,9 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->Set("B_LightIntensity", m_intensity);
     sp->Set("B_LightColor", m_color);
 
-    Transform *t = gameObject->transform;
-    sp->Set("B_LightForwardWorld",  t->GetForward());
-    sp->Set("B_LightPositionWorld", t->GetPosition());
+    Transform *tr = GetGameObject()->GetTransform();
+    sp->Set("B_LightForwardWorld",  tr->GetForward());
+    sp->Set("B_LightPositionWorld", tr->GetPosition());
 }
 
 void Light::SetLightMaterial(Material *lightMat)

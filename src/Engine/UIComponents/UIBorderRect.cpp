@@ -65,7 +65,7 @@ int UIBorderRect::GetPaddingPx() const
 
 void UIBorderRect::OnRectTransformChanged()
 {
-    RectTransform *rt = gameObject->GetComponent<RectTransform>(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>(); ENSURE(rt);
     Rect boundingRectNDC = rt->GetScreenSpaceRectNDC();
 
     Vector2 pNDC = GL::FromPixelsAmountToGlobalNDC( Vector2(m_padding) );
