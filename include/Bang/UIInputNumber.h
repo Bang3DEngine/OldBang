@@ -4,12 +4,15 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/IFocusListener.h"
 #include "Bang/IComponentDriver.h"
+#include "Bang/IValueChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UIInputText;
 
 class UIInputNumber : public IComponentDriver<UIInputNumber>,
+                      public EventEmitter<IValueChangedListener>,
+                      public IValueChangedListener,
                       public IFocusListener,
                       public Component
 {
@@ -19,6 +22,7 @@ public:
 	UIInputNumber();
 	virtual ~UIInputNumber();
 
+    void OnStart() override;
     void OnUpdate() override;
 
     void SetNumber(float v);
@@ -30,10 +34,13 @@ public:
 
 private:
     float m_value = 0.0f;
-
     UIInputText *p_inputText = nullptr;
 
+    void UpdateValueFromText();
     UIInputText* GetInputText() const;
+
+    // IValueChangedListener
+    void OnValueChanged(const IEventEmitter *emitter) override;
 
     // IComponentDriver
     static UIInputNumber *CreateInto(GameObject *go);

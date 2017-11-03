@@ -17,21 +17,24 @@ UIFocusable::~UIFocusable()
 {
 }
 
-void UIFocusable::OnPreUpdate()
-{
-    Component::OnPreUpdate();
-
-    m_hasJustFocusChanged = false;
-    HandleFocusing(false);
-}
-
 void UIFocusable::OnUpdate()
 {
     Component::OnUpdate();
 
+    m_hasJustFocusChanged = false;
+    HandleFocusing(false);
     HandleFocusing(true);
 }
 
+void UIFocusable::LeaveFocus()
+{
+    if (HasFocus())
+    {
+        m_hasFocus = false;
+        m_hasJustFocusChanged = true;
+        PropagateToFocusListeners();
+    }
+}
 bool UIFocusable::HasFocus() const { return m_hasFocus; }
 bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 
@@ -46,15 +49,14 @@ void UIFocusable::HandleFocusing(bool handleFocusTake)
         {
             m_hasFocus = gotFocus;
             m_hasJustFocusChanged = true;
-
-            List<IFocusListener*> focusListeners =
-                            GetGameObject()->GetComponents<IFocusListener>();
-            for (IFocusListener *fl : focusListeners)
-            {
-                if (gotFocus) { fl->OnFocusTaken(); }
-                else { fl->OnFocusLost();  }
-            }
+            PropagateToFocusListeners();
         }
     }
+}
+
+void UIFocusable::PropagateToFocusListeners()
+{
+    Propagate(HasFocus() ? &IFocusListener::OnFocusTaken :
+                           &IFocusListener::OnFocusLost);
 }
 

@@ -1,9 +1,11 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
+#include "Bang/IEventEmitter.h"
 #include "Bang/ILayoutElement.h"
 #include "Bang/IFocusListener.h"
 #include "Bang/IComponentDriver.h"
+#include "Bang/IValueChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -16,6 +18,7 @@ FORWARD class UIImageRenderer;
 
 class UIInputText : public IComponentDriver<UIInputText>,
                     public Component,
+                    public EventEmitter<IValueChangedListener>,
                     public IFocusListener,
                     public ILayoutElement
 {

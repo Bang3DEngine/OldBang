@@ -450,24 +450,14 @@ void RectTransform::OnRectTransformChanged()
 
 void RectTransform::PropagateParentRectTransformChangedEvent() const
 {
-    // Propagate to children
-    auto rtChildrenListeners =
-    GetGameObject()->GetComponentsInChildrenOnly<IRectTransformListener>(false);
-    for (IRectTransformListener *rtListener : rtChildrenListeners)
-    {
-        rtListener->OnParentRectTransformChanged();
-    }
+    PropagateInChildrenOnly(
+                false, &IRectTransformListener::OnParentRectTransformChanged);
 }
 
 void RectTransform::PropagateChildrenRectTransformChangedEvent() const
 {
-    // Propagate to parent
-    auto rtParentLists =
-            GetGameObject()->GetComponentsInParent<IRectTransformListener>(false);
-    for (IRectTransformListener *parentRTListener : rtParentLists)
-    {
-        parentRTListener->OnChildrenRectTransformChanged();
-    }
+    PropagateInParent(false,
+                      &IRectTransformListener::OnChildrenRectTransformChanged);
 }
 
 void RectTransform::OnParentRectTransformChanged()

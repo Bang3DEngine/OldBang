@@ -3,6 +3,7 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
+#include "Bang/IEventEmitter.h"
 #include "Bang/IEnabledListener.h"
 #include "Bang/IRectTransformListener.h"
 
@@ -10,7 +11,8 @@ NAMESPACE_BANG_BEGIN
 
 class RectTransform : public Transform,
                       public IEnabledListener,
-                      public IRectTransformListener
+                      public IRectTransformListener,
+                      public EventEmitterComponent<IRectTransformListener>
 {
     COMPONENT(RectTransform)
 

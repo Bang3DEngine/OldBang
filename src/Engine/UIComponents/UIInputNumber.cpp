@@ -1,5 +1,6 @@
 #include "Bang/UIInputNumber.h"
 
+#include "Bang/Input.h"
 #include "Bang/UIInputText.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -15,9 +16,29 @@ UIInputNumber::~UIInputNumber()
 {
 }
 
+void UIInputNumber::OnStart()
+{
+    UIInputText *inputText = GetGameObject()->GetComponent<UIInputText>();
+    inputText->RegisterListener( SCAST<IValueChangedListener*>(this) );
+}
+
 void UIInputNumber::OnUpdate()
 {
     Component::OnUpdate();
+
+    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
+    if (focusable->HasFocus())
+    {
+        if (Input::GetKeyDown(Key::Enter))
+        {
+            List<UIFocusable*> focusables =
+                   GetGameObject()->GetComponentsInChildren<UIFocusable>(true);
+            for (UIFocusable *cFocusable : focusables)
+            {
+                cFocusable->LeaveFocus();
+            }
+        }
+    }
 }
 
 void UIInputNumber::SetNumber(float v)
@@ -27,7 +48,10 @@ void UIInputNumber::SetNumber(float v)
     GetInputText()->GetText()->SetContent(vStr);
 }
 
-float UIInputNumber::GetNumber() const { return m_value; }
+float UIInputNumber::GetNumber() const
+{
+    return m_value;
+}
 
 void UIInputNumber::OnFocusTaken()
 {
@@ -37,13 +61,28 @@ void UIInputNumber::OnFocusTaken()
 void UIInputNumber::OnFocusLost()
 {
     IFocusListener::OnFocusLost();
-    std::istringstream iss( GetInputText()->GetText()->GetContent() );
-    float number = 0.0f;
-    iss >> number;
-    SetNumber(number);
+    SetNumber( GetNumber() );
+}
+
+void UIInputNumber::UpdateValueFromText()
+{
+    const String &content = GetInputText()->GetText()->GetContent();
+    if (!content.IsEmpty())
+    {
+        std::istringstream iss(content);
+        iss >> m_value;
+    }
+    else { m_value = 0; }
 }
 
 UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
+
+void UIInputNumber::OnValueChanged(const IEventEmitter *emitter)
+{
+    UpdateValueFromText();
+    Propagate(&IValueChangedListener::OnValueChanged,
+              SCAST<const IEventEmitter*>(this));
+}
 
 UIInputNumber *UIInputNumber::CreateInto(GameObject *go)
 {

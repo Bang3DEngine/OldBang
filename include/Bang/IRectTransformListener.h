@@ -1,11 +1,11 @@
 #ifndef IRECTTRANSFORMLISTENER_H
 #define IRECTTRANSFORMLISTENER_H
 
-#include "Bang/Bang.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class IRectTransformListener
+class IRectTransformListener : public IEventListener
 {
 public:
     virtual void OnRectTransformChanged()         {}

@@ -1,11 +1,11 @@
 #ifndef IENABLEDLISTENER_H
 #define IENABLEDLISTENER_H
 
-#include "Bang/Bang.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class IEnabledListener
+class IEnabledListener : public IEventListener
 {
 public:
     virtual void OnEnabled()  {}

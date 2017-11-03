@@ -3,14 +3,18 @@
 
 #include "Bang/Bang.h"
 #include "Bang/FocusAction.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class IFocusListener
+class IFocusListener : public IEventListener
 {
 public:
     virtual void OnFocusTaken() {}
     virtual void OnFocusLost()  {}
+
+protected:
+    IFocusListener() = default;
 };
 
 NAMESPACE_BANG_END
