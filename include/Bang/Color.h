@@ -51,6 +51,7 @@ public:
     const static Color Yellow;
     const static Color Green;
     const static Color Turquoise;
+    const static Color VeryLightBlue;
     const static Color LightBlue;
     const static Color Blue;
     const static Color DarkBlue;

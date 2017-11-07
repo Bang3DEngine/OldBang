@@ -2,9 +2,6 @@
 
 USING_NAMESPACE_BANG
 
-Object::Object() {}
-Object::~Object() {}
-
 void Object::Start()
 {
     if (!IsStarted()) { OnStart(); m_started = true; }

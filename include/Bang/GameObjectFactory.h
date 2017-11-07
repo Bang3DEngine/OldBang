@@ -11,6 +11,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
 FORWARD class UILabel;
 FORWARD class UICanvas;
+FORWARD class Texture2D;
 FORWARD class GameObject;
 FORWARD class UIInputText;
 FORWARD class UIScrollBar;
@@ -47,6 +48,8 @@ public:
     static UIInputNumber*   CreateUIInputNumber();
     static UIButtonDriver*  CreateUIButtonInto(GameObject *go);
     static UIButtonDriver*  CreateUIButton();
+    static UIButtonDriver*  CreateUIButton(const String &text,
+                                           Texture2D *icon = nullptr);
     static UILabel*         CreateUILabel();
     static UILabel*         CreateUILabelInto(GameObject *go);
     static UIScrollArea*    CreateUIScrollAreaInto(GameObject *go);
@@ -59,11 +62,11 @@ public:
     static GameObject* CreateUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceY = 1,
-                            float linePercent = 0.95f);
+                            float linePercent = 1.0f);
     static GameObject* CreateUIVSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,
                             int spaceX = 1,
-                            float linePercent = 0.95f);
+                            float linePercent = 1.0f);
 
     static GameObject* CreateUISpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,

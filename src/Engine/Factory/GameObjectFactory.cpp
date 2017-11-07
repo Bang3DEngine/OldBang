@@ -177,7 +177,20 @@ UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 UIButtonDriver* GameObjectFactory::CreateUIButton()
 {
     return UIButtonDriver::CreateInto(
-                            GameObjectFactory::CreateUIGameObject("Button") );
+                GameObjectFactory::CreateUIGameObject("Button") );
+}
+
+UIButtonDriver *GameObjectFactory::CreateUIButton(const String &text,
+                                                  Texture2D *icon)
+{
+    const Vector2i size(15);
+    UIButtonDriver *btn = GameObjectFactory::CreateUIButton();
+
+    if (!text.IsEmpty()) { btn->GetText()->SetContent(text); }
+
+    if (icon) { btn->SetIcon(icon, size, 5); }
+
+    return btn;
 }
 
 UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)

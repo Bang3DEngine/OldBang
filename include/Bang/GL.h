@@ -177,7 +177,8 @@ public:
     {
         Repeat = GL_REPEAT,
         Clamp = GL_CLAMP,
-        ClampToEdge = GL_CLAMP_TO_EDGE
+        ClampToEdge = GL_CLAMP_TO_EDGE,
+        ClampToBorder = GL_CLAMP_TO_BORDER
     };
     enum class WrapCoord
     {

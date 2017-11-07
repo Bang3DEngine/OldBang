@@ -18,6 +18,7 @@ FORWARD class Resources;
 FORWARD class Texture2D;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
+FORWARD class DestroyManager;
 
 class Window
 {
@@ -67,12 +68,13 @@ public:
     static int GetHeightS();
     static int GetWidthS();
 
-    SDL_GLContext  GetGLContext() const;
-    Resources     *GetResources() const;
-    GEngine       *GetGEngine() const;
-    Input         *GetInput() const;
-    AudioManager  *GetAudioManager() const;
-    SceneManager  *GetSceneManager() const;
+    SDL_GLContext   GetGLContext() const;
+    Resources      *GetResources() const;
+    GEngine        *GetGEngine() const;
+    Input          *GetInput() const;
+    AudioManager   *GetAudioManager() const;
+    SceneManager   *GetSceneManager() const;
+    DestroyManager *GetDestroyManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -89,12 +91,13 @@ private:
     List<Window*> p_children;
     Window* p_parent = nullptr;
 
-    SDL_GLContext  m_sdlGLContext = nullptr;
-    Resources     *m_resources    = nullptr;
-    GEngine       *m_gEngine      = nullptr;
-    Input         *m_input        = nullptr;
-    AudioManager  *m_audioManager = nullptr;
-    SceneManager  *m_sceneManager = nullptr;
+    SDL_GLContext   m_sdlGLContext = nullptr;
+    Resources      *m_resources    = nullptr;
+    GEngine        *m_gEngine      = nullptr;
+    Input          *m_input        = nullptr;
+    AudioManager   *m_audioManager = nullptr;
+    SceneManager   *m_sceneManager = nullptr;
+    DestroyManager *m_destroyManager = nullptr;
 
     Vector2i m_minSize = Vector2i::Zero;
     Vector2i m_maxSize = Vector2i(4096);

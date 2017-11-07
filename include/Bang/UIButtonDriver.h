@@ -6,7 +6,8 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIBorderRect;
+FORWARD class Texture2D;
+FORWARD class UIDirLayout;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class UITintedButton;
@@ -19,23 +20,22 @@ class UIButtonDriver : public Component,
 public:
     virtual ~UIButtonDriver();
 
-    UIBorderRect* GetBorder() const;
+    void SetIcon(Texture2D *texture, const Vector2i &size,
+                 int spacingWithText = 5);
+
+    UIImageRenderer* GetIcon() const;
     UITextRenderer* GetText() const;
     UIImageRenderer* GetBackground() const;
     UITintedButton* GetButton() const;
+    UIDirLayout *GetDirLayout() const;
 
 private:
     UIButtonDriver();
 
-    UIBorderRect    *p_border      = nullptr;
+    UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;
     UIImageRenderer *p_background  = nullptr;
     UITintedButton  *p_button      = nullptr;
-
-    void SetBorder(UIBorderRect *borderRect);
-    void SetText(UITextRenderer *textRenderer);
-    void SetBackground(UIImageRenderer *imgRenderer);
-    void SetButton(UITintedButton *button);
 
     // IComponentDriver
     static UIButtonDriver *CreateInto(GameObject *go);

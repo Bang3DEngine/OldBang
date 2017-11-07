@@ -3,8 +3,8 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
-#include "Bang/IEventEmitter.h"
 #include "Bang/IEnabledListener.h"
+#include "Bang/EventEmitterComponent.h"
 #include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN

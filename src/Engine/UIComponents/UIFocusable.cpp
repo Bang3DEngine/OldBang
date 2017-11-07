@@ -56,7 +56,8 @@ void UIFocusable::HandleFocusing(bool handleFocusTake)
 
 void UIFocusable::PropagateToFocusListeners()
 {
-    Propagate(HasFocus() ? &IFocusListener::OnFocusTaken :
-                           &IFocusListener::OnFocusLost);
+    EventEmitterComponent<IFocusListener>::Propagate(
+                HasFocus() ? &IFocusListener::OnFocusTaken :
+                             &IFocusListener::OnFocusLost);
 }
 

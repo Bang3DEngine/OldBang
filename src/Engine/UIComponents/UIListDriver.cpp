@@ -100,7 +100,7 @@ void UIListDriver::AddElement(GameObject *go)
 
 void UIListDriver::RemoveElement(GameObject *go)
 {
-    delete go;
+    GameObject::Destroy(go);
 
     int selIndex = GetSelectedIndex();
     if (p_mouseOverGo == go) { p_mouseOverGo = nullptr; }

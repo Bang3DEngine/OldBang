@@ -1,5 +1,6 @@
 #include "Bang/UIGroupLayout.h"
 
+#include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/UILayoutManager.h"
 
@@ -15,6 +16,7 @@ Bang::UIGroupLayout::~UIGroupLayout()
 
 }
 
+void UIGroupLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }
 void UIGroupLayout::SetPaddingLeft(int paddingLeft)
 {
     SetPaddings(paddingLeft, GetPaddingBot(), GetPaddingRight(), GetPaddingTop());
@@ -85,6 +87,7 @@ void UIGroupLayout::SetChildrenVerticalStretch(Stretch vStretch)
     }
 }
 
+int UIGroupLayout::GetSpacing() const { return m_spacingPx; }
 HorizontalAlignment UIGroupLayout::GetChildrenHorizontalAlignment() const
 {
     return m_childrenHorizontalAlignment;
@@ -138,4 +141,19 @@ const Vector2i &UIGroupLayout::GetPaddingRightTop() const
 Vector2i UIGroupLayout::GetPaddingSize() const
 {
     return GetPaddingLeftBot() + GetPaddingRightTop();
+}
+
+void UIGroupLayout::ImportXML(const XMLNode &xmlInfo)
+{
+    Component::ImportXML(xmlInfo);
+
+    if (xmlInfo.Contains("SpacingPx"))
+    { SetSpacing( xmlInfo.Get<int>("SpacingPx") ); }
+}
+
+void UIGroupLayout::ExportXML(XMLNode *xmlInfo) const
+{
+    Component::ExportXML(xmlInfo);
+
+    xmlInfo->Set("SpacingPx", m_spacingPx);
 }

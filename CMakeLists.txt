@@ -167,8 +167,10 @@ ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
+${ENGINE_SRC_DIR}/General/DestroyManager.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/IEventListener.cpp
+${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${ENGINE_SRC_DIR}/General/Object.cpp
@@ -222,6 +224,7 @@ ${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
@@ -230,6 +233,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIButtonDriver.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIGridLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp

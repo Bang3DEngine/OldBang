@@ -11,6 +11,7 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
+#include "Bang/DestroyManager.h"
 #include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
@@ -37,13 +38,13 @@ void SceneManager::Update()
     if (rootScene)
     {
         rootScene->PreUpdate();
-        rootScene->DestroyQueuedGameObjects();
+        DestroyManager::DestroyObjects();
 
         rootScene->Update();
-        rootScene->DestroyQueuedGameObjects();
+        DestroyManager::DestroyObjects();
 
         rootScene->PostUpdate();
-        rootScene->DestroyQueuedGameObjects();
+        DestroyManager::DestroyObjects();
     }
 }
 
@@ -93,7 +94,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     if (!spath.IsFile()) { spath = PPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
     {
-        spath = spath.AppendExtension(Extensions::Get<Scene>());
+        spath = spath.AppendExtension(Extensions::GetSceneExtension());
     }
 
     SceneManager *sm = SceneManager::GetInstance();

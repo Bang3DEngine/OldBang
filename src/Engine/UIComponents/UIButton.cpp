@@ -21,71 +21,78 @@ void UIButton::OnUpdate()
 {
     Component::OnUpdate();
 
-    // Is mouse currently over some agent?
-    bool mouseOverSomeAgent = IsMouseOverSomeAgent();
+    // Is mouse currently over some emitter?
+    bool mouseOverSomeEmitter = IsMouseOverSomeEmitter();
 
     // Mouse Down & Up events
-    if (mouseOverSomeAgent)
+    if (mouseOverSomeEmitter)
     {
         Array<MouseButton> buttonsDown = Input::GetMouseButtonsDown();
         for (MouseButton mb : buttonsDown)
         {
-            PROPAGATE(OnButton_MouseDown(this, mb), p_listeners);
+            EventEmitter<IUIButtonListener>::
+                Propagate(&IUIButtonListener::OnButton_MouseDown, this,
+                          SCAST<MouseButton>(mb));
             for (auto f : m_mouseDownCallbacks) { f(this, mb); }
         }
 
         Array<MouseButton> buttonsUp = Input::GetMouseButtonsUp();
         for (MouseButton mb : buttonsUp)
         {
-            PROPAGATE(OnButton_MouseUp(this, mb), p_listeners);
+            EventEmitter<IUIButtonListener>::
+                Propagate(&IUIButtonListener::OnButton_MouseUp, this,
+                      SCAST<MouseButton>(mb));
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
 
     // Clicked event and pressed tracking
-    if (mouseOverSomeAgent)
+    if (mouseOverSomeEmitter)
     {
         m_beingPressed = m_beingPressed ||
                          Input::GetMouseButtonDown(MouseButton::Left);
         if (m_beingPressed && Input::GetMouseButtonUp(MouseButton::Left))
         {
-            PROPAGATE(OnButton_Clicked(this), p_listeners);
+            EventEmitter<IUIButtonListener>::
+                Propagate(&IUIButtonListener::OnButton_Clicked, this);
             for (auto f : m_clickedCallbacks) { f(this); }
+        }
+
+        if (m_beingPressed &&
+            Input::GetMouseButtonDoubleClick(MouseButton::Left))
+        {
+            EventEmitter<IUIButtonListener>::
+                Propagate(&IUIButtonListener::OnButton_DoubleClicked, this);
+            for (auto f : m_doubleClickedCallbacks) { f(this); }
         }
     }
     m_beingPressed = ( m_beingPressed &&
                        Input::GetMouseButton(MouseButton::Left) );
 
     // Mouse Enter & Exit events
-    if (!m_mouseOver && mouseOverSomeAgent)
+    if (!m_mouseOver && mouseOverSomeEmitter)
     {
-        PROPAGATE(OnButton_MouseEnter(this), p_listeners);
+        EventEmitter<IUIButtonListener>::
+            Propagate(&IUIButtonListener::OnButton_MouseEnter, this);
         for (auto f : m_mouseEnterCallbacks) { f(this); }
     }
-    else if (m_mouseOver && !mouseOverSomeAgent)
+    else if (m_mouseOver && !mouseOverSomeEmitter)
     {
-        PROPAGATE(OnButton_MouseExit(this), p_listeners);
+        EventEmitter<IUIButtonListener>::
+            Propagate(&IUIButtonListener::OnButton_MouseExit, this);
         for (auto f : m_mouseExitCallbacks) { f(this); }
     }
-    m_mouseOver = mouseOverSomeAgent;
+    m_mouseOver = mouseOverSomeEmitter;
 }
 
-void UIButton::AddAgent(GameObject *agent)
+void UIButton::RegisterEmitter(GameObject *emitter)
 {
-    p_agents.Add(agent);
+    p_emitters.Add(emitter);
+    emitter->RegisterListener(this);
 }
-void UIButton::RemoveAgent(GameObject *agent)
+void UIButton::UnRegisterEmitter(GameObject *emitter)
 {
-    p_agents.Remove(agent);
-}
-
-void UIButton::AddListener(UIButtonListener *listener)
-{
-    p_listeners.Add(listener);
-}
-void UIButton::RemoveListener(UIButtonListener *listener)
-{
-    p_listeners.Remove(listener);
+    p_emitters.Remove(emitter);
 }
 
 void UIButton::AddMouseEnterCallback(UIButton::EnterExitCallback callback)
@@ -109,22 +116,27 @@ void UIButton::AddClickedCallback(UIButton::ClickedCallback callback)
     m_clickedCallbacks.PushBack(callback);
 }
 
+void UIButton::AddDoubleClickedCallback(UIButton::DoubleClickedCallback callback)
+{
+    m_doubleClickedCallbacks.PushBack(callback);
+}
+
 void UIButton::SetMode(UIButtonMode mode)
 {
     m_mode = mode;
 }
 
-bool UIButton::IsMouseOverSomeAgent() const
+bool UIButton::IsMouseOverSomeEmitter() const
 {
     if (GetMode() == UIButtonMode::UseRender)
     {
         GameObject *overedGameObject = Selection::GetOveredGameObject();
         if (!overedGameObject) { return false; }
-        for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+        for (auto it = p_emitters.cbegin(); it != p_emitters.cend(); ++it)
         {
-            const GameObject *agent = *it;
-            if (overedGameObject == agent ||
-                overedGameObject->IsChildOf(agent, true))
+            const GameObject *emitter = *it;
+            if (overedGameObject == emitter ||
+                overedGameObject->IsChildOf(emitter, true))
             {
                 return true;
             }
@@ -133,22 +145,24 @@ bool UIButton::IsMouseOverSomeAgent() const
     }
     else
     {
-        for (auto it = p_agents.cbegin(); it != p_agents.cend(); ++it)
+        for (auto it = p_emitters.cbegin(); it != p_emitters.cend(); ++it)
         {
-           const GameObject *agent = *it;
-           RectTransform *rt = agent->GetComponent<RectTransform>();
+           const GameObject *emitter = *it;
+           RectTransform *rt = emitter->GetComponent<RectTransform>();
            if (rt && rt->IsMouseOver()) { return true; }
         }
     }
     return false;
 }
 
-bool UIButton::IsBeingPressed() const
-{
-    return m_beingPressed;
-}
+bool UIButton::IsBeingPressed() const { return m_beingPressed; }
+UIButtonMode UIButton::GetMode() const { return m_mode; }
 
-UIButtonMode UIButton::GetMode() const
+void UIButton::OnBeforeDestroyed(IEventEmitter *destroyedEmitter)
 {
-    return m_mode;
+    GameObject *destroyedGo = DCAST<GameObject*>(destroyedEmitter);
+    if (destroyedGo)
+    {
+        UnRegisterEmitter(destroyedGo);
+    }
 }

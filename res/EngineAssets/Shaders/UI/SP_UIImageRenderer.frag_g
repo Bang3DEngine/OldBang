@@ -5,6 +5,10 @@ void Main()
     vec2 inUv = B_FragIn_Uv;
     vec4 textureColor = vec4(1);
     vec4 tint = B_Out_DiffColor;
-    if (B_HasTexture) { textureColor = texture2D(B_Texture0, inUv); }
-    B_Out_Color = vec4(tint.rgb * textureColor.rgb, 1);
+    if (B_HasTexture)
+    {
+        textureColor = texture2D(B_Texture0, inUv);
+        if (textureColor.a <= B_AlphaCutoff) { discard; }
+    }
+    B_Out_Color = vec4(tint.rgb * textureColor.rgb, textureColor.a);
 }

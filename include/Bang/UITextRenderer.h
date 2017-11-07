@@ -93,7 +93,7 @@ private:
     bool m_kerning              = false;
     mutable Rect m_textRectNDC  = Rect::Zero;
 
-    float m_blurriness      = 1.2f;
+    float m_blurriness      = 1.15f;
     float m_alphaThreshold  = 0.24f;
 
     float m_outlineWidth        = 0.0f;

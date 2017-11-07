@@ -20,15 +20,8 @@ public:
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;
 
-    void SetSpacing(int spacingPx);
-
-    int GetSpacing() const;
     Axis GetAxis() const;
     Vector2i GetDir() const;
-
-    // Serializable
-    virtual void ImportXML(const XMLNode &xmlInfo) override;
-    virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
     UIDirLayout();
@@ -36,7 +29,6 @@ protected:
     virtual ~UIDirLayout();
 
 private:
-    int m_spacingPx = 0;
     Axis m_axis = Axis::Horizontal;
 
     Vector2i GetTotalSpacing(const List<GameObject*> &children) const;

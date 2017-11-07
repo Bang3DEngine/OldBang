@@ -83,27 +83,6 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     SetCamera(sceneCamera);
 }
 
-void Scene::Destroy(GameObject *gameObject)
-{
-    m_gameObjectsToBeDestroyed.push(gameObject);
-}
-
-void Scene::DestroyImmediate(GameObject *gameObject)
-{
-    gameObject->Destroy();
-    delete gameObject;
-}
-
-void Scene::DestroyQueuedGameObjects()
-{
-    while (!m_gameObjectsToBeDestroyed.empty())
-    {
-        GameObject *go = m_gameObjectsToBeDestroyed.front();
-        DestroyImmediate(go);
-        m_gameObjectsToBeDestroyed.pop();
-    }
-}
-
 void Scene::InvalidateCanvas()
 {
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);

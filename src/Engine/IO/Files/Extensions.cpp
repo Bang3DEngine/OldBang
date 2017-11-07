@@ -14,42 +14,41 @@
 
 NAMESPACE_BANG_BEGIN
 
-template<> String Extensions::Get<Font>() { return "bfont"; }
-template<> String Extensions::Get<Prefab>() { return "bprefab"; }
-template<> String Extensions::Get<Material>() { return "bmat"; }
-template<> String Extensions::Get<AudioClip>() { return "baudioclip"; }
-template<> String Extensions::Get<Texture2D>() { return "btex2d"; }
-template<> String Extensions::Get<ShaderProgram>() { return "bshaderprogram"; }
+String Extensions::GetFontExtension() { return "bfont"; }
+String Extensions::GetSceneExtension() { return "bscene"; }
+String Extensions::GetPrefabExtension() { return "bprefab"; }
+String Extensions::GetProjectExtension() { return "bproject"; }
+String Extensions::GetMaterialExtension() { return "bmat"; }
+String Extensions::GetAudioClipExtension() { return "baudioclip"; }
+String Extensions::GetTexture2DExtension() { return "btex2d"; }
+String Extensions::GetShaderProgramExtension() { return "bshaderprogram"; }
 
-template<> String Extensions::Get<Scene>() { return "bscene"; }
-template<> String Extensions::Get<Project>() { return "bproject"; }
-
-template<> List<String> Extensions::GetList<Behaviour>()
-{
-    return {"c", "cpp", "h", "hpp"};
-}
-
-List<String> Extensions::GetTTFList()
+List<String> Extensions::GetTTFExtensions()
 {
     return {"ttf"};
 }
 
-List<String> Extensions::GetTextFileList()
+List<String> Extensions::GetTextFileExtensions()
 {
     return {"txt"};
 }
 
-List<String> Extensions::GetSourceFileList()
+List<String> Extensions::GetBehaviourExtensions()
+{
+    return {"c", "cpp", "h", "hpp"};
+}
+
+List<String> Extensions::GetSourceFileExtensions()
 {
     return {"c", "cpp"};
 }
 
-List<String> Extensions::GetVertexShaderList()
+List<String> Extensions::GetVertexShaderExtensions()
 {
     return {"vert", "vert_*"};
 }
 
-List<String> Extensions::GetFragmentShaderList()
+List<String> Extensions::GetFragmentShaderExtensions()
 {
     return {"frag", "frag_*"};
 }

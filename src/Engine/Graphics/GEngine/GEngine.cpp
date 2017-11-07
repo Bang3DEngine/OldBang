@@ -204,6 +204,7 @@ void GEngine::RenderToScreen(Camera *cam)
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
+    if (Input::GetKey(Key::S)) { sp->Set("B_GTex_Color", cam->GetSelectionFramebuffer()->GetAttachmentTexture(SelectionFramebuffer::AttColor)); }
 
     GEngine::RenderScreenPlane(true);
 

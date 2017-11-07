@@ -14,6 +14,7 @@
 #include "Bang/Application.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
+#include "Bang/DestroyManager.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -32,6 +33,7 @@ Window::~Window()
     delete m_audioManager;
     delete m_sceneManager;
     delete m_resources;
+    delete m_destroyManager;
     SDL_GL_DeleteContext(GetGLContext());
     SDL_DestroyWindow(m_sdlWindow);
 }
@@ -75,6 +77,7 @@ void Window::Create(uint flags)
     m_sceneManager        = Application::GetInstance()->CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
+    m_destroyManager      = new DestroyManager();
     SetSize(winSize.x, winSize.y);
 }
 
@@ -352,6 +355,11 @@ AudioManager *Window::GetAudioManager() const
 SceneManager *Window::GetSceneManager() const
 {
     return m_sceneManager;
+}
+
+DestroyManager *Window::GetDestroyManager() const
+{
+    return m_destroyManager;
 }
 
 SDL_Window *Window::GetSDLWindow() const

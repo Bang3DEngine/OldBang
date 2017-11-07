@@ -32,7 +32,7 @@ Path Project::GetProjectAssetsRootFilepath() const
 Path Project::GetProjectFileFilepath() const
 {
     return Path(m_projectRootFilepath + "/" +
-                GetProjectName() + "." + Extensions::Get<Project>());
+                GetProjectName() + "." + Extensions::GetProjectExtension());
 }
 
 String Project::GetProjectName() const
@@ -65,7 +65,7 @@ Path Project::GetFirstFoundScenePath() const
 {
     List<Path> sceneFilepaths = GetProjectAssetsRootFilepath()
                                 .FindFiles(Path::FindFlag::Recursive,
-                                           {Extensions::Get<Scene>()});
+                                           {Extensions::GetSceneExtension()});
     return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Front() : Path::Empty;
 }
 

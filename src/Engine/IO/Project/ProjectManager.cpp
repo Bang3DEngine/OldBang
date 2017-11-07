@@ -61,7 +61,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
     ProjectManager::CloseCurrentProject();
 
     Path projectFileFilepath(projectDir + "/" + projectName + "." +
-                             Extensions::Get<Project>());
+                             Extensions::GetProjectExtension());
 
     ProjectManager::s_currentProject =
             CreateNewProjectFileOnly(projectFileFilepath);

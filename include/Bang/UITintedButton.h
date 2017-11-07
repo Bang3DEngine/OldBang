@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Renderer;
 
 class UITintedButton : public UIButton,
-                       public UIButtonListener
+                       public IUIButtonListener
 {
     COMPONENT(UITintedButton)
 
@@ -23,10 +23,12 @@ public:
     void AddToTint(Renderer *rnd);
     void AddToTint(GameObject *go);
 
+    void SetTintEnabled(bool tintEnabled);
     void SetOverTintColor(const Color &tintColor);
     void SetIdleTintColor(const Color &tintColor);
     void SetPressedTintColor(const Color &tintColor);
 
+    bool IsTintEnabled() const;
     const Color& GetIdleTintColor() const;
     const Color& GetOverTintColor() const;
     const Color& GetPressedTintColor() const;
@@ -42,6 +44,9 @@ protected:
 private:
     Set<Renderer*>   p_renderersToTint;
     Set<GameObject*> p_gameObjectsToTint;
+
+    bool m_tintEnabled = true;
+
     Color m_idleTintColor    = Color::White;
     Color m_overTintColor    = Color::LightBlue;
     Color m_pressedTintColor = Color::DarkBlue;

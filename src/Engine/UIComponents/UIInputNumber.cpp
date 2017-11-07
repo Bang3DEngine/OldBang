@@ -19,7 +19,7 @@ UIInputNumber::~UIInputNumber()
 void UIInputNumber::OnStart()
 {
     UIInputText *inputText = GetGameObject()->GetComponent<UIInputText>();
-    inputText->RegisterListener( SCAST<IValueChangedListener*>(this) );
+    inputText->EventEmitter<IValueChangedListener>::RegisterListener(this);
 }
 
 void UIInputNumber::OnUpdate()
@@ -77,11 +77,13 @@ void UIInputNumber::UpdateValueFromText()
 
 UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
 
-void UIInputNumber::OnValueChanged(const IEventEmitter *emitter)
+void UIInputNumber::OnValueChanged(const IEventEmitter*)
 {
     UpdateValueFromText();
-    Propagate(&IValueChangedListener::OnValueChanged,
-              SCAST<const IEventEmitter*>(this));
+
+    auto *emitter = SCAST< EventEmitter<IValueChangedListener>* >(this);
+    emitter->Propagate(&IValueChangedListener::OnValueChanged,
+                       SCAST<const IEventEmitter*>(emitter));
 }
 
 UIInputNumber *UIInputNumber::CreateInto(GameObject *go)

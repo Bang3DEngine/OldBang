@@ -17,6 +17,7 @@ public:
     UIGroupLayout();
     virtual ~UIGroupLayout();
 
+    void SetSpacing(int spacingPx);
     void SetPaddingLeft(int paddingLeft);
     void SetPaddingBot(int paddingBot);
     void SetPaddingRight(int paddingRight);
@@ -29,6 +30,7 @@ public:
     void SetChildrenHorizontalStretch(Stretch hStretch);
     void SetChildrenVerticalStretch(Stretch vStretch);
 
+    int GetSpacing() const;
     int GetPaddingLeft()  const;
     int GetPaddingBot()   const;
     int GetPaddingRight() const;
@@ -41,7 +43,12 @@ public:
     Stretch GetChildrenVerticalStretch() const;
     Stretch GetChildrenHorizontalStretch() const;
 
+    // Serializable
+    virtual void ImportXML(const XMLNode &xmlInfo) override;
+    virtual void ExportXML(XMLNode *xmlInfo) const override;
+
 private:
+    int m_spacingPx = 0;
     HorizontalAlignment m_childrenHorizontalAlignment = HorizontalAlignment::Center;
     VerticalAlignment   m_childrenVerticalAlignment   = VerticalAlignment::Center;
     Stretch m_childrenHorizontalStretch = Stretch::Full;

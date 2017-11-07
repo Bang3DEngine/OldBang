@@ -7,6 +7,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
 
@@ -20,20 +21,24 @@ UIButtonDriver::~UIButtonDriver()
 
 }
 
-UIBorderRect *UIButtonDriver::GetBorder() const { return p_border; }
+void UIButtonDriver::SetIcon(Texture2D *texture, const Vector2i &size,
+                             int spacingWithText)
+{
+    GetIcon()->SetImageTexture(texture);
+
+    UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
+    le->SetMinSize(size);
+
+    GetGameObject()->GetComponent<UIDirLayout>()->SetSpacing(spacingWithText);
+}
+
+UIImageRenderer *UIButtonDriver::GetIcon() const { return p_icon; }
 UITextRenderer *UIButtonDriver::GetText() const { return p_text; }
 UIImageRenderer *UIButtonDriver::GetBackground() const { return p_background; }
 UITintedButton *UIButtonDriver::GetButton() const { return p_button; }
-
-void UIButtonDriver::SetBorder(UIBorderRect *borderRect) { p_border = borderRect; }
-void UIButtonDriver::SetText(UITextRenderer *textRenderer) { p_text = textRenderer; }
-void UIButtonDriver::SetBackground(UIImageRenderer *imgRenderer)
+UIDirLayout *UIButtonDriver::GetDirLayout() const
 {
-    p_background = imgRenderer;
-}
-void UIButtonDriver::SetButton(UITintedButton *button)
-{
-    p_button = button;
+    return GetGameObject()->GetComponent<UIDirLayout>();
 }
 
 UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
@@ -42,11 +47,12 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
 
     UIButtonDriver *buttonDriv = go->AddComponent<UIButtonDriver>();
 
-    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetPaddingBot(5);
-    vl->SetPaddingTop(5);
-    vl->SetPaddingRight(5);
-    vl->SetPaddingLeft (5);
+    UIHorizontalLayout *hl = go->AddComponent<UIHorizontalLayout>();
+    hl->SetPaddingBot(3);
+    hl->SetPaddingTop(3);
+    hl->SetPaddingRight(3);
+    hl->SetPaddingLeft (3);
+    hl->SetSpacing(5);
 
     UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
@@ -60,16 +66,27 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     bgWTint->SetIdleTintColor(bgImg->GetTint());
     bgWTint->SetOverTintColor( Color(Vector3(0.95), 1) );
     bgWTint->SetPressedTintColor( Color(Vector3(0.9), 1) );
-    bgWTint->AddAgent(go);
+    bgWTint->RegisterEmitter(go);
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetTextColor(Color::Black);
 
-    buttonDriv->SetBackground(bgImg);
-    buttonDriv->SetButton(bgWTint);
-    buttonDriv->SetText(label->GetText());
+    UIImageRenderer *icon = GameObjectFactory::CreateUIImage();
+    icon->SetAspectRatioMode(AspectRatioMode::Keep);
 
+    GameObject *iconGo = icon->GetGameObject();
+    UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
+    iconLE->SetFlexibleSize(Vector2::Zero);
+
+    buttonDriv->p_icon = icon;
+    buttonDriv->p_background = bgImg;
+    buttonDriv->p_button = bgWTint;
+    buttonDriv->p_text = label->GetText();
+
+    go->AddChild(icon->GetGameObject());
     go->AddChild(label->GetGameObject());
+
+    buttonDriv->SetIcon(nullptr, Vector2i::Zero, 0);
 
     return buttonDriv;
 }

@@ -31,7 +31,8 @@ Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
 void UIDirLayout::ApplyLayout(Axis axis)
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>(); ENSURE(rt);
-    auto children = UILayoutManager::GetLayoutableChildrenList(GetGameObject());
+    List<GameObject*> children =
+                    UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
     Vector2i layoutRectSize( Vector2::Round(rt->GetScreenSpaceRectPx().GetSize()) );
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
@@ -48,17 +49,17 @@ void UIDirLayout::ApplyLayout(Axis axis)
 
     // Apply actual calculation to RectTransforms Margins
     uint i = 0;
-    Vector2i marginAccum (GetPaddingLeft(), GetPaddingTop());
+    Vector2i currentTopLeft(GetPaddingLeft(), GetPaddingTop());
     for (GameObject *child : children)
     {
         Vector2i spacing = (i > 0) ? (GetDir() * GetSpacing()) : Vector2i::Zero;
-        marginAccum += spacing;
+        currentTopLeft += spacing;
 
         const Vector2i& childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetComponent<RectTransform>();
         ApplyLayoutToChildRectTransform(axis, layoutRectSize, crt,
-                                        marginAccum, childRTSize);
-        marginAccum += childRTSize;
+                                        currentTopLeft, childRTSize);
+        currentTopLeft += childRTSize;
         ++i;
     }
 }
@@ -297,22 +298,5 @@ void UIDirLayout::CalculateLayout(Axis axis)
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
 
-void UIDirLayout::SetSpacing(int spacingPx) { m_spacingPx = spacingPx; }
-int UIDirLayout::GetSpacing() const { return m_spacingPx; }
 Axis UIDirLayout::GetAxis() const { return m_axis; }
 Vector2i UIDirLayout::GetDir() const { return Vector2i::FromAxis(m_axis); }
-
-void UIDirLayout::ImportXML(const XMLNode &xmlInfo)
-{
-    Component::ImportXML(xmlInfo);
-
-    if (xmlInfo.Contains("SpacingPx"))
-    { SetSpacing( xmlInfo.Get<int>("SpacingPx") ); }
-}
-
-void UIDirLayout::ExportXML(XMLNode *xmlInfo) const
-{
-    Component::ExportXML(xmlInfo);
-
-    xmlInfo->Set("SpacingPx", m_spacingPx);
-}

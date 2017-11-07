@@ -5,6 +5,8 @@
 #include "Bang/IToString.h"
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -17,7 +19,8 @@ NAMESPACE_BANG_BEGIN
 
 class Component : public Object,
                   public Serializable,
-                  public IToString
+                  public IToString,
+                  public EventEmitter<IDestroyListener>
 {
     COMPONENT(Component)
 

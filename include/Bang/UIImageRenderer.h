@@ -65,7 +65,6 @@ private:
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
 
     Vector2i m_prevRectSize = Vector2i::Zero;
-    Vector2i m_prevImageTextureSize = Vector2i::Zero;
 };
 
 NAMESPACE_BANG_END

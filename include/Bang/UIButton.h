@@ -6,11 +6,13 @@
 #include "Bang/Set.h"
 #include "Bang/Input.h"
 #include "Bang/Component.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
-FORWARD class UIButtonListener;
+FORWARD class IUIButtonListener;
 
 enum UIButtonMode
 {
@@ -18,7 +20,9 @@ enum UIButtonMode
     UseRender
 };
 
-class UIButton : public Component
+class UIButton : public Component,
+                 public IDestroyListener,
+                 public EventEmitter<IUIButtonListener>
 {
     COMPONENT(UIButton)
 
@@ -29,14 +33,12 @@ public:
     // Component
     virtual void OnUpdate() override;
 
-    void AddAgent(GameObject *agent);
-    void RemoveAgent(GameObject *agent);
-
-    void AddListener(UIButtonListener *listener);
-    void RemoveListener(UIButtonListener *listener);
+    void RegisterEmitter(GameObject *emitter);
+    void UnRegisterEmitter(GameObject *emitter);
 
     using EnterExitCallback = std::function<void(UIButton*)>;
     using ClickedCallback = EnterExitCallback;
+    using DoubleClickedCallback = ClickedCallback;
     using DownUpCallback = std::function<void(UIButton*, MouseButton)>;
 
     void AddMouseEnterCallback(EnterExitCallback callback);
@@ -44,29 +46,32 @@ public:
     void AddMouseDownCallback(DownUpCallback callback);
     void AddMouseUpCallback(DownUpCallback callback);
     void AddClickedCallback(ClickedCallback callback);
+    void AddDoubleClickedCallback(DoubleClickedCallback callback);
 
     void SetMode(UIButtonMode mode);
 
-    bool IsMouseOverSomeAgent() const;
+    bool IsMouseOverSomeEmitter() const;
     bool IsBeingPressed() const;
     UIButtonMode GetMode() const;
+
+    void OnBeforeDestroyed(IEventEmitter *destroyedEmitter) override;
 
 private:
     bool m_mouseOver    = false;
     bool m_beingPressed = false;
     UIButtonMode m_mode = UIButtonMode::UseRender;
 
-    Set<GameObject*> p_agents;
-    Set<UIButtonListener*> p_listeners;
+    Set<GameObject*> p_emitters;
 
     Array<EnterExitCallback> m_mouseEnterCallbacks;
     Array<EnterExitCallback> m_mouseExitCallbacks;
     Array<DownUpCallback> m_mouseDownCallbacks;
     Array<DownUpCallback> m_mouseUpCallbacks;
     Array<ClickedCallback> m_clickedCallbacks;
+    Array<DoubleClickedCallback> m_doubleClickedCallbacks;
 };
 
-class UIButtonListener
+class IUIButtonListener : public IEventListener
 {
 protected:
     virtual void OnButton_MouseEnter(UIButton *btn) {}
@@ -74,6 +79,7 @@ protected:
     virtual void OnButton_MouseDown(UIButton *btn, MouseButton mb) {}
     virtual void OnButton_MouseUp(UIButton *btn, MouseButton mb) {}
     virtual void OnButton_Clicked(UIButton *btn) {}
+    virtual void OnButton_DoubleClicked(UIButton *btn) {}
 
     friend class UIButton;
 };

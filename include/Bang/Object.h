@@ -8,8 +8,6 @@ NAMESPACE_BANG_BEGIN
 class Object
 {
 public:
-    virtual ~Object();
-
     virtual void Start();
     virtual void OnStart();
     virtual void OnEnabled();
@@ -21,11 +19,14 @@ public:
     bool IsStarted() const;
 
 protected:
-    Object();
+    Object() = default;
+    virtual ~Object() = default;
 
 private:
     bool m_enabled = true;
     bool m_started = false;
+
+    friend class DestroyManager;
 };
 
 NAMESPACE_BANG_END

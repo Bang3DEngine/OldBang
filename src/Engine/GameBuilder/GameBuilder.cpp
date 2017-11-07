@@ -63,7 +63,7 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
     List<Path> sceneFiles = Paths::ProjectAssets()
                                     .FindFiles(Path::FindFlag::Recursive,
-                                               {Extensions::Get<Scene>()});
+                                               {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
     {
         Debug_Error("Please save at least one scene in the "
@@ -145,7 +145,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     // Compile every behaviour into its .o
     List<Path> behavioursSourceFiles = Paths::ProjectAssets()
                                   .FindFiles(Path::FindFlag::Recursive,
-                                             Extensions::GetSourceFileList());
+                                             Extensions::GetSourceFileExtensions());
 
     // Preprocess behaviours before
     for (const Path &behaviourSourcePath : behavioursSourceFiles)

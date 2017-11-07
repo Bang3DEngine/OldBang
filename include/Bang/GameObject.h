@@ -8,6 +8,8 @@
 #include "Bang/IToString.h"
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -18,29 +20,23 @@ FORWARD class Component;
 
 class GameObject : public Object,
                    public Serializable,
-                   public IToString
+                   public IToString,
+                   public EventEmitter<IDestroyListener>
 {
     GAMEOBJECT(GameObject)
 
 public:
-    virtual ~GameObject();
-
+    virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void Start() override;
     virtual void PreUpdate();
     virtual void Update();
     virtual void PostUpdate();
     virtual void BeforeChildrenRender(RenderPass renderPass);
-    virtual void Render(RenderPass renderPass, bool renderChildren = true);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
     virtual void ChildAdded(GameObject *addedChild);
     virtual void ChildRemoved(GameObject *removedChild);
     virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
-    virtual void Destroy();
-
-    virtual void OnEnabled() override;
-    virtual void OnDisabled() override;
-
     static void Destroy(GameObject *gameObject);
 
     bool IsEnabled(bool recursive = false) const;
@@ -106,8 +102,7 @@ public:
     Transform *GetTransform() const;
 
     void SetParent(GameObject *newParent, int _index = -1);
-    GameObject* GetParent();
-    const GameObject* GetParent() const;
+    GameObject* GetParent() const;
 
     void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
 
@@ -133,6 +128,7 @@ public:
 
 protected:
     GameObject(const String &m_name = "GameObject");
+    virtual ~GameObject();
 
     List<GameObject*> m_children;
     List<Component*> m_components;
@@ -146,6 +142,16 @@ protected:
     std::queue<Component*> m_componentsToBeRemoved;
 
     bool m_iteratingComponents = false;
+
+    virtual void Destroy();
+
+    virtual void OnEnabled() override;
+    virtual void OnDisabled() override;
+
+private:
+    void PropagateEnabledEvent(bool enabled) const;
+    void PropagateChildrenEvent(int type, GameObject *dataGo1,
+                                GameObject *dataGo2) const;
 
     friend class Scene;
     friend class Prefab;

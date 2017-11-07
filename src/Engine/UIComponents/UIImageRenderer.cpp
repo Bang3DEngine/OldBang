@@ -160,7 +160,6 @@ void UIImageRenderer::RegenerateQuadVAO()
                                Vector2(uvMin.x, uvMin.y)};
 
     m_quadMesh->LoadUvs(quadUvs);
-    m_prevImageTextureSize = m_imageTexture->GetSize();
 }
 
 void UIImageRenderer::OnRectTransformChanged()

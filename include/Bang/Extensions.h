@@ -5,17 +5,24 @@
 
 NAMESPACE_BANG_BEGIN
 
-class   Extensions
+class Extensions
 {
 public:
-    template<class T> static String Get();
-    template<class T> static List<String> GetList();
+    static String GetFontExtension();
+    static String GetSceneExtension();
+    static String GetPrefabExtension();
+    static String GetProjectExtension();
+    static String GetMaterialExtension();
+    static String GetAudioClipExtension();
+    static String GetTexture2DExtension();
+    static String GetShaderProgramExtension();
 
-    static List<String> GetTTFList();
-    static List<String> GetTextFileList();
-    static List<String> GetSourceFileList();
-    static List<String> GetVertexShaderList();
-    static List<String> GetFragmentShaderList();
+    static List<String> GetTTFExtensions();
+    static List<String> GetTextFileExtensions();
+    static List<String> GetBehaviourExtensions();
+    static List<String> GetSourceFileExtensions();
+    static List<String> GetVertexShaderExtensions();
+    static List<String> GetFragmentShaderExtensions();
 
     Extensions() = delete;
 };

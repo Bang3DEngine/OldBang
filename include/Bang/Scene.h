@@ -26,9 +26,6 @@ public:
     void SetCamera(Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
 
-    void Destroy(GameObject *gameObject);
-    void DestroyImmediate(GameObject *gameObject);
-
     static Scene *GetActiveScene();
     UILayoutManager* GetUILayoutManager() const;
     virtual Camera *GetCamera() const;
@@ -42,7 +39,6 @@ public:
 
 protected:
     UILayoutManager *m_uiLayoutManager = nullptr;
-    std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
