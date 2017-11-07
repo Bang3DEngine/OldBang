@@ -83,8 +83,8 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     buttonDriv->p_button = bgWTint;
     buttonDriv->p_text = label->GetText();
 
-    go->AddChild(icon->GetGameObject());
-    go->AddChild(label->GetGameObject());
+    go->SetAsChild(icon->GetGameObject());
+    go->SetAsChild(label->GetGameObject());
 
     buttonDriv->SetIcon(nullptr, Vector2i::Zero, 0);
 

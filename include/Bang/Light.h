@@ -16,8 +16,6 @@ class Light : public Component
     COMPONENT(Light)
 
 public:
-    virtual ~Light();
-
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
 
@@ -33,6 +31,8 @@ public:
 
 protected:
     Light();
+    virtual ~Light();
+
     void SetLightMaterial(Material *lightMat);
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;

@@ -69,7 +69,7 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
                                   Camera *camera)
 {
     Rect maskRect = lightReceiver->GetGameObject()->GetBoundingScreenRect(camera, false);
-    maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
+    maskRect = Rect::ScreenRectNDC; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
     ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }
@@ -79,7 +79,7 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
                                   Camera *camera)
 {
     Rect maskRect = lightReceiver->GetBoundingScreenRect(camera, true);
-    maskRect = Rect::ScreenRect; // TAKE THIS OUT !!!!
+    maskRect = Rect::ScreenRectNDC; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
     ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }

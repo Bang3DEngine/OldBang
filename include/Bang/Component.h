@@ -15,7 +15,7 @@ NAMESPACE_BANG_BEGIN
 
 #define COMPONENT(ClassName) \
     SERIALIZABLE(ClassName) \
-    friend class ComponentFactory;
+    friend class ObjectManager;
 
 class Component : public Object,
                   public Serializable,

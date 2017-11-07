@@ -10,7 +10,6 @@ class CircleRenderer : public LineRenderer
     COMPONENT(CircleRenderer)
 
 public:
-    virtual ~CircleRenderer();
 
     void SetRadius(float m_radius);
     void SetSegments(int m_segments);
@@ -30,6 +29,7 @@ protected:
     int m_segments = 32;
 
     CircleRenderer();
+    virtual ~CircleRenderer();
 
     virtual void ReloadPoints();
 };

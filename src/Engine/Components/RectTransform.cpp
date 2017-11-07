@@ -305,12 +305,12 @@ Rect RectTransform::GetScreenSpaceRectNDC() const
 {
     Matrix4 localToWorld;
     GetLocalToWorldMatrix(&localToWorld);
-    return localToWorld * Rect::ScreenRect;
+    return localToWorld * Rect::ScreenRectNDC;
 }
 
 Rect RectTransform::GetParentScreenRect() const
 {
-    Rect parentScreenRect = Rect::ScreenRect;
+    Rect parentScreenRect = Rect::ScreenRectNDC;
     if (GetGameObject()->GetParent())
     {
         RectTransform *parentRectTransform =

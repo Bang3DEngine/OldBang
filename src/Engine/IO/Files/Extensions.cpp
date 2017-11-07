@@ -28,6 +28,16 @@ List<String> Extensions::GetTTFExtensions()
     return {"ttf"};
 }
 
+List<String> Extensions::GetImageExtensions()
+{
+    return {"png", "jpg", "jpeg", "bmp", "tiff"};
+}
+
+List<String> Extensions::GetModelExtensions()
+{
+    return {"obj", "ply"};
+}
+
 List<String> Extensions::GetTextFileExtensions()
 {
     return {"txt"};
@@ -51,6 +61,16 @@ List<String> Extensions::GetVertexShaderExtensions()
 List<String> Extensions::GetFragmentShaderExtensions()
 {
     return {"frag", "frag_*"};
+}
+
+bool Extensions::Has(const Path &path, const List<String> &extensions)
+{
+    return Extensions::Equals(path.GetExtension(), extensions);
+}
+
+bool Extensions::Equals(const String &extension, const List<String> &extensions)
+{
+    return extensions.Contains(extension.ToLower());
 }
 
 NAMESPACE_BANG_END

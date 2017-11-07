@@ -23,18 +23,6 @@ class UITextRenderer : public UIRenderer,
     IINVALIDATABLE(UITextRenderer)
 
 public:
-    virtual ~UITextRenderer();
-
-    // UIRenderer
-    virtual void OnRender() override;
-    virtual void Bind() const override;
-    virtual void UnBind() const override;
-    virtual void OnRenderGizmos() override;
-    virtual void OnRender(RenderPass renderPass) override;
-
-    // ILayoutElement
-    virtual void CalculateLayout(Axis axis) override;
-
     void RegenerateCharQuadsVAO() const;
 
     void SetFont (Font *font);
@@ -75,6 +63,16 @@ public:
     Rect GetContentGlobalNDCRect() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
+    // UIRenderer
+    virtual void OnRender() override;
+    virtual void Bind() const override;
+    virtual void UnBind() const override;
+    virtual void OnRenderGizmos() override;
+    virtual void OnRender(RenderPass renderPass) override;
+
+    // ILayoutElement
+    virtual void CalculateLayout(Axis axis) override;
+
     // IRectTransformListener
     virtual void OnRectTransformChanged() override;
 
@@ -113,10 +111,9 @@ private:
     mutable Array<Rect> m_charRectsGlobalNDC;
 
     UITextRenderer();
+    virtual ~UITextRenderer();
 
     void OnChanged();
-
-    friend class ComponentFactory;
 };
 
 NAMESPACE_BANG_END

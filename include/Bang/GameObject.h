@@ -16,7 +16,9 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Camera;
 FORWARD class Component;
 
-#define GAMEOBJECT(ClassName) SERIALIZABLE(ClassName)
+#define GAMEOBJECT(ClassName) \
+    SERIALIZABLE(ClassName) \
+    friend class ObjectManager;
 
 class GameObject : public Object,
                    public Serializable,
@@ -27,7 +29,6 @@ class GameObject : public Object,
 
 public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
-    virtual void Start() override;
     virtual void PreUpdate();
     virtual void Update();
     virtual void PostUpdate();
@@ -55,7 +56,7 @@ public:
     const List<GameObject*>& GetChildren() const;
     List<GameObject*> GetChildrenRecursively() const;
 
-    void AddChild(GameObject *child);
+    void SetAsChild(GameObject *child);
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 
     GameObject* GetChild(int index) const;
@@ -139,12 +140,6 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
-    std::queue<Component*> m_componentsToBeRemoved;
-
-    bool m_iteratingComponents = false;
-
-    virtual void Destroy();
-
     virtual void OnEnabled() override;
     virtual void OnDisabled() override;
 
@@ -156,9 +151,9 @@ private:
     friend class Scene;
     friend class Prefab;
     friend class GEngine;
+    friend class Component;
     friend class SceneManager;
     friend class RectTransform;
-    friend class GameObjectFactory;
 };
 
 NAMESPACE_BANG_END

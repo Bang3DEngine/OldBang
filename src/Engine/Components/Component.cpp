@@ -13,11 +13,16 @@ Component::Component()
 
 Component::~Component()
 {
+    SetGameObject(nullptr);
 }
 
 void Component::SetGameObject(GameObject *gameObject)
 {
-    p_gameObject = gameObject;
+    if (p_gameObject != gameObject)
+    {
+        if (p_gameObject) { p_gameObject->m_components.Remove(this); }
+        p_gameObject = gameObject;
+    }
 }
 
 GameObject *Component::GetGameObject() const { return p_gameObject; }

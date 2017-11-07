@@ -291,8 +291,8 @@ UILabel *UILabel::CreateInto(GameObject *go)
     selectionQuad->SetTint(Color::LightBlue);
     label->p_selectionQuad = selectionQuadGo;
 
-    go->AddChild(selectionQuadGo);
-    go->AddChild(textContainer);
+    go->SetAsChild(selectionQuadGo);
+    go->SetAsChild(textContainer);
 
     label->ResetSelection();
     label->UpdateSelectionQuadRenderer();

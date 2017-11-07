@@ -131,7 +131,7 @@ Material *Renderer::GetMaterial() const
 }
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
-    return Rect::ScreenRect;
+    return Rect::ScreenRectNDC;
     return camera ? camera->GetScreenBoundingRect(GetAABBox()) :
                     Rect::Zero;
 }

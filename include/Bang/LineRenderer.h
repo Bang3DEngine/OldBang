@@ -14,8 +14,6 @@ class LineRenderer : public Renderer
     COMPONENT(LineRenderer)
 
 public:
-    virtual ~LineRenderer();
-
     virtual void SetPoint(int i, const Vector3& point);
     virtual void SetPoints(const Array<Vector3>& points);
 
@@ -31,6 +29,7 @@ public:
 
 protected:
     LineRenderer();
+    virtual ~LineRenderer();
 
     // Renderer
     virtual void OnRender() override;

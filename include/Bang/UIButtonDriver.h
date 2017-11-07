@@ -18,8 +18,6 @@ class UIButtonDriver : public Component,
     COMPONENT(UIButtonDriver)
 
 public:
-    virtual ~UIButtonDriver();
-
     void SetIcon(Texture2D *texture, const Vector2i &size,
                  int spacingWithText = 5);
 
@@ -31,6 +29,7 @@ public:
 
 private:
     UIButtonDriver();
+    virtual ~UIButtonDriver();
 
     UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;

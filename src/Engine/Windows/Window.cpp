@@ -14,7 +14,7 @@
 #include "Bang/Application.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
-#include "Bang/DestroyManager.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -77,7 +77,7 @@ void Window::Create(uint flags)
     m_sceneManager        = Application::GetInstance()->CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
-    m_destroyManager      = new DestroyManager();
+    m_destroyManager      = new ObjectManager();
     SetSize(winSize.x, winSize.y);
 }
 
@@ -357,7 +357,7 @@ SceneManager *Window::GetSceneManager() const
     return m_sceneManager;
 }
 
-DestroyManager *Window::GetDestroyManager() const
+ObjectManager *Window::GetObjectManager() const
 {
     return m_destroyManager;
 }

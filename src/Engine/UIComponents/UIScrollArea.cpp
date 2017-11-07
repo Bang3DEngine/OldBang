@@ -93,7 +93,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     scrollArea->p_mask = mask;
     scrollArea->p_container = childrenCont;
 
-    go->AddChild(childrenCont);
+    go->SetAsChild(childrenCont);
 
     return scrollArea;
 }

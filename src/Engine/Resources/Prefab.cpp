@@ -42,7 +42,6 @@ GameObject *Prefab::Instantiate() const
     {
         Scene *scene = SceneManager::GetRootScene();
         go->SetParent(scene);
-        go->Start();
     }
     return go;
 }

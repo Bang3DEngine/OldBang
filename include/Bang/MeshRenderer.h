@@ -12,8 +12,6 @@ class MeshRenderer : public Renderer
     COMPONENT(MeshRenderer)
 
 public:
-    virtual ~MeshRenderer();
-
     void SetMesh(Mesh *m);
     Mesh* GetMesh() const;
 
@@ -31,6 +29,7 @@ protected:
     mutable Mesh *p_mesh = nullptr;
 
     MeshRenderer();
+    virtual ~MeshRenderer();
 
     // Renderer
     virtual void OnRender() override;

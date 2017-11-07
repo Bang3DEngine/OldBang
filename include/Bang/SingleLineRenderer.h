@@ -12,8 +12,6 @@ class SingleLineRenderer : public LineRenderer
     COMPONENT(SingleLineRenderer)
 
 public:
-    virtual ~SingleLineRenderer();
-
     void SetOrigin(const Vector3 &o);
     void SetDestiny(const Vector3 &d);
 
@@ -29,6 +27,7 @@ public:
 
 protected:
     SingleLineRenderer();
+    virtual ~SingleLineRenderer();
 };
 
 NAMESPACE_BANG_END

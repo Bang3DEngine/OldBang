@@ -11,7 +11,7 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
-#include "Bang/DestroyManager.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
@@ -34,17 +34,15 @@ void SceneManager::Update()
 {
     SceneManager::TryToLoadQueuedScene();
 
+    ObjectManager::StartObjects();
+
     Scene *rootScene = SceneManager::GetRootScene();
     if (rootScene)
     {
         rootScene->PreUpdate();
-        DestroyManager::DestroyObjects();
-
         rootScene->Update();
-        DestroyManager::DestroyObjects();
-
         rootScene->PostUpdate();
-        DestroyManager::DestroyObjects();
+        ObjectManager::DestroyObjects();
     }
 }
 
@@ -55,7 +53,6 @@ void SceneManager::_LoadScene(Scene *scene)
     m_activeScene = scene;
     if (m_activeScene)
     {
-        m_activeScene->Start();
         m_activeScene->SetFirstFoundCameraOrDefaultOne();
         m_activeScene->InvalidateCanvas();
     }

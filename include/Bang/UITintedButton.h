@@ -51,8 +51,6 @@ private:
     Color m_overTintColor    = Color::LightBlue;
     Color m_pressedTintColor = Color::DarkBlue;
 
-    Color m_currentTintColor = m_idleTintColor;
-
     void ApplyTint(const Color &tintColor);
 };
 

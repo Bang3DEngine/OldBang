@@ -140,19 +140,19 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UILayoutElement *inputHLLE = inputPathCont->AddComponent<UILayoutElement>();
     inputHLLE->SetFlexibleHeight(0);
 
-    scene->AddChild(vlGo);
+    scene->SetAsChild(vlGo);
 
-    vlGo->AddChild(inputPathCont);
-    inputPathCont->AddChild(inputPathText->GetGameObject());
-    inputPathCont->AddChild(goButton->GetGameObject());
+    vlGo->SetAsChild(inputPathCont);
+    inputPathCont->SetAsChild(inputPathText->GetGameObject());
+    inputPathCont->SetAsChild(goButton->GetGameObject());
 
-    vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
-    vlGo->AddChild(list->GetGameObject());
-    vlGo->AddChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->SetAsChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
+    vlGo->SetAsChild(list->GetGameObject());
+    vlGo->SetAsChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10));
 
-    vlGo->AddChild(hlGo);
-    hlGo->AddChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible));
-    hlGo->AddChild(openButton->GetGameObject());
+    vlGo->SetAsChild(hlGo);
+    hlGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible));
+    hlGo->SetAsChild(openButton->GetGameObject());
 
     scene->SetFirstFoundCameraOrDefaultOne();
 
@@ -209,19 +209,19 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     button1->GetText()->SetContent("OK");
     button1->GetButton()->AddClickedCallback(OnButtonClicked);
 
-    scene->AddChild(container);
-     container->AddChild(mainVLayoutGo);
-      mainVLayoutGo->AddChild(hLayoutGo);
-       hLayoutGo->AddChild(iconGo);
-       hLayoutGo->AddChild(
+    scene->SetAsChild(container);
+     container->SetAsChild(mainVLayoutGo);
+      mainVLayoutGo->SetAsChild(hLayoutGo);
+       hLayoutGo->SetAsChild(iconGo);
+       hLayoutGo->SetAsChild(
           GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Min, 20));
-       hLayoutGo->AddChild(msgGo);
-      mainVLayoutGo->AddChild(
+       hLayoutGo->SetAsChild(msgGo);
+      mainVLayoutGo->SetAsChild(
          GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 20));
-      mainVLayoutGo->AddChild(buttonsGo);
-       buttonsGo->AddChild(hSpacer);
-       buttonsGo->AddChild(button0->GetGameObject());
-       buttonsGo->AddChild(button1->GetGameObject());
+      mainVLayoutGo->SetAsChild(buttonsGo);
+       buttonsGo->SetAsChild(hSpacer);
+       buttonsGo->SetAsChild(button0->GetGameObject());
+       buttonsGo->SetAsChild(button1->GetGameObject());
 
     return scene;
 }

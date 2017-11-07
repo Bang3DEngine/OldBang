@@ -167,7 +167,7 @@ ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
-${ENGINE_SRC_DIR}/General/DestroyManager.cpp
+${ENGINE_SRC_DIR}/General/ObjectManager.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/IEventListener.cpp
 ${ENGINE_SRC_DIR}/General/IDestroyListener.cpp

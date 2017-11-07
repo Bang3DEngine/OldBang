@@ -14,12 +14,9 @@ FORWARD class UILayoutManager;
 
 class Scene : public GameObject
 {
-    SERIALIZABLE(Scene)
+    GAMEOBJECT(Scene)
 
 public:
-    Scene();
-    virtual ~Scene();
-
     virtual void Update() override;
     virtual void OnResize(int newWidth, int newHeight);
 
@@ -43,12 +40,13 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 
-    // GameObject
-    virtual void RenderGizmos() override;
-
-    void DestroyQueuedGameObjects();
+    Scene();
+    virtual ~Scene();
 
     Gizmos *GetGizmos() const;
+
+    // GameObject
+    virtual void RenderGizmos() override;
 
     friend class Gizmos;
     friend class Window;

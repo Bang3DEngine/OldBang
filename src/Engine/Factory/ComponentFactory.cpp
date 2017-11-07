@@ -18,24 +18,24 @@
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButton.h"
 #include "Bang/AudioListener.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
 #include "Bang/UIHorizontalLayout.h"
-#include "Bang/UITintedButton.h"
 
 USING_NAMESPACE_BANG
 
 #define CREATE_COMPONENT(className, ComponentClass) \
     if (className == ComponentClass::GetClassNameStatic()) \
-    { return new ComponentClass(); }
+    { return ObjectManager::Create<ComponentClass>(); }
 
 Component* ComponentFactory::CreateComponent(const String &componentClassName)
 {

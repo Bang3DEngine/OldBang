@@ -30,7 +30,7 @@ public:
     void RenderToScreen(Camera *cam);
     void RenderToScreen(Texture *fullScreenTexture);
     void ApplyScreenPass(ShaderProgram *sp,
-                         const Rect &mask = Rect::ScreenRect);
+                         const Rect &mask = Rect::ScreenRectNDC);
     void RenderScreenPlane(bool withDepth = false);
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);

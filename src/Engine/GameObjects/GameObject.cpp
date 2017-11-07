@@ -14,76 +14,60 @@
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
-#include "Bang/DestroyManager.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/IEnabledListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 
-#define PROPAGATE_EVENT_TO_COMPONENTS(Event, Components) \
-    m_iteratingComponents = true; \
-    PROPAGATE_EVENT(Event, Components); \
-    m_iteratingComponents = false; \
-    RemoveQueuedComponents();
-
-#define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
-    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it )  \
-        if ((*it)->IsEnabled(true)) { (*it)->FUNCTION; } \
+#define _PROPAGATE_EVENT(FUNCTION, ITERABLE, _CAST)\
+do {\
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
+    { \
+        Object *obj = _CAST<Object*>(*it); \
+        if (obj->IsEnabled() && \
+            obj->IsStarted() && \
+           !obj->IsWaitingToBeDestroyed()) \
+        { \
+            (*it)->FUNCTION; \
+        } \
+    } \
 } while (0)
+#define PROPAGATE_EVENT_D(FUNC, ITER) _PROPAGATE_EVENT(FUNC, ITER, DCAST)
+#define   PROPAGATE_EVENT(FUNC, ITER) _PROPAGATE_EVENT(FUNC, ITER, SCAST)
 
 GameObject::GameObject(const String &name) : m_name(name)
 {
+    ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 GameObject::~GameObject()
 {
-    while (!GetChildren().IsEmpty())
-    {
-        GameObject *child = GetChildren().Front();
-        delete child;
-    }
-
-    while (!m_components.IsEmpty())
-    {
-        Component *comp = m_components.Front();
-        m_components.PopFront();
-        delete comp;
-    }
-
     SetParent(nullptr);
-}
-
-void GameObject::Start()
-{
-    PROPAGATE_EVENT_TO_COMPONENTS(Start(), m_components);
-    Object::Start();
-    PROPAGATE_EVENT(Start(), GetChildren());
 }
 
 void GameObject::PreUpdate()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnPreUpdate(), m_components);
+    PROPAGATE_EVENT(OnPreUpdate(), GetComponents());
     PROPAGATE_EVENT(PreUpdate(), GetChildren());
 }
 
 void GameObject::Update()
 {
-    if (!Object::IsStarted()) { Start(); }
-
-    PROPAGATE_EVENT_TO_COMPONENTS(OnUpdate(), m_components);
+    PROPAGATE_EVENT(OnUpdate(), GetComponents());
     PROPAGATE_EVENT(Update(), GetChildren());
 }
 
 void GameObject::PostUpdate()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnPostUpdate(), m_components);
+    PROPAGATE_EVENT(OnPostUpdate(), GetComponents());
     PROPAGATE_EVENT(PostUpdate(), GetChildren());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRender(renderPass), m_components);
+    PROPAGATE_EVENT(OnRender(renderPass), GetComponents());
     if (renderChildren)
     {
         BeforeChildrenRender(renderPass);
@@ -94,45 +78,32 @@ void GameObject::Render(RenderPass renderPass, bool renderChildren)
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnBeforeChildrenRender(renderPass),
-                                  m_components);
+    PROPAGATE_EVENT(OnBeforeChildrenRender(renderPass), GetComponents());
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnAfterChildrenRender(renderPass),
-                                  m_components);
+    PROPAGATE_EVENT(OnAfterChildrenRender(renderPass), GetComponents());
 }
 
 void GameObject::PropagateChildrenEvent(int type, GameObject *dataGo1,
                                         GameObject *dataGo2) const
 {
-    auto childrenListeners = GetComponents<IChildrenListener>();
-    for (IChildrenListener *childrenListener : childrenListeners)
-    {
-        switch (type)
-        {
-            case 1: childrenListener->OnChildAdded(dataGo1); break;
-            case 2: childrenListener->OnChildRemoved(dataGo1); break;
-            case 3: childrenListener->OnParentChanged(dataGo1, dataGo2); break;
-            default: ASSERT(false);
-        }
-    }
-
+    auto cListeners = GetComponents<IChildrenListener>();
     switch (type)
     {
         case 1:
+            PROPAGATE_EVENT_D(OnChildAdded(dataGo1), cListeners);
             if (GetParent()) { GetParent()->ChildAdded(dataGo1); }
-        break;
-
+            break;
         case 2:
+            PROPAGATE_EVENT_D(OnChildRemoved(dataGo1), cListeners);
             if (GetParent()) { GetParent()->ChildRemoved(dataGo1); }
-        break;
-
+            break;
         case 3:
-            PROPAGATE_EVENT(ParentChanged(dataGo1, dataGo2), GetChildren());
-        break;
-
+            PROPAGATE_EVENT_D(OnParentChanged(dataGo1, dataGo2), cListeners);
+            PROPAGATE_EVENT_D(ParentChanged(dataGo1, dataGo2), GetChildren());
+            break;
         default: ASSERT(false);
     }
 }
@@ -147,15 +118,8 @@ void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
 
 void GameObject::RenderGizmos()
 {
-    PROPAGATE_EVENT_TO_COMPONENTS(OnRenderGizmos(), m_components);
+    PROPAGATE_EVENT(OnRenderGizmos(), GetComponents());
     PROPAGATE_EVENT(RenderGizmos(), GetChildren());
-}
-
-void GameObject::Destroy()
-{
-    Propagate(&IDestroyListener::OnBeforeDestroyed, SCAST<IEventEmitter*>(this));
-    PROPAGATE_EVENT(Destroy(), GetChildren());
-    PROPAGATE_EVENT_TO_COMPONENTS(OnDestroy(), m_components);
 }
 
 void GameObject::PropagateEnabledEvent(bool enabled) const
@@ -176,7 +140,20 @@ void GameObject::OnDisabled() { PropagateEnabledEvent(false); }
 
 void GameObject::Destroy(GameObject *gameObject)
 {
-    DestroyManager::Destroy(gameObject);
+    gameObject->Propagate(&IDestroyListener::OnBeforeDestroyed,
+                          SCAST<IEventEmitter*>(gameObject));
+
+    for (GameObject *child : gameObject->GetChildren())
+    {
+        GameObject::Destroy(child);
+    }
+
+    for (Component *comp : gameObject->GetComponents())
+    {
+        ObjectManager::Destroy(comp);
+    }
+
+    ObjectManager::Destroy(gameObject);
 }
 
 bool GameObject::IsEnabled(bool recursive) const
@@ -195,9 +172,9 @@ Component *GameObject::AddComponent(const String &componentClassName,
 
 Component* GameObject::AddComponent(Component *c, int _index)
 {
-    if (c && !m_components.Contains(c))
+    if (c && !GetComponents().Contains(c))
     {
-        const int index = (_index != -1 ? _index : m_components.Size());
+        const int index = (_index != -1 ? _index : GetComponents().Size());
         m_components.Insert(index, c);
 
         c->SetGameObject(this);
@@ -225,31 +202,7 @@ Component *GameObject::GetComponentByGUID(const GUID &guid) const
 
 void GameObject::RemoveComponent(Component *c)
 {
-    if (!m_iteratingComponents)
-    {
-        RemoveComponentInstantly(c);
-    }
-    else
-    {
-        m_componentsToBeRemoved.push(c);
-    }
-}
-
-void GameObject::RemoveComponentInstantly(Component *c)
-{
-    if (p_transform == c) { p_transform = nullptr; }
-    m_components.Remove(c);
-    delete c;
-}
-
-void GameObject::RemoveQueuedComponents()
-{
-    while (!m_componentsToBeRemoved.empty())
-    {
-        Component *c = m_componentsToBeRemoved.front();
-        RemoveComponentInstantly(c);
-        m_componentsToBeRemoved.pop();
-    }
+    ObjectManager::Destroy(c);
 }
 
 Transform *GameObject::GetTransform() const { return p_transform; }
@@ -326,7 +279,7 @@ List<GameObject *> GameObject::GetChildrenRecursively() const
     return cc;
 }
 
-void GameObject::AddChild(GameObject *child)
+void GameObject::SetAsChild(GameObject *child)
 {
     child->SetParent(this);
 }
@@ -445,7 +398,7 @@ void GameObject::CloneInto(ICloneable *clone) const
         childClone->SetParent(go);
     }
 
-    for (Component *comp : m_components)
+    for (Component *comp : GetComponents())
     {
         go->AddComponent(comp->Clone());
     }

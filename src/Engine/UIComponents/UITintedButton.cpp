@@ -20,8 +20,7 @@ UITintedButton::~UITintedButton()
 void UITintedButton::OnUpdate()
 {
     UIButton::OnUpdate();
-    if ( (m_currentTintColor == m_pressedTintColor) &&
-         Input::GetMouseButtonUp(MouseButton::Left) )
+    if ( Input::GetMouseButtonUp(MouseButton::Left) )
     {
         ApplyTint( IsMouseOverSomeEmitter() ? m_overTintColor : m_idleTintColor);
     }
@@ -30,13 +29,11 @@ void UITintedButton::OnUpdate()
 void UITintedButton::AddToTint(Renderer *rend)
 {
     p_renderersToTint.Add(rend);
-    ApplyTint( IsMouseOverSomeEmitter() ? m_overTintColor : m_idleTintColor );
 }
 
 void UITintedButton::AddToTint(GameObject *go)
 {
     p_gameObjectsToTint.Add(go);
-    ApplyTint( IsMouseOverSomeEmitter() ? m_overTintColor : m_idleTintColor );
 }
 
 void UITintedButton::SetTintEnabled(bool tintEnabled)
@@ -78,8 +75,7 @@ const Color &UITintedButton::GetPressedTintColor() const
 void UITintedButton::OnButton_MouseEnter(UIButton *btn)
 {
     IUIButtonListener::OnButton_MouseEnter(btn);
-    ApplyTint( IsBeingPressed() ? m_pressedTintColor :
-                                               m_overTintColor);
+    ApplyTint( IsBeingPressed() ? m_pressedTintColor : m_overTintColor);
 }
 
 void UITintedButton::OnButton_MouseExit(UIButton *btn)
@@ -117,6 +113,5 @@ void UITintedButton::ApplyTint(const Color &tintColor)
             Material *mat = rend->GetMaterial();
             if (mat) { mat->SetDiffuseColor(tintColor); }
         }
-        m_currentTintColor = tintColor;
     }
 }

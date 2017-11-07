@@ -11,7 +11,7 @@ template<class T>
 class RectG
 {
 public:
-    const static RectG<T> ScreenRect;
+    const static RectG<T> ScreenRectNDC;
     const static RectG<T> Zero;
 
     Vector2G<T> m_min = Vector2G<T>::Zero;
@@ -164,7 +164,7 @@ public:
 };
 
 template<class T>
-const RectG<T> RectG<T>::ScreenRect = RectG<T>(Vector2G<T>(-1),
+const RectG<T> RectG<T>::ScreenRectNDC = RectG<T>(Vector2G<T>(-1),
                                                Vector2G<T>(1));
 
 template<class T>

@@ -2,6 +2,7 @@
 #define COMPONENTFACTORY_H
 
 #include "Bang/String.h"
+#include "Bang/ObjectManager.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -22,7 +23,7 @@ public:
 template<class T>
 T* ComponentFactory::CreateComponent()
 {
-    return new T();
+    return ObjectManager::Create<T>();
 }
 
 NAMESPACE_BANG_END

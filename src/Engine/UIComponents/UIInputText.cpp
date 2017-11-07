@@ -372,8 +372,8 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
                                 SetMargins(MarginX, MarginY, MarginX, MarginY);
     inputText->p_label = label;
 
-    scrollArea->GetContainer()->AddChild(label->GetGameObject());
-    label->GetGameObject()->AddChild(cursorGo);
+    scrollArea->GetContainer()->SetAsChild(label->GetGameObject());
+    label->GetGameObject()->SetAsChild(cursorGo);
 
     inputText->SetCursorIndex( inputText->GetText()->GetContent().Size() );
     inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);

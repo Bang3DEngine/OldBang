@@ -32,9 +32,9 @@ public:
 
     void ApplyPass(ShaderProgram *sp,
                    bool willReadFromColor = false,
-                   const Rect &mask = Rect::ScreenRect);
+                   const Rect &mask = Rect::ScreenRectNDC);
 
-    void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRect);
+    void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::ScreenRectNDC);
 
     void SetAllDrawBuffers() const override;
     void SetAllDrawBuffersExceptColor();

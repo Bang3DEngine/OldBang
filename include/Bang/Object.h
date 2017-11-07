@@ -17,16 +17,18 @@ public:
 
     bool IsEnabled() const;
     bool IsStarted() const;
+    bool IsWaitingToBeDestroyed() const;
 
 protected:
     Object() = default;
-    virtual ~Object() = default;
+    virtual ~Object();
 
 private:
     bool m_enabled = true;
     bool m_started = false;
+    bool m_waitingToBeDestroyed = false;
 
-    friend class DestroyManager;
+    friend class ObjectManager;
 };
 
 NAMESPACE_BANG_END

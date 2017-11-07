@@ -17,8 +17,6 @@ class Transform : public Component,
     IINVALIDATABLE(Transform)
 
 public:
-    virtual ~Transform();
-
     virtual const Matrix4& GetLocalToParentMatrix() const;
 
     void LookAt(const Vector3 &target,
@@ -109,6 +107,7 @@ protected:
     mutable Matrix4 m_localToParentMatrix;
 
     Transform();
+    virtual ~Transform();
 
 private:
     Vector3    m_localPosition  = Vector3::Zero;

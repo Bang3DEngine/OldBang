@@ -18,7 +18,7 @@ FORWARD class Resources;
 FORWARD class Texture2D;
 FORWARD class AudioManager;
 FORWARD class SceneManager;
-FORWARD class DestroyManager;
+FORWARD class ObjectManager;
 
 class Window
 {
@@ -74,7 +74,7 @@ public:
     Input          *GetInput() const;
     AudioManager   *GetAudioManager() const;
     SceneManager   *GetSceneManager() const;
-    DestroyManager *GetDestroyManager() const;
+    ObjectManager *GetObjectManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -97,7 +97,7 @@ private:
     Input          *m_input        = nullptr;
     AudioManager   *m_audioManager = nullptr;
     SceneManager   *m_sceneManager = nullptr;
-    DestroyManager *m_destroyManager = nullptr;
+    ObjectManager *m_destroyManager = nullptr;
 
     Vector2i m_minSize = Vector2i::Zero;
     Vector2i m_maxSize = Vector2i(4096);

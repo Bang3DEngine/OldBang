@@ -18,11 +18,16 @@ public:
     static String GetShaderProgramExtension();
 
     static List<String> GetTTFExtensions();
+    static List<String> GetImageExtensions();
+    static List<String> GetModelExtensions();
     static List<String> GetTextFileExtensions();
     static List<String> GetBehaviourExtensions();
     static List<String> GetSourceFileExtensions();
     static List<String> GetVertexShaderExtensions();
     static List<String> GetFragmentShaderExtensions();
+
+    static bool Has(const Path &path, const List<String> &extensions);
+    static bool Equals(const String &extension, const List<String> &extensions);
 
     Extensions() = delete;
 };

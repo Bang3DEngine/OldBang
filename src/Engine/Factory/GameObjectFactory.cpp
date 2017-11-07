@@ -17,12 +17,13 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/UIListDriver.h"
-#include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/UIButtonDriver.h"
-#include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -33,14 +34,14 @@ USING_NAMESPACE_BANG
 
 GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
 {
-    GameObject *go = new GameObject();
+    GameObject *go = ObjectManager::Create<GameObject>();
     if (addTransform) { go->AddComponent<Transform>(); }
     return go;
 }
 
 GameObject *GameObjectFactory::CreateUIGameObject(bool addComponents)
 {
-    GameObject *go = new GameObject();
+    GameObject *go = ObjectManager::Create<GameObject>();
     GameObjectFactory::CreateUIGameObjectInto(go, addComponents);
     return go;
 }
@@ -69,14 +70,14 @@ void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
 
 Scene *GameObjectFactory::CreateScene()
 {
-    Scene *scene = new Scene();
+    Scene *scene = ObjectManager::Create<Scene>();
     scene->AddComponent<Transform>();
     return scene;
 }
 
 Scene *GameObjectFactory::CreateUIScene()
 {
-    Scene *scene = new Scene();
+    Scene *scene = ObjectManager::Create<Scene>();
     GameObjectFactory::CreateUIGameObjectInto(scene);
     GameObjectFactory::CreateUICanvasInto(scene);
     return scene;
@@ -102,9 +103,9 @@ Scene *GameObjectFactory::CreateDefaultScene()
     cam->SetClearColor(Color::LightBlue);
     scene->SetCamera(cam);
 
-    scene->AddChild(cube);
-    scene->AddChild(light);
-    scene->AddChild(cameraGo);
+    scene->SetAsChild(cube);
+    scene->SetAsChild(light);
+    scene->SetAsChild(cameraGo);
     return scene;
 }
 

@@ -42,10 +42,9 @@ private:
 
 class UIFileListEntry : public GameObject
 {
-public:
-    UIFileListEntry();
-    virtual ~UIFileListEntry();
+    GAMEOBJECT(UIFileListEntry)
 
+public:
     void OnMouseOver();
     void OnMouseOut();
     void OnSelectionIn();
@@ -53,6 +52,10 @@ public:
 
     void SetPath(const Path &path);
     const Path& GetPath();
+
+protected:
+    UIFileListEntry();
+    virtual ~UIFileListEntry();
 
 private:
     bool m_isSelected = false;

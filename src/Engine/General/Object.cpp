@@ -4,7 +4,11 @@ USING_NAMESPACE_BANG
 
 void Object::Start()
 {
-    if (!IsStarted()) { OnStart(); m_started = true; }
+    if (!IsStarted())
+    {
+        OnStart();
+        m_started = true;
+    }
 }
 void Object::OnStart() {}
 void Object::OnEnabled() {}
@@ -21,3 +25,9 @@ void Object::SetEnabled(bool enabled)
 
 bool Object::IsEnabled() const { return m_enabled; }
 bool Object::IsStarted() const { return m_started; }
+bool Object::IsWaitingToBeDestroyed() const { return m_waitingToBeDestroyed; }
+
+Object::~Object()
+{
+    ASSERT( IsWaitingToBeDestroyed() );
+}

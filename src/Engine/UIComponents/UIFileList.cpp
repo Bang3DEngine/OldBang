@@ -72,7 +72,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
 
     for (const Path &path : paths)
     {
-        UIFileListEntry *entry = new UIFileListEntry();
+        UIFileListEntry *entry = ObjectManager::Create<UIFileListEntry>();
         entry->SetPath(path);
 
         listDriver->AddElement(entry);
@@ -161,7 +161,7 @@ UIFileListEntry::UIFileListEntry()
     m_text->SetTextSize(12);
     m_text->SetHorizontalAlign(HorizontalAlignment::Left);
 
-    AddChild(container);
+    SetAsChild(container);
 }
 
 UIFileListEntry::~UIFileListEntry()
