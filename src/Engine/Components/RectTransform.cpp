@@ -444,7 +444,7 @@ void RectTransform::OnRectTransformChanged()
             GetGameObject()->GetComponents<IRectTransformListener>();
     propagateTo.Remove(this);
 
-    PROPAGATE_1_0(IRectTransformListener, OnRectTransformChanged, propagateTo);
+    PROPAGATE_1(IRectTransformListener, OnRectTransformChanged, propagateTo);
     PropagateParentRectTransformChangedEvent();
     PropagateChildrenRectTransformChangedEvent();
 }
@@ -452,15 +452,15 @@ void RectTransform::OnRectTransformChanged()
 void RectTransform::PropagateParentRectTransformChangedEvent() const
 {
     GameObject *go = GetGameObject();
-    PROPAGATE_1_0(IRectTransformListener, OnParentRectTransformChanged,
-                 go->GetComponentsInChildrenOnly<IRectTransformListener>(false));
+    PROPAGATE_1(IRectTransformListener, OnParentRectTransformChanged,
+                go->GetComponentsInChildrenOnly<IRectTransformListener>(false));
 }
 
 void RectTransform::PropagateChildrenRectTransformChangedEvent() const
 {
     GameObject *go = GetGameObject();
-    PROPAGATE_1_0(IRectTransformListener, OnChildrenRectTransformChanged,
-                 go->GetComponentsInParent<IRectTransformListener>(false));
+    PROPAGATE_1(IRectTransformListener, OnChildrenRectTransformChanged,
+                go->GetComponentsInParent<IRectTransformListener>(false));
 }
 
 void RectTransform::OnParentRectTransformChanged()

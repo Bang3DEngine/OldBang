@@ -30,18 +30,14 @@ void UIButton::OnUpdate()
         Array<MouseButton> buttonsDown = Input::GetMouseButtonsDown();
         for (MouseButton mb : buttonsDown)
         {
-            EventEmitter<IUIButtonListener>::
-                Propagate(&IUIButtonListener::OnButton_MouseDown, this,
-                          SCAST<MouseButton>(mb));
+            PROPAGATE(IUIButtonListener, OnButton_MouseDown, this, mb);
             for (auto f : m_mouseDownCallbacks) { f(this, mb); }
         }
 
         Array<MouseButton> buttonsUp = Input::GetMouseButtonsUp();
         for (MouseButton mb : buttonsUp)
         {
-            EventEmitter<IUIButtonListener>::
-                Propagate(&IUIButtonListener::OnButton_MouseUp,
-                          this, SCAST<MouseButton>(mb));
+            PROPAGATE(IUIButtonListener, OnButton_MouseUp, this, mb);
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
@@ -53,16 +49,14 @@ void UIButton::OnUpdate()
                          Input::GetMouseButtonDown(MouseButton::Left);
         if (m_beingPressed && Input::GetMouseButtonUp(MouseButton::Left))
         {
-            EventEmitter<IUIButtonListener>::
-                Propagate(&IUIButtonListener::OnButton_Clicked, this);
+            PROPAGATE(IUIButtonListener, OnButton_Clicked, this);
             for (auto f : m_clickedCallbacks) { f(this); }
         }
 
         if (m_beingPressed &&
             Input::GetMouseButtonDoubleClick(MouseButton::Left))
         {
-            EventEmitter<IUIButtonListener>::
-                Propagate(&IUIButtonListener::OnButton_DoubleClicked, this);
+            PROPAGATE(IUIButtonListener, OnButton_DoubleClicked, this);
             for (auto f : m_doubleClickedCallbacks) { f(this); }
         }
     }
@@ -72,14 +66,12 @@ void UIButton::OnUpdate()
     // Mouse Enter & Exit events
     if (!m_mouseOver && mouseOverSomePart)
     {
-        EventEmitter<IUIButtonListener>::
-            Propagate(&IUIButtonListener::OnButton_MouseEnter, this);
+        PROPAGATE(IUIButtonListener, OnButton_MouseEnter, this);
         for (auto f : m_mouseEnterCallbacks) { f(this); }
     }
     else if (m_mouseOver && !mouseOverSomePart)
     {
-        EventEmitter<IUIButtonListener>::
-            Propagate(&IUIButtonListener::OnButton_MouseExit, this);
+        PROPAGATE(IUIButtonListener, OnButton_MouseExit, this);
         for (auto f : m_mouseExitCallbacks) { f(this); }
     }
     m_mouseOver = mouseOverSomePart;

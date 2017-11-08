@@ -13,11 +13,11 @@ void Object::Start()
 void Object::OnStart() {}
 void Object::OnEnabled()
 {
-    EventEmitter<IEnabledListener>::Propagate(&IEnabledListener::OnEnabled);
+    PROPAGATE(IEnabledListener, OnEnabled);
 }
 void Object::OnDisabled()
 {
-    EventEmitter<IEnabledListener>::Propagate(&IEnabledListener::OnDisabled);
+    PROPAGATE(IEnabledListener, OnDisabled);
 }
 void Object::OnDestroy() {}
 
@@ -42,7 +42,5 @@ Object::~Object()
 void Object::BeforeDestroyed()
 {
     OnDestroy();
-    // PROPAGATE(IDestroyListener, OnBeforeDestroyed, this);
-    EventEmitter<IDestroyListener>::Propagate(&IDestroyListener::OnBeforeDestroyed,
-                                              this);
+    PROPAGATE(IDestroyListener, OnBeforeDestroyed, this);
 }

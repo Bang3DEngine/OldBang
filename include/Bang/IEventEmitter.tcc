@@ -20,6 +20,12 @@ void EventEmitter<EListenerC>::UnRegisterListener(IEventListener *listener)
 }
 
 template<class EventListenerClass>
+const List<IEventListener *> EventEmitter<EventListenerClass>::GetListeners() const
+{
+    return m_listeners;
+}
+
+template<class EventListenerClass>
 EventEmitter<EventListenerClass>::~EventEmitter()
 {
     while (!m_listeners.IsEmpty())
@@ -29,34 +35,3 @@ EventEmitter<EventListenerClass>::~EventEmitter()
     }
 }
 
-template <class EListenerC>
-template <class ReturnType, class... Args>
-void EventEmitter<EListenerC>::
-Propagate(ReturnType (EListenerC::*Function)(Args...), Args... args) const
-{
-    PropagateTo(m_listeners, Function, args...);
-}
-
-template <class EListenerC>
-template <class T, class ReturnType, class... Args>
-void EventEmitter<EListenerC>::
-PropagateTo(const List<T*> &listenersList,
-            ReturnType (EListenerC::*Function)(Args...),
-            Args... args) const
-{
-    for (IEventListener *listener : listenersList)
-    {
-        PropagateTo(listener, Function, args...);
-    }
-}
-
-template <class EListenerC>
-template <class T, class ReturnType, class... Args>
-void EventEmitter<EListenerC>::
-PropagateTo(T* listener,
-            ReturnType (EListenerC::*Function)(Args...),
-            Args... args) const
-{
-    EListenerC *cListener = DCAST<EListenerC*>(listener);
-    if (cListener) { (cListener->*Function)( std::forward<Args>(args)... ); }
-}

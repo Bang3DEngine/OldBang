@@ -26,20 +26,7 @@ public:
     void RegisterListener(EventListenerClass *listener);
     void UnRegisterListener(IEventListener *listener) override;
 
-    template<class ReturnType, class... Args>
-    void Propagate(ReturnType (EventListenerClass::*Function)(Args...),
-                   Args... args) const;
-
-    // Extra propagate to one list
-    template<class T, class ReturnType, class... Args>
-    void PropagateTo(const List<T*> &listenersList,
-                     ReturnType (EventListenerClass::*Function)(Args...),
-                     Args... args) const;
-
-    template<class T, class ReturnType, class... Args>
-    void PropagateTo(T* listener,
-                     ReturnType (EventListenerClass::*Function)(Args...),
-                     Args... args) const;
+    const List<IEventListener*> GetListeners() const;
 
 protected:
     EventEmitter() = default;
@@ -51,50 +38,40 @@ private:
 
 // PROPAGATE Macros
 
-#define PROPAGATE(ListenerClass, ListenerFunction, ...) \
-    { EventEmitter<ListenerClass>::Propagate(&ListenerClass::ListenerFunction, __VA_ARGS__); }
-#define PROPAGATE_0(ListenerClass, ListenerFunction) \
-    { EventEmitter<ListenerClass>::Propagate(&ListenerClass::ListenerFunction); }
-
-#define PROPAGATE_1_0(ListenerClass, ListenerFunction, \
-                      ExtraListenersList) \
+#define _PROPAGATE(EventListenerClass, FunctionCall, List) \
 { \
-    PROPAGATE_0(ListenerClass, ListenerFunction); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList, &ListenerClass::ListenerFunction); \
+    for (IEventListener *listener : List) \
+    { \
+        EventListenerClass *cListener = DCAST<EventListenerClass*>(listener); \
+        if (cListener) { cListener->FunctionCall; } \
+    } \
 }
-#define PROPAGATE_1(ListenerClass, ListenerFunction, \
-                    ExtraListenersList, ...) \
+
+#define PROPAGATE(ListenerClass, ListenerFunction, ...) \
+    { _PROPAGATE(ListenerClass, ListenerFunction(__VA_ARGS__), \
+                 EventEmitter<ListenerClass>::GetListeners()); }
+#define PROPAGATE_1(ListenerClass, ListenerFunction, ExtraListenersList, ...) \
 { \
     PROPAGATE(ListenerClass, ListenerFunction, __VA_ARGS__); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList, &ListenerClass::ListenerFunction, __VA_ARGS__); \
-}
-
-#define PROPAGATE_2_0(ListenerClass, ListenerFunction, \
-                      ExtraListenersList1, ExtraListenersList2) \
-{ \
-    PROPAGATE_1_0(ListenerClass, ListenerFunction, ExtraListenersList1); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList2, &ListenerClass::ListenerFunction); \
+    _PROPAGATE(ListenerClass, ListenerFunction(__VA_ARGS__), ExtraListenersList); \
 }
 #define PROPAGATE_2(ListenerClass, ListenerFunction, \
-                    ExtraListenersList1, ExtraListenersList2, \
-                    ...) \
+                    ExtraListenersList1, ExtraListenersList2, ...) \
 { \
     PROPAGATE_1(ListenerClass, ListenerFunction, ExtraListenersList1, __VA_ARGS__); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList2, &ListenerClass::ListenerFunction, __VA_ARGS__); \
-}
-
-#define PROPAGATE_3_0(ListenerClass, ListenerFunction, \
-                      ExtraListenersList1, ExtraListenersList2, ExtraListenersList3) \
-{ \
-    PROPAGATE_2_0(ListenerClass, ListenerFunction, ExtraListenersList1, ExtraListenersList2); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList3, &ListenerClass::ListenerFunction); \
+    _PROPAGATE(ListenerClass, ListenerFunction(__VA_ARGS__), ExtraListenersList2); \
 }
 #define PROPAGATE_3(ListenerClass, ListenerFunction, \
-                    ExtraListenersList1, ExtraListenersList2, ExtraListenersList3, \
-                    ...) \
+                    ExtraListenersList1, ExtraListenersList2, ExtraListenersList3, ...) \
 { \
     PROPAGATE_2(ListenerClass, ListenerFunction, ExtraListenersList1, ExtraListenersList2, __VA_ARGS__); \
-    EventEmitter<ListenerClass>::PropagateTo(ExtraListenersList3, &ListenerClass::ListenerFunction, __VA_ARGS__); \
+    _PROPAGATE(ListenerClass, ListenerFunction(__VA_ARGS__), ExtraListenersList3); \
+}
+#define PROPAGATE_4(ListenerClass, ListenerFunction, \
+                    ExtraListenersList1, ExtraListenersList2, ExtraListenersList3, ExtraListenersList4, ...) \
+{ \
+    PROPAGATE_3(ListenerClass, ListenerFunction, ExtraListenersList1, ExtraListenersList2, ExtraListenersList3, __VA_ARGS__); \
+    _PROPAGATE(ListenerClass, ListenerFunction(__VA_ARGS__), ExtraListenersList4); \
 }
 
 

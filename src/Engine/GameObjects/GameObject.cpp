@@ -87,15 +87,16 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
 
 void GameObject::ChildAdded(GameObject *addedChild)
 {
+    PROPAGATE(IChildrenListener, OnChildAdded, SCAST<GameObject*>(addedChild));
     PROPAGATE_2(IChildrenListener, OnChildAdded,
-                GetComponents<IChildrenListener>(), GetParent(),
+                GetComponents<IChildrenListener>(), {GetParent()},
                 SCAST<GameObject*>(addedChild));
 }
 
 void GameObject::ChildRemoved(GameObject *removedChild)
 {
     PROPAGATE_2(IChildrenListener, OnChildRemoved,
-                GetComponents<IChildrenListener>(), GetParent(),
+                GetComponents<IChildrenListener>(), {GetParent()},
                 SCAST<GameObject*>(removedChild));
 }
 
@@ -128,13 +129,13 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
 }
 void GameObject::OnEnabled()
 {
-    PROPAGATE_2_0(IEnabledListener, OnEnabled,
-                  GetComponents<IEnabledListener>(), GetChildren());
+    PROPAGATE_2(IEnabledListener, OnEnabled,
+                GetComponents<IEnabledListener>(), GetChildren());
 }
 void GameObject::OnDisabled()
 {
-    PROPAGATE_2_0(IEnabledListener, OnEnabled,
-                  GetComponents<IEnabledListener>(), GetChildren());
+    PROPAGATE_2(IEnabledListener, OnEnabled,
+                GetComponents<IEnabledListener>(), GetChildren());
 }
 
 void GameObject::Destroy(GameObject *gameObject)
