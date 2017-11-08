@@ -11,10 +11,22 @@ uniform MatricesBlock
 }
 B_Matrices;
 
-// Camera ///////////////////////////////
-uniform float B_Camera_Near = 0.0f;
-uniform float B_Camera_Far  = 0.0f;
-/////////////////////////////////////////
+layout (std140)
+uniform CameraBlock
+{
+    float ZNear;
+    float ZFar;
+}
+B_Camera;
+
+layout (std140)
+uniform ViewportBlock
+{
+    vec2 MinPos;
+    vec2 Size;
+}
+B_Viewport;
+
 
 // Material related /////////////////////////
 uniform bool  B_MaterialReceivesLighting;
@@ -29,8 +41,6 @@ uniform sampler2D B_Texture0;
 
 
 // Screen related /////////////////////////
-uniform vec2 B_ViewportSize;
-uniform vec2 B_ViewportMinPos;
 #ifdef BANG_FRAGMENT
 vec2 B_ViewportStep;
 vec2 B_ViewportPos;
@@ -61,8 +71,9 @@ uniform sampler2D  B_GTex_DepthStencil;
 // Util functions /////////////////
 float B_LinearizeDepth(float d)
 {
-    return (2 * B_Camera_Near) / (B_Camera_Far + B_Camera_Near - d
-                                  * (B_Camera_Far - B_Camera_Near));
+    return (2 * B_Camera.ZNear) /
+                (B_Camera.ZFar + B_Camera.ZNear -
+                  d * (B_Camera.ZFar - B_Camera.ZNear));
 }
 //
 
@@ -120,9 +131,9 @@ float B_LinearizeDepth(float d)
 void InitCommon()
 {
     #ifdef BANG_FRAGMENT
-    B_ViewportStep = 1.0 / B_ViewportSize;
-    B_ViewportPos  = (gl_FragCoord.xy - B_ViewportMinPos);
-    B_ViewportUv   = B_ViewportPos / B_ViewportSize;
+    B_ViewportStep = 1.0 / B_Viewport.Size;
+    B_ViewportPos  = (gl_FragCoord.xy - B_Viewport.MinPos);
+    B_ViewportUv   = B_ViewportPos / B_Viewport.Size;
     #endif
 }
 // ///////////////////////////////////////

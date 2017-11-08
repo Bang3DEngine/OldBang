@@ -764,19 +764,21 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
     matricesBuffer->GetData()->normal = Matrix4(normalMatrix);
 
     const Matrix4& viewMatrix = GL::GetViewMatrix();
-    matricesBuffer->GetData()->view = viewMatrix;
+    matricesBuffer->GetData()->view    = viewMatrix;
     matricesBuffer->GetData()->viewInv = viewMatrix.Inversed();
 
     const Matrix4& projectionMatrix = GL::GetProjectionMatrix();
-    matricesBuffer->GetData()->proj = projectionMatrix;
+    matricesBuffer->GetData()->proj    = projectionMatrix;
     matricesBuffer->GetData()->projInv = projectionMatrix.Inversed();
 
     GL *gl = GL::GetActive();
-    sp->Set("B_Camera_Near", gl->m_zNear);
-    sp->Set("B_Camera_Far",  gl->m_zFar);
+    auto *cameraBuffer = GLUniforms::GetCameraBuffer();
+    cameraBuffer->GetData()->zNear = gl->m_zNear;
+    cameraBuffer->GetData()->zFar  = gl->m_zFar;
 
-    sp->Set("B_ViewportMinPos", Vector2(GL::GetViewportRect().GetMin()));
-    sp->Set("B_ViewportSize",   Vector2(GL::GetViewportSize()));
+    auto *viewportBuffer = GLUniforms::GetViewportBuffer();
+    viewportBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
+    viewportBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
 
     Matrix4 pvmMatrix;
     if (gl->m_viewProjMode == GL::ViewProjMode::UseBoth)
@@ -811,7 +813,10 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
     }
 
     matricesBuffer->GetData()->pvm = pvmMatrix;
+
     matricesBuffer->UpdateBuffer();
+    cameraBuffer->UpdateBuffer();
+    viewportBuffer->UpdateBuffer();
 }
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)

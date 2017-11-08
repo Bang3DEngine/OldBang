@@ -24,6 +24,18 @@ public:
         Matrix4 pvm;
     };
 
+    struct Camera
+    {
+        float zNear;
+        float zFar;
+    };
+
+    struct Viewport
+    {
+        Vector2 minPos;
+        Vector2 size;
+    };
+
     template <class T>
     static UniformBuffer<T>* CreateBuffer();
 
@@ -36,6 +48,8 @@ public:
     static void BindAllUniformBuffersToShader(const ShaderProgram *sp);
 
     static UniformBuffer<Matrices>* GetMatricesBuffer();
+    static UniformBuffer<Camera>* GetCameraBuffer();
+    static UniformBuffer<Viewport>* GetViewportBuffer();
 
 private:
     int m_bindingPointsUsed = 0;

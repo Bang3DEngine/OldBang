@@ -33,19 +33,33 @@ void GLUniforms::RemoveBuffer(IUniformBuffer *buffer)
     }
 }
 
-void GLUniforms::BindAllUniformBuffersToShader(const ShaderProgram *sp)
-{
-}
-
 UniformBuffer<GLUniforms::Matrices> *GLUniforms::GetMatricesBuffer()
 {
     return GLUniforms::GetBuffer<GLUniforms::Matrices>();
 }
 
+UniformBuffer<GLUniforms::Camera> *GLUniforms::GetCameraBuffer()
+{
+    return GLUniforms::GetBuffer<GLUniforms::Camera>();
+}
+
+UniformBuffer<GLUniforms::Viewport> *GLUniforms::GetViewportBuffer()
+{
+    return GLUniforms::GetBuffer<GLUniforms::Viewport>();
+}
+
 GLUniforms::GLUniforms()
 {
-    UniformBuffer<GLUniforms::Matrices> *matricesBuffer =
-                                    _CreateBuffer<GLUniforms::Matrices>();
+    _CreateBuffer<GLUniforms::Matrices>();
+    _CreateBuffer<GLUniforms::Camera>();
+    _CreateBuffer<GLUniforms::Viewport>();
+}
+
+void GLUniforms::BindAllUniformBuffersToShader(const ShaderProgram *sp)
+{
+    GL::BindUniformBufferToShader("MatricesBlock", sp, GetMatricesBuffer());
+    GL::BindUniformBufferToShader("CameraBlock", sp, GetCameraBuffer());
+    GL::BindUniformBufferToShader("ViewportBlock", sp, GetViewportBuffer());
 }
 
 GLUniforms::~GLUniforms()
