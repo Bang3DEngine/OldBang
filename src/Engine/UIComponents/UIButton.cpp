@@ -21,11 +21,11 @@ void UIButton::OnUpdate()
 {
     Component::OnUpdate();
 
-    // Is mouse currently over some emitter?
-    bool mouseOverSomeEmitter = IsMouseOverSomeEmitter();
+    // Is mouse currently over some button part?
+    bool mouseOverSomePart = IsMouseOverSomePart();
 
     // Mouse Down & Up events
-    if (mouseOverSomeEmitter)
+    if (mouseOverSomePart)
     {
         Array<MouseButton> buttonsDown = Input::GetMouseButtonsDown();
         for (MouseButton mb : buttonsDown)
@@ -40,14 +40,14 @@ void UIButton::OnUpdate()
         for (MouseButton mb : buttonsUp)
         {
             EventEmitter<IUIButtonListener>::
-                Propagate(&IUIButtonListener::OnButton_MouseUp, this,
-                      SCAST<MouseButton>(mb));
+                Propagate(&IUIButtonListener::OnButton_MouseUp,
+                          this, SCAST<MouseButton>(mb));
             for (auto f : m_mouseUpCallbacks) { f(this, mb); }
         }
     }
 
     // Clicked event and pressed tracking
-    if (mouseOverSomeEmitter)
+    if (mouseOverSomePart)
     {
         m_beingPressed = m_beingPressed ||
                          Input::GetMouseButtonDown(MouseButton::Left);
@@ -70,29 +70,29 @@ void UIButton::OnUpdate()
                        Input::GetMouseButton(MouseButton::Left) );
 
     // Mouse Enter & Exit events
-    if (!m_mouseOver && mouseOverSomeEmitter)
+    if (!m_mouseOver && mouseOverSomePart)
     {
         EventEmitter<IUIButtonListener>::
             Propagate(&IUIButtonListener::OnButton_MouseEnter, this);
         for (auto f : m_mouseEnterCallbacks) { f(this); }
     }
-    else if (m_mouseOver && !mouseOverSomeEmitter)
+    else if (m_mouseOver && !mouseOverSomePart)
     {
         EventEmitter<IUIButtonListener>::
             Propagate(&IUIButtonListener::OnButton_MouseExit, this);
         for (auto f : m_mouseExitCallbacks) { f(this); }
     }
-    m_mouseOver = mouseOverSomeEmitter;
+    m_mouseOver = mouseOverSomePart;
 }
 
-void UIButton::RegisterEmitter(GameObject *emitter)
+void UIButton::RegisterButtonPart(GameObject *buttonPart)
 {
-    p_emitters.Add(emitter);
-    emitter->RegisterListener(this);
+    p_buttonParts.Add(buttonPart);
+    buttonPart->EventEmitter<IDestroyListener>::RegisterListener(this);
 }
-void UIButton::UnRegisterEmitter(GameObject *emitter)
+void UIButton::UnRegisterButtonPart(GameObject *buttonPart)
 {
-    p_emitters.Remove(emitter);
+    p_buttonParts.Remove(buttonPart);
 }
 
 void UIButton::AddMouseEnterCallback(UIButton::EnterExitCallback callback)
@@ -126,17 +126,17 @@ void UIButton::SetMode(UIButtonMode mode)
     m_mode = mode;
 }
 
-bool UIButton::IsMouseOverSomeEmitter() const
+bool UIButton::IsMouseOverSomePart() const
 {
     if (GetMode() == UIButtonMode::UseRender)
     {
         GameObject *overedGameObject = Selection::GetOveredGameObject();
         if (!overedGameObject) { return false; }
-        for (auto it = p_emitters.cbegin(); it != p_emitters.cend(); ++it)
+        for (auto it = p_buttonParts.cbegin(); it != p_buttonParts.cend(); ++it)
         {
-            const GameObject *emitter = *it;
-            if (overedGameObject == emitter ||
-                overedGameObject->IsChildOf(emitter, true))
+            const GameObject *part = *it;
+            if (overedGameObject == part ||
+                overedGameObject->IsChildOf(part, true))
             {
                 return true;
             }
@@ -145,10 +145,10 @@ bool UIButton::IsMouseOverSomeEmitter() const
     }
     else
     {
-        for (auto it = p_emitters.cbegin(); it != p_emitters.cend(); ++it)
+        for (auto it = p_buttonParts.cbegin(); it != p_buttonParts.cend(); ++it)
         {
-           const GameObject *emitter = *it;
-           RectTransform *rt = emitter->GetComponent<RectTransform>();
+           const GameObject *part = *it;
+           RectTransform *rt = part->GetComponent<RectTransform>();
            if (rt && rt->IsMouseOver()) { return true; }
         }
     }
@@ -158,11 +158,11 @@ bool UIButton::IsMouseOverSomeEmitter() const
 bool UIButton::IsBeingPressed() const { return m_beingPressed; }
 UIButtonMode UIButton::GetMode() const { return m_mode; }
 
-void UIButton::OnBeforeDestroyed(IEventEmitter *destroyedEmitter)
+void UIButton::OnBeforeDestroyed(Object *object)
 {
-    GameObject *destroyedGo = DCAST<GameObject*>(destroyedEmitter);
+    GameObject *destroyedGo = DCAST<GameObject*>(object);
     if (destroyedGo)
     {
-        UnRegisterEmitter(destroyedGo);
+        UnRegisterButtonPart(destroyedGo);
     }
 }

@@ -2,13 +2,13 @@
 #define UIFOCUSABLE_H
 
 #include "Bang/Component.h"
+#include "Bang/IEventEmitter.h"
 #include "Bang/IFocusListener.h"
-#include "Bang/EventEmitterComponent.h"
 
 NAMESPACE_BANG_BEGIN
 
 class UIFocusable : public Component,
-                    public EventEmitterComponent<IFocusListener>
+                    public EventEmitter<IFocusListener>
 {
     COMPONENT(UIFocusable)
 

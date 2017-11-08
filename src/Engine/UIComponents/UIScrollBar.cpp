@@ -143,7 +143,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     barImg->SetTint(Color::Black);
 
     UITintedButton *btn = bar->AddComponent<UITintedButton>();
-    btn->RegisterEmitter(bar);
+    btn->RegisterButtonPart(bar);
     btn->AddToTint(bar);
     btn->SetMode(UIButtonMode::UseRectTransform);
     btn->SetIdleTintColor( Color::Black );

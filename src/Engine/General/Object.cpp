@@ -11,8 +11,15 @@ void Object::Start()
     }
 }
 void Object::OnStart() {}
-void Object::OnEnabled() {}
-void Object::OnDisabled() {}
+void Object::OnEnabled()
+{
+    EventEmitter<IEnabledListener>::Propagate(&IEnabledListener::OnEnabled);
+}
+void Object::OnDisabled()
+{
+    EventEmitter<IEnabledListener>::Propagate(&IEnabledListener::OnDisabled);
+}
+void Object::OnDestroy() {}
 
 void Object::SetEnabled(bool enabled)
 {
@@ -30,4 +37,12 @@ bool Object::IsWaitingToBeDestroyed() const { return m_waitingToBeDestroyed; }
 Object::~Object()
 {
     ASSERT( IsWaitingToBeDestroyed() );
+}
+
+void Object::BeforeDestroyed()
+{
+    OnDestroy();
+    // PROPAGATE(IDestroyListener, OnBeforeDestroyed, this);
+    EventEmitter<IDestroyListener>::Propagate(&IDestroyListener::OnBeforeDestroyed,
+                                              this);
 }

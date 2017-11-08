@@ -33,8 +33,8 @@ public:
     // Component
     virtual void OnUpdate() override;
 
-    void RegisterEmitter(GameObject *emitter);
-    void UnRegisterEmitter(GameObject *emitter);
+    void RegisterButtonPart(GameObject *emitter);
+    void UnRegisterButtonPart(GameObject *emitter);
 
     using EnterExitCallback = std::function<void(UIButton*)>;
     using ClickedCallback = EnterExitCallback;
@@ -50,18 +50,18 @@ public:
 
     void SetMode(UIButtonMode mode);
 
-    bool IsMouseOverSomeEmitter() const;
+    bool IsMouseOverSomePart() const;
     bool IsBeingPressed() const;
     UIButtonMode GetMode() const;
 
-    void OnBeforeDestroyed(IEventEmitter *destroyedEmitter) override;
+    void OnBeforeDestroyed(Object *object) override;
 
 private:
     bool m_mouseOver    = false;
     bool m_beingPressed = false;
     UIButtonMode m_mode = UIButtonMode::UseRender;
 
-    Set<GameObject*> p_emitters;
+    Set<GameObject*> p_buttonParts;
 
     Array<EnterExitCallback> m_mouseEnterCallbacks;
     Array<EnterExitCallback> m_mouseExitCallbacks;

@@ -41,22 +41,18 @@ void UIListDriver::OnUpdate()
         }
 
         // Mouse In/Out
-        GameObject *mouseOverGo = nullptr;
-        Vector2 mouseCoords = Input::GetMouseCoordsNDC();
+        GameObject *goUnderMouse = nullptr;
         for (GameObject *child : GetContainer()->GetChildren())
         {
             RectTransform *rt = child->GetComponent<RectTransform>();
-            if (rt && rt->GetScreenSpaceRectNDC().Contains(mouseCoords))
-            {
-                mouseOverGo = child; break;
-            }
+            if (rt && rt->IsMouseOver()) { goUnderMouse = child; break; }
         }
 
-        if (p_mouseOverGo != mouseOverGo)
+        if (p_mouseOverGo != goUnderMouse)
         {
             if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
 
-            p_mouseOverGo = mouseOverGo;
+            p_mouseOverGo = goUnderMouse;
             if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOver); }
         }
 
@@ -86,6 +82,11 @@ void UIListDriver::OnUpdate()
                 Callback(p_mouseOverGo, Action::DoubleClickedLeft);
             }
         }
+    }
+    else
+    {
+        if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
+        p_mouseOverGo = nullptr;
     }
 }
 

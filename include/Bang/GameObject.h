@@ -10,6 +10,7 @@
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IDestroyListener.h"
+#include "Bang/IChildrenListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -23,7 +24,8 @@ FORWARD class Component;
 class GameObject : public Object,
                    public Serializable,
                    public IToString,
-                   public EventEmitter<IDestroyListener>
+                   public IChildrenListener,
+                   public EventEmitter<IChildrenListener>
 {
     GAMEOBJECT(GameObject)
 
@@ -145,8 +147,6 @@ protected:
 
 private:
     void PropagateEnabledEvent(bool enabled) const;
-    void PropagateChildrenEvent(int type, GameObject *dataGo1,
-                                GameObject *dataGo2) const;
 
     friend class Scene;
     friend class Prefab;

@@ -5,12 +5,14 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Object;
+
 class IDestroyListener : public IEventListener
 {
 public:
     virtual ~IDestroyListener() = default;
 
-    virtual void OnBeforeDestroyed(IEventEmitter *destroyedEmitter) = 0;
+    virtual void OnBeforeDestroyed(Object *object) = 0;
 
 protected:
     IDestroyListener() = default;

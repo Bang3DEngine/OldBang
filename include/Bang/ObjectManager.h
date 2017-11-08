@@ -34,7 +34,7 @@ private:
     static void DestroyObjects();
 
     // IDestroyListener
-    virtual void OnBeforeDestroyed(IEventEmitter *destroyedEmitter);
+    virtual void OnBeforeDestroyed(Object *object) override;
 
     static ObjectManager *GetInstance();
 

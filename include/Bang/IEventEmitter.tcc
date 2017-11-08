@@ -32,11 +32,31 @@ EventEmitter<EventListenerClass>::~EventEmitter()
 template <class EListenerC>
 template <class ReturnType, class... Args>
 void EventEmitter<EListenerC>::
-Propagate(ReturnType (EListenerC::*Function)(Args...), Args&&... args)
+Propagate(ReturnType (EListenerC::*Function)(Args...), Args... args) const
 {
-    for (IEventListener *listener : m_listeners)
+    PropagateTo(m_listeners, Function, args...);
+}
+
+template <class EListenerC>
+template <class T, class ReturnType, class... Args>
+void EventEmitter<EListenerC>::
+PropagateTo(const List<T*> &listenersList,
+            ReturnType (EListenerC::*Function)(Args...),
+            Args... args) const
+{
+    for (IEventListener *listener : listenersList)
     {
-        EListenerC *cListener = DCAST<EListenerC*>(listener);
-        (cListener->*Function)( std::forward<Args>(args)... );
+        PropagateTo(listener, Function, args...);
     }
+}
+
+template <class EListenerC>
+template <class T, class ReturnType, class... Args>
+void EventEmitter<EListenerC>::
+PropagateTo(T* listener,
+            ReturnType (EListenerC::*Function)(Args...),
+            Args... args) const
+{
+    EListenerC *cListener = DCAST<EListenerC*>(listener);
+    if (cListener) { (cListener->*Function)( std::forward<Args>(args)... ); }
 }

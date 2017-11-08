@@ -97,8 +97,11 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 
 Vector2 UIScrollPanel::GetContentSize() const
 {
-    return GetScrollArea()->GetContainedGameObject()->
-           GetComponent<RectTransform>()->GetScreenSpaceRectPx().GetSize();
+    GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
+    return containedGo ?
+                containedGo->GetComponent<RectTransform>()->
+                GetScreenSpaceRectPx().GetSize() :
+                Vector2::Zero;
 }
 
 Vector2 UIScrollPanel::GetContainerSize() const

@@ -18,7 +18,9 @@ void ObjectManager::Destroy(Object *object)
 
     if (!om->m_objectsToBeDestroyedSet.Contains(object))
     {
+        object->BeforeDestroyed();
         object->m_waitingToBeDestroyed = true;
+
         om->m_objectsToBeDestroyedQueue.push(object);
         om->m_objectsToBeDestroyedSet.Add(object);
     }
@@ -53,9 +55,9 @@ void ObjectManager::DestroyObjects()
     om->m_objectsToBeDestroyedSet.Clear();
 }
 
-void ObjectManager::OnBeforeDestroyed(IEventEmitter *destroyedEmitter)
+void ObjectManager::OnBeforeDestroyed(Object *object)
 {
-    Object *destroyedObject = DCAST<Object*>(destroyedEmitter);
+    Object *destroyedObject = DCAST<Object*>(object);
     m_objectsDestroyedWhileDestroying.Add(destroyedObject);
 }
 

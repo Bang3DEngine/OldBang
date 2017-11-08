@@ -88,6 +88,17 @@ private:
     std::vector<T> m_vector;
 };
 
+template<class T, class... Args>
+Array<const T&> MakeArray(const T& x, Args&&... args)
+{
+    if (sizeof...(args) == 0) { return Array<const T&>(); }
+
+    Array<const T&> res;
+    res.PushBack( SCAST<const T&>(x) );
+    for (auto arg : {args...}) { res.PushBack( SCAST<const T&>(arg) ); }
+    return res;
+}
+
 NAMESPACE_BANG_END
 
 #include "Array.tcc"

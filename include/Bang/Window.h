@@ -74,7 +74,7 @@ public:
     Input          *GetInput() const;
     AudioManager   *GetAudioManager() const;
     SceneManager   *GetSceneManager() const;
-    ObjectManager *GetObjectManager() const;
+    ObjectManager  *GetObjectManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -91,13 +91,13 @@ private:
     List<Window*> p_children;
     Window* p_parent = nullptr;
 
-    SDL_GLContext   m_sdlGLContext = nullptr;
-    Resources      *m_resources    = nullptr;
-    GEngine        *m_gEngine      = nullptr;
-    Input          *m_input        = nullptr;
-    AudioManager   *m_audioManager = nullptr;
-    SceneManager   *m_sceneManager = nullptr;
-    ObjectManager *m_destroyManager = nullptr;
+    SDL_GLContext   m_sdlGLContext  = nullptr;
+    Resources      *m_resources     = nullptr;
+    GEngine        *m_gEngine       = nullptr;
+    Input          *m_input         = nullptr;
+    AudioManager   *m_audioManager  = nullptr;
+    SceneManager   *m_sceneManager  = nullptr;
+    ObjectManager  *m_objectManager = nullptr;
 
     Vector2i m_minSize = Vector2i::Zero;
     Vector2i m_maxSize = Vector2i(4096);

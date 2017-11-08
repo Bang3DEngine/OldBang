@@ -33,7 +33,7 @@ Window::~Window()
     delete m_audioManager;
     delete m_sceneManager;
     delete m_resources;
-    delete m_destroyManager;
+    delete m_objectManager;
     SDL_GL_DeleteContext(GetGLContext());
     SDL_DestroyWindow(m_sdlWindow);
 }
@@ -77,7 +77,7 @@ void Window::Create(uint flags)
     m_sceneManager        = Application::GetInstance()->CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
-    m_destroyManager      = new ObjectManager();
+    m_objectManager       = new ObjectManager();
     SetSize(winSize.x, winSize.y);
 }
 
@@ -359,7 +359,7 @@ SceneManager *Window::GetSceneManager() const
 
 ObjectManager *Window::GetObjectManager() const
 {
-    return m_destroyManager;
+    return m_objectManager;
 }
 
 SDL_Window *Window::GetSDLWindow() const

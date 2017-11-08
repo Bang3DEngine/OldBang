@@ -2,6 +2,7 @@
 #define UIINPUTNUMBER_H
 
 #include "Bang/UIFocusable.h"
+#include "Bang/IEventEmitter.h"
 #include "Bang/IFocusListener.h"
 #include "Bang/IComponentDriver.h"
 #include "Bang/IValueChangedListener.h"
@@ -40,7 +41,7 @@ private:
     UIInputText* GetInputText() const;
 
     // IValueChangedListener
-    void OnValueChanged(const IEventEmitter *emitter) override;
+    void OnValueChanged(Object*) override;
 
     // IComponentDriver
     static UIInputNumber *CreateInto(GameObject *go);

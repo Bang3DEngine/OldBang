@@ -22,7 +22,7 @@ void UITintedButton::OnUpdate()
     UIButton::OnUpdate();
     if ( Input::GetMouseButtonUp(MouseButton::Left) )
     {
-        ApplyTint( IsMouseOverSomeEmitter() ? m_overTintColor : m_idleTintColor);
+        ApplyTint( IsMouseOverSomePart() ? m_overTintColor : m_idleTintColor);
     }
 }
 

@@ -66,7 +66,7 @@ UIButtonDriver* UIButtonDriver::CreateInto(GameObject *go)
     bgWTint->SetIdleTintColor(bgImg->GetTint());
     bgWTint->SetOverTintColor( Color(Vector3(0.95), 1) );
     bgWTint->SetPressedTintColor( Color(Vector3(0.9), 1) );
-    bgWTint->RegisterEmitter(go);
+    bgWTint->RegisterButtonPart(go);
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetTextColor(Color::Black);

@@ -35,10 +35,7 @@ void Component::OnBeforeChildrenRender(RenderPass renderPass) {}
 void Component::OnRender(RenderPass renderPass) {}
 void Component::OnRenderGizmos() {}
 void Component::OnAfterChildrenRender(RenderPass renderPass) {}
-void Component::OnDestroy()
-{
-    Propagate(&IDestroyListener::OnBeforeDestroyed, SCAST<IEventEmitter*>(this));
-}
+void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const
 {

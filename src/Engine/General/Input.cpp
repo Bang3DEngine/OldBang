@@ -416,6 +416,7 @@ bool Input::IsLockMouseMovement()
 Vector2i Input::GetMouseCoords()
 {
     Input *inp = Input::GetInstance();
+    if (!Input::IsMouseInsideScreen()) { return -Vector2i::One; }
     return inp->m_mouseCoords;
 }
 

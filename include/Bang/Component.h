@@ -19,8 +19,7 @@ NAMESPACE_BANG_BEGIN
 
 class Component : public Object,
                   public Serializable,
-                  public IToString,
-                  public EventEmitter<IDestroyListener>
+                  public IToString
 {
     COMPONENT(Component)
 
@@ -37,7 +36,7 @@ public:
     virtual void OnRender(RenderPass renderPass);
     virtual void OnRenderGizmos();
     virtual void OnAfterChildrenRender(RenderPass renderPass);
-    virtual void OnDestroy();
+    virtual void OnDestroy() override;
 
     bool IsEnabled(bool recursive = false) const;
 

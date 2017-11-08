@@ -57,6 +57,7 @@ Vector2 RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
 
 bool RectTransform::IsMouseOver() const
 {
+    if (!Input::IsMouseInsideScreen()) { return false; }
     return GetScreenSpaceRectNDC().Contains( Input::GetMouseCoordsNDC() );
 }
 
@@ -439,25 +440,27 @@ void RectTransform::OnDisabled() { Invalidate(); }
 
 void RectTransform::OnRectTransformChanged()
 {
-    auto rtListeners = GetGameObject()->GetComponents<IRectTransformListener>();
-    for (IRectTransformListener *rtListener : rtListeners)
-    {
-        if (rtListener != this) { rtListener->OnRectTransformChanged(); }
-    }
+    List<IRectTransformListener*> propagateTo =
+            GetGameObject()->GetComponents<IRectTransformListener>();
+    propagateTo.Remove(this);
+
+    PROPAGATE_1_0(IRectTransformListener, OnRectTransformChanged, propagateTo);
     PropagateParentRectTransformChangedEvent();
     PropagateChildrenRectTransformChangedEvent();
 }
 
 void RectTransform::PropagateParentRectTransformChangedEvent() const
 {
-    PropagateInChildrenOnly(
-                false, &IRectTransformListener::OnParentRectTransformChanged);
+    GameObject *go = GetGameObject();
+    PROPAGATE_1_0(IRectTransformListener, OnParentRectTransformChanged,
+                 go->GetComponentsInChildrenOnly<IRectTransformListener>(false));
 }
 
 void RectTransform::PropagateChildrenRectTransformChangedEvent() const
 {
-    PropagateInParent(false,
-                      &IRectTransformListener::OnChildrenRectTransformChanged);
+    GameObject *go = GetGameObject();
+    PROPAGATE_1_0(IRectTransformListener, OnChildrenRectTransformChanged,
+                 go->GetComponentsInParent<IRectTransformListener>(false));
 }
 
 void RectTransform::OnParentRectTransformChanged()

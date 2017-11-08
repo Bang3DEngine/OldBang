@@ -1,17 +1,21 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "Bang/Bang.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IEnabledListener.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class Object
+class Object : public EventEmitter<IDestroyListener>,
+               public EventEmitter<IEnabledListener>
 {
 public:
     virtual void Start();
     virtual void OnStart();
     virtual void OnEnabled();
     virtual void OnDisabled();
+    virtual void OnDestroy();
 
     void SetEnabled(bool enabled);
 
@@ -27,6 +31,8 @@ private:
     bool m_enabled = true;
     bool m_started = false;
     bool m_waitingToBeDestroyed = false;
+
+    void BeforeDestroyed();
 
     friend class ObjectManager;
 };

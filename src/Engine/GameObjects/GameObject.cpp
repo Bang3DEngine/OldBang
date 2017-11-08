@@ -16,7 +16,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/IEnabledListener.h"
-#include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -86,35 +85,27 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
     PROPAGATE_EVENT(OnAfterChildrenRender(renderPass), GetComponents());
 }
 
-void GameObject::PropagateChildrenEvent(int type, GameObject *dataGo1,
-                                        GameObject *dataGo2) const
-{
-    auto cListeners = GetComponents<IChildrenListener>();
-    switch (type)
-    {
-        case 1:
-            PROPAGATE_EVENT_D(OnChildAdded(dataGo1), cListeners);
-            if (GetParent()) { GetParent()->ChildAdded(dataGo1); }
-            break;
-        case 2:
-            PROPAGATE_EVENT_D(OnChildRemoved(dataGo1), cListeners);
-            if (GetParent()) { GetParent()->ChildRemoved(dataGo1); }
-            break;
-        case 3:
-            PROPAGATE_EVENT_D(OnParentChanged(dataGo1, dataGo2), cListeners);
-            PROPAGATE_EVENT_D(ParentChanged(dataGo1, dataGo2), GetChildren());
-            break;
-        default: ASSERT(false);
-    }
-}
 void GameObject::ChildAdded(GameObject *addedChild)
-{ PropagateChildrenEvent(1, addedChild, nullptr); }
+{
+    PROPAGATE_2(IChildrenListener, OnChildAdded,
+                GetComponents<IChildrenListener>(), GetParent(),
+                SCAST<GameObject*>(addedChild));
+}
 
 void GameObject::ChildRemoved(GameObject *removedChild)
-{ PropagateChildrenEvent(2, removedChild, nullptr); }
+{
+    PROPAGATE_2(IChildrenListener, OnChildRemoved,
+                GetComponents<IChildrenListener>(), GetParent(),
+                SCAST<GameObject*>(removedChild));
+}
 
 void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
-{ PropagateChildrenEvent(3, oldParent, newParent); }
+{
+    PROPAGATE_2(IChildrenListener, OnParentChanged,
+                GetComponents<IChildrenListener>(), GetChildren(),
+                SCAST<GameObject*>(oldParent),
+                SCAST<GameObject*>(newParent));
+}
 
 void GameObject::RenderGizmos()
 {
@@ -135,14 +126,19 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
         if (enabled) { child->OnEnabled(); } else { child->OnDisabled(); }
     }
 }
-void GameObject::OnEnabled()  { PropagateEnabledEvent(true); }
-void GameObject::OnDisabled() { PropagateEnabledEvent(false); }
+void GameObject::OnEnabled()
+{
+    PROPAGATE_2_0(IEnabledListener, OnEnabled,
+                  GetComponents<IEnabledListener>(), GetChildren());
+}
+void GameObject::OnDisabled()
+{
+    PROPAGATE_2_0(IEnabledListener, OnEnabled,
+                  GetComponents<IEnabledListener>(), GetChildren());
+}
 
 void GameObject::Destroy(GameObject *gameObject)
 {
-    gameObject->Propagate(&IDestroyListener::OnBeforeDestroyed,
-                          SCAST<IEventEmitter*>(gameObject));
-
     for (GameObject *child : gameObject->GetChildren())
     {
         GameObject::Destroy(child);
