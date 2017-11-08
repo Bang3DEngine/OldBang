@@ -12,13 +12,6 @@ FORWARD class Texture;
 class ShaderProgram : public GLObject
 {
 public:
-    enum InputType
-    {
-        GBuffer,
-        PostProcess,
-        Other
-    };
-
     bool Load(const Path &vshaderPath, const Path &fshaderPath);
     bool Load(Shader *vShader, Shader *fShader);
 
@@ -41,20 +34,13 @@ public:
     bool Set(const String &name, const Texture *texture) const;
 
     bool Refresh();
-    void SetInputType(InputType type);
     bool SetVertexShader(Shader *vertexShader);
     bool SetFragmentShader(Shader *fragmentShader);
 
-    void SetVertexInputBinding(const String& vertexInputName, uint location);
-    void SetFragmentInputBinding(const String& fragInputName, uint location);
-
-    InputType GetInputType() const;
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;
 
     GLint GetUniformLocation(const String &name) const;
-
-    void RetrieveType(const Path &vshaderPath, const Path &fshaderPath);
 
 private:
     ShaderProgram();
@@ -63,8 +49,6 @@ private:
     bool m_isLinked = false;
     Shader *p_vshader = nullptr;
     Shader *p_fshader = nullptr;
-
-    InputType m_inputType = InputType::GBuffer;
 
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, const Texture*> m_namesToTexture;

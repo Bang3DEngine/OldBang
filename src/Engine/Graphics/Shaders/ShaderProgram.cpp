@@ -32,9 +32,6 @@ bool ShaderProgram::Load(Shader *vShader, Shader *fShader)
        (vShader && vShader == GetVertexShader()) ||
        (fShader && fShader == GetFragmentShader())) { return false; }
 
-    RetrieveType(vShader->GetResourceFilepath(),
-                 fShader->GetResourceFilepath());
-
     SetVertexShader(vShader);
     SetFragmentShader(fShader);
     return Refresh();
@@ -67,22 +64,6 @@ bool ShaderProgram::Link()
 
     GL::AttachShader(m_idGL, GetVertexShader()->GetGLId());
     GL::AttachShader(m_idGL, GetFragmentShader()->GetGLId());
-
-    if (GetInputType() == InputType::GBuffer)
-    {
-        SetVertexInputBinding("B_In_PositionObject", 0);
-        SetVertexInputBinding("B_In_NormalObject",   1);
-        SetVertexInputBinding("B_In_Uv",             2);
-        SetFragmentInputBinding("B_GIn_Normal", 0);
-        SetFragmentInputBinding("B_GIn_DiffColor",   1);
-        SetFragmentInputBinding("B_GIn_Misc",        2);
-        SetFragmentInputBinding("B_GIn_Color",       3);
-    }
-    else if (GetInputType() == InputType::PostProcess)
-    {
-        SetVertexInputBinding("B_In_PositionObject", 0);
-        SetFragmentInputBinding("B_GIn_Color",       0);
-    }
 
     if (!GL::LinkProgram(m_idGL))
     {
@@ -143,29 +124,6 @@ bool ShaderProgram::SetFragmentShader(Shader *fragmentShader)
     return true;
 }
 
-void ShaderProgram::SetInputType(ShaderProgram::InputType inputType)
-{
-    m_inputType = inputType;
-    Refresh();
-}
-
-void ShaderProgram::SetVertexInputBinding(const String &attribName,
-                                            uint location)
-{
-    GL::BindAttribLocation(m_idGL, location, attribName);
-}
-
-void ShaderProgram::SetFragmentInputBinding(const String &fragDataName,
-                                              uint location)
-{
-    GL::BindFragDataLocation(m_idGL, location, fragDataName);
-}
-
-ShaderProgram::InputType ShaderProgram::GetInputType() const
-{
-    return m_inputType;
-}
-
 Shader *ShaderProgram::GetVertexShader() const
 {
     return p_vshader;
@@ -184,15 +142,6 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
     const GLuint location = GL::GetUniformLocation(m_idGL, name);
     m_nameToLocationCache[name] = location;
     return location;
-}
-
-void ShaderProgram::RetrieveType(const Path &vshaderPath,
-                                 const Path &fshaderPath)
-{
-    String fShaderExt = fshaderPath.GetExtension();
-    if      (fShaderExt.EndsWith("_g"))   { m_inputType = InputType::GBuffer; }
-    else if (fShaderExt.EndsWith("_pp"))  { m_inputType = InputType::PostProcess; }
-    else { m_inputType = InputType::Other; }
 }
 
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,

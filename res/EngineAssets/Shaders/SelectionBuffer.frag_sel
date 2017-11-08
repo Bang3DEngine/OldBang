@@ -1,10 +1,9 @@
+#define BANG_FRAGMENT
+#define BANG_G
 #include "Common.glsl"
+#include "Ins.glsl"
 
 uniform vec4 selectionColor;
-
-in vec4 B_FragIn_PositionWorld;
-in vec3 B_FragIn_NormalWorld;
-in vec2 B_FragIn_Uv;
 
 out vec4 fragColor;
 
@@ -12,7 +11,7 @@ void main()
 {
     if (B_HasTexture)
     {
-        vec4 texColor = texture2D(B_Texture0, B_FragIn_Uv);
+        vec4 texColor = texture2D(B_Texture0, B_FIn_Uv);
         if (texColor.a <= 0.0f) { discard; }
     }
     fragColor = selectionColor;

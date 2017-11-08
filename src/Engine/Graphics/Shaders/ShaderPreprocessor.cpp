@@ -6,7 +6,7 @@
 
 USING_NAMESPACE_BANG
 
-const String ShaderPreprocessor::GLSLVersionString = "#version 130";
+const String ShaderPreprocessor::GLSLVersionString = "#version 330";
 
 void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 {

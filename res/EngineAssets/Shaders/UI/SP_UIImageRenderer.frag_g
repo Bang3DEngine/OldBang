@@ -2,7 +2,7 @@
 
 void Main()
 {
-    vec2 inUv = B_FragIn_Uv;
+    vec2 inUv = B_FIn_Uv;
     vec4 textureColor = vec4(1);
     vec4 tint = B_Out_DiffColor;
     if (B_HasTexture)

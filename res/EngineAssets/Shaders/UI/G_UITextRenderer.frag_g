@@ -15,7 +15,7 @@ void Main()
 {
     B_UsePlainDiffuseColor = true;
 
-    vec2 charAtlasUv = B_FragIn_Uv;
+    vec2 charAtlasUv = B_FIn_Uv;
 
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)

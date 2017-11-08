@@ -38,7 +38,7 @@ void Shader::Import(const Path& shaderFilepath)
     if ( !GL::CompileShader(m_idGL) )
     {
         Debug_Error("Failed to compile shader: '"  << shaderFilepath
-                    << "': " << GL::GetShaderErrorMsg(m_idGL));
+                    << "': " << std::endl << GL::GetShaderErrorMsg(m_idGL));
         GL::DeleteShader(m_idGL);
         return;
     }

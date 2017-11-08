@@ -1,17 +1,20 @@
 #define BANG_VERTEX
 #define BANG_G
 #include "Common.glsl"
+#include "Ins.glsl"
+#include "Outs.glsl"
 
 void InitMain()
 {
-    B_FragIn_PositionWorld = B_Model * vec4(B_In_PositionObject, 1);
-    B_FragIn_NormalWorld   = normalize(B_Normal * B_In_NormalObject);
-    B_FragIn_Uv            = vec2(B_In_Uv.x, B_In_Uv.y) * B_UvMultiply;
-    gl_Position            = B_PVM * vec4(B_In_PositionObject, 1);
+    B_FIn_Position = ( B_Model * vec4(B_VIn_Position, 1) ).xyz;
+    B_FIn_Normal   = normalize(B_VIn_Normal * B_VIn_Normal);
+    B_FIn_Uv       = vec2(B_VIn_Uv.x, B_VIn_Uv.y) * B_UvMultiply;
+    gl_Position    = B_PVM * vec4(B_VIn_Position, 1);
 }
 
 void EndMain()
 {
+
 }
 
 #include "Main.glsl"

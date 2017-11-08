@@ -1,4 +1,3 @@
-
 // Matrices //////////////////////////////
 uniform mat4 B_Model;
 uniform mat4 B_ModelInv;
@@ -55,7 +54,6 @@ uniform vec3  B_LightPositionWorld;
 // ///////////////////////////////////////
 
 
-
 // GBuffer textures //////////////////////
 uniform sampler2D  B_GTex_Normal;
 uniform sampler2D  B_GTex_DiffColor;
@@ -64,48 +62,6 @@ uniform sampler2D  B_GTex_Color;
 uniform sampler2D  B_GTex_DepthStencil;
 // ///////////////////////////////////////
 
-
-
-// In/Out Structures ///////////////////////////
-#ifdef BANG_G
-    #ifdef BANG_VERTEX
-        in vec3 B_In_PositionObject; // Order is important, for vao-vbo location
-        in vec3 B_In_NormalObject;
-        in vec2 B_In_Uv;
-
-        out vec4 B_FragIn_PositionWorld;
-        out vec3 B_FragIn_NormalWorld;
-        out vec2 B_FragIn_Uv;
-    #endif
-
-    #ifdef BANG_FRAGMENT
-        vec3  B_Out_NormalWorld;
-        vec4  B_Out_DiffColor;
-        vec4  B_Out_Color;
-        bool  B_Out_ReceivesLighting;
-        float B_Out_Shininess;
-
-        in vec4 B_FragIn_PositionWorld;
-        in vec3 B_FragIn_NormalWorld;
-        in vec2 B_FragIn_Uv;
-
-        out vec4 B_GIn_Normal;
-        out vec4 B_GIn_DiffColor;
-        out vec4 B_GIn_Misc;
-        out vec4 B_GIn_Color;
-    #endif
-#endif
-
-#ifdef BANG_SP
-    #ifdef BANG_VERTEX
-    #endif
-
-    #ifdef BANG_FRAGMENT
-        vec4 B_Out_Color;
-        out vec4 B_GIn_Color;
-    #endif
-#endif
-// ///////////////////////////////////////
 
 // Util functions /////////////////
 float B_LinearizeDepth(float d)

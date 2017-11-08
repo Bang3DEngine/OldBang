@@ -51,7 +51,6 @@ void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
     p_postProcessShader = postProcessShader;
     ENSURE(p_postProcessShader);
 
-    m_shaderProgram->SetInputType(ShaderProgram::InputType::PostProcess);
     m_shaderProgram->SetFragmentShader( p_postProcessShader );
 }
 

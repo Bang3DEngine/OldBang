@@ -1,13 +1,15 @@
 #define BANG_FRAGMENT
 #define BANG_G
 #include "Common.glsl"
+#include "Ins.glsl"
+#include "Outs.glsl"
 
 bool B_UsePlainDiffuseColor;
 
 void InitMain()
 {
     B_UsePlainDiffuseColor = false;
-    B_Out_NormalWorld      = B_FragIn_NormalWorld;
+    B_Out_NormalWorld      = B_FIn_Normal;
     B_Out_ReceivesLighting = B_MaterialReceivesLighting;
     B_Out_Shininess        = B_MaterialShininess;
     B_Out_DiffColor        = B_MaterialDiffuseColor;
@@ -16,9 +18,9 @@ void InitMain()
 
 void EndMain()
 {
-    B_GIn_Normal   = vec4(B_Out_NormalWorld.xyz * 0.5f + 0.5f, 0);
-    B_GIn_DiffColor = B_Out_DiffColor;
-    B_GIn_Misc      = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
+    B_FOut_Normal   = vec4(B_Out_NormalWorld.xyz * 0.5f + 0.5f, 0);
+    B_FOut_Diffuse  = B_Out_DiffColor;
+    B_FOut_Misc     = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
                            B_Out_Shininess,
                            0, 0);
 
@@ -31,8 +33,8 @@ void EndMain()
     }
     else { outColor = B_Out_Color; }
 
-    B_Out_Color = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
-    B_GIn_Color = B_Out_Color;
+    B_Out_Color  = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
+    B_FOut_Color = B_Out_Color;
 }
 
 #include "Main.glsl"
