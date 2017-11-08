@@ -12,5 +12,5 @@ void Main()
     float contrast = 1.3;
     outputColor = pow(outputColor * valueFactor, vec4(contrast)) / valueFactor;
 
-    B_Out_Color = outputColor;
+    B_FOut.Color = outputColor;
 }

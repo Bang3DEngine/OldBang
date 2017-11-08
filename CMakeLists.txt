@@ -191,6 +191,7 @@ ${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
+${ENGINE_SRC_DIR}/Graphics/General/GLUniforms.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 ${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp

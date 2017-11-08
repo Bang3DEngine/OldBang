@@ -78,6 +78,7 @@ void Window::Create(uint flags)
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
     m_objectManager       = new ObjectManager();
+    m_gEngine->Init();
     SetSize(winSize.x, winSize.y);
 }
 

@@ -8,5 +8,5 @@ void Main()
         texColor = texture2D(B_Texture0, B_FIn_Uv);
         if (texColor.a <= 1.0f) discard;
     }
-    B_Out_DiffColor = B_MaterialDiffuseColor * texColor;
+    B_FOut.Diffuse = B_MaterialDiffuseColor * texColor;
 }

@@ -30,17 +30,21 @@ USING_NAMESPACE_BANG
 
 GEngine::GEngine()
 {
-    m_gl = new GL();
-    m_texUnitManager = new TextureUnitManager();
-
-    m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
-    m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
 GEngine::~GEngine()
 {
     delete m_texUnitManager;
     delete m_gl;
+}
+
+void GEngine::Init()
+{
+    m_gl = new GL();
+    m_texUnitManager = new TextureUnitManager();
+
+    m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
+    m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)

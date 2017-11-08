@@ -25,7 +25,7 @@ void Main()
         float lowerCharLimit = B_textAlphaThreshold - B_textBlurriness;
         if (dist <= lowerCharLimit)
         {
-            B_Out_Color = B_Out_DiffColor; // Just opaque char
+            B_FOut.Color = B_FOut.Diffuse; // Just opaque char
         }
         else
         {
@@ -45,8 +45,8 @@ void Main()
                 float outlineAlpha = 1.0f - smoothstep(outlineLowerLimit,
                                                        outlineUpperLimit,
                                                        dist);
-                B_Out_Color = vec4(B_outlineColor.rgb,
-                                   B_outlineColor.a * outlineAlpha);
+                B_FOut.Color = vec4(B_outlineColor.rgb,
+                                    B_outlineColor.a * outlineAlpha);
 
 
                 if (dist <= upperCharLimit)
@@ -54,9 +54,9 @@ void Main()
                     // Blend outline color with character color
                     float charAlpha = 1.0f - smoothstep(lowerCharLimit,
                                                         upperCharLimit, dist);
-                    vec4 charColor = vec4(B_Out_DiffColor.rgb, charAlpha);
-                    float blendAlpha = max(charAlpha, B_Out_Color.a);
-                    B_Out_Color = vec4(mix(B_Out_Color.rgb, charColor.rgb,
+                    vec4 charColor = vec4(B_FOut.Diffuse.rgb, charAlpha);
+                    float blendAlpha = max(charAlpha, B_FOut.Color.a);
+                    B_FOut.Color = vec4(mix(B_FOut.Color.rgb, charColor.rgb,
                                            charAlpha),
                                        blendAlpha);
                 }
@@ -68,12 +68,12 @@ void Main()
 
                 float charAlpha = 1.0f-smoothstep(lowerCharLimit,
                                                   upperCharLimit, dist);
-                B_Out_Color = vec4(B_Out_DiffColor.rgb, charAlpha);
+                B_FOut.Color = vec4(B_FOut.Diffuse.rgb, charAlpha);
             }
         }
     }
     else
     {
-        B_Out_Color = vec4(B_Out_DiffColor.rgb, thisColor.a);
+        B_FOut.Color = vec4(B_FOut.Diffuse.rgb, thisColor.a);
     }
 }

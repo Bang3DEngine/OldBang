@@ -8,33 +8,33 @@ bool B_UsePlainDiffuseColor;
 
 void InitMain()
 {
-    B_UsePlainDiffuseColor = false;
-    B_Out_NormalWorld      = B_FIn_Normal;
-    B_Out_ReceivesLighting = B_MaterialReceivesLighting;
-    B_Out_Shininess        = B_MaterialShininess;
-    B_Out_DiffColor        = B_MaterialDiffuseColor;
-    B_Out_Color            = B_MaterialDiffuseColor;
+    B_UsePlainDiffuseColor  = false;
+    B_FOut.Normal           = B_FIn_Normal;
+    B_FOut.ReceivesLighting = B_MaterialReceivesLighting;
+    B_FOut.Shininess        = B_MaterialShininess;
+    B_FOut.Diffuse          = B_MaterialDiffuseColor;
+    B_FOut.Color            = B_MaterialDiffuseColor;
 }
 
 void EndMain()
 {
-    B_FOut_Normal   = vec4(B_Out_NormalWorld.xyz * 0.5f + 0.5f, 0);
-    B_FOut_Diffuse  = B_Out_DiffColor;
-    B_FOut_Misc     = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
-                           B_Out_Shininess,
+    B_GIn_Normal   = vec4(B_FOut.Normal.xyz * 0.5f + 0.5f, 0);
+    B_GIn_Diffuse  = B_FOut.Diffuse;
+    B_GIn_Misc     = vec4(B_FOut.ReceivesLighting ? 1.0 : 0.0,
+                           B_FOut.Shininess,
                            0, 0);
 
     vec4 outColor;
     if (!B_UsePlainDiffuseColor)
     {
         float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-        outColor = vec4(B_Out_DiffColor.rgb * B_Out_Color.rgb * ambientLight,
-                        B_Out_DiffColor.a * B_Out_Color.a);
+        outColor = vec4(B_FOut.Diffuse.rgb * B_FOut.Color.rgb * ambientLight,
+                        B_FOut.Diffuse.a * B_FOut.Color.a);
     }
-    else { outColor = B_Out_Color; }
+    else { outColor = B_FOut.Color; }
 
-    B_Out_Color  = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
-    B_FOut_Color = B_Out_Color;
+    B_FOut.Color  = vec4( mix(B_SampleColor().rgb, outColor.rgb, outColor.a), 1);
+    B_GIn_Color = B_FOut.Color;
 }
 
 #include "Main.glsl"

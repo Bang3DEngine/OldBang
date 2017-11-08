@@ -14,7 +14,7 @@ void Main()
     float diffS  = abs(fragDepth - depthS);
     if ( abs(diffN - diffS) >= DepthThresh )
     {
-        B_Out_Color = StrokeColor;
+        B_FOut.Color = StrokeColor;
         return;
     }
 
@@ -24,7 +24,7 @@ void Main()
     float diffE  = abs(fragDepth - depthE);
     if ( abs(diffE - diffW) >= DepthThresh )
     {
-        B_Out_Color = StrokeColor;
+        B_FOut.Color = StrokeColor;
         return;
     }
 
@@ -36,7 +36,7 @@ void Main()
             vec3 ijNormal = B_SampleNormalOffset( vec2(i,j) );
             if ( dot(fragNormal, ijNormal) <= 0.2 )
             {
-                B_Out_Color = StrokeColor;
+                B_FOut.Color = StrokeColor;
                 return;
             }
         }

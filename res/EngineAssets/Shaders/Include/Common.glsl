@@ -1,20 +1,15 @@
-// Matrices //////////////////////////////
-uniform mat4 B_Model;
-uniform mat4 B_ModelInv;
-uniform mat3 B_Normal;
-uniform mat3 B_NormalInv;
-uniform mat4 B_View;
-uniform mat4 B_ViewInv;
-uniform mat4 B_Projection;
-uniform mat4 B_ProjectionInv;
-uniform mat4 B_PVM;
-// ///////////////////////////////////////
-
-
-// Misc ////////////////////////////////
-// Uniform that's always False. Useful to fool glsl optimization.
-uniform bool B_False = false;
-// ///////////////////////////////////////
+layout (std140)
+uniform MatricesBlock
+{
+    mat4 Model;
+    mat4 Normal;
+    mat4 View;
+    mat4 ViewInv;
+    mat4 Projection;
+    mat4 ProjectionInv;
+    mat4 PVM;
+}
+B_Matrices;
 
 // Camera ///////////////////////////////
 uniform float B_Camera_Near = 0.0f;
@@ -107,7 +102,7 @@ float B_LinearizeDepth(float d)
     float B_SampleFlagsOffset(vec2 pixOffset)
       { return B_SampleFlags(B_ViewportUv + B_ViewportStep * pixOffset); }
 
-    vec3 B_GetCameraPositionWorld() { return B_ViewInv[3].xyz; }
+    vec3 B_GetCameraPositionWorld() { return B_Matrices.ViewInv[3].xyz; }
 
     vec3 B_ComputeWorldPosition(float depth)
     {
@@ -115,8 +110,8 @@ float B_LinearizeDepth(float d)
         float y = B_ViewportUv.y * 2.0 - 1.0;
         float z = depth * 2.0 - 1.0;
         vec4 projectedPos = vec4(x, y, z, 1);
-        vec4 worldPos = (B_ProjectionInv * projectedPos);
-        worldPos = (B_ViewInv * (worldPos/worldPos.w));
+        vec4 worldPos = (B_Matrices.ProjectionInv * projectedPos);
+        worldPos = (B_Matrices.ViewInv * (worldPos/worldPos.w));
         return worldPos.xyz;
     }
     vec3 B_ComputeWorldPosition() { return B_ComputeWorldPosition( B_SampleDepth() ); }

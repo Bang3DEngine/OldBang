@@ -7,6 +7,7 @@
 #include "Bang/GEngine.h"
 #include "Bang/Texture.h"
 #include "Bang/GLObject.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/ShaderProgram.h"
 
 USING_NAMESPACE_BANG
@@ -106,6 +107,16 @@ void GL::VertexAttribPointer(int location,
                           dataStride,
                           RCAST<void*>(dataOffset));
     GL_CheckError();
+}
+
+GLvoid* GL::MapBuffer(GL::BindTarget target, GL::Enum access)
+{
+    return glMapBuffer(GLCAST(target), access);
+}
+
+void GL::UnMapBuffer(GL::BindTarget target)
+{
+    glUnmapBuffer( GLCAST(target) );
 }
 
 int GL::GetUniformsListSize(GLId shaderProgramId)
@@ -663,9 +674,10 @@ Vector2 GL::GetViewportPixelSize()
     return 1.0f / Vector2(GL::GetViewportSize());
 }
 
-void GL::BufferDataVBO(int dataSize, const void *data, GL::UsageHint usageHint)
+void GL::BufferData(GL::BindTarget target, int dataSize,
+                    const void *data, GL::UsageHint usageHint)
 {
-    glBufferData(GL_ARRAY_BUFFER, dataSize, data, GLCAST(usageHint));
+    glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint));
 }
 
 #include "Bang/Input.h"
@@ -673,8 +685,7 @@ void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();
-    if (!Input::GetKey(Key::X))
-        glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
+    glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
     vao->UnBind();
 }
 
@@ -699,22 +710,25 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
     switch (bindTarget)
     {
         case BindTarget::Texture2D:
-            glBindTexture(GLCAST(GL::TextureTarget::Texture2D), glId);
+            glBindTexture( GLCAST(GL::BindTarget::Texture2D), glId);
         break;
         case BindTarget::ShaderProgram:
             glUseProgram(glId);
         break;
         case BindTarget::Framebuffer:
-            glBindFramebuffer(GL_FRAMEBUFFER, glId);
+            glBindFramebuffer( GLCAST(GL::BindTarget::Framebuffer), glId);
         break;
         case BindTarget::VAO:
             glBindVertexArray(glId);
         break;
         case BindTarget::VBO:
-            glBindBuffer(GL_ARRAY_BUFFER, glId);
+            glBindBuffer( GLCAST(GL::BindTarget::VBO), glId);
         break;
-        default:
+        case BindTarget::UniformBuffer:
+            glBindBuffer( GLCAST(GL::BindTarget::UniformBuffer), glId);
         break;
+
+        default: ASSERT(false); break;
     }
     GL_CheckError();
 }
@@ -737,24 +751,25 @@ bool GL::IsBound(const GLObject *bindable)
 void GL::ApplyToShaderProgram(ShaderProgram *sp)
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
+
+    auto matricesBuffer = GLUniforms::GetMatricesBuffer();
+
     const Matrix4& modelMatrix = GL::GetModelMatrix();
-    sp->Set("B_Model",    modelMatrix);
-    sp->Set("B_ModelInv", modelMatrix.Inversed());
+    matricesBuffer->GetData()->model = modelMatrix;
 
     Matrix3 normalMatrix = Matrix3(modelMatrix.c0.xyz(),
                                    modelMatrix.c1.xyz(),
                                    modelMatrix.c2.xyz()
                                ).Transposed().Inversed();
-    sp->Set("B_Normal",    normalMatrix);
-    sp->Set("B_NormalInv", normalMatrix.Inversed());
+    matricesBuffer->GetData()->normal = Matrix4(normalMatrix);
 
     const Matrix4& viewMatrix = GL::GetViewMatrix();
-    sp->Set("B_View",    viewMatrix);
-    sp->Set("B_ViewInv", viewMatrix.Inversed());
+    matricesBuffer->GetData()->view = viewMatrix;
+    matricesBuffer->GetData()->viewInv = viewMatrix.Inversed();
 
     const Matrix4& projectionMatrix = GL::GetProjectionMatrix();
-    sp->Set("B_Projection",    projectionMatrix);
-    sp->Set("B_ProjectionInv", projectionMatrix.Inversed());
+    matricesBuffer->GetData()->proj = projectionMatrix;
+    matricesBuffer->GetData()->projInv = projectionMatrix.Inversed();
 
     GL *gl = GL::GetActive();
     sp->Set("B_Camera_Near", gl->m_zNear);
@@ -795,7 +810,8 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
         pvmMatrix = Matrix4::Identity;
     }
 
-    sp->Set("B_PVM", pvmMatrix);
+    matricesBuffer->GetData()->pvm = pvmMatrix;
+    matricesBuffer->UpdateBuffer();
 }
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
@@ -1083,10 +1099,24 @@ GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
     return GL::ColorComp::RGB;
 }
 
+void GL::BindUniformBufferToShader(const String &uniformBlockName,
+                                   const ShaderProgram *sp,
+                                   const IUniformBuffer *buffer)
+{
+    GLuint blockIndex = glGetUniformBlockIndex(sp->GetGLId(),
+                                               uniformBlockName.ToCString());
+    glUniformBlockBinding(sp->GetGLId(), blockIndex, buffer->GetBindingPoint());
+}
+
 GL *GL::GetActive()
 {
     GEngine *gp = GEngine::GetInstance();
     return gp ? gp->GetGL() : nullptr;
 }
 
-GL::GL() {}
+GLUniforms *GL::GetGLUniforms() const { return m_glUniforms; }
+
+GL::GL()
+{
+    m_glUniforms = new GLUniforms();
+}

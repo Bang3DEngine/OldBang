@@ -16,6 +16,6 @@ void Main()
                                     B_LightColor.rgb,
                                     B_GetCameraPositionWorld() );
 
-        B_Out_Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
+        B_FOut.Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
     }
 }

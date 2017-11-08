@@ -15,7 +15,7 @@ VBO::~VBO()
 void VBO::Fill(const void *data, int dataSize, GL::UsageHint usage)
 {
     Bind();
-    GL::BufferDataVBO(dataSize, data, usage);
+    GL::BufferData(GL::BindTarget::VBO, dataSize, data, usage);
     UnBind();
 }
 

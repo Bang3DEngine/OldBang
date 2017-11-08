@@ -47,5 +47,5 @@ void Main()
 
     float lumaB = dot(rgbB, luma);
     vec3 col = ((lumaB < lumaMin) || (lumaB > lumaMax)) ? rgbA : rgbB;
-    B_Out_Color = vec4(col, 1);
+    B_FOut.Color = vec4(col, 1);
 }

@@ -13,22 +13,31 @@
     #endif
 
     #ifdef BANG_FRAGMENT
-        vec3  B_Out_NormalWorld;
-        vec4  B_Out_DiffColor;
-        vec4  B_Out_Color;
-        bool  B_Out_ReceivesLighting;
-        float B_Out_Shininess;
+        struct B_FragmentOut
+        {
+            vec3  Normal;
+            vec4  Diffuse;
+            vec4  Color;
+            bool  ReceivesLighting;
+            float Shininess;
+        }
+        B_FOut;
 
-        layout(location = B_LOC_GBUFFER_OUT_NORMAL)  out vec4 B_FOut_Normal;
-        layout(location = B_LOC_GBUFFER_OUT_DIFFUSE) out vec4 B_FOut_Diffuse;
-        layout(location = B_LOC_GBUFFER_OUT_MISC)    out vec4 B_FOut_Misc;
-        layout(location = B_LOC_GBUFFER_OUT_COLOR)   out vec4 B_FOut_Color;
+        layout(location = B_LOC_GBUFFER_OUT_NORMAL)  out vec4 B_GIn_Normal;
+        layout(location = B_LOC_GBUFFER_OUT_DIFFUSE) out vec4 B_GIn_Diffuse;
+        layout(location = B_LOC_GBUFFER_OUT_MISC)    out vec4 B_GIn_Misc;
+        layout(location = B_LOC_GBUFFER_OUT_COLOR)   out vec4 B_GIn_Color;
     #endif
 #endif
 
 #ifdef BANG_SP
     #ifdef BANG_FRAGMENT
-        vec4 B_Out_Color;
-        out vec4 B_FOut_Color;
+        struct B_FragmentOut
+        {
+            vec4 Color;
+        }
+        B_FOut;
+
+        layout(location = 0) out vec4 B_GIn_Color;
     #endif
 #endif

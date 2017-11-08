@@ -21,9 +21,11 @@ NAMESPACE_BANG_BEGIN
 using GLId = GLuint;
 
 FORWARD class VAO;
-FORWARD class GLObject;
 FORWARD class Texture;
+FORWARD class GLObject;
+FORWARD class GLUniforms;
 FORWARD class ShaderProgram;
+FORWARD class IUniformBuffer;
 
 class GL
 {
@@ -32,8 +34,11 @@ public:
 
     enum
     {
-        Viewport = GL_VIEWPORT,
-        Blend    = GL_BLEND
+        Viewport  = GL_VIEWPORT,
+        Blend     = GL_BLEND,
+        WriteOnly = GL_WRITE_ONLY,
+        ReadOnly  = GL_READ_ONLY,
+        ReadWrite = GL_READ_WRITE
     };
 
     enum class Primitives
@@ -87,7 +92,8 @@ public:
         ShaderProgram  = GL_SHADER,
         Framebuffer    = GL_FRAMEBUFFER,
         VAO            = GL_VERTEX_ARRAY,
-        VBO            = GL_BUFFER
+        VBO            = GL_ARRAY_BUFFER,
+        UniformBuffer  = GL_UNIFORM_BUFFER
     };
 
     enum class DataType
@@ -289,6 +295,9 @@ public:
                                     int dataStride,
                                     int dataOffset);
 
+    static GLvoid* MapBuffer(GL::BindTarget target, Enum access);
+    static void UnMapBuffer(GL::BindTarget target);
+
     static int GetUniformsListSize(GLId shaderProgramId);
     template <class T>
     static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
@@ -425,8 +434,9 @@ public:
     static float GetViewportAspectRatio();
     static Vector2 GetViewportPixelSize();
 
-    static void BufferDataVBO(int dataSize, const void *data,
-                              GL::UsageHint usageHint);
+    static void BufferData(GL::BindTarget target,
+                           int dataSize, const void *data,
+                           GL::UsageHint usageHint);
     static void SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA);
     static void SetViewProjMode(ViewProjMode mode);
     static void SetStencilOp(GL::StencilOperation zPass);
@@ -496,11 +506,18 @@ public:
     static GL::DataType GetDataTypeFrom(GL::ColorFormat format);
     static GL::ColorComp GetColorCompFrom(GL::ColorFormat format);
 
+    static void BindUniformBufferToShader(const String &uniformBlockName,
+                                          const ShaderProgram *sp,
+                                          const IUniformBuffer *buffer);
+
     static GL* GetActive();
+
+    GLUniforms *GetGLUniforms() const;
 
     GL();
 
 private:
+    GLUniforms *m_glUniforms = nullptr;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
     float m_zNear, m_zFar;

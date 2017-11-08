@@ -24,6 +24,8 @@ public:
     GEngine();
     virtual ~GEngine();
 
+    void Init();
+
     void Render(Scene *scene);
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);

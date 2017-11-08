@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Bang/Debug.h"
+#include "Bang/Matrix3.h"
 #include "Bang/Vector4.h"
 
 NAMESPACE_BANG_BEGIN
@@ -27,14 +28,6 @@ public:
         c3 = Vector4G<T>(m.c3);
     }
 
-    template<class OtherT>
-    Matrix4G(const OtherT& a)
-    {
-        c0 = Vector4G<T>(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0), SCAST<T>(0));
-        c1 = Vector4G<T>(SCAST<T>(0), SCAST<T>(a), SCAST<T>(0), SCAST<T>(0));
-        c2 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(a), SCAST<T>(0));
-        c3 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(0), SCAST<T>(a));
-    }
     Matrix4G(const Vector4G<T> &col0,
              const Vector4G<T> &col1,
              const Vector4G<T> &col2,
@@ -45,6 +38,7 @@ public:
         c2 = col2;
         c3 = col3;
     }
+
     Matrix4G(const T& m00, const T& m01, const T& m02, const T& m03,
              const T& m10, const T& m11, const T& m12, const T& m13,
              const T& m20, const T& m21, const T& m22, const T& m23,
@@ -54,6 +48,24 @@ public:
         c1 = Vector4G<T>(m01, m11, m21, m31);
         c2 = Vector4G<T>(m02, m12, m22, m32);
         c3 = Vector4G<T>(m03, m13, m23, m33);
+    }
+
+    template<class OtherT>
+    explicit Matrix4G(const Matrix3G<OtherT>& m)
+    {
+        c0 = Vector4G<T>(m.c0, 0);
+        c1 = Vector4G<T>(m.c1, 0);
+        c2 = Vector4G<T>(m.c2, 0);
+        c3 = Vector4G<T>(0, 0, 0, 1);
+    }
+
+    template<class OtherT>
+    explicit Matrix4G(const OtherT& a)
+    {
+        c0 = Vector4G<T>(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0), SCAST<T>(0));
+        c1 = Vector4G<T>(SCAST<T>(0), SCAST<T>(a), SCAST<T>(0), SCAST<T>(0));
+        c2 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(a), SCAST<T>(0));
+        c3 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(0), SCAST<T>(a));
     }
 
     Matrix4G<T> Inversed() const

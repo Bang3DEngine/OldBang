@@ -8,13 +8,13 @@ vec4 inColor;
 void InitMain()
 {
     inColor = B_SampleColor();
-    B_Out_Color = inColor; // Default value
+    B_FOut.Color = inColor; // Default value
 }
 
 void EndMain()
 {
-    B_Out_Color = vec4( mix(inColor.rgb, B_Out_Color.rgb, B_Out_Color.a), 1.0);
-    B_GIn_Color = B_Out_Color;
+    B_FOut.Color = vec4( mix(inColor.rgb, B_FOut.Color.rgb, B_FOut.Color.a), 1.0);
+    B_GIn_Color = B_FOut.Color;
 }
 
 void Main();

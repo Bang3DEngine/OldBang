@@ -11,6 +11,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/Texture.h"
 #include "Bang/Resources.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/TextureUnitManager.h"
 
 USING_NAMESPACE_BANG
@@ -74,6 +75,7 @@ bool ShaderProgram::Link()
     }
 
     m_isLinked = true;
+    GLUniforms::BindAllUniformBuffersToShader(this);
     m_nameToLocationCache.Clear(); // Invalidate cache
     return true;
 }
@@ -159,6 +161,7 @@ bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
     }
     return (location >= 0);
 }
+
 
 void ShaderProgram::Bind() const
 {
