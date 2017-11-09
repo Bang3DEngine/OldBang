@@ -9,6 +9,7 @@
 #include "Bang/GEngine.h"
 #include "Bang/Transform.h"
 #include "Bang/Resources.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
@@ -42,12 +43,8 @@ void Renderer::Bind() const
     GL::SetCullFace(m_cullMode);
     GL::LineWidth(m_lineWidth);
 
-    if (GetGameObject()->GetTransform())
-    {
-        Matrix4 model;
-        GetGameObject()->GetTransform()->GetLocalToWorldMatrix(&model);
-        GL::SetModelMatrix(model);
-    }
+    Transform *t = GetGameObject()->GetTransform();
+    if (t) { GLUniforms::SetModelMatrix(t->GetLocalToWorldMatrix()); }
 
     Material *mat = GetMaterial();
     mat->Bind();

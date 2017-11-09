@@ -51,8 +51,8 @@ public:
     float GetFovDegrees() const;
     float GetZNear() const;
     float GetZFar() const;
-    void GetViewMatrix(Matrix4 *view) const;
-    void GetProjectionMatrix(Matrix4 *proj) const;
+    Matrix4 GetViewMatrix() const;
+    Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
     Texture2D *GetRenderTexture() const;

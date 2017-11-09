@@ -642,6 +642,14 @@ void GL::SetViewport(const Recti &viewport)
 void GL::SetViewport(int x, int y, int width, int height)
 {
     glViewport(x, y, width, height);
+
+    if (GL::GetActive() && GLUniforms::GetActive())
+    {
+        auto *vpBuffer = GLUniforms::GetViewportBuffer();
+        vpBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
+        vpBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
+        vpBuffer->UpdateBuffer();
+    }
 }
 
 void GL::SetLineWidth(float lineWidth)
@@ -746,77 +754,6 @@ void GL::UnBind(GL::BindTarget bindTarget)
 bool GL::IsBound(const GLObject *bindable)
 {
     return GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId());
-}
-
-void GL::ApplyToShaderProgram(ShaderProgram *sp)
-{
-    ENSURE(sp); ASSERT(GL::IsBound(sp));
-
-    auto matricesBuffer = GLUniforms::GetMatricesBuffer();
-
-    const Matrix4& modelMatrix = GL::GetModelMatrix();
-    matricesBuffer->GetData()->model = modelMatrix;
-
-    Matrix3 normalMatrix = Matrix3(modelMatrix.c0.xyz(),
-                                   modelMatrix.c1.xyz(),
-                                   modelMatrix.c2.xyz()
-                               ).Transposed().Inversed();
-    matricesBuffer->GetData()->normal = Matrix4(normalMatrix);
-
-    const Matrix4& viewMatrix = GL::GetViewMatrix();
-    matricesBuffer->GetData()->view    = viewMatrix;
-    matricesBuffer->GetData()->viewInv = viewMatrix.Inversed();
-
-    const Matrix4& projectionMatrix = GL::GetProjectionMatrix();
-    matricesBuffer->GetData()->proj    = projectionMatrix;
-    matricesBuffer->GetData()->projInv = projectionMatrix.Inversed();
-
-    GL *gl = GL::GetActive();
-    auto *cameraBuffer = GLUniforms::GetCameraBuffer();
-    cameraBuffer->GetData()->zNear = gl->m_zNear;
-    cameraBuffer->GetData()->zFar  = gl->m_zFar;
-
-    auto *viewportBuffer = GLUniforms::GetViewportBuffer();
-    viewportBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
-    viewportBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
-
-    Matrix4 pvmMatrix;
-    if (gl->m_viewProjMode == GL::ViewProjMode::UseBoth)
-    {
-        pvmMatrix = projectionMatrix * viewMatrix * modelMatrix;
-    }
-    else if (gl->m_viewProjMode == GL::ViewProjMode::OnlyFixAspectRatio)
-    {
-        Matrix4 modelTranslate( Vector4(1,0,0,0),
-                                Vector4(0,1,0,0),
-                                Vector4(0,0,1,0),
-                                modelMatrix.c3);
-
-        Matrix4 modelNoTranslate = modelMatrix;
-        modelNoTranslate.SetTranslate( Vector3(0,0,0) );
-
-        float ar = 1.0f / GL::GetViewportAspectRatio();
-        Matrix4 fixAR(ar, 0, 0, 0,
-                       0, 1, 0, 0,
-                       0, 0, 1, 0,
-                       0, 0, 0, 1);
-
-        pvmMatrix = modelTranslate * fixAR * modelNoTranslate;
-    }
-    else if (gl->m_viewProjMode == GL::ViewProjMode::IgnoreBoth)
-    {
-        pvmMatrix = modelMatrix;
-    }
-    else if (gl->m_viewProjMode == GL::ViewProjMode::IgnoreBothAndModel)
-    {
-        pvmMatrix = Matrix4::Identity;
-    }
-
-    matricesBuffer->GetData()->pvm = pvmMatrix;
-
-    matricesBuffer->UpdateBuffer();
-    cameraBuffer->UpdateBuffer();
-    viewportBuffer->UpdateBuffer();
 }
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
@@ -1111,6 +1048,11 @@ void GL::BindUniformBufferToShader(const String &uniformBlockName,
     GLuint blockIndex = glGetUniformBlockIndex(sp->GetGLId(),
                                                uniformBlockName.ToCString());
     glUniformBlockBinding(sp->GetGLId(), blockIndex, buffer->GetBindingPoint());
+}
+
+GL::ViewProjMode GL::GetViewProjMode()
+{
+    return GL::GetActive()->m_viewProjMode;
 }
 
 GL *GL::GetActive()

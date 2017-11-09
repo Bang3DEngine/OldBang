@@ -72,8 +72,7 @@ public:
     Vector3 WorldToLocalVector(const Vector3 &vector) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
-    void GetLocalToParentMatrix(Matrix4 *m) const;
-    void GetLocalToWorldMatrix(Matrix4 *m) const;
+    Matrix4 GetLocalToWorldMatrix() const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;

@@ -33,6 +33,7 @@ private:
     int GetLayoutPriority() const;
 
     virtual void CalculateLayout(Axis axis) = 0;
+    void _CalculateLayout(Axis axis);
 
     Vector2i GetMinSize()       const;
     Vector2i GetPreferredSize() const;

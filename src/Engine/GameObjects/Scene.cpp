@@ -38,9 +38,7 @@ void Scene::OnResize(int newWidth, int newHeight)
 void Scene::RenderGizmos()
 {
     GameObject::RenderGizmos();
-    m_gizmos->m_gizmosGo->SetParent(this);
     GetGizmos()->m_gizmosGo->RenderGizmos();
-    m_gizmos->m_gizmosGo->SetParent(nullptr);
 }
 
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }

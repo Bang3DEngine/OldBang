@@ -47,6 +47,11 @@ public:
 
     static void BindAllUniformBuffersToShader(const ShaderProgram *sp);
 
+    static void SetModelMatrix(const Matrix4 &model);
+    static void SetViewMatrix(const Matrix4 &view);
+    static void SetProjectionMatrix(const Matrix4 &projection);
+    static void UpdatePVMMatrix();
+
     static UniformBuffer<Matrices>* GetMatricesBuffer();
     static UniformBuffer<Camera>* GetCameraBuffer();
     static UniformBuffer<Viewport>* GetViewportBuffer();

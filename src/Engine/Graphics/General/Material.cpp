@@ -94,8 +94,6 @@ void Material::Bind() const
     ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->Set("B_ViewportSize", Vector2f(GL::GetViewportSize()));
-
     sp->Set("B_UvMultiply",               GetUvMultiply());
     sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
     sp->Set("B_MaterialShininess",        GetShininess());
@@ -105,8 +103,6 @@ void Material::Bind() const
     sp->Set("B_Texture0",  GetTexture());
     sp->Set("B_AlphaCutoff", alphaCutoff);
     sp->Set("B_HasTexture",   GetTexture() != nullptr);
-
-    GL::ApplyToShaderProgram(sp);
 }
 
 void Material::UnBind() const

@@ -43,6 +43,15 @@ int ILayoutElement::GetLayoutPriority() const
     return m_layoutPriority;
 }
 
+void ILayoutElement::_CalculateLayout(Axis axis)
+{
+    if (IInvalidatable<ILayoutElement>::IsInvalid())
+    {
+        CalculateLayout(axis);
+        if (axis == Axis::Vertical) { Validate(); }
+    }
+}
+
 Vector2i ILayoutElement::GetMinSize() const
 {
     return m_calculatedMinSize;

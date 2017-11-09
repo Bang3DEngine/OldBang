@@ -14,6 +14,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -33,12 +34,12 @@ Camera::~Camera()
 
 void Camera::Bind() const
 {
-    Matrix4 view, projection;
-    GetViewMatrix(&view);
-    GetProjectionMatrix(&projection);
-    GL::SetZNearFar(GetZNear(), GetZFar());
-    GL::SetViewMatrix(view);
-    GL::SetProjectionMatrix(projection);
+    auto *cameraBuffer = GLUniforms::GetCameraBuffer();
+    cameraBuffer->GetData()->zNear = GetZNear();
+    cameraBuffer->GetData()->zFar  = GetZFar();
+
+    GLUniforms::SetViewMatrix( GetViewMatrix() );
+    GLUniforms::SetProjectionMatrix( GetProjectionMatrix() );
 
     SetViewportForRendering();
 }
@@ -99,10 +100,7 @@ Vector2i Camera::FromScreenPointToViewport(const Vector2i &screenPointPx)
 
 Vector2 Camera::FromWorldPointToScreenNDC(const Vector3 &position)
 {
-    Matrix4 p, v;
-    GetProjectionMatrix(&p);
-    GetViewMatrix(&v);
-    Vector4 v4 = p * v * Vector4(position, 1);
+    Vector4 v4 = GetProjectionMatrix() * GetViewMatrix() * Vector4(position, 1);
     v4 /= v4.w;
     return v4.xy();
 }
@@ -110,15 +108,11 @@ Vector2 Camera::FromWorldPointToScreenNDC(const Vector3 &position)
 Vector3 Camera::FromScreenNDCPointToWorld(const Vector2 &screenNDCPos,
                                       float zFromCamera)
 {
-    Matrix4 p, v;
-    GetProjectionMatrix(&p);
-    GetViewMatrix(&v);
-
     // Pass coordinates to clip space, to invert them using projInversed
     Vector4 clipCoords = Vector4(screenNDCPos, 1, 1) * zFromCamera;
-    Vector4 res4 = p.Inversed() * clipCoords;
+    Vector4 res4 = GetProjectionMatrix().Inversed() * clipCoords;
     Vector3 res = res4.xyz();
-    res = (v.Inversed() * Vector4(res, 1)).xyz();
+    res = (GetViewMatrix().Inversed() * Vector4(res, 1)).xyz();
     return res;
 }
 
@@ -210,26 +204,25 @@ float Camera::GetOrthoWidth() const
    return GetOrthoHeight() * GL::GetViewportAspectRatio();
 }
 
-void Camera::GetViewMatrix(Matrix4 *view) const
+Matrix4 Camera::GetViewMatrix() const
 {
     Transform *tr = GetGameObject()->GetTransform();
-    tr->GetLocalToWorldMatrix(view);
-    *view = view->Inversed();
+    return tr->GetLocalToWorldMatrix().Inversed();
 }
 
-void Camera::GetProjectionMatrix(Matrix4 *proj) const
+Matrix4 Camera::GetProjectionMatrix() const
 {
     if (m_projMode == ProjectionMode::Perspective)
     {
-        *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), GL::GetViewportAspectRatio(),
-                    m_zNear, m_zFar);
+        return Matrix4::Perspective(Math::Deg2Rad(GetFovDegrees()),
+                                    GL::GetViewportAspectRatio(),
+                                    GetZNear(), GetZFar());
     }
     else //Ortho
     {
-        *proj = Matrix4::Ortho(-GetOrthoWidth(),  GetOrthoWidth(),
-                               -GetOrthoHeight(), GetOrthoHeight(),
-                                GetZNear(),       GetZFar());
+        return Matrix4::Ortho(-GetOrthoWidth(),  GetOrthoWidth(),
+                              -GetOrthoHeight(), GetOrthoHeight(),
+                               GetZNear(),       GetZFar());
     }
 }
 

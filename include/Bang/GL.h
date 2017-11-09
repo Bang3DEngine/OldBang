@@ -466,7 +466,6 @@ public:
     static Vector2  FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
     static Vector2  FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
 
-    static void ApplyToShaderProgram(ShaderProgram *sp);
     static void Render(const VAO* vao,
                        GL::Primitives renderMode,
                        int elementsCount,
@@ -509,6 +508,8 @@ public:
     static void BindUniformBufferToShader(const String &uniformBlockName,
                                           const ShaderProgram *sp,
                                           const IUniformBuffer *buffer);
+
+    static GL::ViewProjMode GetViewProjMode();
 
     static GL* GetActive();
 

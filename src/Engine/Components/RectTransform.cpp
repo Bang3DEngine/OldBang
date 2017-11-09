@@ -304,9 +304,7 @@ Rect RectTransform::GetParentScreenRectPx() const
 
 Rect RectTransform::GetScreenSpaceRectNDC() const
 {
-    Matrix4 localToWorld;
-    GetLocalToWorldMatrix(&localToWorld);
-    return localToWorld * Rect::ScreenRectNDC;
+    return GetLocalToWorldMatrix() * Rect::ScreenRectNDC;
 }
 
 Rect RectTransform::GetParentScreenRect() const

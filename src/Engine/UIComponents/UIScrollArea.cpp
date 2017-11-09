@@ -18,8 +18,6 @@ UIScrollArea::~UIScrollArea()
 void UIScrollArea::OnUpdate()
 {
     Component::OnUpdate();
-
-    GetGameObject()->GetComponent<RectTransform>()->Invalidate();
 }
 
 void UIScrollArea::SetScrolling(const Vector2i &scrollPx)

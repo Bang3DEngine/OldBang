@@ -22,12 +22,12 @@ UILayoutManager::UILayoutManager()
 
 void UILayoutManager::OnInvalidated(ILayoutElement *element)
 {
-    UILayoutManager::OnInvalidatedLayout( DCAST<Component*>(element), false );
+    UILayoutManager::OnLayoutInvalidated( DCAST<Component*>(element), false );
 }
 
 void UILayoutManager::OnInvalidated(ILayoutController *controller)
 {
-    UILayoutManager::OnInvalidatedLayout( DCAST<Component*>(controller), true );
+    UILayoutManager::OnLayoutInvalidated( DCAST<Component*>(controller), true );
 }
 
 Vector2i UILayoutManager::GetMinSize(GameObject *go)
@@ -118,11 +118,7 @@ void UILayoutManager::CalculateLayout(GameObject *gameObject, Axis axis)
     List<ILayoutElement*> goLEs = gameObject->GetComponents<ILayoutElement>();
     for (ILayoutElement *goLE : goLEs)
     {
-        // if (goLE->IsInvalid())
-        {
-            goLE->CalculateLayout(axis);
-            // if (axis == Axis::Vertical) { goLE->Validate(); }
-        }
+        goLE->_CalculateLayout(axis);
     }
 }
 
@@ -146,8 +142,7 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
                            DCAST<ILayoutSelfController*>(layoutController);
             if (selfController)
             {
-                selfController->ApplyLayout(axis);
-                // if (axis == Axis::Vertical) { layoutController->Validate(); }
+                selfController->_ApplyLayout(axis);
             }
             else { nonSelfControllers.PushBack(layoutController); }
         }
@@ -155,8 +150,7 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
         // Normal LayoutControllers
         for (ILayoutController *layoutController : nonSelfControllers)
         {
-            layoutController->ApplyLayout(axis);
-            // if (axis == Axis::Vertical) { layoutController->Validate(); }
+            layoutController->_ApplyLayout(axis);
         }
 
         const List<GameObject*> &children = go->GetChildren();
@@ -164,14 +158,14 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
     }
 }
 
-void UILayoutManager::OnInvalidatedLayout(Component *comp,
+void UILayoutManager::OnLayoutInvalidated(Component *comp,
                                           bool isLayoutController)
 {
     ENSURE(comp);
 
     GameObject *go = comp->GetGameObject();
 
-    if (true) // isLayoutController)
+    if (isLayoutController)
     {
         auto pLayoutContrs = go->GetComponentsInParent<ILayoutController>(false);
         for (ILayoutController *pCont : pLayoutContrs) { pCont->Invalidate(); }
@@ -184,8 +178,11 @@ void UILayoutManager::OnInvalidatedLayout(Component *comp,
     for (ILayoutController *cCont : cLayoutContrs) { cCont->Invalidate(); }
 
     const bool isLayoutElement = !isLayoutController;
-    if (true) // isLayoutElement)
+    if (isLayoutElement)
     {
+        auto pLayoutContrs = go->GetComponentsInParent<ILayoutController>(false);
+        for (ILayoutController *pCont : pLayoutContrs) { pCont->Invalidate(); }
+
         auto pLayoutElements = go->GetComponentsInParent<ILayoutElement>(false);
         for (ILayoutElement *pElm : pLayoutElements) { pElm->Invalidate(); }
 

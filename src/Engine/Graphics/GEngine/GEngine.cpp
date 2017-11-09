@@ -16,6 +16,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
@@ -23,7 +24,6 @@
 #include "Bang/UILayoutManager.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/TextureUnitManager.h"
-#include "Bang/GBuffer.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
@@ -192,7 +192,6 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
     sp->Bind();
-    m_gl->ApplyToShaderProgram(sp);
     sp->Set("B_rectMinCoord", mask.GetMin());
     sp->Set("B_rectMaxCoord", mask.GetMax());
     RenderScreenPlane();
@@ -265,13 +264,13 @@ void GEngine::Render(Renderer *rend)
     if (GL::IsBound(boundCamera->GetGBuffer()))
     {
         rend->Bind();
-        Material *rendMat = rend->GetMaterial();
 
         if (rend->NeedsReadingColorBuffer())
         {
             boundCamera->GetGBuffer()->PrepareColorReadBuffer(
                                         rend->GetBoundingRect(p_boundCamera));
         }
+        Material *rendMat = rend->GetMaterial();
         boundCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();
         rend->UnBind();

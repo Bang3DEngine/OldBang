@@ -52,6 +52,8 @@ public:
 
     static void Render(Renderer *rend);
 
+    static void Reset();
+
 private:
     GameObject *m_gizmosGo = nullptr;
 
@@ -65,12 +67,7 @@ private:
     MeshRenderer *m_meshRenderer = nullptr;
     List<Renderer*> m_renderers;
 
-    bool m_resetAllowed  = true;
-
     Gizmos();
-
-    void SetResetAllowed(bool allowed);
-    void Reset();
 
     static GameObject *GetGizmosGameObject();
     static Gizmos *GetInstance();

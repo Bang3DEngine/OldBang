@@ -60,11 +60,11 @@ uniform vec3  B_LightPositionWorld;
 
 
 // GBuffer textures //////////////////////
-uniform sampler2D  B_GTex_Normal;
-uniform sampler2D  B_GTex_DiffColor;
-uniform sampler2D  B_GTex_Misc;
-uniform sampler2D  B_GTex_Color;
-uniform sampler2D  B_GTex_DepthStencil;
+uniform sampler2D B_GTex_Normal;
+uniform sampler2D B_GTex_DiffColor;
+uniform sampler2D B_GTex_Misc;
+uniform sampler2D B_GTex_Color;
+uniform sampler2D B_GTex_DepthStencil;
 // ///////////////////////////////////////
 
 

@@ -366,8 +366,8 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
 AABox GameObject::GetAABBox(bool includeChildren) const
 {
     AABox b = GetObjectAABBox(includeChildren);
-    Matrix4 mat;
-    if (GetTransform()) { GetTransform()->GetLocalToWorldMatrix(&mat); }
+    Matrix4 mat = Matrix4::Identity;
+    if (GetTransform()) { mat = GetTransform()->GetLocalToWorldMatrix(); }
     b = mat * b;
     return b;
 }

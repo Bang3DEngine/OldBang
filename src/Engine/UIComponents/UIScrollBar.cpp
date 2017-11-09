@@ -107,7 +107,6 @@ void UIScrollBar::UpdateLengthThicknessMargins()
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
     RectTransform *barRT = GetBar()->GetComponent<RectTransform>();
-    barRT->SetAnchors( Vector2(-1, -1) );
     if (GetAxis() == Axis::Horizontal)
     {
         rt->SetAnchorX( Vector2(-1, 1) );

@@ -32,6 +32,7 @@ protected:
 
 private:
     virtual void ApplyLayout(Axis axis) = 0;
+    void _ApplyLayout(Axis axis);
 
     friend class UILayoutManager;
 };

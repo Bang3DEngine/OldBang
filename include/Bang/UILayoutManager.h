@@ -38,7 +38,7 @@ private:
     static void ApplyLayout(GameObject *gameObject, Axis axis);
 
     static void OnLayoutRebuilt(GameObject *go);
-    static void OnInvalidatedLayout(Component *comp,
+    static void OnLayoutInvalidated(Component *comp,
                                    bool isLayoutController);
 
     static UILayoutManager *GetInstance();

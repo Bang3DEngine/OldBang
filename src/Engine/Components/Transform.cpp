@@ -141,15 +141,11 @@ void Transform::SetLocalScale(const Vector3 &s)
 
 Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
-    Matrix4 m;
-    GetLocalToWorldMatrix(&m);
-    return (m * Vector4(point, 1)).xyz();
+    return (GetLocalToWorldMatrix() * Vector4(point, 1)).xyz();
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
-    Matrix4 m;
-    GetLocalToWorldMatrix(&m);
-    return (m.Inversed() * Vector4(point, 1)).xyz();
+    return (GetLocalToWorldMatrix().Inversed() * Vector4(point, 1)).xyz();
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
@@ -161,30 +157,22 @@ Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 }
 Vector3 Transform::TransformVector(const Vector3 &dir) const
 {
-    Matrix4 m;
-    GetLocalToWorldMatrix(&m);
-    return (m * Vector4(dir, 0)).xyz();
+    return (GetLocalToWorldMatrix() * Vector4(dir, 0)).xyz();
 }
 Vector3 Transform::InverseTransformVector(const Vector3 &dir) const
 {
-    Matrix4 m;
-    GetLocalToWorldMatrix(&m);
-    return (m.Inversed() * Vector4(dir, 0)).xyz();
+    return (GetLocalToWorldMatrix().Inversed() * Vector4(dir, 0)).xyz();
 }
 
 
 Vector3 Transform::ParentToLocalPoint(const Vector3 &point) const
 {
-    Matrix4 m;
-    GetLocalToParentMatrix(&m);
-    return (m.Inversed() * Vector4(point, 1)).xyz();
+    return (GetLocalToWorldMatrix().Inversed() * Vector4(point, 1)).xyz();
 }
 
 Vector3 Transform::ParentToLocalVector(const Vector3 &vector) const
 {
-    Matrix4 m;
-    GetLocalToParentMatrix(&m);
-    return (m.Inversed() * Vector4(vector, 0)).xyz();
+    return (GetLocalToParentMatrix().Inversed() * Vector4(vector, 0)).xyz();
 }
 Vector3 Transform::ParentToLocalDirection(const Vector3 &dir) const
 {
@@ -192,16 +180,12 @@ Vector3 Transform::ParentToLocalDirection(const Vector3 &dir) const
 }
 Vector3 Transform::LocalToParentPoint(const Vector3 &point) const
 {
-    Matrix4 m;
-    GetLocalToParentMatrix(&m);
-    return (m * Vector4(point, 1)).xyz();
+    return (GetLocalToParentMatrix() * Vector4(point, 1)).xyz();
 }
 
 Vector3 Transform::LocalToParentVector(const Vector3 &vector) const
 {
-    Matrix4 m;
-    GetLocalToParentMatrix(&m);
-    return (m * Vector4(vector, 0)).xyz();
+    return (GetLocalToParentMatrix() * Vector4(vector, 0)).xyz();
 }
 Vector3 Transform::LocalToParentDirection(const Vector3 &dir) const
 {
@@ -250,21 +234,17 @@ const Matrix4 &Transform::GetLocalToParentMatrix() const
     return m_localToParentMatrix;
 }
 
-void Transform::GetLocalToParentMatrix(Matrix4 *m) const
+Matrix4 Transform::GetLocalToWorldMatrix() const
 {
-    *m = GetLocalToParentMatrix();
-}
-
-void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
-{
-    GetLocalToParentMatrix(m);
+    Matrix4 m = GetLocalToParentMatrix();
     if (GetGameObject()->GetParent() &&
         GetGameObject()->GetParent()->GetTransform())
     {
-        Matrix4 mp;
-        GetGameObject()->GetParent()->GetTransform()->GetLocalToWorldMatrix(&mp);
-        *m = mp * (*m);
+        Matrix4 mp =
+          GetGameObject()->GetParent()->GetTransform()->GetLocalToWorldMatrix();
+        return mp * m;
     }
+    return m;
 }
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
