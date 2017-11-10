@@ -57,7 +57,6 @@ void Input::OnFrameFinished()
     m_lastMouseWheelDelta = 0.0f;
 
     ++m_framesMouseStopped;
-    m_secsSinceLastMouseDown += Time::GetDeltaTime();
 }
 
 void Input::ProcessEventInfo(const EventInfo &ei)
@@ -110,16 +109,13 @@ void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
     m_isADoubleClick = false; // Reset double click
 
     m_mouseInfo.Add(mb, ButtonInfo(up, true, true));
-    if (m_secsSinceLastMouseDown <= DoubleClickMaxSeconds &&
-        Vector2::Distance(Vector2(GetMouseCoords()),
-                          Vector2(m_lastClickMouseCoords)) < 10.0f &&
-        m_secsSinceLastMouseDown != 0)
+    if ((ei.timestampSecs - m_lastMouseDownTimestamp) <= DoubleClickMaxSeconds)
     {
         m_isADoubleClick = true;
     }
-    m_secsSinceLastMouseDown = 0;
 
     m_lastClickMouseCoords = GetMouseCoords();
+    m_lastMouseDownTimestamp = ei.timestampSecs;
 }
 
 void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
@@ -145,10 +141,7 @@ void Input::ProcessMouseUpEventInfo(const EventInfo &ei)
 void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
 {
     Key k = ei.key;
-    if (m_keyInfos.ContainsKey(k))
-    {
-        m_keyInfos[k] = ButtonInfo();
-    }
+    if (!m_keyInfos.ContainsKey(k)) { m_keyInfos[k] = ButtonInfo(); }
     m_keyInfos[k].down       = true;
     m_keyInfos[k].pressed    = true;
     m_keyInfos[k].autoRepeat = ei.autoRepeat;
@@ -163,10 +156,7 @@ void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
     if (ei.autoRepeat) return;
 
     Key k = ei.key;
-    if (m_keyInfos.ContainsKey(k))
-    {
-        m_keyInfos[k] = ButtonInfo();
-    }
+    if (!m_keyInfos.ContainsKey(k)) { m_keyInfos[k] = ButtonInfo(); }
     m_keyInfos[k].up = true;
 
     m_pressedKeys.Remove(k);
@@ -187,13 +177,15 @@ void Input::PeekEvent(const SDL_Event &event, const Window *window)
             eventInfo.type       = EventInfo::KeyDown;
             eventInfo.autoRepeat = event.key.repeat;
             eventInfo.key        = SCAST<Key>(event.key.keysym.sym);
+            eventInfo.timestampSecs = event.key.timestamp / 1000.0f;
             enqueue = true;
         break;
 
         case SDL_KEYUP:
-            eventInfo.type = EventInfo::KeyUp;
+            eventInfo.type       = EventInfo::KeyUp;
             eventInfo.autoRepeat = event.key.repeat;
             eventInfo.key        = SCAST<Key>(event.key.keysym.sym);
+            eventInfo.timestampSecs = event.key.timestamp / 1000.0f;
             enqueue = true;
         break;
 
@@ -207,27 +199,31 @@ void Input::PeekEvent(const SDL_Event &event, const Window *window)
         switch(event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                eventInfo.type = EventInfo::MouseDown;
+                eventInfo.type        = EventInfo::MouseDown;
                 eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
+                eventInfo.timestampSecs = event.button.timestamp / 1000.0f;
                 enqueue = true;
             break;
 
             case SDL_MOUSEBUTTONUP:
-                eventInfo.type = EventInfo::MouseUp;
+                eventInfo.type        = EventInfo::MouseUp;
                 eventInfo.mouseButton = SCAST<MouseButton>(event.button.button);
+                eventInfo.timestampSecs = event.button.timestamp / 1000.0f;
                 enqueue = true;
             break;
 
             case SDL_MOUSEWHEEL:
-                eventInfo.type = EventInfo::Wheel;
+                eventInfo.type       = EventInfo::Wheel;
                 eventInfo.wheelDelta = float(event.wheel.y);
+                eventInfo.timestampSecs = event.button.timestamp / 1000.0f;
                 enqueue = true;
             break;
 
             case SDL_MOUSEMOTION:
-                eventInfo.type = EventInfo::MouseMove;
-                eventInfo.x = event.motion.x;
-                eventInfo.y = event.motion.y;
+                eventInfo.type      = EventInfo::MouseMove;
+                eventInfo.x         = event.motion.x;
+                eventInfo.y         = event.motion.y;
+                eventInfo.timestampSecs = event.button.timestamp / 1000.0f;
                 enqueue = true;
             break;
         }
@@ -455,7 +451,7 @@ void Input::Reset()
 {
     m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
     m_framesMouseStopped = 0;
-    m_lastMouseWheelDelta = m_secsSinceLastMouseDown = 0.0f;
+    m_lastMouseWheelDelta = m_lastMouseDownTimestamp = 0.0f;
     m_mouseCoords = m_lastMouseCoords = Vector2i(-1);
     m_inputText = "";
 

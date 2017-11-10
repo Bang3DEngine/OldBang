@@ -138,13 +138,14 @@ public:
     void Reset();
 
 private:
-    static constexpr float DoubleClickMaxSeconds = 0.3f;
+    static constexpr float DoubleClickMaxSeconds = 0.25f;
+
     bool m_isADoubleClick          = false;
-    float m_secsSinceLastMouseDown = 0.0f;
     float m_lastMouseWheelDelta    = 0.0f;
     bool m_lockMouseMovement       = false;
     int m_framesMouseStopped       = 0;
     bool m_isMouseInside           = false;
+    float m_lastMouseDownTimestamp = 0;
 
     String m_inputText = "";
 
@@ -182,11 +183,9 @@ private:
         int x                   = 0;
         int y                   = 0;
         float wheelDelta        = 0.0f;
+        float timestampSecs     = 0;
 
-        String ToString() const override
-        {
-            return String::ToString(type);
-        }
+        String ToString() const override { return String::ToString(type); }
     };
 
 
