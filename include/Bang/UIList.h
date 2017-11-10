@@ -1,5 +1,5 @@
-#ifndef UILISTDRIVER_H
-#define UILISTDRIVER_H
+#ifndef UILIST_H
+#define UILIST_H
 
 #include <functional>
 
@@ -10,16 +10,16 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class UIScrollArea;
 
-class UIListDriver : public IComponentDriver<UIListDriver>,
-                     public Component
+class UIList : public IComponentDriver<UIList>,
+               public Component
 {
-    COMPONENT(UIListDriver);
+    COMPONENT(UIList);
 
 public:
     enum Action { SelectionIn, SelectionOut, MouseOver, MouseOut,
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
-    virtual ~UIListDriver();
+    virtual ~UIList();
 
     void OnUpdate() override;
     void AddElement(GameObject *go);
@@ -38,7 +38,7 @@ public:
     void SetSelectionCallback(SelectionCallback selectionCallback);
 
 protected:
-    UIListDriver();
+    UIList();
 
 private:
     int m_selectionIndex = 0;
@@ -50,13 +50,13 @@ private:
 
     UIScrollPanel *GetScrollPanel() const;
 
-    static UIListDriver* CreateInto(GameObject *go);
+    static UIList* CreateInto(GameObject *go);
     void Callback(GameObject *go, Action action);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIListDriver>;
+    friend class IComponentDriver<UIList>;
 };
 
 NAMESPACE_BANG_END
 
-#endif // UILISTDRIVER_H
+#endif // UILIST_H

@@ -2,6 +2,7 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/UIList.h"
 #include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
@@ -15,7 +16,6 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
-#include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"
@@ -140,13 +140,13 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
     return img;
 }
 
-UIListDriver *GameObjectFactory::CreateUIListInto(GameObject *go)
+UIList *GameObjectFactory::CreateUIListInto(GameObject *go)
 {
-    return UIListDriver::CreateInto(go);
+    return UIList::CreateInto(go);
 }
-UIListDriver *GameObjectFactory::CreateUIList()
+UIList *GameObjectFactory::CreateUIList()
 {
-    return UIListDriver::CreateInto( GameObjectFactory::CreateUIGameObject("List") );
+    return UIList::CreateInto( GameObjectFactory::CreateUIGameObject("List") );
 }
 
 UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)

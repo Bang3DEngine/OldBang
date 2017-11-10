@@ -3,6 +3,7 @@
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/UIList.h"
 #include "Bang/Window.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
@@ -11,7 +12,6 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
-#include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UITintedButton.h"
@@ -85,7 +85,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UILayoutElement *hlLE = hlGo->AddComponent<UILayoutElement>();
     hlLE->SetFlexibleHeight(0);
 
-    UIListDriver *list = GameObjectFactory::CreateUIList();
+    UIList *list = GameObjectFactory::CreateUIList();
     UILayoutElement *listLE = list->GetGameObject()->AddComponent<UILayoutElement>();
     listLE->SetFlexibleSize( Vector2(1) );
 

@@ -1,4 +1,4 @@
-#include "Bang/UIListDriver.h"
+#include "Bang/UIList.h"
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
@@ -17,15 +17,15 @@
 
 USING_NAMESPACE_BANG
 
-UIListDriver::UIListDriver()
+UIList::UIList()
 {
 }
 
-UIListDriver::~UIListDriver()
+UIList::~UIList()
 {
 }
 
-void UIListDriver::OnUpdate()
+void UIList::OnUpdate()
 {
     if (GetGameObject()->GetComponent<RectTransform>()->IsMouseOver())
     {
@@ -90,7 +90,7 @@ void UIListDriver::OnUpdate()
     }
 }
 
-void UIListDriver::AddElement(GameObject *go)
+void UIList::AddElement(GameObject *go)
 {
     bool hadSelectedGameObject = GetSelectedGameObject();
 
@@ -99,7 +99,7 @@ void UIListDriver::AddElement(GameObject *go)
     if (!hadSelectedGameObject) { SetSelection(0); }
 }
 
-void UIListDriver::RemoveElement(GameObject *go)
+void UIList::RemoveElement(GameObject *go)
 {
     GameObject::Destroy(go);
 
@@ -109,14 +109,14 @@ void UIListDriver::RemoveElement(GameObject *go)
     SetSelection(selIndex);
 }
 
-void UIListDriver::Clear()
+void UIList::Clear()
 {
     List<GameObject*> children = GetContainer()->GetChildren();
     for (GameObject *child : children) { RemoveElement(child); }
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
 }
 
-void UIListDriver::SetSelection(int _i)
+void UIList::SetSelection(int _i)
 {
     const int numChildren = GetContainer()->GetChildren().Size();
     ENSURE(numChildren > 0);
@@ -130,32 +130,32 @@ void UIListDriver::SetSelection(int _i)
     if (selectedGo) { Callback(selectedGo, Action::SelectionIn); }
 }
 
-void UIListDriver::SetSelection(GameObject *go)
+void UIList::SetSelection(GameObject *go)
 {
     SetSelection(GetContainer()->GetChildren().IndexOf(go));
 }
 
-GameObject *UIListDriver::GetContainer() const
+GameObject *UIList::GetContainer() const
 {
     return p_container;
 }
 
-int UIListDriver::GetSelectedIndex() const
+int UIList::GetSelectedIndex() const
 {
     return m_selectionIndex;
 }
 
-GameObject *UIListDriver::GetSelectedGameObject() const
+GameObject *UIList::GetSelectedGameObject() const
 {
     return GetContainer()->GetChild( GetSelectedIndex() );
 }
 
-void UIListDriver::SetSelectionCallback(SelectionCallback selectionCallback)
+void UIList::SetSelectionCallback(SelectionCallback selectionCallback)
 {
     m_selectionCallback = selectionCallback;
 }
 
-UIListDriver* UIListDriver::CreateInto(GameObject *go)
+UIList* UIList::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
 
@@ -180,16 +180,16 @@ UIListDriver* UIListDriver::CreateInto(GameObject *go)
 
     scrollPanel->GetScrollArea()->SetContainedGameObject(container);
 
-    UIListDriver *ld = go->AddComponent<UIListDriver>();
+    UIList *ld = go->AddComponent<UIList>();
     ld->p_scrollPanel = scrollPanel;
     ld->p_container = container;
 
     return ld;
 }
 
-void UIListDriver::Callback(GameObject *go, Action action)
+void UIList::Callback(GameObject *go, Action action)
 {
     if (m_selectionCallback) { m_selectionCallback(go, action); }
 }
 
-UIScrollPanel *UIListDriver::GetScrollPanel() const { return p_scrollPanel; }
+UIScrollPanel *UIList::GetScrollPanel() const { return p_scrollPanel; }

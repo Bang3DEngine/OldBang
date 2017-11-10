@@ -2,9 +2,9 @@
 
 #include "Bang/Paths.h"
 #include "Bang/Input.h"
+#include "Bang/UIList.h"
 #include "Bang/Alignment.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIListDriver.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -67,7 +67,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     if (!GetFileExtensions().IsEmpty()) { FilterPathsByExtension(&paths); }
     paths.PushFront( Path("..") );
 
-    UIListDriver *listDriver = GetGameObject()->GetComponent<UIListDriver>();
+    UIList *listDriver = GetGameObject()->GetComponent<UIList>();
     listDriver->Clear();
 
     for (const Path &path : paths)
@@ -80,27 +80,27 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     listDriver->SetSelection(1);
 
     listDriver->SetSelectionCallback(
-        [this, listDriver](GameObject *go, UIListDriver::Action action)
+        [this, listDriver](GameObject *go, UIList::Action action)
         {
             UIFileListEntry *entry = SCAST<UIFileListEntry*>(go);
-            if (action == UIListDriver::Action::SelectionIn)
+            if (action == UIList::Action::SelectionIn)
             {
                 entry->OnSelectionIn();
             }
-            else if (action == UIListDriver::Action::SelectionOut)
+            else if (action == UIList::Action::SelectionOut)
             {
                 entry->OnSelectionOut();
             }
-            else if (action == UIListDriver::Action::MouseOver)
+            else if (action == UIList::Action::MouseOver)
             {
                 entry->OnMouseOver();
             }
-            else if (action == UIListDriver::Action::MouseOut)
+            else if (action == UIList::Action::MouseOut)
             {
                 entry->OnMouseOut();
             }
-            else if (action == UIListDriver::Action::Pressed ||
-                     action == UIListDriver::Action::DoubleClickedLeft)
+            else if (action == UIList::Action::Pressed ||
+                     action == UIList::Action::DoubleClickedLeft)
             {
                 Path entryPath = entry->GetPath();
                 if (entryPath.GetAbsolute() == "..")

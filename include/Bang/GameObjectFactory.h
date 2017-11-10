@@ -15,7 +15,7 @@ FORWARD class Texture2D;
 FORWARD class GameObject;
 FORWARD class UIInputText;
 FORWARD class UIScrollBar;
-FORWARD class UIListDriver;
+FORWARD class UIList;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIInputNumber;
@@ -40,8 +40,8 @@ public:
     static UIImageRenderer* CreateUIImage(const Color &color = Color::White);
     static UIImageRenderer* CreateUIImage(const Color &color,
                                           const Vector2i &size);
-    static UIListDriver*    CreateUIListInto(GameObject *go);
-    static UIListDriver*    CreateUIList();
+    static UIList*    CreateUIListInto(GameObject *go);
+    static UIList*    CreateUIList();
     static UIInputText*     CreateUIInputTextInto(GameObject *go);
     static UIInputText*     CreateUIInputText();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);

@@ -245,7 +245,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIListDriver.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
@@ -254,6 +254,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITintedButton.cpp
+${ENGINE_SRC_DIR}/UIComponents/UITree.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
 ${ENGINE_SRC_DIR}/Windows/Dialog.cpp
 ${ENGINE_SRC_DIR}/Windows/DialogWindow.cpp
