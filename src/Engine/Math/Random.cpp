@@ -14,46 +14,46 @@ void Random::SetSeed(const String &seedStr)
     Random::SetSeed(seed);
 }
 
-Vector2 Random::InsideUnitCircle()
+Vector2 Random::GetInsideUnitCircle()
 {
-    return Vector2(Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f));
+    return Vector2(Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f));
 }
 
-Vector3 Random::InsideUnitSphere()
+Vector3 Random::GetInsideUnitSphere()
 {
-    return Vector3(Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f));
+    return Vector3(Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f));
 }
 
-Vector4 Random::RandomVector4()
+Vector4 Random::GetRandomVector4()
 {
-    return Vector4(Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f),
-                   Random::Range(-1.0f, 1.0f));
+    return Vector4(Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f),
+                   Random::GetRange(-1.0f, 1.0f));
 }
 
 Quaternion Random::GetRotation()
 {
-    const float angle = Random::Range(0.0f, 360.0f);
-    return Quaternion::AngleAxis(angle, Random::InsideUnitSphere());
+    const float angle = Random::GetRange(0.0f, 360.0f);
+    return Quaternion::AngleAxis(angle, Random::GetInsideUnitSphere());
 }
 
 Color Random::GetColor()
 {
-    return Color(Random::Value(),
-                 Random::Value(),
-                 Random::Value(),
-                 Random::Value());
+    return Color(Random::GetValue(),
+                 Random::GetValue(),
+                 Random::GetValue(),
+                 Random::GetValue());
 }
 
 Color Random::GetColorOpaque()
 {
-    return Color(Random::Value(),
-                 Random::Value(),
-                 Random::Value(), 1.0f);
+    return Color(Random::GetValue(),
+                 Random::GetValue(),
+                 Random::GetValue(), 1.0f);
 }
 
 Random::Random()

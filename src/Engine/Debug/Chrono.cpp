@@ -15,11 +15,11 @@ void Chrono::MarkEvent(const String &eventName)
 {
     ChronoEvent ce;
     ce.eventName = eventName;
-    ce.time = Time::GetNow();
+    ce.time = Time::GetNow_Millis();
     if (!m_events.IsEmpty())
     {
         ChronoEvent &previousEvent = m_events.Back();
-        previousEvent.timeSinceLastEvent = Time::GetNow() - previousEvent.time;
+        previousEvent.timeSinceLastEvent = Time::GetNow_Millis() - previousEvent.time;
     }
     m_events.PushBack(ce);
 }

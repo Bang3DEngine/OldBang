@@ -31,15 +31,6 @@ class GameObject : public Object,
 
 public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
-    virtual void PreUpdate();
-    virtual void Update();
-    virtual void PostUpdate();
-    virtual void BeforeChildrenRender(RenderPass renderPass);
-    virtual void RenderGizmos();
-    virtual void AfterChildrenRender(RenderPass renderPass);
-    virtual void ChildAdded(GameObject *addedChild);
-    virtual void ChildRemoved(GameObject *removedChild);
-    virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
     static void Destroy(GameObject *gameObject);
 
     bool IsEnabled(bool recursive = false) const;
@@ -130,9 +121,6 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    GameObject(const String &m_name = "GameObject");
-    virtual ~GameObject();
-
     List<GameObject*> m_children;
     List<Component*> m_components;
 
@@ -141,6 +129,19 @@ protected:
 
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
+
+    GameObject(const String &name = "GameObject");
+    virtual ~GameObject();
+
+    virtual void PreUpdate();
+    virtual void Update();
+    virtual void PostUpdate();
+    virtual void BeforeChildrenRender(RenderPass renderPass);
+    virtual void RenderGizmos();
+    virtual void AfterChildrenRender(RenderPass renderPass);
+    virtual void ChildAdded(GameObject *addedChild);
+    virtual void ChildRemoved(GameObject *removedChild);
+    virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
 
     virtual void OnEnabled() override;
     virtual void OnDisabled() override;

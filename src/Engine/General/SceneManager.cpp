@@ -30,20 +30,30 @@ SceneManager *SceneManager::GetInstance()
     return win ? win->GetSceneManager() : nullptr;
 }
 
-void SceneManager::Update()
+void SceneManager::UpdateScene(Scene *scene)
 {
-    SceneManager::TryToLoadQueuedScene();
+    ENSURE(scene);
 
+    SceneManager::TryToLoadQueuedScene();
     ObjectManager::StartObjects();
 
-    Scene *rootScene = SceneManager::GetRootScene();
-    if (rootScene)
+    if (scene)
     {
-        rootScene->PreUpdate();
-        rootScene->Update();
-        rootScene->PostUpdate();
+        scene->PreUpdate();
+        scene->Update();
+        scene->PostUpdate();
         ObjectManager::DestroyObjects();
     }
+}
+
+void SceneManager::_Update()
+{
+    SceneManager::UpdateScene( SceneManager::GetRootScene() );
+}
+
+void SceneManager::Update()
+{
+    SceneManager::GetInstance()->_Update();
 }
 
 void SceneManager::_LoadScene(Scene *scene)

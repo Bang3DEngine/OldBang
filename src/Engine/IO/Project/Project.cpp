@@ -12,7 +12,7 @@ USING_NAMESPACE_BANG
 
 Project::Project()
 {
-    m_randomId = std::to_string(Time::GetNow());
+    m_id = GUID::GetRandomGUID();
 }
 
 Project::~Project()
@@ -40,9 +40,9 @@ String Project::GetProjectName() const
     return m_projectRootFilepath.GetName();
 }
 
-String Project::GetProjectRandomId() const
+const GUID& Project::GetProjectRandomId() const
 {
-    return m_randomId;
+    return m_id;
 }
 
 void Project::SetProjectRootFilepath(const Path &projectDir)
@@ -73,11 +73,11 @@ Path Project::GetFirstFoundScenePath() const
 void Project::ImportXML(const XMLNode &xmlInfo)
 {
     if (xmlInfo.Contains("RandomID"))
-    { m_randomId = xmlInfo.Get<String>("RandomID"); }
+    { m_id = xmlInfo.Get<GUID>("RandomID"); }
 }
 
 void Project::ExportXML(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Project");
-    xmlInfo->Set("RandomID", m_randomId);
+    xmlInfo->Set("RandomID", m_id);
 }

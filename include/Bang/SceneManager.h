@@ -21,6 +21,7 @@ public:
     static SceneManager* GetInstance();
 
     static void Update();
+    static void UpdateScene(Scene *scene);
 
 protected:
     Scene *m_activeScene = nullptr;
@@ -28,6 +29,7 @@ protected:
     SceneManager();
     virtual ~SceneManager();
 
+    virtual void _Update();
     virtual void _LoadScene(Scene *scene);
     virtual Scene* _GetRootScene() const;
     virtual Scene* _GetActiveScene() const;

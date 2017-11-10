@@ -24,12 +24,12 @@ void GEngineDebugger::Reset()
 }
 
 void GEngineDebugger::TakeGBufferShot(GBuffer *gbuffer,
-                                              GL::Attachment att,
-                                              const String &screenshotName)
+                                      GL::Attachment att,
+                                      const String &screenshotName)
 {
     if (Input::GetKeyDown(Key::Q))
     {
-        String fileName = String::ToString( int(Time::GetNow()) ) + "_"
+        String fileName = String::ToString( int(Time::GetNow_Millis()) ) + "_"
                           + screenshotName;
         Path filepath = GEngineDebugger::c_debugDir
                             .Append(fileName).AppendExtension("bmp");
@@ -38,6 +38,6 @@ void GEngineDebugger::TakeGBufferShot(GBuffer *gbuffer,
 }
 
 void GEngineDebugger::TakeGBufferShotStencil(GBuffer *gbuffer,
-                                                     const String &screenshotName)
+                                             const String &screenshotName)
 {
 }

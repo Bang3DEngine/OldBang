@@ -16,14 +16,14 @@ public:
     static void SetSeed(const String &seed);
 
     template<class T = float>
-    static T Value();
+    static T GetValue();
 
     template<class T>
-    static T Range(T minIncluded, T maxExcluded);
+    static T GetRange(T minIncluded, T maxExcluded);
 
-    static Vector2 InsideUnitCircle();
-    static Vector3 InsideUnitSphere();
-    static Vector4 RandomVector4();
+    static Vector2 GetInsideUnitCircle();
+    static Vector3 GetInsideUnitSphere();
+    static Vector4 GetRandomVector4();
     static Quaternion GetRotation();
     static Color GetColor();
     static Color GetColorOpaque();
@@ -33,15 +33,15 @@ private:
 };
 
 template<class T>
-T Random::Value()
+T Random::GetValue()
 {
     return float(rand()) / RAND_MAX;
 }
 
 template<class T>
-T Random::Range(T minIncluded, T maxExcluded)
+T Random::GetRange(T minIncluded, T maxExcluded)
 {
-    return SCAST<T>(Random::Value() * (maxExcluded-minIncluded)) + minIncluded;
+    return SCAST<T>(Random::GetValue() * (maxExcluded-minIncluded)) + minIncluded;
 }
 
 NAMESPACE_BANG_END

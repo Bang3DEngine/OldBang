@@ -28,16 +28,6 @@ public:
 
     GameObject *GetGameObject() const;
 
-    virtual void OnStart() override;
-    virtual void OnPreUpdate();
-    virtual void OnUpdate();
-    virtual void OnPostUpdate();
-    virtual void OnBeforeChildrenRender(RenderPass renderPass);
-    virtual void OnRender(RenderPass renderPass);
-    virtual void OnRenderGizmos();
-    virtual void OnAfterChildrenRender(RenderPass renderPass);
-    virtual void OnDestroy() override;
-
     bool IsEnabled(bool recursive = false) const;
 
     // ICloneable
@@ -54,6 +44,16 @@ public:
 protected:
     Component();
     virtual ~Component();
+
+    virtual void OnStart() override;
+    virtual void OnPreUpdate();
+    virtual void OnUpdate();
+    virtual void OnPostUpdate();
+    virtual void OnBeforeChildrenRender(RenderPass renderPass);
+    virtual void OnRender(RenderPass renderPass);
+    virtual void OnRenderGizmos();
+    virtual void OnAfterChildrenRender(RenderPass renderPass);
+    virtual void OnDestroy() override;
 
 private:
     GameObject *p_gameObject = nullptr;

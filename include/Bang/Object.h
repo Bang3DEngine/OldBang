@@ -11,12 +11,6 @@ class Object : public EventEmitter<IDestroyListener>,
                public EventEmitter<IEnabledListener>
 {
 public:
-    virtual void Start();
-    virtual void OnStart();
-    virtual void OnEnabled();
-    virtual void OnDisabled();
-    virtual void OnDestroy();
-
     void SetEnabled(bool enabled);
 
     bool IsEnabled() const;
@@ -26,6 +20,12 @@ public:
 protected:
     Object() = default;
     virtual ~Object();
+
+    virtual void Start();
+    virtual void OnStart();
+    virtual void OnEnabled();
+    virtual void OnDisabled();
+    virtual void OnDestroy();
 
 private:
     bool m_enabled = true;

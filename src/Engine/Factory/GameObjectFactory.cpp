@@ -13,7 +13,6 @@
 #include "Bang/UIScrollBar.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/UIBorderRect.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/UIListDriver.h"

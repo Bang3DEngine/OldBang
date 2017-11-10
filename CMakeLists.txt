@@ -154,6 +154,7 @@ ${ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
 ${ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
+${ENGINE_SRC_DIR}/Components/Timer.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
@@ -229,7 +230,6 @@ ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIBorderRect.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButtonDriver.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp

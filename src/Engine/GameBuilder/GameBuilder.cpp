@@ -177,7 +177,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     Path outputLibPath =
                 libsDir.Append("Behaviours")
                        .AppendExtension("so")
-                       .AppendExtension( String::ToString(Time::GetNow()) );
+                       .AppendExtension( String::ToString(Time::GetNow_Millis()) );
     Debug_Log("Merging behaviour objects into '" << outputLibPath << "'...");
 
     Compiler::Result res =

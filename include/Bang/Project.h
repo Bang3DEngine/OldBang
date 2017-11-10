@@ -1,6 +1,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#include "Bang/GUID.h"
 #include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/Serializable.h"
@@ -19,7 +20,7 @@ public:
     Path GetProjectAssetsRootFilepath() const;
     Path GetProjectFileFilepath() const;
     String GetProjectName() const;
-    String GetProjectRandomId() const;
+    const GUID& GetProjectRandomId() const;
 
     void SetProjectRootFilepath(const Path &projectDir);
 
@@ -31,7 +32,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    String m_randomId = "";
+    GUID m_id;
     Path m_projectRootFilepath;
 };
 

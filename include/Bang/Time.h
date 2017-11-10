@@ -9,8 +9,9 @@ class Time
 {
 public:
     static float GetDeltaTime();
-    static double GetTime();
-    static uint64_t GetNow();
+    static double GetNow_Seconds();
+    static uint64_t GetNow_Millis();
+    static uint64_t GetNow_Nanos();
 
 private:
     double m_time = 0.0;
