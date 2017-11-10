@@ -3,6 +3,7 @@
 
 #include <istream>
 
+#include "Bang/Time.h"
 #include "Bang/String.h"
 #include "Bang/Random.h"
 #include "Bang/IToString.h"
@@ -12,27 +13,19 @@ NAMESPACE_BANG_BEGIN
 class GUID : public IToString
 {
 private:
-    using GUIDType = long long unsigned int;
+    using GUIDType = uint64_t;
     static constexpr GUIDType EmptyGUID = 0;
 
 public:
     GUID() {}
 
-    static const GUID& Empty() { static GUID emptyGUID; return emptyGUID; }
-    bool IsEmpty() const { return *this == Empty(); }
+    static const GUID& Empty();
+    bool IsEmpty() const;
 
-    static GUID GetRandomGUID()
-    {
-        GUID guid;
-        guid.m_guid = Random::Range<GUIDType>(1, Math::Max<GUIDType>());
-        return guid;
-    }
+    static GUID GetRandomGUID();
 
     // IToString
-    String ToString() const override
-    {
-        return String::ToString(m_guid);
-    }
+    String ToString() const override;
 
     friend  std::istream &operator>>(std::istream &is, GUID &guid);
     friend bool operator==(const GUID &lhs, const GUID &rhs);

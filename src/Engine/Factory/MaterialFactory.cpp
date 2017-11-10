@@ -11,7 +11,7 @@ Material *MaterialFactory::GetDefault()
 }
 Material *MaterialFactory::GetDefaultUnLighted()
 {
-    return MaterialFactory::Load("Materials/G_DefaultNoSP.bmat");
+    return MaterialFactory::Load("Materials/G_DefaultNoPP.bmat");
 }
 
 Material *MaterialFactory::GetMissing()
@@ -21,11 +21,11 @@ Material *MaterialFactory::GetMissing()
 
 Material *MaterialFactory::GetPointLight()
 {
-    return MaterialFactory::Load("Materials/SP_PointLight_Screen.bmat");
+    return MaterialFactory::Load("Materials/PP_PointLight_Screen.bmat");
 }
 Material *MaterialFactory::GetDirectionalLight()
 {
-    return MaterialFactory::Load("Materials/SP_DirectionalLight_Screen.bmat");
+    return MaterialFactory::Load("Materials/PP_DirectionalLight_Screen.bmat");
 }
 
 Material *MaterialFactory::GetUIText()

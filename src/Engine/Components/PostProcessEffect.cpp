@@ -15,7 +15,7 @@ PostProcessEffect::PostProcessEffect()
 {
     m_shaderProgram = ShaderProgramFactory::GetEmptyProgram();
 
-    Path vShaderPath = EPATH("Shaders/SP_ScreenPass.vert_pp");
+    Path vShaderPath = EPATH("Shaders/PP_ScreenPass.vert");
     Shader *vShader = Resources::Load<Shader>(vShaderPath);
     m_shaderProgram->SetVertexShader(vShader);
 }

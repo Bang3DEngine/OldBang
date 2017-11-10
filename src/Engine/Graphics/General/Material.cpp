@@ -15,8 +15,8 @@ USING_NAMESPACE_BANG
 Material::Material()
 {
     ShaderProgram *sp = ShaderProgramFactory::GetShaderProgram(
-                                    EPATH("Shaders/G_Default.vert_g"),
-                                    EPATH("Shaders/G_Default.frag_g"));
+                                    EPATH("Shaders/G_Default.vert"),
+                                    EPATH("Shaders/G_Default.frag"));
     SetShaderProgram(sp);
 }
 

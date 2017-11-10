@@ -11,12 +11,10 @@ void ILayoutController::OnInvalidated()
     UILayoutManager::OnInvalidated(this);
 }
 
-#include "Bang/Debug.h"
 void ILayoutController::_ApplyLayout(Axis axis)
 {
     if (IInvalidatable<ILayoutController>::IsInvalid())
     {
-        Debug_Log("ApplyLayout " << this);
         ApplyLayout(axis);
         if (axis == Axis::Vertical) { Validate(); }
     }

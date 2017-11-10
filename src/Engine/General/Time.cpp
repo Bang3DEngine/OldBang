@@ -17,10 +17,10 @@ double Time::GetTime()
     return Time::GetNow() / 1000.0f;
 }
 
-unsigned long long Time::GetNow()
+uint64_t Time::GetNow()
 {
     return std::chrono::system_clock::now().time_since_epoch() /
-           std::chrono::milliseconds(1);
+           std::chrono::nanoseconds(1);
 }
 
 Time::Time()

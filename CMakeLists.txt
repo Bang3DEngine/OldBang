@@ -118,8 +118,8 @@ macro(add_info_files)
          endif()
      endforeach()
 endmacro()
-file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag_g" "[^.]*.frag_pp"
-                              "[^.]*.vert" "[^.]*.vert_g" "[^.]*.vert_pp"
+file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag" "[^.]*.frag"
+                              "[^.]*.vert" "[^.]*.vert" "[^.]*.vert"
                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
                               "[^.]*.glsl"
                               "${BANG_INCLUDE_DIR}/*.h"
@@ -167,13 +167,14 @@ ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
-${ENGINE_SRC_DIR}/General/ObjectManager.cpp
+${ENGINE_SRC_DIR}/General/GUID.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/IEventListener.cpp
 ${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${ENGINE_SRC_DIR}/General/Object.cpp
+${ENGINE_SRC_DIR}/General/ObjectManager.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp

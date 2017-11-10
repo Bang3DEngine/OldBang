@@ -17,8 +17,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 {
     ShaderProgram *selectionProgram =
             ShaderProgramFactory::GetShaderProgram(
-                EPATH("Shaders/G_Default.vert_g"),
-                EPATH("Shaders/SelectionBuffer.frag_sel") );
+                EPATH("Shaders/G_Default.vert"),
+                EPATH("Shaders/SelectionBuffer.frag") );
 
     m_selectionMaterial = new Material();
     m_selectionMaterial->SetShaderProgram(selectionProgram);

@@ -10,12 +10,12 @@ class Time
 public:
     static float GetDeltaTime();
     static double GetTime();
-    static unsigned long long GetNow();
+    static uint64_t GetNow();
 
 private:
     double m_time = 0.0;
     float m_deltaTime = 0.0f;
-    unsigned long long m_deltaTimeReference = 0.0;
+    uint64_t m_deltaTimeReference = 0.0;
 
     Time();
 

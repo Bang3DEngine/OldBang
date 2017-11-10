@@ -1,6 +1,0 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          ReceivesLighting="false"{}
-          FragmentShader="5366407292407250945"{}
-          VertexShader="10184333104903094273"{}
-         >
-</Material>

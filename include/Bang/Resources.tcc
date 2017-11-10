@@ -17,7 +17,12 @@ void Resources::Add(const GUID& guid, Resource *x)
 template <class ResourceClass>
 TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
 {
-    if (!filepath.IsFile()) { return nullptr; }
+    if (!filepath.IsFile())
+    {
+        Debug_Error("Trying to load file '" << filepath <<
+                    "' which does not exist.");
+        return nullptr;
+    }
 
     Resource *res = Resources::GetCached<ResourceClass>(
                 ImportFilesManager::GetGUIDFromFilepath(filepath) );
