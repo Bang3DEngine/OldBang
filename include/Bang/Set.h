@@ -47,8 +47,8 @@ public:
     // To allow range-based for loops
     Iterator begin();
     Iterator end();
-    Const_Iterator cbegin() const;
-    Const_Iterator cend() const;
+    Const_Iterator begin() const;
+    Const_Iterator end() const;
 
 private:
     std::set<Key> m_set;

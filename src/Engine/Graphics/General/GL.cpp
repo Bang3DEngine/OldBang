@@ -763,8 +763,7 @@ void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
 
 void GL::SetViewProjMode(GL::ViewProjMode mode)
 {
-    GL *gl = GL::GetActive();
-    gl->m_viewProjMode = mode;
+    GL::GetActive()->GetGLUniforms()->SetViewProjMode(mode);
 }
 
 void GL::SetStencilOp(GL::StencilOperation fail,
@@ -816,28 +815,6 @@ void GL::SetWireframe(bool wireframe)
 void GL::SetCullFace(GL::Face cullFace)
 {
     glCullFace( GLCAST(cullFace) );
-}
-
-void GL::SetModelMatrix(const Matrix4 &model)
-{
-    GL::GetActive()->m_modelMatrix = model;
-}
-
-void GL::SetViewMatrix(const Matrix4 &view)
-{
-    GL::GetActive()->m_viewMatrix = view;
-}
-
-void GL::SetProjectionMatrix(const Matrix4 &projection)
-{
-    GL::GetActive()->m_projectionMatrix = projection;
-}
-
-void GL::SetZNearFar(float zNear, float zFar)
-{
-    GL *gl = GL::GetActive();
-    gl->m_zNear = zNear;
-    gl->m_zFar  = zFar;
 }
 
 Rect GL::FromGlobalNDCToPixels(const Rect &rectNDC)
@@ -927,15 +904,6 @@ GL::Face GL::GetCullFace()
 {
     return SCAST<GL::Face>(GL::GetInteger(GL_CULL_FACE_MODE));
 }
-
-const Matrix4& GL::GetModelMatrix()
-{ return GL::GetActive()->m_modelMatrix; }
-
-const Matrix4& GL::GetViewMatrix()
-{ return GL::GetActive()->m_viewMatrix; }
-
-const Matrix4& GL::GetProjectionMatrix()
-{ return GL::GetActive()->m_projectionMatrix; }
 
 GLId GL::GetBoundId(GL::BindTarget bindTarget)
 {
@@ -1052,7 +1020,7 @@ void GL::BindUniformBufferToShader(const String &uniformBlockName,
 
 GL::ViewProjMode GL::GetViewProjMode()
 {
-    return GL::GetActive()->m_viewProjMode;
+    return GL::GetActive()->GetGLUniforms()->GetViewProjMode();
 }
 
 GL *GL::GetActive()

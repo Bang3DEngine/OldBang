@@ -55,8 +55,6 @@ void Input::OnFrameFinished()
     //
 
     m_lastMouseWheelDelta = 0.0f;
-
-    ++m_framesMouseStopped;
 }
 
 void Input::ProcessEventInfo(const EventInfo &ei)
@@ -94,8 +92,6 @@ void Input::ProcessMouseWheelEventInfo(const EventInfo &ei)
 
 void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 {
-    m_framesMouseStopped = 0;
-    m_mouseCoords = Vector2i(ei.x, ei.y);
 }
 
 void Input::ProcessMouseDownEventInfo(const EventInfo &ei)
@@ -239,7 +235,7 @@ void Input::EnqueueEvent(const EventInfo &eventInfo)
 
 void Input::ProcessEnqueuedEvents()
 {
-    m_lastMouseCoords = m_mouseCoords;
+    m_lastMouseCoords = GetMouseCoords();
 
     for (const EventInfo &ei : m_eventInfoQueue)
     {
@@ -383,13 +379,13 @@ Vector2 Input::GetMouseAxis()
 float Input::GetMouseDeltaX()
 {
     Input *inp = Input::GetInstance();
-    return inp->m_mouseCoords.x - inp->m_lastMouseCoords.x;
+    return inp->GetMouseCoords().x - inp->m_lastMouseCoords.x;
 }
 
 float Input::GetMouseDeltaY()
 {
     Input *inp = Input::GetInstance();
-    return inp->m_mouseCoords.y - inp->m_lastMouseCoords.y;
+    return inp->GetMouseCoords().y - inp->m_lastMouseCoords.y;
 }
 
 Vector2 Input::GetMouseDelta()
@@ -411,9 +407,18 @@ bool Input::IsLockMouseMovement()
 
 Vector2i Input::GetMouseCoords()
 {
-    Input *inp = Input::GetInstance();
-    if (!Input::IsMouseInsideScreen()) { return -Vector2i::One; }
-    return inp->m_mouseCoords;
+    Vector2i coords;
+    if (Input::IsMouseInsideScreen())
+    {
+        SDL_GetMouseState(&coords.x, &coords.y);
+    }
+    else
+    {
+        SDL_GetGlobalMouseState(&coords.x, &coords.y);
+        Window *win = Window::GetCurrent();
+        coords -= (Vector2i(0, win->GetTitleBarHeight()) + win->GetPosition());
+    }
+    return coords;
 }
 
 Vector2 Input::GetMouseCoordsNDC()
@@ -450,9 +455,8 @@ void Input::StopTextInput()
 void Input::Reset()
 {
     m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
-    m_framesMouseStopped = 0;
     m_lastMouseWheelDelta = m_lastMouseDownTimestamp = 0.0f;
-    m_mouseCoords = m_lastMouseCoords = Vector2i(-1);
+    m_lastMouseCoords = Vector2i(-1);
     m_inputText = "";
 
     m_keysUp.Clear();

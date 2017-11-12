@@ -75,8 +75,10 @@ int UIGridLayout::GetNumColumns() const
     float effectiveWidth = (rt->GetScreenSpaceRectPx().GetWidth() -
                             GetPaddingSize().x);
 
-    return SCAST<int>((effectiveWidth + GetSpacing()) /
-                      (GetCellSize().x + GetSpacing()) );
+    int cellSizeSpaced = (GetCellSize().x + GetSpacing());
+
+    int numCols = SCAST<int>((effectiveWidth + GetSpacing()) / cellSizeSpaced);
+    return Math::Max(numCols, 1);
 }
 
 Vector2i UIGridLayout::GetTotalSpacing() const

@@ -349,6 +349,7 @@ Rect RectTransform::FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const
                  FromGlobalNDCToLocalNDC(globalNDCRect.GetMax()) );
 }
 
+#include "Bang/GEngine.h"
 void RectTransform::OnRenderGizmos()
 {
     Transform::OnRenderGizmos();
@@ -361,8 +362,8 @@ void RectTransform::OnRenderGizmos()
     // Gizmos::RenderFillRect(r);
 
     Gizmos::SetColor(Color::Green);
-    Gizmos::RenderRect(r);
     /*
+    Gizmos::RenderRect(r);
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());

@@ -82,6 +82,7 @@ void UIScrollPanel::OnUpdate()
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
 {
     Vector2 contentSize = GetContentSize();
+    contentSize = Vector2::Max(contentSize, Vector2::One);
     SetScrollingPercent( Vector2(scrolling) / contentSize );
 }
 

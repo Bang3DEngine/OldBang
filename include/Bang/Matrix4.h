@@ -427,6 +427,25 @@ template<class T>
 const Matrix4G<T> Matrix4G<T>::Identity = Matrix4G<T>(1);
 
 template<class T>
+bool operator==(const Matrix4G<T> &m1, const Matrix4G<T>& m2)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            if (m1[i][j] != m2[i][j]) { return false; }
+        }
+    }
+    return true;
+}
+
+template<class T>
+bool operator!=(const Matrix4G<T> &m1, const Matrix4G<T>& m2)
+{
+    return !(m1 == m2);
+}
+
+template<class T>
 Matrix4G<T> operator*(const Matrix4G<T> &m1, const Matrix4G<T>& m2)
 {
     Matrix4G<T> m;

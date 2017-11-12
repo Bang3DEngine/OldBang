@@ -117,11 +117,11 @@ Set<Key>::end() { return m_set.end(); }
 
 template<class Key>
 typename Set<Key>::Const_Iterator
-Set<Key>::cbegin() const { return m_set.cbegin(); }
+Set<Key>::begin() const { return m_set.cbegin(); }
 
 template<class Key>
 typename Set<Key>::Const_Iterator
-Set<Key>::cend() const { return m_set.cend(); }
+Set<Key>::end() const { return m_set.cend(); }
 
 NAMESPACE_BANG_END
 

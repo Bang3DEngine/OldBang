@@ -22,7 +22,7 @@ void UIButton::OnUpdate()
     Component::OnUpdate();
 
     // Is mouse currently over some button part?
-    bool mouseOverSomePart = IsMouseOverSomePart();
+    const bool mouseOverSomePart = IsMouseOverSomePart();
 
     // Mouse Down & Up events
     if (mouseOverSomePart)
@@ -124,22 +124,17 @@ bool UIButton::IsMouseOverSomePart() const
     {
         GameObject *overedGameObject = Selection::GetOveredGameObject();
         if (!overedGameObject) { return false; }
-        for (auto it = p_buttonParts.cbegin(); it != p_buttonParts.cend(); ++it)
+        for (const GameObject *part : p_buttonParts)
         {
-            const GameObject *part = *it;
-            if (overedGameObject == part ||
-                overedGameObject->IsChildOf(part, true))
-            {
-                return true;
-            }
+            if (!part->IsEnabled(true)) { continue; }
+            if (overedGameObject == part) { return true; }
         }
-        return false;
     }
     else
     {
-        for (auto it = p_buttonParts.cbegin(); it != p_buttonParts.cend(); ++it)
+        for (const GameObject *part : p_buttonParts)
         {
-           const GameObject *part = *it;
+           if (!part->IsEnabled(true)) { continue; }
            RectTransform *rt = part->GetComponent<RectTransform>();
            if (rt && rt->IsMouseOver()) { return true; }
         }

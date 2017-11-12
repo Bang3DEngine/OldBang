@@ -30,7 +30,8 @@ USING_NAMESPACE_BANG
 
 Gizmos::Gizmos()
 {
-    m_gizmosGo = GameObjectFactory::CreateGameObject(true);
+    m_gizmosGo = GameObjectFactory::CreateGameObject();
+    m_gizmosGo->SetName("Gizmos");
 
     m_boxMesh    = MeshFactory::GetCube();
     m_planeMesh  = MeshFactory::GetPlane();
@@ -251,11 +252,11 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
-    g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
+//    g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
+//    g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
 
-    g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
-    g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
+//    g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
+//    g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
     g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_singleLineRenderer);
@@ -325,8 +326,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
     Gizmos::RenderLine(nearDownLeft , farDownLeft);
 }
 
-void Gizmos::RenderSimpleSphere(const Vector3 &origin,
-                                                float radius)
+void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_circleRenderer->SetRadius(radius);

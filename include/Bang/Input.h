@@ -143,13 +143,11 @@ private:
     bool m_isADoubleClick          = false;
     float m_lastMouseWheelDelta    = 0.0f;
     bool m_lockMouseMovement       = false;
-    int m_framesMouseStopped       = 0;
     bool m_isMouseInside           = false;
     float m_lastMouseDownTimestamp = 0;
 
     String m_inputText = "";
 
-    Vector2i m_mouseCoords     = Vector2i::Zero;
     Vector2i m_lastMouseCoords = Vector2i::Zero;
     Vector2i m_lastClickMouseCoords = Vector2i::Zero;
 

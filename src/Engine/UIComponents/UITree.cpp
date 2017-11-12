@@ -10,3 +10,13 @@ UITree::~UITree()
 {
 }
 
+UITree *UITree::CreateInto(GameObject *go)
+{
+
+}
+
+void UITree::OnUpdate()
+{
+    Component::OnUpdate();
+}
+

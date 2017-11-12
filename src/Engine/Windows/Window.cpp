@@ -74,7 +74,7 @@ void Window::Create(uint flags)
 
     m_input               = new Input();
     m_resources           = new Resources();
-    m_sceneManager        = Application::GetInstance()->CreateSceneManager();
+    m_sceneManager        = CreateSceneManager();
     m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
     m_objectManager       = new ObjectManager();
@@ -95,6 +95,8 @@ void Window::MakeCurrent() const
 
 bool Window::MainLoopIteration()
 {
+    RetrieveTitleBarHeight();
+
     MakeCurrent();
     GetInput()->ProcessEnqueuedEvents();
 
@@ -373,6 +375,16 @@ uint Window::GetSDLWindowID() const
     return SDL_GetWindowID(m_sdlWindow);
 }
 
+uint Window::GetTitleBarHeight() const
+{
+    return m_titleBarHeight;
+}
+
+SceneManager *Window::CreateSceneManager() const
+{
+    return new SceneManager();
+}
+
 void Window::Destroy(Window *win)
 {
     Application::GetInstance()->DestroyWindow(win);
@@ -402,6 +414,17 @@ void Window::SetParent(Window *parentWindow)
     {
         p_parent->SetResizable(false);
         p_parent->p_children.PushBack(this);
+    }
+}
+
+void Window::RetrieveTitleBarHeight()
+{
+    if(m_titleBarHeight == 0 && Input::IsMouseInsideScreen())
+    {
+        Vector2i localCoords, globalCoords;
+        SDL_GetMouseState(&localCoords.x, &localCoords.y);
+        SDL_GetGlobalMouseState(&globalCoords.x, &globalCoords.y);
+        m_titleBarHeight = globalCoords.y - GetPosition().y - localCoords.y;
     }
 }
 

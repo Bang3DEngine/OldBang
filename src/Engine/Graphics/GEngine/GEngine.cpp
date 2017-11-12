@@ -207,7 +207,10 @@ void GEngine::RenderToScreen(Camera *cam)
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
-    if (Input::GetKey(Key::S)) { sp->Set("B_GTex_Color", cam->GetSelectionFramebuffer()->GetAttachmentTexture(SelectionFramebuffer::AttColor)); }
+    if (Input::GetKey(Key::S)) { sp->Set("B_GTex_Color",
+                                         cam->GetSelectionFramebuffer()->
+                                         GetAttachmentTexture(
+                                             SelectionFramebuffer::AttColor)); }
 
     GEngine::RenderScreenPlane(true);
 
@@ -231,6 +234,8 @@ void GEngine::RenderScreenPlane(bool withDepth)
 {
     bool prevWireframe = GL::IsWireframe();
     GL::SetWireframe(false);
+
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBothAndModel);
 
     GL::Face prevCullFace = GL::GetCullFace();
     bool prevDepthMask = GL::GetDepthMask();
@@ -261,6 +266,7 @@ GEngine* GEngine::GetInstance()
 void GEngine::Render(Renderer *rend)
 {
     Camera *boundCamera = p_boundCamera; ENSURE(boundCamera);
+
     if (GL::IsBound(boundCamera->GetGBuffer()))
     {
         rend->Bind();
@@ -279,6 +285,7 @@ void GEngine::Render(Renderer *rend)
     {
         boundCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
     }
+    else { ASSERT(false); }
 }
 
 GL *GEngine::GetGL() const { return m_gl; }

@@ -31,10 +31,10 @@ void Component::OnStart() {}
 void Component::OnPreUpdate() {}
 void Component::OnUpdate() {}
 void Component::OnPostUpdate() {}
-void Component::OnBeforeChildrenRender(RenderPass renderPass) {}
-void Component::OnRender(RenderPass renderPass) {}
+void Component::OnBeforeChildrenRender(RenderPass) {}
+void Component::OnRender(RenderPass) {}
 void Component::OnRenderGizmos() {}
-void Component::OnAfterChildrenRender(RenderPass renderPass) {}
+void Component::OnAfterChildrenRender(RenderPass) {}
 void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const

@@ -38,13 +38,13 @@ void Renderer::OnRender() { }
 
 void Renderer::Bind() const
 {
-    GL::SetViewProjMode(m_viewProjMode);
-    GL::SetWireframe(m_drawWireframe);
-    GL::SetCullFace(m_cullMode);
-    GL::LineWidth(m_lineWidth);
-
     Transform *t = GetGameObject()->GetTransform();
     if (t) { GLUniforms::SetModelMatrix(t->GetLocalToWorldMatrix()); }
+
+    GL::SetViewProjMode( GetViewProjMode() );
+    GL::SetWireframe( IsRenderWireframe() );
+    GL::SetCullFace( GetCullMode() );
+    GL::LineWidth( GetLineWidth() );
 
     Material *mat = GetMaterial();
     mat->Bind();

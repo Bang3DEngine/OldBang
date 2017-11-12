@@ -19,8 +19,6 @@ public:
     enum Action { SelectionIn, SelectionOut, MouseOver, MouseOut,
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
-    virtual ~UIList();
-
     void OnUpdate() override;
     void AddElement(GameObject *go);
     void RemoveElement(GameObject *go);
@@ -39,6 +37,7 @@ public:
 
 protected:
     UIList();
+    virtual ~UIList();
 
 private:
     int m_selectionIndex = 0;

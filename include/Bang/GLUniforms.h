@@ -52,13 +52,18 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void UpdatePVMMatrix();
 
+    void SetViewProjMode(GL::ViewProjMode viewProjMode);
+    GL::ViewProjMode GetViewProjMode() const;
+
     static UniformBuffer<Matrices>* GetMatricesBuffer();
     static UniformBuffer<Camera>* GetCameraBuffer();
     static UniformBuffer<Viewport>* GetViewportBuffer();
 
 private:
-    int m_bindingPointsUsed = 0;
     TypeMap<IUniformBuffer*> m_uniformBuffers;
+
+    int m_bindingPointsUsed = 0;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::IgnoreBothAndModel;
 
     GLUniforms();
     virtual ~GLUniforms();

@@ -519,9 +519,6 @@ public:
 
 private:
     GLUniforms *m_glUniforms = nullptr;
-    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
-    Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
-    float m_zNear, m_zFar;
 
     friend class GEngine;
 };

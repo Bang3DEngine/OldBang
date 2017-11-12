@@ -59,7 +59,7 @@ public:
 private:
     bool m_mouseOver    = false;
     bool m_beingPressed = false;
-    UIButtonMode m_mode = UIButtonMode::UseRender;
+    UIButtonMode m_mode = UIButtonMode::UseRectTransform;
 
     Set<GameObject*> p_buttonParts;
 

@@ -1,6 +1,5 @@
 #include "Bang/UITextRenderer.h"
 
-#include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Font.h"
 #include "Bang/Scene.h"
@@ -11,6 +10,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
@@ -198,7 +198,7 @@ void UITextRenderer::Bind() const
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
     Vector3 translate(0, 0, GetGameObject()->GetTransform()->GetPosition().z);
-    GL::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
+    GLUniforms::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
     UIRenderer::Bind();
 
     if (GetFont())

@@ -39,6 +39,7 @@ public:
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
 
+
     void MoveToFront() const;
     void SetBordered(bool bordered);
     void SetMinSize(int minSizeX, int minSizeY);
@@ -78,6 +79,9 @@ public:
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
+    uint GetTitleBarHeight() const;
+
+    virtual SceneManager* CreateSceneManager() const;
 
     static void Destroy(Window *win);
     static Window *GetCurrent();
@@ -99,11 +103,14 @@ private:
     SceneManager   *m_sceneManager  = nullptr;
     ObjectManager  *m_objectManager = nullptr;
 
+    int m_titleBarHeight = 0;
     Vector2i m_minSize = Vector2i::Zero;
     Vector2i m_maxSize = Vector2i(4096);
     Vector2i m_prevSize = Vector2i::Zero;
     Vector2i m_newSize  = Vector2i::Zero;
     bool m_isResizable = true, m_resizableChanged = false;
+
+    void RetrieveTitleBarHeight();
 
     void _SetMinSize(int minSizeX, int minSizeY);
     void _SetMaxSize(int maxSizeX, int maxSizeY);
