@@ -252,11 +252,11 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
-//    g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
-//    g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
+    g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
+    g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
 
-//    g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
-//    g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
+    g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
+    g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
     g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_singleLineRenderer);

@@ -38,7 +38,7 @@ void UIScrollBar::OnUpdate()
         Vector2 mousePercent = ((leftSpace != Vector2::Zero) ?
             Vector2(offsettedMouseCoords - scrollRectPx.GetMin()) / leftSpace :
             Vector2::Zero);
-        float scrollPercent = mousePercent.GetAxis( GetAxis() );
+        float scrollPercent = mousePercent.GetAxis( GetScrollAxis() );
         scrollPercent = Math::Clamp(scrollPercent, 0.0f, 1.0f);
 
         SetScrollingPercent(scrollPercent);
@@ -46,12 +46,21 @@ void UIScrollBar::OnUpdate()
     m_wasGrabbed = isBeingGrabbed;
 }
 
+void UIScrollBar::SetSide(Side side)
+{
+    if (side != GetSide())
+    {
+        m_side = side;
+        UpdateLengthThicknessMargins();
+    }
+}
+
 void UIScrollBar::SetScrolling(int _scrollingPx)
 {
     int scrollingPx = Math::Clamp(_scrollingPx, 0, GetScrollingSpacePx());
     m_scrollingPx = scrollingPx;
 
-    Vector2i scrolling = (GetAxis() == Axis::Vertical) ?
+    Vector2i scrolling = (GetScrollAxis() == Axis::Vertical) ?
                           Vector2i(0, -scrollingPx) : Vector2i(scrollingPx, 0);
     GetScrollArea()->SetScrolling(scrolling);
 }
@@ -73,7 +82,7 @@ void UIScrollBar::SetLengthPercent(float lengthPercent)
 {
     Vector2i length(
         Vector2::Round(Vector2(GetScrollingRect().GetSize()) * lengthPercent ) );
-    SetLength(GetAxis() == Axis::Vertical ? length.y : length.x);
+    SetLength(GetScrollAxis() == Axis::Vertical ? length.y : length.x);
 }
 
 void UIScrollBar::SetThickness(int thickPx)
@@ -82,16 +91,7 @@ void UIScrollBar::SetThickness(int thickPx)
     UpdateLengthThicknessMargins();
 }
 
-void UIScrollBar::SetAxis(Axis axis)
-{
-    m_axis = axis;
-
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-    SetLength( GetLength() );
-    SetThickness( GetThickness() );
-    UpdateLengthThicknessMargins();
-}
-
+Side UIScrollBar::GetSide() const { return m_side; }
 int UIScrollBar::GetScrolling() const { return m_scrollingPx; }
 float UIScrollBar::GetScrollingPercent() const
 {
@@ -101,26 +101,40 @@ float UIScrollBar::GetScrollingPercent() const
 
 int UIScrollBar::GetLength() const { return m_length; }
 int UIScrollBar::GetThickness() const { return m_thickness; }
-Axis UIScrollBar::GetAxis() const { return m_axis; }
+Axis UIScrollBar::GetScrollAxis() const
+{
+    switch (GetSide())
+    {
+        case Side::Left: case Side::Right: return Axis::Vertical;
+        case Side::Top: case Side::Bot: return Axis::Horizontal;
+    }
+    ASSERT(false); return Axis::Horizontal;
+}
 
 void UIScrollBar::UpdateLengthThicknessMargins()
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
     RectTransform *barRT = GetBar()->GetComponent<RectTransform>();
-    if (GetAxis() == Axis::Horizontal)
+    if (GetScrollAxis() == Axis::Horizontal)
     {
+        bool bot = (GetSide() == Side::Bot);
         rt->SetAnchorX( Vector2(-1, 1) );
-        rt->SetAnchorY( Vector2(-1) );
-        rt->SetMargins(0, -GetThickness(), 0, 0);
+        rt->SetAnchorY( Vector2(bot ? 1 : -1 ) );
+        rt->SetMargins(0, bot ? -GetThickness() : 0,
+                       0, bot ? 0 : -GetThickness());
+
         barRT->SetAnchorX( Vector2(-1) );
         barRT->SetAnchorY( Vector2(-1, 1) );
         barRT->SetMargins(0, 0, -GetLength(), 0);
     }
     else
     {
-        rt->SetAnchorX( Vector2(1) );
+        bool left = (GetSide() == Side::Left);
+        rt->SetAnchorX( Vector2( left ? -1 : 1 )  );
         rt->SetAnchorY( Vector2(-1, 1) );
-        rt->SetMargins(-GetThickness(), 0, 0, 0);
+        rt->SetMargins(left ? 0 : -GetThickness(), 0,
+                       left ? -GetThickness() : 0, 0);
+
         barRT->SetAnchorX( Vector2(-1, 1) );
         barRT->SetAnchorY( Vector2(1) );
         barRT->SetMargins(0, 0, 0, -GetLength());
@@ -152,7 +166,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     scrollBar->p_bar = bar;
     scrollBar->p_button = btn;
     scrollBar->p_scrollArea = scrollArea;
-    scrollBar->SetAxis(Axis::Vertical);
+    scrollBar->SetSide(Side::Left);
     scrollBar->SetLength(50);
     scrollBar->SetThickness(10);
 
@@ -163,7 +177,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 
 int UIScrollBar::GetScrollingSpacePx() const
 {
-    int scrollingSpace = GetScrollingRect().GetSize().GetAxis( GetAxis() );
+    int scrollingSpace = GetScrollingRect().GetSize().GetAxis( GetScrollAxis() );
     scrollingSpace -= GetLength();
     return  Math::Max(scrollingSpace, 0);
 }

@@ -23,29 +23,18 @@ void UIScrollPanel::OnUpdate()
 {
     Component::OnUpdate();
 
-    RectTransform *scrollAreaRT =
-            GetScrollArea()->GetGameObject()->GetComponent<RectTransform>();
-    scrollAreaRT->SetMarginRight(GetScrollBar()->GetThickness());
-
-    GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
-    if (containedGo)
-    {
-        RectTransform *containedGoRT = containedGo->GetComponent<RectTransform>();
-        if (GetScrollBar()->GetAxis() == Axis::Vertical)
-        {
-            containedGoRT->SetAnchorX( Vector2(-1,1) );
-            containedGoRT->SetAnchorY( Vector2(1) );
-        }
-        else
-        {
-            containedGoRT->SetAnchorX( Vector2(-1) );
-            containedGoRT->SetAnchorY( Vector2(-1,1) );
-        }
-    }
-
-    Axis axis = GetScrollBar()->GetAxis();
+    Axis axis = GetScrollBar()->GetScrollAxis();
     int contentSize = GetContentSize().GetAxis(axis);
     int containerSize = GetContainerSize().GetAxis(axis);
+
+    // Handle vertical/horizontal show mode
+    HandleScrollShowMode(contentSize, containerSize);
+
+    // Set containedGo anchors according to the current scrolling and scroll
+    // area margins to leave space for the scroll bar
+    HandleScrollAreaRectTransform();
+
+    // Handle scroll percent and scroll bar
     if (contentSize > containerSize)
     {
         // Set bar length
@@ -75,7 +64,44 @@ void UIScrollPanel::OnUpdate()
     }
     else
     {
+        // Reestablish bar length
         GetScrollBar()->SetLength( GetContainerSize().y );
+    }
+}
+
+void UIScrollPanel::SetScrollBarSide(VerticalSide side)
+{
+    if (GetVerticalScrollBarSide() != side)
+    {
+        GetScrollBar()->SetSide(side == VerticalSide::Top ? Side::Top :
+                                                            Side::Bot);
+        m_verticalScrollBarSide = side;
+    }
+}
+
+void UIScrollPanel::SetScrollBarSide(HorizontalSide side)
+{
+    if (GetHorizontalScrollBarSide() != side)
+    {
+        GetScrollBar()->SetSide(side == HorizontalSide::Left ? Side::Left :
+                                                               Side::Right);
+        m_horizontalScrollBarSide = side;
+    }
+}
+
+void UIScrollPanel::SetVerticalShowScrollMode(ShowScrollMode showScrollMode)
+{
+    if (GetVerticalShowScrollMode() != showScrollMode)
+    {
+        m_verticalShowScrollMode = showScrollMode;
+    }
+}
+
+void UIScrollPanel::SetHorizontalShowScrollMode(ShowScrollMode showScrollMode)
+{
+    if (GetHorizontalShowScrollMode() != showScrollMode)
+    {
+        m_horizontalShowScrollMode = showScrollMode;
     }
 }
 
@@ -92,17 +118,35 @@ void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
     GetScrollArea()->SetScrolling(
                 Vector2i( Vector2::Round(scrollPerc * contentSize)) );
 
-    Axis axis = GetScrollBar()->GetAxis();
+    Axis axis = GetScrollBar()->GetScrollAxis();
     GetScrollBar()->SetScrollingPercent( scrollPerc.GetAxis(axis) );
+}
+
+VerticalSide UIScrollPanel::GetVerticalScrollBarSide() const
+{
+    return m_verticalScrollBarSide;
+}
+
+HorizontalSide UIScrollPanel::GetHorizontalScrollBarSide() const
+{
+    return m_horizontalScrollBarSide;
+}
+
+ShowScrollMode UIScrollPanel::GetVerticalShowScrollMode() const
+{
+    return m_verticalShowScrollMode;
+}
+
+ShowScrollMode UIScrollPanel::GetHorizontalShowScrollMode() const
+{
+    return m_horizontalShowScrollMode;
 }
 
 Vector2 UIScrollPanel::GetContentSize() const
 {
     GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
-    return containedGo ?
-                containedGo->GetComponent<RectTransform>()->
-                GetScreenSpaceRectPx().GetSize() :
-                Vector2::Zero;
+    return containedGo ? containedGo->GetComponent<RectTransform>()->
+                            GetScreenSpaceRectPx().GetSize() : Vector2::Zero;
 }
 
 Vector2 UIScrollPanel::GetContainerSize() const
@@ -113,6 +157,63 @@ Vector2 UIScrollPanel::GetContainerSize() const
 
 UIScrollArea *UIScrollPanel::GetScrollArea() const { return p_scrollArea; }
 UIScrollBar *UIScrollPanel::GetScrollBar() const { return p_scrollBar; }
+
+void UIScrollPanel::HandleScrollAreaRectTransform()
+{
+    RectTransform *scrollAreaRT =
+            GetScrollArea()->GetGameObject()->GetComponent<RectTransform>();
+
+    int scrollBarThickness = (GetScrollBar()->GetGameObject()->IsEnabled() ?
+                                  GetScrollBar()->GetThickness() : 0 );
+    if (GetHorizontalScrollBarSide() == HorizontalSide::Right)
+    {
+        scrollAreaRT->SetMarginRight(scrollBarThickness);
+    }
+    else
+    {
+        scrollAreaRT->SetMarginLeft(scrollBarThickness);
+    }
+
+    GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
+    if (containedGo)
+    {
+        RectTransform *containedGoRT = containedGo->GetComponent<RectTransform>();
+        if (GetScrollBar()->GetScrollAxis() == Axis::Vertical)
+        {
+            containedGoRT->SetAnchorX( Vector2(-1,1) );
+            containedGoRT->SetAnchorY( Vector2(1) );
+        }
+        else
+        {
+            containedGoRT->SetAnchorX( Vector2(-1) );
+            containedGoRT->SetAnchorY( Vector2(-1,1) );
+        }
+    }
+}
+
+void UIScrollPanel::HandleScrollShowMode(int contentSize, int containerSize)
+{
+    bool showVertical = false;
+    switch (GetVerticalShowScrollMode())
+    {
+        case ShowScrollMode::Never: showVertical = false; break;
+        case ShowScrollMode::WhenNeeded:
+            showVertical = (contentSize > containerSize); break;
+        case ShowScrollMode::Always: showVertical = true; break;
+    }
+
+    bool showHorizontal = false;
+    switch (GetHorizontalShowScrollMode())
+    {
+        case ShowScrollMode::Never: showHorizontal = false; break;
+        case ShowScrollMode::WhenNeeded:
+            showHorizontal = (contentSize > containerSize); break;
+        case ShowScrollMode::Always: showHorizontal = true; break;
+    }
+
+    GetScrollBar()->GetGameObject()->SetEnabled(showVertical);
+}
+
 
 UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 {
@@ -128,6 +229,11 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 
     scrollPanel->p_scrollArea = scrollArea;
     scrollPanel->p_scrollBar  = scrollBar;
+
+    scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::Always);
+    scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::Always);
+    scrollPanel->SetScrollBarSide(VerticalSide::Top);
+    scrollPanel->SetScrollBarSide(HorizontalSide::Right);
 
     return scrollPanel;
 }

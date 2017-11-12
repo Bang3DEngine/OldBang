@@ -9,13 +9,14 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class UIList;
+FORWARD class UITree;
 FORWARD class UILabel;
 FORWARD class UICanvas;
 FORWARD class Texture2D;
 FORWARD class GameObject;
 FORWARD class UIInputText;
 FORWARD class UIScrollBar;
-FORWARD class UIList;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIInputNumber;
@@ -40,8 +41,10 @@ public:
     static UIImageRenderer* CreateUIImage(const Color &color = Color::White);
     static UIImageRenderer* CreateUIImage(const Color &color,
                                           const Vector2i &size);
-    static UIList*    CreateUIListInto(GameObject *go);
-    static UIList*    CreateUIList();
+    static UIList*          CreateUIListInto(GameObject *go);
+    static UIList*          CreateUIList();
+    static UITree*          CreateUITreeInto(GameObject *go);
+    static UITree*          CreateUITree();
     static UIInputText*     CreateUIInputTextInto(GameObject *go);
     static UIInputText*     CreateUIInputText();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);

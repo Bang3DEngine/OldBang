@@ -28,6 +28,7 @@ public:
     void SetSelection(GameObject *go);
 
     GameObject *GetContainer() const;
+    UIScrollPanel *GetScrollPanel() const;
 
     int GetSelectedIndex() const;
     GameObject* GetSelectedGameObject() const;
@@ -46,8 +47,6 @@ private:
 
     GameObject *p_container = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
-
-    UIScrollPanel *GetScrollPanel() const;
 
     static UIList* CreateInto(GameObject *go);
     void Callback(GameObject *go, Action action);

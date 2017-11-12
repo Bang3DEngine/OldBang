@@ -1,6 +1,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "Bang/Scene.h"
+#include "Bang/UITree.h"
 #include "Bang/Camera.h"
 #include "Bang/UIList.h"
 #include "Bang/UIMask.h"
@@ -147,6 +148,16 @@ UIList *GameObjectFactory::CreateUIListInto(GameObject *go)
 UIList *GameObjectFactory::CreateUIList()
 {
     return UIList::CreateInto( GameObjectFactory::CreateUIGameObject("List") );
+}
+
+UITree *GameObjectFactory::CreateUITreeInto(GameObject *go)
+{
+    return UITree::CreateInto(go);
+}
+
+UITree *GameObjectFactory::CreateUITree()
+{
+    return UITree::CreateInto( GameObjectFactory::CreateUIGameObject("Tree") );
 }
 
 UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)

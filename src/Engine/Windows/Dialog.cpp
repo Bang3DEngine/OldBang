@@ -12,6 +12,7 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UITintedButton.h"
@@ -136,6 +137,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UIHorizontalLayout *inputPathHL = inputPathCont->AddComponent<UIHorizontalLayout>();
     inputPathHL->SetChildrenVerticalStretch(Stretch::None);
     inputPathHL->SetSpacing(10);
+    list->GetScrollPanel()->SetScrollBarSide(HorizontalSide::Right);
 
     UILayoutElement *inputHLLE = inputPathCont->AddComponent<UILayoutElement>();
     inputHLLE->SetFlexibleHeight(0);
