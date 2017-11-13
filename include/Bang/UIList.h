@@ -20,8 +20,8 @@ public:
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
     void OnUpdate() override;
-    void AddElement(GameObject *go);
-    void RemoveElement(GameObject *go);
+    void AddItem(GameObject *go);
+    void RemoveItem(GameObject *go);
     void Clear();
 
     void SetSelection(int i);

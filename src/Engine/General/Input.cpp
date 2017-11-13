@@ -54,7 +54,7 @@ void Input::OnFrameFinished()
     }
     //
 
-    m_lastMouseWheelDelta = 0.0f;
+    m_lastMouseWheelDelta = Vector2::Zero;
 }
 
 void Input::ProcessEventInfo(const EventInfo &ei)
@@ -87,7 +87,7 @@ void Input::ProcessEventInfo(const EventInfo &ei)
 
 void Input::ProcessMouseWheelEventInfo(const EventInfo &ei)
 {
-    m_lastMouseWheelDelta = float(ei.wheelDelta);
+    m_lastMouseWheelDelta = ei.wheelDelta;
 }
 
 void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
@@ -210,7 +210,7 @@ void Input::PeekEvent(const SDL_Event &event, const Window *window)
 
             case SDL_MOUSEWHEEL:
                 eventInfo.type       = EventInfo::Wheel;
-                eventInfo.wheelDelta = float(event.wheel.y);
+                eventInfo.wheelDelta = Vector2(event.wheel.x, event.wheel.y);
                 eventInfo.timestampSecs = event.button.timestamp / 1000.0f;
                 enqueue = true;
             break;
@@ -294,7 +294,7 @@ const Array<Key>& Input::GetPressedKeys()
     return Input::GetInstance()->m_pressedKeys;
 }
 
-float Input::GetMouseWheel()
+Vector2 Input::GetMouseWheel()
 {
     Input *inp = Input::GetInstance();
     return inp->m_lastMouseWheelDelta;
@@ -455,8 +455,9 @@ void Input::StopTextInput()
 void Input::Reset()
 {
     m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
-    m_lastMouseWheelDelta = m_lastMouseDownTimestamp = 0.0f;
+    m_lastMouseWheelDelta = Vector2::Zero;
     m_lastMouseCoords = Vector2i(-1);
+    m_lastMouseDownTimestamp = 0.0f;
     m_inputText = "";
 
     m_keysUp.Clear();

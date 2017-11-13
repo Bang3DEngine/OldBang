@@ -74,8 +74,11 @@ void UIScrollBar::SetScrollingPercent(float _percent)
 
 void UIScrollBar::SetLength(int lengthPx)
 {
-    m_length = lengthPx;
-    UpdateLengthThicknessMargins();
+    if (lengthPx != GetLength())
+    {
+        m_length = lengthPx;
+        UpdateLengthThicknessMargins();
+    }
 }
 
 void UIScrollBar::SetLengthPercent(float lengthPercent)
@@ -87,8 +90,11 @@ void UIScrollBar::SetLengthPercent(float lengthPercent)
 
 void UIScrollBar::SetThickness(int thickPx)
 {
-    m_thickness = thickPx;
-    UpdateLengthThicknessMargins();
+    if (thickPx != GetThickness())
+    {
+        m_thickness = thickPx;
+        UpdateLengthThicknessMargins();
+    }
 }
 
 Side UIScrollBar::GetSide() const { return m_side; }
@@ -119,9 +125,10 @@ void UIScrollBar::UpdateLengthThicknessMargins()
     {
         bool bot = (GetSide() == Side::Bot);
         rt->SetAnchorX( Vector2(-1, 1) );
-        rt->SetAnchorY( Vector2(bot ? 1 : -1 ) );
-        rt->SetMargins(0, bot ? -GetThickness() : 0,
-                       0, bot ? 0 : -GetThickness());
+        rt->SetAnchorY( Vector2(bot ? -1 : 1 ) );
+        rt->SetMargins(0);
+        rt->SetMarginTop(bot ? -GetThickness() : 0);
+        rt->SetMarginBot(bot ? 0 : -GetThickness());
 
         barRT->SetAnchorX( Vector2(-1) );
         barRT->SetAnchorY( Vector2(-1, 1) );
@@ -132,8 +139,9 @@ void UIScrollBar::UpdateLengthThicknessMargins()
         bool left = (GetSide() == Side::Left);
         rt->SetAnchorX( Vector2( left ? -1 : 1 )  );
         rt->SetAnchorY( Vector2(-1, 1) );
-        rt->SetMargins(left ? 0 : -GetThickness(), 0,
-                       left ? -GetThickness() : 0, 0);
+        rt->SetMargins(0);
+        rt->SetMarginRight(left ? -GetThickness() : 0);
+        rt->SetMarginLeft(left ? 0 : -GetThickness());
 
         barRT->SetAnchorX( Vector2(-1, 1) );
         barRT->SetAnchorY( Vector2(1) );

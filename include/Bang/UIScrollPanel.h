@@ -19,34 +19,45 @@ public:
 
     void OnUpdate() override;
 
-    void SetScrollBarSide(VerticalSide side);
-    void SetScrollBarSide(HorizontalSide side);
+    void SetVerticalScrollBarSide(HorizontalSide side);
+    void SetHorizontalScrollBarSide(VerticalSide side);
     void SetVerticalShowScrollMode(ShowScrollMode showScrollMode);
     void SetHorizontalShowScrollMode(ShowScrollMode showScrollMode);
+    void SetVerticalScrollEnabled(bool enabled);
+    void SetHorizontalScrollEnabled(bool enabled);
     void SetScrolling(const Vector2i &scrolling);
     void SetScrollingPercent(const Vector2 &scrollingPercent);
 
-    VerticalSide GetVerticalScrollBarSide() const;
-    HorizontalSide GetHorizontalScrollBarSide() const;
+    HorizontalSide GetVerticalScrollBarSide() const;
+    VerticalSide GetHorizontalScrollBarSide() const;
     ShowScrollMode GetVerticalShowScrollMode() const;
     ShowScrollMode GetHorizontalShowScrollMode() const;
+    bool IsVerticalScrollEnabled() const;
+    bool IsHorizontalScrollEnabled() const;
     UIScrollArea *GetScrollArea() const;
-    UIScrollBar  *GetScrollBar() const;
+    UIScrollBar  *GetVerticalScrollBar() const;
+    UIScrollBar  *GetHorizontalScrollBar() const;
 
 private:
-    constexpr static int WheelScrollSpeedPx = 50;
+    const static float WheelScrollSpeedPx;
 
     UIScrollArea *p_scrollArea = nullptr;
-    UIScrollBar  *p_scrollBar  = nullptr;
-    VerticalSide m_verticalScrollBarSide = Undef<VerticalSide>();
-    HorizontalSide m_horizontalScrollBarSide = Undef<HorizontalSide>();
+    UIScrollBar  *p_verticalScrollBar = nullptr;
+    UIScrollBar  *p_horizontalScrollBar = nullptr;
+    HorizontalSide m_verticalScrollBarSide = Undef<HorizontalSide>();
+    VerticalSide m_horizontalScrollBarSide = Undef<VerticalSide>();
     ShowScrollMode m_verticalShowScrollMode = Undef<ShowScrollMode>();
     ShowScrollMode m_horizontalShowScrollMode = Undef<ShowScrollMode>();
+    bool m_verticalScrollEnabled = true;
+    bool m_horizontalScrollEnabled = true;
 
     UIScrollPanel();
 
+    void UpdateScrollUI();
+
     void HandleScrollAreaRectTransform();
-    void HandleScrollShowMode(int contentSize, int containerSize);
+    void HandleScrollShowMode(const Vector2& contentSize,
+                              const Vector2& containerSize);
 
     Vector2 GetContentSize() const;
     Vector2 GetContainerSize() const;

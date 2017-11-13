@@ -86,7 +86,7 @@ public:
     static const Array<Key>& GetKeysDown();
     static const Array<Key>& GetPressedKeys();
 
-    static float GetMouseWheel();
+    static Vector2 GetMouseWheel();
 
     static Array<MouseButton> GetMouseButtons();
     static Array<MouseButton> GetMouseButtonsUp();
@@ -141,10 +141,10 @@ private:
     static constexpr float DoubleClickMaxSeconds = 0.25f;
 
     bool m_isADoubleClick          = false;
-    float m_lastMouseWheelDelta    = 0.0f;
     bool m_lockMouseMovement       = false;
     bool m_isMouseInside           = false;
     float m_lastMouseDownTimestamp = 0;
+    Vector2 m_lastMouseWheelDelta  = Vector2::Zero;
 
     String m_inputText = "";
 
@@ -180,8 +180,8 @@ private:
         bool autoRepeat         = false;
         int x                   = 0;
         int y                   = 0;
-        float wheelDelta        = 0.0f;
         float timestampSecs     = 0;
+        Vector2 wheelDelta      = Vector2::Zero;
 
         String ToString() const override { return String::ToString(type); }
     };

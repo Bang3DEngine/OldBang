@@ -15,14 +15,19 @@ UITree::~UITree()
 {
 }
 
+void UITree::AddItem(GameObject *go, GameObject *parentItem)
+{
+    GetList()->AddItem(go);
+}
+
+void UITree::RemoveItem(GameObject *go)
+{
+
+}
+
 void UITree::OnUpdate()
 {
     Component::OnUpdate();
-    if (Input::GetKeyDown(Key::A))
-    {
-        GetList()->AddElement( GameObjectFactory::CreateUIImage(
-                                 Color::Blue, Vector2i(50))->GetGameObject() );
-    }
 }
 
 UIList *UITree::GetList() const { return p_list; }
@@ -33,4 +38,6 @@ UITree *UITree::CreateInto(GameObject *go)
 
     UITree *tree = go->AddComponent<UITree>();
     tree->p_list = list;
+
+    return tree;
 }

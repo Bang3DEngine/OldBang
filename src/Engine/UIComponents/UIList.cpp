@@ -90,7 +90,7 @@ void UIList::OnUpdate()
     }
 }
 
-void UIList::AddElement(GameObject *go)
+void UIList::AddItem(GameObject *go)
 {
     bool hadSelectedGameObject = GetSelectedGameObject();
 
@@ -99,7 +99,7 @@ void UIList::AddElement(GameObject *go)
     if (!hadSelectedGameObject) { SetSelection(0); }
 }
 
-void UIList::RemoveElement(GameObject *go)
+void UIList::RemoveItem(GameObject *go)
 {
     GameObject::Destroy(go);
 
@@ -112,7 +112,7 @@ void UIList::RemoveElement(GameObject *go)
 void UIList::Clear()
 {
     List<GameObject*> children = GetContainer()->GetChildren();
-    for (GameObject *child : children) { RemoveElement(child); }
+    for (GameObject *child : children) { RemoveItem(child); }
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
 }
 

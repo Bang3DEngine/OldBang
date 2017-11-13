@@ -75,7 +75,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
         UIFileListEntry *entry = ObjectManager::Create<UIFileListEntry>();
         entry->SetPath(path);
 
-        listDriver->AddElement(entry);
+        listDriver->AddItem(entry);
     }
     listDriver->SetSelection(1);
 

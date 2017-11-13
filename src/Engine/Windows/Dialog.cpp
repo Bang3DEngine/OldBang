@@ -137,7 +137,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UIHorizontalLayout *inputPathHL = inputPathCont->AddComponent<UIHorizontalLayout>();
     inputPathHL->SetChildrenVerticalStretch(Stretch::None);
     inputPathHL->SetSpacing(10);
-    list->GetScrollPanel()->SetScrollBarSide(HorizontalSide::Right);
+    list->GetScrollPanel()->SetHorizontalScrollBarSide(VerticalSide::Bot);
+    list->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
 
     UILayoutElement *inputHLLE = inputPathCont->AddComponent<UILayoutElement>();
     inputHLLE->SetFlexibleHeight(0);

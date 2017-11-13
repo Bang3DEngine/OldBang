@@ -12,6 +12,11 @@ class UITree : public IComponentDriver<UITree>,
     COMPONENT(UITree);
 
 public:
+
+    void AddItem(GameObject *go, GameObject *parentItem);
+    void RemoveItem(GameObject *go);
+
+    // Component
     void OnUpdate() override;
 
     UIList* GetList() const;
