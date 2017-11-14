@@ -43,6 +43,7 @@ GameObject::GameObject(const String &name) : m_name(name)
 
 GameObject::~GameObject()
 {
+    ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
     SetParent(nullptr);
 }
 

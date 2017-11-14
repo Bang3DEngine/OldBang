@@ -41,78 +41,78 @@ void UIList::OnUpdate()
         }
 
         // Mouse In/Out
-        GameObject *goUnderMouse = nullptr;
-        for (GameObject *child : GetContainer()->GetChildren())
+        GOItem *itemUnderMouse = nullptr;
+        for (GOItem *childItem : GetContainer()->GetChildren())
         {
-            RectTransform *rt = child->GetComponent<RectTransform>();
-            if (rt && rt->IsMouseOver()) { goUnderMouse = child; break; }
+            RectTransform *rt = childItem->GetComponent<RectTransform>();
+            if (rt && rt->IsMouseOver()) { itemUnderMouse = childItem; break; }
         }
 
-        if (p_mouseOverGo != goUnderMouse)
+        if (p_itemUnderMouse != itemUnderMouse)
         {
-            if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
+            if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
 
-            p_mouseOverGo = goUnderMouse;
-            if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOver); }
+            p_itemUnderMouse = itemUnderMouse;
+            if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOver); }
         }
 
         // Clicked
         if (Input::GetKeyDownRepeat(Key::Right) ||
             Input::GetKeyDownRepeat(Key::Enter))
         {
-            GameObject *selectedGo = GetSelectedGameObject();
-            if (selectedGo) { Callback(selectedGo, Action::Pressed); }
+            GOItem *selectedItem = GetSelectedItem();
+            if (selectedItem) { Callback(selectedItem, Action::Pressed); }
         }
 
-        if (p_mouseOverGo)
+        if (p_itemUnderMouse)
         {
             if (Input::GetMouseButtonDown(MouseButton::Left))
             {
-                SetSelection(p_mouseOverGo);
-                Callback(p_mouseOverGo, Action::ClickedLeft);
+                SetSelection(p_itemUnderMouse);
+                Callback(p_itemUnderMouse, Action::ClickedLeft);
             }
 
             if (Input::GetMouseButtonDown(MouseButton::Right))
             {
-                Callback(p_mouseOverGo, Action::ClickedRight);
+                Callback(p_itemUnderMouse, Action::ClickedRight);
             }
 
             if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
             {
-                Callback(p_mouseOverGo, Action::DoubleClickedLeft);
+                Callback(p_itemUnderMouse, Action::DoubleClickedLeft);
             }
         }
     }
     else
     {
-        if (p_mouseOverGo) { Callback(p_mouseOverGo, Action::MouseOut); }
-        p_mouseOverGo = nullptr;
+        if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
+        p_itemUnderMouse = nullptr;
     }
 }
 
-void UIList::AddItem(GameObject *go)
+void UIList::AddItem(GOItem *newItem)
 {
-    bool hadSelectedGameObject = GetSelectedGameObject();
+    bool hadSelectedGameObject = GetSelectedItem();
 
-    go->SetParent(GetContainer());
+    newItem->SetParent(GetContainer());
 
     if (!hadSelectedGameObject) { SetSelection(0); }
 }
 
-void UIList::RemoveItem(GameObject *go)
+void UIList::RemoveItem(GOItem *item)
 {
-    GameObject::Destroy(go);
+    GameObject::Destroy(item);
 
     int selIndex = GetSelectedIndex();
-    if (p_mouseOverGo == go) { p_mouseOverGo = nullptr; }
+    if (p_itemUnderMouse == item) { p_itemUnderMouse = nullptr; }
     selIndex = Math::Clamp(selIndex, 0, GetContainer()->GetChildren().Size());
     SetSelection(selIndex);
 }
 
 void UIList::Clear()
 {
-    List<GameObject*> children = GetContainer()->GetChildren();
-    for (GameObject *child : children) { RemoveItem(child); }
+    List<GOItem*> childrenItems = GetContainer()->GetChildren();
+    for (GOItem *child : childrenItems) { RemoveItem(child); }
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
 }
 
@@ -122,17 +122,17 @@ void UIList::SetSelection(int _i)
     ENSURE(numChildren > 0);
 
     int i = ((_i + numChildren) % numChildren);
-    GameObject *prevSelectedGo = GetSelectedGameObject();
-    if (prevSelectedGo) { Callback(prevSelectedGo, Action::SelectionOut); }
+    GOItem *prevSelectedItem = GetSelectedItem();
+    if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
 
     m_selectionIndex = i;
-    GameObject *selectedGo = GetSelectedGameObject();
-    if (selectedGo) { Callback(selectedGo, Action::SelectionIn); }
+    GOItem *selectedItem = GetSelectedItem();
+    if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
 }
 
-void UIList::SetSelection(GameObject *go)
+void UIList::SetSelection(GOItem *item)
 {
-    SetSelection(GetContainer()->GetChildren().IndexOf(go));
+    SetSelection(GetContainer()->GetChildren().IndexOf(item));
 }
 
 GameObject *UIList::GetContainer() const
@@ -145,7 +145,7 @@ int UIList::GetSelectedIndex() const
     return m_selectionIndex;
 }
 
-GameObject *UIList::GetSelectedGameObject() const
+GOItem *UIList::GetSelectedItem() const
 {
     return GetContainer()->GetChild( GetSelectedIndex() );
 }
@@ -187,9 +187,9 @@ UIList* UIList::CreateInto(GameObject *go)
     return ld;
 }
 
-void UIList::Callback(GameObject *go, Action action)
+void UIList::Callback(GOItem *item, Action action)
 {
-    if (m_selectionCallback) { m_selectionCallback(go, action); }
+    if (m_selectionCallback) { m_selectionCallback(item, action); }
 }
 
 UIScrollPanel *UIList::GetScrollPanel() const { return p_scrollPanel; }

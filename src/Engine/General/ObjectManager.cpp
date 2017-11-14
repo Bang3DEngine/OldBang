@@ -48,7 +48,15 @@ void ObjectManager::DestroyObjects()
         om->m_objectsToBeDestroyedQueue.pop();
         if (!om->m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyed))
         {
+            #ifdef DEBUG
+            ObjectManager::AssertDestroyedFromObjectManager = true;
+            #endif
+
             delete objectToBeDestroyed;
+
+            #ifdef DEBUG
+            ObjectManager::AssertDestroyedFromObjectManager = false;
+            #endif
         }
     }
     om->m_objectsDestroyedWhileDestroying.Clear();
@@ -68,5 +76,6 @@ ObjectManager *ObjectManager::GetInstance()
 
 #ifdef DEBUG
 bool ObjectManager::AssertCreatedFromObjectManager = false;
+bool ObjectManager::AssertDestroyedFromObjectManager = false;
 #endif
 

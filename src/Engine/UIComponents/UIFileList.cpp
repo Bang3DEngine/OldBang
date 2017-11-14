@@ -72,50 +72,50 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
 
     for (const Path &path : paths)
     {
-        UIFileListEntry *entry = ObjectManager::Create<UIFileListEntry>();
-        entry->SetPath(path);
+        UIFileListItem *item = ObjectManager::Create<UIFileListItem>();
+        item->SetPath(path);
 
-        listDriver->AddItem(entry);
+        listDriver->AddItem(item);
     }
     listDriver->SetSelection(1);
 
     listDriver->SetSelectionCallback(
         [this, listDriver](GameObject *go, UIList::Action action)
         {
-            UIFileListEntry *entry = SCAST<UIFileListEntry*>(go);
+            UIFileListItem *item = SCAST<UIFileListItem*>(go);
             if (action == UIList::Action::SelectionIn)
             {
-                entry->OnSelectionIn();
+                item->OnSelectionIn();
             }
             else if (action == UIList::Action::SelectionOut)
             {
-                entry->OnSelectionOut();
+                item->OnSelectionOut();
             }
             else if (action == UIList::Action::MouseOver)
             {
-                entry->OnMouseOver();
+                item->OnMouseOver();
             }
             else if (action == UIList::Action::MouseOut)
             {
-                entry->OnMouseOut();
+                item->OnMouseOut();
             }
             else if (action == UIList::Action::Pressed ||
                      action == UIList::Action::DoubleClickedLeft)
             {
-                Path entryPath = entry->GetPath();
-                if (entryPath.GetAbsolute() == "..")
+                Path itemPath = item->GetPath();
+                if (itemPath.GetAbsolute() == "..")
                 {
                     this->SetCurrentPath(GetCurrentPath().GetDirectory());
                 }
-                else if (entryPath.IsDir())
+                else if (itemPath.IsDir())
                 {
-                    this->SetCurrentPath(entryPath);
+                    this->SetCurrentPath(itemPath);
                 }
-                else if (entryPath.IsFile())
+                else if (itemPath.IsFile())
                 {
-                    this->SetCurrentPath(entryPath);
+                    this->SetCurrentPath(itemPath);
                     if (m_fileAcceptedCallback)
-                    { m_fileAcceptedCallback(entryPath); }
+                    { m_fileAcceptedCallback(itemPath); }
                 }
             }
         }
@@ -145,8 +145,8 @@ void UIFileList::FilterPathsByExtension(List<Path> *paths) const
     }
 }
 
-// UIFileListEntry
-UIFileListEntry::UIFileListEntry()
+// UIFileListItem
+UIFileListItem::UIFileListItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -164,48 +164,48 @@ UIFileListEntry::UIFileListEntry()
     SetAsChild(container);
 }
 
-UIFileListEntry::~UIFileListEntry()
+UIFileListItem::~UIFileListItem()
 {
 
 }
 
-void UIFileListEntry::OnMouseOver()
+void UIFileListItem::OnMouseOver()
 {
     m_isMouseOver = true;
     UpdateColor();
 }
 
-void UIFileListEntry::OnMouseOut()
+void UIFileListItem::OnMouseOut()
 {
     m_isMouseOver = false;
     UpdateColor();
 }
 
-void UIFileListEntry::OnSelectionOut()
+void UIFileListItem::OnSelectionOut()
 {
     m_isSelected = false;
     UpdateColor();
 }
 
-void UIFileListEntry::OnSelectionIn()
+void UIFileListItem::OnSelectionIn()
 {
     m_isSelected = true;
     UpdateColor();
 }
 
-void UIFileListEntry::SetPath(const Path &path)
+void UIFileListItem::SetPath(const Path &path)
 {
     m_path = path;
     m_text->SetContent( (path.IsFile() ? "File - " : "Dir  - ") +
                          path.GetNameExt() );
 }
 
-const Path &UIFileListEntry::GetPath()
+const Path &UIFileListItem::GetPath()
 {
     return m_path;
 }
 
-void UIFileListEntry::UpdateColor()
+void UIFileListItem::UpdateColor()
 {
     if (m_isSelected)
     {

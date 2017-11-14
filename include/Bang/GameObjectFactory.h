@@ -26,11 +26,16 @@ FORWARD class UIImageRenderer;
 class GameObjectFactory
 {
 public:
+
     static GameObject* CreateGameObject(bool addTransform = true);
     static GameObject* CreateUIGameObject(bool addComponents = true);
-    static GameObject* CreateGameObject(const String &name);
-    static GameObject* CreateUIGameObject(const String &name);
+    static GameObject* CreateGameObjectNamed(const String &name);
+    static GameObject* CreateUIGameObjectNamed(const String &name);
     static void CreateUIGameObjectInto(GameObject *go, bool addComponents = true);
+
+    // Disallow implicit conversions on above functions
+    template <class T> GameObject* CreateGameObject(T) = delete;
+    template <class T> GameObject* CreateUIGameObject(T) = delete;
 
     static Scene* CreateScene();
     static Scene* CreateUIScene();

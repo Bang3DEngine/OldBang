@@ -2,7 +2,7 @@
 *.cbp
 *.trace
 build*/
-*.user
+*.user*
 *.refl.h
 res/EngineAssets/tmp
 *refactor-cpp-class-name.sh

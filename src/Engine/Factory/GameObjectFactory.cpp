@@ -46,14 +46,14 @@ GameObject *GameObjectFactory::CreateUIGameObject(bool addComponents)
     return go;
 }
 
-GameObject *GameObjectFactory::CreateGameObject(const String &name)
+GameObject *GameObjectFactory::CreateGameObjectNamed(const String &name)
 {
     GameObject *go = GameObjectFactory::CreateGameObject(true);
     go->SetName(name);
     return go;
 }
 
-GameObject *GameObjectFactory::CreateUIGameObject(const String &name)
+GameObject *GameObjectFactory::CreateUIGameObjectNamed(const String &name)
 {
     GameObject *go = GameObjectFactory::CreateUIGameObject(true);
     go->SetName(name);
@@ -87,16 +87,27 @@ Scene *GameObjectFactory::CreateDefaultScene()
 {
     Scene *scene = GameObjectFactory::CreateScene();
 
-    GameObject *cube = GameObjectFactory::CreateGameObject();
+    GameObject *cube = GameObjectFactory::CreateGameObjectNamed("Cube");
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     mr->SetMesh( MeshFactory::GetCube() );
 
-    GameObject *light = GameObjectFactory::CreateGameObject();
+    GameObject *sphere = GameObjectFactory::CreateGameObjectNamed("Sphere");
+    sphere->GetTransform()->SetLocalPosition(Vector3(1,1,1));
+    sphere->GetTransform()->SetLocalScale( Vector3(0.3f) );
+    MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
+    mr2->SetMesh( MeshFactory::GetSphere() );
+
+    GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Child");
+    cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
+    MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
+    mr3->SetMesh( MeshFactory::GetCube() );
+
+    GameObject *light = GameObjectFactory::CreateGameObjectNamed("Light");
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
     light->GetTransform()->SetPosition( Vector3(5,4,3) );
     light->GetTransform()->LookAt( Vector3::Zero );
 
-    GameObject *cameraGo = GameObjectFactory::CreateGameObject();
+    GameObject *cameraGo = GameObjectFactory::CreateGameObjectNamed("Camera");
     cameraGo->GetTransform()->SetPosition( Vector3(5,4,3) );
     cameraGo->GetTransform()->LookAt( Vector3::Zero );
     Camera *cam = cameraGo->AddComponent<Camera>();
@@ -104,6 +115,8 @@ Scene *GameObjectFactory::CreateDefaultScene()
     scene->SetCamera(cam);
 
     scene->SetAsChild(cube);
+    cube->SetAsChild(sphere);
+    sphere->SetAsChild(cube2);
     scene->SetAsChild(light);
     scene->SetAsChild(cameraGo);
     return scene;
@@ -147,7 +160,7 @@ UIList *GameObjectFactory::CreateUIListInto(GameObject *go)
 }
 UIList *GameObjectFactory::CreateUIList()
 {
-    return UIList::CreateInto( GameObjectFactory::CreateUIGameObject("List") );
+    return UIList::CreateInto( GameObjectFactory::CreateUIGameObjectNamed("List") );
 }
 
 UITree *GameObjectFactory::CreateUITreeInto(GameObject *go)
@@ -157,7 +170,7 @@ UITree *GameObjectFactory::CreateUITreeInto(GameObject *go)
 
 UITree *GameObjectFactory::CreateUITree()
 {
-    return UITree::CreateInto( GameObjectFactory::CreateUIGameObject("Tree") );
+    return UITree::CreateInto( GameObjectFactory::CreateUIGameObjectNamed("Tree") );
 }
 
 UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
@@ -167,7 +180,7 @@ UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 UIInputText *GameObjectFactory::CreateUIInputText()
 {
     return GameObjectFactory::CreateUIInputTextInto(
-                        GameObjectFactory::CreateUIGameObject("InputText") );
+                        GameObjectFactory::CreateUIGameObjectNamed("InputText") );
 }
 
 UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)
@@ -178,7 +191,7 @@ UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)
 UIInputNumber *GameObjectFactory::CreateUIInputNumber()
 {
     return GameObjectFactory::CreateUIInputNumberInto(
-                    GameObjectFactory::CreateUIGameObject("InputNumber") );
+                    GameObjectFactory::CreateUIGameObjectNamed("InputNumber") );
 }
 
 UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
@@ -188,7 +201,7 @@ UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 UIButtonDriver* GameObjectFactory::CreateUIButton()
 {
     return UIButtonDriver::CreateInto(
-                GameObjectFactory::CreateUIGameObject("Button") );
+                GameObjectFactory::CreateUIGameObjectNamed("Button") );
 }
 
 UIButtonDriver *GameObjectFactory::CreateUIButton(const String &text,
@@ -210,13 +223,13 @@ UILabel *GameObjectFactory::CreateUILabelInto(GameObject *go)
 }
 UILabel *GameObjectFactory::CreateUILabel()
 {
-    return UILabel::CreateInto( GameObjectFactory::CreateUIGameObject("Label") );
+    return UILabel::CreateInto( GameObjectFactory::CreateUIGameObjectNamed("Label") );
 }
 
 UIScrollArea *GameObjectFactory::CreateUIScrollArea()
 {
     return UIScrollArea::CreateInto(
-                        GameObjectFactory::CreateUIGameObject("ScrollArea") );
+                    GameObjectFactory::CreateUIGameObjectNamed("ScrollArea") );
 }
 
 UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
@@ -225,7 +238,8 @@ UIScrollBar *GameObjectFactory::CreateUIScrollBarInto(GameObject *go)
 }
 UIScrollBar *GameObjectFactory::CreateUIScrollBar()
 {
-    return UIScrollBar::CreateInto( GameObjectFactory::CreateUIGameObject("ScrollBar") );
+    return UIScrollBar::CreateInto(
+                GameObjectFactory::CreateUIGameObjectNamed("ScrollBar") );
 }
 
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
@@ -235,7 +249,7 @@ UIScrollPanel *GameObjectFactory::CreateUIScrollPanelInto(GameObject *go)
 UIScrollPanel *GameObjectFactory::CreateUIScrollPanel()
 {
     return GameObjectFactory::CreateUIScrollPanelInto(
-                GameObjectFactory::CreateUIGameObject("ScrollPanel") );
+                GameObjectFactory::CreateUIGameObjectNamed("ScrollPanel") );
 }
 
 UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
@@ -246,7 +260,7 @@ UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
 GameObject *GameObjectFactory::CreateUISpacer(LayoutSizeType sizeType,
                                               const Vector2i &space)
 {
-    GameObject *spacerGo = GameObjectFactory::CreateUIGameObject("Separator");
+    GameObject *spacerGo = GameObjectFactory::CreateUIGameObjectNamed("Separator");
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
 
     le->SetMinSize( Vector2i(0) );

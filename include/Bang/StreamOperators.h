@@ -9,6 +9,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD_T  class Set;
 FORWARD_TT class Map;
 FORWARD    class Path;
+FORWARD_T  class Tree;
 FORWARD    class GUID;
 FORWARD_T  class List;
 FORWARD    class Color;
@@ -153,6 +154,21 @@ std::ostream &operator<<(std::ostream &log, const Set<T> &s)
         log << (*it);
     }
     log << "}";
+    return log;
+}
+
+template <class T>
+std::ostream &operator<<(std::ostream &log, const Tree<T> &t)
+{
+    log << "(" << t.GetData();
+    bool first = true;
+    List<T> &children = t.GetChildren();
+    for (const T &child : children)
+    {
+        log << (first ? "" : ", ") << child;
+        first = false;
+    }
+    log << ")";
     return log;
 }
 

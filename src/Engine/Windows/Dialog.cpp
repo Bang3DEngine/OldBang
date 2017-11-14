@@ -180,14 +180,14 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     icon->SetImageTexture( EDPATH("Icons/Error.png"));
     icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Linear );
 
-    GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObject("HL");
+    GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObjectNamed("HL");
     UIHorizontalLayout *hLayout = hLayoutGo->AddComponent<UIHorizontalLayout>();
     hLayout->SetChildrenHorizontalAlignment(HorizontalAlignment::Center);
     hLayout->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     UILayoutElement *hLayoutLE = hLayoutGo->AddComponent<UILayoutElement>();
     hLayoutLE->SetPreferredSize( Vector2i::One );
 
-    GameObject *msgGo = GameObjectFactory::CreateUIGameObject("MSGGo");
+    GameObject *msgGo = GameObjectFactory::CreateUIGameObjectNamed("MSGGo");
     UITextRenderer *text = msgGo->AddComponent<UITextRenderer>();
     text->SetWrapping(true);
     text->SetContent(msg);

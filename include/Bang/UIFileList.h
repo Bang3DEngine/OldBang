@@ -40,9 +40,9 @@ private:
     void FilterPathsByExtension(List<Path> *paths) const;
 };
 
-class UIFileListEntry : public GameObject
+class UIFileListItem : public GameObject
 {
-    GAMEOBJECT(UIFileListEntry)
+    GAMEOBJECT(UIFileListItem)
 
 public:
     void OnMouseOver();
@@ -54,8 +54,8 @@ public:
     const Path& GetPath();
 
 protected:
-    UIFileListEntry();
-    virtual ~UIFileListEntry();
+    UIFileListItem();
+    virtual ~UIFileListItem();
 
 private:
     bool m_isSelected = false;

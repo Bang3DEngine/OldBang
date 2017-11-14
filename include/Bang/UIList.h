@@ -10,6 +10,8 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class UIScrollArea;
 
+using GOItem = GameObject;
+
 class UIList : public IComponentDriver<UIList>,
                public Component
 {
@@ -20,20 +22,20 @@ public:
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
     void OnUpdate() override;
-    void AddItem(GameObject *go);
-    void RemoveItem(GameObject *go);
+    void AddItem(GOItem *newItem);
+    void RemoveItem(GOItem *item);
     void Clear();
 
     void SetSelection(int i);
-    void SetSelection(GameObject *go);
+    void SetSelection(GOItem *item);
 
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
 
     int GetSelectedIndex() const;
-    GameObject* GetSelectedGameObject() const;
+    GOItem* GetSelectedItem() const;
 
-    using SelectionCallback = std::function<void(GameObject *go, Action action)>;
+    using SelectionCallback = std::function<void(GOItem *item, Action action)>;
     void SetSelectionCallback(SelectionCallback selectionCallback);
 
 protected:
@@ -42,14 +44,14 @@ protected:
 
 private:
     int m_selectionIndex = 0;
-    GameObject *p_mouseOverGo = nullptr;
+    GOItem *p_itemUnderMouse = nullptr;
     SelectionCallback m_selectionCallback;
 
     GameObject *p_container = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
 
     static UIList* CreateInto(GameObject *go);
-    void Callback(GameObject *go, Action action);
+    void Callback(GameObject *item, Action action);
 
     friend class GameObjectFactory;
     friend class IComponentDriver<UIList>;

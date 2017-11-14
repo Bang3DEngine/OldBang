@@ -40,6 +40,7 @@ private:
 
     #ifdef DEBUG
     public: static bool AssertCreatedFromObjectManager;
+    public: static bool AssertDestroyedFromObjectManager;
     #endif
 
     friend class Window;
