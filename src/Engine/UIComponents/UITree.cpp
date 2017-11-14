@@ -35,10 +35,10 @@ List<GOItem*> UITree::GetChildrenItems(GOItem *item)
     if ( m_itemToTree.ContainsKey(item) || !item )
     {
         const Tree<GOItem*>* itemTree = item ? m_itemToTree.Get(item) : &m_tree;
-        const List<Tree<GOItem*>>& childrenTrees = itemTree->GetChildren();
-        for (const Tree<GOItem*> &childTree : childrenTrees)
+        const List<Tree<GOItem*>*>& childrenTrees = itemTree->GetChildren();
+        for (const Tree<GOItem*>* childTree : childrenTrees)
         {
-            childrenItems.PushBack(childTree.GetData());
+            childrenItems.PushBack(childTree->GetData());
         }
     }
     return childrenItems;
@@ -56,10 +56,11 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
     }
     else { parentTree = &m_tree; }
 
-    if (parentTree)
+    if (parentTree && !m_itemToTree.ContainsKey(newItem))
     {
-        GameObject *itemContainer = ObjectManager::Create<UITreeItemContainer>();
-        itemContainer->SetAsChild(newItem);
+        UITreeItemContainer *itemContainer =
+                                GameObject::Create<UITreeItemContainer>();
+        itemContainer->SetContainedItem(newItem);
 
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem);
         m_itemToTree.Add(newItem, childTree);
@@ -91,6 +92,11 @@ void UITree::Clear()
     m_itemToTree.Clear();
 }
 
+void UITree::SetSelectionCallback(UIList::SelectionCallback callback)
+{
+    m_selectionCallback = callback;
+}
+
 UIList *UITree::GetUIList() const { return p_uiList; }
 
 UITree *UITree::CreateInto(GameObject *go)
@@ -99,6 +105,21 @@ UITree *UITree::CreateInto(GameObject *go)
 
     UITree *tree = go->AddComponent<UITree>();
     tree->p_uiList = list;
+
+    tree->GetUIList()->SetSelectionCallback(
+                    [tree](GOItem *item, UIList::Action action)
+                    {
+                        // Forward selectionCallback from itemContainer to
+                        // actual item
+                        UITreeItemContainer *itemCont =
+                                        SCAST<UITreeItemContainer*>(item);
+                        if (tree->m_selectionCallback)
+                        {
+                            tree->m_selectionCallback(
+                                        itemCont->GetContainedItem(), action);
+                        }
+                    }
+    );
 
     return tree;
 }
@@ -126,6 +147,17 @@ UITreeItemContainer::UITreeItemContainer()
 UITreeItemContainer::~UITreeItemContainer()
 {
 
+}
+
+void UITreeItemContainer::SetContainedItem(GameObject *go)
+{
+    p_containedGameObject = go;
+    SetAsChild(p_containedGameObject);
+}
+
+GameObject *UITreeItemContainer::GetContainedItem() const
+{
+    return p_containedGameObject;
 }
 
 void UITreeItemContainer::SetIndentation(int indentationPx)

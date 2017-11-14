@@ -164,7 +164,7 @@ bool GameObject::IsEnabled(bool recursive) const
 Component *GameObject::AddComponent(const String &componentClassName,
                                     int _index)
 {
-    Component *c = ComponentFactory::CreateComponent(componentClassName);
+    Component *c = ComponentFactory::Create(componentClassName);
     return AddComponent(c, _index);
 }
 

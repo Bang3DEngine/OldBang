@@ -37,7 +37,7 @@ public:
     template <class T> GameObject* CreateGameObject(T) = delete;
     template <class T> GameObject* CreateUIGameObject(T) = delete;
 
-    static Scene* CreateScene();
+    static Scene* CreateScene(bool addTransform = true);
     static Scene* CreateUIScene();
     static Scene* CreateDefaultScene();
 

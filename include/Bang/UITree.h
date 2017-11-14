@@ -21,6 +21,8 @@ public:
     void RemoveItem(GOItem *itemToRemove);
     void Clear();
 
+    void SetSelectionCallback(UIList::SelectionCallback callback);
+
     // Component
     void OnUpdate() override;
 
@@ -37,6 +39,7 @@ private:
     UIList *p_uiList = nullptr;
     Tree<GOItem*> m_tree;
     Map<GOItem*, Tree<GOItem*>*> m_itemToTree;
+    UIList::SelectionCallback m_selectionCallback;
 
     void IndentItem(GOItem *item, int indentation);
 
@@ -50,9 +53,13 @@ public:
     UITreeItemContainer();
     virtual ~UITreeItemContainer();
 
+    void SetContainedItem(GOItem *item);
+
+    GOItem *GetContainedItem() const;
     void SetIndentation(int indentationPx);
 
 private:
+    GOItem *p_containedGameObject = nullptr;
     GameObject *p_spacer = nullptr;
 };
 

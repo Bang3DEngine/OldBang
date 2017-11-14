@@ -34,14 +34,14 @@ USING_NAMESPACE_BANG
 
 GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
 {
-    GameObject *go = ObjectManager::Create<GameObject>();
+    GameObject *go = GameObject::Create<GameObject>();
     if (addTransform) { go->AddComponent<Transform>(); }
     return go;
 }
 
 GameObject *GameObjectFactory::CreateUIGameObject(bool addComponents)
 {
-    GameObject *go = ObjectManager::Create<GameObject>();
+    GameObject *go = GameObject::Create<GameObject>();
     GameObjectFactory::CreateUIGameObjectInto(go, addComponents);
     return go;
 }
@@ -68,16 +68,16 @@ void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
     }
 }
 
-Scene *GameObjectFactory::CreateScene()
+Scene *GameObjectFactory::CreateScene(bool addTransform)
 {
-    Scene *scene = ObjectManager::Create<Scene>();
-    scene->AddComponent<Transform>();
+    Scene *scene = GameObject::Create<Scene>();
+    if (addTransform) { scene->AddComponent<Transform>(); }
     return scene;
 }
 
 Scene *GameObjectFactory::CreateUIScene()
 {
-    Scene *scene = ObjectManager::Create<Scene>();
+    Scene *scene = GameObject::Create<Scene>();
     GameObjectFactory::CreateUIGameObjectInto(scene);
     GameObjectFactory::CreateUICanvasInto(scene);
     return scene;
@@ -97,10 +97,15 @@ Scene *GameObjectFactory::CreateDefaultScene()
     MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
     mr2->SetMesh( MeshFactory::GetSphere() );
 
-    GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Child");
+    GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Sphere-Child");
     cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
     mr3->SetMesh( MeshFactory::GetCube() );
+
+    GameObject *cube3 = GameObjectFactory::CreateGameObjectNamed("Sphere-Child-Child");
+    cube3->GetTransform()->SetLocalPosition(Vector3(4,0,0));
+    MeshRenderer *mr4 = cube3->AddComponent<MeshRenderer>();
+    mr4->SetMesh( MeshFactory::GetCube() );
 
     GameObject *light = GameObjectFactory::CreateGameObjectNamed("Light");
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
@@ -117,6 +122,9 @@ Scene *GameObjectFactory::CreateDefaultScene()
     scene->SetAsChild(cube);
     cube->SetAsChild(sphere);
     sphere->SetAsChild(cube2);
+    cube->SetAsChild(cube->Clone());
+    scene->SetAsChild(cube->Clone());
+    scene->SetAsChild(cube->Clone());
     scene->SetAsChild(light);
     scene->SetAsChild(cameraGo);
     return scene;

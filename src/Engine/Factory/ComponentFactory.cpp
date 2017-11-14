@@ -36,7 +36,7 @@ USING_NAMESPACE_BANG
     if (className == ComponentClass::GetClassNameStatic()) \
     { return ObjectManager::Create<ComponentClass>(); }
 
-Component* ComponentFactory::CreateComponent(const String &componentClassName)
+Component* ComponentFactory::Create(const String &componentClassName)
 {
     CREATE_COMPONENT(componentClassName, Light);
     CREATE_COMPONENT(componentClassName, Camera);
@@ -76,7 +76,7 @@ Component* ComponentFactory::CreateComponent(const String &componentClassName)
     if (componentClassName == ComponentClass::GetClassNameStatic()) \
     { return true; }
 
-bool ComponentFactory::ExistsComponentClass(const String &componentClassName)
+bool ComponentFactory::Exists(const String &componentClassName)
 {
     EXISTS_COMPONENT(componentClassName, Light);
     EXISTS_COMPONENT(componentClassName, Camera);

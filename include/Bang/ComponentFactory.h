@@ -11,17 +11,21 @@ FORWARD class Component;
 class ComponentFactory
 {
 public:
-    static Component* CreateComponent(const String &componentClassName);
-    static bool ExistsComponentClass(const String &componentClassName);
-
     template<class T>
-    static T* CreateComponent();
+    static T* Create();
+
+private:
+    static Component* Create(const String &componentClassName);
+    static bool Exists(const String &componentClassName);
 
     ComponentFactory() = delete;
+
+    friend class Component;
+    friend class GameObject;
 };
 
 template<class T>
-T* ComponentFactory::CreateComponent()
+T* ComponentFactory::Create()
 {
     return ObjectManager::Create<T>();
 }

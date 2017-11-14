@@ -72,7 +72,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
 
     for (const Path &path : paths)
     {
-        UIFileListItem *item = ObjectManager::Create<UIFileListItem>();
+        UIFileListItem *item = GameObject::Create<UIFileListItem>();
         item->SetPath(path);
 
         listDriver->AddItem(item);

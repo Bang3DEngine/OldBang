@@ -22,7 +22,6 @@ Tree<T>* Tree<T>::AddChild()
 {
     Tree<T> *childTree = new Tree<T>();
     childTree->SetParent(this);
-    m_subTrees.PushBack(childTree);
     return childTree;
 }
 
@@ -76,7 +75,7 @@ int Tree<T>::GetDepth() const
 }
 
 template<class T>
-const List< Tree<T> > &Tree<T>::GetChildren() const { return m_subTrees; }
+const List< Tree<T>* > &Tree<T>::GetChildren() const { return m_subTrees; }
 
 template<class T>
 Tree<T>* Tree<T>::GetParent() const { return p_parent; }

@@ -10,6 +10,7 @@ NAMESPACE_BANG_BEGIN
 
 class Project : public Serializable
 {
+    ICLONEABLE(Project)
     SERIALIZABLE(Project)
 
 public:

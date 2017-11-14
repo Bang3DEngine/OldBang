@@ -165,7 +165,7 @@ UITextRenderer *UILabel::GetText() const { return p_text; }
 void UILabel::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
-    if (m_selectAllOnFocusTaken) { SelectAll(); }
+    if (m_selectAllOnFocusTaken && IsSelectable()) { SelectAll(); }
     else { ResetSelection(); }
     UpdateSelectionQuadRenderer();
 }

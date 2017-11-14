@@ -23,7 +23,7 @@ public:
     int GetDepth() const;
     const T& GetData() const;
     Tree<T>* GetParent() const;
-    const List< Tree<T> >& GetChildren() const;
+    const List< Tree<T>* >& GetChildren() const;
 
 private:
     T m_data;

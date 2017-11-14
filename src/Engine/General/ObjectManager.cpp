@@ -34,23 +34,30 @@ void ObjectManager::StartObjects()
         Object *objectToBeStarted = om->m_objectsToBeStartedQueue.front();
         om->m_objectsToBeStartedQueue.pop();
 
-        ASSERT(!objectToBeStarted->IsStarted());
-        objectToBeStarted->Start();
+        if (!om->m_objectsDestroyedInLastFrame.Contains(objectToBeStarted))
+        {
+            ASSERT(!objectToBeStarted->IsStarted());
+            objectToBeStarted->Start();
+        }
     }
 }
 
 void ObjectManager::DestroyObjects()
 {
     ObjectManager *om = ObjectManager::GetInstance();
+    om->m_objectsDestroyedInLastFrame.Clear();
     while (!om->m_objectsToBeDestroyedQueue.empty())
     {
         Object *objectToBeDestroyed = om->m_objectsToBeDestroyedQueue.front();
         om->m_objectsToBeDestroyedQueue.pop();
+
         if (!om->m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyed))
         {
             #ifdef DEBUG
             ObjectManager::AssertDestroyedFromObjectManager = true;
             #endif
+
+            om->m_objectsDestroyedInLastFrame.Add(objectToBeDestroyed);
 
             delete objectToBeDestroyed;
 

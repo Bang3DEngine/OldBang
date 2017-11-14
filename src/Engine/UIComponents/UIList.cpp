@@ -122,12 +122,15 @@ void UIList::SetSelection(int _i)
     ENSURE(numChildren > 0);
 
     int i = ((_i + numChildren) % numChildren);
-    GOItem *prevSelectedItem = GetSelectedItem();
-    if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
+    if (m_selectionIndex != i)
+    {
+        GOItem *prevSelectedItem = GetSelectedItem();
+        if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
 
-    m_selectionIndex = i;
-    GOItem *selectedItem = GetSelectedItem();
-    if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
+        m_selectionIndex = i;
+        GOItem *selectedItem = GetSelectedItem();
+        if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
+    }
 }
 
 void UIList::SetSelection(GOItem *item)

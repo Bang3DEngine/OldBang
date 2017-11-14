@@ -10,7 +10,6 @@
 NAMESPACE_BANG_BEGIN
 
 #define SERIALIZABLE(CLASS) \
-        ICLONEABLE(CLASS)\
         public: \
         virtual String GetClassName() const override { return #CLASS; } \
         static String GetClassNameStatic() { return #CLASS; }

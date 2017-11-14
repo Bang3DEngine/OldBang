@@ -9,10 +9,12 @@ USING_NAMESPACE_BANG
 
 Component::Component()
 {
+    ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 Component::~Component()
 {
+    ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
     SetGameObject(nullptr);
 }
 

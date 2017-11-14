@@ -162,7 +162,6 @@ void Gizmos::RenderBox(const AABox &b)
 
 void Gizmos::RenderRect(const Rect &r)
 {
-    Gizmos *g = Gizmos::GetInstance();
     RenderScreenLine( Vector2(r.m_min.x, r.m_min.y), Vector2(r.m_max.x, r.m_min.y) );
     RenderScreenLine( Vector2(r.m_max.x, r.m_min.y), Vector2(r.m_max.x, r.m_max.y) );
     RenderScreenLine( Vector2(r.m_max.x, r.m_max.y), Vector2(r.m_min.x, r.m_max.y) );

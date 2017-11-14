@@ -6,6 +6,8 @@
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
+#include "Bang/ObjectManager.h"
+#include "Bang/ComponentFactory.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -14,6 +16,11 @@ NAMESPACE_BANG_BEGIN
     ASSERT(gameObject->HasComponent<ComponentClass>())
 
 #define COMPONENT(ClassName) \
+    public: virtual ClassName *Clone() const override {\
+        ClassName *clone = ComponentFactory::Create<ClassName>();\
+        CloneInto(clone);\
+        return clone;\
+    }\
     SERIALIZABLE(ClassName) \
     friend class ObjectManager;
 

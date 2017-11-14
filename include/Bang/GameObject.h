@@ -9,8 +9,10 @@
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
+#include "Bang/GameObjectFactory.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -18,6 +20,11 @@ FORWARD class Camera;
 FORWARD class Component;
 
 #define GAMEOBJECT(ClassName) \
+    public: virtual ClassName* Clone() const override {\
+        ClassName *clone = GameObject::Create<ClassName>();\
+        CloneInto(clone);\
+        return clone;\
+    }\
     SERIALIZABLE(ClassName) \
     friend class ObjectManager;
 
@@ -31,6 +38,9 @@ class GameObject : public Object,
 
 public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
+
+    template <class T = GameObject, class... Args>
+    static T* Create(Args... args);
     static void Destroy(GameObject *gameObject);
 
     bool IsEnabled(bool recursive = false) const;
