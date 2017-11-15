@@ -9,11 +9,16 @@ FORWARD class IEventEmitter;
 
 class IEventListener
 {
+public:
+    void SetReceiveEvents(bool receiveEvents);
+    bool IsReceivingEvents() const;
+
 protected:
     IEventListener() = default;
     virtual ~IEventListener();
 
 private:
+    bool m_receivingEvents = true;
     List<IEventEmitter*> m_emitters;
 
     void OnRegisteredTo(IEventEmitter *emitter);

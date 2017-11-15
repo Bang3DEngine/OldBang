@@ -41,7 +41,9 @@ void Component::OnDestroy() {}
 
 bool Component::IsEnabled(bool recursive) const
 {
-    return Object::IsEnabled() && GetGameObject()->IsEnabled(recursive);
+    return recursive ?
+             (Object::IsEnabled() && GetGameObject()->IsEnabled(true)) :
+              Object::IsEnabled();
 }
 
 void Component::CloneInto(ICloneable *clone) const

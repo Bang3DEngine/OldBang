@@ -18,6 +18,9 @@ class UIButtonDriver : public Component,
     COMPONENT(UIButtonDriver)
 
 public:
+    void SetIconSize(const Vector2i &size);
+    void SetIconTexture(Texture2D *texture);
+    void SetIconSpacingWithText(int spacingWithText);
     void SetIcon(Texture2D *texture, const Vector2i &size,
                  int spacingWithText = 5);
 

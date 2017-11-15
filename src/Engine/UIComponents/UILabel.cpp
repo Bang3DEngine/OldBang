@@ -203,7 +203,8 @@ void UILabel::HandleClipboardCopy()
 void UILabel::HandleMouseSelection()
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-    if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
+    if (rt->IsMouseOver() &&
+        Input::GetMouseButtonDown(MouseButton::Left))
     {
         m_selectingWithMouse = true;
     }

@@ -35,7 +35,10 @@ USING_NAMESPACE_BANG
 GameObject *GameObjectFactory::CreateGameObject(bool addTransform)
 {
     GameObject *go = GameObject::Create<GameObject>();
-    if (addTransform) { go->AddComponent<Transform>(); }
+    if (addTransform && !go->HasComponent<Transform>())
+    {
+        go->AddComponent<Transform>();
+    }
     return go;
 }
 
@@ -64,14 +67,18 @@ void GameObjectFactory::CreateUIGameObjectInto(GameObject *go,  bool addComps)
 {
     if (addComps)
     {
-        go->AddComponent<RectTransform>();
+        if (!go->HasComponent<RectTransform>())
+        { go->AddComponent<RectTransform>(); }
     }
 }
 
 Scene *GameObjectFactory::CreateScene(bool addTransform)
 {
     Scene *scene = GameObject::Create<Scene>();
-    if (addTransform) { scene->AddComponent<Transform>(); }
+    if (addTransform && !scene->HasComponent<Transform>())
+    {
+        scene->AddComponent<Transform>();
+    }
     return scene;
 }
 

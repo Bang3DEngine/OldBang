@@ -1,7 +1,11 @@
-#include "Bang/UITree.h"
+﻿#include "Bang/UITree.h"
 
 #include "Bang/Input.h"
+#include "Bang/IconManager.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITintedButton.h"
+#include "Bang/UIButtonDriver.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -11,6 +15,7 @@ USING_NAMESPACE_BANG
 
 UITree::UITree()
 {
+    m_tree.SetData(nullptr);
 }
 
 UITree::~UITree()
@@ -27,6 +32,13 @@ void UITree::OnUpdate()
         Tree<GOItem*> *tree = it.second;
         IndentItem(child, tree->GetDepth()-1);
     }
+}
+
+void UITree::OnButton_Clicked(UIButton *btn)
+{
+    UITreeItemContainer *itemContainer = GetItemContainer(btn->GetGameObject());
+    SetItemCollapsed(itemContainer->GetContainedItem(),
+                     !itemContainer->IsCollapsed());
 }
 
 List<GOItem*> UITree::GetChildrenItems(GOItem *item)
@@ -46,25 +58,22 @@ List<GOItem*> UITree::GetChildrenItems(GOItem *item)
 
 void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
 {
-    Tree<GOItem*> *parentTree = nullptr;
-    if (parentItem)
-    {
-        if (m_itemToTree.ContainsKey(parentItem))
-        {
-            parentTree = m_itemToTree.Get(parentItem);
-        }
-    }
-    else { parentTree = &m_tree; }
-
+    Tree<GOItem*> *parentTree = GetItemTree(parentItem);
     if (parentTree && !m_itemToTree.ContainsKey(newItem))
     {
         UITreeItemContainer *itemContainer =
                                 GameObject::Create<UITreeItemContainer>();
+        itemContainer->GetCollapseButton()->GetButton()
+                ->EventEmitter<IUIButtonListener>::RegisterListener(this);
         itemContainer->SetContainedItem(newItem);
 
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem);
         m_itemToTree.Add(newItem, childTree);
         GetUIList()->AddItem(itemContainer);
+
+        // Update collapsabilities
+        UpdateCollapsability(newItem);
+        if (parentItem) { UpdateCollapsability(parentItem); }
     }
     else
     {
@@ -75,13 +84,19 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
 
 void UITree::RemoveItem(GOItem *item)
 {
-    if (m_itemToTree.ContainsKey(item))
+    Tree<GOItem*> *itemTree = GetItemTree(item);
+    if (itemTree)
     {
-        Tree<GOItem*> *parentTree = m_itemToTree.Get(item);
-        delete parentTree;
+        GOItem* parentItem = GetParentItem(item); // Get parent before deleting
 
-        GetUIList()->RemoveItem( item->GetParent() );
+        // Finally remove from list, remove from map, and delete the item tree
+        Tree<GOItem*> *itemTree = GetItemTree(item);
+        GetUIList()->RemoveItem( GetItemContainer(item) );
         m_itemToTree.Remove( item );
+        delete itemTree;
+
+        // Update parent collapsability
+        if (parentItem) { UpdateCollapsability(parentItem); }
     }
 }
 
@@ -92,9 +107,48 @@ void UITree::Clear()
     m_itemToTree.Clear();
 }
 
+void UITree::SetSelection(GOItem *item)
+{
+    UnCollapseUpwards( GetParentItem(item) );
+    GetUIList()->SetSelection(item);
+}
+
+void UITree::SetItemCollapsed(GOItem *item, bool collapsed)
+{
+    if (!collapsed) { UnCollapseUpwards(item); }
+    _SetItemCollapsedRec(item, collapsed, true);
+}
+
+void UITree::_SetItemCollapsedRec(GOItem *item, bool collapse, bool firstCall)
+{
+    if (firstCall) { GetItemContainer(item)->SetCollapsed(collapse); }
+
+    List<GOItem*> childrenItems = GetChildrenItems(item);
+    for (GOItem *childItem : childrenItems)
+    {
+        UITreeItemContainer *childItemContainer = GetItemContainer(childItem);
+        _SetItemCollapsedNoRec(childItem, collapse);
+        _SetItemCollapsedRec(childItem,
+                            (collapse || childItemContainer->IsCollapsed()),
+                            false);
+    }
+}
+
+void UITree::_SetItemCollapsedNoRec(GOItem *item, bool collapse)
+{
+    UITreeItemContainer *childItemContainer = GetItemContainer(item);
+    childItemContainer->SetEnabled(!collapse);
+}
+
+
 void UITree::SetSelectionCallback(UIList::SelectionCallback callback)
 {
     m_selectionCallback = callback;
+}
+
+bool UITree::IsItemCollapsed(GOItem *item) const
+{
+    return GetItemContainer(item)->IsCollapsed();
 }
 
 UIList *UITree::GetUIList() const { return p_uiList; }
@@ -103,34 +157,70 @@ UITree *UITree::CreateInto(GameObject *go)
 {
     UIList *list = GameObjectFactory::CreateUIListInto(go);
 
-    UITree *tree = go->AddComponent<UITree>();
-    tree->p_uiList = list;
+    UITree *uiTree = go->AddComponent<UITree>();
+    uiTree->p_uiList = list;
 
-    tree->GetUIList()->SetSelectionCallback(
-                    [tree](GOItem *item, UIList::Action action)
-                    {
-                        // Forward selectionCallback from itemContainer to
-                        // actual item
-                        UITreeItemContainer *itemCont =
-                                        SCAST<UITreeItemContainer*>(item);
-                        if (tree->m_selectionCallback)
-                        {
-                            tree->m_selectionCallback(
-                                        itemCont->GetContainedItem(), action);
-                        }
-                    }
+    uiTree->GetUIList()->SetSelectionCallback(
+        [uiTree](GOItem *item, UIList::Action action)
+        {
+            // Forward selectionCallback from itemContainer to
+            // actual item
+            if (uiTree->m_selectionCallback)
+            {
+                UITreeItemContainer *itemCont = SCAST<UITreeItemContainer*>(item);
+                uiTree->m_selectionCallback( itemCont->GetContainedItem(), action);
+            }
+        }
     );
 
-    return tree;
+    return uiTree;
+}
+
+void UITree::UnCollapseUpwards(GOItem *item)
+{
+    ENSURE(item);
+    _SetItemCollapsedNoRec(item, false);
+    UnCollapseUpwards( GetParentItem(item) );
+}
+
+UITreeItemContainer *UITree::GetItemContainer(GOItem *item) const
+{
+    return SCAST<UITreeItemContainer*>(item->GetParent());
+}
+
+void UITree::UpdateCollapsability(GOItem *item)
+{
+    Tree<GOItem*> *itemTree = GetItemTree(item);
+    if (itemTree)
+    {
+        bool isLeaf = (itemTree->GetChildren().Size() == 0);
+        GetItemContainer(item)->SetCollapsable(!isLeaf);
+    }
 }
 
 void UITree::IndentItem(GOItem *child, int indentation)
 {
-    UITreeItemContainer *itemContainer =
-                            DCAST<UITreeItemContainer*>(child->GetParent());
-    ASSERT(itemContainer);
+    GetItemContainer(child)->SetIndentation(10 * indentation);
+}
 
-    itemContainer->SetIndentation(10 * indentation);
+GOItem* UITree::GetParentItem(GOItem *item)
+{
+    Tree<GOItem*>* itemTree = GetItemTree(item);
+    if (!itemTree) { return nullptr; }
+
+    Tree<GOItem*>* parentTree = itemTree ? itemTree->GetParent() : nullptr;
+    if (!parentTree) { return nullptr; }
+
+    return (parentTree != &m_tree) ? parentTree->GetData() : nullptr;
+}
+
+Tree<GOItem*>* UITree::GetItemTree(GOItem *item)
+{
+    if (!item) { return &m_tree; }
+
+    // Make sure item belongs to this UITree
+    if (m_itemToTree.ContainsKey(item))  { return m_itemToTree.Get(item); }
+    return nullptr;
 }
 
 // UITreeItemContainer
@@ -141,12 +231,36 @@ UITreeItemContainer::UITreeItemContainer()
     AddComponent<UIHorizontalLayout>();
     p_spacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Preferred,
                                                  Vector2i::Zero);
+
+    p_collapseButton = GameObjectFactory::CreateUIButton();
+    p_collapseButton->SetIcon(IconManager::GetDownArrowIcon(), Vector2i(8), 0);
+    p_collapseButton->GetBackground()->SetVisible(false);
+
     SetAsChild(p_spacer);
+    SetAsChild(p_collapseButton->GetGameObject());
 }
 
 UITreeItemContainer::~UITreeItemContainer()
 {
 
+}
+
+void UITreeItemContainer::SetCollapsable(bool collapsable)
+{
+    GetCollapseButton()->SetEnabled(collapsable);
+    GetCollapseButton()->GetIcon()->SetVisible(collapsable);
+    GetCollapseButton()->GetButton()->SetEnabled(collapsable);
+}
+
+void UITreeItemContainer::SetCollapsed(bool collapsed)
+{
+    if (collapsed != IsCollapsed())
+    {
+        m_collapsed = collapsed;
+        GetCollapseButton()->SetIconTexture(
+                    IsCollapsed() ? IconManager::GetRightArrowIcon() :
+                                    IconManager::GetDownArrowIcon() );
+    }
 }
 
 void UITreeItemContainer::SetContainedItem(GameObject *go)
@@ -163,4 +277,14 @@ GameObject *UITreeItemContainer::GetContainedItem() const
 void UITreeItemContainer::SetIndentation(int indentationPx)
 {
     p_spacer->GetComponent<UILayoutElement>()->SetPreferredWidth(indentationPx);
+}
+
+bool UITreeItemContainer::IsCollapsed() const
+{
+    return m_collapsed;
+}
+
+UIButtonDriver *UITreeItemContainer::GetCollapseButton() const
+{
+    return p_collapseButton;
 }

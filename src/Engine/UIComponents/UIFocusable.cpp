@@ -26,6 +26,11 @@ void UIFocusable::OnUpdate()
     HandleFocusing(true);
 }
 
+bool UIFocusable::IsMouseOver() const
+{
+    return GetGameObject()->GetComponent<RectTransform>()->IsMouseOver();
+}
+
 void UIFocusable::LeaveFocus()
 {
     if (HasFocus())
@@ -40,10 +45,9 @@ bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 
 void UIFocusable::HandleFocusing(bool handleFocusTake)
 {
-    bool mouseOver = GetGameObject()->GetComponent<RectTransform>()->IsMouseOver();
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
-        bool gotFocus = mouseOver;
+        bool gotFocus = IsMouseOver();
         bool triggerEvent = (HasFocus() != gotFocus);
         if (triggerEvent && (gotFocus == handleFocusTake))
         {

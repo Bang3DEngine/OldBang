@@ -32,6 +32,7 @@ void UILayoutElement::SetMinSize(const Vector2i &minSize)
     {
         m_minSize = minSize;
         OnChanged();
+        SetPreferredSize(Vector2i::Max(GetMinSize(), GetPreferredSize()));
     }
 }
 

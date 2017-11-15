@@ -12,6 +12,16 @@ IEventListener::~IEventListener()
     }
 }
 
+void IEventListener::SetReceiveEvents(bool receiveEvents)
+{
+    m_receivingEvents = receiveEvents;
+}
+
+bool IEventListener::IsReceivingEvents() const
+{
+    return m_receivingEvents;
+}
+
 void IEventListener::OnRegisteredTo(IEventEmitter *emitter)
 {
     m_emitters.PushBack(emitter);

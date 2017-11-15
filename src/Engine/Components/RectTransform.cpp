@@ -354,7 +354,7 @@ void RectTransform::OnRenderGizmos()
     Transform::OnRenderGizmos();
     Gizmos::SetLineWidth(1.0f);
 
-    Rect r = GetScreenSpaceRectNDC();
+    Rect r = GetScreenSpaceRectNDC(); (void)r;
 
     // Random::SetSeed(GetInstanceId());
     Gizmos::SetColor(Random::GetColorOpaque());
@@ -440,9 +440,11 @@ void RectTransform::OnRectTransformChanged()
 {
     List<IRectTransformListener*> propagateTo =
             GetGameObject()->GetComponents<IRectTransformListener>();
-    propagateTo.Remove(this);
 
+    IRectTransformListener::SetReceiveEvents(false);
     PROPAGATE_1(IRectTransformListener, OnRectTransformChanged, propagateTo);
+    IRectTransformListener::SetReceiveEvents(true);
+
     PropagateParentRectTransformChangedEvent();
     PropagateChildrenRectTransformChangedEvent();
 }

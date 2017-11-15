@@ -43,7 +43,8 @@ private:
     for (IEventListener *listener : List) \
     { \
         EventListenerClass *cListener = DCAST<EventListenerClass*>(listener); \
-        if (cListener) { cListener->FunctionCall; } \
+        if (cListener && cListener->IsReceivingEvents()) \
+        { cListener->FunctionCall; } \
     } \
 }
 

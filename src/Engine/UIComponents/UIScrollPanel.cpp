@@ -4,6 +4,7 @@
 #include "Bang/Input.h"
 #include "Bang/Color.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -278,7 +279,7 @@ void UIScrollPanel::HandleScrollShowMode(const Vector2& contentSize,
 
 UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
 {
-    REQUIRE_COMPONENT(go, RectTransform);
+    GameObjectFactory::CreateUIGameObjectInto(go);
 
     UIScrollPanel *scrollPanel = go->AddComponent<UIScrollPanel>();
 

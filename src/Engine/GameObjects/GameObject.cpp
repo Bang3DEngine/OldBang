@@ -172,13 +172,15 @@ Component* GameObject::AddComponent(Component *c, int _index)
 {
     if (c && !GetComponents().Contains(c))
     {
+        Transform *trans = DCAST<Transform*>(c);
+        if (trans) { ASSERT(!HasComponent<Transform>()); }
+
         const int index = (_index != -1 ? _index : GetComponents().Size());
         m_components.Insert(index, c);
 
         c->SetGameObject(this);
         if (IsStarted()) { c->Start(); }
 
-        Transform *trans = DCAST<Transform*>(c);
         if (trans) { p_transform = trans; }
     }
     return c;

@@ -5,13 +5,18 @@
 #include "Bang/List.h"
 #include "Bang/Tree.h"
 #include "Bang/UIList.h"
+#include "Bang/UIButton.h"
 #include "Bang/Component.h"
+#include "Bang/UIButtonDriver.h"
 #include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UITreeItemContainer;
+
 class UITree : public IComponentDriver<UITree>,
-               public Component
+               public Component,
+               public IUIButtonListener
 {
     COMPONENT(UITree);
 
@@ -21,13 +26,19 @@ public:
     void RemoveItem(GOItem *itemToRemove);
     void Clear();
 
+    void SetSelection(GOItem *item);
+    void SetItemCollapsed(GOItem *item, bool collapsed);
     void SetSelectionCallback(UIList::SelectionCallback callback);
+
+    bool IsItemCollapsed(GOItem *item) const;
+    List<GOItem*> GetChildrenItems(GOItem *item);
+    UIList* GetUIList() const;
 
     // Component
     void OnUpdate() override;
 
-    List<GOItem*> GetChildrenItems(GOItem *item);
-    UIList* GetUIList() const;
+    // IUIButtonListener
+    void OnButton_Clicked(UIButton *btn) override;
 
 protected:
     UITree();
@@ -41,7 +52,15 @@ private:
     Map<GOItem*, Tree<GOItem*>*> m_itemToTree;
     UIList::SelectionCallback m_selectionCallback;
 
+    void UnCollapseUpwards(GOItem *item);
+    void _SetItemCollapsedRec(GOItem *item, bool collapse, bool firstCall);
+    void _SetItemCollapsedNoRec(GOItem *item, bool collapse);
+    void UpdateCollapsability(GOItem *item);
     void IndentItem(GOItem *item, int indentation);
+
+    GOItem* GetParentItem(GOItem *item);
+    Tree<GOItem*>* GetItemTree(GOItem* item);
+    UITreeItemContainer* GetItemContainer(GOItem *item) const;
 
     friend class GameObjectFactory;
     friend class IComponentDriver<UITree>;
@@ -53,12 +72,19 @@ public:
     UITreeItemContainer();
     virtual ~UITreeItemContainer();
 
+    void SetCollapsable(bool collapsable);
+    void SetCollapsed(bool collapsed);
     void SetContainedItem(GOItem *item);
-
-    GOItem *GetContainedItem() const;
     void SetIndentation(int indentationPx);
 
+    bool IsCollapsed() const;
+    GOItem *GetContainedItem() const;
+    UIButtonDriver *GetCollapseButton() const;
+
 private:
+    bool m_collapsed = false;
+
+    UIButtonDriver *p_collapseButton = nullptr;
     GOItem *p_containedGameObject = nullptr;
     GameObject *p_spacer = nullptr;
 };

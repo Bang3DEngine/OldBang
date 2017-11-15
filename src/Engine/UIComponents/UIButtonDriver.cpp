@@ -21,15 +21,29 @@ UIButtonDriver::~UIButtonDriver()
 
 }
 
+void UIButtonDriver::SetIconSize(const Vector2i &size)
+{
+    UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
+    le->SetMinSize(size);
+    le->SetPreferredSize(size);
+}
+
+void UIButtonDriver::SetIconTexture(Texture2D *texture)
+{
+    GetIcon()->SetImageTexture(texture);
+}
+
+void UIButtonDriver::SetIconSpacingWithText(int spacingWithText)
+{
+    GetGameObject()->GetComponent<UIDirLayout>()->SetSpacing(spacingWithText);
+}
+
 void UIButtonDriver::SetIcon(Texture2D *texture, const Vector2i &size,
                              int spacingWithText)
 {
-    GetIcon()->SetImageTexture(texture);
-
-    UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
-    le->SetMinSize(size);
-
-    GetGameObject()->GetComponent<UIDirLayout>()->SetSpacing(spacingWithText);
+    SetIconTexture(texture);
+    SetIconSize(size);
+    SetIconSpacingWithText(spacingWithText);
 }
 
 UIImageRenderer *UIButtonDriver::GetIcon() const { return p_icon; }

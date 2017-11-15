@@ -27,7 +27,8 @@ UIList::~UIList()
 
 void UIList::OnUpdate()
 {
-    if (GetGameObject()->GetComponent<RectTransform>()->IsMouseOver())
+    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    if (rt->IsMouseOver())
     {
         // Selection In/Out
         if (Input::GetKeyDownRepeat(Key::Down))
@@ -44,8 +45,9 @@ void UIList::OnUpdate()
         GOItem *itemUnderMouse = nullptr;
         for (GOItem *childItem : GetContainer()->GetChildren())
         {
-            RectTransform *rt = childItem->GetComponent<RectTransform>();
-            if (rt && rt->IsMouseOver()) { itemUnderMouse = childItem; break; }
+            RectTransform *childRT = childItem->GetComponent<RectTransform>();
+            if (childRT->IsEnabled(true) && childRT->IsMouseOver())
+            { itemUnderMouse = childItem; break; }
         }
 
         if (p_itemUnderMouse != itemUnderMouse)

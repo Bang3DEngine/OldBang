@@ -18,6 +18,8 @@ public:
 
     void OnUpdate() override;
 
+    bool IsMouseOver() const;
+
     void LeaveFocus();
     bool HasFocus() const;
     bool HasJustFocusChanged() const;
