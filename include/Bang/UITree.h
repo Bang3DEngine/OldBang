@@ -53,9 +53,9 @@ private:
     UIList::SelectionCallback m_selectionCallback;
 
     void UnCollapseUpwards(GOItem *item);
-    void _SetItemCollapsedRec(GOItem *item, bool collapse, bool firstCall);
+    void _SetItemCollapsedRec(GOItem *item, bool collapse);
     void UpdateCollapsability(GOItem *item);
-    void IndentItem(GOItem *item, int indentation);
+    void IndentItem(GOItem *item);
 
     GOItem* GetParentItem(GOItem *item);
     Tree<GOItem*>* GetItemTree(GOItem* item);

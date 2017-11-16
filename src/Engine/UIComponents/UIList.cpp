@@ -118,6 +118,11 @@ void UIList::Clear()
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
 }
 
+int UIList::GetNumItems() const
+{
+    return GetContainer()->GetChildren().Size();
+}
+
 void UIList::SetSelection(int _i)
 {
     const int numChildren = GetContainer()->GetChildren().Size();

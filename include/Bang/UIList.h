@@ -29,6 +29,7 @@ public:
     void SetSelection(int i);
     void SetSelection(GOItem *item);
 
+    int GetNumItems() const;
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
 
@@ -43,7 +44,7 @@ protected:
     virtual ~UIList();
 
 private:
-    int m_selectionIndex = 0;
+    int m_selectionIndex = -1;
     GOItem *p_itemUnderMouse = nullptr;
     SelectionCallback m_selectionCallback;
 

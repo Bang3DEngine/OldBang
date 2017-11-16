@@ -49,10 +49,10 @@ public:
 
 private:
     int m_spacingPx = 0;
-    HorizontalAlignment m_childrenHorizontalAlignment = HorizontalAlignment::Center;
-    VerticalAlignment   m_childrenVerticalAlignment   = VerticalAlignment::Center;
-    Stretch m_childrenHorizontalStretch = Stretch::Full;
-    Stretch m_childrenVerticalStretch   = Stretch::Full;
+    HorizontalAlignment m_childrenHorizontalAlignment = Undef<HorizontalAlignment>();
+    VerticalAlignment   m_childrenVerticalAlignment   = Undef<VerticalAlignment>();
+    Stretch m_childrenHorizontalStretch = Undef<Stretch>();
+    Stretch m_childrenVerticalStretch   = Undef<Stretch>();
 
     Vector2i m_paddingLeftBot  = Vector2i::Zero;
     Vector2i m_paddingRightTop = Vector2i::Zero;

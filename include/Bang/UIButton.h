@@ -33,8 +33,8 @@ public:
     // Component
     virtual void OnUpdate() override;
 
-    void RegisterButtonPart(GameObject *emitter);
-    void UnRegisterButtonPart(GameObject *emitter);
+    void RegisterButtonPart(GameObject *buttonPart);
+    void UnRegisterButtonPart(GameObject *buttonPart);
 
     using EnterExitCallback = std::function<void(UIButton*)>;
     using ClickedCallback = EnterExitCallback;

@@ -100,8 +100,8 @@ public:
 
     bool Contains(const Vector2G<T> &p) const
     {
-        return p.x >= m_min.x && p.x <= m_max.x &&
-               p.y >= m_min.y && p.y <= m_max.y;
+        return p.x >= m_min.x && p.x < m_max.x &&
+               p.y >= m_min.y && p.y < m_max.y;
     }
 
     static RectG<T> Union(const RectG<T> &r1, const RectG<T> &r2)

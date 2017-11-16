@@ -136,6 +136,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     GameObject *inputPathCont = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *inputPathHL = inputPathCont->AddComponent<UIHorizontalLayout>();
     inputPathHL->SetChildrenVerticalStretch(Stretch::None);
+    inputPathHL->SetChildrenHorizontalStretch(Stretch::Full);
     inputPathHL->SetSpacing(10);
     list->GetScrollPanel()->SetHorizontalScrollBarSide(VerticalSide::Bot);
     list->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);

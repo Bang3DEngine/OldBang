@@ -361,8 +361,8 @@ void RectTransform::OnRenderGizmos()
     // Gizmos::RenderFillRect(r);
 
     Gizmos::SetColor(Color::Green);
-    /*
     Gizmos::RenderRect(r);
+    /*
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
