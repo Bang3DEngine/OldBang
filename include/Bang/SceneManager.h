@@ -14,7 +14,6 @@ public:
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
-    static Scene *GetRootScene();
     static Scene* GetActiveScene();
     static const Path& GetActiveSceneFilepath();
 
@@ -31,8 +30,8 @@ protected:
 
     virtual void _Update();
     virtual void _LoadScene(Scene *scene);
-    virtual Scene* _GetRootScene() const;
-    virtual Scene* _GetActiveScene() const;
+    void _SetActiveScene(Scene *activeScene);
+    Scene *_GetActiveScene() const;
 
 private:
     Path m_queuedSceneFilepath;

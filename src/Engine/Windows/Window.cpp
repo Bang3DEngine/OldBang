@@ -124,7 +124,7 @@ void Window::Render()
 {
     Clear();
 
-    Scene *scene = GetSceneManager()->GetRootScene();
+    Scene *scene = GetSceneManager()->GetActiveScene();
     if (scene)
     {
         GetGEngine()->Render(scene);
@@ -264,8 +264,8 @@ void Window::OnResize(int newWidth, int newHeight)
         m_prevSize = m_newSize;
         GL::SetViewport(0, 0, GetWidth(), GetHeight());
 
-        Scene *rootScene = GetSceneManager()->GetRootScene();
-        if (rootScene) { rootScene->OnResize(newWidth, newHeight); }
+        Scene *scene = GetSceneManager()->GetActiveScene();
+        if (scene) { scene->OnResize(newWidth, newHeight); }
     }
 }
 

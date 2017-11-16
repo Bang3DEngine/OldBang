@@ -24,7 +24,6 @@ void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
     m_uiLayoutManager->RebuildLayout( GetGameObject()->GetScene() );
-    Debug_Log( GetGameObject()->GetScene() );
 }
 
 void UICanvas::CloneInto(ICloneable *clone) const

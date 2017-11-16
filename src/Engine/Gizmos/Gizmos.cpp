@@ -370,6 +370,6 @@ void Gizmos::Render(Renderer *rend)
 
 Gizmos* Gizmos::GetInstance()
 {
-    Scene *scene = SceneManager::GetRootScene();
+    Scene *scene = SceneManager::GetActiveScene();
     return scene ? scene->GetGizmos() : nullptr;
 }

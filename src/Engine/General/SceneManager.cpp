@@ -48,7 +48,7 @@ void SceneManager::UpdateScene(Scene *scene)
 
 void SceneManager::_Update()
 {
-    SceneManager::UpdateScene( SceneManager::GetRootScene() );
+    SceneManager::UpdateScene( SceneManager::GetActiveScene() );
 }
 
 void SceneManager::Update()
@@ -60,7 +60,7 @@ void SceneManager::_LoadScene(Scene *scene)
 {
     ENSURE(m_activeScene != scene);
 
-    m_activeScene = scene;
+    _SetActiveScene(scene);
     if (m_activeScene)
     {
         m_activeScene->SetFirstFoundCameraOrDefaultOne();
@@ -74,25 +74,16 @@ void SceneManager::LoadScene(Scene *scene)
     sm->_LoadScene(scene);
 }
 
-Scene *SceneManager::_GetRootScene() const
-{
-    return _GetActiveScene();
-}
-
 Scene *SceneManager::GetActiveScene()
 {
     SceneManager *sm = SceneManager::GetInstance();
     return sm ? sm->_GetActiveScene() : nullptr;
 }
-Scene *SceneManager::_GetActiveScene() const
-{
-    return m_activeScene;
-}
+Scene *SceneManager::_GetActiveScene() const { return m_activeScene; }
 
-Scene *SceneManager::GetRootScene()
+void SceneManager::_SetActiveScene(Scene *activeScene)
 {
-    SceneManager *sm = SceneManager::GetInstance();
-    return sm ? sm->_GetRootScene() : nullptr;
+    m_activeScene = activeScene;
 }
 
 void SceneManager::LoadScene(const Path &sceneFilepath)
