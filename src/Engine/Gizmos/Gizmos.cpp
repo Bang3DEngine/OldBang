@@ -109,7 +109,7 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 void Gizmos::SetBillboard()
 {
     Gizmos *g = Gizmos::GetInstance();
-    Scene *scene = SceneManager::GetRootScene();
+    Scene *scene = SceneManager::GetActiveScene();
     GameObject *cam = scene->GetCamera()->GetGameObject();
     Vector3 lookDir = (cam->GetTransform()->GetPosition() -
                        g->m_gizmosGo->GetTransform()->GetPosition());
@@ -197,7 +197,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
     SetReceivesLighting(false);
     if (billboard)
     {
-        Camera *cam = SceneManager::GetRootScene()->GetCamera();
+        Camera *cam = SceneManager::GetActiveScene()->GetCamera();
 
         Vector3 camPos = cam->GetGameObject()->GetTransform()->GetPosition();
         float distScale = 1.0f;
@@ -371,6 +371,5 @@ void Gizmos::Render(Renderer *rend)
 Gizmos* Gizmos::GetInstance()
 {
     Scene *scene = SceneManager::GetRootScene();
-    if (!scene) { return nullptr; }
-    return scene->GetGizmos();
+    return scene ? scene->GetGizmos() : nullptr;
 }

@@ -124,13 +124,12 @@ void Window::Render()
 {
     Clear();
 
-    Scene *rootScene = GetSceneManager()->GetRootScene();
-    UILayoutManager::RebuildLayout(rootScene);
-    if (rootScene)
+    Scene *scene = GetSceneManager()->GetRootScene();
+    if (scene)
     {
-        GetGEngine()->Render(rootScene);
+        GetGEngine()->Render(scene);
 
-        Camera *camera = rootScene->GetCamera(); ENSURE(camera);
+        Camera *camera = scene->GetCamera(); ENSURE(camera);
         BlitToScreen(camera);
     }
 }

@@ -90,12 +90,23 @@ Scene *GameObjectFactory::CreateUIScene()
     return scene;
 }
 
+class Rotator : public Component
+{
+public:
+    void OnUpdate() override
+    {
+        Component::OnUpdate();
+        GetGameObject()->GetTransform()->RotateLocal(Quaternion::AngleAxis(0.1f,Vector3::Up));
+    }
+};
+
 Scene *GameObjectFactory::CreateDefaultScene()
 {
     Scene *scene = GameObjectFactory::CreateScene();
 
     GameObject *cube = GameObjectFactory::CreateGameObjectNamed("Cube");
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
+    cube->AddComponent<Rotator>();
     mr->SetMesh( MeshFactory::GetCube() );
 
     GameObject *sphere = GameObjectFactory::CreateGameObjectNamed("Sphere-Child");

@@ -103,7 +103,7 @@ public:
     void RemoveComponentInstantly(Component *c);
     void RemoveQueuedComponents();
 
-    GameObject *GetScene() const;
+    Scene* GetScene() const;
     Transform *GetTransform() const;
     GameObject* GetParent() const;
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;

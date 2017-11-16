@@ -12,14 +12,7 @@ USING_NAMESPACE_BANG
 GameObject *Selection::GetOveredGameObject()
 {
     if (!Input::IsMouseInsideScreen()) { return nullptr; }
-
-    Scene *rootScene = SceneManager::GetRootScene();
-    GameObject *selGo = GetOveredGameObject(rootScene);
-    if (selGo) { return selGo; }
-
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene != rootScene) { selGo = GetOveredGameObject(activeScene); }
-    return selGo;
+    return GetOveredGameObject(  SceneManager::GetActiveScene() );
 }
 
 GameObject *Selection::GetOveredGameObject(Scene *scene)

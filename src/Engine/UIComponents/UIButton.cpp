@@ -1,6 +1,7 @@
 #include "Bang/UIButton.h"
 
 #include "Bang/Rect.h"
+#include "Bang/Scene.h"
 #include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
@@ -122,7 +123,8 @@ bool UIButton::IsMouseOverSomePart() const
 {
     if (GetMode() == UIButtonMode::UseRender)
     {
-        GameObject *overedGameObject = Selection::GetOveredGameObject();
+        GameObject *overedGameObject =
+                  Selection::GetOveredGameObject( GetGameObject()->GetScene() );
         if (!overedGameObject) { return false; }
         for (const GameObject *part : p_buttonParts)
         {
