@@ -54,7 +54,6 @@ private:
 
     void UnCollapseUpwards(GOItem *item);
     void _SetItemCollapsedRec(GOItem *item, bool collapse, bool firstCall);
-    void _SetItemCollapsedNoRec(GOItem *item, bool collapse);
     void UpdateCollapsability(GOItem *item);
     void IndentItem(GOItem *item, int indentation);
 

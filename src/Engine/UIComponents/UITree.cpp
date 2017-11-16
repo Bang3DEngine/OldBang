@@ -110,7 +110,9 @@ void UITree::Clear()
 void UITree::SetSelection(GOItem *item)
 {
     UnCollapseUpwards( GetParentItem(item) );
-    GetUIList()->SetSelection(item);
+    UITreeItemContainer *itemContainer = GetItemContainer(item);
+    if (itemContainer) { itemContainer->SetEnabled(true); }
+    GetUIList()->SetSelection(itemContainer);
 }
 
 void UITree::SetItemCollapsed(GOItem *item, bool collapsed)
@@ -127,19 +129,21 @@ void UITree::_SetItemCollapsedRec(GOItem *item, bool collapse, bool firstCall)
     for (GOItem *childItem : childrenItems)
     {
         UITreeItemContainer *childItemContainer = GetItemContainer(childItem);
-        _SetItemCollapsedNoRec(childItem, collapse);
+        childItemContainer->SetEnabled(!collapse);
         _SetItemCollapsedRec(childItem,
                             (collapse || childItemContainer->IsCollapsed()),
                             false);
     }
 }
 
-void UITree::_SetItemCollapsedNoRec(GOItem *item, bool collapse)
+void UITree::UnCollapseUpwards(GOItem *item)
 {
-    UITreeItemContainer *childItemContainer = GetItemContainer(item);
-    childItemContainer->SetEnabled(!collapse);
+    ENSURE(item);
+    UITreeItemContainer *itemContainer = GetItemContainer(item);
+    itemContainer->SetEnabled(true);
+    itemContainer->SetCollapsed(false);
+    UnCollapseUpwards( GetParentItem(item) );
 }
-
 
 void UITree::SetSelectionCallback(UIList::SelectionCallback callback)
 {
@@ -160,7 +164,7 @@ UITree *UITree::CreateInto(GameObject *go)
     UITree *uiTree = go->AddComponent<UITree>();
     uiTree->p_uiList = list;
 
-    uiTree->GetUIList()->SetSelectionCallback(
+    uiTree->()->SetSelectionCallback(
         [uiTree](GOItem *item, UIList::Action action)
         {
             // Forward selectionCallback from itemContainer to
@@ -174,13 +178,6 @@ UITree *UITree::CreateInto(GameObject *go)
     );
 
     return uiTree;
-}
-
-void UITree::UnCollapseUpwards(GOItem *item)
-{
-    ENSURE(item);
-    _SetItemCollapsedNoRec(item, false);
-    UnCollapseUpwards( GetParentItem(item) );
 }
 
 UITreeItemContainer *UITree::GetItemContainer(GOItem *item) const

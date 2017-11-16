@@ -98,21 +98,16 @@ Scene *GameObjectFactory::CreateDefaultScene()
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     mr->SetMesh( MeshFactory::GetCube() );
 
-    GameObject *sphere = GameObjectFactory::CreateGameObjectNamed("Sphere");
+    GameObject *sphere = GameObjectFactory::CreateGameObjectNamed("Sphere-Child");
     sphere->GetTransform()->SetLocalPosition(Vector3(1,1,1));
     sphere->GetTransform()->SetLocalScale( Vector3(0.3f) );
     MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
     mr2->SetMesh( MeshFactory::GetSphere() );
 
-    GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Sphere-Child");
+    GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Sphere-Child");
     cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
     mr3->SetMesh( MeshFactory::GetCube() );
-
-    GameObject *cube3 = GameObjectFactory::CreateGameObjectNamed("Sphere-Child-Child");
-    cube3->GetTransform()->SetLocalPosition(Vector3(4,0,0));
-    MeshRenderer *mr4 = cube3->AddComponent<MeshRenderer>();
-    mr4->SetMesh( MeshFactory::GetCube() );
 
     GameObject *light = GameObjectFactory::CreateGameObjectNamed("Light");
     DirectionalLight *dl = light->AddComponent<DirectionalLight>();
@@ -129,9 +124,6 @@ Scene *GameObjectFactory::CreateDefaultScene()
     scene->SetAsChild(cube);
     cube->SetAsChild(sphere);
     sphere->SetAsChild(cube2);
-    cube->SetAsChild(cube->Clone());
-    scene->SetAsChild(cube->Clone());
-    scene->SetAsChild(cube->Clone());
     scene->SetAsChild(light);
     scene->SetAsChild(cameraGo);
     return scene;
