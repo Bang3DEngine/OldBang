@@ -172,7 +172,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     containerL->SetPaddings(20);
 
     GameObject *mainVLayoutGo = GameObjectFactory::CreateUIGameObject();
-    UIVerticalLayout *mainVLayout = mainVLayoutGo->AddComponent<UIVerticalLayout>();
+    mainVLayoutGo->AddComponent<UIVerticalLayout>();
 
     GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();

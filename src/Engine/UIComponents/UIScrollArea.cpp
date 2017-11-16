@@ -81,7 +81,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     bg->SetTint(Color::White);
 
     UIMask *mask = go->AddComponent<UIMask>();
-    UIImageRenderer *maskQuad = go->AddComponent<UIImageRenderer>();
+    go->AddComponent<UIImageRenderer>();
     mask->SetDrawMask(false);
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();

@@ -2,14 +2,18 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/Scene.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
 UICanvas::UICanvas()
 {
+    m_uiLayoutManager = new UILayoutManager();
 }
 
 UICanvas::~UICanvas()
@@ -19,6 +23,7 @@ UICanvas::~UICanvas()
 void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
+    m_uiLayoutManager->RebuildLayout( GetGameObject()->GetScene() );
 }
 
 void UICanvas::CloneInto(ICloneable *clone) const

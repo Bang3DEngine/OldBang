@@ -263,7 +263,6 @@ void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 
 void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 {
-    Gizmos *g = Gizmos::GetInstance();
     Gizmos::RenderLine(origin, origin + rayDir);
 }
 
@@ -281,8 +280,6 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
                            float zNear, float zFar,
                            float fovDegrees, float aspectRatio)
 {
-    Gizmos *g = Gizmos::GetInstance();
-
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
 

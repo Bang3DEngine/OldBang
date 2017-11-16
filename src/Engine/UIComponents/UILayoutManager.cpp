@@ -193,9 +193,3 @@ void UILayoutManager::OnLayoutInvalidated(Component *comp,
         for (ILayoutController *lContr : thisLayoutContrs) { lContr->Invalidate(); }
     }
 }
-
-UILayoutManager *UILayoutManager::GetInstance()
-{
-    Scene *scene = SceneManager::GetRootScene();
-    return scene ? scene->GetUILayoutManager() : nullptr;
-}

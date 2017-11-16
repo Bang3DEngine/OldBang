@@ -17,11 +17,12 @@ UIGridLayout::~UIGridLayout()
 
 void UIGridLayout::ApplyLayout(Axis axis)
 {
+     (void)(axis);
     List<GameObject*> children =
             UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
     uint i = 0;
-    const int numRows = GetNumRows();
+    // const int numRows = GetNumRows();
     const int numColumns = GetNumColumns();
     for (GameObject *child : children)
     {

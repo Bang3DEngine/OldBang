@@ -56,15 +56,15 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
-    const List<GameObject*>& GetChildren() const;
-    List<GameObject*> GetChildrenRecursively() const;
-
     void SetAsChild(GameObject *child);
-    bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
+    void SetParent(GameObject *newParent, int _index = -1);
+    void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
 
     GameObject* GetChild(int index) const;
     GameObject* GetChild(const GUID &guid) const;
     GameObject* GetChild(const String &name) const;
+    const List<GameObject*>& GetChildren() const;
+    List<GameObject*> GetChildrenRecursively() const;
 
     template <class T>
     T* GetComponent() const;
@@ -103,12 +103,10 @@ public:
     void RemoveComponentInstantly(Component *c);
     void RemoveQueuedComponents();
 
+    GameObject *GetScene() const;
     Transform *GetTransform() const;
-
-    void SetParent(GameObject *newParent, int _index = -1);
     GameObject* GetParent() const;
-
-    void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
+    bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 
     bool IsDontDestroyOnLoad() const;
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;

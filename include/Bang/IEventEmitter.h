@@ -40,6 +40,8 @@ private:
 
 #define _PROPAGATE(EventListenerClass, FunctionCall, List) \
 { \
+    static_assert(T_SUBCLASS(EventListenerClass, IEventListener), \
+                  ""#EventListenerClass" must be subclass of IEventListener.");\
     for (IEventListener *listener : List) \
     { \
         EventListenerClass *cListener = DCAST<EventListenerClass*>(listener); \

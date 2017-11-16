@@ -272,7 +272,7 @@ UITreeItemContainer::UITreeItemContainer()
 
     p_collapseButton = GameObjectFactory::CreateUIButton();
     p_collapseButton->SetIcon(IconManager::GetDownArrowIcon(), Vector2i(8), 0);
-    p_collapseButton->GetBackground()->SetVisible(false);
+    p_collapseButton->GetBackground()->SetVisible(false);    
 
     SetAsChild(p_spacer);
     SetAsChild(p_collapseButton->GetGameObject());

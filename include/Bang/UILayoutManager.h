@@ -38,10 +38,7 @@ private:
     static void ApplyLayout(GameObject *gameObject, Axis axis);
 
     static void OnLayoutRebuilt(GameObject *go);
-    static void OnLayoutInvalidated(Component *comp,
-                                   bool isLayoutController);
-
-    static UILayoutManager *GetInstance();
+    static void OnLayoutInvalidated(Component *comp, bool isLayoutController);
 };
 
 NAMESPACE_BANG_END

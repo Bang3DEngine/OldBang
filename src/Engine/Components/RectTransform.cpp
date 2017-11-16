@@ -55,10 +55,23 @@ Vector2 RectTransform::FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const
     return GL::FromGlobalNDCToPixelsPoint( FromLocalNDCToGlobalNDC(ndcPoint) );
 }
 
-bool RectTransform::IsMouseOver() const
+bool RectTransform::IsMouseOver(bool recursive) const
 {
     if (!Input::IsMouseInsideScreen()) { return false; }
-    return GetScreenSpaceRectNDC().Contains( Input::GetMouseCoordsNDC() );
+
+    if (GetScreenSpaceRectNDC().Contains( Input::GetMouseCoordsNDC() ))
+    { return true; }
+
+    if (recursive)
+    {
+        List<RectTransform*> childrenRTs =
+             GetGameObject()->GetComponentsInChildrenOnly<RectTransform>(false);
+        for (RectTransform *childRT : childrenRTs)
+        {
+            if (childRT->IsMouseOver(true)) { return true; }
+        }
+    }
+    return false;
 }
 
 Vector2 RectTransform::FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const

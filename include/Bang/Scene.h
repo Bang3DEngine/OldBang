@@ -10,7 +10,6 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 FORWARD class Gizmos;
-FORWARD class UILayoutManager;
 
 class Scene : public GameObject
 {
@@ -24,7 +23,6 @@ public:
     void SetFirstFoundCameraOrDefaultOne();
 
     static Scene *GetActiveScene();
-    UILayoutManager* GetUILayoutManager() const;
     virtual Camera *GetCamera() const;
 
     void InvalidateCanvas();
@@ -35,7 +33,6 @@ public:
     virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
-    UILayoutManager *m_uiLayoutManager = nullptr;
     GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;

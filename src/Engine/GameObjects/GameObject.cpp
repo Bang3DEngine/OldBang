@@ -205,6 +205,15 @@ void GameObject::RemoveComponent(Component *c)
     ObjectManager::Destroy(c);
 }
 
+GameObject *GameObject::GetScene() const
+{
+    GameObject *parent = GetParent();
+    if (!parent) { return nullptr; }
+
+    Scene *parentScene = DCAST<Scene*>(parent);
+    return parentScene ? parentScene : parent->GetScene();
+}
+
 Transform *GameObject::GetTransform() const { return p_transform; }
 
 void GameObject::SetName(const String &name) { m_name = name; }

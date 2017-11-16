@@ -10,7 +10,6 @@
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutManager.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -18,7 +17,6 @@ USING_NAMESPACE_BANG
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
-    m_uiLayoutManager = new UILayoutManager();
 }
 
 Scene::~Scene()
@@ -97,8 +95,6 @@ void Scene::InvalidateCanvas()
 }
 
 Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
-
-UILayoutManager *Scene::GetUILayoutManager() const { return m_uiLayoutManager; }
 Camera *Scene::GetCamera() const { return p_camera; }
 
 void Scene::ImportXML(const XMLNode &xmlInfo)

@@ -6,6 +6,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
+FORWARD class UILayoutManager;
 
 class UICanvas : public Component
 {
@@ -21,6 +22,9 @@ public:
 
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
+
+private:
+    UILayoutManager *m_uiLayoutManager = nullptr;
 };
 
 NAMESPACE_BANG_END

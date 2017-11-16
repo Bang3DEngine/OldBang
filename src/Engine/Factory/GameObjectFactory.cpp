@@ -110,7 +110,7 @@ Scene *GameObjectFactory::CreateDefaultScene()
     mr3->SetMesh( MeshFactory::GetCube() );
 
     GameObject *light = GameObjectFactory::CreateGameObjectNamed("Light");
-    DirectionalLight *dl = light->AddComponent<DirectionalLight>();
+    light->AddComponent<DirectionalLight>();
     light->GetTransform()->SetPosition( Vector3(5,4,3) );
     light->GetTransform()->LookAt( Vector3::Zero );
 
