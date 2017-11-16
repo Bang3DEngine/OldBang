@@ -111,6 +111,18 @@ void UIList::RemoveItem(GOItem *item)
     SetSelection(selIndex);
 }
 
+void UIList::ClearSelection()
+{
+    if (m_selectionIndex >= 0)
+    {
+        if (m_selectionCallback)
+        {
+            m_selectionCallback(GetSelectedItem(), Action::SelectionOut);
+        }
+        m_selectionIndex = -1;
+    }
+}
+
 void UIList::Clear()
 {
     List<GOItem*> childrenItems = GetContainer()->GetChildren();
