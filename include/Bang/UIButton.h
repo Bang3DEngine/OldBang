@@ -1,89 +1,55 @@
-#ifndef UIBUTTON_H
-#define UIBUTTON_H
+#ifndef UIBUTTONDRIVER_H
+#define UIBUTTONDRIVER_H
 
-#include <functional>
-
-#include "Bang/Set.h"
-#include "Bang/Input.h"
 #include "Bang/Component.h"
-#include "Bang/IEventEmitter.h"
-#include "Bang/IEventListener.h"
+#include "Bang/UIButtoneable.h"
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class GameObject;
-FORWARD class IUIButtonListener;
-
-enum UIButtonMode
-{
-    UseRectTransform,
-    UseRender
-};
+FORWARD class Texture2D;
+FORWARD class UIDirLayout;
+FORWARD class UITextRenderer;
+FORWARD class UIImageRenderer;
 
 class UIButton : public Component,
-                 public IDestroyListener,
-                 public EventEmitter<IUIButtonListener>
+                 public IUIButtonListener
 {
     COMPONENT(UIButton)
 
 public:
+    void SetIconSize(const Vector2i &size);
+    void SetIconTexture(Texture2D *texture);
+    void SetIconSpacingWithText(int spacingWithText);
+    void SetIcon(Texture2D *texture, const Vector2i &size,
+                 int spacingWithText = 5);
+
+    UIImageRenderer* GetIcon() const;
+    UITextRenderer* GetText() const;
+    UIImageRenderer* GetBackground() const;
+    UIDirLayout *GetDirLayout() const;
+    UIButtoneable* GetButton() const;
+
+private:
     UIButton();
     virtual ~UIButton();
 
-    // Component
-    virtual void OnUpdate() override;
+    UIImageRenderer *p_icon        = nullptr;
+    UITextRenderer  *p_text        = nullptr;
+    UIImageRenderer *p_background  = nullptr;
+    UIButtoneable        *p_button      = nullptr;
 
-    void RegisterButtonPart(GameObject *buttonPart);
-    void UnRegisterButtonPart(GameObject *buttonPart);
+    static UIButton *CreateInto(GameObject *go);
 
-    using EnterExitCallback = std::function<void(UIButton*)>;
-    using ClickedCallback = EnterExitCallback;
-    using DoubleClickedCallback = ClickedCallback;
-    using DownUpCallback = std::function<void(UIButton*, MouseButton)>;
+    // IUIButtonListener
+    virtual void OnButton_MouseEnter(UIButtoneable *btn) override;
+    virtual void OnButton_MouseExit(UIButtoneable *btn) override;
+    virtual void OnButton_MouseDown(UIButtoneable *btn, MouseButton mb) override;
+    virtual void OnButton_MouseUp(UIButtoneable *btn, MouseButton mb,
+                                  bool inside) override;
 
-    void AddMouseEnterCallback(EnterExitCallback callback);
-    void AddMouseExitCallback(EnterExitCallback callback);
-    void AddMouseDownCallback(DownUpCallback callback);
-    void AddMouseUpCallback(DownUpCallback callback);
-    void AddClickedCallback(ClickedCallback callback);
-    void AddDoubleClickedCallback(DoubleClickedCallback callback);
-
-    void SetMode(UIButtonMode mode);
-
-    bool IsMouseOverSomePart() const;
-    bool IsBeingPressed() const;
-    UIButtonMode GetMode() const;
-
-    void OnBeforeDestroyed(Object *object) override;
-
-private:
-    bool m_mouseOver    = false;
-    bool m_beingPressed = false;
-    UIButtonMode m_mode = UIButtonMode::UseRectTransform;
-
-    Set<GameObject*> p_buttonParts;
-
-    Array<EnterExitCallback> m_mouseEnterCallbacks;
-    Array<EnterExitCallback> m_mouseExitCallbacks;
-    Array<DownUpCallback> m_mouseDownCallbacks;
-    Array<DownUpCallback> m_mouseUpCallbacks;
-    Array<ClickedCallback> m_clickedCallbacks;
-    Array<DoubleClickedCallback> m_doubleClickedCallbacks;
-};
-
-class IUIButtonListener : public IEventListener
-{
-protected:
-    virtual void OnButton_MouseEnter(UIButton *btn) {}
-    virtual void OnButton_MouseExit(UIButton *btn) {}
-    virtual void OnButton_MouseDown(UIButton *btn, MouseButton mb) {}
-    virtual void OnButton_MouseUp(UIButton *btn, MouseButton mb) {}
-    virtual void OnButton_Clicked(UIButton *btn) {}
-    virtual void OnButton_DoubleClicked(UIButton *btn) {}
-
-    friend class UIButton;
+    friend class GameObjectFactory;
 };
 
 NAMESPACE_BANG_END
 
-#endif // UIBUTTON_H
+#endif // UIBUTTONDRIVER_H

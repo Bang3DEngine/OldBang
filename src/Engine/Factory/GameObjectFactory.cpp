@@ -8,7 +8,6 @@
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
-#include "Bang/UIButton.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
@@ -17,13 +16,13 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
-#include "Bang/UIButtonDriver.h"
+#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -212,21 +211,21 @@ UIInputNumber *GameObjectFactory::CreateUIInputNumber()
                     GameObjectFactory::CreateUIGameObjectNamed("InputNumber") );
 }
 
-UIButtonDriver *GameObjectFactory::CreateUIButtonInto(GameObject *go)
+UIButton *GameObjectFactory::CreateUIButtonInto(GameObject *go)
 {
-    return UIButtonDriver::CreateInto(go);
+    return UIButton::CreateInto(go);
 }
-UIButtonDriver* GameObjectFactory::CreateUIButton()
+UIButton* GameObjectFactory::CreateUIButton()
 {
-    return UIButtonDriver::CreateInto(
+    return UIButton::CreateInto(
                 GameObjectFactory::CreateUIGameObjectNamed("Button") );
 }
 
-UIButtonDriver *GameObjectFactory::CreateUIButton(const String &text,
+UIButton *GameObjectFactory::CreateUIButton(const String &text,
                                                   Texture2D *icon)
 {
     const Vector2i size(15);
-    UIButtonDriver *btn = GameObjectFactory::CreateUIButton();
+    UIButton *btn = GameObjectFactory::CreateUIButton();
 
     if (!text.IsEmpty()) { btn->GetText()->SetContent(text); }
 

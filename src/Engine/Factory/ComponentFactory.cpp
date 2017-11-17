@@ -3,7 +3,6 @@
 #include "Bang/Light.h"
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"
-#include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
@@ -15,14 +14,14 @@
 #include "Bang/AudioSource.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/AudioListener.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AudioListener.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"
@@ -41,9 +40,9 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, Light);
     CREATE_COMPONENT(componentClassName, Camera);
     CREATE_COMPONENT(componentClassName, UIMask);
-    CREATE_COMPONENT(componentClassName, UIButton);
+    CREATE_COMPONENT(componentClassName, UIButtoneable);
     CREATE_COMPONENT(componentClassName, Renderer);
-    CREATE_COMPONENT(componentClassName, UIButton);
+    CREATE_COMPONENT(componentClassName, UIButtoneable);
     CREATE_COMPONENT(componentClassName, UICanvas);
     CREATE_COMPONENT(componentClassName, Behaviour);
     CREATE_COMPONENT(componentClassName, Transform);
@@ -56,7 +55,6 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, UITextCursor);
     CREATE_COMPONENT(componentClassName, AudioListener);
     CREATE_COMPONENT(componentClassName, RectTransform);
-    CREATE_COMPONENT(componentClassName, UITintedButton);
     CREATE_COMPONENT(componentClassName, CircleRenderer);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
     CREATE_COMPONENT(componentClassName, UIImageRenderer);
@@ -82,7 +80,7 @@ bool ComponentFactory::Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, Camera);
     EXISTS_COMPONENT(componentClassName, UIMask);
     EXISTS_COMPONENT(componentClassName, Renderer);
-    EXISTS_COMPONENT(componentClassName, UIButton);
+    EXISTS_COMPONENT(componentClassName, UIButtoneable);
     EXISTS_COMPONENT(componentClassName, UICanvas);
     EXISTS_COMPONENT(componentClassName, Behaviour);
     EXISTS_COMPONENT(componentClassName, Transform);
@@ -97,7 +95,6 @@ bool ComponentFactory::Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, AudioListener);
     EXISTS_COMPONENT(componentClassName, RectTransform);
     EXISTS_COMPONENT(componentClassName, CircleRenderer);
-    EXISTS_COMPONENT(componentClassName, UITintedButton);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
     EXISTS_COMPONENT(componentClassName, UIImageRenderer);
     EXISTS_COMPONENT(componentClassName, DirectionalLight);

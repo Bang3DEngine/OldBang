@@ -3,7 +3,6 @@
 
 #include "Bang/Component.h"
 #include "Bang/IFocusListener.h"
-#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -11,9 +10,8 @@ FORWARD class UIMask;
 FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 
-class UILabel : public IComponentDriver<UILabel>,
-                public IFocusListener,
-                public Component
+class UILabel : public Component,
+                public IFocusListener
 {
     COMPONENT(UILabel)
 
@@ -72,11 +70,9 @@ private:
     bool IsShiftPressed() const;
     RectTransform *GetTextParentRT() const;
 
-    // IComponentDriver
     static UILabel *CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UILabel>;
 };
 
 NAMESPACE_BANG_END

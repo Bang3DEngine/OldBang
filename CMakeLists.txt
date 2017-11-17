@@ -232,7 +232,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIButtonDriver.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIButtoneable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
@@ -254,7 +254,6 @@ ${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
-${ENGINE_SRC_DIR}/UIComponents/UITintedButton.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITree.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
 ${ENGINE_SRC_DIR}/Windows/Dialog.cpp

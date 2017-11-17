@@ -7,15 +7,14 @@
 #include "Bang/UIList.h"
 #include "Bang/UIButton.h"
 #include "Bang/Component.h"
-#include "Bang/UIButtonDriver.h"
-#include "Bang/IComponentDriver.h"
+#include "Bang/GameObject.h"
+#include "Bang/UIButtoneable.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UITreeItemContainer;
 
-class UITree : public IComponentDriver<UITree>,
-               public Component,
+class UITree : public Component,
                public IUIButtonListener
 {
     COMPONENT(UITree);
@@ -38,7 +37,7 @@ public:
     void OnUpdate() override;
 
     // IUIButtonListener
-    void OnButton_Clicked(UIButton *btn) override;
+    void OnButton_Clicked(UIButtoneable *btn) override;
 
 protected:
     UITree();
@@ -62,7 +61,6 @@ private:
     UITreeItemContainer* GetItemContainer(GOItem *item) const;
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UITree>;
 };
 
 
@@ -80,12 +78,12 @@ public:
 
     bool IsCollapsed() const;
     GOItem *GetContainedItem() const;
-    UIButtonDriver *GetCollapseButton() const;
+    UIButton *GetCollapseButton() const;
 
 private:
     bool m_collapsed = false;
 
-    UIButtonDriver *p_collapseButton = nullptr;
+    UIButton *p_collapseButton = nullptr;
     GOItem *p_containedGameObject = nullptr;
     GameObject *p_spacer = nullptr;
 };

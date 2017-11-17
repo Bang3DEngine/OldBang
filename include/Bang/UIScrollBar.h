@@ -3,15 +3,16 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Component.h"
-#include "Bang/IComponentDriver.h"
+#include "Bang/UIButtoneable.h"
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIButton;
 FORWARD class UIScrollArea;
+FORWARD class UIButtoneable;
+FORWARD class UIImageRenderer;
 
-class UIScrollBar : public IComponentDriver<UIScrollBar>,
-                    public Component
+class UIScrollBar : public Component,
+                    public IUIButtonListener
 {
     COMPONENT(UIScrollBar)
 
@@ -35,16 +36,20 @@ public:
     int GetThickness() const;
     Axis GetScrollAxis() const;
 
+    bool IsBeingGrabbed() const;
+
 private:
     int m_length = 0;
     int m_thickness = 0;
     int m_scrollingPx = 0;
     bool m_wasGrabbed = false;
-    Side m_side = Undef<Side>();
     Vector2i m_grabOffset = Vector2i::Zero;
 
+    Side m_side = Undef<Side>();
+
     GameObject *p_bar = nullptr;
-    UIButton *p_button = nullptr;
+    UIButtoneable *p_button = nullptr;
+    UIImageRenderer *p_barImg = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
 
     static UIScrollBar* CreateInto(GameObject *go);
@@ -54,11 +59,16 @@ private:
     int GetScrollingSpacePx() const;
     Rect GetScrollingRect() const;
     UIScrollArea *GetScrollArea() const;
-    UIButton* GetButton() const;
+    UIButtoneable* GetButton() const;
     GameObject* GetBar() const;
 
+    // IUIButtonListener
+    void OnButton_MouseEnter(UIButtoneable *btn) override;
+    void OnButton_MouseExit(UIButtoneable *btn) override;
+    void OnButton_MouseDown(UIButtoneable *btn, MouseButton mb) override;
+    void OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside) override;
+
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIScrollBar>;
 };
 
 NAMESPACE_BANG_END

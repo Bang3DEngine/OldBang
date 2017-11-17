@@ -20,7 +20,7 @@ FORWARD class UIScrollBar;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIInputNumber;
-FORWARD class UIButtonDriver;
+FORWARD class UIButton;
 FORWARD class UIImageRenderer;
 
 class GameObjectFactory
@@ -54,9 +54,9 @@ public:
     static UIInputText*     CreateUIInputText();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
     static UIInputNumber*   CreateUIInputNumber();
-    static UIButtonDriver*  CreateUIButtonInto(GameObject *go);
-    static UIButtonDriver*  CreateUIButton();
-    static UIButtonDriver*  CreateUIButton(const String &text,
+    static UIButton*  CreateUIButtonInto(GameObject *go);
+    static UIButton*  CreateUIButton();
+    static UIButton*  CreateUIButton(const String &text,
                                            Texture2D *icon = nullptr);
     static UILabel*         CreateUILabel();
     static UILabel*         CreateUILabelInto(GameObject *go);

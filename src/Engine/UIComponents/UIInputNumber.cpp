@@ -1,6 +1,7 @@
 #include "Bang/UIInputNumber.h"
 
 #include "Bang/Input.h"
+#include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"

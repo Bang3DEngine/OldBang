@@ -1,9 +1,10 @@
 #include "Bang/UIScrollBar.h"
 
 #include "Bang/Rect.h"
+#include "Bang/GameObject.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UITintedButton.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/UIImageRenderer.h"
 
 USING_NAMESPACE_BANG
@@ -20,9 +21,10 @@ void UIScrollBar::OnUpdate()
 {
     Component::OnUpdate();
 
-    bool isBeingGrabbed = GetButton()->IsBeingPressed();
-    if (isBeingGrabbed)
+    if ( IsBeingGrabbed() )
     {
+        p_barImg->SetTint(Color::Black);
+
         Vector2 mouseCoords (Input::GetMouseCoords());
         Rect scrollRectPx = GetScrollingRect();
         Rect barRectPx = GetBar()->GetComponent<RectTransform>()->
@@ -43,7 +45,7 @@ void UIScrollBar::OnUpdate()
 
         SetScrollingPercent(scrollPercent);
     }
-    m_wasGrabbed = isBeingGrabbed;
+    m_wasGrabbed = IsBeingGrabbed();
 }
 
 void UIScrollBar::SetSide(Side side)
@@ -117,6 +119,11 @@ Axis UIScrollBar::GetScrollAxis() const
     ASSERT(false); return Axis::Horizontal;
 }
 
+bool UIScrollBar::IsBeingGrabbed() const
+{
+    return GetButton()->IsBeingPressed();
+}
+
 void UIScrollBar::UpdateLengthThicknessMargins()
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
@@ -163,16 +170,13 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     UIImageRenderer *barImg = bar->AddComponent<UIImageRenderer>();
     barImg->SetTint(Color::Black);
 
-    UITintedButton *btn = bar->AddComponent<UITintedButton>();
+    UIButtoneable *btn = bar->AddComponent<UIButtoneable>();
     btn->RegisterButtonPart(bar);
-    btn->AddToTint(bar);
-    btn->SetMode(UIButtonMode::UseRectTransform);
-    btn->SetIdleTintColor( Color::Black );
-    btn->SetOverTintColor( Color::Gray * 1.3f );
-    btn->SetPressedTintColor( Color::Gray);
+    btn->SetMode(UIButtoneableMode::RectTransform);
 
     scrollBar->p_bar = bar;
     scrollBar->p_button = btn;
+    scrollBar->p_barImg = barImg;
     scrollBar->p_scrollArea = scrollArea;
     scrollBar->SetSide(Side::Left);
     scrollBar->SetLength(50);
@@ -199,5 +203,33 @@ Rect UIScrollBar::GetScrollingRect() const
 
 UIScrollArea *UIScrollBar::GetScrollArea() const { return p_scrollArea; }
 GameObject *UIScrollBar::GetBar() const { return p_bar; }
-UIButton *UIScrollBar::GetButton() const { return p_button; }
+
+void UIScrollBar::OnButton_MouseEnter(UIButtoneable*)
+{
+    if (!IsBeingGrabbed())
+    {
+        p_barImg->SetTint(Color::LightGray);
+    }
+}
+
+void UIScrollBar::OnButton_MouseExit(UIButtoneable*)
+{
+    if (!IsBeingGrabbed())
+    {
+        p_barImg->SetTint(Color::Gray);
+    }
+}
+
+void UIScrollBar::OnButton_MouseDown(UIButtoneable *btn, MouseButton mb)
+{
+    Debug_Log("DOWN");
+}
+
+void UIScrollBar::OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside)
+{
+    if (inside) { OnButton_MouseEnter(btn); }
+    else { OnButton_MouseExit(btn); }
+}
+
+UIButtoneable *UIScrollBar::GetButton() const { return p_button; }
 

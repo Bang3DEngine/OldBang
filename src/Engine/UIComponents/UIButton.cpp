@@ -1,14 +1,17 @@
 #include "Bang/UIButton.h"
 
-#include "Bang/Rect.h"
-#include "Bang/Scene.h"
-#include "Bang/Selection.h"
+#include "Bang/UILabel.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UIVerticalLayout.h"
+#include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
 
-UIButton::UIButton() : Component()
+UIButton::UIButton()
 {
 
 }
@@ -18,140 +21,116 @@ UIButton::~UIButton()
 
 }
 
-void UIButton::OnUpdate()
+void UIButton::SetIconSize(const Vector2i &size)
 {
-    Component::OnUpdate();
+    UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
+    le->SetMinSize(size);
+    le->SetPreferredSize(size);
+}
 
-    // Is mouse currently over some button part?
-    const bool mouseOverSomePart = IsMouseOverSomePart();
+void UIButton::SetIconTexture(Texture2D *texture)
+{
+    GetIcon()->SetImageTexture(texture);
+}
 
-    // Mouse Down & Up events
-    if (mouseOverSomePart)
+void UIButton::SetIconSpacingWithText(int spacingWithText)
+{
+    GetGameObject()->GetComponent<UIDirLayout>()->SetSpacing(spacingWithText);
+}
+
+void UIButton::SetIcon(Texture2D *texture, const Vector2i &size,
+                             int spacingWithText)
+{
+    SetIconTexture(texture);
+    SetIconSize(size);
+    SetIconSpacingWithText(spacingWithText);
+}
+
+UIImageRenderer *UIButton::GetIcon() const { return p_icon; }
+UITextRenderer *UIButton::GetText() const { return p_text; }
+UIImageRenderer *UIButton::GetBackground() const { return p_background; }
+UIButtoneable *UIButton::GetButton() const { return p_button; }
+UIDirLayout *UIButton::GetDirLayout() const
+{
+    return GetGameObject()->GetComponent<UIDirLayout>();
+}
+
+UIButton* UIButton::CreateInto(GameObject *go)
+{
+    REQUIRE_COMPONENT(go, RectTransform);
+
+    UIButton *buttonDriv = go->AddComponent<UIButton>();
+
+    UIHorizontalLayout *hl = go->AddComponent<UIHorizontalLayout>();
+    hl->SetPaddingBot(3);
+    hl->SetPaddingTop(3);
+    hl->SetPaddingRight(3);
+    hl->SetPaddingLeft (3);
+    hl->SetSpacing(5);
+
+    UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
+    bgImg->SetTint(Color::White);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2(0) );
+
+    UIButtoneable *btn = go->AddComponent<UIButtoneable>();
+    btn->SetMode(UIButtoneableMode::RectTransform);
+    btn->RegisterButtonPart(go);
+    btn->EventEmitter<IUIButtonListener>::RegisterListener(buttonDriv);
+
+    UILabel *label = GameObjectFactory::CreateUILabel();
+    label->GetText()->SetTextColor(Color::Black);
+
+    UIImageRenderer *icon = GameObjectFactory::CreateUIImage();
+    icon->SetAspectRatioMode(AspectRatioMode::Keep);
+
+    GameObject *iconGo = icon->GetGameObject();
+    UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
+    iconLE->SetFlexibleSize(Vector2::Zero);
+
+    buttonDriv->p_icon = icon;
+    buttonDriv->p_background = bgImg;
+    buttonDriv->p_button = btn;
+    buttonDriv->p_text = label->GetText();
+
+    go->SetAsChild(icon->GetGameObject());
+    go->SetAsChild(label->GetGameObject());
+
+    buttonDriv->SetIcon(nullptr, Vector2i::Zero, 0);
+
+    return buttonDriv;
+}
+
+void UIButton::OnButton_MouseEnter(UIButtoneable *btn)
+{
+    if (!GetButton()->IsBeingPressed())
     {
-        Array<MouseButton> buttonsDown = Input::GetMouseButtonsDown();
-        for (MouseButton mb : buttonsDown)
-        {
-            PROPAGATE(IUIButtonListener, OnButton_MouseDown, this, mb);
-            for (auto f : m_mouseDownCallbacks) { f(this, mb); }
-        }
-
-        Array<MouseButton> buttonsUp = Input::GetMouseButtonsUp();
-        for (MouseButton mb : buttonsUp)
-        {
-            PROPAGATE(IUIButtonListener, OnButton_MouseUp, this, mb);
-            for (auto f : m_mouseUpCallbacks) { f(this, mb); }
-        }
+        GetBackground()->SetTint(Color::LightGray);
     }
+}
 
-    // Clicked event and pressed tracking
-    if (mouseOverSomePart)
+void UIButton::OnButton_MouseExit(UIButtoneable *btn)
+{
+    if (!GetButton()->IsBeingPressed())
     {
-        m_beingPressed = m_beingPressed ||
-                         Input::GetMouseButtonDown(MouseButton::Left);
-        if (m_beingPressed && Input::GetMouseButtonUp(MouseButton::Left))
-        {
-            PROPAGATE(IUIButtonListener, OnButton_Clicked, this);
-            for (auto f : m_clickedCallbacks) { f(this); }
-        }
-
-        if (m_beingPressed &&
-            Input::GetMouseButtonDoubleClick(MouseButton::Left))
-        {
-            PROPAGATE(IUIButtonListener, OnButton_DoubleClicked, this);
-            for (auto f : m_doubleClickedCallbacks) { f(this); }
-        }
+        GetBackground()->SetTint(Color::White);
     }
-    m_beingPressed = ( m_beingPressed &&
-                       Input::GetMouseButton(MouseButton::Left) );
+}
 
-    // Mouse Enter & Exit events
-    if (!m_mouseOver && mouseOverSomePart)
+void UIButton::OnButton_MouseDown(UIButtoneable *btn, MouseButton mb)
+{
+    if (mb == MouseButton::Left)
     {
-        PROPAGATE(IUIButtonListener, OnButton_MouseEnter, this);
-        for (auto f : m_mouseEnterCallbacks) { f(this); }
+        GetBackground()->SetTint(Color::Black);
     }
-    else if (m_mouseOver && !mouseOverSomePart)
+}
+
+void UIButton::OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside)
+{
+    if (mb == MouseButton::Left)
     {
-        PROPAGATE(IUIButtonListener, OnButton_MouseExit, this);
-        for (auto f : m_mouseExitCallbacks) { f(this); }
-    }
-    m_mouseOver = mouseOverSomePart;
-}
-
-void UIButton::RegisterButtonPart(GameObject *buttonPart)
-{
-    p_buttonParts.Add(buttonPart);
-    buttonPart->EventEmitter<IDestroyListener>::RegisterListener(this);
-}
-void UIButton::UnRegisterButtonPart(GameObject *buttonPart)
-{
-    p_buttonParts.Remove(buttonPart);
-}
-
-void UIButton::AddMouseEnterCallback(UIButton::EnterExitCallback callback)
-{
-    m_mouseEnterCallbacks.PushBack(callback);
-}
-void UIButton::AddMouseExitCallback(UIButton::EnterExitCallback callback)
-{
-    m_mouseExitCallbacks.PushBack(callback);
-}
-void UIButton::AddMouseDownCallback(UIButton::DownUpCallback callback)
-{
-    m_mouseDownCallbacks.PushBack(callback);
-}
-void UIButton::AddMouseUpCallback(UIButton::DownUpCallback callback)
-{
-    m_mouseUpCallbacks.PushBack(callback);
-}
-void UIButton::AddClickedCallback(UIButton::ClickedCallback callback)
-{
-    m_clickedCallbacks.PushBack(callback);
-}
-
-void UIButton::AddDoubleClickedCallback(UIButton::DoubleClickedCallback callback)
-{
-    m_doubleClickedCallbacks.PushBack(callback);
-}
-
-void UIButton::SetMode(UIButtonMode mode)
-{
-    m_mode = mode;
-}
-
-bool UIButton::IsMouseOverSomePart() const
-{
-    if (GetMode() == UIButtonMode::UseRender)
-    {
-        GameObject *overedGameObject =
-                  Selection::GetOveredGameObject( GetGameObject()->GetScene() );
-        if (!overedGameObject) { return false; }
-        for (const GameObject *part : p_buttonParts)
-        {
-            if (!part->IsEnabled(true)) { continue; }
-            if (overedGameObject == part) { return true; }
-        }
-    }
-    else
-    {
-        for (const GameObject *part : p_buttonParts)
-        {
-           if (!part->IsEnabled(true)) { continue; }
-           RectTransform *rt = part->GetComponent<RectTransform>();
-           if (rt && rt->IsMouseOver()) { return true; }
-        }
-    }
-    return false;
-}
-
-bool UIButton::IsBeingPressed() const { return m_beingPressed; }
-UIButtonMode UIButton::GetMode() const { return m_mode; }
-
-void UIButton::OnBeforeDestroyed(Object *object)
-{
-    GameObject *destroyedGo = DCAST<GameObject*>(object);
-    if (destroyedGo)
-    {
-        UnRegisterButtonPart(destroyedGo);
+        if (inside) { OnButton_MouseEnter(btn); }
+        else { OnButton_MouseExit(btn); }
     }
 }

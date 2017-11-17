@@ -4,18 +4,16 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IFocusListener.h"
-#include "Bang/IComponentDriver.h"
 #include "Bang/IValueChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UIInputText;
 
-class UIInputNumber : public IComponentDriver<UIInputNumber>,
+class UIInputNumber : public Component,
                       public EventEmitter<IValueChangedListener>,
                       public IValueChangedListener,
-                      public IFocusListener,
-                      public Component
+                      public IFocusListener
 {
     COMPONENT(UIInputNumber)
 
@@ -43,11 +41,9 @@ private:
     // IValueChangedListener
     void OnValueChanged(Object*) override;
 
-    // IComponentDriver
     static UIInputNumber *CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIInputText>;
 };
 
 NAMESPACE_BANG_END

@@ -3,9 +3,8 @@
 #include "Bang/Input.h"
 #include "Bang/IconManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UITintedButton.h"
-#include "Bang/UIButtonDriver.h"
-#include "Bang/UITintedButton.h"
+#include "Bang/UIButtoneable.h"
+#include "Bang/UIButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -67,7 +66,7 @@ void UITree::OnUpdate()
     }
 }
 
-void UITree::OnButton_Clicked(UIButton *btn)
+void UITree::OnButton_Clicked(UIButtoneable *btn)
 {
     UITreeItemContainer *itemContainer = GetItemContainer(btn->GetGameObject());
     SetItemCollapsed(itemContainer->GetContainedItem(),
@@ -322,7 +321,7 @@ bool UITreeItemContainer::IsCollapsed() const
     return m_collapsed;
 }
 
-UIButtonDriver *UITreeItemContainer::GetCollapseButton() const
+UIButton *UITreeItemContainer::GetCollapseButton() const
 {
     return p_collapseButton;
 }

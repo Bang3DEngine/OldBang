@@ -4,16 +4,15 @@
 #include <functional>
 
 #include "Bang/Component.h"
-#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UIScrollArea;
+FORWARD class UIScrollPanel;
 
 using GOItem = GameObject;
 
-class UIList : public IComponentDriver<UIList>,
-               public Component
+class UIList : public Component
 {
     COMPONENT(UIList);
 
@@ -56,7 +55,6 @@ private:
     void Callback(GameObject *item, Action action);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIList>;
 };
 
 NAMESPACE_BANG_END

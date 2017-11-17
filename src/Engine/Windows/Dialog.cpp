@@ -14,8 +14,7 @@
 #include "Bang/DialogWindow.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButtonDriver.h"
-#include "Bang/UITintedButton.h"
+#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -109,10 +108,10 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
                             AddComponent<UILayoutElement>();
     itLE->SetFlexibleSize(Vector2(1));
 
-    UIButtonDriver *goButton = GameObjectFactory::CreateUIButton();
+    UIButton *goButton = GameObjectFactory::CreateUIButton();
     goButton->GetText()->SetContent("Go");
     goButton->GetButton()->AddClickedCallback(
-        [inputPathText, fileList](UIButton *_)
+        [inputPathText, fileList](UIButtoneable *_)
         {
             Path inputPath(inputPathText->GetText()->GetContent());
             if (inputPath.IsFile()) { inputPath = inputPath.GetDirectory(); }
@@ -123,10 +122,10 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
         }
     );
 
-    UIButtonDriver *openButton = GameObjectFactory::CreateUIButton();
+    UIButton *openButton = GameObjectFactory::CreateUIButton();
     openButton->GetText()->SetContent("Open");
     openButton->GetButton()->AddClickedCallback(
-        [fileList](UIButton *_)
+        [fileList](UIButtoneable *_)
         {
             Path path = fileList->GetCurrentPath();
             FileAcceptedCallback(path);
@@ -205,11 +204,11 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     buttonsHL->SetSpacing(20);
     buttonsHL->SetPaddings(5);
 
-    UIButtonDriver *button0 = GameObjectFactory::CreateUIButton();
+    UIButton *button0 = GameObjectFactory::CreateUIButton();
     button0->GetText()->SetContent("Cancel");
     button0->GetButton()->AddClickedCallback(OnButtonClicked);
 
-    UIButtonDriver *button1 = GameObjectFactory::CreateUIButton();
+    UIButton *button1 = GameObjectFactory::CreateUIButton();
     button1->GetText()->SetContent("OK");
     button1->GetButton()->AddClickedCallback(OnButtonClicked);
 
@@ -236,7 +235,7 @@ void Dialog::FileAcceptedCallback(const Path &path)
     Window::Destroy(Window::GetCurrent());
 }
 
-void Dialog::OnButtonClicked(UIButton *button)
+void Dialog::OnButtonClicked(UIButtoneable *button)
 {
     Window::Destroy( Window::GetCurrent() );
 }

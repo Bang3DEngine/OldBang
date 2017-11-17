@@ -1,14 +1,15 @@
 #ifndef UIINPUTTEXT_H
 #define UIINPUTTEXT_H
 
+#include "Bang/Component.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/ILayoutElement.h"
 #include "Bang/IFocusListener.h"
-#include "Bang/IComponentDriver.h"
 #include "Bang/IValueChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UILabel;
 FORWARD class GameObject;
 FORWARD class UITextCursor;
 FORWARD class UIScrollArea;
@@ -16,8 +17,7 @@ FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
-class UIInputText : public IComponentDriver<UIInputText>,
-                    public Component,
+class UIInputText : public Component,
                     public EventEmitter<IValueChangedListener>,
                     public IFocusListener,
                     public ILayoutElement
@@ -85,11 +85,9 @@ private:
     void UpdateTextScrolling();
     bool IsShiftPressed() const;
 
-    // IComponentDriver
     static UIInputText *CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIInputText>;
 };
 
 NAMESPACE_BANG_END

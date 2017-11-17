@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
 FORWARD class DialogWindow;
-FORWARD class UIButton;
+FORWARD class UIButtoneable;
 
 class Dialog
 {
@@ -31,7 +31,7 @@ private:
 
     static void FileAcceptedCallback(const Path &path);
 
-    static void OnButtonClicked(UIButton *button);
+    static void OnButtonClicked(UIButtoneable *button);
 };
 
 NAMESPACE_BANG_END

@@ -3,14 +3,15 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Component.h"
-#include "Bang/IComponentDriver.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIScrollBar;
+FORWARD class UIScrollArea;
+
 enum class ShowScrollMode { Never = 0, WhenNeeded = 1, Always = 2 };
 
-class UIScrollPanel : public IComponentDriver<UIScrollPanel>,
-                      public Component
+class UIScrollPanel : public Component
 {
     COMPONENT(UIScrollPanel)
 
@@ -65,7 +66,6 @@ private:
     static UIScrollPanel* CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
-    friend class IComponentDriver<UIScrollPanel>;
 };
 
 NAMESPACE_BANG_END
