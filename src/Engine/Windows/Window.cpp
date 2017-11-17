@@ -84,6 +84,8 @@ void Window::Create(uint flags)
 
 void Window::SwapBuffers() const
 {
+    glFinish();
+    glFlush();
     SDL_GL_SwapWindow( GetSDLWindow() );
 }
 
@@ -100,9 +102,16 @@ bool Window::MainLoopIteration()
     MakeCurrent();
     GetInput()->ProcessEnqueuedEvents();
 
+    // auto t = Time::GetNow_Millis();
     Update();
+    // Debug_Log("Update: " << (Time::GetNow_Millis()-t));
     Time::EstablishDeltaTimeReferenceToNow();
+    // t = Time::GetNow_Millis();
     Render();
+    // glFlush();
+    // glFinish();
+    // Debug_Log("Render: " << (Time::GetNow_Millis()-t));
+    // Debug_Log("====================");
 
     GetInput()->OnFrameFinished();
     SwapBuffers();

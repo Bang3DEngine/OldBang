@@ -1,5 +1,6 @@
 #include "Bang/GameObjectFactory.h"
 
+#include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/UITree.h"
 #include "Bang/Camera.h"
@@ -8,7 +9,11 @@
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
+#include "Bang/UIButton.h"
+#include "Bang/Texture2D.h"
+#include "Bang/Resources.h"
 #include "Bang/Transform.h"
+#include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIScrollBar.h"
@@ -21,7 +26,6 @@
 #include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
-#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -98,6 +102,16 @@ public:
         GetGameObject()->GetTransform()->RotateLocal(Quaternion::AngleAxis(0.1f,Vector3::Up));
     }
 };
+class Scalator : public Component
+{
+public:
+    void OnUpdate() override
+    {
+        Component::OnUpdate();
+        GetGameObject()->GetTransform()->SetLocalScale(
+                    Math::Abs( Math::Sin(Time::GetNow_Seconds()) ) + 1.0f );
+    }
+};
 
 Scene *GameObjectFactory::CreateDefaultScene()
 {
@@ -107,22 +121,69 @@ Scene *GameObjectFactory::CreateDefaultScene()
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     cube->AddComponent<Rotator>();
     mr->SetMesh( MeshFactory::GetCube() );
+    mr->UseMaterialCopy();
+    mr->GetMaterial()->SetTexture( Resources::Load<Texture2D>(
+                                       Paths::EngineAssets().Append("Images/LogoBang_B_512.png")) );
+    mr->GetMaterial()->SetDiffuseColor(Color::White);
 
     GameObject *sphere = GameObjectFactory::CreateGameObjectNamed("Sphere-Child");
     sphere->GetTransform()->SetLocalPosition(Vector3(1,1,1));
     sphere->GetTransform()->SetLocalScale( Vector3(0.3f) );
     MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
     mr2->SetMesh( MeshFactory::GetSphere() );
+    mr2->UseMaterialCopy();
+    mr2->GetMaterial()->SetDiffuseColor(Color::Green);
 
     GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Sphere-Child");
     cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
+    cube2->AddComponent<Scalator>();
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
     mr3->SetMesh( MeshFactory::GetCube() );
+    mr3->UseMaterialCopy();
+    mr3->GetMaterial()->SetDiffuseColor(Color::Purple);
 
-    GameObject *light = GameObjectFactory::CreateGameObjectNamed("Light");
-    light->AddComponent<DirectionalLight>();
-    light->GetTransform()->SetPosition( Vector3(5,4,3) );
-    light->GetTransform()->LookAt( Vector3::Zero );
+    GameObject *lightGo = GameObjectFactory::CreateGameObjectNamed("Light");
+    PointLight *pl = lightGo->AddComponent<PointLight>();
+    pl->SetRange(20.0f);
+    pl->SetColor(Color::Yellow);
+    lightGo->GetTransform()->SetPosition( Vector3(7,4,-2) );
+    lightGo->GetTransform()->LookAt( Vector3::Zero );
+    scene->SetAsChild(lightGo);
+
+    GameObject *light2Go = GameObjectFactory::CreateGameObjectNamed("Light2");
+    PointLight *pl2 = light2Go->AddComponent<PointLight>();
+    pl2->SetRange(20.0f);
+    pl2->SetColor(Color::Purple);
+    light2Go->GetTransform()->SetPosition( Vector3(-7,4,-2) );
+    light2Go->GetTransform()->LookAt( Vector3::Zero );
+    scene->SetAsChild(light2Go);
+
+    GameObject *light3Go = GameObjectFactory::CreateGameObjectNamed("Light3");
+    PointLight *pl3 = light3Go->AddComponent<PointLight>();
+    pl3->SetRange(6.0f);
+    pl3->SetColor(Color::White);
+    light3Go->GetTransform()->SetPosition( Vector3(0, 4, 0) );
+    light3Go->GetTransform()->LookAt( Vector3::Zero );
+    scene->SetAsChild(light3Go);
+
+    GameObject *floor = MeshFactory::GetCubeGameObject();
+    floor->SetName("Floor");
+    floor->GetTransform()->TranslateLocal( Vector3(0, -1, 0) );
+    floor->GetTransform()->SetLocalScale( Vector3(10.0f, 0.2f, 10.0f));
+    scene->SetAsChild(floor);
+
+    GameObject *wall1 = MeshFactory::GetCubeGameObject();
+    wall1->SetName("Wall1");
+    wall1->GetTransform()->TranslateLocal( Vector3(-4, 3, 0) );
+    wall1->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
+    scene->SetAsChild(wall1);
+
+    GameObject *wall2 = MeshFactory::GetCubeGameObject();
+    wall2->SetName("Wall2");
+    wall2->GetTransform()->TranslateLocal( Vector3(0, 3, -4) );
+    wall2->GetTransform()->SetLocalRotation( Quaternion::AngleAxis(Math::PI/2, Vector3::Up) );
+    wall2->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
+    scene->SetAsChild(wall2);
 
     GameObject *cameraGo = GameObjectFactory::CreateGameObjectNamed("Camera");
     cameraGo->GetTransform()->SetPosition( Vector3(5,4,3) );
@@ -134,7 +195,6 @@ Scene *GameObjectFactory::CreateDefaultScene()
     scene->SetAsChild(cube);
     cube->SetAsChild(sphere);
     sphere->SetAsChild(cube2);
-    scene->SetAsChild(light);
     scene->SetAsChild(cameraGo);
     return scene;
 }

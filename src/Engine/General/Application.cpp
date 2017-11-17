@@ -125,8 +125,6 @@ bool Application::MainLoopIteration()
     DestroyQueuedWindows();
     if (m_windows.IsEmpty()) { exit = true; }
 
-    SDL_Delay(RedrawDelay_ms);
-
     return exit;
 }
 

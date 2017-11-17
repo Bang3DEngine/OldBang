@@ -53,7 +53,6 @@ public:
     static void Exit(int returnCode, bool immediate = false);
 
 protected:
-    const uint RedrawDelay_ms = 10;
     unsigned long long m_lastRenderTime = 0;
 
     Time               *m_time               = nullptr;

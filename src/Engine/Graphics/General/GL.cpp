@@ -688,7 +688,6 @@ void GL::BufferData(GL::BindTarget target, int dataSize,
     glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint));
 }
 
-#include "Bang/Input.h"
 void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
                 int elementsCount, int startIndex)
 {

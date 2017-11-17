@@ -5,7 +5,6 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIRenderer.h"
 
-
 #include "Bang/Image.h"
 #include "Bang/GEngine.h"
 #include "Bang/GBuffer.h"
@@ -18,8 +17,7 @@ UIMask::~UIMask() {}
 void UIMask::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
-    if  (!m_restoringStencil &&
-         renderPass == RenderPass::Canvas)
+    if  (!m_restoringStencil && renderPass == RenderPass::Canvas)
     {
         PrepareStencilToDrawMask();
     }
