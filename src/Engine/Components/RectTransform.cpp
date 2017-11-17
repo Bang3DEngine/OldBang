@@ -365,6 +365,7 @@ Rect RectTransform::FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const
 void RectTransform::OnRenderGizmos()
 {
     Transform::OnRenderGizmos();
+    /*
     Gizmos::SetLineWidth(1.0f);
 
     Rect r = GetScreenSpaceRectNDC(); (void)r;
@@ -375,7 +376,6 @@ void RectTransform::OnRenderGizmos()
 
     Gizmos::SetColor(Color::Green);
     Gizmos::RenderRect(r);
-    /*
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());

@@ -120,9 +120,6 @@ bool Application::MainLoopIteration()
         w->MainLoopIteration();
     }
 
-    // Debug_Log(Time::GetDeltaTime() << " " << Random::Value());
-    GetTime()->EstablishDeltaTimeReferenceToNow();
-
     bool exit = false;
     if (!HandleEvents())     { exit = true; }
     DestroyQueuedWindows();

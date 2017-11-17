@@ -21,6 +21,8 @@ class UILayoutManager
 public:
     UILayoutManager();
 
+    void RebuildLayout(GameObject *gameObject);
+
     static void OnInvalidated(ILayoutElement    *element);
     static void OnInvalidated(ILayoutController *controller);
 
@@ -29,13 +31,11 @@ public:
     static Vector2  GetFlexibleSize(GameObject *go);
     static Vector2  GetSize(GameObject *go, LayoutSizeType sizeType);
 
-    static void RebuildLayout(GameObject *gameObject);
-
     static List<GameObject*> GetLayoutableChildrenList(GameObject *go);
 
 private:
-    static void CalculateLayout(GameObject *gameObject, Axis axis);
-    static void ApplyLayout(GameObject *gameObject, Axis axis);
+    void CalculateLayout(GameObject *gameObject, Axis axis);
+    void ApplyLayout(GameObject *gameObject, Axis axis);
 
     static void OnLayoutRebuilt(GameObject *go);
     static void OnLayoutInvalidated(Component *comp, bool isLayoutController);

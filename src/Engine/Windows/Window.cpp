@@ -101,6 +101,7 @@ bool Window::MainLoopIteration()
     GetInput()->ProcessEnqueuedEvents();
 
     Update();
+    Time::EstablishDeltaTimeReferenceToNow();
     Render();
 
     GetInput()->OnFrameFinished();

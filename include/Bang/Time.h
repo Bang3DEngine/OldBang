@@ -12,6 +12,7 @@ public:
     static double GetNow_Seconds();
     static uint64_t GetNow_Millis();
     static uint64_t GetNow_Nanos();
+    static void EstablishDeltaTimeReferenceToNow();
 
 private:
     double m_time = 0.0;
@@ -20,7 +21,6 @@ private:
 
     Time();
 
-    void EstablishDeltaTimeReferenceToNow();
     static Time *GetInstance();
 
     friend class Application;

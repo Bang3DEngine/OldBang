@@ -35,7 +35,7 @@ Time::Time()
 
 void Time::EstablishDeltaTimeReferenceToNow()
 {
-    m_deltaTimeReference = Time::GetNow_Millis();
+    Time::GetInstance()->m_deltaTimeReference = Time::GetNow_Millis();
 }
 
 Time *Time::GetInstance()
