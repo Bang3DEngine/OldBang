@@ -16,6 +16,7 @@ void Main()
                                     B_LightColor.rgb,
                                     B_GetCameraPositionWorld() );
 
-        B_FOut.Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
+        B_GIn_Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
+        B_GIn_Color = MixedWithBackground(B_GIn_Color);
     }
 }

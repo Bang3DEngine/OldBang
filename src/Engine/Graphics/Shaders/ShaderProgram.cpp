@@ -68,7 +68,10 @@ bool ShaderProgram::Link()
 
     if (!GL::LinkProgram(m_idGL))
     {
-       Debug_Error("The shader program " << this << " did not link: " <<
+       Debug_Error("The shader program " << this << "( " <<
+                   GetVertexShader()->GetResourceFilepath() << ", " <<
+                   GetFragmentShader()->GetResourceFilepath() <<
+                   ") did not link: " <<
                    GL::GetProgramLinkErrorMsg(m_idGL));
        GL::DeleteProgram(m_idGL); m_idGL = 0;
        return false;

@@ -5,7 +5,7 @@ uniform vec2 B_rectMaxCoord = vec2( 1,  1);
 
 in vec3 B_In_PositionObject; // Plane positions
 
-void Main()
+void main()
 {
     vec2 rectSize   = B_rectMaxCoord - B_rectMinCoord;
     vec2 rectCenter = (B_rectMaxCoord + B_rectMinCoord) * 0.5;

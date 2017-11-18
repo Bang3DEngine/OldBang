@@ -11,10 +11,8 @@ uniform float B_outlineWidth;
 uniform vec4  B_outlineColor;
 uniform float B_outlineBlurriness;
 
-void Main()
+void main()
 {
-    B_UsePlainDiffuseColor = true;
-
     vec2 charAtlasUv = B_FIn_Uv;
 
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
@@ -25,7 +23,8 @@ void Main()
         float lowerCharLimit = B_textAlphaThreshold - B_textBlurriness;
         if (dist <= lowerCharLimit)
         {
-            B_FOut.Color = B_FOut.Diffuse; // Just opaque char
+            B_GIn_Color = B_MaterialDiffuseColor; // Just opaque char
+            return;
         }
         else
         {
@@ -45,8 +44,8 @@ void Main()
                 float outlineAlpha = 1.0f - smoothstep(outlineLowerLimit,
                                                        outlineUpperLimit,
                                                        dist);
-                B_FOut.Color = vec4(B_outlineColor.rgb,
-                                    B_outlineColor.a * outlineAlpha);
+                B_GIn_Color = vec4(B_outlineColor.rgb,
+                                   B_outlineColor.a * outlineAlpha);
 
 
                 if (dist <= upperCharLimit)
@@ -54,9 +53,9 @@ void Main()
                     // Blend outline color with character color
                     float charAlpha = 1.0f - smoothstep(lowerCharLimit,
                                                         upperCharLimit, dist);
-                    vec4 charColor = vec4(B_FOut.Diffuse.rgb, charAlpha);
-                    float blendAlpha = max(charAlpha, B_FOut.Color.a);
-                    B_FOut.Color = vec4(mix(B_FOut.Color.rgb, charColor.rgb,
+                    vec4 charColor = vec4(B_MaterialDiffuseColor.rgb, charAlpha);
+                    float blendAlpha = max(charAlpha, B_GIn_Color.a);
+                    B_GIn_Color = vec4(mix(B_GIn_Color.rgb, charColor.rgb,
                                            charAlpha),
                                        blendAlpha);
                 }
@@ -68,12 +67,14 @@ void Main()
 
                 float charAlpha = 1.0f-smoothstep(lowerCharLimit,
                                                   upperCharLimit, dist);
-                B_FOut.Color = vec4(B_FOut.Diffuse.rgb, charAlpha);
+                B_GIn_Color = vec4(B_MaterialDiffuseColor.rgb, charAlpha);
             }
         }
     }
     else
     {
-        B_FOut.Color = vec4(B_FOut.Diffuse.rgb, thisColor.a);
+        B_GIn_Color = vec4(B_MaterialDiffuseColor.rgb, thisColor.a);
     }
+
+    B_GIn_Color = MixedWithBackground(B_GIn_Color);
 }

@@ -1,14 +1,16 @@
 #include "G.frag"
 
-void Main()
+void main()
 {
-    vec2 inUv = B_FIn_Uv;
-    vec4 textureColor = vec4(1);
-    vec4 tint = B_FOut.Diffuse;
+    vec4 texColor = vec4(1);
     if (B_HasTexture)
     {
-        textureColor = texture2D(B_Texture0, inUv);
-        if (textureColor.a <= B_AlphaCutoff) { discard; }
+        texColor = texture2D(B_Texture0, B_FIn_Uv);
+        if (texColor.a <= B_AlphaCutoff) { discard; }
     }
-    B_FOut.Color = vec4(tint.rgb * textureColor.rgb, textureColor.a);
+
+    B_GIn_Misc = vec4(0,0,0,0);
+    B_GIn_Normal = vec4(0,0,1,0);
+    B_GIn_Diffuse = vec4(B_MaterialDiffuseColor * texColor);
+    B_GIn_Color = MixedWithBackground(B_GIn_Diffuse);
 }
