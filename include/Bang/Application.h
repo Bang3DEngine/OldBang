@@ -62,6 +62,7 @@ protected:
 
     virtual Window* _CreateWindow();
     virtual void SetupWindow(Window *window);
+    void SetActiveWindow(Window *window);
 
 private:
     static Application *s_appSingleton;

@@ -20,6 +20,8 @@
 
 USING_NAMESPACE_BANG
 
+Window* Window::s_activeWindow = nullptr;
+
 Window::Window()
 {
 }
@@ -89,10 +91,11 @@ void Window::SwapBuffers() const
     SDL_GL_SwapWindow( GetSDLWindow() );
 }
 
-void Window::MakeCurrent() const
+void Window::MakeCurrent()
 {
     SDL_GL_MakeCurrent(GetSDLWindow(), GetGLContext());
     GL::SetViewport(0, 0, GetWidth(), GetHeight());
+    Window::SetActive(this);
 }
 
 bool Window::MainLoopIteration()
@@ -331,12 +334,12 @@ bool Window::HasFlags(uint flags) const
 
 int Window::GetHeightS()
 {
-    return Window::GetCurrent()->GetHeight();
+    return Window::GetActive()->GetHeight();
 }
 
 int Window::GetWidthS()
 {
-    return Window::GetCurrent()->GetWidth();
+    return Window::GetActive()->GetWidth();
 }
 
 SDL_GLContext Window::GetGLContext() const
@@ -399,10 +402,9 @@ void Window::Destroy(Window *win)
     Application::GetInstance()->DestroyWindow(win);
 }
 
-Window *Window::GetCurrent()
+Window *Window::GetActive()
 {
-    Application *app = Application::GetInstance();
-    return app ? app->GetCurrentWindow() : nullptr;
+    return s_activeWindow;
 }
 
 void Window::SetParent(Window *parentWindow)
@@ -465,4 +467,10 @@ bool Window::IsParentWindow(int sdlWindowId) const
 {
     return p_parent ? (p_parent->GetSDLWindowID() == sdlWindowId ||
                        p_parent->IsParentWindow(sdlWindowId)) : false;
+}
+
+void Window::SetActive(Window *window)
+{
+    Window::s_activeWindow = window;
+    GEngine::SetActive(window ? window->GetGEngine() : nullptr);
 }

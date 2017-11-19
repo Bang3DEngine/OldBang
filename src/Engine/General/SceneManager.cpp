@@ -26,7 +26,7 @@ SceneManager::~SceneManager()
 
 SceneManager *SceneManager::GetInstance()
 {
-    Window *win = Window::GetCurrent();
+    Window *win = Window::GetActive();
     return win ? win->GetSceneManager() : nullptr;
 }
 

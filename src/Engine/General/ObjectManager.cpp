@@ -78,7 +78,7 @@ void ObjectManager::OnBeforeDestroyed(Object *object)
 
 ObjectManager *ObjectManager::GetInstance()
 {
-    return Window::GetCurrent()->GetObjectManager();
+    return Window::GetActive()->GetObjectManager();
 }
 
 #ifdef DEBUG

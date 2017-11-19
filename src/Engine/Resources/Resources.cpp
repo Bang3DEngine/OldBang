@@ -62,6 +62,6 @@ void Resources::UnLoad(Resource *res, bool deleteResource)
 
 Resources *Resources::GetInstance()
 {
-    Window *win = Window::GetCurrent();
+    Window *win = Window::GetActive();
     return  win ? win->GetResources() : nullptr;
 }

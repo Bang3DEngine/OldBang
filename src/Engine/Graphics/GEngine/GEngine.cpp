@@ -28,6 +28,8 @@
 
 USING_NAMESPACE_BANG
 
+GEngine* GEngine::s_gEngine = nullptr;
+
 GEngine::GEngine()
 {
 }
@@ -41,10 +43,12 @@ GEngine::~GEngine()
 void GEngine::Init()
 {
     m_gl = new GL();
+    GL::SetActive( GetGL() );
     m_texUnitManager = new TextureUnitManager();
 
     m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
+    GL::SetActive( nullptr );
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)
@@ -121,7 +125,7 @@ void GEngine::_BindCamera(Camera *cam)
 
 void GEngine::BindCamera(Camera *cam)
 {
-    GEngine::GetInstance()->_BindCamera(cam);
+    GEngine::GetActive()->_BindCamera(cam);
 }
 
 GBuffer *GEngine::GetCurrentGBuffer()
@@ -132,7 +136,7 @@ GBuffer *GEngine::GetCurrentGBuffer()
 
 Camera *GEngine::GetBoundCamera()
 {
-    return GEngine::GetInstance()->p_boundCamera;
+    return GEngine::GetActive()->p_boundCamera;
 }
 
 SelectionFramebuffer *GEngine::GetCurrentSelectionFramebuffer()
@@ -187,6 +191,12 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
     GL::ClearStencilBuffer();
     go->Render(RenderPass::Canvas);
     go->RenderGizmos();
+}
+
+void GEngine::SetActive(GEngine *gEngine)
+{
+    GEngine::s_gEngine = gEngine;
+    GL::SetActive( gEngine ? gEngine->GetGL() : nullptr );
 }
 
 
@@ -258,9 +268,9 @@ void GEngine::RenderScreenPlane(bool withDepth)
     GL::SetWireframe(prevWireframe);
 }
 
-GEngine* GEngine::GetInstance()
+GEngine* GEngine::GetActive()
 {
-    Window *win = Window::GetCurrent();
+    Window *win = Window::GetActive();
     return win ? win->GetGEngine() : nullptr;
 }
 

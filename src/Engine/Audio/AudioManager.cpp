@@ -159,5 +159,5 @@ bool AudioManager::CheckALError()
 
 AudioManager *AudioManager::GetInstance()
 {
-    return Window::GetCurrent()->GetAudioManager();
+    return Window::GetActive()->GetAudioManager();
 }

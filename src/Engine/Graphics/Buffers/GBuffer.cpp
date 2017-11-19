@@ -53,7 +53,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 
     SetColorDrawBuffer();
 
-    GEngine::GetInstance()->ApplyScreenPass(sp, mask);
+    GEngine::GetActive()->ApplyScreenPass(sp, mask);
 
     GL::SetStencilOp(prevStencilOp);
 }

@@ -58,7 +58,7 @@ public:
     GL *GetGL() const;
     TextureUnitManager *GetTextureUnitManager() const;
 
-    static GEngine* GetInstance();
+    static GEngine* GetActive();
 
 private:
     GL *m_gl = nullptr;
@@ -71,6 +71,11 @@ private:
 
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
+
+    static GEngine *s_gEngine;
+    static void SetActive(GEngine *gEngine);
+
+    friend class Window;
 };
 
 NAMESPACE_BANG_END

@@ -232,10 +232,10 @@ Scene *Dialog::CreateMsgScene(const String &msg)
 void Dialog::FileAcceptedCallback(const Path &path)
 {
     Dialog::s_resultPath = path;
-    Window::Destroy(Window::GetCurrent());
+    Window::Destroy(Window::GetActive());
 }
 
 void Dialog::OnButtonClicked(UIButtoneable *button)
 {
-    Window::Destroy( Window::GetCurrent() );
+    Window::Destroy( Window::GetActive() );
 }

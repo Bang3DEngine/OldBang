@@ -12,6 +12,8 @@
 
 USING_NAMESPACE_BANG
 
+GL* GL::s_activeGL = nullptr;
+
 void GL::ClearError()
 {
     glGetError();
@@ -754,27 +756,38 @@ void GL::Bind(const GLObject *bindable)
 
 void GL::Bind(GL::BindTarget bindTarget, GLId glId)
 {
-    if (GL::IsBound(bindTarget, glId)) { return; }
+    GL *gl = GL::GetActive();
 
     GL_ClearError();
     switch (bindTarget)
     {
         case BindTarget::Texture2D:
+            if (gl) { gl->m_boundTextureId = glId; }
             glBindTexture( GLCAST(GL::BindTarget::Texture2D), glId);
         break;
         case BindTarget::ShaderProgram:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundShaderProgramId = glId; }
             glUseProgram(glId);
         break;
         case BindTarget::Framebuffer:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundFramebufferId = glId; }
             glBindFramebuffer( GLCAST(GL::BindTarget::Framebuffer), glId);
         break;
         case BindTarget::VAO:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if(gl) { gl->m_boundVAOId = glId; }
             glBindVertexArray(glId);
         break;
         case BindTarget::VBO:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundVBOId = glId; }
             glBindBuffer( GLCAST(GL::BindTarget::VBO), glId);
         break;
         case BindTarget::UniformBuffer:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundUniformBufferId = glId; }
             glBindBuffer( GLCAST(GL::BindTarget::UniformBuffer), glId);
         break;
 
@@ -955,15 +968,15 @@ GLId GL::GetBoundId(GL::BindTarget bindTarget)
     switch(bindTarget)
     {
         case GL::BindTarget::Texture2D:
-            return GL::GetInteger(GL_TEXTURE_BINDING_2D);
+            return GL::GetActive()->m_boundTextureId;
         case GL::BindTarget::Framebuffer:
-            return GL::GetInteger(GL_FRAMEBUFFER_BINDING);
+            return GL::GetActive()->m_boundFramebufferId;
         case GL::BindTarget::VAO:
-            return GL::GetInteger(GL_VERTEX_ARRAY_BINDING);
+            return GL::GetActive()->m_boundVAOId;
         case GL::BindTarget::VBO:
-            return GL::GetInteger(GL_ARRAY_BUFFER_BINDING);
+            return GL::GetActive()->m_boundVBOId;
         case GL::BindTarget::ShaderProgram:
-            return GL::GetInteger(GL_CURRENT_PROGRAM);
+            return GL::GetActive()->m_boundShaderProgramId;
         default: return 0;
     }
     return 0;
@@ -1070,8 +1083,7 @@ GL::ViewProjMode GL::GetViewProjMode()
 
 GL *GL::GetActive()
 {
-    GEngine *gp = GEngine::GetInstance();
-    return gp ? gp->GetGL() : nullptr;
+    return GL::s_activeGL;
 }
 
 GLUniforms *GL::GetGLUniforms() const { return m_glUniforms; }
@@ -1079,4 +1091,9 @@ GLUniforms *GL::GetGLUniforms() const { return m_glUniforms; }
 GL::GL()
 {
     m_glUniforms = new GLUniforms();
+}
+
+void GL::SetActive(GL *gl)
+{
+    GL::s_activeGL = gl;
 }

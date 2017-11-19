@@ -92,7 +92,7 @@ void Camera::BindSelectionFramebuffer()
 Vector2i Camera::FromScreenPointToViewport(const Vector2i &screenPointPx)
 {
     Vector2i res = screenPointPx;
-    res.y = (Window::GetCurrent()->GetHeight() - res.y - 1);
+    res.y = (Window::GetActive()->GetHeight() - res.y - 1);
     res.x -= m_latestViewportRect.GetMin().x;
     res.y -= m_latestViewportRect.GetMin().y;
     return res;

@@ -28,8 +28,8 @@ public:
 
     virtual void Create(uint flags);
     void SwapBuffers() const;
-    void MakeCurrent() const;
     bool MainLoopIteration();
+    void MakeCurrent();
 
     void Clear();
     virtual void Update();
@@ -84,7 +84,7 @@ public:
     virtual SceneManager* CreateSceneManager() const;
 
     static void Destroy(Window *win);
-    static Window *GetCurrent();
+    static Window *GetActive();
 
 protected:
     void SetParent(Window *parentWindow);
@@ -118,6 +118,10 @@ private:
     Vector2i _GetMaxSize() const;
     bool IsParentWindow(int sdlWindowId) const;
 
+    static Window* s_activeWindow;
+    static void SetActive(Window *window);
+
+    friend class Application;
     friend int EventFilter(void *userData, SDL_Event *event);
 };
 

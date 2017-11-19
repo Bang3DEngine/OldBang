@@ -246,7 +246,7 @@ void Input::ProcessEnqueuedEvents()
 
 Input *Input::GetInstance()
 {
-    return Window::GetCurrent()->GetInput();
+    return Window::GetActive()->GetInput();
 }
 
 String KeyToString(Key k)
@@ -415,7 +415,7 @@ Vector2i Input::GetMouseCoords()
     else
     {
         SDL_GetGlobalMouseState(&coords.x, &coords.y);
-        Window *win = Window::GetCurrent();
+        Window *win = Window::GetActive();
         coords -= (Vector2i(0, win->GetTitleBarHeight()) + win->GetPosition());
     }
     return coords;

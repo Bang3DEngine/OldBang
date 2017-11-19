@@ -12,7 +12,7 @@ TextureUnitManager::TextureUnitManager()
 
 TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
 {
-    GEngine *gp = GEngine::GetInstance();
+    GEngine *gp = GEngine::GetActive();
     TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnit unitToUse = 0;
@@ -54,7 +54,7 @@ void TextureUnitManager::UnBindTexture(const Texture *tex)
 
 void TextureUnitManager::UnBindTexture(GLId textureId)
 {
-    GEngine *gp = GEngine::GetInstance();
+    GEngine *gp = GEngine::GetActive();
     TextureUnitManager *tm = gp->GetTextureUnitManager();
 
     TexUnitMap::Iterator it = tm->m_textureIdToUnit.Find(textureId);

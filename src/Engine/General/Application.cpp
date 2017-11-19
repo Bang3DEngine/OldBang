@@ -82,8 +82,14 @@ void Application::SetupWindow(Window *window)
     window->OnResize(window->GetWidth(), window->GetHeight());
 }
 
+void Application::SetActiveWindow(Window *window)
+{
+    Window::SetActive(window);
+}
+
 void Application::BindWindow(Window *window)
 {
+    Window::SetActive(window);
     p_latestCurrentWindow = p_currentWindow;
     p_currentWindow = window;
     window->MakeCurrent();
@@ -116,8 +122,10 @@ bool Application::MainLoopIteration()
     List<Window*> windows = GetWindows();
     for (Window *w : windows)
     {
+        SetActiveWindow(w);
         BindWindow(w);
         w->MainLoopIteration();
+        SetActiveWindow(nullptr);
     }
 
     bool exit = false;
@@ -157,6 +165,7 @@ bool Application::HandleEvents()
                 for (auto itw = m_windows.Begin(); itw != m_windows.End(); )
                 {
                     Window *w = *itw;
+                    SetActiveWindow(w);
                     p_currentWindow = w;
                     bool hasNotClosed = w->HandleEvent(sdlEvent);
                     if (!hasNotClosed)
@@ -165,6 +174,7 @@ bool Application::HandleEvents()
                         itw = m_windows.Remove(itw);
                     }
                     else { ++itw; }
+                    SetActiveWindow(nullptr);
                 }
         }
     }
@@ -173,6 +183,7 @@ bool Application::HandleEvents()
     {
         BindWindow(w);
         w->OnHandleEventsFinished();
+        SetActiveWindow(nullptr);
     }
 
     return true;

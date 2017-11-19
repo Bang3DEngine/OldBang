@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 
 #include "Bang/Map.h"
+#include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
@@ -281,7 +282,6 @@ public:
                            const String &file = "");
     static bool CheckFramebufferError();
 
-    static Color GetClearColor();
     static void Clear(GL::BufferBit bufferBit);
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,
@@ -302,15 +302,9 @@ public:
                                     int dataOffset);
 
     static void PolygonMode(GL::Face face, GL::Enum mode);
-    static GL::Enum GetPolygonMode(GL::Face face);
 
     static GLvoid* MapBuffer(GL::BindTarget target, Enum access);
     static void UnMapBuffer(GL::BindTarget target);
-
-    static int GetUniformsListSize(GLId shaderProgramId);
-    template <class T>
-    static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
-    static DataType GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex);
 
     static void BlendFunc(BlendFactor srcFactor, BlendFactor dstFactor);
 
@@ -325,21 +319,16 @@ public:
     static GLId CreateShader(GL::ShaderType shaderType);
     static void ShaderSource(GLId shaderId, const String &sourceCode);
     static bool CompileShader(GLId shaderId);
-    static int  GetShaderInteger(GLId shaderId, GL::Enum glEnum);
-    static String GetShaderErrorMsg(GLId shaderId);
     static void DeleteShader(GLId shaderId);
+
 
     static GLId   CreateProgram();
     static void   AttachShader(GLId programId, GLId shaderId);
     static bool   LinkProgram(GLId programId);
-    static String GetProgramLinkErrorMsg(GLId programId);
-    static int    GetProgramInteger(GLId programId, GL::Enum glEnum);
-    static void   GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints);
     static void   BindAttribLocation(GLId programId, int location,
                                      const String &attribName);
     static void   BindFragDataLocation(GLId programId, int location,
                                        const String &fragDataName);
-    static int    GetUniformLocation(GLId programId, const String &uniformName);
     static void   DeleteProgram(GLId programId);
 
     static void FramebufferTexture2D(GL::FramebufferTarget target,
@@ -383,15 +372,6 @@ public:
     static void Uniform(int location, const Vector3 &value);
     static void Uniform(int location, const Vector4 &value);
 
-    template <class T>
-    static T GetUniform(GLId program, int uniformLocation);
-
-    template <class T>
-    static T GetUniform(GLId program, const String &uniformName);
-
-    template <class T>
-    static T GetUniform(const String &uniformName);
-
     static void PixelStore(GL::Enum pixelStoreEnum, int n);
 
     static void GenerateMipMap(GL::TextureTarget textureTarget);
@@ -408,17 +388,6 @@ public:
     static void TexParameterWrap(GL::TextureTarget textureTarget,
                                  GL::WrapCoord wrapCoord,
                                  GL::WrapMode wrapMode);
-    static void GetTexImage(GL::TextureTarget textureTarget,
-                            Byte *pixels);
-    static void GetTexImage(GL::TextureTarget textureTarget,
-                            float *pixels);
-    static void GetTexImage(GL::TextureTarget textureTarget,
-                            GL::DataType dataType,
-                            void *pixels);
-    static int GetInteger(GL::Enum glEnum);
-    static void GetInteger(GL::Enum glEnum, int *values);
-    static bool GetBoolean(GL::Enum glEnum);
-    static void GetBoolean(GL::Enum glEnum, bool *values);
     static void ActiveTexture(int activeTexture);
     static void LineWidth(float lineWidth);
 
@@ -437,11 +406,6 @@ public:
     static void SetViewport(const Recti &viewport);
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
-
-    static Recti GetViewportRect();
-    static Vector2i GetViewportSize();
-    static float GetViewportAspectRatio();
-    static Vector2 GetViewportPixelSize();
 
     static void BufferData(GL::BindTarget target,
                            int dataSize, const void *data,
@@ -480,6 +444,42 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
+    static int GetInteger(GL::Enum glEnum);
+    static void GetInteger(GL::Enum glEnum, int *values);
+    static bool GetBoolean(GL::Enum glEnum);
+    static void GetBoolean(GL::Enum glEnum, bool *values);
+
+    template <class T>
+    static T GetUniform(GLId program, int uniformLocation);
+
+    template <class T>
+    static T GetUniform(GLId program, const String &uniformName);
+
+    template <class T>
+    static T GetUniform(const String &uniformName);
+
+    template <class T>
+    static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
+
+    static int GetUniformLocation(GLId programId, const String &uniformName);
+
+    static int GetUniformsListSize(GLId shaderProgramId);
+    static DataType GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex);
+
+    static String GetProgramLinkErrorMsg(GLId programId);
+    static int    GetProgramInteger(GLId programId, GL::Enum glEnum);
+    static void   GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints);
+
+    static int  GetShaderInteger(GLId shaderId, GL::Enum glEnum);
+    static String GetShaderErrorMsg(GLId shaderId);
+
+    static Recti GetViewportRect();
+    static Vector2i GetViewportSize();
+    static float GetViewportAspectRatio();
+    static Vector2 GetViewportPixelSize();
+
+    static Color GetClearColor();
+    static GL::Enum GetPolygonMode(GL::Face face);
     static uint GetLineWidth();
     static uint GetStencilMask();
     static GL::Function GetStencilFunc();
@@ -494,9 +494,19 @@ public:
     static GL::Function GetDepthFunc();
     static bool IsWireframe();
     static GL::Face GetCullFace();
+
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
     static const Matrix4 &GetProjectionMatrix();
+
+
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            Byte *pixels);
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            float *pixels);
+    static void GetTexImage(GL::TextureTarget textureTarget,
+                            GL::DataType dataType,
+                            void *pixels);
 
     static void Bind(const GLObject *bindable);
     static void Bind(BindTarget bindTarget, GLId glId);
@@ -522,13 +532,30 @@ public:
     static GL::ViewProjMode GetViewProjMode();
 
     static GL* GetActive();
-
     GLUniforms *GetGLUniforms() const;
 
     GL();
 
 private:
+    // Context
+    GLId m_boundVAOId              = 0;
+    GLId m_boundVBOId              = 0;
+    GLId m_boundTextureId          = 0;
+    GLId m_boundFramebufferId      = 0;
+    GLId m_boundShaderProgramId    = 0;
+    GLId m_boundUniformBufferId    = 0;
+    std::array<bool, 4> m_rgbaMask = {{false, false, false, false}};
+    uint m_lineWidth     = Undef<uint>();
+    Byte m_stencilValue  = Undef<Byte>();
+    uint m_stencilMask   = Undef<uint>();
+    Recti m_viewportRect = Recti::Zero;
+    GL::Function m_stencilFunc       = Undef<GL::Function>();
+    GL::StencilOperation m_stencilOp = Undef<GL::StencilOperation>();
+
     GLUniforms *m_glUniforms = nullptr;
+
+    static GL* s_activeGL;
+    static void SetActive(GL *gl);
 
     friend class GEngine;
 };

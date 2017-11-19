@@ -31,7 +31,7 @@ void Renderer::OnRender(RenderPass renderPass)
     Component::OnRender(renderPass);
     if (IsVisible() && renderPass == GetRenderPass())
     {
-        GEngine::GetInstance()->Render(this);
+        GEngine::GetActive()->Render(this);
     }
 }
 void Renderer::OnRender() { }
