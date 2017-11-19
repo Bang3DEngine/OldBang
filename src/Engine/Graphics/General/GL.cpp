@@ -49,9 +49,8 @@ bool GL::CheckFramebufferError()
 
 Color GL::GetClearColor()
 {
-    GLfloat clearColor[4];
-    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
-    return Color(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+    GL *gl = GL::GetActive();
+    return gl ? gl->m_clearColor : Color::Zero;
 }
 
 void GL::Clear(GL::BufferBit bufferBit)
@@ -62,18 +61,17 @@ void GL::Clear(GL::BufferBit bufferBit)
 void GL::ClearColorBuffer(const Color &clearColor,
                           bool clearR, bool clearG, bool clearB, bool clearA)
 {
-    bool colorMaskRBefore = GL::IsColorMaskR();
-    bool colorMaskGBefore = GL::IsColorMaskG();
-    bool colorMaskBBefore = GL::IsColorMaskB();
-    bool colorMaskABefore = GL::IsColorMaskA();
-    bool differentColorMask = (colorMaskRBefore != clearR) ||
-                              (colorMaskGBefore != clearG) ||
-                              (colorMaskBBefore != clearB) ||
-                              (colorMaskABefore != clearA);
-    if (differentColorMask) { GL::SetColorMask(clearR, clearG, clearB, clearA); }
+    std::array<bool, 4> lastColorMask = GL::GetColorMask();
+    bool differentColorMask =
+                (lastColorMask[0] != clearR) || (lastColorMask[1] != clearG) ||
+                (lastColorMask[2] != clearB) || (lastColorMask[3] != clearA);
+
+    if (differentColorMask)
+    { GL::SetColorMask(clearR, clearG, clearB, clearA); }
 
     if (GL::GetClearColor() != clearColor)
     {
+        GL::GetActive()->m_clearColor = clearColor;
         glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     }
 
@@ -81,8 +79,8 @@ void GL::ClearColorBuffer(const Color &clearColor,
 
     if (differentColorMask)
     {
-        GL::SetColorMask(colorMaskRBefore, colorMaskGBefore,
-                         colorMaskBBefore, colorMaskABefore);
+        GL::SetColorMask(lastColorMask[0], lastColorMask[1],
+                         lastColorMask[2], lastColorMask[3]);
     }
 }
 
@@ -133,15 +131,31 @@ void GL::PolygonMode(GL::Face face, GL::Enum mode)
 {
     if (GL::GetPolygonMode(face) != mode)
     {
+        switch (face)
+        {
+            case GL::Face::FrontAndBack:
+                GL::GetActive()->m_frontBackPolygonMode = mode; break;
+            case GL::Face::Front:
+                GL::GetActive()->m_frontPolygonMode = mode; break;
+            case GL::Face::Back:
+                GL::GetActive()->m_backPolygonMode = mode; break;
+            default: return;
+        }
+
         glPolygonMode(GLCAST(face), mode);
     }
 }
 
 GL::Enum GL::GetPolygonMode(GL::Face face)
 {
-    GLint polygonModes[2];
-    GL::GetInteger(GL_POLYGON_MODE, polygonModes);
-    return face == GL::Face::Front ? polygonModes[0] : polygonModes[1];
+    switch (face)
+    {
+        case GL::Face::FrontAndBack: return GL::GetActive()->m_frontBackPolygonMode;
+        case GL::Face::Front: return GL::GetActive()->m_frontPolygonMode;
+        case GL::Face::Back: return GL::GetActive()->m_backPolygonMode;
+        default: break;
+    }
+    return  GL_FILL;
 }
 
 GLvoid* GL::MapBuffer(GL::BindTarget target, GL::Enum access)
@@ -610,6 +624,7 @@ void GL::LineWidth(float lineWidth)
 {
     if (GL::GetLineWidth() != lineWidth)
     {
+        GL::GetActive()->m_lineWidth = lineWidth;
         glLineWidth(lineWidth);
     }
 }
@@ -679,14 +694,20 @@ void GL::SetViewport(const Recti &viewport)
 
 void GL::SetViewport(int x, int y, int width, int height)
 {
-    glViewport(x, y, width, height);
-
-    if (GL::GetActive() && GLUniforms::GetActive())
+    Recti vpRect( Vector2i(x, y), Vector2i(x+width, y+height));
+    if (GL::GetViewportRect() != vpRect)
     {
-        auto *vpBuffer = GLUniforms::GetViewportBuffer();
-        vpBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
-        vpBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
-        vpBuffer->UpdateBuffer();
+        GL *gl = GL::GetActive();
+        if (gl) { gl->m_viewportRect = vpRect; }
+        glViewport(x, y, width, height);
+
+        if (gl && GLUniforms::GetActive())
+        {
+            auto *vpBuffer = GLUniforms::GetViewportBuffer();
+            vpBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
+            vpBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
+            vpBuffer->UpdateBuffer();
+        }
     }
 }
 
@@ -697,11 +718,8 @@ void GL::SetLineWidth(float lineWidth)
 
 Recti GL::GetViewportRect()
 {
-    int viewport[4];
-    GL::GetInteger(GL::Viewport, viewport);
-    return Recti( viewport[0], viewport[1],
-                 (viewport[0] + viewport[2]),
-                 (viewport[1] + viewport[3]));
+    GL *gl = GL::GetActive();
+    return gl ? gl->m_viewportRect : Recti::Zero;
 }
 
 Vector2i GL::GetViewportSize()
@@ -736,7 +754,7 @@ void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
 
 uint GL::GetLineWidth()
 {
-    return SCAST<uint>(GL::GetInteger(GL_LINE_WIDTH));
+    return GL::GetActive()->m_lineWidth;
 }
 
 uint GL::GetStencilMask()
@@ -813,7 +831,13 @@ bool GL::IsBound(const GLObject *bindable)
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
 {
-    glColorMask(maskR, maskG, maskB, maskA);
+    GL *gl = GL::GetActive();
+    std::array<bool,4> newColorMask = {{maskR, maskG, maskB, maskA}};
+    if (!gl || (GL::GetColorMask() != newColorMask))
+    {
+        gl->m_colorMask = newColorMask;
+        glColorMask(maskR, maskG, maskB, maskA);
+    }
 }
 
 void GL::SetViewProjMode(GL::ViewProjMode mode)
@@ -854,7 +878,12 @@ void GL::SetStencilValue(Byte value)
 
 void GL::SetDepthMask(bool writeDepth)
 {
-    glDepthMask(writeDepth);
+    if (GL::GetActive()->GetDepthMask() != writeDepth)
+    {
+        GL *gl = GL::GetActive();
+        gl->m_depthMask = writeDepth;
+        glDepthMask(writeDepth);
+    }
 }
 
 void GL::SetDepthFunc(GL::Function depthFunc)
@@ -864,13 +893,17 @@ void GL::SetDepthFunc(GL::Function depthFunc)
 
 void GL::SetWireframe(bool wireframe)
 {
-    GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL_LINE : GL_FILL);
+    if (GL::IsWireframe() != wireframe)
+    {
+        GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL_LINE : GL_FILL);
+    }
 }
 
 void GL::SetCullFace(GL::Face cullFace)
 {
     if (GL::GetCullFace() != cullFace)
     {
+        GL::GetActive()->m_cullFace = cullFace;
         glCullFace( GLCAST(cullFace) );
     }
 }
@@ -932,21 +965,17 @@ Byte GL::GetStencilValue()
     return SCAST<Byte>(GL::GetInteger(GL_STENCIL_REF));
 }
 
-Array<BoolByte> GL::GetColorMask()
+std::array<bool, 4> GL::GetColorMask()
 {
-    int colorMask[4];
-    GL::GetInteger(GL_COLOR_WRITEMASK, &colorMask[0]);
-    return {SCAST<BoolByte>(colorMask[0]),
-            SCAST<BoolByte>(colorMask[1]),
-            SCAST<BoolByte>(colorMask[2]),
-            SCAST<BoolByte>(colorMask[3])};
+    GL *gl = GL::GetActive();
+    return gl ? gl->m_colorMask : std::array<bool, 4>({{true, true, true, true}});
 }
-bool GL::IsColorMaskR()  { return GL::GetColorMask().At(0) == 1;  }
-bool GL::IsColorMaskG()  { return GL::GetColorMask().At(1) == 1;  }
-bool GL::IsColorMaskB()  { return GL::GetColorMask().At(2) == 1;  }
-bool GL::IsColorMaskA()  { return GL::GetColorMask().At(3) == 1;  }
+bool GL::IsColorMaskR()  { return GL::GetColorMask()[0];  }
+bool GL::IsColorMaskG()  { return GL::GetColorMask()[1];  }
+bool GL::IsColorMaskB()  { return GL::GetColorMask()[2];  }
+bool GL::IsColorMaskA()  { return GL::GetColorMask()[3];  }
 
-bool GL::GetDepthMask()  {  return GL::GetBoolean(GL_DEPTH_WRITEMASK);  }
+bool GL::GetDepthMask()  { return GL::GetActive()->m_depthMask; }
 GL::Function GL::GetDepthFunc()
 {
     return SCAST<GL::Function>(GL::GetInteger(GL_DEPTH_FUNC));
@@ -960,7 +989,8 @@ bool GL::IsWireframe()
 }
 GL::Face GL::GetCullFace()
 {
-    return SCAST<GL::Face>(GL::GetInteger(GL_CULL_FACE_MODE));
+    GL *gl = GL::GetActive();
+    return gl ? gl->m_cullFace : GL::Face::None;
 }
 
 GLId GL::GetBoundId(GL::BindTarget bindTarget)

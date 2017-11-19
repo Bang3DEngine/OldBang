@@ -93,9 +93,9 @@ void Window::SwapBuffers() const
 
 void Window::MakeCurrent()
 {
+    Window::SetActive(this);
     SDL_GL_MakeCurrent(GetSDLWindow(), GetGLContext());
     GL::SetViewport(0, 0, GetWidth(), GetHeight());
-    Window::SetActive(this);
 }
 
 bool Window::MainLoopIteration()

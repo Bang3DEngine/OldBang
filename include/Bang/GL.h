@@ -489,16 +489,11 @@ public:
     static bool IsColorMaskG();
     static bool IsColorMaskB();
     static bool IsColorMaskA();
-    static Array<BoolByte> GetColorMask();
+    static std::array<bool, 4> GetColorMask();
     static bool GetDepthMask();
     static GL::Function GetDepthFunc();
     static bool IsWireframe();
     static GL::Face GetCullFace();
-
-    static const Matrix4 &GetModelMatrix();
-    static const Matrix4 &GetViewMatrix();
-    static const Matrix4 &GetProjectionMatrix();
-
 
     static void GetTexImage(GL::TextureTarget textureTarget,
                             Byte *pixels);
@@ -544,11 +539,17 @@ private:
     GLId m_boundFramebufferId      = 0;
     GLId m_boundShaderProgramId    = 0;
     GLId m_boundUniformBufferId    = 0;
-    std::array<bool, 4> m_rgbaMask = {{false, false, false, false}};
+    std::array<bool, 4> m_colorMask = {{true, true, true, true}};
     uint m_lineWidth     = Undef<uint>();
     Byte m_stencilValue  = Undef<Byte>();
     uint m_stencilMask   = Undef<uint>();
     Recti m_viewportRect = Recti::Zero;
+    bool m_depthMask = true;
+    Color m_clearColor = Color::Zero;
+    GL::Face m_cullFace = GL::Face::None;
+    GL::Enum m_frontPolygonMode = GL_FILL;
+    GL::Enum m_backPolygonMode = GL_FILL;
+    GL::Enum m_frontBackPolygonMode = GL_FILL;
     GL::Function m_stencilFunc       = Undef<GL::Function>();
     GL::StencilOperation m_stencilOp = Undef<GL::StencilOperation>();
 

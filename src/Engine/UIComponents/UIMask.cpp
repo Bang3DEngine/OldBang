@@ -38,7 +38,7 @@ void UIMask::OnAfterChildrenRender(RenderPass renderPass)
 void UIMask::PrepareStencilToDrawMask()
 {
     // Save values for later restoring
-    m_maskBefore         = GL::GetColorMask();
+    m_colorMaskBefore    = GL::GetColorMask();
     m_stencilFuncBefore  = GL::GetStencilFunc();
     m_stencilOpBefore    = GL::GetStencilOp();
 
@@ -55,8 +55,8 @@ void UIMask::PrepareStencilToDrawMask()
 void UIMask::PrepareStencilToDrawChildren()
 {
     // Restore color mask for children
-    GL::SetColorMask(m_maskBefore[0], m_maskBefore[1],
-                     m_maskBefore[2], m_maskBefore[3]);
+    GL::SetColorMask(m_colorMaskBefore[0], m_colorMaskBefore[1],
+                     m_colorMaskBefore[2], m_colorMaskBefore[3]);
 
     if (IsMasking())
     {
@@ -81,8 +81,8 @@ void UIMask::RestoreStencilBuffer(RenderPass renderPass)
     m_restoringStencil = false;
 
     GL::SetStencilValue( GL::GetStencilValue() - 1 );
-    GL::SetColorMask(m_maskBefore[0], m_maskBefore[1],
-                     m_maskBefore[2], m_maskBefore[3]);
+    GL::SetColorMask(m_colorMaskBefore[0], m_colorMaskBefore[1],
+                     m_colorMaskBefore[2], m_colorMaskBefore[3]);
     GL::SetStencilOp(m_stencilOpBefore);
     GL::SetStencilFunc(m_stencilFuncBefore);
 }
