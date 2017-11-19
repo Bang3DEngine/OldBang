@@ -89,7 +89,6 @@ void Application::SetActiveWindow(Window *window)
 
 void Application::BindWindow(Window *window)
 {
-    Window::SetActive(window);
     p_latestCurrentWindow = p_currentWindow;
     p_currentWindow = window;
     window->MakeCurrent();

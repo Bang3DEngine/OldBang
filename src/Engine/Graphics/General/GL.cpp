@@ -759,12 +759,12 @@ uint GL::GetLineWidth()
 
 uint GL::GetStencilMask()
 {
-    return SCAST<uint>(GL::GetInteger(GL_STENCIL_VALUE_MASK));
+    return GL::GetActive()->m_stencilMask;
 }
 
 GL::Function GL::GetStencilFunc()
 {
-    return SCAST<GL::Function>(GL::GetInteger(GL_STENCIL_FUNC));
+    return GL::GetActive()->m_stencilFunc;
 }
 
 void GL::Bind(const GLObject *bindable)
@@ -849,6 +849,7 @@ void GL::SetStencilOp(GL::StencilOperation fail,
                       GL::StencilOperation zFail,
                       GL::StencilOperation zPass)
 {
+    GL::GetActive()->m_stencilOp = zPass;
     glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass));
 }
 
@@ -861,14 +862,26 @@ void GL::SetStencilFunc(GL::Function stencilFunction,
                         Byte stencilValue,
                         uint mask)
 {
-    glStencilFunc(GLCAST(stencilFunction), stencilValue, mask);
+    if (stencilFunction != GL::GetStencilFunc() ||
+        stencilValue != GL::GetStencilValue() ||
+        mask != GL::GetStencilMask())
+    {
+        GL *gl = GL::GetActive();
+        gl->m_stencilFunc  = stencilFunction;
+        gl->m_stencilValue = stencilValue;
+        gl->m_stencilMask  = mask;
+        glStencilFunc(GLCAST(stencilFunction), stencilValue, mask);
+    }
 }
 
 void GL::SetStencilOp(GL::StencilOperation zPass)
 {
-    GL::SetStencilOp(GL::StencilOperation::Keep,
-                     GL::StencilOperation::Keep,
-                     zPass);
+    if (GL::GetStencilOp() != zPass)
+    {
+        GL::SetStencilOp(GL::StencilOperation::Keep,
+                         GL::StencilOperation::Keep,
+                         zPass);
+    }
 }
 
 void GL::SetStencilValue(Byte value)
@@ -888,7 +901,11 @@ void GL::SetDepthMask(bool writeDepth)
 
 void GL::SetDepthFunc(GL::Function depthFunc)
 {
-    glDepthFunc( GLCAST(depthFunc) );
+    if (GL::GetDepthFunc() != depthFunc)
+    {
+        GL::GetActive()->m_depthFunc = depthFunc;
+        glDepthFunc( GLCAST(depthFunc) );
+    }
 }
 
 void GL::SetWireframe(bool wireframe)
@@ -957,12 +974,11 @@ Vector2 GL::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
 
 GL::StencilOperation GL::GetStencilOp()
 {
-    return SCAST<GL::StencilOperation>(
-                        GL::GetInteger(GL_STENCIL_PASS_DEPTH_PASS));
+    return GL::GetActive()->m_stencilOp;
 }
 Byte GL::GetStencilValue()
 {
-    return SCAST<Byte>(GL::GetInteger(GL_STENCIL_REF));
+    return GL::GetActive()->m_stencilValue;
 }
 
 std::array<bool, 4> GL::GetColorMask()
@@ -976,16 +992,11 @@ bool GL::IsColorMaskB()  { return GL::GetColorMask()[2];  }
 bool GL::IsColorMaskA()  { return GL::GetColorMask()[3];  }
 
 bool GL::GetDepthMask()  { return GL::GetActive()->m_depthMask; }
-GL::Function GL::GetDepthFunc()
-{
-    return SCAST<GL::Function>(GL::GetInteger(GL_DEPTH_FUNC));
-}
+GL::Function GL::GetDepthFunc() { return GL::GetActive()->m_depthFunc; }
 
 bool GL::IsWireframe()
 {
-    GLint result[2];
-    GL::GetInteger(GL_POLYGON_MODE, result);
-    return result[0] == GL_LINE;
+    return GL::GetPolygonMode(GL::Face::FrontAndBack) == GL_LINE;
 }
 GL::Face GL::GetCullFace()
 {

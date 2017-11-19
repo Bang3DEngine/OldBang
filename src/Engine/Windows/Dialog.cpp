@@ -54,6 +54,7 @@ Path Dialog::GetFilePath(const String &title,
         dialog = Application::GetInstance()->CreateDialogWindow(topWindow);
         dialog->SetTitle(title);
         dialog->SetSize(500, 400);
+        dialog->MakeCurrent();
 
         Scene *scene = CreateGetFilePathScene(title, extensions);
         SceneManager::LoadScene(scene);

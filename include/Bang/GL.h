@@ -540,18 +540,21 @@ private:
     GLId m_boundShaderProgramId    = 0;
     GLId m_boundUniformBufferId    = 0;
     std::array<bool, 4> m_colorMask = {{true, true, true, true}};
-    uint m_lineWidth     = Undef<uint>();
-    Byte m_stencilValue  = Undef<Byte>();
-    uint m_stencilMask   = Undef<uint>();
+    uint m_lineWidth     = 0;
+    Byte m_stencilValue  = 0;
+    uint m_stencilMask   = 0xFF;
     Recti m_viewportRect = Recti::Zero;
+
     bool m_depthMask = true;
+    GL::Function m_depthFunc = GL::Function::Less;
     Color m_clearColor = Color::Zero;
     GL::Face m_cullFace = GL::Face::None;
-    GL::Enum m_frontPolygonMode = GL_FILL;
-    GL::Enum m_backPolygonMode = GL_FILL;
-    GL::Enum m_frontBackPolygonMode = GL_FILL;
-    GL::Function m_stencilFunc       = Undef<GL::Function>();
-    GL::StencilOperation m_stencilOp = Undef<GL::StencilOperation>();
+
+    GL::Enum m_frontPolygonMode      = GL_FILL;
+    GL::Enum m_backPolygonMode       = GL_FILL;
+    GL::Enum m_frontBackPolygonMode  = GL_FILL;
+    GL::Function m_stencilFunc       = GL::Function::Always;
+    GL::StencilOperation m_stencilOp = GL::StencilOperation::Keep;
 
     GLUniforms *m_glUniforms = nullptr;
 
