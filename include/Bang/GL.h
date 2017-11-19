@@ -15,8 +15,13 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define GL_CheckError() \
-    ASSERT(GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+#ifdef DEBUG
+#define GL_ClearError() GL::ClearError()
+#define GL_CheckError() ASSERT(GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+#else
+#define GL_ClearError() // Empty
+#define GL_CheckError() // Empty
+#endif
 
 using GLId = GLuint;
 
@@ -276,6 +281,7 @@ public:
                            const String &file = "");
     static bool CheckFramebufferError();
 
+    static Color GetClearColor();
     static void Clear(GL::BufferBit bufferBit);
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,
@@ -294,6 +300,9 @@ public:
                                     bool dataNormalized,
                                     int dataStride,
                                     int dataOffset);
+
+    static void PolygonMode(GL::Face face, GL::Enum mode);
+    static GL::Enum GetPolygonMode(GL::Face face);
 
     static GLvoid* MapBuffer(GL::BindTarget target, Enum access);
     static void UnMapBuffer(GL::BindTarget target);
@@ -471,6 +480,7 @@ public:
                        int elementsCount,
                        int startElementIndex = 0);
 
+    static uint GetLineWidth();
     static uint GetStencilMask();
     static GL::Function GetStencilFunc();
     static GL::StencilOperation GetStencilOp();

@@ -108,7 +108,7 @@ void Material::Bind() const
 void Material::UnBind() const
 {
     ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
-    sp->UnBind();
+    // sp->UnBind();
 }
 
 void Material::CloneInto(ICloneable *clone) const

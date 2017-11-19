@@ -27,6 +27,7 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -370,6 +371,8 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
 {
     GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
+    lr->SetMaterial(MaterialFactory::GetUIImage());
+    lr->GetMaterial()->SetDiffuseColor(Color::White);
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);
 

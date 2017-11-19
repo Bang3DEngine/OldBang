@@ -54,17 +54,6 @@ uniform sampler2D B_GTex_Color;
 uniform sampler2D B_GTex_DepthStencil;
 // ///////////////////////////////////////
 
-// Locations ////////////////////////
-#define B_LOC_VIN_POSITION 0
-#define B_LOC_VIN_NORMAL   1
-#define B_LOC_VIN_UV       2
-
-#define B_LOC_GBUFFER_OUT_NORMAL  0
-#define B_LOC_GBUFFER_OUT_DIFFUSE 1
-#define B_LOC_GBUFFER_OUT_MISC    2
-#define B_LOC_GBUFFER_OUT_COLOR   3
-//////////////////////////////////////
-
 // Util functions /////////////////
 float B_LinearizeDepth(float d)
 {

@@ -45,6 +45,13 @@ bool GL::CheckFramebufferError()
     return error;
 }
 
+Color GL::GetClearColor()
+{
+    GLfloat clearColor[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
+    return Color(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+}
+
 void GL::Clear(GL::BufferBit bufferBit)
 {
     glClear( GLCAST(bufferBit) );
@@ -57,13 +64,24 @@ void GL::ClearColorBuffer(const Color &clearColor,
     bool colorMaskGBefore = GL::IsColorMaskG();
     bool colorMaskBBefore = GL::IsColorMaskB();
     bool colorMaskABefore = GL::IsColorMaskA();
-    GL::SetColorMask(clearR, clearG, clearB, clearA);
+    bool differentColorMask = (colorMaskRBefore != clearR) ||
+                              (colorMaskGBefore != clearG) ||
+                              (colorMaskBBefore != clearB) ||
+                              (colorMaskABefore != clearA);
+    if (differentColorMask) { GL::SetColorMask(clearR, clearG, clearB, clearA); }
 
-    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    if (GL::GetClearColor() != clearColor)
+    {
+        glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    }
+
     GL::Clear(GL::BufferBit::Color);
 
-    GL::SetColorMask(colorMaskRBefore, colorMaskGBefore,
-                     colorMaskBBefore, colorMaskABefore);
+    if (differentColorMask)
+    {
+        GL::SetColorMask(colorMaskRBefore, colorMaskGBefore,
+                         colorMaskBBefore, colorMaskABefore);
+    }
 }
 
 void GL::ClearDepthBuffer(float clearDepth)
@@ -80,14 +98,14 @@ void GL::ClearStencilBuffer(int stencilValue)
 
 void GL::EnableVertexAttribArray(int location)
 {
-    GL::ClearError();
+    GL_ClearError();
     glEnableVertexAttribArray(location);
     GL_CheckError();
 }
 
 void GL::DisableVertexAttribArray(int location)
 {
-    GL::ClearError();
+    GL_ClearError();
     glDisableVertexAttribArray(location);
     GL_CheckError();
 }
@@ -99,7 +117,7 @@ void GL::VertexAttribPointer(int location,
                              int dataStride,
                              int dataOffset)
 {
-    GL::ClearError();
+    GL_ClearError();
     glVertexAttribPointer(location,
                           dataComponentsCount,
                           GLCAST(dataType),
@@ -107,6 +125,21 @@ void GL::VertexAttribPointer(int location,
                           dataStride,
                           RCAST<void*>(dataOffset));
     GL_CheckError();
+}
+
+void GL::PolygonMode(GL::Face face, GL::Enum mode)
+{
+    if (GL::GetPolygonMode(face) != mode)
+    {
+        glPolygonMode(GLCAST(face), mode);
+    }
+}
+
+GL::Enum GL::GetPolygonMode(GL::Face face)
+{
+    GLint polygonModes[2];
+    GL::GetInteger(GL_POLYGON_MODE, polygonModes);
+    return face == GL::Face::Front ? polygonModes[0] : polygonModes[1];
 }
 
 GLvoid* GL::MapBuffer(GL::BindTarget target, GL::Enum access)
@@ -147,7 +180,7 @@ void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
     ENSURE(srcFactor != GL::BlendFactor::None &&
            dstFactor != GL::BlendFactor::None);
 
-    GL::ClearError();
+    GL_ClearError();
     glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) );
     GL_CheckError();
 }
@@ -167,7 +200,7 @@ void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
                          GL::FilterMode filterMode,
                          GL::BufferBit bufferBitMask)
 {
-    GL::ClearError();
+    GL_ClearError();
     glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1,
                       dstX0, dstY0, dstX1, dstY1,
                       GLCAST(bufferBitMask),
@@ -188,7 +221,7 @@ void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
 
 GLId GL::CreateShader(GL::ShaderType shaderType)
 {
-    GL::ClearError();
+    GL_ClearError();
     GLId id = glCreateShader( GLCAST(shaderType) );
     GL_CheckError();
     return id;
@@ -196,7 +229,7 @@ GLId GL::CreateShader(GL::ShaderType shaderType)
 
 void GL::ShaderSource(GLId shaderId, const String &sourceCode)
 {
-    GL::ClearError();
+    GL_ClearError();
     int sourceSize = sourceCode.Size();
     const char *src = sourceCode.ToCString();
     glShaderSource(shaderId, 1, &src, &sourceSize);
@@ -205,7 +238,7 @@ void GL::ShaderSource(GLId shaderId, const String &sourceCode)
 
 bool GL::CompileShader(GLId shaderId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glCompileShader(shaderId);
     GL_CheckError();
     bool ok = GL::GetShaderInteger(shaderId, GL_COMPILE_STATUS);
@@ -216,7 +249,7 @@ bool GL::CompileShader(GLId shaderId)
 int GL::GetShaderInteger(GLId shaderId, GL::Enum glEnum)
 {
     int v = false;
-    GL::ClearError();
+    GL_ClearError();
     glGetShaderiv(shaderId, glEnum, &v);
     GL_CheckError();
     return v;
@@ -226,7 +259,7 @@ String GL::GetShaderErrorMsg(GLId shaderId)
 {
     int maxLength = GL::GetShaderInteger(shaderId, GL_INFO_LOG_LENGTH);
 
-    GL::ClearError();
+    GL_ClearError();
     Array<char> v(maxLength);
     glGetShaderInfoLog(shaderId, maxLength, &maxLength, &v[0]);
     GL_CheckError();
@@ -236,7 +269,7 @@ String GL::GetShaderErrorMsg(GLId shaderId)
 
 void GL::DeleteShader(GLId shaderId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glDeleteShader(shaderId);
     GL_CheckError();
 }
@@ -248,14 +281,14 @@ GLId GL::CreateProgram()
 
 void GL::AttachShader(GLId programId, GLId shaderId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glAttachShader(programId, shaderId);
     GL_CheckError();
 }
 
 bool GL::LinkProgram(GLId programId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glLinkProgram(programId);
     GL_CheckError();
     int linked = GL::GetProgramInteger(programId, GL_LINK_STATUS);
@@ -285,7 +318,7 @@ int GL::GetProgramInteger(GLId programId, GL::Enum glEnum)
 
 void GL::GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints)
 {
-    GL::ClearError();
+    GL_ClearError();
     glGetProgramiv(programId, glEnum, ints);
     GL_CheckError();
 }
@@ -293,7 +326,7 @@ void GL::GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints)
 void GL::BindAttribLocation(GLId programId, int location,
                             const String &attribName)
 {
-    GL::ClearError();
+    GL_ClearError();
     glBindAttribLocation(programId, location, attribName.ToCString());
     GL_CheckError();
 }
@@ -301,14 +334,14 @@ void GL::BindAttribLocation(GLId programId, int location,
 void GL::BindFragDataLocation(GLId programId, int location,
                               const String &fragDataName)
 {
-    GL::ClearError();
+    GL_ClearError();
     glBindFragDataLocation(programId, location, fragDataName.ToCString());
     GL_CheckError();
 }
 
 int GL::GetUniformLocation(GLId programId, const String &uniformName)
 {
-    GL::ClearError();
+    GL_ClearError();
     int location = glGetUniformLocation(programId, uniformName.ToCString());
     GL_CheckError();
     return location;
@@ -316,7 +349,7 @@ int GL::GetUniformLocation(GLId programId, const String &uniformName)
 
 void GL::DeleteProgram(GLId programId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glDeleteProgram(programId);
     GL_CheckError();
 }
@@ -326,7 +359,7 @@ void GL::FramebufferTexture2D(GL::FramebufferTarget target,
                               GL::TextureTarget texTarget,
                               GLId textureId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glFramebufferTexture2D(GLCAST(target),
                            GLCAST(attachment),
                            GLCAST(texTarget),
@@ -337,7 +370,7 @@ void GL::FramebufferTexture2D(GL::FramebufferTarget target,
 
 void GL::BindRenderbuffer(GL::RenderbufferTarget target, GLId renderbufferId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glBindRenderbuffer(GLCAST(target), renderbufferId);
     GL_CheckError();
 }
@@ -346,7 +379,7 @@ void GL::RenderbufferStorage(GL::RenderbufferTarget target,
                              GL::RenderbufferFormat format,
                              int width, int height)
 {
-    GL::ClearError();
+    GL_ClearError();
     glRenderbufferStorage(GLCAST(target),
                           GLCAST(format),
                           width, height);
@@ -358,7 +391,7 @@ void GL::FramebufferRenderbuffer(GL::FramebufferTarget target,
                                  GL::RenderbufferTarget rbTarget,
                                  GLId renderbufferId)
 {
-    GL::ClearError();
+    GL_ClearError();
     glFramebufferRenderbuffer(GLCAST(target),
                               GLCAST(attachment),
                               GLCAST(rbTarget),
@@ -368,14 +401,14 @@ void GL::FramebufferRenderbuffer(GL::FramebufferTarget target,
 
 void GL::DrawBuffers(const Array<GL::Attachment> &attachments)
 {
-    GL::ClearError();
+    GL_ClearError();
     glDrawBuffers(attachments.Size(), (const GLenum*)(&attachments[0]));
     GL_CheckError();
 }
 
 void GL::ReadBuffer(GL::Attachment readAttachment)
 {
-    GL::ClearError();
+    GL_ClearError();
     glReadBuffer( GLCAST(readAttachment) );
     GL_CheckError();
 }
@@ -384,7 +417,7 @@ void GL::ReadPixels(int x, int y, int width, int height,
                     GL::ColorComp inputComp, GL::DataType inputDataType,
                     void *pixels)
 {
-    GL::ClearError();
+    GL_ClearError();
     glReadPixels(x, y, width, height,
                  GLCAST(inputComp),
                  GLCAST(inputDataType),
@@ -405,31 +438,31 @@ void GL::Flush() { glFlush(); }
 
 void GL::Uniform(int location, int value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform1i(location, value);
     GL_CheckError();
 }
 void GL::Uniform(int location, float value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform1f(location, value);
     GL_CheckError();
 }
 void GL::Uniform(int location, bool value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform1i(location, value ? 1 : 0);
     GL_CheckError();
 }
 void GL::Uniform(int location, const Matrix3f& value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniformMatrix3fv(location, 1, false, value.Data());
     GL_CheckError();
 }
 void GL::Uniform(int location, const Matrix4f& value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniformMatrix4fv(location, 1, false, value.Data());
     GL_CheckError();
 }
@@ -439,33 +472,33 @@ void GL::Uniform(int location, const Color &value)
 }
 void GL::Uniform(int location, const Vector2 &value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform2fv(location, 1, value.Data());
     GL_CheckError();
 }
 void GL::Uniform(int location, const Vector3 &value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform3fv(location, 1, value.Data());
     GL_CheckError();
 }
 void GL::Uniform(int location, const Vector4 &value)
 {
-    GL::ClearError();
+    GL_ClearError();
     glUniform4fv(location, 1, value.Data());
     GL_CheckError();
 }
 
 void GL::PixelStore(GL::Enum pixelStoreEnum, int n)
 {
-    GL::ClearError();
+    GL_ClearError();
     glPixelStorei(pixelStoreEnum, n);
     GL_CheckError();
 }
 
 void GL::GenerateMipMap(GL::TextureTarget textureTarget)
 {
-    GL::ClearError();
+    GL_ClearError();
     glGenerateMipmap( GLCAST(textureTarget) );
     GL_CheckError();
 }
@@ -478,7 +511,7 @@ void GL::TexImage2D(GL::TextureTarget textureTarget,
                     GL::DataType inputDataType,
                     const void *data)
 {
-    GL::ClearError();
+    GL_ClearError();
 
     glTexImage2D(GLCAST(textureTarget),
                  0,
@@ -526,7 +559,7 @@ void GL::GetTexImage(GL::TextureTarget textureTarget,
                      GL::DataType dataType,
                      void *pixels)
 {
-    GL::ClearError();
+    GL_ClearError();
 
     glGetTexImage(GLCAST(textureTarget),
                   0,
@@ -545,7 +578,7 @@ bool GL::GetBoolean(GL::Enum glEnum)
 }
 void GL::GetBoolean(GL::Enum glEnum, bool *values)
 {
-    GL::ClearError();
+    GL_ClearError();
     GLboolean result;
     glGetBooleanv(GLCAST(glEnum), &result);
     *values = result;
@@ -560,7 +593,7 @@ int GL::GetInteger(GL::Enum glEnum)
 }
 void GL::GetInteger(GL::Enum glEnum, int *values)
 {
-    GL::ClearError();
+    GL_ClearError();
     glGetIntegerv(glEnum, values);
     GL_CheckError();
 }
@@ -573,7 +606,10 @@ void GL::ActiveTexture(int activeTexture)
 
 void GL::LineWidth(float lineWidth)
 {
-    glLineWidth(lineWidth);
+    if (GL::GetLineWidth() != lineWidth)
+    {
+        glLineWidth(lineWidth);
+    }
 }
 
 void GL::GenFramebuffers(int n, GLId *glIds)
@@ -696,6 +732,11 @@ void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
     vao->UnBind();
 }
 
+uint GL::GetLineWidth()
+{
+    return SCAST<uint>(GL::GetInteger(GL_LINE_WIDTH));
+}
+
 uint GL::GetStencilMask()
 {
     return SCAST<uint>(GL::GetInteger(GL_STENCIL_VALUE_MASK));
@@ -713,7 +754,9 @@ void GL::Bind(const GLObject *bindable)
 
 void GL::Bind(GL::BindTarget bindTarget, GLId glId)
 {
-    GL::ClearError();
+    if (GL::IsBound(bindTarget, glId)) { return; }
+
+    GL_ClearError();
     switch (bindTarget)
     {
         case BindTarget::Texture2D:
@@ -808,12 +851,15 @@ void GL::SetDepthFunc(GL::Function depthFunc)
 
 void GL::SetWireframe(bool wireframe)
 {
-    glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+    GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL_LINE : GL_FILL);
 }
 
 void GL::SetCullFace(GL::Face cullFace)
 {
-    glCullFace( GLCAST(cullFace) );
+    if (GL::GetCullFace() != cullFace)
+    {
+        glCullFace( GLCAST(cullFace) );
+    }
 }
 
 Rect GL::FromGlobalNDCToPixels(const Rect &rectNDC)
@@ -915,7 +961,7 @@ GLId GL::GetBoundId(GL::BindTarget bindTarget)
         case GL::BindTarget::VAO:
             return GL::GetInteger(GL_VERTEX_ARRAY_BINDING);
         case GL::BindTarget::VBO:
-            return GL::GetInteger(GL_BUFFER_BINDING);
+            return GL::GetInteger(GL_ARRAY_BUFFER_BINDING);
         case GL::BindTarget::ShaderProgram:
             return GL::GetInteger(GL_CURRENT_PROGRAM);
         default: return 0;

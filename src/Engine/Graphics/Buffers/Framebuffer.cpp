@@ -31,7 +31,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
                                    GL::ColorFormat texFormat)
 {
     ASSERT(GL::IsBound(this));
-    GL::ClearError();
+    GL_ClearError();
     Texture2D *tex = new Texture2D();
     tex->Bind();
     tex->SetInternalFormat(texFormat);
@@ -76,7 +76,7 @@ void Framebuffer::SetAttachmentTexture(Texture2D *tex,
     m_attachments_To_Texture.Remove(attachment);
 
     Bind();
-    GL::ClearError();
+    GL_ClearError();
     GL::FramebufferTexture2D(GL::FramebufferTarget::ReadDraw,
                              attachment,
                              GL::TextureTarget::Texture2D,
@@ -123,7 +123,7 @@ void Framebuffer::Resize(int width, int height)
         Texture2D *t = it.second;
         if (t)
         {
-            GL::ClearError();
+            GL_ClearError();
             t->Resize(m_width, m_height);
         }
     }

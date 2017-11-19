@@ -158,8 +158,9 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_UnLighted);
     go->Render(RenderPass::Scene_PostProcess);
 
+
     // GBuffer Canvas rendering
-    camera->GetGBuffer()->SetAllDrawBuffers();
+    camera->GetGBuffer()->SetColorDrawBuffer();
     GL::ClearDepthBuffer();
     GL::ClearStencilBuffer();
     GL::SetDepthMask(true);
