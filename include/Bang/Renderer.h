@@ -41,7 +41,6 @@ public:
     void SetRenderPass(RenderPass rp);
 
     bool IsVisible() const;
-    virtual bool NeedsReadingColorBuffer() const;
     Material* GetMaterial() const;
     Material* GetSharedMaterial() const;
     bool IsRenderWireframe() const;

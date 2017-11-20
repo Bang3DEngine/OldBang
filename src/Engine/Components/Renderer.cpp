@@ -93,11 +93,6 @@ void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
 
 bool Renderer::IsVisible() const { return m_visible; }
 
-bool Renderer::NeedsReadingColorBuffer() const
-{
-    Material *mat = GetMaterial();
-    return mat ? (mat->GetDiffuseColor().a < 1) : false;
-}
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }

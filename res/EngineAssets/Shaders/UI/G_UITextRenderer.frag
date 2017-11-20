@@ -24,13 +24,12 @@ void main()
         if (dist <= lowerCharLimit)
         {
             B_GIn_Color = B_MaterialDiffuseColor; // Just opaque char
-            return;
         }
         else
         {
-            // Outside opaque character zone
-
+            // Outside opaque character zon
             float upperCharLimit = B_textAlphaThreshold + B_textBlurriness;
+            /*
             if (B_outlineWidth > 0)
             {
                 // Outline zone
@@ -38,8 +37,6 @@ void main()
                 float outlineLimit = B_textAlphaThreshold + B_outlineWidth;
                 float outlineLowerLimit = outlineLimit - outlineBlur;
                 float outlineUpperLimit = outlineLimit + outlineBlur;
-
-                if (dist > outlineUpperLimit) { discard; }
 
                 float outlineAlpha = 1.0f - smoothstep(outlineLowerLimit,
                                                        outlineUpperLimit,
@@ -61,10 +58,9 @@ void main()
                 }
             }
             else
+            */
             {
                 // No outline, but character has smoothstep alpha
-                if (dist > upperCharLimit) { discard; }
-
                 float charAlpha = 1.0f-smoothstep(lowerCharLimit,
                                                   upperCharLimit, dist);
                 B_GIn_Color = vec4(B_MaterialDiffuseColor.rgb, charAlpha);
@@ -75,6 +71,4 @@ void main()
     {
         B_GIn_Color = vec4(B_MaterialDiffuseColor.rgb, thisColor.a);
     }
-
-    B_GIn_Color = MixedWithBackground(B_GIn_Color);
 }

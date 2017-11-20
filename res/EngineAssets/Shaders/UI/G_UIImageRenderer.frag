@@ -6,8 +6,10 @@ void main()
     if (B_HasTexture)
     {
         texColor = texture2D(B_Texture0, B_FIn_Uv);
-        if (texColor.a <= B_AlphaCutoff) { discard; }
+        B_GIn_Color = B_MaterialDiffuseColor * texColor;
     }
-
-    B_GIn_Color = MixedWithBackground(B_MaterialDiffuseColor * texColor);
+    else
+    {
+        B_GIn_Color = B_MaterialDiffuseColor;
+    }
 }

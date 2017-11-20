@@ -77,7 +77,6 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
                                   Camera *camera)
 {
     Rect maskRect = lightReceiver->GetGameObject()->GetBoundingScreenRect(camera, false);
-    maskRect = Rect::ScreenRectNDC; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
     ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }
@@ -87,7 +86,6 @@ void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
                                   Camera *camera)
 {
     Rect maskRect = lightReceiver->GetBoundingScreenRect(camera, true);
-    maskRect = Rect::ScreenRectNDC; // TAKE THIS OUT !!!!
     ENSURE(maskRect != Rect::Zero);
     ApplyDeferredLightsToGBuffer(lightsContainer, camera, maskRect);
 }
@@ -159,9 +157,11 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     ApplyDeferredLights(go, go, camera);
     GL::SetStencilValue(0);
 
-    go->Render(RenderPass::Scene_UnLighted);
-    go->Render(RenderPass::Scene_PostProcess);
+    // go->Render(RenderPass::Scene_UnLighted);
+    // go->Render(RenderPass::Scene_PostProcess);
 
+    GL::Enable(GL::Blend);
+    GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
 
     // GBuffer Canvas rendering
     camera->GetGBuffer()->SetColorDrawBuffer();
@@ -178,6 +178,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::ClearStencilBuffer();
     GL::SetDepthFunc(GL::Function::LEqual);
     go->RenderGizmos();
+
+    GL::Disable(GL::Blend);
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
@@ -282,11 +284,6 @@ void GEngine::Render(Renderer *rend)
     {
         rend->Bind();
 
-        if (rend->NeedsReadingColorBuffer())
-        {
-            boundCamera->GetGBuffer()->PrepareColorReadBuffer(
-                                        rend->GetBoundingRect(p_boundCamera));
-        }
         Material *rendMat = rend->GetMaterial();
         boundCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();

@@ -31,7 +31,6 @@ public:
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     void SetKerning(bool kerning);
     void SetWrapping(bool wrapping);
-    void SetOverlapping(bool overlapping);
     void SetAlphaThreshold(float alphaThreshold);
     void SetBlurriness(float blurriness);
     void SetContent(const String &content);
@@ -41,7 +40,6 @@ public:
     void SetOutlineBlurriness(float outlineBlurriness);
     void SetSpacingMultiplier(const Vector2 &spacingMultiplier);
 
-    virtual bool NeedsReadingColorBuffer() const override;
     Font* GetFont() const;
     bool IsKerning() const;
     const Color& GetTextColor() const;
@@ -52,7 +50,6 @@ public:
     HorizontalAlignment GetHorizontalAlignment() const;
     const String& GetContent() const;
     int GetTextSize() const;
-    bool IsOverlapping() const;
     float GetOutlineWidth() const;
     const Color& GetOutlineColor() const;
     float GetOutlineBlurriness() const;
@@ -68,7 +65,6 @@ public:
     virtual void Bind() const override;
     virtual void UnBind() const override;
     virtual void OnRenderGizmos() override;
-    virtual void OnRender(RenderPass renderPass) override;
 
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;
@@ -98,14 +94,11 @@ private:
     Color m_outlineColor        = Color::Red;
     float m_outlineBlurriness   = 0.01f;
 
-    bool m_isOverlapping = false;
-
     bool m_wrapping = false;
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
 
     Mesh *m_mesh = nullptr;
-    uint m_currentRenderingChar = 0;
     mutable uint m_numberOfLines = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
     mutable Array<Rect> m_charRectsGlobalNDC;

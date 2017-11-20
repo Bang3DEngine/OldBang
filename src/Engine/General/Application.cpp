@@ -237,12 +237,15 @@ void Application::DestroyWindow(Window *window)
 }
 void Application::DestroyQueuedWindows()
 {
+    Window *latestWindow = Window::GetActive();
     for (Window *w : p_windowsToBeDestroyed)
     {
+        Window::SetActive(w);
         m_windows.Remove(w);
         delete w;
     }
     p_windowsToBeDestroyed.Clear();
+    Window::SetActive(latestWindow);
 }
 
 Window *Application::GetCurrentWindow() const

@@ -104,11 +104,6 @@ float B_SampleDepthOffset(vec2 pixOffset)
 float B_SampleFlagsOffset(vec2 pixOffset)
   { return B_SampleFlags(GetViewportUv() + GetViewportStep() * pixOffset); }
 
-vec4 MixedWithBackground(vec4 color)
-{
-    return vec4( mix(B_SampleColor().rgb, color.rgb, color.a), 1);
-}
-
 vec3 B_GetCameraPositionWorld() { return B_Matrices.ViewInv[3].xyz; }
 
 vec3 B_ComputeWorldPosition(float depth)

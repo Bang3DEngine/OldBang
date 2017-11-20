@@ -15,8 +15,6 @@ void main()
                           B_MaterialShininess, 0, 0);
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-    vec4 outColor = vec4(B_MaterialDiffuseColor.rgb * texColor.rgb * ambientLight,
-                         B_MaterialDiffuseColor.a * texColor.a);
-
-    B_GIn_Color = MixedWithBackground(outColor);
+    B_GIn_Color = vec4(B_MaterialDiffuseColor.rgb * texColor.rgb * ambientLight,
+                       B_MaterialDiffuseColor.a * texColor.a);
 }
