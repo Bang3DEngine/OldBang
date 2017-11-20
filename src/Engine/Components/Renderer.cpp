@@ -23,7 +23,7 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    if (m_materialCopy) { delete m_materialCopy; }
+    if (m_materialCopy) { Asset::Destroy(m_materialCopy); }
 }
 
 void Renderer::OnRender(RenderPass renderPass)
@@ -59,13 +59,13 @@ void Renderer::UseMaterialCopy()
 {
     if (m_materialCopy)
     {
-        delete m_materialCopy;
+        Asset::Destroy(m_materialCopy);
         m_materialCopy = nullptr;
     }
 
     if (GetSharedMaterial())
     {
-        m_materialCopy = new Material();
+        m_materialCopy = Asset::Create<Material>();
         GetSharedMaterial()->CloneInto(m_materialCopy);
     }
 }
@@ -83,7 +83,7 @@ void Renderer::SetMaterial(Material *m)
         m_material = m;
         if (m_materialCopy)
         {
-            delete m_materialCopy;
+            Asset::Destroy(m_materialCopy);
             m_materialCopy = nullptr;
         }
     }

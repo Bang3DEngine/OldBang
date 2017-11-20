@@ -16,17 +16,6 @@ Mesh::Mesh()
     m_vao = new VAO();
 }
 
-Mesh::Mesh(const Mesh &m)
-{
-    m_bBox = m.m_bBox;
-    m_bSphere = m.m_bSphere;
-    m_modelFilepath = m.m_modelFilepath;
-
-    m_vao = new VAO();
-    LoadAll(m.m_positions, m.m_normals, m.m_uvs);
-
-}
-
 Mesh::~Mesh()
 {
     if (m_vao)                { delete m_vao;                }
@@ -115,6 +104,18 @@ const Array<Vector3> &Mesh::GetPositions() { return m_positions; }
 const Array<Vector3> &Mesh::GetNormals() { return m_normals; }
 const Array<Vector2> &Mesh::GetUvs() { return m_uvs; }
 const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
+
+void Mesh::CloneInto(ICloneable *clone) const
+{
+    Mesh *mClone = SCAST<Mesh*>(clone);
+
+    mClone->m_bBox = m_bBox;
+    mClone->m_bSphere = m_bSphere;
+    mClone->m_modelFilepath = m_modelFilepath;
+
+    mClone->m_vao = new VAO();
+    mClone->LoadAll(m_positions, m_normals, m_uvs);
+}
 
 void Mesh::Import(const Path &meshFilepath)
 {

@@ -37,7 +37,7 @@ Gizmos::Gizmos()
     m_planeMesh  = MeshFactory::GetPlane();
     m_sphereMesh = MeshFactory::GetSphere();
 
-    m_material   = new Material();
+    m_material   = Asset::Create<Material>();
     MaterialFactory::GetDefaultUnLighted()->CloneInto(m_material);
 
     m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
@@ -187,8 +187,7 @@ void Gizmos::RenderCircle(float radius)
     g->Render(g->m_circleRenderer);
 }
 
-void Gizmos::RenderIcon(const Texture2D *texture,
-                                        bool billboard)
+void Gizmos::RenderIcon(Texture2D *texture, bool billboard)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->m_planeMesh);
@@ -217,7 +216,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderScreenIcon(const Texture2D *texture,
+void Gizmos::RenderScreenIcon(Texture2D *texture,
                               const Rect &screenRect,
                               bool fixAspectRatio)
 {

@@ -12,13 +12,14 @@ NAMESPACE_BANG_BEGIN
 class Resource : public Serializable
 {
 public:
-    virtual ~Resource();
-
     Path GetResourceFilepath() const;
     virtual void Import(const Path &resourceFilepath) = 0;
 
 protected:
-    Resource();
+    Resource() = default;
+    virtual ~Resource() = default;
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

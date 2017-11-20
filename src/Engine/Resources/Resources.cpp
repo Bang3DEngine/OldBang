@@ -1,9 +1,12 @@
 #include "Bang/Resources.h"
 
 #include "Bang/File.h"
+#include "Bang/Asset.h"
 #include "Bang/Paths.h"
+#include "Bang/Object.h"
 #include "Bang/Random.h"
 #include "Bang/Window.h"
+#include "Bang/ObjectManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -14,7 +17,11 @@ Resources::Resources()
 Resources::~Resources()
 {
     Array<Resource*> resources = Resources::GetAllResources();
-    for (Resource *res : resources) { delete res; }
+    for (Resource *res : resources)
+    {
+        Asset *asset = DCAST<Asset*>(res);
+        if (asset) { Destroy(asset); } else { Destroy(res); }
+    }
 }
 
 Array<Resource *> Resources::GetAllResources()
@@ -35,9 +42,9 @@ void Resources::UnLoad(const GUID &guid, bool deleteResource)
     {
         if (deleteResource)
         {
-            for (const auto& itGUIDRes : itTypeMap.second)
+            for (auto& itGUIDRes : itTypeMap.second)
             {
-                if (itGUIDRes.first == guid) { delete itGUIDRes.second; }
+                if (itGUIDRes.first == guid) { Destroy(itGUIDRes.second); }
             }
         }
         (itTypeMap.second).Remove(guid);
@@ -53,11 +60,20 @@ void Resources::UnLoad(Resource *res, bool deleteResource)
         {
             for (const auto& itGUIDRes : itTypeMap.second)
             {
-                if (itGUIDRes.second == res ) { delete res; }
+                if (itGUIDRes.second == res ) { Destroy(res); }
             }
         }
         (itTypeMap.second).RemoveValues(res);
     }
+}
+
+void Resources::Destroy(Asset *resource)
+{
+    Asset::Destroy(resource);
+}
+void Resources::Destroy(Resource *resource)
+{
+    delete resource;
 }
 
 Resources *Resources::GetInstance()

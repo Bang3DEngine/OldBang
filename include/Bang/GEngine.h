@@ -30,7 +30,7 @@ public:
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
     void RenderToScreen(Camera *cam);
-    void RenderToScreen(Texture *fullScreenTexture);
+    void RenderToScreen(Texture2D *fullScreenTexture);
     void ApplyScreenPass(ShaderProgram *sp,
                          const Rect &mask = Rect::ScreenRectNDC);
     void RenderScreenPlane(bool withDepth = false);

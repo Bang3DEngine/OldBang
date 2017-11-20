@@ -15,19 +15,16 @@ class Material : public Asset
     ASSET(Material)
 
 public:
-    Material();
-    virtual ~Material();
-
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(const Texture2D *mtexture);
+    void SetTexture(Texture2D *mtexture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
     const Vector2& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
-    const Texture2D* GetTexture() const;
+    Texture2D* GetTexture() const;
     bool IsReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
@@ -46,13 +43,16 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    const Texture2D *m_texture     = nullptr;
+    Texture2D *m_texture     = nullptr;
     ShaderProgram *m_shaderProgram = nullptr;
 
     Color m_diffuseColor    = Color::White;
     float m_shininess       = 60.0f;
     bool m_receivesLighting = true;
     Vector2 m_uvMultiply    = Vector2::One;
+
+    Material();
+    virtual ~Material();
 };
 
 NAMESPACE_BANG_END

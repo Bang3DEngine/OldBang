@@ -22,7 +22,7 @@ USING_NAMESPACE_BANG
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
-    m_mesh = new Mesh();
+    m_mesh = Asset::Create<Mesh>();
 
     SetMaterial( MaterialFactory::GetUIText() );
     UseMaterialCopy();
@@ -38,7 +38,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
 UITextRenderer::~UITextRenderer()
 {
-    if (m_mesh) { delete m_mesh; }
+    if (m_mesh) { Asset::Destroy(m_mesh); }
 }
 
 void UITextRenderer::OnRender()
@@ -326,7 +326,15 @@ void UITextRenderer::SetTextColor(const Color &textColor)
     GetMaterial()->SetDiffuseColor( textColor );
 }
 
-Font *UITextRenderer::GetFont() const { return m_font; }
+Font *UITextRenderer::GetFont() const
+{
+    if (m_font)
+    {
+        m_font->SetMetricsSize(GetTextSize());
+        return m_font;
+    }
+    return nullptr;
+}
 bool UITextRenderer::IsKerning() const { return m_kerning; }
 bool UITextRenderer::IsWrapping() const { return m_wrapping; }
 

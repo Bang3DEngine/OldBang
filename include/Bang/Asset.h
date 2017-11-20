@@ -2,17 +2,29 @@
 #define ASSET_H
 
 #include "Bang/Path.h"
+#include "Bang/Object.h"
 #include "Bang/Resource.h"
 #include "Bang/IToString.h"
+#include "Bang/ObjectManager.h"
 
 NAMESPACE_BANG_BEGIN
 
-#define ASSET(CLASS_NAME) RESOURCE(CLASS_NAME)
+#define ASSET(CLASS_NAME) \
+            friend class Asset; \
+            friend class ObjectManager; \
+            RESOURCE(CLASS_NAME)
 
 class Asset : public Resource,
-              public IToString
+              public IToString,
+              public Object
 {
 public:
+    template <class AssetClass, class... Args>
+    static AssetClass* Create(Args... args)
+    { return ObjectManager::Create<AssetClass>(args...); }
+
+    static void Destroy(Asset *asset);
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -26,8 +38,6 @@ public:
 protected:
     Asset();
     virtual ~Asset();
-
-    friend class Resources;
 };
 
 NAMESPACE_BANG_END

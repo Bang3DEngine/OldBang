@@ -11,12 +11,6 @@ class Prefab : public Asset
     ASSET(Prefab)
 
 public:
-    Prefab();
-    Prefab(const Prefab &p);
-    Prefab(GameObject *go);
-    Prefab(const String &gameObjectXMLInfoContent);
-    virtual ~Prefab();
-
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
@@ -29,6 +23,12 @@ public:
 
 private:
     String m_gameObjectXMLInfoContent = "";
+
+    Prefab();
+    Prefab(const Prefab &p);
+    Prefab(GameObject *go);
+    Prefab(const String &gameObjectXMLInfoContent);
+    virtual ~Prefab();
 };
 
 NAMESPACE_BANG_END

@@ -1,5 +1,7 @@
 #include "Bang/Resources.h"
 
+#include "Bang/ObjectManager.h"
+
 NAMESPACE_BANG_BEGIN
 
 template<class ResourceClass>
@@ -28,7 +30,7 @@ TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
                 ImportFilesManager::GetGUIDFromFilepath(filepath) );
     if (!res)
     {
-        res = new ResourceClass();
+        res = Create<ResourceClass>();
         res->Import(filepath);
 
         Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);

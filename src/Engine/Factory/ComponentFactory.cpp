@@ -52,7 +52,6 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, LineRenderer);
     CREATE_COMPONENT(componentClassName, MeshRenderer);
     CREATE_COMPONENT(componentClassName, UIScrollArea);
-    CREATE_COMPONENT(componentClassName, UITextCursor);
     CREATE_COMPONENT(componentClassName, AudioListener);
     CREATE_COMPONENT(componentClassName, RectTransform);
     CREATE_COMPONENT(componentClassName, CircleRenderer);
@@ -91,7 +90,6 @@ bool ComponentFactory::Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, LineRenderer);
     EXISTS_COMPONENT(componentClassName, MeshRenderer);
     EXISTS_COMPONENT(componentClassName, UIScrollArea);
-    EXISTS_COMPONENT(componentClassName, UITextCursor);
     EXISTS_COMPONENT(componentClassName, AudioListener);
     EXISTS_COMPONENT(componentClassName, RectTransform);
     EXISTS_COMPONENT(componentClassName, CircleRenderer);

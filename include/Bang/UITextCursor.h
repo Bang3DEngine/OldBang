@@ -23,7 +23,7 @@ public:
 
 private:
     float m_cursorTime = 0.0f;
-    float m_cursorTickTime = 0.25f;
+    float m_cursorTickTime = 0.5f;
 };
 
 NAMESPACE_BANG_END

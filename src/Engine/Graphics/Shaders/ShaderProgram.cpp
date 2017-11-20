@@ -9,7 +9,7 @@
 #include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/XMLNode.h"
-#include "Bang/Texture.h"
+#include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/TextureUnitManager.h"
@@ -93,9 +93,20 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
     return GL::BindTarget::ShaderProgram;
 }
 
-bool ShaderProgram::Set(const String &name, const Texture *texture) const
+bool ShaderProgram::Set(const String &name, Texture2D *texture)
 {
+    if (m_namesToTexture.ContainsKey(name))
+    {
+        Texture2D *tex = m_namesToTexture[name];
+        if (tex) { tex->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
+    }
+
+    if (texture)
+    {
+        texture->EventEmitter<IDestroyListener>::RegisterListener(this);
+    }
     m_namesToTexture[name] = texture;
+
     if (GL::IsBound(this)) { BindTextureToAvailableUnit(name, texture); }
     return true;
 }
@@ -150,7 +161,7 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
 }
 
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
-                                               const Texture *texture) const
+                                               Texture2D *texture) const
 {
     int location = -1;
     if (texture)
@@ -175,6 +186,21 @@ void ShaderProgram::Bind() const
 void ShaderProgram::UnBind() const
 {
     GL::UnBind(this);
+}
+
+void ShaderProgram::OnDestroyed(Object *obj)
+{
+    Debug_Log("Destroyed " << obj);
+    for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); )
+    {
+        Texture2D *tex = it->second;
+        if (tex == SCAST<Texture2D*>(obj))
+        {
+            it = m_namesToTexture.Remove(it);
+            // Dont break, in case it has obj texture several times
+        }
+        else { ++it; }
+    }
 }
 
 void ShaderProgram::UpdateTextureBindings() const

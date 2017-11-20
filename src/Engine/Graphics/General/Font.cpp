@@ -37,7 +37,7 @@ void Font::Import(const Path &ttfFilepath)
 
     String loadedChars = "";
     Array<Recti> charPxRects;
-    m_atlasTexture = new Texture2D();
+    m_atlasTexture = Asset::Create<Texture2D>();
     if (distFieldImgPath.IsFile() && distFieldInfoPath.IsFile())
     {
         Imageb distFieldImg;
@@ -220,6 +220,6 @@ TTF_Font *Font::GetTTFFont() const
 void Font::Free()
 {
     m_charUvsInAtlas.Clear();
-    if (m_atlasTexture) { delete m_atlasTexture; }
+    if (m_atlasTexture) { Asset::Destroy(m_atlasTexture); }
     if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }

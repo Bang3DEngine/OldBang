@@ -30,9 +30,9 @@ public:
     static void RenderSimpleBox(const AABox &b);
     static void RenderRect(const Rect &r);
     static void RenderFillRect(const Rect &r);
-    static void RenderIcon(const Texture2D *texture,
+    static void RenderIcon(Texture2D *texture,
                            bool billboard = true);
-    static void RenderScreenIcon(const Texture2D *texture,
+    static void RenderScreenIcon(Texture2D *texture,
                                  const Rect &screenRect,
                                  bool fixAspectRatio = false);
     static void RenderCircle(float radius);

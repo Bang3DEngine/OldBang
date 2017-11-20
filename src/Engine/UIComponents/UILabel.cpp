@@ -40,7 +40,15 @@ void UILabel::OnUpdate()
     {
         if (IsSelectable())
         {
-            if (!focusable->HasJustFocusChanged()) { HandleMouseSelection(); }
+            if (!focusable->HasJustFocusChanged())
+            {
+                if (IsFirstSelectAll() && Input::GetMouseButtonDown(MouseButton::Left))
+                {
+                    m_firstSelectAll = false;
+                }
+
+                if (!IsFirstSelectAll()) { HandleMouseSelection(); }
+            }
             HandleClipboardCopy();
         }
         else
@@ -61,10 +69,10 @@ void UILabel::SetSelectable(bool selectable)
         m_selectable = selectable;
     }
 }
-void UILabel::SetSelection(int beginIndex, int endIndex)
+void UILabel::SetSelection(int cursorIndex, int selectionIndex)
 {
-    SetCursorIndex(beginIndex);
-    SetSelectionIndex(endIndex);
+    SetCursorIndex(cursorIndex);
+    SetSelectionIndex(selectionIndex);
 }
 
 String UILabel::GetSelectedText() const
@@ -75,7 +83,10 @@ String UILabel::GetSelectedText() const
                                              GetSelectionEndIndex()-1);
 }
 void UILabel::ResetSelection() { SetSelectionIndex( GetCursorIndex() ); }
-void UILabel::SelectAll() { SetSelection(0, GetText()->GetContent().Size()); }
+void UILabel::SelectAll()
+{
+    SetSelection(GetText()->GetContent().Size(), 0);
+}
 void UILabel::SetSelectAllOnFocus(bool selectAllOnFocus)
 {
     m_selectAllOnFocusTaken = selectAllOnFocus;
@@ -130,6 +141,16 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
     return Vector2(localTextX, 0).x;
 }
 
+bool UILabel::IsFirstSelectAll() const
+{
+    return m_firstSelectAll;
+}
+
+bool UILabel::IsSelectAllOnFocus() const
+{
+    return m_selectAllOnFocusTaken;
+}
+
 int UILabel::GetClosestCharIndexTo(const Vector2 &coordsLocalNDC)
 {
     int closestCharIndex = 0;
@@ -165,8 +186,13 @@ UITextRenderer *UILabel::GetText() const { return p_text; }
 void UILabel::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
-    if (m_selectAllOnFocusTaken && IsSelectable()) { SelectAll(); }
+    if (IsSelectAllOnFocus() && IsSelectable())
+    {
+        m_firstSelectAll = true;
+        SelectAll();
+    }
     else { ResetSelection(); }
+
     UpdateSelectionQuadRenderer();
 }
 
@@ -203,8 +229,7 @@ void UILabel::HandleClipboardCopy()
 void UILabel::HandleMouseSelection()
 {
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-    if (rt->IsMouseOver() &&
-        Input::GetMouseButtonDown(MouseButton::Left))
+    if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
     {
         m_selectingWithMouse = true;
     }
@@ -245,8 +270,8 @@ void UILabel::UpdateSelectionQuadRenderer()
     float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC( Vector2(0, lineSkipPx) ).y;
 
     Rect r = GetText()->GetContentGlobalNDCRect();
-    Vector2 p1(cursorX,    r.GetMax().y - lineSkipNDC);
-    Vector2 p2(selectionX, r.GetMax().y);
+    Vector2 p1(Math::Min(cursorX, selectionX), r.GetMax().y - lineSkipNDC);
+    Vector2 p2(Math::Max(cursorX, selectionX), r.GetMax().y);
 
     RectTransform *textParentRT = GetTextParentRT();
     p1 = textParentRT->FromGlobalNDCToLocalNDC(p1);

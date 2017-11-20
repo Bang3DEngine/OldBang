@@ -22,10 +22,6 @@ public:
     static constexpr uint DefaultNormalsVBOLocation   = 1;
     static constexpr uint DefaultUvsVBOLocation       = 2;
 
-    Mesh();
-    Mesh(const Mesh& m);
-    virtual ~Mesh();
-
     void LoadPositions(const Array<Vector3>& positions);
     void LoadNormals(const Array<Vector3>& normals);
     void LoadUvs(const Array<Vector2>& uvs);
@@ -45,6 +41,9 @@ public:
     const Array<Vector3>& GetNormals();
     const Array<Vector2>& GetUvs();
     const Path &GetModelFilepath() const;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
 
     // Resource
     void Import(const Path &meshFilepath) override;
@@ -69,6 +68,9 @@ private:
     Sphere m_bSphere;
 
     bool m_trisModel = false;
+
+    Mesh();
+    virtual ~Mesh();
 };
 
 NAMESPACE_BANG_END

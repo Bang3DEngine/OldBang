@@ -28,9 +28,6 @@ public:
         float    advance = 0;
     };
 
-    Font();
-    virtual ~Font();
-
     void SetLoadSize(int loadSize);
     void SetMetricsSize(int metricsSize);
 
@@ -71,6 +68,9 @@ private:
 
     Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+
+    Font();
+    virtual ~Font();
 
     void Free();
 };

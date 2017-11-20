@@ -17,9 +17,6 @@ class AudioClip : public Asset
     ASSET(AudioClip)
 
 public:
-    AudioClip();
-    virtual ~AudioClip();
-
     int GetChannels() const;
     int GetBufferSize() const;
     int GetBitDepth() const;
@@ -38,6 +35,9 @@ public:
 private:
     ALuint m_alBufferId = 0;
     Path m_soundFilepath;
+
+    AudioClip();
+    virtual ~AudioClip();
 
     ALuint GetALBufferId() const;
 

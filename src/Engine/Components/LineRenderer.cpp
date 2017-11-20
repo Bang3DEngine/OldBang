@@ -9,7 +9,7 @@ USING_NAMESPACE_BANG
 
 LineRenderer::LineRenderer()
 {
-    m_mesh = new Mesh();
+    m_mesh = Asset::Create<Mesh>();
     SetMaterial(MaterialFactory::GetDefaultUnLighted());
 
     SetRenderPrimitive(GL::Primitives::Lines);
@@ -17,7 +17,7 @@ LineRenderer::LineRenderer()
 
 LineRenderer::~LineRenderer()
 {
-    delete m_mesh;
+    Asset::Destroy(m_mesh);
 }
 
 void LineRenderer::OnRender()

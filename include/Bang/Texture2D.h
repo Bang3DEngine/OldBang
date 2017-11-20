@@ -13,9 +13,7 @@ class Texture2D : public Texture,
     ASSET(Texture2D)
 
 public:
-    Texture2D();
     Texture2D(const Texture2D &tex) = delete;
-    virtual ~Texture2D();
 
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
@@ -72,6 +70,9 @@ public:
 
 protected:
     float m_alphaCutoff = 0.1f;
+
+    Texture2D();
+    virtual ~Texture2D();
 
 private:
     static Color GetColorFromArray(const float *pixels, int i);

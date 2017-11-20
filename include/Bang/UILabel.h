@@ -24,7 +24,7 @@ public:
     void SetCursorIndex(int index);
     void SetSelectionIndex(int index);
     void SetSelectable(bool selectable);
-    void SetSelection(int beginIndex, int endIndex);
+    void SetSelection(int cursorIndex, int selectionIndex);
     String GetSelectedText() const;
 
     void SelectAll();
@@ -40,6 +40,8 @@ public:
     float GetCursorXGlobalNDC(int cursorIndex) const;
     float GetCursorXLocalNDC(int cursorIndex) const;
 
+    bool IsFirstSelectAll() const;
+    bool IsSelectAllOnFocus() const;
     bool IsSelectingWithMouse() const;
 
     UIMask *GetMask() const;
@@ -53,6 +55,7 @@ private:
     int m_cursorIndex = 0;
     int m_selectionIndex = 0;
     bool m_selectable = false;
+    bool m_firstSelectAll = false;
     bool m_selectingWithMouse = false;
     bool m_selectAllOnFocusTaken = false;
 

@@ -41,7 +41,6 @@ public:
     void SetFovDegrees(float fovDegrees);
     void SetZNear(float zNear);
     void SetZFar(float zFar);
-    void SetRenderTexture(Texture2D *renderTexture);
     void SetProjectionMode(ProjectionMode projMode);
     void SetViewportRect(const Rect &viewportRectNDC);
 
@@ -55,7 +54,6 @@ public:
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
-    Texture2D *GetRenderTexture() const;
     GameObject *GetGameObjectToRender() const;
     const Rect& GetViewportRect() const;
     GBuffer *GetGBuffer() const;
@@ -76,7 +74,6 @@ private:
     GBuffer *m_gbuffer = nullptr;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
-    Texture2D *p_renderTexture = nullptr;
     GameObject *p_gameObjectToRender = nullptr;
 
     Color m_clearColor = Color(Color(0.3f), 1);

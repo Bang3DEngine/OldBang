@@ -405,7 +405,6 @@ public:
     static void SetViewport(const Rect &viewportNDC);
     static void SetViewport(const Recti &viewport);
     static void SetViewport(int x, int y, int width, int height);
-    static void SetLineWidth(float lineWidth);
 
     static void BufferData(GL::BindTarget target,
                            int dataSize, const void *data,

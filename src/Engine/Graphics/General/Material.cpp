@@ -34,7 +34,7 @@ void Material::SetShaderProgram(ShaderProgram *program)
     m_shaderProgram = program;
 }
 
-void Material::SetTexture(const Texture2D *texture)
+void Material::SetTexture(Texture2D *texture)
 {
     m_texture = texture;
     if (m_texture)
@@ -69,7 +69,7 @@ ShaderProgram *Material::GetShaderProgram() const
     return m_shaderProgram;
 }
 
-const Texture2D *Material::GetTexture() const
+Texture2D *Material::GetTexture() const
 {
     return m_texture;
 }
@@ -183,7 +183,7 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("ReceivesLighting", IsReceivesLighting());
     xmlInfo->Set("UvMultiply",       GetUvMultiply());
 
-    const Texture2D *tex = GetTexture();
+    Texture2D *tex = GetTexture();
     xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());
 
     ShaderProgram *sp = GetShaderProgram();

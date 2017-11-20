@@ -711,11 +711,6 @@ void GL::SetViewport(int x, int y, int width, int height)
     }
 }
 
-void GL::SetLineWidth(float lineWidth)
-{
-    glLineWidth(lineWidth);
-}
-
 Recti GL::GetViewportRect()
 {
     GL *gl = GL::GetActive();

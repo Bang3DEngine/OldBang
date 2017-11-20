@@ -199,7 +199,7 @@ void GEngine::RenderToScreen(Camera *cam)
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GEngine::RenderToScreen(Texture *fullScreenTexture)
+void GEngine::RenderToScreen(Texture2D *fullScreenTexture)
 {
     ASSERT(fullScreenTexture);
     m_renderGBufferToScreenMaterial->Bind();

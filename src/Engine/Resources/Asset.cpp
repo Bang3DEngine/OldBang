@@ -14,6 +14,11 @@ Asset::~Asset()
     Resources::UnLoad(this);
 }
 
+void Asset::Destroy(Asset *asset)
+{
+    ObjectManager::Destroy(asset);
+}
+
 void Asset::CloneInto(ICloneable * clone) const
 {
     Serializable::CloneInto(clone);

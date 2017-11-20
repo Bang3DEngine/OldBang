@@ -4,14 +4,18 @@
 #include <sstream>
 
 #include "Bang/Map.h"
+#include "Bang/Asset.h"
 #include "Bang/Paths.h"
 #include "Bang/TypeMap.h"
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Serializable.h"
+#include "Bang/ObjectManager.h"
 #include "Bang/ImportFilesManager.h"
 
 NAMESPACE_BANG_BEGIN
+
+FORWARD class Asset;
 
 class Resources
 {
@@ -41,6 +45,21 @@ public:
 private:
     using GUIDToResourceMap = Map<GUID, Resource*>;
     TypeMap<GUIDToResourceMap> m_GUIDToResource;
+
+    template<class ResourceClass>
+    static TT_SUBCLASS(ResourceClass, Asset)* Create()
+    {
+        return Asset::Create<ResourceClass>();
+    }
+
+    template<class ResourceClass>
+    static TT_NOT_SUBCLASS(ResourceClass, Asset)* Create()
+    {
+        return new ResourceClass();
+    }
+
+    static void Destroy(Asset *resource);
+    static void Destroy(Resource *resource);
 
     template<class ResourceClass>
     static bool Contains(const GUID &guid);

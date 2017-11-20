@@ -35,7 +35,8 @@ void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    bool hasFocus = GetGameObject()->GetComponent<UIFocusable>()->HasFocus();
+    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
+    bool hasFocus = focusable->HasFocus();
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
@@ -69,8 +70,8 @@ void UIInputText::UpdateCursorRenderer()
         maxPoint = Vector2(cursorX, limitsRect.GetMax().y);
     }
 
-    RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->
-                               GetComponent<RectTransform>();
+    const RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->
+                                                 GetComponent<RectTransform>();
     const Vector2 cursorSizeLocalNDC = cParentRT->FromPixelsAmountToLocalNDC(Vector2i(3,0));
     const Vector2 minPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(minPoint);
     const Vector2 maxPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(maxPoint);

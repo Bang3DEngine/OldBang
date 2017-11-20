@@ -22,7 +22,7 @@ Framebuffer::~Framebuffer()
     for (auto itPair : m_attachments_To_Texture)
     {
         Texture2D *tex = itPair.second;
-        delete tex;
+        Asset::Destroy(tex);
     }
     GL::DeleteFramebuffers(1, &m_idGL);
 }
@@ -32,7 +32,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
 {
     ASSERT(GL::IsBound(this));
     GL_ClearError();
-    Texture2D *tex = new Texture2D();
+    Texture2D *tex = Asset::Create<Texture2D>();
     tex->Bind();
     tex->SetInternalFormat(texFormat);
     tex->CreateEmpty(GetWidth(), GetHeight());

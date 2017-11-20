@@ -4,6 +4,7 @@
 #include "Bang/Material.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/RectTransform.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/ComponentFactory.h"
 
 USING_NAMESPACE_BANG
@@ -11,10 +12,11 @@ USING_NAMESPACE_BANG
 UITextCursor::UITextCursor()
 {
     UseMaterialCopy();
+    SetMaterial(MaterialFactory::GetUIImage());
     GetMaterial()->SetDiffuseColor(Color::Black);
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderPass(RenderPass::Canvas);
-    SetStroke(0.5f);
+    SetStroke(1.0f);
 
     constexpr float limit = 1.0f;
     SetPoints({Vector3(0, -limit, 0), Vector3(0,  limit, 0)});

@@ -18,14 +18,14 @@ UIImageRenderer::UIImageRenderer()
     SetMaterial( MaterialFactory::GetUIImage() );
     UseMaterialCopy();
 
-    m_quadMesh = new Mesh(*MeshFactory::GetUIPlane());
+    m_quadMesh = MeshFactory::GetUIPlane()->Clone();
     SetHorizontalAlignment( GetHorizontalAlignment() );
     SetVerticalAlignment( GetVerticalAlignment() );
 }
 
 UIImageRenderer::~UIImageRenderer()
 {
-    delete m_quadMesh;
+    Asset::Destroy(m_quadMesh);
 }
 
 void UIImageRenderer::OnRender()

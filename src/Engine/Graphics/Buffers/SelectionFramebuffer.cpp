@@ -20,7 +20,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 EPATH("Shaders/G_Default.vert"),
                 EPATH("Shaders/SelectionBuffer.frag") );
 
-    m_selectionMaterial = new Material();
+    m_selectionMaterial = Asset::Create<Material>();
     m_selectionMaterial->SetShaderProgram(selectionProgram);
 
     Bind();
@@ -34,7 +34,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete m_selectionMaterial;
+    Asset::Destroy(m_selectionMaterial);
 }
 
 void SelectionFramebuffer::PrepareForRender(const GameObject *go)

@@ -58,8 +58,10 @@ private:
     public: static bool AssertDestroyedFromObjectManager;
     #endif
 
+    friend class Asset;
     friend class Window;
     friend class Component;
+    friend class Resources;
     friend class GameObject;
     friend class Application;
     friend class SceneManager;
