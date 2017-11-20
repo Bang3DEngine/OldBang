@@ -15,7 +15,8 @@ NAMESPACE_BANG_BEGIN
 FORWARD class UITreeItemContainer;
 
 class UITree : public Component,
-               public IUIButtonListener
+               public IUIButtonListener,
+               public IDestroyListener
 {
     COMPONENT(UITree);
 
@@ -23,6 +24,7 @@ public:
 
     void AddItem(GOItem *newItem, GOItem *parentItem);
     void RemoveItem(GOItem *itemToRemove);
+    GOItem* GetSelectedItem() const;
     void Clear();
 
     void SetSelection(GOItem *item);
@@ -38,6 +40,9 @@ public:
 
     // IUIButtonListener
     void OnButton_Clicked(UIButtoneable *btn) override;
+
+    // IDestroyListener
+    void OnDestroyed(Object *object) override;
 
 protected:
     UITree();

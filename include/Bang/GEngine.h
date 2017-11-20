@@ -48,11 +48,7 @@ public:
 
     void Resize(int newWidth, int newHeight);
 
-    void _BindCamera(Camera *cam);
-    static void BindCamera(Camera *cam);
-
     static GBuffer *GetCurrentGBuffer();
-    static Camera *GetBoundCamera();
     static SelectionFramebuffer *GetCurrentSelectionFramebuffer();
 
     GL *GetGL() const;
@@ -62,13 +58,13 @@ public:
 
 private:
     GL *m_gl = nullptr;
+    Camera *p_activeCamera = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
-
-    Camera *p_boundCamera = nullptr;
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;
 
+    void SetActiveCamera(Camera *camera);
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
 

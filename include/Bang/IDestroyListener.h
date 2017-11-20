@@ -12,7 +12,7 @@ class IDestroyListener : public IEventListener
 public:
     virtual ~IDestroyListener() = default;
 
-    virtual void OnBeforeDestroyed(Object *object) = 0;
+    virtual void OnDestroyed(Object *object) = 0;
 
 protected:
     IDestroyListener() = default;

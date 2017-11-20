@@ -4,6 +4,8 @@
 #include <queue>
 
 #include "Bang/Set.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/ICreateListener.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -12,8 +14,17 @@ FORWARD class Object;
 FORWARD class Component;
 FORWARD class GameObject;
 
-class ObjectManager : public IDestroyListener
+class ObjectManager : public IDestroyListener,
+                      public EventEmitter<ICreateListener>,
+                      public EventEmitter<IDestroyListener>
 {
+public:
+    static void RegisterCreateListener(ICreateListener *listener);
+    static void UnRegisterCreateListener(ICreateListener *listener);
+
+    static void RegisterDestroyListener(IDestroyListener *listener);
+    static void UnRegisterDestroyListener(IDestroyListener *listener);
+
 private:
     std::queue<Object*> m_objectsToBeStartedQueue;
 
@@ -35,7 +46,10 @@ private:
     static void Destroy(Object *object);
 
     // IDestroyListener
-    virtual void OnBeforeDestroyed(Object *object) override;
+    virtual void OnDestroyed(Object *object) override;
+
+    void PropagateOnCreated(Object *object);
+    void PropagateOnDestroyed(Object *object);
 
     static ObjectManager *GetInstance();
 

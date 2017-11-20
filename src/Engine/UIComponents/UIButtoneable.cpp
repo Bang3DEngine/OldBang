@@ -122,7 +122,7 @@ bool UIButtoneable::IsMouseOverSomePart() const
 bool UIButtoneable::IsBeingPressed() const { return m_beingPressed; }
 UIButtoneableMode UIButtoneable::GetMode() const { return m_mode; }
 
-void UIButtoneable::OnBeforeDestroyed(Object *object)
+void UIButtoneable::OnDestroyed(Object *object)
 {
     GameObject *destroyedGo = DCAST<GameObject*>(object);
     if (destroyedGo)

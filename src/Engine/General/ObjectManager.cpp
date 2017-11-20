@@ -18,12 +18,37 @@ void ObjectManager::Destroy(Object *object)
 
     if (!om->m_objectsToBeDestroyedSet.Contains(object))
     {
-        object->BeforeDestroyed();
-        object->m_waitingToBeDestroyed = true;
+        om->m_objectsToBeDestroyedQueue.push(object); // Must go before
+        om->m_objectsToBeDestroyedSet.Add(object);    // Must go before
 
-        om->m_objectsToBeDestroyedQueue.push(object);
-        om->m_objectsToBeDestroyedSet.Add(object);
+        object->m_waitingToBeDestroyed = true;
+        object->BeforeDestroyed();
+        om->PropagateOnDestroyed(object);
     }
+}
+
+void ObjectManager::RegisterCreateListener(ICreateListener *listener)
+{
+    ObjectManager::GetInstance()->
+            EventEmitter<ICreateListener>::RegisterListener(listener);
+}
+
+void ObjectManager::UnRegisterCreateListener(ICreateListener *listener)
+{
+    ObjectManager::GetInstance()->
+            EventEmitter<ICreateListener>::UnRegisterListener(listener);
+}
+
+void ObjectManager::RegisterDestroyListener(IDestroyListener *listener)
+{
+    ObjectManager::GetInstance()->
+            EventEmitter<IDestroyListener>::RegisterListener(listener);
+}
+
+void ObjectManager::UnRegisterDestroyListener(IDestroyListener *listener)
+{
+    ObjectManager::GetInstance()->
+            EventEmitter<IDestroyListener>::RegisterListener(listener);
 }
 
 void ObjectManager::StartObjects()
@@ -38,6 +63,7 @@ void ObjectManager::StartObjects()
         {
             ASSERT(!objectToBeStarted->IsStarted());
             objectToBeStarted->Start();
+            om->PropagateOnCreated(objectToBeStarted);
         }
     }
 }
@@ -70,10 +96,20 @@ void ObjectManager::DestroyObjects()
     om->m_objectsToBeDestroyedSet.Clear();
 }
 
-void ObjectManager::OnBeforeDestroyed(Object *object)
+void ObjectManager::OnDestroyed(Object *object)
 {
     Object *destroyedObject = DCAST<Object*>(object);
     m_objectsDestroyedWhileDestroying.Add(destroyedObject);
+}
+
+void ObjectManager::PropagateOnCreated(Object *object)
+{
+    PROPAGATE(ICreateListener, OnCreated, object);
+}
+
+void ObjectManager::PropagateOnDestroyed(Object *object)
+{
+    PROPAGATE(IDestroyListener, OnDestroyed, object);
 }
 
 ObjectManager *ObjectManager::GetInstance()

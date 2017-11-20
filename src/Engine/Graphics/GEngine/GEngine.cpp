@@ -53,10 +53,10 @@ void GEngine::Init()
 
 void GEngine::Render(GameObject *go, Camera *camera)
 {
-    _BindCamera(camera);
+    SetActiveCamera(camera);
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
-    _BindCamera(nullptr);
+    SetActiveCamera(nullptr);
 }
 
 void GEngine::Render(Scene *scene)
@@ -112,37 +112,6 @@ void GEngine::Resize(int newWidth, int newHeight)
 {
 }
 
-void GEngine::_BindCamera(Camera *cam)
-{
-    ENSURE(cam != p_boundCamera);
-    if (p_boundCamera) { p_boundCamera->UnBind(); }
-
-    p_boundCamera = cam;
-    if (p_boundCamera) { p_boundCamera->Bind(); }
-}
-
-void GEngine::BindCamera(Camera *cam)
-{
-    GEngine::GetActive()->_BindCamera(cam);
-}
-
-GBuffer *GEngine::GetCurrentGBuffer()
-{
-    Camera *cam = GEngine::GetBoundCamera();
-    return cam ? cam->GetGBuffer() : nullptr;
-}
-
-Camera *GEngine::GetBoundCamera()
-{
-    return GEngine::GetActive()->p_boundCamera;
-}
-
-SelectionFramebuffer *GEngine::GetCurrentSelectionFramebuffer()
-{
-    Camera *cam = GEngine::GetBoundCamera();
-    return cam ? cam->GetSelectionFramebuffer() : nullptr;
-}
-
 void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 {
     camera->BindGBuffer();
@@ -157,16 +126,16 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     ApplyDeferredLights(go, go, camera);
     GL::SetStencilValue(0);
 
-    // go->Render(RenderPass::Scene_UnLighted);
-    // go->Render(RenderPass::Scene_PostProcess);
+    go->Render(RenderPass::Scene_UnLighted);
+    go->Render(RenderPass::Scene_PostProcess);
 
     GL::Enable(GL::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
 
     // GBuffer Canvas rendering
     camera->GetGBuffer()->SetColorDrawBuffer();
-    GL::ClearDepthBuffer();
     GL::ClearStencilBuffer();
+    GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     go->Render(RenderPass::Canvas);
@@ -175,7 +144,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     // GBuffer Gizmos rendering
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
-    GL::ClearStencilBuffer();
+    GL::SetStencilFunc(GL::Function::Always);
     GL::SetDepthFunc(GL::Function::LEqual);
     go->RenderGizmos();
 
@@ -276,22 +245,30 @@ GEngine* GEngine::GetActive()
     return win ? win->GetGEngine() : nullptr;
 }
 
+void GEngine::SetActiveCamera(Camera *camera)
+{
+    if (p_activeCamera) { p_activeCamera->UnBind(); }
+
+    p_activeCamera = camera;
+    if (p_activeCamera) { p_activeCamera->Bind(); }
+}
+
 void GEngine::Render(Renderer *rend)
 {
-    Camera *boundCamera = p_boundCamera; ENSURE(boundCamera);
+    Camera *activeCamera = p_activeCamera; ENSURE(activeCamera);
 
-    if (GL::IsBound(boundCamera->GetGBuffer()))
+    if (GL::IsBound(activeCamera->GetGBuffer()))
     {
         rend->Bind();
 
         Material *rendMat = rend->GetMaterial();
-        boundCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
+        activeCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
         rend->OnRender();
         rend->UnBind();
     }
-    else if (GL::IsBound(boundCamera->GetSelectionFramebuffer()))
+    else if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
     {
-        boundCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
+        activeCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
     }
     else { ASSERT(false); }
 }

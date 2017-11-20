@@ -55,7 +55,7 @@ public:
     bool IsBeingPressed() const;
     UIButtoneableMode GetMode() const;
 
-    void OnBeforeDestroyed(Object *object) override;
+    void OnDestroyed(Object *object) override;
 
 private:
     bool m_mouseOver    = false;

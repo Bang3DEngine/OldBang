@@ -5,13 +5,15 @@
 
 #include "Bang/List.h"
 #include "Bang/GameObject.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 FORWARD class Gizmos;
 
-class Scene : public GameObject
+class Scene : public GameObject,
+              public IDestroyListener
 {
     GAMEOBJECT(Scene)
 
@@ -26,6 +28,9 @@ public:
     virtual Camera *GetCamera() const;
 
     void InvalidateCanvas();
+
+    // IDestroyListener
+    void OnDestroyed(Object *object) override;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

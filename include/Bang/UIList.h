@@ -12,7 +12,8 @@ FORWARD class UIScrollPanel;
 
 using GOItem = GameObject;
 
-class UIList : public Component
+class UIList : public Component,
+               public IDestroyListener
 {
     COMPONENT(UIList);
 
@@ -35,6 +36,9 @@ public:
 
     int GetSelectedIndex() const;
     GOItem* GetSelectedItem() const;
+
+    // IDestroyListener
+    virtual void OnDestroyed(Object *object) override;
 
     using SelectionCallback = std::function<void(GOItem *item, Action action)>;
     void SetSelectionCallback(SelectionCallback selectionCallback);

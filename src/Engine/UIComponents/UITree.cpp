@@ -73,6 +73,12 @@ void UITree::OnButton_Clicked(UIButtoneable *btn)
                      !itemContainer->IsCollapsed());
 }
 
+void UITree::OnDestroyed(Object *object)
+{
+    GOItem* item = SCAST<GOItem*>(object);
+    RemoveItem(item);
+}
+
 List<GOItem*> UITree::GetChildrenItems(GOItem *item)
 {
     List<GOItem*> childrenItems;
@@ -102,6 +108,7 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem);
         m_itemToTree.Add(newItem, childTree);
         GetUIList()->AddItem(itemContainer);
+        newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
 
         // Update collapsabilities
         UpdateCollapsability(newItem);
@@ -125,13 +132,26 @@ void UITree::RemoveItem(GOItem *item)
 
         // Finally remove from list, remove from map, and delete the item tree
         Tree<GOItem*> *itemTree = GetItemTree(item);
-        GetUIList()->RemoveItem( GetItemContainer(item) );
-        m_itemToTree.Remove( item );
+        m_itemToTree.Remove( item ); // Must go before list item removal
         delete itemTree;
+
+        GetUIList()->RemoveItem( GetItemContainer(item) );
 
         // Update parent collapsability
         if (parentItem) { UpdateCollapsability(parentItem); }
     }
+}
+
+GOItem *UITree::GetSelectedItem() const
+{
+    GOItem *selectedItem = GetUIList()->GetSelectedItem();
+    if (selectedItem)
+    {
+        UITreeItemContainer *selectedItemCont =
+                                SCAST<UITreeItemContainer*>(selectedItem);
+        return selectedItemCont->GetContainedItem();
+    }
+    return nullptr;
 }
 
 void UITree::Clear()

@@ -53,6 +53,7 @@ void Scene::SetCamera(Camera *cam)
     if (p_camera)
     {
         p_camera->SetGameObjectToRender(this);
+        p_camera->EventEmitter<IDestroyListener>::RegisterListener(this);
     }
 }
 
@@ -91,6 +92,14 @@ void Scene::InvalidateCanvas()
     for (RectTransform *rt : rts)
     {
         rt->Invalidate();
+    }
+}
+
+void Scene::OnDestroyed(Object *object)
+{
+    if (GetCamera() && object == GetCamera())
+    {
+        SetCamera(nullptr);
     }
 }
 

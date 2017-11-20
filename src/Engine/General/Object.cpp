@@ -42,5 +42,5 @@ Object::~Object()
 void Object::BeforeDestroyed()
 {
     OnDestroy();
-    PROPAGATE(IDestroyListener, OnBeforeDestroyed, this);
+    PROPAGATE(IDestroyListener, OnDestroyed, this);
 }

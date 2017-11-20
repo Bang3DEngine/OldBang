@@ -52,10 +52,16 @@ void UIList::OnUpdate()
 
         if (p_itemUnderMouse != itemUnderMouse)
         {
-            if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
+            if (p_itemUnderMouse)
+            {
+                Callback(p_itemUnderMouse, Action::MouseOut);
+            }
 
             p_itemUnderMouse = itemUnderMouse;
-            if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOver); }
+            if (p_itemUnderMouse)
+            {
+                Callback(p_itemUnderMouse, Action::MouseOver);
+            }
         }
 
         // Clicked
@@ -96,6 +102,7 @@ void UIList::AddItem(GOItem *newItem)
 {
     bool hadSelectedGameObject = GetSelectedItem();
 
+    newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
     newItem->SetParent(GetContainer());
 
     if (!hadSelectedGameObject) { SetSelection(0); }
@@ -170,6 +177,16 @@ int UIList::GetSelectedIndex() const
 GOItem *UIList::GetSelectedItem() const
 {
     return GetContainer()->GetChild( GetSelectedIndex() );
+}
+
+void UIList::OnDestroyed(Object *object)
+{
+    if (object == p_itemUnderMouse)
+    {
+        if (m_selectionCallback) { m_selectionCallback(p_itemUnderMouse,
+                                                       Action::SelectionOut); }
+        p_itemUnderMouse = nullptr;
+    }
 }
 
 void UIList::SetSelectionCallback(SelectionCallback selectionCallback)
