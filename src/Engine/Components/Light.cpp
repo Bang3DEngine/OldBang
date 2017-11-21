@@ -60,7 +60,7 @@ Rect Light::GetRenderRect(Camera *cam) const
 void Light::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Light *l = SCAST<Light*>(clone);
+    Light *l = DCAST<Light*>(clone);
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
 }

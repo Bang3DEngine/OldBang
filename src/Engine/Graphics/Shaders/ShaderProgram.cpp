@@ -190,7 +190,6 @@ void ShaderProgram::UnBind() const
 
 void ShaderProgram::OnDestroyed(Object *obj)
 {
-    Debug_Log("Destroyed " << obj);
     for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); )
     {
         Texture2D *tex = it->second;

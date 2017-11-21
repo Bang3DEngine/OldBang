@@ -224,7 +224,7 @@ Matrix4 Camera::GetProjectionMatrix() const
 void Camera::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Camera *cam = SCAST<Camera*>(clone);
+    Camera *cam = DCAST<Camera*>(clone);
     cam->SetZFar(GetZFar());
     cam->SetZNear(GetZNear());
     cam->SetClearColor(GetClearColor());

@@ -25,12 +25,13 @@ NAMESPACE_BANG_BEGIN
     friend class ObjectManager;
 
 class Component : public Object,
-                  public Serializable,
                   public IToString
 {
     COMPONENT(Component)
 
 public:
+    static void Destroy(Component *component);
+
     void SetGameObject(GameObject *gameObject);
 
     GameObject *GetGameObject() const;

@@ -16,10 +16,9 @@ void ObjectManager::Destroy(Object *object)
 {
     ObjectManager *om = ObjectManager::GetInstance();
 
-    if (!om->m_objectsToBeDestroyedSet.Contains(object))
+    if (!object->IsWaitingToBeDestroyed())
     {
         om->m_objectsToBeDestroyedQueue.push(object); // Must go before
-        om->m_objectsToBeDestroyedSet.Add(object);    // Must go before
 
         object->m_waitingToBeDestroyed = true;
         object->BeforeDestroyed();
@@ -57,10 +56,13 @@ void ObjectManager::StartObjects()
     while (!om->m_objectsToBeStartedQueue.empty())
     {
         Object *objectToBeStarted = om->m_objectsToBeStartedQueue.front();
+        const ObjectId& objToBeStartedId = objectToBeStarted->GetObjectId();
         om->m_objectsToBeStartedQueue.pop();
 
-        if (!om->m_objectsDestroyedInLastFrame.Contains(objectToBeStarted))
+        if (om->m_objectsToBeStartedSet.Contains(objToBeStartedId))
         {
+            om->m_objectsToBeStartedSet.Remove(objToBeStartedId);
+
             ASSERT(!objectToBeStarted->IsStarted());
             objectToBeStarted->Start();
             om->PropagateOnCreated(objectToBeStarted);
@@ -71,20 +73,19 @@ void ObjectManager::StartObjects()
 void ObjectManager::DestroyObjects()
 {
     ObjectManager *om = ObjectManager::GetInstance();
-    om->m_objectsDestroyedInLastFrame.Clear();
     while (!om->m_objectsToBeDestroyedQueue.empty())
     {
         Object *objectToBeDestroyed = om->m_objectsToBeDestroyedQueue.front();
+        const ObjectId& objectToBeDestroyedId = objectToBeDestroyed->GetObjectId();
         om->m_objectsToBeDestroyedQueue.pop();
 
-        if (!om->m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyed))
+        if (!om->m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyedId))
         {
             #ifdef DEBUG
             ObjectManager::AssertDestroyedFromObjectManager = true;
             #endif
 
-            om->m_objectsDestroyedInLastFrame.Add(objectToBeDestroyed);
-
+            om->m_objectsToBeStartedSet.Remove(objectToBeDestroyedId);
             delete objectToBeDestroyed;
 
             #ifdef DEBUG
@@ -93,13 +94,12 @@ void ObjectManager::DestroyObjects()
         }
     }
     om->m_objectsDestroyedWhileDestroying.Clear();
-    om->m_objectsToBeDestroyedSet.Clear();
 }
 
 void ObjectManager::OnDestroyed(Object *object)
 {
     Object *destroyedObject = DCAST<Object*>(object);
-    m_objectsDestroyedWhileDestroying.Add(destroyedObject);
+    m_objectsDestroyedWhileDestroying.Add(destroyedObject->GetObjectId());
 }
 
 void ObjectManager::PropagateOnCreated(Object *object)

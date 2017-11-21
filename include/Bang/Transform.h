@@ -93,7 +93,6 @@ public:
     static Vector3    GetPositionFromMatrix4(const Matrix4 &transformMatrix);
     static Quaternion GetRotationFromMatrix4(const Matrix4 &transformMatrix);
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
-    static Transform  FromTransformMatrix(const Matrix4 &transformMatrix);
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

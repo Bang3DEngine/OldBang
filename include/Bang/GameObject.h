@@ -29,7 +29,6 @@ FORWARD class Component;
     friend class ObjectManager;
 
 class GameObject : public Object,
-                   public Serializable,
                    public IToString,
                    public IChildrenListener,
                    public EventEmitter<IChildrenListener>

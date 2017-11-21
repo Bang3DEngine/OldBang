@@ -350,15 +350,6 @@ Vector3 Transform::GetScaleFromMatrix4(const Matrix4 &tm)
     return Vector3(tm.c0.Length(), tm.c1.Length(), tm.c2.Length());
 }
 
-Transform Transform::FromTransformMatrix(const Matrix4 &transformMatrix)
-{
-    Transform t;
-    t.SetLocalPosition(Transform::GetPositionFromMatrix4(transformMatrix));
-    t.SetLocalRotation(Transform::GetRotationFromMatrix4(transformMatrix));
-    t.SetLocalScale   (Transform::GetScaleFromMatrix4(transformMatrix));
-    return t;
-}
-
 Vector3 Transform::GetForward() const
 {
     return LocalToWorldVector(Vector3::Forward).Normalized();
@@ -392,7 +383,7 @@ Vector3 Transform::GetDown() const
 void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Transform *t = SCAST<Transform*>(clone);
+    Transform *t = DCAST<Transform*>(clone);
     t->SetLocalPosition(GetLocalPosition());
     t->SetLocalRotation(GetLocalRotation());
     t->SetLocalScale(GetLocalScale());

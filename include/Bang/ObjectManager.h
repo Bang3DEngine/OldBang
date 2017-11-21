@@ -11,6 +11,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Object;
+FORWARD class ObjectId;
 FORWARD class Component;
 FORWARD class GameObject;
 
@@ -27,11 +28,10 @@ public:
 
 private:
     std::queue<Object*> m_objectsToBeStartedQueue;
+    Set<ObjectId> m_objectsToBeStartedSet;
 
     std::queue<Object*> m_objectsToBeDestroyedQueue;
-    Set<Object*> m_objectsToBeDestroyedSet;
-    Set<Object*> m_objectsDestroyedWhileDestroying;
-    Set<Object*> m_objectsDestroyedInLastFrame;
+    Set<ObjectId> m_objectsDestroyedWhileDestroying;
 
     ObjectManager() = default;
     virtual ~ObjectManager() = default;

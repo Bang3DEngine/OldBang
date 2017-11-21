@@ -141,17 +141,18 @@ void GameObject::OnDisabled()
 
 void GameObject::Destroy(GameObject *gameObject)
 {
-    for (GameObject *child : gameObject->GetChildren())
+    while (!gameObject->GetChildren().IsEmpty())
     {
-        GameObject::Destroy(child);
+        GameObject::Destroy(gameObject->GetChildren().Front());
     }
 
-    for (Component *comp : gameObject->GetComponents())
+    while (!gameObject->GetComponents().IsEmpty())
     {
-        ObjectManager::Destroy(comp);
+        Component::Destroy(gameObject->GetComponents().Front());
     }
 
     ObjectManager::Destroy(gameObject);
+    gameObject->SetParent(nullptr);
 }
 
 bool GameObject::IsEnabled(bool recursive) const
@@ -202,7 +203,7 @@ Component *GameObject::GetComponentByGUID(const GUID &guid) const
 
 void GameObject::RemoveComponent(Component *c)
 {
-    ObjectManager::Destroy(c);
+    Component::Destroy(c);
 }
 
 Scene* GameObject::GetScene() const
@@ -396,8 +397,9 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
-    Serializable::CloneInto(clone);
-    GameObject *go = SCAST<GameObject*>(clone);
+    Object::CloneInto(clone);
+
+    GameObject *go = DCAST<GameObject*>(clone);
     go->SetName(m_name);
     go->SetParent(nullptr);
 

@@ -1,21 +1,60 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEnabledListener.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class Object : public EventEmitter<IDestroyListener>,
+
+// ObjectId
+class ObjectId final
+{
+public:
+    ~ObjectId() = default;
+
+private:
+    using ObjectIdType = uint64_t;
+
+    static ObjectIdType s_nextObjectId;
+
+    unsigned long long int m_id = 0;
+
+    ObjectId();
+
+    friend bool operator==(const ObjectId &lhs, const ObjectId &rhs);
+    friend bool operator!=(const ObjectId &lhs, const ObjectId &rhs);
+    friend bool operator<(const ObjectId &lhs, const ObjectId &rhs);
+
+    friend class Object;
+};
+inline bool operator==(const ObjectId &lhs, const ObjectId &rhs)
+{ return lhs.m_id == rhs.m_id; }
+bool operator!=(const ObjectId &lhs, const ObjectId &rhs);
+inline bool operator<(const ObjectId &lhs, const ObjectId &rhs)
+{ return lhs.m_id < rhs.m_id; }
+
+
+
+
+
+// Object
+class Object : public virtual Serializable,
+               public EventEmitter<IDestroyListener>,
                public EventEmitter<IEnabledListener>
 {
 public:
+    const ObjectId& GetObjectId() const;
     void SetEnabled(bool enabled);
 
     bool IsEnabled() const;
     bool IsStarted() const;
     bool IsWaitingToBeDestroyed() const;
+
+    // ICloneable
+    virtual void CloneInto(ICloneable *clone) const override;
 
 protected:
     Object() = default;
@@ -28,6 +67,7 @@ protected:
     virtual void OnDestroy();
 
 private:
+    ObjectId m_objectId;
     bool m_enabled = true;
     bool m_started = false;
     bool m_waitingToBeDestroyed = false;

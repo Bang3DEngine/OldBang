@@ -127,7 +127,7 @@ void Behaviour::OnUpdate()
 void Behaviour::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Behaviour *b = SCAST<Behaviour*>(clone);
+    Behaviour *b = DCAST<Behaviour*>(clone);
     b->SetSourceFilepath( GetSourceFilepath() );
     b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }

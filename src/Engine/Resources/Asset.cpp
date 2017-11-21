@@ -21,7 +21,7 @@ void Asset::Destroy(Asset *asset)
 
 void Asset::CloneInto(ICloneable * clone) const
 {
-    Serializable::CloneInto(clone);
+    Object::CloneInto(clone);
 }
 
 String Asset::ToString() const

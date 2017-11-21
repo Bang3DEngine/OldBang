@@ -131,7 +131,7 @@ Rect Renderer::GetBoundingRect(Camera *camera) const
 void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Renderer *r = SCAST<Renderer*>(clone);
+    Renderer *r = DCAST<Renderer*>(clone);
     r->SetMaterial(GetSharedMaterial());
     r->SetRenderWireframe(IsRenderWireframe());
     r->SetCullMode(GetCullMode());

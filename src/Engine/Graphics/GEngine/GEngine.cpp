@@ -142,6 +142,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Canvas_PostProcess);
 
     // GBuffer Gizmos rendering
+    camera->GetGBuffer()->SetAllDrawBuffers();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetStencilFunc(GL::Function::Always);

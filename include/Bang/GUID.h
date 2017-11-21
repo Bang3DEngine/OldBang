@@ -33,18 +33,21 @@ public:
     friend bool operator<(const GUID &lhs, const GUID &rhs);
 
 private:
-    GUIDType m_guid = GUID::EmptyGUID;
+    GUIDType m_timeGUID = GUID::EmptyGUID;
+    GUIDType m_randGUID = GUID::EmptyGUID;
 };
 
 inline std::istream &operator>>(std::istream &is, GUID &guid)
 {
-    is >> guid.m_guid;
+    is >> guid.m_timeGUID;
+    is >> guid.m_randGUID;
     return is;
 }
 
 inline bool operator==(const GUID &lhs, const GUID &rhs)
 {
-    return lhs.m_guid == rhs.m_guid;
+    return lhs.m_timeGUID == rhs.m_timeGUID &&
+           lhs.m_randGUID == rhs.m_randGUID;
 }
 inline bool operator!=(const GUID &lhs, const GUID &rhs)
 {
@@ -52,7 +55,13 @@ inline bool operator!=(const GUID &lhs, const GUID &rhs)
 }
 inline bool operator<(const GUID &lhs, const GUID &rhs)
 {
-    return lhs.m_guid < rhs.m_guid;
+    if (lhs.m_timeGUID < rhs.m_timeGUID) { return true; }
+    else if (lhs.m_timeGUID > rhs.m_timeGUID) { return false; }
+    else
+    {
+        if (lhs.m_randGUID < rhs.m_randGUID) { return true; }
+        return false;
+    }
 }
 
 NAMESPACE_BANG_END

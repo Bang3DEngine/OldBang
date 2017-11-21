@@ -201,8 +201,8 @@ public:
         if (Vector3G<T>::Dot(forward,  up) >= SCAST<T>(0.99) ||
             Vector3G<T>::Dot(forward, -up) >= SCAST<T>(0.99))
         {
-            Debug_Warn("LookDirection: Forward and up aligned."
-                         " Returning identity");
+            // Debug_Warn("LookDirection: Forward and up aligned."
+            //              " Returning identity");
             return QuaternionG<T>::Identity;
         }
         return Matrix4G<T>::ToQuaternion(

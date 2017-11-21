@@ -1,5 +1,7 @@
 #include "Bang/ObjectManager.h"
 
+#include "Bang/Object.h"
+
 USING_NAMESPACE_BANG
 
 template <class ObjectClass, class... Args>
@@ -18,6 +20,7 @@ ObjectClass* ObjectManager::Create(Args... args)
     #endif
 
     Object *obj = SCAST<ObjectClass*>(newObj);
+    om->m_objectsToBeStartedSet.Add(obj->GetObjectId());
     om->m_objectsToBeStartedQueue.push(obj);
 
     return newObj;

@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
     ICLONEABLE(CLASSNAME) \
     SERIALIZABLE(CLASSNAME)
 
-class Resource : public Serializable
+class Resource : public virtual Serializable
 {
 public:
     Path GetResourceFilepath() const;

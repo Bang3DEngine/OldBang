@@ -18,6 +18,12 @@ Component::~Component()
     SetGameObject(nullptr);
 }
 
+void Component::Destroy(Component *component)
+{
+    component->SetGameObject(nullptr);
+    ObjectManager::Destroy(component);
+}
+
 void Component::SetGameObject(GameObject *gameObject)
 {
     if (p_gameObject != gameObject)
@@ -48,8 +54,8 @@ bool Component::IsEnabled(bool recursive) const
 
 void Component::CloneInto(ICloneable *clone) const
 {
-    Serializable::CloneInto(clone);
-    Component *c = SCAST<Component*>(clone);
+    Object::CloneInto(clone);
+    Component *c = DCAST<Component*>(clone);
     c->SetEnabled( IsEnabled() );
 }
 
