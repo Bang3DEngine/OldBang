@@ -20,8 +20,7 @@ private:
 
     static ObjectIdType s_nextObjectId;
 
-    unsigned long long int m_id = 0;
-
+    ObjectIdType m_id = SCAST<ObjectIdType>(-1);
     ObjectId();
 
     friend bool operator==(const ObjectId &lhs, const ObjectId &rhs);
@@ -29,6 +28,7 @@ private:
     friend bool operator<(const ObjectId &lhs, const ObjectId &rhs);
 
     friend class Object;
+    friend class ObjectManager;
 };
 inline bool operator==(const ObjectId &lhs, const ObjectId &rhs)
 { return lhs.m_id == rhs.m_id; }

@@ -20,7 +20,6 @@ Component::~Component()
 
 void Component::Destroy(Component *component)
 {
-    component->SetGameObject(nullptr);
     ObjectManager::Destroy(component);
 }
 

@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class IRectTransformListener : public IEventListener
+class IRectTransformListener : public virtual IEventListener
 {
 public:
     virtual void OnRectTransformChanged()         {}

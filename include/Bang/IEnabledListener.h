@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class IEnabledListener : public IEventListener
+class IEnabledListener : public virtual IEventListener
 {
 public:
     virtual void OnEnabled()  {}

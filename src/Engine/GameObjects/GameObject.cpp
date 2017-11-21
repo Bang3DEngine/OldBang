@@ -141,18 +141,17 @@ void GameObject::OnDisabled()
 
 void GameObject::Destroy(GameObject *gameObject)
 {
-    while (!gameObject->GetChildren().IsEmpty())
+    for (GameObject *child : gameObject->GetChildren())
     {
-        GameObject::Destroy(gameObject->GetChildren().Front());
+        GameObject::Destroy(child);
     }
 
-    while (!gameObject->GetComponents().IsEmpty())
+    for (Component *comp : gameObject->GetComponents())
     {
-        Component::Destroy(gameObject->GetComponents().Front());
+        Component::Destroy(comp);
     }
 
     ObjectManager::Destroy(gameObject);
-    gameObject->SetParent(nullptr);
 }
 
 bool GameObject::IsEnabled(bool recursive) const
@@ -310,7 +309,7 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     ASSERT( newParent != this );
     ASSERT( !newParent || !newParent->IsChildOf(this) );
 
-    GameObject *oldParent = p_parent;
+    GameObject *oldParent = GetParent();
     if (GetParent())
     {
         GetParent()->m_children.Remove(this);
@@ -321,8 +320,9 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     if (GetParent())
     {
         int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
-        p_parent->m_children.Insert(index, this);
-        p_parent->ChildAdded(this);
+        ASSERT(!GetParent()->m_children.Contains(this));
+        GetParent()->m_children.Insert(index, this);
+        GetParent()->ChildAdded(this);
     }
 
     ParentChanged(oldParent, newParent);

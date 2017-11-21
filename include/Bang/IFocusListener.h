@@ -7,7 +7,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class IFocusListener : public IEventListener
+class IFocusListener : public virtual IEventListener
 {
 public:
     virtual void OnFocusTaken() {}

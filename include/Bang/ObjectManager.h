@@ -28,10 +28,12 @@ public:
 
 private:
     std::queue<Object*> m_objectsToBeStartedQueue;
-    Set<ObjectId> m_objectsToBeStartedSet;
+    std::queue<ObjectId> m_objectsIdsToBeStartedQueue;
 
     std::queue<Object*> m_objectsToBeDestroyedQueue;
+    std::queue<ObjectId> m_objectsIdsToBeDestroyedQueue;
     Set<ObjectId> m_objectsDestroyedWhileDestroying;
+    Set<ObjectId> m_objectsToBeDestroyedSet;
 
     ObjectManager() = default;
     virtual ~ObjectManager() = default;

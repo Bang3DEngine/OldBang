@@ -40,6 +40,7 @@ void UIInputText::OnUpdate()
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
+        Debug_Log(GetCursorIndex() << ", " << GetSelectionIndex());
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);
@@ -193,12 +194,12 @@ void UIInputText::HandleTyping()
         }
     }
 
-    if (resetSelection) { ResetSelection(); }
     if (Input::GetKeyDown(Key::End))
     {
         SetCursorIndex( GetText()->GetContent().Size() );
     }
     else if (Input::GetKeyDown(Key::Home)) { SetCursorIndex(0); }
+    if (resetSelection) { ResetSelection(); }
 }
 
 void UIInputText::HandleCursorIndices(bool wasSelecting)

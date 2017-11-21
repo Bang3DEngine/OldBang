@@ -6,7 +6,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Object;
 
-class ICreateListener : public IEventListener
+class ICreateListener : public virtual IEventListener
 {
 public:
     virtual ~ICreateListener() = default;

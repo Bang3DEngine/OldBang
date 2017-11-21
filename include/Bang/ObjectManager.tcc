@@ -20,8 +20,8 @@ ObjectClass* ObjectManager::Create(Args... args)
     #endif
 
     Object *obj = SCAST<ObjectClass*>(newObj);
-    om->m_objectsToBeStartedSet.Add(obj->GetObjectId());
     om->m_objectsToBeStartedQueue.push(obj);
+    om->m_objectsIdsToBeStartedQueue.push(obj->GetObjectId());
 
     return newObj;
 }

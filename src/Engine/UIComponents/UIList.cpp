@@ -31,14 +31,15 @@ void UIList::OnUpdate()
     if (rt->IsMouseOver())
     {
         // Selection In/Out
+        int numItems = GetNumItems();
         if (Input::GetKeyDownRepeat(Key::Down))
         {
-            SetSelection( GetSelectedIndex() + 1 );
+            SetSelection( (GetSelectedIndex() + 1) % numItems );
         }
 
         if (Input::GetKeyDownRepeat(Key::Up))
         {
-            SetSelection( GetSelectedIndex() - 1 );
+            SetSelection( (GetSelectedIndex() - 1 + numItems) % numItems );
         }
 
         // Mouse In/Out
@@ -110,23 +111,37 @@ void UIList::AddItem(GOItem *newItem)
 
 void UIList::RemoveItem(GOItem *item)
 {
+    ASSERT( item->IsChildOf(GetContainer()) );
     GameObject::Destroy(item);
 
-    int selIndex = GetSelectedIndex();
+    SetSelection(nullptr);
+    if (GetGameObject()->GetChildren().IndexOf(item) >= GetSelectedIndex())
+    {
+        SetSelection(GetSelectedIndex() - 1);
+    }
+
     if (p_itemUnderMouse == item) { p_itemUnderMouse = nullptr; }
-    selIndex = Math::Clamp(selIndex, 0, GetContainer()->GetChildren().Size());
-    SetSelection(selIndex);
+    if (GetNumItems() > 0)
+    {
+        int selIndex = Math::Clamp(GetSelectedIndex()-1, 0, GetNumItems()-1);
+        SetSelection(selIndex);
+    }
+    else { ClearSelection(); }
 }
 
 void UIList::ClearSelection()
 {
-    if (m_selectionIndex >= 0)
+    if (GetSelectedIndex() >= 0)
     {
         if (m_selectionCallback)
         {
-            m_selectionCallback(GetSelectedItem(), Action::SelectionOut);
+            GOItem *selectedItem = GetSelectedItem();
+            if (selectedItem)
+            {
+                m_selectionCallback(selectedItem, Action::SelectionOut);
+            }
         }
-        m_selectionIndex = -1;
+        SetSelection(-1);
     }
 }
 
@@ -135,6 +150,7 @@ void UIList::Clear()
     List<GOItem*> childrenItems = GetContainer()->GetChildren();
     for (GOItem *child : childrenItems) { RemoveItem(child); }
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
+    ClearSelection();
 }
 
 int UIList::GetNumItems() const
@@ -142,20 +158,21 @@ int UIList::GetNumItems() const
     return GetContainer()->GetChildren().Size();
 }
 
-void UIList::SetSelection(int _i)
+void UIList::SetSelection(int index)
 {
-    const int numChildren = GetContainer()->GetChildren().Size();
-    ENSURE(numChildren > 0);
-
-    int i = ((_i + numChildren) % numChildren);
-    if (m_selectionIndex != i)
+    const int numChildren = GetNumItems();
+    Debug_Log(GetSelectedIndex() << ", " << index << " ::: " << numChildren);
+    if (GetSelectedIndex() != index)
     {
         GOItem *prevSelectedItem = GetSelectedItem();
         if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
 
-        m_selectionIndex = i;
-        GOItem *selectedItem = GetSelectedItem();
-        if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
+        m_selectionIndex = index;
+        if (index >= 0 && index < GetNumItems())
+        {
+            GOItem *selectedItem = GetSelectedItem();
+            if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
+        }
     }
 }
 
@@ -176,7 +193,11 @@ int UIList::GetSelectedIndex() const
 
 GOItem *UIList::GetSelectedItem() const
 {
-    return GetContainer()->GetChild( GetSelectedIndex() );
+    if (GetSelectedIndex() >= 0)
+    {
+        return GetContainer()->GetChild( GetSelectedIndex() );
+    }
+    return nullptr;
 }
 
 void UIList::OnDestroyed(Object *object)

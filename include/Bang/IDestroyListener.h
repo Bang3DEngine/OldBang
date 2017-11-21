@@ -7,7 +7,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Object;
 
-class IDestroyListener : public IEventListener
+class IDestroyListener : public virtual IEventListener
 {
 public:
     virtual ~IDestroyListener() = default;

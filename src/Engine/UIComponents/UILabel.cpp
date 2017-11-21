@@ -82,7 +82,11 @@ String UILabel::GetSelectedText() const
     return GetText()->GetContent().SubString(GetSelectionBeginIndex(),
                                              GetSelectionEndIndex()-1);
 }
-void UILabel::ResetSelection() { SetSelectionIndex( GetCursorIndex() ); }
+void UILabel::ResetSelection()
+{
+    SetSelectionIndex( GetCursorIndex() );
+    UpdateSelectionQuadRenderer();
+}
 void UILabel::SelectAll()
 {
     SetSelection(GetText()->GetContent().Size(), 0);
