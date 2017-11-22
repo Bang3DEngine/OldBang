@@ -67,20 +67,20 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     if (!GetFileExtensions().IsEmpty()) { FilterPathsByExtension(&paths); }
     paths.PushFront( Path("..") );
 
-    UIList *listDriver = GetGameObject()->GetComponent<UIList>();
-    listDriver->Clear();
+    UIList *uiList = GetGameObject()->GetComponent<UIList>();
+    uiList->Clear();
 
     for (const Path &path : paths)
     {
         UIFileListItem *item = GameObject::Create<UIFileListItem>();
         item->SetPath(path);
 
-        listDriver->AddItem(item);
+        uiList->AddItem(item);
     }
-    listDriver->SetSelection(1);
+    uiList->SetSelection(1);
 
-    listDriver->SetSelectionCallback(
-        [this, listDriver](GameObject *go, UIList::Action action)
+    uiList->SetSelectionCallback(
+        [this, uiList](GameObject *go, UIList::Action action)
         {
             UIFileListItem *item = SCAST<UIFileListItem*>(go);
             if (action == UIList::Action::SelectionIn)

@@ -44,7 +44,7 @@ void UIList::OnUpdate()
 
         // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
-        for (GOItem *childItem : GetContainer()->GetChildren())
+        for (GOItem *childItem : p_items)
         {
             RectTransform *childRT = childItem->GetComponent<RectTransform>();
             if (childRT->IsEnabled(true) && childRT->IsMouseOver())
@@ -103,6 +103,7 @@ void UIList::AddItem(GOItem *newItem)
 {
     bool hadSelectedGameObject = GetSelectedItem();
 
+    p_items.PushBack(newItem);
     newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
     newItem->SetParent(GetContainer());
 
@@ -111,14 +112,10 @@ void UIList::AddItem(GOItem *newItem)
 
 void UIList::RemoveItem(GOItem *item)
 {
-    ASSERT( item->IsChildOf(GetContainer()) );
+    ASSERT( p_items.Contains(item) );
     GameObject::Destroy(item);
 
-    SetSelection(nullptr);
-    if (GetGameObject()->GetChildren().IndexOf(item) >= GetSelectedIndex())
-    {
-        SetSelection(GetSelectedIndex() - 1);
-    }
+    p_items.Remove(item);
 
     if (p_itemUnderMouse == item) { p_itemUnderMouse = nullptr; }
     if (GetNumItems() > 0)
@@ -147,38 +144,35 @@ void UIList::ClearSelection()
 
 void UIList::Clear()
 {
-    List<GOItem*> childrenItems = GetContainer()->GetChildren();
-    for (GOItem *child : childrenItems) { RemoveItem(child); }
+    while (!p_items.IsEmpty()) { RemoveItem(p_items.Front()); }
     GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
     ClearSelection();
 }
 
 int UIList::GetNumItems() const
 {
-    return GetContainer()->GetChildren().Size();
+    return p_items.Size();
 }
 
 void UIList::SetSelection(int index)
 {
-    const int numChildren = GetNumItems();
-    // Debug_Log(GetSelectedIndex() << ", " << index << " ::: " << numChildren);
     if (GetSelectedIndex() != index)
     {
         GOItem *prevSelectedItem = GetSelectedItem();
         if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
+    }
 
-        m_selectionIndex = index;
-        if (index >= 0 && index < GetNumItems())
-        {
-            GOItem *selectedItem = GetSelectedItem();
-            if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
-        }
+    m_selectionIndex = index;
+    if (index >= 0 && index < GetNumItems())
+    {
+        GOItem *selectedItem = GetSelectedItem();
+        if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
     }
 }
 
 void UIList::SetSelection(GOItem *item)
 {
-    SetSelection(GetContainer()->GetChildren().IndexOf(item));
+    SetSelection(p_items.IndexOf(item));
 }
 
 GameObject *UIList::GetContainer() const
@@ -193,9 +187,11 @@ int UIList::GetSelectedIndex() const
 
 GOItem *UIList::GetSelectedItem() const
 {
-    if (GetSelectedIndex() >= 0)
+    if (GetSelectedIndex() >= 0 && GetSelectedIndex() < p_items.Size())
     {
-        return GetContainer()->GetChild( GetSelectedIndex() );
+        auto it = p_items.Begin();
+        std::advance(it, GetSelectedIndex());
+        return *it;
     }
     return nullptr;
 }

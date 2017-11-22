@@ -2,6 +2,7 @@
 #define UILIST_H
 
 #include <functional>
+#include <unordered_map>
 
 #include "Bang/Component.h"
 
@@ -48,6 +49,9 @@ protected:
     virtual ~UIList();
 
 private:
+    List<GOItem*> p_items;
+    std::unordered_map<int, List<GOItem*>::Iterator> m_indexToIterator;
+
     int m_selectionIndex = -1;
     GOItem *p_itemUnderMouse = nullptr;
     SelectionCallback m_selectionCallback;
