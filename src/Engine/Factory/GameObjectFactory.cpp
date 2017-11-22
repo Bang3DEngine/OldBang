@@ -122,7 +122,6 @@ Scene *GameObjectFactory::CreateDefaultScene()
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     cube->AddComponent<Rotator>();
     mr->SetMesh( MeshFactory::GetCube() );
-    mr->UseMaterialCopy();
     mr->GetMaterial()->SetTexture( Resources::Load<Texture2D>(
                                        Paths::EngineAssets().Append("Images/LogoBang_B_512.png")) );
     mr->GetMaterial()->SetDiffuseColor(Color::White);
@@ -132,7 +131,6 @@ Scene *GameObjectFactory::CreateDefaultScene()
     sphere->GetTransform()->SetLocalScale( Vector3(0.3f) );
     MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
     mr2->SetMesh( MeshFactory::GetSphere() );
-    mr2->UseMaterialCopy();
     mr2->GetMaterial()->SetDiffuseColor(Color::Green);
 
     GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Sphere-Child");
@@ -140,7 +138,6 @@ Scene *GameObjectFactory::CreateDefaultScene()
     cube2->AddComponent<Scalator>();
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
     mr3->SetMesh( MeshFactory::GetCube() );
-    mr3->UseMaterialCopy();
     mr3->GetMaterial()->SetDiffuseColor(Color::Purple);
 
     GameObject *lightGo = GameObjectFactory::CreateGameObjectNamed("Light");
@@ -372,7 +369,6 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
     GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetMaterial(MaterialFactory::GetUIImage());
-    lr->UseMaterialCopy();
     lr->GetMaterial()->SetDiffuseColor(Color::White);
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);

@@ -40,7 +40,6 @@ void UIInputText::OnUpdate()
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
-        Debug_Log(GetCursorIndex() << ", " << GetSelectionIndex());
 
         HandleTyping();
         HandleCursorIndices(wasSelecting);

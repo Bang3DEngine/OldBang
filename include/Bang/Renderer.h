@@ -29,8 +29,6 @@ public:
     // Component
     virtual void OnRender(RenderPass renderPass) override;
 
-    void UseMaterialCopy();
-
     void SetVisible(bool visible);
     void SetMaterial(Material *m);
     void SetRenderWireframe(bool drawWireframe);
@@ -74,7 +72,6 @@ private:
     bool m_visible = true;
     float m_lineWidth = 1.0f;
     Material *m_material = nullptr;
-    Material *m_materialCopy = nullptr;
     RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
     friend class GEngine;

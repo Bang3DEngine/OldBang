@@ -11,7 +11,6 @@ USING_NAMESPACE_BANG
 
 UITextCursor::UITextCursor()
 {
-    UseMaterialCopy();
     SetMaterial(MaterialFactory::GetUIImage());
     GetMaterial()->SetDiffuseColor(Color::Black);
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);

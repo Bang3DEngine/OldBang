@@ -25,7 +25,6 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     m_mesh = Asset::Create<Mesh>();
 
     SetMaterial( MaterialFactory::GetUIText() );
-    UseMaterialCopy();
 
     SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ));
     SetContent("");

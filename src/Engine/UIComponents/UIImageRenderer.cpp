@@ -16,7 +16,6 @@ USING_NAMESPACE_BANG
 UIImageRenderer::UIImageRenderer()
 {
     SetMaterial( MaterialFactory::GetUIImage() );
-    UseMaterialCopy();
 
     m_quadMesh = MeshFactory::GetUIPlane()->Clone();
     SetHorizontalAlignment( GetHorizontalAlignment() );

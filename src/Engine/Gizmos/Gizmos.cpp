@@ -37,8 +37,7 @@ Gizmos::Gizmos()
     m_planeMesh  = MeshFactory::GetPlane();
     m_sphereMesh = MeshFactory::GetSphere();
 
-    m_material   = Asset::Create<Material>();
-    MaterialFactory::GetDefaultUnLighted()->CloneInto(m_material);
+    m_material   = MaterialFactory::GetDefaultUnLighted();
 
     m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
     m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();

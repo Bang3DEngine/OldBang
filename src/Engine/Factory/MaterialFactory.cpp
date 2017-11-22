@@ -44,5 +44,5 @@ Material *MaterialFactory::GetRenderGBufferToScreen()
 
 Material *MaterialFactory::Load(const String &enginePath)
 {
-    return Resources::Load<Material>( EPATH(enginePath) );
+    return Resources::Load<Material>( EPATH(enginePath) )->Clone();
 }

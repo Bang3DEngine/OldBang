@@ -161,7 +161,7 @@ int UIList::GetNumItems() const
 void UIList::SetSelection(int index)
 {
     const int numChildren = GetNumItems();
-    Debug_Log(GetSelectedIndex() << ", " << index << " ::: " << numChildren);
+    // Debug_Log(GetSelectedIndex() << ", " << index << " ::: " << numChildren);
     if (GetSelectedIndex() != index)
     {
         GOItem *prevSelectedItem = GetSelectedItem();

@@ -23,7 +23,7 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    if (m_materialCopy) { Asset::Destroy(m_materialCopy); }
+    if (GetMaterial()) { Asset::Destroy( GetMaterial() ); }
 }
 
 void Renderer::OnRender(RenderPass renderPass)
@@ -55,21 +55,6 @@ void Renderer::UnBind() const
     GetMaterial()->UnBind();
 }
 
-void Renderer::UseMaterialCopy()
-{
-    if (m_materialCopy)
-    {
-        Asset::Destroy(m_materialCopy);
-        m_materialCopy = nullptr;
-    }
-
-    if (GetSharedMaterial())
-    {
-        m_materialCopy = Asset::Create<Material>();
-        GetSharedMaterial()->CloneInto(m_materialCopy);
-    }
-}
-
 void Renderer::SetVisible(bool visible)
 {
     m_visible = visible;
@@ -81,11 +66,6 @@ void Renderer::SetMaterial(Material *m)
     if (m_material != m)
     {
         m_material = m;
-        if (m_materialCopy)
-        {
-            Asset::Destroy(m_materialCopy);
-            m_materialCopy = nullptr;
-        }
     }
 }
 
@@ -118,7 +98,6 @@ float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material *Renderer::GetSharedMaterial() const { return m_material; }
 Material *Renderer::GetMaterial() const
 {
-    if (m_materialCopy) { return m_materialCopy; }
     return m_material ? m_material : MaterialFactory::GetMissing();
 }
 Rect Renderer::GetBoundingRect(Camera *camera) const
