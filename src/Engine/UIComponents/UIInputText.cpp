@@ -53,7 +53,8 @@ void UIInputText::UpdateCursorRenderer()
 {
     // Cursor "I" position update
     float cursorX  = GetLabel()->GetCursorXGlobalNDC( GetCursorIndex() );
-    float lineSkip = GetText()->GetFont()->GetLineSkip() + 1;
+    float lineSkip = GetText()->GetFont()->GetLineSkip(
+                                                GetText()->GetTextSize() ) + 1;
     float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC(Vector2(0, lineSkip)).y;
 
     Vector2 minPoint, maxPoint;

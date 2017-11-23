@@ -16,6 +16,7 @@ public:
     UICanvas();
     virtual ~UICanvas();
 
+    virtual void OnStart() override;
     virtual void OnUpdate() override;
 
     virtual void CloneInto(ICloneable *clone) const override;

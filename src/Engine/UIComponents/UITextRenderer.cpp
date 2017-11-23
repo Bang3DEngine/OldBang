@@ -26,7 +26,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
     SetMaterial( MaterialFactory::GetUIText() );
 
-    SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ));
+    SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ) );
     SetContent("");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
@@ -61,11 +61,12 @@ void UITextRenderer::CalculateLayout(Axis axis)
     Vector2i minSize = Vector2i::Zero;
     Vector2i prefSize = Vector2i::Zero;
 
-    GetFont()->SetMetricsSize( GetTextSize() );
     prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
+                                                  GetTextSize(),
                                                   GetSpacingMultiplier());
     prefSize.y = Math::Max<int>(prefSize.y,
-                                m_numberOfLines * GetFont()->GetLineSkip());
+                                    m_numberOfLines *
+                                    GetFont()->GetLineSkip(GetTextSize()));
 
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }
@@ -76,7 +77,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     IInvalidatable<UITextRenderer>::Validate();
 
-    if (!m_font)
+    if (!GetFont())
     {
         m_mesh->LoadPositions({});
         m_mesh->LoadUvs({});
@@ -87,11 +88,11 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
     ENSURE(rt);
 
-    m_font->SetMetricsSize( GetTextSize() );
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
                                         GetContent(),
                                         GetFont(),
+                                        GetTextSize(),
                                         Recti( rt->GetScreenSpaceRectPx() ),
                                         GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
@@ -114,18 +115,19 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
         Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
 
-        Vector2 minUv = m_font->GetCharMinUvInAtlas(cr.character);
-        Vector2 maxUv = m_font->GetCharMaxUvInAtlas(cr.character);
-
-        if (m_font->IsUsingDistanceField())
+        Vector2 minUv, maxUv;
+        if (GetFont()->HasDistanceField())
         {
+            minUv = GetFont()->GetCharMinUvInDistField(cr.character);
+            maxUv = GetFont()->GetCharMaxUvInDistField(cr.character);
+
             // Scale the character quad and uvs so that the character is as
             // large as if we weren't using SDF. If we dont compensate
             // this size, we would get all the distance field in the same quad,
             // and consequently the character itself would be smaller
-            Vector2 spOffsetPx = Vector2(m_font->GetSDFSpreadOffsetPx(cr.character));
+            Vector2 spOffsetPx = Vector2(GetFont()->GetDistFieldSpreadOffsetPx(cr.character));
             Vector2 spOffsetUv( Vector2(spOffsetPx) /
-                                Vector2(m_font->GetAtlasTexture()->GetSize()) );
+                                Vector2(GetFont()->GetDistFieldTexture()->GetSize()) );
 
             Vector2 uvSize = (maxUv-minUv);
             Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
@@ -136,6 +138,12 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
             maxGlobalNDC = globalNDCPosCenter + scaledSize * 0.5f;
             minUv -= spOffsetUv;
             maxUv += spOffsetUv;
+        }
+        else
+        {
+            GetFont()->GetFontAtlas(GetTextSize()); // Load atlas
+            minUv = GetFont()->GetCharMinUv(GetTextSize(), cr.character);
+            maxUv = GetFont()->GetCharMaxUv(GetTextSize(), cr.character);
         }
 
         Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
@@ -172,6 +180,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     m_mesh->LoadUvs(textQuadUvs);
 }
 
+#include "Bang/Input.h"
 void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
@@ -184,19 +193,11 @@ void UITextRenderer::Bind() const
     {
         const int textSize = Math::Max(GetTextSize(), 1);
 
-        Vector2 atlasSize = Vector2(GetFont()->GetAtlasTexture()->GetSize());
-        GL::Uniform("B_fontAtlasSize", atlasSize, false);
-
-        bool usingDistField = GetFont()->IsUsingDistanceField();
-        GL::Uniform("B_usingDistField", usingDistField,  false);
+        bool usingDistField = GetFont()->HasDistanceField();
         if (usingDistField)
         {
-            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
-            if (GetOutlineWidth() > 0.0f)
-            {
-                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
-                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
-            }
+            Texture2D *fontDistField = GetFont()->GetDistFieldTexture();
+            GetMaterial()->SetTexture(fontDistField);
 
             float blurriness = GetBlurriness() / textSize;
             blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
@@ -205,7 +206,21 @@ void UITextRenderer::Bind() const
             float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
             alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
             GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
+
+            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
+            if (GetOutlineWidth() > 0.0f)
+            {
+                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
+                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
+            }
         }
+        else
+        {
+            Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
+            GetMaterial()->SetTexture(fontAtlas);
+        }
+        GL::Uniform("B_X", Input::GetKey(Key::X),  false);
+        GL::Uniform("B_usingDistField", usingDistField,  false);
     }
 }
 
@@ -242,10 +257,6 @@ void UITextRenderer::SetFont(Font *font)
     if (GetFont() != font)
     {
         m_font = font;
-        if (m_font)
-        {
-            GetMaterial()->SetTexture(m_font->GetAtlasTexture());
-        }
         OnChanged();
     }
 }
@@ -329,7 +340,6 @@ Font *UITextRenderer::GetFont() const
 {
     if (m_font)
     {
-        m_font->SetMetricsSize(GetTextSize());
         return m_font;
     }
     return nullptr;
@@ -382,7 +392,8 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
     return GetContentGlobalNDCRect();
 }
 
-void UITextRenderer::OnRectTransformChanged() { OnChanged(); }
+void UITextRenderer::OnRectTransformChanged()
+{ if (GetGameObject()->GetName() == "WOLOLO") { Debug_Log("OnRectTransformChanged()"); } OnChanged(); }
 
 const Color &UITextRenderer::GetTextColor() const
 {

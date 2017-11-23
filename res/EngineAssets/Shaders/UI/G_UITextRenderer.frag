@@ -1,7 +1,6 @@
 #include "UI.frag"
 
-uniform vec2  B_fontAtlasSize;
-
+uniform bool B_X;
 uniform bool  B_usingDistField;
 
 uniform float B_textBlurriness;
@@ -14,6 +13,7 @@ uniform float B_outlineBlurriness;
 void main()
 {
     vec2 charAtlasUv = B_FIn_Uv;
+    if (B_X) { B_GIn_Color = vec4(charAtlasUv, 0, 1); return; }
 
     vec4 thisColor = texture2D(B_Texture0, charAtlasUv);
     if (B_usingDistField)

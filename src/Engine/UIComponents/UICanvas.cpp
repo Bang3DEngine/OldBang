@@ -20,6 +20,11 @@ UICanvas::~UICanvas()
 {
 }
 
+void UICanvas::OnStart()
+{
+    Component::OnStart();
+}
+
 void UICanvas::OnUpdate()
 {
     Component::OnUpdate();

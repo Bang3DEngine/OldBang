@@ -63,8 +63,8 @@ void Image<T>::Copy(const Image<T> &image, const Vector2i &pos)
 
 template<class T>
 void Image<T>::Copy(const Image<T> &image,
-                       const Recti &dstRect,
-                       ImageResizeMode resizeMode)
+                    const Recti &dstRect,
+                    ImageResizeMode resizeMode)
 {
     Image<T> resizedImage = image;
 
@@ -83,9 +83,9 @@ void Image<T>::Copy(const Image<T> &image,
 
 template<class T>
 void Image<T>::Copy(const Image<T> &image,
-                       const Recti &srcCopyRect,
-                       const Recti &dstCopyRect,
-                       ImageResizeMode resizeMode)
+                    const Recti &srcCopyRect,
+                    const Recti &dstCopyRect,
+                    ImageResizeMode resizeMode)
 {
     Image<T> subImageSrc = image.GetSubImage(srcCopyRect);
     subImageSrc.Resize(dstCopyRect.GetSize(), resizeMode);
@@ -94,8 +94,8 @@ void Image<T>::Copy(const Image<T> &image,
 
 template<class T>
 void Image<T>::AddMargins(const Vector2i &margins,
-                             const Color &marginColor,
-                             AspectRatioMode arMode)
+                          const Color &marginColor,
+                          AspectRatioMode arMode)
 {
     Image<T> original = *this;
 
@@ -110,14 +110,14 @@ void Image<T>::AddMargins(const Vector2i &margins,
 
 template<class T>
 void Image<T>::AddMarginsToMatchAspectRatio(const Vector2i &arSizes,
-                                               const Color &marginColor)
+                                            const Color &marginColor)
 {
     AddMarginsToMatchAspectRatio(arSizes.x / float(arSizes.y), marginColor);
 }
 
 template<class T>
 void Image<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
-                                               const Color &marginColor)
+                                            const Color &marginColor)
 {
     Vector2i newSize = GetSize();
     if (aspectRatio > 1.0f) { newSize.x = (GetHeight() * aspectRatio); }
@@ -128,25 +128,21 @@ void Image<T>::AddMarginsToMatchAspectRatio(float aspectRatio,
 
 template<class T>
 void Image<T>::ResizeToMatchAspectRatio(const Vector2i &arSizes,
-                                           bool makeBigger,
-                                           ImageResizeMode resizeMode)
+                                        bool makeBigger,
+                                        ImageResizeMode resizeMode)
 {
     ResizeToMatchAspectRatio(arSizes.x / float(arSizes.y), makeBigger, resizeMode);
 }
 
 template<class T>
 void Image<T>::ResizeToMatchAspectRatio(float aspectRatio,
-                                           bool makeBigger,
-                                           ImageResizeMode resizeMode)
+                                        bool makeBigger,
+                                        ImageResizeMode resizeMode)
 {
     Vector2i newSize = GetSize();
     bool modifyWidth = ((aspectRatio > 1.0f) == makeBigger);
     if (modifyWidth) { newSize.x = (GetHeight() * aspectRatio); }
     else { newSize.y = GetWidth() / aspectRatio; }
-    Debug_Peek(aspectRatio);
-    Debug_Peek(GetSize());
-    Debug_Peek(newSize);
-    Debug_Peek(modifyWidth);
     Resize(newSize, resizeMode, AspectRatioMode::Ignore);
 }
 
@@ -158,16 +154,16 @@ float Image<T>::GetAspectRatio() const
 
 template<class T>
 void Image<T>::Resize(const Vector2i &newSize,
-                         ImageResizeMode resizeMode,
-                         AspectRatioMode arMode)
+                      ImageResizeMode resizeMode,
+                      AspectRatioMode arMode)
 {
     Resize(newSize.x, newSize.y, resizeMode, arMode);
 }
 
 template<class T>
 void Image<T>::Resize(int _newWidth, int _newHeight,
-                         ImageResizeMode resizeMode,
-                         AspectRatioMode arMode)
+                      ImageResizeMode resizeMode,
+                      AspectRatioMode arMode)
 {
     // First pick the new (width,height), depending on the AspectRatioMode
     Vector2i newSize = AspectRatio::GetAspectRatioedSize(
@@ -281,7 +277,7 @@ void Image<T>::InvertVertically()
 
 template<class T>
 Image<T> Image<T>::LoadFromData(int width, int height,
-                              const Array<T> &rgbaByteData)
+                                const Array<T> &rgbaByteData)
 {
     Image<T> img(width, height);
     img.m_pixels = rgbaByteData;

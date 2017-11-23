@@ -270,7 +270,8 @@ void UILabel::UpdateSelectionQuadRenderer()
     float cursorX     = GetCursorXGlobalNDC( GetCursorIndex() );
     float selectionX  = GetCursorXGlobalNDC( GetSelectionIndex() );
 
-    float lineSkipPx  = GetText()->GetFont()->GetLineSkip() + 1;
+    float lineSkipPx  = GetText()->GetFont()->GetLineSkip(
+                                                GetText()->GetTextSize() ) + 1;
     float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC( Vector2(0, lineSkipPx) ).y;
 
     Rect r = GetText()->GetContentGlobalNDCRect();

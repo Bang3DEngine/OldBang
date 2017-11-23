@@ -31,6 +31,7 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
 
             // Create bitmap
             constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
+            TTF_SetFontHinting(ttfFont, TTF_HINTING_LIGHT);
             SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(ttfFont, c,
                                                               WhiteColor);
             SDL_PixelFormat *fmt = charBitmap->format;
@@ -55,19 +56,23 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                 }
             }
 
-            const Vector2i off(2);
-            localMinPixel = Vector2i::Max(Vector2i::Zero, localMinPixel - off);
-            localMaxPixel = Vector2i::Min(charImage.GetSize(), localMaxPixel + off);
+            localMinPixel = Vector2i::Max(Vector2i::Zero, localMinPixel);
+            localMaxPixel += Vector2i::One;
+            // localMaxPixel = Vector2i::Min(charImage.GetSize(), localMaxPixel);
 
             // Fit image to the actual character size
             // (eliminate all margins/paddings)
             Vector2i actualCharSize = localMaxPixel - localMinPixel;
+            // Debug_Log(c << ": " << charImage.GetSize());
+            // Debug_Log(c << " actualCharSize: " << actualCharSize);
 
             Imageb fittedCharImage(actualCharSize.x, actualCharSize.y);
             fittedCharImage.Copy(charImage,
                                  Recti(localMinPixel, localMaxPixel),
-                                 Recti(Vector2i::Zero, actualCharSize));
-            // fittedCharImage.Export( Path("Char_" + String(int(c)) + ".png"));
+                                 Recti(Vector2i::Zero, actualCharSize),
+                                 ImageResizeMode::Nearest);
+            fittedCharImage.Export( Path("Char_" + String(int(c)) + "_" +
+                                         String(actualCharSize.x) + ".png"));
             charImages.PushBack(fittedCharImage);
             SDL_FreeSurface(charBitmap);
         }
@@ -82,7 +87,7 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
     Imageb atlasImage = FontSheetCreator::PackImages(charImages,
                                                      extraMargin,
                                                      imagesOutputRects);
-    // atlasImage.Export(Path("font.png"));
+    atlasImage.Export(Path("font_" + String(atlasImage.GetWidth()) + ".png"));
 
     if (atlasTexture) // Create final atlas texture
     {
@@ -139,8 +144,20 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
         if (imagesOutputRects) { imagesOutputRects->PushBack(imgRect); }
         result.Copy(img, imgRect);
 
+        Vector2i minPixel = imgRect.GetMin();
+        Vector2i maxPixel = imgRect.GetMax();
+        /*for (int y = minPixel.y; y <= maxPixel.y; ++y)
+        { result.SetPixel(minPixel.x, y, Color::Red); }
+        for (int y = minPixel.y; y <= maxPixel.y; ++y)
+        { result.SetPixel(maxPixel.x, y, Color::Red); }
+        for (int x = minPixel.x; x <= maxPixel.x; ++x)
+        { result.SetPixel(x, minPixel.y, Color::Red); }
+        for (int x = minPixel.x; x <= maxPixel.x; ++x)
+        { result.SetPixel(x, maxPixel.y, Color::Red); }
+        */
+
         maxImgHeight = Math::Max(maxImgHeight, imgRect.GetSize().y);
-        penPosTopLeft.x += img.GetWidth() + margin;
+        penPosTopLeft.x += imgRect.GetWidth() + margin;
     }
 
     Vector2i minPixel = result.GetSize();

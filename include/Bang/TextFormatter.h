@@ -25,6 +25,7 @@ public:
     static Array<CharRect> GetFormattedTextPositions(
                                         const String &content,
                                         const Font *font,
+                                        int fontSize,
                                         const Recti &limitsRect,
                                         const Vector2 &spacingMultiplier,
                                         HorizontalAlignment hAlignment,
@@ -34,6 +35,7 @@ public:
 
     static Vector2i GetTextSizeOneLined(const String &content,
                                         const Font *font,
+                                        int fontSize,
                                         const Vector2 &spacingMultiplier);
 
     TextFormatter() = delete;
@@ -42,6 +44,7 @@ private:
     static Array< Array<CharRect> > SplitCharRectsInLines(
                                             const String &content,
                                             const Font *font,
+                                            int fontSize,
                                             const Recti &limitsRect,
                                             const Vector2 &spacingMultiplier,
                                             const Array<CharRect> &charRects,
@@ -50,12 +53,16 @@ private:
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
                                const Recti &limitsRect,
                                const Font *font,
+                               int fontSize,
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment);
 
-    static Rectf GetCharRect(char c, const Font *font);
+    static Rectf GetCharRect(char c,
+                             const Font *font,
+                             int fontSize);
     static int GetCharAdvanceX(const String &content,
                                const Font *font,
+                               int fontSize,
                                int currentCharIndex);
 };
 

@@ -28,29 +28,27 @@ public:
         float    advance = 0;
     };
 
-    void SetLoadSize(int loadSize);
-    void SetMetricsSize(int metricsSize);
+    Texture2D* GetFontAtlas(int size) const;
 
-    int GetLoadSize() const;
-    int GetMetricsSize() const;
-    bool IsUsingDistanceField() const;
-    Font::GlyphMetrics GetCharMetrics(char c) const;
-    Vector2 GetCharMinUvInAtlas(char c) const;
-    Vector2 GetCharMaxUvInAtlas(char c) const;
+    bool HasDistanceField() const;
+    Font::GlyphMetrics GetCharMetrics(int fontSize, char c) const;
     bool HasCharacter(char c) const;
-    Texture2D *GetAtlasTexture() const;
-    float GetKerning(char leftChar, char rightChar) const;
-    float GetLineSkip() const;
-    float GetFontAscent() const;
-    float GetFontDescent() const;
-    float GetFontHeight() const;
-    Vector2i GetSDFSpreadOffsetPx(char c) const;
+    float GetKerning(int fontSize, char leftChar, char rightChar) const;
+    float GetLineSkip(int fontSize) const;
+    float GetFontAscent(int fontSize) const;
+    float GetFontDescent(int fontSize) const;
+    float GetFontHeight(int fontSize) const;
+    Vector2 GetCharMinUv(int fontSize, char c) const;
+    Vector2 GetCharMaxUv(int fontSize, char c) const;
 
-    TTF_Font *GetTTFFont() const;
+    // DistField related
+    Vector2 GetCharMinUvInDistField(char c) const;
+    Vector2 GetCharMaxUvInDistField(char c) const;
+    Texture2D *GetDistFieldTexture() const;
+    Vector2i GetDistFieldSpreadOffsetPx(char c) const;
 
-    float GetScaleProportion() const;
-    float Scale(float magnitude) const;
-    Vector2 Scale(const Vector2 &magnitude) const;
+    // ICloneable
+    void CloneInto(ICloneable *clone) const override;
 
     // Resource
     void Import(const Path &ttfFilepath) override;
@@ -60,17 +58,30 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    int m_metricsSize = 0;
-    int m_ttfLoadSize = 128;
-    TTF_Font *m_ttfFont = nullptr;
-    bool m_usingDistanceField = false;
-    Texture2D *m_atlasTexture = nullptr;
+    Path m_ttfFilepath = Path::Empty;
+    TTF_Font *m_referenceFont = nullptr;
 
-    Map<char, Vector2i> m_sdfSpreadOffsetPxInAtlas;
-    Map<char, std::pair<Vector2, Vector2> > m_charUvsInAtlas;
+    // Textures
+    mutable Map<int, TTF_Font*> m_openFonts;
+    mutable Map<int, Texture2D*> m_cachedAtlas; // Per each font size, cached atlas
+    mutable Map<int, Map<char, Recti>> m_cachedAtlasCharRects; // ", cached atlas char rects
+    mutable Map<int, String> m_cachedAtlasChars; // ", cached atlas chars
+
+    // DistField texture and metrics
+    bool m_hasDistanceField = false;
+    Texture2D *m_distFieldTexture = nullptr;
+    Map<char, Vector2i> m_distFieldSpreadOffsetPx;
+    Map<char, std::pair<Vector2, Vector2> > m_charUvsInDistanceFieldAtlas;
 
     Font();
     virtual ~Font();
+
+    TTF_Font *GetReferenceFont() const;
+    TTF_Font *GetTTFFont(int fontSize) const;
+    bool HasFontSizeLoaded(int fontSize) const;
+    static float ScaleMagnitude(int fontSize, float magnitude);
+    static Vector2 ScaleMagnitude(int fontSize, const Vector2 &magnitude);
+    static float GetScaleProportion(int fontSize);
 
     void Free();
 };
