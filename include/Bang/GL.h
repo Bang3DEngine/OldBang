@@ -430,6 +430,7 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
+    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& ndcPoint);
     static Rect     FromGlobalNDCToPixels(const Rect &rectNDC);
     static Rect     FromPixelsToGlobalNDC(const Rect &rectPixels);
     static Vector2  FromPixelsAmountToGlobalNDC(const Vector2 &pixelsAmount);

@@ -911,6 +911,11 @@ void GL::SetWireframe(bool wireframe)
     }
 }
 
+Vector2 GL::FromPixelsPointToPixelPerfect(const Vector2 &ndcPoint)
+{
+    return Vector2::Floor(ndcPoint);
+}
+
 void GL::SetCullFace(GL::Face cullFace)
 {
     if (GL::GetCullFace() != cullFace)

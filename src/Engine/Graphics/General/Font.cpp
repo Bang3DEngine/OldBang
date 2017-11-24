@@ -251,6 +251,12 @@ float Font::GetFontHeight(int fontSize) const
     return ScaleMagnitude(fontSize,  float( TTF_FontHeight(GetReferenceFont()) ) );
 }
 
+Vector2i Font::GetAtlasCharRectSize(int fontSize, char c) const
+{
+    GetFontAtlas(fontSize); // Load if not loaded yet
+    return m_cachedAtlasCharRects[fontSize][c].GetSize();
+}
+
 bool Font::HasFontSizeLoaded(int fontSize) const
 {
     return m_cachedAtlas.ContainsKey(fontSize);

@@ -1,5 +1,6 @@
 #include "Bang/UIButton.h"
 
+#include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
@@ -81,6 +82,7 @@ UIButton* UIButton::CreateInto(GameObject *go)
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetTextColor(Color::Black);
+    label->GetMask()->SetMasking(false);
 
     UIImageRenderer *icon = GameObjectFactory::CreateUIImage();
     icon->SetAspectRatioMode(AspectRatioMode::Keep);

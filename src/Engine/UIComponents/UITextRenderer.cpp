@@ -98,6 +98,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
                                         IsWrapping(),
+                                        true,
                                         &m_numberOfLines);
 
     // Generate quad positions and uvs for the mesh, and load them
@@ -110,8 +111,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
 
-        Vector2 minPxPerf = cr.rectPx.GetMin(); // Vector2::Round( cr.rectPx.GetMin() ) + 0.5f;
-        Vector2 maxPxPerf = cr.rectPx.GetMax(); // Vector2::Round( cr.rectPx.GetMax() ) + 0.5f;
+        Vector2 minPxPerf = GL::FromPixelsPointToPixelPerfect(cr.rectPx.GetMin()); // Vector2::Floor( cr.rectPx.GetMin() ) + 0.5f;
+        Vector2 maxPxPerf = cr.rectPx.GetMin() + cr.rectPx.GetSize(); // Vector2::Floor( cr.rectPx.GetMax() ) + 0.5f;
         Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
         Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
 

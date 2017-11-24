@@ -38,6 +38,7 @@ public:
     float GetFontAscent(int fontSize) const;
     float GetFontDescent(int fontSize) const;
     float GetFontHeight(int fontSize) const;
+    Vector2i GetAtlasCharRectSize(int fontSize, char c) const;
     Vector2 GetCharMinUv(int fontSize, char c) const;
     Vector2 GetCharMaxUv(int fontSize, char c) const;
 

@@ -26,9 +26,6 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
     {
         if (TTF_GlyphIsProvided(ttfFont, c))
         {
-            Vector2i localMinPixel(Math::Max<int>());
-            Vector2i localMaxPixel(Math::Min<int>());
-
             // Create bitmap
             constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
             TTF_SetFontHinting(ttfFont, TTF_HINTING_LIGHT);
@@ -46,34 +43,12 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                                     << fmt->Aloss;
                     Color pxColor = Color::Zero;
                     pxColor.a = (alpha / 255.0f);
-                    if (pxColor.a > 0.0f)
-                    {
-                        const Vector2i xy(x,y);
-                        localMinPixel = Vector2i::Min(localMinPixel, xy);
-                        localMaxPixel = Vector2i::Max(localMaxPixel, xy);
-                    }
                     charImage.SetPixel(x, y, pxColor);
                 }
             }
+            // charImage.Export( Path("Char_" + String(int(c)) + "_" + String(charBitmap->w) + ".png") );
 
-            localMinPixel = Vector2i::Max(Vector2i::Zero, localMinPixel);
-            localMaxPixel += Vector2i::One;
-            // localMaxPixel = Vector2i::Min(charImage.GetSize(), localMaxPixel);
-
-            // Fit image to the actual character size
-            // (eliminate all margins/paddings)
-            Vector2i actualCharSize = localMaxPixel - localMinPixel;
-            // Debug_Log(c << ": " << charImage.GetSize());
-            // Debug_Log(c << " actualCharSize: " << actualCharSize);
-
-            Imageb fittedCharImage(actualCharSize.x, actualCharSize.y);
-            fittedCharImage.Copy(charImage,
-                                 Recti(localMinPixel, localMaxPixel),
-                                 Recti(Vector2i::Zero, actualCharSize),
-                                 ImageResizeMode::Nearest);
-            fittedCharImage.Export( Path("Char_" + String(int(c)) + "_" +
-                                         String(actualCharSize.x) + ".png"));
-            charImages.PushBack(fittedCharImage);
+            charImages.PushBack(charImage);
             SDL_FreeSurface(charBitmap);
         }
         else
@@ -87,13 +62,13 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
     Imageb atlasImage = FontSheetCreator::PackImages(charImages,
                                                      extraMargin,
                                                      imagesOutputRects);
-    atlasImage.Export(Path("font_" + String(atlasImage.GetWidth()) + ".png"));
+    // atlasImage.Export(Path("font_" + String(atlasImage.GetWidth()) + ".png"));
 
     if (atlasTexture) // Create final atlas texture
     {
         GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
         atlasTexture->Import(atlasImage);
-        atlasTexture->SetWrapMode(GL::WrapMode::ClampToEdge);
+        atlasTexture->SetWrapMode(GL::WrapMode::Clamp);
         atlasTexture->SetFilterMode(GL::FilterMode::Trilinear_LL);
         atlasTexture->SetAlphaCutoff(0.0f);
         atlasTexture->Bind();
@@ -144,18 +119,6 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
         if (imagesOutputRects) { imagesOutputRects->PushBack(imgRect); }
         result.Copy(img, imgRect);
 
-        Vector2i minPixel = imgRect.GetMin();
-        Vector2i maxPixel = imgRect.GetMax();
-        /*for (int y = minPixel.y; y <= maxPixel.y; ++y)
-        { result.SetPixel(minPixel.x, y, Color::Red); }
-        for (int y = minPixel.y; y <= maxPixel.y; ++y)
-        { result.SetPixel(maxPixel.x, y, Color::Red); }
-        for (int x = minPixel.x; x <= maxPixel.x; ++x)
-        { result.SetPixel(x, minPixel.y, Color::Red); }
-        for (int x = minPixel.x; x <= maxPixel.x; ++x)
-        { result.SetPixel(x, maxPixel.y, Color::Red); }
-        */
-
         maxImgHeight = Math::Max(maxImgHeight, imgRect.GetSize().y);
         penPosTopLeft.x += imgRect.GetWidth() + margin;
     }
@@ -175,6 +138,7 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
         }
     }
 
+    maxPixel += Vector2i::One;
     Vector2i fittedSize = (maxPixel - minPixel);
     Imageb fittedResult(fittedSize.x, fittedSize.y);
     fittedResult = result.GetSubImage( Recti(minPixel, maxPixel) );

@@ -31,6 +31,7 @@ public:
                                         HorizontalAlignment hAlignment,
                                         VerticalAlignment vAlignment,
                                         bool wrapping,
+                                        bool useAtlasCharRectSize,
                                         uint *numberOfLines);
 
     static Vector2i GetTextSizeOneLined(const String &content,
