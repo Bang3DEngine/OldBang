@@ -12,9 +12,19 @@ class UIRenderer : public Renderer
 public:
     virtual Rect GetBoundingRect(Camera *camera) const override;
 
+    // Renderer
+    virtual void OnRender() override;
+    virtual void OnRender(RenderPass renderPass) override;
+
+    void SetCullByRectTransform(bool cullByRectTransform);
+    bool GetCullByRectTransform() const;
+
 protected:
     UIRenderer();
     virtual ~UIRenderer();
+
+private:
+    bool m_cullByRectTransform = true;
 };
 
 NAMESPACE_BANG_END
