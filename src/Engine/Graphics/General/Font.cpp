@@ -104,12 +104,12 @@ float Font::GetScaleProportion(int fontSize)
 
 float Font::ScaleMagnitude(int fontSize, float magnitude)
 {
-    return magnitude * GetScaleProportion(fontSize);
+    return Math::Round(magnitude * GetScaleProportion(fontSize));
 }
 
 Vector2 Font::ScaleMagnitude(int fontSize, const Vector2 &magnitude)
 {
-    return magnitude * GetScaleProportion(fontSize);
+    return Vector2::Round(magnitude * GetScaleProportion(fontSize));
 }
 
 void Font::CloneInto(ICloneable *clone) const

@@ -161,7 +161,7 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_Lighted);
     go->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
-    go->Render(RenderPass::Canvas);
+    // go->Render(RenderPass::Canvas);
     go->RenderGizmos();
 }
 

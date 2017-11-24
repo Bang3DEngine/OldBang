@@ -26,7 +26,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
     SetMaterial( MaterialFactory::GetUIText() );
 
-    SetFont( Resources::Load<Font>( EPATH("Fonts/Ubuntu.ttf") ) );
+    SetFont( Resources::Load<Font>( EPATH("Fonts/Roboto.ttf") ) );
     SetContent("");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
@@ -111,8 +111,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     {
         if (!GetFont()->HasCharacter(cr.character)) { continue; }
 
-        Vector2 minPxPerf = GL::FromPixelsPointToPixelPerfect(cr.rectPx.GetMin()); // Vector2::Floor( cr.rectPx.GetMin() ) + 0.5f;
-        Vector2 maxPxPerf = cr.rectPx.GetMin() + cr.rectPx.GetSize(); // Vector2::Floor( cr.rectPx.GetMax() ) + 0.5f;
+        Vector2 minPxPerf = GL::FromPixelsPointToPixelPerfect(cr.rectPx.GetMin());
+        Vector2 maxPxPerf = cr.rectPx.GetMin() + cr.rectPx.GetSize();
         Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
         Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
 

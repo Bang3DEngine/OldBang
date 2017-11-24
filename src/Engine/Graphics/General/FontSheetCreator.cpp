@@ -68,8 +68,8 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
     {
         GL::PixelStore(GL_UNPACK_ALIGNMENT, 1);
         atlasTexture->Import(atlasImage);
-        atlasTexture->SetWrapMode(GL::WrapMode::Clamp);
-        atlasTexture->SetFilterMode(GL::FilterMode::Trilinear_LL);
+        atlasTexture->SetWrapMode(GL::WrapMode::ClampToEdge);
+        atlasTexture->SetFilterMode(GL::FilterMode::Nearest);
         atlasTexture->SetAlphaCutoff(0.0f);
         atlasTexture->Bind();
         atlasTexture->GenerateMipMaps();
