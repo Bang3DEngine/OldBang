@@ -29,6 +29,7 @@ public:
     void SetScrolling(const Vector2i &scrolling);
     void SetScrollingPercent(const Vector2 &scrollingPercent);
 
+    Vector2i GetScrolling() const;
     HorizontalSide GetVerticalScrollBarSide() const;
     VerticalSide GetHorizontalScrollBarSide() const;
     ShowScrollMode GetVerticalShowScrollMode() const;
@@ -38,6 +39,9 @@ public:
     UIScrollArea *GetScrollArea() const;
     UIScrollBar  *GetVerticalScrollBar() const;
     UIScrollBar  *GetHorizontalScrollBar() const;
+    Vector2 GetContentSize() const;
+    Vector2 GetContainerSize() const;
+    Vector2 GetMaxScrollLength() const;
 
 private:
     const static float WheelScrollSpeedPx;
@@ -59,9 +63,6 @@ private:
     void HandleScrollAreaRectTransform();
     void HandleScrollShowMode(const Vector2& contentSize,
                               const Vector2& containerSize);
-
-    Vector2 GetContentSize() const;
-    Vector2 GetContainerSize() const;
 
     static UIScrollPanel* CreateInto(GameObject *go);
 

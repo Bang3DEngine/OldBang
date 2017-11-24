@@ -30,17 +30,7 @@ void UIList::OnUpdate()
     RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
     if (rt->IsMouseOver())
     {
-        // Selection In/Out
-        int numItems = GetNumItems();
-        if (Input::GetKeyDownRepeat(Key::Down))
-        {
-            SetSelection( (GetSelectedIndex() + 1) % numItems );
-        }
-
-        if (Input::GetKeyDownRepeat(Key::Up))
-        {
-            SetSelection( (GetSelectedIndex() - 1 + numItems) % numItems );
-        }
+        HandleShortcuts();
 
         // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
@@ -113,17 +103,24 @@ void UIList::AddItem(GOItem *newItem)
 void UIList::RemoveItem(GOItem *item)
 {
     ASSERT( p_items.Contains(item) );
-    GameObject::Destroy(item);
 
-    p_items.Remove(item);
+    int indexOfItem = p_items.IndexOf(item);
 
+    // Change selection to another element
     if (p_itemUnderMouse == item) { p_itemUnderMouse = nullptr; }
     if (GetNumItems() > 0)
     {
-        int selIndex = Math::Clamp(GetSelectedIndex()-1, 0, GetNumItems()-1);
-        SetSelection(selIndex);
+        int newSelIndex = GetSelectedIndex() == 0 ? 1 : (GetSelectedIndex()-1);
+        newSelIndex = Math::Clamp(newSelIndex, 0, GetNumItems()-1-1);
+        SetSelection(-1); // Deselect first
+        SetSelection(newSelIndex);
     }
     else { ClearSelection(); }
+
+    // Destroy the element
+    GameObject::Destroy(item);
+    if (indexOfItem < GetSelectedIndex()) { m_selectionIndex -= 1; }
+    p_items.Remove(item);
 }
 
 void UIList::ClearSelection()
@@ -149,6 +146,52 @@ void UIList::Clear()
     ClearSelection();
 }
 
+const List<GOItem *> &UIList::GetItems() const
+{
+    return p_items;
+}
+
+GOItem *UIList::GetItem(int i) const
+{
+    if (i >= 0 && i < p_items.Size())
+    {
+        auto it = p_items.Begin();
+        std::advance(it, GetSelectedIndex());
+        return *it;
+    }
+    return nullptr;
+}
+
+void UIList::ScrollTo(int i)
+{
+    ScrollTo( GetItem(i) );
+}
+
+void UIList::ScrollTo(GOItem *item)
+{
+    Rect itemRect = item->GetComponent<RectTransform>()-> GetScreenSpaceRectPx();
+    Rect panelRect = GetScrollPanel()->GetGameObject()->
+                     GetComponent<RectTransform>()->GetScreenSpaceRectPx();
+    Rect containerRect = GetContainer()->GetComponent<RectTransform>()->
+                         GetScreenSpaceRectPx();
+    Rect relativeItemRect = itemRect - containerRect.GetMin();
+
+    Vector2i scrolling = -Vector2i::One;
+    if (itemRect.GetMax().y > panelRect.GetMax().y)
+    {
+        scrolling = Vector2i(relativeItemRect.GetMax() - panelRect.GetHeight());
+    }
+    else if (itemRect.GetMin().y < panelRect.GetMin().y)
+    {
+        scrolling = Vector2i(relativeItemRect.GetMin());
+    }
+
+    if (scrolling != -Vector2i::One)
+    {
+        GetScrollPanel()->SetScrolling(scrolling);
+    }
+}
+
 int UIList::GetNumItems() const
 {
     return p_items.Size();
@@ -162,11 +205,47 @@ void UIList::SetSelection(int index)
         if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
     }
 
-    m_selectionIndex = index;
-    if (index >= 0 && index < GetNumItems())
+    if (m_selectionIndex != index && index >= 0 && index < GetNumItems())
     {
+        m_selectionIndex = index;
         GOItem *selectedItem = GetSelectedItem();
-        if (selectedItem) { Callback(selectedItem, Action::SelectionIn); }
+        if (selectedItem)
+        {
+            ScrollTo(selectedItem);
+            Callback(selectedItem, Action::SelectionIn);
+        }
+    }
+}
+
+void UIList::HandleShortcuts()
+{
+    int newSelectedIndex = -1;
+
+    int numItems = GetNumItems();
+    if (Input::GetKeyDownRepeat(Key::Down))
+    {
+        newSelectedIndex = (GetSelectedIndex() + 1) % numItems;
+    }
+    else if (Input::GetKeyDownRepeat(Key::Up))
+    {
+        newSelectedIndex = (GetSelectedIndex() - 1 + numItems) % numItems;
+    }
+    else if (Input::GetKeyDownRepeat(Key::PageDown))
+    {
+        GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() +
+                               Vector2i(GetScrollPanel()->GetContainerSize()) );
+    }
+    else if (Input::GetKeyDownRepeat(Key::PageUp))
+    {
+        GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() -
+                               Vector2i(GetScrollPanel()->GetContainerSize()) );
+    }
+    else if (Input::GetKeyDown(Key::End)) { newSelectedIndex = GetNumItems() - 1; }
+    else if (Input::GetKeyDown(Key::Home)) { newSelectedIndex = 0; }
+
+    if (newSelectedIndex >= 0)
+    {
+        SetSelection(newSelectedIndex);
     }
 }
 
@@ -187,13 +266,7 @@ int UIList::GetSelectedIndex() const
 
 GOItem *UIList::GetSelectedItem() const
 {
-    if (GetSelectedIndex() >= 0 && GetSelectedIndex() < p_items.Size())
-    {
-        auto it = p_items.Begin();
-        std::advance(it, GetSelectedIndex());
-        return *it;
-    }
-    return nullptr;
+    return GetItem( GetSelectedIndex() );
 }
 
 void UIList::OnDestroyed(Object *object)

@@ -133,21 +133,25 @@ void UIScrollPanel::SetHorizontalScrollEnabled(bool enabled)
 
 void UIScrollPanel::SetScrolling(const Vector2i &scrolling)
 {
-    Vector2 contentSize = GetContentSize();
-    contentSize = Vector2::Max(contentSize, Vector2::One);
-    SetScrollingPercent( Vector2(scrolling) / contentSize );
+    Vector2 scrollPerc;
+    const Vector2 maxScrollLength = GetMaxScrollLength();
+    scrollPerc.x = (maxScrollLength.x > 0 ? scrolling.x / maxScrollLength.x : 0);
+    scrollPerc.y = (maxScrollLength.y > 0 ? scrolling.y / maxScrollLength.y : 0);
+    SetScrollingPercent(scrollPerc);
 }
 
 void UIScrollPanel::SetScrollingPercent(const Vector2 &scrollPerc)
 {
-    Vector2 contentSize = GetContentSize();
+    Vector2 scrollPercClamped = Vector2::Clamp(scrollPerc,
+                                               Vector2::Zero, Vector2::One);
     GetScrollArea()->SetScrolling(
-                Vector2i( Vector2::Round(scrollPerc * contentSize)) );
-
-    GetHorizontalScrollBar()->SetScrollingPercent( scrollPerc.x );
-    GetVerticalScrollBar()->SetScrollingPercent( scrollPerc.y );
+        Vector2i( Vector2::Round(scrollPercClamped * GetMaxScrollLength())) );
+    GetHorizontalScrollBar()->SetScrollingPercent( scrollPercClamped.x );
+    GetVerticalScrollBar()->SetScrollingPercent( scrollPercClamped.y );
 }
 
+Vector2i UIScrollPanel::GetScrolling() const
+{ return GetScrollArea()->GetScrolling(); }
 HorizontalSide UIScrollPanel::GetVerticalScrollBarSide() const
 { return m_verticalScrollBarSide; }
 VerticalSide UIScrollPanel::GetHorizontalScrollBarSide() const
@@ -170,8 +174,13 @@ Vector2 UIScrollPanel::GetContentSize() const
 
 Vector2 UIScrollPanel::GetContainerSize() const
 {
-    return GetScrollArea()->GetContainer()->GetParent()->
-           GetComponent<RectTransform>()->GetScreenSpaceRectPx().GetSize();
+    return GetGameObject()->GetComponent<RectTransform>()->
+            GetScreenSpaceRectPx().GetSize();
+}
+
+Vector2 UIScrollPanel::GetMaxScrollLength() const
+{
+    return Vector2::Max(GetContentSize() - GetContainerSize(), Vector2::Zero);
 }
 
 UIScrollArea *UIScrollPanel::GetScrollArea() const { return p_scrollArea; }

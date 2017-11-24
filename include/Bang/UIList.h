@@ -28,6 +28,11 @@ public:
     void ClearSelection();
     void Clear();
 
+    const List<GOItem*>& GetItems() const;
+    GOItem *GetItem(int i) const;
+
+    void ScrollTo(int i);
+    void ScrollTo(GOItem *item);
     void SetSelection(int i);
     void SetSelection(GOItem *item);
 
@@ -58,6 +63,8 @@ private:
 
     GameObject *p_container = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
+
+    void HandleShortcuts();
 
     static UIList* CreateInto(GameObject *go);
     void Callback(GameObject *item, Action action);
