@@ -73,120 +73,120 @@ public:
         Matrix4G<T> inv;
         const Matrix4G<T> &m = *this;
 
-        inv[0].x = m[1].y * m[2].z * m[3].w -
-                   m[1].y * m[2].w * m[3].z -
-                   m[2].y * m[1].z * m[3].w +
-                   m[2].y * m[1].w * m[3].z +
-                   m[3].y * m[1].z * m[2].w -
-                   m[3].y * m[1].w * m[2].z;
+        inv[0].x = m.c1.y * m.c2.z * m.c3.w -
+                   m.c1.y * m.c2.w * m.c3.z -
+                   m.c2.y * m.c1.z * m.c3.w +
+                   m.c2.y * m.c1.w * m.c3.z +
+                   m.c3.y * m.c1.z * m.c2.w -
+                   m.c3.y * m.c1.w * m.c2.z;
 
-        inv[1].x = -m[1].x * m[2].z * m[3].w +
-                    m[1].x * m[2].w * m[3].z +
-                    m[2].x * m[1].z * m[3].w -
-                    m[2].x * m[1].w * m[3].z -
-                    m[3].x * m[1].z * m[2].w +
-                    m[3].x * m[1].w * m[2].z;
+        inv.c1.x = -m.c1.x * m.c2.z * m.c3.w +
+                    m.c1.x * m.c2.w * m.c3.z +
+                    m.c2.x * m.c1.z * m.c3.w -
+                    m.c2.x * m.c1.w * m.c3.z -
+                    m.c3.x * m.c1.z * m.c2.w +
+                    m.c3.x * m.c1.w * m.c2.z;
 
-        inv[2].x = m[1].x * m[2].y * m[3].w -
-                   m[1].x * m[2].w * m[3].y -
-                   m[2].x * m[1].y * m[3].w +
-                   m[2].x * m[1].w * m[3].y +
-                   m[3].x * m[1].y * m[2].w -
-                   m[3].x * m[1].w * m[2].y;
+        inv.c2.x = m.c1.x * m.c2.y * m.c3.w -
+                   m.c1.x * m.c2.w * m.c3.y -
+                   m.c2.x * m.c1.y * m.c3.w +
+                   m.c2.x * m.c1.w * m.c3.y +
+                   m.c3.x * m.c1.y * m.c2.w -
+                   m.c3.x * m.c1.w * m.c2.y;
 
-        inv[3].x = -m[1].x * m[2].y * m[3].z +
-                    m[1].x * m[2].z * m[3].y +
-                    m[2].x * m[1].y * m[3].z -
-                    m[2].x * m[1].z * m[3].y -
-                    m[3].x * m[1].y * m[2].z +
-                    m[3].x * m[1].z * m[2].y;
+        inv.c3.x = -m.c1.x * m.c2.y * m.c3.z +
+                    m.c1.x * m.c2.z * m.c3.y +
+                    m.c2.x * m.c1.y * m.c3.z -
+                    m.c2.x * m.c1.z * m.c3.y -
+                    m.c3.x * m.c1.y * m.c2.z +
+                    m.c3.x * m.c1.z * m.c2.y;
 
-        inv[0].y = -m[0].y * m[2].z * m[3].w +
-                    m[0].y * m[2].w * m[3].z +
-                    m[2].y * m[0].z * m[3].w -
-                    m[2].y * m[0].w * m[3].z -
-                    m[3].y * m[0].z * m[2].w +
-                    m[3].y * m[0].w * m[2].z;
+        inv.c0.y = -m.c0.y * m.c2.z * m.c3.w +
+                    m.c0.y * m.c2.w * m.c3.z +
+                    m.c2.y * m.c0.z * m.c3.w -
+                    m.c2.y * m.c0.w * m.c3.z -
+                    m.c3.y * m.c0.z * m.c2.w +
+                    m.c3.y * m.c0.w * m.c2.z;
 
-        inv[1].y = m[0].x * m[2].z * m[3].w -
-                   m[0].x * m[2].w * m[3].z -
-                   m[2].x * m[0].z * m[3].w +
-                   m[2].x * m[0].w * m[3].z +
-                   m[3].x * m[0].z * m[2].w -
-                   m[3].x * m[0].w * m[2].z;
+        inv.c1.y = m.c0.x * m.c2.z * m.c3.w -
+                   m.c0.x * m.c2.w * m.c3.z -
+                   m.c2.x * m.c0.z * m.c3.w +
+                   m.c2.x * m.c0.w * m.c3.z +
+                   m.c3.x * m.c0.z * m.c2.w -
+                   m.c3.x * m.c0.w * m.c2.z;
 
-        inv[2].y = -m[0].x * m[2].y * m[3].w +
-                    m[0].x * m[2].w * m[3].y +
-                    m[2].x * m[0].y * m[3].w -
-                    m[2].x * m[0].w * m[3].y -
-                    m[3].x * m[0].y * m[2].w +
-                    m[3].x * m[0].w * m[2].y;
+        inv.c2.y = -m.c0.x * m.c2.y * m.c3.w +
+                    m.c0.x * m.c2.w * m.c3.y +
+                    m.c2.x * m.c0.y * m.c3.w -
+                    m.c2.x * m.c0.w * m.c3.y -
+                    m.c3.x * m.c0.y * m.c2.w +
+                    m.c3.x * m.c0.w * m.c2.y;
 
-        inv[3].y = m[0].x * m[2].y * m[3].z -
-                   m[0].x * m[2].z * m[3].y -
-                   m[2].x * m[0].y * m[3].z +
-                   m[2].x * m[0].z * m[3].y +
-                   m[3].x * m[0].y * m[2].z -
-                   m[3].x * m[0].z * m[2].y;
+        inv.c3.y = m.c0.x * m.c2.y * m.c3.z -
+                   m.c0.x * m.c2.z * m.c3.y -
+                   m.c2.x * m.c0.y * m.c3.z +
+                   m.c2.x * m.c0.z * m.c3.y +
+                   m.c3.x * m.c0.y * m.c2.z -
+                   m.c3.x * m.c0.z * m.c2.y;
 
-        inv[0].z = m[0].y * m[1].z * m[3].w -
-                   m[0].y * m[1].w * m[3].z -
-                   m[1].y * m[0].z * m[3].w +
-                   m[1].y * m[0].w * m[3].z +
-                   m[3].y * m[0].z * m[1].w -
-                   m[3].y * m[0].w * m[1].z;
+        inv.c0.z = m.c0.y * m.c1.z * m.c3.w -
+                   m.c0.y * m.c1.w * m.c3.z -
+                   m.c1.y * m.c0.z * m.c3.w +
+                   m.c1.y * m.c0.w * m.c3.z +
+                   m.c3.y * m.c0.z * m.c1.w -
+                   m.c3.y * m.c0.w * m.c1.z;
 
-        inv[1].z = -m[0].x * m[1].z * m[3].w +
-                    m[0].x * m[1].w * m[3].z +
-                    m[1].x * m[0].z * m[3].w -
-                    m[1].x * m[0].w * m[3].z -
-                    m[3].x * m[0].z * m[1].w +
-                    m[3].x * m[0].w * m[1].z;
+        inv.c1.z = -m.c0.x * m.c1.z * m.c3.w +
+                    m.c0.x * m.c1.w * m.c3.z +
+                    m.c1.x * m.c0.z * m.c3.w -
+                    m.c1.x * m.c0.w * m.c3.z -
+                    m.c3.x * m.c0.z * m.c1.w +
+                    m.c3.x * m.c0.w * m.c1.z;
 
-        inv[2].z = m[0].x * m[1].y * m[3].w -
-                   m[0].x * m[1].w * m[3].y -
-                   m[1].x * m[0].y * m[3].w +
-                   m[1].x * m[0].w * m[3].y +
-                   m[3].x * m[0].y * m[1].w -
-                   m[3].x * m[0].w * m[1].y;
+        inv.c2.z = m.c0.x * m.c1.y * m.c3.w -
+                   m.c0.x * m.c1.w * m.c3.y -
+                   m.c1.x * m.c0.y * m.c3.w +
+                   m.c1.x * m.c0.w * m.c3.y +
+                   m.c3.x * m.c0.y * m.c1.w -
+                   m.c3.x * m.c0.w * m.c1.y;
 
-        inv[3].z = -m[0].x * m[1].y * m[3].z +
-                    m[0].x * m[1].z * m[3].y +
-                    m[1].x * m[0].y * m[3].z -
-                    m[1].x * m[0].z * m[3].y -
-                    m[3].x * m[0].y * m[1].z +
-                    m[3].x * m[0].z * m[1].y;
+        inv.c3.z = -m.c0.x * m.c1.y * m.c3.z +
+                    m.c0.x * m.c1.z * m.c3.y +
+                    m.c1.x * m.c0.y * m.c3.z -
+                    m.c1.x * m.c0.z * m.c3.y -
+                    m.c3.x * m.c0.y * m.c1.z +
+                    m.c3.x * m.c0.z * m.c1.y;
 
-        inv[0].w = -m[0].y * m[1].z * m[2].w +
-                    m[0].y * m[1].w * m[2].z +
-                    m[1].y * m[0].z * m[2].w -
-                    m[1].y * m[0].w * m[2].z -
-                    m[2].y * m[0].z * m[1].w +
-                    m[2].y * m[0].w * m[1].z;
+        inv.c0.w = -m.c0.y * m.c1.z * m.c2.w +
+                    m.c0.y * m.c1.w * m.c2.z +
+                    m.c1.y * m.c0.z * m.c2.w -
+                    m.c1.y * m.c0.w * m.c2.z -
+                    m.c2.y * m.c0.z * m.c1.w +
+                    m.c2.y * m.c0.w * m.c1.z;
 
-        inv[1].w = m[0].x * m[1].z * m[2].w -
-                   m[0].x * m[1].w * m[2].z -
-                   m[1].x * m[0].z * m[2].w +
-                   m[1].x * m[0].w * m[2].z +
-                   m[2].x * m[0].z * m[1].w -
-                   m[2].x * m[0].w * m[1].z;
+        inv.c1.w = m.c0.x * m.c1.z * m.c2.w -
+                   m.c0.x * m.c1.w * m.c2.z -
+                   m.c1.x * m.c0.z * m.c2.w +
+                   m.c1.x * m.c0.w * m.c2.z +
+                   m.c2.x * m.c0.z * m.c1.w -
+                   m.c2.x * m.c0.w * m.c1.z;
 
-        inv[2].w = -m[0].x * m[1].y * m[2].w +
-                    m[0].x * m[1].w * m[2].y +
-                    m[1].x * m[0].y * m[2].w -
-                    m[1].x * m[0].w * m[2].y -
-                    m[2].x * m[0].y * m[1].w +
-                    m[2].x * m[0].w * m[1].y;
+        inv.c2.w = -m.c0.x * m.c1.y * m.c2.w +
+                    m.c0.x * m.c1.w * m.c2.y +
+                    m.c1.x * m.c0.y * m.c2.w -
+                    m.c1.x * m.c0.w * m.c2.y -
+                    m.c2.x * m.c0.y * m.c1.w +
+                    m.c2.x * m.c0.w * m.c1.y;
 
-        inv[3].w = m[0].x * m[1].y * m[2].z -
-                   m[0].x * m[1].z * m[2].y -
-                   m[1].x * m[0].y * m[2].z +
-                   m[1].x * m[0].z * m[2].y +
-                   m[2].x * m[0].y * m[1].z -
-                   m[2].x * m[0].z * m[1].y;
+        inv.c3.w = m.c0.x * m.c1.y * m.c2.z -
+                   m.c0.x * m.c1.z * m.c2.y -
+                   m.c1.x * m.c0.y * m.c2.z +
+                   m.c1.x * m.c0.z * m.c2.y +
+                   m.c2.x * m.c0.y * m.c1.z -
+                   m.c2.x * m.c0.z * m.c1.y;
 
-        float det = m[0].x * inv[0].x + m[0].y * inv[1].x + m[0].z * inv[2].x +
-                    m[0].w * inv[3].x;
+        float det = m.c0.x * inv.c0.x + m.c0.y * inv.c1.x + m.c0.z * inv.c2.x +
+                    m.c0.w * inv.c3.x;
         if (det == 0) return *this;
 
         inv.c0 *= SCAST<T>(1) / det;
@@ -201,25 +201,25 @@ public:
         Matrix4G<T> trans;
         const Matrix4G<T> &m = *this;
 
-        trans[0].x = m[0].x;
-        trans[0].y = m[1].x;
-        trans[0].z = m[2].x;
-        trans[0].w = m[3].x;
+        trans.c0.x = m.c0.x;
+        trans.c0.y = m.c1.x;
+        trans.c0.z = m.c2.x;
+        trans.c0.w = m.c3.x;
 
-        trans[1].x = m[0].y;
-        trans[1].y = m[1].y;
-        trans[1].z = m[2].y;
-        trans[1].w = m[3].y;
+        trans.c1.x = m.c0.y;
+        trans.c1.y = m.c1.y;
+        trans.c1.z = m.c2.y;
+        trans.c1.w = m.c3.y;
 
-        trans[2].x = m[0].z;
-        trans[2].y = m[1].z;
-        trans[2].z = m[2].z;
-        trans[2].w = m[3].z;
+        trans.c2.x = m.c0.z;
+        trans.c2.y = m.c1.z;
+        trans.c2.z = m.c2.z;
+        trans.c2.w = m.c3.z;
 
-        trans[3].x = m[0].w;
-        trans[3].y = m[1].w;
-        trans[3].z = m[2].w;
-        trans[3].w = m[3].w;
+        trans.c3.x = m.c0.w;
+        trans.c3.y = m.c1.w;
+        trans.c3.z = m.c2.w;
+        trans.c3.w = m.c3.w;
 
         return trans;
     }
@@ -338,28 +338,28 @@ public:
         switch (biggestIndex)
         {
             case 0:
-                res.x = (m[1][2] - m[2][1]) * mult;
-                res.y = (m[2][0] - m[0][2]) * mult;
-                res.z = (m[0][1] - m[1][0]) * mult;
+                res.x = (m.c1[2] - m.c2[1]) * mult;
+                res.y = (m.c2[0] - m.c0[2]) * mult;
+                res.z = (m.c0[1] - m.c1[0]) * mult;
                 res.w = biggestVal;
                 break;
             case 1:
                 res.x = biggestVal;
-                res.y = (m[0][1] + m[1][0]) * mult;
-                res.z = (m[2][0] + m[0][2]) * mult;
-                res.w = (m[1][2] - m[2][1]) * mult;
+                res.y = (m.c0[1] + m.c1[0]) * mult;
+                res.z = (m.c2[0] + m.c0[2]) * mult;
+                res.w = (m.c1[2] - m.c2[1]) * mult;
                 break;
             case 2:
-                res.x = (m[0][1] + m[1][0]) * mult;
+                res.x = (m.c0[1] + m.c1[0]) * mult;
                 res.y = biggestVal;
-                res.z = (m[1][2] + m[2][1]) * mult;
-                res.w = (m[2][0] - m[0][2]) * mult;
+                res.z = (m.c1[2] + m.c2[1]) * mult;
+                res.w = (m.c2[0] - m.c0[2]) * mult;
                 break;
             case 3:
-                res.x = (m[2][0] + m[0][2]) * mult;
-                res.y = (m[1][2] + m[2][1]) * mult;
+                res.x = (m.c2[0] + m.c0[2]) * mult;
+                res.y = (m.c1[2] + m.c2[1]) * mult;
                 res.z = biggestVal;
-                res.w = (m[0][1] - m[1][0]) * mult;
+                res.w = (m.c0[1] - m.c1[0]) * mult;
                 break;
 
             default: break;
@@ -381,17 +381,17 @@ public:
 
         Matrix4G<T> res(1);
 
-        res[0][0] = 1 - 2 * (qyy +  qzz);
-        res[0][1] = 2 * (qxy + qwz);
-        res[0][2] = 2 * (qxz - qwy);
+        res.c0.x = 1 - 2 * (qyy +  qzz);
+        res.c0.y = 2 * (qxy + qwz);
+        res.c0.z = 2 * (qxz - qwy);
 
-        res[1][0] = 2 * (qxy - qwz);
-        res[1][1] = 1 - 2 * (qxx +  qzz);
-        res[1][2] = 2 * (qyz + qwx);
+        res.c1.x = 2 * (qxy - qwz);
+        res.c1.y = 1 - 2 * (qxx +  qzz);
+        res.c1.z = 2 * (qyz + qwx);
 
-        res[2][0] = 2 * (qxz + qwy);
-        res[2][1] = 2 * (qyz - qwx);
-        res[2][2] = 1 - 2 * (qxx +  qyy);
+        res.c2.x = 2 * (qxz + qwy);
+        res.c2.y = 2 * (qyz - qwx);
+        res.c2.z = 1 - 2 * (qxx +  qyy);
 
         return res;
     }
@@ -475,10 +475,10 @@ Matrix4G<T> operator*(const Matrix4G<T> &m1, const Matrix4G<T>& m2)
 template<class T>
 Vector4G<T> operator*(const Matrix4G<T> &m, const Vector4G<T> &v)
 {
-    return Vector4G<T>((m[0].x * v.x) + (m[1].x * v.y) + (m[2].x * v.z) + (m[3].x * v.w),
-                       (m[0].y * v.x) + (m[1].y * v.y) + (m[2].y * v.z) + (m[3].y * v.w),
-                       (m[0].z * v.x) + (m[1].z * v.y) + (m[2].z * v.z) + (m[3].z * v.w),
-                       (m[0].w * v.x) + (m[1].w * v.y) + (m[2].w * v.z) + (m[3].w * v.w));
+    return Vector4G<T>((m.c0.x * v.x) + (m.c1.x * v.y) + (m.c2.x * v.z) + (m.c3.x * v.w),
+                       (m.c0.y * v.x) + (m.c1.y * v.y) + (m.c2.y * v.z) + (m.c3.y * v.w),
+                       (m.c0.z * v.x) + (m.c1.z * v.y) + (m.c2.z * v.z) + (m.c3.z * v.w),
+                       (m.c0.w * v.x) + (m.c1.w * v.y) + (m.c2.w * v.z) + (m.c3.w * v.w));
 }
 
 NAMESPACE_BANG_END

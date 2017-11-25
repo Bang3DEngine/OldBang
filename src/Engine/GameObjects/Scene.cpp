@@ -83,16 +83,8 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
 void Scene::InvalidateCanvas()
 {
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
-    for (UICanvas *canvas : canvases)
-    {
-        canvas->GetGameObject()->GetRectTransform()->Invalidate();
-    }
+    for (UICanvas *canvas : canvases) { canvas->Invalidate(); }
 
-    List<RectTransform*> rts = GetComponentsInChildren<RectTransform>(true);
-    for (RectTransform *rt : rts)
-    {
-        rt->Invalidate();
-    }
 }
 
 void Scene::OnDestroyed(Object *object)

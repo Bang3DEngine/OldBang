@@ -148,9 +148,9 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const Set<T> &s)
 {
     log << "{";
-    for (auto it = s.cbegin(); it != s.cend(); ++it)
+    for (auto it = s.Begin(); it != s.End(); ++it)
     {
-        if (it != s.cbegin()) log << ", ";
+        if (it != s.Begin()) log << ", ";
         log << (*it);
     }
     log << "}";

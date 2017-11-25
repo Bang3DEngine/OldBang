@@ -18,16 +18,29 @@ USING_NAMESPACE_BANG
 
 UILayoutManager::UILayoutManager()
 {
+    ObjectManager::RegisterCreateListener(this);
 }
 
 void UILayoutManager::OnInvalidated(ILayoutElement *element)
 {
-    UILayoutManager::OnLayoutInvalidated( DCAST<Component*>(element), false );
+    Component *comp = DCAST<Component*>(element);
+    UILayoutManager::OnLayoutInvalidated(comp, false);
+
+    UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
+    ASSERT(lmgr);
+    lmgr->m_invalidatedLayoutElements.PushBack(element);
+    lmgr->OnInvalidated(comp->GetGameObject());
 }
 
 void UILayoutManager::OnInvalidated(ILayoutController *controller)
 {
-    UILayoutManager::OnLayoutInvalidated( DCAST<Component*>(controller), true );
+    Component *comp = DCAST<Component*>(controller);
+    UILayoutManager::OnLayoutInvalidated(comp, true);
+
+    UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
+    ASSERT(lmgr);
+    lmgr->m_invalidatedLayoutControllers.PushBack(controller);
+    lmgr->OnInvalidated(comp->GetGameObject());
 }
 
 Vector2i UILayoutManager::GetMinSize(GameObject *go)
@@ -98,6 +111,12 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
     return childrenList;
 }
 
+void UILayoutManager::OnCreated(Object *object)
+{
+    GameObject *go = DCAST<GameObject*>(object);
+    if (go) { m_invalidatedGameObjects.Add(go); }
+}
+
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
     ENSURE(rootGo);
@@ -105,10 +124,16 @@ void UILayoutManager::RebuildLayout(GameObject *rootGo)
     ApplyLayout(rootGo, Axis::Horizontal);
     CalculateLayout(rootGo, Axis::Vertical);
     ApplyLayout(rootGo, Axis::Vertical);
+
+    m_invalidatedGameObjects.Clear();
+    m_invalidatedLayoutElements.Clear();
+    m_invalidatedLayoutControllers.Clear();
 }
 
 void UILayoutManager::CalculateLayout(GameObject *gameObject, Axis axis)
 {
+    if (!m_invalidatedGameObjects.Contains(gameObject)) { return; }
+
     const List<GameObject*> &children = gameObject->GetChildren();
     for (GameObject *child : children)
     {
@@ -124,6 +149,8 @@ void UILayoutManager::CalculateLayout(GameObject *gameObject, Axis axis)
 
 void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
 {
+    if (!m_invalidatedGameObjects.Contains(gameObject)) { return; }
+
     std::queue<String> indentQueue; indentQueue.push("");
 
     std::queue<GameObject*> goQueue; goQueue.push(gameObject);
@@ -155,6 +182,15 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
 
         const List<GameObject*> &children = go->GetChildren();
         for (GameObject *child : children) { goQueue.push(child); }
+    }
+}
+
+void UILayoutManager::OnInvalidated(GameObject *go)
+{
+    if (go && !m_invalidatedGameObjects.Contains(go))
+    {
+        m_invalidatedGameObjects.Add(go);
+        OnInvalidated(go->GetParent());
     }
 }
 
@@ -193,3 +229,10 @@ void UILayoutManager::OnLayoutInvalidated(Component *comp,
         for (ILayoutController *lContr : thisLayoutContrs) { lContr->Invalidate(); }
     }
 }
+
+UILayoutManager *UILayoutManager::GetLayoutManagerFor(GameObject *go)
+{
+    UICanvas *canvas = go->GetComponentInParent<UICanvas>(true);
+    return canvas ? canvas->GetLayoutManager() : nullptr;
+}
+

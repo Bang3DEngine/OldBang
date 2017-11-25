@@ -67,6 +67,7 @@ void UILabel::SetSelectable(bool selectable)
     if (selectable != IsSelectable())
     {
         m_selectable = selectable;
+        p_selectionQuad->SetEnabled(selectable);
     }
 }
 void UILabel::SetSelection(int cursorIndex, int selectionIndex)

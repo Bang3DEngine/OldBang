@@ -27,6 +27,8 @@ UIList::~UIList()
 
 void UIList::OnUpdate()
 {
+    Component::OnUpdate();
+
     RectTransform *rt = GetGameObject()->GetRectTransform();
     if (rt->IsMouseOver())
     {

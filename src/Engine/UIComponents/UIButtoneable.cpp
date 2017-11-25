@@ -103,17 +103,17 @@ bool UIButtoneable::IsMouseOverSomePart() const
         if (!overedGameObject) { return false; }
         for (const GameObject *part : p_buttonParts)
         {
-            if (!part->IsEnabled(true)) { continue; }
-            if (overedGameObject == part) { return true; }
+            if (overedGameObject == part && part->IsEnabled(true))
+            { return true; }
         }
     }
     else
     {
         for (const GameObject *part : p_buttonParts)
         {
-           if (!part->IsEnabled(true)) { continue; }
            RectTransform *rt = part->GetRectTransform();
-           if (rt && rt->IsMouseOver()) { return true; }
+           if (rt && rt->IsMouseOver() && part->IsEnabled(true))
+           { return true; }
         }
     }
     return false;

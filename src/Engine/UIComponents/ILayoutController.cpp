@@ -5,6 +5,9 @@
 
 USING_NAMESPACE_BANG
 
+ILayoutController::ILayoutController() {}
+ILayoutController::~ILayoutController() {}
+
 void ILayoutController::OnInvalidated()
 {
     IInvalidatable<ILayoutController>::OnInvalidated();
@@ -45,6 +48,3 @@ void ILayoutController::OnChildrenRectTransformChanged()
 {
     Invalidate();
 }
-
-ILayoutController::ILayoutController() {}
-ILayoutController::~ILayoutController() {}
