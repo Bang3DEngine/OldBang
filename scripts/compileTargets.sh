@@ -19,9 +19,9 @@ BeginHeader "COMPILING (Targets: ${TARGETS})"
 VERBOSE=1
 # if [ "$2" == "VERBOSE" ] ; then VERBOSE=1 ; fi
 
-RD=${RELEASE_OR_DEBUG}
+BT=${BUILD_TYPE}
 
-CMAKE_CMD="cmake -DCMAKE_BUILD_TYPE=${RD} .."
+CMAKE_CMD="cmake -DCMAKE_BUILD_TYPE=${BT} .."
 if [ "${BANG_COMPILER}" != "" ]
 then
 	CMAKE_CMD="${CMAKE_CMD} -DCMAKE_CXX_COMPILER=${BANG_COMPILER}"
@@ -29,8 +29,8 @@ fi
 
 
 echo "Compiling targets ${TARGETS}"
-mkdir -p build${RD} && \
-cd build${RD} && \
+mkdir -p build${BT} && \
+cd build${BT} && \
 ${CMAKE_CMD} && \
 make ${TARGETS} \
      --no-print-directory \

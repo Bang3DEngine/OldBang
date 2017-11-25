@@ -4,5 +4,5 @@ cd "$(dirname "$0")"
 cd .. # Go to root directory
 
 source "scripts/captureArgs.sh"
-source "scripts/clean.sh" "${RELEASE_OR_DEBUG}"
-source "scripts/compileExecutables.sh" "${RELEASE_OR_DEBUG}"
+source "scripts/clean.sh" "${BUILD_TYPE}"
+source "scripts/compileExecutables.sh" "${BUILD_TYPE}"

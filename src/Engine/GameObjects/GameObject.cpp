@@ -8,13 +8,14 @@
 #include "Bang/Scene.h"
 #include "Bang/Sphere.h"
 #include "Bang/Camera.h"
-#include "Bang/Renderer.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Renderer.h"
 #include "Bang/Material.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/RectTransform.h"
 #include "Bang/IEnabledListener.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -215,6 +216,10 @@ Scene* GameObject::GetScene() const
 }
 
 Transform *GameObject::GetTransform() const { return p_transform; }
+RectTransform *GameObject::GetRectTransform() const
+{
+    return GetTransform() ? DCAST<RectTransform*>(GetTransform()) : nullptr;
+}
 
 void GameObject::SetName(const String &name) { m_name = name; }
 const String& GameObject::GetName() const { return m_name; }

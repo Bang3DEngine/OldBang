@@ -27,7 +27,7 @@ UIList::~UIList()
 
 void UIList::OnUpdate()
 {
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
     if (rt->IsMouseOver())
     {
         HandleShortcuts();
@@ -36,7 +36,7 @@ void UIList::OnUpdate()
         GOItem *itemUnderMouse = nullptr;
         for (GOItem *childItem : p_items)
         {
-            RectTransform *childRT = childItem->GetComponent<RectTransform>();
+            RectTransform *childRT = childItem->GetRectTransform();
             if (childRT->IsEnabled(true) && childRT->IsMouseOver())
             { itemUnderMouse = childItem; break; }
         }
@@ -146,18 +146,15 @@ void UIList::Clear()
     ClearSelection();
 }
 
-const List<GOItem *> &UIList::GetItems() const
-{
-    return p_items;
-}
-
+const Array<GOItem *> &UIList::GetItems() const { return p_items; }
 GOItem *UIList::GetItem(int i) const
 {
     if (i >= 0 && i < p_items.Size())
     {
-        auto it = p_items.Begin();
-        std::advance(it, GetSelectedIndex());
-        return *it;
+        // auto it = GetItems().Begin();
+        // std::advance(it, GetSelectedIndex());
+        // return *it;
+        return GetItems()[i];
     }
     return nullptr;
 }
@@ -169,11 +166,11 @@ void UIList::ScrollTo(int i)
 
 void UIList::ScrollTo(GOItem *item)
 {
-    Rect itemRect = item->GetComponent<RectTransform>()-> GetScreenSpaceRectPx();
-    Rect panelRect = GetScrollPanel()->GetGameObject()->
-                     GetComponent<RectTransform>()->GetScreenSpaceRectPx();
-    Rect containerRect = GetContainer()->GetComponent<RectTransform>()->
-                         GetScreenSpaceRectPx();
+    Rect itemRect = item->GetRectTransform()-> GetScreenSpaceRectPx();
+    Rect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
+                                                        GetScreenSpaceRectPx();
+    Rect containerRect = GetContainer()->GetRectTransform()->
+                                         GetScreenSpaceRectPx();
     Rect relativeItemRect = itemRect - containerRect.GetMin();
 
     Vector2i scrolling = -Vector2i::One;
@@ -302,7 +299,7 @@ UIList* UIList::CreateInto(GameObject *go)
     dirLayout->SetSpacing(0);
     dirLayout->SetPaddings(0);
 
-    container->GetComponent<RectTransform>()->SetPivotPosition(Vector2(-1,1));
+    container->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
     UIContentSizeFitter *csf = container->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);

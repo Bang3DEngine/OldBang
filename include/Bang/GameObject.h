@@ -18,6 +18,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 FORWARD class Component;
+FORWARD class RectTransform;
 
 #define GAMEOBJECT(ClassName) \
     public: virtual ClassName* Clone() const override {\
@@ -104,6 +105,7 @@ public:
 
     Scene* GetScene() const;
     Transform *GetTransform() const;
+    RectTransform *GetRectTransform() const;
     GameObject* GetParent() const;
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 

@@ -32,7 +32,7 @@ void UIFileList::OnUpdate()
 {
     Component::OnUpdate();
 
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
     if (rt->IsMouseOver())
     {
         if (Input::GetKeyDownRepeat(Key::Left))

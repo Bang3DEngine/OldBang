@@ -71,13 +71,13 @@ void UIInputText::UpdateCursorRenderer()
         maxPoint = Vector2(cursorX, limitsRect.GetMax().y);
     }
 
-    const RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->
-                                                 GetComponent<RectTransform>();
+    const RectTransform *cParentRT =
+            p_cursor->GetGameObject()->GetParent()->GetRectTransform();
     const Vector2 cursorSizeLocalNDC = cParentRT->FromPixelsAmountToLocalNDC(Vector2i(3,0));
     const Vector2 minPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(minPoint);
     const Vector2 maxPointLocalNDC = cParentRT->FromGlobalNDCToLocalNDC(maxPoint);
 
-    RectTransform *cRT = p_cursor->GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *cRT = p_cursor->GetGameObject()->GetRectTransform();
     cRT->SetAnchors(minPointLocalNDC - cursorSizeLocalNDC,
                     maxPointLocalNDC + cursorSizeLocalNDC);
 }
@@ -226,17 +226,17 @@ UILabel *UIInputText::GetLabel() const { return p_label; }
 
 RectTransform *UIInputText::GetLabelRT() const
 {
-    return GetLabel()->GetGameObject()->GetComponent<RectTransform>();
+    return GetLabel()->GetGameObject()->GetRectTransform();
 }
 
 RectTransform *UIInputText::GetTextRT() const
 {
-    return GetText()->GetGameObject()->GetComponent<RectTransform>();
+    return GetText()->GetGameObject()->GetRectTransform();
 }
 
 RectTransform *UIInputText::GetRT() const
 {
-    return GetGameObject()->GetComponent<RectTransform>();
+    return GetGameObject()->GetRectTransform();
 }
 
 void UIInputText::HandleKeySelection(bool wasSelecting)
@@ -368,8 +368,8 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->SetSelectable(true);
     label->GetMask()->SetMasking(false);
-    label->GetGameObject()->GetComponent<RectTransform>()->
-                                SetMargins(MarginX, MarginY, MarginX, MarginY);
+    label->GetGameObject()->GetRectTransform()->
+                            SetMargins(MarginX, MarginY, MarginX, MarginY);
     inputText->p_label = label;
 
     scrollArea->GetContainer()->SetAsChild(label->GetGameObject());

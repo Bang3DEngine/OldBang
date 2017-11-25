@@ -69,7 +69,7 @@ void UIScrollArea::UpdatePaddings()
     int paddingTop   =  GetScrolling().y;
     int paddingBot   = -GetScrolling().y;
 
-    RectTransform *rt = GetContainer()->GetComponent<RectTransform>();
+    RectTransform *rt = GetContainer()->GetRectTransform();
     rt->SetMargins(paddingLeft, paddingBot, paddingRight, paddingTop);
 }
 

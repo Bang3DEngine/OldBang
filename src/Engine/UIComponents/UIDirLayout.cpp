@@ -30,7 +30,7 @@ Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
 
 void UIDirLayout::ApplyLayout(Axis axis)
 {
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetRectTransform(); ENSURE(rt);
     List<GameObject*> children =
                     UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
@@ -56,7 +56,7 @@ void UIDirLayout::ApplyLayout(Axis axis)
         currentTopLeft += spacing;
 
         const Vector2i& childRTSize = childrenRTSizes[i];
-        RectTransform *crt = child->GetComponent<RectTransform>();
+        RectTransform *crt = child->GetRectTransform();
         ApplyLayoutToChildRectTransform(axis, layoutRectSize, crt,
                                         currentTopLeft, childRTSize);
         currentTopLeft += childRTSize;

@@ -28,7 +28,7 @@ void UIFocusable::OnUpdate()
 
 bool UIFocusable::IsMouseOver() const
 {
-    return GetGameObject()->GetComponent<RectTransform>()->IsMouseOver();
+    return GetGameObject()->GetRectTransform()->IsMouseOver();
 }
 
 void UIFocusable::LeaveFocus()

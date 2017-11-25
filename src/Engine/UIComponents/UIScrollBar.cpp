@@ -27,8 +27,7 @@ void UIScrollBar::OnUpdate()
 
         Vector2 mouseCoords (Input::GetMouseCoords());
         Rect scrollRectPx = GetScrollingRect();
-        Rect barRectPx = GetBar()->GetComponent<RectTransform>()->
-                         GetScreenSpaceRectPx();
+        Rect barRectPx = GetBar()->GetRectTransform()->GetScreenSpaceRectPx();
         if (!m_wasGrabbed)
         {
             m_grabOffset = Vector2i( Vector2::Round(mouseCoords -
@@ -126,8 +125,8 @@ bool UIScrollBar::IsBeingGrabbed() const
 
 void UIScrollBar::UpdateLengthThicknessMargins()
 {
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
-    RectTransform *barRT = GetBar()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
+    RectTransform *barRT = GetBar()->GetRectTransform();
     if (GetScrollAxis() == Axis::Horizontal)
     {
         bool bot = (GetSide() == Side::Bot);
@@ -197,7 +196,7 @@ int UIScrollBar::GetScrollingSpacePx() const
 Rect UIScrollBar::GetScrollingRect() const
 {
     GameObject *cont = GetScrollArea()->GetGameObject();
-    RectTransform *rt = cont->GetComponent<RectTransform>();
+    RectTransform *rt = cont->GetRectTransform();
     return rt->GetScreenSpaceRectPx();
 }
 

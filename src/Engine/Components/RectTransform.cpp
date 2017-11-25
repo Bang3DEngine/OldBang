@@ -329,7 +329,7 @@ Rect RectTransform::GetParentScreenRect() const
     if (GetGameObject()->GetParent())
     {
         RectTransform *parentRectTransform =
-                GetGameObject()->GetParent()->GetComponent<RectTransform>();
+                GetGameObject()->GetParent()->GetRectTransform();
         if (parentRectTransform)
         {
             parentScreenRect = parentRectTransform->GetScreenSpaceRectNDC();

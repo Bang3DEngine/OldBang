@@ -211,7 +211,7 @@ void UILabel::OnFocusLost()
 
 RectTransform *UILabel::GetTextParentRT() const
 {
-    return GetText()->GetGameObject()->GetParent()->GetComponent<RectTransform>();
+    return GetText()->GetGameObject()->GetParent()->GetRectTransform();
 }
 bool UILabel::IsShiftPressed() const
 {
@@ -232,7 +232,7 @@ void UILabel::HandleClipboardCopy()
 
 void UILabel::HandleMouseSelection()
 {
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
     if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
     {
         m_selectingWithMouse = true;
@@ -282,7 +282,7 @@ void UILabel::UpdateSelectionQuadRenderer()
     p1 = textParentRT->FromGlobalNDCToLocalNDC(p1);
     p2 = textParentRT->FromGlobalNDCToLocalNDC(p2);
 
-    RectTransform *quadRT = p_selectionQuad->GetComponent<RectTransform>();
+    RectTransform *quadRT = p_selectionQuad->GetRectTransform();
     quadRT->SetAnchorMin( Vector2::Min(p1, p2) );
     quadRT->SetAnchorMax( Vector2::Max(p1, p2) );
 }

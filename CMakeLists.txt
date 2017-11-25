@@ -6,7 +6,6 @@ project(Bang C CXX)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
 set(SRC_DIR ${ROOT}/src)
-set(ENGINE_Resources_DIR ${ROOT}/res/EngineResources)
 set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
 
 set(CMAKE_BINARY_DIR ${ROOT}/bin)
@@ -31,6 +30,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_definitions(-DGPROF)
+    link_libraries("profiler") # gperftools
+endif()
 
 # GLEW Dependency
 find_package(GLEW REQUIRED)

@@ -28,7 +28,7 @@ public:
     void ClearSelection();
     void Clear();
 
-    const List<GOItem*>& GetItems() const;
+    const Array<GOItem*>& GetItems() const;
     GOItem *GetItem(int i) const;
 
     void ScrollTo(int i);
@@ -54,7 +54,7 @@ protected:
     virtual ~UIList();
 
 private:
-    List<GOItem*> p_items;
+    Array<GOItem*> p_items;
     std::unordered_map<int, List<GOItem*>::Iterator> m_indexToIterator;
 
     int m_selectionIndex = -1;

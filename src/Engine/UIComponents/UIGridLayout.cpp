@@ -26,7 +26,7 @@ void UIGridLayout::ApplyLayout(Axis axis)
     const int numColumns = GetNumColumns();
     for (GameObject *child : children)
     {
-        RectTransform *childRT = child->GetComponent<RectTransform>();
+        RectTransform *childRT = child->GetRectTransform();
         childRT->SetAnchorX(Vector2(-1));
         childRT->SetAnchorY(Vector2(1));
 
@@ -72,7 +72,7 @@ int UIGridLayout::GetNumRows() const
 
 int UIGridLayout::GetNumColumns() const
 {
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
     float effectiveWidth = (rt->GetScreenSpaceRectPx().GetWidth() -
                             GetPaddingSize().x);
 

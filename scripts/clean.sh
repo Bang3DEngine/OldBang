@@ -7,12 +7,12 @@ source "scripts/captureArgs.sh"
 
 BeginHeader "CLEANING"
 
-echo "Removing build${RELEASE_OR_DEBUG}..."
-rm -rf build${RELEASE_OR_DEBUG}
+echo "Removing build${BUILD_TYPE}..."
+rm -rf build${BUILD_TYPE}
 if [ $? != 0 ] ; then Error "ERROR" ; exit 1 ; fi
 
-echo "Removing bin/${RELEASE_OR_DEBUG}..."
-rm -rf bin/${RELEASE_OR_DEBUG}
+echo "Removing bin/${BUILD_TYPE}..."
+rm -rf bin/${BUILD_TYPE}
 if [ $? != 0 ] ; then Error "ERROR" ; exit 1 ; fi
 
 Success "Successfully cleaned!"

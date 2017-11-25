@@ -50,7 +50,7 @@ void UIScrollPanel::UpdateScrollUI()
                                                             Vector2::One);
 
         // MouseWheel scrolling
-        if (GetGameObject()->GetComponent<RectTransform>()->IsMouseOver())
+        if (GetGameObject()->GetRectTransform()->IsMouseOver())
         {
             Vector2i mouseWheelPx(Input::GetMouseWheel() * WheelScrollSpeedPx);
             Vector2 mouseWheelPercent = Vector2(mouseWheelPx) / contentSize;
@@ -168,14 +168,13 @@ bool UIScrollPanel::IsHorizontalScrollEnabled() const
 Vector2 UIScrollPanel::GetContentSize() const
 {
     GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
-    return containedGo ? containedGo->GetComponent<RectTransform>()->
+    return containedGo ? containedGo->GetRectTransform()->
                             GetScreenSpaceRectPx().GetSize() : Vector2::Zero;
 }
 
 Vector2 UIScrollPanel::GetContainerSize() const
 {
-    return GetGameObject()->GetComponent<RectTransform>()->
-            GetScreenSpaceRectPx().GetSize();
+    return GetGameObject()->GetRectTransform()->GetScreenSpaceRectPx().GetSize();
 }
 
 Vector2 UIScrollPanel::GetMaxScrollLength() const
@@ -192,7 +191,7 @@ UIScrollBar *UIScrollPanel::GetHorizontalScrollBar() const
 void UIScrollPanel::HandleScrollAreaRectTransform()
 {
     RectTransform *scrollAreaRT =
-            GetScrollArea()->GetGameObject()->GetComponent<RectTransform>();
+            GetScrollArea()->GetGameObject()->GetRectTransform();
 
     // Set margins to make room for the vertical scroll bar
     UIScrollBar *vScrollBar = GetVerticalScrollBar();
@@ -213,7 +212,7 @@ void UIScrollPanel::HandleScrollAreaRectTransform()
     // Set margins to make room for the horizontal scroll bar
     UIScrollBar *hScrollBar = GetHorizontalScrollBar();
     GameObject *hScrollBarGo = hScrollBar->GetGameObject();
-    RectTransform *vScrollBarRT = vScrollBarGo->GetComponent<RectTransform>();
+    RectTransform *vScrollBarRT = vScrollBarGo->GetRectTransform();
     int hScrollBarThickness = (hScrollBarGo->IsEnabled() ?
                                           hScrollBar->GetThickness() : 0 );
     if (GetHorizontalScrollBarSide() == VerticalSide::Bot)
@@ -236,7 +235,7 @@ void UIScrollPanel::HandleScrollAreaRectTransform()
     GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
     if (containedGo)
     {
-        RectTransform *containedGoRT = containedGo->GetComponent<RectTransform>();
+        RectTransform *containedGoRT = containedGo->GetRectTransform();
         if (IsVerticalScrollEnabled() && IsHorizontalScrollEnabled())
         {
             containedGoRT->SetAnchors( Vector2(-1,1) );

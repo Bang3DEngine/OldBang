@@ -2,12 +2,13 @@
 
 source "scripts/messages.sh"
 
-RELEASE_OR_DEBUG=$1
-if [ "${RELEASE_OR_DEBUG}" != "Debug" ] && [ "${RELEASE_OR_DEBUG}" != "Release" ]
+BUILD_TYPE=$1
+if [ "${BUILD_TYPE}" != "Debug" ] && [ "${BUILD_TYPE}" != "Release" ] && [ "${BUILD_TYPE}" != "RelWithDebInfo" ]
 then
-        Error "Option '${RELEASE_OR_DEBUG}' for the first parameter not recognised. Valid options are:"
+        Error "Option '${BUILD_TYPE}' for the first parameter not recognised. Valid options are:"
         Error "   Debug"
         Error "   Release"
+        Error "   RelWithDebInfo"
         exit 1
 fi
 shift

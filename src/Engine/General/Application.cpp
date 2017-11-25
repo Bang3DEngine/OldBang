@@ -106,13 +106,30 @@ Window *Application::GetTopWindow()
     return nullptr;
 }
 
+#ifdef GPROF
+#include <gperftools/profiler.h>
+#endif
 int Application::MainLoop()
 {
+    #ifdef GPROF
+    Path profileOutFile = Paths::ExecutablePath().GetDirectory().Append("profiling_info.out");
+    Debug_Log("Writing profiling information to: '" << profileOutFile << "'");
+    ProfilerStart(profileOutFile.GetAbsolute().ToCString());
+    #endif
+
     bool exit = false;
     while (!exit && !m_forcedExit)
     {
         exit = MainLoopIteration();
+        #ifdef GPROF
+        ProfilerFlush();
+        #endif
     }
+
+    #ifdef GPROF
+    ProfilerStop();
+    #endif
+
     return m_exitCode;
 }
 

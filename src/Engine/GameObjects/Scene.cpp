@@ -85,7 +85,7 @@ void Scene::InvalidateCanvas()
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
     for (UICanvas *canvas : canvases)
     {
-        canvas->GetGameObject()->GetComponent<RectTransform>()->Invalidate();
+        canvas->GetGameObject()->GetRectTransform()->Invalidate();
     }
 
     List<RectTransform*> rts = GetComponentsInChildren<RectTransform>(true);

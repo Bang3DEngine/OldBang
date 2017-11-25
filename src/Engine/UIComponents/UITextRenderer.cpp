@@ -85,7 +85,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     }
 
     // Get the quad positions of the rects of each char
-    RectTransform *rt = GetGameObject()->GetComponent<RectTransform>();
+    RectTransform *rt = GetGameObject()->GetRectTransform();
     ENSURE(rt);
 
     Array<TextFormatter::CharRect> textCharRects =
@@ -370,12 +370,12 @@ const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 
 Rect UITextRenderer::GetCharRectGlobalNDC(uint charIndex) const
 {
-    return GetGameObject()->GetComponent<RectTransform>()->
+    return GetGameObject()->GetRectTransform()->
             FromLocalNDCToGlobalNDC(GetCharRectsLocalNDC()[charIndex]);
 }
 Rect UITextRenderer::GetContentGlobalNDCRect() const
 {
-    return GetGameObject()->GetComponent<RectTransform>()->
+    return GetGameObject()->GetRectTransform()->
             FromLocalNDCToGlobalNDC(m_textRectNDC);
 }
 
