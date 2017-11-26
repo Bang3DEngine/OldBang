@@ -34,6 +34,11 @@ void UITextCursor::OnUpdate()
     if (m_cursorTime >= m_cursorTickTime * 2) { m_cursorTime = 0.0f; }
 }
 
+void UITextCursor::ResetTickTime()
+{
+    m_cursorTime = 0.0f;
+}
+
 void UITextCursor::SetStroke(float cursorWidth)
 {
     SetLineWidth(cursorWidth);

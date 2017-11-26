@@ -15,6 +15,8 @@ public:
 
     virtual void OnUpdate() override;
 
+    void ResetTickTime();
+
     void SetStroke(float cursorWidth);
     void SetTickTime(float cursorTickTime);
 

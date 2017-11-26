@@ -190,7 +190,7 @@ Scene *GameObjectFactory::CreateDefaultScene()
     cam->SetClearColor(Color::LightBlue);
     scene->SetCamera(cam);
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 0; ++i)
     {
         scene->SetAsChild( GameObjectFactory::CreateGameObjectNamed("GO_" + String(i)) );
     }

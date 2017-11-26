@@ -63,14 +63,16 @@ void UIFocusable::PropagateToFocusListeners()
     if (HasFocus())
     {
         EventEmitter<IFocusListener>::
-                PropagateToListenersX1(&IFocusListener::OnFocusTaken,
-                    GetGameObject()->GetComponents<IFocusListener>());
+                PropagateToListeners(&IFocusListener::OnFocusTaken);
+        GameObject::Propagate(&IFocusListener::OnFocusTaken,
+                              GetGameObject()->GetComponents<IFocusListener>());
     }
     else
     {
         EventEmitter<IFocusListener>::
-            PropagateToListenersX1(&IFocusListener::OnFocusLost,
-                    GetGameObject()->GetComponents<IFocusListener>());
+            PropagateToListeners(&IFocusListener::OnFocusLost);
+        GameObject::Propagate(&IFocusListener::OnFocusLost,
+                              GetGameObject()->GetComponents<IFocusListener>());
     }
 }
 

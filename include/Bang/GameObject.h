@@ -7,6 +7,7 @@
 #include "Bang/Object.h"
 #include "Bang/IToString.h"
 #include "Bang/RenderPass.h"
+#include "Bang/IsContainer.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/ObjectManager.h"
@@ -115,6 +116,34 @@ public:
     AABox GetAABBox(bool includeChildren = true) const;
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
     Sphere GetBoundingSphere(bool includeChildren = true) const;
+
+    // Helper propagate functions
+    template<class T>
+    static bool CanEventBePropagated(const T& x);
+
+    template<class TFunction, class T, class... Args>
+    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+                                    !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
+                                    !IsContainer<T>::value, void >::type
+    Propagate(const TFunction &func, const T &obj, const Args&... args);
+
+    template<class TFunction, template <class T> class TContainer, class T, class... Args>
+    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+                                    !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
+                                     IsContainer<TContainer<T>>::value, void >::type
+    Propagate(const TFunction &func, const TContainer<T> &container, const Args&... args);
+
+    template<class TFunction, class T, class... Args>
+    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+                                     std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
+                                    !IsContainer<T>::value, void >::type
+    Propagate(const TFunction &func, const T &obj, const Args&... args);
+
+    template<class TFunction, template <class T> class TContainer, class T, class... Args>
+    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+                                     std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
+                                     IsContainer<TContainer<T>>::value, void >::type
+    Propagate(const TFunction &func, const TContainer<T> &container, const Args&... args);
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

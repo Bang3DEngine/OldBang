@@ -13,13 +13,13 @@ void Object::Start()
 void Object::OnStart() {}
 void Object::OnEnabled()
 {
-    // EventEmitter<IEnabledListener>::
-    //         PropagateToListeners(&IEnabledListener::OnEnabled);
+    EventEmitter<IEnabledListener>::
+            PropagateToListeners(&IEnabledListener::OnEnabled);
 }
 void Object::OnDisabled()
 {
-    // EventEmitter<IEnabledListener>::
-    //         PropagateToListeners(&IEnabledListener::OnDisabled);
+    EventEmitter<IEnabledListener>::
+            PropagateToListeners(&IEnabledListener::OnDisabled);
 }
 void Object::OnDestroy() {}
 

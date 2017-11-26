@@ -51,9 +51,9 @@ public:
     void UnRegisterListener(IEventListener *listener) override;
 
     template<class TListener, class TFunction, class... Args>
-    void PropagateToListener(const TListener &listener,
-                             const TFunction &func,
-                             const Args&... args) const
+    static void PropagateToListener(const TListener &listener,
+                                    const TFunction &func,
+                                    const Args&... args)
     {
         if (listener && listener->IsReceivingEvents())
         {
@@ -67,45 +67,6 @@ public:
         for (const auto &x : GetListeners())
         {
             PropagateToListener(x, func, args...);
-        }
-    }
-
-    template<class TFunction, class TList1, class... Args>
-    void PropagateToListenersX1(const TFunction &func,
-                                const TList1& extraList1,
-                                const Args&... args) const
-    {
-        PropagateToListeners(func, args...);
-        for (const auto &listener : extraList1)
-        {
-            PropagateToListener(listener, func, args...);
-        }
-    }
-
-    template<class TFunction, class TList1, class TList2, class... Args>
-    void PropagateToListenersX2(const TFunction &func,
-                                const TList1& extraList1,
-                                const TList2& extraList2,
-                                const Args&... args) const
-    {
-        PropagateToListenersX1(func, extraList1, args...);
-        for (const auto &listener : extraList2)
-        {
-            PropagateToListener(listener, func, args...);
-        }
-    }
-
-    template<class TFunction, class TList1, class TList2, class TList3, class... Args>
-    void PropagateToListenersX3(const TFunction &func,
-                                const TList1& extraList1,
-                                const TList2& extraList2,
-                                const TList3& extraList3,
-                                const Args&... args) const
-    {
-        PropagateToListenersX2(func, extraList1, extraList2, args...);
-        for (const auto &listener : extraList3)
-        {
-            PropagateToListener(listener, func, args...);
         }
     }
 

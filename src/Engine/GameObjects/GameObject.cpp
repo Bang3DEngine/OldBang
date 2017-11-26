@@ -13,7 +13,6 @@
 #include "Bang/Material.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
-#include "Bang/IsContainer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
@@ -21,30 +20,6 @@
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
-
-template<class T>
-bool CanEventBePropagated(const T& x)
-{
-    if (!x) { return false; }
-    const Object *object = DCAST<const Object*>(x);
-    return !object ||
-           (object->IsEnabled() && object->IsStarted() &&
-           !object->IsWaitingToBeDestroyed());
-}
-
-template<class TFunction, class T, class... Args>
-typename std::enable_if< !IsContainer<T>::value, void >::type
-GOPropagate(const TFunction &func, const T &obj, const Args&... args)
-{
-    if (CanEventBePropagated(obj)) { (obj->*func)(args...); }
-}
-
-template<class TFunction, template <class T> class TContainer, class T, class... Args>
-typename std::enable_if< IsContainer<TContainer<T>>::value, void >::type
-GOPropagate(const TFunction &func, const TContainer<T> &container, const Args&... args)
-{
-    for (const auto &x : container) { GOPropagate(func, x, args...); }
-}
 
 GameObject::GameObject(const String &name) : m_name(name)
 {
@@ -59,59 +34,59 @@ GameObject::~GameObject()
 
 void GameObject::PreUpdate()
 {
-    GOPropagate(&Component::OnPreUpdate, GetComponents());
-    GOPropagate(&GameObject::PreUpdate, GetChildren());
+    GameObject::Propagate(&Component::OnPreUpdate, GetComponents());
+    GameObject::Propagate(&GameObject::PreUpdate, GetChildren());
 }
 
 void GameObject::Update()
 {
-    GOPropagate(&Component::OnUpdate, GetComponents());
-    GOPropagate(&GameObject::Update, GetChildren());
+    GameObject::Propagate(&Component::OnUpdate, GetComponents());
+    GameObject::Propagate(&GameObject::Update, GetChildren());
 }
 
 void GameObject::PostUpdate()
 {
-    GOPropagate(&Component::OnPostUpdate, GetComponents());
-    GOPropagate(&GameObject::PostUpdate, GetChildren());
+    GameObject::Propagate(&Component::OnPostUpdate, GetComponents());
+    GameObject::Propagate(&GameObject::PostUpdate, GetChildren());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    GOPropagate(&Component::OnRender, GetComponents(), renderPass);
+    GameObject::Propagate(&Component::OnRender, GetComponents(), renderPass);
     if (renderChildren)
     {
         BeforeChildrenRender(renderPass);
-        GOPropagate(&GameObject::Render, GetChildren(), renderPass, true);
+        GameObject::Propagate(&GameObject::Render, GetChildren(), renderPass, true);
         AfterChildrenRender(renderPass);
     }
 }
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
-    GOPropagate(&Component::OnBeforeChildrenRender, GetComponents(), renderPass);
+    GameObject::Propagate(&Component::OnBeforeChildrenRender, GetComponents(), renderPass);
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
-    GOPropagate(&Component::OnAfterChildrenRender, GetComponents(), renderPass);
+    GameObject::Propagate(&Component::OnAfterChildrenRender, GetComponents(), renderPass);
 }
 
 void GameObject::ChildAdded(GameObject *addedChild)
 {
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnChildAdded, addedChild);
-    GOPropagate(&IChildrenListener::OnChildAdded,
+    GameObject::Propagate(&IChildrenListener::OnChildAdded,
                 GetComponents<IChildrenListener>(), addedChild);
-    GOPropagate(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
+    GameObject::Propagate(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
 }
 
 void GameObject::ChildRemoved(GameObject *removedChild)
 {
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnChildRemoved, removedChild);
-    GOPropagate(&IChildrenListener::OnChildRemoved,
+    GameObject::Propagate(&IChildrenListener::OnChildRemoved,
                 GetComponents<IChildrenListener>(), removedChild);
-    GOPropagate(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
+    GameObject::Propagate(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
 }
 
 void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
@@ -119,16 +94,16 @@ void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnParentChanged,
                                oldParent, newParent);
-    GOPropagate(&IChildrenListener::OnParentChanged,
+    GameObject::Propagate(&IChildrenListener::OnParentChanged,
                 GetComponents<IChildrenListener>(), oldParent, newParent);
-    GOPropagate(&IChildrenListener::OnParentChanged,
+    GameObject::Propagate(&IChildrenListener::OnParentChanged,
                 GetChildren(), oldParent, newParent);
 }
 
 void GameObject::RenderGizmos()
 {
-    GOPropagate(&Component::OnRenderGizmos, GetComponents());
-    GOPropagate(&GameObject::RenderGizmos, GetChildren());
+    GameObject::Propagate(&Component::OnRenderGizmos, GetComponents());
+    GameObject::Propagate(&GameObject::RenderGizmos, GetChildren());
 }
 
 void GameObject::PropagateEnabledEvent(bool enabled) const
@@ -147,14 +122,14 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
 void GameObject::OnEnabled()
 {
     Object::OnEnabled();
-    GOPropagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
-    GOPropagate(&IEnabledListener::OnEnabled, GetChildren());
+    GameObject::Propagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
+    GameObject::Propagate(&IEnabledListener::OnEnabled, GetChildren());
 }
 void GameObject::OnDisabled()
 {
     Object::OnDisabled();
-    GOPropagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
-    GOPropagate(&IEnabledListener::OnDisabled, GetChildren());
+    GameObject::Propagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
+    GameObject::Propagate(&IEnabledListener::OnDisabled, GetChildren());
 }
 
 void GameObject::Destroy(GameObject *gameObject)

@@ -220,7 +220,6 @@ void UITextRenderer::Bind() const
             Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
             GetMaterial()->SetTexture(fontAtlas);
         }
-        GL::Uniform("B_X", Input::GetKey(Key::X),  false);
         GL::Uniform("B_usingDistField", usingDistField,  false);
     }
 }

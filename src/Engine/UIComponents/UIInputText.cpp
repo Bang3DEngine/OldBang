@@ -285,8 +285,12 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 
 void UIInputText::SetCursorIndex(int index)
 {
-    GetLabel()->SetCursorIndex(index);
-    UpdateCursorRenderer();
+    if (GetLabel()->GetCursorIndex() != index)
+    {
+        GetLabel()->SetCursorIndex(index);
+        GetCursor()->ResetTickTime();
+        UpdateCursorRenderer();
+    }
 }
 
 void UIInputText::SetSelection(int selectionBeginIndex,
