@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/UIList.h"
 #include "Bang/Window.h"
+#include "Bang/UIButton.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFileList.h"
@@ -14,7 +15,6 @@
 #include "Bang/DialogWindow.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -140,6 +140,8 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     inputPathHL->SetSpacing(10);
     list->GetScrollPanel()->SetHorizontalScrollBarSide(VerticalSide::Bot);
     list->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
+    list->GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
+    list->GetScrollPanel()->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
 
     UILayoutElement *inputHLLE = inputPathCont->AddComponent<UILayoutElement>();
     inputHLLE->SetFlexibleHeight(0);

@@ -8,8 +8,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class RectTransform : public Transform,
-                      public IEnabledListener
+class RectTransform : public Transform
 {
     COMPONENT(RectTransform)
 

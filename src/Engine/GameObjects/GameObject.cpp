@@ -21,21 +21,37 @@
 
 USING_NAMESPACE_BANG
 
-#define _PROPAGATE_EVENT(FUNCTION, ITERABLE, _CAST)\
-do {\
-    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
-    { \
-        Object *obj = _CAST<Object*>(*it); \
-        if (obj->IsEnabled() && \
-            obj->IsStarted() && \
-           !obj->IsWaitingToBeDestroyed()) \
-        { \
-            (*it)->FUNCTION; \
-        } \
-    } \
-} while (0)
-#define PROPAGATE_EVENT_D(FUNC, ITER) _PROPAGATE_EVENT(FUNC, ITER, DCAST)
-#define   PROPAGATE_EVENT(FUNC, ITER) _PROPAGATE_EVENT(FUNC, ITER, SCAST)
+template<class DestT, class SourceT>
+TT_NOT_SUBCLASS(DestT, SourceT) Cast(SourceT x) { return DCAST<DestT>(x); }
+template<class DestT, class SourceT>
+TT_SUBCLASS(DestT, SourceT) Cast(SourceT x) { return SCAST<DestT>(x); }
+
+template<class T>
+bool CanBePropagated(const T& x)
+{
+    if (!x) { return false; }
+    const Object *object = Cast<const Object*>(x);
+    return !object ||
+           (object->IsEnabled() && object->IsStarted() &&
+           !object->IsWaitingToBeDestroyed());
+}
+
+template<class TFunction, class TObject, class... Args>
+void PropagateSingle(const TFunction &func, const TObject &obj, const Args&... args)
+{
+    if (CanBePropagated(obj))
+    {
+        (obj->*func)(args...);
+    }
+}
+template<class TFunction, class TList, class... Args>
+void Propagate(const TFunction &func, const TList &list, const Args&... args)
+{
+    for (auto it = list.Begin(); it != list.End(); ++it)
+    {
+        PropagateSingle(func, *it, args...);
+    }
+}
 
 GameObject::GameObject(const String &name) : m_name(name)
 {
@@ -50,70 +66,72 @@ GameObject::~GameObject()
 
 void GameObject::PreUpdate()
 {
-    PROPAGATE_EVENT(OnPreUpdate(), GetComponents());
-    PROPAGATE_EVENT(PreUpdate(), GetChildren());
+    Propagate(&Component::OnPreUpdate, GetComponents());
+    Propagate(&GameObject::PreUpdate, GetChildren());
 }
 
 void GameObject::Update()
 {
-    PROPAGATE_EVENT(OnUpdate(), GetComponents());
-    PROPAGATE_EVENT(Update(), GetChildren());
+    Propagate(&Component::OnUpdate, GetComponents());
+    Propagate(&GameObject::Update, GetChildren());
 }
 
 void GameObject::PostUpdate()
 {
-    PROPAGATE_EVENT(OnPostUpdate(), GetComponents());
-    PROPAGATE_EVENT(PostUpdate(), GetChildren());
+    Propagate(&Component::OnPostUpdate, GetComponents());
+    Propagate(&GameObject::PostUpdate, GetChildren());
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    PROPAGATE_EVENT(OnRender(renderPass), GetComponents());
+    Propagate(&Component::OnRender, GetComponents(), renderPass);
     if (renderChildren)
     {
         BeforeChildrenRender(renderPass);
-        PROPAGATE_EVENT(Render(renderPass, true), GetChildren());
+        Propagate(&GameObject::Render, GetChildren(), renderPass, true);
         AfterChildrenRender(renderPass);
     }
 }
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT(OnBeforeChildrenRender(renderPass), GetComponents());
+    Propagate(&Component::OnBeforeChildrenRender, GetComponents(), renderPass);
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
-    PROPAGATE_EVENT(OnAfterChildrenRender(renderPass), GetComponents());
+    Propagate(&Component::OnAfterChildrenRender, GetComponents(), renderPass);
 }
 
 void GameObject::ChildAdded(GameObject *addedChild)
 {
-    PROPAGATE(IChildrenListener, OnChildAdded, SCAST<GameObject*>(addedChild));
-    PROPAGATE_2(IChildrenListener, OnChildAdded,
-                GetComponents<IChildrenListener>(), {GetParent()},
-                SCAST<GameObject*>(addedChild));
+    PROPAGATE(IChildrenListener, OnChildAdded, addedChild);
+    Propagate(&IChildrenListener::OnChildAdded,
+              GetComponents<IChildrenListener>(), addedChild);
+    PropagateSingle(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
 }
 
 void GameObject::ChildRemoved(GameObject *removedChild)
 {
-    PROPAGATE_2(IChildrenListener, OnChildRemoved,
-                GetComponents<IChildrenListener>(), {GetParent()},
-                SCAST<GameObject*>(removedChild));
+    PROPAGATE(IChildrenListener, OnChildRemoved, removedChild);
+    Propagate(&IChildrenListener::OnChildRemoved,
+              GetComponents<IChildrenListener>(), removedChild);
+    PropagateSingle(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
 }
 
 void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
 {
-    PROPAGATE_2(IChildrenListener, OnParentChanged,
-                GetComponents<IChildrenListener>(), GetChildren(),
-                SCAST<GameObject*>(oldParent),
-                SCAST<GameObject*>(newParent));
+    PROPAGATE(IChildrenListener, OnParentChanged, oldParent, newParent);
+    Propagate(&IChildrenListener::OnParentChanged,
+              GetComponents<IChildrenListener>(), oldParent, newParent);
+    Propagate(&IChildrenListener::OnParentChanged,
+              GetChildren(), oldParent, newParent);
 }
 
 void GameObject::RenderGizmos()
 {
-    PROPAGATE_EVENT(OnRenderGizmos(), GetComponents());
-    PROPAGATE_EVENT(RenderGizmos(), GetChildren());
+    Propagate(&Component::OnRenderGizmos, GetComponents());
+    Propagate(&GameObject::RenderGizmos, GetChildren());
 }
 
 void GameObject::PropagateEnabledEvent(bool enabled) const
@@ -131,13 +149,15 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
 }
 void GameObject::OnEnabled()
 {
-    PROPAGATE_2(IEnabledListener, OnEnabled,
-                GetComponents<IEnabledListener>(), GetChildren());
+    Object::OnEnabled();
+    Propagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
+    Propagate(&IEnabledListener::OnEnabled, GetChildren());
 }
 void GameObject::OnDisabled()
 {
-    PROPAGATE_2(IEnabledListener, OnEnabled,
-                GetComponents<IEnabledListener>(), GetChildren());
+    Object::OnDisabled();
+    Propagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
+    Propagate(&IEnabledListener::OnDisabled, GetChildren());
 }
 
 void GameObject::Destroy(GameObject *gameObject)

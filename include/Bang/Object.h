@@ -42,6 +42,7 @@ inline bool operator<(const ObjectId &lhs, const ObjectId &rhs)
 
 // Object
 class Object : public virtual Serializable,
+               public IEnabledListener,
                public EventEmitter<IDestroyListener>,
                public EventEmitter<IEnabledListener>
 {
@@ -62,8 +63,8 @@ protected:
 
     virtual void Start();
     virtual void OnStart();
-    virtual void OnEnabled();
-    virtual void OnDisabled();
+    virtual void OnEnabled() override;
+    virtual void OnDisabled() override;
     virtual void OnDestroy();
 
 private:

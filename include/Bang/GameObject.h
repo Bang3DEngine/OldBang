@@ -122,7 +122,7 @@ public:
     // IToString
     void Print(const String& indent = "") const;
     String ToStringStructure(bool recursive = false, const String &indent = "");
-    String ToString() const;
+    String ToString() const override;
 
     // Serializable
     virtual String GetInstanceId() const override;
@@ -152,6 +152,7 @@ protected:
     virtual void ChildRemoved(GameObject *removedChild);
     virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
 
+    // IEnabledListener
     virtual void OnEnabled() override;
     virtual void OnDisabled() override;
 

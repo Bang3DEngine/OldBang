@@ -41,8 +41,7 @@ private:
 { \
     static_assert(T_SUBCLASS(EventListenerClass, IEventListener), \
                   ""#EventListenerClass" must be subclass of IEventListener.");\
-    const auto l = List;\
-    for (IEventListener *listener : l) \
+    for (IEventListener *listener : List) \
     { \
         EventListenerClass *cListener = DCAST<EventListenerClass*>(listener); \
         if (cListener && cListener->IsReceivingEvents()) \
