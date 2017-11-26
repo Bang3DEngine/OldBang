@@ -21,18 +21,18 @@ public: \
  \
     VECTOR_G() \
     { \
-        for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(0); } \
+        for (int i = 0; i < N; ++i) { At(i) = Cast<T>(0); } \
     } \
  \
     explicit VECTOR_G(const T& a) \
     { \
-        for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(a); } \
+        for (int i = 0; i < N; ++i) { At(i) = Cast<T>(a); } \
     } \
  \
     template<class OtherT> \
     explicit VECTOR_G(const VECTOR_G<OtherT>& v) \
     { \
-        for (int i = 0; i < N; ++i) { At(i) = SCAST<T>(v[i]); } \
+        for (int i = 0; i < N; ++i) { At(i) = Cast<T>(v[i]); } \
     } \
  \
     T Length() const \
@@ -42,7 +42,7 @@ public: \
  \
     T SqLength() const \
     { \
-        T res = SCAST<T>(0); \
+        T res = Cast<T>(0); \
         for (int i = 0; i < N; ++i) { res += At(i) * At(i); } \
         return res; \
     } \
@@ -123,7 +123,7 @@ public: \
  \
     static T Dot(const VECTOR_G<T> &v1, const VECTOR_G<T> &v2) \
     { \
-        T res = SCAST<T>(0); \
+        T res = Cast<T>(0); \
         for (int i = 0; i < N; ++i) { res += v1[i] * v2[i]; } \
         return res; \
     } \
@@ -385,7 +385,7 @@ VECTOR_G<T> &operator/=(VECTOR_G<T> &lhs, const T& a) \
 template<class T> \
 VECTOR_G<T> operator-(const VECTOR_G<T> &v) \
 { \
-    return v * SCAST<T>(-1); \
+    return v * Cast<T>(-1); \
 }
 
 NAMESPACE_BANG_END

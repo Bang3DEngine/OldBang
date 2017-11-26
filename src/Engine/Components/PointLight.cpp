@@ -44,7 +44,7 @@ float PointLight::GetRange() const { return m_range; }
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
-    PointLight *pl = DCAST<PointLight*>(clone);
+    PointLight *pl = Cast<PointLight*>(clone);
     pl->SetRange(GetRange());
 }
 

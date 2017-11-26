@@ -106,7 +106,7 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     GL::ReadPixels(x, y, 1, 1,
                    GL::GetColorCompFrom(t->GetInternalFormat()),
                    t->GetInternalDataType(),
-                   SCAST<void*>(&color));
+                   Cast<void*>(&color));
     Color readColor = Color(color[0], color[1], color[2], color[3]) / 255.0f;
     GL::Bind(GL::BindTarget::Framebuffer, prevFBId);
     return readColor;

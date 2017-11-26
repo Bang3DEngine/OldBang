@@ -114,7 +114,7 @@ GL::GLSLVar<T> GL::GetUniformAt(GLId shaderProgramId, GLuint uniformIndex)
     GLchar cname[bufSize];
 
     glGetActiveUniform(shaderProgramId,
-                       SCAST<GLuint>(uniformIndex),
+                       Cast<GLuint>(uniformIndex),
                        bufSize, &length,
                        &size, &type, cname);
 

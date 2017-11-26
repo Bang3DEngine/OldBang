@@ -70,7 +70,7 @@ AABox LineRenderer::GetAABBox() const
 void LineRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
-    LineRenderer *lr = DCAST<LineRenderer*>(clone);
+    LineRenderer *lr = Cast<LineRenderer*>(clone);
     lr->SetPoints( GetPoints() );
 }
 

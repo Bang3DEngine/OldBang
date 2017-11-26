@@ -22,7 +22,7 @@ UniformBuffer<T>* GLUniforms::_GetBuffer()
     IUniformBuffer *iBuffer = m_uniformBuffers.Get<T>();
     if (iBuffer)
     {
-        UniformBuffer<T> *buffer = SCAST< UniformBuffer<T>* >(iBuffer);
+        UniformBuffer<T> *buffer = Cast< UniformBuffer<T>* >(iBuffer);
         return buffer;
     }
     return nullptr;

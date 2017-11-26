@@ -399,7 +399,7 @@ void RectTransform::OnRenderGizmos()
 void RectTransform::CloneInto(ICloneable *clone) const
 {
     Transform::CloneInto(clone);
-    RectTransform *rt = DCAST<RectTransform*>(clone);
+    RectTransform *rt = Cast<RectTransform*>(clone);
 
     rt->SetMargins( GetMarginRightTop(), GetMarginLeftBot() );
     rt->SetAnchors( GetAnchorMin(), GetAnchorMax() );

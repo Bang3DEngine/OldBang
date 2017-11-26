@@ -41,7 +41,7 @@ TT_SUBCLASS(ResourceClass, Resource)* Resources::Load(const Path &filepath)
         }
         Resources::Add<ResourceClass>(res->GetGUID(), res);
     }
-    return DCAST<ResourceClass*>(res);
+    return Cast<ResourceClass*>(res);
 }
 
 template <class ResourceClass>
@@ -68,7 +68,7 @@ Array<ResourceClass*> Resources::GetAll()
     Array<Resource*> resources = Resources::GetAllResources();
     for (Resource *res : resources)
     {
-        ResourceClass *rc = DCAST<ResourceClass*>(res);
+        ResourceClass *rc = Cast<ResourceClass*>(res);
         if (rc) { result.PushBack(rc); }
     }
     return result;
@@ -87,7 +87,7 @@ ResourceClass* Resources::GetCached(const GUID &guid)
     Resources *rs = Resources::GetInstance();
     if (!rs->m_GUIDToResource.ContainsKey<ResourceClass>()) { return nullptr; }
     Resource *res = rs->m_GUIDToResource.Get<ResourceClass>().Get(guid);
-    return res ? DCAST<ResourceClass*>(res) : nullptr;
+    return res ? Cast<ResourceClass*>(res) : nullptr;
 }
 
 NAMESPACE_BANG_END

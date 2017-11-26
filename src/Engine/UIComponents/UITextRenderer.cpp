@@ -404,7 +404,7 @@ void UITextRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
 
-    UITextRenderer *text = DCAST<UITextRenderer*>(clone);
+    UITextRenderer *text = Cast<UITextRenderer*>(clone);
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );

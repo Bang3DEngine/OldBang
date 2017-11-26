@@ -14,7 +14,7 @@ float Time::GetDeltaTime()
 
 double Time::GetNow_Seconds()
 {
-    return GetNow_Nanos() / SCAST<double>(1e9);
+    return GetNow_Nanos() / Cast<double>(1e9);
 }
 
 uint64_t Time::GetNow_Millis()

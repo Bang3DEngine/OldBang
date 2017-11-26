@@ -58,8 +58,8 @@ public:
         List<Value> values;
         for (const auto& it : *this)
         {
-            Class *v = DCAST<Class*>(it.second);
-            if (v) { values.PushBack( SCAST<Class*>(v) ); }
+            Class *v = Cast<Class*>(it.second);
+            if (v) { values.PushBack( Cast<Class*>(v) ); }
         }
         return values;
     }

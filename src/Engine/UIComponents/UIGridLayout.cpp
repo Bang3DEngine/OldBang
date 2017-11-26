@@ -78,7 +78,7 @@ int UIGridLayout::GetNumColumns() const
 
     int cellSizeSpaced = (GetCellSize().x + GetSpacing());
 
-    int numCols = SCAST<int>((effectiveWidth + GetSpacing()) / cellSizeSpaced);
+    int numCols = Cast<int>((effectiveWidth + GetSpacing()) / cellSizeSpaced);
     return Math::Max(numCols, 1);
 }
 

@@ -62,10 +62,10 @@ public:
     template<class OtherT>
     explicit Matrix4G(const OtherT& a)
     {
-        c0 = Vector4G<T>(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0), SCAST<T>(0));
-        c1 = Vector4G<T>(SCAST<T>(0), SCAST<T>(a), SCAST<T>(0), SCAST<T>(0));
-        c2 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(a), SCAST<T>(0));
-        c3 = Vector4G<T>(SCAST<T>(0), SCAST<T>(0), SCAST<T>(0), SCAST<T>(a));
+        c0 = Vector4G<T>(Cast<T>(a), Cast<T>(0), Cast<T>(0), Cast<T>(0));
+        c1 = Vector4G<T>(Cast<T>(0), Cast<T>(a), Cast<T>(0), Cast<T>(0));
+        c2 = Vector4G<T>(Cast<T>(0), Cast<T>(0), Cast<T>(a), Cast<T>(0));
+        c3 = Vector4G<T>(Cast<T>(0), Cast<T>(0), Cast<T>(0), Cast<T>(a));
     }
 
     Matrix4G<T> Inversed() const
@@ -189,10 +189,10 @@ public:
                     m.c0.w * inv.c3.x;
         if (det == 0) return *this;
 
-        inv.c0 *= SCAST<T>(1) / det;
-        inv.c1 *= SCAST<T>(1) / det;
-        inv.c2 *= SCAST<T>(1) / det;
-        inv.c3 *= SCAST<T>(1) / det;
+        inv.c0 *= Cast<T>(1) / det;
+        inv.c1 *= Cast<T>(1) / det;
+        inv.c2 *= Cast<T>(1) / det;
+        inv.c3 *= Cast<T>(1) / det;
         return inv;
     }
 
@@ -224,8 +224,8 @@ public:
         return trans;
     }
 
-    T *Data() { return SCAST<T*>(&(c0.x)); }
-    const T *Data() const { return SCAST<const T*>(&(c0.x)); }
+    T *Data() { return Cast<T*>(&(c0.x)); }
+    const T *Data() const { return Cast<const T*>(&(c0.x)); }
 
     void SetTranslate(const Vector3G<T> &translate)
     {
@@ -270,14 +270,14 @@ public:
                                    Real zNear,
                                    Real zFar)
     {
-        float const tanHalfFovy = Math::Tan(fovYRads / SCAST<T>(2));
+        float const tanHalfFovy = Math::Tan(fovYRads / Cast<T>(2));
 
         Matrix4G<T> res(0);
-        res[0][0] = SCAST<T>(1) / (aspect * tanHalfFovy);
-        res[1][1] = SCAST<T>(1) / (tanHalfFovy);
+        res[0][0] = Cast<T>(1) / (aspect * tanHalfFovy);
+        res[1][1] = Cast<T>(1) / (tanHalfFovy);
         res[2][2] = -(zFar + zNear) / (zFar - zNear);
-        res[2][3] = -SCAST<T>(1);
-        res[3][2] = -(SCAST<T>(2) * zFar * zNear) / (zFar - zNear);
+        res[2][3] = -Cast<T>(1);
+        res[3][2] = -(Cast<T>(2) * zFar * zNear) / (zFar - zNear);
 
         return res;
     }
@@ -288,9 +288,9 @@ public:
                              Real zNear,  Real zFar)
     {
         Matrix4G<T> res(1);
-        res[0][0] = SCAST<T>(2) / (right - left);
-        res[1][1] = SCAST<T>(2) / (top - bottom);
-        res[2][2] = -SCAST<T>(2) / (zFar - zNear);
+        res[0][0] = Cast<T>(2) / (right - left);
+        res[1][1] = Cast<T>(2) / (top - bottom);
+        res[2][2] = -Cast<T>(2) / (zFar - zNear);
         res[3][0] = -(right + left) / (right - left);
         res[3][1] = -(top + bottom) / (top - bottom);
         res[3][2] = -(zFar + zNear) / (zFar - zNear);
@@ -330,9 +330,9 @@ public:
             biggestIndex = 3;
         }
 
-        float biggestVal = Math::Sqrt(fourBiggestSquaredMinus1 + SCAST<T>(1)) *
-                           SCAST<T>(0.5);
-        float mult = SCAST<T>(0.25)/biggestVal;
+        float biggestVal = Math::Sqrt(fourBiggestSquaredMinus1 + Cast<T>(1)) *
+                           Cast<T>(0.5);
+        float mult = Cast<T>(0.25)/biggestVal;
 
         QuaternionG<T> res;
         switch (biggestIndex)

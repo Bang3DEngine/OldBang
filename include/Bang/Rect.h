@@ -95,7 +95,7 @@ public:
 
     Vector2G<T> GetCenter() const
     {
-        return (GetMin() + GetMax()) / SCAST<T>(2);
+        return (GetMin() + GetMax()) / Cast<T>(2);
     }
 
     bool Contains(const Vector2G<T> &p) const

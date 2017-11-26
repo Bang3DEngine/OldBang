@@ -12,21 +12,21 @@ FORWARD_T class Vector2G;
 template <class OtherT1, class OtherT2, class OtherT3>\
 explicit Vector3G(const OtherT1 &_x, \
                   const OtherT2 &_y, \
-                  const OtherT3 &_z) : x( SCAST<T>(_x) ),\
-                                       y( SCAST<T>(_y) ),\
-                                       z( SCAST<T>(_z) ) {}\
+                  const OtherT3 &_z) : x( Cast<T>(_x) ),\
+                                       y( Cast<T>(_y) ),\
+                                       z( Cast<T>(_z) ) {}\
 \
 template <class OtherT1, class OtherT2>\
 explicit Vector3G(const Vector2G<OtherT1> &v, const OtherT2 &_z)\
-                        : x( SCAST<T>(v.x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(_z) ) {}\
+                        : x( Cast<T>(v.x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(_z) ) {}\
 \
 template <class OtherT1, class OtherT2>\
 explicit Vector3G(const OtherT1 &_x, const Vector2G<OtherT2> &v)\
-                        : x( SCAST<T>(_x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(v.z) ) {}\
+                        : x( Cast<T>(_x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(v.z) ) {}\
 \
 \
 \
@@ -68,33 +68,33 @@ const static Vector3G NInfinity;
 CLASS_VECTOR_T(Vector3G, 3)
 
 template<class T>
-const Vector3G<T> Vector3G<T>::Up = Vector3G<T>(SCAST<T>(0),
-                                                SCAST<T>(1),
-                                                SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Up = Vector3G<T>(Cast<T>(0),
+                                                Cast<T>(1),
+                                                Cast<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::Down = Vector3G<T>(SCAST<T>(0),
-                                                  SCAST<T>(-1),
-                                                  SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Down = Vector3G<T>(Cast<T>(0),
+                                                  Cast<T>(-1),
+                                                  Cast<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::Right = Vector3G<T>(SCAST<T>(1),
-                                                   SCAST<T>(0),
-                                                   SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Right = Vector3G<T>(Cast<T>(1),
+                                                   Cast<T>(0),
+                                                   Cast<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::Left = Vector3G<T>(SCAST<T>(-1),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Left = Vector3G<T>(Cast<T>(-1),
+                                                  Cast<T>(0),
+                                                  Cast<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::Zero = Vector3G<T>(SCAST<T>(0));
+const Vector3G<T> Vector3G<T>::Zero = Vector3G<T>(Cast<T>(0));
 template<class T>
-const Vector3G<T> Vector3G<T>::One = Vector3G<T>(SCAST<T>(1));
+const Vector3G<T> Vector3G<T>::One = Vector3G<T>(Cast<T>(1));
 template<class T>
-const Vector3G<T> Vector3G<T>::Forward = Vector3G<T>(SCAST<T>(0),
-                                                     SCAST<T>(0),
-                                                     SCAST<T>(-1));
+const Vector3G<T> Vector3G<T>::Forward = Vector3G<T>(Cast<T>(0),
+                                                     Cast<T>(0),
+                                                     Cast<T>(-1));
 template<class T>
-const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(SCAST<T>(0),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(1));
+const Vector3G<T> Vector3G<T>::Back = Vector3G<T>(Cast<T>(0),
+                                                  Cast<T>(0),
+                                                  Cast<T>(1));
 template<class T>
 const Vector3G<T> Vector3G<T>::Infinity = Vector3G<T>(Math::Max<T>());
 template<class T>

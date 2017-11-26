@@ -315,7 +315,7 @@ void UIInputText::ReplaceSelectedText(const String &replaceStr)
     SetCursorIndex(minIndex);
     ResetSelection();
 
-    PROPAGATE(IValueChangedListener, OnValueChanged, SCAST<Object*>(this));
+    PROPAGATE(IValueChangedListener, OnValueChanged, Cast<Object*>(this));
 }
 
 void UIInputText::ResetSelection() { GetLabel()->ResetSelection(); }

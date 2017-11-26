@@ -23,7 +23,7 @@ UILayoutManager::UILayoutManager()
 
 void UILayoutManager::OnInvalidated(ILayoutElement *element)
 {
-    Component *comp = DCAST<Component*>(element);
+    Component *comp = Cast<Component*>(element);
     UILayoutManager::OnLayoutInvalidated(comp, false);
 
     UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
@@ -36,7 +36,7 @@ void UILayoutManager::OnInvalidated(ILayoutElement *element)
 
 void UILayoutManager::OnInvalidated(ILayoutController *controller)
 {
-    Component *comp = DCAST<Component*>(controller);
+    Component *comp = Cast<Component*>(controller);
     UILayoutManager::OnLayoutInvalidated(comp, true);
 
     UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
@@ -117,7 +117,7 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
 
 void UILayoutManager::OnCreated(Object *object)
 {
-    GameObject *go = DCAST<GameObject*>(object);
+    GameObject *go = Cast<GameObject*>(object);
     if (go) { m_invalidatedGameObjects.Add(go); }
 }
 
@@ -170,7 +170,7 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
         for (ILayoutController *layoutController : layoutControllers)
         {
             ILayoutSelfController *selfController =
-                           DCAST<ILayoutSelfController*>(layoutController);
+                           Cast<ILayoutSelfController*>(layoutController);
             if (selfController)
             {
                 selfController->_ApplyLayout(axis);

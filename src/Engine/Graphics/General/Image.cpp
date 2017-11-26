@@ -149,7 +149,7 @@ void Image<T>::ResizeToMatchAspectRatio(float aspectRatio,
 template<class T>
 float Image<T>::GetAspectRatio() const
 {
-    return GetWidth() / SCAST<float>(Math::Max(GetHeight(), 1));
+    return GetWidth() / Cast<float>(Math::Max(GetHeight(), 1));
 }
 
 template<class T>
@@ -174,8 +174,8 @@ void Image<T>::Resize(int _newWidth, int _newHeight,
     // Now do the resizing
     Image<T> original = *this;
 
-    Vector2 sizeProp(original.GetWidth()  / SCAST<float>(newSize.x),
-                     original.GetHeight() / SCAST<float>(newSize.y));
+    Vector2 sizeProp(original.GetWidth()  / Cast<float>(newSize.x),
+                     original.GetHeight() / Cast<float>(newSize.y));
 
     Create(newSize.x, newSize.y);
     for (int y = 0; y < newSize.y; ++y)
@@ -348,10 +348,10 @@ void Image<Byte>::SetPixel(int x, int y, const Color &color)
     ASSERT_MSG(x >= 0 && y >= 0 && x < GetWidth() && y < GetHeight(),
                "Pixel (" << x << ", " << y << ") out of bounds");
     const int coord = (y * GetWidth() + x) * 4;
-    m_pixels[coord + 0] = SCAST<Byte>(color.r * 255);
-    m_pixels[coord + 1] = SCAST<Byte>(color.g * 255);
-    m_pixels[coord + 2] = SCAST<Byte>(color.b * 255);
-    m_pixels[coord + 3] = SCAST<Byte>(color.a * 255);
+    m_pixels[coord + 0] = Cast<Byte>(color.r * 255);
+    m_pixels[coord + 1] = Cast<Byte>(color.g * 255);
+    m_pixels[coord + 2] = Cast<Byte>(color.b * 255);
+    m_pixels[coord + 3] = Cast<Byte>(color.a * 255);
 }
 
 template<>

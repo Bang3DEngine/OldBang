@@ -90,10 +90,10 @@ void ImageIO::ExportPNG(const Path &filepath, const Imageb &img)
             new png_byte[ png_get_rowbytes(png, info) / sizeof(png_byte)];
         for (int x = 0; x < img.GetWidth(); ++x)
         {
-            rowPointers[y][x * 4 + 0] = SCAST<Byte>(img.GetPixel(x, y).r * 255);
-            rowPointers[y][x * 4 + 1] = SCAST<Byte>(img.GetPixel(x, y).g * 255);
-            rowPointers[y][x * 4 + 2] = SCAST<Byte>(img.GetPixel(x, y).b * 255);
-            rowPointers[y][x * 4 + 3] = SCAST<Byte>(img.GetPixel(x, y).a * 255);
+            rowPointers[y][x * 4 + 0] = Cast<Byte>(img.GetPixel(x, y).r * 255);
+            rowPointers[y][x * 4 + 1] = Cast<Byte>(img.GetPixel(x, y).g * 255);
+            rowPointers[y][x * 4 + 2] = Cast<Byte>(img.GetPixel(x, y).b * 255);
+            rowPointers[y][x * 4 + 3] = Cast<Byte>(img.GetPixel(x, y).a * 255);
         }
     }
     png_write_image(png, rowPointers);

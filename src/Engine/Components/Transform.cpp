@@ -437,7 +437,7 @@ void Transform::OnChildrenTransformChanged()
 void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Transform *t = DCAST<Transform*>(clone);
+    Transform *t = Cast<Transform*>(clone);
     t->SetLocalPosition(GetLocalPosition());
     t->SetLocalRotation(GetLocalRotation());
     t->SetLocalScale(GetLocalScale());

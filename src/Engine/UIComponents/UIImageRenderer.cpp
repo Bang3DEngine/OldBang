@@ -177,7 +177,7 @@ Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
 void UIImageRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
-    UIImageRenderer *img = DCAST<UIImageRenderer*>(clone);
+    UIImageRenderer *img = Cast<UIImageRenderer*>(clone);
     img->SetImageTexture( GetImageTexture() );
     img->SetAspectRatioMode( GetAspectRatioMode() );
 }

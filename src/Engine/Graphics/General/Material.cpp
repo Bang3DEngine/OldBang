@@ -113,7 +113,7 @@ void Material::UnBind() const
 
 void Material::CloneInto(ICloneable *clone) const
 {
-    Material *matClone = DCAST<Material*>(clone);
+    Material *matClone = Cast<Material*>(clone);
 
     matClone->SetShaderProgram(GetShaderProgram());
     matClone->SetDiffuseColor(GetDiffuseColor());

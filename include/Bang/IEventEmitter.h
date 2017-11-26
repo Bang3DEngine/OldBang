@@ -43,7 +43,7 @@ private:
                   ""#EventListenerClass" must be subclass of IEventListener.");\
     for (IEventListener *listener : List) \
     { \
-        EventListenerClass *cListener = DCAST<EventListenerClass*>(listener); \
+        EventListenerClass *cListener = Cast<EventListenerClass*>(listener); \
         if (cListener && cListener->IsReceivingEvents()) \
         { cListener->FunctionCall; } \
     } \

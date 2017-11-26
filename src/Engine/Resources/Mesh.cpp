@@ -107,7 +107,7 @@ const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
 
 void Mesh::CloneInto(ICloneable *clone) const
 {
-    Mesh *mClone = DCAST<Mesh*>(clone);
+    Mesh *mClone = Cast<Mesh*>(clone);
 
     mClone->m_bBox = m_bBox;
     mClone->m_bSphere = m_bSphere;

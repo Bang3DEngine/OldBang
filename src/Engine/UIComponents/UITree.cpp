@@ -35,7 +35,7 @@ void UITree::OnUpdate()
         if (selItemCont)
         {
             UITreeItemContainer *selectedItemCont =
-                                    SCAST<UITreeItemContainer*>(selItemCont);
+                                    Cast<UITreeItemContainer*>(selItemCont);
             GOItem *selectedItem = selectedItemCont->GetContainedItem();
 
             bool isCollapsed = selectedItemCont->IsCollapsed();
@@ -75,7 +75,7 @@ void UITree::OnButton_Clicked(UIButtoneable *btn)
 
 void UITree::OnDestroyed(Object *object)
 {
-    GOItem* item = SCAST<GOItem*>(object);
+    GOItem* item = Cast<GOItem*>(object);
     RemoveItem(item);
 }
 
@@ -148,7 +148,7 @@ GOItem *UITree::GetSelectedItem() const
     if (selectedItem)
     {
         UITreeItemContainer *selectedItemCont =
-                                SCAST<UITreeItemContainer*>(selectedItem);
+                                Cast<UITreeItemContainer*>(selectedItem);
         return selectedItemCont->GetContainedItem();
     }
     return nullptr;
@@ -229,7 +229,7 @@ UITree *UITree::CreateInto(GameObject *go)
             // actual item
             if (uiTree->m_selectionCallback)
             {
-                UITreeItemContainer *itemCont = SCAST<UITreeItemContainer*>(item);
+                UITreeItemContainer *itemCont = Cast<UITreeItemContainer*>(item);
                 uiTree->m_selectionCallback( itemCont->GetContainedItem(), action);
             }
         }
@@ -240,8 +240,8 @@ UITree *UITree::CreateInto(GameObject *go)
 
 UITreeItemContainer *UITree::GetItemContainer(GOItem *item) const
 {
-    ASSERT(!item || !DCAST<UITreeItemContainer*>(item));
-    return item ? SCAST<UITreeItemContainer*>(item->GetParent()) : nullptr;
+    ASSERT(!item || !Cast<UITreeItemContainer*>(item));
+    return item ? Cast<UITreeItemContainer*>(item->GetParent()) : nullptr;
 }
 
 void UITree::UpdateCollapsability(GOItem *item)

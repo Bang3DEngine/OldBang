@@ -21,11 +21,6 @@
 
 USING_NAMESPACE_BANG
 
-template<class DestT, class SourceT>
-TT_NOT_SUBCLASS(DestT, SourceT) Cast(SourceT x) { return DCAST<DestT>(x); }
-template<class DestT, class SourceT>
-TT_SUBCLASS(DestT, SourceT) Cast(SourceT x) { return SCAST<DestT>(x); }
-
 template<class T>
 bool CanBePropagated(const T& x)
 {
@@ -193,7 +188,7 @@ Component* GameObject::AddComponent(Component *c, int _index)
 {
     if (c && !GetComponents().Contains(c))
     {
-        Transform *trans = DCAST<Transform*>(c);
+        Transform *trans = Cast<Transform*>(c);
         if (trans) { ASSERT(!HasComponent<Transform>()); }
 
         const int index = (_index != -1 ? _index : GetComponents().Size());
@@ -228,7 +223,7 @@ void GameObject::RemoveComponent(Component *c)
 
 Scene* GameObject::GetScene() const
 {
-    Scene *scene = DCAST<Scene*>( const_cast<GameObject*>(this) );
+    Scene *scene = Cast<Scene*>( const_cast<GameObject*>(this) );
     if (scene) { return scene; }
 
     GameObject *parent = GetParent();
@@ -238,7 +233,7 @@ Scene* GameObject::GetScene() const
 Transform *GameObject::GetTransform() const { return p_transform; }
 RectTransform *GameObject::GetRectTransform() const
 {
-    return GetTransform() ? DCAST<RectTransform*>(GetTransform()) : nullptr;
+    return GetTransform() ? Cast<RectTransform*>(GetTransform()) : nullptr;
 }
 
 void GameObject::SetName(const String &name) { m_name = name; }
@@ -424,7 +419,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
 
-    GameObject *go = DCAST<GameObject*>(clone);
+    GameObject *go = Cast<GameObject*>(clone);
     go->SetName(m_name);
     go->SetParent(nullptr);
 

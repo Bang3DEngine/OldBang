@@ -19,7 +19,7 @@ Resources::~Resources()
     Array<Resource*> resources = Resources::GetAllResources();
     for (Resource *res : resources)
     {
-        Asset *asset = DCAST<Asset*>(res);
+        Asset *asset = Cast<Asset*>(res);
         if (asset) { Destroy(asset); } else { Destroy(res); }
     }
 }

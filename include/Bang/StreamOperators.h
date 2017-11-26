@@ -91,7 +91,7 @@ std::ostream& operator<<(std::ostream &log, const Matrix4G<T> &m)
 template <class EnumClass, class=TT_ENUM(EnumClass)>
 std::ostream& operator<<(std::ostream &log, const EnumClass &e)
 {
-    log << SCAST<int>(e);
+    log << Cast<int>(e);
     return log;
 }
 
@@ -221,7 +221,7 @@ std::istream& operator>>(std::istream &is, EnumClass& e)
 {
     int x;
     is >> x;
-    e = SCAST<EnumClass>(x);
+    e = Cast<EnumClass>(x);
     return is;
 }
 

@@ -124,7 +124,7 @@ UIButtoneableMode UIButtoneable::GetMode() const { return m_mode; }
 
 void UIButtoneable::OnDestroyed(Object *object)
 {
-    GameObject *destroyedGo = DCAST<GameObject*>(object);
+    GameObject *destroyedGo = Cast<GameObject*>(object);
     if (destroyedGo)
     {
         UnRegisterButtonPart(destroyedGo);

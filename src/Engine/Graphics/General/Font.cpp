@@ -56,7 +56,7 @@ void Font::Import(const Path &ttfFilepath)
         XMLNode distFieldInfo = XMLParser::FromFile(distFieldInfoPath);
         for (int i = 0; i < 255; ++i)
         {
-            const char c = SCAST<char>(i);
+            const char c = Cast<char>(i);
             String attrName = "CharRect_" + String(i);
             if (distFieldInfo.Contains(attrName))
             {
@@ -116,7 +116,7 @@ void Font::CloneInto(ICloneable *clone) const
 {
     Asset::CloneInto(clone);
 
-    Font *fontClone = DCAST<Font*>(clone);
+    Font *fontClone = Cast<Font*>(clone);
 
     // TODO: Clone fonts one by one...
     fontClone->m_ttfFilepath = m_ttfFilepath;

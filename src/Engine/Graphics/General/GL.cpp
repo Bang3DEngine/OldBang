@@ -184,11 +184,11 @@ GL::DataType GL::GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex)
     GLchar cname[bufSize];
 
     glGetActiveUniform(shaderProgramId,
-                       SCAST<GLuint>(uniformIndex),
+                       Cast<GLuint>(uniformIndex),
                        bufSize, &length,
                        &size, &type, cname);
 
-    return SCAST<GL::DataType>(type);
+    return Cast<GL::DataType>(type);
 }
 
 void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
@@ -581,7 +581,7 @@ void GL::GetTexImage(GL::TextureTarget textureTarget,
                   0,
                   GLCAST(GL::ColorComp::RGBA),
                   GLCAST(dataType),
-                  SCAST<void*>(pixels));
+                  Cast<void*>(pixels));
 
     GL_CheckError();
 }
@@ -725,7 +725,7 @@ Vector2i GL::GetViewportSize()
 float GL::GetViewportAspectRatio()
 {
     Vector2i vpSize = GL::GetViewportSize();
-    return SCAST<float>(vpSize.x) / vpSize.y;
+    return Cast<float>(vpSize.x) / vpSize.y;
 }
 
 Vector2 GL::GetViewportPixelSize()

@@ -33,7 +33,7 @@ Vector3 SingleLineRenderer::GetDestiny() const
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    SingleLineRenderer *slr = DCAST<SingleLineRenderer*>(clone);
+    SingleLineRenderer *slr = Cast<SingleLineRenderer*>(clone);
     slr->SetOrigin(GetOrigin());
     slr->SetDestiny(GetDestiny());
 }

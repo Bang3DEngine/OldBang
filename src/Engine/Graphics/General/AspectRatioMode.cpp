@@ -9,8 +9,8 @@ Vector2i AspectRatio::GetAspectRatioedSize(const Vector2i &targetSize,
     Vector2i finalSize = targetSize;
     if (aspectRatioMode != AspectRatioMode::Ignore)
     {
-        Vector2 aspectRatio(SCAST<float>(targetSize.x) / currentSize.x,
-                            SCAST<float>(targetSize.y) / currentSize.y);
+        Vector2 aspectRatio(Cast<float>(targetSize.x) / currentSize.x,
+                            Cast<float>(targetSize.y) / currentSize.y);
 
         bool keepExc = (aspectRatioMode == AspectRatioMode::KeepExceeding);
         float ar =  (aspectRatio.x < aspectRatio.y) ?

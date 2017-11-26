@@ -9,7 +9,7 @@
 
 void ObjectManager::Destroy(GameObject *gameObject)
 {
-    Destroy( SCAST<Object*>(gameObject) );
+    Destroy( Cast<Object*>(gameObject) );
 }
 
 void ObjectManager::Destroy(Object *object)
@@ -104,7 +104,7 @@ void ObjectManager::DestroyObjects()
 
 void ObjectManager::OnDestroyed(Object *object)
 {
-    Object *destroyedObject = DCAST<Object*>(object);
+    Object *destroyedObject = Cast<Object*>(object);
     m_objectsDestroyedWhileDestroying.Add(destroyedObject->GetObjectId());
 }
 

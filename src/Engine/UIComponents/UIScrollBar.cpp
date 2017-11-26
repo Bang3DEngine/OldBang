@@ -103,7 +103,7 @@ int UIScrollBar::GetScrolling() const { return m_scrollingPx; }
 float UIScrollBar::GetScrollingPercent() const
 {
     int scrollSpacePx = GetScrollingSpacePx();
-    return scrollSpacePx > 0 ? SCAST<float>(GetScrolling()) / scrollSpacePx : 0;
+    return scrollSpacePx > 0 ? Cast<float>(GetScrolling()) / scrollSpacePx : 0;
 }
 
 int UIScrollBar::GetLength() const { return m_length; }

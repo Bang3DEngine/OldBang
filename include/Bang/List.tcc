@@ -262,7 +262,7 @@ template < template <class> class Container, class OtherT>
 Container<OtherT> List<T>::To() const
 {
     Container<OtherT> cont;
-    for (const T &x : *this) { cont.PushBack( SCAST<OtherT>(x) ); }
+    for (const T &x : *this) { cont.PushBack( Cast<OtherT>(x) ); }
     return cont;
 }
 

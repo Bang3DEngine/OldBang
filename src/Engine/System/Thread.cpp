@@ -52,7 +52,7 @@ ThreadRunnable *Thread::GetRunnable() const { return p_runnable; }
 
 void Thread::SleepCurrentThread(float seconds)
 {
-    int millis = SCAST<int>(seconds * 1000);
+    int millis = Cast<int>(seconds * 1000);
     std::this_thread::sleep_for( std::chrono::milliseconds(millis) );
 }
 

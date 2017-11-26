@@ -65,10 +65,46 @@ NAMESPACE_BANG_BEGIN
 
 
 // Casts ===============================================
+
+// Templated SFINAE cast dynamic/static cast
 #define SCAST static_cast
 #define DCAST dynamic_cast
+
+template <class SourceT, class DestT>
+struct IsExplicitlyConvertible :
+        public std::__and_<
+                    std::is_constructible<SourceT, DestT>,
+                    std::__not_<std::is_convertible<DestT, SourceT>>
+                >::type
+{
+};
+
+template<typename SourceT, typename DestT>
+  struct IsStaticCasteable
+  : public std::__or_<
+                    std::is_enum<SourceT>,
+                    std::is_same<SourceT, DestT>,
+                    std::is_convertible<DestT, SourceT>,
+                    std::is_fundamental<SourceT>,
+                    std::is_fundamental< std::remove_pointer<SourceT> >,
+                    std::is_fundamental< std::remove_reference<SourceT> >,
+                    IsExplicitlyConvertible<DestT, SourceT>
+               >::type
+{
+};
+
+template<class DestT, class SourceT>
+    typename std::enable_if< IsStaticCasteable<DestT, SourceT>::value, DestT >::type
+Cast(SourceT x)
+{ return SCAST<DestT>(x); }
+
+template<class DestT, class SourceT>
+    typename std::enable_if< !IsStaticCasteable<DestT, SourceT>::value, DestT >::type
+ Cast(SourceT x)
+{ return DCAST<DestT>(x); }
+
 #define RCAST reinterpret_cast
-#define GLCAST(x) SCAST<GLenum>(x)
+#define GLCAST(x) static_cast<GLenum>(x)
 // =====================================================
 
 
@@ -144,7 +180,8 @@ using Recti       = RectG<int>;
 using Rect        = Rectf;
 // ======================================================
 
-// Others =================================
+// Propagating =================================
+// =============================================
 
 // Macro overloading
 #define __NARG__(...)  __NARG_I_(__VA_ARGS__,__RSEQ_N())

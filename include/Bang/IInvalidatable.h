@@ -24,7 +24,7 @@ public:
 
     bool IsInvalid() const
     {
-        return SCAST<const T*>(this)->T::m_invalid;
+        return Cast<const T*>(this)->T::m_invalid;
     }
 
 protected:
@@ -41,7 +41,7 @@ protected:
 private:
     void SetInvalid(bool invalid) const
     {
-        SCAST<const T*>(this)->T::m_invalid = invalid;
+        Cast<const T*>(this)->T::m_invalid = invalid;
     }
 
 };

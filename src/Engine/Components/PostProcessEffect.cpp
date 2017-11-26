@@ -71,7 +71,7 @@ Path PostProcessEffect::GetPostProcessShaderFilepath() const
 void PostProcessEffect::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    PostProcessEffect *ppe = DCAST<PostProcessEffect*>(clone);
+    PostProcessEffect *ppe = Cast<PostProcessEffect*>(clone);
     ppe->SetPostProcessShader( GetPostProcessShader() );
     ppe->SetType( GetType() );
     ppe->SetPriority( GetPriority() );

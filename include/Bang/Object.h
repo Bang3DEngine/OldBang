@@ -20,7 +20,7 @@ private:
 
     static ObjectIdType s_nextObjectId;
 
-    ObjectIdType m_id = SCAST<ObjectIdType>(-1);
+    ObjectIdType m_id = Cast<ObjectIdType>(-1);
     ObjectId();
 
     friend bool operator==(const ObjectId &lhs, const ObjectId &rhs);

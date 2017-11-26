@@ -82,7 +82,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     uiList->SetSelectionCallback(
         [this, uiList](GameObject *go, UIList::Action action)
         {
-            UIFileListItem *item = SCAST<UIFileListItem*>(go);
+            UIFileListItem *item = Cast<UIFileListItem*>(go);
             if (action == UIList::Action::SelectionIn)
             {
                 item->OnSelectionIn();

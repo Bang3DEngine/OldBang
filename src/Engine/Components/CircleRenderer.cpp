@@ -47,7 +47,7 @@ int CircleRenderer::GetSegments() const { return m_segments; }
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    CircleRenderer *cr = DCAST<CircleRenderer*>(clone);
+    CircleRenderer *cr = Cast<CircleRenderer*>(clone);
     cr->SetRadius(GetRadius());
     cr->SetSegments(GetSegments());
 }

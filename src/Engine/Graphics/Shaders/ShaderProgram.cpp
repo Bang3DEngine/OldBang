@@ -193,7 +193,7 @@ void ShaderProgram::OnDestroyed(Object *obj)
     for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); )
     {
         Texture2D *tex = it->second;
-        if (tex == SCAST<Texture2D*>(obj))
+        if (tex == Cast<Texture2D*>(obj))
         {
             it = m_namesToTexture.Remove(it);
             // Dont break, in case it has obj texture several times

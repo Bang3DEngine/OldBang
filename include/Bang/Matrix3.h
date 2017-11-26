@@ -20,9 +20,9 @@ public:
     template<class OtherT>
     Matrix3G(const OtherT& a)
     {
-        c0 = Vector3(SCAST<T>(a), SCAST<T>(0), SCAST<T>(0));
-        c1 = Vector3(SCAST<T>(0), SCAST<T>(a), SCAST<T>(0));
-        c2 = Vector3(SCAST<T>(0), SCAST<T>(0), SCAST<T>(a));
+        c0 = Vector3(Cast<T>(a), Cast<T>(0), Cast<T>(0));
+        c1 = Vector3(Cast<T>(0), Cast<T>(a), Cast<T>(0));
+        c2 = Vector3(Cast<T>(0), Cast<T>(0), Cast<T>(a));
     }
 
     Matrix3G(const Vector3G<T> &col0,
@@ -46,7 +46,7 @@ public:
     Matrix3G<T> Inversed() const
     {
         const Matrix3G<T> &m = *this;
-        const T invDet = SCAST<T>(1) / (
+        const T invDet = Cast<T>(1) / (
                 + m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
                 - m[1][0] * (m[0][1] * m[2][2] - m[2][1] * m[0][2])
                 + m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]));
@@ -84,8 +84,8 @@ public:
         return trans;
     }
 
-    const T *Data() const { return SCAST<const T*>(&(c0.x)); }
-    T *Data() { return SCAST<T*>(&(c0.x)); }
+    const T *Data() const { return Cast<const T*>(&(c0.x)); }
+    T *Data() { return Cast<T*>(&(c0.x)); }
 
     Vector3G<T>& operator[](std::size_t i)
     {
@@ -122,15 +122,15 @@ Matrix3G<T> operator*(const Matrix3G<T> &m1, const Matrix3G<OtherT> &m2)
     const T vA21 = m1[2][1];
     const T vA22 = m1[2][2];
 
-    const T vB00 = SCAST<T>(m2[0][0]);
-    const T vB01 = SCAST<T>(m2[0][1]);
-    const T vB02 = SCAST<T>(m2[0][2]);
-    const T vB10 = SCAST<T>(m2[1][0]);
-    const T vB11 = SCAST<T>(m2[1][1]);
-    const T vB12 = SCAST<T>(m2[1][2]);
-    const T vB20 = SCAST<T>(m2[2][0]);
-    const T vB21 = SCAST<T>(m2[2][1]);
-    const T vB22 = SCAST<T>(m2[2][2]);
+    const T vB00 = Cast<T>(m2[0][0]);
+    const T vB01 = Cast<T>(m2[0][1]);
+    const T vB02 = Cast<T>(m2[0][2]);
+    const T vB10 = Cast<T>(m2[1][0]);
+    const T vB11 = Cast<T>(m2[1][1]);
+    const T vB12 = Cast<T>(m2[1][2]);
+    const T vB20 = Cast<T>(m2[2][0]);
+    const T vB21 = Cast<T>(m2[2][1]);
+    const T vB22 = Cast<T>(m2[2][2]);
 
     Matrix3G<T> res;
     res[0][0] = vA00 * vB00 + vA10 * vB01 + vA20 * vB02;

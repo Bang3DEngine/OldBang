@@ -30,7 +30,7 @@ EventEmitter<EventListenerClass>::~EventEmitter()
 {
     while (!m_listeners.IsEmpty())
     {
-        IEventListener *eListener = SCAST<IEventListener*>( m_listeners.Front() );
+        IEventListener *eListener = Cast<IEventListener*>( m_listeners.Front() );
         UnRegisterListener(eListener);
     }
 }

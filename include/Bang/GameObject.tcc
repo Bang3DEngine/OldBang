@@ -26,7 +26,7 @@ T* GameObject::GetComponent() const
 {
     for (Component *comp : m_components)
     {
-        T *tp = DCAST<T*>(comp);
+        T *tp = Cast<T*>(comp);
         if (tp) { return tp; }
     }
     return nullptr;
@@ -38,7 +38,7 @@ List<T*> GameObject::GetComponents() const
     List<T*> comps_l;
     for (Component *comp : m_components)
     {
-        T *tp = DCAST<T*>(comp);
+        T *tp = Cast<T*>(comp);
         if (tp) { comps_l.PushBack(tp); }
     }
     return comps_l;
@@ -119,7 +119,7 @@ int GameObject::CountComponents() const
     int count = 0;
     for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
     {
-        T *tp = DCAST<T*>(comp);
+        T *tp = Cast<T*>(comp);
         if (tp) { ++count; }
     }
     return count;
@@ -131,7 +131,7 @@ void GameObject::RemoveComponent()
 {
     for (Component *comp : m_components)
     {
-        T *compT = DCAST<T*>(comp);
+        T *compT = Cast<T*>(comp);
         if (compT)
         {
             this->RemoveComponent(compT);

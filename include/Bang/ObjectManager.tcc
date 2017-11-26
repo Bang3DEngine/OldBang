@@ -19,7 +19,7 @@ ObjectClass* ObjectManager::Create(Args... args)
     ObjectManager::AssertCreatedFromObjectManager = false;
     #endif
 
-    Object *obj = SCAST<ObjectClass*>(newObj);
+    Object *obj = Cast<ObjectClass*>(newObj);
     om->m_objectsToBeStartedQueue.push(obj);
     om->m_objectsIdsToBeStartedQueue.push(obj->GetObjectId());
 

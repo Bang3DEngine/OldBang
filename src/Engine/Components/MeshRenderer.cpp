@@ -35,7 +35,7 @@ void MeshRenderer::OnRender()
 void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
-    MeshRenderer *mr = DCAST<MeshRenderer*>(clone);
+    MeshRenderer *mr = Cast<MeshRenderer*>(clone);
     mr->SetMesh( GetMesh() );
 }
 

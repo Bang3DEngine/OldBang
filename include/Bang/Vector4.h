@@ -15,41 +15,41 @@ explicit Vector4G(OtherT1 _x, \
                   OtherT2 _y, \
                   OtherT3 _z, \
                   OtherT4 _w) : \
-                                       x( SCAST<T>(_x) ),\
-                                       y( SCAST<T>(_y) ),\
-                                       z( SCAST<T>(_z) ),\
-                                       w( SCAST<T>(_w) ) {}\
+                                       x( Cast<T>(_x) ),\
+                                       y( Cast<T>(_y) ),\
+                                       z( Cast<T>(_z) ),\
+                                       w( Cast<T>(_w) ) {}\
 \
 template <class OtherT1, class OtherT2, class OtherT3>\
 explicit Vector4G(const Vector2G<OtherT1> &v, const OtherT2 &_z, const OtherT3 &_w)\
-                        : x( SCAST<T>(v.x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(_z) ),\
-                          w( SCAST<T>(_w) ) {}\
+                        : x( Cast<T>(v.x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(_z) ),\
+                          w( Cast<T>(_w) ) {}\
 template <class OtherT1, class OtherT2, class OtherT3>\
 explicit Vector4G(const OtherT1 &_x, const Vector2G<OtherT2> &v, const OtherT3 &_w)\
-                        : x( SCAST<T>(_x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(v.z) ),\
-                          w( SCAST<T>(_w) ) {}\
+                        : x( Cast<T>(_x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(v.z) ),\
+                          w( Cast<T>(_w) ) {}\
 template <class OtherT1, class OtherT2, class OtherT3>\
 explicit Vector4G(const OtherT1 &_x, const OtherT2 &_y, const Vector2G<OtherT3> &v)\
-                        : x( SCAST<T>(_x) ),\
-                          y( SCAST<T>(_y) ),\
-                          z( SCAST<T>(v.z) ),\
-                          w( SCAST<T>(v.w) ) {}\
+                        : x( Cast<T>(_x) ),\
+                          y( Cast<T>(_y) ),\
+                          z( Cast<T>(v.z) ),\
+                          w( Cast<T>(v.w) ) {}\
 template <class OtherT1, class OtherT2>\
 explicit Vector4G(const Vector3G<OtherT1> &v, const OtherT2 &_w)\
-                        : x( SCAST<T>(v.x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(v.z) ),\
-                          w( SCAST<T>(_w) ) {}\
+                        : x( Cast<T>(v.x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(v.z) ),\
+                          w( Cast<T>(_w) ) {}\
 template <class OtherT1, class OtherT2>\
 explicit Vector4G(const OtherT1 &_x, const Vector3G<OtherT2> &v)\
-                        : x( SCAST<T>(_x) ),\
-                          y( SCAST<T>(v.y) ),\
-                          z( SCAST<T>(v.z) ),\
-                          w( SCAST<T>(v.w) ) {}\
+                        : x( Cast<T>(_x) ),\
+                          y( Cast<T>(v.y) ),\
+                          z( Cast<T>(v.z) ),\
+                          w( Cast<T>(v.w) ) {}\
 \
 \
 Vector2G<T> xy()  const { return Vector2G<T>(x,y); } \
@@ -69,39 +69,39 @@ const static Vector4G NInfinity;
 CLASS_VECTOR_T(Vector4G, 4)
 
 template<class T>
-const Vector4G<T> Vector4G<T>::Up = Vector4G<T>(SCAST<T>(0),
-                                                SCAST<T>(1),
-                                                SCAST<T>(0),
-                                                SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Up = Vector4G<T>(Cast<T>(0),
+                                                Cast<T>(1),
+                                                Cast<T>(0),
+                                                Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::Down = Vector4G<T>(SCAST<T>(0),
-                                                  SCAST<T>(-1),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Down = Vector4G<T>(Cast<T>(0),
+                                                  Cast<T>(-1),
+                                                  Cast<T>(0),
+                                                  Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::Right = Vector4G<T>(SCAST<T>(1),
-                                                   SCAST<T>(0),
-                                                   SCAST<T>(0),
-                                                   SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Right = Vector4G<T>(Cast<T>(1),
+                                                   Cast<T>(0),
+                                                   Cast<T>(0),
+                                                   Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::Left = Vector4G<T>(SCAST<T>(-1),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Left = Vector4G<T>(Cast<T>(-1),
+                                                  Cast<T>(0),
+                                                  Cast<T>(0),
+                                                  Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::Zero = Vector4G<T>(SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Zero = Vector4G<T>(Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::One = Vector4G<T>(SCAST<T>(1));
+const Vector4G<T> Vector4G<T>::One = Vector4G<T>(Cast<T>(1));
 template<class T>
-const Vector4G<T> Vector4G<T>::Forward = Vector4G<T>(SCAST<T>(0),
-                                                     SCAST<T>(0),
-                                                     SCAST<T>(-1),
-                                                     SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Forward = Vector4G<T>(Cast<T>(0),
+                                                     Cast<T>(0),
+                                                     Cast<T>(-1),
+                                                     Cast<T>(0));
 template<class T>
-const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(SCAST<T>(0),
-                                                  SCAST<T>(0),
-                                                  SCAST<T>(1),
-                                                  SCAST<T>(0));
+const Vector4G<T> Vector4G<T>::Back = Vector4G<T>(Cast<T>(0),
+                                                  Cast<T>(0),
+                                                  Cast<T>(1),
+                                                  Cast<T>(0));
 template<class T>
 const Vector4G<T> Vector4G<T>::Infinity = Vector4G<T>(Math::Max<T>());
 template<class T>
