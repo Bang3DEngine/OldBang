@@ -81,7 +81,8 @@ UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
 void UIInputNumber::OnValueChanged(Object*)
 {
     UpdateValueFromText();
-    PROPAGATE(IValueChangedListener, OnValueChanged, Cast<Object*>(this));
+    EventEmitter<IValueChangedListener>::
+            PropagateToListeners(&IValueChangedListener::OnValueChanged, this);
 }
 
 UIInputNumber *UIInputNumber::CreateInto(GameObject *go)

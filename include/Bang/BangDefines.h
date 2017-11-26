@@ -62,10 +62,7 @@ NAMESPACE_BANG_BEGIN
     typename std::enable_if<!T_SUBCLASS(T, BASE_CLASS), T>::type
 // =====================================================
 
-
-
 // Casts ===============================================
-
 // Templated SFINAE cast dynamic/static cast
 #define SCAST static_cast
 #define DCAST dynamic_cast
@@ -180,10 +177,11 @@ using Recti       = RectG<int>;
 using Rect        = Rectf;
 // ======================================================
 
-// Propagating =================================
-// =============================================
+// Other ================================================
+template<class EnumT> constexpr EnumT Undef() { return SCAST<EnumT>(-1); }
+// ======================================================
 
-// Macro overloading
+// Macro overloading ====================================
 #define __NARG__(...)  __NARG_I_(__VA_ARGS__,__RSEQ_N())
 #define __NARG_I_(...) __ARG_N(__VA_ARGS__)
 #define __ARG_N(_1, _2, _3, _4, _5, _6, _7, _8, _9,_10,  \
@@ -212,7 +210,6 @@ using Rect        = Rectf;
 #define ___ADD2(a,b)   (a+b)
 #define ___ADD3(a,b,c) (a+b+c)
 */
-
 // ======================================================
 
 NAMESPACE_BANG_END

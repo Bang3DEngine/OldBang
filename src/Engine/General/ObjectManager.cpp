@@ -110,12 +110,14 @@ void ObjectManager::OnDestroyed(Object *object)
 
 void ObjectManager::PropagateOnCreated(Object *object)
 {
-    PROPAGATE(ICreateListener, OnCreated, object);
+    EventEmitter<ICreateListener>::
+            PropagateToListeners(&ICreateListener::OnCreated, object);
 }
 
 void ObjectManager::PropagateOnDestroyed(Object *object)
 {
-    PROPAGATE(IDestroyListener, OnDestroyed, object);
+    EventEmitter<IDestroyListener>::
+            PropagateToListeners(&IDestroyListener::OnDestroyed, object);
 }
 
 ObjectManager *ObjectManager::GetInstance()

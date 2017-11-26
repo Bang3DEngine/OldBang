@@ -396,13 +396,12 @@ void Transform::OnInvalidated()
 
 void Transform::OnTransformChanged()
 {
-    List<ITransformListener*> propagateTo =
-            GetGameObject()->GetComponents<ITransformListener>();
-
     IInvalidatable<Transform>::Invalidate();
 
     ITransformListener::SetReceiveEvents(false);
-    PROPAGATE_1(ITransformListener, OnTransformChanged, propagateTo);
+    EventEmitter<ITransformListener>::
+       PropagateToListenersX1(&ITransformListener::OnTransformChanged,
+                              GetGameObject()->GetComponents<ITransformListener>());
     ITransformListener::SetReceiveEvents(true);
 
     PropagateParentTransformChangedEvent();
@@ -411,16 +410,17 @@ void Transform::OnTransformChanged()
 
 void Transform::PropagateParentTransformChangedEvent() const
 {
-    GameObject *go = GetGameObject();
-    PROPAGATE_1(ITransformListener, OnParentTransformChanged,
-                go->GetComponentsInChildrenOnly<ITransformListener>(false));
+    EventEmitter<ITransformListener>::
+      PropagateToListenersX1(&ITransformListener::OnParentTransformChanged,
+        GetGameObject()->GetComponentsInChildrenOnly<ITransformListener>(false));
 }
 
 void Transform::PropagateChildrenTransformChangedEvent() const
 {
     GameObject *go = GetGameObject();
-    PROPAGATE_1(ITransformListener, OnChildrenTransformChanged,
-                go->GetComponentsInParent<ITransformListener>(false));
+    EventEmitter<ITransformListener>::
+       PropagateToListenersX1(&ITransformListener::OnChildrenTransformChanged,
+                        go->GetComponentsInParent<ITransformListener>(false));
 }
 
 void Transform::OnParentTransformChanged()

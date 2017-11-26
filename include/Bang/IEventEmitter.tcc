@@ -20,7 +20,7 @@ void EventEmitter<EListenerC>::UnRegisterListener(IEventListener *listener)
 }
 
 template<class EventListenerClass>
-const List<IEventListener *> EventEmitter<EventListenerClass>::GetListeners() const
+const List<IEventListener*>& EventEmitter<EventListenerClass>::GetListeners() const
 {
     return m_listeners;
 }
