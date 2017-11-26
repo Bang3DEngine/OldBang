@@ -5,12 +5,12 @@
 #include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/AspectRatioMode.h"
-#include "Bang/IRectTransformListener.h"
+#include "Bang/ITransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class UIImageRenderer : public UIRenderer,
-                        public IRectTransformListener
+                        public ITransformListener
 {
     COMPONENT(UIImageRenderer)
 
@@ -41,8 +41,8 @@ public:
     void OnChanged();
     void RegenerateQuadVAO();
 
-    // IRectTransformListener
-    virtual void OnRectTransformChanged() override;
+    // ITransformListener
+    virtual void OnTransformChanged() override;
 
     // Renderer
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;

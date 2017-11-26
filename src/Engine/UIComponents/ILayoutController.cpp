@@ -39,12 +39,12 @@ void ILayoutController::OnParentChanged(GameObject *oldParent,
     Invalidate();
 }
 
-void ILayoutController::OnRectTransformChanged()
+void ILayoutController::OnTransformChanged()
 {
     Invalidate();
 }
 
-void ILayoutController::OnChildrenRectTransformChanged()
+void ILayoutController::OnChildrenTransformChanged()
 {
     Invalidate();
 }

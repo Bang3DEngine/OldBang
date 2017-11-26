@@ -11,8 +11,8 @@
 #include "Bang/ILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/ILayoutController.h"
+#include "Bang/ITransformListener.h"
 #include "Bang/ILayoutSelfController.h"
-#include "Bang/IRectTransformListener.h"
 
 USING_NAMESPACE_BANG
 
@@ -27,9 +27,11 @@ void UILayoutManager::OnInvalidated(ILayoutElement *element)
     UILayoutManager::OnLayoutInvalidated(comp, false);
 
     UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
-    ASSERT(lmgr);
-    lmgr->m_invalidatedLayoutElements.PushBack(element);
-    lmgr->OnInvalidated(comp->GetGameObject());
+    if (lmgr)
+    {
+        lmgr->m_invalidatedLayoutElements.PushBack(element);
+        lmgr->OnInvalidated(comp->GetGameObject());
+    }
 }
 
 void UILayoutManager::OnInvalidated(ILayoutController *controller)
@@ -38,9 +40,11 @@ void UILayoutManager::OnInvalidated(ILayoutController *controller)
     UILayoutManager::OnLayoutInvalidated(comp, true);
 
     UILayoutManager *lmgr = UILayoutManager::GetLayoutManagerFor(comp->GetGameObject());
-    ASSERT(lmgr);
-    lmgr->m_invalidatedLayoutControllers.PushBack(controller);
-    lmgr->OnInvalidated(comp->GetGameObject());
+    if (lmgr)
+    {
+        lmgr->m_invalidatedLayoutControllers.PushBack(controller);
+        lmgr->OnInvalidated(comp->GetGameObject());
+    }
 }
 
 Vector2i UILayoutManager::GetMinSize(GameObject *go)

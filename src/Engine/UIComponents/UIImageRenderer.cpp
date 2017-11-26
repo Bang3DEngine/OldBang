@@ -161,7 +161,7 @@ void UIImageRenderer::RegenerateQuadVAO()
     m_quadMesh->LoadUvs(quadUvs);
 }
 
-void UIImageRenderer::OnRectTransformChanged()
+void UIImageRenderer::OnTransformChanged()
 {
     OnChanged();
 }

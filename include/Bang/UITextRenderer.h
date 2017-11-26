@@ -8,7 +8,7 @@
 #include "Bang/Alignment.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/ILayoutElement.h"
-#include "Bang/IRectTransformListener.h"
+#include "Bang/ITransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -16,7 +16,7 @@ FORWARD class Font;
 
 class UITextRenderer : public UIRenderer,
                        public ILayoutElement,
-                       public IRectTransformListener,
+                       public ITransformListener,
                        public IInvalidatable<UITextRenderer>
 {
     COMPONENT(UITextRenderer)
@@ -69,8 +69,8 @@ public:
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;
 
-    // IRectTransformListener
-    virtual void OnRectTransformChanged() override;
+    // ITransformListener
+    virtual void OnTransformChanged() override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

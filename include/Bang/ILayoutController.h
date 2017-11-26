@@ -4,13 +4,13 @@
 #include "Bang/Axis.h"
 #include "Bang/IInvalidatable.h"
 #include "Bang/IChildrenListener.h"
-#include "Bang/IRectTransformListener.h"
+#include "Bang/ITransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class ILayoutController : public IInvalidatable<ILayoutController>,
                           public IChildrenListener,
-                          public IRectTransformListener
+                          public ITransformListener
 {
     IINVALIDATABLE(ILayoutController)
 
@@ -22,9 +22,9 @@ public:
     void OnChildRemoved(GameObject *removedChild) override;
     void OnParentChanged(GameObject *oldParent, GameObject *newParent) override;
 
-    // IRectTransformListener
-    void OnRectTransformChanged() override;
-    void OnChildrenRectTransformChanged() override;
+    // ITransformListener
+    void OnTransformChanged() override;
+    void OnChildrenTransformChanged() override;
 
 protected:
     ILayoutController();

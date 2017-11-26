@@ -393,8 +393,7 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
     return GetContentGlobalNDCRect();
 }
 
-void UITextRenderer::OnRectTransformChanged()
-{ if (GetGameObject()->GetName() == "WOLOLO") { Debug_Log("OnRectTransformChanged()"); } OnChanged(); }
+void UITextRenderer::OnTransformChanged() { OnChanged(); }
 
 const Color &UITextRenderer::GetTextColor() const
 {

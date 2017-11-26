@@ -7,11 +7,15 @@
 #include "Bang/Component.h"
 #include "Bang/Quaternion.h"
 #include "Bang/IInvalidatable.h"
+#include "Bang/IChildrenListener.h"
+#include "Bang/ITransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class Transform : public Component,
-                  public IInvalidatable<Transform>
+                  public IInvalidatable<Transform>,
+                  public ITransformListener,
+                  public EventEmitter<ITransformListener>
 {
     COMPONENT(Transform)
     IINVALIDATABLE(Transform)
@@ -72,7 +76,7 @@ public:
     Vector3 WorldToLocalVector(const Vector3 &vector) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
-    Matrix4 GetLocalToWorldMatrix() const;
+    const Matrix4& GetLocalToWorldMatrix() const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;
@@ -94,6 +98,11 @@ public:
     static Quaternion GetRotationFromMatrix4(const Matrix4 &transformMatrix);
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
 
+    // ITransformListener
+    void OnTransformChanged() override;
+    void OnParentTransformChanged() override;
+    void OnChildrenTransformChanged() override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -101,16 +110,26 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
+    // IInvalidatable
+    void OnInvalidated() override;
+
 protected:
+    mutable Matrix4 m_localToWorldMatrix;
     mutable Matrix4 m_localToParentMatrix;
+    mutable bool m_invalidLocalToWorldMatrix = true;
 
     Transform();
     virtual ~Transform();
+
+    void RecalculateLocalToWorldMatrix() const;
 
 private:
     Vector3    m_localPosition  = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;
+
+    void PropagateParentTransformChangedEvent() const;
+    void PropagateChildrenTransformChangedEvent() const;
 };
 
 NAMESPACE_BANG_END

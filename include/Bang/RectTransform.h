@@ -5,14 +5,11 @@
 #include "Bang/Transform.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEnabledListener.h"
-#include "Bang/IRectTransformListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class RectTransform : public Transform,
-                      public IEnabledListener,
-                      public IRectTransformListener,
-                      public EventEmitter<IRectTransformListener>
+                      public IEnabledListener
 {
     COMPONENT(RectTransform)
 
@@ -89,21 +86,12 @@ public:
     void OnEnabled() override;
     void OnDisabled() override;
 
-    // IRectTransformListener
-    void OnRectTransformChanged() override;
-    void OnParentRectTransformChanged() override;
-    void OnChildrenRectTransformChanged() override;
-
     // ICloneable
     void CloneInto(ICloneable *clone) const;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
-
-    // IInvalidatable
-    void Invalidate() override;
-    void OnInvalidated() override;
 
 private:
     Vector2i m_marginRightTop = Vector2i::Zero;
@@ -112,9 +100,6 @@ private:
     Vector2 m_pivotPosition =  Vector2::Zero;
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
-
-    void PropagateParentRectTransformChangedEvent() const;
-    void PropagateChildrenRectTransformChangedEvent() const;
 
     friend class UILayoutManager;
 };

@@ -9,7 +9,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UILayoutManager.h"
-#include "Bang/IRectTransformListener.h"
+#include "Bang/ITransformListener.h"
 
 USING_NAMESPACE_BANG
 
@@ -438,53 +438,5 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
 }
 
-void RectTransform::Invalidate()
-{
-    IInvalidatable<Transform>::Invalidate();
-}
-
-void RectTransform::OnInvalidated()
-{
-    // Propagate to RectTransformListeners
-    OnRectTransformChanged();
-}
-
 void RectTransform::OnEnabled()  { Invalidate(); }
 void RectTransform::OnDisabled() { Invalidate(); }
-
-void RectTransform::OnRectTransformChanged()
-{
-    List<IRectTransformListener*> propagateTo =
-            GetGameObject()->GetComponents<IRectTransformListener>();
-
-    IRectTransformListener::SetReceiveEvents(false);
-    PROPAGATE_1(IRectTransformListener, OnRectTransformChanged, propagateTo);
-    IRectTransformListener::SetReceiveEvents(true);
-
-    PropagateParentRectTransformChangedEvent();
-    PropagateChildrenRectTransformChangedEvent();
-}
-
-void RectTransform::PropagateParentRectTransformChangedEvent() const
-{
-    GameObject *go = GetGameObject();
-    PROPAGATE_1(IRectTransformListener, OnParentRectTransformChanged,
-                go->GetComponentsInChildrenOnly<IRectTransformListener>(false));
-}
-
-void RectTransform::PropagateChildrenRectTransformChangedEvent() const
-{
-    GameObject *go = GetGameObject();
-    PROPAGATE_1(IRectTransformListener, OnChildrenRectTransformChanged,
-                go->GetComponentsInParent<IRectTransformListener>(false));
-}
-
-void RectTransform::OnParentRectTransformChanged()
-{
-    Invalidate();
-}
-
-void RectTransform::OnChildrenRectTransformChanged()
-{
-    PropagateChildrenRectTransformChangedEvent();
-}

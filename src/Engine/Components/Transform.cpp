@@ -5,7 +5,7 @@
 
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
-#include "Bang/IRectTransformListener.h"
+#include "Bang/ITransformListener.h"
 
 USING_NAMESPACE_BANG
 
@@ -234,17 +234,25 @@ const Matrix4 &Transform::GetLocalToParentMatrix() const
     return m_localToParentMatrix;
 }
 
-Matrix4 Transform::GetLocalToWorldMatrix() const
+void Transform::RecalculateLocalToWorldMatrix() const
 {
-    Matrix4 m = GetLocalToParentMatrix();
+    const Matrix4 &m = GetLocalToParentMatrix();
     if (GetGameObject()->GetParent() &&
         GetGameObject()->GetParent()->GetTransform())
     {
-        Matrix4 mp =
+        const Matrix4 &mp =
           GetGameObject()->GetParent()->GetTransform()->GetLocalToWorldMatrix();
-        return mp * m;
+        m_localToWorldMatrix = mp * m;
     }
-    return m;
+    else { m_localToWorldMatrix = m; }
+
+    m_invalidLocalToWorldMatrix = false;
+}
+
+const Matrix4& Transform::GetLocalToWorldMatrix() const
+{
+    if (m_invalidLocalToWorldMatrix) { RecalculateLocalToWorldMatrix(); }
+    return m_localToWorldMatrix;
 }
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
@@ -380,6 +388,52 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
+void Transform::OnInvalidated()
+{
+    OnTransformChanged();
+    m_invalidLocalToWorldMatrix = true;
+}
+
+void Transform::OnTransformChanged()
+{
+    List<ITransformListener*> propagateTo =
+            GetGameObject()->GetComponents<ITransformListener>();
+
+    IInvalidatable<Transform>::Invalidate();
+
+    ITransformListener::SetReceiveEvents(false);
+    PROPAGATE_1(ITransformListener, OnTransformChanged, propagateTo);
+    ITransformListener::SetReceiveEvents(true);
+
+    PropagateParentTransformChangedEvent();
+    PropagateChildrenTransformChangedEvent();
+}
+
+void Transform::PropagateParentTransformChangedEvent() const
+{
+    GameObject *go = GetGameObject();
+    PROPAGATE_1(ITransformListener, OnParentTransformChanged,
+                go->GetComponentsInChildrenOnly<ITransformListener>(false));
+}
+
+void Transform::PropagateChildrenTransformChangedEvent() const
+{
+    GameObject *go = GetGameObject();
+    PROPAGATE_1(ITransformListener, OnChildrenTransformChanged,
+                go->GetComponentsInParent<ITransformListener>(false));
+}
+
+void Transform::OnParentTransformChanged()
+{
+    IInvalidatable<Transform>::Invalidate();
+}
+
+void Transform::OnChildrenTransformChanged()
+{
+    PropagateChildrenTransformChangedEvent();
+}
+
+
 void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -410,3 +464,4 @@ void Transform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Rotation", GetLocalRotation());
     xmlInfo->Set("Scale",    GetLocalScale());
 }
+
