@@ -94,6 +94,7 @@ public:
 
     template <class T>
     bool HasComponent() const;
+    bool HasComponent(const String &className) const;
 
     template <class T>
     int CountComponents() const;

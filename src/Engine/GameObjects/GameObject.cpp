@@ -168,11 +168,10 @@ Component* GameObject::AddComponent(Component *c, int _index)
         Transform *trans = Cast<Transform*>(c);
         if (trans) { ASSERT(!HasComponent<Transform>()); }
 
+        c->SetGameObject(this);
+
         const int index = (_index != -1 ? _index : GetComponents().Size());
         m_components.Insert(index, c);
-
-        c->SetGameObject(this);
-        if (IsStarted()) { c->Start(); }
 
         if (trans) { p_transform = trans; }
     }
@@ -182,6 +181,15 @@ Component* GameObject::AddComponent(Component *c, int _index)
 const List<Component *> &GameObject::GetComponents() const
 {
     return m_components;
+}
+
+bool GameObject::HasComponent(const String &className) const
+{
+    for (Component *comp : GetComponents())
+    {
+        if (comp->GetClassName() == className) { return true; }
+    }
+    return false;
 }
 
 Component *GameObject::GetComponentByGUID(const GUID &guid) const

@@ -31,15 +31,6 @@ void UIFileList::OnStart()
 void UIFileList::OnUpdate()
 {
     Component::OnUpdate();
-
-    RectTransform *rt = GetGameObject()->GetRectTransform();
-    if (rt->IsMouseOver())
-    {
-        if (Input::GetKeyDownRepeat(Key::Left))
-        {
-            SetCurrentPath( GetCurrentPath().GetDirectory() );
-        }
-    }
 }
 
 void UIFileList::SetFileExtensions(const List<String> &extensions)

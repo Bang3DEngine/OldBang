@@ -21,8 +21,8 @@ enum class UIButtoneableMode
 };
 
 class UIButtoneable : public Component,
-                 public IDestroyListener,
-                 public EventEmitter<IUIButtonListener>
+                      public IDestroyListener,
+                      public EventEmitter<IUIButtonListener>
 {
     COMPONENT(UIButtoneable)
 

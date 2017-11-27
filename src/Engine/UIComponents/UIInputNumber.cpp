@@ -1,6 +1,7 @@
 #include "Bang/UIInputNumber.h"
 
 #include "Bang/Input.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputText.h"
 #include "Bang/RectTransform.h"
@@ -27,18 +28,9 @@ void UIInputNumber::OnUpdate()
 {
     Component::OnUpdate();
 
-    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
-    if (focusable->HasFocus())
+    if (UICanvas::HasFocus(this))
     {
-        if (Input::GetKeyDown(Key::Enter))
-        {
-            List<UIFocusable*> focusables =
-                   GetGameObject()->GetComponentsInChildren<UIFocusable>(true);
-            for (UIFocusable *cFocusable : focusables)
-            {
-                cFocusable->LeaveFocus();
-            }
-        }
+        if (Input::GetKeyDown(Key::Enter)) { UICanvas::ClearFocus(); }
     }
 }
 

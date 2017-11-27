@@ -28,6 +28,12 @@ void Component::SetGameObject(GameObject *gameObject)
     if (p_gameObject != gameObject)
     {
         if (p_gameObject) { p_gameObject->m_components.Remove(this); }
+
+        if (!CanBeRepeatedInGameObject())
+        {
+            ASSERT(!gameObject->HasComponent(GetClassName()));
+        }
+
         p_gameObject = gameObject;
     }
 }
@@ -43,6 +49,12 @@ void Component::OnRender(RenderPass) {}
 void Component::OnRenderGizmos() {}
 void Component::OnAfterChildrenRender(RenderPass) {}
 void Component::OnDestroy() {}
+
+bool Component::CanBeRepeatedInGameObject() const
+{
+    return true;
+
+}
 
 bool Component::IsEnabled(bool recursive) const
 {

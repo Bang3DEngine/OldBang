@@ -234,6 +234,8 @@ const Matrix4 &Transform::GetLocalToParentMatrix() const
     return m_localToParentMatrix;
 }
 
+bool Transform::CanBeRepeatedInGameObject() const { return false; }
+
 void Transform::RecalculateLocalToWorldMatrix() const
 {
     const Matrix4 &m = GetLocalToParentMatrix();

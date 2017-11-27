@@ -2,6 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
@@ -117,8 +118,7 @@ bool UIButtoneable::IsMouseOverSomePart() const
     {
         for (const GameObject *part : p_buttonParts)
         {
-           RectTransform *rt = part->GetRectTransform();
-           if (rt && rt->IsMouseOver() && part->IsEnabled(true))
+           if (UICanvas::IsMouseOver(part, true) && part->IsEnabled(true))
            { return true; }
         }
     }

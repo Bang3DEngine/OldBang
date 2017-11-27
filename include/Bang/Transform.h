@@ -121,6 +121,7 @@ protected:
     Transform();
     virtual ~Transform();
 
+    virtual bool CanBeRepeatedInGameObject() const override;
     void RecalculateLocalToWorldMatrix() const;
 
 private:

@@ -13,23 +13,36 @@ class UIFocusable : public Component,
     COMPONENT(UIFocusable)
 
 public:
-	UIFocusable();
-	virtual ~UIFocusable();
-
     void OnUpdate() override;
+    void OnPostUpdate() override;
 
-    bool IsMouseOver() const;
+    bool HasMouseOver() const;
 
-    void LeaveFocus();
+    void SetFocusEnabled(bool focusEnabled);
+
     bool HasFocus() const;
+    bool IsFocusEnabled() const;
     bool HasJustFocusChanged() const;
+
+protected:
+    virtual bool CanBeRepeatedInGameObject() const override;
 
 private:
     bool m_hasFocus = false;
+    bool m_focusEnabled = true;
+    bool m_hasMouseOver = false;
     bool m_hasJustFocusChanged = false;
+
+    UIFocusable();
+    virtual ~UIFocusable();
 
     void PropagateToFocusListeners();
     void HandleFocusing(bool handleFocusTake);
+
+    void SetFocus();
+    void ClearFocus();
+
+    friend class UICanvas;
 };
 
 NAMESPACE_BANG_END

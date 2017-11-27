@@ -5,6 +5,7 @@
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFocusable.h"
@@ -35,8 +36,7 @@ void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
-    bool hasFocus = focusable->HasFocus();
+    bool hasFocus = UICanvas::HasFocus(this);
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());

@@ -1,10 +1,11 @@
 ﻿#include "Bang/UITree.h"
 
 #include "Bang/Input.h"
+#include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
 #include "Bang/IconManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtoneable.h"
-#include "Bang/UIButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -26,41 +27,44 @@ void UITree::OnUpdate()
     Component::OnUpdate();
 
     // Collapse with left-right buttons
-    int collapseOnOff = 0;
-    if (Input::GetKeyDownRepeat(Key::Left)) { collapseOnOff = -1; }
-    else if (Input::GetKeyDownRepeat(Key::Right)) { collapseOnOff = 1; }
-    if (collapseOnOff != 0)
+    if (UICanvas::HasFocus(this, true))
     {
-        GOItem *selItemCont = GetUIList()->GetSelectedItem();
-        if (selItemCont)
+        int collapseOnOff = 0;
+        if (Input::GetKeyDownRepeat(Key::Left)) { collapseOnOff = -1; }
+        else if (Input::GetKeyDownRepeat(Key::Right)) { collapseOnOff = 1; }
+        if (collapseOnOff != 0)
         {
-            UITreeItemContainer *selectedItemCont =
-                                    Cast<UITreeItemContainer*>(selItemCont);
-            GOItem *selectedItem = selectedItemCont->GetContainedItem();
-
-            bool isCollapsed = selectedItemCont->IsCollapsed();
-            int numChildren = GetItemTree(selectedItem)->GetChildren().Size();
-
-            int newSelIndex = GetUIList()->GetSelectedIndex();
-
-            if ( (numChildren == 0 || !isCollapsed) && collapseOnOff == 1)
-            { ++newSelIndex; }
-
-            else if ( (numChildren == 0 || isCollapsed) && collapseOnOff == -1)
-            { --newSelIndex; }
-
-            if (newSelIndex == GetUIList()->GetSelectedIndex())
+            GOItem *selItemCont = GetUIList()->GetSelectedItem();
+            if (selItemCont)
             {
-                // Normal Collapse/UnCollapse
+                UITreeItemContainer *selectedItemCont =
+                                        Cast<UITreeItemContainer*>(selItemCont);
                 GOItem *selectedItem = selectedItemCont->GetContainedItem();
-                SetItemCollapsed(selectedItem, (collapseOnOff == -1) );
-            }
-            else
-            {
-                // "Redundant" Collapse/UnCollapse. Go Up or Down
-                newSelIndex = Math::Clamp(newSelIndex,
-                                          0, GetUIList()->GetNumItems()-1);
-                GetUIList()->SetSelection(newSelIndex);
+
+                bool isCollapsed = selectedItemCont->IsCollapsed();
+                int numChildren = GetItemTree(selectedItem)->GetChildren().Size();
+
+                int newSelIndex = GetUIList()->GetSelectedIndex();
+
+                if ( (numChildren == 0 || !isCollapsed) && collapseOnOff == 1)
+                { ++newSelIndex; }
+
+                else if ( (numChildren == 0 || isCollapsed) && collapseOnOff == -1)
+                { --newSelIndex; }
+
+                if (newSelIndex == GetUIList()->GetSelectedIndex())
+                {
+                    // Normal Collapse/UnCollapse
+                    GOItem *selectedItem = selectedItemCont->GetContainedItem();
+                    SetItemCollapsed(selectedItem, (collapseOnOff == -1) );
+                }
+                else
+                {
+                    // "Redundant" Collapse/UnCollapse. Go Up or Down
+                    newSelIndex = Math::Clamp(newSelIndex,
+                                              0, GetUIList()->GetNumItems()-1);
+                    GetUIList()->SetSelection(newSelIndex);
+                }
             }
         }
     }

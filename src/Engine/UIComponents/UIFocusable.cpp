@@ -20,41 +20,47 @@ UIFocusable::~UIFocusable()
 void UIFocusable::OnUpdate()
 {
     Component::OnUpdate();
-
-    m_hasJustFocusChanged = false;
-    HandleFocusing(false);
-    HandleFocusing(true);
 }
 
-bool UIFocusable::IsMouseOver() const
+void UIFocusable::OnPostUpdate()
 {
-    return GetGameObject()->GetRectTransform()->IsMouseOver();
+    Component::OnPostUpdate();
+    m_hasJustFocusChanged = false;
 }
 
-void UIFocusable::LeaveFocus()
+bool UIFocusable::HasMouseOver() const
+{
+    return m_hasMouseOver;
+}
+
+void UIFocusable::SetFocusEnabled(bool focusEnabled)
+{
+    m_focusEnabled = focusEnabled;
+}
+
+bool UIFocusable::HasFocus() const { return m_hasFocus; }
+bool UIFocusable::IsFocusEnabled() const { return m_focusEnabled; }
+bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
+bool UIFocusable::CanBeRepeatedInGameObject() const { return false; }
+
+void UIFocusable::SetFocus()
+{
+    ASSERT(IsFocusEnabled());
+    if (!HasFocus())
+    {
+        m_hasFocus = true;
+        m_hasJustFocusChanged = true;
+        PropagateToFocusListeners();
+    }
+}
+
+void UIFocusable::ClearFocus()
 {
     if (HasFocus())
     {
         m_hasFocus = false;
         m_hasJustFocusChanged = true;
         PropagateToFocusListeners();
-    }
-}
-bool UIFocusable::HasFocus() const { return m_hasFocus; }
-bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
-
-void UIFocusable::HandleFocusing(bool handleFocusTake)
-{
-    if (Input::GetMouseButtonDown(MouseButton::Left))
-    {
-        bool gotFocus = IsMouseOver();
-        bool triggerEvent = (HasFocus() != gotFocus);
-        if (triggerEvent && (gotFocus == handleFocusTake))
-        {
-            m_hasFocus = gotFocus;
-            m_hasJustFocusChanged = true;
-            PropagateToFocusListeners();
-        }
     }
 }
 

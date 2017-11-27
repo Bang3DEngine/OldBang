@@ -3,6 +3,7 @@
 #include "Bang/Font.h"
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
@@ -35,20 +36,20 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
-    if (focusable->HasFocus())
+    if (UICanvas::HasFocus(this, true))
     {
         if (IsSelectable())
         {
+            UIFocusable *focusable = UICanvas::GetCurrentFocus();
             if (!focusable->HasJustFocusChanged())
             {
-                if (IsFirstSelectAll() && Input::GetMouseButtonDown(MouseButton::Left))
+                if (m_firstSelectAll && Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     m_firstSelectAll = false;
                 }
-
-                if (!IsFirstSelectAll()) { HandleMouseSelection(); }
+                if (!m_firstSelectAll) { HandleMouseSelection(); }
             }
+
             HandleClipboardCopy();
         }
         else
@@ -146,11 +147,6 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
     return Vector2(localTextX, 0).x;
 }
 
-bool UILabel::IsFirstSelectAll() const
-{
-    return m_firstSelectAll;
-}
-
 bool UILabel::IsSelectAllOnFocus() const
 {
     return m_selectAllOnFocusTaken;
@@ -233,8 +229,7 @@ void UILabel::HandleClipboardCopy()
 
 void UILabel::HandleMouseSelection()
 {
-    RectTransform *rt = GetGameObject()->GetRectTransform();
-    if (rt->IsMouseOver() && Input::GetMouseButtonDown(MouseButton::Left))
+    if (Input::GetMouseButtonDown(MouseButton::Left))
     {
         m_selectingWithMouse = true;
     }
@@ -255,7 +250,7 @@ void UILabel::HandleMouseSelection()
         // Move the selection index accordingly
         if (!IsShiftPressed() && Input::GetMouseButtonDown(MouseButton::Left))
         {
-           ResetSelection();
+            ResetSelection();
         }
         if (!IsSelectingWithMouse()) { ResetSelection(); }
     }

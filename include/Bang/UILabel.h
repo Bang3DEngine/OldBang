@@ -40,7 +40,6 @@ public:
     float GetCursorXGlobalNDC(int cursorIndex) const;
     float GetCursorXLocalNDC(int cursorIndex) const;
 
-    bool IsFirstSelectAll() const;
     bool IsSelectAllOnFocus() const;
     bool IsSelectingWithMouse() const;
 
@@ -55,7 +54,7 @@ private:
     int m_cursorIndex = 0;
     int m_selectionIndex = 0;
     bool m_selectable = false;
-    bool m_firstSelectAll = false;
+    bool m_firstSelectAll = true;
     bool m_selectingWithMouse = false;
     bool m_selectAllOnFocusTaken = false;
 

@@ -63,6 +63,8 @@ protected:
     virtual void OnAfterChildrenRender(RenderPass renderPass);
     virtual void OnDestroy() override;
 
+    virtual bool CanBeRepeatedInGameObject() const;
+
 private:
     GameObject *p_gameObject = nullptr;
 

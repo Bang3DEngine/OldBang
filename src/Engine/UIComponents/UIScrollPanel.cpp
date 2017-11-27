@@ -3,6 +3,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Color.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIScrollBar.h"
@@ -50,7 +51,7 @@ void UIScrollPanel::UpdateScrollUI()
                                                             Vector2::One);
 
         // MouseWheel scrolling
-        if (GetGameObject()->GetRectTransform()->IsMouseOver())
+        if (UICanvas::IsMouseOver(this, true))
         {
             Vector2i mouseWheelPx(Input::GetMouseWheel() * WheelScrollSpeedPx);
             Vector2 mouseWheelPercent = Vector2(mouseWheelPx) / contentSize;

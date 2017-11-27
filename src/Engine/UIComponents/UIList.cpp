@@ -2,6 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
@@ -29,8 +30,7 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
-    RectTransform *rt = GetGameObject()->GetRectTransform();
-    if (rt->IsMouseOver())
+    if (UICanvas::HasFocus(this, true))
     {
         HandleShortcuts();
 
