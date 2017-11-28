@@ -230,6 +230,7 @@ ${ENGINE_SRC_DIR}/System/Library.cpp
 ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
+${ENGINE_SRC_DIR}/UIComponents/IFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp

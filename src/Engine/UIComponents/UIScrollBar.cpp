@@ -2,6 +2,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtoneable.h"
@@ -162,6 +163,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 
     go->SetName("ScrollBar");
     UIScrollBar *scrollBar = go->AddComponent<UIScrollBar>();
+    go->AddComponent<UIFocusable>();
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
     GameObject *bar = GameObjectFactory::CreateUIGameObjectNamed("Bar");

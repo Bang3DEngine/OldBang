@@ -55,7 +55,9 @@ protected:
 
     virtual void OnStart() override;
     virtual void OnPreUpdate();
+    virtual void OnBeforeChildrenUpdate();
     virtual void OnUpdate();
+    virtual void OnAfterChildrenUpdate();
     virtual void OnPostUpdate();
     virtual void OnBeforeChildrenRender(RenderPass renderPass);
     virtual void OnRender(RenderPass renderPass);

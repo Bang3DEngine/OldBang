@@ -42,7 +42,9 @@ GameObject *Component::GetGameObject() const { return p_gameObject; }
 
 void Component::OnStart() {}
 void Component::OnPreUpdate() {}
+void Component::OnBeforeChildrenUpdate() {}
 void Component::OnUpdate() {}
+void Component::OnAfterChildrenUpdate() {}
 void Component::OnPostUpdate() {}
 void Component::OnBeforeChildrenRender(RenderPass) {}
 void Component::OnRender(RenderPass) {}

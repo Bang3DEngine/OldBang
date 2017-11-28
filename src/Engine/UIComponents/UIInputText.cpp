@@ -32,6 +32,11 @@ UIInputText::~UIInputText()
 {
 }
 
+void UIInputText::OnStart()
+{
+    Component::OnStart();
+}
+
 void UIInputText::OnUpdate()
 {
     Component::OnUpdate();

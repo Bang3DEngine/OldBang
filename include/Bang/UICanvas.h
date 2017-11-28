@@ -1,12 +1,13 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include "Bang/Set.h"
 #include "Bang/Component.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
-FORWARD class UIFocusable;
+FORWARD class IFocusable;
 FORWARD class UILayoutManager;
 
 class UICanvas : public Component,
@@ -21,15 +22,18 @@ public:
     // Component
     virtual void OnStart() override;
     virtual void OnUpdate() override;
-    virtual void OnPostUpdate() override;
+    virtual void OnAfterChildrenUpdate() override;
 
     void Invalidate();
 
+    // Static functions
     static void ClearFocus();
-    static void SetFocus(UIFocusable *focusable);
+    static void SetFocus(IFocusable *focusable);
 
-    void _ClearFocus();
-    void _SetFocus(UIFocusable *focusable);
+    static bool HasFocus(const Component *comp);
+    static bool HasFocus(const GameObject *go);
+    static bool IsMouseOver(const Component *comp);
+    static bool IsMouseOver(const GameObject *go);
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -41,18 +45,6 @@ public:
     // IDestroyListener
     virtual void OnDestroyed(Object *object) override;
 
-    // Static functions
-    static bool HasFocus(const Component *comp, bool recursive = false);
-    static bool HasFocus(const GameObject *go, bool recursive = false);
-    static bool IsMouseOver(const Component *comp, bool recursive = false);
-    static bool IsMouseOver(const GameObject *go, bool recursive = false);
-    static UIFocusable *GetCurrentFocus();
-    static GameObject *GetCurrentFocusGameObject();
-    static UIFocusable *GetCurrentFocusMouseOver();
-    static GameObject *GetCurrentFocusMouseOverGameObject();
-
-    UIFocusable *_GetCurrentFocus() const;
-    UIFocusable *_GetCurrentFocusMouseOver() const;
     UILayoutManager* GetLayoutManager() const;
 
     static UICanvas *GetActive();
@@ -61,8 +53,18 @@ private:
     static UICanvas *p_activeCanvas;
 
     UILayoutManager *m_uiLayoutManager = nullptr;
-    UIFocusable *p_currentFocus = nullptr;
-    UIFocusable *p_currentFocusMouseOver = nullptr;
+
+    Set<IFocusable*> p_currentFocus;
+    Set<IFocusable*> p_currentFocusMouseOver;
+
+    void _SetFocus(IFocusable *focusable);
+    void _SetFocusMouseOver(IFocusable *focusable);
+
+    Set<IFocusable*>& GetCurrentFocus();
+    Set<IFocusable*>& GetCurrentFocusMouseOver();
+
+    void GetSortedFocusCandidates(List<IFocusable*> *sortedCandidates,
+                                  const GameObject *go) const;
 };
 
 NAMESPACE_BANG_END

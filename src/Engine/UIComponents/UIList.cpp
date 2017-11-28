@@ -30,7 +30,7 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::HasFocus(this, true))
+    if (UICanvas::HasFocus(this))
     {
         HandleShortcuts();
 

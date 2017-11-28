@@ -118,7 +118,7 @@ bool UIButtoneable::IsMouseOverSomePart() const
     {
         for (const GameObject *part : p_buttonParts)
         {
-           if (UICanvas::IsMouseOver(part, true) && part->IsEnabled(true))
+           if (UICanvas::IsMouseOver(part) && part->IsEnabled(true))
            { return true; }
         }
     }

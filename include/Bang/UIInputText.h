@@ -27,6 +27,7 @@ class UIInputText : public Component,
 public:
     virtual ~UIInputText();
 
+    void OnStart() override;
     void OnUpdate() override;
 
     void SetCursorIndex(int index);

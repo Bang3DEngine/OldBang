@@ -36,11 +36,11 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::HasFocus(this, true))
+    if (UICanvas::HasFocus(this))
     {
         if (IsSelectable())
         {
-            UIFocusable *focusable = UICanvas::GetCurrentFocus();
+            UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
             if (!focusable->HasJustFocusChanged())
             {
                 if (m_firstSelectAll && Input::GetMouseButtonDown(MouseButton::Left))

@@ -27,7 +27,7 @@ void UITree::OnUpdate()
     Component::OnUpdate();
 
     // Collapse with left-right buttons
-    if (UICanvas::HasFocus(this, true))
+    if (UICanvas::HasFocus(this))
     {
         int collapseOnOff = 0;
         if (Input::GetKeyDownRepeat(Key::Left)) { collapseOnOff = -1; }

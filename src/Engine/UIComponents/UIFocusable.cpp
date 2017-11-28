@@ -28,57 +28,35 @@ void UIFocusable::OnPostUpdate()
     m_hasJustFocusChanged = false;
 }
 
-bool UIFocusable::HasMouseOver() const
-{
-    return m_hasMouseOver;
-}
-
-void UIFocusable::SetFocusEnabled(bool focusEnabled)
-{
-    m_focusEnabled = focusEnabled;
-}
-
-bool UIFocusable::HasFocus() const { return m_hasFocus; }
-bool UIFocusable::IsFocusEnabled() const { return m_focusEnabled; }
 bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 bool UIFocusable::CanBeRepeatedInGameObject() const { return false; }
 
 void UIFocusable::SetFocus()
 {
-    ASSERT(IsFocusEnabled());
-    if (!HasFocus())
-    {
-        m_hasFocus = true;
-        m_hasJustFocusChanged = true;
-        PropagateToFocusListeners();
-    }
+    if (!HasFocus()) { m_hasJustFocusChanged = true; }
+    IFocusable::SetFocus();
 }
 
 void UIFocusable::ClearFocus()
 {
-    if (HasFocus())
-    {
-        m_hasFocus = false;
-        m_hasJustFocusChanged = true;
-        PropagateToFocusListeners();
-    }
+    if (!HasFocus()) { m_hasJustFocusChanged = true; }
+    IFocusable::ClearFocus();
 }
 
 void UIFocusable::PropagateToFocusListeners()
 {
+    IFocusable::PropagateToFocusListeners();
+
     if (HasFocus())
     {
-        EventEmitter<IFocusListener>::
-                PropagateToListeners(&IFocusListener::OnFocusTaken);
         GameObject::Propagate(&IFocusListener::OnFocusTaken,
                               GetGameObject()->GetComponents<IFocusListener>());
     }
     else
     {
-        EventEmitter<IFocusListener>::
-            PropagateToListeners(&IFocusListener::OnFocusLost);
         GameObject::Propagate(&IFocusListener::OnFocusLost,
                               GetGameObject()->GetComponents<IFocusListener>());
     }
 }
+
 

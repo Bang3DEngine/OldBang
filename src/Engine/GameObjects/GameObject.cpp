@@ -38,10 +38,22 @@ void GameObject::PreUpdate()
     GameObject::Propagate(&GameObject::PreUpdate, GetChildren());
 }
 
+void GameObject::BeforeChildrenUpdate()
+{
+    GameObject::Propagate(&Component::OnBeforeChildrenUpdate, GetComponents());
+}
+
 void GameObject::Update()
 {
     GameObject::Propagate(&Component::OnUpdate, GetComponents());
+    BeforeChildrenUpdate();
     GameObject::Propagate(&GameObject::Update, GetChildren());
+    AfterChildrenUpdate();
+}
+
+void GameObject::AfterChildrenUpdate()
+{
+    GameObject::Propagate(&Component::OnAfterChildrenUpdate, GetComponents());
 }
 
 void GameObject::PostUpdate()

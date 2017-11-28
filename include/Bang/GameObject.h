@@ -173,7 +173,9 @@ protected:
     virtual ~GameObject();
 
     virtual void PreUpdate();
+    virtual void BeforeChildrenUpdate();
     virtual void Update();
+    virtual void AfterChildrenUpdate();
     virtual void PostUpdate();
     virtual void BeforeChildrenRender(RenderPass renderPass);
     virtual void RenderGizmos();

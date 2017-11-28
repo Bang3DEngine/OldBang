@@ -5,7 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusable.h"
+#include "Bang/IFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutManager.h"
@@ -23,6 +23,57 @@ UICanvas::~UICanvas()
 {
 }
 
+void UICanvas::OnStart()
+{
+    Component::OnStart();
+}
+
+void UICanvas::OnUpdate()
+{
+    Component::OnUpdate();
+    UICanvas::p_activeCanvas = this;
+
+    // Layout rebuilding
+    m_uiLayoutManager->RebuildLayout( GetGameObject() );
+
+    // Focus
+    p_currentFocusMouseOver.Clear();
+
+    List<IFocusable*> focusables;
+    GetSortedFocusCandidates(&focusables, GetGameObject());
+    for (IFocusable *focusable : focusables)
+    {
+        Component *focusableComp = Cast<Component*>(focusable);
+        if (focusableComp->IsEnabled() && focusable->IsFocusEnabled())
+        {
+            RectTransform *rt = focusableComp->GetGameObject()->GetRectTransform();
+            if (rt && rt->IsMouseOver())
+            {
+                _SetFocusMouseOver(focusable);
+
+                if (Input::GetMouseButtonDown(MouseButton::Left))
+                {
+                    _SetFocus(focusable);
+                }
+
+                break; // Finished searching!
+            }
+        }
+    }
+
+    if (GetCurrentFocusMouseOver().IsEmpty() &&
+        Input::GetMouseButtonDown(MouseButton::Left))
+    {
+        _SetFocus(nullptr); // Clicked onto nothing, clear focus
+    }
+
+    if (Input::GetKeyDown(Key::X))
+    {
+        Debug_Log(GetCurrentFocus());
+    }
+}
+
+
 void UICanvas::Invalidate()
 {
     List<RectTransform*> rts = GetGameObject()->
@@ -37,104 +88,77 @@ void UICanvas::Invalidate()
 void UICanvas::ClearFocus()
 {
     UICanvas *canvas = UICanvas::GetActive();
-    if (canvas) { canvas->_ClearFocus(); }
+    if (canvas) { canvas->_SetFocus(nullptr); }
 }
 
-void SetFocus(UIFocusable *focusable)
+void UICanvas::SetFocus(IFocusable *focusable)
 {
     UICanvas *canvas = UICanvas::GetActive();
     if (canvas) { canvas->_SetFocus(focusable); }
 }
 
-void UICanvas::_ClearFocus()
+void UICanvas::_SetFocus(IFocusable *newFocusable)
 {
-    _SetFocus(nullptr);
-}
-
-void UICanvas::_SetFocus(UIFocusable *focusable)
-{
-    if (_GetCurrentFocus() != focusable)
+    Debug_Log("_SetFocus " << newFocusable);
+    if (!GetCurrentFocus().Contains(newFocusable))
     {
-        if (_GetCurrentFocus())
+        for (IFocusable *focusable : GetCurrentFocus())
         {
-            _GetCurrentFocus()->ClearFocus();
-            _GetCurrentFocus()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+            Component *focusableComp = Cast<Component*>(newFocusable);
+            focusableComp->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+            focusable->ClearFocus();
         }
+        p_currentFocus.Clear();
 
-        p_currentFocus = focusable;
-        if (_GetCurrentFocus())
+        if (newFocusable)
         {
-            _GetCurrentFocus()->SetFocus();
-            _GetCurrentFocus()->EventEmitter<IDestroyListener>::RegisterListener(this);
-        }
-    }
-}
-
-void UICanvas::OnStart()
-{
-    Component::OnStart();
-}
-
-void UICanvas::OnUpdate()
-{
-    Component::OnUpdate();
-    UICanvas::p_activeCanvas = this;
-
-    // Layout rebuilding
-    m_uiLayoutManager->RebuildLayout( GetGameObject()->GetScene() );
-
-    // Focus
-    p_currentFocusMouseOver = nullptr;
-    List<UIFocusable*> focusables =
-            GetGameObject()->GetComponentsInChildrenOnly<UIFocusable>(true);
-    for (UIFocusable *focusable : focusables)
-    {
-        if (focusable->IsEnabled() && focusable->IsFocusEnabled())
-        {
-            RectTransform *rt = focusable->GetGameObject()->GetRectTransform();
-            if (rt && rt->IsMouseOver())
+            Component *newFocusableComp = Cast<Component*>(newFocusable);
+            List<IFocusable*> newFocus = newFocusableComp->GetGameObject()->
+                                  GetComponentsInParent<IFocusable>(true);
+            newFocus.PushFront(newFocusable);
+            Debug_Log(newFocus);
+            p_currentFocus.Add(newFocus.Begin(), newFocus.End());
+            for (IFocusable *focusable : GetCurrentFocus())
             {
-                // MouseOver update
-                if (_GetCurrentFocusMouseOver() != p_currentFocusMouseOver)
-                {
-                    if (_GetCurrentFocusMouseOver())
-                    {
-                        _GetCurrentFocusMouseOver()->m_hasMouseOver = false;
-                        _GetCurrentFocusMouseOver()->
-                            EventEmitter<IDestroyListener>::UnRegisterListener(this);
-                    }
-
-                    p_currentFocusMouseOver = focusable;
-                    if (_GetCurrentFocusMouseOver())
-                    {
-                        _GetCurrentFocusMouseOver()->m_hasMouseOver = true;
-                        _GetCurrentFocusMouseOver()->
-                            EventEmitter<IDestroyListener>::RegisterListener(this);
-                    }
-                }
-                else { p_currentFocusMouseOver = focusable; }
-
-                // Mouse Focus on click
-                if (Input::GetMouseButtonDown(MouseButton::Left))
-                {
-                    _SetFocus(focusable);
-                }
-
-                break; // Finished searching!
+                Component *focusableComp = Cast<Component*>(focusable);
+                focusable->SetFocus();
+                focusableComp->EventEmitter<IDestroyListener>::RegisterListener(this);
             }
         }
     }
-
-    if (!p_currentFocusMouseOver && Input::GetMouseButtonDown(MouseButton::Left))
-    {
-        _ClearFocus(); // Clicked onto nothing, clear focus
-    }
+    Debug_Log("_SetFocus end: " << GetCurrentFocus());
 }
 
-void UICanvas::OnPostUpdate()
+void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
 {
-    Component::OnPostUpdate();
+    if (!GetCurrentFocusMouseOver().Contains(newFocusableMO))
+    {
+        for (IFocusable *focusable : GetCurrentFocusMouseOver())
+        {
+            Component *focusableComp = Cast<Component*>(focusable);
+            focusableComp->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+        }
+        p_currentFocusMouseOver.Clear();
 
+        if (newFocusableMO)
+        {
+            Component *newFocusablMOComp = Cast<Component*>(newFocusableMO);
+            List<IFocusable*> newFocusMO = newFocusablMOComp->GetGameObject()->
+                                  GetComponentsInParent<IFocusable>(true);
+            newFocusMO.PushFront(newFocusableMO);
+
+            p_currentFocusMouseOver.Add(newFocusMO.Begin(), newFocusMO.End());
+            for (IFocusable *focusable : GetCurrentFocusMouseOver())
+            {
+                Component *focusableComp = Cast<Component*>(focusable);
+                focusableComp->EventEmitter<IDestroyListener>::RegisterListener(this);
+            }
+        }
+    }
+}
+void UICanvas::OnAfterChildrenUpdate()
+{
+    Component::OnAfterChildrenUpdate();
     UICanvas::p_activeCanvas = nullptr;
 }
 
@@ -155,76 +179,43 @@ void UICanvas::ExportXML(XMLNode *xmlInfo) const
 
 void UICanvas::OnDestroyed(Object *object)
 {
-    UIFocusable *destroyedFocusable = SCAST<UIFocusable*>(object);
-    if (destroyedFocusable == _GetCurrentFocus())
-    {
-        p_currentFocus = nullptr;
-    }
-
-    if (destroyedFocusable == _GetCurrentFocusMouseOver())
-    {
-        p_currentFocusMouseOver = nullptr;
-    }
+    IFocusable *destroyedFocusable = Cast<IFocusable*>(object);
+    GetCurrentFocusMouseOver().Remove(destroyedFocusable);
+    GetCurrentFocus().Remove(destroyedFocusable);
 }
 
-bool UICanvas::HasFocus(const Component *comp, bool recursive)
+bool UICanvas::HasFocus(const Component *comp)
 {
-    return comp ? UICanvas::HasFocus(comp->GetGameObject(), recursive) : false;
+    return comp ? UICanvas::HasFocus(comp->GetGameObject()) : false;
 }
 
-bool UICanvas::HasFocus(const GameObject *go, bool recursive)
-{
-    if (!go || !UICanvas::GetCurrentFocusGameObject()) { return false; }
-
-    if (!recursive) { return (UICanvas::GetCurrentFocusGameObject() == go); }
-    else { return HasFocus(go, false) ||
-                  go->IsChildOf(UICanvas::GetCurrentFocusGameObject()); }
-}
-
-bool UICanvas::IsMouseOver(const Component *comp, bool recursive)
-{
-    return comp ? UICanvas::IsMouseOver(comp->GetGameObject(), recursive) : false;
-}
-
-bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
-{
-    if (!go || !UICanvas::GetCurrentFocusGameObject()) { return false; }
-
-    if (!recursive) { return (UICanvas::GetCurrentFocusMouseOverGameObject() == go); }
-    else { return HasFocus(go, false) ||
-                  go->IsChildOf(UICanvas::GetCurrentFocusMouseOverGameObject()); }
-}
-
-UIFocusable *UICanvas::GetCurrentFocus()
+bool UICanvas::HasFocus(const GameObject *go)
 {
     UICanvas *canvas = UICanvas::GetActive();
-    return canvas ? canvas->_GetCurrentFocus() : nullptr;
+    if (!go || !canvas) { return false; }
+    IFocusable *focusable = go->GetComponent<IFocusable>();
+    return canvas->GetCurrentFocus().Contains(focusable);
 }
 
-GameObject *UICanvas::GetCurrentFocusGameObject()
+bool UICanvas::IsMouseOver(const Component *comp)
 {
-    UIFocusable *focus = UICanvas::GetCurrentFocus();
-    return focus ? focus->GetGameObject() : nullptr;
+    return comp ? UICanvas::IsMouseOver(comp->GetGameObject()) : false;
 }
 
-UIFocusable *UICanvas::GetCurrentFocusMouseOver()
+bool UICanvas::IsMouseOver(const GameObject *go)
 {
     UICanvas *canvas = UICanvas::GetActive();
-    return canvas ? canvas->_GetCurrentFocusMouseOver() : nullptr;
+    if (!go || !canvas) { return false; }
+    IFocusable *focusable = go->GetComponent<IFocusable>();
+    return canvas->GetCurrentFocusMouseOver().Contains(focusable);
 }
 
-GameObject *UICanvas::GetCurrentFocusMouseOverGameObject()
-{
-    UIFocusable *focus = UICanvas::GetCurrentFocusMouseOver();
-    return focus ? focus->GetGameObject() : nullptr;
-}
-
-UIFocusable *UICanvas::_GetCurrentFocus() const
+Set<IFocusable*>& UICanvas::GetCurrentFocus()
 {
     return p_currentFocus;
 }
 
-UIFocusable *UICanvas::_GetCurrentFocusMouseOver() const
+Set<IFocusable*>& UICanvas::GetCurrentFocusMouseOver()
 {
     return p_currentFocusMouseOver;
 }
@@ -237,4 +228,19 @@ UILayoutManager *UICanvas::GetLayoutManager() const
 UICanvas *UICanvas::GetActive()
 {
     return UICanvas::p_activeCanvas;
+}
+
+void UICanvas::GetSortedFocusCandidates(List<IFocusable *> *sortedCandidates,
+                                        const GameObject *go) const
+{
+    for (GameObject *child : go->GetChildren())
+    {
+        if (child->IsEnabled())
+        {
+            GetSortedFocusCandidates(sortedCandidates, child);
+
+            IFocusable *focusable = child->GetComponent<IFocusable>();
+            if (focusable) { sortedCandidates->PushBack(focusable); }
+        }
+    }
 }

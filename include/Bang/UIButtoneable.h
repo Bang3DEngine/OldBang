@@ -6,6 +6,7 @@
 #include "Bang/Set.h"
 #include "Bang/Input.h"
 #include "Bang/Component.h"
+#include "Bang/IFocusable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
 
@@ -21,6 +22,7 @@ enum class UIButtoneableMode
 };
 
 class UIButtoneable : public Component,
+                      public IFocusable,
                       public IDestroyListener,
                       public EventEmitter<IUIButtonListener>
 {
