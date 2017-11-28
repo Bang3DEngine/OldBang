@@ -221,23 +221,26 @@ void UIList::HandleShortcuts()
     int newSelectedIndex = -1;
 
     int numItems = GetNumItems();
-    if (Input::GetKeyDownRepeat(Key::Down))
+    if (Input::GetKeyDownRepeat(Key::Down) || Input::GetKeyDownRepeat(Key::Up))
     {
-        newSelectedIndex = (GetSelectedIndex() + 1) % numItems;
+        int inc = Input::GetKeyDownRepeat(Key::Down) ? 1 : -1;
+        GOItem *newSelectedItem;
+        newSelectedIndex = GetSelectedIndex();
+        do
+        {
+            newSelectedIndex = (newSelectedIndex + inc + numItems) % numItems;
+            newSelectedItem = GetItem(newSelectedIndex);
+            if (newSelectedIndex == GetSelectedIndex()) { break; }
+        }
+        while (newSelectedIndex != GetSelectedIndex() &&
+               !newSelectedItem->IsEnabled());
     }
-    else if (Input::GetKeyDownRepeat(Key::Up))
+    else if (Input::GetKeyDownRepeat(Key::PageDown) ||
+             Input::GetKeyDownRepeat(Key::PageUp))
     {
-        newSelectedIndex = (GetSelectedIndex() - 1 + numItems) % numItems;
-    }
-    else if (Input::GetKeyDownRepeat(Key::PageDown))
-    {
+        int sign = Input::GetKeyDownRepeat(Key::PageDown) ? 1 : -1;
         GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() +
-                               Vector2i(GetScrollPanel()->GetContainerSize()) );
-    }
-    else if (Input::GetKeyDownRepeat(Key::PageUp))
-    {
-        GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() -
-                               Vector2i(GetScrollPanel()->GetContainerSize()) );
+                          sign * Vector2i(GetScrollPanel()->GetContainerSize()) );
     }
     else if (Input::GetKeyDown(Key::End)) { newSelectedIndex = GetNumItems() - 1; }
     else if (Input::GetKeyDown(Key::Home)) { newSelectedIndex = 0; }

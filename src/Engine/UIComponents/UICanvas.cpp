@@ -66,11 +66,6 @@ void UICanvas::OnUpdate()
     {
         _SetFocus(nullptr); // Clicked onto nothing, clear focus
     }
-
-    if (Input::GetKeyDown(Key::X))
-    {
-        Debug_Log(GetCurrentFocus());
-    }
 }
 
 
@@ -99,12 +94,11 @@ void UICanvas::SetFocus(IFocusable *focusable)
 
 void UICanvas::_SetFocus(IFocusable *newFocusable)
 {
-    Debug_Log("_SetFocus " << newFocusable);
     if (!GetCurrentFocus().Contains(newFocusable))
     {
         for (IFocusable *focusable : GetCurrentFocus())
         {
-            Component *focusableComp = Cast<Component*>(newFocusable);
+            Component *focusableComp = Cast<Component*>(focusable);
             focusableComp->EventEmitter<IDestroyListener>::UnRegisterListener(this);
             focusable->ClearFocus();
         }
@@ -116,7 +110,7 @@ void UICanvas::_SetFocus(IFocusable *newFocusable)
             List<IFocusable*> newFocus = newFocusableComp->GetGameObject()->
                                   GetComponentsInParent<IFocusable>(true);
             newFocus.PushFront(newFocusable);
-            Debug_Log(newFocus);
+
             p_currentFocus.Add(newFocus.Begin(), newFocus.End());
             for (IFocusable *focusable : GetCurrentFocus())
             {
@@ -126,7 +120,6 @@ void UICanvas::_SetFocus(IFocusable *newFocusable)
             }
         }
     }
-    Debug_Log("_SetFocus end: " << GetCurrentFocus());
 }
 
 void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
