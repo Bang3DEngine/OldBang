@@ -1,7 +1,5 @@
 #include "Bang/IFocusable.h"
 
-#include "Bang/Component.h"
-
 USING_NAMESPACE_BANG
 
 IFocusable::IFocusable()

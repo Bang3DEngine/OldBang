@@ -25,7 +25,9 @@ public:
     void OnUpdate() override;
 
     void SetNumber(float v);
+
     float GetNumber() const;
+    UIInputText* GetInputText() const;
 
     // IFocusListener
     virtual void OnFocusTaken() override;
@@ -36,7 +38,6 @@ private:
     UIInputText *p_inputText = nullptr;
 
     void UpdateValueFromText();
-    UIInputText* GetInputText() const;
 
     // IValueChangedListener
     void OnValueChanged(Object*) override;

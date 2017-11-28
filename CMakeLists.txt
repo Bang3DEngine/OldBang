@@ -231,9 +231,6 @@ ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
 ${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
 ${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/IFocusable.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
 ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
@@ -241,6 +238,9 @@ ${ENGINE_SRC_DIR}/UIComponents/UIButtoneable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIGridLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
@@ -257,6 +257,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
+${ENGINE_SRC_DIR}/UIComponents/UITabbingGroup.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITree.cpp

@@ -25,6 +25,7 @@ enum class Key
     PageDown = SDLK_PAGEDOWN, LShift = SDLK_LSHIFT, RShift = SDLK_RSHIFT,
     LControl = SDLK_LCTRL, RControl = SDLK_RCTRL,
     LAlt = SDLK_LALT, RAlt = SDLK_RALT,
+    Tab = SDLK_TAB, TabKp = SDLK_KP_TAB,
     CapsLock = SDLK_CAPSLOCK, NumLock = SDLK_NUMLOCKCLEAR,
     ScrollLock = SDLK_SCROLLLOCK,
     F1 = SDLK_F1, F2 = SDLK_F2, F3 = SDLK_F3,
