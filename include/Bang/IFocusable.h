@@ -28,6 +28,7 @@ private:
     bool m_hasFocus = false;
     bool m_focusEnabled = true;
     bool m_hasMouseOver = false;
+    bool m_hasJustFocusChanged = false;
 
     void HandleFocusing(bool handleFocusTake);
 

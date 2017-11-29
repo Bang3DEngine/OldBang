@@ -42,8 +42,8 @@ public:
     void SetAllowedCharacters(const String &allowedCharacters);
 
     // IFocusListener
-    virtual void OnFocusTaken() override;
-    virtual void OnFocusLost() override;
+    virtual void OnFocusTaken(IFocusable *focusable) override;
+    virtual void OnFocusLost(IFocusable *focusable) override;
 
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;

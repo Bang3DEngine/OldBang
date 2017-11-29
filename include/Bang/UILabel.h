@@ -47,8 +47,8 @@ public:
     UITextRenderer *GetText() const;
 
     // IFocusListener
-    virtual void OnFocusTaken() override;
-    virtual void OnFocusLost() override;
+    virtual void OnFocusTaken(IFocusable *focusable) override;
+    virtual void OnFocusLost(IFocusable *focusable) override;
 
 private:
     int m_cursorIndex = 0;

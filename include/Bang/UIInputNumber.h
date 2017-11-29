@@ -30,8 +30,8 @@ public:
     UIInputText* GetInputText() const;
 
     // IFocusListener
-    virtual void OnFocusTaken() override;
-    virtual void OnFocusLost() override;
+    virtual void OnFocusTaken(IFocusable *focusable) override;
+    virtual void OnFocusLost(IFocusable *focusable) override;
 
 private:
     float m_value = 0.0f;

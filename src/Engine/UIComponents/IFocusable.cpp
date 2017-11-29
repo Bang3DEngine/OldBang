@@ -29,6 +29,7 @@ void IFocusable::SetFocus()
     if (!HasFocus())
     {
         m_hasFocus = true;
+        m_hasJustFocusChanged = true;
         PropagateToFocusListeners();
     }
 }
@@ -38,6 +39,7 @@ void IFocusable::ClearFocus()
     if (HasFocus())
     {
         m_hasFocus = false;
+        m_hasJustFocusChanged = true;
         PropagateToFocusListeners();
     }
 }
@@ -47,11 +49,11 @@ void IFocusable::PropagateToFocusListeners()
     if (HasFocus())
     {
         EventEmitter<IFocusListener>::
-                PropagateToListeners(&IFocusListener::OnFocusTaken);
+                PropagateToListeners(&IFocusListener::OnFocusTaken, this);
     }
     else
     {
         EventEmitter<IFocusListener>::
-            PropagateToListeners(&IFocusListener::OnFocusLost);
+            PropagateToListeners(&IFocusListener::OnFocusLost, this);
     }
 }

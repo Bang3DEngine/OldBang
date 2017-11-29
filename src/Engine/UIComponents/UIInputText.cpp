@@ -432,18 +432,20 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
     return i;
 }
 
-void UIInputText::OnFocusTaken()
+void UIInputText::OnFocusTaken(IFocusable *focusable)
 {
-    IFocusListener::OnFocusTaken();
+    IFocusListener::OnFocusTaken(focusable);
     Input::PollInputText();
-    GetLabel()->OnFocusTaken();
+    EventEmitter<IFocusListener>::
+      PropagateToListener(GetLabel(), &IFocusListener::OnFocusTaken, focusable);
 }
 
-void UIInputText::OnFocusLost()
+void UIInputText::OnFocusLost(IFocusable *focusable)
 {
-    IFocusListener::OnFocusLost();
+    IFocusListener::OnFocusLost(focusable);
     UpdateCursorRenderer();
-    GetLabel()->OnFocusLost();
+    EventEmitter<IFocusListener>::
+      PropagateToListener(GetLabel(), &IFocusListener::OnFocusLost, focusable);
 }
 
 void UIInputText::CalculateLayout(Axis axis)

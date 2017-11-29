@@ -184,9 +184,9 @@ bool UILabel::IsSelectingWithMouse() const { return m_selectingWithMouse; }
 UIMask *UILabel::GetMask() const { return p_mask; }
 UITextRenderer *UILabel::GetText() const { return p_text; }
 
-void UILabel::OnFocusTaken()
+void UILabel::OnFocusTaken(IFocusable *focusable)
 {
-    IFocusListener::OnFocusTaken();
+    IFocusListener::OnFocusTaken(focusable);
     if (IsSelectAllOnFocus() && IsSelectable())
     {
         m_firstSelectAll = true;
@@ -197,9 +197,9 @@ void UILabel::OnFocusTaken()
     UpdateSelectionQuadRenderer();
 }
 
-void UILabel::OnFocusLost()
+void UILabel::OnFocusLost(IFocusable *focusable)
 {
-    IFocusListener::OnFocusLost();
+    IFocusListener::OnFocusLost(focusable);
     ResetSelection();
     UpdateSelectionQuadRenderer();
     m_selectingWithMouse = false;

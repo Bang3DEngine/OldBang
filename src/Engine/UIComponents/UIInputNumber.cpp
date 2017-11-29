@@ -46,14 +46,14 @@ float UIInputNumber::GetNumber() const
     return m_value;
 }
 
-void UIInputNumber::OnFocusTaken()
+void UIInputNumber::OnFocusTaken(IFocusable *focusable)
 {
-    IFocusListener::OnFocusTaken();
+    IFocusListener::OnFocusTaken(focusable);
 }
 
-void UIInputNumber::OnFocusLost()
+void UIInputNumber::OnFocusLost(IFocusable *focusable)
 {
-    IFocusListener::OnFocusLost();
+    IFocusListener::OnFocusLost(focusable);
     SetNumber( GetNumber() );
 }
 

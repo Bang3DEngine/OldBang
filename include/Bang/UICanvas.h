@@ -57,6 +57,7 @@ private:
     Set<IFocusable*> p_currentFocus;
     Set<IFocusable*> p_currentFocusMouseOver;
 
+    void ApplyFocusChange();
     void _SetFocus(IFocusable *focusable);
     void _SetFocusMouseOver(IFocusable *focusable);
 

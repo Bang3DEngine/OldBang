@@ -7,11 +7,13 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class IFocusable;
+
 class IFocusListener : public virtual IEventListener
 {
 public:
-    virtual void OnFocusTaken() {}
-    virtual void OnFocusLost()  {}
+    virtual void OnFocusTaken(IFocusable *focusable) {}
+    virtual void OnFocusLost(IFocusable *focusable)  {}
 
 protected:
     IFocusListener() = default;
