@@ -7,8 +7,8 @@
 #include "Bang/Set.h"
 #include "Bang/Axis.h"
 #include "Bang/List.h"
+#include "Bang/Object.h"
 #include "Bang/LayoutSizeType.h"
-#include "Bang/ICreateListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -19,7 +19,7 @@ FORWARD class ILayoutElement;
 FORWARD class ILayoutController;
 FORWARD class ITransformListener;
 
-class UILayoutManager : public ICreateListener
+class UILayoutManager
 {
 public:
     UILayoutManager();
@@ -36,23 +36,14 @@ public:
 
     static List<GameObject*> GetLayoutableChildrenList(GameObject *go);
 
-    // ICreateListener
-    virtual void OnCreated(Object *object) override;
-
 private:
-    Set<GameObject*> m_invalidatedGameObjects;
-    List<ILayoutElement*> m_invalidatedLayoutElements;
-    List<ILayoutController*> m_invalidatedLayoutControllers;
-
     void CalculateLayout(GameObject *gameObject, Axis axis);
     void ApplyLayout(GameObject *gameObject, Axis axis);
-
-    void OnInvalidated(GameObject *go);
 
     static void OnLayoutRebuilt(GameObject *go);
     static void OnLayoutInvalidated(Component *comp, bool isLayoutController);
 
-    static UILayoutManager* GetLayoutManagerFor(GameObject *go);
+    static UILayoutManager* GetActive();
 };
 
 NAMESPACE_BANG_END

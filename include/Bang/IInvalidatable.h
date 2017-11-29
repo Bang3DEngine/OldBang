@@ -7,6 +7,7 @@ NAMESPACE_BANG_BEGIN
 
 #define IINVALIDATABLE(CLASS) \
         private: mutable bool m_invalid = true; \
+        private: mutable bool m_isFirstInvalidation = true; \
         friend class IInvalidatable<CLASS>;
 
 template <class T>
@@ -15,8 +16,9 @@ class IInvalidatable
 public:
     virtual void Invalidate()
     {
-        if (!IsInvalid())
+        if (!IsInvalid() || IsFirstInvalidation())
         {
+            SCAST<const T*>(this)->T::m_isFirstInvalidation = false;
             SetInvalid(true);
             OnInvalidated();
         }
@@ -24,7 +26,7 @@ public:
 
     bool IsInvalid() const
     {
-        return Cast<const T*>(this)->T::m_invalid;
+        return SCAST<const T*>(this)->T::m_invalid;
     }
 
 protected:
@@ -34,6 +36,11 @@ protected:
     void Validate() const
     {
         SetInvalid(false);
+    }
+
+    bool IsFirstInvalidation() const
+    {
+        return SCAST<const T*>(this)->T::m_isFirstInvalidation;
     }
 
     virtual void OnInvalidated() {}

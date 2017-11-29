@@ -10,9 +10,6 @@ class UIGridLayout : public UIGroupLayout
     COMPONENT(UIGridLayout)
 
 public:
-	UIGridLayout();
-	virtual ~UIGridLayout();
-
     void SetCellSize(const Vector2i &cellSize);
 
     int GetNumRows() const;
@@ -27,6 +24,9 @@ public:
 
 private:
     Vector2i m_cellSize = Vector2i(40);
+
+    UIGridLayout();
+    virtual ~UIGridLayout();
 
     Vector2i GetTotalSpacing() const;
 };

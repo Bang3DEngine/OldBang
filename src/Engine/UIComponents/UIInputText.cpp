@@ -436,16 +436,14 @@ void UIInputText::OnFocusTaken()
 {
     IFocusListener::OnFocusTaken();
     Input::PollInputText();
-
-    GetGameObject()->GetComponentInChildren<UILabel>()->OnFocusTaken();
+    GetLabel()->OnFocusTaken();
 }
 
 void UIInputText::OnFocusLost()
 {
     IFocusListener::OnFocusLost();
     UpdateCursorRenderer();
-
-    GetGameObject()->GetComponentInChildren<UILabel>()->OnFocusLost();
+    GetLabel()->OnFocusLost();
 }
 
 void UIInputText::CalculateLayout(Axis axis)

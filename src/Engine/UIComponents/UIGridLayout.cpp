@@ -17,7 +17,7 @@ UIGridLayout::~UIGridLayout()
 
 void UIGridLayout::ApplyLayout(Axis axis)
 {
-     (void)(axis);
+    (void)(axis);
     List<GameObject*> children =
             UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
