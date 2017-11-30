@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Bang/Component.h"
+#include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -14,6 +15,7 @@ FORWARD class UIScrollPanel;
 using GOItem = GameObject;
 
 class UIList : public Component,
+               public IFocusListener,
                public IDestroyListener
 {
     COMPONENT(UIList);
@@ -22,7 +24,9 @@ public:
     enum Action { SelectionIn, SelectionOut, MouseOver, MouseOut,
                   Pressed, DoubleClickedLeft, ClickedLeft, ClickedRight };
 
+    // Component
     void OnUpdate() override;
+
     void AddItem(GOItem *newItem);
     void RemoveItem(GOItem *item);
     void ClearSelection();
@@ -40,6 +44,7 @@ public:
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
 
+    bool SomeChildHasFocus() const;
     int GetSelectedIndex() const;
     GOItem* GetSelectedItem() const;
 
@@ -55,7 +60,7 @@ protected:
 
 private:
     Array<GOItem*> p_items;
-    std::unordered_map<int, List<GOItem*>::Iterator> m_indexToIterator;
+    bool m_someChildHasFocus = false;
 
     int m_selectionIndex = -1;
     GOItem *p_itemUnderMouse = nullptr;
@@ -65,6 +70,10 @@ private:
     UIScrollPanel *p_scrollPanel = nullptr;
 
     void HandleShortcuts();
+
+    // IFocusListener
+    virtual void OnFocusTaken(IFocusable *focusable) override;
+    virtual void OnFocusLost(IFocusable *focusable) override;
 
     static UIList* CreateInto(GameObject *go);
     void Callback(GameObject *item, Action action);

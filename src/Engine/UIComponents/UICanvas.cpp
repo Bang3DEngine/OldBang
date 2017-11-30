@@ -86,12 +86,11 @@ void UICanvas::OnUpdate()
 
                 IFocusable *newFocus = focusables.At(newFocusIndex);
                 Component *newFocusComp = Cast<Component*>(newFocus);
-                const bool isValid = (newFocus->IsFocusEnabled() &&
-                                     (!newFocusComp || newFocusComp->IsEnabled(true)));
+                const bool isValid = newFocus->IsFocusEnabled() &&
+                                     (!newFocusComp ||
+                                       newFocusComp->IsEnabled(true));
                 if (isValid) { break; }
             }
-
-            IFocusable *newFocus = focusables.At(newFocusIndex);
             _SetFocus( focusables.At(newFocusIndex) );
         }
     }
@@ -206,8 +205,12 @@ bool UICanvas::HasFocus(const GameObject *go)
 {
     UICanvas *canvas = UICanvas::GetActive();
     if (!go || !canvas) { return false; }
-    IFocusable *focusable = go->GetComponent<IFocusable>();
-    return focusable == canvas->GetCurrentFocus();
+    List<IFocusable*> focusables = go->GetComponents<IFocusable>();
+    for (IFocusable *focusable : focusables)
+    {
+        if (focusable == canvas->GetCurrentFocus()) { return true; }
+    }
+    return false;
 }
 
 bool UICanvas::IsMouseOver(const Component *comp, bool recursive)
@@ -221,8 +224,11 @@ bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
     if (!go || !canvas) { return false; }
     if (!recursive)
     {
-        IFocusable *focusable = go->GetComponent<IFocusable>();
-        return focusable == canvas->GetCurrentFocusMouseOver();
+        List<IFocusable*> focusables = go->GetComponents<IFocusable>();
+        for (IFocusable *focusable : focusables)
+        {
+            if (focusable == canvas->GetCurrentFocusMouseOver()) { return true; }
+        }
     }
     else
     {
@@ -262,7 +268,17 @@ void UICanvas::GetSortedFocusCandidates(const GameObject *go,
             GetSortedFocusCandidates(child, sortedCandidates);
 
             IFocusable *focusable = child->GetComponent<IFocusable>();
-            if (focusable) { sortedCandidates->PushBack(focusable); }
+            if (focusable)
+            {
+                Object *focusableObj = Cast<Object*>(focusable);
+                if (!focusableObj ||
+                     (focusableObj->IsEnabled() &&
+                     !focusableObj->IsWaitingToBeDestroyed())
+                   )
+                {
+                    sortedCandidates->PushBack(focusable);
+                }
+            }
         }
     }
 }

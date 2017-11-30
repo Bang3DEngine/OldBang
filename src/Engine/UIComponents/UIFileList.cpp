@@ -5,6 +5,7 @@
 #include "Bang/UIList.h"
 #include "Bang/Alignment.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -140,6 +141,7 @@ void UIFileList::FilterPathsByExtension(List<Path> *paths) const
 UIFileListItem::UIFileListItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
+    AddComponent<UIFocusable>();
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetPaddings(5);

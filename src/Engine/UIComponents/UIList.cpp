@@ -30,17 +30,22 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::HasFocus(this))
+    if (SomeChildHasFocus())
     {
         HandleShortcuts();
 
         // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
-        for (GOItem *childItem : p_items)
+        if (UICanvas::IsMouseOver(this, true))
         {
-            RectTransform *childRT = childItem->GetRectTransform();
-            if (childRT->IsEnabled(true) && childRT->IsMouseOver())
-            { itemUnderMouse = childItem; break; }
+            for (GOItem *childItem : p_items)
+            {
+                if (UICanvas::IsMouseOver(childItem, true))
+                {
+                    itemUnderMouse = childItem;
+                    break;
+                }
+            }
         }
 
         if (p_itemUnderMouse != itemUnderMouse)
@@ -86,6 +91,7 @@ void UIList::OnUpdate()
     }
     else
     {
+        SetSelection(nullptr);
         if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
         p_itemUnderMouse = nullptr;
     }
@@ -96,6 +102,14 @@ void UIList::AddItem(GOItem *newItem)
     bool hadSelectedGameObject = GetSelectedItem();
 
     p_items.PushBack(newItem);
+
+    List<IFocusable*> newItemFocusables =
+                            newItem->GetComponentsInChildren<IFocusable>(true);
+    for (IFocusable* newItemFocusable : newItemFocusables)
+    {
+        newItemFocusable->EventEmitter<IFocusListener>::RegisterListener(this);
+    }
+
     newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
     newItem->SetParent(GetContainer());
 
@@ -251,6 +265,18 @@ void UIList::HandleShortcuts()
     }
 }
 
+void UIList::OnFocusTaken(IFocusable *focusable)
+{
+    IFocusListener::OnFocusTaken(focusable);
+    m_someChildHasFocus = true;
+}
+
+void UIList::OnFocusLost(IFocusable *focusable)
+{
+    IFocusListener::OnFocusLost(focusable);
+    m_someChildHasFocus = false;
+}
+
 void UIList::SetSelection(GOItem *item)
 {
     SetSelection(p_items.IndexOf(item));
@@ -265,6 +291,8 @@ int UIList::GetSelectedIndex() const
 {
     return m_selectionIndex;
 }
+
+bool UIList::SomeChildHasFocus() const { return m_someChildHasFocus; }
 
 GOItem *UIList::GetSelectedItem() const
 {

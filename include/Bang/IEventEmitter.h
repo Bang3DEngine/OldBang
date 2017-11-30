@@ -24,28 +24,6 @@ private:
 template <class EventListenerClass>
 class EventEmitter : public IEventEmitter
 {
-private:
-    template<int index, typename TCallback, typename... Ts>
-    struct iterate_tuple {
-        void operator() (std::tuple<Ts...>& t, TCallback callback) {
-            callback(std::get<index>(t));
-            iterate_tuple<index - 1, TCallback, Ts...>{}(t, callback);
-        }
-    };
-
-    template<typename TCallback, typename... Ts>
-    struct iterate_tuple<0, TCallback, Ts...> {
-        void operator() (std::tuple<Ts...>& t, TCallback callback) {
-            callback(std::get<0>(t));
-        }
-    };
-
-    template<typename TCallback, typename... Ts>
-    void for_each(std::tuple<Ts...>& t, TCallback callback) {
-        iterate_tuple<std::tuple_size<std::tuple<Ts...>>::value - 1, TCallback, Ts...> it;
-        it(t, callback);
-    }
-
 public:
     void RegisterListener(EventListenerClass *listener);
     void UnRegisterListener(IEventListener *listener) override;

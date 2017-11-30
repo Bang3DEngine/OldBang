@@ -50,9 +50,6 @@ private:
     // IDestroyListener
     virtual void OnDestroyed(Object *object) override;
 
-    void PropagateOnCreated(Object *object);
-    void PropagateOnDestroyed(Object *object);
-
     static ObjectManager *GetInstance();
 
     #ifdef DEBUG

@@ -26,7 +26,8 @@ void ObjectManager::Destroy(Object *object)
 
         object->m_waitingToBeDestroyed = true;
         object->BeforeDestroyed();
-        om->PropagateOnDestroyed(object);
+        om->EventEmitter<IDestroyListener>::
+                PropagateToListeners(&IDestroyListener::OnDestroyed, object);
     }
 }
 
@@ -70,7 +71,9 @@ void ObjectManager::StartObjects()
         {
             ASSERT(!objectToBeStarted->IsStarted());
             objectToBeStarted->Start();
-            om->PropagateOnCreated(objectToBeStarted);
+            om->EventEmitter<ICreateListener>::
+                    PropagateToListeners(&ICreateListener::OnCreated,
+                                         objectToBeStarted);
         }
     }
 }
@@ -106,18 +109,6 @@ void ObjectManager::OnDestroyed(Object *object)
 {
     Object *destroyedObject = Cast<Object*>(object);
     m_objectsDestroyedWhileDestroying.Add(destroyedObject->GetObjectId());
-}
-
-void ObjectManager::PropagateOnCreated(Object *object)
-{
-    EventEmitter<ICreateListener>::
-            PropagateToListeners(&ICreateListener::OnCreated, object);
-}
-
-void ObjectManager::PropagateOnDestroyed(Object *object)
-{
-    EventEmitter<IDestroyListener>::
-            PropagateToListeners(&IDestroyListener::OnDestroyed, object);
 }
 
 ObjectManager *ObjectManager::GetInstance()
