@@ -12,6 +12,7 @@ FORWARD class Scene;
 FORWARD class UIList;
 FORWARD class UITree;
 FORWARD class UILabel;
+FORWARD class UIButton;
 FORWARD class UICanvas;
 FORWARD class Texture2D;
 FORWARD class GameObject;
@@ -20,7 +21,6 @@ FORWARD class UIScrollBar;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIInputNumber;
-FORWARD class UIButton;
 FORWARD class UIImageRenderer;
 
 class GameObjectFactory

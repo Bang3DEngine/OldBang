@@ -11,24 +11,14 @@ class UIFocusable : public Component,
 {
     COMPONENT(UIFocusable)
 
-public:
-    void OnUpdate() override;
-    void OnPostUpdate() override;
-
-    bool HasJustFocusChanged() const;
-
 protected:
     // IFocusable
-    virtual void SetFocus() override;
-    virtual void ClearFocus() override;
     virtual void PropagateToFocusListeners() override;
 
     // Component
     virtual bool CanBeRepeatedInGameObject() const override;
 
 private:
-    bool m_hasJustFocusChanged = false;
-
     UIFocusable();
     virtual ~UIFocusable();
 };

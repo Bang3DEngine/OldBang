@@ -22,6 +22,7 @@ void IFocusable::SetFocusEnabled(bool focusEnabled)
 
 bool IFocusable::HasFocus() const { return m_hasFocus; }
 bool IFocusable::IsFocusEnabled() const { return m_focusEnabled; }
+bool IFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 
 void IFocusable::SetFocus()
 {

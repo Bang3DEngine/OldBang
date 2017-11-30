@@ -12,6 +12,7 @@ FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
 class UIButton : public Component,
+                 public IFocusable,
                  public IUIButtonListener
 {
     COMPONENT(UIButton)

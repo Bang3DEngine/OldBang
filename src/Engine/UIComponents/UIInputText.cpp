@@ -8,7 +8,6 @@
 #include "Bang/UICanvas.h"
 #include "Bang/Material.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
@@ -35,13 +34,15 @@ UIInputText::~UIInputText()
 void UIInputText::OnStart()
 {
     Component::OnStart();
+
+    GetLabel()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    bool hasFocus = UICanvas::HasFocus(this);
+    bool hasFocus = UICanvas::HasFocus( GetLabel() );
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
@@ -360,7 +361,6 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     REQUIRE_COMPONENT(go, RectTransform);
 
     UIInputText *inputText = go->AddComponent<UIInputText>();
-    go->AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);
@@ -435,17 +435,17 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
 void UIInputText::OnFocusTaken(IFocusable *focusable)
 {
     IFocusListener::OnFocusTaken(focusable);
+    ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
+
     Input::PollInputText();
-    EventEmitter<IFocusListener>::
-      PropagateToListener(GetLabel(), &IFocusListener::OnFocusTaken, focusable);
 }
 
 void UIInputText::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
+    ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
+
     UpdateCursorRenderer();
-    EventEmitter<IFocusListener>::
-      PropagateToListener(GetLabel(), &IFocusListener::OnFocusLost, focusable);
 }
 
 void UIInputText::CalculateLayout(Axis axis)

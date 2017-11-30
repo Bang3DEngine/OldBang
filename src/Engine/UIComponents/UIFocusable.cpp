@@ -17,31 +17,7 @@ UIFocusable::~UIFocusable()
 {
 }
 
-void UIFocusable::OnUpdate()
-{
-    Component::OnUpdate();
-}
-
-void UIFocusable::OnPostUpdate()
-{
-    Component::OnPostUpdate();
-    m_hasJustFocusChanged = false;
-}
-
-bool UIFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 bool UIFocusable::CanBeRepeatedInGameObject() const { return false; }
-
-void UIFocusable::SetFocus()
-{
-    if (!HasFocus()) { m_hasJustFocusChanged = true; }
-    IFocusable::SetFocus();
-}
-
-void UIFocusable::ClearFocus()
-{
-    if (!HasFocus()) { m_hasJustFocusChanged = true; }
-    IFocusable::ClearFocus();
-}
 
 void UIFocusable::PropagateToFocusListeners()
 {

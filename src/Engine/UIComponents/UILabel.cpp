@@ -5,7 +5,6 @@
 #include "Bang/UIMask.h"
 #include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
@@ -17,6 +16,7 @@ USING_NAMESPACE_BANG
 
 UILabel::UILabel()
 {
+    SetSelectable(false);
 }
 
 UILabel::~UILabel()
@@ -26,6 +26,8 @@ UILabel::~UILabel()
 void UILabel::OnStart()
 {
     Component::OnStart();
+
+    EventEmitter<IFocusListener>::RegisterListener(this);
 
     ResetSelection();
     SetSelectAllOnFocus(true);
@@ -40,10 +42,10 @@ void UILabel::OnUpdate()
     {
         if (IsSelectable())
         {
-            UIFocusable *focusable = GetGameObject()->GetComponent<UIFocusable>();
-            if (!focusable->HasJustFocusChanged())
+            if (!HasJustFocusChanged())
             {
-                if (m_firstSelectAll && Input::GetMouseButtonDown(MouseButton::Left))
+                if (m_firstSelectAll &&
+                    Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     m_firstSelectAll = false;
                 }
@@ -65,11 +67,9 @@ void UILabel::SetSelectionIndex(int index) { m_selectionIndex = index; }
 
 void UILabel::SetSelectable(bool selectable)
 {
-    if (selectable != IsSelectable())
-    {
-        m_selectable = selectable;
-        p_selectionQuad->SetEnabled(selectable);
-    }
+    m_selectable = selectable;
+    SetFocusEnabled(selectable);
+    if (p_selectionQuad) { p_selectionQuad->SetEnabled(selectable); }
 }
 void UILabel::SetSelection(int cursorIndex, int selectionIndex)
 {
@@ -187,6 +187,8 @@ UITextRenderer *UILabel::GetText() const { return p_text; }
 void UILabel::OnFocusTaken(IFocusable *focusable)
 {
     IFocusListener::OnFocusTaken(focusable);
+    ASSERT(focusable == this);
+
     if (IsSelectAllOnFocus() && IsSelectable())
     {
         m_firstSelectAll = true;
@@ -200,6 +202,8 @@ void UILabel::OnFocusTaken(IFocusable *focusable)
 void UILabel::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
+    ASSERT(focusable == this);
+
     ResetSelection();
     UpdateSelectionQuadRenderer();
     m_selectingWithMouse = false;
@@ -288,8 +292,6 @@ UILabel *UILabel::CreateInto(GameObject *go)
     REQUIRE_COMPONENT(go, RectTransform);
 
     UILabel *label = go->AddComponent<UILabel>();
-
-    go->AddComponent<UIFocusable>();
 
     UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
     vl->SetChildrenVerticalStretch(Stretch::Full);

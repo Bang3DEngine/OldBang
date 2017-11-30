@@ -32,8 +32,8 @@ public:
 
     static bool HasFocus(const Component *comp);
     static bool HasFocus(const GameObject *go);
-    static bool IsMouseOver(const Component *comp);
-    static bool IsMouseOver(const GameObject *go);
+    static bool IsMouseOver(const Component *comp, bool recursive = false);
+    static bool IsMouseOver(const GameObject *go, bool recursive = false);
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -54,18 +54,18 @@ private:
 
     UILayoutManager *m_uiLayoutManager = nullptr;
 
-    Set<IFocusable*> p_currentFocus;
-    Set<IFocusable*> p_currentFocusMouseOver;
+    IFocusable* p_currentFocus = nullptr;
+    IFocusable* p_currentFocusMouseOver = nullptr;
 
     void ApplyFocusChange();
     void _SetFocus(IFocusable *focusable);
     void _SetFocusMouseOver(IFocusable *focusable);
 
-    Set<IFocusable*>& GetCurrentFocus();
-    Set<IFocusable*>& GetCurrentFocusMouseOver();
+    IFocusable* GetCurrentFocus();
+    IFocusable* GetCurrentFocusMouseOver();
 
-    void GetSortedFocusCandidates(List<IFocusable*> *sortedCandidates,
-                                  const GameObject *go) const;
+    void GetSortedFocusCandidates(const GameObject *go,
+                                  Array<IFocusable *> *sortedCandidates) const;
 };
 
 NAMESPACE_BANG_END

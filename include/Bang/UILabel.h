@@ -2,6 +2,7 @@
 #define UILABEL_H
 
 #include "Bang/Component.h"
+#include "Bang/IFocusable.h"
 #include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -11,6 +12,7 @@ FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 
 class UILabel : public Component,
+                public IFocusable,
                 public IFocusListener
 {
     COMPONENT(UILabel)
@@ -53,9 +55,9 @@ public:
 private:
     int m_cursorIndex = 0;
     int m_selectionIndex = 0;
-    bool m_selectable = false;
     bool m_firstSelectAll = true;
     bool m_selectingWithMouse = false;
+    bool m_selectable = Undef<bool>();
     bool m_selectAllOnFocusTaken = false;
 
     UIMask *p_mask = nullptr;

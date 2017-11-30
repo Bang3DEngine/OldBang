@@ -15,13 +15,14 @@ public:
 
     bool HasFocus() const;
     bool IsFocusEnabled() const;
+    bool HasJustFocusChanged() const;
 
 protected:
     IFocusable();
     virtual ~IFocusable();
 
-    virtual void SetFocus();
-    virtual void ClearFocus();
+    void SetFocus();
+    void ClearFocus();
     virtual void PropagateToFocusListeners();
 
 private:
