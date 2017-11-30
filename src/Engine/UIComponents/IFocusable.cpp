@@ -10,9 +10,9 @@ IFocusable::~IFocusable()
 {
 }
 
-bool IFocusable::HasMouseOver() const
+bool IFocusable::IsMouseOver() const
 {
-    return m_hasMouseOver;
+    return m_isMouseOver;
 }
 
 void IFocusable::SetFocusEnabled(bool focusEnabled)
@@ -31,7 +31,7 @@ void IFocusable::SetFocus()
     {
         m_hasFocus = true;
         m_hasJustFocusChanged = true;
-        PropagateToFocusListeners();
+        PropagateFocusToListeners();
     }
 }
 
@@ -41,11 +41,29 @@ void IFocusable::ClearFocus()
     {
         m_hasFocus = false;
         m_hasJustFocusChanged = true;
-        PropagateToFocusListeners();
+        PropagateFocusToListeners();
     }
 }
 
-void IFocusable::PropagateToFocusListeners()
+void IFocusable::PropagateMouseOverToListeners(bool mouseOver)
+{
+    if (IsMouseOver() != mouseOver)
+    {
+        m_isMouseOver = mouseOver;
+        if (IsMouseOver())
+        {
+            EventEmitter<IFocusListener>::
+                    PropagateToListeners(&IFocusListener::OnMouseEnter, this);
+        }
+        else
+        {
+            EventEmitter<IFocusListener>::
+                    PropagateToListeners(&IFocusListener::OnMouseExit, this);
+        }
+    }
+}
+
+void IFocusable::PropagateFocusToListeners()
 {
     if (HasFocus())
     {

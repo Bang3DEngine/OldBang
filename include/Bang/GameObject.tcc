@@ -181,13 +181,7 @@ GameObject::Propagate(const TFunction &func,
 {
     for (const auto &x : container)
     {
-        #ifdef DEBUG
-        const int previousSize = container.Size();
-        #endif
-
         GameObject::Propagate(func, x, args...);
-
-        ASSERT(container.Size() == previousSize);
     }
 }
 

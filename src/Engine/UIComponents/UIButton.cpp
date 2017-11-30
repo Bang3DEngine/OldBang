@@ -22,6 +22,24 @@ UIButton::~UIButton()
 
 }
 
+void UIButton::OnUpdate()
+{
+    Component::OnUpdate();
+    if (GetButton()->IsMouseOver())
+    {
+        if (Input::GetMouseButtonDown(MouseButton::Left))
+        {
+            GetBackground()->SetTint(Color::DarkGray);
+        }
+    }
+
+    if (Input::GetMouseButtonUp(MouseButton::Left))
+    {
+        if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
+        else { OnMouseExit(GetButton()); }
+    }
+}
+
 void UIButton::SetIconSize(const Vector2i &size)
 {
     UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
@@ -76,9 +94,6 @@ UIButton* UIButton::CreateInto(GameObject *go)
     le->SetFlexibleSize( Vector2(0) );
 
     UIButtoneable *btn = go->AddComponent<UIButtoneable>();
-    btn->SetMode(UIButtoneableMode::RectTransform);
-    btn->RegisterButtonPart(go);
-    btn->EventEmitter<IUIButtonListener>::RegisterListener(buttonDriv);
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetTextColor(Color::Black);
@@ -104,7 +119,7 @@ UIButton* UIButton::CreateInto(GameObject *go)
     return buttonDriv;
 }
 
-void UIButton::OnButton_MouseEnter(UIButtoneable *btn)
+void UIButton::OnMouseEnter(IFocusable*)
 {
     if (!GetButton()->IsBeingPressed())
     {
@@ -112,27 +127,10 @@ void UIButton::OnButton_MouseEnter(UIButtoneable *btn)
     }
 }
 
-void UIButton::OnButton_MouseExit(UIButtoneable *btn)
+void UIButton::OnMouseExit(IFocusable*)
 {
     if (!GetButton()->IsBeingPressed())
     {
         GetBackground()->SetTint(Color::White);
-    }
-}
-
-void UIButton::OnButton_MouseDown(UIButtoneable *btn, MouseButton mb)
-{
-    if (mb == MouseButton::Left)
-    {
-        GetBackground()->SetTint(Color::Black);
-    }
-}
-
-void UIButton::OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside)
-{
-    if (mb == MouseButton::Left)
-    {
-        if (inside) { OnButton_MouseEnter(btn); }
-        else { OnButton_MouseExit(btn); }
     }
 }

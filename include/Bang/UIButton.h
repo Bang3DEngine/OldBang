@@ -3,6 +3,7 @@
 
 #include "Bang/Component.h"
 #include "Bang/UIButtoneable.h"
+#include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -13,11 +14,14 @@ FORWARD class UIImageRenderer;
 
 class UIButton : public Component,
                  public IFocusable,
-                 public IUIButtonListener
+                 public IFocusListener
 {
     COMPONENT(UIButton)
 
 public:
+    // Component
+    void OnUpdate() override;
+
     void SetIconSize(const Vector2i &size);
     void SetIconTexture(Texture2D *texture);
     void SetIconSpacingWithText(int spacingWithText);
@@ -37,16 +41,13 @@ private:
     UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;
     UIImageRenderer *p_background  = nullptr;
-    UIButtoneable        *p_button      = nullptr;
+    UIButtoneable   *p_button      = nullptr;
 
     static UIButton *CreateInto(GameObject *go);
 
-    // IUIButtonListener
-    virtual void OnButton_MouseEnter(UIButtoneable *btn) override;
-    virtual void OnButton_MouseExit(UIButtoneable *btn) override;
-    virtual void OnButton_MouseDown(UIButtoneable *btn, MouseButton mb) override;
-    virtual void OnButton_MouseUp(UIButtoneable *btn, MouseButton mb,
-                                  bool inside) override;
+    // IFocusListener
+    virtual void OnMouseEnter(IFocusable *focusable) override;
+    virtual void OnMouseExit(IFocusable *focusable) override;
 
     friend class GameObjectFactory;
 };

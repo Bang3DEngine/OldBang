@@ -37,7 +37,8 @@ void UICanvas::OnUpdate()
     m_uiLayoutManager->RebuildLayout( GetGameObject() );
 
     // Focus
-    p_currentFocusMouseOver = nullptr;
+
+    IFocusable *focusMouseOver = nullptr;
 
     Array<IFocusable*> focusables;
     GetSortedFocusCandidates(GetGameObject(), &focusables);
@@ -49,7 +50,7 @@ void UICanvas::OnUpdate()
             RectTransform *rt = focusableComp->GetGameObject()->GetRectTransform();
             if (rt && rt->IsMouseOver())
             {
-                _SetFocusMouseOver(focusable);
+                focusMouseOver = focusable;
 
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
@@ -66,6 +67,7 @@ void UICanvas::OnUpdate()
     {
         _SetFocus(nullptr); // Clicked onto nothing, clear focus
     }
+    _SetFocusMouseOver(focusMouseOver);
 
 
     // Tabbing
@@ -151,6 +153,7 @@ void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
         {
             Component *focusableMOComp = Cast<Component*>( GetCurrentFocusMouseOver() );
             focusableMOComp->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+            GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(false);
         }
 
         p_currentFocusMouseOver = newFocusableMO;
@@ -158,6 +161,7 @@ void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
         {
             Component *focusableMOComp = Cast<Component*>( GetCurrentFocusMouseOver() );
             focusableMOComp->EventEmitter<IDestroyListener>::RegisterListener(this);
+            GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(true);
         }
     }
 }

@@ -9,13 +9,14 @@
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIButtoneable.h"
+#include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UITreeItemContainer;
 
 class UITree : public Component,
-               public IUIButtonListener,
+               public IFocusListener,
                public IDestroyListener
 {
     COMPONENT(UITree);
@@ -38,8 +39,8 @@ public:
     // Component
     void OnUpdate() override;
 
-    // IUIButtonListener
-    void OnButton_Clicked(UIButtoneable *btn) override;
+    // IFocusListener
+    void OnFocusTaken(IFocusable *focusable) override;
 
     // IDestroyListener
     void OnDestroyed(Object *object) override;

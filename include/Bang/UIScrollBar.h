@@ -4,6 +4,7 @@
 #include "Bang/Alignment.h"
 #include "Bang/Component.h"
 #include "Bang/UIButtoneable.h"
+#include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -12,7 +13,7 @@ FORWARD class UIButtoneable;
 FORWARD class UIImageRenderer;
 
 class UIScrollBar : public Component,
-                    public IUIButtonListener
+                    public IFocusListener
 {
     COMPONENT(UIScrollBar)
 
@@ -62,11 +63,9 @@ private:
     UIButtoneable* GetButton() const;
     GameObject* GetBar() const;
 
-    // IUIButtonListener
-    void OnButton_MouseEnter(UIButtoneable *btn) override;
-    void OnButton_MouseExit(UIButtoneable *btn) override;
-    void OnButton_MouseDown(UIButtoneable *btn, MouseButton mb) override;
-    void OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside) override;
+    // IFocusListener
+    void OnMouseEnter(IFocusable *focusable) override;
+    void OnMouseExit(IFocusable *focusable) override;
 
     friend class GameObjectFactory;
 };

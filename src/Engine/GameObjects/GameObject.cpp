@@ -34,71 +34,71 @@ GameObject::~GameObject()
 
 void GameObject::PreUpdate()
 {
-    GameObject::Propagate(&Component::OnPreUpdate, GetComponents());
-    GameObject::Propagate(&GameObject::PreUpdate, GetChildren());
+    PropagateToComponents(&Component::OnPreUpdate);
+    PropagateToChildren(&GameObject::PreUpdate);
 }
 
 void GameObject::BeforeChildrenUpdate()
 {
-    GameObject::Propagate(&Component::OnBeforeChildrenUpdate, GetComponents());
+    PropagateToComponents(&Component::OnBeforeChildrenUpdate);
 }
 
 void GameObject::Update()
 {
-    GameObject::Propagate(&Component::OnUpdate, GetComponents());
+    PropagateToComponents(&Component::OnUpdate);
     BeforeChildrenUpdate();
-    GameObject::Propagate(&GameObject::Update, GetChildren());
+    PropagateToChildren(&GameObject::Update);
     AfterChildrenUpdate();
 }
 
 void GameObject::AfterChildrenUpdate()
 {
-    GameObject::Propagate(&Component::OnAfterChildrenUpdate, GetComponents());
+    PropagateToComponents(&Component::OnAfterChildrenUpdate);
 }
 
 void GameObject::PostUpdate()
 {
-    GameObject::Propagate(&Component::OnPostUpdate, GetComponents());
-    GameObject::Propagate(&GameObject::PostUpdate, GetChildren());
+    PropagateToComponents(&Component::OnPostUpdate);
+    PropagateToChildren(&GameObject::PostUpdate);
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    GameObject::Propagate(&Component::OnRender, GetComponents(), renderPass);
+    PropagateToComponents(&Component::OnRender, renderPass);
     if (renderChildren)
     {
         BeforeChildrenRender(renderPass);
-        GameObject::Propagate(&GameObject::Render, GetChildren(), renderPass, true);
+        PropagateToChildren(&GameObject::Render, renderPass, true);
         AfterChildrenRender(renderPass);
     }
 }
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
-    GameObject::Propagate(&Component::OnBeforeChildrenRender, GetComponents(), renderPass);
+    PropagateToComponents(&Component::OnBeforeChildrenRender, renderPass);
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
-    GameObject::Propagate(&Component::OnAfterChildrenRender, GetComponents(), renderPass);
+    PropagateToComponents(&Component::OnAfterChildrenRender, renderPass);
 }
 
 void GameObject::ChildAdded(GameObject *addedChild)
 {
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnChildAdded, addedChild);
-    GameObject::Propagate(&IChildrenListener::OnChildAdded,
-                GetComponents<IChildrenListener>(), addedChild);
-    GameObject::Propagate(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
+    Propagate(&IChildrenListener::OnChildAdded,
+              GetComponents<IChildrenListener>(), addedChild);
+    Propagate(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
 }
 
 void GameObject::ChildRemoved(GameObject *removedChild)
 {
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnChildRemoved, removedChild);
-    GameObject::Propagate(&IChildrenListener::OnChildRemoved,
+    Propagate(&IChildrenListener::OnChildRemoved,
                 GetComponents<IChildrenListener>(), removedChild);
-    GameObject::Propagate(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
+    Propagate(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
 }
 
 void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
@@ -106,16 +106,16 @@ void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
     EventEmitter<IChildrenListener>::
           PropagateToListeners(&IChildrenListener::OnParentChanged,
                                oldParent, newParent);
-    GameObject::Propagate(&IChildrenListener::OnParentChanged,
+    Propagate(&IChildrenListener::OnParentChanged,
                 GetComponents<IChildrenListener>(), oldParent, newParent);
-    GameObject::Propagate(&IChildrenListener::OnParentChanged,
+    Propagate(&IChildrenListener::OnParentChanged,
                 GetChildren(), oldParent, newParent);
 }
 
 void GameObject::RenderGizmos()
 {
-    GameObject::Propagate(&Component::OnRenderGizmos, GetComponents());
-    GameObject::Propagate(&GameObject::RenderGizmos, GetChildren());
+    PropagateToComponents(&Component::OnRenderGizmos);
+    PropagateToChildren(&GameObject::RenderGizmos);
 }
 
 void GameObject::PropagateEnabledEvent(bool enabled) const
@@ -131,17 +131,48 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
         if (enabled) { child->OnEnabled(); } else { child->OnDisabled(); }
     }
 }
+
+void GameObject::AddChild(GameObject *child, int index)
+{
+    ASSERT(!GetChildren().Contains(child));
+    auto it = m_children.Insert(index, child);
+    if (!m_currentChildrenIterators.empty())
+    {
+        m_currentChildrenIterators.top() = it;
+    }
+}
+
+void GameObject::RemoveChild(GameObject *child)
+{
+    auto it = m_children.Remove(child);
+    if (!m_currentChildrenIterators.empty())
+    {
+        m_currentChildrenIterators.top() = it;
+    }
+}
+
+void GameObject::_RemoveComponent(Component *component)
+{
+    ASSERT( component->IsWaitingToBeDestroyed() );
+
+    auto it = m_components.Remove(component);
+    if (!m_currentComponentsIterators.empty())
+    {
+        m_currentComponentsIterators.top() = it;
+    }
+}
+
 void GameObject::OnEnabled()
 {
     Object::OnEnabled();
-    GameObject::Propagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
-    GameObject::Propagate(&IEnabledListener::OnEnabled, GetChildren());
+    Propagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
+    PropagateToChildren(&IEnabledListener::OnEnabled);
 }
 void GameObject::OnDisabled()
 {
     Object::OnDisabled();
-    GameObject::Propagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
-    GameObject::Propagate(&IEnabledListener::OnDisabled, GetChildren());
+    Propagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
+    PropagateToChildren(&IEnabledListener::OnDisabled);
 }
 
 void GameObject::Destroy(GameObject *gameObject)
@@ -183,7 +214,11 @@ Component* GameObject::AddComponent(Component *c, int _index)
         c->SetGameObject(this);
 
         const int index = (_index != -1 ? _index : GetComponents().Size());
-        m_components.Insert(index, c);
+        auto it = m_components.Insert(index, c);
+        if (!m_currentComponentsIterators.empty())
+        {
+            m_currentComponentsIterators.top() = it;
+        }
 
         if (trans) { p_transform = trans; }
     }
@@ -324,12 +359,12 @@ bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 void GameObject::SetParent(GameObject *newParent, int _index)
 {
     ASSERT( newParent != this );
-    ASSERT( !newParent || !newParent->IsChildOf(this) );
+    ASSERT( !newParent || !newParent->IsChildOf(this) )
 
     GameObject *oldParent = GetParent();
     if (GetParent())
     {
-        GetParent()->m_children.Remove(this);
+        GetParent()->RemoveChild(this);
         GetParent()->ChildRemoved(this);
     }
 
@@ -337,8 +372,7 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     if (GetParent())
     {
         int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
-        ASSERT(!GetParent()->m_children.Contains(this));
-        GetParent()->m_children.Insert(index, this);
+        GetParent()->AddChild(this, index);
         GetParent()->ChildAdded(this);
     }
 
@@ -410,6 +444,46 @@ Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
 Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 {
     return Sphere::FromBox(GetAABBox(includeChildren));
+}
+
+template<class TFunction, class... Args>
+void GameObject::PropagateToChildren(const TFunction &func, const Args&... args)
+{
+    m_currentChildrenIterators.push( m_children.Begin() );
+    auto prevIterator = m_currentChildrenIterators.top();
+    while (m_currentChildrenIterators.top() != m_children.End())
+    {
+        prevIterator = m_currentChildrenIterators.top();
+
+        GameObject *child = *(m_currentChildrenIterators.top());
+        GameObject::Propagate(func, child, args...);
+
+        if (prevIterator == m_currentChildrenIterators.top())
+        {
+            ++m_currentChildrenIterators.top();
+        }
+    }
+    m_currentChildrenIterators.pop();
+}
+
+template<class TFunction, class... Args>
+void GameObject::PropagateToComponents(const TFunction &func, const Args&... args)
+{
+    m_currentComponentsIterators.push( m_components.Begin() );
+    auto prevIterator = m_currentComponentsIterators.top();
+    while (m_currentComponentsIterators.top() != m_components.End())
+    {
+        prevIterator = m_currentComponentsIterators.top();
+
+        Component *comp = *(m_currentComponentsIterators.top());
+        GameObject::Propagate(func, comp, args...);
+
+        if (prevIterator == m_currentComponentsIterators.top())
+        {
+            ++m_currentComponentsIterators.top();
+        }
+    }
+    m_currentComponentsIterators.pop();
 }
 
 void GameObject::CloneInto(ICloneable *clone) const

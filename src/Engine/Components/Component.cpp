@@ -25,9 +25,12 @@ void Component::Destroy(Component *component)
 
 void Component::SetGameObject(GameObject *gameObject)
 {
-    if (p_gameObject != gameObject)
+    if (GetGameObject() != gameObject)
     {
-        if (p_gameObject) { p_gameObject->m_components.Remove(this); }
+        if (GetGameObject())
+        {
+            GetGameObject()->_RemoveComponent(this);
+        }
 
         if (!CanBeRepeatedInGameObject())
         {

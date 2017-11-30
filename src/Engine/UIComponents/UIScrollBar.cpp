@@ -46,6 +46,12 @@ void UIScrollBar::OnUpdate()
         SetScrollingPercent(scrollPercent);
     }
     m_wasGrabbed = IsBeingGrabbed();
+
+    if (Input::GetMouseButtonUp(MouseButton::Left))
+    {
+        if ( GetButton()->IsMouseOver() ) { OnMouseEnter(GetButton()); }
+        else { OnMouseExit(GetButton()); }
+    }
 }
 
 void UIScrollBar::SetSide(Side side)
@@ -172,8 +178,6 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     barImg->SetTint(Color::Black);
 
     UIButtoneable *btn = bar->AddComponent<UIButtoneable>();
-    btn->RegisterButtonPart(bar);
-    btn->SetMode(UIButtoneableMode::RectTransform);
 
     scrollBar->p_bar = bar;
     scrollBar->p_button = btn;
@@ -205,7 +209,7 @@ Rect UIScrollBar::GetScrollingRect() const
 UIScrollArea *UIScrollBar::GetScrollArea() const { return p_scrollArea; }
 GameObject *UIScrollBar::GetBar() const { return p_bar; }
 
-void UIScrollBar::OnButton_MouseEnter(UIButtoneable*)
+void UIScrollBar::OnMouseEnter(IFocusable*)
 {
     if (!IsBeingGrabbed())
     {
@@ -213,23 +217,12 @@ void UIScrollBar::OnButton_MouseEnter(UIButtoneable*)
     }
 }
 
-void UIScrollBar::OnButton_MouseExit(UIButtoneable*)
+void UIScrollBar::OnMouseExit(IFocusable*)
 {
     if (!IsBeingGrabbed())
     {
         p_barImg->SetTint(Color::Gray);
     }
-}
-
-void UIScrollBar::OnButton_MouseDown(UIButtoneable *btn, MouseButton mb)
-{
-    Debug_Log("DOWN");
-}
-
-void UIScrollBar::OnButton_MouseUp(UIButtoneable *btn, MouseButton mb, bool inside)
-{
-    if (inside) { OnButton_MouseEnter(btn); }
-    else { OnButton_MouseExit(btn); }
 }
 
 UIButtoneable *UIScrollBar::GetButton() const { return p_button; }

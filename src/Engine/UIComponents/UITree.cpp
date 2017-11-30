@@ -70,11 +70,15 @@ void UITree::OnUpdate()
     }
 }
 
-void UITree::OnButton_Clicked(UIButtoneable *btn)
+void UITree::OnFocusTaken(IFocusable *focusable)
 {
-    UITreeItemContainer *itemContainer = GetItemContainer(btn->GetGameObject());
-    SetItemCollapsed(itemContainer->GetContainedItem(),
-                     !itemContainer->IsCollapsed());
+    Component *comp = Cast<Component*>(focusable);
+    UITreeItemContainer *itemContainer = GetItemContainer(comp->GetGameObject());
+    if (itemContainer)
+    {
+        SetItemCollapsed(itemContainer->GetContainedItem(),
+                         !itemContainer->IsCollapsed());
+    }
 }
 
 void UITree::OnDestroyed(Object *object)
@@ -106,7 +110,7 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
         UITreeItemContainer *itemContainer =
                                 GameObject::Create<UITreeItemContainer>();
         itemContainer->GetCollapseButton()->GetButton()
-                ->EventEmitter<IUIButtonListener>::RegisterListener(this);
+                ->EventEmitter<IFocusListener>::RegisterListener(this);
         itemContainer->SetContainedItem(newItem);
 
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem);

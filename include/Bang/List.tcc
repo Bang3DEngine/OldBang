@@ -49,24 +49,26 @@ void List<T>::Splice(typename List<T>::Iterator insertAfter,
 }
 
 template<class T>
-void List<T>::Insert(const typename List<T>::Iterator &it, const T &x)
+typename List<T>::Iterator
+List<T>::Insert(const typename List<T>::Iterator &it, const T &x)
 {
-    m_list.insert(it, x);
+    return m_list.insert(it, x);
 }
 
 template<class T>
-void List<T>::Insert(int index, const T &x)
+typename List<T>::Iterator
+List<T>::Insert(int index, const T &x)
 {
     ASSERT(index >= 0 && index <= Size());
     auto it = Begin(); std::advance(it, index);
-    Insert(it, x);
+    return Insert(it, x);
 }
 
 template<class T>
-void List<T>::Insert(const typename List<T>::Iterator &first,
-                     int count, const T &x)
+typename List<T>::Iterator
+List<T>::Insert(const typename List<T>::Iterator &first, int count, const T &x)
 {
-    m_list.insert(first, count, x);
+    return m_list.insert(first, count, x);
 }
 
 template<class T>

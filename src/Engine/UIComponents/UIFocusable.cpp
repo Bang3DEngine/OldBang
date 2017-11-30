@@ -19,15 +19,15 @@ UIFocusable::~UIFocusable()
 
 bool UIFocusable::CanBeRepeatedInGameObject() const { return false; }
 
-void UIFocusable::PropagateToFocusListeners()
+void UIFocusable::PropagateFocusToListeners()
 {
-    IFocusable::PropagateToFocusListeners();
+    IFocusable::PropagateFocusToListeners();
 
     if (HasFocus())
     {
         EventEmitter<IFocusListener>::
                 PropagateToListeners(&IFocusListener::OnFocusTaken, this);
-        GameObject::Propagate(&IFocusListener::OnFocusTaken,
+        GetGameObject()->Propagate(&IFocusListener::OnFocusTaken,
                               GetGameObject()->GetComponents<IFocusListener>(),
                               this);
     }
@@ -35,10 +35,15 @@ void UIFocusable::PropagateToFocusListeners()
     {
         EventEmitter<IFocusListener>::
                 PropagateToListeners(&IFocusListener::OnFocusLost, this);
-        GameObject::Propagate(&IFocusListener::OnFocusLost,
+        GetGameObject()->Propagate(&IFocusListener::OnFocusLost,
                               GetGameObject()->GetComponents<IFocusListener>(),
                               this);
     }
+}
+
+void UIFocusable::PropagateMouseOverToListeners(bool mouseOver)
+{
+    IFocusable::PropagateMouseOverToListeners(mouseOver);
 }
 
 

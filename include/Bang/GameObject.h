@@ -2,6 +2,8 @@
 #define GAMEOBJECT_H
 
 #include <queue>
+#include <stack>
+#include <tuple>
 
 #include "Bang/List.h"
 #include "Bang/Object.h"
@@ -124,23 +126,35 @@ public:
 
     // Propagation to a single non-event listener
     template<class TFunction, class T, class... Args>
-    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                                    !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
-                                    !IsContainer<T>::value, void >::type
+    static typename std::enable_if<
+        (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+        !std::is_base_of<IEventListener,
+                             typename std::remove_pointer<T>::type>::value &&
+        !IsContainer<T>::value, void >::type
     Propagate(const TFunction &func, const T &obj, const Args&... args);
 
     // Propagation to a single event listener
     template<class TFunction, class T, class... Args>
-    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                                     std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
-                                    !IsContainer<T>::value, void >::type
+    static typename std::enable_if<
+        (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+         std::is_base_of<IEventListener,
+                         typename std::remove_pointer<T>::type>::value &&
+         !IsContainer<T>::value, void >::type
     Propagate(const TFunction &func, const T &obj, const Args&... args);
 
     // List propagation
     template<class TFunction, template <class T> class TContainer, class T, class... Args>
-    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                                     IsContainer<TContainer<T>>::value, void >::type
+    static typename std::enable_if<
+        (std::is_pointer<T>::value || std::is_reference<T>::value) &&
+         IsContainer<TContainer<T>>::value, void >::type
     Propagate(const TFunction &func, const TContainer<T> &container, const Args&... args);
+
+    template<class TFunction, class... Args>
+    void PropagateToChildren(const TFunction &func, const Args&... args);
+
+    template<class TFunction, class... Args>
+    void PropagateToComponents(const TFunction &func, const Args&... args);
+
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -165,6 +179,10 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
+    // Concurrent modification when iterating stuff
+    std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
+    std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
+
     GameObject(const String &name = "GameObject");
     virtual ~GameObject();
 
@@ -186,6 +204,10 @@ protected:
 
 private:
     void PropagateEnabledEvent(bool enabled) const;
+
+    void AddChild(GameObject *child, int index);
+    void RemoveChild(GameObject *child);
+    void _RemoveComponent(Component *component);
 
     friend class Scene;
     friend class Prefab;

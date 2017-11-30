@@ -403,7 +403,7 @@ void Transform::OnTransformChanged()
     ITransformListener::SetReceiveEvents(false);
     EventEmitter<ITransformListener>::
        PropagateToListeners(&ITransformListener::OnTransformChanged);
-    GameObject::Propagate(&ITransformListener::OnTransformChanged,
+    GetGameObject()->Propagate(&ITransformListener::OnTransformChanged,
                           GetGameObject()->GetComponents<ITransformListener>());
     ITransformListener::SetReceiveEvents(true);
 
@@ -415,7 +415,7 @@ void Transform::PropagateParentTransformChangedEvent() const
 {
     EventEmitter<ITransformListener>::
            PropagateToListeners(&ITransformListener::OnParentTransformChanged);
-    GameObject::Propagate(&ITransformListener::OnParentTransformChanged,
+    GetGameObject()->Propagate(&ITransformListener::OnParentTransformChanged,
         GetGameObject()->GetComponentsInChildrenOnly<ITransformListener>(false));
 }
 
@@ -424,7 +424,7 @@ void Transform::PropagateChildrenTransformChangedEvent() const
     GameObject *go = GetGameObject();
     EventEmitter<ITransformListener>::
            PropagateToListeners(&ITransformListener::OnChildrenTransformChanged);
-    GameObject::Propagate(&ITransformListener::OnChildrenTransformChanged,
+    GetGameObject()->Propagate(&ITransformListener::OnChildrenTransformChanged,
                           go->GetComponentsInParent<ITransformListener>(false));
 }
 

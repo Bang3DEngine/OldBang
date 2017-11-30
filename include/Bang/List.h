@@ -31,11 +31,11 @@ public:
     void Splice(Iterator insertAfter, List<T> &src,
                 Iterator srcRangeBegin, Iterator srcRangeEnd);
 
-    void Insert(const Iterator& it, const T& x);
+    Iterator Insert(const Iterator& it, const T& x);
 
-    void Insert(int index, const T& x);
+    Iterator Insert(int index, const T& x);
 
-    void Insert(const Iterator& first, int count, const T& x);
+    Iterator Insert(const Iterator& first, int count, const T& x);
 
     void PushFront(const T& x);
     void PopFront();

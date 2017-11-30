@@ -1,4 +1,4 @@
-#ifndef IFOCUSABLE_H
+﻿#ifndef IFOCUSABLE_H
 #define IFOCUSABLE_H
 
 #include "Bang/IEventEmitter.h"
@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 class IFocusable : public EventEmitter<IFocusListener>
 {
 public:
-    bool HasMouseOver() const;
+    bool IsMouseOver() const;
 
     void SetFocusEnabled(bool focusEnabled);
 
@@ -23,12 +23,13 @@ protected:
 
     void SetFocus();
     void ClearFocus();
-    virtual void PropagateToFocusListeners();
+    virtual void PropagateFocusToListeners();
+    virtual void PropagateMouseOverToListeners(bool mouseOver);
 
 private:
     bool m_hasFocus = false;
+    bool m_isMouseOver = false;
     bool m_focusEnabled = true;
-    bool m_hasMouseOver = false;
     bool m_hasJustFocusChanged = false;
 
     void HandleFocusing(bool handleFocusTake);
