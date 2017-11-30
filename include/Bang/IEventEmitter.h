@@ -42,10 +42,32 @@ public:
     template<class TFunction, class... Args>
     void PropagateToListeners(const TFunction &func, const Args&... args) const
     {
+        m_iteratingListeners = true;
         for (const auto &x : GetListeners())
         {
+            #ifdef DEBUG
+            const int previousSize = GetListeners().Size();
+            #endif
+
             PropagateToListener(x, func, args...);
+
+            ASSERT(GetListeners().Size() == previousSize);
         }
+        m_iteratingListeners = false;
+
+        // Un/Register delayed listeners
+        EventEmitter<EventListenerClass> *ncThis =
+                        const_cast< EventEmitter<EventListenerClass>* >(this);
+        for (IEventListener *listener : m_delayedListenersToRegister)
+        {
+            ncThis->RegisterListener( Cast<EventListenerClass*>(listener) );
+        }
+        for (IEventListener *listener : m_delayedListenersToUnRegister)
+        {
+            ncThis->UnRegisterListener( Cast<EventListenerClass*>(listener) );
+        }
+        m_delayedListenersToRegister.Clear();
+        m_delayedListenersToUnRegister.Clear();
     }
 
     const List<IEventListener*>& GetListeners() const;
@@ -56,6 +78,10 @@ protected:
 
 private:
     List<IEventListener*> m_listeners;
+
+    mutable bool m_iteratingListeners = false;
+    mutable List<IEventListener*> m_delayedListenersToRegister;
+    mutable List<IEventListener*> m_delayedListenersToUnRegister;
 };
 
 NAMESPACE_BANG_END

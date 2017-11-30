@@ -161,17 +161,6 @@ GameObject::Propagate(const TFunction &func,
     if (CanEventBePropagated(obj)) { (obj->*func)(args...); }
 }
 
-template<class TFunction, template <class T> class TContainer, class T, class... Args>
-typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                         !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
-                          IsContainer<TContainer<T>>::value, void >::type
-GameObject::Propagate(const TFunction &func,
-                      const TContainer<T> &container,
-                      const Args&... args)
-{
-    for (const auto &x : container) { GameObject::Propagate(func, x, args...); }
-}
-
 template<class TFunction, class T, class... Args>
 typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
                           std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
@@ -185,13 +174,21 @@ GameObject::Propagate(const TFunction &func, const T &obj, const Args&... args)
 
 template<class TFunction, template <class T> class TContainer, class T, class... Args>
 typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                          std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
                           IsContainer<TContainer<T>>::value, void >::type
 GameObject::Propagate(const TFunction &func,
                       const TContainer<T> &container,
                       const Args&... args)
 {
-    for (const auto &x : container) { GameObject::Propagate(func, x, args...); }
+    for (const auto &x : container)
+    {
+        #ifdef DEBUG
+        const int previousSize = container.Size();
+        #endif
+
+        GameObject::Propagate(func, x, args...);
+
+        ASSERT(container.Size() == previousSize);
+    }
 }
 
 

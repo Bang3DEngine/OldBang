@@ -122,27 +122,23 @@ public:
     template<class T>
     static bool CanEventBePropagated(const T& x);
 
+    // Propagation to a single non-event listener
     template<class TFunction, class T, class... Args>
     static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
                                     !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
                                     !IsContainer<T>::value, void >::type
     Propagate(const TFunction &func, const T &obj, const Args&... args);
 
-    template<class TFunction, template <class T> class TContainer, class T, class... Args>
-    static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                                    !std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
-                                     IsContainer<TContainer<T>>::value, void >::type
-    Propagate(const TFunction &func, const TContainer<T> &container, const Args&... args);
-
+    // Propagation to a single event listener
     template<class TFunction, class T, class... Args>
     static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
                                      std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
                                     !IsContainer<T>::value, void >::type
     Propagate(const TFunction &func, const T &obj, const Args&... args);
 
+    // List propagation
     template<class TFunction, template <class T> class TContainer, class T, class... Args>
     static typename std::enable_if< (std::is_pointer<T>::value || std::is_reference<T>::value) &&
-                                     std::is_base_of<IEventListener, typename std::remove_pointer<T>::type>::value &&
                                      IsContainer<TContainer<T>>::value, void >::type
     Propagate(const TFunction &func, const TContainer<T> &container, const Args&... args);
 

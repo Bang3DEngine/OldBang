@@ -5,18 +5,28 @@ USING_NAMESPACE_BANG
 template <class EListenerC>
 void EventEmitter<EListenerC>::RegisterListener(EListenerC *listener)
 {
-    if (!m_listeners.Contains(listener))
+    if (!m_iteratingListeners)
     {
-        m_listeners.PushBack(listener);
-        listener->OnRegisteredTo(this);
+        if (!m_listeners.Contains(listener))
+        {
+            m_listeners.PushBack(listener);
+            listener->OnRegisteredTo(this);
+        }
     }
+    else
+    { m_delayedListenersToRegister.PushBack(listener); }
 }
 
 template <class EListenerC>
 void EventEmitter<EListenerC>::UnRegisterListener(IEventListener *listener)
 {
-    m_listeners.Remove(listener);
-    listener->OnUnRegisteredFrom(this);
+    if (!m_iteratingListeners)
+    {
+        m_listeners.Remove(listener);
+        listener->OnUnRegisteredFrom(this);
+    }
+    else
+    { m_delayedListenersToUnRegister.PushBack(listener); }
 }
 
 template<class EventListenerClass>
