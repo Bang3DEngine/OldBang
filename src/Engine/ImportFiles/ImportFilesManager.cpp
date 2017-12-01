@@ -11,31 +11,32 @@ USING_NAMESPACE_BANG
 
 ImportFilesManager::ImportFilesManager()
 {
+    m_assetsPaths.PushBack( Paths::EngineAssets() );
 }
 
 ImportFilesManager::~ImportFilesManager()
 {
 }
 
-void ImportFilesManager::CreateMissingProjectImportFiles()
+void ImportFilesManager::CreateMissingImportFiles()
 {
     // First load existing importFiles, to avoid creating new import files
     // with duplicated GUIDs.
     ImportFilesManager::LoadImportFilepathGUIDs();
 
-    List<Path> projectFilesList = Paths::ProjectAssets()
-                                        .FindFiles(Path::FindFlag::Recursive);
-    projectFilesList.PushBack( Paths::EngineAssets()
-                                      .FindFiles(Path::FindFlag::Recursive) );
-
-    Set<Path> files;
-    files.Add(projectFilesList.Begin(), projectFilesList.End());
-
-    for (const Path &filepath : files)
+    for (const Path &assetsPath : ImportFilesManager::GetInstance()->m_assetsPaths)
     {
-        if (!IsImportFile(filepath) && !HasImportFile(filepath))
+        List<Path> assetFile = assetsPath.FindFiles(Path::FindFlag::Recursive);
+
+        Set<Path> files;
+        files.Add(assetFile.Begin(), assetFile.End());
+
+        for (const Path &filepath : files)
         {
-            ImportFilesManager::CreateImportFile(filepath);
+            if (!IsImportFile(filepath) && !HasImportFile(filepath))
+            {
+                ImportFilesManager::CreateImportFile(filepath);
+            }
         }
     }
 }
@@ -108,6 +109,18 @@ bool ImportFilesManager::IsImportFile(const Path &filepath)
 GUIDManager* ImportFilesManager::GetGUIDManager()
 {
     return &(ImportFilesManager::GetInstance()->m_GUIDManager);
+}
+
+void ImportFilesManager::AddAssetPath(const Path &assetPath)
+{
+    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
+    ifm->m_assetsPaths.PushBack(assetPath);
+}
+
+void ImportFilesManager::RemoveAssetPath(const Path &assetPath)
+{
+    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
+    ifm->m_assetsPaths.Remove(assetPath);
 }
 
 GUID ImportFilesManager::GetGUIDFromFilepath(const Path& filepath)

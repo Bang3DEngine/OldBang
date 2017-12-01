@@ -8,7 +8,6 @@
 #include "Bang/UIButton.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN

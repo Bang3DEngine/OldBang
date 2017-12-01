@@ -5,7 +5,6 @@
 #include "Bang/UICanvas.h"
 #include "Bang/IconManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"

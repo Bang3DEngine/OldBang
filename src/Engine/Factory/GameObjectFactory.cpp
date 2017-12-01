@@ -21,7 +21,6 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"

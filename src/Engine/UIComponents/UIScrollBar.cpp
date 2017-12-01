@@ -1,11 +1,12 @@
 #include "Bang/UIScrollBar.h"
 
 #include "Bang/Rect.h"
+#include "Bang/Input.h"
 #include "Bang/GameObject.h"
+#include "Bang/IFocusable.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/UIImageRenderer.h"
 
 USING_NAMESPACE_BANG
@@ -16,6 +17,12 @@ UIScrollBar::UIScrollBar()
 
 UIScrollBar::~UIScrollBar()
 {
+}
+
+void UIScrollBar::OnStart()
+{
+    Component::OnStart();
+    GetButton()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIScrollBar::OnUpdate()
@@ -177,7 +184,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
     UIImageRenderer *barImg = bar->AddComponent<UIImageRenderer>();
     barImg->SetTint(Color::Black);
 
-    UIButtoneable *btn = bar->AddComponent<UIButtoneable>();
+    UIFocusable *btn = bar->AddComponent<UIFocusable>();
 
     scrollBar->p_bar = bar;
     scrollBar->p_button = btn;
@@ -213,17 +220,14 @@ void UIScrollBar::OnMouseEnter(IFocusable*)
 {
     if (!IsBeingGrabbed())
     {
-        p_barImg->SetTint(Color::LightGray);
+        p_barImg->SetTint(Color::DarkGray);
     }
 }
 
 void UIScrollBar::OnMouseExit(IFocusable*)
 {
-    if (!IsBeingGrabbed())
-    {
-        p_barImg->SetTint(Color::Gray);
-    }
+    if (!IsBeingGrabbed()) { p_barImg->SetTint(Color::Black); }
 }
 
-UIButtoneable *UIScrollBar::GetButton() const { return p_button; }
+UIFocusable *UIScrollBar::GetButton() const { return p_button; }
 

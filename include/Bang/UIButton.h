@@ -2,7 +2,7 @@
 #define UIBUTTONDRIVER_H
 
 #include "Bang/Component.h"
-#include "Bang/UIButtoneable.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -13,13 +13,13 @@ FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 
 class UIButton : public Component,
-                 public IFocusable,
                  public IFocusListener
 {
     COMPONENT(UIButton)
 
 public:
     // Component
+    void OnStart() override;
     void OnUpdate() override;
 
     void SetIconSize(const Vector2i &size);
@@ -32,7 +32,7 @@ public:
     UITextRenderer* GetText() const;
     UIImageRenderer* GetBackground() const;
     UIDirLayout *GetDirLayout() const;
-    UIButtoneable* GetButton() const;
+    UIFocusable* GetButton() const;
 
 private:
     UIButton();
@@ -41,7 +41,7 @@ private:
     UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;
     UIImageRenderer *p_background  = nullptr;
-    UIButtoneable   *p_button      = nullptr;
+    UIFocusable     *p_button      = nullptr;
 
     static UIButton *CreateInto(GameObject *go);
 

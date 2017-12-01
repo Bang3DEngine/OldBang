@@ -1,5 +1,6 @@
 #include "Bang/UIButton.h"
 
+#include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
 #include "Bang/GameObject.h"
@@ -14,12 +15,17 @@ USING_NAMESPACE_BANG
 
 UIButton::UIButton()
 {
-
 }
 
 UIButton::~UIButton()
 {
 
+}
+
+void UIButton::OnStart()
+{
+    Component::OnStart();
+    GetButton()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIButton::OnUpdate()
@@ -68,7 +74,7 @@ void UIButton::SetIcon(Texture2D *texture, const Vector2i &size,
 UIImageRenderer *UIButton::GetIcon() const { return p_icon; }
 UITextRenderer *UIButton::GetText() const { return p_text; }
 UIImageRenderer *UIButton::GetBackground() const { return p_background; }
-UIButtoneable *UIButton::GetButton() const { return p_button; }
+UIFocusable *UIButton::GetButton() const { return p_button; }
 UIDirLayout *UIButton::GetDirLayout() const
 {
     return GetGameObject()->GetComponent<UIDirLayout>();
@@ -93,7 +99,7 @@ UIButton* UIButton::CreateInto(GameObject *go)
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
     le->SetFlexibleSize( Vector2(0) );
 
-    UIButtoneable *btn = go->AddComponent<UIButtoneable>();
+    UIFocusable *btn = go->AddComponent<UIFocusable>();
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetTextColor(Color::Black);

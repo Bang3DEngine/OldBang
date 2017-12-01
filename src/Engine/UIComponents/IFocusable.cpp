@@ -1,5 +1,7 @@
 #include "Bang/IFocusable.h"
 
+#include "Bang/Input.h"
+
 USING_NAMESPACE_BANG
 
 IFocusable::IFocusable()
@@ -9,6 +11,31 @@ IFocusable::IFocusable()
 IFocusable::~IFocusable()
 {
 }
+
+void IFocusable::UpdateFromCanvas()
+{
+    // Mouse Down event
+    if (IsMouseOver())
+    {
+        if (Input::GetMouseButtonDown(MouseButton::Left))
+        {
+            m_beingPressed = true;
+            for (auto callback : m_clickedCallbacks) { callback(this); }
+        }
+    }
+
+    if (Input::GetMouseButtonUp(MouseButton::Left))
+    {
+        m_beingPressed = false;
+    }
+}
+
+bool IFocusable::IsBeingPressed() const { return m_beingPressed; }
+void IFocusable::AddClickedCallback(ClickedCallback callback)
+{
+    m_clickedCallbacks.PushBack(callback);
+}
+
 
 bool IFocusable::IsMouseOver() const
 {
@@ -62,6 +89,7 @@ void IFocusable::PropagateMouseOverToListeners(bool mouseOver)
         }
     }
 }
+
 
 void IFocusable::PropagateFocusToListeners()
 {

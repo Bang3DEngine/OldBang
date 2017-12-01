@@ -17,6 +17,11 @@ public:
     bool IsFocusEnabled() const;
     bool HasJustFocusChanged() const;
 
+    bool IsBeingPressed() const;
+
+    using ClickedCallback = std::function<void(IFocusable*)>;
+    void AddClickedCallback(ClickedCallback callback);
+
 protected:
     IFocusable();
     virtual ~IFocusable();
@@ -27,11 +32,15 @@ protected:
     virtual void PropagateMouseOverToListeners(bool mouseOver);
 
 private:
+    bool m_beingPressed = false;
     bool m_hasFocus = false;
     bool m_isMouseOver = false;
     bool m_focusEnabled = true;
     bool m_hasJustFocusChanged = false;
 
+    Array<ClickedCallback> m_clickedCallbacks;
+
+    void UpdateFromCanvas();
     void HandleFocusing(bool handleFocusTake);
 
     friend class UICanvas;

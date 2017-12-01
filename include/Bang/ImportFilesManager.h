@@ -11,13 +11,16 @@ NAMESPACE_BANG_BEGIN
 class ImportFilesManager
 {
 public:
-    static void CreateMissingProjectImportFiles();
+    static void CreateMissingImportFiles();
     static void LoadImportFilepathGUIDs();
 
     static Path CreateImportFile(const Path &filepath);
     static bool HasImportFile(const Path &filepath);
     static bool IsImportFile(const Path &filepath);
     static GUIDManager *GetGUIDManager();
+
+    static void AddAssetPath(const Path& assetPath);
+    static void RemoveAssetPath(const Path& assetPath);
 
     static Path GetFilepath(const GUID& guid);
     static Path GetFilepath(const Path& importFilepath);
@@ -28,6 +31,7 @@ public:
     static GUID GetGUIDFromImportFilepath(const Path& importFilepath);
 
 private:
+    List<Path> m_assetsPaths;
     Map<GUID, Path> m_GUIDToImportFilepath;
     Map<Path, GUID> m_importFilepathToGUID;
 

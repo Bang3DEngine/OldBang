@@ -3,13 +3,12 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Component.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/IFocusListener.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIFocusable;
 FORWARD class UIScrollArea;
-FORWARD class UIButtoneable;
 FORWARD class UIImageRenderer;
 
 class UIScrollBar : public Component,
@@ -21,6 +20,7 @@ public:
 	UIScrollBar();
 	virtual ~UIScrollBar();
 
+    void OnStart() override;
     void OnUpdate() override;
 
     void SetSide(Side side);
@@ -49,7 +49,7 @@ private:
     Side m_side = Undef<Side>();
 
     GameObject *p_bar = nullptr;
-    UIButtoneable *p_button = nullptr;
+    UIFocusable *p_button = nullptr;
     UIImageRenderer *p_barImg = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
 
@@ -60,7 +60,7 @@ private:
     int GetScrollingSpacePx() const;
     Rect GetScrollingRect() const;
     UIScrollArea *GetScrollArea() const;
-    UIButtoneable* GetButton() const;
+    UIFocusable* GetButton() const;
     GameObject* GetBar() const;
 
     // IFocusListener

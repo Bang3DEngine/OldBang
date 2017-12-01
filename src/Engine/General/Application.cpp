@@ -46,7 +46,7 @@ Application::Application(int argc, char **argv, const Path &engineRootPath)
     m_behaviourManager   = new BehaviourManager();
     m_importFilesManager = new ImportFilesManager();
 
-    ImportFilesManager::CreateMissingProjectImportFiles();
+    ImportFilesManager::CreateMissingImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
 }
 

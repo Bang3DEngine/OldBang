@@ -69,7 +69,6 @@ void UICanvas::OnUpdate()
     }
     _SetFocusMouseOver(focusMouseOver);
 
-
     // Tabbing
     if (Input::GetKeyDownRepeat(Key::Tab))
     {
@@ -95,6 +94,12 @@ void UICanvas::OnUpdate()
             }
             _SetFocus( focusables.At(newFocusIndex) );
         }
+    }
+
+    // Update focusables
+    for (IFocusable *focusable : focusables)
+    {
+        focusable->UpdateFromCanvas();
     }
 }
 
@@ -267,7 +272,7 @@ void UICanvas::GetSortedFocusCandidates(const GameObject *go,
 {
     for (GameObject *child : go->GetChildren())
     {
-        if (child->IsEnabled())
+        if (child->IsEnabled() && !child->IsWaitingToBeDestroyed())
         {
             GetSortedFocusCandidates(child, sortedCandidates);
 

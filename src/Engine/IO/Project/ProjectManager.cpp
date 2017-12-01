@@ -32,7 +32,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 
     Paths::SetProjectRoot(currentProject->GetProjectDirPath());
 
-    ImportFilesManager::CreateMissingProjectImportFiles();
+    ImportFilesManager::CreateMissingImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
 
     return currentProject;
