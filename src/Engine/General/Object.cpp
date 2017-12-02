@@ -66,6 +66,11 @@ void Object::BeforeDestroyed()
 
 ObjectId::ObjectIdType ObjectId::s_nextObjectId = 0;
 
+ObjectId::ObjectIdType ObjectId::GetId() const
+{
+    return m_id;
+}
+
 ObjectId::ObjectId()
 {
     m_id = ObjectId::s_nextObjectId;

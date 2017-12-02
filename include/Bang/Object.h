@@ -12,11 +12,14 @@ NAMESPACE_BANG_BEGIN
 // ObjectId
 class ObjectId final
 {
-public:
-    ~ObjectId() = default;
-
 private:
     using ObjectIdType = uint64_t;
+
+public:
+    ~ObjectId() = default;
+    ObjectIdType GetId() const;
+
+private:
 
     static ObjectIdType s_nextObjectId;
 
@@ -24,6 +27,8 @@ private:
     ObjectId();
 
     friend bool operator==(const ObjectId &lhs, const ObjectId &rhs);
+    friend bool operator==(const ObjectId &lhs, ObjectIdType id);
+    friend bool operator==(ObjectIdType id, const ObjectId &rhs);
     friend bool operator!=(const ObjectId &lhs, const ObjectId &rhs);
     friend bool operator<(const ObjectId &lhs, const ObjectId &rhs);
     friend std::ostream& operator<<(std::ostream &os, const ObjectId &objectId);
@@ -33,6 +38,10 @@ private:
 };
 inline bool operator==(const ObjectId &lhs, const ObjectId &rhs)
 { return lhs.m_id == rhs.m_id; }
+inline bool operator==(typename ObjectId::ObjectIdType id, const ObjectId &rhs)
+{ return id == rhs.m_id; }
+inline bool operator==(const ObjectId &lhs, typename ObjectId::ObjectIdType id)
+{ return lhs.m_id == id; }
 bool operator!=(const ObjectId &lhs, const ObjectId &rhs);
 inline bool operator<(const ObjectId &lhs, const ObjectId &rhs)
 { return lhs.m_id < rhs.m_id; }

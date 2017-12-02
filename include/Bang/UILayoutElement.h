@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 class UILayoutElement : public Component,
                         public ILayoutElement
 {
-    COMPONENT(UILayoutElement);
+    COMPONENT(UILayoutElement)
 
 public:
     UILayoutElement();

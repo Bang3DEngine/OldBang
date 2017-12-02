@@ -31,45 +31,12 @@ public:
     template<class TListener, class TFunction, class... Args>
     static void PropagateToListener(const TListener &listener,
                                     const TFunction &func,
-                                    const Args&... args)
-    {
-        if (listener && listener->IsReceivingEvents())
-        {
-            (Cast<EventListenerClass*>(listener)->*func)(args...);
-        }
-    }
+                                    const Args&... args);
 
     template<class TFunction, class... Args>
-    void PropagateToListeners(const TFunction &func, const Args&... args) const
-    {
-        m_iteratingListeners = true;
-        for (const auto &x : GetListeners())
-        {
-            #ifdef DEBUG
-            const int previousSize = GetListeners().Size();
-            #endif
+    void PropagateToListeners(const TFunction &func, const Args&... args) const;
 
-            PropagateToListener(x, func, args...);
-
-            ASSERT(GetListeners().Size() == previousSize);
-        }
-        m_iteratingListeners = false;
-
-        // Un/Register delayed listeners
-        EventEmitter<EventListenerClass> *ncThis =
-                        const_cast< EventEmitter<EventListenerClass>* >(this);
-        for (IEventListener *listener : m_delayedListenersToRegister)
-        {
-            ncThis->RegisterListener( Cast<EventListenerClass*>(listener) );
-        }
-        for (IEventListener *listener : m_delayedListenersToUnRegister)
-        {
-            ncThis->UnRegisterListener( Cast<EventListenerClass*>(listener) );
-        }
-        m_delayedListenersToRegister.Clear();
-        m_delayedListenersToUnRegister.Clear();
-    }
-
+    bool IsIteratingListeners() const;
     const List<IEventListener*>& GetListeners() const;
 
 protected:
@@ -79,7 +46,7 @@ protected:
 private:
     List<IEventListener*> m_listeners;
 
-    mutable bool m_iteratingListeners = false;
+    mutable int m_iteratingListeners = 0;
     mutable List<IEventListener*> m_delayedListenersToRegister;
     mutable List<IEventListener*> m_delayedListenersToUnRegister;
 };

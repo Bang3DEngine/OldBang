@@ -15,7 +15,6 @@ void ObjectManager::Destroy(GameObject *gameObject)
 void ObjectManager::Destroy(Object *object)
 {
     ObjectManager *om = ObjectManager::GetInstance();
-
     ObjectId objectToBeDestroyedId = object->GetObjectId();
     if (!object->IsWaitingToBeDestroyed() &&
         !om->m_objectsToBeDestroyedSet.Contains(objectToBeDestroyedId))
@@ -85,6 +84,7 @@ void ObjectManager::DestroyObjects()
     {
         Object *objectToBeDestroyed = om->m_objectsToBeDestroyedQueue.front();
         ObjectId objectToBeDestroyedId = om->m_objectsIdsToBeDestroyedQueue.front();
+        ASSERT(objectToBeDestroyed->GetObjectId() == objectToBeDestroyedId);
         om->m_objectsToBeDestroyedQueue.pop();
         om->m_objectsIdsToBeDestroyedQueue.pop();
 

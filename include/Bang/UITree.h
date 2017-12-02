@@ -18,7 +18,7 @@ class UITree : public Component,
                public IFocusListener,
                public IDestroyListener
 {
-    COMPONENT(UITree);
+    COMPONENT(UITree)
 
 public:
 

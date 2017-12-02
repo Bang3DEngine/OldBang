@@ -41,7 +41,6 @@ private:
     Array<ClickedCallback> m_clickedCallbacks;
 
     void UpdateFromCanvas();
-    void HandleFocusing(bool handleFocusTake);
 
     friend class UICanvas;
 };

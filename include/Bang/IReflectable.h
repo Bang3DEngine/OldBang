@@ -5,10 +5,10 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define BP_REFLECT_VARIABLE(args...)
-#define BP_REFLECT_CLASS(args...)
-#define BP_REFLECT_STRUCT(args...)
-#define BP_REFLECT_DEFINITIONS(args...)
+#define BP_REFLECT_VARIABLE(...)
+#define BP_REFLECT_CLASS(...)
+#define BP_REFLECT_STRUCT(...)
+#define BP_REFLECT_DEFINITIONS(...)
 
 FORWARD class BPReflectedStruct;
 

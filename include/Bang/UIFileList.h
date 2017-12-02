@@ -12,7 +12,7 @@ FORWARD class UIImageRenderer;
 
 class UIFileList : public Component
 {
-    COMPONENT(UIFileList);
+    COMPONENT(UIFileList)
 
 public:
     UIFileList();

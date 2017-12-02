@@ -196,10 +196,10 @@ private:
     class ButtonInfo : public IToString
     {
         public:
-            bool up;         // Just one frame
-            bool down;       // Just one frame
-            bool pressed;    // Long duration
-            bool autoRepeat;
+            bool up = false;         // Just one frame
+            bool down = false;       // Just one frame
+            bool pressed = false;    // Long duration
+            bool autoRepeat = false;
 
             ButtonInfo() { up = down = pressed = false; }
             ButtonInfo(bool up, bool down, bool pressed)

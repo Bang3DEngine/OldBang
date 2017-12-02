@@ -18,7 +18,7 @@ class UIList : public Component,
                public IFocusListener,
                public IDestroyListener
 {
-    COMPONENT(UIList);
+    COMPONENT(UIList)
 
 public:
     enum Action { SelectionIn, SelectionOut, MouseOver, MouseOut,
