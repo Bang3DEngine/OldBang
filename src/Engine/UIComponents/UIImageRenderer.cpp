@@ -24,7 +24,7 @@ UIImageRenderer::UIImageRenderer()
 
 UIImageRenderer::~UIImageRenderer()
 {
-    Asset::Destroy(m_quadMesh);
+    Resources::Unload(m_quadMesh);
 }
 
 void UIImageRenderer::OnRender()

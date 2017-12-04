@@ -387,7 +387,26 @@ Color Image<float>::GetPixel(int x, int y) const
     return Color(m_pixels[coord + 0],
                  m_pixels[coord + 1],
                  m_pixels[coord + 2],
-                 m_pixels[coord + 3]);
+            m_pixels[coord + 3]);
+}
+
+// ImageResource
+template<class T>
+ImageResource<T>::ImageResource() : Image<T>()
+{
+
+}
+
+template<class T>
+ImageResource<T>::ImageResource(int width, int height) : Image<T>(width, height)
+{
+
+}
+
+template<class T>
+void ImageResource<T>::Import(const Path &imageFilepath)
+{
+    Image<T>::Import(imageFilepath);
 }
 
 NAMESPACE_BANG_END

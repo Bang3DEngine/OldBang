@@ -13,6 +13,7 @@
 #include "Bang/ChronoGL.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
+#include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
@@ -38,8 +39,8 @@ GEngine::~GEngine()
 {
     delete m_texUnitManager;
     delete m_gl;
-    Asset::Destroy(m_renderGBufferToScreenMaterial);
-    Asset::Destroy(m_screenPlaneMesh);
+    Resources::Unload(m_renderGBufferToScreenMaterial);
+    Resources::Unload(m_screenPlaneMesh);
 }
 
 void GEngine::Init()

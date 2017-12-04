@@ -7,11 +7,13 @@ USING_NAMESPACE_BANG
 
 Asset::Asset()
 {
+    ASSERT(Resources::AssertCreatedFromResources());
     ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 Asset::~Asset()
 {
+    ASSERT(Resources::AssertDestroyedFromResources());
     ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
 }
 

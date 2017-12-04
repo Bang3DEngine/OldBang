@@ -13,7 +13,7 @@ USING_NAMESPACE_BANG
 
 PostProcessEffect::PostProcessEffect()
 {
-    m_shaderProgram = ShaderProgramFactory::GetEmptyProgram();
+    m_shaderProgram = ShaderProgramFactory::CreateEmptyProgram();
 
     Path vShaderPath = EPATH("Shaders/PP_ScreenPass.vert");
     Shader *vShader = Resources::Load<Shader>(vShaderPath);

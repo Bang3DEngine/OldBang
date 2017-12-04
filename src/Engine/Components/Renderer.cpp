@@ -23,7 +23,7 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    if (GetMaterial()) { Asset::Destroy( GetMaterial() ); }
+    if (GetMaterial()) { Resources::Unload( GetMaterial() ); }
 }
 
 void Renderer::OnRender(RenderPass renderPass)
@@ -65,7 +65,7 @@ void Renderer::SetMaterial(Material *mat)
 {
     if (GetMaterial() != mat)
     {
-        if (GetMaterial()) { Asset::Destroy( GetMaterial() ); }
+        if (GetMaterial()) { Resources::Unload( GetMaterial() ); }
         m_material = mat;
     }
 }

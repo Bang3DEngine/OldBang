@@ -9,9 +9,9 @@
 
 USING_NAMESPACE_BANG
 
-ShaderProgram *ShaderProgramFactory::GetEmptyProgram()
+ShaderProgram *ShaderProgramFactory::CreateEmptyProgram()
 {
-    ShaderProgram *sp = new ShaderProgram();
+    ShaderProgram *sp = Resources::Create<ShaderProgram>();
     return sp;
 }
 
@@ -37,7 +37,7 @@ ShaderProgram *ShaderProgramFactory::GetShaderProgram(Shader *vShader,
     }
     else
     {
-        shaderProgram = ShaderProgramFactory::GetEmptyProgram();
+        shaderProgram = ShaderProgramFactory::CreateEmptyProgram();
         if (shaderProgram->Load(vShader, fShader))
         { spShaderCache.Add(shadersPair, shaderProgram); }
     }

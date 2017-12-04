@@ -4,10 +4,13 @@
 
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Resources.h"
 #include "Bang/AudioSource.h"
 #include "Bang/AudioManager.h"
 
 USING_NAMESPACE_BANG
+
+ASSET_IMPL(AudioClip)
 
 AudioClip::AudioClip()
 {

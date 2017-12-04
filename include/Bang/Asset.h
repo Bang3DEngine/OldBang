@@ -9,28 +9,29 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define ASSET(CLASS_NAME) \
-            friend class Asset; \
-            friend class ObjectManager; \
-            public: \
-            virtual CLASS_NAME* Clone() const override { \
-                CLASS_NAME *c = Asset::Create<CLASS_NAME>(); \
-                CloneInto(c); \
-                return c; \
-            } \
-            SERIALIZABLE(CLASS_NAME)
+#define ASSET(CLASSNAME) \
+    IRESOURCE(CLASSNAME) \
+    SERIALIZABLE(CLASSNAME) \
+    friend class Asset; \
+    friend class ObjectManager; \
+    public: \
+    virtual CLASSNAME* Clone() const override; \
+
+#define ASSET_IMPL(CLASSNAME) \
+    CLASSNAME* CLASSNAME::Clone() const \
+    { \
+        CLASSNAME *c = Resources::Create<CLASSNAME>(); \
+        CloneInto(c); \
+        return c; \
+    } \
 
 class Asset : public Resource,
               public IToString,
               public Object
 {
+    IRESOURCE(Asset)
+
 public:
-    template <class AssetClass, class... Args>
-    static AssetClass* Create(Args... args)
-    { return ObjectManager::Create<AssetClass>(args...); }
-
-    static void Destroy(Asset *asset);
-
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -44,6 +45,13 @@ public:
 protected:
     Asset();
     virtual ~Asset();
+
+private:
+    template <class AssetClass, class... Args>
+    static AssetClass* Create(Args... args)
+    { return ObjectManager::Create<AssetClass>(args...); }
+
+    static void Destroy(Asset *asset);
 };
 
 NAMESPACE_BANG_END

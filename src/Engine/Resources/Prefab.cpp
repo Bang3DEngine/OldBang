@@ -1,12 +1,15 @@
 #include "Bang/Prefab.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Resources.h"
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
+
+ASSET_IMPL(Prefab)
 
 Prefab::Prefab()
 {

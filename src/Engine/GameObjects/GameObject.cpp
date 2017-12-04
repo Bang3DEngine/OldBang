@@ -29,6 +29,8 @@ GameObject::GameObject(const String &name) : m_name(name)
 GameObject::~GameObject()
 {
     ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
+    ASSERT(GetChildren().IsEmpty());
+    ASSERT(GetComponents().IsEmpty());
     SetParent(nullptr);
 }
 

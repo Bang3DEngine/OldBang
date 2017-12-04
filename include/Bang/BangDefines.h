@@ -43,6 +43,7 @@ NAMESPACE_BANG_BEGIN
 #define T_ENUM(T) std::is_enum<T>::value
 #define T_POINTER(T) std::is_pointer<T>::value
 #define T_SUBCLASS(T, BASE_CLASS) std::is_base_of<BASE_CLASS, T>::value
+#define T_NOT_SUBCLASS(T, BASE_CLASS) !T_SUBCLASS(T, BASE_CLASS)
 
 #define TT_SCALAR(T) \
     typename std::enable_if<T_SCALAR(T), T>::type

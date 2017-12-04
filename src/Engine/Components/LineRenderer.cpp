@@ -3,13 +3,14 @@
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/MaterialFactory.h"
 
 USING_NAMESPACE_BANG
 
 LineRenderer::LineRenderer()
 {
-    m_mesh = Asset::Create<Mesh>();
+    m_mesh = Resources::Create<Mesh>();
     SetMaterial(MaterialFactory::GetDefaultUnLighted());
 
     SetRenderPrimitive(GL::Primitives::Lines);
@@ -17,7 +18,7 @@ LineRenderer::LineRenderer()
 
 LineRenderer::~LineRenderer()
 {
-    Asset::Destroy(m_mesh);
+    Resources::Unload(m_mesh);
 }
 
 void LineRenderer::OnRender()

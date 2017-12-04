@@ -5,6 +5,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Material.h"
 #include "Bang/Renderer.h"
+#include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
@@ -20,7 +21,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 EPATH("Shaders/G_Default.vert"),
                 EPATH("Shaders/SelectionBuffer.frag") );
 
-    m_selectionMaterial = Asset::Create<Material>();
+    m_selectionMaterial = Resources::Create<Material>();
     m_selectionMaterial->SetShaderProgram(selectionProgram);
 
     Bind();
@@ -34,7 +35,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    Asset::Destroy(m_selectionMaterial);
+    Resources::Unload(m_selectionMaterial);
 }
 
 void SelectionFramebuffer::PrepareForRender(const GameObject *go)

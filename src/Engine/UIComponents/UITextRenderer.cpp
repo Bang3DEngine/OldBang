@@ -22,7 +22,7 @@ USING_NAMESPACE_BANG
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
-    m_mesh = Asset::Create<Mesh>();
+    m_mesh = Resources::Create<Mesh>();
 
     SetMaterial( MaterialFactory::GetUIText() );
 
@@ -37,7 +37,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
 UITextRenderer::~UITextRenderer()
 {
-    if (m_mesh) { Asset::Destroy(m_mesh); }
+    if (m_mesh) { Resources::Unload(m_mesh); }
 }
 
 void UITextRenderer::OnRender()

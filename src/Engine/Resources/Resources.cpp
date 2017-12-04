@@ -17,7 +17,7 @@ Resources::Resources()
 Resources::~Resources()
 {
     Array<IResource*> resources = Resources::GetAllResources();
-    for (IResource *res : resources) { Destroy(res); }
+    for (IResource *res : resources) { Resources::Unload(res); }
 }
 
 Array<IResource*> Resources::GetAllResources()
@@ -31,42 +31,87 @@ Array<IResource*> Resources::GetAllResources()
     return result;
 }
 
-void Resources::UnLoad(const GUID &guid, bool deleteResource)
+void Resources::Unload(const GUID &guid)
 {
-    Resources *res = Resources::GetInstance();
-    for (auto& itTypeMap : res->m_GUIDToResource)
+    Resources *rs = Resources::GetInstance();
+    if (rs)
     {
-        if (deleteResource)
+        for (auto& itTypeMap : rs->m_GUIDToResource)
         {
             for (auto& itGUIDRes : itTypeMap.second)
             {
-                if (itGUIDRes.first == guid) { Destroy(itGUIDRes.second); }
+                const GUID &foundGUID = itGUIDRes.first;
+                if (foundGUID == guid)  { UnloadSingleResource(itGUIDRes.second);  }
             }
+            (itTypeMap.second).Remove(guid);
         }
-        (itTypeMap.second).Remove(guid);
     }
 }
 
-void Resources::Destroy(IResource *resource)
-{
-    Asset *asset = Cast<Asset*>(resource);
-    if (asset) {  Asset::Destroy(asset); } else { delete resource; }
-}
-
-void Resources::UnLoad(IResource *res, bool deleteResource)
+void Resources::Unload(IResource *res)
 {
     Resources *rs = Resources::GetInstance();
-    for (auto& itTypeMap : rs->m_GUIDToResource)
+    if (rs)
     {
-        if (deleteResource)
+        for (auto& itTypeMap : rs->m_GUIDToResource)
         {
             for (const auto& itGUIDRes : itTypeMap.second)
             {
-                if (itGUIDRes.second == res ) { Destroy(res); }
+                IResource *foundRes = itGUIDRes.second;
+                if (foundRes == res ) { UnloadSingleResource(res); }
             }
+            (itTypeMap.second).RemoveValues(res);
         }
-        (itTypeMap.second).RemoveValues(res);
     }
+    else { UnloadSingleResource(res); }
+}
+
+void Resources::UnloadSingleResource(IResource *res)
+{
+    Resources *rs = Resources::GetInstance();
+
+    bool destroy = true;
+    if (rs)
+    {
+        ASSERT(rs->m_resourcesUsage.ContainsKey(res));
+        uint *resourcesUsage = &(rs->m_resourcesUsage[res]);
+
+        --(*resourcesUsage);
+        ASSERT(*resourcesUsage >= 0);
+
+        destroy = (*resourcesUsage == 0);
+    }
+
+    if (destroy) { Destroy(res); }
+}
+
+#ifdef DEBUG
+bool Resources::_AssertCreatedFromResources = false;
+bool Resources::_AssertDestroyedFromResources = false;
+
+bool Resources::AssertCreatedFromResources()
+{
+    return !Resources::GetInstance() || Resources::_AssertCreatedFromResources;
+}
+
+bool Resources::AssertDestroyedFromResources()
+{
+    return !Resources::GetInstance() || Resources::_AssertDestroyedFromResources;
+}
+#endif
+
+void Resources::Destroy(IResource *resource)
+{
+    #ifdef DEBUG
+    Resources::_AssertDestroyedFromResources = true;
+    #endif
+
+    Asset *asset = Cast<Asset*>(resource);
+    if (asset) { Asset::Destroy(asset); } else { delete resource; }
+
+    #ifdef DEBUG
+    Resources::_AssertDestroyedFromResources = false;
+    #endif
 }
 
 Resources *Resources::GetInstance()

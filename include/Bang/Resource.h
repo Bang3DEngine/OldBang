@@ -1,19 +1,24 @@
-#ifndef RESOURCE_H
+﻿#ifndef RESOURCE_H
 #define RESOURCE_H
 
 #include "Bang/Serializable.h"
 
 NAMESPACE_BANG_BEGIN
 
+#define IRESOURCE(CLASSNAME) friend class Resources;
+
 #define RESOURCE(CLASSNAME)\
+    IRESOURCE(CLASSNAME) \
     ICLONEABLE(CLASSNAME) \
     SERIALIZABLE(CLASSNAME)
 
 class IResource
 {
+    IRESOURCE(IResource)
+
 protected:
-    IResource() = default;
-    virtual ~IResource() = default;
+    IResource();
+    virtual ~IResource();
 
     friend class Resources;
 };
@@ -21,6 +26,8 @@ protected:
 class Resource : public virtual Serializable,
                  public IResource
 {
+    IRESOURCE(Resource)
+
 public:
     Path GetResourceFilepath() const;
     virtual void Import(const Path &resourceFilepath) = 0;
@@ -28,8 +35,6 @@ public:
 protected:
     Resource() = default;
     virtual ~Resource() = default;
-
-    friend class Resources;
 };
 
 NAMESPACE_BANG_END

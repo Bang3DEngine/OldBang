@@ -30,7 +30,7 @@ TT_SUBCLASS(IResourceClass, IResource)* Resources::Load(const Path &filepath)
                 ImportFilesManager::GetGUIDFromFilepath(filepath) );
     if (!res)
     {
-        res = Create<IResourceClass>();
+        res = Resources::Create<IResourceClass>();
         res->Import(filepath);
 
         Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);
@@ -44,14 +44,14 @@ TT_SUBCLASS(IResourceClass, IResource)* Resources::Load(const Path &filepath)
     return Cast<IResourceClass*>(res);
 }
 
-template <class ResourceClass>
-ResourceClass* Resources::Load(const String &filepath)
+template <class IResourceClass>
+TT_SUBCLASS(IResourceClass, IResource)* Resources::Load(const String &filepath)
 {
-    return Load<ResourceClass>(PPATH(filepath));
+    return Load<IResourceClass>(PPATH(filepath));
 }
 
 template <class IResourceClass>
-IResourceClass* Resources::Load(const GUID &guid)
+TT_SUBCLASS(IResourceClass, IResource)* Resources::Load(const GUID &guid)
 {
     if (guid.IsEmpty()) { return nullptr; }
     if (!Resources::Contains<IResourceClass>(guid))
@@ -80,6 +80,34 @@ bool Resources::Contains(const GUID &guid)
     if (guid.IsEmpty()) { return false; }
     return Resources::GetCached<IResourceClass>(guid) != nullptr;
 }
+
+template<class IResourceClass, class ...Args>
+IResourceClass* Resources::Create(const Args&... args)
+{
+    #ifdef DEBUG
+    Resources::_AssertCreatedFromResources = true;
+    #endif
+
+    IResourceClass *res = Resources::JustCreate<IResourceClass>(args...);
+    Resources *rs = Resources::GetInstance();
+    rs->m_resourcesUsage[res] = 1;
+
+    #ifdef DEBUG
+    Resources::_AssertCreatedFromResources = false;
+    #endif
+
+    return res;
+}
+
+template<class IResourceClass, class ...Args>
+typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),
+         IResourceClass*>::type Resources::JustCreate(const Args&... args)
+{ return Asset::Create<IResourceClass>(args...); }
+
+template<class IResourceClass, class ...Args>
+typename std::enable_if<T_NOT_SUBCLASS(IResourceClass, Asset),
+         IResourceClass*>::type Resources::JustCreate(const Args&... args)
+{ return new IResourceClass(args...); }
 
 template<class IResourceClass>
 IResourceClass* Resources::GetCached(const GUID &guid)

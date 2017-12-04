@@ -4,6 +4,8 @@
 
 USING_NAMESPACE_BANG
 
+ASSET_IMPL(Texture2D)
+
 Texture2D::Texture2D() : Texture(GL::TextureTarget::Texture2D)
 {
     CreateEmpty(1,1);
@@ -125,7 +127,7 @@ void Texture2D::ExportXML(XMLNode *xmlInfo) const
 
 void Texture2D::Import(const Path &imageFilepath)
 {
-    Imageb *img = Resources::Load<Imageb>(imageFilepath);
+    ImageResourceb *img = Resources::Load<ImageResourceb>(imageFilepath);
     if (img) { Import(*img); }
 
     Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);

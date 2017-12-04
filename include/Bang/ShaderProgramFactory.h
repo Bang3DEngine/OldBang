@@ -11,7 +11,7 @@ FORWARD class ShaderProgram;
 class ShaderProgramFactory
 {
 public:
-    static ShaderProgram* GetEmptyProgram();
+    static ShaderProgram* CreateEmptyProgram();
     static ShaderProgram* GetShaderProgram(const Path &vShaderPath,
                                            const Path &fShaderPath);
     static ShaderProgram* GetShaderProgram(Shader *vShader, Shader *fShader);

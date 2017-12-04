@@ -15,6 +15,8 @@ class ShaderProgram : public GLObject,
                       public IResource,
                       public IDestroyListener
 {
+    IRESOURCE(ShaderProgram)
+
 public:
     bool Load(const Path &vshaderPath, const Path &fshaderPath);
     bool Load(Shader *vShader, Shader *fShader);

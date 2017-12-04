@@ -29,33 +29,44 @@ public:
     template <class IResourceClass>
     static TT_SUBCLASS(IResourceClass, IResource)* Load(const Path &filepath);
 
-    template <class ResourceClass>
-    static ResourceClass* Load(const String &filepath);
+    template <class IResourceClass>
+    static TT_SUBCLASS(IResourceClass, IResource)* Load(const String &filepath);
 
-    template <class ResourceClass>
-    static ResourceClass* Load(const GUID &guid);
+    template <class IResourceClass>
+    static TT_SUBCLASS(IResourceClass, IResource)* Load(const GUID &guid);
+
+    template<class IResourceClass, class ...Args>
+    static IResourceClass* Create(const Args&... args);
 
     template <class IResourceClass>
     static Array<IResourceClass*> GetAll();
     static Array<IResource*> GetAllResources();
 
-    static void UnLoad(const GUID &guid, bool deleteResource = false);
-    static void UnLoad(IResource *res, bool deleteResource = false);
+    static void Unload(const GUID &guid);
+    static void Unload(IResource *res);
+    static void UnloadSingleResource(IResource *res);
+
+    #ifdef DEBUG
+    static bool AssertCreatedFromResources();
+    static bool AssertDestroyedFromResources();
+    #endif
 
 private:
+    #ifdef DEBUG
+    static bool _AssertCreatedFromResources;
+    static bool _AssertDestroyedFromResources;
+    #endif
+
+    Map<IResource*, uint> m_resourcesUsage;
     TypeMap< Map<GUID, IResource*> > m_GUIDToResource;
 
-    template<class IResourceClass>
-    static TT_SUBCLASS(IResourceClass, Asset)* Create()
-    {
-        return Asset::Create<IResourceClass>();
-    }
+    template<class IResourceClass, class ...Args>
+    static typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),
+                    IResourceClass*>::type JustCreate(const Args&... args);
 
-    template<class IResourceClass>
-    static TT_NOT_SUBCLASS(IResourceClass, Asset)* Create()
-    {
-        return new IResourceClass();
-    }
+    template<class IResourceClass, class ...Args>
+    static typename std::enable_if<T_NOT_SUBCLASS(IResourceClass, Asset),
+                    IResourceClass*>::type JustCreate(const Args&... args);
 
     template<class IResourceClass>
     static bool Contains(const GUID &guid);

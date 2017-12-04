@@ -5,9 +5,12 @@
 #include "Bang/Vector2.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Resources.h"
 #include "Bang/FontSheetCreator.h"
 
 USING_NAMESPACE_BANG
+
+ASSET_IMPL(Font)
 
 Font::Font()
 {
@@ -42,7 +45,7 @@ void Font::Import(const Path &ttfFilepath)
         Imageb distFieldImg;
         distFieldImg.Import(distFieldImgPath);
 
-        m_distFieldTexture = Asset::Create<Texture2D>();
+        m_distFieldTexture = Resources::Create<Texture2D>();
         m_distFieldTexture->Import(distFieldImg);
         m_distFieldTexture->Bind();
         m_distFieldTexture->GenerateMipMaps();
@@ -128,7 +131,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
     {
         // Create atlas
         Array<Recti> charRects;
-        Texture2D *atlasTex = Asset::Create<Texture2D>();
+        Texture2D *atlasTex = Resources::Create<Texture2D>();
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                        "0123456789.,-;:_?!+*/\\\"'";
 
@@ -287,13 +290,8 @@ TTF_Font *Font::GetTTFFont(int fontSize) const
 void Font::Free()
 {
     m_charUvsInDistanceFieldAtlas.Clear();
-    if (m_distFieldTexture) { Asset::Destroy(m_distFieldTexture); }
+    if (m_distFieldTexture) { Resources::Unload(m_distFieldTexture); }
 
-    for (auto it : m_cachedAtlas)
-    {
-        Asset::Destroy( it.second );
-    }
-
-    // TODO: Free stuff
-    // if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
+    for (auto it : m_cachedAtlas) { Resources::Unload( it.second ); }
+    for (auto it : m_openFonts) { TTF_CloseFont( it.second ); }
 }

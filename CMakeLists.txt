@@ -231,6 +231,7 @@ ${ENGINE_SRC_DIR}/Resources/Mesh.cpp
 ${ENGINE_SRC_DIR}/Resources/Prefab.cpp
 ${ENGINE_SRC_DIR}/Resources/Resource.cpp
 ${ENGINE_SRC_DIR}/Resources/Resources.cpp
+${ENGINE_SRC_DIR}/Resources/ResourceHandler.cpp
 ${ENGINE_SRC_DIR}/Resources/Serializable.cpp
 ${ENGINE_SRC_DIR}/System/Library.cpp
 ${ENGINE_SRC_DIR}/System/SystemUtils.cpp
