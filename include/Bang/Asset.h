@@ -12,7 +12,13 @@ NAMESPACE_BANG_BEGIN
 #define ASSET(CLASS_NAME) \
             friend class Asset; \
             friend class ObjectManager; \
-            RESOURCE(CLASS_NAME)
+            public: \
+            virtual CLASS_NAME* Clone() const override { \
+                CLASS_NAME *c = Asset::Create<CLASS_NAME>(); \
+                CloneInto(c); \
+                return c; \
+            } \
+            SERIALIZABLE(CLASS_NAME)
 
 class Asset : public Resource,
               public IToString,

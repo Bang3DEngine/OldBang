@@ -61,11 +61,12 @@ void Renderer::SetVisible(bool visible)
 }
 
 
-void Renderer::SetMaterial(Material *m)
+void Renderer::SetMaterial(Material *mat)
 {
-    if (m_material != m)
+    if (GetMaterial() != mat)
     {
-        m_material = m;
+        if (GetMaterial()) { Asset::Destroy( GetMaterial() ); }
+        m_material = mat;
     }
 }
 
@@ -96,10 +97,8 @@ GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
 GL::Primitives Renderer::GetRenderPrimitive() const { return m_renderMode; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material *Renderer::GetSharedMaterial() const { return m_material; }
-Material *Renderer::GetMaterial() const
-{
-    return m_material ? m_material : MaterialFactory::GetMissing();
-}
+Material *Renderer::GetMaterial() const { return m_material; }
+
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     return Rect::ScreenRectNDC;

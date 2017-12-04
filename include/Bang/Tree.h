@@ -24,6 +24,7 @@ public:
     const T& GetData() const;
     Tree<T>* GetParent() const;
     const List< Tree<T>* >& GetChildren() const;
+    List< Tree<T>* > GetChildrenRecursive() const;
 
 private:
     T m_data;

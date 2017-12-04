@@ -7,6 +7,14 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
 
+ObjectManager::~ObjectManager()
+{
+    while (!m_objectsToBeDestroyedQueue.empty())
+    {
+        _DestroyObjects();
+    }
+}
+
 void ObjectManager::Destroy(GameObject *gameObject)
 {
     Destroy( Cast<Object*>(gameObject) );
@@ -80,21 +88,26 @@ void ObjectManager::StartObjects()
 void ObjectManager::DestroyObjects()
 {
     ObjectManager *om = ObjectManager::GetInstance();
-    while (!om->m_objectsToBeDestroyedQueue.empty())
-    {
-        Object *objectToBeDestroyed = om->m_objectsToBeDestroyedQueue.front();
-        ObjectId objectToBeDestroyedId = om->m_objectsIdsToBeDestroyedQueue.front();
-        ASSERT(objectToBeDestroyed->GetObjectId() == objectToBeDestroyedId);
-        om->m_objectsToBeDestroyedQueue.pop();
-        om->m_objectsIdsToBeDestroyedQueue.pop();
+    om->_DestroyObjects();
+}
 
-        if (!om->m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyedId))
+void ObjectManager::_DestroyObjects()
+{
+    while (!m_objectsToBeDestroyedQueue.empty())
+    {
+        Object *objectToBeDestroyed = m_objectsToBeDestroyedQueue.front();
+        ObjectId objectToBeDestroyedId = m_objectsIdsToBeDestroyedQueue.front();
+        ASSERT(objectToBeDestroyed->GetObjectId() == objectToBeDestroyedId);
+        m_objectsToBeDestroyedQueue.pop();
+        m_objectsIdsToBeDestroyedQueue.pop();
+
+        if (!m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyedId))
         {
             #ifdef DEBUG
             ObjectManager::AssertDestroyedFromObjectManager = true;
             #endif
 
-            om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
+            m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
             delete objectToBeDestroyed;
 
             #ifdef DEBUG
@@ -102,7 +115,7 @@ void ObjectManager::DestroyObjects()
             #endif
         }
     }
-    om->m_objectsDestroyedWhileDestroying.Clear();
+    m_objectsDestroyedWhileDestroying.Clear();
 }
 
 void ObjectManager::OnDestroyed(Object *object)

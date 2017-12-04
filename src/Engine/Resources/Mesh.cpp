@@ -13,6 +13,9 @@ USING_NAMESPACE_BANG
 
 Mesh::Mesh()
 {
+    static int created = 0;
+    ++created;
+    Debug_Log("CREATED " << created);
     m_vao = new VAO();
 }
 
@@ -22,6 +25,9 @@ Mesh::~Mesh()
     if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
     if (m_vertexNormalsVBO)   { delete m_vertexNormalsVBO;   }
     if (m_vertexUvsVBO)       { delete m_vertexUvsVBO;       }
+    static int destroyed = 0;
+    ++destroyed;
+    Debug_Log("DESTROYED " << destroyed);
 }
 
 void Mesh::LoadPositions(const Array<Vector3>& positions)
@@ -113,6 +119,7 @@ void Mesh::CloneInto(ICloneable *clone) const
     mClone->m_bSphere = m_bSphere;
     mClone->m_modelFilepath = m_modelFilepath;
 
+    if (mClone->m_vao) { delete mClone->m_vao; }
     mClone->m_vao = new VAO();
     mClone->LoadAll(m_positions, m_normals, m_uvs);
 }

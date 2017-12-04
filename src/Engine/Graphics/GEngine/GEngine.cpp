@@ -38,6 +38,8 @@ GEngine::~GEngine()
 {
     delete m_texUnitManager;
     delete m_gl;
+    Asset::Destroy(m_renderGBufferToScreenMaterial);
+    Asset::Destroy(m_screenPlaneMesh);
 }
 
 void GEngine::Init()

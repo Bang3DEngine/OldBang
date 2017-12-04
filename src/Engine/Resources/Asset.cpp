@@ -7,11 +7,12 @@ USING_NAMESPACE_BANG
 
 Asset::Asset()
 {
+    ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 Asset::~Asset()
 {
-    Resources::UnLoad(this);
+    ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
 }
 
 void Asset::Destroy(Asset *asset)

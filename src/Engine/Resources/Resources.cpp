@@ -16,17 +16,13 @@ Resources::Resources()
 
 Resources::~Resources()
 {
-    Array<Resource*> resources = Resources::GetAllResources();
-    for (Resource *res : resources)
-    {
-        Asset *asset = Cast<Asset*>(res);
-        if (asset) { Destroy(asset); } else { Destroy(res); }
-    }
+    Array<IResource*> resources = Resources::GetAllResources();
+    for (IResource *res : resources) { Destroy(res); }
 }
 
-Array<Resource *> Resources::GetAllResources()
+Array<IResource*> Resources::GetAllResources()
 {
-    Array<Resource*> result;
+    Array<IResource*> result;
     Resources *rs = Resources::GetInstance();
     for (const auto& itTypeMap : rs->m_GUIDToResource)
     {
@@ -37,8 +33,8 @@ Array<Resource *> Resources::GetAllResources()
 
 void Resources::UnLoad(const GUID &guid, bool deleteResource)
 {
-    Resources *imp = Resources::GetInstance();
-    for (auto& itTypeMap : imp->m_GUIDToResource)
+    Resources *res = Resources::GetInstance();
+    for (auto& itTypeMap : res->m_GUIDToResource)
     {
         if (deleteResource)
         {
@@ -51,7 +47,13 @@ void Resources::UnLoad(const GUID &guid, bool deleteResource)
     }
 }
 
-void Resources::UnLoad(Resource *res, bool deleteResource)
+void Resources::Destroy(IResource *resource)
+{
+    Asset *asset = Cast<Asset*>(resource);
+    if (asset) {  Asset::Destroy(asset); } else { delete resource; }
+}
+
+void Resources::UnLoad(IResource *res, bool deleteResource)
 {
     Resources *rs = Resources::GetInstance();
     for (auto& itTypeMap : rs->m_GUIDToResource)
@@ -65,15 +67,6 @@ void Resources::UnLoad(Resource *res, bool deleteResource)
         }
         (itTypeMap.second).RemoveValues(res);
     }
-}
-
-void Resources::Destroy(Asset *resource)
-{
-    Asset::Destroy(resource);
-}
-void Resources::Destroy(Resource *resource)
-{
-    delete resource;
 }
 
 Resources *Resources::GetInstance()

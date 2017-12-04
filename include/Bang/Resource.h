@@ -9,7 +9,17 @@ NAMESPACE_BANG_BEGIN
     ICLONEABLE(CLASSNAME) \
     SERIALIZABLE(CLASSNAME)
 
-class Resource : public virtual Serializable
+class IResource
+{
+protected:
+    IResource() = default;
+    virtual ~IResource() = default;
+
+    friend class Resources;
+};
+
+class Resource : public virtual Serializable,
+                 public IResource
 {
 public:
     Path GetResourceFilepath() const;

@@ -31,9 +31,6 @@ AudioManager::~AudioManager()
     }
     StopAllSounds();
 
-    Array<AudioClip*> allAudioClips = Resources::GetAll<AudioClip>();
-    for (AudioClip *ac : allAudioClips) { Resources::UnLoad(ac, true); }
-
     alcDestroyContext(m_alContext);
     alcCloseDevice(m_alDevice);
 }

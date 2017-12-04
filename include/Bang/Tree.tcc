@@ -78,6 +78,17 @@ template<class T>
 const List< Tree<T>* > &Tree<T>::GetChildren() const { return m_subTrees; }
 
 template<class T>
+List< Tree<T>* > Tree<T>::GetChildrenRecursive() const
+{
+    List< Tree<T>* > result = GetChildren();
+    for (Tree<T>* child : GetChildren())
+    {
+        result.PushBack(child->GetChildrenRecursive());
+    }
+    return result;
+}
+
+template<class T>
 Tree<T>* Tree<T>::GetParent() const { return p_parent; }
 
 template<class T>

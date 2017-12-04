@@ -16,7 +16,6 @@ Font::Font()
 Font::~Font()
 {
     Free();
-
 }
 
 void Font::Import(const Path &ttfFilepath)
@@ -289,6 +288,12 @@ void Font::Free()
 {
     m_charUvsInDistanceFieldAtlas.Clear();
     if (m_distFieldTexture) { Asset::Destroy(m_distFieldTexture); }
+
+    for (auto it : m_cachedAtlas)
+    {
+        Asset::Destroy( it.second );
+    }
+
     // TODO: Free stuff
     // if (GetTTFFont()) { m_ttfFont = nullptr; TTF_CloseFont(GetTTFFont()); }
 }

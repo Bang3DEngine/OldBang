@@ -30,12 +30,13 @@ Window::~Window()
 {
     SetParent(nullptr);
 
+    delete m_sceneManager;
+    delete m_audioManager;
     delete m_input;
     delete m_gEngine;
-    delete m_audioManager;
-    delete m_sceneManager;
     delete m_resources;
     delete m_objectManager;
+
     SDL_GL_DeleteContext(GetGLContext());
     SDL_DestroyWindow(m_sdlWindow);
 }

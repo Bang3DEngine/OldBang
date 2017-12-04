@@ -135,14 +135,26 @@ void UITree::RemoveItem(GOItem *item)
     Tree<GOItem*> *itemTree = GetItemTree(item);
     if (itemTree)
     {
-        GOItem* parentItem = GetParentItem(item); // Get parent before deleting
+        // Get some info before deleting
+        GOItem* parentItem = GetParentItem(item);
 
-        // Finally remove from list, remove from map, and delete the item tree
-        Tree<GOItem*> *itemTree = GetItemTree(item);
-        m_itemToTree.Remove( item ); // Must go before list item removal
+        List< Tree<GOItem*>* > treeChildrenRec = itemTree->GetChildrenRecursive();
+        treeChildrenRec.PushBack(itemTree);
+
+        List<GOItem*> itemsToRemove;
+        for (Tree<GOItem*>* treeChild : treeChildrenRec)
+        {
+            itemsToRemove.PushBack( treeChild->GetData() );
+        }
+
+        // Remove needed stuff from list, remove from map, and delete the item
+        // tree (which recursively deletes its children)
+        for (GOItem* itemToRemove : itemsToRemove)
+        {
+            m_itemToTree.Remove(itemToRemove);
+            GetUIList()->RemoveItem( GetItemContainer(itemToRemove) );
+        }
         delete itemTree;
-
-        GetUIList()->RemoveItem( GetItemContainer(item) );
 
         // Update parent collapsability
         if (parentItem) { UpdateCollapsability(parentItem); }

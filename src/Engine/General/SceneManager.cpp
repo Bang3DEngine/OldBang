@@ -22,6 +22,10 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
+    if (GetActiveScene())
+    {
+        GameObject::Destroy( GetActiveScene() );
+    }
 }
 
 SceneManager *SceneManager::GetInstance()

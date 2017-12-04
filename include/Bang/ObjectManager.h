@@ -36,10 +36,12 @@ private:
     Set<ObjectId> m_objectsToBeDestroyedSet;
 
     ObjectManager() = default;
-    virtual ~ObjectManager() = default;
+    virtual ~ObjectManager();
 
     static void StartObjects();
     static void DestroyObjects();
+
+    void _DestroyObjects();
 
     template <class ObjectClass, class... Args>
     static ObjectClass* Create(Args... args);

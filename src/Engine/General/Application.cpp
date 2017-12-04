@@ -56,6 +56,9 @@ Application::~Application()
     delete m_paths;
     delete m_behaviourManager;
 
+    for (Window *w : m_windows) { delete w; }
+    for (Window *w : p_windowsToBeDestroyed) { delete w; }
+
     TTF_Quit();
 }
 

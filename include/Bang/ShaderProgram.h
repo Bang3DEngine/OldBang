@@ -3,6 +3,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/GLObject.h"
+#include "Bang/Resources.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -11,6 +12,7 @@ FORWARD class Shader;
 FORWARD class Texture2D;
 
 class ShaderProgram : public GLObject,
+                      public IResource,
                       public IDestroyListener
 {
 public:

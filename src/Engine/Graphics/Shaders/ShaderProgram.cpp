@@ -21,6 +21,11 @@ ShaderProgram::ShaderProgram()
     m_idGL = GL::CreateProgram();
 }
 
+ShaderProgram::~ShaderProgram()
+{
+    GL::DeleteProgram(m_idGL);
+}
+
 bool ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
 {
     return Load(Resources::Load<Shader>(vshaderPath),
@@ -36,12 +41,6 @@ bool ShaderProgram::Load(Shader *vShader, Shader *fShader)
     SetVertexShader(vShader);
     SetFragmentShader(fShader);
     return Refresh();
-}
-
-
-ShaderProgram::~ShaderProgram()
-{
-    GL::DeleteProgram(m_idGL);
 }
 
 bool ShaderProgram::Link()
