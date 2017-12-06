@@ -20,11 +20,6 @@ Framebuffer::Framebuffer(int width, int height) : m_width(width),
 
 Framebuffer::~Framebuffer()
 {
-    for (auto itPair : m_attachments_To_Texture)
-    {
-        Texture2D *tex = itPair.second;
-        Resources::Unload(tex);
-    }
     GL::DeleteFramebuffers(1, &m_idGL);
 }
 
@@ -33,20 +28,21 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
 {
     ASSERT(GL::IsBound(this));
     GL_ClearError();
-    Texture2D *tex = Resources::Create<Texture2D>();
-    tex->Bind();
-    tex->SetInternalFormat(texFormat);
-    tex->CreateEmpty(GetWidth(), GetHeight());
+    RH<Texture2D> tex;
+    Resources::Create<Texture2D>(&tex);
+    tex.Get()->Bind();
+    tex.Get()->SetInternalFormat(texFormat);
+    tex.Get()->CreateEmpty(GetWidth(), GetHeight());
     GL_CheckError();
 
-    SetAttachmentTexture(tex, attachment);
-    tex->UnBind();
+    SetAttachmentTexture(tex.Get(), attachment);
+    tex.Get()->UnBind();
 }
 
-Texture2D *Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
+Texture2D* Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const
 {
     if (!m_attachments_To_Texture.ContainsKey(attachment)) { return nullptr; }
-    return m_attachments_To_Texture.Get(attachment);
+    return m_attachments_To_Texture.Get(attachment).Get();
 }
 
 void Framebuffer::SetAllDrawBuffers() const
@@ -69,7 +65,7 @@ void Framebuffer::SetReadBuffer(GL::Attachment attachment) const
     GL::ReadBuffer(attachment);
 }
 
-void Framebuffer::SetAttachmentTexture(Texture2D *tex,
+void Framebuffer::SetAttachmentTexture(Texture2D* tex,
                                        GL::Attachment attachment)
 {
     GLId prevId = GL::GetBoundId(GL::BindTarget::Framebuffer);
@@ -86,7 +82,9 @@ void Framebuffer::SetAttachmentTexture(Texture2D *tex,
     UnBind();
 
     m_attachments.PushBack(attachment);
-    m_attachments_To_Texture.Add(attachment, tex);
+    RH<Texture2D> texRH;
+    texRH.Set(tex);
+    m_attachments_To_Texture.Add(attachment, texRH);
 
     GL::Bind(GL::BindTarget::Framebuffer, prevId);
 }
@@ -101,7 +99,7 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     GLId prevFBId = GL::GetBoundId(GL::BindTarget::Framebuffer);
     Bind();
-    Texture2D *t = GetAttachmentTexture(attachment);
+    Texture2D* t = GetAttachmentTexture(attachment);
     SetReadBuffer(attachment);
     Byte color[4] = {0,0,0,0};
     GL::ReadPixels(x, y, 1, 1,
@@ -121,7 +119,7 @@ void Framebuffer::Resize(int width, int height)
 
     for (auto it : m_attachments_To_Texture)
     {
-        Texture2D *t = it.second;
+        Texture2D *t = it.second.Get();
         if (t)
         {
             GL_ClearError();

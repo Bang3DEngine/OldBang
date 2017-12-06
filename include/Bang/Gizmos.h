@@ -2,6 +2,7 @@
 #define GIZMOS_H
 
 #include "Bang/GameObject.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -54,13 +55,14 @@ public:
 
     static void Reset();
 
+    GameObject *GetGameObject() const;
+
 private:
     GameObject *m_gizmosGo = nullptr;
 
-    Mesh *m_boxMesh      = nullptr;
-    Mesh *m_sphereMesh   = nullptr;
-    Mesh *m_planeMesh    = nullptr;
-    Material *m_material = nullptr;
+    RH<Mesh> p_boxMesh;
+    RH<Mesh> p_planeMesh;
+    RH<Mesh> p_sphereMesh;
 
     SingleLineRenderer *m_singleLineRenderer = nullptr;
     CircleRenderer *m_circleRenderer = nullptr;
@@ -68,6 +70,7 @@ private:
     List<Renderer*> m_renderers;
 
     Gizmos();
+    virtual ~Gizmos();
 
     static GameObject *GetGizmosGameObject();
     static Gizmos *GetInstance();

@@ -19,17 +19,18 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::SetMesh(Mesh *m) { p_mesh = m; }
-Mesh *MeshRenderer::GetMesh() const { return p_mesh; }
+void MeshRenderer::SetMesh(Mesh *m) { p_mesh.Set(m); }
+Mesh* MeshRenderer::GetMesh() const { return p_mesh.Get(); }
 AABox MeshRenderer::GetAABBox() const
 {
-    return p_mesh ? p_mesh->GetAABBox() : AABox::Empty;
+    return p_mesh ? p_mesh.Get()->GetAABBox() : AABox::Empty;
 }
 
 void MeshRenderer::OnRender()
 {
     Renderer::OnRender(); ENSURE(p_mesh);
-    GL::Render(p_mesh->GetVAO(), GetRenderPrimitive(), p_mesh->GetVertexCount());
+    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(),
+               p_mesh.Get()->GetVertexCount());
 }
 
 void MeshRenderer::CloneInto(ICloneable *clone) const
@@ -43,7 +44,11 @@ void MeshRenderer::ImportXML(const XMLNode &xmlInfo)
 {
     Renderer::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Mesh"))
-    { SetMesh( Resources::Load<Mesh>( xmlInfo.Get<GUID>("Mesh") ) ); }
+    {
+        RH<Mesh> mesh;
+        Resources::Load<Mesh>(&mesh, xmlInfo.Get<GUID>("Mesh"));
+        SetMesh(mesh.Get());
+    }
 }
 
 void MeshRenderer::ExportXML(XMLNode *xmlInfo) const

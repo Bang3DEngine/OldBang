@@ -4,6 +4,7 @@
 #include "Bang/Component.h"
 #include "Bang/AudioManager.h"
 #include "Bang/ALAudioSource.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -44,9 +45,8 @@ protected:
     virtual void OnUpdate() override;
 
 private:
-    AudioClip *m_audioClip = nullptr;
+    RH<AudioClip> p_audioClip;
     bool m_playOnStart = true;
-
     uint m_currentAudioClipALBufferId = 0;
 
     friend class AudioClip;

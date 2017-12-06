@@ -131,12 +131,6 @@ List<Value> Map<Key,Value>::GetValues() const
 }
 
 template<class Key, class Value>
-Value &Map<Key,Value>::At(const Key &k) { return m_map.at(k); }
-
-template<class Key, class Value>
-const Value &Map<Key,Value>::At(const Key &k) const { return m_map.at(k); }
-
-template<class Key, class Value>
 const Value &Map<Key,Value>::operator[](const Key &k) const { return m_map[k]; }
 
 template<class Key, class Value>

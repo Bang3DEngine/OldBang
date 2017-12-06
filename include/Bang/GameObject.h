@@ -179,10 +179,6 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
-    // Concurrent modification when iterating stuff
-    std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
-    std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
-
     GameObject(const String &name = "GameObject");
     virtual ~GameObject();
 

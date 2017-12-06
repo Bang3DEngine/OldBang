@@ -39,8 +39,6 @@ GEngine::~GEngine()
 {
     delete m_texUnitManager;
     delete m_gl;
-    Resources::Unload(m_renderGBufferToScreenMaterial);
-    Resources::Unload(m_screenPlaneMesh);
 }
 
 void GEngine::Init()
@@ -49,8 +47,8 @@ void GEngine::Init()
     GL::SetActive( GetGL() );
     m_texUnitManager = new TextureUnitManager();
 
-    m_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
-    m_screenPlaneMesh = MeshFactory::GetUIPlane();
+    MaterialFactory::GetRenderGBufferToScreen(&p_renderGBufferToScreenMaterial);
+    MeshFactory::GetUIPlane(&p_screenPlaneMesh);
     GL::SetActive( nullptr );
 }
 
@@ -187,9 +185,9 @@ void GEngine::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 void GEngine::RenderToScreen(Camera *cam)
 {
     ENSURE(cam);
-    m_renderGBufferToScreenMaterial->Bind();
+    p_renderGBufferToScreenMaterial.Get()->Bind();
 
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
@@ -201,20 +199,21 @@ void GEngine::RenderToScreen(Camera *cam)
 
     GEngine::RenderScreenPlane(true);
 
-    m_renderGBufferToScreenMaterial->UnBind();
+    p_renderGBufferToScreenMaterial.Get()->UnBind();
 }
 
 void GEngine::RenderToScreen(Texture2D *fullScreenTexture)
 {
     ASSERT(fullScreenTexture);
-    m_renderGBufferToScreenMaterial->Bind();
+    p_renderGBufferToScreenMaterial.Get()->Bind();
 
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->
+                        GetShaderProgram();
     sp->Set("B_GTex_Color", fullScreenTexture);
 
     GEngine::RenderScreenPlane();
 
-    m_renderGBufferToScreenMaterial->UnBind();
+    p_renderGBufferToScreenMaterial.Get()->UnBind();
 }
 
 void GEngine::RenderScreenPlane(bool withDepth)
@@ -235,8 +234,8 @@ void GEngine::RenderScreenPlane(bool withDepth)
     }
     GL::SetCullFace(GL::Face::None);
 
-    GL::Render(m_screenPlaneMesh->GetVAO(), GL::Primitives::Triangles,
-               m_screenPlaneMesh->GetVertexCount());
+    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitives::Triangles,
+               p_screenPlaneMesh.Get()->GetVertexCount());
 
     GL::SetCullFace(prevCullFace);
     GL::SetDepthMask(prevDepthMask);

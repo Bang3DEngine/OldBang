@@ -23,7 +23,7 @@ public:
 
     void SetUvMultiply(const Vector2 &uvMultiply);
     void SetImageTexture(const Path &imagePath);
-    void SetImageTexture(Texture2D *imageTexture);
+    void SetImageTexture(Texture2D* imageTexture);
     void SetTint(const Color& tint);
     void SetIsBackground(bool isBackground);
     void SetAspectRatioMode(AspectRatioMode arMode);
@@ -55,10 +55,11 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    RH<Mesh> p_quadMesh;
+    RH<Texture2D> p_imageTexture;
+
     bool m_hasChanged = false;
-    Mesh *m_quadMesh = nullptr;
     bool m_isBackground = false;
-    Texture2D *m_imageTexture = nullptr;
 
     AspectRatioMode m_aspectRatioMode         = AspectRatioMode::Ignore;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;

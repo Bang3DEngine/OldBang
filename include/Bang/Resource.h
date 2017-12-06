@@ -1,6 +1,7 @@
 ﻿#ifndef RESOURCE_H
 #define RESOURCE_H
 
+#include "Bang/IGUIDable.h"
 #include "Bang/Serializable.h"
 
 NAMESPACE_BANG_BEGIN
@@ -12,7 +13,7 @@ NAMESPACE_BANG_BEGIN
     ICLONEABLE(CLASSNAME) \
     SERIALIZABLE(CLASSNAME)
 
-class IResource
+class IResource : public virtual IGUIDable
 {
     IRESOURCE(IResource)
 

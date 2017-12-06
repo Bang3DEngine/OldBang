@@ -12,8 +12,6 @@
 
 USING_NAMESPACE_BANG
 
-ASSET_IMPL(Mesh)
-
 Mesh::Mesh()
 {
     static int created = 0;

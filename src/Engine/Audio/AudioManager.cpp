@@ -56,7 +56,8 @@ void AudioManager::Play(AudioClip *audioClip,
                         float delay)
 {
     ENSURE(audioClip);
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, aas, delay);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
+                                                          aas, delay);
     AudioManager *am = AudioManager::GetInstance();
     bool started = am->m_threadPool.TryStart(player);
     if (started)
@@ -82,8 +83,9 @@ void AudioManager::Play(const Path &audioClipFilepath,
                         const AudioParams &params,
                         float delay)
 {
-    AudioClip *audioClip = Resources::Load<AudioClip>(audioClipFilepath);
-    AudioManager::Play(audioClip, params, delay);
+    RH<AudioClip> audioClip;
+    Resources::Load<AudioClip>(&audioClip, audioClipFilepath);
+    AudioManager::Play(audioClip.Get(), params, delay);
 }
 
 void AudioManager::PauseAllSounds()

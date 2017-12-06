@@ -11,7 +11,9 @@ USING_NAMESPACE_BANG
 
 UITextCursor::UITextCursor()
 {
-    SetMaterial(MaterialFactory::GetUIImage());
+    RH<Material> mat;
+    MaterialFactory::GetUIImage(&mat);
+    SetMaterial(mat.Get());
     GetMaterial()->SetDiffuseColor(Color::Black);
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderPass(RenderPass::Canvas);

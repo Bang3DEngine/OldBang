@@ -10,8 +10,6 @@
 
 USING_NAMESPACE_BANG
 
-ASSET_IMPL(Font)
-
 Font::Font()
 {
 }
@@ -45,13 +43,13 @@ void Font::Import(const Path &ttfFilepath)
         Imageb distFieldImg;
         distFieldImg.Import(distFieldImgPath);
 
-        m_distFieldTexture = Resources::Create<Texture2D>();
-        m_distFieldTexture->Import(distFieldImg);
-        m_distFieldTexture->Bind();
-        m_distFieldTexture->GenerateMipMaps();
-        m_distFieldTexture->SetFilterMode(GL::FilterMode::Linear);
-        m_distFieldTexture->SetWrapMode(GL::WrapMode::ClampToEdge);
-        m_distFieldTexture->UnBind();
+        Resources::Create<Texture2D>(&p_distFieldTexture);
+        p_distFieldTexture.Get()->Import(distFieldImg);
+        p_distFieldTexture.Get()->Bind();
+        p_distFieldTexture.Get()->GenerateMipMaps();
+        p_distFieldTexture.Get()->SetFilterMode(GL::FilterMode::Linear);
+        p_distFieldTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
+        p_distFieldTexture.Get()->UnBind();
 
         String loadedChars = "";
         Array<Recti> charPxRects;
@@ -81,9 +79,9 @@ void Font::Import(const Path &ttfFilepath)
             const char c = loadedChars[i];
             Recti charPxRect = charPxRects[i];
             Vector2 uvMin = Vector2(charPxRect.GetMin()) /
-                                 Vector2(m_distFieldTexture->GetSize());
+                                 Vector2(p_distFieldTexture.Get()->GetSize());
             Vector2 uvMax = Vector2(charPxRect.GetMax()) /
-                                 Vector2(m_distFieldTexture->GetSize());
+                                 Vector2(p_distFieldTexture.Get()->GetSize());
             m_charUvsInDistanceFieldAtlas.Add(c, std::make_pair(uvMin, uvMax));
         }
     }
@@ -131,12 +129,13 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
     {
         // Create atlas
         Array<Recti> charRects;
-        Texture2D *atlasTex = Resources::Create<Texture2D>();
+        RH<Texture2D> atlasTex;
+        Resources::Create<Texture2D>(&atlasTex);
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                        "0123456789.,-;:_?!+*/\\\"'";
 
         FontSheetCreator::LoadAtlasTexture(GetTTFFont(fontSize),
-                                           atlasTex, chars,
+                                           atlasTex.Get(), chars,
                                            &charRects, 1);
 
         m_cachedAtlas[fontSize] = atlasTex;
@@ -146,10 +145,10 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
             m_cachedAtlasCharRects[fontSize].Add(chars[i], charRects[i]);
         }
 
-        atlasTex->SetFilterMode(GL::FilterMode::Nearest);
+        atlasTex.Get()->SetFilterMode(GL::FilterMode::Nearest);
     }
 
-    return m_cachedAtlas.Get(fontSize);
+    return m_cachedAtlas.Get(fontSize).Get();
 }
 
 bool Font::HasDistanceField() const { return m_hasDistanceField; }
@@ -189,20 +188,20 @@ Vector2 Font::GetCharMaxUvInDistField(char c) const
 Vector2 Font::GetCharMaxUv(int fontSize, char c) const
 {
     ASSERT( HasFontSizeLoaded(fontSize) );
-    if (m_cachedAtlasCharRects.At(fontSize).ContainsKey(c))
+    if (m_cachedAtlasCharRects.Get(fontSize).ContainsKey(c))
     {
-        return Vector2(m_cachedAtlasCharRects.At(fontSize).At(c).GetMax()) /
-               Vector2(m_cachedAtlas.At(fontSize)->GetSize());
+        return Vector2(m_cachedAtlasCharRects.Get(fontSize).Get(c).GetMax()) /
+               Vector2(m_cachedAtlas.Get(fontSize).Get()->GetSize());
     }
     else { return Vector2::Zero; }
 }
 Vector2 Font::GetCharMinUv(int fontSize, char c) const
 {
     ASSERT( HasFontSizeLoaded(fontSize) );
-    if (m_cachedAtlasCharRects.At(fontSize).ContainsKey(c))
+    if (m_cachedAtlasCharRects.Get(fontSize).ContainsKey(c))
     {
-        return Vector2(m_cachedAtlasCharRects.At(fontSize).At(c).GetMin()) /
-               Vector2(m_cachedAtlas.At(fontSize)->GetSize());
+        return Vector2(m_cachedAtlasCharRects.Get(fontSize).Get(c).GetMin()) /
+               Vector2(m_cachedAtlas.Get(fontSize).Get()->GetSize());
     }
     else { return Vector2::Zero; }
 }
@@ -212,9 +211,9 @@ bool Font::HasCharacter(char c) const
     return TTF_GlyphIsProvided(GetReferenceFont(), c);
 }
 
-Texture2D *Font::GetDistFieldTexture() const
+Texture2D* Font::GetDistFieldTexture() const
 {
-    return m_distFieldTexture;
+    return p_distFieldTexture.Get();
 }
 
 float Font::GetKerning(int fontSize, char leftChar, char rightChar) const
@@ -267,7 +266,7 @@ bool Font::HasFontSizeLoaded(int fontSize) const
 Vector2i Font::GetDistFieldSpreadOffsetPx(char c) const
 {
     if (!m_distFieldSpreadOffsetPx.ContainsKey(c)) { return Vector2i::Zero; }
-    return m_distFieldSpreadOffsetPx.At(c);
+    return m_distFieldSpreadOffsetPx.Get(c);
 }
 
 TTF_Font *Font::GetReferenceFont() const
@@ -284,14 +283,11 @@ TTF_Font *Font::GetTTFFont(int fontSize) const
         m_openFonts[fontSize] = font;
     }
 
-    return m_openFonts.At(fontSize);
+    return m_openFonts.Get(fontSize);
 }
 
 void Font::Free()
 {
     m_charUvsInDistanceFieldAtlas.Clear();
-    if (m_distFieldTexture) { Resources::Unload(m_distFieldTexture); }
-
-    for (auto it : m_cachedAtlas) { Resources::Unload( it.second ); }
     for (auto it : m_openFonts) { TTF_CloseFont( it.second ); }
 }

@@ -11,6 +11,10 @@
 NAMESPACE_BANG_BEGIN
 
 using TypeId = String;
+template <class T>
+static TypeId GetTypeId() { return typeid(T).name(); }
+template <class T>
+static TypeId GetTypeId(const T& x) { return typeid(x).name(); }
 
 template <class Value>
 class TypeMap : public Map<TypeId, Value>
@@ -19,7 +23,7 @@ public:
     template <class Class>
     void Add(const Value &value = Value())
     {
-        Map<TypeId, Value>::Add( typeid(Class).name(), value );
+        Map<TypeId, Value>::Add( GetTypeId<Class>(), value );
     }
     void Add(const TypeId &className, const Value &value = Value())
     {
@@ -29,13 +33,13 @@ public:
     template <class Class>
     void Remove()
     {
-        Map<TypeId, Value>::Remove( typeid(Class).name() );
+        Map<TypeId, Value>::Remove( GetTypeId<Class>() );
     }
 
     template<class Class>
     Value& Get()
     {
-        return Map<TypeId, Value>::Get( typeid(Class).name() );
+        return Map<TypeId, Value>::Get( GetTypeId<Class>() );
     }
     Value& Get(const TypeId &className)
     {
@@ -45,7 +49,7 @@ public:
     template<class Class>
     const Value& Get() const
     {
-        return Map<TypeId, Value>::Get( typeid(Class).name() );
+        return Map<TypeId, Value>::Get( GetTypeId<Class>() );
     }
     const Value& Get(const TypeId &className) const
     {
@@ -67,18 +71,11 @@ public:
     template<class Class>
     bool ContainsKey() const
     {
-        return Map<TypeId,Value>::ContainsKey( typeid(Class).name() );
+        return ContainsKey( GetTypeId<Class>() );
     }
-
-    template<class Class>
-    Value& operator[](const Class &k)
+    bool ContainsKey(const TypeId &typeId) const
     {
-        return Map<TypeId,Value>::operator[]( typeid(Class).name() );
-    }
-    template<class Class>
-    const Value& operator[](const Class &k) const
-    {
-        return std::map<TypeId,Value>::operator[]( typeid(Class).name() );
+        return Map<TypeId,Value>::ContainsKey( typeId );
     }
 };
 

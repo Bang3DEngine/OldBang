@@ -101,13 +101,3 @@ String Serializable::GetInstanceId() const
 HideFlags &Serializable::GetHideFlags() { return m_hideFlags; }
 const HideFlags &Serializable::GetHideFlags() const { return m_hideFlags; }
 
-void Serializable::SetGUID(const GUID &guid)
-{
-    m_GUID = guid;
-    GUIDManager::RemoveGUID( GetGUID() );
-}
-
-const GUID &Serializable::GetGUID() const
-{
-    return m_GUID;
-}

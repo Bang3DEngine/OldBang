@@ -15,25 +15,26 @@ USING_NAMESPACE_BANG
 
 UIImageRenderer::UIImageRenderer()
 {
-    SetMaterial( MaterialFactory::GetUIImage() );
+    RH<Material> mat;
+    MaterialFactory::GetUIImage(&mat);
+    SetMaterial(mat.Get());
 
-    m_quadMesh = MeshFactory::GetUIPlane()->Clone();
+    MeshFactory::GetUIPlane(&p_quadMesh);
     SetHorizontalAlignment( GetHorizontalAlignment() );
     SetVerticalAlignment( GetVerticalAlignment() );
 }
 
 UIImageRenderer::~UIImageRenderer()
 {
-    Resources::Unload(m_quadMesh);
 }
 
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
     if (m_hasChanged) { RegenerateQuadVAO(); }
-    GL::Render(m_quadMesh->GetVAO(),
+    GL::Render(p_quadMesh.Get()->GetVAO(),
                GetRenderPrimitive(),
-               m_quadMesh->GetVertexCount());
+               p_quadMesh.Get()->GetVertexCount());
 }
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
@@ -43,14 +44,15 @@ void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
 {
-    Texture2D *tex = Resources::Load<Texture2D>(imagePath);
-    SetImageTexture(tex);
+    RH<Texture2D> tex;
+    Resources::Load<Texture2D>(&tex, imagePath);
+    SetImageTexture(tex.Get());
 }
 
-void UIImageRenderer::SetImageTexture(Texture2D *imageTexture)
+void UIImageRenderer::SetImageTexture(Texture2D* imageTexture)
 {
-    m_imageTexture = imageTexture;
-    GetMaterial()->SetTexture(m_imageTexture);
+    p_imageTexture.Set(imageTexture);
+    GetMaterial()->SetTexture(p_imageTexture.Get());
 }
 
 void UIImageRenderer::SetTint(const Color &tint)
@@ -94,7 +96,7 @@ const Color &UIImageRenderer::GetTint() const
 
 Texture2D *UIImageRenderer::GetImageTexture() const
 {
-    return m_imageTexture;
+    return p_imageTexture.Get();
 }
 
 AspectRatioMode UIImageRenderer::GetAspectRatioMode() const
@@ -129,9 +131,9 @@ void UIImageRenderer::RegenerateQuadVAO()
     Rect rectPx = rt->GetScreenSpaceRectPx();
     Vector2i rectSize(rectPx.GetSize());
     ENSURE(m_prevRectSize != rectSize);
-    ENSURE(m_imageTexture);
+    ENSURE(p_imageTexture);
 
-    Vector2i texSize(m_imageTexture->GetSize());
+    Vector2i texSize(p_imageTexture.Get()->GetSize());
     Vector2i texQuadSize =
             AspectRatio::GetAspectRatioedSize(rectSize, texSize,
                                               GetAspectRatioMode());
@@ -158,7 +160,7 @@ void UIImageRenderer::RegenerateQuadVAO()
                                Vector2(uvMax.x, uvMin.y),
                                Vector2(uvMin.x, uvMin.y)};
 
-    m_quadMesh->LoadUvs(quadUvs);
+    p_quadMesh.Get()->LoadUvs(quadUvs);
 }
 
 void UIImageRenderer::OnTransformChanged()
@@ -187,7 +189,11 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
     UIRenderer::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("Image"))
-    { SetImageTexture( Resources::Load<Texture2D>( xmlInfo.Get<GUID>("Image") ) ); }
+    {
+        RH<Texture2D> tex;
+        Resources::Load<Texture2D>(&tex, xmlInfo.Get<GUID>("Image"));
+        SetImageTexture(tex.Get());
+    }
 
     if (xmlInfo.Contains("Tint"))
     { SetTint( xmlInfo.Get<Color>("Tint") ); }

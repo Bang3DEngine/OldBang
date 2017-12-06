@@ -13,7 +13,6 @@ Asset::Asset()
 
 Asset::~Asset()
 {
-    ASSERT(Resources::AssertDestroyedFromResources());
     ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
 }
 

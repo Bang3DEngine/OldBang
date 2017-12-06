@@ -6,6 +6,7 @@
 #include "Bang/Resource.h"
 #include "Bang/IToString.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -13,23 +14,15 @@ NAMESPACE_BANG_BEGIN
     IRESOURCE(CLASSNAME) \
     SERIALIZABLE(CLASSNAME) \
     friend class Asset; \
-    friend class ObjectManager; \
-    public: \
-    virtual CLASSNAME* Clone() const override; \
-
-#define ASSET_IMPL(CLASSNAME) \
-    CLASSNAME* CLASSNAME::Clone() const \
-    { \
-        CLASSNAME *c = Resources::Create<CLASSNAME>(); \
-        CloneInto(c); \
-        return c; \
-    } \
+    friend class ObjectManager;
 
 class Asset : public Resource,
               public IToString,
               public Object
 {
-    IRESOURCE(Asset)
+    IRESOURCE(CLASSNAME)
+    SERIALIZABLE(CLASSNAME)
+    friend class ObjectManager;
 
 public:
     // ICloneable

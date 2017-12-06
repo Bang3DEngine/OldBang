@@ -3,6 +3,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -61,8 +62,8 @@ private:
     Camera *p_activeCamera = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
-    Material *m_renderGBufferToScreenMaterial = nullptr;
-    Mesh *m_screenPlaneMesh = nullptr;
+    RH<Mesh> p_screenPlaneMesh;
+    RH<Material> p_renderGBufferToScreenMaterial;
 
     void SetActiveCamera(Camera *camera);
     void RenderToGBuffer(GameObject *go, Camera *camera);

@@ -9,20 +9,19 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    ShaderProgram *selectionProgram =
-            ShaderProgramFactory::GetShaderProgram(
-                EPATH("Shaders/G_Default.vert"),
-                EPATH("Shaders/SelectionBuffer.frag") );
+    RH<ShaderProgram> selectionProgram;
+    Resources::Create<ShaderProgram>(&selectionProgram,
+                                     EPATH("Shaders/G_Default.vert"),
+                                     EPATH("Shaders/SelectionBuffer.frag") );
 
-    m_selectionMaterial = Resources::Create<Material>();
-    m_selectionMaterial->SetShaderProgram(selectionProgram);
+    Resources::Create<Material>(&p_selectionMaterial);
+    p_selectionMaterial.Get()->SetShaderProgram(selectionProgram.Get());
 
     Bind();
     CreateAttachment(AttColor, GL::ColorFormat::RGBA_UByte8);
@@ -30,12 +29,11 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                      GL::ColorFormat::Depth24_Stencil8);
     UnBind();
 
-    m_colorTexture = GetAttachmentTexture(AttColor);
+    p_colorTexture.Set(GetAttachmentTexture(AttColor));
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    Resources::Unload(m_selectionMaterial);
 }
 
 void SelectionFramebuffer::PrepareForRender(const GameObject *go)
@@ -61,7 +59,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 
     GameObject *go = rend->GetGameObject();
 
-    ShaderProgram *selSP = m_selectionMaterial->GetShaderProgram();
+    ShaderProgram *selSP = p_selectionMaterial.Get()->GetShaderProgram();
     ShaderProgram *prevSP = rend->GetMaterial()->GetShaderProgram();
     rend->GetMaterial()->SetShaderProgram(selSP);
 
@@ -111,7 +109,7 @@ long SelectionFramebuffer::MapColorToId(const Color &color)
            long(color.a * C * C * C * C);
 }
 
-Texture2D *SelectionFramebuffer::GetColorTexture() const
+RH<Texture2D> SelectionFramebuffer::GetColorTexture() const
 {
-    return m_colorTexture;
+    return p_colorTexture;
 }

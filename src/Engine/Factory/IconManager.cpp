@@ -6,21 +6,18 @@
 
 USING_NAMESPACE_BANG
 
-Texture2D *IconManager::GetRightArrowIcon() { return GetIconTexture("RightArrow"); }
-Texture2D *IconManager::GetDownArrowIcon() { return GetIconTexture("DownArrow"); }
+void IconManager::GetRightArrowIcon(RH<Texture2D> *iconTexture)
+{ return GetIconTexture(iconTexture, "RightArrow"); }
+void IconManager::GetDownArrowIcon(RH<Texture2D> *iconTexture)
+{ return GetIconTexture(iconTexture, "DownArrow"); }
 
-Texture2D *IconManager::GetIconTexture(const String &filename)
+void IconManager::GetIconTexture(RH<Texture2D> *iconTexture, const String &filename)
 {
-    Texture2D *iconTex =
-            Resources::Load<Texture2D>(Paths::EngineAssets().
-                                       Append("Icons").
-                                       Append(filename).
-                                       AppendExtension("png"));
-    ASSERT(iconTex);
+    Resources::Load<Texture2D>(iconTexture,
+                               Paths::EngineAssets().Append("Icons").
+                               Append(filename).AppendExtension("png"));
 
-    iconTex->SetFilterMode(GL::FilterMode::Linear);
-    iconTex->SetWrapMode(GL::WrapMode::ClampToEdge);
-
-    return iconTex;
+    iconTexture->Get()->SetFilterMode(GL::FilterMode::Linear);
+    iconTexture->Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
 }
 

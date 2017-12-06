@@ -19,7 +19,7 @@ class ShaderProgram : public GLObject,
 
 public:
     bool Load(const Path &vshaderPath, const Path &fshaderPath);
-    bool Load(Shader *vShader, Shader *fShader);
+    bool Load(Shader* vShader, Shader* fShader);
 
     bool Link();
     bool IsLinked() const;
@@ -40,8 +40,8 @@ public:
     bool Set(const String &name, Texture2D *texture);
 
     bool Refresh();
-    bool SetVertexShader(Shader *vertexShader);
-    bool SetFragmentShader(Shader *fragmentShader);
+    bool SetVertexShader(Shader* vertexShader);
+    bool SetFragmentShader(Shader* fragmentShader);
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;
@@ -52,21 +52,22 @@ public:
     void OnDestroyed(Object *obj) override;
 
 private:
-    ShaderProgram();
-    virtual ~ShaderProgram();
-
+    RH<Shader> p_vshader;
+    RH<Shader> p_fshader;
     bool m_isLinked = false;
-    Shader *p_vshader = nullptr;
-    Shader *p_fshader = nullptr;
 
     mutable Map<String, GLuint> m_nameToLocationCache;
     mutable Map<String, Texture2D*> m_namesToTexture;
 
+    ShaderProgram();
+    ShaderProgram(Shader *vShader, Shader *fShader);
+    ShaderProgram(const Path& vShaderPath,
+                  const Path& fShaderPath);
+    virtual ~ShaderProgram();
+
     bool BindTextureToAvailableUnit(const String &texName,
                                     Texture2D *texture) const;
     void UpdateTextureBindings() const;
-
-    friend class ShaderProgramFactory;
 };
 
 NAMESPACE_BANG_END

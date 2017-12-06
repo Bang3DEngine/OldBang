@@ -1,18 +1,18 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
-#include "Bang/Bang.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
 class MeshFactory
 {
 public:
-    static Mesh* GetPlane();
-    static Mesh* GetUIPlane();
-    static Mesh* GetCube();
-    static Mesh* GetSphere();
-    static Mesh* GetCone();
+    static void GetPlane(RH<Mesh> *mesh);
+    static void GetUIPlane(RH<Mesh> *mesh);
+    static void GetCube(RH<Mesh> *mesh);
+    static void GetSphere(RH<Mesh> *mesh);
+    static void GetCone(RH<Mesh> *mesh);
 
     static GameObject* GetPlaneGameObject();
     static GameObject* GetCubeGameObject();
@@ -20,8 +20,10 @@ public:
     static GameObject* GetConeGameObject();
 
 private:
-    MeshFactory();
-    static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
+    MeshFactory() = default;
+    static void GetMesh(RH<Mesh> *mesh, const String &enginePath);
+
+    static GameObject* CreatePrimitiveGameObject(Mesh* m, const String &name);
 };
 
 NAMESPACE_BANG_END

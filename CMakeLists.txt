@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
@@ -174,12 +174,12 @@ ${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/IconManager.cpp
-${ENGINE_SRC_DIR}/Factory/ShaderProgramFactory.cpp
 ${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
 ${ENGINE_SRC_DIR}/General/GUID.cpp
+${ENGINE_SRC_DIR}/General/IGUIDable.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
 ${ENGINE_SRC_DIR}/General/IEventListener.cpp
 ${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
@@ -231,7 +231,7 @@ ${ENGINE_SRC_DIR}/Resources/Mesh.cpp
 ${ENGINE_SRC_DIR}/Resources/Prefab.cpp
 ${ENGINE_SRC_DIR}/Resources/Resource.cpp
 ${ENGINE_SRC_DIR}/Resources/Resources.cpp
-${ENGINE_SRC_DIR}/Resources/ResourceHandler.cpp
+${ENGINE_SRC_DIR}/Resources/ResourceHandle.cpp
 ${ENGINE_SRC_DIR}/Resources/Serializable.cpp
 ${ENGINE_SRC_DIR}/System/Library.cpp
 ${ENGINE_SRC_DIR}/System/SystemUtils.cpp

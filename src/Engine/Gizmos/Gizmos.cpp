@@ -33,11 +33,9 @@ Gizmos::Gizmos()
     m_gizmosGo = GameObjectFactory::CreateGameObject();
     m_gizmosGo->SetName("Gizmos");
 
-    m_boxMesh    = MeshFactory::GetCube();
-    m_planeMesh  = MeshFactory::GetPlane();
-    m_sphereMesh = MeshFactory::GetSphere();
-
-    m_material   = MaterialFactory::GetDefaultUnLighted();
+    MeshFactory::GetCube(&p_boxMesh);
+    MeshFactory::GetPlane(&p_planeMesh);
+    MeshFactory::GetSphere(&p_sphereMesh);
 
     m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
     m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();
@@ -46,17 +44,26 @@ Gizmos::Gizmos()
 
     for (Renderer *rend : m_renderers)
     {
-        rend->SetMaterial(m_material);
+        RH<Material> mat;
+        MaterialFactory::GetDefaultUnLighted(&mat);
+        rend->SetMaterial(mat.Get());
         rend->SetRenderPass(RenderPass::Gizmos);
     }
 
     m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSave);
 }
 
+Gizmos::~Gizmos()
+{
+}
+
 void Gizmos::SetColor(const Color &color)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_material->SetDiffuseColor(color);
+    for (Renderer *rend : g->m_renderers)
+    {
+        rend->GetMaterial()->SetDiffuseColor(color);
+    }
 }
 
 void Gizmos::SetPosition(const Vector3 &position)
@@ -152,7 +159,7 @@ void Gizmos::RenderSimpleBox(const AABox &b)
 void Gizmos::RenderBox(const AABox &b)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_meshRenderer->SetMesh(g->m_boxMesh);
+    g->m_meshRenderer->SetMesh(g->p_boxMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(b.GetCenter());
     g->m_gizmosGo->GetTransform()->SetScale(g->m_gizmosGo->GetTransform()->GetScale() *
                                        b.GetDimensions());
@@ -170,7 +177,7 @@ void Gizmos::RenderRect(const Rect &r)
 void Gizmos::RenderFillRect(const Rect &r)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_meshRenderer->SetMesh(g->m_planeMesh);
+    g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
@@ -189,7 +196,7 @@ void Gizmos::RenderCircle(float radius)
 void Gizmos::RenderIcon(Texture2D *texture, bool billboard)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_meshRenderer->SetMesh(g->m_planeMesh);
+    g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     SetRenderWireframe(false);
     SetReceivesLighting(false);
@@ -220,7 +227,7 @@ void Gizmos::RenderScreenIcon(Texture2D *texture,
                               bool fixAspectRatio)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_meshRenderer->SetMesh(g->m_planeMesh);
+    g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
@@ -267,7 +274,7 @@ void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_meshRenderer->SetMesh(g->m_sphereMesh);
+    g->m_meshRenderer->SetMesh(g->p_sphereMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(origin);
     g->m_gizmosGo->GetTransform()->SetScale(radius);
     g->Render(g->m_meshRenderer);
@@ -356,9 +363,14 @@ void Gizmos::Reset()
     g->m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }
 
+GameObject *Gizmos::GetGameObject() const
+{
+    return m_gizmosGo;
+}
+
 GameObject *Gizmos::GetGizmosGameObject()
 {
-    return Gizmos::GetInstance()->m_gizmosGo;
+    return Gizmos::GetInstance()->GetGameObject();
 }
 
 void Gizmos::Render(Renderer *rend)

@@ -5,44 +5,46 @@
 
 USING_NAMESPACE_BANG
 
-Material *MaterialFactory::GetDefault()
+void MaterialFactory::GetDefault(RH<Material> *material)
 {
-    return MaterialFactory::Load("Materials/G_Default.bmat");
+    return MaterialFactory::Load(material, "Materials/G_Default.bmat");
 }
-Material *MaterialFactory::GetDefaultUnLighted()
+void MaterialFactory::GetDefaultUnLighted(RH<Material> *material)
 {
-    return MaterialFactory::Load("Materials/G_DefaultNoPP.bmat");
-}
-
-Material *MaterialFactory::GetMissing()
-{
-    return MaterialFactory::Load("Materials/Missing.bmat");
+    return MaterialFactory::Load(material, "Materials/G_DefaultNoPP.bmat");
 }
 
-Material *MaterialFactory::GetPointLight()
+void MaterialFactory::GetMissing(RH<Material> *material)
 {
-    return MaterialFactory::Load("Materials/PP_PointLight_Screen.bmat");
-}
-Material *MaterialFactory::GetDirectionalLight()
-{
-    return MaterialFactory::Load("Materials/PP_DirectionalLight_Screen.bmat");
+    return MaterialFactory::Load(material, "Materials/Missing.bmat");
 }
 
-Material *MaterialFactory::GetUIText()
+void MaterialFactory::GetPointLight(RH<Material> *material)
 {
-    return MaterialFactory::Load("Materials/UI/G_UITextRenderer.bmat");
+    return MaterialFactory::Load(material, "Materials/PP_PointLight_Screen.bmat");
 }
-Material *MaterialFactory::GetUIImage()
+void MaterialFactory::GetDirectionalLight(RH<Material> *material)
 {
-    return MaterialFactory::Load("Materials/UI/G_UIImageRenderer.bmat");
-}
-
-Material *MaterialFactory::GetRenderGBufferToScreen()
-{
-    return MaterialFactory::Load("Materials/RenderGBufferToScreen.bmat");
+    return MaterialFactory::Load(material, "Materials/PP_DirectionalLight_Screen.bmat");
 }
 
-Material *MaterialFactory::Load(const String &enginePath)
+void MaterialFactory::GetUIText(RH<Material> *material)
 {
-    return Resources::Load<Material>( EPATH(enginePath) )->Clone();
+    return MaterialFactory::Load(material, "Materials/UI/G_UITextRenderer.bmat");
+}
+void MaterialFactory::GetUIImage(RH<Material> *material)
+{
+    return MaterialFactory::Load(material, "Materials/UI/G_UIImageRenderer.bmat");
+}
+
+void MaterialFactory::GetRenderGBufferToScreen(RH<Material> *material)
+{
+    return MaterialFactory::Load(material, "Materials/RenderGBufferToScreen.bmat");
+}
+
+void MaterialFactory::Load(RH<Material> *material, const String &enginePath)
+{
+    RH<Material> originalMaterial;
+    Resources::Load<Material>(&originalMaterial, EPATH(enginePath));
+    Resources::Clone<Material>(originalMaterial, material);
 }

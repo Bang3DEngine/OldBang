@@ -22,13 +22,12 @@ public:
     void PrepareForRender(const GameObject *go);
     void RenderForSelectionBuffer(Renderer *renderer);
 
-    Texture2D *GetColorTexture() const;
+    RH<Texture2D> GetColorTexture() const;
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
-    Texture2D *m_colorTexture = nullptr;
-
-    Material *m_selectionMaterial = nullptr;
+    RH<Texture2D> p_colorTexture;
+    RH<Material> p_selectionMaterial;
 
     mutable Map<GameObject*, long> m_gameObject_To_Id;
     mutable Map<long, GameObject*> m_id_To_GameObject;

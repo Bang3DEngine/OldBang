@@ -9,8 +9,6 @@
 
 USING_NAMESPACE_BANG
 
-ASSET_IMPL(Prefab)
-
 Prefab::Prefab()
 {
 

@@ -64,7 +64,7 @@ void UIButton::SetIconSpacingWithText(int spacingWithText)
 }
 
 void UIButton::SetIcon(Texture2D *texture, const Vector2i &size,
-                             int spacingWithText)
+                       int spacingWithText)
 {
     SetIconTexture(texture);
     SetIconSize(size);

@@ -34,11 +34,11 @@ void AudioSource::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (m_audioClip)
+    if (GetAudioClip())
     {
-        if (m_currentAudioClipALBufferId != m_audioClip->GetALBufferId())
+        if (m_currentAudioClipALBufferId != GetAudioClip()->GetALBufferId())
         {
-            SetAudioClip(m_audioClip);
+            SetAudioClip(GetAudioClip());
         }
     }
 
@@ -51,8 +51,8 @@ void AudioSource::OnUpdate()
 
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
-    m_audioClip = audioClip;
-    if (m_audioClip)
+    p_audioClip.Set(audioClip);
+    if (GetAudioClip())
     {
         SetALBufferId(audioClip->GetALBufferId());
         m_currentAudioClipALBufferId = audioClip->GetALBufferId();
@@ -76,17 +76,17 @@ void AudioSource::Play()
 
 void AudioSource::Play(float delay)
 {
-    AudioManager::Play(m_audioClip, this, delay);
+    AudioManager::Play(GetAudioClip(), this, delay);
 }
 
 bool AudioSource::IsPlayOnStart() const { return m_playOnStart; }
-AudioClip *AudioSource::GetAudioClip() const { return m_audioClip; }
+AudioClip *AudioSource::GetAudioClip() const { return p_audioClip.Get(); }
 float AudioSource::GetPlayProgress() const
 {
     float secondsOffset;
     alGetSourcef(GetALSourceId(), AL_SEC_OFFSET, &secondsOffset);
     alGetSourcef(GetALSourceId(), AL_SEC_OFFSET, &secondsOffset);
-    return secondsOffset / m_audioClip->GetLength();
+    return secondsOffset / GetAudioClip()->GetLength();
 }
 
 void AudioSource::CloneInto(ICloneable *clone) const
@@ -106,7 +106,11 @@ void AudioSource::ImportXML(const XMLNode &xml)
     Component::ImportXML(xml);
 
     if (xml.Contains("AudioClip"))
-    { SetAudioClip( Resources::Load<AudioClip>( xml.Get<GUID>("AudioClip") ) ); }
+    {
+        RH<AudioClip> audioClip;
+        Resources::Load<AudioClip>(&audioClip, xml.Get<GUID>("AudioClip") );
+        SetAudioClip(audioClip.Get());
+    }
 
     if (xml.Contains("Volume"))
     { SetVolume(xml.Get<float>("Volume")); }

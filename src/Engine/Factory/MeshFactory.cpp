@@ -10,63 +10,62 @@
 
 USING_NAMESPACE_BANG
 
-Mesh* MeshFactory::GetPlane()
+void MeshFactory::GetPlane(RH<Mesh> *mesh)
+{ MeshFactory::GetMesh(mesh, "Meshes/Plane.obj"); }
+void MeshFactory::GetUIPlane(RH<Mesh> *mesh)
+{ MeshFactory::GetMesh(mesh, "Meshes/UIPlane.obj"); }
+void MeshFactory::GetCube(RH<Mesh> *mesh)
+{ MeshFactory::GetMesh(mesh, "Meshes/Cube.obj"); }
+void MeshFactory::GetSphere(RH<Mesh> *mesh)
+{ MeshFactory::GetMesh(mesh, "Meshes/Sphere.obj"); }
+void MeshFactory::GetCone(RH<Mesh> *mesh)
+{ MeshFactory::GetMesh(mesh, "Meshes/Cone.obj"); }
+
+void MeshFactory::GetMesh(RH<Mesh> *mesh, const String &enginePath)
 {
-    return Resources::Load<Mesh>( EPATH("Meshes/Plane.obj") );
+    Resources::Load<Mesh>(mesh, EPATH(enginePath));
+    // Resources::Clone<Mesh>(*mesh, mesh);
 }
 
-Mesh *MeshFactory::GetUIPlane()
-{
-    return Resources::Load<Mesh>( EPATH("Meshes/UIPlane.obj") );
-}
-
-Mesh* MeshFactory::GetCube()
-{
-    return Resources::Load<Mesh>( EPATH("Meshes/Cube.obj") );
-}
-
-Mesh *MeshFactory::GetSphere()
-{
-    return Resources::Load<Mesh>( EPATH("Meshes/Sphere.obj") );
-}
-
-Mesh *MeshFactory::GetCone()
-{
-    return Resources::Load<Mesh>( EPATH("Meshes/Cone.obj") );
-}
-
-MeshFactory::MeshFactory() {}
-
-GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
+GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh* m, const String &name)
 {
     GameObject *go = GameObjectFactory::CreateGameObject(true);
     go->SetName(name);
 
-    Material *mat = MaterialFactory::GetDefault();
+    RH<Material> mat;
+    MaterialFactory::GetDefault(&mat);
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderPrimitive(GL::Primitives::Triangles);
-    r->SetMaterial(mat);
+    r->SetMaterial(mat.Get());
     r->SetMesh(m);
 
     return go;
 }
 
-GameObject *MeshFactory::GetPlaneGameObject()
+GameObject* MeshFactory::GetPlaneGameObject()
 {
-    return CreatePrimitiveGameObject(GetPlane(), "Plane");
+    RH<Mesh> mesh;
+    MeshFactory::GetPlane(&mesh);
+    return CreatePrimitiveGameObject(mesh.Get(), "Plane");
 }
 
-GameObject *MeshFactory::GetCubeGameObject()
+GameObject* MeshFactory::GetCubeGameObject()
 {
-    return CreatePrimitiveGameObject(GetCube(), "Cube");
+    RH<Mesh> mesh;
+    MeshFactory::GetCube(&mesh);
+    return CreatePrimitiveGameObject(mesh.Get(), "Cube");
 }
 
-GameObject *MeshFactory::GetSphereGameObject()
+GameObject* MeshFactory::GetSphereGameObject()
 {
-    return CreatePrimitiveGameObject(GetSphere(), "Sphere");
+    RH<Mesh> mesh;
+    MeshFactory::GetSphere(&mesh);
+    return CreatePrimitiveGameObject(mesh.Get(), "Sphere");
 }
 
-GameObject *MeshFactory::GetConeGameObject()
+GameObject* MeshFactory::GetConeGameObject()
 {
-    return CreatePrimitiveGameObject(GetCone(), "Cone");
+    RH<Mesh> mesh;
+    MeshFactory::GetCone(&mesh);
+    return CreatePrimitiveGameObject(mesh.Get(), "Cone");
 }

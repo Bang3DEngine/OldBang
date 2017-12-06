@@ -11,6 +11,7 @@
 #include "Bang/ThreadPool.h"
 #include "Bang/MutexLocker.h"
 #include "Bang/AudioParams.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -24,10 +25,10 @@ FORWARD class AudioPlayerRunnable;
 class AudioManager
 {
 public:
-    static void Play(AudioClip *audioClip,
+    static void Play(AudioClip* audioClip,
                      ALAudioSource *alAudioSource,
                      float delay = 0.0f);
-    static void Play(AudioClip *audioClip,
+    static void Play(AudioClip* audioClip,
                      const AudioParams &params,
                      float delay = 0.0f);
     static void Play(const Path& audioClipFilepath,

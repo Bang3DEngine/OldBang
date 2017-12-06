@@ -13,7 +13,8 @@ IResource::IResource()
 
 IResource::~IResource()
 {
-    ASSERT(Resources::AssertDestroyedFromResources());
+    // ASSERT(Resources::AssertDestroyedFromResources() ||
+    //        ObjectManager::AssertDestroyedFromObjectManager);
 }
 
 // Resource

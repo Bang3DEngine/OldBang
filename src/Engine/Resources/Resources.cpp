@@ -16,73 +16,74 @@ Resources::Resources()
 
 Resources::~Resources()
 {
-    Array<IResource*> resources = Resources::GetAllResources();
-    for (IResource *res : resources) { Resources::Unload(res); }
 }
 
 Array<IResource*> Resources::GetAllResources()
 {
     Array<IResource*> result;
-    Resources *rs = Resources::GetInstance();
-    for (const auto& itTypeMap : rs->m_GUIDToResource)
+    Resources *rs = Resources::GetActive();
+    for (auto& itMap : rs->m_GUIDCache)
     {
-        result.PushBack(itTypeMap.second.GetValues());
+        for (const auto& it : itMap.second) { result.PushBack(it.second.resource); }
     }
     return result;
 }
 
-void Resources::Unload(const GUID &guid)
+void Resources::Add(const TypeId &resTypeId, IResource *res)
 {
-    Resources *rs = Resources::GetInstance();
-    if (rs)
-    {
-        for (auto& itTypeMap : rs->m_GUIDToResource)
-        {
-            for (auto& itGUIDRes : itTypeMap.second)
-            {
-                const GUID &foundGUID = itGUIDRes.first;
-                if (foundGUID == guid)  { UnloadSingleResource(itGUIDRes.second);  }
-            }
-            (itTypeMap.second).Remove(guid);
-        }
-    }
+    const GUID &guid = res->GetGUID();
+    Debug_Log("Add " << res << ", " << resTypeId << ", " << guid);
+    ASSERT(!guid.IsEmpty());
+
+    Resources *rs = Resources::GetActive(); ASSERT(rs);
+    ASSERT(!Resources::Contains(resTypeId, guid));
+
+    if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { rs->m_GUIDCache.Add(resTypeId); }
+
+    ResourceEntry resourceEntry;
+    resourceEntry.resource = res;
+    resourceEntry.usageCount = 0;
+    rs->m_GUIDCache.Get(resTypeId).Add(guid, resourceEntry);
 }
 
-void Resources::Unload(IResource *res)
+void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
 {
-    Resources *rs = Resources::GetInstance();
-    if (rs)
+    Debug_Log("Remove " << guid);
+    Resources *rs = Resources::GetActive(); ASSERT(rs);
+    IResource* resourceToDestroy;
+    ASSERT(rs->m_GUIDCache.ContainsKey(resTypeId));
+    auto &map = rs->m_GUIDCache.Get(resTypeId);
+    for (const auto& itGUIDRes : map)
     {
-        for (auto& itTypeMap : rs->m_GUIDToResource)
+        const GUID &foundGUID = itGUIDRes.first;
+        if (foundGUID == guid)
         {
-            for (const auto& itGUIDRes : itTypeMap.second)
-            {
-                IResource *foundRes = itGUIDRes.second;
-                if (foundRes == res ) { UnloadSingleResource(res); }
-            }
-            (itTypeMap.second).RemoveValues(res);
+            IResource *res = itGUIDRes.second.resource;
+            resourceToDestroy = res;
+            break;
         }
     }
-    else { UnloadSingleResource(res); }
+    map.Remove(guid);
+
+    GUID guidCpy = guid;
+    ASSERT(resourceToDestroy);
+    Destroy(resourceToDestroy);
+    Debug_Log("Remove FINISH " << guidCpy);
 }
 
-void Resources::UnloadSingleResource(IResource *res)
+bool Resources::Contains(const TypeId &resTypeId, const GUID &guid)
 {
-    Resources *rs = Resources::GetInstance();
+    return Resources::GetCached(resTypeId, guid) != nullptr;
+}
 
-    bool destroy = true;
-    if (rs)
+bool Resources::ContainsGUID(const GUID &guid)
+{
+    Resources *rs = Resources::GetActive();
+    for (const auto &it : rs->m_GUIDCache)
     {
-        ASSERT(rs->m_resourcesUsage.ContainsKey(res));
-        uint *resourcesUsage = &(rs->m_resourcesUsage[res]);
-
-        --(*resourcesUsage);
-        ASSERT(*resourcesUsage >= 0);
-
-        destroy = (*resourcesUsage == 0);
+        if (it.second.ContainsKey(guid)) { return true; }
     }
-
-    if (destroy) { Destroy(res); }
+    return false;
 }
 
 #ifdef DEBUG
@@ -91,14 +92,56 @@ bool Resources::_AssertDestroyedFromResources = false;
 
 bool Resources::AssertCreatedFromResources()
 {
-    return !Resources::GetInstance() || Resources::_AssertCreatedFromResources;
+    return !Resources::GetActive() || Resources::_AssertCreatedFromResources;
 }
 
 bool Resources::AssertDestroyedFromResources()
 {
-    return !Resources::GetInstance() || Resources::_AssertDestroyedFromResources;
+    return !Resources::GetActive() || Resources::_AssertDestroyedFromResources;
 }
 #endif
+
+void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resource)
+{
+    const GUID &guid = resource->GetGUID();
+    ASSERT(!guid.IsEmpty());
+
+    Debug_Log("RegisterResourceUsage " << resTypeId << ", " <<
+              resource << ", " << guid);
+    Resources *rs = Resources::GetActive();
+    if (!Resources::ContainsGUID(guid))
+    {
+        Resources::Add(resTypeId, resource);
+    }
+    Debug_Log("Registering " << resource << ", " << guid << " from " <<
+      (rs->m_GUIDCache.Get(resTypeId)[guid].usageCount) <<
+      " to " <<
+      (rs->m_GUIDCache.Get(resTypeId)[guid].usageCount + 1) );
+    ++rs->m_GUIDCache.Get(resTypeId)[guid].usageCount;
+}
+
+void Resources::UnRegisterResourceUsage(const TypeId &resTypeId, IResource *resource)
+{
+    const GUID &guid = resource->GetGUID();
+    ASSERT(!guid.IsEmpty());
+
+    Debug_Log("UnRegisterResourceUsage " << resTypeId << ", " <<
+              resource << ", " << guid);
+    Resources *rs = Resources::GetActive();
+    if (rs)
+    {
+        ASSERT(Resources::ContainsGUID(guid));
+        uint *resourcesUsage = &(rs->m_GUIDCache.Get(resTypeId)
+                                 .Get(guid).usageCount);
+        ASSERT(*resourcesUsage >= 1);
+
+        Debug_Log("Unregistering " << guid << " from " << (*resourcesUsage) <<
+                  " to " << (*resourcesUsage-1) );
+        --(*resourcesUsage);
+
+        if (*resourcesUsage == 0) { Resources::Remove(resTypeId, guid); }
+    }
+}
 
 void Resources::Destroy(IResource *resource)
 {
@@ -107,14 +150,32 @@ void Resources::Destroy(IResource *resource)
     #endif
 
     Asset *asset = Cast<Asset*>(resource);
-    if (asset) { Asset::Destroy(asset); } else { delete resource; }
+    if (asset)
+    {
+        Debug_Log("Destroying " << asset << ", " << asset->GetGUID() << ", " <<
+                  asset->GetResourceFilepath());
+        Asset::Destroy(asset);
+    }
+    else
+    {
+        Debug_Log("Destroying plain " << resource << ", " << resource->GetGUID());
+        delete resource;
+    }
 
     #ifdef DEBUG
     Resources::_AssertDestroyedFromResources = false;
     #endif
 }
 
-Resources *Resources::GetInstance()
+IResource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
+{
+    Resources *rs = Resources::GetActive();
+    if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { return nullptr; }
+    if (!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid)) { return nullptr; }
+    return rs->m_GUIDCache.Get(resTypeId).Get(guid).resource;
+}
+
+Resources *Resources::GetActive()
 {
     Window *win = Window::GetActive();
     return  win ? win->GetResources() : nullptr;

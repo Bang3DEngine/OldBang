@@ -4,6 +4,7 @@
 #include "Bang/Array.h"
 #include "Bang/Vector3.h"
 #include "Bang/Renderer.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -35,7 +36,7 @@ protected:
     virtual void OnRender() override;
 
 private:
-    Mesh  *m_mesh = nullptr;
+    RH<Mesh> p_mesh;
     Array<Vector3> m_points;
 };
 

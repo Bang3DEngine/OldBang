@@ -22,11 +22,15 @@ USING_NAMESPACE_BANG
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
-    m_mesh = Resources::Create<Mesh>();
+    Resources::Create<Mesh>(&p_mesh);
 
-    SetMaterial( MaterialFactory::GetUIText() );
+    RH<Material> mat;
+    MaterialFactory::GetUIText(&mat);
+    SetMaterial(mat.Get());
 
-    SetFont( Resources::Load<Font>( EPATH("Fonts/Roboto.ttf") ) );
+    RH<Font> font;
+    Resources::Load<Font>(&font, EPATH("Fonts/Roboto.ttf"));
+    SetFont(font.Get());
     SetContent("");
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
@@ -37,7 +41,6 @@ UITextRenderer::UITextRenderer() : UIRenderer()
 
 UITextRenderer::~UITextRenderer()
 {
-    if (m_mesh) { Resources::Unload(m_mesh); }
 }
 
 void UITextRenderer::OnRender()
@@ -49,8 +52,8 @@ void UITextRenderer::OnRender()
 
     UIRenderer::OnRender();
 
-    int vertCount = m_mesh->GetVertexCount();
-    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), vertCount);
+    int vertCount = p_mesh.Get()->GetVertexCount();
+    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
 }
 
 void UITextRenderer::CalculateLayout(Axis axis)
@@ -79,8 +82,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     if (!GetFont())
     {
-        m_mesh->LoadPositions({});
-        m_mesh->LoadUvs({});
+        p_mesh.Get()->LoadPositions({});
+        p_mesh.Get()->LoadUvs({});
         return;
     }
 
@@ -177,8 +180,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
                                                        textQuadPos2D.End());
-    m_mesh->LoadPositions(textQuadPos3D);
-    m_mesh->LoadUvs(textQuadUvs);
+    p_mesh.Get()->LoadPositions(textQuadPos3D);
+    p_mesh.Get()->LoadUvs(textQuadUvs);
 }
 
 #include "Bang/Input.h"
@@ -256,7 +259,7 @@ void UITextRenderer::SetFont(Font *font)
 {
     if (GetFont() != font)
     {
-        m_font = font;
+        p_font.Set(font);
         OnChanged();
     }
 }
@@ -336,14 +339,7 @@ void UITextRenderer::SetTextColor(const Color &textColor)
     GetMaterial()->SetDiffuseColor( textColor );
 }
 
-Font *UITextRenderer::GetFont() const
-{
-    if (m_font)
-    {
-        return m_font;
-    }
-    return nullptr;
-}
+Font *UITextRenderer::GetFont() const { return p_font.Get(); }
 bool UITextRenderer::IsKerning() const { return m_kerning; }
 bool UITextRenderer::IsWrapping() const { return m_wrapping; }
 
@@ -424,7 +420,11 @@ void UITextRenderer::ImportXML(const XMLNode &xml)
     UIRenderer::ImportXML(xml);
 
     if (xml.Contains("Font"))
-    { SetFont( Resources::Load<Font>( xml.Get<GUID>("Font") ) ); }
+    {
+        RH<Font> font;
+        Resources::Load<Font>(&font, xml.Get<GUID>("Font"));
+        SetFont(font.Get());
+    }
 
     if (xml.Contains("Content"))
     { SetContent(xml.Get<String>("Content")); }

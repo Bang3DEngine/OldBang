@@ -2,6 +2,7 @@
 #define MESHRENDERER_H
 
 #include "Bang/Renderer.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -12,7 +13,7 @@ class MeshRenderer : public Renderer
     COMPONENT(MeshRenderer)
 
 public:
-    void SetMesh(Mesh *m);
+    void SetMesh(Mesh* m);
     Mesh* GetMesh() const;
 
     // Renderer
@@ -26,7 +27,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    mutable Mesh *p_mesh = nullptr;
+    mutable RH<Mesh> p_mesh;
 
     MeshRenderer();
     virtual ~MeshRenderer();

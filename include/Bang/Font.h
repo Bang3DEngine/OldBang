@@ -45,7 +45,7 @@ public:
     // DistField related
     Vector2 GetCharMinUvInDistField(char c) const;
     Vector2 GetCharMaxUvInDistField(char c) const;
-    Texture2D *GetDistFieldTexture() const;
+    Texture2D* GetDistFieldTexture() const;
     Vector2i GetDistFieldSpreadOffsetPx(char c) const;
 
     // ICloneable
@@ -64,13 +64,13 @@ private:
 
     // Textures
     mutable Map<int, TTF_Font*> m_openFonts;
-    mutable Map<int, Texture2D*> m_cachedAtlas; // Per each font size, cached atlas
+    mutable Map<int, RH<Texture2D>> m_cachedAtlas; // Per each font size, cached atlas
     mutable Map<int, Map<char, Recti>> m_cachedAtlasCharRects; // ", cached atlas char rects
     mutable Map<int, String> m_cachedAtlasChars; // ", cached atlas chars
 
     // DistField texture and metrics
     bool m_hasDistanceField = false;
-    Texture2D *m_distFieldTexture = nullptr;
+    RH<Texture2D> p_distFieldTexture;
     Map<char, Vector2i> m_distFieldSpreadOffsetPx;
     Map<char, std::pair<Vector2, Vector2> > m_charUvsInDistanceFieldAtlas;
 

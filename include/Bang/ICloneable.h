@@ -16,7 +16,10 @@ NAMESPACE_BANG_BEGIN
 class ICloneable
 {
 public:
-    virtual ICloneable* Clone() const = 0;
+    virtual ICloneable* Clone() const
+    {
+        ASSERT_MSG(false, "Method not implemented");
+    }
 
 protected:
     ICloneable() {}

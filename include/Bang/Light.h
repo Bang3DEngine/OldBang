@@ -3,6 +3,7 @@
 
 #include "Bang/Color.h"
 #include "Bang/Component.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -33,14 +34,14 @@ protected:
     Light();
     virtual ~Light();
 
-    void SetLightMaterial(Material *lightMat);
+    void SetLightMaterial(Material* lightMat);
 
-    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
+    virtual void SetUniformsBeforeApplyingLight(Material* mat) const;
 
 private:
     float m_intensity = 1.0f;
     Color m_color = Color::White;
-    Material *m_lightMaterialScreen = nullptr;
+    RH<Material> p_lightMaterialScreen;
 
     void ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const;
     virtual Rect GetRenderRect(Camera *cam) const;

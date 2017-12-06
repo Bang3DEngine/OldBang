@@ -4,6 +4,7 @@
 #include "Bang/Asset.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -17,7 +18,7 @@ class Material : public Asset
 public:
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(Texture2D *mtexture);
+    void SetTexture(Texture2D *texture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
@@ -43,8 +44,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    Texture2D *m_texture     = nullptr;
-    ShaderProgram *m_shaderProgram = nullptr;
+    RH<Texture2D> p_texture;
+    RH<ShaderProgram> p_shaderProgram;
 
     Color m_diffuseColor    = Color::White;
     float m_shininess       = 60.0f;

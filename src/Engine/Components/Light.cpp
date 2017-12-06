@@ -23,18 +23,18 @@ float Light::GetIntensity() const { return m_intensity; }
 
 void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 {
-    m_lightMaterialScreen->Bind();
-    SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
+    p_lightMaterialScreen.Get()->Bind();
+    SetUniformsBeforeApplyingLight(p_lightMaterialScreen.Get());
 
     // Intersect with light rect to draw exactly what we need
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
-    gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
+    gbuffer->ApplyPass(p_lightMaterialScreen.Get()->GetShaderProgram(),
                        true, improvedRenderRect);
-    m_lightMaterialScreen->UnBind();
+    p_lightMaterialScreen.Get()->UnBind();
 }
 
-void Light::SetUniformsBeforeApplyingLight(Material *mat) const
+void Light::SetUniformsBeforeApplyingLight(Material* mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
@@ -49,7 +49,7 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 
 void Light::SetLightMaterial(Material *lightMat)
 {
-    m_lightMaterialScreen = lightMat;
+    p_lightMaterialScreen.Set(lightMat);
 }
 
 Rect Light::GetRenderRect(Camera *cam) const

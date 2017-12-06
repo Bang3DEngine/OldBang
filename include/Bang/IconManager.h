@@ -1,7 +1,7 @@
 #ifndef ICONMANAGER_H
 #define ICONMANAGER_H
 
-#include "Bang/Bang.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -10,14 +10,14 @@ FORWARD class Texture2D;
 class IconManager
 {
 public:
-    static Texture2D *GetRightArrowIcon();
-    static Texture2D *GetDownArrowIcon();
+    static void GetRightArrowIcon(RH<Texture2D> *iconTexture);
+    static void GetDownArrowIcon(RH<Texture2D> *iconTexture);
 
 private:
     IconManager() = default;
     virtual ~IconManager() = default;
 
-    static Texture2D *GetIconTexture(const String &filename);
+    static void GetIconTexture(RH<Texture2D> *iconTexture, const String &filename);
 };
 
 NAMESPACE_BANG_END

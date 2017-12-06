@@ -29,7 +29,7 @@ protected:
     virtual ~PointLight();
 
     // Light
-    virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
+    virtual void SetUniformsBeforeApplyingLight(Material* mat) const override;
 
     // Renderer
     Rect GetRenderRect(Camera *cam) const override;

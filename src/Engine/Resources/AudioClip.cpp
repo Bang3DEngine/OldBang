@@ -10,8 +10,6 @@
 
 USING_NAMESPACE_BANG
 
-ASSET_IMPL(AudioClip)
-
 AudioClip::AudioClip()
 {
     alGenBuffers(1, &m_alBufferId);

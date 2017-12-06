@@ -13,7 +13,9 @@ USING_NAMESPACE_BANG
 
 PointLight::PointLight() : Light()
 {
-    SetLightMaterial( MaterialFactory::GetPointLight() );
+    RH<Material> material;
+    MaterialFactory::GetPointLight(&material);
+    SetLightMaterial(material.Get());
 }
 
 PointLight::~PointLight()
@@ -21,7 +23,7 @@ PointLight::~PointLight()
 
 }
 
-void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
+void PointLight::SetUniformsBeforeApplyingLight(Material* mat) const
 {
     Light::SetUniformsBeforeApplyingLight(mat);
 

@@ -1,9 +1,9 @@
 #ifndef SERIALIZABLE_H
 #define SERIALIZABLE_H
 
-#include "Bang/GUID.h"
 #include "Bang/String.h"
 #include "Bang/HideFlags.h"
+#include "Bang/IGUIDable.h"
 #include "Bang/ICloneable.h"
 #include "Bang/IReflectable.h"
 
@@ -15,6 +15,7 @@ NAMESPACE_BANG_BEGIN
         static String GetClassNameStatic() { return #CLASS; }
 
 class Serializable : public ICloneable,
+                     public virtual IGUIDable,
                      public IReflectable
 {
 public:
@@ -43,16 +44,12 @@ public:
 
     HideFlags& GetHideFlags();
     const HideFlags& GetHideFlags() const;
-    const GUID& GetGUID() const;
 
 protected:
     Serializable();
 
 private:
-    GUID m_GUID;
     HideFlags m_hideFlags;
-
-    void SetGUID(const GUID &guid);
 
     friend class Resources;
 };

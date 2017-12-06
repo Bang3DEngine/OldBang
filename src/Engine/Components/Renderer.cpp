@@ -18,12 +18,13 @@ USING_NAMESPACE_BANG
 
 Renderer::Renderer()
 {
-    SetMaterial( MaterialFactory::GetDefault() );
+    RH<Material> material;
+    MaterialFactory::GetDefault(&material);
+    SetMaterial(material.Get());
 }
 
 Renderer::~Renderer()
 {
-    if (GetMaterial()) { Resources::Unload( GetMaterial() ); }
 }
 
 void Renderer::OnRender(RenderPass renderPass)
@@ -46,8 +47,7 @@ void Renderer::Bind() const
     GL::SetCullFace( GetCullMode() );
     GL::LineWidth( GetLineWidth() );
 
-    Material *mat = GetMaterial();
-    mat->Bind();
+    GetMaterial()->Bind();
 }
 
 void Renderer::UnBind() const
@@ -65,8 +65,7 @@ void Renderer::SetMaterial(Material *mat)
 {
     if (GetMaterial() != mat)
     {
-        if (GetMaterial()) { Resources::Unload( GetMaterial() ); }
-        m_material = mat;
+        p_material.Set(mat);
     }
 }
 
@@ -96,8 +95,7 @@ void Renderer::SetRenderPrimitive(GL::Primitives renderMode)
 GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
 GL::Primitives Renderer::GetRenderPrimitive() const { return m_renderMode; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
-Material *Renderer::GetSharedMaterial() const { return m_material; }
-Material *Renderer::GetMaterial() const { return m_material; }
+Material* Renderer::GetMaterial() const { return p_material.Get(); }
 
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
@@ -110,7 +108,7 @@ void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Renderer *r = Cast<Renderer*>(clone);
-    r->SetMaterial(GetSharedMaterial());
+    r->SetMaterial(GetMaterial());
     r->SetRenderWireframe(IsRenderWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderPrimitive(GetRenderPrimitive());
@@ -125,7 +123,11 @@ void Renderer::ImportXML(const XMLNode &xml)
     { SetVisible( xml.Get<bool>("Visible") ); }
 
     if (xml.Contains("Material"))
-    { SetMaterial( Resources::Load<Material>( xml.Get<GUID>("Material") ) ); }
+    {
+        RH<Material> material;
+        Resources::Load<Material>(&material, xml.Get<GUID>("Material"));
+        SetMaterial(material.Get());
+    }
 
     if (xml.Contains("RenderPass"))
     { SetRenderPass( xml.Get<RenderPass>("RenderPass") ); }
@@ -141,9 +143,9 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
 
-    Material *sharedMat = GetSharedMaterial();
+    Material* mat = GetMaterial();
     xmlInfo->Set("Visible", IsVisible());
-    xmlInfo->Set("Material", sharedMat ? sharedMat->GetGUID() : GUID::Empty());
+    xmlInfo->Set("Material", mat ? mat->GetGUID() : GUID::Empty());
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", IsRenderWireframe());

@@ -137,31 +137,18 @@ void GameObject::PropagateEnabledEvent(bool enabled) const
 void GameObject::AddChild(GameObject *child, int index)
 {
     ASSERT(!GetChildren().Contains(child));
-    auto it = m_children.Insert(index, child);
-    if (!m_currentChildrenIterators.empty())
-    {
-        m_currentChildrenIterators.top() = it;
-    }
+    m_children.Insert(index, child);
 }
 
 void GameObject::RemoveChild(GameObject *child)
 {
-    auto it = m_children.Remove(child);
-    if (!m_currentChildrenIterators.empty())
-    {
-        m_currentChildrenIterators.top() = it;
-    }
+    m_children.Remove(child);
 }
 
 void GameObject::_RemoveComponent(Component *component)
 {
     ASSERT( component->IsWaitingToBeDestroyed() );
-
-    auto it = m_components.Remove(component);
-    if (!m_currentComponentsIterators.empty())
-    {
-        m_currentComponentsIterators.top() = it;
-    }
+    m_components.Remove(component);
 }
 
 void GameObject::OnEnabled()
@@ -216,11 +203,7 @@ Component* GameObject::AddComponent(Component *c, int _index)
         c->SetGameObject(this);
 
         const int index = (_index != -1 ? _index : GetComponents().Size());
-        auto it = m_components.Insert(index, c);
-        if (!m_currentComponentsIterators.empty())
-        {
-            m_currentComponentsIterators.top() = it;
-        }
+        m_components.Insert(index, c);
 
         if (trans) { p_transform = trans; }
     }
@@ -451,41 +434,31 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 template<class TFunction, class... Args>
 void GameObject::PropagateToChildren(const TFunction &func, const Args&... args)
 {
-    m_currentChildrenIterators.push( m_children.Begin() );
-    auto prevIterator = m_currentChildrenIterators.top();
-    while (m_currentChildrenIterators.top() != m_children.End())
+    for (GameObject *child : GetChildren())
     {
-        prevIterator = m_currentChildrenIterators.top();
+        #ifdef DEBUG
+        const uint prevSize = GetChildren().Size();
+        #endif
 
-        GameObject *child = *(m_currentChildrenIterators.top());
         GameObject::Propagate(func, child, args...);
 
-        if (prevIterator == m_currentChildrenIterators.top())
-        {
-            ++m_currentChildrenIterators.top();
-        }
+        ASSERT(prevSize == GetChildren().Size());
     }
-    m_currentChildrenIterators.pop();
 }
 
 template<class TFunction, class... Args>
 void GameObject::PropagateToComponents(const TFunction &func, const Args&... args)
 {
-    m_currentComponentsIterators.push( m_components.Begin() );
-    auto prevIterator = m_currentComponentsIterators.top();
-    while (m_currentComponentsIterators.top() != m_components.End())
+    for (Component *comp : GetComponents())
     {
-        prevIterator = m_currentComponentsIterators.top();
+        #ifdef DEBUG
+        const uint prevSize = GetComponents().Size();
+        #endif
 
-        Component *comp = *(m_currentComponentsIterators.top());
         GameObject::Propagate(func, comp, args...);
 
-        if (prevIterator == m_currentComponentsIterators.top())
-        {
-            ++m_currentComponentsIterators.top();
-        }
+        ASSERT(prevSize == GetComponents().Size());
     }
-    m_currentComponentsIterators.pop();
 }
 
 void GameObject::CloneInto(ICloneable *clone) const

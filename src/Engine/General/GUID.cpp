@@ -17,5 +17,5 @@ GUID GUID::GetRandomGUID()
 
 String GUID::ToString() const
 {
-    return String::ToString(m_timeGUID) + " " + String::ToString(m_randGUID);
+    return String::ToString(m_timeGUID) + "_" + String::ToString(m_randGUID);
 }

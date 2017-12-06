@@ -11,12 +11,12 @@
 #include "Bang/XMLParser.h"
 #include "Bang/Serializable.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/ResourceHandle.h"
 #include "Bang/ImportFilesManager.h"
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class Asset;
-
+FORWARD   class Asset;
 class Resources
 {
 public:
@@ -24,27 +24,23 @@ public:
     virtual ~Resources();
 
     template <class IResourceClass>
-    static void Add(const GUID& guid, IResource *x);
+    static void Load(RH<IResourceClass> *handle, const Path &filepath);
 
     template <class IResourceClass>
-    static TT_SUBCLASS(IResourceClass, IResource)* Load(const Path &filepath);
+    static void Load(RH<IResourceClass> *handle, const String &filepath);
 
     template <class IResourceClass>
-    static TT_SUBCLASS(IResourceClass, IResource)* Load(const String &filepath);
-
-    template <class IResourceClass>
-    static TT_SUBCLASS(IResourceClass, IResource)* Load(const GUID &guid);
+    static void Load(RH<IResourceClass> *handle, const GUID &guid);
 
     template<class IResourceClass, class ...Args>
-    static IResourceClass* Create(const Args&... args);
+    static void Create(RH<IResourceClass> *handle, const Args&... args);
+
+    template<class IResourceClass>
+    static void Clone(const RH<IResourceClass> &src, RH<IResourceClass> *dst);
 
     template <class IResourceClass>
     static Array<IResourceClass*> GetAll();
     static Array<IResource*> GetAllResources();
-
-    static void Unload(const GUID &guid);
-    static void Unload(IResource *res);
-    static void UnloadSingleResource(IResource *res);
 
     #ifdef DEBUG
     static bool AssertCreatedFromResources();
@@ -57,26 +53,45 @@ private:
     static bool _AssertDestroyedFromResources;
     #endif
 
-    Map<IResource*, uint> m_resourcesUsage;
-    TypeMap< Map<GUID, IResource*> > m_GUIDToResource;
+    struct ResourceEntry
+    {
+        IResource *resource = nullptr;
+        uint usageCount = 0; // Number of RH's using this resource entry
+    };
+    TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
+
+    static void Add(const TypeId &resTypeId, IResource *res);
+
+    static void RegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
+    static void UnRegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
+
+    static void Remove(const TypeId &resTypeId, const GUID &guid);
+
+    template<class IResourceClass, class ...Args>
+    static IResourceClass* _Create(const Args&... args);
 
     template<class IResourceClass, class ...Args>
     static typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),
-                    IResourceClass*>::type JustCreate(const Args&... args);
+           IResourceClass*>::type _JustCreate(const Args&... args);
 
     template<class IResourceClass, class ...Args>
     static typename std::enable_if<T_NOT_SUBCLASS(IResourceClass, Asset),
-                    IResourceClass*>::type JustCreate(const Args&... args);
+           IResourceClass*>::type _JustCreate(const Args&... args);
 
     template<class IResourceClass>
     static bool Contains(const GUID &guid);
+    static bool Contains(const TypeId &resourceClassTypeId, const GUID &guid);
+    static bool ContainsGUID(const GUID &guid);
 
     static void Destroy(IResource *resource);
 
     template<class IResourceClass>
     static IResourceClass* GetCached(const GUID &guid);
+    static IResource* GetCached(const TypeId &resTypeId, const GUID &guid);
 
-    static Resources* GetInstance();
+    static Resources* GetActive();
+
+    friend class IResourceHandle;
 };
 
 NAMESPACE_BANG_END

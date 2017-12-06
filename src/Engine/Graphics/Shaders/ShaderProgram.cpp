@@ -21,18 +21,31 @@ ShaderProgram::ShaderProgram()
     m_idGL = GL::CreateProgram();
 }
 
+ShaderProgram::ShaderProgram(Shader *vShader, Shader *fShader) : ShaderProgram()
+{
+    Load(vShader, fShader);
+}
+
+ShaderProgram::ShaderProgram(const Path &vShaderPath,
+                             const Path &fShaderPath) : ShaderProgram()
+{
+    Load(vShaderPath, fShaderPath);
+}
+
 ShaderProgram::~ShaderProgram()
 {
     GL::DeleteProgram(m_idGL);
 }
 
-bool ShaderProgram::Load(const Path &vshaderPath, const Path &fshaderPath)
+bool ShaderProgram::Load(const Path &vShaderPath, const Path &fShaderPath)
 {
-    return Load(Resources::Load<Shader>(vshaderPath),
-                Resources::Load<Shader>(fshaderPath));
+    RH<Shader> vShader, fShader;
+    Resources::Load<Shader>(&vShader, vShaderPath);
+    Resources::Load<Shader>(&fShader, fShaderPath);
+    return Load(vShader.Get(), fShader.Get());
 }
 
-bool ShaderProgram::Load(Shader *vShader, Shader *fShader)
+bool ShaderProgram::Load(Shader* vShader, Shader* fShader)
 {
     if(!vShader || !fShader ||
        (vShader && vShader == GetVertexShader()) ||
@@ -115,7 +128,7 @@ bool ShaderProgram::Refresh()
     return Link();
 }
 
-bool ShaderProgram::SetVertexShader(Shader *vertexShader)
+bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 {
     if (vertexShader->GetType() != GL::ShaderType::Vertex)
     {
@@ -123,11 +136,11 @@ bool ShaderProgram::SetVertexShader(Shader *vertexShader)
                     "non-vertex shader");
         return false;
     }
-    p_vshader = vertexShader;
+    p_vshader.Set(vertexShader);
     return true;
 }
 
-bool ShaderProgram::SetFragmentShader(Shader *fragmentShader)
+bool ShaderProgram::SetFragmentShader(Shader* fragmentShader)
 {
     if (fragmentShader->GetType() != GL::ShaderType::Fragment)
     {
@@ -135,19 +148,12 @@ bool ShaderProgram::SetFragmentShader(Shader *fragmentShader)
                     "non-fragment shader");
         return false;
     }
-    p_fshader = fragmentShader;
+    p_fshader.Set(fragmentShader);
     return true;
 }
 
-Shader *ShaderProgram::GetVertexShader() const
-{
-    return p_vshader;
-}
-
-Shader *ShaderProgram::GetFragmentShader() const
-{
-    return p_fshader;
-}
+Shader* ShaderProgram::GetVertexShader() const { return p_vshader.Get(); }
+Shader* ShaderProgram::GetFragmentShader() const { return p_fshader.Get(); }
 
 GLint ShaderProgram::GetUniformLocation(const String &name) const
 {

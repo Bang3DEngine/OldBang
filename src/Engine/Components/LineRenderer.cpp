@@ -10,21 +10,24 @@ USING_NAMESPACE_BANG
 
 LineRenderer::LineRenderer()
 {
-    m_mesh = Resources::Create<Mesh>();
-    SetMaterial(MaterialFactory::GetDefaultUnLighted());
+    Resources::Create<Mesh>(&p_mesh);
+
+    RH<Material> material;
+    MaterialFactory::GetDefaultUnLighted(&material);
+    SetMaterial(material.Get());
 
     SetRenderPrimitive(GL::Primitives::Lines);
 }
 
 LineRenderer::~LineRenderer()
 {
-    Resources::Unload(m_mesh);
 }
 
 void LineRenderer::OnRender()
 {
-    Renderer::OnRender(); ENSURE(m_mesh->GetVertexCount() > 0);
-    GL::Render(m_mesh->GetVAO(), GetRenderPrimitive(), m_mesh->GetVertexCount());
+    Renderer::OnRender(); ENSURE(p_mesh.Get()->GetVertexCount() > 0);
+    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(),
+               p_mesh.Get()->GetVertexCount());
 }
 
 void LineRenderer::SetPoint(int i, const Vector3 &point)
@@ -44,7 +47,7 @@ void LineRenderer::SetPoint(int i, const Vector3 &point)
 void LineRenderer::SetPoints(const Array<Vector3> &points)
 {
     m_points = points;
-    m_mesh->LoadPositions(m_points);
+    p_mesh.Get()->LoadPositions(m_points);
 }
 
 const Array<Vector3> &LineRenderer::GetPoints() const { return m_points; }

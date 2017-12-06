@@ -2,29 +2,30 @@
 #define MATERIALFACTORY_H
 
 #include "Bang/Material.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
 class MaterialFactory
 {
 public:
-    static Material* GetDefault();
-    static Material* GetDefaultUnLighted();
+    static void GetDefault(RH<Material> *material);
+    static void GetDefaultUnLighted(RH<Material> *material);
 
-    static Material* GetMissing();
+    static void GetMissing(RH<Material> *material);
 
-    static Material* GetPointLight();
-    static Material* GetDirectionalLight();
+    static void GetPointLight(RH<Material> *material);
+    static void GetDirectionalLight(RH<Material> *material);
 
-    static Material* GetUIText();
-    static Material* GetUIImage();
+    static void GetUIText(RH<Material> *material);
+    static void GetUIImage(RH<Material> *material);
 
-    static Material* GetRenderGBufferToScreen();
+    static void GetRenderGBufferToScreen(RH<Material> *material);
 
     MaterialFactory() = delete;
 
 private:
-    static Material* Load(const String &enginePath);
+    static void Load(RH<Material> *material, const String &enginePath);
 };
 
 NAMESPACE_BANG_END

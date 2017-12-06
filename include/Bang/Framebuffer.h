@@ -48,7 +48,7 @@ protected:
     int m_width = 0;
     int m_height = 0;
     Array<GL::Attachment> m_attachments;
-    Map<GL::Attachment, Texture2D*> m_attachments_To_Texture;
+    Map<GL::Attachment, RH<Texture2D>> m_attachments_To_Texture;
 
     void PushDrawAttachments();
     void PopDrawAttachments();

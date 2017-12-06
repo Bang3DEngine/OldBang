@@ -7,6 +7,7 @@
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
 #include "Bang/RenderPass.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -30,7 +31,7 @@ public:
     virtual void OnRender(RenderPass renderPass) override;
 
     void SetVisible(bool visible);
-    void SetMaterial(Material *m);
+    void SetMaterial(Material *mat);
     void SetRenderWireframe(bool drawWireframe);
     void SetCullMode(GL::Face cullMode);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
@@ -40,7 +41,6 @@ public:
 
     bool IsVisible() const;
     Material* GetMaterial() const;
-    Material* GetSharedMaterial() const;
     bool IsRenderWireframe() const;
     GL::Face GetCullMode() const;
     GL::ViewProjMode GetViewProjMode() const;
@@ -70,8 +70,8 @@ protected:
 
 private:
     bool m_visible = true;
+    RH<Material> p_material;
     float m_lineWidth = 1.0f;
-    Material *m_material = nullptr;
     RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
     friend class GEngine;

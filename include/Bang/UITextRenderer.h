@@ -25,7 +25,7 @@ class UITextRenderer : public UIRenderer,
 public:
     void RegenerateCharQuadsVAO() const;
 
-    void SetFont (Font *font);
+    void SetFont (Font* font);
     void SetTextColor(const Color &textColor);
     void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
@@ -80,8 +80,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    RH<Font> p_font;
     String m_content            = "";
-    Font *m_font                = nullptr;
     int m_textSize              = 64;
     Vector2 m_spacingMultiplier = Vector2::One;
     bool m_kerning              = false;
@@ -98,7 +98,7 @@ private:
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
 
-    Mesh *m_mesh = nullptr;
+    RH<Mesh> p_mesh;
     mutable uint m_numberOfLines = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
     mutable Array<Rect> m_charRectsGlobalNDC;

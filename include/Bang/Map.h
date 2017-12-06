@@ -41,8 +41,6 @@ public:
     bool ContainsKey(const Key &key) const;
     bool ContainsValue(const Value &value) const;
 
-    Value& At(const Key &k);
-    const Value& At(const Key &k) const;
     Value& operator[](const Key &k);
     const Value& operator[](const Key &k) const;
 

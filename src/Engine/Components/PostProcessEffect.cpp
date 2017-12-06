@@ -7,17 +7,17 @@
 #include "Bang/GEngine.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 PostProcessEffect::PostProcessEffect()
 {
-    m_shaderProgram = ShaderProgramFactory::CreateEmptyProgram();
+    Resources::Create<ShaderProgram>(&p_shaderProgram);
 
     Path vShaderPath = EPATH("Shaders/PP_ScreenPass.vert");
-    Shader *vShader = Resources::Load<Shader>(vShaderPath);
-    m_shaderProgram->SetVertexShader(vShader);
+    RH<Shader> vShader;
+    Resources::Load<Shader>(&vShader, vShaderPath);
+    p_shaderProgram.Get()->SetVertexShader(vShader.Get());
 }
 
 PostProcessEffect::~PostProcessEffect()
@@ -35,9 +35,9 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
 
     if (scenePostProcess || canvasPostProcess)
     {
-        m_shaderProgram->Bind();
-        GEngine::GetActive()->ApplyScreenPass(m_shaderProgram);
-        m_shaderProgram->UnBind();
+        p_shaderProgram.Get()->Bind();
+        GEngine::GetActive()->ApplyScreenPass(p_shaderProgram.Get());
+        p_shaderProgram.Get()->UnBind();
     }
 }
 
@@ -45,27 +45,28 @@ void PostProcessEffect::SetType(PostProcessEffect::Type type) { m_type = type; }
 void PostProcessEffect::SetPriority(int priority) { m_priority = priority; }
 void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
 {
-    ENSURE(p_postProcessShader != postProcessShader);
+    ENSURE(p_postProcessShader.Get() != postProcessShader);
 
-    p_postProcessShader = postProcessShader;
+    p_postProcessShader.Set(postProcessShader);
     ENSURE(p_postProcessShader);
 
-    m_shaderProgram->SetFragmentShader( p_postProcessShader );
+    p_shaderProgram.Get()->SetFragmentShader( GetPostProcessShader() );
 }
 
 PostProcessEffect::Type PostProcessEffect::GetType() const { return m_type; }
 int PostProcessEffect::GetPriority() const { return m_priority; }
-ShaderProgram *PostProcessEffect::GetPostProcessShaderProgram() const
+ShaderProgram* PostProcessEffect::GetPostProcessShaderProgram() const
 {
-    return m_shaderProgram;
+    return p_shaderProgram.Get();
 }
-Shader *PostProcessEffect::GetPostProcessShader() const
+Shader* PostProcessEffect::GetPostProcessShader() const
 {
-    return p_postProcessShader;
+    return p_postProcessShader.Get();
 }
 Path PostProcessEffect::GetPostProcessShaderFilepath() const
 {
-    return p_postProcessShader ? p_postProcessShader->GetResourceFilepath() : Path();
+    return p_postProcessShader ?
+                p_postProcessShader.Get()->GetResourceFilepath() : Path();
 }
 
 void PostProcessEffect::CloneInto(ICloneable *clone) const
@@ -91,10 +92,11 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
     {
         Path shaderFilepath = xmlInfo.Get<Path>("PostProcessShader");
         if (!p_postProcessShader ||
-            shaderFilepath != p_postProcessShader->GetResourceFilepath())
+            shaderFilepath != p_postProcessShader.Get()->GetResourceFilepath())
         {
-            Shader *postProcessShader = Resources::Load<Shader>(shaderFilepath);
-            SetPostProcessShader(postProcessShader);
+            RH<Shader> postProcessShader;
+            Resources::Load<Shader>(&postProcessShader, shaderFilepath);
+            SetPostProcessShader(postProcessShader.Get());
         }
     }
 }

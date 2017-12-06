@@ -9,18 +9,16 @@
 #include "Bang/Resources.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
-ASSET_IMPL(Material)
-
 Material::Material()
 {
-    ShaderProgram *sp = ShaderProgramFactory::GetShaderProgram(
-                                    EPATH("Shaders/G_Default.vert"),
-                                    EPATH("Shaders/G_Default.frag"));
-    SetShaderProgram(sp);
+    RH<ShaderProgram> sp;
+    Resources::Create<ShaderProgram>(&sp,
+                                     EPATH("Shaders/G_Default.vert"),
+                                     EPATH("Shaders/G_Default.frag"));
+    SetShaderProgram(sp.Get());
 }
 
 Material::~Material()
@@ -32,18 +30,18 @@ void Material::SetUvMultiply(const Vector2 &uvMultiply)
     m_uvMultiply = uvMultiply;
 }
 
-void Material::SetShaderProgram(ShaderProgram *program)
+void Material::SetShaderProgram(ShaderProgram* program)
 {
-    m_shaderProgram = program;
+    p_shaderProgram.Set(program);
 }
 
-void Material::SetTexture(Texture2D *texture)
+void Material::SetTexture(Texture2D* texture)
 {
-    m_texture = texture;
-    if (m_texture)
+    p_texture.Set(texture);
+    if (p_texture)
     {
         ShaderProgram *sp = GetShaderProgram();
-        if (sp) { sp->Set("B_Texture0", m_texture); }
+        if (sp) { sp->Set("B_Texture0", p_texture.Get()); }
     }
 }
 
@@ -62,35 +60,12 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
     m_diffuseColor = diffuseColor;
 }
 
-const Vector2 &Material::GetUvMultiply() const
-{
-    return m_uvMultiply;
-}
-
-ShaderProgram *Material::GetShaderProgram() const
-{
-    return m_shaderProgram;
-}
-
-Texture2D *Material::GetTexture() const
-{
-    return m_texture;
-}
-
-bool Material::IsReceivesLighting() const
-{
-    return m_receivesLighting;
-}
-
-float Material::GetShininess() const
-{
-    return m_shininess;
-}
-
-const Color& Material::GetDiffuseColor() const
-{
-    return m_diffuseColor;
-}
+const Vector2 &Material::GetUvMultiply() const { return m_uvMultiply; }
+ShaderProgram* Material::GetShaderProgram() const { return p_shaderProgram.Get(); }
+Texture2D* Material::GetTexture() const { return p_texture.Get(); }
+bool Material::IsReceivesLighting() const { return m_receivesLighting; }
+float Material::GetShininess() const { return m_shininess; }
+const Color& Material::GetDiffuseColor() const { return m_diffuseColor; }
 
 void Material::Bind() const
 {
@@ -105,35 +80,26 @@ void Material::Bind() const
     float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
     sp->Set("B_Texture0",  GetTexture());
     sp->Set("B_AlphaCutoff", alphaCutoff);
-    sp->Set("B_HasTexture",   GetTexture() != nullptr);
+    Debug_Peek( GetTexture() );
+    sp->Set("B_HasTexture", (GetTexture() != nullptr));
 }
 
 void Material::UnBind() const
 {
-    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
+    // ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     // sp->UnBind();
 }
 
 void Material::CloneInto(ICloneable *clone) const
 {
+    Asset::CloneInto(clone);
+
     Material *matClone = Cast<Material*>(clone);
 
     matClone->SetShaderProgram(GetShaderProgram());
     matClone->SetDiffuseColor(GetDiffuseColor());
     matClone->SetReceivesLighting(IsReceivesLighting());
     matClone->SetShininess(GetShininess());
-    matClone->SetTexture(GetTexture());
-
-    /*
-    ShaderProgram *sp = GetShaderProgram();
-    if (sp && sp->GetVertexShader() && sp->GetFragmentShader())
-    {
-        Shader *vshader = sp->GetVertexShader();
-        Shader *fshader = sp->GetFragmentShader();
-        sp = new ShaderProgram();
-        sp->Load(vshader->GetResourceFilepath(), fshader->GetResourceFilepath());
-    }*/
-    matClone->SetShaderProgram(GetShaderProgram());
     matClone->SetTexture(GetTexture());
 }
 
@@ -159,21 +125,33 @@ void Material::ImportXML(const XMLNode &xml)
     { SetUvMultiply(xml.Get<Vector2>("UvMultiply")); }
 
     if (xml.Contains("Texture"))
-    { SetTexture( Resources::Load<Texture2D>( xml.Get<GUID>("Texture") ) ); }
+    {
+        RH<Texture2D> texture;
+        Resources::Load<Texture2D>(&texture, xml.Get<GUID>("Texture"));
+        SetTexture(texture.Get());
+    }
 
-    Shader *vShader = nullptr;
+    RH<Shader> vShader;
     if (xml.Contains("VertexShader"))
-    { vShader = Resources::Load<Shader>(xml.Get<GUID>("VertexShader")); }
+    {  Resources::Load<Shader>(&vShader, xml.Get<GUID>("VertexShader"));  }
 
-    Shader *fShader = nullptr;
+    RH<Shader> fShader;
     if (xml.Contains("FragmentShader"))
-    { fShader = Resources::Load<Shader>(xml.Get<GUID>("FragmentShader")); }
+    { Resources::Load<Shader>(&fShader, xml.Get<GUID>("FragmentShader")); }
+
+    Debug_Log("Loading material " << xml.ToString());
+    Debug_Peek(vShader.Get());
+    Debug_Peek(fShader.Get());
 
     if (vShader && fShader)
     {
-        ShaderProgram *newSp = ShaderProgramFactory::GetShaderProgram(vShader,
-                                                                      fShader);
-        SetShaderProgram(newSp);
+        RH<ShaderProgram> newSp;
+        Resources::Create<ShaderProgram>(&newSp, vShader.Get(), fShader.Get());
+        SetShaderProgram(newSp.Get());
+
+        Debug_Log("Creating shader program " << newSp.Get() << ", " <<
+                  newSp.Get()->GetVertexShader()->GetResourceFilepath() << ", " <<
+                  newSp.Get()->GetFragmentShader()->GetResourceFilepath() );
     }
 }
 
@@ -186,12 +164,12 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("ReceivesLighting", IsReceivesLighting());
     xmlInfo->Set("UvMultiply",       GetUvMultiply());
 
-    Texture2D *tex = GetTexture();
+    Texture2D* tex = GetTexture();
     xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());
 
     ShaderProgram *sp = GetShaderProgram();
-    Shader *vShader = (sp ? sp->GetVertexShader()   : nullptr);
-    Shader *fShader = (sp ? sp->GetFragmentShader() : nullptr);
+    Shader* vShader = (sp ? sp->GetVertexShader()   : nullptr);
+    Shader* fShader = (sp ? sp->GetFragmentShader() : nullptr);
     xmlInfo->Set("VertexShader",   vShader);
     xmlInfo->Set("FragmentShader", fShader);
 }
