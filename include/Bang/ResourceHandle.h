@@ -9,12 +9,11 @@ NAMESPACE_BANG_BEGIN
 class IResourceHandle
 {
 public:
-    /*
     IResourceHandle(const IResourceHandle &rhs);
     IResourceHandle(IResourceHandle &&rhs);
     IResourceHandle& operator=(IResourceHandle &&rhs);
     IResourceHandle& operator=(const IResourceHandle &rhs);
-*/
+
     bool operator==(const IResourceHandle &rhs) const;
     bool operator!=(const IResourceHandle &rhs) const;
     bool operator<(const IResourceHandle &rhs) const;

@@ -59,8 +59,10 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 
     GameObject *go = rend->GetGameObject();
 
+    RH<ShaderProgram> prevSP;
+    prevSP.Set( rend->GetMaterial()->GetShaderProgram() );
+
     ShaderProgram *selSP = p_selectionMaterial.Get()->GetShaderProgram();
-    ShaderProgram *prevSP = rend->GetMaterial()->GetShaderProgram();
     rend->GetMaterial()->SetShaderProgram(selSP);
 
     rend->Bind();
@@ -68,7 +70,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     rend->OnRender();
     rend->UnBind();
 
-    rend->GetMaterial()->SetShaderProgram(prevSP);
+    rend->GetMaterial()->SetShaderProgram(prevSP.Get());
 }
 
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(

@@ -4,26 +4,31 @@
 
 USING_NAMESPACE_BANG
 
-IResourceHandle::IResourceHandle()
-{}
-/*
+IResourceHandle::IResourceHandle() {}
 IResourceHandle::IResourceHandle(const IResourceHandle &rhs) { *this = rhs; }
 IResourceHandle::IResourceHandle(IResourceHandle &&rhs) { *this = rhs; }
 IResourceHandle& IResourceHandle::operator=(const IResourceHandle &rhs)
 {
-    if (&rhs != this) { Set(rhs.Get()); }
+    if (&rhs != this)
+    {
+        m_typeId = rhs.m_typeId;
+        Set(rhs.Get());
+    }
     return *this;
 }
 IResourceHandle& IResourceHandle::operator=(IResourceHandle &&rhs)
 {
     if (&rhs != this)
     {
-        rhs.p_resource = Get();
-        p_resource = nullptr;
+        // Swap resources without triggering Resources usageCounting, since
+        // usageCount will remain the same.polymo
+        rhs.p_resource = nullptr;
+        p_resource = Get();
+        std::swap(m_typeId, rhs.m_typeId);
     }
     return *this;
 }
-*/
+
 bool IResourceHandle::operator==(const IResourceHandle &rhs) const
 { return Get() == rhs.Get(); }
 bool IResourceHandle::operator!=(const IResourceHandle &rhs) const
@@ -45,7 +50,7 @@ void IResourceHandle::Set(IResource *resource)
     {
         if (Get())
         {
-            // Resources::UnRegisterResourceUsage( m_typeId, Get() );
+            Resources::UnRegisterResourceUsage( m_typeId, Get() );
         }
 
         p_resource = resource;

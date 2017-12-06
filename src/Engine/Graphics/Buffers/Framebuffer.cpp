@@ -94,7 +94,6 @@ const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
     return m_currentDrawAttachmentIds;
 }
 
-#include "Bang/Input.h"
 Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
 {
     GLId prevFBId = GL::GetBoundId(GL::BindTarget::Framebuffer);
@@ -117,13 +116,15 @@ void Framebuffer::Resize(int width, int height)
     m_width  = Math::Max(width,  1);
     m_height = Math::Max(height, 1);
 
-    for (auto it : m_attachments_To_Texture)
+    // for (const auto &it : m_attachments_To_Texture)
+    for (const auto &it : m_attachments_To_Texture)
     {
         Texture2D *t = it.second.Get();
         if (t)
         {
             GL_ClearError();
             t->Resize(m_width, m_height);
+            GL_CheckError();
         }
     }
 }

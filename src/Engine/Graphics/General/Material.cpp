@@ -138,19 +138,11 @@ void Material::ImportXML(const XMLNode &xml)
     if (xml.Contains("FragmentShader"))
     { Resources::Load<Shader>(&fShader, xml.Get<GUID>("FragmentShader")); }
 
-    Debug_Log("Loading material " << xml.ToString());
-    Debug_Peek(vShader.Get());
-    Debug_Peek(fShader.Get());
-
     if (vShader && fShader)
     {
         RH<ShaderProgram> newSp;
         Resources::Create<ShaderProgram>(&newSp, vShader.Get(), fShader.Get());
         SetShaderProgram(newSp.Get());
-
-        Debug_Log("Creating shader program " << newSp.Get() << ", " <<
-                  newSp.Get()->GetVertexShader()->GetResourceFilepath() << ", " <<
-                  newSp.Get()->GetFragmentShader()->GetResourceFilepath() );
     }
 }
 

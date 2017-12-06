@@ -34,6 +34,7 @@ void Resources::Add(const TypeId &resTypeId, IResource *res)
     const GUID &guid = res->GetGUID();
     Debug_Log("Add " << res << ", " << resTypeId << ", " << guid);
     ASSERT(!guid.IsEmpty());
+    ASSERT(!resTypeId.IsEmpty());
 
     Resources *rs = Resources::GetActive(); ASSERT(rs);
     ASSERT(!Resources::Contains(resTypeId, guid));
@@ -49,25 +50,23 @@ void Resources::Add(const TypeId &resTypeId, IResource *res)
 void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
 {
     Debug_Log("Remove " << guid);
+
     Resources *rs = Resources::GetActive(); ASSERT(rs);
-    IResource* resourceToDestroy;
     ASSERT(rs->m_GUIDCache.ContainsKey(resTypeId));
+
     auto &map = rs->m_GUIDCache.Get(resTypeId);
-    for (const auto& itGUIDRes : map)
-    {
-        const GUID &foundGUID = itGUIDRes.first;
-        if (foundGUID == guid)
-        {
-            IResource *res = itGUIDRes.second.resource;
-            resourceToDestroy = res;
-            break;
-        }
-    }
-    map.Remove(guid);
+    ASSERT(map.ContainsKey(guid));
+
+    auto it = map.Find(guid);
+    const ResourceEntry &resEntry = it->second;
+    ASSERT(resEntry.resource != nullptr);
+    ASSERT(resEntry.usageCount == 0);
+
+    map.Remove(it);
+    ASSERT(!map.ContainsKey(guid));
 
     GUID guidCpy = guid;
-    ASSERT(resourceToDestroy);
-    Destroy(resourceToDestroy);
+    Destroy(resEntry.resource);
     Debug_Log("Remove FINISH " << guidCpy);
 }
 
@@ -105,6 +104,7 @@ void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resour
 {
     const GUID &guid = resource->GetGUID();
     ASSERT(!guid.IsEmpty());
+    ASSERT(!resTypeId.IsEmpty());
 
     Debug_Log("RegisterResourceUsage " << resTypeId << ", " <<
               resource << ", " << guid);
@@ -124,13 +124,14 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId, IResource *reso
 {
     const GUID &guid = resource->GetGUID();
     ASSERT(!guid.IsEmpty());
+    ASSERT(!resTypeId.IsEmpty());
 
     Debug_Log("UnRegisterResourceUsage " << resTypeId << ", " <<
               resource << ", " << guid);
     Resources *rs = Resources::GetActive();
     if (rs)
     {
-        ASSERT(Resources::ContainsGUID(guid));
+        ASSERT(Resources::Contains(resTypeId, guid));
         uint *resourcesUsage = &(rs->m_GUIDCache.Get(resTypeId)
                                  .Get(guid).usageCount);
         ASSERT(*resourcesUsage >= 1);
