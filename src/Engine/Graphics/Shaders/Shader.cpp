@@ -12,11 +12,12 @@
 
 USING_NAMESPACE_BANG
 
-Shader::Shader() : Shader(GL::ShaderType::Vertex)
+Shader::Shader(GL::ShaderType t) : m_type(t)
 {
+    m_isPersistentResource = true;
 }
 
-Shader::Shader(GL::ShaderType t) : m_type(t)
+Shader::Shader() : Shader(GL::ShaderType::Vertex)
 {
 }
 

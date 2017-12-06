@@ -16,7 +16,9 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD   class Asset;
+FORWARD class Asset;
+FORWARD class ShaderProgramFactory;
+
 class Resources
 {
 public:
@@ -60,6 +62,8 @@ private:
     };
     TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
 
+    ShaderProgramFactory *m_shaderProgramFactory = nullptr;
+
     static void Add(const TypeId &resTypeId, IResource *res);
 
     static void RegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
@@ -81,7 +85,6 @@ private:
     template<class IResourceClass>
     static bool Contains(const GUID &guid);
     static bool Contains(const TypeId &resourceClassTypeId, const GUID &guid);
-    static bool ContainsGUID(const GUID &guid);
 
     static void Destroy(IResource *resource);
 
@@ -92,6 +95,7 @@ private:
     static Resources* GetActive();
 
     friend class IResourceHandle;
+    friend class ShaderProgramFactory;
 };
 
 NAMESPACE_BANG_END

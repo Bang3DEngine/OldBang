@@ -211,6 +211,7 @@ ${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
+${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgramFactory.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp

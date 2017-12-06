@@ -19,3 +19,6 @@ String GUID::ToString() const
 {
     return String::ToString(m_timeGUID) + "_" + String::ToString(m_randGUID);
 }
+
+const GUID::GUIDType &GUID::GetTime() const { return m_timeGUID; }
+const GUID::GUIDType &GUID::GetRand() const { return m_randGUID; }

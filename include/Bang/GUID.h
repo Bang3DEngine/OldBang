@@ -32,6 +32,9 @@ public:
     friend bool operator!=(const GUID &lhs, const GUID &rhs);
     friend bool operator<(const GUID &lhs, const GUID &rhs);
 
+    const GUIDType& GetTime() const;
+    const GUIDType& GetRand() const;
+
 private:
     GUIDType m_timeGUID = GUID::EmptyGUID;
     GUIDType m_randGUID = GUID::EmptyGUID;

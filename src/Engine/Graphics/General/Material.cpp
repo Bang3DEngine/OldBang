@@ -9,16 +9,13 @@
 #include "Bang/Resources.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 Material::Material()
 {
-    RH<ShaderProgram> sp;
-    Resources::Create<ShaderProgram>(&sp,
-                                     EPATH("Shaders/G_Default.vert"),
-                                     EPATH("Shaders/G_Default.frag"));
-    SetShaderProgram(sp.Get());
+    SetShaderProgram( ShaderProgramFactory::GetDefault() );
 }
 
 Material::~Material()
@@ -140,9 +137,10 @@ void Material::ImportXML(const XMLNode &xml)
 
     if (vShader && fShader)
     {
-        RH<ShaderProgram> newSp;
-        Resources::Create<ShaderProgram>(&newSp, vShader.Get(), fShader.Get());
-        SetShaderProgram(newSp.Get());
+        ShaderProgram *newSp =
+                ShaderProgramFactory::Get(vShader.Get()->GetResourceFilepath(),
+                                          fShader.Get()->GetResourceFilepath());
+        SetShaderProgram(newSp);
     }
 }
 

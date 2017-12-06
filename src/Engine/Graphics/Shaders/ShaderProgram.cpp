@@ -19,6 +19,7 @@ USING_NAMESPACE_BANG
 ShaderProgram::ShaderProgram()
 {
     m_idGL = GL::CreateProgram();
+    m_isPersistentResource = true;
 }
 
 ShaderProgram::ShaderProgram(Shader *vShader, Shader *fShader) : ShaderProgram()
