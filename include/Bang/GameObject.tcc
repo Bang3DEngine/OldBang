@@ -113,33 +113,6 @@ List<T*> GameObject::GetComponentsInChildrenOnly(bool recursive) const
 template <class T>
 bool GameObject::HasComponent() const { return GetComponent<T>() ; }
 
-template <class T>
-int GameObject::CountComponents() const
-{
-    int count = 0;
-    for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
-    {
-        T *tp = Cast<T*>(comp);
-        if (tp) { ++count; }
-    }
-    return count;
-}
-
-
-template <class T>
-void GameObject::RemoveComponent()
-{
-    for (Component *comp : m_components)
-    {
-        T *compT = Cast<T*>(comp);
-        if (compT)
-        {
-            this->RemoveComponent(compT);
-            break;
-        }
-    }
-}
-
 template<class T>
 bool GameObject::CanEventBePropagated(const T& x)
 {

@@ -38,7 +38,7 @@ void Behaviour::RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour)
             {
                 createdBehaviour->ImportXML(*xmlInfoForNewBehaviour);
             }
-            GetGameObject()->RemoveComponent(this);
+            SetGameObject(nullptr);
         }
     }
 }

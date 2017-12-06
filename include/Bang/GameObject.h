@@ -98,15 +98,7 @@ public:
     bool HasComponent() const;
     bool HasComponent(const String &className) const;
 
-    template <class T>
-    int CountComponents() const;
-
-    template <class T>
-    void RemoveComponent();
-    void RemoveComponent(Component *c);
-    void RemoveComponentInstantly(Component *c);
-    void RemoveQueuedComponents();
-
+    void RemoveComponent(Component *component);
     Scene* GetScene() const;
     Transform *GetTransform() const;
     RectTransform *GetRectTransform() const;
@@ -179,6 +171,12 @@ protected:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
+    // Concurrent modification when iterating stuff
+    bool m_increaseChildrenIterator = true;
+    bool m_increaseComponentsIterator = true;
+    std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
+    std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
+
     GameObject(const String &name = "GameObject");
     virtual ~GameObject();
 
@@ -203,7 +201,6 @@ private:
 
     void AddChild(GameObject *child, int index);
     void RemoveChild(GameObject *child);
-    void _RemoveComponent(Component *component);
 
     friend class Scene;
     friend class Prefab;

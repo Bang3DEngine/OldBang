@@ -23,8 +23,9 @@ void MeshFactory::GetCone(RH<Mesh> *mesh)
 
 void MeshFactory::GetMesh(RH<Mesh> *mesh, const String &enginePath)
 {
-    Resources::Load<Mesh>(mesh, EPATH(enginePath));
-    // Resources::Clone<Mesh>(*mesh, mesh);
+    RH<Mesh> originalMesh;
+    Resources::Load<Mesh>(&originalMesh, EPATH(enginePath));
+    Resources::Clone<Mesh>(originalMesh, mesh);
 }
 
 GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh* m, const String &name)

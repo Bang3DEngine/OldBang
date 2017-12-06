@@ -29,7 +29,7 @@ void Component::SetGameObject(GameObject *gameObject)
     {
         if (GetGameObject())
         {
-            GetGameObject()->_RemoveComponent(this);
+            GetGameObject()->RemoveComponent(this);
         }
 
         if (!CanBeRepeatedInGameObject())
