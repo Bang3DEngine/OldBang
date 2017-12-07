@@ -13,9 +13,7 @@ USING_NAMESPACE_BANG
 
 PointLight::PointLight() : Light()
 {
-    RH<Material> material;
-    MaterialFactory::GetPointLight(&material);
-    SetLightMaterial(material.Get());
+    SetLightMaterial(MaterialFactory::GetPointLight().Get());
 }
 
 PointLight::~PointLight()

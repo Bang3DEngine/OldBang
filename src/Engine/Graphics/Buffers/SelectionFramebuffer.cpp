@@ -9,19 +9,19 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    RH<ShaderProgram> selectionProgram;
-    Resources::Create<ShaderProgram>(&selectionProgram,
-                                     EPATH("Shaders/G_Default.vert"),
-                                     EPATH("Shaders/SelectionBuffer.frag") );
+    ShaderProgram *selectionProgram =
+            ShaderProgramFactory::Get(EPATH("Shaders/G_Default.vert"),
+                                      EPATH("Shaders/SelectionBuffer.frag") );
 
-    Resources::Create<Material>(&p_selectionMaterial);
-    p_selectionMaterial.Get()->SetShaderProgram(selectionProgram.Get());
+    p_selectionMaterial = Resources::Create<Material>();
+    p_selectionMaterial.Get()->SetShaderProgram(selectionProgram);
 
     Bind();
     CreateAttachment(AttColor, GL::ColorFormat::RGBA_UByte8);

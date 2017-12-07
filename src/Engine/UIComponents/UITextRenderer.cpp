@@ -22,14 +22,10 @@ USING_NAMESPACE_BANG
 
 UITextRenderer::UITextRenderer() : UIRenderer()
 {
-    Resources::Create<Mesh>(&p_mesh);
+    p_mesh = Resources::Create<Mesh>();
+    SetMaterial(MaterialFactory::GetUIText().Get());
 
-    RH<Material> mat;
-    MaterialFactory::GetUIText(&mat);
-    SetMaterial(mat.Get());
-
-    RH<Font> font;
-    Resources::Load<Font>(&font, EPATH("Fonts/Roboto.ttf"));
+    RH<Font> font = Resources::Load<Font>(EPATH("Fonts/Roboto.ttf"));
     SetFont(font.Get());
     SetContent("");
     SetTextSize(20.0f);
@@ -420,11 +416,7 @@ void UITextRenderer::ImportXML(const XMLNode &xml)
     UIRenderer::ImportXML(xml);
 
     if (xml.Contains("Font"))
-    {
-        RH<Font> font;
-        Resources::Load<Font>(&font, xml.Get<GUID>("Font"));
-        SetFont(font.Get());
-    }
+    { SetFont(Resources::Load<Font>(xml.Get<GUID>("Font")).Get()); }
 
     if (xml.Contains("Content"))
     { SetContent(xml.Get<String>("Content")); }

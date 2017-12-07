@@ -47,8 +47,8 @@ void GEngine::Init()
     GL::SetActive( GetGL() );
     m_texUnitManager = new TextureUnitManager();
 
-    MaterialFactory::GetRenderGBufferToScreen(&p_renderGBufferToScreenMaterial);
-    MeshFactory::GetUIPlane(&p_screenPlaneMesh);
+    p_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
+    p_screenPlaneMesh = MeshFactory::GetUIPlane();
     GL::SetActive( nullptr );
 }
 

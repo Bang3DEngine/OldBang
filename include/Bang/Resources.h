@@ -26,19 +26,19 @@ public:
     virtual ~Resources();
 
     template <class IResourceClass>
-    static void Load(RH<IResourceClass> *handle, const Path &filepath);
+    static RH<IResourceClass> Load(const Path &filepath);
 
     template <class IResourceClass>
-    static void Load(RH<IResourceClass> *handle, const String &filepath);
+    static RH<IResourceClass> Load(const String &filepath);
 
     template <class IResourceClass>
-    static void Load(RH<IResourceClass> *handle, const GUID &guid);
+    static RH<IResourceClass> Load(const GUID &guid);
 
     template<class IResourceClass, class ...Args>
-    static void Create(RH<IResourceClass> *handle, const Args&... args);
+    static RH<IResourceClass> Create(const Args&... args);
 
     template<class IResourceClass>
-    static void Clone(const RH<IResourceClass> &src, RH<IResourceClass> *dst);
+    static RH<IResourceClass> Clone(const RH<IResourceClass> &src);
 
     template <class IResourceClass>
     static Array<IResourceClass*> GetAll();

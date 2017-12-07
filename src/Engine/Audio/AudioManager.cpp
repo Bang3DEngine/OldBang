@@ -83,8 +83,7 @@ void AudioManager::Play(const Path &audioClipFilepath,
                         const AudioParams &params,
                         float delay)
 {
-    RH<AudioClip> audioClip;
-    Resources::Load<AudioClip>(&audioClip, audioClipFilepath);
+    RH<AudioClip> audioClip = Resources::Load<AudioClip>(audioClipFilepath);
     AudioManager::Play(audioClip.Get(), params, delay);
 }
 

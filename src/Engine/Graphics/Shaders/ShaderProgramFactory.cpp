@@ -20,8 +20,8 @@ ShaderProgram *ShaderProgramFactory::Get(const Path &vShaderPath,
     auto shaderPathsPair = std::make_pair(vShaderPath, fShaderPath);
     if ( !spf->m_cache.ContainsKey(shaderPathsPair) )
     {
-        RH<ShaderProgram> shaderProgram;
-        Resources::Create(&shaderProgram, vShaderPath, fShaderPath);
+        RH<ShaderProgram> shaderProgram =
+                    Resources::Create<ShaderProgram>(vShaderPath, fShaderPath);
         spf->m_cache.Add(shaderPathsPair, shaderProgram);
     }
 

@@ -10,11 +10,9 @@ USING_NAMESPACE_BANG
 
 LineRenderer::LineRenderer()
 {
-    Resources::Create<Mesh>(&p_mesh);
+    p_mesh = Resources::Create<Mesh>();
 
-    RH<Material> material;
-    MaterialFactory::GetDefaultUnLighted(&material);
-    SetMaterial(material.Get());
+    SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
 
     SetRenderPrimitive(GL::Primitives::Lines);
 }

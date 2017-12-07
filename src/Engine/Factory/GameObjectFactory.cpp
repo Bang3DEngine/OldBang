@@ -120,13 +120,11 @@ Scene *GameObjectFactory::CreateDefaultScene()
     GameObject *cube = GameObjectFactory::CreateGameObjectNamed("Cube");
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     cube->AddComponent<Rotator>();
-    RH<Mesh> cubeMesh;
-    MeshFactory::GetCube(&cubeMesh);
-    mr->SetMesh(cubeMesh.Get());
+    mr->SetMesh(MeshFactory::GetCube().Get());
 
-    RH<Texture2D> texture;
-    Resources::Load<Texture2D>(&texture,
-               Paths::EngineAssets().Append("Images/LogoBang_B_512.png"));
+    RH<Texture2D> texture =
+            Resources::Load<Texture2D>(Paths::EngineAssets()
+                                       .Append("Images/LogoBang_B_512.png"));
     mr->GetMaterial()->SetTexture(texture.Get());
     mr->GetMaterial()->SetDiffuseColor(Color::White);
 
@@ -134,18 +132,14 @@ Scene *GameObjectFactory::CreateDefaultScene()
     sphere->GetTransform()->SetLocalPosition(Vector3(1,1,1));
     sphere->GetTransform()->SetLocalScale( Vector3(0.3f) );
     MeshRenderer *mr2 = sphere->AddComponent<MeshRenderer>();
-    RH<Mesh> sphereMesh;
-    MeshFactory::GetSphere(&sphereMesh);
-    mr2->SetMesh(sphereMesh.Get());
+    mr2->SetMesh(MeshFactory::GetSphere().Get());
     mr2->GetMaterial()->SetDiffuseColor(Color::Green);
 
     GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Sphere-Child");
     cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
     cube2->AddComponent<Scalator>();
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
-    RH<Mesh> cubeMesh3;
-    MeshFactory::GetCube(&cubeMesh3);
-    mr3->SetMesh(cubeMesh3.Get());
+    mr3->SetMesh(MeshFactory::GetCube().Get());
     mr3->GetMaterial()->SetDiffuseColor(Color::Purple);
 
     GameObject *lightGo = GameObjectFactory::CreateGameObjectNamed("Light");
@@ -381,9 +375,7 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
 {
     GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
-    RH<Material> material;
-    MaterialFactory::GetUIImage(&material);
-    lr->SetMaterial(material.Get());
+    lr->SetMaterial(MaterialFactory::GetUIImage().Get());
     lr->GetMaterial()->SetDiffuseColor(Color::White);
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);

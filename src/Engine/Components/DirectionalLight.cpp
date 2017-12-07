@@ -7,9 +7,7 @@ USING_NAMESPACE_BANG
 
 DirectionalLight::DirectionalLight()
 {
-    RH<Material> material;
-    MaterialFactory::GetDirectionalLight(&material);
-    SetLightMaterial(material.Get());
+    SetLightMaterial(MaterialFactory::GetDirectionalLight().Get());
 }
 
 DirectionalLight::~DirectionalLight()

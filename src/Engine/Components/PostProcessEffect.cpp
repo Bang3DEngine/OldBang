@@ -12,11 +12,10 @@ USING_NAMESPACE_BANG
 
 PostProcessEffect::PostProcessEffect()
 {
-    Resources::Create<ShaderProgram>(&p_shaderProgram);
+    p_shaderProgram = Resources::Create<ShaderProgram>();
 
     Path vShaderPath = EPATH("Shaders/PP_ScreenPass.vert");
-    RH<Shader> vShader;
-    Resources::Load<Shader>(&vShader, vShaderPath);
+    RH<Shader> vShader = Resources::Load<Shader>(vShaderPath);
     p_shaderProgram.Get()->SetVertexShader(vShader.Get());
 }
 
@@ -94,9 +93,8 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
         if (!p_postProcessShader ||
             shaderFilepath != p_postProcessShader.Get()->GetResourceFilepath())
         {
-            RH<Shader> postProcessShader;
-            Resources::Load<Shader>(&postProcessShader, shaderFilepath);
-            SetPostProcessShader(postProcessShader.Get());
+            RH<Shader> ppShader = Resources::Load<Shader>(shaderFilepath);
+            SetPostProcessShader(ppShader.Get());
         }
     }
 }

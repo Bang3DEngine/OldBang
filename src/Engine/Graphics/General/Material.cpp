@@ -121,19 +121,15 @@ void Material::ImportXML(const XMLNode &xml)
     { SetUvMultiply(xml.Get<Vector2>("UvMultiply")); }
 
     if (xml.Contains("Texture"))
-    {
-        RH<Texture2D> texture;
-        Resources::Load<Texture2D>(&texture, xml.Get<GUID>("Texture"));
-        SetTexture(texture.Get());
-    }
+    { SetTexture(Resources::Load<Texture2D>(xml.Get<GUID>("Texture")).Get()); }
 
     RH<Shader> vShader;
     if (xml.Contains("VertexShader"))
-    {  Resources::Load<Shader>(&vShader, xml.Get<GUID>("VertexShader"));  }
+    {  vShader = Resources::Load<Shader>(xml.Get<GUID>("VertexShader"));  }
 
     RH<Shader> fShader;
     if (xml.Contains("FragmentShader"))
-    { Resources::Load<Shader>(&fShader, xml.Get<GUID>("FragmentShader")); }
+    { fShader = Resources::Load<Shader>(xml.Get<GUID>("FragmentShader")); }
 
     if (vShader && fShader)
     {

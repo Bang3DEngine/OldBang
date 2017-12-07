@@ -9,23 +9,23 @@ NAMESPACE_BANG_BEGIN
 class MaterialFactory
 {
 public:
-    static void GetDefault(RH<Material> *material);
-    static void GetDefaultUnLighted(RH<Material> *material);
+    static RH<Material> GetDefault();
+    static RH<Material> GetDefaultUnLighted();
 
-    static void GetMissing(RH<Material> *material);
+    static RH<Material> GetMissing();
 
-    static void GetPointLight(RH<Material> *material);
-    static void GetDirectionalLight(RH<Material> *material);
+    static RH<Material> GetPointLight();
+    static RH<Material> GetDirectionalLight();
 
-    static void GetUIText(RH<Material> *material);
-    static void GetUIImage(RH<Material> *material);
+    static RH<Material> GetUIText();
+    static RH<Material> GetUIImage();
 
-    static void GetRenderGBufferToScreen(RH<Material> *material);
+    static RH<Material> GetRenderGBufferToScreen();
 
     MaterialFactory() = delete;
 
 private:
-    static void Load(RH<Material> *material, const String &enginePath);
+    static RH<Material> Load(const String &enginePath);
 };
 
 NAMESPACE_BANG_END

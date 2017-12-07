@@ -41,6 +41,11 @@ public:
         m_typeId = GetTypeId<IResourceClass>();
     }
 
+    ResourceHandle(IResourceClass *res) : ResourceHandle()
+    {
+        Set(res);
+    }
+
     virtual ~ResourceHandle() {}
 
     IResourceClass* Get() const

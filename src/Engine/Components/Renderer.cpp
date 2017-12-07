@@ -18,9 +18,7 @@ USING_NAMESPACE_BANG
 
 Renderer::Renderer()
 {
-    RH<Material> material;
-    MaterialFactory::GetDefault(&material);
-    SetMaterial(material.Get());
+    SetMaterial(MaterialFactory::GetDefault().Get());
 }
 
 Renderer::~Renderer()
@@ -123,11 +121,7 @@ void Renderer::ImportXML(const XMLNode &xml)
     { SetVisible( xml.Get<bool>("Visible") ); }
 
     if (xml.Contains("Material"))
-    {
-        RH<Material> material;
-        Resources::Load<Material>(&material, xml.Get<GUID>("Material"));
-        SetMaterial(material.Get());
-    }
+    { SetMaterial(Resources::Load<Material>(xml.Get<GUID>("Material")).Get()); }
 
     if (xml.Contains("RenderPass"))
     { SetRenderPass( xml.Get<RenderPass>("RenderPass") ); }

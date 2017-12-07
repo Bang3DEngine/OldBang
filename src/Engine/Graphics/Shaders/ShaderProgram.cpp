@@ -40,9 +40,8 @@ ShaderProgram::~ShaderProgram()
 
 bool ShaderProgram::Load(const Path &vShaderPath, const Path &fShaderPath)
 {
-    RH<Shader> vShader, fShader;
-    Resources::Load<Shader>(&vShader, vShaderPath);
-    Resources::Load<Shader>(&fShader, fShaderPath);
+    RH<Shader> vShader = Resources::Load<Shader>(vShaderPath);
+    RH<Shader> fShader = Resources::Load<Shader>(fShaderPath);
     return Load(vShader.Get(), fShader.Get());
 }
 

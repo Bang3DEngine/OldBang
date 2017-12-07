@@ -309,8 +309,7 @@ UITreeItemContainer::UITreeItemContainer()
                                                  Vector2i::Zero);
 
     p_collapseButton = GameObjectFactory::CreateUIButton();
-    RH<Texture2D> iconTex;
-    IconManager::GetDownArrowIcon(&iconTex);
+    RH<Texture2D> iconTex = IconManager::GetDownArrowIcon();
     p_collapseButton->SetIcon(iconTex.Get(), Vector2i(8), 0);
     p_collapseButton->GetBackground()->SetVisible(false);    
 
@@ -335,9 +334,8 @@ void UITreeItemContainer::SetCollapsed(bool collapsed)
     if (collapsed != IsCollapsed())
     {
         m_collapsed = collapsed;
-        RH<Texture2D> iconTex;
-        if (IsCollapsed()) { IconManager::GetRightArrowIcon(&iconTex); }
-        else { IconManager::GetDownArrowIcon(&iconTex); }
+        RH<Texture2D> iconTex = IsCollapsed() ? IconManager::GetRightArrowIcon() :
+                                                IconManager::GetDownArrowIcon();
         GetCollapseButton()->SetIconTexture(iconTex.Get());
     }
 }

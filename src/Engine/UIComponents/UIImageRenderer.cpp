@@ -15,11 +15,9 @@ USING_NAMESPACE_BANG
 
 UIImageRenderer::UIImageRenderer()
 {
-    RH<Material> mat;
-    MaterialFactory::GetUIImage(&mat);
-    SetMaterial(mat.Get());
+    SetMaterial(MaterialFactory::GetUIImage().Get());
 
-    MeshFactory::GetUIPlane(&p_quadMesh);
+    p_quadMesh = MeshFactory::GetUIPlane();
     SetHorizontalAlignment( GetHorizontalAlignment() );
     SetVerticalAlignment( GetVerticalAlignment() );
 }
@@ -44,8 +42,7 @@ void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
 {
-    RH<Texture2D> tex;
-    Resources::Load<Texture2D>(&tex, imagePath);
+    RH<Texture2D> tex = Resources::Load<Texture2D>(imagePath);
     SetImageTexture(tex.Get());
 }
 
@@ -190,8 +187,7 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
 
     if (xmlInfo.Contains("Image"))
     {
-        RH<Texture2D> tex;
-        Resources::Load<Texture2D>(&tex, xmlInfo.Get<GUID>("Image"));
+        RH<Texture2D> tex = Resources::Load<Texture2D>(xmlInfo.Get<GUID>("Image"));
         SetImageTexture(tex.Get());
     }
 

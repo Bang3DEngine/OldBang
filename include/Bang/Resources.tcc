@@ -5,14 +5,13 @@
 NAMESPACE_BANG_BEGIN
 
 template <class IResourceClass>
-void Resources::Load(RH<IResourceClass> *handle, const Path &filepath)
+RH<IResourceClass> Resources::Load(const Path &filepath)
 {
     if (!filepath.IsFile())
     {
         Debug_Error("Trying to load file '" << filepath <<
                     "' which does not exist.");
-        handle->Set(nullptr);
-        return;
+        return RH<IResourceClass>();
     }
 
     IResourceClass* res = Resources::GetCached<IResourceClass>(
@@ -26,17 +25,17 @@ void Resources::Load(RH<IResourceClass> *handle, const Path &filepath)
         res->ImportXMLFromFile(importFilepath);
     }
 
-    handle->Set( res );
+    return RH<IResourceClass>(res);
 }
 
 template <class IResourceClass>
-void Resources::Load(RH<IResourceClass> *handle, const String &filepath)
+RH<IResourceClass> Resources::Load(const String &filepath)
 {
-    Resources::Load<IResourceClass>(handle, PPATH(filepath));
+    return Resources::Load<IResourceClass>(PPATH(filepath));
 }
 
 template <class IResourceClass>
-void Resources::Load(RH<IResourceClass> *handle, const GUID &guid)
+RH<IResourceClass> Resources::Load(const GUID &guid)
 {
     if (!guid.IsEmpty())
     {
@@ -44,23 +43,22 @@ void Resources::Load(RH<IResourceClass> *handle, const GUID &guid)
         {
             Path filepath = ImportFilesManager::GetFilepath(guid);
             // Debug_Log("Going to load from filepath with GUID " << guid);
-            Resources::Load<IResourceClass>(handle, filepath);
+            return Resources::Load<IResourceClass>(filepath);
         }
         else
         {
-            handle->Set( Resources::GetCached<IResourceClass>(guid) );
+            return
+              RH<IResourceClass>( Resources::GetCached<IResourceClass>(guid) );
         }
     }
-    else
-    {
-        handle->Set(nullptr);
-    }
+
+    return RH<IResourceClass>();
 }
 
 template<class IResourceClass, class ...Args>
-void Resources::Create(RH<IResourceClass> *handle, const Args&... args)
+RH<IResourceClass> Resources::Create(const Args&... args)
 {
-    handle->Set( Resources::_Create<IResourceClass>(args...) );
+    return RH<IResourceClass>( Resources::_Create<IResourceClass>(args...) );
 }
 
 template<class IResourceClass, class ...Args>
@@ -125,14 +123,11 @@ IResourceClass* Resources::GetCached(const GUID &guid)
 }
 
 template<class IResourceClass>
-void Resources::Clone(const RH<IResourceClass> &src, RH<IResourceClass> *dst)
+RH<IResourceClass> Resources::Clone(const RH<IResourceClass> &src)
 {
-    ASSERT(&src != dst);
-    Resources::Create<IResourceClass>(dst);
-    if (src)
-    {
-        src.Get()->CloneInto( dst->Get() );
-    }
+    RH<IResourceClass> rh = Resources::Create<IResourceClass>();
+    src.Get()->CloneInto( rh.Get() );
+    return rh;
 }
 
 NAMESPACE_BANG_END

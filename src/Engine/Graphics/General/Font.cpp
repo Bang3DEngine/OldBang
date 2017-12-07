@@ -43,7 +43,7 @@ void Font::Import(const Path &ttfFilepath)
         Imageb distFieldImg;
         distFieldImg.Import(distFieldImgPath);
 
-        Resources::Create<Texture2D>(&p_distFieldTexture);
+        p_distFieldTexture = Resources::Create<Texture2D>();
         p_distFieldTexture.Get()->Import(distFieldImg);
         p_distFieldTexture.Get()->Bind();
         p_distFieldTexture.Get()->GenerateMipMaps();
@@ -129,8 +129,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
     {
         // Create atlas
         Array<Recti> charRects;
-        RH<Texture2D> atlasTex;
-        Resources::Create<Texture2D>(&atlasTex);
+        RH<Texture2D> atlasTex = Resources::Create<Texture2D>();
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                        "0123456789.,-;:_?!+*/\\\"'";
 

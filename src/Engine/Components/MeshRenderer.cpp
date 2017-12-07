@@ -45,8 +45,7 @@ void MeshRenderer::ImportXML(const XMLNode &xmlInfo)
     Renderer::ImportXML(xmlInfo);
     if (xmlInfo.Contains("Mesh"))
     {
-        RH<Mesh> mesh;
-        Resources::Load<Mesh>(&mesh, xmlInfo.Get<GUID>("Mesh"));
+        RH<Mesh> mesh = Resources::Load<Mesh>(xmlInfo.Get<GUID>("Mesh"));
         SetMesh(mesh.Get());
     }
 }

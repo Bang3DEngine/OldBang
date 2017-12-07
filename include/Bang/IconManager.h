@@ -10,14 +10,14 @@ FORWARD class Texture2D;
 class IconManager
 {
 public:
-    static void GetRightArrowIcon(RH<Texture2D> *iconTexture);
-    static void GetDownArrowIcon(RH<Texture2D> *iconTexture);
+    static RH<Texture2D> GetRightArrowIcon();
+    static RH<Texture2D> GetDownArrowIcon();
 
 private:
     IconManager() = default;
     virtual ~IconManager() = default;
 
-    static void GetIconTexture(RH<Texture2D> *iconTexture, const String &filename);
+    static RH<Texture2D> GetIconTexture(const String &filename);
 };
 
 NAMESPACE_BANG_END

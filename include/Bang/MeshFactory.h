@@ -8,11 +8,11 @@ NAMESPACE_BANG_BEGIN
 class MeshFactory
 {
 public:
-    static void GetPlane(RH<Mesh> *mesh);
-    static void GetUIPlane(RH<Mesh> *mesh);
-    static void GetCube(RH<Mesh> *mesh);
-    static void GetSphere(RH<Mesh> *mesh);
-    static void GetCone(RH<Mesh> *mesh);
+    static RH<Mesh> GetPlane();
+    static RH<Mesh> GetUIPlane();
+    static RH<Mesh> GetCube();
+    static RH<Mesh> GetSphere();
+    static RH<Mesh> GetCone();
 
     static GameObject* GetPlaneGameObject();
     static GameObject* GetCubeGameObject();
@@ -21,7 +21,7 @@ public:
 
 private:
     MeshFactory() = default;
-    static void GetMesh(RH<Mesh> *mesh, const String &enginePath);
+    static RH<Mesh> GetMesh(const String &enginePath);
 
     static GameObject* CreatePrimitiveGameObject(Mesh* m, const String &name);
 };

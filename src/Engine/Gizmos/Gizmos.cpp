@@ -33,9 +33,9 @@ Gizmos::Gizmos()
     m_gizmosGo = GameObjectFactory::CreateGameObject();
     m_gizmosGo->SetName("Gizmos");
 
-    MeshFactory::GetCube(&p_boxMesh);
-    MeshFactory::GetPlane(&p_planeMesh);
-    MeshFactory::GetSphere(&p_sphereMesh);
+    p_boxMesh = MeshFactory::GetCube();
+    p_planeMesh = MeshFactory::GetPlane();
+    p_sphereMesh = MeshFactory::GetSphere();
 
     m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
     m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();
@@ -44,9 +44,7 @@ Gizmos::Gizmos()
 
     for (Renderer *rend : m_renderers)
     {
-        RH<Material> mat;
-        MaterialFactory::GetDefaultUnLighted(&mat);
-        rend->SetMaterial(mat.Get());
+        rend->SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
         rend->SetRenderPass(RenderPass::Gizmos);
     }
 

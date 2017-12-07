@@ -107,8 +107,8 @@ void AudioSource::ImportXML(const XMLNode &xml)
 
     if (xml.Contains("AudioClip"))
     {
-        RH<AudioClip> audioClip;
-        Resources::Load<AudioClip>(&audioClip, xml.Get<GUID>("AudioClip") );
+        RH<AudioClip> audioClip =
+                         Resources::Load<AudioClip>(xml.Get<GUID>("AudioClip") );
         SetAudioClip(audioClip.Get());
     }
 

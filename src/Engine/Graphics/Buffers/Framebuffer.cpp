@@ -28,8 +28,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
 {
     ASSERT(GL::IsBound(this));
     GL_ClearError();
-    RH<Texture2D> tex;
-    Resources::Create<Texture2D>(&tex);
+    RH<Texture2D> tex = Resources::Create<Texture2D>();
     tex.Get()->Bind();
     tex.Get()->SetInternalFormat(texFormat);
     tex.Get()->CreateEmpty(GetWidth(), GetHeight());
