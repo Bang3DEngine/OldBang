@@ -42,7 +42,6 @@ RH<IResourceClass> Resources::Load(const GUID &guid)
         if (!Resources::Contains<IResourceClass>(guid))
         {
             Path filepath = ImportFilesManager::GetFilepath(guid);
-            // Debug_Log("Going to load from filepath with GUID " << guid);
             return Resources::Load<IResourceClass>(filepath);
         }
         else
@@ -72,7 +71,6 @@ IResourceClass* Resources::_Create(const Args&... args)
     if (res->GetGUID().IsEmpty())
     {
         res->SetGUID( GUIDManager::GetNewGUID() );
-        // Debug_Log("Empty GUID, generating to " << res->GetGUID());
     }
 
     #ifdef DEBUG

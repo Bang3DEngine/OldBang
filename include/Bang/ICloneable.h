@@ -19,6 +19,7 @@ public:
     virtual ICloneable* Clone() const
     {
         ASSERT_MSG(false, "Method not implemented");
+        return nullptr;
     }
 
 protected:
