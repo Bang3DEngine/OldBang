@@ -88,6 +88,7 @@ void Material::UnBind() const
 
 void Material::CloneInto(ICloneable *clone) const
 {
+    // Debug_Log("Material CloneInto begin " << this << " to " << clone);
     Asset::CloneInto(clone);
 
     Material *matClone = Cast<Material*>(clone);
@@ -97,6 +98,7 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetReceivesLighting(IsReceivesLighting());
     matClone->SetShininess(GetShininess());
     matClone->SetTexture(GetTexture());
+    // Debug_Log("Material CloneInto end " << this << " to " << clone);
 }
 
 void Material::Import(const Path &materialFilepath)

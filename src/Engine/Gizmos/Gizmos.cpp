@@ -53,6 +53,7 @@ Gizmos::Gizmos()
 
 Gizmos::~Gizmos()
 {
+    GameObject::Destroy(m_gizmosGo);
 }
 
 void Gizmos::SetColor(const Color &color)

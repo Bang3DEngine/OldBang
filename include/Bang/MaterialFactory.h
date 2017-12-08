@@ -22,10 +22,15 @@ public:
 
     static RH<Material> GetRenderGBufferToScreen();
 
-    MaterialFactory() = delete;
-
 private:
+    Map<String, RH<Material>> m_cache;
+
+    MaterialFactory() = default;
     static RH<Material> Load(const String &enginePath);
+
+    static MaterialFactory* GetActive();
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

@@ -17,6 +17,8 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Asset;
+FORWARD class MeshFactory;
+FORWARD class MaterialFactory;
 FORWARD class ShaderProgramFactory;
 
 class Resources
@@ -50,18 +52,25 @@ public:
     #endif
 
 private:
+public:
     #ifdef DEBUG
     static bool _AssertCreatedFromResources;
     static bool _AssertDestroyedFromResources;
     #endif
 
-    struct ResourceEntry
+    struct ResourceEntry : public IToString
     {
         IResource *resource = nullptr;
         uint usageCount = 0; // Number of RH's using this resource entry
+        String ToString() const override
+        {
+            return "RE(" + String(resource) + ", " + String(usageCount) + ")";
+        }
     };
     TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
 
+    MeshFactory *m_meshFactory = nullptr;
+    MaterialFactory *m_materialFactory = nullptr;
     ShaderProgramFactory *m_shaderProgramFactory = nullptr;
 
     static void Add(const TypeId &resTypeId, IResource *res);
@@ -92,9 +101,14 @@ private:
     static IResourceClass* GetCached(const GUID &guid);
     static IResource* GetCached(const TypeId &resTypeId, const GUID &guid);
 
+    void Destroy();
+
     static Resources* GetActive();
 
+    friend class Window;
+    friend class MeshFactory;
     friend class IResourceHandle;
+    friend class MaterialFactory;
     friend class ShaderProgramFactory;
 };
 

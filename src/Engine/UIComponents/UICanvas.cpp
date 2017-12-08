@@ -21,6 +21,7 @@ UICanvas::UICanvas()
 
 UICanvas::~UICanvas()
 {
+    delete m_uiLayoutManager;
 }
 
 void UICanvas::OnStart()

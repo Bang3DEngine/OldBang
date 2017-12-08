@@ -9,10 +9,7 @@
 
 ObjectManager::~ObjectManager()
 {
-    while (!m_objectsToBeDestroyedQueue.empty())
-    {
-        _DestroyObjects();
-    }
+    _DestroyObjects();
 }
 
 void ObjectManager::Destroy(GameObject *gameObject)
@@ -23,18 +20,21 @@ void ObjectManager::Destroy(GameObject *gameObject)
 void ObjectManager::Destroy(Object *object)
 {
     ObjectManager *om = ObjectManager::GetInstance();
-    ObjectId objectToBeDestroyedId = object->GetObjectId();
-    if (!object->IsWaitingToBeDestroyed() &&
-        !om->m_objectsToBeDestroyedSet.Contains(objectToBeDestroyedId))
+    if (om)
     {
-        om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
-        om->m_objectsToBeDestroyedQueue.push(object);
-        om->m_objectsIdsToBeDestroyedQueue.push(objectToBeDestroyedId);
+        ObjectId objectToBeDestroyedId = object->GetObjectId();
+        if (!object->IsWaitingToBeDestroyed() &&
+            !om->m_objectsToBeDestroyedSet.Contains(objectToBeDestroyedId))
+        {
+            om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
+            om->m_objectsToBeDestroyedQueue.push(object);
+            om->m_objectsIdsToBeDestroyedQueue.push(objectToBeDestroyedId);
 
-        object->m_waitingToBeDestroyed = true;
-        object->BeforeDestroyed();
-        om->EventEmitter<IDestroyListener>::
-                PropagateToListeners(&IDestroyListener::OnDestroyed, object);
+            object->m_waitingToBeDestroyed = true;
+            object->BeforeDestroyed();
+            om->EventEmitter<IDestroyListener>::
+                    PropagateToListeners(&IDestroyListener::OnDestroyed, object);
+        }
     }
 }
 

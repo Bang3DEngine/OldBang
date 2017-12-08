@@ -4,25 +4,13 @@
 
 USING_NAMESPACE_BANG
 
-IUniformBuffer::IUniformBuffer()
+GLUniforms::~GLUniforms()
 {
+    while (!m_uniformBuffers.IsEmpty())
+    {
+        RemoveBuffer(m_uniformBuffers.Begin()->second);
+    }
 }
-
-IUniformBuffer::~IUniformBuffer()
-{
-}
-
-void IUniformBuffer::SetBindingPoint(int bindingPoint)
-{
-    m_bindingPoint = bindingPoint;
-    Bind();
-    glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, GetGLId());
-    UnBind();
-}
-
-GLuint IUniformBuffer::GetBindingPoint() const { return m_bindingPoint; }
-
-
 
 void GLUniforms::RemoveBuffer(IUniformBuffer *buffer)
 {
@@ -158,14 +146,6 @@ void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
 GL::ViewProjMode GLUniforms::GetViewProjMode() const
 {
     return m_viewProjMode;
-}
-
-GLUniforms::~GLUniforms()
-{
-    while (!m_uniformBuffers.IsEmpty())
-    {
-        RemoveBuffer(m_uniformBuffers.Begin()->second);
-    }
 }
 
 GLUniforms *GLUniforms::GetActive()

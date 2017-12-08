@@ -55,11 +55,13 @@ Application::~Application()
     delete m_time;
     delete m_paths;
     delete m_behaviourManager;
+    delete m_importFilesManager;
 
     for (Window *w : m_windows) { delete w; }
     for (Window *w : p_windowsToBeDestroyed) { delete w; }
 
     TTF_Quit();
+    SDL_Quit();
 }
 
 Window *Application::CreateWindow()

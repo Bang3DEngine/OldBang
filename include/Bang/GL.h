@@ -530,6 +530,7 @@ public:
     GLUniforms *GetGLUniforms() const;
 
     GL();
+    virtual ~GL();
 
 private:
     // Context

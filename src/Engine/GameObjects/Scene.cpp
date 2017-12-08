@@ -21,7 +21,7 @@ Scene::Scene() : GameObject("Scene")
 
 Scene::~Scene()
 {
-    GameObject::Destroy(GetGizmos()->GetGameObject());
+    delete m_gizmos;
 }
 
 void Scene::Update()

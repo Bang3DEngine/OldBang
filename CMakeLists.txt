@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
 # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Wl,-O2")
 set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
@@ -192,6 +192,7 @@ ${ENGINE_SRC_DIR}/General/Time.cpp
 ${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
+${ENGINE_SRC_DIR}/Graphics/Buffers/IUniformBuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/AspectRatioMode.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/Font.cpp

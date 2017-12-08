@@ -17,6 +17,7 @@ UniformBuffer<BufferStruct>::UniformBuffer()
 template<class BufferStruct>
 UniformBuffer<BufferStruct>::~UniformBuffer()
 {
+    GL::DeleteBuffers(1, &m_idGL);
 }
 
 template<class BufferStruct>

@@ -6,18 +6,25 @@
 #include "Bang/Object.h"
 #include "Bang/Random.h"
 #include "Bang/Window.h"
+#include "Bang/MeshFactory.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 Resources::Resources()
 {
+    m_meshFactory = new MeshFactory();
+    m_materialFactory = new MaterialFactory();
     m_shaderProgramFactory = new ShaderProgramFactory();
 }
 
 Resources::~Resources()
 {
+    ASSERT_MSG(m_meshFactory == nullptr,          "Call Destroy()");
+    ASSERT_MSG(m_materialFactory == nullptr,      "Call Destroy()");
+    ASSERT_MSG(m_shaderProgramFactory == nullptr, "Call Destroy()");
 }
 
 Array<IResource*> Resources::GetAllResources()
@@ -64,10 +71,9 @@ void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
     ASSERT(resEntry.resource != nullptr);
     ASSERT(resEntry.usageCount == 0);
 
-    map.Remove(it);
-    ASSERT(!map.ContainsKey(guid));
-
     Destroy(resEntry.resource);
+
+    map.Remove(it);
 }
 
 bool Resources::Contains(const TypeId &resTypeId, const GUID &guid)
@@ -101,10 +107,15 @@ void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resour
     {
         Resources::Add(resTypeId, resource);
     }
-    ++rs->m_GUIDCache.Get(resTypeId)[guid].usageCount;
+    ++rs->m_GUIDCache.Get(resTypeId).Get(guid).usageCount;
+
+    // Debug_Log("RegisterResourceUsage " << resTypeId << ", to " <<
+              // resource << ", " << guid << " to " << rs->m_GUIDCache.Get(resTypeId).Get(guid).usageCount);
+    // Debug_Log(rs->m_GUIDCache);
 }
 
-void Resources::UnRegisterResourceUsage(const TypeId &resTypeId, IResource *resource)
+void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
+                                        IResource *resource)
 {
     const GUID &guid = resource->GetGUID();
     ASSERT(!guid.IsEmpty());
@@ -117,12 +128,18 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId, IResource *reso
         uint *resourcesUsage = &(rs->m_GUIDCache.Get(resTypeId)
                                  .Get(guid).usageCount);
         ASSERT(*resourcesUsage >= 1);
-
         --(*resourcesUsage);
 
-        if (*resourcesUsage == 0 && !resource->m_isPersistentResource)
+        // Debug_Log("UnRegisterResourceUsage " << resource << " " << resTypeId << " " <<
+                  // guid << " to " << *resourcesUsage);
+        // Debug_Log(rs->m_GUIDCache);
+        if (*resourcesUsage == 0)//&& !resource->m_isPersistentResource)
         {
+            // Debug_Log("Remove begin " << resTypeId << " " << guid);
+            // Debug_Log(rs->m_GUIDCache);
             Resources::Remove(resTypeId, guid);
+            // Debug_Log("Remove end " << resTypeId << " " << guid);
+            // Debug_Log(rs->m_GUIDCache);
         }
     }
 }
@@ -147,6 +164,13 @@ IResource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
     if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { return nullptr; }
     if (!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid)) { return nullptr; }
     return rs->m_GUIDCache.Get(resTypeId).Get(guid).resource;
+}
+
+void Resources::Destroy()
+{
+    delete m_meshFactory;          m_meshFactory          = nullptr;
+    delete m_materialFactory;      m_materialFactory      = nullptr;
+    delete m_shaderProgramFactory; m_shaderProgramFactory = nullptr;
 }
 
 Resources *Resources::GetActive()

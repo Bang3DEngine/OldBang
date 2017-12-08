@@ -44,6 +44,12 @@ RH<Material> MaterialFactory::GetRenderGBufferToScreen()
 
 RH<Material> MaterialFactory::Load(const String &enginePath)
 {
-    return Resources::Clone<Material>(
-                     Resources::Load<Material>(EPATH(enginePath)) );
+    MaterialFactory *mf = MaterialFactory::GetActive();
+    mf->m_cache.Add(enginePath, Resources::Load<Material>(EPATH(enginePath)));
+    return Resources::Clone<Material>( mf->m_cache.Get(enginePath) );
+}
+
+MaterialFactory *MaterialFactory::GetActive()
+{
+    return Resources::GetActive()->m_materialFactory;
 }

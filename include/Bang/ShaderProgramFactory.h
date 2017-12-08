@@ -9,15 +9,17 @@ NAMESPACE_BANG_BEGIN
 class ShaderProgramFactory
 {
 public:
-    ShaderProgramFactory();
-
     static ShaderProgram* GetDefault();
     static ShaderProgram* Get(const Path &vShaderPath, const Path &fShaderPath);
 
 private:
     Map< std::pair<Path, Path>, RH<ShaderProgram> > m_cache;
 
+    ShaderProgramFactory() = default;
+
     static ShaderProgramFactory* GetActive();
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

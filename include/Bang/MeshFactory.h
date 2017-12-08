@@ -20,10 +20,16 @@ public:
     static GameObject* GetConeGameObject();
 
 private:
+    Map<String, RH<Mesh>> m_cache;
+
     MeshFactory() = default;
     static RH<Mesh> GetMesh(const String &enginePath);
 
     static GameObject* CreatePrimitiveGameObject(Mesh* m, const String &name);
+
+    static MeshFactory* GetActive();
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

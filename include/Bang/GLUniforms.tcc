@@ -32,11 +32,7 @@ template <class T>
 void GLUniforms::_RemoveBuffer()
 {
     IUniformBuffer *uniformBuffer = GetBuffer<T>();
-    if (uniformBuffer)
-    {
-        delete uniformBuffer;
-        m_uniformBuffers.Remove<T>();
-    }
+    if (uniformBuffer) { RemoveBuffer(uniformBuffer); }
 }
 
 

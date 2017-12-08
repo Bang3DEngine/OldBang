@@ -2,10 +2,6 @@
 
 USING_NAMESPACE_BANG
 
-ShaderProgramFactory::ShaderProgramFactory()
-{
-}
-
 ShaderProgram *ShaderProgramFactory::GetDefault()
 {
     return Get(EPATH("Shaders/G_Default.vert"),

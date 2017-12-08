@@ -1134,6 +1134,11 @@ GL::GL()
     m_glUniforms = new GLUniforms();
 }
 
+GL::~GL()
+{
+    delete m_glUniforms;
+}
+
 void GL::SetActive(GL *gl)
 {
     GL::s_activeGL = gl;

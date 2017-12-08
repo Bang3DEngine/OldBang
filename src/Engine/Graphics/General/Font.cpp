@@ -288,5 +288,5 @@ TTF_Font *Font::GetTTFFont(int fontSize) const
 void Font::Free()
 {
     m_charUvsInDistanceFieldAtlas.Clear();
-    for (auto it : m_openFonts) { TTF_CloseFont( it.second ); }
+    for (const auto& it : m_openFonts) { TTF_CloseFont( it.second ); }
 }

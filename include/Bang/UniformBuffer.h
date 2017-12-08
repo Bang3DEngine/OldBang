@@ -1,25 +1,9 @@
 #ifndef UNIFORMBUFFER_H
 #define UNIFORMBUFFER_H
 
-#include "Bang/GLObject.h"
+#include "Bang/IUniformBuffer.h"
 
 NAMESPACE_BANG_BEGIN
-
-class IUniformBuffer : public GLObject
-{
-public:
-    virtual ~IUniformBuffer();
-
-    void SetBindingPoint(int bindingPoint);
-    GLuint GetBindingPoint() const;
-
-protected:
-    IUniformBuffer();
-
-private:
-    GLuint m_bindingPoint;
-};
-
 
 template<class BufferStruct>
 class UniformBuffer : public IUniformBuffer

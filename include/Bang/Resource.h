@@ -18,8 +18,6 @@ class IResource : public virtual IGUIDable
     IRESOURCE(IResource)
 
 protected:
-    bool m_isPersistentResource = true;
-
     IResource();
     virtual ~IResource();
 

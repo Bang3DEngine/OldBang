@@ -7,6 +7,8 @@ NAMESPACE_BANG_BEGIN
 template <class IResourceClass>
 RH<IResourceClass> Resources::Load(const Path &filepath)
 {
+    // Debug_Log("Load begin " << filepath);
+    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     if (!filepath.IsFile())
     {
         Debug_Error("Trying to load file '" << filepath <<
@@ -25,6 +27,8 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
         res->ImportXMLFromFile(importFilepath);
     }
 
+    // Debug_Log("Load end " << filepath);
+    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     return RH<IResourceClass>(res);
 }
 
@@ -123,8 +127,16 @@ IResourceClass* Resources::GetCached(const GUID &guid)
 template<class IResourceClass>
 RH<IResourceClass> Resources::Clone(const RH<IResourceClass> &src)
 {
-    RH<IResourceClass> rh = Resources::Create<IResourceClass>();
-    src.Get()->CloneInto( rh.Get() );
+    // Debug_Log("Clone begin " << src.Get());
+    // Debug_Log(Resources::GetActive()->m_GUIDCache);
+    RH<IResourceClass> rh;
+    if (src.Get())
+    {
+        rh = Resources::Create<IResourceClass>();
+        src.Get()->CloneInto( rh.Get() );
+    }
+    // Debug_Log("Clone end to " << rh.Get());
+    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     return rh;
 }
 

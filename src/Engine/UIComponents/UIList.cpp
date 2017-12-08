@@ -31,10 +31,8 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (SomeChildHasFocus())
+    if ( UICanvas::IsMouseOver(GetGameObject(), true) )
     {
-        HandleShortcuts();
-
         // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
         if (UICanvas::IsMouseOver(this, true))
@@ -62,6 +60,11 @@ void UIList::OnUpdate()
                 Callback(p_itemUnderMouse, Action::MouseOver);
             }
         }
+    }
+
+    if (SomeChildHasFocus())
+    {
+        HandleShortcuts();
 
         // Clicked
         if (Input::GetKeyDownRepeat(Key::Right) ||
@@ -90,7 +93,7 @@ void UIList::OnUpdate()
             }
         }
     }
-    else
+    else if (!p_itemUnderMouse)
     {
         SetSelection(nullptr);
         if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
@@ -219,15 +222,24 @@ void UIList::SetSelection(int index)
         if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
     }
 
-    if (m_selectionIndex != index && index >= 0 && index < GetNumItems())
+    if (GetSelectedIndex() != index && index >= 0 && index < GetNumItems())
     {
         m_selectionIndex = index;
         GOItem *selectedItem = GetSelectedItem();
         if (selectedItem)
         {
             ScrollTo(selectedItem);
+
+            IFocusable *itemFocusable = selectedItem->
+                                        GetComponentInChildren<IFocusable>();
+            UICanvas::GetActive()->SetFocus(itemFocusable);
+
             Callback(selectedItem, Action::SelectionIn);
         }
+    }
+    else if (index == -1)
+    {
+        m_selectionIndex = -1;
     }
 }
 
