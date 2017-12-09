@@ -85,33 +85,26 @@ void GameObject::AfterChildrenRender(RenderPass renderPass)
     PropagateToComponents(&Component::OnAfterChildrenRender, renderPass);
 }
 
-void GameObject::ChildAdded(GameObject *addedChild)
+void GameObject::ChildAdded(GameObject *addedChild, GameObject *parent)
 {
     EventEmitter<IChildrenListener>::
-          PropagateToListeners(&IChildrenListener::OnChildAdded, addedChild);
+          PropagateToListeners(&IChildrenListener::OnChildAdded,
+                               addedChild, parent);
     Propagate(&IChildrenListener::OnChildAdded,
-              GetComponents<IChildrenListener>(), addedChild);
-    Propagate(&IChildrenListener::OnChildAdded, GetParent(), addedChild);
+              GetComponents<IChildrenListener>(), addedChild, parent);
+    Propagate(&IChildrenListener::OnChildAdded, GetParent(),
+              addedChild, parent);
 }
 
-void GameObject::ChildRemoved(GameObject *removedChild)
+void GameObject::ChildRemoved(GameObject *removedChild, GameObject *parent)
 {
     EventEmitter<IChildrenListener>::
-          PropagateToListeners(&IChildrenListener::OnChildRemoved, removedChild);
+          PropagateToListeners(&IChildrenListener::OnChildRemoved,
+                               removedChild, parent);
     Propagate(&IChildrenListener::OnChildRemoved,
-                GetComponents<IChildrenListener>(), removedChild);
-    Propagate(&IChildrenListener::OnChildRemoved, GetParent(), removedChild);
-}
-
-void GameObject::ParentChanged(GameObject *oldParent, GameObject *newParent)
-{
-    EventEmitter<IChildrenListener>::
-          PropagateToListeners(&IChildrenListener::OnParentChanged,
-                               oldParent, newParent);
-    Propagate(&IChildrenListener::OnParentChanged,
-                GetComponents<IChildrenListener>(), oldParent, newParent);
-    Propagate(&IChildrenListener::OnParentChanged,
-                GetChildren(), oldParent, newParent);
+                GetComponents<IChildrenListener>(), removedChild, parent);
+    Propagate(&IChildrenListener::OnChildRemoved, GetParent(),
+              removedChild, parent);
 }
 
 void GameObject::RenderGizmos()
@@ -336,9 +329,9 @@ const List<GameObject *> &GameObject::GetChildren() const
     return m_children;
 }
 
-GameObject *GameObject::GetChild(int index) const
+GameObject *GameObject::GetChild(uint index) const
 {
-    if (index < 0 || index >= GetChildren().Size()) { return nullptr; }
+    if (index >= GetChildren().Size()) { return nullptr; }
 
     auto it = GetChildren().Begin(); std::advance(it, index);
     return *it;
@@ -381,7 +374,7 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     if (GetParent())
     {
         GetParent()->RemoveChild(this);
-        GetParent()->ChildRemoved(this);
+        GetParent()->ChildRemoved(this, oldParent);
     }
 
     p_parent = newParent;
@@ -389,10 +382,8 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     {
         int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
         GetParent()->AddChild(this, index);
-        GetParent()->ChildAdded(this);
+        GetParent()->ChildAdded(this, newParent);
     }
-
-    ParentChanged(oldParent, newParent);
 }
 
 GameObject *GameObject::GetParent() const { return p_parent; }

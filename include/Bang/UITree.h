@@ -1,5 +1,4 @@
 #ifndef UITREE_H
-#define UITREE_H
 
 #include "Bang/Map.h"
 #include "Bang/List.h"

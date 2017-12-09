@@ -38,11 +38,10 @@ void UICanvas::OnUpdate()
     m_uiLayoutManager->RebuildLayout( GetGameObject() );
 
     // Focus
-
     IFocusable *focusMouseOver = nullptr;
 
     Array<IFocusable*> focusables;
-    GetSortedFocusCandidates(GetGameObject(), &focusables);
+    GetSortedFocusCandidatesByOcclusionOrder(GetGameObject(), &focusables);
     for (IFocusable *focusable : focusables)
     {
         Component *focusableComp = Cast<Component*>(focusable);
@@ -271,14 +270,44 @@ UICanvas *UICanvas::GetActive()
     return UICanvas::p_activeCanvas;
 }
 
-void UICanvas::GetSortedFocusCandidates(const GameObject *go,
-                                        Array<IFocusable*> *sortedCandidates) const
+struct GameObjectZComparer
 {
-    for (GameObject *child : go->GetChildren())
+    inline bool operator() (const IFocusable * const& lhs,
+                            const IFocusable * const& rhs)
+    {
+        const GameObject *glhs = Cast<const GameObject*>(lhs);
+        const GameObject *grhs = Cast<const GameObject*>(rhs);
+        if (!glhs) { glhs = Cast<const Component*>(lhs)->GetGameObject(); }
+        if (!grhs) { grhs = Cast<const Component*>(rhs)->GetGameObject(); }
+        Transform *lt = glhs->GetTransform();
+        Transform *rt = grhs->GetTransform();
+        if (!lt) { return false; }
+        if (!rt) { return true; }
+        return lt->GetPosition().z < rt->GetPosition().z;
+    }
+};
+
+
+void UICanvas::GetSortedFocusCandidatesByOcclusionOrder(
+                                    const GameObject *go,
+                                    Array<IFocusable*> *sortedCandidates) const
+{
+    GetSortedFocusCandidatesByPaintOrder(go, sortedCandidates);
+    Containers::StableSort(sortedCandidates->Begin(), sortedCandidates->End(),
+                           GameObjectZComparer());
+}
+
+void UICanvas::GetSortedFocusCandidatesByPaintOrder(
+                                    const GameObject *go,
+                                    Array<IFocusable*> *sortedCandidates) const
+{
+    List<GameObject*> children = go->GetChildren();
+    Containers::Reverse(children.Begin(), children.End());
+    for (GameObject *child : children)
     {
         if (child->IsEnabled() && !child->IsWaitingToBeDestroyed())
         {
-            GetSortedFocusCandidates(child, sortedCandidates);
+            GetSortedFocusCandidatesByPaintOrder(child, sortedCandidates);
 
             IFocusable *focusable = child->GetComponent<IFocusable>();
             if (focusable)

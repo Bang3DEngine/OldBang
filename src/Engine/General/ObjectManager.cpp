@@ -78,9 +78,6 @@ void ObjectManager::StartObjects()
         {
             ASSERT(!objectToBeStarted->IsStarted());
             objectToBeStarted->Start();
-            om->EventEmitter<ICreateListener>::
-                    PropagateToListeners(&ICreateListener::OnCreated,
-                                         objectToBeStarted);
         }
     }
 }

@@ -113,10 +113,8 @@ public:
     }
 };
 
-Scene *GameObjectFactory::CreateDefaultScene()
+Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
 {
-    Scene *scene = GameObjectFactory::CreateScene();
-
     GameObject *cube = GameObjectFactory::CreateGameObjectNamed("Cube");
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
     cube->AddComponent<Rotator>();

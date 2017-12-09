@@ -28,6 +28,7 @@ public:
     void OnUpdate() override;
 
     void AddItem(GOItem *newItem);
+    void AddItem(GOItem *newItem, int index);
     void RemoveItem(GOItem *item);
     void ClearSelection();
     void Clear();

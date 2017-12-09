@@ -27,6 +27,8 @@ public:
     template < template<class> class Container>
     explicit Array(const Container<T> &container);
 
+    void Insert(const T& x, int index);
+
     void PushBack(const T& x);
 
     template<class IteratorClass>

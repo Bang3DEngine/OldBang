@@ -32,6 +32,33 @@ public:
         return Containers::Find(cont, x) != cont.End();
     }
 
+    template <class Iterator>
+    static void Sort(Iterator begin, Iterator end)
+    {
+        std::sort(begin, end);
+    }
+    template <class Iterator, class Comparer>
+    static void Sort(Iterator begin, Iterator end, Comparer comparer)
+    {
+        std::sort(begin, end, comparer);
+    }
+    template <class Iterator>
+    static void StableSort(Iterator begin, Iterator end)
+    {
+        std::stable_sort(begin, end);
+    }
+    template <class Iterator, class Comparer>
+    static void StableSort(Iterator begin, Iterator end, Comparer comparer)
+    {
+        std::stable_sort(begin, end, comparer);
+    }
+
+    template <class Iterator>
+    static void Reverse(Iterator begin, Iterator end)
+    {
+        std::reverse(begin, end);
+    }
+
     template <class Iterator, class T>
     static uint Count(Iterator begin, Iterator end, const T& x)
     {

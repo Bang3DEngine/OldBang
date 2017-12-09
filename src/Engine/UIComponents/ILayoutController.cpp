@@ -23,18 +23,14 @@ void ILayoutController::_ApplyLayout(Axis axis)
     }
 }
 
-void ILayoutController::OnChildAdded(GameObject *addedChild)
+void ILayoutController::OnChildAdded(GameObject *addedChild,
+                                     GameObject *parent)
 {
     Invalidate();
 }
 
-void ILayoutController::OnChildRemoved(GameObject *removedChild)
-{
-    Invalidate();
-}
-
-void ILayoutController::OnParentChanged(GameObject *oldParent,
-                                        GameObject *newParent)
+void ILayoutController::OnChildRemoved(GameObject *removedChild,
+                                       GameObject *parent)
 {
     Invalidate();
 }

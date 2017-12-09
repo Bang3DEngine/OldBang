@@ -22,6 +22,19 @@ template<class T>
 Array<T>::Array(std::initializer_list<T> l) : m_vector(l) {}
 
 template<class T>
+void Array<T>::Insert(const T &x, int index)
+{
+    ASSERT(index >= 0 && index <= Size());
+    Resize( Size() + 1 );
+
+    for (int i = Size()-1; i > index; --i)
+    {
+        this->At(i) = this->At(i-1);
+    }
+    this->At(index) = x;
+}
+
+template<class T>
 template <class OtherIterator>
 Array<T>::Array(OtherIterator begin, OtherIterator end)
     : m_vector(begin, end) {}

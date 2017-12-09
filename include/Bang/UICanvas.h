@@ -64,8 +64,13 @@ private:
     IFocusable* GetCurrentFocus();
     IFocusable* GetCurrentFocusMouseOver();
 
-    void GetSortedFocusCandidates(const GameObject *go,
-                                  Array<IFocusable *> *sortedCandidates) const;
+    void GetSortedFocusCandidatesByOcclusionOrder(
+                                  const GameObject *go,
+                                  Array<IFocusable*> *sortedCandidates) const;
+
+    void GetSortedFocusCandidatesByPaintOrder(
+                                  const GameObject *go,
+                                  Array<IFocusable*> *sortedCandidates) const;
 };
 
 NAMESPACE_BANG_END

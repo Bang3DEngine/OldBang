@@ -39,7 +39,7 @@ public:
 
     static Scene* CreateScene(bool addTransform = true);
     static Scene* CreateUIScene();
-    static Scene* CreateDefaultScene();
+    static Scene* CreateDefaultSceneInto(Scene *scene);
 
     static UICanvas*        CreateUICanvas();
     static UICanvas*        CreateUICanvasInto(GameObject *go);

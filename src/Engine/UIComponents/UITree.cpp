@@ -114,7 +114,11 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
 
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem);
         m_itemToTree.Add(newItem, childTree);
-        GetUIList()->AddItem(itemContainer);
+
+        UITreeItemContainer *parentItemContainer = GetItemContainer(parentItem);
+        int parentItemIndex = GetUIList()->GetItems().IndexOf(parentItemContainer);
+        int newItemIndex = (parentItemIndex == -1) ? 0 : (parentItemIndex + 1);
+        GetUIList()->AddItem(itemContainer, newItemIndex);
         newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
 
         // Update collapsabilities

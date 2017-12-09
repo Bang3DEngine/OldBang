@@ -63,7 +63,7 @@ public:
     void SetParent(GameObject *newParent, int _index = -1);
     void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
 
-    GameObject* GetChild(int index) const;
+    GameObject* GetChild(uint index) const;
     GameObject* GetChild(const GUID &guid) const;
     GameObject* GetChild(const String &name) const;
     const List<GameObject*>& GetChildren() const;
@@ -188,9 +188,8 @@ protected:
     virtual void BeforeChildrenRender(RenderPass renderPass);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
-    virtual void ChildAdded(GameObject *addedChild);
-    virtual void ChildRemoved(GameObject *removedChild);
-    virtual void ParentChanged(GameObject *oldParent, GameObject *newParent);
+    virtual void ChildAdded(GameObject *addedChild, GameObject *parent);
+    virtual void ChildRemoved(GameObject *removedChild, GameObject *parent);
 
     // IEnabledListener
     virtual void OnEnabled() override;

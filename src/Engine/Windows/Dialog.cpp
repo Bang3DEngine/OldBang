@@ -112,7 +112,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UIButton *goButton = GameObjectFactory::CreateUIButton();
     goButton->GetText()->SetContent("Go");
     goButton->GetButton()->AddClickedCallback(
-        [inputPathText, fileList](IFocusable *_)
+        [&inputPathText, &fileList](IFocusable *_)
         {
             Path inputPath(inputPathText->GetText()->GetContent());
             if (inputPath.IsFile()) { inputPath = inputPath.GetDirectory(); }
@@ -126,7 +126,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     UIButton *openButton = GameObjectFactory::CreateUIButton();
     openButton->GetText()->SetContent("Open");
     openButton->GetButton()->AddClickedCallback(
-        [fileList](IFocusable *_)
+        [&fileList](IFocusable *_)
         {
             Path path = fileList->GetCurrentPath();
             FileAcceptedCallback(path);

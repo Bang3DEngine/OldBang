@@ -103,10 +103,16 @@ void UIList::OnUpdate()
 
 void UIList::AddItem(GOItem *newItem)
 {
+    AddItem(newItem, GetNumItems());
+}
+
+void UIList::AddItem(GOItem *newItem, int index)
+{
+    ASSERT(index >= 0 && index <= GetNumItems());
+
     bool hadSelectedGameObject = GetSelectedItem();
 
-    p_items.PushBack(newItem);
-
+    p_items.Insert(newItem, index);
     List<IFocusable*> newItemFocusables =
                             newItem->GetComponentsInChildren<IFocusable>(true);
     for (IFocusable* newItemFocusable : newItemFocusables)
@@ -115,9 +121,10 @@ void UIList::AddItem(GOItem *newItem)
     }
 
     newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
-    newItem->SetParent(GetContainer());
+    newItem->SetParent(GetContainer(), index);
 
-    if (!hadSelectedGameObject) { SetSelection(0); }
+    if (index <= m_selectionIndex) { ++m_selectionIndex; }
+    if (!hadSelectedGameObject) { SetSelection(index); }
 }
 
 void UIList::RemoveItem(GOItem *item)

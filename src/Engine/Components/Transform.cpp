@@ -400,11 +400,13 @@ void Transform::OnTransformChanged()
 {
     IInvalidatable<Transform>::Invalidate();
 
+    if (!GetGameObject()) { return; }
+
     ITransformListener::SetReceiveEvents(false);
     EventEmitter<ITransformListener>::
        PropagateToListeners(&ITransformListener::OnTransformChanged);
     GetGameObject()->Propagate(&ITransformListener::OnTransformChanged,
-                          GetGameObject()->GetComponents<ITransformListener>());
+                               GetGameObject()->GetComponents<ITransformListener>());
     ITransformListener::SetReceiveEvents(true);
 
     PropagateParentTransformChangedEvent();

@@ -18,9 +18,8 @@ public:
     virtual void OnInvalidated() override;
 
     // IChildrenListener
-    virtual void OnChildAdded(GameObject *addedChild) override;
-    void OnChildRemoved(GameObject *removedChild) override;
-    void OnParentChanged(GameObject *oldParent, GameObject *newParent) override;
+    virtual void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
+    void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
 
     // ITransformListener
     void OnTransformChanged() override;

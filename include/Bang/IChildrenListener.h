@@ -8,10 +8,13 @@ NAMESPACE_BANG_BEGIN
 class IChildrenListener : public virtual IEventListener
 {
 public:
-    virtual void OnChildAdded(GameObject *addedChild)     {};
-    virtual void OnChildRemoved(GameObject *removedChild) {};
-    virtual void OnParentChanged(GameObject *oldParent,
-                                 GameObject *newParent)   {};
+    virtual void OnChildAdded(GameObject *addedChild, GameObject *parent)
+    {
+    };
+
+    virtual void OnChildRemoved(GameObject *removedChild, GameObject *parent)
+    {
+    };
 };
 
 NAMESPACE_BANG_END
