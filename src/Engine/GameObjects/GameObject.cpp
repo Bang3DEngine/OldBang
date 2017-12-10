@@ -187,6 +187,8 @@ void GameObject::OnDisabled()
 
 void GameObject::Destroy(GameObject *gameObject)
 {
+    ASSERT(gameObject);
+
     for (GameObject *child : gameObject->GetChildren())
     {
         GameObject::Destroy(child);

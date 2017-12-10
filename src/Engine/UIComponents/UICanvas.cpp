@@ -82,7 +82,7 @@ void UICanvas::OnUpdate()
 
             while (true)
             {
-                newFocusIndex = (newFocusIndex + (shift ? -1 : 1) + n) % n;
+                newFocusIndex = (newFocusIndex + (shift ? 1 : -1) + n) % n;
                 if (newFocusIndex == indexOfFocus) { break; } // Complete loop
 
                 IFocusable *newFocus = focusables.At(newFocusIndex);

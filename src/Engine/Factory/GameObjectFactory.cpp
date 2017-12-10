@@ -88,6 +88,7 @@ Scene *GameObjectFactory::CreateScene(bool addTransform)
 Scene *GameObjectFactory::CreateUIScene()
 {
     Scene *scene = GameObject::Create<Scene>();
+    scene->AddComponent<Camera>();
     GameObjectFactory::CreateUIGameObjectInto(scene);
     GameObjectFactory::CreateUICanvasInto(scene);
     return scene;

@@ -319,7 +319,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return GetLocalRotation().GetEulerAngles();
+    return GetLocalRotation().GetEulerAngles().ToDegrees();
 }
 
 Vector3 Transform::GetEuler() const

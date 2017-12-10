@@ -29,12 +29,15 @@ public:
     float GetNumber() const;
     UIInputText* GetInputText() const;
 
+    bool HasFocus() const;
+
     // IFocusListener
     virtual void OnFocusTaken(IFocusable *focusable) override;
     virtual void OnFocusLost(IFocusable *focusable) override;
 
 private:
     float m_value = 0.0f;
+    bool m_hasFocus = false;
     UIInputText *p_inputText = nullptr;
 
     void UpdateValueFromText();

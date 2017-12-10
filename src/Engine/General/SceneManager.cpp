@@ -67,7 +67,7 @@ void SceneManager::_LoadScene(Scene *scene)
     _SetActiveScene(scene);
     if (m_activeScene)
     {
-        m_activeScene->SetFirstFoundCameraOrDefaultOne();
+        m_activeScene->SetFirstFoundCamera();
         m_activeScene->InvalidateCanvas();
     }
 }

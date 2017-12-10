@@ -22,7 +22,7 @@ public:
     virtual void OnResize(int newWidth, int newHeight);
 
     void SetCamera(Camera *cam);
-    void SetFirstFoundCameraOrDefaultOne();
+    void SetFirstFoundCamera();
 
     static Scene *GetActiveScene();
     virtual Camera *GetCamera() const;
@@ -38,7 +38,6 @@ public:
     virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
-    GameObject *m_defaultCamera = nullptr;
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
 

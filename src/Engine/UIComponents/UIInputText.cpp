@@ -437,6 +437,9 @@ void UIInputText::OnFocusTaken(IFocusable *focusable)
     IFocusListener::OnFocusTaken(focusable);
     ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
 
+    EventEmitter<IFocusListener>::
+            PropagateToListeners(&IFocusListener::OnFocusTaken, focusable);
+
     Input::PollInputText();
 }
 
@@ -444,6 +447,9 @@ void UIInputText::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
     ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
+
+    EventEmitter<IFocusListener>::
+            PropagateToListeners(&IFocusListener::OnFocusLost, focusable);
 
     UpdateCursorRenderer();
 }

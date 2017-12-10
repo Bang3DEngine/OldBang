@@ -160,7 +160,7 @@ Scene *Dialog::CreateGetFilePathScene(const String &title,
     hlGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible));
     hlGo->SetAsChild(openButton->GetGameObject());
 
-    scene->SetFirstFoundCameraOrDefaultOne();
+    scene->SetFirstFoundCamera();
 
     return scene;
 }

@@ -21,6 +21,7 @@ UIInputNumber::~UIInputNumber()
 void UIInputNumber::OnStart()
 {
     UIInputText *inputText = GetGameObject()->GetComponent<UIInputText>();
+    inputText->EventEmitter<IFocusListener>::RegisterListener(this);
     inputText->EventEmitter<IValueChangedListener>::RegisterListener(this);
 }
 
@@ -28,7 +29,7 @@ void UIInputNumber::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::HasFocus(this))
+    if (HasFocus())
     {
         if (Input::GetKeyDown(Key::Enter)) { UICanvas::ClearFocus(); }
     }
@@ -49,12 +50,14 @@ float UIInputNumber::GetNumber() const
 void UIInputNumber::OnFocusTaken(IFocusable *focusable)
 {
     IFocusListener::OnFocusTaken(focusable);
+    m_hasFocus = true;
 }
 
 void UIInputNumber::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
     SetNumber( GetNumber() );
+    m_hasFocus = false;
 }
 
 void UIInputNumber::UpdateValueFromText()
@@ -69,6 +72,7 @@ void UIInputNumber::UpdateValueFromText()
 }
 
 UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
+bool UIInputNumber::HasFocus() const { return m_hasFocus; }
 
 void UIInputNumber::OnValueChanged(Object*)
 {
