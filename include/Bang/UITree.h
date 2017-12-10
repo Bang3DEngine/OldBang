@@ -1,4 +1,5 @@
 #ifndef UITREE_H
+#define UITREE_H
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
@@ -21,7 +22,7 @@ class UITree : public Component,
 
 public:
 
-    void AddItem(GOItem *newItem, GOItem *parentItem);
+    void AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent = 0);
     void RemoveItem(GOItem *itemToRemove);
     GOItem* GetSelectedItem() const;
     void Clear();
@@ -38,7 +39,7 @@ public:
     void OnUpdate() override;
 
     // IFocusListener
-    void OnFocusTaken(IFocusable *focusable) override;
+    void OnClicked(IFocusable *focusable) override;
 
     // IDestroyListener
     void OnDestroyed(Object *object) override;
@@ -50,8 +51,8 @@ protected:
     static UITree* CreateInto(GameObject *go);
 
 private:
-    UIList *p_uiList = nullptr;
     Tree<GOItem*> m_tree;
+    UIList *p_uiList = nullptr;
     Map<GOItem*, Tree<GOItem*>*> m_itemToTree;
     UIList::SelectionCallback m_selectionCallback;
 
@@ -89,7 +90,7 @@ private:
 
     UIButton *p_collapseButton = nullptr;
     GOItem *p_containedGameObject = nullptr;
-    GameObject *p_spacer = nullptr;
+    GameObject *p_indentSpacer = nullptr;
 };
 
 NAMESPACE_BANG_END

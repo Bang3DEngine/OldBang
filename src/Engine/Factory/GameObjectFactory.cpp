@@ -367,6 +367,41 @@ GameObject *GameObjectFactory::CreateUIVSpacer(LayoutSizeType sizeType,
     return spacerGo;
 }
 
+String GameObjectFactory::GetGameObjectDuplicateName(const GameObject *go)
+{
+    String originalName = go->GetName();
+
+    String duplicateNameNumber = "";
+    bool isDuplicatedName = false;
+    for (int i = originalName.Size()-1; i >= 0; --i)
+    {
+        char c = originalName[i];
+        if (String::IsNumber(c))
+        {
+            isDuplicatedName = true;
+            duplicateNameNumber.Prepend( String(c) );
+        }
+        else
+        {
+            isDuplicatedName = (c == '_');
+            break;
+        }
+    }
+
+
+    String duplicateName;
+    if (isDuplicatedName)
+    {
+        int duplicateNumber = String::ToInt(duplicateNameNumber);
+        duplicateName = originalName.SubString(0, originalName.Size() -
+                                                  duplicateNameNumber.Size() - 2);
+        duplicateName += "_" + String(duplicateNumber+1);
+    }
+    else { duplicateName = (originalName + "_1"); }
+
+    return duplicateName;
+}
+
 GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
                                                  const Vector2i &space,
                                                  float linePercent)

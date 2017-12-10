@@ -20,17 +20,22 @@ Tree<T>::~Tree()
 template<class T>
 Tree<T>* Tree<T>::AddChild()
 {
-    Tree<T> *childTree = new Tree<T>();
-    childTree->SetParent(this);
-    return childTree;
+    return AddChild(T(), GetChildren().Size());
 }
 
 template<class T>
 Tree<T>* Tree<T>::AddChild(const T &data)
 {
-    Tree<T> *child = AddChild();
-    child->SetData(data);
-    return child;
+    return AddChild(data, GetChildren().Size());
+}
+
+template<class T>
+Tree<T>* Tree<T>::AddChild(const T &data, uint index)
+{
+    Tree<T> *childTree = new Tree<T>();
+    childTree->SetParent(this, index);
+    childTree->SetData(data);
+    return childTree;
 }
 
 template<class T>
@@ -39,8 +44,16 @@ void Tree<T>::SetData(const T &data)
     m_data = data;
 }
 
+
 template<class T>
 void Tree<T>::SetParent(Tree<T> *parentTree)
+{
+    if (parentTree) { SetParent(parentTree, parentTree->GetChildren().Size()); }
+    else { SetParent(nullptr, -1); }
+}
+
+template<class T>
+void Tree<T>::SetParent(Tree<T> *parentTree, uint index)
 {
     ENSURE (GetParent() != parentTree);
 
@@ -52,7 +65,7 @@ void Tree<T>::SetParent(Tree<T> *parentTree)
     p_parent = parentTree;
     if (GetParent())
     {
-        GetParent()->m_subTrees.PushBack(this);
+        GetParent()->m_subTrees.Insert(index, this);
     }
 }
 

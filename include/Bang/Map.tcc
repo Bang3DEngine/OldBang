@@ -183,6 +183,14 @@ Map<Key,Value>::end() { return m_map.end(); }
 
 template<class Key, class Value>
 typename Map<Key,Value>::Const_Iterator
+Map<Key,Value>::begin() const { return this->CBegin(); }
+
+template<class Key, class Value>
+typename Map<Key,Value>::Const_Iterator
+Map<Key,Value>::end() const { return this->CEnd(); }
+
+template<class Key, class Value>
+typename Map<Key,Value>::Const_Iterator
 Map<Key,Value>::cbegin() const { return m_map.cbegin(); }
 
 template<class Key, class Value>

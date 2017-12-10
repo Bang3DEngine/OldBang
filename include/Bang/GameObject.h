@@ -13,6 +13,7 @@
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/INameListener.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
@@ -35,6 +36,7 @@ FORWARD class RectTransform;
 class GameObject : public Object,
                    public IToString,
                    public IChildrenListener,
+                   public EventEmitter<INameListener>,
                    public EventEmitter<IChildrenListener>
 {
     GAMEOBJECT(GameObject)

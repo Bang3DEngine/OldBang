@@ -58,6 +58,8 @@ public:
     // To allow range-based for loops
     Iterator begin();
     Iterator end();
+    Const_Iterator begin() const;
+    Const_Iterator end() const;
     Const_Iterator cbegin() const;
     Const_Iterator cend() const;
 

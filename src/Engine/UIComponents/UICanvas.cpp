@@ -55,6 +55,7 @@ void UICanvas::OnUpdate()
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     _SetFocus(focusable);
+                    focusable->PropagateOnClickedToListeners();
                 }
 
                 break; // Finished searching!
@@ -62,10 +63,9 @@ void UICanvas::OnUpdate()
         }
     }
 
-    if (!GetCurrentFocusMouseOver() &&
-        Input::GetMouseButtonDown(MouseButton::Left))
+    if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
     {
-        _SetFocus(nullptr); // Clicked onto nothing, clear focus
+        _SetFocus(nullptr);
     }
     _SetFocusMouseOver(focusMouseOver);
 

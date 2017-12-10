@@ -14,9 +14,11 @@ public:
 
     Tree<T>* AddChild();
     Tree<T>* AddChild(const T& data);
+    Tree<T>* AddChild(const T& data, uint index);
 
     void SetData(const T &data);
     void SetParent(Tree<T> *parentTree);
+    void SetParent(Tree<T> *parentTree, uint index);
 
     void Clear();
 

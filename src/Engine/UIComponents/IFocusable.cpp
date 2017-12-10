@@ -104,3 +104,9 @@ void IFocusable::PropagateFocusToListeners()
             PropagateToListeners(&IFocusListener::OnFocusLost, this);
     }
 }
+
+void IFocusable::PropagateOnClickedToListeners()
+{
+    EventEmitter<IFocusListener>::
+        PropagateToListeners(&IFocusListener::OnClicked, this);
+}

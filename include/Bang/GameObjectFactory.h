@@ -86,6 +86,8 @@ public:
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
                             int spaceY = 1);
 
+    static String GetGameObjectDuplicateName(const GameObject *go);
+
     GameObjectFactory() = delete;
 
 private:

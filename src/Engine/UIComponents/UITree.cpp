@@ -69,10 +69,13 @@ void UITree::OnUpdate()
     }
 }
 
-void UITree::OnFocusTaken(IFocusable *focusable)
+void UITree::OnClicked(IFocusable *focusable)
 {
-    Component *comp = Cast<Component*>(focusable);
-    UITreeItemContainer *itemContainer = GetItemContainer(comp->GetGameObject());
+    IFocusable *collapseButton = focusable;
+    Component *cCollapseButton = Cast<Component*>(collapseButton);
+    UITreeItemContainer *itemContainer =
+               SCAST<UITreeItemContainer*>(cCollapseButton->GetGameObject()->
+                                           GetParent());
     if (itemContainer)
     {
         SetItemCollapsed(itemContainer->GetContainedItem(),
@@ -101,24 +104,45 @@ List<GOItem*> UITree::GetChildrenItems(GOItem *item)
     return childrenItems;
 }
 
-void UITree::AddItem(GOItem *newItem, GOItem *parentItem)
+void UITree::AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent)
 {
     Tree<GOItem*> *parentTree = GetItemTree(parentItem);
     if (parentTree && !m_itemToTree.ContainsKey(newItem))
     {
-        UITreeItemContainer *itemContainer =
-                                GameObject::Create<UITreeItemContainer>();
-        itemContainer->GetCollapseButton()->GetButton()
-                ->EventEmitter<IFocusListener>::RegisterListener(this);
-        itemContainer->SetContainedItem(newItem);
+        // Create itemContainer and populate
+        auto newItemContainer = GameObject::Create<UITreeItemContainer>();
+        newItemContainer->SetContainedItem(newItem);
 
-        Tree<GOItem*> *childTree = parentTree->AddChild(newItem);
-        m_itemToTree.Add(newItem, childTree);
-
+        // Determine flat index in UIList
         UITreeItemContainer *parentItemContainer = GetItemContainer(parentItem);
         int parentItemIndex = GetUIList()->GetItems().IndexOf(parentItemContainer);
-        int newItemIndex = (parentItemIndex == -1) ? 0 : (parentItemIndex + 1);
-        GetUIList()->AddItem(itemContainer, newItemIndex);
+        int newItemFlatListIndex;
+        if (indexInsideParent > 0)
+        {
+            auto it = parentTree->GetChildren().Begin();
+            std::advance(it, indexInsideParent - 1);
+            GOItem* siblingItem = (*it)->GetData();
+            Tree<GOItem*> *siblingTree = GetItemTree(siblingItem);
+            UITreeItemContainer *siblingItemCont = GetItemContainer(siblingItem);
+
+            newItemFlatListIndex = GetUIList()->GetItems().IndexOf(siblingItemCont);
+            ASSERT(newItemFlatListIndex >= 0);
+            ++newItemFlatListIndex;
+            newItemFlatListIndex += siblingTree->GetChildrenRecursive().Size();
+        }
+        else
+        {
+            newItemFlatListIndex = parentItemIndex + 1;
+        }
+
+        // Add
+        Tree<GOItem*> *childTree = parentTree->AddChild(newItem, indexInsideParent);
+        m_itemToTree.Add(newItem, childTree); // Add to item_tree map
+        GetUIList()->AddItem(newItemContainer, newItemFlatListIndex); // Add to UIList
+
+        // Listen to focus and destroying
+        newItemContainer->GetCollapseButton()->GetButton()
+                ->EventEmitter<IFocusListener>::RegisterListener(this);
         newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
 
         // Update collapsabilities
@@ -309,15 +333,17 @@ UITreeItemContainer::UITreeItemContainer()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     AddComponent<UIHorizontalLayout>();
-    p_spacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Preferred,
+    p_indentSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Preferred,
                                                  Vector2i::Zero);
+    p_indentSpacer->SetName("IndentSpacer");
 
     p_collapseButton = GameObjectFactory::CreateUIButton();
+    p_collapseButton->GetGameObject()->SetName("CollapseButton");
     RH<Texture2D> iconTex = IconManager::GetDownArrowIcon();
     p_collapseButton->SetIcon(iconTex.Get(), Vector2i(8), 0);
     p_collapseButton->GetBackground()->SetVisible(false);    
 
-    SetAsChild(p_spacer);
+    SetAsChild(p_indentSpacer);
     SetAsChild(p_collapseButton->GetGameObject());
 }
 
@@ -339,7 +365,7 @@ void UITreeItemContainer::SetCollapsed(bool collapsed)
     {
         m_collapsed = collapsed;
         RH<Texture2D> iconTex = IsCollapsed() ? IconManager::GetRightArrowIcon() :
-                                                IconManager::GetDownArrowIcon();
+                                                  IconManager::GetDownArrowIcon();
         GetCollapseButton()->SetIconTexture(iconTex.Get());
     }
 }
@@ -357,7 +383,7 @@ GameObject *UITreeItemContainer::GetContainedItem() const
 
 void UITreeItemContainer::SetIndentation(int indentationPx)
 {
-    p_spacer->GetComponent<UILayoutElement>()->SetPreferredWidth(indentationPx);
+    p_indentSpacer->GetComponent<UILayoutElement>()->SetPreferredWidth(indentationPx);
 }
 
 bool UITreeItemContainer::IsCollapsed() const

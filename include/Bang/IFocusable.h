@@ -29,6 +29,7 @@ protected:
     void SetFocus();
     void ClearFocus();
     virtual void PropagateFocusToListeners();
+    virtual void PropagateOnClickedToListeners();
     virtual void PropagateMouseOverToListeners(bool mouseOver);
 
 private:

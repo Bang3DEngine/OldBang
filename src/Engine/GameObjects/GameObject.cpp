@@ -277,7 +277,16 @@ RectTransform *GameObject::GetRectTransform() const
     return GetTransform() ? Cast<RectTransform*>(GetTransform()) : nullptr;
 }
 
-void GameObject::SetName(const String &name) { m_name = name; }
+void GameObject::SetName(const String &name)
+{
+    if (name != GetName())
+    {
+        String oldName = name;
+        m_name = name;
+        EventEmitter<INameListener>::PropagateToListeners(
+                    &INameListener::OnNameChanged, this, oldName, GetName());
+    }
+}
 const String& GameObject::GetName() const { return m_name; }
 
 GameObject *GameObject::Find(const String &name)
