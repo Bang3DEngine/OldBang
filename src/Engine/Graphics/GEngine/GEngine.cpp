@@ -106,11 +106,30 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
         if (!light || !light->IsEnabled(true)) { continue; }
         light->ApplyLight(camera->GetGBuffer(), maskRectNDC);
     }
+
     GL::SetStencilFunc(latestStencilFunc);
 }
 
 void GEngine::Resize(int newWidth, int newHeight)
 {
+}
+
+Camera *GEngine::GetActiveCamera()
+{
+    GEngine *ge = GEngine::GetActive();
+    return ge ? ge->p_activeCamera : nullptr;
+}
+
+GBuffer *GEngine::GetActiveGBuffer()
+{
+    Camera *cam = GEngine::GetActiveCamera();
+    return cam ? cam->GetGBuffer() : nullptr;
+}
+
+SelectionFramebuffer *GEngine::GetActiveSelectionFramebuffer()
+{
+    Camera *cam = GEngine::GetActiveCamera();
+    return cam ? cam->GetSelectionFramebuffer() : nullptr;
 }
 
 void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
@@ -123,8 +142,11 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
     go->Render(RenderPass::Scene_Lighted);
+
+    // Apply lights to stenciled zone
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
     ApplyDeferredLights(go, go, camera);
+    GL::SetStencilFunc(GL::Function::Always);
     GL::SetStencilValue(0);
 
     go->Render(RenderPass::Scene_UnLighted);

@@ -49,8 +49,9 @@ public:
 
     void Resize(int newWidth, int newHeight);
 
-    static GBuffer *GetCurrentGBuffer();
-    static SelectionFramebuffer *GetCurrentSelectionFramebuffer();
+    static Camera *GetActiveCamera();
+    static GBuffer *GetActiveGBuffer();
+    static SelectionFramebuffer *GetActiveSelectionFramebuffer();
 
     GL *GetGL() const;
     TextureUnitManager *GetTextureUnitManager() const;

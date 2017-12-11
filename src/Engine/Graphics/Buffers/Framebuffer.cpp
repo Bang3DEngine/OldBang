@@ -55,13 +55,14 @@ void Framebuffer::SetDrawBuffers(const Array<GL::Attachment> &attachments) const
 {
     ASSERT(GL::IsBound(this));
     GL::DrawBuffers(attachments);
-    m_currentDrawAttachmentIds = attachments;
+    m_currentDrawAttachments = attachments;
 }
 
 void Framebuffer::SetReadBuffer(GL::Attachment attachment) const
 {
     ASSERT(GL::IsBound(this));
     GL::ReadBuffer(attachment);
+    m_currentReadAttachment = attachment;
 }
 
 void Framebuffer::SetAttachmentTexture(Texture2D* tex,
@@ -88,9 +89,14 @@ void Framebuffer::SetAttachmentTexture(Texture2D* tex,
     GL::Bind(GL::BindTarget::Framebuffer, prevId);
 }
 
+GL::Attachment Framebuffer::GetCurrentReadAttachment() const
+{
+    return m_currentReadAttachment;
+}
+
 const Array<GL::Attachment>& Framebuffer::GetCurrentDrawAttachments() const
 {
-    return m_currentDrawAttachmentIds;
+    return m_currentDrawAttachments;
 }
 
 Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
@@ -115,7 +121,6 @@ void Framebuffer::Resize(int width, int height)
     m_width  = Math::Max(width,  1);
     m_height = Math::Max(height, 1);
 
-    // for (const auto &it : m_attachments_To_Texture)
     for (const auto &it : m_attachments_To_Texture)
     {
         Texture2D *t = it.second.Get();
@@ -178,7 +183,10 @@ void Framebuffer::Export(GL::Attachment attachment,
                          const Path &filepath,
                          bool invertY) const
 {
+    ASSERT(GL::IsBound(this));
+
     GL::Flush(); GL::Finish();
+
     Imageb img = GetAttachmentTexture(attachment)->ToImage(invertY);
     img.Export(filepath);
 }
@@ -186,11 +194,17 @@ void Framebuffer::Export(GL::Attachment attachment,
 void Framebuffer::ExportStencil(const Path &filepath,
                                 int stencilValueMultiplier) const
 {
+    ASSERT(GL::IsBound(this));
+
     GL::Flush(); GL::Finish();
+
     Byte *stencilData = new Byte[GetWidth() * GetHeight()];
+    Debug_Peek(GetWidth());
+    Debug_Peek(GetHeight());
     GL::ReadPixels(0, 0, GetWidth(), GetHeight(),
                    GL::ColorComp::StencilIndex,
-                   GL::DataType::UnsignedByte, stencilData);
+                   GL::DataType::UnsignedByte,
+                   stencilData);
 
     Array<Byte> bytes(GetWidth() * GetHeight() * 4);
     for (int i = 0; i < GetWidth() * GetHeight(); ++i)
@@ -210,10 +224,10 @@ void Framebuffer::ExportStencil(const Path &filepath,
 
 void Framebuffer::PushDrawAttachments()
 {
-    m_latestDrawAttachmentIds = m_currentDrawAttachmentIds;
+    m_latestDrawAttachments = m_currentDrawAttachments;
 }
 
 void Framebuffer::PopDrawAttachments()
 {
-    SetDrawBuffers(m_latestDrawAttachmentIds);
+    SetDrawBuffers(m_latestDrawAttachments);
 }

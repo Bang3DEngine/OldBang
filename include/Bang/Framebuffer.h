@@ -28,6 +28,7 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     Vector2 GetSize() const;
+    GL::Attachment GetCurrentReadAttachment() const;
     const Array<GL::Attachment>& GetCurrentDrawAttachments() const;
     Texture2D* GetAttachmentTexture(GL::Attachment attachment) const;
     GL::BindTarget GetGLBindTarget() const override;
@@ -54,8 +55,9 @@ protected:
     void PopDrawAttachments();
 
 private:
-    mutable Array<GL::Attachment> m_currentDrawAttachmentIds;
-    mutable Array<GL::Attachment> m_latestDrawAttachmentIds;
+    mutable Array<GL::Attachment> m_currentDrawAttachments;
+    mutable Array<GL::Attachment> m_latestDrawAttachments;
+    mutable GL::Attachment m_currentReadAttachment;
 };
 
 NAMESPACE_BANG_END

@@ -112,6 +112,7 @@ public:
         UnsignedInt   = GL_UNSIGNED_INT,
         Float         = GL_FLOAT,
         Double        = GL_DOUBLE,
+        UnsignedInt_24_8 = GL_UNSIGNED_INT_24_8,
         Vector2       = GL_FLOAT_VEC2,
         Vector3       = GL_FLOAT_VEC3,
         Vector4       = GL_FLOAT_VEC4,
@@ -349,11 +350,11 @@ public:
 
     static void ReadPixels(int x, int y, int width, int height,
                            GL::ColorComp inputComp,
-                           GL::DataType inputDataType,
+                           GL::DataType outputDataType,
                            void *pixels);
     static void ReadPixels(const Recti &readRect,
                            GL::ColorComp inputComp,
-                           GL::DataType inputDataType,
+                           GL::DataType outputDataType,
                            void *pixels);
 
     static void Finish();

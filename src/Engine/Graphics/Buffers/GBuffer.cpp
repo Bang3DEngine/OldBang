@@ -51,9 +51,12 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 
     PrepareForRender(sp);
 
+    PushDrawAttachments();
     SetColorDrawBuffer();
 
     GEngine::GetActive()->ApplyScreenPass(sp, mask);
+
+    PopDrawAttachments();
 
     GL::SetStencilOp(prevStencilOp);
 }
@@ -94,8 +97,8 @@ void GBuffer::ClearAllBuffersExceptColor()
     GL::ClearStencilBuffer(0);
     ClearDepth(1.0f);
 
-    // SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc});
-    // GL::ClearColorBuffer(Color::Zero);
+    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc});
+    GL::ClearColorBuffer(Color::Zero);
 }
 
 void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)

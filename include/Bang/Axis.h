@@ -5,10 +5,8 @@
 
 NAMESPACE_BANG_BEGIN
 
-enum class Axis
-{
-    Vertical = 0, Horizontal = 1
-};
+enum class Axis { Vertical, Horizontal };
+enum class Axis3D { X, Y, Z };
 
 NAMESPACE_BANG_END
 

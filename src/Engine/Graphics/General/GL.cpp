@@ -430,23 +430,23 @@ void GL::ReadBuffer(GL::Attachment readAttachment)
 }
 
 void GL::ReadPixels(int x, int y, int width, int height,
-                    GL::ColorComp inputComp, GL::DataType inputDataType,
+                    GL::ColorComp inputComp, GL::DataType outputDataType,
                     void *pixels)
 {
     GL_ClearError();
     glReadPixels(x, y, width, height,
                  GLCAST(inputComp),
-                 GLCAST(inputDataType),
+                 GLCAST(outputDataType),
                  pixels);
     GL_CheckError();
 }
 
 void GL::ReadPixels(const Recti &readRect, GL::ColorComp inputComp,
-                    GL::DataType inputDataType, void *pixels)
+                    GL::DataType outputDataType, void *pixels)
 {
     GL::ReadPixels(readRect.GetMin().x, readRect.GetMin().y,
                    readRect.GetWidth(), readRect.GetHeight(),
-                   inputComp, inputDataType, pixels);
+                   inputComp, outputDataType, pixels);
 }
 
 void GL::Finish() { glFinish(); }
