@@ -33,7 +33,7 @@ void UIScrollBar::OnUpdate()
     {
         p_barImg->SetTint(Color::Black);
 
-        Vector2 mouseCoords (Input::GetMouseCoords());
+        Vector2 mouseCoords (Input::GetMousePosition());
         Rect scrollRectPx = GetScrollingRect();
         Rect barRectPx = GetBar()->GetRectTransform()->GetScreenSpaceRectPx();
         if (!m_wasGrabbed)

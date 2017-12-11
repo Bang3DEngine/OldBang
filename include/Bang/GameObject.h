@@ -31,7 +31,7 @@ FORWARD class RectTransform;
         return clone;\
     }\
     SERIALIZABLE(ClassName) \
-    friend class ObjectManager;
+    friend class Bang::ObjectManager;
 
 class GameObject : public Object,
                    public IToString,

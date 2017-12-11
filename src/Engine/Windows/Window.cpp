@@ -318,6 +318,11 @@ Vector2i Window::GetPosition() const
     return wpos;
 }
 
+Vector2i Window::GetInsidePosition() const
+{
+    return GetPosition() + Vector2i(0, GetTitleBarHeight());
+}
+
 bool Window::IsBlockedByChildren() const
 {
     return !p_children.IsEmpty();

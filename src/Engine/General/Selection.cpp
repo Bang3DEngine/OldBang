@@ -22,7 +22,7 @@ GameObject *Selection::GetOveredGameObject(Scene *scene)
     List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>();
     for (Camera *cam : sceneCameras)
     {
-        Vector2i coords = Input::GetMouseCoords();
+        Vector2i coords = Input::GetMousePosition();
         coords = cam->FromScreenPointToViewport(coords);
         SelectionFramebuffer *sfb = cam->GetSelectionFramebuffer();
         if (sfb)

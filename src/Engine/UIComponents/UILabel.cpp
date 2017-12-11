@@ -245,7 +245,7 @@ void UILabel::HandleMouseSelection()
     // Find the closest visible char bounds to the mouse position
     if (Input::GetMouseButton(MouseButton::Left))
     {
-        Vector2 mouseCoordsLocalNDC = Input::GetMouseCoordsNDC();
+        Vector2 mouseCoordsLocalNDC = Input::GetMousePositionNDC();
         mouseCoordsLocalNDC = GetTextParentRT()->FromGlobalNDCToLocalNDC(
                                             Vector2(mouseCoordsLocalNDC) );
         int closestCharIndex = GetClosestCharIndexTo(mouseCoordsLocalNDC);

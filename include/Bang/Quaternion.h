@@ -3,7 +3,9 @@
 
 #include <iostream>
 
+#include "Bang/Math.h"
 #include "Bang/Debug.h"
+#include "Bang/Vector3.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -105,7 +107,7 @@ public:
         return Vector3G<T>(q.GetPitch(), q.GetYaw(), q.GetRoll());
     }
 
-    template<class Real>
+    template<class Real = T>
     static QuaternionG<T> Lerp(const QuaternionG<T> &from,
                                const QuaternionG<T> &to,
                                Real t)
@@ -115,25 +117,25 @@ public:
         if(cosTheta > Cast<T>(1) - Cast<T>(0.01))
         {
             return QuaternionG(Math::Lerp(from.x, to.x, t),
-                              Math::Lerp(from.y, to.y, t),
-                              Math::Lerp(from.z, to.z, t),
-                              Math::Lerp(from.w, to.w, t));
+                               Math::Lerp(from.y, to.y, t),
+                               Math::Lerp(from.z, to.z, t),
+                               Math::Lerp(from.w, to.w, t));
         }
         else
         {
             T angle = Math::ACos(cosTheta);
             return (
-                        Math::Sin((Cast<T>(1) - t) * angle) * from +
-                        Math::Sin(t * angle) * to
-                        ) /
-                    Math::Sin(angle);
+                    Math::Sin((Cast<T>(1) - t) * angle) * from +
+                    Math::Sin(t * angle) * to
+                   ) /
+                   Math::Sin(angle);
         }
     }
 
-    template<class Real>
+    template<class Real = T>
     static QuaternionG<T> SLerp(const QuaternionG<T> &from,
                                 const QuaternionG<T> &_to,
-                                float t)
+                                Real t)
     {
         QuaternionG<T> to = _to;
 

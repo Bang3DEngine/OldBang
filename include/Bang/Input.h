@@ -99,38 +99,27 @@ public:
 
     static bool IsMouseInsideScreen();
 
-    /**
-     * @brief GetMouseAxisX
-     * @return Mouse movement in x divided by screen width [0.0f, 1.0f]
-     */
     static float GetMouseAxisX();
-
-    /**
-     * @brief GetMouseDeltaY
-     * @return Mouse movement in y divided by screen height [0.0f, 1.0f]
-     */
     static float GetMouseAxisY();
     static Vector2 GetMouseAxis();
 
-    /**
-     * @brief GetMouseDeltaX
-     * @return Mouse movement in x in pixels [0.0f, screenWidth]
-     */
-    static float GetMouseDeltaX();
+    static int GetMouseDeltaX();
+    static int GetMouseDeltaY();
+    static Vector2i GetMouseDelta();
 
-    /**
-     * @brief GetMouseDeltaY
-     * @return Mouse movement in y in pixels [0.0f, screenHeight]
-     */
-    static float GetMouseDeltaY();
-    static Vector2 GetMouseDelta();
+    static void SetMouseWrapping(bool isMouseWrapping);
+    static bool IsMouseWrapping();
 
     static void LockMouseMovement(bool lock);
     static bool IsLockMouseMovement();
 
-    static Vector2i GetMouseCoords();
-    static Vector2 GetMouseCoordsNDC();
-    static Vector2i GetPreviousMouseCoords();
+    static void SetMousePositionWindow(int globalMousePosX,  int globalMousePosY);
+    static void SetMousePositionWindow(const Vector2i &globalMousePosition);
+    static void SetMousePosition(int globalMousePosX,  int globalMousePosY);
+    static void SetMousePosition(const Vector2i &globalMousePosition);
+    static Vector2i GetMousePosition();
+    static Vector2 GetMousePositionNDC();
+    static Vector2i GetPreviousMousePosition();
 
     static void StartTextInput();
     static String PollInputText();
@@ -141,23 +130,24 @@ public:
 private:
     static constexpr float DoubleClickMaxSeconds = 0.25f;
 
+    float m_lastMouseDownTimestamp = 0;
+    bool m_isMouseWrapping         = false;
     bool m_isADoubleClick          = false;
     bool m_lockMouseMovement       = false;
     bool m_isMouseInside           = false;
-    float m_lastMouseDownTimestamp = 0;
     Vector2 m_lastMouseWheelDelta  = Vector2::Zero;
 
     String m_inputText = "";
 
-    Vector2i m_lastMouseCoords = Vector2i::Zero;
-    Vector2i m_lastClickMouseCoords = Vector2i::Zero;
+    Vector2i m_lastMousePos      = Vector2i::Zero;
+    Vector2i m_lastClickMousePos = Vector2i::Zero;
 
     Array<Key> m_keysUp;
     Array<Key> m_keysDown;
     Array<Key> m_pressedKeys;
 
     FORWARD struct EventInfo;
-    FORWARD struct ButtonInfo;
+    FORWARD class  ButtonInfo;
     Map<Key, ButtonInfo> m_keyInfos;
     Map<MouseButton, ButtonInfo> m_mouseInfo;
     Array<EventInfo> m_eventInfoQueue;
@@ -188,11 +178,6 @@ private:
     };
 
 
-    /**
-     * @brief Struct to keep track of a Button state.
-     * A button can either be a key or a mouse button,
-     * and it contains the states up, down and pressed.
-     */
     class ButtonInfo : public IToString
     {
         public:

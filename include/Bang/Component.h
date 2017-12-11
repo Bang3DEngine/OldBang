@@ -22,7 +22,7 @@ NAMESPACE_BANG_BEGIN
         return clone;\
     }\
     SERIALIZABLE(ClassName) \
-    friend class ObjectManager;
+    friend class Bang::ObjectManager;
 
 class Component : public Object,
                   public IToString

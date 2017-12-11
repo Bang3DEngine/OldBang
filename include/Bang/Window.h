@@ -62,6 +62,7 @@ public:
     Vector2i GetMaxSize() const;
     bool IsResizable() const;
     Vector2i GetPosition() const;
+    Vector2i GetInsidePosition() const;
     bool IsBlockedByChildren() const;
     bool HasFlags(uint flags) const;
 
