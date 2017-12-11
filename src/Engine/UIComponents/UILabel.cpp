@@ -38,7 +38,7 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::HasFocus(this))
+    if (UICanvas::GetActive(this)->HasFocus(this))
     {
         if (IsSelectable())
         {

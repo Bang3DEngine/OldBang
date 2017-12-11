@@ -31,15 +31,15 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
-    if ( UICanvas::IsMouseOver(GetGameObject(), true) )
+    if ( UICanvas::GetActive(this)->IsMouseOver(GetGameObject(), true) )
     {
         // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
-        if (UICanvas::IsMouseOver(this, true))
+        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
         {
             for (GOItem *childItem : p_items)
             {
-                if (UICanvas::IsMouseOver(childItem, true))
+                if (UICanvas::GetActive(this)->IsMouseOver(childItem, true))
                 {
                     itemUnderMouse = childItem;
                     break;
@@ -239,7 +239,8 @@ void UIList::SetSelection(int index)
 
             IFocusable *itemFocusable = selectedItem->
                                         GetComponentInChildren<IFocusable>();
-            UICanvas::GetActive()->SetFocus(itemFocusable);
+            GetGameObject()->GetComponentInParent<UICanvas>()->
+                             SetFocus(itemFocusable);
 
             Callback(selectedItem, Action::SelectionIn);
         }

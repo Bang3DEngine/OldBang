@@ -196,9 +196,14 @@ void UILayoutManager::OnLayoutInvalidated(Component *comp,
     }
 }
 
-UILayoutManager *UILayoutManager::GetActive()
+UILayoutManager *UILayoutManager::GetActive(GameObject *go)
 {
-    UICanvas *canvas = UICanvas::GetActive();
+    UICanvas *canvas = UICanvas::GetActive(go);
     return canvas ? canvas->GetLayoutManager() : nullptr;
+}
+
+UILayoutManager *UILayoutManager::GetActive(Component *comp)
+{
+    return UILayoutManager::GetActive(comp->GetGameObject());
 }
 

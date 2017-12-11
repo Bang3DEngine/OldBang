@@ -31,7 +31,7 @@ FORWARD class RectTransform;
         return clone;\
     }\
     SERIALIZABLE(ClassName) \
-    friend class Bang::ObjectManager;
+    friend class Bang::ObjectManager
 
 class GameObject : public Object,
                    public IToString,
@@ -39,7 +39,7 @@ class GameObject : public Object,
                    public EventEmitter<INameListener>,
                    public EventEmitter<IChildrenListener>
 {
-    GAMEOBJECT(GameObject)
+    GAMEOBJECT(GameObject);
 
 public:
     virtual void Render(RenderPass renderPass, bool renderChildren = true);

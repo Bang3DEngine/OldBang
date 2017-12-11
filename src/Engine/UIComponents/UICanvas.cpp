@@ -12,8 +12,6 @@
 
 USING_NAMESPACE_BANG
 
-UICanvas *UICanvas::p_activeCanvas = nullptr;
-
 UICanvas::UICanvas()
 {
     m_uiLayoutManager = new UILayoutManager();
@@ -32,7 +30,6 @@ void UICanvas::OnStart()
 void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
-    UICanvas::p_activeCanvas = this;
 
     // Layout rebuilding
     m_uiLayoutManager->RebuildLayout( GetGameObject() );
@@ -54,7 +51,7 @@ void UICanvas::OnUpdate()
 
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
-                    _SetFocus(focusable);
+                    SetFocus(focusable);
                     focusable->PropagateOnClickedToListeners();
                 }
 
@@ -65,9 +62,9 @@ void UICanvas::OnUpdate()
 
     if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
     {
-        _SetFocus(nullptr);
+        SetFocus(nullptr);
     }
-    _SetFocusMouseOver(focusMouseOver);
+    SetFocusMouseOver(focusMouseOver);
 
     // Tabbing
     if (Input::GetKeyDownRepeat(Key::Tab))
@@ -92,7 +89,7 @@ void UICanvas::OnUpdate()
                                        newFocusComp->IsEnabled(true));
                 if (isValid) { break; }
             }
-            _SetFocus( focusables.At(newFocusIndex) );
+            SetFocus( focusables.At(newFocusIndex) );
         }
     }
 
@@ -115,19 +112,7 @@ void UICanvas::Invalidate()
 
 }
 
-void UICanvas::ClearFocus()
-{
-    UICanvas *canvas = UICanvas::GetActive();
-    if (canvas) { canvas->_SetFocus(nullptr); }
-}
-
-void UICanvas::SetFocus(IFocusable *focusable)
-{
-    UICanvas *canvas = UICanvas::GetActive();
-    if (canvas) { canvas->_SetFocus(focusable); }
-}
-
-void UICanvas::_SetFocus(IFocusable *newFocusable)
+void UICanvas::SetFocus(IFocusable *newFocusable)
 {
     if (newFocusable != GetCurrentFocus())
     {
@@ -151,7 +136,7 @@ void UICanvas::_SetFocus(IFocusable *newFocusable)
     }
 }
 
-void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
+void UICanvas::SetFocusMouseOver(IFocusable *newFocusableMO)
 {
     if (newFocusableMO != GetCurrentFocusMouseOver())
     {
@@ -177,7 +162,6 @@ void UICanvas::_SetFocusMouseOver(IFocusable *newFocusableMO)
 void UICanvas::OnAfterChildrenUpdate()
 {
     Component::OnAfterChildrenUpdate();
-    UICanvas::p_activeCanvas = nullptr;
 
     if (GetCurrentFocus()) { GetCurrentFocus()->m_hasJustFocusChanged = false; }
 }
@@ -202,10 +186,10 @@ void UICanvas::OnDestroyed(Object *object)
     IFocusable *destroyedFocusable = Cast<IFocusable*>(object);
 
     if (destroyedFocusable == GetCurrentFocus())
-    { _SetFocus(nullptr); }
+    { SetFocus(nullptr); }
 
     if (destroyedFocusable == GetCurrentFocusMouseOver())
-    { _SetFocusMouseOver(nullptr); }
+    { SetFocusMouseOver(nullptr); }
 }
 
 bool UICanvas::HasFocus(const Component *comp)
@@ -215,12 +199,11 @@ bool UICanvas::HasFocus(const Component *comp)
 
 bool UICanvas::HasFocus(const GameObject *go)
 {
-    UICanvas *canvas = UICanvas::GetActive();
-    if (!go || !canvas) { return false; }
+    if (!go) { return false; }
     List<IFocusable*> focusables = go->GetComponents<IFocusable>();
     for (IFocusable *focusable : focusables)
     {
-        if (focusable == canvas->GetCurrentFocus()) { return true; }
+        if (focusable == GetCurrentFocus()) { return true; }
     }
     return false;
 }
@@ -232,14 +215,13 @@ bool UICanvas::IsMouseOver(const Component *comp, bool recursive)
 
 bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
 {
-    UICanvas *canvas = UICanvas::GetActive();
-    if (!go || !canvas) { return false; }
+    if (!go) { return false; }
     if (!recursive)
     {
         List<IFocusable*> focusables = go->GetComponents<IFocusable>();
         for (IFocusable *focusable : focusables)
         {
-            if (focusable == canvas->GetCurrentFocusMouseOver()) { return true; }
+            if (focusable == GetCurrentFocusMouseOver()) { return true; }
         }
     }
     else
@@ -265,9 +247,14 @@ UILayoutManager *UICanvas::GetLayoutManager() const
     return m_uiLayoutManager;
 }
 
-UICanvas *UICanvas::GetActive()
+UICanvas *UICanvas::GetActive(const GameObject *go)
 {
-    return UICanvas::p_activeCanvas;
+    return go->GetComponentInParent<UICanvas>();
+}
+
+UICanvas *UICanvas::GetActive(const Component *comp)
+{
+    return UICanvas::GetActive(comp->GetGameObject());
 }
 
 struct GameObjectZComparer

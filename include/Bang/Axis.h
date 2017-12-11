@@ -10,4 +10,4 @@ enum class Axis3D { X, Y, Z };
 
 NAMESPACE_BANG_END
 
-#endif
+#endif // AXIS_H

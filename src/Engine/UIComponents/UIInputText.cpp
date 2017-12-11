@@ -42,7 +42,7 @@ void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    bool hasFocus = UICanvas::HasFocus( GetLabel() );
+    bool hasFocus = UICanvas::GetActive(this)->HasFocus( GetLabel() );
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());

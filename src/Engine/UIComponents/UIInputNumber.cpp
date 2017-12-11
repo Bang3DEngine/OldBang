@@ -31,7 +31,10 @@ void UIInputNumber::OnUpdate()
 
     if (HasFocus())
     {
-        if (Input::GetKeyDown(Key::Enter)) { UICanvas::ClearFocus(); }
+        if (Input::GetKeyDown(Key::Enter))
+        {
+            UICanvas::GetActive(this)->SetFocus(nullptr);
+        }
     }
 }
 

@@ -15,7 +15,7 @@ FORWARD class Gizmos;
 class Scene : public GameObject,
               public IDestroyListener
 {
-    GAMEOBJECT(Scene)
+    GAMEOBJECT(Scene);
 
 public:
     virtual void Update() override;

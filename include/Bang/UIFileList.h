@@ -42,7 +42,7 @@ private:
 
 class UIFileListItem : public GameObject
 {
-    GAMEOBJECT(UIFileListItem)
+    GAMEOBJECT(UIFileListItem);
 
 public:
     void OnMouseOver();

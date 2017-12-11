@@ -51,7 +51,7 @@ void UIScrollPanel::UpdateScrollUI()
                                                             Vector2::One);
 
         // MouseWheel scrolling
-        if (UICanvas::IsMouseOver(this, true))
+        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
         {
             Vector2i mouseWheelPx(Input::GetMouseWheel() * WheelScrollSpeedPx);
             Vector2 mouseWheelPercent = Vector2(mouseWheelPx) / contentSize;

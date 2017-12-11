@@ -43,7 +43,8 @@ private:
     static void OnLayoutRebuilt(GameObject *go);
     static void OnLayoutInvalidated(Component *comp, bool isLayoutController);
 
-    static UILayoutManager* GetActive();
+    static UILayoutManager* GetActive(GameObject *go);
+    static UILayoutManager* GetActive(Component *comp);
 };
 
 NAMESPACE_BANG_END

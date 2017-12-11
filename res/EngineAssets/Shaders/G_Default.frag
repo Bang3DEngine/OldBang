@@ -3,11 +3,11 @@
 void main()
 {
     vec4 texColor = vec4(1);
-    /*if (B_HasTexture)
+    if (B_HasTexture)
     {
         texColor = texture2D(B_Texture0, B_FIn_Uv);
         if (texColor.a <= B_AlphaCutoff) discard;
-    }*/
+    }
 
     B_GIn_Diffuse  = B_MaterialDiffuseColor * texColor;
     B_GIn_Normal   = vec4(B_FIn_Normal.xyz * 0.5f + 0.5f, 0);

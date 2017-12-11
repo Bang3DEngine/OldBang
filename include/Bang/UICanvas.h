@@ -26,14 +26,15 @@ public:
 
     void Invalidate();
 
-    // Static functions
-    static void ClearFocus();
-    static void SetFocus(IFocusable *focusable);
+    void ClearFocus();
+    void SetFocus(IFocusable *focusable);
 
-    static bool HasFocus(const Component *comp);
-    static bool HasFocus(const GameObject *go);
-    static bool IsMouseOver(const Component *comp, bool recursive = false);
-    static bool IsMouseOver(const GameObject *go, bool recursive = false);
+    IFocusable* GetCurrentFocus();
+    IFocusable* GetCurrentFocusMouseOver();
+    bool HasFocus(const Component *comp);
+    bool HasFocus(const GameObject *go);
+    bool IsMouseOver(const Component *comp, bool recursive = false);
+    bool IsMouseOver(const GameObject *go, bool recursive = false);
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -47,22 +48,17 @@ public:
 
     UILayoutManager* GetLayoutManager() const;
 
-    static UICanvas *GetActive();
+    static UICanvas *GetActive(const GameObject *go);
+    static UICanvas *GetActive(const Component *comp);
 
 private:
-    static UICanvas *p_activeCanvas;
-
     UILayoutManager *m_uiLayoutManager = nullptr;
 
     IFocusable* p_currentFocus = nullptr;
     IFocusable* p_currentFocusMouseOver = nullptr;
 
     void ApplyFocusChange();
-    void _SetFocus(IFocusable *focusable);
-    void _SetFocusMouseOver(IFocusable *focusable);
-
-    IFocusable* GetCurrentFocus();
-    IFocusable* GetCurrentFocusMouseOver();
+    void SetFocusMouseOver(IFocusable *focusable);
 
     void GetSortedFocusCandidatesByOcclusionOrder(
                                   const GameObject *go,
