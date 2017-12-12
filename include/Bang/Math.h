@@ -32,6 +32,13 @@ public:
     }
 
     template<class T>
+    static T NaN()
+    {
+        ASSERT_MSG(false, "NaN does not exist for this type.");
+        return 0;
+    }
+
+    template<class T>
     static T NegativeInfinity()
     {
         return -std::numeric_limits<T>::infinity();
@@ -263,6 +270,9 @@ private:
 
     Math() {}
 };
+
+template<> inline double Math::NaN() { return std::nan(""); }
+template<> inline  float Math::NaN() { return std::nanf(""); }
 
 NAMESPACE_BANG_END
 

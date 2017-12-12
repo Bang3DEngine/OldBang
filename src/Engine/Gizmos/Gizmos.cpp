@@ -249,6 +249,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
+    g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::UseBoth);
     g->Render(g->m_singleLineRenderer);
 }
 

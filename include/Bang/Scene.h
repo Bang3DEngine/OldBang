@@ -11,6 +11,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 FORWARD class Gizmos;
+FORWARD class DebugRenderer;
 
 class Scene : public GameObject,
               public IDestroyListener
@@ -19,6 +20,7 @@ class Scene : public GameObject,
 
 public:
     virtual void Update() override;
+    virtual void Render(RenderPass rp, bool renderChildren = true) override;
     virtual void OnResize(int newWidth, int newHeight);
 
     void SetCamera(Camera *cam);
@@ -40,20 +42,20 @@ public:
 protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
+    DebugRenderer *p_debugRenderer = nullptr;
 
     Scene();
     virtual ~Scene();
 
     Gizmos *GetGizmos() const;
-
-    // GameObject
-    virtual void RenderGizmos() override;
+    DebugRenderer *GetDebugRenderer() const;
 
     friend class Gizmos;
     friend class Window;
     friend class GEngine;
     friend class Application;
     friend class SceneManager;
+    friend class DebugRenderer;
 };
 
 NAMESPACE_BANG_END

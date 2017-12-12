@@ -186,7 +186,9 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_Lighted);
     go->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
+    GL::ClearDepthBuffer();
     // go->Render(RenderPass::Canvas);
+    go->Render(RenderPass::Gizmos);
     go->RenderGizmos();
 }
 
@@ -215,11 +217,6 @@ void GEngine::RenderToScreen(Camera *cam)
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
-    /*if (Input::GetKey(Key::S)) { sp->Set("B_GTex_Color",
-                                         cam->GetSelectionFramebuffer()->
-                                         GetAttachmentTexture(
-                                             SelectionFramebuffer::AttColor)); }
-    */
 
     GEngine::RenderScreenPlane(true);
 

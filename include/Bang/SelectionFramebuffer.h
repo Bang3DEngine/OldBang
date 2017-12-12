@@ -26,14 +26,16 @@ public:
     GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
 
 private:
+    using IdType = unsigned long long;
+
     RH<Texture2D> p_colorTexture;
     RH<Material> p_selectionMaterial;
 
-    mutable Map<GameObject*, long> m_gameObject_To_Id;
-    mutable Map<long, GameObject*> m_id_To_GameObject;
+    mutable Map<GameObject*, IdType> m_gameObject_To_Id;
+    mutable Map<IdType, GameObject*> m_id_To_GameObject;
 
-    static Color MapIdToColor(long id);
-    static long MapColorToId(const Color &color);
+    static Color MapIdToColor(IdType id);
+    static IdType MapColorToId(const Color &color);
 
     Color GetSelectionColor(GameObject *go) const;
 

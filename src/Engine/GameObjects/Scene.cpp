@@ -9,6 +9,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/DebugRenderer.h"
 #include "Bang/RectTransform.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -17,11 +18,13 @@ USING_NAMESPACE_BANG
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
+    p_debugRenderer = GameObject::Create<DebugRenderer>();
 }
 
 Scene::~Scene()
 {
     delete m_gizmos;
+    GameObject::Destroy(p_debugRenderer);
 }
 
 void Scene::Update()
@@ -29,18 +32,27 @@ void Scene::Update()
     GameObject::Update();
 }
 
+void Scene::Render(RenderPass rp, bool renderChildren)
+{
+    GameObject::Render(rp, renderChildren);
+
+    if (rp == RenderPass::Scene_UnLighted)
+    {
+        GetDebugRenderer()->Render(true);
+    }
+    else if (rp == RenderPass::Gizmos)
+    {
+        GetDebugRenderer()->Render(false);
+    }
+}
+
 void Scene::OnResize(int newWidth, int newHeight)
 {
     InvalidateCanvas();
 }
 
-void Scene::RenderGizmos()
-{
-    GameObject::RenderGizmos();
-    GetGizmos()->m_gizmosGo->RenderGizmos();
-}
-
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
+DebugRenderer *Scene::GetDebugRenderer() const { return p_debugRenderer; }
 
 void Scene::SetCamera(Camera *cam)
 {

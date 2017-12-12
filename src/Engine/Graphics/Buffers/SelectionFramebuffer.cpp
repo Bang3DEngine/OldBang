@@ -38,7 +38,7 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::PrepareForRender(const GameObject *go)
 {
-    int id = 1;
+    IdType id = 1;
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
 
@@ -74,10 +74,10 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 }
 
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(
-        const Vector2i &screenCoords)
+                                            const Vector2i &screenCoords)
 {
     Color colorUnderMouse = ReadColor(screenCoords.x, screenCoords.y, AttColor);
-    long id = MapColorToId(colorUnderMouse);
+    IdType id = MapColorToId(colorUnderMouse);
     if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
@@ -90,25 +90,31 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
     return MapIdToColor(m_gameObject_To_Id[go]);
 }
 
-Color SelectionFramebuffer::MapIdToColor(long id)
+Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
-    constexpr int C = 256;
+    constexpr IdType C = 256;
     Color color =
-            Color(float(   id                % C),
-                  float(  (id / C)           % C),
-                  float( ((id / C) / C)      % C),
-                  float((((id / C) / C) / C) % C)
+            Color(double(   id                % C),
+                  double(  (id / C)           % C),
+                  double( ((id / C) / C)      % C),
+                  double((((id / C) / C) / C) % C)
                  );
-   return color / float(C);
+
+    #ifdef DEBUG
+        color.a = 256.0; // To be able to see selection framebuffer
+    #endif
+
+   return color / double(C);
 }
 
-long SelectionFramebuffer::MapColorToId(const Color &color)
+typename SelectionFramebuffer::IdType
+SelectionFramebuffer::MapColorToId(const Color &color)
 {
-    constexpr int C = 256;
-    return long(color.r * C) +
-           long(color.g * C * C) +
-           long(color.b * C * C * C) +
-           long(color.a * C * C * C * C);
+    constexpr IdType C = 256;
+    return   IdType(color.r * C)
+           + IdType(color.g * C * C)
+           + IdType(color.b * C * C * C)
+           ;// + IdType(color.a * C * C * C * C);
 }
 
 RH<Texture2D> SelectionFramebuffer::GetColorTexture() const

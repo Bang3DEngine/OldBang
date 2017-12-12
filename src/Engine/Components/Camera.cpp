@@ -5,6 +5,7 @@
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
+#include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/GBuffer.h"
 #include "Bang/Vector2.h"
@@ -15,6 +16,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/GLUniforms.h"
+#include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -191,6 +193,12 @@ GBuffer *Camera::GetGBuffer() const
 SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
 {
     return m_selectionFramebuffer;
+}
+
+Camera *Camera::GetActive()
+{
+    Scene *scene = SceneManager::GetActiveScene();
+    return scene ? scene->GetCamera() : nullptr;
 }
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 

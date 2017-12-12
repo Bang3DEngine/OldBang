@@ -59,6 +59,8 @@ public:
     GBuffer *GetGBuffer() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;
 
+    static Camera *GetActive();
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
