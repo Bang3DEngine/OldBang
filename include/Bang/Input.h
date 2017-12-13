@@ -118,8 +118,10 @@ public:
     static void SetMousePosition(int globalMousePosX,  int globalMousePosY);
     static void SetMousePosition(const Vector2i &globalMousePosition);
     static Vector2i GetMousePosition();
-    static Vector2 GetMousePositionNDC();
-    static Vector2i GetPreviousMousePosition();
+    static Vector2  GetMousePositionNDC();
+    static Vector2i GetMousePositionScreen();
+    static Vector2  GetMousePositionScreenNDC();
+    static Vector2i GetPreviousMousePositionScreen();
 
     static void StartTextInput();
     static String PollInputText();
@@ -139,8 +141,8 @@ private:
 
     String m_inputText = "";
 
-    Vector2i m_lastMousePos      = Vector2i::Zero;
-    Vector2i m_lastClickMousePos = Vector2i::Zero;
+    Vector2i m_lastMousePosScreen = Vector2i::Zero;
+    Vector2i m_lastClickMousePos  = Vector2i::Zero;
 
     Array<Key> m_keysUp;
     Array<Key> m_keysDown;

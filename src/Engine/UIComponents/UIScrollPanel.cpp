@@ -170,12 +170,12 @@ Vector2 UIScrollPanel::GetContentSize() const
 {
     GameObject *containedGo = GetScrollArea()->GetContainedGameObject();
     return containedGo ? containedGo->GetRectTransform()->
-                            GetScreenSpaceRectPx().GetSize() : Vector2::Zero;
+                            GetViewportRect().GetSize() : Vector2::Zero;
 }
 
 Vector2 UIScrollPanel::GetContainerSize() const
 {
-    return GetGameObject()->GetRectTransform()->GetScreenSpaceRectPx().GetSize();
+    return GetGameObject()->GetRectTransform()->GetViewportRect().GetSize();
 }
 
 Vector2 UIScrollPanel::GetMaxScrollLength() const

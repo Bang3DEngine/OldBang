@@ -92,7 +92,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
                                         GetContent(),
                                         GetFont(),
                                         GetTextSize(),
-                                        Recti( rt->GetScreenSpaceRectPx() ),
+                                        Recti( rt->GetViewportRect() ),
                                         GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
@@ -112,8 +112,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
         Vector2 minPxPerf = GL::FromPixelsPointToPixelPerfect(cr.rectPx.GetMin());
         Vector2 maxPxPerf = cr.rectPx.GetMin() + cr.rectPx.GetSize();
-        Vector2f minGlobalNDC ( GL::FromPixelsPointToGlobalNDC(minPxPerf) );
-        Vector2f maxGlobalNDC ( GL::FromPixelsPointToGlobalNDC(maxPxPerf) );
+        Vector2f minViewportNDC ( GL::FromViewportPointToViewportPointNDC(minPxPerf) );
+        Vector2f maxViewportNDC ( GL::FromViewportPointToViewportPointNDC(maxPxPerf) );
 
         Vector2 minUv, maxUv;
         if (GetFont()->HasDistanceField())
@@ -131,11 +131,11 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
             Vector2 uvSize = (maxUv-minUv);
             Vector2 uvScaling = (uvSize + spOffsetUv * 2.0f) / uvSize;
-            Vector2 globalNDCCharSize  = (maxGlobalNDC - minGlobalNDC);
-            Vector2 globalNDCPosCenter = (maxGlobalNDC + minGlobalNDC) / 2.0f;
-            Vector2 scaledSize = (globalNDCCharSize * uvScaling);
-            minGlobalNDC = globalNDCPosCenter - scaledSize * 0.5f;
-            maxGlobalNDC = globalNDCPosCenter + scaledSize * 0.5f;
+            Vector2 viewportNDCCharSize  = (maxViewportNDC - minViewportNDC);
+            Vector2 viewportNDCPosCenter = (maxViewportNDC + minViewportNDC) / 2.0f;
+            Vector2 scaledSize = (viewportNDCCharSize * uvScaling);
+            minViewportNDC = viewportNDCPosCenter - scaledSize * 0.5f;
+            maxViewportNDC = viewportNDCPosCenter + scaledSize * 0.5f;
             minUv -= spOffsetUv;
             maxUv += spOffsetUv;
         }
@@ -146,8 +146,9 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
             maxUv = GetFont()->GetCharMaxUv(GetTextSize(), cr.character);
         }
 
-        Rect charRectGlobalNDC(minGlobalNDC, maxGlobalNDC);
-        Rect charRectLocalNDC = rt->FromGlobalNDCToLocalNDC(charRectGlobalNDC);
+        Rect charRectViewportNDC(minViewportNDC, maxViewportNDC);
+        Rect charRectLocalNDC =
+                    rt->FromViewportRectNDCToLocalRectNDC(charRectViewportNDC);
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
         textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
@@ -169,8 +170,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
 
-        Rect charRectLocalNDCRaw ( rt->FromPixelsPointToLocalNDC(minPxPerf),
-                                   rt->FromPixelsPointToLocalNDC(maxPxPerf) );
+        Rect charRectLocalNDCRaw ( rt->FromViewportPointToLocalPointNDC(minPxPerf),
+                                   rt->FromViewportPointToLocalPointNDC(maxPxPerf) );
         m_charRectsLocalNDC.PushBack(charRectLocalNDCRaw);
     }
 
@@ -359,15 +360,15 @@ const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
     return GetCharRectsLocalNDC()[charIndex];
 }
 
-Rect UITextRenderer::GetCharRectGlobalNDC(uint charIndex) const
+Rect UITextRenderer::GetCharRectViewportNDC(uint charIndex) const
 {
     return GetGameObject()->GetRectTransform()->
-            FromLocalNDCToGlobalNDC(GetCharRectsLocalNDC()[charIndex]);
+            FromLocalRectNDCToViewportRectNDC(GetCharRectsLocalNDC()[charIndex]);
 }
-Rect UITextRenderer::GetContentGlobalNDCRect() const
+Rect UITextRenderer::GetContentViewportNDCRect() const
 {
     return GetGameObject()->GetRectTransform()->
-            FromLocalNDCToGlobalNDC(m_textRectNDC);
+            FromLocalRectNDCToViewportRectNDC(m_textRectNDC);
 }
 
 VerticalAlignment UITextRenderer::GetVerticalAlignment() const
@@ -381,7 +382,7 @@ HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
 
 Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
-    return GetContentGlobalNDCRect();
+    return GetContentViewportNDCRect();
 }
 
 void UITextRenderer::OnTransformChanged() { OnChanged(); }

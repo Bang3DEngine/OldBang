@@ -18,7 +18,7 @@ Input::~Input()
 
 void Input::OnFrameFinished()
 {
-    m_lastMousePos = GetMousePosition();
+    m_lastMousePosScreen = GetMousePosition();
 
     // KEYS
     for (auto it = m_keyInfos.Begin(); it != m_keyInfos.End();)
@@ -403,7 +403,8 @@ Vector2 Input::GetMouseAxis()
 int Input::GetMouseDeltaX()
 {
     Input *inp = Input::GetInstance();
-    int delta = inp->GetMousePosition().x - Input::GetPreviousMousePosition().x;
+    int delta = inp->GetMousePositionScreen().x -
+                Input::GetPreviousMousePositionScreen().x;
     if (Math::Abs(delta) > Window::GetActive()->GetWidth() * 0.8f) { delta = 0; }
     return delta;
 }
@@ -411,7 +412,8 @@ int Input::GetMouseDeltaX()
 int Input::GetMouseDeltaY()
 {
     Input *inp = Input::GetInstance();
-    int delta = inp->GetMousePosition().y - Input::GetPreviousMousePosition().y;
+    int delta = inp->GetMousePositionScreen().y -
+                Input::GetPreviousMousePositionScreen().y;
     if (Math::Abs(delta) > Window::GetActive()->GetHeight() * 0.8f) { delta = 0; }
     return delta;
 }
@@ -467,31 +469,42 @@ void Input::SetMousePosition(const Vector2i &globalMousePosition)
 
 Vector2i Input::GetMousePosition()
 {
-    Vector2i coords;
+    return Vector2i(
+              GL::FromScreenPointToViewportPoint( GetMousePositionScreen() ) );
+}
+Vector2 Input::GetMousePositionNDC()
+{
+    return GL::FromViewportPointToViewportPointNDC( Input::GetMousePosition() );
+}
+
+Vector2i Input::GetMousePositionScreen()
+{
+    Window *win = Window::GetActive();
+
+    Vector2i pos;
     if (Input::IsMouseInsideScreen())
     {
-        SDL_GetMouseState(&coords.x, &coords.y);
+        SDL_GetMouseState(&pos.x, &pos.y);
     }
     else
     {
-        SDL_GetGlobalMouseState(&coords.x, &coords.y);
-        Window *win = Window::GetActive();
-        coords -= (Vector2i(0, win->GetTitleBarHeight()) + win->GetPosition());
+        SDL_GetGlobalMouseState(&pos.x, &pos.y);
+        pos -= (Vector2i(0, win->GetTitleBarHeight()) + win->GetPosition());
     }
-    return coords;
+
+    pos.y = (win->GetHeight()-1) - pos.y; // Invert Y !!!!
+    return pos;
 }
 
-Vector2 Input::GetMousePositionNDC()
+Vector2 Input::GetMousePositionScreenNDC()
 {
-    Vector2f coordsNDC = Vector2f(Input::GetMousePosition()) *
-                                  GL::GetViewportPixelSize() * 2.0f - 1.0f;
-    return coordsNDC * Vector2f(1, -1);
+    return GL::FromScreenPointToScreenPointNDC( Input::GetMousePositionScreen() );
 }
 
-Vector2i Input::GetPreviousMousePosition()
+Vector2i Input::GetPreviousMousePositionScreen()
 {
     Input *inp = Input::GetInstance();
-    return inp->m_lastMousePos;
+    return inp->m_lastMousePosScreen;
 }
 
 void Input::StartTextInput()
@@ -516,7 +529,7 @@ void Input::Reset()
 {
     m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
     m_lastMouseWheelDelta = Vector2::Zero;
-    m_lastMousePos = Vector2i(-1);
+    m_lastMousePosScreen = Vector2i(-1);
     m_lastMouseDownTimestamp = 0.0f;
     m_inputText = "";
 

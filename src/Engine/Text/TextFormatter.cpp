@@ -26,12 +26,16 @@ Array<TextFormatter::CharRect>
     for (int i = 0; i < content.Size(); ++i)
     {
         const char c = content[i];
-        Rectf charRect = TextFormatter::GetCharRect(c, font, fontSize);
+        Rectf charRect;
         if (useAtlasCharRectSize)
         {
             Vector2 size = Vector2(font->GetAtlasCharRectSize(fontSize, c));
-            charRect = Rect(Vector2::Zero, size) -
-                       Vector2(font->GetFontAscent(fontSize));
+            charRect = Rect(Vector2(0, -size.y), Vector2(size.x, 0)) +
+                       Vector2(0, font->GetFontAscent(fontSize));
+        }
+        else
+        {
+            charRect = TextFormatter::GetCharRect(c, font, fontSize);
         }
         charRects.PushBack( CharRect(c, charRect) );
     }
@@ -64,9 +68,8 @@ TextFormatter::SplitCharRectsInLines(const String &content,
 {
     Array< Array<CharRect> > linedCharRects(1); // Result
 
-    Vector2 penPosition (limitsRect.GetMin());
+    Vector2 penPosition (limitsRect.GetMinXMaxY()); // penPosition.y is baseline
     const float lineSkip = font->GetLineSkip(fontSize);
-    // penPosition.y is baseline
     for (int i = 0; i < content.Size(); ++i)
     {
         const int charAdvX = GetCharAdvanceX(content, font, fontSize, i);
@@ -105,7 +108,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
             if (lineBreak)
             {
                 // Advance to next line! Add the current line to the result.
-                penPosition.y += lineSkip * spacingMult.y;
+                penPosition.y -= lineSkip * spacingMult.y;
                 penPosition.x  = limitsRect.GetMin().x;
                 linedCharRects.PushBack( Array<CharRect>() );
 
@@ -119,7 +122,7 @@ TextFormatter::SplitCharRectsInLines(const String &content,
 
             if (!anticipatedLineBreak)
             {
-                CharRect cr(content[i], charRects[i].rectPx + penPosition);
+                CharRect cr(content[i], penPosition + charRects[i].rectPx);
                 linedCharRects.Back().PushBack(cr);
                 penPosition.x += charAdvX * spacingMult.x;
             }
@@ -193,17 +196,17 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     const float textHeight = (linesCharRects->Size() * font->GetLineSkip(fontSize));
     if (vAlignment == VerticalAlignment::Top)
     {
-        textVerticalOffset = font->GetFontAscent(fontSize);
+        textVerticalOffset = -font->GetFontAscent(fontSize);
     }
     else if (vAlignment == VerticalAlignment::Center)
     {
-        textVerticalOffset = font->GetFontAscent(fontSize) +
-                            (limitsRect.GetHeight()/2) - (textHeight/2);
+        textVerticalOffset = -font->GetFontDescent(fontSize) -
+                             (limitsRect.GetHeight()/2) - (textHeight/2);
     }
     else if (vAlignment == VerticalAlignment::Bot)
     {
-        textVerticalOffset = font->GetFontAscent(fontSize) +
-                             limitsRect.GetHeight() - textHeight;
+        textVerticalOffset = -font->GetFontAscent(fontSize) -
+                              limitsRect.GetHeight() + textHeight;
     }
 
     // Apply offsets
@@ -221,10 +224,10 @@ Rectf TextFormatter::GetCharRect(char c, const Font *font, int fontSize)
     if (!font) { return Rectf::Zero; }
 
     Font::GlyphMetrics charMetrics = font->GetCharMetrics(fontSize, c);
+    const Font::GlyphMetrics &cm = charMetrics;
 
-    Vector2 bearing(charMetrics.bearing.x, -charMetrics.bearing.y);
-    Vector2 charMin(bearing);
-    Vector2 charMax(bearing + charMetrics.size);
+    Vector2 charMin (cm.bearing.x, -(cm.size.y - cm.bearing.y));
+    Vector2 charMax (cm.bearing.x + cm.size.x, cm.bearing.y);
     return Rectf(charMin, charMax);
 }
 

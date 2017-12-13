@@ -39,7 +39,7 @@ public:
     int GetSelectionBeginIndex() const;
     int GetSelectionEndIndex() const;
 
-    float GetCursorXGlobalNDC(int cursorIndex) const;
+    float GetCursorXViewportNDC(int cursorIndex) const;
     float GetCursorXLocalNDC(int cursorIndex) const;
 
     bool IsSelectAllOnFocus() const;

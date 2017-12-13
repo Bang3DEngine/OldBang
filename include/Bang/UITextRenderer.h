@@ -56,8 +56,8 @@ public:
     const Vector2& GetSpacingMultiplier() const;
     const Array<Rect>& GetCharRectsLocalNDC() const;
     const Rect& GetCharRectLocalNDC(uint charIndex) const;
-    Rect GetCharRectGlobalNDC(uint charIndex) const;
-    Rect GetContentGlobalNDCRect() const;
+    Rect GetCharRectViewportNDC(uint charIndex) const;
+    Rect GetContentViewportNDCRect() const;
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // UIRenderer
@@ -101,7 +101,7 @@ private:
     RH<Mesh> p_mesh;
     mutable uint m_numberOfLines = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
-    mutable Array<Rect> m_charRectsGlobalNDC;
+    mutable Array<Rect> m_charRectsViewportNDC;
 
     UITextRenderer();
     virtual ~UITextRenderer();

@@ -154,22 +154,22 @@ bool Font::HasDistanceField() const { return m_hasDistanceField; }
 
 Font::GlyphMetrics Font::GetCharMetrics(int fontSize, char c) const
 {
-    Font::GlyphMetrics charMetrics;
+    Font::GlyphMetrics cm;
 
-    int xmin, xmax, ymin, ymax, advance;
-    TTF_GlyphMetrics(m_referenceFont, c,
-                     &xmin, &xmax, &ymin, &ymax, &advance);
-    charMetrics.size    = ScaleMagnitude(fontSize, Vector2((xmax - xmin), (ymax - ymin)) );
-    charMetrics.bearing = ScaleMagnitude(fontSize,  Vector2(xmin, ymax) );
-    charMetrics.advance = ScaleMagnitude(fontSize,  float(advance) );
+    int minx, maxx, miny, maxy, advance;
+    TTF_GlyphMetrics(m_referenceFont, c, &minx, &maxx, &miny, &maxy, &advance);
+
+    cm.size    = ScaleMagnitude(fontSize, Vector2((maxx - minx),
+                                                  (maxy - miny)) );
+    cm.bearing = ScaleMagnitude(fontSize, Vector2(minx, maxy) );
+    cm.advance = ScaleMagnitude(fontSize, float(advance) );
     if (c == ' ')
     {
-        charMetrics.size = ScaleMagnitude(fontSize,
-                                          Vector2(advance,
-                                                  GetLineSkip(fontSize)) );
+        cm.size = ScaleMagnitude(fontSize, Vector2(cm.advance,
+                                                   GetLineSkip(fontSize)) );
     }
 
-    return charMetrics;
+    return cm;
 }
 
 Vector2 Font::GetCharMinUvInDistField(char c) const

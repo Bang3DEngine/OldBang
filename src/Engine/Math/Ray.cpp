@@ -26,9 +26,10 @@ void Ray::SetDirection(const Vector3 &direction)
     m_direction = direction.Normalized();
 }
 
-Vector3 Ray::GetIntersectionWithPlane(const Vector3 &planeNormal,
+Vector3 Ray::GetIntersectionWithPlane(const Vector3 &_planeNormal,
                                       const Vector3 &planePoint)
 {
+    Vector3 planeNormal = _planeNormal.Normalized();
     float dot = Vector3::Dot(planeNormal, GetDirection());
     if (Math::Abs(dot) > 0.0001f)
     {

@@ -61,23 +61,22 @@ public:
     const Vector2& GetPivotPosition()  const;
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
-    Rect GetScreenSpaceRectPx() const;
-    Rect GetScreenSpaceRectNDC() const;
-    Rect GetParentScreenRectPx() const;
-    Rect GetParentScreenRect() const;
+    Rect GetViewportRect() const;
+    Rect GetScreenRectNDC() const;
+    Rect GetParentViewportRect() const;
+    Rect GetParentViewportRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
-    Rect FromGlobalNDCToLocalNDC(const Rect &globalNDCRect) const;
-    Vector2 FromGlobalNDCToLocalNDC(const Vector2 &globalNDCPoint) const;
-    Rect FromLocalNDCToGlobalNDC(const Rect &localNDCRect) const;
-    Vector2 FromLocalNDCToGlobalNDC(const Vector2 &localNDCPoint) const;
-    Vector2 FromPixelsToLocalNDC(const Vector2i &pixels) const;
-    Vector2 FromPixelsAmountToLocalNDC(const Vector2i &pixelsAmount) const;
-    Vector2 FromLocalNDCToPixelsAmount(const Vector2 &ndcAmount) const;
-    Vector2 FromPixelsPointToLocalNDC(const Vector2 &pixelsPoint) const;
-    Vector2 FromPixelsPointToLocalNDC(const Vector2i &pixelsPoint) const;
-    Vector2 FromLocalNDCToPixelsPoint(const Vector2 &ndcPoint) const;
+    Rect    FromViewportRectNDCToLocalRectNDC(const Rect &vpRectNDC) const;
+    Rect    FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const;
+    Vector2 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const;
+    Vector2 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const;
+    Vector2 FromViewportPointToLocalPointNDC(const Vector2  &vpPoint) const;
+    Vector2 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const;
+    Vector2 FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmount) const;
+    Vector2 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const;
+    Vector2 FromLocalPointNDCToViewportPoint(const Vector2 &localPointNDC) const;
 
     bool IsMouseOver(bool recursive = false) const;
 

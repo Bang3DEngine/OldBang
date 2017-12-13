@@ -73,10 +73,10 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     rend->GetMaterial()->SetShaderProgram(prevSP.Get());
 }
 
-GameObject *SelectionFramebuffer::GetGameObjectInPosition(
-                                            const Vector2i &screenCoords)
+GameObject *SelectionFramebuffer::
+GetGameObjectInViewportPoint(const Vector2i &vpPoint)
 {
-    Color colorUnderMouse = ReadColor(screenCoords.x, screenCoords.y, AttColor);
+    Color colorUnderMouse = ReadColor(vpPoint.x, vpPoint.y, AttColor);
     IdType id = MapColorToId(colorUnderMouse);
     if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {

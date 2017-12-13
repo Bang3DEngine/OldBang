@@ -55,11 +55,8 @@ void Camera::UnBind() const
 
 void Camera::SetViewportForBlitting() const
 {
-    Rect vpRect = GetViewportRect() * 0.5f + 0.5f;
-    Recti renderVP( vpRect * Vector2(GL::GetViewportSize())
-                           + Vector2(GL::GetViewportRect().GetMin()) );
-    m_latestViewportRect = renderVP;
-    GL::SetViewport(renderVP);
+    m_latestViewportRect = Recti( GetViewportScreenRect() );
+    GL::SetViewport(m_latestViewportRect);
 }
 
 void Camera::SetViewportForRendering() const
@@ -91,27 +88,41 @@ void Camera::BindSelectionFramebuffer()
     GetSelectionFramebuffer()->ClearColor(Color::Zero);
 }
 
-Vector2i Camera::FromScreenPointToViewport(const Vector2i &screenPointPx)
+Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC)
 {
-    Vector2i res = screenPointPx;
-    res.y = (Window::GetActive()->GetHeight() - res.y - 1);
-    res.x -= m_latestViewportRect.GetMin().x;
-    res.y -= m_latestViewportRect.GetMin().y;
-    return res;
+    Vector3 worldPoint = FromViewportPointNDCToWorldPoint(vpPointNDC, GetZNear());
+
+    Ray ray;
+    ray.SetOrigin( GetGameObject()->GetTransform()->GetPosition() );
+    ray.SetDirection( (worldPoint - ray.GetOrigin()).Normalized() );
+    return ray;
 }
 
-Vector2 Camera::FromWorldPointToScreenNDC(const Vector3 &position)
+Vector2i Camera::FromScreenPointToViewportPoint(const Vector2i &screenPoint)
 {
-    Vector4 v4 = GetProjectionMatrix() * GetViewMatrix() * Vector4(position, 1);
+    return Vector2i(
+                GL::FromScreenPointToViewportPoint(Vector2(screenPoint),
+                                                   Recti(GetViewportScreenRect())) );
+}
+
+Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition)
+{
+    Vector4 v4 = GetProjectionMatrix() *
+                 GetViewMatrix() * Vector4(worldPosition, 1);
     v4 /= v4.w;
     return v4.xy();
 }
 
-Vector3 Camera::FromScreenNDCPointToWorld(const Vector2 &screenNDCPos,
-                                      float zFromCamera)
+Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector3 &vpPointNDC)
+{
+    return FromViewportPointNDCToWorldPoint(vpPointNDC.xy(), vpPointNDC.z);
+}
+
+Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector2 &vpPointNDC,
+                                                 float zFromCamera)
 {
     // Pass coordinates to clip space, to invert them using projInversed
-    Vector4 clipCoords = Vector4(screenNDCPos, 1, 1) * zFromCamera;
+    Vector4 clipCoords = Vector4(vpPointNDC, 1, 1) * zFromCamera;
     Vector4 res4 = GetProjectionMatrix().Inversed() * clipCoords;
     Vector3 res = res4.xyz();
     res = (GetViewMatrix().Inversed() * Vector4(res, 1)).xyz();
@@ -161,7 +172,7 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
 
 void Camera::SetViewportRect(const Rect &viewportRectNDC)
 {
-    m_viewportRect = viewportRectNDC;
+    m_viewportRectNDC = viewportRectNDC;
 }
 
 void Camera::SetGameObjectToRender(GameObject *go)
@@ -180,9 +191,21 @@ GameObject *Camera::GetGameObjectToRender() const
     return p_gameObjectToRender;
 }
 
-const Rect &Camera::GetViewportRect() const
+Rect Camera::GetViewportScreenRect() const
 {
-    return m_viewportRect;
+    Rect vpRect = GetViewportRectNDC() * 0.5f + 0.5f;
+    Recti vp( vpRect * Vector2(GL::GetViewportSize())
+                     + Vector2(GL::GetViewportRect().GetMin()) );
+    return Rect(vp);
+}
+Rect Camera::GetViewportScreenRectNDC() const
+{
+    return GL::FromScreenRectToScreenRectNDC( GetViewportScreenRect() );
+}
+
+const Rect& Camera::GetViewportRectNDC() const
+{
+    return m_viewportRectNDC;
 }
 
 GBuffer *Camera::GetGBuffer() const

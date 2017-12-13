@@ -34,7 +34,7 @@ void UIDirLayout::ApplyLayout(Axis axis)
     List<GameObject*> children =
                     UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
-    Vector2i layoutRectSize( Vector2::Round(rt->GetScreenSpaceRectPx().GetSize()) );
+    Vector2i layoutRectSize( Vector2::Round(rt->GetViewportRect().GetSize()) );
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
     Vector2i availableSpace = paddedLayoutRectSize - GetTotalSpacing(children);
 
@@ -90,7 +90,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
                 {
                     crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
                 }
-                crt->SetMarginRight( -crt->GetMarginLeft() - childRTSize.x );
+                crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
             }
             else
             {
@@ -119,7 +119,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
                 {
                     crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
                 }
-                crt->SetMarginBot( -crt->GetMarginTop() - childRTSize.y );
+                crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
             }
             else
             {

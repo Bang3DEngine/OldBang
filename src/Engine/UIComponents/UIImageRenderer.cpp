@@ -125,7 +125,7 @@ void UIImageRenderer::RegenerateQuadVAO()
 {
     m_hasChanged = false;
     RectTransform *rt = GetGameObject()->GetRectTransform();
-    Rect rectPx = rt->GetScreenSpaceRectPx();
+    Rect rectPx = rt->GetViewportRect();
     Vector2i rectSize(rectPx.GetSize());
     ENSURE(m_prevRectSize != rectSize);
     ENSURE(p_imageTexture);

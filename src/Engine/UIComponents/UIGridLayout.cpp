@@ -73,7 +73,7 @@ int UIGridLayout::GetNumRows() const
 int UIGridLayout::GetNumColumns() const
 {
     RectTransform *rt = GetGameObject()->GetRectTransform();
-    float effectiveWidth = (rt->GetScreenSpaceRectPx().GetWidth() -
+    float effectiveWidth = (rt->GetViewportRect().GetWidth() -
                             GetPaddingSize().x);
 
     int cellSizeSpaced = (GetCellSize().x + GetSpacing());

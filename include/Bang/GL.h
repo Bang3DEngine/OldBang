@@ -431,14 +431,28 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& ndcPoint);
-    static Rect     FromGlobalNDCToPixels(const Rect &rectNDC);
-    static Rect     FromPixelsToGlobalNDC(const Rect &rectPixels);
-    static Vector2  FromPixelsAmountToGlobalNDC(const Vector2 &pixelsAmount);
-    static Vector2  FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount);
-    static Vector2  FromPixelsPointToGlobalNDC(const Vector2 &pixelsPoint);
-    static Vector2  FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint);
-    static Vector2  FromGlobalNDCToPixelsPoint(const Vector2 &ndcPoint);
+    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& screenPoint);
+    static Vector2  FromPointToPointNDC(const Vector2 &point,
+                                        const Vector2 &rectSize);
+    static Vector2  FromPointNDCToPoint(const Vector2 &pointNDC,
+                                        const Vector2 &rectSize);
+    static Vector2  FromScreenPointToViewportPoint(const Vector2& screenPoint,
+                                                   const Recti& viewport);
+    static Vector2  FromViewportPointToScreenPoint(const Vector2& vpPoint);
+    static Vector2  FromViewportPointToScreenPoint(const Vector2i& vpPoint);
+    static Vector2  FromScreenPointToViewportPoint(const Vector2& screenPoint);
+    static Vector2  FromScreenPointToViewportPoint(const Vector2i& screenPoint);
+    static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
+    static Rect     FromScreenRectToScreenRectNDC(const Rect &screenRect);
+    static Rect     FromScreenRectNDCToScreenRect(const Rect &screenRectNDC);
+    static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
+    static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
+    static Vector2  FromScreenPointNDCToScreenPoint(const Vector2  &screenPointNDC);
+    static Vector2  FromScreenPointToScreenPointNDC(const Vector2  &screenPoint);
+    static Vector2  FromScreenPointToScreenPointNDC(const Vector2i &screenPoint);
+    static Vector2  FromViewportPointToViewportPointNDC(const Vector2  &vpPoint);
+    static Vector2  FromViewportPointToViewportPointNDC(const Vector2i &vpPoint);
+    static Vector2  FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);
 
     static void Render(const VAO* vao,
                        GL::Primitives renderMode,

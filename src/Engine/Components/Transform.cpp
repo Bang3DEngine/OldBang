@@ -31,7 +31,7 @@ void Transform::SetPosition(const Vector3 &p)
     else
     {
         SetLocalPosition(GetGameObject()->GetParent()->
-                         GetTransform()->WorldToLocalPoint(p));
+                         GetTransform()->FromWorldToLocalPoint(p));
     }
 }
 void Transform::TranslateLocal(const Vector3 &translation)
@@ -164,58 +164,29 @@ Vector3 Transform::InverseTransformVector(const Vector3 &dir) const
     return (GetLocalToWorldMatrix().Inversed() * Vector4(dir, 0)).xyz();
 }
 
-
-Vector3 Transform::ParentToLocalPoint(const Vector3 &point) const
-{
-    return (GetLocalToWorldMatrix().Inversed() * Vector4(point, 1)).xyz();
-}
-
-Vector3 Transform::ParentToLocalVector(const Vector3 &vector) const
-{
-    return (GetLocalToParentMatrix().Inversed() * Vector4(vector, 0)).xyz();
-}
-Vector3 Transform::ParentToLocalDirection(const Vector3 &dir) const
-{
-    return GetLocalRotation().Inversed() * dir;
-}
-Vector3 Transform::LocalToParentPoint(const Vector3 &point) const
-{
-    return (GetLocalToParentMatrix() * Vector4(point, 1)).xyz();
-}
-
-Vector3 Transform::LocalToParentVector(const Vector3 &vector) const
-{
-    return (GetLocalToParentMatrix() * Vector4(vector, 0)).xyz();
-}
-Vector3 Transform::LocalToParentDirection(const Vector3 &dir) const
-{
-    return GetLocalRotation() * dir;
-}
-
-
-Vector3 Transform::LocalToWorldPoint(const Vector3 &point) const
+Vector3 Transform::FromLocalToWorldPoint(const Vector3 &point) const
 {
     return TransformPoint(point);
 }
-Vector3 Transform::LocalToWorldVector(const Vector3 &dir) const
+Vector3 Transform::FromLocalToWorldVector(const Vector3 &dir) const
 {
     return TransformVector(dir);
 }
-Vector3 Transform::LocalToWorldDirection(const Vector3 &dir) const
+Vector3 Transform::FromLocalToWorldDirection(const Vector3 &dir) const
 {
     return TransformDirection(dir);
 }
 
-Vector3 Transform::WorldToLocalPoint(const Vector3 &point) const
+Vector3 Transform::FromWorldToLocalPoint(const Vector3 &point) const
 {
     return InverseTransformPoint(point);
 }
-Vector3 Transform::WorldToLocalVector(const Vector3 &dir) const
+Vector3 Transform::FromWorldToLocalVector(const Vector3 &dir) const
 {
     return InverseTransformVector(dir);
 }
 
-Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
+Vector3 Transform::FromWorldToLocalDirection(const Vector3 &dir) const
 {
     return InverseTransformDirection(dir);
 }
@@ -294,7 +265,7 @@ Vector3 Transform::GetPosition() const
     else
     {
         return GetGameObject()->GetParent()->GetTransform()->
-               LocalToWorldPoint(GetLocalPosition());
+               FromLocalToWorldPoint(GetLocalPosition());
     }
 }
 
@@ -324,7 +295,7 @@ Vector3 Transform::GetLocalEuler() const
 
 Vector3 Transform::GetEuler() const
 {
-    return LocalToWorldDirection( GetLocalEuler() );
+    return FromLocalToWorldDirection( GetLocalEuler() );
 }
 
 const Vector3& Transform::GetLocalScale() const
@@ -334,7 +305,7 @@ const Vector3& Transform::GetLocalScale() const
 
 Vector3 Transform::GetScale() const
 {
-    return LocalToWorldVector(GetLocalScale());
+    return FromLocalToWorldVector(GetLocalScale());
 }
 
 Vector3 Transform::GetPositionFromMatrix4(const Matrix4 &tm)
@@ -362,7 +333,7 @@ Vector3 Transform::GetScaleFromMatrix4(const Matrix4 &tm)
 
 Vector3 Transform::GetForward() const
 {
-    return LocalToWorldVector(Vector3::Forward).Normalized();
+    return FromLocalToWorldVector(Vector3::Forward).Normalized();
 }
 
 Vector3 Transform::GetBack() const
@@ -372,7 +343,7 @@ Vector3 Transform::GetBack() const
 
 Vector3 Transform::GetRight() const
 {
-    return  LocalToWorldVector(Vector3::Right).Normalized();
+    return  FromLocalToWorldVector(Vector3::Right).Normalized();
 }
 
 Vector3 Transform::GetLeft() const
@@ -382,7 +353,7 @@ Vector3 Transform::GetLeft() const
 
 Vector3 Transform::GetUp() const
 {
-    return LocalToWorldVector(Vector3::Up).Normalized();
+    return FromLocalToWorldVector(Vector3::Up).Normalized();
 }
 
 Vector3 Transform::GetDown() const

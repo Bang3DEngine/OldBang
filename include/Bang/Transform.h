@@ -62,19 +62,12 @@ public:
     Vector3 TransformVector(const Vector3 &vector) const;
     Vector3 InverseTransformVector(const Vector3 &vector) const;
 
-    Vector3 ParentToLocalPoint(const Vector3 &point) const;
-    Vector3 ParentToLocalVector(const Vector3 &vector) const;
-    Vector3 ParentToLocalDirection(const Vector3 &dir) const;
-    Vector3 LocalToParentPoint(const Vector3 &point) const;
-    Vector3 LocalToParentVector(const Vector3 &vector) const;
-    Vector3 LocalToParentDirection(const Vector3 &dir) const;
-
-    Vector3 LocalToWorldPoint(const Vector3 &point) const;
-    Vector3 LocalToWorldVector(const Vector3 &vector) const;
-    Vector3 LocalToWorldDirection(const Vector3 &dir) const;
-    Vector3 WorldToLocalPoint(const Vector3 &point) const;
-    Vector3 WorldToLocalVector(const Vector3 &vector) const;
-    Vector3 WorldToLocalDirection(const Vector3 &dir) const;
+    Vector3 FromLocalToWorldPoint(const Vector3 &point) const;
+    Vector3 FromLocalToWorldVector(const Vector3 &vector) const;
+    Vector3 FromLocalToWorldDirection(const Vector3 &dir) const;
+    Vector3 FromWorldToLocalPoint(const Vector3 &point) const;
+    Vector3 FromWorldToLocalVector(const Vector3 &vector) const;
+    Vector3 FromWorldToLocalDirection(const Vector3 &dir) const;
 
     const Matrix4& GetLocalToWorldMatrix() const;
 

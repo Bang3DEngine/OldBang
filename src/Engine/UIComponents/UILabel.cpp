@@ -114,9 +114,9 @@ int UILabel::GetSelectionEndIndex() const
     return Math::Max(GetCursorIndex(), GetSelectionIndex());
 }
 
-float UILabel::GetCursorXGlobalNDC(int cursorIndex) const
+float UILabel::GetCursorXViewportNDC(int cursorIndex) const
 {
-    return GetTextParentRT()->FromLocalNDCToGlobalNDC(
+    return GetTextParentRT()->FromLocalPointNDCToViewportPointNDC(
                             Vector2(GetCursorXLocalNDC(cursorIndex), 0) ).x;
 }
 
@@ -246,7 +246,7 @@ void UILabel::HandleMouseSelection()
     if (Input::GetMouseButton(MouseButton::Left))
     {
         Vector2 mouseCoordsLocalNDC = Input::GetMousePositionNDC();
-        mouseCoordsLocalNDC = GetTextParentRT()->FromGlobalNDCToLocalNDC(
+        mouseCoordsLocalNDC = GetTextParentRT()->FromViewportPointNDCToLocalPointNDC(
                                             Vector2(mouseCoordsLocalNDC) );
         int closestCharIndex = GetClosestCharIndexTo(mouseCoordsLocalNDC);
         SetCursorIndex(closestCharIndex);
@@ -267,20 +267,20 @@ void UILabel::HandleMouseSelection()
 
 void UILabel::UpdateSelectionQuadRenderer()
 {
-    float cursorX     = GetCursorXGlobalNDC( GetCursorIndex() );
-    float selectionX  = GetCursorXGlobalNDC( GetSelectionIndex() );
+    float cursorX     = GetCursorXViewportNDC( GetCursorIndex() );
+    float selectionX  = GetCursorXViewportNDC( GetSelectionIndex() );
 
     float lineSkipPx  = GetText()->GetFont()->GetLineSkip(
                                                 GetText()->GetTextSize() ) + 1;
-    float lineSkipNDC = GL::FromPixelsAmountToGlobalNDC( Vector2(0, lineSkipPx) ).y;
+    float lineSkipNDC = GL::FromViewportAmountToViewportAmountNDC( Vector2(0, lineSkipPx) ).y;
 
-    Rect r = GetText()->GetContentGlobalNDCRect();
+    Rect r = GetText()->GetContentViewportNDCRect();
     Vector2 p1(Math::Min(cursorX, selectionX), r.GetMax().y - lineSkipNDC);
     Vector2 p2(Math::Max(cursorX, selectionX), r.GetMax().y);
 
     RectTransform *textParentRT = GetTextParentRT();
-    p1 = textParentRT->FromGlobalNDCToLocalNDC(p1);
-    p2 = textParentRT->FromGlobalNDCToLocalNDC(p2);
+    p1 = textParentRT->FromViewportPointNDCToLocalPointNDC(p1);
+    p2 = textParentRT->FromViewportPointNDCToLocalPointNDC(p2);
 
     RectTransform *quadRT = p_selectionQuad->GetRectTransform();
     quadRT->SetAnchorMin( Vector2::Min(p1, p2) );

@@ -214,7 +214,7 @@ Rect AABox::GetAABoundingScreenRect(Camera *cam) const
         somePointInFront = somePointInFront ||
                            Vector3::Dot(p-camPosition, camForward) > 0;
 
-        Vector2 screenP = cam->FromWorldPointToScreenNDC(p);
+        Vector2 screenP = cam->FromWorldPointToViewportPointNDC(p);
         screenPoints.PushBack(screenP);
     }
     if (!somePointInFront) { return Rect::Zero; }

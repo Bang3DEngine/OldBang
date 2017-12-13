@@ -3,6 +3,7 @@
 #include "Bang/VAO.h"
 #include "Bang/List.h"
 #include "Bang/Debug.h"
+#include "Bang/Window.h"
 #include "Bang/Matrix3.h"
 #include "Bang/GEngine.h"
 #include "Bang/Texture.h"
@@ -681,8 +682,8 @@ void GL::DeleteBuffers(int n, const GLId *glIds)
 
 void GL::SetViewport(const Rect &viewportNDC)
 {
-    Vector2 minPx = GL::FromGlobalNDCToPixelsPoint(viewportNDC.GetMin());
-    Vector2 maxPx = GL::FromGlobalNDCToPixelsAmount(viewportNDC.GetMax());
+    Vector2 minPx = GL::FromViewportPointNDCToViewportPoint(viewportNDC.GetMin());
+    Vector2 maxPx = GL::FromViewportAmountNDCToViewportAmount(viewportNDC.GetMax());
     GL::SetViewport( Recti(minPx.x, minPx.y, maxPx.x, maxPx.y) );
 }
 
@@ -903,19 +904,6 @@ void GL::SetDepthFunc(GL::Function depthFunc)
     }
 }
 
-void GL::SetWireframe(bool wireframe)
-{
-    if (GL::IsWireframe() != wireframe)
-    {
-        GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL_LINE : GL_FILL);
-    }
-}
-
-Vector2 GL::FromPixelsPointToPixelPerfect(const Vector2 &ndcPoint)
-{
-    return Vector2::Floor(ndcPoint);
-}
-
 void GL::SetCullFace(GL::Face cullFace)
 {
     if (GL::GetCullFace() != cullFace)
@@ -925,48 +913,117 @@ void GL::SetCullFace(GL::Face cullFace)
     }
 }
 
-Rect GL::FromGlobalNDCToPixels(const Rect &rectNDC)
+void GL::SetWireframe(bool wireframe)
 {
-    Vector2 min = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMin());
-    Vector2 max = GL::FromGlobalNDCToPixelsPoint(rectNDC.GetMax());
+    if (GL::IsWireframe() != wireframe)
+    {
+        GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL_LINE : GL_FILL);
+    }
+}
+
+Vector2 GL::FromPixelsPointToPixelPerfect(const Vector2 &screenPoint)
+{
+    return Vector2::Floor(screenPoint);
+}
+
+Vector2 GL::FromPointToPointNDC(const Vector2 &point, const Vector2 &rectSize)
+{
+    return (point / rectSize) * 2.0f - 1.0f;
+}
+
+Vector2 GL::FromPointNDCToPoint(const Vector2 &pointNDC, const Vector2 &rectSize)
+{
+    return (pointNDC * 0.5f + 0.5f) * rectSize;
+}
+
+Vector2 GL::FromScreenPointToViewportPoint(const Vector2 &screenPoint,
+                                           const Recti &viewport)
+{
+    return Vector2(screenPoint - Vector2(viewport.GetMin()));
+}
+
+Vector2 GL::FromViewportPointToScreenPoint(const Vector2 &vpPoint)
+{
+    Vector2 screenPoint = vpPoint + Vector2( GL::GetViewportRect().GetMin() );
+    return screenPoint;
+}
+Vector2 GL::FromViewportPointToScreenPoint(const Vector2i &vpPoint)
+{
+    return GL::FromViewportPointToScreenPoint( Vector2(vpPoint) );
+}
+
+Vector2 GL::FromScreenPointToViewportPoint(const Vector2 &screenPoint)
+{
+    return GL::FromScreenPointToViewportPoint(screenPoint, GL::GetViewportRect());
+}
+Vector2 GL::FromScreenPointToViewportPoint(const Vector2i &screenPoint)
+{
+    return GL::FromScreenPointToViewportPoint( Vector2(screenPoint) );
+}
+
+Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
+{
+    Vector2 min = GL::FromViewportPointNDCToViewportPoint(vpRectNDC.GetMin());
+    Vector2 max = GL::FromViewportPointNDCToViewportPoint(vpRectNDC.GetMax());
     return Rect(min, max);
 }
 
-Rect GL::FromPixelsToGlobalNDC(const Rect &rectPixels)
+Rect GL::FromScreenRectToScreenRectNDC(const Rect &screenRect)
 {
-    Vector2 min  = GL::FromPixelsPointToGlobalNDC(rectPixels.GetMin());
-    Vector2 size = GL::FromPixelsAmountToGlobalNDC(rectPixels.GetSize());
-    return Rect(min, (min+size));
+    Vector2 min = GL::FromScreenPointToScreenPointNDC(screenRect.GetMin());
+    Vector2 max = GL::FromScreenPointToScreenPointNDC(screenRect.GetMax());
+    return Rect(min, max);
 }
 
-Vector2 GL::FromPixelsAmountToGlobalNDC(const Vector2 &pixels)
+Rect GL::FromScreenRectNDCToScreenRect(const Rect &screenRectNDC)
 {
-    return (pixels / Vector2(GL::GetViewportSize())) * 2.0f;
+    Vector2 min = GL::FromScreenPointNDCToScreenPoint(screenRectNDC.GetMin());
+    Vector2 max = GL::FromScreenPointNDCToScreenPoint(screenRectNDC.GetMax());
+    return Rect(min, max);
 }
 
-Vector2 GL::FromGlobalNDCToPixelsAmount(const Vector2 &ndcAmount)
+Vector2 GL::FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount)
 {
-    return Vector2::Round((ndcAmount * Vector2(GL::GetViewportSize())) * 0.5f);
+    return (vpAmount / Vector2(GL::GetViewportSize())) * 2.0f;
 }
 
-Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2 &_pixelsPoint)
+Vector2 GL::FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC)
 {
-    Vector2i screenSize( GL::GetViewportSize() );
-    Vector2 pixelsPoint(_pixelsPoint.x, (screenSize.y-1) - _pixelsPoint.y);
-    Vector2 res = ( Vector2f(pixelsPoint) / Vector2f(screenSize) ) * 2.0f - 1.0f;
+    return Vector2::Round((vpAmountNDC * Vector2(GL::GetViewportSize())) * 0.5f);
+}
+
+Vector2 GL::FromScreenPointNDCToScreenPoint(const Vector2 &screenPointNDC)
+{
+    Vector2i winSize = Window::GetActive()->GetSize();
+    return GL::FromPointNDCToPoint(screenPointNDC, Vector2(winSize));
+}
+
+Vector2 GL::FromScreenPointToScreenPointNDC(const Vector2 &screenPoint)
+{
+    Vector2i winSize( Window::GetActive()->GetSize() );
+    return GL::FromPointToPointNDC(screenPoint, Vector2(winSize));
+}
+Vector2 GL::FromScreenPointToScreenPointNDC(const Vector2i &screenPoint)
+{
+    return GL::FromScreenPointToScreenPointNDC( Vector2(screenPoint) );
+}
+
+Vector2 GL::FromViewportPointToViewportPointNDC(const Vector2 &vpPoint)
+{
+    Vector2i vpSize( GL::GetViewportSize() );
+    Vector2 res = GL::FromPointToPointNDC(vpPoint, Vector2(vpSize));
     return res;
 }
-Vector2 GL::FromPixelsPointToGlobalNDC(const Vector2i &pixelsPoint)
+
+Vector2 GL::FromViewportPointToViewportPointNDC(const Vector2i &vpPoint)
 {
-    return GL::FromPixelsPointToGlobalNDC(pixelsPoint);
+    return GL::FromViewportPointToViewportPointNDC( Vector2(vpPoint) );
 }
 
-Vector2 GL::FromGlobalNDCToPixelsPoint(const Vector2 &_ndcPoint)
+Vector2 GL::FromViewportPointNDCToViewportPoint(const Vector2 &vpPointNDC)
 {
-    Vector2 ndcPoint(_ndcPoint.x,  _ndcPoint.y);
-    Vector2 screenSize( GL::GetViewportSize() );
-    Vector2 resultPx ( Vector2::Round((ndcPoint * 0.5f + 0.5f) * screenSize) );
-    return Vector2(resultPx.x, (screenSize.y-1) - resultPx.y);
+    Vector2 vpSize( GL::GetViewportSize() );
+    return Vector2::Round( GL::FromPointNDCToPoint(vpPointNDC, vpSize) );
 }
 
 

@@ -193,11 +193,11 @@ void UIList::ScrollTo(int i)
 
 void UIList::ScrollTo(GOItem *item)
 {
-    Rect itemRect = item->GetRectTransform()-> GetScreenSpaceRectPx();
+    Rect itemRect = item->GetRectTransform()-> GetViewportRect();
     Rect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
-                                                        GetScreenSpaceRectPx();
+                                                        GetViewportRect();
     Rect containerRect = GetContainer()->GetRectTransform()->
-                                         GetScreenSpaceRectPx();
+                                         GetViewportRect();
     Rect relativeItemRect = itemRect - containerRect.GetMin();
 
     Vector2i scrolling = -Vector2i::One;
@@ -239,8 +239,8 @@ void UIList::SetSelection(int index)
 
             IFocusable *itemFocusable = selectedItem->
                                         GetComponentInChildren<IFocusable>();
-            GetGameObject()->GetComponentInParent<UICanvas>()->
-                             SetFocus(itemFocusable);
+            UICanvas *canvas = GetGameObject()->GetComponentInParent<UICanvas>();
+            if (canvas) { canvas->SetFocus(itemFocusable); }
 
             Callback(selectedItem, Action::SelectionIn);
         }

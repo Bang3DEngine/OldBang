@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "Bang/Ray.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/Component.h"
@@ -23,7 +24,6 @@ public:
         Perspective
     };
 
-
     virtual void Bind() const;
     virtual void UnBind() const;
     void SetViewportForBlitting() const;
@@ -32,9 +32,12 @@ public:
     void BindGBuffer();
     void BindSelectionFramebuffer();
 
-    Vector2i FromScreenPointToViewport(const Vector2i &screenPointPx);
-    Vector2 FromWorldPointToScreenNDC(const Vector3 &position);
-    Vector3 FromScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCam);
+    Ray      FromViewportPointNDCToRay(const Vector2 &vpPointNDC);
+    Vector2i FromScreenPointToViewportPoint(const Vector2i &screenPoint);
+    Vector2  FromWorldPointToViewportPointNDC(const Vector3 &worldPosition);
+    Vector3  FromViewportPointNDCToWorldPoint(const Vector3 &vpPositionNDC);
+    Vector3  FromViewportPointNDCToWorldPoint(const Vector2 &vpPositionNDC,
+                                              float zFromCam);
 
     void SetOrthoHeight(float orthoHeight);
     void SetClearColor(const Color& color);
@@ -55,7 +58,9 @@ public:
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
     GameObject *GetGameObjectToRender() const;
-    const Rect& GetViewportRect() const;
+    Rect GetViewportScreenRect() const;
+    Rect GetViewportScreenRectNDC() const;
+    const Rect& GetViewportRectNDC() const;
     GBuffer *GetGBuffer() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;
 
@@ -83,7 +88,7 @@ private:
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;
-    Rect m_viewportRect = Rect::ScreenRectNDC;
+    Rect m_viewportRectNDC = Rect::ScreenRectNDC;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
     mutable Recti m_latestViewportRect = Recti::Zero;

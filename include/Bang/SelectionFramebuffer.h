@@ -23,7 +23,7 @@ public:
     void RenderForSelectionBuffer(Renderer *renderer);
 
     RH<Texture2D> GetColorTexture() const;
-    GameObject *GetGameObjectInPosition(const Vector2i &screenCoords);
+    GameObject *GetGameObjectInViewportPoint(const Vector2i &vpPoint);
 
 private:
     using IdType = unsigned long long;
