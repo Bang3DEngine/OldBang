@@ -7,7 +7,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-Color GetColorFromAxis(Axis3D axis)
+inline Color GetColorFromAxis(Axis3D axis)
 {
     switch (axis)
     {
@@ -18,7 +18,7 @@ Color GetColorFromAxis(Axis3D axis)
     ASSERT(false);
 }
 
-Vector3 GetVectorFromAxis(Axis3D axis)
+inline Vector3 GetVectorFromAxis(Axis3D axis)
 {
     switch (axis)
     {

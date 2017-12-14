@@ -32,6 +32,7 @@ private:
         float thickness;
         double destroyTimestamp;
         bool depthTest;
+        bool renderedOnce;
     };
 
     List<DebugRenderLine> m_linesToRender;

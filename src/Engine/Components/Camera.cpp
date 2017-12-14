@@ -194,9 +194,8 @@ GameObject *Camera::GetGameObjectToRender() const
 Rect Camera::GetViewportScreenRect() const
 {
     Rect vpRect = GetViewportRectNDC() * 0.5f + 0.5f;
-    Recti vp( vpRect * Vector2(GL::GetViewportSize())
-                     + Vector2(GL::GetViewportRect().GetMin()) );
-    return Rect(vp);
+    return Rect( vpRect * Vector2(GL::GetViewportSize())
+                        + Vector2(GL::GetViewportRect().GetMin()) );
 }
 Rect Camera::GetViewportScreenRectNDC() const
 {

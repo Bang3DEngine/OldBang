@@ -272,7 +272,8 @@ void UILabel::UpdateSelectionQuadRenderer()
 
     float lineSkipPx  = GetText()->GetFont()->GetLineSkip(
                                                 GetText()->GetTextSize() ) + 1;
-    float lineSkipNDC = GL::FromViewportAmountToViewportAmountNDC( Vector2(0, lineSkipPx) ).y;
+    float lineSkipNDC = GL::FromViewportAmountToViewportAmountNDC(
+                                                Vector2(0, lineSkipPx) ).y;
 
     Rect r = GetText()->GetContentViewportNDCRect();
     Vector2 p1(Math::Min(cursorX, selectionX), r.GetMax().y - lineSkipNDC);

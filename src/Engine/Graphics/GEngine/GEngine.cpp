@@ -244,7 +244,6 @@ void GEngine::RenderScreenPlane(bool withDepth)
 
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBothAndModel);
 
-    GL::Face prevCullFace = GL::GetCullFace();
     bool prevDepthMask = GL::GetDepthMask();
     GL::Function prevDepthFunc = GL::GetDepthFunc();
 
@@ -253,12 +252,12 @@ void GEngine::RenderScreenPlane(bool withDepth)
         GL::SetDepthFunc(GL::Function::Always);
         GL::SetDepthMask(false);
     }
-    GL::SetCullFace(GL::Face::None);
+    GL::Disable(GL::Test::CullFace);
 
     GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitives::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
 
-    GL::SetCullFace(prevCullFace);
+    GL::Enable(GL::Test::CullFace);
     GL::SetDepthMask(prevDepthMask);
     GL::SetDepthFunc(prevDepthFunc);
     GL::SetWireframe(prevWireframe);

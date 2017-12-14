@@ -180,7 +180,7 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     GameObject *wall2 = MeshFactory::GetCubeGameObject();
     wall2->SetName("Wall2");
     wall2->GetTransform()->TranslateLocal( Vector3(0, 3, -4) );
-    wall2->GetTransform()->SetLocalRotation( Quaternion::AngleAxis(Math::PI/2, Vector3::Up) );
+    wall2->GetTransform()->SetLocalRotation( Quaternion::AngleAxis(Math::Pi/2, Vector3::Up) );
     wall2->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
     scene->SetAsChild(wall2);
 

@@ -17,9 +17,14 @@
 NAMESPACE_BANG_BEGIN
 
 #ifdef DEBUG
+#define GL_CALL( CALL ) \
+        GL_ClearError(); \
+        CALL; \
+        GL_CheckError()
 #define GL_ClearError() GL::ClearError()
 #define GL_CheckError() ASSERT(GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 #else
+#define GL_CALL( CALL ) CALL
 #define GL_ClearError() // Empty
 #define GL_CheckError() // Empty
 #endif
@@ -61,7 +66,7 @@ public:
         Polygon       = GL_POLYGON
     };
 
-    enum Test
+    enum class Test
     {
         Depth    = GL_DEPTH_TEST,
         Stencil  = GL_STENCIL_TEST,
@@ -87,8 +92,7 @@ public:
     {
         Front        = GL_FRONT,
         Back         = GL_BACK,
-        FrontAndBack = GL_FRONT_AND_BACK,
-        None         = GL_NONE
+        FrontAndBack = GL_FRONT_AND_BACK
     };
 
     enum class BindTarget
@@ -189,7 +193,6 @@ public:
     enum class WrapMode
     {
         Repeat = GL_REPEAT,
-        Clamp = GL_CLAMP,
         ClampToEdge = GL_CLAMP_TO_EDGE,
         ClampToBorder = GL_CLAMP_TO_BORDER
     };
@@ -291,7 +294,9 @@ public:
     static void ClearStencilBuffer(int stencilValue = 0);
 
     static void Enable (GL::Enum glEnum);
+    static void Enable (GL::Test glTest);
     static void Disable(GL::Enum glEnum);
+    static void Disable(GL::Test glTest);
 
     static void EnableVertexAttribArray(int location);
     static void DisableVertexAttribArray(int location);
@@ -564,7 +569,7 @@ private:
     bool m_depthMask = true;
     GL::Function m_depthFunc = GL::Function::Less;
     Color m_clearColor = Color::Zero;
-    GL::Face m_cullFace = GL::Face::None;
+    GL::Face m_cullFace = GL::Face::Back;
 
     GL::Enum m_frontPolygonMode      = GL_FILL;
     GL::Enum m_backPolygonMode       = GL_FILL;

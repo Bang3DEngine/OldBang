@@ -18,7 +18,7 @@ void CircleRenderer::ReloadPoints()
 {
     Array<Vector3> points;
     points.Resize(m_segments);
-    const float step = (2.0f * Math::PI) / (m_segments - 1);
+    const float step = (2.0f * Math::Pi) / (m_segments - 1);
     for (int i = 0; i < m_segments; ++i)
     {
         points[i] = Vector3(Math::Cos(step*i),

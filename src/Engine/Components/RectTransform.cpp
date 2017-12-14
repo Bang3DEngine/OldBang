@@ -353,7 +353,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
     if (!Input::IsMouseInsideScreen()) { return false; }
 
     if (!IsWaitingToBeDestroyed() && IsEnabled() &&
-        GetScreenRectNDC().Contains( Input::GetMousePositionNDC() ))
+        GetScreenRectNDC().Contains( Input::GetMousePositionScreenNDC() ))
     {
         return true;
     }

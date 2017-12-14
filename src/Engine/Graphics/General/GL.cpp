@@ -15,6 +15,19 @@ USING_NAMESPACE_BANG
 
 GL* GL::s_activeGL = nullptr;
 
+GL::GL()
+{
+    m_glUniforms = new GLUniforms();
+    GL::Enable(GL::Test::Depth);
+    GL::Enable(GL::Test::Stencil);
+    GL::Enable(GL::Test::CullFace);
+}
+
+GL::~GL()
+{
+    delete m_glUniforms;
+}
+
 void GL::ClearError()
 {
     glGetError();
@@ -56,7 +69,7 @@ Color GL::GetClearColor()
 
 void GL::Clear(GL::BufferBit bufferBit)
 {
-    glClear( GLCAST(bufferBit) );
+    GL_CALL( glClear( GLCAST(bufferBit) ) );
 }
 
 void GL::ClearColorBuffer(const Color &clearColor,
@@ -73,7 +86,8 @@ void GL::ClearColorBuffer(const Color &clearColor,
     if (GL::GetClearColor() != clearColor)
     {
         GL::GetActive()->m_clearColor = clearColor;
-        glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+        GL_CALL( glClearColor(clearColor.r, clearColor.g,
+                              clearColor.b, clearColor.a) );
     }
 
     GL::Clear(GL::BufferBit::Color);
@@ -87,28 +101,24 @@ void GL::ClearColorBuffer(const Color &clearColor,
 
 void GL::ClearDepthBuffer(float clearDepth)
 {
-    glClearDepth(clearDepth);
+    GL_CALL( glClearDepth(clearDepth) );
     GL::Clear(GL::BufferBit::Depth);
 }
 
 void GL::ClearStencilBuffer(int stencilValue)
 {
-    glClearStencil(stencilValue);
+    GL_CALL( glClearStencil(stencilValue) );
     GL::Clear(GL::BufferBit::Stencil);
 }
 
 void GL::EnableVertexAttribArray(int location)
 {
-    GL_ClearError();
-    glEnableVertexAttribArray(location);
-    GL_CheckError();
+    GL_CALL( glEnableVertexAttribArray(location) );
 }
 
 void GL::DisableVertexAttribArray(int location)
 {
-    GL_ClearError();
-    glDisableVertexAttribArray(location);
-    GL_CheckError();
+    GL_CALL( glDisableVertexAttribArray(location) );
 }
 
 void GL::VertexAttribPointer(int location,
@@ -118,14 +128,14 @@ void GL::VertexAttribPointer(int location,
                              int dataStride,
                              int dataOffset)
 {
-    GL_ClearError();
+    GL_CALL(
     glVertexAttribPointer(location,
                           dataComponentsCount,
                           GLCAST(dataType),
                           dataNormalized,
                           dataStride,
-                          RCAST<void*>(dataOffset));
-    GL_CheckError();
+                          RCAST<void*>(dataOffset))
+    );
 }
 
 void GL::PolygonMode(GL::Face face, GL::Enum mode)
@@ -161,12 +171,13 @@ GL::Enum GL::GetPolygonMode(GL::Face face)
 
 GLvoid* GL::MapBuffer(GL::BindTarget target, GL::Enum access)
 {
-    return glMapBuffer(GLCAST(target), access);
+    GL_CALL( GLvoid *ret = glMapBuffer(GLCAST(target), access) );
+    return ret;
 }
 
 void GL::UnMapBuffer(GL::BindTarget target)
 {
-    glUnmapBuffer( GLCAST(target) );
+    GL_CALL( glUnmapBuffer( GLCAST(target) ) );
 }
 
 int GL::GetUniformsListSize(GLId shaderProgramId)
@@ -184,10 +195,12 @@ GL::DataType GL::GetUniformTypeAt(GLId shaderProgramId, GLuint uniformIndex)
     constexpr GLsizei bufSize = 128;
     GLchar cname[bufSize];
 
+    GL_CALL(
     glGetActiveUniform(shaderProgramId,
                        Cast<GLuint>(uniformIndex),
                        bufSize, &length,
-                       &size, &type, cname);
+                       &size, &type, cname)
+    );
 
     return Cast<GL::DataType>(type);
 }
@@ -196,33 +209,26 @@ void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
 {
     ENSURE(srcFactor != GL::BlendFactor::None &&
            dstFactor != GL::BlendFactor::None);
-
-    GL_ClearError();
-    glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) );
-    GL_CheckError();
+    GL_CALL( glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) ) );
 }
 
-void GL::Enable(GL::Enum glEnum)
-{
-    glEnable(glEnum);
-}
+void GL::Enable(GL::Enum glEnum) { GL_CALL( glEnable(glEnum) ); }
+void GL::Enable(GL::Test glTest) { GL_CALL( glEnable( GLCAST(glTest) ) ); }
 
-void GL::Disable(GL::Enum glEnum)
-{
-    glDisable(glEnum);
-}
+void GL::Disable(GL::Enum glEnum) { GL_CALL( glDisable(glEnum) ); }
+void GL::Disable(GL::Test glTest) { GL_CALL( glDisable( GLCAST(glTest) ) ); }
 
 void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
                          int dstX0, int dstY0, int dstX1, int dstY1,
                          GL::FilterMode filterMode,
                          GL::BufferBit bufferBitMask)
 {
-    GL_ClearError();
+    GL_CALL(
     glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1,
                       dstX0, dstY0, dstX1, dstY1,
                       GLCAST(bufferBitMask),
-                      GLCAST(filterMode));
-    GL_CheckError();
+                      GLCAST(filterMode))
+    );
 }
 
 void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
@@ -238,37 +244,29 @@ void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
 
 GLId GL::CreateShader(GL::ShaderType shaderType)
 {
-    GL_ClearError();
-    GLId id = glCreateShader( GLCAST(shaderType) );
-    GL_CheckError();
+    GL_CALL( GLId id = glCreateShader( GLCAST(shaderType) ) );
     return id;
 }
 
 void GL::ShaderSource(GLId shaderId, const String &sourceCode)
 {
-    GL_ClearError();
     int sourceSize = sourceCode.Size();
     const char *src = sourceCode.ToCString();
-    glShaderSource(shaderId, 1, &src, &sourceSize);
-    GL_CheckError();
+    GL_CALL( glShaderSource(shaderId, 1, &src, &sourceSize) );
 }
 
 bool GL::CompileShader(GLId shaderId)
 {
     GL_ClearError();
     glCompileShader(shaderId);
-    GL_CheckError();
-    bool ok = GL::GetShaderInteger(shaderId, GL_COMPILE_STATUS);
-    GL_CheckError();
+    GL_CALL( bool ok = GL::GetShaderInteger(shaderId, GL_COMPILE_STATUS) );
     return ok;
 }
 
 int GL::GetShaderInteger(GLId shaderId, GL::Enum glEnum)
 {
     int v = false;
-    GL_ClearError();
-    glGetShaderiv(shaderId, glEnum, &v);
-    GL_CheckError();
+    GL_CALL( glGetShaderiv(shaderId, glEnum, &v) );
     return v;
 }
 
@@ -276,38 +274,31 @@ String GL::GetShaderErrorMsg(GLId shaderId)
 {
     int maxLength = GL::GetShaderInteger(shaderId, GL_INFO_LOG_LENGTH);
 
-    GL_ClearError();
     Array<char> v(maxLength);
-    glGetShaderInfoLog(shaderId, maxLength, &maxLength, &v[0]);
-    GL_CheckError();
+    GL_CALL( glGetShaderInfoLog(shaderId, maxLength, &maxLength, &v[0]) );
 
     return String(v.begin(), v.end());
 }
 
 void GL::DeleteShader(GLId shaderId)
 {
-    GL_ClearError();
-    glDeleteShader(shaderId);
-    GL_CheckError();
+    GL_CALL( glDeleteShader(shaderId) );
 }
 
 GLId GL::CreateProgram()
 {
-    return glCreateProgram();
+    GL_CALL( GLId id = glCreateProgram() );
+    return id;
 }
 
 void GL::AttachShader(GLId programId, GLId shaderId)
 {
-    GL_ClearError();
-    glAttachShader(programId, shaderId);
-    GL_CheckError();
+    GL_CALL( glAttachShader(programId, shaderId) );
 }
 
 bool GL::LinkProgram(GLId programId)
 {
-    GL_ClearError();
-    glLinkProgram(programId);
-    GL_CheckError();
+    GL_CALL( glLinkProgram(programId) );
     int linked = GL::GetProgramInteger(programId, GL_LINK_STATUS);
     return linked;
 }
@@ -335,40 +326,33 @@ int GL::GetProgramInteger(GLId programId, GL::Enum glEnum)
 
 void GL::GetProgramIntegers(GLId programId, GL::Enum glEnum, GLint *ints)
 {
-    GL_ClearError();
-    glGetProgramiv(programId, glEnum, ints);
-    GL_CheckError();
+    GL_CALL( glGetProgramiv(programId, glEnum, ints) );
 }
 
 void GL::BindAttribLocation(GLId programId, int location,
                             const String &attribName)
 {
-    GL_ClearError();
-    glBindAttribLocation(programId, location, attribName.ToCString());
-    GL_CheckError();
+    GL_CALL( glBindAttribLocation(programId, location,
+                                  attribName.ToCString()) );
 }
 
 void GL::BindFragDataLocation(GLId programId, int location,
                               const String &fragDataName)
 {
-    GL_ClearError();
-    glBindFragDataLocation(programId, location, fragDataName.ToCString());
-    GL_CheckError();
+    GL_CALL( glBindFragDataLocation(programId, location,
+                                    fragDataName.ToCString()) );
 }
 
 int GL::GetUniformLocation(GLId programId, const String &uniformName)
 {
-    GL_ClearError();
-    int location = glGetUniformLocation(programId, uniformName.ToCString());
-    GL_CheckError();
+    GL_CALL( int location = glGetUniformLocation(programId,
+                                                 uniformName.ToCString()) );
     return location;
 }
 
 void GL::DeleteProgram(GLId programId)
 {
-    GL_ClearError();
-    glDeleteProgram(programId);
-    GL_CheckError();
+    GL_CALL( glDeleteProgram(programId) );
 }
 
 void GL::FramebufferTexture2D(GL::FramebufferTarget target,
@@ -376,31 +360,29 @@ void GL::FramebufferTexture2D(GL::FramebufferTarget target,
                               GL::TextureTarget texTarget,
                               GLId textureId)
 {
-    GL_ClearError();
+    GL_CALL(
     glFramebufferTexture2D(GLCAST(target),
                            GLCAST(attachment),
                            GLCAST(texTarget),
                            textureId,
                            0);
-    GL_CheckError();
+    );
 }
 
 void GL::BindRenderbuffer(GL::RenderbufferTarget target, GLId renderbufferId)
 {
-    GL_ClearError();
-    glBindRenderbuffer(GLCAST(target), renderbufferId);
-    GL_CheckError();
+    GL_CALL( glBindRenderbuffer(GLCAST(target), renderbufferId) );
 }
 
 void GL::RenderbufferStorage(GL::RenderbufferTarget target,
                              GL::RenderbufferFormat format,
                              int width, int height)
 {
-    GL_ClearError();
+    GL_CALL(
     glRenderbufferStorage(GLCAST(target),
                           GLCAST(format),
-                          width, height);
-    GL_CheckError();
+                          width, height)
+    );
 }
 
 void GL::FramebufferRenderbuffer(GL::FramebufferTarget target,
@@ -408,38 +390,35 @@ void GL::FramebufferRenderbuffer(GL::FramebufferTarget target,
                                  GL::RenderbufferTarget rbTarget,
                                  GLId renderbufferId)
 {
-    GL_ClearError();
+    GL_CALL(
     glFramebufferRenderbuffer(GLCAST(target),
                               GLCAST(attachment),
                               GLCAST(rbTarget),
-                              renderbufferId);
-    GL_CheckError();
+                              renderbufferId)
+    );
 }
 
 void GL::DrawBuffers(const Array<GL::Attachment> &attachments)
 {
-    GL_ClearError();
-    glDrawBuffers(attachments.Size(), (const GLenum*)(&attachments[0]));
-    GL_CheckError();
+    GL_CALL( glDrawBuffers(attachments.Size(),
+                           (const GLenum*)(&attachments[0])) );
 }
 
 void GL::ReadBuffer(GL::Attachment readAttachment)
 {
-    GL_ClearError();
-    glReadBuffer( GLCAST(readAttachment) );
-    GL_CheckError();
+    GL_CALL( glReadBuffer( GLCAST(readAttachment) ) );
 }
 
 void GL::ReadPixels(int x, int y, int width, int height,
                     GL::ColorComp inputComp, GL::DataType outputDataType,
                     void *pixels)
 {
-    GL_ClearError();
+    GL_CALL(
     glReadPixels(x, y, width, height,
                  GLCAST(inputComp),
                  GLCAST(outputDataType),
                  pixels);
-    GL_CheckError();
+    );
 }
 
 void GL::ReadPixels(const Recti &readRect, GL::ColorComp inputComp,
@@ -455,33 +434,23 @@ void GL::Flush() { glFlush(); }
 
 void GL::Uniform(int location, int value)
 {
-    GL_ClearError();
-    glUniform1i(location, value);
-    GL_CheckError();
+    GL_CALL( glUniform1i(location, value) );
 }
 void GL::Uniform(int location, float value)
 {
-    GL_ClearError();
-    glUniform1f(location, value);
-    GL_CheckError();
+    GL_CALL( glUniform1f(location, value) );
 }
 void GL::Uniform(int location, bool value)
 {
-    GL_ClearError();
-    glUniform1i(location, value ? 1 : 0);
-    GL_CheckError();
+    GL_CALL( glUniform1i(location, value ? 1 : 0) );
 }
 void GL::Uniform(int location, const Matrix3f& value)
 {
-    GL_ClearError();
-    glUniformMatrix3fv(location, 1, false, value.Data());
-    GL_CheckError();
+    GL_CALL( glUniformMatrix3fv(location, 1, false, value.Data()) );
 }
 void GL::Uniform(int location, const Matrix4f& value)
 {
-    GL_ClearError();
-    glUniformMatrix4fv(location, 1, false, value.Data());
-    GL_CheckError();
+    GL_CALL( glUniformMatrix4fv(location, 1, false, value.Data()) );
 }
 void GL::Uniform(int location, const Color &value)
 {
@@ -489,35 +458,25 @@ void GL::Uniform(int location, const Color &value)
 }
 void GL::Uniform(int location, const Vector2 &value)
 {
-    GL_ClearError();
-    glUniform2fv(location, 1, value.Data());
-    GL_CheckError();
+    GL_CALL( glUniform2fv(location, 1, value.Data()) );
 }
 void GL::Uniform(int location, const Vector3 &value)
 {
-    GL_ClearError();
-    glUniform3fv(location, 1, value.Data());
-    GL_CheckError();
+    GL_CALL( glUniform3fv(location, 1, value.Data()) );
 }
 void GL::Uniform(int location, const Vector4 &value)
 {
-    GL_ClearError();
-    glUniform4fv(location, 1, value.Data());
-    GL_CheckError();
+    GL_CALL( glUniform4fv(location, 1, value.Data()) );
 }
 
 void GL::PixelStore(GL::Enum pixelStoreEnum, int n)
 {
-    GL_ClearError();
-    glPixelStorei(pixelStoreEnum, n);
-    GL_CheckError();
+    GL_CALL( glPixelStorei(pixelStoreEnum, n) );
 }
 
 void GL::GenerateMipMap(GL::TextureTarget textureTarget)
 {
-    GL_ClearError();
-    glGenerateMipmap( GLCAST(textureTarget) );
-    GL_CheckError();
+    GL_CALL( glGenerateMipmap( GLCAST(textureTarget) ) );
 }
 
 void GL::TexImage2D(GL::TextureTarget textureTarget,
@@ -528,8 +487,7 @@ void GL::TexImage2D(GL::TextureTarget textureTarget,
                     GL::DataType inputDataType,
                     const void *data)
 {
-    GL_ClearError();
-
+    GL_CALL(
     glTexImage2D(GLCAST(textureTarget),
                  0,
                  GLCAST(textureInternalColorFormat),
@@ -538,27 +496,28 @@ void GL::TexImage2D(GL::TextureTarget textureTarget,
                  0,
                  GLCAST(inputDataColorComp),
                  GLCAST(inputDataType),
-                 data);
-
-    GL_CheckError();
+                 data)
+    );
 }
 
 void GL::TexParameterFilter(GL::TextureTarget textureTarget,
                             GL::FilterMagMin filterMagMin,
                             GL::FilterMode filterMode)
 {
+    GL_CALL(
     glTexParameteri(GLCAST(textureTarget),
                     GLCAST(filterMagMin),
-                    GLCAST(filterMode));
+                    GLCAST(filterMode)) );
 }
 
 void GL::TexParameterWrap(GL::TextureTarget textureTarget,
                           GL::WrapCoord wrapCoord,
                           GL::WrapMode wrapMode)
 {
+    GL_CALL(
     glTexParameteri(GLCAST(textureTarget),
                     GLCAST(wrapCoord),
-                    GLCAST(wrapMode));
+                    GLCAST(wrapMode)) );
 }
 
 void GL::GetTexImage(GL::TextureTarget textureTarget,
@@ -576,15 +535,12 @@ void GL::GetTexImage(GL::TextureTarget textureTarget,
                      GL::DataType dataType,
                      void *pixels)
 {
-    GL_ClearError();
-
+    GL_CALL(
     glGetTexImage(GLCAST(textureTarget),
                   0,
                   GLCAST(GL::ColorComp::RGBA),
                   GLCAST(dataType),
-                  Cast<void*>(pixels));
-
-    GL_CheckError();
+                  Cast<void*>(pixels)) );
 }
 
 bool GL::GetBoolean(GL::Enum glEnum)
@@ -595,11 +551,9 @@ bool GL::GetBoolean(GL::Enum glEnum)
 }
 void GL::GetBoolean(GL::Enum glEnum, bool *values)
 {
-    GL_ClearError();
     GLboolean result;
-    glGetBooleanv(GLCAST(glEnum), &result);
+    GL_CALL( glGetBooleanv(GLCAST(glEnum), &result) );
     *values = result;
-    GL_CheckError();
 }
 
 int GL::GetInteger(GL::Enum glEnum)
@@ -610,15 +564,13 @@ int GL::GetInteger(GL::Enum glEnum)
 }
 void GL::GetInteger(GL::Enum glEnum, int *values)
 {
-    GL_ClearError();
-    glGetIntegerv(glEnum, values);
-    GL_CheckError();
+    GL_CALL( glGetIntegerv(glEnum, values) );
 }
 
 void GL::ActiveTexture(int activeTexture)
 {
     ASSERT(activeTexture >= GL_TEXTURE0);
-    glActiveTexture(activeTexture);
+    GL_CALL( glActiveTexture(activeTexture) );
 }
 
 void GL::LineWidth(float lineWidth)
@@ -632,52 +584,52 @@ void GL::LineWidth(float lineWidth)
 
 void GL::GenFramebuffers(int n, GLId *glIds)
 {
-    glGenFramebuffers(n, glIds);
+    GL_CALL( glGenFramebuffers(n, glIds) );
 }
 
 void GL::GenRenderBuffers(int n, GLId *glIds)
 {
-    glGenRenderbuffers(n, glIds);
+    GL_CALL( glGenRenderbuffers(n, glIds) );
 }
 
 void GL::GenTextures(int n, GLId *glIds)
 {
-    glGenTextures(n, glIds);
+    GL_CALL( glGenTextures(n, glIds) );
 }
 
 void GL::GenVertexArrays(int n, GLId *glIds)
 {
-    glGenVertexArrays(n, glIds);
+    GL_CALL( glGenVertexArrays(n, glIds) );
 }
 
 void GL::GenBuffers(int n, GLId *glIds)
 {
-    glGenBuffers(n, glIds);
+    GL_CALL( glGenBuffers(n, glIds) );
 }
 
 void GL::DeleteFramebuffers(int n, const GLId *glIds)
 {
-    glDeleteFramebuffers(n, glIds);
+    GL_CALL( glDeleteFramebuffers(n, glIds) );
 }
 
 void GL::DeleteRenderBuffers(int n, const GLId *glIds)
 {
-    glDeleteRenderbuffers(n, glIds);
+    GL_CALL( glDeleteRenderbuffers(n, glIds) );
 }
 
 void GL::DeleteTextures(int n, const GLId *glIds)
 {
-    glDeleteTextures(n, glIds);
+    GL_CALL( glDeleteTextures(n, glIds) );
 }
 
 void GL::DeleteVertexArrays(int n, const GLId *glIds)
 {
-    glDeleteVertexArrays(n, glIds);
+    GL_CALL( glDeleteVertexArrays(n, glIds) );
 }
 
 void GL::DeleteBuffers(int n, const GLId *glIds)
 {
-    glDeleteBuffers(n, glIds);
+    GL_CALL( glDeleteBuffers(n, glIds) );
 }
 
 void GL::SetViewport(const Rect &viewportNDC)
@@ -737,7 +689,7 @@ Vector2 GL::GetViewportPixelSize()
 void GL::BufferData(GL::BindTarget target, int dataSize,
                     const void *data, GL::UsageHint usageHint)
 {
-    glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint));
+    GL_CALL( glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint)) );
 }
 
 void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
@@ -782,27 +734,29 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
         case BindTarget::ShaderProgram:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundShaderProgramId = glId; }
-            glUseProgram(glId);
+            GL_CALL( glUseProgram(glId) );
         break;
         case BindTarget::Framebuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundFramebufferId = glId; }
-            glBindFramebuffer( GLCAST(GL::BindTarget::Framebuffer), glId);
+            GL_CALL( glBindFramebuffer( GLCAST(GL::BindTarget::Framebuffer),
+                                        glId) );
         break;
         case BindTarget::VAO:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if(gl) { gl->m_boundVAOId = glId; }
-            glBindVertexArray(glId);
+            GL_CALL( glBindVertexArray(glId) );
         break;
         case BindTarget::VBO:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundVBOId = glId; }
-            glBindBuffer( GLCAST(GL::BindTarget::VBO), glId);
+            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::VBO), glId) );
         break;
         case BindTarget::UniformBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundUniformBufferId = glId; }
-            glBindBuffer( GLCAST(GL::BindTarget::UniformBuffer), glId);
+            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::UniformBuffer),
+                                   glId) );
         break;
 
         default: ASSERT(false); break;
@@ -866,7 +820,7 @@ void GL::SetStencilFunc(GL::Function stencilFunction,
         gl->m_stencilFunc  = stencilFunction;
         gl->m_stencilValue = stencilValue;
         gl->m_stencilMask  = mask;
-        glStencilFunc(GLCAST(stencilFunction), stencilValue, mask);
+        GL_CALL( glStencilFunc(GLCAST(stencilFunction), stencilValue, mask) );
     }
 }
 
@@ -891,7 +845,7 @@ void GL::SetDepthMask(bool writeDepth)
     {
         GL *gl = GL::GetActive();
         gl->m_depthMask = writeDepth;
-        glDepthMask(writeDepth);
+        GL_CALL( glDepthMask(writeDepth) );
     }
 }
 
@@ -900,7 +854,7 @@ void GL::SetDepthFunc(GL::Function depthFunc)
     if (GL::GetDepthFunc() != depthFunc)
     {
         GL::GetActive()->m_depthFunc = depthFunc;
-        glDepthFunc( GLCAST(depthFunc) );
+        GL_CALL( glDepthFunc( GLCAST(depthFunc) ) );
     }
 }
 
@@ -909,7 +863,7 @@ void GL::SetCullFace(GL::Face cullFace)
     if (GL::GetCullFace() != cullFace)
     {
         GL::GetActive()->m_cullFace = cullFace;
-        glCullFace( GLCAST(cullFace) );
+        GL_CALL( glCullFace( GLCAST(cullFace) ) );
     }
 }
 
@@ -1058,7 +1012,7 @@ bool GL::IsWireframe()
 GL::Face GL::GetCullFace()
 {
     GL *gl = GL::GetActive();
-    return gl ? gl->m_cullFace : GL::Face::None;
+    return gl ? gl->m_cullFace : GL::Face::Back;
 }
 
 GLId GL::GetBoundId(GL::BindTarget bindTarget)
@@ -1169,9 +1123,11 @@ void GL::BindUniformBufferToShader(const String &uniformBlockName,
                                    const ShaderProgram *sp,
                                    const IUniformBuffer *buffer)
 {
+    GL_CALL(
     GLuint blockIndex = glGetUniformBlockIndex(sp->GetGLId(),
-                                               uniformBlockName.ToCString());
-    glUniformBlockBinding(sp->GetGLId(), blockIndex, buffer->GetBindingPoint());
+                                               uniformBlockName.ToCString()) );
+    GL_CALL( glUniformBlockBinding(sp->GetGLId(), blockIndex,
+                                   buffer->GetBindingPoint()) );
 }
 
 GL::ViewProjMode GL::GetViewProjMode()
@@ -1185,16 +1141,6 @@ GL *GL::GetActive()
 }
 
 GLUniforms *GL::GetGLUniforms() const { return m_glUniforms; }
-
-GL::GL()
-{
-    m_glUniforms = new GLUniforms();
-}
-
-GL::~GL()
-{
-    delete m_glUniforms;
-}
 
 void GL::SetActive(GL *gl)
 {

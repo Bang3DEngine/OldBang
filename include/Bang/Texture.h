@@ -49,7 +49,7 @@ private:
     Vector2i m_size = Vector2i::Zero;
 
     GL::FilterMode m_filterMode = GL::FilterMode::Nearest;
-    GL::WrapMode m_wrapMode     = GL::WrapMode::Clamp;
+    GL::WrapMode m_wrapMode     = GL::WrapMode::ClampToEdge;
     int m_textureUnit = 0;
 
     GL::ColorFormat m_internalFormat = GL::ColorFormat::RGBA_Float32;

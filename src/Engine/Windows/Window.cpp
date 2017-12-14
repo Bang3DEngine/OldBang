@@ -73,9 +73,6 @@ void Window::Create(uint flags)
     {
         Debug_Error("Glew init error: " << glewGetErrorString(glewError));
     }
-    GL::Enable(GL::Test::Depth);
-    GL::Enable(GL::Test::Stencil);
-    GL::Enable(GL::Test::CullFace);
 
     m_input               = new Input();
     m_resources           = new Resources();

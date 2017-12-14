@@ -21,6 +21,7 @@ void DebugRenderer::RenderLine(const Vector3 &origin,
     drl.destroyTimestamp = Time::GetNow_Seconds() + time;
     drl.thickness = thickness;
     drl.depthTest = depthTest;
+    drl.renderedOnce = false;
 
     DebugRenderer *dr = DebugRenderer::GetActive();
     ASSERT(dr);
@@ -40,22 +41,24 @@ void DebugRenderer::Render(bool withDepth)
     GL::Function prevDepthFunc = GL::GetDepthFunc();
     for (auto it = m_linesToRender.Begin(); it != m_linesToRender.End(); )
     {
-        const DebugRenderLine &drl = *it;
-        if (drl.depthTest != withDepth)
+        DebugRenderLine *drl = &(*it);
+        if (drl->depthTest != withDepth)
         {
             ++it;
         }
-        else if (Time::GetNow_Seconds() >= drl.destroyTimestamp)
+        else if (Time::GetNow_Seconds() >= drl->destroyTimestamp &&
+                 drl->renderedOnce)
         {
             it = m_linesToRender.Remove(it);
         }
         else
         {
-            GL::SetDepthFunc(drl.depthTest ? GL::Function::LEqual :
-                                             GL::Function::Always);
-            Gizmos::SetLineWidth(drl.thickness);
-            Gizmos::SetColor(drl.color);
-            Gizmos::RenderLine(drl.origin, drl.end);
+            GL::SetDepthFunc(drl->depthTest ? GL::Function::LEqual :
+                                              GL::Function::Always);
+            Gizmos::SetLineWidth(drl->thickness);
+            Gizmos::SetColor(drl->color);
+            Gizmos::RenderLine(drl->origin, drl->end);
+            drl->renderedOnce = true;
             ++it;
         }
     }

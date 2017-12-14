@@ -33,7 +33,8 @@ public:
     void SetVisible(bool visible);
     void SetMaterial(Material *mat);
     void SetRenderWireframe(bool drawWireframe);
-    void SetCullMode(GL::Face cullMode);
+    void SetCullFace(GL::Face cullMode);
+    void SetCulling(bool cull);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     void SetRenderPrimitive(GL::Primitives renderMode);
     void SetLineWidth(float w);
@@ -42,7 +43,8 @@ public:
     bool IsVisible() const;
     Material* GetMaterial() const;
     bool IsRenderWireframe() const;
-    GL::Face GetCullMode() const;
+    GL::Face GetCullFace() const;
+    bool GetCulling() const;
     GL::ViewProjMode GetViewProjMode() const;
     GL::Primitives GetRenderPrimitive() const;
     float GetLineWidth() const;
@@ -60,8 +62,9 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
+    bool m_cullling = true;
     bool m_drawWireframe = false;
-    GL::Face m_cullMode = GL::Face::Back;
+    GL::Face m_cullFace = GL::Face::Back;
     GL::Primitives m_renderMode = GL::Primitives::Triangles;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 

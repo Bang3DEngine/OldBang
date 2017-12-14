@@ -11,7 +11,7 @@ NAMESPACE_BANG_BEGIN
 class Math
 {
 public:
-    static constexpr double PI = 3.1415926535897932384626;
+    static constexpr double Pi = 3.1415926535897932384626;
 
     template<class T>
     static T Min()
@@ -265,8 +265,8 @@ public:
 
 private:
 
-    static constexpr double s_Rad2Deg  = 180.0 / Math::PI;
-    static constexpr double s_Deg2Rad = Math::PI / 180.0;
+    static constexpr double s_Rad2Deg  = 180.0 / Math::Pi;
+    static constexpr double s_Deg2Rad = Math::Pi / 180.0;
 
     Math() {}
 };

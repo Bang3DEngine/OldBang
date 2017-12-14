@@ -42,7 +42,11 @@ void Renderer::Bind() const
 
     GL::SetViewProjMode( GetViewProjMode() );
     GL::SetWireframe( IsRenderWireframe() );
-    GL::SetCullFace( GetCullMode() );
+
+    GL::SetCullFace( GetCullFace() ); // Culling states
+    if (GetCulling()) { GL::Enable( GL::Test::CullFace ); }
+    else { GL::Disable( GL::Test::CullFace ); }
+
     GL::LineWidth( GetLineWidth() );
 
     GetMaterial()->Bind();
@@ -74,8 +78,10 @@ bool Renderer::IsVisible() const { return m_visible; }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
-void Renderer::SetCullMode(GL::Face cullMode) { m_cullMode = cullMode; }
-GL::Face Renderer::GetCullMode() const { return m_cullMode; }
+void Renderer::SetCullFace(GL::Face cullMode) { m_cullFace = cullMode; }
+void Renderer::SetCulling(bool culling) { m_cullling = culling; }
+GL::Face Renderer::GetCullFace() const { return m_cullFace; }
+bool Renderer::GetCulling() const { return m_cullling; }
 void Renderer::SetLineWidth(float w) { m_lineWidth = w; }
 void Renderer::SetRenderWireframe(bool drawWireframe)
 {
@@ -108,7 +114,8 @@ void Renderer::CloneInto(ICloneable *clone) const
     Renderer *r = Cast<Renderer*>(clone);
     r->SetMaterial(GetMaterial());
     r->SetRenderWireframe(IsRenderWireframe());
-    r->SetCullMode(GetCullMode());
+    r->SetCullFace(GetCullFace());
+    r->SetCulling(GetCulling());
     r->SetRenderPrimitive(GetRenderPrimitive());
     r->SetLineWidth(GetLineWidth());
 }
