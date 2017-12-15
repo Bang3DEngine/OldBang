@@ -1,6 +1,7 @@
 #ifndef DEBUGRENDERER_H
 #define DEBUGRENDERER_H
 
+#include "Bang/GL.h"
 #include "Bang/Set.h"
 #include "Bang/Time.h"
 #include "Bang/Color.h"
@@ -16,6 +17,8 @@ class DebugRenderer : public GameObject
     GAMEOBJECT(DebugRenderer);
 
 public:
+    static void Clear();
+
     static void RenderLine(const Vector3 &origin,
                            const Vector3 &end,
                            const Color &color = Color::Green,
@@ -23,9 +26,16 @@ public:
                            float thickness = 1.0f,
                            bool depthTest = false);
 
+    static void RenderPoint(const Vector3 &point,
+                            const Color &color = Color::Green,
+                            float time = 1.0f,
+                            float thickness = 1.0f,
+                            bool depthTest = false);
+
 private:
-    struct DebugRenderLine
+    struct DebugRenderPrimitive
     {
+        GL::Primitive primitive;
         Vector3 origin;
         Vector3 end;
         Color color;
@@ -35,12 +45,21 @@ private:
         bool renderedOnce;
     };
 
-    List<DebugRenderLine> m_linesToRender;
+    List<DebugRenderPrimitive> m_primitivesToRender;
 
 	DebugRenderer();
 	virtual ~DebugRenderer();
 
     void Render(bool withDepth);
+
+
+    static DebugRenderPrimitive*
+           CreateDebugRenderPrimitive(GL::Primitive primitive,
+                                      const Array<Vector3> &points,
+                                      const Color &color,
+                                      float time,
+                                      float thickness,
+                                      bool depthTest);
 
     static DebugRenderer *GetActive();
 

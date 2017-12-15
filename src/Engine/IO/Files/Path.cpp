@@ -193,7 +193,7 @@ Array<String> Path::GetExtensions() const
 {
     if (IsEmpty()) { return {}; }
     List<String> parts = GetNameExt().Split<List>('.');
-    parts.PopFront();
+    if (!parts.IsEmpty()) { parts.PopFront(); }
     return parts.To<Array>();
 }
 

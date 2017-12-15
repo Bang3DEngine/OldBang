@@ -582,6 +582,11 @@ void GL::LineWidth(float lineWidth)
     }
 }
 
+void GL::PointSize(float pointSize)
+{
+    GL_CALL( glPointSize(pointSize) );
+}
+
 void GL::GenFramebuffers(int n, GLId *glIds)
 {
     GL_CALL( glGenFramebuffers(n, glIds) );
@@ -692,7 +697,7 @@ void GL::BufferData(GL::BindTarget target, int dataSize,
     GL_CALL( glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint)) );
 }
 
-void GL::Render(const VAO *vao, GL::Primitives primitivesMode,
+void GL::Render(const VAO *vao, GL::Primitive primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();

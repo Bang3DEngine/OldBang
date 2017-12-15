@@ -7,6 +7,12 @@
 
 USING_NAMESPACE_BANG
 
+void DebugRenderer::Clear()
+{
+    DebugRenderer *dr = DebugRenderer::GetActive(); ASSERT(dr);
+    dr->m_primitivesToRender.Clear();
+}
+
 void DebugRenderer::RenderLine(const Vector3 &origin,
                                const Vector3 &end,
                                const Color &color,
@@ -14,18 +20,44 @@ void DebugRenderer::RenderLine(const Vector3 &origin,
                                float thickness,
                                bool depthTest)
 {
-    DebugRenderLine drl;
-    drl.origin = origin;
-    drl.end = end;
-    drl.color = color;
-    drl.destroyTimestamp = Time::GetNow_Seconds() + time;
-    drl.thickness = thickness;
-    drl.depthTest = depthTest;
-    drl.renderedOnce = false;
+    CreateDebugRenderPrimitive(GL::Primitive::Lines,
+                               {origin, end},
+                               color, time, thickness, depthTest);
+}
 
-    DebugRenderer *dr = DebugRenderer::GetActive();
-    ASSERT(dr);
-    dr->m_linesToRender.PushBack(drl);
+void DebugRenderer::RenderPoint(const Vector3 &point,
+                                const Color &color,
+                                float time,
+                                float thickness,
+                                bool depthTest)
+{
+    CreateDebugRenderPrimitive(GL::Primitive::Points,
+                               {point},
+                               color, time, thickness, depthTest);
+}
+
+DebugRenderer::DebugRenderPrimitive
+*DebugRenderer::CreateDebugRenderPrimitive(GL::Primitive primitive,
+                                           const Array<Vector3> &points,
+                                           const Color &color,
+                                           float time,
+                                           float thickness,
+                                           bool depthTest)
+{
+    DebugRenderPrimitive drp;
+    drp.primitive = primitive;
+    drp.origin = (points.Size() >= 1 ? points[0] : Vector3::Zero);
+    drp.end =    (points.Size() >= 2 ? points[1] : Vector3::Zero);
+    drp.color = color;
+    drp.destroyTimestamp = Time::GetNow_Seconds() + time;
+    drp.thickness = thickness;
+    drp.depthTest = depthTest;
+    drp.renderedOnce = false;
+
+    DebugRenderer *dr = DebugRenderer::GetActive(); ASSERT(dr);
+    dr->m_primitivesToRender.PushBack(drp);
+
+    return &(dr->m_primitivesToRender.Back());
 }
 
 DebugRenderer::DebugRenderer()
@@ -39,26 +71,38 @@ DebugRenderer::~DebugRenderer()
 void DebugRenderer::Render(bool withDepth)
 {
     GL::Function prevDepthFunc = GL::GetDepthFunc();
-    for (auto it = m_linesToRender.Begin(); it != m_linesToRender.End(); )
+    for (auto it = m_primitivesToRender.Begin();
+         it != m_primitivesToRender.End(); )
     {
-        DebugRenderLine *drl = &(*it);
-        if (drl->depthTest != withDepth)
+        DebugRenderPrimitive *drp = &(*it);
+        if (drp->depthTest != withDepth)
         {
             ++it;
         }
-        else if (Time::GetNow_Seconds() >= drl->destroyTimestamp &&
-                 drl->renderedOnce)
+        else if (Time::GetNow_Seconds() >= drp->destroyTimestamp &&
+                 drp->renderedOnce)
         {
-            it = m_linesToRender.Remove(it);
+            it = m_primitivesToRender.Remove(it);
         }
         else
         {
-            GL::SetDepthFunc(drl->depthTest ? GL::Function::LEqual :
+            GL::SetDepthFunc(drp->depthTest ? GL::Function::LEqual :
                                               GL::Function::Always);
-            Gizmos::SetLineWidth(drl->thickness);
-            Gizmos::SetColor(drl->color);
-            Gizmos::RenderLine(drl->origin, drl->end);
-            drl->renderedOnce = true;
+            Gizmos::SetColor(drp->color);
+            Gizmos::SetThickness(drp->thickness);
+            switch (drp->primitive)
+            {
+                case GL::Primitive::Lines:
+                    Gizmos::RenderLine(drp->origin, drp->end);
+                break;
+
+                case GL::Primitive::Points:
+                    Gizmos::RenderPoint(drp->origin);
+                break;
+
+                default: ASSERT(false); break;
+            }
+            drp->renderedOnce = true;
             ++it;
         }
     }

@@ -36,6 +36,10 @@ Vector3G ProjectedOnPlane(const Vector3G& planeNormal, \
     Vector3G n = planeNormal.Normalized(); \
     return (*this) - n * Vector3G<T>::Dot(n, *this - planePoint); \
 } \
+Vector3G ProjectedOnVector(const Vector3G& vector) const \
+{ \
+    return Vector3G<T>::Dot(*this, vector) * vector.Normalized(); \
+} \
 template<class OtherT1, class OtherT2> \
 static Vector3G<T> Cross(const Vector3G<OtherT1> &v1, \
                          const Vector3G<OtherT2> &v2) \

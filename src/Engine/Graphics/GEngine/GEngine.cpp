@@ -254,7 +254,7 @@ void GEngine::RenderScreenPlane(bool withDepth)
     }
     GL::Disable(GL::Test::CullFace);
 
-    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitives::Triangles,
+    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
 
     GL::Enable(GL::Test::CullFace);

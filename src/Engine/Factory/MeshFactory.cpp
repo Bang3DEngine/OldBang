@@ -34,7 +34,7 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh* m, const String &name)
     go->SetName(name);
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderPrimitive(GL::Primitives::Triangles);
+    r->SetRenderPrimitive(GL::Primitive::Triangles);
     r->SetMaterial(MaterialFactory::GetDefault().Get());
     r->SetMesh(m);
 

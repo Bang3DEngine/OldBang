@@ -91,13 +91,13 @@ void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
 {
     m_viewProjMode = viewProjMode;
 }
-void Renderer::SetRenderPrimitive(GL::Primitives renderMode)
+void Renderer::SetRenderPrimitive(GL::Primitive renderMode)
 {
     m_renderMode = renderMode;
 }
 
 GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
-GL::Primitives Renderer::GetRenderPrimitive() const { return m_renderMode; }
+GL::Primitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material* Renderer::GetMaterial() const { return p_material.Get(); }
 

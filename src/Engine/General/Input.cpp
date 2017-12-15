@@ -387,12 +387,12 @@ bool Input::IsMouseInsideScreen()
 
 float Input::GetMouseAxisX()
 {
-    return Input::GetMouseDeltaX() / GL::GetViewportSize().x;
+    return SCAST<float>(Input::GetMouseDeltaX()) / GL::GetViewportSize().x;
 }
 
 float Input::GetMouseAxisY()
 {
-    return Input::GetMouseDeltaY() / GL::GetViewportSize().y;
+    return SCAST<float>(Input::GetMouseDeltaY()) / GL::GetViewportSize().y;
 }
 
 Vector2 Input::GetMouseAxis()

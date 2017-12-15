@@ -83,12 +83,13 @@ void Gizmos::SetScale(const Vector3 &scale)
     g->m_gizmosGo->GetTransform()->SetLocalScale(scale);
 }
 
-void Gizmos::SetLineWidth(float lineWidth)
+void Gizmos::SetThickness(float thickness)
 {
     Gizmos *g = Gizmos::GetInstance();
     for (Renderer *rend : g->m_renderers)
     {
-        rend->SetLineWidth(lineWidth);
+        rend->SetLineWidth(thickness);
+        GL::PointSize(thickness);
     }
 }
 
@@ -342,6 +343,23 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
     Render(g->m_circleRenderer);
 }
 
+void Gizmos::RenderPoint(const Vector3 &point)
+{
+    Gizmos *g = Gizmos::GetInstance();
+
+    RH<Mesh> rhm = Resources::Create<Mesh>();
+    Mesh *m = rhm.Get();
+    m->LoadPositions( {point} );
+
+    g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
+    g->m_meshRenderer->SetMesh(m);
+    g->m_meshRenderer->SetRenderPrimitive(GL::Primitive::Points);
+
+    Render(g->m_meshRenderer);
+
+    g->m_meshRenderer->SetRenderPrimitive(GL::Primitive::Triangles);
+}
+
 void Gizmos::Reset()
 {
     Gizmos *g = Gizmos::GetInstance();
@@ -350,7 +368,7 @@ void Gizmos::Reset()
     Gizmos::SetRotation(Quaternion::Identity);
     Gizmos::SetScale(Vector3::One);
     Gizmos::SetColor(Color::Green);
-    Gizmos::SetLineWidth(1.0f);
+    Gizmos::SetThickness(1.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetRenderWireframe(false);
 

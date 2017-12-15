@@ -22,7 +22,7 @@ public:
     static void SetRotation(const Quaternion &rotation);
     static void SetScale(const Vector3 &scale);
 
-    static void SetLineWidth(float lineWidth);
+    static void SetThickness(float thickness);
     static void SetRenderWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void SetBillboard();
@@ -50,6 +50,7 @@ public:
                               float zNear, float zFar,
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
+    static void RenderPoint(const Vector3 &point);
 
     static void Render(Renderer *rend);
 

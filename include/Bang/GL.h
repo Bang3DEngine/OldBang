@@ -52,7 +52,7 @@ public:
         ReadWrite = GL_READ_WRITE
     };
 
-    enum class Primitives
+    enum class Primitive
     {
         Points        = GL_POINTS,
         Lines         = GL_LINES,
@@ -396,6 +396,7 @@ public:
                                  GL::WrapMode wrapMode);
     static void ActiveTexture(int activeTexture);
     static void LineWidth(float lineWidth);
+    static void PointSize(float pointSize);
 
     static void GenFramebuffers(int n, GLId *glIds);
     static void GenRenderBuffers(int n, GLId *glIds);
@@ -460,7 +461,7 @@ public:
     static Vector2  FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);
 
     static void Render(const VAO* vao,
-                       GL::Primitives renderMode,
+                       GL::Primitive renderMode,
                        int elementsCount,
                        int startElementIndex = 0);
 

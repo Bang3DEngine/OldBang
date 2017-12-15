@@ -15,7 +15,7 @@ LineRenderer::LineRenderer()
     SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
     SetRenderPass(RenderPass::Scene_UnLighted);
 
-    SetRenderPrimitive(GL::Primitives::Lines);
+    SetRenderPrimitive(GL::Primitive::Lines);
 }
 
 LineRenderer::~LineRenderer()

@@ -15,8 +15,28 @@ public:
     void SetOrigin(const Vector3 &origin);
     void SetDirection(const Vector3 &direction);
 
-    Vector3 GetIntersectionWithPlane(const Vector3& planeNormal,
-                                     const Vector3& planePoint);
+    void GetIntersectionWithPlaneDistance(const Vector3& planePoint,
+                                          const Vector3& planeNormal,
+                                          bool *intersected,
+                                          float *distance);
+    void GetIntersectionWithPlane(const Vector3& planePoint,
+                                  const Vector3& planeNormal,
+                                  bool *intersected,
+                                  Vector3 *intersectionPoint);
+    void GetIntersectionWithSphere(const Vector3& sphereCenter,
+                                   float sphereRadius,
+                                   bool *intersected,
+                                   Vector3 *intersectionPoint);
+
+    // Returns the two closest points between the ray and the passed line
+    void GetClosestPointToLine(const Vector3 &linePoint,
+                               const Vector3 &lineDirection,
+                               Vector3 *pointOnRay  = nullptr,
+                               Vector3 *pointOnLine = nullptr);
+
+    // Returns the point in the ray that is closer to the passed point
+    Vector3 GetClosestPointToPoint(const Vector3 &point);
+
     Vector3 GetPoint(float t) const;
     const Vector3& GetOrigin() const;
     const Vector3& GetDirection() const;

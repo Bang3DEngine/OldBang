@@ -36,7 +36,7 @@ public:
     void SetCullFace(GL::Face cullMode);
     void SetCulling(bool cull);
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
-    void SetRenderPrimitive(GL::Primitives renderMode);
+    void SetRenderPrimitive(GL::Primitive renderMode);
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
@@ -46,7 +46,7 @@ public:
     GL::Face GetCullFace() const;
     bool GetCulling() const;
     GL::ViewProjMode GetViewProjMode() const;
-    GL::Primitives GetRenderPrimitive() const;
+    GL::Primitive GetRenderPrimitive() const;
     float GetLineWidth() const;
     RenderPass GetRenderPass() const;
 
@@ -65,7 +65,7 @@ protected:
     bool m_cullling = true;
     bool m_drawWireframe = false;
     GL::Face m_cullFace = GL::Face::Back;
-    GL::Primitives m_renderMode = GL::Primitives::Triangles;
+    GL::Primitive m_renderMode = GL::Primitive::Triangles;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 
     Renderer();

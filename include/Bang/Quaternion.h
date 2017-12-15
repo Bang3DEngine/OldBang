@@ -184,13 +184,13 @@ public:
                 axis = Vector3G<T>::Cross(axis, v0);
             }
 
-            return QuaternionG<T>(0.0f, axis.x, axis.y, axis.z).Normalized();
+            return QuaternionG<T>(axis.x, axis.y, axis.z, 0.0f).Normalized();
         }
 
         const float s = float(Math::Sqrt( (1+d)*2 ));
         const float invs = 1.0f/s;
         const Vector3G<T> c = Vector3G<T>::Cross(v0, v1) * invs;
-        return QuaternionG<T>(s * 0.5f, c.x, c.y, c.z).Normalized();
+        return QuaternionG<T>(c.x, c.y, c.z, s * 0.5f).Normalized();
     }
 
     static QuaternionG<T> LookDirection(

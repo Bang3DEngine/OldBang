@@ -12,7 +12,7 @@ USING_NAMESPACE_BANG
 
 MeshRenderer::MeshRenderer()
 {
-    SetRenderPrimitive( GL::Primitives::Triangles );
+    SetRenderPrimitive( GL::Primitive::Triangles );
 }
 
 MeshRenderer::~MeshRenderer()

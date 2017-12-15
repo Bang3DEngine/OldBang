@@ -100,6 +100,7 @@ long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 
 String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 {
+    if (startIndexInclusive < 0) { return ""; }
     if (startIndexInclusive >= Size()) { return ""; }
     if (endIndexInclusive   >= Size()) { endIndexInclusive = Size()-1; }
 
