@@ -14,6 +14,11 @@ RH<Material> MaterialFactory::GetDefaultUnLighted()
     return MaterialFactory::Load("Materials/G_DefaultNoPP.bmat");
 }
 
+RH<Material> MaterialFactory::GetOnlyColor()
+{
+    return MaterialFactory::Load("Materials/G_OnlyColor.bmat");
+}
+
 RH<Material> MaterialFactory::GetMissing()
 {
     return MaterialFactory::Load("Materials/Missing.bmat");

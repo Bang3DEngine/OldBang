@@ -23,6 +23,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/RendererFactory.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SingleLineRenderer.h"
 
@@ -44,8 +45,7 @@ Gizmos::Gizmos()
 
     for (Renderer *rend : m_renderers)
     {
-        rend->SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
-        rend->SetRenderPass(RenderPass::Gizmos);
+        RendererFactory::ConvertToGizmoRenderer( rend );
     }
 
     m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSave);

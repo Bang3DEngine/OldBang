@@ -293,6 +293,10 @@ public:
     static void ClearDepthBuffer(float clearDepth = 1.0f);
     static void ClearStencilBuffer(int stencilValue = 0);
 
+    static void Enablei (GL::Enum glEnum, int index);
+    static void Enablei (GL::Test glTest, int index);
+    static void Disablei(GL::Enum glEnum, int index);
+    static void Disablei(GL::Test glTest, int index);
     static void Enable (GL::Enum glEnum);
     static void Enable (GL::Test glTest);
     static void Disable(GL::Enum glEnum);

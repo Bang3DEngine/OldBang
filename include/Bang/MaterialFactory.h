@@ -11,6 +11,7 @@ class MaterialFactory
 public:
     static RH<Material> GetDefault();
     static RH<Material> GetDefaultUnLighted();
+    static RH<Material> GetOnlyColor();
 
     static RH<Material> GetMissing();
 

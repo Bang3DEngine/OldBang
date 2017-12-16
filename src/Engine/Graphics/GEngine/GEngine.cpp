@@ -137,6 +137,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     camera->BindGBuffer();
 
     // GBuffer Scene rendering
+    GL::Enablei(GL::Blend, 3);
     GL::SetDepthMask(true); // Write depth
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
@@ -154,9 +155,9 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 
     GL::Enable(GL::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
+    camera->GetGBuffer()->SetColorDrawBuffer();
 
     // GBuffer Canvas rendering
-    camera->GetGBuffer()->SetColorDrawBuffer();
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
@@ -164,10 +165,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Canvas);
     go->Render(RenderPass::Canvas_PostProcess);
 
-    GL::Disable(GL::Blend);
-
     // GBuffer Gizmos rendering
-    camera->GetGBuffer()->SetAllDrawBuffers();
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
@@ -175,6 +173,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     go->Render(RenderPass::Gizmos);
     go->RenderGizmos();
+
+    GL::Disable(GL::Blend);
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)

@@ -212,11 +212,17 @@ void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
     GL_CALL( glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) ) );
 }
 
+void GL::Enablei (GL::Enum glEnum, int i) { GL_CALL(glEnablei(glEnum, i)); }
+void GL::Enablei (GL::Test glTest, int i) { GL::Enablei( GLCAST(glTest), i ); }
+
+void GL::Disablei(GL::Enum glEnum, int i) { GL_CALL(glDisablei(glEnum, i)); }
+void GL::Disablei(GL::Test glTest, int i) { GL::Disablei( GLCAST(glTest), i ); }
+
 void GL::Enable(GL::Enum glEnum) { GL_CALL( glEnable(glEnum) ); }
-void GL::Enable(GL::Test glTest) { GL_CALL( glEnable( GLCAST(glTest) ) ); }
+void GL::Enable(GL::Test glTest) { GL::Enable( GLCAST(glTest) ); }
 
 void GL::Disable(GL::Enum glEnum) { GL_CALL( glDisable(glEnum) ); }
-void GL::Disable(GL::Test glTest) { GL_CALL( glDisable( GLCAST(glTest) ) ); }
+void GL::Disable(GL::Test glTest) { GL::Disable( GLCAST(glTest) ); }
 
 void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
                          int dstX0, int dstY0, int dstX1, int dstY1,
