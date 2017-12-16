@@ -72,7 +72,7 @@ void UIInputText::UpdateCursorRenderer()
     }
     else
     {
-        Rect limitsRect = GetLabelRT()->GetScreenRectNDC();
+        Rect limitsRect = GetLabelRT()->GetViewportRectNDC();
         minPoint = Vector2(cursorX, limitsRect.GetMin().y);
         maxPoint = Vector2(cursorX, limitsRect.GetMax().y);
     }
@@ -95,7 +95,7 @@ void UIInputText::UpdateTextScrolling()
     GetText()->RegenerateCharQuadsVAO();
 
     Vector2 scrollNDC = Vector2::Zero;
-    Rect labelLimits = GetLabelRT()->GetScreenRectNDC();
+    Rect labelLimits = GetLabelRT()->GetViewportRectNDC();
     Rect contentRectNDC = GetText()->GetContentViewportNDCRect();
     if (contentRectNDC.GetWidth() > labelLimits.GetWidth() && GetCursorIndex() > 0)
     {

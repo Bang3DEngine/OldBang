@@ -220,6 +220,7 @@ void Transform::RecalculateLocalToWorldMatrix() const
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
 {
+    m_invalidLocalToWorldMatrix = true;
     if (m_invalidLocalToWorldMatrix) { RecalculateLocalToWorldMatrix(); }
     return m_localToWorldMatrix;
 }

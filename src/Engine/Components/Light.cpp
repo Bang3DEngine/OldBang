@@ -54,7 +54,7 @@ void Light::SetLightMaterial(Material *lightMat)
 
 Rect Light::GetRenderRect(Camera *cam) const
 {
-    return Rect::ScreenRectNDC;
+    return Rect::NDCRect;
 }
 
 void Light::CloneInto(ICloneable *clone) const

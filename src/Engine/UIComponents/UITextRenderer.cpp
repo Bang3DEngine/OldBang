@@ -181,7 +181,6 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     p_mesh.Get()->LoadUvs(textQuadUvs);
 }
 
-#include "Bang/Input.h"
 void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size

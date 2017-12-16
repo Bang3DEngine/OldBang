@@ -901,6 +901,18 @@ Vector2 GL::FromPointNDCToPoint(const Vector2 &pointNDC, const Vector2 &rectSize
     return (pointNDC * 0.5f + 0.5f) * rectSize;
 }
 
+Vector2 GL::FromAmountToAmountNDC(const Vector2 &amountNDC,
+                                  const Vector2 &rectSize)
+{
+    return ( (amountNDC / rectSize) * 2.0f);
+}
+
+Vector2 GL::FromAmountNDCToAmount(const Vector2 &amountNDC,
+                                  const Vector2 &rectSize)
+{
+    return (amountNDC * rectSize * 0.5f);
+}
+
 Vector2 GL::FromScreenPointToViewportPoint(const Vector2 &screenPoint,
                                            const Recti &viewport)
 {

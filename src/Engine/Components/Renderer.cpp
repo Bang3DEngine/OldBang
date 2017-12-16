@@ -103,7 +103,7 @@ Material* Renderer::GetMaterial() const { return p_material.Get(); }
 
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
-    return Rect::ScreenRectNDC;
+    return Rect::NDCRect;
     return camera ? camera->GetScreenBoundingRect(GetAABBox()) :
                     Rect::Zero;
 }

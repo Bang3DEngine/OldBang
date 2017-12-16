@@ -153,7 +153,7 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     for (const Vector3 &p : points)
     {
         Vector3 dirToP = p - tr->GetPosition();
-        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRectNDC; }
+        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::NDCRect; }
     }
 
     return screenRect;

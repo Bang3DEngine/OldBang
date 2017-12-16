@@ -101,7 +101,6 @@ private:
     RH<Mesh> p_mesh;
     mutable uint m_numberOfLines = 0;
     mutable Array<Rect> m_charRectsLocalNDC;
-    mutable Array<Rect> m_charRectsViewportNDC;
 
     UITextRenderer();
     virtual ~UITextRenderer();

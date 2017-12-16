@@ -88,7 +88,7 @@ private:
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;
-    Rect m_viewportRectNDC = Rect::ScreenRectNDC;
+    Rect m_viewportRectNDC = Rect::NDCRect;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
     mutable Recti m_latestViewportRect = Recti::Zero;
