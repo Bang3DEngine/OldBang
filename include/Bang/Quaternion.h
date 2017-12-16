@@ -46,6 +46,7 @@ public:
     QuaternionG<T> Normalized() const
     {
         T length = Length();
+        if (length == 0.0f) { return QuaternionG<T>::Identity; }
         return QuaternionG<T>(x/length, y/length, z/length, w/length);
     }
     QuaternionG<T> Inversed() const
@@ -102,6 +103,26 @@ public:
                               q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z);
     }
 
+    Vector3G<T> GetAngleAxis() const
+    {
+        float angle = 2 * Math::ACos(w);
+
+        float w2 = w*w;
+        float sqrt = Math::Sqrt(1.0f - w2);
+
+        Vector3 axis;
+        if (sqrt != 0) { axis = Vector3(x / sqrt, y / sqrt, z / sqrt); }
+        else { axis = Vector3::Zero; }
+
+        return axis.NormalizedSafe() * angle;
+    }
+    static QuaternionG<T> FromEulerAngles(const Vector3 &eulerAnglesRads)
+    {
+        QuaternionG<T> qx = Quaternion::AngleAxis(eulerAnglesRads.x, Vector3::Right);
+        QuaternionG<T> qy = Quaternion::AngleAxis(eulerAnglesRads.y, Vector3::Up);
+        QuaternionG<T> qz = Quaternion::AngleAxis(eulerAnglesRads.z, Vector3::Forward);
+        return (qz * qy * qx).Normalized();
+    }
     static Vector3G<T> GetEulerAngles(const QuaternionG<T> &q)
     {
         return Vector3G<T>(q.GetPitch(), q.GetYaw(), q.GetRoll());
@@ -218,7 +239,7 @@ public:
         return QuaternionG<T>(Cast<T>(axis.x) * s,
                               Cast<T>(axis.y) * s,
                               Cast<T>(axis.z) * s,
-                              Math::Cos(angleRads * Cast<T>(0.5)));
+                              Math::Cos(angleRads * Cast<T>(0.5))).Normalized();
     }
 
     static QuaternionG Identity;

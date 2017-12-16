@@ -289,7 +289,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
 
-    const float fovH = Math::Deg2Rad(fovDegrees) / 2.0f;
+    const float fovH = Math::DegToRad(fovDegrees) / 2.0f;
 
     Vector3 nearPlaneCenter = c + forward * zNear;
     Vector3 farPlaneCenter  = c + forward * zFar;

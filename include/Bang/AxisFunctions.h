@@ -7,7 +7,24 @@
 
 NAMESPACE_BANG_BEGIN
 
-inline Color GetColorFromAxis(Axis3D axis)
+inline int GetAxisIndex(Axis3D axis)
+{
+    switch (axis)
+    {
+        case Axis3D::X: return 0;
+        case Axis3D::Y: return 1;
+        case Axis3D::Z: return 2;
+    }
+    ASSERT(false);
+}
+
+inline std::pair<int,int> GetOtherAxisIndex(Axis3D axis)
+{
+    int i = GetAxisIndex(axis);
+    return std::make_pair( (i+2) % 3, (i+2) % 3 );
+}
+
+inline Color GetAxisColor(Axis3D axis)
 {
     switch (axis)
     {
@@ -18,7 +35,7 @@ inline Color GetColorFromAxis(Axis3D axis)
     ASSERT(false);
 }
 
-inline Vector3 GetVectorFromAxis(Axis3D axis)
+inline Vector3 GetAxisVector(Axis3D axis)
 {
     switch (axis)
     {

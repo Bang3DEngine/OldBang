@@ -32,12 +32,12 @@ public:
     void BindGBuffer();
     void BindSelectionFramebuffer();
 
-    Ray      FromViewportPointNDCToRay(const Vector2 &vpPointNDC);
-    Vector2i FromScreenPointToViewportPoint(const Vector2i &screenPoint);
-    Vector2  FromWorldPointToViewportPointNDC(const Vector3 &worldPosition);
-    Vector3  FromViewportPointNDCToWorldPoint(const Vector3 &vpPositionNDC);
+    Ray      FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const;
+    Vector2i FromScreenPointToViewportPoint(const Vector2i &screenPoint) const;
+    Vector2  FromWorldPointToViewportPointNDC(const Vector3 &worldPosition) const;
+    Vector3  FromViewportPointNDCToWorldPoint(const Vector3 &vpPositionNDC) const;
     Vector3  FromViewportPointNDCToWorldPoint(const Vector2 &vpPositionNDC,
-                                              float zFromCam);
+                                              float zFromCam) const;
 
     void SetOrthoHeight(float orthoHeight);
     void SetClearColor(const Color& color);

@@ -59,12 +59,8 @@ void Transform::SetLocalEuler(const Vector3 &degreesEuler)
     eulers.x = std::fmod(eulers.x, 360.0f);
     eulers.y = std::fmod(eulers.y, 360.0f);
     eulers.z = std::fmod(eulers.z, 360.0f);
-
-    Vector3 rads = eulers.ToRadians();
-    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::Right);
-    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::Up);
-    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::Forward);
-    SetLocalRotation( (qz * qy * qx).Normalized() );
+    Vector3 eulersRads = eulers.ToRadians();
+    SetLocalRotation( Quaternion::FromEulerAngles(eulersRads).Normalized() );
 }
 void Transform::SetLocalEuler(float x, float y, float z)
 {
@@ -77,8 +73,8 @@ void Transform::SetRotation(const Quaternion &q)
     else
     {
         SetLocalRotation(
-            Quaternion(-GetGameObject()->GetParent()->GetTransform()->
-                       GetRotation() * q.Normalized()));
+            Quaternion(GetGameObject()->GetParent()->GetTransform()->
+                       GetRotation().Inversed() * q.Normalized()));
     }
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)

@@ -242,31 +242,31 @@ public:
                 destMin;
     }
 
-    static float Deg2Rad(float deg)
+    static float DegToRad(float deg)
     {
-        return deg * static_cast<float>(Math::s_Deg2Rad);
+        return deg * static_cast<float>(Math::s_DegToRad);
     }
 
-    static float Rad2Deg(float rad)
+    static float RadToDeg(float rad)
     {
-		return rad * static_cast<float>(Math::s_Rad2Deg);
+        return rad * static_cast<float>(Math::s_RadToDeg);
     }
 
-    static double Deg2Rad(double deg)
+    static double DegToRad(double deg)
     {
-        return deg * Math::s_Deg2Rad;
+        return deg * Math::s_DegToRad;
     }
 
-    static double Rad2Deg(double rad)
+    static double RadToDeg(double rad)
     {
-        return rad * Math::s_Rad2Deg;
+        return rad * Math::s_RadToDeg;
     }
 
 
 private:
 
-    static constexpr double s_Rad2Deg  = 180.0 / Math::Pi;
-    static constexpr double s_Deg2Rad = Math::Pi / 180.0;
+    static constexpr double s_RadToDeg  = 180.0 / Math::Pi;
+    static constexpr double s_DegToRad = Math::Pi / 180.0;
 
     Math() {}
 };

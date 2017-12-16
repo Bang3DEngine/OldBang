@@ -67,14 +67,14 @@ public: \
     VECTOR_G ToDegrees() const \
     { \
         VECTOR_G res(*this); \
-        for (int i = 0; i < N; ++i) { res[i] = Math::Rad2Deg( res[i] ); } \
+        for (int i = 0; i < N; ++i) { res[i] = Math::RadToDeg( res[i] ); } \
         return res; \
     } \
  \
     VECTOR_G ToRadians() const \
     { \
         VECTOR_G res(*this); \
-        for (int i = 0; i < N; ++i) { res[i] = Math::Deg2Rad( res[i] ); } \
+        for (int i = 0; i < N; ++i) { res[i] = Math::DegToRad( res[i] ); } \
         return res; \
     } \
  \

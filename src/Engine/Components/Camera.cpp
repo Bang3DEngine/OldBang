@@ -88,7 +88,7 @@ void Camera::BindSelectionFramebuffer()
     GetSelectionFramebuffer()->ClearColor(Color::Zero);
 }
 
-Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC)
+Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const
 {
     Vector3 worldPoint = FromViewportPointNDCToWorldPoint(vpPointNDC, GetZNear());
 
@@ -98,14 +98,14 @@ Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC)
     return ray;
 }
 
-Vector2i Camera::FromScreenPointToViewportPoint(const Vector2i &screenPoint)
+Vector2i Camera::FromScreenPointToViewportPoint(const Vector2i &screenPoint) const
 {
     return Vector2i(
                 GL::FromScreenPointToViewportPoint(Vector2(screenPoint),
                                                    Recti(GetViewportScreenRect())) );
 }
 
-Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition)
+Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition) const
 {
     Vector4 v4 = GetProjectionMatrix() *
                  GetViewMatrix() * Vector4(worldPosition, 1);
@@ -113,13 +113,13 @@ Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition)
     return v4.xy();
 }
 
-Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector3 &vpPointNDC)
+Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector3 &vpPointNDC) const
 {
     return FromViewportPointNDCToWorldPoint(vpPointNDC.xy(), vpPointNDC.z);
 }
 
 Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector2 &vpPointNDC,
-                                                 float zFromCamera)
+                                                 float zFromCamera) const
 {
     // Pass coordinates to clip space, to invert them using projInversed
     Vector4 clipCoords = Vector4(vpPointNDC, 1, 1) * zFromCamera;
@@ -239,7 +239,7 @@ Matrix4 Camera::GetProjectionMatrix() const
 {
     if (m_projMode == ProjectionMode::Perspective)
     {
-        return Matrix4::Perspective(Math::Deg2Rad(GetFovDegrees()),
+        return Matrix4::Perspective(Math::DegToRad(GetFovDegrees()),
                                     GL::GetViewportAspectRatio(),
                                     GetZNear(), GetZFar());
     }
