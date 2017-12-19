@@ -59,7 +59,7 @@ PropagateToListeners(const TFunction &func, const Args&... args) const
         const int previousSize = GetListeners().Size();
         #endif
 
-        PropagateToListener(x, func, args...);
+        if (IsEmittingEvents()) { PropagateToListener(x, func, args...); }
 
         ASSERT(GetListeners().Size() == previousSize);
     }

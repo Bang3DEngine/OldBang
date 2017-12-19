@@ -25,6 +25,12 @@ Renderer::~Renderer()
 {
 }
 
+Material *Renderer::GetUserMaterial() const
+{
+    if (p_material) { return GetMaterial(); }
+    return GetSharedMaterial();
+}
+
 void Renderer::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
@@ -49,12 +55,12 @@ void Renderer::Bind() const
 
     GL::LineWidth( GetLineWidth() );
 
-    GetMaterial()->Bind();
+    if (GetUserMaterial()) { GetUserMaterial()->Bind(); }
 }
 
 void Renderer::UnBind() const
 {
-    GetMaterial()->UnBind();
+    if (GetUserMaterial()) { GetUserMaterial()->UnBind(); }
 }
 
 void Renderer::SetVisible(bool visible)
@@ -65,16 +71,17 @@ void Renderer::SetVisible(bool visible)
 
 void Renderer::SetMaterial(Material *mat)
 {
-    if (GetMaterial() != mat)
+    if (GetSharedMaterial() != mat)
     {
-        p_material.Set(mat);
+        p_sharedMaterial.Set(mat);
+        p_material.Set(nullptr);
     }
 }
 
 void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
 
 bool Renderer::IsVisible() const { return m_visible; }
-
+Material* Renderer::GetSharedMaterial() const { return p_sharedMaterial.Get(); }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
@@ -99,7 +106,17 @@ void Renderer::SetRenderPrimitive(GL::Primitive renderMode)
 GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
 GL::Primitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
-Material* Renderer::GetMaterial() const { return p_material.Get(); }
+Material* Renderer::GetMaterial() const
+{
+    if (!p_material)
+    {
+        if (GetSharedMaterial())
+        {
+            p_material = Resources::Clone<Material>(GetSharedMaterial());
+        }
+    }
+    return p_material.Get();
+}
 
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
@@ -112,7 +129,7 @@ void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Renderer *r = Cast<Renderer*>(clone);
-    r->SetMaterial(GetMaterial());
+    r->SetMaterial(GetSharedMaterial());
     r->SetRenderWireframe(IsRenderWireframe());
     r->SetCullFace(GetCullFace());
     r->SetCulling(GetCulling());
@@ -144,9 +161,11 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
 
-    Material* mat = GetMaterial();
     xmlInfo->Set("Visible", IsVisible());
-    xmlInfo->Set("Material", mat ? mat->GetGUID() : GUID::Empty());
+
+    Material* sMat = GetSharedMaterial();
+    xmlInfo->Set("Material", sMat ? sMat->GetGUID() : GUID::Empty());
+
     xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", IsRenderWireframe());

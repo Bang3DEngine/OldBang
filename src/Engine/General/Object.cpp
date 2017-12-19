@@ -2,6 +2,8 @@
 
 USING_NAMESPACE_BANG
 
+ObjectId ObjectId::Empty = ObjectId();
+
 void Object::Start()
 {
     if (!IsStarted())
@@ -79,3 +81,4 @@ ObjectId::ObjectId()
 
 bool operator!=(const ObjectId &lhs, const ObjectId &rhs)
 { return !(lhs == rhs); }
+

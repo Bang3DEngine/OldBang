@@ -7,15 +7,6 @@ NAMESPACE_BANG_BEGIN
 template <class IResourceClass>
 RH<IResourceClass> Resources::Load(const Path &filepath)
 {
-    // Debug_Log("Load begin " << filepath);
-    // Debug_Log(Resources::GetActive()->m_GUIDCache);
-    if (!filepath.IsFile())
-    {
-        Debug_Error("Trying to load file '" << filepath <<
-                    "' which does not exist.");
-        return RH<IResourceClass>();
-    }
-
     IResourceClass* res = Resources::GetCached<IResourceClass>(
                             ImportFilesManager::GetGUIDFromFilepath(filepath) );
     if (!res)
@@ -27,8 +18,6 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
         res->ImportXMLFromFile(importFilepath);
     }
 
-    // Debug_Log("Load end " << filepath);
-    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     return RH<IResourceClass>(res);
 }
 
@@ -46,12 +35,20 @@ RH<IResourceClass> Resources::Load(const GUID &guid)
         if (!Resources::Contains<IResourceClass>(guid))
         {
             Path filepath = ImportFilesManager::GetFilepath(guid);
-            return Resources::Load<IResourceClass>(filepath);
+            if (filepath.IsFile())
+            {
+                return Resources::Load<IResourceClass>(filepath);
+            }
+            else
+            {
+                RH<IResourceClass> rh = Resources::Create<IResourceClass>(guid);
+                return rh;
+            }
         }
         else
         {
-            return
-              RH<IResourceClass>( Resources::GetCached<IResourceClass>(guid) );
+            return RH<IResourceClass>(
+                        Resources::GetCached<IResourceClass>(guid) );
         }
     }
 
@@ -63,25 +60,32 @@ RH<IResourceClass> Resources::Create(const Args&... args)
 {
     return RH<IResourceClass>( Resources::_Create<IResourceClass>(args...) );
 }
-
 template<class IResourceClass, class ...Args>
-IResourceClass* Resources::_Create(const Args&... args)
+RH<IResourceClass> Resources::Create(const GUID &guid, const Args&... args)
+{
+    return RH<IResourceClass>( Resources::_Create<IResourceClass>(guid, args...) );
+}
+template<class IResourceClass, class ...Args>
+IResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
 {
     #ifdef DEBUG
     Resources::_AssertCreatedFromResources = true;
     #endif
 
     IResourceClass *res = Resources::_JustCreate<IResourceClass>(args...);
-    if (res->GetGUID().IsEmpty())
-    {
-        res->SetGUID( GUIDManager::GetNewGUID() );
-    }
+    res->SetGUID(guid);
 
     #ifdef DEBUG
     Resources::_AssertCreatedFromResources = false;
     #endif
 
     return res;
+}
+template<class IResourceClass, class ...Args>
+IResourceClass* Resources::_Create(const Args&... args)
+{
+    GUID guid = GUIDManager::GetNewGUID();
+    return Resources::_Create<IResourceClass, Args...>( guid, args... );
 }
 
 template<class IResourceClass, class ...Args>

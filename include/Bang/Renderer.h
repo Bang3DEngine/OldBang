@@ -41,6 +41,7 @@ public:
     void SetRenderPass(RenderPass rp);
 
     bool IsVisible() const;
+    Material* GetSharedMaterial() const;
     Material* GetMaterial() const;
     bool IsRenderWireframe() const;
     GL::Face GetCullFace() const;
@@ -71,9 +72,12 @@ protected:
     Renderer();
     virtual ~Renderer();
 
+    Material* GetUserMaterial() const;
+
 private:
     bool m_visible = true;
-    RH<Material> p_material;
+    mutable RH<Material> p_material;
+    RH<Material> p_sharedMaterial;
     float m_lineWidth = 1.0f;
     RenderPass m_renderPass = RenderPass::Scene_Lighted;
 

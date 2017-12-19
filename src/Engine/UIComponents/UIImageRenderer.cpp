@@ -17,7 +17,7 @@ UIImageRenderer::UIImageRenderer()
 {
     SetMaterial(MaterialFactory::GetUIImage().Get());
 
-    p_quadMesh = MeshFactory::GetUIPlane();
+    p_quadMesh = Resources::Clone<Mesh>( MeshFactory::GetUIPlane() );
     SetHorizontalAlignment( GetHorizontalAlignment() );
     SetVerticalAlignment( GetVerticalAlignment() );
 }
@@ -30,8 +30,7 @@ void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
     if (m_hasChanged) { RegenerateQuadVAO(); }
-    GL::Render(p_quadMesh.Get()->GetVAO(),
-               GetRenderPrimitive(),
+    GL::Render(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
                p_quadMesh.Get()->GetVertexCount());
 }
 

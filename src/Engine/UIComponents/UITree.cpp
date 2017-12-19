@@ -104,7 +104,7 @@ List<GOItem*> UITree::GetChildrenItems(GOItem *item)
     return childrenItems;
 }
 
-void UITree::AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent)
+void UITree::AddItem(GOItem *newItem, GOItem *parentItem, int indexInsideParent)
 {
     Tree<GOItem*> *parentTree = GetItemTree(parentItem);
     if (parentTree && !m_itemToTree.ContainsKey(newItem))
@@ -117,7 +117,8 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent
         UITreeItemContainer *parentItemContainer = GetItemContainer(parentItem);
         int parentItemIndex = GetUIList()->GetItems().IndexOf(parentItemContainer);
         int newItemFlatListIndex;
-        if (indexInsideParent > 0)
+        if (indexInsideParent >  0 &&
+            indexInsideParent < int(parentTree->GetChildren().Size()))
         {
             auto it = parentTree->GetChildren().Begin();
             std::advance(it, indexInsideParent - 1);
@@ -136,6 +137,7 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent
         }
 
         // Add
+        ASSERT(indexInsideParent >= 0);
         Tree<GOItem*> *childTree = parentTree->AddChild(newItem, indexInsideParent);
         m_itemToTree.Add(newItem, childTree); // Add to item_tree map
         GetUIList()->AddItem(newItemContainer, newItemFlatListIndex); // Add to UIList
@@ -334,7 +336,7 @@ UITreeItemContainer::UITreeItemContainer()
 
     AddComponent<UIHorizontalLayout>();
     p_indentSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Preferred,
-                                                 Vector2i::Zero);
+                                                       Vector2::Zero);
     p_indentSpacer->SetName("IndentSpacer");
 
     p_collapseButton = GameObjectFactory::CreateUIButton();

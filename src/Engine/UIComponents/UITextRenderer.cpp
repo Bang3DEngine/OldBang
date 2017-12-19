@@ -58,14 +58,13 @@ void UITextRenderer::CalculateLayout(Axis axis)
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
 
     Vector2i minSize = Vector2i::Zero;
-    Vector2i prefSize = Vector2i::Zero;
 
-    prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
-                                                  GetTextSize(),
-                                                  GetSpacingMultiplier());
+    Vector2i prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
+                                                           GetTextSize(),
+                                                           GetSpacingMultiplier());
     prefSize.y = Math::Max<int>(prefSize.y,
-                                    m_numberOfLines *
-                                    GetFont()->GetLineSkip(GetTextSize()));
+                                m_numberOfLines *
+                                GetFont()->GetFontHeight(GetTextSize()));
 
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis));
 }

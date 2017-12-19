@@ -34,9 +34,9 @@ Gizmos::Gizmos()
     m_gizmosGo = GameObjectFactory::CreateGameObject();
     m_gizmosGo->SetName("Gizmos");
 
-    p_boxMesh = MeshFactory::GetCube();
-    p_planeMesh = MeshFactory::GetPlane();
-    p_sphereMesh = MeshFactory::GetSphere();
+    p_boxMesh = Resources::Clone<Mesh>(MeshFactory::GetCube());
+    p_planeMesh = Resources::Clone<Mesh>(MeshFactory::GetPlane());
+    p_sphereMesh = Resources::Clone<Mesh>(MeshFactory::GetSphere());
 
     m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
     m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();
@@ -48,7 +48,7 @@ Gizmos::Gizmos()
         RendererFactory::ConvertToGizmoRenderer( rend );
     }
 
-    m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSave);
+    m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSerialize);
 }
 
 Gizmos::~Gizmos()

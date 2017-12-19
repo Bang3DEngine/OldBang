@@ -108,10 +108,6 @@ void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resour
         Resources::Add(resTypeId, resource);
     }
     ++rs->m_GUIDCache.Get(resTypeId).Get(guid).usageCount;
-
-    // Debug_Log("RegisterResourceUsage " << resTypeId << ", to " <<
-              // resource << ", " << guid << " to " << rs->m_GUIDCache.Get(resTypeId).Get(guid).usageCount);
-    // Debug_Log(rs->m_GUIDCache);
 }
 
 void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
@@ -130,16 +126,9 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
         ASSERT(*resourcesUsage >= 1);
         --(*resourcesUsage);
 
-        // Debug_Log("UnRegisterResourceUsage " << resource << " " << resTypeId << " " <<
-                  // guid << " to " << *resourcesUsage);
-        // Debug_Log(rs->m_GUIDCache);
-        if (*resourcesUsage == 0)//&& !resource->m_isPersistentResource)
+        if (*resourcesUsage == 0)
         {
-            // Debug_Log("Remove begin " << resTypeId << " " << guid);
-            // Debug_Log(rs->m_GUIDCache);
             Resources::Remove(resTypeId, guid);
-            // Debug_Log("Remove end " << resTypeId << " " << guid);
-            // Debug_Log(rs->m_GUIDCache);
         }
     }
 }

@@ -60,8 +60,8 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, SingleLineRenderer);
     CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
 
-    Debug_Error("Please register class '" << componentClassName << "' in "
-                "ComponentFactory"); ASSERT(false);
+    Debug_Warn("Please register class '" << componentClassName << "' in "
+               "ComponentFactory");
 
     return nullptr;
 }

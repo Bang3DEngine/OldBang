@@ -39,6 +39,7 @@ public:
 
     static Scene* CreateScene(bool addTransform = true);
     static Scene* CreateUIScene();
+    static void   CreateUISceneInto(Scene *scene);
     static Scene* CreateDefaultSceneInto(Scene *scene);
 
     static UICanvas*        CreateUICanvas();
@@ -57,7 +58,7 @@ public:
     static UIButton*  CreateUIButtonInto(GameObject *go);
     static UIButton*  CreateUIButton();
     static UIButton*  CreateUIButton(const String &text,
-                                           Texture2D *icon = nullptr);
+                                     Texture2D *icon = nullptr);
     static UILabel*         CreateUILabel();
     static UILabel*         CreateUILabelInto(GameObject *go);
     static UIScrollArea*    CreateUIScrollAreaInto(GameObject *go);
@@ -78,13 +79,13 @@ public:
 
     static GameObject* CreateUISpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            const Vector2i &space = Vector2i(1));
+                            const Vector2 &space = Vector2::One);
     static GameObject* CreateUIHSpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            int spaceX = 1);
+                            float spaceX = 1);
     static GameObject* CreateUIVSpacer(
                             LayoutSizeType sizeType = LayoutSizeType::Flexible,
-                            int spaceY = 1);
+                            float spaceY = 1);
 
     static String GetGameObjectDuplicateName(const GameObject *go);
 

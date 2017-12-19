@@ -88,10 +88,15 @@ Scene *GameObjectFactory::CreateScene(bool addTransform)
 Scene *GameObjectFactory::CreateUIScene()
 {
     Scene *scene = GameObject::Create<Scene>();
+    CreateUISceneInto(scene);
+    return scene;
+}
+
+void GameObjectFactory::CreateUISceneInto(Scene *scene)
+{
     scene->AddComponent<Camera>();
     GameObjectFactory::CreateUIGameObjectInto(scene);
     GameObjectFactory::CreateUICanvasInto(scene);
-    return scene;
 }
 
 class Rotator : public Component
@@ -147,7 +152,6 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     pl->SetColor(Color::Yellow);
     lightGo->GetTransform()->SetPosition( Vector3(7,4,-2) );
     lightGo->GetTransform()->LookAt( Vector3::Zero );
-    scene->SetAsChild(lightGo);
 
     GameObject *light2Go = GameObjectFactory::CreateGameObjectNamed("Light2");
     PointLight *pl2 = light2Go->AddComponent<PointLight>();
@@ -155,7 +159,6 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     pl2->SetColor(Color::Purple);
     light2Go->GetTransform()->SetPosition( Vector3(-7,4,-2) );
     light2Go->GetTransform()->LookAt( Vector3::Zero );
-    scene->SetAsChild(light2Go);
 
     GameObject *light3Go = GameObjectFactory::CreateGameObjectNamed("Light3");
     PointLight *pl3 = light3Go->AddComponent<PointLight>();
@@ -163,26 +166,22 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     pl3->SetColor(Color::White);
     light3Go->GetTransform()->SetPosition( Vector3(0, 4, 0) );
     light3Go->GetTransform()->LookAt( Vector3::Zero );
-    scene->SetAsChild(light3Go);
 
     GameObject *floor = MeshFactory::GetCubeGameObject();
     floor->SetName("Floor");
     floor->GetTransform()->TranslateLocal( Vector3(0, -1, 0) );
     floor->GetTransform()->SetLocalScale( Vector3(10.0f, 0.2f, 10.0f));
-    scene->SetAsChild(floor);
 
     GameObject *wall1 = MeshFactory::GetCubeGameObject();
     wall1->SetName("Wall1");
     wall1->GetTransform()->TranslateLocal( Vector3(-4, 3, 0) );
     wall1->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
-    scene->SetAsChild(wall1);
 
     GameObject *wall2 = MeshFactory::GetCubeGameObject();
     wall2->SetName("Wall2");
     wall2->GetTransform()->TranslateLocal( Vector3(0, 3, -4) );
     wall2->GetTransform()->SetLocalRotation( Quaternion::AngleAxis(Math::Pi/2, Vector3::Up) );
     wall2->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
-    scene->SetAsChild(wall2);
 
     GameObject *cameraGo = GameObjectFactory::CreateGameObjectNamed("Camera");
     cameraGo->GetTransform()->SetPosition( Vector3(5,4,3) );
@@ -196,6 +195,12 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
         scene->SetAsChild( GameObjectFactory::CreateGameObjectNamed("GO_" + String(i)) );
     }
 
+    scene->SetAsChild(lightGo);
+    scene->SetAsChild(light2Go);
+    scene->SetAsChild(light3Go);
+    scene->SetAsChild(floor);
+    scene->SetAsChild(wall1);
+    scene->SetAsChild(wall2);
     scene->SetAsChild(cube);
     cube->SetAsChild(sphere);
     sphere->SetAsChild(cube2);
@@ -339,7 +344,7 @@ UIScrollArea* GameObjectFactory::CreateUIScrollAreaInto(GameObject *go)
 }
 
 GameObject *GameObjectFactory::CreateUISpacer(LayoutSizeType sizeType,
-                                              const Vector2i &space)
+                                              const Vector2 &space)
 {
     GameObject *spacerGo = GameObjectFactory::CreateUIGameObjectNamed("Separator");
     UILayoutElement *le = spacerGo->AddComponent<UILayoutElement>();
@@ -348,23 +353,23 @@ GameObject *GameObjectFactory::CreateUISpacer(LayoutSizeType sizeType,
     le->SetPreferredSize( Vector2i(0) );
     le->SetFlexibleSize( Vector2(0) );
 
-    if (sizeType == LayoutSizeType::Min) { le->SetMinSize(space); }
-    else if (sizeType == LayoutSizeType::Preferred) { le->SetPreferredSize(space); }
+    if (sizeType == LayoutSizeType::Min) { le->SetMinSize(Vector2i(space)); }
+    else if (sizeType == LayoutSizeType::Preferred) { le->SetPreferredSize(Vector2i(space)); }
     else { le->SetFlexibleSize( Vector2(space) ); }
     return spacerGo;
 }
 GameObject *GameObjectFactory::CreateUIHSpacer(LayoutSizeType sizeType,
-                                               int spaceX)
+                                               float spaceX)
 {
     GameObject *spacerGo =
-            GameObjectFactory::CreateUISpacer(sizeType, Vector2i(spaceX, 0) );
+            GameObjectFactory::CreateUISpacer(sizeType, Vector2(spaceX, 0) );
     return spacerGo;
 }
 GameObject *GameObjectFactory::CreateUIVSpacer(LayoutSizeType sizeType,
-                                               int spaceY)
+                                               float spaceY)
 {
     GameObject *spacerGo =
-            GameObjectFactory::CreateUISpacer(sizeType, Vector2i(0, spaceY) );
+            GameObjectFactory::CreateUISpacer(sizeType, Vector2(0, spaceY) );
     return spacerGo;
 }
 
@@ -407,7 +412,8 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
                                                  const Vector2i &space,
                                                  float linePercent)
 {
-    GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType, space);
+    GameObject *sepGo = GameObjectFactory::CreateUISpacer(sizeType,
+                                                          Vector2(space));
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetMaterial(MaterialFactory::GetUIImage().Get());
     lr->GetMaterial()->SetDiffuseColor(Color::White);

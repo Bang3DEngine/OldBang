@@ -119,9 +119,9 @@ String XMLNode::ToString(const String& indent) const
     String str = "";
 
     str += indent + "<" + m_tagName;
-    for (auto itAttr : GetAttributesListInOrder())
+    for (const auto& attrPair : GetAttributesListInOrder())
     {
-        const XMLAttribute* attr = itAttr.second;
+        const XMLAttribute* attr = attrPair.second;
         str += " " + attr->ToString() + "\n";
         for (int i = 0; i < m_tagName.Size() + indent.Size() + 1; ++i )
         {

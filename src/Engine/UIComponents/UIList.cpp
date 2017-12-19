@@ -31,9 +31,9 @@ void UIList::OnUpdate()
 {
     Component::OnUpdate();
 
+    // Mouse In/Out
     if ( UICanvas::GetActive(this)->IsMouseOver(GetGameObject(), true) )
     {
-        // Mouse In/Out
         GOItem *itemUnderMouse = nullptr;
         if (UICanvas::GetActive(this)->IsMouseOver(this, true))
         {
@@ -60,6 +60,11 @@ void UIList::OnUpdate()
                 Callback(p_itemUnderMouse, Action::MouseOver);
             }
         }
+    }
+    else
+    {
+        if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
+        p_itemUnderMouse = nullptr;
     }
 
     if (SomeChildHasFocus())
@@ -92,12 +97,6 @@ void UIList::OnUpdate()
                 Callback(p_itemUnderMouse, Action::DoubleClickedLeft);
             }
         }
-    }
-    else if (!p_itemUnderMouse)
-    {
-        SetSelection(nullptr);
-        if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
-        p_itemUnderMouse = nullptr;
     }
 }
 
@@ -133,20 +132,12 @@ void UIList::RemoveItem(GOItem *item)
 
     int indexOfItem = p_items.IndexOf(item);
 
-    // Change selection to another element
     if (p_itemUnderMouse == item) { p_itemUnderMouse = nullptr; }
-    if (GetNumItems() > 0)
-    {
-        int newSelIndex = GetSelectedIndex() == 0 ? 1 : (GetSelectedIndex()-1);
-        newSelIndex = Math::Clamp(newSelIndex, 0, GetNumItems()-1-1);
-        SetSelection(-1); // Deselect first
-        SetSelection(newSelIndex);
-    }
-    else { ClearSelection(); }
+    if (indexOfItem < GetSelectedIndex()) { m_selectionIndex -= 1; }
+    if (GetSelectedIndex() == indexOfItem) { ClearSelection(); }
 
     // Destroy the element
     GameObject::Destroy(item);
-    if (indexOfItem < GetSelectedIndex()) { m_selectionIndex -= 1; }
     p_items.Remove(item);
 }
 
@@ -154,14 +145,6 @@ void UIList::ClearSelection()
 {
     if (GetSelectedIndex() >= 0)
     {
-        if (m_selectionCallback)
-        {
-            GOItem *selectedItem = GetSelectedItem();
-            if (selectedItem)
-            {
-                m_selectionCallback(selectedItem, Action::SelectionOut);
-            }
-        }
         SetSelection(-1);
     }
 }

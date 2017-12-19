@@ -8,7 +8,10 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class UIButton;
 FORWARD class IFocusable;
+FORWARD class UIFileList;
+FORWARD class UIInputText;
 FORWARD class DialogWindow;
 
 class Dialog
@@ -16,20 +19,32 @@ class Dialog
 public:
     static DialogWindow* Error(const String &title,
                                const String &msg);
-
-    static Path GetFilePath(const String &title,
-                            const List<String> &extensions = {});
+    static Path OpenFilePath(const String &title,
+                             const List<String> &extensions = {});
+    static Path SaveFilePath(const String &title,
+                             const String &extension);
 
     Dialog() = delete;
 
 private:
     static Path s_resultPath;
 
-    static Scene* CreateGetFilePathScene(const String &title,
-                                         const List<String> &extensions);
+    static DialogWindow* BeginCreateDialog(const String &title);
+    static void EndCreateDialog(DialogWindow *dialogWindow);
+
+    static void CreateSaveFilePathSceneInto(Scene *scene,
+                                            const String &extension);
+    static void CreateOpenFilePathSceneInto(Scene *scene,
+                                            const List<String> &extensions);
+    static void CreateFilePathBaseInto(Scene *scene,
+                                       UIFileList **outFileList,
+                                       UIButton **outBotLeftButton,
+                                       UIButton **outBotRightButton,
+                                       UIInputText **botInputText);
+
     static Scene* CreateMsgScene(const String &msg);
 
-    static void FileAcceptedCallback(const Path &path);
+    static void AcceptDialogFile(const Path &path);
 
     static void OnButtonClicked(IFocusable *button);
 };

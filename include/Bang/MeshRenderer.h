@@ -15,6 +15,7 @@ class MeshRenderer : public Renderer
 public:
     void SetMesh(Mesh* m);
     Mesh* GetMesh() const;
+    Mesh* GetSharedMesh() const;
 
     // Renderer
     virtual AABox GetAABBox() const override;
@@ -28,12 +29,15 @@ public:
 
 protected:
     mutable RH<Mesh> p_mesh;
+    RH<Mesh> p_sharedMesh;
 
     MeshRenderer();
     virtual ~MeshRenderer();
 
     // Renderer
     virtual void OnRender() override;
+
+    Mesh* GetUserMesh() const;
 };
 
 NAMESPACE_BANG_END

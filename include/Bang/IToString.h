@@ -8,7 +8,8 @@ NAMESPACE_BANG_BEGIN
 class IToString
 {
 protected:
-    IToString() {}
+    IToString() = default;
+    virtual ~IToString() = default;
 
 public:
     virtual String ToString() const = 0;

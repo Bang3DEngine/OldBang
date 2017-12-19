@@ -112,15 +112,22 @@ void UICanvas::Invalidate()
 
 }
 
-void UICanvas::SetFocus(IFocusable *newFocusable)
+void UICanvas::SetFocus(IFocusable *_newFocusable)
 {
+    IFocusable *newFocusable = _newFocusable;
+    Object *obj = newFocusable ? DCAST<Object*>(newFocusable) : nullptr;
+    if (obj)
+    {
+        if (obj->IsWaitingToBeDestroyed()) { newFocusable = nullptr; }
+    }
+
     if (newFocusable != GetCurrentFocus())
     {
         if (GetCurrentFocus())
         {
-            Component *focusableComp = Cast<Component*>( GetCurrentFocus() );
+            Object *focusableObj = Cast<Object*>( GetCurrentFocus() );
             if (GetCurrentFocus() != GetCurrentFocusMouseOver())
-            { focusableComp->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
+            { focusableObj->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
 
             GetCurrentFocus()->ClearFocus();
         }
@@ -128,23 +135,30 @@ void UICanvas::SetFocus(IFocusable *newFocusable)
         p_currentFocus = newFocusable;
         if (GetCurrentFocus())
         {
-            Component *focusableComp = DCAST<Component*>( GetCurrentFocus() );
-            focusableComp->EventEmitter<IDestroyListener>::RegisterListener(this);
+            Object *focusableObj = DCAST<Object*>( GetCurrentFocus() );
+            focusableObj->EventEmitter<IDestroyListener>::RegisterListener(this);
 
             GetCurrentFocus()->SetFocus();
         }
     }
 }
 
-void UICanvas::SetFocusMouseOver(IFocusable *newFocusableMO)
+void UICanvas::SetFocusMouseOver(IFocusable *_newFocusableMO)
 {
+    IFocusable *newFocusableMO = _newFocusableMO;
+    Object *obj = newFocusableMO ? DCAST<Object*>(newFocusableMO) : nullptr;
+    if (obj)
+    {
+        if (obj->IsWaitingToBeDestroyed()) { newFocusableMO = nullptr; }
+    }
+
     if (newFocusableMO != GetCurrentFocusMouseOver())
     {
         if (GetCurrentFocusMouseOver())
         {
-            Component *focusableMOComp = Cast<Component*>( GetCurrentFocusMouseOver() );
+            Object *focusableMOObj = Cast<Object*>( GetCurrentFocusMouseOver() );
             if (GetCurrentFocus() != GetCurrentFocusMouseOver())
-            { focusableMOComp->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
+            { focusableMOObj->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
 
             GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(false);
         }
@@ -152,8 +166,8 @@ void UICanvas::SetFocusMouseOver(IFocusable *newFocusableMO)
         p_currentFocusMouseOver = newFocusableMO;
         if (GetCurrentFocusMouseOver())
         {
-            Component *focusableMOComp = Cast<Component*>( GetCurrentFocusMouseOver() );
-            focusableMOComp->EventEmitter<IDestroyListener>::RegisterListener(this);
+            Object *focusableMOObj = Cast<Object*>( GetCurrentFocusMouseOver() );
+            focusableMOObj->EventEmitter<IDestroyListener>::RegisterListener(this);
             GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(true);
         }
     }

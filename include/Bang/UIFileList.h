@@ -8,6 +8,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UITextRenderer;
+FORWARD class UIFileListItem;
 FORWARD class UIImageRenderer;
 
 class UIFileList : public Component
@@ -28,12 +29,14 @@ public:
     void SetFileAcceptedCallback(PathCallback callback);
     void SetPathChangedCallback(PathCallback callback);
 
+    Path GetCurrentSelectedPath() const;
     const Path& GetCurrentPath() const;
     const List<String> &GetFileExtensions() const;
 
 private:
     Path m_currentPath;
     List<String> m_fileExtensions;
+    UIFileListItem *p_selectedItem;
     PathCallback m_fileAcceptedCallback;
     PathCallback m_pathChangedCallback;
 

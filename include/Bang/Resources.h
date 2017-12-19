@@ -38,6 +38,8 @@ public:
 
     template<class IResourceClass, class ...Args>
     static RH<IResourceClass> Create(const Args&... args);
+    template<class IResourceClass, class ...Args>
+    static RH<IResourceClass> Create(const GUID &guid, const Args&... args);
 
     template<class IResourceClass>
     static RH<IResourceClass> Clone(const RH<IResourceClass> &src);
@@ -82,6 +84,8 @@ public:
 
     template<class IResourceClass, class ...Args>
     static IResourceClass* _Create(const Args&... args);
+    template<class IResourceClass, class ...Args>
+    static IResourceClass* _Create(const GUID &guid, const Args&... args);
 
     template<class IResourceClass, class ...Args>
     static typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),

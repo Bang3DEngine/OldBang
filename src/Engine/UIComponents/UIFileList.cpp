@@ -50,6 +50,12 @@ void UIFileList::SetPathChangedCallback(UIFileList::PathCallback callback)
     m_pathChangedCallback = callback;
 }
 
+Path UIFileList::GetCurrentSelectedPath() const
+{
+    if (p_selectedItem) { return p_selectedItem->GetPath(); }
+    return GetCurrentPath();
+}
+
 void UIFileList::SetCurrentPath(const Path &currentPath)
 {
     m_currentPath = currentPath;
@@ -78,10 +84,12 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
             if (action == UIList::Action::SelectionIn)
             {
                 item->OnSelectionIn();
+                p_selectedItem = item;
             }
             else if (action == UIList::Action::SelectionOut)
             {
                 item->OnSelectionOut();
+                p_selectedItem = nullptr;
             }
             else if (action == UIList::Action::MouseOver)
             {

@@ -382,7 +382,7 @@ void RectTransform::OnRenderGizmos()
 {
     Transform::OnRenderGizmos();
     /*
-    Gizmos::SetLineWidth(1.0f);
+    Gizmos::SetThickness(1.0f);
 
     Rect r = GetViewportRectNDC(); (void)r;
 

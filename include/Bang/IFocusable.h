@@ -22,6 +22,7 @@ public:
     using ClickedCallback = std::function<void(IFocusable*)>;
     void AddClickedCallback(ClickedCallback callback);
 
+
 protected:
     IFocusable();
     virtual ~IFocusable();

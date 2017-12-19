@@ -22,7 +22,7 @@ class UITree : public Component,
 
 public:
 
-    void AddItem(GOItem *newItem, GOItem *parentItem, uint indexInsideParent = 0);
+    void AddItem(GOItem *newItem, GOItem *parentItem, int indexInsideParent = 0);
     void RemoveItem(GOItem *itemToRemove);
     GOItem* GetSelectedItem() const;
     void Clear();

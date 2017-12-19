@@ -22,12 +22,14 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
+    void SetBlocked(bool blocked);
     void SetIconSize(const Vector2i &size);
     void SetIconTexture(Texture2D *texture);
     void SetIconSpacingWithText(int spacingWithText);
     void SetIcon(Texture2D *texture, const Vector2i &size,
                  int spacingWithText = 5);
 
+    bool IsBlocked() const;
     UIImageRenderer* GetIcon() const;
     UITextRenderer* GetText() const;
     UIImageRenderer* GetBackground() const;
@@ -38,6 +40,7 @@ private:
     UIButton();
     virtual ~UIButton();
 
+    bool m_isBlocked = false;
     UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;
     UIImageRenderer *p_background  = nullptr;

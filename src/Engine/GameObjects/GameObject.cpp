@@ -170,6 +170,8 @@ void GameObject::RemoveComponent(Component *component)
             m_increaseComponentsIterator = false;
         }
     }
+
+    if (component == p_transform) { p_transform = nullptr; }
 }
 
 void GameObject::OnEnabled()
@@ -580,7 +582,7 @@ void GameObject::ImportXML(const XMLNode &xmlInfo)
         else
         {
             Component *comp = AddComponent(tagName);
-            comp->ImportXML(xmlChild);
+            if (comp) { comp->ImportXML(xmlChild); }
         }
     }
 }
@@ -595,7 +597,7 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
 
     for (Component *c : GetComponents())
     {
-        if (c->GetHideFlags().IsOff(HideFlag::DontSave))
+        if (c->GetHideFlags().IsOff(HideFlag::DontSerialize))
         {
             XMLNode xmlComp;
             c->ExportXML(&xmlComp);
@@ -605,7 +607,7 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
 
     for (GameObject *child : GetChildren())
     {
-        if (child->GetHideFlags().IsOff(HideFlag::DontSave))
+        if (child->GetHideFlags().IsOff(HideFlag::DontSerialize))
         {
             XMLNode xmlChild;
             child->ExportXML(&xmlChild);

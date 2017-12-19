@@ -77,6 +77,7 @@ void ObjectManager::StartObjects()
         if (!om->m_objectsToBeDestroyedSet.Contains(objToBeStartedId))
         {
             ASSERT(!objectToBeStarted->IsStarted());
+            ASSERT(!objectToBeStarted->IsWaitingToBeDestroyed());
             objectToBeStarted->Start();
         }
     }
@@ -95,6 +96,7 @@ void ObjectManager::_DestroyObjects()
         Object *objectToBeDestroyed = m_objectsToBeDestroyedQueue.front();
         ObjectId objectToBeDestroyedId = m_objectsIdsToBeDestroyedQueue.front();
         ASSERT(objectToBeDestroyed->GetObjectId() == objectToBeDestroyedId);
+        ASSERT(objectToBeDestroyed->IsWaitingToBeDestroyed());
         m_objectsToBeDestroyedQueue.pop();
         m_objectsIdsToBeDestroyedQueue.pop();
 

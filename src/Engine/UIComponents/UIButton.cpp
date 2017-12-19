@@ -31,24 +31,47 @@ void UIButton::OnStart()
 void UIButton::OnUpdate()
 {
     Component::OnUpdate();
-    if (GetButton()->IsMouseOver())
+
+    if (!IsBlocked())
     {
-        if (Input::GetMouseButtonDown(MouseButton::Left))
+        if (GetButton()->IsMouseOver())
         {
-            GetBackground()->SetTint(Color::DarkGray);
+            if (Input::GetMouseButtonDown(MouseButton::Left))
+            {
+                GetBackground()->SetTint(Color::DarkGray);
+            }
+        }
+
+        if (Input::GetMouseButtonUp(MouseButton::Left))
+        {
+            if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
+            else { OnMouseExit(GetButton()); }
         }
     }
+}
 
-    if (Input::GetMouseButtonUp(MouseButton::Left))
+void UIButton::SetBlocked(bool blocked)
+{
+    m_isBlocked = blocked;
+
+    p_button->IFocusable::SetEmitEvents( !IsBlocked() );
+    if (!IsBlocked())
     {
+        GetText()->SetTextColor(Color::Black);
         if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
         else { OnMouseExit(GetButton()); }
+    }
+    else
+    {
+        GetText()->SetTextColor(Color::LightGray);
+        GetBackground()->SetTint(Color::DarkGray);
     }
 }
 
 void UIButton::SetIconSize(const Vector2i &size)
 {
-    UILayoutElement *le = GetIcon()->GetGameObject()->GetComponent<UILayoutElement>();
+    UILayoutElement *le = GetIcon()->GetGameObject()->
+                          GetComponent<UILayoutElement>();
     le->SetMinSize(size);
     le->SetPreferredSize(size);
 }
@@ -71,6 +94,7 @@ void UIButton::SetIcon(Texture2D *texture, const Vector2i &size,
     SetIconSpacingWithText(spacingWithText);
 }
 
+bool UIButton::IsBlocked() const { return m_isBlocked; }
 UIImageRenderer *UIButton::GetIcon() const { return p_icon; }
 UITextRenderer *UIButton::GetText() const { return p_text; }
 UIImageRenderer *UIButton::GetBackground() const { return p_background; }
@@ -96,9 +120,6 @@ UIButton* UIButton::CreateInto(GameObject *go)
     UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
 
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(0) );
-
     UIFocusable *btn = go->AddComponent<UIFocusable>();
 
     UILabel *label = GameObjectFactory::CreateUILabel();
@@ -111,6 +132,9 @@ UIButton* UIButton::CreateInto(GameObject *go)
     GameObject *iconGo = icon->GetGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
     iconLE->SetFlexibleSize(Vector2::Zero);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2(0.0f) );
 
     buttonDriv->p_icon = icon;
     buttonDriv->p_background = bgImg;

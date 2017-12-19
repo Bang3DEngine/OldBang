@@ -14,7 +14,12 @@ class IEventEmitter
 public:
     virtual void UnRegisterListener(IEventListener *listener) = 0;
 
+    void SetEmitEvents(bool emitEvents);
+    bool IsEmittingEvents() const;
+
 private:
+    bool m_emitEvents = true;
+
     IEventEmitter() = default;
     virtual ~IEventEmitter() = default;
 

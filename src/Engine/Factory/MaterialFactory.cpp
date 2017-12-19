@@ -51,7 +51,7 @@ RH<Material> MaterialFactory::Load(const String &enginePath)
 {
     MaterialFactory *mf = MaterialFactory::GetActive();
     mf->m_cache.Add(enginePath, Resources::Load<Material>(EPATH(enginePath)));
-    return Resources::Clone<Material>( mf->m_cache.Get(enginePath) );
+    return mf->m_cache.Get(enginePath);
 }
 
 MaterialFactory *MaterialFactory::GetActive()

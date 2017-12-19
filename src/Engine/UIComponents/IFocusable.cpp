@@ -20,7 +20,8 @@ void IFocusable::UpdateFromCanvas()
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
             m_beingPressed = true;
-            for (auto callback : m_clickedCallbacks) { callback(this); }
+            if (IsEmittingEvents())
+            { for (auto callback : m_clickedCallbacks) { callback(this); } }
         }
     }
 

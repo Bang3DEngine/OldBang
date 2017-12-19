@@ -25,7 +25,7 @@ RH<Mesh> MeshFactory::GetMesh(const String &enginePath)
 {
     MeshFactory *mf = MeshFactory::GetActive();
     mf->m_cache.Add(enginePath, Resources::Load<Mesh>(EPATH(enginePath)));
-    return Resources::Clone<Mesh>( mf->m_cache.Get(enginePath) );
+    return mf->m_cache.Get(enginePath);
 }
 
 GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh* m, const String &name)

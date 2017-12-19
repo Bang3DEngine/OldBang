@@ -47,7 +47,7 @@ void GEngine::Init()
     GL::SetActive( GetGL() );
     m_texUnitManager = new TextureUnitManager();
 
-    p_screenPlaneMesh = MeshFactory::GetUIPlane();
+    p_screenPlaneMesh = Resources::Clone<Mesh>(MeshFactory::GetUIPlane());
     p_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     GL::SetActive( nullptr );
 }
@@ -286,9 +286,12 @@ void GEngine::Render(Renderer *rend)
         rend->Bind();
 
         Material *rendMat = rend->GetMaterial();
-        activeCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
-        rend->OnRender();
-        rend->UnBind();
+        if (rendMat)
+        {
+            activeCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
+            rend->OnRender();
+            rend->UnBind();
+        }
     }
     else if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
     {

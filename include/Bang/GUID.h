@@ -43,6 +43,7 @@ private:
 inline std::istream &operator>>(std::istream &is, GUID &guid)
 {
     is >> guid.m_timeGUID;
+    { char c; is >> c; }
     is >> guid.m_randGUID;
     return is;
 }

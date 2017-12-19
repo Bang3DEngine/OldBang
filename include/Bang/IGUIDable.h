@@ -18,6 +18,8 @@ protected:
 
 private:
     GUID m_GUID;
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

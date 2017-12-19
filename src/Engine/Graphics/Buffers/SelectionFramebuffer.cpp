@@ -56,6 +56,7 @@ void SelectionFramebuffer::PrepareForRender(const GameObject *go)
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
+    if (!rend->GetMaterial()) { return; }
 
     GameObject *go = rend->GetGameObject();
 

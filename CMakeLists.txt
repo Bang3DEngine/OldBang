@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=float-divide-by-zero")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=integer-divide-by-zero")
@@ -188,6 +188,7 @@ ${ENGINE_SRC_DIR}/General/Application.cpp
 ${ENGINE_SRC_DIR}/General/GUID.cpp
 ${ENGINE_SRC_DIR}/General/IGUIDable.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
+${ENGINE_SRC_DIR}/General/IEventEmitter.cpp
 ${ENGINE_SRC_DIR}/General/IEventListener.cpp
 ${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
