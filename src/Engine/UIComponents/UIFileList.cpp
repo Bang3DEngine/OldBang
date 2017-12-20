@@ -50,6 +50,15 @@ void UIFileList::SetPathChangedCallback(UIFileList::PathCallback callback)
     m_pathChangedCallback = callback;
 }
 
+void UIFileList::SetShowOnlyDirectories(bool showOnlyDirectories)
+{
+    if (m_showOnlyDirectories != showOnlyDirectories)
+    {
+        m_showOnlyDirectories = showOnlyDirectories;
+        UpdateEntries();
+    }
+}
+
 Path UIFileList::GetCurrentSelectedPath() const
 {
     if (p_selectedItem) { return p_selectedItem->GetPath(); }
@@ -58,11 +67,38 @@ Path UIFileList::GetCurrentSelectedPath() const
 
 void UIFileList::SetCurrentPath(const Path &currentPath)
 {
-    m_currentPath = currentPath;
-    if (m_pathChangedCallback) { m_pathChangedCallback(m_currentPath); }
+    if (m_currentPath != currentPath)
+    {
+        m_currentPath = currentPath;
+        if (m_pathChangedCallback) { m_pathChangedCallback( GetCurrentPath() ); }
+        UpdateEntries();
+    }
+}
 
+const Path &UIFileList::GetCurrentPath() const
+{
+    return m_currentPath;
+}
+
+bool UIFileList::GetShowOnlyDirectories() const
+{
+    return m_showOnlyDirectories;
+}
+
+const List<String> &UIFileList::GetFileExtensions() const
+{
+    return m_fileExtensions;
+}
+
+void UIFileList::UpdateEntries()
+{
     List<Path> paths = GetCurrentPath().FindSubPaths(Path::FindFlag::Simple);
-    if (!GetFileExtensions().IsEmpty()) { FilterPathsByExtension(&paths); }
+
+    if (!GetFileExtensions().IsEmpty())
+    {
+        UIFileList::FilterPathsByExtension(&paths, GetFileExtensions());
+    }
+    if (GetShowOnlyDirectories()) { UIFileList::RemoveFilesFromList(&paths); }
     paths.PushFront( Path("..") );
 
     UIList *uiList = GetGameObject()->GetComponent<UIList>();
@@ -122,25 +158,26 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     );
 }
 
-const Path &UIFileList::GetCurrentPath() const
-{
-    return m_currentPath;
-}
-
-const List<String> &UIFileList::GetFileExtensions() const
-{
-    return m_fileExtensions;
-}
-
-void UIFileList::FilterPathsByExtension(List<Path> *paths) const
+void UIFileList::FilterPathsByExtension(List<Path> *paths,
+                                        const List<String>& extensions)
 {
     for (auto it = paths->Begin(); it != paths->End(); )
     {
         const Path &p = *it;
-        if ( p.IsFile() && !p.HasExtension(GetFileExtensions()) )
+        if ( p.IsFile() && !p.HasExtension(extensions) )
         {
             it = paths->Remove(it);
         }
+        else { ++it; }
+    }
+}
+
+void UIFileList::RemoveFilesFromList(List<Path> *paths)
+{
+    for (auto it = paths->Begin(); it != paths->End(); )
+    {
+        const Path &p = *it;
+        if (p.IsFile()) { it = paths->Remove(it); }
         else { ++it; }
     }
 }

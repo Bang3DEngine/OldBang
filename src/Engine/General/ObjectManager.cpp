@@ -72,7 +72,7 @@ void ObjectManager::StartObjects()
         om->m_objectsToBeStartedQueue.pop();
         om->m_objectsIdsToBeStartedQueue.pop();
 
-        ASSERT(objToBeStartedId.m_id < ObjectId::s_nextObjectId);
+        ASSERT(objToBeStartedId.m_id < ObjectId::NextObjectId);
 
         if (!om->m_objectsToBeDestroyedSet.Contains(objToBeStartedId))
         {

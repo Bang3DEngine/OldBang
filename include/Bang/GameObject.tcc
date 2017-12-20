@@ -158,6 +158,15 @@ GameObject::Propagate(const TFunction &func,
     }
 }
 
+template<class T>
+List<T*> GameObject::GetComponentsInParentAndThis(bool recursive) const
+{
+    List<T*> comps_l;
+    comps_l.PushBack( GetComponents<T>() );
+    comps_l.PushBack( GetComponentsInParent<T>(recursive) );
+    return comps_l;
+}
+
 
 NAMESPACE_BANG_END
 

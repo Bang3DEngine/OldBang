@@ -23,6 +23,7 @@ public:
     virtual void OnStart() override;
     virtual void OnUpdate() override;
     virtual void OnAfterChildrenUpdate() override;
+    virtual void OnBeforeRender() override;
 
     void Invalidate();
 

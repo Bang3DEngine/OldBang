@@ -59,6 +59,7 @@ protected:
     virtual void OnUpdate();
     virtual void OnAfterChildrenUpdate();
     virtual void OnPostUpdate();
+    virtual void OnBeforeRender();
     virtual void OnBeforeChildrenRender(RenderPass renderPass);
     virtual void OnRender(RenderPass renderPass);
     virtual void OnRenderGizmos();

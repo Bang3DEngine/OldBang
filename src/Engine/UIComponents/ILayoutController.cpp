@@ -8,10 +8,15 @@ USING_NAMESPACE_BANG
 ILayoutController::ILayoutController() {}
 ILayoutController::~ILayoutController() {}
 
+void ILayoutController::Invalidate()
+{
+    IInvalidatable<ILayoutController>::Invalidate();
+}
+
 void ILayoutController::OnInvalidated()
 {
     IInvalidatable<ILayoutController>::OnInvalidated();
-    UILayoutManager::OnInvalidated(this);
+    UILayoutManager::PropagateInvalidation(this);
 }
 
 void ILayoutController::_ApplyLayout(Axis axis)
@@ -26,21 +31,18 @@ void ILayoutController::_ApplyLayout(Axis axis)
 void ILayoutController::OnChildAdded(GameObject *addedChild,
                                      GameObject *parent)
 {
+    (void) addedChild; (void) parent;
     Invalidate();
 }
 
 void ILayoutController::OnChildRemoved(GameObject *removedChild,
                                        GameObject *parent)
 {
+    (void) removedChild; (void) parent;
     Invalidate();
 }
 
 void ILayoutController::OnTransformChanged()
-{
-    Invalidate();
-}
-
-void ILayoutController::OnChildrenTransformChanged()
 {
     Invalidate();
 }

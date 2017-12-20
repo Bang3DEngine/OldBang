@@ -9,9 +9,10 @@ NAMESPACE_BANG_BEGIN
 
 class ILayoutElement : public IInvalidatable<ILayoutElement>
 {
-    IINVALIDATABLE(ILayoutElement)
-
 public:
+
+    //IInvalidatable
+    virtual void Invalidate() override;
     virtual void OnInvalidated() override;
 
     void SetLayoutPriority(int layoutPriority);

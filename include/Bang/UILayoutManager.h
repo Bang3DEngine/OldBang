@@ -26,8 +26,8 @@ public:
 
     void RebuildLayout(GameObject *gameObject);
 
-    static void OnInvalidated(ILayoutElement    *element);
-    static void OnInvalidated(ILayoutController *controller);
+    static void PropagateInvalidation(ILayoutElement    *element);
+    static void PropagateInvalidation(ILayoutController *controller);
 
     static Vector2i GetMinSize(GameObject *go);
     static Vector2i GetPreferredSize(GameObject *go);
@@ -36,12 +36,10 @@ public:
 
     static List<GameObject*> GetLayoutableChildrenList(GameObject *go);
 
+
 private:
     void CalculateLayout(GameObject *gameObject, Axis axis);
     void ApplyLayout(GameObject *gameObject, Axis axis);
-
-    static void OnLayoutRebuilt(GameObject *go);
-    static void OnLayoutInvalidated(Component *comp, bool isLayoutController);
 
     static UILayoutManager* GetActive(GameObject *go);
     static UILayoutManager* GetActive(Component *comp);

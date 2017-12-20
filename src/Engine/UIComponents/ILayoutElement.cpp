@@ -32,10 +32,15 @@ void ILayoutElement::SetLayoutPriority(int layoutPriority)
     m_layoutPriority = layoutPriority;
 }
 
+void ILayoutElement::Invalidate()
+{
+    IInvalidatable<ILayoutElement>::Invalidate();
+}
+
 void ILayoutElement::OnInvalidated()
 {
     IInvalidatable<ILayoutElement>::OnInvalidated();
-    UILayoutManager::OnInvalidated(this);
+    UILayoutManager::PropagateInvalidation(this);
 }
 
 int ILayoutElement::GetLayoutPriority() const

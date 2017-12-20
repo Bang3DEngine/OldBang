@@ -2,7 +2,10 @@
 
 USING_NAMESPACE_BANG
 
-ObjectId ObjectId::Empty = ObjectId();
+Object::~Object()
+{
+    ASSERT( IsWaitingToBeDestroyed() );
+}
 
 void Object::Start()
 {
@@ -52,11 +55,6 @@ void Object::CloneInto(ICloneable *clone) const
     obj->m_waitingToBeDestroyed = IsWaitingToBeDestroyed();
 }
 
-Object::~Object()
-{
-    ASSERT( IsWaitingToBeDestroyed() );
-}
-
 void Object::BeforeDestroyed()
 {
     OnDestroy();
@@ -64,21 +62,4 @@ void Object::BeforeDestroyed()
             PropagateToListeners(&IDestroyListener::OnDestroyed, this);
 }
 
-// ObjectId
-
-ObjectId::ObjectIdType ObjectId::s_nextObjectId = 0;
-
-ObjectId::ObjectIdType ObjectId::GetId() const
-{
-    return m_id;
-}
-
-ObjectId::ObjectId()
-{
-    m_id = ObjectId::s_nextObjectId;
-    ++ObjectId::s_nextObjectId;
-}
-
-bool operator!=(const ObjectId &lhs, const ObjectId &rhs)
-{ return !(lhs == rhs); }
 

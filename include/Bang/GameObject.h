@@ -86,6 +86,9 @@ public:
     List<T*> GetComponentsInParent(bool recursive = true) const;
 
     template <class T>
+    List<T*> GetComponentsInParentAndThis(bool recursive = true) const;
+
+    template <class T>
     T* GetComponentInChildren(bool recursive = true) const;
 
     template <class T>
@@ -187,6 +190,7 @@ protected:
     virtual void Update();
     virtual void AfterChildrenUpdate();
     virtual void PostUpdate();
+    virtual void BeforeRender();
     virtual void BeforeChildrenRender(RenderPass renderPass);
     virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);

@@ -41,20 +41,15 @@ UITextRenderer::~UITextRenderer()
 
 void UITextRenderer::OnRender()
 {
-    if (IInvalidatable<UITextRenderer>::IsInvalid())
-    {
-        RegenerateCharQuadsVAO();
-    }
-
     UIRenderer::OnRender();
 
+    RegenerateCharQuadsVAO();
     int vertCount = p_mesh.Get()->GetVertexCount();
     GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
 }
 
 void UITextRenderer::CalculateLayout(Axis axis)
 {
-    RegenerateCharQuadsVAO();
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
 
     Vector2i minSize = Vector2i::Zero;
@@ -72,7 +67,6 @@ void UITextRenderer::CalculateLayout(Axis axis)
 void UITextRenderer::RegenerateCharQuadsVAO() const
 {
     if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
-
     IInvalidatable<UITextRenderer>::Validate();
 
     if (!GetFont())
@@ -83,8 +77,9 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
     }
 
     // Get the quad positions of the rects of each char
+    if (!GetGameObject()) { return; }
     RectTransform *rt = GetGameObject()->GetRectTransform();
-    ENSURE(rt);
+    if (!rt) { return; }
 
     Array<TextFormatter::CharRect> textCharRects =
             TextFormatter::GetFormattedTextPositions(
@@ -349,10 +344,7 @@ const Color &UITextRenderer::GetOutlineColor() const { return m_outlineColor; }
 float UITextRenderer::GetOutlineBlurriness() const { return m_outlineBlurriness; }
 const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
 const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
-{
-    if (IInvalidatable<UITextRenderer>::IsInvalid()) { RegenerateCharQuadsVAO(); }
-    return m_charRectsLocalNDC;
-}
+{ return m_charRectsLocalNDC; }
 const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
     return GetCharRectsLocalNDC()[charIndex];
@@ -382,8 +374,6 @@ Rect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
     return GetContentViewportNDCRect();
 }
-
-void UITextRenderer::OnTransformChanged() { OnChanged(); }
 
 const Color &UITextRenderer::GetTextColor() const
 {
@@ -464,4 +454,10 @@ void UITextRenderer::ExportXML(XMLNode *xmlInfo) const
 void UITextRenderer::OnChanged()
 {
     IInvalidatable<UITextRenderer>::Invalidate();
+    IInvalidatable<ILayoutElement>::Invalidate();
+}
+
+void UITextRenderer::OnTransformChanged()
+{
+    OnChanged();
 }

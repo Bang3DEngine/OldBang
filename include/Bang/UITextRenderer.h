@@ -20,7 +20,6 @@ class UITextRenderer : public UIRenderer,
                        public IInvalidatable<UITextRenderer>
 {
     COMPONENT(UITextRenderer)
-    IINVALIDATABLE(UITextRenderer)
 
 public:
     void RegenerateCharQuadsVAO() const;

@@ -195,7 +195,7 @@ List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go
 
 void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
 {
-    Scene *scene = new Scene();
+    Scene *scene = GameObjectFactory::CreateScene(false);
 
     SceneManager::SetActiveSceneFilepath( sceneFilepath );
     if (scene->ImportXMLFromFile(sceneFilepath))

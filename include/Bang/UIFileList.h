@@ -28,9 +28,11 @@ public:
     void SetCurrentPath(const Path &currentPath);
     void SetFileAcceptedCallback(PathCallback callback);
     void SetPathChangedCallback(PathCallback callback);
+    void SetShowOnlyDirectories(bool showOnlyDirectories);
 
     Path GetCurrentSelectedPath() const;
     const Path& GetCurrentPath() const;
+    bool GetShowOnlyDirectories() const;
     const List<String> &GetFileExtensions() const;
 
 private:
@@ -39,8 +41,12 @@ private:
     UIFileListItem *p_selectedItem;
     PathCallback m_fileAcceptedCallback;
     PathCallback m_pathChangedCallback;
+    bool m_showOnlyDirectories = false;
 
-    void FilterPathsByExtension(List<Path> *paths) const;
+    void UpdateEntries();
+    static void FilterPathsByExtension(List<Path> *paths,
+                                       const List<String>& extensions);
+    static void RemoveFilesFromList(List<Path> *paths);
 };
 
 class UIFileListItem : public GameObject

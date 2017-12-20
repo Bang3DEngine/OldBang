@@ -46,7 +46,20 @@ Path Dialog::OpenFilePath(const String &title, const List<String> &extensions)
     dialog->SetSize(500, 400);
 
     Scene *scene = GameObjectFactory::CreateScene(false);
-    CreateOpenFilePathSceneInto(scene, extensions);
+    CreateOpenFilePathSceneInto(scene, false, extensions);
+    SceneManager::LoadScene(scene);
+
+    EndCreateDialog(dialog);
+    return Dialog::s_resultPath;
+}
+
+Path Dialog::OpenDirectory(const String &title)
+{
+    DialogWindow *dialog = BeginCreateDialog(title);
+    dialog->SetSize(500, 400);
+
+    Scene *scene = GameObjectFactory::CreateScene(false);
+    CreateOpenFilePathSceneInto(scene, true, {});
     SceneManager::LoadScene(scene);
 
     EndCreateDialog(dialog);
@@ -148,6 +161,7 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
 }
 
 void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
+                                         bool openDir,
                                          const List<String> &extensions)
 {
     UIFileList *fileList;
@@ -161,6 +175,7 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
                                    &botInputText);
 
     fileList->SetFileExtensions( extensions );
+    fileList->SetShowOnlyDirectories(openDir);
 
     UIButton *openButton = botRightButton;
     openButton->GetText()->SetContent("Open");
@@ -174,31 +189,39 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
 
     botInputText->GetGameObject()->SetEnabled(false);
 
-    class OpenSceneController : public Component
+    class OpenFileSceneController : public Component
     {
     public:
-        void Init(UIFileList *fileList, UIButton *openButton)
+        void Init(UIFileList *fileList, UIButton *openButton, bool openDir)
         {
             p_fileList = fileList;
             p_openButton = openButton;
+            m_openDir = openDir;
         }
 
         void OnUpdate() override
         {
             Component::OnUpdate();
 
-            Path currPath = p_fileList->GetCurrentSelectedPath();
-            p_openButton->SetBlocked(!currPath.IsFile());
+            Path currPath = m_openDir ? p_fileList->GetCurrentPath() :
+                                        p_fileList->GetCurrentSelectedPath();
+            bool buttonBlocked = m_openDir ? !currPath.IsDir() : !currPath.IsFile();
+            p_openButton->SetBlocked(buttonBlocked);
+
+            if (m_openDir)
+            {
+                p_openButton->GetText()->SetContent("Open " + currPath);
+            }
         }
 
+        bool m_openDir;
         UIFileList *p_fileList;
         UIButton *p_openButton;
         String m_prevContent = "";
     };
 
-    OpenSceneController *osc = scene->AddComponent<OpenSceneController>();
-    osc->Init(fileList, openButton);
-
+    OpenFileSceneController *ofsc = scene->AddComponent<OpenFileSceneController>();
+    ofsc->Init(fileList, openButton, openDir);
 }
 
 void Dialog::CreateFilePathBaseInto(Scene *scene,
@@ -230,7 +253,6 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     listLE->SetFlexibleSize( Vector2(1) );
 
     UIFileList *fileList = list->GetGameObject()->AddComponent<UIFileList>();
-    fileList->SetCurrentPath(Paths::EngineAssets());
 
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
     inputPathText->GetText()->SetContent("");
@@ -311,12 +333,14 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     botHLGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible,
                                                            0.0001f));
     botInputText->GetGameObject()->SetParent(botHLGo);
+    botHLGo->SetName("WOW");
     botHLGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Preferred, 10));
     botHLGo->SetAsChild(cancelButton->GetGameObject());
     botHLGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Preferred, 5));
     botHLGo->SetAsChild(openButton->GetGameObject());
 
     scene->SetFirstFoundCamera();
+    fileList->SetCurrentPath(Paths::EngineAssets());
 
     // Params
     if (outFileList)       { *outFileList       = fileList;     }

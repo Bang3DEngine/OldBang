@@ -49,6 +49,7 @@ void Component::OnBeforeChildrenUpdate() {}
 void Component::OnUpdate() {}
 void Component::OnAfterChildrenUpdate() {}
 void Component::OnPostUpdate() {}
+void Component::OnBeforeRender() {}
 void Component::OnBeforeChildrenRender(RenderPass) {}
 void Component::OnRender(RenderPass) {}
 void Component::OnRenderGizmos() {}

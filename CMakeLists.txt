@@ -194,6 +194,7 @@ ${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
 ${ENGINE_SRC_DIR}/General/Input.cpp
 ${ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${ENGINE_SRC_DIR}/General/Object.cpp
+${ENGINE_SRC_DIR}/General/ObjectId.cpp
 ${ENGINE_SRC_DIR}/General/ObjectManager.cpp
 ${ENGINE_SRC_DIR}/General/Selection.cpp
 ${ENGINE_SRC_DIR}/General/Time.cpp

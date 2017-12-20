@@ -129,10 +129,12 @@ void UILayoutElement::CalculateLayout(Axis axis)
 void UILayoutElement::OnChanged()
 {
     ILayoutElement::Invalidate();
+    /*
     auto parentLayoutControllers =
                 GetGameObject()->GetComponentsInParent<ILayoutController>();
     for (ILayoutController *controller : parentLayoutControllers)
     {
         controller->Invalidate();
     }
+    */
 }

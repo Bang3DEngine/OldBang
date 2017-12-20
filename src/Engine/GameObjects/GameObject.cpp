@@ -64,6 +64,12 @@ void GameObject::PostUpdate()
     PropagateToChildren(&GameObject::PostUpdate);
 }
 
+void GameObject::BeforeRender()
+{
+    PropagateToComponents(&Component::OnBeforeRender);
+    PropagateToChildren(&GameObject::BeforeRender);
+}
+
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
     PropagateToComponents(&Component::OnRender, renderPass);

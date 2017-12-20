@@ -81,7 +81,6 @@ void Scene::InvalidateCanvas()
 {
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
     for (UICanvas *canvas : canvases) { canvas->Invalidate(); }
-
 }
 
 void Scene::OnDestroyed(Object *object)

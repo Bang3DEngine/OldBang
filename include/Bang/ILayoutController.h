@@ -12,9 +12,9 @@ class ILayoutController : public IInvalidatable<ILayoutController>,
                           public IChildrenListener,
                           public ITransformListener
 {
-    IINVALIDATABLE(ILayoutController)
-
 public:
+    // IInvalidatable
+    virtual void Invalidate() override;
     virtual void OnInvalidated() override;
 
     // IChildrenListener
@@ -23,7 +23,6 @@ public:
 
     // ITransformListener
     void OnTransformChanged() override;
-    void OnChildrenTransformChanged() override;
 
 protected:
     ILayoutController();

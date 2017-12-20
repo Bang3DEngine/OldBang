@@ -62,6 +62,7 @@ void GEngine::Render(GameObject *go, Camera *camera)
 
 void GEngine::Render(Scene *scene)
 {
+    scene->BeforeRender();
     List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>();
     for (Camera *camera : sceneCameras)
     {

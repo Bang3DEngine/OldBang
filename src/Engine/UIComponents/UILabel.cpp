@@ -294,9 +294,6 @@ UILabel *UILabel::CreateInto(GameObject *go)
     vl->SetChildrenHorizontalStretch(Stretch::Full);
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
 
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(1.0f) );
-
     UIMask *mask = go->AddComponent<UIMask>();
     go->AddComponent<UIImageRenderer>(); // Quad mask
     label->p_mask = mask;
@@ -315,6 +312,9 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
     selectionQuad->SetTint(Color::LightBlue);
     label->p_selectionQuad = selectionQuadGo;
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2(1.0f) );
 
     go->SetAsChild(selectionQuadGo);
     go->SetAsChild(textContainer);

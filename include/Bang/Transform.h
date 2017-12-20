@@ -18,7 +18,6 @@ class Transform : public Component,
                   public EventEmitter<ITransformListener>
 {
     COMPONENT(Transform)
-    IINVALIDATABLE(Transform)
 
 public:
     virtual const Matrix4& GetLocalToParentMatrix() const;
@@ -122,8 +121,8 @@ private:
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;
 
-    void PropagateParentTransformChangedEvent() const;
-    void PropagateChildrenTransformChangedEvent() const;
+    void PropagateParentTransformChangedEventToChildren() const;
+    void PropagateChildrenTransformChangedEventToParent() const;
 };
 
 NAMESPACE_BANG_END

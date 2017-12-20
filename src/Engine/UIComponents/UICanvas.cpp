@@ -31,9 +31,6 @@ void UICanvas::OnUpdate()
 {
     Component::OnUpdate();
 
-    // Layout rebuilding
-    m_uiLayoutManager->RebuildLayout( GetGameObject() );
-
     // Focus
     IFocusable *focusMouseOver = nullptr;
 
@@ -99,7 +96,6 @@ void UICanvas::OnUpdate()
         focusable->UpdateFromCanvas();
     }
 }
-
 
 void UICanvas::Invalidate()
 {
@@ -178,6 +174,12 @@ void UICanvas::OnAfterChildrenUpdate()
     Component::OnAfterChildrenUpdate();
 
     if (GetCurrentFocus()) { GetCurrentFocus()->m_hasJustFocusChanged = false; }
+}
+
+void UICanvas::OnBeforeRender()
+{
+    Component::OnBeforeRender();
+    GetLayoutManager()->RebuildLayout( GetGameObject() );
 }
 
 void UICanvas::CloneInto(ICloneable *clone) const

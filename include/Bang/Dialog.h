@@ -21,6 +21,7 @@ public:
                                const String &msg);
     static Path OpenFilePath(const String &title,
                              const List<String> &extensions = {});
+    static Path OpenDirectory(const String &title);
     static Path SaveFilePath(const String &title,
                              const String &extension);
 
@@ -35,6 +36,7 @@ private:
     static void CreateSaveFilePathSceneInto(Scene *scene,
                                             const String &extension);
     static void CreateOpenFilePathSceneInto(Scene *scene,
+                                            bool openDir,
                                             const List<String> &extensions);
     static void CreateFilePathBaseInto(Scene *scene,
                                        UIFileList **outFileList,

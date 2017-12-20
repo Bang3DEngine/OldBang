@@ -46,10 +46,13 @@ public:
     Matrix3G<T> Inversed() const
     {
         const Matrix3G<T> &m = *this;
-        const T invDet = Cast<T>(1) / (
-                + m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
-                - m[1][0] * (m[0][1] * m[2][2] - m[2][1] * m[0][2])
-                + m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]));
+        const T div = (+ m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
+                       - m[1][0] * (m[0][1] * m[2][2] - m[2][1] * m[0][2])
+                       + m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]));
+
+        if (div < SCAST<T>(10e-9)) { return m; } // Non invertible
+
+        const T invDet = SCAST<T>(1) / div;
 
         Matrix3G<T> res;
         res[0][0] = + (m[1][1] * m[2][2] - m[2][1] * m[1][2]) * invDet;

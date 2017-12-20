@@ -20,16 +20,30 @@ UILayoutManager::UILayoutManager()
 {
 }
 
-void UILayoutManager::OnInvalidated(ILayoutElement *element)
+void UILayoutManager::PropagateInvalidation(ILayoutElement *element)
 {
     Component *comp = Cast<Component*>(element);
-    UILayoutManager::OnLayoutInvalidated(comp, false);
+    GameObject *go = Cast<GameObject*>(element);
+    if (!go && comp) { go = comp->GetGameObject(); }
+    if (!go) { return; }
+
+    auto pLayoutContrs = go->GetComponentsInParent<ILayoutController>(false);
+    for (ILayoutController *pCont : pLayoutContrs) { pCont->Invalidate(); }
 }
 
-void UILayoutManager::OnInvalidated(ILayoutController *controller)
+void UILayoutManager::PropagateInvalidation(ILayoutController *controller)
 {
     Component *comp = Cast<Component*>(controller);
-    UILayoutManager::OnLayoutInvalidated(comp, true);
+    GameObject *go = Cast<GameObject*>(controller);
+    if (!go && comp) { go = comp->GetGameObject(); }
+    if (!go) { return; }
+
+    ILayoutElement *lElm = comp ? Cast<ILayoutElement*>(comp) : nullptr;
+    if (!lElm) { lElm = go ? Cast<ILayoutElement*>(go) : nullptr; }
+    if (lElm)
+    {
+        lElm->Invalidate();
+    }
 }
 
 Vector2i UILayoutManager::GetMinSize(GameObject *go)
@@ -103,6 +117,7 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
     ENSURE(rootGo);
+
     CalculateLayout(rootGo, Axis::Horizontal);
     ApplyLayout(rootGo, Axis::Horizontal);
     CalculateLayout(rootGo, Axis::Vertical);
@@ -126,8 +141,6 @@ void UILayoutManager::CalculateLayout(GameObject *gameObject, Axis axis)
 
 void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
 {
-    std::queue<String> indentQueue; indentQueue.push("");
-
     std::queue<GameObject*> goQueue; goQueue.push(gameObject);
     while (!goQueue.empty())
     {
@@ -157,42 +170,6 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
 
         const List<GameObject*> &children = go->GetChildren();
         for (GameObject *child : children) { goQueue.push(child); }
-    }
-}
-
-void UILayoutManager::OnLayoutInvalidated(Component *comp,
-                                          bool isLayoutController)
-{
-    ENSURE(comp);
-
-    GameObject *go = comp->GetGameObject();
-
-    if (isLayoutController)
-    {
-        auto pLayoutContrs = go->GetComponentsInParent<ILayoutController>(false);
-        for (ILayoutController *pCont : pLayoutContrs) { pCont->Invalidate(); }
-
-        auto thisLayoutElms = go->GetComponents<ILayoutElement>();
-        for (ILayoutElement *lElm : thisLayoutElms) { lElm->Invalidate(); }
-    }
-
-    auto cLayoutContrs = go->GetComponentsInChildrenOnly<ILayoutController>(false);
-    for (ILayoutController *cCont : cLayoutContrs) { cCont->Invalidate(); }
-
-    const bool isLayoutElement = !isLayoutController;
-    if (isLayoutElement)
-    {
-        auto pLayoutContrs = go->GetComponentsInParent<ILayoutController>(false);
-        for (ILayoutController *pCont : pLayoutContrs) { pCont->Invalidate(); }
-
-        auto pLayoutElements = go->GetComponentsInParent<ILayoutElement>(false);
-        for (ILayoutElement *pElm : pLayoutElements) { pElm->Invalidate(); }
-
-        auto cLayoutElements = go->GetComponentsInChildrenOnly<ILayoutElement>(false);
-        for (ILayoutElement *cElm : cLayoutElements) { cElm->Invalidate(); }
-
-        auto thisLayoutContrs = go->GetComponents<ILayoutController>();
-        for (ILayoutController *lContr : thisLayoutContrs) { lContr->Invalidate(); }
     }
 }
 
