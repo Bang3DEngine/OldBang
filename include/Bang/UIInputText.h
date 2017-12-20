@@ -49,6 +49,7 @@ public:
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;
 
+    UILabel *GetLabel() const;
     UITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
     UIImageRenderer *GetBackground() const;
@@ -75,7 +76,6 @@ private:
     int GetCursorIndex() const;
     int GetSelectionIndex() const;
 
-    UILabel *GetLabel() const;
     RectTransform *GetLabelRT() const;
     RectTransform *GetTextRT() const;
     RectTransform *GetRT() const;

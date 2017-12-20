@@ -104,11 +104,7 @@ Window *Application::GetTopWindow()
     Application *app = Application::GetInstance();
     if (!app) { return nullptr; }
 
-    for (Window *w : app->m_windows)
-    {
-        if (w->HasFocus()) { return w; }
-    }
-    return nullptr;
+    return !app->m_windows.IsEmpty() ? app->m_windows.Front() : nullptr;
 }
 
 #ifdef GPROF

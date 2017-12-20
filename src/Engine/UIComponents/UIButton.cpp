@@ -34,12 +34,11 @@ void UIButton::OnUpdate()
 
     if (!IsBlocked())
     {
-        if (GetButton()->IsMouseOver())
+        if (GetButton()->IsMouseOver() &&
+            Input::GetMouseButtonDown(MouseButton::Left))
         {
-            if (Input::GetMouseButtonDown(MouseButton::Left))
-            {
-                GetBackground()->SetTint(Color::DarkGray);
-            }
+            Click();
+            GetBackground()->SetTint(Color::DarkGray);
         }
 
         if (Input::GetMouseButtonUp(MouseButton::Left))
@@ -48,6 +47,11 @@ void UIButton::OnUpdate()
             else { OnMouseExit(GetButton()); }
         }
     }
+}
+
+void UIButton::Click()
+{
+    GetButton()->Click();
 }
 
 void UIButton::SetBlocked(bool blocked)

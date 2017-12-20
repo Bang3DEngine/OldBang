@@ -13,6 +13,7 @@ public:
 
     void SetFocusEnabled(bool focusEnabled);
 
+    void Click();
     bool HasFocus() const;
     bool IsFocusEnabled() const;
     bool HasJustFocusChanged() const;

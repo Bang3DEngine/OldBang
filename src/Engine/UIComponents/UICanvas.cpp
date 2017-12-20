@@ -49,7 +49,6 @@ void UICanvas::OnUpdate()
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     SetFocus(focusable);
-                    focusable->PropagateOnClickedToListeners();
                 }
 
                 break; // Finished searching!

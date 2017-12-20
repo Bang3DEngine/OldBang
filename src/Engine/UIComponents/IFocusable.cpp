@@ -20,8 +20,7 @@ void IFocusable::UpdateFromCanvas()
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
             m_beingPressed = true;
-            if (IsEmittingEvents())
-            { for (auto callback : m_clickedCallbacks) { callback(this); } }
+            Click();
         }
     }
 
@@ -46,6 +45,11 @@ bool IFocusable::IsMouseOver() const
 void IFocusable::SetFocusEnabled(bool focusEnabled)
 {
     m_focusEnabled = focusEnabled;
+}
+
+void IFocusable::Click()
+{
+    PropagateOnClickedToListeners();
 }
 
 bool IFocusable::HasFocus() const { return m_hasFocus; }
@@ -108,6 +112,14 @@ void IFocusable::PropagateFocusToListeners()
 
 void IFocusable::PropagateOnClickedToListeners()
 {
-    EventEmitter<IFocusListener>::
-        PropagateToListeners(&IFocusListener::OnClicked, this);
+    if (IsEmittingEvents())
+    {
+        EventEmitter<IFocusListener>::
+            PropagateToListeners(&IFocusListener::OnClicked, this);
+
+        for (auto callback : m_clickedCallbacks)
+        {
+            callback(this);
+        }
+    }
 }

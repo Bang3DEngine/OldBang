@@ -19,36 +19,51 @@ class Dialog
 public:
     static DialogWindow* Error(const String &title,
                                const String &msg);
+    static String GetString(const String &title,
+                            const String &msg,
+                            const String &hint = "");
     static Path OpenFilePath(const String &title,
-                             const List<String> &extensions = {});
-    static Path OpenDirectory(const String &title);
+                             const List<String> &extensions = {},
+                             const Path &initialDirPath = Path::Empty);
+    static Path OpenDirectory(const String &title,
+                              const Path &initialDirPath = Path::Empty);
     static Path SaveFilePath(const String &title,
-                             const String &extension);
+                             const String &extension,
+                             const Path &initialDirPath = Path::Empty);
 
     Dialog() = delete;
 
 private:
+    static bool s_okPressed;
     static Path s_resultPath;
+    static String s_resultString;
+    static DialogWindow *s_currentDialog;
 
     static DialogWindow* BeginCreateDialog(const String &title);
     static void EndCreateDialog(DialogWindow *dialogWindow);
+    static void EndCurrentDialog();
 
     static void CreateSaveFilePathSceneInto(Scene *scene,
-                                            const String &extension);
+                                            const String &extension,
+                                            const Path &initialDirPath);
     static void CreateOpenFilePathSceneInto(Scene *scene,
                                             bool openDir,
-                                            const List<String> &extensions);
+                                            const List<String> &extensions,
+                                            const Path &initialDirPath);
     static void CreateFilePathBaseInto(Scene *scene,
+                                       const Path &initialDirPath,
                                        UIFileList **outFileList,
                                        UIButton **outBotLeftButton,
                                        UIButton **outBotRightButton,
                                        UIInputText **botInputText);
+    static Scene* CreateGetStringScene(const String &msg,
+                                       const String &hint);
 
     static Scene* CreateMsgScene(const String &msg);
 
     static void AcceptDialogFile(const Path &path);
 
-    static void OnButtonClicked(IFocusable *button);
+    static void OnAcceptButtonClicked(IFocusable *button);
 };
 
 NAMESPACE_BANG_END

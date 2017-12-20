@@ -1,11 +1,14 @@
 #include "Bang/Dialog.h"
 
 #include "Bang/File.h"
+#include "Bang/Input.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/UIList.h"
 #include "Bang/Window.h"
+#include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Transform.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
@@ -14,6 +17,7 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
+#include "Bang/UIAutoFocuser.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -25,7 +29,10 @@
 
 USING_NAMESPACE_BANG
 
+bool Dialog::s_okPressed = false;
+String Dialog::s_resultString = "";
 Path Dialog::s_resultPath = Path::Empty;
+DialogWindow* Dialog::s_currentDialog = nullptr;
 
 DialogWindow *Bang::Dialog::Error(const String &title,
                                   const String &msg)
@@ -40,43 +47,60 @@ DialogWindow *Bang::Dialog::Error(const String &title,
     return dialog;
 }
 
-Path Dialog::OpenFilePath(const String &title, const List<String> &extensions)
+String Dialog::GetString(const String &title,
+                         const String &msg,
+                         const String &hint)
 {
     DialogWindow *dialog = BeginCreateDialog(title);
-    dialog->SetSize(500, 400);
+    dialog->SetSize(300, 100);
 
-    Scene *scene = GameObjectFactory::CreateScene(false);
-    CreateOpenFilePathSceneInto(scene, false, extensions);
+    Scene *scene = CreateGetStringScene(msg, hint);
     SceneManager::LoadScene(scene);
 
     EndCreateDialog(dialog);
-    return Dialog::s_resultPath;
+    return Dialog::s_okPressed ? Dialog::s_resultString : "";
 }
 
-Path Dialog::OpenDirectory(const String &title)
+Path Dialog::OpenFilePath(const String &title, const List<String> &extensions,
+                          const Path &initialDirPath)
 {
     DialogWindow *dialog = BeginCreateDialog(title);
     dialog->SetSize(500, 400);
 
     Scene *scene = GameObjectFactory::CreateScene(false);
-    CreateOpenFilePathSceneInto(scene, true, {});
+    CreateOpenFilePathSceneInto(scene, false, extensions, initialDirPath);
     SceneManager::LoadScene(scene);
 
     EndCreateDialog(dialog);
-    return Dialog::s_resultPath;
+    return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
 }
 
-Path Dialog::SaveFilePath(const String &title, const String &extension)
+Path Dialog::OpenDirectory(const String &title,
+                           const Path &initialDirPath)
 {
     DialogWindow *dialog = BeginCreateDialog(title);
     dialog->SetSize(500, 400);
 
     Scene *scene = GameObjectFactory::CreateScene(false);
-    CreateSaveFilePathSceneInto(scene, extension);
+    CreateOpenFilePathSceneInto(scene, true, {}, initialDirPath);
     SceneManager::LoadScene(scene);
 
     EndCreateDialog(dialog);
-    return Dialog::s_resultPath;
+    return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
+}
+
+Path Dialog::SaveFilePath(const String &title, const String &extension,
+                          const Path &initialDirPath)
+{
+    DialogWindow *dialog = BeginCreateDialog(title);
+    dialog->SetSize(500, 400);
+
+    Scene *scene = GameObjectFactory::CreateScene(false);
+    CreateSaveFilePathSceneInto(scene, extension, initialDirPath);
+    SceneManager::LoadScene(scene);
+
+    EndCreateDialog(dialog);
+    return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
 }
 
 DialogWindow* Dialog::BeginCreateDialog(const String &title)
@@ -90,7 +114,10 @@ DialogWindow* Dialog::BeginCreateDialog(const String &title)
         dialogWindow->SetTitle(title);
         dialogWindow->MakeCurrent();
 
+        Dialog::s_okPressed = false;
+        Dialog::s_resultString = "";
         Dialog::s_resultPath = Path::Empty;
+        Dialog::s_currentDialog = dialogWindow;
     }
     return dialogWindow;
 }
@@ -100,14 +127,26 @@ void Dialog::EndCreateDialog(DialogWindow *dialogWindow)
     Application::GetInstance()->BlockingWait(dialogWindow);
 }
 
+void Dialog::EndCurrentDialog()
+{
+    if (Dialog::s_currentDialog)
+    {
+        Window::Destroy(Dialog::s_currentDialog);
+        Dialog::s_currentDialog = nullptr;
+    }
+}
+
 void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
-                                         const String &extension)
+                                         const String &extension,
+                                         const Path &initialDirPath)
 {
     UIFileList *fileList;
     UIButton *cancelButton, *botLeftButton;
     UIInputText *botInputText;
 
-    Dialog::CreateFilePathBaseInto(scene, &fileList,
+    Dialog::CreateFilePathBaseInto(scene,
+                                   initialDirPath,
+                                   &fileList,
                                    &cancelButton,
                                    &botLeftButton,
                                    &botInputText);
@@ -162,13 +201,15 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
 
 void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
                                          bool openDir,
-                                         const List<String> &extensions)
+                                         const List<String> &extensions,
+                                         const Path &initialDirPath)
 {
     UIFileList *fileList;
     UIButton *cancelButton, *botRightButton;
     UIInputText *botInputText;
 
     Dialog::CreateFilePathBaseInto(scene,
+                                   initialDirPath,
                                    &fileList,
                                    &cancelButton,
                                    &botRightButton,
@@ -225,6 +266,7 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
 }
 
 void Dialog::CreateFilePathBaseInto(Scene *scene,
+                                    const Path &initialDirPath,
                                     UIFileList **outFileList,
                                     UIButton **outBotLeftButton,
                                     UIButton **outBotRightButton,
@@ -312,7 +354,7 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     cancelButton->GetButton()->AddClickedCallback(
         [scene](IFocusable *)
         {
-            Window::Destroy(Application::GetTopWindow());
+            Dialog::EndCurrentDialog();
         }
     );
 
@@ -340,13 +382,91 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     botHLGo->SetAsChild(openButton->GetGameObject());
 
     scene->SetFirstFoundCamera();
-    fileList->SetCurrentPath(Paths::EngineAssets());
+
+    Path initDirPath = initialDirPath;
+    if (!initDirPath.IsDir()) { initDirPath = Paths::Engine(); }
+    fileList->SetCurrentPath(initDirPath);
 
     // Params
     if (outFileList)       { *outFileList       = fileList;     }
     if (outBotLeftButton)  { *outBotLeftButton  = cancelButton; }
     if (outBotRightButton) { *outBotRightButton = openButton;   }
     if (outBotInputText)   { *outBotInputText   = botInputText; }
+}
+
+Scene* Dialog::CreateGetStringScene(const String &msg, const String &hint)
+{
+    Scene *scene = GameObjectFactory::CreateUIScene();
+
+    UIVerticalLayout *sceneVL = scene->AddComponent<UIVerticalLayout>();
+    sceneVL->SetPaddings(10, 10, 10, 20);
+
+    UILabel *msgLabel = GameObjectFactory::CreateUILabel();
+    GameObject *msgGo = msgLabel->GetGameObject();
+    UITextRenderer *msgText = msgLabel->GetText();
+    msgText->SetWrapping(true);
+    msgText->SetContent(msg);
+    msgText->SetTextColor(Color::White);
+    msgText->SetTextSize(12);
+    msgText->SetHorizontalAlign(HorizontalAlignment::Left);
+    msgText->SetVerticalAlign(VerticalAlignment::Center);
+
+    GameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *buttonsHL = buttonsGo->AddComponent<UIHorizontalLayout>();
+    buttonsHL->SetChildrenVerticalStretch(Stretch::Full);
+    buttonsHL->SetSpacing(20);
+    buttonsHL->SetPaddings(5);
+    UILayoutElement *buttonsGoLE = buttonsGo->AddComponent<UILayoutElement>();
+    buttonsGoLE->SetFlexibleWidth(1.0f);
+    buttonsGoLE->SetFlexibleHeight(0.0f);
+
+    UIInputText *inputText = GameObjectFactory::CreateUIInputText();
+    inputText->GetText()->SetContent(hint);
+    UIAutoFocuser *autoFocuser = inputText->GetLabel()->GetGameObject()->
+                                  AddComponent<UIAutoFocuser>();
+    autoFocuser->SetFocusableToAutoFocus(inputText->GetLabel());
+    Dialog::s_resultString = hint;
+
+    UIButton *okButton = GameObjectFactory::CreateUIButton();
+    okButton->GetText()->SetContent("OK");
+    okButton->GetButton()->AddClickedCallback(OnAcceptButtonClicked);
+
+    scene->SetAsChild(msgGo);
+    scene->SetAsChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10.0f) );
+    scene->SetAsChild(inputText->GetGameObject());
+    scene->SetAsChild(GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Flexible,
+                                                         99999.0f) );
+    scene->SetAsChild(buttonsGo);
+    buttonsGo->SetAsChild(GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible,
+                                                             0.0001f));
+    buttonsGo->SetAsChild(okButton->GetGameObject());
+
+    class GetSceneController : public Component,
+                               public IValueChangedListener
+    {
+    public:
+        UIButton *m_okButton;
+        UIInputText *m_inputText;
+
+        void OnUpdate() override
+        {
+            Component::OnUpdate();
+            if (Input::GetKeyDown(Key::Enter)) { m_okButton->Click(); }
+        }
+
+        virtual void OnValueChanged(Object *object) override
+        {
+            ASSERT(m_inputText == object);
+            Dialog::s_resultString = m_inputText->GetText()->GetContent();
+        }
+    };
+
+    GetSceneController *gsc = inputText->GetGameObject()->AddComponent<GetSceneController>();
+    gsc->m_inputText = inputText;
+    gsc->m_inputText->EventEmitter<IValueChangedListener>::RegisterListener(gsc);
+    gsc->m_okButton = okButton;
+
+    return scene;
 }
 
 Scene *Dialog::CreateMsgScene(const String &msg)
@@ -393,11 +513,11 @@ Scene *Dialog::CreateMsgScene(const String &msg)
 
     UIButton *button0 = GameObjectFactory::CreateUIButton();
     button0->GetText()->SetContent("Cancel");
-    button0->GetButton()->AddClickedCallback(OnButtonClicked);
+    button0->GetButton()->AddClickedCallback(OnAcceptButtonClicked);
 
     UIButton *button1 = GameObjectFactory::CreateUIButton();
     button1->GetText()->SetContent("OK");
-    button1->GetButton()->AddClickedCallback(OnButtonClicked);
+    button1->GetButton()->AddClickedCallback(OnAcceptButtonClicked);
 
     scene->SetAsChild(container);
      container->SetAsChild(mainVLayoutGo);
@@ -419,10 +539,12 @@ Scene *Dialog::CreateMsgScene(const String &msg)
 void Dialog::AcceptDialogFile(const Path &path)
 {
     Dialog::s_resultPath = path;
-    Window::Destroy(Window::GetActive());
+    Dialog::s_okPressed = true;
+    EndCurrentDialog();
 }
 
-void Dialog::OnButtonClicked(IFocusable *button)
+void Dialog::OnAcceptButtonClicked(IFocusable *)
 {
-    Window::Destroy( Window::GetActive() );
+    Dialog::s_okPressed = true;
+    EndCurrentDialog();
 }
