@@ -44,7 +44,7 @@ private:
     int m_thickness = 0;
     int m_scrollingPx = 0;
     bool m_wasGrabbed = false;
-    Vector2i m_grabOffset = Vector2i::Zero;
+    Vector2 m_grabOffsetPx = Vector2::Zero;
 
     Side m_side = Undef<Side>();
 

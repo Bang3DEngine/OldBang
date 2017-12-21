@@ -66,10 +66,21 @@ List<T>::Insert(int index, const T &x)
 
 template<class T>
 typename List<T>::Iterator
-List<T>::Insert(const typename List<T>::Iterator &first, int count, const T &x)
+List<T>::Insert(const typename List<T>::Iterator &begin, int count, const T &x)
 {
-    return m_list.insert(first, count, x);
+    return m_list.insert(begin, count, x);
 }
+
+template<class T>
+template <class OtherIterator>
+typename List<T>::Iterator
+List<T>::Insert(const List<T>::Iterator& begin,
+                const OtherIterator &otherBegin,
+                const OtherIterator &otherEnd)
+{
+    return m_list.insert(begin, otherBegin, otherEnd);
+}
+
 
 template<class T>
 void List<T>::PushFront(const T &x) { m_list.push_front(x); }

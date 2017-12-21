@@ -198,15 +198,15 @@ void UIScrollPanel::HandleScrollAreaRectTransform()
     UIScrollBar *vScrollBar = GetVerticalScrollBar();
     GameObject *vScrollBarGo = vScrollBar->GetGameObject();
     int vScrollBarThickness = (vScrollBarGo->IsEnabled() ?
-                                              vScrollBar->GetThickness() : 0 );
+                               vScrollBar->GetThickness() : 0 );
     if (GetVerticalScrollBarSide() == HorizontalSide::Right)
     {
         scrollAreaRT->SetMarginLeft(0);
-        scrollAreaRT->SetMarginRight(vScrollBarThickness);
+        scrollAreaRT->SetMarginRight(2*vScrollBarThickness);
     }
     else
     {
-        scrollAreaRT->SetMarginLeft(vScrollBarThickness);
+        scrollAreaRT->SetMarginLeft(2*vScrollBarThickness);
         scrollAreaRT->SetMarginRight(0);
     }
 
@@ -215,7 +215,7 @@ void UIScrollPanel::HandleScrollAreaRectTransform()
     GameObject *hScrollBarGo = hScrollBar->GetGameObject();
     RectTransform *vScrollBarRT = vScrollBarGo->GetRectTransform();
     int hScrollBarThickness = (hScrollBarGo->IsEnabled() ?
-                                          hScrollBar->GetThickness() : 0 );
+                               hScrollBar->GetThickness() : 0 );
     if (GetHorizontalScrollBarSide() == VerticalSide::Bot)
     {
         scrollAreaRT->SetMarginTop(0);

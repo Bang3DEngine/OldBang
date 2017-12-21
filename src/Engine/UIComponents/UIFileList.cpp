@@ -97,6 +97,7 @@ void UIFileList::UpdateEntries()
     if (!GetFileExtensions().IsEmpty())
     {
         UIFileList::FilterPathsByExtension(&paths, GetFileExtensions());
+        UIFileList::SortPathsByName(&paths);
     }
     if (GetShowOnlyDirectories()) { UIFileList::RemoveFilesFromList(&paths); }
     paths.PushFront( Path("..") );
@@ -146,7 +147,6 @@ void UIFileList::UpdateEntries()
                 else if (itemPath.IsDir())
                 {
                     this->SetCurrentPath(itemPath);
-                    for (auto cb : m_fileAcceptedCallback)  { cb( GetCurrentPath() ); }
                 }
                 else if (itemPath.IsFile())
                 {
@@ -156,6 +156,21 @@ void UIFileList::UpdateEntries()
             }
         }
     );
+}
+
+void UIFileList::SortPathsByName(List<Path> *paths)
+{
+    Array<Path> pathsArr;
+    pathsArr.PushBack(paths->Begin(), paths->End());
+    std::sort(pathsArr.Begin(), pathsArr.End(),
+              [](const Path &lhs, const Path &rhs)
+              {
+                  return lhs.GetNameExt() < rhs.GetNameExt();
+              }
+    );
+
+    paths->Clear();
+    paths->Insert(paths->End(), pathsArr.Begin(), pathsArr.End());
 }
 
 void UIFileList::FilterPathsByExtension(List<Path> *paths,

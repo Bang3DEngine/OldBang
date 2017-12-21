@@ -64,13 +64,13 @@ const Vector2i &UIScrollArea::GetScrolling() const { return m_scrollingPx; }
 
 void UIScrollArea::UpdatePaddings()
 {
-    int paddingLeft  =  GetScrolling().x;
-    int paddingRight = -GetScrolling().x;
-    int paddingTop   =  GetScrolling().y;
-    int paddingBot   = -GetScrolling().y;
+    int marginLeft  =  GetScrolling().x;
+    int marginRight = -GetScrolling().x;
+    int margingTop  =  GetScrolling().y;
+    int marginBot   = -GetScrolling().y;
 
     RectTransform *rt = GetContainer()->GetRectTransform();
-    rt->SetMargins(paddingLeft, paddingBot, paddingRight, paddingTop);
+    rt->SetMargins(marginLeft, marginBot, marginRight, margingTop);
 }
 
 UIScrollArea* UIScrollArea::CreateInto(GameObject *go)

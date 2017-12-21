@@ -33,19 +33,21 @@ void UIScrollBar::OnUpdate()
     {
         p_barImg->SetTint(Color::Black);
 
-        Vector2 mouseCoords (Input::GetMousePosition());
+        Vector2 mouseCoordsPx (Input::GetMousePosition());
         Rect scrollRectPx = GetScrollingRect();
         Rect barRectPx = GetBar()->GetRectTransform()->GetViewportRect();
         if (!m_wasGrabbed)
         {
-            m_grabOffset = Vector2i( Vector2::Round(mouseCoords -
-                                                    barRectPx.GetMin()) );
+            m_grabOffsetPx.x = mouseCoordsPx.x - barRectPx.GetMin().x;
+            m_grabOffsetPx.y = (barRectPx.GetMax().y - mouseCoordsPx.y);
         }
 
-        Vector2 offsettedMouseCoords = mouseCoords - Vector2(m_grabOffset);
-        Vector2 leftSpace = scrollRectPx.GetSize() - barRectPx.GetSize();
-        Vector2 mousePercent = ((leftSpace != Vector2::Zero) ?
-            Vector2(offsettedMouseCoords - scrollRectPx.GetMin()) / leftSpace :
+        Vector2 mouseCoordsPxRel = mouseCoordsPx - scrollRectPx.GetMin();
+        mouseCoordsPxRel.y = (scrollRectPx.GetMax().y - mouseCoordsPxRel.y);
+        Vector2 offsettedMouseCoordsPxRel = mouseCoordsPxRel - m_grabOffsetPx;
+        Vector2 emptySpacePx = scrollRectPx.GetSize() - barRectPx.GetSize();
+        Vector2 mousePercent = ((emptySpacePx != Vector2::Zero) ?
+            Vector2(offsettedMouseCoordsPxRel - scrollRectPx.GetMin()) / emptySpacePx :
             Vector2::Zero);
         float scrollPercent = mousePercent.GetAxis( GetScrollAxis() );
         scrollPercent = Math::Clamp(scrollPercent, 0.0f, 1.0f);

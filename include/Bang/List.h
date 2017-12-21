@@ -35,7 +35,12 @@ public:
 
     Iterator Insert(int index, const T& x);
 
-    Iterator Insert(const Iterator& first, int count, const T& x);
+    Iterator Insert(const Iterator& begin, int count, const T& x);
+
+    template <class OtherIterator>
+    Iterator Insert(const Iterator& begin,
+                    const OtherIterator &otherBegin,
+                    const OtherIterator &otherEnd);
 
     void PushFront(const T& x);
     void PopFront();
