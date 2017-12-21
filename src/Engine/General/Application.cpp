@@ -18,7 +18,6 @@
 #include "Bang/AudioManager.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
-#include "Bang/BehaviourManager.h"
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
 
@@ -26,7 +25,11 @@ USING_NAMESPACE_BANG
 
 Application* Application::s_appSingleton = nullptr;
 
-Application::Application(int argc, char **argv, const Path &engineRootPath)
+Application::Application()
+{
+}
+
+void Application::Init(const Path &engineRootPath)
 {
     srand(1234);
 
@@ -40,21 +43,20 @@ Application::Application(int argc, char **argv, const Path &engineRootPath)
     Application::s_appSingleton = this;
 
     m_time = new Time();
-    m_paths = new Paths();
+    m_paths = CreatePaths();
     m_paths->InitPaths(engineRootPath);
 
-    m_behaviourManager   = new BehaviourManager();
     m_importFilesManager = new ImportFilesManager();
 
     ImportFilesManager::CreateMissingImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
 }
 
+
 Application::~Application()
 {
     delete m_time;
     delete m_paths;
-    delete m_behaviourManager;
     delete m_importFilesManager;
 
     for (Window *w : m_windows) { delete w; }
@@ -221,11 +223,6 @@ ImportFilesManager *Application::GetImportFilesManager() const
     return m_importFilesManager;
 }
 
-BehaviourManager *Application::GetBehaviourManager() const
-{
-    return m_behaviourManager;
-}
-
 Application *Application::GetInstance()
 {
     return Application::s_appSingleton;
@@ -245,6 +242,11 @@ void Application::Exit(int returnCode, bool immediate)
         app->m_forcedExit = true;
         app->m_exitCode = returnCode;
     }
+}
+
+Paths *Application::CreatePaths()
+{
+    return new Paths();
 }
 
 Window *Application::_CreateWindow() { return new Window(); }

@@ -7,7 +7,6 @@
 #include "Bang/Renderer.h"
 #include "Bang/Transform.h"
 #include "Bang/Component.h"
-#include "Bang/Behaviour.h"
 #include "Bang/PointLight.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/UIInputText.h"
@@ -41,7 +40,6 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, UIMask);
     CREATE_COMPONENT(componentClassName, Renderer);
     CREATE_COMPONENT(componentClassName, UICanvas);
-    CREATE_COMPONENT(componentClassName, Behaviour);
     CREATE_COMPONENT(componentClassName, Transform);
     CREATE_COMPONENT(componentClassName, PointLight);
     CREATE_COMPONENT(componentClassName, AudioSource);
@@ -77,7 +75,6 @@ bool ComponentFactory::Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, UIMask);
     EXISTS_COMPONENT(componentClassName, Renderer);
     EXISTS_COMPONENT(componentClassName, UICanvas);
-    EXISTS_COMPONENT(componentClassName, Behaviour);
     EXISTS_COMPONENT(componentClassName, Transform);
     EXISTS_COMPONENT(componentClassName, PointLight);
     EXISTS_COMPONENT(componentClassName, UIRenderer);

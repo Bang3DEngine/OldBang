@@ -40,14 +40,14 @@ void UIFileList::SetFileExtensions(const List<String> &extensions)
     SetCurrentPath( GetCurrentPath() );
 }
 
-void UIFileList::SetFileAcceptedCallback(UIFileList::PathCallback callback)
+void UIFileList::AddFileAcceptedCallback(UIFileList::PathCallback callback)
 {
-    m_fileAcceptedCallback = callback;
+    m_fileAcceptedCallback.PushBack(callback);
 }
 
-void UIFileList::SetPathChangedCallback(UIFileList::PathCallback callback)
+void UIFileList::AddPathChangedCallback(UIFileList::PathCallback callback)
 {
-    m_pathChangedCallback = callback;
+    m_pathChangedCallback.PushBack(callback);
 }
 
 void UIFileList::SetShowOnlyDirectories(bool showOnlyDirectories)
@@ -70,7 +70,7 @@ void UIFileList::SetCurrentPath(const Path &currentPath)
     if (m_currentPath != currentPath)
     {
         m_currentPath = currentPath;
-        if (m_pathChangedCallback) { m_pathChangedCallback( GetCurrentPath() ); }
+        for (auto cb : m_pathChangedCallback)  { cb( GetCurrentPath() ); }
         UpdateEntries();
     }
 }
@@ -146,12 +146,12 @@ void UIFileList::UpdateEntries()
                 else if (itemPath.IsDir())
                 {
                     this->SetCurrentPath(itemPath);
+                    for (auto cb : m_fileAcceptedCallback)  { cb( GetCurrentPath() ); }
                 }
                 else if (itemPath.IsFile())
                 {
                     this->SetCurrentPath(itemPath);
-                    if (m_fileAcceptedCallback)
-                    { m_fileAcceptedCallback(itemPath); }
+                    for (auto cb : m_fileAcceptedCallback)  { cb(itemPath); }
                 }
             }
         }

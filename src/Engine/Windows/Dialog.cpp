@@ -161,7 +161,7 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
             Path path = fileList->GetCurrentPath()
                         .Append(botInputText->GetText()->GetContent())
                         .AppendExtension(Extensions::GetSceneExtension());
-            AcceptDialogFile(path);
+            AcceptDialogPath(path);
         }
     );
 
@@ -221,11 +221,7 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
     UIButton *openButton = botRightButton;
     openButton->GetText()->SetContent("Open");
     openButton->GetButton()->AddClickedCallback(
-        [fileList](IFocusable *)
-        {
-            Path path = fileList->GetCurrentSelectedPath();
-            AcceptDialogFile(path);
-        }
+        [fileList](IFocusable *) { OnAcceptButtonClicked(nullptr); }
     );
 
     botInputText->GetGameObject()->SetEnabled(false);
@@ -299,13 +295,14 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     UIInputText *inputPathText = GameObjectFactory::CreateUIInputText();
     inputPathText->GetText()->SetContent("");
     inputPathText->GetText()->SetTextSize(12);
-    fileList->SetPathChangedCallback(
+    fileList->AddPathChangedCallback(
         [inputPathText](const Path &newPath)
         {
             inputPathText->GetText()->SetContent(newPath.GetAbsolute());
         }
     );
-    fileList->SetFileAcceptedCallback( Dialog::AcceptDialogFile );
+    fileList->AddPathChangedCallback( Dialog::OnDialogPathChanged );
+    fileList->AddFileAcceptedCallback( Dialog::AcceptDialogPath );
 
     UILayoutElement *itLE = inputPathText->GetGameObject()->
                             AddComponent<UILayoutElement>();
@@ -484,7 +481,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
     iconLE->SetMinSize( Vector2i(45) );
     UIImageRenderer *icon = iconGo->AddComponent<UIImageRenderer>();
-    icon->SetImageTexture( EDPATH("Icons/Error.png"));
+    icon->SetImageTexture( EPATH("Icons/Error.png"));
     icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Linear );
 
     GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObjectNamed("HL");
@@ -533,14 +530,18 @@ Scene *Dialog::CreateMsgScene(const String &msg)
        buttonsGo->SetAsChild(button0->GetGameObject());
        buttonsGo->SetAsChild(button1->GetGameObject());
 
-    return scene;
+       return scene;
 }
 
-void Dialog::AcceptDialogFile(const Path &path)
+void Dialog::AcceptDialogPath(const Path &path)
+{
+    OnDialogPathChanged(path);
+    OnAcceptButtonClicked(nullptr);
+}
+
+void Dialog::OnDialogPathChanged(const Path &path)
 {
     Dialog::s_resultPath = path;
-    Dialog::s_okPressed = true;
-    EndCurrentDialog();
 }
 
 void Dialog::OnAcceptButtonClicked(IFocusable *)

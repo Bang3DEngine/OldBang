@@ -61,8 +61,8 @@ private:
 
     static Scene* CreateMsgScene(const String &msg);
 
-    static void AcceptDialogFile(const Path &path);
-
+    static void AcceptDialogPath(const Path &path);
+    static void OnDialogPathChanged(const Path &path);
     static void OnAcceptButtonClicked(IFocusable *button);
 };
 

@@ -26,8 +26,8 @@ public:
 
     void SetFileExtensions(const List<String> &extensions);
     void SetCurrentPath(const Path &currentPath);
-    void SetFileAcceptedCallback(PathCallback callback);
-    void SetPathChangedCallback(PathCallback callback);
+    void AddFileAcceptedCallback(PathCallback callback);
+    void AddPathChangedCallback(PathCallback callback);
     void SetShowOnlyDirectories(bool showOnlyDirectories);
 
     Path GetCurrentSelectedPath() const;
@@ -39,8 +39,8 @@ private:
     Path m_currentPath;
     List<String> m_fileExtensions;
     UIFileListItem *p_selectedItem;
-    PathCallback m_fileAcceptedCallback;
-    PathCallback m_pathChangedCallback;
+    List<PathCallback> m_fileAcceptedCallback;
+    List<PathCallback> m_pathChangedCallback;
     bool m_showOnlyDirectories = false;
 
     void UpdateEntries();

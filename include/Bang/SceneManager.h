@@ -14,6 +14,9 @@ public:
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
+    static void LoadSceneInstantly(Scene *scene);
+    static void LoadSceneInstantly(const Path &sceneFilepath);
+
     static Scene* GetActiveScene();
     static const Path& GetActiveSceneFilepath();
 
@@ -21,7 +24,6 @@ public:
 
     static void Update();
     static void UpdateScene(Scene *scene);
-
 protected:
     Scene *m_activeScene = nullptr;
 
@@ -40,16 +42,12 @@ private:
     static List<GameObject *>
     FindDontDestroyOnLoadGameObjects(GameObject *go);
     static void TryToLoadQueuedScene();
-    static void OpenScene(const Path &filepath);
     static void SetActiveSceneFilepath(const Path &sceneFilepath);
     static void CloseOpenScene();
     static bool IsActiveSceneSaved();
     static void OnActiveSceneSavedAs(const Path &filepath);
-    static void LoadSceneInstantly(Scene *scene);
-    static void LoadSceneInstantly(const Path &sceneFilepath);
 
     friend class Window;
-    friend class Project;
     friend class Application;
 };
 

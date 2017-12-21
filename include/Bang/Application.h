@@ -16,15 +16,15 @@ FORWARD class GEngine;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
-FORWARD class BehaviourManager;
 FORWARD class ImportFilesManager;
 
 class Application
 {
 public:
-    Application(int argc, char **argv,
-                const Path &engineRootPath = Path::Empty);
+    Application();
     virtual ~Application();
+
+    virtual void Init(const Path &engineRootPath = Path::Empty);
 
     Window* CreateWindow();
     DialogWindow* CreateDialogWindow(Window *parentWindow);
@@ -40,7 +40,6 @@ public:
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     ImportFilesManager *GetImportFilesManager() const;
-    BehaviourManager   *GetBehaviourManager() const;
     Window             *GetCurrentWindow() const;
 
     virtual SceneManager* CreateSceneManager() const;
@@ -58,8 +57,8 @@ protected:
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
-    BehaviourManager   *m_behaviourManager   = nullptr;
 
+    virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();
     virtual void SetupWindow(Window *window);
     void SetActiveWindow(Window *window);

@@ -8,7 +8,6 @@
 #include "Bang/MeshIO.h"
 #include "Bang/Window.h"
 #include "Bang/XMLParser.h"
-#include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
 #include "Bang/ObjectManager.h"
@@ -93,7 +92,7 @@ void SceneManager::_SetActiveScene(Scene *activeScene)
 void SceneManager::LoadScene(const Path &sceneFilepath)
 {
     Path spath(sceneFilepath);
-    if (!spath.IsFile()) { spath = PPATH(spath.GetAbsolute()); }
+    if (!spath.IsFile()) { spath = EPATH(spath.GetAbsolute()); }
     if (!spath.IsFile())
     {
         spath = spath.AppendExtension(Extensions::GetSceneExtension());
@@ -122,12 +121,6 @@ void SceneManager::TryToLoadQueuedScene()
 const Path& SceneManager::GetActiveSceneFilepath()
 {
     return SceneManager::GetInstance()->m_activeSceneFilepath;
-}
-
-void SceneManager::OpenScene(const Path &filepath)
-{
-    ENSURE(filepath.IsFile());
-    SceneManager::LoadSceneInstantly(filepath);
 }
 
 void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)

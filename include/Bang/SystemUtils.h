@@ -14,7 +14,6 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Library;
-FORWARD class Behaviour;
 
 class SystemUtils
 {

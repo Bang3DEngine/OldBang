@@ -107,9 +107,8 @@ template<>
 inline Path XMLAttribute::Get() const
 {
     if ( GetStringValue().IsEmpty() ) { return Path::Empty; }
-    return HasProperty(XMLProperty::IsEngineFile) ?
-                EPATH(GetStringValue()) :
-                PPATH(GetStringValue());
+    return HasProperty(XMLProperty::IsEngineFile) ? EPATH(GetStringValue()) :
+                                                     Path(GetStringValue());
 }
 
 NAMESPACE_BANG_END

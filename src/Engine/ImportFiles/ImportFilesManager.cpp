@@ -44,7 +44,7 @@ void ImportFilesManager::CreateMissingImportFiles()
 void ImportFilesManager::LoadImportFilepathGUIDs()
 {
     List<String> extensions = {GetImportExtension()};
-    List<Path> importFilepaths = Paths::ProjectAssets()
+    List<Path> importFilepaths = Paths::EngineAssets()
                                    .FindFiles(Path::FindFlag::RecursiveHidden,
                                               extensions);
     importFilepaths.PushBack( Paths::EngineAssets()

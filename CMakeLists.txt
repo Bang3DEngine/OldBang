@@ -157,7 +157,6 @@ ${ENGINE_SRC_DIR}/Compiler/CodePreprocessor.cpp
 ${ENGINE_SRC_DIR}/Compiler/Compiler.cpp
 ${ENGINE_SRC_DIR}/Components/AudioListener.cpp
 ${ENGINE_SRC_DIR}/Components/AudioSource.cpp
-${ENGINE_SRC_DIR}/Components/Behaviour.cpp
 ${ENGINE_SRC_DIR}/Components/Camera.cpp
 ${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
@@ -181,7 +180,6 @@ ${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/RendererFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/IconManager.cpp
-${ENGINE_SRC_DIR}/GameBuilder/GameBuilder.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
@@ -224,12 +222,9 @@ ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgramFactory.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
-${ENGINE_SRC_DIR}/IO/Behaviours/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
 ${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
-${ENGINE_SRC_DIR}/IO/Project/Project.cpp
-${ENGINE_SRC_DIR}/IO/Project/ProjectManager.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLParser.cpp
@@ -308,10 +303,4 @@ ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 )
 add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
-add_executable(BangMain ${SRC_DIR}/Main.cpp)
-add_executable(Game.exe ${SRC_DIR}/MainGame.cpp)
-add_executable(BangGameBuilder ${SRC_DIR}/MainGameBuilder.cpp)
 add_dependencies(BangPreprocessor BangShared)
-add_dependencies(BangMain BangShared)
-add_dependencies(Game.exe BangShared)
-add_dependencies(BangGameBuilder BangShared)

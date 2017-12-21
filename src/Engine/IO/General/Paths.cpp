@@ -9,8 +9,14 @@
 #include "Bang/SystemUtils.h"
 
 USING_NAMESPACE_BANG
+
 Paths::Paths()
 {
+}
+
+Paths::~Paths()
+{
+
 }
 
 void Paths::InitPaths(const Path &engineRootPath)
@@ -42,11 +48,6 @@ void Paths::InitPaths(const Path &engineRootPath)
     }
 
     Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
-}
-
-void Paths::InitEditorPath(const Path &editorRootPath)
-{
-    c_editorRoot = editorRootPath;
 }
 
 Path Paths::ExecutablePath()
@@ -82,22 +83,7 @@ Path Paths::GameExecutableOutputFile(BinType binaryType)
 
 List<Path> Paths::GetBehavioursSourcesFilepaths()
 {
-    return Paths::ProjectAssets().FindFiles(Path::FindFlag::Recursive, {"cpp"});
-}
-
-List<Path> Paths::GetAllProjectSubDirs()
-{
-    List<Path> subdirs = Paths::Project()
-                         .FindSubDirectories(Path::FindFlag::Recursive);
-    subdirs.PushFront(Paths::Project());
-    return subdirs;
-}
-
-List<Path> Paths::GetProjectIncludeDirs()
-{
-    List<Path> subdirs = Paths::ProjectAssets()
-                        .FindSubDirectories(Path::FindFlag::Recursive);
-    return subdirs;
+    return List<Path>(); // Paths::ProjectAssets().FindFiles(Path::FindFlag::Recursive, {"cpp"});
 }
 
 List<Path> Paths::GetEngineIncludeDirs()
@@ -110,31 +96,6 @@ List<Path> Paths::GetEngineIncludeDirs()
     return subdirs;
 }
 
-const Path &Paths::Project()
-{
-    return Paths::GetInstance()->c_projectRoot;
-}
-
-Path Paths::ProjectAssets()
-{
-    return Project().Append("Assets");
-}
-
-Path Paths::ProjectLibrariesDir()
-{
-    return Project().Append("Libraries");
-}
-
-const Path &Paths::Editor()
-{
-    return Paths::GetInstance()->c_editorRoot;
-}
-
-Path Paths::EditorResources()
-{
-    return Editor().Append("res");
-}
-
 Path Paths::GetRelative(const Path &path)
 {
     const Path &engineAssets = Paths::EngineAssets();
@@ -144,25 +105,11 @@ Path Paths::GetRelative(const Path &path)
                         .SubString(engineAssets.GetAbsolute().Size() + 1));
     }
 
-    const Path &projectAssets = Paths::ProjectAssets();
-    if (path.BeginsWith(projectAssets))
-    {
-        return Path(path.GetAbsolute()
-                        .SubString(projectAssets.GetAbsolute().Size() + 1));
-    }
-
     const Path &engineRoot = Paths::Engine();
     if (path.BeginsWith(engineRoot))
     {
         return Path(path.GetAbsolute()
                         .SubString(engineRoot.GetAbsolute().Size() + 1));
-    }
-
-    const Path &projectRoot = Paths::Project();
-    if (path.BeginsWith(projectRoot))
-    {
-        return Path(path.GetAbsolute()
-                        .SubString(projectRoot.GetAbsolute().Size() + 1));
     }
 
     return Path(path.GetAbsolute());
@@ -178,24 +125,9 @@ Path Paths::MakeEnginePath(const String &path)
     return Paths::EngineAssets().Append(path);
 }
 
-Path Paths::MakeEditorPath(const String &path)
-{
-    return Paths::EditorResources().Append(path);
-}
-
-Path Paths::MakeProjectPath(const String &path)
-{
-    return Paths::ProjectAssets().Append(path);
-}
-
 void Paths::SetEngineRoot(const Path &engineRootDir)
 {
     Paths::GetInstance()->c_engineRoot = engineRootDir;
-}
-
-void Paths::SetProjectRoot(const Path &projectRootDir)
-{
-    Paths::GetInstance()->c_projectRoot = projectRootDir;
 }
 
 Paths *Paths::GetInstance()

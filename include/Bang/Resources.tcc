@@ -24,7 +24,7 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
 template <class IResourceClass>
 RH<IResourceClass> Resources::Load(const String &filepath)
 {
-    return Resources::Load<IResourceClass>(PPATH(filepath));
+    return Resources::Load<IResourceClass>( EPATH(filepath) );
 }
 
 template <class IResourceClass>
@@ -131,16 +131,12 @@ IResourceClass* Resources::GetCached(const GUID &guid)
 template<class IResourceClass>
 RH<IResourceClass> Resources::Clone(const RH<IResourceClass> &src)
 {
-    // Debug_Log("Clone begin " << src.Get());
-    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     RH<IResourceClass> rh;
     if (src.Get())
     {
         rh = Resources::Create<IResourceClass>();
         src.Get()->CloneInto( rh.Get() );
     }
-    // Debug_Log("Clone end to " << rh.Get());
-    // Debug_Log(Resources::GetActive()->m_GUIDCache);
     return rh;
 }
 
