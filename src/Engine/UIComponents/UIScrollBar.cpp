@@ -203,6 +203,7 @@ UIScrollBar *UIScrollBar::CreateInto(GameObject *go)
 
 int UIScrollBar::GetScrollingSpacePx() const
 {
+    if (!GetGameObject()->IsEnabled() || !IsEnabled()) { return 0; }
     int scrollingSpace = GetScrollingRect().GetSize().GetAxis( GetScrollAxis() );
     scrollingSpace -= GetLength();
     return  Math::Max(scrollingSpace, 0);

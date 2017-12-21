@@ -62,10 +62,12 @@ void UIScrollPanel::UpdateScrollUI()
 
         // Apply scrollings
         Vector2i scrollEnabledMask(IsHorizontalScrollEnabled() ? 1 : 0,
-                                     IsVerticalScrollEnabled() ? 1 : 0);
+                                   IsVerticalScrollEnabled() ? 1 : 0);
         scrollingPercent *= Vector2(scrollEnabledMask);
 
         Vector2 scrollMaxAmount = (contentSize - containerSize);
+        scrollMaxAmount = Vector2::Clamp(scrollMaxAmount, Vector2::Zero,
+                                         contentSize);
         Vector2i scrolling(scrollingPercent * scrollMaxAmount);
 
         GetScrollArea()->SetScrolling( scrolling * Vector2i(-1, 1) );
@@ -202,11 +204,11 @@ void UIScrollPanel::HandleScrollAreaRectTransform()
     if (GetVerticalScrollBarSide() == HorizontalSide::Right)
     {
         scrollAreaRT->SetMarginLeft(0);
-        scrollAreaRT->SetMarginRight(2*vScrollBarThickness);
+        scrollAreaRT->SetMarginRight(vScrollBarThickness);
     }
     else
     {
-        scrollAreaRT->SetMarginLeft(2*vScrollBarThickness);
+        scrollAreaRT->SetMarginLeft(vScrollBarThickness);
         scrollAreaRT->SetMarginRight(0);
     }
 

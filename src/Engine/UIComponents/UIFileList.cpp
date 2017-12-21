@@ -97,8 +97,8 @@ void UIFileList::UpdateEntries()
     if (!GetFileExtensions().IsEmpty())
     {
         UIFileList::FilterPathsByExtension(&paths, GetFileExtensions());
-        UIFileList::SortPathsByName(&paths);
     }
+    UIFileList::SortPathsByName(&paths);
     if (GetShowOnlyDirectories()) { UIFileList::RemoveFilesFromList(&paths); }
     paths.PushFront( Path("..") );
 
