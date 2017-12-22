@@ -179,9 +179,14 @@ void UIList::ScrollTo(GOItem *item)
     Rect itemRect = item->GetRectTransform()-> GetViewportRect();
     Rect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
                                                         GetViewportRect();
-    Rect containerRect = GetContainer()->GetRectTransform()->
-                                         GetViewportRect();
-    Rect relativeItemRect = itemRect - containerRect.GetMin();
+    Rect containerRect = GetContainer()->GetRectTransform()-> GetViewportRect();
+
+    Vector2 relativeItemRectMin = itemRect.GetMin() - containerRect.GetMin();
+    relativeItemRectMin.y = (containerRect.GetHeight() - relativeItemRectMin.y);
+    Vector2 relativeItemRectMax = relativeItemRectMin + itemRect.GetSize();
+    Rect relativeItemRect;
+    relativeItemRect.SetMin( Vector2::Min(relativeItemRectMin, relativeItemRectMax) );
+    relativeItemRect.SetMax( Vector2::Max(relativeItemRectMin, relativeItemRectMax) );
 
     Vector2i scrolling = -Vector2i::One;
     if (itemRect.GetMax().y > panelRect.GetMax().y)
@@ -190,7 +195,7 @@ void UIList::ScrollTo(GOItem *item)
     }
     else if (itemRect.GetMin().y < panelRect.GetMin().y)
     {
-        scrolling = Vector2i(relativeItemRect.GetMin());
+        scrolling = Vector2i(relativeItemRect.GetMin() - panelRect.GetHeight());
     }
 
     if (scrolling != -Vector2i::One)

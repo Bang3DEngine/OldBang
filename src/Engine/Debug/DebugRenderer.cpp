@@ -20,7 +20,7 @@ void DebugRenderer::RenderLine(const Vector3 &origin,
                                float thickness,
                                bool depthTest)
 {
-    CreateDebugRenderPrimitive(GL::Primitive::Lines,
+    CreateDebugRenderPrimitive(DebugRendererPrimitiveType::Line,
                                {origin, end},
                                color, time, thickness, depthTest);
 }
@@ -31,19 +31,34 @@ void DebugRenderer::RenderPoint(const Vector3 &point,
                                 float thickness,
                                 bool depthTest)
 {
-    CreateDebugRenderPrimitive(GL::Primitive::Points,
+    CreateDebugRenderPrimitive(DebugRendererPrimitiveType::Point,
                                {point},
                                color, time, thickness, depthTest);
 }
 
-DebugRenderer::DebugRenderPrimitive
-*DebugRenderer::CreateDebugRenderPrimitive(GL::Primitive primitive,
-                                           const Array<Vector3> &points,
-                                           const Color &color,
-                                           float time,
-                                           float thickness,
-                                           bool depthTest)
+void DebugRenderer::RenderRectPx(const Rect &rect, const Color &color,
+                                 float time, float thickness, bool depthTest)
 {
+    DebugRenderer::DebugRenderPrimitive *drp =
+        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::RectPx,
+                                   {}, color, time, thickness, depthTest);
+    if (drp)
+    {
+        drp->rectNDC = GL::FromViewportRectToViewportRectNDC(rect);
+    }
+}
+
+DebugRenderer::DebugRenderPrimitive*
+DebugRenderer::CreateDebugRenderPrimitive(DebugRendererPrimitiveType primitive,
+                                          const Array<Vector3> &points,
+                                          const Color &color,
+                                          float time,
+                                          float thickness,
+                                          bool depthTest)
+{
+    DebugRenderer *dr = DebugRenderer::GetActive();
+    if (!dr) { return nullptr; }
+
     DebugRenderPrimitive drp;
     drp.primitive = primitive;
     drp.origin = (points.Size() >= 1 ? points[0] : Vector3::Zero);
@@ -54,7 +69,6 @@ DebugRenderer::DebugRenderPrimitive
     drp.depthTest = depthTest;
     drp.renderedOnce = false;
 
-    DebugRenderer *dr = DebugRenderer::GetActive(); ASSERT(dr);
     dr->m_primitivesToRender.PushBack(drp);
 
     return &(dr->m_primitivesToRender.Back());
@@ -92,12 +106,16 @@ void DebugRenderer::Render(bool withDepth)
             Gizmos::SetThickness(drp->thickness);
             switch (drp->primitive)
             {
-                case GL::Primitive::Lines:
+                case DebugRendererPrimitiveType::Line:
                     Gizmos::RenderLine(drp->origin, drp->end);
                 break;
 
-                case GL::Primitive::Points:
+                case DebugRendererPrimitiveType::Point:
                     Gizmos::RenderPoint(drp->origin);
+                break;
+
+                case DebugRendererPrimitiveType::RectPx:
+                    Gizmos::RenderRect(drp->rectNDC);
                 break;
 
                 default: ASSERT(false); break;

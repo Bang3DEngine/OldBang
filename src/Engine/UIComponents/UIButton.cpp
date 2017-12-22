@@ -37,7 +37,6 @@ void UIButton::OnUpdate()
         if (GetButton()->IsMouseOver() &&
             Input::GetMouseButtonDown(MouseButton::Left))
         {
-            Click();
             GetBackground()->SetTint(Color::DarkGray);
         }
 

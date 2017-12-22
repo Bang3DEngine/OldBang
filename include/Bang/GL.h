@@ -456,6 +456,7 @@ public:
     static Vector2  FromViewportPointToScreenPoint(const Vector2i& vpPoint);
     static Vector2  FromScreenPointToViewportPoint(const Vector2& screenPoint);
     static Vector2  FromScreenPointToViewportPoint(const Vector2i& screenPoint);
+    static Rect     FromViewportRectToViewportRectNDC(const Rect &vpRect);
     static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
     static Rect     FromScreenRectToScreenRectNDC(const Rect &screenRect);
     static Rect     FromScreenRectNDCToScreenRect(const Rect &screenRectNDC);

@@ -938,6 +938,13 @@ Vector2 GL::FromScreenPointToViewportPoint(const Vector2i &screenPoint)
     return GL::FromScreenPointToViewportPoint( Vector2(screenPoint) );
 }
 
+Rect GL::FromViewportRectToViewportRectNDC(const Rect &vpRect)
+{
+    Vector2 min = GL::FromViewportPointToViewportPointNDC(vpRect.GetMin());
+    Vector2 max = GL::FromViewportPointToViewportPointNDC(vpRect.GetMax());
+    return Rect(min, max);
+}
+
 Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
 {
     Vector2 min = GL::FromViewportPointNDCToViewportPoint(vpRectNDC.GetMin());

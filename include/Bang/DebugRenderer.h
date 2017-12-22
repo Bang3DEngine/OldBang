@@ -1,8 +1,8 @@
 #ifndef DEBUGRENDERER_H
 #define DEBUGRENDERER_H
 
-#include "Bang/GL.h"
 #include "Bang/Set.h"
+#include "Bang/Rect.h"
 #include "Bang/Time.h"
 #include "Bang/Color.h"
 #include "Bang/Vector3.h"
@@ -32,12 +32,20 @@ public:
                             float thickness = 1.0f,
                             bool depthTest = false);
 
+    static void RenderRectPx(const Rect &rect,
+                             const Color &color = Color::Green,
+                             float time = 1.0f,
+                             float thickness = 1.0f,
+                             bool depthTest = false);
+
 private:
+    enum class DebugRendererPrimitiveType { Point, Line, RectPx };
     struct DebugRenderPrimitive
     {
-        GL::Primitive primitive;
+        DebugRendererPrimitiveType primitive;
         Vector3 origin;
         Vector3 end;
+        Rect rectNDC;
         Color color;
         float thickness;
         double destroyTimestamp;
@@ -52,9 +60,8 @@ private:
 
     void Render(bool withDepth);
 
-
     static DebugRenderPrimitive*
-           CreateDebugRenderPrimitive(GL::Primitive primitive,
+           CreateDebugRenderPrimitive(DebugRendererPrimitiveType primitive,
                                       const Array<Vector3> &points,
                                       const Color &color,
                                       float time,

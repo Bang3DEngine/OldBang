@@ -51,7 +51,7 @@ void UIScrollPanel::UpdateScrollUI()
                                                             Vector2::One);
 
         // MouseWheel scrolling
-        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
+        if (GetGameObject()->GetRectTransform()->IsMouseOver(false))
         {
             Vector2i mouseWheelPx(Input::GetMouseWheel() * WheelScrollSpeedPx);
             Vector2 mouseWheelPercent = Vector2(mouseWheelPx) / contentSize;
@@ -293,7 +293,6 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
     GameObjectFactory::CreateUIGameObjectInto(go);
 
     UIScrollPanel *scrollPanel = go->AddComponent<UIScrollPanel>();
-    go->AddComponent<UIFocusable>();
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollArea();
     UIScrollBar *verticalScrollBar = GameObjectFactory::CreateUIScrollBar();
@@ -306,6 +305,9 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
     scrollPanel->p_scrollArea = scrollArea;
     scrollPanel->p_verticalScrollBar = verticalScrollBar;
     scrollPanel->p_horizontalScrollBar = horizontalScrollBar;
+
+    scrollPanel->p_scrollArea->GetGameObject()->
+                 GetRectTransform()->TranslateLocal( Vector3(0, 0, 0.1f) );
 
     scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::Always);
     scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::Always);

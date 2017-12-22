@@ -27,6 +27,9 @@ Scene::~Scene()
     GameObject::Destroy(p_debugRenderer);
 }
 
+#include "Bang/Input.h"
+#include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
 void Scene::Update()
 {
     GameObject::Update();

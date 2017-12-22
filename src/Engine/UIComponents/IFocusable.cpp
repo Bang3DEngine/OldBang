@@ -116,10 +116,6 @@ void IFocusable::PropagateOnClickedToListeners()
     {
         EventEmitter<IFocusListener>::
             PropagateToListeners(&IFocusListener::OnClicked, this);
-
-        for (auto callback : m_clickedCallbacks)
-        {
-            callback(this);
-        }
+        for (auto callback : m_clickedCallbacks) { callback(this); }
     }
 }

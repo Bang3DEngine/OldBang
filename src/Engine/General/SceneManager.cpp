@@ -61,13 +61,14 @@ void SceneManager::Update()
 
 void SceneManager::_LoadScene(Scene *scene)
 {
-    ENSURE(m_activeScene != scene);
-
-    _SetActiveScene(scene);
-    if (m_activeScene)
+    if (m_activeScene != scene)
     {
-        m_activeScene->SetFirstFoundCamera();
-        m_activeScene->InvalidateCanvas();
+        _SetActiveScene(scene);
+        if (m_activeScene)
+        {
+            m_activeScene->SetFirstFoundCamera();
+            m_activeScene->InvalidateCanvas();
+        }
     }
 }
 
@@ -86,7 +87,10 @@ Scene *SceneManager::_GetActiveScene() const { return m_activeScene; }
 
 void SceneManager::_SetActiveScene(Scene *activeScene)
 {
-    m_activeScene = activeScene;
+    if (_GetActiveScene() != activeScene)
+    {
+        m_activeScene = activeScene;
+    }
 }
 
 void SceneManager::LoadScene(const Path &sceneFilepath)

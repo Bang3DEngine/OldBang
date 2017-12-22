@@ -45,7 +45,6 @@ void UICanvas::OnUpdate()
             if (rt && rt->IsMouseOver())
             {
                 focusMouseOver = focusable;
-
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     SetFocus(focusable);

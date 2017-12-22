@@ -215,7 +215,7 @@ void Transform::RecalculateLocalToWorldMatrix() const
     }
     else { m_localToWorldMatrix = m; }
 
-    m_invalidLocalToWorldMatrix = false;
+    m_invalidLocalToWorldMatrix = true; // false;
 }
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
@@ -366,6 +366,8 @@ void Transform::OnInvalidated()
 
 void Transform::OnTransformChanged()
 {
+    IInvalidatable<Transform>::Invalidate();
+
     GameObject *go = GetGameObject();
     if (!go) { return; }
 
@@ -408,6 +410,7 @@ void Transform::OnParentTransformChanged()
 
 void Transform::OnChildrenTransformChanged()
 {
+    IInvalidatable<Transform>::Invalidate();
     PropagateChildrenTransformChangedEventToParent();
 }
 

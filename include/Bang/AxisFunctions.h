@@ -16,6 +16,7 @@ inline int GetAxisIndex(Axis3D axis)
         case Axis3D::Z: return 2;
     }
     ASSERT(false);
+    return -1;
 }
 
 inline std::pair<int,int> GetOtherAxisIndex(Axis3D axis)
@@ -33,6 +34,7 @@ inline Color GetAxisColor(Axis3D axis)
         case Axis3D::Z: return Color::Blue;
     }
     ASSERT(false);
+    return Color::White;
 }
 
 inline Vector3 GetAxisVector(Axis3D axis)
@@ -44,6 +46,7 @@ inline Vector3 GetAxisVector(Axis3D axis)
         case Axis3D::Z: return Vector3::Forward;
     }
     ASSERT(false);
+    return Vector3::Zero;
 }
 
 NAMESPACE_BANG_END
