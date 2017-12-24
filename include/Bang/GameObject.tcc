@@ -103,7 +103,7 @@ List<T*> GameObject::GetComponentsInChildrenOnly(bool recursive) const
     for (auto c = GetChildren().Begin(); c != GetChildren().End(); ++c)
     {
         List<T*> childChildrenComps =
-                recursive ? (*c)->GetComponentsInChildren<T>(recursive) :
+                recursive ? (*c)->GetComponentsInChildren<T>(true) :
                             (*c)->GetComponents<T>();
         comps.Splice(comps.End(), childChildrenComps); //concat
     }
@@ -119,7 +119,7 @@ bool GameObject::CanEventBePropagated(const T& x)
     if (!x) { return false; }
     const Object *object = DCAST<const Object*>(x);
     return !object ||
-           (object->IsEnabled() && object->IsStarted() &&
+           (object->IsEnabled() &&
            !object->IsWaitingToBeDestroyed());
 }
 

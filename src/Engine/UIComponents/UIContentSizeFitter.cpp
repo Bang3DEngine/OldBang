@@ -47,6 +47,7 @@ void UIContentSizeFitter::SetHorizontalSizeType(LayoutSizeType sizeType)
            sizeType == LayoutSizeType::Min  ||
            sizeType == LayoutSizeType::Preferred);
     m_horizontalSizeType = sizeType;
+    Invalidate();
 }
 
 void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
@@ -55,6 +56,7 @@ void UIContentSizeFitter::SetVerticalSizeType(LayoutSizeType sizeType)
            sizeType == LayoutSizeType::Min  ||
            sizeType == LayoutSizeType::Preferred);
     m_verticalSizeType = sizeType;
+    Invalidate();
 }
 
 LayoutSizeType UIContentSizeFitter::GetHorizontalSizeType() const

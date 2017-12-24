@@ -41,7 +41,7 @@ DialogWindow *Bang::Dialog::Error(const String &title,
     dialog->SetSize(300, 150);
 
     Scene *scene = CreateMsgScene(msg);
-    SceneManager::LoadScene(scene);
+    SceneManager::LoadSceneInstantly(scene);
 
     EndCreateDialog(dialog);
     return dialog;
@@ -55,7 +55,7 @@ String Dialog::GetString(const String &title,
     dialog->SetSize(300, 100);
 
     Scene *scene = CreateGetStringScene(msg, hint);
-    SceneManager::LoadScene(scene);
+    SceneManager::LoadSceneInstantly(scene);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultString : "";
@@ -69,7 +69,7 @@ Path Dialog::OpenFilePath(const String &title, const List<String> &extensions,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateOpenFilePathSceneInto(scene, false, extensions, initialDirPath);
-    SceneManager::LoadScene(scene);
+    SceneManager::LoadSceneInstantly(scene);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
@@ -83,7 +83,7 @@ Path Dialog::OpenDirectory(const String &title,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateOpenFilePathSceneInto(scene, true, {}, initialDirPath);
-    SceneManager::LoadScene(scene);
+    SceneManager::LoadSceneInstantly(scene);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
@@ -97,7 +97,7 @@ Path Dialog::SaveFilePath(const String &title, const String &extension,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateSaveFilePathSceneInto(scene, extension, initialDirPath);
-    SceneManager::LoadScene(scene);
+    SceneManager::LoadSceneInstantly(scene);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
@@ -106,13 +106,13 @@ Path Dialog::SaveFilePath(const String &title, const String &extension,
 DialogWindow* Dialog::BeginCreateDialog(const String &title)
 {
     DialogWindow *dialogWindow = nullptr;
-    Window *topWindow = Application::GetTopWindow();
+    Window *topWindow = Application::GetMainWindow();
     if (topWindow)
     {
         dialogWindow = Application::GetInstance()->CreateDialogWindow(topWindow);
+        Window::SetActive(dialogWindow);
         dialogWindow->SetSize(500, 400);
         dialogWindow->SetTitle(title);
-        dialogWindow->MakeCurrent();
 
         Dialog::s_okPressed = false;
         Dialog::s_resultString = "";
@@ -124,7 +124,8 @@ DialogWindow* Dialog::BeginCreateDialog(const String &title)
 
 void Dialog::EndCreateDialog(DialogWindow *dialogWindow)
 {
-    Application::GetInstance()->BlockingWait(dialogWindow);
+    Application::GetInstance()->BlockingWait(dialogWindow,
+                                             Application::GetMainWindow());
 }
 
 void Dialog::EndCurrentDialog()

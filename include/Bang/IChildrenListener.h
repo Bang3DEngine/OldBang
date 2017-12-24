@@ -15,6 +15,10 @@ public:
     virtual void OnChildRemoved(GameObject *removedChild, GameObject *parent)
     {
     };
+
+    virtual void OnParentChanged(GameObject *oldParent, GameObject *newParent)
+    {
+    };
 };
 
 NAMESPACE_BANG_END

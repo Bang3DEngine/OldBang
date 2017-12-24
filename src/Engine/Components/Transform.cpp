@@ -360,8 +360,13 @@ Vector3 Transform::GetDown() const
 
 void Transform::OnInvalidated()
 {
-    OnTransformChanged();
     m_invalidLocalToWorldMatrix = true;
+    OnTransformChanged();
+}
+
+void Transform::OnParentChanged(GameObject*, GameObject*)
+{
+    OnParentTransformChanged();
 }
 
 void Transform::OnTransformChanged()
@@ -371,17 +376,18 @@ void Transform::OnTransformChanged()
     GameObject *go = GetGameObject();
     if (!go) { return; }
 
-    PropagateParentTransformChangedEventToChildren();
-    PropagateChildrenTransformChangedEventToParent();
+    EventEmitter<ITransformListener>::
+       PropagateToListeners(&ITransformListener::OnTransformChanged);
 
     ITransformListener::SetReceiveEvents(false);
 
-    EventEmitter<ITransformListener>::
-       PropagateToListeners(&ITransformListener::OnTransformChanged);
     go->Propagate(&ITransformListener::OnTransformChanged,
                   go->GetComponents<ITransformListener>());
 
     ITransformListener::SetReceiveEvents(true);
+
+    PropagateParentTransformChangedEventToChildren();
+    PropagateChildrenTransformChangedEventToParent();
 }
 
 void Transform::PropagateParentTransformChangedEventToChildren() const
@@ -406,6 +412,13 @@ void Transform::OnParentTransformChanged()
 {
     IInvalidatable<Transform>::Invalidate();
     PropagateParentTransformChangedEventToChildren();
+
+    List<Transform*> childrenTransforms = GetGameObject()->
+                                    GetComponentsInChildrenOnly<Transform>(true);
+    for (Transform *t : childrenTransforms)
+    {
+        t->Invalidate();
+    }
 }
 
 void Transform::OnChildrenTransformChanged()

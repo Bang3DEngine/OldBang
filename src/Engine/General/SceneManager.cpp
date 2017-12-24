@@ -59,7 +59,7 @@ void SceneManager::Update()
     SceneManager::GetInstance()->_Update();
 }
 
-void SceneManager::_LoadScene(Scene *scene)
+void SceneManager::_LoadSceneInstantly(Scene *scene)
 {
     if (m_activeScene != scene)
     {
@@ -70,12 +70,6 @@ void SceneManager::_LoadScene(Scene *scene)
             m_activeScene->InvalidateCanvas();
         }
     }
-}
-
-void SceneManager::LoadScene(Scene *scene)
-{
-    SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);
-    sm->_LoadScene(scene);
 }
 
 Scene *SceneManager::GetActiveScene()
@@ -133,41 +127,12 @@ void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
     sm->m_activeSceneFilepath = sceneFilepath;
 }
 
-void SceneManager::CloseOpenScene()
-{
-    SceneManager::SetActiveSceneFilepath( Path::Empty );
-}
-
-bool SceneManager::IsActiveSceneSaved()
-{
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (!activeScene) { return false; }
-
-    Path openSceneFilepath = SceneManager::GetActiveSceneFilepath();
-    String savedFileXML    = File::GetContents(openSceneFilepath);
-    String currentSceneXML = activeScene->GetXMLInfo().ToString();
-    return (savedFileXML == currentSceneXML);
-}
-
-void SceneManager::OnActiveSceneSavedAs(const Path &filepath)
-{
-    SceneManager::SetActiveSceneFilepath(filepath);
-}
-
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
     List<GameObject*> dontDestroyOnLoadGameObjects;
-    Scene *oldScene = SceneManager::GetActiveScene();
-    if (oldScene)
-    {
-        dontDestroyOnLoadGameObjects = FindDontDestroyOnLoadGameObjects(oldScene);
-        for (GameObject *ddolGo : dontDestroyOnLoadGameObjects)
-        {
-            ddolGo->SetParent(nullptr); // Dont let them be destroyed now!
-        }
-        delete oldScene;
-    }
-    SceneManager::LoadScene(nullptr);
+
+    SceneManager *sm = SceneManager::GetInstance();
+    sm->_LoadSceneInstantly(nullptr);
 
     if (scene)
     {
@@ -175,7 +140,7 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
         {
             ddolGo->SetParent(scene);
         }
-        SceneManager::LoadScene(scene);
+        sm->_LoadSceneInstantly(scene);
     }
 }
 

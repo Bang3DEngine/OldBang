@@ -34,7 +34,7 @@ Array<Vector3> Sphere::GetPoints() const
         {
             for (int k = -1; k <= 1; ++k)
             {
-                Vector3 dir = Vector3(i,j,k).Normalized();
+                Vector3 dir = Vector3(i,j,k).NormalizedSafe();
                 points.PushBack(m_center + m_radius * dir);
             }
         }

@@ -28,23 +28,22 @@ public:
 
     Window* CreateWindow();
     DialogWindow* CreateDialogWindow(Window *parentWindow);
-
     void DestroyWindow(Window *window);
+
     int MainLoop();
     bool MainLoopIteration();
 
-    void BlockingWait(Window *win);
+    void BlockingWait(Window *win, Window *previousWindow = nullptr);
 
     bool HandleEvents();
 
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     ImportFilesManager *GetImportFilesManager() const;
-    Window             *GetCurrentWindow() const;
 
     virtual SceneManager* CreateSceneManager() const;
-    static Window* GetTopWindow();
     const List<Window*>& GetWindows() const;
+    static Window* GetMainWindow();
 
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);
@@ -61,20 +60,16 @@ protected:
     virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();
     virtual void SetupWindow(Window *window);
-    void SetActiveWindow(Window *window);
 
 private:
     static Application *s_appSingleton;
 
     List<Window*> m_windows;
     List<Window*> p_windowsToBeDestroyed;
-    Window *p_currentWindow = nullptr;
-    Window *p_latestCurrentWindow = nullptr;
 
     bool m_forcedExit = false;
     int m_exitCode = 0;
 
-    void BindWindow(Window *window);
     void DestroyQueuedWindows();
 };
 

@@ -389,19 +389,28 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     ASSERT( newParent != this );
     ASSERT( !newParent || !newParent->IsChildOf(this) )
 
-    GameObject *oldParent = GetParent();
-    if (GetParent())
+    if (GetParent() != newParent)
     {
-        GetParent()->RemoveChild(this);
-        GetParent()->ChildRemoved(this, oldParent);
-    }
+        GameObject *oldParent = GetParent();
+        if (GetParent())
+        {
+            GetParent()->RemoveChild(this);
+            GetParent()->ChildRemoved(this, oldParent);
+        }
 
-    p_parent = newParent;
-    if (GetParent())
-    {
-        int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
-        GetParent()->AddChild(this, index);
-        GetParent()->ChildAdded(this, newParent);
+        p_parent = newParent;
+        if (GetParent())
+        {
+            int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
+            GetParent()->AddChild(this, index);
+            GetParent()->ChildAdded(this, newParent);
+        }
+
+        EventEmitter<IChildrenListener>::
+               PropagateToListeners(&IChildrenListener::OnParentChanged,
+                                    oldParent, newParent);
+        Propagate(&IChildrenListener::OnParentChanged,
+                  GetComponents<IChildrenListener>(), oldParent, newParent);
     }
 }
 

@@ -67,7 +67,9 @@ int UIGridLayout::GetNumRows() const
 {
     List<GameObject*> children =
                 UILayoutManager::GetLayoutableChildrenList(GetGameObject());
-    return (children.Size() - 1) / GetNumColumns() + 1;
+    const int numColumns = GetNumColumns();
+    if (children.Size() == 0 || numColumns == 0) { return 0; }
+    return numColumns > 0 ? ((children.Size() - 1) / numColumns + 1) : 0;
 }
 
 int UIGridLayout::GetNumColumns() const
@@ -78,7 +80,8 @@ int UIGridLayout::GetNumColumns() const
 
     int cellSizeSpaced = (GetCellSize().x + GetSpacing());
 
-    int numCols = Cast<int>((effectiveWidth + GetSpacing()) / cellSizeSpaced);
+    int numCols = cellSizeSpaced > 0 ?
+                  int(effectiveWidth + GetSpacing()) / cellSizeSpaced : 0;
     return Math::Max(numCols, 1);
 }
 

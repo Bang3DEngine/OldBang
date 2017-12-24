@@ -10,7 +10,6 @@ FORWARD class Scene;
 class SceneManager
 {
 public:
-    static void LoadScene(Scene *scene);
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
@@ -31,7 +30,7 @@ protected:
     virtual ~SceneManager();
 
     virtual void _Update();
-    virtual void _LoadScene(Scene *scene);
+    virtual void _LoadSceneInstantly(Scene *scene);
     void _SetActiveScene(Scene *activeScene);
     Scene *_GetActiveScene() const;
 
@@ -39,13 +38,9 @@ private:
     Path m_queuedSceneFilepath;
     Path m_activeSceneFilepath;
 
-    static List<GameObject *>
-    FindDontDestroyOnLoadGameObjects(GameObject *go);
-    static void TryToLoadQueuedScene();
+    static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
     static void SetActiveSceneFilepath(const Path &sceneFilepath);
-    static void CloseOpenScene();
-    static bool IsActiveSceneSaved();
-    static void OnActiveSceneSavedAs(const Path &filepath);
+    static void TryToLoadQueuedScene();
 
     friend class Window;
     friend class Application;

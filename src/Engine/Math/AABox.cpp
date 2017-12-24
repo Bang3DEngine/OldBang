@@ -163,18 +163,19 @@ AABox AABox::Union(const AABox &b1, const AABox &b2)
 
 void AABox::FillFromPositions(const Array<Vector3> &positions)
 {
-    ENSURE(!positions.IsEmpty());
+    if (positions.IsEmpty()) { return; }
+
     m_minv = m_maxv = positions[0];
     for (const Vector3 &v : positions)
     {
-        m_minv.x = std::min(m_minv.x, v.x);
-        m_maxv.x = std::max(m_maxv.x, v.x);
+        m_minv.x = Math::Min(m_minv.x, v.x);
+        m_maxv.x = Math::Max(m_maxv.x, v.x);
 
-        m_minv.y = std::min(m_minv.y, v.y);
-        m_maxv.y = std::max(m_maxv.y, v.y);
+        m_minv.y = Math::Min(m_minv.y, v.y);
+        m_maxv.y = Math::Max(m_maxv.y, v.y);
 
-        m_minv.z = std::min(m_minv.z, v.z);
-        m_maxv.z = std::max(m_maxv.z, v.z);
+        m_minv.z = Math::Min(m_minv.z, v.z);
+        m_maxv.z = Math::Max(m_maxv.z, v.z);
     }
 }
 

@@ -42,7 +42,17 @@ void ILayoutController::OnChildRemoved(GameObject *removedChild,
     Invalidate();
 }
 
+void ILayoutController::OnParentChanged(GameObject*, GameObject*)
+{
+    Invalidate();
+}
+
 void ILayoutController::OnTransformChanged()
+{
+    Invalidate();
+}
+
+void ILayoutController::OnParentTransformChanged()
 {
     Invalidate();
 }

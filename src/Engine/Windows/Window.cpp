@@ -62,7 +62,7 @@ void Window::Create(uint flags)
                                    flags);
 
     m_sdlGLContext = SDL_GL_CreateContext(GetSDLWindow());
-    MakeCurrent();
+    Window::SetActive(this);
 
     SetMinSize(1, 1);
     SetMaxSize(99999, 99999);
@@ -94,7 +94,6 @@ void Window::SwapBuffers() const
 
 void Window::MakeCurrent()
 {
-    Window::SetActive(this);
     SDL_GL_MakeCurrent(GetSDLWindow(), GetGLContext());
     GL::SetViewport(0, 0, GetWidth(), GetHeight());
 }
@@ -103,7 +102,7 @@ bool Window::MainLoopIteration()
 {
     RetrieveTitleBarHeight();
 
-    MakeCurrent();
+    Window::SetActive(this);
     GetInput()->ProcessEnqueuedEvents();
 
     Update();
@@ -403,7 +402,7 @@ void Window::Destroy(Window *win)
 
 Window *Window::GetActive()
 {
-    return s_activeWindow;
+    return Window::s_activeWindow;
 }
 
 void Window::SetParent(Window *parentWindow)
@@ -472,4 +471,5 @@ void Window::SetActive(Window *window)
 {
     Window::s_activeWindow = window;
     GEngine::SetActive(window ? window->GetGEngine() : nullptr);
+    if (window) { window->MakeCurrent(); }
 }

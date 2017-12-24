@@ -1,6 +1,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <stack>
+
 #include "Bang/List.h"
 #include "Bang/Vector2.h"
 
@@ -35,10 +37,10 @@ public:
     virtual void Update();
     virtual void Render();
     virtual void BlitToScreen(Camera *camera);
+    virtual void OnResize(int newWidth, int newHeight);
 
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
-
 
     void MoveToFront() const;
     void SetBordered(bool bordered);
@@ -47,9 +49,8 @@ public:
     void SetResizable(bool resizable);
     void SetPosition(int newPosX, int newPosY);
     void SetTitle(const String &title);
-
     void SetSize(int newWidth, int newHeight);
-    virtual void OnResize(int newWidth, int newHeight);
+    static void SetActive(Window *window);
 
     int GetWidth() const;
     int GetHeight() const;
@@ -111,6 +112,8 @@ private:
     Vector2i m_newSize  = Vector2i::Zero;
     bool m_isResizable = true, m_resizableChanged = false;
 
+    static Window* s_activeWindow;
+
     void RetrieveTitleBarHeight();
 
     void _SetMinSize(int minSizeX, int minSizeY);
@@ -119,8 +122,6 @@ private:
     Vector2i _GetMaxSize() const;
     bool IsParentWindow(int sdlWindowId) const;
 
-    static Window* s_activeWindow;
-    static void SetActive(Window *window);
 
     friend class Application;
     friend int EventFilter(void *userData, SDL_Event *event);

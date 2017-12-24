@@ -46,6 +46,8 @@ void UIScrollBar::OnUpdate()
         mouseCoordsPxRel.y = (scrollRectPx.GetMax().y - mouseCoordsPxRel.y);
         Vector2 offsettedMouseCoordsPxRel = mouseCoordsPxRel - m_grabOffsetPx;
         Vector2 emptySpacePx = scrollRectPx.GetSize() - barRectPx.GetSize();
+        emptySpacePx = Vector2::Max(emptySpacePx, Vector2::One);
+
         Vector2 mousePercent = ((emptySpacePx != Vector2::Zero) ?
             Vector2(offsettedMouseCoordsPxRel - scrollRectPx.GetMin()) / emptySpacePx :
             Vector2::Zero);

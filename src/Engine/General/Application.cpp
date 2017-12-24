@@ -82,26 +82,13 @@ DialogWindow *Application::CreateDialogWindow(Window *parentWindow)
 
 void Application::SetupWindow(Window *window)
 {
-    BindWindow(window);
     m_windows.PushBack(window);
 
     window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
     window->OnResize(window->GetWidth(), window->GetHeight());
 }
 
-void Application::SetActiveWindow(Window *window)
-{
-    Window::SetActive(window);
-}
-
-void Application::BindWindow(Window *window)
-{
-    p_latestCurrentWindow = p_currentWindow;
-    p_currentWindow = window;
-    window->MakeCurrent();
-}
-
-Window *Application::GetTopWindow()
+Window *Application::GetMainWindow()
 {
     Application *app = Application::GetInstance();
     if (!app) { return nullptr; }
@@ -141,32 +128,30 @@ bool Application::MainLoopIteration()
     List<Window*> windows = GetWindows();
     for (Window *w : windows)
     {
-        SetActiveWindow(w);
-        BindWindow(w);
+        Window::SetActive(w);
         w->MainLoopIteration();
-        SetActiveWindow(nullptr);
+        Window::SetActive(nullptr);
     }
 
     bool exit = false;
     if (!HandleEvents())     { exit = true; }
-    DestroyQueuedWindows();
     if (m_windows.IsEmpty()) { exit = true; }
+    DestroyQueuedWindows();
 
     return exit;
 }
 
-void Application::BlockingWait(Window *win)
+void Application::BlockingWait(Window *win, Window *previousWindow)
 {
-    Window *latestCurrentWindow = p_latestCurrentWindow;
     List<Window*> allWindows = m_windows;
 
     allWindows.Remove(win);
     m_windows = {win};
-    BindWindow(win);
+    Window::SetActive(win);
 
     MainLoop();
 
-    BindWindow(latestCurrentWindow);
+    Window::SetActive(previousWindow);
     m_windows = allWindows;
 }
 
@@ -184,8 +169,7 @@ bool Application::HandleEvents()
                 for (auto itw = m_windows.Begin(); itw != m_windows.End(); )
                 {
                     Window *w = *itw;
-                    SetActiveWindow(w);
-                    p_currentWindow = w;
+                    Window::SetActive(w);
                     bool hasNotClosed = w->HandleEvent(sdlEvent);
                     if (!hasNotClosed)
                     {
@@ -193,16 +177,16 @@ bool Application::HandleEvents()
                         itw = m_windows.Remove(itw);
                     }
                     else { ++itw; }
-                    SetActiveWindow(nullptr);
+                    Window::SetActive(nullptr);
                 }
         }
     }
 
     for (Window *w : GetWindows())
     {
-        BindWindow(w);
+        Window::SetActive(w);
         w->OnHandleEventsFinished();
-        SetActiveWindow(nullptr);
+        Window::SetActive(nullptr);
     }
 
     return true;
@@ -266,11 +250,6 @@ void Application::DestroyQueuedWindows()
     }
     p_windowsToBeDestroyed.Clear();
     Window::SetActive(latestWindow);
-}
-
-Window *Application::GetCurrentWindow() const
-{
-    return p_currentWindow;
 }
 
 SceneManager *Application::CreateSceneManager() const

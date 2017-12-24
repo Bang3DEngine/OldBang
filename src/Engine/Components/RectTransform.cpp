@@ -162,13 +162,10 @@ void RectTransform::SetMarginMax(Axis axis, int marginMin)
 void RectTransform::SetMargins(const Vector2i &marginRightTop,
                                const Vector2i &marginLeftBot)
 {
-    if (GetMarginRightTop() != marginRightTop ||
-        GetMarginLeftBot() != marginLeftBot)
-    {
-        m_marginRightTop = marginRightTop;
-        m_marginLeftBot  = marginLeftBot;
-        Invalidate();
-    }
+    SetMarginBot(marginLeftBot.y);
+    SetMarginLeft(marginLeftBot.x);
+    SetMarginTop(marginRightTop.y);
+    SetMarginRight(marginRightTop.x);
 }
 
 void RectTransform::SetMargins(Axis axis, const Vector2i &margins)
@@ -180,21 +177,17 @@ void RectTransform::SetMargins(Axis axis, int marginMin, int marginMax)
 {
     if (axis == Axis::Vertical)
     { SetMarginBot(marginMin); SetMarginTop(marginMax); }
+
     if (axis == Axis::Horizontal)
     { SetMarginLeft(marginMin); SetMarginRight(marginMax); }
 }
 
 void RectTransform::SetMargins(int left, int top, int right, int bot)
 {
-    if (GetMarginLeft()  != left  || GetMarginTop() != top ||
-        GetMarginRight() != right || GetMarginBot() != bot)
-    {
-        m_marginLeftBot.x  = left;
-        m_marginRightTop.y = top;
-        m_marginRightTop.x = right;
-        m_marginLeftBot.y  = bot;
-        Invalidate();
-    }
+    SetMarginBot(bot);
+    SetMarginTop(top);
+    SetMarginLeft(left);
+    SetMarginRight(right);
 }
 
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
@@ -246,14 +239,14 @@ void RectTransform::SetAnchorMaxY(float anchorMaxY)
 
 void RectTransform::SetAnchorX(const Vector2 &anchorX)
 {
-    SetAnchorMinX(anchorX.x);
-    SetAnchorMaxX(anchorX.y);
+    SetAnchorMinX(anchorX[0]);
+    SetAnchorMaxX(anchorX[1]);
 }
 
 void RectTransform::SetAnchorY(const Vector2 &anchorY)
 {
-    SetAnchorMinY(anchorY.x);
-    SetAnchorMaxY(anchorY.y);
+    SetAnchorMinY(anchorY[0]);
+    SetAnchorMaxY(anchorY[1]);
 }
 
 void RectTransform::SetAnchors(const Vector2 &anchorPoint)
@@ -264,12 +257,8 @@ void RectTransform::SetAnchors(const Vector2 &anchorPoint)
 void RectTransform::SetAnchors(const Vector2 &anchorMin,
                                const Vector2 &anchorMax)
 {
-    if (m_anchorMin != anchorMin || m_anchorMax != anchorMax)
-    {
-        m_anchorMin = anchorMin;
-        m_anchorMax = anchorMax;
-        Invalidate();
-    }
+    SetAnchorMin(anchorMin);
+    SetAnchorMax(anchorMax);
 }
 
 void RectTransform::SetWidthFromPivot(int width)

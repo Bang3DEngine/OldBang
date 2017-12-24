@@ -37,7 +37,7 @@ void UIFileList::OnUpdate()
 void UIFileList::SetFileExtensions(const List<String> &extensions)
 {
     m_fileExtensions = extensions;
-    SetCurrentPath( GetCurrentPath() );
+    UpdateEntries();
 }
 
 void UIFileList::AddFileAcceptedCallback(UIFileList::PathCallback callback)

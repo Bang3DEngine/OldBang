@@ -33,6 +33,22 @@ Scene::~Scene()
 void Scene::Update()
 {
     GameObject::Update();
+
+    List<RectTransform*> rts = GetComponentsInChildren<RectTransform>();
+    if (Input::GetKeyDown(Key::R))
+    {
+        for (RectTransform* rt : rts)
+        {
+            rt->Invalidate();
+        }
+    }
+/*
+    for (RectTransform* rt : rts)
+    {
+        Debug_Log(rt->GetGameObject()->GetName() << ": " << rt->IsInvalid());
+    }
+    Debug_Log("================");
+    */
 }
 
 void Scene::Render(RenderPass rp, bool renderChildren)

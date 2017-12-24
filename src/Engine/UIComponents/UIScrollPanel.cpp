@@ -38,6 +38,8 @@ void UIScrollPanel::UpdateScrollUI()
     // Handle scroll percent and scroll bar
     if (contentSize.x > containerSize.x || contentSize.y > containerSize.y)
     {
+        contentSize = Vector2::Max(contentSize, Vector2::One);
+
         // Set bar length
         Vector2 sizeProp = Vector2(containerSize) / Vector2(contentSize);
         sizeProp = Vector2::Clamp(sizeProp, Vector2(0.1f), Vector2::One);
@@ -54,6 +56,7 @@ void UIScrollPanel::UpdateScrollUI()
         if (GetGameObject()->GetRectTransform()->IsMouseOver(false))
         {
             Vector2i mouseWheelPx(Input::GetMouseWheel() * WheelScrollSpeedPx);
+
             Vector2 mouseWheelPercent = Vector2(mouseWheelPx) / contentSize;
             scrollingPercent -= mouseWheelPercent;
         }

@@ -15,6 +15,7 @@ NAMESPACE_BANG_BEGIN
 class Transform : public Component,
                   public IInvalidatable<Transform>,
                   public ITransformListener,
+                  public IChildrenListener,
                   public EventEmitter<ITransformListener>
 {
     COMPONENT(Transform)
@@ -89,6 +90,9 @@ public:
     static Vector3    GetPositionFromMatrix4(const Matrix4 &transformMatrix);
     static Quaternion GetRotationFromMatrix4(const Matrix4 &transformMatrix);
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
+
+    // IChildrenListener
+    void OnParentChanged(GameObject *oldParent, GameObject *newParent) override;
 
     // ITransformListener
     void OnTransformChanged() override;
