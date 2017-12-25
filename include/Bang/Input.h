@@ -129,6 +129,8 @@ public:
 
     void Reset();
 
+    static Input* GetActive();
+
 private:
     static constexpr float DoubleClickMaxSeconds = 0.25f;
 
@@ -204,8 +206,6 @@ private:
                 return String(oss.str());
             }
     };
-
-    static Input* GetInstance();
 
     void ProcessMouseWheelEventInfo(const EventInfo &ei);
     void ProcessMouseMoveEventInfo(const EventInfo &ei);

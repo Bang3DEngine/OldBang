@@ -268,7 +268,7 @@ void Input::ProcessEnqueuedEvents()
     m_eventInfoQueue.Clear();
 }
 
-Input *Input::GetInstance()
+Input *Input::GetActive()
 {
     return Window::GetActive()->GetInput();
 }
@@ -280,54 +280,54 @@ String KeyToString(Key k)
 
 bool Input::GetKey(Key k)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].pressed;
 }
 
 bool Input::GetKeyUp(Key k)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_keyInfos.ContainsKey(k) && inp-> m_keyInfos[k].up;
 }
 
 bool Input::GetKeyDown(Key k)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return  inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down &&
            !inp->m_keyInfos[k].autoRepeat;
 }
 
 bool Input::GetKeyDownRepeat(Key k)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;
 }
 
 const Array<Key> &Input::GetKeysUp()
 {
-    return Input::GetInstance()->m_keysUp;
+    return Input::GetActive()->m_keysUp;
 }
 
 const Array<Key> &Input::GetKeysDown()
 {
-    return Input::GetInstance()->m_keysDown;
+    return Input::GetActive()->m_keysDown;
 }
 
 const Array<Key>& Input::GetPressedKeys()
 {
-    return Input::GetInstance()->m_pressedKeys;
+    return Input::GetActive()->m_pressedKeys;
 }
 
 Vector2 Input::GetMouseWheel()
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_lastMouseWheelDelta;
 }
 
 Array<MouseButton> Input::GetMouseButtons()
 {
     Array<MouseButton> mouseButtons;
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     for (auto it : inp->m_mouseInfo)
     {
         if (it.second.pressed) { mouseButtons.PushBack(it.first); }
@@ -337,7 +337,7 @@ Array<MouseButton> Input::GetMouseButtons()
 Array<MouseButton> Input::GetMouseButtonsUp()
 {
     Array<MouseButton> mouseButtons;
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     for (auto it : inp->m_mouseInfo)
     {
         if (it.second.up) { mouseButtons.PushBack(it.first); }
@@ -347,7 +347,7 @@ Array<MouseButton> Input::GetMouseButtonsUp()
 Array<MouseButton> Input::GetMouseButtonsDown()
 {
     Array<MouseButton> mouseButtons;
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     for (auto it : inp->m_mouseInfo)
     {
         if (it.second.down) { mouseButtons.PushBack(it.first); }
@@ -358,31 +358,31 @@ Array<MouseButton> Input::GetMouseButtonsDown()
 
 bool Input::GetMouseButton(MouseButton mb)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].pressed;
 }
 
 bool Input::GetMouseButtonUp(MouseButton mb)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].up;
 }
 
 bool Input::GetMouseButtonDown(MouseButton mb)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].down;
 }
 
 bool Input::GetMouseButtonDoubleClick(MouseButton mb)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return Input::GetMouseButtonUp(mb) && inp->m_isADoubleClick;
 }
 
 bool Input::IsMouseInsideScreen()
 {
-    return Input::GetInstance()->m_isMouseInside;
+    return Input::GetActive()->m_isMouseInside;
 }
 
 float Input::GetMouseAxisX()
@@ -402,7 +402,7 @@ Vector2 Input::GetMouseAxis()
 
 int Input::GetMouseDeltaX()
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     int delta = inp->GetMousePositionScreen().x -
                 Input::GetPreviousMousePositionScreen().x;
     if (Math::Abs(delta) > Window::GetActive()->GetWidth() * 0.8f) { delta = 0; }
@@ -411,7 +411,7 @@ int Input::GetMouseDeltaX()
 
 int Input::GetMouseDeltaY()
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     int delta = inp->GetMousePositionScreen().y -
                 Input::GetPreviousMousePositionScreen().y;
     if (Math::Abs(delta) > Window::GetActive()->GetHeight() * 0.8f) { delta = 0; }
@@ -425,23 +425,23 @@ Vector2i Input::GetMouseDelta()
 
 void Input::SetMouseWrapping(bool isMouseWrapping)
 {
-    Input::GetInstance()->m_isMouseWrapping = isMouseWrapping;
+    Input::GetActive()->m_isMouseWrapping = isMouseWrapping;
 }
 
 bool Input::IsMouseWrapping()
 {
-    return Input::GetInstance()->m_isMouseWrapping;
+    return Input::GetActive()->m_isMouseWrapping;
 }
 
 void Input::LockMouseMovement(bool lock)
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     inp->m_lockMouseMovement = lock;
 }
 
 bool Input::IsLockMouseMovement()
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_lockMouseMovement;
 }
 
@@ -503,7 +503,7 @@ Vector2 Input::GetMousePositionScreenNDC()
 
 Vector2i Input::GetPreviousMousePositionScreen()
 {
-    Input *inp = Input::GetInstance();
+    Input *inp = Input::GetActive();
     return inp->m_lastMousePosScreen;
 }
 
@@ -514,7 +514,7 @@ void Input::StartTextInput()
 
 String Input::PollInputText()
 {
-    Input *input = Input::GetInstance();
+    Input *input = Input::GetActive();
     String res = input->m_inputText;
     input->m_inputText = "";
     return res;

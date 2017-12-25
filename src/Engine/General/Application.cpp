@@ -8,6 +8,7 @@
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
+#include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Paths.h"
 #include "Bang/Chrono.h"

@@ -121,6 +121,8 @@ DialogWindow* Dialog::BeginCreateDialog(const String &title, int sizeX, int size
     Window *topWindow = Application::GetMainWindow();
     if (topWindow)
     {
+        Input::GetActive()->Reset();
+
         dialogWindow = Application::GetInstance()->
                                     CreateDialogWindow(topWindow, resizable);
         Window::SetActive(dialogWindow);
