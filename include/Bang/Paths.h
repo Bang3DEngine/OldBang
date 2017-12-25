@@ -13,6 +13,7 @@ class Paths
 public:
     void InitPaths(const Path &engineRootPath);
 
+    static Path Home();
     static Path ExecutablePath();
     static const Path& Engine();
     static Path EngineAssets();

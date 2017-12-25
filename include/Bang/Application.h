@@ -57,9 +57,10 @@ protected:
     Paths              *m_paths              = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
 
+    void SetupWindow(Window *window);
+
     virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();
-    virtual void SetupWindow(Window *window);
 
 private:
     static Application *s_appSingleton;

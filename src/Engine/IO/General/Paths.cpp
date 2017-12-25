@@ -1,7 +1,10 @@
 #include "Bang/Paths.h"
 
 #include <limits.h>
+
+#include <sys/types.h>
 #include <unistd.h>
+#include <pwd.h>
 
 #include "Bang/Debug.h"
 #include "Bang/String.h"
@@ -48,6 +51,14 @@ void Paths::InitPaths(const Path &engineRootPath)
     }
 
     Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
+}
+
+Path Paths::Home()
+{
+    Path homePath;
+    struct passwd *pw = getpwuid(getuid());
+    homePath = Path(pw->pw_dir);
+    return homePath;
 }
 
 Path Paths::ExecutablePath()

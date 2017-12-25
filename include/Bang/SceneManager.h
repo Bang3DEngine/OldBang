@@ -2,12 +2,20 @@
 #define SCENEMANAGER_H
 
 #include "Bang/Path.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
 
-class SceneManager
+class SceneManagerListener : public IEventListener
+{
+public:
+    virtual void OnSceneOpen(Scene *scene, const Path &sceneFilepath) {}
+};
+
+class SceneManager : public EventEmitter<SceneManagerListener>
 {
 public:
     static void LoadScene(const Path &sceneFilepath);

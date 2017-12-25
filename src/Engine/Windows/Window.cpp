@@ -390,6 +390,11 @@ uint Window::GetTitleBarHeight() const
     return m_titleBarHeight;
 }
 
+Window *Window::GetParentWindow() const
+{
+    return p_parent;
+}
+
 SceneManager *Window::CreateSceneManager() const
 {
     return new SceneManager();

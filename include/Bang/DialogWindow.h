@@ -12,6 +12,10 @@ public:
     virtual ~DialogWindow();
 
     virtual void Create(uint flags) override;
+    void CenterInParent();
+
+private:
+    Window *p_parentWindow = nullptr;
 };
 
 NAMESPACE_BANG_END

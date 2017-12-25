@@ -17,11 +17,14 @@ FORWARD class DialogWindow;
 class Dialog
 {
 public:
+    enum YesNoCancel { Yes, No, Cancel };
+
     static DialogWindow* Error(const String &title,
                                const String &msg);
     static String GetString(const String &title,
                             const String &msg,
                             const String &hint = "");
+    static YesNoCancel GetYesNoCancel(const String &title, const String &msg);
     static Path OpenFilePath(const String &title,
                              const List<String> &extensions = {},
                              const Path &initialDirPath = Path::Empty);
@@ -29,7 +32,8 @@ public:
                               const Path &initialDirPath = Path::Empty);
     static Path SaveFilePath(const String &title,
                              const String &extension,
-                             const Path &initialDirPath = Path::Empty);
+                             const Path &initialDirPath = Path::Empty,
+                             const String &initialFileName = "Unnamed");
 
     Dialog() = delete;
 
@@ -37,15 +41,19 @@ private:
     static bool s_okPressed;
     static Path s_resultPath;
     static String s_resultString;
+    static YesNoCancel s_resultYesNoCancel;
+
     static DialogWindow *s_currentDialog;
 
-    static DialogWindow* BeginCreateDialog(const String &title);
+    static DialogWindow* BeginCreateDialog(const String &title,
+                                           int sizeX, int sizeY);
     static void EndCreateDialog(DialogWindow *dialogWindow);
     static void EndCurrentDialog();
 
     static void CreateSaveFilePathSceneInto(Scene *scene,
                                             const String &extension,
-                                            const Path &initialDirPath);
+                                            const Path &initialDirPath,
+                                            const String &initialFileName);
     static void CreateOpenFilePathSceneInto(Scene *scene,
                                             bool openDir,
                                             const List<String> &extensions,
@@ -58,12 +66,17 @@ private:
                                        UIInputText **botInputText);
     static Scene* CreateGetStringScene(const String &msg,
                                        const String &hint);
+    static Scene* CreateYesNoCancelScene(const String &msg);
 
     static Scene* CreateMsgScene(const String &msg);
 
+    static void OnOkClicked(IFocusable *button);
+    static void OnYesClicked(IFocusable *button);
+    static void OnNoClicked(IFocusable *button);
+    static void OnCancelClicked(IFocusable *button);
     static void AcceptDialogPath(const Path &path);
     static void OnDialogPathChanged(const Path &path);
-    static void OnAcceptButtonClicked(IFocusable *button);
+    static void OnNeedToEndDialog(IFocusable *button);
 };
 
 NAMESPACE_BANG_END

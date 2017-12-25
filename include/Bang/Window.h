@@ -82,6 +82,7 @@ public:
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
     uint GetTitleBarHeight() const;
+    Window *GetParentWindow() const;
 
     virtual SceneManager* CreateSceneManager() const;
 

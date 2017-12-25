@@ -129,18 +129,33 @@ void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
 
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
-    List<GameObject*> dontDestroyOnLoadGameObjects;
-
     SceneManager *sm = SceneManager::GetInstance();
     sm->_LoadSceneInstantly(nullptr);
 
     if (scene)
     {
-        for (GameObject *ddolGo : dontDestroyOnLoadGameObjects)
-        {
-            ddolGo->SetParent(scene);
-        }
         sm->_LoadSceneInstantly(scene);
+    }
+}
+
+void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
+{
+    Scene *scene = GameObjectFactory::CreateScene(false);
+
+    SceneManager::SetActiveSceneFilepath( sceneFilepath );
+    if (scene->ImportXMLFromFile(sceneFilepath))
+    {
+        scene->SetName(sceneFilepath.GetName());
+        SceneManager::GetInstance()->
+            EventEmitter<SceneManagerListener>::PropagateToListeners(
+                &SceneManagerListener::OnSceneOpen, scene, sceneFilepath);
+        SceneManager::LoadSceneInstantly(scene);
+    }
+    else
+    {
+        Debug_Error("Scene from file '" << sceneFilepath <<
+                    "' could not be loaded.");
+        delete scene;
     }
 }
 
@@ -153,22 +168,4 @@ List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go
         else { result.PushBack(FindDontDestroyOnLoadGameObjects(child)); }
     }
     return result;
-}
-
-void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
-{
-    Scene *scene = GameObjectFactory::CreateScene(false);
-
-    SceneManager::SetActiveSceneFilepath( sceneFilepath );
-    if (scene->ImportXMLFromFile(sceneFilepath))
-    {
-        scene->SetName(sceneFilepath.GetName());
-        SceneManager::LoadSceneInstantly(scene);
-    }
-    else
-    {
-        Debug_Error("Scene from file '" << sceneFilepath <<
-                    "' could not be loaded.");
-        delete scene;
-    }
 }
