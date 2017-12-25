@@ -131,6 +131,8 @@ void UIInputText::UpdateTextScrolling()
 
 void UIInputText::HandleTyping()
 {
+    if (IsBlocked()) { return; }
+
     String inputText = Input::PollInputText();
     inputText = FilterAllowedInputText(inputText);
 
@@ -194,6 +196,7 @@ void UIInputText::HandleTyping()
         else if ( Input::GetKeyDownRepeat(Key::V) )
         {
             String clipboardText = SystemClipboard::Get();
+            clipboardText = FilterAllowedInputText(clipboardText);
             ReplaceSelectedText(clipboardText);
             SetCursorIndex( GetCursorIndex() + clipboardText.Size());
             resetSelection = true;
@@ -331,6 +334,11 @@ void UIInputText::ReplaceSelectedText(const String &replaceStr)
 
 void UIInputText::ResetSelection() { GetLabel()->ResetSelection(); }
 
+void UIInputText::SetBlocked(bool blocked)
+{
+    m_isBlocked = blocked;
+}
+
 void UIInputText::SetAllowedCharacters(const String &allowedCharacters)
 {
     m_allowedCharacters = allowedCharacters;
@@ -467,4 +475,9 @@ void UIInputText::CalculateLayout(Axis axis)
 
     SetCalculatedLayout(axis, minSize.GetAxis(axis), prefSize.GetAxis(axis),
                         flexSize.GetAxis(axis));
+}
+
+bool UIInputText::IsBlocked() const
+{
+    return m_isBlocked;
 }

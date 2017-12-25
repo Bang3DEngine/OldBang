@@ -28,7 +28,7 @@ public:
     void SetIconTexture(Texture2D *texture);
     void SetIconSpacingWithText(int spacingWithText);
     void SetIcon(Texture2D *texture, const Vector2i &size,
-                 int spacingWithText = 5);
+                 int spacingWithText = 0);
 
     bool IsBlocked() const;
     UIImageRenderer* GetIcon() const;
@@ -38,14 +38,19 @@ public:
     UIFocusable* GetButton() const;
 
 private:
-    UIButton();
-    virtual ~UIButton();
+    static const Color IdleColor;
+    static const Color OverColor;
+    static const Color BlockedColor;
+    static const Color PressedColor;
 
     bool m_isBlocked = false;
     UIImageRenderer *p_icon        = nullptr;
     UITextRenderer  *p_text        = nullptr;
     UIImageRenderer *p_background  = nullptr;
     UIFocusable     *p_button      = nullptr;
+
+    UIButton();
+    virtual ~UIButton();
 
     static UIButton *CreateInto(GameObject *go);
 

@@ -500,7 +500,7 @@ Scene *Dialog::CreateYesNoCancelScene(const String &msg)
     iconLE->SetMinSize( Vector2i(45) );
     UIImageRenderer *icon = iconGo->AddComponent<UIImageRenderer>();
     icon->SetImageTexture( EPATH("Icons/Warn.png"));
-    icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Linear );
+    icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Bilinear );
 
     GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObjectNamed("HL");
     UIHorizontalLayout *hLayout = hLayoutGo->AddComponent<UIHorizontalLayout>();
@@ -572,7 +572,7 @@ Scene *Dialog::CreateMsgScene(const String &msg)
     iconLE->SetMinSize( Vector2i(45) );
     UIImageRenderer *icon = iconGo->AddComponent<UIImageRenderer>();
     icon->SetImageTexture( EPATH("Icons/Error.png"));
-    icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Linear );
+    icon->GetImageTexture()->SetFilterMode( GL::FilterMode::Bilinear );
 
     GameObject *hLayoutGo = GameObjectFactory::CreateUIGameObjectNamed("HL");
     UIHorizontalLayout *hLayout = hLayoutGo->AddComponent<UIHorizontalLayout>();

@@ -39,6 +39,8 @@ public:
     virtual void BlitToScreen(Camera *camera);
     virtual void OnResize(int newWidth, int newHeight);
 
+    virtual SceneManager* CreateSceneManager() const;
+
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
 
@@ -83,8 +85,7 @@ public:
     uint GetSDLWindowID() const;
     uint GetTitleBarHeight() const;
     Window *GetParentWindow() const;
-
-    virtual SceneManager* CreateSceneManager() const;
+    const List<Window*>& GetChildren() const;
 
     static void Destroy(Window *win);
     static Window *GetActive();

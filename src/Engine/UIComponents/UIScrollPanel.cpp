@@ -87,6 +87,10 @@ void UIScrollPanel::UpdateScrollUI()
     {
         GetVerticalScrollBar()->SetLengthPercent(1.0f);
     }
+
+    // Clamp to adjust for dynamic children size changes
+    Vector2i clampedScrolling = Vector2i::Min(GetScrolling(), Vector2i(contentSize));
+    SetScrolling(clampedScrolling);
 }
 
 void UIScrollPanel::OnUpdate()

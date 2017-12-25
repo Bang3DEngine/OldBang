@@ -40,6 +40,7 @@ public:
 
     void ResetSelection();
 
+    void SetBlocked(bool blocked);
     void SetAllowedCharacters(const String &allowedCharacters);
 
     // IFocusListener
@@ -49,6 +50,7 @@ public:
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;
 
+    bool IsBlocked() const;
     UILabel *GetLabel() const;
     UITextCursor *GetCursor() const;
     UITextRenderer *GetText() const;
@@ -59,12 +61,13 @@ private:
     static const int MarginX;
     static const int MarginY;
 
-    UIImageRenderer *p_background = nullptr;
+    bool m_isBlocked = false;
+    String m_allowedCharacters = "";
 
     UILabel *p_label = nullptr;
     UITextCursor *p_cursor = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
-    String m_allowedCharacters = "";
+    UIImageRenderer *p_background = nullptr;
 
     UIInputText();
 

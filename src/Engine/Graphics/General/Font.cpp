@@ -47,7 +47,7 @@ void Font::Import(const Path &ttfFilepath)
         p_distFieldTexture.Get()->Import(distFieldImg);
         p_distFieldTexture.Get()->Bind();
         p_distFieldTexture.Get()->GenerateMipMaps();
-        p_distFieldTexture.Get()->SetFilterMode(GL::FilterMode::Linear);
+        p_distFieldTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);
         p_distFieldTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
         p_distFieldTexture.Get()->UnBind();
 

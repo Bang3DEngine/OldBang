@@ -44,8 +44,14 @@ void Texture::SetFilterMode(GL::FilterMode filterMode)
 {
     m_filterMode = filterMode;
     Bind();
-    GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Mag, GetFilterMode());
-    GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Min, GetFilterMode());
+    if (GetFilterMode() == GL::FilterMode::Nearest ||
+        GetFilterMode() == GL::FilterMode::Bilinear)
+    {
+        GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Mag,
+                               GetFilterMode());
+    }
+    GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Min,
+                           GetFilterMode());
     UnBind();
 }
 

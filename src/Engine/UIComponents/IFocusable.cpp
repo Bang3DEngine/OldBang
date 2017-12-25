@@ -24,7 +24,7 @@ void IFocusable::UpdateFromCanvas()
         }
     }
 
-    if (Input::GetMouseButtonUp(MouseButton::Left))
+    if (!Input::GetMouseButton(MouseButton::Left))
     {
         m_beingPressed = false;
     }

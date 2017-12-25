@@ -13,6 +13,11 @@
 
 USING_NAMESPACE_BANG
 
+const Color UIButton::IdleColor    = Color::White;
+const Color UIButton::OverColor    = Color::VeryLightBlue;
+const Color UIButton::BlockedColor = Color::LightGray;
+const Color UIButton::PressedColor = Color::DarkGray;
+
 UIButton::UIButton()
 {
 }
@@ -34,10 +39,16 @@ void UIButton::OnUpdate()
 
     if (!IsBlocked())
     {
-        if (GetButton()->IsMouseOver() &&
-            Input::GetMouseButtonDown(MouseButton::Left))
+        if (GetButton()->IsMouseOver())
         {
-            GetBackground()->SetTint(Color::DarkGray);
+            if (Input::GetMouseButtonDown(MouseButton::Left))
+            {
+                GetBackground()->SetTint(UIButton::PressedColor);
+            }
+        }
+        else if (!GetButton()->IsBeingPressed())
+        {
+            GetBackground()->SetTint(UIButton::IdleColor);
         }
 
         if (Input::GetMouseButtonUp(MouseButton::Left))
@@ -60,14 +71,14 @@ void UIButton::SetBlocked(bool blocked)
     p_button->IFocusable::SetEmitEvents( !IsBlocked() );
     if (!IsBlocked())
     {
-        GetText()->SetTextColor(Color::Black);
+        GetText()->SetTextColor(Color::DarkGray);
         if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
         else { OnMouseExit(GetButton()); }
     }
     else
     {
         GetText()->SetTextColor(Color::LightGray);
-        GetBackground()->SetTint(Color::DarkGray);
+        GetBackground()->SetTint(UIButton::BlockedColor);
     }
 }
 
@@ -156,7 +167,7 @@ void UIButton::OnMouseEnter(IFocusable*)
 {
     if (!GetButton()->IsBeingPressed())
     {
-        GetBackground()->SetTint(Color::LightGray);
+        GetBackground()->SetTint(UIButton::OverColor);
     }
 }
 
@@ -164,6 +175,6 @@ void UIButton::OnMouseExit(IFocusable*)
 {
     if (!GetButton()->IsBeingPressed())
     {
-        GetBackground()->SetTint(Color::White);
+        GetBackground()->SetTint(UIButton::IdleColor);
     }
 }

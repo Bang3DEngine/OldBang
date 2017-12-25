@@ -35,6 +35,12 @@ public:
                              const Path &initialDirPath = Path::Empty,
                              const String &initialFileName = "Unnamed");
 
+    static DialogWindow* BeginCreateDialog(const String &title,
+                                           int sizeX, int sizeY,
+                                           bool resizable);
+    static void EndCreateDialog(DialogWindow *dialogWindow);
+    static void EndCurrentDialog();
+
     Dialog() = delete;
 
 private:
@@ -45,11 +51,6 @@ private:
 
     static DialogWindow *s_currentDialog;
 
-    static DialogWindow* BeginCreateDialog(const String &title,
-                                           int sizeX, int sizeY,
-                                           bool resizable);
-    static void EndCreateDialog(DialogWindow *dialogWindow);
-    static void EndCurrentDialog();
 
     static void CreateSaveFilePathSceneInto(Scene *scene,
                                             const String &extension,
