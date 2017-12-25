@@ -46,7 +46,8 @@ private:
     static DialogWindow *s_currentDialog;
 
     static DialogWindow* BeginCreateDialog(const String &title,
-                                           int sizeX, int sizeY);
+                                           int sizeX, int sizeY,
+                                           bool resizable);
     static void EndCreateDialog(DialogWindow *dialogWindow);
     static void EndCurrentDialog();
 

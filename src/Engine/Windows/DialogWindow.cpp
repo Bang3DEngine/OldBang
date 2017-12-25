@@ -5,8 +5,9 @@
 
 USING_NAMESPACE_BANG
 
-DialogWindow::DialogWindow(Window *parentWindow)
+DialogWindow::DialogWindow(Window *parentWindow, bool resizable)
 {
+    m_resizable = resizable;
     SetParent(parentWindow);
 }
 
@@ -18,7 +19,7 @@ DialogWindow::~DialogWindow()
 void DialogWindow::Create(uint flags)
 {
     uint newFlags = flags;
-    newFlags &= ~SDL_WINDOW_RESIZABLE;
+    if (!m_resizable) { newFlags &= ~SDL_WINDOW_RESIZABLE; }
     Window::Create(newFlags);
 }
 

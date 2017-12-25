@@ -27,7 +27,7 @@ public:
     virtual void Init(const Path &engineRootPath = Path::Empty);
 
     Window* CreateWindow();
-    DialogWindow* CreateDialogWindow(Window *parentWindow);
+    DialogWindow* CreateDialogWindow(Window *parentWindow, bool resizable);
     void DestroyWindow(Window *window);
 
     int MainLoop();

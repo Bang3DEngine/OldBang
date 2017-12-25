@@ -73,9 +73,10 @@ Window *Application::CreateWindow()
     return w;
 }
 
-DialogWindow *Application::CreateDialogWindow(Window *parentWindow)
+DialogWindow *Application::CreateDialogWindow(Window *parentWindow,
+                                              bool resizable)
 {
-     DialogWindow *w = new DialogWindow(parentWindow);
+     DialogWindow *w = new DialogWindow(parentWindow, resizable);
      SetupWindow(w);
      return w;
 }

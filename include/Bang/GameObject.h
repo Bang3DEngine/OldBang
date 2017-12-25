@@ -61,7 +61,6 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
-    void SetAsChild(GameObject *child);
     void SetParent(GameObject *newParent, int _index = -1);
     void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
 

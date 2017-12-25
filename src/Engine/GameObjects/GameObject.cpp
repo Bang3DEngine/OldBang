@@ -368,11 +368,6 @@ List<GameObject *> GameObject::GetChildrenRecursively() const
     return cc;
 }
 
-void GameObject::SetAsChild(GameObject *child)
-{
-    child->SetParent(this);
-}
-
 bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
 {
     if (!GetParent()) { return false; }

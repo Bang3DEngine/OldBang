@@ -301,9 +301,9 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
     UIScrollBar *verticalScrollBar = GameObjectFactory::CreateUIScrollBar();
     UIScrollBar *horizontalScrollBar = GameObjectFactory::CreateUIScrollBar();
 
-    go->SetAsChild(scrollArea->GetGameObject());
-    go->SetAsChild(verticalScrollBar->GetGameObject());
-    go->SetAsChild(horizontalScrollBar->GetGameObject());
+    scrollArea->GetGameObject()->SetParent(go);
+    verticalScrollBar->GetGameObject()->SetParent(go);
+    horizontalScrollBar->GetGameObject()->SetParent(go);
 
     scrollPanel->p_scrollArea = scrollArea;
     scrollPanel->p_verticalScrollBar = verticalScrollBar;

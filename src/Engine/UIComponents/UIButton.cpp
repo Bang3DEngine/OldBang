@@ -144,8 +144,8 @@ UIButton* UIButton::CreateInto(GameObject *go)
     buttonDriv->p_button = btn;
     buttonDriv->p_text = label->GetText();
 
-    go->SetAsChild(icon->GetGameObject());
-    go->SetAsChild(label->GetGameObject());
+    icon->GetGameObject()->SetParent(go);
+    label->GetGameObject()->SetParent(go);
 
     buttonDriv->SetIcon(nullptr, Vector2i::Zero, 0);
 

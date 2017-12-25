@@ -214,7 +214,7 @@ UIFileListItem::UIFileListItem()
     m_text->SetTextSize(12);
     m_text->SetHorizontalAlign(HorizontalAlignment::Left);
 
-    SetAsChild(container);
+    container->SetParent(this);
 }
 
 UIFileListItem::~UIFileListItem()

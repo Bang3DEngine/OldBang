@@ -192,19 +192,19 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
 
     for (int i = 0; i < 0; ++i)
     {
-        scene->SetAsChild( GameObjectFactory::CreateGameObjectNamed("GO_" + String(i)) );
+        GameObjectFactory::CreateGameObjectNamed("GO_" + String(i))->SetParent(scene);
     }
 
-    scene->SetAsChild(lightGo);
-    scene->SetAsChild(light2Go);
-    scene->SetAsChild(light3Go);
-    scene->SetAsChild(floor);
-    scene->SetAsChild(wall1);
-    scene->SetAsChild(wall2);
-    scene->SetAsChild(cube);
-    cube->SetAsChild(sphere);
-    sphere->SetAsChild(cube2);
-    scene->SetAsChild(cameraGo);
+    lightGo->SetParent(scene);
+    light2Go->SetParent(scene);
+    light3Go->SetParent(scene);
+    floor->SetParent(scene);
+    wall1->SetParent(scene);
+    wall2->SetParent(scene);
+    cube->SetParent(scene);
+    sphere->SetParent(cube);
+    cube2->SetParent(sphere);
+    cameraGo->SetParent(scene);
     return scene;
 }
 

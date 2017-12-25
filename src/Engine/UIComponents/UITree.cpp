@@ -345,8 +345,8 @@ UITreeItemContainer::UITreeItemContainer()
     p_collapseButton->SetIcon(iconTex.Get(), Vector2i(8), 0);
     p_collapseButton->GetBackground()->SetVisible(false);    
 
-    SetAsChild(p_indentSpacer);
-    SetAsChild(p_collapseButton->GetGameObject());
+    p_indentSpacer->SetParent(this);
+    p_collapseButton->GetGameObject()->SetParent(this);
 }
 
 UITreeItemContainer::~UITreeItemContainer()
@@ -375,7 +375,7 @@ void UITreeItemContainer::SetCollapsed(bool collapsed)
 void UITreeItemContainer::SetContainedItem(GameObject *go)
 {
     p_containedGameObject = go;
-    SetAsChild(p_containedGameObject);
+    p_containedGameObject->SetParent(this);
 }
 
 GameObject *UITreeItemContainer::GetContainedItem() const

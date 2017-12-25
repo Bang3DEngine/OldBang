@@ -316,8 +316,8 @@ UILabel *UILabel::CreateInto(GameObject *go)
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
     le->SetFlexibleSize( Vector2(1.0f) );
 
-    go->SetAsChild(selectionQuadGo);
-    go->SetAsChild(textContainer);
+    selectionQuadGo->SetParent(go);
+    textContainer->SetParent(go);
 
     label->ResetSelection();
     label->UpdateSelectionQuadRenderer();

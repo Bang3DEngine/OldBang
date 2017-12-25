@@ -8,13 +8,14 @@ NAMESPACE_BANG_BEGIN
 class DialogWindow : public Window
 {
 public:
-    DialogWindow(Window *parentWindow);
+    DialogWindow(Window *parentWindow, bool resizable);
     virtual ~DialogWindow();
 
     virtual void Create(uint flags) override;
     void CenterInParent();
 
 private:
+    bool m_resizable = false;
     Window *p_parentWindow = nullptr;
 };
 
