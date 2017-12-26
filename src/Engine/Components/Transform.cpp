@@ -215,12 +215,12 @@ void Transform::RecalculateLocalToWorldMatrix() const
     }
     else { m_localToWorldMatrix = m; }
 
-    m_invalidLocalToWorldMatrix = true; // false;
+    m_invalidLocalToWorldMatrix = false;
 }
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
 {
-    m_invalidLocalToWorldMatrix = true;
+    // m_invalidLocalToWorldMatrix = true;
     if (m_invalidLocalToWorldMatrix) { RecalculateLocalToWorldMatrix(); }
     return m_localToWorldMatrix;
 }

@@ -13,7 +13,7 @@ public:
 
     void SetFocusEnabled(bool focusEnabled);
 
-    void Click();
+    void Click(bool doubleClick);
     bool HasFocus() const;
     bool IsFocusEnabled() const;
     bool HasJustFocusChanged() const;
@@ -22,6 +22,7 @@ public:
 
     using ClickedCallback = std::function<void(IFocusable*)>;
     void AddClickedCallback(ClickedCallback callback);
+    void AddDoubleClickedCallback(ClickedCallback callback);
 
 
 protected:
@@ -31,7 +32,7 @@ protected:
     void SetFocus();
     void ClearFocus();
     virtual void PropagateFocusToListeners();
-    virtual void PropagateOnClickedToListeners();
+    virtual void PropagateOnClickedToListeners(bool doubleClick);
     virtual void PropagateMouseOverToListeners(bool mouseOver);
 
 private:
@@ -42,6 +43,7 @@ private:
     bool m_hasJustFocusChanged = false;
 
     Array<ClickedCallback> m_clickedCallbacks;
+    Array<ClickedCallback> m_doubleClickedCallbacks;
 
     void UpdateFromCanvas();
 

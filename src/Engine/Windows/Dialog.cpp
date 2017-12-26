@@ -468,7 +468,7 @@ Scene* Dialog::CreateGetStringScene(const String &msg, const String &hint)
         void OnUpdate() override
         {
             Component::OnUpdate();
-            if (Input::GetKeyDown(Key::Enter)) { m_okButton->Click(); }
+            if (Input::GetKeyDown(Key::Enter)) { m_okButton->Click(false); }
         }
 
         virtual void OnValueChanged(Object *object) override

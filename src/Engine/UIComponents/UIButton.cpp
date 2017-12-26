@@ -59,9 +59,9 @@ void UIButton::OnUpdate()
     }
 }
 
-void UIButton::Click()
+void UIButton::Click(bool doubleClick)
 {
-    GetButton()->Click();
+    GetButton()->Click(doubleClick);
 }
 
 void UIButton::SetBlocked(bool blocked)
@@ -71,13 +71,13 @@ void UIButton::SetBlocked(bool blocked)
     p_button->IFocusable::SetEmitEvents( !IsBlocked() );
     if (!IsBlocked())
     {
-        GetText()->SetTextColor(Color::DarkGray);
+        GetText()->SetTextColor(Color::Black);
         if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
         else { OnMouseExit(GetButton()); }
     }
     else
     {
-        GetText()->SetTextColor(Color::LightGray);
+        GetText()->SetTextColor(Color::DarkGray);
         GetBackground()->SetTint(UIButton::BlockedColor);
     }
 }

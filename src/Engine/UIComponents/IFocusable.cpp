@@ -20,7 +20,12 @@ void IFocusable::UpdateFromCanvas()
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
             m_beingPressed = true;
-            Click();
+            Click(false);
+        }
+
+        if ( Input::GetMouseButtonDoubleClick(MouseButton::Left) )
+        {
+            Click(true);
         }
     }
 
@@ -36,6 +41,11 @@ void IFocusable::AddClickedCallback(ClickedCallback callback)
     m_clickedCallbacks.PushBack(callback);
 }
 
+void IFocusable::AddDoubleClickedCallback(IFocusable::ClickedCallback callback)
+{
+    m_doubleClickedCallbacks.PushBack(callback);
+}
+
 
 bool IFocusable::IsMouseOver() const
 {
@@ -47,9 +57,9 @@ void IFocusable::SetFocusEnabled(bool focusEnabled)
     m_focusEnabled = focusEnabled;
 }
 
-void IFocusable::Click()
+void IFocusable::Click(bool doubleClick)
 {
-    PropagateOnClickedToListeners();
+    PropagateOnClickedToListeners(doubleClick);
 }
 
 bool IFocusable::HasFocus() const { return m_hasFocus; }
@@ -110,12 +120,21 @@ void IFocusable::PropagateFocusToListeners()
     }
 }
 
-void IFocusable::PropagateOnClickedToListeners()
+void IFocusable::PropagateOnClickedToListeners(bool doubleClick)
 {
     if (IsEmittingEvents())
     {
-        EventEmitter<IFocusListener>::
-            PropagateToListeners(&IFocusListener::OnClicked, this);
-        for (auto callback : m_clickedCallbacks) { callback(this); }
+        if (!doubleClick)
+        {
+            EventEmitter<IFocusListener>::
+                PropagateToListeners(&IFocusListener::OnClicked, this);
+            for (auto callback : m_clickedCallbacks) { callback(this); }
+        }
+        else
+        {
+            EventEmitter<IFocusListener>::
+                PropagateToListeners(&IFocusListener::OnDoubleClicked, this);
+            for (auto callback : m_doubleClickedCallbacks) { callback(this); }
+        }
     }
 }

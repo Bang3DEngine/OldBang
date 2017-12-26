@@ -22,7 +22,7 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
-    void Click();
+    void Click(bool doubleClick);
     void SetBlocked(bool blocked);
     void SetIconSize(const Vector2i &size);
     void SetIconTexture(Texture2D *texture);
