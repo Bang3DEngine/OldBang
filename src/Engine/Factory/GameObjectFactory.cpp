@@ -15,6 +15,7 @@
 #include "Bang/Transform.h"
 #include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/MeshFactory.h"
@@ -266,7 +267,18 @@ UIInputText *GameObjectFactory::CreateUIInputTextInto(GameObject *go)
 UIInputText *GameObjectFactory::CreateUIInputText()
 {
     return GameObjectFactory::CreateUIInputTextInto(
-                        GameObjectFactory::CreateUIGameObjectNamed("InputText") );
+                GameObjectFactory::CreateUIGameObjectNamed("InputText") );
+}
+
+UICheckBox *GameObjectFactory::CreateUICheckBoxInto(GameObject *go)
+{
+    return UICheckBox::CreateInto(go);
+}
+
+UICheckBox *GameObjectFactory::CreateUICheckBox()
+{
+    return GameObjectFactory::CreateUICheckBoxInto(
+                GameObjectFactory::CreateUIGameObjectNamed("CheckBox") );
 }
 
 UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)

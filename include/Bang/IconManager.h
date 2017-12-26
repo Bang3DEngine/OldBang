@@ -12,6 +12,7 @@ class IconManager
 public:
     static RH<Texture2D> GetRightArrowIcon();
     static RH<Texture2D> GetDownArrowIcon();
+    static RH<Texture2D> GetCheckIcon();
 
 private:
     IconManager() = default;

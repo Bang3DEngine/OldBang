@@ -10,6 +10,8 @@ RH<Texture2D> IconManager::GetRightArrowIcon()
 { return GetIconTexture("RightArrow"); }
 RH<Texture2D> IconManager::GetDownArrowIcon()
 { return GetIconTexture("DownArrow"); }
+RH<Texture2D> IconManager::GetCheckIcon()
+{ return GetIconTexture("Check"); }
 
 RH<Texture2D> IconManager::GetIconTexture(const String &filename)
 {

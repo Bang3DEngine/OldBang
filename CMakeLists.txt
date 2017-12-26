@@ -249,6 +249,7 @@ ${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIAutoFocuser.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
+${ENGINE_SRC_DIR}/UIComponents/UICheckBox.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp

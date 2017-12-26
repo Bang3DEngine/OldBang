@@ -26,8 +26,6 @@ class UIInputText : public Component,
     COMPONENT(UIInputText)
 
 public:
-    virtual ~UIInputText();
-
     void OnStart() override;
     void OnUpdate() override;
 
@@ -70,6 +68,7 @@ private:
     UIImageRenderer *p_background = nullptr;
 
     UIInputText();
+    virtual ~UIInputText();
 
     void HandleTyping();
     void HandleKeySelection(bool wasSelecting);

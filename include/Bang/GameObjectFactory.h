@@ -16,6 +16,7 @@ FORWARD class UIButton;
 FORWARD class UICanvas;
 FORWARD class Texture2D;
 FORWARD class GameObject;
+FORWARD class UICheckBox;
 FORWARD class UIInputText;
 FORWARD class UIScrollBar;
 FORWARD class UIScrollArea;
@@ -53,12 +54,14 @@ public:
     static UITree*          CreateUITree();
     static UIInputText*     CreateUIInputTextInto(GameObject *go);
     static UIInputText*     CreateUIInputText();
+    static UICheckBox*      CreateUICheckBoxInto(GameObject *go);
+    static UICheckBox*      CreateUICheckBox();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
     static UIInputNumber*   CreateUIInputNumber();
-    static UIButton*  CreateUIButtonInto(GameObject *go);
-    static UIButton*  CreateUIButton();
-    static UIButton*  CreateUIButton(const String &text,
-                                     Texture2D *icon = nullptr);
+    static UIButton*        CreateUIButtonInto(GameObject *go);
+    static UIButton*        CreateUIButton();
+    static UIButton*        CreateUIButton(const String &text,
+                                           Texture2D *icon = nullptr);
     static UILabel*         CreateUILabel();
     static UILabel*         CreateUILabelInto(GameObject *go);
     static UIScrollArea*    CreateUIScrollAreaInto(GameObject *go);
