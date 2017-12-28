@@ -54,6 +54,14 @@ private:
     Debug::Error(log.str(), __LINE__, __FILE__); \
 } while (0)
 
+#define ASSERT_SOFT(assertion) if ( !(assertion) ) {\
+  Debug_Warn("BANG SOFT ASSERTION FAILED.'"); \
+}
+#define ASSERT_SOFT_MSG(assertion, msg) if ( !(assertion) ) {\
+  Debug_Warn("BANG SOFT ASSERTION FAILED: '" << msg); \
+}
+
+
 NAMESPACE_BANG_END
 
 #endif // DEBUG_H

@@ -386,7 +386,7 @@ void RectTransform::OnRenderGizmos()
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMinY(), r.GetMaxXMaxY());
-    float size = GL::FromViewportAmountToScreenAmountNDC(Vector2i(2)).x;
+    float size = GL::FromViewportAmountToViewportAmountNDC(Vector2(2)).x;
     Gizmos::SetColor(Color::Red);
     Gizmos::RenderRect(Rect(r.GetCenter() - Vector2(size),
                             r.GetCenter() + Vector2(size)));

@@ -22,7 +22,9 @@ NAMESPACE_BANG_BEGIN
         CALL; \
         GL_CheckError()
 #define GL_ClearError() GL::ClearError()
-#define GL_CheckError() ASSERT(GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+#define GL_CheckError() \
+    ASSERT_SOFT_MSG( GL::CheckError(__LINE__, __FUNCTION__, __FILE__), \
+                     "There was an OpenGL error, see previous message.");
 #else
 #define GL_CALL( CALL ) CALL
 #define GL_ClearError() // Empty

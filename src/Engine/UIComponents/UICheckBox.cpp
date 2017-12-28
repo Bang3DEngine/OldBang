@@ -85,20 +85,20 @@ UICheckBox *UICheckBox::CreateInto(GameObject *go)
     UILayoutElement *checkBoxLE = go->AddComponent<UILayoutElement>();
     checkBoxLE->SetFlexibleSize( Vector2::Zero );
 
-    GameObject *checkBoxImgGo = GameObjectFactory::CreateUIGameObject();
-    UIImageRenderer *checkBoxImg = checkBoxImgGo->AddComponent<UIImageRenderer>();
+    GameObject *checkBoxBgImgGo = GameObjectFactory::CreateUIGameObject();
+    UIImageRenderer *checkBoxImg = checkBoxBgImgGo->AddComponent<UIImageRenderer>();
     checkBoxImg->GetMaterial()->SetDiffuseColor(UICheckBox::IdleColor);
 
-    UIFocusable *focusable = checkBoxImgGo->AddComponent<UIFocusable>();
+    UIFocusable *focusable = checkBoxBgImgGo->AddComponent<UIFocusable>();
     focusable->AddClickedCallback([checkBox](IFocusable*)
     {
         checkBox->SetChecked( !checkBox->IsChecked() );
     });
 
-    UILayoutElement* checkBoxImgLE = checkBoxImgGo->AddComponent<UILayoutElement>();
-    checkBoxImgLE->SetMinSize( Vector2i(CheckBoxSize) );
-    checkBoxImgLE->SetPreferredSize( checkBoxImgLE->GetMinSize() );
-    checkBoxImgLE->SetFlexibleSize( Vector2::Zero );
+    UILayoutElement* checkBoxBgImgLE = checkBoxBgImgGo->AddComponent<UILayoutElement>();
+    checkBoxBgImgLE->SetMinSize( Vector2i(CheckBoxSize) );
+    checkBoxBgImgLE->SetPreferredSize( checkBoxBgImgLE->GetMinSize() );
+    checkBoxBgImgLE->SetFlexibleSize( Vector2::Zero );
 
     GameObject *checkImgGo = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *checkImg = checkImgGo->AddComponent<UIImageRenderer>();
@@ -109,8 +109,8 @@ UICheckBox *UICheckBox::CreateInto(GameObject *go)
     checkBox->p_checkImage = checkImg;
     checkBox->p_checkBgImage = checkBoxImg;
 
-    checkBoxImgGo->SetParent(go);
-    checkImgGo->SetParent(checkBoxImgGo);
+    checkBoxBgImgGo->SetParent(go);
+    checkImgGo->SetParent(checkBoxBgImgGo);
 
     checkBox->SetChecked(true);
 
