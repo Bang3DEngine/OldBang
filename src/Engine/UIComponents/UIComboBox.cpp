@@ -2,9 +2,11 @@
 
 #include <functional>
 
+#include "Bang/Input.h"
 #include "Bang/UIList.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
+#include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/IconManager.h"
 #include "Bang/UIFocusable.h"
@@ -31,6 +33,14 @@ UIComboBox::~UIComboBox()
 void UIComboBox::OnUpdate()
 {
     Component::OnUpdate();
+
+    if (!UICanvas::GetActive(this)->IsMouseOver(this, true))
+    {
+        if (Input::GetMouseButtonDown(MouseButton::Left))
+        {
+            GetList()->GetGameObject()->SetEnabled(false);
+        }
+    }
 }
 
 void UIComboBox::AddItem(const String &label, int value)

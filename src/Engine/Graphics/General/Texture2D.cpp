@@ -114,7 +114,7 @@ void Texture2D::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("WrapMode"))
     { SetWrapMode( xmlInfo.Get<GL::WrapMode>("WrapMode") ); }
 
-    if (xmlInfo.Contains("AlphaCuttoff"))
+    if (xmlInfo.Contains("AlphaCutoff"))
     { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }
 }
 
