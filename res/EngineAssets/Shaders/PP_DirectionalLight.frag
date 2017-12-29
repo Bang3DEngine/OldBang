@@ -22,6 +22,8 @@ void Main()
     {
         // Should not arrive here, because pixels that do not receive light
         // are stenciled
-        B_GIn_Color = vec4(1,0,0,1);
+        // TODO: This seems not to be being stenciled, fix this in behalf of performance
+        // B_GIn_Color = vec4(1,0,0,1);
+        B_GIn_Color = diffColor;
     }
 }

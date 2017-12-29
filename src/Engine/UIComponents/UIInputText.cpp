@@ -20,8 +20,8 @@
 USING_NAMESPACE_BANG
 
 const Vector2i UIInputText::LookAheadOffsetPx = Vector2i(5);
-const int UIInputText::MarginX = 5;
-const int UIInputText::MarginY = 2;
+const int UIInputText::MarginX = 2;
+const int UIInputText::MarginY = 0;
 
 UIInputText::UIInputText()
 {

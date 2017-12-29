@@ -25,6 +25,7 @@ Window* Window::s_activeWindow = nullptr;
 
 Window::Window()
 {
+    Debug_Log("Window() " << this);
 }
 
 Window::~Window()
@@ -201,6 +202,26 @@ bool Window::HandleEvent(const SDL_Event &sdlEvent)
 void Window::OnHandleEventsFinished()
 {
     OnResize(m_newSize.x, m_newSize.y);
+}
+
+void Window::OnClosed()
+{
+
+}
+
+void Window::Maximize() const
+{
+    SDL_MaximizeWindow( GetSDLWindow() );
+}
+
+void Window::Restore() const
+{
+    SDL_RestoreWindow( GetSDLWindow() );
+}
+
+void Window::Minimize() const
+{
+    SDL_MinimizeWindow( GetSDLWindow() );
 }
 
 void Window::MoveToFront() const

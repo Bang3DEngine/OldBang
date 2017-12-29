@@ -11,45 +11,37 @@ USING_NAMESPACE_BANG
 
 ImportFilesManager::ImportFilesManager()
 {
-    m_assetsPaths.PushBack( Paths::EngineAssets() );
 }
 
 ImportFilesManager::~ImportFilesManager()
 {
 }
 
-void ImportFilesManager::CreateMissingImportFiles()
+void ImportFilesManager::CreateMissingImportFiles(const Path &directory)
 {
     // First load existing importFiles, to avoid creating new import files
     // with duplicated GUIDs.
-    ImportFilesManager::LoadImportFilepathGUIDs();
+    ImportFilesManager::LoadImportFilepathGUIDs(directory);
 
-    for (const Path &assetsPath : ImportFilesManager::GetInstance()->m_assetsPaths)
+    List<Path> assetFile = directory.FindFiles(Path::FindFlag::Recursive);
+
+    Set<Path> files;
+    files.Add(assetFile.Begin(), assetFile.End());
+
+    for (const Path &filepath : files)
     {
-        List<Path> assetFile = assetsPath.FindFiles(Path::FindFlag::Recursive);
-
-        Set<Path> files;
-        files.Add(assetFile.Begin(), assetFile.End());
-
-        for (const Path &filepath : files)
+        if (!IsImportFile(filepath) && !HasImportFile(filepath))
         {
-            if (!IsImportFile(filepath) && !HasImportFile(filepath))
-            {
-                ImportFilesManager::CreateImportFile(filepath);
-            }
+            ImportFilesManager::CreateImportFile(filepath);
         }
     }
 }
 
-void ImportFilesManager::LoadImportFilepathGUIDs()
+void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
 {
     List<String> extensions = {GetImportExtension()};
-    List<Path> importFilepaths = Paths::EngineAssets()
-                                   .FindFiles(Path::FindFlag::RecursiveHidden,
-                                              extensions);
-    importFilepaths.PushBack( Paths::EngineAssets()
-                                .FindFiles(Path::FindFlag::RecursiveHidden,
-                                           extensions) );
+    List<Path> importFilepaths = directory.FindFiles(Path::FindFlag::RecursiveHidden,
+                                                     extensions);
 
     // Clean alone .import files
     for (const Path &importFilepath : importFilepaths)
@@ -109,18 +101,6 @@ bool ImportFilesManager::IsImportFile(const Path &filepath)
 GUIDManager* ImportFilesManager::GetGUIDManager()
 {
     return &(ImportFilesManager::GetInstance()->m_GUIDManager);
-}
-
-void ImportFilesManager::AddAssetPath(const Path &assetPath)
-{
-    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
-    ifm->m_assetsPaths.PushBack(assetPath);
-}
-
-void ImportFilesManager::RemoveAssetPath(const Path &assetPath)
-{
-    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
-    ifm->m_assetsPaths.Remove(assetPath);
 }
 
 GUID ImportFilesManager::GetGUIDFromFilepath(const Path& filepath)

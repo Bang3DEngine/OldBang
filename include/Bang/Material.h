@@ -26,7 +26,7 @@ public:
     const Vector2& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
     Texture2D* GetTexture() const;
-    bool IsReceivesLighting() const;
+    bool GetReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 

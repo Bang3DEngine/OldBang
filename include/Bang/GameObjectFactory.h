@@ -17,6 +17,7 @@ FORWARD class UICanvas;
 FORWARD class Texture2D;
 FORWARD class GameObject;
 FORWARD class UICheckBox;
+FORWARD class UIComboBox;
 FORWARD class UIInputText;
 FORWARD class UIScrollBar;
 FORWARD class UIScrollArea;
@@ -56,6 +57,8 @@ public:
     static UIInputText*     CreateUIInputText();
     static UICheckBox*      CreateUICheckBoxInto(GameObject *go);
     static UICheckBox*      CreateUICheckBox();
+    static UIComboBox*      CreateUIComboBoxInto(GameObject *go);
+    static UIComboBox*      CreateUIComboBox();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
     static UIInputNumber*   CreateUIInputNumber();
     static UIButton*        CreateUIButtonInto(GameObject *go);

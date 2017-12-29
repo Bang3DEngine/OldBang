@@ -43,7 +43,11 @@ public:
 
     virtual bool HandleEvent(const SDL_Event &sdlEvent);
     void OnHandleEventsFinished();
+    virtual void OnClosed();
 
+    void Maximize() const;
+    void Restore() const;
+    void Minimize() const;
     void MoveToFront() const;
     void SetBordered(bool bordered);
     void SetMinSize(int minSizeX, int minSizeY);

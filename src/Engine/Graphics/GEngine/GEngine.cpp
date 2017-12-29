@@ -286,7 +286,7 @@ void GEngine::Render(Renderer *rend)
     {
         rend->Bind();
 
-        Material *rendMat = rend->GetMaterial();
+        Material *rendMat = rend->GetUserMaterial();
         if (rendMat)
         {
             activeCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());

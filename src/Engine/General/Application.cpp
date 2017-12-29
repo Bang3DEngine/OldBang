@@ -49,8 +49,8 @@ void Application::Init(const Path &engineRootPath)
 
     m_importFilesManager = new ImportFilesManager();
 
-    ImportFilesManager::CreateMissingImportFiles();
-    ImportFilesManager::LoadImportFilepathGUIDs();
+    ImportFilesManager::CreateMissingImportFiles(Paths::EngineAssets());
+    ImportFilesManager::LoadImportFilepathGUIDs(Paths::EngineAssets());
 }
 
 
@@ -151,7 +151,9 @@ void Application::BlockingWait(Window *win, Window *previousWindow)
     m_windows = {win};
     Window::SetActive(win);
 
+    Debug_Log("Blocking wait, MainLoop starts");
     MainLoop();
+    Debug_Log("Blocking wait, MainLoop end");
 
     Window::SetActive(previousWindow);
     m_windows = allWindows;
@@ -160,12 +162,12 @@ void Application::BlockingWait(Window *win, Window *previousWindow)
 bool Application::HandleEvents()
 {
     SDL_Event sdlEvent;
-    constexpr int THERE_ARE_MORE_EVENTS = 1;
-    while (SDL_PollEvent(&sdlEvent) == THERE_ARE_MORE_EVENTS)
+    constexpr int AreThereMoreEvents = 1;
+    while (SDL_PollEvent(&sdlEvent) == AreThereMoreEvents)
     {
         switch (sdlEvent.type)
         {
-            case SDL_QUIT: return false;
+            case SDL_QUIT: Debug_Log("SDL_QUIT event!"); return false;
 
             default:
                 for (auto itw = m_windows.Begin(); itw != m_windows.End(); )
@@ -175,7 +177,10 @@ bool Application::HandleEvents()
                     bool hasNotClosed = w->HandleEvent(sdlEvent);
                     if (!hasNotClosed)
                     {
+                        w->OnClosed();
+                        Debug_Log("Delete " << w);
                         delete w;
+                        Debug_Log("Deleted");
                         itw = m_windows.Remove(itw);
                     }
                     else { ++itw; }

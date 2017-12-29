@@ -440,23 +440,25 @@ void GL::Flush() { glFlush(); }
 
 void GL::Uniform(int location, int value)
 {
-    GL_CALL( glUniform1i(location, value) );
+    if (location >= 0) { GL_CALL( glUniform1i(location, value) ); }
 }
 void GL::Uniform(int location, float value)
 {
-    GL_CALL( glUniform1f(location, value) );
+    if (location >= 0) { GL_CALL( glUniform1f(location, value) ); }
 }
 void GL::Uniform(int location, bool value)
 {
-    GL_CALL( glUniform1i(location, value ? 1 : 0) );
+    if (location >= 0) { GL_CALL( glUniform1i(location, value ? 1 : 0) ); }
 }
 void GL::Uniform(int location, const Matrix3f& value)
 {
-    GL_CALL( glUniformMatrix3fv(location, 1, false, value.Data()) );
+    if (location >= 0) { GL_CALL( glUniformMatrix3fv(location, 1, false,
+                                                     value.Data()) ); }
 }
 void GL::Uniform(int location, const Matrix4f& value)
 {
-    GL_CALL( glUniformMatrix4fv(location, 1, false, value.Data()) );
+    if (location >= 0) { GL_CALL( glUniformMatrix4fv(location, 1, false,
+                                                     value.Data()) ); }
 }
 void GL::Uniform(int location, const Color &value)
 {
@@ -464,15 +466,15 @@ void GL::Uniform(int location, const Color &value)
 }
 void GL::Uniform(int location, const Vector2 &value)
 {
-    GL_CALL( glUniform2fv(location, 1, value.Data()) );
+    if (location >= 0) { GL_CALL( glUniform2fv(location, 1, value.Data()) ); }
 }
 void GL::Uniform(int location, const Vector3 &value)
 {
-    GL_CALL( glUniform3fv(location, 1, value.Data()) );
+    if (location >= 0) { GL_CALL( glUniform3fv(location, 1, value.Data()) ); }
 }
 void GL::Uniform(int location, const Vector4 &value)
 {
-    GL_CALL( glUniform4fv(location, 1, value.Data()) );
+    if (location >= 0) { GL_CALL( glUniform4fv(location, 1, value.Data()) ); }
 }
 
 void GL::PixelStore(GL::Enum pixelStoreEnum, int n)

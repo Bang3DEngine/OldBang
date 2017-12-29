@@ -16,6 +16,7 @@
 #include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/MeshFactory.h"
@@ -279,6 +280,17 @@ UICheckBox *GameObjectFactory::CreateUICheckBox()
 {
     return GameObjectFactory::CreateUICheckBoxInto(
                 GameObjectFactory::CreateUIGameObjectNamed("CheckBox") );
+}
+
+UIComboBox *GameObjectFactory::CreateUIComboBoxInto(GameObject *go)
+{
+    return UIComboBox::CreateInto(go);
+}
+
+UIComboBox *GameObjectFactory::CreateUIComboBox()
+{
+    return GameObjectFactory::CreateUIComboBoxInto(
+                    GameObjectFactory::CreateUIGameObjectNamed("ComboBox") );
 }
 
 UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)

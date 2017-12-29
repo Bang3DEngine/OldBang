@@ -86,7 +86,6 @@ void UIButton::SetIconSize(const Vector2i &size)
 {
     UILayoutElement *le = GetIcon()->GetGameObject()->
                           GetComponent<UILayoutElement>();
-    le->SetMinSize(size);
     le->SetPreferredSize(size);
 }
 
