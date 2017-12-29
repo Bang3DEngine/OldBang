@@ -55,11 +55,6 @@ class UIFileListItem : public GameObject
     GAMEOBJECT(UIFileListItem);
 
 public:
-    void OnMouseOver();
-    void OnMouseOut();
-    void OnSelectionIn();
-    void OnSelectionOut();
-
     void SetPath(const Path &path);
     const Path& GetPath();
 
@@ -68,13 +63,8 @@ protected:
     virtual ~UIFileListItem();
 
 private:
-    bool m_isSelected = false;
     Path m_path = Path::Empty;
-    bool m_isMouseOver = false;
-    UIImageRenderer *m_bg = nullptr;
     UITextRenderer *m_text = nullptr;
-
-    void UpdateColor();
 };
 
 NAMESPACE_BANG_END

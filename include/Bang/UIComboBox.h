@@ -13,7 +13,7 @@ class UIComboBox : public Component,
                    public EventEmitter<IFocusListener>,
                    public IFocusListener
 {
-    COMPONENT(UIComboBox);
+    COMPONENT(UIComboBox)
 
 public:
     void AddItem(const String &label, int value);

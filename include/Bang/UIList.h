@@ -2,8 +2,8 @@
 #define UILIST_H
 
 #include <functional>
-#include <unordered_map>
 
+#include "Bang/Map.h"
 #include "Bang/Component.h"
 #include "Bang/IFocusListener.h"
 
@@ -11,6 +11,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
+FORWARD class UIImageRenderer;
 
 using GOItem = GameObject;
 
@@ -33,6 +34,10 @@ public:
     void ClearSelection();
     void Clear();
 
+    void SetOverColor(const Color &overColor);
+    void SetUseSelectedColor(const Color &selectedColor);
+    void SetUseSelectedColor(bool useSelectColor);
+
     const Array<GOItem*>& GetItems() const;
     GOItem *GetItem(int i) const;
 
@@ -44,10 +49,14 @@ public:
     int GetNumItems() const;
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
+    const Color& GetOverColor() const;
+    const Color& GetSelectedColor() const;
 
     bool SomeChildHasFocus() const;
     int GetSelectedIndex() const;
     GOItem* GetSelectedItem() const;
+
+    void SetWideSelectionMode(bool wideSelectionMode);
 
     // IDestroyListener
     virtual void OnDestroyed(Object *object) override;
@@ -61,6 +70,7 @@ protected:
 
 private:
     Array<GOItem*> p_items;
+    Map<GOItem*, UIImageRenderer*> p_itemsBackground;
     bool m_someChildHasFocus = false;
 
     int m_selectionIndex = -1;
@@ -70,14 +80,20 @@ private:
     GameObject *p_container = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
 
+    bool m_useSelectColor = true;
+    Color m_overColor = Color::VeryLightBlue;
+    Color m_selectedColor = Color::LightBlue;
+
+    bool m_wideSelectionMode = true;
+
     void HandleShortcuts();
 
     // IFocusListener
     virtual void OnFocusTaken(IFocusable *focusable) override;
     virtual void OnFocusLost(IFocusable *focusable) override;
 
-    static UIList* CreateInto(GameObject *go);
-    void Callback(GameObject *item, Action action);
+    static UIList* CreateInto(GameObject *go, bool withScrollPanel);
+    void CallSelectionCallback(GameObject *item, Action action);
 
     friend class GameObjectFactory;
 };

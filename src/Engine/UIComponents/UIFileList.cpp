@@ -120,21 +120,11 @@ void UIFileList::UpdateEntries()
             UIFileListItem *item = Cast<UIFileListItem*>(go);
             if (action == UIList::Action::SelectionIn)
             {
-                item->OnSelectionIn();
                 p_selectedItem = item;
             }
             else if (action == UIList::Action::SelectionOut)
             {
-                item->OnSelectionOut();
                 p_selectedItem = nullptr;
-            }
-            else if (action == UIList::Action::MouseOver)
-            {
-                item->OnMouseOver();
-            }
-            else if (action == UIList::Action::MouseOut)
-            {
-                item->OnMouseOut();
             }
             else if (action == UIList::Action::Pressed ||
                      action == UIList::Action::DoubleClickedLeft)
@@ -206,9 +196,6 @@ UIFileListItem::UIFileListItem()
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetPaddings(5);
 
-    m_bg = AddComponent<UIImageRenderer>();
-    m_bg->SetTint(Color::Zero);
-
     GameObject *container = GameObjectFactory::CreateUIGameObject();
     m_text = container->AddComponent<UITextRenderer>();
     m_text->SetTextSize(12);
@@ -222,57 +209,17 @@ UIFileListItem::~UIFileListItem()
 
 }
 
-void UIFileListItem::OnMouseOver()
-{
-    m_isMouseOver = true;
-    UpdateColor();
-}
-
-void UIFileListItem::OnMouseOut()
-{
-    m_isMouseOver = false;
-    UpdateColor();
-}
-
-void UIFileListItem::OnSelectionOut()
-{
-    m_isSelected = false;
-    UpdateColor();
-}
-
-void UIFileListItem::OnSelectionIn()
-{
-    m_isSelected = true;
-    UpdateColor();
-}
-
 void UIFileListItem::SetPath(const Path &path)
 {
-    m_path = path;
-    m_text->SetContent( (path.IsFile() ? "File - " : "Dir  - ") +
-                         path.GetNameExt() );
+    if (path != GetPath())
+    {
+        m_path = path;
+        m_text->SetContent( (path.IsFile() ? "File - " : "Dir  - ") +
+                             path.GetNameExt() );
+    }
 }
 
 const Path &UIFileListItem::GetPath()
 {
     return m_path;
-}
-
-void UIFileListItem::UpdateColor()
-{
-    if (m_isSelected)
-    {
-        m_bg->SetTint(Color::LightBlue);
-    }
-    else
-    {
-        if (m_isMouseOver)
-        {
-            m_bg->SetTint(Color(0.9f, 0.95f, 1.0f));
-        }
-        else
-        {
-            m_bg->SetTint(Color::Zero);
-        }
-    }
 }

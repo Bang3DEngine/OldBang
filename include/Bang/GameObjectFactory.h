@@ -49,8 +49,9 @@ public:
     static UIImageRenderer* CreateUIImage(const Color &color = Color::White);
     static UIImageRenderer* CreateUIImage(const Color &color,
                                           const Vector2i &size);
-    static UIList*          CreateUIListInto(GameObject *go);
-    static UIList*          CreateUIList();
+    static UIList*          CreateUIListInto(GameObject *go,
+                                             bool withScrollPanel = true);
+    static UIList*          CreateUIList(bool withScrollPanel = true);
     static UITree*          CreateUITreeInto(GameObject *go);
     static UITree*          CreateUITree();
     static UIInputText*     CreateUIInputTextInto(GameObject *go);

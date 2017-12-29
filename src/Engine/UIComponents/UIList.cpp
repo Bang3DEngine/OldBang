@@ -2,9 +2,11 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/IFocusable.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
@@ -32,42 +34,56 @@ void UIList::OnUpdate()
     Component::OnUpdate();
 
     // Mouse In/Out
-    if ( UICanvas::GetActive(this)->IsMouseOver(GetGameObject(), true) )
+    UICanvas *canvas = UICanvas::GetActive(this);
+    GOItem *itemUnderMouse = nullptr;
+    if (canvas->IsMouseOver(GetContainer(), true))
     {
-        GOItem *itemUnderMouse = nullptr;
-        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
+        for (GOItem *childItem : p_items)
         {
-            for (GOItem *childItem : p_items)
+            bool overChildItem = false;
+            overChildItem = canvas->IsMouseOver(childItem, true);
+            if (m_wideSelectionMode && !overChildItem)
             {
-                if (UICanvas::GetActive(this)->IsMouseOver(childItem, true))
-                {
-                    itemUnderMouse = childItem;
-                    break;
-                }
-            }
-        }
-
-        if (p_itemUnderMouse != itemUnderMouse)
-        {
-            if (p_itemUnderMouse)
-            {
-                Callback(p_itemUnderMouse, Action::MouseOut);
+                Vector2 mousePos = Input::GetMousePositionNDC();
+                Rect listRTRect = GetContainer()->GetRectTransform()->GetViewportRectNDC();
+                Rect itemRTRect = childItem->GetRectTransform()->GetViewportRectNDC();
+                overChildItem = (mousePos.x >= listRTRect.GetMin().x &&
+                                 mousePos.x <= listRTRect.GetMax().x &&
+                                 mousePos.y >= itemRTRect.GetMin().y &&
+                                 mousePos.y <= itemRTRect.GetMax().y);
             }
 
-            p_itemUnderMouse = itemUnderMouse;
-            if (p_itemUnderMouse)
+            if (overChildItem)
             {
-                Callback(p_itemUnderMouse, Action::MouseOver);
+                itemUnderMouse = childItem;
+                break;
             }
         }
     }
-    else
+
+    if (p_itemUnderMouse != itemUnderMouse)
     {
-        if (p_itemUnderMouse) { Callback(p_itemUnderMouse, Action::MouseOut); }
+        if (p_itemUnderMouse)
+        {
+            CallSelectionCallback(p_itemUnderMouse, Action::MouseOut);
+        }
+
+        p_itemUnderMouse = itemUnderMouse;
+        if (p_itemUnderMouse)
+        {
+            CallSelectionCallback(p_itemUnderMouse, Action::MouseOver);
+        }
+    }
+
+    if (!p_itemUnderMouse)
+    {
+        if (p_itemUnderMouse) { CallSelectionCallback(p_itemUnderMouse, Action::MouseOut); }
         p_itemUnderMouse = nullptr;
     }
 
-    if (SomeChildHasFocus())
+    bool someChildHasFocus = m_wideSelectionMode ? (p_itemUnderMouse != nullptr) :
+                                                    SomeChildHasFocus();
+    if (someChildHasFocus)
     {
         HandleShortcuts();
 
@@ -76,7 +92,7 @@ void UIList::OnUpdate()
             Input::GetKeyDownRepeat(Key::Enter))
         {
             GOItem *selectedItem = GetSelectedItem();
-            if (selectedItem) { Callback(selectedItem, Action::Pressed); }
+            if (selectedItem) { CallSelectionCallback(selectedItem, Action::Pressed); }
         }
 
         if (p_itemUnderMouse)
@@ -84,17 +100,17 @@ void UIList::OnUpdate()
             if (Input::GetMouseButtonDown(MouseButton::Left))
             {
                 SetSelection(p_itemUnderMouse);
-                Callback(p_itemUnderMouse, Action::ClickedLeft);
+                CallSelectionCallback(p_itemUnderMouse, Action::ClickedLeft);
             }
 
             if (Input::GetMouseButtonDown(MouseButton::Right))
             {
-                Callback(p_itemUnderMouse, Action::ClickedRight);
+                CallSelectionCallback(p_itemUnderMouse, Action::ClickedRight);
             }
 
             if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
             {
-                Callback(p_itemUnderMouse, Action::DoubleClickedLeft);
+                CallSelectionCallback(p_itemUnderMouse, Action::DoubleClickedLeft);
             }
         }
     }
@@ -111,9 +127,12 @@ void UIList::AddItem(GOItem *newItem, int index)
 
     bool hadSelectedGameObject = GetSelectedItem();
 
-    p_items.Insert(newItem, index);
     List<IFocusable*> newItemFocusables =
                             newItem->GetComponentsInChildren<IFocusable>(true);
+
+    UIImageRenderer *itemBg = newItem->AddComponent<UIImageRenderer>();
+    itemBg->GetMaterial()->SetDiffuseColor( Color::Zero );
+
     for (IFocusable* newItemFocusable : newItemFocusables)
     {
         newItemFocusable->EventEmitter<IFocusListener>::RegisterListener(this);
@@ -121,6 +140,9 @@ void UIList::AddItem(GOItem *newItem, int index)
 
     newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
     newItem->SetParent(GetContainer(), index);
+
+    p_itemsBackground.Add(newItem, itemBg);
+    p_items.Insert(newItem, index);
 
     if (index <= m_selectionIndex) { ++m_selectionIndex; }
     if (!hadSelectedGameObject) { SetSelection(index); }
@@ -139,6 +161,7 @@ void UIList::RemoveItem(GOItem *item)
     // Destroy the element
     GameObject::Destroy(item);
     p_items.Remove(item);
+    p_itemsBackground.Remove(item);
 }
 
 void UIList::ClearSelection()
@@ -152,7 +175,10 @@ void UIList::ClearSelection()
 void UIList::Clear()
 {
     while (!p_items.IsEmpty()) { RemoveItem(p_items.Front()); }
-    GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
+    if (GetScrollPanel())
+    {
+        GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
+    }
     ClearSelection();
 }
 
@@ -176,6 +202,8 @@ void UIList::ScrollTo(int i)
 
 void UIList::ScrollTo(GOItem *item)
 {
+    if (!GetScrollPanel()) { return; }
+
     Rect itemRect = item->GetRectTransform()-> GetViewportRect();
     Rect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
                                                         GetViewportRect();
@@ -214,7 +242,7 @@ void UIList::SetSelection(int index)
     if (GetSelectedIndex() != index)
     {
         GOItem *prevSelectedItem = GetSelectedItem();
-        if (prevSelectedItem) { Callback(prevSelectedItem, Action::SelectionOut); }
+        if (prevSelectedItem) { CallSelectionCallback(prevSelectedItem, Action::SelectionOut); }
     }
 
     if (GetSelectedIndex() != index && index >= 0 && index < GetNumItems())
@@ -226,11 +254,11 @@ void UIList::SetSelection(int index)
             ScrollTo(selectedItem);
 
             IFocusable *itemFocusable = selectedItem->
-                                        GetComponentInChildren<IFocusable>();
+                                        GetComponentInChildren<IFocusable>(true);
             UICanvas *canvas = GetGameObject()->GetComponentInParent<UICanvas>();
             if (canvas) { canvas->SetFocus(itemFocusable); }
 
-            Callback(selectedItem, Action::SelectionIn);
+            CallSelectionCallback(selectedItem, Action::SelectionIn);
         }
     }
     else if (index == -1)
@@ -261,9 +289,12 @@ void UIList::HandleShortcuts()
     else if (Input::GetKeyDownRepeat(Key::PageDown) ||
              Input::GetKeyDownRepeat(Key::PageUp))
     {
-        int sign = Input::GetKeyDownRepeat(Key::PageDown) ? 1 : -1;
-        GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() +
-                          sign * Vector2i(GetScrollPanel()->GetContainerSize()) );
+        if (GetScrollPanel())
+        {
+            int sign = Input::GetKeyDownRepeat(Key::PageDown) ? 1 : -1;
+            GetScrollPanel()->SetScrolling( GetScrollPanel()->GetScrolling() +
+                              sign * Vector2i(GetScrollPanel()->GetContainerSize()) );
+        }
     }
     else if (Input::GetKeyDown(Key::End)) { newSelectedIndex = GetNumItems() - 1; }
     else if (Input::GetKeyDown(Key::Home)) { newSelectedIndex = 0; }
@@ -308,12 +339,31 @@ GOItem *UIList::GetSelectedItem() const
     return GetItem( GetSelectedIndex() );
 }
 
+void UIList::SetWideSelectionMode(bool wideSelectionMode)
+{
+    m_wideSelectionMode = wideSelectionMode;
+}
+
+void UIList::SetOverColor(const Color &overColor)
+{
+    m_overColor = overColor;
+}
+
+void UIList::SetUseSelectedColor(const Color &selectedColor)
+{
+    m_selectedColor = selectedColor;
+}
+
+void UIList::SetUseSelectedColor(bool useSelectColor)
+{
+    m_useSelectColor = useSelectColor;
+}
+
 void UIList::OnDestroyed(Object *object)
 {
     if (object == p_itemUnderMouse)
     {
-        if (m_selectionCallback) { m_selectionCallback(p_itemUnderMouse,
-                                                       Action::SelectionOut); }
+        CallSelectionCallback(p_itemUnderMouse, Action::SelectionOut);
         p_itemUnderMouse = nullptr;
     }
 }
@@ -323,41 +373,82 @@ void UIList::SetSelectionCallback(SelectionCallback selectionCallback)
     m_selectionCallback = selectionCallback;
 }
 
-UIList* UIList::CreateInto(GameObject *go)
+UIList* UIList::CreateInto(GameObject *go, bool withScrollPanel)
 {
     REQUIRE_COMPONENT(go, RectTransform);
 
-    UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanelInto(go);
+    UIList *list = go->AddComponent<UIList>();
 
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetMinHeight(10);
-
-    GameObject *container = GameObjectFactory::CreateUIGameObject();
+    const bool vertical = true;
+    GameObject *container = withScrollPanel ?
+                                GameObjectFactory::CreateUIGameObject() : go;
 
     UIDirLayout *dirLayout;
-    const bool vertical = true;
     if (vertical) { dirLayout = container->AddComponent<UIVerticalLayout>(); }
     else { dirLayout = container->AddComponent<UIHorizontalLayout>(); }
-    dirLayout->SetSpacing(0);
-    dirLayout->SetPaddings(0);
+    (void) dirLayout;
 
-    container->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
-    UIContentSizeFitter *csf = container->AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    UIFocusable *focusable = container->AddComponent<UIFocusable>();
 
-    scrollPanel->GetScrollArea()->SetContainedGameObject(container);
+    if (withScrollPanel)
+    {
+        UIScrollPanel *scrollPanel = nullptr;
+        scrollPanel = GameObjectFactory::CreateUIScrollPanelInto(go);
 
-    UIList *ld = go->AddComponent<UIList>();
-    ld->p_scrollPanel = scrollPanel;
-    ld->p_container = container;
+        UIContentSizeFitter *csf = container->AddComponent<UIContentSizeFitter>();
+        csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
+        csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+        container->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
 
-    return ld;
+        scrollPanel->GetScrollArea()->SetContainedGameObject(container);
+
+        list->p_scrollPanel = scrollPanel;
+    }
+    else { list->p_scrollPanel = nullptr; }
+
+    list->p_container = container;
+
+    return list;
 }
 
-void UIList::Callback(GOItem *item, Action action)
+void UIList::CallSelectionCallback(GOItem *item, Action action)
 {
+    UIImageRenderer *itemBg = p_itemsBackground.Get(item);
+    ASSERT(itemBg);
+
+    bool isSelected = (GetSelectedItem() == item);
+    switch (action)
+    {
+        case UIList::Action::MouseOver:
+            if (!m_useSelectColor || !isSelected) { itemBg->SetTint( GetOverColor() ); }
+        break;
+
+        case UIList::Action::MouseOut:
+            if (!m_useSelectColor || !isSelected) { itemBg->SetTint( Color::Zero ); }
+        break;
+
+        case UIList::Action::SelectionIn:
+            if (m_useSelectColor) { itemBg->SetTint( GetSelectedColor() ); }
+        break;
+
+        case UIList::Action::SelectionOut:
+            if (m_useSelectColor) { itemBg->SetTint( Color::Zero ); }
+        break;
+
+        default: break;
+    }
+
     if (m_selectionCallback) { m_selectionCallback(item, action); }
 }
 
 UIScrollPanel *UIList::GetScrollPanel() const { return p_scrollPanel; }
+
+const Color &UIList::GetOverColor() const
+{
+    return m_overColor;
+}
+
+const Color &UIList::GetSelectedColor() const
+{
+    return m_selectedColor;
+}

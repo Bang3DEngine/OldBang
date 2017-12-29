@@ -242,13 +242,15 @@ UIImageRenderer *GameObjectFactory::CreateUIImage(const Color &color,
     return img;
 }
 
-UIList *GameObjectFactory::CreateUIListInto(GameObject *go)
+UIList *GameObjectFactory::CreateUIListInto(GameObject *go,
+                                            bool withScrollPanel)
 {
-    return UIList::CreateInto(go);
+    return UIList::CreateInto(go, withScrollPanel);
 }
-UIList *GameObjectFactory::CreateUIList()
+UIList *GameObjectFactory::CreateUIList(bool withScrollPanel)
 {
-    return UIList::CreateInto( GameObjectFactory::CreateUIGameObjectNamed("List") );
+    return UIList::CreateInto( GameObjectFactory::CreateUIGameObjectNamed("List"),
+                               withScrollPanel );
 }
 
 UITree *GameObjectFactory::CreateUITreeInto(GameObject *go)
