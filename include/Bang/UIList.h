@@ -35,7 +35,7 @@ public:
     void Clear();
 
     void SetOverColor(const Color &overColor);
-    void SetUseSelectedColor(const Color &selectedColor);
+    void SetSelectedColor(const Color &selectedColor);
     void SetUseSelectedColor(bool useSelectColor);
 
     const Array<GOItem*>& GetItems() const;

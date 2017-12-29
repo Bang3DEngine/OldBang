@@ -125,8 +125,6 @@ void UIList::AddItem(GOItem *newItem, int index)
 {
     ASSERT(index >= 0 && index <= GetNumItems());
 
-    bool hadSelectedGameObject = GetSelectedItem();
-
     List<IFocusable*> newItemFocusables =
                             newItem->GetComponentsInChildren<IFocusable>(true);
 
@@ -145,7 +143,6 @@ void UIList::AddItem(GOItem *newItem, int index)
     p_items.Insert(newItem, index);
 
     if (index <= m_selectionIndex) { ++m_selectionIndex; }
-    if (!hadSelectedGameObject) { SetSelection(index); }
 }
 
 void UIList::RemoveItem(GOItem *item)
@@ -349,7 +346,7 @@ void UIList::SetOverColor(const Color &overColor)
     m_overColor = overColor;
 }
 
-void UIList::SetUseSelectedColor(const Color &selectedColor)
+void UIList::SetSelectedColor(const Color &selectedColor)
 {
     m_selectedColor = selectedColor;
 }
