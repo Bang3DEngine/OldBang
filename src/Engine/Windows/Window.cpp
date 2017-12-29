@@ -25,7 +25,6 @@ Window* Window::s_activeWindow = nullptr;
 
 Window::Window()
 {
-    Debug_Log("Window() " << this);
 }
 
 Window::~Window()

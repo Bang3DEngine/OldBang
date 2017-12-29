@@ -146,14 +146,12 @@ bool Application::MainLoopIteration()
 void Application::BlockingWait(Window *win, Window *previousWindow)
 {
     List<Window*> allWindows = m_windows;
-
     allWindows.Remove(win);
+
     m_windows = {win};
     Window::SetActive(win);
 
-    Debug_Log("Blocking wait, MainLoop starts");
     MainLoop();
-    Debug_Log("Blocking wait, MainLoop end");
 
     Window::SetActive(previousWindow);
     m_windows = allWindows;
@@ -167,25 +165,29 @@ bool Application::HandleEvents()
     {
         switch (sdlEvent.type)
         {
-            case SDL_QUIT: Debug_Log("SDL_QUIT event!"); return false;
-
             default:
-                for (auto itw = m_windows.Begin(); itw != m_windows.End(); )
+            {
+                List<Window*> windowsToBeClosed;
+                for (Window *w : m_windows)
                 {
-                    Window *w = *itw;
                     Window::SetActive(w);
                     bool hasNotClosed = w->HandleEvent(sdlEvent);
-                    if (!hasNotClosed)
-                    {
-                        w->OnClosed();
-                        Debug_Log("Delete " << w);
-                        delete w;
-                        Debug_Log("Deleted");
-                        itw = m_windows.Remove(itw);
-                    }
-                    else { ++itw; }
+                    if (!hasNotClosed) { windowsToBeClosed.PushBack(w); }
                     Window::SetActive(nullptr);
                 }
+
+                for (Window *w : windowsToBeClosed)
+                {
+                    Window::SetActive(w);
+                    w->OnClosed();
+                    Window::SetActive(nullptr);
+
+                    Window::SetActive(w);
+                    m_windows.Remove(w);
+                    delete w;
+                    Window::SetActive(nullptr);
+                }
+            }
         }
     }
 

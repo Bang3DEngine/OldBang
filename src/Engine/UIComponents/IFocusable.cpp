@@ -68,7 +68,6 @@ bool IFocusable::HasJustFocusChanged() const { return m_hasJustFocusChanged; }
 
 void IFocusable::SetFocus()
 {
-    ASSERT(IsFocusEnabled());
     if (!HasFocus())
     {
         m_hasFocus = true;

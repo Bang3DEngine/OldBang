@@ -8,6 +8,8 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIList;
+
 class UIComboBox : public Component,
                    public EventEmitter<IValueChangedListener>,
                    public EventEmitter<IFocusListener>,
@@ -19,6 +21,8 @@ public:
     void AddItem(const String &label, int value);
 
 private:
+    UIList *p_list = nullptr;
+
 	UIComboBox();
     virtual ~UIComboBox();
 
