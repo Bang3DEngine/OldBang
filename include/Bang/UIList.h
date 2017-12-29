@@ -9,6 +9,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class UIDirLayout;
 FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIImageRenderer;
@@ -47,6 +48,7 @@ public:
     void SetSelection(GOItem *item);
 
     int GetNumItems() const;
+    UIDirLayout *GetDirLayout() const;
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
     const Color& GetOverColor() const;

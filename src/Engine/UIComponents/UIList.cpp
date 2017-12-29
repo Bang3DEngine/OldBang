@@ -128,7 +128,7 @@ void UIList::AddItem(GOItem *newItem, int index)
     List<IFocusable*> newItemFocusables =
                             newItem->GetComponentsInChildren<IFocusable>(true);
 
-    UIImageRenderer *itemBg = newItem->AddComponent<UIImageRenderer>();
+    UIImageRenderer *itemBg = newItem->AddComponent<UIImageRenderer>(0);
     itemBg->GetMaterial()->SetDiffuseColor( Color::Zero );
 
     for (IFocusable* newItemFocusable : newItemFocusables)
@@ -232,6 +232,11 @@ void UIList::ScrollTo(GOItem *item)
 int UIList::GetNumItems() const
 {
     return p_items.Size();
+}
+
+UIDirLayout *UIList::GetDirLayout() const
+{
+    return GetGameObject()->GetComponent<UIDirLayout>();
 }
 
 void UIList::SetSelection(int index)

@@ -5,8 +5,8 @@ USING_NAMESPACE_BANG
 Texture::Texture()
 {
     GL::GenTextures(1, &m_idGL);
-    SetFilterMode(m_filterMode);
-    SetWrapMode(m_wrapMode);
+    SetFilterMode(GL::FilterMode::Bilinear);
+    SetWrapMode(GL::WrapMode::ClampToEdge);
     SetInternalFormat(m_internalFormat);
 }
 

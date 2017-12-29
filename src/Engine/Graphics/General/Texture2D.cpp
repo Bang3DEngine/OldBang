@@ -111,6 +111,9 @@ void Texture2D::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("FilterMode"))
     { SetFilterMode( xmlInfo.Get<GL::FilterMode>("FilterMode") ); }
 
+    if (xmlInfo.Contains("WrapMode"))
+    { SetWrapMode( xmlInfo.Get<GL::WrapMode>("WrapMode") ); }
+
     if (xmlInfo.Contains("AlphaCuttoff"))
     { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }
 }
@@ -120,6 +123,7 @@ void Texture2D::ExportXML(XMLNode *xmlInfo) const
     Asset::ExportXML(xmlInfo);
 
     xmlInfo->Set("FilterMode", GetFilterMode());
+    xmlInfo->Set("WrapMode", GetWrapMode());
     xmlInfo->Set("AlphaCutoff", GetAlphaCutoff());
 }
 
