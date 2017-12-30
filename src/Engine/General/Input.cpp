@@ -485,14 +485,16 @@ Vector2i Input::GetMousePositionScreen()
     if (Input::IsMouseInsideScreen())
     {
         SDL_GetMouseState(&pos.x, &pos.y);
+        pos.y = (win->GetHeight()-1) - pos.y; // Invert Y
     }
     else
     {
         SDL_GetGlobalMouseState(&pos.x, &pos.y);
-        pos -= (Vector2i(0, win->GetTitleBarHeight()) + win->GetPosition());
+        pos -= win->GetPosition();
+        pos.y = (win->GetHeight()-1) - pos.y; // Invert Y
+        pos.y += win->GetTitleBarHeight();
     }
 
-    pos.y = (win->GetHeight()-1) - pos.y; // Invert Y !!!!
     return pos;
 }
 

@@ -14,6 +14,7 @@ FORWARD class UITree;
 FORWARD class UILabel;
 FORWARD class UIButton;
 FORWARD class UICanvas;
+FORWARD class UISlider;
 FORWARD class Texture2D;
 FORWARD class GameObject;
 FORWARD class UICheckBox;
@@ -60,6 +61,8 @@ public:
     static UICheckBox*      CreateUICheckBox();
     static UIComboBox*      CreateUIComboBoxInto(GameObject *go);
     static UIComboBox*      CreateUIComboBox();
+    static UISlider*        CreateUISliderInto(GameObject *go);
+    static UISlider*        CreateUISlider();
     static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
     static UIInputNumber*   CreateUIInputNumber();
     static UIButton*        CreateUIButtonInto(GameObject *go);

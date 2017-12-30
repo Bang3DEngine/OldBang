@@ -45,7 +45,7 @@ void UIList::OnUpdate()
             if (m_wideSelectionMode && !overChildItem)
             {
                 Vector2 mousePos = Input::GetMousePositionNDC();
-                Rect listRTRect = GetContainer()->GetRectTransform()->GetViewportRectNDC();
+                Rect listRTRect = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
                 Rect itemRTRect = childItem->GetRectTransform()->GetViewportRectNDC();
                 overChildItem = (mousePos.x >= listRTRect.GetMin().x &&
                                  mousePos.x <= listRTRect.GetMax().x &&

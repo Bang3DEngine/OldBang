@@ -38,14 +38,14 @@ void UIInputNumber::OnUpdate()
     }
 }
 
-void UIInputNumber::SetNumber(float v)
+void UIInputNumber::SetValue(float v)
 {
     m_value = v;
     String vStr = String::ToString(v, 2);
     GetInputText()->GetText()->SetContent(vStr);
 }
 
-float UIInputNumber::GetNumber() const
+float UIInputNumber::GetValue() const
 {
     return m_value;
 }
@@ -59,7 +59,7 @@ void UIInputNumber::OnFocusTaken(IFocusable *focusable)
 void UIInputNumber::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
-    SetNumber( GetNumber() );
+    SetValue( GetValue() );
     m_hasFocus = false;
 }
 
@@ -99,7 +99,7 @@ UIInputNumber *UIInputNumber::CreateInto(GameObject *go)
 
     inputNumber->p_inputText = inputText;
 
-    inputNumber->SetNumber(0.0f);
+    inputNumber->SetValue(0.0f);
 
     return inputNumber;
 }

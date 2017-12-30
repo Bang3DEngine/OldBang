@@ -272,6 +272,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
+${ENGINE_SRC_DIR}/UIComponents/UISlider.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UITree.cpp

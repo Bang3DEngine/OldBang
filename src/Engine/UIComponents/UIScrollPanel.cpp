@@ -107,19 +107,23 @@ void UIScrollPanel::OnPostUpdate()
     UIScrollArea *sa = GetScrollArea();
     if (sa->GetContainedGameObject())
     {
-        RectTransform *srcRT = sa->GetGameObject()->GetRectTransform();
-        RectTransform *targetRT = sa->GetContainedGameObject()->GetRectTransform();
+        RectTransform *referenceRT = sa->GetGameObject()->GetRectTransform();
+        RectTransform *toConvertRT = sa->GetContainedGameObject()->GetRectTransform();
+        RectTransform *toConvertParentRT = toConvertRT->GetGameObject()
+                                           ->GetParent()->GetRectTransform();
+
+        Rect refRect = referenceRT->GetViewportRect();
 
         if (GetForceHorizontalFit())
         {
-            targetRT->SetAnchorMinX( srcRT->GetAnchorMin().x );
-            targetRT->SetAnchorMaxX( srcRT->GetAnchorMax().x );
+            toConvertRT->SetAnchorMinX( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMin()).x );
+            toConvertRT->SetAnchorMaxX( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMax()).x );
         }
 
         if (GetForceVerticalFit())
         {
-            targetRT->SetAnchorMinY( srcRT->GetAnchorMin().y );
-            targetRT->SetAnchorMaxY( srcRT->GetAnchorMax().y );
+            toConvertRT->SetAnchorMinY( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMin()).y );
+            toConvertRT->SetAnchorMaxY( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMax()).y );
         }
     }
 }

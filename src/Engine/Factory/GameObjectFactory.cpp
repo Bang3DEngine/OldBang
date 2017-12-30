@@ -8,8 +8,9 @@
 #include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
-#include "Bang/UICanvas.h"
 #include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
+#include "Bang/UISlider.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
@@ -292,7 +293,18 @@ UIComboBox *GameObjectFactory::CreateUIComboBoxInto(GameObject *go)
 UIComboBox *GameObjectFactory::CreateUIComboBox()
 {
     return GameObjectFactory::CreateUIComboBoxInto(
-                    GameObjectFactory::CreateUIGameObjectNamed("ComboBox") );
+                GameObjectFactory::CreateUIGameObjectNamed("ComboBox") );
+}
+
+UISlider *GameObjectFactory::CreateUISliderInto(GameObject *go)
+{
+    return UISlider::CreateInto(go);
+}
+
+UISlider *GameObjectFactory::CreateUISlider()
+{
+    return GameObjectFactory::CreateUISliderInto(
+                GameObjectFactory::CreateUIGameObjectNamed("Slider") );
 }
 
 UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)

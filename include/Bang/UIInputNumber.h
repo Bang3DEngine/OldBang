@@ -24,9 +24,9 @@ public:
     void OnStart() override;
     void OnUpdate() override;
 
-    void SetNumber(float v);
+    void SetValue(float v);
 
-    float GetNumber() const;
+    float GetValue() const;
     UIInputText* GetInputText() const;
 
     bool HasFocus() const;
