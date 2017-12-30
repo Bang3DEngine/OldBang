@@ -453,7 +453,7 @@ void Window::SetParent(Window *parentWindow)
 
 void Window::RetrieveTitleBarHeight()
 {
-    if(m_titleBarHeight == 0 && Input::IsMouseInsideScreen())
+    if(Input::IsMouseInsideScreen())
     {
         Vector2i localCoords, globalCoords;
         SDL_GetMouseState(&localCoords.x, &localCoords.y);

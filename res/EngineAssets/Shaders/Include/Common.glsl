@@ -85,7 +85,7 @@ vec4  B_SampleColor()  { return B_SampleColor(GetViewportUv()); }
 vec3  B_SampleNormal() { return B_SampleNormal(GetViewportUv()); }
 vec4  B_SampleDiffColor() { return B_SampleDiffColor(GetViewportUv()); }
 bool  B_SampleReceivesLight() { return B_SampleReceivesLight(GetViewportUv()); }
-float B_SampleShininess () { return B_SampleShininess(GetViewportUv()); }
+float B_SampleShininess () { return B_SampleShininess(GetViewportUv()) * 255.0f; }
 float B_SampleDepth() { return B_SampleDepth(GetViewportUv()); }
 float B_SampleFlags() { return B_SampleFlags(GetViewportUv()); }
 

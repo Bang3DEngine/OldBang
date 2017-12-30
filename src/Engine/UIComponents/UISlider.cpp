@@ -188,7 +188,7 @@ UISlider *UISlider::CreateInto(GameObject *go)
     UIImageRenderer *handleRenderer = GameObjectFactory::CreateUIImage(slider->m_idleColor);
     RectTransform *handleRT = handleRenderer->GetGameObject()->GetRectTransform();
     handleRT->SetAnchors(Vector2::Zero);
-    handleRT->SetMargins(-5);
+    handleRT->SetMargins(-6);
 
     UIFocusable *handleFocusable = handleRenderer->GetGameObject()
                                    ->AddComponent<UIFocusable>();
