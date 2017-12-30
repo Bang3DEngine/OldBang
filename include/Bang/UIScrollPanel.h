@@ -19,7 +19,10 @@ public:
 	virtual ~UIScrollPanel();
 
     void OnUpdate() override;
+    void OnPostUpdate() override;
 
+    void SetForceVerticalFit(bool forceVerticalFit);
+    void SetForceHorizontalFit(bool forceHorizontalFit);
     void SetVerticalScrollBarSide(HorizontalSide side);
     void SetHorizontalScrollBarSide(VerticalSide side);
     void SetVerticalShowScrollMode(ShowScrollMode showScrollMode);
@@ -30,6 +33,8 @@ public:
     void SetScrollingPercent(const Vector2 &scrollingPercent);
 
     Vector2i GetScrolling() const;
+    bool GetForceVerticalFit() const;
+    bool GetForceHorizontalFit() const;
     HorizontalSide GetVerticalScrollBarSide() const;
     VerticalSide GetHorizontalScrollBarSide() const;
     ShowScrollMode GetVerticalShowScrollMode() const;
@@ -45,6 +50,9 @@ public:
 
 private:
     const static float WheelScrollSpeedPx;
+
+    bool m_forceVerticalFit = false;
+    bool m_forceHorizontalFit = false;
 
     UIScrollArea *p_scrollArea = nullptr;
     UIScrollBar  *p_verticalScrollBar = nullptr;
@@ -63,6 +71,9 @@ private:
     void HandleScrollAreaRectTransform();
     void HandleScrollShowMode(const Vector2& contentSize,
                               const Vector2& containerSize);
+
+    bool IsVerticalScrollEnabledAndNoFit() const;
+    bool IsHorizontalScrollEnabledAndNoFit() const;
 
     static UIScrollPanel* CreateInto(GameObject *go);
 

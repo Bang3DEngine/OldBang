@@ -307,6 +307,7 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     hlLE->SetFlexibleHeight(0);
 
     UIList *list = GameObjectFactory::CreateUIList();
+    list->GetScrollPanel()->SetForceHorizontalFit(true);
     UILayoutElement *listLE = list->GetGameObject()->AddComponent<UILayoutElement>();
     listLE->SetFlexibleSize( Vector2(1) );
 

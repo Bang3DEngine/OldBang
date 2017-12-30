@@ -4,6 +4,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIContentSizeFitter.h"
 
 USING_NAMESPACE_BANG
 
