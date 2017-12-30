@@ -358,10 +358,10 @@ bool RectTransform::IsMouseOver(bool recursive) const
     if (recursive)
     {
         List<RectTransform*> childrenRTs =
-             GetGameObject()->GetComponentsInChildrenOnly<RectTransform>(false);
+             GetGameObject()->GetComponentsInChildrenOnly<RectTransform>(true);
         for (RectTransform *childRT : childrenRTs)
         {
-            if (childRT->IsMouseOver(true)) { return true; }
+            if (childRT->IsMouseOver(false)) { return true; }
         }
     }
     return false;

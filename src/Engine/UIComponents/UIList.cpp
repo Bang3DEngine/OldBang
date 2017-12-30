@@ -129,7 +129,7 @@ void UIList::AddItem(GOItem *newItem, int index)
                             newItem->GetComponentsInChildren<IFocusable>(true);
 
     UIImageRenderer *itemBg = newItem->AddComponent<UIImageRenderer>(0);
-    itemBg->GetMaterial()->SetDiffuseColor( Color::Zero );
+    itemBg->GetMaterial()->SetDiffuseColor( GetIdleColor() );
 
     for (IFocusable* newItemFocusable : newItemFocusables)
     {
@@ -177,6 +177,11 @@ void UIList::Clear()
         GetScrollPanel()->SetScrollingPercent( Vector2(0.0f) );
     }
     ClearSelection();
+}
+
+void UIList::SetIdleColor(const Color &idleColor)
+{
+    m_idleColor = idleColor;
 }
 
 const Array<GOItem *> &UIList::GetItems() const { return p_items; }
@@ -426,7 +431,7 @@ void UIList::CallSelectionCallback(GOItem *item, Action action)
         break;
 
         case UIList::Action::MouseOut:
-            if (!m_useSelectColor || !isSelected) { itemBg->SetTint( Color::Zero ); }
+            if (!m_useSelectColor || !isSelected) { itemBg->SetTint( GetIdleColor() ); }
         break;
 
         case UIList::Action::SelectionIn:
@@ -434,7 +439,7 @@ void UIList::CallSelectionCallback(GOItem *item, Action action)
         break;
 
         case UIList::Action::SelectionOut:
-            if (m_useSelectColor) { itemBg->SetTint( Color::Zero ); }
+            if (m_useSelectColor) { itemBg->SetTint( GetIdleColor() ); }
         break;
 
         default: break;
@@ -444,6 +449,11 @@ void UIList::CallSelectionCallback(GOItem *item, Action action)
 }
 
 UIScrollPanel *UIList::GetScrollPanel() const { return p_scrollPanel; }
+
+const Color &UIList::GetIdleColor() const
+{
+    return m_idleColor;
+}
 
 const Color &UIList::GetOverColor() const
 {

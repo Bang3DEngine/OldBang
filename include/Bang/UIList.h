@@ -35,6 +35,7 @@ public:
     void ClearSelection();
     void Clear();
 
+    void SetIdleColor(const Color &idleColor);
     void SetOverColor(const Color &overColor);
     void SetSelectedColor(const Color &selectedColor);
     void SetUseSelectedColor(bool useSelectColor);
@@ -51,6 +52,7 @@ public:
     UIDirLayout *GetDirLayout() const;
     GameObject *GetContainer() const;
     UIScrollPanel *GetScrollPanel() const;
+    const Color& GetIdleColor() const;
     const Color& GetOverColor() const;
     const Color& GetSelectedColor() const;
 
@@ -83,6 +85,7 @@ private:
     UIScrollPanel *p_scrollPanel = nullptr;
 
     bool m_useSelectColor = true;
+    Color m_idleColor = Color::Zero;
     Color m_overColor = Color::VeryLightBlue;
     Color m_selectedColor = Color::LightBlue;
 
