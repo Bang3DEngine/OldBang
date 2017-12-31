@@ -31,6 +31,7 @@ void BatchParameters::SetPrimitive(GL::Primitive primitive)
 bool BatchParameters::Equals(const BatchParameters &bp) const
 {
     if (GetPrimitive() != bp.GetPrimitive()) { return false; }
+    return false;
 
     bool matEquals = false;
     {
@@ -38,7 +39,7 @@ bool BatchParameters::Equals(const BatchParameters &bp) const
         Material *bpMat = bp.GetMaterial();
 
         if (mat == bpMat) { matEquals = true; }
-        if (!matEquals && mat && bpMat)
+        else if (mat && bpMat)
         {
             matEquals =
               (mat->GetTexture() == bpMat->GetTexture()) &&

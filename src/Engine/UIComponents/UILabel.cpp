@@ -295,7 +295,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
 
     UIMask *mask = go->AddComponent<UIMask>();
-    go->AddComponent<UIImageRenderer>(); // Quad mask
+    // go->AddComponent<UIImageRenderer>(); // Quad mask
     label->p_mask = mask;
 
     GameObject *textContainer = GameObjectFactory::CreateUIGameObject();

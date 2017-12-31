@@ -19,20 +19,20 @@ void UIMask::OnRender(RenderPass renderPass)
     Component::OnRender(renderPass);
     if  (!m_restoringStencil && renderPass == RenderPass::Canvas)
     {
-        PrepareStencilToDrawMask();
+        // PrepareStencilToDrawMask();
     }
 }
 
 void UIMask::OnBeforeChildrenRender(RenderPass renderPass)
 {
     Component::OnBeforeChildrenRender(renderPass);
-    if (renderPass == RenderPass::Canvas) { PrepareStencilToDrawChildren(); }
+    // if (renderPass == RenderPass::Canvas) { PrepareStenclToDrawChildren(); }
 }
 
 void UIMask::OnAfterChildrenRender(RenderPass renderPass)
 {
     Component::OnAfterChildrenRender(renderPass);
-    if (renderPass == RenderPass::Canvas) { RestoreStencilBuffer(renderPass); }
+    // if (renderPass == RenderPass::Canvas) { RestoreStencilBuffer(renderPass); }
 }
 
 void UIMask::PrepareStencilToDrawMask()
@@ -43,7 +43,7 @@ void UIMask::PrepareStencilToDrawMask()
     m_stencilOpBefore    = GL::GetStencilOp();
 
     // Will this mask be drawn?
-    GL::SetColorMask(m_drawMask, m_drawMask, m_drawMask, m_drawMask);
+    GL::SetColorMask(IsDrawMask(), IsDrawMask(), IsDrawMask(), IsDrawMask());
 
     if (IsMasking())
     {
@@ -69,18 +69,20 @@ void UIMask::PrepareStencilToDrawChildren()
 
 void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 {
-    if (!IsMasking()) { return; }
+    if (IsMasking())
+    {
+        // Restore stencil as it was before, decrementing marked mask pixels
+        GL::SetColorMask(false, false, false, false);
+        GL::SetStencilFunc(GL::Function::Equal);
+        GL::SetStencilOp( GL::StencilOperation::Decr );
 
-    // Restore stencil as it was before, decrementing marked mask pixels
-    GL::SetColorMask(false, false, false, false);
-    GL::SetStencilFunc(GL::Function::Equal);
-    GL::SetStencilOp( GL::StencilOperation::Decr );
+        m_restoringStencil = true;
+        GetGameObject()->Render(renderPass, false);
+        m_restoringStencil = false;
 
-    m_restoringStencil = true;
-    GetGameObject()->Render(renderPass, false);
-    m_restoringStencil = false;
+        GL::SetStencilValue( GL::GetStencilValue() - 1 );
+    }
 
-    GL::SetStencilValue( GL::GetStencilValue() - 1 );
     GL::SetColorMask(m_colorMaskBefore[0], m_colorMaskBefore[1],
                      m_colorMaskBefore[2], m_colorMaskBefore[3]);
     GL::SetStencilOp(m_stencilOpBefore);
@@ -90,8 +92,8 @@ void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 void UIMask::SetMasking(bool maskEnabled) { m_masking = maskEnabled; }
 void UIMask::SetDrawMask(bool drawMask) { m_drawMask = drawMask; }
 
-bool UIMask::IsMasking() const { return m_masking; }
-bool UIMask::IsDrawMask() const { return true; } // m_drawMask; }
+bool UIMask::IsMasking() const { return false; } // m_masking; }
+bool UIMask::IsDrawMask() const { return false; } // m_drawMask; }
 
 void UIMask::ImportXML(const XMLNode &xmlInfo)
 {

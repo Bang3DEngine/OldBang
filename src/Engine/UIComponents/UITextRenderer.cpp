@@ -186,15 +186,15 @@ void UITextRenderer::Bind() const
 void UITextRenderer::OnRender()
 {
     UIRenderer::OnRender();
-
     RegenerateCharQuadsVAO();
+
+    GetMaterial()->SetTexture( GetFont()->GetFontAtlas(GetTextSize()) );
 
     BatchParameters batchParams;
     batchParams.SetPrimitive( GetRenderPrimitive() );
     batchParams.SetTransform( Matrix4::Identity );
-    Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
-    GetMaterial()->SetTexture(fontAtlas);
     batchParams.SetMaterial( GetUserMaterial() );
+
     GEngine::RenderBatched(p_mesh.Get()->GetPositions(),
                            p_mesh.Get()->GetNormals(),
                            p_mesh.Get()->GetUvs(),

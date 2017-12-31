@@ -368,7 +368,7 @@ UIScrollPanel *UIScrollPanel::CreateInto(GameObject *go)
     scrollPanel->p_horizontalScrollBar = horizontalScrollBar;
 
     scrollPanel->p_scrollArea->GetGameObject()->
-                 GetRectTransform()->TranslateLocal( Vector3(0, 0, 0.1f) );
+                 GetRectTransform()->TranslateLocal( Vector3(0, 0, 0.01f) );
 
     scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::Always);
     scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::Always);

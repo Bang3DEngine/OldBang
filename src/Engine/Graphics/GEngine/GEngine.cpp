@@ -62,7 +62,7 @@ void GEngine::RenderBatched(const Array<Vector3> &positions,
                             bool sorted)
 {
     GEngine *ge = GEngine::GetActive(); ASSERT(ge);
-    ge->m_batchManager->AddGeometry(positions, normals, uvs, batchParams, sorted);
+    ge->GetBatchManager()->AddGeometry(positions, normals, uvs, batchParams, sorted);
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)
@@ -171,7 +171,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
 
     camera->GetGBuffer()->SetColorDrawBuffer();
-    m_batchManager->ClearBatches();
+    GetBatchManager()->ClearBatches();
 
     // GBuffer Canvas rendering
     GL::ClearStencilBuffer();
@@ -181,8 +181,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Canvas);
     go->Render(RenderPass::Canvas_PostProcess);
 
-    m_batchManager->Render();
-    m_batchManager->ClearBatches();
+    GetBatchManager()->Render();
+    GetBatchManager()->ClearBatches();
 
     // GBuffer Gizmos rendering
     GL::ClearStencilBuffer();
@@ -320,6 +320,10 @@ void GEngine::Render(Renderer *rend)
 }
 
 GL *GEngine::GetGL() const { return m_gl; }
+BatchManager *GEngine::GetBatchManager() const
+{
+    return m_batchManager;
+}
 TextureUnitManager *GEngine::GetTextureUnitManager() const
 {
     return m_texUnitManager;

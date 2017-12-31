@@ -558,6 +558,8 @@ public:
 
     static GL::ViewProjMode GetViewProjMode();
 
+    static void PrintState();
+
     static GL* GetActive();
     GLUniforms *GetGLUniforms() const;
 

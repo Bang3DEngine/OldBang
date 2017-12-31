@@ -35,7 +35,7 @@ void BatchManager::AddGeometry(const Array<Vector3> &positions,
     Array<Vector3> finalPositions;
     if (incrementalZ)
     {
-        m_incrementalZ -= 0.0001;
+        m_incrementalZ -= 0.00001;
         for (const Vector3 &pos : positions)
         {
             finalPositions.PushBack( pos + Vector3(0, 0, m_incrementalZ) );
@@ -48,6 +48,7 @@ void BatchManager::AddGeometry(const Array<Vector3> &positions,
 
 void BatchManager::Render()
 {
+    Debug_Log("Rendering " << m_currentBatches.Size() << " batches");
     for (const Batch &batch : m_currentBatches)
     {
         batch.Render();

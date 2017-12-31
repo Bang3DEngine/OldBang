@@ -1167,6 +1167,45 @@ GL::ViewProjMode GL::GetViewProjMode()
     return GL::GetActive()->GetGLUniforms()->GetViewProjMode();
 }
 
+void GL::PrintState()
+{
+    Debug_Peek(GL::GetActive()->m_boundVAOId);
+    Debug_Peek(GL::GetActive()->m_boundVBOId);
+    Debug_Peek(GL::GetActive()->m_boundTextureId);
+    Debug_Peek(GL::GetActive()->m_boundFramebufferId);
+    Debug_Peek(GL::GetActive()->m_boundShaderProgramId);
+    Debug_Peek(GL::GetActive()->m_boundUniformBufferId);
+    Debug_Peek(GL::GetActive()->m_colorMask[0]);
+    Debug_Peek(GL::GetActive()->m_colorMask[1]);
+    Debug_Peek(GL::GetActive()->m_colorMask[2]);
+    Debug_Peek(GL::GetActive()->m_colorMask[3]);
+    Debug_Peek(GL::GetActive()->m_lineWidth);
+    Debug_Peek(int(GL::GetActive()->m_stencilValue));
+    Debug_Peek(GL::GetActive()->m_stencilMask);
+    Debug_Peek(GL::GetActive()->m_viewportRect);
+    Debug_Peek(GL::GetActive()->m_depthMask);
+    Debug_Peek(GL::GetActive()->m_depthFunc);
+    Debug_Peek(GL::GetActive()->m_clearColor);
+    Debug_Peek(GL::GetActive()->m_cullFace);
+    Debug_Peek(GL::GetActive()->m_frontPolygonMode);
+    Debug_Peek(GL::GetActive()->m_backPolygonMode);
+    Debug_Peek(GL::GetActive()->m_frontBackPolygonMode);
+    Debug_Peek(GL::GetActive()->m_stencilFunc);
+    Debug_Peek(GL::GetActive()->m_stencilOp);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetCameraBuffer()->GetData()->zNear);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetCameraBuffer()->GetData()->zFar);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetViewProjMode());
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetViewportBuffer()->GetData()->minPos);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetViewportBuffer()->GetData()->size);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->model);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->normal);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->view);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->viewInv);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->proj);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->projInv);
+    Debug_Peek(GL::GetActive()->m_glUniforms->GetMatricesBuffer()->GetData()->pvm);
+}
+
 GL *GL::GetActive()
 {
     return GL::s_activeGL;

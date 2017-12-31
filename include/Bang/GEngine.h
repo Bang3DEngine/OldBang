@@ -62,6 +62,7 @@ public:
     static SelectionFramebuffer *GetActiveSelectionFramebuffer();
 
     GL *GetGL() const;
+    BatchManager *GetBatchManager() const;
     TextureUnitManager *GetTextureUnitManager() const;
 
     static GEngine* GetActive();

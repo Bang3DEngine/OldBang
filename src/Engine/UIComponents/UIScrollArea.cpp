@@ -79,10 +79,10 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     UIScrollArea *scrollArea = go->AddComponent<UIScrollArea>();
 
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White);
+    bg->SetTint(Color::Zero);
 
     UIMask *mask = go->AddComponent<UIMask>();
-    go->AddComponent<UIImageRenderer>();
+    // go->AddComponent<UIImageRenderer>();
     mask->SetDrawMask(false);
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();

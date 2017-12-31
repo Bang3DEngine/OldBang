@@ -32,24 +32,16 @@ void UIImageRenderer::OnRender()
     UIRenderer::OnRender();
     RegenerateQuadVAO();
 
-    /*
-    GL::DrawArrays(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
-                   p_quadMesh.Get()->GetVertexCount());
-    /*/
     BatchParameters batchParams;
     batchParams.SetPrimitive( GetRenderPrimitive() );
     batchParams.SetTransform( Matrix4::Identity );
-    // batchParams.SetTransform( GetGameObject()->GetRectTransform()->GetLocalToWorldMatrix() );
-    GetMaterial()->SetTexture( nullptr ); // GetImageTexture() );
-    GetMaterial()->SetDiffuseColor(Color::White);
-    batchParams.SetMaterial( GetMaterial() );
+    batchParams.SetMaterial( GetUserMaterial() );
 
     GEngine::RenderBatched(p_quadMesh.Get()->GetPositions(),
                            p_quadMesh.Get()->GetNormals(),
                            p_quadMesh.Get()->GetUvs(),
                            batchParams,
                            true);
-    //*/
 }
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
@@ -72,12 +64,6 @@ void UIImageRenderer::SetImageTexture(Texture2D* imageTexture)
 void UIImageRenderer::SetTint(const Color &tint)
 {
     GetMaterial()->SetDiffuseColor(tint);
-}
-
-void UIImageRenderer::SetIsBackground(bool isBackground)
-{
-    m_isBackground = isBackground;
-    OnChanged();
 }
 
 void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
@@ -128,11 +114,6 @@ HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
     return m_horizontalAlignment;
 }
 
-bool UIImageRenderer::IsBackground() const
-{
-    return m_isBackground;
-}
-
 void UIImageRenderer::OnChanged()
 {
     m_hasChanged = true;
@@ -144,16 +125,17 @@ void UIImageRenderer::RegenerateQuadVAO()
     m_hasChanged = false;
 
     RectTransform *rt = GetGameObject()->GetRectTransform();
+    Rect rectNDC = rt->GetViewportRectNDC();
     {
-        Rect rectNDC = rt->GetViewportRectNDC();
         float z = rt->GetPosition().z;
         Array<Vector3> quadViewportNDCPositions;
-        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMaxY(), z) );
-        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMaxY(), z) );
-        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMinY(), z) );
-        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMaxY(), z) );
-        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMinY(), z) );
         quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMinY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMinY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMaxY(), z) );
+
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMinY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMaxY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMaxY(), z) );
 
         p_quadMesh.Get()->LoadPositions(quadViewportNDCPositions);
     }
@@ -201,8 +183,6 @@ void UIImageRenderer::OnTransformChanged()
 Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
 {
     Rect boundingRect = UIRenderer::GetBoundingRect(camera);
-
-    if (!IsBackground()) { return boundingRect; }
     return Rect(boundingRect.GetCenter(), boundingRect.GetCenter());
 }
 
@@ -227,9 +207,6 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Tint"))
     { SetTint( xmlInfo.Get<Color>("Tint") ); }
 
-    if (xmlInfo.Contains("IsBackground"))
-    { SetIsBackground( xmlInfo.Get<bool>("IsBackground") ); }
-
     if (xmlInfo.Contains("HorizontalAlignment"))
     { SetHorizontalAlignment( xmlInfo.Get<HorizontalAlignment>("HorizontalAlignment") ); }
 
@@ -247,7 +224,6 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
-    xmlInfo->Set("IsBackground", IsBackground());
     xmlInfo->Set("HorizontalAlignment", GetHorizontalAlignment());
     xmlInfo->Set("VerticalAlignment", GetVerticalAlignment());
     xmlInfo->Set("AspectRatioMode", GetAspectRatioMode());

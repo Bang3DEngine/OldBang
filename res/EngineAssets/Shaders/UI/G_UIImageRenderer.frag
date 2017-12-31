@@ -2,11 +2,9 @@
 
 void main()
 {
-    vec4 texColor = vec4(1);
     if (B_HasTexture)
     {
-        texColor = texture2D(B_Texture0, B_FIn_Uv);
-        B_GIn_Color = B_MaterialDiffuseColor * texColor;
+        B_GIn_Color = B_MaterialDiffuseColor * texture2D(B_Texture0, B_FIn_Uv);
     }
     else
     {

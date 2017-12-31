@@ -9,8 +9,8 @@ USING_NAMESPACE_BANG
 
 Bang::Batch::Batch(const Bang::BatchParameters &params)
 {
-    m_params = params;
     m_mesh = Resources::Create<Mesh>();
+    m_params = params;
 }
 
 Batch::~Batch()
@@ -30,12 +30,11 @@ void Batch::AddGeometry(const Array<Vector3> &positions,
 
 void Batch::Render() const
 {
-    GLUniforms::SetModelMatrix(GetParameters().GetTransform());
-    GLUniforms::SetViewMatrix(Matrix4::Identity);
-    GLUniforms::SetProjectionMatrix(Matrix4::Identity);
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-
     GetParameters().GetMaterial()->Bind();
+
+    GLUniforms::SetModelMatrix(GetParameters().GetTransform());
+    GL::ViewProjMode lastViewProjMode = GL::GetViewProjMode();
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     m_mesh.Get()->LoadAll(m_positions, m_normals, m_uvs);
     GL::DrawArrays(m_mesh.Get()->GetVAO(),
@@ -43,7 +42,9 @@ void Batch::Render() const
                    m_mesh.Get()->GetPositions().Size(),
                    0);
 
-    // GetParameters().GetMaterial()->UnBind();
+    GL::SetViewProjMode(lastViewProjMode);
+
+    GetParameters().GetMaterial()->UnBind();
 }
 
 const BatchParameters &Batch::GetParameters() const

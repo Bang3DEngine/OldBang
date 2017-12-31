@@ -20,6 +20,7 @@ UIRenderer::~UIRenderer()
 
 void UIRenderer::Bind() const
 {
+    Renderer::Bind();
 }
 
 void UIRenderer::OnRender()
