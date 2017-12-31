@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Camera.h"
+#include "Bang/GEngine.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -15,6 +16,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/TextFormatter.h"
+#include "Bang/BatchParameters.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/UILayoutManager.h"
 
@@ -39,15 +41,6 @@ UITextRenderer::~UITextRenderer()
 {
 }
 
-void UITextRenderer::OnRender()
-{
-    UIRenderer::OnRender();
-
-    RegenerateCharQuadsVAO();
-    int vertCount = p_mesh.Get()->GetVertexCount();
-    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
-}
-
 void UITextRenderer::CalculateLayout(Axis axis)
 {
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
@@ -66,12 +59,13 @@ void UITextRenderer::CalculateLayout(Axis axis)
 
 void UITextRenderer::RegenerateCharQuadsVAO() const
 {
-    if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
+    // if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
     IInvalidatable<UITextRenderer>::Validate();
 
     if (!GetFont())
     {
         p_mesh.Get()->LoadPositions({});
+        p_mesh.Get()->LoadNormals({});
         p_mesh.Get()->LoadUvs({});
         return;
     }
@@ -141,28 +135,27 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         }
 
         Rect charRectViewportNDC(minViewportNDC, maxViewportNDC);
-        Rect charRectLocalNDC =
-                    rt->FromViewportRectNDCToLocalRectNDC(charRectViewportNDC);
 
+        float z = GetGameObject()->GetTransform()->GetPosition().z;
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMinXMinY(), z) );
         textQuadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMaxXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMaxXMinY(), z) );
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMaxXMaxY(), z) );
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMinY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMinXMinY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMinXMinY(), z) );
         textQuadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMaxXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMaxXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMaxXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMaxXMaxY(), z) );
         textQuadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMaxY());
-        textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
+        textQuadPos2D.PushBack(charRectViewportNDC.GetMinXMaxY());
+        textQuadPos3D.PushBack( Vector3(charRectViewportNDC.GetMinXMaxY(), z) );
 
         Rect charRectLocalNDCRaw ( rt->FromViewportPointToLocalPointNDC(minPxPerf),
                                    rt->FromViewportPointToLocalPointNDC(maxPxPerf) );
@@ -171,17 +164,30 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
                                                        textQuadPos2D.End());
+
+    // Fill mesh positions and uvs
     p_mesh.Get()->LoadPositions(textQuadPos3D);
     p_mesh.Get()->LoadUvs(textQuadUvs);
+
+    // Fill mesh with dummy normals
+    Array<Vector3> textNormals;
+    for (int i = 0; i < p_mesh.Get()->GetPositions().Size(); ++i)
+    {
+        textNormals.PushBack(Vector3::One);
+    }
+    p_mesh.Get()->LoadNormals(textNormals);
 }
 
 void UITextRenderer::Bind() const
 {
     // Nullify RectTransform model, since we control its position and size
     // directly from the VBO creation...
+    /*
     Vector3 translate(0, 0, GetGameObject()->GetTransform()->GetPosition().z);
     GLUniforms::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
+    */
     UIRenderer::Bind();
+    /*
 
     if (GetFont())
     {
@@ -215,6 +221,24 @@ void UITextRenderer::Bind() const
         }
         GL::Uniform("B_usingDistField", usingDistField,  false);
     }
+    */
+}
+
+void UITextRenderer::OnRender()
+{
+    UIRenderer::OnRender();
+
+    RegenerateCharQuadsVAO();
+
+    BatchParameters batchParams;
+    batchParams.SetTransform( Matrix4::Identity );
+    Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
+    GetMaterial()->SetTexture(fontAtlas);
+    batchParams.SetMaterial( GetUserMaterial() );
+    GEngine::RenderBatched(p_mesh.Get()->GetPositions(),
+                           p_mesh.Get()->GetNormals(),
+                           p_mesh.Get()->GetUvs(),
+                           batchParams);
 }
 
 void UITextRenderer::UnBind() const

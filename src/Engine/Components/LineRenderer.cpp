@@ -25,8 +25,8 @@ LineRenderer::~LineRenderer()
 void LineRenderer::OnRender()
 {
     Renderer::OnRender(); ENSURE(p_mesh.Get()->GetVertexCount() > 0);
-    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(),
-               p_mesh.Get()->GetVertexCount());
+    GL::DrawArrays(p_mesh.Get()->GetVAO(), GetRenderPrimitive(),
+                   p_mesh.Get()->GetVertexCount());
 }
 
 void LineRenderer::SetPoint(int i, const Vector3 &point)

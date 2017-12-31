@@ -4,6 +4,7 @@
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/BatchParameters.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -15,6 +16,7 @@ FORWARD class GBuffer;
 FORWARD class Renderer;
 FORWARD class Texture2D;
 FORWARD class Framebuffer;
+FORWARD class BatchManager;
 FORWARD class ShaderProgram;
 FORWARD class TextureUnitManager;
 FORWARD class SelectionFramebuffer;
@@ -26,6 +28,11 @@ public:
     virtual ~GEngine();
 
     void Init();
+
+    static void RenderBatched(const Array<Vector3> &positions,
+                              const Array<Vector3> &normals,
+                              const Array<Vector2> &uvs,
+                              const BatchParameters &batchParams);
 
     void Render(Scene *scene);
     void Render(Renderer *rend);
@@ -61,6 +68,7 @@ public:
 private:
     GL *m_gl = nullptr;
     Camera *p_activeCamera = nullptr;
+    BatchManager *m_batchManager = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
     RH<Mesh> p_screenPlaneMesh;

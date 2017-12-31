@@ -19,6 +19,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/MeshFactory.h"
+#include "Bang/BatchManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/RectTransform.h"
@@ -38,6 +39,7 @@ GEngine::GEngine()
 GEngine::~GEngine()
 {
     delete m_texUnitManager;
+    delete m_batchManager;
     delete m_gl;
 }
 
@@ -45,11 +47,23 @@ void GEngine::Init()
 {
     m_gl = new GL();
     GL::SetActive( GetGL() );
+    m_batchManager = new BatchManager();
     m_texUnitManager = new TextureUnitManager();
 
     p_screenPlaneMesh = Resources::Clone<Mesh>(MeshFactory::GetUIPlane());
     p_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
     GL::SetActive( nullptr );
+}
+
+void GEngine::RenderBatched(const Array<Vector3> &positions,
+                            const Array<Vector3> &normals,
+                            const Array<Vector2> &uvs,
+                            const BatchParameters &batchParams)
+{
+    GEngine *ge = GEngine::GetActive();
+    ASSERT(ge);
+
+    ge->m_batchManager->AddGeometry(positions, normals, uvs, batchParams);
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)
@@ -158,6 +172,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
     camera->GetGBuffer()->SetColorDrawBuffer();
 
+    m_batchManager->ClearBatches();
+
     // GBuffer Canvas rendering
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
@@ -165,6 +181,9 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     go->Render(RenderPass::Canvas);
     go->Render(RenderPass::Canvas_PostProcess);
+
+    m_batchManager->Render();
+    m_batchManager->ClearBatches();
 
     // GBuffer Gizmos rendering
     GL::ClearStencilBuffer();
@@ -255,7 +274,7 @@ void GEngine::RenderScreenPlane(bool withDepth)
     }
     GL::Disable(GL::Test::CullFace);
 
-    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
+    GL::DrawArrays(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
 
     GL::Enable(GL::Test::CullFace);

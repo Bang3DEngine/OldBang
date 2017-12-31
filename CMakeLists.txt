@@ -215,6 +215,9 @@ ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLUniforms.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
+${ENGINE_SRC_DIR}/Graphics/GEngine/Batch.cpp
+${ENGINE_SRC_DIR}/Graphics/GEngine/BatchManager.cpp
+${ENGINE_SRC_DIR}/Graphics/GEngine/BatchParameters.cpp
 ${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp

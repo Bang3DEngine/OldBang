@@ -471,7 +471,7 @@ public:
     static Vector2  FromViewportPointToViewportPointNDC(const Vector2i &vpPoint);
     static Vector2  FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);
 
-    static void Render(const VAO* vao,
+    static void DrawArrays(const VAO* vao,
                        GL::Primitive renderMode,
                        int elementsCount,
                        int startElementIndex = 0);

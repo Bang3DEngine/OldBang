@@ -705,8 +705,8 @@ void GL::BufferData(GL::BindTarget target, int dataSize,
     GL_CALL( glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint)) );
 }
 
-void GL::Render(const VAO *vao, GL::Primitive primitivesMode,
-                int elementsCount, int startIndex)
+void GL::DrawArrays(const VAO *vao, GL::Primitive primitivesMode,
+                    int elementsCount, int startIndex)
 {
     vao->Bind();
     glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);

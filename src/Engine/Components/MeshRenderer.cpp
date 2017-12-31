@@ -48,8 +48,8 @@ void MeshRenderer::OnRender()
 {
     Renderer::OnRender();
     if (!GetUserMesh()) { return; }
-    GL::Render(GetUserMesh()->GetVAO(), GetRenderPrimitive(),
-               GetUserMesh()->GetVertexCount());
+    GL::DrawArrays(GetUserMesh()->GetVAO(), GetRenderPrimitive(),
+                   GetUserMesh()->GetVertexCount());
 }
 
 Mesh *MeshRenderer::GetUserMesh() const

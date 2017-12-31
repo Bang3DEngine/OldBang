@@ -30,8 +30,8 @@ void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
     if (m_hasChanged) { RegenerateQuadVAO(); }
-    GL::Render(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
-               p_quadMesh.Get()->GetVertexCount());
+    GL::DrawArrays(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
+                   p_quadMesh.Get()->GetVertexCount());
 }
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
