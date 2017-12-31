@@ -32,7 +32,8 @@ public:
     static void RenderBatched(const Array<Vector3> &positions,
                               const Array<Vector3> &normals,
                               const Array<Vector2> &uvs,
-                              const BatchParameters &batchParams);
+                              const BatchParameters &batchParams,
+                              bool sorted);
 
     void Render(Scene *scene);
     void Render(Renderer *rend);

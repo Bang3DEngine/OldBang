@@ -59,7 +59,7 @@ void UITextRenderer::CalculateLayout(Axis axis)
 
 void UITextRenderer::RegenerateCharQuadsVAO() const
 {
-    // if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
+    if (!IInvalidatable<UITextRenderer>::IsInvalid()) { return; }
     IInvalidatable<UITextRenderer>::Validate();
 
     if (!GetFont())
@@ -180,48 +180,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
 void UITextRenderer::Bind() const
 {
-    // Nullify RectTransform model, since we control its position and size
-    // directly from the VBO creation...
-    /*
-    Vector3 translate(0, 0, GetGameObject()->GetTransform()->GetPosition().z);
-    GLUniforms::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
-    */
     UIRenderer::Bind();
-    /*
-
-    if (GetFont())
-    {
-        const int textSize = Math::Max(GetTextSize(), 1);
-
-        bool usingDistField = GetFont()->HasDistanceField();
-        if (usingDistField)
-        {
-            Texture2D *fontDistField = GetFont()->GetDistFieldTexture();
-            GetMaterial()->SetTexture(fontDistField);
-
-            float blurriness = GetBlurriness() / textSize;
-            blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
-            GL::Uniform("B_textBlurriness", blurriness, false);
-
-            float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
-            alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
-            GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
-
-            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
-            if (GetOutlineWidth() > 0.0f)
-            {
-                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
-                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
-            }
-        }
-        else
-        {
-            Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
-            GetMaterial()->SetTexture(fontAtlas);
-        }
-        GL::Uniform("B_usingDistField", usingDistField,  false);
-    }
-    */
 }
 
 void UITextRenderer::OnRender()
@@ -231,6 +190,7 @@ void UITextRenderer::OnRender()
     RegenerateCharQuadsVAO();
 
     BatchParameters batchParams;
+    batchParams.SetPrimitive( GetRenderPrimitive() );
     batchParams.SetTransform( Matrix4::Identity );
     Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
     GetMaterial()->SetTexture(fontAtlas);
@@ -238,7 +198,8 @@ void UITextRenderer::OnRender()
     GEngine::RenderBatched(p_mesh.Get()->GetPositions(),
                            p_mesh.Get()->GetNormals(),
                            p_mesh.Get()->GetUvs(),
-                           batchParams);
+                           batchParams,
+                           true);
 }
 
 void UITextRenderer::UnBind() const

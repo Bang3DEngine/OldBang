@@ -13,7 +13,8 @@ BatchManager::~BatchManager()
 void BatchManager::AddGeometry(const Array<Vector3> &positions,
                                const Array<Vector3> &normals,
                                const Array<Vector2> &uvs,
-                               const BatchParameters &batchParams)
+                               const BatchParameters &batchParams,
+                               bool incrementalZ)
 {
     Batch *targetBatch = nullptr;
     for (Batch &batch : m_currentBatches)
@@ -29,14 +30,24 @@ void BatchManager::AddGeometry(const Array<Vector3> &positions,
         m_currentBatches.PushBack( Batch(batchParams) );
         targetBatch = &m_currentBatches.Back();
     }
-
     ASSERT(targetBatch);
-    targetBatch->AddGeometry(positions, normals, uvs);
+
+    Array<Vector3> finalPositions;
+    if (incrementalZ)
+    {
+        m_incrementalZ -= 0.0001;
+        for (const Vector3 &pos : positions)
+        {
+            finalPositions.PushBack( pos + Vector3(0, 0, m_incrementalZ) );
+        }
+    }
+    else { finalPositions = positions; }
+
+    targetBatch->AddGeometry(finalPositions, normals, uvs);
 }
 
 void BatchManager::Render()
 {
-    Debug_Peek(m_currentBatches.Size());
     for (const Batch &batch : m_currentBatches)
     {
         batch.Render();
@@ -45,6 +56,7 @@ void BatchManager::Render()
 
 void BatchManager::ClearBatches()
 {
+    m_incrementalZ = 0.0;
     m_currentBatches.Clear();
 }
 

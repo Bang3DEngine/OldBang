@@ -58,12 +58,11 @@ void GEngine::Init()
 void GEngine::RenderBatched(const Array<Vector3> &positions,
                             const Array<Vector3> &normals,
                             const Array<Vector2> &uvs,
-                            const BatchParameters &batchParams)
+                            const BatchParameters &batchParams,
+                            bool sorted)
 {
-    GEngine *ge = GEngine::GetActive();
-    ASSERT(ge);
-
-    ge->m_batchManager->AddGeometry(positions, normals, uvs, batchParams);
+    GEngine *ge = GEngine::GetActive(); ASSERT(ge);
+    ge->m_batchManager->AddGeometry(positions, normals, uvs, batchParams, sorted);
 }
 
 void GEngine::Render(GameObject *go, Camera *camera)
@@ -170,8 +169,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 
     GL::Enable(GL::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
-    camera->GetGBuffer()->SetColorDrawBuffer();
 
+    camera->GetGBuffer()->SetColorDrawBuffer();
     m_batchManager->ClearBatches();
 
     // GBuffer Canvas rendering

@@ -16,13 +16,15 @@ public:
     void AddGeometry(const Array<Vector3> &positions,
                      const Array<Vector3> &normals,
                      const Array<Vector2> &uvs,
-                     const BatchParameters &batchParams);
+                     const BatchParameters &batchParams,
+                     bool incrementalZ);
 
     void Render();
 
     void ClearBatches();
 
 private:
+    double m_incrementalZ = 0.0;
     Array<Batch> m_currentBatches;
 };
 

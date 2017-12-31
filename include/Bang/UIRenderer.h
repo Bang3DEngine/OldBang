@@ -23,6 +23,8 @@ protected:
     UIRenderer();
     virtual ~UIRenderer();
 
+    void Bind() const override;
+
 private:
     bool m_cullByRectTransform = true;
 };

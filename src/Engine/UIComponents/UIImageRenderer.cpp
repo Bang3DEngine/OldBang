@@ -2,6 +2,7 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/Image.h"
+#include "Bang/GEngine.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
@@ -29,9 +30,26 @@ UIImageRenderer::~UIImageRenderer()
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
-    if (m_hasChanged) { RegenerateQuadVAO(); }
+    RegenerateQuadVAO();
+
+    /*
     GL::DrawArrays(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
                    p_quadMesh.Get()->GetVertexCount());
+    /*/
+    BatchParameters batchParams;
+    batchParams.SetPrimitive( GetRenderPrimitive() );
+    batchParams.SetTransform( Matrix4::Identity );
+    // batchParams.SetTransform( GetGameObject()->GetRectTransform()->GetLocalToWorldMatrix() );
+    GetMaterial()->SetTexture( nullptr ); // GetImageTexture() );
+    GetMaterial()->SetDiffuseColor(Color::White);
+    batchParams.SetMaterial( GetMaterial() );
+
+    GEngine::RenderBatched(p_quadMesh.Get()->GetPositions(),
+                           p_quadMesh.Get()->GetNormals(),
+                           p_quadMesh.Get()->GetUvs(),
+                           batchParams,
+                           true);
+    //*/
 }
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
@@ -122,8 +140,24 @@ void UIImageRenderer::OnChanged()
 
 void UIImageRenderer::RegenerateQuadVAO()
 {
+    if (!m_hasChanged) { return; }
     m_hasChanged = false;
+
     RectTransform *rt = GetGameObject()->GetRectTransform();
+    {
+        Rect rectNDC = rt->GetViewportRectNDC();
+        float z = rt->GetPosition().z;
+        Array<Vector3> quadViewportNDCPositions;
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMaxY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMaxY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMinY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMaxY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMaxXMinY(), z) );
+        quadViewportNDCPositions.PushBack( Vector3(rectNDC.GetMinXMinY(), z) );
+
+        p_quadMesh.Get()->LoadPositions(quadViewportNDCPositions);
+    }
+
     Rect rectPx = rt->GetViewportRect();
     Vector2i rectSize(rectPx.GetSize());
     ENSURE(m_prevRectSize != rectSize);

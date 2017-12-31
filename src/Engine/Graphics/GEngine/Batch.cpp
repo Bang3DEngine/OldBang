@@ -30,15 +30,14 @@ void Batch::AddGeometry(const Array<Vector3> &positions,
 
 void Batch::Render() const
 {
-    GetParameters().GetMaterial()->Bind();
-
     GLUniforms::SetModelMatrix(GetParameters().GetTransform());
     GLUniforms::SetViewMatrix(Matrix4::Identity);
     GLUniforms::SetProjectionMatrix(Matrix4::Identity);
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
-    m_mesh.Get()->LoadAll(m_positions, m_normals, m_uvs);
+    GetParameters().GetMaterial()->Bind();
 
+    m_mesh.Get()->LoadAll(m_positions, m_normals, m_uvs);
     GL::DrawArrays(m_mesh.Get()->GetVAO(),
                    GetParameters().GetPrimitive(),
                    m_mesh.Get()->GetPositions().Size(),

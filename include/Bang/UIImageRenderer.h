@@ -58,7 +58,7 @@ private:
     RH<Mesh> p_quadMesh;
     RH<Texture2D> p_imageTexture;
 
-    bool m_hasChanged = false;
+    bool m_hasChanged = true;
     bool m_isBackground = false;
 
     AspectRatioMode m_aspectRatioMode         = AspectRatioMode::Ignore;
