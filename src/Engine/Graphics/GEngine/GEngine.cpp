@@ -98,8 +98,8 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
 {
     // We have marked from before the zone where we want to apply the effect
     GL::SetStencilValue(1);
-    GL::Function latestStencilFunc = GL::GetStencilFunc();
-    GL::SetStencilFunc(GL::Function::Equal);
+    GL_Function latestStencilFunc = GL::GetStencilFunc();
+    GL::SetStencilFunc(GL_Function::Equal);
 
     List<Light*> lights = lightsContainer->GetComponentsInChildren<Light>();
     for (Light *light : lights)
@@ -138,31 +138,31 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     camera->BindGBuffer();
 
     // GBuffer Scene rendering
-    GL::Enablei(GL::Test::Blend, 3);
+    GL::Enablei(GL_Test::Blend, 3);
     GL::SetDepthMask(true); // Write depth
-    GL::SetDepthFunc(GL::Function::LEqual);
+    GL::SetDepthFunc(GL_Function::LEqual);
     GL::SetStencilValue(1);
-    GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
+    GL::SetStencilOp(GL_StencilOperation::Replace); // Write to stencil
     go->Render(RenderPass::Scene_Lighted);
 
     // Apply lights to stenciled zone
-    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
+    GL::SetStencilOp(GL_StencilOperation::Keep); // Dont modify stencil
     ApplyDeferredLights(go, go, camera);
-    GL::SetStencilFunc(GL::Function::Always);
+    GL::SetStencilFunc(GL_Function::Always);
     GL::SetStencilValue(0);
 
     go->Render(RenderPass::Scene_UnLighted);
     go->Render(RenderPass::Scene_PostProcess);
 
-    GL::Enable(GL::Test::Blend);
-    GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
+    GL::Enable(GL_Test::Blend);
+    GL::BlendFunc(GL_BlendFactor::SrcAlpha, GL_BlendFactor::OneMinusSrcAlpha);
     camera->GetGBuffer()->SetColorDrawBuffer();
 
     // GBuffer Canvas rendering
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
-    GL::SetDepthFunc(GL::Function::LEqual);
+    GL::SetDepthFunc(GL_Function::LEqual);
     go->Render(RenderPass::Canvas);
     go->Render(RenderPass::Canvas_PostProcess);
 
@@ -170,12 +170,12 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
-    GL::SetStencilFunc(GL::Function::Always);
-    GL::SetDepthFunc(GL::Function::LEqual);
+    GL::SetStencilFunc(GL_Function::Always);
+    GL::SetDepthFunc(GL_Function::LEqual);
     go->Render(RenderPass::Gizmos);
     go->RenderGizmos();
 
-    GL::Disable(GL::Test::Blend);
+    GL::Disable(GL_Test::Blend);
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
@@ -242,18 +242,18 @@ void GEngine::RenderScreenPlane(bool withDepth)
     bool prevWireframe = GL::IsWireframe();
     GL::SetWireframe(false);
 
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBothAndModel);
+    GL::SetViewProjMode(GL_ViewProjMode::IgnoreBothAndModel);
 
     bool prevDepthMask = GL::GetDepthMask();
-    GL::Function prevDepthFunc = GL::GetDepthFunc();
+    GL_Function prevDepthFunc = GL::GetDepthFunc();
 
     if (!withDepth)
     {
-        GL::SetDepthFunc(GL::Function::Always);
+        GL::SetDepthFunc(GL_Function::Always);
         GL::SetDepthMask(false);
     }
 
-    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
+    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL_Primitive::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
 
     GL::SetDepthMask(prevDepthMask);

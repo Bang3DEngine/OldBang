@@ -1,6 +1,7 @@
 #ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
+#include "Bang/GL.h"
 #include "Bang/Asset.h"
 #include "Bang/Image.h"
 #include "Bang/Texture.h"
@@ -21,8 +22,8 @@ public:
               int width, int height);
     void Fill(const Byte *newData,
               int width, int height,
-              GL::ColorComp inputDataColorComp,
-              GL::DataType inputDataType);
+              GL_ColorComp inputDataColorComp,
+              GL_DataType inputDataType);
     void GenerateMipMaps() const;
 
     template<class T = Byte>
@@ -32,10 +33,10 @@ public:
         const int numComps = GL::GetNumComponents(GetInternalFormat());
         T *pixels = new T[width * height * numComps];
 
-        GLId prevBound = GL::GetBoundId(GL::BindTarget::Texture2D);
+        GLId prevBound = GL::GetBoundId(GL_BindTarget::Texture2D);
         Bind();
         GL::GetTexImage(GetTextureTarget(), pixels);
-        GL::Bind(GL::BindTarget::Texture2D, prevBound);
+        GL::Bind(GL_BindTarget::Texture2D, prevBound);
 
         Image<T> img(width, height);
         for (int y = 0; y < height; ++y)

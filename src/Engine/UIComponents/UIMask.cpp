@@ -47,8 +47,8 @@ void UIMask::PrepareStencilToDrawMask()
 
     if (IsMasking())
     {
-        GL::SetStencilOp( GL::StencilOperation::Incr );
-        GL::SetStencilFunc(GL::Function::Equal); // Only increment once
+        GL::SetStencilOp( GL_StencilOperation::Incr );
+        GL::SetStencilFunc(GL_Function::Equal); // Only increment once
     }
 }
 
@@ -63,7 +63,7 @@ void UIMask::PrepareStencilToDrawChildren()
         // Test and write for current stencil value + 1
         GL::SetStencilValue( GL::GetStencilValue() + 1 );
         GL::SetStencilOp(m_stencilOpBefore);
-        GL::SetStencilFunc(GL::Function::Equal); // Mask children
+        GL::SetStencilFunc(GL_Function::Equal); // Mask children
     }
 }
 
@@ -73,8 +73,8 @@ void UIMask::RestoreStencilBuffer(RenderPass renderPass)
 
     // Restore stencil as it was before, decrementing marked mask pixels
     GL::SetColorMask(false, false, false, false);
-    GL::SetStencilFunc(GL::Function::Equal);
-    GL::SetStencilOp( GL::StencilOperation::Decr );
+    GL::SetStencilFunc(GL_Function::Equal);
+    GL::SetStencilOp( GL_StencilOperation::Decr );
 
     m_restoringStencil = true;
     GetGameObject()->Render(renderPass, false);

@@ -24,7 +24,7 @@ void GEngineDebugger::Reset()
 }
 
 void GEngineDebugger::TakeGBufferShot(GBuffer *gbuffer,
-                                      GL::Attachment att,
+                                      GL_Attachment att,
                                       const String &screenshotName)
 {
     if (Input::GetKeyDown(Key::Q))

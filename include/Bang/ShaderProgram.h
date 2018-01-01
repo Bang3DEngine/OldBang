@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 
+#include "Bang/GL.h"
 #include "Bang/Map.h"
 #include "Bang/GLObject.h"
 #include "Bang/Resources.h"
@@ -28,7 +29,7 @@ public:
 
     void Bind() const override;
     void UnBind() const override;
-    GL::BindTarget GetGLBindTarget() const override;
+    GL_BindTarget GetGLBindTarget() const override;
 
     template<class T, class=TT_NOT_POINTER(T)>
     bool Set(const String &name, const T &v)

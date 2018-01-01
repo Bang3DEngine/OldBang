@@ -1,5 +1,6 @@
 #include "Bang/LineRenderer.h"
 
+#include "Bang/GL.h"
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
 #include "Bang/Material.h"
@@ -15,7 +16,7 @@ LineRenderer::LineRenderer()
     SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
     SetRenderPass(RenderPass::Scene_UnLighted);
 
-    SetRenderPrimitive(GL::Primitive::Lines);
+    SetRenderPrimitive(GL_Primitive::Lines);
 }
 
 LineRenderer::~LineRenderer()

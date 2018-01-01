@@ -1,12 +1,14 @@
 #include "Bang/Texture.h"
 
+#include "Bang/GL.h"
+
 USING_NAMESPACE_BANG
 
 Texture::Texture()
 {
     GL::GenTextures(1, &m_idGL);
-    SetFilterMode(GL::FilterMode::Bilinear);
-    SetWrapMode(GL::WrapMode::ClampToEdge);
+    SetFilterMode(GL_FilterMode::Bilinear);
+    SetWrapMode(GL_WrapMode::ClampToEdge);
     SetInternalFormat(m_internalFormat);
 }
 
@@ -15,7 +17,7 @@ Texture::~Texture()
     GL::DeleteTextures(1, &m_idGL);
 }
 
-Texture::Texture(GL::TextureTarget texTarget) : Texture()
+Texture::Texture(GL_TextureTarget texTarget) : Texture()
 {
     m_target = texTarget;
 }
@@ -30,38 +32,38 @@ Texture::Texture(const Texture &t) : GLObject(t)
     m_target = t.m_target;
 }
 
-void Texture::SetInternalFormat(GL::ColorFormat internalFormat)
+void Texture::SetInternalFormat(GL_ColorFormat internalFormat)
 {
     m_internalFormat = internalFormat;
 }
 
-void Texture::SetTarget(GL::TextureTarget target)
+void Texture::SetTarget(GL_TextureTarget target)
 {
     m_target = target;
 }
 
-void Texture::SetFilterMode(GL::FilterMode filterMode)
+void Texture::SetFilterMode(GL_FilterMode filterMode)
 {
     m_filterMode = filterMode;
     Bind();
-    if (GetFilterMode() == GL::FilterMode::Nearest ||
-        GetFilterMode() == GL::FilterMode::Bilinear)
+    if (GetFilterMode() == GL_FilterMode::Nearest ||
+        GetFilterMode() == GL_FilterMode::Bilinear)
     {
-        GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Mag,
+        GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Mag,
                                GetFilterMode());
     }
-    GL::TexParameterFilter(GetTextureTarget(), GL::FilterMagMin::Min,
+    GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Min,
                            GetFilterMode());
     UnBind();
 }
 
-void Texture::SetWrapMode(GL::WrapMode wrapMode)
+void Texture::SetWrapMode(GL_WrapMode wrapMode)
 {
     m_wrapMode = wrapMode;
     Bind();
-    GL::TexParameterWrap(GetTextureTarget(), GL::WrapCoord::WrapS, GetWrapMode());
-    GL::TexParameterWrap(GetTextureTarget(), GL::WrapCoord::WrapT, GetWrapMode());
-    GL::TexParameterWrap(GetTextureTarget(), GL::WrapCoord::WrapR, GetWrapMode());
+    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapS, GetWrapMode());
+    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapT, GetWrapMode());
+    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapR, GetWrapMode());
     UnBind();
 }
 
@@ -85,12 +87,12 @@ const Vector2i &Texture::GetSize() const
     return m_size;
 }
 
-GL::DataType Texture::GetInternalDataType() const
+GL_DataType Texture::GetInternalDataType() const
 {
     return GL::GetDataTypeFrom( GetInternalFormat() );
 }
 
-GL::ColorFormat Texture::GetInternalFormat() const
+GL_ColorFormat Texture::GetInternalFormat() const
 {
     return m_internalFormat;
 }
@@ -100,17 +102,17 @@ uint Texture::GetBytesSize() const
     return GetWidth() * GetHeight() * GL::GetPixelBytesSize(m_internalFormat);
 }
 
-GL::TextureTarget Texture::GetTextureTarget() const
+GL_TextureTarget Texture::GetTextureTarget() const
 {
     return m_target;
 }
 
-GL::FilterMode Texture::GetFilterMode() const
+GL_FilterMode Texture::GetFilterMode() const
 {
     return m_filterMode;
 }
 
-GL::WrapMode Texture::GetWrapMode() const
+GL_WrapMode Texture::GetWrapMode() const
 {
     return m_wrapMode;
 }
@@ -129,7 +131,7 @@ void Texture::BindToTextureUnit(int textureUnit) const
 void Texture::SetWidth(int width) { m_size.x = width; }
 void Texture::SetHeight(int height) { m_size.y = height; }
 
-GL::BindTarget Texture::GetGLBindTarget() const
+GL_BindTarget Texture::GetGLBindTarget() const
 {
-    return GL::BindTarget::Texture2D;
+    return GL_BindTarget::Texture2D;
 }

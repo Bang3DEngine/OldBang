@@ -182,7 +182,7 @@ void Gizmos::RenderFillRect(const Rect &r)
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
 
-    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
     g->Render(g->m_meshRenderer);
 }
 
@@ -236,8 +236,8 @@ void Gizmos::RenderScreenIcon(Texture2D *texture,
     SetReceivesLighting(false);
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
     g->m_meshRenderer->SetViewProjMode(fixAspectRatio ?
-                                        GL::ViewProjMode::OnlyFixAspectRatio :
-                                        GL::ViewProjMode::IgnoreBoth);
+                                        GL_ViewProjMode::OnlyFixAspectRatio :
+                                        GL_ViewProjMode::IgnoreBoth);
     g->Render(g->m_meshRenderer);
 }
 
@@ -250,7 +250,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::UseBoth);
+    g->m_singleLineRenderer->SetViewProjMode(GL_ViewProjMode::UseBoth);
     g->Render(g->m_singleLineRenderer);
 }
 
@@ -263,7 +263,7 @@ void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_singleLineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_singleLineRenderer->SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
     g->Render(g->m_singleLineRenderer);
 }
 
@@ -353,11 +353,11 @@ void Gizmos::RenderPoint(const Vector3 &point)
 
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_meshRenderer->SetMesh(m);
-    g->m_meshRenderer->SetRenderPrimitive(GL::Primitive::Points);
+    g->m_meshRenderer->SetRenderPrimitive(GL_Primitive::Points);
 
     Render(g->m_meshRenderer);
 
-    g->m_meshRenderer->SetRenderPrimitive(GL::Primitive::Triangles);
+    g->m_meshRenderer->SetRenderPrimitive(GL_Primitive::Triangles);
 }
 
 void Gizmos::Reset()
@@ -375,7 +375,7 @@ void Gizmos::Reset()
     List<Renderer*> rends = g->m_gizmosGo->GetComponents<Renderer>();
     for (Renderer *rend : rends)
     {
-        rend->SetViewProjMode(GL::ViewProjMode::UseBoth);
+        rend->SetViewProjMode(GL_ViewProjMode::UseBoth);
     }
 
     g->m_meshRenderer->GetMaterial()->SetTexture(nullptr);

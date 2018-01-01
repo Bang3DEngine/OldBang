@@ -1,7 +1,8 @@
 #include "Bang/MeshRenderer.h"
 
-#include "Bang/Mesh.h"
+#include "Bang/GL.h"
 #include "Bang/VAO.h"
+#include "Bang/Mesh.h"
 #include "Bang/MeshIO.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -12,7 +13,7 @@ USING_NAMESPACE_BANG
 
 MeshRenderer::MeshRenderer()
 {
-    SetRenderPrimitive( GL::Primitive::Triangles );
+    SetRenderPrimitive( GL_Primitive::Triangles );
 }
 
 MeshRenderer::~MeshRenderer()

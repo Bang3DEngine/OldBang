@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "Bang/GL.h"
 #include "Bang/File.h"
 #include "Bang/Path.h"
 #include "Bang/Array.h"
@@ -12,11 +13,11 @@
 
 USING_NAMESPACE_BANG
 
-Shader::Shader(GL::ShaderType t) : m_type(t)
+Shader::Shader(GL_ShaderType t) : m_type(t)
 {
 }
 
-Shader::Shader() : Shader(GL::ShaderType::Vertex)
+Shader::Shader() : Shader(GL_ShaderType::Vertex)
 {
 }
 
@@ -48,14 +49,14 @@ void Shader::RetrieveType(const Path &shaderPath)
 {
     if (shaderPath.GetExtension().Contains("vert"))
     {
-        m_type = GL::ShaderType::Vertex;
+        m_type = GL_ShaderType::Vertex;
     }
-    else { m_type = GL::ShaderType::Fragment; }
+    else { m_type = GL_ShaderType::Fragment; }
 }
 
-GL::BindTarget Shader::GetGLBindTarget() const
+GL_BindTarget Shader::GetGLBindTarget() const
 {
-    return GL::BindTarget::None;
+    return GL_BindTarget::None;
 }
 
 const String& Shader::GetSourceCode() const
@@ -63,7 +64,7 @@ const String& Shader::GetSourceCode() const
     return m_sourceCode;
 }
 
-GL::ShaderType Shader::GetType() const
+GL_ShaderType Shader::GetType() const
 {
     return m_type;
 }

@@ -2,6 +2,7 @@
 
 #include <functional>
 
+#include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Camera.h"
@@ -50,8 +51,8 @@ void Renderer::Bind() const
     GL::SetWireframe( IsRenderWireframe() );
 
     GL::SetCullFace( GetCullFace() ); // Culling states
-    if (GetCulling()) { GL::Enable( GL::Test::CullFace ); }
-    else { GL::Disable( GL::Test::CullFace ); }
+    if (GetCulling()) { GL::Enable( GL_Test::CullFace ); }
+    else { GL::Disable( GL_Test::CullFace ); }
 
     GL::LineWidth( GetLineWidth() );
 
@@ -85,26 +86,26 @@ Material* Renderer::GetSharedMaterial() const { return p_sharedMaterial.Get(); }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
-void Renderer::SetCullFace(GL::Face cullMode) { m_cullFace = cullMode; }
+void Renderer::SetCullFace(GL_Face cullMode) { m_cullFace = cullMode; }
 void Renderer::SetCulling(bool culling) { m_cullling = culling; }
-GL::Face Renderer::GetCullFace() const { return m_cullFace; }
+GL_Face Renderer::GetCullFace() const { return m_cullFace; }
 bool Renderer::GetCulling() const { return m_cullling; }
 void Renderer::SetLineWidth(float w) { m_lineWidth = w; }
 void Renderer::SetRenderWireframe(bool drawWireframe)
 {
     m_drawWireframe = drawWireframe;
 }
-void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
+void Renderer::SetViewProjMode(GL_ViewProjMode viewProjMode)
 {
     m_viewProjMode = viewProjMode;
 }
-void Renderer::SetRenderPrimitive(GL::Primitive renderMode)
+void Renderer::SetRenderPrimitive(GL_Primitive renderMode)
 {
     m_renderMode = renderMode;
 }
 
-GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
-GL::Primitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
+GL_ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
+GL_Primitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material* Renderer::GetMaterial() const
 {

@@ -8,7 +8,7 @@ USING_NAMESPACE_BANG
 SingleLineRenderer::SingleLineRenderer()
 {
     SetPoints( {Vector3::Zero, Vector3::One} );
-    SetRenderPrimitive(GL::Primitive::Lines);
+    SetRenderPrimitive(GL_Primitive::Lines);
 }
 
 SingleLineRenderer::~SingleLineRenderer()

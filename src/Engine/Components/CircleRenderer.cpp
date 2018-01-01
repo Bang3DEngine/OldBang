@@ -7,7 +7,7 @@ USING_NAMESPACE_BANG
 
 CircleRenderer::CircleRenderer()
 {
-    SetRenderPrimitive(GL::Primitive::LineStrip);
+    SetRenderPrimitive(GL_Primitive::LineStrip);
 }
 
 CircleRenderer::~CircleRenderer()

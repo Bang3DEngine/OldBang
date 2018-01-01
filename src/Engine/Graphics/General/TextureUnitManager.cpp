@@ -1,5 +1,6 @@
 #include "Bang/TextureUnitManager.h"
 
+#include "Bang/GL.h"
 #include "Bang/Texture.h"
 #include "Bang/GEngine.h"
 
@@ -7,7 +8,7 @@ USING_NAMESPACE_BANG
 
 TextureUnitManager::TextureUnitManager()
 {
-    c_numTextureUnits = GL::GetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
+    c_numTextureUnits = GL::GetInteger(GL_Enum::MaxTextureImageUnits);
 }
 
 TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
@@ -38,7 +39,7 @@ TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
         tm->m_textureIdToUnit.Add(texId, unitToUse);
 
         GL::ActiveTexture(GL_TEXTURE0 + unitToUse);
-        GL::Bind(GL::BindTarget::Texture2D, texId);
+        GL::Bind(GL_BindTarget::Texture2D, texId);
 
         // ASSERT(tm->m_usedUnits.size() == tm->m_textureIdToUnit.Size());
         ASSERT(tm->m_usedUnits.size() <= tm->c_numTextureUnits);
@@ -69,6 +70,6 @@ void TextureUnitManager::UnBindTexture(GLId textureId)
         tm->m_textureIdToUnit.Remove(textureId);
 
         GL::ActiveTexture(GL_TEXTURE0 + unit);
-        GL::UnBind(GL::BindTarget::Texture2D);
+        GL::UnBind(GL_BindTarget::Texture2D);
     }
 }

@@ -4,7 +4,7 @@
 #include <stack>
 #include <GL/glew.h>
 
-#include "Bang/GL.h"
+#include "Bang/GLEnums.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -13,7 +13,7 @@ class GLObject
 public:
     GLId GetGLId() const;
 
-    virtual GL::BindTarget GetGLBindTarget() const;
+    virtual GL_BindTarget GetGLBindTarget() const;
     virtual void Bind() const;
     virtual void UnBind() const;
 

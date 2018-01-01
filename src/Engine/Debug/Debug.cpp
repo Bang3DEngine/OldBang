@@ -53,68 +53,68 @@ void Debug::PrintUniforms(uint programId)
     int uniformsCount = GL::GetUniformsListSize(programId);
     for (int i = 0; i < uniformsCount; ++i)
     {
-        GL::DataType type = GL::GetUniformTypeAt(programId, i);
-        if (type == GL::DataType::Byte)
+        GL_DataType type = GL::GetUniformTypeAt(programId, i);
+        if (type == GL_DataType::Byte)
         {
             GL::GLSLVar<Byte> var = GL::GetUniformAt<Byte>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Double)
+        else if (type == GL_DataType::Double)
         {
             GL::GLSLVar<float> var = GL::GetUniformAt<float>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Float)
+        else if (type == GL_DataType::Float)
         {
             GL::GLSLVar<float> var = GL::GetUniformAt<float>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Int)
+        else if (type == GL_DataType::Int)
         {
             GL::GLSLVar<int> var = GL::GetUniformAt<int>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Short)
+        else if (type == GL_DataType::Short)
         {
             GL::GLSLVar<short> var = GL::GetUniformAt<short>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::UnsignedByte)
+        else if (type == GL_DataType::UnsignedByte)
         {
             GL::GLSLVar<Byte> var = GL::GetUniformAt<Byte>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::UnsignedShort)
+        else if (type == GL_DataType::UnsignedShort)
         {
             GL::GLSLVar<short> var = GL::GetUniformAt<short>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::UnsignedInt)
+        else if (type == GL_DataType::UnsignedInt)
         {
             GL::GLSLVar<int> var = GL::GetUniformAt<int>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Vector2)
+        else if (type == GL_DataType::Vector2)
         {
             GL::GLSLVar<Vector2> var = GL::GetUniformAt<Vector2>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Vector3)
+        else if (type == GL_DataType::Vector3)
         {
             GL::GLSLVar<Vector3> var = GL::GetUniformAt<Vector3>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Vector4)
+        else if (type == GL_DataType::Vector4)
         {
             GL::GLSLVar<Vector4> var = GL::GetUniformAt<Vector4>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Matrix3)
+        else if (type == GL_DataType::Matrix3)
         {
             GL::GLSLVar<Matrix3> var = GL::GetUniformAt<Matrix3>(programId, i);
             Debug_Log(var.name << ": " << var.value);
         }
-        else if (type == GL::DataType::Matrix4)
+        else if (type == GL_DataType::Matrix4)
         {
             GL::GLSLVar<Matrix4> var = GL::GetUniformAt<Matrix4>(programId, i);
             Debug_Log(var.name << ": " << var.value);
@@ -124,5 +124,5 @@ void Debug::PrintUniforms(uint programId)
 
 void Debug::PrintUniforms()
 {
-    Debug::PrintUniforms(GL::GetBoundId(GL::BindTarget::ShaderProgram));
+    Debug::PrintUniforms(GL::GetBoundId(GL_BindTarget::ShaderProgram));
 }

@@ -11,7 +11,7 @@ public:
     static Path c_debugDir;
     static void Reset();
     static void TakeGBufferShot(GBuffer *gbuffer,
-                                GL::Attachment att,
+                                GL_Attachment att,
                                 const String &screenshotName);
     static void TakeGBufferShotStencil(GBuffer *gbuffer,
                                        const String &screenshotName);

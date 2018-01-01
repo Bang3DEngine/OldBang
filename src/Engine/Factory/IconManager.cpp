@@ -19,8 +19,8 @@ RH<Texture2D> IconManager::GetIconTexture(const String &filename)
          Resources::Load<Texture2D>(Paths::EngineAssets().Append("Icons").
                                     Append(filename).AppendExtension("png"));
 
-    iconTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);
-    iconTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
+    iconTexture.Get()->SetFilterMode(GL_FilterMode::Bilinear);
+    iconTexture.Get()->SetWrapMode(GL_WrapMode::ClampToEdge);
     return iconTexture;
 }
 

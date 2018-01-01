@@ -1,5 +1,7 @@
 #include "Bang/GLObject.h"
 
+#include "Bang/GL.h"
+
 USING_NAMESPACE_BANG
 
 GLObject::GLObject() {}
@@ -9,9 +11,9 @@ GLId GLObject::GetGLId() const
     return m_idGL;
 }
 
-GL::BindTarget GLObject::GetGLBindTarget() const
+GL_BindTarget GLObject::GetGLBindTarget() const
 {
-    return GL::BindTarget::None;
+    return GL_BindTarget::None;
 }
 
 void GLObject::Bind() const

@@ -100,9 +100,9 @@ bool ShaderProgram::IsLinked() const
     return m_isLinked;
 }
 
-GL::BindTarget ShaderProgram::GetGLBindTarget() const
+GL_BindTarget ShaderProgram::GetGLBindTarget() const
 {
-    return GL::BindTarget::ShaderProgram;
+    return GL_BindTarget::ShaderProgram;
 }
 
 bool ShaderProgram::Set(const String &name, Texture2D *texture)
@@ -136,7 +136,7 @@ bool ShaderProgram::Refresh()
 
 bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 {
-    if (vertexShader->GetType() != GL::ShaderType::Vertex)
+    if (vertexShader->GetType() != GL_ShaderType::Vertex)
     {
         Debug_Error("You are trying to set as vertex shader a "
                     "non-vertex shader");
@@ -148,7 +148,7 @@ bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 
 bool ShaderProgram::SetFragmentShader(Shader* fragmentShader)
 {
-    if (fragmentShader->GetType() != GL::ShaderType::Fragment)
+    if (fragmentShader->GetType() != GL_ShaderType::Fragment)
     {
         Debug_Error("You are trying to set as fragment shader a "
                     "non-fragment shader");

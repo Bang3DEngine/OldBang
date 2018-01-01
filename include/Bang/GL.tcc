@@ -3,12 +3,15 @@
 
 #include "Bang/GL.h"
 
+#include <GL/glew.h>
+#include <GL/gl.h>
+
 NAMESPACE_BANG_BEGIN
 
 template <class T>
 bool GL::Uniform(const String &uniformName, const T& value, bool warn)
 {
-    GLId shaderProgramId = GL::GetBoundId(GL::BindTarget::ShaderProgram);
+    GLId shaderProgramId = GL::GetBoundId(GL_BindTarget::ShaderProgram);
     if (shaderProgramId <= 0)
     {
         if (warn)
@@ -114,7 +117,7 @@ T GL::GetUniform(GLId program, const String &uniformName)
 template <class T>
 T GL::GetUniform(const String &uniformName)
 {
-    return GL::GetUniform<T>(GL::GetBoundId(GL::BindTarget::ShaderProgram),
+    return GL::GetUniform<T>(GL::GetBoundId(GL_BindTarget::ShaderProgram),
                              uniformName);
 }
 
@@ -124,7 +127,7 @@ GL::GLSLVar<T> GL::GetUniformAt(GLId shaderProgramId, GLuint uniformIndex)
     if (shaderProgramId == 0) { return GL::GLSLVar<T>(); }
 
     GLint size;
-    GL::Enum type;
+    GLenum type;
     GLsizei length;
     constexpr GLsizei bufSize = 128;
     GLchar cname[bufSize];
@@ -132,8 +135,11 @@ GL::GLSLVar<T> GL::GetUniformAt(GLId shaderProgramId, GLuint uniformIndex)
     GL_CALL(
     glGetActiveUniform(shaderProgramId,
                        Cast<GLuint>(uniformIndex),
-                       bufSize, &length,
-                       &size, &type, cname);
+                       bufSize,
+                       &length,
+                       &size,
+                       &type,
+                       cname);
     );
 
     String name(cname);

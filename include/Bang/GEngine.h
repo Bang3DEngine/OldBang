@@ -1,8 +1,8 @@
 #ifndef GENGINE_H
 #define GENGINE_H
 
-#include "Bang/GL.h"
 #include "Bang/Rect.h"
+#include "Bang/GLEnums.h"
 #include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN

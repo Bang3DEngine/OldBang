@@ -12,12 +12,12 @@ USING_NAMESPACE_BANG
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     Bind();
-    CreateAttachment(AttNormal,       GL::ColorFormat::RGB10_A2_UByte);
-    CreateAttachment(AttDiffuse,      GL::ColorFormat::RGBA_UByte8);
-    CreateAttachment(AttMisc,         GL::ColorFormat::RGB10_A2_UByte);
-    CreateAttachment(AttColor,        GL::ColorFormat::RGBA_UByte8);
-    CreateAttachment(AttColorRead,    GL::ColorFormat::RGBA_UByte8);
-    CreateAttachment(AttDepthStencil, GL::ColorFormat::Depth24_Stencil8);
+    CreateAttachment(AttNormal,       GL_ColorFormat::RGB10_A2_UByte);
+    CreateAttachment(AttDiffuse,      GL_ColorFormat::RGBA_UByte8);
+    CreateAttachment(AttMisc,         GL_ColorFormat::RGB10_A2_UByte);
+    CreateAttachment(AttColor,        GL_ColorFormat::RGBA_UByte8);
+    CreateAttachment(AttColorRead,    GL_ColorFormat::RGBA_UByte8);
+    CreateAttachment(AttDepthStencil, GL_ColorFormat::Depth24_Stencil8);
     UnBind();
 }
 
@@ -43,8 +43,8 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 {
     ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
 
-    GL::StencilOperation prevStencilOp = GL::GetStencilOp();
-    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
+    GL_StencilOperation prevStencilOp = GL::GetStencilOp();
+    GL::SetStencilOp(GL_StencilOperation::Keep); // Dont modify stencil
 
     if (willReadFromColor) { PrepareColorReadBuffer(mask); }
 
@@ -68,8 +68,8 @@ void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
     Rect rf (readNDCRect * 0.5f + 0.5f);
     Recti r ( Rect(Vector2::Floor(rf.GetMin()),
                    Vector2::Ceil(rf.GetMax())) * GetSize() );
-    GL::BlitFramebuffer(r, r, GL::FilterMode::Nearest,
-                        GL::BufferBit::Color);
+    GL::BlitFramebuffer(r, r, GL_FilterMode::Nearest,
+                        GL_BufferBit::Color);
     PopDrawAttachments();
 }
 

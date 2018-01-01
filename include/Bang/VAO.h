@@ -19,14 +19,14 @@ public:
     void BindVBO(const VBO *vbo,
                  int location,
                  int dataComponentsCount,
-                 GL::DataType dataType = GL::DataType::Float,
+                 GL_DataType dataType = GL_DataType::Float,
                  bool dataNormalized   = false,
                  int dataStride        = 0,
                  int dataOffset        = 0);
 
     void UnBindVBO(GLint location);
 
-    GL::BindTarget GetGLBindTarget() const override;
+    GL_BindTarget GetGLBindTarget() const override;
 
     void Bind() const override;
     void UnBind() const override;

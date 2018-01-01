@@ -3,8 +3,8 @@
 
 #include <queue>
 
-#include "Bang/GL.h"
 #include "Bang/Map.h"
+#include "Bang/GLEnums.h"
 
 NAMESPACE_BANG_BEGIN
 

@@ -17,18 +17,18 @@ class Shader : public GLObject,
 
 public:
     Shader();
-    Shader(GL::ShaderType t);
+    Shader(GL_ShaderType t);
 
-    GL::BindTarget GetGLBindTarget() const override;
+    GL_BindTarget GetGLBindTarget() const override;
 
     const String& GetSourceCode() const;
-    GL::ShaderType GetType() const;
+    GL_ShaderType GetType() const;
 
     // Resource
     virtual void Import(const Path &shaderFilepath) override;
 
 private:
-    GL::ShaderType m_type;
+    GL_ShaderType m_type;
     String m_sourceCode = "";
 
     void RetrieveType(const Path &shaderPath);

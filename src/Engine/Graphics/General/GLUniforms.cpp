@@ -95,13 +95,13 @@ void GLUniforms::UpdatePVMMatrix()
     const Matrix4 &model = matrices->GetData()->model;
     switch (gu->GetViewProjMode())
     {
-        case GL::ViewProjMode::UseBoth:
+        case GL_ViewProjMode::UseBoth:
             pvmMatrix = matrices->GetData()->proj *
                         matrices->GetData()->view *
                         model;
         break;
 
-        case GL::ViewProjMode::OnlyFixAspectRatio:
+        case GL_ViewProjMode::OnlyFixAspectRatio:
         {
             Matrix4 modelTranslate( Vector4(1,0,0,0),
                                     Vector4(0,1,0,0),
@@ -121,11 +121,11 @@ void GLUniforms::UpdatePVMMatrix()
         }
         break;
 
-        case GL::ViewProjMode::IgnoreBoth:
+        case GL_ViewProjMode::IgnoreBoth:
             pvmMatrix = model;
             break;
 
-        case GL::ViewProjMode::IgnoreBothAndModel:
+        case GL_ViewProjMode::IgnoreBothAndModel:
             pvmMatrix = Matrix4::Identity;
             break;
     }
@@ -134,7 +134,7 @@ void GLUniforms::UpdatePVMMatrix()
     matrices->UpdateBuffer();
 }
 
-void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
+void GLUniforms::SetViewProjMode(GL_ViewProjMode viewProjMode)
 {
     if (viewProjMode != GetViewProjMode())
     {
@@ -143,7 +143,7 @@ void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
     }
 }
 
-GL::ViewProjMode GLUniforms::GetViewProjMode() const
+GL_ViewProjMode GLUniforms::GetViewProjMode() const
 {
     return m_viewProjMode;
 }

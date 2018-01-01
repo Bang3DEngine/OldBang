@@ -84,7 +84,7 @@ DebugRenderer::~DebugRenderer()
 
 void DebugRenderer::Render(bool withDepth)
 {
-    GL::Function prevDepthFunc = GL::GetDepthFunc();
+    GL_Function prevDepthFunc = GL::GetDepthFunc();
     for (auto it = m_primitivesToRender.Begin();
          it != m_primitivesToRender.End(); )
     {
@@ -100,8 +100,8 @@ void DebugRenderer::Render(bool withDepth)
         }
         else
         {
-            GL::SetDepthFunc(drp->depthTest ? GL::Function::LEqual :
-                                              GL::Function::Always);
+            GL::SetDepthFunc(drp->depthTest ? GL_Function::LEqual :
+                                              GL_Function::Always);
             Gizmos::SetColor(drp->color);
             Gizmos::SetThickness(drp->thickness);
             switch (drp->primitive)
