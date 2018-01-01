@@ -19,7 +19,7 @@ protected:
     IUniformBuffer();
 
 private:
-    GLuint m_bindingPoint;
+    GLuint m_bindingPoint = -1;
 };
 
 NAMESPACE_BANG_END
