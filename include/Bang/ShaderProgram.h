@@ -1,6 +1,8 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
+#include <unordered_map>
+
 #include "Bang/Map.h"
 #include "Bang/GLObject.h"
 #include "Bang/Resources.h"
@@ -56,8 +58,10 @@ private:
     RH<Shader> p_fshader;
     bool m_isLinked = false;
 
-    mutable Map<String, GLuint> m_nameToLocationCache;
-    mutable Map<String, Texture2D*> m_namesToTexture;
+    mutable std::unordered_map<String, GLuint> m_nameToLocationCache;
+    mutable std::unordered_map<String, Texture2D*> m_namesToTexture;
+    // mutable Map<String, GLuint> m_nameToLocationCache;
+    // mutable Map<String, Texture2D*> m_namesToTexture;
 
     ShaderProgram();
     ShaderProgram(Shader *vShader, Shader *fShader);

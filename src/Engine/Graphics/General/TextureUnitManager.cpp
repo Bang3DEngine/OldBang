@@ -17,7 +17,7 @@ TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
 
     TexUnit unitToUse = 0;
     TexUnitMap::Iterator it = tm->m_textureIdToUnit.Find(texId);
-    if (it != tm->m_textureIdToUnit.End())
+    if (false && it != tm->m_textureIdToUnit.End())
     {
         // It was still bound, reuse it (just return where it is)
         unitToUse = it->second;
@@ -40,7 +40,7 @@ TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
         GL::ActiveTexture(GL_TEXTURE0 + unitToUse);
         GL::Bind(GL::BindTarget::Texture2D, texId);
 
-        ASSERT(tm->m_usedUnits.size() == tm->m_textureIdToUnit.Size());
+        // ASSERT(tm->m_usedUnits.size() == tm->m_textureIdToUnit.Size());
         ASSERT(tm->m_usedUnits.size() <= tm->c_numTextureUnits);
     }
 

@@ -92,7 +92,7 @@ void GLUniforms::UpdatePVMMatrix()
     GLUniforms *gu = GLUniforms::GetActive();
 
     Matrix4 pvmMatrix;
-    Matrix4 model = matrices->GetData()->model;
+    const Matrix4 &model = matrices->GetData()->model;
     switch (gu->GetViewProjMode())
     {
         case GL::ViewProjMode::UseBoth:

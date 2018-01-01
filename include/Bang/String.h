@@ -286,4 +286,18 @@ String operator+(const T &v, const char *str)
 
 NAMESPACE_BANG_END
 
+// Hash specialization
+namespace std
+{
+    template <>
+    struct hash<Bang::String>
+    {
+        std::size_t operator()(const Bang::String& str) const
+        {
+            return std::hash<std::string>()(str);
+        }
+    };
+
+}
+
 #endif // STRING_H

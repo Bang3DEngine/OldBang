@@ -170,17 +170,17 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     light3Go->GetTransform()->SetPosition( Vector3(0, 4, 0) );
     light3Go->GetTransform()->LookAt( Vector3::Zero );
 
-    GameObject *floor = MeshFactory::GetCubeGameObject();
+    GameObject *floor = GameObjectFactory::CreateCubeGameObject();
     floor->SetName("Floor");
     floor->GetTransform()->TranslateLocal( Vector3(0, -1, 0) );
     floor->GetTransform()->SetLocalScale( Vector3(10.0f, 0.2f, 10.0f));
 
-    GameObject *wall1 = MeshFactory::GetCubeGameObject();
+    GameObject *wall1 = GameObjectFactory::CreateCubeGameObject();
     wall1->SetName("Wall1");
     wall1->GetTransform()->TranslateLocal( Vector3(-4, 3, 0) );
     wall1->GetTransform()->SetLocalScale( Vector3(0.2f, 10.0f, 10.0f));
 
-    GameObject *wall2 = MeshFactory::GetCubeGameObject();
+    GameObject *wall2 = GameObjectFactory::CreateCubeGameObject();
     wall2->SetName("Wall2");
     wall2->GetTransform()->TranslateLocal( Vector3(0, 3, -4) );
     wall2->GetTransform()->SetLocalRotation( Quaternion::AngleAxis(Math::Pi/2, Vector3::Up) );
@@ -491,4 +491,42 @@ GameObject *GameObjectFactory::CreateUIVSeparator(LayoutSizeType sizeType,
             GameObjectFactory::CreateUISeparator(sizeType, Vector2i(spaceX, 0),
                                                  linePercent);
     return sepGo;
+}
+
+GameObject* GameObjectFactory::CreateGameObjectWithMesh(Mesh* m,
+                                                        const String &name)
+{
+    GameObject *go = GameObjectFactory::CreateGameObject(true);
+    go->SetName(name);
+
+    MeshRenderer *r = go->AddComponent<MeshRenderer>();
+    r->SetRenderPrimitive(GL::Primitive::Triangles);
+    r->SetMaterial(MaterialFactory::GetDefault().Get());
+    r->SetMesh(m);
+
+    return go;
+}
+
+GameObject* GameObjectFactory::CreatePlaneGameObject()
+{
+    RH<Mesh> mesh = MeshFactory::GetPlane();
+    return CreateGameObjectWithMesh(mesh.Get(), "Plane");
+}
+
+GameObject* GameObjectFactory::CreateCubeGameObject()
+{
+    RH<Mesh> mesh = MeshFactory::GetCube();
+    return CreateGameObjectWithMesh(mesh.Get(), "Cube");
+}
+
+GameObject* GameObjectFactory::CreateSphereGameObject()
+{
+    RH<Mesh> mesh = MeshFactory::GetSphere();
+    return CreateGameObjectWithMesh(mesh.Get(), "Sphere");
+}
+
+GameObject* GameObjectFactory::CreateConeGameObject()
+{
+    RH<Mesh> mesh = MeshFactory::GetCone();
+    return CreateGameObjectWithMesh(mesh.Get(), "Cone");
 }

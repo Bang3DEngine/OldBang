@@ -14,18 +14,11 @@ public:
     static RH<Mesh> GetSphere();
     static RH<Mesh> GetCone();
 
-    static GameObject* GetPlaneGameObject();
-    static GameObject* GetCubeGameObject();
-    static GameObject* GetSphereGameObject();
-    static GameObject* GetConeGameObject();
-
 private:
     Map<String, RH<Mesh>> m_cache;
 
     MeshFactory() = default;
     static RH<Mesh> GetMesh(const String &enginePath);
-
-    static GameObject* CreatePrimitiveGameObject(Mesh* m, const String &name);
 
     static MeshFactory* GetActive();
 

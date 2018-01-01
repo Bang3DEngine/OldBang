@@ -90,7 +90,8 @@ bool ShaderProgram::Link()
 
     m_isLinked = true;
     GLUniforms::BindAllUniformBuffersToShader(this);
-    m_nameToLocationCache.Clear(); // Invalidate cache
+    m_nameToLocationCache.clear(); // Invalidate cache
+    m_namesToTexture.clear(); // Invalidate cache
     return true;
 }
 
@@ -106,19 +107,25 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
 
 bool ShaderProgram::Set(const String &name, Texture2D *texture)
 {
-    if (m_namesToTexture.ContainsKey(name))
+    bool needToAdd = true;
+
+    auto it = m_namesToTexture.find(name);
+    if (it != m_namesToTexture.end())
     {
-        Texture2D *tex = m_namesToTexture[name];
-        if (tex) { tex->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
+        if (texture != it->second)
+        {
+            needToAdd = true;
+            Texture2D *tex = it->second;
+            if (tex) { tex->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
+        }
     }
 
-    if (texture)
+    if (needToAdd)
     {
-        texture->EventEmitter<IDestroyListener>::RegisterListener(this);
+        m_namesToTexture[name] = texture;
+        if (texture) { texture->EventEmitter<IDestroyListener>::RegisterListener(this); }
+        if (GL::IsBound(this)) { BindTextureToAvailableUnit(name, texture); }
     }
-    m_namesToTexture[name] = texture;
-
-    if (GL::IsBound(this)) { BindTextureToAvailableUnit(name, texture); }
     return true;
 }
 
@@ -156,8 +163,8 @@ Shader* ShaderProgram::GetFragmentShader() const { return p_fshader.Get(); }
 
 GLint ShaderProgram::GetUniformLocation(const String &name) const
 {
-    auto it = m_nameToLocationCache.Find(name);
-    if (it != m_nameToLocationCache.End()) { return it->second; }
+    auto it = m_nameToLocationCache.find(name);
+    if (it != m_nameToLocationCache.end()) { return it->second; }
 
     const GLuint location = GL::GetUniformLocation(m_idGL, name);
     m_nameToLocationCache[name] = location;
@@ -194,12 +201,12 @@ void ShaderProgram::UnBind() const
 
 void ShaderProgram::OnDestroyed(Object *obj)
 {
-    for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); )
+    for (auto it = m_namesToTexture.begin(); it != m_namesToTexture.end(); )
     {
         Texture2D *tex = it->second;
         if (tex == Cast<Texture2D*>(obj))
         {
-            it = m_namesToTexture.Remove(it);
+            it = m_namesToTexture.erase(it);
             // Dont break, in case it has obj texture several times
         }
         else { ++it; }
@@ -208,8 +215,8 @@ void ShaderProgram::OnDestroyed(Object *obj)
 
 void ShaderProgram::UpdateTextureBindings() const
 {
-    for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); ++it)
+    for (const auto &nameTexPair : m_namesToTexture)
     {
-        BindTextureToAvailableUnit(it->first, it->second);
+        BindTextureToAvailableUnit(nameTexPair.first, nameTexPair.second);
     }
 }

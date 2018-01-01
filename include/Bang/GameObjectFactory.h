@@ -99,12 +99,18 @@ public:
 
     static String GetGameObjectDuplicateName(const GameObject *go);
 
+    static GameObject* CreatePlaneGameObject();
+    static GameObject* CreateCubeGameObject();
+    static GameObject* CreateSphereGameObject();
+    static GameObject* CreateConeGameObject();
+
     GameObjectFactory() = delete;
 
 private:
     static GameObject* CreateUISeparator(LayoutSizeType sizeType,
                                          const Vector2i &space,
                                          float linePercent);
+    static GameObject* CreateGameObjectWithMesh(Mesh* m, const String &name);
 
 };
 

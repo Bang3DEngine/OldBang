@@ -28,44 +28,7 @@ RH<Mesh> MeshFactory::GetMesh(const String &enginePath)
     return mf->m_cache.Get(enginePath);
 }
 
-GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh* m, const String &name)
-{
-    GameObject *go = GameObjectFactory::CreateGameObject(true);
-    go->SetName(name);
-
-    MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderPrimitive(GL::Primitive::Triangles);
-    r->SetMaterial(MaterialFactory::GetDefault().Get());
-    r->SetMesh(m);
-
-    return go;
-}
-
 MeshFactory *MeshFactory::GetActive()
 {
     return Resources::GetActive()->m_meshFactory;
-}
-
-GameObject* MeshFactory::GetPlaneGameObject()
-{
-    RH<Mesh> mesh = MeshFactory::GetPlane();
-    return CreatePrimitiveGameObject(mesh.Get(), "Plane");
-}
-
-GameObject* MeshFactory::GetCubeGameObject()
-{
-    RH<Mesh> mesh = MeshFactory::GetCube();
-    return CreatePrimitiveGameObject(mesh.Get(), "Cube");
-}
-
-GameObject* MeshFactory::GetSphereGameObject()
-{
-    RH<Mesh> mesh = MeshFactory::GetSphere();
-    return CreatePrimitiveGameObject(mesh.Get(), "Sphere");
-}
-
-GameObject* MeshFactory::GetConeGameObject()
-{
-    RH<Mesh> mesh = MeshFactory::GetCone();
-    return CreatePrimitiveGameObject(mesh.Get(), "Cone");
 }

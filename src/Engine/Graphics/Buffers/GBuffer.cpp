@@ -3,10 +3,9 @@
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/GEngine.h"
 #include "Bang/Texture2D.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/GEngine.h"
-#include "Bang/TextureUnitManager.h"
 
 USING_NAMESPACE_BANG
 

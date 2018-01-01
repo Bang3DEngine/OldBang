@@ -13,10 +13,13 @@ IUniformBuffer::~IUniformBuffer()
 
 void IUniformBuffer::SetBindingPoint(int bindingPoint)
 {
-    m_bindingPoint = bindingPoint;
-    Bind();
-    glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, GetGLId());
-    UnBind();
+    if (bindingPoint != GetBindingPoint())
+    {
+        m_bindingPoint = bindingPoint;
+        Bind();
+        glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, GetGLId());
+        UnBind();
+    }
 }
 
 GLuint IUniformBuffer::GetBindingPoint() const { return m_bindingPoint; }

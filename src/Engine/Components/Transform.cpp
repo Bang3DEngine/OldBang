@@ -412,19 +412,10 @@ void Transform::OnParentTransformChanged()
 {
     IInvalidatable<Transform>::Invalidate();
     PropagateParentTransformChangedEventToChildren();
-
-    List<Transform*> childrenTransforms = GetGameObject()->
-                                    GetComponentsInChildrenOnly<Transform>(true);
-    for (Transform *t : childrenTransforms)
-    {
-        t->Invalidate();
-    }
 }
 
 void Transform::OnChildrenTransformChanged()
 {
-    IInvalidatable<Transform>::Invalidate();
-    PropagateChildrenTransformChangedEventToParent();
 }
 
 
