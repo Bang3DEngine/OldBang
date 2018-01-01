@@ -18,13 +18,11 @@
 #include "Bang/AudioListener.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/CircleRenderer.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/PostProcessEffect.h"
-#include "Bang/SingleLineRenderer.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
@@ -49,13 +47,11 @@ Component* ComponentFactory::Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, UIScrollArea);
     CREATE_COMPONENT(componentClassName, AudioListener);
     CREATE_COMPONENT(componentClassName, RectTransform);
-    CREATE_COMPONENT(componentClassName, CircleRenderer);
     CREATE_COMPONENT(componentClassName, UITextRenderer);
     CREATE_COMPONENT(componentClassName, UIImageRenderer);
     CREATE_COMPONENT(componentClassName, DirectionalLight);
     CREATE_COMPONENT(componentClassName, UIVerticalLayout);
     CREATE_COMPONENT(componentClassName, PostProcessEffect);
-    CREATE_COMPONENT(componentClassName, SingleLineRenderer);
     CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
 
     Debug_Warn("Please register class '" << componentClassName << "' in "
@@ -85,13 +81,11 @@ bool ComponentFactory::Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, UIScrollArea);
     EXISTS_COMPONENT(componentClassName, AudioListener);
     EXISTS_COMPONENT(componentClassName, RectTransform);
-    EXISTS_COMPONENT(componentClassName, CircleRenderer);
     EXISTS_COMPONENT(componentClassName, UITextRenderer);
     EXISTS_COMPONENT(componentClassName, UIImageRenderer);
     EXISTS_COMPONENT(componentClassName, DirectionalLight);
     EXISTS_COMPONENT(componentClassName, UIVerticalLayout);
     EXISTS_COMPONENT(componentClassName, PostProcessEffect);
-    EXISTS_COMPONENT(componentClassName, SingleLineRenderer);
     EXISTS_COMPONENT(componentClassName, UIHorizontalLayout);
 
     return false;

@@ -19,13 +19,12 @@
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
+#include "Bang/LineRenderer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/CircleRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/RendererFactory.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SingleLineRenderer.h"
 
 USING_NAMESPACE_BANG
 
@@ -38,10 +37,9 @@ Gizmos::Gizmos()
     p_planeMesh = Resources::Clone<Mesh>(MeshFactory::GetPlane());
     p_sphereMesh = Resources::Clone<Mesh>(MeshFactory::GetSphere());
 
-    m_singleLineRenderer = m_gizmosGo->AddComponent<SingleLineRenderer>();
-    m_circleRenderer     = m_gizmosGo->AddComponent<CircleRenderer>();
-    m_meshRenderer       = m_gizmosGo->AddComponent<MeshRenderer>();
-    m_renderers          = m_gizmosGo->GetComponents<Renderer>();
+    m_lineRenderer = m_gizmosGo->AddComponent<LineRenderer>();
+    m_meshRenderer = m_gizmosGo->AddComponent<MeshRenderer>();
+    m_renderers    = m_gizmosGo->GetComponents<Renderer>();
 
     for (Renderer *rend : m_renderers)
     {
@@ -186,13 +184,6 @@ void Gizmos::RenderFillRect(const Rect &r)
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderCircle(float radius)
-{
-    Gizmos *g = Gizmos::GetInstance();
-    g->m_circleRenderer->SetRadius(radius);
-    g->Render(g->m_circleRenderer);
-}
-
 void Gizmos::RenderIcon(Texture2D *texture, bool billboard)
 {
     Gizmos *g = Gizmos::GetInstance();
@@ -244,27 +235,26 @@ void Gizmos::RenderScreenIcon(Texture2D *texture,
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_singleLineRenderer->SetOrigin(origin);
-    g->m_singleLineRenderer->SetDestiny(destiny);
+    g->m_lineRenderer->SetPoints( {origin, destiny} );
 
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_singleLineRenderer->SetViewProjMode(GL_ViewProjMode::UseBoth);
-    g->Render(g->m_singleLineRenderer);
+    g->m_lineRenderer->SetViewProjMode(GL_ViewProjMode::UseBoth);
+    g->Render(g->m_lineRenderer);
 }
 
 void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_singleLineRenderer->SetOrigin( Vector3(origin, 0) );
-    g->m_singleLineRenderer->SetDestiny( Vector3(destiny, 0) );
+    g->m_lineRenderer->SetPoints( {Vector3(origin.x, origin.y, 0),
+                                   Vector3(destiny.x, destiny.y, 0)} );
 
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_singleLineRenderer->SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
-    g->Render(g->m_singleLineRenderer);
+    g->m_lineRenderer->SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
+    g->Render(g->m_lineRenderer);
 }
 
 void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
@@ -326,21 +316,6 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
     Gizmos::RenderLine(nearUpRight  , farUpRight);
     Gizmos::RenderLine(nearDownRight, farDownRight);
     Gizmos::RenderLine(nearDownLeft , farDownLeft);
-}
-
-void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
-{
-    Gizmos *g = Gizmos::GetInstance();
-    g->m_circleRenderer->SetRadius(radius);
-
-    g->m_gizmosGo->GetTransform()->SetPosition(origin);
-
-    g->m_gizmosGo->GetTransform()->SetLocalEuler(0, 0, 0);
-    g->Render(g->m_circleRenderer);
-    g->m_gizmosGo->GetTransform()->SetLocalEuler(0, 90, 0);
-    g->Render(g->m_circleRenderer);
-    g->m_gizmosGo->GetTransform()->SetLocalEuler(90, 0, 0);
-    Render(g->m_circleRenderer);
 }
 
 void Gizmos::RenderPoint(const Vector3 &point)

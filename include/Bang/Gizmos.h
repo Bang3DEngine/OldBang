@@ -9,9 +9,8 @@ NAMESPACE_BANG_BEGIN
 FORWARD   class Material;
 FORWARD   class Renderer;
 FORWARD   class Texture2D;
+FORWARD   class LineRenderer;
 FORWARD   class MeshRenderer;
-FORWARD   class CircleRenderer;
-FORWARD   class SingleLineRenderer;
 
 class Gizmos
 {
@@ -36,7 +35,6 @@ public:
     static void RenderScreenIcon(Texture2D *texture,
                                  const Rect &screenRect,
                                  bool fixAspectRatio = false);
-    static void RenderCircle(float radius);
     static void RenderScreenLine(const Vector2 &origin,
                                  const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin,
@@ -49,7 +47,6 @@ public:
                               const Vector3 &origin,
                               float zNear, float zFar,
                               float fovDegrees, float aspectRatio);
-    static void RenderSimpleSphere(const Vector3 &origin, float radius);
     static void RenderPoint(const Vector3 &point);
 
     static void Render(Renderer *rend);
@@ -65,8 +62,7 @@ private:
     RH<Mesh> p_planeMesh;
     RH<Mesh> p_sphereMesh;
 
-    SingleLineRenderer *m_singleLineRenderer = nullptr;
-    CircleRenderer *m_circleRenderer = nullptr;
+    LineRenderer *m_lineRenderer = nullptr;
     MeshRenderer *m_meshRenderer = nullptr;
     List<Renderer*> m_renderers;
 

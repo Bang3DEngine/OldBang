@@ -158,7 +158,6 @@ ${ENGINE_SRC_DIR}/Compiler/Compiler.cpp
 ${ENGINE_SRC_DIR}/Components/AudioListener.cpp
 ${ENGINE_SRC_DIR}/Components/AudioSource.cpp
 ${ENGINE_SRC_DIR}/Components/Camera.cpp
-${ENGINE_SRC_DIR}/Components/CircleRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
 ${ENGINE_SRC_DIR}/Components/Light.cpp
@@ -168,7 +167,6 @@ ${ENGINE_SRC_DIR}/Components/PointLight.cpp
 ${ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
 ${ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${ENGINE_SRC_DIR}/Components/Renderer.cpp
-${ENGINE_SRC_DIR}/Components/SingleLineRenderer.cpp
 ${ENGINE_SRC_DIR}/Components/Timer.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
