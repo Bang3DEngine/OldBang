@@ -62,6 +62,7 @@ void Texture2D::Fill(const Byte *newData,
     SetWidth(width);
     SetHeight(height);
 
+    GLId prevBoundId = GL::GetBoundId(GL::BindTarget::Texture2D);
     Bind();
     GL::TexImage2D(GetTextureTarget(),
                    GetWidth(), GetHeight(),
@@ -73,7 +74,7 @@ void Texture2D::Fill(const Byte *newData,
     {
         GenerateMipMaps();
     }
-    UnBind();
+    GL::Bind(GL::BindTarget::Texture2D, prevBoundId);
 }
 
 void Texture2D::GenerateMipMaps() const

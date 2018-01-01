@@ -138,7 +138,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     camera->BindGBuffer();
 
     // GBuffer Scene rendering
-    GL::Enablei(GL::Blend, 3);
+    GL::Enablei(GL::Test::Blend, 3);
     GL::SetDepthMask(true); // Write depth
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
@@ -154,7 +154,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_UnLighted);
     go->Render(RenderPass::Scene_PostProcess);
 
-    GL::Enable(GL::Blend);
+    GL::Enable(GL::Test::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
     camera->GetGBuffer()->SetColorDrawBuffer();
 
@@ -175,7 +175,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Gizmos);
     go->RenderGizmos();
 
-    GL::Disable(GL::Blend);
+    GL::Disable(GL::Test::Blend);
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
@@ -229,8 +229,7 @@ void GEngine::RenderToScreen(Texture2D *fullScreenTexture)
     ASSERT(fullScreenTexture);
     p_renderGBufferToScreenMaterial.Get()->Bind();
 
-    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->
-                        GetShaderProgram();
+    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()-> GetShaderProgram();
     sp->Set("B_GTex_Color", fullScreenTexture);
 
     GEngine::RenderScreenPlane();
@@ -253,12 +252,10 @@ void GEngine::RenderScreenPlane(bool withDepth)
         GL::SetDepthFunc(GL::Function::Always);
         GL::SetDepthMask(false);
     }
-    GL::Disable(GL::Test::CullFace);
 
     GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
 
-    GL::Enable(GL::Test::CullFace);
     GL::SetDepthMask(prevDepthMask);
     GL::SetDepthFunc(prevDepthFunc);
     GL::SetWireframe(prevWireframe);

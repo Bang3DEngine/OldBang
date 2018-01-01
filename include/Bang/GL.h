@@ -48,7 +48,6 @@ public:
     enum
     {
         Viewport  = GL_VIEWPORT,
-        Blend     = GL_BLEND,
         WriteOnly = GL_WRITE_ONLY,
         ReadOnly  = GL_READ_ONLY,
         ReadWrite = GL_READ_WRITE
@@ -70,6 +69,7 @@ public:
 
     enum class Test
     {
+        Blend    = GL_BLEND,
         Depth    = GL_DEPTH_TEST,
         Stencil  = GL_STENCIL_TEST,
         Scissor  = GL_SCISSOR_TEST,
@@ -295,14 +295,13 @@ public:
     static void ClearDepthBuffer(float clearDepth = 1.0f);
     static void ClearStencilBuffer(int stencilValue = 0);
 
-    static void Enablei (GL::Enum glEnum, int index);
     static void Enablei (GL::Test glTest, int index);
-    static void Disablei(GL::Enum glEnum, int index);
     static void Disablei(GL::Test glTest, int index);
-    static void Enable (GL::Enum glEnum);
     static void Enable (GL::Test glTest);
-    static void Disable(GL::Enum glEnum);
     static void Disable(GL::Test glTest);
+    static bool IsEnabled(GL::Test glTest);
+    static bool IsEnabledi(GL::Test glTest, int index);
+
 
     static void EnableVertexAttribArray(int location);
     static void DisableVertexAttribArray(int location);
@@ -577,6 +576,8 @@ private:
     Byte m_stencilValue  = 0;
     uint m_stencilMask   = 0xFF;
     Recti m_viewportRect = Recti::Zero;
+    Map<GL::Test, bool> m_enabledTests;
+    Map<std::pair<GL::Test, int>, bool> m_enabled_i_Tests;
 
     bool m_depthMask = true;
     GL::Function m_depthFunc = GL::Function::Less;

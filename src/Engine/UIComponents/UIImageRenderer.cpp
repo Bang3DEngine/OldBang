@@ -8,8 +8,8 @@
 #include "Bang/GameObject.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutManager.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -29,9 +29,13 @@ UIImageRenderer::~UIImageRenderer()
 void UIImageRenderer::OnRender()
 {
     UIRenderer::OnRender();
-    if (m_hasChanged) { RegenerateQuadVAO(); }
-    GL::Render(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
-               p_quadMesh.Get()->GetVertexCount());
+    RegenerateQuadVAO();
+
+    if (GetTint().a > 0.0f)
+    {
+        GL::Render(p_quadMesh.Get()->GetVAO(), GetRenderPrimitive(),
+                   p_quadMesh.Get()->GetVertexCount());
+    }
 }
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
@@ -122,7 +126,9 @@ void UIImageRenderer::OnChanged()
 
 void UIImageRenderer::RegenerateQuadVAO()
 {
+    if (!m_hasChanged) { return; }
     m_hasChanged = false;
+
     RectTransform *rt = GetGameObject()->GetRectTransform();
     Rect rectPx = rt->GetViewportRect();
     Vector2i rectSize(rectPx.GetSize());

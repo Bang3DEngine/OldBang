@@ -65,8 +65,7 @@ private:
                   const Path& fShaderPath);
     virtual ~ShaderProgram();
 
-    bool BindTextureToAvailableUnit(const String &texName,
-                                    Texture2D *texture) const;
+    bool BindTextureToAvailableUnit(const String &texName, Texture2D *texture) const;
     void UpdateTextureBindings() const;
 };
 

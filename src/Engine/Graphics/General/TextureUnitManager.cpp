@@ -26,17 +26,22 @@ TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const GLId texId)
     {
         if (tm->m_usedUnits.size() < tm->c_numTextureUnits)
         {
-            unitToUse = tm->m_usedUnits.size() + 1;
+            unitToUse = tm->m_usedUnits.size();
         }
         else
-        {   // Reuse oldest texture unit
+        {   // Free oldest texture unit
             unitToUse = tm->m_usedUnits.front();
             tm->m_usedUnits.pop();
+            tm->m_textureIdToUnit.RemoveValues(unitToUse);
         }
         tm->m_usedUnits.push(unitToUse);
+        tm->m_textureIdToUnit.Add(texId, unitToUse);
 
         GL::ActiveTexture(GL_TEXTURE0 + unitToUse);
         GL::Bind(GL::BindTarget::Texture2D, texId);
+
+        ASSERT(tm->m_usedUnits.size() == tm->m_textureIdToUnit.Size());
+        ASSERT(tm->m_usedUnits.size() <= tm->c_numTextureUnits);
     }
 
     return unitToUse;

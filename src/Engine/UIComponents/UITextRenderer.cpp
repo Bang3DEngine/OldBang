@@ -42,10 +42,13 @@ UITextRenderer::~UITextRenderer()
 void UITextRenderer::OnRender()
 {
     UIRenderer::OnRender();
-
     RegenerateCharQuadsVAO();
+
     int vertCount = p_mesh.Get()->GetVertexCount();
-    GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
+    if (vertCount >= 3)
+    {
+        GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
+    }
 }
 
 void UITextRenderer::CalculateLayout(Axis axis)
@@ -213,7 +216,7 @@ void UITextRenderer::Bind() const
             Texture2D *fontAtlas = GetFont()->GetFontAtlas(GetTextSize());
             GetMaterial()->SetTexture(fontAtlas);
         }
-        GL::Uniform("B_usingDistField", usingDistField,  false);
+        // GL::Uniform("B_usingDistField", usingDistField,  false);
     }
 }
 

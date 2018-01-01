@@ -212,17 +212,73 @@ void GL::BlendFunc(GL::BlendFactor srcFactor, GL::BlendFactor dstFactor)
     GL_CALL( glBlendFunc( GLCAST(srcFactor), GLCAST(dstFactor) ) );
 }
 
-void GL::Enablei (GL::Enum glEnum, int i) { GL_CALL(glEnablei(glEnum, i)); }
-void GL::Enablei (GL::Test glTest, int i) { GL::Enablei( GLCAST(glTest), i ); }
+void GL::Enablei (GL::Test glTest, int i)
+{
+    if (!GL::IsEnabledi(glTest, i))
+    {
+        GL_CALL( glEnablei( GLCAST(glTest), i ) );
 
-void GL::Disablei(GL::Enum glEnum, int i) { GL_CALL(glDisablei(glEnum, i)); }
-void GL::Disablei(GL::Test glTest, int i) { GL::Disablei( GLCAST(glTest), i ); }
+        GL *gl = GL::GetActive();
+        if (gl) { gl->m_enabled_i_Tests[std::make_pair(glTest, i)] = true; }
+    }
+}
+void GL::Disablei(GL::Test glTest, int i)
+{
+    if (GL::IsEnabledi(glTest, i))
+    {
+        GL_CALL( glDisablei( GLCAST(glTest), i ) );
 
-void GL::Enable(GL::Enum glEnum) { GL_CALL( glEnable(glEnum) ); }
-void GL::Enable(GL::Test glTest) { GL::Enable( GLCAST(glTest) ); }
+        GL *gl = GL::GetActive();
+        if (gl) { gl->m_enabled_i_Tests[std::make_pair(glTest, i)] = false; }
+    }
+}
 
-void GL::Disable(GL::Enum glEnum) { GL_CALL( glDisable(glEnum) ); }
-void GL::Disable(GL::Test glTest) { GL::Disable( GLCAST(glTest) ); }
+void GL::Enable(GL::Test glTest)
+{
+    if (!GL::IsEnabled(glTest))
+    {
+        GL_CALL( glEnable( GLCAST(glTest) ) );
+
+        GL *gl = GL::GetActive();
+        if (gl) { gl->m_enabledTests[glTest] = true; }
+    }
+}
+
+void GL::Disable(GL::Test glTest)
+{
+    if (GL::IsEnabled(glTest))
+    {
+        GL_CALL( glDisable( GLCAST(glTest) ) );
+
+        GL *gl = GL::GetActive();
+        if (gl) { gl->m_enabledTests[glTest] = false; }
+    }
+}
+
+bool GL::IsEnabled(GL::Test glTest)
+{
+    GL *gl = GL::GetActive();
+    if (!gl) { return false; }
+
+    if (!gl->m_enabledTests.ContainsKey(glTest))
+    {
+        gl->m_enabledTests.Add(glTest, false);
+    }
+    return gl->m_enabledTests.Get(glTest);
+}
+
+bool GL::IsEnabledi(GL::Test glTest, int index)
+{
+    GL *gl = GL::GetActive();
+    if (!gl) { return false; }
+
+    std::pair<GL::Test, int> glTest_i = std::make_pair(glTest, index);
+    if (!gl->m_enabled_i_Tests.ContainsKey(glTest_i))
+    {
+        gl->m_enabled_i_Tests.Add(glTest_i, false);
+    }
+    return gl->m_enabled_i_Tests.Get(glTest_i);
+}
 
 void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
                          int dstX0, int dstY0, int dstX1, int dstY1,

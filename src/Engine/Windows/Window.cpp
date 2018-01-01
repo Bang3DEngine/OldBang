@@ -87,8 +87,6 @@ void Window::Create(uint flags)
 
 void Window::SwapBuffers() const
 {
-    glFinish();
-    glFlush();
     SDL_GL_SwapWindow( GetSDLWindow() );
 }
 
