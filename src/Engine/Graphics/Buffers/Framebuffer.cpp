@@ -124,12 +124,7 @@ void Framebuffer::Resize(int width, int height)
     for (const auto &it : m_attachments_To_Texture)
     {
         Texture2D *t = it.second.Get();
-        if (t)
-        {
-            GL_ClearError();
-            t->Resize(m_width, m_height);
-            GL_CheckError();
-        }
+        if (t) { t->Resize(m_width, m_height); }
     }
 }
 

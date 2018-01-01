@@ -18,13 +18,11 @@ public:
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const Color &fillColor,
-              int width, int height,
-              bool genMipMaps = true);
+              int width, int height);
     void Fill(const Byte *newData,
               int width, int height,
               GL::ColorComp inputDataColorComp,
-              GL::DataType inputDataType,
-              bool genMipMaps = true);
+              GL::DataType inputDataType);
     void GenerateMipMaps() const;
 
     template<class T = Byte>

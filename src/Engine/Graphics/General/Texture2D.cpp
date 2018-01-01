@@ -33,7 +33,7 @@ void Texture2D::CreateEmpty(int width, int height)
     GL::ColorComp colorComp =
             (GetInternalFormat() == GL::ColorFormat::Depth24_Stencil8) ?
                 GL::ColorComp::Depth : GL::ColorComp::RGB;
-    Fill(nullptr, width, height, colorComp, GL::DataType::UnsignedByte, false);
+    Fill(nullptr, width, height, colorComp, GL::DataType::UnsignedByte);
 }
 
 void Texture2D::Resize(int width, int height)
@@ -45,19 +45,17 @@ void Texture2D::Resize(int width, int height)
 }
 
 void Texture2D::Fill(const Color &fillColor,
-                     int width, int height,
-                     bool genMipMaps)
+                     int width, int height)
 {
     Array<Color> inputData = Array<Color>(width * height, fillColor);
     Fill( RCAST<const Byte*>(inputData.Data()), width, height,
-          GL::ColorComp::RGBA, GL::DataType::Float, genMipMaps);
+          GL::ColorComp::RGBA, GL::DataType::Float);
 }
 
 void Texture2D::Fill(const Byte *newData,
                      int width, int height,
                      GL::ColorComp inputDataColorComp,
-                     GL::DataType inputDataType,
-                     bool genMipMaps)
+                     GL::DataType inputDataType)
 {
     SetWidth(width);
     SetHeight(height);
@@ -70,10 +68,6 @@ void Texture2D::Fill(const Byte *newData,
                    inputDataColorComp,
                    inputDataType,
                    newData);
-    if (genMipMaps && GetWidth() > 0 && GetHeight() > 0)
-    {
-        GenerateMipMaps();
-    }
     GL::Bind(GL::BindTarget::Texture2D, prevBoundId);
 }
 
