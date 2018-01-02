@@ -72,13 +72,15 @@ enum class GL_Face
 
 enum class GL_BindTarget
 {
-    None           = 0,
-    Texture2D      = GL_TEXTURE_2D,
-    ShaderProgram  = GL_SHADER,
-    Framebuffer    = GL_FRAMEBUFFER,
-    VAO            = GL_VERTEX_ARRAY,
-    VBO            = GL_ARRAY_BUFFER,
-    UniformBuffer  = GL_UNIFORM_BUFFER
+    None            = 0,
+    Texture2D       = GL_TEXTURE_2D,
+    ShaderProgram   = GL_SHADER,
+    Framebuffer     = GL_FRAMEBUFFER,
+    DrawFramebuffer = GL_DRAW_FRAMEBUFFER,
+    ReadFramebuffer = GL_READ_FRAMEBUFFER,
+    VAO             = GL_VERTEX_ARRAY,
+    VBO             = GL_ARRAY_BUFFER,
+    UniformBuffer   = GL_UNIFORM_BUFFER
 };
 
 enum class GL_DataType

@@ -25,6 +25,7 @@ FORWARD class UIScrollArea;
 FORWARD class UIScrollPanel;
 FORWARD class UIInputNumber;
 FORWARD class UIImageRenderer;
+FORWARD class UIRendererCacher;
 
 class GameObjectFactory
 {
@@ -45,38 +46,40 @@ public:
     static void   CreateUISceneInto(Scene *scene);
     static Scene* CreateDefaultSceneInto(Scene *scene);
 
-    static UICanvas*        CreateUICanvas();
-    static UICanvas*        CreateUICanvasInto(GameObject *go);
-    static UIImageRenderer* CreateUIImage(const Color &color = Color::White);
-    static UIImageRenderer* CreateUIImage(const Color &color,
+    static UICanvas*           CreateUICanvas();
+    static UICanvas*           CreateUICanvasInto(GameObject *go);
+    static UIImageRenderer*    CreateUIImage(const Color &color = Color::White);
+    static UIImageRenderer*    CreateUIImage(const Color &color,
                                           const Vector2i &size);
-    static UIList*          CreateUIListInto(GameObject *go,
+    static UIList*             CreateUIListInto(GameObject *go,
                                              bool withScrollPanel = true);
-    static UIList*          CreateUIList(bool withScrollPanel = true);
-    static UITree*          CreateUITreeInto(GameObject *go);
-    static UITree*          CreateUITree();
-    static UIInputText*     CreateUIInputTextInto(GameObject *go);
-    static UIInputText*     CreateUIInputText();
-    static UICheckBox*      CreateUICheckBoxInto(GameObject *go);
-    static UICheckBox*      CreateUICheckBox();
-    static UIComboBox*      CreateUIComboBoxInto(GameObject *go);
-    static UIComboBox*      CreateUIComboBox();
-    static UISlider*        CreateUISliderInto(GameObject *go);
-    static UISlider*        CreateUISlider();
-    static UIInputNumber*   CreateUIInputNumberInto(GameObject *go);
-    static UIInputNumber*   CreateUIInputNumber();
-    static UIButton*        CreateUIButtonInto(GameObject *go);
-    static UIButton*        CreateUIButton();
-    static UIButton*        CreateUIButton(const String &text,
+    static UIList*             CreateUIList(bool withScrollPanel = true);
+    static UITree*             CreateUITreeInto(GameObject *go);
+    static UITree*             CreateUITree();
+    static UIInputText*        CreateUIInputTextInto(GameObject *go);
+    static UIInputText*        CreateUIInputText();
+    static UICheckBox*         CreateUICheckBoxInto(GameObject *go);
+    static UICheckBox*         CreateUICheckBox();
+    static UIComboBox*         CreateUIComboBoxInto(GameObject *go);
+    static UIComboBox*         CreateUIComboBox();
+    static UISlider*           CreateUISliderInto(GameObject *go);
+    static UISlider*           CreateUISlider();
+    static UIInputNumber*      CreateUIInputNumberInto(GameObject *go);
+    static UIInputNumber*      CreateUIInputNumber();
+    static UIRendererCacher*   CreateUIRendererCacherInto(GameObject *go);
+    static UIRendererCacher*   CreateUIRendererCacher();
+    static UIButton*           CreateUIButtonInto(GameObject *go);
+    static UIButton*           CreateUIButton();
+    static UIButton*           CreateUIButton(const String &text,
                                            Texture2D *icon = nullptr);
-    static UILabel*         CreateUILabel();
-    static UILabel*         CreateUILabelInto(GameObject *go);
-    static UIScrollArea*    CreateUIScrollAreaInto(GameObject *go);
-    static UIScrollArea*    CreateUIScrollArea();
-    static UIScrollBar*     CreateUIScrollBarInto(GameObject *go);
-    static UIScrollBar*     CreateUIScrollBar();
-    static UIScrollPanel*   CreateUIScrollPanelInto(GameObject *go);
-    static UIScrollPanel*   CreateUIScrollPanel();
+    static UILabel*            CreateUILabel();
+    static UILabel*            CreateUILabelInto(GameObject *go);
+    static UIScrollArea*       CreateUIScrollAreaInto(GameObject *go);
+    static UIScrollArea*       CreateUIScrollArea();
+    static UIScrollBar*        CreateUIScrollBarInto(GameObject *go);
+    static UIScrollBar*        CreateUIScrollBar();
+    static UIScrollPanel*      CreateUIScrollPanelInto(GameObject *go);
+    static UIScrollPanel*      CreateUIScrollPanel();
 
     static GameObject* CreateUIHSeparator(
                             LayoutSizeType sizeType = LayoutSizeType::Preferred,

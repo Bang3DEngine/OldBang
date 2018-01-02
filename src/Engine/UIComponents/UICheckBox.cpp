@@ -1,6 +1,5 @@
 #include "Bang/UICheckBox.h"
 
-#include "Bang/Material.h"
 #include "Bang/GameObject.h"
 #include "Bang/IconManager.h"
 #include "Bang/UIFocusable.h"
@@ -28,11 +27,11 @@ void UICheckBox::OnUpdate()
 
     if (GetFocusable()->IsMouseOver())
     {
-        GetBackgroundImage()->GetMaterial()->SetDiffuseColor( UICheckBox::OverColor );
+        GetBackgroundImage()->SetTint( UICheckBox::OverColor );
     }
     else
     {
-        GetBackgroundImage()->GetMaterial()->SetDiffuseColor( UICheckBox::IdleColor );
+        GetBackgroundImage()->SetTint( UICheckBox::IdleColor );
     }
 }
 
@@ -87,7 +86,7 @@ UICheckBox *UICheckBox::CreateInto(GameObject *go)
 
     GameObject *checkBoxBgImgGo = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *checkBoxImg = checkBoxBgImgGo->AddComponent<UIImageRenderer>();
-    checkBoxImg->GetMaterial()->SetDiffuseColor(UICheckBox::IdleColor);
+    checkBoxImg->SetTint(UICheckBox::IdleColor);
 
     UIFocusable *focusable = checkBoxBgImgGo->AddComponent<UIFocusable>();
     focusable->AddClickedCallback([checkBox](IFocusable*)
@@ -103,7 +102,7 @@ UICheckBox *UICheckBox::CreateInto(GameObject *go)
     GameObject *checkImgGo = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *checkImg = checkImgGo->AddComponent<UIImageRenderer>();
     checkImg->SetImageTexture( IconManager::GetCheckIcon().Get() );
-    checkImg->GetMaterial()->SetDiffuseColor(Color::Black);
+    checkImg->SetTint(Color::Black);
 
     checkBox->p_focusable = focusable;
     checkBox->p_checkImage = checkImg;

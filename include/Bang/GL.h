@@ -122,7 +122,7 @@ public:
                                         GL_Attachment attachment,
                                         GL_RenderbufferTarget rbTarget,
                                         GLId renderbufferId);
-    static void DrawBuffers(const Array<GL_Attachment> &attachments);
+    static void DrawBuffers(const Array<GL_Attachment> &drawAttachments);
     static void ReadBuffer(GL_Attachment readAttachment);
 
     static void ReadPixels(int x, int y, int width, int height,
@@ -276,6 +276,10 @@ public:
     static float GetViewportAspectRatio();
     static Vector2 GetViewportPixelSize();
 
+    static const Array<GL_Attachment>& GetDrawBuffers();
+    static GL_Attachment& GetReadBuffer();
+
+
     static Color GetClearColor();
     static GL_Enum GetPolygonMode(GL_Face face);
     static uint GetLineWidth();
@@ -335,7 +339,8 @@ private:
     GLId m_boundVAOId              = 0;
     GLId m_boundVBOId              = 0;
     GLId m_boundTextureId          = 0;
-    GLId m_boundFramebufferId      = 0;
+    GLId m_boundDrawFramebufferId  = 0;
+    GLId m_boundReadFramebufferId  = 0;
     GLId m_boundShaderProgramId    = 0;
     GLId m_boundUniformBufferId    = 0;
     std::array<bool, 4> m_colorMask = {{true, true, true, true}};
@@ -345,6 +350,9 @@ private:
     Recti m_viewportRect = Recti::Zero;
     Map<GL_Test, bool> m_enabledTests;
     Map<std::pair<GL_Test, int>, bool> m_enabled_i_Tests;
+
+    Array<GL_Attachment> m_drawBuffers;
+    GL_Attachment m_readBuffer = Undef<GL_Attachment>();
 
     bool m_depthMask = true;
     GL_Function m_depthFunc = GL_Function::Less;

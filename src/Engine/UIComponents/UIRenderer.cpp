@@ -31,8 +31,9 @@ void UIRenderer::OnRender(RenderPass renderPass)
         RectTransform *rt = GetGameObject()->GetRectTransform();
         if (rt)
         {
-            if (Rect::Intersection(Rect::NDCRect,
-                                   rt->GetViewportRectNDC()) == Rect::Zero)
+            Rect rectNDC = rt->GetViewportRectNDC();
+            if (rectNDC != Rect::Zero &&
+                Rect::Intersection(Rect::NDCRect, rectNDC) == Rect::Zero)
             {
                 render = false;
             }
@@ -55,9 +56,47 @@ bool UIRenderer::GetCullByRectTransform() const
     return m_cullByRectTransform;
 }
 
+void UIRenderer::OnEnabled()
+{
+    Renderer::OnEnabled();
+    PropagateOnUIRendererChanged();
+}
+
+void UIRenderer::OnDisabled()
+{
+    Renderer::OnDisabled();
+    PropagateOnUIRendererChanged();
+}
+
+void UIRenderer::OnTransformChanged()
+{
+    PropagateOnUIRendererChanged();
+}
+
+void UIRenderer::OnChildAdded(GameObject*, GameObject*)
+{
+    PropagateOnUIRendererChanged();
+}
+
+void UIRenderer::OnChildRemoved(GameObject*, GameObject*)
+{
+    PropagateOnUIRendererChanged();
+}
+
+void UIRenderer::OnParentChanged(GameObject*, GameObject*)
+{
+    PropagateOnUIRendererChanged();
+}
+
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
 {
     GameObject *go = GetGameObject();
     RectTransform *rt = go ? go->GetRectTransform() : nullptr;
     return rt ? rt->GetViewportRectNDC() : Rect::Zero;
+}
+
+void UIRenderer::PropagateOnUIRendererChanged() const
+{
+    EventEmitter<IUIRendererChangeListener>::PropagateToListeners(
+                 &IUIRendererChangeListener::OnUIRendererChanged, this);
 }

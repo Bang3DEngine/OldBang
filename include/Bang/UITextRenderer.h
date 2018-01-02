@@ -16,7 +16,6 @@ FORWARD class Font;
 
 class UITextRenderer : public UIRenderer,
                        public ILayoutElement,
-                       public ITransformListener,
                        public IInvalidatable<UITextRenderer>
 {
     COMPONENT(UITextRenderer)

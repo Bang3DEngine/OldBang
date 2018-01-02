@@ -32,6 +32,7 @@
 #include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIRendererCacher.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -315,7 +316,18 @@ UIInputNumber *GameObjectFactory::CreateUIInputNumberInto(GameObject *go)
 UIInputNumber *GameObjectFactory::CreateUIInputNumber()
 {
     return GameObjectFactory::CreateUIInputNumberInto(
-                    GameObjectFactory::CreateUIGameObjectNamed("InputNumber") );
+                GameObjectFactory::CreateUIGameObjectNamed("InputNumber") );
+}
+
+UIRendererCacher *GameObjectFactory::CreateUIRendererCacherInto(GameObject *go)
+{
+    return UIRendererCacher::CreateInto(go);
+}
+
+UIRendererCacher *GameObjectFactory::CreateUIRendererCacher()
+{
+    return GameObjectFactory::CreateUIRendererCacherInto(
+                GameObjectFactory::CreateUIGameObjectNamed("UIRendererCacher") );
 }
 
 UIButton *GameObjectFactory::CreateUIButtonInto(GameObject *go)

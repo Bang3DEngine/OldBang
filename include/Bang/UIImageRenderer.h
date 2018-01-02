@@ -9,8 +9,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-class UIImageRenderer : public UIRenderer,
-                        public ITransformListener
+class UIImageRenderer : public UIRenderer
 {
     COMPONENT(UIImageRenderer)
 
@@ -25,7 +24,6 @@ public:
     void SetImageTexture(const Path &imagePath);
     void SetImageTexture(Texture2D* imageTexture);
     void SetTint(const Color& tint);
-    void SetIsBackground(bool isBackground);
     void SetAspectRatioMode(AspectRatioMode arMode);
     void SetVerticalAlignment(VerticalAlignment verticalAlignment);
     void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
@@ -36,7 +34,6 @@ public:
     AspectRatioMode GetAspectRatioMode() const;
     VerticalAlignment GetVerticalAlignment() const;
     HorizontalAlignment GetHorizontalAlignment() const;
-    bool IsBackground() const;
 
     void OnChanged();
     void RegenerateQuadVAO();
@@ -59,7 +56,6 @@ private:
     RH<Texture2D> p_imageTexture;
 
     bool m_hasChanged = false;
-    bool m_isBackground = false;
 
     AspectRatioMode m_aspectRatioMode         = AspectRatioMode::Ignore;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;

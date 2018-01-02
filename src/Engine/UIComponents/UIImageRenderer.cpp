@@ -40,7 +40,11 @@ void UIImageRenderer::OnRender()
 
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
 {
-    GetMaterial()->SetUvMultiply(uvMultiply);
+    if (uvMultiply != GetUvMultiply())
+    {
+        GetMaterial()->SetUvMultiply(uvMultiply);
+        OnChanged();
+    }
 }
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
@@ -51,37 +55,48 @@ void UIImageRenderer::SetImageTexture(const Path &imagePath)
 
 void UIImageRenderer::SetImageTexture(Texture2D* imageTexture)
 {
-    p_imageTexture.Set(imageTexture);
-    GetMaterial()->SetTexture(p_imageTexture.Get());
+    if (imageTexture != GetImageTexture())
+    {
+        p_imageTexture.Set(imageTexture);
+        GetMaterial()->SetTexture(p_imageTexture.Get());
+        OnChanged();
+    }
 }
 
 void UIImageRenderer::SetTint(const Color &tint)
 {
-    GetMaterial()->SetDiffuseColor(tint);
-}
-
-void UIImageRenderer::SetIsBackground(bool isBackground)
-{
-    m_isBackground = isBackground;
-    OnChanged();
+    if (tint != GetTint())
+    {
+        GetMaterial()->SetDiffuseColor(tint);
+        OnChanged();
+    }
 }
 
 void UIImageRenderer::SetAspectRatioMode(AspectRatioMode arMode)
 {
-    m_aspectRatioMode = arMode;
-    OnChanged();
+    if (arMode != GetAspectRatioMode())
+    {
+        m_aspectRatioMode = arMode;
+        OnChanged();
+    }
 }
 
 void UIImageRenderer::SetVerticalAlignment(VerticalAlignment verticalAlignment)
 {
-    m_verticalAlignment = verticalAlignment;
-    OnChanged();
+    if (verticalAlignment != GetVerticalAlignment())
+    {
+        m_verticalAlignment = verticalAlignment;
+        OnChanged();
+    }
 }
 
 void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 {
-    m_horizontalAlignment = horizontalAlignment;
-    OnChanged();
+    if (horizontalAlignment != GetHorizontalAlignment())
+    {
+        m_horizontalAlignment = horizontalAlignment;
+        OnChanged();
+    }
 }
 
 const Vector2 &UIImageRenderer::GetUvMultiply() const
@@ -114,14 +129,10 @@ HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
     return m_horizontalAlignment;
 }
 
-bool UIImageRenderer::IsBackground() const
-{
-    return m_isBackground;
-}
-
 void UIImageRenderer::OnChanged()
 {
     m_hasChanged = true;
+    UIRenderer::PropagateOnUIRendererChanged();
 }
 
 void UIImageRenderer::RegenerateQuadVAO()
@@ -167,14 +178,13 @@ void UIImageRenderer::RegenerateQuadVAO()
 
 void UIImageRenderer::OnTransformChanged()
 {
+    UIRenderer::OnTransformChanged();
     OnChanged();
 }
 
 Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
 {
     Rect boundingRect = UIRenderer::GetBoundingRect(camera);
-
-    if (!IsBackground()) { return boundingRect; }
     return Rect(boundingRect.GetCenter(), boundingRect.GetCenter());
 }
 
@@ -199,9 +209,6 @@ void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Tint"))
     { SetTint( xmlInfo.Get<Color>("Tint") ); }
 
-    if (xmlInfo.Contains("IsBackground"))
-    { SetIsBackground( xmlInfo.Get<bool>("IsBackground") ); }
-
     if (xmlInfo.Contains("HorizontalAlignment"))
     { SetHorizontalAlignment( xmlInfo.Get<HorizontalAlignment>("HorizontalAlignment") ); }
 
@@ -219,7 +226,6 @@ void UIImageRenderer::ExportXML(XMLNode *xmlInfo) const
     Texture2D *imgTex = GetImageTexture();
     xmlInfo->Set("Image", imgTex ? imgTex->GetGUID() : GUID::Empty());
     xmlInfo->Set("Tint", GetTint());
-    xmlInfo->Set("IsBackground", IsBackground());
     xmlInfo->Set("HorizontalAlignment", GetHorizontalAlignment());
     xmlInfo->Set("VerticalAlignment", GetVerticalAlignment());
     xmlInfo->Set("AspectRatioMode", GetAspectRatioMode());

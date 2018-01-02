@@ -279,8 +279,15 @@ void GEngine::Render(Renderer *rend)
 {
     Camera *activeCamera = p_activeCamera; ENSURE(activeCamera);
 
-    if (GL::IsBound(activeCamera->GetGBuffer()))
+    if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
     {
+        activeCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
+    }
+    else
+    {
+        ASSERT( GL::IsBound(activeCamera->GetGBuffer()) ||
+                GL::GetBoundId(GL_BindTarget::DrawFramebuffer) > 0 );
+
         rend->Bind();
 
         Material *rendMat = rend->GetUserMaterial();
@@ -291,11 +298,6 @@ void GEngine::Render(Renderer *rend)
             rend->UnBind();
         }
     }
-    else if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
-    {
-        activeCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
-    }
-    else { ASSERT(false); }
 }
 
 GL *GEngine::GetGL() const { return m_gl; }

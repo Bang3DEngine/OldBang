@@ -53,14 +53,14 @@ void Framebuffer::SetAllDrawBuffers() const
 
 void Framebuffer::SetDrawBuffers(const Array<GL_Attachment> &attachments) const
 {
-    ASSERT(GL::IsBound(this));
+    ASSERT(GL::GetBoundId(GL_BindTarget::DrawFramebuffer) == GetGLId());
     GL::DrawBuffers(attachments);
     m_currentDrawAttachments = attachments;
 }
 
 void Framebuffer::SetReadBuffer(GL_Attachment attachment) const
 {
-    ASSERT(GL::IsBound(this));
+    ASSERT(GL::GetBoundId(GL_BindTarget::ReadFramebuffer) == GetGLId());
     GL::ReadBuffer(attachment);
     m_currentReadAttachment = attachment;
 }

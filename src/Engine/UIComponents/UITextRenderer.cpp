@@ -277,12 +277,20 @@ void UITextRenderer::SetWrapping(bool wrapping)
 
 void UITextRenderer::SetAlphaThreshold(float alphaThreshold)
 {
-    m_alphaThreshold = alphaThreshold;
+    if (alphaThreshold != GetAlphaThreshold())
+    {
+        m_alphaThreshold = alphaThreshold;
+        OnChanged();
+    }
 }
 
 void UITextRenderer::SetBlurriness(float blurriness)
 {
-    m_blurriness = blurriness;
+    if (blurriness != GetBlurriness())
+    {
+        m_blurriness = blurriness;
+        OnChanged();
+    }
 }
 
 void UITextRenderer::SetContent(const String &content)
@@ -305,17 +313,29 @@ void UITextRenderer::SetTextSize(int size)
 
 void UITextRenderer::SetOutlineWidth(float outlineWidth)
 {
-    m_outlineWidth = outlineWidth;
+    if (outlineWidth != GetOutlineWidth())
+    {
+        m_outlineWidth = outlineWidth;
+        OnChanged();
+    }
 }
 
 void UITextRenderer::SetOutlineColor(const Color &color)
 {
-    m_outlineColor = color;
+    if (color != GetOutlineColor())
+    {
+        m_outlineColor = color;
+        OnChanged();
+    }
 }
 
 void UITextRenderer::SetOutlineBlurriness(float outlineBlurriness)
 {
-    m_outlineBlurriness = outlineBlurriness;
+    if (outlineBlurriness != GetOutlineBlurriness())
+    {
+        m_outlineBlurriness = outlineBlurriness;
+        OnChanged();
+    }
 }
 
 void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
@@ -329,7 +349,11 @@ void UITextRenderer::SetSpacingMultiplier(const Vector2& spacingMultiplier)
 
 void UITextRenderer::SetTextColor(const Color &textColor)
 {
-    GetMaterial()->SetDiffuseColor( textColor );
+    if (textColor != GetTextColor())
+    {
+        GetMaterial()->SetDiffuseColor( textColor );
+        OnChanged();
+    }
 }
 
 Font *UITextRenderer::GetFont() const { return p_font.Get(); }
@@ -458,9 +482,11 @@ void UITextRenderer::OnChanged()
 {
     IInvalidatable<UITextRenderer>::Invalidate();
     IInvalidatable<ILayoutElement>::Invalidate();
+    UIRenderer::PropagateOnUIRendererChanged();
 }
 
 void UITextRenderer::OnTransformChanged()
 {
+    UIRenderer::OnTransformChanged();
     OnChanged();
 }

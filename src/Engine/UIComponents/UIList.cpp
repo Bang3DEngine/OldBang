@@ -129,7 +129,7 @@ void UIList::AddItem(GOItem *newItem, int index)
                             newItem->GetComponentsInChildren<IFocusable>(true);
 
     UIImageRenderer *itemBg = newItem->AddComponent<UIImageRenderer>(0);
-    itemBg->GetMaterial()->SetDiffuseColor( GetIdleColor() );
+    itemBg->SetTint( GetIdleColor() );
 
     for (IFocusable* newItemFocusable : newItemFocusables)
     {

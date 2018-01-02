@@ -267,6 +267,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIRendererCacher.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp

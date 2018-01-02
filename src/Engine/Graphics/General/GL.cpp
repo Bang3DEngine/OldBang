@@ -466,15 +466,26 @@ void GL::FramebufferRenderbuffer(GL_FramebufferTarget target,
     );
 }
 
-void GL::DrawBuffers(const Array<GL_Attachment> &attachments)
+void GL::DrawBuffers(const Array<GL_Attachment> &drawAttachments)
 {
-    GL_CALL( glDrawBuffers(attachments.Size(),
-                           (const GLenum*)(&attachments[0])) );
+    GL *gl = GL::GetActive();
+    // if (!Containers::Equal(gl->m_drawBuffers.Begin(), gl->m_drawBuffers.End(),
+    //                        drawAttachments.Begin()))
+    {
+        gl->m_drawBuffers = drawAttachments;
+        GL_CALL( glDrawBuffers(drawAttachments.Size(),
+                               (const GLenum*)(&drawAttachments[0])) );
+    }
 }
 
 void GL::ReadBuffer(GL_Attachment readAttachment)
 {
-    GL_CALL( glReadBuffer( GLCAST(readAttachment) ) );
+    GL *gl = GL::GetActive();
+    // if (gl->m_readBuffer != readAttachment)
+    {
+        gl->m_readBuffer = readAttachment;
+        GL_CALL( glReadBuffer( GLCAST(readAttachment) ) );
+    }
 }
 
 void GL::ReadPixels(int x, int y, int width, int height,
@@ -761,6 +772,16 @@ Vector2 GL::GetViewportPixelSize()
     return 1.0f / Vector2(GL::GetViewportSize());
 }
 
+const Array<GL_Attachment> &GL::GetDrawBuffers()
+{
+    return GL::GetActive()->m_drawBuffers;
+}
+
+GL_Attachment &GL::GetReadBuffer()
+{
+    return GL::GetActive()->m_readBuffer;
+}
+
 void GL::BufferData(GL_BindTarget target, int dataSize,
                     const void *data, GL_UsageHint usageHint)
 {
@@ -813,8 +834,23 @@ void GL::Bind(GL_BindTarget bindTarget, GLId glId)
         break;
         case GL_BindTarget::Framebuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
-            if (gl) { gl->m_boundFramebufferId = glId; }
+            if (gl)
+            {
+                gl->m_boundDrawFramebufferId = gl->m_boundReadFramebufferId = glId;
+            }
             GL_CALL( glBindFramebuffer( GLCAST(GL_BindTarget::Framebuffer),
+                                        glId) );
+        break;
+        case GL_BindTarget::DrawFramebuffer:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundDrawFramebufferId = glId; }
+            GL_CALL( glBindFramebuffer( GLCAST(GL_BindTarget::DrawFramebuffer),
+                                        glId) );
+        break;
+        case GL_BindTarget::ReadFramebuffer:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundReadFramebufferId = glId; }
+            GL_CALL( glBindFramebuffer( GLCAST(GL_BindTarget::ReadFramebuffer),
                                         glId) );
         break;
         case GL_BindTarget::VAO:
@@ -1117,7 +1153,13 @@ GLId GL::GetBoundId(GL_BindTarget bindTarget)
         case GL_BindTarget::Texture2D:
             return GL::GetActive()->m_boundTextureId;
         case GL_BindTarget::Framebuffer:
-            return GL::GetActive()->m_boundFramebufferId;
+            return ( GL::GetBoundId(GL_BindTarget::DrawFramebuffer) ==
+                     GL::GetBoundId(GL_BindTarget::ReadFramebuffer) ) ?
+                       GL::GetBoundId(GL_BindTarget::DrawFramebuffer) : 0;
+        case GL_BindTarget::DrawFramebuffer:
+            return GL::GetActive()->m_boundDrawFramebufferId;
+        case GL_BindTarget::ReadFramebuffer:
+            return GL::GetActive()->m_boundReadFramebufferId;
         case GL_BindTarget::VAO:
             return GL::GetActive()->m_boundVAOId;
         case GL_BindTarget::VBO:
