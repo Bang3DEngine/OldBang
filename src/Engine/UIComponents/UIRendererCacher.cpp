@@ -54,13 +54,13 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
                 m_needNewImageToSnapshotInNextFrame = false;
             }
 
-            if (m_needNewImageToSnapshot) { SetContainerEnabled(true); }
-            else { SetContainerEnabled(false); }
+            if (m_needNewImageToSnapshot) { SetContainerVisible(true); }
+            else { SetContainerVisible(false); }
             p_cachedImageRenderer->SetVisible(!m_needNewImageToSnapshot);
         }
         else
         {
-            SetContainerEnabled(true);
+            SetContainerVisible(true);
             p_cachedImageRenderer->SetVisible(false);
         }
     }
@@ -78,9 +78,8 @@ void UIRendererCacher::OnAfterChildrenRender(RenderPass renderPass)
             m_needNewImageToSnapshotInNextFrame = false;
             p_cachedImageRenderer->SetVisible(true);
         }
+        SetContainerVisible(true);
     }
-
-    SetContainerEnabled(true);
 }
 
 void UIRendererCacher::SetCachingEnabled(bool enabled)
@@ -173,11 +172,9 @@ void UIRendererCacher::SnapshotGBufferIntoCachedImage()
     GL::ReadBuffer(prevReadAttachment);
 }
 
-void UIRendererCacher::SetContainerEnabled(bool enabled)
+void UIRendererCacher::SetContainerVisible(bool visible)
 {
-    IRendererChangedListener::SetReceiveEvents(false);
-    GetContainer()->SetEnabled(enabled);
-    IRendererChangedListener::SetReceiveEvents(true);
+    GetContainer()->SetVisible(visible);
 }
 
 UIRendererCacher* UIRendererCacher::CreateInto(GameObject *go)

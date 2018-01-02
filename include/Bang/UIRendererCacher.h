@@ -52,7 +52,7 @@ private:
 
     void SnapshotGBufferIntoCachedImage();
 
-    void SetContainerEnabled(bool enabled);
+    void SetContainerVisible(bool visible);
     static UIRendererCacher* CreateInto(GameObject *go);
 
     friend class GameObjectFactory;

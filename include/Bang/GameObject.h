@@ -61,6 +61,7 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name, bool recursive = true);
 
+    void SetVisible(bool visible);
     void SetParent(GameObject *newParent, int _index = -1);
     void SetDontDestroyOnLoad(bool dontDestroyOnLoad);
 
@@ -109,6 +110,7 @@ public:
     GameObject* GetParent() const;
     bool IsChildOf(const GameObject *_parent, bool recursive = true) const;
 
+    bool IsVisible() const;
     bool IsDontDestroyOnLoad() const;
     Rect GetBoundingScreenRect(Camera *cam, bool includeChildren = true) const;
     AABox GetObjectAABBox(bool includeChildren = true) const;
@@ -170,6 +172,7 @@ protected:
     List<Component*> m_components;
 
     String m_name = "";
+    bool m_visible = true;
     bool m_dontDestroyOnLoad = false;
 
     Transform *p_transform = nullptr;

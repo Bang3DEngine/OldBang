@@ -72,12 +72,15 @@ void GameObject::BeforeRender()
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
-    PropagateToComponents(&Component::OnRender, renderPass);
-    if (renderChildren)
+    if (IsVisible())
     {
-        BeforeChildrenRender(renderPass);
-        PropagateToChildren(&GameObject::Render, renderPass, true);
-        AfterChildrenRender(renderPass);
+        PropagateToComponents(&Component::OnRender, renderPass);
+        if (renderChildren)
+        {
+            BeforeChildrenRender(renderPass);
+            PropagateToChildren(&GameObject::Render, renderPass, true);
+            AfterChildrenRender(renderPass);
+        }
     }
 }
 
@@ -325,6 +328,11 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
     return nullptr;
 }
 
+void GameObject::SetVisible(bool visible)
+{
+    m_visible = visible;
+}
+
 GameObject *GameObject::GetChild(const GUID &guid) const
 {
     for (GameObject *go : GetChildren())
@@ -377,6 +385,11 @@ bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
         return GetParent() == _parent || GetParent()->IsChildOf(_parent);
     }
     return GetParent() == _parent;
+}
+
+bool GameObject::IsVisible() const
+{
+    return m_visible;
 }
 
 void GameObject::SetParent(GameObject *newParent, int _index)
@@ -574,6 +587,9 @@ void GameObject::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Enabled"))
     { SetEnabled( xmlInfo.Get<bool>("Enabled") ); }
 
+    if (xmlInfo.Contains("Visible"))
+    { SetVisible( xmlInfo.Get<bool>("Visible") ); }
+
     if (xmlInfo.Contains("Name"))
     { SetName( xmlInfo.Get<String>("Name") ); }
 
@@ -602,6 +618,7 @@ void GameObject::ExportXML(XMLNode *xmlInfo) const
     Serializable::ExportXML(xmlInfo);
 
     xmlInfo->Set("Enabled", IsEnabled());
+    xmlInfo->Set("Visible", IsVisible());
     xmlInfo->Set("Name", GetName());
     xmlInfo->Set("DontDestroyOnLoad", IsDontDestroyOnLoad());
 
