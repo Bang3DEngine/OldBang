@@ -3,7 +3,6 @@
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
-#include "Bang/Debug.h"
 #include "Bang/IToString.h"
 #include "Bang/XMLAttribute.h"
 #include "Bang/StreamOperators.h"

@@ -411,6 +411,11 @@ void GL::BindFragDataLocation(GLId programId, int location,
                                     fragDataName.ToCString()) );
 }
 
+int GL::GetUniformLocation(const String &uniformName)
+{
+    return GL::GetUniformLocation(GL::GetBoundId(GL_BindTarget::ShaderProgram),
+                                  uniformName);
+}
 int GL::GetUniformLocation(GLId programId, const String &uniformName)
 {
     GL_CALL( int location = glGetUniformLocation(programId,
@@ -510,6 +515,51 @@ void GL::ReadPixels(const Recti &readRect, GL_ColorComp inputComp,
 
 void GL::Finish() { glFinish(); }
 void GL::Flush() { glFlush(); }
+
+void GL::Uniform(const String &name, int value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, float value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, bool value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Matrix3f &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Matrix4f &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Color &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Vector2 &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Vector3 &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
+
+void GL::Uniform(const String &name, const Vector4 &value)
+{
+    GL::Uniform( GL::GetUniformLocation(name), value);
+}
 
 void GL::Uniform(int location, int value)
 {

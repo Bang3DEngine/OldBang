@@ -1,7 +1,11 @@
 #ifndef OBJECTID_H
 #define OBJECTID_H
 
+#include <cstdint>
+#include <ostream>
+
 #include "Bang/Bang.h"
+#include "Bang/TypeTraits.h"
 
 NAMESPACE_BANG_BEGIN
 

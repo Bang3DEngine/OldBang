@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 
-#include "Bang/GL.h"
 #include "Bang/Map.h"
 #include "Bang/GLObject.h"
 #include "Bang/Resources.h"
@@ -31,15 +30,15 @@ public:
     void UnBind() const override;
     GL_BindTarget GetGLBindTarget() const override;
 
-    template<class T, class=TT_NOT_POINTER(T)>
-    bool Set(const String &name, const T &v)
-    {
-        ASSERT(GL::IsBound(this));
-        int location = GetUniformLocation(name);
-        if (location >= 0) { GL::Uniform(location, v); }
-        return (location >= 0);
-    }
-
+    bool Set(const String &name, int v);
+    bool Set(const String &name, bool v);
+    bool Set(const String &name, float v);
+    bool Set(const String &name, const Color& v);
+    bool Set(const String &name, const Vector2& v);
+    bool Set(const String &name, const Vector3& v);
+    bool Set(const String &name, const Vector4& v);
+    bool Set(const String &name, const Matrix3& v);
+    bool Set(const String &name, const Matrix4& v);
     bool Set(const String &name, Texture2D *texture);
 
     bool Refresh();
@@ -61,8 +60,6 @@ private:
 
     mutable std::unordered_map<String, GLuint> m_nameToLocationCache;
     mutable std::unordered_map<String, Texture2D*> m_namesToTexture;
-    // mutable Map<String, GLuint> m_nameToLocationCache;
-    // mutable Map<String, Texture2D*> m_namesToTexture;
 
     ShaderProgram();
     ShaderProgram(Shader *vShader, Shader *fShader);

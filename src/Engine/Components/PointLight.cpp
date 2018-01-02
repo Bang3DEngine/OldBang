@@ -1,5 +1,6 @@
 #include "Bang/PointLight.h"
 
+#include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Sphere.h"

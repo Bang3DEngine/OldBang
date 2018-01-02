@@ -1,5 +1,6 @@
 #include "Bang/SelectionFramebuffer.h"
 
+#include "Bang/GL.h"
 #include "Bang/Paths.h"
 #include "Bang/Input.h"
 #include "Bang/Vector3.h"

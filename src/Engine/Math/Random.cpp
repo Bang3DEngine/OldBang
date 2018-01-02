@@ -1,5 +1,7 @@
 #include "Bang/Random.h"
 
+#include "Bang/String.h"
+
 USING_NAMESPACE_BANG
 
 void Random::SetSeed(long seed)

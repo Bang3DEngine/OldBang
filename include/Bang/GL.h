@@ -5,12 +5,12 @@
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
+#include "Bang/GLEnums.h"
+#include "Bang/Matrix3.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
-#include "Bang/Matrix3.h"
-#include "Bang/Matrix4.h"
-#include "Bang/GLEnums.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -29,8 +29,6 @@ NAMESPACE_BANG_BEGIN
 #define GL_CheckError() // Empty
 #endif
 
-using GLId = GLuint;
-
 FORWARD class VAO;
 FORWARD class Texture;
 FORWARD class GLObject;
@@ -41,15 +39,6 @@ FORWARD class IUniformBuffer;
 class GL
 {
 public:
-    template <class T>
-    struct GLSLVar
-    {
-        String name = ""; T value;
-        GLSLVar(const String &_name, const T &_value)
-            : name(_name), value(_value) {}
-        GLSLVar() {}
-    };
-
     static void ClearError();
     static bool CheckError(int line = 0, const String &func = "",
                            const String &file = "");
@@ -137,9 +126,15 @@ public:
     static void Finish();
     static void Flush();
 
-    template <class T>
-    static bool Uniform(const String &uniformName, const T& value,
-                        bool warn = true);
+    static void Uniform(const String &name, int value);
+    static void Uniform(const String &name, float value);
+    static void Uniform(const String &name, bool value);
+    static void Uniform(const String &name, const Matrix3f &value);
+    static void Uniform(const String &name, const Matrix4f &value);
+    static void Uniform(const String &name, const Color &value);
+    static void Uniform(const String &name, const Vector2 &value);
+    static void Uniform(const String &name, const Vector3 &value);
+    static void Uniform(const String &name, const Vector4 &value);
     static void Uniform(int location, int value);
     static void Uniform(int location, float value);
     static void Uniform(int location, bool value);
@@ -247,18 +242,7 @@ public:
     static bool GetBoolean(GL_Enum glEnum);
     static void GetBoolean(GL_Enum glEnum, bool *values);
 
-    template <class T>
-    static T GetUniform(GLId program, int uniformLocation);
-
-    template <class T>
-    static T GetUniform(GLId program, const String &uniformName);
-
-    template <class T>
-    static T GetUniform(const String &uniformName);
-
-    template <class T>
-    static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
-
+    static int GetUniformLocation(const String &uniformName);
     static int GetUniformLocation(GLId programId, const String &uniformName);
 
     static int GetUniformsListSize(GLId shaderProgramId);
@@ -374,7 +358,5 @@ private:
 };
 
 NAMESPACE_BANG_END
-
-#include "GL.tcc"
 
 #endif // GL_H

@@ -1,11 +1,9 @@
 #ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
-#include "Bang/GL.h"
 #include "Bang/Asset.h"
 #include "Bang/Image.h"
 #include "Bang/Texture.h"
-
 
 NAMESPACE_BANG_BEGIN
 
@@ -30,14 +28,12 @@ public:
     template<class T = Byte>
     Image<T> ToImage(bool invertY = false) const
     {
-        const int width  = GetWidth(), height = GetHeight();
-        const int numComps = GL::GetNumComponents(GetInternalFormat());
+        const int width  = GetWidth();
+        const int height = GetHeight();
+        const int numComps = GetNumComponents();
         T *pixels = new T[width * height * numComps];
 
-        GLId prevBound = GL::GetBoundId(GL_BindTarget::Texture2D);
-        Bind();
-        GL::GetTexImage(GetTextureTarget(), pixels);
-        GL::Bind(GL_BindTarget::Texture2D, prevBound);
+        GetTexImageInto(pixels);
 
         Image<T> img(width, height);
         for (int y = 0; y < height; ++y)
@@ -77,6 +73,10 @@ protected:
 private:
     static Color GetColorFromArray(const float *pixels, int i);
     static Color GetColorFromArray(const Byte *pixels, int i);
+
+    void GetTexImageInto(float *pixels) const;
+    void GetTexImageInto(Byte *pixels) const;
+    int GetNumComponents() const;
 };
 
 NAMESPACE_BANG_END

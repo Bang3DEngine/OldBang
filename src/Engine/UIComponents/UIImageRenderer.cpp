@@ -1,5 +1,6 @@
 ﻿#include "Bang/UIImageRenderer.h"
 
+#include "Bang/GL.h"
 #include "Bang/Mesh.h"
 #include "Bang/Image.h"
 #include "Bang/Material.h"

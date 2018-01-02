@@ -198,17 +198,17 @@ void UITextRenderer::Bind() const
 
             float blurriness = GetBlurriness() / textSize;
             blurriness = Math::Clamp(blurriness, 0.0f, 1.0f);
-            GL::Uniform("B_textBlurriness", blurriness, false);
+            GL::Uniform("B_textBlurriness", blurriness);
 
             float alphaThresh = GetAlphaThreshold() + (0.05f / textSize);
             alphaThresh = Math::Clamp(alphaThresh, 0.0f, 1.0f);
-            GL::Uniform("B_textAlphaThreshold", alphaThresh, false);
+            GL::Uniform("B_textAlphaThreshold", alphaThresh);
 
-            GL::Uniform("B_outlineWidth", GetOutlineWidth(), false);
+            GL::Uniform("B_outlineWidth", GetOutlineWidth());
             if (GetOutlineWidth() > 0.0f)
             {
-                GL::Uniform("B_outlineColor", GetOutlineColor(), false);
-                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness(), false);
+                GL::Uniform("B_outlineColor", GetOutlineColor());
+                GL::Uniform("B_outlineBlurriness", GetOutlineBlurriness());
             }
         }
         else

@@ -1,5 +1,6 @@
 ﻿#include "Bang/UIInputText.h"
 
+#include "Bang/GL.h"
 #include "Bang/Font.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"

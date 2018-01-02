@@ -1,9 +1,6 @@
 #ifndef GLOBJECT_H
 #define GLOBJECT_H
 
-#include <stack>
-#include <GL/glew.h>
-
 #include "Bang/GLEnums.h"
 
 NAMESPACE_BANG_BEGIN

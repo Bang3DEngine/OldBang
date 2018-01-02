@@ -1,5 +1,6 @@
 #include "Bang/VAO.h"
 
+#include "Bang/GL.h"
 #include "Bang/VBO.h"
 #include "Bang/ShaderProgram.h"
 

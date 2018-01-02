@@ -2,7 +2,7 @@
 #define STREAMOPERATORS_H
 
 #include <sstream>
-#include "Bang/Bang.h"
+#include "Bang/TypeTraits.h"
 
 NAMESPACE_BANG_BEGIN
 

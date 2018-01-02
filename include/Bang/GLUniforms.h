@@ -37,6 +37,27 @@ public:
     };
 
     template <class T>
+    struct GLSLVar
+    {
+        String name = ""; T value;
+        GLSLVar(const String &_name, const T &_value)
+            : name(_name), value(_value) {}
+        GLSLVar() {}
+    };
+
+    template <class T>
+    static T GetUniform(GLId program, int uniformLocation);
+
+    template <class T>
+    static T GetUniform(GLId program, const String &uniformName);
+
+    template <class T>
+    static T GetUniform(const String &uniformName);
+
+    template <class T>
+    static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
+
+    template <class T>
     static UniformBuffer<T>* CreateBuffer();
 
     template <class T>

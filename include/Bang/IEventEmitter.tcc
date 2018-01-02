@@ -2,7 +2,6 @@
 
 USING_NAMESPACE_BANG
 
-#include "Bang/Debug.h"
 template <class EListenerC>
 void EventEmitter<EListenerC>::RegisterListener(EListenerC *listener)
 {

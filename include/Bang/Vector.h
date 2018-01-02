@@ -1,11 +1,9 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <cstdlib>
-#include <type_traits>
-
 #include "Bang/Math.h"
 #include "Bang/Axis.h"
+#include "Bang/TypeTraits.h"
 
 NAMESPACE_BANG_BEGIN
 

@@ -1,5 +1,6 @@
 #include "Bang/GBuffer.h"
 
+#include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"

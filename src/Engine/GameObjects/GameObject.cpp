@@ -330,7 +330,12 @@ GameObject *GameObject::FindInChildren(const String &name, bool recursive)
 
 void GameObject::SetVisible(bool visible)
 {
-    m_visible = visible;
+    if (visible != IsVisible())
+    {
+        m_visible = visible;
+        EventEmitter<IGameObjectVisibilityChangedListener>::PropagateToListeners(
+            &IGameObjectVisibilityChangedListener::OnVisibilityChanged, this);
+    }
 }
 
 GameObject *GameObject::GetChild(const GUID &guid) const

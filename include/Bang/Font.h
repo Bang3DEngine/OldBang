@@ -1,12 +1,13 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include <SDL2/SDL_ttf.h>
-
 #include "Bang/Map.h"
 #include "Bang/Asset.h"
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
+
+FORWARD struct _TTF_Font;
+using TTF_Font = _TTF_Font;
 
 NAMESPACE_BANG_BEGIN
 

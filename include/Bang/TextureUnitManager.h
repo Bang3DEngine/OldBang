@@ -4,7 +4,6 @@
 #include <queue>
 
 #include "Bang/Map.h"
-#include "Bang/GLEnums.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -13,7 +12,7 @@ FORWARD class Texture;
 class TextureUnitManager
 {
 public:
-    using TexUnit = GLuint;
+    using TexUnit = uint;
     TextureUnitManager();
 
     // Returns the texture unit it has been bound to

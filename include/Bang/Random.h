@@ -1,6 +1,8 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#include <cstdlib>
+
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"

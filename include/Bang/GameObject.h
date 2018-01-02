@@ -17,6 +17,7 @@
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/IGameObjectVisibilityChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -33,11 +34,13 @@ FORWARD class RectTransform;
     SERIALIZABLE(ClassName) \
     friend class Bang::ObjectManager
 
+
 class GameObject : public Object,
                    public IToString,
                    public IChildrenListener,
                    public EventEmitter<INameListener>,
-                   public EventEmitter<IChildrenListener>
+                   public EventEmitter<IChildrenListener>,
+                   public EventEmitter<IGameObjectVisibilityChangedListener>
 {
     GAMEOBJECT(GameObject);
 

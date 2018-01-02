@@ -1,5 +1,6 @@
 #include "Bang/Gizmos.h"
 
+#include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/Mesh.h"
 #include "Bang/Math.h"

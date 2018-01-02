@@ -3,12 +3,12 @@
 
 #include <unordered_map>
 
-#include "Bang/GLEnums.h"
 #include "Bang/Component.h"
 #include "Bang/RenderPass.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/IRendererChangedListener.h"
+#include "Bang/IGameObjectVisibilityChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -17,7 +17,8 @@ FORWARD class UIImageRenderer;
 
 class UIRendererCacher : public Component,
                          public IChildrenListener,
-                         public IRendererChangedListener
+                         public IRendererChangedListener,
+                         public IGameObjectVisibilityChangedListener
 {
     COMPONENT( UIRendererCacher )
 
@@ -54,6 +55,9 @@ private:
 
     void SetContainerVisible(bool visible);
     static UIRendererCacher* CreateInto(GameObject *go);
+
+    // IGameObjectVisibilityChangedListener
+    void OnVisibilityChanged(GameObject *go) override;
 
     friend class GameObjectFactory;
 };

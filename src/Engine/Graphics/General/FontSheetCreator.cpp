@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/Math.h"
 #include "Bang/Array.h"

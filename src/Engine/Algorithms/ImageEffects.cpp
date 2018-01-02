@@ -1,7 +1,5 @@
 #include "Bang/ImageEffects.h"
 
-#include "Bang/Debug.h"
-
 USING_NAMESPACE_BANG
 
 void ImageEffects::SignedDistanceField(const Imageb &inputImageBW,
@@ -19,7 +17,6 @@ void ImageEffects::SignedDistanceField(const Imageb &inputImageBW,
 
     for (int y = 0; y < inputImageBW.GetHeight(); ++y)
     {
-        Debug_Peek(y);
         const int minY = Math::Max(0, y - radius);
         const int maxY = Math::Min(inputImageBW.GetHeight()-1, y + radius);
         for (int x = 0; x < inputImageBW.GetWidth(); ++x)

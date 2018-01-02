@@ -3,9 +3,12 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/GLEnums.h"
 #include "Bang/Framebuffer.h"
 
 NAMESPACE_BANG_BEGIN
+
+FORWARD class ShaderProgram;
 
 class GBuffer : public Framebuffer
 {

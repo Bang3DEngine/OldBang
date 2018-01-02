@@ -1,10 +1,7 @@
 #ifndef QUATERNIONG_H
 #define QUATERNIONG_H
 
-#include <iostream>
-
 #include "Bang/Math.h"
-#include "Bang/Debug.h"
 #include "Bang/Vector3.h"
 
 NAMESPACE_BANG_BEGIN
@@ -224,8 +221,6 @@ public:
         if (Vector3G<T>::Dot(forward,  up) >= Cast<T>(0.99) ||
             Vector3G<T>::Dot(forward, -up) >= Cast<T>(0.99))
         {
-            // Debug_Warn("LookDirection: Forward and up aligned."
-            //              " Returning identity");
             return QuaternionG<T>::Identity;
         }
         return Matrix4G<T>::ToQuaternion(

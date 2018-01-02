@@ -1,9 +1,6 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
-#include <iostream>
-
-#include "Bang/Debug.h"
 #include "Bang/Matrix3.h"
 #include "Bang/Vector4.h"
 
@@ -412,7 +409,7 @@ public:
             case 2: return c2;
             case 3: return c3;
         }
-        Debug_Warn("Matrix4G<T> index " << i << " too big");
+        ASSERT(false);
         return c3;
     }
     const Vector4G<T>& operator[](std::size_t i) const

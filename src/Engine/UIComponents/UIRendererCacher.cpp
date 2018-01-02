@@ -1,5 +1,6 @@
 #include "Bang/UIRendererCacher.h"
 
+#include "Bang/GL.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -112,6 +113,7 @@ void UIRendererCacher::OnChildAdded(GameObject*, GameObject*)
             uiRend->EventEmitter<IRendererChangedListener>::RegisterListener(this);
         }
         child->EventEmitter<IChildrenListener>::RegisterListener(this);
+        child->EventEmitter<IGameObjectVisibilityChangedListener>::RegisterListener(this);
     }
 }
 
@@ -127,6 +129,7 @@ void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
             uiRend->EventEmitter<IRendererChangedListener>::UnRegisterListener(this);
         }
         child->EventEmitter<IChildrenListener>::UnRegisterListener(this);
+        child->EventEmitter<IGameObjectVisibilityChangedListener>::UnRegisterListener(this);
     }
 }
 
@@ -194,4 +197,9 @@ UIRendererCacher* UIRendererCacher::CreateInto(GameObject *go)
     rendererCacher->OnChildAdded(container, go);
 
     return rendererCacher;
+}
+
+void UIRendererCacher::OnVisibilityChanged(GameObject*)
+{
+    OnRendererChanged(nullptr);
 }

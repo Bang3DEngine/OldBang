@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 
+#include "Bang/TypeTraits.h"
 #include "Bang/Containers.h"
 
 NAMESPACE_BANG_BEGIN

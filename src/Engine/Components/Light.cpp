@@ -1,5 +1,6 @@
 #include "Bang/Light.h"
 
+#include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
 #include "Bang/XMLNode.h"

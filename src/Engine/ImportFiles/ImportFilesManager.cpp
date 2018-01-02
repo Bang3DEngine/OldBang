@@ -3,6 +3,7 @@
 #include "Bang/Set.h"
 #include "Bang/File.h"
 #include "Bang/List.h"
+#include "Bang/Debug.h"
 #include "Bang/Paths.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Application.h"

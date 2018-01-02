@@ -1,11 +1,15 @@
 #include "Bang/Font.h"
 
+#include <SDL2/SDL_ttf.h>
+
 #include "Bang/Path.h"
 #include "Bang/Rect.h"
+#include "Bang/Debug.h"
 #include "Bang/Vector2.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
+#include "Bang/StreamOperators.h"
 #include "Bang/FontSheetCreator.h"
 
 USING_NAMESPACE_BANG

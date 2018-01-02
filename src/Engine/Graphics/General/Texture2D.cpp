@@ -1,5 +1,6 @@
 #include "Bang/Texture2D.h"
 
+#include "Bang/GL.h"
 #include "Bang/Resources.h"
 
 USING_NAMESPACE_BANG
@@ -102,6 +103,25 @@ Color Texture2D::GetColorFromArray(const Byte *pixels, int i)
 {
     return Color(pixels[i+0] / 255.0f, pixels[i+1] / 255.0f,
             pixels[i+2] / 255.0f, pixels[i+3] / 255.0f);
+}
+
+template <class T>
+void GetTexImageInto_T(const Texture2D *tex, T *pixels)
+{
+    GLId prevBound = GL::GetBoundId(GL_BindTarget::Texture2D);
+    tex->Bind();
+    GL::GetTexImage(tex->GetTextureTarget(), pixels);
+    GL::Bind(GL_BindTarget::Texture2D, prevBound);
+}
+
+void Texture2D::GetTexImageInto(Byte *pixels) const
+{ GetTexImageInto_T<Byte>(this, pixels); }
+void Texture2D::GetTexImageInto(float *pixels) const
+{ GetTexImageInto_T<float>(this, pixels); }
+
+int Texture2D::GetNumComponents() const
+{
+    return GL::GetNumComponents( GetInternalFormat() );
 }
 
 

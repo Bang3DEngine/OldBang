@@ -1,5 +1,6 @@
 #include "Bang/ShaderProgram.h"
 
+#include "Bang/GL.h"
 #include "Bang/Debug.h"
 #include "Bang/Color.h"
 #include "Bang/Shader.h"
@@ -105,22 +106,71 @@ GL_BindTarget ShaderProgram::GetGLBindTarget() const
     return GL_BindTarget::ShaderProgram;
 }
 
+template<class T, class=TT_NOT_POINTER(T)>
+bool SetShaderUniform(ShaderProgram *sp, const String &name, const T &v)
+{
+    ASSERT(GL::IsBound(sp));
+    int location = sp->GetUniformLocation(name);
+    if (location >= 0) { GL::Uniform(location, v); }
+    return (location >= 0);
+}
+
+bool ShaderProgram::Set(const String &name, bool v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, float v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Color &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Vector2 &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Vector3 &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Vector4 &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Matrix3 &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
+bool ShaderProgram::Set(const String &name, const Matrix4 &v)
+{
+    return SetShaderUniform(this, name, v);
+}
+
 bool ShaderProgram::Set(const String &name, Texture2D *texture)
 {
-    bool needToAdd = true;
+    bool needToAddTextureToMap = true;
 
     auto it = m_namesToTexture.find(name);
     if (it != m_namesToTexture.end())
     {
         if (texture != it->second)
         {
-            needToAdd = true;
+            needToAddTextureToMap = true;
             Texture2D *tex = it->second;
             if (tex) { tex->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
         }
     }
 
-    if (needToAdd)
+    if (needToAddTextureToMap)
     {
         m_namesToTexture[name] = texture;
         if (texture) { texture->EventEmitter<IDestroyListener>::RegisterListener(this); }

@@ -1,5 +1,7 @@
 #include "Bang/Ray.h"
 
+#include <algorithm>
+
 USING_NAMESPACE_BANG
 
 Ray::Ray()

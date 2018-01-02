@@ -194,8 +194,6 @@ void Framebuffer::ExportStencil(const Path &filepath,
     GL::Flush(); GL::Finish();
 
     Byte *stencilData = new Byte[GetWidth() * GetHeight()];
-    Debug_Peek(GetWidth());
-    Debug_Peek(GetHeight());
     GL::ReadPixels(0, 0, GetWidth(), GetHeight(),
                    GL_ColorComp::StencilIndex,
                    GL_DataType::UnsignedByte,

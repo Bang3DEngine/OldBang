@@ -8,8 +8,6 @@
 
 NAMESPACE_BANG_BEGIN
 
-using GLId = GLuint;
-
 enum GL_Enum
 {
     ActiveUniforms       = GL_ACTIVE_UNIFORMS,
