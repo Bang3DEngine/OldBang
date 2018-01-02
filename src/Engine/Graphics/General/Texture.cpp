@@ -27,7 +27,6 @@ Texture::Texture(const Texture &t) : GLObject(t)
     m_size = Vector2i(t.GetWidth(), t.GetHeight());
     m_filterMode = t.m_filterMode;
     m_wrapMode = t.m_wrapMode;
-    m_textureUnit = t.m_textureUnit;
     m_internalFormat = t.m_internalFormat;
     m_target = t.m_target;
 }
@@ -44,32 +43,41 @@ void Texture::SetTarget(GL_TextureTarget target)
 
 void Texture::SetFilterMode(GL_FilterMode filterMode)
 {
-    m_filterMode = filterMode;
-    Bind();
-    if (GetFilterMode() == GL_FilterMode::Nearest ||
-        GetFilterMode() == GL_FilterMode::Bilinear)
+    if (filterMode != GetFilterMode())
     {
-        GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Mag,
+        m_filterMode = filterMode;
+
+        Bind();
+
+        if (GetFilterMode() == GL_FilterMode::Nearest ||
+            GetFilterMode() == GL_FilterMode::Bilinear)
+        {
+            GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Mag,
+                                   GetFilterMode());
+        }
+        GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Min,
                                GetFilterMode());
+
+        UnBind();
+
+        PropagateTextureChanged();
     }
-    GL::TexParameterFilter(GetTextureTarget(), GL_FilterMagMin::Min,
-                           GetFilterMode());
-    UnBind();
 }
 
 void Texture::SetWrapMode(GL_WrapMode wrapMode)
 {
-    m_wrapMode = wrapMode;
-    Bind();
-    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapS, GetWrapMode());
-    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapT, GetWrapMode());
-    GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapR, GetWrapMode());
-    UnBind();
-}
+    if (wrapMode != GetWrapMode())
+    {
+        m_wrapMode = wrapMode;
 
-void Texture::SetTextureUnit(int textureSlot)
-{
-    m_textureUnit = textureSlot;
+        Bind();
+        GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapS, GetWrapMode());
+        GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapT, GetWrapMode());
+        GL::TexParameterWrap(GetTextureTarget(), GL_WrapCoord::WrapR, GetWrapMode());
+        UnBind();
+
+        PropagateTextureChanged();
+    }
 }
 
 int Texture::GetWidth() const
@@ -117,21 +125,36 @@ GL_WrapMode Texture::GetWrapMode() const
     return m_wrapMode;
 }
 
-int Texture::GetTextureUnit() const
-{
-    return m_textureUnit;
-}
-
 void Texture::BindToTextureUnit(int textureUnit) const
 {
     GL::ActiveTexture(GL_TEXTURE0 + textureUnit);
     Bind();
 }
 
-void Texture::SetWidth(int width) { m_size.x = width; }
-void Texture::SetHeight(int height) { m_size.y = height; }
+void Texture::SetWidth(int width)
+{
+    if (width != GetWidth())
+    {
+        m_size.x = width;
+        PropagateTextureChanged();
+    }
+}
+void Texture::SetHeight(int height)
+{
+    if (height != GetHeight())
+    {
+        m_size.y = height;
+        PropagateTextureChanged();
+    }
+}
 
 GL_BindTarget Texture::GetGLBindTarget() const
 {
     return GL_BindTarget::Texture2D;
+}
+
+void Texture::PropagateTextureChanged()
+{
+    EventEmitter<ITextureChangedListener>::PropagateToListeners(
+                &ITextureChangedListener::OnTextureChanged, this);
 }

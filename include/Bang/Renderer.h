@@ -7,7 +7,10 @@
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
 #include "Bang/RenderPass.h"
+#include "Bang/IEventEmitter.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/IMaterialChangedListener.h"
+#include "Bang/IRendererChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -15,8 +18,10 @@ FORWARD class Camera;
 FORWARD class Material;
 FORWARD class SceneManager;
 
-class Renderer : public GLObject,
-                 public Component
+class Renderer : public Component,
+                 public GLObject,
+                 public IMaterialChangedListener,
+                 public EventEmitter<IRendererChangedListener>
 {
     COMPONENT(Renderer)
 
@@ -32,11 +37,11 @@ public:
 
     void SetVisible(bool visible);
     void SetMaterial(Material *mat);
-    void SetRenderWireframe(bool drawWireframe);
+    void SetRenderWireframe(bool renderWireframe);
     void SetCullFace(GL_Face cullMode);
     void SetCulling(bool cull);
     void SetViewProjMode(GL_ViewProjMode viewProjMode);
-    void SetRenderPrimitive(GL_Primitive renderMode);
+    void SetRenderPrimitive(GL_Primitive renderPrimitive);
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
@@ -52,6 +57,9 @@ public:
     float GetLineWidth() const;
     RenderPass GetRenderPass() const;
 
+    // IMaterialChangedListener
+    void OnMaterialChanged(const Material *changedMaterial) override;
+
     // Renderer
     virtual AABox GetAABBox() const;
     virtual Rect GetBoundingRect(Camera *camera) const;
@@ -65,13 +73,15 @@ public:
 
 protected:
     bool m_cullling = true;
-    bool m_drawWireframe = false;
+    bool m_renderWireframe = false;
     GL_Face m_cullFace = GL_Face::Back;
-    GL_Primitive m_renderMode = GL_Primitive::Triangles;
+    GL_Primitive m_renderPrimitive = GL_Primitive::Triangles;
     GL_ViewProjMode m_viewProjMode = GL_ViewProjMode::UseBoth;
 
     Renderer();
     virtual ~Renderer();
+
+    void PropagateRendererChanged();
 
 private:
     bool m_visible = true;

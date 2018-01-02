@@ -482,7 +482,7 @@ void UITextRenderer::OnChanged()
 {
     IInvalidatable<UITextRenderer>::Invalidate();
     IInvalidatable<ILayoutElement>::Invalidate();
-    UIRenderer::PropagateOnUIRendererChanged();
+    UIRenderer::PropagateRendererChanged();
 }
 
 void UITextRenderer::OnTransformChanged()

@@ -6,6 +6,7 @@
 #include "Bang/Image.h"
 #include "Bang/Texture.h"
 
+
 NAMESPACE_BANG_BEGIN
 
 class Texture2D : public Texture,

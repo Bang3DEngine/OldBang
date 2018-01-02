@@ -64,9 +64,14 @@ void Renderer::UnBind() const
     if (GetUserMaterial()) { GetUserMaterial()->UnBind(); }
 }
 
+
 void Renderer::SetVisible(bool visible)
 {
-    m_visible = visible;
+    if (visible != IsVisible())
+    {
+        m_visible = visible;
+        PropagateRendererChanged();
+    }
 }
 
 
@@ -74,38 +79,88 @@ void Renderer::SetMaterial(Material *mat)
 {
     if (GetSharedMaterial() != mat)
     {
+        if (GetSharedMaterial())
+        {
+            GetSharedMaterial()->EventEmitter<IMaterialChangedListener>::
+                                 UnRegisterListener(this);
+        }
+
+        if (p_material.Get())
+        {
+            p_material.Get()->EventEmitter<IMaterialChangedListener>::
+                              UnRegisterListener(this);
+        }
+
         p_sharedMaterial.Set(mat);
         p_material.Set(nullptr);
+
+        if (GetSharedMaterial())
+        {
+            GetSharedMaterial()->EventEmitter<IMaterialChangedListener>::
+                                 RegisterListener(this);
+        }
+
+        PropagateRendererChanged();
     }
 }
 
-void Renderer::SetRenderPass(RenderPass rp) { m_renderPass = rp; }
+void Renderer::SetRenderPass(RenderPass rp)
+{
+    if (rp != GetRenderPass())
+    {
+        m_renderPass = rp;
+        PropagateRendererChanged();
+    }
+}
+
+void Renderer::SetLineWidth(float w)
+{
+    if (w != GetLineWidth())
+    {
+        m_lineWidth = w;
+        PropagateRendererChanged();
+    }
+}
+void Renderer::SetRenderWireframe(bool renderWireframe)
+{
+    if (renderWireframe != IsRenderWireframe())
+    {
+        m_renderWireframe = renderWireframe;
+        PropagateRendererChanged();
+    }
+}
+void Renderer::SetViewProjMode(GL_ViewProjMode viewProjMode)
+{
+    if (viewProjMode != GetViewProjMode())
+    {
+        m_viewProjMode = viewProjMode;
+        PropagateRendererChanged();
+    }
+}
+void Renderer::SetRenderPrimitive(GL_Primitive renderPrimitive)
+{
+    if (renderPrimitive != GetRenderPrimitive())
+    {
+        m_renderPrimitive = renderPrimitive;
+    }
+}
 
 bool Renderer::IsVisible() const { return m_visible; }
 Material* Renderer::GetSharedMaterial() const { return p_sharedMaterial.Get(); }
 RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
-bool Renderer::IsRenderWireframe() const { return m_drawWireframe; }
+
+void Renderer::OnMaterialChanged(const Material *changedMaterial)
+{
+    PropagateRendererChanged();
+}
+bool Renderer::IsRenderWireframe() const { return m_renderWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
 void Renderer::SetCullFace(GL_Face cullMode) { m_cullFace = cullMode; }
 void Renderer::SetCulling(bool culling) { m_cullling = culling; }
 GL_Face Renderer::GetCullFace() const { return m_cullFace; }
 bool Renderer::GetCulling() const { return m_cullling; }
-void Renderer::SetLineWidth(float w) { m_lineWidth = w; }
-void Renderer::SetRenderWireframe(bool drawWireframe)
-{
-    m_drawWireframe = drawWireframe;
-}
-void Renderer::SetViewProjMode(GL_ViewProjMode viewProjMode)
-{
-    m_viewProjMode = viewProjMode;
-}
-void Renderer::SetRenderPrimitive(GL_Primitive renderMode)
-{
-    m_renderMode = renderMode;
-}
-
 GL_ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
-GL_Primitive Renderer::GetRenderPrimitive() const { return m_renderMode; }
+GL_Primitive Renderer::GetRenderPrimitive() const { return m_renderPrimitive; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material* Renderer::GetMaterial() const
 {
@@ -114,6 +169,8 @@ Material* Renderer::GetMaterial() const
         if (GetSharedMaterial())
         {
             p_material = Resources::Clone<Material>(GetSharedMaterial());
+            p_material.Get()->EventEmitter<IMaterialChangedListener>::
+                              RegisterListener(const_cast<Renderer*>(this));
         }
     }
     return p_material.Get();
@@ -124,6 +181,12 @@ Rect Renderer::GetBoundingRect(Camera *camera) const
     return Rect::NDCRect;
     return camera ? camera->GetScreenBoundingRect(GetAABBox()) :
                     Rect::Zero;
+}
+
+void Renderer::PropagateRendererChanged()
+{
+    EventEmitter<IRendererChangedListener>::PropagateToListeners(
+                &IRendererChangedListener::OnRendererChanged, this);
 }
 
 void Renderer::CloneInto(ICloneable *clone) const

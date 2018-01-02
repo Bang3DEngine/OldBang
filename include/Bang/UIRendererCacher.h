@@ -8,6 +8,7 @@
 #include "Bang/RenderPass.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/IChildrenListener.h"
+#include "Bang/IRendererChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -15,8 +16,9 @@ FORWARD class Framebuffer;
 FORWARD class UIImageRenderer;
 
 class UIRendererCacher : public Component,
+                         public IDestroyListener,
                          public IChildrenListener,
-                         public IUIRendererChangeListener
+                         public IRendererChangedListener
 {
     COMPONENT( UIRendererCacher )
 
@@ -25,7 +27,7 @@ public:
 	virtual ~UIRendererCacher();
 
     void OnStart() override;
-    void OnBeforeRender() override;
+    void OnRender(RenderPass rp) override;
     void OnAfterChildrenRender(RenderPass renderPass) override;
 
     void SetCachingEnabled(bool enabled);
@@ -33,16 +35,20 @@ public:
     bool IsCachingEnabled() const;
     GameObject *GetContainer() const;
 
+    // IDestroyListener
+    void OnDestroyed(Object *object) override;
+
     // IChildrenListener
     void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
     void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
 
-    // IUIRendererChangeListener
-    void OnUIRendererChanged(const UIRenderer *changedUIRenderer) override;
+    // IRendererChangedListener
+    void OnRendererChanged(const Renderer *changedRenderer) override;
 
 private:
     bool m_cachingEnabled = true;
     bool m_needNewImageToSnapshot = true;
+    bool m_needNewImageToSnapshotInNextFrame = true;
 
     std::unordered_map<UIRenderer*, bool> m_uiRenderersVisibility;
 

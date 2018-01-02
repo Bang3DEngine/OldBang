@@ -24,37 +24,69 @@ Material::~Material()
 
 void Material::SetUvMultiply(const Vector2 &uvMultiply)
 {
-    m_uvMultiply = uvMultiply;
+    if (uvMultiply != GetUvMultiply())
+    {
+        m_uvMultiply = uvMultiply;
+        PropagateMaterialChanged();
+    }
 }
 
 void Material::SetShaderProgram(ShaderProgram* program)
 {
-    p_shaderProgram.Set(program);
+    if (p_shaderProgram.Get() != program)
+    {
+        p_shaderProgram.Set(program);
+        PropagateMaterialChanged();
+    }
 }
 
 void Material::SetTexture(Texture2D* texture)
 {
-    p_texture.Set(texture);
-    if (p_texture)
+    if (p_texture.Get() != texture)
     {
+        if (GetTexture())
+        {
+            GetTexture()->EventEmitter<ITextureChangedListener>::
+                          UnRegisterListener(this);
+        }
+
+        p_texture.Set(texture);
         ShaderProgram *sp = GetShaderProgram();
-        if (sp) { sp->Set("B_Texture0", p_texture.Get()); }
+        if (sp) { sp->Set("B_Texture0", GetTexture()); }
+
+        if (GetTexture())
+        {
+            GetTexture()->EventEmitter<ITextureChangedListener>::
+                          RegisterListener(this);
+        }
     }
 }
 
 void Material::SetReceivesLighting(bool receivesLighting)
 {
-    m_receivesLighting = receivesLighting;
+    if (receivesLighting != GetReceivesLighting())
+    {
+        m_receivesLighting = receivesLighting;
+        PropagateMaterialChanged();
+    }
 }
 
 void Material::SetShininess(float shininess)
 {
-    m_shininess = shininess;
+    if (shininess != GetShininess())
+    {
+        m_shininess = shininess;
+        PropagateMaterialChanged();
+    }
 }
 
 void Material::SetDiffuseColor(const Color &diffuseColor)
 {
-    m_diffuseColor = diffuseColor;
+    if (diffuseColor != GetDiffuseColor())
+    {
+        m_diffuseColor = diffuseColor;
+        PropagateMaterialChanged();
+    }
 }
 
 const Vector2 &Material::GetUvMultiply() const { return m_uvMultiply; }
@@ -97,6 +129,17 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetReceivesLighting(GetReceivesLighting());
     matClone->SetShininess(GetShininess());
     matClone->SetTexture(GetTexture());
+}
+
+void Material::OnTextureChanged(const Texture*)
+{
+    PropagateMaterialChanged();
+}
+
+void Material::PropagateMaterialChanged()
+{
+    EventEmitter<IMaterialChangedListener>::PropagateToListeners(
+                &IMaterialChangedListener::OnMaterialChanged, this);
 }
 
 void Material::Import(const Path &materialFilepath)

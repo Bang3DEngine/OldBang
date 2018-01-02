@@ -9,15 +9,13 @@
 #include "Bang/IEnabledListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/ITransformListener.h"
+#include "Bang/IMaterialChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class IUIRendererChangeListener;
-
 class UIRenderer : public Renderer,
                    public IChildrenListener,
-                   public ITransformListener,
-                   public EventEmitter<IUIRendererChangeListener>
+                   public ITransformListener
 {
 public:
     virtual Rect GetBoundingRect(Camera *camera) const override;
@@ -45,17 +43,9 @@ protected:
     UIRenderer();
     virtual ~UIRenderer();
 
-    void PropagateOnUIRendererChanged() const;
-
 private:
     bool m_cullByRectTransform = true;
 
-};
-
-class IUIRendererChangeListener : public virtual IEventListener
-{
-public:
-    virtual void OnUIRendererChanged(const UIRenderer *changedUIRenderer) = 0;
 };
 
 NAMESPACE_BANG_END

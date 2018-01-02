@@ -69,6 +69,8 @@ void Texture2D::Fill(const Byte *newData,
                    inputDataType,
                    newData);
     GL::Bind(GL_BindTarget::Texture2D, prevBoundId);
+
+    PropagateTextureChanged();
 }
 
 void Texture2D::GenerateMipMaps() const
@@ -79,7 +81,11 @@ void Texture2D::GenerateMipMaps() const
 
 void Texture2D::SetAlphaCutoff(float alphaCutoff)
 {
-    m_alphaCutoff = alphaCutoff;
+    if (alphaCutoff != GetAlphaCutoff())
+    {
+        m_alphaCutoff = alphaCutoff;
+        PropagateTextureChanged();
+    }
 }
 
 float Texture2D::GetAlphaCutoff() const
@@ -95,7 +101,7 @@ Color Texture2D::GetColorFromArray(const float *pixels, int i)
 Color Texture2D::GetColorFromArray(const Byte *pixels, int i)
 {
     return Color(pixels[i+0] / 255.0f, pixels[i+1] / 255.0f,
-                 pixels[i+2] / 255.0f, pixels[i+3] / 255.0f);
+            pixels[i+2] / 255.0f, pixels[i+3] / 255.0f);
 }
 
 

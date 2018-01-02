@@ -5,13 +5,17 @@
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/ITextureChangedListener.h"
+#include "Bang/IMaterialChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Texture2D;
 FORWARD class ShaderProgram;
 
-class Material : public Asset
+class Material : public Asset,
+                 public ITextureChangedListener,
+                 public EventEmitter<IMaterialChangedListener>
 {
     ASSET(Material)
 
@@ -36,6 +40,9 @@ public:
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
+    // ITextureChangedListener
+    void OnTextureChanged(const Texture *changedTexture) override;
+
     // Resource
     void Import(const Path &materialFilepath) override;
 
@@ -54,6 +61,8 @@ protected:
 
     Material();
     virtual ~Material();
+
+    void PropagateMaterialChanged();
 };
 
 NAMESPACE_BANG_END

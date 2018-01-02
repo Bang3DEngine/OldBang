@@ -5,10 +5,13 @@
 
 #include "Bang/Vector2.h"
 #include "Bang/GLObject.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/ITextureChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class Texture : public GLObject
+class Texture : public GLObject,
+                public EventEmitter<ITextureChangedListener>
 {
 public:
 
@@ -24,14 +27,12 @@ public:
     void SetTarget(GL_TextureTarget target);
     void SetFilterMode(GL_FilterMode filterMode);
     void SetWrapMode(GL_WrapMode wrapMode);
-    void SetTextureUnit(int textureSlot);
 
     int GetWidth() const;
     int GetHeight() const;
     const Vector2i& GetSize() const;
     GL_FilterMode GetFilterMode() const;
     GL_WrapMode GetWrapMode() const;
-    int GetTextureUnit() const;
 
     GL_DataType GetInternalDataType() const;
     GL_ColorFormat GetInternalFormat() const;
@@ -45,12 +46,13 @@ protected:
     void SetWidth(int width);
     void SetHeight(int height);
 
+    void PropagateTextureChanged();
+
 private:
     Vector2i m_size = Vector2i::Zero;
 
     GL_FilterMode m_filterMode = Undef<GL_FilterMode>();
     GL_WrapMode m_wrapMode     = Undef<GL_WrapMode>();
-    int m_textureUnit = 0;
 
     GL_ColorFormat m_internalFormat = GL_ColorFormat::RGBA_Float32;
     GL_TextureTarget m_target = GL_TextureTarget::Texture2D;

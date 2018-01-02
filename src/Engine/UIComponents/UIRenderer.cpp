@@ -59,33 +59,33 @@ bool UIRenderer::GetCullByRectTransform() const
 void UIRenderer::OnEnabled()
 {
     Renderer::OnEnabled();
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 void UIRenderer::OnDisabled()
 {
     Renderer::OnDisabled();
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 void UIRenderer::OnTransformChanged()
 {
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 void UIRenderer::OnChildAdded(GameObject*, GameObject*)
 {
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 void UIRenderer::OnChildRemoved(GameObject*, GameObject*)
 {
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 void UIRenderer::OnParentChanged(GameObject*, GameObject*)
 {
-    PropagateOnUIRendererChanged();
+    PropagateRendererChanged();
 }
 
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
@@ -93,10 +93,4 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
     GameObject *go = GetGameObject();
     RectTransform *rt = go ? go->GetRectTransform() : nullptr;
     return rt ? rt->GetViewportRectNDC() : Rect::Zero;
-}
-
-void UIRenderer::PropagateOnUIRendererChanged() const
-{
-    EventEmitter<IUIRendererChangeListener>::PropagateToListeners(
-                 &IUIRendererChangeListener::OnUIRendererChanged, this);
 }

@@ -132,7 +132,7 @@ HorizontalAlignment UIImageRenderer::GetHorizontalAlignment() const
 void UIImageRenderer::OnChanged()
 {
     m_hasChanged = true;
-    UIRenderer::PropagateOnUIRendererChanged();
+    UIRenderer::PropagateRendererChanged();
 }
 
 void UIImageRenderer::RegenerateQuadVAO()

@@ -114,16 +114,26 @@ void UIScrollPanel::OnPostUpdate()
 
         Rect refRect = referenceRT->GetViewportRect();
 
-        if (GetForceHorizontalFit())
+        Vector2 newAnchorMin = toConvertParentRT->
+                               FromViewportPointToLocalPointNDC(refRect.GetMin());
+        Vector2 newAnchorMax = toConvertParentRT->
+                               FromViewportPointToLocalPointNDC(refRect.GetMax());
+
+        constexpr float Epsilon = 0.0001f;
+        if (GetForceHorizontalFit() &&
+            (Math::Abs(newAnchorMin.x - toConvertRT->GetAnchorMin().x) > Epsilon ||
+             Math::Abs(newAnchorMax.x - toConvertRT->GetAnchorMax().x) > Epsilon) )
         {
-            toConvertRT->SetAnchorMinX( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMin()).x );
-            toConvertRT->SetAnchorMaxX( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMax()).x );
+            toConvertRT->SetAnchorMinX( newAnchorMin.x );
+            toConvertRT->SetAnchorMaxX( newAnchorMax.x );
         }
 
-        if (GetForceVerticalFit())
+        if (GetForceVerticalFit() &&
+            (Math::Abs(newAnchorMin.y - toConvertRT->GetAnchorMin().y) > Epsilon ||
+             Math::Abs(newAnchorMax.y - toConvertRT->GetAnchorMax().y) > Epsilon) )
         {
-            toConvertRT->SetAnchorMinY( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMin()).y );
-            toConvertRT->SetAnchorMaxY( toConvertParentRT->FromViewportPointToLocalPointNDC(refRect.GetMax()).y );
+            toConvertRT->SetAnchorMinY( newAnchorMin.y );
+            toConvertRT->SetAnchorMaxY( newAnchorMax.y );
         }
     }
 }
