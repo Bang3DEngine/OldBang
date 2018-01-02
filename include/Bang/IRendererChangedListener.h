@@ -10,7 +10,7 @@ FORWARD class Renderer;
 class IRendererChangedListener : public virtual IEventListener
 {
 public:
-    virtual void OnRendererChanged(const Renderer *changedRenderer) = 0;
+    virtual void OnRendererChanged(Renderer *changedRenderer) = 0;
 };
 
 NAMESPACE_BANG_END

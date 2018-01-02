@@ -40,40 +40,47 @@ void UIRendererCacher::OnStart()
     }
 }
 
-void UIRendererCacher::OnRender(RenderPass rp)
+void UIRendererCacher::OnRender(RenderPass renderPass)
 {
-    Component::OnRender(rp);
+    Component::OnRender(renderPass);
 
-    if (rp == RenderPass::Canvas)
+    if (renderPass == RenderPass::Canvas)
     {
-        if (IsCachingEnabled() && m_needNewImageToSnapshotInNextFrame)
+        if (IsCachingEnabled())
         {
-            m_needNewImageToSnapshot = true;
-            m_needNewImageToSnapshotInNextFrame = false;
+            if (m_needNewImageToSnapshotInNextFrame)
+            {
+                m_needNewImageToSnapshot = true;
+                m_needNewImageToSnapshotInNextFrame = false;
+            }
+
+            if (m_needNewImageToSnapshot) { SetContainerEnabled(true); }
+            else { SetContainerEnabled(false); }
+            p_cachedImageRenderer->SetVisible(!m_needNewImageToSnapshot);
         }
-        else if (!IsCachingEnabled())
+        else
         {
-            RestoreContainerUIRenderersVisibility();
+            SetContainerEnabled(true);
+            p_cachedImageRenderer->SetVisible(false);
         }
-
-        if (m_needNewImageToSnapshot) { RestoreContainerUIRenderersVisibility(); }
-        else { SetContainerUIRenderersInvisible(); }
-
-        p_cachedImageRenderer->SetVisible(!m_needNewImageToSnapshot);
     }
 }
 
 void UIRendererCacher::OnAfterChildrenRender(RenderPass renderPass)
 {
     Component::OnAfterChildrenRender(renderPass);
-    if (renderPass == RenderPass::Canvas &&
-        IsCachingEnabled() &&
-        m_needNewImageToSnapshot)
+    if (renderPass == RenderPass::Canvas)
     {
-        SnapshotGBufferIntoCachedImage();
-        m_needNewImageToSnapshot = false;
-        m_needNewImageToSnapshotInNextFrame = false;
+        if ( IsCachingEnabled() && m_needNewImageToSnapshot )
+        {
+            SnapshotGBufferIntoCachedImage();
+            m_needNewImageToSnapshot = false;
+            m_needNewImageToSnapshotInNextFrame = false;
+            p_cachedImageRenderer->SetVisible(true);
+        }
     }
+
+    SetContainerEnabled(true);
 }
 
 void UIRendererCacher::SetCachingEnabled(bool enabled)
@@ -95,19 +102,7 @@ GameObject *UIRendererCacher::GetContainer() const
     return p_uiRenderersContainer;
 }
 
-void UIRendererCacher::OnDestroyed(Object *object)
-{
-    UIRenderer *uiRend = DCAST<UIRenderer*>(object);
-    ASSERT(uiRend);
-
-    auto it = m_uiRenderersVisibility.find(uiRend);
-    if (it != m_uiRenderersVisibility.end())
-    {
-        m_uiRenderersVisibility.erase(it);
-    }
-}
-
-void UIRendererCacher::OnChildAdded(GameObject *addedChild, GameObject *parent)
+void UIRendererCacher::OnChildAdded(GameObject*, GameObject*)
 {
     List<GameObject*> children = GetContainer()->GetChildrenRecursively();
     for (GameObject *child : children)
@@ -121,7 +116,7 @@ void UIRendererCacher::OnChildAdded(GameObject *addedChild, GameObject *parent)
     }
 }
 
-void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject *parent)
+void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
 {
     List<GameObject*> children = removedChild->GetChildrenRecursively();
     children.PushBack(removedChild);
@@ -136,7 +131,7 @@ void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject *pare
     }
 }
 
-void UIRendererCacher::OnRendererChanged(const Renderer*)
+void UIRendererCacher::OnRendererChanged(Renderer*)
 {
     m_needNewImageToSnapshotInNextFrame = true;
 }
@@ -165,58 +160,23 @@ void UIRendererCacher::SnapshotGBufferIntoCachedImage()
     GL::Bind(GL_BindTarget::DrawFramebuffer, p_cacheFramebuffer->GetGLId());
     GL::DrawBuffers( {GL_Attachment::Color0} );
 
-    GL::Disable(GL_Test::Blend);
-
     // Copy from GBuffer to cache framebuffer
     GL::BlitFramebuffer(Recti(rtRectPx),
                         dstRectPx,
                         GL_FilterMode::Nearest,
                         GL_BufferBit::Color);
 
-    GL::Enable(GL_Test::Blend);
-
     // Restore
     GL::Bind(GL_BindTarget::DrawFramebuffer, prevBoundDrawFramebuffer);
     GL::Bind(GL_BindTarget::ReadFramebuffer, prevBoundReadFramebuffer);
     GL::DrawBuffers(prevDrawAttachments);
     GL::ReadBuffer(prevReadAttachment);
-
-    p_cacheFramebuffer->GetAttachmentTexture(GL_Attachment::Color0)->
-            ToImage<Byte>().Export( Path(GetGameObject()->GetName() + ".png") );
 }
 
-void UIRendererCacher::RestoreContainerUIRenderersVisibility()
+void UIRendererCacher::SetContainerEnabled(bool enabled)
 {
     IRendererChangedListener::SetReceiveEvents(false);
-
-    for (const auto &uiRend_visibility : m_uiRenderersVisibility)
-    {
-        UIRenderer *uiRend = uiRend_visibility.first;
-        bool wasVisible = uiRend_visibility.second;
-        uiRend->SetVisible(wasVisible);
-    }
-    m_uiRenderersVisibility.clear();
-
-    IRendererChangedListener::SetReceiveEvents(true);
-}
-
-void UIRendererCacher::SetContainerUIRenderersInvisible()
-{
-    IRendererChangedListener::SetReceiveEvents(false);
-
-    bool isANewInvisibilitySet = m_uiRenderersVisibility.empty();
-    if (isANewInvisibilitySet)
-    {
-        List<UIRenderer*> containerUIRenderers =
-                    GetContainer()->GetComponentsInChildren<UIRenderer>(true);
-        for (UIRenderer *uiRend : containerUIRenderers)
-        {
-            uiRend->EventEmitter<IDestroyListener>::RegisterListener(this);
-            m_uiRenderersVisibility[uiRend] = uiRend->IsVisible();
-            uiRend->SetVisible(false);
-        }
-    }
-
+    GetContainer()->SetEnabled(enabled);
     IRendererChangedListener::SetReceiveEvents(true);
 }
 
@@ -226,7 +186,6 @@ UIRendererCacher* UIRendererCacher::CreateInto(GameObject *go)
 
     UIRendererCacher *rendererCacher = go->AddComponent<UIRendererCacher>();
     UIImageRenderer *cacherImageRend = go->AddComponent<UIImageRenderer>();
-    cacherImageRend->SetVisible(false);
 
     GameObject *container = GameObjectFactory::CreateUIGameObject();
 

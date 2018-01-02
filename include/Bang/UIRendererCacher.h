@@ -16,7 +16,6 @@ FORWARD class Framebuffer;
 FORWARD class UIImageRenderer;
 
 class UIRendererCacher : public Component,
-                         public IDestroyListener,
                          public IChildrenListener,
                          public IRendererChangedListener
 {
@@ -27,7 +26,7 @@ public:
 	virtual ~UIRendererCacher();
 
     void OnStart() override;
-    void OnRender(RenderPass rp) override;
+    void OnRender(RenderPass renderPass) override;
     void OnAfterChildrenRender(RenderPass renderPass) override;
 
     void SetCachingEnabled(bool enabled);
@@ -35,31 +34,25 @@ public:
     bool IsCachingEnabled() const;
     GameObject *GetContainer() const;
 
-    // IDestroyListener
-    void OnDestroyed(Object *object) override;
-
     // IChildrenListener
     void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
     void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
 
     // IRendererChangedListener
-    void OnRendererChanged(const Renderer *changedRenderer) override;
+    void OnRendererChanged(Renderer *changedRenderer) override;
 
 private:
     bool m_cachingEnabled = true;
     bool m_needNewImageToSnapshot = true;
     bool m_needNewImageToSnapshotInNextFrame = true;
 
-    std::unordered_map<UIRenderer*, bool> m_uiRenderersVisibility;
-
     Framebuffer *p_cacheFramebuffer = nullptr;
-    UIImageRenderer *p_cachedImageRenderer = nullptr;
     GameObject *p_uiRenderersContainer = nullptr;
+    UIImageRenderer *p_cachedImageRenderer = nullptr;
 
     void SnapshotGBufferIntoCachedImage();
 
-    void RestoreContainerUIRenderersVisibility();
-    void SetContainerUIRenderersInvisible();
+    void SetContainerEnabled(bool enabled);
     static UIRendererCacher* CreateInto(GameObject *go);
 
     friend class GameObjectFactory;
