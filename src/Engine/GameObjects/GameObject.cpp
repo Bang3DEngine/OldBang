@@ -167,7 +167,6 @@ void GameObject::RemoveChild(GameObject *child)
 
 void GameObject::RemoveComponent(Component *component)
 {
-    ASSERT( component->IsWaitingToBeDestroyed() );
     auto it = m_components.Find(component);
     if (it != m_components.End())
     {

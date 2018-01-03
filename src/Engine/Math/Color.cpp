@@ -78,6 +78,11 @@ Color Color::Lerp(const Color &c1,
                 );
 }
 
+Color Color::WithValue(float v) const
+{
+    return Color(r * v, g * v, b * v, a);
+}
+
 String Color::ToStringRgb() const
 {
     std::ostringstream oss;
@@ -129,7 +134,7 @@ Vector4 Color::ToVector4() const
     return Vector4(r, g, b, a);
 }
 
-Color Color::Saturated(float t) const
+Color Color::WithSaturation(float t) const
 {
     Color c = *this;
     float length = Math::Sqrt(c.r*c.r + c.g*c.g + c.b*c.b);
