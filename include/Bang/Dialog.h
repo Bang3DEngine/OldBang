@@ -60,12 +60,12 @@ private:
                                             bool openDir,
                                             const List<String> &extensions,
                                             const Path &initialDirPath);
-    static void CreateFilePathBaseInto(Scene *scene,
-                                       const Path &initialDirPath,
-                                       UIFileList **outFileList,
-                                       UIButton **outBotLeftButton,
-                                       UIButton **outBotRightButton,
-                                       UIInputText **botInputText);
+    static void CreateFilePathBaseSceneInto(Scene *scene,
+                                            const Path &initialDirPath,
+                                            UIFileList **outFileList,
+                                            UIButton **outBotLeftButton,
+                                            UIButton **outBotRightButton,
+                                            UIInputText **botInputText);
     static Scene* CreateGetStringScene(const String &msg,
                                        const String &hint);
     static Scene* CreateYesNoCancelScene(const String &msg);

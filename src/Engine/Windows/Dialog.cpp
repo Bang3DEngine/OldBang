@@ -162,7 +162,7 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
     UIButton *cancelButton, *botLeftButton;
     UIInputText *botInputText;
 
-    Dialog::CreateFilePathBaseInto(scene,
+    Dialog::CreateFilePathBaseSceneInto(scene,
                                    initialDirPath,
                                    &fileList,
                                    &cancelButton,
@@ -228,7 +228,7 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
     UIButton *cancelButton, *botRightButton;
     UIInputText *botInputText;
 
-    Dialog::CreateFilePathBaseInto(scene,
+    Dialog::CreateFilePathBaseSceneInto(scene,
                                    initialDirPath,
                                    &fileList,
                                    &cancelButton,
@@ -281,12 +281,12 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
     ofsc->Init(fileList, openButton, openDir);
 }
 
-void Dialog::CreateFilePathBaseInto(Scene *scene,
-                                    const Path &initialDirPath,
-                                    UIFileList **outFileList,
-                                    UIButton **outBotLeftButton,
-                                    UIButton **outBotRightButton,
-                                    UIInputText **outBotInputText)
+void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
+                                         const Path &initialDirPath,
+                                         UIFileList **outFileList,
+                                         UIButton **outBotLeftButton,
+                                         UIButton **outBotRightButton,
+                                         UIInputText **outBotInputText)
 {
     GameObjectFactory::CreateUISceneInto(scene);
 
@@ -302,7 +302,7 @@ void Dialog::CreateFilePathBaseInto(Scene *scene,
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = botHLGo->AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Right);
-    hl->SetChildrenVerticalStretch(Stretch::None);
+    hl->SetChildrenVerticalStretch(Stretch::Full);
     UILayoutElement *hlLE = botHLGo->AddComponent<UILayoutElement>();
     hlLE->SetFlexibleHeight(0);
 

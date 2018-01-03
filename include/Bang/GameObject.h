@@ -17,6 +17,7 @@
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/IComponentListener.h"
 #include "Bang/IGameObjectVisibilityChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -40,6 +41,7 @@ class GameObject : public Object,
                    public IChildrenListener,
                    public EventEmitter<INameListener>,
                    public EventEmitter<IChildrenListener>,
+                   public EventEmitter<IComponentListener>,
                    public EventEmitter<IGameObjectVisibilityChangedListener>
 {
     GAMEOBJECT(GameObject);

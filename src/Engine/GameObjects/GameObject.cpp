@@ -178,6 +178,9 @@ void GameObject::RemoveComponent(Component *component)
             m_currentComponentsIterators.top() = nextIt;
             m_increaseComponentsIterator = false;
         }
+
+        EventEmitter<IComponentListener>::PropagateToListeners(
+                    &IComponentListener::OnComponentRemoved, component);
     }
 
     if (component == p_transform) { p_transform = nullptr; }
@@ -223,33 +226,36 @@ bool GameObject::IsEnabled(bool recursive) const
 Component *GameObject::AddComponent(const String &componentClassName,
                                     int _index)
 {
-    Component *c = ComponentFactory::Create(componentClassName);
-    return AddComponent(c, _index);
+    Component *component = ComponentFactory::Create(componentClassName);
+    return AddComponent(component, _index);
 }
 
-Component* GameObject::AddComponent(Component *c, int _index)
+Component* GameObject::AddComponent(Component *component, int _index)
 {
-    if (c && !GetComponents().Contains(c))
+    if (component && !GetComponents().Contains(component))
     {
-        Transform *trans = Cast<Transform*>(c);
+        Transform *trans = Cast<Transform*>(component);
         if (trans) { ASSERT(!HasComponent<Transform>()); }
 
-        c->SetGameObject(this);
+        component->SetGameObject(this);
 
         const int index = (_index != -1 ? _index : GetComponents().Size());
-        auto nextIt = m_components.Insert(index, c);
+        auto nextIt = m_components.Insert(index, component);
 
         auto it = m_components.Begin(); std::advance(it, index);
         if (!m_currentComponentsIterators.empty() &&
-            m_currentComponentsIterators.top() == it)
+             m_currentComponentsIterators.top() == it)
         {
             m_currentComponentsIterators.top() = nextIt;
             m_increaseComponentsIterator = false;
         }
 
         if (trans) { p_transform = trans; }
+
+        EventEmitter<IComponentListener>::PropagateToListeners(
+                    &IComponentListener::OnComponentAdded, component, index);
     }
-    return c;
+    return component;
 }
 
 const List<Component *> &GameObject::GetComponents() const
