@@ -266,6 +266,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIRectMask.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIRendererCacher.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp

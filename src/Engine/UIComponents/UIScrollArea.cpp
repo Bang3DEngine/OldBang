@@ -1,6 +1,7 @@
 #include "Bang/UIScrollArea.h"
 
 #include "Bang/GameObject.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
@@ -57,7 +58,7 @@ void UIScrollArea::SetContainedGameObject(GameObject *go)
     }
 }
 
-UIMask *UIScrollArea::GetMask() const { return p_mask; }
+UIRectMask *UIScrollArea::GetMask() const { return p_mask; }
 GameObject *UIScrollArea::GetContainer() const { return p_container; }
 GameObject *UIScrollArea::GetContainedGameObject() const { return p_containedGo; }
 UIImageRenderer *UIScrollArea::GetBackground() const { return p_bg; }
@@ -81,9 +82,7 @@ UIScrollArea* UIScrollArea::CreateInto(GameObject *go)
     UIImageRenderer *bg = go->AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White);
 
-    UIMask *mask = go->AddComponent<UIMask>();
-    go->AddComponent<UIImageRenderer>();
-    mask->SetDrawMask(false);
+    UIRectMask *mask = go->AddComponent<UIRectMask>();
 
     GameObject *childrenCont = GameObjectFactory::CreateUIGameObject();
     childrenCont->SetName("ScrollAreaChildrenContainer");

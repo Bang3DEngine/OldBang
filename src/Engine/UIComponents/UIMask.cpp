@@ -107,6 +107,7 @@ void UIMask::ImportXML(const XMLNode &xmlInfo)
 void UIMask::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
+
     xmlInfo->Set("Masking", IsMasking());
     xmlInfo->Set("DrawMask", IsDrawMask());
 }

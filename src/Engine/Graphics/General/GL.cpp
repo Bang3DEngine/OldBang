@@ -64,7 +64,7 @@ bool GL::CheckFramebufferError()
     return error;
 }
 
-Color GL::GetClearColor()
+const Color& GL::GetClearColor()
 {
     GL *gl = GL::GetActive();
     return gl ? gl->m_clearColor : Color::Zero;
@@ -356,6 +356,33 @@ void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
                         dstRect.GetMin().x, dstRect.GetMin().y,
                         dstRect.GetMax().x, dstRect.GetMax().y,
                         filterMode, bufferBitMask);
+}
+
+void GL::Scissor(int x, int y, int width, int height)
+{
+    GL::Scissor( Recti(x, y, x+width, y+height) );
+}
+
+void GL::Scissor(const Recti &scissorRectPx)
+{
+    if (scissorRectPx != GL::GetScissorRect())
+    {
+        GL::GetActive()->m_scissorRectPx = scissorRectPx;
+        GL_CALL( glScissor(scissorRectPx.GetMin().x, scissorRectPx.GetMin().y,
+                           scissorRectPx.GetWidth(), scissorRectPx.GetHeight()) );
+    }
+}
+
+void GL::ScissorIntersecting(int x, int y, int width, int height)
+{
+    GL::ScissorIntersecting( Recti(x, y, x+width, y+height) );
+}
+
+void GL::ScissorIntersecting(const Recti &scissorRectPx)
+{
+    Recti prevScissor = GL::GetScissorRect();
+    Recti additiveScissor = Recti::Intersection(prevScissor, scissorRectPx);
+    GL::Scissor(additiveScissor);
 }
 
 GLId GL::CreateShader(GL::ShaderType shaderType)
@@ -908,6 +935,16 @@ GL::BlendEquationE GL::GetBlendEquationColor()
 GL::BlendEquationE GL::GetBlendEquationAlpha()
 {
     return GL::GetActive()->m_blendEquationAlpha;
+}
+
+const Recti& GL::GetScissorRect()
+{
+    if (!GL::IsEnabled(GL::Test::Scissor) ||
+        GL::GetActive()->m_scissorRectPx == Recti(-1,-1,-1,-1))
+    {
+        GL::GetActive()->m_scissorRectPx = GL::GetViewportRect();
+    }
+    return GL::GetActive()->m_scissorRectPx;
 }
 
 void GL::BufferData(GL::BindTarget target, int dataSize,

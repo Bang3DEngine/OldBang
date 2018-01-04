@@ -2,9 +2,9 @@
 
 #include "Bang/Font.h"
 #include "Bang/Input.h"
-#include "Bang/UIMask.h"
 #include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/SystemClipboard.h"
@@ -181,7 +181,7 @@ int UILabel::GetCursorIndex() const { return m_cursorIndex; }
 int UILabel::GetSelectionIndex() const { return m_selectionIndex; }
 bool UILabel::IsSelectingWithMouse() const { return m_selectingWithMouse; }
 
-UIMask *UILabel::GetMask() const { return p_mask; }
+UIRectMask *UILabel::GetMask() const { return p_mask; }
 UITextRenderer *UILabel::GetText() const { return p_text; }
 
 void UILabel::OnFocusTaken(IFocusable *focusable)
@@ -294,8 +294,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     vl->SetChildrenHorizontalStretch(Stretch::Full);
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
 
-    UIMask *mask = go->AddComponent<UIMask>();
-    go->AddComponent<UIImageRenderer>(); // Quad mask
+    UIRectMask *mask = go->AddComponent<UIRectMask>();
     label->p_mask = mask;
 
     GameObject *textContainer = GameObjectFactory::CreateUIGameObject();

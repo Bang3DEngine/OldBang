@@ -1,8 +1,8 @@
 #include "Bang/UIButton.h"
 
 #include "Bang/Input.h"
-#include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"

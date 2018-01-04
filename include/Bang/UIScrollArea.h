@@ -2,12 +2,12 @@
 #define UISCROLLAREA_H
 
 #include "Bang/Vector2.h"
-#include "Bang/UIMask.h"
 #include "Bang/Component.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class GameObject;
+FORWARD class UIRectMask;
 FORWARD class UIImageRenderer;
 
 class UIScrollArea : public Component
@@ -25,7 +25,7 @@ public:
 
     void SetContainedGameObject(GameObject *go);
 
-    UIMask* GetMask() const;
+    UIRectMask* GetMask() const;
     GameObject* GetContainer() const;
     GameObject* GetContainedGameObject() const;
     UIImageRenderer* GetBackground() const;
@@ -34,7 +34,7 @@ public:
 private:
     UIScrollArea();
 
-    UIMask *p_mask = nullptr;
+    UIRectMask *p_mask = nullptr;
     UIImageRenderer *p_bg = nullptr;
     GameObject *p_container = nullptr;
     GameObject *p_containedGo = nullptr;

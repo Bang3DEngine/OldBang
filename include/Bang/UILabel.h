@@ -7,7 +7,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-FORWARD class UIMask;
+FORWARD class UIRectMask;
 FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 
@@ -45,7 +45,7 @@ public:
     bool IsSelectAllOnFocus() const;
     bool IsSelectingWithMouse() const;
 
-    UIMask *GetMask() const;
+    UIRectMask *GetMask() const;
     UITextRenderer *GetText() const;
 
     // IFocusListener
@@ -60,7 +60,7 @@ private:
     bool m_selectable = Undef<bool>();
     bool m_selectAllOnFocusTaken = false;
 
-    UIMask *p_mask = nullptr;
+    UIRectMask *p_mask = nullptr;
     UITextRenderer *p_text = nullptr;
     GameObject *p_selectionQuad = nullptr;
 

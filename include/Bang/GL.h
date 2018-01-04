@@ -341,6 +341,11 @@ public:
                                 GL::FilterMode filterMode,
                                 GL::BufferBit bufferBitMask);
 
+    static void Scissor(int x, int y, int width, int height);
+    static void Scissor(const Recti &scissorRectPx);
+    static void ScissorIntersecting(int x, int y, int width, int height);
+    static void ScissorIntersecting(const Recti &scissorRectPx);
+
     static GLId CreateShader(GL::ShaderType shaderType);
     static void ShaderSource(GLId shaderId, const String &sourceCode);
     static bool CompileShader(GLId shaderId);
@@ -527,7 +532,8 @@ public:
     static GL::BlendFactor GetBlendDstFactorAlpha();
     static GL::BlendEquationE GetBlendEquationColor();
     static GL::BlendEquationE GetBlendEquationAlpha();
-    static Color GetClearColor();
+    static const Recti& GetScissorRect();
+    static const Color& GetClearColor();
     static GL::Enum GetPolygonMode(GL::Face face);
     static uint GetLineWidth();
     static uint GetStencilMask();
@@ -606,6 +612,7 @@ private:
     Color m_clearColor = Color::Zero;
     GL::Face m_cullFace = GL::Face::Back;
 
+    Recti m_scissorRectPx                     = Recti(-1,-1,-1,-1);
     GL::Enum m_frontPolygonMode             = GL::Fill;
     GL::Enum m_backPolygonMode              = GL::Fill;
     GL::Enum m_frontBackPolygonMode         = GL::Fill;
