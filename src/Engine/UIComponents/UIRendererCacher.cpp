@@ -142,10 +142,10 @@ void UIRendererCacher::OnChildAdded(GameObject*, GameObject*)
     List<GameObject*> children = GetContainer()->GetChildrenRecursively();
     for (GameObject *child : children)
     {
-        List<UIRenderer*> uiRenderers = child->GetComponents<UIRenderer>();
-        for (UIRenderer *uiRend : uiRenderers)
+        List<Renderer*> renderers = child->GetComponents<Renderer>();
+        for (Renderer *rend : renderers)
         {
-            uiRend->EventEmitter<IRendererChangedListener>::RegisterListener(this);
+            rend->EventEmitter<IRendererChangedListener>::RegisterListener(this);
         }
         child->EventEmitter<IChildrenListener>::RegisterListener(this);
         child->EventEmitter<IGameObjectVisibilityChangedListener>::RegisterListener(this);
@@ -158,10 +158,10 @@ void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
     children.PushBack(removedChild);
     for (GameObject *child : children)
     {
-        List<UIRenderer*> uiRenderers = child->GetComponents<UIRenderer>();
-        for (UIRenderer *uiRend : uiRenderers)
+        List<Renderer*> renderers = child->GetComponents<Renderer>();
+        for (Renderer *rend : renderers)
         {
-            uiRend->EventEmitter<IRendererChangedListener>::UnRegisterListener(this);
+            rend->EventEmitter<IRendererChangedListener>::UnRegisterListener(this);
         }
         child->EventEmitter<IChildrenListener>::UnRegisterListener(this);
         child->EventEmitter<IGameObjectVisibilityChangedListener>::UnRegisterListener(this);

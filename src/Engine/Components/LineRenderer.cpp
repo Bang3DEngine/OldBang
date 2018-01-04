@@ -32,22 +32,25 @@ void LineRenderer::OnRender()
 
 void LineRenderer::SetPoint(int i, const Vector3 &point)
 {
-    if (i >= m_points.Size())
-    {
-        if (i == m_points.Size()) { m_points.PushBack(point); }
-        else { return; }
-    }
-    else
-    {
-        m_points[i] = point;
-    }
-    SetPoints(m_points);
+    Array<Vector3> newPoints = m_points;
+    ASSERT(i >= 0 && i <= newPoints.Size());
+
+    if (i == newPoints.Size()) { newPoints.PushBack(point); }
+    else { newPoints[i] = point; }
+
+    SetPoints(newPoints);
 }
 
 void LineRenderer::SetPoints(const Array<Vector3> &points)
 {
-    m_points = points;
-    p_mesh.Get()->LoadPositions(m_points);
+    if ((points.IsEmpty() && GetPoints().IsEmpty()) ||
+        points.Size() != GetPoints().Size() ||
+        !Containers::Equal(points.Begin(), points.End(), GetPoints().Begin()))
+    {
+        m_points = points;
+        p_mesh.Get()->LoadPositions(GetPoints());
+        PropagateRendererChanged();
+    }
 }
 
 const Array<Vector3> &LineRenderer::GetPoints() const { return m_points; }
