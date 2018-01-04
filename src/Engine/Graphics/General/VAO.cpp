@@ -19,7 +19,7 @@ VAO::~VAO()
 void VAO::BindVBO(const VBO *vbo,
                   int location,
                   int dataComponentsCount,
-                  GL_DataType dataType,
+                  GL::DataType dataType,
                   bool dataNormalized,
                   int dataStride,
                   int dataOffset)
@@ -55,9 +55,9 @@ void VAO::UnBindVBO(GLint location)
     }
 }
 
-GL_BindTarget VAO::GetGLBindTarget() const
+GL::BindTarget VAO::GetGLBindTarget() const
 {
-    return GL_BindTarget::VAO;
+    return GL::BindTarget::VAO;
 }
 
 void VAO::Bind() const

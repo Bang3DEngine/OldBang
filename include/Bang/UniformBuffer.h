@@ -18,7 +18,7 @@ public:
 
     void UpdateBuffer() const;
 
-    virtual GL_BindTarget GetGLBindTarget() const;
+    virtual GL::BindTarget GetGLBindTarget() const;
 
 private:
     BufferStruct m_data;

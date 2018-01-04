@@ -5,7 +5,7 @@
 
 USING_NAMESPACE_BANG
 
-Texture2D::Texture2D() : Texture(GL_TextureTarget::Texture2D)
+Texture2D::Texture2D() : Texture(GL::TextureTarget::Texture2D)
 {
     CreateEmpty(1,1);
 }
@@ -21,20 +21,20 @@ void Texture2D::Import(const Image<Byte> &image)
         SetWidth(image.GetWidth());
         SetHeight(image.GetHeight());
 
-        SetInternalFormat(GL_ColorFormat::RGBA_UByte8);
+        SetInternalFormat(GL::ColorFormat::RGBA_UByte8);
         Fill(image.GetData(),
              GetWidth(), GetHeight(),
-             GL_ColorComp::RGBA,
-             GL_DataType::UnsignedByte);
+             GL::ColorComp::RGBA,
+             GL::DataType::UnsignedByte);
     }
 }
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    GL_ColorComp colorComp =
-            (GetInternalFormat() == GL_ColorFormat::Depth24_Stencil8) ?
-                GL_ColorComp::Depth : GL_ColorComp::RGB;
-    Fill(nullptr, width, height, colorComp, GL_DataType::UnsignedByte);
+    GL::ColorComp colorComp =
+            (GetInternalFormat() == GL::ColorFormat::Depth24_Stencil8) ?
+                GL::ColorComp::Depth : GL::ColorComp::RGB;
+    Fill(nullptr, width, height, colorComp, GL::DataType::UnsignedByte);
 }
 
 void Texture2D::Resize(int width, int height)
@@ -50,18 +50,18 @@ void Texture2D::Fill(const Color &fillColor,
 {
     Array<Color> inputData = Array<Color>(width * height, fillColor);
     Fill( RCAST<const Byte*>(inputData.Data()), width, height,
-          GL_ColorComp::RGBA, GL_DataType::Float);
+          GL::ColorComp::RGBA, GL::DataType::Float);
 }
 
 void Texture2D::Fill(const Byte *newData,
                      int width, int height,
-                     GL_ColorComp inputDataColorComp,
-                     GL_DataType inputDataType)
+                     GL::ColorComp inputDataColorComp,
+                     GL::DataType inputDataType)
 {
     SetWidth(width);
     SetHeight(height);
 
-    GLId prevBoundId = GL::GetBoundId(GL_BindTarget::Texture2D);
+    GLId prevBoundId = GL::GetBoundId(GL::BindTarget::Texture2D);
     Bind();
     GL::TexImage2D(GetTextureTarget(),
                    GetWidth(), GetHeight(),
@@ -69,7 +69,7 @@ void Texture2D::Fill(const Byte *newData,
                    inputDataColorComp,
                    inputDataType,
                    newData);
-    GL::Bind(GL_BindTarget::Texture2D, prevBoundId);
+    GL::Bind(GL::BindTarget::Texture2D, prevBoundId);
 
     PropagateTextureChanged();
 }
@@ -108,10 +108,10 @@ Color Texture2D::GetColorFromArray(const Byte *pixels, int i)
 template <class T>
 void GetTexImageInto_T(const Texture2D *tex, T *pixels)
 {
-    GLId prevBound = GL::GetBoundId(GL_BindTarget::Texture2D);
+    GLId prevBound = GL::GetBoundId(GL::BindTarget::Texture2D);
     tex->Bind();
     GL::GetTexImage(tex->GetTextureTarget(), pixels);
-    GL::Bind(GL_BindTarget::Texture2D, prevBound);
+    GL::Bind(GL::BindTarget::Texture2D, prevBound);
 }
 
 void Texture2D::GetTexImageInto(Byte *pixels) const
@@ -130,10 +130,10 @@ void Texture2D::ImportXML(const XMLNode &xmlInfo)
     Asset::ImportXML(xmlInfo);
 
     if (xmlInfo.Contains("FilterMode"))
-    { SetFilterMode( xmlInfo.Get<GL_FilterMode>("FilterMode") ); }
+    { SetFilterMode( xmlInfo.Get<GL::FilterMode>("FilterMode") ); }
 
     if (xmlInfo.Contains("WrapMode"))
-    { SetWrapMode( xmlInfo.Get<GL_WrapMode>("WrapMode") ); }
+    { SetWrapMode( xmlInfo.Get<GL::WrapMode>("WrapMode") ); }
 
     if (xmlInfo.Contains("AlphaCutoff"))
     { SetAlphaCutoff( xmlInfo.Get<float>("AlphaCutoff") ); }

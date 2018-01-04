@@ -467,7 +467,7 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
     LineRenderer *lr = sepGo->AddComponent<LineRenderer>();
     lr->SetMaterial(MaterialFactory::GetUIImage().Get());
     lr->GetMaterial()->SetDiffuseColor(Color::White);
-    lr->SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
+    lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     lr->SetRenderPass(RenderPass::Canvas);
 
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
@@ -512,7 +512,7 @@ GameObject* GameObjectFactory::CreateGameObjectWithMesh(Mesh* m,
     go->SetName(name);
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderPrimitive(GL_Primitive::Triangles);
+    r->SetRenderPrimitive(GL::Primitive::Triangles);
     r->SetMaterial(MaterialFactory::GetDefault().Get());
     r->SetMesh(m);
 

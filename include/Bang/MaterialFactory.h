@@ -27,7 +27,7 @@ private:
     Map<String, RH<Material>> m_cache;
 
     MaterialFactory() = default;
-    static RH<Material> Load(const String &enginePath);
+    static RH<Material> Load(const String &matEnginePath);
 
     static MaterialFactory* GetActive();
 

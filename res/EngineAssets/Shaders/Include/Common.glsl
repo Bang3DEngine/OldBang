@@ -32,6 +32,7 @@ uniform bool  B_MaterialReceivesLighting;
 uniform vec4  B_MaterialDiffuseColor;
 uniform float B_AlphaCutoff;
 uniform float B_MaterialShininess;
+uniform vec2  B_UvOffset;
 uniform vec2  B_UvMultiply;
 uniform bool  B_HasTexture;
 uniform sampler2D B_Texture0;

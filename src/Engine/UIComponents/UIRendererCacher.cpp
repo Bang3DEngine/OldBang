@@ -8,6 +8,8 @@
 #include "Bang/UIRenderer.h"
 #include "Bang/Framebuffer.h"
 #include "Bang/RectTransform.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
 
 USING_NAMESPACE_BANG
@@ -16,8 +18,10 @@ UIRendererCacher::UIRendererCacher()
 {
     p_cacheFramebuffer = new Framebuffer(1, 1);
     p_cacheFramebuffer->Bind();
-    p_cacheFramebuffer->CreateAttachment(GL_Attachment::Color0,
-                                         GL_ColorFormat::RGBA_UByte8);
+    p_cacheFramebuffer->CreateAttachment(GL::Attachment::Color0,
+                                         GL::ColorFormat::RGBA_UByte8);
+    p_cacheFramebuffer->CreateAttachment(GL::Attachment::DepthStencil,
+                                         GL::ColorFormat::Depth24_Stencil8);
     p_cacheFramebuffer->UnBind();
 }
 
@@ -29,37 +33,79 @@ UIRendererCacher::~UIRendererCacher()
 void UIRendererCacher::OnStart()
 {
     // Prepare image renderer
-    Texture2D *tex = p_cacheFramebuffer->GetAttachmentTexture(GL_Attachment::Color0);
+    Texture2D *tex = p_cacheFramebuffer->GetAttachmentTexture(GL::Attachment::Color0);
     if (p_cachedImageRenderer)
     {
-        tex->SetWrapMode(GL_WrapMode::Repeat);
+        tex->SetWrapMode(GL::WrapMode::Repeat);
         p_cachedImageRenderer->SetImageTexture(tex);
         p_cachedImageRenderer->SetTint(Color::White);
-        p_cachedImageRenderer->SetUvMultiply(Vector2(1, -1));
+        p_cachedImageRenderer->SetUvMultiply(Vector2(1, 1));
         p_cachedImageRenderer->GetImageTexture()->SetAlphaCutoff(1.0f);
-        p_cachedImageRenderer->GetImageTexture()->SetFilterMode(GL_FilterMode::Nearest);
+        p_cachedImageRenderer->GetImageTexture()->SetFilterMode(GL::FilterMode::Nearest);
     }
 }
 
+#include "Bang/Input.h"
 void UIRendererCacher::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
 
     if (renderPass == RenderPass::Canvas)
     {
-        if (IsCachingEnabled())
+        if (IsCachingEnabled() && m_needNewImageToSnapshot)
         {
-            if (m_needNewImageToSnapshotInNextFrame)
-            {
-                m_needNewImageToSnapshot = true;
-                m_needNewImageToSnapshotInNextFrame = false;
-            }
+            // Save previous state
+            GLId prevBoundDrawFramebuffer = GL::GetBoundId(GL::BindTarget::DrawFramebuffer);
+            GLId prevBoundReadFramebuffer = GL::GetBoundId(GL::BindTarget::ReadFramebuffer);
+            GL::BlendFactor prevBlendSrcFactorColor   = GL::GetBlendSrcFactorColor();
+            GL::BlendFactor prevBlendDstFactorColor   = GL::GetBlendDstFactorColor();
+            GL::BlendFactor prevBlendSrcFactorAlpha   = GL::GetBlendSrcFactorAlpha();
+            GL::BlendFactor prevBlendDstFactorAlpha   = GL::GetBlendDstFactorAlpha();
+            Array<GL::Attachment> prevDrawAttachments = GL::GetDrawBuffers();
+            GL::Attachment prevReadAttachment         = GL::GetReadBuffer();
+            bool wasBlendEnabled                      = GL::IsEnabled(GL::Test::Blend);
 
-            if (m_needNewImageToSnapshot) { SetContainerVisible(true); }
-            else { SetContainerVisible(false); }
-            p_cachedImageRenderer->SetVisible(!m_needNewImageToSnapshot);
+            p_cacheFramebuffer->Bind();
+
+            GBuffer *gbuffer = GEngine::GetActiveCamera()->GetGBuffer();
+            Rect rtRectNDC(GetGameObject()->GetRectTransform()->GetViewportRectNDC());
+            p_cacheFramebuffer->Resize(gbuffer->GetWidth(), gbuffer->GetHeight());
+
+            GL::DrawBuffers( {GL::Attachment::Color0} );
+            GL::ClearColorBuffer(Color::Zero);
+            p_cacheFramebuffer->ClearDepth(1.0f);
+            GL::ClearStencilBuffer(0);
+
+            Vector2 rtSize = rtRectNDC.GetSize();
+            Vector2 rtOri = rtRectNDC.GetMinXMaxY() * 0.5f + 0.5f;
+            Vector2 rtOriInvY = Vector2(rtOri.x, rtOri.y);
+            p_cachedImageRenderer->SetUvOffset( rtOriInvY );
+            p_cachedImageRenderer->SetUvMultiply( (rtSize * 0.5f) * Vector2(1, -1) );
+
+            SetContainerVisible(true);
+            p_cachedImageRenderer->SetVisible(false);
+            GL::BlendFuncSeparate(GL::BlendFactor::SrcAlpha,
+                                  GL::BlendFactor::OneMinusSrcAlpha,
+                                  GL::BlendFactor::One,
+                                  GL::BlendFactor::OneMinusSrcAlpha);
+            GetContainer()->Render(RenderPass::Canvas);
+            p_cachedImageRenderer->SetVisible(true);
+            SetContainerVisible(false);
+
+            // Restore gl state
+            GL::Bind(GL::BindTarget::DrawFramebuffer, prevBoundDrawFramebuffer);
+            GL::Bind(GL::BindTarget::ReadFramebuffer, prevBoundReadFramebuffer);
+            GL::DrawBuffers(prevDrawAttachments);
+            GL::ReadBuffer(prevReadAttachment);
+            GL::BlendFuncSeparate(prevBlendSrcFactorColor,
+                                  prevBlendDstFactorColor,
+                                  prevBlendSrcFactorAlpha,
+                                  prevBlendDstFactorAlpha);
+            GL::SetEnabled(GL::Test::Blend, wasBlendEnabled);
+
+            m_needNewImageToSnapshot = false;
         }
-        else
+        else if (!IsCachingEnabled())
         {
             SetContainerVisible(true);
             p_cachedImageRenderer->SetVisible(false);
@@ -70,17 +116,6 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
 void UIRendererCacher::OnAfterChildrenRender(RenderPass renderPass)
 {
     Component::OnAfterChildrenRender(renderPass);
-    if (renderPass == RenderPass::Canvas)
-    {
-        if ( IsCachingEnabled() && m_needNewImageToSnapshot )
-        {
-            SnapshotGBufferIntoCachedImage();
-            m_needNewImageToSnapshot = false;
-            m_needNewImageToSnapshotInNextFrame = false;
-            p_cachedImageRenderer->SetVisible(true);
-        }
-        SetContainerVisible(true);
-    }
 }
 
 void UIRendererCacher::SetCachingEnabled(bool enabled)
@@ -135,49 +170,14 @@ void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
 
 void UIRendererCacher::OnRendererChanged(Renderer*)
 {
-    m_needNewImageToSnapshotInNextFrame = true;
-}
-
-void UIRendererCacher::SnapshotGBufferIntoCachedImage()
-{
-    ASSERT(!p_cachedImageRenderer->IsVisible());
-
-    // Save previous state
-    GLId prevBoundDrawFramebuffer = GL::GetBoundId(GL_BindTarget::DrawFramebuffer);
-    GLId prevBoundReadFramebuffer = GL::GetBoundId(GL_BindTarget::ReadFramebuffer);
-    Array<GL_Attachment> prevDrawAttachments = GL::GetDrawBuffers();
-    GL_Attachment prevReadAttachment = GL::GetReadBuffer();
-
-    // Get src and destination rects
-    Rect rtRectPx = GetGameObject()->GetRectTransform()->GetViewportRect();
-    p_cacheFramebuffer->Resize(rtRectPx.GetWidth(), rtRectPx.GetHeight());
-
-    Recti dstRectPx(Vector2i::Zero, Vector2i(p_cacheFramebuffer->GetSize()));
-    GBuffer *gbuffer = GEngine::GetActive()->GetActiveCamera()->GetGBuffer();
-
-    // Bind read and draw framebuffers
-    GL::Bind(GL_BindTarget::ReadFramebuffer, gbuffer->GetGLId());
-    GL::ReadBuffer(GBuffer::AttColor);
-
-    GL::Bind(GL_BindTarget::DrawFramebuffer, p_cacheFramebuffer->GetGLId());
-    GL::DrawBuffers( {GL_Attachment::Color0} );
-
-    // Copy from GBuffer to cache framebuffer
-    GL::BlitFramebuffer(Recti(rtRectPx),
-                        dstRectPx,
-                        GL_FilterMode::Nearest,
-                        GL_BufferBit::Color);
-
-    // Restore
-    GL::Bind(GL_BindTarget::DrawFramebuffer, prevBoundDrawFramebuffer);
-    GL::Bind(GL_BindTarget::ReadFramebuffer, prevBoundReadFramebuffer);
-    GL::DrawBuffers(prevDrawAttachments);
-    GL::ReadBuffer(prevReadAttachment);
+    m_needNewImageToSnapshot = true;
 }
 
 void UIRendererCacher::SetContainerVisible(bool visible)
 {
+    SetReceiveEvents(false);
     GetContainer()->SetVisible(visible);
+    SetReceiveEvents(true);
 }
 
 UIRendererCacher* UIRendererCacher::CreateInto(GameObject *go)

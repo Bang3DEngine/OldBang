@@ -20,6 +20,7 @@ public:
     // UIRenderer
     virtual void OnRender() override;
 
+    void SetUvOffset(const Vector2 &uvOffset);
     void SetUvMultiply(const Vector2 &uvMultiply);
     void SetImageTexture(const Path &imagePath);
     void SetImageTexture(Texture2D* imageTexture);
@@ -28,6 +29,7 @@ public:
     void SetVerticalAlignment(VerticalAlignment verticalAlignment);
     void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
 
+    const Vector2& GetUvOffset() const;
     const Vector2& GetUvMultiply() const;
     const Color& GetTint() const;
     Texture2D *GetImageTexture() const;

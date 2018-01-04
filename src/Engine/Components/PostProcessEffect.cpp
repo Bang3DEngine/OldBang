@@ -35,7 +35,7 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     if (scenePostProcess || canvasPostProcess)
     {
         p_shaderProgram.Get()->Bind();
-        GEngine::GetActive()->ApplyScreenPass(p_shaderProgram.Get());
+        GEngine::GetActive()->RenderScreenRect(p_shaderProgram.Get());
         p_shaderProgram.Get()->UnBind();
     }
 }

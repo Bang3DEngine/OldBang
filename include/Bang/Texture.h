@@ -16,30 +16,30 @@ class Texture : public GLObject,
 public:
 
     Texture();
-    Texture(GL_TextureTarget texTarget);
+    Texture(GL::TextureTarget texTarget);
     Texture(const Texture &t);
     virtual ~Texture();
 
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;
 
-    void SetInternalFormat(GL_ColorFormat internalFormat);
-    void SetTarget(GL_TextureTarget target);
-    void SetFilterMode(GL_FilterMode filterMode);
-    void SetWrapMode(GL_WrapMode wrapMode);
+    void SetInternalFormat(GL::ColorFormat internalFormat);
+    void SetTarget(GL::TextureTarget target);
+    void SetFilterMode(GL::FilterMode filterMode);
+    void SetWrapMode(GL::WrapMode wrapMode);
 
     int GetWidth() const;
     int GetHeight() const;
     const Vector2i& GetSize() const;
-    GL_FilterMode GetFilterMode() const;
-    GL_WrapMode GetWrapMode() const;
+    GL::FilterMode GetFilterMode() const;
+    GL::WrapMode GetWrapMode() const;
 
-    GL_DataType GetInternalDataType() const;
-    GL_ColorFormat GetInternalFormat() const;
+    GL::DataType GetInternalDataType() const;
+    GL::ColorFormat GetInternalFormat() const;
     uint GetBytesSize() const;
 
-    GL_TextureTarget GetTextureTarget() const;
-    GL_BindTarget GetGLBindTarget() const override;
+    GL::TextureTarget GetTextureTarget() const;
+    GL::BindTarget GetGLBindTarget() const override;
     void BindToTextureUnit(int textureUnit) const;
 
 protected:
@@ -51,11 +51,11 @@ protected:
 private:
     Vector2i m_size = Vector2i::Zero;
 
-    GL_FilterMode m_filterMode = Undef<GL_FilterMode>();
-    GL_WrapMode m_wrapMode     = Undef<GL_WrapMode>();
+    GL::FilterMode m_filterMode = Undef<GL::FilterMode>();
+    GL::WrapMode m_wrapMode     = Undef<GL::WrapMode>();
 
-    GL_ColorFormat m_internalFormat = GL_ColorFormat::RGBA_Float32;
-    GL_TextureTarget m_target = GL_TextureTarget::Texture2D;
+    GL::ColorFormat m_internalFormat = GL::ColorFormat::RGBA_Float32;
+    GL::TextureTarget m_target = GL::TextureTarget::Texture2D;
 };
 
 NAMESPACE_BANG_END

@@ -1,9 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <GL/glew.h>
-
-#include "Bang/GLEnums.h"
+#include "Bang/GL.h"
 #include "Bang/GLObject.h"
 #include "Bang/Component.h"
 #include "Bang/RenderPass.h"
@@ -38,10 +36,10 @@ public:
     void SetVisible(bool visible);
     void SetMaterial(Material *mat);
     void SetRenderWireframe(bool renderWireframe);
-    void SetCullFace(GL_Face cullMode);
+    void SetCullFace(GL::Face cullMode);
     void SetCulling(bool cull);
-    void SetViewProjMode(GL_ViewProjMode viewProjMode);
-    void SetRenderPrimitive(GL_Primitive renderPrimitive);
+    void SetViewProjMode(GL::ViewProjMode viewProjMode);
+    void SetRenderPrimitive(GL::Primitive renderPrimitive);
     void SetLineWidth(float w);
     void SetRenderPass(RenderPass rp);
 
@@ -50,10 +48,10 @@ public:
     Material* GetUserMaterial() const;
     Material* GetMaterial() const;
     bool IsRenderWireframe() const;
-    GL_Face GetCullFace() const;
+    GL::Face GetCullFace() const;
     bool GetCulling() const;
-    GL_ViewProjMode GetViewProjMode() const;
-    GL_Primitive GetRenderPrimitive() const;
+    GL::ViewProjMode GetViewProjMode() const;
+    GL::Primitive GetRenderPrimitive() const;
     float GetLineWidth() const;
     RenderPass GetRenderPass() const;
 
@@ -74,9 +72,9 @@ public:
 protected:
     bool m_cullling = true;
     bool m_renderWireframe = false;
-    GL_Face m_cullFace = GL_Face::Back;
-    GL_Primitive m_renderPrimitive = GL_Primitive::Triangles;
-    GL_ViewProjMode m_viewProjMode = GL_ViewProjMode::UseBoth;
+    GL::Face m_cullFace = GL::Face::Back;
+    GL::Primitive m_renderPrimitive = GL::Primitive::Triangles;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
 
     Renderer();
     virtual ~Renderer();

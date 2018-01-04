@@ -13,6 +13,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Framebuffer;
+FORWARD class ShaderProgram;
 FORWARD class UIImageRenderer;
 
 class UIRendererCacher : public Component,
@@ -45,13 +46,10 @@ public:
 private:
     bool m_cachingEnabled = true;
     bool m_needNewImageToSnapshot = true;
-    bool m_needNewImageToSnapshotInNextFrame = true;
 
     Framebuffer *p_cacheFramebuffer = nullptr;
     GameObject *p_uiRenderersContainer = nullptr;
     UIImageRenderer *p_cachedImageRenderer = nullptr;
-
-    void SnapshotGBufferIntoCachedImage();
 
     void SetContainerVisible(bool visible);
     static UIRendererCacher* CreateInto(GameObject *go);

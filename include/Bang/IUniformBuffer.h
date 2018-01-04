@@ -13,7 +13,7 @@ public:
     void SetBindingPoint(int bindingPoint);
     GLuint GetBindingPoint() const;
 
-    GL_BindTarget GetGLBindTarget() const override;
+    GL::BindTarget GetGLBindTarget() const override;
 
 protected:
     IUniformBuffer();

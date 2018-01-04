@@ -101,9 +101,9 @@ bool ShaderProgram::IsLinked() const
     return m_isLinked;
 }
 
-GL_BindTarget ShaderProgram::GetGLBindTarget() const
+GL::BindTarget ShaderProgram::GetGLBindTarget() const
 {
-    return GL_BindTarget::ShaderProgram;
+    return GL::BindTarget::ShaderProgram;
 }
 
 template<class T, class=TT_NOT_POINTER(T)>
@@ -186,7 +186,7 @@ bool ShaderProgram::Refresh()
 
 bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 {
-    if (vertexShader->GetType() != GL_ShaderType::Vertex)
+    if (vertexShader->GetType() != GL::ShaderType::Vertex)
     {
         Debug_Error("You are trying to set as vertex shader a "
                     "non-vertex shader");
@@ -198,7 +198,7 @@ bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 
 bool ShaderProgram::SetFragmentShader(Shader* fragmentShader)
 {
-    if (fragmentShader->GetType() != GL_ShaderType::Fragment)
+    if (fragmentShader->GetType() != GL::ShaderType::Fragment)
     {
         Debug_Error("You are trying to set as fragment shader a "
                     "non-fragment shader");

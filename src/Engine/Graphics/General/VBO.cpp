@@ -14,16 +14,16 @@ VBO::~VBO()
     GL::DeleteBuffers(1, &m_idGL);
 }
 
-void VBO::Fill(const void *data, int dataSize, GL_UsageHint usage)
+void VBO::Fill(const void *data, int dataSize, GL::UsageHint usage)
 {
     Bind();
-    GL::BufferData(GL_BindTarget::VBO, dataSize, data, usage);
+    GL::BufferData(GL::BindTarget::VBO, dataSize, data, usage);
     UnBind();
 }
 
-GL_BindTarget VBO::GetGLBindTarget() const
+GL::BindTarget VBO::GetGLBindTarget() const
 {
-    return GL_BindTarget::VBO;
+    return GL::BindTarget::VBO;
 }
 
 void VBO::Bind() const

@@ -9,7 +9,7 @@ USING_NAMESPACE_BANG
 UIRenderer::UIRenderer()
 {
     SetRenderPass(RenderPass::Canvas);
-    SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
+    SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     SetCullByRectTransform(true);
 }

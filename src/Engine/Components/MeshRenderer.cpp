@@ -8,12 +8,14 @@
 #include "Bang/Transform.h"
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
+#include "Bang/MeshFactory.h"
 
 USING_NAMESPACE_BANG
 
 MeshRenderer::MeshRenderer()
 {
-    SetRenderPrimitive( GL_Primitive::Triangles );
+    SetRenderPrimitive( GL::Primitive::Triangles );
+    SetMesh( MeshFactory::GetCube().Get() );
 }
 
 MeshRenderer::~MeshRenderer()

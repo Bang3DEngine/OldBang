@@ -15,6 +15,6 @@ void main()
     vec4 v = B_Matrices.Model * vec4(B_VIn_Position, 1);
     B_FIn_Position = v.xyz;
     B_FIn_Normal   = vec4(0, 0, 0, 0); // normalize( mat3(B_Matrices.Normal) * B_VIn_Normal);
-    B_FIn_Uv       = vec2(B_VIn_Uv.x, B_VIn_Uv.y) * B_UvMultiply;
+    B_FIn_Uv       = vec2(B_VIn_Uv.x, B_VIn_Uv.y) * B_UvMultiply + B_UvOffset;
     gl_Position    = v;
 }

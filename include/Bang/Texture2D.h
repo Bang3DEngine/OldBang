@@ -21,8 +21,8 @@ public:
               int width, int height);
     void Fill(const Byte *newData,
               int width, int height,
-              GL_ColorComp inputDataColorComp,
-              GL_DataType inputDataType);
+              GL::ColorComp inputDataColorComp,
+              GL::DataType inputDataType);
     void GenerateMipMaps() const;
 
     template<class T = Byte>

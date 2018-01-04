@@ -28,7 +28,7 @@ public:
 
     void Bind() const override;
     void UnBind() const override;
-    GL_BindTarget GetGLBindTarget() const override;
+    GL::BindTarget GetGLBindTarget() const override;
 
     bool Set(const String &name, int v);
     bool Set(const String &name, bool v);

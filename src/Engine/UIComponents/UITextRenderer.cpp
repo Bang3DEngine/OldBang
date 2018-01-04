@@ -31,7 +31,7 @@ UITextRenderer::UITextRenderer() : UIRenderer()
     SetTextSize(20.0f);
     SetTextColor(Color::Black);
 
-    SetRenderPrimitive(GL_Primitive::Triangles);
+    SetRenderPrimitive(GL::Primitive::Triangles);
     OnChanged();
 }
 

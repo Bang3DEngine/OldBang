@@ -1,8 +1,8 @@
 #ifndef UIMASK_H
 #define UIMASK_H
 
+#include "Bang/GL.h"
 #include "Bang/Array.h"
-#include "Bang/GLEnums.h"
 #include "Bang/Component.h"
 
 NAMESPACE_BANG_BEGIN
@@ -35,8 +35,8 @@ private:
     bool m_restoringStencil = false;
 
     std::array<bool, 4> m_colorMaskBefore;
-    GL_Function  m_stencilFuncBefore;
-    GL_StencilOperation m_stencilOpBefore;
+    GL::Function  m_stencilFuncBefore;
+    GL::StencilOperation m_stencilOpBefore;
 
     void PrepareStencilToDrawMask();
     void PrepareStencilToDrawChildren();

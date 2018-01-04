@@ -11,9 +11,9 @@ GLId GLObject::GetGLId() const
     return m_idGL;
 }
 
-GL_BindTarget GLObject::GetGLBindTarget() const
+GL::BindTarget GLObject::GetGLBindTarget() const
 {
-    return GL_BindTarget::None;
+    return GL::BindTarget::None;
 }
 
 void GLObject::Bind() const

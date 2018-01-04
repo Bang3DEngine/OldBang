@@ -13,11 +13,11 @@
 
 USING_NAMESPACE_BANG
 
-Shader::Shader(GL_ShaderType t) : m_type(t)
+Shader::Shader(GL::ShaderType t) : m_type(t)
 {
 }
 
-Shader::Shader() : Shader(GL_ShaderType::Vertex)
+Shader::Shader() : Shader(GL::ShaderType::Vertex)
 {
 }
 
@@ -49,14 +49,14 @@ void Shader::RetrieveType(const Path &shaderPath)
 {
     if (shaderPath.GetExtension().Contains("vert"))
     {
-        m_type = GL_ShaderType::Vertex;
+        m_type = GL::ShaderType::Vertex;
     }
-    else { m_type = GL_ShaderType::Fragment; }
+    else { m_type = GL::ShaderType::Fragment; }
 }
 
-GL_BindTarget Shader::GetGLBindTarget() const
+GL::BindTarget Shader::GetGLBindTarget() const
 {
-    return GL_BindTarget::None;
+    return GL::BindTarget::None;
 }
 
 const String& Shader::GetSourceCode() const
@@ -64,7 +64,7 @@ const String& Shader::GetSourceCode() const
     return m_sourceCode;
 }
 
-GL_ShaderType Shader::GetType() const
+GL::ShaderType Shader::GetType() const
 {
     return m_type;
 }

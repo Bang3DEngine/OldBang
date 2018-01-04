@@ -39,6 +39,15 @@ void UIImageRenderer::OnRender()
     }
 }
 
+void UIImageRenderer::SetUvOffset(const Vector2 &uvOffset)
+{
+    if (uvOffset != GetUvOffset())
+    {
+        GetMaterial()->SetUvOffset(uvOffset);
+        OnChanged();
+    }
+}
+
 void UIImageRenderer::SetUvMultiply(const Vector2 &uvMultiply)
 {
     if (uvMultiply != GetUvMultiply())
@@ -98,6 +107,11 @@ void UIImageRenderer::SetHorizontalAlignment(HorizontalAlignment horizontalAlign
         m_horizontalAlignment = horizontalAlignment;
         OnChanged();
     }
+}
+
+const Vector2 &UIImageRenderer::GetUvOffset() const
+{
+    return GetMaterial()->GetUvOffset();
 }
 
 const Vector2 &UIImageRenderer::GetUvMultiply() const

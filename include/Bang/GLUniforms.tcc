@@ -59,7 +59,7 @@ T GLUniforms::GetUniform(GLId program, const String &uniformName)
 template <class T>
 T GLUniforms::GetUniform(const String &uniformName)
 {
-    return GLUniforms::GetUniform<T>(GL::GetBoundId(GL_BindTarget::ShaderProgram),
+    return GLUniforms::GetUniform<T>(GL::GetBoundId(GL::BindTarget::ShaderProgram),
                                      uniformName);
 }
 

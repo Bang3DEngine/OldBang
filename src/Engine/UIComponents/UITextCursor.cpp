@@ -13,7 +13,7 @@ UITextCursor::UITextCursor()
 {
     SetMaterial(MaterialFactory::GetUIImage().Get());
     GetMaterial()->SetDiffuseColor(Color::Black);
-    SetViewProjMode(GL_ViewProjMode::IgnoreBoth);
+    SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     SetRenderPass(RenderPass::Canvas);
     SetStroke(1.0f);
 

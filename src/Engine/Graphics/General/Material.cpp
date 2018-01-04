@@ -22,6 +22,15 @@ Material::~Material()
 {
 }
 
+void Material::SetUvOffset(const Vector2 &uvOffset)
+{
+    if (uvOffset != GetUvOffset())
+    {
+        m_uvOffset = uvOffset;
+        PropagateMaterialChanged();
+    }
+}
+
 void Material::SetUvMultiply(const Vector2 &uvMultiply)
 {
     if (uvMultiply != GetUvMultiply())
@@ -89,6 +98,7 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
     }
 }
 
+const Vector2 &Material::GetUvOffset() const { return m_uvOffset; }
 const Vector2 &Material::GetUvMultiply() const { return m_uvMultiply; }
 ShaderProgram* Material::GetShaderProgram() const { return p_shaderProgram.Get(); }
 Texture2D* Material::GetTexture() const { return p_texture.Get(); }
@@ -101,6 +111,7 @@ void Material::Bind() const
     ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
+    sp->Set("B_UvOffset",                 GetUvOffset());
     sp->Set("B_UvMultiply",               GetUvMultiply());
     sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
     sp->Set("B_MaterialShininess",        GetShininess());
@@ -160,6 +171,9 @@ void Material::ImportXML(const XMLNode &xml)
     if (xml.Contains("ReceivesLighting"))
     { SetReceivesLighting(xml.Get<bool>("ReceivesLighting")); }
 
+    if (xml.Contains("UvOffset"))
+    { SetUvMultiply(xml.Get<Vector2>("UvOffset")); }
+
     if (xml.Contains("UvMultiply"))
     { SetUvMultiply(xml.Get<Vector2>("UvMultiply")); }
 
@@ -191,6 +205,7 @@ void Material::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Shininess",        GetShininess());
     xmlInfo->Set("ReceivesLighting", GetReceivesLighting());
     xmlInfo->Set("UvMultiply",       GetUvMultiply());
+    xmlInfo->Set("UvOffset",         GetUvOffset());
 
     Texture2D* tex = GetTexture();
     xmlInfo->Set("Texture",  tex ? tex->GetGUID() : GUID::Empty());

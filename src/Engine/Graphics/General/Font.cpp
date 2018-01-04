@@ -51,8 +51,8 @@ void Font::Import(const Path &ttfFilepath)
         p_distFieldTexture.Get()->Import(distFieldImg);
         p_distFieldTexture.Get()->Bind();
         p_distFieldTexture.Get()->GenerateMipMaps();
-        p_distFieldTexture.Get()->SetFilterMode(GL_FilterMode::Bilinear);
-        p_distFieldTexture.Get()->SetWrapMode(GL_WrapMode::ClampToEdge);
+        p_distFieldTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);
+        p_distFieldTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
         p_distFieldTexture.Get()->UnBind();
 
         String loadedChars = "";
@@ -148,7 +148,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
             m_cachedAtlasCharRects[fontSize].Add(chars[i], charRects[i]);
         }
 
-        atlasTex.Get()->SetFilterMode(GL_FilterMode::Nearest);
+        atlasTex.Get()->SetFilterMode(GL::FilterMode::Nearest);
     }
 
     return m_cachedAtlas.Get(fontSize).Get();

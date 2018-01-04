@@ -51,8 +51,8 @@ void Renderer::Bind() const
     GL::SetWireframe( IsRenderWireframe() );
 
     GL::SetCullFace( GetCullFace() ); // Culling states
-    if (GetCulling()) { GL::Enable( GL_Test::CullFace ); }
-    else { GL::Disable( GL_Test::CullFace ); }
+    if (GetCulling()) { GL::Enable( GL::Test::CullFace ); }
+    else { GL::Disable( GL::Test::CullFace ); }
 
     GL::LineWidth( GetLineWidth() );
 
@@ -129,7 +129,7 @@ void Renderer::SetRenderWireframe(bool renderWireframe)
         PropagateRendererChanged();
     }
 }
-void Renderer::SetViewProjMode(GL_ViewProjMode viewProjMode)
+void Renderer::SetViewProjMode(GL::ViewProjMode viewProjMode)
 {
     if (viewProjMode != GetViewProjMode())
     {
@@ -137,7 +137,7 @@ void Renderer::SetViewProjMode(GL_ViewProjMode viewProjMode)
         PropagateRendererChanged();
     }
 }
-void Renderer::SetRenderPrimitive(GL_Primitive renderPrimitive)
+void Renderer::SetRenderPrimitive(GL::Primitive renderPrimitive)
 {
     if (renderPrimitive != GetRenderPrimitive())
     {
@@ -155,12 +155,12 @@ void Renderer::OnMaterialChanged(const Material *changedMaterial)
 }
 bool Renderer::IsRenderWireframe() const { return m_renderWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
-void Renderer::SetCullFace(GL_Face cullMode) { m_cullFace = cullMode; }
+void Renderer::SetCullFace(GL::Face cullMode) { m_cullFace = cullMode; }
 void Renderer::SetCulling(bool culling) { m_cullling = culling; }
-GL_Face Renderer::GetCullFace() const { return m_cullFace; }
+GL::Face Renderer::GetCullFace() const { return m_cullFace; }
 bool Renderer::GetCulling() const { return m_cullling; }
-GL_ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
-GL_Primitive Renderer::GetRenderPrimitive() const { return m_renderPrimitive; }
+GL::ViewProjMode Renderer::GetViewProjMode() const { return m_viewProjMode; }
+GL::Primitive Renderer::GetRenderPrimitive() const { return m_renderPrimitive; }
 float Renderer::GetLineWidth() const { return m_lineWidth; }
 Material* Renderer::GetMaterial() const
 {

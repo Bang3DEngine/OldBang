@@ -20,6 +20,7 @@ class Material : public Asset,
     ASSET(Material)
 
 public:
+    void SetUvOffset(const Vector2& uvOffset);
     void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(Texture2D *texture);
@@ -27,6 +28,7 @@ public:
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
+    const Vector2& GetUvOffset() const;
     const Vector2& GetUvMultiply() const;
     ShaderProgram* GetShaderProgram() const;
     Texture2D* GetTexture() const;
@@ -57,6 +59,7 @@ protected:
     Color m_diffuseColor    = Color::White;
     float m_shininess       = 60.0f;
     bool m_receivesLighting = true;
+    Vector2 m_uvOffset      = Vector2::Zero;
     Vector2 m_uvMultiply    = Vector2::One;
 
     Material();

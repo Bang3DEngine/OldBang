@@ -31,8 +31,10 @@ public:
     void Render(GameObject *go, Camera *camera);
     void RenderToScreen(Camera *cam);
     void RenderToScreen(Texture2D *fullScreenTexture);
-    void ApplyScreenPass(ShaderProgram *sp,
-                         const Rect &mask = Rect::NDCRect);
+    void RenderScreenRect(ShaderProgram *sp,
+                          const Rect &destRectMask = Rect::NDCRect);
+    void RenderGBufferToScreen(const Rect &gbufferRectMask = Rect::NDCRect,
+                         const Rect &destRectMask = Rect::NDCRect);
     void RenderScreenPlane(bool withDepth = false);
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);

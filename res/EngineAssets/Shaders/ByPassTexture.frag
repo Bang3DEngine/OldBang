@@ -12,7 +12,9 @@ layout(location = 0) out vec4 B_GIn_Color;
 
 void main()
 {
-    vec4 color = B_SampleColor();
+    vec2 uv = GetViewportUv() * B_UvMultiply + B_UvOffset;
+
+    vec4 color = B_SampleColor(uv);
     gl_FragColor = color;
-    gl_FragDepth = B_SampleDepth();
+    gl_FragDepth = B_SampleDepth(uv);
 }
