@@ -11,7 +11,7 @@ Library::Library(const Path &libPath)
 
 Library::~Library()
 {
-
+    UnLoad();
 }
 
 bool Library::Load()

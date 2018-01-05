@@ -27,16 +27,15 @@ void SystemUtils::_System(const String &command,
                           bool background)
 {
     SystemProcess process;
-    process.Start(command, argsList);
     if (!background)
     {
+        process.Start(command, argsList);
         process.WaitUntilFinished();
-        bool ok = process.FinishedOk();
 
         String out = process.ReadStandardOutput() +
                      process.ReadStandardError();
         if (output) { *output = out; }
-        if (success) { *success = ok; }
+        if (success) { *success = process.FinishedOk(); }
         process.Close();
     }
     else

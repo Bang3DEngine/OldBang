@@ -47,8 +47,6 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
                         &result.output,
                         &result.success);
 
-    Debug_Peek(result.output);
-
     return result;
 }
 

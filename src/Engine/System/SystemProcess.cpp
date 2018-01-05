@@ -26,7 +26,6 @@ SystemProcess::~SystemProcess()
 {
 }
 
-#include "Bang/Debug.h"
 bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 {
     m_oldFileDescriptors[IN]  = dup(Channel::StandardIn);
@@ -36,9 +35,6 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     if (pipe(m_childToParentOutFD) != 0 ||
         pipe(m_childToParentErrFD) != 0 ||
         pipe(m_parentToChildFD) != 0)  { m_exitCode = -1; return false; }
-
-    Debug_Peek(command);
-    Debug_Peek(extraArgs);
 
     int pid = fork();
     if (pid == 0) // Child process
