@@ -40,7 +40,7 @@ void ImportFilesManager::CreateMissingImportFiles(const Path &directory)
 
 void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
 {
-    List<String> extensions = {GetImportExtension()};
+    Array<String> extensions = {GetImportExtension()};
     List<Path> importFilepaths = directory.FindFiles(Path::FindFlag::RecursiveHidden,
                                                      extensions);
 

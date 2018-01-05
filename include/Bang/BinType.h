@@ -5,7 +5,7 @@
 
 NAMESPACE_BANG_BEGIN
 
-enum BinType
+enum class BinType
 {
     Debug,
     Release

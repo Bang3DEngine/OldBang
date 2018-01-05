@@ -63,7 +63,7 @@ bool Path::Exists() const
 }
 
 List<Path> Path::FindFiles(FindFlags findFlags,
-                           const List<String> &extensions) const
+                           const Array<String> &extensions) const
 {
     if (!IsDir()) { return {}; }
 
@@ -296,11 +296,11 @@ Path Path::WithExtension(const String &extension) const
 
 bool Path::HasExtension(const String &extensions) const
 {
-    List<String> extensionsList = extensions.Split<List>(' ', true);
+    Array<String> extensionsList = extensions.Split<Array>(' ', true);
     return HasExtension(extensionsList);
 }
 
-bool Path::HasExtension(const List<String> &extensions) const
+bool Path::HasExtension(const Array<String> &extensions) const
 {
     Array<String> thisExtensions = GetExtensions();
     for (const String &extension : extensions)

@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-#include "Bang/Bang.h"
+#include "Bang/List.h"
 #include "Bang/Path.h"
 
 NAMESPACE_BANG_BEGIN
@@ -16,6 +16,7 @@ FORWARD class GEngine;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
+FORWARD class ComponentFactory;
 FORWARD class ImportFilesManager;
 
 class Application
@@ -40,6 +41,7 @@ public:
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     ImportFilesManager *GetImportFilesManager() const;
+    ComponentFactory   *GetComponentFactory() const;
 
     virtual SceneManager* CreateSceneManager() const;
     const List<Window*>& GetWindows() const;
@@ -56,11 +58,13 @@ protected:
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
+    ComponentFactory   *m_componentFactory   = nullptr;
 
     void SetupWindow(Window *window);
 
     virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();
+    virtual ComponentFactory* CreateComponentFactory();
 
 private:
     static Application *s_appSingleton;

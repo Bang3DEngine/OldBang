@@ -26,7 +26,7 @@ public:
                             const String &hint = "");
     static YesNoCancel GetYesNoCancel(const String &title, const String &msg);
     static Path OpenFilePath(const String &title,
-                             const List<String> &extensions = {},
+                             const Array<String> &extensions = {},
                              const Path &initialDirPath = Path::Empty);
     static Path OpenDirectory(const String &title,
                               const Path &initialDirPath = Path::Empty);
@@ -58,7 +58,7 @@ private:
                                             const String &initialFileName);
     static void CreateOpenFilePathSceneInto(Scene *scene,
                                             bool openDir,
-                                            const List<String> &extensions,
+                                            const Array<String> &extensions,
                                             const Path &initialDirPath);
     static void CreateFilePathBaseSceneInto(Scene *scene,
                                             const Path &initialDirPath,

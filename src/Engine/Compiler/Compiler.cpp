@@ -1,5 +1,6 @@
 #include "Bang/Compiler.h"
 
+#include "Bang/Debug.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/BangPreprocessor.h"
 
@@ -45,6 +46,9 @@ Compiler::Result Compiler::Compile(const Compiler::Job &job)
                         args,
                         &result.output,
                         &result.success);
+
+    Debug_Peek(result.output);
+
     return result;
 }
 

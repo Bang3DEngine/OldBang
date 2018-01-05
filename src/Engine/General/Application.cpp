@@ -20,6 +20,7 @@
 #include "Bang/AudioManager.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
+#include "Bang/ComponentFactory.h"
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
 
@@ -47,6 +48,7 @@ void Application::Init(const Path &engineRootPath)
     m_time = new Time();
     m_paths = CreatePaths();
     m_paths->InitPaths(engineRootPath);
+    m_componentFactory = CreateComponentFactory();
 
     m_importFilesManager = new ImportFilesManager();
 
@@ -217,6 +219,11 @@ ImportFilesManager *Application::GetImportFilesManager() const
     return m_importFilesManager;
 }
 
+ComponentFactory *Application::GetComponentFactory() const
+{
+    return m_componentFactory;
+}
+
 Application *Application::GetInstance()
 {
     return Application::s_appSingleton;
@@ -244,6 +251,11 @@ Paths *Application::CreatePaths()
 }
 
 Window *Application::_CreateWindow() { return new Window(); }
+
+ComponentFactory *Application::CreateComponentFactory()
+{
+    return new ComponentFactory();
+}
 
 void Application::DestroyWindow(Window *window)
 {

@@ -24,7 +24,7 @@ public:
 
     using PathCallback = std::function<void(const Path&)>;
 
-    void SetFileExtensions(const List<String> &extensions);
+    void SetFileExtensions(const Array<String> &extensions);
     void SetCurrentPath(const Path &currentPath);
     void AddFileAcceptedCallback(PathCallback callback);
     void AddPathChangedCallback(PathCallback callback);
@@ -33,11 +33,11 @@ public:
     Path GetCurrentSelectedPath() const;
     const Path& GetCurrentPath() const;
     bool GetShowOnlyDirectories() const;
-    const List<String> &GetFileExtensions() const;
+    const Array<String> &GetFileExtensions() const;
 
 private:
     Path m_currentPath;
-    List<String> m_fileExtensions;
+    Array<String> m_fileExtensions;
     UIFileListItem *p_selectedItem;
     List<PathCallback> m_fileAcceptedCallback;
     List<PathCallback> m_pathChangedCallback;
@@ -46,7 +46,7 @@ private:
     void UpdateEntries();
     static void SortPathsByName(List<Path> *paths);
     static void FilterPathsByExtension(List<Path> *paths,
-                                       const List<String>& extensions);
+                                       const Array<String>& extensions);
     static void RemoveFilesFromList(List<Path> *paths);
 };
 

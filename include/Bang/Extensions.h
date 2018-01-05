@@ -17,17 +17,20 @@ public:
     static String GetTexture2DExtension();
     static String GetShaderProgramExtension();
 
-    static List<String> GetTTFExtensions();
-    static List<String> GetImageExtensions();
-    static List<String> GetModelExtensions();
-    static List<String> GetTextFileExtensions();
-    static List<String> GetBehaviourExtensions();
-    static List<String> GetSourceFileExtensions();
-    static List<String> GetVertexShaderExtensions();
-    static List<String> GetFragmentShaderExtensions();
+    static Array<String> GetTTFExtensions();
+    static Array<String> GetImageExtensions();
+    static Array<String> GetModelExtensions();
+    static Array<String> GetTextFileExtensions();
+    static Array<String> GetBehaviourExtensions();
+    static Array<String> GetSourceFileExtensions();
+    static Array<String> GetVertexShaderExtensions();
+    static Array<String> GetFragmentShaderExtensions();
 
-    static bool Has(const Path &path, const List<String> &extensions);
-    static bool Equals(const String &extension, const List<String> &extensions);
+    static String GetDefaultBehaviourHeaderExtension();
+    static String GetDefaultBehaviourSourceExtension();
+
+    static bool Has(const Path &path, const Array<String> &extensions);
+    static bool Equals(const String &extension, const Array<String> &extensions);
 
     Extensions() = delete;
 };

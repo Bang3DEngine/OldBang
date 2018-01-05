@@ -143,7 +143,7 @@ void UITree::AddItem(GOItem *newItem, GOItem *parentItem, int indexInsideParent)
         GetUIList()->AddItem(newItemContainer, newItemFlatListIndex); // Add to UIList
 
         // Listen to focus and destroying
-        newItemContainer->GetCollapseButton()->GetButton()
+        newItemContainer->GetCollapseButton()->GetFocusable()
                 ->EventEmitter<IFocusListener>::RegisterListener(this);
         newItem->EventEmitter<IDestroyListener>::RegisterListener(this);
 
@@ -358,7 +358,7 @@ void UITreeItemContainer::SetCollapsable(bool collapsable)
 {
     GetCollapseButton()->SetEnabled(collapsable);
     GetCollapseButton()->GetIcon()->SetVisible(collapsable);
-    GetCollapseButton()->GetButton()->SetEnabled(collapsable);
+    GetCollapseButton()->GetFocusable()->SetEnabled(collapsable);
 }
 
 void UITreeItemContainer::SetCollapsed(bool collapsed)

@@ -99,12 +99,9 @@ List<Path> Paths::GetBehavioursSourcesFilepaths()
 
 List<Path> Paths::GetEngineIncludeDirs()
 {
-    Path incPath = Paths::Engine().Append("include");
-    List<Path> subdirs;
-    subdirs.PushBack(incPath.FindSubDirectories(Path::FindFlag::Simple));
-    subdirs.PushBack(incPath.Append("Bang")
-                     .FindSubDirectories(Path::FindFlag::Simple));
-    return subdirs;
+    List<Path> incPaths;
+    incPaths.PushBack( Paths::Engine().Append("include") );
+    return incPaths;
 }
 
 Path Paths::GetRelative(const Path &path)

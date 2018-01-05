@@ -72,7 +72,7 @@ Dialog::YesNoCancel Dialog::GetYesNoCancel(const String &title, const String &ms
     return Dialog::s_resultYesNoCancel;
 }
 
-Path Dialog::OpenFilePath(const String &title, const List<String> &extensions,
+Path Dialog::OpenFilePath(const String &title, const Array<String> &extensions,
                           const Path &initialDirPath)
 {
     DialogWindow *dialog = BeginCreateDialog(title, 500, 400, true);
@@ -173,7 +173,7 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
 
     UIButton *saveButton = botLeftButton;
     saveButton->GetText()->SetContent("Save");
-    saveButton->GetButton()->AddClickedCallback(
+    saveButton->GetFocusable()->AddClickedCallback(
         [fileList, botInputText](IFocusable *)
         {
             Path path = fileList->GetCurrentPath()
@@ -221,7 +221,7 @@ void Dialog::CreateSaveFilePathSceneInto(Scene *scene,
 
 void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
                                          bool openDir,
-                                         const List<String> &extensions,
+                                         const Array<String> &extensions,
                                          const Path &initialDirPath)
 {
     UIFileList *fileList;
@@ -240,7 +240,7 @@ void Dialog::CreateOpenFilePathSceneInto(Scene *scene,
 
     UIButton *openButton = botRightButton;
     openButton->GetText()->SetContent("Open");
-    openButton->GetButton()->AddClickedCallback(
+    openButton->GetFocusable()->AddClickedCallback(
         [fileList](IFocusable *) { OnOkClicked(nullptr); }
     );
 
@@ -346,7 +346,7 @@ void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
 
     UIButton *goButton = GameObjectFactory::CreateUIButton();
     goButton->GetText()->SetContent("Go");
-    goButton->GetButton()->AddClickedCallback(
+    goButton->GetFocusable()->AddClickedCallback(
         [inputPathText, fileList](IFocusable *)
         {
             Path inputPath(inputPathText->GetText()->GetContent());
@@ -369,7 +369,7 @@ void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
     cancelButton->GetText()->SetContent("Cancel");
     cancelButton->GetGameObject()->GetComponent<UILayoutElement>()->
                   SetFlexibleHeight(1.0f);
-    cancelButton->GetButton()->AddClickedCallback(
+    cancelButton->GetFocusable()->AddClickedCallback(
         [scene](IFocusable *)
         {
             Dialog::EndCurrentDialog();
@@ -447,7 +447,7 @@ Scene* Dialog::CreateGetStringScene(const String &msg, const String &hint)
 
     UIButton *okButton = GameObjectFactory::CreateUIButton();
     okButton->GetText()->SetContent("OK");
-    okButton->GetButton()->AddClickedCallback(OnNeedToEndDialog);
+    okButton->GetFocusable()->AddClickedCallback(OnOkClicked);
 
     msgGo->SetParent(scene);
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 10.0f)->SetParent(scene);
@@ -531,15 +531,15 @@ Scene *Dialog::CreateYesNoCancelScene(const String &msg)
 
     UIButton *buttonYes = GameObjectFactory::CreateUIButton();
     buttonYes->GetText()->SetContent("Yes");
-    buttonYes->GetButton()->AddClickedCallback(OnYesClicked);
+    buttonYes->GetFocusable()->AddClickedCallback(OnYesClicked);
 
     UIButton *buttonNo = GameObjectFactory::CreateUIButton();
     buttonNo->GetText()->SetContent("No");
-    buttonNo->GetButton()->AddClickedCallback(OnNoClicked);
+    buttonNo->GetFocusable()->AddClickedCallback(OnNoClicked);
 
     UIButton *buttonCancel = GameObjectFactory::CreateUIButton();
     buttonCancel->GetText()->SetContent("Cancel");
-    buttonCancel->GetButton()->AddClickedCallback(OnCancelClicked);
+    buttonCancel->GetFocusable()->AddClickedCallback(OnCancelClicked);
 
     container->SetParent(scene);
      mainVLayoutGo->SetParent(container);
@@ -601,11 +601,11 @@ Scene *Dialog::CreateMsgScene(const String &msg)
 
     UIButton *button0 = GameObjectFactory::CreateUIButton();
     button0->GetText()->SetContent("Cancel");
-    button0->GetButton()->AddClickedCallback(OnNeedToEndDialog);
+    button0->GetFocusable()->AddClickedCallback(OnNeedToEndDialog);
 
     UIButton *button1 = GameObjectFactory::CreateUIButton();
     button1->GetText()->SetContent("OK");
-    button1->GetButton()->AddClickedCallback(OnNeedToEndDialog);
+    button1->GetFocusable()->AddClickedCallback(OnNeedToEndDialog);
 
     container->SetParent(scene);
      mainVLayoutGo->SetParent(container);

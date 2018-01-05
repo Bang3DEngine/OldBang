@@ -60,7 +60,7 @@ private:
     int GetScrollingSpacePx() const;
     Rect GetScrollingRect() const;
     UIScrollArea *GetScrollArea() const;
-    UIFocusable* GetButton() const;
+    UIFocusable* GetFocusable() const;
     GameObject* GetBar() const;
 
     // IFocusListener

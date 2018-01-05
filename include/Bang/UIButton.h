@@ -35,7 +35,7 @@ public:
     UITextRenderer* GetText() const;
     UIImageRenderer* GetBackground() const;
     UIDirLayout *GetDirLayout() const;
-    UIFocusable* GetButton() const;
+    UIFocusable* GetFocusable() const;
 
 private:
     static const Color IdleColor;

@@ -30,7 +30,7 @@ UIButton::~UIButton()
 void UIButton::OnStart()
 {
     Component::OnStart();
-    GetButton()->EventEmitter<IFocusListener>::RegisterListener(this);
+    GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIButton::OnUpdate()
@@ -39,29 +39,29 @@ void UIButton::OnUpdate()
 
     if (!IsBlocked())
     {
-        if (GetButton()->IsMouseOver())
+        if (GetFocusable()->IsMouseOver())
         {
             if (Input::GetMouseButtonDown(MouseButton::Left))
             {
                 GetBackground()->SetTint(UIButton::PressedColor);
             }
         }
-        else if (!GetButton()->IsBeingPressed())
+        else if (!GetFocusable()->IsBeingPressed())
         {
             GetBackground()->SetTint(UIButton::IdleColor);
         }
 
         if (Input::GetMouseButtonUp(MouseButton::Left))
         {
-            if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
-            else { OnMouseExit(GetButton()); }
+            if (GetFocusable()->IsMouseOver()) { OnMouseEnter(GetFocusable()); }
+            else { OnMouseExit(GetFocusable()); }
         }
     }
 }
 
 void UIButton::Click(bool doubleClick)
 {
-    GetButton()->Click(doubleClick);
+    GetFocusable()->Click(doubleClick);
 }
 
 void UIButton::SetBlocked(bool blocked)
@@ -72,8 +72,8 @@ void UIButton::SetBlocked(bool blocked)
     if (!IsBlocked())
     {
         GetText()->SetTextColor(Color::Black);
-        if (GetButton()->IsMouseOver()) { OnMouseEnter(GetButton()); }
-        else { OnMouseExit(GetButton()); }
+        if (GetFocusable()->IsMouseOver()) { OnMouseEnter(GetFocusable()); }
+        else { OnMouseExit(GetFocusable()); }
     }
     else
     {
@@ -111,7 +111,7 @@ bool UIButton::IsBlocked() const { return m_isBlocked; }
 UIImageRenderer *UIButton::GetIcon() const { return p_icon; }
 UITextRenderer *UIButton::GetText() const { return p_text; }
 UIImageRenderer *UIButton::GetBackground() const { return p_background; }
-UIFocusable *UIButton::GetButton() const { return p_button; }
+UIFocusable *UIButton::GetFocusable() const { return p_button; }
 UIDirLayout *UIButton::GetDirLayout() const
 {
     return GetGameObject()->GetComponent<UIDirLayout>();
@@ -164,7 +164,7 @@ UIButton* UIButton::CreateInto(GameObject *go)
 
 void UIButton::OnMouseEnter(IFocusable*)
 {
-    if (!GetButton()->IsBeingPressed())
+    if (!GetFocusable()->IsBeingPressed())
     {
         GetBackground()->SetTint(UIButton::OverColor);
     }
@@ -172,7 +172,7 @@ void UIButton::OnMouseEnter(IFocusable*)
 
 void UIButton::OnMouseExit(IFocusable*)
 {
-    if (!GetButton()->IsBeingPressed())
+    if (!GetFocusable()->IsBeingPressed())
     {
         GetBackground()->SetTint(UIButton::IdleColor);
     }

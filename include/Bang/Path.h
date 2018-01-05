@@ -1,7 +1,7 @@
 #ifndef PATH_H
 #define PATH_H
 
-#include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/Flags.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
@@ -34,7 +34,7 @@ public:
     bool Exists() const;
 
     List<Path> FindFiles(FindFlags findFlags = FindFlag::Default,
-                         const List<String> &extensions = {}) const;
+                         const Array<String> &extensions = {}) const;
     List<Path> FindSubDirectories(FindFlags findFlags) const;
     List<Path> FindSubPaths(FindFlags findFlags) const;
 
@@ -64,7 +64,7 @@ public:
     Path WithExtension(const String& extension) const;
 
     bool HasExtension(const String &extension) const;
-    bool HasExtension(const List<String> &extensions) const;
+    bool HasExtension(const Array<String> &extensions) const;
 
     explicit operator String() const;
     bool operator!=(const Path &rhs) const;

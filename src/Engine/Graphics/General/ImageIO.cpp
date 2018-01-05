@@ -8,6 +8,7 @@
 #include <jpeglib.h>
 
 #include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/Debug.h"
 #include "Bang/Image.h"
 #include "Bang/Paths.h"
@@ -20,7 +21,7 @@ void ImageIO::Export(const Path &filepath, const Imageb &img)
     {
         ImageIO::ExportPNG(filepath, img);
     }
-    else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
+    else if (filepath.HasExtension( Array<String>({"jpg", "jpeg"}) ))
     {
         ImageIO::ExportJPG(filepath, img, 10);
     }
@@ -38,7 +39,7 @@ void ImageIO::Import(const Path &filepath, Imageb *img, bool *_ok)
     {
         ImageIO::ImportPNG(filepath, img, &ok);
     }
-    else if (filepath.HasExtension( List<String>({"jpg", "jpeg"})) )
+    else if (filepath.HasExtension( Array<String>({"jpg", "jpeg"})) )
     {
         ImageIO::ImportJPG(filepath, img, &ok);
     }

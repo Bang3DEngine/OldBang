@@ -1,7 +1,7 @@
 #include "Bang/Extensions.h"
 
-#include "Bang/List.h"
 #include "Bang/Path.h"
+#include "Bang/Array.h"
 #include "Bang/String.h"
 
 NAMESPACE_BANG_BEGIN
@@ -15,52 +15,62 @@ String Extensions::GetAudioClipExtension() { return "baudioclip"; }
 String Extensions::GetTexture2DExtension() { return "btex2d"; }
 String Extensions::GetShaderProgramExtension() { return "bshaderprogram"; }
 
-List<String> Extensions::GetTTFExtensions()
+Array<String> Extensions::GetTTFExtensions()
 {
     return {"ttf"};
 }
 
-List<String> Extensions::GetImageExtensions()
+Array<String> Extensions::GetImageExtensions()
 {
     return {"png", "jpg", "jpeg", "bmp", "tiff"};
 }
 
-List<String> Extensions::GetModelExtensions()
+Array<String> Extensions::GetModelExtensions()
 {
     return {"obj", "ply"};
 }
 
-List<String> Extensions::GetTextFileExtensions()
+Array<String> Extensions::GetTextFileExtensions()
 {
     return {"txt"};
 }
 
-List<String> Extensions::GetBehaviourExtensions()
+Array<String> Extensions::GetBehaviourExtensions()
 {
     return {"c", "cpp", "h", "hpp"};
 }
 
-List<String> Extensions::GetSourceFileExtensions()
+Array<String> Extensions::GetSourceFileExtensions()
 {
     return {"c", "cpp"};
 }
 
-List<String> Extensions::GetVertexShaderExtensions()
+Array<String> Extensions::GetVertexShaderExtensions()
 {
     return {"vert", "vert_*"};
 }
 
-List<String> Extensions::GetFragmentShaderExtensions()
+Array<String> Extensions::GetFragmentShaderExtensions()
 {
     return {"frag", "frag_*"};
 }
 
-bool Extensions::Has(const Path &path, const List<String> &extensions)
+String Extensions::GetDefaultBehaviourHeaderExtension()
+{
+    return "h";
+}
+
+String Extensions::GetDefaultBehaviourSourceExtension()
+{
+    return "cpp";
+}
+
+bool Extensions::Has(const Path &path, const Array<String> &extensions)
 {
     return Extensions::Equals(path.GetExtension(), extensions);
 }
 
-bool Extensions::Equals(const String &extension, const List<String> &extensions)
+bool Extensions::Equals(const String &extension, const Array<String> &extensions)
 {
     return extensions.Contains(extension.ToLower());
 }

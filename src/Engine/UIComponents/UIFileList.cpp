@@ -34,7 +34,7 @@ void UIFileList::OnUpdate()
     Component::OnUpdate();
 }
 
-void UIFileList::SetFileExtensions(const List<String> &extensions)
+void UIFileList::SetFileExtensions(const Array<String> &extensions)
 {
     m_fileExtensions = extensions;
     UpdateEntries();
@@ -85,7 +85,7 @@ bool UIFileList::GetShowOnlyDirectories() const
     return m_showOnlyDirectories;
 }
 
-const List<String> &UIFileList::GetFileExtensions() const
+const Array<String> &UIFileList::GetFileExtensions() const
 {
     return m_fileExtensions;
 }
@@ -164,7 +164,7 @@ void UIFileList::SortPathsByName(List<Path> *paths)
 }
 
 void UIFileList::FilterPathsByExtension(List<Path> *paths,
-                                        const List<String>& extensions)
+                                        const Array<String>& extensions)
 {
     for (auto it = paths->Begin(); it != paths->End(); )
     {

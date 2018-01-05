@@ -22,7 +22,7 @@ UIScrollBar::~UIScrollBar()
 void UIScrollBar::OnStart()
 {
     Component::OnStart();
-    GetButton()->EventEmitter<IFocusListener>::RegisterListener(this);
+    GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIScrollBar::OnUpdate()
@@ -60,8 +60,8 @@ void UIScrollBar::OnUpdate()
 
     if (Input::GetMouseButtonUp(MouseButton::Left))
     {
-        if ( GetButton()->IsMouseOver() ) { OnMouseEnter(GetButton()); }
-        else { OnMouseExit(GetButton()); }
+        if ( GetFocusable()->IsMouseOver() ) { OnMouseEnter(GetFocusable()); }
+        else { OnMouseExit(GetFocusable()); }
     }
 }
 
@@ -138,7 +138,7 @@ Axis UIScrollBar::GetScrollAxis() const
 
 bool UIScrollBar::IsBeingGrabbed() const
 {
-    return GetButton()->IsBeingPressed();
+    return GetFocusable()->IsBeingPressed();
 }
 
 void UIScrollBar::UpdateLengthThicknessMargins()
@@ -234,5 +234,5 @@ void UIScrollBar::OnMouseExit(IFocusable*)
     if (!IsBeingGrabbed()) { p_barImg->SetTint(Color::Black); }
 }
 
-UIFocusable *UIScrollBar::GetButton() const { return p_button; }
+UIFocusable *UIScrollBar::GetFocusable() const { return p_button; }
 

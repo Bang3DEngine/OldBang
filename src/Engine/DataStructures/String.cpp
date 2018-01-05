@@ -151,7 +151,7 @@ int String::ReplaceInSitu(const String &from,
         lastIndex = IndexOf(from, lastIndex);
         if (lastIndex >= 0)
         {
-            Remove(lastIndex, lastIndex + from.Size() - 1);
+            Remove(lastIndex, lastIndex + from.Size());
             Insert(lastIndex, to);
             lastIndex += to.Size();
             ++numReplacements;

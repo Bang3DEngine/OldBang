@@ -14,14 +14,22 @@ public:
     template<class T>
     static T* Create();
 
-private:
+protected:
+    ComponentFactory() = default;
+    virtual ~ComponentFactory() = default;
+
+protected:
     static Component* Create(const String &componentClassName);
     static bool Exists(const String &componentClassName);
 
-    ComponentFactory() = delete;
+    virtual Component* _Create(const String &componentClassName);
+    virtual bool _Exists(const String &componentClassName);
+
+    static ComponentFactory* GetInstance();
 
     friend class Component;
     friend class GameObject;
+    friend class Application;
 };
 
 template<class T>
