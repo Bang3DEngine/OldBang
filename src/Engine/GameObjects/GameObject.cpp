@@ -537,13 +537,19 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (GameObject *child : GetChildren())
     {
-        GameObject *childClone = child->Clone();
-        childClone->SetParent(go);
+        if (!child->GetHideFlags().IsOn(HideFlag::DontClone))
+        {
+            GameObject *childClone = child->Clone();
+            childClone->SetParent(go);
+        }
     }
 
     for (Component *comp : GetComponents())
     {
-        go->AddComponent(comp->Clone());
+        if (!comp->GetHideFlags().IsOn(HideFlag::DontClone))
+        {
+            go->AddComponent(comp->Clone());
+        }
     }
 }
 

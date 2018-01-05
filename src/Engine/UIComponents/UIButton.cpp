@@ -15,7 +15,7 @@ USING_NAMESPACE_BANG
 
 const Color UIButton::IdleColor    = Color::White;
 const Color UIButton::OverColor    = Color::VeryLightBlue;
-const Color UIButton::BlockedColor = Color::LightGray;
+const Color UIButton::BlockedColor = Color::LightGray * 0.8f;
 const Color UIButton::PressedColor = Color::DarkGray;
 
 UIButton::UIButton()
@@ -112,6 +112,7 @@ UIImageRenderer *UIButton::GetIcon() const { return p_icon; }
 UITextRenderer *UIButton::GetText() const { return p_text; }
 UIImageRenderer *UIButton::GetBackground() const { return p_background; }
 UIFocusable *UIButton::GetFocusable() const { return p_button; }
+ UILayoutElement *UIButton::GetLayoutElement() const { return p_layoutElement; }
 UIDirLayout *UIButton::GetDirLayout() const
 {
     return GetGameObject()->GetComponent<UIDirLayout>();
@@ -121,14 +122,18 @@ UIButton* UIButton::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);
 
-    UIButton *buttonDriv = go->AddComponent<UIButton>();
+    UIButton *button = go->AddComponent<UIButton>();
 
     UIHorizontalLayout *hl = go->AddComponent<UIHorizontalLayout>();
     hl->SetPaddingBot(3);
     hl->SetPaddingTop(3);
     hl->SetPaddingRight(3);
     hl->SetPaddingLeft (3);
-    hl->SetSpacing(5);
+    hl->SetSpacing(0);
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::Zero );
+    le->SetLayoutPriority(1);
 
     UIImageRenderer *bgImg = go->AddComponent<UIImageRenderer>();
     bgImg->SetTint(Color::White);
@@ -146,20 +151,18 @@ UIButton* UIButton::CreateInto(GameObject *go)
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
     iconLE->SetFlexibleSize(Vector2::Zero);
 
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(0.0f) );
-
-    buttonDriv->p_icon = icon;
-    buttonDriv->p_background = bgImg;
-    buttonDriv->p_button = btn;
-    buttonDriv->p_text = label->GetText();
+    button->p_icon = icon;
+    button->p_background = bgImg;
+    button->p_button = btn;
+    button->p_text = label->GetText();
+    button->p_layoutElement = le;
 
     icon->GetGameObject()->SetParent(go);
     label->GetGameObject()->SetParent(go);
 
-    buttonDriv->SetIcon(nullptr, Vector2i::Zero, 0);
+    button->SetIcon(nullptr, Vector2i::Zero, 0);
 
-    return buttonDriv;
+    return button;
 }
 
 void UIButton::OnMouseEnter(IFocusable*)

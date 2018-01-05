@@ -11,6 +11,7 @@ FORWARD class Texture2D;
 FORWARD class UIDirLayout;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
+FORWARD class UILayoutElement;
 
 class UIButton : public Component,
                  public IFocusListener
@@ -36,6 +37,7 @@ public:
     UIImageRenderer* GetBackground() const;
     UIDirLayout *GetDirLayout() const;
     UIFocusable* GetFocusable() const;
+    UILayoutElement *GetLayoutElement() const;
 
 private:
     static const Color IdleColor;
@@ -44,10 +46,11 @@ private:
     static const Color PressedColor;
 
     bool m_isBlocked = false;
-    UIImageRenderer *p_icon        = nullptr;
-    UITextRenderer  *p_text        = nullptr;
-    UIImageRenderer *p_background  = nullptr;
-    UIFocusable     *p_button      = nullptr;
+    UIImageRenderer *p_icon          = nullptr;
+    UITextRenderer  *p_text          = nullptr;
+    UIImageRenderer *p_background    = nullptr;
+    UIFocusable     *p_button        = nullptr;
+    UILayoutElement *p_layoutElement = nullptr;
 
     UIButton();
     virtual ~UIButton();
