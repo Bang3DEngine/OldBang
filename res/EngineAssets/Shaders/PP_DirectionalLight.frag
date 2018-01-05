@@ -1,7 +1,7 @@
 #include "PP.frag"
 #include "DirectionalLight.glsl"
 
-void Main()
+void main()
 {
     vec4 diffColor = B_SampleDiffColor();
     if (B_SampleReceivesLight())

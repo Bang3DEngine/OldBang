@@ -41,8 +41,12 @@ void UIInputNumber::OnUpdate()
 void UIInputNumber::SetValue(float v)
 {
     m_value = v;
-    String vStr = String::ToString(v, 2);
-    GetInputText()->GetText()->SetContent(vStr);
+
+    if (!HasFocus())
+    {
+        String vStr = String::ToString(v, 2);
+        GetInputText()->GetText()->SetContent(vStr);
+    }
 }
 
 float UIInputNumber::GetValue() const
@@ -59,19 +63,21 @@ void UIInputNumber::OnFocusTaken(IFocusable *focusable)
 void UIInputNumber::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
-    SetValue( GetValue() );
     m_hasFocus = false;
+    SetValue( GetValue() );
 }
 
 void UIInputNumber::UpdateValueFromText()
 {
     const String &content = GetInputText()->GetText()->GetContent();
+    float value = 0.0f;
     if (!content.IsEmpty())
     {
         std::istringstream iss(content);
-        iss >> m_value;
+        iss >> value;
     }
-    else { m_value = 0; }
+
+    SetValue(value);
 }
 
 UIInputText *UIInputNumber::GetInputText() const { return p_inputText; }
