@@ -157,6 +157,8 @@ ${ENGINE_SRC_DIR}/Compiler/CodePreprocessor.cpp
 ${ENGINE_SRC_DIR}/Compiler/Compiler.cpp
 ${ENGINE_SRC_DIR}/Components/AudioListener.cpp
 ${ENGINE_SRC_DIR}/Components/AudioSource.cpp
+${ENGINE_SRC_DIR}/Components/Behaviour.cpp
+${ENGINE_SRC_DIR}/BehaviourContainer.cpp
 ${ENGINE_SRC_DIR}/Components/Camera.cpp
 ${ENGINE_SRC_DIR}/Components/Component.cpp
 ${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
@@ -181,6 +183,7 @@ ${ENGINE_SRC_DIR}/Factory/IconManager.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
+${ENGINE_SRC_DIR}/General/BehaviourManager.cpp
 ${ENGINE_SRC_DIR}/General/GUID.cpp
 ${ENGINE_SRC_DIR}/General/IGUIDable.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
@@ -283,17 +286,15 @@ ${ENGINE_SRC_DIR}/Windows/Window.cpp
 ${OTHER_FILES}
 )
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
-add_library(BangEngineStatic  STATIC $<TARGET_OBJECTS:BangEngineObjects>)
-add_library(BangEngine        SHARED $<TARGET_OBJECTS:BangEngineObjects>)
 
 list(APPEND ALL_SRC_FILES ${CORE_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${GRAPHICS_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${ENGINE_SRC_FILES})
-add_library(BangStatic STATIC $<TARGET_OBJECTS:BangCoreObjects>
-                              $<TARGET_OBJECTS:BangEngineObjects>)
-add_library(BangShared SHARED $<TARGET_OBJECTS:BangCoreObjects>
-                              $<TARGET_OBJECTS:BangEngineObjects>)
-set_target_properties(BangShared PROPERTIES OUTPUT_NAME Bang)
+add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangCoreObjects>
+                                 $<TARGET_OBJECTS:BangEngineObjects>)
+add_library(BangSharedLib SHARED $<TARGET_OBJECTS:BangCoreObjects>
+                                 $<TARGET_OBJECTS:BangEngineObjects>)
+set_target_properties(BangSharedLib PROPERTIES OUTPUT_NAME Bang)
 
 
 # Executables ===========================
@@ -306,4 +307,4 @@ ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
 ${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 )
 add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
-add_dependencies(BangPreprocessor BangShared)
+add_dependencies(BangPreprocessor BangEngineObjects)

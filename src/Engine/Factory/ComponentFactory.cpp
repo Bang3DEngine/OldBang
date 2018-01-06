@@ -25,6 +25,7 @@
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/PostProcessEffect.h"
+#include "Bang/BehaviourContainer.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
@@ -69,6 +70,7 @@ Component *ComponentFactory::_Create(const String &componentClassName)
     CREATE_COMPONENT(componentClassName, DirectionalLight);
     CREATE_COMPONENT(componentClassName, UIVerticalLayout);
     CREATE_COMPONENT(componentClassName, PostProcessEffect);
+    CREATE_COMPONENT(componentClassName, BehaviourContainer);
     CREATE_COMPONENT(componentClassName, UIHorizontalLayout);
 
     Debug_Warn("Please register class '" << componentClassName << "' in "
@@ -100,6 +102,7 @@ bool ComponentFactory::_Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, DirectionalLight);
     EXISTS_COMPONENT(componentClassName, UIVerticalLayout);
     EXISTS_COMPONENT(componentClassName, PostProcessEffect);
+    EXISTS_COMPONENT(componentClassName, BehaviourContainer);
     EXISTS_COMPONENT(componentClassName, UIHorizontalLayout);
 
     return false;

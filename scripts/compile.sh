@@ -4,5 +4,5 @@ cd "$(dirname "$0")"
 cd .. # Go to root directory
 
 source "scripts/captureArgs.sh"
-source "scripts/compileExecutables.sh" "${BUILD_TYPE}"
+source "scripts/compileTargets.sh" "${BUILD_TYPE}" BangSharedLib
 

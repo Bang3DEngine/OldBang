@@ -19,12 +19,9 @@ public:
     static Path EngineAssets();
     static Path EngineBinaryDir(BinType binaryType);
     static Path EngineLibrariesDir(BinType binaryType);
-    static Path GameExecutableOutputFile(BinType binaryType);
-    static Path GameExecutableLibrariesDir(BinType binaryType);
     static bool IsEnginePath(const Path &path);
 
     static List<Path> GetEngineIncludeDirs();
-    static List<Path> GetBehavioursSourcesFilepaths();
 
     static Path GetRelative(const Path &path);
 

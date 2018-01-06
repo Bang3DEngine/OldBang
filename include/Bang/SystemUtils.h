@@ -24,19 +24,8 @@ public:
                        String *output = nullptr,
                        bool *success = nullptr);
 
-    static void SystemBackground(const String &command,
-                                 const List<String> &argsList = {});
-
-    static void CloseLibrary(Library *library);
-
 private:
     SystemUtils() {}
-
-    static void _System(const String &command,
-                        const List<String> &argsList,
-                        String *output,
-                        bool *success,
-                        bool background);
 
 };
 

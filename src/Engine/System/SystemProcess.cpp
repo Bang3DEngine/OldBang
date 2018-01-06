@@ -90,14 +90,6 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     return true;
 }
 
-bool SystemProcess::StartDettached(const String &command,
-                                   const List<String> &extraArgs)
-{
-    List<String> args = extraArgs;
-    args.PushBack("&");
-    return Start(command, args);
-}
-
 long long unsigned int GetNow()
 {
     return std::chrono::duration_cast< std::chrono::milliseconds >(

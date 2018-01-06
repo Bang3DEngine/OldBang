@@ -27,21 +27,21 @@ void Paths::InitPaths(const Path &engineRootPath)
     c_engineRoot = Path::Empty;
     if (!engineRootPath.IsEmpty())
     {
-        c_engineRoot = engineRootPath;
+        Paths::SetEngineRoot(engineRootPath);
     }
 
     // Try current directory (some dirs up)
     if (!EngineAssets().IsDir())
     {
-        c_engineRoot = Paths::ExecutablePath().GetDirectory()
-                                              .GetDirectory()
-                                              .GetDirectory();
+        Paths::SetEngineRoot( Paths::ExecutablePath().GetDirectory()
+                                                     .GetDirectory()
+                                                     .GetDirectory() );
     }
 
     // Try default installation path
     if (!EngineAssets().IsDir())
     {
-        c_engineRoot = Path("/opt/Bang");
+        Paths::SetEngineRoot( Path("/opt/Bang") );
         if (!EngineAssets().IsDir())
         {
             Debug_Error("Bang is not properly installed. "
@@ -49,8 +49,6 @@ void Paths::InitPaths(const Path &engineRootPath)
             Application::Exit(1, true);
         }
     }
-
-    Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
 }
 
 Path Paths::Home()
@@ -79,22 +77,12 @@ Path Paths::EngineAssets()
 }
 Path Paths::EngineBinaryDir(BinType binaryType)
 {
-    return Engine()
-              .Append("bin")
-              .Append( binaryType == BinType::Debug ? "Debug" : "Release" );
+    return Engine().Append("bin").Append( binaryType == BinType::Debug ? "Debug" :
+                                                                         "Release" );
 }
 Path Paths::EngineLibrariesDir(BinType binaryType)
 {
     return Paths::EngineBinaryDir(binaryType).Append("lib");
-}
-Path Paths::GameExecutableOutputFile(BinType binaryType)
-{
-    return Paths::EngineBinaryDir(binaryType).Append("Game.exe");
-}
-
-List<Path> Paths::GetBehavioursSourcesFilepaths()
-{
-    return List<Path>(); // Paths::ProjectAssets().FindFiles(Path::FindFlag::Recursive, {"cpp"});
 }
 
 List<Path> Paths::GetEngineIncludeDirs()
@@ -136,6 +124,7 @@ Path Paths::MakeEnginePath(const String &path)
 void Paths::SetEngineRoot(const Path &engineRootDir)
 {
     Paths::GetInstance()->c_engineRoot = engineRootDir;
+    Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
 }
 
 Paths *Paths::GetInstance()
