@@ -31,18 +31,18 @@ void Paths::InitPaths(const Path &engineRootPath)
     }
 
     // Try current directory (some dirs up)
-    if (!EngineAssets().IsDir())
+    if (!GetEngineAssetsDir().IsDir())
     {
-        Paths::SetEngineRoot( Paths::ExecutablePath().GetDirectory()
+        Paths::SetEngineRoot( Paths::GetExecutablePath().GetDirectory()
                                                      .GetDirectory()
                                                      .GetDirectory() );
     }
 
     // Try default installation path
-    if (!EngineAssets().IsDir())
+    if (!GetEngineAssetsDir().IsDir())
     {
         Paths::SetEngineRoot( Path("/opt/Bang") );
-        if (!EngineAssets().IsDir())
+        if (!GetEngineAssetsDir().IsDir())
         {
             Debug_Error("Bang is not properly installed. "
                         "Can't find it in /opt.");
@@ -51,7 +51,7 @@ void Paths::InitPaths(const Path &engineRootPath)
     }
 }
 
-Path Paths::Home()
+Path Paths::GetHome()
 {
     Path homePath;
     struct passwd *pw = getpwuid(getuid());
@@ -59,7 +59,7 @@ Path Paths::Home()
     return homePath;
 }
 
-Path Paths::ExecutablePath()
+Path Paths::GetExecutablePath()
 {
     char result[PATH_MAX];
     ssize_t count = readlink("/proc/self/exe", result, PATH_MAX );
@@ -67,64 +67,48 @@ Path Paths::ExecutablePath()
     return Path(exePath);
 }
 
-const Path &Paths::Engine()
+const Path &Paths::GetEngineDir()
 {
     return Paths::GetInstance()->c_engineRoot;
 }
-Path Paths::EngineAssets()
+Path Paths::GetEngineAssetsDir()
 {
-    return Engine().Append("res/EngineAssets");
+    return GetEngineResourcesDir().Append("EngineAssets");
 }
-Path Paths::EngineBinaryDir(BinType binaryType)
+
+Path Paths::GetEngineResourcesDir()
 {
-    return Engine().Append("bin").Append( binaryType == BinType::Debug ? "Debug" :
-                                                                         "Release" );
+    return Paths::GetEngineDir().Append("res");
 }
-Path Paths::EngineLibrariesDir(BinType binaryType)
+
+Path Paths::GetEngineLibrariesDir(BinType binaryType)
 {
-    return Paths::EngineBinaryDir(binaryType).Append("lib");
+    return GetEngineDir().
+           Append("lib").
+           Append(binaryType == BinType::Debug ? "Debug" : "Release");
+}
+
+Path Paths::CreateEnginePath(const String &path)
+{
+    return Paths::GetEngineAssetsDir().Append(path);
 }
 
 List<Path> Paths::GetEngineIncludeDirs()
 {
     List<Path> incPaths;
-    incPaths.PushBack( Paths::Engine().Append("include") );
+    incPaths.PushBack( Paths::GetEngineDir().Append("include") );
     return incPaths;
-}
-
-Path Paths::GetRelative(const Path &path)
-{
-    const Path &engineAssets = Paths::EngineAssets();
-    if (path.BeginsWith(engineAssets))
-    {
-        return Path(path.GetAbsolute()
-                        .SubString(engineAssets.GetAbsolute().Size() + 1));
-    }
-
-    const Path &engineRoot = Paths::Engine();
-    if (path.BeginsWith(engineRoot))
-    {
-        return Path(path.GetAbsolute()
-                        .SubString(engineRoot.GetAbsolute().Size() + 1));
-    }
-
-    return Path(path.GetAbsolute());
 }
 
 bool Paths::IsEnginePath(const Path &path)
 {
-    return path.BeginsWith( Paths::Engine() + "/" );
-}
-
-Path Paths::MakeEnginePath(const String &path)
-{
-    return Paths::EngineAssets().Append(path);
+    return path.BeginsWith( Paths::GetEngineDir() + "/" );
 }
 
 void Paths::SetEngineRoot(const Path &engineRootDir)
 {
     Paths::GetInstance()->c_engineRoot = engineRootDir;
-    Debug_Log("Picking as Paths Bang Engine Root: " << Engine());
+    Debug_Log("Picking as Paths Bang Engine Root: " << GetEngineDir());
 }
 
 Paths *Paths::GetInstance()

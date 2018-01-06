@@ -70,8 +70,7 @@ inline void XMLAttribute::Set(const String &name,
                               const Path& filepath,
                               const Array<XMLProperty> &properties)
 {
-    String relFilepath = Paths::GetRelative(filepath).ToString();
-    Set(name, relFilepath, properties);
+    Set(name, filepath.GetAbsolute(), properties);
 
     if (Paths::IsEnginePath(filepath))
     {

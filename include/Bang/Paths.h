@@ -6,26 +6,23 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define EPATH(path)  Paths::MakeEnginePath(path)  // Engine assets path
+#define EPATH(path)  Paths::CreateEnginePath(path)  // Engine assets path
 
 class Paths
 {
 public:
     void InitPaths(const Path &engineRootPath);
 
-    static Path Home();
-    static Path ExecutablePath();
-    static const Path& Engine();
-    static Path EngineAssets();
-    static Path EngineBinaryDir(BinType binaryType);
-    static Path EngineLibrariesDir(BinType binaryType);
+    static Path GetHome();
+    static Path GetExecutablePath();
+    static const Path& GetEngineDir();
+    static Path GetEngineAssetsDir();
+    static Path GetEngineResourcesDir();
+    static Path GetEngineLibrariesDir(BinType binaryType);
     static bool IsEnginePath(const Path &path);
 
+    static Path CreateEnginePath(const String &path);
     static List<Path> GetEngineIncludeDirs();
-
-    static Path GetRelative(const Path &path);
-
-    static Path MakeEnginePath(const String &path);
 
     static void SetEngineRoot(const Path &engineRootDir);
 

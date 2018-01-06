@@ -83,8 +83,7 @@ void GBuffer::SetAllDrawBuffers() const
 
 void GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse,
-                    GBuffer::AttMisc});
+    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc});
 }
 
 void GBuffer::SetColorDrawBuffer()

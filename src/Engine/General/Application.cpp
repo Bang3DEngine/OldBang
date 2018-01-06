@@ -52,8 +52,8 @@ void Application::Init(const Path &engineRootPath)
 
     m_importFilesManager = new ImportFilesManager();
 
-    ImportFilesManager::CreateMissingImportFiles(Paths::EngineAssets());
-    ImportFilesManager::LoadImportFilepathGUIDs(Paths::EngineAssets());
+    ImportFilesManager::CreateMissingImportFiles(Paths::GetEngineAssetsDir());
+    ImportFilesManager::LoadImportFilepathGUIDs(Paths::GetEngineAssetsDir());
 }
 
 

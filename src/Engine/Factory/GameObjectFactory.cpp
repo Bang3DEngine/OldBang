@@ -131,7 +131,7 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
     mr->SetMesh(MeshFactory::GetCube().Get());
 
     RH<Texture2D> texture =
-            Resources::Load<Texture2D>(Paths::EngineAssets()
+            Resources::Load<Texture2D>(Paths::GetEngineAssetsDir()
                                        .Append("Images/LogoBang_B_512.png"));
     mr->GetMaterial()->SetTexture(texture.Get());
     mr->GetMaterial()->SetDiffuseColor(Color::White);

@@ -16,7 +16,7 @@ RH<Texture2D> IconManager::GetCheckIcon()
 RH<Texture2D> IconManager::GetIconTexture(const String &filename)
 {
     RH<Texture2D> iconTexture =
-         Resources::Load<Texture2D>(Paths::EngineAssets().Append("Icons").
+         Resources::Load<Texture2D>(Paths::GetEngineAssetsDir().Append("Icons").
                                     Append(filename).AppendExtension("png"));
 
     iconTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);

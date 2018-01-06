@@ -402,7 +402,7 @@ void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
     scene->SetFirstFoundCamera();
 
     Path initDirPath = initialDirPath;
-    if (!initDirPath.IsDir()) { initDirPath = Paths::Engine(); }
+    if (!initDirPath.IsDir()) { initDirPath = Paths::GetEngineDir(); }
     fileList->SetCurrentPath(initDirPath);
 
     // Params
