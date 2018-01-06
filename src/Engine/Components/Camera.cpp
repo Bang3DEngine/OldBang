@@ -24,6 +24,12 @@ USING_NAMESPACE_BANG
 
 Camera::Camera()
 {
+    AddRenderPass(RenderPass::Scene_Lighted);
+    AddRenderPass(RenderPass::Scene_PostProcess);
+    AddRenderPass(RenderPass::Scene_UnLighted);
+    AddRenderPass(RenderPass::Canvas);
+    AddRenderPass(RenderPass::Canvas_PostProcess);
+
     m_gbuffer = new GBuffer(1,1);
     m_selectionFramebuffer = new SelectionFramebuffer(1,1);
 }
@@ -175,6 +181,16 @@ void Camera::SetViewportRect(const Rect &viewportRectNDC)
     m_viewportRectNDC = viewportRectNDC;
 }
 
+void Camera::AddRenderPass(RenderPass renderPass)
+{
+    m_renderPassMask.Add(renderPass);
+}
+
+void Camera::RemoveRenderPass(RenderPass renderPass)
+{
+    m_renderPassMask.Remove(renderPass);
+}
+
 void Camera::SetGameObjectToRender(GameObject *go)
 {
     p_gameObjectToRender = go;
@@ -185,6 +201,16 @@ float Camera::GetOrthoHeight() const { return m_orthoHeight; }
 float Camera::GetFovDegrees() const { return m_fovDegrees; }
 float Camera::GetZNear() const { return m_zNear; }
 float Camera::GetZFar() const { return m_zFar; }
+
+bool Camera::MustRenderPass(RenderPass renderPass) const
+{
+    return GetRenderPassMask().Contains(renderPass);
+}
+
+const Set<RenderPass> &Camera::GetRenderPassMask() const
+{
+    return m_renderPassMask;
+}
 
 GameObject *Camera::GetGameObjectToRender() const
 {

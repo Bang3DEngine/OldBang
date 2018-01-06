@@ -2,6 +2,7 @@
 #define GENGINE_H
 
 #include "Bang/Rect.h"
+#include "Bang/RenderPass.h"
 #include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
@@ -67,9 +68,11 @@ private:
     RH<Mesh> p_screenPlaneMesh;
     RH<Material> p_renderGBufferToScreenMaterial;
 
-    void SetActiveCamera(Camera *camera);
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
+    void RenderWithPass(GameObject *go, RenderPass renderPass);
+
+    void SetActiveCamera(Camera *camera);
 
     static GEngine *s_gEngine;
     static void SetActive(GEngine *gEngine);

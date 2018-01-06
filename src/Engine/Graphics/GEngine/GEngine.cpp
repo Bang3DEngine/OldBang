@@ -143,7 +143,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
-    go->Render(RenderPass::Scene_Lighted);
+    RenderWithPass(go, RenderPass::Scene_Lighted);
 
     // Apply lights to stenciled zone
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
@@ -151,8 +151,8 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetStencilFunc(GL::Function::Always);
     GL::SetStencilValue(0);
 
-    go->Render(RenderPass::Scene_UnLighted);
-    go->Render(RenderPass::Scene_PostProcess);
+    RenderWithPass(go, RenderPass::Scene_UnLighted);
+    RenderWithPass(go, RenderPass::Scene_PostProcess);
 
     camera->GetGBuffer()->SetColorDrawBuffer();
     GL::Enable(GL::Test::Blend);
@@ -163,17 +163,20 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
-    go->Render(RenderPass::Canvas);
-    go->Render(RenderPass::Canvas_PostProcess);
+    RenderWithPass(go, RenderPass::Canvas);
+    RenderWithPass(go, RenderPass::Canvas_PostProcess);
 
     // GBuffer Gizmos rendering
-    GL::ClearStencilBuffer();
-    GL::ClearDepthBuffer();
-    GL::SetDepthMask(true);
-    GL::SetStencilFunc(GL::Function::Always);
-    GL::SetDepthFunc(GL::Function::LEqual);
-    go->Render(RenderPass::Gizmos);
-    go->RenderGizmos();
+    if (camera->MustRenderPass(RenderPass::Gizmos))
+    {
+        GL::ClearStencilBuffer();
+        GL::ClearDepthBuffer();
+        GL::SetDepthMask(true);
+        GL::SetStencilFunc(GL::Function::Always);
+        GL::SetDepthFunc(GL::Function::LEqual);
+        RenderWithPass(go, RenderPass::Gizmos);
+        go->RenderGizmos();
+    }
 
     GL::Disable(GL::Test::Blend);
 }
@@ -188,9 +191,22 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
     go->Render(RenderPass::Scene_UnLighted);
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
-    // go->Render(RenderPass::Canvas);
-    go->Render(RenderPass::Gizmos);
-    go->RenderGizmos();
+    // RenderWithPass(go, RenderPass::Canvas);
+
+    if (camera->MustRenderPass(RenderPass::Gizmos))
+    {
+        RenderWithPass(go, RenderPass::Gizmos);
+        go->RenderGizmos();
+    }
+}
+
+void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)
+{
+    Camera *cam = GetActiveCamera();
+    if (cam && cam->MustRenderPass(renderPass))
+    {
+        go->Render(renderPass, true);
+    }
 }
 
 void GEngine::SetActive(GEngine *gEngine)
@@ -303,7 +319,8 @@ void GEngine::SetActiveCamera(Camera *camera)
 
 void GEngine::Render(Renderer *rend)
 {
-    Camera *activeCamera = p_activeCamera; ENSURE(activeCamera);
+    Camera *activeCamera = GetActiveCamera();
+    if (!activeCamera) { return; }
 
     if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
     {

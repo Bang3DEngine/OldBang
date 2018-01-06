@@ -46,6 +46,8 @@ public:
     void SetZFar(float zFar);
     void SetProjectionMode(ProjectionMode projMode);
     void SetViewportRect(const Rect &viewportRectNDC);
+    void AddRenderPass(RenderPass renderPass);
+    void RemoveRenderPass(RenderPass renderPass);
 
     const Color& GetClearColor() const;
     float GetOrthoWidth() const;
@@ -53,6 +55,8 @@ public:
     float GetFovDegrees() const;
     float GetZNear() const;
     float GetZFar() const;
+    bool MustRenderPass(RenderPass renderPass) const;
+    const Set<RenderPass>& GetRenderPassMask() const;
     Matrix4 GetViewMatrix() const;
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
@@ -79,6 +83,7 @@ protected:
 
 private:
     GBuffer *m_gbuffer = nullptr;
+    Set<RenderPass> m_renderPassMask;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
     GameObject *p_gameObjectToRender = nullptr;
