@@ -80,6 +80,8 @@ void UISlider::SetMinValue(float minValue)
     if (minValue != GetMinValue())
     {
         m_minValue = minValue;
+        if (GetMaxValue() < GetMinValue()) { SetMaxValue(GetMinValue()); }
+        if (GetValue() < GetMinValue()) { SetValue(GetMinValue()); }
         UpdateSliderHandlerFromValue();
     }
 }
@@ -89,6 +91,8 @@ void UISlider::SetMaxValue(float maxValue)
     if (maxValue != GetMaxValue())
     {
         m_maxValue = maxValue;
+        if (GetMinValue() > GetMaxValue()) { SetMinValue(GetMaxValue()); }
+        if (GetValue() > GetMaxValue()) { SetValue(GetMaxValue()); }
         UpdateSliderHandlerFromValue();
     }
 }
