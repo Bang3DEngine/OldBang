@@ -16,4 +16,5 @@ void main()
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
     B_GIn_Color = vec4(B_GIn_Diffuse.rgb * ambientLight, B_GIn_Diffuse.a);
+
 }

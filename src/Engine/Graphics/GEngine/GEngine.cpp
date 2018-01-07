@@ -138,7 +138,6 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     camera->BindGBuffer();
 
     // GBuffer Scene rendering
-    GL::Enablei(GL::Test::Blend, 3);
     GL::SetDepthMask(true); // Write depth
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
