@@ -38,6 +38,8 @@ public:
     List<Path> FindSubDirectories(FindFlags findFlags) const;
     List<Path> FindSubPaths(FindFlags findFlags) const;
 
+    uint64_t GetModificationTimeNanos() const;
+
     Path GetDirectory() const;
     String GetName() const;
     String GetNameExt() const;

@@ -100,7 +100,8 @@ void GameObject::ChildAdded(GameObject *addedChild, GameObject *parent)
           PropagateToListeners(&IChildrenListener::OnChildAdded,
                                addedChild, parent);
     Propagate(&IChildrenListener::OnChildAdded,
-              GetComponents<IChildrenListener>(), addedChild, parent);
+              GetComponentsInParentAndThis<IChildrenListener>(),
+              addedChild, parent);
     Propagate(&IChildrenListener::OnChildAdded, GetParent(),
               addedChild, parent);
 }
@@ -111,7 +112,8 @@ void GameObject::ChildRemoved(GameObject *removedChild, GameObject *parent)
           PropagateToListeners(&IChildrenListener::OnChildRemoved,
                                removedChild, parent);
     Propagate(&IChildrenListener::OnChildRemoved,
-                GetComponents<IChildrenListener>(), removedChild, parent);
+              GetComponentsInParentAndThis<IChildrenListener>(true),
+              removedChild, parent);
     Propagate(&IChildrenListener::OnChildRemoved, GetParent(),
               removedChild, parent);
 }

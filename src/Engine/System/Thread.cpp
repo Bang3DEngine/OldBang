@@ -39,13 +39,22 @@ void Thread::Join()
     m_thread.join();
 }
 
+void Thread::Detach()
+{
+    m_thread.detach();
+}
+
 bool Thread::HasFinished() const
 {
     return m_hasFinished;
 }
 
 void Thread::SetName(const String &threadName) { m_threadName = threadName; }
-void Thread::SetRunnable(ThreadRunnable *runnable) { p_runnable = runnable; }
+void Thread::SetRunnable(ThreadRunnable *runnable)
+{
+    p_runnable = runnable;
+    p_runnable->p_thread = this;
+}
 
 const String &Thread::GetName() const { return m_threadName; }
 ThreadRunnable *Thread::GetRunnable() const { return p_runnable; }
@@ -92,6 +101,11 @@ void ThreadRunnable::SetAutoDelete(bool autoDelete)
 bool ThreadRunnable::IsAutoDelete() const
 {
     return m_autoDelete;
+}
+
+Thread *ThreadRunnable::GetThread() const
+{
+    return p_thread;
 }
 
 NAMESPACE_BANG_END

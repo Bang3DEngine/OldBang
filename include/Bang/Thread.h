@@ -19,6 +19,7 @@ public:
 
     void Start();
     void Join();
+    void Detach();
     bool HasFinished() const;
 
     void SetName(const String &threadName);
@@ -50,10 +51,15 @@ public:
     void SetAutoDelete(bool autoDelete);
     bool IsAutoDelete() const;
 
+    Thread *GetThread() const;
+
     virtual void Run() = 0;
 
 private:
+    Thread *p_thread = nullptr;
     bool m_autoDelete = true;
+
+    friend class Thread;
 };
 
 NAMESPACE_BANG_END

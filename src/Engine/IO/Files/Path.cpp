@@ -1,10 +1,11 @@
 #include "Bang/Path.h"
 
+#include <ctime>
 #include <cstdio>
 #include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "Bang/List.h"
 #include "Bang/Array.h"
@@ -150,6 +151,15 @@ List<Path> Path::FindSubPaths(FindFlags findFlags) const
     closedir(d);
 
     return subPathsList;
+}
+
+uint64_t Path::GetModificationTimeNanos() const
+{
+    if (!Exists()) { return 0; }
+
+    struct stat attr;
+    stat(GetAbsolute().ToCString(), &attr);
+    return attr.st_mtime;
 }
 
 String Path::GetName() const

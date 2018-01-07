@@ -184,6 +184,7 @@ ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
 ${ENGINE_SRC_DIR}/General/Application.cpp
 ${ENGINE_SRC_DIR}/General/BehaviourManager.cpp
+${ENGINE_SRC_DIR}/General/FileTracker.cpp
 ${ENGINE_SRC_DIR}/General/GUID.cpp
 ${ENGINE_SRC_DIR}/General/IGUIDable.cpp
 ${ENGINE_SRC_DIR}/General/ICloneable.cpp
