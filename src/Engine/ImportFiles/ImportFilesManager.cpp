@@ -44,34 +44,20 @@ void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
     List<Path> importFilepaths = directory.FindFiles(Path::FindFlag::RecursiveHidden,
                                                      extensions);
 
-    // Clean alone .import files
+    // Remove alone .import files
     for (const Path &importFilepath : importFilepaths)
     {
         if ( IsImportFile(importFilepath) &&
-            !GetFilepath(importFilepath).IsFile())
+            !GetFilepath(importFilepath).IsFile() )
         {
             File::Remove(importFilepath);
         }
     }
 
     // Load GUID's of import files!
-    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
     for (const Path &importFilepath : importFilepaths)
     {
-        if (!IsImportFile(importFilepath)) { continue; }
-
-        XMLNode info = XMLParser::FromFile(importFilepath);
-
-        GUID guid = info.Get<GUID>("GUID");
-        if (ifm->m_GUIDToImportFilepath.ContainsKey(guid) &&
-            ifm->m_GUIDToImportFilepath.Get(guid) != importFilepath)
-        {
-            Debug_Error("Found conflicting GUID: " << guid <<
-                        "(Files '" << importFilepath << "' and '" <<
-                        ifm->m_GUIDToImportFilepath.Get(guid) << "'");
-        }
-        ifm->m_GUIDToImportFilepath.Add(guid, importFilepath);
-        ifm->m_importFilepathToGUID.Add(importFilepath, guid);
+        RegisterImportFilepath(importFilepath);
     }
 }
 
@@ -82,7 +68,7 @@ Path ImportFilesManager::CreateImportFile(const Path &filepath)
     {
         XMLNode xmlInfo;
         xmlInfo.Set( "GUID", GUIDManager::GetNewGUID() );
-        importFilepath = GetImportFilePath(filepath);
+        importFilepath = GetImportFilepath(filepath);
         File::Write(importFilepath, xmlInfo.ToString());
     }
     return importFilepath;
@@ -90,7 +76,7 @@ Path ImportFilesManager::CreateImportFile(const Path &filepath)
 
 bool ImportFilesManager::HasImportFile(const Path &filepath)
 {
-    return GetImportFilePath(filepath).Exists();
+    return GetImportFilepath(filepath).Exists();
 }
 
 bool ImportFilesManager::IsImportFile(const Path &filepath)
@@ -104,9 +90,36 @@ GUIDManager* ImportFilesManager::GetGUIDManager()
     return &(ImportFilesManager::GetInstance()->m_GUIDManager);
 }
 
+void ImportFilesManager::RegisterImportFilepath(const Path &importFilepath)
+{
+    if (!IsImportFile(importFilepath)) { return; }
+
+    XMLNode info = XMLParser::FromFile(importFilepath);
+
+    GUID guid = info.Get<GUID>("GUID");
+    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
+    if (ifm->m_GUIDToImportFilepath.ContainsKey(guid) &&
+        ifm->m_GUIDToImportFilepath.Get(guid) != importFilepath)
+    {
+        Debug_Error("Found conflicting GUID: " << guid <<
+                    "(Files '" << importFilepath << "' and '" <<
+                    ifm->m_GUIDToImportFilepath.Get(guid) << "'");
+    }
+
+    ifm->m_GUIDToImportFilepath.Add(guid, importFilepath);
+    ifm->m_importFilepathToGUID.Add(importFilepath, guid);
+}
+
+void ImportFilesManager::UnRegisterImportFilepath(const Path &importFilepath)
+{
+    ImportFilesManager *ifm = ImportFilesManager::GetInstance();
+    ifm->m_GUIDToImportFilepath.RemoveValues(importFilepath);
+    ifm->m_importFilepathToGUID.Remove(importFilepath);
+}
+
 GUID ImportFilesManager::GetGUIDFromFilepath(const Path& filepath)
 {
-    Path importFilepath = GetImportFilePath(filepath);
+    Path importFilepath = GetImportFilepath(filepath);
     return GetGUIDFromImportFilepath(importFilepath);
 }
 
@@ -138,7 +151,7 @@ Path ImportFilesManager::GetFilepath(const Path &importFilepath)
     return Path(strPath);
 }
 
-Path ImportFilesManager::GetImportFilePath(const Path &filepath)
+Path ImportFilesManager::GetImportFilepath(const Path &filepath)
 {
     return filepath.AppendExtension( GetImportExtension() ).WithHidden(true);
 }
@@ -151,6 +164,17 @@ const Path &ImportFilesManager::GetImportFilepath(const GUID &guid)
         return ifm->m_GUIDToImportFilepath.Get(guid);
     }
     return Path::Empty;
+}
+
+void ImportFilesManager::OnFilepathRenamed(const Path &oldPath, const Path &newPath)
+{
+    Path oldImportFilepath = ImportFilesManager::GetImportFilepath(oldPath);
+    ImportFilesManager::UnRegisterImportFilepath(oldImportFilepath);
+
+    Path newImportFilepath = ImportFilesManager::GetImportFilepath(newPath);
+
+    File::Rename(oldImportFilepath, newImportFilepath);
+    ImportFilesManager::RegisterImportFilepath(newImportFilepath);
 }
 
 ImportFilesManager *ImportFilesManager::GetInstance()

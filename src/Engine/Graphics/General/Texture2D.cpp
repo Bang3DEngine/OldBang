@@ -153,6 +153,6 @@ void Texture2D::Import(const Path &imageFilepath)
     RH<ImageResourceb> img = Resources::Load<ImageResourceb>(imageFilepath);
     if (img) { Import( *(img.Get()) ); }
 
-    Path importFilepath = ImportFilesManager::GetImportFilePath(imageFilepath);
+    Path importFilepath = ImportFilesManager::GetImportFilepath(imageFilepath);
     ImportXMLFromFile(importFilepath);
 }

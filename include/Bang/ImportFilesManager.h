@@ -18,11 +18,14 @@ public:
     static bool HasImportFile(const Path &filepath);
     static bool IsImportFile(const Path &filepath);
     static GUIDManager *GetGUIDManager();
+    static void RegisterImportFilepath(const Path &importFilepath);
+    static void UnRegisterImportFilepath(const Path &importFilepath);
 
     static Path GetFilepath(const GUID& guid);
     static Path GetFilepath(const Path& importFilepath);
-    static Path GetImportFilePath(const Path &filepath);
+    static Path GetImportFilepath(const Path &filepath);
     static const Path& GetImportFilepath(const GUID& guid);
+    static void OnFilepathRenamed(const Path &oldPath, const Path &newPath);
 
     static GUID GetGUIDFromFilepath(const Path& filepath);
     static GUID GetGUIDFromImportFilepath(const Path& importFilepath);

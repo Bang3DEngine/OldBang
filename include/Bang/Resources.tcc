@@ -14,7 +14,7 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
         res = Resources::_Create<IResourceClass>();
         res->Import(filepath);
 
-        Path importFilepath = ImportFilesManager::GetImportFilePath(filepath);
+        Path importFilepath = ImportFilesManager::GetImportFilepath(filepath);
         res->ImportXMLFromFile(importFilepath);
     }
 
