@@ -9,24 +9,21 @@ class CodePreprocessor
 {
 public:
 
-    /**
-     * @brief Preprocess the passed source code.
-     * For the moment, doing the needed recursive includes.
-     * @param srcCode
-     */
     static void PreprocessCode(String *srcCode,
                                const List<Path> &includePaths);
 
+    static List<String> GetSourceIncludeDirectives(const String &srcCode);
+    static List<Path> GetSourceIncludePaths(const Path &srcPath,
+                                            const List<Path> &includePaths);
+    static List<Path> GetSourceIncludePaths(const String &srcCode,
+                                            const List<Path> &includePaths);
 protected:
-    /**
-     * @brief Given an include directive, returns
-     * the String that it should be replaced with.
-     * @param includeDirective '#include "Bang/myShaderFile.frag"'
-     * @return The String that the include directive
-     * should be replaced with.
-     */
+
+    static String GetIncludeString(const String &includeDirective);
+    static Path GetIncludePath(const String &includeDirective,
+                               const List<Path> &includePaths);
     static String GetIncludeContents(const String &includeDirective,
-                                              const List<Path> &includePaths);
+                                     const List<Path> &includePaths);
 
 private:
     CodePreprocessor();

@@ -58,7 +58,7 @@ bool File::DuplicateDir(const Path &fromDirpath,
     if (!overwrite && toDirpath.Exists()) { return false; }
     if (!File::CreateDirectory(toDirpath)) { return false; }
 
-    List<Path> filepaths = fromDirpath.FindFiles(Path::FindFlag::SimpleHidden);
+    List<Path> filepaths = fromDirpath.GetFiles(Path::FindFlag::SimpleHidden);
     for(const Path& filepath : filepaths)
     {
         String fileName = filepath.GetNameExt();
@@ -68,7 +68,7 @@ bool File::DuplicateDir(const Path &fromDirpath,
         if (!ok) { return false; }
     }
 
-    List<Path> subdirs = fromDirpath.FindSubDirectories(Path::FindFlag::SimpleHidden);
+    List<Path> subdirs = fromDirpath.GetSubDirectories(Path::FindFlag::SimpleHidden);
     for (const Path &subdir : subdirs)
     {
         bool ok = File::DuplicateDir(subdir,
@@ -88,10 +88,10 @@ bool File::Remove(const Path &path)
     }
     else
     {
-        List<Path> subDirs  = path.FindSubDirectories(Path::FindFlag::SimpleHidden);
+        List<Path> subDirs  = path.GetSubDirectories(Path::FindFlag::SimpleHidden);
         for (const Path &subDir : subDirs) { File::Remove(subDir); }
 
-        List<Path> subFiles = path.FindFiles(Path::FindFlag::SimpleHidden);
+        List<Path> subFiles = path.GetFiles(Path::FindFlag::SimpleHidden);
         for (const Path &subFile : subFiles) { File::Remove(subFile); }
         return std::remove(path.GetAbsolute().ToCString()) == 0;
     }

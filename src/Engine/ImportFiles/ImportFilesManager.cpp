@@ -24,7 +24,7 @@ void ImportFilesManager::CreateMissingImportFiles(const Path &directory)
     // with duplicated GUIDs.
     ImportFilesManager::LoadImportFilepathGUIDs(directory);
 
-    List<Path> assetFile = directory.FindFiles(Path::FindFlag::Recursive);
+    List<Path> assetFile = directory.GetFiles(Path::FindFlag::Recursive);
 
     Set<Path> files;
     files.Add(assetFile.Begin(), assetFile.End());
@@ -41,7 +41,7 @@ void ImportFilesManager::CreateMissingImportFiles(const Path &directory)
 void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
 {
     Array<String> extensions = {GetImportExtension()};
-    List<Path> importFilepaths = directory.FindFiles(Path::FindFlag::RecursiveHidden,
+    List<Path> importFilepaths = directory.GetFiles(Path::FindFlag::RecursiveHidden,
                                                      extensions);
 
     // Remove alone .import files

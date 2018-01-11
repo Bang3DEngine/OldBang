@@ -24,6 +24,7 @@ public:
 	virtual ~FileTracker();
 
     void AddPath(const Path &path);
+    void RemovePath(const Path &path);
     void Clear();
 
     void Update();
@@ -35,8 +36,7 @@ public:
 private:
     Map<Path, uint64_t> m_pathsToTrackToModificationTime;
 
-    uint64_t m_lastCheckTime = 0;
-    float m_latestCheckTimeSeconds = 0.0f;
+    uint64_t m_lastCheckTime = 0.0;
     float m_checkFrequencySeconds = 5.0f;
 };
 

@@ -43,8 +43,6 @@ void BehaviourContainer::SubstituteByBehaviourInstance(Library *behavioursLibrar
 {
     Behaviour *behaviour = CreateBehaviourInstance(behavioursLibrary);
     if (behaviour) { GetGameObject()->AddComponent(behaviour); }
-    Debug_Peek(behaviour);
-    Debug_Peek(behaviour->GetClassName());
     Component::Destroy(this);
 }
 

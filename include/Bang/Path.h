@@ -33,12 +33,12 @@ public:
     bool IsFile() const;
     bool Exists() const;
 
-    List<Path> FindFiles(FindFlags findFlags = FindFlag::Default,
-                         const Array<String> &extensions = {}) const;
-    List<Path> FindSubDirectories(FindFlags findFlags) const;
-    List<Path> FindSubPaths(FindFlags findFlags) const;
+    List<Path> GetFiles(FindFlags findFlags = FindFlag::Default,
+                        const Array<String> &extensions = {}) const;
+    List<Path> GetSubDirectories(FindFlags findFlags) const;
+    List<Path> GetSubPaths(FindFlags findFlags) const;
 
-    uint64_t GetModificationTimeNanos() const;
+    uint64_t GetModificationTimeSeconds() const;
 
     Path GetDirectory() const;
     String GetName() const;
