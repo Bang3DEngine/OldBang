@@ -19,6 +19,7 @@ BehaviourManager::~BehaviourManager()
 Behaviour *BehaviourManager::CreateBehaviourInstance(const String &behaviourName,
                                                      Library *behavioursLib)
 {
+    if (!behavioursLib) { return nullptr; }
     if (!behavioursLib->IsLoaded()) { behavioursLib->Load(); }
 
     String errorString = "";

@@ -34,16 +34,29 @@ bool ThreadPool::TryStart(ThreadRunnable *runnable)
 
     if (m_threadList.Size() >= m_maxThreadCount) { return false; }
 
-    Thread *thread = new Thread(runnable,
-                                "BANG_PooledThread" + m_threadList.Size());
+    String threadName = m_threadsName + String::ToString(m_threadList.Size());
+    Thread *thread = new Thread(runnable, threadName);
     thread->Start();
     m_threadList.PushBack(thread);
     return true;
 }
 
+void ThreadPool::SetName(const String &name)
+{
+    if (name != GetName())
+    {
+        m_threadsName = name;
+    }
+}
+
 void ThreadPool::SetMaxThreadCount(int maxThreadCount)
 {
     m_maxThreadCount = maxThreadCount;
+}
+
+const String &ThreadPool::GetName() const
+{
+    return m_threadsName;
 }
 
 int ThreadPool::GetMaxThreadCount() const

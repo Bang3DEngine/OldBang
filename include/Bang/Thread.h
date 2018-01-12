@@ -33,7 +33,7 @@ public:
 
 private:
     std::thread m_thread;
-    String m_threadName = "BANG_Thread";
+    String m_threadName = "";
     ThreadRunnable *p_runnable = nullptr;
 
     bool m_hasFinished = false;

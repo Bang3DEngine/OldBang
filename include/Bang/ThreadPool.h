@@ -14,10 +14,14 @@ public:
 
     bool TryStart(ThreadRunnable *runnable);
 
+    void SetName(const String &name);
     void SetMaxThreadCount(int maxThreadCount);
+
+    const String &GetName() const;
     int GetMaxThreadCount() const;
 
 private:
+    String m_threadsName = "BangPooledThread";
     List<Thread*> m_threadList;
 
     int m_maxThreadCount = 32;

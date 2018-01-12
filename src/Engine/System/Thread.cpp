@@ -1,5 +1,7 @@
 #include "Bang/Thread.h"
 
+#include <pthread.h>
+
 #include "Bang/Debug.h"
 
 NAMESPACE_BANG_BEGIN
@@ -18,7 +20,7 @@ Thread::Thread(ThreadRunnable *runnable) : Thread()
 Thread::Thread(ThreadRunnable *runnable,
                const String &threadName) : Thread(runnable)
 {
-    m_threadName = threadName;
+    SetName(threadName);
 }
 
 Thread::~Thread()
@@ -49,7 +51,14 @@ bool Thread::HasFinished() const
     return m_hasFinished;
 }
 
-void Thread::SetName(const String &threadName) { m_threadName = threadName; }
+void Thread::SetName(const String &threadName)
+{
+    if (threadName != GetName())
+    {
+        m_threadName = threadName;
+        pthread_setname_np(m_thread.native_handle(), GetName().ToCString());
+    }
+}
 void Thread::SetRunnable(ThreadRunnable *runnable)
 {
     p_runnable = runnable;
