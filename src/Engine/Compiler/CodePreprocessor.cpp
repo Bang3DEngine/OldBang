@@ -24,13 +24,13 @@ String CodePreprocessor::GetIncludeString(const String &includeDirective)
 }
 
 Path CodePreprocessor::GetIncludePath(const String &includeDirective,
-                                      const List<Path> &includePaths)
+                                      const List<Path> &includeDirs)
 {
     String includeStr = CodePreprocessor::GetIncludeString(includeDirective);
 
     // Search if the include file combined with any of the include paths
     // gives us an existing file. Return the first found.
-    for (const Path& includeDirPath : includePaths)
+    for (const Path& includeDirPath : includeDirs)
     {
         Path completeFilepath = includeDirPath.Append(includeStr);
         if (completeFilepath.IsFile()) { return completeFilepath; }
@@ -40,16 +40,16 @@ Path CodePreprocessor::GetIncludePath(const String &includeDirective,
 }
 
 String CodePreprocessor::GetIncludeContents(const String &includeDirective,
-                                            const List<Path> &includePaths)
+                                            const List<Path> &includeDirs)
 {
     Path includePath = CodePreprocessor::GetIncludePath(includeDirective,
-                                                        includePaths);
+                                                        includeDirs);
     if (includePath.IsFile()) { return File::GetContents(includePath); }
     return "";
 }
 
 void CodePreprocessor::PreprocessCode(String *srcCode,
-                                      const List<Path> &includePaths)
+                                      const List<Path> &includeDirs)
 {
     String &outputCode = *srcCode;
 
@@ -64,8 +64,8 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
         if (line.BeginsWith("#include"))
         {
             it = lines.Remove(it);
-            String includeContent = GetIncludeContents(line, includePaths);
-            CodePreprocessor::PreprocessCode(&includeContent, includePaths);
+            String includeContent = GetIncludeContents(line, includeDirs);
+            CodePreprocessor::PreprocessCode(&includeContent, includeDirs);
 
             List<String> contentLines = includeContent.Split<List>('\n', false);
             contentLines.PushBack("#line " + String(originalLineNum-1));
@@ -97,29 +97,29 @@ List<String> CodePreprocessor::GetSourceIncludeDirectives(const String &srcCode)
     {
         if (line.Replace(" ", "").BeginsWith("#include"))
         {
-            includes.PushBack( CodePreprocessor::GetIncludeString(line) );
+            includes.PushBack(line);
         }
     }
     return includes;
 }
 
 List<Path> CodePreprocessor::GetSourceIncludePaths(const Path &srcPath,
-                                                   const List<Path> &includePaths)
+                                                   const List<Path> &includeDirs)
 {
     return CodePreprocessor::GetSourceIncludePaths(File::GetContents(srcPath),
-                                                   includePaths);
+                                                   includeDirs);
 }
 
 List<Path> CodePreprocessor::GetSourceIncludePaths(const String &srcCode,
-                                                   const List<Path> &includePaths)
+                                                   const List<Path> &includeDirs)
 {
     List<Path> sourceIncludePaths;
     List<String> includeDirectives =
-                        CodePreprocessor::GetSourceIncludeDirectives(srcCode);
+                CodePreprocessor::GetSourceIncludeDirectives(srcCode);
     for (const String &includeDirective : includeDirectives)
     {
         Path incPath = CodePreprocessor::GetIncludePath(includeDirective,
-                                                        includePaths);
+                                                        includeDirs);
         if (incPath.IsFile()) { sourceIncludePaths.PushBack(incPath); }
     }
     return sourceIncludePaths;

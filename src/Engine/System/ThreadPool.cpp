@@ -8,13 +8,6 @@ ThreadPool::ThreadPool()
 
 ThreadPool::~ThreadPool()
 {
-    while (!m_threadList.IsEmpty())
-    {
-        Thread *thread = m_threadList.Back();
-        m_threadList.PopBack();
-        thread->Join();
-        delete thread;
-    }
 }
 
 bool ThreadPool::TryStart(ThreadRunnable *runnable)
@@ -25,8 +18,6 @@ bool ThreadPool::TryStart(ThreadRunnable *runnable)
         Thread *thread = *it;
         if (thread->HasFinished())
         {
-            thread->Join();
-            delete thread;
             it = m_threadList.Remove(it);
         }
         else { ++it; }
@@ -37,6 +28,7 @@ bool ThreadPool::TryStart(ThreadRunnable *runnable)
     String threadName = m_threadsName + String::ToString(m_threadList.Size());
     Thread *thread = new Thread(runnable, threadName);
     thread->Start();
+    thread->Detach();
     m_threadList.PushBack(thread);
     return true;
 }

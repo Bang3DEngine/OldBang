@@ -236,7 +236,7 @@ void Application::SetApplicationSingleton(Application *app)
 
 void Application::Exit(int returnCode, bool immediate)
 {
-    if (immediate) { exit(returnCode); }
+    if (immediate) { std::quick_exit(returnCode); }
     else
     {
         Application *app = Application::GetInstance();

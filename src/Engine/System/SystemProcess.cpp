@@ -1,16 +1,18 @@
 #include "Bang/SystemProcess.h"
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
+#include <chrono>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <chrono>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
+#include "Bang/Debug.h"
 #include "Bang/Thread.h"
+
 
 USING_NAMESPACE_BANG
 
@@ -64,8 +66,8 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
         close(Channel::StandardOut);
         close(Channel::StandardError);
 
-        if (result < 0) { exit(-1); }
-        exit( WEXITSTATUS(result) );
+        if (result < 0) { std::quick_exit(-1); }
+        std::quick_exit( WEXITSTATUS(result) );
     }
     else if (pid != -1) // Parent process
     {
@@ -76,9 +78,9 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 
         // Specify NonBlocking read
         fcntl(m_childToParentOutFD[READ], F_SETFL,
-              fcntl(m_childToParentOutFD[READ], F_GETFL) | O_NONBLOCK);
+        fcntl(m_childToParentOutFD[READ], F_GETFL) | O_NONBLOCK);
         fcntl(m_childToParentErrFD[READ], F_SETFL,
-              fcntl(m_childToParentErrFD[READ], F_GETFL) | O_NONBLOCK);
+        fcntl(m_childToParentErrFD[READ], F_GETFL) | O_NONBLOCK);
     }
     else
     {
@@ -108,7 +110,12 @@ bool SystemProcess::WaitUntilFinished(float seconds)
     while ( (GetNow() - beginning) / 1000.0f < seconds )
     {
         status = -1;
-        waitpid(m_childPID, &status, WNOHANG);
+        if ( waitpid(m_childPID, &status, WNOHANG) < 0)
+        {
+            Debug_Error("Waitpid error");
+            break;
+        }
+
         exited = WIFEXITED(status);
         signaled = WIFSIGNALED(status);
         if (status >= 0 && (exited || signaled))
