@@ -206,18 +206,34 @@ void UICanvas::OnDestroyed(Object *object)
     { SetFocusMouseOver(nullptr); }
 }
 
-bool UICanvas::HasFocus(const Component *comp)
+bool UICanvas::HasFocus(const Component *comp, bool recursive)
 {
-    return comp ? UICanvas::HasFocus(comp->GetGameObject()) : false;
+    return comp ? UICanvas::HasFocus(comp->GetGameObject(), recursive) : false;
 }
 
-bool UICanvas::HasFocus(const GameObject *go)
+bool UICanvas::HasFocus(const GameObject *go, bool recursive)
 {
     if (!go) { return false; }
-    List<IFocusable*> focusables = go->GetComponents<IFocusable>();
-    for (IFocusable *focusable : focusables)
+
+    if (!recursive)
     {
-        if (focusable == GetCurrentFocus()) { return true; }
+        List<IFocusable*> focusables = go->GetComponents<IFocusable>();
+        for (IFocusable *focusable : focusables)
+        {
+            if (focusable == GetCurrentFocus()) { return true; }
+        }
+    }
+    else
+    {
+        if (HasFocus(go, false)) { return true; }
+        else
+        {
+            const List<GameObject*>& children = go->GetChildren();
+            for (GameObject *child : children)
+            {
+                if (HasFocus(child, true)) { return true; }
+            }
+        }
     }
     return false;
 }

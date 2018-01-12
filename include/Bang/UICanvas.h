@@ -32,8 +32,8 @@ public:
 
     IFocusable* GetCurrentFocus();
     IFocusable* GetCurrentFocusMouseOver();
-    bool HasFocus(const Component *comp);
-    bool HasFocus(const GameObject *go);
+    bool HasFocus(const Component *comp, bool recursive = false);
+    bool HasFocus(const GameObject *go, bool recursive = false);
     bool IsMouseOver(const Component *comp, bool recursive = false);
     bool IsMouseOver(const GameObject *go, bool recursive = false);
 
