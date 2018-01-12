@@ -1,6 +1,7 @@
 #include "Bang/UISlider.h"
 
 #include "Bang/Input.h"
+#include "Bang/Cursor.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
@@ -23,6 +24,12 @@ UISlider::~UISlider()
 void UISlider::OnUpdate()
 {
     Component::OnUpdate();
+
+    if (GetHandleFocusable()->IsBeingPressed() ||
+        GetHandleFocusable()->IsMouseOver())
+    {
+        Cursor::Set( Cursor::Type::Hand );
+    }
 
     if (GetHandleFocusable()->IsBeingPressed())
     {

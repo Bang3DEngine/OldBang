@@ -3,6 +3,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Cursor.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusable.h"
@@ -55,11 +56,18 @@ void UICanvas::OnUpdate()
         }
     }
 
+    // Reset focus when clicking out of everything
     if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
     {
         SetFocus(nullptr);
     }
     SetFocusMouseOver(focusMouseOver);
+
+    // Reset cursor type on mouse up
+    if (Input::GetMouseButtonUp(MouseButton::Left))
+    {
+        Cursor::Set(Cursor::Type::Arrow);
+    }
 
     // Tabbing
     if (Input::GetKeyDownRepeat(Key::Tab))
@@ -148,6 +156,8 @@ void UICanvas::SetFocusMouseOver(IFocusable *_newFocusableMO)
 
     if (newFocusableMO != GetCurrentFocusMouseOver())
     {
+        Cursor::Set(Cursor::Type::Arrow); // Reset cursor type
+
         if (GetCurrentFocusMouseOver())
         {
             Object *focusableMOObj = Cast<Object*>( GetCurrentFocusMouseOver() );

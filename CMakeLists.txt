@@ -114,6 +114,7 @@ ${ENGINE_SRC_DIR}/Math/Color.cpp
 ${ENGINE_SRC_DIR}/Math/Math.cpp
 ${ENGINE_SRC_DIR}/Math/Random.cpp
 ${ENGINE_SRC_DIR}/Math/Ray.cpp
+${ENGINE_SRC_DIR}/System/Cursor.cpp
 ${ENGINE_SRC_DIR}/System/Mutex.cpp
 ${ENGINE_SRC_DIR}/System/MutexLocker.cpp
 ${ENGINE_SRC_DIR}/System/SystemProcess.cpp

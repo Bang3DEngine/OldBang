@@ -1,6 +1,7 @@
 #include "Bang/UIButton.h"
 
 #include "Bang/Input.h"
+#include "Bang/Cursor.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/GameObject.h"
@@ -41,6 +42,7 @@ void UIButton::OnUpdate()
     {
         if (GetFocusable()->IsMouseOver())
         {
+            Cursor::Set( Cursor::Type::Hand );
             if (Input::GetMouseButtonDown(MouseButton::Left))
             {
                 GetBackground()->SetTint(UIButton::PressedColor);
@@ -56,6 +58,10 @@ void UIButton::OnUpdate()
             if (GetFocusable()->IsMouseOver()) { OnMouseEnter(GetFocusable()); }
             else { OnMouseExit(GetFocusable()); }
         }
+    }
+    else
+    {
+        if (GetFocusable()->IsMouseOver()) { Cursor::Set( Cursor::Type::No ); }
     }
 }
 

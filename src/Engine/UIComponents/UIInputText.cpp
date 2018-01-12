@@ -4,6 +4,7 @@
 #include "Bang/Font.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
+#include "Bang/Cursor.h"
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Material.h"
@@ -43,7 +44,8 @@ void UIInputText::OnUpdate()
 {
     Component::OnUpdate();
 
-    bool hasFocus = UICanvas::GetActive(this)->HasFocus( GetLabel() );
+    UICanvas *canvas = UICanvas::GetActive(this);
+    bool hasFocus = canvas->HasFocus( GetLabel() );
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
@@ -53,6 +55,12 @@ void UIInputText::OnUpdate()
         UpdateTextScrolling();
         UpdateCursorRenderer();
     }
+
+    if ( canvas->IsMouseOver(GetLabel()) )
+    {
+        Cursor::Set(Cursor::Type::IBeam);
+    }
+
     p_cursor->SetEnabled(hasFocus);
 }
 
