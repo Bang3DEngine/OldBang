@@ -25,6 +25,8 @@ FORWARD class AudioPlayerRunnable;
 class AudioManager
 {
 public:
+    void Init();
+
     static void Play(AudioClip* audioClip,
                      ALAudioSource *alAudioSource,
                      float delay = 0.0f);
@@ -48,22 +50,25 @@ private:
     ALCdevice *m_alDevice = nullptr;
     ALCcontext *m_alContext = nullptr;
 
+    ThreadPool m_threadPool;
+    Mutex m_mutex_currentAudios;
+    Set<AudioPlayerRunnable*> m_currentAudioPlayers;
+
     AudioManager();
     virtual ~AudioManager();
 
     bool InitAL();
-
-    ThreadPool m_threadPool;
-    Mutex m_mutex_currentAudios;
-    Set<AudioPlayerRunnable*> m_currentAudioPlayers;
+    static List<String> GetAudioDevicesList();
+    static String GetALErrorEnumString(ALenum errorEnum);
+    static String GetALCErrorEnumString(ALCenum errorEnum);
 
     // Handling of real-time buffer change
     static void DettachSourcesFromAudioClip(AudioClip *ac);
 
     void OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer);
 
-    friend class Window;
     friend class AudioClip;
+    friend class Application;
     friend class AudioPlayerRunnable;
 };
 

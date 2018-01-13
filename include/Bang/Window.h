@@ -18,7 +18,6 @@ FORWARD class Camera;
 FORWARD class GEngine;
 FORWARD class Resources;
 FORWARD class Texture2D;
-FORWARD class AudioManager;
 FORWARD class SceneManager;
 FORWARD class ObjectManager;
 
@@ -81,7 +80,6 @@ public:
     Resources      *GetResources() const;
     GEngine        *GetGEngine() const;
     Input          *GetInput() const;
-    AudioManager   *GetAudioManager() const;
     SceneManager   *GetSceneManager() const;
     ObjectManager  *GetObjectManager() const;
 
@@ -107,7 +105,6 @@ private:
     Resources      *m_resources     = nullptr;
     GEngine        *m_gEngine       = nullptr;
     Input          *m_input         = nullptr;
-    AudioManager   *m_audioManager  = nullptr;
     SceneManager   *m_sceneManager  = nullptr;
     ObjectManager  *m_objectManager = nullptr;
 

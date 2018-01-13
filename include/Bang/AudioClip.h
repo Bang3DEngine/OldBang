@@ -39,6 +39,7 @@ private:
     AudioClip();
     virtual ~AudioClip();
 
+    void FreeBuffer();
     ALuint GetALBufferId() const;
 
     friend class AudioSource;

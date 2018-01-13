@@ -14,12 +14,12 @@ FileTracker::~FileTracker()
 {
 }
 
-void FileTracker::AddPath(const Path &path)
+void FileTracker::TrackPath(const Path &path)
 {
     if (path.IsDir())
     {
         List<Path> dirSubPaths = path.GetSubPaths(Path::FindFlag::RecursiveHidden);
-        for (const Path &subPath : dirSubPaths) { AddPath(subPath); }
+        for (const Path &subPath : dirSubPaths) { TrackPath(subPath); }
     }
 
     if (path.Exists())
@@ -34,14 +34,14 @@ void FileTracker::AddPath(const Path &path)
     }
 }
 
-void FileTracker::RemovePath(const Path &path)
+void FileTracker::UnTrackPath(const Path &path)
 {
     if (path.IsDir())
     {
         List<Path> subpaths = path.GetSubPaths(Path::FindFlag::RecursiveHidden);
         for (const Path &subpath : subpaths)
         {
-            RemovePath(subpath);
+            UnTrackPath(subpath);
         }
     }
     m_pathsToTrackToModificationTime.Remove(path);
@@ -65,46 +65,36 @@ void FileTracker::CheckForChanges()
 {
     Map<Path, uint64_t> previousPathsToTrack = m_pathsToTrackToModificationTime;
 
-    // Create the new path tracking list
-    for (const auto &pathToModTime : previousPathsToTrack)
-    {
-        const Path &path = pathToModTime.first;
-        AddPath(path); // Add m_pathsToTrackToModificationTime
-    }
-
-    // Update modification times
-    for (auto &pathToModTime : m_pathsToTrackToModificationTime)
-    {
-        pathToModTime.second = pathToModTime.first.GetModificationTimeSeconds();
-    }
-
-    // Check for new and modified paths
-    for (const auto &newPathToModTime : m_pathsToTrackToModificationTime)
-    {
-        const Path &newPath = newPathToModTime.first;
-        if (!previousPathsToTrack.ContainsKey(newPath))
-        {
-            EventEmitter<IFileTrackerListener>::
-               PropagateToListeners(&IFileTrackerListener::OnPathAdded, newPath);
-        }
-
-        double epsilon = GetCheckFrequencySeconds() / 2.0;
-        if (newPath.GetModificationTimeSeconds() >= m_lastCheckTime - epsilon)
-        {
-            EventEmitter<IFileTrackerListener>::
-               PropagateToListeners(&IFileTrackerListener::OnPathModified, newPath);
-        }
-
-    }
-
     // Check for removed paths
     for (const auto &previousPathToModTime : previousPathsToTrack)
     {
         const Path &previousPath = previousPathToModTime.first;
-        if (!m_pathsToTrackToModificationTime.ContainsKey(previousPath))
+        if (!previousPath.Exists())
         {
             EventEmitter<IFileTrackerListener>::
-               PropagateToListeners(&IFileTrackerListener::OnPathRemoved, previousPath);
+               PropagateToListeners(&IFileTrackerListener::OnPathRemoved,
+                                    previousPath);
+            UnTrackPath(previousPath);
+        }
+    }
+
+    // Create for new paths and add them to track
+    for (const auto &pathToModTime : previousPathsToTrack)
+    {
+        const Path &path = pathToModTime.first;
+        TrackPath(path);
+    }
+
+    // Check for modified paths
+    for (const auto &newPathToModTime : m_pathsToTrackToModificationTime)
+    {
+        const Path &newPath = newPathToModTime.first;
+        double epsilon = GetCheckFrequencySeconds() / 2.0;
+        ASSERT(epsilon < GetCheckFrequencySeconds());
+        if (newPath.GetModificationTimeSeconds() >= m_lastCheckTime - epsilon)
+        {
+            EventEmitter<IFileTrackerListener>::
+               PropagateToListeners(&IFileTrackerListener::OnPathModified, newPath);
         }
     }
 

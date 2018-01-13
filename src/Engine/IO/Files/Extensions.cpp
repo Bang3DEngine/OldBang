@@ -6,13 +6,10 @@
 
 NAMESPACE_BANG_BEGIN
 
-String Extensions::GetFontExtension() { return "bfont"; }
 String Extensions::GetSceneExtension() { return "bscene"; }
 String Extensions::GetPrefabExtension() { return "bprefab"; }
 String Extensions::GetProjectExtension() { return "bproject"; }
 String Extensions::GetMaterialExtension() { return "bmat"; }
-String Extensions::GetAudioClipExtension() { return "baudioclip"; }
-String Extensions::GetTexture2DExtension() { return "btex2d"; }
 String Extensions::GetShaderProgramExtension() { return "bshaderprogram"; }
 
 Array<String> Extensions::GetTTFExtensions()
@@ -28,6 +25,11 @@ Array<String> Extensions::GetImageExtensions()
 Array<String> Extensions::GetModelExtensions()
 {
     return {"obj", "ply"};
+}
+
+Array<String> Extensions::GetAudioClipExtensions()
+{
+    return {"ogg", "wav"};
 }
 
 Array<String> Extensions::GetTextFileExtensions()
@@ -73,6 +75,11 @@ bool Extensions::Has(const Path &path, const Array<String> &extensions)
 bool Extensions::Equals(const String &extension, const Array<String> &extensions)
 {
     return extensions.Contains(extension.ToLower());
+}
+
+bool Extensions::Equals(const String &extensionSrc, const String &extensionDst)
+{
+    return extensionSrc.ToLower() == extensionDst.ToLower();
 }
 
 NAMESPACE_BANG_END

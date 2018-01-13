@@ -26,7 +26,7 @@ T* GameObject::GetComponent() const
 {
     for (Component *comp : m_components)
     {
-        T *tp = Cast<T*>(comp);
+        T *tp = DCAST<T*>(comp);
         if (tp) { return tp; }
     }
     return nullptr;
@@ -38,7 +38,7 @@ List<T*> GameObject::GetComponents() const
     List<T*> comps_l;
     for (Component *comp : m_components)
     {
-        T *tp = Cast<T*>(comp);
+        T *tp = DCAST<T*>(comp);
         if (tp) { comps_l.PushBack(tp); }
     }
     return comps_l;

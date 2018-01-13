@@ -97,7 +97,7 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetVolume( GetVolume()  );
     as->SetPitch( GetPitch() );
     as->SetRange( GetRange() );
-    as->SetLooping( IsLooping() );
+    as->SetLooping( GetLooping() );
     as->SetPlayOnStart( IsPlayOnStart() );
 }
 
@@ -138,6 +138,6 @@ void AudioSource::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Volume",      GetVolume());
     xmlInfo->Set("Pitch",       GetPitch());
     xmlInfo->Set("Range",       GetRange());
-    xmlInfo->Set("Looping",     IsLooping());
+    xmlInfo->Set("Looping",     GetLooping());
     xmlInfo->Set("PlayOnStart", IsPlayOnStart());
 }

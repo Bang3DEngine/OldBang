@@ -23,8 +23,8 @@ public:
 	FileTracker();
 	virtual ~FileTracker();
 
-    void AddPath(const Path &path);
-    void RemovePath(const Path &path);
+    void TrackPath(const Path &path);
+    void UnTrackPath(const Path &path);
     void Clear();
 
     void Update();

@@ -43,7 +43,7 @@ public:
     ALuint GetALSourceId() const;
     const Vector3& GetPosition() const;
     const AudioParams& GetParams();
-    bool IsLooping()  const;
+    bool GetLooping()  const;
 
 private:
     ALuint m_alSourceId = 0;

@@ -31,45 +31,45 @@ void ALAudioSource::Stop()
 
 void ALAudioSource::SetVolume(float volume)
 {
-    if (m_audioParams.volume != volume)
+    if (volume != GetVolume())
     {
         m_audioParams.volume = volume;
-        alSourcef(GetALSourceId(), AL_GAIN, m_audioParams.volume);
+        alSourcef(GetALSourceId(), AL_GAIN, GetVolume());
     }
 }
 void ALAudioSource::SetPitch(float _pitch)
 {
     float pitch = Math::Max(_pitch, 0.01f);
-    if (m_audioParams.pitch != pitch)
+    if (pitch != GetPitch())
     {
         m_audioParams.pitch = pitch;
-        alSourcef(GetALSourceId(), AL_PITCH, m_audioParams.pitch);
+        alSourcef(GetALSourceId(), AL_PITCH, GetPitch());
     }
 }
 void ALAudioSource::SetRange(float range)
 {
-    if (m_audioParams.range != range)
+    if (range != GetRange())
     {
         m_audioParams.range = range;
-        alSourcef(m_alSourceId,  AL_MAX_DISTANCE, m_audioParams.range);
-        alSourcef(m_alSourceId,  AL_REFERENCE_DISTANCE, m_audioParams.range * 0.5f);
+        alSourcef(m_alSourceId,  AL_MAX_DISTANCE,       GetRange());
+        alSourcef(m_alSourceId,  AL_REFERENCE_DISTANCE, GetRange() * 0.5f);
     }
 }
 void ALAudioSource::SetLooping(bool looping)
 {
-    if (m_audioParams.range == looping)
+    if (looping != GetLooping())
     {
         m_audioParams.looping = looping;
-        alSourcef(GetALSourceId(), AL_LOOPING, m_audioParams.looping);
+        alSourcef(GetALSourceId(), AL_LOOPING, GetLooping());
     }
 }
 
 void ALAudioSource::SetPosition(const Vector3 &position)
 {
-    if (m_audioParams.position != position)
+    if (position != GetPosition())
     {
         m_audioParams.position = position;
-        alSourcefv(GetALSourceId(), AL_POSITION, m_audioParams.position.Data());
+        alSourcefv(GetALSourceId(), AL_POSITION, GetPosition().Data());
 
         //Vector3 at = -transform->GetForward(), up = transform->GetUp();
         //ALfloat listenerOri[] = { at.x, at.y, at.z, up.x, up.y, up.z };
@@ -100,7 +100,7 @@ float ALAudioSource::GetRange() const { return m_audioParams.range; }
 ALuint ALAudioSource::GetALSourceId() const { return m_alSourceId; }
 const Vector3 &ALAudioSource::GetPosition() const { return m_audioParams.position; }
 const AudioParams &ALAudioSource::GetParams() { return m_audioParams; }
-bool ALAudioSource::IsLooping() const { return m_audioParams.looping; }
+bool ALAudioSource::GetLooping() const { return m_audioParams.looping; }
 ALAudioSource::State ALAudioSource::GetState() const
 {
     ALint state;

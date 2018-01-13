@@ -13,7 +13,6 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Application.h"
-#include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/UILayoutManager.h"
@@ -32,7 +31,6 @@ Window::~Window()
     SetParent(nullptr);
 
     delete m_sceneManager;  m_sceneManager  = nullptr;
-    delete m_audioManager;  m_audioManager  = nullptr;
     delete m_input;         m_input         = nullptr;
     delete m_gEngine;       m_gEngine       = nullptr;
 
@@ -78,10 +76,11 @@ void Window::Create(uint flags)
     m_input               = new Input();
     m_resources           = new Resources();
     m_sceneManager        = CreateSceneManager();
-    m_audioManager        = new AudioManager();
     m_gEngine             = new GEngine();
     m_objectManager       = new ObjectManager();
+
     m_gEngine->Init();
+
     SetSize(winSize.x, winSize.y);
 }
 
@@ -376,11 +375,6 @@ GEngine *Window::GetGEngine() const
 Input *Window::GetInput() const
 {
     return m_input;
-}
-
-AudioManager *Window::GetAudioManager() const
-{
-    return m_audioManager;
 }
 
 SceneManager *Window::GetSceneManager() const

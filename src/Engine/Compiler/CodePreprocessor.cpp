@@ -26,17 +26,32 @@ String CodePreprocessor::GetIncludeString(const String &includeDirective)
 Path CodePreprocessor::GetIncludePath(const String &includeDirective,
                                       const List<Path> &includeDirs)
 {
-    String includeStr = CodePreprocessor::GetIncludeString(includeDirective);
+    List<Path> includeDirPathCombinations =
+            CodePreprocessor::GetIncludePathCombinations(includeDirective, includeDirs);
 
     // Search if the include file combined with any of the include paths
     // gives us an existing file. Return the first found.
-    for (const Path& includeDirPath : includeDirs)
+    for (const Path& includePath : includeDirPathCombinations)
     {
-        Path completeFilepath = includeDirPath.Append(includeStr);
-        if (completeFilepath.IsFile()) { return completeFilepath; }
+        if (includePath.IsFile()) { return includePath; }
     }
 
     return Path::Empty;
+}
+
+List<Path> CodePreprocessor::GetIncludePathCombinations(const String &includeDirective,
+                                                        const List<Path> &includeDirs)
+{
+    String includeStr = CodePreprocessor::GetIncludeString(includeDirective);
+
+    List<Path> combinations;
+    for (const Path& includeDirPath : includeDirs)
+    {
+        Path completeFilepath = includeDirPath.Append(includeStr);
+        combinations.PushBack(completeFilepath);
+    }
+
+    return combinations;
 }
 
 String CodePreprocessor::GetIncludeContents(const String &includeDirective,
@@ -104,23 +119,37 @@ List<String> CodePreprocessor::GetSourceIncludeDirectives(const String &srcCode)
 }
 
 List<Path> CodePreprocessor::GetSourceIncludePaths(const Path &srcPath,
-                                                   const List<Path> &includeDirs)
+                                                   const List<Path> &includeDirs,
+                                                   bool onlyExisting)
 {
     return CodePreprocessor::GetSourceIncludePaths(File::GetContents(srcPath),
-                                                   includeDirs);
+                                                   includeDirs,
+                                                   onlyExisting);
 }
 
 List<Path> CodePreprocessor::GetSourceIncludePaths(const String &srcCode,
-                                                   const List<Path> &includeDirs)
+                                                   const List<Path> &includeDirs,
+                                                   bool onlyExisting)
 {
     List<Path> sourceIncludePaths;
+
     List<String> includeDirectives =
                 CodePreprocessor::GetSourceIncludeDirectives(srcCode);
     for (const String &includeDirective : includeDirectives)
     {
-        Path incPath = CodePreprocessor::GetIncludePath(includeDirective,
-                                                        includeDirs);
-        if (incPath.IsFile()) { sourceIncludePaths.PushBack(incPath); }
+        Path incPath;
+        if (!onlyExisting)
+        {
+            CodePreprocessor::GetIncludePath(includeDirective, includeDirs);
+            if (incPath.IsFile()) { sourceIncludePaths.PushBack(incPath); }
+        }
+        else
+        {
+            List<Path> combinations =
+                 CodePreprocessor::GetIncludePathCombinations(includeDirective,
+                                                              includeDirs);
+            sourceIncludePaths.PushBack(combinations);
+        }
     }
     return sourceIncludePaths;
 }

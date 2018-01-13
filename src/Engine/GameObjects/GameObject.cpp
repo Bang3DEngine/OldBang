@@ -235,7 +235,7 @@ Component* GameObject::AddComponent(Component *component, int _index)
 {
     if (component && !GetComponents().Contains(component))
     {
-        Transform *trans = Cast<Transform*>(component);
+        Transform *trans = DCAST<Transform*>(component);
         if (trans) { ASSERT(!HasComponent<Transform>()); }
 
         component->SetGameObject(this);
@@ -284,7 +284,7 @@ Component *GameObject::GetComponentByGUID(const GUID &guid) const
 
 Scene* GameObject::GetScene() const
 {
-    Scene *scene = Cast<Scene*>( const_cast<GameObject*>(this) );
+    Scene *scene = DCAST<Scene*>( const_cast<GameObject*>(this) );
     if (scene) { return scene; }
 
     GameObject *parent = GetParent();
@@ -294,7 +294,7 @@ Scene* GameObject::GetScene() const
 Transform *GameObject::GetTransform() const { return p_transform; }
 RectTransform *GameObject::GetRectTransform() const
 {
-    return GetTransform() ? Cast<RectTransform*>(GetTransform()) : nullptr;
+    return GetTransform() ? DCAST<RectTransform*>(GetTransform()) : nullptr;
 }
 
 void GameObject::SetName(const String &name)
@@ -533,7 +533,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     Object::CloneInto(clone);
 
-    GameObject *go = Cast<GameObject*>(clone);
+    GameObject *go = DCAST<GameObject*>(clone);
     go->SetName(m_name);
     go->SetParent(nullptr);
 

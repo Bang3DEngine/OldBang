@@ -12,35 +12,26 @@ USING_NAMESPACE_BANG
 
 AudioClip::AudioClip()
 {
+    AudioManager::ClearALErrors();
     alGenBuffers(1, &m_alBufferId);
+    AudioManager::CheckALError();
 }
 
 AudioClip::~AudioClip()
 {
-    if ( IsLoaded() )
-    {
-        alDeleteBuffers(1, &m_alBufferId);
-    }
+    FreeBuffer();
 }
 
 void AudioClip::Import(const Path &soundFilepath)
 {
     if (!soundFilepath.Exists() || !soundFilepath.IsFile()) { return; }
 
-    if (soundFilepath.HasExtension("ogg"))
-    {
-        Debug_Error("OGG audio file format for " << soundFilepath.GetAbsolute()
-                    << " not supported.");
-        return;
-    }
-
     AudioManager::ClearALErrors();
     AudioManager::DettachSourcesFromAudioClip(this);
-    alDeleteBuffers(1, &m_alBufferId);
+    FreeBuffer();
     alGenBuffers(1, &m_alBufferId);
     AudioManager::CheckALError();
 
-    AudioManager::ClearALErrors();
 
     SF_INFO soundInfo;
     SNDFILE *soundFile = sf_open(soundFilepath.GetAbsolute().ToCString(),
@@ -58,25 +49,18 @@ void AudioClip::Import(const Path &soundFilepath)
         if (readSize <= 0) { break; }
         readData.PushBack(buffer.begin(), buffer.begin() + readSize);
     }
-    AudioManager::CheckALError();
 
     AudioManager::ClearALErrors();
+    alBufferData(m_alBufferId,
+                 soundInfo.channels == 1? AL_FORMAT_MONO16 :
+                                          AL_FORMAT_STEREO16,
+                 &readData.Front(),
+                 readData.Size() * sizeof(short),
+                 soundInfo.samplerate);
     bool hasError = AudioManager::CheckALError();
-    if (!hasError)
-    {
-        alBufferData(m_alBufferId,
-                     soundInfo.channels == 1? AL_FORMAT_MONO16 :
-                                              AL_FORMAT_STEREO16,
-                     &readData.Front(),
-                     readData.Size() * sizeof(short),
-                     soundInfo.samplerate);
-        m_soundFilepath = soundFilepath;
 
-        hasError = AudioManager::CheckALError();
-    }
+    if(!hasError) { m_soundFilepath = soundFilepath; }
     else { m_soundFilepath = Path::Empty; }
-
-    return;
 }
 
 int AudioClip::GetChannels() const
@@ -136,6 +120,15 @@ bool AudioClip::IsLoaded() const
 const Path &AudioClip::GetSoundFilepath() const
 {
     return m_soundFilepath;
+}
+
+void AudioClip::FreeBuffer()
+{
+    if ( IsLoaded() )
+    {
+        alDeleteBuffers(1, &m_alBufferId);
+        m_alBufferId = 0;
+    }
 }
 
 void AudioClip::ImportXML(const XMLNode &xmlInfo)

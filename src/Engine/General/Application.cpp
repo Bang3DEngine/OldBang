@@ -50,6 +50,9 @@ void Application::Init(const Path &engineRootPath)
     m_paths->InitPaths(engineRootPath);
     m_componentFactory = CreateComponentFactory();
 
+    m_audioManager = new AudioManager();
+    m_audioManager->Init();
+
     m_importFilesManager = new ImportFilesManager();
 
     ImportFilesManager::CreateMissingImportFiles(Paths::GetEngineAssetsDir());
@@ -61,6 +64,7 @@ Application::~Application()
 {
     delete m_time;
     delete m_paths;
+    delete m_audioManager;
     delete m_importFilesManager;
 
     for (Window *w : m_windows) { delete w; }
@@ -212,6 +216,11 @@ Time *Application::GetTime() const
 Paths *Application::GetPaths() const
 {
     return m_paths;
+}
+
+AudioManager *Application::GetAudioManager() const
+{
+    return m_audioManager;
 }
 
 ImportFilesManager *Application::GetImportFilesManager() const

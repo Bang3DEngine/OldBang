@@ -40,8 +40,9 @@ public:
 
     Time               *GetTime() const;
     Paths              *GetPaths() const;
-    ImportFilesManager *GetImportFilesManager() const;
+    AudioManager       *GetAudioManager() const;
     ComponentFactory   *GetComponentFactory() const;
+    ImportFilesManager *GetImportFilesManager() const;
 
     virtual SceneManager* CreateSceneManager() const;
     const List<Window*>& GetWindows() const;
@@ -57,8 +58,9 @@ protected:
 
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
-    ImportFilesManager *m_importFilesManager = nullptr;
+    AudioManager       *m_audioManager       = nullptr;
     ComponentFactory   *m_componentFactory   = nullptr;
+    ImportFilesManager *m_importFilesManager = nullptr;
 
     void SetupWindow(Window *window);
 
