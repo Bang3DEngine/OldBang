@@ -113,15 +113,18 @@ void AudioManager::Play(AudioClip *audioClip,
                         ALAudioSource *aas,
                         float delay)
 {
-    ENSURE(audioClip);
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
-                                                          aas, delay);
-    AudioManager *am = AudioManager::GetInstance();
-    bool started = am->m_threadPool.TryStart(player);
-    if (started)
+    if (!AudioManager::GetSoundsBlocked())
     {
-        MutexLocker m(&am->m_mutex_currentAudios);
-        am->m_currentAudioPlayers.Add(player);
+        ENSURE(audioClip);
+        AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
+                                                              aas, delay);
+        AudioManager *am = AudioManager::GetInstance();
+        bool started = am->m_threadPool.TryStart(player);
+        if (started)
+        {
+            MutexLocker m(&am->m_mutexCurrentAudios);
+            am->m_currentAudioPlayers.Add(player);
+        }
     }
 }
 
@@ -129,12 +132,15 @@ void AudioManager::Play(AudioClip *audioClip,
                         const AudioParams &params,
                         float delay)
 {
-    ENSURE(audioClip);
-    ALAudioSource *aas = new ALAudioSource();
-    aas->SetALBufferId(audioClip->GetALBufferId());
-    aas->SetParams(params);
-    aas->m_autoDelete = true;
-    AudioManager::Play(audioClip, aas, delay);
+    if (!AudioManager::GetSoundsBlocked())
+    {
+        ENSURE(audioClip);
+        ALAudioSource *aas = new ALAudioSource();
+        aas->SetALBufferId(audioClip->GetALBufferId());
+        aas->SetParams(params);
+        aas->m_autoDelete = true;
+        AudioManager::Play(audioClip, aas, delay);
+    }
 }
 
 void AudioManager::Play(const Path &audioClipFilepath,
@@ -171,13 +177,25 @@ void AudioManager::StopAllSounds()
         audioPlayer->Stop();
     }
 
-    MutexLocker m(&am->m_mutex_currentAudios);
+    MutexLocker m(&am->m_mutexCurrentAudios);
     am->m_currentAudioPlayers.Clear();
+}
+
+void AudioManager::SetSoundsBlocked(bool blocked)
+{
+    AudioManager *am = AudioManager::GetInstance();
+    am->m_soundsBlocked = blocked;
+}
+
+bool AudioManager::GetSoundsBlocked()
+{
+    AudioManager *am = AudioManager::GetInstance();
+    return am->m_soundsBlocked;
 }
 
 void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
 {
-    MutexLocker m(&m_mutex_currentAudios);
+    MutexLocker m(&m_mutexCurrentAudios);
     m_currentAudioPlayers.Remove(audioPlayer);
 }
 

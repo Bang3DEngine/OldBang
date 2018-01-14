@@ -11,6 +11,8 @@ ALAudioSource::ALAudioSource()
 ALAudioSource::~ALAudioSource()
 {
     Stop();
+    EventEmitter<IDestroyListener>::
+            PropagateToListeners(&IDestroyListener::OnDestroyed, this);
     alDeleteSources(1, &m_alSourceId);
 }
 

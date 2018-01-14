@@ -45,9 +45,15 @@ void AudioPlayerRunnable::Run()
     }
 
     AudioManager::ClearALErrors();
-    AudioManager::CheckALError();
-
     m_alAudioSource->Play(); // Play and wait until source is stopped
-    do { Thread::SleepCurrentThread(0.3f); }
+    do
+    {
+        AudioManager::ClearALErrors();
+        Thread::SleepCurrentThread(0.3f);
+
+        ALenum error = alGetError();
+        bool hasError = (error != AL_NO_ERROR);
+        if (hasError) { m_forceExit = true; }
+    }
     while ( !m_forceExit && !m_alAudioSource->IsStopped() );
 }

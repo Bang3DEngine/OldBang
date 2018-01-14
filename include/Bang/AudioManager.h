@@ -40,7 +40,9 @@ public:
     static void PauseAllSounds();
     static void ResumeAllSounds();
     static void StopAllSounds();
+    static void SetSoundsBlocked(bool blocked);
 
+    static bool GetSoundsBlocked();
     static void ClearALErrors();
     static bool CheckALError();
 
@@ -51,7 +53,8 @@ private:
     ALCcontext *m_alContext = nullptr;
 
     ThreadPool m_threadPool;
-    Mutex m_mutex_currentAudios;
+    Mutex m_mutexCurrentAudios;
+    bool m_soundsBlocked = false;
     Set<AudioPlayerRunnable*> m_currentAudioPlayers;
 
     AudioManager();

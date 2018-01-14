@@ -5,10 +5,12 @@
 #include <AL/alc.h>
 
 #include "Bang/AudioParams.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
-class ALAudioSource
+class ALAudioSource : public virtual EventEmitter<IDestroyListener>
 {
 public:
     enum State

@@ -38,6 +38,7 @@ protected:
     virtual ~SceneManager();
 
     virtual void _Update();
+    virtual void _StartScene(Scene *scene);
     virtual void _LoadSceneInstantly(Scene *scene);
     void _SetActiveScene(Scene *activeScene);
     Scene *_GetActiveScene() const;
