@@ -83,7 +83,7 @@ void Scene::InvalidateCanvas()
     for (UICanvas *canvas : canvases) { canvas->Invalidate(); }
 }
 
-void Scene::OnDestroyed(Object *object)
+void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (GetCamera() && object == GetCamera())
     {

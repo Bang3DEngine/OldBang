@@ -24,7 +24,7 @@ public:
     void Play(); // Hides ALAudioSource::Play()
     void Play(float delay);
 
-    bool IsPlayOnStart() const;
+    bool GetPlayOnStart() const;
     float GetPlayProgress() const;
     AudioClip* GetAudioClip() const;
 

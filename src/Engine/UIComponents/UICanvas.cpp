@@ -205,9 +205,9 @@ void UICanvas::ExportXML(XMLNode *xmlInfo) const
     Component::ExportXML(xmlInfo);
 }
 
-void UICanvas::OnDestroyed(Object *object)
+void UICanvas::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    IFocusable *destroyedFocusable = Cast<IFocusable*>(object);
+    IFocusable *destroyedFocusable = DCAST<IFocusable*>(object);
 
     if (destroyedFocusable == GetCurrentFocus())
     { SetFocus(nullptr); }

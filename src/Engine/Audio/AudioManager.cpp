@@ -32,8 +32,9 @@ void AudioManager::Init()
 
 AudioManager::~AudioManager()
 {
-    for (AudioPlayerRunnable *audioPlayer : m_currentAudioPlayers)
+    for (const auto &pair : m_sourcesToPlayers)
     {
+        AudioPlayerRunnable *audioPlayer = pair.second;
         ALuint sourceId = audioPlayer->GetALAudioSource()->GetALSourceId();
         alDeleteSources(1, &sourceId);
     }
@@ -109,22 +110,50 @@ String AudioManager::GetALCErrorEnumString(ALCenum errorEnum)
     return "";
 }
 
-void AudioManager::Play(AudioClip *audioClip,
-                        ALAudioSource *aas,
-                        float delay)
+void AudioManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    if (!AudioManager::GetSoundsBlocked())
+    if (ALAudioSource *alAudioSource = DCAST<ALAudioSource*>(object))
     {
-        ENSURE(audioClip);
-        AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
-                                                              aas, delay);
-        AudioManager *am = AudioManager::GetInstance();
-        bool started = am->m_threadPool.TryStart(player);
-        if (started)
-        {
-            MutexLocker m(&am->m_mutexCurrentAudios);
-            am->m_currentAudioPlayers.Add(player);
-        }
+        OnALAudioSourceDestroyed(alAudioSource);
+    }
+    else if (AudioPlayerRunnable *audioPlayer = DCAST<AudioPlayerRunnable*>(object))
+    {
+        OnAudioPlayerDestroyed(audioPlayer);
+    }
+}
+
+void AudioManager::OnALAudioSourceDestroyed(ALAudioSource *alAudioSource)
+{
+    alAudioSource->Stop();
+    if (m_sourcesToPlayers.ContainsKey(alAudioSource))
+    {
+        AudioPlayerRunnable *audioPlayer = m_sourcesToPlayers.Get(alAudioSource);
+        audioPlayer->Stop();
+    }
+}
+
+void AudioManager::OnAudioPlayerDestroyed(AudioPlayerRunnable *audioPlayer)
+{
+    if (m_sourcesToPlayers.ContainsValue(audioPlayer))
+    {
+        ALAudioSource *audioSource =
+                    m_sourcesToPlayers.GetKeysWithValue(audioPlayer).Front();
+        audioSource->Stop();
+    }
+}
+
+void AudioManager::Play(AudioClip *audioClip, ALAudioSource *aas, float delay)
+{
+    ENSURE(audioClip);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
+                                                          aas, delay);
+    AudioManager *am = AudioManager::GetInstance();
+    bool started = am->m_threadPool.TryStart(player);
+    if (started)
+    {
+        MutexLocker ml(&am->m_mutexCurrentAudios); (void)ml;
+        aas->EventEmitter<IDestroyListener>::RegisterListener(am);
+        am->m_sourcesToPlayers.Add(aas, player);
     }
 }
 
@@ -132,15 +161,12 @@ void AudioManager::Play(AudioClip *audioClip,
                         const AudioParams &params,
                         float delay)
 {
-    if (!AudioManager::GetSoundsBlocked())
-    {
-        ENSURE(audioClip);
-        ALAudioSource *aas = new ALAudioSource();
-        aas->SetALBufferId(audioClip->GetALBufferId());
-        aas->SetParams(params);
-        aas->m_autoDelete = true;
-        AudioManager::Play(audioClip, aas, delay);
-    }
+    ENSURE(audioClip);
+    ALAudioSource *aas = new ALAudioSource();
+    aas->SetALBufferId(audioClip->GetALBufferId());
+    aas->SetParams(params);
+    aas->m_autoDelete = true;
+    AudioManager::Play(audioClip, aas, delay);
 }
 
 void AudioManager::Play(const Path &audioClipFilepath,
@@ -154,8 +180,9 @@ void AudioManager::Play(const Path &audioClipFilepath,
 void AudioManager::PauseAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
+    for (const auto &pair : am->m_sourcesToPlayers)
     {
+        AudioPlayerRunnable *audioPlayer = pair.second;
         audioPlayer->Pause();
     }
 }
@@ -163,8 +190,9 @@ void AudioManager::PauseAllSounds()
 void AudioManager::ResumeAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
+    for (const auto &pair : am->m_sourcesToPlayers)
     {
+        AudioPlayerRunnable *audioPlayer = pair.second;
         audioPlayer->Resume();
     }
 }
@@ -172,31 +200,32 @@ void AudioManager::ResumeAllSounds()
 void AudioManager::StopAllSounds()
 {
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudioPlayers)
+    for (const auto &pair : am->m_sourcesToPlayers)
     {
+        AudioPlayerRunnable *audioPlayer = pair.second;
         audioPlayer->Stop();
     }
 
     MutexLocker m(&am->m_mutexCurrentAudios);
-    am->m_currentAudioPlayers.Clear();
+    am->m_sourcesToPlayers.Clear();
 }
 
-void AudioManager::SetSoundsBlocked(bool blocked)
+void AudioManager::SetPlayOnStartBlocked(bool blocked)
 {
     AudioManager *am = AudioManager::GetInstance();
-    am->m_soundsBlocked = blocked;
+    am->m_playOnStartBlocked = blocked;
 }
 
-bool AudioManager::GetSoundsBlocked()
+bool AudioManager::GetPlayOnStartBlocked()
 {
     AudioManager *am = AudioManager::GetInstance();
-    return am->m_soundsBlocked;
+    return am->m_playOnStartBlocked;
 }
 
 void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
 {
     MutexLocker m(&m_mutexCurrentAudios);
-    m_currentAudioPlayers.Remove(audioPlayer);
+    m_sourcesToPlayers.RemoveValues(audioPlayer);
 }
 
 void AudioManager::DettachSourcesFromAudioClip(AudioClip *ac)
@@ -204,12 +233,13 @@ void AudioManager::DettachSourcesFromAudioClip(AudioClip *ac)
     // Dettach all audioSources using this AudioClip.
     // Otherwise OpenAL throws error.
     AudioManager *am = AudioManager::GetInstance();
-    for (AudioPlayerRunnable *ap : am->m_currentAudioPlayers)
+    for (const auto &pair : am->m_sourcesToPlayers)
     {
-        if (ap->GetAudioClip() == ac)
+        AudioPlayerRunnable *audioPlayer = pair.second;
+        if (audioPlayer->GetAudioClip() == ac)
         {
-            ap->Stop();
-            ap->GetALAudioSource()->SetALBufferId(0);
+            audioPlayer->Stop();
+            audioPlayer->GetALAudioSource()->SetALBufferId(0);
         }
     }
 }

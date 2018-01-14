@@ -12,6 +12,7 @@
 #include "Bang/MutexLocker.h"
 #include "Bang/AudioParams.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -22,7 +23,7 @@ FORWARD class AudioSource;
 FORWARD class ALAudioSource;
 FORWARD class AudioPlayerRunnable;
 
-class AudioManager
+class AudioManager : public IDestroyListener
 {
 public:
     void Init();
@@ -40,9 +41,9 @@ public:
     static void PauseAllSounds();
     static void ResumeAllSounds();
     static void StopAllSounds();
-    static void SetSoundsBlocked(bool blocked);
+    static void SetPlayOnStartBlocked(bool blocked);
 
-    static bool GetSoundsBlocked();
+    static bool GetPlayOnStartBlocked();
     static void ClearALErrors();
     static bool CheckALError();
 
@@ -54,8 +55,8 @@ private:
 
     ThreadPool m_threadPool;
     Mutex m_mutexCurrentAudios;
-    bool m_soundsBlocked = false;
-    Set<AudioPlayerRunnable*> m_currentAudioPlayers;
+    bool m_playOnStartBlocked = false;
+    Map<ALAudioSource*, AudioPlayerRunnable*> m_sourcesToPlayers;
 
     AudioManager();
     virtual ~AudioManager();
@@ -64,6 +65,11 @@ private:
     static List<String> GetAudioDevicesList();
     static String GetALErrorEnumString(ALenum errorEnum);
     static String GetALCErrorEnumString(ALCenum errorEnum);
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    void OnAudioPlayerDestroyed(AudioPlayerRunnable *audioPlayer);
+    void OnALAudioSourceDestroyed(ALAudioSource *alAudioSource);
 
     // Handling of real-time buffer change
     static void DettachSourcesFromAudioClip(AudioClip *ac);

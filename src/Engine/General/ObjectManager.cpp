@@ -117,9 +117,9 @@ void ObjectManager::_DestroyObjects()
     m_objectsDestroyedWhileDestroying.Clear();
 }
 
-void ObjectManager::OnDestroyed(Object *object)
+void ObjectManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    Object *destroyedObject = Cast<Object*>(object);
+    Object *destroyedObject = SCAST<Object*>(object);
     m_objectsDestroyedWhileDestroying.Add(destroyedObject->GetObjectId());
 }
 

@@ -51,7 +51,7 @@ public:
     GLint GetUniformLocation(const String &name) const;
 
     // IDestroyListener
-    void OnDestroyed(Object *obj) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
 private:
     RH<Shader> p_vshader;

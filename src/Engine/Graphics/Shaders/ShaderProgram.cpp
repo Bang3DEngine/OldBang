@@ -249,12 +249,13 @@ void ShaderProgram::UnBind() const
     GL::UnBind(this);
 }
 
-void ShaderProgram::OnDestroyed(Object *obj)
+void ShaderProgram::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     for (auto it = m_namesToTexture.begin(); it != m_namesToTexture.end(); )
     {
+        Texture2D *destroyedTex = DCAST<Texture2D*>( SCAST<Object*>(object) );
         Texture2D *tex = it->second;
-        if (tex == Cast<Texture2D*>(obj))
+        if (tex == destroyedTex)
         {
             it = m_namesToTexture.erase(it);
             // Dont break, in case it has obj texture several times

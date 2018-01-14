@@ -83,9 +83,9 @@ void UITree::OnClicked(IFocusable *focusable)
     }
 }
 
-void UITree::OnDestroyed(Object *object)
+void UITree::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    GOItem* item = Cast<GOItem*>(object);
+    GOItem* item = SCAST<GOItem*>(object);
     RemoveItem(item);
 }
 

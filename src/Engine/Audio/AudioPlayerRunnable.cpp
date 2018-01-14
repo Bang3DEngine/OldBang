@@ -10,8 +10,8 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
                                          ALAudioSource *alAudioSource,
                                          float delayInSeconds)
 {
-    m_audioClip = clip;
-    m_alAudioSource = alAudioSource;
+    p_audioClip = clip;
+    p_alAudioSource = alAudioSource;
     m_delayInSeconds = delayInSeconds;
     SetAutoDelete(true);
 }
@@ -19,41 +19,36 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
 AudioPlayerRunnable::~AudioPlayerRunnable()
 {
     AudioManager::GetInstance()->OnAudioFinishedPlaying(this);
-    if (m_alAudioSource->m_autoDelete) { delete m_alAudioSource; }
+    EventEmitter<IDestroyListener>::PropagateToListeners(
+                          &IDestroyListener::OnDestroyed, this);
 }
 
-void AudioPlayerRunnable::Resume() { m_alAudioSource->Play(); }
-void AudioPlayerRunnable::Pause() { m_alAudioSource->Pause(); }
+void AudioPlayerRunnable::Resume() { p_alAudioSource->Play(); }
+void AudioPlayerRunnable::Pause() { p_alAudioSource->Pause(); }
 void AudioPlayerRunnable::Stop()
 {
     m_forceExit = true;
-    m_alAudioSource->Stop();
+    p_alAudioSource->Stop();
 }
-AudioClip *AudioPlayerRunnable::GetAudioClip() const { return m_audioClip; }
+AudioClip *AudioPlayerRunnable::GetAudioClip() const { return p_audioClip; }
 ALAudioSource *AudioPlayerRunnable::GetALAudioSource() const
 {
-    return m_alAudioSource;
+    return p_alAudioSource;
 }
 
 void AudioPlayerRunnable::Run()
 {
-    ENSURE(m_audioClip->IsLoaded());
+    ENSURE(p_audioClip->IsLoaded());
 
     if (m_delayInSeconds > 0.0f) // Wait delay
     {
         Thread::SleepCurrentThread(m_delayInSeconds);
     }
 
-    AudioManager::ClearALErrors();
-    m_alAudioSource->Play(); // Play and wait until source is stopped
+    p_alAudioSource->Play(); // Play and wait until source is stopped
     do
     {
-        AudioManager::ClearALErrors();
         Thread::SleepCurrentThread(0.3f);
-
-        ALenum error = alGetError();
-        bool hasError = (error != AL_NO_ERROR);
-        if (hasError) { m_forceExit = true; }
     }
-    while ( !m_forceExit && !m_alAudioSource->IsStopped() );
+    while ( !m_forceExit && !p_alAudioSource->IsStopped() );
 }

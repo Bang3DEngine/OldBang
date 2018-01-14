@@ -42,7 +42,7 @@ public:
     void OnClicked(IFocusable *focusable) override;
 
     // IDestroyListener
-    void OnDestroyed(Object *object) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
 protected:
     UITree();

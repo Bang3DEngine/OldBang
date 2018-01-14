@@ -45,7 +45,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
     // IDestroyListener
-    virtual void OnDestroyed(Object *object) override;
+    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     UILayoutManager* GetLayoutManager() const;
 

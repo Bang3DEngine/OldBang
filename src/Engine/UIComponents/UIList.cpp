@@ -366,7 +366,7 @@ void UIList::SetUseSelectedColor(bool useSelectColor)
     m_useSelectColor = useSelectColor;
 }
 
-void UIList::OnDestroyed(Object *object)
+void UIList::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (object == p_itemUnderMouse)
     {

@@ -54,11 +54,6 @@ void SceneManager::_Update()
     SceneManager::UpdateScene( SceneManager::GetActiveScene() );
 }
 
-void SceneManager::_StartScene(Scene *scene)
-{
-    ObjectManager::StartObjects();
-}
-
 void SceneManager::Update()
 {
     SceneManager::GetInstance()->_Update();
@@ -136,7 +131,6 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance();
     sm->_LoadSceneInstantly(nullptr);
-    sm->_StartScene(scene);
 
     if (scene)
     {

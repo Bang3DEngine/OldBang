@@ -32,7 +32,7 @@ public:
     void InvalidateCanvas();
 
     // IDestroyListener
-    void OnDestroyed(Object *object) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

@@ -24,7 +24,7 @@ AudioSource::~AudioSource()
 void AudioSource::OnStart()
 {
     Component::OnStart();
-    if (IsPlayOnStart())
+    if (GetPlayOnStart() && !AudioManager::GetPlayOnStartBlocked())
     {
         Play();
     }
@@ -79,7 +79,7 @@ void AudioSource::Play(float delay)
     AudioManager::Play(GetAudioClip(), this, delay);
 }
 
-bool AudioSource::IsPlayOnStart() const { return m_playOnStart; }
+bool AudioSource::GetPlayOnStart() const { return m_playOnStart; }
 AudioClip *AudioSource::GetAudioClip() const { return p_audioClip.Get(); }
 float AudioSource::GetPlayProgress() const
 {
@@ -98,7 +98,7 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetPitch( GetPitch() );
     as->SetRange( GetRange() );
     as->SetLooping( GetLooping() );
-    as->SetPlayOnStart( IsPlayOnStart() );
+    as->SetPlayOnStart( GetPlayOnStart() );
 }
 
 void AudioSource::ImportXML(const XMLNode &xml)
@@ -139,5 +139,5 @@ void AudioSource::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Pitch",       GetPitch());
     xmlInfo->Set("Range",       GetRange());
     xmlInfo->Set("Looping",     GetLooping());
-    xmlInfo->Set("PlayOnStart", IsPlayOnStart());
+    xmlInfo->Set("PlayOnStart", GetPlayOnStart());
 }

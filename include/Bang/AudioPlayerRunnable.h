@@ -3,12 +3,16 @@
 
 #include "Bang/Thread.h"
 
+#include "Bang/IEventEmitter.h"
+#include "Bang/IDestroyListener.h"
+
 NAMESPACE_BANG_BEGIN
 
 FORWARD class AudioClip;
 FORWARD class ALAudioSource;
 
-class AudioPlayerRunnable : public ThreadRunnable
+class AudioPlayerRunnable : public ThreadRunnable,
+                            public EventEmitter<IDestroyListener>
 {
 public:
     AudioPlayerRunnable(AudioClip *clip,
@@ -27,8 +31,8 @@ public:
 
 private:
     bool m_forceExit = false;
-    AudioClip *m_audioClip = nullptr;
-    ALAudioSource *m_alAudioSource = 0;
+    AudioClip *p_audioClip = nullptr;
+    ALAudioSource *p_alAudioSource = 0;
     float m_delayInSeconds = 0.0f;
 };
 

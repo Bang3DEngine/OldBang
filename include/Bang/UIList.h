@@ -63,7 +63,7 @@ public:
     void SetWideSelectionMode(bool wideSelectionMode);
 
     // IDestroyListener
-    virtual void OnDestroyed(Object *object) override;
+    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     using SelectionCallback = std::function<void(GOItem *item, Action action)>;
     void SetSelectionCallback(SelectionCallback selectionCallback);
