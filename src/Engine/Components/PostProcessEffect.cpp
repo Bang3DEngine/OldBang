@@ -28,9 +28,9 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     Component::OnRender(renderPass);
 
     bool scenePostProcess = (GetType() == Type::AfterScene &&
-                             renderPass == RenderPass::Scene_PostProcess);
+                             renderPass == RenderPass::ScenePostProcess);
     bool canvasPostProcess = (GetType() == Type::AfterCanvas &&
-                              renderPass == RenderPass::Canvas_PostProcess);
+                              renderPass == RenderPass::CanvasPostProcess);
 
     if (scenePostProcess || canvasPostProcess)
     {

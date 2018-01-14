@@ -142,7 +142,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetStencilValue(1);
     GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
-    RenderWithPass(go, RenderPass::Scene_Lighted);
+    RenderWithPass(go, RenderPass::Scene);
 
     // Apply lights to stenciled zone
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
@@ -150,8 +150,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetStencilFunc(GL::Function::Always);
     GL::SetStencilValue(0);
 
-    RenderWithPass(go, RenderPass::Scene_UnLighted);
-    RenderWithPass(go, RenderPass::Scene_PostProcess);
+    RenderWithPass(go, RenderPass::ScenePostProcess);
 
     camera->GetGBuffer()->SetColorDrawBuffer();
     GL::Enable(GL::Test::Blend);
@@ -163,17 +162,17 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     RenderWithPass(go, RenderPass::Canvas);
-    RenderWithPass(go, RenderPass::Canvas_PostProcess);
+    RenderWithPass(go, RenderPass::CanvasPostProcess);
 
-    // GBuffer Gizmos rendering
-    if (camera->MustRenderPass(RenderPass::Gizmos))
+    // GBuffer Overlay rendering
+    if (camera->MustRenderPass(RenderPass::Overlay))
     {
         GL::ClearStencilBuffer();
         GL::ClearDepthBuffer();
         GL::SetDepthMask(true);
         GL::SetStencilFunc(GL::Function::Always);
         GL::SetDepthFunc(GL::Function::LEqual);
-        RenderWithPass(go, RenderPass::Gizmos);
+        RenderWithPass(go, RenderPass::Overlay);
         go->RenderGizmos();
     }
 
@@ -186,15 +185,14 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 
     // Selection rendering
     camera->GetSelectionFramebuffer()->PrepareForRender(go);
-    go->Render(RenderPass::Scene_Lighted);
-    go->Render(RenderPass::Scene_UnLighted);
+    go->Render(RenderPass::Scene);
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     // RenderWithPass(go, RenderPass::Canvas);
 
-    if (camera->MustRenderPass(RenderPass::Gizmos))
+    if (camera->MustRenderPass(RenderPass::Overlay))
     {
-        RenderWithPass(go, RenderPass::Gizmos);
+        RenderWithPass(go, RenderPass::Overlay);
         go->RenderGizmos();
     }
 }

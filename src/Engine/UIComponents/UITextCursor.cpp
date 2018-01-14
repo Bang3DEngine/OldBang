@@ -14,7 +14,6 @@ UITextCursor::UITextCursor()
     SetMaterial(MaterialFactory::GetUIImage().Get());
     GetMaterial()->SetDiffuseColor(Color::Black);
     SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    SetRenderPass(RenderPass::Canvas);
     SetStroke(1.0f);
 
     constexpr float limit = 1.0f;

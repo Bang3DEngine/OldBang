@@ -41,7 +41,6 @@ public:
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     void SetRenderPrimitive(GL::Primitive renderPrimitive);
     void SetLineWidth(float w);
-    void SetRenderPass(RenderPass rp);
 
     bool IsVisible() const;
     Material* GetSharedMaterial() const;
@@ -53,7 +52,6 @@ public:
     GL::ViewProjMode GetViewProjMode() const;
     GL::Primitive GetRenderPrimitive() const;
     float GetLineWidth() const;
-    RenderPass GetRenderPass() const;
 
     // IMaterialChangedListener
     void OnMaterialChanged(const Material *changedMaterial) override;
@@ -70,12 +68,6 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    bool m_cullling = true;
-    bool m_renderWireframe = false;
-    GL::Face m_cullFace = GL::Face::Back;
-    GL::Primitive m_renderPrimitive = GL::Primitive::Triangles;
-    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
-
     Renderer();
     virtual ~Renderer();
 
@@ -83,10 +75,15 @@ protected:
 
 private:
     bool m_visible = true;
+    bool m_cullling = true;
+    float m_lineWidth = 1.0f;
+    bool m_renderWireframe = false;
+    GL::Face m_cullFace = GL::Face::Back;
+    GL::Primitive m_renderPrimitive = GL::Primitive::Triangles;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
+
     mutable RH<Material> p_material;
     RH<Material> p_sharedMaterial;
-    float m_lineWidth = 1.0f;
-    RenderPass m_renderPass = RenderPass::Scene_Lighted;
 
     friend class GEngine;
 };

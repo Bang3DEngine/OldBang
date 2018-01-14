@@ -7,14 +7,14 @@ NAMESPACE_BANG_BEGIN
 
 enum class RenderPass
 {
-    Scene_Lighted,
-    Scene_UnLighted,
-    Scene_PostProcess,
+    Scene              = 0,
+    ScenePostProcess   = 1,
 
-    Canvas,
-    Canvas_PostProcess,
+    Canvas             = 2,
+    CanvasPostProcess  = 3,
 
-    Gizmos
+    Overlay            = 4,
+    OverlayPostProcess = 5
 };
 
 NAMESPACE_BANG_END

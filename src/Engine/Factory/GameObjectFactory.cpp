@@ -468,7 +468,6 @@ GameObject *GameObjectFactory::CreateUISeparator(LayoutSizeType sizeType,
     lr->SetMaterial(MaterialFactory::GetUIImage().Get());
     lr->GetMaterial()->SetDiffuseColor(Color::White);
     lr->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
-    lr->SetRenderPass(RenderPass::Canvas);
 
     UILayoutElement *le = sepGo->GetComponent<UILayoutElement>();
     le->SetPreferredSize( Vector2i::Max(space, Vector2i::One) );

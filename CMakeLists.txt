@@ -179,7 +179,6 @@ ${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
-${ENGINE_SRC_DIR}/Factory/RendererFactory.cpp
 ${ENGINE_SRC_DIR}/Factory/IconManager.cpp
 ${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
 ${ENGINE_SRC_DIR}/GameObjects/Scene.cpp

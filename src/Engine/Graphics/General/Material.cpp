@@ -98,6 +98,15 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
     }
 }
 
+void Material::SetRenderPass(RenderPass renderPass)
+{
+    if (renderPass != GetRenderPass())
+    {
+        m_renderPass = renderPass;
+        PropagateMaterialChanged();
+    }
+}
+
 const Vector2 &Material::GetUvOffset() const { return m_uvOffset; }
 const Vector2 &Material::GetUvMultiply() const { return m_uvMultiply; }
 ShaderProgram* Material::GetShaderProgram() const { return p_shaderProgram.Get(); }
@@ -105,6 +114,7 @@ Texture2D* Material::GetTexture() const { return p_texture.Get(); }
 bool Material::GetReceivesLighting() const { return m_receivesLighting; }
 float Material::GetShininess() const { return m_shininess; }
 const Color& Material::GetDiffuseColor() const { return m_diffuseColor; }
+RenderPass Material::GetRenderPass() const { return m_renderPass; }
 
 void Material::Bind() const
 {
@@ -140,6 +150,7 @@ void Material::CloneInto(ICloneable *clone) const
     matClone->SetReceivesLighting(GetReceivesLighting());
     matClone->SetShininess(GetShininess());
     matClone->SetTexture(GetTexture());
+    matClone->SetRenderPass(GetRenderPass());
 }
 
 void Material::OnTextureChanged(const Texture*)
@@ -158,9 +169,13 @@ void Material::Import(const Path &materialFilepath)
     ImportXMLFromFile(materialFilepath);
 }
 
+#include "Bang/Debug.h"
 void Material::ImportXML(const XMLNode &xml)
 {
     Asset::ImportXML(xml);
+
+    if (xml.Contains("RenderPass"))
+    { SetRenderPass(xml.Get<RenderPass>("RenderPass")); }
 
     if (xml.Contains("DiffuseColor"))
     { SetDiffuseColor(xml.Get<Color>("DiffuseColor")); }
@@ -201,6 +216,7 @@ void Material::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 
+    xmlInfo->Set("RenderPass",       GetRenderPass());
     xmlInfo->Set("DiffuseColor",     GetDiffuseColor());
     xmlInfo->Set("Shininess",        GetShininess());
     xmlInfo->Set("ReceivesLighting", GetReceivesLighting());

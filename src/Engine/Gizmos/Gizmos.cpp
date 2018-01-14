@@ -24,7 +24,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/RendererFactory.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -44,7 +43,7 @@ Gizmos::Gizmos()
 
     for (Renderer *rend : m_renderers)
     {
-        RendererFactory::ConvertToGizmoRenderer( rend );
+        rend->SetMaterial(MaterialFactory::GetOnlyColor().Get());
     }
 
     m_gizmosGo->GetHideFlags().SetOn(HideFlag::DontSerialize);
@@ -370,7 +369,7 @@ GameObject *Gizmos::GetGizmosGameObject()
 
 void Gizmos::Render(Renderer *rend)
 {
-    rend->OnRender(RenderPass::Gizmos);
+    rend->OnRender(RenderPass::Overlay);
 }
 
 Gizmos* Gizmos::GetInstance()

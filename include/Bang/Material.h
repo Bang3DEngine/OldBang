@@ -4,6 +4,7 @@
 #include "Bang/Asset.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
+#include "Bang/RenderPass.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/ITextureChangedListener.h"
 #include "Bang/IMaterialChangedListener.h"
@@ -27,6 +28,7 @@ public:
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
+    void SetRenderPass(RenderPass renderPass);
 
     const Vector2& GetUvOffset() const;
     const Vector2& GetUvMultiply() const;
@@ -35,6 +37,7 @@ public:
     bool GetReceivesLighting() const;
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
+    RenderPass GetRenderPass() const;
 
     virtual void Bind() const;
     virtual void UnBind() const;
@@ -56,6 +59,7 @@ protected:
     RH<Texture2D> p_texture;
     RH<ShaderProgram> p_shaderProgram;
 
+    RenderPass m_renderPass = RenderPass::Scene;
     Color m_diffuseColor    = Color::White;
     float m_shininess       = 60.0f;
     bool m_receivesLighting = true;

@@ -14,7 +14,6 @@ LineRenderer::LineRenderer()
     p_mesh = Resources::Create<Mesh>();
 
     SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
-    SetRenderPass(RenderPass::Scene_UnLighted);
 
     SetRenderPrimitive(GL::Primitive::Lines);
 }

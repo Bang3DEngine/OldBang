@@ -26,11 +26,10 @@ USING_NAMESPACE_BANG
 
 Camera::Camera()
 {
-    AddRenderPass(RenderPass::Scene_Lighted);
-    AddRenderPass(RenderPass::Scene_PostProcess);
-    AddRenderPass(RenderPass::Scene_UnLighted);
+    AddRenderPass(RenderPass::Scene);
+    AddRenderPass(RenderPass::ScenePostProcess);
     AddRenderPass(RenderPass::Canvas);
-    AddRenderPass(RenderPass::Canvas_PostProcess);
+    AddRenderPass(RenderPass::CanvasPostProcess);
 
     m_gbuffer = new GBuffer(1,1);
     m_selectionFramebuffer = new SelectionFramebuffer(1,1);

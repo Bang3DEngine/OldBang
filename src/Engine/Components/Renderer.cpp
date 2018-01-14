@@ -35,12 +35,14 @@ Material *Renderer::GetUserMaterial() const
 void Renderer::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
-    if (IsVisible() && renderPass == GetRenderPass())
+
+    Material *mat = GetUserMaterial();
+    if (IsVisible() && mat && mat->GetRenderPass() == renderPass)
     {
         GEngine::GetActive()->Render(this);
     }
 }
-void Renderer::OnRender() { }
+void Renderer::OnRender() {}
 
 void Renderer::Bind() const
 {
@@ -104,15 +106,6 @@ void Renderer::SetMaterial(Material *mat)
     }
 }
 
-void Renderer::SetRenderPass(RenderPass rp)
-{
-    if (rp != GetRenderPass())
-    {
-        m_renderPass = rp;
-        PropagateRendererChanged();
-    }
-}
-
 void Renderer::SetLineWidth(float w)
 {
     if (w != GetLineWidth())
@@ -142,17 +135,14 @@ void Renderer::SetRenderPrimitive(GL::Primitive renderPrimitive)
     if (renderPrimitive != GetRenderPrimitive())
     {
         m_renderPrimitive = renderPrimitive;
+        PropagateRendererChanged();
     }
 }
 
 bool Renderer::IsVisible() const { return m_visible; }
 Material* Renderer::GetSharedMaterial() const { return p_sharedMaterial.Get(); }
-RenderPass Renderer::GetRenderPass() const { return m_renderPass; }
 
-void Renderer::OnMaterialChanged(const Material *changedMaterial)
-{
-    PropagateRendererChanged();
-}
+void Renderer::OnMaterialChanged(const Material*) { PropagateRendererChanged(); }
 bool Renderer::IsRenderWireframe() const { return m_renderWireframe; }
 AABox Renderer::GetAABBox() const { return AABox(); }
 void Renderer::SetCullFace(GL::Face cullMode) { m_cullFace = cullMode; }
@@ -211,9 +201,6 @@ void Renderer::ImportXML(const XMLNode &xml)
     if (xml.Contains("Material"))
     { SetMaterial(Resources::Load<Material>(xml.Get<GUID>("Material")).Get()); }
 
-    if (xml.Contains("RenderPass"))
-    { SetRenderPass( xml.Get<RenderPass>("RenderPass") ); }
-
     if (xml.Contains("LineWidth"))
     { SetLineWidth(xml.Get<float>("LineWidth")); }
 
@@ -230,7 +217,6 @@ void Renderer::ExportXML(XMLNode *xmlInfo) const
     Material* sMat = GetSharedMaterial();
     xmlInfo->Set("Material", sMat ? sMat->GetGUID() : GUID::Empty());
 
-    xmlInfo->Set("RenderPass", GetRenderPass());
     xmlInfo->Set("LineWidth", GetLineWidth());
     xmlInfo->Set("RenderWireframe", IsRenderWireframe());
 }

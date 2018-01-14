@@ -36,11 +36,11 @@ void Scene::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
-    if (rp == RenderPass::Scene_UnLighted)
+    if (rp == RenderPass::Scene)
     {
         GetDebugRenderer()->Render(true);
     }
-    else if (rp == RenderPass::Gizmos)
+    else if (rp == RenderPass::Overlay)
     {
         GetDebugRenderer()->Render(false);
     }
