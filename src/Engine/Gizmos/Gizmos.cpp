@@ -67,13 +67,13 @@ void Gizmos::SetColor(const Color &color)
 void Gizmos::SetPosition(const Vector3 &position)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_gizmosGo->GetTransform()->SetLocalPosition(position);
+    g->m_gizmosGo->GetTransform()->SetPosition(position);
 }
 
 void Gizmos::SetRotation(const Quaternion &rotation)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_gizmosGo->GetTransform()->SetLocalRotation(rotation);
+    g->m_gizmosGo->GetTransform()->SetRotation(rotation);
 }
 
 void Gizmos::SetScale(const Vector3 &scale)
@@ -160,8 +160,8 @@ void Gizmos::RenderBox(const AABox &b)
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_boxMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(b.GetCenter());
-    g->m_gizmosGo->GetTransform()->SetScale(g->m_gizmosGo->GetTransform()->GetScale() *
-                                       b.GetDimensions());
+    g->m_gizmosGo->GetTransform()->
+       SetScale(g->m_gizmosGo->GetTransform()->GetScale() * b.GetDimensions());
     g->Render(g->m_meshRenderer);
 }
 
@@ -272,7 +272,8 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
+void Gizmos::RenderFrustum(const Vector3 &forward,
+                           const Vector3 &up,
                            const Vector3 &origin,
                            float zNear, float zFar,
                            float fovDegrees, float aspectRatio)

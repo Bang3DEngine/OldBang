@@ -44,8 +44,11 @@ bool GL::CheckError(int line, const String &func, const String &file)
     if (glError != GL_NO_ERROR)
     {
         const char *err = reinterpret_cast<const char*>(gluErrorString(glError));
-        Debug_Error("OpenGL error: " << err << " At function " << func << " in "
-                    << file << ":" << line);
+        Debug_Error("OpenGL error \"" << String(err).ToUpper() <<
+                    "\" at function \"" << func << "\" in " <<
+                    file <<
+                    ":" <<
+                    line);
         ok = false;
     }
     return ok;

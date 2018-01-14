@@ -69,6 +69,12 @@ void Texture2D::Fill(const Byte *newData,
                    inputDataColorComp,
                    inputDataType,
                    newData);
+
+    if (newData && GetWidth() > 0 && GetHeight() > 0)
+    {
+        GL::GenerateMipMap(GL::TextureTarget::Texture2D);
+    }
+
     GL::Bind(GL::BindTarget::Texture2D, prevBoundId);
 
     PropagateTextureChanged();

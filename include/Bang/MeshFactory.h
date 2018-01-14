@@ -13,6 +13,7 @@ public:
     static RH<Mesh> GetCube();
     static RH<Mesh> GetSphere();
     static RH<Mesh> GetCone();
+    static RH<Mesh> GetCamera();
 
 private:
     Map<String, RH<Mesh>> m_cache;

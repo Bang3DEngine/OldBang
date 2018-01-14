@@ -20,6 +20,9 @@ RH<Mesh> MeshFactory::GetSphere()
 { return MeshFactory::GetMesh("Meshes/Sphere.obj"); }
 RH<Mesh> MeshFactory::GetCone()
 { return MeshFactory::GetMesh("Meshes/Cone.obj"); }
+RH<Mesh> MeshFactory::GetCamera()
+{ return MeshFactory::GetMesh("Meshes/Camera.obj"); }
+
 
 RH<Mesh> MeshFactory::GetMesh(const String &enginePath)
 {
