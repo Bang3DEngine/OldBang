@@ -38,16 +38,9 @@ public:
                          const Rect &destRectMask = Rect::NDCRect);
     void RenderScreenPlane(bool withDepth = false);
 
-    void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
-    void ApplyDeferredLights(GameObject *lightsContainer,
-                             Renderer *lightReceiver,
-                             Camera *camera);
-    void ApplyDeferredLights(GameObject *lightsContainer,
-                             GameObject *lightReceiver,
-                             Camera *camera);
-    void ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
-                                      Camera *camera,
-                                      const Rect &maskRectNDC);
+    void ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                               Camera *camera,
+                                               const Rect &maskRectNDC = Rect::NDCRect);
 
     void Resize(int newWidth, int newHeight);
 
@@ -71,6 +64,7 @@ private:
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
     void RenderWithPass(GameObject *go, RenderPass renderPass);
+    void RenderWithPassAndMarkStencilForLights(GameObject *go, RenderPass renderPass);
 
     void SetActiveCamera(Camera *camera);
 

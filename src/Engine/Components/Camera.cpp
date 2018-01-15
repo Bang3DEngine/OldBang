@@ -285,11 +285,15 @@ void Camera::OnRender(RenderPass rp)
 
     Gizmos::Reset();
     static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
+    Transform *camTransform = GetGameObject()->GetTransform();
+    float distScale = 15.0f;
+
+    /*
     Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
     Transform *sceneCamTransform = sceneCam->GetGameObject()->GetTransform();
-    Transform *camTransform = GetGameObject()->GetTransform();
     float distScale = Vector3::Distance(sceneCamTransform->GetPosition(),
                                         camTransform->GetPosition());
+    */
 
     Gizmos::SetSelectable(GetGameObject());
     Gizmos::SetReceivesLighting(true);
@@ -298,6 +302,7 @@ void Camera::OnRender(RenderPass rp)
     Gizmos::SetScale(Vector3::One * 0.02f * distScale);
     Gizmos::SetColor(Color::White);
     Gizmos::RenderCustomMesh(cameraMesh.Get());
+    Gizmos::SetRenderPass(RenderPass::Overlay);
 }
 
 void Camera::CloneInto(ICloneable *clone) const

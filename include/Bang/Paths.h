@@ -26,6 +26,13 @@ public:
 
     static void SetEngineRoot(const Path &engineRootDir);
 
+    static void SortPathsByName(List<Path> *paths);
+    static void SortPathsByExtension(List<Path> *paths);
+    static void FilterByExtension(List<Path> *paths,
+                                  const Array<String>& extensions);
+    static void RemoveFilesFromList(List<Path> *paths);
+    static void RemoveDirectoriesFromList(List<Path> *paths);
+
 protected:
     Paths();
     virtual ~Paths();

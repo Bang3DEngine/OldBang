@@ -44,10 +44,6 @@ private:
     bool m_showOnlyDirectories = false;
 
     void UpdateEntries();
-    static void SortPathsByName(List<Path> *paths);
-    static void FilterPathsByExtension(List<Path> *paths,
-                                       const Array<String>& extensions);
-    static void RemoveFilesFromList(List<Path> *paths);
 };
 
 class UIFileListItem : public GameObject

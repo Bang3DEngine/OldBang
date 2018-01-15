@@ -74,32 +74,18 @@ void GEngine::Render(Scene *scene)
     }
 }
 
-void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
-                                  Renderer *lightReceiver,
-                                  Camera *camera)
+void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
+                                                    Camera *camera,
+                                                    const Rect &maskRectNDC)
 {
-    // Rect maskRect = lightReceiver->GetGameObject()->GetBoundingScreenRect(camera, false);
-    // ENSURE(maskRect != Rect::Zero);
-    ApplyDeferredLightsToGBuffer(lightsContainer, camera, Rect::NDCRect);
-}
+    Byte prevStencilValue              = GL::GetStencilValue();
+    GL::Function prevStencilFunc       = GL::GetStencilFunc();
+    GL::StencilOperation prevStencilOp = GL::GetStencilOp();
 
-void GEngine::ApplyDeferredLights(GameObject *lightsContainer,
-                                  GameObject *lightReceiver,
-                                  Camera *camera)
-{
-    // Rect maskRect = lightReceiver->GetBoundingScreenRect(camera, true);
-    // ENSURE(maskRect != Rect::Zero);
-    ApplyDeferredLightsToGBuffer(lightsContainer, camera, Rect::NDCRect);
-}
-
-void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
-                                           Camera *camera,
-                                           const Rect &maskRectNDC)
-{
     // We have marked from before the zone where we want to apply the effect
-    GL::SetStencilValue(1);
-    GL::Function latestStencilFunc = GL::GetStencilFunc();
+    GL::SetStencilOp(GL::StencilOperation::Keep);
     GL::SetStencilFunc(GL::Function::Equal);
+    GL::SetStencilValue(1);
 
     List<Light*> lights = lightsContainer->GetComponentsInChildren<Light>();
     for (Light *light : lights)
@@ -108,7 +94,9 @@ void GEngine::ApplyDeferredLightsToGBuffer(GameObject *lightsContainer,
         light->ApplyLight(camera->GetGBuffer(), maskRectNDC);
     }
 
-    GL::SetStencilFunc(latestStencilFunc);
+    GL::SetStencilValue(prevStencilValue);
+    GL::SetStencilFunc(prevStencilFunc);
+    GL::SetStencilOp(prevStencilOp);
 }
 
 void GEngine::Resize(int newWidth, int newHeight)
@@ -138,41 +126,34 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     camera->BindGBuffer();
 
     // GBuffer Scene rendering
-    GL::SetDepthMask(true); // Write depth
+    camera->GetGBuffer()->SetAllDrawBuffers();
+    GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
-    GL::SetStencilValue(1);
-    GL::SetStencilOp(GL::StencilOperation::Replace); // Write to stencil
-    RenderWithPass(go, RenderPass::Scene);
-
-    // Apply lights to stenciled zone
-    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
-    ApplyDeferredLights(go, go, camera);
-    GL::SetStencilFunc(GL::Function::Always);
-    GL::SetStencilValue(0);
-
+    RenderWithPassAndMarkStencilForLights(go, RenderPass::Scene);
+    ApplyStenciledDeferredLightsToGBuffer(go, camera);
     RenderWithPass(go, RenderPass::ScenePostProcess);
 
+    // GBuffer Canvas rendering
     camera->GetGBuffer()->SetColorDrawBuffer();
     GL::Enable(GL::Test::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
-
-    // GBuffer Canvas rendering
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     RenderWithPass(go, RenderPass::Canvas);
     RenderWithPass(go, RenderPass::CanvasPostProcess);
+    GL::Disable(GL::Test::Blend);
 
     // GBuffer Overlay rendering
+    camera->GetGBuffer()->SetAllDrawBuffers();
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
-    GL::SetStencilFunc(GL::Function::Always);
     GL::SetDepthFunc(GL::Function::LEqual);
-    RenderWithPass(go, RenderPass::Overlay);
-
-    GL::Disable(GL::Test::Blend);
+    RenderWithPassAndMarkStencilForLights(go, RenderPass::Overlay);
+    ApplyStenciledDeferredLightsToGBuffer(go, camera);
+    RenderWithPass(go, RenderPass::OverlayPostProcess);
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
@@ -196,6 +177,23 @@ void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)
     {
         go->Render(renderPass, true);
     }
+}
+
+void GEngine::RenderWithPassAndMarkStencilForLights(GameObject *go,
+                                                    RenderPass renderPass)
+{
+    Byte prevStencilValue                     = GL::GetStencilValue();
+    GL::StencilOperation prevStencilOperation = GL::GetStencilOp();
+
+    GL::SetStencilValue(1);
+    GL::SetStencilOp(GL::StencilOperation::Replace);
+
+    // Render pass
+    RenderWithPass(go, renderPass);
+
+    // Restore
+    GL::SetStencilOp(prevStencilOperation);
+    GL::SetStencilValue(prevStencilValue);
 }
 
 void GEngine::SetActive(GEngine *gEngine)

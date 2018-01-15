@@ -14,9 +14,24 @@ RH<Material> MaterialFactory::GetDefaultUnLighted()
     return MaterialFactory::Load("Materials/G_DefaultNoPP.bmat");
 }
 
-RH<Material> MaterialFactory::GetOnlyColor()
+RH<Material> MaterialFactory::GetGizmosLightedScene()
 {
-    return MaterialFactory::Load("Materials/G_OnlyColor.bmat");
+    return MaterialFactory::Load("Materials/G_GizmosLightedScene.bmat");
+}
+
+RH<Material> MaterialFactory::GetGizmosUnLightedScene()
+{
+    return MaterialFactory::Load("Materials/G_GizmosUnLightedScene.bmat");
+}
+
+RH<Material> MaterialFactory::GetGizmosUnLightedOverlay()
+{
+    return MaterialFactory::Load("Materials/G_GizmosUnLightedOverlay.bmat");
+}
+
+RH<Material> MaterialFactory::GetGizmosLightedOverlay()
+{
+    return MaterialFactory::Load("Materials/G_GizmosLightedOverlay.bmat");
 }
 
 RH<Material> MaterialFactory::GetMissing()

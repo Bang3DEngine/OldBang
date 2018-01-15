@@ -96,10 +96,11 @@ void UIFileList::UpdateEntries()
 
     if (!GetFileExtensions().IsEmpty())
     {
-        UIFileList::FilterPathsByExtension(&paths, GetFileExtensions());
+        Paths::FilterByExtension(&paths, GetFileExtensions());
     }
-    UIFileList::SortPathsByName(&paths);
-    if (GetShowOnlyDirectories()) { UIFileList::RemoveFilesFromList(&paths); }
+    Paths::SortPathsByName(&paths);
+
+    if (GetShowOnlyDirectories()) { Paths::RemoveFilesFromList(&paths); }
     paths.PushFront( Path("..") );
 
     UIList *uiList = GetGameObject()->GetComponent<UIList>();
@@ -146,45 +147,6 @@ void UIFileList::UpdateEntries()
             }
         }
     );
-}
-
-void UIFileList::SortPathsByName(List<Path> *paths)
-{
-    Array<Path> pathsArr;
-    pathsArr.PushBack(paths->Begin(), paths->End());
-    std::sort(pathsArr.Begin(), pathsArr.End(),
-              [](const Path &lhs, const Path &rhs)
-              {
-                  return lhs.GetNameExt() < rhs.GetNameExt();
-              }
-    );
-
-    paths->Clear();
-    paths->Insert(paths->End(), pathsArr.Begin(), pathsArr.End());
-}
-
-void UIFileList::FilterPathsByExtension(List<Path> *paths,
-                                        const Array<String>& extensions)
-{
-    for (auto it = paths->Begin(); it != paths->End(); )
-    {
-        const Path &p = *it;
-        if ( p.IsFile() && !p.HasExtension(extensions) )
-        {
-            it = paths->Remove(it);
-        }
-        else { ++it; }
-    }
-}
-
-void UIFileList::RemoveFilesFromList(List<Path> *paths)
-{
-    for (auto it = paths->Begin(); it != paths->End(); )
-    {
-        const Path &p = *it;
-        if (p.IsFile()) { it = paths->Remove(it); }
-        else { ++it; }
-    }
 }
 
 // UIFileListItem

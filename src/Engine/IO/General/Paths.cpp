@@ -111,6 +111,72 @@ void Paths::SetEngineRoot(const Path &engineRootDir)
     Debug_Log("Picking as Paths Bang Engine Root: " << GetEngineDir());
 }
 
+void Paths::SortPathsByName(List<Path> *paths)
+{
+    Array<Path> pathsArr;
+    pathsArr.PushBack(paths->Begin(), paths->End());
+    std::stable_sort(
+        pathsArr.Begin(), pathsArr.End(),
+        [](const Path &lhs, const Path &rhs)
+        {
+            return lhs.GetNameExt() < rhs.GetNameExt();
+        }
+    );
+
+    paths->Clear();
+    paths->Insert(paths->End(), pathsArr.Begin(), pathsArr.End());
+}
+
+void Paths::SortPathsByExtension(List<Path> *paths)
+{
+    Array<Path> pathsArr;
+    pathsArr.PushBack(paths->Begin(), paths->End());
+    std::stable_sort(
+        pathsArr.Begin(), pathsArr.End(),
+        [](const Path &lhs, const Path &rhs)
+        {
+            return lhs.GetExtension() < rhs.GetExtension();
+        }
+    );
+
+    paths->Clear();
+    paths->Insert(paths->End(), pathsArr.Begin(), pathsArr.End());
+}
+
+void Paths::FilterByExtension(List<Path> *paths, const Array<String>& extensions)
+{
+    for (auto it = paths->Begin(); it != paths->End(); )
+    {
+        const Path &p = *it;
+        if ( p.IsFile() && !p.HasExtension(extensions) )
+        {
+            it = paths->Remove(it);
+        }
+        else { ++it; }
+    }
+}
+
+void Paths::RemoveFilesFromList(List<Path> *paths)
+{
+    for (auto it = paths->Begin(); it != paths->End(); )
+    {
+        const Path &p = *it;
+        if (p.IsFile()) { it = paths->Remove(it); }
+        else { ++it; }
+    }
+}
+
+void Paths::RemoveDirectoriesFromList(List<Path> *paths)
+{
+    for (auto it = paths->Begin(); it != paths->End(); )
+    {
+        const Path &p = *it;
+        if (p.IsDir()) { it = paths->Remove(it); }
+        else { ++it; }
+    }
+}
+
+
 Paths *Paths::GetInstance()
 {
     return Application::GetInstance()->GetPaths();

@@ -11,7 +11,10 @@ class MaterialFactory
 public:
     static RH<Material> GetDefault();
     static RH<Material> GetDefaultUnLighted();
-    static RH<Material> GetOnlyColor();
+    static RH<Material> GetGizmosLightedScene();
+    static RH<Material> GetGizmosUnLightedScene();
+    static RH<Material> GetGizmosUnLightedOverlay();
+    static RH<Material> GetGizmosLightedOverlay();
 
     static RH<Material> GetMissing();
 
