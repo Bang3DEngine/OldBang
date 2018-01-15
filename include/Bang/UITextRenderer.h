@@ -62,7 +62,6 @@ public:
     virtual void OnRender() override;
     virtual void Bind() const override;
     virtual void UnBind() const override;
-    virtual void OnRenderGizmos() override;
 
     // ILayoutElement
     virtual void CalculateLayout(Axis axis) override;

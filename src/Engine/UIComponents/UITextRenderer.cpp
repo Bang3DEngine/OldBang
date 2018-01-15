@@ -225,11 +225,6 @@ void UITextRenderer::UnBind() const
     UIRenderer::UnBind();
 }
 
-void UITextRenderer::OnRenderGizmos()
-{
-    UIRenderer::OnRenderGizmos();
-}
-
 void UITextRenderer::SetHorizontalAlign(HorizontalAlignment horizontalAlignment)
 {
     if (GetHorizontalAlignment() != horizontalAlignment)

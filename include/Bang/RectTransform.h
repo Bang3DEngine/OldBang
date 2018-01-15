@@ -16,7 +16,7 @@ public:
     RectTransform();
     virtual ~RectTransform();
 
-    void OnRenderGizmos() override;
+    void OnRender(RenderPass rp) override;
 
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);

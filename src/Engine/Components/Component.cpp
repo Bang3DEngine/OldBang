@@ -52,7 +52,6 @@ void Component::OnPostUpdate() {}
 void Component::OnBeforeRender() {}
 void Component::OnBeforeChildrenRender(RenderPass) {}
 void Component::OnRender(RenderPass) {}
-void Component::OnRenderGizmos() {}
 void Component::OnAfterChildrenRender(RenderPass) {}
 void Component::OnDestroy() {}
 

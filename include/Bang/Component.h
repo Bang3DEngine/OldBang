@@ -62,7 +62,6 @@ protected:
     virtual void OnBeforeRender();
     virtual void OnBeforeChildrenRender(RenderPass renderPass);
     virtual void OnRender(RenderPass renderPass);
-    virtual void OnRenderGizmos();
     virtual void OnAfterChildrenRender(RenderPass renderPass);
     virtual void OnDestroy() override;
 

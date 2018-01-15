@@ -367,9 +367,10 @@ bool RectTransform::IsMouseOver(bool recursive) const
     return false;
 }
 
-void RectTransform::OnRenderGizmos()
+void RectTransform::OnRender(RenderPass rp)
 {
-    Transform::OnRenderGizmos();
+    Transform::OnRender(rp);
+    if (rp != RenderPass::Overlay) { return; }
     /*
     Gizmos::SetThickness(1.0f);
 

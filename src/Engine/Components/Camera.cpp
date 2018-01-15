@@ -278,9 +278,10 @@ Matrix4 Camera::GetProjectionMatrix() const
     }
 }
 
-void Camera::OnRenderGizmos()
+void Camera::OnRender(RenderPass rp)
 {
-    Component::OnRenderGizmos();
+    Component::OnRender(rp);
+    if (rp != RenderPass::Overlay) { return; }
 
     Gizmos::Reset();
     static RH<Mesh> cameraMesh = MeshFactory::GetCamera();

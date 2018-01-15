@@ -199,7 +199,6 @@ protected:
     virtual void PostUpdate();
     virtual void BeforeRender();
     virtual void BeforeChildrenRender(RenderPass renderPass);
-    virtual void RenderGizmos();
     virtual void AfterChildrenRender(RenderPass renderPass);
     virtual void ChildAdded(GameObject *addedChild, GameObject *parent);
     virtual void ChildRemoved(GameObject *removedChild, GameObject *parent);

@@ -71,7 +71,7 @@ public:
     static Camera *GetActive();
 
     // Component
-    void OnRenderGizmos() override;
+    void OnRender(RenderPass rp) override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

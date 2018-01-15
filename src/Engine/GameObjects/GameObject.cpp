@@ -118,12 +118,6 @@ void GameObject::ChildRemoved(GameObject *removedChild, GameObject *parent)
               removedChild, parent);
 }
 
-void GameObject::RenderGizmos()
-{
-    PropagateToComponents(&Component::OnRenderGizmos);
-    PropagateToChildren(&GameObject::RenderGizmos);
-}
-
 void GameObject::PropagateEnabledEvent(bool enabled) const
 {
     auto enabledListeners = GetComponents<IEnabledListener>();
