@@ -7,6 +7,9 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
 
+bool ObjectManager::AssertCreatedFromObjectManager = false;
+bool ObjectManager::AssertDestroyedFromObjectManager = false;
+
 ObjectManager::~ObjectManager()
 {
     _DestroyObjects();
@@ -127,9 +130,4 @@ ObjectManager *ObjectManager::GetInstance()
 {
     return Window::GetActive()->GetObjectManager();
 }
-
-#ifdef DEBUG
-bool ObjectManager::AssertCreatedFromObjectManager = false;
-bool ObjectManager::AssertDestroyedFromObjectManager = false;
-#endif
 

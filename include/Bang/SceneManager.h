@@ -9,13 +9,14 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
 
-class SceneManagerListener : public IEventListener
+class ISceneManagerListener : public IEventListener
 {
 public:
-    virtual void OnSceneOpen(Scene *scene, const Path &sceneFilepath) {}
+    virtual void OnSceneOpen(Scene *scene, const Path &sceneFilepath)
+    { (void)scene; (void)sceneFilepath; }
 };
 
-class SceneManager : public EventEmitter<SceneManagerListener>
+class SceneManager : public EventEmitter<ISceneManagerListener>
 {
 public:
     static void LoadScene(const Path &sceneFilepath);

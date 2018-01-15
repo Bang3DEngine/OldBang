@@ -174,6 +174,7 @@ ${ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${ENGINE_SRC_DIR}/Components/Timer.cpp
 ${ENGINE_SRC_DIR}/Components/Transform.cpp
 ${ENGINE_SRC_DIR}/Debug/Chrono.cpp
+${ENGINE_SRC_DIR}/Debug/FPSChrono.cpp
 ${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
 ${ENGINE_SRC_DIR}/Debug/GEngineDebugger.cpp
 ${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp

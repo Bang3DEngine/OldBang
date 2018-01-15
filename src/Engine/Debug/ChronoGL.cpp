@@ -6,64 +6,43 @@
 
 USING_NAMESPACE_BANG
 
-ChronoGL::ChronoGL(const String &chronoName)
+ChronoGL::ChronoGL()
 {
-    m_chronoName = chronoName;
-    glFinish();
+    glGenQueries(1, &m_queryId);
 }
 
 ChronoGL::~ChronoGL()
 {
-    for (const ChronoGLEvent &ev : m_events)
-    {
-        glDeleteQueries(1, &ev.queryId);
-    }
+    glDeleteQueries(1, &m_queryId);
 }
 
-void ChronoGL::MarkEvent(const String &eventName)
+void ChronoGL::MarkBegin()
 {
-    ChronoGLEvent cge;
-    cge.eventName = eventName;
-    if (!m_events.IsEmpty()) // Wait for previous event complete and update it
-    {
-        glEndQuery(GL_TIME_ELAPSED); // End previous query
-
-        ChronoGLEvent &previousEvent = m_events.Back();
-
-        GLint done = false;
-        while (!done)
-        {
-            glGetQueryObjectiv(previousEvent.queryId,
-                               GL_QUERY_RESULT_AVAILABLE, &done);
-        }
-        GLuint64 previousEventTime;
-        glGetQueryObjectui64v(previousEvent.queryId,
-                              GL_QUERY_RESULT, &previousEventTime);
-        previousEvent.timeSinceLastEvent = previousEventTime;
-    }
-
-    glGenQueries(1, &(cge.queryId));
-    m_events.PushBack(cge);
-    glBeginQuery(GL_TIME_ELAPSED, cge.queryId);
+    if( IsQueryResultAvailable() ) { m_prevTimeNanos = GetQueryResultNanos(); }
+    glBeginQuery(GL_TIME_ELAPSED, m_queryId);
 }
 
-void ChronoGL::Log()
+void ChronoGL::MarkEnd()
 {
-    if (m_events.IsEmpty()) { return; }
+    glEndQuery(GL_TIME_ELAPSED);
+}
 
-    MarkEvent("EmptyEvent"); // To get the last timer time
+double ChronoGL::GetEllapsedSeconds() const
+{
+    if (IsQueryResultAvailable()) { m_prevTimeNanos = GetQueryResultNanos(); }
+    return m_prevTimeNanos;
+}
 
-    std::cerr << "ChronoGL " <<  m_chronoName
-              << " -------------------" << std::endl;
-    long totalTime = 0;
-    for (int i = 0; i < m_events.Size() - 1; ++i)
-    {
-        ChronoGLEvent &cge = m_events[i];
-        double intervalSecs = cge.timeSinceLastEvent / 1000000000.0;
-        totalTime += cge.timeSinceLastEvent;
-        std::cerr << "  " <<
-                     cge.eventName << ": " <<  intervalSecs << " s." << std::endl;
-    }
-    std::cerr << "  Total: " << totalTime / 1000000000.0 <<
-                 " s. ----------------" << std::endl << std::endl;
+bool ChronoGL::IsQueryResultAvailable() const
+{
+    GLint available = 0;
+    glGetQueryObjectiv(m_queryId, GL_QUERY_RESULT_AVAILABLE, &available);
+    return (available != 0);
+}
+
+GLuint ChronoGL::GetQueryResultNanos() const
+{
+    GLuint resultNanos;
+    glGetQueryObjectuiv(m_queryId, GL_QUERY_RESULT, &resultNanos);
+    return resultNanos;
 }

@@ -32,8 +32,9 @@ public:
                       const Color &v2,
                       float progression);
 
-    Color WithValue(float v) const;
-    Color WithSaturation(float t) const;
+    Color WithAlpha(float alpha) const;
+    Color WithValue(float value) const;
+    Color WithSaturation(float saturation) const;
 
     String ToStringRgb() const;
     String ToStringRgb255() const;

@@ -78,9 +78,26 @@ Color Color::Lerp(const Color &c1,
                 );
 }
 
-Color Color::WithValue(float v) const
+Color Color::WithAlpha(float alpha) const
 {
-    return Color(r * v, g * v, b * v, a);
+    return Color(r, g, b, alpha);
+}
+
+Color Color::WithValue(float value) const
+{
+    return Color(r * value, g * value, b * value, a);
+}
+
+Color Color::WithSaturation(float saturation) const
+{
+    Color c = *this;
+    float length = Math::Sqrt(c.r*c.r + c.g*c.g + c.b*c.b);
+
+    c.r = length + (c.r - length) * saturation;
+    c.g = length + (c.g - length) * saturation;
+    c.b = length + (c.b - length) * saturation;
+
+    return c;
 }
 
 String Color::ToStringRgb() const
@@ -132,18 +149,6 @@ Vector3 Color::ToVector3() const
 Vector4 Color::ToVector4() const
 {
     return Vector4(r, g, b, a);
-}
-
-Color Color::WithSaturation(float t) const
-{
-    Color c = *this;
-    float length = Math::Sqrt(c.r*c.r + c.g*c.g + c.b*c.b);
-
-    c.r = length + (c.r - length) * t;
-    c.g = length + (c.g - length) * t;
-    c.b = length + (c.b - length) * t;
-
-    return c;
 }
 
 Color Color::FromVector3(const Vector3 &v)

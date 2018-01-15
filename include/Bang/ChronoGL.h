@@ -11,22 +11,20 @@ NAMESPACE_BANG_BEGIN
 class ChronoGL
 {
 public:
-    ChronoGL(const String &chronoName = "");
+    ChronoGL();
     virtual ~ChronoGL();
 
-    void MarkEvent(const String &eventName);
-    void Log();
+    void MarkBegin();
+    void MarkEnd();
+
+    double GetEllapsedSeconds() const;
 
 private:
-    struct ChronoGLEvent
-    {
-        String eventName        = "";
-        GLuint queryId          = 0;
-        long timeSinceLastEvent = 0;
-    };
+    GLuint m_queryId = 0;
+    mutable GLuint m_prevTimeNanos = 0;
 
-    String m_chronoName = "";
-    Array<ChronoGLEvent> m_events = {};
+    bool IsQueryResultAvailable() const;
+    GLuint GetQueryResultNanos() const;
 };
 
 NAMESPACE_BANG_END

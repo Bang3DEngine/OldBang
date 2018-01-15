@@ -147,8 +147,8 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
     {
         scene->SetName(sceneFilepath.GetName());
         SceneManager::GetInstance()->
-            EventEmitter<SceneManagerListener>::PropagateToListeners(
-                &SceneManagerListener::OnSceneOpen, scene, sceneFilepath);
+            EventEmitter<ISceneManagerListener>::PropagateToListeners(
+                &ISceneManagerListener::OnSceneOpen, scene, sceneFilepath);
         SceneManager::LoadSceneInstantly(scene);
     }
     else

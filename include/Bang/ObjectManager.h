@@ -54,10 +54,8 @@ private:
 
     static ObjectManager *GetInstance();
 
-    #ifdef DEBUG
     public: static bool AssertCreatedFromObjectManager;
     public: static bool AssertDestroyedFromObjectManager;
-    #endif
 
     friend class Asset;
     friend class Window;
