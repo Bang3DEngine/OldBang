@@ -37,7 +37,12 @@ SelectionFramebuffer::~SelectionFramebuffer()
 {
 }
 
-void SelectionFramebuffer::PrepareForRender(const GameObject *go)
+void SelectionFramebuffer::SetNextRenderSelectable(GameObject *go)
+{
+    p_nextRenderSelectable = go;
+}
+
+void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
 {
     IdType id = 1;
     m_gameObject_To_Id.Clear();
@@ -59,7 +64,8 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     ASSERT(GL::IsBound(this));
     if (!rend->GetUserMaterial()) { return; }
 
-    GameObject *go = rend->GetGameObject();
+    GameObject *go = p_nextRenderSelectable ? p_nextRenderSelectable :
+                                              rend->GetGameObject();
 
     RH<ShaderProgram> prevSP;
     prevSP.Set( rend->GetUserMaterial()->GetShaderProgram() );
@@ -73,6 +79,13 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     rend->UnBind();
 
     rend->GetUserMaterial()->SetShaderProgram(prevSP.Get());
+
+    p_nextRenderSelectable = nullptr;
+}
+
+void SelectionFramebuffer::ClearColor()
+{
+    Framebuffer::ClearColor(Color::Zero);
 }
 
 GameObject *SelectionFramebuffer::

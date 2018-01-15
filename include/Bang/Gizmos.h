@@ -21,6 +21,7 @@ public:
     static void SetRotation(const Quaternion &rotation);
     static void SetScale(const Vector3 &scale);
 
+    static void SetSelectable(GameObject *go);
     static void SetThickness(float thickness);
     static void SetRenderWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
@@ -62,6 +63,7 @@ private:
     RH<Mesh> p_planeMesh;
     RH<Mesh> p_sphereMesh;
 
+    GameObject *p_selectable = nullptr;
     LineRenderer *m_lineRenderer = nullptr;
     MeshRenderer *m_meshRenderer = nullptr;
     List<Renderer*> m_renderers;

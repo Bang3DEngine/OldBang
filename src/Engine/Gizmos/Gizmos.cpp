@@ -25,6 +25,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 
@@ -79,6 +80,12 @@ void Gizmos::SetScale(const Vector3 &scale)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_gizmosGo->GetTransform()->SetLocalScale(scale);
+}
+
+void Gizmos::SetSelectable(GameObject *go)
+{
+    Gizmos *g = Gizmos::GetInstance();
+    g->p_selectable = go;
 }
 
 void Gizmos::SetThickness(float thickness)
@@ -347,6 +354,7 @@ void Gizmos::Reset()
     Gizmos::SetThickness(1.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetRenderWireframe(false);
+    Gizmos::SetSelectable(nullptr);
 
     List<Renderer*> rends = g->m_gizmosGo->GetComponents<Renderer>();
     for (Renderer *rend : rends)
@@ -369,6 +377,15 @@ GameObject *Gizmos::GetGizmosGameObject()
 
 void Gizmos::Render(Renderer *rend)
 {
+    // Set selectable for SelectionFramebuffer if any was set
+    Gizmos *g = Gizmos::GetInstance();
+    SelectionFramebuffer *sfb = GEngine::GetActive()->GetActiveSelectionFramebuffer();
+    if (sfb && GL::IsBound(sfb) && g->p_selectable)
+    {
+        sfb->SetNextRenderSelectable(g->p_selectable);
+    }
+
+    // Render!
     rend->OnRender(RenderPass::Overlay);
 }
 

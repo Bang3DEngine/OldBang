@@ -70,6 +70,9 @@ public:
 
     static Camera *GetActive();
 
+    // Component
+    void OnRenderGizmos() override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

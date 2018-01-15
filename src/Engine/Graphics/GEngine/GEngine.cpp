@@ -184,7 +184,7 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
     camera->BindSelectionFramebuffer();
 
     // Selection rendering
-    camera->GetSelectionFramebuffer()->PrepareForRender(go);
+    camera->GetSelectionFramebuffer()->PrepareNewFrameForRender(go);
     go->Render(RenderPass::Scene);
     GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();

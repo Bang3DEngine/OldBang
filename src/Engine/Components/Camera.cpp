@@ -92,7 +92,7 @@ void Camera::BindSelectionFramebuffer()
     GetSelectionFramebuffer()->Bind();
     GL::ClearStencilBuffer();
     GetSelectionFramebuffer()->ClearDepth();
-    GetSelectionFramebuffer()->ClearColor(Color::Zero);
+    GetSelectionFramebuffer()->ClearColor();
 }
 
 Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const
@@ -276,6 +276,27 @@ Matrix4 Camera::GetProjectionMatrix() const
                               -GetOrthoHeight(), GetOrthoHeight(),
                                GetZNear(),       GetZFar());
     }
+}
+
+void Camera::OnRenderGizmos()
+{
+    Component::OnRenderGizmos();
+
+    Gizmos::Reset();
+    static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
+    Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
+    Transform *sceneCamTransform = sceneCam->GetGameObject()->GetTransform();
+    Transform *camTransform = GetGameObject()->GetTransform();
+    float distScale = Vector3::Distance(sceneCamTransform->GetPosition(),
+                                        camTransform->GetPosition());
+
+    Gizmos::SetSelectable(GetGameObject());
+    Gizmos::SetReceivesLighting(true);
+    Gizmos::SetPosition(camTransform->GetPosition());
+    Gizmos::SetRotation(camTransform->GetRotation());
+    Gizmos::SetScale(Vector3::One * 0.02f * distScale);
+    Gizmos::SetColor(Color::White);
+    Gizmos::RenderCustomMesh(cameraMesh.Get());
 }
 
 void Camera::CloneInto(ICloneable *clone) const

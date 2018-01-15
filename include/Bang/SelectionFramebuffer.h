@@ -19,8 +19,11 @@ public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
-    void PrepareForRender(const GameObject *go);
+    void SetNextRenderSelectable(GameObject *go);
+    void PrepareNewFrameForRender(const GameObject *go);
     void RenderForSelectionBuffer(Renderer *renderer);
+
+    void ClearColor();
 
     RH<Texture2D> GetColorTexture() const;
     GameObject *GetGameObjectInViewportPoint(const Vector2i &vpPoint);
@@ -31,6 +34,7 @@ private:
     RH<Texture2D> p_colorTexture;
     RH<Material> p_selectionMaterial;
 
+    GameObject *p_nextRenderSelectable = nullptr;
     mutable Map<GameObject*, IdType> m_gameObject_To_Id;
     mutable Map<IdType, GameObject*> m_id_To_GameObject;
 
