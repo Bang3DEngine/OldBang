@@ -1,16 +1,16 @@
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNodeReader.h"
 
-#include "Bang/Paths.h"
 #include "Bang/File.h"
+#include "Bang/Paths.h"
 #include "Bang/Serializable.h"
 
 USING_NAMESPACE_BANG
 
-XMLParser::XMLParser()
+XMLNodeReader::XMLNodeReader()
 {
 }
 
-String XMLParser::GetTagName(const String &tag,
+String XMLNodeReader::GetTagName(const String &tag,
                              int *tagNameBegin,
                              int *tagNameEnd)
 {
@@ -27,19 +27,20 @@ String XMLParser::GetTagName(const String &tag,
     return tag.SubString(nameBegin, nameEnd - 1);
 }
 
-void XMLParser::GetFirstAttribute(const String &tag,
-                                  int startPosition,
-                                  XMLAttribute *attribute,
-                                  int *attributeEnd)
+void XMLNodeReader::GetNextAttribute(const String &tag,
+                                 int startPosition,
+                                 XMLAttribute *attribute,
+                                 int *attributeEnd)
 {
-    if (attributeEnd) *attributeEnd = -1;
+    if (attributeEnd) { *attributeEnd = -1; }
     if (attribute)
     {
         attribute->SetName("");
         attribute->SetValue("");
     }
 
-    int attrEnd = tag.IndexOf("}", startPosition);
+    int attrEnd = tag.IndexOf("\"", startPosition);
+    attrEnd = tag.IndexOf("\"", attrEnd + 1);
     if (attrEnd == -1) { return; }
 
     String attrString = tag.SubString(startPosition, attrEnd);
@@ -58,12 +59,12 @@ void XMLParser::GetFirstAttribute(const String &tag,
     }
 }
 
-bool XMLParser::IsOpenTag(const String &tag)
+bool XMLNodeReader::IsOpenTag(const String &tag)
 {
     return tag[0] == '<' && tag[1] != '/';
 }
 
-void XMLParser::GetCorrespondingCloseTag(const String &xml,
+void XMLNodeReader::GetCorrespondingCloseTag(const String &xml,
                                          int startPositionAfterOpenTag,
                                          String tagName,
                                          int *beginPosition,
@@ -80,13 +81,13 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
     {
         String tag;
         int begin;
-        XMLParser::GetNextTag(xml, end, &tag, &begin, &end);
+        XMLNodeReader::GetNextTag(xml, end, &tag, &begin, &end);
         if (end != -1)
         {
-            String name = XMLParser::GetTagName(tag);
+            String name = XMLNodeReader::GetTagName(tag);
             if (name == tagName)
             {
-                bool openTag = XMLParser::IsOpenTag(tag);
+                bool openTag = XMLNodeReader::IsOpenTag(tag);
                 if (openTag)
                 {
                     ++tagDeepness;
@@ -111,7 +112,7 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
     }
 }
 
-void XMLParser::GetNextOpenTag(const String &xml,
+void XMLNodeReader::GetNextOpenTag(const String &xml,
                                int startPosition,
                                String *tag,
                                int *beginTagPosition,
@@ -121,8 +122,8 @@ void XMLParser::GetNextOpenTag(const String &xml,
     int end = startPosition;
     while (end != -1)
     {
-        XMLParser::GetNextTag(xml, end, &resultTag, beginTagPosition, &end);
-        if (XMLParser::IsOpenTag(resultTag))
+        XMLNodeReader::GetNextTag(xml, end, &resultTag, beginTagPosition, &end);
+        if (XMLNodeReader::IsOpenTag(resultTag))
         {
             break;
         }
@@ -141,7 +142,7 @@ void XMLParser::GetNextOpenTag(const String &xml,
     }
 }
 
-void XMLParser::GetNextTag(const String &xml,
+void XMLNodeReader::GetNextTag(const String &xml,
                            int startPosition,
                            String *tag,
                            int *beginPosition,
@@ -165,28 +166,27 @@ void XMLParser::GetNextTag(const String &xml,
     }
 }
 
-XMLNode XMLParser::FromFile(const Path &filepath)
+XMLNode XMLNodeReader::FromFile(const Path &filepath)
 {
     if (!filepath.IsFile()) { return XMLNode(); }
     String fileContents = File::GetContents(filepath);
-    return XMLParser::FromString(fileContents);
+    return XMLNodeReader::FromString(fileContents);
 }
 
-XMLNode XMLParser::FromString(const String &xml)
+XMLNode XMLNodeReader::FromString(const String &xml)
 {
     if (xml.IsEmpty()) { return XMLNode(); }
 
     //Read name
     String tag;
     int rootOpenTagBegin, rootOpenTagEnd;
-    XMLParser::GetNextOpenTag(xml, 0, &tag,
-                              &rootOpenTagBegin, &rootOpenTagEnd);
+    XMLNodeReader::GetNextOpenTag(xml, 0, &tag, &rootOpenTagBegin, &rootOpenTagEnd);
     if (rootOpenTagEnd == -1) { return XMLNode(); }
 
     int tagNameEnd;
-    String tagName = XMLParser::GetTagName(tag, nullptr, &tagNameEnd);
+    String tagName = XMLNodeReader::GetTagName(tag, nullptr, &tagNameEnd);
     int rootCloseTagBegin, rootCloseTagEnd;
-    XMLParser::GetCorrespondingCloseTag(xml, rootOpenTagEnd, tagName,
+    XMLNodeReader::GetCorrespondingCloseTag(xml, rootOpenTagEnd, tagName,
                                         &rootCloseTagBegin, &rootCloseTagEnd);
 
     XMLNode root;
@@ -197,9 +197,9 @@ XMLNode XMLParser::FromString(const String &xml)
     while (attrEnd != -1)
     {
         XMLAttribute attr;
-        XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
+        XMLNodeReader::GetNextAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1) { break; }
-        root.Set(attr.GetName(), attr.GetStringValue(), attr.GetProperties());
+        root.Set(attr.GetName(), attr.GetStringValue());
     }
 
     //Read children
@@ -209,18 +209,18 @@ XMLNode XMLParser::FromString(const String &xml)
     {
         String innerTag;
         int childOpenTagBegin, childOpenTagEnd;
-        XMLParser::GetNextOpenTag(innerXML, innerLastPos, &innerTag,
+        XMLNodeReader::GetNextOpenTag(innerXML, innerLastPos, &innerTag,
                                   &childOpenTagBegin, &childOpenTagEnd);
 
         if (childOpenTagBegin == -1) { break; }
 
-        String tagName = XMLParser::GetTagName(innerTag);
+        String tagName = XMLNodeReader::GetTagName(innerTag);
         int childCloseTagBegin, childCloseTagEnd;
-        XMLParser::GetCorrespondingCloseTag(innerXML, childOpenTagEnd, tagName,
+        XMLNodeReader::GetCorrespondingCloseTag(innerXML, childOpenTagEnd, tagName,
                                             &childCloseTagBegin, &childCloseTagEnd);
         String childXML = innerXML.SubString(childOpenTagBegin, childCloseTagEnd);
 
-        XMLNode child = XMLParser::FromString(childXML);
+        XMLNode child = XMLNodeReader::FromString(childXML);
         root.AddChild(child);
 
         innerLastPos = childCloseTagEnd;

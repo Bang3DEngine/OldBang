@@ -18,8 +18,8 @@
 #include "Bang/Array.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
-#include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
+#include "Bang/XMLNodeReader.h"
 
 USING_NAMESPACE_BANG
 

@@ -1,7 +1,7 @@
 #include "Bang/XMLNode.h"
 
 #include "Bang/Paths.h"
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNodeReader.h"
 
 USING_NAMESPACE_BANG
 
@@ -64,11 +64,9 @@ void XMLNode::Set(const XMLAttribute &attribute)
     }
 }
 
-void XMLNode::Set(const String &attributeName,
-                  const String &attributeValue,
-                  const Array<XMLProperty>& properties)
+void XMLNode::Set(const String &attributeName, const String &attributeValue)
 {
-    XMLAttribute attr(attributeName, attributeValue, properties);
+    XMLAttribute attr(attributeName, attributeValue);
     Set(attr);
 }
 
@@ -186,5 +184,5 @@ List<XMLNode> &XMLNode::GetChildren()
 
 XMLNode XMLNode::FromString(const String &xml)
 {
-    return XMLParser::FromString(xml);
+    return XMLNodeReader::FromString(xml);
 }

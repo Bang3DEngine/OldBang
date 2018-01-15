@@ -1,5 +1,5 @@
-#ifndef XMLPARSER_H
-#define XMLPARSER_H
+#ifndef XMLNODEREADER_H
+#define XMLNODEREADER_H
 
 #include <sstream>
 #include <fstream>
@@ -10,9 +10,8 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Serializable;
 
-class XMLParser
+class XMLNodeReader
 {
-private:
 public:
     static void GetNextOpenTag(const String &xml,
                                int startPosition,
@@ -32,15 +31,15 @@ public:
                                          int *beginPosition,
                                          int *endPosition);
 
-    static void GetFirstAttribute(const String &tag,
-                                  int startPosition,
-                                  XMLAttribute *attribute,
-                                  int *attributeEnd);
+    static void GetNextAttribute(const String &tag,
+                                 int startPosition,
+                                 XMLAttribute *attribute,
+                                 int *attributeEnd);
 
     static bool IsOpenTag(const String &tag);
 
 public:
-    XMLParser();
+    XMLNodeReader();
 
     static String GetTagName(const String &tag,
                              int *tagNameBegin = nullptr,
@@ -52,4 +51,4 @@ public:
 
 NAMESPACE_BANG_END
 
-#endif // XMLPARSER_H
+#endif // XMLNODEREADER_H

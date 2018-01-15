@@ -7,7 +7,7 @@
 #include "Bang/Debug.h"
 #include "Bang/MeshIO.h"
 #include "Bang/Resources.h"
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/ImportFilesManager.h"
 
 USING_NAMESPACE_BANG

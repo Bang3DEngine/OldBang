@@ -139,6 +139,7 @@ file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag" "[^.]*.frag"
                               "[^.]*.vert" "[^.]*.vert" "[^.]*.vert"
                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
                               "[^.]*.glsl"
+                              "/home/sephirot47/NewProject/Assets/*"
                               "${BANG_INCLUDE_DIR}/*.h"
                               "${BANG_INCLUDE_DIR}/*.tcc")
 set(OTHER_FILES README.md "${OTHER_FILES}")
@@ -229,8 +230,7 @@ ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
 ${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
-${ENGINE_SRC_DIR}/IO/XML/XMLParser.cpp
-${ENGINE_SRC_DIR}/IO/XML/XMLProperty.cpp
+${ENGINE_SRC_DIR}/IO/XML/XMLNodeReader.cpp
 ${ENGINE_SRC_DIR}/Math/AABox.cpp
 ${ENGINE_SRC_DIR}/Math/Sphere.cpp
 ${ENGINE_SRC_DIR}/Resources/Asset.cpp

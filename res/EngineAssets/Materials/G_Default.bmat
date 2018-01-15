@@ -1,7 +1,7 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          Shininess="60"{}
-	  ReceivesLighting="true"{}
-          VertexShader="1510299163478730097 0"{}
-          FragmentShader="1510299163478634161 0"{}
+<Material DiffuseColor="(1, 1, 1, 1)"
+          Shininess="60"
+	  ReceivesLighting="true"
+          VertexShader="1510299163478730097 0"
+          FragmentShader="1510299163478634161 0"
          >
 </Material>

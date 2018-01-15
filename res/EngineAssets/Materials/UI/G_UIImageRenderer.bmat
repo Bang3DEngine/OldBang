@@ -1,7 +1,7 @@
-<Material DiffuseColor="(1, 1, 1, 1)"{}
-          ReceivesLighting="false"{}
-          RenderPass="2"{}
-          VertexShader="1510299163478730097 0"{}
-          FragmentShader="1510301744096732801 0"{}
+<Material DiffuseColor="(1, 1, 1, 1)"
+          ReceivesLighting="false"
+          RenderPass="2"
+          VertexShader="1510299163478730097 0"
+          FragmentShader="1510301744096732801 0"
          >
 </Material>

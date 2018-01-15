@@ -7,10 +7,10 @@
 #include "Bang/String.h"
 #include "Bang/MeshIO.h"
 #include "Bang/Window.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/UILayoutManager.h"
 
 USING_NAMESPACE_BANG

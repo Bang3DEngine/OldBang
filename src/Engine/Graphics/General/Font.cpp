@@ -6,9 +6,9 @@
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
 #include "Bang/Vector2.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/StreamOperators.h"
 #include "Bang/FontSheetCreator.h"
 
@@ -57,7 +57,7 @@ void Font::Import(const Path &ttfFilepath)
 
         String loadedChars = "";
         Array<Recti> charPxRects;
-        XMLNode distFieldInfo = XMLParser::FromFile(distFieldInfoPath);
+        XMLNode distFieldInfo = XMLNodeReader::FromFile(distFieldInfoPath);
         for (int i = 0; i < 255; ++i)
         {
             const char c = Cast<char>(i);

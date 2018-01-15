@@ -5,7 +5,6 @@
 #include "Bang/Array.h"
 #include "Bang/String.h"
 #include "Bang/IToString.h"
-#include "Bang/XMLProperty.h"
 #include "Bang/StreamOperators.h"
 
 NAMESPACE_BANG_BEGIN
@@ -14,22 +13,9 @@ class XMLAttribute : public IToString
 {
 public:
     XMLAttribute();
-    XMLAttribute(const String &name,
-                 const String &value,
-                 const Array<XMLProperty> &properties = {});
+    XMLAttribute(const String &name, const String &value);
 
-    void Set(const String &name,
-             const String &value,
-             const Array<XMLProperty> &properties = {});
-
-    void SetProperty(const XMLProperty &property);
-    void SetProperty(const String &propertyName, const String &propertyValue = "");
-    void SetProperties(const Array<XMLProperty>& properties);
-    const String& GetPropertyValue(const String &propertyName) const;
-    bool HasProperty(const XMLProperty &property) const;
-    bool HasProperty(const String &propertyName) const;
-    void RemoveProperty(const String &propertyName);
-    const Array<XMLProperty>& GetProperties() const;
+    void Set(const String &name, const String &value);
 
     void SetName(const String &name);
     const String& GetName() const;
@@ -41,12 +27,10 @@ public:
     static XMLAttribute FromString(const String &string);
 
     template<class T>
-    void Set(const String &name,
-             const T& value,
-             const Array<XMLProperty> &properties = {})
+    void Set(const String &name, const T& value)
     {
         std::ostringstream oss; oss << value;
-        Set(name, String(oss.str()), properties);
+        Set(name, String(oss.str()));
     }
 
     template<class T>
@@ -61,33 +45,19 @@ public:
 protected:
     String m_name  = "";
     String m_value = "";
-    Array<XMLProperty> m_properties;
 };
 
 
 template<>
-inline void XMLAttribute::Set(const String &name,
-                              const Path& filepath,
-                              const Array<XMLProperty> &properties)
+inline void XMLAttribute::Set(const String &name, const Path& filepath)
 {
-    Set(name, filepath.GetAbsolute(), properties);
-
-    if (Paths::IsEnginePath(filepath))
-    {
-        SetProperty(XMLProperty::IsEngineFile);
-    }
-    else
-    {
-        RemoveProperty(XMLProperty::IsEngineFile.GetName());
-    }
+    Set(name, filepath.GetAbsolute());
 }
 
 template<>
-inline void XMLAttribute::Set(const String &name,
-                              const bool& value,
-                              const Array<XMLProperty> &properties)
+inline void XMLAttribute::Set(const String &name, const bool& value)
 {
-    Set(name, value ? "True" : "False", properties);
+    Set(name, value ? "True" : "False");
 }
 
 template<>
@@ -106,8 +76,7 @@ template<>
 inline Path XMLAttribute::Get() const
 {
     if ( GetStringValue().IsEmpty() ) { return Path::Empty; }
-    return HasProperty(XMLProperty::IsEngineFile) ? EPATH(GetStringValue()) :
-                                                     Path(GetStringValue());
+    return Path(GetStringValue());
 }
 
 NAMESPACE_BANG_END

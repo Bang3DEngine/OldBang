@@ -24,16 +24,13 @@ public:
 
     bool Contains(const String &attrName) const;
     void Set(const XMLAttribute &attribute);
-    void Set(const String &attributeName,
-             const String &attributeValue,
-             const Array<XMLProperty>& properties = {});
+    void Set(const String &attributeName, const String &attributeValue);
 
     template <class T>
-    void Set(const String &attributeName, const T& value,
-             const Array<XMLProperty>& properties = {})
+    void Set(const String &attributeName, const T& value)
     {
         XMLAttribute attr;
-        attr.Set<T>(attributeName, value, properties);
+        attr.Set<T>(attributeName, value);
         Set(attr);
     }
 

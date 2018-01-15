@@ -2,9 +2,9 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Resources.h"
-#include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -51,7 +51,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 {
     if (!m_gameObjectXMLInfoContent.IsEmpty())
     {
-        XMLNode xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+        XMLNode xmlInfo = XMLNodeReader::FromString(m_gameObjectXMLInfoContent);
 
         GameObject *go = GameObjectFactory::CreateGameObject(false);
         go->ImportXML(xmlInfo);
@@ -80,6 +80,6 @@ void Prefab::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 
-    XMLNode goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+    XMLNode goInfo = XMLNodeReader::FromString(m_gameObjectXMLInfoContent);
     goInfo.CloneInto(xmlInfo);
 }

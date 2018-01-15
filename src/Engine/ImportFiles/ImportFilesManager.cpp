@@ -5,8 +5,8 @@
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/Paths.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Application.h"
+#include "Bang/XMLNodeReader.h"
 
 USING_NAMESPACE_BANG
 
@@ -94,7 +94,7 @@ void ImportFilesManager::RegisterImportFilepath(const Path &importFilepath)
 {
     if (!IsImportFile(importFilepath)) { return; }
 
-    XMLNode info = XMLParser::FromFile(importFilepath);
+    XMLNode info = XMLNodeReader::FromFile(importFilepath);
 
     GUID guid = info.Get<GUID>("GUID");
     ImportFilesManager *ifm = ImportFilesManager::GetInstance();
@@ -125,7 +125,7 @@ GUID ImportFilesManager::GetGUIDFromFilepath(const Path& filepath)
 
 GUID ImportFilesManager::GetGUIDFromImportFilepath(const Path& importFilepath)
 {
-    XMLNode xmlNode = XMLParser::FromFile(importFilepath);
+    XMLNode xmlNode = XMLNodeReader::FromFile(importFilepath);
     return xmlNode.Get<GUID>("GUID");
 }
 
