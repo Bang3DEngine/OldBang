@@ -23,7 +23,7 @@ enum class Key
     End = SDLK_END, Left = SDLK_LEFT, Up = SDLK_UP,
     Right = SDLK_RIGHT, Down = SDLK_DOWN, PageUp = SDLK_PAGEUP,
     PageDown = SDLK_PAGEDOWN, LShift = SDLK_LSHIFT, RShift = SDLK_RSHIFT,
-    LControl = SDLK_LCTRL, RControl = SDLK_RCTRL,
+    LCtrl = SDLK_LCTRL, RCtrl = SDLK_RCTRL,
     LAlt = SDLK_LALT, RAlt = SDLK_RALT,
     Tab = SDLK_TAB, TabKp = SDLK_KP_TAB,
     CapsLock = SDLK_CAPSLOCK, NumLock = SDLK_NUMLOCKCLEAR,

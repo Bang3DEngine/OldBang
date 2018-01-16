@@ -174,9 +174,12 @@ void Input::ProcessKeyDownEventInfo(const EventInfo &ei)
     m_keyInfos[k].pressed    = true;
     m_keyInfos[k].autoRepeat = ei.autoRepeat;
 
-    m_pressedKeys.PushBack(k);
-    m_keysDown.PushBack(k);
-    m_keysUp.Remove(k);
+    if (!ei.autoRepeat)
+    {
+        m_pressedKeys.PushBack(k);
+        m_keysDown.PushBack(k);
+        m_keysUp.Remove(k);
+    }
 }
 
 void Input::ProcessKeyUpEventInfo(const EventInfo &ei)
@@ -270,7 +273,8 @@ void Input::ProcessEnqueuedEvents()
 
 Input *Input::GetActive()
 {
-    return Window::GetActive()->GetInput();
+    Window *w = Window::GetActive();
+    return w ? w->GetInput() : nullptr;
 }
 
 String KeyToString(Key k)

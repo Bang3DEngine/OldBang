@@ -221,7 +221,7 @@ bool UILabel::IsShiftPressed() const
 
 void UILabel::HandleClipboardCopy()
 {
-    if ( (Input::GetKey(Key::LControl) || Input::GetKey(Key::RControl)) )
+    if ( (Input::GetKey(Key::LCtrl) || Input::GetKey(Key::RCtrl)) )
     {
         String selectedText = GetSelectedText();
         if ( Input::GetKeyDown(Key::C) && selectedText.Size() > 0 )

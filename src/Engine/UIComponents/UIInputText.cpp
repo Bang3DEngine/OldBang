@@ -194,7 +194,7 @@ void UIInputText::HandleTyping()
         resetSelection = true;
     }
 
-    if ( (Input::GetKey(Key::LControl) || Input::GetKey(Key::RControl)) )
+    if ( (Input::GetKey(Key::LCtrl) || Input::GetKey(Key::RCtrl)) )
     {
         String selectedText = GetSelectedText();
         if ( Input::GetKeyDown(Key::X) && selectedText.Size() > 0 )
@@ -265,8 +265,8 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
     if (Input::GetKeyDownRepeat(Key::Left)) { cursorIndexAdvance = -1; }
 
     if (cursorIndexAdvance != 0 &&
-        (Input::GetKey(Key::LControl) ||
-         Input::GetKey(Key::RControl))
+        (Input::GetKey(Key::LCtrl) ||
+         Input::GetKey(Key::RCtrl))
        )
     {
         bool fwd = (cursorIndexAdvance > 0);
