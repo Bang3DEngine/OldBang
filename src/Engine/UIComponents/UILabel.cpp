@@ -11,6 +11,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 

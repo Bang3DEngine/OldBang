@@ -16,12 +16,12 @@
 #include "Bang/INameListener.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
-#include "Bang/GameObjectFactory.h"
 #include "Bang/IComponentListener.h"
 #include "Bang/IGameObjectVisibilityChangedListener.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Scene;
 FORWARD class Camera;
 FORWARD class Component;
 FORWARD class RectTransform;

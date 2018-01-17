@@ -10,6 +10,7 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 

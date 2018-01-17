@@ -11,6 +11,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 

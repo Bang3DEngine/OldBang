@@ -3,13 +3,13 @@
 #include "Bang/Input.h"
 #include "Bang/Cursor.h"
 #include "Bang/UILabel.h"
-#include "Bang/UIRectMask.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/UIVerticalLayout.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG

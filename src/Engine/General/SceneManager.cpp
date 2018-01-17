@@ -1,17 +1,14 @@
 #include "Bang/SceneManager.h"
 
-#include "Bang/File.h"
 #include "Bang/Paths.h"
+#include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/String.h"
-#include "Bang/MeshIO.h"
 #include "Bang/Window.h"
 #include "Bang/Extensions.h"
-#include "Bang/Application.h"
 #include "Bang/ObjectManager.h"
-#include "Bang/XMLNodeReader.h"
-#include "Bang/UILayoutManager.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 
