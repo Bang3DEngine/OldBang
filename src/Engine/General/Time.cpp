@@ -28,12 +28,13 @@ uint64_t Time::GetNow_Nanos()
             std::chrono::nanoseconds(1);
 }
 
-
-Time::Time()
+void Time::SetDeltaTime(double seconds)
 {
+    Time::GetInstance()->m_deltaTimeReference = Time::GetNow_Millis() -
+                                                (seconds * 1000);
 }
 
-void Time::EstablishDeltaTimeReferenceToNow()
+void Time::SetDeltaTimeReferenceToNow()
 {
     Time::GetInstance()->m_deltaTimeReference = Time::GetNow_Millis();
 }

@@ -149,7 +149,7 @@ String File::GetContents(const Path &filepath)
 
     String contents = "";
     std::ifstream ifs(filepath.GetAbsolute().ToCString());
-    if (ifs)
+    if (ifs.is_open() && ifs.good() && !ifs.bad() && !ifs.fail())
     {
         contents = String((std::istreambuf_iterator<char>(ifs)),
                            std::istreambuf_iterator<char>());

@@ -57,10 +57,6 @@ private:
 
     static UIButton *CreateInto(GameObject *go);
 
-    // IFocusListener
-    virtual void OnMouseEnter(IFocusable *focusable) override;
-    virtual void OnMouseExit(IFocusable *focusable) override;
-
     friend class GameObjectFactory;
 };
 

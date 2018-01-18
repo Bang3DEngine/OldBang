@@ -47,6 +47,7 @@ class GameObject : public Object,
     GAMEOBJECT(GameObject);
 
 public:
+    virtual void Update();
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
 
     template <class T = GameObject, class... Args>
@@ -194,7 +195,6 @@ protected:
 
     virtual void PreUpdate();
     virtual void BeforeChildrenUpdate();
-    virtual void Update();
     virtual void AfterChildrenUpdate();
     virtual void PostUpdate();
     virtual void BeforeRender();
