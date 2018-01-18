@@ -18,19 +18,21 @@ GameObject *Selection::GetOveredGameObject()
 GameObject *Selection::GetOveredGameObject(Scene *scene)
 {
     if (!scene) { return nullptr; }
+    return Selection::GetOveredGameObject( scene->GetCamera() );
+}
 
-    Camera *cam = scene->GetCamera();
-    if (cam)
+GameObject *Selection::GetOveredGameObject(Camera *cam)
+{
+    if (!cam) { return nullptr; }
+
+    Vector2i mouseViewportPoint = Input::GetMousePositionScreen();
+    mouseViewportPoint = cam->FromScreenPointToViewportPoint(mouseViewportPoint);
+    SelectionFramebuffer *sfb = cam->GetSelectionFramebuffer();
+    if (sfb)
     {
-        Vector2i mouseViewportPoint = Input::GetMousePositionScreen();
-        mouseViewportPoint = cam->FromScreenPointToViewportPoint(mouseViewportPoint);
-        SelectionFramebuffer *sfb = cam->GetSelectionFramebuffer();
-        if (sfb)
-        {
-            GameObject *selGo =
-                        sfb->GetGameObjectInViewportPoint(mouseViewportPoint);
-            if (selGo) { return selGo; }
-        }
+        GameObject *selGo =
+                    sfb->GetGameObjectInViewportPoint(mouseViewportPoint);
+        if (selGo) { return selGo; }
     }
     return nullptr;
 }

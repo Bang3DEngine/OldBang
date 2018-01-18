@@ -6,6 +6,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class Camera;
 FORWARD class SelectionFramebuffer;
 
 class Selection
@@ -13,6 +14,7 @@ class Selection
 public:
     static GameObject *GetOveredGameObject();
     static GameObject *GetOveredGameObject(Scene *scene);
+    static GameObject *GetOveredGameObject(Camera *camera);
     Selection() = delete;
 };
 

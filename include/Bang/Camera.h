@@ -61,7 +61,6 @@ public:
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
-    GameObject *GetGameObjectToRender() const;
     Rect GetViewportScreenRect() const;
     Rect GetViewportScreenRectNDC() const;
     const Rect& GetViewportRectNDC() const;
@@ -89,8 +88,6 @@ private:
     Set<RenderPass> m_renderPassMask;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
-    GameObject *p_gameObjectToRender = nullptr;
-
     Color m_clearColor = Color(Color(0.3f), 1);
     float m_orthoHeight  = 25.0f;
     float m_fovDegrees = 60.0f;
@@ -100,8 +97,6 @@ private:
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
     mutable Recti m_latestViewportRect = Recti::Zero;
-
-    void SetGameObjectToRender(GameObject *go);
 
     friend class Scene;
 };

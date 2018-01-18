@@ -192,11 +192,6 @@ void Camera::RemoveRenderPass(RenderPass renderPass)
     m_renderPassMask.Remove(renderPass);
 }
 
-void Camera::SetGameObjectToRender(GameObject *go)
-{
-    p_gameObjectToRender = go;
-}
-
 const Color &Camera::GetClearColor() const { return m_clearColor; }
 float Camera::GetOrthoHeight() const { return m_orthoHeight; }
 float Camera::GetFovDegrees() const { return m_fovDegrees; }
@@ -211,11 +206,6 @@ bool Camera::MustRenderPass(RenderPass renderPass) const
 const Set<RenderPass> &Camera::GetRenderPassMask() const
 {
     return m_renderPassMask;
-}
-
-GameObject *Camera::GetGameObjectToRender() const
-{
-    return p_gameObjectToRender;
 }
 
 Rect Camera::GetViewportScreenRect() const

@@ -50,16 +50,11 @@ DebugRenderer *Scene::GetDebugRenderer() const { return p_debugRenderer; }
 
 void Scene::SetCamera(Camera *cam)
 {
-    if (p_camera)
-    {
-        p_camera->SetGameObjectToRender(nullptr);
-        p_camera = nullptr;
-    }
+    if (p_camera) { p_camera = nullptr; }
 
     p_camera = cam;
     if (p_camera)
     {
-        p_camera->SetGameObjectToRender(this);
         p_camera->EventEmitter<IDestroyListener>::RegisterListener(this);
     }
 }

@@ -40,6 +40,8 @@ void UIList::OnUpdate()
     {
         for (GOItem *childItem : p_items)
         {
+            if (!childItem->IsEnabled()) { continue; }
+
             bool overChildItem = false;
             overChildItem = canvas->IsMouseOver(childItem, true);
             if (m_wideSelectionMode && !overChildItem)

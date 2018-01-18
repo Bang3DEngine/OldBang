@@ -130,9 +130,8 @@ void Window::Render()
     Scene *scene = GetSceneManager()->GetActiveScene();
     if (scene)
     {
-        GetGEngine()->Render(scene);
-
         Camera *camera = scene->GetCamera(); ENSURE(camera);
+        GetGEngine()->Render(scene, camera);
         BlitToScreen(camera);
     }
 }

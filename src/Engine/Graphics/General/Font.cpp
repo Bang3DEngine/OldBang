@@ -135,7 +135,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
         Array<Recti> charRects;
         RH<Texture2D> atlasTex = Resources::Create<Texture2D>();
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                       "0123456789.,-;:_?!+*/\\\"'";
+                       "0123456789.,-;:_?!+*/\\()|\"'";
 
         FontSheetCreator::LoadAtlasTexture(GetTTFFont(fontSize),
                                            atlasTex.Get(), chars,

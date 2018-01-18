@@ -18,7 +18,6 @@ void FPSChrono::MarkEnd()
         m_latestDeltaTimes.PopBack();
     }
 
-    ASSERT(Time::GetNow_Seconds() >= m_beginTimeSeconds);
     m_latestDeltaTimes.PushFront( Time::GetNow_Seconds() - m_beginTimeSeconds );
 }
 

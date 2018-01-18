@@ -27,7 +27,6 @@ public:
 
     void Init();
 
-    void Render(Scene *scene);
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
     void RenderToScreen(Camera *cam);

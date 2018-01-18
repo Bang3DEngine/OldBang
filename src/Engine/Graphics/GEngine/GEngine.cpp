@@ -54,24 +54,11 @@ void GEngine::Init()
 
 void GEngine::Render(GameObject *go, Camera *camera)
 {
+    go->BeforeRender();
     SetActiveCamera(camera);
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
     SetActiveCamera(nullptr);
-}
-
-void GEngine::Render(Scene *scene)
-{
-    scene->BeforeRender();
-    List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>();
-    for (Camera *camera : sceneCameras)
-    {
-        GameObject *gameObjectToRender = camera->GetGameObjectToRender();
-        if (gameObjectToRender)
-        {
-            Render(gameObjectToRender, camera);
-        }
-    }
 }
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
