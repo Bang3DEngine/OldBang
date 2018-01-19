@@ -17,9 +17,9 @@ String::String(const char *cstr) { if (cstr != nullptr) { m_str = cstr; } }
 String::String(const std::string &stdstr) : m_str(stdstr) {}
 
 String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
-               std::istreambuf_iterator<char, std::char_traits<char> > end) :
-    m_str(begin, end)
+               std::istreambuf_iterator<char, std::char_traits<char> > end)
 {
+    m_str = std::string(begin, end);
 }
 
 String::~String()

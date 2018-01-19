@@ -151,8 +151,16 @@ String File::GetContents(const Path &filepath)
     std::ifstream ifs(filepath.GetAbsolute().ToCString());
     if (ifs.is_open() && ifs.good() && !ifs.bad() && !ifs.fail())
     {
-        contents = String((std::istreambuf_iterator<char>(ifs)),
-                           std::istreambuf_iterator<char>());
+        // contents = String((std::istreambuf_iterator<char>(ifs)),
+        //                   std::istreambuf_iterator<char>());
+
+        std::string line;
+        while ( std::getline (ifs, line) )
+        {
+            contents += line;
+            contents += "\n";
+        }
+
         ifs.close();
     }
     else

@@ -15,12 +15,17 @@ RH<Texture2D> IconManager::GetCheckIcon()
 
 RH<Texture2D> IconManager::GetIconTexture(const String &filename)
 {
-    RH<Texture2D> iconTexture =
-         Resources::Load<Texture2D>(Paths::GetEngineAssetsDir().Append("Icons").
-                                    Append(filename).AppendExtension("png"));
+    static Map<Path, RH<Texture2D>> cache;
 
-    iconTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);
-    iconTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
-    return iconTexture;
+    Path path = Paths::GetEngineAssetsDir().Append("Icons").
+                       Append(filename).AppendExtension("png");
+    if (!cache.ContainsKey(path))
+    {
+        RH<Texture2D> iconTex = Resources::Load<Texture2D>(path);
+        iconTex.Get()->SetFilterMode(GL::FilterMode::Bilinear);
+        iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
+        cache.Add(path, iconTex);
+    }
+    return cache.Get(path);
 }
 
