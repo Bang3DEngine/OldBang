@@ -46,7 +46,6 @@ void UIRendererCacher::OnStart()
     }
 }
 
-#include "Bang/Input.h"
 void UIRendererCacher::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);

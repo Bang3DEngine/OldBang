@@ -14,7 +14,7 @@ class PostProcessEffect : public Component
     COMPONENT(PostProcessEffect)
 
 public:
-    enum Type { AfterScene = 0, AfterCanvas };
+    enum class Type { AfterScene = 0, AfterCanvas };
 
     PostProcessEffect();
     virtual ~PostProcessEffect();

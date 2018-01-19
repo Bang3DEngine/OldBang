@@ -10,6 +10,7 @@ class ShaderProgramFactory
 {
 public:
     static ShaderProgram* GetDefault();
+    static ShaderProgram* GetDefaultPostProcess();
     static ShaderProgram* Get(const Path &vShaderPath, const Path &fShaderPath);
 
 private:

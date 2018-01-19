@@ -372,9 +372,9 @@ void RectTransform::OnRender(RenderPass rp)
     Transform::OnRender(rp);
     if (rp != RenderPass::Overlay) { return; }
 
+    /*
     Gizmos::Reset();
     Gizmos::SetThickness(1.0f);
-    /*
 
     Rect r = GetViewportRectNDC(); (void)r;
 

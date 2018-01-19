@@ -1,6 +1,6 @@
 #include "PP.frag"
 
-void Main()
+void main()
 {
     vec4 outputColor = B_SampleColor();
 
@@ -12,5 +12,5 @@ void Main()
     float contrast = 1.3;
     outputColor = pow(outputColor * valueFactor, vec4(contrast)) / valueFactor;
 
-    B_FOut.Color = outputColor;
+    B_GIn_Color = outputColor;
 }

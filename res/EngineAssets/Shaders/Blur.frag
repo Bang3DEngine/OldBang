@@ -2,7 +2,7 @@
 
 int BlurSize = 5;
 
-void Main()
+void main()
 {
     vec4 meanColor = vec4(0);
     for (int i = -BlurSize; i <= BlurSize; ++i)
@@ -14,5 +14,5 @@ void Main()
     }
 
     meanColor /= pow(BlurSize * 2 + 1, 2);
-    B_FOut.Color = meanColor;
+    B_GIn_Color = meanColor;
 }

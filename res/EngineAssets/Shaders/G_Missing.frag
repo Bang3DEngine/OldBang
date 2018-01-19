@@ -1,6 +1,6 @@
 #include "G.frag"
 
-void Main()
+void main()
 {
     B_GIn_Diffuse  = B_MaterialDiffuseColor * texColor;
     B_GIn_Normal   = vec4(0, 0, 0, 1);

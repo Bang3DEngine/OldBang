@@ -8,12 +8,18 @@ ShaderProgram *ShaderProgramFactory::GetDefault()
                EPATH("Shaders/G_Default.frag"));
 }
 
+ShaderProgram *ShaderProgramFactory::GetDefaultPostProcess()
+{
+    return Get(EPATH("Shaders/PP_ScreenPass.vert"),
+               EPATH("Shaders/Outline.frag"));
+}
+
 ShaderProgram *ShaderProgramFactory::Get(const Path &vShaderPath,
                                          const Path &fShaderPath)
 {
     ShaderProgramFactory *spf = ShaderProgramFactory::GetActive();
 
-    auto shaderPathsPair = std::make_pair(vShaderPath, fShaderPath);
+    const auto &shaderPathsPair = std::make_pair(vShaderPath, fShaderPath);
     if ( !spf->m_cache.ContainsKey(shaderPathsPair) )
     {
         RH<ShaderProgram> shaderProgram =

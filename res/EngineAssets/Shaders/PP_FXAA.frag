@@ -5,14 +5,14 @@
 #define FXAA_REDUCE_MIN   (1.0/128.0)
 #define FXAA_SUBPIX_SHIFT (1.0/4.0)
 
-void Main()
+void main()
 {
-    vec2 uv = B_ViewportUv;
+    vec2 uv = GetViewportUv();
 
-    vec3 rgbNW = B_SampleColor(uv + vec2(-1, -1) * B_ViewportStep).rgb;
-    vec3 rgbNE = B_SampleColor(uv + vec2( 1, -1) * B_ViewportStep).rgb;
-    vec3 rgbSW = B_SampleColor(uv + vec2(-1,  1) * B_ViewportStep).rgb;
-    vec3 rgbSE = B_SampleColor(uv + vec2( 1,  1) * B_ViewportStep).rgb;
+    vec3 rgbNW = B_SampleColor(uv + vec2(-1, -1) * GetViewportStep()).rgb;
+    vec3 rgbNE = B_SampleColor(uv + vec2( 1, -1) * GetViewportStep()).rgb;
+    vec3 rgbSW = B_SampleColor(uv + vec2(-1,  1) * GetViewportStep()).rgb;
+    vec3 rgbSE = B_SampleColor(uv + vec2( 1,  1) * GetViewportStep()).rgb;
     vec3 rgbM  = B_SampleColor(uv).rgb;
     vec3 luma = vec3(0.299, 0.587, 0.114);
 
@@ -36,7 +36,7 @@ void Main()
     dir = min(
        vec2(FXAA_SPAN_MAX, FXAA_SPAN_MAX),
        max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),  dir * rcpDirMin)
-     ) * B_ViewportStep;
+     ) * GetViewportStep();
 
     vec3 rgbA = 0.5 * (
             B_SampleColor(uv + dir * (1.0 / 3.0 - 0.5)).rgb +
@@ -47,5 +47,5 @@ void Main()
 
     float lumaB = dot(rgbB, luma);
     vec3 col = ((lumaB < lumaMin) || (lumaB > lumaMax)) ? rgbA : rgbB;
-    B_FOut.Color = vec4(col, 1);
+    B_GIn_Color = vec4(col, 1);
 }

@@ -43,8 +43,8 @@ private:
     Color m_color = Color::White;
     RH<Material> p_lightMaterialScreen;
 
-    void ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const;
-    virtual Rect GetRenderRect(Camera *cam) const;
+    void ApplyLight(Camera *camera, const Rect &renderRect) const;
+    virtual Rect GetRenderRect(Camera *camera) const;
 
     friend class GEngine;
 };

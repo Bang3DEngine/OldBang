@@ -74,7 +74,7 @@ void Scene::InvalidateCanvas()
 
 void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    if (GetCamera() && object == GetCamera())
+    if (object == GetCamera())
     {
         SetCamera(nullptr);
     }

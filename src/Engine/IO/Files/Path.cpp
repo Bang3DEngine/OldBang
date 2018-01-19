@@ -224,7 +224,7 @@ const String &Path::GetAbsolute() const
     return m_absolutePath;
 }
 
-Path Path::GetDuplicate() const
+Path Path::GetDuplicatePath() const
 {
     if (IsEmpty()) { return Path::Empty; }
 

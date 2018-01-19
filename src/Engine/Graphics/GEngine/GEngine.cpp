@@ -78,7 +78,7 @@ void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
     for (Light *light : lights)
     {
         if (!light || !light->IsEnabled(true)) { continue; }
-        light->ApplyLight(camera->GetGBuffer(), maskRectNDC);
+        light->ApplyLight(camera, maskRectNDC);
     }
 
     GL::SetStencilValue(prevStencilValue);
@@ -118,6 +118,7 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     GL::SetDepthFunc(GL::Function::LEqual);
     RenderWithPassAndMarkStencilForLights(go, RenderPass::Scene);
     ApplyStenciledDeferredLightsToGBuffer(go, camera);
+    camera->GetGBuffer()->SetColorDrawBuffer();
     RenderWithPass(go, RenderPass::ScenePostProcess);
 
     // GBuffer Canvas rendering
@@ -203,7 +204,8 @@ void GEngine::RenderScreenRect(ShaderProgram *sp, const Rect &destRectMask)
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
 }
 
-void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask, const Rect &destRectMask)
+void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask,
+                                    const Rect &destRectMask)
 {
     GBuffer *gbuffer = Camera::GetActive()->GetGBuffer();
     GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);

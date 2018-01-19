@@ -1,8 +1,8 @@
 #include "PP.frag"
 
-void Main()
+void main()
 {
     vec4 screenColor = B_SampleColor();
     screenColor = vec4(1.0 - screenColor.rgb, 1.0);
-    B_FOut.Color = screenColor;
+    B_GIn_Color = screenColor;
 }

@@ -3,9 +3,10 @@
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/GBuffer.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Material.h"
-#include "Bang/GBuffer.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
@@ -22,14 +23,15 @@ void Light::SetIntensity(float intensity) { m_intensity = intensity; }
 Color Light::GetColor() const { return m_color; }
 float Light::GetIntensity() const { return m_intensity; }
 
-void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
+void Light::ApplyLight(Camera *camera, const Rect &renderRect) const
 {
     p_lightMaterialScreen.Get()->Bind();
     SetUniformsBeforeApplyingLight(p_lightMaterialScreen.Get());
 
     // Intersect with light rect to draw exactly what we need
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
+    GBuffer *gbuffer = camera->GetGBuffer();
+    Rect improvedRenderRect = Rect::Intersection(GetRenderRect(camera),
+                                                 renderRect);
     gbuffer->ApplyPass(p_lightMaterialScreen.Get()->GetShaderProgram(),
                        true, improvedRenderRect);
     p_lightMaterialScreen.Get()->UnBind();
@@ -53,7 +55,7 @@ void Light::SetLightMaterial(Material *lightMat)
     p_lightMaterialScreen.Set(lightMat);
 }
 
-Rect Light::GetRenderRect(Camera *cam) const
+Rect Light::GetRenderRect(Camera *camera) const
 {
     return Rect::NDCRect;
 }

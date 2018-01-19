@@ -46,7 +46,7 @@ public:
     String GetExtension() const;
     Array<String> GetExtensions() const;
     const String& GetAbsolute() const;
-    Path GetDuplicate() const;
+    Path GetDuplicatePath() const;
 
     virtual String ToString() const override;
     bool IsEmpty() const;

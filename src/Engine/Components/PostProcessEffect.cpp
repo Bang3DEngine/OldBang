@@ -7,16 +7,13 @@
 #include "Bang/GEngine.h"
 #include "Bang/Resources.h"
 #include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
 
 USING_NAMESPACE_BANG
 
 PostProcessEffect::PostProcessEffect()
 {
-    p_shaderProgram = Resources::Create<ShaderProgram>();
-
-    Path vShaderPath = EPATH("Shaders/PP_ScreenPass.vert");
-    RH<Shader> vShader = Resources::Load<Shader>(vShaderPath);
-    p_shaderProgram.Get()->SetVertexShader(vShader.Get());
+    p_shaderProgram = ShaderProgramFactory::GetDefaultPostProcess();
 }
 
 PostProcessEffect::~PostProcessEffect()
@@ -34,9 +31,12 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
 
     if (scenePostProcess || canvasPostProcess)
     {
-        p_shaderProgram.Get()->Bind();
-        GEngine::GetActive()->RenderScreenRect(p_shaderProgram.Get());
-        p_shaderProgram.Get()->UnBind();
+        if (p_postProcessShader && p_shaderProgram.Get()->IsLinked())
+        {
+            p_shaderProgram.Get()->Bind();
+            GEngine::GetActiveGBuffer()->ApplyPass(p_shaderProgram.Get(), true);
+            p_shaderProgram.Get()->UnBind();
+        }
     }
 }
 
@@ -44,12 +44,14 @@ void PostProcessEffect::SetType(PostProcessEffect::Type type) { m_type = type; }
 void PostProcessEffect::SetPriority(int priority) { m_priority = priority; }
 void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
 {
-    ENSURE(p_postProcessShader.Get() != postProcessShader);
+    if (postProcessShader == p_postProcessShader.Get()) { return; }
 
     p_postProcessShader.Set(postProcessShader);
-    ENSURE(p_postProcessShader);
-
-    p_shaderProgram.Get()->SetFragmentShader( GetPostProcessShader() );
+    if (p_postProcessShader)
+    {
+        p_shaderProgram.Get()->SetFragmentShader( GetPostProcessShader() );
+        p_shaderProgram.Get()->Link();
+    }
 }
 
 PostProcessEffect::Type PostProcessEffect::GetType() const { return m_type; }
