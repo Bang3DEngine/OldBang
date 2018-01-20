@@ -32,7 +32,7 @@ SceneManager *SceneManager::GetInstance()
 
 void SceneManager::UpdateScene(Scene *scene)
 {
-    ENSURE(scene);
+    if (!scene) { return; }
 
     SceneManager::TryToLoadQueuedScene();
     ObjectManager::StartObjects();

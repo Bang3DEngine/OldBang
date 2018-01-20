@@ -130,7 +130,8 @@ void Window::Render()
     Scene *scene = GetSceneManager()->GetActiveScene();
     if (scene)
     {
-        Camera *camera = scene->GetCamera(); ENSURE(camera);
+        Camera *camera = scene->GetCamera();
+        if (!camera) { return; }
         GetGEngine()->Render(scene, camera);
         BlitToScreen(camera);
     }
@@ -138,12 +139,13 @@ void Window::Render()
 
 void Window::BlitToScreen(Camera *camera)
 {
-    ENSURE (camera);
-
-    Recti prevVP = GL::GetViewportRect();
-    camera->SetViewportForBlitting();
-    GetGEngine()->RenderToScreen(camera);
-    GL::SetViewport(prevVP);
+    if (camera)
+    {
+        Recti prevVP = GL::GetViewportRect();
+        camera->SetViewportForBlitting();
+        GetGEngine()->RenderToScreen(camera);
+        GL::SetViewport(prevVP);
+    }
 }
 
 bool Window::HandleEvent(const SDL_Event &sdlEvent)
@@ -244,7 +246,7 @@ void Window::SetMaxSize(int maxSizeX, int maxSizeY)
 
 void Window::SetResizable(bool resizable)
 {
-    ENSURE(m_isResizable != resizable);
+    if (m_isResizable == resizable) { return; }
     m_isResizable = resizable;
 
     if (IsResizable())
@@ -425,20 +427,22 @@ void Window::SetParent(Window *parentWindow)
 {
     ASSERT(parentWindow != this);
     ASSERT(!p_children.Contains(parentWindow));
-    ENSURE(p_parent != parentWindow);
 
-    if (p_parent)
+    if (p_parent != parentWindow)
     {
-        p_parent->p_children.Remove(this);
-        p_parent->SetResizable(true);
-    }
+        if (p_parent)
+        {
+            p_parent->p_children.Remove(this);
+            p_parent->SetResizable(true);
+        }
 
-    p_parent = parentWindow;
+        p_parent = parentWindow;
 
-    if (p_parent)
-    {
-        p_parent->SetResizable(false);
-        p_parent->p_children.PushBack(this);
+        if (p_parent)
+        {
+            p_parent->SetResizable(false);
+            p_parent->p_children.PushBack(this);
+        }
     }
 }
 

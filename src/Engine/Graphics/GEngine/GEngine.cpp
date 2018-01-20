@@ -229,7 +229,7 @@ void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask,
 
 void GEngine::RenderToScreen(Camera *cam)
 {
-    ENSURE(cam);
+    if (!cam) { return; }
     p_renderGBufferToScreenMaterial.Get()->Bind();
 
     ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();

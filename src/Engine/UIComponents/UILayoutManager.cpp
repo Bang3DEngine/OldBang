@@ -116,7 +116,7 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
 
 void UILayoutManager::RebuildLayout(GameObject *rootGo)
 {
-    ENSURE(rootGo);
+    if (!rootGo) { return; }
 
     CalculateLayout(rootGo, Axis::Horizontal);
     ApplyLayout(rootGo, Axis::Horizontal);

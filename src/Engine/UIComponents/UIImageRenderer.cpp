@@ -158,8 +158,8 @@ void UIImageRenderer::RegenerateQuadVAO()
     RectTransform *rt = GetGameObject()->GetRectTransform();
     Rect rectPx = rt->GetViewportRect();
     Vector2i rectSize(rectPx.GetSize());
-    ENSURE(m_prevRectSize != rectSize);
-    ENSURE(p_imageTexture);
+    if (m_prevRectSize == rectSize) { return; }
+    if (!p_imageTexture) { return; }
 
     Vector2i texSize(p_imageTexture.Get()->GetSize());
     Vector2i texQuadSize =

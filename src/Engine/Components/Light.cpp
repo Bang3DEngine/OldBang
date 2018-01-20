@@ -40,7 +40,8 @@ void Light::ApplyLight(Camera *camera, const Rect &renderRect) const
 void Light::SetUniformsBeforeApplyingLight(Material* mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();
-    ENSURE(sp); ASSERT(GL::IsBound(sp));
+    if (!sp) { return; }
+    ASSERT(GL::IsBound(sp))
 
     sp->Set("B_LightIntensity", m_intensity, false);
     sp->Set("B_LightColor", m_color, false);

@@ -30,7 +30,8 @@ Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
 
 void UIDirLayout::ApplyLayout(Axis axis)
 {
-    RectTransform *rt = GetGameObject()->GetRectTransform(); ENSURE(rt);
+    RectTransform *rt = GetGameObject()->GetRectTransform();
+    if (!rt) { return; }
     List<GameObject*> children =
                     UILayoutManager::GetLayoutableChildrenList(GetGameObject());
 
@@ -70,7 +71,7 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
                                                   const Vector2i &position,
                                                   const Vector2i &childRTSize)
 {
-    ENSURE(crt);
+    if (!crt) { return; }
     crt->SetAnchors( Vector2(-1, 1) );
 
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();

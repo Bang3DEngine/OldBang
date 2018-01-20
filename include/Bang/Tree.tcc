@@ -55,7 +55,7 @@ void Tree<T>::SetParent(Tree<T> *parentTree)
 template<class T>
 void Tree<T>::SetParent(Tree<T> *parentTree, uint index)
 {
-    ENSURE (GetParent() != parentTree);
+    if (GetParent() == parentTree) { return; }
 
     if (GetParent())
     {

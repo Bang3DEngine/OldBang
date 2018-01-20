@@ -144,7 +144,7 @@ void AudioManager::OnAudioPlayerDestroyed(AudioPlayerRunnable *audioPlayer)
 
 void AudioManager::Play(AudioClip *audioClip, ALAudioSource *aas, float delay)
 {
-    ENSURE(audioClip);
+    if (!audioClip) { return; }
     AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
                                                           aas, delay);
     AudioManager *am = AudioManager::GetInstance();
@@ -161,7 +161,7 @@ void AudioManager::Play(AudioClip *audioClip,
                         const AudioParams &params,
                         float delay)
 {
-    ENSURE(audioClip);
+    if (!audioClip) { return; }
     ALAudioSource *aas = new ALAudioSource();
     aas->SetALBufferId(audioClip->GetALBufferId());
     aas->SetParams(params);

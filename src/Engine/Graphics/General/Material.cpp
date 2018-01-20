@@ -118,7 +118,8 @@ RenderPass Material::GetRenderPass() const { return m_renderPass; }
 
 void Material::Bind() const
 {
-    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
+    ShaderProgram *sp = GetShaderProgram();
+    if (!sp) { return; }
     sp->Bind();
 
     sp->Set("B_UvOffset",                 GetUvOffset(), false);
@@ -135,7 +136,8 @@ void Material::Bind() const
 
 void Material::UnBind() const
 {
-    // ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
+    // ShaderProgram *sp = GetShaderProgram();
+    // if (!sp) { return; }
     // sp->UnBind();
 }
 

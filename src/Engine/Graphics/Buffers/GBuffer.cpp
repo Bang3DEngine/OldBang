@@ -28,7 +28,8 @@ GBuffer::~GBuffer()
 
 void GBuffer::PrepareForRender(ShaderProgram *sp)
 {
-    ENSURE(sp); ASSERT(GL::IsBound(sp));
+    if (!sp) { return; }
+    ASSERT(GL::IsBound(sp));
 
     sp->Set("B_GTex_Normal",       GetAttachmentTexture(AttNormal), false);
     sp->Set("B_GTex_DiffColor",    GetAttachmentTexture(AttDiffuse), false);
@@ -42,7 +43,9 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
                         bool willReadFromColor,
                         const Rect &mask)
 {
-    ENSURE(sp); ASSERT(GL::IsBound(this)); ASSERT(GL::IsBound(sp));
+    if (!sp) { return; }
+    ASSERT(GL::IsBound(this));
+    ASSERT(GL::IsBound(sp));
 
     GL::StencilOperation prevStencilOp = GL::GetStencilOp();
     GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil

@@ -24,7 +24,8 @@ LineRenderer::~LineRenderer()
 
 void LineRenderer::OnRender()
 {
-    Renderer::OnRender(); ENSURE(p_mesh.Get()->GetVertexCount() > 0);
+    Renderer::OnRender();
+    if (p_mesh.Get()->GetVertexCount() <= 0) { return; }
     GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(),
                p_mesh.Get()->GetVertexCount());
 }

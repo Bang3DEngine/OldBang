@@ -22,7 +22,7 @@ UIContentSizeFitter::~UIContentSizeFitter()
 void UIContentSizeFitter::ApplyLayout(Axis axis)
 {
     RectTransform *rt = GetGameObject()->GetRectTransform();
-    ENSURE(rt);
+    if (!rt) { return; }
 
     if (axis == Axis::Horizontal &&
         GetHorizontalSizeType() != LayoutSizeType::None)

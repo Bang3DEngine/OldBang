@@ -244,7 +244,7 @@ void UITree::_SetItemCollapsedRec(GOItem *item, bool collapse)
 
 void UITree::UnCollapseUpwards(GOItem *item)
 {
-    ENSURE(item);
+    if (!item) { return; }
 
     UITreeItemContainer *itemContainer = GetItemContainer(item);
     itemContainer->SetEnabled(true);

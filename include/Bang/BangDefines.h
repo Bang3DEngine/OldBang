@@ -19,10 +19,6 @@ NAMESPACE_BANG_BEGIN
 #endif
 
 // Asserts ==============================================
-#define ENSURE(mustBeTrue) do{\
-    if (!(mustBeTrue)) { return; }\
-} while (false)
-
 #ifdef DEBUG
 #define ASSERT_MSG(assertion, msg) if ( !(assertion) ) {\
   std::cerr << "BANG ASSERTION FAILED: '" << msg; abort(); \

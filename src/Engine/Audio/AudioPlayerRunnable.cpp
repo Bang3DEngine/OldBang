@@ -38,7 +38,7 @@ ALAudioSource *AudioPlayerRunnable::GetALAudioSource() const
 
 void AudioPlayerRunnable::Run()
 {
-    ENSURE(p_audioClip->IsLoaded());
+    if (!p_audioClip->IsLoaded()) { return; }
 
     if (m_delayInSeconds > 0.0f) // Wait delay
     {
