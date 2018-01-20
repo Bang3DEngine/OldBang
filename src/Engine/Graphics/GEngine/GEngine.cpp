@@ -195,10 +195,10 @@ void GEngine::RenderScreenRect(ShaderProgram *sp, const Rect &destRectMask)
 {
     GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);
     sp->Bind();
-    sp->Set("B_UvOffset",         Vector2::Zero);
-    sp->Set("B_UvMultiply",       Vector2::One);
-    sp->Set("B_destRectMinCoord", destRectMask.GetMin());
-    sp->Set("B_destRectMaxCoord", destRectMask.GetMax());
+    sp->Set("B_UvOffset",         Vector2::Zero, false);
+    sp->Set("B_UvMultiply",       Vector2::One, false);
+    sp->Set("B_destRectMinCoord", destRectMask.GetMin(), false);
+    sp->Set("B_destRectMaxCoord", destRectMask.GetMax(), false);
     RenderScreenPlane();
     sp->UnBind();
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
@@ -214,7 +214,8 @@ void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask,
 
     sp->Bind();
     gbuffer->PrepareForRender(sp);
-    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
+    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
+            false);
 
     sp->Set("B_UvOffset",         gbufferRectMask.GetMin()  * 0.5f + 0.5f);
     sp->Set("B_UvMultiply",       gbufferRectMask.GetSize() * 0.5f);
@@ -234,7 +235,8 @@ void GEngine::RenderToScreen(Camera *cam)
     ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->PrepareForRender(sp);
-    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor));
+    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
+            false);
 
     GEngine::RenderScreenRect(sp, Rect::NDCRect);
 
@@ -247,7 +249,7 @@ void GEngine::RenderToScreen(Texture2D *fullScreenTexture)
     p_renderGBufferToScreenMaterial.Get()->Bind();
 
     ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()-> GetShaderProgram();
-    sp->Set("B_GTex_Color", fullScreenTexture);
+    sp->Set("B_GTex_Color", fullScreenTexture, false);
 
     GEngine::RenderScreenPlane();
 

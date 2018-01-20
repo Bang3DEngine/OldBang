@@ -125,12 +125,6 @@ GL::WrapMode Texture::GetWrapMode() const
     return m_wrapMode;
 }
 
-void Texture::BindToTextureUnit(int textureUnit) const
-{
-    GL::ActiveTexture(GL_TEXTURE0 + textureUnit);
-    Bind();
-}
-
 void Texture::SetWidth(int width)
 {
     if (width != GetWidth())

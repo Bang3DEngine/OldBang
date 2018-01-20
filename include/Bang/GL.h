@@ -612,7 +612,7 @@ private:
     Color m_clearColor = Color::Zero;
     GL::Face m_cullFace = GL::Face::Back;
 
-    Recti m_scissorRectPx                     = Recti(-1,-1,-1,-1);
+    Recti m_scissorRectPx                   = Recti(-1,-1,-1,-1);
     GL::Enum m_frontPolygonMode             = GL::Fill;
     GL::Enum m_backPolygonMode              = GL::Fill;
     GL::Enum m_frontBackPolygonMode         = GL::Fill;

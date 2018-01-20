@@ -107,55 +107,65 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
 }
 
 template<class T, class=TT_NOT_POINTER(T)>
-bool SetShaderUniform(ShaderProgram *sp, const String &name, const T &v)
+bool SetShaderUniform(ShaderProgram *sp,
+                      const String &name,
+                      const T &v,
+                      bool warn)
 {
     ASSERT(GL::IsBound(sp));
     int location = sp->GetUniformLocation(name);
-    if (location >= 0) { GL::Uniform(location, v); }
+    if (location >= 0)
+    {
+        GL::Uniform(location, v);
+    }
+    else if (warn)
+    {
+        Debug_Warn("Uniform '" << name << "' not found");
+    }
     return (location >= 0);
 }
 
-bool ShaderProgram::Set(const String &name, bool v)
+bool ShaderProgram::Set(const String &name, bool v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, float v)
+bool ShaderProgram::Set(const String &name, float v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Color &v)
+bool ShaderProgram::Set(const String &name, const Color &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Vector2 &v)
+bool ShaderProgram::Set(const String &name, const Vector2 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Vector3 &v)
+bool ShaderProgram::Set(const String &name, const Vector3 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Vector4 &v)
+bool ShaderProgram::Set(const String &name, const Vector4 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Matrix3 &v)
+bool ShaderProgram::Set(const String &name, const Matrix3 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, const Matrix4 &v)
+bool ShaderProgram::Set(const String &name, const Matrix4 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v);
+    return SetShaderUniform(this, name, v, warn);
 }
 
-bool ShaderProgram::Set(const String &name, Texture2D *texture)
+bool ShaderProgram::Set(const String &name, Texture2D *texture, bool warn)
 {
     bool needToAddTextureToMap = true;
 
@@ -242,6 +252,7 @@ void ShaderProgram::Bind() const
 {
     GL::Bind(this);
     UpdateTextureBindings();
+    GLUniforms::SetAllUniformsToShaderProgram(const_cast<ShaderProgram*>(this));
 }
 
 void ShaderProgram::UnBind() const

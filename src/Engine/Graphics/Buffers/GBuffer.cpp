@@ -30,11 +30,11 @@ void GBuffer::PrepareForRender(ShaderProgram *sp)
 {
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
-    sp->Set("B_GTex_Normal",       GetAttachmentTexture(AttNormal));
-    sp->Set("B_GTex_DiffColor",    GetAttachmentTexture(AttDiffuse));
-    sp->Set("B_GTex_Misc",         GetAttachmentTexture(AttMisc));
-    sp->Set("B_GTex_Color",        GetAttachmentTexture(AttColorRead));
-    sp->Set("B_GTex_DepthStencil", GetAttachmentTexture(AttDepthStencil));
+    sp->Set("B_GTex_Normal",       GetAttachmentTexture(AttNormal), false);
+    sp->Set("B_GTex_DiffColor",    GetAttachmentTexture(AttDiffuse), false);
+    sp->Set("B_GTex_Misc",         GetAttachmentTexture(AttMisc), false);
+    sp->Set("B_GTex_Color",        GetAttachmentTexture(AttColorRead), false);
+    sp->Set("B_GTex_DepthStencil", GetAttachmentTexture(AttDepthStencil), false);
 }
 
 

@@ -121,16 +121,16 @@ void Material::Bind() const
     ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
-    sp->Set("B_UvOffset",                 GetUvOffset());
-    sp->Set("B_UvMultiply",               GetUvMultiply());
-    sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor());
-    sp->Set("B_MaterialShininess",        GetShininess());
-    sp->Set("B_MaterialReceivesLighting", GetReceivesLighting());
+    sp->Set("B_UvOffset",                 GetUvOffset(), false);
+    sp->Set("B_UvMultiply",               GetUvMultiply(), false);
+    sp->Set("B_MaterialDiffuseColor",     GetDiffuseColor(), false);
+    sp->Set("B_MaterialShininess",        GetShininess(), false);
+    sp->Set("B_MaterialReceivesLighting", GetReceivesLighting(), false);
 
     float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
-    sp->Set("B_Texture0",  GetTexture());
-    sp->Set("B_AlphaCutoff", alphaCutoff);
-    sp->Set("B_HasTexture", (GetTexture() != nullptr));
+    sp->Set("B_Texture0",  GetTexture(), false);
+    sp->Set("B_AlphaCutoff", alphaCutoff, false);
+    sp->Set("B_HasTexture", (GetTexture() != nullptr), false);
 }
 
 void Material::UnBind() const

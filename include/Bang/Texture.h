@@ -40,7 +40,6 @@ public:
 
     GL::TextureTarget GetTextureTarget() const;
     GL::BindTarget GetGLBindTarget() const override;
-    void BindToTextureUnit(int textureUnit) const;
 
 protected:
     void SetWidth(int width);

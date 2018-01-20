@@ -16,7 +16,7 @@ public:
     struct Matrices
     {
         Matrix4 model;
-        Matrix4 normal;
+        Matrix3 normal;
         Matrix4 view;
         Matrix4 viewInv;
         Matrix4 proj;
@@ -66,6 +66,7 @@ public:
     template <class T>
     static void RemoveBuffer();
 
+    static void SetAllUniformsToShaderProgram(ShaderProgram *sp);
     static void BindAllUniformBuffersToShader(const ShaderProgram *sp);
 
     static void SetModelMatrix(const Matrix4 &model);
@@ -76,13 +77,13 @@ public:
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     GL::ViewProjMode GetViewProjMode() const;
 
-    static UniformBuffer<Matrices>* GetMatricesBuffer();
     static UniformBuffer<Camera>* GetCameraBuffer();
     static UniformBuffer<Viewport>* GetViewportBuffer();
 
 private:
     TypeMap<IUniformBuffer*> m_uniformBuffers;
 
+    Matrices m_matrices;
     int m_bindingPointsUsed = 0;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::IgnoreBothAndModel;
 
@@ -100,6 +101,7 @@ private:
 
     void RemoveBuffer(IUniformBuffer *buffer);
 
+    static Matrices *GetMatrices();
     static GLUniforms *GetActive();
 
     friend class GL;

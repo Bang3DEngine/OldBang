@@ -1,15 +1,8 @@
-layout (std140)
-uniform MatricesBlock
-{
-    mat4 Model;
-    mat4 Normal;
-    mat4 View;
-    mat4 ViewInv;
-    mat4 Projection;
-    mat4 ProjectionInv;
-    mat4 PVM;
-}
-B_Matrices;
+uniform mat4 B_Model;
+uniform mat3 B_Normal;
+uniform mat4 B_View;
+uniform mat4 B_Projection;
+uniform mat4 B_PVM;
 
 layout (std140)
 uniform CameraBlock
@@ -105,7 +98,7 @@ float B_SampleDepthOffset(vec2 pixOffset)
 float B_SampleFlagsOffset(vec2 pixOffset)
   { return B_SampleFlags(GetViewportUv() + GetViewportStep() * pixOffset); }
 
-vec3 B_GetCameraPositionWorld() { return B_Matrices.ViewInv[3].xyz; }
+vec3 B_GetCameraPositionWorld() { return inverse(B_View)[3].xyz; }
 
 vec3 B_ComputeWorldPosition(float depth)
 {
@@ -113,8 +106,8 @@ vec3 B_ComputeWorldPosition(float depth)
     float y = GetViewportUv().y * 2.0 - 1.0;
     float z = depth * 2.0 - 1.0;
     vec4 projectedPos = vec4(x, y, z, 1);
-    vec4 worldPos = (B_Matrices.ProjectionInv * projectedPos);
-    worldPos = (B_Matrices.ViewInv * (worldPos/worldPos.w));
+    vec4 worldPos = (inverse(B_Projection) * projectedPos);
+    worldPos = (inverse(B_View) * (worldPos/worldPos.w));
     return worldPos.xyz;
 }
 vec3 B_ComputeWorldPosition() { return B_ComputeWorldPosition( B_SampleDepth() ); }

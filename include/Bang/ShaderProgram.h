@@ -30,16 +30,16 @@ public:
     void UnBind() const override;
     GL::BindTarget GetGLBindTarget() const override;
 
-    bool Set(const String &name, int v);
-    bool Set(const String &name, bool v);
-    bool Set(const String &name, float v);
-    bool Set(const String &name, const Color& v);
-    bool Set(const String &name, const Vector2& v);
-    bool Set(const String &name, const Vector3& v);
-    bool Set(const String &name, const Vector4& v);
-    bool Set(const String &name, const Matrix3& v);
-    bool Set(const String &name, const Matrix4& v);
-    bool Set(const String &name, Texture2D *texture);
+    bool Set(const String &name, int v, bool warn = true);
+    bool Set(const String &name, bool v, bool warn = true);
+    bool Set(const String &name, float v, bool warn = true);
+    bool Set(const String &name, const Color& v, bool warn = true);
+    bool Set(const String &name, const Vector2& v, bool warn = true);
+    bool Set(const String &name, const Vector3& v, bool warn = true);
+    bool Set(const String &name, const Vector4& v, bool warn = true);
+    bool Set(const String &name, const Matrix3& v, bool warn = true);
+    bool Set(const String &name, const Matrix4& v, bool warn = true);
+    bool Set(const String &name, Texture2D *texture, bool warn = true);
 
     bool Refresh();
     bool SetVertexShader(Shader* vertexShader);

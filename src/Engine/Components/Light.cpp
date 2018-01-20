@@ -42,12 +42,12 @@ void Light::SetUniformsBeforeApplyingLight(Material* mat) const
     ShaderProgram *sp = mat->GetShaderProgram();
     ENSURE(sp); ASSERT(GL::IsBound(sp));
 
-    sp->Set("B_LightIntensity", m_intensity);
-    sp->Set("B_LightColor", m_color);
+    sp->Set("B_LightIntensity", m_intensity, false);
+    sp->Set("B_LightColor", m_color, false);
 
     Transform *tr = GetGameObject()->GetTransform();
-    sp->Set("B_LightForwardWorld",  tr->GetForward());
-    sp->Set("B_LightPositionWorld", tr->GetPosition());
+    sp->Set("B_LightForwardWorld",  tr->GetForward(), false);
+    sp->Set("B_LightPositionWorld", tr->GetPosition(), false);
 }
 
 void Light::SetLightMaterial(Material *lightMat)

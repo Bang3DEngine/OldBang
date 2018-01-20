@@ -1,5 +1,6 @@
 #include "Bang/GLUniforms.h"
 
+#include "Bang/ShaderProgram.h"
 #include "Bang/UniformBuffer.h"
 
 USING_NAMESPACE_BANG
@@ -21,9 +22,9 @@ void GLUniforms::RemoveBuffer(IUniformBuffer *buffer)
     }
 }
 
-UniformBuffer<GLUniforms::Matrices> *GLUniforms::GetMatricesBuffer()
+GLUniforms::Matrices *GLUniforms::GetMatrices()
 {
-    return GLUniforms::GetBuffer<GLUniforms::Matrices>();
+    return &GLUniforms::GetActive()->m_matrices;
 }
 
 UniformBuffer<GLUniforms::Camera> *GLUniforms::GetCameraBuffer()
@@ -38,67 +39,76 @@ UniformBuffer<GLUniforms::Viewport> *GLUniforms::GetViewportBuffer()
 
 GLUniforms::GLUniforms()
 {
-    _CreateBuffer<GLUniforms::Matrices>();
     _CreateBuffer<GLUniforms::Camera>();
     _CreateBuffer<GLUniforms::Viewport>();
 }
 
+void GLUniforms::SetAllUniformsToShaderProgram(ShaderProgram *sp)
+{
+    if (GL::IsBound(sp->GetGLBindTarget(), sp->GetGLId()))
+    {
+        Matrices *matrices = GLUniforms::GetMatrices();
+        sp->Set("B_Model", matrices->model, false);
+        sp->Set("B_Normal", matrices->normal, false);
+        sp->Set("B_View", matrices->view, false);
+        sp->Set("B_Projection", matrices->proj, false);
+        sp->Set("B_PVM", matrices->pvm, false);
+    }
+}
+
 void GLUniforms::BindAllUniformBuffersToShader(const ShaderProgram *sp)
 {
-    GL::BindUniformBufferToShader("MatricesBlock", sp, GetMatricesBuffer());
     GL::BindUniformBufferToShader("CameraBlock", sp, GetCameraBuffer());
     GL::BindUniformBufferToShader("ViewportBlock", sp, GetViewportBuffer());
 }
 
 void GLUniforms::SetModelMatrix(const Matrix4 &model)
 {
-    auto matrices = GLUniforms::GetMatricesBuffer();
-    if (model != matrices->GetData()->model)
+    Matrices *matrices = GLUniforms::GetMatrices();
+    if (model != matrices->model)
     {
-        matrices->GetData()->model = model;
+        matrices->model = model;
         Matrix3 normalMatrix = Matrix3(model.c0.xyz(),
                                        model.c1.xyz(),
                                        model.c2.xyz()
                                    ).Transposed().Inversed();
-        matrices->GetData()->normal = Matrix4(normalMatrix);
+        matrices->normal = normalMatrix;
         UpdatePVMMatrix();
     }
 
 }
 void GLUniforms::SetViewMatrix(const Matrix4 &view)
 {
-    auto matrices = GLUniforms::GetMatricesBuffer();
-    if (view != matrices->GetData()->view)
+    Matrices *matrices = GLUniforms::GetMatrices();
+    if (view != matrices->view)
     {
-        matrices->GetData()->view    = view;
-        matrices->GetData()->viewInv = view.Inversed();
+        matrices->view    = view;
+        matrices->viewInv = view.Inversed();
         UpdatePVMMatrix();
     }
 }
 void GLUniforms::SetProjectionMatrix(const Matrix4 &projection)
 {
-    auto matrices = GLUniforms::GetMatricesBuffer();
-    if (projection != matrices->GetData()->proj)
+    Matrices *matrices = GLUniforms::GetMatrices();
+    if (projection != matrices->proj)
     {
-        matrices->GetData()->proj    = projection;
-        matrices->GetData()->projInv = projection.Inversed();
+        matrices->proj    = projection;
+        matrices->projInv = projection.Inversed();
         UpdatePVMMatrix();
     }
 }
 
 void GLUniforms::UpdatePVMMatrix()
 {
-    auto matrices = GLUniforms::GetMatricesBuffer();
+    Matrices *matrices = GLUniforms::GetMatrices();
     GLUniforms *gu = GLUniforms::GetActive();
 
     Matrix4 pvmMatrix;
-    const Matrix4 &model = matrices->GetData()->model;
+    const Matrix4 &model = matrices->model;
     switch (gu->GetViewProjMode())
     {
         case GL::ViewProjMode::UseBoth:
-            pvmMatrix = matrices->GetData()->proj *
-                        matrices->GetData()->view *
-                        model;
+            pvmMatrix = matrices->proj * matrices->view * model;
         break;
 
         case GL::ViewProjMode::OnlyFixAspectRatio:
@@ -130,8 +140,7 @@ void GLUniforms::UpdatePVMMatrix()
             break;
     }
 
-    matrices->GetData()->pvm = pvmMatrix;
-    matrices->UpdateBuffer();
+    matrices->pvm = pvmMatrix;
 }
 
 void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
