@@ -1,3 +1,4 @@
+
 #ifndef MATRIX3_H
 #define MATRIX3_H
 
@@ -146,6 +147,24 @@ Matrix3G<T> operator*(const Matrix3G<T> &m1, const Matrix3G<OtherT> &m2)
     res[2][1] = vA01 * vB20 + vA11 * vB21 + vA21 * vB22;
     res[2][2] = vA02 * vB20 + vA12 * vB21 + vA22 * vB22;
     return res;
+}
+
+template<class T>
+bool operator!=(const Matrix3G<T> &m1, const Matrix3G<T>& m2)
+{
+    return !(m1 == m2);
+}
+template<class T>
+bool operator==(const Matrix3G<T> &m1, const Matrix3G<T>& m2)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            if (m1[i][j] != m2[i][j]) { return false; }
+        }
+    }
+    return true;
 }
 
 NAMESPACE_BANG_END

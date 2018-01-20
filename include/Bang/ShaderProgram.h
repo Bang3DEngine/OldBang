@@ -58,6 +58,15 @@ private:
     RH<Shader> p_fshader;
     bool m_isLinked = false;
 
+    std::unordered_map<String, int> m_uniformCacheInt;
+    std::unordered_map<String, bool> m_uniformCacheBool;
+    std::unordered_map<String, float> m_uniformCacheFloat;
+    std::unordered_map<String, Color> m_uniformCacheColor;
+    std::unordered_map<String, Vector2> m_uniformCacheVector2;
+    std::unordered_map<String, Vector3> m_uniformCacheVector3;
+    std::unordered_map<String, Vector4> m_uniformCacheVector4;
+    std::unordered_map<String, Matrix3> m_uniformCacheMatrix3;
+    std::unordered_map<String, Matrix4> m_uniformCacheMatrix4;
     mutable std::unordered_map<String, GLuint> m_nameToLocationCache;
     mutable std::unordered_map<String, Texture2D*> m_namesToTexture;
 

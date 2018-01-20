@@ -91,8 +91,20 @@ bool ShaderProgram::Link()
 
     m_isLinked = true;
     GLUniforms::BindAllUniformBuffersToShader(this);
-    m_nameToLocationCache.clear(); // Invalidate cache
-    m_namesToTexture.clear(); // Invalidate cache
+
+     // Invalidate caches
+    m_nameToLocationCache.clear();
+    m_uniformCacheBool.clear();
+    m_uniformCacheInt.clear();
+    m_uniformCacheFloat.clear();
+    m_uniformCacheColor.clear();
+    m_uniformCacheVector2.clear();
+    m_uniformCacheVector3.clear();
+    m_uniformCacheVector4.clear();
+    m_uniformCacheMatrix3.clear();
+    m_uniformCacheMatrix4.clear();
+    m_namesToTexture.clear();
+
     return true;
 }
 
@@ -108,61 +120,81 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
 
 template<class T, class=TT_NOT_POINTER(T)>
 bool SetShaderUniform(ShaderProgram *sp,
+                      std::unordered_map<String, T> *cache,
                       const String &name,
                       const T &v,
                       bool warn)
 {
     ASSERT(GL::IsBound(sp));
-    int location = sp->GetUniformLocation(name);
-    if (location >= 0)
+
+    bool update = true;
+    if (cache)
     {
-        GL::Uniform(location, v);
+        const auto &it = cache->find(name);
+        if (it != cache->end() && it->second == v) { update = false; }
     }
-    else if (warn)
+
+    if (update)
     {
-        Debug_Warn("Uniform '" << name << "' not found");
+        if (cache) { (*cache)[name] = v; }
+
+        int location = sp->GetUniformLocation(name);
+        if (location >= 0)
+        {
+            GL::Uniform(location, v);
+        }
+        else if (warn)
+        {
+            Debug_Warn("Uniform '" << name << "' not found");
+        }
+        return (location >= 0);
     }
-    return (location >= 0);
+    return true;
+}
+
+bool ShaderProgram::Set(const String &name, int v, bool warn)
+{
+    return SetShaderUniform<int>(this, &m_uniformCacheInt, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, bool v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheBool, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, float v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheFloat, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Color &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheColor, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Vector2 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheVector2, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Vector3 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheVector3, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Vector4 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheVector4, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Matrix3 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheMatrix3, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, const Matrix4 &v, bool warn)
 {
-    return SetShaderUniform(this, name, v, warn);
+    return SetShaderUniform(this, &m_uniformCacheMatrix4, name, v, warn);
 }
 
 bool ShaderProgram::Set(const String &name, Texture2D *texture, bool warn)
