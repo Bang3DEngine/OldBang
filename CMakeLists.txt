@@ -228,7 +228,7 @@ ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
-${ENGINE_SRC_DIR}/IO/Files/MeshIO.cpp
+${ENGINE_SRC_DIR}/IO/Files/ModelIO.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLNodeReader.cpp
@@ -237,6 +237,7 @@ ${ENGINE_SRC_DIR}/Math/Sphere.cpp
 ${ENGINE_SRC_DIR}/Resources/Asset.cpp
 ${ENGINE_SRC_DIR}/Resources/AudioClip.cpp
 ${ENGINE_SRC_DIR}/Resources/Mesh.cpp
+${ENGINE_SRC_DIR}/Resources/Model.cpp
 ${ENGINE_SRC_DIR}/Resources/Prefab.cpp
 ${ENGINE_SRC_DIR}/Resources/Resource.cpp
 ${ENGINE_SRC_DIR}/Resources/Resources.cpp

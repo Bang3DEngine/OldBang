@@ -1,7 +1,9 @@
 #include "Bang/ImageIO.h"
 
 #include <png.h>
+#include <string>
 #include <stdio.h>
+#include <fstream>
 #include <stdlib.h>
 
 #include <setjmp.h>
@@ -25,6 +27,10 @@ void ImageIO::Export(const Path &filepath, const Imageb &img)
     {
         ImageIO::ExportJPG(filepath, img, 10);
     }
+    else if (filepath.HasExtension( Array<String>({"tga"}) ))
+    {
+        ImageIO::ExportTGA(filepath, img);
+    }
     else
     {
         Debug_Error("Unrecognized image format " << filepath.GetExtension());
@@ -43,9 +49,14 @@ void ImageIO::Import(const Path &filepath, Imageb *img, bool *_ok)
     {
         ImageIO::ImportJPG(filepath, img, &ok);
     }
+    else if (filepath.HasExtension( Array<String>({"tga"})) )
+    {
+        ImageIO::ImportTGA(filepath, img, &ok);
+    }
     else
     {
-        Debug_Error("Unrecognized image format " << filepath.GetExtension());
+        Debug_Error("Unrecognized image format for '" << filepath.GetAbsolute()
+                    << "'");
     }
 
     if (_ok) { *_ok = ok; }
@@ -283,4 +294,141 @@ void ImageIO::ImportJPG(const Path &filepath, Imageb *img, bool *ok)
     fclose(fp);
 
     *ok = true;
+}
+
+void ImageIO::ExportTGA(const Path &filepath, const Imageb &img)
+{
+    std::ofstream tgafile( filepath.GetAbsolute().ToCString(), std::ios::binary );
+    if (!tgafile) { return; }
+
+    // The image header
+    Byte header[ 18 ] = { 0 };
+    header[  2 ] = 1;  // truecolor
+    header[ 12 ] =  img.GetWidth()        & 0xFF;
+    header[ 13 ] = (img.GetWidth()  >> 8) & 0xFF;
+    header[ 14 ] =  img.GetHeight()       & 0xFF;
+    header[ 15 ] = (img.GetHeight() >> 8) & 0xFF;
+    header[ 16 ] = 24;  // bits per pixel
+
+    tgafile.write( (const char*)header, 18 );
+
+    // The image data is stored bottom-to-top, left-to-right
+    for (int y = img.GetHeight() -1; y >= 0; y--)
+    {
+        for (int x = 0; x < img.GetWidth(); x++)
+        {
+            unsigned char r = img.GetPixel(x, y).r;
+            unsigned char g = img.GetPixel(x, y).g;
+            unsigned char b = img.GetPixel(x, y).b;
+            tgafile.put(b);
+            tgafile.put(g);
+            tgafile.put(r);
+        }
+    }
+
+    // The file footer. This part is totally optional.
+    static const char footer[ 26 ] =
+      "\0\0\0\0"  // no extension area
+      "\0\0\0\0"  // no developer directory
+      "TRUEVISION-XFILE"  // yep, this is a TGA file
+      ".";
+    tgafile.write( footer, 26 );
+
+    tgafile.close();
+}
+
+void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
+{
+    struct TGAFile
+    {
+        unsigned char imageTypeCode;
+        short int imageWidth;
+        short int imageHeight;
+        unsigned char bitCount;
+        unsigned char *imageData;
+    };
+
+    TGAFile tgaFile;
+
+    // Open the TGA file.
+    FILE *filePtr = fopen(filepath.GetAbsolute().ToCString(), "rb");
+    if (!filePtr)
+    {
+        *ok = false;
+        return;
+    }
+
+    // Read the two first bytes we don't need.
+    short int ucharBad;
+    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+
+    // Which type of image gets stored in imageTypeCode.
+    fread(&tgaFile.imageTypeCode, sizeof(unsigned char), 1, filePtr);
+
+    // For our purposes, the type code should be 2 (uncompressed RGB image)
+    // or 3 (uncompressed black-and-white images).
+    if (tgaFile.imageTypeCode != 2 && tgaFile.imageTypeCode != 3)
+    {
+        fclose(filePtr);
+        *ok = false;
+        return;
+    }
+
+    // Read 13 bytes of data we don't need.
+    short int sintBad;
+    fread(&sintBad,      sizeof(short int), 1, filePtr);
+    fread(&sintBad,      sizeof(short int), 1, filePtr);
+    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    fread(&sintBad,      sizeof(short int), 1, filePtr);
+    fread(&sintBad,      sizeof(short int), 1, filePtr);
+
+    // Read the image's width and height.
+    fread(&tgaFile.imageWidth, sizeof(short int), 1, filePtr);
+    fread(&tgaFile.imageHeight, sizeof(short int), 1, filePtr);
+
+    // Read the bit depth.
+    fread(&tgaFile.bitCount, sizeof(unsigned char), 1, filePtr);
+
+    // Read one byte of data we don't need.
+    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+
+    // Color mode -> 3 = BGR, 4 = BGRA.
+    int compsPerPixel = tgaFile.bitCount / 8;
+    long imageSize = tgaFile.imageWidth * tgaFile.imageHeight;
+    long imageTotalComps = imageSize * compsPerPixel;
+
+    // Allocate memory for the image data.
+    tgaFile.imageData = (unsigned char*) malloc(sizeof(unsigned char) * imageTotalComps);
+
+    // Read the image data.
+    fread(tgaFile.imageData, sizeof(unsigned char), imageTotalComps, filePtr);
+
+    // Change from BGR to RGB so OpenGL can read the image data.
+    for (int imageIdx = 0; imageIdx < imageTotalComps; imageIdx += compsPerPixel)
+    {
+        unsigned char colorSwap = tgaFile.imageData[imageIdx];
+        tgaFile.imageData[imageIdx] = tgaFile.imageData[imageIdx + 2];
+        tgaFile.imageData[imageIdx + 2] = colorSwap;
+    }
+
+    img->Create(tgaFile.imageWidth, tgaFile.imageHeight);
+    for (int pixel_i = 0; pixel_i < imageSize; ++pixel_i)
+    {
+        unsigned char r = tgaFile.imageData[pixel_i * compsPerPixel + 0];
+        unsigned char g = tgaFile.imageData[pixel_i * compsPerPixel + 1];
+        unsigned char b = tgaFile.imageData[pixel_i * compsPerPixel + 2];
+        unsigned char a = 255;
+        if (compsPerPixel >= 4)
+        {
+            a = tgaFile.imageData[pixel_i * compsPerPixel + 3];
+        }
+
+        int x = (pixel_i % tgaFile.imageWidth);
+        int y = (pixel_i / tgaFile.imageWidth);
+        Color color (r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+        img->SetPixel(x, y, color);
+    }
+
+    fclose(filePtr);
 }

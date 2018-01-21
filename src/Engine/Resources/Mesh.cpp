@@ -5,7 +5,7 @@
 #include "Bang/VAO.h"
 #include "Bang/VBO.h"
 #include "Bang/Debug.h"
-#include "Bang/MeshIO.h"
+#include "Bang/ModelIO.h"
 #include "Bang/Resources.h"
 #include "Bang/XMLNodeReader.h"
 #include "Bang/ImportFilesManager.h"
@@ -104,7 +104,6 @@ const Sphere &Mesh::GetBoundingSphere() const { return m_bSphere; }
 const Array<Vector3> &Mesh::GetPositions() { return m_positions; }
 const Array<Vector3> &Mesh::GetNormals() { return m_normals; }
 const Array<Vector2> &Mesh::GetUvs() { return m_uvs; }
-const Path &Mesh::GetModelFilepath() const { return m_modelFilepath; }
 
 void Mesh::CloneInto(ICloneable *clone) const
 {
@@ -112,7 +111,6 @@ void Mesh::CloneInto(ICloneable *clone) const
 
     mClone->m_bBox = m_bBox;
     mClone->m_bSphere = m_bSphere;
-    mClone->m_modelFilepath = m_modelFilepath;
 
     if (mClone->m_vao) { delete mClone->m_vao; }
     mClone->m_vao = new VAO();
@@ -124,12 +122,12 @@ void Mesh::Import(const Path &meshFilepath)
     m_uvs.Clear();
     m_normals.Clear();
     m_positions.Clear();
-    if ( MeshIO::ReadModel(meshFilepath, &m_positions, &m_normals, &m_uvs))
+    if ( ModelIO::ReadFirstFoundMeshRaw(meshFilepath,
+                                        &m_positions, &m_normals, &m_uvs) )
     {
         LoadPositions(m_positions);
         LoadNormals(m_normals);
         LoadUvs(m_uvs);
-        m_modelFilepath = meshFilepath;
     }
     else
     {

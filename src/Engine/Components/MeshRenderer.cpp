@@ -3,7 +3,7 @@
 #include "Bang/GL.h"
 #include "Bang/VAO.h"
 #include "Bang/Mesh.h"
-#include "Bang/MeshIO.h"
+#include "Bang/ModelIO.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Resources.h"

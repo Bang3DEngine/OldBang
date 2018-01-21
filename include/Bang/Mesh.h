@@ -53,8 +53,6 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    Path m_modelFilepath;
-
     Array<Vector3> m_positions;
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;
@@ -66,8 +64,6 @@ private:
 
     AABox m_bBox;
     Sphere m_bSphere;
-
-    bool m_trisModel = false;
 
     Mesh();
     virtual ~Mesh();

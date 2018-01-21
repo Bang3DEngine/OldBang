@@ -19,7 +19,7 @@ Array<String> Extensions::GetTTFExtensions()
 
 Array<String> Extensions::GetImageExtensions()
 {
-    return {"png", "jpg", "jpeg", "bmp", "tiff"};
+    return {"png", "jpg", "jpeg", "tga", "bmp", "tiff"};
 }
 
 Array<String> Extensions::GetModelExtensions()

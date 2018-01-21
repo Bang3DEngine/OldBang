@@ -14,21 +14,6 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::Import(const Image<Byte> &image)
-{
-    if (image.GetData())
-    {
-        SetWidth(image.GetWidth());
-        SetHeight(image.GetHeight());
-
-        SetInternalFormat(GL::ColorFormat::RGBA_UByte8);
-        Fill(image.GetData(),
-             GetWidth(), GetHeight(),
-             GL::ColorComp::RGBA,
-             GL::DataType::UnsignedByte);
-    }
-}
-
 void Texture2D::CreateEmpty(int width, int height)
 {
     GL::ColorComp colorComp =
@@ -162,3 +147,19 @@ void Texture2D::Import(const Path &imageFilepath)
     Path importFilepath = ImportFilesManager::GetImportFilepath(imageFilepath);
     ImportXMLFromFile(importFilepath);
 }
+
+void Texture2D::Import(const Image<Byte> &image)
+{
+    if (image.GetData())
+    {
+        SetWidth(image.GetWidth());
+        SetHeight(image.GetHeight());
+
+        SetInternalFormat(GL::ColorFormat::RGBA_UByte8);
+        Fill(image.GetData(),
+             GetWidth(), GetHeight(),
+             GL::ColorComp::RGBA,
+             GL::DataType::UnsignedByte);
+    }
+}
+

@@ -234,10 +234,16 @@ void Image<T>::FillTransparentPixels(const Color &color)
 }
 
 template<class T>
-T *Image<T>::GetData() { return &m_pixels[0]; }
+T *Image<T>::GetData()
+{
+    return m_pixels.Size() > 0 ? &m_pixels[0] : nullptr;
+}
 
 template<class T>
-const T *Image<T>::GetData() const { return &m_pixels[0]; }
+const T *Image<T>::GetData() const
+{
+    return m_pixels.Size() > 0 ? &m_pixels[0] : nullptr;
+}
 
 template<class T>
 void Image<T>::SetPixel(int x, int y, const Color& color)
