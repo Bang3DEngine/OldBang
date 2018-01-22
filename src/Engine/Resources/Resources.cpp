@@ -2,6 +2,7 @@
 
 #include "Bang/File.h"
 #include "Bang/Asset.h"
+#include "Bang/Debug.h"
 #include "Bang/Paths.h"
 #include "Bang/Object.h"
 #include "Bang/Random.h"
@@ -56,6 +57,42 @@ void Resources::Add(const TypeId &resTypeId, IResource *res)
     resourceEntry.usageCount = 0;
     ASSERT(!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid));
     rs->m_GUIDCache.Get(resTypeId).Add(guid, resourceEntry);
+}
+
+void Resources::SetPermanent(IResource *resource, bool permanent)
+{
+    if (resource)
+    {
+        Resources *rs = Resources::GetActive(); ASSERT(rs);
+        if (permanent) { rs->m_permanentResources.Add(resource); }
+        else { rs->m_permanentResources.Remove(resource); }
+    }
+}
+
+bool Resources::IsPermanent(IResource *resource)
+{
+    if (!resource) { return false; }
+
+    Resources *rs = Resources::GetActive(); ASSERT(rs);
+    return rs->m_permanentResources.Contains(resource);
+}
+
+void Resources::SetPermanent(const Path &resourcePath, bool permanent)
+{
+    if (!resourcePath.IsEmpty())
+    {
+        Resources *rs = Resources::GetActive(); ASSERT(rs);
+        if (permanent) { rs->m_permanentResourcesPaths.Add(resourcePath); }
+        else { rs->m_permanentResourcesPaths.Remove(resourcePath); }
+    }
+}
+
+bool Resources::IsPermanent(const Path &resourcePath)
+{
+    if (resourcePath.IsEmpty()) { return false; }
+
+    Resources *rs = Resources::GetActive(); ASSERT(rs);
+    return rs->m_permanentResourcesPaths.Contains(resourcePath);
 }
 
 void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
@@ -126,7 +163,10 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
         ASSERT(*resourcesUsage >= 1);
         --(*resourcesUsage);
 
-        if (*resourcesUsage == 0)
+        Path resourcePath = Resources::GetResourcePath(resource);
+        if (*resourcesUsage == 0 &&
+            !Resources::IsPermanent(resource) &&
+            !Resources::IsPermanent(resourcePath) )
         {
             Resources::Remove(resTypeId, guid);
         }
@@ -153,6 +193,40 @@ IResource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
     if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { return nullptr; }
     if (!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid)) { return nullptr; }
     return rs->m_GUIDCache.Get(resTypeId).Get(guid).resource;
+}
+
+Path Resources::GetResourcePath(IResource *resource)
+{
+    return ImportFilesManager::GetFilepath(resource->GetGUID());
+}
+
+String Resources::ToString(IResource *resource)
+{
+    String result = "";
+    Resources *rs = Resources::GetActive();
+    for (const auto &pair : rs->m_GUIDCache)
+    {
+        const String typeName = pair.first;
+        for (const auto &pairMap : pair.second)
+        {
+            if (!resource || resource == pairMap.second.resource)
+            {
+                Path resourcePath = ImportFilesManager::GetFilepath(pairMap.first);
+                result += typeName + ":";
+                result += "  " + resourcePath +
+                          "(" + String(pairMap.second.resource) + ", " +
+                                String(pairMap.second.usageCount) +
+                           ")";
+                if (!resource) { result += "\n"; }
+            }
+        }
+    }
+    return result;
+}
+
+String Resources::ToString()
+{
+    return Resources::ToString(nullptr);
 }
 
 void Resources::Destroy()

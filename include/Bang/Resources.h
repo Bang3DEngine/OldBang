@@ -48,18 +48,6 @@ public:
     static Array<IResourceClass*> GetAll();
     static Array<IResource*> GetAllResources();
 
-    #ifdef DEBUG
-    static bool AssertCreatedFromResources();
-    static bool AssertDestroyedFromResources();
-    #endif
-
-private:
-public:
-    #ifdef DEBUG
-    static bool _AssertCreatedFromResources;
-    static bool _AssertDestroyedFromResources;
-    #endif
-
     struct ResourceEntry : public IToString
     {
         IResource *resource = nullptr;
@@ -69,13 +57,13 @@ public:
             return "RE(" + String(resource) + ", " + String(usageCount) + ")";
         }
     };
-    TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
-
-    MeshFactory *m_meshFactory = nullptr;
-    MaterialFactory *m_materialFactory = nullptr;
-    ShaderProgramFactory *m_shaderProgramFactory = nullptr;
 
     static void Add(const TypeId &resTypeId, IResource *res);
+
+    static void SetPermanent(IResource *resource, bool permanent);
+    static bool IsPermanent(IResource *resource);
+    static void SetPermanent(const Path &resourcePath, bool permanent);
+    static bool IsPermanent(const Path &resourcePath);
 
     static void RegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
     static void UnRegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
@@ -105,9 +93,32 @@ public:
     static IResourceClass* GetCached(const GUID &guid);
     static IResource* GetCached(const TypeId &resTypeId, const GUID &guid);
 
+    static Path GetResourcePath(IResource *resource);
+    static String ToString(IResource *resource);
+    static String ToString();
+
     void Destroy();
 
     static Resources* GetActive();
+
+    #ifdef DEBUG
+    static bool AssertCreatedFromResources();
+    static bool AssertDestroyedFromResources();
+    #endif
+
+private:
+    Set<Path> m_permanentResourcesPaths;
+    Set<IResource*> m_permanentResources;
+    TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
+
+    MeshFactory *m_meshFactory = nullptr;
+    MaterialFactory *m_materialFactory = nullptr;
+    ShaderProgramFactory *m_shaderProgramFactory = nullptr;
+
+    #ifdef DEBUG
+    static bool _AssertCreatedFromResources;
+    static bool _AssertDestroyedFromResources;
+    #endif
 
     friend class Window;
     friend class MeshFactory;

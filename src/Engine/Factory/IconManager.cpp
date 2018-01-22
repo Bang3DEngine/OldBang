@@ -13,19 +13,35 @@ RH<Texture2D> IconManager::GetDownArrowIcon()
 RH<Texture2D> IconManager::GetCheckIcon()
 { return GetIconTexture("Check"); }
 
+RH<Texture2D> IconManager::GetIconTexture(const String &filename,
+                                          const Path &dir)
+{
+    Path path = dir.Append(filename).AppendExtension("png");
+
+    // Avoid removing of img resource when loading Texture2D[::Import()]
+    // (this is why it must go before Load<Texture2D>(), and not after)
+    Resources::SetPermanent(path, true);
+
+    RH<Texture2D> iconTex = Resources::Load<Texture2D>(path);
+    if (iconTex)
+    {
+        GLId prevId = GL::GetBoundId(iconTex.Get()->GetGLBindTarget());
+        iconTex.Get()->Bind();
+        iconTex.Get()->GenerateMipMaps();
+        iconTex.Get()->SetFilterMode(GL::FilterMode::Trilinear_LL);
+        iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
+        GL::Bind(iconTex.Get()->GetGLBindTarget(), prevId);
+
+        Resources::SetPermanent(iconTex.Get(), true);
+    }
+
+    return iconTex;
+}
+
 RH<Texture2D> IconManager::GetIconTexture(const String &filename)
 {
-    static Map<Path, RH<Texture2D>> cache;
-
-    Path path = Paths::GetEngineAssetsDir().Append("Icons").
-                       Append(filename).AppendExtension("png");
-    if (!cache.ContainsKey(path))
-    {
-        RH<Texture2D> iconTex = Resources::Load<Texture2D>(path);
-        iconTex.Get()->SetFilterMode(GL::FilterMode::Bilinear);
-        iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
-        cache.Add(path, iconTex);
-    }
-    return cache.Get(path);
+    return IconManager::GetIconTexture(filename,
+                                       Paths::GetEngineAssetsDir()
+                                       .Append("Icons"));
 }
 

@@ -14,6 +14,8 @@ public:
     static RH<Texture2D> GetDownArrowIcon();
     static RH<Texture2D> GetCheckIcon();
 
+    static RH<Texture2D> GetIconTexture(const String &filename, const Path &dir);
+
 private:
     IconManager() = default;
     virtual ~IconManager() = default;
