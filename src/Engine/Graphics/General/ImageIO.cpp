@@ -377,21 +377,23 @@ void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
 
     // Read 13 bytes of data we don't need.
     short int sintBad;
-    fread(&sintBad,      sizeof(short int), 1, filePtr);
-    fread(&sintBad,      sizeof(short int), 1, filePtr);
-    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
-    fread(&sintBad,      sizeof(short int), 1, filePtr);
-    fread(&sintBad,      sizeof(short int), 1, filePtr);
+
+    size_t freadn;
+    freadn = fread(&sintBad,      sizeof(short int), 1, filePtr);
+    freadn = fread(&sintBad,      sizeof(short int), 1, filePtr);
+    freadn = fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    freadn = fread(&sintBad,      sizeof(short int), 1, filePtr);
+    freadn = fread(&sintBad,      sizeof(short int), 1, filePtr);
 
     // Read the image's width and height.
-    fread(&tgaFile.imageWidth, sizeof(short int), 1, filePtr);
-    fread(&tgaFile.imageHeight, sizeof(short int), 1, filePtr);
+    freadn = fread(&tgaFile.imageWidth, sizeof(short int), 1, filePtr);
+    freadn = fread(&tgaFile.imageHeight, sizeof(short int), 1, filePtr);
 
     // Read the bit depth.
-    fread(&tgaFile.bitCount, sizeof(unsigned char), 1, filePtr);
+    freadn = fread(&tgaFile.bitCount, sizeof(unsigned char), 1, filePtr);
 
     // Read one byte of data we don't need.
-    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    freadn = fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
 
     // Color mode -> 3 = BGR, 4 = BGRA.
     int compsPerPixel = tgaFile.bitCount / 8;
@@ -402,7 +404,7 @@ void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
     tgaFile.imageData = (unsigned char*) malloc(sizeof(unsigned char) * imageTotalComps);
 
     // Read the image data.
-    fread(tgaFile.imageData, sizeof(unsigned char), imageTotalComps, filePtr);
+    freadn = fread(tgaFile.imageData, sizeof(unsigned char), imageTotalComps, filePtr);
 
     // Change from BGR to RGB so OpenGL can read the image data.
     for (int imageIdx = 0; imageIdx < imageTotalComps; imageIdx += compsPerPixel)

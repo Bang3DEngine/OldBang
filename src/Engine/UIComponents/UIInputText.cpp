@@ -277,7 +277,7 @@ void UIInputText::HandleKeySelection(bool wasSelecting)
 
     // Advance the the cursor index, and clamp it
     SetCursorIndex(Math::Clamp(GetCursorIndex() + cursorIndexAdvance,
-                               0, GetText()->GetContent().Size()) );
+                               0, GetText()->GetContent().Size()+1) );
 
     // Selection resetting handling
     bool doingSelection = IsShiftPressed() || GetLabel()->IsSelectingWithMouse();

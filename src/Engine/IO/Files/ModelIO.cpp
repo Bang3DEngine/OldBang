@@ -41,9 +41,11 @@ int ModelIO::GetModelNumTriangles(const Path &modelFilepath)
     return 0;
 }
 
-bool ModelIO::ReadModel(const Path &modelFilepath,
+bool ModelIO::ReadModel(const Path& modelFilepath,
                         Array< RH<Mesh> > *meshes,
-                        Array< RH<Material> > *materials)
+                        Array< RH<Material> > *materials,
+                        Array<String> *meshesNames,
+                        Array<String> *materialsNames)
 {
     Assimp::Importer importer;
     const aiScene* scene = ReadScene(&importer, modelFilepath);
@@ -51,23 +53,36 @@ bool ModelIO::ReadModel(const Path &modelFilepath,
     bool ok = false;
     if (scene)
     {
+        Array< String > unorderedMaterialNames;
         Array< RH<Material> > unorderedMaterials;
         for (int i = 0; i < SCAST<int>(scene->mNumMaterials); ++i)
         {
-            RH<Material> material =
-                    ModelIO::ReadMaterial(modelFilepath.GetDirectory(),
-                                          scene->mMaterials[i]);
-            unorderedMaterials.PushBack(material);
+            String materialName;
+            RH<Material> materialRH;
+            ModelIO::ReadMaterial(modelFilepath.GetDirectory(),
+                                  scene->mMaterials[i],
+                                  &materialRH,
+                                  &materialName);
+
+            unorderedMaterialNames.PushBack(materialName);
+            unorderedMaterials.PushBack(materialRH);
         }
 
         for (int i = 0; i < SCAST<int>(scene->mNumMeshes); ++i)
         {
-            RH<Mesh> meshRH = ModelIO::ReadMesh(scene->mMeshes[i]);
-            meshes->PushBack(meshRH);
+            RH<Mesh> meshRH;
+            String meshName;
+            ModelIO::ReadMesh(scene->mMeshes[i], &meshRH, &meshName);
 
             int matIndex = scene->mMeshes[i]->mMaterialIndex;
-            RH<Material> mat = unorderedMaterials[matIndex];
+            const RH<Material> &mat = unorderedMaterials[matIndex];
+            const String &materialName = unorderedMaterialNames[matIndex];
+
+            meshes->PushBack(meshRH);
+            meshesNames->PushBack(meshName);
+
             materials->PushBack(mat);
+            materialsNames->PushBack(materialName);
         }
         ok = true;
     }
@@ -95,17 +110,25 @@ bool ModelIO::ReadFirstFoundMeshRaw(const Path &modelFilepath,
     return ok;
 }
 
-RH<Material> ModelIO::ReadMaterial(const Path& modelDirectory,
-                                   aiMaterial *aMaterial)
+void ModelIO::ReadMaterial(const Path& modelDirectory,
+                           aiMaterial *aMaterial,
+                           RH<Material> *outMaterial,
+                           String *outMaterialName)
 {
-    RH<Material> materialRH = Resources::Create<Material>();
+    *outMaterial = Resources::Create<Material>();
 
     aiString aMatName;
     aiGetMaterialString(aMaterial, AI_MATKEY_NAME, &aMatName);
-    // String matName( aMatName.C_Str() );
+    if (outMaterialName)
+    {
+        *outMaterialName = String( aMatName.C_Str() );
+        if (outMaterialName->IsEmpty()) { *outMaterialName = "Material"; }
+    }
 
     float aShininess;
+    aiColor3D aAmbientColor;
     aiColor3D aDiffuseColor;
+    aMaterial->Get(AI_MATKEY_COLOR_AMBIENT, aAmbientColor);
     aMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aDiffuseColor);
     aMaterial->Get(AI_MATKEY_SHININESS, aShininess);
 
@@ -120,11 +143,9 @@ RH<Material> ModelIO::ReadMaterial(const Path& modelDirectory,
         matTexture = Resources::Load<Texture2D>(texturePath);
     }
 
-    materialRH.Get()->SetDiffuseColor( AIColor3ToColor(aDiffuseColor) );
-    materialRH.Get()->SetShininess( aShininess );
-    materialRH.Get()->SetTexture( matTexture.Get() );
-
-    return materialRH;
+    outMaterial->Get()->SetDiffuseColor( Color::White );
+    outMaterial->Get()->SetShininess( aShininess );
+    outMaterial->Get()->SetTexture( matTexture.Get() );
 }
 
 void ModelIO::ReadMeshRaw(aiMesh *aMesh,
@@ -155,13 +176,9 @@ void ModelIO::ReadMeshRaw(aiMesh *aMesh,
             Vector3 norm0 = AIVectorToVec3(aMesh->mNormals[iV0]);
             Vector3 norm1 = AIVectorToVec3(aMesh->mNormals[iV1]);
             Vector3 norm2 = AIVectorToVec3(aMesh->mNormals[iV2]);
-            vertexNormals->PushBack(norm0);
-            vertexNormals->PushBack(norm1);
-            vertexNormals->PushBack(norm2);
-
-            ASSERT( Math::Abs(norm0.Length()-1.0f) < 0.05f  );
-            ASSERT( Math::Abs(norm1.Length()-1.0f) < 0.05f  );
-            ASSERT( Math::Abs(norm2.Length()-1.0f) < 0.05f  );
+            vertexNormals->PushBack(norm0.NormalizedSafe());
+            vertexNormals->PushBack(norm1.NormalizedSafe());
+            vertexNormals->PushBack(norm2.NormalizedSafe());
         }
 
         if (aMesh->GetNumUVChannels() > 0)
@@ -176,19 +193,24 @@ void ModelIO::ReadMeshRaw(aiMesh *aMesh,
     }
 }
 
-RH<Mesh> ModelIO::ReadMesh(aiMesh *aMesh)
+void ModelIO::ReadMesh(aiMesh *aMesh,
+                       RH<Mesh> *outMesh,
+                       String *outMeshName)
 {
-    RH<Mesh> meshRH = Resources::Create<Mesh>();
+    *outMesh = Resources::Create<Mesh>();
 
     Array<Vector3> vertexPositions;
     Array<Vector3> vertexNormals;
     Array<Vector2> vertexUvs;
 
     ModelIO::ReadMeshRaw(aMesh, &vertexPositions, &vertexNormals, &vertexUvs);
+    if (outMeshName)
+    {
+        *outMeshName = String( aMesh->mName.C_Str() );
+        if (outMeshName->IsEmpty()) { *outMeshName = "Mesh"; }
+    }
 
-    meshRH.Get()->LoadAll(vertexPositions, vertexNormals, vertexUvs);
-
-    return meshRH;
+    outMesh->Get()->LoadAll(vertexPositions, vertexNormals, vertexUvs);
 }
 
 const aiScene *ModelIO::ReadScene(Assimp::Importer *importer,

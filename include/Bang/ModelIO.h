@@ -21,16 +21,22 @@ public:
 
     static bool ReadModel(const Path& modelFilepath,
                           Array< RH<Mesh> > *meshes,
-                          Array< RH<Material> > *materials);
+                          Array< RH<Material> > *materials,
+                          Array<String> *meshesNames,
+                          Array<String> *materialsNames);
 
     static bool ReadFirstFoundMeshRaw(const Path& modelFilepath,
                                       Array<Vector3> *vertexPositions,
                                       Array<Vector3> *vertexNormals,
                                       Array<Vector2> *vertexUvs);
 
-    static RH<Mesh> ReadMesh(aiMesh *aMesh);
-    static RH<Material> ReadMaterial(const Path& modelDirectory,
-                                     aiMaterial *aMaterial);
+    static void ReadMesh(aiMesh *aMesh,
+                         RH<Mesh> *outMesh,
+                         String *outMeshName);
+    static void ReadMaterial(const Path& modelDirectory,
+                             aiMaterial *aMaterial,
+                             RH<Material> *outMaterial,
+                             String *outMaterialName);
 
     static void ReadMeshRaw(aiMesh *aMesh,
                             Array<Vector3> *vertexPositions,

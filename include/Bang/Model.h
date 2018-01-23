@@ -14,10 +14,18 @@ public:
 	Model();
 	virtual ~Model();
 
-    void AddMesh(Mesh *mesh, Material *material);
+    GameObject *CreateGameObjectFromModel() const;
+
+    void AddMesh(Mesh *mesh, Material *material,
+                 const String &meshName, const String &materialName);
+
+    RH<Mesh> GetMeshByName(const String &meshName);
+    RH<Material> GetMaterialByName(const String &materialName);
 
     const Array< RH<Mesh> >& GetMeshes() const;
     const Array< RH<Material> >& GetMaterials() const;
+    const Array<String>& GetMeshesNames() const;
+    const Array<String>& GetMaterialsNames() const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -32,6 +40,11 @@ public:
 private:
     Array< RH<Mesh> > m_meshes;
     Array< RH<Material> > m_materials;
+    Array<String> m_meshesNames;
+    Array<String> m_materialsNames;
+
+    static String GetNewName(const String &originalName,
+                             const Array<String> &existingNames);
 };
 
 NAMESPACE_BANG_END
