@@ -289,7 +289,8 @@ UILayoutManager *UICanvas::GetLayoutManager() const
 
 UICanvas *UICanvas::GetActive(const GameObject *go)
 {
-    return go->GetComponentInParent<UICanvas>();
+    UICanvas *canvasInThis = go->GetComponent<UICanvas>();
+    return canvasInThis ? canvasInThis : go->GetComponentInParent<UICanvas>();
 }
 
 UICanvas *UICanvas::GetActive(const Component *comp)

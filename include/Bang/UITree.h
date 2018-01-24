@@ -31,6 +31,7 @@ public:
     void SetItemCollapsed(GOItem *item, bool collapsed);
     void SetSelectionCallback(UIList::SelectionCallback callback);
 
+    GOItem* GetParentItem(GOItem *item);
     bool IsItemCollapsed(GOItem *item) const;
     List<GOItem*> GetChildrenItems(GOItem *item);
     UIList* GetUIList() const;
@@ -61,7 +62,6 @@ private:
     void UpdateCollapsability(GOItem *item);
     void IndentItem(GOItem *item);
 
-    GOItem* GetParentItem(GOItem *item);
     Tree<GOItem*>* GetItemTree(GOItem* item);
     UITreeItemContainer* GetItemContainer(GOItem *item) const;
 

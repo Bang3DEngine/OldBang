@@ -29,8 +29,10 @@ public:
     void SetMargins(int marginAll);
     void SetMarginMin(Axis axis, int marginMax);
     void SetMarginMax(Axis axis, int marginMin);
-    void SetMargins(const Vector2i& marginRightTop,
-                    const Vector2i& marginLeftBot);
+    void SetMarginLeftBot(const Vector2i& marginLeftBot);
+    void SetMarginRightTop(const Vector2i& marginRightTop);
+    void SetMargins(const Vector2i& marginLeftBot,
+                    const Vector2i& marginRightTop);
     void SetMargins(Axis axis, const Vector2i &margins);
     void SetMargins(Axis axis, int marginMin, int marginMax);
     void SetMargins(int left, int top, int right, int bot);

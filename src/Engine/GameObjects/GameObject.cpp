@@ -229,8 +229,12 @@ Component* GameObject::AddComponent(Component *component, int _index)
 {
     if (component && !GetComponents().Contains(component))
     {
-        Transform *trans = DCAST<Transform*>(component);
-        if (trans) { ASSERT(!HasComponent<Transform>()); }
+        Transform *transformComp = DCAST<Transform*>(component);
+        if (transformComp)
+        {
+            ASSERT_SOFT_MSG(!HasComponent<Transform>(),
+                            "A GameObject can not have more than one transform");
+        }
 
         component->SetGameObject(this);
 
@@ -245,7 +249,7 @@ Component* GameObject::AddComponent(Component *component, int _index)
             m_increaseComponentsIterator = false;
         }
 
-        if (trans) { p_transform = trans; }
+        if (transformComp) { p_transform = transformComp; }
 
         EventEmitter<IComponentListener>::PropagateToListeners(
                     &IComponentListener::OnComponentAdded, component, index);

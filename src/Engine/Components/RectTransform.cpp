@@ -159,13 +159,23 @@ void RectTransform::SetMarginMax(Axis axis, int marginMin)
     SetMargins(axis, marginMin, GetMarginMax(axis));
 }
 
-void RectTransform::SetMargins(const Vector2i &marginRightTop,
-                               const Vector2i &marginLeftBot)
+void RectTransform::SetMarginLeftBot(const Vector2i &marginLeftBot)
 {
-    SetMarginBot(marginLeftBot.y);
     SetMarginLeft(marginLeftBot.x);
-    SetMarginTop(marginRightTop.y);
+    SetMarginBot(marginLeftBot.y);
+}
+
+void RectTransform::SetMarginRightTop(const Vector2i &marginRightTop)
+{
     SetMarginRight(marginRightTop.x);
+    SetMarginTop(marginRightTop.y);
+}
+
+void RectTransform::SetMargins(const Vector2i &marginLeftBot,
+                               const Vector2i &marginRightTop)
+{
+    SetMarginLeftBot(marginLeftBot);
+    SetMarginRightTop(marginRightTop);
 }
 
 void RectTransform::SetMargins(Axis axis, const Vector2i &margins)
@@ -406,7 +416,7 @@ void RectTransform::CloneInto(ICloneable *clone) const
     Transform::CloneInto(clone);
     RectTransform *rt = Cast<RectTransform*>(clone);
 
-    rt->SetMargins( GetMarginRightTop(), GetMarginLeftBot() );
+    rt->SetMargins( GetMarginLeftBot(), GetMarginRightTop() );
     rt->SetAnchors( GetAnchorMin(), GetAnchorMax() );
     rt->SetPivotPosition( GetPivotPosition() );
 }
