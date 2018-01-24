@@ -48,6 +48,7 @@ public:
     void SetViewportRect(const Rect &viewportRectNDC);
     void AddRenderPass(RenderPass renderPass);
     void RemoveRenderPass(RenderPass renderPass);
+    void SetRenderSelectionBuffer(bool renderSelectionBuffer);
 
     const Color& GetClearColor() const;
     float GetOrthoWidth() const;
@@ -58,6 +59,7 @@ public:
     bool MustRenderPass(RenderPass renderPass) const;
     const Set<RenderPass>& GetRenderPassMask() const;
     Matrix4 GetViewMatrix() const;
+    bool GetRenderSelectionBuffer() const;
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
     Rect GetScreenBoundingRect(const AABox &bbox);
@@ -85,8 +87,10 @@ protected:
 
 private:
     GBuffer *m_gbuffer = nullptr;
-    Set<RenderPass> m_renderPassMask;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
+
+    Set<RenderPass> m_renderPassMask;
+    bool m_renderSelectionBuffer = true;
 
     Color m_clearColor = Color(Color(0.3f), 1);
     float m_orthoHeight  = 25.0f;

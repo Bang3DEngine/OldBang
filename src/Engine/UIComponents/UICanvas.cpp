@@ -111,7 +111,7 @@ void UICanvas::Invalidate()
     {
         rt->Invalidate();
     }
-
+    GetLayoutManager()->RebuildLayout(GetGameObject());
 }
 
 void UICanvas::SetFocus(IFocusable *_newFocusable)

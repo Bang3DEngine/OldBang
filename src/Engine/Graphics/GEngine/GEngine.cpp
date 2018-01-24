@@ -146,16 +146,19 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 {
-    camera->BindSelectionFramebuffer();
+    if (camera->GetRenderSelectionBuffer())
+    {
+        camera->BindSelectionFramebuffer();
 
-    // Selection rendering
-    camera->GetSelectionFramebuffer()->PrepareNewFrameForRender(go);
-    go->Render(RenderPass::Scene);
-    GL::ClearStencilBuffer();
-    GL::ClearDepthBuffer();
-    // RenderWithPass(go, RenderPass::Canvas);
+        // Selection rendering
+        camera->GetSelectionFramebuffer()->PrepareNewFrameForRender(go);
+        go->Render(RenderPass::Scene);
+        GL::ClearStencilBuffer();
+        GL::ClearDepthBuffer();
+        RenderWithPass(go, RenderPass::Canvas);
 
-    RenderWithPass(go, RenderPass::Overlay);
+        RenderWithPass(go, RenderPass::Overlay);
+    }
 }
 
 void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)

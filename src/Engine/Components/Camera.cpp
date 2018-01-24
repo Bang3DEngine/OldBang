@@ -193,6 +193,11 @@ void Camera::RemoveRenderPass(RenderPass renderPass)
     m_renderPassMask.Remove(renderPass);
 }
 
+void Camera::SetRenderSelectionBuffer(bool renderSelectionBuffer)
+{
+    m_renderSelectionBuffer = renderSelectionBuffer;
+}
+
 const Color &Camera::GetClearColor() const { return m_clearColor; }
 float Camera::GetOrthoHeight() const { return m_orthoHeight; }
 float Camera::GetFovDegrees() const { return m_fovDegrees; }
@@ -251,6 +256,11 @@ Matrix4 Camera::GetViewMatrix() const
 {
     Transform *tr = GetGameObject()->GetTransform();
     return tr->GetLocalToWorldMatrix().Inversed();
+}
+
+bool Camera::GetRenderSelectionBuffer() const
+{
+    return m_renderSelectionBuffer;
 }
 
 Matrix4 Camera::GetProjectionMatrix() const
