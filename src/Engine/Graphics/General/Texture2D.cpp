@@ -1,6 +1,7 @@
 #include "Bang/Texture2D.h"
 
 #include "Bang/GL.h"
+#include "Bang/ImageIO.h"
 #include "Bang/Resources.h"
 
 USING_NAMESPACE_BANG
@@ -141,8 +142,7 @@ void Texture2D::ExportXML(XMLNode *xmlInfo) const
 
 void Texture2D::Import(const Path &imageFilepath)
 {
-    RH<ImageResourceb> img = Resources::Load<ImageResourceb>(imageFilepath);
-    if (img) { Import( *(img.Get()) ); }
+    ImageIO::Import(imageFilepath, this, nullptr);
 
     Path importFilepath = ImportFilesManager::GetImportFilepath(imageFilepath);
     ImportXMLFromFile(importFilepath);

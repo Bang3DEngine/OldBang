@@ -19,12 +19,17 @@ Array<String> Extensions::GetTTFExtensions()
 
 Array<String> Extensions::GetImageExtensions()
 {
-    return {"png", "jpg", "jpeg", "tga", "bmp", "tiff"};
+    return {"png", "jpg", "jpeg", "tga", "bmp", "tiff", "dds"};
 }
 
 Array<String> Extensions::GetModelExtensions()
 {
-    return {"obj", "ply"};
+    return {"obj", "ply", "fbx", "dae", "3ds", "gltf", "glb",
+            "blend", "3ds", "ase", "ifc", "xgl", "zgl", "dxf",
+            "lwo", "lws", "lxo", "stl", "x", "ac", "ms3d", "cob",
+            "scn", "bvh", "csm", "mdl", "md2", "md3", "pk3", "mdc",
+            "md5", "smd", "vta", "ogex", "3d", "b3d", "q3d", "q3s",
+            "nff", "off", "raw", "ter", "mdl", "hmp", "ndo"};
 }
 
 Array<String> Extensions::GetAudioClipExtensions()

@@ -14,6 +14,8 @@
 #include "Bang/Debug.h"
 #include "Bang/Image.h"
 #include "Bang/Paths.h"
+#include "Bang/Texture2D.h"
+#include "Bang/ImageIODDS.h"
 
 USING_NAMESPACE_BANG
 
@@ -59,6 +61,22 @@ void ImageIO::Import(const Path &filepath, Imageb *img, bool *_ok)
                     << "'");
     }
 
+    if (_ok) { *_ok = ok; }
+}
+
+void ImageIO::Import(const Path &filepath, Texture2D *tex, bool *_ok)
+{
+    bool ok = false;
+    if (filepath.HasExtension("dds"))
+    {
+        ImageIODDS::ImportDDS(filepath, tex, _ok);
+    }
+    else
+    {
+        Imageb img;
+        ImageIO::Import(filepath, &img, _ok);
+        tex->Import(img);
+    }
     if (_ok) { *_ok = ok; }
 }
 
@@ -294,6 +312,11 @@ void ImageIO::ImportJPG(const Path &filepath, Imageb *img, bool *ok)
     fclose(fp);
 
     *ok = true;
+}
+
+void ImageIO::ImportDDS(const Path &filepath, Texture2D *tex, bool *ok)
+{
+    ImageIODDS::ImportDDS(filepath, tex, ok);
 }
 
 void ImageIO::ExportTGA(const Path &filepath, const Imageb &img)

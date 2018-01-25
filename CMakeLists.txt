@@ -218,7 +218,6 @@ ${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLUniforms.cpp
 ${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
-${ENGINE_SRC_DIR}/Graphics/General/ImageIO.cpp
 ${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
 ${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
@@ -228,6 +227,9 @@ ${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
+${ENGINE_SRC_DIR}/IO/Files/Images/ImageIO.cpp
+${ENGINE_SRC_DIR}/IO/Files/Images/ImageIODDS.cpp
+${ENGINE_SRC_DIR}/IO/Files/Images/nv_dds.cpp
 ${ENGINE_SRC_DIR}/IO/Files/ModelIO.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
 ${ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
