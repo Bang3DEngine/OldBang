@@ -6,12 +6,12 @@
 USING_NAMESPACE_BANG
 
 // IResource
-IResource::IResource()
+Resource::Resource()
 {
     ASSERT(Resources::AssertCreatedFromResources());
 }
 
-IResource::~IResource()
+Resource::~Resource()
 {
     // ASSERT(Resources::AssertDestroyedFromResources() ||
     //        ObjectManager::AssertDestroyedFromObjectManager);
@@ -36,6 +36,11 @@ Resource *Resource::GetInsideFileResource(const GUID &insideFileGUID) const
 Resource* Resource::GetInsideFileResource(GUID::GUIDType) const
 {
     return nullptr;
+}
+
+String Resource::GetInsideFileResourceName(GUID::GUIDType) const
+{
+    return "InsideResource";
 }
 
 void Resource::ImportXML(const XMLNode &xmlInfo)

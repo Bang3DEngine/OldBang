@@ -27,36 +27,36 @@ public:
     Resources();
     virtual ~Resources();
 
-    template <class IResourceClass>
-    static RH<IResourceClass> Load(const Path &filepath);
+    template <class ResourceClass>
+    static RH<ResourceClass> Load(const Path &filepath);
 
-    template <class IResourceClass>
-    static RH<IResourceClass> Load(const String &filepath);
+    template <class ResourceClass>
+    static RH<ResourceClass> Load(const String &filepath);
 
-    template <class IResourceClass>
-    static RH<IResourceClass> Load(const GUID &guid);
+    template <class ResourceClass>
+    static RH<ResourceClass> Load(const GUID &guid);
 
     static RH<Resource> LoadFromExtension(const Path &filepath);
 
-    template<class IResourceClass, class ...Args>
-    static RH<IResourceClass> Create(const Args&... args);
-    template<class IResourceClass, class ...Args>
-    static RH<IResourceClass> Create(const GUID &guid, const Args&... args);
-    template<class IResourceClass, class ...Args>
-    static RH<IResourceClass> CreateInnerResource(const GUID &baseGUID,
+    template<class ResourceClass, class ...Args>
+    static RH<ResourceClass> Create(const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static RH<ResourceClass> Create(const GUID &guid, const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static RH<ResourceClass> CreateInnerResource(const GUID &baseGUID,
                                                   const GUID::GUIDType insideFileGUID,
                                                   const Args&... args);
 
-    template<class IResourceClass>
-    static RH<IResourceClass> Clone(const RH<IResourceClass> &src);
+    template<class ResourceClass>
+    static RH<ResourceClass> Clone(const RH<ResourceClass> &src);
 
-    template <class IResourceClass>
-    static Array<IResourceClass*> GetAll();
-    static Array<IResource*> GetAllResources();
+    template <class ResourceClass>
+    static Array<ResourceClass*> GetAll();
+    static Array<Resource*> GetAllResources();
 
     struct ResourceEntry : public IToString
     {
-        IResource *resource = nullptr;
+        Resource *resource = nullptr;
         uint usageCount = 0; // Number of RH's using this resource entry
         String ToString() const override
         {
@@ -64,43 +64,43 @@ public:
         }
     };
 
-    static void Add(const TypeId &resTypeId, IResource *res);
+    static void Add(const TypeId &resTypeId, Resource *res);
 
-    static void SetPermanent(IResource *resource, bool permanent);
-    static bool IsPermanent(IResource *resource);
+    static void SetPermanent(Resource *resource, bool permanent);
+    static bool IsPermanent(Resource *resource);
     static void SetPermanent(const Path &resourcePath, bool permanent);
     static bool IsPermanent(const Path &resourcePath);
 
-    static void RegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
-    static void UnRegisterResourceUsage(const TypeId &resTypeId, IResource *resource);
+    static void RegisterResourceUsage(const TypeId &resTypeId, Resource *resource);
+    static void UnRegisterResourceUsage(const TypeId &resTypeId, Resource *resource);
 
     static void Remove(const TypeId &resTypeId, const GUID &guid);
 
-    template<class IResourceClass, class ...Args>
-    static IResourceClass* _Create(const Args&... args);
-    template<class IResourceClass, class ...Args>
-    static IResourceClass* _Create(const GUID &guid, const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static ResourceClass* _Create(const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static ResourceClass* _Create(const GUID &guid, const Args&... args);
 
-    template<class IResourceClass, class ...Args>
-    static typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),
-           IResourceClass*>::type _JustCreate(const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static typename std::enable_if<T_SUBCLASS(ResourceClass, Asset),
+           ResourceClass*>::type _JustCreate(const Args&... args);
 
-    template<class IResourceClass, class ...Args>
-    static typename std::enable_if<T_NOT_SUBCLASS(IResourceClass, Asset),
-           IResourceClass*>::type _JustCreate(const Args&... args);
+    template<class ResourceClass, class ...Args>
+    static typename std::enable_if<T_NOT_SUBCLASS(ResourceClass, Asset),
+           ResourceClass*>::type _JustCreate(const Args&... args);
 
-    template<class IResourceClass>
+    template<class ResourceClass>
     static bool Contains(const GUID &guid);
     static bool Contains(const TypeId &resourceClassTypeId, const GUID &guid);
 
-    static void Destroy(IResource *resource);
+    static void Destroy(Resource *resource);
 
-    template<class IResourceClass>
-    static IResourceClass* GetCached(const GUID &guid);
-    static IResource* GetCached(const TypeId &resTypeId, const GUID &guid);
+    template<class ResourceClass>
+    static ResourceClass* GetCached(const GUID &guid);
+    static Resource* GetCached(const TypeId &resTypeId, const GUID &guid);
 
-    static Path GetResourcePath(IResource *resource);
-    static String ToString(IResource *resource);
+    static Path GetResourcePath(Resource *resource);
+    static String ToString(Resource *resource);
     static String ToString();
 
     void Destroy();
@@ -114,7 +114,7 @@ public:
 
 private:
     Set<Path> m_permanentResourcesPaths;
-    Set<IResource*> m_permanentResources;
+    Set<Resource*> m_permanentResources;
     TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
 
     MeshFactory *m_meshFactory = nullptr;

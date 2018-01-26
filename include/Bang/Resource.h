@@ -6,30 +6,17 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define IRESOURCE(CLASSNAME) friend class Resources;
-
-#define RESOURCE(CLASSNAME)\
-    IRESOURCE(CLASSNAME) \
-    ICLONEABLE(CLASSNAME) \
+#define RESOURCE_NO_CLONEABLE(CLASSNAME) \
+    friend class Resources; \
     SERIALIZABLE(CLASSNAME)
 
-class IResource : public virtual IGUIDable
-{
-    IRESOURCE(IResource)
-
-protected:
-    IResource();
-    virtual ~IResource();
-
-
-    friend class Resources;
-};
+#define RESOURCE(CLASSNAME) \
+    RESOURCE_NO_CLONEABLE(CLASSNAME) \
+    ICLONEABLE(CLASSNAME)
 
 class Resource : public virtual Serializable,
-                 public IResource
+                 public virtual IGUIDable
 {
-    IRESOURCE(Resource)
-
 public:
     Path GetResourceFilepath() const;
     virtual void Import(const Path &resourceFilepath) = 0;
@@ -37,14 +24,17 @@ public:
     virtual GUID::GUIDType GetNextInsideFileGUID() const;
 
 protected:
-    Resource() = default;
-    virtual ~Resource() = default;
+    Resource();
+    virtual ~Resource();
 
     Resource* GetInsideFileResource(const GUID &insideFileGUID) const;
     virtual Resource* GetInsideFileResource(GUID::GUIDType insideFileGUID) const;
+    virtual String GetInsideFileResourceName(GUID::GUIDType insideFileGUID) const;
 
     virtual void ImportXML(const XMLNode &xmlInfo);
     virtual void ExportXML(XMLNode *xmlInfo) const;
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

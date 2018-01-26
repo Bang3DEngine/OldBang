@@ -42,9 +42,9 @@ RH<Resource> Resources::LoadFromExtension(const Path &filepath)
     return resRH;
 }
 
-Array<IResource*> Resources::GetAllResources()
+Array<Resource*> Resources::GetAllResources()
 {
-    Array<IResource*> result;
+    Array<Resource*> result;
     Resources *rs = Resources::GetActive();
     for (auto& itMap : rs->m_GUIDCache)
     {
@@ -53,7 +53,7 @@ Array<IResource*> Resources::GetAllResources()
     return result;
 }
 
-void Resources::Add(const TypeId &resTypeId, IResource *res)
+void Resources::Add(const TypeId &resTypeId, Resource *res)
 {
     const GUID &guid = res->GetGUID();
     ASSERT(res != nullptr);
@@ -73,7 +73,7 @@ void Resources::Add(const TypeId &resTypeId, IResource *res)
     rs->m_GUIDCache.Get(resTypeId).Add(guid, resourceEntry);
 }
 
-void Resources::SetPermanent(IResource *resource, bool permanent)
+void Resources::SetPermanent(Resource *resource, bool permanent)
 {
     if (resource)
     {
@@ -83,7 +83,7 @@ void Resources::SetPermanent(IResource *resource, bool permanent)
     }
 }
 
-bool Resources::IsPermanent(IResource *resource)
+bool Resources::IsPermanent(Resource *resource)
 {
     if (!resource) { return false; }
 
@@ -147,7 +147,7 @@ bool Resources::AssertDestroyedFromResources()
 }
 #endif
 
-void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resource)
+void Resources::RegisterResourceUsage(const TypeId &resTypeId, Resource *resource)
 {
     const GUID &guid = resource->GetGUID();
     ASSERT(!guid.IsEmpty());
@@ -162,7 +162,7 @@ void Resources::RegisterResourceUsage(const TypeId &resTypeId, IResource *resour
 }
 
 void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
-                                        IResource *resource)
+                                        Resource *resource)
 {
     const GUID &guid = resource->GetGUID();
     ASSERT(!guid.IsEmpty());
@@ -195,7 +195,7 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
     }
 }
 
-void Resources::Destroy(IResource *resource)
+void Resources::Destroy(Resource *resource)
 {
     #ifdef DEBUG
     Resources::_AssertDestroyedFromResources = true;
@@ -209,7 +209,7 @@ void Resources::Destroy(IResource *resource)
     #endif
 }
 
-IResource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
+Resource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
 {
     Resources *rs = Resources::GetActive();
     if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { return nullptr; }
@@ -217,12 +217,21 @@ IResource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
     return rs->m_GUIDCache.Get(resTypeId).Get(guid).resource;
 }
 
-Path Resources::GetResourcePath(IResource *resource)
+Path Resources::GetResourcePath(Resource *resource)
 {
-    return ImportFilesManager::GetFilepath(resource->GetGUID());
+    Path resPath = ImportFilesManager::GetFilepath(resource->GetGUID().
+                                                   WithoutInsideFileGUID());
+    const GUID::GUIDType insideFileGUID = resource->GetGUID().GetInsideFileGUID();
+    if (insideFileGUID != 0)
+    {
+        String insideFileResourceName =
+                    resource->GetInsideFileResourceName(insideFileGUID);
+        resPath = resPath.Append(insideFileResourceName);
+    }
+    return resPath;
 }
 
-String Resources::ToString(IResource *resource)
+String Resources::ToString(Resource *resource)
 {
     String result = "";
     Resources *rs = Resources::GetActive();

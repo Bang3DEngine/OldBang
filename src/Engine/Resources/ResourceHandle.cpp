@@ -49,8 +49,8 @@ IResourceHandle::~IResourceHandle()
     Set(nullptr);
 }
 
-IResource *IResourceHandle::Get() const { return p_resource; }
-void IResourceHandle::Set(IResource *resource)
+Resource *IResourceHandle::Get() const { return p_resource; }
+void IResourceHandle::Set(Resource *resource)
 {
     if (Get() != resource)
     {

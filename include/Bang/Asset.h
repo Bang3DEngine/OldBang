@@ -11,8 +11,7 @@
 NAMESPACE_BANG_BEGIN
 
 #define ASSET(CLASSNAME) \
-    IRESOURCE(CLASSNAME) \
-    SERIALIZABLE(CLASSNAME) \
+    RESOURCE(CLASSNAME) \
     friend class Asset; \
     friend class ObjectManager;
 
@@ -20,8 +19,7 @@ class Asset : public Resource,
               public IToString,
               public Object
 {
-    IRESOURCE(CLASSNAME)
-    SERIALIZABLE(CLASSNAME)
+    RESOURCE_NO_CLONEABLE(CLASSNAME)
     friend class ObjectManager;
 
 public:

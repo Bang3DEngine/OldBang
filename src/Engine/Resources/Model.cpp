@@ -108,23 +108,14 @@ GUID::GUIDType Model::GetNextInsideFileGUID() const
 
 Resource *Model::GetInsideFileResource(GUID::GUIDType insideFileGUID) const
 {
-    for (const RH<Mesh>& mesh : GetMeshes())
-    {
-        if (mesh.Get()->GetGUID().GetInsideFileGUID() == insideFileGUID)
-        {
-            return mesh.Get();
-        }
-    }
+    auto pair = GetInsideFileResourceAndName(insideFileGUID);
+    return pair.first;
+}
 
-    for (const RH<Material>& material : GetMaterials())
-    {
-        if (material.Get()->GetGUID().GetInsideFileGUID() == insideFileGUID)
-        {
-            return material.Get();
-        }
-    }
-
-    return nullptr;
+String Model::GetInsideFileResourceName(GUID::GUIDType insideFileGUID) const
+{
+    auto pair = GetInsideFileResourceAndName(insideFileGUID);
+    return pair.second;
 }
 
 void Model::CloneInto(ICloneable *clone) const
@@ -165,6 +156,39 @@ void Model::ImportXML(const XMLNode &xmlInfo)
 void Model::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
+}
+
+std::pair<Resource *, String>
+Model::GetInsideFileResourceAndName(GUID::GUIDType insideFileGUID) const
+{
+    std::pair<Resource*, String> pair;
+    pair.first = nullptr;
+    pair.second = "NameNotFound";
+
+    ASSERT(GetMeshes().Size() == GetMaterials().Size());
+    ASSERT(GetMeshes().Size() == GetMeshesNames().Size());
+    ASSERT(GetMeshes().Size() == GetMaterialsNames().Size());
+    Array< String > names;
+    Array< Resource* > resources;
+    for (uint i = 0; i < GetMeshes().Size(); ++i)
+    {
+        names.PushBack(GetMeshesNames()[i]);
+        names.PushBack(GetMaterialsNames()[i]);
+        resources.PushBack(GetMeshes()[i].Get());
+        resources.PushBack(GetMaterials()[i].Get());
+    }
+
+    for (uint i = 0; i < resources.Size(); ++i)
+    {
+        if (resources[i]->GetGUID().GetInsideFileGUID() == insideFileGUID)
+        {
+            pair.first = resources[i];
+            pair.second = names[i];
+            break;
+        }
+    }
+
+    return pair;
 }
 
 String Model::GetNewName(const String &originalName,

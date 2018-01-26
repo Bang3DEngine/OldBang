@@ -4,14 +4,14 @@
 
 NAMESPACE_BANG_BEGIN
 
-template <class IResourceClass>
-RH<IResourceClass> Resources::Load(const Path &filepath)
+template <class ResourceClass>
+RH<ResourceClass> Resources::Load(const Path &filepath)
 {
-    IResourceClass* res = Resources::GetCached<IResourceClass>(
+    ResourceClass* res = Resources::GetCached<ResourceClass>(
                             ImportFilesManager::GetGUIDFromFilepath(filepath) );
     if (!res)
     {
-        res = Resources::_Create<IResourceClass>();
+        res = Resources::_Create<ResourceClass>();
 
         Path importFilepath = ImportFilesManager::GetImportFilepath(filepath);
 
@@ -21,42 +21,42 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
         res->ImportXMLFromFile(importFilepath); // Import XML after again
     }
 
-    return RH<IResourceClass>(res);
+    return RH<ResourceClass>(res);
 }
 
-template <class IResourceClass>
-RH<IResourceClass> Resources::Load(const String &filepath)
+template <class ResourceClass>
+RH<ResourceClass> Resources::Load(const String &filepath)
 {
-    return Resources::Load<IResourceClass>( EPATH(filepath) );
+    return Resources::Load<ResourceClass>( EPATH(filepath) );
 }
 
-template <class IResourceClass>
-RH<IResourceClass> Resources::Load(const GUID &guid)
+template <class ResourceClass>
+RH<ResourceClass> Resources::Load(const GUID &guid)
 {
     if (!guid.IsEmpty())
     {
         const GUID::GUIDType insideFileGUID = guid.GetInsideFileGUID();
         if (insideFileGUID == 0) // Normal resource (file attached to it)
         {
-            if (!Resources::Contains<IResourceClass>(guid))
+            if (!Resources::Contains<ResourceClass>(guid))
             {
                 // If we don't have it loaded, load/create a new one
                 Path filepath = ImportFilesManager::GetFilepath(guid);
                 if (filepath.IsFile())
                 {
-                    return Resources::Load<IResourceClass>(filepath);
+                    return Resources::Load<ResourceClass>(filepath);
                 }
                 else
                 {
-                    RH<IResourceClass> rh = Resources::Create<IResourceClass>(guid);
+                    RH<ResourceClass> rh = Resources::Create<ResourceClass>(guid);
                     return rh;
                 }
             }
             else
             {
                 // Load it from cache
-                return RH<IResourceClass>(
-                            Resources::GetCached<IResourceClass>(guid) );
+                return RH<ResourceClass>(
+                            Resources::GetCached<ResourceClass>(guid) );
             }
         }
         else  // Inner resource (resource embedded into another resource)
@@ -76,10 +76,10 @@ RH<IResourceClass> Resources::Load(const GUID &guid)
                     // the handler, and return it 3
                     Resource *innerRes =
                         parentRes.Get()->GetInsideFileResource(insideFileGUID);
-                    RH<IResourceClass> innerResRH;
+                    RH<ResourceClass> innerResRH;
                     if (innerRes)
                     {
-                        innerResRH.Set( DCAST<IResourceClass*>(innerRes) );
+                        innerResRH.Set( DCAST<ResourceClass*>(innerRes) );
                     }
                     return innerResRH;
                 }
@@ -87,40 +87,40 @@ RH<IResourceClass> Resources::Load(const GUID &guid)
         }
     }
 
-    return RH<IResourceClass>();
+    return RH<ResourceClass>();
 }
 
-template<class IResourceClass, class ...Args>
-RH<IResourceClass> Resources::Create(const Args&... args)
+template<class ResourceClass, class ...Args>
+RH<ResourceClass> Resources::Create(const Args&... args)
 {
-    return RH<IResourceClass>( Resources::_Create<IResourceClass>(args...) );
+    return RH<ResourceClass>( Resources::_Create<ResourceClass>(args...) );
 }
-template<class IResourceClass, class ...Args>
-RH<IResourceClass> Resources::Create(const GUID &guid, const Args&... args)
+template<class ResourceClass, class ...Args>
+RH<ResourceClass> Resources::Create(const GUID &guid, const Args&... args)
 {
-    return RH<IResourceClass>( Resources::_Create<IResourceClass>(guid, args...) );
+    return RH<ResourceClass>( Resources::_Create<ResourceClass>(guid, args...) );
 }
 
-template<class IResourceClass, class ...Args>
-RH<IResourceClass> Resources::CreateInnerResource(const GUID &baseGUID,
+template<class ResourceClass, class ...Args>
+RH<ResourceClass> Resources::CreateInnerResource(const GUID &baseGUID,
                                                   const GUID::GUIDType insideFileGUID,
                                                   const Args&... args)
 {
     GUID resourceInsideFileGUID;
     GUIDManager::CreateInsideFileGUID(baseGUID, insideFileGUID,
                                       &resourceInsideFileGUID);
-    return Resources::Create<IResourceClass, Args...>(resourceInsideFileGUID,
+    return Resources::Create<ResourceClass, Args...>(resourceInsideFileGUID,
                                                       args...);
 }
 
-template<class IResourceClass, class ...Args>
-IResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
+template<class ResourceClass, class ...Args>
+ResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
 {
     #ifdef DEBUG
     Resources::_AssertCreatedFromResources = true;
     #endif
 
-    IResourceClass *res = Resources::_JustCreate<IResourceClass>(args...);
+    ResourceClass *res = Resources::_JustCreate<ResourceClass>(args...);
     res->SetGUID(guid);
 
     #ifdef DEBUG
@@ -129,60 +129,60 @@ IResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
 
     return res;
 }
-template<class IResourceClass, class ...Args>
-IResourceClass* Resources::_Create(const Args&... args)
+template<class ResourceClass, class ...Args>
+ResourceClass* Resources::_Create(const Args&... args)
 {
     GUID guid = GUIDManager::GetNewGUID();
-    return Resources::_Create<IResourceClass, Args...>( guid, args... );
+    return Resources::_Create<ResourceClass, Args...>( guid, args... );
 }
 
-template<class IResourceClass, class ...Args>
-typename std::enable_if<T_SUBCLASS(IResourceClass, Asset),
-         IResourceClass*>::type Resources::_JustCreate(const Args&... args)
+template<class ResourceClass, class ...Args>
+typename std::enable_if<T_SUBCLASS(ResourceClass, Asset),
+         ResourceClass*>::type Resources::_JustCreate(const Args&... args)
 {
-    return Asset::Create<IResourceClass>(args...);
+    return Asset::Create<ResourceClass>(args...);
 }
 
-template<class IResourceClass, class ...Args>
-typename std::enable_if<T_NOT_SUBCLASS(IResourceClass, Asset),
-         IResourceClass*>::type  Resources::_JustCreate(const Args&... args)
+template<class ResourceClass, class ...Args>
+typename std::enable_if<T_NOT_SUBCLASS(ResourceClass, Asset),
+         ResourceClass*>::type  Resources::_JustCreate(const Args&... args)
 {
-    return new IResourceClass(args...);
+    return new ResourceClass(args...);
 }
 
-template <class IResourceClass>
-Array<IResourceClass*> Resources::GetAll()
+template <class ResourceClass>
+Array<ResourceClass*> Resources::GetAll()
 {
-    Array<IResourceClass*> result;
-    Array<IResource*> resources = Resources::GetAllResources();
-    for (IResource *res : resources)
+    Array<ResourceClass*> result;
+    Array<Resource*> resources = Resources::GetAllResources();
+    for (Resource *res : resources)
     {
-        IResourceClass *rc = Cast<IResourceClass*>(res);
+        ResourceClass *rc = Cast<ResourceClass*>(res);
         if (rc) { result.PushBack(rc); }
     }
     return result;
 }
 
-template<class IResourceClass>
+template<class ResourceClass>
 bool Resources::Contains(const GUID &guid)
 {
-    return Resources::Contains(GetTypeId<IResourceClass>(), guid);
+    return Resources::Contains(GetTypeId<ResourceClass>(), guid);
 }
 
-template<class IResourceClass>
-IResourceClass* Resources::GetCached(const GUID &guid)
+template<class ResourceClass>
+ResourceClass* Resources::GetCached(const GUID &guid)
 {
-    return SCAST<IResourceClass*>(
-                Resources::GetCached(GetTypeId<IResourceClass>(), guid) );
+    return SCAST<ResourceClass*>(
+                Resources::GetCached(GetTypeId<ResourceClass>(), guid) );
 }
 
-template<class IResourceClass>
-RH<IResourceClass> Resources::Clone(const RH<IResourceClass> &src)
+template<class ResourceClass>
+RH<ResourceClass> Resources::Clone(const RH<ResourceClass> &src)
 {
-    RH<IResourceClass> rh;
+    RH<ResourceClass> rh;
     if (src.Get())
     {
-        rh = Resources::Create<IResourceClass>();
+        rh = Resources::Create<ResourceClass>();
         src.Get()->CloneInto( rh.Get() );
     }
     return rh;

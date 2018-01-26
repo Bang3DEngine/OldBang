@@ -29,6 +29,7 @@ public:
 
     virtual GUID::GUIDType GetNextInsideFileGUID() const override;
     virtual Resource* GetInsideFileResource(GUID::GUIDType insideFileGUID) const override;
+    virtual String GetInsideFileResourceName(GUID::GUIDType insideFileGUID) const override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -45,6 +46,9 @@ private:
     Array< RH<Material> > m_materials;
     Array<String> m_meshesNames;
     Array<String> m_materialsNames;
+
+    std::pair<Resource*, String>
+        GetInsideFileResourceAndName(GUID::GUIDType insideFileGUID) const;
 
     static String GetNewName(const String &originalName,
                              const Array<String> &existingNames);

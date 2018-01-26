@@ -263,6 +263,10 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
     return location;
 }
 
+void ShaderProgram::Import(const Path &)
+{
+}
+
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
                                                Texture2D *texture) const
 {

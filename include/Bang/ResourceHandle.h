@@ -21,42 +21,42 @@ public:
 
 protected:
     TypeId m_typeId;
-    IResource* p_resource = nullptr;
+    Resource* p_resource = nullptr;
 
     IResourceHandle();
     virtual ~IResourceHandle();
 
-    IResource* Get() const;
-    void Set(IResource* resource);
+    Resource* Get() const;
+    void Set(Resource* resource);
 
     friend class Resources;
 };
 
-template <class IResourceClass>
+template <class ResourceClass>
 class ResourceHandle : public IResourceHandle
 {
 public:
     ResourceHandle()
     {
-        m_typeId = GetTypeId<IResourceClass>();
+        m_typeId = GetTypeId<ResourceClass>();
     }
 
-    ResourceHandle(IResourceClass *res) : ResourceHandle()
+    ResourceHandle(ResourceClass *res) : ResourceHandle()
     {
         Set(res);
     }
 
     virtual ~ResourceHandle() {}
 
-    IResourceClass* Get() const
+    ResourceClass* Get() const
     {
-        IResource *res = IResourceHandle::Get();
-        return res ? SCAST<IResourceClass*>(res) : nullptr;
+        Resource *res = IResourceHandle::Get();
+        return res ? SCAST<ResourceClass*>(res) : nullptr;
     }
 
-    void Set(IResourceClass* resource)
+    void Set(ResourceClass* resource)
     {
-        IResourceHandle::Set( resource ? SCAST<IResource*>(resource) : nullptr);
+        IResourceHandle::Set( resource ? SCAST<Resource*>(resource) : nullptr);
     }
 
     friend class Resources;

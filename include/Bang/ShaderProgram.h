@@ -14,10 +14,10 @@ FORWARD class Shader;
 FORWARD class Texture2D;
 
 class ShaderProgram : public GLObject,
-                      public IResource,
+                      public Resource,
                       public IDestroyListener
 {
-    IRESOURCE(ShaderProgram)
+    RESOURCE(ShaderProgram)
 
 public:
     bool Load(const Path &vshaderPath, const Path &fshaderPath);
@@ -49,6 +49,9 @@ public:
     Shader* GetFragmentShader() const;
 
     GLint GetUniformLocation(const String &name) const;
+
+    // Resource
+    void Import(const Path &resourceFilepath) override;
 
     // IDestroyListener
     void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
