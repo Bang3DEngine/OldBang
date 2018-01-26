@@ -20,6 +20,7 @@ Model::~Model()
 {
 }
 
+#include "Bang/Debug.h"
 GameObject *Model::CreateGameObjectFromModel() const
 {
     GameObject *gameObject = GameObjectFactory::CreateGameObject();

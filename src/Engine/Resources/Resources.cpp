@@ -53,6 +53,14 @@ Array<Resource*> Resources::GetAllResources()
     return result;
 }
 
+void Resources::ExportXMLResource(const Resource *resource,
+                                  const Path &exportFilepath)
+{
+    File::Write(exportFilepath, "");
+    Path importFile = ImportFilesManager::CreateImportFile(exportFilepath);
+    resource->ExportXMLToFile(importFile);
+}
+
 void Resources::Add(const TypeId &resTypeId, Resource *res)
 {
     const GUID &guid = res->GetGUID();
@@ -176,13 +184,7 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
                                  .Get(guid).usageCount);
         ASSERT(*resourcesUsage >= 1);
         --(*resourcesUsage);
-/*
-        bool stillBeingUsed = false;
-        for (auto &pair : rs->m_GUIDCache)
-        { if (pair.second.ContainsKey(guid)) { stillBeingUsed = true; break; } }
 
-        if (!stillBeingUsed)
-            */
         if (*resourcesUsage == 0)
         {
             const Path resourcePath = Resources::GetResourcePath(resource);

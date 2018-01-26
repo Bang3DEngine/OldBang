@@ -42,7 +42,7 @@ void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
 {
     Array<String> extensions = {GetImportExtension()};
     List<Path> importFilepaths = directory.GetFiles(Path::FindFlag::RecursiveHidden,
-                                                     extensions);
+                                                    extensions);
 
     // Remove alone .import files
     for (const Path &importFilepath : importFilepaths)

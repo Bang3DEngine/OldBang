@@ -14,22 +14,6 @@ XMLNode::~XMLNode()
 {
 }
 
-void XMLNode::CloneInto(XMLNode *xmlNode) const
-{
-    xmlNode->m_children.Clear();
-
-    String name = xmlNode->GetTagName();
-    xmlNode->SetTagName(name);
-    xmlNode->m_attributes = GetAttributes();
-    xmlNode->m_attributeOrder = GetAttributesOrderList();
-    for (const XMLNode& child : m_children)
-    {
-        XMLNode childClone;
-        child.CloneInto(&childClone);
-        xmlNode->AddChild(childClone);
-    }
-}
-
 void XMLNode::AddChild(const XMLNode &node)
 {
     m_children.PushBack(node);

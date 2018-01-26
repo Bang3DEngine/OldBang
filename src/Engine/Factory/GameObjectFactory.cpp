@@ -103,31 +103,10 @@ void GameObjectFactory::CreateUISceneInto(Scene *scene)
     GameObjectFactory::CreateUICanvasInto(scene);
 }
 
-class Rotator : public Component
-{
-public:
-    void OnUpdate() override
-    {
-        Component::OnUpdate();
-        GetGameObject()->GetTransform()->RotateLocal(Quaternion::AngleAxis(0.1f,Vector3::Up));
-    }
-};
-class Scalator : public Component
-{
-public:
-    void OnUpdate() override
-    {
-        Component::OnUpdate();
-        GetGameObject()->GetTransform()->SetLocalScale(
-                    Math::Abs( Math::Sin(Time::GetNow_Seconds()) ) + 1.0f );
-    }
-};
-
 Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
 {
     GameObject *cube = GameObjectFactory::CreateGameObjectNamed("Cube");
     MeshRenderer *mr = cube->AddComponent<MeshRenderer>();
-    cube->AddComponent<Rotator>();
     mr->SetMesh(MeshFactory::GetCube().Get());
 
     RH<Texture2D> texture =
@@ -145,7 +124,6 @@ Scene *GameObjectFactory::CreateDefaultSceneInto(Scene *scene)
 
     GameObject *cube2 = GameObjectFactory::CreateGameObjectNamed("Cube-Sphere-Child");
     cube2->GetTransform()->SetLocalPosition(Vector3(4,0,0));
-    cube2->AddComponent<Scalator>();
     MeshRenderer *mr3 = cube2->AddComponent<MeshRenderer>();
     mr3->SetMesh(MeshFactory::GetCube().Get());
     mr3->GetMaterial()->SetDiffuseColor(Color::Purple);

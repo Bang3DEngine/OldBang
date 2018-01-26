@@ -7,8 +7,8 @@ NAMESPACE_BANG_BEGIN
 template <class ResourceClass>
 RH<ResourceClass> Resources::Load(const Path &filepath)
 {
-    ResourceClass* res = Resources::GetCached<ResourceClass>(
-                            ImportFilesManager::GetGUIDFromFilepath(filepath) );
+    GUID resGUID = ImportFilesManager::GetGUIDFromFilepath(filepath);
+    ResourceClass* res = Resources::GetCached<ResourceClass>(resGUID);
     if (!res)
     {
         res = Resources::_Create<ResourceClass>();

@@ -15,8 +15,6 @@ public:
     XMLNode(const String &tagName = "NoTag");
     virtual ~XMLNode();
 
-    void CloneInto(XMLNode *xmlNode) const;
-
     void AddChild(const XMLNode &node);
 
     void UpdateAttributeValue(const String &attributeName,
