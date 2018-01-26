@@ -305,7 +305,7 @@ public:
     static void Enable (GL::Test glTest);
     static void Disable(GL::Test glTest);
     static void SetEnabled(GL::Test glTest, bool enabled);
-    static void SetEnabledi(GL::Test glTest, bool enabled, int index);
+    static void SetEnabledi(GL::Test glTest, int index, bool enabled);
     static bool IsEnabled(GL::Test glTest);
     static bool IsEnabledi(GL::Test glTest, int index);
 

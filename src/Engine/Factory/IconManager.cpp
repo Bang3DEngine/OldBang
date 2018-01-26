@@ -12,6 +12,12 @@ RH<Texture2D> IconManager::GetDownArrowIcon()
 { return GetIconTexture("DownArrow"); }
 RH<Texture2D> IconManager::GetCheckIcon()
 { return GetIconTexture("Check"); }
+RH<Texture2D> IconManager::GetAudioIcon()
+{ return GetIconTexture("Audio"); }
+RH<Texture2D> IconManager::GetSunIcon()
+{ return GetIconTexture("Sun"); }
+RH<Texture2D> IconManager::GetLightBulbIcon()
+{ return GetIconTexture("LightBulb"); }
 
 RH<Texture2D> IconManager::GetIconTexture(const String &filename,
                                           const Path &dir)
@@ -28,6 +34,7 @@ RH<Texture2D> IconManager::GetIconTexture(const String &filename,
         GLId prevId = GL::GetBoundId(iconTex.Get()->GetGLBindTarget());
         iconTex.Get()->Bind();
         iconTex.Get()->GenerateMipMaps();
+        iconTex.Get()->SetAlphaCutoff(0.5f);
         iconTex.Get()->SetFilterMode(GL::FilterMode::Trilinear_LL);
         iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
         GL::Bind(iconTex.Get()->GetGLBindTarget(), prevId);

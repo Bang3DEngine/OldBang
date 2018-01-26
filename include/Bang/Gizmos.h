@@ -26,7 +26,6 @@ public:
     static void SetThickness(float thickness);
     static void SetRenderWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
-    static void SetBillboard();
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);

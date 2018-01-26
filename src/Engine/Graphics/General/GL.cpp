@@ -306,7 +306,7 @@ void GL::SetEnabled(GL::Test glTest, bool enabled)
     if (enabled) { GL::Enable(glTest); } else { GL::Disable(glTest); }
 }
 
-void GL::SetEnabledi(GL::Test glTest, bool enabled, int index)
+void GL::SetEnabledi(GL::Test glTest, int index, bool enabled)
 {
     if (enabled) { GL::Enablei(glTest, index); }
     else { GL::Disablei(glTest, index); }

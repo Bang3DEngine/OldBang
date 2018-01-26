@@ -9,6 +9,7 @@
 #include "Bang/Color.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
@@ -122,17 +123,6 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
     }
 }
 
-void Gizmos::SetBillboard()
-{
-    Gizmos *g = Gizmos::GetInstance();
-    Scene *scene = SceneManager::GetActiveScene();
-    GameObject *cam = scene->GetCamera()->GetGameObject();
-    Vector3 lookDir = (cam->GetTransform()->GetPosition() -
-                       g->m_gizmosGo->GetTransform()->GetPosition());
-    lookDir.Normalize();
-    Gizmos::SetRotation( Quaternion::LookDirection(lookDir) );
-}
-
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
     Gizmos *g = Gizmos::GetInstance();
@@ -196,7 +186,8 @@ void Gizmos::RenderFillRect(const Rect &r)
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderIcon(Texture2D *texture, bool billboard)
+void Gizmos::RenderIcon(Texture2D *texture,
+                        bool billboard)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
@@ -205,7 +196,7 @@ void Gizmos::RenderIcon(Texture2D *texture, bool billboard)
     SetReceivesLighting(false);
     if (billboard)
     {
-        Camera *cam = SceneManager::GetActiveScene()->GetCamera();
+        Camera *cam = Camera::GetActive();
 
         Vector3 camPos = cam->GetGameObject()->GetTransform()->GetPosition();
         float distScale = 1.0f;

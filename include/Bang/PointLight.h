@@ -15,6 +15,9 @@ public:
     void SetRange(float range);
     float GetRange() const;
 
+    // Component
+    void OnRender(RenderPass rp) override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

@@ -13,6 +13,9 @@ public:
     static RH<Texture2D> GetRightArrowIcon();
     static RH<Texture2D> GetDownArrowIcon();
     static RH<Texture2D> GetCheckIcon();
+    static RH<Texture2D> GetAudioIcon();
+    static RH<Texture2D> GetSunIcon();
+    static RH<Texture2D> GetLightBulbIcon();
 
     static RH<Texture2D> GetIconTexture(const String &filename, const Path &dir);
 

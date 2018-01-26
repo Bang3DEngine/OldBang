@@ -9,9 +9,10 @@
 #include "Bang/Gizmos.h"
 #include "Bang/Window.h"
 #include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
-#include "Bang/Matrix4.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
@@ -242,8 +243,7 @@ SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
 
 Camera *Camera::GetActive()
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    return scene ? scene->GetCamera() : nullptr;
+    return GEngine::GetActiveCamera();
 }
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 

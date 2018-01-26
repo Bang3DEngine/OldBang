@@ -3,9 +3,12 @@
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
 #include "Bang/AABox.h"
+#include "Bang/Gizmos.h"
 #include "Bang/Sphere.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
+#include "Bang/IconManager.h"
 #include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialFactory.h"
@@ -42,6 +45,20 @@ Rect PointLight::GetRenderRect(Camera *cam) const
 
 void PointLight::SetRange(float range) { m_range = range; }
 float PointLight::GetRange() const { return m_range; }
+
+void PointLight::OnRender(RenderPass rp)
+{
+    Component::OnRender(rp);
+    if (rp == RenderPass::Overlay)
+    {
+        Gizmos::Reset();
+        Gizmos::SetColor(GetColor());
+        Gizmos::SetSelectable(GetGameObject());
+        Gizmos::SetPosition( GetGameObject()->GetTransform()->GetPosition() );
+        Gizmos::SetScale( Vector3(0.1f) );
+        Gizmos::RenderIcon( IconManager::GetLightBulbIcon().Get(), true );
+    }
+}
 
 void PointLight::CloneInto(ICloneable *clone) const
 {

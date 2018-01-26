@@ -10,6 +10,9 @@ class DirectionalLight : public Light
     COMPONENT(DirectionalLight)
 
 public:
+    // Component
+    void OnRender(RenderPass rp) override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
