@@ -34,9 +34,17 @@ public:
     Path GetResourceFilepath() const;
     virtual void Import(const Path &resourceFilepath) = 0;
 
+    virtual GUID::GUIDType GetNextInsideFileGUID() const;
+
 protected:
     Resource() = default;
     virtual ~Resource() = default;
+
+    Resource* GetInsideFileResource(const GUID &insideFileGUID) const;
+    virtual Resource* GetInsideFileResource(GUID::GUIDType insideFileGUID) const;
+
+    virtual void ImportXML(const XMLNode &xmlInfo);
+    virtual void ExportXML(XMLNode *xmlInfo) const;
 };
 
 NAMESPACE_BANG_END

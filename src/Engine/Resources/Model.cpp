@@ -5,6 +5,7 @@
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
+#include "Bang/GUIDManager.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -100,6 +101,32 @@ const Array<String> &Model::GetMaterialsNames() const
     return m_materialsNames;
 }
 
+GUID::GUIDType Model::GetNextInsideFileGUID() const
+{
+    return m_meshes.Size() + m_materials.Size();
+}
+
+Resource *Model::GetInsideFileResource(GUID::GUIDType insideFileGUID) const
+{
+    for (const RH<Mesh>& mesh : GetMeshes())
+    {
+        if (mesh.Get()->GetGUID().GetInsideFileGUID() == insideFileGUID)
+        {
+            return mesh.Get();
+        }
+    }
+
+    for (const RH<Material>& material : GetMaterials())
+    {
+        if (material.Get()->GetGUID().GetInsideFileGUID() == insideFileGUID)
+        {
+            return material.Get();
+        }
+    }
+
+    return nullptr;
+}
+
 void Model::CloneInto(ICloneable *clone) const
 {
     Asset::CloneInto(clone);
@@ -117,8 +144,11 @@ void Model::Import(const Path &modelFilepath)
     Array< String > materialsNames;
 
     ModelIO::ReadModel(modelFilepath,
-                       &meshes, &materials,
-                       &meshesNames, &materialsNames);
+                       GetGUID(),
+                       &meshes,
+                       &materials,
+                       &meshesNames,
+                       &materialsNames);
 
     for (uint i = 0; i < meshes.Size(); ++i)
     {

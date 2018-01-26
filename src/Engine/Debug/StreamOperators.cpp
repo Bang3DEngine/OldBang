@@ -49,4 +49,10 @@ std::istream &operator>>(std::istream &is, Path &p)
     return is;
 }
 
+std::istream &operator>>(std::istream &is, GUID &guid)
+{
+    guid.operator>>(is);
+    return is;
+}
+
 NAMESPACE_BANG_END

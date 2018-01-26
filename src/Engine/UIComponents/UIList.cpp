@@ -398,6 +398,7 @@ UIList* UIList::CreateInto(GameObject *go, bool withScrollPanel)
     (void) dirLayout;
 
     UIFocusable *focusable = container->AddComponent<UIFocusable>();
+    (void)(focusable);
 
     if (withScrollPanel)
     {

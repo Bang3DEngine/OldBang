@@ -456,4 +456,6 @@ void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
     }
 
     fclose(filePtr);
+
+    (void)(freadn);
 }

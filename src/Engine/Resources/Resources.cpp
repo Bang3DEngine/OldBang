@@ -4,9 +4,11 @@
 #include "Bang/Asset.h"
 #include "Bang/Debug.h"
 #include "Bang/Paths.h"
+#include "Bang/Model.h"
 #include "Bang/Object.h"
 #include "Bang/Random.h"
 #include "Bang/Window.h"
+#include "Bang/Extensions.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/MaterialFactory.h"
@@ -26,6 +28,18 @@ Resources::~Resources()
     ASSERT_MSG(m_meshFactory == nullptr,          "Call Destroy()");
     ASSERT_MSG(m_materialFactory == nullptr,      "Call Destroy()");
     ASSERT_MSG(m_shaderProgramFactory == nullptr, "Call Destroy()");
+}
+
+RH<Resource> Resources::LoadFromExtension(const Path &filepath)
+{
+    RH<Resource> resRH;
+
+    if (filepath.HasExtension(Extensions::GetModelExtensions()))
+    {
+        resRH.Set( Resources::Load<Model>(filepath).Get() );
+    }
+
+    return resRH;
 }
 
 Array<IResource*> Resources::GetAllResources()
@@ -162,13 +176,21 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
                                  .Get(guid).usageCount);
         ASSERT(*resourcesUsage >= 1);
         --(*resourcesUsage);
+/*
+        bool stillBeingUsed = false;
+        for (auto &pair : rs->m_GUIDCache)
+        { if (pair.second.ContainsKey(guid)) { stillBeingUsed = true; break; } }
 
-        Path resourcePath = Resources::GetResourcePath(resource);
-        if (*resourcesUsage == 0 &&
-            !Resources::IsPermanent(resource) &&
-            !Resources::IsPermanent(resourcePath) )
+        if (!stillBeingUsed)
+            */
+        if (*resourcesUsage == 0)
         {
-            Resources::Remove(resTypeId, guid);
+            const Path resourcePath = Resources::GetResourcePath(resource);
+            if (!Resources::IsPermanent(resource) &&
+                !Resources::IsPermanent(resourcePath) )
+            {
+                Resources::Remove(resTypeId, guid);
+            }
         }
     }
 }

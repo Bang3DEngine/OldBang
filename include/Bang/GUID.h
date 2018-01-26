@@ -12,10 +12,10 @@ NAMESPACE_BANG_BEGIN
 
 class GUID : public IToString
 {
-private:
+public:
     using GUIDType = uint64_t;
-    static constexpr GUIDType EmptyGUID = 0;
 
+private: static constexpr GUIDType EmptyGUID = 0;
 public:
     GUID() {}
 
@@ -27,46 +27,26 @@ public:
     // IToString
     String ToString() const override;
 
-    friend  std::istream &operator>>(std::istream &is, GUID &guid);
-    friend bool operator==(const GUID &lhs, const GUID &rhs);
-    friend bool operator!=(const GUID &lhs, const GUID &rhs);
-    friend bool operator<(const GUID &lhs, const GUID &rhs);
+    const GUIDType& GetTimeGUID() const;
+    const GUIDType& GetRandGUID() const;
+    const GUIDType& GetInsideFileGUID() const;
 
-    const GUIDType& GetTime() const;
-    const GUIDType& GetRand() const;
+    GUID WithoutInsideFileGUID() const;
+
+    std::istream &operator>>(std::istream &is);
+    bool operator==(const GUID &rhs) const;
+    bool operator!=(const GUID &rhs) const;
+    bool operator<(const GUID &rhs) const;
 
 private:
-    GUIDType m_timeGUID = GUID::EmptyGUID;
-    GUIDType m_randGUID = GUID::EmptyGUID;
+    GUIDType m_timeGUID       = GUID::EmptyGUID;
+    GUIDType m_randGUID       = GUID::EmptyGUID;
+    GUIDType m_insideFileGUID = GUID::EmptyGUID;
+
+    void SetInsideFileGUID(const GUIDType &guid);
+
+    friend class GUIDManager;
 };
-
-inline std::istream &operator>>(std::istream &is, GUID &guid)
-{
-    is >> guid.m_timeGUID;
-    { char c; is >> c; }
-    is >> guid.m_randGUID;
-    return is;
-}
-
-inline bool operator==(const GUID &lhs, const GUID &rhs)
-{
-    return lhs.m_timeGUID == rhs.m_timeGUID &&
-           lhs.m_randGUID == rhs.m_randGUID;
-}
-inline bool operator!=(const GUID &lhs, const GUID &rhs)
-{
-    return !(lhs == rhs);
-}
-inline bool operator<(const GUID &lhs, const GUID &rhs)
-{
-    if (lhs.m_timeGUID < rhs.m_timeGUID) { return true; }
-    else if (lhs.m_timeGUID > rhs.m_timeGUID) { return false; }
-    else
-    {
-        if (lhs.m_randGUID < rhs.m_randGUID) { return true; }
-        return false;
-    }
-}
 
 NAMESPACE_BANG_END
 

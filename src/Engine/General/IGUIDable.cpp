@@ -22,3 +22,9 @@ const GUID& IGUIDable::GetGUID() const
 {
     return m_GUID;
 }
+
+GUID& IGUIDable::GetGUID()
+{
+    return m_GUID;
+}
+

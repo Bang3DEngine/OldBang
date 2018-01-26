@@ -42,6 +42,7 @@ int ModelIO::GetModelNumTriangles(const Path &modelFilepath)
 }
 
 bool ModelIO::ReadModel(const Path& modelFilepath,
+                        const GUID &modelGUID,
                         Array< RH<Mesh> > *meshes,
                         Array< RH<Material> > *materials,
                         Array<String> *meshesNames,
@@ -53,29 +54,39 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
     bool ok = false;
     if (scene)
     {
+        int innerResourceGUID = 1;
+
         Array< String > unorderedMaterialNames;
         Array< RH<Material> > unorderedMaterials;
         for (int i = 0; i < SCAST<int>(scene->mNumMaterials); ++i)
         {
             String materialName;
             RH<Material> materialRH;
-            ModelIO::ReadMaterial(modelFilepath.GetDirectory(),
-                                  scene->mMaterials[i],
+            ModelIO::ReadMaterial(scene->mMaterials[i],
+                                  modelFilepath.GetDirectory(),
+                                  modelGUID,
+                                  innerResourceGUID,
                                   &materialRH,
                                   &materialName);
 
             unorderedMaterialNames.PushBack(materialName);
             unorderedMaterials.PushBack(materialRH);
+
+            ++innerResourceGUID;
         }
 
         for (int i = 0; i < SCAST<int>(scene->mNumMeshes); ++i)
         {
             RH<Mesh> meshRH;
             String meshName;
-            ModelIO::ReadMesh(scene->mMeshes[i], &meshRH, &meshName);
+            ModelIO::ReadMesh(scene->mMeshes[i],
+                              modelGUID,
+                              innerResourceGUID,
+                              &meshRH,
+                              &meshName);
 
             int matIndex = scene->mMeshes[i]->mMaterialIndex;
-            const RH<Material> &mat = unorderedMaterials[matIndex];
+            RH<Material> mat = unorderedMaterials[matIndex];
             const String &materialName = unorderedMaterialNames[matIndex];
 
             meshes->PushBack(meshRH);
@@ -83,6 +94,8 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
 
             materials->PushBack(mat);
             materialsNames->PushBack(materialName);
+
+            ++innerResourceGUID;
         }
         ok = true;
     }
@@ -110,12 +123,15 @@ bool ModelIO::ReadFirstFoundMeshRaw(const Path &modelFilepath,
     return ok;
 }
 
-void ModelIO::ReadMaterial(const Path& modelDirectory,
-                           aiMaterial *aMaterial,
+void ModelIO::ReadMaterial(aiMaterial *aMaterial,
+                           const Path& modelDirectory,
+                           const GUID &parentModelGUID,
+                           const GUID::GUIDType &innerMaterialGUID,
                            RH<Material> *outMaterial,
                            String *outMaterialName)
 {
-    *outMaterial = Resources::Create<Material>();
+    *outMaterial =  Resources::CreateInnerResource<Material>(parentModelGUID,
+                                                             innerMaterialGUID);
 
     aiString aMatName;
     aiGetMaterialString(aMaterial, AI_MATKEY_NAME, &aMatName);
@@ -194,10 +210,12 @@ void ModelIO::ReadMeshRaw(aiMesh *aMesh,
 }
 
 void ModelIO::ReadMesh(aiMesh *aMesh,
+                       const GUID &parentModelGUID,
+                       const GUID::GUIDType &innerMeshGUID,
                        RH<Mesh> *outMesh,
                        String *outMeshName)
 {
-    *outMesh = Resources::Create<Mesh>();
+    *outMesh =  Resources::CreateInnerResource<Mesh>(parentModelGUID, innerMeshGUID);
 
     Array<Vector3> vertexPositions;
     Array<Vector3> vertexNormals;

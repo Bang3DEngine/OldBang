@@ -13,6 +13,10 @@ public:
     static void RemoveGUID(const GUID& guid);
     static bool IsBeingUsed(const GUID& guid);
 
+    static void CreateInsideFileGUID(const GUID &baseGUID,
+                                  GUID::GUIDType insideFileGUID,
+                                  GUID *outGUID);
+
 private:
     GUIDManager();
 

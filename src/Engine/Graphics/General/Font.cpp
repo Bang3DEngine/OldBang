@@ -28,9 +28,8 @@ void Font::Import(const Path &ttfFilepath)
     Free();
 
     m_ttfFilepath = ttfFilepath;
-    m_referenceFont =
-                TTF_OpenFont(m_ttfFilepath.GetAbsolute().ToCString(), 128);
-    if (!m_referenceFont)
+    m_referenceFont = TTF_OpenFont(m_ttfFilepath.GetAbsolute().ToCString(), 128);
+    if (!GetReferenceFont())
     {
         Debug_Error("Could not load font '" << ttfFilepath << "'");
         return;
@@ -143,7 +142,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
 
         m_cachedAtlas[fontSize] = atlasTex;
         m_cachedAtlasChars[fontSize] = chars;
-        for (int i = 0; i < chars.Size(); ++i)
+        for (uint i = 0; i < chars.Size() && i < charRects.Size(); ++i)
         {
             m_cachedAtlasCharRects[fontSize].Add(chars[i], charRects[i]);
         }
@@ -159,9 +158,10 @@ bool Font::HasDistanceField() const { return m_hasDistanceField; }
 Font::GlyphMetrics Font::GetCharMetrics(int fontSize, char c) const
 {
     Font::GlyphMetrics cm;
+    if (!GetReferenceFont()) { return cm; }
 
     int minx, maxx, miny, maxy, advance;
-    TTF_GlyphMetrics(m_referenceFont, c, &minx, &maxx, &miny, &maxy, &advance);
+    TTF_GlyphMetrics(GetReferenceFont(), c, &minx, &maxx, &miny, &maxy, &advance);
 
     cm.size    = ScaleMagnitude(fontSize, Vector2((maxx - minx),
                                                   (maxy - miny)) );
@@ -211,7 +211,7 @@ Vector2 Font::GetCharMinUv(int fontSize, char c) const
 
 bool Font::HasCharacter(char c) const
 {
-    return TTF_GlyphIsProvided(GetReferenceFont(), c);
+    return GetReferenceFont() && TTF_GlyphIsProvided(GetReferenceFont(), c);
 }
 
 Texture2D* Font::GetDistFieldTexture() const
@@ -221,10 +221,10 @@ Texture2D* Font::GetDistFieldTexture() const
 
 float Font::GetKerning(int fontSize, char leftChar, char rightChar) const
 {
-    if (!TTF_GetFontKerning(GetReferenceFont()))
+    if (!GetReferenceFont() || !TTF_GetFontKerning(GetReferenceFont()))
     { return -1; }
 
-#if (SDL_TTF_MAJOR_VERSION >= 2 && \
+    #if (SDL_TTF_MAJOR_VERSION >= 2 && \
          SDL_TTF_MINOR_VERSION >= 0 && \
          SDL_TTF_PATCHLEVEL >= 14)
         return ScaleMagnitude(
@@ -237,33 +237,38 @@ float Font::GetKerning(int fontSize, char leftChar, char rightChar) const
 
 float Font::GetLineSkip(int fontSize) const
 {
+    if (!GetReferenceFont()) { return 0.0f; }
     return ScaleMagnitude(fontSize, float( TTF_FontLineSkip(GetReferenceFont()) ) );
 }
 
 float Font::GetFontAscent(int fontSize) const
 {
+    if (!GetReferenceFont()) { return 0.0f; }
     return ScaleMagnitude(fontSize, float( TTF_FontAscent(GetReferenceFont()) ) );
 }
 
 float Font::GetFontDescent(int fontSize) const
 {
+    if (!GetReferenceFont()) { return 0.0f; }
     return ScaleMagnitude(fontSize, float( TTF_FontDescent(GetReferenceFont()) ) );
 }
 
 float Font::GetFontHeight(int fontSize) const
 {
+    if (!GetReferenceFont()) { return 0.0f; }
     return ScaleMagnitude(fontSize,  float( TTF_FontHeight(GetReferenceFont()) ) );
 }
 
 Vector2i Font::GetAtlasCharRectSize(int fontSize, char c) const
 {
+    if (!GetReferenceFont()) { return Vector2i::Zero; }
     GetFontAtlas(fontSize); // Load if not loaded yet
     return m_cachedAtlasCharRects[fontSize][c].GetSize();
 }
 
 bool Font::HasFontSizeLoaded(int fontSize) const
 {
-    return m_cachedAtlas.ContainsKey(fontSize);
+    return GetReferenceFont() && m_cachedAtlas.ContainsKey(fontSize);
 }
 
 Vector2i Font::GetDistFieldSpreadOffsetPx(char c) const

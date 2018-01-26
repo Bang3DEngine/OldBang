@@ -27,6 +27,9 @@ public:
     const Array<String>& GetMeshesNames() const;
     const Array<String>& GetMaterialsNames() const;
 
+    virtual GUID::GUIDType GetNextInsideFileGUID() const override;
+    virtual Resource* GetInsideFileResource(GUID::GUIDType insideFileGUID) const override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

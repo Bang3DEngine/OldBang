@@ -12,6 +12,7 @@ public:
 	virtual ~IGUIDable();
 
     const GUID& GetGUID() const;
+    GUID& GetGUID();
 
 protected:
     void SetGUID(const GUID &guid);

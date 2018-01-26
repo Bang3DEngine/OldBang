@@ -12,10 +12,13 @@ RH<IResourceClass> Resources::Load(const Path &filepath)
     if (!res)
     {
         res = Resources::_Create<IResourceClass>();
-        res->Import(filepath);
 
         Path importFilepath = ImportFilesManager::GetImportFilepath(filepath);
+
+        // Import XML before to get resource GUID at least
         res->ImportXMLFromFile(importFilepath);
+        res->Import(filepath); // Import now from filepath itself
+        res->ImportXMLFromFile(importFilepath); // Import XML after again
     }
 
     return RH<IResourceClass>(res);
@@ -32,23 +35,55 @@ RH<IResourceClass> Resources::Load(const GUID &guid)
 {
     if (!guid.IsEmpty())
     {
-        if (!Resources::Contains<IResourceClass>(guid))
+        const GUID::GUIDType insideFileGUID = guid.GetInsideFileGUID();
+        if (insideFileGUID == 0) // Normal resource (file attached to it)
         {
-            Path filepath = ImportFilesManager::GetFilepath(guid);
-            if (filepath.IsFile())
+            if (!Resources::Contains<IResourceClass>(guid))
             {
-                return Resources::Load<IResourceClass>(filepath);
+                // If we don't have it loaded, load/create a new one
+                Path filepath = ImportFilesManager::GetFilepath(guid);
+                if (filepath.IsFile())
+                {
+                    return Resources::Load<IResourceClass>(filepath);
+                }
+                else
+                {
+                    RH<IResourceClass> rh = Resources::Create<IResourceClass>(guid);
+                    return rh;
+                }
             }
             else
             {
-                RH<IResourceClass> rh = Resources::Create<IResourceClass>(guid);
-                return rh;
+                // Load it from cache
+                return RH<IResourceClass>(
+                            Resources::GetCached<IResourceClass>(guid) );
             }
         }
-        else
+        else  // Inner resource (resource embedded into another resource)
         {
-            return RH<IResourceClass>(
-                        Resources::GetCached<IResourceClass>(guid) );
+            // It is a resource inside another resource. Find parent path,
+            // load it, and retrieve from it the inner resource!
+            GUID parentResourceGUID = guid.WithoutInsideFileGUID();
+            Path parentFilepath = ImportFilesManager::GetFilepath(parentResourceGUID);
+            if (parentFilepath.IsFile())
+            {
+                // Load the parent resource guessing the type from the extension
+                RH<Resource> parentRes =
+                                Resources::LoadFromExtension(parentFilepath);
+                if (parentRes)
+                {
+                    // Call virtual function that finds inner resource, create
+                    // the handler, and return it 3
+                    Resource *innerRes =
+                        parentRes.Get()->GetInsideFileResource(insideFileGUID);
+                    RH<IResourceClass> innerResRH;
+                    if (innerRes)
+                    {
+                        innerResRH.Set( DCAST<IResourceClass*>(innerRes) );
+                    }
+                    return innerResRH;
+                }
+            }
         }
     }
 
@@ -65,6 +100,19 @@ RH<IResourceClass> Resources::Create(const GUID &guid, const Args&... args)
 {
     return RH<IResourceClass>( Resources::_Create<IResourceClass>(guid, args...) );
 }
+
+template<class IResourceClass, class ...Args>
+RH<IResourceClass> Resources::CreateInnerResource(const GUID &baseGUID,
+                                                  const GUID::GUIDType insideFileGUID,
+                                                  const Args&... args)
+{
+    GUID resourceInsideFileGUID;
+    GUIDManager::CreateInsideFileGUID(baseGUID, insideFileGUID,
+                                      &resourceInsideFileGUID);
+    return Resources::Create<IResourceClass, Args...>(resourceInsideFileGUID,
+                                                      args...);
+}
+
 template<class IResourceClass, class ...Args>
 IResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
 {

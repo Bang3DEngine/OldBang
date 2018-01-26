@@ -36,10 +36,16 @@ public:
     template <class IResourceClass>
     static RH<IResourceClass> Load(const GUID &guid);
 
+    static RH<Resource> LoadFromExtension(const Path &filepath);
+
     template<class IResourceClass, class ...Args>
     static RH<IResourceClass> Create(const Args&... args);
     template<class IResourceClass, class ...Args>
     static RH<IResourceClass> Create(const GUID &guid, const Args&... args);
+    template<class IResourceClass, class ...Args>
+    static RH<IResourceClass> CreateInnerResource(const GUID &baseGUID,
+                                                  const GUID::GUIDType insideFileGUID,
+                                                  const Args&... args);
 
     template<class IResourceClass>
     static RH<IResourceClass> Clone(const RH<IResourceClass> &src);
@@ -121,6 +127,7 @@ private:
     #endif
 
     friend class Window;
+    friend class GUIDManager;
     friend class MeshFactory;
     friend class IResourceHandle;
     friend class MaterialFactory;
