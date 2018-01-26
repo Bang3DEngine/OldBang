@@ -1,5 +1,5 @@
 uniform mat4 B_Model;
-uniform mat3 B_Normal;
+uniform mat4 B_Normal;
 uniform mat4 B_View;
 uniform mat4 B_Projection;
 uniform mat4 B_PVM;

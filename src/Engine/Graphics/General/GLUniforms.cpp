@@ -68,11 +68,6 @@ void GLUniforms::SetModelMatrix(const Matrix4 &model)
     if (model != matrices->model)
     {
         matrices->model = model;
-        Matrix3 normalMatrix = Matrix3(model.c0.xyz(),
-                                       model.c1.xyz(),
-                                       model.c2.xyz()
-                                   ).Transposed().Inversed();
-        matrices->normal = normalMatrix;
         UpdatePVMMatrix();
     }
 
@@ -105,10 +100,18 @@ void GLUniforms::UpdatePVMMatrix()
 
     Matrix4 pvmMatrix;
     const Matrix4 &model = matrices->model;
+    Matrix4 viewModel = matrices->view * matrices->model;
+
+    Matrix4 normalMatrix = Matrix4(viewModel.c0,
+                                   viewModel.c1,
+                                   viewModel.c2,
+                                   viewModel.c3).Inversed().Transposed();
+    matrices->normal = normalMatrix;
+
     switch (gu->GetViewProjMode())
     {
         case GL::ViewProjMode::UseBoth:
-            pvmMatrix = matrices->proj * matrices->view * model;
+            pvmMatrix = matrices->proj * viewModel;
         break;
 
         case GL::ViewProjMode::OnlyFixAspectRatio:

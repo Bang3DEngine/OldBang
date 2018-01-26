@@ -36,7 +36,6 @@ GameObject *Prefab::Instantiate() const
     {
         XMLNode xmlInfo = XMLNodeReader::FromString(m_gameObjectXMLInfoContent);
         go->ImportXML(xmlInfo);
-        go->SetEnabled(true);
     }
 
     return go;

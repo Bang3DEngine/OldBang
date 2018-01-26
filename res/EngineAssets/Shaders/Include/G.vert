@@ -13,7 +13,7 @@ out vec2 B_FIn_Uv;
 void main()
 {
     B_FIn_Position = ( B_Model * vec4(B_VIn_Position, 1) ).xyz;
-    B_FIn_Normal   = normalize(B_Normal * B_VIn_Normal);
+    B_FIn_Normal   = normalize( (B_Normal * vec4(B_VIn_Normal, 0)).xyz );
     B_FIn_Uv       = vec2(B_VIn_Uv.x, B_VIn_Uv.y) * B_UvMultiply + B_UvOffset;
     gl_Position    = B_PVM * vec4(B_VIn_Position, 1);
 }

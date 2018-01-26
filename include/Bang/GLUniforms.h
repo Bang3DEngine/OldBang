@@ -16,7 +16,7 @@ public:
     struct Matrices
     {
         Matrix4 model;
-        Matrix3 normal;
+        Matrix4 normal;
         Matrix4 view;
         Matrix4 viewInv;
         Matrix4 proj;
