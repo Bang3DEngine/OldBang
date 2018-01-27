@@ -1,10 +1,12 @@
 #include "Bang/BehaviourManager.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Scene.h"
 #include "Bang/String.h"
 #include "Bang/Library.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Application.h"
+#include "Bang/SceneManager.h"
 
 USING_NAMESPACE_BANG
 
@@ -14,6 +16,7 @@ BehaviourManager::BehaviourManager()
 
 BehaviourManager::~BehaviourManager()
 {
+    if (m_behavioursLibrary) { delete m_behavioursLibrary; }
 }
 
 Behaviour *BehaviourManager::CreateBehaviourInstance(const String &behaviourName,
@@ -68,4 +71,32 @@ bool BehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
 
     Debug_Error(behavioursLib->GetErrorString());
     return false;
+}
+
+bool BehaviourManager::IsInstanceCreationAllowed() const
+{
+    return true;
+}
+
+Library *BehaviourManager::GetBehavioursLibrary() const
+{
+    return m_behavioursLibrary;
+}
+
+BehaviourManager *BehaviourManager::GetActive()
+{
+    return SceneManager::GetActiveScene()->GetBehaviourManager();
+}
+
+void BehaviourManager::SetBehavioursLibrary(const Path &libPath)
+{
+    Library *behavioursLib = new Library(libPath);
+    behavioursLib->Load();
+    SetBehavioursLibrary(behavioursLib);
+}
+
+void BehaviourManager::SetBehavioursLibrary(Library *behavioursLibrary)
+{
+    if (GetBehavioursLibrary()) { delete GetBehavioursLibrary(); }
+    m_behavioursLibrary = behavioursLibrary;
 }

@@ -1,10 +1,12 @@
 #include "Bang/ObjectManager.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Scene.h"
 #include "Bang/Object.h"
 #include "Bang/Window.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
 #include "Bang/IEventEmitter.h"
 
 bool ObjectManager::AssertCreatedFromObjectManager = false;
@@ -12,7 +14,7 @@ bool ObjectManager::AssertDestroyedFromObjectManager = false;
 
 ObjectManager::~ObjectManager()
 {
-    _DestroyObjects();
+    DestroyObjects();
 }
 
 void ObjectManager::Destroy(GameObject *gameObject)
@@ -22,7 +24,7 @@ void ObjectManager::Destroy(GameObject *gameObject)
 
 void ObjectManager::Destroy(Object *object)
 {
-    ObjectManager *om = ObjectManager::GetInstance();
+    ObjectManager *om = ObjectManager::GetActive();
     if (om)
     {
         ObjectId objectToBeDestroyedId = object->GetObjectId();
@@ -43,41 +45,40 @@ void ObjectManager::Destroy(Object *object)
 
 void ObjectManager::RegisterCreateListener(ICreateListener *listener)
 {
-    ObjectManager::GetInstance()->
+    ObjectManager::GetActive()->
             EventEmitter<ICreateListener>::RegisterListener(listener);
 }
 
 void ObjectManager::UnRegisterCreateListener(ICreateListener *listener)
 {
-    ObjectManager::GetInstance()->
+    ObjectManager::GetActive()->
             EventEmitter<ICreateListener>::UnRegisterListener(listener);
 }
 
 void ObjectManager::RegisterDestroyListener(IDestroyListener *listener)
 {
-    ObjectManager::GetInstance()->
+    ObjectManager::GetActive()->
             EventEmitter<IDestroyListener>::RegisterListener(listener);
 }
 
 void ObjectManager::UnRegisterDestroyListener(IDestroyListener *listener)
 {
-    ObjectManager::GetInstance()->
+    ObjectManager::GetActive()->
             EventEmitter<IDestroyListener>::RegisterListener(listener);
 }
 
 void ObjectManager::StartObjects()
 {
-    ObjectManager *om = ObjectManager::GetInstance();
-    while (!om->m_objectsToBeStartedQueue.empty())
+    while (!m_objectsToBeStartedQueue.empty())
     {
-        Object *objectToBeStarted = om->m_objectsToBeStartedQueue.front();
-        ObjectId objToBeStartedId = om->m_objectsIdsToBeStartedQueue.front();
-        om->m_objectsToBeStartedQueue.pop();
-        om->m_objectsIdsToBeStartedQueue.pop();
+        Object *objectToBeStarted = m_objectsToBeStartedQueue.front();
+        ObjectId objToBeStartedId = m_objectsIdsToBeStartedQueue.front();
+        m_objectsToBeStartedQueue.pop();
+        m_objectsIdsToBeStartedQueue.pop();
 
         ASSERT(objToBeStartedId.m_id < ObjectId::NextObjectId);
 
-        if (!om->m_objectsToBeDestroyedSet.Contains(objToBeStartedId))
+        if (!m_objectsToBeDestroyedSet.Contains(objToBeStartedId))
         {
             ASSERT(!objectToBeStarted->IsStarted());
             ASSERT(!objectToBeStarted->IsWaitingToBeDestroyed());
@@ -87,12 +88,6 @@ void ObjectManager::StartObjects()
 }
 
 void ObjectManager::DestroyObjects()
-{
-    ObjectManager *om = ObjectManager::GetInstance();
-    om->_DestroyObjects();
-}
-
-void ObjectManager::_DestroyObjects()
 {
     while (!m_objectsToBeDestroyedQueue.empty())
     {
@@ -126,8 +121,10 @@ void ObjectManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
     m_objectsDestroyedWhileDestroying.Add(destroyedObject->GetObjectId());
 }
 
-ObjectManager *ObjectManager::GetInstance()
+ObjectManager *ObjectManager::GetActive()
 {
-    return Window::GetActive()->GetObjectManager();
+    Scene *scene = SceneManager::GetActiveScene();
+    return scene ? scene->GetLocalObjectManager() :
+                   Window::GetActive()->GetGlobalObjectManager();
 }
 

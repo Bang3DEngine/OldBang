@@ -7,7 +7,7 @@ USING_NAMESPACE_BANG
 template <class ObjectClass, class... Args>
 ObjectClass* ObjectManager::Create(Args... args)
 {
-    ObjectManager *om = ObjectManager::GetInstance();
+    ObjectManager *om = ObjectManager::GetActive();
 
     #ifdef DEBUG
     ObjectManager::AssertCreatedFromObjectManager = true;

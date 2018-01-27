@@ -18,13 +18,22 @@ USING_NAMESPACE_BANG
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
+    m_localObjectManager = new ObjectManager();
     p_debugRenderer = GameObject::Create<DebugRenderer>();
 }
 
 Scene::~Scene()
 {
     delete m_gizmos;
+    delete m_behaviourManager;
+    delete m_localObjectManager;
     GameObject::Destroy(p_debugRenderer);
+}
+
+void Scene::Start()
+{
+    m_behaviourManager = CreateBehaviourManager();
+    GameObject::Start();
 }
 
 void Scene::Update()
@@ -47,6 +56,11 @@ void Scene::OnResize(int newWidth, int newHeight)
 
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 DebugRenderer *Scene::GetDebugRenderer() const { return p_debugRenderer; }
+
+BehaviourManager *Scene::CreateBehaviourManager() const
+{
+    return new BehaviourManager();
+}
 
 void Scene::SetCamera(Camera *cam)
 {
@@ -72,6 +86,11 @@ void Scene::InvalidateCanvas()
     for (UICanvas *canvas : canvases) { canvas->Invalidate(); }
 }
 
+ObjectManager *Scene::GetLocalObjectManager() const
+{
+    return m_localObjectManager;
+}
+
 void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (object == GetCamera())
@@ -80,8 +99,8 @@ void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)
     }
 }
 
-Scene *Scene::GetActiveScene() { return SceneManager::GetActiveScene(); }
 Camera *Scene::GetCamera() const { return p_camera; }
+BehaviourManager *Scene::GetBehaviourManager() const { return m_behaviourManager; }
 
 void Scene::ImportXML(const XMLNode &xmlInfo)
 {

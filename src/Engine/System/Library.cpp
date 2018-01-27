@@ -4,9 +4,13 @@
 
 USING_NAMESPACE_BANG
 
+Library::Library()
+{
+}
+
 Library::Library(const Path &libPath)
 {
-    m_libPath = libPath;
+    SetLibraryPath(libPath);
 }
 
 Library::~Library()
@@ -29,6 +33,11 @@ bool Library::UnLoad()
     if ( IsLoaded() ) { dlclose(m_libHandle); }
     FetchError();
     return !TheresError();
+}
+
+void Library::SetLibraryPath(const Path &libPath)
+{
+    m_libPath = libPath;
 }
 
 bool Library::IsLoaded() const

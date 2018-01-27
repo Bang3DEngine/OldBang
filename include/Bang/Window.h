@@ -81,7 +81,7 @@ public:
     GEngine        *GetGEngine() const;
     Input          *GetInput() const;
     SceneManager   *GetSceneManager() const;
-    ObjectManager  *GetObjectManager() const;
+    ObjectManager  *GetGlobalObjectManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -106,7 +106,7 @@ private:
     GEngine        *m_gEngine       = nullptr;
     Input          *m_input         = nullptr;
     SceneManager   *m_sceneManager  = nullptr;
-    ObjectManager  *m_objectManager = nullptr;
+    ObjectManager  *m_globalObjectManager = nullptr;
 
     int m_titleBarHeight = 0;
     Vector2i m_minSize = Vector2i::Zero;

@@ -33,6 +33,9 @@ private:
     BehaviourContainer();
     virtual ~BehaviourContainer();
 
+    // Component
+    void OnStart() override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

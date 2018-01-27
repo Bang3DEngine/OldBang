@@ -35,15 +35,12 @@ void SceneManager::UpdateScene(Scene *scene)
     if (!scene) { return; }
 
     SceneManager::TryToLoadQueuedScene();
-    ObjectManager::StartObjects();
 
-    if (scene)
-    {
-        scene->PreUpdate();
-        scene->Update();
-        scene->PostUpdate();
-        ObjectManager::DestroyObjects();
-    }
+    scene->GetLocalObjectManager()->StartObjects();
+    scene->PreUpdate();
+    scene->Update();
+    scene->PostUpdate();
+    scene->GetLocalObjectManager()->DestroyObjects();
 }
 
 void SceneManager::_Update()

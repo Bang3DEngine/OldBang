@@ -9,10 +9,25 @@ USING_NAMESPACE_BANG
 
 BehaviourContainer::BehaviourContainer()
 {
+    Debug_Log("BehaviourContainer " << this << " created from " << SceneManager::GetActiveScene());
 }
 
 BehaviourContainer::~BehaviourContainer()
 {
+}
+
+void BehaviourContainer::OnStart()
+{
+    Component::OnStart();
+
+    Debug_Log("BehaviourContainer OnStart from "  << this <<
+              " in " << SceneManager::GetActiveScene());
+    if (BehaviourManager::GetActive() &&
+        BehaviourManager::GetActive()->IsInstanceCreationAllowed())
+    {
+        SubstituteByBehaviourInstance(
+                        BehaviourManager::GetActive()->GetBehavioursLibrary());
+    }
 }
 
 void BehaviourContainer::SetSourceFilepath(const Path &sourceFilepath)

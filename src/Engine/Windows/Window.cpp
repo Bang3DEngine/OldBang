@@ -35,7 +35,7 @@ Window::~Window()
     delete m_gEngine;       m_gEngine       = nullptr;
 
     m_resources->Destroy();
-    delete m_objectManager; m_objectManager = nullptr;
+    delete m_globalObjectManager; m_globalObjectManager = nullptr;
     delete m_resources;     m_resources     = nullptr;
 
     SDL_GL_DeleteContext(GetGLContext());
@@ -77,7 +77,7 @@ void Window::Create(uint flags)
     m_resources           = new Resources();
     m_sceneManager        = CreateSceneManager();
     m_gEngine             = new GEngine();
-    m_objectManager       = new ObjectManager();
+    m_globalObjectManager = new ObjectManager();
 
     m_gEngine->Init();
 
@@ -120,7 +120,9 @@ void Window::Clear()
 
 void Window::Update()
 {
+    GetGlobalObjectManager()->StartObjects();
     GetSceneManager()->Update();
+    GetGlobalObjectManager()->DestroyObjects();
 }
 
 void Window::Render()
@@ -383,9 +385,9 @@ SceneManager *Window::GetSceneManager() const
     return m_sceneManager;
 }
 
-ObjectManager *Window::GetObjectManager() const
+ObjectManager *Window::GetGlobalObjectManager() const
 {
-    return m_objectManager;
+    return m_globalObjectManager;
 }
 
 SDL_Window *Window::GetSDLWindow() const

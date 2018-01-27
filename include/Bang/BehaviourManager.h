@@ -19,6 +19,18 @@ public:
     static bool DeleteBehaviourInstance(const String &behaviourName,
                                         Behaviour *behaviour,
                                         Library *behavioursLibrary);
+
+    void SetBehavioursLibrary(const Path &libPath);
+    void SetBehavioursLibrary(Library *behavioursLibrary);
+
+    virtual bool IsInstanceCreationAllowed() const;
+    Library* GetBehavioursLibrary() const;
+
+    static BehaviourManager* GetActive();
+
+private:
+    Library *m_behavioursLibrary = nullptr;
+
 };
 
 NAMESPACE_BANG_END

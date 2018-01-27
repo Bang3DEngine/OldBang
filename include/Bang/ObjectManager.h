@@ -20,6 +20,9 @@ class ObjectManager : public IDestroyListener,
                       public EventEmitter<IDestroyListener>
 {
 public:
+    void StartObjects();
+    void DestroyObjects();
+
     static void RegisterCreateListener(ICreateListener *listener);
     static void UnRegisterCreateListener(ICreateListener *listener);
 
@@ -38,11 +41,6 @@ private:
     ObjectManager() = default;
     virtual ~ObjectManager();
 
-    static void StartObjects();
-    static void DestroyObjects();
-
-    void _DestroyObjects();
-
     template <class ObjectClass, class... Args>
     static ObjectClass* Create(Args... args);
 
@@ -52,12 +50,13 @@ private:
     // IDestroyListener
     virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
-    static ObjectManager *GetInstance();
+    static ObjectManager *GetActive();
 
     public: static bool AssertCreatedFromObjectManager;
     public: static bool AssertDestroyedFromObjectManager;
 
     friend class Asset;
+    friend class Scene;
     friend class Window;
     friend class Component;
     friend class Resources;

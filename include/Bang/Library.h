@@ -8,9 +8,13 @@ NAMESPACE_BANG_BEGIN
 class Library
 {
 public:
+    Library();
     Library(const Path& libPath);
     ~Library();
 
+    bool Load();
+    bool UnLoad();
+    void SetLibraryPath(const Path &libPath);
 
     template<class T>
     T Get(const String &symbolName)
@@ -18,8 +22,6 @@ public:
         return RCAST<T>( GetSymbol(symbolName) );
     }
 
-    bool Load();
-    bool UnLoad();
     bool IsLoaded() const;
     void* GetSymbol(const String &symbolName);
 
