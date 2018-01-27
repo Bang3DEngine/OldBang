@@ -109,11 +109,6 @@ public:
 
     static Resources* GetActive();
 
-    #ifdef DEBUG
-    static bool AssertCreatedFromResources();
-    static bool AssertDestroyedFromResources();
-    #endif
-
 private:
     Set<Path> m_permanentResourcesPaths;
     Set<Resource*> m_permanentResources;
@@ -124,11 +119,6 @@ private:
     ShaderProgramFactory *m_shaderProgramFactory = nullptr;
 
     virtual Array<Path> GetLookUpPaths() const;
-
-    #ifdef DEBUG
-    static bool _AssertCreatedFromResources;
-    static bool _AssertDestroyedFromResources;
-    #endif
 
     friend class Window;
     friend class GUIDManager;

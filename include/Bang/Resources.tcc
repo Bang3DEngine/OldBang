@@ -88,7 +88,7 @@ RH<ResourceClass> Resources::Load(const GUID &guid)
                 if (parentRes)
                 {
                     // Call virtual function that finds inner resource, create
-                    // the handler, and return it 3
+                    // the handler, and return it
                     Resource *innerRes =
                         parentRes.Get()->GetInsideFileResource(insideFileGUID);
                     RH<ResourceClass> innerResRH;
@@ -118,8 +118,8 @@ RH<ResourceClass> Resources::Create(const GUID &guid, const Args&... args)
 
 template<class ResourceClass, class ...Args>
 RH<ResourceClass> Resources::CreateInnerResource(const GUID &baseGUID,
-                                                  const GUID::GUIDType insideFileGUID,
-                                                  const Args&... args)
+                                                 const GUID::GUIDType insideFileGUID,
+                                                 const Args&... args)
 {
     GUID resourceInsideFileGUID;
     GUIDManager::CreateInsideFileGUID(baseGUID, insideFileGUID,
@@ -131,16 +131,8 @@ RH<ResourceClass> Resources::CreateInnerResource(const GUID &baseGUID,
 template<class ResourceClass, class ...Args>
 ResourceClass* Resources::_Create(const GUID &guid, const Args&... args)
 {
-    #ifdef DEBUG
-    Resources::_AssertCreatedFromResources = true;
-    #endif
-
     ResourceClass *res = Resources::_JustCreate<ResourceClass>(args...);
     res->SetGUID(guid);
-
-    #ifdef DEBUG
-    Resources::_AssertCreatedFromResources = false;
-    #endif
 
     return res;
 }

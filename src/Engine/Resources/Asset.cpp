@@ -7,23 +7,21 @@ USING_NAMESPACE_BANG
 
 Asset::Asset()
 {
-    ASSERT(Resources::AssertCreatedFromResources());
-    ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 Asset::~Asset()
 {
-    ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
 }
 
 void Asset::Destroy(Asset *asset)
 {
-    ObjectManager::Destroy(asset);
+    asset->EventEmitter<IDestroyListener>::PropagateToListeners(
+                                   &IDestroyListener::OnDestroyed, asset);
+    delete asset;
 }
 
 void Asset::CloneInto(ICloneable * clone) const
 {
-    Object::CloneInto(clone);
 }
 
 String Asset::ToString() const

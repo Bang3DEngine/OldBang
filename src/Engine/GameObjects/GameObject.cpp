@@ -23,12 +23,10 @@ USING_NAMESPACE_BANG
 
 GameObject::GameObject(const String &name) : m_name(name)
 {
-    ASSERT(ObjectManager::AssertCreatedFromObjectManager);
 }
 
 GameObject::~GameObject()
 {
-    ASSERT(ObjectManager::AssertDestroyedFromObjectManager);
     ASSERT(GetChildren().IsEmpty());
     ASSERT(GetComponents().IsEmpty());
     SetParent(nullptr);

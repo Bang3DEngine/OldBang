@@ -52,9 +52,6 @@ private:
 
     static ObjectManager *GetActive();
 
-    public: static bool AssertCreatedFromObjectManager;
-    public: static bool AssertDestroyedFromObjectManager;
-
     friend class Asset;
     friend class Scene;
     friend class Window;

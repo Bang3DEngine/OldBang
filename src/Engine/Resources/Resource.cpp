@@ -8,13 +8,10 @@ USING_NAMESPACE_BANG
 // IResource
 Resource::Resource()
 {
-    ASSERT(Resources::AssertCreatedFromResources());
 }
 
 Resource::~Resource()
 {
-    // ASSERT(Resources::AssertDestroyedFromResources() ||
-    //        ObjectManager::AssertDestroyedFromObjectManager);
 }
 
 // Resource

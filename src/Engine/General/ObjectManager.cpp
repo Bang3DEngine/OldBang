@@ -9,9 +9,6 @@
 #include "Bang/SceneManager.h"
 #include "Bang/IEventEmitter.h"
 
-bool ObjectManager::AssertCreatedFromObjectManager = false;
-bool ObjectManager::AssertDestroyedFromObjectManager = false;
-
 ObjectManager::~ObjectManager()
 {
     DestroyObjects();
@@ -104,16 +101,8 @@ void ObjectManager::DestroyObjects()
 
         if (!m_objectsDestroyedWhileDestroying.Contains(objectToBeDestroyedId))
         {
-            #ifdef DEBUG
-            ObjectManager::AssertDestroyedFromObjectManager = true;
-            #endif
-
             m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
             delete objectToBeDestroyed;
-
-            #ifdef DEBUG
-            ObjectManager::AssertDestroyedFromObjectManager = false;
-            #endif
         }
     }
     m_objectsDestroyedWhileDestroying.Clear();

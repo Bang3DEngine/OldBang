@@ -126,34 +126,29 @@ void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
     ASSERT(map.ContainsKey(guid));
 
     auto it = map.Find(guid);
-    const ResourceEntry &resEntry = it->second;
+    ResourceEntry resEntry = it->second;
+    map.Remove(it);
+
     ASSERT(resEntry.resource != nullptr);
     ASSERT(resEntry.usageCount == 0);
 
-    Destroy(resEntry.resource);
+    bool totallyUnused = true;
+    for (const auto &pair : rs->m_GUIDCache)
+    {
+        if (pair.second.ContainsKey(resEntry.resource->GetGUID()))
+        {
+            totallyUnused = false;
+            break;
+        }
+    }
 
-    map.Remove(it);
+    if (totallyUnused) { Destroy(resEntry.resource); }
 }
 
 bool Resources::Contains(const TypeId &resTypeId, const GUID &guid)
 {
     return Resources::GetCached(resTypeId, guid) != nullptr;
 }
-
-#ifdef DEBUG
-bool Resources::_AssertCreatedFromResources = false;
-bool Resources::_AssertDestroyedFromResources = false;
-
-bool Resources::AssertCreatedFromResources()
-{
-    return !Resources::GetActive() || Resources::_AssertCreatedFromResources;
-}
-
-bool Resources::AssertDestroyedFromResources()
-{
-    return !Resources::GetActive() || Resources::_AssertDestroyedFromResources;
-}
-#endif
 
 Array<Path> Resources::GetLookUpPaths() const
 {
@@ -204,16 +199,8 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
 
 void Resources::Destroy(Resource *resource)
 {
-    #ifdef DEBUG
-    Resources::_AssertDestroyedFromResources = true;
-    #endif
-
-    Asset *asset = Cast<Asset*>(resource);
+    Asset *asset = DCAST<Asset*>(resource);
     if (asset) { Asset::Destroy(asset); } else { delete resource; }
-
-    #ifdef DEBUG
-    Resources::_AssertDestroyedFromResources = false;
-    #endif
 }
 
 Resource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)

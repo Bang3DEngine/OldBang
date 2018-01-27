@@ -9,15 +9,7 @@ ObjectClass* ObjectManager::Create(Args... args)
 {
     ObjectManager *om = ObjectManager::GetActive();
 
-    #ifdef DEBUG
-    ObjectManager::AssertCreatedFromObjectManager = true;
-    #endif
-
     ObjectClass *newObj = new ObjectClass(args...);
-
-    #ifdef DEBUG
-    ObjectManager::AssertCreatedFromObjectManager = false;
-    #endif
 
     Object *obj = Cast<ObjectClass*>(newObj);
     om->m_objectsToBeStartedQueue.push(obj);

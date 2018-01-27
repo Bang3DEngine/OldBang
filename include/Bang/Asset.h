@@ -12,12 +12,13 @@ NAMESPACE_BANG_BEGIN
 
 #define ASSET(CLASSNAME) \
     RESOURCE(CLASSNAME) \
-    friend class Asset; \
-    friend class ObjectManager;
+    friend class Asset;
 
 class Asset : public Resource,
               public IToString,
-              public Object
+              public IEnabledListener,
+              public EventEmitter<IDestroyListener>,
+              public EventEmitter<IEnabledListener>
 {
     RESOURCE_NO_CLONEABLE(CLASSNAME)
     friend class ObjectManager;
@@ -40,7 +41,7 @@ protected:
 private:
     template <class AssetClass, class... Args>
     static AssetClass* Create(Args... args)
-    { return ObjectManager::Create<AssetClass>(args...); }
+    { return new AssetClass(args...); }
 
     static void Destroy(Asset *asset);
 };
