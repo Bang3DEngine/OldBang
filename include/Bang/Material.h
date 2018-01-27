@@ -15,6 +15,7 @@ FORWARD class Texture2D;
 FORWARD class ShaderProgram;
 
 class Material : public Asset,
+                 public ICloneable,
                  public ITextureChangedListener,
                  public EventEmitter<IMaterialChangedListener>
 {

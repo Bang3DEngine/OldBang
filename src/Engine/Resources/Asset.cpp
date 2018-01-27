@@ -20,10 +20,6 @@ void Asset::Destroy(Asset *asset)
     delete asset;
 }
 
-void Asset::CloneInto(ICloneable * clone) const
-{
-}
-
 String Asset::ToString() const
 {
     String res = GetClassName();

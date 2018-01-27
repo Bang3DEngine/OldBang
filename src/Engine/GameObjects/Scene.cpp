@@ -113,8 +113,3 @@ void Scene::ExportXML(XMLNode *xmlInfo) const
     GameObject::ExportXML(xmlInfo);
     xmlInfo->SetTagName("Scene");
 }
-
-void Scene::PostImportXML(const XMLNode &xmlInfo)
-{
-    GameObject::PostImportXML(xmlInfo);
-}

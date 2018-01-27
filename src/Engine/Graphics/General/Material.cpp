@@ -143,8 +143,6 @@ void Material::UnBind() const
 
 void Material::CloneInto(ICloneable *clone) const
 {
-    Asset::CloneInto(clone);
-
     Material *matClone = Cast<Material*>(clone);
 
     matClone->SetShaderProgram(GetShaderProgram());

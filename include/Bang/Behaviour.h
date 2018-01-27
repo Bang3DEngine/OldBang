@@ -51,6 +51,8 @@ extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
     /* This line links the Application in the main binary \
         to the Application in the behaviour loaded library. */ \
     Application::SetApplicationSingleton(mainBinaryApplication); \
+    Debug_Log("FROM BEHAVIOUR: " << SceneManager::GetActiveScene() << ", " \
+<< SceneManager::GetActiveScene()->GetLocalObjectManager()); \
     return ComponentFactory::Create<CLASS_NAME>(); \
 } \
 \

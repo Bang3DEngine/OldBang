@@ -13,7 +13,8 @@ NAMESPACE_BANG_BEGIN
 FORWARD class VAO;
 FORWARD class VBO;
 
-class Mesh : public Asset
+class Mesh : public Asset,
+             public ICloneable
 {
     ASSET(Mesh)
 

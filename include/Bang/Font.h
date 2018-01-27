@@ -49,9 +49,6 @@ public:
     Texture2D* GetDistFieldTexture() const;
     Vector2i GetDistFieldSpreadOffsetPx(char c) const;
 
-    // ICloneable
-    void CloneInto(ICloneable *clone) const override;
-
     // Resource
     void Import(const Path &ttfFilepath) override;
 

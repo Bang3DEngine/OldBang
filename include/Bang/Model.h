@@ -31,9 +31,6 @@ public:
     virtual Resource* GetInsideFileResource(GUID::GUIDType insideFileGUID) const override;
     virtual String GetInsideFileResourceName(GUID::GUIDType insideFileGUID) const override;
 
-    // ICloneable
-    virtual void CloneInto(ICloneable *clone) const override;
-
     // Resource
     void Import(const Path &modelFilepath) override;
 

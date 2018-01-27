@@ -22,8 +22,12 @@ void BehaviourContainer::OnPreStart()
     if (BehaviourManager::GetActive() &&
         BehaviourManager::GetActive()->IsInstanceCreationAllowed())
     {
+        Debug_Log("Before SubstituteByBehaviourInstance..." << SceneManager::GetActiveScene() << ", "
+                  << SceneManager::GetActiveScene()->GetLocalObjectManager());
         SubstituteByBehaviourInstance(
                         BehaviourManager::GetActive()->GetBehavioursLibrary());
+        Debug_Log("After SubstituteByBehaviourInstance..." << SceneManager::GetActiveScene() << ", "
+                  << SceneManager::GetActiveScene()->GetLocalObjectManager());
     }
 }
 
@@ -54,7 +58,10 @@ const Path &BehaviourContainer::GetSourceFilepath() const
 void BehaviourContainer::SubstituteByBehaviourInstance(Library *behavioursLibrary)
 {
     Behaviour *behaviour = CreateBehaviourInstance(behavioursLibrary);
-    if (behaviour) { GetGameObject()->AddComponent(behaviour); }
+    if (behaviour)
+    {
+        GetGameObject()->AddComponent(behaviour);
+    }
     Component::Destroy(this);
 }
 

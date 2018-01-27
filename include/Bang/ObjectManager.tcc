@@ -11,7 +11,7 @@ ObjectClass* ObjectManager::Create(Args... args)
 
     ObjectClass *newObj = new ObjectClass(args...);
 
-    Object *obj = Cast<ObjectClass*>(newObj);
+    Object *obj = SCAST<ObjectClass*>(newObj);
     om->m_objectsToBeStartedQueue.push(obj);
     om->m_objectsIdsToBeStartedQueue.push(obj->GetObjectId());
 

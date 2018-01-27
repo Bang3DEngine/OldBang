@@ -20,13 +20,7 @@ class Asset : public Resource,
               public EventEmitter<IDestroyListener>,
               public EventEmitter<IEnabledListener>
 {
-    RESOURCE_NO_CLONEABLE(CLASSNAME)
-    friend class ObjectManager;
-
 public:
-    // ICloneable
-    virtual void CloneInto(ICloneable *clone) const override;
-
     // IToString
     virtual String ToString() const override;
 
@@ -40,10 +34,11 @@ protected:
 
 private:
     template <class AssetClass, class... Args>
-    static AssetClass* Create(Args... args)
-    { return new AssetClass(args...); }
+    static AssetClass* Create(Args... args) { return new AssetClass(args...); }
 
     static void Destroy(Asset *asset);
+
+    friend class Resources;
 };
 
 NAMESPACE_BANG_END

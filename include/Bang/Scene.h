@@ -41,7 +41,6 @@ public:
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
-    virtual void PostImportXML(const XMLNode &xmlInfo) override;
 
 protected:
     Camera *p_camera = nullptr;

@@ -169,7 +169,6 @@ public:
     String ToString() const override;
 
     // Serializable
-    virtual String GetInstanceId() const override;
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 

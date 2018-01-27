@@ -53,6 +53,23 @@ void Component::OnRender(RenderPass) {}
 void Component::OnAfterChildrenRender(RenderPass) {}
 void Component::OnDestroy() {}
 
+void Component::PreUpdate()
+{ if (IsStarted()) { OnPreUpdate(); } }
+void Component::BeforeChildrenUpdate()
+{ if (IsStarted()) { OnBeforeChildrenUpdate(); } }
+void Component::Update()
+{ if (IsStarted()) { OnUpdate(); } }
+void Component::AfterChildrenUpdate()
+{ if (IsStarted()) { OnAfterChildrenUpdate(); } }
+void Component::BeforeRender()
+{ if (IsStarted()) { OnBeforeRender(); } }
+void Component::BeforeChildrenRender(RenderPass rp)
+{ if (IsStarted()) { OnBeforeChildrenRender(rp); } }
+void Component::Render(RenderPass rp)
+{ if (IsStarted()) { OnRender(rp); } }
+void Component::AfterChildrenRender(RenderPass rp)
+{ if (IsStarted()) { OnAfterChildrenRender(rp); } }
+
 bool Component::CanBeRepeatedInGameObject() const
 {
     return true;
@@ -78,19 +95,6 @@ String Component::ToString() const
     std::ostringstream msg;
     msg << "";
     return GetClassName() + "(" + String::ToString((void*)this) + ")";
-}
-
-String Component::GetInstanceId() const
-{
-    String instanceId = GetClassName();
-    if (GetGameObject())
-    {
-        instanceId.Prepend(GetGameObject()->GetInstanceId() + "_");
-        Component *ncThis = const_cast<Component*>(this);
-        int indInGameObject = GetGameObject()->GetComponents().IndexOf(ncThis);
-        instanceId.Append( String::ToString(indInGameObject) );
-    }
-    return instanceId;
 }
 
 void Component::ImportXML(const XMLNode &xmlInfo)

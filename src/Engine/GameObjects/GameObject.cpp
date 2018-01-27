@@ -34,18 +34,24 @@ GameObject::~GameObject()
 
 void GameObject::PreUpdate()
 {
-    PropagateToComponents(&Component::OnPreUpdate);
+    if (!IsStarted()) { return; }
+
+    PropagateToComponents(&Component::PreUpdate);
     PropagateToChildren(&GameObject::PreUpdate);
 }
 
 void GameObject::BeforeChildrenUpdate()
 {
-    PropagateToComponents(&Component::OnBeforeChildrenUpdate);
+    if (!IsStarted()) { return; }
+
+    PropagateToComponents(&Component::BeforeChildrenUpdate);
 }
 
 void GameObject::Update()
 {
-    PropagateToComponents(&Component::OnUpdate);
+    if (!IsStarted()) { return; }
+
+    PropagateToComponents(&Component::Update);
     BeforeChildrenUpdate();
     PropagateToChildren(&GameObject::Update);
     AfterChildrenUpdate();
@@ -53,11 +59,15 @@ void GameObject::Update()
 
 void GameObject::AfterChildrenUpdate()
 {
+    if (!IsStarted()) { return; }
+
     PropagateToComponents(&Component::OnAfterChildrenUpdate);
 }
 
 void GameObject::PostUpdate()
 {
+    if (!IsStarted()) { return; }
+
     PropagateToComponents(&Component::OnPostUpdate);
     PropagateToChildren(&GameObject::PostUpdate);
 }
@@ -579,19 +589,6 @@ String GameObject::ToString() const
     std::ostringstream oss;
     oss << "GameObject: " << GetName() << "(" << ((void*)this) << ")";
     return oss.str();
-}
-
-String GameObject::GetInstanceId() const
-{
-    String instanceId = GetName();
-    if ( GetParent() )
-    {
-        instanceId.Prepend( GetParent()->GetInstanceId() + "_");
-        GameObject *ncThis = const_cast<GameObject*>(this);
-        int indexInParent = GetParent()->GetChildren().IndexOf(ncThis);
-        instanceId.Append( String::ToString(indexInParent) );
-    }
-    return instanceId;
 }
 
 void GameObject::ImportXML(const XMLNode &xmlInfo)

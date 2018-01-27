@@ -6,16 +6,11 @@
 
 NAMESPACE_BANG_BEGIN
 
-#define RESOURCE_NO_CLONEABLE(CLASSNAME) \
-    friend class Resources; \
-    SERIALIZABLE(CLASSNAME)
-
 #define RESOURCE(CLASSNAME) \
-    RESOURCE_NO_CLONEABLE(CLASSNAME) \
-    ICLONEABLE(CLASSNAME)
+    SERIALIZABLE(CLASSNAME) \
+    friend class Resources;
 
-class Resource : public virtual Serializable,
-                 public virtual IGUIDable
+class Resource : public Serializable
 {
 public:
     Path GetResourceFilepath() const;

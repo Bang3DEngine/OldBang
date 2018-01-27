@@ -115,17 +115,6 @@ Vector2 Font::ScaleMagnitude(int fontSize, const Vector2 &magnitude)
     return Vector2::Round(magnitude * GetScaleProportion(fontSize));
 }
 
-void Font::CloneInto(ICloneable *clone) const
-{
-    Asset::CloneInto(clone);
-
-    Font *fontClone = Cast<Font*>(clone);
-
-    // TODO: Clone fonts one by one...
-    fontClone->m_ttfFilepath = m_ttfFilepath;
-    fontClone->m_hasDistanceField  = HasDistanceField();
-}
-
 Texture2D *Font::GetFontAtlas(int fontSize) const
 {
     if (!HasFontSizeLoaded(fontSize))

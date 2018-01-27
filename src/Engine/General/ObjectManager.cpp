@@ -28,12 +28,13 @@ void ObjectManager::Destroy(Object *object)
         if (!object->IsWaitingToBeDestroyed() &&
             !om->m_objectsToBeDestroyedSet.Contains(objectToBeDestroyedId))
         {
-            om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
             om->m_objectsToBeDestroyedQueue.push(object);
             om->m_objectsIdsToBeDestroyedQueue.push(objectToBeDestroyedId);
+            om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
 
             object->m_waitingToBeDestroyed = true;
             object->BeforeDestroyed();
+
             om->EventEmitter<IDestroyListener>::
                     PropagateToListeners(&IDestroyListener::OnDestroyed, object);
         }
@@ -78,6 +79,24 @@ void ObjectManager::StartObjects()
 
         if (!m_objectsToBeDestroyedSet.Contains(objToBeStartedId))
         {
+            Component *startedComp = nullptr;
+            GameObject *startedGO = DCAST<GameObject*>(objectToBeStarted);
+            if (!startedGO)
+            {
+                startedComp = DCAST<Component*>(objectToBeStarted);
+                if (startedComp)
+                {
+                    startedGO = startedComp->GetGameObject();
+                }
+            }
+            if (startedGO)
+            {
+                if (startedGO->GetName() == "Splash")
+                {
+                    int a = 2;
+                }
+            }
+
             ASSERT(!objectToBeStarted->IsStarted());
             ASSERT(!objectToBeStarted->IsWaitingToBeDestroyed());
             objectsToBeStartedNow.PushBack(objectToBeStarted);

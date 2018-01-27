@@ -118,15 +118,6 @@ String Model::GetInsideFileResourceName(GUID::GUIDType insideFileGUID) const
     return pair.second;
 }
 
-void Model::CloneInto(ICloneable *clone) const
-{
-    Asset::CloneInto(clone);
-
-    Model *modelClone = DCAST<Model*>(clone);
-    modelClone->m_meshes = m_meshes;
-    modelClone->m_materials = m_materials;
-}
-
 void Model::Import(const Path &modelFilepath)
 {
     Array< RH<Mesh> > meshes;

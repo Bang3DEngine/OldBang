@@ -14,9 +14,7 @@ NAMESPACE_BANG_BEGIN
         virtual String GetClassName() const override { return #CLASS; } \
         static String GetClassNameStatic() { return #CLASS; }
 
-class Serializable : public ICloneable,
-                     public virtual IGUIDable,
-                     public IReflectable
+class Serializable : public IGUIDable
 {
 public:
     virtual ~Serializable();
@@ -24,20 +22,13 @@ public:
 
     void ImportXML(const String &xmlInfoString);
 
-    virtual void ImportXMLReflection(const XMLNode &xmlInfo);
-    virtual void ExportXMLReflection(XMLNode *xmlInfo) const;
-
     virtual void ImportXML(const XMLNode &xmlInfo);
     virtual void ExportXML(XMLNode *xmlInfo) const;
 
     virtual bool ImportXMLFromFile(const Path &path);
     virtual bool ExportXMLToFile(const Path &path) const;
 
-    virtual void PostImportXML(const XMLNode &xmlInfo);
-
-    virtual void CloneInto(ICloneable*) const override;
     virtual String GetClassName() const = 0;
-    virtual String GetInstanceId() const;
 
     XMLNode GetXMLInfo() const;
     String GetSerializedString() const;

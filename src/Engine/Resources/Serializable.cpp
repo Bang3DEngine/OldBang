@@ -45,27 +45,16 @@ void Serializable::ImportXML(const String &xmlInfoString)
 {
     XMLNode xmlInfo = XMLNode::FromString(xmlInfoString);
     ImportXML(xmlInfo);
-    PostImportXML(xmlInfo);
-}
-
-void Serializable::ImportXMLReflection(const XMLNode &xmlInfo)
-{
-}
-
-void Serializable::ExportXMLReflection(XMLNode *xmlInfo) const
-{
 }
 
 void Serializable::ImportXML(const XMLNode &xmlInfo)
 {
-    ImportXMLReflection(xmlInfo);
     if (xmlInfo.Contains("GUID"))
     { SetGUID(xmlInfo.Get<GUID>("GUID")); }
 }
 
 void Serializable::ExportXML(XMLNode *xmlInfo) const
 {
-    ExportXMLReflection(xmlInfo);
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->Set<GUID>( "GUID", GetGUID() );
 }
@@ -85,17 +74,6 @@ bool Serializable::ExportXMLToFile(const Path &path) const
 {
     File::Write(path, GetSerializedString());
     return true;
-}
-
-void Serializable::PostImportXML(const XMLNode &xmlInfo) {}
-
-void Serializable::CloneInto(ICloneable *) const
-{
-}
-
-String Serializable::GetInstanceId() const
-{
-    return String::ToString( static_cast<const void*>(this) );
 }
 
 HideFlags &Serializable::GetHideFlags() { return m_hideFlags; }

@@ -45,7 +45,6 @@ public:
     virtual String ToString() const override;
 
     // Serializable
-    virtual String GetInstanceId() const override;
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
@@ -64,6 +63,17 @@ protected:
     virtual void OnRender(RenderPass renderPass);
     virtual void OnAfterChildrenRender(RenderPass renderPass);
     virtual void OnDestroy() override;
+
+    void PreUpdate();
+    void BeforeChildrenUpdate();
+    void Update();
+    void AfterChildrenUpdate();
+    void PostUpdate();
+    void BeforeRender();
+    void BeforeChildrenRender(RenderPass renderPass);
+    void Render(RenderPass renderPass);
+    void AfterChildrenRender(RenderPass renderPass);
+
 
     virtual bool CanBeRepeatedInGameObject() const;
 

@@ -9,7 +9,8 @@
 
 NAMESPACE_BANG_BEGIN
 
-class Object : public virtual Serializable,
+class Object : public Serializable,
+               public ICloneable,
                public IEnabledListener,
                public EventEmitter<IDestroyListener>,
                public EventEmitter<IEnabledListener>
