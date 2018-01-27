@@ -20,7 +20,7 @@ class Scene : public GameObject,
     GAMEOBJECT(Scene);
 
 public:
-    virtual void Start() override;
+    virtual void OnPreStart() override;
     virtual void Update() override;
     virtual void Render(RenderPass rp, bool renderChildren = true) override;
     virtual void OnResize(int newWidth, int newHeight);

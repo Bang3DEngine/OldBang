@@ -74,7 +74,7 @@ void Window::Create(uint flags)
     }
 
     m_input               = new Input();
-    m_resources           = new Resources();
+    m_resources           = CreateResources();
     m_sceneManager        = CreateSceneManager();
     m_gEngine             = new GEngine();
     m_globalObjectManager = new ObjectManager();
@@ -457,6 +457,11 @@ void Window::RetrieveTitleBarHeight()
         SDL_GetGlobalMouseState(&globalCoords.x, &globalCoords.y);
         m_titleBarHeight = globalCoords.y - GetPosition().y - localCoords.y;
     }
+}
+
+Resources *Window::CreateResources() const
+{
+    return new Resources();
 }
 
 void Window::_SetMinSize(int minSizeX, int minSizeY)

@@ -19,6 +19,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
 #include "Bang/Application.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"

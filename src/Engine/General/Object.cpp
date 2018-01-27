@@ -7,6 +7,14 @@ Object::~Object()
     ASSERT( IsWaitingToBeDestroyed() );
 }
 
+void Object::PreStart()
+{
+    if (!IsStarted())
+    {
+        OnPreStart();
+    }
+}
+
 void Object::Start()
 {
     if (!IsStarted())
@@ -15,6 +23,8 @@ void Object::Start()
         m_started = true;
     }
 }
+
+void Object::OnPreStart() {}
 void Object::OnStart() {}
 void Object::OnEnabled()
 {

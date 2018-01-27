@@ -30,14 +30,21 @@ Prefab::~Prefab()
 
 GameObject *Prefab::Instantiate() const
 {
+    GameObject *go = InstantiateRaw();
+    go->SetParent(SceneManager::GetActiveScene());
+    SceneManager::GetActiveScene()->GetLocalObjectManager()->StartObjects();
+    return go;
+}
+
+GameObject *Prefab::InstantiateRaw() const
+{
     GameObject *go = GameObjectFactory::CreateGameObject(false);
 
-    if (!m_gameObjectXMLInfoContent.IsEmpty())
+    if (!GetInfoContent().IsEmpty())
     {
-        XMLNode xmlInfo = XMLNodeReader::FromString(m_gameObjectXMLInfoContent);
+        XMLNode xmlInfo = XMLNodeReader::FromString(GetInfoContent());
         go->ImportXML(xmlInfo);
     }
-
     return go;
 }
 
@@ -50,9 +57,14 @@ void Prefab::SetGameObject(GameObject *go)
     else { m_gameObjectXMLInfoContent = ""; }
 }
 
+const String &Prefab::GetInfoContent() const
+{
+    return m_gameObjectXMLInfoContent;
+}
+
 void Prefab::Import(const Path &prefabFilepath)
 {
-    ImportXMLFromFile(prefabFilepath);
+    ImportXMLFromFile( ImportFilesManager::GetImportFilepath(prefabFilepath) );
 }
 
 void Prefab::ImportXML(const XMLNode &xmlInfo)
@@ -60,9 +72,9 @@ void Prefab::ImportXML(const XMLNode &xmlInfo)
     Asset::ImportXML(xmlInfo);
 
     String newXMLInfo = xmlInfo.ToString();
-    if (m_gameObjectXMLInfoContent != newXMLInfo)
+    if (newXMLInfo != GetInfoContent())
     {
-        m_gameObjectXMLInfoContent = xmlInfo.ToString();
+        m_gameObjectXMLInfoContent = newXMLInfo;
     }
 }
 
@@ -70,5 +82,5 @@ void Prefab::ExportXML(XMLNode *xmlInfo) const
 {
     Asset::ExportXML(xmlInfo);
 
-    *xmlInfo = XMLNodeReader::FromString(m_gameObjectXMLInfoContent);
+    *xmlInfo = XMLNodeReader::FromString(GetInfoContent());
 }

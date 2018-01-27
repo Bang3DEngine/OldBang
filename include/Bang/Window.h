@@ -118,6 +118,7 @@ private:
     static Window* s_activeWindow;
 
     void RetrieveTitleBarHeight();
+    virtual Resources *CreateResources() const;
 
     void _SetMinSize(int minSizeX, int minSizeY);
     void _SetMaxSize(int maxSizeX, int maxSizeY);

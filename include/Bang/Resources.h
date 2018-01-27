@@ -123,6 +123,8 @@ private:
     MaterialFactory *m_materialFactory = nullptr;
     ShaderProgramFactory *m_shaderProgramFactory = nullptr;
 
+    virtual Array<Path> GetLookUpPaths() const;
+
     #ifdef DEBUG
     static bool _AssertCreatedFromResources;
     static bool _AssertDestroyedFromResources;

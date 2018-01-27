@@ -30,10 +30,10 @@ Scene::~Scene()
     GameObject::Destroy(p_debugRenderer);
 }
 
-void Scene::Start()
+void Scene::OnPreStart()
 {
     m_behaviourManager = CreateBehaviourManager();
-    GameObject::Start();
+    GameObject::OnPreStart();
 }
 
 void Scene::Update()

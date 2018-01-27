@@ -12,8 +12,11 @@ class Prefab : public Asset
 
 public:
     GameObject* Instantiate() const;
+    GameObject* InstantiateRaw() const;
 
     void SetGameObject(GameObject *go);
+
+    const String& GetInfoContent() const;
 
     // Resource
     void Import(const Path& prefabFilepath) override;
@@ -22,8 +25,8 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    String m_gameObjectXMLInfoContent = "";
 private:
+    String m_gameObjectXMLInfoContent = "";
 
     Prefab();
     Prefab(GameObject *go);

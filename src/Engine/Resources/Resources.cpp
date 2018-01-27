@@ -155,6 +155,11 @@ bool Resources::AssertDestroyedFromResources()
 }
 #endif
 
+Array<Path> Resources::GetLookUpPaths() const
+{
+    return {Paths::GetEngineAssetsDir()};
+}
+
 void Resources::RegisterResourceUsage(const TypeId &resTypeId, Resource *resource)
 {
     const GUID &guid = resource->GetGUID();

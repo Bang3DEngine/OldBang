@@ -1,5 +1,6 @@
 #include "Bang/Resources.h"
 
+#include "Bang/Debug.h"
 #include "Bang/ObjectManager.h"
 
 NAMESPACE_BANG_BEGIN
@@ -7,6 +8,11 @@ NAMESPACE_BANG_BEGIN
 template <class ResourceClass>
 RH<ResourceClass> Resources::Load(const Path &filepath)
 {
+    if (!filepath.Exists())
+    {
+        Debug_Warn("Filepath '" << filepath.GetAbsolute() << "' not found");
+    }
+
     GUID resGUID = ImportFilesManager::GetGUIDFromFilepath(filepath);
     ResourceClass* res = Resources::GetCached<ResourceClass>(resGUID);
     if (!res)
@@ -25,9 +31,18 @@ RH<ResourceClass> Resources::Load(const Path &filepath)
 }
 
 template <class ResourceClass>
-RH<ResourceClass> Resources::Load(const String &filepath)
+RH<ResourceClass> Resources::Load(const String &filepathStr)
 {
-    return Resources::Load<ResourceClass>( EPATH(filepath) );
+    Resources *rs = Resources::GetActive();
+    Array<Path> lookupPaths = rs->GetLookUpPaths();
+
+    Path filepath = Path::Empty;
+    for (const Path &lookUpPath : lookupPaths)
+    {
+        filepath = lookUpPath.Append(filepathStr);
+        if (filepath.IsFile()) { break; }
+    }
+    return Resources::Load<ResourceClass>(filepath);
 }
 
 template <class ResourceClass>

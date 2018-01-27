@@ -29,7 +29,10 @@ protected:
     Object() = default;
     virtual ~Object();
 
-    virtual void Start();
+    void PreStart();
+    void Start();
+
+    virtual void OnPreStart();
     virtual void OnStart();
     virtual void OnEnabled() override;
     virtual void OnDisabled() override;

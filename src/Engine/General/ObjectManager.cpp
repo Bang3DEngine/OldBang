@@ -69,6 +69,7 @@ void ObjectManager::UnRegisterDestroyListener(IDestroyListener *listener)
 
 void ObjectManager::StartObjects()
 {
+    Array<Object*> objectsToBeStartedNow;
     while (!m_objectsToBeStartedQueue.empty())
     {
         Object *objectToBeStarted = m_objectsToBeStartedQueue.front();
@@ -82,9 +83,12 @@ void ObjectManager::StartObjects()
         {
             ASSERT(!objectToBeStarted->IsStarted());
             ASSERT(!objectToBeStarted->IsWaitingToBeDestroyed());
-            objectToBeStarted->Start();
+            objectsToBeStartedNow.PushBack(objectToBeStarted);
         }
     }
+
+    for (Object *obj : objectsToBeStartedNow) { obj->PreStart(); }
+    for (Object *obj : objectsToBeStartedNow) { obj->Start(); }
 }
 
 void ObjectManager::DestroyObjects()

@@ -85,6 +85,7 @@ void FileTracker::CheckForChanges()
         TrackPath(path);
     }
 
+
     // Check for modified paths
     for (const auto &newPathToModTime : m_pathsToTrackToModificationTime)
     {
