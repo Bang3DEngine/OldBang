@@ -21,7 +21,6 @@ public:
     static void SetRotation(const Quaternion &rotation);
     static void SetScale(const Vector3 &scale);
 
-    static void SetRenderPass(RenderPass rp);
     static void SetSelectable(GameObject *go);
     static void SetThickness(float thickness);
     static void SetRenderWireframe(bool wireframe);

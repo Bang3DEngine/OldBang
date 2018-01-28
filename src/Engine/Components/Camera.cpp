@@ -309,7 +309,6 @@ void Camera::OnRender(RenderPass rp)
     Gizmos::SetScale(Vector3::One * 0.02f * distScale);
     Gizmos::SetColor(Color::White);
     Gizmos::RenderCustomMesh(cameraMesh.Get());
-    Gizmos::SetRenderPass(RenderPass::Overlay);
 }
 
 void Camera::CloneInto(ICloneable *clone) const
