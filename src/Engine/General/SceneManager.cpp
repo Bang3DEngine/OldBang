@@ -1,13 +1,14 @@
 #include "Bang/SceneManager.h"
 
-#include "Bang/Paths.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
+#include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/String.h"
 #include "Bang/Window.h"
 #include "Bang/Extensions.h"
 #include "Bang/ObjectManager.h"
+#include "Bang/BehaviourManager.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -22,6 +23,17 @@ SceneManager::~SceneManager()
     {
         GameObject::Destroy( GetActiveScene() );
     }
+    delete m_behaviourManager;
+}
+
+void SceneManager::Init()
+{
+    m_behaviourManager = CreateBehaviourManager();
+}
+
+BehaviourManager *SceneManager::CreateBehaviourManager() const
+{
+    return new BehaviourManager();
 }
 
 SceneManager *SceneManager::GetInstance()
@@ -41,6 +53,11 @@ void SceneManager::UpdateScene(Scene *scene)
     scene->Update();
     scene->PostUpdate();
     scene->GetLocalObjectManager()->DestroyObjects();
+}
+
+BehaviourManager *SceneManager::GetBehaviourManager() const
+{
+    return m_behaviourManager;
 }
 
 void SceneManager::_Update()

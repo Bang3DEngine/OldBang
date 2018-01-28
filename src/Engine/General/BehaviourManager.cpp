@@ -85,7 +85,7 @@ Library *BehaviourManager::GetBehavioursLibrary() const
 
 BehaviourManager *BehaviourManager::GetActive()
 {
-    return SceneManager::GetActiveScene()->GetBehaviourManager();
+    return SceneManager::GetInstance()->GetBehaviourManager();
 }
 
 void BehaviourManager::SetBehavioursLibrary(const Path &libPath)

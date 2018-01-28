@@ -25,14 +25,12 @@ Scene::Scene() : GameObject("Scene")
 Scene::~Scene()
 {
     delete m_gizmos;
-    delete m_behaviourManager;
     delete m_localObjectManager;
     GameObject::Destroy(p_debugRenderer);
 }
 
 void Scene::OnPreStart()
 {
-    m_behaviourManager = CreateBehaviourManager();
     GameObject::OnPreStart();
 }
 
@@ -56,11 +54,6 @@ void Scene::OnResize(int newWidth, int newHeight)
 
 Gizmos *Scene::GetGizmos() const { return m_gizmos; }
 DebugRenderer *Scene::GetDebugRenderer() const { return p_debugRenderer; }
-
-BehaviourManager *Scene::CreateBehaviourManager() const
-{
-    return new BehaviourManager();
-}
 
 void Scene::SetCamera(Camera *cam)
 {
@@ -100,7 +93,6 @@ void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)
 }
 
 Camera *Scene::GetCamera() const { return p_camera; }
-BehaviourManager *Scene::GetBehaviourManager() const { return m_behaviourManager; }
 
 void Scene::ImportXML(const XMLNode &xmlInfo)
 {

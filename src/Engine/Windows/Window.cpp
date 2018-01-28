@@ -79,6 +79,7 @@ void Window::Create(uint flags)
     m_gEngine             = new GEngine();
     m_globalObjectManager = new ObjectManager();
 
+    m_sceneManager->Init();
     m_gEngine->Init();
 
     SetSize(winSize.x, winSize.y);

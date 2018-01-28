@@ -8,6 +8,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
+FORWARD class BehaviourManager;
 
 class ISceneManagerListener : public IEventListener
 {
@@ -32,6 +33,9 @@ public:
 
     static void Update();
     static void UpdateScene(Scene *scene);
+
+    BehaviourManager *GetBehaviourManager() const;
+
 protected:
     Scene *m_activeScene = nullptr;
 
@@ -46,6 +50,10 @@ protected:
 private:
     Path m_queuedSceneFilepath;
     Path m_activeSceneFilepath;
+    BehaviourManager *m_behaviourManager = nullptr;
+
+    void Init();
+    virtual BehaviourManager* CreateBehaviourManager() const;
 
     static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
     static void SetActiveSceneFilepath(const Path &sceneFilepath);

@@ -5,7 +5,6 @@
 
 #include "Bang/List.h"
 #include "Bang/GameObject.h"
-#include "Bang/BehaviourManager.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
@@ -29,7 +28,6 @@ public:
     void SetFirstFoundCamera();
 
     virtual Camera *GetCamera() const;
-    BehaviourManager *GetBehaviourManager() const;
 
     void InvalidateCanvas();
 
@@ -47,7 +45,6 @@ protected:
     Gizmos *m_gizmos = nullptr;
     DebugRenderer *p_debugRenderer = nullptr;
     ObjectManager *m_localObjectManager = nullptr;
-    BehaviourManager *m_behaviourManager = nullptr;
 
     Scene();
     virtual ~Scene();
@@ -56,8 +53,6 @@ protected:
     DebugRenderer *GetDebugRenderer() const;
 
 private:
-    virtual BehaviourManager* CreateBehaviourManager() const;
-
     friend class Gizmos;
     friend class Window;
     friend class GEngine;
