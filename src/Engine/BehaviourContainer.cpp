@@ -22,12 +22,8 @@ void BehaviourContainer::OnPreStart()
     if (BehaviourManager::GetActive() &&
         BehaviourManager::GetActive()->IsInstanceCreationAllowed())
     {
-        Debug_Log("Before SubstituteByBehaviourInstance..." << SceneManager::GetActiveScene() << ", "
-                  << SceneManager::GetActiveScene()->GetLocalObjectManager());
         SubstituteByBehaviourInstance(
                         BehaviourManager::GetActive()->GetBehavioursLibrary());
-        Debug_Log("After SubstituteByBehaviourInstance..." << SceneManager::GetActiveScene() << ", "
-                  << SceneManager::GetActiveScene()->GetLocalObjectManager());
     }
 }
 

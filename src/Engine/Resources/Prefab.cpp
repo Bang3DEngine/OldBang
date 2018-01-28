@@ -32,7 +32,6 @@ GameObject *Prefab::Instantiate() const
 {
     GameObject *go = InstantiateRaw();
     go->SetParent(SceneManager::GetActiveScene());
-    Debug_Peek( SceneManager::GetActiveScene() );
     SceneManager::GetActiveScene()->GetLocalObjectManager()->StartObjects();
     return go;
 }

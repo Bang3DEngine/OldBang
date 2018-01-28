@@ -430,20 +430,26 @@ void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
     freadn = fread(tgaFile.imageData, sizeof(unsigned char), imageTotalComps, filePtr);
 
     // Change from BGR to RGB so OpenGL can read the image data.
-    for (int imageIdx = 0; imageIdx < imageTotalComps; imageIdx += compsPerPixel)
+    if (compsPerPixel == 3 || compsPerPixel == 4)
     {
-        unsigned char colorSwap = tgaFile.imageData[imageIdx];
-        tgaFile.imageData[imageIdx] = tgaFile.imageData[imageIdx + 2];
-        tgaFile.imageData[imageIdx + 2] = colorSwap;
+        for (int imageIdx = 0; imageIdx < imageTotalComps; imageIdx += compsPerPixel)
+        {
+            unsigned char colorSwap = tgaFile.imageData[imageIdx];
+            tgaFile.imageData[imageIdx] = tgaFile.imageData[imageIdx + 2];
+            tgaFile.imageData[imageIdx + 2] = colorSwap;
+        }
     }
 
     img->Create(tgaFile.imageWidth, tgaFile.imageHeight);
     for (int pixel_i = 0; pixel_i < imageSize; ++pixel_i)
     {
         unsigned char r = tgaFile.imageData[pixel_i * compsPerPixel + 0];
-        unsigned char g = tgaFile.imageData[pixel_i * compsPerPixel + 1];
-        unsigned char b = tgaFile.imageData[pixel_i * compsPerPixel + 2];
-        unsigned char a = 255;
+        unsigned char g = compsPerPixel > 2 ?
+                            tgaFile.imageData[pixel_i * compsPerPixel + 1] : r;
+        unsigned char b = compsPerPixel > 2 ?
+                            tgaFile.imageData[pixel_i * compsPerPixel + 2] : r;
+        unsigned char a = compsPerPixel > 3 ?
+                            tgaFile.imageData[pixel_i * compsPerPixel + 3] : 255;
         if (compsPerPixel >= 4)
         {
             a = tgaFile.imageData[pixel_i * compsPerPixel + 3];

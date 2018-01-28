@@ -298,7 +298,7 @@ void ShaderProgram::UnBind() const
 
 void ShaderProgram::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    Texture2D *destroyedTex = DCAST<Texture2D*>( SCAST<Object*>(object) );
+    Texture2D *destroyedTex = DCAST<Texture2D*>( object );
     for (auto it = m_namesToTexture.begin(); it != m_namesToTexture.end(); )
     {
         Texture2D *tex = it->second;
