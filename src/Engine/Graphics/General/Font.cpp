@@ -34,60 +34,6 @@ void Font::Import(const Path &ttfFilepath)
         Debug_Error("Could not load font '" << ttfFilepath << "'");
         return;
     }
-
-    // Load distance field (if it exists)
-    String fileName = m_ttfFilepath.GetName() + "_DistField";
-    Path distFieldImgPath = m_ttfFilepath.WithNameExt(fileName, "png");
-    Path distFieldInfoPath = m_ttfFilepath.WithNameExt(fileName, "info");
-    if (false && distFieldImgPath.IsFile() && distFieldInfoPath.IsFile())
-    {
-        m_hasDistanceField = true;
-
-        Imageb distFieldImg;
-        distFieldImg.Import(distFieldImgPath);
-
-        p_distFieldTexture = Resources::Create<Texture2D>();
-        p_distFieldTexture.Get()->Import(distFieldImg);
-        p_distFieldTexture.Get()->Bind();
-        p_distFieldTexture.Get()->GenerateMipMaps();
-        p_distFieldTexture.Get()->SetFilterMode(GL::FilterMode::Bilinear);
-        p_distFieldTexture.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
-        p_distFieldTexture.Get()->UnBind();
-
-        String loadedChars = "";
-        Array<Recti> charPxRects;
-        XMLNode distFieldInfo = XMLNodeReader::FromFile(distFieldInfoPath);
-        for (int i = 0; i < 255; ++i)
-        {
-            const char c = Cast<char>(i);
-            String attrName = "CharRect_" + String(i);
-            if (distFieldInfo.Contains(attrName))
-            {
-                loadedChars.Append( String(c) );
-                Recti charPxRect = distFieldInfo.Get<Recti>(attrName);
-                charPxRects.PushBack(charPxRect);
-            }
-
-            attrName = "SpreadOffset_" + String(i);
-            if (distFieldInfo.Contains(attrName))
-            {
-                Vector2i spreadOffsetPx = distFieldInfo.Get<Vector2i>(attrName);
-                m_distFieldSpreadOffsetPx.Add(c, spreadOffsetPx);
-            }
-        }
-
-        // Process character rects
-        for (int i = 0; i < loadedChars.Size(); ++i)
-        {
-            const char c = loadedChars[i];
-            Recti charPxRect = charPxRects[i];
-            Vector2 uvMin = Vector2(charPxRect.GetMin()) /
-                                 Vector2(p_distFieldTexture.Get()->GetSize());
-            Vector2 uvMax = Vector2(charPxRect.GetMax()) /
-                                 Vector2(p_distFieldTexture.Get()->GetSize());
-            m_charUvsInDistanceFieldAtlas.Add(c, std::make_pair(uvMin, uvMax));
-        }
-    }
 }
 
 void Font::ImportXML(const XMLNode &xmlInfo)
@@ -142,8 +88,6 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
     return m_cachedAtlas.Get(fontSize).Get();
 }
 
-bool Font::HasDistanceField() const { return m_hasDistanceField; }
-
 Font::GlyphMetrics Font::GetCharMetrics(int fontSize, char c) const
 {
     Font::GlyphMetrics cm;
@@ -163,18 +107,6 @@ Font::GlyphMetrics Font::GetCharMetrics(int fontSize, char c) const
     }
 
     return cm;
-}
-
-Vector2 Font::GetCharMinUvInDistField(char c) const
-{
-    if (!m_charUvsInDistanceFieldAtlas.ContainsKey(c)) { return Vector2::Zero; }
-    return m_charUvsInDistanceFieldAtlas.Get(c).first;
-}
-
-Vector2 Font::GetCharMaxUvInDistField(char c) const
-{
-    if (!m_charUvsInDistanceFieldAtlas.ContainsKey(c)) { return Vector2::Zero; }
-    return m_charUvsInDistanceFieldAtlas.Get(c).second;
 }
 
 Vector2 Font::GetCharMaxUv(int fontSize, char c) const
@@ -201,11 +133,6 @@ Vector2 Font::GetCharMinUv(int fontSize, char c) const
 bool Font::HasCharacter(char c) const
 {
     return GetReferenceFont() && TTF_GlyphIsProvided(GetReferenceFont(), c);
-}
-
-Texture2D* Font::GetDistFieldTexture() const
-{
-    return p_distFieldTexture.Get();
 }
 
 float Font::GetKerning(int fontSize, char leftChar, char rightChar) const
@@ -260,12 +187,6 @@ bool Font::HasFontSizeLoaded(int fontSize) const
     return GetReferenceFont() && m_cachedAtlas.ContainsKey(fontSize);
 }
 
-Vector2i Font::GetDistFieldSpreadOffsetPx(char c) const
-{
-    if (!m_distFieldSpreadOffsetPx.ContainsKey(c)) { return Vector2i::Zero; }
-    return m_distFieldSpreadOffsetPx.Get(c);
-}
-
 TTF_Font *Font::GetReferenceFont() const
 {
     return m_referenceFont;
@@ -285,6 +206,9 @@ TTF_Font *Font::GetTTFFont(int fontSize) const
 
 void Font::Free()
 {
-    m_charUvsInDistanceFieldAtlas.Clear();
-    for (const auto& it : m_openFonts) { TTF_CloseFont( it.second ); }
+    for (const auto& it : m_openFonts)
+    {
+        TTF_CloseFont( it.second );
+    }
+    m_openFonts.Clear();
 }
