@@ -93,6 +93,48 @@ Path Paths::CreateEnginePath(const String &path)
     return Paths::GetEngineAssetsDir().Append(path);
 }
 
+
+List<Path> Paths::GetAllProjectSubDirs()
+{
+    List<Path> subdirs = Paths::GetProjectDir()
+                         .GetSubDirectories(Path::FindFlag::Recursive);
+    subdirs.PushFront(Paths::GetProjectDir());
+    return subdirs;
+}
+
+List<Path> Paths::GetProjectIncludeDirs()
+{
+    List<Path> incDirs = Paths::GetProjectAssetsDir()
+                        .GetSubDirectories(Path::FindFlag::Recursive);
+    incDirs.PushBack( Paths::GetProjectAssetsDir() );
+    return incDirs;
+}
+
+const Path &Paths::GetProjectDir()
+{
+    return Paths::GetInstance()->c_projectRoot;
+}
+
+Path Paths::GetProjectAssetsDir()
+{
+    return GetProjectDir().Append("Assets");
+}
+
+Path Paths::GetProjectLibrariesDir()
+{
+    return GetProjectDir().Append("Libraries");
+}
+
+Path Paths::CreateProjectPath(const String &path)
+{
+    return Paths::GetProjectAssetsDir().Append(path);
+}
+
+void Paths::SetProjectRoot(const Path &projectRootDir)
+{
+    Paths::GetInstance()->c_projectRoot = projectRootDir;
+}
+
 List<Path> Paths::GetEngineIncludeDirs()
 {
     List<Path> incPaths;

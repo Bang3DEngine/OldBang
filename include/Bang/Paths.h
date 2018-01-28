@@ -7,6 +7,7 @@
 NAMESPACE_BANG_BEGIN
 
 #define EPATH(path)  Paths::CreateEnginePath(path)  // Engine assets path
+#define PPATH(path)  Paths::CreateProjectPath(path) // Project assets path
 
 class Paths
 {
@@ -22,7 +23,15 @@ public:
     static bool IsEnginePath(const Path &path);
 
     static Path CreateEnginePath(const String &path);
+    static Path CreateProjectPath(const String &path);
+
     static List<Path> GetEngineIncludeDirs();
+    static List<Path> GetAllProjectSubDirs();
+    static List<Path> GetProjectIncludeDirs();
+
+    static const Path& GetProjectDir();
+    static Path GetProjectAssetsDir();
+    static Path GetProjectLibrariesDir();
 
     static void SetEngineRoot(const Path &engineRootDir);
 
@@ -33,6 +42,8 @@ public:
     static void RemoveFilesFromList(List<Path> *paths);
     static void RemoveDirectoriesFromList(List<Path> *paths);
 
+    static void SetProjectRoot(const Path &projectRootDir);
+
 protected:
     Paths();
     virtual ~Paths();
@@ -41,6 +52,7 @@ protected:
 
 private:
     Path c_engineRoot  = Path::Empty;
+    Path c_projectRoot = Path::Empty;
 
     friend class Application;
 };

@@ -152,7 +152,7 @@ bool Resources::Contains(const TypeId &resTypeId, const GUID &guid)
 
 Array<Path> Resources::GetLookUpPaths() const
 {
-    return {Paths::GetEngineAssetsDir()};
+    return {Paths::GetProjectAssetsDir(), Paths::GetEngineAssetsDir()};
 }
 
 void Resources::RegisterResourceUsage(const TypeId &resTypeId, Resource *resource)
