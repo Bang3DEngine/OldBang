@@ -100,16 +100,26 @@ void SceneManager::_SetActiveScene(Scene *activeScene)
 
 void SceneManager::LoadScene(const Path &sceneFilepath)
 {
-    Path spath(sceneFilepath);
-    if (!spath.IsFile()) { spath = EPATH(spath.GetAbsolute()); }
-    if (!spath.IsFile())
+    Path basePath(sceneFilepath);
+    Path scenePath(basePath);
+    if (!scenePath.IsFile())
     {
-        spath = spath.AppendExtension(Extensions::GetSceneExtension());
+        if (!basePath.HasExtension(Extensions::GetSceneExtension()))
+        {
+            basePath = basePath.AppendExtension(Extensions::GetSceneExtension());
+        }
+        scenePath = basePath;
+
+        if (!scenePath.IsFile()) { scenePath = EPATH(basePath.GetAbsolute()); }
+        if (!scenePath.IsFile()) { scenePath = PPATH(basePath.GetAbsolute()); }
     }
 
     SceneManager *sm = SceneManager::GetInstance();
-    if (spath.IsFile()) { sm->m_queuedSceneFilepath = spath; }
-    else { Debug_Warn("Scene '" << spath << "' does not exist."); }
+    if (scenePath.IsFile()) { sm->m_queuedSceneFilepath = scenePath; }
+    else
+    {
+        Debug_Warn("Scene '" << scenePath << "' does not exist.");
+    }
 }
 
 void SceneManager::LoadScene(const String &sceneFilepath)

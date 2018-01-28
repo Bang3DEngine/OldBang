@@ -26,8 +26,8 @@ public:
     String(const std::string &stdstr);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
-    template<class Stringable>
-    explicit String(const Stringable &stringable)
+    template<class IToStringClass>
+    explicit String(const IToStringClass &stringable)
     {
         std::ostringstream oss; oss << stringable;
         *this = String(oss.str());

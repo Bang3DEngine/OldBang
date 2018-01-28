@@ -243,7 +243,13 @@ SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
 
 Camera *Camera::GetActive()
 {
-    return GEngine::GetActiveCamera();
+    Camera *cam = GEngine::GetActiveCamera();
+    if (!cam)
+    {
+        Scene *activeScene = SceneManager::GetActiveScene();
+        cam = activeScene ? activeScene->GetCamera() : nullptr;
+    }
+    return cam;
 }
 Camera::ProjectionMode Camera::GetProjectionMode() const { return m_projMode; }
 

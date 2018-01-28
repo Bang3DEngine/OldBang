@@ -14,6 +14,7 @@ NAMESPACE_BANG_BEGIN
 
 String::String() : m_str("") {}
 String::String(const char *cstr) { if (cstr != nullptr) { m_str = cstr; } }
+
 String::String(const std::string &stdstr) : m_str(stdstr) {}
 
 String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,

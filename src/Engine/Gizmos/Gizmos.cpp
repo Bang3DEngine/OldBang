@@ -346,7 +346,7 @@ void Gizmos::Reset()
     Gizmos::SetPosition(Vector3::Zero);
     Gizmos::SetRotation(Quaternion::Identity);
     Gizmos::SetScale(Vector3::One);
-    Gizmos::SetColor(Color::Green);
+    Gizmos::SetColor(Color::White);
     Gizmos::SetThickness(1.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetRenderWireframe(false);
