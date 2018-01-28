@@ -76,28 +76,37 @@ RH<ResourceClass> Resources::Load(const GUID &guid)
         }
         else  // Inner resource (resource embedded into another resource)
         {
-            // It is a resource inside another resource. Find parent path,
-            // load it, and retrieve from it the inner resource!
-            GUID parentResourceGUID = guid.WithoutInsideFileGUID();
-            Path parentFilepath = ImportFilesManager::GetFilepath(parentResourceGUID);
-            if (parentFilepath.IsFile())
+            if (!Resources::Contains<ResourceClass>(guid))
             {
-                // Load the parent resource guessing the type from the extension
-                RH<Resource> parentRes =
-                                Resources::LoadFromExtension(parentFilepath);
-                if (parentRes)
+                // It is a resource inside another resource. Find parent path,
+                // load it, and retrieve from it the inner resource!
+                GUID parentResourceGUID = guid.WithoutInsideFileGUID();
+                Path parentFilepath = ImportFilesManager::GetFilepath(parentResourceGUID);
+                if (parentFilepath.IsFile())
                 {
-                    // Call virtual function that finds inner resource, create
-                    // the handler, and return it
-                    Resource *innerRes =
-                        parentRes.Get()->GetInsideFileResource(insideFileGUID);
-                    RH<ResourceClass> innerResRH;
-                    if (innerRes)
+                    // Load the parent resource guessing the type from the extension
+                    RH<Resource> parentRes =
+                                    Resources::LoadFromExtension(parentFilepath);
+                    if (parentRes)
                     {
-                        innerResRH.Set( DCAST<ResourceClass*>(innerRes) );
+                        // Call virtual function that finds inner resource, create
+                        // the handler, and return it
+                        Resource *innerRes =
+                            parentRes.Get()->GetInsideFileResource(insideFileGUID);
+                        RH<ResourceClass> innerResRH;
+                        if (innerRes)
+                        {
+                            innerResRH.Set( DCAST<ResourceClass*>(innerRes) );
+                        }
+                        return innerResRH;
                     }
-                    return innerResRH;
                 }
+            }
+            else
+            {
+                // Load it from cache
+                return RH<ResourceClass>(
+                            Resources::GetCached<ResourceClass>(guid) );
             }
         }
     }

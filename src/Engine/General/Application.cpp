@@ -116,6 +116,8 @@ int Application::MainLoop()
     ProfilerStart(profileOutFile.GetAbsolute().ToCString());
     #endif
 
+    Time::SetDeltaTimeReferenceToNow();
+
     bool exit = false;
     while (!exit && !m_forcedExit)
     {

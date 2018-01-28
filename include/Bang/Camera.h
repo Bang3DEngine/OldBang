@@ -90,7 +90,7 @@ private:
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
     Set<RenderPass> m_renderPassMask;
-    bool m_renderSelectionBuffer = true;
+    bool m_renderSelectionBuffer = false;
 
     Color m_clearColor = Color(Color(0.3f), 1);
     float m_orthoHeight  = 25.0f;

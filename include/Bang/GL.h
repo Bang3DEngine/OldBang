@@ -275,6 +275,7 @@ public:
 
     enum class Attachment
     {
+        None         = GL_NONE,
         Color0       = GL_COLOR_ATTACHMENT0,
         Color1       = GL_COLOR_ATTACHMENT1,
         Color2       = GL_COLOR_ATTACHMENT2,
@@ -285,7 +286,9 @@ public:
         Color7       = GL_COLOR_ATTACHMENT7,
         DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT,
         Stencil      = GL_STENCIL_ATTACHMENT,
-        Depth        = GL_DEPTH_ATTACHMENT
+        Depth        = GL_DEPTH_ATTACHMENT,
+        Back         = GL_BACK,
+        Front        = GL_FRONT
     };
 
     static void ClearError();
@@ -604,8 +607,8 @@ private:
     Map<GL::Test, bool> m_enabledTests;
     Map<std::pair<GL::Test, int>, bool> m_enabled_i_Tests;
 
-    Array<GL::Attachment> m_drawBuffers;
-    GL::Attachment m_readBuffer = Undef<GL::Attachment>();
+    Array<GL::Attachment> m_drawBuffers = {GL::Attachment::Color0};
+    GL::Attachment m_readBuffer = GL::Attachment::Color0;
 
     bool m_depthMask = true;
     GL::Function m_depthFunc = GL::Function::Less;

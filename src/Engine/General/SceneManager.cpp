@@ -7,6 +7,7 @@
 #include "Bang/String.h"
 #include "Bang/Window.h"
 #include "Bang/Extensions.h"
+#include "Bang/AudioManager.h"
 #include "Bang/ObjectManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/GameObjectFactory.h"
@@ -74,6 +75,8 @@ void SceneManager::_LoadSceneInstantly(Scene *scene)
 {
     if (m_activeScene != scene)
     {
+        AudioManager::StopAllSounds();
+
         _SetActiveScene(scene);
         if (m_activeScene)
         {
