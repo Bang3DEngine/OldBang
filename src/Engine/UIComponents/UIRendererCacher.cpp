@@ -71,6 +71,7 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
             Rect rtRectNDC(GetGameObject()->GetRectTransform()->GetViewportRectNDC());
             p_cacheFramebuffer->Resize(gbuffer->GetWidth(), gbuffer->GetHeight());
 
+            GL::ReadBuffer( GBuffer::AttColor );
             GL::DrawBuffers( {GL::Attachment::Color0} );
             GL::ClearColorBuffer(Color::Zero);
             p_cacheFramebuffer->ClearDepth(1.0f);
