@@ -83,6 +83,12 @@ void Gizmos::SetScale(const Vector3 &scale)
     g->m_gizmosGo->GetTransform()->SetLocalScale(scale);
 }
 
+void Gizmos::SetRenderPass(RenderPass rp)
+{
+    Gizmos *g = Gizmos::GetInstance();
+    for (Renderer *rend : g->m_renderers) { rend->GetMaterial()->SetRenderPass(rp); }
+}
+
 void Gizmos::SetSelectable(GameObject *go)
 {
     Gizmos *g = Gizmos::GetInstance();
@@ -345,6 +351,7 @@ void Gizmos::Reset()
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetRenderWireframe(false);
     Gizmos::SetSelectable(nullptr);
+    Gizmos::SetRenderPass(RenderPass::Overlay);
 
     List<Renderer*> rends = g->m_gizmosGo->GetComponents<Renderer>();
     for (Renderer *rend : rends)
@@ -376,7 +383,7 @@ void Gizmos::Render(Renderer *rend)
     }
 
     // Render!
-    rend->OnRender(RenderPass::Overlay);
+    rend->OnRender( rend->GetMaterial()->GetRenderPass() );
 }
 
 Gizmos* Gizmos::GetInstance()
