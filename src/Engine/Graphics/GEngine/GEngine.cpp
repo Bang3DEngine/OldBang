@@ -122,14 +122,14 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     RenderWithPass(go, RenderPass::ScenePostProcess);
 
     // GBuffer Canvas rendering
-    camera->GetGBuffer()->SetColorDrawBuffer();
+    camera->GetGBuffer()->SetAllDrawBuffers();
     GL::Enable(GL::Test::Blend);
     GL::BlendFunc(GL::BlendFactor::SrcAlpha, GL::BlendFactor::OneMinusSrcAlpha);
-    GL::ClearStencilBuffer();
     GL::ClearDepthBuffer();
     GL::SetDepthMask(true);
     GL::SetDepthFunc(GL::Function::LEqual);
     RenderWithPass(go, RenderPass::Canvas);
+    camera->GetGBuffer()->SetColorDrawBuffer();
     RenderWithPass(go, RenderPass::CanvasPostProcess);
     GL::Disable(GL::Test::Blend);
 
