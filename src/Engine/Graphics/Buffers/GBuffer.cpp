@@ -13,10 +13,10 @@ USING_NAMESPACE_BANG
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     Bind();
-    CreateAttachment(AttNormal,       GL::ColorFormat::RGB10_A2_UByte);
-    CreateAttachment(AttDiffuse,      GL::ColorFormat::RGBA_UByte8);
-    CreateAttachment(AttMisc,         GL::ColorFormat::RGB10_A2_UByte);
     CreateAttachment(AttColor,        GL::ColorFormat::RGBA_UByte8);
+    CreateAttachment(AttDiffuse,      GL::ColorFormat::RGBA_UByte8);
+    CreateAttachment(AttNormal,       GL::ColorFormat::RGB10_A2_UByte);
+    CreateAttachment(AttMisc,         GL::ColorFormat::RGB10_A2_UByte);
     CreateAttachment(AttColorRead,    GL::ColorFormat::RGBA_UByte8);
     CreateAttachment(AttDepthStencil, GL::ColorFormat::Depth24_Stencil8);
     UnBind();
@@ -79,14 +79,14 @@ void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
 
 void GBuffer::SetAllDrawBuffers() const
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse,
-                    GBuffer::AttMisc, GBuffer::AttColor
+    SetDrawBuffers({GBuffer::AttColor,  GBuffer::AttDiffuse,
+                    GBuffer::AttNormal, GBuffer::AttMisc
                    });
 }
 
 void GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc});
+    SetDrawBuffers({GBuffer::AttDiffuse, GBuffer::AttNormal, GBuffer::AttMisc});
 }
 
 void GBuffer::SetColorDrawBuffer()
