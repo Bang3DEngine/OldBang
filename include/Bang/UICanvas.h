@@ -25,7 +25,7 @@ public:
     virtual void OnAfterChildrenUpdate() override;
     virtual void OnBeforeRender() override;
 
-    void Invalidate();
+    void InvalidateCanvas();
 
     void ClearFocus();
     void SetFocus(IFocusable *focusable);

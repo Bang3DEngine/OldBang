@@ -103,7 +103,7 @@ void UICanvas::OnUpdate()
     }
 }
 
-void UICanvas::Invalidate()
+void UICanvas::InvalidateCanvas()
 {
     List<RectTransform*> rts = GetGameObject()->
                                GetComponentsInChildren<RectTransform>(true);

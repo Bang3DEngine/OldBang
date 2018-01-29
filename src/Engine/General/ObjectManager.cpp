@@ -89,13 +89,6 @@ void ObjectManager::StartObjects()
                     startedGO = startedComp->GetGameObject();
                 }
             }
-            if (startedGO)
-            {
-                if (startedGO->GetName() == "Splash")
-                {
-                    int a = 2;
-                }
-            }
 
             ASSERT(!objectToBeStarted->IsStarted());
             ASSERT(!objectToBeStarted->IsWaitingToBeDestroyed());

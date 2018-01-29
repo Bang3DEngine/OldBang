@@ -76,7 +76,7 @@ void Scene::SetFirstFoundCamera()
 void Scene::InvalidateCanvas()
 {
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
-    for (UICanvas *canvas : canvases) { canvas->Invalidate(); }
+    for (UICanvas *canvas : canvases) { canvas->InvalidateCanvas(); }
 }
 
 ObjectManager *Scene::GetLocalObjectManager() const
