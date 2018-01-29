@@ -26,7 +26,7 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::PrepareForRender(ShaderProgram *sp)
+void GBuffer::BindAttachmentsForReading(ShaderProgram *sp)
 {
     if (!sp) { return; }
     ASSERT(GL::IsBound(sp));
@@ -52,7 +52,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 
     if (willReadFromColor) { PrepareColorReadBuffer(mask); }
 
-    PrepareForRender(sp);
+    BindAttachmentsForReading(sp);
 
     PushDrawAttachments();
     SetColorDrawBuffer();

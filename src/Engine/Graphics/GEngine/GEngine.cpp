@@ -216,7 +216,7 @@ void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask,
     ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
 
     sp->Bind();
-    gbuffer->PrepareForRender(sp);
+    gbuffer->BindAttachmentsForReading(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
             false);
 
@@ -237,7 +237,7 @@ void GEngine::RenderToScreen(Camera *cam)
 
     ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
     GBuffer *gbuffer = cam->GetGBuffer();
-    gbuffer->PrepareForRender(sp);
+    gbuffer->BindAttachmentsForReading(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
             false);
 
@@ -313,14 +313,8 @@ void GEngine::Render(Renderer *rend)
                 GL::GetBoundId(GL::BindTarget::DrawFramebuffer) > 0 );
 
         rend->Bind();
-
-        Material *rendMat = rend->GetUserMaterial();
-        if (rendMat)
-        {
-            activeCamera->GetGBuffer()->PrepareForRender(rendMat->GetShaderProgram());
-            rend->OnRender();
-            rend->UnBind();
-        }
+        rend->OnRender();
+        rend->UnBind();
     }
 }
 

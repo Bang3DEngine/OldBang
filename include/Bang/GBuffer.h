@@ -32,7 +32,7 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    virtual void PrepareForRender(ShaderProgram *sp);
+    void BindAttachmentsForReading(ShaderProgram *sp);
 
     void ApplyPass(ShaderProgram *sp,
                    bool willReadFromColor = false,
