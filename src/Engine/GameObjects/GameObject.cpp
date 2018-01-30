@@ -452,7 +452,7 @@ bool GameObject::IsDontDestroyOnLoad() const
     return m_dontDestroyOnLoad;
 }
 
-Rect GameObject::GetBoundingScreenRect(Camera *cam, bool includeChildren) const
+Rect GameObject::GetBoundingViewportRect(Camera *cam, bool includeChildren) const
 {
     AABox bbox = GetAABBox(includeChildren);
     return cam->GetViewportBoundingRect(bbox);

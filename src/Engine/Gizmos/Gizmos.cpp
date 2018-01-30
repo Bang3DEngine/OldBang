@@ -168,10 +168,10 @@ void Gizmos::RenderBox(const AABox &b)
 
 void Gizmos::RenderRect(const Rect &r)
 {
-    RenderScreenLine( Vector2(r.m_min.x, r.m_min.y), Vector2(r.m_max.x, r.m_min.y) );
-    RenderScreenLine( Vector2(r.m_max.x, r.m_min.y), Vector2(r.m_max.x, r.m_max.y) );
-    RenderScreenLine( Vector2(r.m_max.x, r.m_max.y), Vector2(r.m_min.x, r.m_max.y) );
-    RenderScreenLine( Vector2(r.m_min.x, r.m_max.y), Vector2(r.m_min.x, r.m_min.y) );
+    RenderViewportLine( Vector2(r.m_min.x, r.m_min.y), Vector2(r.m_max.x, r.m_min.y) );
+    RenderViewportLine( Vector2(r.m_max.x, r.m_min.y), Vector2(r.m_max.x, r.m_max.y) );
+    RenderViewportLine( Vector2(r.m_max.x, r.m_max.y), Vector2(r.m_min.x, r.m_max.y) );
+    RenderViewportLine( Vector2(r.m_min.x, r.m_max.y), Vector2(r.m_min.x, r.m_min.y) );
 }
 
 void Gizmos::RenderFillRect(const Rect &r)
@@ -216,15 +216,15 @@ void Gizmos::RenderIcon(Texture2D *texture,
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderScreenIcon(Texture2D *texture,
-                              const Rect &screenRect,
+void Gizmos::RenderViewportIcon(Texture2D *texture,
+                              const Rect &winRect,
                               bool fixAspectRatio)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
-    Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
-    Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
+    Gizmos::SetPosition( Vector3(winRect.GetCenter(), 0) );
+    Gizmos::SetScale( Vector3(winRect.GetSize(), 1) );
 
     g->m_meshRenderer->SetRenderWireframe(false);
     SetReceivesLighting(false);
@@ -247,7 +247,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->Render(g->m_lineRenderer);
 }
 
-void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
+void Gizmos::RenderViewportLine(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_lineRenderer->SetPoints( {Vector3(origin.x, origin.y, 0),

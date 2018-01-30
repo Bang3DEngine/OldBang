@@ -41,11 +41,11 @@ RH<Material> MaterialFactory::GetMissing()
 
 RH<Material> MaterialFactory::GetPointLight()
 {
-    return MaterialFactory::Load("Materials/PP_PointLight_Screen.bmat");
+    return MaterialFactory::Load("Materials/PP_PointLight.bmat");
 }
 RH<Material> MaterialFactory::GetDirectionalLight()
 {
-    return MaterialFactory::Load("Materials/PP_DirectionalLight_Screen.bmat");
+    return MaterialFactory::Load("Materials/PP_DirectionalLight.bmat");
 }
 
 RH<Material> MaterialFactory::GetUIText()
@@ -57,9 +57,9 @@ RH<Material> MaterialFactory::GetUIImage()
     return MaterialFactory::Load("Materials/UI/G_UIImageRenderer.bmat");
 }
 
-RH<Material> MaterialFactory::GetRenderGBufferToScreen()
+RH<Material> MaterialFactory::GetRenderGBufferToWindow()
 {
-    return MaterialFactory::Load("Materials/RenderGBufferToScreen.bmat");
+    return MaterialFactory::Load("Materials/RenderGBufferToViewport.bmat");
 }
 
 RH<Material> MaterialFactory::Load(const String &matEnginePath)

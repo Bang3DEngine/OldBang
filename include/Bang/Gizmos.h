@@ -33,11 +33,11 @@ public:
     static void RenderFillRect(const Rect &r);
     static void RenderIcon(Texture2D *texture,
                            bool billboard = true);
-    static void RenderScreenIcon(Texture2D *texture,
-                                 const Rect &screenRect,
-                                 bool fixAspectRatio = false);
-    static void RenderScreenLine(const Vector2 &origin,
-                                 const Vector2 &destiny);
+    static void RenderViewportIcon(Texture2D *texture,
+                                   const Rect &winRect,
+                                   bool fixAspectRatio = false);
+    static void RenderViewportLine(const Vector2 &origin,
+                                   const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin,
                            const Vector3 &destiny);
     static void RenderRay(const Vector3 &origin,

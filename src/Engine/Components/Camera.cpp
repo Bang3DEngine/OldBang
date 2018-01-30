@@ -107,10 +107,10 @@ Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const
     return ray;
 }
 
-Vector2i Camera::FromWindowPointToViewportPoint(const Vector2i &screenPoint) const
+Vector2i Camera::FromWindowPointToViewportPoint(const Vector2i &winPoint) const
 {
     return Vector2i(
-                GL::FromScreenPointToViewportPoint(Vector2(screenPoint),
+                GL::FromWindowPointToViewportPoint(Vector2(winPoint),
                                                    Recti(GetViewportRectInWindow())) );
 }
 
@@ -142,19 +142,19 @@ Rect Camera::GetViewportBoundingRect(const AABox &bbox)
 {
     // If there's a point outside the camera rect, return Empty
     bool allPointsOutside = true;
-    Rect screenRect = bbox.GetAABoundingViewportRect(this);
-    Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
+    Rect winRect = bbox.GetAABoundingViewportRect(this);
+    Vector2 rMin = winRect.GetMin(), rMax = winRect.GetMax();
     allPointsOutside = allPointsOutside &&
-                       !screenRect.Contains( Vector2(rMin.x, rMin.y) );
+                       !winRect.Contains( Vector2(rMin.x, rMin.y) );
     allPointsOutside = allPointsOutside &&
-                       !screenRect.Contains( Vector2(rMin.x, rMax.y) );
+                       !winRect.Contains( Vector2(rMin.x, rMax.y) );
     allPointsOutside = allPointsOutside &&
-                       !screenRect.Contains( Vector2(rMax.x, rMin.y) );
+                       !winRect.Contains( Vector2(rMax.x, rMin.y) );
     allPointsOutside = allPointsOutside &&
-                       !screenRect.Contains( Vector2(rMax.x, rMax.y) );
+                       !winRect.Contains( Vector2(rMax.x, rMax.y) );
     if (allPointsOutside) { return Rect::Zero; }
 
-    // If there's one or more points behind the camera, return ScreenRect
+    // If there's one or more points behind the camera, return WindowRect
     // because we don't know how to handle it properly
     Array<Vector3> points = bbox.GetPoints();
     Transform *tr = GetGameObject()->GetTransform();
@@ -165,7 +165,7 @@ Rect Camera::GetViewportBoundingRect(const AABox &bbox)
         if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::NDCRect; }
     }
 
-    return screenRect;
+    return winRect;
 }
 
 void Camera::SetOrthoHeight(float orthoHeight) { m_orthoHeight = orthoHeight; }
@@ -223,7 +223,7 @@ Rect Camera::GetViewportRectInWindow() const
 }
 Rect Camera::GetViewportRectNDCInWindow() const
 {
-    return GL::FromScreenRectToScreenRectNDC( GetViewportRectInWindow() );
+    return GL::FromWindowRectToWindowRectNDC( GetViewportRectInWindow() );
 }
 
 const Rect& Camera::GetViewportRectNDC() const

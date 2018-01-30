@@ -207,7 +207,7 @@ Rect AABox::GetAABoundingViewportRect(Camera *cam) const
     if ( Contains(camPosition) ) { return Rect::NDCRect; }
     Array<Vector3> boxPoints = (*this).GetPoints();
 
-    List<Vector2> screenPoints;
+    List<Vector2> viewportPoints;
     bool somePointInFront = false;
     Vector3 camForward = cam->GetGameObject()->GetTransform()->GetForward();
     for (const Vector3 &p : boxPoints)
@@ -215,13 +215,13 @@ Rect AABox::GetAABoundingViewportRect(Camera *cam) const
         somePointInFront = somePointInFront ||
                            Vector3::Dot(p-camPosition, camForward) > 0;
 
-        Vector2 screenP = cam->FromWorldPointToViewportPointNDC(p);
-        screenPoints.PushBack(screenP);
+        Vector2 viewportP = cam->FromWorldPointToViewportPointNDC(p);
+        viewportPoints.PushBack(viewportP);
     }
     if (!somePointInFront) { return Rect::Zero; }
 
-    Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints.Begin(),
-                                                           screenPoints.End());
+    Rect boundingRect = Rect::GetBoundingRectFromPositions(viewportPoints.Begin(),
+                                                           viewportPoints.End());
     return boundingRect;
 }
 

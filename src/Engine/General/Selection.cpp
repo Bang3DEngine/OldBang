@@ -11,7 +11,7 @@ USING_NAMESPACE_BANG
 
 GameObject *Selection::GetOveredGameObject()
 {
-    if (!Input::IsMouseInsideScreen()) { return nullptr; }
+    if (!Input::IsMouseInsideWindow()) { return nullptr; }
     return GetOveredGameObject(  SceneManager::GetActiveScene() );
 }
 
@@ -25,7 +25,7 @@ GameObject *Selection::GetOveredGameObject(Camera *cam)
 {
     if (!cam) { return nullptr; }
 
-    Vector2i mouseViewportPoint = Input::GetMousePositionScreen();
+    Vector2i mouseViewportPoint = Input::GetMousePositionWindow();
     mouseViewportPoint = cam->FromWindowPointToViewportPoint(mouseViewportPoint);
     SelectionFramebuffer *sfb = cam->GetSelectionFramebuffer();
     if (sfb)

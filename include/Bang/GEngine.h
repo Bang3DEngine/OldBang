@@ -52,8 +52,8 @@ private:
     Camera *p_currentRenderingCamera = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
-    RH<Mesh> p_screenPlaneMesh;
-    RH<Material> p_renderGBufferToScreenMaterial;
+    RH<Mesh> p_windowPlaneMesh;
+    RH<Material> p_renderGBufferToWindowMaterial;
 
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);

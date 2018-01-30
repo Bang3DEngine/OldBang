@@ -136,11 +136,11 @@ void Window::Render()
         Camera *camera = scene->GetCamera();
         if (!camera) { return; }
         GetGEngine()->Render(scene, camera);
-        BlitToScreen(camera);
+        BlitToWindow(camera);
     }
 }
 
-void Window::BlitToScreen(Camera *camera)
+void Window::BlitToWindow(Camera *camera)
 {
     if (camera)
     {
@@ -451,7 +451,7 @@ void Window::SetParent(Window *parentWindow)
 
 void Window::RetrieveTitleBarHeight()
 {
-    if(Input::IsMouseInsideScreen())
+    if(Input::IsMouseInsideWindow())
     {
         Vector2i localCoords, globalCoords;
         SDL_GetMouseState(&localCoords.x, &localCoords.y);

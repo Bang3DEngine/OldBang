@@ -47,8 +47,8 @@ void GEngine::Init()
     GL::SetActive( GetGL() );
     m_texUnitManager = new TextureUnitManager();
 
-    p_screenPlaneMesh = Resources::Clone<Mesh>(MeshFactory::GetUIPlane());
-    p_renderGBufferToScreenMaterial = MaterialFactory::GetRenderGBufferToScreen();
+    p_windowPlaneMesh = Resources::Clone<Mesh>(MeshFactory::GetUIPlane());
+    p_renderGBufferToWindowMaterial = MaterialFactory::GetRenderGBufferToWindow();
     GL::SetActive( nullptr );
 }
 
@@ -206,9 +206,9 @@ void GEngine::RenderViewportRect(ShaderProgram *sp, const Rect &destRectMask)
 void GEngine::RenderGBufferColorToViewport(Camera *cam)
 {
     if (!cam) { return; }
-    p_renderGBufferToScreenMaterial.Get()->Bind();
+    p_renderGBufferToWindowMaterial.Get()->Bind();
 
-    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
+    ShaderProgram *sp = p_renderGBufferToWindowMaterial.Get()->GetShaderProgram();
     GBuffer *gbuffer = cam->GetGBuffer();
     gbuffer->BindAttachmentsForReading(sp);
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
@@ -216,7 +216,7 @@ void GEngine::RenderGBufferColorToViewport(Camera *cam)
 
     GEngine::RenderViewportRect(sp, Rect::NDCRect);
 
-    p_renderGBufferToScreenMaterial.Get()->UnBind();
+    p_renderGBufferToWindowMaterial.Get()->UnBind();
 }
 
 void GEngine::RenderViewportPlane()
@@ -231,8 +231,8 @@ void GEngine::RenderViewportPlane()
     GL::SetDepthFunc(GL::Function::Always);
     GL::SetDepthMask(false);
 
-    GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
-               p_screenPlaneMesh.Get()->GetVertexCount());
+    GL::Render(p_windowPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
+               p_windowPlaneMesh.Get()->GetVertexCount());
 
     GL::SetDepthMask(prevDepthMask);
     GL::SetDepthFunc(prevDepthFunc);

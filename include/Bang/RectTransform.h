@@ -65,8 +65,8 @@ public:
     const Vector2& GetAnchorMax() const;
     Rect GetViewportRect() const;
     Rect GetViewportRectNDC() const;
-    Rect GetParentScreenRect() const;
-    Rect GetParentScreenRectNDC() const;
+    Rect GetParentViewportRect() const;
+    Rect GetParentViewportRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
@@ -78,8 +78,8 @@ public:
     Vector2 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmount) const;
-    Vector2 FromScreenAmountToLocalAmountNDC(const Vector2 &winAmount) const;
-    Vector2 FromScreenAmountToLocalAmountNDC(const Vector2i &winAmount) const;
+    Vector2 FromWindowAmountToLocalAmountNDC(const Vector2 &winAmount) const;
+    Vector2 FromWindowAmountToLocalAmountNDC(const Vector2i &winAmount) const;
     Vector2 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const;
     Vector2 FromLocalPointNDCToViewportPoint(const Vector2 &localPointNDC) const;
 
@@ -90,7 +90,7 @@ public:
     void OnDisabled() override;
 
     // ICloneable
-    void CloneInto(ICloneable *clone) const;
+    void CloneInto(ICloneable *clone) const override;
 
     // Serializable
     virtual void ImportXML(const XMLNode &xmlInfo) override;

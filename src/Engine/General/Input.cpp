@@ -18,7 +18,7 @@ Input::~Input()
 
 void Input::OnFrameFinished()
 {
-    m_lastMousePosScreen = GetMousePosition();
+    m_lastMousePosWindow = GetMousePosition();
 
     // KEYS
     for (auto it = m_keyInfos.Begin(); it != m_keyInfos.End();)
@@ -384,7 +384,7 @@ bool Input::GetMouseButtonDoubleClick(MouseButton mb)
     return Input::GetMouseButtonUp(mb) && inp->m_isADoubleClick;
 }
 
-bool Input::IsMouseInsideScreen()
+bool Input::IsMouseInsideWindow()
 {
     return Input::GetActive()->m_isMouseInside;
 }
@@ -407,8 +407,8 @@ Vector2 Input::GetMouseAxis()
 int Input::GetMouseDeltaX()
 {
     Input *inp = Input::GetActive();
-    int delta = inp->GetMousePositionScreen().x -
-                Input::GetPreviousMousePositionScreen().x;
+    int delta = inp->GetMousePositionWindow().x -
+                Input::GetPreviousMousePositionWindow().x;
     if (Math::Abs(delta) > Window::GetActive()->GetWidth() * 0.8f) { delta = 0; }
     return delta;
 }
@@ -416,8 +416,8 @@ int Input::GetMouseDeltaX()
 int Input::GetMouseDeltaY()
 {
     Input *inp = Input::GetActive();
-    int delta = inp->GetMousePositionScreen().y -
-                Input::GetPreviousMousePositionScreen().y;
+    int delta = inp->GetMousePositionWindow().y -
+                Input::GetPreviousMousePositionWindow().y;
     if (Math::Abs(delta) > Window::GetActive()->GetHeight() * 0.8f) { delta = 0; }
     return delta;
 }
@@ -474,19 +474,19 @@ void Input::SetMousePosition(const Vector2i &globalMousePosition)
 Vector2i Input::GetMousePosition()
 {
     return Vector2i(
-              GL::FromScreenPointToViewportPoint( GetMousePositionScreen() ) );
+              GL::FromWindowPointToViewportPoint( GetMousePositionWindow() ) );
 }
 Vector2 Input::GetMousePositionNDC()
 {
     return GL::FromViewportPointToViewportPointNDC( Input::GetMousePosition() );
 }
 
-Vector2i Input::GetMousePositionScreen()
+Vector2i Input::GetMousePositionWindow()
 {
     Window *win = Window::GetActive();
 
     Vector2i pos;
-    if (Input::IsMouseInsideScreen())
+    if (Input::IsMouseInsideWindow())
     {
         SDL_GetMouseState(&pos.x, &pos.y);
         pos.y = (win->GetHeight()-1) - pos.y; // Invert Y
@@ -502,15 +502,15 @@ Vector2i Input::GetMousePositionScreen()
     return pos;
 }
 
-Vector2 Input::GetMousePositionScreenNDC()
+Vector2 Input::GetMousePositionWindowNDC()
 {
-    return GL::FromScreenPointToScreenPointNDC( Input::GetMousePositionScreen() );
+    return GL::FromWindowPointToWindowPointNDC( Input::GetMousePositionWindow() );
 }
 
-Vector2i Input::GetPreviousMousePositionScreen()
+Vector2i Input::GetPreviousMousePositionWindow()
 {
     Input *inp = Input::GetActive();
-    return inp->m_lastMousePosScreen;
+    return inp->m_lastMousePosWindow;
 }
 
 void Input::StartTextInput()
@@ -535,7 +535,7 @@ void Input::Reset()
 {
     m_isADoubleClick = m_lockMouseMovement = m_isMouseInside = false;
     m_lastMouseWheelDelta = Vector2::Zero;
-    m_lastMousePosScreen = Vector2i(-1);
+    m_lastMousePosWindow = Vector2i(-1);
     m_lastMouseDownTimestamp = 0.0f;
     m_inputText = "";
 

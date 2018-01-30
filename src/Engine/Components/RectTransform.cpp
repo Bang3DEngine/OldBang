@@ -25,7 +25,7 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    Rect parentWinRect = GetParentScreenRect();
+    Rect parentWinRect = GetParentViewportRect();
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
     return Vector2f(vpPoint - parentWinRect.GetMin()) * pixelNDCSize - 1.0f;
@@ -38,33 +38,32 @@ FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
 
 Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const
 {
-    Rect parentWinRect = GetParentScreenRect();
+    Rect parentWinRect = GetParentViewportRect();
     Vector2 parentSizePxVp = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountToAmountNDC( Vector2(vpAmount) , parentSizePxVp );
 }
-
 Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmount) const
 {
-    return FromScreenAmountToLocalAmountNDC( Vector2(vpAmount) );
+    return FromWindowAmountToLocalAmountNDC( Vector2(vpAmount) );
 }
 
-Vector2 RectTransform::FromScreenAmountToLocalAmountNDC(const Vector2 &winAmount) const
+Vector2 RectTransform::FromWindowAmountToLocalAmountNDC(const Vector2 &winAmount) const
 {
-    Vector2 screenViewportProportion = (Vector2(Window::GetActive()->GetSize()) /
+    Vector2 winViewportProportion = (Vector2(Window::GetActive()->GetSize()) /
                                         Vector2(GL::GetViewportSize()));
-    Vector2 amount = winAmount * screenViewportProportion;
+    Vector2 amount = winAmount * winViewportProportion;
     return FromViewportAmountToLocalAmountNDC(amount);
 }
 Vector2 RectTransform::
-FromScreenAmountToLocalAmountNDC(const Vector2i &winAmount) const
+FromWindowAmountToLocalAmountNDC(const Vector2i &winAmount) const
 {
-    return FromScreenAmountToLocalAmountNDC( Vector2(winAmount) );
+    return FromWindowAmountToLocalAmountNDC( Vector2(winAmount) );
 }
 
 Vector2 RectTransform::
 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const
 {
-    Rect parentWinRect = GetParentScreenRect();
+    Rect parentWinRect = GetParentViewportRect();
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountNDCToAmount(localAmountNDC, parentSizePx);
 }
@@ -325,21 +324,21 @@ Rect RectTransform::GetViewportRect() const
     return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
 }
 
-Rect RectTransform::GetParentScreenRectNDC() const
+Rect RectTransform::GetParentViewportRectNDC() const
 {
-    Rect parentScreenRectNDC = Rect::NDCRect;
+    Rect parentWindowRectNDC = Rect::NDCRect;
     GameObject *parent = GetGameObject()->GetParent();
     RectTransform *parentRectTransform = parent ? parent->GetRectTransform() :
                                                   nullptr;
     if (parentRectTransform)
     {
-        parentScreenRectNDC = parentRectTransform->GetViewportRectNDC();
+        parentWindowRectNDC = parentRectTransform->GetViewportRectNDC();
     }
-    return parentScreenRectNDC;
+    return parentWindowRectNDC;
 }
-Rect RectTransform::GetParentScreenRect() const
+Rect RectTransform::GetParentViewportRect() const
 {
-    return GL::FromScreenRectNDCToScreenRect( GetParentScreenRectNDC() );
+    return GL::FromWindowRectNDCToWindowRect( GetParentViewportRectNDC() );
 }
 
 
@@ -348,9 +347,9 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
     Vector2d minMarginedAnchor (GetAnchorMin() +
-                                FromScreenAmountToLocalAmountNDC(GetMarginLeftBot()));
+                                FromWindowAmountToLocalAmountNDC(GetMarginLeftBot()));
     Vector2d maxMarginedAnchor (GetAnchorMax() -
-                                FromScreenAmountToLocalAmountNDC(GetMarginRightTop()));
+                                FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
     Vector3d anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5, 1);
 
     Vector3d moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5,
@@ -368,10 +367,10 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
 bool RectTransform::IsMouseOver(bool recursive) const
 {
-    if (!Input::IsMouseInsideScreen()) { return false; }
+    if (!Input::IsMouseInsideWindow()) { return false; }
 
     if (!IsWaitingToBeDestroyed() && IsEnabled() &&
-        GetViewportRectNDC().Contains( Input::GetMousePositionScreenNDC() ))
+        GetViewportRectNDC().Contains( Input::GetMousePositionWindowNDC() ))
     {
         return true;
     }

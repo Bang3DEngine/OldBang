@@ -470,7 +470,7 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& screenPoint);
+    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& winPoint);
     static Vector2  FromPointToPointNDC(const Vector2 &point,
                                         const Vector2 &rectSize);
     static Vector2  FromPointNDCToPoint(const Vector2 &pointNDC,
@@ -479,21 +479,21 @@ public:
                                           const Vector2 &rectSize);
     static Vector2  FromAmountNDCToAmount(const Vector2 &amountNDC,
                                           const Vector2 &rectSize);
-    static Vector2  FromScreenPointToViewportPoint(const Vector2& screenPoint,
+    static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint,
                                                    const Recti& viewport);
-    static Vector2  FromViewportPointToScreenPoint(const Vector2& vpPoint);
-    static Vector2  FromViewportPointToScreenPoint(const Vector2i& vpPoint);
-    static Vector2  FromScreenPointToViewportPoint(const Vector2& screenPoint);
-    static Vector2  FromScreenPointToViewportPoint(const Vector2i& screenPoint);
+    static Vector2  FromViewportPointToWindowPoint(const Vector2& vpPoint);
+    static Vector2  FromViewportPointToWindowPoint(const Vector2i& vpPoint);
+    static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint);
+    static Vector2  FromWindowPointToViewportPoint(const Vector2i& winPoint);
     static Rect     FromViewportRectToViewportRectNDC(const Rect &vpRect);
     static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
-    static Rect     FromScreenRectToScreenRectNDC(const Rect &screenRect);
-    static Rect     FromScreenRectNDCToScreenRect(const Rect &screenRectNDC);
+    static Rect     FromWindowRectToWindowRectNDC(const Rect &winRect);
+    static Rect     FromWindowRectNDCToWindowRect(const Rect &winRectNDC);
     static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
     static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
-    static Vector2  FromScreenPointNDCToScreenPoint(const Vector2  &screenPointNDC);
-    static Vector2  FromScreenPointToScreenPointNDC(const Vector2  &screenPoint);
-    static Vector2  FromScreenPointToScreenPointNDC(const Vector2i &screenPoint);
+    static Vector2  FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);
+    static Vector2  FromWindowPointToWindowPointNDC(const Vector2  &winPoint);
+    static Vector2  FromWindowPointToWindowPointNDC(const Vector2i &winPoint);
     static Vector2  FromViewportPointToViewportPointNDC(const Vector2  &vpPoint);
     static Vector2  FromViewportPointToViewportPointNDC(const Vector2i &vpPoint);
     static Vector2  FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);

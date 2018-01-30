@@ -97,7 +97,7 @@ public:
     static bool GetMouseButtonDown(MouseButton mb);
     static bool GetMouseButtonDoubleClick(MouseButton mb);
 
-    static bool IsMouseInsideScreen();
+    static bool IsMouseInsideWindow();
 
     static float GetMouseAxisX();
     static float GetMouseAxisY();
@@ -119,9 +119,9 @@ public:
     static void SetMousePosition(const Vector2i &globalMousePosition);
     static Vector2i GetMousePosition();
     static Vector2  GetMousePositionNDC();
-    static Vector2i GetMousePositionScreen();
-    static Vector2  GetMousePositionScreenNDC();
-    static Vector2i GetPreviousMousePositionScreen();
+    static Vector2i GetMousePositionWindow();
+    static Vector2  GetMousePositionWindowNDC();
+    static Vector2i GetPreviousMousePositionWindow();
 
     static void StartTextInput();
     static String PollInputText();
@@ -143,7 +143,7 @@ private:
 
     String m_inputText = "";
 
-    Vector2i m_lastMousePosScreen = Vector2i::Zero;
+    Vector2i m_lastMousePosWindow = Vector2i::Zero;
     Vector2i m_lastClickMousePos  = Vector2i::Zero;
 
     Array<Key> m_keysUp;

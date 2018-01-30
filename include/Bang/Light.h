@@ -41,7 +41,7 @@ protected:
 private:
     float m_intensity = 1.0f;
     Color m_color = Color::White;
-    RH<Material> p_lightMaterialScreen;
+    RH<Material> p_lightMaterial;
 
     void ApplyLight(Camera *camera, const Rect &renderRect) const;
     virtual Rect GetRenderRect(Camera *camera) const;
