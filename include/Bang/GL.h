@@ -475,7 +475,7 @@ public:
                                         const Vector2 &rectSize);
     static Vector2  FromPointNDCToPoint(const Vector2 &pointNDC,
                                         const Vector2 &rectSize);
-    static Vector2  FromAmountToAmountNDC(const Vector2 &amountNDC,
+    static Vector2  FromAmountToAmountNDC(const Vector2 &amount,
                                           const Vector2 &rectSize);
     static Vector2  FromAmountNDCToAmount(const Vector2 &amountNDC,
                                           const Vector2 &rectSize);

@@ -88,7 +88,7 @@ void UIInputText::UpdateCursorRenderer()
 
     const RectTransform *cParentRT =
             p_cursor->GetGameObject()->GetParent()->GetRectTransform();
-    const Vector2 cursorSizeLocalNDC = cParentRT->FromViewportAmountToLocalAmountNDC(Vector2i(3,0));
+    const Vector2 cursorSizeLocalNDC = cParentRT->FromScreenAmountToLocalAmountNDC(Vector2i(3,0));
     const Vector2 minPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(minPoint);
     const Vector2 maxPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(maxPoint);
 

@@ -65,7 +65,7 @@ public:
     const Vector2& GetAnchorMax() const;
     Rect GetViewportRect() const;
     Rect GetViewportRectNDC() const;
-    Rect GetParentViewportRect() const;
+    Rect GetParentScreenRect() const;
     Rect GetParentScreenRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
@@ -78,6 +78,8 @@ public:
     Vector2 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmount) const;
+    Vector2 FromScreenAmountToLocalAmountNDC(const Vector2 &winAmount) const;
+    Vector2 FromScreenAmountToLocalAmountNDC(const Vector2i &winAmount) const;
     Vector2 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const;
     Vector2 FromLocalPointNDCToViewportPoint(const Vector2 &localPointNDC) const;
 
