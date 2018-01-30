@@ -34,8 +34,7 @@ public:
     static void RenderIcon(Texture2D *texture,
                            bool billboard = true);
     static void RenderViewportIcon(Texture2D *texture,
-                                   const Rect &winRect,
-                                   bool fixAspectRatio = false);
+                                   const Rect &winRect);
     static void RenderViewportLine(const Vector2 &origin,
                                    const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin,

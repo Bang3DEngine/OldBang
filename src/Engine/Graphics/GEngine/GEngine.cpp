@@ -226,7 +226,7 @@ void GEngine::RenderViewportPlane()
     bool prevDepthMask = GL::GetDepthMask();
 
     GL::SetWireframe(false);
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBothAndModel);
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     GL::Function prevDepthFunc = GL::GetDepthFunc();
     GL::SetDepthFunc(GL::Function::Always);
     GL::SetDepthMask(false);

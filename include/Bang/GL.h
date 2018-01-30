@@ -159,9 +159,7 @@ public:
     enum class ViewProjMode
     {
         UseBoth            = 0,
-        OnlyFixAspectRatio = 1,
-        IgnoreBoth         = 2,
-        IgnoreBothAndModel = 3
+        IgnoreBoth         = 1
     };
 
     enum class TextureTarget

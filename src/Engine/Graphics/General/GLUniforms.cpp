@@ -114,32 +114,8 @@ void GLUniforms::UpdatePVMMatrix()
             pvmMatrix = matrices->proj * viewModel;
         break;
 
-        case GL::ViewProjMode::OnlyFixAspectRatio:
-        {
-            Matrix4 modelTranslate( Vector4(1,0,0,0),
-                                    Vector4(0,1,0,0),
-                                    Vector4(0,0,1,0),
-                                    model.c3);
-
-            Matrix4 modelNoTranslate = model;
-            modelNoTranslate.SetTranslate( Vector3(0,0,0) );
-
-            float ar = 1.0f / GL::GetViewportAspectRatio();
-            Matrix4 fixAR(ar, 0, 0, 0,
-                           0, 1, 0, 0,
-                           0, 0, 1, 0,
-                           0, 0, 0, 1);
-
-            pvmMatrix = modelTranslate * fixAR * modelNoTranslate;
-        }
-        break;
-
         case GL::ViewProjMode::IgnoreBoth:
             pvmMatrix = model;
-            break;
-
-        case GL::ViewProjMode::IgnoreBothAndModel:
-            pvmMatrix = Matrix4::Identity;
             break;
     }
 

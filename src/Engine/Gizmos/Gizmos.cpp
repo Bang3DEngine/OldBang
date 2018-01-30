@@ -217,8 +217,7 @@ void Gizmos::RenderIcon(Texture2D *texture,
 }
 
 void Gizmos::RenderViewportIcon(Texture2D *texture,
-                              const Rect &winRect,
-                              bool fixAspectRatio)
+                                const Rect &winRect)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
@@ -229,9 +228,7 @@ void Gizmos::RenderViewportIcon(Texture2D *texture,
     g->m_meshRenderer->SetRenderWireframe(false);
     SetReceivesLighting(false);
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
-    g->m_meshRenderer->SetViewProjMode(fixAspectRatio ?
-                                        GL::ViewProjMode::OnlyFixAspectRatio :
-                                        GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     g->Render(g->m_meshRenderer);
 }
 

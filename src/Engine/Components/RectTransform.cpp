@@ -392,7 +392,6 @@ void RectTransform::OnRender(RenderPass rp)
     Transform::OnRender(rp);
     if (rp != RenderPass::Overlay) { return; }
 
-    /*
     Gizmos::Reset();
     Gizmos::SetThickness(1.0f);
 
@@ -404,6 +403,7 @@ void RectTransform::OnRender(RenderPass rp)
 
     Gizmos::SetColor(Color::Green);
     Gizmos::RenderRect(r);
+    /*
 
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
