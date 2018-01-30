@@ -182,7 +182,7 @@ void Gizmos::RenderFillRect(const Rect &r)
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
 
-    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::Canvas);
     g->Render(g->m_meshRenderer);
 }
 
@@ -228,7 +228,7 @@ void Gizmos::RenderViewportIcon(Texture2D *texture,
     g->m_meshRenderer->SetRenderWireframe(false);
     SetReceivesLighting(false);
     g->m_meshRenderer->GetMaterial()->SetTexture(texture);
-    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_meshRenderer->SetViewProjMode(GL::ViewProjMode::Canvas);
     g->Render(g->m_meshRenderer);
 }
 
@@ -240,7 +240,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_lineRenderer->SetViewProjMode(GL::ViewProjMode::UseBoth);
+    g->m_lineRenderer->SetViewProjMode(GL::ViewProjMode::World);
     g->Render(g->m_lineRenderer);
 }
 
@@ -253,7 +253,7 @@ void Gizmos::RenderViewportLine(const Vector2 &origin, const Vector2 &destiny)
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);
 
-    g->m_lineRenderer->SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
+    g->m_lineRenderer->SetViewProjMode(GL::ViewProjMode::Canvas);
     g->Render(g->m_lineRenderer);
 }
 
@@ -353,7 +353,7 @@ void Gizmos::Reset()
     List<Renderer*> rends = g->m_gizmosGo->GetComponents<Renderer>();
     for (Renderer *rend : rends)
     {
-        rend->SetViewProjMode(GL::ViewProjMode::UseBoth);
+        rend->SetViewProjMode(GL::ViewProjMode::World);
     }
 
     g->m_meshRenderer->GetMaterial()->SetTexture(nullptr);

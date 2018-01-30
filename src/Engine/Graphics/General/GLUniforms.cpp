@@ -110,13 +110,13 @@ void GLUniforms::UpdatePVMMatrix()
 
     switch (gu->GetViewProjMode())
     {
-        case GL::ViewProjMode::UseBoth:
+        case GL::ViewProjMode::World:
             pvmMatrix = matrices->proj * viewModel;
         break;
 
-        case GL::ViewProjMode::IgnoreBoth:
+        case GL::ViewProjMode::Canvas:
             pvmMatrix = model;
-            break;
+        break;
     }
 
     matrices->pvm = pvmMatrix;

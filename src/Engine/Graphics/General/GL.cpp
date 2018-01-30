@@ -892,7 +892,7 @@ Vector2i GL::GetViewportSize()
 float GL::GetViewportAspectRatio()
 {
     Vector2i vpSize = GL::GetViewportSize();
-    return Cast<float>(vpSize.x) / vpSize.y;
+    return SCAST<float>(vpSize.x) / vpSize.y;
 }
 
 Vector2 GL::GetViewportPixelSize()

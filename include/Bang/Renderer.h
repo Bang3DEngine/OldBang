@@ -80,7 +80,7 @@ private:
     bool m_renderWireframe = false;
     GL::Face m_cullFace = GL::Face::Back;
     GL::Primitive m_renderPrimitive = GL::Primitive::Triangles;
-    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::World;
 
     mutable RH<Material> p_material;
     RH<Material> p_sharedMaterial;

@@ -346,20 +346,44 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (!IsInvalid()) { return m_localToParentMatrix; }
 
-    Vector2d minMarginedAnchor (GetAnchorMin() +
-                                FromWindowAmountToLocalAmountNDC(GetMarginLeftBot()));
-    Vector2d maxMarginedAnchor (GetAnchorMax() -
-                                FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
-    Vector3d anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5, 1);
+    Vector2 minMarginedAnchor (GetAnchorMin() +
+                               FromWindowAmountToLocalAmountNDC(GetMarginLeftBot()));
+    Vector2 maxMarginedAnchor (GetAnchorMax() -
+                               FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
+    Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
-    Vector3d moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5,
+    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
                                   0);
 
-    Matrix4d rtMatrix = Matrix4d::TranslateMatrix(moveToAnchorCenter) *
-                        Matrix4d::ScaleMatrix(anchorScaling);
-    Matrix4d transformMatrix ( Transform::GetLocalToParentMatrix() );
+    Matrix4 scaleToAnchorsMat    = Matrix4::ScaleMatrix(anchorScaling);
+    Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
 
-    m_localToParentMatrix = Matrix4f( transformMatrix * rtMatrix );
+    Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
+
+    Matrix4f rotation = Matrix4f::Identity;
+    if (GetLocalRotation() != Quaternion::Identity)
+    {
+        float ar  = GL::GetViewportAspectRatio();
+        Matrix4 aspectRatio    = Matrix4::ScaleMatrix( Vector3(ar, 1, 1) );
+        Matrix4 aspectRatioInv = Matrix4::ScaleMatrix( Vector3(1.0f/ar, 1, 1) );
+
+        Matrix4f translateToPivotMatrix =
+                Matrix4f::TranslateMatrix( Vector3f(-GetPivotPosition(), 0) );
+        Matrix4f translateToPivotMatrixInv =
+                Matrix4f::TranslateMatrix( Vector3f( GetPivotPosition(), 0) );
+
+        rotation = aspectRatioInv                                    *
+                     translateToPivotMatrixInv                       *
+                       scaleToAnchorsInvMat                          *
+                         Matrix4::RotateMatrix( GetLocalRotation() ) *
+                       scaleToAnchorsMat                             *
+                     translateToPivotMatrix                          *
+                   aspectRatio;
+    }
+
+    m_localToParentMatrix = translateToAnchorCenterMat *
+                            scaleToAnchorsMat *
+                            rotation;
     Validate();
 
     return m_localToParentMatrix;
@@ -390,6 +414,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
 void RectTransform::OnRender(RenderPass rp)
 {
     Transform::OnRender(rp);
+    /*
     if (rp != RenderPass::Overlay) { return; }
 
     Gizmos::Reset();
@@ -403,8 +428,6 @@ void RectTransform::OnRender(RenderPass rp)
 
     Gizmos::SetColor(Color::Green);
     Gizmos::RenderRect(r);
-    /*
-
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
     Gizmos::SetColor(Color::Yellow);

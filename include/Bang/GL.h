@@ -158,8 +158,8 @@ public:
 
     enum class ViewProjMode
     {
-        UseBoth            = 0,
-        IgnoreBoth         = 1
+        World  = 0,
+        Canvas = 1
     };
 
     enum class TextureTarget

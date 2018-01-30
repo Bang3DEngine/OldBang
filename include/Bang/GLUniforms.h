@@ -85,7 +85,7 @@ private:
 
     Matrices m_matrices;
     int m_bindingPointsUsed = 0;
-    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::IgnoreBoth;
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::Canvas;
 
     GLUniforms();
     virtual ~GLUniforms();
