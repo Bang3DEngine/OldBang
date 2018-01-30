@@ -48,7 +48,7 @@ public:
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
 private:
-    void RenderScreenPlane();
+    void RenderViewportPlane();
 
     friend class GEngine;
 };

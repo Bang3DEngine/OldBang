@@ -33,7 +33,7 @@ public:
     void BindSelectionFramebuffer();
 
     Ray      FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const;
-    Vector2i FromScreenPointToViewportPoint(const Vector2i &screenPoint) const;
+    Vector2i FromWindowPointToViewportPoint(const Vector2i &winPoint) const;
     Vector2  FromWorldPointToViewportPointNDC(const Vector3 &worldPosition) const;
     Vector3  FromViewportPointNDCToWorldPoint(const Vector3 &vpPositionNDC) const;
     Vector3  FromViewportPointNDCToWorldPoint(const Vector2 &vpPositionNDC,
@@ -62,9 +62,9 @@ public:
     bool GetRenderSelectionBuffer() const;
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
-    Rect GetScreenBoundingRect(const AABox &bbox);
-    Rect GetViewportScreenRect() const;
-    Rect GetViewportScreenRectNDC() const;
+    Rect GetViewportBoundingRect(const AABox &bbox);
+    Rect GetViewportRectInWindow() const;
+    Rect GetViewportRectNDCInWindow() const;
     const Rect& GetViewportRectNDC() const;
     GBuffer *GetGBuffer() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;

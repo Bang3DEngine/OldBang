@@ -146,7 +146,7 @@ void Window::BlitToScreen(Camera *camera)
     {
         Recti prevVP = GL::GetViewportRect();
         camera->SetViewportForBlitting();
-        GetGEngine()->RenderToScreen(camera);
+        GetGEngine()->RenderGBufferColorToViewport(camera);
         GL::SetViewport(prevVP);
     }
 }

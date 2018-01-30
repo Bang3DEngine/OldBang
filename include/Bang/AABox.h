@@ -40,7 +40,7 @@ public:
     Vector3 GetDimensions() const;
     float GetArea() const;
     float GetVolume() const;
-    Rect GetAABoundingScreenRect(Camera *cam) const;
+    Rect GetAABoundingViewportRect(Camera *cam) const;
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
     Array<Vector3> GetPoints() const;
 

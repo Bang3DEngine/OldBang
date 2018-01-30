@@ -201,7 +201,7 @@ Array<Vector3> AABox::GetPoints() const
     return {p1, p2, p3, p4, p5, p6, p7, p8};
 }
 
-Rect AABox::GetAABoundingScreenRect(Camera *cam) const
+Rect AABox::GetAABoundingViewportRect(Camera *cam) const
 {
     Vector3 camPosition = cam->GetGameObject()->GetTransform()->GetPosition();
     if ( Contains(camPosition) ) { return Rect::NDCRect; }

@@ -64,7 +64,7 @@ void Camera::UnBind() const
 
 void Camera::SetViewportForBlitting() const
 {
-    m_latestViewportRect = Recti( GetViewportScreenRect() );
+    m_latestViewportRect = Recti( GetViewportRectInWindow() );
     GL::SetViewport(m_latestViewportRect);
 }
 
@@ -107,11 +107,11 @@ Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const
     return ray;
 }
 
-Vector2i Camera::FromScreenPointToViewportPoint(const Vector2i &screenPoint) const
+Vector2i Camera::FromWindowPointToViewportPoint(const Vector2i &screenPoint) const
 {
     return Vector2i(
                 GL::FromScreenPointToViewportPoint(Vector2(screenPoint),
-                                                   Recti(GetViewportScreenRect())) );
+                                                   Recti(GetViewportRectInWindow())) );
 }
 
 Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition) const
@@ -138,11 +138,11 @@ Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector2 &vpPointNDC,
     return res;
 }
 
-Rect Camera::GetScreenBoundingRect(const AABox &bbox)
+Rect Camera::GetViewportBoundingRect(const AABox &bbox)
 {
     // If there's a point outside the camera rect, return Empty
     bool allPointsOutside = true;
-    Rect screenRect = bbox.GetAABoundingScreenRect(this);
+    Rect screenRect = bbox.GetAABoundingViewportRect(this);
     Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
     allPointsOutside = allPointsOutside &&
                        !screenRect.Contains( Vector2(rMin.x, rMin.y) );
@@ -215,15 +215,15 @@ const Set<RenderPass> &Camera::GetRenderPassMask() const
     return m_renderPassMask;
 }
 
-Rect Camera::GetViewportScreenRect() const
+Rect Camera::GetViewportRectInWindow() const
 {
     Rect vpRect = GetViewportRectNDC() * 0.5f + 0.5f;
     return Rect( vpRect * Vector2(GL::GetViewportSize())
                         + Vector2(GL::GetViewportRect().GetMin()) );
 }
-Rect Camera::GetViewportScreenRectNDC() const
+Rect Camera::GetViewportRectNDCInWindow() const
 {
-    return GL::FromScreenRectToScreenRectNDC( GetViewportScreenRect() );
+    return GL::FromScreenRectToScreenRectNDC( GetViewportRectInWindow() );
 }
 
 const Rect& Camera::GetViewportRectNDC() const
@@ -243,7 +243,7 @@ SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
 
 Camera *Camera::GetActive()
 {
-    Camera *cam = GEngine::GetActiveCamera();
+    Camera *cam = GEngine::GetCurrentRenderingCamera();
     if (!cam)
     {
         Scene *activeScene = SceneManager::GetActiveScene();

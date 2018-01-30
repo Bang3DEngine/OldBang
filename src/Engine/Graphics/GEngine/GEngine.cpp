@@ -55,10 +55,10 @@ void GEngine::Init()
 void GEngine::Render(GameObject *go, Camera *camera)
 {
     go->BeforeRender();
-    SetActiveCamera(camera);
+    SetCurrentRenderingCamera(camera);
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
-    SetActiveCamera(nullptr);
+    SetCurrentRenderingCamera(nullptr);
 }
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
@@ -86,25 +86,21 @@ void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
     GL::SetStencilOp(prevStencilOp);
 }
 
-void GEngine::Resize(int newWidth, int newHeight)
-{
-}
-
-Camera *GEngine::GetActiveCamera()
+Camera *GEngine::GetCurrentRenderingCamera()
 {
     GEngine *ge = GEngine::GetActive();
-    return ge ? ge->p_activeCamera : nullptr;
+    return ge ? ge->p_currentRenderingCamera : nullptr;
 }
 
 GBuffer *GEngine::GetActiveGBuffer()
 {
-    Camera *cam = GEngine::GetActiveCamera();
+    Camera *cam = GEngine::GetCurrentRenderingCamera();
     return cam ? cam->GetGBuffer() : nullptr;
 }
 
 SelectionFramebuffer *GEngine::GetActiveSelectionFramebuffer()
 {
-    Camera *cam = GEngine::GetActiveCamera();
+    Camera *cam = GEngine::GetCurrentRenderingCamera();
     return cam ? cam->GetSelectionFramebuffer() : nullptr;
 }
 
@@ -163,7 +159,7 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 
 void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)
 {
-    Camera *cam = GetActiveCamera();
+    Camera *cam = GetCurrentRenderingCamera();
     if (cam && cam->MustRenderPass(renderPass))
     {
         go->Render(renderPass, true);
@@ -194,7 +190,7 @@ void GEngine::SetActive(GEngine *gEngine)
 }
 
 
-void GEngine::RenderScreenRect(ShaderProgram *sp, const Rect &destRectMask)
+void GEngine::RenderViewportRect(ShaderProgram *sp, const Rect &destRectMask)
 {
     GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);
     sp->Bind();
@@ -202,35 +198,12 @@ void GEngine::RenderScreenRect(ShaderProgram *sp, const Rect &destRectMask)
     sp->Set("B_UvMultiply",       Vector2::One, false);
     sp->Set("B_destRectMinCoord", destRectMask.GetMin(), false);
     sp->Set("B_destRectMaxCoord", destRectMask.GetMax(), false);
-    RenderScreenPlane();
+    RenderViewportPlane();
     sp->UnBind();
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
 }
 
-void GEngine::RenderGBufferToScreen(const Rect &gbufferRectMask,
-                                    const Rect &destRectMask)
-{
-    GBuffer *gbuffer = Camera::GetActive()->GetGBuffer();
-    GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);
-
-    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()->GetShaderProgram();
-
-    sp->Bind();
-    gbuffer->BindAttachmentsForReading(sp);
-    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
-            false);
-
-    sp->Set("B_UvOffset",         gbufferRectMask.GetMin()  * 0.5f + 0.5f);
-    sp->Set("B_UvMultiply",       gbufferRectMask.GetSize() * 0.5f);
-    sp->Set("B_destRectMinCoord", destRectMask.GetMin());
-    sp->Set("B_destRectMaxCoord", destRectMask.GetMax());
-    RenderScreenPlane();
-    sp->UnBind();
-
-    GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
-}
-
-void GEngine::RenderToScreen(Camera *cam)
+void GEngine::RenderGBufferColorToViewport(Camera *cam)
 {
     if (!cam) { return; }
     p_renderGBufferToScreenMaterial.Get()->Bind();
@@ -241,25 +214,12 @@ void GEngine::RenderToScreen(Camera *cam)
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
             false);
 
-    GEngine::RenderScreenRect(sp, Rect::NDCRect);
+    GEngine::RenderViewportRect(sp, Rect::NDCRect);
 
     p_renderGBufferToScreenMaterial.Get()->UnBind();
 }
 
-void GEngine::RenderToScreen(Texture2D *fullScreenTexture)
-{
-    ASSERT(fullScreenTexture);
-    p_renderGBufferToScreenMaterial.Get()->Bind();
-
-    ShaderProgram *sp = p_renderGBufferToScreenMaterial.Get()-> GetShaderProgram();
-    sp->Set("B_GTex_Color", fullScreenTexture, false);
-
-    GEngine::RenderScreenPlane();
-
-    p_renderGBufferToScreenMaterial.Get()->UnBind();
-}
-
-void GEngine::RenderScreenPlane(bool withDepth)
+void GEngine::RenderViewportPlane()
 {
     bool prevWireframe = GL::IsWireframe();
     GL::ViewProjMode prevViewProjMode = GL::GetViewProjMode();
@@ -268,12 +228,8 @@ void GEngine::RenderScreenPlane(bool withDepth)
     GL::SetWireframe(false);
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBothAndModel);
     GL::Function prevDepthFunc = GL::GetDepthFunc();
-
-    if (!withDepth)
-    {
-        GL::SetDepthFunc(GL::Function::Always);
-        GL::SetDepthMask(false);
-    }
+    GL::SetDepthFunc(GL::Function::Always);
+    GL::SetDepthMask(false);
 
     GL::Render(p_screenPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
                p_screenPlaneMesh.Get()->GetVertexCount());
@@ -290,17 +246,17 @@ GEngine* GEngine::GetActive()
     return win ? win->GetGEngine() : nullptr;
 }
 
-void GEngine::SetActiveCamera(Camera *camera)
+void GEngine::SetCurrentRenderingCamera(Camera *camera)
 {
-    if (p_activeCamera) { p_activeCamera->UnBind(); }
+    if (p_currentRenderingCamera) { p_currentRenderingCamera->UnBind(); }
 
-    p_activeCamera = camera;
-    if (p_activeCamera) { p_activeCamera->Bind(); }
+    p_currentRenderingCamera = camera;
+    if (p_currentRenderingCamera) { p_currentRenderingCamera->Bind(); }
 }
 
 void GEngine::Render(Renderer *rend)
 {
-    Camera *activeCamera = GetActiveCamera();
+    Camera *activeCamera = GetCurrentRenderingCamera();
     if (!activeCamera) { return; }
 
     if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))

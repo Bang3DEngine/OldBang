@@ -169,7 +169,7 @@ Material* Renderer::GetMaterial() const
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     return Rect::NDCRect;
-    return camera ? camera->GetScreenBoundingRect(GetAABBox()) :
+    return camera ? camera->GetViewportBoundingRect(GetAABBox()) :
                     Rect::Zero;
 }
 

@@ -57,7 +57,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     PushDrawAttachments();
     SetColorDrawBuffer();
 
-    GEngine::GetActive()->RenderScreenRect(sp, mask);
+    GEngine::GetActive()->RenderViewportRect(sp, mask);
 
     PopDrawAttachments();
 

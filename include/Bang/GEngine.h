@@ -29,22 +29,17 @@ public:
 
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
-    void RenderToScreen(Camera *cam);
-    void RenderToScreen(Texture2D *fullScreenTexture);
-    void RenderScreenRect(ShaderProgram *sp,
-                          const Rect &destRectMask = Rect::NDCRect);
-    void RenderGBufferToScreen(const Rect &gbufferRectMask = Rect::NDCRect,
-                         const Rect &destRectMask = Rect::NDCRect);
-    void RenderScreenPlane(bool withDepth = false);
+    void RenderGBufferColorToViewport(Camera *cam);
+    void RenderViewportRect(ShaderProgram *sp,
+                            const Rect &destRectMask = Rect::NDCRect);
+    void RenderViewportPlane();
 
     void ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
                                                Camera *camera,
                                                const Rect &maskRectNDC = Rect::NDCRect);
 
-    void Resize(int newWidth, int newHeight);
-
-    static Camera *GetActiveCamera();
     static GBuffer *GetActiveGBuffer();
+    static Camera *GetCurrentRenderingCamera();
     static SelectionFramebuffer *GetActiveSelectionFramebuffer();
 
     GL *GetGL() const;
@@ -54,7 +49,7 @@ public:
 
 private:
     GL *m_gl = nullptr;
-    Camera *p_activeCamera = nullptr;
+    Camera *p_currentRenderingCamera = nullptr;
     TextureUnitManager *m_texUnitManager = nullptr;
 
     RH<Mesh> p_screenPlaneMesh;
@@ -65,7 +60,7 @@ private:
     void RenderWithPass(GameObject *go, RenderPass renderPass);
     void RenderWithPassAndMarkStencilForLights(GameObject *go, RenderPass renderPass);
 
-    void SetActiveCamera(Camera *camera);
+    void SetCurrentRenderingCamera(Camera *camera);
 
     static GEngine *s_gEngine;
     static void SetActive(GEngine *gEngine);

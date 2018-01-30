@@ -40,7 +40,7 @@ Rect PointLight::GetRenderRect(Camera *cam) const
     Transform *tr = GetGameObject()->GetTransform();
     Sphere sphere(tr->GetPosition(), GetRange());
     AABox bbox = AABox::FromSphere(sphere);
-    return bbox.GetAABoundingScreenRect(cam);
+    return bbox.GetAABoundingViewportRect(cam);
 }
 
 void PointLight::SetRange(float range) { m_range = range; }
