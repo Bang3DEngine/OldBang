@@ -29,9 +29,10 @@ public:
     static Scene* GetActiveScene();
     static const Path& GetActiveSceneFilepath();
 
-    static SceneManager* GetInstance();
+    static SceneManager* GetActive();
 
     static void Update();
+    static void StartScene(Scene *scene);
     static void UpdateScene(Scene *scene);
 
     BehaviourManager *GetBehaviourManager() const;

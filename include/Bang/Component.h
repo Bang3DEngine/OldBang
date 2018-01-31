@@ -52,6 +52,7 @@ protected:
     Component();
     virtual ~Component();
 
+    virtual void OnPreStart() override;
     virtual void OnStart() override;
     virtual void OnPreUpdate();
     virtual void OnBeforeChildrenUpdate();

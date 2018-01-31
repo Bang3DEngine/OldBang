@@ -19,7 +19,6 @@ FORWARD class GEngine;
 FORWARD class Resources;
 FORWARD class Texture2D;
 FORWARD class SceneManager;
-FORWARD class ObjectManager;
 
 class Window
 {
@@ -81,7 +80,6 @@ public:
     GEngine        *GetGEngine() const;
     Input          *GetInput() const;
     SceneManager   *GetSceneManager() const;
-    ObjectManager  *GetGlobalObjectManager() const;
 
     SDL_Window *GetSDLWindow() const;
     uint GetSDLWindowID() const;
@@ -106,7 +104,6 @@ private:
     GEngine        *m_gEngine       = nullptr;
     Input          *m_input         = nullptr;
     SceneManager   *m_sceneManager  = nullptr;
-    ObjectManager  *m_globalObjectManager = nullptr;
 
     int m_titleBarHeight = 0;
     Vector2i m_minSize = Vector2i::Zero;

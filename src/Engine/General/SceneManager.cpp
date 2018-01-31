@@ -37,10 +37,18 @@ BehaviourManager *SceneManager::CreateBehaviourManager() const
     return new BehaviourManager();
 }
 
-SceneManager *SceneManager::GetInstance()
+SceneManager *SceneManager::GetActive()
 {
     Window *win = Window::GetActive();
     return win ? win->GetSceneManager() : nullptr;
+}
+
+void SceneManager::StartScene(Scene *scene)
+{
+    if (!scene) { return; }
+
+    scene->PreStart();
+    scene->Start();
 }
 
 void SceneManager::UpdateScene(Scene *scene)
@@ -49,11 +57,10 @@ void SceneManager::UpdateScene(Scene *scene)
 
     SceneManager::TryToLoadQueuedScene();
 
-    scene->GetLocalObjectManager()->StartObjects();
     scene->PreUpdate();
     scene->Update();
     scene->PostUpdate();
-    scene->GetLocalObjectManager()->DestroyObjects();
+    // scene->GetLocalObjectManager()->DestroyObjects();
 }
 
 BehaviourManager *SceneManager::GetBehaviourManager() const
@@ -63,12 +70,13 @@ BehaviourManager *SceneManager::GetBehaviourManager() const
 
 void SceneManager::_Update()
 {
+    SceneManager::StartScene( SceneManager::GetActiveScene() );
     SceneManager::UpdateScene( SceneManager::GetActiveScene() );
 }
 
 void SceneManager::Update()
 {
-    SceneManager::GetInstance()->_Update();
+    SceneManager::GetActive()->_Update();
 }
 
 void SceneManager::_LoadSceneInstantly(Scene *scene)
@@ -88,7 +96,7 @@ void SceneManager::_LoadSceneInstantly(Scene *scene)
 
 Scene *SceneManager::GetActiveScene()
 {
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     return sm ? sm->_GetActiveScene() : nullptr;
 }
 Scene *SceneManager::_GetActiveScene() const { return m_activeScene; }
@@ -117,7 +125,7 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
         if (!scenePath.IsFile()) { scenePath = PPATH(basePath.GetAbsolute()); }
     }
 
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     if (scenePath.IsFile()) { sm->m_queuedSceneFilepath = scenePath; }
     else
     {
@@ -132,7 +140,7 @@ void SceneManager::LoadScene(const String &sceneFilepath)
 
 void SceneManager::TryToLoadQueuedScene()
 {
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     if (sm->m_queuedSceneFilepath.IsFile())
     {
         SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
@@ -142,18 +150,18 @@ void SceneManager::TryToLoadQueuedScene()
 
 const Path& SceneManager::GetActiveSceneFilepath()
 {
-    return SceneManager::GetInstance()->m_activeSceneFilepath;
+    return SceneManager::GetActive()->m_activeSceneFilepath;
 }
 
 void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
 {
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     sm->m_activeSceneFilepath = sceneFilepath;
 }
 
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     sm->_LoadSceneInstantly(nullptr);
 
     if (scene)
@@ -170,7 +178,7 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
     if (scene->ImportXMLFromFile(sceneFilepath))
     {
         scene->SetName(sceneFilepath.GetName());
-        SceneManager::GetInstance()->
+        SceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::PropagateToListeners(
                 &ISceneManagerListener::OnSceneOpen, scene, sceneFilepath);
         SceneManager::LoadSceneInstantly(scene);

@@ -14,7 +14,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -35,7 +34,6 @@ Window::~Window()
     delete m_gEngine;       m_gEngine       = nullptr;
 
     m_resources->Destroy();
-    delete m_globalObjectManager; m_globalObjectManager = nullptr;
     delete m_resources;     m_resources     = nullptr;
 
     SDL_GL_DeleteContext(GetGLContext());
@@ -77,7 +75,6 @@ void Window::Create(uint flags)
     m_resources           = CreateResources();
     m_sceneManager        = CreateSceneManager();
     m_gEngine             = new GEngine();
-    m_globalObjectManager = new ObjectManager();
 
     m_sceneManager->Init();
     m_gEngine->Init();
@@ -121,9 +118,7 @@ void Window::Clear()
 
 void Window::Update()
 {
-    GetGlobalObjectManager()->StartObjects();
     GetSceneManager()->Update();
-    GetGlobalObjectManager()->DestroyObjects();
 }
 
 void Window::Render()
@@ -384,11 +379,6 @@ Input *Window::GetInput() const
 SceneManager *Window::GetSceneManager() const
 {
     return m_sceneManager;
-}
-
-ObjectManager *Window::GetGlobalObjectManager() const
-{
-    return m_globalObjectManager;
 }
 
 SDL_Window *Window::GetSDLWindow() const

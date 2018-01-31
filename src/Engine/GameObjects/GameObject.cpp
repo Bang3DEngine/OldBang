@@ -32,9 +32,23 @@ GameObject::~GameObject()
     SetParent(nullptr);
 }
 
+void GameObject::PreStart()
+{
+    PropagateToChildren(&GameObject::PreStart);
+    PropagateToComponents(&Component::PreStart);
+    Object::PreStart();
+}
+
+void GameObject::Start()
+{
+    PropagateToChildren(&GameObject::Start);
+    PropagateToComponents(&Component::Start);
+    Object::Start();
+}
+
 void GameObject::PreUpdate()
 {
-    if (!IsStarted()) { return; }
+    if (!IsActive()) { return; }
 
     PropagateToComponents(&Component::PreUpdate);
     PropagateToChildren(&GameObject::PreUpdate);
@@ -42,14 +56,14 @@ void GameObject::PreUpdate()
 
 void GameObject::BeforeChildrenUpdate()
 {
-    if (!IsStarted()) { return; }
+    if (!IsActive()) { return; }
 
     PropagateToComponents(&Component::BeforeChildrenUpdate);
 }
 
 void GameObject::Update()
 {
-    if (!IsStarted()) { return; }
+    if (!IsActive()) { return; }
 
     PropagateToComponents(&Component::Update);
     BeforeChildrenUpdate();
@@ -59,14 +73,14 @@ void GameObject::Update()
 
 void GameObject::AfterChildrenUpdate()
 {
-    if (!IsStarted()) { return; }
+    if (!IsActive()) { return; }
 
     PropagateToComponents(&Component::OnAfterChildrenUpdate);
 }
 
 void GameObject::PostUpdate()
 {
-    if (!IsStarted()) { return; }
+    if (!IsActive()) { return; }
 
     PropagateToComponents(&Component::OnPostUpdate);
     PropagateToChildren(&GameObject::PostUpdate);
@@ -74,12 +88,16 @@ void GameObject::PostUpdate()
 
 void GameObject::BeforeRender()
 {
+    if (!IsActive()) { return; }
+
     PropagateToComponents(&Component::OnBeforeRender);
     PropagateToChildren(&GameObject::BeforeRender);
 }
 
 void GameObject::Render(RenderPass renderPass, bool renderChildren)
 {
+    if (!IsActive()) { return; }
+
     if (IsVisible())
     {
         PropagateToComponents(&Component::OnRender, renderPass);
@@ -94,11 +112,15 @@ void GameObject::Render(RenderPass renderPass, bool renderChildren)
 
 void GameObject::BeforeChildrenRender(RenderPass renderPass)
 {
+    if (!IsActive()) { return; }
+
     PropagateToComponents(&Component::OnBeforeChildrenRender, renderPass);
 }
 
 void GameObject::AfterChildrenRender(RenderPass renderPass)
 {
+    if (!IsActive()) { return; }
+
     PropagateToComponents(&Component::OnAfterChildrenRender, renderPass);
 }
 
@@ -216,7 +238,7 @@ void GameObject::Destroy(GameObject *gameObject)
         Component::Destroy(comp);
     }
 
-    ObjectManager::Destroy(gameObject);
+    Object::DestroyObject(gameObject);
 }
 
 bool GameObject::IsEnabled(bool recursive) const
@@ -415,7 +437,7 @@ void GameObject::SetParent(GameObject *newParent, int _index)
     ASSERT( newParent != this );
     ASSERT( !newParent || !newParent->IsChildOf(this) )
 
-    if (GetParent() != newParent)
+    if (!IsWaitingToBeDestroyed() && GetParent() != newParent)
     {
         GameObject *oldParent = GetParent();
         if (GetParent())

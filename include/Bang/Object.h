@@ -30,8 +30,10 @@ protected:
     Object() = default;
     virtual ~Object();
 
-    void PreStart();
-    void Start();
+    bool IsActive() const;
+
+    virtual void PreStart();
+    virtual void Start();
 
     virtual void OnPreStart();
     virtual void OnStart();
@@ -39,13 +41,13 @@ protected:
     virtual void OnDisabled() override;
     virtual void OnDestroy();
 
+    static void DestroyObject(Object *object);
+
 private:
     ObjectId m_objectId;
     bool m_enabled = true;
     bool m_started = false;
     bool m_waitingToBeDestroyed = false;
-
-    void BeforeDestroyed();
 
     friend class ObjectManager;
 };

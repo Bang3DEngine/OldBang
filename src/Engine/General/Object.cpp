@@ -1,10 +1,17 @@
 #include "Bang/Object.h"
 
+#include "Bang/Debug.h"
+
 USING_NAMESPACE_BANG
 
 Object::~Object()
 {
     ASSERT( IsWaitingToBeDestroyed() );
+}
+
+bool Object::IsActive() const
+{
+    return IsStarted() && IsEnabled() && !IsWaitingToBeDestroyed();
 }
 
 void Object::PreStart()
@@ -38,6 +45,18 @@ void Object::OnDisabled()
 }
 void Object::OnDestroy() {}
 
+void Object::DestroyObject(Object *object)
+{
+    if (!object->m_waitingToBeDestroyed)
+    {
+        object->m_waitingToBeDestroyed = true;
+
+        object->OnDestroy();
+        object->EventEmitter<IDestroyListener>::
+                PropagateToListeners(&IDestroyListener::OnDestroyed, object);
+    }
+}
+
 const ObjectId& Object::GetObjectId() const
 {
     return m_objectId;
@@ -60,13 +79,6 @@ void Object::CloneInto(ICloneable *clone) const
 {
     Object *obj = Cast<Object*>(clone);
     obj->SetEnabled( IsEnabled() );
-}
-
-void Object::BeforeDestroyed()
-{
-    OnDestroy();
-    EventEmitter<IDestroyListener>::
-            PropagateToListeners(&IDestroyListener::OnDestroyed, this);
 }
 
 

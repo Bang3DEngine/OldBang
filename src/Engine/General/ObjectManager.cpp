@@ -3,7 +3,6 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Object.h"
-#include "Bang/Window.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
@@ -33,7 +32,7 @@ void ObjectManager::Destroy(Object *object)
             om->m_objectsToBeDestroyedSet.Add(objectToBeDestroyedId);
 
             object->m_waitingToBeDestroyed = true;
-            object->BeforeDestroyed();
+            // object->BeforeDestroyed();
 
             om->EventEmitter<IDestroyListener>::
                     PropagateToListeners(&IDestroyListener::OnDestroyed, object);
@@ -129,7 +128,6 @@ void ObjectManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
 ObjectManager *ObjectManager::GetActive()
 {
     Scene *scene = SceneManager::GetActiveScene();
-    return scene ? scene->GetLocalObjectManager() :
-                   Window::GetActive()->GetGlobalObjectManager();
+    return scene ? scene->GetLocalObjectManager() : nullptr;
 }
 

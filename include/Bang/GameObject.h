@@ -47,6 +47,8 @@ class GameObject : public Object,
     GAMEOBJECT(GameObject);
 
 public:
+    virtual void PreStart() override;
+    virtual void Start() override;
     virtual void Update();
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
 
@@ -173,22 +175,6 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 protected:
-    List<GameObject*> m_children;
-    List<Component*> m_components;
-
-    String m_name = "";
-    bool m_visible = true;
-    bool m_dontDestroyOnLoad = false;
-
-    Transform *p_transform = nullptr;
-    GameObject* p_parent = nullptr;
-
-    // Concurrent modification when iterating stuff
-    bool m_increaseChildrenIterator = true;
-    bool m_increaseComponentsIterator = true;
-    std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
-    std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
-
     GameObject(const String &name = "GameObject");
     virtual ~GameObject();
 
@@ -207,6 +193,25 @@ protected:
     virtual void OnDisabled() override;
 
 private:
+    List<GameObject*> m_children;
+    List<Component*> m_components;
+
+    String m_name = "";
+    bool m_visible = true;
+    bool m_dontDestroyOnLoad = false;
+
+    Transform *p_transform = nullptr;
+    GameObject* p_parent = nullptr;
+
+    List<GameObject*> p_pendingChildrenToDestroy;
+
+    // Concurrent modification when iterating stuff
+    bool m_increaseChildrenIterator = true;
+    bool m_increaseComponentsIterator = true;
+    std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
+    std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
+
+
     void PropagateEnabledEvent(bool enabled) const;
 
     void AddChild(GameObject *child, int index);

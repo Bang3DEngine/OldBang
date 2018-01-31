@@ -23,7 +23,7 @@ void Component::Destroy(Component *component)
 
 void Component::SetGameObject(GameObject *gameObject)
 {
-    if (GetGameObject() != gameObject)
+    if (!IsWaitingToBeDestroyed() && GetGameObject() != gameObject)
     {
         if (GetGameObject())
         {
@@ -41,6 +41,7 @@ void Component::SetGameObject(GameObject *gameObject)
 
 GameObject *Component::GetGameObject() const { return p_gameObject; }
 
+void Component::OnPreStart() {}
 void Component::OnStart() {}
 void Component::OnPreUpdate() {}
 void Component::OnBeforeChildrenUpdate() {}
