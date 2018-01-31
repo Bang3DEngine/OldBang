@@ -352,17 +352,16 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                                FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
 
-    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f,
-                                  0);
+    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0 );
 
     Matrix4 scaleToAnchorsMat    = Matrix4::ScaleMatrix(anchorScaling);
-    Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
-
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
     Matrix4f rotation = Matrix4f::Identity;
     if (GetLocalRotation() != Quaternion::Identity)
     {
+        Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
+
         float ar  = GL::GetViewportAspectRatio();
         Matrix4 aspectRatio    = Matrix4::ScaleMatrix( Vector3(ar, 1, 1) );
         Matrix4 aspectRatioInv = Matrix4::ScaleMatrix( Vector3(1.0f/ar, 1, 1) );
@@ -383,7 +382,9 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 
     m_localToParentMatrix = translateToAnchorCenterMat *
                             scaleToAnchorsMat *
-                            rotation;
+                            Matrix4::TranslateMatrix( GetLocalPosition() ) *
+                            rotation *
+                            Matrix4::ScaleMatrix( GetLocalScale() );
     Validate();
 
     return m_localToParentMatrix;
