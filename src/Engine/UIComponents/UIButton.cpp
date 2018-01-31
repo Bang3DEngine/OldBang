@@ -147,7 +147,6 @@ UIButton* UIButton::CreateInto(GameObject *go)
     label->GetMask()->SetMasking(false);
 
     UIImageRenderer *icon = GameObjectFactory::CreateUIImage();
-    icon->SetAspectRatioMode(AspectRatioMode::Keep);
 
     GameObject *iconGo = icon->GetGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();

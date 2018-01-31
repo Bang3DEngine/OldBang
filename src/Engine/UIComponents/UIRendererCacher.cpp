@@ -40,7 +40,7 @@ void UIRendererCacher::OnStart()
         tex->SetWrapMode(GL::WrapMode::Repeat);
         p_cachedImageRenderer->SetImageTexture(tex);
         p_cachedImageRenderer->SetTint(Color::White);
-        p_cachedImageRenderer->SetUvMultiply(Vector2(1, 1));
+        p_cachedImageRenderer->GetMaterial()->SetUvMultiply(Vector2(1, 1));
         p_cachedImageRenderer->GetImageTexture()->SetAlphaCutoff(1.0f);
         p_cachedImageRenderer->GetImageTexture()->SetFilterMode(GL::FilterMode::Nearest);
     }
@@ -80,8 +80,9 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
             Vector2 rtSize = rtRectNDC.GetSize();
             Vector2 rtOri = rtRectNDC.GetMinXMaxY() * 0.5f + 0.5f;
             Vector2 rtOriInvY = Vector2(rtOri.x, rtOri.y);
-            p_cachedImageRenderer->SetUvOffset( rtOriInvY );
-            p_cachedImageRenderer->SetUvMultiply( (rtSize * 0.5f) * Vector2(1, -1) );
+            p_cachedImageRenderer->GetMaterial()->SetUvOffset( rtOriInvY );
+            p_cachedImageRenderer->GetMaterial()->SetUvMultiply((rtSize * 0.5f) *
+                                                                Vector2(1, -1) );
 
             SetContainerVisible(true);
             p_cachedImageRenderer->SetVisible(false);
