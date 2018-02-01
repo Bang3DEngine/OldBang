@@ -6,7 +6,6 @@
 #include "Bang/RenderPass.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/ComponentFactory.h"
 #include "Bang/IDestroyListener.h"
 
@@ -15,21 +14,26 @@ NAMESPACE_BANG_BEGIN
 #define REQUIRE_COMPONENT(gameObject, ComponentClass) \
     ASSERT(gameObject->HasComponent<ComponentClass>())
 
-#define COMPONENT(ClassName) \
+#define COMPONENT_NO_FRIEND(ClassName) \
     public: virtual ClassName *Clone() const override {\
-        ClassName *clone = ComponentFactory::Create<ClassName>();\
+        ClassName *clone = Component::Create<ClassName>();\
         CloneInto(clone);\
         return clone;\
     }\
-    SERIALIZABLE(ClassName) \
-    friend class Bang::ObjectManager;
+    SERIALIZABLE(ClassName)
+
+#define COMPONENT(ClassName) \
+    COMPONENT_NO_FRIEND(ClassName) \
+    friend class Component;
 
 class Component : public Object,
                   public IToString
 {
-    COMPONENT(Component)
+    COMPONENT_NO_FRIEND(Component)
 
 public:
+    template <class T, class... Args>
+    static T* Create(const Args&... args) { return new T(args...); }
     static void Destroy(Component *component);
 
     void SetGameObject(GameObject *gameObject);
@@ -75,6 +79,7 @@ protected:
     void Render(RenderPass renderPass);
     void AfterChildrenRender(RenderPass renderPass);
 
+    virtual void OnGameObjectChanged();
 
     virtual bool CanBeRepeatedInGameObject() const;
 

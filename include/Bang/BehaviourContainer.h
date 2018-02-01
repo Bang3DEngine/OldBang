@@ -24,6 +24,7 @@ public:
     String GetBehaviourName() const;
     const Path& GetSourceFilepath() const;
 
+    void TryToSubstituteByBehaviourInstance();
     void SubstituteByBehaviourInstance(Library *behavioursLibrary);
 
 private:
@@ -35,6 +36,7 @@ private:
 
     // Component
     void OnPreStart() override;
+    void OnGameObjectChanged() override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

@@ -14,7 +14,6 @@
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/IEnabledListener.h"
 #include "Bang/GameObjectFactory.h"
@@ -29,6 +28,7 @@ GameObject::~GameObject()
 {
     ASSERT(GetChildren().IsEmpty());
     ASSERT(GetComponents().IsEmpty());
+    ASSERT(IsWaitingToBeDestroyed());
     SetParent(nullptr);
 }
 
@@ -148,6 +148,36 @@ void GameObject::ChildRemoved(GameObject *removedChild, GameObject *parent)
               removedChild, parent);
 }
 
+void GameObject::DestroyPending()
+{
+    // Pending GameObjects and Components do not necessarily have to be children
+    // or components of this gameObject!!!
+    PropagateToChildren(&GameObject::DestroyPending);
+
+    // Destroy pending children
+    while (!p_pendingGameObjectsToDestroy.empty())
+    {
+        GameObject *goToDestroy = p_pendingGameObjectsToDestroy.front();
+        p_pendingGameObjectsToDestroy.pop();
+
+        ASSERT(goToDestroy->IsWaitingToBeDestroyed());
+        goToDestroy->DestroyPending();
+        RemoveChild(goToDestroy);
+        delete goToDestroy;
+    }
+
+    // Destroy pending components
+    while (!p_pendingComponentsToDestroy.empty())
+    {
+        Component *componentToDestroy = p_pendingComponentsToDestroy.front();
+        p_pendingComponentsToDestroy.pop();
+
+        ASSERT(componentToDestroy->IsWaitingToBeDestroyed());
+        RemoveComponent(componentToDestroy);
+        delete componentToDestroy;
+    }
+}
+
 void GameObject::PropagateEnabledEvent(bool enabled) const
 {
     auto enabledListeners = GetComponents<IEnabledListener>();
@@ -191,6 +221,13 @@ void GameObject::RemoveChild(GameObject *child)
     }
 }
 
+void GameObject::MarkComponentForDestroyPending(Component *comp)
+{
+    ASSERT(comp->IsWaitingToBeDestroyed());
+    ASSERT(GetComponents().Contains(comp));
+    p_pendingComponentsToDestroy.push(comp);
+}
+
 void GameObject::RemoveComponent(Component *component)
 {
     auto it = m_components.Find(component);
@@ -228,17 +265,24 @@ void GameObject::Destroy(GameObject *gameObject)
 {
     ASSERT(gameObject);
 
-    for (GameObject *child : gameObject->GetChildren())
+    if (!gameObject->IsWaitingToBeDestroyed())
     {
-        GameObject::Destroy(child);
-    }
+        Object::DestroyObject(gameObject);
 
-    for (Component *comp : gameObject->GetComponents())
-    {
-        Component::Destroy(comp);
-    }
+        for (GameObject *child : gameObject->GetChildren())
+        {
+            if (!child->IsWaitingToBeDestroyed()) // Avoid destroying twice
+            {
+                gameObject->p_pendingGameObjectsToDestroy.push(child);
+            }
+            GameObject::Destroy(child);
+        }
 
-    Object::DestroyObject(gameObject);
+        for (Component *comp : gameObject->GetComponents())
+        {
+            Component::Destroy(comp);
+        }
+    }
 }
 
 bool GameObject::IsEnabled(bool recursive) const
@@ -266,8 +310,6 @@ Component* GameObject::AddComponent(Component *component, int _index)
                             "A GameObject can not have more than one transform");
         }
 
-        component->SetGameObject(this);
-
         const int index = (_index != -1 ? _index : GetComponents().Size());
         auto nextIt = m_components.Insert(index, component);
 
@@ -280,6 +322,8 @@ Component* GameObject::AddComponent(Component *component, int _index)
         }
 
         if (transformComp) { p_transform = transformComp; }
+
+        component->SetGameObject(this);
 
         EventEmitter<IComponentListener>::PropagateToListeners(
                     &IComponentListener::OnComponentAdded, component, index);
@@ -416,15 +460,15 @@ List<GameObject *> GameObject::GetChildrenRecursively() const
     return cc;
 }
 
-bool GameObject::IsChildOf(const GameObject *_parent, bool recursive) const
+bool GameObject::IsChildOf(const GameObject *parent, bool recursive) const
 {
     if (!GetParent()) { return false; }
-
     if (recursive)
     {
-        return GetParent() == _parent || GetParent()->IsChildOf(_parent);
+        return IsChildOf(parent, false) ||
+               GetParent()->IsChildOf(parent, true);
     }
-    return GetParent() == _parent;
+    return GetParent() == parent;
 }
 
 bool GameObject::IsVisible() const
@@ -435,23 +479,30 @@ bool GameObject::IsVisible() const
 void GameObject::SetParent(GameObject *newParent, int _index)
 {
     ASSERT( newParent != this );
-    ASSERT( !newParent || !newParent->IsChildOf(this) )
+    ASSERT( !newParent || !newParent->IsChildOf(this, true) );
 
-    if (!IsWaitingToBeDestroyed() && GetParent() != newParent)
+    if (newParent != GetParent())
     {
-        GameObject *oldParent = GetParent();
-        if (GetParent())
+        if (newParent && newParent->IsWaitingToBeDestroyed())
         {
-            GetParent()->RemoveChild(this);
-            GetParent()->ChildRemoved(this, oldParent);
+            Debug_Warn("Trying to set as parent a destroyed object. "
+                       "Not setting parent...");
+            return;
+        }
+
+        GameObject *oldParent = GetParent();
+        if (oldParent)
+        {
+            oldParent->RemoveChild(this);
+            oldParent->ChildRemoved(this, oldParent);
         }
 
         p_parent = newParent;
-        if (GetParent())
+        if (newParent)
         {
             int index = (_index != -1 ? _index : GetParent()->GetChildren().Size());
-            GetParent()->AddChild(this, index);
-            GetParent()->ChildAdded(this, newParent);
+            newParent->AddChild(this, index);
+            newParent->ChildAdded(this, newParent);
         }
 
         EventEmitter<IChildrenListener>::

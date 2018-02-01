@@ -13,18 +13,37 @@ Component::Component()
 
 Component::~Component()
 {
+    ASSERT(IsWaitingToBeDestroyed());
     SetGameObject(nullptr);
 }
 
 void Component::Destroy(Component *component)
 {
-    ObjectManager::Destroy(component);
+    if (!component->IsWaitingToBeDestroyed())
+    {
+        Object::DestroyObject(component);
+        if (component->GetGameObject())
+        {
+            component->GetGameObject()->MarkComponentForDestroyPending(component);
+        }
+        else
+        {
+            delete component;
+        }
+    }
 }
 
-void Component::SetGameObject(GameObject *gameObject)
+void Component::SetGameObject(GameObject *newGameObject)
 {
-    if (!IsWaitingToBeDestroyed() && GetGameObject() != gameObject)
+    if (GetGameObject() != newGameObject)
     {
+        if (newGameObject && newGameObject->IsWaitingToBeDestroyed())
+        {
+            Debug_Warn("Trying to set as gameObject a destroyed gameObject. "
+                       "Not setting gameObject");
+            return;
+        }
+
         if (GetGameObject())
         {
             GetGameObject()->RemoveComponent(this);
@@ -32,10 +51,13 @@ void Component::SetGameObject(GameObject *gameObject)
 
         if (!CanBeRepeatedInGameObject())
         {
-            ASSERT(!gameObject->HasComponent(GetClassName()));
+            for (Component *comp : newGameObject->GetComponents())
+            { ASSERT(comp == this || comp->GetClassName() != GetClassName()); }
         }
 
-        p_gameObject = gameObject;
+        p_gameObject = newGameObject;
+
+        OnGameObjectChanged();
     }
 }
 
@@ -55,27 +77,24 @@ void Component::OnAfterChildrenRender(RenderPass) {}
 void Component::OnDestroy() {}
 
 void Component::PreUpdate()
-{ if (IsStarted()) { OnPreUpdate(); } }
+{ if (IsActive()) { OnPreUpdate(); } }
 void Component::BeforeChildrenUpdate()
-{ if (IsStarted()) { OnBeforeChildrenUpdate(); } }
+{ if (IsActive()) { OnBeforeChildrenUpdate(); } }
 void Component::Update()
-{ if (IsStarted()) { OnUpdate(); } }
+{ if (IsActive()) { OnUpdate(); } }
 void Component::AfterChildrenUpdate()
-{ if (IsStarted()) { OnAfterChildrenUpdate(); } }
+{ if (IsActive()) { OnAfterChildrenUpdate(); } }
 void Component::BeforeRender()
-{ if (IsStarted()) { OnBeforeRender(); } }
+{ if (IsActive()) { OnBeforeRender(); } }
 void Component::BeforeChildrenRender(RenderPass rp)
-{ if (IsStarted()) { OnBeforeChildrenRender(rp); } }
+{ if (IsActive()) { OnBeforeChildrenRender(rp); } }
 void Component::Render(RenderPass rp)
-{ if (IsStarted()) { OnRender(rp); } }
+{ if (IsActive()) { OnRender(rp); } }
 void Component::AfterChildrenRender(RenderPass rp)
-{ if (IsStarted()) { OnAfterChildrenRender(rp); } }
+{ if (IsActive()) { OnAfterChildrenRender(rp); } }
 
-bool Component::CanBeRepeatedInGameObject() const
-{
-    return true;
-
-}
+void Component::OnGameObjectChanged() {}
+bool Component::CanBeRepeatedInGameObject() const { return true;  }
 
 bool Component::IsEnabled(bool recursive) const
 {

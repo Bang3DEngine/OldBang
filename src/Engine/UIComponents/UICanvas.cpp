@@ -107,11 +107,7 @@ void UICanvas::InvalidateCanvas()
 {
     List<RectTransform*> rts = GetGameObject()->
                                GetComponentsInChildren<RectTransform>(true);
-    for (RectTransform *rt : rts)
-    {
-        rt->Invalidate();
-    }
-    GetLayoutManager()->RebuildLayout(GetGameObject());
+    for (RectTransform *rt : rts) { rt->Invalidate(); }
 }
 
 void UICanvas::SetFocus(IFocusable *_newFocusable)

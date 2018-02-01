@@ -18,7 +18,6 @@
 #include "Bang/UITextCursor.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/AudioListener.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -32,23 +31,13 @@ USING_NAMESPACE_BANG
 
 #define CREATE_COMPONENT(className, ComponentClass) \
     if (className == ComponentClass::GetClassNameStatic()) \
-    { return ComponentFactory::Create<ComponentClass>(); }
+    { return Component::Create<ComponentClass>(); }
 
 #define EXISTS_COMPONENT(componentClassName, ComponentClass) \
     if (componentClassName == ComponentClass::GetClassNameStatic()) \
     { return true; }
 
 Component* ComponentFactory::Create(const String &componentClassName)
-{
-    return ComponentFactory::GetInstance()->_Create(componentClassName);
-}
-
-bool ComponentFactory::Exists(const String &componentClassName)
-{
-    return ComponentFactory::GetInstance()->_Exists(componentClassName);
-}
-
-Component *ComponentFactory::_Create(const String &componentClassName)
 {
     CREATE_COMPONENT(componentClassName, Light);
     CREATE_COMPONENT(componentClassName, Camera);
@@ -79,7 +68,7 @@ Component *ComponentFactory::_Create(const String &componentClassName)
     return nullptr;
 }
 
-bool ComponentFactory::_Exists(const String &componentClassName)
+bool ComponentFactory::Exists(const String &componentClassName)
 {
     EXISTS_COMPONENT(componentClassName, Light);
     EXISTS_COMPONENT(componentClassName, Camera);
@@ -106,9 +95,4 @@ bool ComponentFactory::_Exists(const String &componentClassName)
     EXISTS_COMPONENT(componentClassName, UIHorizontalLayout);
 
     return false;
-}
-
-ComponentFactory *ComponentFactory::GetInstance()
-{
-    return Application::GetInstance()->GetComponentFactory();
 }

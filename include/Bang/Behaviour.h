@@ -51,7 +51,7 @@ extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
     /* This line links the Application in the main binary \
         to the Application in the behaviour loaded library. */ \
     Application::SetApplicationSingleton(mainBinaryApplication); \
-    return ComponentFactory::Create<CLASS_NAME>(); \
+    return Component::Create<CLASS_NAME>(); \
 } \
 \
 extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b) \

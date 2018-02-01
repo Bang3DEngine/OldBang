@@ -31,8 +31,6 @@ public:
 
     void InvalidateCanvas();
 
-    ObjectManager *GetLocalObjectManager() const;
-
     // IDestroyListener
     void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
@@ -44,7 +42,6 @@ protected:
     Camera *p_camera = nullptr;
     Gizmos *m_gizmos = nullptr;
     DebugRenderer *p_debugRenderer = nullptr;
-    ObjectManager *m_localObjectManager = nullptr;
 
     Scene();
     virtual ~Scene();
@@ -53,6 +50,7 @@ protected:
     DebugRenderer *GetDebugRenderer() const;
 
 private:
+
     friend class Gizmos;
     friend class Window;
     friend class GEngine;

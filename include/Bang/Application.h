@@ -16,7 +16,6 @@ FORWARD class GEngine;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
-FORWARD class ComponentFactory;
 FORWARD class ImportFilesManager;
 
 class Application
@@ -41,7 +40,6 @@ public:
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     AudioManager       *GetAudioManager() const;
-    ComponentFactory   *GetComponentFactory() const;
     ImportFilesManager *GetImportFilesManager() const;
 
     virtual SceneManager* CreateSceneManager() const;
@@ -59,14 +57,12 @@ protected:
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
     AudioManager       *m_audioManager       = nullptr;
-    ComponentFactory   *m_componentFactory   = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
 
     void SetupWindow(Window *window);
 
     virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();
-    virtual ComponentFactory* CreateComponentFactory();
 
 private:
     static Application *s_appSingleton;

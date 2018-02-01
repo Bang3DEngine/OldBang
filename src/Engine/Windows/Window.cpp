@@ -204,22 +204,23 @@ void Window::OnClosed()
 
 }
 
-void Window::Maximize() const
+void Window::Maximize()
 {
     SDL_MaximizeWindow( GetSDLWindow() );
+    OnResize(GetWidth(), GetHeight());
 }
 
-void Window::Restore() const
+void Window::Restore()
 {
     SDL_RestoreWindow( GetSDLWindow() );
 }
 
-void Window::Minimize() const
+void Window::Minimize()
 {
     SDL_MinimizeWindow( GetSDLWindow() );
 }
 
-void Window::MoveToFront() const
+void Window::MoveToFront()
 {
     SDL_RaiseWindow(GetSDLWindow());
     for (Window *childWindow : p_children) { childWindow->MoveToFront(); }

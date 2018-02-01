@@ -1,7 +1,6 @@
 #include "Bang/Resources.h"
 
 #include "Bang/Debug.h"
-#include "Bang/ObjectManager.h"
 
 NAMESPACE_BANG_BEGIN
 

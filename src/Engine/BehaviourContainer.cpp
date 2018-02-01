@@ -17,14 +17,14 @@ BehaviourContainer::~BehaviourContainer()
 
 void BehaviourContainer::OnPreStart()
 {
-    Component::OnStart();
+    Component::OnPreStart();
+    TryToSubstituteByBehaviourInstance();
+}
 
-    if (BehaviourManager::GetActive() &&
-        BehaviourManager::GetActive()->IsInstanceCreationAllowed())
-    {
-        SubstituteByBehaviourInstance(
-                        BehaviourManager::GetActive()->GetBehavioursLibrary());
-    }
+void BehaviourContainer::OnGameObjectChanged()
+{
+    Component::OnGameObjectChanged();
+    TryToSubstituteByBehaviourInstance();
 }
 
 void BehaviourContainer::SetSourceFilepath(const Path &sourceFilepath)
@@ -51,14 +51,28 @@ const Path &BehaviourContainer::GetSourceFilepath() const
     return m_sourceFilepath;
 }
 
+void BehaviourContainer::TryToSubstituteByBehaviourInstance()
+{
+    BehaviourManager *behaviourManager = BehaviourManager::GetActive();
+    if ( behaviourManager &&
+         behaviourManager->IsInstanceCreationAllowed() &&
+        !IsWaitingToBeDestroyed() &&
+        !GetBehaviourName().IsEmpty()
+       )
+    {
+        Library *behLib = behaviourManager->GetBehavioursLibrary();
+        SubstituteByBehaviourInstance(behLib);
+    }
+}
+
 void BehaviourContainer::SubstituteByBehaviourInstance(Library *behavioursLibrary)
 {
     Behaviour *behaviour = CreateBehaviourInstance(behavioursLibrary);
     if (behaviour)
     {
         GetGameObject()->AddComponent(behaviour);
+        Component::Destroy(this);
     }
-    Component::Destroy(this);
 }
 
 void BehaviourContainer::CloneInto(ICloneable *clone) const
@@ -74,6 +88,8 @@ void BehaviourContainer::ImportXML(const XMLNode &xmlInfo)
 
     if (xmlInfo.Contains("SourceFilepath"))
     { SetSourceFilepath( xmlInfo.Get<Path>("SourceFilepath") ); }
+
+    TryToSubstituteByBehaviourInstance();
 }
 
 void BehaviourContainer::ExportXML(XMLNode *xmlInfo) const

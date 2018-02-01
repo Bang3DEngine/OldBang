@@ -10,7 +10,6 @@
 #include "Bang/Window.h"
 #include "Bang/Extensions.h"
 #include "Bang/MeshFactory.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/ShaderProgramFactory.h"
 

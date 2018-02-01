@@ -31,9 +31,8 @@ public:
 
     static SceneManager* GetActive();
 
+    static void OnNewFrame(Scene *scene, bool update);
     static void Update();
-    static void StartScene(Scene *scene);
-    static void UpdateScene(Scene *scene);
 
     BehaviourManager *GetBehaviourManager() const;
 

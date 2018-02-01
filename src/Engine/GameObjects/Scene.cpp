@@ -18,14 +18,12 @@ USING_NAMESPACE_BANG
 Scene::Scene() : GameObject("Scene")
 {
     m_gizmos = new Gizmos();
-    m_localObjectManager = new ObjectManager();
     p_debugRenderer = GameObject::Create<DebugRenderer>();
 }
 
 Scene::~Scene()
 {
     delete m_gizmos;
-    delete m_localObjectManager;
     GameObject::Destroy(p_debugRenderer);
 }
 
@@ -43,8 +41,8 @@ void Scene::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
-    if (rp == RenderPass::Scene) { GetDebugRenderer()->Render(true); }
-    else if (rp == RenderPass::Overlay) { GetDebugRenderer()->Render(false); }
+    if (rp == RenderPass::Scene) { GetDebugRenderer()->RenderPrimitives(true); }
+    else if (rp == RenderPass::Overlay) { GetDebugRenderer()->RenderPrimitives(false); }
 }
 
 void Scene::OnResize(int newWidth, int newHeight)
@@ -77,11 +75,6 @@ void Scene::InvalidateCanvas()
 {
     List<UICanvas*> canvases = GetComponentsInChildren<UICanvas>(true);
     for (UICanvas *canvas : canvases) { canvas->InvalidateCanvas(); }
-}
-
-ObjectManager *Scene::GetLocalObjectManager() const
-{
-    return m_localObjectManager;
 }
 
 void Scene::OnDestroyed(EventEmitter<IDestroyListener> *object)

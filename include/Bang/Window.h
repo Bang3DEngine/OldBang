@@ -43,10 +43,10 @@ public:
     void OnHandleEventsFinished();
     virtual void OnClosed();
 
-    void Maximize() const;
-    void Restore() const;
-    void Minimize() const;
-    void MoveToFront() const;
+    void Maximize();
+    void Restore();
+    void Minimize();
+    void MoveToFront();
     void SetBordered(bool bordered);
     void SetMinSize(int minSizeX, int minSizeY);
     void SetMaxSize(int maxSizeX, int maxSizeY);

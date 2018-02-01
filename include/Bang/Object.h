@@ -48,8 +48,6 @@ private:
     bool m_enabled = true;
     bool m_started = false;
     bool m_waitingToBeDestroyed = false;
-
-    friend class ObjectManager;
 };
 
 

@@ -25,7 +25,6 @@
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"

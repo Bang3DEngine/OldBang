@@ -9,14 +9,14 @@ NAMESPACE_BANG_BEGIN
 template <class T, class... Args>
 T* GameObject::Create(Args... args)
 {
-    T* gameObject = ObjectManager::Create<T>(args...);
+    T* gameObject = new T(args...);
     return gameObject;
 }
 
 template <class T>
 T* GameObject::AddComponent(int index)
 {
-    T *c = ComponentFactory::Create<T>();
+    T *c = Component::Create<T>();
     this->AddComponent(c, index);
     return c;
 }

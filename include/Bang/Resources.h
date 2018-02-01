@@ -10,7 +10,6 @@
 #include "Bang/Resource.h"
 #include "Bang/XMLParser.h"
 #include "Bang/Serializable.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/ImportFilesManager.h"
 

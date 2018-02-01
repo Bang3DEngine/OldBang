@@ -47,7 +47,7 @@ void Object::OnDestroy() {}
 
 void Object::DestroyObject(Object *object)
 {
-    if (!object->m_waitingToBeDestroyed)
+    if (!object->IsWaitingToBeDestroyed())
     {
         object->m_waitingToBeDestroyed = true;
 

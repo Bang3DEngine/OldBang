@@ -82,7 +82,7 @@ DebugRenderer::~DebugRenderer()
 {
 }
 
-void DebugRenderer::Render(bool withDepth)
+void DebugRenderer::RenderPrimitives(bool withDepth)
 {
     GL::Function prevDepthFunc = GL::GetDepthFunc();
     for (auto it = m_primitivesToRender.Begin();

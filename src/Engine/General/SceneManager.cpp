@@ -8,7 +8,6 @@
 #include "Bang/Window.h"
 #include "Bang/Extensions.h"
 #include "Bang/AudioManager.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -43,24 +42,22 @@ SceneManager *SceneManager::GetActive()
     return win ? win->GetSceneManager() : nullptr;
 }
 
-void SceneManager::StartScene(Scene *scene)
+void SceneManager::OnNewFrame(Scene *scene, bool update)
 {
-    if (!scene) { return; }
+    if (scene)
+    {
+        scene->PreStart();
+        scene->Start();
 
-    scene->PreStart();
-    scene->Start();
-}
+        if (update)
+        {
+            scene->PreUpdate();
+            scene->Update();
+            scene->PostUpdate();
+        }
 
-void SceneManager::UpdateScene(Scene *scene)
-{
-    if (!scene) { return; }
-
-    SceneManager::TryToLoadQueuedScene();
-
-    scene->PreUpdate();
-    scene->Update();
-    scene->PostUpdate();
-    // scene->GetLocalObjectManager()->DestroyObjects();
+        scene->DestroyPending();
+    }
 }
 
 BehaviourManager *SceneManager::GetBehaviourManager() const
@@ -70,8 +67,8 @@ BehaviourManager *SceneManager::GetBehaviourManager() const
 
 void SceneManager::_Update()
 {
-    SceneManager::StartScene( SceneManager::GetActiveScene() );
-    SceneManager::UpdateScene( SceneManager::GetActiveScene() );
+    SceneManager::TryToLoadQueuedScene();
+    SceneManager::OnNewFrame( SceneManager::GetActiveScene(), true );
 }
 
 void SceneManager::Update()

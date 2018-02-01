@@ -35,7 +35,6 @@ private:
     friend std::ostream& operator<<(std::ostream &os, const ObjectId &objectId);
 
     friend class Object;
-    friend class ObjectManager;
 };
 
 

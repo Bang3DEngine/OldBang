@@ -58,7 +58,7 @@ private:
 	DebugRenderer();
 	virtual ~DebugRenderer();
 
-    void Render(bool withDepth);
+    void RenderPrimitives(bool withDepth);
 
     static DebugRenderPrimitive*
            CreateDebugRenderPrimitive(DebugRendererPrimitiveType primitive,
@@ -71,6 +71,7 @@ private:
     static DebugRenderer *GetActive();
 
     friend class Scene;
+    friend class GameObject;
 };
 
 NAMESPACE_BANG_END

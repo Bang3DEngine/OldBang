@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "Bang/Ray.h"
+#include "Bang/Set.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/Component.h"

@@ -5,7 +5,6 @@
 #include "Bang/Object.h"
 #include "Bang/Resource.h"
 #include "Bang/IToString.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN

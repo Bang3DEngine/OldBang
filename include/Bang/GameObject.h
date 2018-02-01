@@ -7,12 +7,12 @@
 
 #include "Bang/List.h"
 #include "Bang/Object.h"
+#include "Bang/Component.h"
 #include "Bang/IToString.h"
 #include "Bang/RenderPass.h"
 #include "Bang/IsContainer.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
-#include "Bang/ObjectManager.h"
 #include "Bang/INameListener.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IChildrenListener.h"
@@ -26,14 +26,17 @@ FORWARD class Camera;
 FORWARD class Component;
 FORWARD class RectTransform;
 
-#define GAMEOBJECT(ClassName) \
+#define GAMEOBJECT_NO_FRIEND(ClassName) \
     public: virtual ClassName* Clone() const override {\
         ClassName *clone = GameObject::Create<ClassName>();\
         CloneInto(clone);\
         return clone;\
     }\
-    SERIALIZABLE(ClassName) \
-    friend class Bang::ObjectManager
+    SERIALIZABLE(ClassName)
+
+#define GAMEOBJECT(ClassName) \
+    GAMEOBJECT_NO_FRIEND(ClassName) \
+    friend class GameObject
 
 
 class GameObject : public Object,
@@ -44,13 +47,14 @@ class GameObject : public Object,
                    public EventEmitter<IComponentListener>,
                    public EventEmitter<IGameObjectVisibilityChangedListener>
 {
-    GAMEOBJECT(GameObject);
+    GAMEOBJECT_NO_FRIEND(GameObject);
 
 public:
     virtual void PreStart() override;
     virtual void Start() override;
     virtual void Update();
     virtual void Render(RenderPass renderPass, bool renderChildren = true);
+    void DestroyPending();
 
     template <class T = GameObject, class... Args>
     static T* Create(Args... args);
@@ -203,7 +207,8 @@ private:
     Transform *p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
-    List<GameObject*> p_pendingChildrenToDestroy;
+    std::queue<GameObject*> p_pendingGameObjectsToDestroy;
+    std::queue<Component*> p_pendingComponentsToDestroy;
 
     // Concurrent modification when iterating stuff
     bool m_increaseChildrenIterator = true;
@@ -211,11 +216,11 @@ private:
     std::stack< List<GameObject*>::Iterator > m_currentChildrenIterators;
     std::stack< List<Component*>::Iterator  > m_currentComponentsIterators;
 
-
     void PropagateEnabledEvent(bool enabled) const;
 
     void AddChild(GameObject *child, int index);
     void RemoveChild(GameObject *child);
+    void MarkComponentForDestroyPending(Component *comp);
 
     friend class Scene;
     friend class Prefab;
