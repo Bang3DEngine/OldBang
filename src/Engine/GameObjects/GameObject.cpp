@@ -271,16 +271,22 @@ void GameObject::Destroy(GameObject *gameObject)
 
         for (GameObject *child : gameObject->GetChildren())
         {
-            if (!child->IsWaitingToBeDestroyed()) // Avoid destroying twice
-            {
-                gameObject->p_pendingGameObjectsToDestroy.push(child);
-            }
             GameObject::Destroy(child);
         }
 
         for (Component *comp : gameObject->GetComponents())
         {
             Component::Destroy(comp);
+        }
+
+        if (gameObject->GetParent())
+        {
+            gameObject->GetParent()->p_pendingGameObjectsToDestroy.push(gameObject);
+        }
+        else
+        {
+            gameObject->DestroyPending();
+            delete gameObject;
         }
     }
 }

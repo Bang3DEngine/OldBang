@@ -53,6 +53,9 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
     {
         m_gameObject_To_Id[go] = id;
         m_id_To_GameObject[id] = go;
+
+        go->EventEmitter<IDestroyListener>::RegisterListener(this);
+
         ++id;
     }
 
@@ -98,6 +101,20 @@ GetGameObjectInViewportPoint(const Vector2i &vpPoint)
         return m_id_To_GameObject[id];
     }
     return nullptr;
+}
+
+void SelectionFramebuffer::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+    GameObject *go = DCAST<GameObject*>(object);
+    if (go)
+    {
+        if (m_gameObject_To_Id.ContainsKey(go))
+        {
+            IdType id = m_gameObject_To_Id.Get(go);
+            m_gameObject_To_Id.Remove(go);
+            m_id_To_GameObject.Remove(id);
+        }
+    }
 }
 
 Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
