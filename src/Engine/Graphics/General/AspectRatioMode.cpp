@@ -2,8 +2,8 @@
 
 USING_NAMESPACE_BANG
 
-Vector2i AspectRatio::GetAspectRatioedSize(const Vector2i &targetSize,
-                                           const Vector2i &currentSize,
+Vector2i AspectRatio::GetAspectRatioedSize(const Vector2i &currentSize,
+                                           const Vector2i &targetSize,
                                            AspectRatioMode aspectRatioMode)
 {
     Vector2i finalSize = targetSize;

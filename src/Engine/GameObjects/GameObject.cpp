@@ -15,7 +15,7 @@
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/IEnabledListener.h"
+#include "Bang/IObjectListener.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -180,8 +180,8 @@ void GameObject::DestroyPending()
 
 void GameObject::PropagateEnabledEvent(bool enabled) const
 {
-    auto enabledListeners = GetComponents<IEnabledListener>();
-    for (IEnabledListener *eList : enabledListeners)
+    auto enabledListeners = GetComponents<IObjectListener>();
+    for (IObjectListener *eList : enabledListeners)
     {
         if (enabled) { eList->OnEnabled(); } else { eList->OnDisabled(); }
     }
@@ -251,14 +251,14 @@ void GameObject::RemoveComponent(Component *component)
 void GameObject::OnEnabled()
 {
     Object::OnEnabled();
-    Propagate(&IEnabledListener::OnEnabled, GetComponents<IEnabledListener>());
-    PropagateToChildren(&IEnabledListener::OnEnabled);
+    Propagate(&IObjectListener::OnEnabled, GetComponents<IObjectListener>());
+    PropagateToChildren(&IObjectListener::OnEnabled);
 }
 void GameObject::OnDisabled()
 {
     Object::OnDisabled();
-    Propagate(&IEnabledListener::OnDisabled, GetComponents<IEnabledListener>());
-    PropagateToChildren(&IEnabledListener::OnDisabled);
+    Propagate(&IObjectListener::OnDisabled, GetComponents<IObjectListener>());
+    PropagateToChildren(&IObjectListener::OnDisabled);
 }
 
 void GameObject::Destroy(GameObject *gameObject)

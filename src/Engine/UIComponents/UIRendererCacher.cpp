@@ -139,6 +139,11 @@ GameObject *UIRendererCacher::GetContainer() const
     return p_uiRenderersContainer;
 }
 
+void UIRendererCacher::OnChanged()
+{
+    m_needNewImageToSnapshot = true;
+}
+
 void UIRendererCacher::OnChildAdded(GameObject*, GameObject*)
 {
     List<GameObject*> children = GetContainer()->GetChildrenRecursively();
@@ -149,9 +154,18 @@ void UIRendererCacher::OnChildAdded(GameObject*, GameObject*)
         {
             rend->EventEmitter<IRendererChangedListener>::RegisterListener(this);
         }
+
+        if (child->GetTransform())
+        {
+            child->GetTransform()->EventEmitter<ITransformListener>::RegisterListener(this);
+        }
+
+        child->EventEmitter<IObjectListener>::RegisterListener(this);
         child->EventEmitter<IChildrenListener>::RegisterListener(this);
         child->EventEmitter<IGameObjectVisibilityChangedListener>::RegisterListener(this);
     }
+
+    OnChanged();
 }
 
 void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
@@ -168,11 +182,36 @@ void UIRendererCacher::OnChildRemoved(GameObject *removedChild, GameObject*)
         child->EventEmitter<IChildrenListener>::UnRegisterListener(this);
         child->EventEmitter<IGameObjectVisibilityChangedListener>::UnRegisterListener(this);
     }
+
+    OnChanged();
+}
+
+void UIRendererCacher::OnTransformChanged()
+{
+    OnChanged();
 }
 
 void UIRendererCacher::OnRendererChanged(Renderer*)
 {
-    m_needNewImageToSnapshot = true;
+    OnChanged();
+}
+
+void UIRendererCacher::OnStarted()
+{
+    Component::OnStarted();
+    OnChanged();
+}
+
+void UIRendererCacher::OnEnabled()
+{
+    Component::OnEnabled();
+    OnChanged();
+}
+
+void UIRendererCacher::OnDisabled()
+{
+    Component::OnDisabled();
+    OnChanged();
 }
 
 void UIRendererCacher::SetContainerVisible(bool visible)

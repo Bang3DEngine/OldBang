@@ -4,7 +4,7 @@
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
 #include "Bang/IEventEmitter.h"
-#include "Bang/IEnabledListener.h"
+#include "Bang/IObjectListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -85,7 +85,7 @@ public:
 
     bool IsMouseOver(bool recursive = false) const;
 
-    // IEnabledListener
+    // IObjectListener
     void OnEnabled() override;
     void OnDisabled() override;
 

@@ -18,6 +18,7 @@ FORWARD class UIImageRenderer;
 
 class UIRendererCacher : public Component,
                          public IChildrenListener,
+                         public ITransformListener,
                          public IRendererChangedListener,
                          public IGameObjectVisibilityChangedListener
 {
@@ -36,12 +37,22 @@ public:
     bool IsCachingEnabled() const;
     GameObject *GetContainer() const;
 
+    void OnChanged();
+
     // IChildrenListener
     void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
     void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
 
+    // ITransformListener
+    void OnTransformChanged() override;
+
     // IRendererChangedListener
     void OnRendererChanged(Renderer *changedRenderer) override;
+
+    // IObjectListener
+    void OnStarted() override;
+    void OnEnabled() override;
+    void OnDisabled() override;
 
 private:
     bool m_cachingEnabled = true;

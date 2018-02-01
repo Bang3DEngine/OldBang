@@ -6,7 +6,7 @@
 #include "Bang/Component.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
-#include "Bang/IEnabledListener.h"
+#include "Bang/IObjectListener.h"
 #include "Bang/IChildrenListener.h"
 #include "Bang/ITransformListener.h"
 #include "Bang/IMaterialChangedListener.h"
@@ -27,7 +27,7 @@ public:
     void SetCullByRectTransform(bool cullByRectTransform);
     bool GetCullByRectTransform() const;
 
-    // IEnabledListener
+    // IObjectListener
     virtual void OnEnabled()  override;
     virtual void OnDisabled() override;
 

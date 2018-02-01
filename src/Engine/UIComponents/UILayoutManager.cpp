@@ -146,7 +146,6 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
     {
         GameObject *go = goQueue.front(); goQueue.pop();
 
-        List<ILayoutController*> nonSelfControllers;
         List<ILayoutController*> layoutControllers =
                                         go->GetComponents<ILayoutController>();
 
@@ -154,18 +153,17 @@ void UILayoutManager::ApplyLayout(GameObject *gameObject, Axis axis)
         for (ILayoutController *layoutController : layoutControllers)
         {
             ILayoutSelfController *selfController =
-                           Cast<ILayoutSelfController*>(layoutController);
-            if (selfController)
-            {
-                selfController->_ApplyLayout(axis);
-            }
-            else { nonSelfControllers.PushBack(layoutController); }
+                           DCAST<ILayoutSelfController*>(layoutController);
+            if (selfController) { selfController->_ApplyLayout(axis); }
         }
 
         // Normal LayoutControllers
-        for (ILayoutController *layoutController : nonSelfControllers)
+        for (ILayoutController *layoutController : layoutControllers)
         {
-            layoutController->_ApplyLayout(axis);
+            if (!DCAST<ILayoutSelfController*>(layoutController))
+            {
+                layoutController->_ApplyLayout(axis);
+            }
         }
 
         const List<GameObject*> &children = go->GetChildren();

@@ -192,7 +192,7 @@ protected:
     virtual void ChildAdded(GameObject *addedChild, GameObject *parent);
     virtual void ChildRemoved(GameObject *removedChild, GameObject *parent);
 
-    // IEnabledListener
+    // IObjectListener
     virtual void OnEnabled() override;
     virtual void OnDisabled() override;
 

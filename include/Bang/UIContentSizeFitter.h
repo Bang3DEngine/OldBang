@@ -13,9 +13,6 @@ class UIContentSizeFitter : public Component,
     COMPONENT(UIContentSizeFitter)
 
 public:
-    UIContentSizeFitter();
-    virtual ~UIContentSizeFitter();
-
     void SetHorizontalSizeType(LayoutSizeType sizeType);
     void SetVerticalSizeType(LayoutSizeType sizeType);
 
@@ -35,6 +32,9 @@ public:
 private:
     LayoutSizeType m_verticalSizeType   = LayoutSizeType::None;
     LayoutSizeType m_horizontalSizeType = LayoutSizeType::None;
+
+    UIContentSizeFitter();
+    virtual ~UIContentSizeFitter();
 };
 
 NAMESPACE_BANG_END

@@ -4,16 +4,16 @@
 #include "Bang/ObjectId.h"
 #include "Bang/Serializable.h"
 #include "Bang/IEventEmitter.h"
-#include "Bang/IEnabledListener.h"
+#include "Bang/IObjectListener.h"
 #include "Bang/IDestroyListener.h"
 
 NAMESPACE_BANG_BEGIN
 
 class Object : public Serializable,
                public ICloneable,
-               public IEnabledListener,
+               public IObjectListener,
                public EventEmitter<IDestroyListener>,
-               public EventEmitter<IEnabledListener>
+               public EventEmitter<IObjectListener>
 {
 public:
     const ObjectId& GetObjectId() const;

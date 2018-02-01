@@ -12,8 +12,8 @@ enum class AspectRatioMode {Ignore, Keep, KeepExceeding};
 
 namespace AspectRatio
 {
-    Vector2i GetAspectRatioedSize(const Vector2i &targetSize,
-                                  const Vector2i &currentSize,
+    Vector2i GetAspectRatioedSize(const Vector2i &currentSize,
+                                  const Vector2i &targetSize,
                                   AspectRatioMode aspectRatioMode);
 }
 

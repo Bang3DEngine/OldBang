@@ -15,9 +15,7 @@ NAMESPACE_BANG_BEGIN
 
 class Asset : public Resource,
               public IToString,
-              public IEnabledListener,
-              public EventEmitter<IDestroyListener>,
-              public EventEmitter<IEnabledListener>
+              public EventEmitter<IDestroyListener>
 {
 public:
     // IToString

@@ -100,7 +100,7 @@ void Image<T>::AddMargins(const Vector2i &margins,
     Image<T> original = *this;
 
     Vector2i newSize = AspectRatio::GetAspectRatioedSize(
-                                (margins * 2) + GetSize(), GetSize(), arMode);
+                                GetSize(), (margins * 2) + GetSize(), arMode);
     Create(newSize.x, newSize.y, marginColor);
     Copy(original,
          Recti(Vector2i::Zero, original.GetSize()),
@@ -167,8 +167,9 @@ void Image<T>::Resize(int _newWidth, int _newHeight,
 {
     // First pick the new (width,height), depending on the AspectRatioMode
     Vector2i newSize = AspectRatio::GetAspectRatioedSize(
+                                            GetSize(),
                                             Vector2i(_newWidth, _newHeight),
-                                            GetSize(), arMode);
+                                            arMode);
     if (newSize.x == GetWidth() && newSize.y == GetHeight()) { return; }
 
     // Now do the resizing

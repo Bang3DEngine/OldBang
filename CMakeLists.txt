@@ -257,6 +257,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UICheckBox.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIComboBox.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
+${ENGINE_SRC_DIR}/UIComponents/UIAspectRatioFitter.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp

@@ -23,8 +23,8 @@ public:
     void OnParentChanged(GameObject *oldParent, GameObject *newParent) override;
 
     // ITransformListener
-    void OnTransformChanged() override;
-    void OnParentTransformChanged() override;
+    virtual void OnTransformChanged() override;
+    virtual void OnParentTransformChanged() override;
 
 protected:
     ILayoutController();
