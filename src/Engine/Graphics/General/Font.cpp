@@ -5,9 +5,11 @@
 #include "Bang/Path.h"
 #include "Bang/Rect.h"
 #include "Bang/Debug.h"
+#include "Bang/Thread.h"
 #include "Bang/Vector2.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
+#include "Bang/MutexLocker.h"
 #include "Bang/XMLNodeReader.h"
 #include "Bang/StreamOperators.h"
 #include "Bang/FontSheetCreator.h"
@@ -30,11 +32,40 @@ void Font::Import(const Path &ttfFilepath)
     m_ttfFilepath = ttfFilepath;
 
     ClearTTFError();
-    m_referenceFont = TTF_OpenFont(m_ttfFilepath.GetAbsolute().ToCString(), 128);
-    if (CatchTTFError() || !GetReferenceFont())
+
+    const int RefFontSize = 128;
+    m_referenceFont = TTF_OpenFont(m_ttfFilepath.GetAbsolute().ToCString(),
+                                   RefFontSize);
+    bool error = (CatchTTFError() || !GetReferenceFont());
+    if (!error)
+    {
+        m_referenceFontDataCache.height   = float(TTF_FontHeight(GetReferenceFont()));
+        m_referenceFontDataCache.ascent   = float(TTF_FontAscent(GetReferenceFont()));
+        m_referenceFontDataCache.descent  = float(TTF_FontDescent(GetReferenceFont()));
+        m_referenceFontDataCache.lineSkip = float(TTF_FontLineSkip(GetReferenceFont()));
+
+        unsigned int c = 0;
+        while (c <= 255)
+        {
+            int minx, maxx, miny, maxy, advance;
+            TTF_GlyphMetrics(GetReferenceFont(), SCAST<unsigned char>(c),
+                             &minx, &maxx, &miny, &maxy, &advance);
+
+            GlyphMetrics cm;
+            cm.size = Vector2((maxx - minx), (maxy - miny));
+            cm.bearing = Vector2(minx, maxy);
+            cm.advance = float(advance);
+
+            if (c == ' ') { cm.size = Vector2(cm.advance,
+                                              m_referenceFontDataCache.lineSkip); }
+
+            m_referenceFontDataCache.charMetrics.Add(SCAST<unsigned char>(c), cm);
+            ++c;
+        }
+    }
+    else
     {
         Debug_Error("Could not load font '" << ttfFilepath << "'");
-        return;
     }
 }
 
@@ -111,25 +142,12 @@ Font::GlyphMetrics Font::GetCharMetrics(int fontSize, char c) const
 {
     Font::GlyphMetrics cm;
     if (!GetReferenceFont()) { return cm; }
+    if (!m_referenceFontDataCache.charMetrics.ContainsKey(c)) { return cm; }
 
-    ClearTTFError();
-    if (!TTF_GlyphIsProvided(GetReferenceFont(), c)) { return cm; }
-    if (CatchTTFError()) { return cm; }
-
-    ClearTTFError();
-    int minx, maxx, miny, maxy, advance;
-    TTF_GlyphMetrics(GetReferenceFont(), c, &minx, &maxx, &miny, &maxy, &advance);
-    if (CatchTTFError()) { return cm; }
-
-    cm.size    = ScaleMagnitude(fontSize, Vector2((maxx - minx),
-                                                  (maxy - miny)) );
-    cm.bearing = ScaleMagnitude(fontSize, Vector2(minx, maxy) );
-    cm.advance = ScaleMagnitude(fontSize, float(advance) );
-    if (c == ' ')
-    {
-        cm.size = ScaleMagnitude(fontSize, Vector2(cm.advance,
-                                                   GetLineSkip(fontSize)) );
-    }
+    cm = m_referenceFontDataCache.charMetrics.Get(c);
+    cm.size    = ScaleMagnitude(fontSize, cm.size);
+    cm.bearing = ScaleMagnitude(fontSize, cm.bearing);
+    cm.advance = ScaleMagnitude(fontSize, cm.advance);
 
     return cm;
 }
@@ -157,78 +175,37 @@ Vector2 Font::GetCharMinUv(int fontSize, char c) const
 
 bool Font::HasCharacter(char c) const
 {
-    ClearTTFError();
-    return GetReferenceFont() && TTF_GlyphIsProvided(GetReferenceFont(), c) &&
-           !CatchTTFError();
+    return GetReferenceFont() &&
+           m_referenceFontDataCache.charMetrics.ContainsKey(c);
 }
 
 float Font::GetKerning(int fontSize, char leftChar, char rightChar) const
 {
-    ClearTTFError();
-    if (!GetReferenceFont() || !TTF_GetFontKerning(GetReferenceFont()) ||
-         CatchTTFError())
-    {
-        return -1;
-    }
-
-    #if (SDL_TTF_MAJOR_VERSION >= 2 && \
-         SDL_TTF_MINOR_VERSION >= 0 && \
-         SDL_TTF_PATCHLEVEL >= 14)
-    {
-        ClearTTFError();
-        int kerning = TTF_GetFontKerningSizeGlyphs(GetReferenceFont(),
-                                                   leftChar, rightChar);
-        if (CatchTTFError()) { return -1; }
-
-        return ScaleMagnitude(fontSize, kerning);
-    }
-    #else
     return -1;
-    #endif
 }
 
 float Font::GetLineSkip(int fontSize) const
 {
     if (!GetReferenceFont()) { return 0.0f; }
-
-    ClearTTFError();
-    int lineSkip = TTF_FontLineSkip(GetReferenceFont());
-    if (CatchTTFError()) { return -1; }
-
-    return ScaleMagnitude(fontSize, float(lineSkip) );
+    return ScaleMagnitude(fontSize, m_referenceFontDataCache.lineSkip);
 }
 
 float Font::GetFontAscent(int fontSize) const
 {
     if (!GetReferenceFont()) { return 0.0f; }
-
-    ClearTTFError();
-    int fontAscent = TTF_FontAscent(GetReferenceFont());
-    if (CatchTTFError()) { return -1; }
-
-    return ScaleMagnitude(fontSize, float(fontAscent) );
+    return ScaleMagnitude(fontSize, m_referenceFontDataCache.ascent);
 }
 
 float Font::GetFontDescent(int fontSize) const
 {
     if (!GetReferenceFont()) { return 0.0f; }
-
-    ClearTTFError();
-    int fontDescent = TTF_FontDescent(GetReferenceFont());
-    if (CatchTTFError()) { return -1; }
-
-    return ScaleMagnitude(fontSize, float(fontDescent) );
+    return ScaleMagnitude(fontSize, m_referenceFontDataCache.descent);
 }
 
 float Font::GetFontHeight(int fontSize) const
 {
     if (!GetReferenceFont()) { return 0.0f; }
-
-    ClearTTFError();
-    int fontHeight = TTF_FontHeight(GetReferenceFont());
-    if (CatchTTFError()) { return -1; }
-
-    return ScaleMagnitude(fontSize,  float(fontHeight) );
+    return ScaleMagnitude(fontSize, m_referenceFontDataCache.height);
 }
 
 Vector2i Font::GetAtlasCharRectSize(int fontSize, char c) const

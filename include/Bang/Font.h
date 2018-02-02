@@ -3,6 +3,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/Asset.h"
+#include "Bang/Mutex.h"
 #include "Bang/Vector2.h"
 #include "Bang/Resource.h"
 
@@ -53,7 +54,13 @@ private:
     Path m_ttfFilepath = Path::Empty;
     TTF_Font *m_referenceFont = nullptr;
 
-    // Textures
+    struct FontDataCache
+    {
+        float height, ascent, descent, lineSkip;
+        Map<char, GlyphMetrics> charMetrics;
+    };
+
+    FontDataCache m_referenceFontDataCache;
     mutable Map<int, TTF_Font*> m_openFonts;
     mutable Map<int, RH<Texture2D>> m_cachedAtlas; // Per each font size, cached atlas
     mutable Map<int, Map<char, Recti>> m_cachedAtlasCharRects; // ", cached atlas char rects

@@ -32,6 +32,8 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
             TTF_SetFontHinting(ttfFont, TTF_HINTING_LIGHT);
             SDL_Surface *charBitmap = TTF_RenderGlyph_Blended(ttfFont, c,
                                                               WhiteColor);
+            if (!charBitmap) { continue; }
+
             SDL_PixelFormat *fmt = charBitmap->format;
             Uint32 *charPixels = SCAST<Uint32*>(charBitmap->pixels);
             Imageb charImage(charBitmap->w, charBitmap->h);
