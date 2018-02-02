@@ -20,6 +20,8 @@ public:
         Rectf rectPx;
         char character;
         CharRect(char _c, const Rectf &_rect) : rectPx(_rect), character(_c) {}
+        friend std::ostream& operator<<(std::ostream &os,
+                                        const TextFormatter::CharRect &cr);
     };
 
     static Array<CharRect> GetFormattedTextPositions(
@@ -31,7 +33,6 @@ public:
                                         HorizontalAlignment hAlignment,
                                         VerticalAlignment vAlignment,
                                         bool wrapping,
-                                        bool useAtlasCharRectSize,
                                         uint *numberOfLines);
 
     static Vector2i GetTextSizeOneLined(const String &content,
@@ -66,6 +67,10 @@ private:
                                int fontSize,
                                int currentCharIndex);
 };
+
+inline std::ostream& operator<<(std::ostream &os,
+                                const TextFormatter::CharRect &cr)
+{ os << "(" << cr.character << ", " << cr.rectPx << ")"; return os; }
 
 NAMESPACE_BANG_END
 

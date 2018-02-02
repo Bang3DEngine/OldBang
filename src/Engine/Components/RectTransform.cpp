@@ -25,10 +25,10 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    Rect parentWinRect = GetParentViewportRect();
-    Vector2 parentSizePx = Vector2::Max(Vector2::One, parentWinRect.GetSize());
+    Rect parentVpRect = GetParentViewportRect();
+    Vector2 parentSizePx = Vector2::Max(Vector2::One, parentVpRect.GetSize());
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
-    return Vector2f(vpPoint - parentWinRect.GetMin()) * pixelNDCSize - 1.0f;
+    return Vector2f(vpPoint - parentVpRect.GetMin()) * pixelNDCSize - 1.0f;
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const

@@ -94,7 +94,6 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
                                         IsWrapping(),
-                                        true,
                                         &m_numberOfLines);
 
     // Generate quad positions and uvs for the mesh, and load them

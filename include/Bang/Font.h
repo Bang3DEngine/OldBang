@@ -69,6 +69,9 @@ private:
     static Vector2 ScaleMagnitude(int fontSize, const Vector2 &magnitude);
     static float GetScaleProportion(int fontSize);
 
+    static void ClearTTFError();
+    static bool CatchTTFError();
+
     void Free();
 };
 

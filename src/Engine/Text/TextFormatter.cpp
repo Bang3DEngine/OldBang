@@ -16,7 +16,6 @@ Array<TextFormatter::CharRect>
                                             HorizontalAlignment hAlignment,
                                             VerticalAlignment vAlignment,
                                             bool wrapping,
-                                            bool useAtlasCharRectSize,
                                             uint *numberOfLines)
 {
     if (content.IsEmpty()) { return Array<CharRect>(); }
@@ -26,17 +25,9 @@ Array<TextFormatter::CharRect>
     for (int i = 0; i < content.Size(); ++i)
     {
         const char c = content[i];
-        Rectf charRect;
-        if (useAtlasCharRectSize)
-        {
-            Vector2 size = Vector2(font->GetAtlasCharRectSize(fontSize, c));
-            charRect = Rect(Vector2(0, -size.y), Vector2(size.x, 0)) +
-                       Vector2(0, font->GetFontAscent(fontSize));
-        }
-        else
-        {
-            charRect = TextFormatter::GetCharRect(c, font, fontSize);
-        }
+        Vector2 size = Vector2(font->GetAtlasCharRectSize(fontSize, c));
+        Rectf charRect = Rect(Vector2(0, -size.y), Vector2(size.x, 0)) +
+                              Vector2(0, font->GetFontAscent(fontSize));
         charRects.PushBack( CharRect(c, charRect) );
     }
 
@@ -239,9 +230,11 @@ int TextFormatter::GetCharAdvanceX(const String &content,
     int advance = 0;
     if (currentCharIndex < content.Size()-1)
     {
+        /*
         advance = font->GetKerning(fontSize,
                                    content[currentCharIndex],
                                    content[currentCharIndex + 1]);
+        */
     }
 
     if (advance <= 0)
