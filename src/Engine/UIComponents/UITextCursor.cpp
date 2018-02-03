@@ -36,6 +36,7 @@ void UITextCursor::OnUpdate()
 void UITextCursor::ResetTickTime()
 {
     m_cursorTime = 0.0f;
+    SetVisible(true);
 }
 
 void UITextCursor::SetStroke(float cursorWidth)

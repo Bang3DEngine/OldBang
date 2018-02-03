@@ -67,34 +67,27 @@ void UIInputText::OnUpdate()
 void UIInputText::UpdateCursorRenderer()
 {
     // Cursor "I" position update
-    float cursorX  = GetLabel()->GetCursorXViewportNDC( GetCursorIndex() );
-    float lineSkip = GetText()->GetFont()->GetLineSkip(
-                                                GetText()->GetTextSize() ) + 1;
-    float lineSkipNDC = GL::FromViewportAmountToViewportAmountNDC(Vector2(0, lineSkip)).y;
+    float cursorX = GetLabel()->GetCursorXViewportNDC( GetCursorIndex() );
+    float fontHeight =
+        GetText()->GetFont()->GetFontHeight( GetText()->GetTextSize() );
+    float fontHeightNDC =
+         GL::FromViewportAmountToViewportAmountNDC(Vector2(0, fontHeight)).y;
 
-    Vector2 minPoint, maxPoint;
-    if (!GetText()->GetContent().IsEmpty())
-    {
-        Rect textRect = GetText()->GetContentViewportNDCRect();
-        minPoint = Vector2(cursorX, textRect.GetMax().y - lineSkipNDC);
-        maxPoint = Vector2(cursorX, textRect.GetMax().y);
-    }
-    else
-    {
-        Rect limitsRect = GetLabelRT()->GetViewportRectNDC();
-        minPoint = Vector2(cursorX, limitsRect.GetMin().y);
-        maxPoint = Vector2(cursorX, limitsRect.GetMax().y);
-    }
+    constexpr float MarginsNDC = 0.1f;
+    Rect limitsRect = GetLabelRT()->GetViewportRectNDC();
+    Vector2 minPoint = Vector2(cursorX, limitsRect.GetCenter().y - fontHeightNDC / 2.0f);
+    Vector2 maxPoint = Vector2(cursorX, limitsRect.GetCenter().y + fontHeightNDC / 2.0f);
 
-    const RectTransform *cParentRT =
-            p_cursor->GetGameObject()->GetParent()->GetRectTransform();
-    const Vector2 cursorSizeLocalNDC = cParentRT->FromWindowAmountToLocalAmountNDC(Vector2i(3,0));
-    const Vector2 minPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(minPoint);
-    const Vector2 maxPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(maxPoint);
+    const RectTransform *cParentRT = p_cursor->GetGameObject()->GetParent()->GetRectTransform();
+    Vector2 minPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(minPoint);
+    Vector2 maxPointLocalNDC = cParentRT->FromViewportPointNDCToLocalPointNDC(maxPoint);
+    minPointLocalNDC.y = Math::Clamp(minPointLocalNDC.y,
+                                     -1.0f + MarginsNDC, 1.0f - MarginsNDC);
+    maxPointLocalNDC.y = Math::Clamp(maxPointLocalNDC.y,
+                                     -1.0f + MarginsNDC, 1.0f - MarginsNDC);
 
     RectTransform *cRT = p_cursor->GetGameObject()->GetRectTransform();
-    cRT->SetAnchors(minPointLocalNDC - cursorSizeLocalNDC,
-                    maxPointLocalNDC + cursorSizeLocalNDC);
+    cRT->SetAnchors(minPointLocalNDC, maxPointLocalNDC);
 }
 
 void UIInputText::UpdateTextScrolling()
