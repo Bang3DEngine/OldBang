@@ -10,6 +10,7 @@
 #include "Bang/Material.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UITextCursor.h"
 #include "Bang/RectTransform.h"
@@ -36,8 +37,6 @@ UIInputText::~UIInputText()
 void UIInputText::OnStart()
 {
     Component::OnStart();
-
-    GetLabel()->EventEmitter<IFocusListener>::RegisterListener(this);
 }
 
 void UIInputText::OnUpdate()
@@ -46,6 +45,7 @@ void UIInputText::OnUpdate()
 
     UICanvas *canvas = UICanvas::GetActive(this);
     bool hasFocus = canvas->HasFocus( GetLabel() );
+    hasFocus = (hasFocus || canvas->HasFocus(this));
     if (hasFocus)
     {
         const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
@@ -56,7 +56,7 @@ void UIInputText::OnUpdate()
         UpdateCursorRenderer();
     }
 
-    if ( canvas->IsMouseOver(GetLabel()) )
+    if ( canvas->IsMouseOver( GetLabel() ) || canvas->IsMouseOver(this) )
     {
         Cursor::Set(Cursor::Type::IBeam);
     }
@@ -383,6 +383,10 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     bg->SetTint(Color::White);
     inputText->p_background = bg;
 
+    UIFocusable *focusable = go->AddComponent<UIFocusable>();
+    focusable->EventEmitter<IFocusListener>::RegisterListener(inputText);
+    inputText->p_focusable = focusable;
+
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
     scrollArea->GetMask()->SetMasking(true);
     inputText->p_scrollArea = scrollArea;
@@ -397,6 +401,7 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     label->GetMask()->SetMasking(false);
     label->GetGameObject()->GetRectTransform()->
                             SetMargins(MarginX, MarginY, MarginX, MarginY);
+    label->SetFocusable( inputText->p_focusable );
     inputText->p_label = label;
 
     label->GetGameObject()->SetParent(scrollArea->GetContainer());
@@ -452,7 +457,6 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
 void UIInputText::OnFocusTaken(IFocusable *focusable)
 {
     IFocusListener::OnFocusTaken(focusable);
-    ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
 
     EventEmitter<IFocusListener>::
             PropagateToListeners(&IFocusListener::OnFocusTaken, focusable);
@@ -463,7 +467,6 @@ void UIInputText::OnFocusTaken(IFocusable *focusable)
 void UIInputText::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
-    ASSERT( focusable == SCAST<IFocusable*>(GetLabel()) );
 
     EventEmitter<IFocusListener>::
             PropagateToListeners(&IFocusListener::OnFocusLost, focusable);

@@ -19,6 +19,7 @@ public:
     const ObjectId& GetObjectId() const;
     void SetEnabled(bool enabled);
 
+    bool IsActive() const;
     bool IsEnabled() const;
     bool IsStarted() const;
     bool IsWaitingToBeDestroyed() const;
@@ -29,8 +30,6 @@ public:
 protected:
     Object() = default;
     virtual ~Object();
-
-    bool IsActive() const;
 
     virtual void PreStart();
     virtual void Start();

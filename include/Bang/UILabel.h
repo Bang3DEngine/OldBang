@@ -8,6 +8,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class UIRectMask;
+FORWARD class UIFocusable;
 FORWARD class RectTransform;
 FORWARD class UITextRenderer;
 
@@ -47,6 +48,9 @@ public:
 
     UIRectMask *GetMask() const;
     UITextRenderer *GetText() const;
+    IFocusable *GetFocusable() const;
+
+    void SetFocusable(IFocusable *focusable);
 
     // IFocusListener
     virtual void OnFocusTaken(IFocusable *focusable) override;
@@ -62,6 +66,7 @@ private:
 
     UIRectMask *p_mask = nullptr;
     UITextRenderer *p_text = nullptr;
+    IFocusable *p_focusable = nullptr;
     GameObject *p_selectionQuad = nullptr;
 
     UILabel();

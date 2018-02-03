@@ -7,6 +7,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusable.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutManager.h"
@@ -35,26 +36,34 @@ void UICanvas::OnUpdate()
     // Focus
     IFocusable *focusMouseOver = nullptr;
 
-    Array<IFocusable*> focusables;
-    GetSortedFocusCandidatesByOcclusionOrder(GetGameObject(), &focusables);
-    for (IFocusable *focusable : focusables)
+    Array< std::pair<IFocusable*, Rect> > focusablesAndRectsNDC;
+    GetSortedFocusCandidatesByOcclusionOrder(GetGameObject(),
+                                             &focusablesAndRectsNDC);
+    for (const auto& focusableAndRectNDC : focusablesAndRectsNDC)
     {
+        IFocusable *focusable = focusableAndRectNDC.first;
+        const Rect& maskedRectNDC = focusableAndRectNDC.second;
+
         Component *focusableComp = Cast<Component*>(focusable);
-        if (focusableComp->IsEnabled() && focusable->IsFocusEnabled())
+        if (focusableComp->IsActive() && focusable->IsFocusEnabled())
         {
             RectTransform *rt = focusableComp->GetGameObject()->GetRectTransform();
-            if (rt && rt->IsMouseOver())
+            if (rt && rt->IsMouseOver() &&
+                maskedRectNDC.Contains( Input::GetMousePositionNDC() ))
             {
                 focusMouseOver = focusable;
                 if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     SetFocus(focusable);
                 }
-
                 break; // Finished searching!
             }
         }
     }
+
+    Array<IFocusable*> focusables;
+    for (const auto& focusableAndRectNDC : focusablesAndRectsNDC)
+    { focusables.PushBack( focusableAndRectNDC.first ); }
 
     // Reset focus when clicking out of everything
     if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
@@ -212,11 +221,14 @@ void UICanvas::OnDestroyed(EventEmitter<IDestroyListener> *object)
     { SetFocusMouseOver(nullptr); }
 }
 
+bool UICanvas::HasFocusFocusable(const IFocusable *focusable)
+{
+    return GetCurrentFocus() == focusable;
+}
 bool UICanvas::HasFocus(const Component *comp, bool recursive)
 {
     return comp ? UICanvas::HasFocus(comp->GetGameObject(), recursive) : false;
 }
-
 bool UICanvas::HasFocus(const GameObject *go, bool recursive)
 {
     if (!go) { return false; }
@@ -226,7 +238,7 @@ bool UICanvas::HasFocus(const GameObject *go, bool recursive)
         List<IFocusable*> focusables = go->GetComponents<IFocusable>();
         for (IFocusable *focusable : focusables)
         {
-            if (focusable == GetCurrentFocus()) { return true; }
+            if (HasFocusFocusable(focusable)) { return true; }
         }
     }
     else
@@ -244,11 +256,14 @@ bool UICanvas::HasFocus(const GameObject *go, bool recursive)
     return false;
 }
 
+bool UICanvas::IsMouseOverFocusable(const IFocusable *focusable)
+{
+    return GetCurrentFocusMouseOver() == focusable;
+}
 bool UICanvas::IsMouseOver(const Component *comp, bool recursive)
 {
     return comp ? UICanvas::IsMouseOver(comp->GetGameObject(), recursive) : false;
 }
-
 bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
 {
     if (!go) { return false; }
@@ -257,7 +272,7 @@ bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
         List<IFocusable*> focusables = go->GetComponents<IFocusable>();
         for (IFocusable *focusable : focusables)
         {
-            if (focusable == GetCurrentFocusMouseOver()) { return true; }
+            if (IsMouseOverFocusable(focusable)) { return true; }
         }
     }
     else
@@ -278,6 +293,7 @@ bool UICanvas::IsMouseOver(const GameObject *go, bool recursive)
 IFocusable *UICanvas::GetCurrentFocus() { return p_currentFocus; }
 IFocusable* UICanvas::GetCurrentFocusMouseOver() { return p_currentFocusMouseOver; }
 
+
 UILayoutManager *UICanvas::GetLayoutManager() const
 {
     return m_uiLayoutManager;
@@ -296,13 +312,13 @@ UICanvas *UICanvas::GetActive(const Component *comp)
 
 struct GameObjectZComparer
 {
-    inline bool operator() (const IFocusable * const& lhs,
-                            const IFocusable * const& rhs)
+    inline bool operator() (const std::pair<IFocusable*, Rect>& lhs,
+                            const std::pair<IFocusable*, Rect>& rhs)
     {
-        const GameObject *glhs = Cast<const GameObject*>(lhs);
-        const GameObject *grhs = Cast<const GameObject*>(rhs);
-        if (!glhs) { glhs = Cast<const Component*>(lhs)->GetGameObject(); }
-        if (!grhs) { grhs = Cast<const Component*>(rhs)->GetGameObject(); }
+        const GameObject *glhs = Cast<const GameObject*>(lhs.first);
+        const GameObject *grhs = Cast<const GameObject*>(rhs.first);
+        if (!glhs) { glhs = Cast<const Component*>(lhs.first)->GetGameObject(); }
+        if (!grhs) { grhs = Cast<const Component*>(rhs.first)->GetGameObject(); }
         Transform *lt = glhs->GetTransform();
         Transform *rt = grhs->GetTransform();
         if (!lt) { return false; }
@@ -313,38 +329,52 @@ struct GameObjectZComparer
 
 
 void UICanvas::GetSortedFocusCandidatesByOcclusionOrder(
-                                    const GameObject *go,
-                                    Array<IFocusable*> *sortedCandidates) const
+        const GameObject *go,
+        Array< std::pair<IFocusable*, Rect> > *sortedCandidates) const
 {
-    GetSortedFocusCandidatesByPaintOrder(go, sortedCandidates);
+    std::stack<Rect> auxMaskRectStack;
+    auxMaskRectStack.push(Rect::NDCRect);
+
+    GetSortedFocusCandidatesByPaintOrder(go, sortedCandidates, &auxMaskRectStack);
+
     Containers::StableSort(sortedCandidates->Begin(), sortedCandidates->End(),
                            GameObjectZComparer());
 }
 
 void UICanvas::GetSortedFocusCandidatesByPaintOrder(
-                                    const GameObject *go,
-                                    Array<IFocusable*> *sortedCandidates) const
+        const GameObject *go,
+        Array< std::pair<IFocusable*, Rect> > *sortedCandidates,
+        std::stack<Rect> *maskRectStack) const
 {
     List<GameObject*> children = go->GetChildren();
-    Containers::Reverse(children.Begin(), children.End());
-    for (GameObject *child : children)
+    for (auto it = children.RBegin(); it != children.REnd(); ++it)
     {
-        if (child->IsEnabled() && !child->IsWaitingToBeDestroyed())
+        GameObject *child = *it;
+        if (child->IsActive())
         {
-            GetSortedFocusCandidatesByPaintOrder(child, sortedCandidates);
+            UIRectMask *rectMask = child->GetComponent<UIRectMask>();
+            Rect maskedRectNDC = maskRectStack->top();
+            if (rectMask && rectMask->IsActive() && rectMask->IsMasking())
+            {
+                Rect childRect = child->GetRectTransform()->GetViewportRectNDC();
+                maskedRectNDC = Rect::Intersection(maskedRectNDC, childRect);
+            }
+            maskRectStack->push(maskedRectNDC);
+
+            GetSortedFocusCandidatesByPaintOrder(child, sortedCandidates,
+                                                 maskRectStack);
 
             IFocusable *focusable = child->GetComponent<IFocusable>();
             if (focusable)
             {
                 Object *focusableObj = Cast<Object*>(focusable);
-                if (!focusableObj ||
-                     (focusableObj->IsEnabled() &&
-                     !focusableObj->IsWaitingToBeDestroyed())
-                   )
+                if (!focusableObj || focusableObj->IsActive())
                 {
-                    sortedCandidates->PushBack(focusable);
+                    sortedCandidates->PushBack(
+                            std::make_pair(focusable, maskedRectNDC));
                 }
             }
+            maskRectStack->pop();
         }
     }
 }

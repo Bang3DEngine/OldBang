@@ -18,6 +18,7 @@ USING_NAMESPACE_BANG
 UILabel::UILabel()
 {
     SetSelectable(false);
+    SetFocusable(this);
 }
 
 UILabel::~UILabel()
@@ -28,8 +29,6 @@ void UILabel::OnStart()
 {
     Component::OnStart();
 
-    EventEmitter<IFocusListener>::RegisterListener(this);
-
     ResetSelection();
     SetSelectAllOnFocus(true);
     UpdateSelectionQuadRenderer();
@@ -39,20 +38,18 @@ void UILabel::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (UICanvas::GetActive(this)->HasFocus(this))
+    if (UICanvas::GetActive(this)->HasFocusFocusable( GetFocusable() ))
     {
         if (IsSelectable())
         {
-            if (!HasJustFocusChanged())
+            if (!GetFocusable()->HasJustFocusChanged())
             {
-                if (m_firstSelectAll &&
-                    Input::GetMouseButtonDown(MouseButton::Left))
+                if (m_firstSelectAll && Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     m_firstSelectAll = false;
                 }
                 if (!m_firstSelectAll) { HandleMouseSelection(); }
             }
-
             HandleClipboardCopy();
         }
         else
@@ -69,7 +66,6 @@ void UILabel::SetSelectionIndex(int index) { m_selectionIndex = index; }
 void UILabel::SetSelectable(bool selectable)
 {
     m_selectable = selectable;
-    SetFocusEnabled(selectable);
     if (p_selectionQuad) { p_selectionQuad->SetEnabled(selectable); }
 }
 void UILabel::SetSelection(int cursorIndex, int selectionIndex)
@@ -92,7 +88,7 @@ void UILabel::ResetSelection()
 }
 void UILabel::SelectAll()
 {
-    SetSelection(GetText()->GetContent().Size(), 0);
+    SetSelection(0, GetText()->GetContent().Size());
 }
 void UILabel::SetSelectAllOnFocus(bool selectAllOnFocus)
 {
@@ -158,7 +154,7 @@ int UILabel::GetClosestCharIndexTo(const Vector2 &coordsLocalNDC)
     int closestCharIndex = 0;
     float minDist = Math::Infinity<float>();
     const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
-    for (int i = 0; i < charRectsNDC.Size(); ++i)
+    for (uint i = 0; i < charRectsNDC.Size(); ++i)
     {
         const Rect &cr = charRectsNDC[i];
         float distToMinX = Math::Abs(coordsLocalNDC.x - cr.GetMin().x);
@@ -184,11 +180,23 @@ bool UILabel::IsSelectingWithMouse() const { return m_selectingWithMouse; }
 
 UIRectMask *UILabel::GetMask() const { return p_mask; }
 UITextRenderer *UILabel::GetText() const { return p_text; }
+IFocusable *UILabel::GetFocusable() const { return p_focusable; }
+
+void UILabel::SetFocusable(IFocusable *focusable)
+{
+    if (GetFocusable())
+    { GetFocusable()->EventEmitter<IFocusListener>::UnRegisterListener(this); }
+
+    p_focusable = focusable;
+    if (GetFocusable() != this) { this->SetFocusEnabled(false); }
+
+    if (GetFocusable())
+    { GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this); }
+}
 
 void UILabel::OnFocusTaken(IFocusable *focusable)
 {
     IFocusListener::OnFocusTaken(focusable);
-    ASSERT(focusable == this);
 
     if (IsSelectAllOnFocus() && IsSelectable())
     {
@@ -203,7 +211,6 @@ void UILabel::OnFocusTaken(IFocusable *focusable)
 void UILabel::OnFocusLost(IFocusable *focusable)
 {
     IFocusListener::OnFocusLost(focusable);
-    ASSERT(focusable == this);
 
     ResetSelection();
     UpdateSelectionQuadRenderer();
@@ -290,13 +297,9 @@ UILabel *UILabel::CreateInto(GameObject *go)
 
     UILabel *label = go->AddComponent<UILabel>();
 
-    UIVerticalLayout *vl = go->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::Full);
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
-    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-
     UIRectMask *mask = go->AddComponent<UIRectMask>();
     label->p_mask = mask;
+    label->p_mask->SetMasking(false);
 
     GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
@@ -304,7 +307,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
     text->SetWrapping(false);
 
     UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2(1.0f) );
+    textLE->SetFlexibleSize( Vector2::One );
 
     label->p_text = text;
 

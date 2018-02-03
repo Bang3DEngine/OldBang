@@ -11,6 +11,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class UILabel;
 FORWARD class GameObject;
+FORWARD class UIFocusable;
 FORWARD class UITextCursor;
 FORWARD class UIScrollArea;
 FORWARD class RectTransform;
@@ -64,6 +65,7 @@ private:
 
     UILabel *p_label = nullptr;
     UITextCursor *p_cursor = nullptr;
+    UIFocusable *p_focusable = nullptr;
     UIScrollArea *p_scrollArea = nullptr;
     UIImageRenderer *p_background = nullptr;
 

@@ -1,6 +1,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include <stack>
+
 #include "Bang/Set.h"
 #include "Bang/Component.h"
 
@@ -32,8 +34,10 @@ public:
 
     IFocusable* GetCurrentFocus();
     IFocusable* GetCurrentFocusMouseOver();
+    bool HasFocusFocusable(const IFocusable *focusable);
     bool HasFocus(const Component *comp, bool recursive = false);
     bool HasFocus(const GameObject *go, bool recursive = false);
+    bool IsMouseOverFocusable(const IFocusable *focusable);
     bool IsMouseOver(const Component *comp, bool recursive = false);
     bool IsMouseOver(const GameObject *go, bool recursive = false);
 
@@ -62,12 +66,13 @@ private:
     void SetFocusMouseOver(IFocusable *focusable);
 
     void GetSortedFocusCandidatesByOcclusionOrder(
-                                  const GameObject *go,
-                                  Array<IFocusable*> *sortedCandidates) const;
+            const GameObject *go,
+            Array< std::pair<IFocusable*, Rect> > *sortedCandidates) const;
 
     void GetSortedFocusCandidatesByPaintOrder(
-                                  const GameObject *go,
-                                  Array<IFocusable*> *sortedCandidates) const;
+            const GameObject *go,
+            Array< std::pair<IFocusable*, Rect> > *sortedCandidates,
+            std::stack<Rect> *maskRectStack) const;
 };
 
 NAMESPACE_BANG_END
