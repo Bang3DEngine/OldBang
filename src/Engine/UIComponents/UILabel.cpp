@@ -44,7 +44,7 @@ void UILabel::OnUpdate()
         {
             if (!GetFocusable()->HasJustFocusChanged())
             {
-                if (m_firstSelectAll && Input::GetMouseButtonDown(MouseButton::Left))
+                if (Input::GetMouseButtonDown(MouseButton::Left))
                 {
                     m_firstSelectAll = false;
                 }
@@ -56,6 +56,12 @@ void UILabel::OnUpdate()
         {
             ResetSelection();
         }
+
+        if (Input::GetMouseButtonUp(MouseButton::Left))
+        {
+            m_selectingWithMouse = false;
+        }
+
         UpdateSelectionQuadRenderer();
     }
 }
@@ -125,7 +131,11 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
     {
         Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
         Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
-        localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
+        if (GetText()->GetContent()[cursorIndex-1] != ' ')
+        {
+            localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
+        }
+        else { localTextX = nextCharRect.GetMin().x; }
     }
     else if (!GetText()->GetCharRectsLocalNDC().IsEmpty()) // Begin or end
     {
@@ -244,10 +254,6 @@ void UILabel::HandleMouseSelection()
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
         m_selectingWithMouse = true;
-    }
-    else if (Input::GetMouseButtonUp(MouseButton::Left))
-    {
-        m_selectingWithMouse = false;
     }
 
     // Find the closest visible char bounds to the mouse position

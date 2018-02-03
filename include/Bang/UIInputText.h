@@ -37,8 +37,6 @@ public:
     String GetSelectedText() const;
     void ReplaceSelectedText(const String &replaceStr);
 
-    void ResetSelection();
-
     void SetBlocked(bool blocked);
     void SetAllowedCharacters(const String &allowedCharacters);
 
@@ -73,10 +71,11 @@ private:
     virtual ~UIInputText();
 
     void HandleTyping();
-    void HandleKeySelection(bool wasSelecting);
-    void HandleCursorIndices(bool wasSelecting);
+    void HandleKeySelection(bool existedSelection);
+    void HandleCursorIndices(bool existedSelection);
     String FilterAllowedInputText(const String &inputText);
 
+    bool IsSelecting() const;
     int GetCursorIndex() const;
     int GetSelectionIndex() const;
 
@@ -85,7 +84,7 @@ private:
     RectTransform *GetRT() const;
 
     bool IsDelimiter(char initialChar, char currentChar) const;
-    int GetWordSplitIndex(int startingIndex, bool forward) const;
+    int GetWordSplitIndex(int cursorIndex, bool forward) const;
 
     void UpdateCursorRenderer();
     void UpdateTextScrolling();

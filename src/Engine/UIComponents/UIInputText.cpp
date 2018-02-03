@@ -48,10 +48,10 @@ void UIInputText::OnUpdate()
     hasFocus = (hasFocus || canvas->HasFocus(this));
     if (hasFocus)
     {
-        const bool wasSelecting = (GetSelectionIndex() != GetCursorIndex());
+        const bool existedSelection = (GetCursorIndex() != GetSelectionIndex());
 
         HandleTyping();
-        HandleCursorIndices(wasSelecting);
+        HandleCursorIndices(existedSelection);
         UpdateTextScrolling();
         UpdateCursorRenderer();
     }
@@ -186,9 +186,6 @@ void UIInputText::HandleTyping()
     // Key typing handling
     if (!inputText.IsEmpty())
     {
-        // String content = GetText()->GetContent();
-        // content.Insert(GetCursorIndex(), inputText);
-        // GetText()->SetContent(content);
         ReplaceSelectedText(inputText);
         SetCursorIndex( GetCursorIndex() + inputText.Size() );
         resetSelection = true;
@@ -214,16 +211,22 @@ void UIInputText::HandleTyping()
 
     if (Input::GetKeyDown(Key::End))
     {
+        resetSelection = !IsSelecting();
         SetCursorIndex( GetText()->GetContent().Size() );
     }
-    else if (Input::GetKeyDown(Key::Home)) { SetCursorIndex(0); }
-    if (resetSelection) { ResetSelection(); }
+    else if (Input::GetKeyDown(Key::Home))
+    {
+        resetSelection = !IsSelecting();
+        SetCursorIndex(0);
+    }
+
+    if (resetSelection) { GetLabel()->ResetSelection(); }
 }
 
-void UIInputText::HandleCursorIndices(bool wasSelecting)
+void UIInputText::HandleCursorIndices(bool existedSelection)
 {
     // Here we will move the selection indices either by arrows...
-    HandleKeySelection(wasSelecting);
+    HandleKeySelection(existedSelection);
 }
 
 String UIInputText::FilterAllowedInputText(const String &inputText)
@@ -236,6 +239,11 @@ String UIInputText::FilterAllowedInputText(const String &inputText)
         if (m_allowedCharacters.Contains( String(c) )) { allowedText += c; }
     }
     return allowedText;
+}
+
+bool UIInputText::IsSelecting() const
+{
+    return IsShiftPressed() || GetLabel()->IsSelectingWithMouse();
 }
 
 int UIInputText::GetCursorIndex() const { return GetLabel()->GetCursorIndex(); }
@@ -257,48 +265,41 @@ RectTransform *UIInputText::GetRT() const
     return GetGameObject()->GetRectTransform();
 }
 
-void UIInputText::HandleKeySelection(bool wasSelecting)
+void UIInputText::HandleKeySelection(bool existedSelection)
 {
     // Get cursor advance 1/-1
-    int cursorIndexAdvance = 0;
-    if (Input::GetKeyDownRepeat(Key::Right)) { cursorIndexAdvance = 1; }
-    if (Input::GetKeyDownRepeat(Key::Left)) { cursorIndexAdvance = -1; }
+    int indexAdvance = 0;
+    if (Input::GetKeyDownRepeat(Key::Right)) { indexAdvance = 1; }
+    if (Input::GetKeyDownRepeat(Key::Left)) { indexAdvance = -1; }
 
-    if (cursorIndexAdvance != 0 &&
-        (Input::GetKey(Key::LCtrl) ||
-         Input::GetKey(Key::RCtrl))
-       )
+    if (indexAdvance != 0)
     {
-        bool fwd = (cursorIndexAdvance > 0);
-        int startIdx = GetCursorIndex() + (fwd ? 0 : -1);
-        cursorIndexAdvance = GetWordSplitIndex(startIdx, fwd) - GetCursorIndex();
-        cursorIndexAdvance += (fwd ? 0 : 1);
-    }
-
-    // Advance the the cursor index, and clamp it
-    SetCursorIndex(Math::Clamp(GetCursorIndex() + cursorIndexAdvance,
-                               0, GetText()->GetContent().Size()+1) );
-
-    // Selection resetting handling
-    bool doingSelection = IsShiftPressed() || GetLabel()->IsSelectingWithMouse();
-    if (!doingSelection)
-    {
-        if (wasSelecting && cursorIndexAdvance != 0)
+        if (Input::GetKey(Key::LCtrl) || Input::GetKey(Key::RCtrl))
         {
-            bool moveCursorToSelectionBoundary =
-              (cursorIndexAdvance == -1 && GetCursorIndex() > GetSelectionIndex()) ||
-              (cursorIndexAdvance ==  1 && GetCursorIndex() < GetSelectionIndex());
-
-            if (moveCursorToSelectionBoundary)
-            {
-                SetCursorIndex( GetSelectionIndex() );
-            }
-            else { SetCursorIndex( GetCursorIndex() - cursorIndexAdvance); }
-
-            if (!IsShiftPressed()) { ResetSelection(); }
+            bool fwd = (indexAdvance > 0);
+            int startIdx = GetCursorIndex() + (fwd ? 0 : -1);
+            indexAdvance = GetWordSplitIndex(startIdx, fwd) - GetCursorIndex();
+            indexAdvance += (fwd ? 0 : 1);
         }
+
+        int newIndex;
+        if (existedSelection && !IsSelecting())
+        {
+            const int leadingIndex = indexAdvance > 0 ?
+                    Math::Max(GetCursorIndex(), GetSelectionIndex()) :
+                    Math::Min(GetCursorIndex(), GetSelectionIndex());
+            newIndex = leadingIndex;
+        }
+        else
+        {
+            newIndex = GetCursorIndex() + indexAdvance;
+        }
+        newIndex = Math::Clamp(newIndex, 0, GetText()->GetContent().Size());
+        SetCursorIndex(newIndex);
+
+        // Selection resetting handling
+        if (!IsSelecting()) { GetLabel()->ResetSelection(); }
     }
-    if (!doingSelection && !wasSelecting) { ResetSelection(); }
 }
 
 void UIInputText::SetCursorIndex(int index)
@@ -335,13 +336,11 @@ void UIInputText::ReplaceSelectedText(const String &replaceStr)
     }
 
     SetCursorIndex(minIndex);
-    ResetSelection();
+    GetLabel()->ResetSelection();
 
     EventEmitter<IValueChangedListener>::
             PropagateToListeners(&IValueChangedListener::OnValueChanged, this);
 }
-
-void UIInputText::ResetSelection() { GetLabel()->ResetSelection(); }
 
 void UIInputText::SetBlocked(bool blocked)
 {
@@ -411,7 +410,7 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     inputText->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     inputText->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     inputText->GetText()->SetWrapping(false);
-    inputText->ResetSelection();
+    inputText->GetLabel()->ResetSelection();
     inputText->UpdateCursorRenderer();
 
     return inputText;
@@ -427,16 +426,16 @@ bool UIInputText::IsDelimiter(char initialChar, char curr) const
            (!String::IsLetter(curr) && !String::IsNumber(curr));
 }
 
-int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
+int UIInputText::GetWordSplitIndex(int cursorIndex, bool forward) const
 {
     const String &content = GetText()->GetContent();
 
-    if (startIndex <= 0 && !forward) { return startIndex; }
-    if (startIndex >= content.Size()-1 && forward) { return startIndex; }
+    if (cursorIndex <= 0 && !forward) { return cursorIndex; }
+    if (cursorIndex >= content.Size()-1 && forward) { return cursorIndex; }
 
-    int i = startIndex;
+    int i = cursorIndex;
     while ( i >= 0 && i < content.Size() &&
-            IsDelimiter(content[startIndex], content[i]) )
+            IsDelimiter(content[cursorIndex], content[i]) )
     {
         i += (forward ? 1 : -1);
     }
@@ -445,7 +444,7 @@ int UIInputText::GetWordSplitIndex(int startIndex, bool forward) const
          (forward ? (i < content.Size()) : (i >= 0));
          i += (forward ? 1 : -1))
     {
-        if ( IsDelimiter(content[startIndex], content[i]) )
+        if ( IsDelimiter(content[cursorIndex], content[i]) )
         {
             return i;
         }
