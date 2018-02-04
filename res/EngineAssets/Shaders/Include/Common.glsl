@@ -7,13 +7,8 @@ uniform mat4 B_PVM;
 uniform float B_Camera_ZNear;
 uniform float B_Camera_ZFar;
 
-layout (std140)
-uniform ViewportBlock
-{
-    vec2 MinPos;
-    vec2 Size;
-}
-B_Viewport;
+uniform vec2 B_Viewport_MinPos;
+uniform vec2 B_Viewport_Size;
 
 // Material related /////////////////////////
 uniform bool  B_MaterialReceivesLighting;
@@ -51,9 +46,9 @@ float B_LinearizeDepth(float d)
                   d * (B_Camera_ZFar - B_Camera_ZNear));
 }
 #ifdef BANG_FRAGMENT
-vec2 GetViewportStep() { return 1.0 / B_Viewport.Size; }
-vec2 GetViewportPos() { return gl_FragCoord.xy - B_Viewport.MinPos; }
-vec2 GetViewportUv() { return GetViewportPos() / B_Viewport.Size; }
+vec2 GetViewportStep() { return 1.0 / B_Viewport_Size; }
+vec2 GetViewportPos() { return gl_FragCoord.xy - B_Viewport_MinPos; }
+vec2 GetViewportUv() { return GetViewportPos() / B_Viewport_Size; }
 #endif
 //
 

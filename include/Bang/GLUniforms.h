@@ -57,17 +57,7 @@ public:
     template <class T>
     static GLSLVar<T> GetUniformAt(GLId shaderProgramId, GLuint uniformIndex);
 
-    template <class T>
-    static UniformBuffer<T>* CreateBuffer();
-
-    template <class T>
-    static UniformBuffer<T>* GetBuffer();
-
-    template <class T>
-    static void RemoveBuffer();
-
     static void SetAllUniformsToShaderProgram(ShaderProgram *sp);
-    static void BindAllUniformBuffersToShader(const ShaderProgram *sp);
 
     static void SetCameraUniforms(float zNear, float zFar);
     static void SetModelMatrix(const Matrix4 &model);
@@ -78,30 +68,16 @@ public:
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     GL::ViewProjMode GetViewProjMode() const;
 
-    static UniformBuffer<ViewportUniforms>* GetViewportBuffer();
-
 private:
-    TypeMap<IUniformBuffer*> m_uniformBuffers;
-
+    ViewportUniforms m_viewportUniforms;
     MatrixUniforms m_matrixUniforms;
     CameraUniforms m_cameraUniforms;
-    int m_bindingPointsUsed = 0;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::Canvas;
 
-    GLUniforms();
-    virtual ~GLUniforms();
+    GLUniforms() = default;
+    virtual ~GLUniforms() = default;
 
-    template <class T>
-    UniformBuffer<T>* _CreateBuffer();
-
-    template <class T>
-    UniformBuffer<T>* _GetBuffer();
-
-    template <class T>
-    void _RemoveBuffer();
-
-    void RemoveBuffer(IUniformBuffer *buffer);
-
+    static ViewportUniforms* GetViewportUniforms();
     static MatrixUniforms *GetMatrixUniforms();
     static CameraUniforms *GetCameraUniforms();
     static GLUniforms *GetActive();

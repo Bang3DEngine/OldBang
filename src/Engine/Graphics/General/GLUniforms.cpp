@@ -5,21 +5,9 @@
 
 USING_NAMESPACE_BANG
 
-GLUniforms::~GLUniforms()
+GLUniforms::ViewportUniforms *GLUniforms::GetViewportUniforms()
 {
-    while (!m_uniformBuffers.IsEmpty())
-    {
-        RemoveBuffer(m_uniformBuffers.Begin()->second);
-    }
-}
-
-void GLUniforms::RemoveBuffer(IUniformBuffer *buffer)
-{
-    if (m_uniformBuffers.ContainsValue(buffer))
-    {
-        delete buffer;
-        m_uniformBuffers.RemoveValues(buffer);
-    }
+    return &GLUniforms::GetActive()->m_viewportUniforms;
 }
 
 GLUniforms::MatrixUniforms *GLUniforms::GetMatrixUniforms()
@@ -30,16 +18,6 @@ GLUniforms::MatrixUniforms *GLUniforms::GetMatrixUniforms()
 GLUniforms::CameraUniforms *GLUniforms::GetCameraUniforms()
 {
     return &GLUniforms::GetActive()->m_cameraUniforms;
-}
-
-UniformBuffer<GLUniforms::ViewportUniforms> *GLUniforms::GetViewportBuffer()
-{
-    return GLUniforms::GetBuffer<GLUniforms::ViewportUniforms>();
-}
-
-GLUniforms::GLUniforms()
-{
-    _CreateBuffer<GLUniforms::ViewportUniforms>();
 }
 
 void GLUniforms::SetAllUniformsToShaderProgram(ShaderProgram *sp)
@@ -56,12 +34,11 @@ void GLUniforms::SetAllUniformsToShaderProgram(ShaderProgram *sp)
         CameraUniforms *cameraUniforms = GLUniforms::GetCameraUniforms();
         sp->Set("B_Camera_ZNear", cameraUniforms->zNear, false);
         sp->Set("B_Camera_ZFar", cameraUniforms->zFar, false);
-    }
-}
 
-void GLUniforms::BindAllUniformBuffersToShader(const ShaderProgram *sp)
-{
-    GL::BindUniformBufferToShader("ViewportBlock", sp, GetViewportBuffer());
+        ViewportUniforms *viewportUniforms = GLUniforms::GetViewportUniforms();
+        sp->Set("B_Viewport_MinPos", viewportUniforms->minPos, false);
+        sp->Set("B_Viewport_Size", viewportUniforms->size, false);
+    }
 }
 
 void GLUniforms::SetCameraUniforms(float zNear, float zFar)

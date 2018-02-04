@@ -380,6 +380,7 @@ UIInputText *UIInputText::CreateInto(GameObject *go)
     inputText->p_focusable = focusable;
 
     UIScrollArea *scrollArea = GameObjectFactory::CreateUIScrollAreaInto(go);
+    scrollArea->GetGameObject()->GetRectTransform()->SetAnchors(Vector2::Zero);
     scrollArea->GetMask()->SetMasking(true);
     inputText->p_scrollArea = scrollArea;
 
