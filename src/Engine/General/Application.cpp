@@ -72,10 +72,10 @@ Application::~Application()
     SDL_Quit();
 }
 
-Window *Application::CreateWindow()
+Window *Application::CreateWindow(uint flags)
 {
     Window *w = _CreateWindow();
-    SetupWindow(w);
+    SetupWindow(w, flags);
     return w;
 }
 
@@ -83,15 +83,17 @@ DialogWindow *Application::CreateDialogWindow(Window *parentWindow,
                                               bool resizable)
 {
      DialogWindow *w = new DialogWindow(parentWindow, resizable);
-     SetupWindow(w);
+     SetupWindow(w, 0);
      return w;
 }
 
-void Application::SetupWindow(Window *window)
+void Application::SetupWindow(Window *window,
+                              uint _flags)
 {
     m_windows.PushBack(window);
 
-    window->Create(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+    uint flags = (_flags > 0 ?_flags : (SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL));
+    window->Create(flags);
     window->OnResize(window->GetWidth(), window->GetHeight());
 }
 
@@ -134,6 +136,11 @@ int Application::MainLoop()
 
 bool Application::MainLoopIteration()
 {
+    bool exit = false;
+    if (!HandleEvents())     { exit = true; }
+    if (m_windows.IsEmpty()) { exit = true; }
+    DestroyQueuedWindows();
+
     List<Window*> windows = GetWindows();
     for (Window *w : windows)
     {
@@ -141,11 +148,6 @@ bool Application::MainLoopIteration()
         w->MainLoopIteration();
         Window::SetActive(nullptr);
     }
-
-    bool exit = false;
-    if (!HandleEvents())     { exit = true; }
-    if (m_windows.IsEmpty()) { exit = true; }
-    DestroyQueuedWindows();
 
     return exit;
 }

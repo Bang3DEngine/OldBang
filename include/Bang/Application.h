@@ -26,7 +26,7 @@ public:
 
     virtual void Init(const Path &engineRootPath = Path::Empty);
 
-    Window* CreateWindow();
+    Window* CreateWindow(uint flags = 0);
     DialogWindow* CreateDialogWindow(Window *parentWindow, bool resizable);
     void DestroyWindow(Window *window);
 
@@ -59,7 +59,7 @@ protected:
     AudioManager       *m_audioManager       = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
 
-    void SetupWindow(Window *window);
+    void SetupWindow(Window *window, uint flags);
 
     virtual Paths* CreatePaths();
     virtual Window* _CreateWindow();

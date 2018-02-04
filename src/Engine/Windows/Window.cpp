@@ -48,13 +48,14 @@ void Window::Create(uint flags)
                         SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     m_sdlWindow = SDL_CreateWindow("Bang",
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
-                                   winSize.x, winSize.y,
+                                   winSize.x,
+                                   winSize.y,
                                    flags);
 
     m_sdlGLContext = SDL_GL_CreateContext(GetSDLWindow());
@@ -207,7 +208,6 @@ void Window::OnClosed()
 void Window::Maximize()
 {
     SDL_MaximizeWindow( GetSDLWindow() );
-    OnResize(GetWidth(), GetHeight());
 }
 
 void Window::Restore()

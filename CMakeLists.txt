@@ -139,7 +139,6 @@ file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag" "[^.]*.frag"
                               "[^.]*.vert" "[^.]*.vert" "[^.]*.vert"
                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
                               "[^.]*.glsl"
-                              "/home/sephirot47/NewProject/Assets/*"
                               "${BANG_INCLUDE_DIR}/*.h"
                               "${BANG_INCLUDE_DIR}/*.tcc")
 set(OTHER_FILES README.md "${OTHER_FILES}")
