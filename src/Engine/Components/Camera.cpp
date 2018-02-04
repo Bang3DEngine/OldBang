@@ -44,11 +44,7 @@ Camera::~Camera()
 
 void Camera::Bind() const
 {
-    auto *cameraBuffer = GLUniforms::GetCameraBuffer();
-    cameraBuffer->GetData()->zNear = GetZNear();
-    cameraBuffer->GetData()->zFar  = GetZFar();
-    GLUniforms::GetCameraBuffer()->UpdateBuffer();
-
+    GLUniforms::SetCameraUniforms(GetZNear(), GetZFar());
     GLUniforms::SetViewMatrix( GetViewMatrix() );
     GLUniforms::SetProjectionMatrix( GetProjectionMatrix() );
 

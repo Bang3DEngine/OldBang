@@ -13,7 +13,7 @@ FORWARD class ShaderProgram;
 class GLUniforms
 {
 public:
-    struct Matrices
+    struct MatrixUniforms
     {
         Matrix4 model;
         Matrix4 normal;
@@ -24,13 +24,13 @@ public:
         Matrix4 pvm;
     };
 
-    struct Camera
+    struct CameraUniforms
     {
         float zNear;
         float zFar;
     };
 
-    struct Viewport
+    struct ViewportUniforms
     {
         Vector2 minPos;
         Vector2 size;
@@ -69,6 +69,7 @@ public:
     static void SetAllUniformsToShaderProgram(ShaderProgram *sp);
     static void BindAllUniformBuffersToShader(const ShaderProgram *sp);
 
+    static void SetCameraUniforms(float zNear, float zFar);
     static void SetModelMatrix(const Matrix4 &model);
     static void SetViewMatrix(const Matrix4 &view);
     static void SetProjectionMatrix(const Matrix4 &projection);
@@ -77,13 +78,13 @@ public:
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     GL::ViewProjMode GetViewProjMode() const;
 
-    static UniformBuffer<Camera>* GetCameraBuffer();
-    static UniformBuffer<Viewport>* GetViewportBuffer();
+    static UniformBuffer<ViewportUniforms>* GetViewportBuffer();
 
 private:
     TypeMap<IUniformBuffer*> m_uniformBuffers;
 
-    Matrices m_matrices;
+    MatrixUniforms m_matrixUniforms;
+    CameraUniforms m_cameraUniforms;
     int m_bindingPointsUsed = 0;
     GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::Canvas;
 
@@ -101,7 +102,8 @@ private:
 
     void RemoveBuffer(IUniformBuffer *buffer);
 
-    static Matrices *GetMatrices();
+    static MatrixUniforms *GetMatrixUniforms();
+    static CameraUniforms *GetCameraUniforms();
     static GLUniforms *GetActive();
 
     friend class GL;

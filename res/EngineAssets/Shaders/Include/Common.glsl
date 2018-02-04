@@ -4,13 +4,8 @@ uniform mat4 B_View;
 uniform mat4 B_Projection;
 uniform mat4 B_PVM;
 
-layout (std140)
-uniform CameraBlock
-{
-    float ZNear;
-    float ZFar;
-}
-B_Camera;
+uniform float B_Camera_ZNear;
+uniform float B_Camera_ZFar;
 
 layout (std140)
 uniform ViewportBlock
@@ -51,9 +46,9 @@ uniform sampler2D B_GTex_DepthStencil;
 // Util functions /////////////////
 float B_LinearizeDepth(float d)
 {
-    return (2 * B_Camera.ZNear) /
-                (B_Camera.ZFar + B_Camera.ZNear -
-                  d * (B_Camera.ZFar - B_Camera.ZNear));
+    return (2 * B_Camera_ZNear) /
+                (B_Camera_ZFar + B_Camera_ZNear -
+                  d * (B_Camera_ZFar - B_Camera_ZNear));
 }
 #ifdef BANG_FRAGMENT
 vec2 GetViewportStep() { return 1.0 / B_Viewport.Size; }
