@@ -67,7 +67,9 @@ BehaviourManager *SceneManager::GetBehaviourManager() const
 
 void SceneManager::_Update()
 {
-    SceneManager::TryToLoadQueuedScene();
+    SceneManager *sm = SceneManager::GetActive();
+    if (sm->m_queuedScene) { SceneManager::LoadSceneInstantly(sm->m_queuedScene); }
+
     SceneManager::OnNewFrame( SceneManager::GetActiveScene(), true );
 }
 
@@ -123,10 +125,22 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     }
 
     SceneManager *sm = SceneManager::GetActive();
-    if (scenePath.IsFile()) { sm->m_queuedSceneFilepath = scenePath; }
+    if (scenePath.IsFile())
+    {
+        if (sm->m_queuedScene) { GameObject::Destroy(sm->m_queuedScene); }
+
+        sm->m_queuedScene = GameObjectFactory::CreateScene(false);
+        sm->m_queuedScene->ImportXMLFromFile(sceneFilepath);
+
+        SceneManager::GetActive()->
+            EventEmitter<ISceneManagerListener>::PropagateToListeners(
+                &ISceneManagerListener::OnSceneLoaded,
+                    sm->m_queuedScene, scenePath);
+    }
     else
     {
-        Debug_Warn("Scene '" << scenePath << "' does not exist.");
+        Debug_Error("Scene from file '" << sceneFilepath <<
+                    "' could not be loaded.");
     }
 }
 
@@ -135,57 +149,21 @@ void SceneManager::LoadScene(const String &sceneFilepath)
     SceneManager::LoadScene( Path(sceneFilepath) );
 }
 
-void SceneManager::TryToLoadQueuedScene()
-{
-    SceneManager *sm = SceneManager::GetActive();
-    if (sm->m_queuedSceneFilepath.IsFile())
-    {
-        SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
-        sm->m_queuedSceneFilepath = Path::Empty;
-    }
-}
-
-const Path& SceneManager::GetActiveSceneFilepath()
-{
-    return SceneManager::GetActive()->m_activeSceneFilepath;
-}
-
-void SceneManager::SetActiveSceneFilepath(const Path &sceneFilepath)
-{
-    SceneManager *sm = SceneManager::GetActive();
-    sm->m_activeSceneFilepath = sceneFilepath;
-}
-
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetActive();
     sm->_LoadSceneInstantly(nullptr);
+    if (scene) { sm->_LoadSceneInstantly(scene); }
 
-    if (scene)
-    {
-        sm->_LoadSceneInstantly(scene);
-    }
+    if (scene == sm->m_queuedScene) { sm->m_queuedScene = nullptr; }
 }
 
 void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
 {
-    Scene *scene = GameObjectFactory::CreateScene(false);
+    SceneManager::LoadScene(sceneFilepath);
 
-    SceneManager::SetActiveSceneFilepath( sceneFilepath );
-    if (scene->ImportXMLFromFile(sceneFilepath))
-    {
-        scene->SetName(sceneFilepath.GetName());
-        SceneManager::GetActive()->
-            EventEmitter<ISceneManagerListener>::PropagateToListeners(
-                &ISceneManagerListener::OnSceneLoaded, scene, sceneFilepath);
-        SceneManager::LoadSceneInstantly(scene);
-    }
-    else
-    {
-        Debug_Error("Scene from file '" << sceneFilepath <<
-                    "' could not be loaded.");
-        delete scene;
-    }
+    SceneManager *sm = SceneManager::GetActive();
+    if (sm->m_queuedScene) { SceneManager::LoadSceneInstantly(sm->m_queuedScene); }
 }
 
 List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go)

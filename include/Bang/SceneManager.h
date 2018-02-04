@@ -27,7 +27,6 @@ public:
     static void LoadSceneInstantly(const Path &sceneFilepath);
 
     static Scene* GetActiveScene();
-    static const Path& GetActiveSceneFilepath();
 
     static SceneManager* GetActive();
 
@@ -37,6 +36,7 @@ public:
     BehaviourManager *GetBehaviourManager() const;
 
 protected:
+    Scene *m_queuedScene = nullptr;
     Scene *m_activeScene = nullptr;
 
     SceneManager();
@@ -48,16 +48,12 @@ protected:
     Scene *_GetActiveScene() const;
 
 private:
-    Path m_queuedSceneFilepath;
-    Path m_activeSceneFilepath;
     BehaviourManager *m_behaviourManager = nullptr;
 
     void Init();
     virtual BehaviourManager* CreateBehaviourManager() const;
 
     static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
-    static void SetActiveSceneFilepath(const Path &sceneFilepath);
-    static void TryToLoadQueuedScene();
 
     friend class Window;
     friend class Application;
