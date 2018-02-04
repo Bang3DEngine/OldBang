@@ -10,7 +10,7 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
 FORWARD class BehaviourManager;
 
-class ISceneManagerListener : public IEventListener
+class ISceneManagerListener : public virtual IEventListener
 {
 public:
     virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
@@ -20,6 +20,7 @@ public:
 class SceneManager : public EventEmitter<ISceneManagerListener>
 {
 public:
+    static void LoadScene(Scene *scene);
     static void LoadScene(const Path &sceneFilepath);
     static void LoadScene(const String &sceneFilepath);
 
@@ -36,8 +37,10 @@ public:
     BehaviourManager *GetBehaviourManager() const;
 
 protected:
-    Scene *m_queuedScene = nullptr;
     Scene *m_activeScene = nullptr;
+
+    Scene *m_queuedScene = nullptr;
+    Path m_queuedScenePath = Path::Empty;
 
     SceneManager();
     virtual ~SceneManager();

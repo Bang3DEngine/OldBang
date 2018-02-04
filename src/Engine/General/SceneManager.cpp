@@ -82,8 +82,6 @@ void SceneManager::_LoadSceneInstantly(Scene *scene)
 {
     if (m_activeScene != scene)
     {
-        AudioManager::StopAllSounds();
-
         _SetActiveScene(scene);
         if (m_activeScene)
         {
@@ -108,6 +106,15 @@ void SceneManager::_SetActiveScene(Scene *activeScene)
     }
 }
 
+void SceneManager::LoadScene(Scene *scene)
+{
+    SceneManager *sm = SceneManager::GetActive();
+
+    if (sm->m_queuedScene) { GameObject::Destroy(sm->m_queuedScene); }
+    sm->m_queuedScene = scene;
+    sm->m_queuedScenePath = Path::Empty;
+}
+
 void SceneManager::LoadScene(const Path &sceneFilepath)
 {
     Path basePath(sceneFilepath);
@@ -127,20 +134,15 @@ void SceneManager::LoadScene(const Path &sceneFilepath)
     SceneManager *sm = SceneManager::GetActive();
     if (scenePath.IsFile())
     {
-        if (sm->m_queuedScene) { GameObject::Destroy(sm->m_queuedScene); }
+        Scene *scene = GameObjectFactory::CreateScene(false);
+        scene->ImportXMLFromFile(sceneFilepath);
 
-        sm->m_queuedScene = GameObjectFactory::CreateScene(false);
-        sm->m_queuedScene->ImportXMLFromFile(sceneFilepath);
-
-        SceneManager::GetActive()->
-            EventEmitter<ISceneManagerListener>::PropagateToListeners(
-                &ISceneManagerListener::OnSceneLoaded,
-                    sm->m_queuedScene, scenePath);
+        SceneManager::LoadScene(scene);
+        sm->m_queuedScenePath = sceneFilepath;
     }
     else
     {
-        Debug_Error("Scene from file '" << sceneFilepath <<
-                    "' could not be loaded.");
+        Debug_Error("Scene '" << sceneFilepath << "' could not be loaded.");
     }
 }
 
@@ -152,10 +154,20 @@ void SceneManager::LoadScene(const String &sceneFilepath)
 void SceneManager::LoadSceneInstantly(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetActive();
+
     sm->_LoadSceneInstantly(nullptr);
     if (scene) { sm->_LoadSceneInstantly(scene); }
 
-    if (scene == sm->m_queuedScene) { sm->m_queuedScene = nullptr; }
+    SceneManager::GetActive()->
+        EventEmitter<ISceneManagerListener>::PropagateToListeners(
+            &ISceneManagerListener::OnSceneLoaded,
+                scene, sm->m_queuedScenePath);
+
+    if (scene == sm->m_queuedScene)
+    {
+        sm->m_queuedScene = nullptr;
+        sm->m_queuedScenePath = Path::Empty;
+    }
 }
 
 void SceneManager::LoadSceneInstantly(const Path &sceneFilepath)
