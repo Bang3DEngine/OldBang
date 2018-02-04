@@ -270,6 +270,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIInputNumber.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
+${ENGINE_SRC_DIR}/UIComponents/UILayoutForwarder.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
 ${ENGINE_SRC_DIR}/UIComponents/UIList.cpp

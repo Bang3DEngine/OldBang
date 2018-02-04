@@ -12,6 +12,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UILayoutForwarder.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
@@ -304,9 +305,7 @@ UILabel *UILabel::CreateInto(GameObject *go)
 
     UILabel *label = go->AddComponent<UILabel>();
 
-    UIHorizontalLayout *hl = go->AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-    hl->SetChildrenVerticalStretch(Stretch::Full);
+    UILayoutForwarder *lf = go->AddComponent<UILayoutForwarder>();
 
     UILayoutElement *le = go->AddComponent<UILayoutElement>();
     le->SetFlexibleSize( Vector2::One );
