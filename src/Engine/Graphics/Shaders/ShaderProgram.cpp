@@ -90,7 +90,6 @@ bool ShaderProgram::Link()
     }
 
     m_isLinked = true;
-    GLUniforms::BindAllUniformBuffersToShader(this);
 
      // Invalidate caches
     m_nameToLocationCache.clear();

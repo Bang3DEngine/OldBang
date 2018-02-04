@@ -295,7 +295,7 @@ void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
 
     GameObject *vlGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::Full);
+    vl->SetChildrenVerticalStretch(Stretch::None);
     UILayoutElement *vlLE = vlGo->AddComponent<UILayoutElement>();
     vlLE->SetFlexibleHeight(1);
 
@@ -335,8 +335,8 @@ void Dialog::CreateFilePathBaseSceneInto(Scene *scene,
     inputHLLE->SetFlexibleHeight(0);
 
     UIHorizontalLayout *inputPathHL = inputPathCont->AddComponent<UIHorizontalLayout>();
-    inputPathHL->SetChildrenVerticalStretch(Stretch::None);
-    inputPathHL->SetChildrenHorizontalStretch(Stretch::Full);
+    inputPathHL->SetChildrenVerticalStretch(Stretch::Full);
+    inputPathHL->SetChildrenHorizontalStretch(Stretch::None);
     inputPathHL->SetSpacing(10);
 
     list->GetScrollPanel()->SetHorizontalScrollBarSide(VerticalSide::Bot);

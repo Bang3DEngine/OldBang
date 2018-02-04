@@ -870,10 +870,9 @@ void GL::SetViewport(int x, int y, int width, int height)
 
         if (gl && GLUniforms::GetActive())
         {
-            auto *vpBuffer = GLUniforms::GetViewportBuffer();
-            vpBuffer->GetData()->minPos = Vector2(GL::GetViewportRect().GetMin());
-            vpBuffer->GetData()->size   = Vector2(GL::GetViewportSize());
-            vpBuffer->UpdateBuffer();
+            GLUniforms::ViewportUniforms *vpUnifs = GLUniforms::GetViewportUniforms();
+            vpUnifs->minPos = Vector2(GL::GetViewportRect().GetMin());
+            vpUnifs->size   = Vector2(GL::GetViewportSize());
         }
     }
 }

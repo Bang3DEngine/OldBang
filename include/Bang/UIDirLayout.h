@@ -51,6 +51,8 @@ private:
                                    const List<GameObject*> &children,
                                    Array<Vector2i> *childrenRTSizes,
                                    Vector2i *availableSpace);
+    void ApplyStretches(const Vector2i &layoutRectSize,
+                        Array<Vector2i> *childrenRTSizes);
 };
 
 NAMESPACE_BANG_END

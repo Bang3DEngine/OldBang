@@ -37,16 +37,19 @@ void UIDirLayout::ApplyLayout(Axis axis)
 
     Vector2i layoutRectSize( Vector2::Round(rt->GetViewportRect().GetSize()) );
     Vector2i paddedLayoutRectSize = layoutRectSize - GetPaddingSize();
-    Vector2i availableSpace = paddedLayoutRectSize - GetTotalSpacing(children);
 
     Array<Vector2i> childrenRTSizes(children.Size(), Vector2i::Zero);
+    {
+        Vector2i availableSpace = paddedLayoutRectSize - GetTotalSpacing(children);
 
-    FillChildrenMinSizes(paddedLayoutRectSize, children,
-                         &childrenRTSizes, &availableSpace);
-    FillChildrenPreferredSizes(paddedLayoutRectSize, children,
-                               &childrenRTSizes, &availableSpace);
-    FillChildrenFlexibleSizes(paddedLayoutRectSize, children,
-                              &childrenRTSizes, &availableSpace);
+        FillChildrenMinSizes(paddedLayoutRectSize, children,
+                             &childrenRTSizes, &availableSpace);
+        FillChildrenPreferredSizes(paddedLayoutRectSize, children,
+                                   &childrenRTSizes, &availableSpace);
+        FillChildrenFlexibleSizes(paddedLayoutRectSize, children,
+                                  &childrenRTSizes, &availableSpace);
+        ApplyStretches(paddedLayoutRectSize, &childrenRTSizes);
+    }
 
     // Apply actual calculation to RectTransforms Margins
     uint i = 0;
@@ -56,8 +59,9 @@ void UIDirLayout::ApplyLayout(Axis axis)
         Vector2i spacing = (i > 0) ? (GetDir() * GetSpacing()) : Vector2i::Zero;
         currentTopLeft += spacing;
 
-        const Vector2i& childRTSize = childrenRTSizes[i];
+        Vector2i childRTSize = childrenRTSizes[i];
         RectTransform *crt = child->GetRectTransform();
+
         ApplyLayoutToChildRectTransform(axis, layoutRectSize, crt,
                                         currentTopLeft, childRTSize);
         currentTopLeft += childRTSize;
@@ -80,23 +84,17 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
         if (rebuildPassAxis == Axis::Horizontal)
         {
             crt->SetMarginLeft( GetPaddingLeft() );
-            if (GetChildrenHorizontalStretch() == Stretch::None)
+
+            HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
+            if (hAlign == HorizontalAlignment::Center)
             {
-                HorizontalAlignment hAlign = GetChildrenHorizontalAlignment();
-                if (hAlign == HorizontalAlignment::Center)
-                {
-                    crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) / 2);
-                }
-                else if (hAlign == HorizontalAlignment::Right)
-                {
-                    crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
-                }
-                crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
+                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) / 2);
             }
-            else
+            else if (hAlign == HorizontalAlignment::Right)
             {
-                crt->SetMarginRight( -layoutRectSize.x + GetPaddingRight() );
+                crt->AddMarginLeft( (paddedLayoutRectSize.x - childRTSize.x) );
             }
+            crt->SetMarginRight( -(crt->GetMarginLeft() + childRTSize.x) );
         }
         else // Axis::Vertical
         {
@@ -109,23 +107,17 @@ void UIDirLayout::ApplyLayoutToChildRectTransform(Axis rebuildPassAxis,
         if (rebuildPassAxis == Axis::Vertical)
         {
             crt->SetMarginTop( GetPaddingTop() );
-            if (GetChildrenVerticalStretch() == Stretch::None)
+
+            VerticalAlignment vAlign = GetChildrenVerticalAlignment();
+            if (vAlign == VerticalAlignment::Center)
             {
-                VerticalAlignment vAlign = GetChildrenVerticalAlignment();
-                if (vAlign == VerticalAlignment::Center)
-                {
-                    crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) / 2);
-                }
-                else if (vAlign == VerticalAlignment::Bot)
-                {
-                    crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
-                }
-                crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
+                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) / 2);
             }
-            else
+            else if (vAlign == VerticalAlignment::Bot)
             {
-                crt->SetMarginBot( -layoutRectSize.y + GetPaddingBot() );
+                crt->AddMarginTop( (paddedLayoutRectSize.y - childRTSize.y) );
             }
+            crt->SetMarginBot( -(crt->GetMarginTop() + childRTSize.y) );
         }
         else // Axis::Horizontal
         {
@@ -264,6 +256,33 @@ void UIDirLayout::FillChildrenFlexibleSizes(const Vector2i &layoutRectSize,
     }
 
     *childrenRTSizes = newChildRTSizes;
+}
+
+void UIDirLayout::ApplyStretches(const Vector2i &layoutRectSize,
+                                 Array<Vector2i> *childrenRTSizes)
+{
+    Array<Vector2i> newChildrenRTSizes;
+    for (const Vector2i& childRTSize : *childrenRTSizes)
+    {
+        Vector2i newChildRTSize = childRTSize;
+        if (GetChildrenHorizontalStretch() == Stretch::Full)
+        {
+            if (GetAxis() == Axis::Horizontal)
+            { newChildRTSize.x = layoutRectSize.x / childrenRTSizes->Size(); }
+            else { newChildRTSize.x = layoutRectSize.x; }
+        }
+
+        if (GetChildrenVerticalStretch() == Stretch::Full)
+        {
+            if (GetAxis() == Axis::Vertical)
+            { newChildRTSize.y = layoutRectSize.y / childrenRTSizes->Size(); }
+            else { newChildRTSize.y = layoutRectSize.y; }
+        }
+
+        newChildrenRTSizes.PushBack(newChildRTSize);
+    }
+
+    *childrenRTSizes = newChildrenRTSizes;
 }
 
 void UIDirLayout::CalculateLayout(Axis axis)
