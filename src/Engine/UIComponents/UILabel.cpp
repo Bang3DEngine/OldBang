@@ -303,30 +303,29 @@ UILabel *UILabel::CreateInto(GameObject *go)
 
     UILabel *label = go->AddComponent<UILabel>();
 
+    go->AddComponent<UIVerticalLayout>();
+
+    UILayoutElement *le = go->AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::One );
+
     UIRectMask *mask = go->AddComponent<UIRectMask>();
     label->p_mask = mask;
     label->p_mask->SetMasking(false);
 
-    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *text = textContainer->AddComponent<UITextRenderer>();
+    GameObject *textGO = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *text = textGO->AddComponent<UITextRenderer>();
     text->SetTextSize(12);
     text->SetWrapping(false);
-
-    UILayoutElement *textLE = textContainer->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2::One );
-
-    label->p_text = text;
 
     GameObject *selectionQuadGo = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *selectionQuad = selectionQuadGo->AddComponent<UIImageRenderer>();
     selectionQuad->SetTint(Color::LightBlue);
+
+    label->p_text = text;
     label->p_selectionQuad = selectionQuadGo;
 
-    UILayoutElement *le = go->AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(1.0f) );
-
     selectionQuadGo->SetParent(go);
-    textContainer->SetParent(go);
+    textGO->SetParent(go);
 
     label->ResetSelection();
     label->UpdateSelectionQuadRenderer();

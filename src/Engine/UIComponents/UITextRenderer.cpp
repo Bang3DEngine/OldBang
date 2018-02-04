@@ -57,7 +57,8 @@ void UITextRenderer::CalculateLayout(Axis axis)
 
     Vector2i minSize = Vector2i::Zero;
 
-    Vector2i prefSize = TextFormatter::GetTextSizeOneLined(GetContent(), GetFont(),
+    Vector2i prefSize = TextFormatter::GetTextSizeOneLined(GetContent(),
+                                                           GetFont(),
                                                            GetTextSize(),
                                                            GetSpacingMultiplier());
     prefSize.y = Math::Max<int>(prefSize.y,

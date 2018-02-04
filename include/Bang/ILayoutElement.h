@@ -21,9 +21,10 @@ protected:
     ILayoutElement();
     virtual ~ILayoutElement();
 
-    void SetCalculatedLayout(Axis axis, int min,
-                             int preferred = -1,
-                             int flexible = -1);
+    void SetCalculatedLayout(Axis axis,
+                             int min,
+                             int preferred  = -1,
+                             float flexible = -1.0f);
 
 private:
     int m_layoutPriority = 0;

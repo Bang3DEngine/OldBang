@@ -66,6 +66,7 @@ Vector2 UILayoutManager::GetSize(GameObject *go, LayoutSizeType sizeType)
     // Retrieve layout elements and their respective priority
     Map<int, List<ILayoutElement*> > priorLayoutElms;
     List<ILayoutElement*> les = go->GetComponents<ILayoutElement>();
+    if (les.IsEmpty()) { return Vector2::Zero; }
     for (ILayoutElement *le : les)
     {
         int prior = le->GetLayoutPriority();
@@ -105,8 +106,7 @@ List<GameObject *> UILayoutManager::GetLayoutableChildrenList(GameObject *go)
     {
         UILayoutIgnorer *ltIgnorer = child->GetComponent<UILayoutIgnorer>();
         bool ignoreLayout = ltIgnorer ? ltIgnorer->IsIgnoreLayout() : false;
-        if (child->IsEnabled() &&
-            child->HasComponent<ILayoutElement>() && !ignoreLayout)
+        if (child->IsEnabled() && child->HasComponent<ILayoutElement>() && !ignoreLayout)
         {
             childrenList.PushBack(child);
         }

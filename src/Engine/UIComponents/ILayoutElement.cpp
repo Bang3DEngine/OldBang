@@ -9,9 +9,10 @@ USING_NAMESPACE_BANG
 ILayoutElement::ILayoutElement() {}
 ILayoutElement::~ILayoutElement() {}
 
-void ILayoutElement::SetCalculatedLayout(Axis axis, int min,
+void ILayoutElement::SetCalculatedLayout(Axis axis,
+                                         int min,
                                          int preferred,
-                                         int flexible)
+                                         float flexible)
 {
     if (axis == Axis::Horizontal)
     {

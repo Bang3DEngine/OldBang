@@ -133,6 +133,8 @@ Vector2i TextFormatter::GetTextSizeOneLined(const String &content,
                                             int fontSize,
                                             const Vector2 &spacingMultiplier)
 {
+    if (!font || content.IsEmpty() || fontSize <= 0) { return Vector2i::Zero; }
+
     Vector2 textSize = Vector2::Zero;
     for (int i = 0; i < content.Size(); ++i)
     {

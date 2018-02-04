@@ -25,7 +25,7 @@ UIDirLayout::~UIDirLayout()
 Vector2i UIDirLayout::GetTotalSpacing(const List<GameObject*> &children) const
 {
     const Vector2i spacing = GetDir() * GetSpacing();
-    return spacing * Cast<int>(children.Size() - 1);
+    return spacing * SCAST<int>(children.Size() - 1);
 }
 
 void UIDirLayout::ApplyLayout(Axis axis)
