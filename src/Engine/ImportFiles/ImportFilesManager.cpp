@@ -61,17 +61,19 @@ void ImportFilesManager::LoadImportFilepathGUIDs(const Path &directory)
     }
 }
 
-Path ImportFilesManager::CreateImportFile(const Path &filepath)
+std::pair<Path, GUID> ImportFilesManager::CreateImportFile(const Path &filepath)
 {
     Path importFilepath;
+    GUID newGUID = GUID::Empty();
     if ( !IsImportFile(filepath) && !HasImportFile(filepath) )
     {
         XMLNode xmlInfo;
-        xmlInfo.Set( "GUID", GUIDManager::GetNewGUID() );
+        newGUID = GUIDManager::GetNewGUID();
+        xmlInfo.Set("GUID", newGUID);
         importFilepath = GetImportFilepath(filepath);
         File::Write(importFilepath, xmlInfo.ToString());
     }
-    return importFilepath;
+    return std::make_pair(importFilepath, newGUID);
 }
 
 bool ImportFilesManager::HasImportFile(const Path &filepath)
@@ -83,6 +85,21 @@ bool ImportFilesManager::IsImportFile(const Path &filepath)
 {
     return filepath.IsHiddenFile() &&
            filepath.HasExtension( GetImportExtension() );
+}
+
+void ImportFilesManager::DuplicateImportFile(const Path &filepath,
+                                             const Path &dupFilepath)
+{
+    const Path dupImportFilepath = GetImportFilepath(dupFilepath);
+    File::Remove(dupImportFilepath);
+
+    const GUID& newGUID = CreateImportFile(dupFilepath).second;
+    const Path originalImportFilepath = GetImportFilepath(filepath);
+    XMLNode originalXML = XMLNodeReader::FromFile(originalImportFilepath);
+    originalXML.Set("GUID", newGUID);
+
+    File::Write(dupImportFilepath, originalXML.ToString());
+    RegisterImportFilepath(dupImportFilepath);
 }
 
 GUIDManager* ImportFilesManager::GetGUIDManager()

@@ -14,9 +14,11 @@ public:
     static void CreateMissingImportFiles(const Path &directory);
     static void LoadImportFilepathGUIDs(const Path &directory);
 
-    static Path CreateImportFile(const Path &filepath);
+    static std::pair<Path, GUID> CreateImportFile(const Path &filepath);
     static bool HasImportFile(const Path &filepath);
     static bool IsImportFile(const Path &filepath);
+    static void DuplicateImportFile(const Path &filepath,
+                                    const Path &dupFilepath);
     static GUIDManager *GetGUIDManager();
     static void RegisterImportFilepath(const Path &importFilepath);
     static void UnRegisterImportFilepath(const Path &importFilepath);

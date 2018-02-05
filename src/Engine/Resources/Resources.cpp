@@ -61,7 +61,7 @@ void Resources::ExportXMLResource(const Resource *resource,
                                   const Path &exportFilepath)
 {
     File::Write(exportFilepath, "");
-    Path importFile = ImportFilesManager::CreateImportFile(exportFilepath);
+    Path importFile = ImportFilesManager::CreateImportFile(exportFilepath).first;
     resource->ExportXMLToFile(importFile);
 }
 

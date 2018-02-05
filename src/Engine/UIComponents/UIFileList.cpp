@@ -113,7 +113,7 @@ void UIFileList::UpdateEntries()
 
         uiList->AddItem(item);
     }
-    uiList->SetSelection(1);
+    // uiList->SetSelection(1);
 
     uiList->SetSelectionCallback(
         [this, uiList](GameObject *go, UIList::Action action)

@@ -22,7 +22,7 @@ Serializable::~Serializable()
 {
 }
 
-Serializable::Serializable(const Serializable &rhs)
+Serializable::Serializable(const Serializable &)
 {
     // Don't copy GUID, intentionally left in blank
 }

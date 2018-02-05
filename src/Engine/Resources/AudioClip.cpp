@@ -37,6 +37,11 @@ void AudioClip::Import(const Path &soundFilepath)
     SNDFILE *soundFile = sf_open(soundFilepath.GetAbsolute().ToCString(),
                                  SFM_READ,
                                  &soundInfo);
+    if (!soundFile)
+    {
+        Debug_Error("Error loading sound file '" << soundFilepath << "'");
+        return;
+    }
 
     constexpr int bufferSize = 4096;
     Array<short> buffer(bufferSize);
