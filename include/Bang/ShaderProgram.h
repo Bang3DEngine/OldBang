@@ -53,9 +53,6 @@ public:
     // Resource
     void Import(const Path &resourceFilepath) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
-
 private:
     RH<Shader> p_vshader;
     RH<Shader> p_fshader;
@@ -81,6 +78,9 @@ private:
 
     bool BindTextureToAvailableUnit(const String &texName, Texture2D *texture) const;
     void UpdateTextureBindings() const;
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 };
 
 NAMESPACE_BANG_END

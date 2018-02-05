@@ -23,7 +23,7 @@ Shader::Shader() : Shader(GL::ShaderType::Vertex)
 
 void Shader::Import(const Path& shaderFilepath)
 {
-    if (!shaderFilepath.Exists())
+    if (!shaderFilepath.IsFile())
     {
         Debug_Error("Shader '" << shaderFilepath << "' does not exist.");
         return;
@@ -41,7 +41,6 @@ void Shader::Import(const Path& shaderFilepath)
         Debug_Error("Failed to compile shader: '"  << shaderFilepath
                     << "': " << std::endl << GL::GetShaderErrorMsg(m_idGL));
         GL::DeleteShader(m_idGL);
-        return;
     }
 }
 

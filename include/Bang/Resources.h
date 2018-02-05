@@ -98,6 +98,11 @@ public:
 
     template<class ResourceClass>
     static ResourceClass* GetCached(const GUID &guid);
+    template<class ResourceClass>
+    static ResourceClass* GetCached(const Path &path);
+
+    static Array<Resource*> GetCached(const GUID &guid);
+    static Array<Resource*> GetCached(const Path &path);
     static Resource* GetCached(const TypeId &resTypeId, const GUID &guid);
 
     static Path GetResourcePath(Resource *resource);
@@ -111,7 +116,7 @@ public:
 private:
     Set<Path> m_permanentResourcesPaths;
     Set<Resource*> m_permanentResources;
-    TypeMap< Map<GUID, ResourceEntry> > m_GUIDCache;
+    TypeMap< Map<GUID, ResourceEntry> > m_resourcesCache;
 
     MeshFactory *m_meshFactory = nullptr;
     MaterialFactory *m_materialFactory = nullptr;

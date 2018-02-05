@@ -57,11 +57,11 @@ void FileTracker::Update()
     float passedSecondsSinceLastCheck = (Time::GetNow_Seconds() - m_lastCheckTime);
     if (passedSecondsSinceLastCheck > GetCheckFrequencySeconds())
     {
-        CheckForChanges();
+        ForceCheckNow();
     }
 }
 
-void FileTracker::CheckForChanges()
+void FileTracker::ForceCheckNow()
 {
     Map<Path, uint64_t> previousPathsToTrack = m_pathsToTrackToModificationTime;
 

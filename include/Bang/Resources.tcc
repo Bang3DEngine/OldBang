@@ -190,6 +190,13 @@ ResourceClass* Resources::GetCached(const GUID &guid)
     return SCAST<ResourceClass*>(
                 Resources::GetCached(GetTypeId<ResourceClass>(), guid) );
 }
+template<class ResourceClass>
+ResourceClass* Resources::GetCached(const Path &path)
+{
+    GUID guid = ImportFilesManager::GetGUIDFromFilepath(path);
+    return SCAST<ResourceClass*>(
+                Resources::GetCached(GetTypeId<ResourceClass>(), guid) );
+}
 
 template<class ResourceClass>
 RH<ResourceClass> Resources::Clone(const RH<ResourceClass> &src)

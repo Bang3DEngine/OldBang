@@ -45,7 +45,7 @@ Array<Resource*> Resources::GetAllResources()
 {
     Array<Resource*> result;
     Resources *rs = Resources::GetActive();
-    for (auto& itMap : rs->m_GUIDCache)
+    for (auto& itMap : rs->m_resourcesCache)
     {
         for (const auto& it : itMap.second) { result.PushBack(it.second.resource); }
     }
@@ -70,14 +70,14 @@ void Resources::Add(const TypeId &resTypeId, Resource *res)
     Resources *rs = Resources::GetActive(); ASSERT(rs);
     ASSERT(!Resources::Contains(resTypeId, guid));
 
-    if (!rs->m_GUIDCache.ContainsKey(resTypeId))
-    { rs->m_GUIDCache.Add(resTypeId); }
+    if (!rs->m_resourcesCache.ContainsKey(resTypeId))
+    { rs->m_resourcesCache.Add(resTypeId); }
 
     ResourceEntry resourceEntry;
     resourceEntry.resource = res;
     resourceEntry.usageCount = 0;
-    ASSERT(!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid));
-    rs->m_GUIDCache.Get(resTypeId).Add(guid, resourceEntry);
+    ASSERT(!rs->m_resourcesCache.Get(resTypeId).ContainsKey(guid));
+    rs->m_resourcesCache.Get(resTypeId).Add(guid, resourceEntry);
 }
 
 void Resources::SetPermanent(Resource *resource, bool permanent)
@@ -119,9 +119,9 @@ bool Resources::IsPermanent(const Path &resourcePath)
 void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
 {
     Resources *rs = Resources::GetActive(); ASSERT(rs);
-    ASSERT(rs->m_GUIDCache.ContainsKey(resTypeId));
+    ASSERT(rs->m_resourcesCache.ContainsKey(resTypeId));
 
-    auto &map = rs->m_GUIDCache.Get(resTypeId);
+    auto &map = rs->m_resourcesCache.Get(resTypeId);
     ASSERT(map.ContainsKey(guid));
 
     auto it = map.Find(guid);
@@ -132,7 +132,7 @@ void Resources::Remove(const TypeId &resTypeId, const GUID &guid)
     ASSERT(resEntry.usageCount == 0);
 
     bool totallyUnused = true;
-    for (const auto &pair : rs->m_GUIDCache)
+    for (const auto &pair : rs->m_resourcesCache)
     {
         if (pair.second.ContainsKey(resEntry.resource->GetGUID()))
         {
@@ -165,7 +165,7 @@ void Resources::RegisterResourceUsage(const TypeId &resTypeId, Resource *resourc
     {
         Resources::Add(resTypeId, resource);
     }
-    ++rs->m_GUIDCache.Get(resTypeId).Get(guid).usageCount;
+    ++rs->m_resourcesCache.Get(resTypeId).Get(guid).usageCount;
 }
 
 void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
@@ -179,7 +179,7 @@ void Resources::UnRegisterResourceUsage(const TypeId &resTypeId,
     if (rs)
     {
         ASSERT(Resources::Contains(resTypeId, guid));
-        uint *resourcesUsage = &(rs->m_GUIDCache.Get(resTypeId)
+        uint *resourcesUsage = &(rs->m_resourcesCache.Get(resTypeId)
                                  .Get(guid).usageCount);
         ASSERT(*resourcesUsage >= 1);
         --(*resourcesUsage);
@@ -202,12 +202,33 @@ void Resources::Destroy(Resource *resource)
     if (asset) { Asset::Destroy(asset); } else { delete resource; }
 }
 
+Array<Resource *> Resources::GetCached(const GUID &guid)
+{
+    Resources *rs = Resources::GetActive();
+
+    Array<Resource*> foundResources;
+    for (const auto &map : rs->m_resourcesCache)
+    {
+        if ( map.second.ContainsKey(guid) )
+        {
+            foundResources.PushBack(map.second.Get(guid).resource);
+        }
+    }
+    return foundResources;
+}
+
+Array<Resource *> Resources::GetCached(const Path &path)
+{
+    GUID guid = ImportFilesManager::GetGUIDFromFilepath(path);
+    return GetCached(guid);
+}
+
 Resource *Resources::GetCached(const TypeId &resTypeId, const GUID &guid)
 {
     Resources *rs = Resources::GetActive();
-    if (!rs->m_GUIDCache.ContainsKey(resTypeId)) { return nullptr; }
-    if (!rs->m_GUIDCache.Get(resTypeId).ContainsKey(guid)) { return nullptr; }
-    return rs->m_GUIDCache.Get(resTypeId).Get(guid).resource;
+    if (!rs->m_resourcesCache.ContainsKey(resTypeId)) { return nullptr; }
+    if (!rs->m_resourcesCache.Get(resTypeId).ContainsKey(guid)) { return nullptr; }
+    return rs->m_resourcesCache.Get(resTypeId).Get(guid).resource;
 }
 
 Path Resources::GetResourcePath(Resource *resource)
@@ -228,7 +249,7 @@ String Resources::ToString(Resource *resource)
 {
     String result = "";
     Resources *rs = Resources::GetActive();
-    for (const auto &pair : rs->m_GUIDCache)
+    for (const auto &pair : rs->m_resourcesCache)
     {
         const String typeName = pair.first;
         for (const auto &pairMap : pair.second)

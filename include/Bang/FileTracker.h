@@ -28,7 +28,7 @@ public:
     void Clear();
 
     void Update();
-    void CheckForChanges();
+    void ForceCheckNow();
     void SetCheckFrequencySeconds(float checkFrequencySeconds);
 
     float GetCheckFrequencySeconds() const;
