@@ -37,6 +37,8 @@ public:
 
     static RH<Resource> LoadFromExtension(const Path &filepath);
 
+    static void Import(Resource *res);
+
     template<class ResourceClass, class ...Args>
     static RH<ResourceClass> Create(const Args&... args);
     template<class ResourceClass, class ...Args>

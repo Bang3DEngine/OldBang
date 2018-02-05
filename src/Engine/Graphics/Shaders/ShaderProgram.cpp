@@ -53,7 +53,7 @@ bool ShaderProgram::Load(Shader* vShader, Shader* fShader)
 
     SetVertexShader(vShader);
     SetFragmentShader(fShader);
-    return Refresh();
+    return Link();
 }
 
 bool ShaderProgram::Link()
@@ -220,32 +220,50 @@ bool ShaderProgram::Set(const String &name, Texture2D *texture, bool warn)
     return true;
 }
 
-bool ShaderProgram::Refresh()
-{
-    return Link();
-}
-
 bool ShaderProgram::SetVertexShader(Shader* vertexShader)
 {
-    if (vertexShader->GetType() != GL::ShaderType::Vertex)
+    if (vertexShader && vertexShader->GetType() != GL::ShaderType::Vertex)
     {
         Debug_Error("You are trying to set as vertex shader a "
                     "non-vertex shader");
         return false;
     }
+
+    if (GetVertexShader())
+    {
+        GetVertexShader()->EventEmitter<IResourceListener>::UnRegisterListener(this);
+    }
+
     p_vshader.Set(vertexShader);
+
+    if (GetVertexShader())
+    {
+        GetVertexShader()->EventEmitter<IResourceListener>::RegisterListener(this);
+    }
+
     return true;
 }
 
 bool ShaderProgram::SetFragmentShader(Shader* fragmentShader)
 {
-    if (fragmentShader->GetType() != GL::ShaderType::Fragment)
+    if (fragmentShader && fragmentShader->GetType() != GL::ShaderType::Fragment)
     {
         Debug_Error("You are trying to set as fragment shader a "
                     "non-fragment shader");
         return false;
     }
+
+    if (GetFragmentShader())
+    {
+        GetFragmentShader()->EventEmitter<IResourceListener>::UnRegisterListener(this);
+    }
+
     p_fshader.Set(fragmentShader);
+    if (GetFragmentShader())
+    {
+        GetFragmentShader()->EventEmitter<IResourceListener>::RegisterListener(this);
+    }
+
     return true;
 }
 
@@ -264,6 +282,7 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
 
 void ShaderProgram::Import(const Path &)
 {
+    // Nothing to import from filepath
 }
 
 bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
@@ -316,4 +335,11 @@ void ShaderProgram::UpdateTextureBindings() const
     {
         BindTextureToAvailableUnit(nameTexPair.first, nameTexPair.second);
     }
+}
+
+void ShaderProgram::OnImported(Resource *res)
+{
+    // When used shader is imported, link shaderProgram
+    ASSERT(res == GetVertexShader() || res == GetFragmentShader());
+    Link();
 }

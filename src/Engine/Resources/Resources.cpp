@@ -41,6 +41,11 @@ RH<Resource> Resources::LoadFromExtension(const Path &filepath)
     return resRH;
 }
 
+void Resources::Import(Resource *res)
+{
+    res->_Import( res->GetResourceFilepath() );
+}
+
 Array<Resource*> Resources::GetAllResources()
 {
     Array<Resource*> result;

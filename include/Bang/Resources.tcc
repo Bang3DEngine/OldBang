@@ -19,13 +19,9 @@ RH<ResourceClass> Resources::Load(const Path &filepath)
         res = Resources::_Create<ResourceClass>();
 
         Path importFilepath = ImportFilesManager::GetImportFilepath(filepath);
-
-        // Import XML before to get resource GUID at least
-        res->ImportXMLFromFile(importFilepath);
-        res->Import(filepath); // Import now from filepath itself
-        res->ImportXMLFromFile(importFilepath); // Import XML after again
+        res->Resource::ImportXMLFromFile(importFilepath); // Get resource GUID
+        Resources::Import(res); // Actually import all
     }
-
     return RH<ResourceClass>(res);
 }
 

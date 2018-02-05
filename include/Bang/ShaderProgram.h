@@ -15,6 +15,7 @@ FORWARD class Texture2D;
 
 class ShaderProgram : public GLObject,
                       public Resource,
+                      public IResourceListener,
                       public IDestroyListener
 {
     RESOURCE(ShaderProgram)
@@ -41,7 +42,6 @@ public:
     bool Set(const String &name, const Matrix4& v, bool warn = true);
     bool Set(const String &name, Texture2D *texture, bool warn = true);
 
-    bool Refresh();
     bool SetVertexShader(Shader* vertexShader);
     bool SetFragmentShader(Shader* fragmentShader);
 
@@ -78,6 +78,9 @@ private:
 
     bool BindTextureToAvailableUnit(const String &texName, Texture2D *texture) const;
     void UpdateTextureBindings() const;
+
+    // IResourceListener
+    void OnImported(Resource *res) override;
 
     // IDestroyListener
     void OnDestroyed(EventEmitter<IDestroyListener> *object) override;

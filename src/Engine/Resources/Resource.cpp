@@ -49,3 +49,13 @@ void Resource::ExportXML(XMLNode *xmlInfo) const
 {
     Serializable::ExportXML(xmlInfo);
 }
+
+void Resource::_Import(const Path &resourceFilepath)
+{
+    Path importFilepath = ImportFilesManager::GetImportFilepath(resourceFilepath);
+    Import(resourceFilepath);          // Import from filepath
+    ImportXMLFromFile(importFilepath); // Import XML then
+
+    EventEmitter<IResourceListener>::PropagateToListeners(
+                &IResourceListener::OnImported, this);
+}

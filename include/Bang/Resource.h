@@ -3,6 +3,8 @@
 
 #include "Bang/IGUIDable.h"
 #include "Bang/Serializable.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IEventListener.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -10,11 +12,18 @@ NAMESPACE_BANG_BEGIN
     SERIALIZABLE(CLASSNAME) \
     friend class Resources;
 
-class Resource : public Serializable
+FORWARD class Resource;
+class IResourceListener : public virtual IEventListener
+{
+public:
+    virtual void OnImported(Resource *res) { (void)(res); }
+};
+
+class Resource : public Serializable,
+                 public EventEmitter<IResourceListener>
 {
 public:
     Path GetResourceFilepath() const;
-    virtual void Import(const Path &resourceFilepath) = 0;
 
     virtual GUID::GUIDType GetNextInsideFileGUID() const;
 
@@ -28,6 +37,9 @@ protected:
 
     virtual void ImportXML(const XMLNode &xmlInfo);
     virtual void ExportXML(XMLNode *xmlInfo) const;
+
+    void _Import(const Path &resourceFilepath);
+    virtual void Import(const Path &resourceFilepath) = 0;
 
     friend class Resources;
 };
