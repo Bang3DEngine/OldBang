@@ -1,11 +1,13 @@
 #include "Bang/PostProcessEffect.h"
 
 #include "Bang/Paths.h"
+#include "Bang/Camera.h"
 #include "Bang/Shader.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/Resources.h"
+#include "Bang/GameObject.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
 
@@ -23,6 +25,10 @@ PostProcessEffect::~PostProcessEffect()
 void PostProcessEffect::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
+
+    // Only render if its gameObject contains the active camera
+    Camera *activeCamera = Camera::GetActive();
+    if (!GetGameObject()->GetComponents().Contains(activeCamera)) { return; }
 
     bool scenePostProcess = (GetType() == Type::AfterScene &&
                              renderPass == RenderPass::ScenePostProcess);
