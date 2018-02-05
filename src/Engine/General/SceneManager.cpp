@@ -102,7 +102,16 @@ void SceneManager::_SetActiveScene(Scene *activeScene)
 {
     if (_GetActiveScene() != activeScene)
     {
+        if (_GetActiveScene())
+        {
+            _GetActiveScene()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+        }
+
         m_activeScene = activeScene;
+        if (_GetActiveScene())
+        {
+            _GetActiveScene()->EventEmitter<IDestroyListener>::RegisterListener(this);
+        }
     }
 }
 
@@ -110,9 +119,18 @@ void SceneManager::LoadScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetActive();
 
-    if (sm->m_queuedScene) { GameObject::Destroy(sm->m_queuedScene); }
+    if (sm->m_queuedScene)
+    {
+        sm->m_queuedScene->EventEmitter<IDestroyListener>::UnRegisterListener(sm);
+        sm->m_queuedScenePath = Path::Empty;
+        GameObject::Destroy(sm->m_queuedScene);
+    }
+
     sm->m_queuedScene = scene;
-    sm->m_queuedScenePath = Path::Empty;
+    if (sm->m_queuedScene)
+    {
+        sm->m_queuedScene->EventEmitter<IDestroyListener>::RegisterListener(sm);
+    }
 }
 
 void SceneManager::LoadScene(const Path &sceneFilepath)
@@ -187,4 +205,15 @@ List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go
         else { result.PushBack(FindDontDestroyOnLoadGameObjects(child)); }
     }
     return result;
+}
+
+void SceneManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+    if (object == m_queuedScene)
+    {
+        m_queuedScene = nullptr;
+        m_queuedScenePath =  Path::Empty;
+    }
+
+    if (object == m_activeScene) { _LoadSceneInstantly(nullptr); }
 }

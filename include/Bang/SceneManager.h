@@ -5,6 +5,8 @@
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
 
+#include "Bang/IDestroyListener.h"
+
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
@@ -19,7 +21,8 @@ public:
     { (void)scene; (void)sceneFilepath; }
 };
 
-class SceneManager : public EventEmitter<ISceneManagerListener>
+class SceneManager : public EventEmitter<ISceneManagerListener>,
+                     public IDestroyListener
 {
 public:
     static void LoadScene(Scene *scene);
@@ -59,6 +62,9 @@ private:
     virtual BehaviourManager* CreateBehaviourManager() const;
 
     static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     friend class Window;
     friend class Application;

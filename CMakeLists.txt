@@ -10,6 +10,9 @@ set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
 
 set(CMAKE_BINARY_DIR ${ROOT}/bin)
 
+# In case you want to break on sanitize error write this command on gdb:
+# rbreak __asan_report_error
+
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
