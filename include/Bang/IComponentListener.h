@@ -9,6 +9,8 @@ FORWARD class Component;
 
 class IComponentListener: public virtual IEventListener
 {
+    EVENTLISTENER(IComponentListener)
+
 public:
     virtual void OnComponentAdded(Component *addedComponent, int index) {}
     virtual void OnComponentRemoved(Component *removedComponent) {}

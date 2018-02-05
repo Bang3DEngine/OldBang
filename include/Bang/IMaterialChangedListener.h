@@ -9,6 +9,8 @@ FORWARD class Material;
 
 class IMaterialChangedListener : public virtual IEventListener
 {
+    EVENTLISTENER(IMaterialChangedListener)
+
 public:
     virtual void OnMaterialChanged(const Material *changedMaterial) = 0;
 };

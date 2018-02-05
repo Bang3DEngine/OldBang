@@ -7,6 +7,8 @@ NAMESPACE_BANG_BEGIN
 
 class IChildrenListener : public virtual IEventListener
 {
+    EVENTLISTENER(IChildrenListener)
+
 public:
     virtual void OnChildAdded(GameObject *addedChild, GameObject *parent)
     {

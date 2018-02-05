@@ -8,6 +8,7 @@ NAMESPACE_BANG_BEGIN
 class ITransformListener : public virtual IEventListener
 {
 public:
+    virtual ~ITransformListener() = default;
     virtual void OnTransformChanged()         {}
     virtual void OnParentTransformChanged()   {}
     virtual void OnChildrenTransformChanged() {}

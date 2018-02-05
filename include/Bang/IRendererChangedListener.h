@@ -9,6 +9,8 @@ FORWARD class Renderer;
 
 class IRendererChangedListener : public virtual IEventListener
 {
+    EVENTLISTENER(IRendererChangedListener)
+
 public:
     virtual void OnRendererChanged(Renderer *changedRenderer) = 0;
 };

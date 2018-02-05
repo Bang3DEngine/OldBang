@@ -12,6 +12,8 @@ FORWARD class BehaviourManager;
 
 class ISceneManagerListener : public virtual IEventListener
 {
+    EVENTLISTENER(ISceneManagerListener)
+
 public:
     virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
     { (void)scene; (void)sceneFilepath; }

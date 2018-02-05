@@ -11,6 +11,8 @@ FORWARD class IFocusable;
 
 class IFocusListener : public virtual IEventListener
 {
+    EVENTLISTENER(IFocusListener)
+
 public:
     virtual void    OnFocusTaken(IFocusable *focusable) { (void)focusable; }
     virtual void     OnFocusLost(IFocusable *focusable) { (void)focusable; }
@@ -18,9 +20,6 @@ public:
     virtual void OnDoubleClicked(IFocusable *focusable) { (void)focusable; }
     virtual void    OnMouseEnter(IFocusable *focusable) { (void)focusable; }
     virtual void     OnMouseExit(IFocusable *focusable) { (void)focusable; }
-
-protected:
-    IFocusListener() = default;
 };
 
 NAMESPACE_BANG_END

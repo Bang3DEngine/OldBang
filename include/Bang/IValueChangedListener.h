@@ -10,6 +10,7 @@ FORWARD class Object;
 class IValueChangedListener: public virtual IEventListener
 {
 public:
+    virtual ~IValueChangedListener() = default;
     virtual void OnValueChanged(Object *object) = 0;
 };
 

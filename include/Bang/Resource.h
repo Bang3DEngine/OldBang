@@ -15,6 +15,8 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Resource;
 class IResourceListener : public virtual IEventListener
 {
+    EVENTLISTENER(IResourceListener)
+
 public:
     virtual void OnImported(Resource *res) { (void)(res); }
 };

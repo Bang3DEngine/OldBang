@@ -8,13 +8,10 @@ NAMESPACE_BANG_BEGIN
 
 class IDestroyListener : public virtual IEventListener
 {
+    EVENTLISTENER(IDestroyListener)
+
 public:
-    virtual ~IDestroyListener() = default;
-
     virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) = 0;
-
-protected:
-    IDestroyListener() = default;
 };
 
 NAMESPACE_BANG_END

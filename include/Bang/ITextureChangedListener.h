@@ -10,6 +10,7 @@ FORWARD class Texture;
 class ITextureChangedListener : public virtual IEventListener
 {
 public:
+    virtual ~ITextureChangedListener() = default;
     virtual void OnTextureChanged(const Texture *changedTexture) = 0;
 };
 

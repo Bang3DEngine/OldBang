@@ -9,6 +9,8 @@ FORWARD class Object;
 
 class IGameObjectVisibilityChangedListener : public virtual IEventListener
 {
+    EVENTLISTENER(IGameObjectVisibilityChangedListener)
+
 public:
     virtual void OnVisibilityChanged(GameObject *go) = 0;
 };

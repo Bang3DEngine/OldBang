@@ -7,6 +7,8 @@ NAMESPACE_BANG_BEGIN
 
 class INameListener : public virtual IEventListener
 {
+    EVENTLISTENER(INameListener)
+
 public:
     virtual void OnNameChanged(GameObject *go, const String &oldName,
                                const String &newName) = 0;

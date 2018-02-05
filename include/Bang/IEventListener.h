@@ -7,6 +7,11 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class IEventEmitter;
 
+#define EVENTLISTENER(ClassName) \
+    protected: \
+        ClassName() = default; \
+        virtual ~ClassName() = default; \
+
 class IEventListener
 {
 public:
