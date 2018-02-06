@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Cursor.h"
 #include "Bang/XMLNode.h"
+#include "Bang/Component.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusable.h"
 #include "Bang/UIRectMask.h"
@@ -61,9 +62,28 @@ void UICanvas::OnUpdate()
         }
     }
 
+    // Create list of focusables, and track those destroyed. For this, we create
+    // a helper class which implements IDestroyListener
+    struct DestroyFocusablesHandler : public IDestroyListener
+    {
+        Set<IFocusable*> set;
+        void OnDestroyed(EventEmitter<IDestroyListener> *object) override
+        { set.Add( DCAST<IFocusable*>(object) ); }
+    };
+
     Array<IFocusable*> focusables;
+    DestroyFocusablesHandler destroyedFocusables;
     for (const auto& focusableAndRectNDC : focusablesAndRectsNDC)
-    { focusables.PushBack( focusableAndRectNDC.first ); }
+    {
+        IFocusable *focusable = focusableAndRectNDC.first;
+        Object *objFocusable = DCAST<Object*>(focusable);
+        if (objFocusable)
+        {
+            objFocusable->EventEmitter<IDestroyListener>::
+                         RegisterListener(&destroyedFocusables);
+        }
+        focusables.PushBack(focusable);
+    }
 
     // Reset focus when clicking out of everything
     if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
@@ -108,7 +128,10 @@ void UICanvas::OnUpdate()
     // Update focusables
     for (IFocusable *focusable : focusables)
     {
-        focusable->UpdateFromCanvas();
+        if (!destroyedFocusables.set.Contains(focusable))
+        {
+            focusable->UpdateFromCanvas();
+        }
     }
 }
 

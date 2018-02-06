@@ -42,7 +42,7 @@ DialogWindow *Bang::Dialog::Error(const String &title,
     DialogWindow *dialog = BeginCreateDialog("Error: " + title, 300, 150, false);
 
     Scene *scene = CreateMsgScene(msg);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return dialog;
@@ -55,7 +55,7 @@ String Dialog::GetString(const String &title,
     DialogWindow *dialog = BeginCreateDialog(title, 300, 100, false);
 
     Scene *scene = CreateGetStringScene(msg, hint);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultString : "";
@@ -66,7 +66,7 @@ Dialog::YesNoCancel Dialog::GetYesNoCancel(const String &title, const String &ms
     DialogWindow *dialog = BeginCreateDialog(title, 300, 140, false);
 
     Scene *scene = CreateYesNoCancelScene(msg);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return Dialog::s_resultYesNoCancel;
@@ -79,7 +79,7 @@ Path Dialog::OpenFilePath(const String &title, const Array<String> &extensions,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateOpenFilePathSceneInto(scene, false, extensions, initialDirPath);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
@@ -92,7 +92,7 @@ Path Dialog::OpenDirectory(const String &title,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateOpenFilePathSceneInto(scene, true, {}, initialDirPath);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;
@@ -108,7 +108,7 @@ Path Dialog::SaveFilePath(const String &title,
     Scene *scene = GameObjectFactory::CreateScene(false);
     CreateSaveFilePathSceneInto(scene, extension, initialDirPath,
                                 initialFileName);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     EndCreateDialog(dialog);
     return Dialog::s_okPressed ? Dialog::s_resultPath : Path::Empty;

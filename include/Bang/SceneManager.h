@@ -25,12 +25,13 @@ class SceneManager : public EventEmitter<ISceneManagerListener>,
                      public IDestroyListener
 {
 public:
-    static void LoadScene(Scene *scene);
-    static void LoadScene(const Path &sceneFilepath);
-    static void LoadScene(const String &sceneFilepath);
+    static void LoadScene(Scene *scene, bool destroyActive = true);
+    static void LoadScene(const Path &sceneFilepath, bool destroyActive = true);
+    static void LoadScene(const String &sceneFilepath, bool destroyActive = true);
 
-    static void LoadSceneInstantly(Scene *scene);
-    static void LoadSceneInstantly(const Path &sceneFilepath);
+    static void LoadSceneInstantly(Scene *scene, bool destroyActive = true);
+    static void LoadSceneInstantly(const Path &sceneFilepath,
+                                   bool destroyActive = true);
 
     static Scene* GetActiveScene();
 
@@ -42,25 +43,37 @@ public:
     BehaviourManager *GetBehaviourManager() const;
 
 protected:
-    Scene *m_activeScene = nullptr;
-
-    Scene *m_queuedScene = nullptr;
-    Path m_queuedScenePath = Path::Empty;
-
     SceneManager();
     virtual ~SceneManager();
 
-    virtual void _Update();
-    virtual void _LoadSceneInstantly(Scene *scene);
+    bool GetNextLoadNeeded() const;
+    Scene* GetNextLoadScene() const;
+    const Path& GetNextLoadScenePath() const;
+    bool GetNextLoadDestroyActive() const;
+
     void _SetActiveScene(Scene *activeScene);
     Scene *_GetActiveScene() const;
+
+    virtual void _Update();
+    virtual void _LoadSceneInstantly();
+
+    void PropagateNextSceneLoadedToListeners();
+    void ClearNextLoad();
 
 private:
     BehaviourManager *m_behaviourManager = nullptr;
 
+    Scene *p_activeScene = nullptr;
+
+    bool m_nextLoadNeeded = false;
+    Scene *p_nextLoadScene = nullptr;
+    bool m_nextLoadDestroyActive = false;
+    Path m_nextLoadScenePath = Path::Empty;
+
     void Init();
     virtual BehaviourManager* CreateBehaviourManager() const;
 
+    void PrepareNextLoad(Scene *scene, const Path &scenePath, bool destroyActive);
     static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
 
     // IDestroyListener
