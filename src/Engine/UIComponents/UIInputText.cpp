@@ -69,7 +69,7 @@ void UIInputText::UpdateCursorRenderer()
          GL::FromViewportAmountToViewportAmountNDC(Vector2(0, fontHeight)).y;
 
     constexpr float MarginsNDC = 0.1f;
-    AARect limitsRect = GetLabelRT()->GetViewportRectNDC();
+    AARect limitsRect ( GetLabelRT()->GetViewportRectNDC() );
     Vector2 minPoint = Vector2(cursorX, limitsRect.GetCenter().y - fontHeightNDC / 2.0f);
     Vector2 maxPoint = Vector2(cursorX, limitsRect.GetCenter().y + fontHeightNDC / 2.0f);
 
@@ -92,7 +92,7 @@ void UIInputText::UpdateTextScrolling()
     GetText()->RegenerateCharQuadsVAO();
 
     Vector2 scrollNDC = Vector2::Zero;
-    AARect labelLimits = GetLabelRT()->GetViewportRectNDC();
+    AARect labelLimits ( GetLabelRT()->GetViewportRectNDC() );
     AARect contentRectNDC = GetText()->GetContentViewportNDCRect();
     if (contentRectNDC.GetWidth() > labelLimits.GetWidth() && GetCursorIndex() > 0)
     {

@@ -11,8 +11,10 @@ template <class T>
 class RectG
 {
 private:
-    Vector2G<T> m_corner;
-    std::array<Vector2G<T>, 2> m_extents;
+    Vector2G<T> m_center;
+    Vector2G<T> m_axis0;
+    T m_halfSizeAxis0;
+    T m_halfSizeAxis1;
 
     static constexpr float ChecksEpsilon = 0.0001f;
 
@@ -21,47 +23,338 @@ public:
     const static RectG<T> Zero;
 
     RectG() {}
-    RectG(const Vector2G<T> &corner,
-          const Vector2G<T> &extent0,
-          const T &extent1Size)
+
+    RectG(const Vector2G<T> &center,
+          const Vector2G<T> &axis0,
+          const T &halfSizeAxis0,
+          const T &halfSizeAxis1)
     {
-        SetCorner(corner);
-        SetExtents(extent0, extent1Size);
+        SetCenter(center);
+        SetAxis(axis0);
+        SetHalfSize(halfSizeAxis0, halfSizeAxis1);
     }
 
-    void SetCorner(const Vector2G<T> &corner)
+    RectG(const Vector2G<T> &center,
+          const Vector2G<T> &axis0,
+          const Vector2G<T> &halfSizeAxis) :
+        RectG(center, axis0, halfSizeAxis.x, halfSizeAxis.y)
     {
-        m_corner = corner;
     }
 
-    void SetExtents( const Vector2G<T> &extent0, const T &extent1Size)
+    void SetCenter(const Vector2G<T> &center)
     {
-        m_extents[0] = extent0;
-        m_extents[1] = extent0.Perpendicular().NormalizedSafe() * extent1Size;
+        m_center = center;
     }
 
-    const Vector2G<T>& GetCorner() const { return m_corner; }
-    Vector2G<T> GetExtent(int i) const
+    void SetAxis(const Vector2G<T> &axis0)
+    {
+        m_axis0 = axis0.NormalizedSafe();
+    }
+
+    void SetHalfSize(int i, const T &halfSize)
+    {
+        if (i == 0) { m_halfSizeAxis0 = halfSize; }
+        else if (i == 1) { m_halfSizeAxis1 = halfSize; }
+    }
+
+    void SetHalfSize(const T &halfSizeAxis0, const T &halfSizeAxis1)
+    {
+        SetHalfSize(0, halfSizeAxis0);
+        SetHalfSize(1, halfSizeAxis1);
+    }
+
+    const Vector2G<T>& GetCenter() const { return m_center; }
+    Vector2G<T> GetAxis(int i) const
     {
         ASSERT(i == 0 || i == 1);
-        return m_extents[i];
+        if (i == 0) { return m_axis0; }
+        return m_axis0.Perpendicular();
+    }
+
+    T GetHalfSize(int i) const
+    {
+        ASSERT(i == 0 || i == 1);
+        if (i == 0) { return m_halfSizeAxis0; }
+        return m_halfSizeAxis1;
+    }
+
+    Vector2G<T> GetHalfExtent(int i) const
+    {
+        return GetAxis(i) * GetHalfSize(i);
+    }
+
+    Vector2G<T> GetHalfSize() const
+    {
+        return Vector2G<T>(GetHalfSize(0), GetHalfSize(1));
+    }
+    Vector2G<T> GetSize() const
+    {
+        return GetHalfSize() * T(2);
+    }
+
+    bool Contains(const Vector2G<T> &point) const
+    {
+        Vector2G<T> p0, p1, _, p3; GetPoints(&p0, &p1, &_, &p3);
+        Vector2G<T> P_P0  = (point-p0);
+        Vector2G<T> P0_P1 = (p1-p0);
+        Vector2G<T> P0_P3 = (p1-p3);
+        T d1 = Vector2G<T>::Dot(P_P0,  P0_P1);
+        T d2 = Vector2G<T>::Dot(P0_P1, P0_P1);
+        T d3 = Vector2G<T>::Dot(P_P0,  P0_P3);
+        T d4 = Vector2G<T>::Dot(P0_P3, P0_P3);
+        return (0 < d1 && d1 < d2) && (0 < d3 && d3 < d4);
+    }
+
+    void GetPoints(Vector2G<T> *p0,
+                   Vector2G<T> *p1,
+                   Vector2G<T> *opposedP0) const
+    {
+        *p0        = GetCenter() + Vector2G<T>(-GetHalfSize(0), -GetHalfSize(1));
+        *p1        = GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
+        *opposedP0 = GetCenter() + Vector2G<T>(+GetHalfSize(0), +GetHalfSize(1));
+    }
+    void GetPoints(Vector2G<T> *p0,
+                   Vector2G<T> *p1,
+                   Vector2G<T> *opposedP0,
+                   Vector2G<T> *opposedP1) const
+    {
+        GetPoints(p0, p1, opposedP0);
+        *opposedP1 = GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
     }
 
     std::array<Vector2G<T>, 4> GetPoints() const
     {
-        return {GetCorner(),
-                GetCorner() + GetExtent(0),
-                GetCorner() + GetExtent(1),
-                GetCorner() + GetExtent(0) + GetExtent(1)};
+        Vector2G<T> p0, p1, p2, p3;
+        GetPoints(&p0, &p1, &p2, &p3);
+        return {p0, p1, p2, p3};
     }
+
+    template<class S> friend bool operator==(const RectG<S> &r1, const RectG<S> &r2);
+    template<class S> friend bool operator!=(const RectG<S> &r1, const RectG<S> &r2);
+    template<class S> friend void operator*=(RectG<S> &r, S a);
+    template<class S> friend void operator/=(RectG<S> &r, S a);
+    template<class S> friend void operator*=(RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend void operator/=(RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend RectG<S> operator*(const Matrix4G<S> &m, const RectG<S> &r);
+    template<class S> friend RectG<S> operator/(S a, const RectG<S> &r);
+    template<class S> friend RectG<S> operator/(const RectG<S> &r, S a);
+    template<class S> friend RectG<S> operator*(S a, const RectG<S> &r);
+    template<class S> friend RectG<S> operator*(const RectG<S> &r, S a);
+    template<class S> friend RectG<S> operator*(const Vector2G<S> &v, const RectG<S> &r);
+    template<class S> friend RectG<S> operator*(const RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend RectG<S> operator/(const Vector2G<S> &v, const RectG<S> &r);
+    template<class S> friend RectG<S> operator/(const RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend RectG<S> operator-(S a, const RectG<S> &r);
+    template<class S> friend RectG<S> operator-(const RectG<S> &r, S a);
+    template<class S> friend RectG<S> operator-(const Vector2G<S> &v, const RectG<S> &r);
+    template<class S> friend RectG<S> operator-(const RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend void operator-=(RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend RectG<S> operator+(S a, const RectG<S> &r);
+    template<class S> friend RectG<S> operator+(const RectG<S> &r, S a);
+    template<class S> friend RectG<S> operator+(const Vector2G<S> &v, const RectG<S> &r);
+    template<class S> friend RectG<S> operator+(const RectG<S> &r, const Vector2G<S> &v);
+    template<class S> friend void operator+=(RectG<S> &r, const Vector2G<S> &v);
 };
 
 template<class T>
-const RectG<T> RectG<T>::NDCRect = RectG<T>(Vector2G<T>(-1),
-                                            Vector2G<T>(1));
+const RectG<T> RectG<T>::NDCRect = RectG<T>(Vector2G<T>(0),
+                                            Vector2G<T>(1, 0),
+                                            2, 2);
 
 template<class T>
-const RectG<T> RectG<T>::Zero = RectG<T>(0, 0, 0, 0);
+const RectG<T> RectG<T>::Zero = RectG<T>(Vector2G<T>(0), Vector2G<T>(0), 0, 0);
+
+template<class T>
+bool operator==(const RectG<T> &r1, const RectG<T> &r2)
+{
+    return r1.GetCorner()   == r2.GetCorner() &&
+           r1.GetAxis0()    == r2.GetAxis0() &&
+           r1.GetHalfSize() == r2.GetHalfSize();
+}
+
+
+template<class T>
+bool operator!=(const RectG<T> &r1, const RectG<T> &r2)
+{
+    return !(r1 == r2);
+}
+
+template<class T>
+void operator*=(RectG<T> &r, T a)
+{
+    r.m_center    *= a;
+    r.m_halfSize0 *= a;
+    r.m_halfSize1 *= a;
+}
+
+template<class T>
+void operator/=(RectG<T> &r, T a)
+{
+    r.m_center    /= a;
+    r.m_halfSize0 /= a;
+    r.m_halfSize1 /= a;
+}
+
+template<class T>
+void operator*=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_center    *= v;
+    r.m_halfSize0 *= v[0];
+    r.m_halfSize1 *= v[1];
+}
+
+template<class T>
+void operator/=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r.m_center    /= v;
+    r.m_halfSize0 /= v[0];
+    r.m_halfSize1 /= v[1];
+}
+
+template<class T>
+RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
+{
+    return RectG<T>(
+       (m * Vector4G<T>(r.GetCenter(),      0, 1)).xy(),
+       (m * Vector4G<T>(r.GetAxis(0),       0, 0)).xy(),
+       (m * Vector4G<T>(r.GetHalfExtent(0), 0, 0)).xy().Length(),
+       (m * Vector4G<T>(r.GetHalfExtent(1), 0, 0)).xy().Length() );
+}
+
+template<class T>
+RectG<T> operator/(T a, const RectG<T> &r)
+{
+    return RectG<T>(a / r.GetCorner(),
+                    r.GetAxis(0),
+                    a / r.GetHalfSize(0),
+                    a / r.GetHalfSize(1));
+}
+
+template<class T>
+RectG<T> operator/(const RectG<T> &r, T a)
+{
+    return RectG<T>(r.GetCorner() / a,
+                    r.GetAxis(0),
+                    r.GetHalfSize(0) / a,
+                    r.GetHalfSize(1) / a);
+}
+
+template<class T>
+RectG<T> operator*(T a, const RectG<T> &r)
+{
+    return RectG<T>(a * r.GetCorner(),
+                    r.GetAxis(0),
+                    a * r.GetHalfSize(0),
+                    a * r.GetHalfSize(1));
+}
+
+template<class T>
+RectG<T> operator*(const RectG<T> &r, T a)
+{
+    return a * r;
+}
+
+template<class T>
+RectG<T> operator*(const Vector2G<T> &v, const RectG<T> &r)
+{
+    return RectG<T>(v * r.GetCorner(),
+                    r.GetAxis(0),
+                    v[0] * r.GetHalfSize(0),
+                    v[1] * r.GetHalfSize(1));
+}
+
+template<class T>
+RectG<T> operator*(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return v * r;
+}
+
+template<class T>
+RectG<T> operator/(const Vector2G<T> &v, const RectG<T> &r)
+{
+    return RectG<T>(v / r.GetCorner(),
+                    r.GetAxis(0),
+                    v[0] / r.GetHalfSize(0),
+                    v[1] / r.GetHalfSize(1));
+}
+
+template<class T>
+RectG<T> operator/(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return RectG<T>(r.GetCorner() / v,
+                    r.GetAxis(0),
+                    r.GetHalfSize(0) / v[0],
+                    r.GetHalfSize(1) / v[1]);
+}
+
+template<class T>
+RectG<T> operator-(T a, const RectG<T> &r)
+{
+    return Vector2G<T>(a) - r;
+}
+
+template<class T>
+RectG<T> operator-(const RectG<T> &r, T a)
+{
+    return r - Vector2G<T>(a);
+}
+
+template<class T>
+RectG<T> operator-(const Vector2G<T> &v, const RectG<T> &r)
+{
+    return RectG<T>(v - r.GetCorner(),
+                    r.GetAxis(0),
+                    v[0] - r.GetHalfSize(0),
+                    v[1] - r.GetHalfSize(1));
+}
+
+template<class T>
+RectG<T> operator-(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return RectG<T>(r.GetCorner() - v,
+                    r.GetAxis(0),
+                    r.GetHalfSize(0) - v[0],
+                    r.GetHalfSize(1) - v[0]);
+}
+
+template<class T>
+void operator-=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r = r - v;
+}
+
+template<class T>
+RectG<T> operator+(T a, const RectG<T> &r)
+{
+    return Vector2G<T>(a) + r;
+}
+
+template<class T>
+RectG<T> operator+(const RectG<T> &r, T a)
+{
+    return Vector2G<T>(a) + r;
+}
+
+template<class T>
+RectG<T> operator+(const Vector2G<T> &v, const RectG<T> &r)
+{
+    RectG<T> res = r;
+    res += v;
+    return res;
+}
+
+template<class T>
+RectG<T> operator+(const RectG<T> &r, const Vector2G<T> &v)
+{
+    return v + r;
+}
+
+template<class T>
+void operator+=(RectG<T> &r, const Vector2G<T> &v)
+{
+    r = r + v;
+}
+
 
 NAMESPACE_BANG_END
 

@@ -289,7 +289,7 @@ void UILabel::UpdateSelectionQuadRenderer()
     float cursorX     = GetCursorXViewportNDC( GetCursorIndex() );
     float selectionX  = GetCursorXViewportNDC( GetSelectionIndex() );
 
-    AARect r = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
+    AARect r ( GetGameObject()->GetRectTransform()->GetViewportRectNDC() );
     Vector2 p1(Math::Min(cursorX, selectionX), r.GetMin().y );
     Vector2 p2(Math::Max(cursorX, selectionX), r.GetMax().y );
 

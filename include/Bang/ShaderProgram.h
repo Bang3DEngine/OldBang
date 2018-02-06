@@ -4,6 +4,11 @@
 #include <unordered_map>
 
 #include "Bang/Map.h"
+#include "Bang/Matrix3.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 #include "Bang/GLObject.h"
 #include "Bang/Resources.h"
 #include "Bang/IDestroyListener.h"

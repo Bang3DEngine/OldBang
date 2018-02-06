@@ -3,6 +3,8 @@
 
 #include "Bang/GL.h"
 #include "Bang/Array.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Vector2.h"
 #include "Bang/TypeMap.h"
 #include "Bang/UniformBuffer.h"
 

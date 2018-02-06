@@ -1,6 +1,7 @@
 #ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
+#include "Bang/Rect.h"
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
 #include "Bang/IEventEmitter.h"
@@ -70,8 +71,10 @@ public:
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
-    AARect    FromViewportRectNDCToLocalRectNDC(const AARect &vpRectNDC) const;
-    AARect    FromLocalRectNDCToViewportRectNDC(const AARect &localRectNDC) const;
+    AARect  FromViewportAARectNDCToLocalAARectNDC(const AARect &vpAARectNDC) const;
+    AARect  FromLocalAARectNDCToViewportAARectNDC(const AARect &localAARectNDC) const;
+    Rect    FromViewportRectNDCToLocalRectNDC(const Rect &vpRectNDC) const;
+    Rect    FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const;
     Vector2 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const;
     Vector2 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const;
     Vector2 FromViewportPointToLocalPointNDC(const Vector2  &vpPoint) const;

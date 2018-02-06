@@ -117,8 +117,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         Vector2 maxUv = GetFont()->GetCharMaxUv(GetTextSize(), cr.character);
 
         AARect charRectViewportNDC(minViewportNDC, maxViewportNDC);
-        AARect charRectLocalNDC =
-                    rt->FromViewportRectNDCToLocalRectNDC(charRectViewportNDC);
+        AARect charRectLocalNDC(
+            rt->FromViewportAARectNDCToLocalAARectNDC(charRectViewportNDC) );
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
         textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMinY());
@@ -270,13 +270,15 @@ const AARect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 
 AARect UITextRenderer::GetCharRectViewportNDC(uint charIndex) const
 {
-    return GetGameObject()->GetRectTransform()->
-            FromLocalRectNDCToViewportRectNDC(GetCharRectsLocalNDC()[charIndex]);
+    return AARect(
+        GetGameObject()->GetRectTransform()->
+          FromLocalAARectNDCToViewportAARectNDC(GetCharRectsLocalNDC()[charIndex]));
 }
 AARect UITextRenderer::GetContentViewportNDCRect() const
 {
-    return GetGameObject()->GetRectTransform()->
-            FromLocalRectNDCToViewportRectNDC(m_textRectNDC);
+    return AARect(
+        GetGameObject()->GetRectTransform()->
+            FromLocalAARectNDCToViewportAARectNDC(m_textRectNDC) );
 }
 
 VerticalAlignment UITextRenderer::GetVerticalAlignment() const

@@ -5,11 +5,16 @@
 
 #include "Bang/VAO.h"
 #include "Bang/List.h"
+#include "Bang/Rect.h"
 #include "Bang/Debug.h"
 #include "Bang/Window.h"
-#include "Bang/Matrix3.h"
 #include "Bang/GEngine.h"
+#include "Bang/Matrix3.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Texture.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 #include "Bang/GLObject.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/ShaderProgram.h"
@@ -1204,6 +1209,34 @@ Vector2 GL::FromWindowPointToViewportPoint(const Vector2 &winPoint)
 Vector2 GL::FromWindowPointToViewportPoint(const Vector2i &winPoint)
 {
     return GL::FromWindowPointToViewportPoint( Vector2(winPoint) );
+}
+
+Rect GL::FromViewportRectToViewportRectNDC(const Rect &vpRect)
+{
+    return Rect( FromViewportPointToViewportPointNDC(vpRect.GetCenter()),
+                 vpRect.GetAxis(0),
+                 FromViewportPointToViewportPointNDC(vpRect.GetHalfSize()));
+}
+
+Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
+{
+    return Rect( FromViewportPointNDCToViewportPoint(vpRectNDC.GetCenter()),
+                 vpRectNDC.GetAxis(0),
+                 FromViewportPointNDCToViewportPoint(vpRectNDC.GetHalfSize()));
+}
+
+Rect GL::FromWindowRectToWindowRectNDC(const Rect &winRect)
+{
+    return Rect( FromWindowPointToWindowPointNDC(winRect.GetCenter()),
+                 winRect.GetAxis(0),
+                 FromWindowPointToWindowPointNDC(winRect.GetHalfSize()));
+}
+
+Rect GL::FromWindowRectNDCToWindowRect(const Rect &winRectNDC)
+{
+    return Rect( FromWindowPointNDCToWindowPoint(winRectNDC.GetCenter()),
+                 winRectNDC.GetAxis(0),
+                 FromWindowPointNDCToWindowPoint(winRectNDC.GetHalfSize()));
 }
 
 AARect GL::FromViewportRectToViewportRectNDC(const AARect &vpRect)

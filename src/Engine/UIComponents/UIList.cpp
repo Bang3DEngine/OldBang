@@ -47,8 +47,8 @@ void UIList::OnUpdate()
             if (m_wideSelectionMode && !overChildItem)
             {
                 Vector2 mousePos = Input::GetMousePositionNDC();
-                AARect listRTRect = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
-                AARect itemRTRect = childItem->GetRectTransform()->GetViewportRectNDC();
+                AARect listRTRect ( GetGameObject()->GetRectTransform()->GetViewportRectNDC() );
+                AARect itemRTRect ( childItem->GetRectTransform()->GetViewportRectNDC() );
                 overChildItem = (mousePos.x >= listRTRect.GetMin().x &&
                                  mousePos.x <= listRTRect.GetMax().x &&
                                  mousePos.y >= itemRTRect.GetMin().y &&
@@ -208,10 +208,10 @@ void UIList::ScrollTo(GOItem *item)
 {
     if (!GetScrollPanel()) { return; }
 
-    AARect itemRect = item->GetRectTransform()-> GetViewportRect();
-    AARect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
-                                                        GetViewportRect();
-    AARect containerRect = GetContainer()->GetRectTransform()-> GetViewportRect();
+    AARect itemRect ( item->GetRectTransform()-> GetViewportRect() );
+    AARect panelRect ( GetScrollPanel()->GetGameObject()->GetRectTransform()->
+                                                          GetViewportRect() );
+    AARect containerRect ( GetContainer()->GetRectTransform()-> GetViewportRect() );
 
     Vector2 relativeItemRectMin = itemRect.GetMin() - containerRect.GetMin();
     relativeItemRectMin.y = (containerRect.GetHeight() - relativeItemRectMin.y);

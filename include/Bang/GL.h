@@ -7,12 +7,6 @@
 #include "Bang/Map.h"
 #include "Bang/Color.h"
 #include "Bang/AARect.h"
-#include "Bang/String.h"
-#include "Bang/Matrix3.h"
-#include "Bang/Matrix4.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
 
 NAMESPACE_BANG_BEGIN
 
@@ -290,8 +284,7 @@ public:
     };
 
     static void ClearError();
-    static bool CheckError(int line = 0, const String &func = "",
-                           const String &file = "");
+    static bool CheckError(int line, const String &func, const String &file);
     static bool CheckFramebufferError();
 
     static void Clear(GL::BufferBit bufferBit);
@@ -483,10 +476,14 @@ public:
     static Vector2  FromViewportPointToWindowPoint(const Vector2i& vpPoint);
     static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint);
     static Vector2  FromWindowPointToViewportPoint(const Vector2i& winPoint);
-    static AARect     FromViewportRectToViewportRectNDC(const AARect &vpRect);
-    static AARect     FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
-    static AARect     FromWindowRectToWindowRectNDC(const AARect &winRect);
-    static AARect     FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
+    static Rect     FromViewportRectToViewportRectNDC(const Rect &vpRect);
+    static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
+    static Rect     FromWindowRectToWindowRectNDC(const Rect &winRect);
+    static Rect     FromWindowRectNDCToWindowRect(const Rect &winRectNDC);
+    static AARect   FromViewportRectToViewportRectNDC(const AARect &vpRect);
+    static AARect   FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
+    static AARect   FromWindowRectToWindowRectNDC(const AARect &winRect);
+    static AARect   FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
     static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
     static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
     static Vector2  FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);

@@ -36,7 +36,7 @@ void UIScrollBar::OnUpdate()
 
         Vector2 mouseCoordsPx (Input::GetMousePosition());
         AARect scrollRectPx = GetScrollingRect();
-        AARect barRectPx = GetBar()->GetRectTransform()->GetViewportRect();
+        AARect barRectPx( GetBar()->GetRectTransform()->GetViewportRect() );
         if (!m_wasGrabbed)
         {
             m_grabOffsetPx.x = mouseCoordsPx.x - barRectPx.GetMin().x;
@@ -216,7 +216,7 @@ AARect UIScrollBar::GetScrollingRect() const
 {
     GameObject *cont = GetScrollArea()->GetGameObject();
     RectTransform *rt = cont->GetRectTransform();
-    return rt->GetViewportRect();
+    return AARect( rt->GetViewportRect() );
 }
 
 UIScrollArea *UIScrollBar::GetScrollArea() const { return p_scrollArea; }

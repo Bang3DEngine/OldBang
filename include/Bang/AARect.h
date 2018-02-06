@@ -1,6 +1,7 @@
 #ifndef AARECT_H
 #define AARECT_H
 
+#include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector4.h"
@@ -27,6 +28,14 @@ public:
     {
         m_min = Vector2G<T>(r.GetMin());
         m_max = Vector2G<T>(r.GetMax());
+    }
+
+    template<class OtherT>
+    explicit AARectG(const RectG<OtherT> &r)
+    {
+        Vector2G<OtherT> p0, p1, opposedP0;
+        r.GetPoints(&p0, &p1, &opposedP0);
+        *this = AARectG(Vector2G<T>(p0), Vector2G<T>(opposedP0));
     }
 
     explicit AARectG(T minx, T miny, T maxx, T maxy)

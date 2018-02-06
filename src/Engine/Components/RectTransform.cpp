@@ -25,10 +25,11 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    AARect parentVpRect = GetParentViewportRect();
+    AARect parentVpRect( GetParentViewportRect() );
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentVpRect.GetSize());
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
     return Vector2f(vpPoint - parentVpRect.GetMin()) * pixelNDCSize - 1.0f;
+    // return (GetLocalToWorldMatrix().Inversed() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
@@ -38,7 +39,7 @@ FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
 
 Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const
 {
-    AARect parentWinRect = GetParentViewportRect();
+    AARect parentWinRect( GetParentViewportRect() );
     Vector2 parentSizePxVp = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountToAmountNDC( Vector2(vpAmount) , parentSizePxVp );
 }
@@ -63,7 +64,7 @@ FromWindowAmountToLocalAmountNDC(const Vector2i &winAmount) const
 Vector2 RectTransform::
 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const
 {
-    AARect parentWinRect = GetParentViewportRect();
+    AARect parentWinRect( GetParentViewportRect() );
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountNDCToAmount(localAmountNDC, parentSizePx);
 }
@@ -82,17 +83,27 @@ FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const
 }
 
 AARect RectTransform::
-FromLocalRectNDCToViewportRectNDC(const AARect &localRectNDC) const
+FromViewportAARectNDCToLocalAARectNDC(const AARect &vpAARectNDC) const
 {
-    return AARect( FromLocalPointNDCToViewportPointNDC(localRectNDC.GetMin()),
-                 FromLocalPointNDCToViewportPointNDC(localRectNDC.GetMax()));
-}
+    return AARect( FromViewportPointNDCToLocalPointNDC(vpAARectNDC.GetMin()),
+                   FromViewportPointNDCToLocalPointNDC(vpAARectNDC.GetMax()));
 
+}
 AARect RectTransform::
-FromViewportRectNDCToLocalRectNDC(const AARect &vpRectNDC) const
+FromLocalAARectNDCToViewportAARectNDC(const AARect &localAARectNDC) const
 {
-    return AARect( FromViewportPointNDCToLocalPointNDC(vpRectNDC.GetMin()),
-                 FromViewportPointNDCToLocalPointNDC(vpRectNDC.GetMax()) );
+    return AARect( FromLocalPointNDCToViewportPointNDC(localAARectNDC.GetMin()),
+                   FromLocalPointNDCToViewportPointNDC(localAARectNDC.GetMax()));
+}
+Rect RectTransform::
+FromViewportRectNDCToLocalRectNDC(const Rect &vpRectNDC) const
+{
+    return GetLocalToWorldMatrix().Inversed() * vpRectNDC;
+}
+Rect RectTransform::
+FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const
+{
+    return GetLocalToWorldMatrix() * localRectNDC;
 }
 
 Vector2 RectTransform::
@@ -318,10 +329,12 @@ const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 AARect RectTransform::GetViewportRectNDC() const
 {
     return GetLocalToWorldMatrix() * AARect::NDCRect;
+    // return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
 AARect RectTransform::GetViewportRect() const
 {
     return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
+    // return GetLocalToWorldMatrix() * AARect::NDCRect;
 }
 
 AARect RectTransform::GetParentViewportRectNDC() const
@@ -335,6 +348,15 @@ AARect RectTransform::GetParentViewportRectNDC() const
         parentWindowRectNDC = parentRectTransform->GetViewportRectNDC();
     }
     return parentWindowRectNDC;
+
+    /*
+    if (!GetGameObject()->GetParent() ||
+        !GetGameObject()->GetParent()->GetRectTransform())
+    {
+        return Rect::NDCRect;
+    }
+    return GetGameObject()->GetParent()->GetRectTransform()->GetViewportRectNDC();
+    */
 }
 AARect RectTransform::GetParentViewportRect() const
 {

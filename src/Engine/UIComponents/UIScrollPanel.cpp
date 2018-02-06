@@ -113,7 +113,7 @@ void UIScrollPanel::OnPostUpdate()
         RectTransform *toConvertParentRT = toConvertRT->GetGameObject()
                                            ->GetParent()->GetRectTransform();
 
-        AARect refRect = referenceRT->GetViewportRect();
+        AARect refRect( referenceRT->GetViewportRect() );
 
         Vector2 newAnchorMin = toConvertParentRT->
                                FromViewportPointToLocalPointNDC(refRect.GetMin());
