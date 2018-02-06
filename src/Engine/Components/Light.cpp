@@ -1,8 +1,8 @@
 #include "Bang/Light.h"
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/XMLNode.h"
@@ -23,14 +23,14 @@ void Light::SetIntensity(float intensity) { m_intensity = intensity; }
 Color Light::GetColor() const { return m_color; }
 float Light::GetIntensity() const { return m_intensity; }
 
-void Light::ApplyLight(Camera *camera, const Rect &renderRect) const
+void Light::ApplyLight(Camera *camera, const AARect &renderRect) const
 {
     p_lightMaterial.Get()->Bind();
     SetUniformsBeforeApplyingLight(p_lightMaterial.Get());
 
     // Intersect with light rect to draw exactly what we need
     GBuffer *gbuffer = camera->GetGBuffer();
-    Rect improvedRenderRect = Rect::Intersection(GetRenderRect(camera),
+    AARect improvedRenderRect = AARect::Intersection(GetRenderRect(camera),
                                                  renderRect);
     gbuffer->ApplyPass(p_lightMaterial.Get()->GetShaderProgram(),
                        true, improvedRenderRect);
@@ -56,9 +56,9 @@ void Light::SetLightMaterial(Material *lightMat)
     p_lightMaterial.Set(lightMat);
 }
 
-Rect Light::GetRenderRect(Camera *camera) const
+AARect Light::GetRenderRect(Camera *camera) const
 {
-    return Rect::NDCRect;
+    return AARect::NDCRect;
 }
 
 void Light::CloneInto(ICloneable *clone) const

@@ -5,8 +5,8 @@
 #include <GL/gl.h>
 
 #include "Bang/Map.h"
-#include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/String.h"
 #include "Bang/Matrix3.h"
 #include "Bang/Matrix4.h"
@@ -338,14 +338,14 @@ public:
                                 int dstX0, int dstY0, int dstX1, int dstY1,
                                 GL::FilterMode filterMode,
                                 GL::BufferBit bufferBitMask);
-    static void BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
+    static void BlitFramebuffer(const AARecti &srcRect, const AARecti &dstRect,
                                 GL::FilterMode filterMode,
                                 GL::BufferBit bufferBitMask);
 
     static void Scissor(int x, int y, int width, int height);
-    static void Scissor(const Recti &scissorRectPx);
+    static void Scissor(const AARecti &scissorRectPx);
     static void ScissorIntersecting(int x, int y, int width, int height);
-    static void ScissorIntersecting(const Recti &scissorRectPx);
+    static void ScissorIntersecting(const AARecti &scissorRectPx);
 
     static GLId CreateShader(GL::ShaderType shaderType);
     static void ShaderSource(GLId shaderId, const String &sourceCode);
@@ -382,7 +382,7 @@ public:
                            GL::ColorComp inputComp,
                            GL::DataType outputDataType,
                            void *pixels);
-    static void ReadPixels(const Recti &readRect,
+    static void ReadPixels(const AARecti &readRect,
                            GL::ColorComp inputComp,
                            GL::DataType outputDataType,
                            void *pixels);
@@ -440,8 +440,8 @@ public:
     static void DeleteVertexArrays(int n, const GLId *glIds);
     static void DeleteBuffers(int n, const GLId *glIds);
 
-    static void SetViewport(const Rect &viewportNDC);
-    static void SetViewport(const Recti &viewport);
+    static void SetViewport(const AARect &viewportNDC);
+    static void SetViewport(const AARecti &viewport);
     static void SetViewport(int x, int y, int width, int height);
 
     static void BufferData(GL::BindTarget target,
@@ -478,15 +478,15 @@ public:
     static Vector2  FromAmountNDCToAmount(const Vector2 &amountNDC,
                                           const Vector2 &rectSize);
     static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint,
-                                                   const Recti& viewport);
+                                                   const AARecti& viewport);
     static Vector2  FromViewportPointToWindowPoint(const Vector2& vpPoint);
     static Vector2  FromViewportPointToWindowPoint(const Vector2i& vpPoint);
     static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint);
     static Vector2  FromWindowPointToViewportPoint(const Vector2i& winPoint);
-    static Rect     FromViewportRectToViewportRectNDC(const Rect &vpRect);
-    static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
-    static Rect     FromWindowRectToWindowRectNDC(const Rect &winRect);
-    static Rect     FromWindowRectNDCToWindowRect(const Rect &winRectNDC);
+    static AARect     FromViewportRectToViewportRectNDC(const AARect &vpRect);
+    static AARect     FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
+    static AARect     FromWindowRectToWindowRectNDC(const AARect &winRect);
+    static AARect     FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
     static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
     static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
     static Vector2  FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);
@@ -519,7 +519,7 @@ public:
     static int  GetShaderInteger(GLId shaderId, GL::Enum glEnum);
     static String GetShaderErrorMsg(GLId shaderId);
 
-    static Recti GetViewportRect();
+    static AARecti GetViewportRect();
     static Vector2i GetViewportSize();
     static float GetViewportAspectRatio();
     static Vector2 GetViewportPixelSize();
@@ -533,7 +533,7 @@ public:
     static GL::BlendFactor GetBlendDstFactorAlpha();
     static GL::BlendEquationE GetBlendEquationColor();
     static GL::BlendEquationE GetBlendEquationAlpha();
-    static const Recti& GetScissorRect();
+    static const AARecti& GetScissorRect();
     static const Color& GetClearColor();
     static GL::Enum GetPolygonMode(GL::Face face);
     static uint GetLineWidth();
@@ -601,7 +601,7 @@ private:
     uint m_lineWidth     = 0;
     Byte m_stencilValue  = 0;
     uint m_stencilMask   = 0xFF;
-    Recti m_viewportRect = Recti::Zero;
+    AARecti m_viewportRect = AARecti::Zero;
     Map<GL::Test, bool> m_enabledTests;
     Map<std::pair<GL::Test, int>, bool> m_enabled_i_Tests;
 
@@ -613,7 +613,7 @@ private:
     Color m_clearColor = Color::Zero;
     GL::Face m_cullFace = GL::Face::Back;
 
-    Recti m_scissorRectPx                   = Recti(-1,-1,-1,-1);
+    AARecti m_scissorRectPx                   = AARecti(-1,-1,-1,-1);
     GL::Enum m_frontPolygonMode             = GL::Fill;
     GL::Enum m_backPolygonMode              = GL::Fill;
     GL::Enum m_frontBackPolygonMode         = GL::Fill;

@@ -1,7 +1,7 @@
 #ifndef GENGINE_H
 #define GENGINE_H
 
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/RenderPass.h"
 #include "Bang/ResourceHandle.h"
 
@@ -31,12 +31,12 @@ public:
     void Render(GameObject *go, Camera *camera);
     void RenderGBufferColorToViewport(Camera *cam);
     void RenderViewportRect(ShaderProgram *sp,
-                            const Rect &destRectMask = Rect::NDCRect);
+                            const AARect &destRectMask = AARect::NDCRect);
     void RenderViewportPlane();
 
     void ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
                                                Camera *camera,
-                                               const Rect &maskRectNDC = Rect::NDCRect);
+                                               const AARect &maskRectNDC = AARect::NDCRect);
 
     static GBuffer *GetActiveGBuffer();
     static Camera *GetCurrentRenderingCamera();

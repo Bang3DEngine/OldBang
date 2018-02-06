@@ -1,13 +1,12 @@
 #include "Bang/Gizmos.h"
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/Mesh.h"
 #include "Bang/Math.h"
-#include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Color.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -166,7 +165,7 @@ void Gizmos::RenderBox(const AABox &b)
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderRect(const Rect &r)
+void Gizmos::RenderRect(const AARect &r)
 {
     RenderViewportLine( Vector2(r.m_min.x, r.m_min.y), Vector2(r.m_max.x, r.m_min.y) );
     RenderViewportLine( Vector2(r.m_max.x, r.m_min.y), Vector2(r.m_max.x, r.m_max.y) );
@@ -174,7 +173,7 @@ void Gizmos::RenderRect(const Rect &r)
     RenderViewportLine( Vector2(r.m_min.x, r.m_max.y), Vector2(r.m_min.x, r.m_min.y) );
 }
 
-void Gizmos::RenderFillRect(const Rect &r)
+void Gizmos::RenderFillRect(const AARect &r)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
@@ -217,7 +216,7 @@ void Gizmos::RenderIcon(Texture2D *texture,
 }
 
 void Gizmos::RenderViewportIcon(Texture2D *texture,
-                                const Rect &winRect)
+                                const AARect &winRect)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());

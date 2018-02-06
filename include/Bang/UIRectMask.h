@@ -28,7 +28,7 @@ public:
 
 private:
     bool m_wasScissorEnabled = false;
-    Recti m_prevScissor = Recti::Zero;
+    AARecti m_prevScissor = AARecti::Zero;
 
     bool m_masking = true;
 };

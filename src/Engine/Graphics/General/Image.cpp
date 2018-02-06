@@ -1,7 +1,7 @@
 #include "Bang/Image.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Debug.h"
+#include "Bang/AARect.h"
 #include "Bang/ImageIO.h"
 #include "Bang/ImportFilesManager.h"
 
@@ -40,7 +40,7 @@ void Image<T>::Create(int width, int height, const Color &backgroundColor)
 }
 
 template<class T>
-Image<T> Image<T>::GetSubImage(const Recti &subCoords) const
+Image<T> Image<T>::GetSubImage(const AARecti &subCoords) const
 {
     Vector2i subSize = subCoords.GetSize();
     Image<T> subImage(subSize.x, subSize.y);
@@ -58,12 +58,12 @@ Image<T> Image<T>::GetSubImage(const Recti &subCoords) const
 template<class T>
 void Image<T>::Copy(const Image<T> &image, const Vector2i &pos)
 {
-    Copy(image, Recti(pos, pos + image.GetSize()));
+    Copy(image, AARecti(pos, pos + image.GetSize()));
 }
 
 template<class T>
 void Image<T>::Copy(const Image<T> &image,
-                    const Recti &dstRect,
+                    const AARecti &dstRect,
                     ImageResizeMode resizeMode)
 {
     Image<T> resizedImage = image;
@@ -83,8 +83,8 @@ void Image<T>::Copy(const Image<T> &image,
 
 template<class T>
 void Image<T>::Copy(const Image<T> &image,
-                    const Recti &srcCopyRect,
-                    const Recti &dstCopyRect,
+                    const AARecti &srcCopyRect,
+                    const AARecti &dstCopyRect,
                     ImageResizeMode resizeMode)
 {
     Image<T> subImageSrc = image.GetSubImage(srcCopyRect);
@@ -103,8 +103,8 @@ void Image<T>::AddMargins(const Vector2i &margins,
                                 GetSize(), (margins * 2) + GetSize(), arMode);
     Create(newSize.x, newSize.y, marginColor);
     Copy(original,
-         Recti(Vector2i::Zero, original.GetSize()),
-         Recti(newSize / 2 -  original.GetSize() / 2,
+         AARecti(Vector2i::Zero, original.GetSize()),
+         AARecti(newSize / 2 -  original.GetSize() / 2,
                newSize / 2 + (original.GetSize()+1) / 2));
 }
 

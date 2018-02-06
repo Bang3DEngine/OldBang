@@ -1,11 +1,11 @@
 #include "Bang/Camera.h"
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/AABox.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Window.h"
 #include "Bang/GBuffer.h"
@@ -60,14 +60,14 @@ void Camera::UnBind() const
 
 void Camera::SetViewportForBlitting() const
 {
-    m_latestViewportRect = Recti( GetViewportRectInWindow() );
+    m_latestViewportRect = AARecti( GetViewportRectInWindow() );
     GL::SetViewport(m_latestViewportRect);
 }
 
 void Camera::SetViewportForRendering() const
 {
     SetViewportForBlitting();
-    Recti vpRect = GL::GetViewportRect();
+    AARecti vpRect = GL::GetViewportRect();
     GL::SetViewport(0, 0, vpRect.GetWidth(), vpRect.GetHeight());
 }
 
@@ -107,7 +107,7 @@ Vector2i Camera::FromWindowPointToViewportPoint(const Vector2i &winPoint) const
 {
     return Vector2i(
                 GL::FromWindowPointToViewportPoint(Vector2(winPoint),
-                                                   Recti(GetViewportRectInWindow())) );
+                                                   AARecti(GetViewportRectInWindow())) );
 }
 
 Vector2 Camera::FromWorldPointToViewportPointNDC(const Vector3 &worldPosition) const
@@ -134,11 +134,11 @@ Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector2 &vpPointNDC,
     return res;
 }
 
-Rect Camera::GetViewportBoundingRect(const AABox &bbox)
+AARect Camera::GetViewportBoundingRect(const AABox &bbox)
 {
     // If there's a point outside the camera rect, return Empty
     bool allPointsOutside = true;
-    Rect winRect = bbox.GetAABoundingViewportRect(this);
+    AARect winRect = bbox.GetAABoundingViewportRect(this);
     Vector2 rMin = winRect.GetMin(), rMax = winRect.GetMax();
     allPointsOutside = allPointsOutside &&
                        !winRect.Contains( Vector2(rMin.x, rMin.y) );
@@ -148,7 +148,7 @@ Rect Camera::GetViewportBoundingRect(const AABox &bbox)
                        !winRect.Contains( Vector2(rMax.x, rMin.y) );
     allPointsOutside = allPointsOutside &&
                        !winRect.Contains( Vector2(rMax.x, rMax.y) );
-    if (allPointsOutside) { return Rect::Zero; }
+    if (allPointsOutside) { return AARect::Zero; }
 
     // If there's one or more points behind the camera, return WindowRect
     // because we don't know how to handle it properly
@@ -158,7 +158,7 @@ Rect Camera::GetViewportBoundingRect(const AABox &bbox)
     for (const Vector3 &p : points)
     {
         Vector3 dirToP = p - tr->GetPosition();
-        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::NDCRect; }
+        if (Vector3::Dot(dirToP, camForward) < 0) { return AARect::NDCRect; }
     }
 
     return winRect;
@@ -175,7 +175,7 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
     m_projMode = projMode;
 }
 
-void Camera::SetViewportRect(const Rect &viewportRectNDC)
+void Camera::SetViewportRect(const AARect &viewportRectNDC)
 {
     m_viewportRectNDC = viewportRectNDC;
 }
@@ -211,18 +211,18 @@ const Set<RenderPass> &Camera::GetRenderPassMask() const
     return m_renderPassMask;
 }
 
-Rect Camera::GetViewportRectInWindow() const
+AARect Camera::GetViewportRectInWindow() const
 {
-    Rect vpRect = GetViewportRectNDC() * 0.5f + 0.5f;
-    return Rect( vpRect * Vector2(GL::GetViewportSize())
+    AARect vpRect = GetViewportRectNDC() * 0.5f + 0.5f;
+    return AARect( vpRect * Vector2(GL::GetViewportSize())
                         + Vector2(GL::GetViewportRect().GetMin()) );
 }
-Rect Camera::GetViewportRectNDCInWindow() const
+AARect Camera::GetViewportRectNDCInWindow() const
 {
     return GL::FromWindowRectToWindowRectNDC( GetViewportRectInWindow() );
 }
 
-const Rect& Camera::GetViewportRectNDC() const
+const AARect& Camera::GetViewportRectNDC() const
 {
     return m_viewportRectNDC;
 }

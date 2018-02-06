@@ -2,8 +2,8 @@
 
 #include "Bang/List.h"
 #include "Bang/Math.h"
-#include "Bang/Rect.h"
 #include "Bang/Array.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/Sphere.h"
 #include "Bang/Vector2.h"
@@ -201,10 +201,10 @@ Array<Vector3> AABox::GetPoints() const
     return {p1, p2, p3, p4, p5, p6, p7, p8};
 }
 
-Rect AABox::GetAABoundingViewportRect(Camera *cam) const
+AARect AABox::GetAABoundingViewportRect(Camera *cam) const
 {
     Vector3 camPosition = cam->GetGameObject()->GetTransform()->GetPosition();
-    if ( Contains(camPosition) ) { return Rect::NDCRect; }
+    if ( Contains(camPosition) ) { return AARect::NDCRect; }
     Array<Vector3> boxPoints = (*this).GetPoints();
 
     List<Vector2> viewportPoints;
@@ -218,9 +218,9 @@ Rect AABox::GetAABoundingViewportRect(Camera *cam) const
         Vector2 viewportP = cam->FromWorldPointToViewportPointNDC(p);
         viewportPoints.PushBack(viewportP);
     }
-    if (!somePointInFront) { return Rect::Zero; }
+    if (!somePointInFront) { return AARect::Zero; }
 
-    Rect boundingRect = Rect::GetBoundingRectFromPositions(viewportPoints.Begin(),
+    AARect boundingRect = AARect::GetBoundingRectFromPositions(viewportPoints.Begin(),
                                                            viewportPoints.End());
     return boundingRect;
 }

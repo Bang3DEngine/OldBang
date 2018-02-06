@@ -31,7 +31,7 @@ public:
     virtual void OnTransformChanged() override;
 
     // Renderer
-    virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
+    virtual AARect GetBoundingRect(Camera *camera = nullptr) const override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

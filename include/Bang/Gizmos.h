@@ -29,12 +29,12 @@ public:
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
-    static void RenderRect(const Rect &r);
-    static void RenderFillRect(const Rect &r);
+    static void RenderRect(const AARect &r);
+    static void RenderFillRect(const AARect &r);
     static void RenderIcon(Texture2D *texture,
                            bool billboard = true);
     static void RenderViewportIcon(Texture2D *texture,
-                                   const Rect &winRect);
+                                   const AARect &winRect);
     static void RenderViewportLine(const Vector2 &origin,
                                    const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin,

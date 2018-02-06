@@ -1,8 +1,8 @@
 #include "Bang/PointLight.h"
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/AABox.h"
+#include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
 #include "Bang/Sphere.h"
 #include "Bang/XMLNode.h"
@@ -35,7 +35,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material* mat) const
     sp->Set("B_LightRange", GetRange());
 }
 
-Rect PointLight::GetRenderRect(Camera *cam) const
+AARect PointLight::GetRenderRect(Camera *cam) const
 {
     Transform *tr = GetGameObject()->GetTransform();
     Sphere sphere(tr->GetPosition(), GetRange());

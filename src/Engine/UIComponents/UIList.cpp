@@ -1,7 +1,7 @@
 #include "Bang/UIList.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/AARect.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/IFocusable.h"
@@ -47,8 +47,8 @@ void UIList::OnUpdate()
             if (m_wideSelectionMode && !overChildItem)
             {
                 Vector2 mousePos = Input::GetMousePositionNDC();
-                Rect listRTRect = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
-                Rect itemRTRect = childItem->GetRectTransform()->GetViewportRectNDC();
+                AARect listRTRect = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
+                AARect itemRTRect = childItem->GetRectTransform()->GetViewportRectNDC();
                 overChildItem = (mousePos.x >= listRTRect.GetMin().x &&
                                  mousePos.x <= listRTRect.GetMax().x &&
                                  mousePos.y >= itemRTRect.GetMin().y &&
@@ -208,15 +208,15 @@ void UIList::ScrollTo(GOItem *item)
 {
     if (!GetScrollPanel()) { return; }
 
-    Rect itemRect = item->GetRectTransform()-> GetViewportRect();
-    Rect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
+    AARect itemRect = item->GetRectTransform()-> GetViewportRect();
+    AARect panelRect = GetScrollPanel()->GetGameObject()->GetRectTransform()->
                                                         GetViewportRect();
-    Rect containerRect = GetContainer()->GetRectTransform()-> GetViewportRect();
+    AARect containerRect = GetContainer()->GetRectTransform()-> GetViewportRect();
 
     Vector2 relativeItemRectMin = itemRect.GetMin() - containerRect.GetMin();
     relativeItemRectMin.y = (containerRect.GetHeight() - relativeItemRectMin.y);
     Vector2 relativeItemRectMax = relativeItemRectMin + itemRect.GetSize();
-    Rect relativeItemRect;
+    AARect relativeItemRect;
     relativeItemRect.SetMin( Vector2::Min(relativeItemRectMin, relativeItemRectMax) );
     relativeItemRect.SetMax( Vector2::Max(relativeItemRectMin, relativeItemRectMax) );
 

@@ -124,7 +124,7 @@ public:
 
     bool IsVisible() const;
     bool IsDontDestroyOnLoad() const;
-    Rect GetBoundingViewportRect(Camera *cam, bool includeChildren = true) const;
+    AARect GetBoundingViewportRect(Camera *cam, bool includeChildren = true) const;
     AABox GetObjectAABBox(bool includeChildren = true) const;
     AABox GetAABBox(bool includeChildren = true) const;
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;

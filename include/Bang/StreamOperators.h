@@ -63,7 +63,7 @@ std::ostream& operator<<(std::ostream &log, const QuaternionG<T> &q)
 }
 
 template<class T>
-std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
+std::ostream& operator<<(std::ostream &log, const AARectG<T> &r)
 {
     log << "(" << r.GetMin() << ", " <<
                   r.GetMax() << ")";
@@ -208,7 +208,7 @@ std::istream& operator>>(std::istream &is, QuaternionG<T>& q)
 }
 
 template<class T>
-std::istream& operator>>(std::istream &is, RectG<T>& r)
+std::istream& operator>>(std::istream &is, AARectG<T>& r)
 {
     char _;
     Vector2G<T> minv, maxv;

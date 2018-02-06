@@ -36,7 +36,7 @@ void DebugRenderer::RenderPoint(const Vector3 &point,
                                color, time, thickness, depthTest);
 }
 
-void DebugRenderer::RenderRectPx(const Rect &rect, const Color &color,
+void DebugRenderer::RenderRectPx(const AARect &rect, const Color &color,
                                  float time, float thickness, bool depthTest)
 {
     DebugRenderer::DebugRenderPrimitive *drp =

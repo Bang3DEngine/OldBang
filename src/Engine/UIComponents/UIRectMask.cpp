@@ -19,7 +19,7 @@ void UIRectMask::OnBeforeChildrenRender(RenderPass renderPass)
         m_wasScissorEnabled = GL::IsEnabled(GL::Test::Scissor);
         m_prevScissor = GL::GetScissorRect();
 
-        Recti rectPx( GetGameObject()->GetRectTransform()->GetViewportRect() );
+        AARecti rectPx( GetGameObject()->GetRectTransform()->GetViewportRect() );
 
         GL::Enable(GL::Test::Scissor);
         GL::ScissorIntersecting(rectPx);

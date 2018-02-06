@@ -350,7 +350,7 @@ void GL::BlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1,
     );
 }
 
-void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
+void GL::BlitFramebuffer(const AARecti &srcRect, const AARecti &dstRect,
                          GL::FilterMode filterMode,
                          GL::BufferBit bufferBitMask)
 {
@@ -363,10 +363,10 @@ void GL::BlitFramebuffer(const Recti &srcRect, const Recti &dstRect,
 
 void GL::Scissor(int x, int y, int width, int height)
 {
-    GL::Scissor( Recti(x, y, x+width, y+height) );
+    GL::Scissor( AARecti(x, y, x+width, y+height) );
 }
 
-void GL::Scissor(const Recti &scissorRectPx)
+void GL::Scissor(const AARecti &scissorRectPx)
 {
     if (scissorRectPx != GL::GetScissorRect())
     {
@@ -378,13 +378,13 @@ void GL::Scissor(const Recti &scissorRectPx)
 
 void GL::ScissorIntersecting(int x, int y, int width, int height)
 {
-    GL::ScissorIntersecting( Recti(x, y, x+width, y+height) );
+    GL::ScissorIntersecting( AARecti(x, y, x+width, y+height) );
 }
 
-void GL::ScissorIntersecting(const Recti &scissorRectPx)
+void GL::ScissorIntersecting(const AARecti &scissorRectPx)
 {
-    Recti prevScissor = GL::GetScissorRect();
-    Recti additiveScissor = Recti::Intersection(prevScissor, scissorRectPx);
+    AARecti prevScissor = GL::GetScissorRect();
+    AARecti additiveScissor = AARecti::Intersection(prevScissor, scissorRectPx);
     GL::Scissor(additiveScissor);
 }
 
@@ -583,7 +583,7 @@ void GL::ReadPixels(int x, int y, int width, int height,
     );
 }
 
-void GL::ReadPixels(const Recti &readRect, GL::ColorComp inputComp,
+void GL::ReadPixels(const AARecti &readRect, GL::ColorComp inputComp,
                     GL::DataType outputDataType, void *pixels)
 {
     GL::ReadPixels(readRect.GetMin().x, readRect.GetMin().y,
@@ -846,14 +846,14 @@ void GL::DeleteBuffers(int n, const GLId *glIds)
     GL_CALL( glDeleteBuffers(n, glIds) );
 }
 
-void GL::SetViewport(const Rect &viewportNDC)
+void GL::SetViewport(const AARect &viewportNDC)
 {
     Vector2 minPx = GL::FromViewportPointNDCToViewportPoint(viewportNDC.GetMin());
     Vector2 maxPx = GL::FromViewportAmountNDCToViewportAmount(viewportNDC.GetMax());
-    GL::SetViewport( Recti(minPx.x, minPx.y, maxPx.x, maxPx.y) );
+    GL::SetViewport( AARecti(minPx.x, minPx.y, maxPx.x, maxPx.y) );
 }
 
-void GL::SetViewport(const Recti &viewport)
+void GL::SetViewport(const AARecti &viewport)
 {
     GL::SetViewport(viewport.GetMin().x, viewport.GetMin().y,
                     viewport.GetWidth(), viewport.GetHeight());
@@ -861,7 +861,7 @@ void GL::SetViewport(const Recti &viewport)
 
 void GL::SetViewport(int x, int y, int width, int height)
 {
-    Recti vpRect( Vector2i(x, y), Vector2i(x+width, y+height));
+    AARecti vpRect( Vector2i(x, y), Vector2i(x+width, y+height));
     if (GL::GetViewportRect() != vpRect)
     {
         GL *gl = GL::GetActive();
@@ -877,10 +877,10 @@ void GL::SetViewport(int x, int y, int width, int height)
     }
 }
 
-Recti GL::GetViewportRect()
+AARecti GL::GetViewportRect()
 {
     GL *gl = GL::GetActive();
-    return gl ? gl->m_viewportRect : Recti::Zero;
+    return gl ? gl->m_viewportRect : AARecti::Zero;
 }
 
 Vector2i GL::GetViewportSize()
@@ -939,10 +939,10 @@ GL::BlendEquationE GL::GetBlendEquationAlpha()
     return GL::GetActive()->m_blendEquationAlpha;
 }
 
-const Recti& GL::GetScissorRect()
+const AARecti& GL::GetScissorRect()
 {
     if (!GL::IsEnabled(GL::Test::Scissor) ||
-        GL::GetActive()->m_scissorRectPx == Recti(-1,-1,-1,-1))
+        GL::GetActive()->m_scissorRectPx == AARecti(-1,-1,-1,-1))
     {
         GL::GetActive()->m_scissorRectPx = GL::GetViewportRect();
     }
@@ -1182,7 +1182,7 @@ Vector2 GL::FromAmountNDCToAmount(const Vector2 &amountNDC,
 }
 
 Vector2 GL::FromWindowPointToViewportPoint(const Vector2 &winPoint,
-                                           const Recti &viewport)
+                                           const AARecti &viewport)
 {
     return Vector2(winPoint - Vector2(viewport.GetMin()));
 }
@@ -1206,32 +1206,32 @@ Vector2 GL::FromWindowPointToViewportPoint(const Vector2i &winPoint)
     return GL::FromWindowPointToViewportPoint( Vector2(winPoint) );
 }
 
-Rect GL::FromViewportRectToViewportRectNDC(const Rect &vpRect)
+AARect GL::FromViewportRectToViewportRectNDC(const AARect &vpRect)
 {
     Vector2 min = GL::FromViewportPointToViewportPointNDC(vpRect.GetMin());
     Vector2 max = GL::FromViewportPointToViewportPointNDC(vpRect.GetMax());
-    return Rect(min, max);
+    return AARect(min, max);
 }
 
-Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
+AARect GL::FromViewportRectNDCToViewportRect(const AARect &vpRectNDC)
 {
     Vector2 min = GL::FromViewportPointNDCToViewportPoint(vpRectNDC.GetMin());
     Vector2 max = GL::FromViewportPointNDCToViewportPoint(vpRectNDC.GetMax());
-    return Rect(min, max);
+    return AARect(min, max);
 }
 
-Rect GL::FromWindowRectToWindowRectNDC(const Rect &winRect)
+AARect GL::FromWindowRectToWindowRectNDC(const AARect &winRect)
 {
     Vector2 min = GL::FromWindowPointToWindowPointNDC(winRect.GetMin());
     Vector2 max = GL::FromWindowPointToWindowPointNDC(winRect.GetMax());
-    return Rect(min, max);
+    return AARect(min, max);
 }
 
-Rect GL::FromWindowRectNDCToWindowRect(const Rect &winRectNDC)
+AARect GL::FromWindowRectNDCToWindowRect(const AARect &winRectNDC)
 {
     Vector2 min = GL::FromWindowPointNDCToWindowPoint(winRectNDC.GetMin());
     Vector2 max = GL::FromWindowPointNDCToWindowPoint(winRectNDC.GetMax());
-    return Rect(min, max);
+    return AARect(min, max);
 }
 
 Vector2 GL::FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount)

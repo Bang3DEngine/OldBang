@@ -90,7 +90,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
                                         GetContent(),
                                         GetFont(),
                                         GetTextSize(),
-                                        Recti( rt->GetViewportRect() ),
+                                        AARecti( rt->GetViewportRect() ),
                                         GetSpacingMultiplier(),
                                         GetHorizontalAlignment(),
                                         GetVerticalAlignment(),
@@ -116,8 +116,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         Vector2 minUv = GetFont()->GetCharMinUv(GetTextSize(), cr.character);
         Vector2 maxUv = GetFont()->GetCharMaxUv(GetTextSize(), cr.character);
 
-        Rect charRectViewportNDC(minViewportNDC, maxViewportNDC);
-        Rect charRectLocalNDC =
+        AARect charRectViewportNDC(minViewportNDC, maxViewportNDC);
+        AARect charRectLocalNDC =
                     rt->FromViewportRectNDCToLocalRectNDC(charRectViewportNDC);
 
         textQuadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
@@ -140,12 +140,12 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         textQuadPos2D.PushBack(charRectLocalNDC.GetMinXMaxY());
         textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
 
-        Rect charRectLocalNDCRaw ( rt->FromViewportPointToLocalPointNDC(minPxPerf),
+        AARect charRectLocalNDCRaw ( rt->FromViewportPointToLocalPointNDC(minPxPerf),
                                    rt->FromViewportPointToLocalPointNDC(maxPxPerf) );
         m_charRectsLocalNDC.PushBack(charRectLocalNDCRaw);
     }
 
-    m_textRectNDC = Rect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
+    m_textRectNDC = AARect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
                                                        textQuadPos2D.End());
     p_mesh.Get()->LoadPositions(textQuadPos3D);
     p_mesh.Get()->LoadUvs(textQuadUvs);
@@ -261,19 +261,19 @@ const String &UITextRenderer::GetContent() const { return m_content; }
 int UITextRenderer::GetTextSize() const { return m_textSize; }
 
 const Vector2& UITextRenderer::GetSpacingMultiplier() const { return m_spacingMultiplier; }
-const Array<Rect> &UITextRenderer::GetCharRectsLocalNDC() const
+const Array<AARect> &UITextRenderer::GetCharRectsLocalNDC() const
 { return m_charRectsLocalNDC; }
-const Rect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
+const AARect &UITextRenderer::GetCharRectLocalNDC(uint charIndex) const
 {
     return GetCharRectsLocalNDC()[charIndex];
 }
 
-Rect UITextRenderer::GetCharRectViewportNDC(uint charIndex) const
+AARect UITextRenderer::GetCharRectViewportNDC(uint charIndex) const
 {
     return GetGameObject()->GetRectTransform()->
             FromLocalRectNDCToViewportRectNDC(GetCharRectsLocalNDC()[charIndex]);
 }
-Rect UITextRenderer::GetContentViewportNDCRect() const
+AARect UITextRenderer::GetContentViewportNDCRect() const
 {
     return GetGameObject()->GetRectTransform()->
             FromLocalRectNDCToViewportRectNDC(m_textRectNDC);
@@ -288,7 +288,7 @@ HorizontalAlignment UITextRenderer::GetHorizontalAlignment() const
     return m_horizontalAlignment;
 }
 
-Rect UITextRenderer::GetBoundingRect(Camera *camera) const
+AARect UITextRenderer::GetBoundingRect(Camera *camera) const
 {
     return GetContentViewportNDCRect();
 }

@@ -18,7 +18,7 @@ class UIRenderer : public Renderer,
                    public ITransformListener
 {
 public:
-    virtual Rect GetBoundingRect(Camera *camera) const override;
+    virtual AARect GetBoundingRect(Camera *camera) const override;
 
     // Renderer
     virtual void OnRender() override;

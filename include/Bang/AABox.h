@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
 #include "Bang/IToString.h"
@@ -40,7 +40,7 @@ public:
     Vector3 GetDimensions() const;
     float GetArea() const;
     float GetVolume() const;
-    Rect GetAABoundingViewportRect(Camera *cam) const;
+    AARect GetAABoundingViewportRect(Camera *cam) const;
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
     Array<Vector3> GetPoints() const;
 

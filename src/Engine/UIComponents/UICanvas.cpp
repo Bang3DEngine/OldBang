@@ -1,8 +1,8 @@
 #include "Bang/UICanvas.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Cursor.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Component.h"
@@ -37,13 +37,13 @@ void UICanvas::OnUpdate()
     // Focus
     IFocusable *focusMouseOver = nullptr;
 
-    Array< std::pair<IFocusable*, Rect> > focusablesAndRectsNDC;
+    Array< std::pair<IFocusable*, AARect> > focusablesAndRectsNDC;
     GetSortedFocusCandidatesByOcclusionOrder(GetGameObject(),
                                              &focusablesAndRectsNDC);
     for (const auto& focusableAndRectNDC : focusablesAndRectsNDC)
     {
         IFocusable *focusable = focusableAndRectNDC.first;
-        const Rect& maskedRectNDC = focusableAndRectNDC.second;
+        const AARect& maskedRectNDC = focusableAndRectNDC.second;
 
         Component *focusableComp = Cast<Component*>(focusable);
         if (focusableComp->IsActive() && focusable->IsFocusEnabled())
@@ -330,8 +330,8 @@ UICanvas *UICanvas::GetActive(const Component *comp)
 
 struct GameObjectZComparer
 {
-    inline bool operator() (const std::pair<IFocusable*, Rect>& lhs,
-                            const std::pair<IFocusable*, Rect>& rhs)
+    inline bool operator() (const std::pair<IFocusable*, AARect>& lhs,
+                            const std::pair<IFocusable*, AARect>& rhs)
     {
         const GameObject *glhs = Cast<const GameObject*>(lhs.first);
         const GameObject *grhs = Cast<const GameObject*>(rhs.first);
@@ -348,10 +348,10 @@ struct GameObjectZComparer
 
 void UICanvas::GetSortedFocusCandidatesByOcclusionOrder(
         const GameObject *go,
-        Array< std::pair<IFocusable*, Rect> > *sortedCandidates) const
+        Array< std::pair<IFocusable*, AARect> > *sortedCandidates) const
 {
-    std::stack<Rect> auxMaskRectStack;
-    auxMaskRectStack.push(Rect::NDCRect);
+    std::stack<AARect> auxMaskRectStack;
+    auxMaskRectStack.push(AARect::NDCRect);
 
     GetSortedFocusCandidatesByPaintOrder(go, sortedCandidates, &auxMaskRectStack);
 
@@ -361,8 +361,8 @@ void UICanvas::GetSortedFocusCandidatesByOcclusionOrder(
 
 void UICanvas::GetSortedFocusCandidatesByPaintOrder(
         const GameObject *go,
-        Array< std::pair<IFocusable*, Rect> > *sortedCandidates,
-        std::stack<Rect> *maskRectStack) const
+        Array< std::pair<IFocusable*, AARect> > *sortedCandidates,
+        std::stack<AARect> *maskRectStack) const
 {
     List<GameObject*> children = go->GetChildren();
     for (auto it = children.RBegin(); it != children.REnd(); ++it)
@@ -371,11 +371,11 @@ void UICanvas::GetSortedFocusCandidatesByPaintOrder(
         if (child->IsActive())
         {
             UIRectMask *rectMask = child->GetComponent<UIRectMask>();
-            Rect maskedRectNDC = maskRectStack->top();
+            AARect maskedRectNDC = maskRectStack->top();
             if (rectMask && rectMask->IsActive() && rectMask->IsMasking())
             {
-                Rect childRect = child->GetRectTransform()->GetViewportRectNDC();
-                maskedRectNDC = Rect::Intersection(maskedRectNDC, childRect);
+                AARect childRect = child->GetRectTransform()->GetViewportRectNDC();
+                maskedRectNDC = AARect::Intersection(maskedRectNDC, childRect);
             }
             maskRectStack->push(maskedRectNDC);
 

@@ -131,8 +131,8 @@ float UILabel::GetCursorXLocalNDC(int cursorIndex) const
     const int textLength = GetText()->GetContent().Size();
     if (cursorIndex > 0 && cursorIndex < textLength) // Between two chars
     {
-        Rect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
-        Rect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
+        AARect currentCharRect = GetText()->GetCharRectLocalNDC(cursorIndex - 1);
+        AARect nextCharRect = GetText()->GetCharRectLocalNDC(cursorIndex);
         if (GetText()->GetContent()[cursorIndex-1] != ' ')
         {
             localTextX = (currentCharRect.GetMax().x + nextCharRect.GetMin().x) / 2.0f;
@@ -165,10 +165,10 @@ int UILabel::GetClosestCharIndexTo(const Vector2 &coordsLocalNDC)
 {
     int closestCharIndex = 0;
     float minDist = Math::Infinity<float>();
-    const Array<Rect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
+    const Array<AARect>& charRectsNDC = GetText()->GetCharRectsLocalNDC();
     for (uint i = 0; i < charRectsNDC.Size(); ++i)
     {
-        const Rect &cr = charRectsNDC[i];
+        const AARect &cr = charRectsNDC[i];
         float distToMinX = Math::Abs(coordsLocalNDC.x - cr.GetMin().x);
         if (distToMinX < minDist)
         {
@@ -289,7 +289,7 @@ void UILabel::UpdateSelectionQuadRenderer()
     float cursorX     = GetCursorXViewportNDC( GetCursorIndex() );
     float selectionX  = GetCursorXViewportNDC( GetSelectionIndex() );
 
-    Rect r = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
+    AARect r = GetGameObject()->GetRectTransform()->GetViewportRectNDC();
     Vector2 p1(Math::Min(cursorX, selectionX), r.GetMin().y );
     Vector2 p2(Math::Max(cursorX, selectionX), r.GetMax().y );
 

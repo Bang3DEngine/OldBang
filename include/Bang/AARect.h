@@ -1,5 +1,5 @@
-#ifndef RECT_H
-#define RECT_H
+#ifndef AARECT_H
+#define AARECT_H
 
 #include "Bang/Array.h"
 #include "Bang/Vector2.h"
@@ -8,33 +8,33 @@
 NAMESPACE_BANG_BEGIN
 
 template<class T>
-class RectG
+class AARectG
 {
 public:
-    const static RectG<T> NDCRect;
-    const static RectG<T> Zero;
+    const static AARectG<T> NDCRect;
+    const static AARectG<T> Zero;
 
     Vector2G<T> m_min = Vector2G<T>::Zero;
     Vector2G<T> m_max = Vector2G<T>::Zero;
 
-    RectG()
+    AARectG()
     {
     }
 
     template<class OtherT>
-    explicit RectG(const RectG<OtherT> &r)
+    explicit AARectG(const AARectG<OtherT> &r)
     {
         m_min = Vector2G<T>(r.GetMin());
         m_max = Vector2G<T>(r.GetMax());
     }
 
-    explicit RectG(T minx, T miny, T maxx, T maxy)
+    explicit AARectG(T minx, T miny, T maxx, T maxy)
     {
         m_min = Vector2G<T>( Math::Min(minx, maxx), Math::Min(miny, maxy) );
         m_max = Vector2G<T>( Math::Max(minx, maxx), Math::Max(miny, maxy) );
     }
 
-    explicit RectG(const Vector2G<T> &p1, const Vector2G<T> &p2)
+    explicit AARectG(const Vector2G<T> &p1, const Vector2G<T> &p2)
     {
         m_min = Vector2G<T>::Min(p1, p2);
         m_max = Vector2G<T>::Max(p1, p2);
@@ -104,25 +104,25 @@ public:
                p.y >= m_min.y && p.y < m_max.y;
     }
 
-    static RectG<T> Union(const RectG<T> &r1, const RectG<T> &r2)
+    static AARectG<T> Union(const AARectG<T> &r1, const AARectG<T> &r2)
     {
-        return RectG<T>(Math::Min(r1.m_min.x, r2.m_min.x),
+        return AARectG<T>(Math::Min(r1.m_min.x, r2.m_min.x),
                         Math::Min(r1.m_min.y, r2.m_min.y),
                         Math::Max(r1.m_max.x, r2.m_max.x),
                         Math::Max(r1.m_max.y, r2.m_max.y));
     }
 
     template <class Iterator>
-    static RectG<T> Union(Iterator begin, Iterator end)
+    static AARectG<T> Union(Iterator begin, Iterator end)
     {
-        if (begin == end) { return RectG<T>::Zero; }
-        RectG<T> unionRect = *begin;
+        if (begin == end) { return AARectG<T>::Zero; }
+        AARectG<T> unionRect = *begin;
         for (auto it = begin; it != end; ++it)
-        { unionRect = RectG<T>::Union(unionRect, *it); }
+        { unionRect = AARectG<T>::Union(unionRect, *it); }
         return unionRect;
     }
 
-    static RectG<T> Intersection(const RectG<T> &r1, const RectG<T> &r2)
+    static AARectG<T> Intersection(const AARectG<T> &r1, const AARectG<T> &r2)
     {
         T minx = Math::Max(r1.m_min.x, r2.m_min.x);
         T miny = Math::Max(r1.m_min.y, r2.m_min.y);
@@ -131,26 +131,26 @@ public:
 
         if (minx > maxx || miny > maxy)
         {
-            return RectG<T>::Zero;
+            return AARectG<T>::Zero;
         }
 
-        return RectG<T>(minx, miny, maxx, maxy);
+        return AARectG<T>(minx, miny, maxx, maxy);
     }
 
     template <class Iterator>
-    static RectG<T> Intersection(Iterator begin, Iterator end)
+    static AARectG<T> Intersection(Iterator begin, Iterator end)
     {
-        if (begin == end) { return RectG<T>::Zero; }
-        RectG<T> intersectionRect = *begin;
+        if (begin == end) { return AARectG<T>::Zero; }
+        AARectG<T> intersectionRect = *begin;
         for (auto it = begin; it != end; ++it)
-        { intersectionRect = RectG<T>::Intersection(intersectionRect, *it); }
+        { intersectionRect = AARectG<T>::Intersection(intersectionRect, *it); }
         return intersectionRect;
     }
 
     template <class Iterator>
-    static RectG<T> GetBoundingRectFromPositions(Iterator begin, Iterator end)
+    static AARectG<T> GetBoundingRectFromPositions(Iterator begin, Iterator end)
     {
-        if (begin == end) { return RectG<T>::Zero; }
+        if (begin == end) { return AARectG<T>::Zero; }
 
         Vector2G<T> minv = *begin, maxv = *begin;
         for (auto it = begin; it != end; ++it)
@@ -159,19 +159,19 @@ public:
             minv = Vector2G<T>::Min(p, minv);
             maxv = Vector2G<T>::Max(p, maxv);
         }
-        return RectG<T>(minv, maxv);
+        return AARectG<T>(minv, maxv);
     }
 };
 
 template<class T>
-const RectG<T> RectG<T>::NDCRect = RectG<T>(Vector2G<T>(-1),
+const AARectG<T> AARectG<T>::NDCRect = AARectG<T>(Vector2G<T>(-1),
                                                Vector2G<T>(1));
 
 template<class T>
-const RectG<T> RectG<T>::Zero = RectG<T>(0, 0, 0, 0);
+const AARectG<T> AARectG<T>::Zero = AARectG<T>(0, 0, 0, 0);
 
 template<class T>
-bool operator==(const RectG<T> &r1, const RectG<T> &r2)
+bool operator==(const AARectG<T> &r1, const AARectG<T> &r2)
 {
     return r1.GetMin() == r2.GetMin() &&
            r1.GetMax() == r2.GetMax();
@@ -179,153 +179,153 @@ bool operator==(const RectG<T> &r1, const RectG<T> &r2)
 
 
 template<class T>
-bool operator!=(const RectG<T> &r1, const RectG<T> &r2)
+bool operator!=(const AARectG<T> &r1, const AARectG<T> &r2)
 {
     return !(r1 == r2);
 }
 
 template<class T>
-void operator*=(RectG<T> &r, T a)
+void operator*=(AARectG<T> &r, T a)
 {
     r.m_min *= a;
     r.m_max *= a;
 }
 
 template<class T>
-void operator/=(RectG<T> &r, T a)
+void operator/=(AARectG<T> &r, T a)
 {
     r.m_min /= a;
     r.m_max /= a;
 }
 
 template<class T>
-void operator*=(RectG<T> &r, const Vector2G<T> &v)
+void operator*=(AARectG<T> &r, const Vector2G<T> &v)
 {
     r.m_min *= v;
     r.m_max *= v;
 }
 
 template<class T>
-void operator/=(RectG<T> &r, const Vector2G<T> &v)
+void operator/=(AARectG<T> &r, const Vector2G<T> &v)
 {
     r.m_min /= v;
     r.m_max /= v;
 }
 
 template<class T>
-RectG<T> operator*(const Matrix4G<T> &m, const RectG<T> &r)
+AARectG<T> operator*(const Matrix4G<T> &m, const AARectG<T> &r)
 {
-    return RectG<T>( (m * Vector4G<T>(r.GetMin(), 0, 1) ).xy(),
+    return AARectG<T>( (m * Vector4G<T>(r.GetMin(), 0, 1) ).xy(),
                      (m * Vector4G<T>(r.GetMax(), 0, 1) ).xy() );
 }
 
 template<class T>
-RectG<T> operator/(T a, const RectG<T> &r)
+AARectG<T> operator/(T a, const AARectG<T> &r)
 {
-    return RectG<T>(a / r.GetMin(), a / r.GetMax());
+    return AARectG<T>(a / r.GetMin(), a / r.GetMax());
 }
 
 template<class T>
-RectG<T> operator/(const RectG<T> &r, T a)
+AARectG<T> operator/(const AARectG<T> &r, T a)
 {
-    return RectG<T>(r.GetMin() / a, r.GetMax() / a);
+    return AARectG<T>(r.GetMin() / a, r.GetMax() / a);
 }
 
 template<class T>
-RectG<T> operator*(T a, const RectG<T> &r)
+AARectG<T> operator*(T a, const AARectG<T> &r)
 {
-    return RectG<T>(a * r.GetMin(), a * r.GetMax());
+    return AARectG<T>(a * r.GetMin(), a * r.GetMax());
 }
 
 template<class T>
-RectG<T> operator*(const RectG<T> &r, T a)
+AARectG<T> operator*(const AARectG<T> &r, T a)
 {
     return a * r;
 }
 
 template<class T>
-RectG<T> operator*(const Vector2G<T> &v, const RectG<T> &r)
+AARectG<T> operator*(const Vector2G<T> &v, const AARectG<T> &r)
 {
-    return RectG<T>(v * r.GetMin(), v * r.GetMax());
+    return AARectG<T>(v * r.GetMin(), v * r.GetMax());
 }
 
 template<class T>
-RectG<T> operator*(const RectG<T> &r, const Vector2G<T> &v)
+AARectG<T> operator*(const AARectG<T> &r, const Vector2G<T> &v)
 {
     return v * r;
 }
 
 template<class T>
-RectG<T> operator/(const Vector2G<T> &v, const RectG<T> &r)
+AARectG<T> operator/(const Vector2G<T> &v, const AARectG<T> &r)
 {
-    return RectG<T>(v / r.GetMin(), v / v.GetMax());
+    return AARectG<T>(v / r.GetMin(), v / v.GetMax());
 }
 
 template<class T>
-RectG<T> operator/(const RectG<T> &r, const Vector2G<T> &v)
+AARectG<T> operator/(const AARectG<T> &r, const Vector2G<T> &v)
 {
-    return RectG<T>(r.GetMin() / v, r.GetMax() / v);
+    return AARectG<T>(r.GetMin() / v, r.GetMax() / v);
 }
 
 template<class T>
-RectG<T> operator-(T a, const RectG<T> &r)
+AARectG<T> operator-(T a, const AARectG<T> &r)
 {
     return Vector2G<T>(a) - r;
 }
 
 template<class T>
-RectG<T> operator-(const RectG<T> &r, T a)
+AARectG<T> operator-(const AARectG<T> &r, T a)
 {
     return r - Vector2G<T>(a);
 }
 
 template<class T>
-RectG<T> operator-(const Vector2G<T> &v, const RectG<T> &r)
+AARectG<T> operator-(const Vector2G<T> &v, const AARectG<T> &r)
 {
-    return RectG<T>(v - r.GetMin(), v - r.GetMax());
+    return AARectG<T>(v - r.GetMin(), v - r.GetMax());
 }
 
 template<class T>
-RectG<T> operator-(const RectG<T> &r, const Vector2G<T> &v)
+AARectG<T> operator-(const AARectG<T> &r, const Vector2G<T> &v)
 {
-    return RectG<T>(r.GetMin() - v, r.GetMax() - v);
+    return AARectG<T>(r.GetMin() - v, r.GetMax() - v);
 }
 
 template<class T>
-void operator-=(RectG<T> &r, const Vector2G<T> &v)
+void operator-=(AARectG<T> &r, const Vector2G<T> &v)
 {
     r.m_min = r.m_min - v;
     r.m_max = r.m_max - v;
 }
 
 template<class T>
-RectG<T> operator+(T a, const RectG<T> &r)
+AARectG<T> operator+(T a, const AARectG<T> &r)
 {
     return Vector2G<T>(a) + r;
 }
 
 template<class T>
-RectG<T> operator+(const RectG<T> &r, T a)
+AARectG<T> operator+(const AARectG<T> &r, T a)
 {
     return Vector2G<T>(a) + r;
 }
 
 template<class T>
-RectG<T> operator+(const Vector2G<T> &v, const RectG<T> &r)
+AARectG<T> operator+(const Vector2G<T> &v, const AARectG<T> &r)
 {
-    RectG<T> res = r;
+    AARectG<T> res = r;
     res += v;
     return res;
 }
 
 template<class T>
-RectG<T> operator+(const RectG<T> &r, const Vector2G<T> &v)
+AARectG<T> operator+(const AARectG<T> &r, const Vector2G<T> &v)
 {
     return v + r;
 }
 
 template<class T>
-void operator+=(RectG<T> &r, const Vector2G<T> &v)
+void operator+=(AARectG<T> &r, const Vector2G<T> &v)
 {
     r.m_min += v;
     r.m_max += v;
@@ -333,4 +333,4 @@ void operator+=(RectG<T> &r, const Vector2G<T> &v)
 
 NAMESPACE_BANG_END
 
-#endif // RECT_H
+#endif // AARECT_H

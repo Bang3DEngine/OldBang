@@ -23,14 +23,14 @@ public:
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
-    Image<T> GetSubImage(const Recti &subImageCoordsPx) const;
+    Image<T> GetSubImage(const AARecti &subImageCoordsPx) const;
     void Copy(const Image<T> &image, const Vector2i& pos);
     void Copy(const Image<T> &image,
-              const Recti& dstRect,
+              const AARecti& dstRect,
               ImageResizeMode resizeMode = ImageResizeMode::Linear);
     void Copy(const Image<T> &image,
-              const Recti& srcCopyRect,
-              const Recti& dstCopyRect,
+              const AARecti& srcCopyRect,
+              const AARecti& dstCopyRect,
               ImageResizeMode resizeMode = ImageResizeMode::Linear);
 
     void AddMargins(const Vector2i& margins,

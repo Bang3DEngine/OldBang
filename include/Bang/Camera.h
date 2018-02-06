@@ -3,8 +3,8 @@
 
 #include "Bang/Ray.h"
 #include "Bang/Set.h"
-#include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/Component.h"
 
 NAMESPACE_BANG_BEGIN
@@ -46,7 +46,7 @@ public:
     void SetZNear(float zNear);
     void SetZFar(float zFar);
     void SetProjectionMode(ProjectionMode projMode);
-    void SetViewportRect(const Rect &viewportRectNDC);
+    void SetViewportRect(const AARect &viewportRectNDC);
     void AddRenderPass(RenderPass renderPass);
     void RemoveRenderPass(RenderPass renderPass);
     void SetRenderSelectionBuffer(bool renderSelectionBuffer);
@@ -63,10 +63,10 @@ public:
     bool GetRenderSelectionBuffer() const;
     Matrix4 GetProjectionMatrix() const;
     ProjectionMode GetProjectionMode() const;
-    Rect GetViewportBoundingRect(const AABox &bbox);
-    Rect GetViewportRectInWindow() const;
-    Rect GetViewportRectNDCInWindow() const;
-    const Rect& GetViewportRectNDC() const;
+    AARect GetViewportBoundingRect(const AABox &bbox);
+    AARect GetViewportRectInWindow() const;
+    AARect GetViewportRectNDCInWindow() const;
+    const AARect& GetViewportRectNDC() const;
     GBuffer *GetGBuffer() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;
 
@@ -98,10 +98,10 @@ private:
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;
-    Rect m_viewportRectNDC = Rect::NDCRect;
+    AARect m_viewportRectNDC = AARect::NDCRect;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
-    mutable Recti m_latestViewportRect = Recti::Zero;
+    mutable AARecti m_latestViewportRect = AARecti::Zero;
 
     friend class Scene;
 };

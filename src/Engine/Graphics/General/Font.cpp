@@ -3,8 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "Bang/Path.h"
-#include "Bang/Rect.h"
 #include "Bang/Debug.h"
+#include "Bang/AARect.h"
 #include "Bang/Thread.h"
 #include "Bang/Vector2.h"
 #include "Bang/Texture2D.h"
@@ -116,7 +116,7 @@ Texture2D *Font::GetFontAtlas(int fontSize) const
     if (!HasFontSizeLoaded(fontSize))
     {
         // Create atlas
-        Array<Recti> charRects;
+        Array<AARecti> charRects;
         RH<Texture2D> atlasTex = Resources::Create<Texture2D>();
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                        "0123456789.,-;:_?!+*/\\()|\"'";

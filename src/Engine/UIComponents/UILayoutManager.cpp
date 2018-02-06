@@ -1,8 +1,8 @@
 #include "Bang/UILayoutManager.h"
 
 #include "Bang/Set.h"
-#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/Application.h"

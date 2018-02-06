@@ -140,7 +140,7 @@ void Window::BlitToWindow(Camera *camera)
 {
     if (camera)
     {
-        Recti prevVP = GL::GetViewportRect();
+        AARecti prevVP = GL::GetViewportRect();
         camera->SetViewportForBlitting();
         GetGEngine()->RenderGBufferColorToViewport(camera);
         GL::SetViewport(prevVP);

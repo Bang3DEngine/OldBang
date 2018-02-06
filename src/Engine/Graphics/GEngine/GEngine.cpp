@@ -66,7 +66,7 @@ void GEngine::Render(GameObject *go, Camera *camera)
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
                                                     Camera *camera,
-                                                    const Rect &maskRectNDC)
+                                                    const AARect &maskRectNDC)
 {
     Byte prevStencilValue              = GL::GetStencilValue();
     GL::Function prevStencilFunc       = GL::GetStencilFunc();
@@ -193,7 +193,7 @@ void GEngine::SetActive(GEngine *gEngine)
 }
 
 
-void GEngine::RenderViewportRect(ShaderProgram *sp, const Rect &destRectMask)
+void GEngine::RenderViewportRect(ShaderProgram *sp, const AARect &destRectMask)
 {
     GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);
     sp->Bind();
@@ -217,7 +217,7 @@ void GEngine::RenderGBufferColorToViewport(Camera *cam)
     sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
             false);
 
-    GEngine::RenderViewportRect(sp, Rect::NDCRect);
+    GEngine::RenderViewportRect(sp, AARect::NDCRect);
 
     p_renderGBufferToWindowMaterial.Get()->UnBind();
 }

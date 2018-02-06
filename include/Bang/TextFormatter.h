@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "Bang/Font.h"
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/Alignment.h"
 
 NAMESPACE_BANG_BEGIN
@@ -17,9 +17,9 @@ class TextFormatter
 public:
     struct CharRect
     {
-        Rectf rectPx;
+        AARectf rectPx;
         char character;
-        CharRect(char _c, const Rectf &_rect) : rectPx(_rect), character(_c) {}
+        CharRect(char _c, const AARectf &_rect) : rectPx(_rect), character(_c) {}
         friend std::ostream& operator<<(std::ostream &os,
                                         const TextFormatter::CharRect &cr);
     };
@@ -28,7 +28,7 @@ public:
                                         const String &content,
                                         const Font *font,
                                         int fontSize,
-                                        const Recti &limitsRect,
+                                        const AARecti &limitsRect,
                                         const Vector2 &spacingMultiplier,
                                         HorizontalAlignment hAlignment,
                                         VerticalAlignment vAlignment,
@@ -47,19 +47,19 @@ private:
                                             const String &content,
                                             const Font *font,
                                             int fontSize,
-                                            const Recti &limitsRect,
+                                            const AARecti &limitsRect,
                                             const Vector2 &spacingMultiplier,
                                             const Array<CharRect> &charRects,
                                             bool wrapping);
 
     static void ApplyAlignment(Array< Array<CharRect> > *linedCharRects,
-                               const Recti &limitsRect,
+                               const AARecti &limitsRect,
                                const Font *font,
                                int fontSize,
                                HorizontalAlignment hAlignment,
                                VerticalAlignment vAlignment);
 
-    static Rectf GetCharRect(char c,
+    static AARectf GetCharRect(char c,
                              const Font *font,
                              int fontSize);
     static int GetCharAdvanceX(const String &content,

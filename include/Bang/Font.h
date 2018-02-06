@@ -63,7 +63,7 @@ private:
     FontDataCache m_referenceFontDataCache;
     mutable Map<int, TTF_Font*> m_openFonts;
     mutable Map<int, RH<Texture2D>> m_cachedAtlas; // Per each font size, cached atlas
-    mutable Map<int, Map<char, Recti>> m_cachedAtlasCharRects; // ", cached atlas char rects
+    mutable Map<int, Map<char, AARecti>> m_cachedAtlasCharRects; // ", cached atlas char rects
     mutable Map<int, String> m_cachedAtlasChars; // ", cached atlas chars
 
     Font();

@@ -1,7 +1,7 @@
 #include "Bang/UIScrollBar.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/AARect.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusable.h"
 #include "Bang/UIFocusable.h"
@@ -35,8 +35,8 @@ void UIScrollBar::OnUpdate()
         p_barImg->SetTint(Color::Black);
 
         Vector2 mouseCoordsPx (Input::GetMousePosition());
-        Rect scrollRectPx = GetScrollingRect();
-        Rect barRectPx = GetBar()->GetRectTransform()->GetViewportRect();
+        AARect scrollRectPx = GetScrollingRect();
+        AARect barRectPx = GetBar()->GetRectTransform()->GetViewportRect();
         if (!m_wasGrabbed)
         {
             m_grabOffsetPx.x = mouseCoordsPx.x - barRectPx.GetMin().x;
@@ -212,7 +212,7 @@ int UIScrollBar::GetScrollingSpacePx() const
     return  Math::Max(scrollingSpace, 0);
 }
 
-Rect UIScrollBar::GetScrollingRect() const
+AARect UIScrollBar::GetScrollingRect() const
 {
     GameObject *cont = GetScrollArea()->GetGameObject();
     RectTransform *rt = cont->GetRectTransform();

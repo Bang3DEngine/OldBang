@@ -1,6 +1,6 @@
 #include "Bang/UIRenderer.h"
 
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
 
@@ -30,9 +30,9 @@ void UIRenderer::OnRender(RenderPass renderPass)
         RectTransform *rt = GetGameObject()->GetRectTransform();
         if (rt)
         {
-            Rect rectNDC = rt->GetViewportRectNDC();
-            if (rectNDC != Rect::Zero &&
-                Rect::Intersection(Rect::NDCRect, rectNDC) == Rect::Zero)
+            AARect rectNDC = rt->GetViewportRectNDC();
+            if (rectNDC != AARect::Zero &&
+                AARect::Intersection(AARect::NDCRect, rectNDC) == AARect::Zero)
             {
                 render = false;
             }
@@ -87,9 +87,9 @@ void UIRenderer::OnParentChanged(GameObject*, GameObject*)
     PropagateRendererChanged();
 }
 
-Rect UIRenderer::GetBoundingRect(Camera *camera) const
+AARect UIRenderer::GetBoundingRect(Camera *camera) const
 {
     GameObject *go = GetGameObject();
     RectTransform *rt = go ? go->GetRectTransform() : nullptr;
-    return rt ? rt->GetViewportRectNDC() : Rect::Zero;
+    return rt ? rt->GetViewportRectNDC() : AARect::Zero;
 }

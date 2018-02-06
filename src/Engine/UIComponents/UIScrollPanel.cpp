@@ -1,8 +1,8 @@
 #include "Bang/UIScrollPanel.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIFocusable.h"
@@ -113,7 +113,7 @@ void UIScrollPanel::OnPostUpdate()
         RectTransform *toConvertParentRT = toConvertRT->GetGameObject()
                                            ->GetParent()->GetRectTransform();
 
-        Rect refRect = referenceRT->GetViewportRect();
+        AARect refRect = referenceRT->GetViewportRect();
 
         Vector2 newAnchorMin = toConvertParentRT->
                                FromViewportPointToLocalPointNDC(refRect.GetMin());

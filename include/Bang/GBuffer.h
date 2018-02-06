@@ -2,8 +2,8 @@
 #define GBUFFER_H
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/Framebuffer.h"
 
 NAMESPACE_BANG_BEGIN
@@ -36,9 +36,9 @@ public:
 
     void ApplyPass(ShaderProgram *sp,
                    bool willReadFromColor = false,
-                   const Rect &mask = Rect::NDCRect);
+                   const AARect &mask = AARect::NDCRect);
 
-    void PrepareColorReadBuffer(const Rect &readNDCRect = Rect::NDCRect);
+    void PrepareColorReadBuffer(const AARect &readNDCRect = AARect::NDCRect);
 
     void SetAllDrawBuffers() const override;
     void SetAllDrawBuffersExceptColor();

@@ -1,6 +1,6 @@
 #include "Bang/UIContentSizeFitter.h"
 
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/XMLNode.h"
 #include "Bang/UIRenderer.h"
 #include "Bang/GameObject.h"

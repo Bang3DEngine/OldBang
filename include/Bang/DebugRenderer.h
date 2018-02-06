@@ -2,9 +2,9 @@
 #define DEBUGRENDERER_H
 
 #include "Bang/Set.h"
-#include "Bang/Rect.h"
 #include "Bang/Time.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/Vector3.h"
 #include "Bang/GameObject.h"
 
@@ -32,7 +32,7 @@ public:
                             float thickness = 1.0f,
                             bool depthTest = false);
 
-    static void RenderRectPx(const Rect &rect,
+    static void RenderRectPx(const AARect &rect,
                              const Color &color = Color::Green,
                              float time = 1.0f,
                              float thickness = 1.0f,
@@ -45,7 +45,7 @@ private:
         DebugRendererPrimitiveType primitive;
         Vector3 origin;
         Vector3 end;
-        Rect rectNDC;
+        AARect rectNDC;
         Color color;
         float thickness;
         double destroyTimestamp;

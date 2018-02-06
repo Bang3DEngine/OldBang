@@ -11,7 +11,7 @@ Array<TextFormatter::CharRect>
    TextFormatter::GetFormattedTextPositions(const String &content,
                                             const Font *font,
                                             int fontSize,
-                                            const Recti &limitsRect,
+                                            const AARecti &limitsRect,
                                             const Vector2 &spacingMultiplier,
                                             HorizontalAlignment hAlignment,
                                             VerticalAlignment vAlignment,
@@ -26,7 +26,7 @@ Array<TextFormatter::CharRect>
     {
         const char c = content[i];
         Vector2 size = Vector2(font->GetAtlasCharRectSize(fontSize, c));
-        Rectf charRect = Rect(Vector2(0, -size.y), Vector2(size.x, 0)) +
+        AARectf charRect = AARect(Vector2(0, -size.y), Vector2(size.x, 0)) +
                               Vector2(0, font->GetFontAscent(fontSize));
         charRects.PushBack( CharRect(c, charRect) );
     }
@@ -52,7 +52,7 @@ Array< Array<TextFormatter::CharRect> >
 TextFormatter::SplitCharRectsInLines(const String &content,
                                      const Font *font,
                                      int fontSize,
-                                     const Recti &limitsRect,
+                                     const AARecti &limitsRect,
                                      const Vector2 &spacingMult,
                                      const Array<CharRect> &charRects,
                                      bool wrapping)
@@ -150,7 +150,7 @@ Vector2 FindMinCoord(const Array<TextFormatter::CharRect>&);
 Vector2 FindMaxCoord(const Array<TextFormatter::CharRect>&);
 
 void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
-                                   const Recti &limitsRect,
+                                   const AARecti &limitsRect,
                                    const Font *font,
                                    int fontSize,
                                    HorizontalAlignment hAlignment,
@@ -212,16 +212,16 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     }
 }
 
-Rectf TextFormatter::GetCharRect(char c, const Font *font, int fontSize)
+AARectf TextFormatter::GetCharRect(char c, const Font *font, int fontSize)
 {
-    if (!font) { return Rectf::Zero; }
+    if (!font) { return AARectf::Zero; }
 
     Font::GlyphMetrics charMetrics = font->GetCharMetrics(fontSize, c);
     const Font::GlyphMetrics &cm = charMetrics;
 
     Vector2 charMin (cm.bearing.x, -(cm.size.y - cm.bearing.y));
     Vector2 charMax (cm.bearing.x + cm.size.x, cm.bearing.y);
-    return Rectf(charMin, charMax);
+    return AARectf(charMin, charMax);
 }
 
 int TextFormatter::GetCharAdvanceX(const String &content,

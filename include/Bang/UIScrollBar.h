@@ -58,7 +58,7 @@ private:
     void UpdateLengthThicknessMargins();
 
     int GetScrollingSpacePx() const;
-    Rect GetScrollingRect() const;
+    AARect GetScrollingRect() const;
     UIScrollArea *GetScrollArea() const;
     UIFocusable* GetFocusable() const;
     GameObject* GetBar() const;

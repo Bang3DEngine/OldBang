@@ -2,8 +2,8 @@
 
 #include "Bang/GL.h"
 #include "Bang/Math.h"
-#include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/AARect.h"
 #include "Bang/GEngine.h"
 #include "Bang/Texture2D.h"
 #include "Bang/ShaderProgram.h"
@@ -41,7 +41,7 @@ void GBuffer::BindAttachmentsForReading(ShaderProgram *sp)
 
 void GBuffer::ApplyPass(ShaderProgram *sp,
                         bool willReadFromColor,
-                        const Rect &mask)
+                        const AARect &mask)
 {
     if (!sp) { return; }
     ASSERT(GL::IsBound(this));
@@ -64,13 +64,13 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     GL::SetStencilOp(prevStencilOp);
 }
 
-void GBuffer::PrepareColorReadBuffer(const Rect &readNDCRect)
+void GBuffer::PrepareColorReadBuffer(const AARect &readNDCRect)
 {
     PushDrawAttachments();
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
-    Rect rf (readNDCRect * 0.5f + 0.5f);
-    Recti r ( Rect(Vector2::Floor(rf.GetMin()),
+    AARect rf (readNDCRect * 0.5f + 0.5f);
+    AARecti r ( AARect(Vector2::Floor(rf.GetMin()),
                    Vector2::Ceil(rf.GetMax())) * GetSize() );
     GL::BlitFramebuffer(r, r, GL::FilterMode::Nearest,
                         GL::BufferBit::Color);

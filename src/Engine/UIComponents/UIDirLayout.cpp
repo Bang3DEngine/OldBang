@@ -1,7 +1,7 @@
 #include "Bang/UIDirLayout.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Array.h"
+#include "Bang/AARect.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"

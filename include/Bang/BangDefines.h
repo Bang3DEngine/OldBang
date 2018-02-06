@@ -70,7 +70,7 @@ FORWARD_T  class List;
 FORWARD_T  class Array;
 
 FORWARD   class File;
-FORWARD_T class RectG;
+FORWARD_T class AARectG;
 FORWARD_T class Vector2G;
 FORWARD_T class Vector3G;
 FORWARD_T class Vector4G;
@@ -114,10 +114,10 @@ using Matrix3f    = Matrix3G<float>;
 using Matrix3d    = Matrix3G<double>;
 using Matrix3     = Matrix3f;
 
-using Rectf       = RectG<float>;
-using Rectd       = RectG<double>;
-using Recti       = RectG<int>;
-using Rect        = Rectf;
+using AARectf     = AARectG<float>;
+using AARectd     = AARectG<double>;
+using AARecti     = AARectG<int>;
+using AARect      = AARectf;
 // ======================================================
 
 // Other ================================================

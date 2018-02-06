@@ -35,7 +35,7 @@ protected:
     virtual void SetUniformsBeforeApplyingLight(Material* mat) const override;
 
     // Renderer
-    Rect GetRenderRect(Camera *cam) const override;
+    AARect GetRenderRect(Camera *cam) const override;
 };
 
 NAMESPACE_BANG_END

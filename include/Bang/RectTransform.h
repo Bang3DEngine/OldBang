@@ -63,15 +63,15 @@ public:
     const Vector2& GetPivotPosition()  const;
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
-    Rect GetViewportRect() const;
-    Rect GetViewportRectNDC() const;
-    Rect GetParentViewportRect() const;
-    Rect GetParentViewportRectNDC() const;
+    AARect GetViewportRect() const;
+    AARect GetViewportRectNDC() const;
+    AARect GetParentViewportRect() const;
+    AARect GetParentViewportRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
-    Rect    FromViewportRectNDCToLocalRectNDC(const Rect &vpRectNDC) const;
-    Rect    FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const;
+    AARect    FromViewportRectNDCToLocalRectNDC(const AARect &vpRectNDC) const;
+    AARect    FromLocalRectNDCToViewportRectNDC(const AARect &localRectNDC) const;
     Vector2 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const;
     Vector2 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const;
     Vector2 FromViewportPointToLocalPointNDC(const Vector2  &vpPoint) const;

@@ -58,7 +58,7 @@ public:
 
     // Renderer
     virtual AABox GetAABBox() const;
-    virtual Rect GetBoundingRect(Camera *camera) const;
+    virtual AARect GetBoundingRect(Camera *camera) const;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

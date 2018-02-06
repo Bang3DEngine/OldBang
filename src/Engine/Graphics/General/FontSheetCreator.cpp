@@ -3,10 +3,10 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/Math.h"
 #include "Bang/Array.h"
 #include "Bang/Debug.h"
+#include "Bang/AARect.h"
 #include "Bang/Vector2.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG
 bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
                                         Texture2D *atlasTexture,
                                         const String &charsToLoad,
-                                        Array<Recti> *imagesOutputRects,
+                                        Array<AARecti> *imagesOutputRects,
                                         int extraMargin)
 {
     if (!ttfFont) { return false; }
@@ -84,7 +84,7 @@ bool FontSheetCreator::LoadAtlasTexture(TTF_Font *ttfFont,
 
 Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
                                     int margin,
-                                    Array<Recti> *imagesOutputRects,
+                                    Array<AARecti> *imagesOutputRects,
                                     const Color &bgColor)
 {
     int maxImgWidth  = 0;
@@ -118,7 +118,7 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
         ++currentRowImages;
         penPosTopLeft.x += margin;
 
-        Recti imgRect = Recti(penPosTopLeft, penPosTopLeft + img.GetSize());
+        AARecti imgRect = AARecti(penPosTopLeft, penPosTopLeft + img.GetSize());
         if (imagesOutputRects) { imagesOutputRects->PushBack(imgRect); }
         result.Copy(img, imgRect);
 
@@ -144,7 +144,7 @@ Imageb FontSheetCreator::PackImages(const Array<Imageb> &images,
     maxPixel += Vector2i::One;
     Vector2i fittedSize = (maxPixel - minPixel);
     Imageb fittedResult(fittedSize.x, fittedSize.y);
-    fittedResult = result.GetSubImage( Recti(minPixel, maxPixel) );
+    fittedResult = result.GetSubImage( AARecti(minPixel, maxPixel) );
     fittedResult.FillTransparentPixels(bgColor);
 
     Imageb fittedResultMargined = fittedResult;

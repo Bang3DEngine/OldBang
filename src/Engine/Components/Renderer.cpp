@@ -3,8 +3,8 @@
 #include <functional>
 
 #include "Bang/GL.h"
-#include "Bang/Rect.h"
 #include "Bang/AABox.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -166,11 +166,11 @@ Material* Renderer::GetMaterial() const
     return p_material.Get();
 }
 
-Rect Renderer::GetBoundingRect(Camera *camera) const
+AARect Renderer::GetBoundingRect(Camera *camera) const
 {
-    return Rect::NDCRect;
+    return AARect::NDCRect;
     return camera ? camera->GetViewportBoundingRect(GetAABBox()) :
-                    Rect::Zero;
+                    AARect::Zero;
 }
 
 void Renderer::PropagateRendererChanged()

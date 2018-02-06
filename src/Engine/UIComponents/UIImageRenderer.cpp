@@ -77,10 +77,10 @@ void UIImageRenderer::OnTransformChanged()
     UIRenderer::OnTransformChanged();
 }
 
-Rect UIImageRenderer::GetBoundingRect(Camera *camera) const
+AARect UIImageRenderer::GetBoundingRect(Camera *camera) const
 {
-    Rect boundingRect = UIRenderer::GetBoundingRect(camera);
-    return Rect(boundingRect.GetCenter(), boundingRect.GetCenter());
+    AARect boundingRect = UIRenderer::GetBoundingRect(camera);
+    return AARect(boundingRect.GetCenter(), boundingRect.GetCenter());
 }
 
 void UIImageRenderer::CloneInto(ICloneable *clone) const
