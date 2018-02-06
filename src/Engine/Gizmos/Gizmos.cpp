@@ -167,10 +167,14 @@ void Gizmos::RenderBox(const AABox &b)
 
 void Gizmos::RenderRect(const AARect &r)
 {
-    RenderViewportLine( Vector2(r.m_min.x, r.m_min.y), Vector2(r.m_max.x, r.m_min.y) );
-    RenderViewportLine( Vector2(r.m_max.x, r.m_min.y), Vector2(r.m_max.x, r.m_max.y) );
-    RenderViewportLine( Vector2(r.m_max.x, r.m_max.y), Vector2(r.m_min.x, r.m_max.y) );
-    RenderViewportLine( Vector2(r.m_min.x, r.m_max.y), Vector2(r.m_min.x, r.m_min.y) );
+    RenderViewportLine( Vector2(r.GetMin().x, r.GetMin().y),
+                        Vector2(r.GetMax().x, r.GetMin().y) );
+    RenderViewportLine( Vector2(r.GetMax().x, r.GetMin().y),
+                        Vector2(r.GetMax().x, r.GetMax().y) );
+    RenderViewportLine( Vector2(r.GetMax().x, r.GetMax().y),
+                        Vector2(r.GetMin().x, r.GetMax().y) );
+    RenderViewportLine( Vector2(r.GetMin().x, r.GetMax().y),
+                        Vector2(r.GetMin().x, r.GetMin().y) );
 }
 
 void Gizmos::RenderFillRect(const AARect &r)
