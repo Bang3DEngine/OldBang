@@ -25,12 +25,6 @@ void UISlider::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (GetHandleFocusable()->IsBeingPressed() ||
-        GetHandleFocusable()->IsMouseOver())
-    {
-        Cursor::Set( Cursor::Type::Hand );
-    }
-
     if (GetHandleFocusable()->IsBeingPressed())
     {
         GetHandleRenderer()->SetTint( m_pressedColor );
@@ -153,7 +147,7 @@ UIImageRenderer *UISlider::GetHandleRenderer() const
     return p_handleRenderer;
 }
 
-IFocusable *UISlider::GetHandleFocusable() const
+UIFocusable *UISlider::GetHandleFocusable() const
 {
     return p_handleFocusable;
 }
@@ -204,6 +198,7 @@ UISlider *UISlider::CreateInto(GameObject *go)
     UIFocusable *handleFocusable = handleRenderer->GetGameObject()
                                    ->AddComponent<UIFocusable>();
     handleFocusable->EventEmitter<IFocusListener>::RegisterListener(slider);
+    handleFocusable->SetCursorType( Cursor::Type::Hand );
 
     guideRenderer->GetGameObject()->SetParent(sliderContainer);
     handleRenderer->GetGameObject()->SetParent(sliderContainer);

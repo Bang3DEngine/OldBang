@@ -35,6 +35,7 @@ void IFocusable::UpdateFromCanvas()
     }
 }
 
+Cursor::Type IFocusable::GetCursorType() const { return m_cursorType; }
 bool IFocusable::IsBeingPressed() const { return m_beingPressed; }
 void IFocusable::AddClickedCallback(ClickedCallback callback)
 {
@@ -55,6 +56,11 @@ bool IFocusable::IsMouseOver() const
 void IFocusable::SetFocusEnabled(bool focusEnabled)
 {
     m_focusEnabled = focusEnabled;
+}
+
+void IFocusable::SetCursorType(Cursor::Type cursorType)
+{
+    m_cursorType = cursorType;
 }
 
 void IFocusable::Click(bool doubleClick)

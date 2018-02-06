@@ -34,7 +34,7 @@ public:
     UIInputNumber *GetInputNumber() const;
     UIImageRenderer *GetGuideRenderer() const;
     UIImageRenderer *GetHandleRenderer() const;
-    IFocusable *GetHandleFocusable() const;
+    UIFocusable *GetHandleFocusable() const;
 
     const Color& GetIdleColor() const;
     const Color& GetOverColor() const;
@@ -51,7 +51,7 @@ private:
 
     UIImageRenderer *p_guideRenderer = nullptr;
     UIImageRenderer *p_handleRenderer = nullptr;
-    IFocusable *p_handleFocusable = nullptr;
+    UIFocusable *p_handleFocusable = nullptr;
     UIInputNumber *p_inputNumber = nullptr;
 
 	UISlider();

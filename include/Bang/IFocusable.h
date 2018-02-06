@@ -1,6 +1,7 @@
 ﻿#ifndef IFOCUSABLE_H
 #define IFOCUSABLE_H
 
+#include "Bang/Cursor.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IFocusListener.h"
 
@@ -12,13 +13,14 @@ public:
     bool IsMouseOver() const;
 
     void SetFocusEnabled(bool focusEnabled);
+    void SetCursorType(Cursor::Type cursorType);
 
     void Click(bool doubleClick);
     bool HasFocus() const;
     bool IsFocusEnabled() const;
     bool HasJustFocusChanged() const;
-
     bool IsBeingPressed() const;
+    Cursor::Type GetCursorType() const;
 
     using ClickedCallback = std::function<void(IFocusable*)>;
     void AddClickedCallback(ClickedCallback callback);
@@ -41,6 +43,7 @@ private:
     bool m_isMouseOver = false;
     bool m_focusEnabled = true;
     bool m_hasJustFocusChanged = false;
+    Cursor::Type m_cursorType = Cursor::Type::Arrow;
 
     Array<ClickedCallback> m_clickedCallbacks;
     Array<ClickedCallback> m_doubleClickedCallbacks;

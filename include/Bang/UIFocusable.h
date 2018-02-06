@@ -9,7 +9,7 @@ NAMESPACE_BANG_BEGIN
 class UIFocusable : public Component,
                     public IFocusable
 {
-    COMPONENT(UIFocusable)
+    COMPONENT(UIFocusable);
 
 protected:
     // IFocusable

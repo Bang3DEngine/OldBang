@@ -61,6 +61,13 @@ void UICanvas::OnUpdate()
             }
         }
     }
+    SetFocusMouseOver(focusMouseOver); // Set Focus mouse over and cursor
+
+    // Reset focus when clicking out of everything
+    if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
+    {
+        SetFocus(nullptr);
+    }
 
     // Create list of focusables, and track those destroyed. For this, we create
     // a helper class which implements IDestroyListener
@@ -83,19 +90,6 @@ void UICanvas::OnUpdate()
                          RegisterListener(&destroyedFocusables);
         }
         focusables.PushBack(focusable);
-    }
-
-    // Reset focus when clicking out of everything
-    if (Input::GetMouseButtonDown(MouseButton::Left) && !focusMouseOver)
-    {
-        SetFocus(nullptr);
-    }
-    SetFocusMouseOver(focusMouseOver);
-
-    // Reset cursor type on mouse up
-    if (Input::GetMouseButtonUp(MouseButton::Left))
-    {
-        Cursor::Set(Cursor::Type::Arrow);
     }
 
     // Tabbing
@@ -184,8 +178,6 @@ void UICanvas::SetFocusMouseOver(IFocusable *_newFocusableMO)
 
     if (newFocusableMO != GetCurrentFocusMouseOver())
     {
-        Cursor::Set(Cursor::Type::Arrow); // Reset cursor type
-
         if (GetCurrentFocusMouseOver())
         {
             Object *focusableMOObj = Cast<Object*>( GetCurrentFocusMouseOver() );
@@ -193,6 +185,7 @@ void UICanvas::SetFocusMouseOver(IFocusable *_newFocusableMO)
             { focusableMOObj->EventEmitter<IDestroyListener>::UnRegisterListener(this); }
 
             GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(false);
+            Cursor::Set(Cursor::Type::Arrow);
         }
 
         p_currentFocusMouseOver = newFocusableMO;
@@ -201,6 +194,8 @@ void UICanvas::SetFocusMouseOver(IFocusable *_newFocusableMO)
             Object *focusableMOObj = Cast<Object*>( GetCurrentFocusMouseOver() );
             focusableMOObj->EventEmitter<IDestroyListener>::RegisterListener(this);
             GetCurrentFocusMouseOver()->PropagateMouseOverToListeners(true);
+
+            Cursor::Set(GetCurrentFocusMouseOver()->GetCursorType());
         }
     }
 }

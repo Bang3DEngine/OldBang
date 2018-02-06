@@ -2,6 +2,7 @@
 
 #include "Bang/Font.h"
 #include "Bang/Input.h"
+#include "Bang/Cursor.h"
 #include "Bang/UICanvas.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIRectMask.h"
@@ -202,7 +203,10 @@ void UILabel::SetFocusable(IFocusable *focusable)
     if (GetFocusable() != this) { this->SetFocusEnabled(false); }
 
     if (GetFocusable())
-    { GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this); }
+    {
+        GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this);
+        GetFocusable()->SetCursorType( Cursor::Type::IBeam );
+    }
 }
 
 void UILabel::OnFocusTaken(IFocusable *focusable)

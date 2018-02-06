@@ -56,11 +56,6 @@ void UIInputText::OnUpdate()
         UpdateCursorRenderer();
     }
 
-    if ( canvas->IsMouseOver( GetLabel() ) || canvas->IsMouseOver(this) )
-    {
-        Cursor::Set(Cursor::Type::IBeam);
-    }
-
     p_cursor->SetEnabled(hasFocus);
 }
 

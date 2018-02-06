@@ -52,11 +52,17 @@ void UIButton::OnUpdate()
             else { GetBackground()->SetTint(UIButton::IdleColor); }
         }
 
-        if (over || pressed) { Cursor::Set( Cursor::Type::Hand ); }
+        if (over || pressed)
+        {
+            GetFocusable()->SetCursorType( Cursor::Type::Hand );
+        }
     }
     else
     {
-        if (GetFocusable()->IsMouseOver()) { Cursor::Set( Cursor::Type::No ); }
+        if (GetFocusable()->IsMouseOver())
+        {
+            GetFocusable()->SetCursorType( Cursor::Type::No );
+        }
         GetBackground()->SetTint(UIButton::BlockedColor);
     }
 }
