@@ -37,8 +37,11 @@ void UIImageRenderer::OnRender()
 
 void UIImageRenderer::SetImageTexture(const Path &imagePath)
 {
-    RH<Texture2D> tex = Resources::Load<Texture2D>(imagePath);
-    SetImageTexture(tex.Get());
+    if (imagePath.IsFile())
+    {
+        RH<Texture2D> tex = Resources::Load<Texture2D>(imagePath);
+        SetImageTexture(tex.Get());
+    }
 }
 
 void UIImageRenderer::SetImageTexture(Texture2D* imageTexture)
@@ -54,13 +57,14 @@ void UIImageRenderer::SetTint(const Color &tint)
 {
     if (tint != GetTint())
     {
-        GetMaterial()->SetDiffuseColor(tint);
+        m_tint = tint;
+        GetMaterial()->SetDiffuseColor( GetTint() );
     }
 }
 
 const Color &UIImageRenderer::GetTint() const
 {
-    return GetMaterial()->GetDiffuseColor();
+    return m_tint;
 }
 
 Texture2D *UIImageRenderer::GetImageTexture() const
@@ -84,6 +88,7 @@ void UIImageRenderer::CloneInto(ICloneable *clone) const
     UIRenderer::CloneInto(clone);
     UIImageRenderer *img = Cast<UIImageRenderer*>(clone);
     img->SetImageTexture( GetImageTexture() );
+    img->SetTint( GetTint() );
 }
 
 void UIImageRenderer::ImportXML(const XMLNode &xmlInfo)

@@ -42,6 +42,7 @@ public:
 
 private:
     RH<Mesh> p_quadMesh;
+    Color m_tint = Color::White;
     RH<Texture2D> p_imageTexture;
 };
 
