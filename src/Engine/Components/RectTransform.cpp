@@ -26,14 +26,15 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    /*
     return (GetLocalToWorldMatrix().Inversed() *
-            Vector4(GL::FromViewportPointNDCToViewportPoint(vpPoint), 0, 1)).
-           xy();*/
-    AARect parentVpRect( GetParentViewportRect() );
+            Vector4(GL::FromViewportPointToViewportPointNDC(vpPoint), 0, 1)).
+           xy();
+    /*
+    Rect parentVpRect = GetParentViewportRect();
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentVpRect.GetSize());
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
     return Vector2f(vpPoint - parentVpRect.GetMin()) * pixelNDCSize - 1.0f;
+    */
     // return (GetLocalToWorldMatrix().Inversed() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
@@ -44,7 +45,7 @@ FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
 
 Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const
 {
-    AARect parentWinRect( GetParentViewportRect() );
+    Rect parentWinRect = GetParentViewportRect();
     Vector2 parentSizePxVp = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountToAmountNDC( Vector2(vpAmount) , parentSizePxVp );
 }
@@ -70,7 +71,7 @@ FromWindowAmountToLocalAmountNDC(const Vector2i &winAmount) const
 Vector2 RectTransform::
 FromLocalAmountNDCToViewportAmount(const Vector2 &localAmountNDC) const
 {
-    AARect parentWinRect( GetParentViewportRect() );
+    Rect parentWinRect = GetParentViewportRect();
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentWinRect.GetSize());
     return GL::FromAmountNDCToAmount(localAmountNDC, parentSizePx);
 }
@@ -406,7 +407,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
 {
     if (!Input::IsMouseInsideWindow()) { return false; }
 
-    if (!IsWaitingToBeDestroyed() && IsEnabled() &&
+    if (IsActive() && GetGameObject()->IsActive() &&
         GetViewportRectNDC().Contains( Input::GetMousePositionWindowNDC() ))
     {
         return true;

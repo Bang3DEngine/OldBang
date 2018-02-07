@@ -102,15 +102,17 @@ public:
 
     bool Contains(const Vector2G<T> &point) const
     {
-        Vector2G<T> p0, p1, _, p3; GetPoints(&p0, &p1, &_, &p3);
-        Vector2G<T> P_P0  = (point-p0);
-        Vector2G<T> P0_P1 = (p1-p0);
-        Vector2G<T> P0_P3 = (p1-p3);
-        T d1 = Vector2G<T>::Dot(P_P0,  P0_P1);
-        T d2 = Vector2G<T>::Dot(P0_P1, P0_P1);
-        T d3 = Vector2G<T>::Dot(P_P0,  P0_P3);
-        T d4 = Vector2G<T>::Dot(P0_P3, P0_P3);
-        return (0 < d1 && d1 < d2) && (0 < d3 && d3 < d4);
+        Vector2G<T> a, b, c, d;
+        GetPoints(&a, &b, &c, &d);
+
+        const Vector2G<T> e = (b - a);
+        const Vector2G<T> f = (d - a);
+        if ((point.x - a.x)*e.x + (point.y - a.y)*e.y <= 0.0) { return false; }
+        if ((point.x - b.x)*e.x + (point.y - b.y)*e.y >= 0.0) { return false; }
+        if ((point.x - a.x)*f.x + (point.y - a.y)*f.y <= 0.0) { return false; }
+        if ((point.x - d.x)*f.x + (point.y - d.y)*f.y >= 0.0) { return false; }
+
+        return true;
     }
 
     void GetPoints(Vector2G<T> *p0,
