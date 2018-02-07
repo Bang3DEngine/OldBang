@@ -1,6 +1,7 @@
 #include "Bang/UIRendererCacher.h"
 
 #include "Bang/GL.h"
+#include "Bang/Rect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"

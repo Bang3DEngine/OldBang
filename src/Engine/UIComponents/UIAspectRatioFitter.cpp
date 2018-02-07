@@ -1,5 +1,6 @@
 #include "Bang/UIAspectRatioFitter.h"
 
+#include "Bang/Rect.h"
 #include "Bang/AARect.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"

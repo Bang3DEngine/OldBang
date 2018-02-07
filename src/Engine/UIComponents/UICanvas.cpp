@@ -1,5 +1,6 @@
 #include "Bang/UICanvas.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/AARect.h"

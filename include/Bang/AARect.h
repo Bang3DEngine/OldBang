@@ -1,7 +1,6 @@
 #ifndef AARECT_H
 #define AARECT_H
 
-#include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector4.h"
@@ -117,9 +116,9 @@ public:
     static AARectG<T> Union(const AARectG<T> &r1, const AARectG<T> &r2)
     {
         return AARectG<T>(Math::Min(r1.GetMin().x, r2.GetMin().x),
-                        Math::Min(r1.GetMin().y, r2.GetMin().y),
-                        Math::Max(r1.GetMax().x, r2.GetMax().x),
-                        Math::Max(r1.GetMax().y, r2.GetMax().y));
+                          Math::Min(r1.GetMin().y, r2.GetMin().y),
+                          Math::Max(r1.GetMax().x, r2.GetMax().x),
+                          Math::Max(r1.GetMax().y, r2.GetMax().y));
     }
 
     template <class Iterator>

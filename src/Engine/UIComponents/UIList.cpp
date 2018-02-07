@@ -1,5 +1,6 @@
 #include "Bang/UIList.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/AARect.h"
 #include "Bang/Material.h"

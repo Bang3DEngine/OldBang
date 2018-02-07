@@ -1,6 +1,7 @@
 #include "Bang/RectTransform.h"
 
 #include "Bang/GL.h"
+#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
@@ -327,27 +328,20 @@ const Vector2& RectTransform::GetPivotPosition() const { return m_pivotPosition;
 const Vector2& RectTransform::GetAnchorMin() const { return m_anchorMin; }
 const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
-AARect RectTransform::GetViewportRectNDC() const
+Rect RectTransform::GetViewportRectNDC() const
 {
-    return GetLocalToWorldMatrix() * AARect::NDCRect;
-    // return GetLocalToWorldMatrix() * Rect::NDCRect;
+    return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
 Rect RectTransform::GetViewportRect() const
 {
-    // Debug_Peek(GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() ).ToRect());
-    // Debug_Peek(GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC().ToRect() ));
-    // return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() ).ToRect();
-    return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC().ToRect() );
-    // Debug_Peek(GetLocalToWorldMatrix() * AARect(GL::GetViewportRect()));
-    // Debug_Peek(GetLocalToWorldMatrix() * Rect(GL::GetViewportRect().ToRect()));
-    // return GetLocalToWorldMatrix() * AARect(GL::GetViewportRect().ToRect());
+    return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
 }
 
 AARect RectTransform::GetParentViewportRectNDC() const
 {
     GameObject *parent = GetGameObject()->GetParent();
     if (!parent || !parent->GetRectTransform()) { return AARect::NDCRect; }
-    return parent->GetRectTransform()->GetViewportRectNDC();
+    return AARect( parent->GetRectTransform()->GetViewportRectNDC() );
 }
 AARect RectTransform::GetParentViewportRect() const
 {

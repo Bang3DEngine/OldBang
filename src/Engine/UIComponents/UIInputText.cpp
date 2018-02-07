@@ -2,6 +2,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Font.h"
+#include "Bang/Rect.h"
 #include "Bang/Time.h"
 #include "Bang/Input.h"
 #include "Bang/Cursor.h"

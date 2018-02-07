@@ -1,5 +1,6 @@
 #include "Bang/UIScrollPanel.h"
 
+#include "Bang/Rect.h"
 #include "Bang/Input.h"
 #include "Bang/Color.h"
 #include "Bang/AARect.h"

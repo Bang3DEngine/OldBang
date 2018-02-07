@@ -65,7 +65,7 @@ public:
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
     Rect GetViewportRect() const;
-    AARect GetViewportRectNDC() const;
+    Rect GetViewportRectNDC() const;
     AARect GetParentViewportRect() const;
     AARect GetParentViewportRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;

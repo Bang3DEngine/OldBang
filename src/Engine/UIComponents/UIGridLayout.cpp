@@ -1,5 +1,6 @@
 #include "Bang/UIGridLayout.h"
 
+#include "Bang/Rect.h"
 #include "Bang/AARect.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"

@@ -127,7 +127,7 @@ public:
                    Vector2G<T> *opposedP1) const
     {
         GetPoints(p0, p1, opposedP0);
-        *opposedP1 = GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
+        *opposedP1 = GetCenter() + Vector2G<T>(+GetHalfSize(0), -GetHalfSize(1));
     }
 
     std::array<Vector2G<T>, 4> GetPoints() const
@@ -167,7 +167,7 @@ public:
 template<class T>
 const RectG<T> RectG<T>::NDCRect = RectG<T>(Vector2G<T>(0),
                                             Vector2G<T>(1, 0),
-                                            2, 2);
+                                            1, 1);
 
 template<class T>
 const RectG<T> RectG<T>::Zero = RectG<T>(Vector2G<T>(0), Vector2G<T>(0), 0, 0);
@@ -322,7 +322,7 @@ RectG<T> operator-(const RectG<T> &r, const Vector2G<T> &v)
     return RectG<T>(r.GetCorner() - v,
                     r.GetAxis(0),
                     r.GetHalfSize(0) - v[0],
-                    r.GetHalfSize(1) - v[0]);
+                    r.GetHalfSize(1) - v[1]);
 }
 
 template<class T>

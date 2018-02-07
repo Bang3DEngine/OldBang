@@ -1,6 +1,7 @@
 #include "Bang/UIRectMask.h"
 
 #include "Bang/GL.h"
+#include "Bang/Rect.h"
 #include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/RectTransform.h"
