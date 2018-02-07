@@ -149,6 +149,8 @@ bool Application::MainLoopIteration()
         Window::SetActive(nullptr);
     }
 
+    Thread::SleepCurrentThread(0.01f);
+
     return exit;
 }
 

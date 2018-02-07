@@ -896,7 +896,7 @@ Vector2i GL::GetViewportSize()
 float GL::GetViewportAspectRatio()
 {
     Vector2i vpSize = GL::GetViewportSize();
-    return SCAST<float>(vpSize.x) / vpSize.y;
+    return SCAST<float>(vpSize.x) / Math::Max(vpSize.y, 1);
 }
 
 Vector2 GL::GetViewportPixelSize()
@@ -1215,14 +1215,14 @@ Rect GL::FromViewportRectToViewportRectNDC(const Rect &vpRect)
 {
     return Rect( FromViewportPointToViewportPointNDC(vpRect.GetCenter()),
                  vpRect.GetAxis(0),
-                 FromViewportPointToViewportPointNDC(vpRect.GetHalfSize()));
+                 FromViewportAmountToViewportAmountNDC(vpRect.GetHalfSize()));
 }
 
 Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
 {
     return Rect( FromViewportPointNDCToViewportPoint(vpRectNDC.GetCenter()),
                  vpRectNDC.GetAxis(0),
-                 FromViewportPointNDCToViewportPoint(vpRectNDC.GetHalfSize()));
+                 FromViewportAmountNDCToViewportAmount(vpRectNDC.GetHalfSize()));
 }
 
 Rect GL::FromWindowRectToWindowRectNDC(const Rect &winRect)
@@ -1295,7 +1295,7 @@ Vector2 GL::FromWindowPointToWindowPointNDC(const Vector2i &winPoint)
 
 Vector2 GL::FromViewportPointToViewportPointNDC(const Vector2 &vpPoint)
 {
-    Vector2i vpSize( GL::GetViewportSize() );
+    Vector2i vpSize = Vector2i::Max( Vector2i::One, GL::GetViewportSize() );
     Vector2 res = GL::FromPointToPointNDC(vpPoint, Vector2(vpSize));
     return res;
 }

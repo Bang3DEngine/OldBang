@@ -16,6 +16,7 @@ FORWARD    class Color;
 FORWARD_T  class Array;
 FORWARD_T  class RectG;
 FORWARD    class String;
+FORWARD_T  class AARectG;
 FORWARD    class ObjectId;
 FORWARD_T  class Vector2G;
 FORWARD_T  class Vector3G;
@@ -69,6 +70,16 @@ std::ostream& operator<<(std::ostream &log, const AARectG<T> &r)
                   r.GetMax() << ")";
     return log;
 }
+template<class T>
+std::ostream& operator<<(std::ostream &log, const RectG<T> &r)
+{
+    log << "(" << r.GetPoints()[0] << ", " <<
+                  r.GetPoints()[1] << ", " <<
+                  r.GetPoints()[2] << ", " <<
+                  r.GetPoints()[3] << ")";
+    return log;
+}
+
 
 template<class T>
 std::ostream& operator<<(std::ostream &log, const Matrix3G<T> &m)

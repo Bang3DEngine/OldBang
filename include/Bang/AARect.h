@@ -172,6 +172,15 @@ public:
         return AARectG<T>(minv, maxv);
     }
 
+    template <class OtherT = T>
+    RectG<OtherT> ToRect() const
+    {
+        return RectG<OtherT>(Vector2G<OtherT>(GetCenter()),
+                             Vector2G<OtherT>::Right,
+                             SCAST<OtherT>(GetWidth()  * 0.5),
+                             SCAST<OtherT>(GetHeight() * 0.5));
+    }
+
     template<class S> friend bool operator==(const AARectG<S> &r1, const AARectG<S> &r2);
     template<class S> friend bool operator!=(const AARectG<S> &r1, const AARectG<S> &r2);
     template<class S> friend void operator*=(AARectG<S> &r, S a);

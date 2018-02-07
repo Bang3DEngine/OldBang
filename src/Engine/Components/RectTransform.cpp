@@ -50,8 +50,9 @@ Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmou
 
 Vector2 RectTransform::FromWindowAmountToLocalAmountNDC(const Vector2 &winAmount) const
 {
-    Vector2 winViewportProportion = (Vector2(Window::GetActive()->GetSize()) /
-                                        Vector2(GL::GetViewportSize()));
+    Vector2 winViewportProportion =
+       (Vector2(Window::GetActive()->GetSize()) /
+        Vector2::Max(Vector2::One, Vector2(GL::GetViewportSize())) );
     Vector2 amount = winAmount * winViewportProportion;
     return FromViewportAmountToLocalAmountNDC(amount);
 }
@@ -331,32 +332,22 @@ AARect RectTransform::GetViewportRectNDC() const
     return GetLocalToWorldMatrix() * AARect::NDCRect;
     // return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
-AARect RectTransform::GetViewportRect() const
+Rect RectTransform::GetViewportRect() const
 {
-    return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
-    // return GetLocalToWorldMatrix() * AARect::NDCRect;
+    // Debug_Peek(GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() ).ToRect());
+    // Debug_Peek(GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC().ToRect() ));
+    // return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() ).ToRect();
+    return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC().ToRect() );
+    // Debug_Peek(GetLocalToWorldMatrix() * AARect(GL::GetViewportRect()));
+    // Debug_Peek(GetLocalToWorldMatrix() * Rect(GL::GetViewportRect().ToRect()));
+    // return GetLocalToWorldMatrix() * AARect(GL::GetViewportRect().ToRect());
 }
 
 AARect RectTransform::GetParentViewportRectNDC() const
 {
-    AARect parentWindowRectNDC = AARect::NDCRect;
     GameObject *parent = GetGameObject()->GetParent();
-    RectTransform *parentRectTransform = parent ? parent->GetRectTransform() :
-                                                  nullptr;
-    if (parentRectTransform)
-    {
-        parentWindowRectNDC = parentRectTransform->GetViewportRectNDC();
-    }
-    return parentWindowRectNDC;
-
-    /*
-    if (!GetGameObject()->GetParent() ||
-        !GetGameObject()->GetParent()->GetRectTransform())
-    {
-        return Rect::NDCRect;
-    }
-    return GetGameObject()->GetParent()->GetRectTransform()->GetViewportRectNDC();
-    */
+    if (!parent || !parent->GetRectTransform()) { return AARect::NDCRect; }
+    return parent->GetRectTransform()->GetViewportRectNDC();
 }
 AARect RectTransform::GetParentViewportRect() const
 {
@@ -373,13 +364,13 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Vector2 maxMarginedAnchor (GetAnchorMax() -
                                FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-
     Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0 );
 
-    Matrix4 scaleToAnchorsMat    = Matrix4::ScaleMatrix(anchorScaling);
+    Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
     Matrix4f rotation = Matrix4f::Identity;
+    /*
     if (GetLocalRotation() != Quaternion::Identity)
     {
         Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
@@ -401,6 +392,7 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
                      translateToPivotMatrix                          *
                    aspectRatio;
     }
+    */
 
     m_localToParentMatrix = translateToAnchorCenterMat *
                             scaleToAnchorsMat *

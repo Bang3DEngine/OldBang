@@ -267,14 +267,14 @@ public:
                                    Real zNear,
                                    Real zFar)
     {
-        float const tanHalfFovy = Math::Tan(fovYRads / Cast<T>(2));
+        float const tanHalfFovy = Math::Tan(fovYRads / SCAST<T>(2));
 
         Matrix4G<T> res(0);
-        res[0][0] = Cast<T>(1) / (aspect * tanHalfFovy);
-        res[1][1] = Cast<T>(1) / (tanHalfFovy);
+        res[0][0] = SCAST<T>(1) / (aspect * tanHalfFovy);
+        res[1][1] = SCAST<T>(1) / (tanHalfFovy);
         res[2][2] = -(zFar + zNear) / (zFar - zNear);
-        res[2][3] = -Cast<T>(1);
-        res[3][2] = -(Cast<T>(2) * zFar * zNear) / (zFar - zNear);
+        res[2][3] = -SCAST<T>(1);
+        res[3][2] = -(SCAST<T>(2) * zFar * zNear) / (zFar - zNear);
 
         return res;
     }
@@ -285,9 +285,9 @@ public:
                              Real zNear,  Real zFar)
     {
         Matrix4G<T> res(1);
-        res[0][0] = Cast<T>(2) / (right - left);
-        res[1][1] = Cast<T>(2) / (top - bottom);
-        res[2][2] = -Cast<T>(2) / (zFar - zNear);
+        res[0][0] = SCAST<T>(2) / (right - left);
+        res[1][1] = SCAST<T>(2) / (top - bottom);
+        res[2][2] = -SCAST<T>(2) / (zFar - zNear);
         res[3][0] = -(right + left) / (right - left);
         res[3][1] = -(top + bottom) / (top - bottom);
         res[3][2] = -(zFar + zNear) / (zFar - zNear);

@@ -269,6 +269,13 @@ Matrix4 Camera::GetProjectionMatrix() const
 {
     if (m_projMode == ProjectionMode::Perspective)
     {
+        if (GL::GetViewportAspectRatio() == 0.0 ||
+            GetFovDegrees() == 0.0 ||
+            GetZNear() == GetZFar())
+        {
+            return Matrix4::Identity;
+        }
+
         return Matrix4::Perspective(Math::DegToRad(GetFovDegrees()),
                                     GL::GetViewportAspectRatio(),
                                     GetZNear(), GetZFar());

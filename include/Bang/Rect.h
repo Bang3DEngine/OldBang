@@ -31,7 +31,15 @@ public:
     {
         SetCenter(center);
         SetAxis(axis0);
-        SetHalfSize(halfSizeAxis0, halfSizeAxis1);
+        SetHalfSizes(halfSizeAxis0, halfSizeAxis1);
+    }
+
+    template<class OtherT>
+    explicit RectG(const RectG<OtherT> &r)
+    {
+        SetCenter(Vector2G<T>(r.GetCenter()));
+        SetAxis(Vector2G<T>(r.GetAxis(0)));
+        SetHalfSizes(SCAST<T>(r.GetHalfSize(0)), SCAST<T>(r.GetHalfSize(1)));
     }
 
     RectG(const Vector2G<T> &center,
@@ -57,7 +65,7 @@ public:
         else if (i == 1) { m_halfSizeAxis1 = halfSize; }
     }
 
-    void SetHalfSize(const T &halfSizeAxis0, const T &halfSizeAxis1)
+    void SetHalfSizes(const T &halfSizeAxis0, const T &halfSizeAxis1)
     {
         SetHalfSize(0, halfSizeAxis0);
         SetHalfSize(1, halfSizeAxis1);

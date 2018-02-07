@@ -64,7 +64,7 @@ public:
     const Vector2& GetPivotPosition()  const;
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
-    AARect GetViewportRect() const;
+    Rect GetViewportRect() const;
     AARect GetViewportRectNDC() const;
     AARect GetParentViewportRect() const;
     AARect GetParentViewportRectNDC() const;
