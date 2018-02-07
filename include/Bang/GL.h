@@ -484,6 +484,8 @@ public:
     static AARect   FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
     static AARect   FromWindowRectToWindowRectNDC(const AARect &winRect);
     static AARect   FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
+    static Vector2  FromWindowAmountToWindowAmountNDC(const Vector2 &winAmount);
+    static Vector2  FromWindowAmountNDCToWindowAmount(const Vector2 &winAmountNDC);
     static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
     static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
     static Vector2  FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);

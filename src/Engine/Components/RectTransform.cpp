@@ -26,6 +26,10 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
+    /*
+    return (GetLocalToWorldMatrix().Inversed() *
+            Vector4(GL::FromViewportPointNDCToViewportPoint(vpPoint), 0, 1)).
+           xy();*/
     AARect parentVpRect( GetParentViewportRect() );
     Vector2 parentSizePx = Vector2::Max(Vector2::One, parentVpRect.GetSize());
     Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
@@ -337,13 +341,13 @@ Rect RectTransform::GetViewportRect() const
     return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
 }
 
-AARect RectTransform::GetParentViewportRectNDC() const
+Rect RectTransform::GetParentViewportRectNDC() const
 {
     GameObject *parent = GetGameObject()->GetParent();
-    if (!parent || !parent->GetRectTransform()) { return AARect::NDCRect; }
-    return AARect( parent->GetRectTransform()->GetViewportRectNDC() );
+    if (!parent || !parent->GetRectTransform()) { return Rect::NDCRect; }
+    return parent->GetRectTransform()->GetViewportRectNDC();
 }
-AARect RectTransform::GetParentViewportRect() const
+Rect RectTransform::GetParentViewportRect() const
 {
     return GL::FromWindowRectNDCToWindowRect( GetParentViewportRectNDC() );
 }

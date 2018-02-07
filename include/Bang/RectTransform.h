@@ -66,8 +66,8 @@ public:
     const Vector2& GetAnchorMax() const;
     Rect GetViewportRect() const;
     Rect GetViewportRectNDC() const;
-    AARect GetParentViewportRect() const;
-    AARect GetParentViewportRectNDC() const;
+    Rect GetParentViewportRect() const;
+    Rect GetParentViewportRectNDC() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
