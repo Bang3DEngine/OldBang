@@ -21,16 +21,10 @@ class Transform : public Component,
     COMPONENT(Transform)
 
 public:
-    virtual const Matrix4& GetLocalToParentMatrix() const;
-
-    void LookAt(const Vector3 &target,
-                const Vector3 &up = Vector3::Up);
-    void LookAt(Transform *targetTransform,
-                const Vector3 &up = Vector3::Up);
-    void LookAt(GameObject *target,
-                const Vector3 &up = Vector3::Up);
-    void LookInDirection(const Vector3 &dir,
-                         const Vector3 &up = Vector3::Up);
+    void LookAt(const Vector3 &target, const Vector3 &up = Vector3::Up);
+    void LookAt(Transform *targetTransform, const Vector3 &up = Vector3::Up);
+    void LookAt(GameObject *target, const Vector3 &up = Vector3::Up);
+    void LookInDirection(const Vector3 &dir, const Vector3 &up = Vector3::Up);
 
     void SetLocalPosition(const Vector3 &p);
     void SetPosition(const Vector3 &p);
@@ -69,7 +63,10 @@ public:
     Vector3 FromWorldToLocalVector(const Vector3 &vector) const;
     Vector3 FromWorldToLocalDirection(const Vector3 &dir) const;
 
+    const Matrix4& GetLocalToParentMatrix() const;
+    const Matrix4& GetLocalToParentMatrixInv() const;
     const Matrix4& GetLocalToWorldMatrix() const;
+    const Matrix4& GetLocalToWorldMatrixInv() const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;
@@ -111,19 +108,25 @@ public:
 
 protected:
     mutable Matrix4 m_localToWorldMatrix;
+    mutable Matrix4 m_localToWorldMatrixInv;
     mutable Matrix4 m_localToParentMatrix;
+    mutable Matrix4 m_localToParentMatrixInv;
     mutable bool m_invalidLocalToWorldMatrix = true;
 
     Transform();
     virtual ~Transform();
 
     virtual bool CanBeRepeatedInGameObject() const override;
-    void RecalculateLocalToWorldMatrix() const;
 
 private:
     Vector3    m_localPosition  = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;
+
+    void RecalculateParentMatricesIfNeeded() const;
+    void RecalculateWorldMatricesIfNeeded() const;
+    virtual void CalculateLocalToParentMatrix() const;
+    virtual void CalculateLocalToWorldMatrix() const;
 
     void PropagateParentTransformChangedEventToChildren() const;
     void PropagateChildrenTransformChangedEventToParent() const;

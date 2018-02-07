@@ -31,6 +31,7 @@ public:
     void ForceCheckNow();
     void SetCheckFrequencySeconds(float checkFrequencySeconds);
 
+    bool NeedsCheck() const;
     float GetCheckFrequencySeconds() const;
 
 private:

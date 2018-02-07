@@ -107,10 +107,10 @@ public:
 
         const Vector2G<T> e = (b - a);
         const Vector2G<T> f = (d - a);
-        if ((point.x - a.x)*e.x + (point.y - a.y)*e.y <= 0.0) { return false; }
-        if ((point.x - b.x)*e.x + (point.y - b.y)*e.y >= 0.0) { return false; }
-        if ((point.x - a.x)*f.x + (point.y - a.y)*f.y <= 0.0) { return false; }
-        if ((point.x - d.x)*f.x + (point.y - d.y)*f.y >= 0.0) { return false; }
+        if ((point.x - a.x)*e.x + (point.y - a.y)*e.y < 0.0) { return false; }
+        if ((point.x - b.x)*e.x + (point.y - b.y)*e.y > 0.0) { return false; }
+        if ((point.x - a.x)*f.x + (point.y - a.y)*f.y < 0.0) { return false; }
+        if ((point.x - d.x)*f.x + (point.y - d.y)*f.y > 0.0) { return false; }
 
         return true;
     }

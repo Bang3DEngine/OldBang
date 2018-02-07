@@ -141,7 +141,7 @@ Vector3 Transform::TransformPoint(const Vector3 &point) const
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
-    return (GetLocalToWorldMatrix().Inversed() * Vector4(point, 1)).xyz();
+    return (GetLocalToWorldMatrixInv() * Vector4(point, 1)).xyz();
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
@@ -157,7 +157,7 @@ Vector3 Transform::TransformVector(const Vector3 &dir) const
 }
 Vector3 Transform::InverseTransformVector(const Vector3 &dir) const
 {
-    return (GetLocalToWorldMatrix().Inversed() * Vector4(dir, 0)).xyz();
+    return (GetLocalToWorldMatrixInv() * Vector4(dir, 0)).xyz();
 }
 
 Vector3 Transform::FromLocalToWorldPoint(const Vector3 &point) const
@@ -187,23 +187,37 @@ Vector3 Transform::FromWorldToLocalDirection(const Vector3 &dir) const
     return InverseTransformDirection(dir);
 }
 
-const Matrix4 &Transform::GetLocalToParentMatrix() const
-{
-    if (!IsInvalid()) { return m_localToParentMatrix; }
+bool Transform::CanBeRepeatedInGameObject() const { return false; }
 
+void Transform::RecalculateParentMatricesIfNeeded() const
+{
+    if (IsInvalid())
+    {
+        CalculateLocalToParentMatrix();
+        Validate();
+    }
+}
+
+void Transform::RecalculateWorldMatricesIfNeeded() const
+{
+    if (m_invalidLocalToWorldMatrix)
+    {
+        CalculateLocalToWorldMatrix();
+        m_invalidLocalToWorldMatrix = false;
+    }
+}
+
+void Transform::CalculateLocalToParentMatrix() const
+{
     Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
     m_localToParentMatrix = (T * R * S);
-    Validate();
-
-    return m_localToParentMatrix;
+    m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
 }
 
-bool Transform::CanBeRepeatedInGameObject() const { return false; }
-
-void Transform::RecalculateLocalToWorldMatrix() const
+void Transform::CalculateLocalToWorldMatrix() const
 {
     const Matrix4 &m = GetLocalToParentMatrix();
     if (GetGameObject()->GetParent() &&
@@ -213,16 +227,35 @@ void Transform::RecalculateLocalToWorldMatrix() const
           GetGameObject()->GetParent()->GetTransform()->GetLocalToWorldMatrix();
         m_localToWorldMatrix = mp * m;
     }
-    else { m_localToWorldMatrix = m; }
+    else
+    {
+        m_localToWorldMatrix = m;
+    }
+    m_localToWorldMatrixInv = m_localToWorldMatrix.Inversed();
+}
 
-    m_invalidLocalToWorldMatrix = false;
+const Matrix4 &Transform::GetLocalToParentMatrix() const
+{
+    RecalculateParentMatricesIfNeeded();
+    return m_localToParentMatrix;
+}
+
+const Matrix4 &Transform::GetLocalToParentMatrixInv() const
+{
+    RecalculateParentMatricesIfNeeded();
+    return m_localToParentMatrixInv;
 }
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
 {
-    // m_invalidLocalToWorldMatrix = true;
-    if (m_invalidLocalToWorldMatrix) { RecalculateLocalToWorldMatrix(); }
+    RecalculateWorldMatricesIfNeeded();
     return m_localToWorldMatrix;
+}
+
+const Matrix4 &Transform::GetLocalToWorldMatrixInv() const
+{
+    RecalculateWorldMatricesIfNeeded();
+    return m_localToWorldMatrixInv;
 }
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)

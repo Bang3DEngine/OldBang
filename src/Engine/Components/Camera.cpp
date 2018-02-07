@@ -257,7 +257,7 @@ float Camera::GetOrthoWidth() const
 Matrix4 Camera::GetViewMatrix() const
 {
     Transform *tr = GetGameObject()->GetTransform();
-    return tr->GetLocalToWorldMatrix().Inversed();
+    return tr->GetLocalToWorldMatrixInv();
 }
 
 bool Camera::GetRenderSelectionBuffer() const

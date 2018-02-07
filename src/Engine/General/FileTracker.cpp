@@ -54,11 +54,7 @@ void FileTracker::Clear()
 
 void FileTracker::Update()
 {
-    float passedSecondsSinceLastCheck = (Time::GetNow_Seconds() - m_lastCheckTime);
-    if (passedSecondsSinceLastCheck > GetCheckFrequencySeconds())
-    {
-        ForceCheckNow();
-    }
+    if (NeedsCheck()) { ForceCheckNow(); }
 }
 
 void FileTracker::ForceCheckNow()
@@ -105,6 +101,12 @@ void FileTracker::ForceCheckNow()
 void FileTracker::SetCheckFrequencySeconds(float checkFrequencySeconds)
 {
     m_checkFrequencySeconds = checkFrequencySeconds;
+}
+
+bool FileTracker::NeedsCheck() const
+{
+    float passedSecondsSinceLastCheck = (Time::GetNow_Seconds() - m_lastCheckTime);
+    return (passedSecondsSinceLastCheck > GetCheckFrequencySeconds());
 }
 
 float FileTracker::GetCheckFrequencySeconds() const

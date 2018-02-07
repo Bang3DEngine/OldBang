@@ -111,7 +111,7 @@ Window *Application::GetMainWindow()
 int Application::MainLoop()
 {
     #ifdef GPROF
-    Path profileOutFile = Paths::ExecutablePath().GetDirectory().Append("profiling_info.out");
+    Path profileOutFile = Paths::GetExecutablePath().GetDirectory().Append("profiling_info.out");
     Debug_Log("Writing profiling information to: '" << profileOutFile << "'");
     ProfilerStart(profileOutFile.GetAbsolute().ToCString());
     #endif

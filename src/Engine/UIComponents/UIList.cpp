@@ -30,6 +30,7 @@ UIList::~UIList()
 {
 }
 
+#include "Bang/UITextRenderer.h"
 void UIList::OnUpdate()
 {
     Component::OnUpdate();
@@ -39,28 +40,24 @@ void UIList::OnUpdate()
     GOItem *itemUnderMouse = nullptr;
     if (canvas->IsMouseOver(GetContainer(), true))
     {
+        const Vector2 mousePos = Input::GetMousePositionNDC();
+        const AARect listRTNDCRect ( GetGameObject()->GetRectTransform()->
+                                     GetViewportRectNDC() );
         for (GOItem *childItem : p_items)
         {
-            if (!childItem->IsEnabled()) { continue; }
+            if (!childItem->IsActive()) { continue; }
 
-            bool overChildItem = false;
-            overChildItem = canvas->IsMouseOver(childItem, true);
+            bool overChildItem = canvas->IsMouseOver(childItem, true);
             if (m_wideSelectionMode && !overChildItem)
             {
-                Vector2 mousePos = Input::GetMousePositionNDC();
-                AARect listRTRect ( GetGameObject()->GetRectTransform()->GetViewportRectNDC() );
                 AARect itemRTRect ( childItem->GetRectTransform()->GetViewportRectNDC() );
-                overChildItem = (mousePos.x >= listRTRect.GetMin().x &&
-                                 mousePos.x <= listRTRect.GetMax().x &&
+                overChildItem = (mousePos.x >= listRTNDCRect.GetMin().x &&
+                                 mousePos.x <= listRTNDCRect.GetMax().x &&
                                  mousePos.y >= itemRTRect.GetMin().y &&
                                  mousePos.y <= itemRTRect.GetMax().y);
             }
 
-            if (overChildItem)
-            {
-                itemUnderMouse = childItem;
-                break;
-            }
+            if (overChildItem) { itemUnderMouse = childItem; break; }
         }
     }
 

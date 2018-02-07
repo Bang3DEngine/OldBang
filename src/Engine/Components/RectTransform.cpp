@@ -26,16 +26,9 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    return (GetLocalToWorldMatrix().Inversed() *
+    return (GetLocalToWorldMatrixInv() *
             Vector4(GL::FromViewportPointToViewportPointNDC(vpPoint), 0, 1)).
            xy();
-    /*
-    Rect parentVpRect = GetParentViewportRect();
-    Vector2 parentSizePx = Vector2::Max(Vector2::One, parentVpRect.GetSize());
-    Vector2f pixelNDCSize = (1.0f / Vector2f(parentSizePx)) * 2.0f;
-    return Vector2f(vpPoint - parentVpRect.GetMin()) * pixelNDCSize - 1.0f;
-    */
-    // return (GetLocalToWorldMatrix().Inversed() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
@@ -105,7 +98,7 @@ FromLocalAARectNDCToViewportAARectNDC(const AARect &localAARectNDC) const
 Rect RectTransform::
 FromViewportRectNDCToLocalRectNDC(const Rect &vpRectNDC) const
 {
-    return GetLocalToWorldMatrix().Inversed() * vpRectNDC;
+    return GetLocalToWorldMatrixInv() * vpRectNDC;
 }
 Rect RectTransform::
 FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const
@@ -348,16 +341,14 @@ Rect RectTransform::GetParentViewportRectNDC() const
     if (!parent || !parent->GetRectTransform()) { return Rect::NDCRect; }
     return parent->GetRectTransform()->GetViewportRectNDC();
 }
+
 Rect RectTransform::GetParentViewportRect() const
 {
     return GL::FromWindowRectNDCToWindowRect( GetParentViewportRectNDC() );
 }
 
-
-const Matrix4 &RectTransform::GetLocalToParentMatrix() const
+void RectTransform::CalculateLocalToParentMatrix() const
 {
-    if (!IsInvalid()) { return m_localToParentMatrix; }
-
     Vector2 minMarginedAnchor (GetAnchorMin() +
                                FromWindowAmountToLocalAmountNDC(GetMarginLeftBot()));
     Vector2 maxMarginedAnchor (GetAnchorMax() -
@@ -368,8 +359,8 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
-    Matrix4f rotation = Matrix4f::Identity;
     /*
+    Matrix4f rotation = Matrix4f::Identity;
     if (GetLocalRotation() != Quaternion::Identity)
     {
         Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
@@ -394,13 +385,14 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
     */
 
     m_localToParentMatrix = translateToAnchorCenterMat *
-                            scaleToAnchorsMat *
+                            scaleToAnchorsMat;
+                            /*
                             Matrix4::TranslateMatrix( GetLocalPosition() ) *
                             rotation *
-                            Matrix4::ScaleMatrix( GetLocalScale() );
-    Validate();
+                            Matrix4::ScaleMatrix( GetLocalScale() )*/
+                            ;
 
-    return m_localToParentMatrix;
+    m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
 }
 
 bool RectTransform::IsMouseOver(bool recursive) const
@@ -408,7 +400,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
     if (!Input::IsMouseInsideWindow()) { return false; }
 
     if (IsActive() && GetGameObject()->IsActive() &&
-        GetViewportRectNDC().Contains( Input::GetMousePositionWindowNDC() ))
+        GetViewportRectNDC().Contains( Input::GetMousePositionNDC() ))
     {
         return true;
     }
@@ -441,7 +433,7 @@ void RectTransform::OnRender(RenderPass rp)
     // Gizmos::RenderFillRect(r);
 
     Gizmos::SetColor(Color::Green);
-    Gizmos::RenderRect(r);
+    Gizmos::RenderRect(AARect(r));
     Gizmos::SetColor(Color::Yellow);
     Gizmos::RenderScreenLine(r.GetMinXMaxY(), r.GetMaxXMinY());
     Gizmos::SetColor(Color::Yellow);

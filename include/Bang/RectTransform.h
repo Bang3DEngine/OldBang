@@ -68,7 +68,6 @@ public:
     Rect GetViewportRectNDC() const;
     Rect GetParentViewportRect() const;
     Rect GetParentViewportRectNDC() const;
-    virtual const Matrix4& GetLocalToParentMatrix() const override;
 
     // Conversion functions
     AARect  FromViewportAARectNDCToLocalAARectNDC(const AARect &vpAARectNDC) const;
@@ -106,6 +105,9 @@ private:
     Vector2 m_pivotPosition =  Vector2::Zero;
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
+
+    // Transform
+    void CalculateLocalToParentMatrix() const override;
 
     friend class UILayoutManager;
 };

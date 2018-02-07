@@ -383,11 +383,12 @@ void ImageIO::ImportTGA(const Path &filepath, Imageb *img, bool *ok)
 
     // Read the two first bytes we don't need.
     short int ucharBad;
-    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
-    fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    size_t readBytes = fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
+    readBytes = fread(&ucharBad, sizeof(unsigned char), 1, filePtr);
 
     // Which type of image gets stored in imageTypeCode.
-    fread(&tgaFile.imageTypeCode, sizeof(unsigned char), 1, filePtr);
+    readBytes = fread(&tgaFile.imageTypeCode, sizeof(unsigned char), 1, filePtr);
+    (void)(readBytes);
 
     // For our purposes, the type code should be 2 (uncompressed RGB image)
     // or 3 (uncompressed black-and-white images).
