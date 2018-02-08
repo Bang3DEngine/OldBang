@@ -22,7 +22,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
     if (GetLocalPosition() != p)
     {
         m_localPosition = p;
-        Invalidate();
+        InvalidateTransform();
     }
 }
 void Transform::SetPosition(const Vector3 &p)
@@ -50,7 +50,7 @@ void Transform::SetLocalRotation(const Quaternion &q)
     if (GetLocalRotation() != q)
     {
         m_localRotation = q.Normalized();
-        Invalidate();
+        InvalidateTransform();
     }
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
@@ -131,7 +131,7 @@ void Transform::SetLocalScale(const Vector3 &s)
     if (GetLocalScale() != s)
     {
         m_localScale = s;
-        Invalidate();
+        IInvalidatableTransformLocal::Invalidate();
     }
 }
 
@@ -191,19 +191,19 @@ bool Transform::CanBeRepeatedInGameObject() const { return false; }
 
 void Transform::RecalculateParentMatricesIfNeeded() const
 {
-    if (IsInvalid())
+    if (IInvalidatableTransformLocal::IsInvalid())
     {
+        IInvalidatableTransformLocal::Validate();
         CalculateLocalToParentMatrix();
-        Validate();
     }
 }
 
 void Transform::RecalculateWorldMatricesIfNeeded() const
 {
-    if (m_invalidLocalToWorldMatrix)
+    if (IInvalidatableTransformWorld::IsInvalid())
     {
+        IInvalidatableTransformWorld::Validate();
         CalculateLocalToWorldMatrix();
-        m_invalidLocalToWorldMatrix = false;
     }
 }
 
@@ -219,17 +219,12 @@ void Transform::CalculateLocalToParentMatrix() const
 
 void Transform::CalculateLocalToWorldMatrix() const
 {
-    const Matrix4 &m = GetLocalToParentMatrix();
-    if (GetGameObject()->GetParent() &&
-        GetGameObject()->GetParent()->GetTransform())
+    m_localToWorldMatrix = GetLocalToParentMatrix();
+    GameObject *parent = GetGameObject()->GetParent();
+    if (parent && parent->GetTransform())
     {
-        const Matrix4 &mp =
-          GetGameObject()->GetParent()->GetTransform()->GetLocalToWorldMatrix();
-        m_localToWorldMatrix = mp * m;
-    }
-    else
-    {
-        m_localToWorldMatrix = m;
+        const Matrix4 &mp = parent->GetTransform()->GetLocalToWorldMatrix();
+        m_localToWorldMatrix = mp * m_localToWorldMatrix;
     }
     m_localToWorldMatrixInv = m_localToWorldMatrix.Inversed();
 }
@@ -391,20 +386,16 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
-void Transform::OnInvalidated()
-{
-    m_invalidLocalToWorldMatrix = true;
-    OnTransformChanged();
-}
-
+void Transform::OnInvalidatedWorld() { OnInvalidated(); }
+void Transform::OnInvalidatedLocal() { OnInvalidated(); }
+void Transform::OnInvalidated() { OnTransformChanged(); }
 void Transform::OnParentChanged(GameObject*, GameObject*)
 {
     OnParentTransformChanged();
 }
-
 void Transform::OnTransformChanged()
 {
-    IInvalidatable<Transform>::Invalidate();
+    InvalidateTransform();
 
     GameObject *go = GetGameObject();
     if (!go) { return; }
@@ -443,13 +434,10 @@ void Transform::PropagateChildrenTransformChangedEventToParent() const
 
 void Transform::OnParentTransformChanged()
 {
-    IInvalidatable<Transform>::Invalidate();
+    InvalidateTransform();
     PropagateParentTransformChangedEventToChildren();
 }
-
-void Transform::OnChildrenTransformChanged()
-{
-}
+void Transform::OnChildrenTransformChanged() {}
 
 
 void Transform::CloneInto(ICloneable *clone) const
@@ -481,5 +469,11 @@ void Transform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("Position", GetLocalPosition());
     xmlInfo->Set("Rotation", GetLocalRotation());
     xmlInfo->Set("Scale",    GetLocalScale());
+}
+
+void Transform::InvalidateTransform()
+{
+    IInvalidatableTransformLocal::Invalidate();
+    IInvalidatableTransformWorld::Invalidate();
 }
 

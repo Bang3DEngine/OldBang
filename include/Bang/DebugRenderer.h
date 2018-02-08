@@ -3,6 +3,7 @@
 
 #include "Bang/Set.h"
 #include "Bang/Time.h"
+#include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/AARect.h"
 #include "Bang/Vector3.h"
@@ -32,20 +33,34 @@ public:
                             float thickness = 1.0f,
                             bool depthTest = false);
 
-    static void RenderRectPx(const AARect &rect,
-                             const Color &color = Color::Green,
-                             float time = 1.0f,
-                             float thickness = 1.0f,
-                             bool depthTest = false);
+    static void RenderLineNDC(const Vector2 &originNDC,
+                              const Vector2 &endNDC,
+                              const Color &color = Color::Green,
+                              float time = 1.0f,
+                              float thickness = 1.0f,
+                              bool depthTest = false);
+
+    static void RenderAARectNDC(const AARect &aaRectNDC,
+                                const Color &color = Color::Green,
+                                float time = 1.0f,
+                                float thickness = 1.0f,
+                                bool depthTest = false);
+
+    static void RenderRectNDC(const Rect &rectNDC,
+                              const Color &color = Color::Green,
+                              float time = 1.0f,
+                              float thickness = 1.0f,
+                              bool depthTest = false);
 
 private:
-    enum class DebugRendererPrimitiveType { Point, Line, RectPx };
+    enum class DebugRendererPrimitiveType { Point, Line, LineNDC, AARectNDC, RectNDc };
     struct DebugRenderPrimitive
     {
         DebugRendererPrimitiveType primitive;
         Vector3 origin;
         Vector3 end;
-        AARect rectNDC;
+        Rect rectNDC;
+        AARect aaRectNDC;
         Color color;
         float thickness;
         double destroyTimestamp;

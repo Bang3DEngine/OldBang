@@ -21,6 +21,7 @@ UILabel::UILabel()
 {
     SetSelectable(false);
     SetFocusable(this);
+    SetFocusEnabled(false);
 }
 
 UILabel::~UILabel()

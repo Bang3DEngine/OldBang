@@ -12,8 +12,20 @@
 
 NAMESPACE_BANG_BEGIN
 
+class IInvalidatableTransformWorld : public IInvalidatable<IInvalidatableTransformWorld>
+{
+public: void OnInvalidated() override { OnInvalidatedWorld(); }
+        virtual void OnInvalidatedWorld() = 0;
+};
+class IInvalidatableTransformLocal : public IInvalidatable<IInvalidatableTransformLocal>
+{
+public: void OnInvalidated() override { OnInvalidatedLocal(); }
+        virtual void OnInvalidatedLocal() = 0;
+};
+
 class Transform : public Component,
-                  public IInvalidatable<Transform>,
+                  public IInvalidatableTransformWorld,
+                  public IInvalidatableTransformLocal,
                   public ITransformListener,
                   public IChildrenListener,
                   public EventEmitter<ITransformListener>
@@ -103,18 +115,24 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    // IInvalidatable
-    void OnInvalidated() override;
+    void InvalidateTransform();
 
 protected:
     mutable Matrix4 m_localToWorldMatrix;
     mutable Matrix4 m_localToWorldMatrixInv;
     mutable Matrix4 m_localToParentMatrix;
     mutable Matrix4 m_localToParentMatrixInv;
-    mutable bool m_invalidLocalToWorldMatrix = true;
 
     Transform();
     virtual ~Transform();
+
+    // IInvalidatable
+    void OnInvalidatedWorld() override;
+    void OnInvalidatedLocal() override;
+    virtual void OnInvalidated();
+
+    void RecalculateParentMatricesIfNeeded() const;
+    void RecalculateWorldMatricesIfNeeded() const;
 
     virtual bool CanBeRepeatedInGameObject() const override;
 
@@ -123,13 +141,12 @@ private:
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;
 
-    void RecalculateParentMatricesIfNeeded() const;
-    void RecalculateWorldMatricesIfNeeded() const;
     virtual void CalculateLocalToParentMatrix() const;
     virtual void CalculateLocalToWorldMatrix() const;
 
     void PropagateParentTransformChangedEventToChildren() const;
     void PropagateChildrenTransformChangedEventToParent() const;
+
 };
 
 NAMESPACE_BANG_END

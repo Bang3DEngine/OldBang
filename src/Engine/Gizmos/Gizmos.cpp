@@ -3,6 +3,7 @@
 #include "Bang/GL.h"
 #include "Bang/Mesh.h"
 #include "Bang/Math.h"
+#include "Bang/Rect.h"
 #include "Bang/AABox.h"
 #include "Bang/Color.h"
 #include "Bang/Scene.h"
@@ -165,16 +166,18 @@ void Gizmos::RenderBox(const AABox &b)
     g->Render(g->m_meshRenderer);
 }
 
-void Gizmos::RenderRect(const AARect &r)
+void Gizmos::RenderRectNDC(const AARect &r)
 {
-    RenderViewportLine( Vector2(r.GetMin().x, r.GetMin().y),
-                        Vector2(r.GetMax().x, r.GetMin().y) );
-    RenderViewportLine( Vector2(r.GetMax().x, r.GetMin().y),
-                        Vector2(r.GetMax().x, r.GetMax().y) );
-    RenderViewportLine( Vector2(r.GetMax().x, r.GetMax().y),
-                        Vector2(r.GetMin().x, r.GetMax().y) );
-    RenderViewportLine( Vector2(r.GetMin().x, r.GetMax().y),
-                        Vector2(r.GetMin().x, r.GetMin().y) );
+    Gizmos::RenderRectNDC(r.ToRect());
+}
+void Gizmos::RenderRectNDC(const Rect &r)
+{
+    Vector2 p0, p1, p2, p3;
+    r.GetPoints(&p0, &p1, &p2, &p3);
+    RenderViewportLineNDC(p0, p1);
+    RenderViewportLineNDC(p1, p2);
+    RenderViewportLineNDC(p2, p3);
+    RenderViewportLineNDC(p3, p0);
 }
 
 void Gizmos::RenderFillRect(const AARect &r)
@@ -247,7 +250,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     g->Render(g->m_lineRenderer);
 }
 
-void Gizmos::RenderViewportLine(const Vector2 &origin, const Vector2 &destiny)
+void Gizmos::RenderViewportLineNDC(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
     g->m_lineRenderer->SetPoints( {Vector3(origin.x, origin.y, 0),

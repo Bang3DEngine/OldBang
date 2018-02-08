@@ -87,6 +87,15 @@ public:
 
     bool IsMouseOver(bool recursive = false) const;
 
+    const Matrix4& GetRectLocalToParentMatrix() const;
+    const Matrix4& GetRectLocalToWorldMatrix() const;
+    const Matrix4& GetRectLocalToParentMatrixInv() const;
+    const Matrix4& GetRectLocalToWorldMatrixInv() const;
+    const Matrix4& GetTransformLocalToParentMatrix() const;
+    const Matrix4& GetTransformLocalToWorldMatrix() const;
+    const Matrix4& GetTransformLocalToParentMatrixInv() const;
+    const Matrix4& GetTransformLocalToWorldMatrixInv() const;
+
     // IObjectListener
     void OnEnabled() override;
     void OnDisabled() override;
@@ -99,6 +108,15 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    mutable Matrix4 m_rectLocalToWorldMatrix;
+    mutable Matrix4 m_rectLocalToWorldMatrixInv;
+    mutable Matrix4 m_rectLocalToParentMatrix;
+    mutable Matrix4 m_rectLocalToParentMatrixInv;
+    mutable Matrix4 m_transformLocalToWorldMatrix;
+    mutable Matrix4 m_transformLocalToWorldMatrixInv;
+    mutable Matrix4 m_transformLocalToParentMatrix;
+    mutable Matrix4 m_transformLocalToParentMatrixInv;
+
     Vector2i m_marginRightTop = Vector2i::Zero;
     Vector2i m_marginLeftBot  = Vector2i::Zero;
 
@@ -108,6 +126,7 @@ private:
 
     // Transform
     void CalculateLocalToParentMatrix() const override;
+    void CalculateLocalToWorldMatrix() const override;
 
     friend class UILayoutManager;
 };

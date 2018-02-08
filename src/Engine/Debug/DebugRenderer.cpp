@@ -36,15 +36,39 @@ void DebugRenderer::RenderPoint(const Vector3 &point,
                                color, time, thickness, depthTest);
 }
 
-void DebugRenderer::RenderRectPx(const AARect &rect, const Color &color,
-                                 float time, float thickness, bool depthTest)
+void DebugRenderer::RenderLineNDC(const Vector2 &originNDC,
+                                  const Vector2 &endNDC,
+                                  const Color &color,
+                                  float time,
+                                  float thickness,
+                                  bool depthTest)
+{
+    CreateDebugRenderPrimitive(DebugRendererPrimitiveType::LineNDC,
+                               {Vector3(originNDC,0), Vector3(endNDC,0)},
+                               color, time, thickness, depthTest);
+}
+
+void DebugRenderer::RenderAARectNDC(const AARect &rectNDC, const Color &color,
+                                    float time, float thickness, bool depthTest)
 {
     DebugRenderer::DebugRenderPrimitive *drp =
-        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::RectPx,
+        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::AARectNDC,
                                    {}, color, time, thickness, depthTest);
     if (drp)
     {
-        drp->rectNDC = GL::FromViewportRectToViewportRectNDC(rect);
+        drp->aaRectNDC = GL::FromViewportRectToViewportRectNDC(rectNDC);
+    }
+}
+
+void DebugRenderer::RenderRectNDC(const Rect &rectNDC, const Color &color,
+                                  float time, float thickness, bool depthTest)
+{
+    DebugRenderer::DebugRenderPrimitive *drp =
+        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::RectNDc,
+                                   {}, color, time, thickness, depthTest);
+    if (drp)
+    {
+        drp->rectNDC = GL::FromViewportRectToViewportRectNDC(rectNDC);
     }
 }
 
@@ -110,12 +134,22 @@ void DebugRenderer::RenderPrimitives(bool withDepth)
                     Gizmos::RenderLine(drp->origin, drp->end);
                 break;
 
+                case DebugRendererPrimitiveType::LineNDC:
+                    Gizmos::RenderViewportLineNDC(drp->origin.xy(), drp->end.xy());
+                break;
+
                 case DebugRendererPrimitiveType::Point:
                     Gizmos::RenderPoint(drp->origin);
                 break;
 
-                case DebugRendererPrimitiveType::RectPx:
-                    Gizmos::RenderRect(drp->rectNDC);
+                case DebugRendererPrimitiveType::AARectNDC:
+                    Gizmos::RenderRectNDC(
+                         GL::FromViewportRectNDCToViewportRect(drp->aaRectNDC) );
+                break;
+
+                case DebugRendererPrimitiveType::RectNDc:
+                    Gizmos::RenderRectNDC(
+                          GL::FromViewportRectNDCToViewportRect(drp->rectNDC) );
                 break;
 
                 default: ASSERT(false); break;
