@@ -115,13 +115,30 @@ public:
         return true;
     }
 
+    Vector2G<T> GetBotLeft() const
+    {
+        return GetCenter() + Vector2G<T>(-GetHalfSize(0), -GetHalfSize(1));
+    }
+    Vector2G<T> GetBotRight() const
+    {
+        return GetCenter() + Vector2G<T>(+GetHalfSize(0), -GetHalfSize(1));
+    }
+    Vector2G<T> GetTopLeft() const
+    {
+        return GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
+    }
+    Vector2G<T> GetTopRight() const
+    {
+        return GetCenter() + Vector2G<T>(+GetHalfSize(0), +GetHalfSize(1));
+    }
+
     void GetPoints(Vector2G<T> *p0,
                    Vector2G<T> *p1,
                    Vector2G<T> *opposedP0) const
     {
-        *p0        = GetCenter() + Vector2G<T>(-GetHalfSize(0), -GetHalfSize(1));
-        *p1        = GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
-        *opposedP0 = GetCenter() + Vector2G<T>(+GetHalfSize(0), +GetHalfSize(1));
+        *p0        = GetBotLeft();
+        *p1        = GetBotRight();
+        *opposedP0 = GetTopRight();
     }
     void GetPoints(Vector2G<T> *p0,
                    Vector2G<T> *p1,
@@ -129,7 +146,7 @@ public:
                    Vector2G<T> *opposedP1) const
     {
         GetPoints(p0, p1, opposedP0);
-        *opposedP1 = GetCenter() + Vector2G<T>(+GetHalfSize(0), -GetHalfSize(1));
+        *opposedP1 = GetTopLeft();
     }
 
     std::array<Vector2G<T>, 4> GetPoints() const

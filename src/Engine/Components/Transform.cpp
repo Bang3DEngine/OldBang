@@ -131,7 +131,7 @@ void Transform::SetLocalScale(const Vector3 &s)
     if (GetLocalScale() != s)
     {
         m_localScale = s;
-        IInvalidatableTransformLocal::Invalidate();
+        InvalidateTransform();
     }
 }
 
@@ -223,7 +223,7 @@ void Transform::CalculateLocalToWorldMatrix() const
     GameObject *parent = GetGameObject()->GetParent();
     if (parent && parent->GetTransform())
     {
-        const Matrix4 &mp = parent->GetTransform()->GetLocalToWorldMatrix();
+        const Matrix4 &mp = parent->GetTransform()->Transform::GetLocalToWorldMatrix();
         m_localToWorldMatrix = mp * m_localToWorldMatrix;
     }
     m_localToWorldMatrixInv = m_localToWorldMatrix.Inversed();
@@ -232,23 +232,27 @@ void Transform::CalculateLocalToWorldMatrix() const
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
     RecalculateParentMatricesIfNeeded();
+    RecalculateWorldMatricesIfNeeded();
     return m_localToParentMatrix;
 }
 
 const Matrix4 &Transform::GetLocalToParentMatrixInv() const
 {
     RecalculateParentMatricesIfNeeded();
+    RecalculateWorldMatricesIfNeeded();
     return m_localToParentMatrixInv;
 }
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
 {
+    RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
     return m_localToWorldMatrix;
 }
 
 const Matrix4 &Transform::GetLocalToWorldMatrixInv() const
 {
+    RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
     return m_localToWorldMatrixInv;
 }

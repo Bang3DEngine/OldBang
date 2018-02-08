@@ -75,10 +75,10 @@ public:
     Vector3 FromWorldToLocalVector(const Vector3 &vector) const;
     Vector3 FromWorldToLocalDirection(const Vector3 &dir) const;
 
-    const Matrix4& GetLocalToParentMatrix() const;
-    const Matrix4& GetLocalToParentMatrixInv() const;
-    const Matrix4& GetLocalToWorldMatrix() const;
-    const Matrix4& GetLocalToWorldMatrixInv() const;
+    virtual const Matrix4& GetLocalToParentMatrix() const;
+    virtual const Matrix4& GetLocalToParentMatrixInv() const;
+    virtual const Matrix4& GetLocalToWorldMatrix() const;
+    virtual const Matrix4& GetLocalToWorldMatrixInv() const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;
@@ -129,7 +129,7 @@ protected:
     // IInvalidatable
     void OnInvalidatedWorld() override;
     void OnInvalidatedLocal() override;
-    virtual void OnInvalidated();
+    virtual void OnInvalidated() override;
 
     void RecalculateParentMatricesIfNeeded() const;
     void RecalculateWorldMatricesIfNeeded() const;

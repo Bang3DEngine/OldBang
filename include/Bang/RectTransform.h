@@ -125,6 +125,8 @@ private:
     Vector2 m_anchorMax     =  Vector2::One;
 
     // Transform
+    virtual const Matrix4& GetLocalToWorldMatrix() const override;
+    virtual const Matrix4& GetLocalToWorldMatrixInv() const override;
     void CalculateLocalToParentMatrix() const override;
     void CalculateLocalToWorldMatrix() const override;
 
