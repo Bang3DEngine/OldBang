@@ -1279,7 +1279,8 @@ Vector2 GL::FromWindowAmountNDCToWindowAmount(const Vector2 &winAmountNDC)
 
 Vector2 GL::FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount)
 {
-    return (vpAmount / Vector2(GL::GetViewportSize())) * 2.0f;
+    Vector2 vpSize ( Vector2i::Max(GL::GetViewportSize(), Vector2i::One) );
+    return (vpAmount / vpSize) * 2.0f;
 }
 
 Vector2 GL::FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC)

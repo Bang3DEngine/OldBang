@@ -81,7 +81,8 @@ FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const
 {
     Rect vpRectNDC = GetViewportRectNDC();
     Vector2 vpPointNDCOrigined = vpPointNDC - vpRectNDC.GetCenter();
-    vpPointNDCOrigined /= (Vector2(vpRectNDC.GetSize()) / 2.0f);
+    Vector2 vpRectSize = Vector2::Max(vpRectNDC.GetSize(), Vector2(0.00001f));
+    vpPointNDCOrigined /= (vpRectSize / 2.0f);
     return vpPointNDCOrigined;
 }
 
@@ -358,44 +359,40 @@ void RectTransform::CalculateLocalToParentMatrix() const
 void RectTransform::CalculateLocalToWorldMatrix() const
 {
     Transform::CalculateLocalToWorldMatrix();
-    Matrix4 transformLocalToWorldMatrix = Transform::GetLocalToWorldMatrix();
 
-    // constexpr float Eps = 0.00001f;
     const Window *win = Window::GetActive();
-    // const Vector2 winSize = Vector2(win->GetSize());
-    const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
-    const Rect vpRect = Rect(vpSize * 0.5f, Vector2::Right, vpSize.x * 0.5f, vpSize.y * 0.5f);
+    const Vector2 winSize (win->GetSize());
     const GameObject *parent = GetGameObject()->GetParent();
+    const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
     const RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
-    const Rect parentRect = parentRT ? parentRT->GetViewportRect() : vpRect;
-    const Vector2 parentVpSize = Vector2::Max(Vector2::Abs(Vector2(parentRect.GetSize())), Vector2::One);
 
-    Vector2 marginLeftBotDC  = (Vector2(GetMarginLeftBot())  / parentVpSize);
-    Vector2 marginRightTopDC = (Vector2(GetMarginRightTop()) / parentVpSize);
+    Rect parentRect;
+    if (parentRT) { parentRect = parentRT->GetViewportRect(); }
+    else
+    {
+        const Vector2 vpHalfSize = vpSize * 0.5f;
+        parentRect = Rect(vpHalfSize, Vector2::Right, vpHalfSize.x, vpHalfSize.y);
+    }
+
+    const Vector2 parentSize = Vector2::Max(parentRect.GetSize(), Vector2::One);
+
+    Vector2 marginLeftBotDC  = (Vector2(GetMarginLeftBot())  / parentSize * (winSize/vpSize));
+    Vector2 marginRightTopDC = (Vector2(GetMarginRightTop()) / parentSize * (winSize/vpSize));
     Vector2 minMarginedAnchor ( (GetAnchorMin() * 0.5f + 0.5f) + marginLeftBotDC);
     Vector2 maxMarginedAnchor ( (GetAnchorMax() * 0.5f + 0.5f) - marginRightTopDC);
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-    anchorScaling *= Vector3(parentVpSize / vpSize, 1.0f);
-    Vector3 viewportScaling = Vector3(vpSize.x, vpSize.y, 1.0f);
-    Vector2 moveToAnchorCenterDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f);
-    Vector3 moveToAnchorCenter =
-        Vector3(moveToAnchorCenterDC * parentVpSize + (parentRect.GetCenter() - Vector2::Abs(parentRect.GetHalfSize())), 0);
+    anchorScaling *= Vector3(parentSize / vpSize, 1.0f);
+    Vector2 moveToAnchorCenterDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f );
+    Vector3 moveToAnchorCenter (moveToAnchorCenterDC * parentSize + parentRect.GetBotLeft(), 0);
 
     Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
-    Matrix4 scaleToViewportMat = Matrix4::ScaleMatrix(viewportScaling);
-    const static Matrix4 fromNDCToDC = Matrix4(0.5f, 0.0f, 0.0f, 0.5f,
-                                               0.0f, 0.5f, 0.0f, 0.5f,
-                                               0.0f, 0.0f, 1.0f, 0.0f,
-                                               0.0f, 0.0f, 0.0f, 1.0f);
+    Matrix4 scaleToViewportMat = Matrix4::ScaleMatrix( Vector3(vpSize.x, vpSize.y, 1.0f) );
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
     m_rectLocalToWorldMatrix = Transform::GetLocalToWorldMatrix() *
                                translateToAnchorCenterMat *
                                scaleToViewportMat *
-                               scaleToAnchorsMat *
-                               // fromNDCToDC *
-                               Matrix4::Identity
-                               ;
+                               scaleToAnchorsMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
 }
 
