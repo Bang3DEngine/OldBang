@@ -52,8 +52,8 @@ Vector2 RectTransform::FromWindowAmountToLocalAmountNDC(const Vector2 &winAmount
     Vector2 winViewportProportion =
        (Vector2(Window::GetActive()->GetSize()) /
         Vector2::Max(Vector2::One, Vector2(GL::GetViewportSize())) );
-    Vector2 amount = winAmount * winViewportProportion;
-    return FromViewportAmountToLocalAmountNDC(amount);
+    Vector2 vpAmount = winAmount * winViewportProportion;
+    return FromViewportAmountToLocalAmountNDC(vpAmount);
 }
 Vector2 RectTransform::
 FromWindowAmountToLocalAmountNDC(const Vector2i &winAmount) const
@@ -349,47 +349,53 @@ Rect RectTransform::GetParentViewportRect() const
 
 void RectTransform::CalculateLocalToParentMatrix() const
 {
-    Vector2 minMarginedAnchor (GetAnchorMin() +
-                               FromWindowAmountToLocalAmountNDC(GetMarginLeftBot()));
-    Vector2 maxMarginedAnchor (GetAnchorMax() -
-                               FromWindowAmountToLocalAmountNDC(GetMarginRightTop()));
+    Vector2 marginLeftBotNDC  = FromWindowAmountToLocalAmountNDC(GetMarginLeftBot());
+    Vector2 marginRightTopNDC = FromWindowAmountToLocalAmountNDC(GetMarginRightTop());
+    Vector2 minMarginedAnchor (GetAnchorMin() + marginLeftBotNDC);
+    Vector2 maxMarginedAnchor (GetAnchorMax() - marginRightTopNDC);
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
     Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0 );
 
     Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
-    /*
     Matrix4f rotation = Matrix4f::Identity;
+
+    constexpr float Eps = 0.00001f;
+    Rect parentRect = GetParentViewportRect();
+    Vector2 parentSize = Vector2::Max(parentRect.GetSize(), Vector2(Eps));
+    float ar = (parentSize.x / parentSize.y);
+    Matrix4 aspectRatio    = Matrix4::ScaleMatrix( Vector3(ar, 1, 1) );
+    Matrix4 aspectRatioInv = Matrix4::ScaleMatrix( Vector3(1.0f/ar, 1, 1) );
+
     if (GetLocalRotation() != Quaternion::Identity)
     {
+        anchorScaling = Vector3::Max(anchorScaling, Vector3(Eps));
         Matrix4 scaleToAnchorsInvMat = Matrix4::ScaleMatrix(1.0f/anchorScaling);
-
-        float ar  = GL::GetViewportAspectRatio();
-        Matrix4 aspectRatio    = Matrix4::ScaleMatrix( Vector3(ar, 1, 1) );
-        Matrix4 aspectRatioInv = Matrix4::ScaleMatrix( Vector3(1.0f/ar, 1, 1) );
-
         Matrix4f translateToPivotMatrix =
                 Matrix4f::TranslateMatrix( Vector3f(-GetPivotPosition(), 0) );
         Matrix4f translateToPivotMatrixInv =
                 Matrix4f::TranslateMatrix( Vector3f( GetPivotPosition(), 0) );
 
-        rotation = aspectRatioInv                                    *
-                     translateToPivotMatrixInv                       *
-                       scaleToAnchorsInvMat                          *
+        rotation = // aspectRatioInv                                    *
+                     // translateToPivotMatrixInv                       *
+                       // scaleToAnchorsInvMat                          *
                          Matrix4::RotateMatrix( GetLocalRotation() ) *
-                       scaleToAnchorsMat                             *
-                     translateToPivotMatrix                          *
-                   aspectRatio;
+                       // scaleToAnchorsMat                             *
+                     // translateToPivotMatrix                          *
+                   // aspectRatio
+                   Matrix4::Identity
+                   ;
     }
-    */
 
     m_localToParentMatrix = translateToAnchorCenterMat *
-                            scaleToAnchorsMat;
-                            /*
-                            Matrix4::TranslateMatrix( GetLocalPosition() ) *
+                            aspectRatioInv *
                             rotation *
-                            Matrix4::ScaleMatrix( GetLocalScale() )*/
+                            aspectRatio *
+                            scaleToAnchorsMat *
+                            Matrix4::TranslateMatrix( GetLocalPosition() ) *
+                            Matrix4::ScaleMatrix( GetLocalScale() ) *
+                            Matrix4::Identity
                             ;
 
     m_localToParentMatrixInv = m_localToParentMatrix.Inversed();

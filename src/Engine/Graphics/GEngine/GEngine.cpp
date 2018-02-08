@@ -156,6 +156,7 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
         GL::ClearDepthBuffer();
         RenderWithPass(go, RenderPass::Canvas);
 
+        GL::ClearDepthBuffer();
         RenderWithPass(go, RenderPass::Overlay);
     }
 }

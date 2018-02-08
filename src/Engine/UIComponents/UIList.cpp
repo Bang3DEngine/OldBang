@@ -47,7 +47,7 @@ void UIList::OnUpdate()
         {
             if (!childItem->IsActive()) { continue; }
 
-            bool overChildItem = canvas->IsMouseOver(childItem, true);
+            bool overChildItem = canvas->IsMouseOver(childItem, false);
             if (m_wideSelectionMode && !overChildItem)
             {
                 AARect itemRTRect ( childItem->GetRectTransform()->GetViewportRectNDC() );
@@ -56,7 +56,6 @@ void UIList::OnUpdate()
                                  mousePos.y >= itemRTRect.GetMin().y &&
                                  mousePos.y <= itemRTRect.GetMax().y);
             }
-
             if (overChildItem) { itemUnderMouse = childItem; break; }
         }
     }
