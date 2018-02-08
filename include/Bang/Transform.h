@@ -133,6 +133,8 @@ protected:
 
     void RecalculateParentMatricesIfNeeded() const;
     void RecalculateWorldMatricesIfNeeded() const;
+    virtual void CalculateLocalToParentMatrix() const;
+    virtual void CalculateLocalToWorldMatrix() const;
 
     virtual bool CanBeRepeatedInGameObject() const override;
 
@@ -141,8 +143,6 @@ private:
     Quaternion m_localRotation = Quaternion::Identity;
     Vector3    m_localScale    = Vector3::One;
 
-    virtual void CalculateLocalToParentMatrix() const;
-    virtual void CalculateLocalToWorldMatrix() const;
 
     void PropagateParentTransformChangedEventToChildren() const;
     void PropagateChildrenTransformChangedEventToParent() const;

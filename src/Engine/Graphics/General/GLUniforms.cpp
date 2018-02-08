@@ -101,7 +101,11 @@ void GLUniforms::UpdatePVMMatrix()
         break;
 
         case GL::ViewProjMode::Canvas:
-            pvmMatrix = model;
+        {
+            Vector2i vpSize = Vector2i::Max(GL::GetViewportSize(), Vector2i::One);
+            Matrix4 ortho = Matrix4::Ortho(0, vpSize.x, 0, vpSize.y, -1, 10);
+            pvmMatrix = ortho * model;
+        }
         break;
     }
 

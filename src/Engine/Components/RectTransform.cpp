@@ -328,11 +328,12 @@ const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
 Rect RectTransform::GetViewportRectNDC() const
 {
-    return GetLocalToWorldMatrix() * Rect::NDCRect;
+    return GL::FromViewportRectToViewportRectNDC( GetViewportRect() );
 }
 Rect RectTransform::GetViewportRect() const
 {
-    return GL::FromViewportRectNDCToViewportRect( GetViewportRectNDC() );
+    if (rand() % 20000 == 0) { Debug_Log("GetViewportRect(): " << (GetLocalToWorldMatrix() * Rect::NDCRect)); }
+    return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
 
 Rect RectTransform::GetParentViewportRectNDC() const
@@ -347,59 +348,52 @@ Rect RectTransform::GetParentViewportRect() const
     return GL::FromWindowRectNDCToWindowRect( GetParentViewportRectNDC() );
 }
 
-#include "Bang/DebugRenderer.h"
 void RectTransform::CalculateLocalToParentMatrix() const
 {
-    const Vector2 vpSize ( GL::GetViewportSize() );
-    const Rect vpRect = Rect(vpSize * 0.5f, Vector2::Right, vpSize.x, vpSize.y);
+    Transform::CalculateLocalToParentMatrix();
+
+    m_localToParentMatrix = Matrix4::Identity;
+    m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
+}
+
+void RectTransform::CalculateLocalToWorldMatrix() const
+{
+    Matrix4 transformLocalToWorldMatrix = Transform::GetLocalToWorldMatrix();
 
     constexpr float Eps = 0.00001f;
-
-    Window *win = Window::GetActive();
-    Vector2 winSize = Vector2(win->GetSize());
-
-    GameObject *parent = GetGameObject()->GetParent();
-    RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
+    const Window *win = Window::GetActive();
+    const Vector2 winSize = Vector2(win->GetSize());
+    const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
+    const Rect vpRect = Rect(vpSize * 0.5f, Vector2::Right, vpSize.x, vpSize.y);
+    const GameObject *parent = GetGameObject()->GetParent();
+    const RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
     const Rect parentRect = parentRT ? parentRT->GetViewportRect() : vpRect;
-    Vector2 parentVpSize = parentRect.GetSize();
-    parentVpSize = Vector2::Max(parentVpSize, Vector2::One);
+    const Vector2 parentVpSize = Vector2::Max(Vector2(parentRect.GetSize()), Vector2::One);
 
     // Vector2 marginLeftBotNDC  = FromWindowAmountToLocalAmountNDC(GetMarginLeftBot());
     // Vector2 marginRightTopNDC = FromWindowAmountToLocalAmountNDC(GetMarginRightTop());
     Vector2 marginLeftBotNDC  = (Vector2(GetMarginLeftBot())  / parentVpSize) * 2.0f;
     Vector2 marginRightTopNDC = (Vector2(GetMarginRightTop()) / parentVpSize) * 2.0f;
-    Vector2 minMarginedAnchor (GetAnchorMin() + marginLeftBotNDC);
-    Vector2 maxMarginedAnchor (GetAnchorMax() - marginRightTopNDC);
+    Debug_Peek(marginLeftBotNDC);
+    Vector2 minMarginedAnchor ( (GetAnchorMin() * 0.5f + 0.5f) + marginLeftBotNDC);
+    Vector2 maxMarginedAnchor ( (GetAnchorMax() * 0.5f + 0.5f) - marginRightTopNDC);
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-    if (GetMarginLeftBot().x == -11)
-    {
-        Debug_Log("Rotation: " << parent->GetTransform()->GetLocalEuler());
-        Debug_Peek(parentRT->GetViewportRect());
-        Debug_Peek(parentVpSize);
-        Debug_Peek(marginLeftBotNDC);
-        Debug_Peek(marginRightTopNDC);
-        Debug_Peek(minMarginedAnchor);
-        Debug_Peek(maxMarginedAnchor);
-        Debug_Peek(anchorScaling);
-
-        Debug_Log( Vector2::Dot(parentRect.GetAxis(0), parentRect.GetAxis(1)));
-
-        DebugRenderer::RenderLineNDC(parentRect.GetCenter(), parentRect.GetCenter() + parentRect.GetAxis(0),
-                                     Color::Green, 1.0f, 2.0f, false);
-        DebugRenderer::RenderLineNDC(parentRect.GetCenter(), parentRect.GetCenter() + parentRect.GetAxis(1),
-                                     Color::Green, 1.0f, 2.0f, false);
-        DebugRenderer::RenderRectNDC(parentRect, Color::Red, 1.0f, 3.0f, false);
-        Debug_Log("==============================\n\n");
-    }
-    Vector3 moveToAnchorCenter( (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0 );
-    // Vector3 moveToAnchorCenter( parentRect.GetCenter(), 0 );
+    anchorScaling *= Vector3(parentVpSize / vpSize, 1.0f);
+    Vector3 viewportScaling = Vector3(vpSize.x, vpSize.y, 1.0f);
+    Vector2 moveToAnchorCenterNDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f);
+    Vector3 moveToAnchorCenter = Vector3(GL::FromPointNDCToPoint(moveToAnchorCenterNDC,
+                                                                 parentVpSize), 0);
 
     Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
+    Matrix4 scaleToViewportMat = Matrix4::ScaleMatrix(viewportScaling);
+    static Matrix4 fromNDCToDC = Matrix4::TranslateMatrix(Vector3(0.5f, 0.5f, 0.0f)) *
+                                 Matrix4::ScaleMatrix(Vector3(0.5f, 0.5f, 1.0f));
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
-    m_rectLocalToParentMatrix = translateToAnchorCenterMat * scaleToAnchorsMat;
-    m_rectLocalToParentMatrixInv = m_rectLocalToParentMatrix.Inversed();
+    // m_rectLocalToParentMatrix = translateToAnchorCenterMat * scaleToAnchorsMat;
+    // m_rectLocalToParentMatrixInv = m_rectLocalToParentMatrix.Inversed();
 
+    /*
     Matrix4f transformRotation = Matrix4f::Identity;
     if (GetLocalRotation() != Quaternion::Identity)
     {
@@ -426,46 +420,16 @@ void RectTransform::CalculateLocalToParentMatrix() const
                 aspectRatio *
                 Matrix4::Identity;
     }
+    */
 
-    m_transformLocalToParentMatrix = Matrix4::TranslateMatrix(GetLocalPosition()) *
-                                     transformRotation *
-                                     Matrix4::ScaleMatrix(GetLocalScale());
-    m_transformLocalToParentMatrixInv = m_transformLocalToParentMatrix.Inversed();
-
-    m_localToParentMatrix = m_transformLocalToParentMatrix * m_rectLocalToParentMatrix;
-    // m_localToParentMatrix = m_rectLocalToParentMatrix;
-    m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
-
-}
-
-void RectTransform::CalculateLocalToWorldMatrix() const
-{
-    m_rectLocalToWorldMatrix = GetRectLocalToParentMatrix();
-    m_transformLocalToWorldMatrix = GetTransformLocalToParentMatrix();
-
-    const GameObject *parent = GetGameObject()->GetParent();
-    if (parent)
-    {
-        if (parent->GetRectTransform())
-        {
-            const Matrix4 &rmp = parent->GetRectTransform()->GetRectLocalToWorldMatrix();
-            m_rectLocalToWorldMatrix = rmp * m_rectLocalToWorldMatrix;
-
-            const Matrix4 &mp = parent->GetRectTransform()->GetTransformLocalToWorldMatrix();
-            m_transformLocalToWorldMatrix = mp * m_transformLocalToWorldMatrix;
-        }
-        else
-        {
-            const Matrix4 &mp = parent->GetTransform()->GetLocalToWorldMatrix();
-            m_rectLocalToWorldMatrix = mp * m_rectLocalToWorldMatrix;
-            m_transformLocalToWorldMatrix = mp * m_transformLocalToWorldMatrix;
-        }
-    }
-    m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
-    m_transformLocalToWorldMatrixInv = m_transformLocalToWorldMatrix.Inversed();
-
-    m_localToWorldMatrix = m_transformLocalToWorldMatrix * m_rectLocalToWorldMatrix;
-    // m_localToWorldMatrix = m_rectLocalToWorldMatrix;
+    m_localToWorldMatrix =
+                           translateToAnchorCenterMat *
+                           scaleToAnchorsMat *
+                           scaleToViewportMat *
+                           fromNDCToDC *
+                           Matrix4::Identity
+                           ;
+    Debug_Log("\n" << m_localToWorldMatrix);
     m_localToWorldMatrixInv = m_localToWorldMatrix.Inversed();
 }
 
