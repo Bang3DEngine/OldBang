@@ -85,6 +85,8 @@ private:
     mutable RH<Material> p_material;
     RH<Material> p_sharedMaterial;
 
+    virtual Matrix4 GetRenderModelMatrix() const;
+
     friend class GEngine;
 };
 

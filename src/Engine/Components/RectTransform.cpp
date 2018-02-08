@@ -336,7 +336,7 @@ Rect RectTransform::GetViewportRectNDC() const
 }
 Rect RectTransform::GetViewportRect() const
 {
-    return GetLocalToWorldMatrix() * Rect::NDCRect;
+    return GetRectTransformLocalToWorldMatrix() * Rect::NDCRect;
 }
 
 Rect RectTransform::GetParentViewportRectNDC() const
@@ -346,14 +346,51 @@ Rect RectTransform::GetParentViewportRectNDC() const
     return parent->GetRectTransform()->GetViewportRectNDC();
 }
 
+AARect RectTransform::GetViewportAARect() const
+{
+    return GetRectLocalToWorldMatrix() * AARect::NDCRect;
+}
+
+AARect RectTransform::GetViewportAARectNDC() const
+{
+    return GL::FromViewportRectToViewportRectNDC( GetViewportAARect() );
+}
+
+AARect RectTransform::GetParentViewportAARect() const
+{
+    GameObject *parent = GetGameObject()->GetParent();
+    if (!parent || !parent->GetRectTransform())
+    { return AARect(Vector2::Zero, Vector2( GL::GetViewportSize() )); }
+    return parent->GetRectTransform()->GetViewportAARect();
+}
+
+AARect RectTransform::GetParentViewportAARectNDC() const
+{
+    GameObject *parent = GetGameObject()->GetParent();
+    if (!parent || !parent->GetRectTransform()) { return AARect::NDCRect; }
+    return parent->GetRectTransform()->GetViewportAARectNDC();
+}
+
 Rect RectTransform::GetParentViewportRect() const
 {
-    return GL::FromWindowRectNDCToWindowRect( GetParentViewportRectNDC() );
+    GameObject *parent = GetGameObject()->GetParent();
+    if (!parent || !parent->GetRectTransform())
+    { return AARect(GL::GetViewportRect()).ToRect(); }
+    return parent->GetRectTransform()->GetViewportRect();
 }
 
 void RectTransform::CalculateLocalToParentMatrix() const
 {
-    Transform::CalculateLocalToParentMatrix();
+    AARect thisVPAARect = GetViewportAARect();
+    Vector2 thisSize = Vector2::Max(thisVPAARect.GetSize(), Vector2::One);
+    Vector2 pivotVp = -thisVPAARect.GetCenter() - GetPivotPosition() * thisSize * 0.5f;
+    Matrix4 translateToPivot = Matrix4::TranslateMatrix( Vector3(pivotVp, 0) );
+    m_localToParentMatrix = Matrix4::TranslateMatrix( GetLocalPosition() ) *
+                            translateToPivot.Inversed() *
+                            Matrix4::RotateMatrix( GetLocalRotation() ) *
+                            translateToPivot *
+                            Matrix4::ScaleMatrix( GetLocalScale() );
+    m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
 }
 
 void RectTransform::CalculateLocalToWorldMatrix() const
@@ -362,19 +399,10 @@ void RectTransform::CalculateLocalToWorldMatrix() const
 
     const Window *win = Window::GetActive();
     const Vector2 winSize (win->GetSize());
-    const GameObject *parent = GetGameObject()->GetParent();
     const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
-    const RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
 
-    Rect parentRect;
-    if (parentRT) { parentRect = parentRT->GetViewportRect(); }
-    else
-    {
-        const Vector2 vpHalfSize = vpSize * 0.5f;
-        parentRect = Rect(vpHalfSize, Vector2::Right, vpHalfSize.x, vpHalfSize.y);
-    }
-
-    const Vector2 parentSize = Vector2::Max(parentRect.GetSize(), Vector2::One);
+    AARect parentAARect = GetParentViewportAARect();
+    const Vector2 parentSize = Vector2::Max(parentAARect.GetSize(), Vector2::One);
 
     Vector2 marginLeftBotDC  = (Vector2(GetMarginLeftBot())  / parentSize * (winSize/vpSize));
     Vector2 marginRightTopDC = (Vector2(GetMarginRightTop()) / parentSize * (winSize/vpSize));
@@ -383,14 +411,13 @@ void RectTransform::CalculateLocalToWorldMatrix() const
     Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
     anchorScaling *= Vector3(parentSize / vpSize, 1.0f);
     Vector2 moveToAnchorCenterDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f );
-    Vector3 moveToAnchorCenter (moveToAnchorCenterDC * parentSize + parentRect.GetBotLeft(), 0);
+    Vector3 moveToAnchorCenter (moveToAnchorCenterDC * parentSize + parentAARect.GetMin(), 0);
 
     Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
     Matrix4 scaleToViewportMat = Matrix4::ScaleMatrix( Vector3(vpSize.x, vpSize.y, 1.0f) );
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
-    m_rectLocalToWorldMatrix = Transform::GetLocalToWorldMatrix() *
-                               translateToAnchorCenterMat *
+    m_rectLocalToWorldMatrix = translateToAnchorCenterMat *
                                scaleToViewportMat *
                                scaleToAnchorsMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
@@ -474,18 +501,11 @@ const Matrix4 &RectTransform::GetTransformLocalToWorldMatrixInv() const
     return m_transformLocalToWorldMatrixInv;
 }
 
-const Matrix4 &RectTransform::GetLocalToWorldMatrix() const
+Matrix4 RectTransform::GetRectTransformLocalToWorldMatrix() const
 {
     RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
-    return m_rectLocalToWorldMatrix;
-}
-
-const Matrix4 &RectTransform::GetLocalToWorldMatrixInv() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_rectLocalToWorldMatrixInv;
+    return GetLocalToWorldMatrix() * GetRectLocalToWorldMatrix();
 }
 
 void RectTransform::OnRender(RenderPass rp)

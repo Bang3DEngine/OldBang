@@ -68,6 +68,10 @@ public:
     Rect GetViewportRectNDC() const;
     Rect GetParentViewportRect() const;
     Rect GetParentViewportRectNDC() const;
+    AARect GetViewportAARect() const;
+    AARect GetViewportAARectNDC() const;
+    AARect GetParentViewportAARect() const;
+    AARect GetParentViewportAARectNDC() const;
 
     // Conversion functions
     AARect  FromViewportAARectNDCToLocalAARectNDC(const AARect &vpAARectNDC) const;
@@ -95,6 +99,8 @@ public:
     const Matrix4& GetTransformLocalToWorldMatrix() const;
     const Matrix4& GetTransformLocalToParentMatrixInv() const;
     const Matrix4& GetTransformLocalToWorldMatrixInv() const;
+
+    Matrix4 GetRectTransformLocalToWorldMatrix() const;
 
     // IObjectListener
     void OnEnabled() override;
@@ -125,8 +131,6 @@ private:
     Vector2 m_anchorMax     =  Vector2::One;
 
     // Transform
-    virtual const Matrix4& GetLocalToWorldMatrix() const override;
-    virtual const Matrix4& GetLocalToWorldMatrixInv() const override;
     void CalculateLocalToParentMatrix() const override;
     void CalculateLocalToWorldMatrix() const override;
 

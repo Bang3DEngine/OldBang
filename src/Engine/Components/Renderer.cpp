@@ -46,8 +46,7 @@ void Renderer::OnRender() {}
 
 void Renderer::Bind() const
 {
-    Transform *t = GetGameObject()->GetTransform();
-    if (t) { GLUniforms::SetModelMatrix(t->GetLocalToWorldMatrix()); }
+    GLUniforms::SetModelMatrix( GetRenderModelMatrix() );
 
     GL::SetViewProjMode( GetViewProjMode() );
     GL::SetWireframe( IsRenderWireframe() );
@@ -177,6 +176,12 @@ void Renderer::PropagateRendererChanged()
 {
     EventEmitter<IRendererChangedListener>::PropagateToListeners(
                 &IRendererChangedListener::OnRendererChanged, this);
+}
+
+Matrix4 Renderer::GetRenderModelMatrix() const
+{
+    Transform *t = GetGameObject()->GetTransform();
+    return t ? t->GetLocalToWorldMatrix() : Matrix4::Identity;
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
