@@ -1,4 +1,4 @@
-#ifndef RECTTRANSFORM_H
+﻿#ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
 #include "Bang/Rect.h"
@@ -91,14 +91,8 @@ public:
 
     bool IsMouseOver(bool recursive = false) const;
 
-    const Matrix4& GetRectLocalToParentMatrix() const;
     const Matrix4& GetRectLocalToWorldMatrix() const;
-    const Matrix4& GetRectLocalToParentMatrixInv() const;
     const Matrix4& GetRectLocalToWorldMatrixInv() const;
-    const Matrix4& GetTransformLocalToParentMatrix() const;
-    const Matrix4& GetTransformLocalToWorldMatrix() const;
-    const Matrix4& GetTransformLocalToParentMatrixInv() const;
-    const Matrix4& GetTransformLocalToWorldMatrixInv() const;
 
     Matrix4 GetRectTransformLocalToWorldMatrix() const;
 
@@ -116,12 +110,7 @@ public:
 private:
     mutable Matrix4 m_rectLocalToWorldMatrix;
     mutable Matrix4 m_rectLocalToWorldMatrixInv;
-    mutable Matrix4 m_rectLocalToParentMatrix;
-    mutable Matrix4 m_rectLocalToParentMatrixInv;
-    mutable Matrix4 m_transformLocalToWorldMatrix;
-    mutable Matrix4 m_transformLocalToWorldMatrixInv;
-    mutable Matrix4 m_transformLocalToParentMatrix;
-    mutable Matrix4 m_transformLocalToParentMatrixInv;
+    mutable bool m_invalidRectLocalToWorldMatrix = true;
 
     Vector2i m_marginRightTop = Vector2i::Zero;
     Vector2i m_marginLeftBot  = Vector2i::Zero;
@@ -132,7 +121,9 @@ private:
 
     // Transform
     void CalculateLocalToParentMatrix() const override;
-    void CalculateLocalToWorldMatrix() const override;
+    void OnTransformInvalidated() override;
+
+    void CalculateRectLocalToWorldMatrix() const;
 
     friend class UILayoutManager;
 };

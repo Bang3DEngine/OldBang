@@ -283,12 +283,9 @@ void Window::OnResize(int newWidth, int newHeight)
 {
     if (m_newSize != m_prevSize)
     {
-        m_newSize  = Vector2i(newWidth, newHeight);
         m_prevSize = m_newSize;
         GL::SetViewport(0, 0, GetWidth(), GetHeight());
-
-        Scene *scene = GetSceneManager()->GetActiveScene();
-        if (scene) { scene->OnResize(newWidth, newHeight); }
+        GetSceneManager()->OnResize(newWidth, newHeight);
     }
 }
 

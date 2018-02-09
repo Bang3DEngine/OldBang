@@ -193,8 +193,8 @@ void Transform::RecalculateParentMatricesIfNeeded() const
 {
     if (IInvalidatableTransformLocal::IsInvalid())
     {
-        IInvalidatableTransformLocal::Validate();
         CalculateLocalToParentMatrix();
+        IInvalidatableTransformLocal::Validate();
     }
 }
 
@@ -202,8 +202,8 @@ void Transform::RecalculateWorldMatricesIfNeeded() const
 {
     if (IInvalidatableTransformWorld::IsInvalid())
     {
-        IInvalidatableTransformWorld::Validate();
         CalculateLocalToWorldMatrix();
+        IInvalidatableTransformWorld::Validate();
     }
 }
 
@@ -232,27 +232,23 @@ void Transform::CalculateLocalToWorldMatrix() const
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
     RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
     return m_localToParentMatrix;
 }
 
 const Matrix4 &Transform::GetLocalToParentMatrixInv() const
 {
     RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
     return m_localToParentMatrixInv;
 }
 
 const Matrix4& Transform::GetLocalToWorldMatrix() const
 {
-    RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
     return m_localToWorldMatrix;
 }
 
 const Matrix4 &Transform::GetLocalToWorldMatrixInv() const
 {
-    RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
     return m_localToWorldMatrixInv;
 }
@@ -390,9 +386,9 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
-void Transform::OnInvalidatedWorld() { OnInvalidated(); }
-void Transform::OnInvalidatedLocal() { OnInvalidated(); }
-void Transform::OnInvalidated() { OnTransformChanged(); }
+void Transform::OnInvalidatedWorld() { OnTransformInvalidated(); }
+void Transform::OnInvalidatedLocal() { OnTransformInvalidated(); }
+void Transform::OnTransformInvalidated() { OnTransformChanged(); }
 void Transform::OnParentChanged(GameObject*, GameObject*)
 {
     OnParentTransformChanged();

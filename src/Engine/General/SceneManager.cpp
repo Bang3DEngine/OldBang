@@ -60,6 +60,12 @@ void SceneManager::OnNewFrame(Scene *scene, bool update)
     }
 }
 
+void SceneManager::OnResize(int width, int height)
+{
+    Scene *scene = GetActiveScene();
+    if (scene) { scene->OnResize(width, height); }
+}
+
 void SceneManager::_Update()
 {
     SceneManager *sm = SceneManager::GetActive();

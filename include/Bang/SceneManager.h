@@ -40,6 +40,8 @@ public:
     static void OnNewFrame(Scene *scene, bool update);
     static void Update();
 
+    virtual void OnResize(int width, int height);
+
     BehaviourManager *GetBehaviourManager() const;
 
 protected:

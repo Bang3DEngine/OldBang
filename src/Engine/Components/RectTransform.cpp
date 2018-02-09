@@ -393,10 +393,14 @@ void RectTransform::CalculateLocalToParentMatrix() const
     m_localToParentMatrixInv = m_localToParentMatrix.Inversed();
 }
 
-void RectTransform::CalculateLocalToWorldMatrix() const
+void RectTransform::OnTransformInvalidated()
 {
-    Transform::CalculateLocalToWorldMatrix();
+    Transform::OnTransformInvalidated();
+    m_invalidRectLocalToWorldMatrix = true;
+}
 
+void RectTransform::CalculateRectLocalToWorldMatrix() const
+{
     const Window *win = Window::GetActive();
     const Vector2 winSize (win->GetSize());
     const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
@@ -421,6 +425,8 @@ void RectTransform::CalculateLocalToWorldMatrix() const
                                scaleToViewportMat *
                                scaleToAnchorsMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
+
+    m_invalidRectLocalToWorldMatrix = false;
 }
 
 bool RectTransform::IsMouseOver(bool recursive) const
@@ -445,65 +451,20 @@ bool RectTransform::IsMouseOver(bool recursive) const
     return false;
 }
 
-const Matrix4 &RectTransform::GetRectLocalToParentMatrix() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_rectLocalToParentMatrix;
-}
-
 const Matrix4 &RectTransform::GetRectLocalToWorldMatrix() const
 {
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
+    if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
     return m_rectLocalToWorldMatrix;
-}
-
-const Matrix4 &RectTransform::GetRectLocalToParentMatrixInv() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_rectLocalToParentMatrixInv;
 }
 
 const Matrix4 &RectTransform::GetRectLocalToWorldMatrixInv() const
 {
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
+    if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
     return m_rectLocalToWorldMatrixInv;
-}
-
-const Matrix4 &RectTransform::GetTransformLocalToParentMatrix() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_transformLocalToParentMatrix;
-}
-
-const Matrix4 &RectTransform::GetTransformLocalToWorldMatrix() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_transformLocalToWorldMatrix;
-}
-
-const Matrix4 &RectTransform::GetTransformLocalToParentMatrixInv() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_transformLocalToParentMatrixInv;
-}
-
-const Matrix4 &RectTransform::GetTransformLocalToWorldMatrixInv() const
-{
-    RecalculateParentMatricesIfNeeded();
-    RecalculateWorldMatricesIfNeeded();
-    return m_transformLocalToWorldMatrixInv;
 }
 
 Matrix4 RectTransform::GetRectTransformLocalToWorldMatrix() const
 {
-    RecalculateParentMatricesIfNeeded();
     RecalculateWorldMatricesIfNeeded();
     return GetLocalToWorldMatrix() * GetRectLocalToWorldMatrix();
 }

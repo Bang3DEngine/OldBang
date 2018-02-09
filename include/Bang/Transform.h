@@ -129,7 +129,7 @@ protected:
     // IInvalidatable
     void OnInvalidatedWorld() override;
     void OnInvalidatedLocal() override;
-    virtual void OnInvalidated() override;
+    virtual void OnTransformInvalidated();
 
     void RecalculateParentMatricesIfNeeded() const;
     void RecalculateWorldMatricesIfNeeded() const;
