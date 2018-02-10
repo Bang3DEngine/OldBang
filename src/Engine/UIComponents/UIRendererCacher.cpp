@@ -69,7 +69,7 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
             p_cacheFramebuffer->Bind();
 
             GBuffer *gbuffer = GEngine::GetCurrentRenderingCamera()->GetGBuffer();
-            AARect rtRectNDC(GetGameObject()->GetRectTransform()->GetViewportRectNDC());
+            AARect rtRectNDC(GetGameObject()->GetRectTransform()->GetViewportAARectNDC());
             p_cacheFramebuffer->Resize(gbuffer->GetWidth(), gbuffer->GetHeight());
 
             GL::ReadBuffer( GBuffer::AttColor );

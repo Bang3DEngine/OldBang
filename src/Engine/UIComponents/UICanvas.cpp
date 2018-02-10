@@ -375,7 +375,7 @@ void UICanvas::GetSortedFocusCandidatesByPaintOrder(
             AARect maskedRectNDC = maskRectStack->top();
             if (rectMask && rectMask->IsActive() && rectMask->IsMasking())
             {
-                AARect childRect ( child->GetRectTransform()->GetViewportRectNDC() );
+                AARect childRect = child->GetRectTransform()->GetViewportAARect();
                 maskedRectNDC = AARect::Intersection(maskedRectNDC, childRect);
             }
             maskRectStack->push(maskedRectNDC);

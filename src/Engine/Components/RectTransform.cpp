@@ -329,20 +329,25 @@ const Vector2& RectTransform::GetPivotPosition() const { return m_pivotPosition;
 const Vector2& RectTransform::GetAnchorMin() const { return m_anchorMin; }
 const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
-Rect RectTransform::GetViewportRectNDC() const
-{
-    return GL::FromViewportRectToViewportRectNDC( AARect( GetViewportRect() ) ).ToRect();
-}
 Rect RectTransform::GetViewportRect() const
 {
     return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
+RectPoints RectTransform::GetViewportRectPointsNDC() const
+{
+    RectPoints vpRectPoints = GetViewportRect().GetPoints();
+    for (int i = 0; i < 4; ++i)
+    {
+        vpRectPoints[i] = GL::FromViewportPointToViewportPointNDC(vpRectPoints[i]);
+    }
+    return vpRectPoints;
+}
 
-Rect RectTransform::GetParentViewportRectNDC() const
+RectPoints RectTransform::GetParentViewportRectPointsNDC() const
 {
     GameObject *parent = GetGameObject()->GetParent();
-    if (!parent || !parent->GetRectTransform()) { return Rect::NDCRect; }
-    return parent->GetRectTransform()->GetViewportRectNDC();
+    if (!parent || !parent->GetRectTransform()) { return Rect::NDCRect.GetPoints(); }
+    return parent->GetRectTransform()->GetViewportRectPointsNDC();
 }
 
 AARect RectTransform::GetViewportAARect() const
@@ -449,7 +454,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
     if (!Input::IsMouseInsideWindow()) { return false; }
 
     if (IsActive() && GetGameObject()->IsActive() &&
-        GetViewportRectNDC().Contains( Input::GetMousePositionNDC() ))
+        GetViewportRect().Contains( Vector2(Input::GetMousePosition()) ))
     {
         return true;
     }

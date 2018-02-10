@@ -42,7 +42,7 @@ void UIList::OnUpdate()
     {
         const Vector2 mousePos = Input::GetMousePositionNDC();
         const AARect listRTNDCRect ( GetGameObject()->GetRectTransform()->
-                                     GetViewportRectNDC() );
+                                     GetViewportAARectNDC() );
         for (GOItem *childItem : p_items)
         {
             if (!childItem->IsActive()) { continue; }
@@ -50,7 +50,7 @@ void UIList::OnUpdate()
             bool overChildItem = canvas->IsMouseOver(childItem, false);
             if (m_wideSelectionMode && !overChildItem)
             {
-                AARect itemRTRect ( childItem->GetRectTransform()->GetViewportRectNDC() );
+                AARect itemRTRect ( childItem->GetRectTransform()->GetViewportAARectNDC() );
                 overChildItem = (mousePos.x >= listRTNDCRect.GetMin().x &&
                                  mousePos.x <= listRTNDCRect.GetMax().x &&
                                  mousePos.y >= itemRTRect.GetMin().y &&

@@ -65,9 +65,9 @@ public:
     const Vector2& GetAnchorMin()  const;
     const Vector2& GetAnchorMax() const;
     Rect GetViewportRect() const;
-    Rect GetViewportRectNDC() const;
+    RectPoints GetViewportRectPointsNDC() const;
     Rect GetParentViewportRect() const;
-    Rect GetParentViewportRectNDC() const;
+    RectPoints GetParentViewportRectPointsNDC() const;
     AARect GetViewportAARect() const;
     AARect GetViewportAARectNDC() const;
     AARect GetParentViewportAARect() const;

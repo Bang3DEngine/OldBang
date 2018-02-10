@@ -85,5 +85,5 @@ AARect UIRenderer::GetBoundingRect(Camera *camera) const
 {
     GameObject *go = GetGameObject();
     RectTransform *rt = go ? go->GetRectTransform() : nullptr;
-    return rt ? AARect(rt->GetViewportRectNDC()) : AARect::Zero;
+    return rt ? (rt->GetViewportAARect()) : AARect::Zero;
 }
