@@ -1,6 +1,7 @@
 #ifndef BANGFORWARD_H
 #define BANGFORWARD_H
 
+#include <array>
 #include <cstdint>
 #include <iostream>
 
@@ -124,6 +125,8 @@ using Rectf       = RectG<float>;
 using Rectd       = RectG<double>;
 using Recti       = RectG<int>;
 using Rect        = Rectf;
+using RectPoints  = std::array<Vector2, 4>;
+
 // ======================================================
 
 // Other ================================================

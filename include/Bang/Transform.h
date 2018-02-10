@@ -115,7 +115,7 @@ public:
     virtual void ImportXML(const XMLNode &xmlInfo) override;
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
-    void InvalidateTransform();
+    virtual void InvalidateTransform();
 
 protected:
     mutable Matrix4 m_localToWorldMatrix;

@@ -461,39 +461,39 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
-    static Vector2  FromPixelsPointToPixelPerfect(const Vector2& winPoint);
-    static Vector2  FromPointToPointNDC(const Vector2 &point,
-                                        const Vector2 &rectSize);
-    static Vector2  FromPointNDCToPoint(const Vector2 &pointNDC,
-                                        const Vector2 &rectSize);
-    static Vector2  FromAmountToAmountNDC(const Vector2 &amount,
+    static Vector2    FromPixelsPointToPixelPerfect(const Vector2& winPoint);
+    static Vector2    FromPointToPointNDC(const Vector2 &point,
                                           const Vector2 &rectSize);
-    static Vector2  FromAmountNDCToAmount(const Vector2 &amountNDC,
+    static Vector2    FromPointNDCToPoint(const Vector2 &pointNDC,
                                           const Vector2 &rectSize);
-    static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint,
-                                                   const AARecti& viewport);
-    static Vector2  FromViewportPointToWindowPoint(const Vector2& vpPoint);
-    static Vector2  FromViewportPointToWindowPoint(const Vector2i& vpPoint);
-    static Vector2  FromWindowPointToViewportPoint(const Vector2& winPoint);
-    static Vector2  FromWindowPointToViewportPoint(const Vector2i& winPoint);
-    static Rect     FromViewportRectToViewportRectNDC(const Rect &vpRect);
-    static Rect     FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
-    static Rect     FromWindowRectToWindowRectNDC(const Rect &winRect);
-    static Rect     FromWindowRectNDCToWindowRect(const Rect &winRectNDC);
-    static AARect   FromViewportRectToViewportRectNDC(const AARect &vpRect);
-    static AARect   FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
-    static AARect   FromWindowRectToWindowRectNDC(const AARect &winRect);
-    static AARect   FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
-    static Vector2  FromWindowAmountToWindowAmountNDC(const Vector2 &winAmount);
-    static Vector2  FromWindowAmountNDCToWindowAmount(const Vector2 &winAmountNDC);
-    static Vector2  FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
-    static Vector2  FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
-    static Vector2  FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);
-    static Vector2  FromWindowPointToWindowPointNDC(const Vector2  &winPoint);
-    static Vector2  FromWindowPointToWindowPointNDC(const Vector2i &winPoint);
-    static Vector2  FromViewportPointToViewportPointNDC(const Vector2  &vpPoint);
-    static Vector2  FromViewportPointToViewportPointNDC(const Vector2i &vpPoint);
-    static Vector2  FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);
+    static Vector2    FromAmountToAmountNDC(const Vector2 &amount,
+                                            const Vector2 &rectSize);
+    static Vector2    FromAmountNDCToAmount(const Vector2 &amountNDC,
+                                            const Vector2 &rectSize);
+    static Vector2    FromWindowPointToViewportPoint(const Vector2& winPoint,
+                                                     const AARecti& viewport);
+    static Vector2    FromViewportPointToWindowPoint(const Vector2& vpPoint);
+    static Vector2    FromViewportPointToWindowPoint(const Vector2i& vpPoint);
+    static Vector2    FromWindowPointToViewportPoint(const Vector2& winPoint);
+    static Vector2    FromWindowPointToViewportPoint(const Vector2i& winPoint);
+    static RectPoints FromViewportRectToViewportRectNDCPoints(const Rect &vpRect);
+    static Rect       FromViewportRectNDCToViewportRect(const Rect &vpRectNDC);
+    static Rect       FromWindowRectToWindowRectNDC(const Rect &winRect);
+    static Rect       FromWindowRectNDCToWindowRect(const Rect &winRectNDC);
+    static AARect     FromViewportRectToViewportRectNDC(const AARect &vpRect);
+    static AARect     FromViewportRectNDCToViewportRect(const AARect &vpRectNDC);
+    static AARect     FromWindowRectToWindowRectNDC(const AARect &winRect);
+    static AARect     FromWindowRectNDCToWindowRect(const AARect &winRectNDC);
+    static Vector2    FromWindowAmountToWindowAmountNDC(const Vector2 &winAmount);
+    static Vector2    FromWindowAmountNDCToWindowAmount(const Vector2 &winAmountNDC);
+    static Vector2    FromViewportAmountToViewportAmountNDC(const Vector2 &vpAmount);
+    static Vector2    FromViewportAmountNDCToViewportAmount(const Vector2 &vpAmountNDC);
+    static Vector2    FromWindowPointNDCToWindowPoint(const Vector2  &winPointNDC);
+    static Vector2    FromWindowPointToWindowPointNDC(const Vector2  &winPoint);
+    static Vector2    FromWindowPointToWindowPointNDC(const Vector2i &winPoint);
+    static Vector2    FromViewportPointToViewportPointNDC(const Vector2  &vpPoint);
+    static Vector2    FromViewportPointToViewportPointNDC(const Vector2i &vpPoint);
+    static Vector2    FromViewportPointNDCToViewportPoint(const Vector2  &vpPoint);
 
     static void Render(const VAO* vao,
                        GL::Primitive renderMode,

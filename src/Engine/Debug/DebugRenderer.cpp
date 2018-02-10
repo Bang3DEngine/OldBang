@@ -64,11 +64,11 @@ void DebugRenderer::RenderRectNDC(const Rect &rectNDC, const Color &color,
                                   float time, float thickness, bool depthTest)
 {
     DebugRenderer::DebugRenderPrimitive *drp =
-        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::RectNDc,
+        CreateDebugRenderPrimitive(DebugRendererPrimitiveType::RectNDC,
                                    {}, color, time, thickness, depthTest);
     if (drp)
     {
-        drp->rectNDC = GL::FromViewportRectToViewportRectNDC(rectNDC);
+        drp->rectNDCPoints = rectNDC.GetPoints();
     }
 }
 
@@ -147,9 +147,8 @@ void DebugRenderer::RenderPrimitives(bool withDepth)
                          GL::FromViewportRectNDCToViewportRect(drp->aaRectNDC) );
                 break;
 
-                case DebugRendererPrimitiveType::RectNDc:
-                    Gizmos::RenderRectNDC(
-                          GL::FromViewportRectNDCToViewportRect(drp->rectNDC) );
+                case DebugRendererPrimitiveType::RectNDC:
+                    Gizmos::RenderRectNDC(drp->rectNDCPoints);
                 break;
 
                 default: ASSERT(false); break;

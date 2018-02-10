@@ -331,7 +331,7 @@ const Vector2& RectTransform::GetAnchorMax() const { return m_anchorMax; }
 
 Rect RectTransform::GetViewportRectNDC() const
 {
-    return GL::FromViewportRectToViewportRectNDC( GetViewportRect() );
+    return GL::FromViewportRectToViewportRectNDC( AARect( GetViewportRect() ) ).ToRect();
 }
 Rect RectTransform::GetViewportRect() const
 {
@@ -399,6 +399,13 @@ void RectTransform::OnTransformInvalidated()
     m_invalidRectTransformLocalToWorldMatrix = true;
 }
 
+void RectTransform::InvalidateTransform()
+{
+    Transform::InvalidateTransform();
+    m_invalidRectLocalToWorldMatrix = true;
+    m_invalidRectTransformLocalToWorldMatrix = true;
+}
+
 void RectTransform::CalculateRectLocalToWorldMatrix() const
 {
     const Window *win = Window::GetActive();
@@ -429,7 +436,9 @@ void RectTransform::CalculateRectLocalToWorldMatrix() const
 
 void RectTransform::CalculateRectTransformLocalToWorldMatrix() const
 {
-    const Matrix4 localToWorldMatrix = Transform::GetLocalToWorldMatrix();
+    RecalculateParentMatricesIfNeeded();
+    RecalculateWorldMatricesIfNeeded();
+    const Matrix4& localToWorldMatrix = Transform::GetLocalToWorldMatrix();
     m_rectTransformLocalToWorldMatrix = localToWorldMatrix * GetRectLocalToWorldMatrix();
     m_rectTransformLocalToWorldMatrixInv = m_rectTransformLocalToWorldMatrix.Inversed();
     m_invalidRectTransformLocalToWorldMatrix = false;

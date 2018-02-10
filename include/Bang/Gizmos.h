@@ -30,7 +30,9 @@ public:
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
     static void RenderRectNDC(const AARect &r);
-    static void RenderRectNDC(const Rect &r);
+    static void RenderRectNDC(const RectPoints &rectPointsNDC);
+    static void RenderRect(const RectPoints &rectPoints);
+    static void RenderRect(const Rect &r);
     static void RenderFillRect(const AARect &r);
     static void RenderIcon(Texture2D *texture,
                            bool billboard = true);

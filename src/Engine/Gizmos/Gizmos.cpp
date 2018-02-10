@@ -168,16 +168,30 @@ void Gizmos::RenderBox(const AABox &b)
 
 void Gizmos::RenderRectNDC(const AARect &r)
 {
-    Gizmos::RenderRectNDC(r.ToRect());
+    Gizmos::RenderRectNDC({{r.GetMinXMinY(), r.GetMaxXMinY(),
+                            r.GetMinXMaxY(), r.GetMaxXMaxY()}});
 }
-void Gizmos::RenderRectNDC(const Rect &r)
+
+void Gizmos::RenderRectNDC(const RectPoints &rectPointsNDC)
 {
-    Vector2 p0, p1, p2, p3;
-    r.GetPoints(&p0, &p1, &p2, &p3);
-    RenderViewportLineNDC(p0, p1);
-    RenderViewportLineNDC(p1, p2);
-    RenderViewportLineNDC(p2, p3);
-    RenderViewportLineNDC(p3, p0);
+    RenderViewportLineNDC(rectPointsNDC[0], rectPointsNDC[1]);
+    RenderViewportLineNDC(rectPointsNDC[1], rectPointsNDC[2]);
+    RenderViewportLineNDC(rectPointsNDC[2], rectPointsNDC[3]);
+    RenderViewportLineNDC(rectPointsNDC[3], rectPointsNDC[0]);
+}
+
+void Gizmos::RenderRect(const RectPoints &rectPoints)
+{
+    RenderRectNDC({{GL::FromViewportPointToViewportPointNDC(rectPoints[0]),
+                    GL::FromViewportPointToViewportPointNDC(rectPoints[1]),
+                    GL::FromViewportPointToViewportPointNDC(rectPoints[2]),
+                    GL::FromViewportPointToViewportPointNDC(rectPoints[3])}});
+}
+
+void Gizmos::RenderRect(const Rect &r)
+{
+    RenderRect({{r.GetLeftBot(), r.GetRightBot(),
+                 r.GetLeftTop(), r.GetRightTop()}});
 }
 
 void Gizmos::RenderFillRect(const AARect &r)
@@ -253,8 +267,10 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 void Gizmos::RenderViewportLineNDC(const Vector2 &origin, const Vector2 &destiny)
 {
     Gizmos *g = Gizmos::GetInstance();
-    g->m_lineRenderer->SetPoints( {Vector3(origin.x, origin.y, 0),
-                                   Vector3(destiny.x, destiny.y, 0)} );
+    Vector2 originVP  = GL::FromViewportPointNDCToViewportPoint(origin);
+    Vector2 destinyVP = GL::FromViewportPointNDCToViewportPoint(destiny);
+    g->m_lineRenderer->SetPoints( {Vector3(originVP.x,  originVP.y,  0),
+                                   Vector3(destinyVP.x, destinyVP.y, 0)} );
 
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
     g->m_gizmosGo->GetTransform()->SetScale(Vector3::One);

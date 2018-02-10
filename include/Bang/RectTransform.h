@@ -94,6 +94,8 @@ public:
     // Transform
     const Matrix4& GetLocalToWorldMatrix() const override;
     const Matrix4& GetLocalToWorldMatrixInv() const override;
+    void InvalidateTransform() override;
+    void OnTransformInvalidated() override;
 
     const Matrix4& GetRectLocalToWorldMatrix() const;
     const Matrix4& GetRectLocalToWorldMatrixInv() const;
@@ -127,7 +129,6 @@ private:
 
     // Transform
     void CalculateLocalToParentMatrix() const override;
-    void OnTransformInvalidated() override;
 
     void CalculateRectLocalToWorldMatrix() const;
     void CalculateRectTransformLocalToWorldMatrix() const;

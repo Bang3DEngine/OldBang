@@ -16,8 +16,6 @@ private:
     T m_halfSizeAxis0;
     T m_halfSizeAxis1;
 
-    static constexpr float ChecksEpsilon = 0.0001f;
-
 public:
     const static RectG<T> NDCRect;
     const static RectG<T> Zero;
@@ -116,30 +114,30 @@ public:
         return true;
     }
 
-    Vector2G<T> GetBotLeft() const
+    Vector2G<T> GetLeftBot() const
     {
-        return GetCenter() + Vector2G<T>(-GetHalfSize(0), -GetHalfSize(1));
+        return GetCenter() - GetHalfExtent(0) - GetHalfExtent(1);
     }
-    Vector2G<T> GetBotRight() const
+    Vector2G<T> GetRightBot() const
     {
-        return GetCenter() + Vector2G<T>(+GetHalfSize(0), -GetHalfSize(1));
+        return GetCenter() + GetHalfExtent(0) - GetHalfExtent(1);
     }
-    Vector2G<T> GetTopLeft() const
+    Vector2G<T> GetLeftTop() const
     {
-        return GetCenter() + Vector2G<T>(-GetHalfSize(0), +GetHalfSize(1));
+        return GetCenter() - GetHalfExtent(0) + GetHalfExtent(1);
     }
-    Vector2G<T> GetTopRight() const
+    Vector2G<T> GetRightTop() const
     {
-        return GetCenter() + Vector2G<T>(+GetHalfSize(0), +GetHalfSize(1));
+        return GetCenter() + GetHalfExtent(0) + GetHalfExtent(1);
     }
 
     void GetPoints(Vector2G<T> *p0,
                    Vector2G<T> *p1,
                    Vector2G<T> *opposedP0) const
     {
-        *p0        = GetBotLeft();
-        *p1        = GetBotRight();
-        *opposedP0 = GetTopRight();
+        *p0        = GetLeftBot();
+        *p1        = GetRightBot();
+        *opposedP0 = GetRightTop();
     }
     void GetPoints(Vector2G<T> *p0,
                    Vector2G<T> *p1,
@@ -147,10 +145,10 @@ public:
                    Vector2G<T> *opposedP1) const
     {
         GetPoints(p0, p1, opposedP0);
-        *opposedP1 = GetTopLeft();
+        *opposedP1 = GetLeftTop();
     }
 
-    std::array<Vector2G<T>, 4> GetPoints() const
+    RectPoints GetPoints() const
     {
         Vector2G<T> p0, p1, p2, p3;
         GetPoints(&p0, &p1, &p2, &p3);

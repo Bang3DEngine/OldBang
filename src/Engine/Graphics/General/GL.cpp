@@ -1211,11 +1211,13 @@ Vector2 GL::FromWindowPointToViewportPoint(const Vector2i &winPoint)
     return GL::FromWindowPointToViewportPoint( Vector2(winPoint) );
 }
 
-Rect GL::FromViewportRectToViewportRectNDC(const Rect &vpRect)
+RectPoints GL::FromViewportRectToViewportRectNDCPoints(const Rect &vpRect)
 {
-    return Rect( FromViewportPointToViewportPointNDC(vpRect.GetCenter()),
-                 vpRect.GetAxis(0),
-                 FromViewportAmountToViewportAmountNDC(vpRect.GetHalfSize()));
+    RectPoints points = vpRect.GetPoints();
+    return {{GL::FromViewportPointToViewportPointNDC(points[0]),
+             GL::FromViewportPointToViewportPointNDC(points[1]),
+             GL::FromViewportPointToViewportPointNDC(points[2]),
+             GL::FromViewportPointToViewportPointNDC(points[3])}};
 }
 
 Rect GL::FromViewportRectNDCToViewportRect(const Rect &vpRectNDC)
@@ -1319,7 +1321,7 @@ Vector2 GL::FromViewportPointToViewportPointNDC(const Vector2i &vpPoint)
 Vector2 GL::FromViewportPointNDCToViewportPoint(const Vector2 &vpPointNDC)
 {
     Vector2 vpSize( GL::GetViewportSize() );
-    return Vector2::Round( GL::FromPointNDCToPoint(vpPointNDC, vpSize) );
+    return GL::FromPointNDCToPoint(vpPointNDC, vpSize);
 }
 
 

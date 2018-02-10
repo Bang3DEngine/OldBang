@@ -53,13 +53,13 @@ public:
                               bool depthTest = false);
 
 private:
-    enum class DebugRendererPrimitiveType { Point, Line, LineNDC, AARectNDC, RectNDc };
+    enum class DebugRendererPrimitiveType { Point, Line, LineNDC, AARectNDC, RectNDC };
     struct DebugRenderPrimitive
     {
         DebugRendererPrimitiveType primitive;
         Vector3 origin;
         Vector3 end;
-        Rect rectNDC;
+        RectPoints rectNDCPoints;
         AARect aaRectNDC;
         Color color;
         float thickness;
