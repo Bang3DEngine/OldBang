@@ -50,17 +50,15 @@ void Transform::SetLocalRotation(const Quaternion &q)
     if (GetLocalRotation() != q)
     {
         m_localRotation = q.Normalized();
+        m_localEulerAnglesDegreesHint = GetLocalRotation().GetEulerAngles();
         InvalidateTransform();
     }
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
-    Vector3 eulers = degreesEuler;
-    eulers.x = std::fmod(eulers.x, 360.0f);
-    eulers.y = std::fmod(eulers.y, 360.0f);
-    eulers.z = std::fmod(eulers.z, 360.0f);
-    Vector3 eulersRads = eulers.ToRadians();
-    SetLocalRotation( Quaternion::FromEulerAngles(eulersRads).Normalized() );
+    Vector3 eulersRads = degreesEuler.ToRadians();
+    SetLocalRotation( Quaternion::FromEulerAngles(eulersRads) );
+    m_localEulerAnglesDegreesHint = degreesEuler;
 }
 void Transform::SetLocalEuler(float x, float y, float z)
 {
@@ -315,7 +313,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return GetLocalRotation().GetEulerAngles().ToDegrees();
+    return m_localEulerAnglesDegreesHint;
 }
 
 Vector3 Transform::GetEuler() const
@@ -459,6 +457,9 @@ void Transform::ImportXML(const XMLNode &xmlInfo)
     if (xmlInfo.Contains("Rotation"))
     { SetLocalRotation(xmlInfo.Get<Quaternion>("Rotation")); }
 
+    if (xmlInfo.Contains("EulerAngleRadsHint"))
+    { SetLocalEuler(xmlInfo.Get<Vector3>("EulerAngleRadsHint")); }
+
     if (xmlInfo.Contains("Scale"))
     { SetLocalScale(xmlInfo.Get<Vector3>("Scale")); }
 }
@@ -466,9 +467,10 @@ void Transform::ImportXML(const XMLNode &xmlInfo)
 void Transform::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
-    xmlInfo->Set("Position", GetLocalPosition());
-    xmlInfo->Set("Rotation", GetLocalRotation());
-    xmlInfo->Set("Scale",    GetLocalScale());
+    xmlInfo->Set("Position",           GetLocalPosition());
+    xmlInfo->Set("Rotation",           GetLocalRotation());
+    xmlInfo->Set("EulerAngleRadsHint", GetLocalEuler());
+    xmlInfo->Set("Scale",              GetLocalScale());
 }
 
 void Transform::InvalidateTransform()

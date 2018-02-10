@@ -122,7 +122,7 @@ public:
     }
     static Vector3G<T> GetEulerAngles(const QuaternionG<T> &q)
     {
-        return Vector3G<T>(q.GetPitch(), q.GetYaw(), q.GetRoll());
+        return Vector3G<T>(q.GetPitch(), q.GetYaw(), q.GetRoll()).ToDegrees();
     }
 
     template<class Real = T>

@@ -139,9 +139,10 @@ protected:
     virtual bool CanBeRepeatedInGameObject() const override;
 
 private:
-    Vector3    m_localPosition  = Vector3::Zero;
-    Quaternion m_localRotation = Quaternion::Identity;
-    Vector3    m_localScale    = Vector3::One;
+    Vector3    m_localPosition               = Vector3::Zero;
+    Quaternion m_localRotation               = Quaternion::Identity;
+    Vector3    m_localEulerAnglesDegreesHint = Vector3::Zero;
+    Vector3    m_localScale                  = Vector3::One;
 
 
     void PropagateParentTransformChangedEventToChildren() const;
