@@ -94,7 +94,8 @@ public:
     const Matrix4& GetRectLocalToWorldMatrix() const;
     const Matrix4& GetRectLocalToWorldMatrixInv() const;
 
-    Matrix4 GetRectTransformLocalToWorldMatrix() const;
+    const Matrix4& GetRectTransformLocalToWorldMatrix() const;
+    const Matrix4& GetRectTransformLocalToWorldMatrixInv() const;
 
     // IObjectListener
     void OnEnabled() override;
@@ -112,6 +113,10 @@ private:
     mutable Matrix4 m_rectLocalToWorldMatrixInv;
     mutable bool m_invalidRectLocalToWorldMatrix = true;
 
+    mutable Matrix4 m_rectTransformLocalToWorldMatrix;
+    mutable Matrix4 m_rectTransformLocalToWorldMatrixInv;
+    mutable bool m_invalidRectTransformLocalToWorldMatrix = true;
+
     Vector2i m_marginRightTop = Vector2i::Zero;
     Vector2i m_marginLeftBot  = Vector2i::Zero;
 
@@ -124,6 +129,7 @@ private:
     void OnTransformInvalidated() override;
 
     void CalculateRectLocalToWorldMatrix() const;
+    void CalculateRectTransformLocalToWorldMatrix() const;
 
     friend class UILayoutManager;
 };

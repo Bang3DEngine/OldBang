@@ -26,7 +26,7 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    return (GetRectTransformLocalToWorldMatrix().Inversed() * Vector4(vpPoint, 0, 1)).xy();
+    return (GetRectTransformLocalToWorldMatrixInv() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
@@ -396,6 +396,7 @@ void RectTransform::OnTransformInvalidated()
 {
     Transform::OnTransformInvalidated();
     m_invalidRectLocalToWorldMatrix = true;
+    m_invalidRectTransformLocalToWorldMatrix = true;
 }
 
 void RectTransform::CalculateRectLocalToWorldMatrix() const
@@ -403,26 +404,34 @@ void RectTransform::CalculateRectLocalToWorldMatrix() const
     const Window *win = Window::GetActive();
     const Vector2 winSize (win->GetSize());
     const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
+    const Vector2 winVPProp = winSize / vpSize;
 
-    AARect parentAARect = GetParentViewportAARect();
-    const Vector2 parentSize = Vector2::Max(parentAARect.GetSize(), Vector2::One);
+    const AARect parentAARect = GetParentViewportAARect();
+    const Vector2 parentSize = parentAARect.GetSize();
 
-    Vector2 marginLeftBotDC  = (Vector2(GetMarginLeftBot())  / parentSize * (winSize/vpSize));
-    Vector2 marginRightTopDC = (Vector2(GetMarginRightTop()) / parentSize * (winSize/vpSize));
-    Vector2 minMarginedAnchor ( (GetAnchorMin() * 0.5f + 0.5f) + marginLeftBotDC);
-    Vector2 maxMarginedAnchor ( (GetAnchorMax() * 0.5f + 0.5f) - marginRightTopDC);
-    Vector3 anchorScaling ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-    anchorScaling *= Vector3(parentSize / vpSize, 1.0f);
-    Vector2 moveToAnchorCenterDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f );
-    Vector3 moveToAnchorCenter (moveToAnchorCenterDC * parentSize + parentAARect.GetMin(), 0);
+    const Vector2 minVPAnchor = (GetAnchorMin() * 0.5f + 0.5f) * parentSize;
+    const Vector2 maxVPAnchor = (GetAnchorMax() * 0.5f + 0.5f) * parentSize;
+    const Vector2 minMarginedVPAnchor = minVPAnchor +
+                                      (Vector2(GetMarginLeftBot()) * winVPProp);
+    const Vector2 maxMarginedVPAnchor = maxVPAnchor -
+                                      (Vector2(GetMarginRightTop()) * winVPProp);
+    const Vector3 anchorScaling ((maxMarginedVPAnchor - minMarginedVPAnchor) * 0.5f, 1);
+    const Vector2 moveToAnchorCenterOffset ( (maxMarginedVPAnchor + minMarginedVPAnchor) * 0.5f );
+    const Vector3 moveToAnchorCenter (moveToAnchorCenterOffset + parentAARect.GetMin(), 0);
 
-    Vector3 vpScale = Vector3(vpSize.x, vpSize.y, 1.0f);
-    Matrix4 scaleMat = Matrix4::ScaleMatrix(anchorScaling * vpScale);
-    Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
+    const Matrix4 scaleMat = Matrix4::ScaleMatrix(anchorScaling);
+    const Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
     m_rectLocalToWorldMatrix = translateToAnchorCenterMat * scaleMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
     m_invalidRectLocalToWorldMatrix = false;
+}
+
+void RectTransform::CalculateRectTransformLocalToWorldMatrix() const
+{
+    m_rectTransformLocalToWorldMatrix = GetLocalToWorldMatrix() * GetRectLocalToWorldMatrix();
+    m_rectTransformLocalToWorldMatrixInv = m_rectTransformLocalToWorldMatrix.Inversed();
+    m_invalidRectTransformLocalToWorldMatrix = false;
 }
 
 bool RectTransform::IsMouseOver(bool recursive) const
@@ -459,10 +468,22 @@ const Matrix4 &RectTransform::GetRectLocalToWorldMatrixInv() const
     return m_rectLocalToWorldMatrixInv;
 }
 
-Matrix4 RectTransform::GetRectTransformLocalToWorldMatrix() const
+const Matrix4& RectTransform::GetRectTransformLocalToWorldMatrix() const
 {
-    RecalculateWorldMatricesIfNeeded();
-    return GetLocalToWorldMatrix() * GetRectLocalToWorldMatrix();
+    if (m_invalidRectTransformLocalToWorldMatrix)
+    {
+        CalculateRectTransformLocalToWorldMatrix();
+    }
+    return m_rectTransformLocalToWorldMatrix;
+}
+
+const Matrix4 &RectTransform::GetRectTransformLocalToWorldMatrixInv() const
+{
+    if (m_invalidRectTransformLocalToWorldMatrix)
+    {
+        CalculateRectTransformLocalToWorldMatrix();
+    }
+    return m_rectTransformLocalToWorldMatrixInv;
 }
 
 void RectTransform::OnRender(RenderPass rp)

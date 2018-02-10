@@ -34,22 +34,15 @@ void UIRenderer::OnRender(RenderPass renderPass)
     bool render = true;
     if (GetCullByRectTransform())
     {
-        RectTransform *rt = GetGameObject()->GetRectTransform();
-        if (rt)
+        if (RectTransform *rt = GetGameObject()->GetRectTransform())
         {
-            AARect rectNDC ( rt->GetViewportRectNDC() );
-            if (rectNDC != AARect::Zero &&
-                AARect::Intersection(AARect::NDCRect, rectNDC) == AARect::Zero)
-            {
-                render = false;
-            }
+            const AARect rectNDC = rt->GetViewportAARectNDC();
+            render = (rectNDC != AARect::Zero &&
+                      AARect::Intersection(AARect::NDCRect, rectNDC) != AARect::Zero);
         }
     }
 
-    if (render)
-    {
-        Renderer::OnRender(renderPass);
-    }
+    if (render) { Renderer::OnRender(renderPass); }
 }
 
 void UIRenderer::SetCullByRectTransform(bool cullByRectTransform)
