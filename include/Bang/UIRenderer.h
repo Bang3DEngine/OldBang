@@ -46,9 +46,6 @@ protected:
 private:
     bool m_cullByRectTransform = true;
 
-    // Renderer
-    virtual Matrix4 GetRenderModelMatrix() const override;
-
 };
 
 NAMESPACE_BANG_END

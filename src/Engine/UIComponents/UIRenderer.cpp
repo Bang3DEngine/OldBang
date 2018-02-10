@@ -18,12 +18,6 @@ UIRenderer::~UIRenderer()
 {
 }
 
-Matrix4 UIRenderer::GetRenderModelMatrix() const
-{
-    RectTransform *rt = GetGameObject()->GetRectTransform();
-    return (rt ? rt->GetRectTransformLocalToWorldMatrix() : Matrix4::Identity);
-}
-
 void UIRenderer::OnRender()
 {
     Renderer::OnRender();

@@ -26,7 +26,7 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    return (GetRectTransformLocalToWorldMatrixInv() * Vector4(vpPoint, 0, 1)).xy();
+    return (GetLocalToWorldMatrixInv() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
@@ -112,7 +112,7 @@ Vector2 RectTransform::
 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const
 {
     return GL::FromViewportPointToViewportPointNDC(
-             (GetRectTransformLocalToWorldMatrix() * Vector4(localPointNDC, 0, 1) ).xy() );
+             (GetLocalToWorldMatrix() * Vector4(localPointNDC, 0, 1) ).xy() );
 }
 
 void RectTransform::SetMarginLeft(int marginLeft)
@@ -335,7 +335,7 @@ Rect RectTransform::GetViewportRectNDC() const
 }
 Rect RectTransform::GetViewportRect() const
 {
-    return GetRectTransformLocalToWorldMatrix() * Rect::NDCRect;
+    return GetLocalToWorldMatrix() * Rect::NDCRect;
 }
 
 Rect RectTransform::GetParentViewportRectNDC() const
@@ -429,7 +429,8 @@ void RectTransform::CalculateRectLocalToWorldMatrix() const
 
 void RectTransform::CalculateRectTransformLocalToWorldMatrix() const
 {
-    m_rectTransformLocalToWorldMatrix = GetLocalToWorldMatrix() * GetRectLocalToWorldMatrix();
+    const Matrix4 localToWorldMatrix = Transform::GetLocalToWorldMatrix();
+    m_rectTransformLocalToWorldMatrix = localToWorldMatrix * GetRectLocalToWorldMatrix();
     m_rectTransformLocalToWorldMatrixInv = m_rectTransformLocalToWorldMatrix.Inversed();
     m_invalidRectTransformLocalToWorldMatrix = false;
 }
@@ -456,6 +457,24 @@ bool RectTransform::IsMouseOver(bool recursive) const
     return false;
 }
 
+const Matrix4 &RectTransform::GetLocalToWorldMatrix() const
+{
+    if (m_invalidRectTransformLocalToWorldMatrix)
+    {
+        CalculateRectTransformLocalToWorldMatrix();
+    }
+    return m_rectTransformLocalToWorldMatrix;
+}
+
+const Matrix4 &RectTransform::GetLocalToWorldMatrixInv() const
+{
+    if (m_invalidRectTransformLocalToWorldMatrix)
+    {
+        CalculateRectTransformLocalToWorldMatrix();
+    }
+    return m_rectTransformLocalToWorldMatrixInv;
+}
+
 const Matrix4 &RectTransform::GetRectLocalToWorldMatrix() const
 {
     if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
@@ -466,24 +485,6 @@ const Matrix4 &RectTransform::GetRectLocalToWorldMatrixInv() const
 {
     if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
     return m_rectLocalToWorldMatrixInv;
-}
-
-const Matrix4& RectTransform::GetRectTransformLocalToWorldMatrix() const
-{
-    if (m_invalidRectTransformLocalToWorldMatrix)
-    {
-        CalculateRectTransformLocalToWorldMatrix();
-    }
-    return m_rectTransformLocalToWorldMatrix;
-}
-
-const Matrix4 &RectTransform::GetRectTransformLocalToWorldMatrixInv() const
-{
-    if (m_invalidRectTransformLocalToWorldMatrix)
-    {
-        CalculateRectTransformLocalToWorldMatrix();
-    }
-    return m_rectTransformLocalToWorldMatrixInv;
 }
 
 void RectTransform::OnRender(RenderPass rp)

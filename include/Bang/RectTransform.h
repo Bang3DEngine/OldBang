@@ -91,11 +91,12 @@ public:
 
     bool IsMouseOver(bool recursive = false) const;
 
+    // Transform
+    const Matrix4& GetLocalToWorldMatrix() const override;
+    const Matrix4& GetLocalToWorldMatrixInv() const override;
+
     const Matrix4& GetRectLocalToWorldMatrix() const;
     const Matrix4& GetRectLocalToWorldMatrixInv() const;
-
-    const Matrix4& GetRectTransformLocalToWorldMatrix() const;
-    const Matrix4& GetRectTransformLocalToWorldMatrixInv() const;
 
     // IObjectListener
     void OnEnabled() override;
