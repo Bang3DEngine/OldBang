@@ -26,9 +26,7 @@ RectTransform::~RectTransform()
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2 &vpPoint) const
 {
-    return (GetLocalToWorldMatrixInv() *
-            Vector4(GL::FromViewportPointToViewportPointNDC(vpPoint), 0, 1)).
-           xy();
+    return (GetRectTransformLocalToWorldMatrix().Inversed() * Vector4(vpPoint, 0, 1)).xy();
 }
 Vector2 RectTransform::
 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
@@ -79,9 +77,9 @@ FromLocalPointNDCToViewportPoint(const Vector2 &localPointNDC) const
 Vector2 RectTransform::
 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const
 {
-    Rect vpRectNDC = GetViewportRectNDC();
-    Vector2 vpPointNDCOrigined = vpPointNDC - vpRectNDC.GetCenter();
-    Vector2 vpRectSize = Vector2::Max(vpRectNDC.GetSize(), Vector2(0.00001f));
+    AARect vpAARectNDC = GetViewportAARectNDC();
+    Vector2 vpPointNDCOrigined = vpPointNDC - vpAARectNDC.GetCenter();
+    Vector2 vpRectSize = Vector2::Max(vpAARectNDC.GetSize(), Vector2(0.00001f));
     vpPointNDCOrigined /= (vpRectSize / 2.0f);
     return vpPointNDCOrigined;
 }
@@ -113,7 +111,8 @@ FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const
 Vector2 RectTransform::
 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const
 {
-    return FromLocalToWorldPoint( Vector3(localPointNDC, 0) ).xy();
+    return GL::FromViewportPointToViewportPointNDC(
+             (GetRectTransformLocalToWorldMatrix() * Vector4(localPointNDC, 0, 1) ).xy() );
 }
 
 void RectTransform::SetMarginLeft(int marginLeft)
@@ -417,15 +416,12 @@ void RectTransform::CalculateRectLocalToWorldMatrix() const
     Vector2 moveToAnchorCenterDC ( (maxMarginedAnchor + minMarginedAnchor) * 0.5f );
     Vector3 moveToAnchorCenter (moveToAnchorCenterDC * parentSize + parentAARect.GetMin(), 0);
 
-    Matrix4 scaleToAnchorsMat = Matrix4::ScaleMatrix(anchorScaling);
-    Matrix4 scaleToViewportMat = Matrix4::ScaleMatrix( Vector3(vpSize.x, vpSize.y, 1.0f) );
+    Vector3 vpScale = Vector3(vpSize.x, vpSize.y, 1.0f);
+    Matrix4 scaleMat = Matrix4::ScaleMatrix(anchorScaling * vpScale);
     Matrix4 translateToAnchorCenterMat = Matrix4::TranslateMatrix(moveToAnchorCenter);
 
-    m_rectLocalToWorldMatrix = translateToAnchorCenterMat *
-                               scaleToViewportMat *
-                               scaleToAnchorsMat;
+    m_rectLocalToWorldMatrix = translateToAnchorCenterMat * scaleMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
-
     m_invalidRectLocalToWorldMatrix = false;
 }
 

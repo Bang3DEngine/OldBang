@@ -141,7 +141,7 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
         textQuadPos3D.PushBack( Vector3(charRectLocalNDC.GetMinXMaxY(), 0) );
 
         AARect charRectLocalNDCRaw ( rt->FromViewportPointToLocalPointNDC(minPxPerf),
-                                   rt->FromViewportPointToLocalPointNDC(maxPxPerf) );
+                                     rt->FromViewportPointToLocalPointNDC(maxPxPerf) );
         m_charRectsLocalNDC.PushBack(charRectLocalNDCRaw);
     }
 
