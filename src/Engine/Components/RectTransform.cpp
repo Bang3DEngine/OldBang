@@ -34,6 +34,17 @@ FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const
     return FromViewportPointToLocalPointNDC( Vector2(vpPoint) );
 }
 
+Vector2 RectTransform::FromViewportPointToLocalPoint(const Vector2 &vpPoint) const
+{
+    return FromLocalPointNDCToLocalPoint(
+                FromViewportPointToLocalPointNDC(vpPoint) );
+}
+
+Vector2 RectTransform::FromViewportPointToLocalPoint(const Vector2i &vpPoint) const
+{
+    return FromViewportPointToLocalPoint( Vector2(vpPoint) );
+}
+
 Vector2 RectTransform::FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const
 {
     Rect parentWinRect = GetParentViewportRect();
@@ -77,11 +88,8 @@ FromLocalPointNDCToViewportPoint(const Vector2 &localPointNDC) const
 Vector2 RectTransform::
 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const
 {
-    AARect vpAARectNDC = GetViewportAARectNDC();
-    Vector2 vpPointNDCOrigined = vpPointNDC - vpAARectNDC.GetCenter();
-    Vector2 vpRectSize = Vector2::Max(vpAARectNDC.GetSize(), Vector2(0.00001f));
-    vpPointNDCOrigined /= (vpRectSize / 2.0f);
-    return vpPointNDCOrigined;
+    return (GetLocalToWorldMatrixInv() *
+            Vector4(GL::FromViewportPointNDCToViewportPoint(vpPointNDC), 0, 1)).xy();
 }
 
 AARect RectTransform::
@@ -112,7 +120,17 @@ Vector2 RectTransform::
 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const
 {
     return GL::FromViewportPointToViewportPointNDC(
-             (GetLocalToWorldMatrix() * Vector4(localPointNDC, 0, 1) ).xy() );
+                (GetLocalToWorldMatrix() * Vector4(localPointNDC, 0, 1) ).xy() );
+}
+
+Vector2 RectTransform::FromLocalPointToLocalPointNDC(const Vector2 &localPoint) const
+{
+    return GL::FromPointToPointNDC(localPoint, GetViewportAARect().GetSize());
+}
+
+Vector2 RectTransform::FromLocalPointNDCToLocalPoint(const Vector2 &localPointNDC) const
+{
+    return GL::FromPointNDCToPoint(localPointNDC, GetViewportAARect().GetSize());
 }
 
 void RectTransform::SetMarginLeft(int marginLeft)
@@ -413,20 +431,13 @@ void RectTransform::InvalidateTransform()
 
 void RectTransform::CalculateRectLocalToWorldMatrix() const
 {
-    const Window *win = Window::GetActive();
-    const Vector2 winSize (win->GetSize());
-    const Vector2 vpSize = Vector2::Max(Vector2(GL::GetViewportSize()), Vector2::One);
-    const Vector2 winVPProp = winSize / vpSize;
-
     const AARect parentAARect = GetParentViewportAARect();
     const Vector2 parentSize = parentAARect.GetSize();
 
     const Vector2 minVPAnchor = (GetAnchorMin() * 0.5f + 0.5f) * parentSize;
     const Vector2 maxVPAnchor = (GetAnchorMax() * 0.5f + 0.5f) * parentSize;
-    const Vector2 minMarginedVPAnchor = minVPAnchor +
-                                      (Vector2(GetMarginLeftBot()) * winVPProp);
-    const Vector2 maxMarginedVPAnchor = maxVPAnchor -
-                                      (Vector2(GetMarginRightTop()) * winVPProp);
+    const Vector2 minMarginedVPAnchor = minVPAnchor + Vector2(GetMarginLeftBot());
+    const Vector2 maxMarginedVPAnchor = maxVPAnchor - Vector2(GetMarginRightTop());
     const Vector3 anchorScaling ((maxMarginedVPAnchor - minMarginedVPAnchor) * 0.5f, 1);
     const Vector2 moveToAnchorCenterOffset ( (maxMarginedVPAnchor + minMarginedVPAnchor) * 0.5f );
     const Vector3 moveToAnchorCenter (moveToAnchorCenterOffset + parentAARect.GetMin(), 0);

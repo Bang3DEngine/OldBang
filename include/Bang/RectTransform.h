@@ -80,8 +80,12 @@ public:
     Rect    FromLocalRectNDCToViewportRectNDC(const Rect &localRectNDC) const;
     Vector2 FromViewportPointNDCToLocalPointNDC(const Vector2 &vpPointNDC) const;
     Vector2 FromLocalPointNDCToViewportPointNDC(const Vector2 &localPointNDC) const;
+    Vector2 FromLocalPointToLocalPointNDC(const Vector2 &localPoint) const;
+    Vector2 FromLocalPointNDCToLocalPoint(const Vector2 &localPointNDC) const;
     Vector2 FromViewportPointToLocalPointNDC(const Vector2  &vpPoint) const;
     Vector2 FromViewportPointToLocalPointNDC(const Vector2i &vpPoint) const;
+    Vector2 FromViewportPointToLocalPoint(const Vector2  &vpPoint) const;
+    Vector2 FromViewportPointToLocalPoint(const Vector2i &vpPoint) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2 &vpAmount) const;
     Vector2 FromViewportAmountToLocalAmountNDC(const Vector2i &vpAmount) const;
     Vector2 FromWindowAmountToLocalAmountNDC(const Vector2 &winAmount) const;
