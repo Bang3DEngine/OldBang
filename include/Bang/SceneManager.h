@@ -54,6 +54,7 @@ protected:
     const Path& GetNextLoadScenePath() const;
     bool GetNextLoadDestroyActive() const;
 
+    virtual Scene *GetSceneToBeRenderedToWindow() const;
     void _SetActiveScene(Scene *activeScene);
     Scene *_GetActiveScene() const;
 

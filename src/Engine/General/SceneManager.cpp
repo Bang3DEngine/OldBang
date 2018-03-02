@@ -71,20 +71,25 @@ void SceneManager::Update()
 
 void SceneManager::Render()
 {
-    Scene *activeScene = _GetActiveScene();
-    if (activeScene)
+    Scene *sceneToBeRendered = GetSceneToBeRenderedToWindow();
+    if (sceneToBeRendered)
     {
-        Camera *camera = activeScene->GetCamera();
+        _SetActiveScene(sceneToBeRendered);
+        Scene *prevActiveScene = _GetActiveScene();
+
+        Camera *camera = sceneToBeRendered->GetCamera();
         GEngine *ge = GEngine::GetActive();
         if (camera && ge)
         {
-            ge->Render(activeScene, camera);
+            ge->Render(sceneToBeRendered, camera);
             AARecti prevVP = GL::GetViewportRect();
             camera->SetViewportForBlitting();
             ge->RenderTextureToViewport(
                 camera->GetGBuffer()->GetAttachmentTexture(GBuffer::AttColor));
             GL::SetViewport(prevVP);
         }
+
+        _SetActiveScene(prevActiveScene);
     }
 }
 
@@ -226,6 +231,11 @@ bool SceneManager::GetNextLoadNeeded() const { return m_nextLoadNeeded; }
 Scene *SceneManager::GetNextLoadScene() const { return p_nextLoadScene; }
 const Path &SceneManager::GetNextLoadScenePath() const { return m_nextLoadScenePath; }
 bool SceneManager::GetNextLoadDestroyActive() const { return m_nextLoadDestroyActive; }
+
+Scene *SceneManager::GetSceneToBeRenderedToWindow() const
+{
+    return GetActiveScene();
+}
 BehaviourManager *SceneManager::GetBehaviourManager() const { return m_behaviourManager; }
 
 void SceneManager::ClearNextLoad()
