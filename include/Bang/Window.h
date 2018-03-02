@@ -86,7 +86,6 @@ public:
     Window *GetParentWindow() const;
     const List<Window*>& GetChildren() const;
 
-    static void Destroy(Window *win);
     static Window *GetActive();
 
 protected:

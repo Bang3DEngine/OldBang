@@ -385,11 +385,6 @@ SceneManager *Window::CreateSceneManager() const
     return new SceneManager();
 }
 
-void Window::Destroy(Window *win)
-{
-    Application::GetInstance()->DestroyWindow(win);
-}
-
 Window *Window::GetActive()
 {
     return Window::s_activeWindow;

@@ -16,6 +16,7 @@ FORWARD class GEngine;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
+FORWARD class WindowManager;
 FORWARD class ImportFilesManager;
 
 class Application
@@ -26,25 +27,15 @@ public:
 
     virtual void Init(const Path &engineRootPath = Path::Empty);
 
-    Window* CreateWindow(uint flags = 0);
-    DialogWindow* CreateDialogWindow(Window *parentWindow, bool resizable);
-    void DestroyWindow(Window *window);
-
     int MainLoop();
     bool MainLoopIteration();
-
-    void BlockingWait(Window *win, Window *previousWindow = nullptr);
-
-    bool HandleEvents();
+    void BlockingWait(Window *win);
 
     Time               *GetTime() const;
     Paths              *GetPaths() const;
     AudioManager       *GetAudioManager() const;
+    WindowManager      *GetWindowManager() const;
     ImportFilesManager *GetImportFilesManager() const;
-
-    virtual SceneManager* CreateSceneManager() const;
-    const List<Window*>& GetWindows() const;
-    static Window* GetMainWindow();
 
     static Application *GetInstance();
     static void SetApplicationSingleton(Application *app);
@@ -52,28 +43,20 @@ public:
     static void Exit(int returnCode, bool immediate = false);
 
 protected:
-    unsigned long long m_lastRenderTime = 0;
-
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
     AudioManager       *m_audioManager       = nullptr;
+    WindowManager      *m_windowManager      = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
-
-    void SetupWindow(Window *window, uint flags);
-
-    virtual Paths* CreatePaths();
-    virtual Window* _CreateWindow();
 
 private:
     static Application *s_appSingleton;
 
-    List<Window*> m_windows;
-    List<Window*> p_windowsToBeDestroyed;
-
-    bool m_forcedExit = false;
     int m_exitCode = 0;
+    bool m_forcedExit = false;
 
-    void DestroyQueuedWindows();
+    virtual Paths* CreatePaths();
+    virtual SceneManager* CreateSceneManager() const;
 };
 
 NAMESPACE_BANG_END

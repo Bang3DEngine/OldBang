@@ -2,9 +2,6 @@
 
 #include <thread>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
@@ -20,6 +17,7 @@
 #include "Bang/AudioManager.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
+#include "Bang/WindowManager.h"
 #include "Bang/FontSheetCreator.h"
 #include "Bang/ImportFilesManager.h"
 
@@ -35,13 +33,6 @@ void Application::Init(const Path &engineRootPath)
 {
     srand(1234);
 
-    if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) { Debug_Error("Failed to init SDL"); }
-    if ( TTF_Init() )
-    {
-        Debug_Error("Could not init FreeType library: Error(" <<
-                    TTF_GetError() <<  ")");
-    }
-
     Application::s_appSingleton = this;
 
     m_time = new Time();
@@ -51,8 +42,10 @@ void Application::Init(const Path &engineRootPath)
     m_audioManager = new AudioManager();
     m_audioManager->Init();
 
-    m_importFilesManager = new ImportFilesManager();
+    m_windowManager = new WindowManager();
+    GetWindowManager()->Init();
 
+    m_importFilesManager = new ImportFilesManager();
     ImportFilesManager::CreateMissingImportFiles(Paths::GetEngineAssetsDir());
     ImportFilesManager::LoadImportFilepathGUIDs(Paths::GetEngineAssetsDir());
 }
@@ -63,153 +56,62 @@ Application::~Application()
     delete m_time;
     delete m_paths;
     delete m_audioManager;
+    delete m_windowManager;
     delete m_importFilesManager;
-
-    for (Window *w : m_windows) { delete w; }
-    for (Window *w : p_windowsToBeDestroyed) { delete w; }
-
-    TTF_Quit();
-    SDL_Quit();
-}
-
-Window *Application::CreateWindow(uint flags)
-{
-    Window *w = _CreateWindow();
-    SetupWindow(w, flags);
-    return w;
-}
-
-DialogWindow *Application::CreateDialogWindow(Window *parentWindow,
-                                              bool resizable)
-{
-     DialogWindow *w = new DialogWindow(parentWindow, resizable);
-     SetupWindow(w, 0);
-     return w;
-}
-
-void Application::SetupWindow(Window *window,
-                              uint _flags)
-{
-    m_windows.PushBack(window);
-
-    uint flags = (_flags > 0 ?_flags : (SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL));
-    window->Create(flags);
-    window->OnResize(window->GetWidth(), window->GetHeight());
-}
-
-Window *Application::GetMainWindow()
-{
-    Application *app = Application::GetInstance();
-    if (!app) { return nullptr; }
-
-    return !app->m_windows.IsEmpty() ? app->m_windows.Front() : nullptr;
 }
 
 #ifdef GPROF
 #include <gperftools/profiler.h>
 #endif
-int Application::MainLoop()
+void InitProfiling()
 {
     #ifdef GPROF
     Path profileOutFile = Paths::GetExecutablePath().GetDirectory().Append("profiling_info.out");
     Debug_Log("Writing profiling information to: '" << profileOutFile << "'");
     ProfilerStart(profileOutFile.GetAbsolute().ToCString());
     #endif
+}
+void FlushProfiling()
+{
+    #ifdef GPROF
+    ProfilerFlush();
+    #endif
+}
+void StopProfiling()
+{
+    #ifdef GPROF
+    ProfilerStop();
+    #endif
+}
 
+int Application::MainLoop()
+{
+    InitProfiling();
     Time::SetDeltaTimeReferenceToNow();
 
     bool exit = false;
     while (!exit && !m_forcedExit)
     {
         exit = MainLoopIteration();
-        #ifdef GPROF
-        ProfilerFlush();
-        #endif
+        FlushProfiling();
     }
 
-    #ifdef GPROF
-    ProfilerStop();
-    #endif
-
+    StopProfiling();
     return m_exitCode;
 }
 
 bool Application::MainLoopIteration()
 {
-    bool exit = false;
-    if (!HandleEvents())     { exit = true; }
-    if (m_windows.IsEmpty()) { exit = true; }
-    DestroyQueuedWindows();
-
-    List<Window*> windows = GetWindows();
-    for (Window *w : windows)
-    {
-        Window::SetActive(w);
-        w->MainLoopIteration();
-        Window::SetActive(nullptr);
-    }
-
+    bool exit = GetWindowManager()->MainLoopIteration();
     Thread::SleepCurrentThread(0.01f);
-
     return exit;
 }
 
-void Application::BlockingWait(Window *win, Window *previousWindow)
+void Application::BlockingWait(Window *win)
 {
-    List<Window*> allWindows = m_windows;
-    allWindows.Remove(win);
-
-    m_windows = {win};
-    Window::SetActive(win);
-
+    GetWindowManager()->OnBlockingWaitBegin(win);
     MainLoop();
-
-    Window::SetActive(previousWindow);
-    m_windows = allWindows;
-}
-
-bool Application::HandleEvents()
-{
-    SDL_Event sdlEvent;
-    constexpr int AreThereMoreEvents = 1;
-    while (SDL_PollEvent(&sdlEvent) == AreThereMoreEvents)
-    {
-        switch (sdlEvent.type)
-        {
-            default:
-            {
-                List<Window*> windowsToBeClosed;
-                for (Window *w : m_windows)
-                {
-                    Window::SetActive(w);
-                    bool hasNotClosed = w->HandleEvent(sdlEvent);
-                    if (!hasNotClosed) { windowsToBeClosed.PushBack(w); }
-                    Window::SetActive(nullptr);
-                }
-
-                for (Window *w : windowsToBeClosed)
-                {
-                    Window::SetActive(w);
-                    w->OnClosed();
-                    Window::SetActive(nullptr);
-
-                    Window::SetActive(w);
-                    m_windows.Remove(w);
-                    delete w;
-                    Window::SetActive(nullptr);
-                }
-            }
-        }
-    }
-
-    for (Window *w : GetWindows())
-    {
-        Window::SetActive(w);
-        w->OnHandleEventsFinished();
-        Window::SetActive(nullptr);
-    }
-
-    return true;
+    GetWindowManager()->OnBlockingWaitEnd();
 }
 
 Time *Application::GetTime() const
@@ -225,6 +127,11 @@ Paths *Application::GetPaths() const
 AudioManager *Application::GetAudioManager() const
 {
     return m_audioManager;
+}
+
+WindowManager *Application::GetWindowManager() const
+{
+    return m_windowManager;
 }
 
 ImportFilesManager *Application::GetImportFilesManager() const
@@ -258,31 +165,7 @@ Paths *Application::CreatePaths()
     return new Paths();
 }
 
-Window *Application::_CreateWindow() { return new Window(); }
-
-void Application::DestroyWindow(Window *window)
-{
-    p_windowsToBeDestroyed.PushBack(window);
-}
-void Application::DestroyQueuedWindows()
-{
-    Window *latestWindow = Window::GetActive();
-    for (Window *w : p_windowsToBeDestroyed)
-    {
-        Window::SetActive(w);
-        m_windows.Remove(w);
-        delete w;
-    }
-    p_windowsToBeDestroyed.Clear();
-    Window::SetActive(latestWindow);
-}
-
 SceneManager *Application::CreateSceneManager() const
 {
     return new SceneManager();
-}
-
-const List<Window *> &Application::GetWindows() const
-{
-    return m_windows;
 }

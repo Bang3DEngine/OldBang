@@ -17,9 +17,10 @@
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
 #include "Bang/DialogWindow.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UIAutoFocuser.h"
 #include "Bang/UIScrollPanel.h"
-#include "Bang/RectTransform.h"
+#include "Bang/WindowManager.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -118,13 +119,12 @@ DialogWindow* Dialog::BeginCreateDialog(const String &title, int sizeX, int size
                                         bool resizable)
 {
     DialogWindow *dialogWindow = nullptr;
-    Window *topWindow = Application::GetMainWindow();
+    Window *topWindow = WindowManager::GetTopWindow();
     if (topWindow)
     {
         Input::GetActive()->Reset();
 
-        dialogWindow = Application::GetInstance()->
-                                    CreateDialogWindow(topWindow, resizable);
+        dialogWindow = WindowManager::CreateDialogWindow(topWindow, resizable);
         Window::SetActive(dialogWindow);
         dialogWindow->SetSize(sizeX, sizeY);
         dialogWindow->SetTitle(title);
@@ -140,15 +140,14 @@ DialogWindow* Dialog::BeginCreateDialog(const String &title, int sizeX, int size
 
 void Dialog::EndCreateDialog(DialogWindow *dialogWindow)
 {
-    Application::GetInstance()->BlockingWait(dialogWindow,
-                                             Application::GetMainWindow());
+    Application::GetInstance()->BlockingWait(dialogWindow);
 }
 
 void Dialog::EndCurrentDialog()
 {
     if (Dialog::s_currentDialog)
     {
-        Window::Destroy(Dialog::s_currentDialog);
+        WindowManager::GetInstance()->DestroyWindow(Dialog::s_currentDialog);
         Dialog::s_currentDialog = nullptr;
     }
 }

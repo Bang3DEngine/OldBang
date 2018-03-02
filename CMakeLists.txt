@@ -290,6 +290,7 @@ ${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
 ${ENGINE_SRC_DIR}/Windows/Dialog.cpp
 ${ENGINE_SRC_DIR}/Windows/DialogWindow.cpp
 ${ENGINE_SRC_DIR}/Windows/Window.cpp
+${ENGINE_SRC_DIR}/Windows/WindowManager.cpp
 ${OTHER_FILES}
 )
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
