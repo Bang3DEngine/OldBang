@@ -1,5 +1,6 @@
 #include "Bang/ComponentFactory.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Light.h"
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"
@@ -20,6 +21,7 @@
 #include "Bang/AudioListener.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/StreamOperators.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/UIVerticalLayout.h"

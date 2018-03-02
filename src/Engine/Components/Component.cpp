@@ -1,5 +1,6 @@
 #include "Bang/Component.h"
 
+#include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Transform.h"

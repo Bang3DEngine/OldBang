@@ -1,5 +1,6 @@
 ﻿#include "Bang/UITree.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"

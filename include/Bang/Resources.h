@@ -8,8 +8,8 @@
 #include "Bang/Paths.h"
 #include "Bang/TypeMap.h"
 #include "Bang/Resource.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Serializable.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/ImportFilesManager.h"
 
