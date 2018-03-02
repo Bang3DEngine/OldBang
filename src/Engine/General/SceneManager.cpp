@@ -4,8 +4,11 @@
 #include "Bang/Debug.h"
 #include "Bang/Paths.h"
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
 #include "Bang/String.h"
 #include "Bang/Window.h"
+#include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
 #include "Bang/Extensions.h"
 #include "Bang/AudioManager.h"
 #include "Bang/BehaviourManager.h"
@@ -60,23 +63,35 @@ void SceneManager::OnNewFrame(Scene *scene, bool update)
     }
 }
 
+void SceneManager::Update()
+{
+    if (GetNextLoadNeeded())  {  _LoadSceneInstantly(); }
+    SceneManager::OnNewFrame( GetActiveScene(), true );
+}
+
+void SceneManager::Render()
+{
+    Scene *activeScene = _GetActiveScene();
+    if (activeScene)
+    {
+        Camera *camera = activeScene->GetCamera();
+        GEngine *ge = GEngine::GetActive();
+        if (camera && ge)
+        {
+            ge->Render(activeScene, camera);
+            AARecti prevVP = GL::GetViewportRect();
+            camera->SetViewportForBlitting();
+            ge->RenderTextureToViewport(
+                camera->GetGBuffer()->GetAttachmentTexture(GBuffer::AttColor));
+            GL::SetViewport(prevVP);
+        }
+    }
+}
+
 void SceneManager::OnResize(int width, int height)
 {
     Scene *scene = GetActiveScene();
     if (scene) { scene->OnResize(width, height); }
-}
-
-void SceneManager::_Update()
-{
-    SceneManager *sm = SceneManager::GetActive();
-    if (sm->GetNextLoadNeeded())  {  _LoadSceneInstantly(); }
-
-    SceneManager::OnNewFrame( SceneManager::GetActiveScene(), true );
-}
-
-void SceneManager::Update()
-{
-    SceneManager::GetActive()->_Update();
 }
 
 Scene *SceneManager::GetActiveScene()

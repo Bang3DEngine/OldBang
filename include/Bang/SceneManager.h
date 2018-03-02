@@ -38,8 +38,9 @@ public:
     static SceneManager* GetActive();
 
     static void OnNewFrame(Scene *scene, bool update);
-    static void Update();
 
+    virtual void Update();
+    virtual void Render();
     virtual void OnResize(int width, int height);
 
     BehaviourManager *GetBehaviourManager() const;
@@ -56,7 +57,6 @@ protected:
     void _SetActiveScene(Scene *activeScene);
     Scene *_GetActiveScene() const;
 
-    virtual void _Update();
     virtual void _LoadSceneInstantly();
 
     void PropagateNextSceneLoadedToListeners();

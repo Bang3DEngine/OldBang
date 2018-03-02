@@ -208,16 +208,15 @@ void GEngine::RenderViewportRect(ShaderProgram *sp, const AARect &destRectMask)
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
 }
 
-void GEngine::RenderGBufferColorToViewport(Camera *cam)
+void GEngine::RenderTextureToViewport(Texture2D *texture)
 {
-    if (!cam) { return; }
+    // if (!cam) { return; }
     p_renderGBufferToWindowMaterial.Get()->Bind();
 
     ShaderProgram *sp = p_renderGBufferToWindowMaterial.Get()->GetShaderProgram();
-    GBuffer *gbuffer = cam->GetGBuffer();
-    gbuffer->BindAttachmentsForReading(sp);
-    sp->Set("B_GTex_Color", gbuffer->GetAttachmentTexture(GBuffer::AttColor),
-            false);
+    // GBuffer *gbuffer = cam->GetGBuffer();
+    // gbuffer->BindAttachmentsForReading(sp);
+    sp->Set("B_GTex_Color", texture, false);
 
     GEngine::RenderViewportRect(sp, AARect::NDCRect);
 

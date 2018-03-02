@@ -125,26 +125,7 @@ void Window::Update()
 void Window::Render()
 {
     Clear();
-
-    Scene *scene = GetSceneManager()->GetActiveScene();
-    if (scene)
-    {
-        Camera *camera = scene->GetCamera();
-        if (!camera) { return; }
-        GetGEngine()->Render(scene, camera);
-        BlitToWindow(camera);
-    }
-}
-
-void Window::BlitToWindow(Camera *camera)
-{
-    if (camera)
-    {
-        AARecti prevVP = GL::GetViewportRect();
-        camera->SetViewportForBlitting();
-        GetGEngine()->RenderGBufferColorToViewport(camera);
-        GL::SetViewport(prevVP);
-    }
+    GetSceneManager()->Render();
 }
 
 bool Window::HandleEvent(const SDL_Event &sdlEvent)

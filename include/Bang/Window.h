@@ -34,7 +34,6 @@ public:
     void Clear();
     virtual void Update();
     virtual void Render();
-    virtual void BlitToWindow(Camera *camera);
     virtual void OnResize(int newWidth, int newHeight);
 
     virtual SceneManager* CreateSceneManager() const;

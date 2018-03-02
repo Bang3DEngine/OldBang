@@ -29,7 +29,7 @@ public:
 
     void Render(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
-    void RenderGBufferColorToViewport(Camera *cam);
+    void RenderTextureToViewport(Texture2D *texture);
     void RenderViewportRect(ShaderProgram *sp,
                             const AARect &destRectMask = AARect::NDCRect);
     void RenderViewportPlane();
