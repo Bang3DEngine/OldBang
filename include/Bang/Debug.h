@@ -38,6 +38,12 @@ private:
     Debug::Log(log.str(), __LINE__, __FILE__); \
 } while (0)
 
+#ifdef DEBUG
+#define Debug_DLog(msg) Debug_Log(msg)
+#else
+#define Debug_DLog(msg)
+#endif
+
 #define Debug_Peek(varName) Debug_Log(#varName << ": " << (varName))
 
 #define Debug_Warn(msg) do{\

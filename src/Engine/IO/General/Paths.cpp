@@ -84,8 +84,9 @@ Path Paths::GetEngineResourcesDir()
 Path Paths::GetEngineLibrariesDir(BinType binaryType)
 {
     return GetEngineDir().
-           Append("lib").
-           Append(binaryType == BinType::Debug ? "Debug" : "Release");
+           Append("bin").
+           Append(binaryType == BinType::Debug ? "Debug" : "Release").
+           Append("lib");
 }
 
 Path Paths::CreateEnginePath(const String &path)

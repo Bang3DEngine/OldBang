@@ -30,6 +30,9 @@ SystemProcess::~SystemProcess()
 
 bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 {
+    Debug_DLog("Executing command: " << command << " " <<
+               String::Join(extraArgs, " "));
+
     m_oldFileDescriptors[IN]  = dup(Channel::StandardIn);
     m_oldFileDescriptors[OUT] = dup(Channel::StandardOut);
     m_oldFileDescriptors[ERR] = dup(Channel::StandardError);
@@ -116,11 +119,13 @@ bool SystemProcess::WaitUntilFinished(float seconds)
         m_readErrorWhileWaiting  += ReadStandardErrorRaw();
 
         status = -1;
-        if ( waitpid(m_childPID, &status, WNOHANG) < 0 )
+        int waitpidStatus = waitpid(m_childPID, &status, WNOHANG);
+        if ( waitpidStatus < 0 )
         {
             Debug_Error("Waitpid error: " << strerror(errno));
             break;
         }
+        Debug_Peek(waitpidStatus);
 
         exited   = WIFEXITED(status);
         signaled = WIFSIGNALED(status);
