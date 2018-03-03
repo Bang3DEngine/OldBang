@@ -10,9 +10,9 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
+#include "Bang/Array.h"
 #include "Bang/Debug.h"
 #include "Bang/Thread.h"
-
 
 USING_NAMESPACE_BANG
 
@@ -39,7 +39,11 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 
     if (pipe(m_childToParentOutFD) != 0 ||
         pipe(m_childToParentErrFD) != 0 ||
-        pipe(m_parentToChildFD) != 0)  { m_exitCode = -1; return false; }
+        pipe(m_parentToChildFD)    != 0)
+    {
+        m_exitCode = -1;
+        return false;
+    }
 
     int pid = fork();
     if (pid == 0) // Child process
@@ -59,25 +63,17 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 
         // Execute the command, and its in/out will come to our pipes
         String fullCommand = command + " " + String::Join(extraArgs, " ");
-        int result = system(fullCommand.ToCString()); // EXECUTE!
+        String fc = fullCommand.Split<Array>(' ').Back().Replace("/", "_").Replace(" ", "_");
 
-        // Close channels
-        close(m_childToParentOutFD[WRITE]);
-        close(m_childToParentErrFD[WRITE]);
-        close(m_parentToChildFD[READ]);
-        close(Channel::StandardIn);
-        close(Channel::StandardOut);
-        close(Channel::StandardError);
-
-        if (result < 0) { std::quick_exit(-1); }
-        std::quick_exit( WEXITSTATUS(result) );
+        // EXECUTE!
+        execl("/bin/sh", "sh", "-c", fullCommand.ToCString(), NULL);
     }
     else if (pid != -1) // Parent process
     {
         m_childPID = pid;
         close(m_childToParentOutFD[WRITE]); // We won't write this
         close(m_childToParentErrFD[WRITE]); // We won't write this
-        close(m_parentToChildFD[READ]);  // We won't read this
+        close(m_parentToChildFD[READ]);     // We won't read this
 
         // Specify NonBlocking read
         fcntl(m_childToParentOutFD[READ], F_SETFL,
@@ -87,8 +83,7 @@ bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
     }
     else
     {
-        std::cerr << "There was an error forking to execute SystemProcess." <<
-                     std::endl;
+        Debug_Error("There was an error forking to execute SystemProcess.");
         return false;
     }
 
@@ -125,14 +120,16 @@ bool SystemProcess::WaitUntilFinished(float seconds)
             Debug_Error("Waitpid error: " << strerror(errno));
             break;
         }
-        Debug_Peek(waitpidStatus);
 
-        exited   = WIFEXITED(status);
-        signaled = WIFSIGNALED(status);
-        if (status >= 0 && (exited || signaled))
+        if (status >= 0)
         {
-            finished = true;
-            break;
+            exited   = WIFEXITED(status);
+            signaled = WIFSIGNALED(status);
+            if (exited || signaled)
+            {
+                finished = true;
+                break;
+            }
         }
         Thread::SleepCurrentThread(0.05f);
     }
@@ -206,7 +203,7 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
     char buffer[bufferSize];
     memset(buffer, 0, bufferSize);
     int readBytes = 0;
-    while ( (readBytes = read(fd, buffer, bufferSize)) >= 0 )
+    while ( (readBytes = read(fd, buffer, bufferSize)) > 0 )
     {
         String readChunk(buffer);
         String::Iterator readChunkEnd = readChunk.Begin();
@@ -214,9 +211,7 @@ String SystemProcess::ReadFileDescriptor(FileDescriptor fd)
         String readChunkN(readChunk.Begin(), readChunkEnd);
         output += readChunkN;
         memset(buffer, 0, bufferSize);
-        if (readBytes == 0) { break ; }
     }
-
     return output;
 }
 
