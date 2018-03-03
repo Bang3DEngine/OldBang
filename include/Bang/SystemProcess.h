@@ -44,11 +44,16 @@ public:
 private:
     int m_childPID = 0;
     int m_exitCode = -1;
+    String m_readOutputWhileWaiting = "";
+    String m_readErrorWhileWaiting  = "";
 
     FileDescriptor m_oldFileDescriptors[3];
     FileDescriptor m_childToParentOutFD[2];
     FileDescriptor m_childToParentErrFD[2];
     FileDescriptor m_parentToChildFD[2];
+
+    String ReadStandardOutputRaw();
+    String ReadStandardErrorRaw();
 };
 
 NAMESPACE_BANG_END

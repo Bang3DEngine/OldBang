@@ -100,6 +100,9 @@ long long unsigned int GetNow()
 
 bool SystemProcess::WaitUntilFinished(float seconds)
 {
+    m_readOutputWhileWaiting = "";
+    m_readErrorWhileWaiting  = "";
+
     auto beginning = GetNow();
 
     // Get its return value
@@ -109,14 +112,17 @@ bool SystemProcess::WaitUntilFinished(float seconds)
     bool finished = false;
     while ( (GetNow() - beginning) / 1000.0f < seconds )
     {
+        m_readOutputWhileWaiting += ReadStandardOutputRaw();
+        m_readErrorWhileWaiting  += ReadStandardErrorRaw();
+
         status = -1;
-        if ( waitpid(m_childPID, &status, WNOHANG) < 0)
+        if ( waitpid(m_childPID, &status, WNOHANG) < 0 )
         {
-            Debug_Error("Waitpid error");
+            Debug_Error("Waitpid error: " << strerror(errno));
             break;
         }
 
-        exited = WIFEXITED(status);
+        exited   = WIFEXITED(status);
         signaled = WIFSIGNALED(status);
         if (status >= 0 && (exited || signaled))
         {
@@ -171,10 +177,18 @@ void SystemProcess::CloseWriteChannel()
 
 String SystemProcess::ReadStandardOutput()
 {
+    return m_readOutputWhileWaiting + ReadStandardOutputRaw();
+}
+String SystemProcess::ReadStandardError()
+{
+    return m_readErrorWhileWaiting + ReadStandardErrorRaw();
+
+}
+String SystemProcess::ReadStandardOutputRaw()
+{
     return ReadFileDescriptor(m_childToParentOutFD[READ]);
 }
-
-String SystemProcess::ReadStandardError()
+String SystemProcess::ReadStandardErrorRaw()
 {
     return ReadFileDescriptor(m_childToParentErrFD[READ]);
 }
