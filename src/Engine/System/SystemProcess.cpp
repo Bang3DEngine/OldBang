@@ -30,8 +30,8 @@ SystemProcess::~SystemProcess()
 
 bool SystemProcess::Start(const String &command, const List<String> &extraArgs)
 {
-    Debug_DLog("Executing command: " << command << " " <<
-               String::Join(extraArgs, " "));
+    // Debug_DLog("Executing command: " << command << " " <<
+    //            String::Join(extraArgs, " "));
 
     m_oldFileDescriptors[IN]  = dup(Channel::StandardIn);
     m_oldFileDescriptors[OUT] = dup(Channel::StandardOut);

@@ -58,7 +58,7 @@ Gizmos::~Gizmos()
 
 void Gizmos::SetColor(const Color &color)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     for (Renderer *rend : g->m_renderers)
     {
         rend->GetMaterial()->SetDiffuseColor(color);
@@ -67,37 +67,37 @@ void Gizmos::SetColor(const Color &color)
 
 void Gizmos::SetPosition(const Vector3 &position)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_gizmosGo->GetTransform()->SetPosition(position);
 }
 
 void Gizmos::SetRotation(const Quaternion &rotation)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_gizmosGo->GetTransform()->SetRotation(rotation);
 }
 
 void Gizmos::SetScale(const Vector3 &scale)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_gizmosGo->GetTransform()->SetLocalScale(scale);
 }
 
 void Gizmos::SetRenderPass(RenderPass rp)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     for (Renderer *rend : g->m_renderers) { rend->GetMaterial()->SetRenderPass(rp); }
 }
 
 void Gizmos::SetSelectable(GameObject *go)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->p_selectable = go;
 }
 
 void Gizmos::SetThickness(float thickness)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     for (Renderer *rend : g->m_renderers)
     {
         rend->SetLineWidth(thickness);
@@ -107,7 +107,7 @@ void Gizmos::SetThickness(float thickness)
 
 void Gizmos::SetRenderWireframe(bool wireframe)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     for (Renderer *rend : g->m_renderers)
     {
         rend->SetRenderWireframe(wireframe);
@@ -116,7 +116,7 @@ void Gizmos::SetRenderWireframe(bool wireframe)
 
 void Gizmos::SetReceivesLighting(bool receivesLighting)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     for (Renderer *rend : g->m_renderers)
     {
         rend->GetMaterial()->SetReceivesLighting(receivesLighting);
@@ -125,7 +125,7 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(m);
     Render(g->m_meshRenderer);
 }
@@ -133,7 +133,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 
 void Gizmos::RenderSimpleBox(const AABox &b)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     const Quaternion &r = g->m_gizmosGo->GetTransform()->GetLocalRotation();
     const Vector3& bMin = b.GetMin();
     const Vector3& bMax = b.GetMax();
@@ -158,7 +158,7 @@ void Gizmos::RenderSimpleBox(const AABox &b)
 
 void Gizmos::RenderBox(const AABox &b)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(g->p_boxMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(b.GetCenter());
     g->m_gizmosGo->GetTransform()->
@@ -196,7 +196,7 @@ void Gizmos::RenderRect(const Rect &r)
 
 void Gizmos::RenderFillRect(const AARect &r)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
@@ -209,7 +209,7 @@ void Gizmos::RenderFillRect(const AARect &r)
 void Gizmos::RenderIcon(Texture2D *texture,
                         bool billboard)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     SetRenderWireframe(false);
@@ -239,7 +239,7 @@ void Gizmos::RenderIcon(Texture2D *texture,
 void Gizmos::RenderViewportIcon(Texture2D *texture,
                                 const AARect &winRect)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(g->p_planeMesh.Get());
 
     Gizmos::SetPosition( Vector3(winRect.GetCenter(), 0) );
@@ -254,7 +254,7 @@ void Gizmos::RenderViewportIcon(Texture2D *texture,
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_lineRenderer->SetPoints( {origin, destiny} );
 
     g->m_gizmosGo->GetTransform()->SetPosition(Vector3::Zero);
@@ -266,7 +266,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 
 void Gizmos::RenderViewportLineNDC(const Vector2 &origin, const Vector2 &destiny)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     Vector2 originVP  = GL::FromViewportPointNDCToViewportPoint(origin);
     Vector2 destinyVP = GL::FromViewportPointNDCToViewportPoint(destiny);
     g->m_lineRenderer->SetPoints( {Vector3(originVP.x,  originVP.y,  0),
@@ -286,7 +286,7 @@ void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     g->m_meshRenderer->SetMesh(g->p_sphereMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(origin);
     g->m_gizmosGo->GetTransform()->SetScale(radius);
@@ -343,7 +343,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward,
 
 void Gizmos::RenderPoint(const Vector3 &point)
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
 
     RH<Mesh> rhm = Resources::Create<Mesh>();
     Mesh *m = rhm.Get();
@@ -360,7 +360,7 @@ void Gizmos::RenderPoint(const Vector3 &point)
 
 void Gizmos::Reset()
 {
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
 
     Gizmos::SetPosition(Vector3::Zero);
     Gizmos::SetRotation(Quaternion::Identity);
@@ -386,15 +386,10 @@ GameObject *Gizmos::GetGameObject() const
     return m_gizmosGo;
 }
 
-GameObject *Gizmos::GetGizmosGameObject()
-{
-    return Gizmos::GetInstance()->GetGameObject();
-}
-
 void Gizmos::Render(Renderer *rend)
 {
     // Set selectable for SelectionFramebuffer if any was set
-    Gizmos *g = Gizmos::GetInstance();
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
     SelectionFramebuffer *sfb = GEngine::GetActive()->GetActiveSelectionFramebuffer();
     if (sfb && GL::IsBound(sfb) && g->p_selectable)
     {

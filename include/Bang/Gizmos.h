@@ -73,7 +73,6 @@ private:
     Gizmos();
     virtual ~Gizmos();
 
-    static GameObject *GetGizmosGameObject();
     static Gizmos *GetInstance();
 
     friend class Scene;

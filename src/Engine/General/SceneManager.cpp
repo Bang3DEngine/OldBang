@@ -22,9 +22,9 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
-    if (GetActiveScene())
+    if (_GetActiveScene())
     {
-        GameObject::Destroy( GetActiveScene() );
+        GameObject::Destroy( _GetActiveScene() );
     }
     delete m_behaviourManager;
 }
@@ -66,7 +66,7 @@ void SceneManager::OnNewFrame(Scene *scene, bool update)
 void SceneManager::Update()
 {
     if (GetNextLoadNeeded())  {  _LoadSceneInstantly(); }
-    SceneManager::OnNewFrame( GetActiveScene(), true );
+    SceneManager::OnNewFrame( _GetActiveScene(), true );
 }
 
 void SceneManager::Render()
@@ -95,7 +95,7 @@ void SceneManager::Render()
 
 void SceneManager::OnResize(int width, int height)
 {
-    Scene *scene = GetActiveScene();
+    Scene *scene = _GetActiveScene();
     if (scene) { scene->OnResize(width, height); }
 }
 
@@ -156,7 +156,6 @@ void SceneManager::LoadScene(const Path &sceneFilepath, bool destroyActive)
     {
         Scene *scene = GameObjectFactory::CreateScene(false);
         scene->ImportXMLFromFile(sceneFilepath);
-
         sm->PrepareNextLoad(scene, sceneFilepath, destroyActive);
     }
     else
@@ -178,31 +177,35 @@ void SceneManager::LoadSceneInstantly(const Path &sceneFilepath, bool destroyAct
     SceneManager::LoadScene(sceneFilepath, destroyActive);
     sm->_LoadSceneInstantly();
 }
+void SceneManager::PreLoadSceneInstantly()
+{
+    // Destroy previous active scene
+    Scene *activeScene = _GetActiveScene();
+    Debug_Peek(GetNextLoadDestroyActive());
+    if (GetNextLoadDestroyActive() && activeScene)
+    {
+        GameObject::Destroy(activeScene);
+    }
+    AudioManager::StopAllSounds();
+}
+void SceneManager::PostLoadSceneInstantly()
+{
+    _SetActiveScene( GetNextLoadScene() );
+    Scene *activeScene = _GetActiveScene();
+    if (activeScene)
+    {
+        activeScene->SetFirstFoundCamera();
+        activeScene->InvalidateCanvas();
+    }
 
+    PropagateNextSceneLoadedToListeners();
+    ClearNextLoad();
+}
 void SceneManager::_LoadSceneInstantly()
 {
     ASSERT( GetNextLoadNeeded() );
-
-    if (_GetActiveScene() != GetNextLoadScene())
-    {
-        Scene *activeScene = _GetActiveScene();
-        if (GetNextLoadDestroyActive() && activeScene)
-        {
-            GameObject::Destroy(activeScene);
-        }
-        AudioManager::StopAllSounds();
-
-        _SetActiveScene( GetNextLoadScene() );
-        activeScene = _GetActiveScene();
-        if (activeScene)
-        {
-            activeScene->SetFirstFoundCamera();
-            activeScene->InvalidateCanvas();
-        }
-
-        PropagateNextSceneLoadedToListeners();
-    }
-    ClearNextLoad();
+    PreLoadSceneInstantly();
+    PostLoadSceneInstantly();
 }
 
 List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go)
@@ -219,7 +222,6 @@ List<GameObject *> SceneManager::FindDontDestroyOnLoadGameObjects(GameObject *go
 void SceneManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (object == GetNextLoadScene()) { ClearNextLoad(); }
-
     if (object == _GetActiveScene())
     {
         if (!GetNextLoadNeeded()) { PrepareNextLoad(nullptr, Path::Empty, false); }
@@ -232,10 +234,7 @@ Scene *SceneManager::GetNextLoadScene() const { return p_nextLoadScene; }
 const Path &SceneManager::GetNextLoadScenePath() const { return m_nextLoadScenePath; }
 bool SceneManager::GetNextLoadDestroyActive() const { return m_nextLoadDestroyActive; }
 
-Scene *SceneManager::GetSceneToBeRenderedToWindow() const
-{
-    return GetActiveScene();
-}
+Scene *SceneManager::GetSceneToBeRenderedToWindow() const { return _GetActiveScene(); }
 BehaviourManager *SceneManager::GetBehaviourManager() const { return m_behaviourManager; }
 
 void SceneManager::ClearNextLoad()
