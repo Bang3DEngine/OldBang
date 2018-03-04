@@ -29,11 +29,12 @@ void UISlider::OnUpdate()
     {
         GetHandleRenderer()->SetTint( m_pressedColor );
 
-        RectTransform *handleRT = GetHandleRectTransform();
-        float mouseLocalX = handleRT->FromViewportPointToLocalPointNDC(
-                                        Input::GetMousePosition() ).x;
-
+        GameObject *guide = GetGuideRenderer()->GetGameObject();
+        float mouseLocalX = guide->GetRectTransform()->
+                                    FromViewportPointToLocalPointNDC(
+                                            Input::GetMousePosition() ).x;
         mouseLocalX = Math::Clamp(mouseLocalX, -1.0f, 1.0f);
+
         float mousePercent = mouseLocalX * 0.5f + 0.5f;
         SetValuePercent(mousePercent);
     }
