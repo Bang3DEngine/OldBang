@@ -73,6 +73,10 @@ bool BehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
     return false;
 }
 
+void BehaviourManager::Update()
+{
+}
+
 bool BehaviourManager::IsInstanceCreationAllowed() const
 {
     return true;

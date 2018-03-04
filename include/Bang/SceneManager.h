@@ -1,4 +1,4 @@
-#ifndef SCENEMANAGER_H
+﻿#ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
 #include "Bang/Path.h"
@@ -33,53 +33,48 @@ public:
     static void LoadSceneInstantly(const Path &sceneFilepath,
                                    bool destroyActive = true);
 
-    static Scene* GetActiveScene();
-
-    static SceneManager* GetActive();
-
+    void Update();
+    void Render();
+    void OnResize(int width, int height);
     static void OnNewFrame(Scene *scene, bool update);
 
-    virtual void Update();
-    virtual void Render();
-    virtual void OnResize(int width, int height);
-
+    static Scene* GetActiveScene();
+    static SceneManager* GetActive();
     BehaviourManager *GetBehaviourManager() const;
 
 protected:
     SceneManager();
     virtual ~SceneManager();
 
+    void LoadSceneInstantly_();
+
+    void SetLoadedScene(Scene *loadedScene);
+    void SetActiveScene_(Scene *activeScene);
+
+    Scene *GetLoadedScene() const;
+    Scene *GetActiveScene_() const;
     bool GetNextLoadNeeded() const;
     Scene* GetNextLoadScene() const;
     const Path& GetNextLoadScenePath() const;
-    bool GetNextLoadDestroyActive() const;
-
-    void _SetActiveScene(Scene *activeScene);
-    virtual Scene *GetSceneToBeRenderedToWindow() const;
-    virtual Scene *_GetActiveScene() const;
-
-    void PreLoadSceneInstantly();
-    void PostLoadSceneInstantly();
-    virtual void _LoadSceneInstantly();
-
-    void PropagateNextSceneLoadedToListeners();
+    bool GetNextLoadDestroyPrevious() const;
     void ClearNextLoad();
 
 private:
-    BehaviourManager *m_behaviourManager = nullptr;
-
     Scene *p_activeScene = nullptr;
+    Scene *p_loadedScene = nullptr;
+    BehaviourManager *m_behaviourManager = nullptr;
 
     bool m_nextLoadNeeded = false;
     Scene *p_nextLoadScene = nullptr;
-    bool m_nextLoadDestroyActive = false;
+    bool m_nextLoadDestroyPrevious = false;
     Path m_nextLoadScenePath = Path::Empty;
 
     void Init();
+    void SetSceneVariable(Scene **sceneVariable, Scene *sceneValue);
     virtual BehaviourManager* CreateBehaviourManager() const;
 
     void PrepareNextLoad(Scene *scene, const Path &scenePath, bool destroyActive);
-    static List<GameObject *> FindDontDestroyOnLoadGameObjects(GameObject *go);
+    static List<GameObject*> FindDontDestroyOnLoadGameObjects(GameObject *go);
 
     // IDestroyListener
     void OnDestroyed(EventEmitter<IDestroyListener> *object) override;

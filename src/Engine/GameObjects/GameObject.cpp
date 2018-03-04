@@ -390,7 +390,7 @@ const String& GameObject::GetName() const { return m_name; }
 GameObject *GameObject::Find(const String &name)
 {
     Scene *scene = SceneManager::GetActiveScene();
-    return scene->FindInChildren(name);
+    return scene ? scene->FindInChildren(name) : nullptr;
 }
 
 GameObject *GameObject::FindInChildren(const String &name, bool recursive)

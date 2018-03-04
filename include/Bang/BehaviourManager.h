@@ -20,6 +20,8 @@ public:
                                         Behaviour *behaviour,
                                         Library *behavioursLibrary);
 
+    virtual void Update();
+
     void SetBehavioursLibrary(const Path &libPath);
     void SetBehavioursLibrary(Library *behavioursLibrary);
 
