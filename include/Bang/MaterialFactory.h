@@ -24,7 +24,7 @@ public:
     static RH<Material> GetUIText();
     static RH<Material> GetUIImage();
 
-    static RH<Material> GetRenderGBufferToWindow();
+    static RH<Material> GetRenderTextureToViewport();
 
 private:
     Map<String, RH<Material>> m_cache;

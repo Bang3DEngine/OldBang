@@ -18,6 +18,9 @@ public:
     // Component
     void OnRender(RenderPass rp) override;
 
+    // Light
+    void RenderShadowMaps() override;
+
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 

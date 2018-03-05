@@ -48,20 +48,22 @@ void GEngine::Init()
     m_texUnitManager = new TextureUnitManager();
 
     p_windowPlaneMesh = Resources::Clone<Mesh>(MeshFactory::GetUIPlane());
-    p_renderGBufferToWindowMaterial = MaterialFactory::GetRenderGBufferToWindow();
+    p_renderTextureToViewportMaterial = MaterialFactory::GetRenderTextureToViewport();
     GL::SetActive( nullptr );
 }
 
+#include "Bang/DirectionalLight.h"
 void GEngine::Render(GameObject *go, Camera *camera)
 {
-    if (go)
-    {
-        go->BeforeRender();
-        SetCurrentRenderingCamera(camera);
-        RenderToGBuffer(go, camera);
-        RenderToSelectionFramebuffer(go, camera);
-        SetCurrentRenderingCamera(nullptr);
-    }
+    if (!go) { return; }
+
+    go->BeforeRender();
+    RenderShadowMaps(go);
+    SetCurrentRenderingCamera(camera);
+    RenderToGBuffer(go, camera);
+    RenderToSelectionFramebuffer(go, camera);
+    SetCurrentRenderingCamera(nullptr);
+
 }
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
@@ -141,6 +143,15 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     ApplyStenciledDeferredLightsToGBuffer(go, camera);
     RenderWithPass(go, RenderPass::OverlayPostProcess);
     GL::Disablei(GL::Test::Blend, 0);
+
+    if (Input::GetKey(Key::L))
+    {
+        DirectionalLight *dLight = go->GetComponentInChildren<DirectionalLight>(true);
+        if (dLight)
+        {
+            GEngine::RenderTextureToViewport(dLight->GetShadowMap());
+        }
+    }
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
@@ -211,16 +222,14 @@ void GEngine::RenderViewportRect(ShaderProgram *sp, const AARect &destRectMask)
 void GEngine::RenderTextureToViewport(Texture2D *texture)
 {
     // if (!cam) { return; }
-    p_renderGBufferToWindowMaterial.Get()->Bind();
+    p_renderTextureToViewportMaterial.Get()->Bind();
 
-    ShaderProgram *sp = p_renderGBufferToWindowMaterial.Get()->GetShaderProgram();
-    // GBuffer *gbuffer = cam->GetGBuffer();
-    // gbuffer->BindAttachmentsForReading(sp);
+    ShaderProgram *sp = p_renderTextureToViewportMaterial.Get()->GetShaderProgram();
     sp->Set("B_GTex_Color", texture, false);
 
     GEngine::RenderViewportRect(sp, AARect::NDCRect);
 
-    p_renderGBufferToWindowMaterial.Get()->UnBind();
+    p_renderTextureToViewportMaterial.Get()->UnBind();
 }
 
 void GEngine::RenderViewportPlane()
@@ -248,6 +257,15 @@ GEngine* GEngine::GetActive()
 {
     Window *win = Window::GetActive();
     return win ? win->GetGEngine() : nullptr;
+}
+
+void GEngine::RenderShadowMaps(GameObject *go)
+{
+    List<Light*> lights = go->GetComponentsInChildren<Light>(true);
+    for (Light *light : lights)
+    {
+        light->RenderShadowMaps();
+    }
 }
 
 void GEngine::SetCurrentRenderingCamera(Camera *camera)

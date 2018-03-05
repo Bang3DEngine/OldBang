@@ -26,7 +26,9 @@ Framebuffer::~Framebuffer()
 void Framebuffer::CreateAttachment(GL::Attachment attachment,
                                    GL::ColorFormat texFormat)
 {
-    ASSERT(GL::IsBound(this));
+    GLId prevBoundFB = GL::GetBoundId(GetGLBindTarget());
+    Bind();
+
     GL_ClearError();
     RH<Texture2D> tex = Resources::Create<Texture2D>();
     tex.Get()->Bind();
@@ -36,6 +38,8 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
 
     SetAttachmentTexture(tex.Get(), attachment);
     tex.Get()->UnBind();
+
+    GL::Bind(GetGLBindTarget(), prevBoundFB);
 }
 
 Texture2D* Framebuffer::GetAttachmentTexture(GL::Attachment attachment) const

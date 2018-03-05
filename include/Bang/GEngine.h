@@ -53,8 +53,9 @@ private:
     TextureUnitManager *m_texUnitManager = nullptr;
 
     RH<Mesh> p_windowPlaneMesh;
-    RH<Material> p_renderGBufferToWindowMaterial;
+    RH<Material> p_renderTextureToViewportMaterial;
 
+    void RenderShadowMaps(GameObject *go);
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
     void RenderWithPass(GameObject *go, RenderPass renderPass);

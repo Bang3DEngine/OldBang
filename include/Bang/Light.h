@@ -14,14 +14,14 @@ FORWARD class GBuffer;
 
 class Light : public Component
 {
-    COMPONENT(Light)
-
 public:
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
 
     Color GetColor() const;
     float GetIntensity() const;
+
+    virtual void RenderShadowMaps() = 0;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;

@@ -41,7 +41,6 @@ USING_NAMESPACE_BANG
 
 Component* ComponentFactory::Create(const String &componentClassName)
 {
-    CREATE_COMPONENT(componentClassName, Light);
     CREATE_COMPONENT(componentClassName, Camera);
     CREATE_COMPONENT(componentClassName, UIMask);
     CREATE_COMPONENT(componentClassName, Renderer);

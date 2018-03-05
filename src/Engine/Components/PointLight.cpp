@@ -60,6 +60,11 @@ void PointLight::OnRender(RenderPass rp)
     }
 }
 
+void PointLight::RenderShadowMaps()
+{
+
+}
+
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);

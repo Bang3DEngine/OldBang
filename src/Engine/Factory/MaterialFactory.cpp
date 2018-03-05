@@ -57,9 +57,9 @@ RH<Material> MaterialFactory::GetUIImage()
     return MaterialFactory::Load("Materials/UI/G_UIImageRenderer.bmat");
 }
 
-RH<Material> MaterialFactory::GetRenderGBufferToWindow()
+RH<Material> MaterialFactory::GetRenderTextureToViewport()
 {
-    return MaterialFactory::Load("Materials/RenderGBufferToViewport.bmat");
+    return MaterialFactory::Load("Materials/RenderTextureToViewport.bmat");
 }
 
 RH<Material> MaterialFactory::Load(const String &matEnginePath)
