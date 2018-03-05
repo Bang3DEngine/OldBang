@@ -29,6 +29,10 @@ void ImageIO::Export(const Path &filepath, const Imageb &img)
     {
         ImageIO::ExportJPG(filepath, img, 10);
     }
+    else if (filepath.HasExtension( Array<String>({"bmp"}) ))
+    {
+        ImageIO::ExportBMP(filepath, img);
+    }
     else if (filepath.HasExtension( Array<String>({"tga"}) ))
     {
         ImageIO::ExportTGA(filepath, img);
@@ -50,6 +54,10 @@ void ImageIO::Import(const Path &filepath, Imageb *img, bool *_ok)
     else if (filepath.HasExtension( Array<String>({"jpg", "jpeg"})) )
     {
         ImageIO::ImportJPG(filepath, img, &ok);
+    }
+    else if (filepath.HasExtension( Array<String>({"bmp"})) )
+    {
+        ImageIO::ImportBMP(filepath, img, &ok);
     }
     else if (filepath.HasExtension( Array<String>({"tga"})) )
     {
@@ -78,6 +86,121 @@ void ImageIO::Import(const Path &filepath, Texture2D *tex, bool *_ok)
         tex->Import(img);
     }
     if (_ok) { *_ok = ok; }
+}
+
+struct BMPFileHeader
+{
+  int16_t bfType;
+  int32_t bfSize;
+  int16_t bfReserved1;
+  int16_t bfReserved2;
+  int32_t bfOffBits;
+};
+
+struct BMPInfoHeader
+{
+  int32_t biSize;
+  int64_t biWidth;
+  int64_t biHeight;
+  int16_t biPlanes;
+  int16_t biBitCount;
+  int32_t biCompression;
+  int32_t biSizeImage;
+  int64_t biXPelsPerMeter;
+  int64_t biYPelsPerMeter;
+  int32_t biClrUsed;
+  int32_t biClrImportant;
+};
+
+void ImageIO::ExportBMP(const Path &filepath, const Imageb &img)
+{
+    ASSERT_MSG(false, "ExportBMP not implemented!");
+}
+void ImageIO::ImportBMP(const Path &filepath, Imageb *img, bool *ok)
+{
+    if (ok) { *ok = false; }
+    Debug_Error("ImportBMP not implemented!");
+    return;
+
+    Byte* datBuff[2] = {nullptr, nullptr}; // Header buffers
+    Byte* pixels = nullptr; // Pixels
+
+    BMPFileHeader* bmpHeader = nullptr; // Header
+    BMPInfoHeader* bmpInfo   = nullptr; // Info
+
+    // The file... We open it with it's constructor
+    std::ifstream file(filepath.GetAbsolute().ToCString(), std::ios::binary);
+    if(!file)
+    {
+        Debug_Error("Failure to open bitmap file " << filepath);
+        return;
+    }
+
+    // Allocate byte memory that will hold the two headers
+    datBuff[0] = new Byte[sizeof(BMPFileHeader)];
+    datBuff[1] = new Byte[sizeof(BMPInfoHeader)];
+
+    file.read((char*)datBuff[0], sizeof(BMPFileHeader));
+    file.read((char*)datBuff[1], sizeof(BMPInfoHeader));
+
+    // Construct the values from the buffers
+    bmpHeader = (BMPFileHeader*) datBuff[0];
+    bmpInfo   = (BMPInfoHeader*) datBuff[1];
+
+    // Check if the file is an actual BMP file
+    if(bmpHeader->bfType != 0x4D42)
+    {
+        Debug_Error("File '" << filepath << "' isn't a bitmap file");
+        return;
+    }
+
+    // First allocate pixel memory
+    pixels = new Byte[bmpInfo->biSizeImage];
+
+    // Go to where image data starts, then read in image data
+    file.seekg(bmpHeader->bfOffBits);
+    file.read((char*)pixels, bmpInfo->biSizeImage);
+
+    // We're almost done. We have our image loaded, however it's not in the right format.
+    // .bmp files store image data in the BGR format, and we have to convert it to RGB.
+    // Since we have the value in bytes, this shouldn't be to hard to accomplish
+    Byte tmpRGB = 0; // Swap buffer
+    for (unsigned long i = 0; i < bmpInfo->biSizeImage; i += 3)
+    {
+        tmpRGB        = pixels[i];
+        pixels[i]     = pixels[i + 2];
+        pixels[i + 2] = tmpRGB;
+    }
+
+    // Set width and height to the values loaded from the file
+    GLuint w = bmpInfo->biWidth;
+    GLuint h = bmpInfo->biHeight;
+
+    int i = 0;
+    Debug_Peek(w);
+    Debug_Peek(h);
+    img->Create(w, h);
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            Color color =  Color(pixels[i * 3 + 0] / 255.0f,
+                                 pixels[i * 3 + 1] / 255.0f,
+                                 pixels[i * 3 + 2] / 255.0f,
+                                 1.0f);
+            color = Color::Red;
+            img->SetPixel(x, y, color);
+            ++i;
+        }
+    }
+
+
+    // Delete buffers.
+    delete[] datBuff[0];
+    delete[] datBuff[1];
+    delete[] pixels;
+
+    *ok = true; // Return success code
 }
 
 void ImageIO::ExportPNG(const Path &filepath, const Imageb &img)

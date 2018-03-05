@@ -19,6 +19,9 @@ public:
     ImageIO() = delete;
 
 private:
+    static void ExportBMP(const Path& filepath, const Imageb &img);
+    static void ImportBMP(const Path& filepath, Imageb *img, bool *ok);
+
     static void ExportPNG(const Path& filepath, const Imageb &img);
     static void ImportPNG(const Path& filepath, Imageb *img, bool *ok);
 
