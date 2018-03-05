@@ -70,6 +70,10 @@ public:
     void SetViewProjMode(GL::ViewProjMode viewProjMode);
     GL::ViewProjMode GetViewProjMode() const;
 
+    static const Matrix4 &GetModelMatrix();
+    static const Matrix4 &GetViewMatrix();
+    static const Matrix4 &GetProjectionMatrix();
+
 private:
     ViewportUniforms m_viewportUniforms;
     MatrixUniforms m_matrixUniforms;

@@ -537,15 +537,20 @@ AARect GameObject::GetBoundingViewportRect(Camera *cam, bool includeChildren) co
     return cam->GetViewportBoundingRect(bbox);
 }
 
-AABox GameObject::GetObjectAABBox(bool includeChildren) const
+AABox GameObject::GetLocalAABBox(bool includeChildren) const
 {
     List<Renderer*> rends = GetComponents<Renderer>();
     AABox aabBox = AABox::Empty;
     for (Renderer *rend : rends)
     {
-        if (rend && rend->IsEnabled())
+        if (rend && rend->IsEnabled() && rend->GetUserMaterial() &&
+            rend->GetUserMaterial()->GetRenderPass() == RenderPass::Scene)
         {
-            aabBox = AABox::Union(aabBox, rend->GetAABBox());
+            const AABox rendAABox = rend->GetAABBox();
+            if (rendAABox != AABox::Empty)
+            {
+                aabBox = AABox::Union(aabBox, rendAABox);
+            }
         }
     }
 
@@ -553,14 +558,15 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
     {
         for (GameObject *child : GetChildren())
         {
-            AABox aabBoxChild = child->GetObjectAABBox(true);
-            Matrix4 mat;
-            if (child->GetTransform())
+            AABox aabBoxChild = child->GetLocalAABBox(true);
+            if (aabBoxChild != AABox::Empty)
             {
-                mat = child->GetTransform()->GetLocalToParentMatrix();
+                Matrix4 mat;
+                const Transform *childT = child->GetTransform();
+                if (childT) { mat = childT->GetLocalToParentMatrix(); }
+                aabBoxChild = mat * aabBoxChild;
+                aabBox = AABox::Union(aabBox, aabBoxChild);
             }
-            aabBoxChild = mat * aabBoxChild;
-            aabBox = AABox::Union(aabBox, aabBoxChild);
         }
     }
 
@@ -569,16 +575,18 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
 
 AABox GameObject::GetAABBox(bool includeChildren) const
 {
-    AABox b = GetObjectAABBox(includeChildren);
+    AABox b = GetLocalAABBox(includeChildren);
+    if (b == AABox::Empty) { return AABox::Empty; }
+
     Matrix4 mat = Matrix4::Identity;
     if (GetTransform()) { mat = GetTransform()->GetLocalToWorldMatrix(); }
     b = mat * b;
     return b;
 }
 
-Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
+Sphere GameObject::GetLocalBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetObjectAABBox(includeChildren));
+    return Sphere::FromBox(GetLocalAABBox(includeChildren));
 }
 
 Sphere GameObject::GetBoundingSphere(bool includeChildren) const

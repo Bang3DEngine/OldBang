@@ -57,6 +57,8 @@ void LineRenderer::SetPoints(const Array<Vector3> &points)
 const Array<Vector3> &LineRenderer::GetPoints() const { return m_points; }
 AABox LineRenderer::GetAABBox() const
 {
+    return AABox::Empty;
+    /*
     if (m_points.IsEmpty()) { return AABox::Empty; }
 
     Vector3 minp = m_points.Front();
@@ -72,7 +74,7 @@ AABox LineRenderer::GetAABBox() const
     minp -= Vector3(strokeAdd);
     maxp += Vector3(strokeAdd);
     return AABox(minp, maxp);
-
+    */
 }
 
 void LineRenderer::CloneInto(ICloneable *clone) const

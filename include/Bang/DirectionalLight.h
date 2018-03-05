@@ -6,6 +6,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Scene;
 FORWARD class Texture2D;
 
 class DirectionalLight : public Light
@@ -33,6 +34,9 @@ protected:
 
     DirectionalLight();
     virtual ~DirectionalLight();
+
+    Matrix4 GetLightDirMatrix() const;
+    AABox GetShadowMapOrthoBox(Scene *scene) const;
 };
 
 NAMESPACE_BANG_END

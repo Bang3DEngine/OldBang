@@ -121,6 +121,21 @@ void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
     }
 }
 
+const Matrix4 &GLUniforms::GetModelMatrix()
+{
+    return GLUniforms::GetActive()->GetMatrixUniforms()->model;
+}
+
+const Matrix4 &GLUniforms::GetViewMatrix()
+{
+    return GLUniforms::GetActive()->GetMatrixUniforms()->view;
+}
+
+const Matrix4 &GLUniforms::GetProjectionMatrix()
+{
+    return GLUniforms::GetActive()->GetMatrixUniforms()->proj;
+}
+
 GL::ViewProjMode GLUniforms::GetViewProjMode() const
 {
     return m_viewProjMode;

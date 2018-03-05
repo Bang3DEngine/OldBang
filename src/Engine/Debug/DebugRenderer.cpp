@@ -1,6 +1,8 @@
 #include "Bang/DebugRenderer.h"
 
 #include "Bang/GL.h"
+#include "Bang/Debug.h"
+#include "Bang/AABox.h"
 #include "Bang/Scene.h"
 #include "Bang/Gizmos.h"
 #include "Bang/SceneManager.h"
@@ -48,6 +50,46 @@ void DebugRenderer::RenderLineNDC(const Vector2 &originNDC,
                                color, time, thickness, depthTest);
 }
 
+void DebugRenderer::RenderAABox(const AABox &aaBox,
+                                const Color &color,
+                                float time,
+                                float thickness,
+                                bool depthTest)
+{
+    const Vector3 ctr = aaBox.GetCenter();
+    const Vector3 ext = aaBox.GetExtents();
+
+    // Floor
+    RenderLine(ctr + ext * Vector3(-1,-1,-1), ctr + ext * Vector3(-1,-1,1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(-1,-1,1), ctr + ext * Vector3(1,-1,1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,-1,1), ctr + ext * Vector3(1,-1,-1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,-1,-1), ctr + ext * Vector3(-1,-1,-1),
+               color, time, thickness, depthTest);
+
+    // Top
+    RenderLine(ctr + ext * Vector3(-1,1,-1), ctr + ext * Vector3(-1,1,1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(-1,1,1), ctr + ext * Vector3(1,1,1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,1,1), ctr + ext * Vector3(1,1,-1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,1,-1), ctr + ext * Vector3(-1,1,-1),
+               color, time, thickness, depthTest);
+
+    // Columns (?) xd
+    RenderLine(ctr + ext * Vector3(-1,-1,-1), ctr + ext * Vector3(-1,1,-1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(-1,-1,1), ctr + ext * Vector3(-1,1,1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,-1,-1), ctr + ext * Vector3(1,1,-1),
+               color, time, thickness, depthTest);
+    RenderLine(ctr + ext * Vector3(1,-1,1), ctr + ext * Vector3(1,1,1),
+               color, time, thickness, depthTest);
+}
+
 void DebugRenderer::RenderAARectNDC(const AARect &rectNDC, const Color &color,
                                     float time, float thickness, bool depthTest)
 {
@@ -81,7 +123,7 @@ DebugRenderer::CreateDebugRenderPrimitive(DebugRendererPrimitiveType primitive,
                                           bool depthTest)
 {
     DebugRenderer *dr = DebugRenderer::GetActive();
-    if (!dr) { return nullptr; }
+    if (!dr) { Debug_Error("No active DebugRenderer!"); return nullptr; }
 
     DebugRenderPrimitive drp;
     drp.primitive = primitive;
@@ -109,8 +151,7 @@ DebugRenderer::~DebugRenderer()
 void DebugRenderer::RenderPrimitives(bool withDepth)
 {
     GL::Function prevDepthFunc = GL::GetDepthFunc();
-    for (auto it = m_primitivesToRender.Begin();
-         it != m_primitivesToRender.End(); )
+    for (auto it = m_primitivesToRender.Begin(); it != m_primitivesToRender.End(); )
     {
         DebugRenderPrimitive *drp = &(*it);
         if (drp->depthTest != withDepth)
@@ -124,6 +165,7 @@ void DebugRenderer::RenderPrimitives(bool withDepth)
         }
         else
         {
+            Gizmos::Reset();
             GL::SetDepthFunc(drp->depthTest ? GL::Function::LEqual :
                                               GL::Function::Always);
             Gizmos::SetColor(drp->color);

@@ -26,10 +26,10 @@ AABox::AABox(float minx, float maxx,
 {
 }
 
-AABox::AABox(const Vector3 &min, const Vector3 &max)
+AABox::AABox(const Vector3 &p1, const Vector3 &p2)
 {
-    m_minv = min;
-    m_maxv = max;
+    m_minv = Vector3::Min(p1, p2);
+    m_maxv = Vector3::Max(p1, p2);
 }
 
 AABox::AABox(const AABox &b)
@@ -106,6 +106,11 @@ float AABox::GetVolume() const
     return w * h * d;
 }
 
+Vector3 AABox::GetExtents() const
+{
+    return (GetMax() - GetMin()) / 2.0f;
+}
+
 Vector3 AABox::GetClosestPointInAABB(const Vector3 &point) const
 {
     Vector3 closestPoint;
@@ -149,34 +154,25 @@ bool AABox::Contains(const Vector3 &point) const
            point.z >= m_minv.z && point.z <= m_maxv.z;
 }
 
+void AABox::AddPoint(const Vector3 &point)
+{
+    SetMin( Vector3::Min(GetMin(), point) );
+    SetMax( Vector3::Max(GetMax(), point) );
+}
+
 AABox AABox::Union(const AABox &b1, const AABox &b2)
 {
     if (b1 == AABox::Empty) { return b2; }
     if (b2 == AABox::Empty) { return b1; }
-    return AABox(Math::Min(b1.m_minv.x, b2.m_minv.x),
-                 Math::Max(b1.m_maxv.x, b2.m_maxv.x),
-                 Math::Min(b1.m_minv.y, b2.m_minv.y),
-                 Math::Max(b1.m_maxv.y, b2.m_maxv.y),
-                 Math::Min(b1.m_minv.z, b2.m_minv.z),
-                 Math::Max(b1.m_maxv.z, b2.m_maxv.z));
+    return AABox(Vector3::Min(b1.GetMin(), b2.GetMin()),
+                 Vector3::Max(b1.GetMax(), b2.GetMax()));
 }
 
 void AABox::FillFromPositions(const Array<Vector3> &positions)
 {
     if (positions.IsEmpty()) { return; }
-
     m_minv = m_maxv = positions[0];
-    for (const Vector3 &v : positions)
-    {
-        m_minv.x = Math::Min(m_minv.x, v.x);
-        m_maxv.x = Math::Max(m_maxv.x, v.x);
-
-        m_minv.y = Math::Min(m_minv.y, v.y);
-        m_maxv.y = Math::Max(m_maxv.y, v.y);
-
-        m_minv.z = Math::Min(m_minv.z, v.z);
-        m_maxv.z = Math::Max(m_maxv.z, v.z);
-    }
+    for (const Vector3 &v : positions) { AddPoint(v); }
 }
 
 AABox AABox::FromSphere(const Sphere &sphere)
@@ -188,16 +184,16 @@ AABox AABox::FromSphere(const Sphere &sphere)
 
 Array<Vector3> AABox::GetPoints() const
 {
-    Vector3 center  = GetCenter();
-    Vector3 extents = GetDimensions() / 2.0f;
-    Vector3 p1 = center + extents * Vector3(-1, -1, -1);
-    Vector3 p2 = center + extents * Vector3(-1, -1,  1);
-    Vector3 p3 = center + extents * Vector3(-1,  1, -1);
-    Vector3 p4 = center + extents * Vector3(-1,  1,  1);
-    Vector3 p5 = center + extents * Vector3( 1, -1, -1);
-    Vector3 p6 = center + extents * Vector3( 1, -1,  1);
-    Vector3 p7 = center + extents * Vector3( 1,  1, -1);
-    Vector3 p8 = center + extents * Vector3( 1,  1,  1);
+    const Vector3 center  = GetCenter();
+    const Vector3 extents = GetExtents();
+    const Vector3 p1 = center + extents * Vector3(-1, -1, -1);
+    const Vector3 p2 = center + extents * Vector3(-1, -1,  1);
+    const Vector3 p3 = center + extents * Vector3(-1,  1, -1);
+    const Vector3 p4 = center + extents * Vector3(-1,  1,  1);
+    const Vector3 p5 = center + extents * Vector3( 1, -1, -1);
+    const Vector3 p6 = center + extents * Vector3( 1, -1,  1);
+    const Vector3 p7 = center + extents * Vector3( 1,  1, -1);
+    const Vector3 p8 = center + extents * Vector3( 1,  1,  1);
     return {p1, p2, p3, p4, p5, p6, p7, p8};
 }
 
@@ -257,8 +253,12 @@ String AABox::ToString() const
 
 bool operator==(const AABox &b1, const AABox &b2)
 {
-    return b1.GetMin() == b2.GetMin() &&
-           b1.GetMax() == b2.GetMax();
+    return (b1.GetMin() == b2.GetMin()) && (b1.GetMax() == b2.GetMax());
+}
+
+bool operator!=(const AABox &b1, const AABox &b2)
+{
+    return !(b1 == b2);
 }
 
 NAMESPACE_BANG_END

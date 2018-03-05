@@ -24,7 +24,7 @@ public:
     AABox(float minx, float maxx,
           float miny, float maxy,
           float minz, float maxz);
-    AABox(const Vector3 &min, const Vector3 &max);
+    AABox(const Vector3 &p1, const Vector3 &p2);
     AABox(const AABox& b);
 
     void SetMin(const Vector3& bMin);
@@ -40,6 +40,7 @@ public:
     Vector3 GetDimensions() const;
     float GetArea() const;
     float GetVolume() const;
+    Vector3 GetExtents() const;
     AARect GetAABoundingViewportRect(Camera *cam) const;
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
     Array<Vector3> GetPoints() const;
@@ -50,6 +51,7 @@ public:
     bool CheckCollision(const AABox &aabox) const;
     bool Contains(const Vector3 &point) const;
 
+    void AddPoint(const Vector3& point);
     static AABox Union(const AABox &b1, const AABox &b2);
     void FillFromPositions(const Array<Vector3> &positions);
 
@@ -61,6 +63,7 @@ public:
 
 AABox operator*(const Matrix4 &m, const AABox &b);
 bool operator==(const AABox &b1, const AABox &b2);
+bool operator!=(const AABox &b1, const AABox &b2);
 
 NAMESPACE_BANG_END
 

@@ -167,8 +167,13 @@ void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)
     Camera *cam = GetCurrentRenderingCamera();
     if (cam && cam->MustRenderPass(renderPass))
     {
-        go->Render(renderPass, true);
+        RenderWithPassRaw(go, renderPass);
     }
+}
+
+void GEngine::RenderWithPassRaw(GameObject *go, RenderPass renderPass)
+{
+    go->Render(renderPass, true);
 }
 
 void GEngine::RenderWithPassAndMarkStencilForLights(GameObject *go,
@@ -208,7 +213,7 @@ void GEngine::RenderViewportRect(ShaderProgram *sp, const AARect &destRectMask)
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
 }
 
-void GEngine::RenderTextureToViewport(Texture2D *texture)
+void GEngine::RenderTexture(Texture2D *texture)
 {
     // if (!cam) { return; }
     p_renderTextureToViewportMaterial.Get()->Bind();
@@ -268,21 +273,30 @@ void GEngine::SetCurrentRenderingCamera(Camera *camera)
 void GEngine::Render(Renderer *rend)
 {
     Camera *activeCamera = GetCurrentRenderingCamera();
-    if (!activeCamera) { return; }
-
-    if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
+    if (activeCamera)
     {
-        activeCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
+        if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))
+        {
+            activeCamera->GetSelectionFramebuffer()->RenderForSelectionBuffer(rend);
+        }
+        else
+        {
+            ASSERT( GL::IsBound(activeCamera->GetGBuffer()) ||
+                    GL::GetBoundId(GL::BindTarget::DrawFramebuffer) > 0 );
+            GEngine::RenderRaw(rend);
+        }
     }
     else
     {
-        ASSERT( GL::IsBound(activeCamera->GetGBuffer()) ||
-                GL::GetBoundId(GL::BindTarget::DrawFramebuffer) > 0 );
-
-        rend->Bind();
-        rend->OnRender();
-        rend->UnBind();
+        GEngine::RenderRaw(rend);
     }
+}
+
+void GEngine::RenderRaw(Renderer *rend)
+{
+    rend->Bind();
+    rend->OnRender();
+    rend->UnBind();
 }
 
 GL *GEngine::GetGL() const { return m_gl; }

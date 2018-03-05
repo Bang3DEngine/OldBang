@@ -28,8 +28,11 @@ public:
     void Init();
 
     void Render(Renderer *rend);
+    void RenderRaw(Renderer *rend);
     void Render(GameObject *go, Camera *camera);
-    void RenderTextureToViewport(Texture2D *texture);
+    void RenderTexture(Texture2D *texture);
+    void RenderWithPass(GameObject *go, RenderPass renderPass);
+    void RenderWithPassRaw(GameObject *go, RenderPass renderPass);
     void RenderViewportRect(ShaderProgram *sp,
                             const AARect &destRectMask = AARect::NDCRect);
     void RenderViewportPlane();
@@ -58,7 +61,6 @@ private:
     void RenderShadowMaps(GameObject *go);
     void RenderToGBuffer(GameObject *go, Camera *camera);
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
-    void RenderWithPass(GameObject *go, RenderPass renderPass);
     void RenderWithPassAndMarkStencilForLights(GameObject *go, RenderPass renderPass);
 
     void SetCurrentRenderingCamera(Camera *camera);

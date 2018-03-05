@@ -260,7 +260,7 @@ template<class T>
 AARectG<T> operator*(const Matrix4G<T> &m, const AARectG<T> &r)
 {
     return AARectG<T>( (m * Vector4G<T>(r.GetMin(), 0, 1) ).xy(),
-                     (m * Vector4G<T>(r.GetMax(), 0, 1) ).xy() );
+                       (m * Vector4G<T>(r.GetMax(), 0, 1) ).xy() );
 }
 
 template<class T>

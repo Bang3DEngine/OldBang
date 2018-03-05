@@ -40,6 +40,12 @@ public:
                               float thickness = 1.0f,
                               bool depthTest = false);
 
+    static void RenderAABox(const AABox &aaBox,
+                            const Color &color = Color::Green,
+                            float time = 1.0f,
+                            float thickness = 1.0f,
+                            bool depthTest = false);
+
     static void RenderAARectNDC(const AARect &aaRectNDC,
                                 const Color &color = Color::Green,
                                 float time = 1.0f,

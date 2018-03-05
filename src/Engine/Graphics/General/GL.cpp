@@ -1064,7 +1064,8 @@ void GL::UnBind(GL::BindTarget bindTarget)
 
 bool GL::IsBound(const GLObject *bindable)
 {
-    return GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId());
+    return bindable ? GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId()) :
+                      false;
 }
 
 void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
@@ -1433,6 +1434,8 @@ uint GL::GetBytesSize(GL::DataType dataType)
 
         case GL::DataType::Double:
             return sizeof(double);
+
+        default: return -1;
     }
     ASSERT(false);
     return 0;
