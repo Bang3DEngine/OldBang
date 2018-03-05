@@ -37,11 +37,10 @@ void DirectionalLight::RenderShadowMaps()
     m_shadowMapFramebuffer->Resize(GL::GetViewportSize().x, GL::GetViewportSize().y);
 
     // Render shadow map into framebuffer
-    m_shadowMapFramebuffer->ClearColor(Color::One);
     // if (rand() % 10 == 0)
-    {
-        m_shadowMapFramebuffer->Export(GL::Attachment::DepthStencil, Path("test.png"));
-    }
+    // {
+    //     m_shadowMapFramebuffer->ExportDepth(Path("test.png"));
+    // }
 
     // Bind previously bound framebuffer (if any)
     GL::Bind(m_shadowMapFramebuffer->GetGLBindTarget(), prevBoundFB);

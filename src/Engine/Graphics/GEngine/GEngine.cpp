@@ -52,7 +52,6 @@ void GEngine::Init()
     GL::SetActive( nullptr );
 }
 
-#include "Bang/DirectionalLight.h"
 void GEngine::Render(GameObject *go, Camera *camera)
 {
     if (!go) { return; }
@@ -63,7 +62,6 @@ void GEngine::Render(GameObject *go, Camera *camera)
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
     SetCurrentRenderingCamera(nullptr);
-
 }
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
@@ -143,15 +141,6 @@ void GEngine::RenderToGBuffer(GameObject *go, Camera *camera)
     ApplyStenciledDeferredLightsToGBuffer(go, camera);
     RenderWithPass(go, RenderPass::OverlayPostProcess);
     GL::Disablei(GL::Test::Blend, 0);
-
-    if (Input::GetKey(Key::L))
-    {
-        DirectionalLight *dLight = go->GetComponentInChildren<DirectionalLight>(true);
-        if (dLight)
-        {
-            GEngine::RenderTextureToViewport(dLight->GetShadowMap());
-        }
-    }
 }
 
 void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)

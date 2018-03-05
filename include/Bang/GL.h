@@ -134,6 +134,7 @@ public:
 
     enum class ColorComp
     {
+        RED  = GL_RED,
         RGB  = GL_RGB,
         RGBA = GL_RGBA,
         Depth = GL_DEPTH_COMPONENT,
@@ -551,10 +552,13 @@ public:
     static GL::Face GetCullFace();
 
     static void GetTexImage(GL::TextureTarget textureTarget,
+                            GL::ColorComp colorComp,
                             Byte *pixels);
     static void GetTexImage(GL::TextureTarget textureTarget,
+                            GL::ColorComp colorComp,
                             float *pixels);
     static void GetTexImage(GL::TextureTarget textureTarget,
+                            GL::ColorComp colorComp,
                             GL::DataType dataType,
                             void *pixels);
 

@@ -735,24 +735,29 @@ void GL::TexParameterWrap(GL::TextureTarget textureTarget,
 }
 
 void GL::GetTexImage(GL::TextureTarget textureTarget,
+                     GL::ColorComp colorComp,
                      Byte *pixels)
 {
-    GL::GetTexImage(textureTarget, GL::DataType::UnsignedByte, pixels);
-}
-
-void GL::GetTexImage(GL::TextureTarget textureTarget, float *pixels)
-{
-    GL::GetTexImage(textureTarget, GL::DataType::Float, pixels);
+    GL::GetTexImage(textureTarget, colorComp, GL::DataType::UnsignedByte, pixels);
 }
 
 void GL::GetTexImage(GL::TextureTarget textureTarget,
+                     GL::ColorComp colorComp,
+                     float *pixels)
+{
+    GL::GetTexImage(textureTarget, colorComp, GL::DataType::Float, pixels);
+}
+
+void GL::GetTexImage(GL::TextureTarget textureTarget,
+                     GL::ColorComp colorComp,
                      GL::DataType dataType,
                      void *pixels)
 {
+    Debug_Log(textureTarget);
     GL_CALL(
     glGetTexImage(GLCAST(textureTarget),
                   0,
-                  GLCAST(GL::ColorComp::RGBA),
+                  GLCAST(colorComp),
                   GLCAST(dataType),
                   Cast<void*>(pixels)) );
 }
@@ -1409,24 +1414,45 @@ uint GL::GetPixelBytesSize(GL::ColorComp colorComp, GL::DataType dataType)
 
 uint GL::GetBytesSize(GL::DataType dataType)
 {
-    if (dataType == GL::DataType::Byte)   { return sizeof(Byte); }
-    if (dataType == GL::DataType::UnsignedByte) { return sizeof(Byte); }
-    if (dataType == GL::DataType::Short) { return sizeof(short); }
-    if (dataType == GL::DataType::UnsignedShort) { return sizeof(unsigned short); }
-    if (dataType == GL::DataType::Int) { return sizeof(int); }
-    if (dataType == GL::DataType::UnsignedInt) { return sizeof(uint); }
-    if (dataType == GL::DataType::Float)  { return sizeof(float); }
-    if (dataType == GL::DataType::Double) { return sizeof(double); }
-    return 1;
+    switch (dataType)
+    {
+        case GL::DataType::Byte:
+        case GL::DataType::UnsignedByte:
+            return sizeof(Byte);
+
+        case GL::DataType::Short:
+        case GL::DataType::UnsignedShort:
+            return sizeof(short);
+
+        case GL::DataType::Int:
+        case GL::DataType::UnsignedInt:
+            return sizeof(int);
+
+        case GL::DataType::Float:
+            return sizeof(float);
+
+        case GL::DataType::Double:
+            return sizeof(double);
+    }
+    ASSERT(false);
+    return 0;
 }
 
 uint GL::GetNumComponents(GL::ColorComp colorComp)
 {
-    if (colorComp == GL::ColorComp::RGBA)          { return 4; }
-    if (colorComp == GL::ColorComp::RGB)           { return 3; }
-    if (colorComp == GL::ColorComp::DepthStencil)  { return 2; }
+    switch (colorComp)
+    {
+        case GL::ColorComp::RED:
+        case GL::ColorComp::DepthStencil:
+            return 1;
+
+        case GL::ColorComp::RGB: return 3;
+        case GL::ColorComp::RGBA: return 4;
+
+        default: break;
+    }
     ASSERT(false);
-    return 3;
+    return 0;
 }
 
 uint GL::GetNumComponents(GL::ColorFormat colorFormat)
@@ -1436,18 +1462,17 @@ uint GL::GetNumComponents(GL::ColorFormat colorFormat)
 
 GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)
 {
-    if (format == GL::ColorFormat::RGBA_UByte8)
+    switch (format)
     {
-        return GL::DataType::UnsignedByte;
-    }
-    else if (format == GL::ColorFormat::RGBA_Float16 ||
-             format == GL::ColorFormat::RGBA_Float32)
-    {
-        return GL::DataType::Float;
-    }
-    else if (format == GL::ColorFormat::Depth24_Stencil8)
-    {
-        return GL::DataType::Float;
+        case GL::ColorFormat::RGBA_UByte8:
+            return GL::DataType::UnsignedByte;
+
+        case GL::ColorFormat::RGBA_Float16:
+        case GL::ColorFormat::RGBA_Float32:
+        case GL::ColorFormat::Depth24_Stencil8:
+            return GL::DataType::Float;
+
+        default: break;
     }
     ASSERT(false);
     return GL::DataType::Float;
@@ -1455,15 +1480,17 @@ GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)
 
 GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
 {
-    if (format == GL::ColorFormat::RGBA_UByte8  ||
-        format == GL::ColorFormat::RGBA_Float16 ||
-        format == GL::ColorFormat::RGBA_Float32)
+    switch (format)
     {
-        return GL::ColorComp::RGBA;
-    }
-    else if (format == GL::ColorFormat::Depth24_Stencil8)
-    {
-        return GL::ColorComp::DepthStencil;
+        case GL::ColorFormat::RGBA_UByte8:
+        case GL::ColorFormat::RGBA_Float16:
+        case GL::ColorFormat::RGBA_Float32:
+            return GL::ColorComp::RGBA;
+
+        case GL::ColorFormat::Depth24_Stencil8:
+            return GL::ColorComp::RED;
+
+        default: break;
     }
     ASSERT(false);
     return GL::ColorComp::RGB;

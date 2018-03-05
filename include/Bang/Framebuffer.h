@@ -42,6 +42,7 @@ public:
 
     void Export(GL::Attachment attachmentId, const Path &filepath,
                 bool invertY = true) const;
+    void ExportDepth(const Path &filepath) const;
     void ExportStencil(const Path &filepath,
                        int stencilValueMultiplier = 1) const;
 

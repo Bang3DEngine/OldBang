@@ -26,31 +26,7 @@ public:
     void GenerateMipMaps() const;
 
     template<class T = Byte>
-    Image<T> ToImage(bool invertY = false) const
-    {
-        const int width  = GetWidth();
-        const int height = GetHeight();
-        const int numComps = GetNumComponents();
-        T *pixels = new T[width * height * numComps];
-
-        GetTexImageInto(pixels);
-
-        Image<T> img(width, height);
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                const int coords = (y * width + x) * numComps;
-                Color pixelColor = GetColorFromArray(pixels, coords);
-                img.SetPixel(x, y, pixelColor);
-            }
-        }
-        if (invertY) { img.InvertVertically(); }
-
-        delete[] pixels;
-
-        return img;
-    }
+    Image<T> ToImage(bool invertY = false) const;
 
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
@@ -78,6 +54,33 @@ private:
     void GetTexImageInto(Byte *pixels) const;
     int GetNumComponents() const;
 };
+
+template<class T>
+Image<T> Texture2D::ToImage(bool invertY) const
+{
+    const int width  = GetWidth();
+    const int height = GetHeight();
+    const int numComps = GL::GetNumComponents( GL::ColorComp::RGBA );
+    T *pixels = new T[width * height * numComps];
+
+    GetTexImageInto(pixels);
+
+    Image<T> img(width, height);
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            const int coords = (y * width + x) * numComps;
+            Color pixelColor = GetColorFromArray(pixels, coords);
+            img.SetPixel(x, y, pixelColor);
+        }
+    }
+    if (invertY) { img.InvertVertically(); }
+
+    delete[] pixels;
+
+    return img;
+}
 
 NAMESPACE_BANG_END
 

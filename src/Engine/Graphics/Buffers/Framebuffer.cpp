@@ -190,33 +190,49 @@ void Framebuffer::Export(GL::Attachment attachment,
     img.Export(filepath);
 }
 
-void Framebuffer::ExportStencil(const Path &filepath,
-                                int stencilValueMultiplier) const
+template<class T>
+void ExportDepthOrStencil(const Framebuffer *fb,
+                          const Path &filepath,
+                          bool depth,
+                          int multiplier)
 {
-    ASSERT(GL::IsBound(this));
+    ASSERT(GL::IsBound(fb));
 
     GL::Flush(); GL::Finish();
 
-    Byte *stencilData = new Byte[GetWidth() * GetHeight()];
-    GL::ReadPixels(0, 0, GetWidth(), GetHeight(),
-                   GL::ColorComp::StencilIndex,
-                   GL::DataType::UnsignedByte,
-                   stencilData);
+    T *data = new T[fb->GetWidth() * fb->GetHeight()];
+    GL::ReadPixels(0, 0, fb->GetWidth(), fb->GetHeight(),
+                   (depth ? GL::ColorComp::Depth :
+                            GL::ColorComp::StencilIndex),
+                   (depth ? GL::DataType::Float :
+                            GL::DataType::UnsignedByte),
+                   data);
 
-    Array<Byte> bytes(GetWidth() * GetHeight() * 4);
-    for (int i = 0; i < GetWidth() * GetHeight(); ++i)
+    Array<Byte> bytes(fb->GetWidth() * fb->GetHeight() * 4);
+    for (int i = 0; i < fb->GetWidth() * fb->GetHeight(); ++i)
     {
-        bytes[i * 4 + 0] = stencilData[i] * stencilValueMultiplier;
-        bytes[i * 4 + 1] = stencilData[i] * stencilValueMultiplier;
-        bytes[i * 4 + 2] = stencilData[i] * stencilValueMultiplier;
-        bytes[i * 4 + 3] = 255;
+        bytes[i * 4 + 0] = Byte(data[i] * multiplier);
+        bytes[i * 4 + 1] = Byte(data[i] * multiplier);
+        bytes[i * 4 + 2] = Byte(data[i] * multiplier);
+        bytes[i * 4 + 3] = Byte(255);
     }
 
-    Imageb img = Imageb::LoadFromData(GetWidth(), GetHeight(), bytes);
+    Imageb img = Imageb::LoadFromData(fb->GetWidth(), fb->GetHeight(), bytes);
     img.InvertVertically();
     img.Export(filepath);
 
-    delete[] stencilData;
+    delete[] data;
+}
+
+void Framebuffer::ExportDepth(const Path &filepath) const
+{
+    ExportDepthOrStencil<float>(this, filepath, true, 255);
+}
+
+void Framebuffer::ExportStencil(const Path &filepath,
+                                int stencilValueMultiplier) const
+{
+    ExportDepthOrStencil<Byte>(this, filepath, false, stencilValueMultiplier);
 }
 
 void Framebuffer::PushDrawAttachments()

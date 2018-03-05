@@ -102,7 +102,9 @@ void GetTexImageInto_T(const Texture2D *tex, T *pixels)
 {
     GLId prevBound = GL::GetBoundId(GL::BindTarget::Texture2D);
     tex->Bind();
-    GL::GetTexImage(tex->GetTextureTarget(), pixels);
+    GL::GetTexImage(tex->GetTextureTarget(),
+                    GL::GetColorCompFrom( tex->GetInternalFormat() ),
+                    pixels);
     GL::Bind(GL::BindTarget::Texture2D, prevBound);
 }
 
