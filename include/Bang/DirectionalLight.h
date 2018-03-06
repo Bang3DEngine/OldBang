@@ -21,6 +21,7 @@ public:
 
     // Light
     void RenderShadowMaps() override;
+    void SetUniformsBeforeApplyingLight(Material* mat) const override;
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -35,6 +36,10 @@ protected:
     DirectionalLight();
     virtual ~DirectionalLight();
 
+    void GetShadowMapMatrices(Scene *scene,
+                              Matrix4 *viewMatrix,
+                              Matrix4 *projMatrix) const;
+    Matrix4 GetShadowMapMatrix(Scene *scene) const;
     Matrix4 GetLightDirMatrix() const;
     AABox GetShadowMapOrthoBox(Scene *scene) const;
 };

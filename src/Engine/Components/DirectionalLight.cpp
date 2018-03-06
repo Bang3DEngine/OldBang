@@ -11,6 +11,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/IconManager.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/DebugRenderer.h"
 #include "Bang/MaterialFactory.h"
 
@@ -30,11 +31,6 @@ DirectionalLight::~DirectionalLight()
     delete m_shadowMapFramebuffer;
 }
 
-void DirectionalLight::CloneInto(ICloneable *clone) const
-{
-    Light::CloneInto(clone);
-}
-
 #include "Bang/Input.h"
 void DirectionalLight::RenderShadowMaps()
 {
@@ -49,21 +45,16 @@ void DirectionalLight::RenderShadowMaps()
     m_shadowMapFramebuffer->Bind();
     m_shadowMapFramebuffer->Resize(GL::GetViewportSize().x, GL::GetViewportSize().y);
 
-    // Set up viewport and matrices
+    // Set up viewport
     GL::SetViewport(0, 0, prevVP.GetWidth(), prevVP.GetHeight());
+
+    // Set up shadow map matrices
     Scene *scene = GetGameObject()->GetScene();
-    Transform *trans = GetGameObject()->GetTransform();
-    AABox orthoBox = GetShadowMapOrthoBox(scene);
-    Vector3 extents = orthoBox.GetExtents();
-    Matrix4 viewMatrix = Matrix4::LookAt(orthoBox.GetCenter(),
-                                         orthoBox.GetCenter() + trans->GetForward(),
-                                         trans->GetUp());
-    Matrix4 projMatrix = Matrix4::Ortho(-extents.x, extents.x,
-                                        -extents.y, extents.y,
-                                        -extents.z, extents.z);
+    Matrix4 shadowMapViewMatrix, shadowMapProjMatrix;
+    GetShadowMapMatrices(scene, &shadowMapViewMatrix, &shadowMapProjMatrix);
     GLUniforms::SetModelMatrix(Matrix4::Identity);
-    GLUniforms::SetViewMatrix(viewMatrix);
-    GLUniforms::SetProjectionMatrix(projMatrix);
+    GLUniforms::SetViewMatrix( shadowMapViewMatrix );
+    GLUniforms::SetProjectionMatrix( shadowMapProjMatrix );
 
     // Render shadow map into framebuffer
     GL::ClearDepthBuffer(1.0f);
@@ -82,10 +73,56 @@ void DirectionalLight::RenderShadowMaps()
     GL::Bind(m_shadowMapFramebuffer->GetGLBindTarget(), prevBoundFB);
 }
 
+void DirectionalLight::SetUniformsBeforeApplyingLight(Material *mat) const
+{
+    Light::SetUniformsBeforeApplyingLight(mat);
+
+    ShaderProgram *sp = mat->GetShaderProgram();
+    if (!sp) { return; }
+    ASSERT(GL::IsBound(sp))
+
+    Scene *scene = GetGameObject()->GetScene();
+    sp->Set("B_LightShadowBias", 0.01f, true);
+    sp->Set("B_LightShadowMap", GetShadowMap(), true);
+    sp->Set("B_WorldToShadowMapMatrix", GetShadowMapMatrix(scene), true);
+}
+
 Texture2D *DirectionalLight::GetShadowMap() const
 {
     return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::DepthStencil);
 }
+
+void DirectionalLight::CloneInto(ICloneable *clone) const
+{
+    Light::CloneInto(clone);
+}
+
+void DirectionalLight::GetShadowMapMatrices(Scene *scene,
+                                            Matrix4 *viewMatrix,
+                                            Matrix4 *projMatrix) const
+{
+    // The ortho box will be the AABox in light space of the AABox of the
+    // scene in world space
+    Transform *trans = GetGameObject()->GetTransform();
+    AABox orthoBox = GetShadowMapOrthoBox(scene);
+    Vector3 extents = orthoBox.GetExtents();
+
+    *viewMatrix = Matrix4::LookAt(orthoBox.GetCenter(),
+                                  orthoBox.GetCenter() + trans->GetForward(),
+                                  trans->GetUp());
+
+    *projMatrix = Matrix4::Ortho(-extents.x, extents.x,
+                                 -extents.y, extents.y,
+                                 -extents.z, extents.z);
+}
+
+Matrix4 DirectionalLight::GetShadowMapMatrix(Scene *scene) const
+{
+    Matrix4 shadowMapViewMatrix, shadowMapProjMatrix;
+    GetShadowMapMatrices(scene, &shadowMapViewMatrix, &shadowMapProjMatrix);
+    return shadowMapProjMatrix * shadowMapViewMatrix;
+}
+
 
 AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
 {
