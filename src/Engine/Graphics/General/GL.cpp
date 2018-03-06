@@ -711,7 +711,27 @@ void GL::TexImage2D(GL::TextureTarget textureTarget,
                  GLCAST(inputDataColorComp),
                  GLCAST(inputDataType),
                  data)
-    );
+                );
+}
+
+void GL::TexParameteri(GL::TextureTarget textureTarget,
+                       GL::TexParameter textureParameter,
+                       GLint value)
+{
+    GL_CALL(
+    glTexParameteri(GLCAST(textureTarget),
+                    GLCAST(textureParameter),
+                    value); );
+}
+
+void GL::TexParameterf(GL::TextureTarget textureTarget,
+                       GL::TexParameter textureParameter,
+                       GLfloat value)
+{
+    GL_CALL(
+    glTexParameterf(GLCAST(textureTarget),
+                    GLCAST(textureParameter),
+                    value); );
 }
 
 void GL::TexParameterFilter(GL::TextureTarget textureTarget,
@@ -719,9 +739,9 @@ void GL::TexParameterFilter(GL::TextureTarget textureTarget,
                             GL::FilterMode filterMode)
 {
     GL_CALL(
-    glTexParameteri(GLCAST(textureTarget),
-                    GLCAST(filterMagMin),
-                    GLCAST(filterMode)) );
+    GL::TexParameteri(textureTarget,
+                      SCAST<GL::TexParameter>(filterMagMin),
+                      GLCAST(filterMode)) );
 }
 
 void GL::TexParameterWrap(GL::TextureTarget textureTarget,
@@ -729,9 +749,9 @@ void GL::TexParameterWrap(GL::TextureTarget textureTarget,
                           GL::WrapMode wrapMode)
 {
     GL_CALL(
-    glTexParameteri(GLCAST(textureTarget),
-                    GLCAST(wrapCoord),
-                    GLCAST(wrapMode)) );
+    GL::TexParameteri(textureTarget,
+                      SCAST<GL::TexParameter>(wrapCoord),
+                      GLCAST(wrapMode)) );
 }
 
 void GL::GetTexImage(GL::TextureTarget textureTarget,

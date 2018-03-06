@@ -65,6 +65,15 @@ public:
         c3 = Vector4G<T>(Cast<T>(0), Cast<T>(0), Cast<T>(0), Cast<T>(a));
     }
 
+    Vector3 TransformPoint(const Vector3 &point)
+    {
+        return ((*this) * Vector4(point, 1)).xyz();
+    }
+    Vector3 TransformVector(const Vector3 &vector)
+    {
+        return ((*this) * Vector4(vector, 0)).xyz();
+    }
+
     Matrix4G<T> Inversed() const
     {
         Matrix4G<T> inv;

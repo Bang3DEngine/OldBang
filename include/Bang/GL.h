@@ -209,6 +209,27 @@ public:
         WrapR = GL_TEXTURE_WRAP_R
     };
 
+    enum class TexParameter
+    {
+        DEPTH_STENCIL_TEXTURE_MODE = GL_DEPTH_STENCIL_TEXTURE_MODE,
+        TEXTURE_BORDER_COLOR       = GL_TEXTURE_BORDER_COLOR,
+        TEXTURE_COMPARE_FUNC       = GL_TEXTURE_COMPARE_FUNC,
+        TEXTURE_COMPARE_MODE       = GL_TEXTURE_COMPARE_MODE,
+        TEXTURE_LOD_BIAS           = GL_TEXTURE_LOD_BIAS,
+        TEXTURE_MIN_FILTER         = GL_TEXTURE_MIN_FILTER,
+        TEXTURE_MAG_FILTER         = GL_TEXTURE_MAG_FILTER,
+        TEXTURE_MIN_LOD            = GL_TEXTURE_MIN_LOD,
+        TEXTURE_MAX_LOD            = GL_TEXTURE_MAX_LOD,
+        TEXTURE_BASE_LEVEL         = GL_TEXTURE_BASE_LEVEL,
+        TEXTURE_MAX_LEVEL          = GL_TEXTURE_MAX_LEVEL,
+        TEXTURE_WRAP_S             = GL_TEXTURE_WRAP_S,
+        TEXTURE_WRAP_T             = GL_TEXTURE_WRAP_T,
+        TEXTURE_WRAP_R             = GL_TEXTURE_WRAP_R,
+        TEXTURE_PRIORITY           = GL_TEXTURE_PRIORITY,
+        DEPTH_TEXTURE_MODE         = GL_DEPTH_TEXTURE_MODE,
+        GENERATE_MIPMAP            = GL_GENERATE_MIPMAP
+    };
+
     enum class FilterMode
     {
         Nearest = GL_NEAREST,
@@ -352,14 +373,14 @@ public:
     static void DeleteShader(GLId shaderId);
 
 
-    static GLId   CreateProgram();
-    static void   AttachShader(GLId programId, GLId shaderId);
-    static bool   LinkProgram(GLId programId);
-    static void   BindAttribLocation(GLId programId, int location,
-                                     const String &attribName);
-    static void   BindFragDataLocation(GLId programId, int location,
-                                       const String &fragDataName);
-    static void   DeleteProgram(GLId programId);
+    static GLId CreateProgram();
+    static void AttachShader(GLId programId, GLId shaderId);
+    static bool LinkProgram(GLId programId);
+    static void BindAttribLocation(GLId programId, int location,
+                                   const String &attribName);
+    static void BindFragDataLocation(GLId programId, int location,
+                                     const String &fragDataName);
+    static void DeleteProgram(GLId programId);
 
     static void FramebufferTexture2D(GL::FramebufferTarget target,
                                      GL::Attachment attachment,
@@ -418,6 +439,12 @@ public:
                            GL::ColorComp inputDataColorComp,
                            GL::DataType inputDataType,
                            const void *data);
+    static void TexParameteri(GL::TextureTarget textureTarget,
+                              GL::TexParameter textureParameter,
+                              GLint value);
+    static void TexParameterf(GL::TextureTarget textureTarget,
+                              GL::TexParameter textureParameter,
+                              GLfloat value);
     static void TexParameterFilter(GL::TextureTarget textureTarget,
                                    GL::FilterMagMin filterMagMin,
                                    GL::FilterMode filterMode);

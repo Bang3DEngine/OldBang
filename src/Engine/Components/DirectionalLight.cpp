@@ -1,4 +1,4 @@
-#include "Bang/DirectionalLight.h"
+﻿#include "Bang/DirectionalLight.h"
 
 #include "Bang/AABox.h"
 #include "Bang/Scene.h"
@@ -22,13 +22,16 @@ DirectionalLight::DirectionalLight()
     SetLightMaterial(MaterialFactory::GetDirectionalLight().Get());
 
     m_shadowMapFramebuffer = new Framebuffer(1,1);
-    // m_shadowMapFramebuffer->CreateAttachment(GL::Attachment::DepthStencil,
-    //                                          GL::ColorFormat::Depth24_Stencil8);
     m_shadowMapFramebuffer->CreateAttachment(GL::Attachment::Depth,
                                              GL::ColorFormat::Depth16);
-    GetShadowMap()->SetFilterMode(GL::FilterMode::Bilinear);
+
+    GLId prevBoundTex = GL::GetBoundId(GetShadowMap()->GetGLBindTarget());
     GetShadowMap()->Bind();
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE );
+    GetShadowMap()->SetFilterMode(GL::FilterMode::Bilinear);
+    GL::TexParameteri( GetShadowMap()->GetTextureTarget(),
+                       GL::TexParameter::TEXTURE_COMPARE_MODE,
+                       GL_COMPARE_REF_TO_TEXTURE );
+    GL::Bind(GetShadowMap()->GetGLBindTarget(), prevBoundTex);
 }
 
 DirectionalLight::~DirectionalLight()
@@ -46,11 +49,12 @@ void DirectionalLight::RenderShadowMaps_()
     GLId prevBoundFB = GL::GetBoundId(m_shadowMapFramebuffer->GetGLBindTarget());
 
     // Bind and resize shadow map framebuffer
+    Vector2i shadowMapSize = Vector2i(2048);
     m_shadowMapFramebuffer->Bind();
-    m_shadowMapFramebuffer->Resize(GL::GetViewportSize().x, GL::GetViewportSize().y);
+    m_shadowMapFramebuffer->Resize(shadowMapSize.x, shadowMapSize.y);
 
     // Set up viewport
-    GL::SetViewport(0, 0, prevVP.GetWidth(), prevVP.GetHeight());
+    GL::SetViewport(0, 0, shadowMapSize.x, shadowMapSize.y);
 
     // Set up shadow map matrices
     Scene *scene = GetGameObject()->GetScene();
@@ -91,7 +95,6 @@ void DirectionalLight::SetUniformsBeforeApplyingLight(Material *mat) const
 
 Texture2D *DirectionalLight::GetShadowMap() const
 {
-    // return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::DepthStencil);
     return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::Depth);
 }
 
@@ -106,13 +109,15 @@ void DirectionalLight::GetShadowMapMatrices(Scene *scene,
 {
     // The ortho box will be the AABox in light space of the AABox of the
     // scene in world space
-    Transform *trans = GetGameObject()->GetTransform();
     AABox orthoBox = GetShadowMapOrthoBox(scene);
     Vector3 extents = orthoBox.GetExtents();
+    Matrix4 lightDirMatrixInv = GetLightDirMatrix().Inversed();
+    Vector3 fwd = lightDirMatrixInv.TransformVector(Vector3::Forward);
+    Vector3 up  = lightDirMatrixInv.TransformVector(Vector3::Up);
 
     *viewMatrix = Matrix4::LookAt(orthoBox.GetCenter(),
-                                  orthoBox.GetCenter() + trans->GetForward(),
-                                  trans->GetUp());
+                                  orthoBox.GetCenter() + fwd,
+                                  up);
 
     *projMatrix = Matrix4::Ortho(-extents.x, extents.x,
                                  -extents.y, extents.y,
@@ -151,25 +156,7 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
 Matrix4 DirectionalLight::GetLightDirMatrix() const
 {
     const Transform *t = GetGameObject()->GetTransform();
-
-    /*
-    // We want no rotation in forward, since this would deform our viewport
-    Vector3 euler = t->GetEuler() * Vector3(1,1,0);
-    Quaternion rot = Quaternion::FromEulerAngles(euler);
-    Vector3 fwd = rot.Inversed() * Vector3::Forward;
-    Vector3 up  = rot.Inversed() * Vector3::Up;
-    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, fwd, up);
-    */
-
-    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, t->GetForward(), Vector3::Up); // t->GetUp());
-    /*
-    Quaternion rot = Transform::GetRotationFromMatrix4(lookAt);
-    Vector3 eulerAng = rot.GetEulerAngles();
-    eulerAng.z = 0.0f;
-    Quaternion plainRot = Quaternion::FromEulerAngles(eulerAng);
-    Vector3 plainUp = plainRot * Vector3::Up;
-    return Matrix4::LookAt(Vector3::Zero, t->GetForward(), plainUp);
-    */
+    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, t->GetForward(), t->GetUp());
     return lookAt;
 }
 
