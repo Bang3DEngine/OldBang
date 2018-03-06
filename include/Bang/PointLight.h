@@ -18,9 +18,6 @@ public:
     // Component
     void OnRender(RenderPass rp) override;
 
-    // Light
-    void RenderShadowMaps() override;
-
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -35,6 +32,7 @@ protected:
     virtual ~PointLight();
 
     // Light
+    void RenderShadowMaps_() override;
     virtual void SetUniformsBeforeApplyingLight(Material* mat) const override;
 
     // Renderer

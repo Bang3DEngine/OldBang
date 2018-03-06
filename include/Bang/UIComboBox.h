@@ -27,6 +27,7 @@ public:
     int GetSelectedValue() const;
     int GetSelectedIndex() const;
     String GetSelectedLabel() const;
+    bool HasFocus() const;
 
 private:
     int m_selectedIndex = -1;

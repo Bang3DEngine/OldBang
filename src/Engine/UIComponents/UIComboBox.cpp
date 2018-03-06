@@ -105,6 +105,11 @@ String UIComboBox::GetSelectedLabel() const
     return "";
 }
 
+bool UIComboBox::HasFocus() const
+{
+    return GetList()->GetGameObject()->IsEnabled();
+}
+
 UIComboBox *UIComboBox::CreateInto(GameObject *go)
 {
     REQUIRE_COMPONENT(go, RectTransform);

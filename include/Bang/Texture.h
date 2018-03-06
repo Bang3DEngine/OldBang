@@ -23,7 +23,7 @@ public:
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;
 
-    void SetInternalFormat(GL::ColorFormat internalFormat);
+    void SetFormat(GL::ColorFormat internalFormat);
     void SetTarget(GL::TextureTarget target);
     void SetFilterMode(GL::FilterMode filterMode);
     void SetWrapMode(GL::WrapMode wrapMode);
@@ -34,8 +34,9 @@ public:
     GL::FilterMode GetFilterMode() const;
     GL::WrapMode GetWrapMode() const;
 
-    GL::DataType GetInternalDataType() const;
-    GL::ColorFormat GetInternalFormat() const;
+    GL::DataType GetDataType() const;
+    GL::ColorComp GetColorComp() const;
+    GL::ColorFormat GetFormat() const;
     uint GetBytesSize() const;
 
     GL::TextureTarget GetTextureTarget() const;
@@ -53,7 +54,7 @@ private:
     GL::FilterMode m_filterMode = Undef<GL::FilterMode>();
     GL::WrapMode m_wrapMode     = Undef<GL::WrapMode>();
 
-    GL::ColorFormat m_internalFormat = GL::ColorFormat::RGBA_Float32;
+    GL::ColorFormat m_glFormat = GL::ColorFormat::RGBA_Float32;
     GL::TextureTarget m_target = GL::TextureTarget::Texture2D;
 };
 

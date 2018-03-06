@@ -22,8 +22,13 @@ DirectionalLight::DirectionalLight()
     SetLightMaterial(MaterialFactory::GetDirectionalLight().Get());
 
     m_shadowMapFramebuffer = new Framebuffer(1,1);
-    m_shadowMapFramebuffer->CreateAttachment(GL::Attachment::DepthStencil,
-                                             GL::ColorFormat::Depth24_Stencil8);
+    // m_shadowMapFramebuffer->CreateAttachment(GL::Attachment::DepthStencil,
+    //                                          GL::ColorFormat::Depth24_Stencil8);
+    m_shadowMapFramebuffer->CreateAttachment(GL::Attachment::Depth,
+                                             GL::ColorFormat::Depth16);
+    GetShadowMap()->SetFilterMode(GL::FilterMode::Bilinear);
+    GetShadowMap()->Bind();
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE );
 }
 
 DirectionalLight::~DirectionalLight()
@@ -31,8 +36,7 @@ DirectionalLight::~DirectionalLight()
     delete m_shadowMapFramebuffer;
 }
 
-#include "Bang/Input.h"
-void DirectionalLight::RenderShadowMaps()
+void DirectionalLight::RenderShadowMaps_()
 {
     // Save previous state
     AARecti prevVP = GL::GetViewportRect();
@@ -62,7 +66,6 @@ void DirectionalLight::RenderShadowMaps()
     GL::SetDepthFunc(GL::Function::LEqual);
     GL::SetDepthMask(true);
     GEngine::GetActive()->RenderWithPassRaw(scene, RenderPass::Scene);
-    if (Input::GetKey(Key::L)) m_shadowMapFramebuffer->ExportDepth(Path("test.png"));
 
     // Restore previous state
     GL::SetViewport(prevVP);
@@ -82,14 +85,14 @@ void DirectionalLight::SetUniformsBeforeApplyingLight(Material *mat) const
     ASSERT(GL::IsBound(sp))
 
     Scene *scene = GetGameObject()->GetScene();
-    sp->Set("B_LightShadowBias", 0.01f, true);
     sp->Set("B_LightShadowMap", GetShadowMap(), true);
     sp->Set("B_WorldToShadowMapMatrix", GetShadowMapMatrix(scene), true);
 }
 
 Texture2D *DirectionalLight::GetShadowMap() const
 {
-    return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::DepthStencil);
+    // return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::DepthStencil);
+    return m_shadowMapFramebuffer->GetAttachmentTexture(GL::Attachment::Depth);
 }
 
 void DirectionalLight::CloneInto(ICloneable *clone) const
@@ -149,8 +152,18 @@ Matrix4 DirectionalLight::GetLightDirMatrix() const
 {
     const Transform *t = GetGameObject()->GetTransform();
 
-    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, t->GetForward(), t->GetUp());
-    /*Quaternion rot = Transform::GetRotationFromMatrix4(lookAt);
+    /*
+    // We want no rotation in forward, since this would deform our viewport
+    Vector3 euler = t->GetEuler() * Vector3(1,1,0);
+    Quaternion rot = Quaternion::FromEulerAngles(euler);
+    Vector3 fwd = rot.Inversed() * Vector3::Forward;
+    Vector3 up  = rot.Inversed() * Vector3::Up;
+    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, fwd, up);
+    */
+
+    Matrix4 lookAt = Matrix4::LookAt(Vector3::Zero, t->GetForward(), Vector3::Up); // t->GetUp());
+    /*
+    Quaternion rot = Transform::GetRotationFromMatrix4(lookAt);
     Vector3 eulerAng = rot.GetEulerAngles();
     eulerAng.z = 0.0f;
     Quaternion plainRot = Quaternion::FromEulerAngles(eulerAng);

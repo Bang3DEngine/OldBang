@@ -696,7 +696,7 @@ void GL::GenerateMipMap(GL::TextureTarget textureTarget)
 void GL::TexImage2D(GL::TextureTarget textureTarget,
                     int textureWidth,
                     int textureHeight,
-                    GL::ColorFormat textureInternalColorFormat,
+                    GL::ColorFormat textureColorFormat,
                     GL::ColorComp inputDataColorComp,
                     GL::DataType inputDataType,
                     const void *data)
@@ -704,7 +704,7 @@ void GL::TexImage2D(GL::TextureTarget textureTarget,
     GL_CALL(
     glTexImage2D(GLCAST(textureTarget),
                  0,
-                 GLCAST(textureInternalColorFormat),
+                 GLCAST(textureColorFormat),
                  textureWidth,
                  textureHeight,
                  0,
@@ -1399,11 +1399,16 @@ uint GL::GetPixelBytesSize(GL::ColorFormat texFormat)
 {
     switch (texFormat)
     {
-        case GL::ColorFormat::RGBA_UByte8:      return 8;
-        case GL::ColorFormat::RGBA_Float16:     return 16;
-        case GL::ColorFormat::Depth24_Stencil8: return 32;
-        case GL::ColorFormat::RGB10_A2_UByte:   return 32;
-        case GL::ColorFormat::RGBA_Float32:     return 128;
+        case GL::ColorFormat::RGBA_UByte8:      return 1;
+        case GL::ColorFormat::RGBA_Float16:     return 8;
+        case GL::ColorFormat::Depth:            return 4;
+        case GL::ColorFormat::Depth16:          return 2;
+        case GL::ColorFormat::Depth24:          return 3;
+        case GL::ColorFormat::Depth32:          return 4;
+        case GL::ColorFormat::Depth32F:         return 16;
+        case GL::ColorFormat::Depth24_Stencil8: return 4;
+        case GL::ColorFormat::RGB10_A2_UByte:   return 4;
+        case GL::ColorFormat::RGBA_Float32:     return 16;
     }
     return 0;
 }
@@ -1446,6 +1451,7 @@ uint GL::GetNumComponents(GL::ColorComp colorComp)
     switch (colorComp)
     {
         case GL::ColorComp::RED:
+        case GL::ColorComp::Depth:
         case GL::ColorComp::DepthStencil:
             return 1;
 
@@ -1473,6 +1479,11 @@ GL::DataType GL::GetDataTypeFrom(GL::ColorFormat format)
         case GL::ColorFormat::RGBA_Float16:
         case GL::ColorFormat::RGBA_Float32:
         case GL::ColorFormat::Depth24_Stencil8:
+        case GL::ColorFormat::Depth:
+        case GL::ColorFormat::Depth16:
+        case GL::ColorFormat::Depth24:
+        case GL::ColorFormat::Depth32:
+        case GL::ColorFormat::Depth32F:
             return GL::DataType::Float;
 
         default: break;
@@ -1488,15 +1499,31 @@ GL::ColorComp GL::GetColorCompFrom(GL::ColorFormat format)
         case GL::ColorFormat::RGBA_UByte8:
         case GL::ColorFormat::RGBA_Float16:
         case GL::ColorFormat::RGBA_Float32:
+        case GL::ColorFormat::RGB10_A2_UByte:
             return GL::ColorComp::RGBA;
 
+        case GL::ColorFormat::Depth:
+        case GL::ColorFormat::Depth16:
+        case GL::ColorFormat::Depth24:
+        case GL::ColorFormat::Depth32:
+        case GL::ColorFormat::Depth32F:
         case GL::ColorFormat::Depth24_Stencil8:
-            return GL::ColorComp::RED;
+            return GL::ColorComp::Depth;
 
         default: break;
     }
     ASSERT(false);
     return GL::ColorComp::RGB;
+}
+
+bool GL::IsDepthFormat(GL::ColorFormat format)
+{
+    return (format == GL::ColorFormat::Depth    ||
+            format == GL::ColorFormat::Depth16  ||
+            format == GL::ColorFormat::Depth24  ||
+            format == GL::ColorFormat::Depth32  ||
+            format == GL::ColorFormat::Depth32F ||
+            format == GL::ColorFormat::Depth24_Stencil8);
 }
 
 void GL::BindUniformBufferToShader(const String &uniformBlockName,

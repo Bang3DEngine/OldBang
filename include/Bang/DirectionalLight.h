@@ -20,7 +20,6 @@ public:
     void OnRender(RenderPass rp) override;
 
     // Light
-    void RenderShadowMaps() override;
     void SetUniformsBeforeApplyingLight(Material* mat) const override;
 
     // ICloneable
@@ -35,6 +34,9 @@ protected:
 
     DirectionalLight();
     virtual ~DirectionalLight();
+
+    // Light
+    void RenderShadowMaps_() override;
 
     void GetShadowMapMatrices(Scene *scene,
                               Matrix4 *viewMatrix,

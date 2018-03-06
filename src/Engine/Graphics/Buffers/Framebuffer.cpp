@@ -32,7 +32,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
     GL_ClearError();
     RH<Texture2D> tex = Resources::Create<Texture2D>();
     tex.Get()->Bind();
-    tex.Get()->SetInternalFormat(texFormat);
+    tex.Get()->SetFormat(texFormat);
     tex.Get()->CreateEmpty(GetWidth(), GetHeight());
     GL_CheckError();
 
@@ -111,8 +111,8 @@ Color Framebuffer::ReadColor(int x, int y, GL::Attachment attachment) const
     SetReadBuffer(attachment);
     Byte color[4] = {0,0,0,0};
     GL::ReadPixels(x, y, 1, 1,
-                   GL::GetColorCompFrom(t->GetInternalFormat()),
-                   t->GetInternalDataType(),
+                   GL::GetColorCompFrom(t->GetFormat()),
+                   t->GetDataType(),
                    Cast<void*>(&color));
     Color readColor = Color(color[0], color[1], color[2], color[3]) / 255.0f;
     GL::Bind(GL::BindTarget::Framebuffer, prevFBId);

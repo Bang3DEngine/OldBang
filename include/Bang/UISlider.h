@@ -35,6 +35,7 @@ public:
     UIImageRenderer *GetGuideRenderer() const;
     UIImageRenderer *GetHandleRenderer() const;
     UIFocusable *GetHandleFocusable() const;
+    bool HasFocus() const;
 
     const Color& GetIdleColor() const;
     const Color& GetOverColor() const;

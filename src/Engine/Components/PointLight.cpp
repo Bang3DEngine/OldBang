@@ -49,7 +49,7 @@ float PointLight::GetRange() const { return m_range; }
 void PointLight::OnRender(RenderPass rp)
 {
     Component::OnRender(rp);
-    if (rp == RenderPass::Overlay)
+    if (rp == RenderPass::Overlay) // Render gizmos
     {
         Gizmos::Reset();
         Gizmos::SetColor(GetColor());
@@ -60,7 +60,7 @@ void PointLight::OnRender(RenderPass rp)
     }
 }
 
-void PointLight::RenderShadowMaps()
+void PointLight::RenderShadowMaps_()
 {
 
 }

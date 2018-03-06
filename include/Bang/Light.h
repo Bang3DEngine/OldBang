@@ -15,13 +15,19 @@ FORWARD class GBuffer;
 class Light : public Component
 {
 public:
+    enum class ShadowType { NONE = 0, HARD, SOFT };
+
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
+    void SetShadowBias(float shadowBias);
+    void SetShadowType(ShadowType shadowType);
 
     Color GetColor() const;
     float GetIntensity() const;
+    float GetShadowBias() const;
+    ShadowType GetShadowType() const;
 
-    virtual void RenderShadowMaps() = 0;
+    void RenderShadowMaps();
 
     // ICloneable
     virtual void CloneInto(ICloneable *clone) const override;
@@ -41,10 +47,15 @@ protected:
 private:
     float m_intensity = 1.0f;
     Color m_color = Color::White;
+
+    float m_shadowBias = 0.01f;
+    ShadowType m_shadowType = ShadowType::SOFT;
+
     RH<Material> p_lightMaterial;
 
     void ApplyLight(Camera *camera, const AARect &renderRect) const;
     virtual AARect GetRenderRect(Camera *camera) const;
+    virtual void RenderShadowMaps_() = 0;
 
     friend class GEngine;
 };

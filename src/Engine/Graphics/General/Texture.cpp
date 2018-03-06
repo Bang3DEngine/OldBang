@@ -9,7 +9,7 @@ Texture::Texture()
     GL::GenTextures(1, &m_idGL);
     SetFilterMode(GL::FilterMode::Bilinear);
     SetWrapMode(GL::WrapMode::ClampToEdge);
-    SetInternalFormat(m_internalFormat);
+    SetFormat(m_glFormat);
 }
 
 Texture::~Texture()
@@ -27,13 +27,13 @@ Texture::Texture(const Texture &t) : GLObject(t)
     m_size = Vector2i(t.GetWidth(), t.GetHeight());
     m_filterMode = t.m_filterMode;
     m_wrapMode = t.m_wrapMode;
-    m_internalFormat = t.m_internalFormat;
+    m_glFormat = t.m_glFormat;
     m_target = t.m_target;
 }
 
-void Texture::SetInternalFormat(GL::ColorFormat internalFormat)
+void Texture::SetFormat(GL::ColorFormat internalFormat)
 {
-    m_internalFormat = internalFormat;
+    m_glFormat = internalFormat;
 }
 
 void Texture::SetTarget(GL::TextureTarget target)
@@ -95,19 +95,24 @@ const Vector2i &Texture::GetSize() const
     return m_size;
 }
 
-GL::DataType Texture::GetInternalDataType() const
+GL::DataType Texture::GetDataType() const
 {
-    return GL::GetDataTypeFrom( GetInternalFormat() );
+    return GL::GetDataTypeFrom( GetFormat() );
 }
 
-GL::ColorFormat Texture::GetInternalFormat() const
+GL::ColorComp Texture::GetColorComp() const
 {
-    return m_internalFormat;
+    return GL::GetColorCompFrom( GetFormat() );
+}
+
+GL::ColorFormat Texture::GetFormat() const
+{
+    return m_glFormat;
 }
 
 uint Texture::GetBytesSize() const
 {
-    return GetWidth() * GetHeight() * GL::GetPixelBytesSize(m_internalFormat);
+    return GetWidth() * GetHeight() * GL::GetPixelBytesSize(m_glFormat);
 }
 
 GL::TextureTarget Texture::GetTextureTarget() const

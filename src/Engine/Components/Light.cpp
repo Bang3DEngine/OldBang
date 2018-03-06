@@ -19,9 +19,21 @@ Light::~Light() { }
 
 void Light::SetColor(const Color &color) { m_color = color; }
 void Light::SetIntensity(float intensity) { m_intensity = intensity; }
+void Light::SetShadowBias(float shadowBias) { m_shadowBias = shadowBias; }
+void Light::SetShadowType(ShadowType shadowType) { m_shadowType = shadowType; }
 
 Color Light::GetColor() const { return m_color; }
 float Light::GetIntensity() const { return m_intensity; }
+float Light::GetShadowBias() const { return m_shadowBias; }
+Light::ShadowType Light::GetShadowType() const { return m_shadowType; }
+
+void Light::RenderShadowMaps()
+{
+    if (GetShadowType() != ShadowType::NONE)
+    {
+        RenderShadowMaps_();
+    }
+}
 
 void Light::ApplyLight(Camera *camera, const AARect &renderRect) const
 {
@@ -41,10 +53,13 @@ void Light::SetUniformsBeforeApplyingLight(Material* mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();
     if (!sp) { return; }
+
     ASSERT(GL::IsBound(sp))
 
-    sp->Set("B_LightIntensity", m_intensity, false);
-    sp->Set("B_LightColor", m_color, false);
+    sp->Set("B_ShadowType", SCAST<int>( GetShadowType() ), true);
+    sp->Set("B_LightShadowBias", GetShadowBias(), true);
+    sp->Set("B_LightIntensity", GetIntensity(), false);
+    sp->Set("B_LightColor", GetColor(), false);
 
     Transform *tr = GetGameObject()->GetTransform();
     sp->Set("B_LightForwardWorld",  tr->GetForward(), false);
@@ -67,6 +82,8 @@ void Light::CloneInto(ICloneable *clone) const
     Light *l = Cast<Light*>(clone);
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
+    l->SetShadowBias( GetShadowBias() );
+    l->SetShadowType( GetShadowType() );
 }
 
 void Light::ImportXML(const XMLNode &xmlInfo)
@@ -78,6 +95,12 @@ void Light::ImportXML(const XMLNode &xmlInfo)
 
     if (xmlInfo.Contains("Color"))
     { SetColor(xmlInfo.Get<Color>("Color")); }
+
+    if (xmlInfo.Contains("ShadowBias"))
+    { SetShadowBias(xmlInfo.Get<float>("ShadowBias")); }
+
+    if (xmlInfo.Contains("ShadowType"))
+    { SetShadowType(xmlInfo.Get<ShadowType>("ShadowType")); }
 }
 
 void Light::ExportXML(XMLNode *xmlInfo) const
@@ -86,4 +109,6 @@ void Light::ExportXML(XMLNode *xmlInfo) const
 
     xmlInfo->Set("Intensity", GetIntensity());
     xmlInfo->Set("Color", GetColor());
+    xmlInfo->Set("ShadowBias", GetShadowBias());
+    xmlInfo->Set("ShadowType", GetShadowType());
 }

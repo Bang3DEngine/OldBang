@@ -17,10 +17,8 @@ Texture2D::~Texture2D()
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    GL::ColorComp colorComp =
-            (GetInternalFormat() == GL::ColorFormat::Depth24_Stencil8) ?
-                GL::ColorComp::Depth : GL::ColorComp::RGB;
-    Fill(nullptr, width, height, colorComp, GL::DataType::UnsignedByte);
+    GL::ColorComp inputColorComp = (GL::GetColorCompFrom( GetFormat() ));
+    Fill(nullptr, width, height, inputColorComp, GL::DataType::UnsignedByte);
 }
 
 void Texture2D::Resize(int width, int height)
@@ -50,8 +48,9 @@ void Texture2D::Fill(const Byte *newData,
     GLId prevBoundId = GL::GetBoundId(GL::BindTarget::Texture2D);
     Bind();
     GL::TexImage2D(GetTextureTarget(),
-                   GetWidth(), GetHeight(),
-                   GetInternalFormat(),
+                   GetWidth(),
+                   GetHeight(),
+                   GetFormat(),
                    inputDataColorComp,
                    inputDataType,
                    newData);
@@ -103,7 +102,7 @@ void GetTexImageInto_T(const Texture2D *tex, T *pixels)
     GLId prevBound = GL::GetBoundId(GL::BindTarget::Texture2D);
     tex->Bind();
     GL::GetTexImage(tex->GetTextureTarget(),
-                    GL::GetColorCompFrom( tex->GetInternalFormat() ),
+                    GL::GetColorCompFrom( tex->GetFormat() ),
                     pixels);
     GL::Bind(GL::BindTarget::Texture2D, prevBound);
 }
@@ -115,7 +114,7 @@ void Texture2D::GetTexImageInto(float *pixels) const
 
 int Texture2D::GetNumComponents() const
 {
-    return GL::GetNumComponents( GetInternalFormat() );
+    return GL::GetNumComponents( GetFormat() );
 }
 
 
@@ -157,7 +156,7 @@ void Texture2D::Import(const Image<Byte> &image)
         SetWidth(image.GetWidth());
         SetHeight(image.GetHeight());
 
-        SetInternalFormat(GL::ColorFormat::RGBA_UByte8);
+        SetFormat(GL::ColorFormat::RGBA_UByte8);
         Fill(image.GetData(),
              GetWidth(), GetHeight(),
              GL::ColorComp::RGBA,

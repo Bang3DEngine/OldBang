@@ -148,6 +148,11 @@ public:
         RGBA_Float16         = GL_RGBA16F,
         RGB10_A2_UByte       = GL_RGB10_A2,
         RGBA_Float32         = GL_RGBA32F,
+        Depth                = GL_DEPTH_COMPONENT,
+        Depth16              = GL_DEPTH_COMPONENT16,
+        Depth24              = GL_DEPTH_COMPONENT24,
+        Depth32              = GL_DEPTH_COMPONENT32,
+        Depth32F             = GL_DEPTH_COMPONENT32F,
         Depth24_Stencil8     = GL_DEPTH24_STENCIL8
     };
 
@@ -409,7 +414,7 @@ public:
     static void TexImage2D(GL::TextureTarget textureTarget,
                            int textureWidth,
                            int textureHeight,
-                           GL::ColorFormat textureInternalColorFormat,
+                           GL::ColorFormat textureColorFormat,
                            GL::ColorComp inputDataColorComp,
                            GL::DataType inputDataType,
                            const void *data);
@@ -578,6 +583,7 @@ public:
     static uint GetNumComponents(GL::ColorFormat colorFormat);
     static GL::DataType GetDataTypeFrom(GL::ColorFormat format);
     static GL::ColorComp GetColorCompFrom(GL::ColorFormat format);
+    static bool IsDepthFormat(GL::ColorFormat format);
 
     static void BindUniformBufferToShader(const String &uniformBlockName,
                                           const ShaderProgram *sp,

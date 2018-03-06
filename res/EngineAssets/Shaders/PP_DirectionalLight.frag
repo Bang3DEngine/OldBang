@@ -7,9 +7,10 @@ void main()
     vec3 pixelPosWorld = B_ComputeWorldPosition();
     if (B_SampleReceivesLight())
     {
-        float shadowness = GetFragmentShadowness(pixelPosWorld);
+        float lightness = GetFragmentLightness(pixelPosWorld);
         // B_GIn_Color = vec4( vec3(shadowness), 1 ); return; // Debug
-        if (shadowness < 0.5f)
+
+        if (lightness > 0.0f)
         {
             vec4 diffColor = B_SampleDiffColor();
             vec3 dirLightApport = GetDirectionalLightColorApportation(
@@ -22,6 +23,7 @@ void main()
                                         B_LightColor.rgb,
                                         B_GetCameraPositionWorld() );
 
+            dirLightApport *= lightness;
             B_GIn_Color = vec4(originalColor.rgb + dirLightApport, diffColor.a);
         }
         else

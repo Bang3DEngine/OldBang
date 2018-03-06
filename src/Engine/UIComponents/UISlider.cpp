@@ -153,6 +153,11 @@ UIFocusable *UISlider::GetHandleFocusable() const
     return p_handleFocusable;
 }
 
+bool UISlider::HasFocus() const
+{
+    return GetHandleFocusable()->IsBeingPressed() || GetInputNumber()->HasFocus();
+}
+
 const Color &UISlider::GetIdleColor() const
 {
     return m_idleColor;

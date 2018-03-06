@@ -1,22 +1,32 @@
 
+const int SHADOW_NONE = 0;
+const int SHADOW_HARD = 1;
+
+uniform int B_ShadowType;
 uniform float B_LightShadowBias;
-uniform sampler2D B_LightShadowMap;
+// uniform sampler2D B_LightShadowMap;
+uniform sampler2DShadow B_LightShadowMap;
 uniform mat4 B_WorldToShadowMapMatrix;
 
-float GetFragmentShadowness(const in vec3 pixelPosWorld)
+float GetFragmentLightness(const in vec3 pixelPosWorld)
 {
+    if (B_ShadowType == SHADOW_NONE) { return 1.0f; }
+
+    // Get uvs in shadow map, and sample the shadow map depth
     vec2 shadowMapUv = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xy * 0.5f + 0.5f;
+    // float shadowMapDepth = texture(B_LightShadowMap, shadowMapUv).r;
+
+    // Get
     vec3 worldPosInLightSpace = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xyz;
-
-    float shadowMapDepth = texture(B_LightShadowMap, shadowMapUv).r;
     float worldPosDepthFromLightSpace = worldPosInLightSpace.z * 0.5f + 0.5f;
+    float biasedWorldDepth = (worldPosDepthFromLightSpace - B_LightShadowBias);
 
-    float shadowDiff = (worldPosDepthFromLightSpace - shadowMapDepth);
-    if (shadowDiff > B_LightShadowBias)
-    {
-        return 1.0f;
-    }
-    return 0.0f;
+    // Get the PCF value from 0 to 1
+    float lightness = texture(B_LightShadowMap,
+                              vec3(shadowMapUv, biasedWorldDepth));
+
+    // Return depending on shadow type either (0 or 1), or [0.0, 1.0];
+    return (B_ShadowType == SHADOW_HARD) ? step(0.5f, lightness) : lightness;
 }
 
 vec3 GetDirectionalLightColorApportation(const in vec3  pixelPosWorld,
