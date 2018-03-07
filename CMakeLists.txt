@@ -114,6 +114,7 @@ ${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
 ${ENGINE_SRC_DIR}/IO/Files/File.cpp
 ${ENGINE_SRC_DIR}/IO/Files/Path.cpp
 ${ENGINE_SRC_DIR}/Math/Color.cpp
+${ENGINE_SRC_DIR}/Math/Geometry.cpp
 ${ENGINE_SRC_DIR}/Math/Math.cpp
 ${ENGINE_SRC_DIR}/Math/Plane.cpp
 ${ENGINE_SRC_DIR}/Math/Random.cpp
