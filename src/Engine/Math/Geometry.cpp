@@ -3,6 +3,7 @@
 #include "Bang/Ray.h"
 #include "Bang/Plane.h"
 #include "Bang/Sphere.h"
+#include "Bang/Triangle.h"
 
 USING_NAMESPACE_BANG
 
@@ -95,6 +96,98 @@ void Geometry::RayLineClosestPoints(const Ray &ray,
         Geometry::RayPlane(lineRay, plane, &intersected, &t);
         *pointOnLine = linePoint + (t * lineDirection.NormalizedSafe());
     }
+}
+
+// https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-
+// rendering-a-triangle/ray-triangle-intersection-geometric-solution
+void Geometry::RayTriangle(const Ray &ray,
+                           const Triangle &triangle,
+                           bool *intersected,
+                           float *distanceFromRayOriginToIntersection)
+{
+    constexpr float EPSILON = 1e-5f;
+
+    float &t = *distanceFromRayOriginToIntersection;
+    const Vector3 &rayOrig = ray.GetOrigin();
+    const Vector3 &rayDir  = ray.GetDirection();
+    const Vector3 &v0 = triangle.GetPoint(0);
+    const Vector3 &v1 = triangle.GetPoint(1);
+    const Vector3 &v2 = triangle.GetPoint(2);
+
+    // Compute plane's normal
+    const Vector3 v0v1 = v1 - v0;
+    const Vector3 v0v2 = v2 - v0;
+
+    // No need to normalize
+    const Vector3 triPlaneNormal = Vector3::Cross(v0v1, v0v2); // N
+
+    // Step 1: finding P
+
+    // Check if ray and plane are parallel ?
+    const float NdotRayDirection = Vector3::Dot(triPlaneNormal, rayDir);
+    if (Math::Abs(NdotRayDirection) < EPSILON) // Almost 0
+    {
+        *intersected = false; // Parallel so they don't intersect
+        return;
+    }
+
+    // Compute d parameter using equation 2
+    const float d = Vector3::Dot(triPlaneNormal, v0);
+
+    // Compute t (equation 3)
+    t = (Vector3::Dot(triPlaneNormal, rayOrig) + d) / NdotRayDirection;
+
+    // Check if the triangle is in behind the ray
+    if (t < 0) { *intersected = false; return; } // The triangle is behind
+
+    // Compute the intersection point using equation 1
+    const Vector3 P = rayOrig + t * rayDir;
+
+    // Step 2: inside-outside test
+
+    // Edge 0
+    const Vector3 edge0 = v1 - v0;
+    const Vector3   vp0 = P  - v0;
+    const Vector3 C0 = Vector3::Cross(edge0, vp0); // Perp. to triangle's plane
+    if (Vector3::Dot(triPlaneNormal, C0) < 0)
+    {
+        *intersected = false;
+        return; // P is on the right side
+    }
+
+    // Edge 1
+    const Vector3 edge1 = v2 - v1;
+    const Vector3   vp1 = P  - v1;
+    const Vector3 C1 = Vector3::Cross(edge1, vp1); // Perp. to triangle's plane
+    if (Vector3::Dot(triPlaneNormal, C1) < 0)
+    {
+        *intersected = false;
+        return; // P is on the right side
+    }
+
+    // Edge 2
+    const Vector3 edge2 = v0 - v2;
+    const Vector3   vp2 = P  - v2;
+    const Vector3 C2 = Vector3::Cross(edge2, vp2); // Perp. to triangle's plane
+    if (Vector3::Dot(triPlaneNormal, C2) < 0)
+    {
+        *intersected = false;
+        return; // P is on the right side
+    }
+
+    *intersected = true; // Ray hits the triangle
+}
+
+void Geometry::RayTriangle(const Ray &ray,
+                           const Triangle &triangle,
+                           bool *intersected,
+                           Vector3 *intersectionPoint)
+
+{
+    float t;
+    Geometry::RayTriangle(ray, triangle, intersected, &t);
+    *intersected       = *intersected && (t >= 0.0f);
+    *intersectionPoint = *intersected ? ray.GetPoint(t) : ray.GetOrigin();
 }
 
 Vector3 Geometry::RayClosestPointTo(const Ray &ray, const Vector3 &point)

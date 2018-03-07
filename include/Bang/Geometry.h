@@ -14,18 +14,10 @@ class Geometry
 {
 public:
     // Computes the intersection between a ray and a plane.
-    // If ray and plane intersect:
-    //   - intersected = true;
-    //   - distanceFromIntersectionToRayOrigin = distance from the ray origin
-    //                                           to the intersection
-    // If they dont intersect:
-    //   - intersected = false;
     static void RayPlane(const Ray &ray,
                          const Plane& plane,
                          bool *intersected,
                          float *distanceFromIntersectionToRayOrigin);
-
-    // Computes the intersection between a ray and a plane
     static void RayPlane(const Ray &ray,
                          const Plane& plane,
                          bool *intersected,
@@ -43,6 +35,16 @@ public:
                                      const Vector3 &lineDirection,
                                      Vector3 *pointOnRay  = nullptr,
                                      Vector3 *pointOnLine = nullptr);
+
+    // Computes the intersection between a ray and a triangle
+    static void RayTriangle(const Ray &ray,
+                            const Triangle &triangle,
+                            bool *intersected,
+                            float *distanceFromRayOriginToIntersection);
+    static void RayTriangle(const Ray &ray,
+                            const Triangle &triangle,
+                            bool *intersected,
+                            Vector3 *intersectionPoint);
 
     // Returns the point in the ray that is closer to the passed point
     static Vector3 RayClosestPointTo(const Ray &ray, const Vector3 &point);
