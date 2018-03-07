@@ -14,10 +14,6 @@ NAMESPACE_BANG_BEGIN
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-AABox::AABox()
-{
-}
-
 AABox::AABox(float minx, float maxx,
              float miny, float maxy,
              float minz, float maxz) :

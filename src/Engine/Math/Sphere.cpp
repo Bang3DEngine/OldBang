@@ -5,21 +5,15 @@
 
 USING_NAMESPACE_BANG
 
-Sphere::Sphere()
+Sphere::Sphere(float radius)
 {
-
+    SetRadius(radius);
 }
 
-Sphere::Sphere(float radius) :
-    m_radius(radius)
+Sphere::Sphere(const Vector3 & center, float radius)
 {
-}
-
-Sphere::Sphere(const Vector3 & center, float radius) :
-    m_center(center),
-    m_radius(radius)
-{
-
+    SetCenter(center);
+    SetRadius(radius);
 }
 
 void Sphere::SetCenter(const Vector3 &center) { m_center = center; }

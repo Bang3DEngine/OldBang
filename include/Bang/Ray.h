@@ -1,9 +1,13 @@
 #ifndef RAY_H
 #define RAY_H
 
+#include "Bang/Bang.h"
 #include "Bang/Vector3.h"
 
 NAMESPACE_BANG_BEGIN
+
+FORWARD class Plane;
+FORWARD class Sphere;
 
 class Ray
 {
@@ -15,16 +19,13 @@ public:
     void SetOrigin(const Vector3 &origin);
     void SetDirection(const Vector3 &direction);
 
-    void GetIntersectionWithPlaneDistance(const Vector3& planePoint,
-                                          const Vector3& planeNormal,
+    void GetIntersectionWithPlaneDistance(const Plane& plane,
                                           bool *intersected,
                                           float *distance);
-    void GetIntersectionWithPlane(const Vector3& planePoint,
-                                  const Vector3& planeNormal,
+    void GetIntersectionWithPlane(const Plane& plane,
                                   bool *intersected,
                                   Vector3 *intersectionPoint);
-    void GetIntersectionWithSphere(const Vector3& sphereCenter,
-                                   float sphereRadius,
+    void GetIntersectionWithSphere(const Sphere& sphere,
                                    bool *intersected,
                                    Vector3 *intersectionPoint);
 

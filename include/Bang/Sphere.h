@@ -9,9 +9,10 @@ NAMESPACE_BANG_BEGIN
 class Sphere
 {
 public:
-    Sphere();
-    Sphere(float m_radius);
-    Sphere(const Vector3 &m_center, float m_radius);
+    Sphere() = default;
+    Sphere(float radius);
+    Sphere(const Vector3 &center, float radius);
+    ~Sphere() = default;
 
     void SetCenter(const Vector3 &m_center);
     void SetRadius(float m_radius);

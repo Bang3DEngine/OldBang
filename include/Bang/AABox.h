@@ -20,7 +20,7 @@ private:
 public:
     static AABox Empty;
 
-    AABox();
+    AABox() = default;
     AABox(float minx, float maxx,
           float miny, float maxy,
           float minz, float maxz);
