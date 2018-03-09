@@ -65,6 +65,15 @@ void Gizmos::SetColor(const Color &color)
     }
 }
 
+void Gizmos::SetCulling(bool culling)
+{
+    Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
+    for (Renderer *rend : g->m_renderers)
+    {
+        rend->SetCulling(culling);
+    }
+}
+
 void Gizmos::SetPosition(const Vector3 &position)
 {
     Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
@@ -362,6 +371,7 @@ void Gizmos::Reset()
 {
     Gizmos *g = Gizmos::GetInstance(); if (!g) { return; }
 
+    Gizmos::SetCulling(true);
     Gizmos::SetPosition(Vector3::Zero);
     Gizmos::SetRotation(Quaternion::Identity);
     Gizmos::SetScale(Vector3::One);

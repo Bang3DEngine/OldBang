@@ -8,7 +8,7 @@ void main()
     if (B_SampleReceivesLight())
     {
         float lightness = GetFragmentLightness(pixelPosWorld);
-        // B_GIn_Color = vec4( vec3(shadowness), 1 ); return; // Debug
+        // B_GIn_Color = vec4( vec3(lightness), 1 ); return; // Debug
 
         if (lightness > 0.0f)
         {

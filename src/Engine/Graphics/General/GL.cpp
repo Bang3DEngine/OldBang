@@ -1180,8 +1180,9 @@ void GL::SetWireframe(bool wireframe)
 {
     if (GL::IsWireframe() != wireframe)
     {
-        GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL::Line :
-                                                           GL::Fill);
+        GL::PolygonMode(GL::Face::Back,         wireframe ? GL::Line : GL::Fill);
+        GL::PolygonMode(GL::Face::Front,        wireframe ? GL::Line : GL::Fill);
+        GL::PolygonMode(GL::Face::FrontAndBack, wireframe ? GL::Line : GL::Fill);
     }
 }
 

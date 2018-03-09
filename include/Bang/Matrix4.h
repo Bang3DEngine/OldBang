@@ -65,11 +65,11 @@ public:
         c3 = Vector4G<T>(Cast<T>(0), Cast<T>(0), Cast<T>(0), Cast<T>(a));
     }
 
-    Vector3 TransformPoint(const Vector3 &point)
+    Vector3 TransformPoint(const Vector3 &point) const
     {
         return ((*this) * Vector4(point, 1)).xyz();
     }
-    Vector3 TransformVector(const Vector3 &vector)
+    Vector3 TransformVector(const Vector3 &vector) const
     {
         return ((*this) * Vector4(vector, 0)).xyz();
     }

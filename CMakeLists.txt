@@ -117,6 +117,7 @@ ${ENGINE_SRC_DIR}/Math/Color.cpp
 ${ENGINE_SRC_DIR}/Math/Geometry.cpp
 ${ENGINE_SRC_DIR}/Math/Math.cpp
 ${ENGINE_SRC_DIR}/Math/Plane.cpp
+${ENGINE_SRC_DIR}/Math/Quad.cpp
 ${ENGINE_SRC_DIR}/Math/Random.cpp
 ${ENGINE_SRC_DIR}/Math/Ray.cpp
 ${ENGINE_SRC_DIR}/Math/Triangle.cpp

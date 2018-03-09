@@ -9,6 +9,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Quad;
 FORWARD class GBuffer;
 FORWARD class Texture2D;
 FORWARD class ShaderProgram;
@@ -69,6 +70,13 @@ public:
     const AARect& GetViewportRectNDC() const;
     GBuffer *GetGBuffer() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;
+
+    Quad GetNearQuad()  const;
+    Quad GetFarQuad()   const;
+    Quad GetLeftQuad()  const;
+    Quad GetRightQuad() const;
+    Quad GetTopQuad()   const;
+    Quad GetBotQuad()   const;
 
     static Camera *GetActive();
 

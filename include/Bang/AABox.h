@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+#include "Bang/Quad.h"
 #include "Bang/AARect.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
@@ -24,6 +25,7 @@ public:
     AABox(float minx, float maxx,
           float miny, float maxy,
           float minz, float maxz);
+    AABox(const Vector3 &p);
     AABox(const Vector3 &p1, const Vector3 &p2);
     AABox(const AABox& b);
 
@@ -44,6 +46,15 @@ public:
     AARect GetAABoundingViewportRect(Camera *cam) const;
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
     Array<Vector3> GetPoints() const;
+
+    Quad GetQuad(Axis3D axis, bool sign) const;
+    Quad GetRightQuad() const;
+    Quad GetLeftQuad()  const;
+    Quad GetTopQuad()   const;
+    Quad GetBotQuad()   const;
+    Quad GetFrontQuad() const;
+    Quad GetBackQuad()  const;
+    std::array<Quad, 6> GetQuads() const;
 
     bool CheckCollision(const Sphere &sphere,
                         Vector3 *point  = nullptr,

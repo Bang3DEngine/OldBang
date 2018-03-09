@@ -2,15 +2,19 @@
 #define DEBUGRENDERER_H
 
 #include "Bang/Set.h"
+#include "Bang/Mesh.h"
 #include "Bang/Time.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/AARect.h"
 #include "Bang/Vector3.h"
 #include "Bang/GameObject.h"
+#include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Quad;
+FORWARD class Triangle;
 FORWARD class LineRenderer;
 
 class DebugRenderer : public GameObject
@@ -46,6 +50,19 @@ public:
                             float thickness = 1.0f,
                             bool depthTest = false);
 
+    static void RenderTriangle(const Triangle &triangle,
+                               const Color &color = Color::Green,
+                               float time = 1.0f,
+                               bool wireframe = false,
+                               bool culling = false,
+                               bool depthTest = false);
+    static void RenderQuad(const Quad &quad,
+                           const Color &color = Color::Green,
+                           float time = 1.0f,
+                           bool wireframe = false,
+                           bool culling = false,
+                           bool depthTest = false);
+
     static void RenderAARectNDC(const AARect &aaRectNDC,
                                 const Color &color = Color::Green,
                                 float time = 1.0f,
@@ -59,21 +76,25 @@ public:
                               bool depthTest = false);
 
 private:
-    enum class DebugRendererPrimitiveType { Point, Line, LineNDC, AARectNDC, RectNDC };
+    enum class DebugRendererPrimitiveType
+    { Point, Line, LineNDC, AARectNDC, RectNDC, Triangle, Quad };
+
     struct DebugRenderPrimitive
     {
         DebugRendererPrimitiveType primitive;
-        Vector3 origin;
-        Vector3 end;
+        Vector3 p0, p1, p2, p3;
         RectPoints rectNDCPoints;
         AARect aaRectNDC;
         Color color;
         float thickness;
         double destroyTimestamp;
+        bool wireframe;
+        bool culling;
         bool depthTest;
         bool renderedOnce;
     };
 
+    RH<Mesh> m_mesh;
     List<DebugRenderPrimitive> m_primitivesToRender;
 
 	DebugRenderer();
@@ -87,6 +108,8 @@ private:
                                       const Color &color,
                                       float time,
                                       float thickness,
+                                      bool wireframe,
+                                      bool culling,
                                       bool depthTest);
 
     static DebugRenderer *GetActive();

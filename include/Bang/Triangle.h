@@ -19,8 +19,12 @@ public:
 
     void SetPoint(int i, const Vector3 &point);
 
+    Vector3 GetNormal() const;
     const std::array<Vector3, 3>& GetPoints() const;
     const Vector3& GetPoint(int i) const;
+
+    Vector3& operator[](std::size_t i);
+    const Vector3& operator[](std::size_t i) const;
 
 private:
     std::array<Vector3, 3> m_points;

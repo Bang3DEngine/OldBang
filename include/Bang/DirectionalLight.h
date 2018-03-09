@@ -14,6 +14,9 @@ class DirectionalLight : public Light
     COMPONENT(DirectionalLight)
 
 public:
+    void SetShadowDistance(float shadowDistance);
+
+    float GetShadowDistance() const;
     Texture2D* GetShadowMap() const;
 
     // Component
@@ -31,6 +34,7 @@ public:
 
 protected:
     Framebuffer *m_shadowMapFramebuffer = nullptr;
+    float m_shadowDistance = 100.0f;
 
     DirectionalLight();
     virtual ~DirectionalLight();

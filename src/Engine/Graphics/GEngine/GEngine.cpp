@@ -255,10 +255,12 @@ GEngine* GEngine::GetActive()
 
 void GEngine::RenderShadowMaps(GameObject *go)
 {
+    if (!go->IsActive()) { return; }
+
     List<Light*> lights = go->GetComponentsInChildren<Light>(true);
     for (Light *light : lights)
     {
-        light->RenderShadowMaps();
+        if (light->IsActive()) { light->RenderShadowMaps(); }
     }
 }
 

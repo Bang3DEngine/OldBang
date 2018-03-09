@@ -22,16 +22,22 @@ AABox::AABox(float minx, float maxx,
 {
 }
 
+AABox::AABox(const Vector3 &p)
+{
+    SetMin(p);
+    SetMax(p);
+}
+
 AABox::AABox(const Vector3 &p1, const Vector3 &p2)
 {
-    m_minv = Vector3::Min(p1, p2);
-    m_maxv = Vector3::Max(p1, p2);
+    SetMin(Vector3::Min(p1, p2));
+    SetMax(Vector3::Max(p1, p2));
 }
 
 AABox::AABox(const AABox &b)
 {
-    m_minv = b.m_minv;
-    m_maxv = b.m_maxv;
+    SetMin(b.GetMin());
+    SetMax(b.GetMax());
 }
 
 void AABox::SetMin(const Vector3 &bMin)
@@ -191,6 +197,58 @@ Array<Vector3> AABox::GetPoints() const
     const Vector3 p7 = center + extents * Vector3( 1,  1, -1);
     const Vector3 p8 = center + extents * Vector3( 1,  1,  1);
     return {p1, p2, p3, p4, p5, p6, p7, p8};
+}
+
+Quad AABox::GetQuad(Axis3D axis, bool sign) const
+{
+    const Vector3 &ctr = GetCenter();
+    const Vector3 &ext = GetExtents();
+    int xs0, xs1, xs2, xs3, ys0, ys1, ys2, ys3, zs0, zs1, zs2, zs3;
+    switch (axis) // Given in CCW order out facing the AABox
+    {
+        case Axis3D::X:
+            xs0 = (sign ?  1 : -1); xs1 = (sign ?  1 : -1);
+            xs2 = (sign ?  1 : -1); xs3 = (sign ?  1 : -1);
+            ys0 = (sign ? -1 : -1); ys1 = (sign ? -1 : -1);
+            ys2 = (sign ?  1 :  1); ys3 = (sign ?  1 :  1);
+            zs0 = (sign ?  1 : -1); zs1 = (sign ? -1 :  1);
+            zs2 = (sign ? -1 :  1); zs3 = (sign ?  1 : -1);
+        break;
+        case Axis3D::Y:
+            xs0 = (sign ? -1 : -1); xs1 = (sign ?  1 : -1);
+            xs2 = (sign ?  1 :  1); xs3 = (sign ? -1 :  1);
+            ys0 = (sign ?  1 : -1); ys1 = (sign ?  1 : -1);
+            ys2 = (sign ?  1 : -1); ys3 = (sign ?  1 : -1);
+            zs0 = (sign ?  1 :  1); zs1 = (sign ?  1 : -1);
+            zs2 = (sign ? -1 : -1); zs3 = (sign ? -1 :  1);
+        break;
+        case Axis3D::Z:
+            xs0 = (sign ? -1 : -1); xs1 = (sign ?  1 : -1);
+            xs2 = (sign ?  1 :  1); xs3 = (sign ? -1 :  1);
+            ys0 = (sign ? -1 : -1); ys1 = (sign ? -1 :  1);
+            ys2 = (sign ?  1 :  1); ys3 = (sign ?  1 : -1);
+            zs0 = (sign ?  1 : -1); zs1 = (sign ?  1 : -1);
+            zs2 = (sign ?  1 : -1); zs3 = (sign ?  1 : -1);
+        break;
+
+    }
+    return Quad(ctr + Vector3(xs0 * ext.x, ys0 * ext.y, zs0 * ext.z),
+                ctr + Vector3(xs1 * ext.x, ys1 * ext.y, zs1 * ext.z),
+                ctr + Vector3(xs2 * ext.x, ys2 * ext.y, zs2 * ext.z),
+                ctr + Vector3(xs3 * ext.x, ys3 * ext.y, zs3 * ext.z));
+}
+Quad AABox::GetRightQuad() const { return GetQuad(Axis3D::X, true); }
+Quad AABox::GetLeftQuad()  const { return GetQuad(Axis3D::X, false); }
+Quad AABox::GetTopQuad()   const { return GetQuad(Axis3D::Y, true); }
+Quad AABox::GetBotQuad()   const { return GetQuad(Axis3D::Y, false); }
+Quad AABox::GetFrontQuad() const { return GetQuad(Axis3D::Z, true); }
+Quad AABox::GetBackQuad()  const { return GetQuad(Axis3D::Z, false); }
+std::array<Quad, 6> AABox::GetQuads() const
+{
+    const std::array<Quad, 6> aaBoxQuads = {GetBotQuad(),   GetTopQuad(),
+                                            GetLeftQuad(),  GetRightQuad(),
+                                            GetFrontQuad(), GetBackQuad()};
+    return aaBoxQuads;
 }
 
 AARect AABox::GetAABoundingViewportRect(Camera *cam) const

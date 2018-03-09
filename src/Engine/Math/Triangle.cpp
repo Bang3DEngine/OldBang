@@ -6,20 +6,24 @@ Triangle::Triangle(const Vector3 &point0,
                    const Vector3 &point1,
                    const Vector3 &point2)
 {
-    m_points[0] = point0;
-    m_points[1] = point1;
-    m_points[2] = point2;
+    SetPoint(0, point0);
+    SetPoint(1, point1);
+    SetPoint(2, point2);
 }
 
 void Triangle::SetPoint(int i, const Vector3 &point)
 {
-    ASSERT(i >= 0 && i <= 3);
-    m_points[i] = point;
+    (*this)[i] = point;
+}
+
+Vector3 Triangle::GetNormal() const
+{
+    return Vector3::Cross(GetPoint(1)-GetPoint(0), GetPoint(2)-GetPoint(0)).
+                    NormalizedSafe();
 }
 
 const Vector3 &Triangle::GetPoint(int i) const
 {
-    ASSERT(i >= 0 && i <= 2);
     return GetPoints()[i];
 }
 
@@ -28,3 +32,14 @@ const std::array<Vector3, 3> &Triangle::GetPoints() const
     return m_points;
 }
 
+Vector3 &Triangle::operator[](std::size_t i)
+{
+    ASSERT(i >= 0 && i <= 2);
+    return m_points[i];
+}
+
+const Vector3 &Triangle::operator[](std::size_t i) const
+{
+    ASSERT(i >= 0 && i <= 2);
+    return m_points[i];
+}

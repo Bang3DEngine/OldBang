@@ -67,12 +67,13 @@ public:
 
     enum class Test
     {
-        Blend    = GL_BLEND,
-        Depth    = GL_DEPTH_TEST,
-        Stencil  = GL_STENCIL_TEST,
-        Scissor  = GL_SCISSOR_TEST,
-        Alpha    = GL_ALPHA_TEST,
-        CullFace = GL_CULL_FACE
+        Blend      = GL_BLEND,
+        Depth      = GL_DEPTH_TEST,
+        DepthClamp = GL_DEPTH_CLAMP,
+        Stencil    = GL_STENCIL_TEST,
+        Scissor    = GL_SCISSOR_TEST,
+        Alpha      = GL_ALPHA_TEST,
+        CullFace   = GL_CULL_FACE
     };
 
     enum class UsageHint

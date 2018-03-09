@@ -95,7 +95,7 @@ void Camera::BindSelectionFramebuffer()
 
 Ray Camera::FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const
 {
-    Vector3 worldPoint = FromViewportPointNDCToWorldPoint(vpPointNDC, GetZNear());
+    Vector3 worldPoint = FromViewportPointNDCToWorldPoint(vpPointNDC, 1);
 
     Ray ray;
     ray.SetOrigin( GetGameObject()->GetTransform()->GetPosition() );
@@ -124,10 +124,14 @@ Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector3 &vpPointNDC) cons
 }
 
 Vector3 Camera::FromViewportPointNDCToWorldPoint(const Vector2 &vpPointNDC,
-                                                 float zFromCamera) const
+                                                 float zNDC) const
 {
+    // 1 is zNear, -1 is zFar
+    float zWorld = (GetZFar() - GetZNear()) * (-zNDC * 0.5f + 0.5f) +
+                    GetZNear();
+
     // Pass coordinates to clip space, to invert them using projInversed
-    Vector4 clipCoords = Vector4(vpPointNDC, 1, 1) * zFromCamera;
+    Vector4 clipCoords = Vector4(vpPointNDC, 1, 1) * zWorld;
     Vector4 res4 = GetProjectionMatrix().Inversed() * clipCoords;
     Vector3 res = res4.xyz();
     res = (GetViewMatrix().Inversed() * Vector4(res, 1)).xyz();
@@ -235,6 +239,55 @@ GBuffer *Camera::GetGBuffer() const
 SelectionFramebuffer *Camera::GetSelectionFramebuffer() const
 {
     return m_selectionFramebuffer;
+}
+
+Quad Camera::GetNearQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1,  1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1,  1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1,  1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1,  1) );
+    return Quad(p0, p1, p2, p3);
+}
+Quad Camera::GetFarQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1, -1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1, -1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1, -1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1, -1) );
+    return Quad(p0, p1, p2, p3);
+}
+Quad Camera::GetLeftQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1, -1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1,  1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1,  1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1, -1) );
+    return Quad(p0, p1, p2, p3);
+}
+Quad Camera::GetRightQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1,  1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1, -1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1, -1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1,  1) );
+    return Quad(p0, p1, p2, p3);
+}
+Quad Camera::GetTopQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1,  1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1,  1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3( 1,  1, -1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3(-1,  1, -1) );
+    return Quad(p0, p1, p2, p3);
+}
+Quad Camera::GetBotQuad() const
+{
+    Vector3 p0 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1,  1) );
+    Vector3 p1 = FromViewportPointNDCToWorldPoint( Vector3(-1, -1, -1) );
+    Vector3 p2 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1, -1) );
+    Vector3 p3 = FromViewportPointNDCToWorldPoint( Vector3( 1, -1,  1) );
+    return Quad(p0, p1, p2, p3);
 }
 
 Camera *Camera::GetActive()
