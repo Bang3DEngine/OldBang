@@ -2,6 +2,7 @@
 #define DIRECTIONALLIGHT_H
 
 #include "Bang/Light.h"
+#include "Bang/Matrix4.h"
 #include "Bang/Framebuffer.h"
 
 NAMESPACE_BANG_BEGIN
@@ -34,7 +35,8 @@ public:
 
 protected:
     Framebuffer *m_shadowMapFramebuffer = nullptr;
-    float m_shadowDistance = 100.0f;
+    Matrix4 m_lastUsedShadowMapViewProj = Matrix4::Identity;
+    float m_shadowDistance = 5.0f;
 
     DirectionalLight();
     virtual ~DirectionalLight();

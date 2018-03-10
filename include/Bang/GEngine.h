@@ -42,7 +42,7 @@ public:
                                                const AARect &maskRectNDC = AARect::NDCRect);
 
     static GBuffer *GetActiveGBuffer();
-    static Camera *GetCurrentRenderingCamera();
+    static Camera *GetActiveRenderingCamera();
     static SelectionFramebuffer *GetActiveSelectionFramebuffer();
 
     GL *GetGL() const;
@@ -63,7 +63,7 @@ private:
     void RenderToSelectionFramebuffer(GameObject *go, Camera *camera);
     void RenderWithPassAndMarkStencilForLights(GameObject *go, RenderPass renderPass);
 
-    void SetCurrentRenderingCamera(Camera *camera);
+    void SetActiveRenderingCamera(Camera *camera);
 
     static GEngine *s_gEngine;
     static void SetActive(GEngine *gEngine);

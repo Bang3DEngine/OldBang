@@ -57,11 +57,15 @@ void GEngine::Render(GameObject *go, Camera *camera)
     if (!go) { return; }
 
     go->BeforeRender();
+
+    SetActiveRenderingCamera(camera);
     RenderShadowMaps(go);
-    SetCurrentRenderingCamera(camera);
+    SetActiveRenderingCamera(nullptr);
+
+    SetActiveRenderingCamera(camera);
     RenderToGBuffer(go, camera);
     RenderToSelectionFramebuffer(go, camera);
-    SetCurrentRenderingCamera(nullptr);
+    SetActiveRenderingCamera(nullptr);
 }
 
 void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
@@ -89,7 +93,7 @@ void GEngine::ApplyStenciledDeferredLightsToGBuffer(GameObject *lightsContainer,
     GL::SetStencilOp(prevStencilOp);
 }
 
-Camera *GEngine::GetCurrentRenderingCamera()
+Camera *GEngine::GetActiveRenderingCamera()
 {
     GEngine *ge = GEngine::GetActive();
     return ge ? ge->p_currentRenderingCamera : nullptr;
@@ -97,13 +101,13 @@ Camera *GEngine::GetCurrentRenderingCamera()
 
 GBuffer *GEngine::GetActiveGBuffer()
 {
-    Camera *cam = GEngine::GetCurrentRenderingCamera();
+    Camera *cam = GEngine::GetActiveRenderingCamera();
     return cam ? cam->GetGBuffer() : nullptr;
 }
 
 SelectionFramebuffer *GEngine::GetActiveSelectionFramebuffer()
 {
-    Camera *cam = GEngine::GetCurrentRenderingCamera();
+    Camera *cam = GEngine::GetActiveRenderingCamera();
     return cam ? cam->GetSelectionFramebuffer() : nullptr;
 }
 
@@ -164,7 +168,7 @@ void GEngine::RenderToSelectionFramebuffer(GameObject *go, Camera *camera)
 
 void GEngine::RenderWithPass(GameObject *go, RenderPass renderPass)
 {
-    Camera *cam = GetCurrentRenderingCamera();
+    Camera *cam = GetActiveRenderingCamera();
     if (cam && cam->MustRenderPass(renderPass))
     {
         RenderWithPassRaw(go, renderPass);
@@ -264,7 +268,7 @@ void GEngine::RenderShadowMaps(GameObject *go)
     }
 }
 
-void GEngine::SetCurrentRenderingCamera(Camera *camera)
+void GEngine::SetActiveRenderingCamera(Camera *camera)
 {
     if (p_currentRenderingCamera) { p_currentRenderingCamera->UnBind(); }
 
@@ -274,7 +278,7 @@ void GEngine::SetCurrentRenderingCamera(Camera *camera)
 
 void GEngine::Render(Renderer *rend)
 {
-    Camera *activeCamera = GetCurrentRenderingCamera();
+    Camera *activeCamera = GetActiveRenderingCamera();
     if (activeCamera)
     {
         if (GL::IsBound(activeCamera->GetSelectionFramebuffer()))

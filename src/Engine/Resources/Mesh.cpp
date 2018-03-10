@@ -12,7 +12,7 @@
 
 USING_NAMESPACE_BANG
 
-Mesh::Mesh()
+Mesh::Mesh() : m_bBox(Vector3::Zero)
 {
     m_vao = new VAO();
 }
@@ -40,7 +40,7 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
                                m_positions.Size() * sizeof(float) * 3);
     BindPositionsVBOToLocation(Mesh::DefaultPositionsVBOLocation);
 
-    m_bBox.FillFromPositions(m_positions);
+    m_bBox.CreateFromPositions(m_positions);
     m_bSphere.FromBox(m_bBox);
 }
 

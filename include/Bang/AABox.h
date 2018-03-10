@@ -13,15 +13,16 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class Camera;
 
-class AABox : public IToString
+class AABox
 {
 private:
     Vector3 m_minv, m_maxv;
+    bool m_initialized = false;
 
 public:
     static AABox Empty;
 
-    AABox() = default;
+    AABox();
     AABox(float minx, float maxx,
           float miny, float maxy,
           float minz, float maxz);
@@ -64,12 +65,9 @@ public:
 
     void AddPoint(const Vector3& point);
     static AABox Union(const AABox &b1, const AABox &b2);
-    void FillFromPositions(const Array<Vector3> &positions);
+    void CreateFromPositions(const Array<Vector3> &positions);
 
     static AABox FromSphere(const Sphere &sphere);
-
-    // IToString
-    String ToString() const override;
 };
 
 AABox operator*(const Matrix4 &m, const AABox &b);

@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Bang C CXX)
 
-set(ROOT ${CMAKE_SOURCE_DIR})
-set(SRC_DIR ${ROOT}/src)
-set(ENGINE_SRC_DIR ${SRC_DIR}/Engine)
+if(NOT DEFINED BANG_DIR)
+    set(BANG_DIR ${CMAKE_SOURCE_DIR})
+endif()
+set(BANG_SRC_DIR ${BANG_DIR}/src)
+set(BANG_ENGINE_SRC_DIR ${BANG_SRC_DIR}/Engine)
 
-set(CMAKE_BINARY_DIR ${ROOT}/bin)
+set(CMAKE_BINARY_DIR ${BANG_DIR}/bin)
 
 # In case you want to break on sanitize error write this command on gdb:
 # rbreak __asan_report_error
@@ -30,8 +32,8 @@ message("Building in ${CMAKE_BUILD_TYPE} mode...")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-set(PROJECT_SOURCE_DIR ${SRC_DIR})
-list(APPEND CMAKE_MODULE_PATH "${ROOT}/scripts")
+set(PROJECT_SOURCE_DIR ${BANG_SRC_DIR})
+list(APPEND CMAKE_MODULE_PATH "${BANG_DIR}/scripts")
 
 # CXX_FLAGS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -101,32 +103,32 @@ include_directories(${OPENAL_INCLUDE_DIRS})
 link_libraries(${OPENAL_LIBRARY})
 
 # Bang include's
-SET(BANG_INCLUDE_DIR_ROOT ${ROOT}/include)
-SET(BANG_INCLUDE_DIR ${BANG_INCLUDE_DIR_ROOT}/Bang)
-include_directories(${BANG_INCLUDE_DIR_ROOT})
+SET(BANG_INCLUDE_DIR_BANG_DIR ${BANG_DIR}/include)
+SET(BANG_INCLUDE_DIR ${BANG_INCLUDE_DIR_BANG_DIR}/Bang)
+include_directories(${BANG_INCLUDE_DIR_BANG_DIR})
 
 # BangCore Library
 set(CORE_SRC_FILES
-${ENGINE_SRC_DIR}/DataStructures/String.cpp
-${ENGINE_SRC_DIR}/Debug/Debug.cpp
-${ENGINE_SRC_DIR}/Debug/DebugRenderer.cpp
-${ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
-${ENGINE_SRC_DIR}/IO/Files/File.cpp
-${ENGINE_SRC_DIR}/IO/Files/Path.cpp
-${ENGINE_SRC_DIR}/Math/Color.cpp
-${ENGINE_SRC_DIR}/Math/Geometry.cpp
-${ENGINE_SRC_DIR}/Math/Math.cpp
-${ENGINE_SRC_DIR}/Math/Plane.cpp
-${ENGINE_SRC_DIR}/Math/Quad.cpp
-${ENGINE_SRC_DIR}/Math/Random.cpp
-${ENGINE_SRC_DIR}/Math/Ray.cpp
-${ENGINE_SRC_DIR}/Math/Triangle.cpp
-${ENGINE_SRC_DIR}/System/Cursor.cpp
-${ENGINE_SRC_DIR}/System/Mutex.cpp
-${ENGINE_SRC_DIR}/System/MutexLocker.cpp
-${ENGINE_SRC_DIR}/System/SystemProcess.cpp
-${ENGINE_SRC_DIR}/System/Thread.cpp
-${ENGINE_SRC_DIR}/System/ThreadPool.cpp
+${BANG_ENGINE_SRC_DIR}/DataStructures/String.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/Debug.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/DebugRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/File.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Path.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Color.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Geometry.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Math.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Plane.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Quad.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Random.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Ray.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Triangle.cpp
+${BANG_ENGINE_SRC_DIR}/System/Cursor.cpp
+${BANG_ENGINE_SRC_DIR}/System/Mutex.cpp
+${BANG_ENGINE_SRC_DIR}/System/MutexLocker.cpp
+${BANG_ENGINE_SRC_DIR}/System/SystemProcess.cpp
+${BANG_ENGINE_SRC_DIR}/System/Thread.cpp
+${BANG_ENGINE_SRC_DIR}/System/ThreadPool.cpp
 )
 add_library(BangCoreObjects OBJECT ${CORE_SRC_FILES})
 add_library(BangCoreStatic  STATIC $<TARGET_OBJECTS:BangCoreObjects>)
@@ -153,148 +155,149 @@ add_info_files(${OTHER_FILES})
 
 # BangEngine Library
 set (ENGINE_SRC_FILES
-${ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
-${ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
-${ENGINE_SRC_DIR}/Audio/AudioManager.cpp
-${ENGINE_SRC_DIR}/Audio/AudioPlayerRunnable.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/IReflectable.cpp
-${ENGINE_SRC_DIR}/Compiler/CodePreprocessor.cpp
-${ENGINE_SRC_DIR}/Compiler/Compiler.cpp
-${ENGINE_SRC_DIR}/Components/AudioListener.cpp
-${ENGINE_SRC_DIR}/Components/AudioSource.cpp
-${ENGINE_SRC_DIR}/Components/Behaviour.cpp
-${ENGINE_SRC_DIR}/BehaviourContainer.cpp
-${ENGINE_SRC_DIR}/Components/Camera.cpp
-${ENGINE_SRC_DIR}/Components/Component.cpp
-${ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
-${ENGINE_SRC_DIR}/Components/Light.cpp
-${ENGINE_SRC_DIR}/Components/LineRenderer.cpp
-${ENGINE_SRC_DIR}/Components/MeshRenderer.cpp
-${ENGINE_SRC_DIR}/Components/PointLight.cpp
-${ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
-${ENGINE_SRC_DIR}/Components/RectTransform.cpp
-${ENGINE_SRC_DIR}/Components/Renderer.cpp
-${ENGINE_SRC_DIR}/Components/Timer.cpp
-${ENGINE_SRC_DIR}/Components/Transform.cpp
-${ENGINE_SRC_DIR}/Debug/Chrono.cpp
-${ENGINE_SRC_DIR}/Debug/FPSChrono.cpp
-${ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
-${ENGINE_SRC_DIR}/Debug/GEngineDebugger.cpp
-${ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
-${ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
-${ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
-${ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
-${ENGINE_SRC_DIR}/Factory/IconManager.cpp
-${ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
-${ENGINE_SRC_DIR}/GameObjects/Scene.cpp
-${ENGINE_SRC_DIR}/General/Application.cpp
-${ENGINE_SRC_DIR}/General/BehaviourManager.cpp
-${ENGINE_SRC_DIR}/General/FileTracker.cpp
-${ENGINE_SRC_DIR}/General/GUID.cpp
-${ENGINE_SRC_DIR}/General/IGUIDable.cpp
-${ENGINE_SRC_DIR}/General/ICloneable.cpp
-${ENGINE_SRC_DIR}/General/IEventEmitter.cpp
-${ENGINE_SRC_DIR}/General/IEventListener.cpp
-${ENGINE_SRC_DIR}/General/IDestroyListener.cpp
-${ENGINE_SRC_DIR}/General/Input.cpp
-${ENGINE_SRC_DIR}/General/SceneManager.cpp
-${ENGINE_SRC_DIR}/General/Object.cpp
-${ENGINE_SRC_DIR}/General/ObjectId.cpp
-${ENGINE_SRC_DIR}/General/Selection.cpp
-${ENGINE_SRC_DIR}/General/Time.cpp
-${ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/IUniformBuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
-${ENGINE_SRC_DIR}/Graphics/General/AspectRatioMode.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Font.cpp
-${ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Image.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Material.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
-${ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
-${ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
-${ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
-${ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
-${ENGINE_SRC_DIR}/Graphics/General/GL.cpp
-${ENGINE_SRC_DIR}/Graphics/General/GLUniforms.cpp
-${ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
-${ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
-${ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgramFactory.cpp
-${ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
-${ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
-${ENGINE_SRC_DIR}/IO/General/Paths.cpp
-${ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
-${ENGINE_SRC_DIR}/IO/Files/Images/ImageIO.cpp
-${ENGINE_SRC_DIR}/IO/Files/Images/ImageIODDS.cpp
-${ENGINE_SRC_DIR}/IO/Files/Images/nv_dds.cpp
-${ENGINE_SRC_DIR}/IO/Files/ModelIO.cpp
-${ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
-${ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
-${ENGINE_SRC_DIR}/IO/XML/XMLNodeReader.cpp
-${ENGINE_SRC_DIR}/Math/AABox.cpp
-${ENGINE_SRC_DIR}/Math/Sphere.cpp
-${ENGINE_SRC_DIR}/Resources/Asset.cpp
-${ENGINE_SRC_DIR}/Resources/AudioClip.cpp
-${ENGINE_SRC_DIR}/Resources/Mesh.cpp
-${ENGINE_SRC_DIR}/Resources/Model.cpp
-${ENGINE_SRC_DIR}/Resources/Prefab.cpp
-${ENGINE_SRC_DIR}/Resources/Resource.cpp
-${ENGINE_SRC_DIR}/Resources/Resources.cpp
-${ENGINE_SRC_DIR}/Resources/ResourceHandle.cpp
-${ENGINE_SRC_DIR}/Resources/Serializable.cpp
-${ENGINE_SRC_DIR}/System/Library.cpp
-${ENGINE_SRC_DIR}/System/SystemUtils.cpp
-${ENGINE_SRC_DIR}/System/SystemClipboard.cpp
-${ENGINE_SRC_DIR}/Text/TextFormatter.cpp
-${ENGINE_SRC_DIR}/UIComponents/IFocusable.cpp
-${ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
-${ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIAutoFocuser.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
-${ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
-${ENGINE_SRC_DIR}/UIComponents/UICheckBox.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIComboBox.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIAspectRatioFitter.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIGridLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIInputNumber.cpp
-${ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
-${ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
-${ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
-${ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIList.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIRectMask.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIRendererCacher.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
-${ENGINE_SRC_DIR}/UIComponents/UISlider.cpp
-${ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
-${ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
-${ENGINE_SRC_DIR}/UIComponents/UITree.cpp
-${ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
-${ENGINE_SRC_DIR}/Windows/Dialog.cpp
-${ENGINE_SRC_DIR}/Windows/DialogWindow.cpp
-${ENGINE_SRC_DIR}/Windows/Window.cpp
-${ENGINE_SRC_DIR}/Windows/WindowManager.cpp
+${BANG_ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
+${BANG_ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
+${BANG_ENGINE_SRC_DIR}/Audio/AudioManager.cpp
+${BANG_ENGINE_SRC_DIR}/Audio/AudioPlayerRunnable.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/IReflectable.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/CodePreprocessor.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/Compiler.cpp
+${BANG_ENGINE_SRC_DIR}/Components/AudioListener.cpp
+${BANG_ENGINE_SRC_DIR}/Components/AudioSource.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Behaviour.cpp
+${BANG_ENGINE_SRC_DIR}/BehaviourContainer.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Camera.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Component.cpp
+${BANG_ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Light.cpp
+${BANG_ENGINE_SRC_DIR}/Components/LineRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/Components/MeshRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/Components/PointLight.cpp
+${BANG_ENGINE_SRC_DIR}/Components/PostProcessEffect.cpp
+${BANG_ENGINE_SRC_DIR}/Components/RectTransform.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Renderer.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Timer.cpp
+${BANG_ENGINE_SRC_DIR}/Components/Transform.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/Chrono.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/FPSChrono.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/GEngineDebugger.cpp
+${BANG_ENGINE_SRC_DIR}/Factory/ComponentFactory.cpp
+${BANG_ENGINE_SRC_DIR}/Factory/GameObjectFactory.cpp
+${BANG_ENGINE_SRC_DIR}/Factory/MaterialFactory.cpp
+${BANG_ENGINE_SRC_DIR}/Factory/MeshFactory.cpp
+${BANG_ENGINE_SRC_DIR}/Factory/IconManager.cpp
+${BANG_ENGINE_SRC_DIR}/GameObjects/GameObject.cpp
+${BANG_ENGINE_SRC_DIR}/GameObjects/Scene.cpp
+${BANG_ENGINE_SRC_DIR}/General/Application.cpp
+${BANG_ENGINE_SRC_DIR}/General/BehaviourManager.cpp
+${BANG_ENGINE_SRC_DIR}/General/FileTracker.cpp
+${BANG_ENGINE_SRC_DIR}/General/GUID.cpp
+${BANG_ENGINE_SRC_DIR}/General/IGUIDable.cpp
+${BANG_ENGINE_SRC_DIR}/General/ICloneable.cpp
+${BANG_ENGINE_SRC_DIR}/General/IEventEmitter.cpp
+${BANG_ENGINE_SRC_DIR}/General/IEventListener.cpp
+${BANG_ENGINE_SRC_DIR}/General/IDestroyListener.cpp
+${BANG_ENGINE_SRC_DIR}/General/Input.cpp
+${BANG_ENGINE_SRC_DIR}/General/SceneManager.cpp
+${BANG_ENGINE_SRC_DIR}/General/Object.cpp
+${BANG_ENGINE_SRC_DIR}/General/ObjectId.cpp
+${BANG_ENGINE_SRC_DIR}/General/Selection.cpp
+${BANG_ENGINE_SRC_DIR}/General/Time.cpp
+${BANG_ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Buffers/GBuffer.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Buffers/IUniformBuffer.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Buffers/SelectionFramebuffer.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/AspectRatioMode.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/Font.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/FontSheetCreator.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/Image.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/Material.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/ShadowMapper.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/GL.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/GLUniforms.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/GLObject.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/GEngine/GEngine.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Shaders/Shader.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Shaders/ShaderPreprocessor.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgram.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/Shaders/ShaderProgramFactory.cpp
+${BANG_ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
+${BANG_ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
+${BANG_ENGINE_SRC_DIR}/IO/General/Paths.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Images/ImageIO.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Images/ImageIODDS.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Images/nv_dds.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/ModelIO.cpp
+${BANG_ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
+${BANG_ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
+${BANG_ENGINE_SRC_DIR}/IO/XML/XMLNodeReader.cpp
+${BANG_ENGINE_SRC_DIR}/Math/AABox.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Sphere.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Asset.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/AudioClip.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Mesh.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Model.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Prefab.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Resource.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Resources.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/ResourceHandle.cpp
+${BANG_ENGINE_SRC_DIR}/Resources/Serializable.cpp
+${BANG_ENGINE_SRC_DIR}/System/Library.cpp
+${BANG_ENGINE_SRC_DIR}/System/SystemUtils.cpp
+${BANG_ENGINE_SRC_DIR}/System/SystemClipboard.cpp
+${BANG_ENGINE_SRC_DIR}/Text/TextFormatter.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/IFocusable.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/ILayoutElement.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIAutoFocuser.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIButton.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UICanvas.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UICheckBox.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIComboBox.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIContentSizeFitter.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIAspectRatioFitter.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIDirLayout.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIFileList.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIFocusable.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIGridLayout.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIGroupLayout.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIHorizontalLayout.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIImageRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIInputText.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIInputNumber.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UILayoutIgnorer.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UILayoutElement.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UILayoutManager.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UILabel.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIList.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIMask.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIRectMask.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIRendererCacher.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIScrollArea.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIScrollBar.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIScrollPanel.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UISlider.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UITextCursor.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UITextRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UITree.cpp
+${BANG_ENGINE_SRC_DIR}/UIComponents/UIVerticalLayout.cpp
+${BANG_ENGINE_SRC_DIR}/Windows/Dialog.cpp
+${BANG_ENGINE_SRC_DIR}/Windows/DialogWindow.cpp
+${BANG_ENGINE_SRC_DIR}/Windows/Window.cpp
+${BANG_ENGINE_SRC_DIR}/Windows/WindowManager.cpp
 ${OTHER_FILES}
 )
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
@@ -313,10 +316,10 @@ set_target_properties(BangSharedLib PROPERTIES OUTPUT_NAME Bang)
 link_directories(${LIBRARY_OUTPUT_PATH})
 link_libraries("Bang") # Use installed lib from now on
 set(PREPROCESSOR_SRC_FILES
-${SRC_DIR}/MainBangPreprocessor.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
-${ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
+${BANG_SRC_DIR}/MainBangPreprocessor.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
+${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
 )
 add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
 add_dependencies(BangPreprocessor BangEngineObjects)

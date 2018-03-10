@@ -12,7 +12,11 @@
 
 NAMESPACE_BANG_BEGIN
 
-AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+AABox AABox::Empty = AABox();
+
+AABox::AABox()
+{
+}
 
 AABox::AABox(float minx, float maxx,
              float miny, float maxy,
@@ -36,53 +40,58 @@ AABox::AABox(const Vector3 &p1, const Vector3 &p2)
 
 AABox::AABox(const AABox &b)
 {
-    SetMin(b.GetMin());
-    SetMax(b.GetMax());
+    // Dont use setters to avoid initialized check in case b is not initialized
+    SetMin(b.m_minv);
+    SetMax(b.m_maxv);
 }
 
 void AABox::SetMin(const Vector3 &bMin)
 {
     m_minv = bMin;
+    m_initialized = true;
 }
 
 void AABox::SetMax(const Vector3 &bMax)
 {
     m_maxv = bMax;
+    m_initialized = true;
 }
 
 const Vector3& AABox::GetMin() const
 {
+    ASSERT(m_initialized);
     return m_minv;
 }
 
 const Vector3& AABox::GetMax() const
 {
+    ASSERT(m_initialized);
     return m_maxv;
 }
 
 Vector3 AABox::GetDiagonal() const
 {
-    return m_maxv - m_minv;
+    return GetMax() - GetMin();
 }
 
 float AABox::GetWidth() const
 {
-    return (m_maxv.x - m_minv.x);
+    return (GetMax().x - GetMin().x);
 }
 
 float AABox::GetHeight() const
 {
-    return (m_maxv.y - m_minv.y);
+    return (GetMax().y - GetMin().y);
 }
 
 float AABox::GetDepth() const
 {
-    return (m_maxv.z - m_minv.z);
+    return (GetMax().z - GetMin().z);
 }
 
 Vector3 AABox::GetCenter() const
 {
-    return (m_minv + m_maxv) / 2.0f;
+    return (GetMin() + GetMax()) / 2.0f;
 }
 
 Vector3 AABox::GetDimensions() const
@@ -116,9 +125,9 @@ Vector3 AABox::GetExtents() const
 Vector3 AABox::GetClosestPointInAABB(const Vector3 &point) const
 {
     Vector3 closestPoint;
-    closestPoint.x = Math::Clamp(point.x, m_minv.x, m_maxv.x);
-    closestPoint.y = Math::Clamp(point.y, m_minv.y, m_maxv.y);
-    closestPoint.z = Math::Clamp(point.z, m_minv.z, m_maxv.z);
+    closestPoint.x = Math::Clamp(point.x, GetMin().x, GetMax().x);
+    closestPoint.y = Math::Clamp(point.y, GetMin().y, GetMax().y);
+    closestPoint.z = Math::Clamp(point.z, GetMin().z, GetMax().z);
     return closestPoint;
 }
 
@@ -151,36 +160,39 @@ bool AABox::CheckCollision(const AABox &aabox) const
 
 bool AABox::Contains(const Vector3 &point) const
 {
-    return point.x >= m_minv.x && point.x <= m_maxv.x &&
-           point.y >= m_minv.y && point.y <= m_maxv.y &&
-           point.z >= m_minv.z && point.z <= m_maxv.z;
+    if (!m_initialized) { return false; }
+    return point.x >= GetMin().x && point.x <= GetMax().x &&
+           point.y >= GetMin().y && point.y <= GetMax().y &&
+           point.z >= GetMin().z && point.z <= GetMax().z;
 }
 
 void AABox::AddPoint(const Vector3 &point)
 {
+    if (!m_initialized) { SetMin(point); SetMax(point); }
+
     SetMin( Vector3::Min(GetMin(), point) );
     SetMax( Vector3::Max(GetMax(), point) );
 }
 
 AABox AABox::Union(const AABox &b1, const AABox &b2)
 {
-    if (b1 == AABox::Empty) { return b2; }
-    if (b2 == AABox::Empty) { return b1; }
+    if (!b1.m_initialized && !b2.m_initialized) { return AABox::Empty; }
+    if (!b1.m_initialized) { return b2; }
+    if (!b2.m_initialized) { return b1; }
     return AABox(Vector3::Min(b1.GetMin(), b2.GetMin()),
                  Vector3::Max(b1.GetMax(), b2.GetMax()));
 }
 
-void AABox::FillFromPositions(const Array<Vector3> &positions)
+void AABox::CreateFromPositions(const Array<Vector3> &positions)
 {
     if (positions.IsEmpty()) { return; }
-    m_minv = m_maxv = positions[0];
     for (const Vector3 &v : positions) { AddPoint(v); }
 }
 
 AABox AABox::FromSphere(const Sphere &sphere)
 {
-    AABox b;
-    b.FillFromPositions(sphere.GetPoints());
+    AABox b (sphere.GetPoints().Front());
+    b.CreateFromPositions(sphere.GetPoints());
     return b;
 }
 
@@ -214,6 +226,7 @@ Quad AABox::GetQuad(Axis3D axis, bool sign) const
             zs0 = (sign ?  1 : -1); zs1 = (sign ? -1 :  1);
             zs2 = (sign ? -1 :  1); zs3 = (sign ?  1 : -1);
         break;
+
         case Axis3D::Y:
             xs0 = (sign ? -1 : -1); xs1 = (sign ?  1 : -1);
             xs2 = (sign ?  1 :  1); xs3 = (sign ? -1 :  1);
@@ -222,6 +235,8 @@ Quad AABox::GetQuad(Axis3D axis, bool sign) const
             zs0 = (sign ?  1 :  1); zs1 = (sign ?  1 : -1);
             zs2 = (sign ? -1 : -1); zs3 = (sign ? -1 :  1);
         break;
+
+        default:
         case Axis3D::Z:
             xs0 = (sign ? -1 : -1); xs1 = (sign ?  1 : -1);
             xs2 = (sign ?  1 :  1); xs3 = (sign ? -1 :  1);
@@ -290,18 +305,9 @@ AABox operator*(const Matrix4 &m, const AABox &b)
             (m * Vector4(points[7], 1)).xyz()
         };
 
-    AABox br;
-    br.FillFromPositions(newTransformedBoxPoints);
+    AABox br (newTransformedBoxPoints.Front());
+    br.CreateFromPositions(newTransformedBoxPoints);
     return br;
-}
-
-
-
-String AABox::ToString() const
-{
-    std::ostringstream oss;
-    oss << "Box(" << m_minv << ", " << m_maxv << ")" << std::endl;
-    return oss.str();
 }
 
 

@@ -143,7 +143,7 @@ Material* Renderer::GetSharedMaterial() const { return p_sharedMaterial.Get(); }
 
 void Renderer::OnMaterialChanged(const Material*) { PropagateRendererChanged(); }
 bool Renderer::IsRenderWireframe() const { return m_renderWireframe; }
-AABox Renderer::GetAABBox() const { return AABox(); }
+AABox Renderer::GetAABBox() const { return AABox::Empty; }
 void Renderer::SetCullFace(GL::Face cullMode) { m_cullFace = cullMode; }
 void Renderer::SetCulling(bool culling) { m_cullling = culling; }
 GL::Face Renderer::GetCullFace() const { return m_cullFace; }

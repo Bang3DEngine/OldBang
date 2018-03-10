@@ -44,7 +44,7 @@ void UIInputNumber::SetValue(float v)
 
     if (!HasFocus())
     {
-        String vStr = String::ToString(v, 2);
+        String vStr = String::ToString(v, 3);
         GetInputText()->GetText()->SetContent(vStr);
     }
 }

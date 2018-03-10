@@ -12,12 +12,15 @@ FORWARD    class Path;
 FORWARD_T  class Tree;
 FORWARD    class GUID;
 FORWARD_T  class List;
-FORWARD    class Color;
+FORWARD    class Quad;
+FORWARD    class AABox;
 FORWARD_T  class Array;
+FORWARD    class Color;
 FORWARD_T  class RectG;
 FORWARD    class String;
 FORWARD_T  class AARectG;
 FORWARD    class ObjectId;
+FORWARD    class Triangle;
 FORWARD_T  class Vector2G;
 FORWARD_T  class Vector3G;
 FORWARD_T  class Vector4G;
@@ -31,6 +34,9 @@ std::istream& operator>>(std::istream& is, Path &p);
 std::istream& operator>>(std::istream& is, Color &c);
 std::ostream& operator<<(std::ostream &log, const ObjectId &objectId);
 std::ostream& operator<<(std::ostream &log, const Color &v);
+std::ostream& operator<<(std::ostream &log, const AABox &v);
+std::ostream& operator<<(std::ostream &log, const Quad &v);
+std::ostream& operator<<(std::ostream &log, const Triangle &v);
 std::ostream& operator<<(std::ostream &log, const IToString &v);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
 
@@ -108,6 +114,14 @@ std::ostream& operator<<(std::ostream &log, const EnumClass &e)
     return log;
 }
 
+template <class T, size_t N>
+std::ostream &operator<<(std::ostream &log, const std::array<T,N>& a)
+{
+    log << "{";
+    for (int i = 0; i < N; ++i) { log << a[i] << ((i == N-1) ? "" : ", "); }
+    log <<"}";
+    return log;
+}
 template <class T, class M>
 std::ostream &operator<<(std::ostream &log, const std::pair<T,M>& p)
 {

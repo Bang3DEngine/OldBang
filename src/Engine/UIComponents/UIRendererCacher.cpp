@@ -68,7 +68,7 @@ void UIRendererCacher::OnRender(RenderPass renderPass)
 
             p_cacheFramebuffer->Bind();
 
-            GBuffer *gbuffer = GEngine::GetCurrentRenderingCamera()->GetGBuffer();
+            GBuffer *gbuffer = GEngine::GetActiveRenderingCamera()->GetGBuffer();
             AARect rtRectNDC(GetGameObject()->GetRectTransform()->GetViewportAARectNDC());
             p_cacheFramebuffer->Resize(gbuffer->GetWidth(), gbuffer->GetHeight());
 

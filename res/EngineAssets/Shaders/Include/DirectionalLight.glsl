@@ -8,25 +8,39 @@ uniform sampler2D B_LightShadowMap;
 uniform sampler2DShadow B_LightShadowMapSoft;
 uniform mat4 B_WorldToShadowMapMatrix;
 
-float GetFragmentLightness(const in vec3 pixelPosWorld)
+float GetFragmentLightness(const in vec3 pixelPosWorld,
+                           const in vec3 pixelNormalWorld,
+                           const in vec3 lightForwardWorld)
 {
     if (B_ShadowType == SHADOW_NONE) { return 1.0f; }
     else
     {
-        // Get uvs in shadow map, and sample the shadow map depth
-        vec2 shadowMapUv = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xy * 0.5f + 0.5f;
+        // SHADOW_HARD or SHADOW_SOFT
 
-        // Get
+        // If facing away, complete shadow directly
+        if (dot(pixelNormalWorld, -lightForwardWorld) < 0) { return 0.0f; }
+
+        // Get uvs in shadow map, and sample the shadow map depth
+        vec2 shadowMapUv = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xy;
+        shadowMapUv = shadowMapUv * 0.5f + 0.5f;
+
+        // Get actual world pixel depth
         vec3 worldPosInLightSpace = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xyz;
         float worldPosDepthFromLightSpace = worldPosInLightSpace.z * 0.5f + 0.5f;
+
+        // Bias it, taking into account slope
+        float MinBias = B_LightShadowBias;
+        float MaxBias = B_LightShadowBias * 2;
+        float bias = tan(acos(dot(pixelNormalWorld, lightForwardWorld)));
+        bias = MinBias; // + clamp(bias, 0, MaxBias);
         float biasedWorldDepth = (worldPosDepthFromLightSpace - B_LightShadowBias);
 
         if (B_ShadowType == SHADOW_HARD)
         {
             float shadowMapDepth = texture(B_LightShadowMap, shadowMapUv).r;
-            float lightness = (shadowMapDepth - biasedWorldDepth);
-            // lightness = step(lightness, 0.1);
-            return (lightness > 0.0) ? 1.0 : 0.0;
+            if (shadowMapDepth == 1.0f) { return 1.0f; }
+            float depthDiff = (shadowMapDepth - biasedWorldDepth);
+            return (depthDiff > 0.0) ? 1.0 : 0.0;
         }
         else // SHADOW_SOFT
         {

@@ -292,7 +292,7 @@ Quad Camera::GetBotQuad() const
 
 Camera *Camera::GetActive()
 {
-    Camera *cam = GEngine::GetCurrentRenderingCamera();
+    Camera *cam = GEngine::GetActiveRenderingCamera();
     if (!cam)
     {
         Scene *activeScene = SceneManager::GetActiveScene();

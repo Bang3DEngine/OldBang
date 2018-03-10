@@ -13,6 +13,7 @@
 #include "Bang/Transform.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/IconManager.h"
+#include "Bang/ShadowMapper.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/DebugRenderer.h"
 #include "Bang/MaterialFactory.h"
@@ -67,13 +68,14 @@ void DirectionalLight::RenderShadowMaps_()
     GLUniforms::SetModelMatrix(Matrix4::Identity);
     GLUniforms::SetViewMatrix( shadowMapViewMatrix );
     GLUniforms::SetProjectionMatrix( shadowMapProjMatrix );
+    m_lastUsedShadowMapViewProj = shadowMapProjMatrix * shadowMapViewMatrix;
     if (Input::GetKey(Key::LShift) && Input::GetKeyDown(Key::L))
     {
         m_shadowMapFramebuffer->ExportDepth(Path("test.png"));
     }
 
     // Render shadow map into framebuffer
-    GL::Enable(GL::Test::DepthClamp);
+    // GL::Enable(GL::Test::DepthClamp);
     GL::ClearDepthBuffer(1.0f);
     GL::SetColorMask(false, false, false, false);
     GL::SetDepthFunc(GL::Function::LEqual);
@@ -101,7 +103,7 @@ void DirectionalLight::SetUniformsBeforeApplyingLight(Material *mat) const
     Scene *scene = GetGameObject()->GetScene();
     sp->Set("B_LightShadowMap", GetShadowMap(), true);
     sp->Set("B_LightShadowMapSoft", GetShadowMap(), true);
-    sp->Set("B_WorldToShadowMapMatrix", GetShadowMapMatrix(scene), true);
+    sp->Set("B_WorldToShadowMapMatrix", m_lastUsedShadowMapViewProj, true);
 }
 
 void DirectionalLight::SetShadowDistance(float shadowDistance)
@@ -130,14 +132,17 @@ void DirectionalLight::GetShadowMapMatrices(Scene *scene,
 {
     // The ortho box will be the AABox in light space of the AABox of the
     // scene in world space
-    AABox orthoBox = GetShadowMapOrthoBox(scene);
-    Vector3 orthoBoxExtents = orthoBox.GetExtents();
-    Matrix4 lightDirMatrixInv = GetLightDirMatrix().Inversed();
+    AABox orthoBoxInLightSpace = GetShadowMapOrthoBox(scene);
+    Vector3 orthoBoxExtents = orthoBoxInLightSpace.GetExtents();
+    Matrix4 lightDirMatrix    = GetLightDirMatrix();
+    Matrix4 lightDirMatrixInv = lightDirMatrix.Inversed();
     Vector3 fwd = lightDirMatrixInv.TransformVector(Vector3::Forward);
     Vector3 up  = lightDirMatrixInv.TransformVector(Vector3::Up);
 
-    *viewMatrix = Matrix4::LookAt(orthoBox.GetCenter(),
-                                  orthoBox.GetCenter() + fwd,
+    Vector3 orthoBoxCenterWorld =
+         lightDirMatrix.TransformPoint( orthoBoxInLightSpace.GetCenter() );
+    *viewMatrix = Matrix4::LookAt(orthoBoxCenterWorld,
+                                  orthoBoxCenterWorld + fwd,
                                   up);
 
     *projMatrix = Matrix4::Ortho(-orthoBoxExtents.x,  orthoBoxExtents.x,
@@ -155,12 +160,13 @@ Matrix4 DirectionalLight::GetShadowMapMatrix(Scene *scene) const
 AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
 {
     // Get AABoxes
-    const AABox sceneAABox = scene->GetAABBox(true);
+    const AABox sceneAABox = ShadowMapper::GetSceneCastersAABox(scene); // scene->GetAABBox(true);
     const Array<Vector3> sceneBoxPoints = sceneAABox.GetPoints();
 
-    Camera *cam = scene->GetCamera();
+    Camera *cam = Camera::GetActive();
+    Debug_Log(cam->GetGameObject()->GetTransform()->GetPosition());
     float prevZFar = cam->GetZFar();
-    cam->SetZFar( GetShadowDistance() ); // Use shadow distance
+    cam->SetZFar( Math::Min(prevZFar, GetShadowDistance()) ); // Set shadow distance
     const std::array<Quad, 4> camQuads = {cam->GetTopQuad(),
                                           cam->GetBotQuad(),
                                           cam->GetLeftQuad(),
@@ -190,6 +196,7 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
                 lightMatrixInv.TransformPoint(sceneBoxPoint);
         orthoBoxInLightSpaceScene.AddPoint( sceneBoxPointInLightSpace );
     }
+
     AABox orthoBoxInLightSpaceCam;
     for (const Vector3 &camFrustumBoxPoint : camFrustumBoxPoints)
     {
@@ -200,13 +207,14 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
 
     // AABox orthoBoxInLightSpace = orthoBoxInLightSpaceScene;
     AABox orthoBoxInLightSpace = orthoBoxInLightSpaceCam;
-
+/*
     // Readjust ortho box to fit better
     Vector3 orthoBoxCenter = orthoBoxInLightSpace.GetCenter();
     Vector3 extents = orthoBoxInLightSpace.GetExtents();
     // extents.z = GetShadowDistance() * 0.5f;
     orthoBoxInLightSpace = AABox(orthoBoxCenter - extents,
                                  orthoBoxCenter + extents);
+    */
 
     if (Input::GetKey(Key::C))
     {
@@ -216,7 +224,7 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
                       cam->GetTopQuad(), cam->GetBotQuad()};
         for (const Quad &quad : quads)
         {
-            DebugRenderer::RenderQuad(quad, Color::Blue, 0.1f, true, false, true);
+            DebugRenderer::RenderQuad(quad, Color::Purple, 0.1f, true, false, true);
         }
     }
 
@@ -226,10 +234,10 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
         auto quads = orthoBoxInLightSpace.GetQuads();
         for (const Quad &quad : quads)
         {
-            Quad worldQuad (lightMatrixInv.TransformPoint(quad.GetPoint(0)),
-                            lightMatrixInv.TransformPoint(quad.GetPoint(1)),
-                            lightMatrixInv.TransformPoint(quad.GetPoint(2)),
-                            lightMatrixInv.TransformPoint(quad.GetPoint(3)));
+            Quad worldQuad (lightMatrix.TransformPoint(quad.GetPoint(0)),
+                            lightMatrix.TransformPoint(quad.GetPoint(1)),
+                            lightMatrix.TransformPoint(quad.GetPoint(2)),
+                            lightMatrix.TransformPoint(quad.GetPoint(3)));
 
             DebugRenderer::RenderQuad(worldQuad, (j == 4) ? Color::Green : Color::Red,
                                       0.1f, true, false, true);
@@ -279,9 +287,14 @@ void DirectionalLight::OnRender(RenderPass rp)
 void DirectionalLight::ImportXML(const XMLNode &xmlInfo)
 {
     Light::ImportXML(xmlInfo);
+
+    if (xmlInfo.Contains("ShadowDistance"))
+    { SetShadowDistance(xmlInfo.Get<float>("ShadowDistance")); }
 }
 
 void DirectionalLight::ExportXML(XMLNode *xmlInfo) const
 {
     Light::ExportXML(xmlInfo);
+
+    xmlInfo->Set("ShadowDistance", GetShadowDistance());
 }
