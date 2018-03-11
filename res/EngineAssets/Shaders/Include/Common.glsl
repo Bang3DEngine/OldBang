@@ -54,16 +54,16 @@ vec2 GetViewportUv() { return GetViewportPos() / B_Viewport_Size; }
 
 // GBuffer Samplers //////////////////////
 #ifdef BANG_FRAGMENT
-vec4  B_SampleColor(vec2 uv) { return texture2D(B_GTex_Color, uv); }
+vec4  B_SampleColor(vec2 uv) { return texture(B_GTex_Color, uv); }
 vec3  B_SampleNormal(vec2 uv)
 {
-    return texture2D(B_GTex_Normal, uv).xyz * 2.0f - 1.0f;
+    return texture(B_GTex_Normal, uv).xyz * 2.0f - 1.0f;
 }
-vec4  B_SampleDiffColor(vec2 uv) { return texture2D(B_GTex_DiffColor, uv); }
-bool  B_SampleReceivesLight (vec2 uv) { return texture2D(B_GTex_Misc, uv).r > 0; }
-float B_SampleShininess (vec2 uv) { return texture2D(B_GTex_Misc, uv).g; }
-float B_SampleDepth(vec2 uv) { return texture2D(B_GTex_DepthStencil, uv).r; }
-float B_SampleFlags(vec2 uv) { return texture2D(B_GTex_Misc, uv).z; }
+vec4  B_SampleDiffColor(vec2 uv) { return texture(B_GTex_DiffColor, uv); }
+bool  B_SampleReceivesLight (vec2 uv) { return texture(B_GTex_Misc, uv).r > 0; }
+float B_SampleShininess (vec2 uv) { return texture(B_GTex_Misc, uv).g; }
+float B_SampleDepth(vec2 uv) { return texture(B_GTex_DepthStencil, uv).r; }
+float B_SampleFlags(vec2 uv) { return texture(B_GTex_Misc, uv).z; }
 
 vec4  B_SampleColor()  { return B_SampleColor(GetViewportUv()); }
 vec3  B_SampleNormal() { return B_SampleNormal(GetViewportUv()); }

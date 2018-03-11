@@ -16,7 +16,7 @@ void main()
 {
     if (B_HasTexture)
     {
-        if (texture2D(B_Texture0, B_FIn_Uv).a < B_AlphaCutoff) { discard; }
+        if (texture(B_Texture0, B_FIn_Uv).a < B_AlphaCutoff) { discard; }
     }
     fragColor = selectionColor;
 }
