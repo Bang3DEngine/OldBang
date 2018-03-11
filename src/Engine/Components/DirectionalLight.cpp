@@ -164,7 +164,6 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
     const Array<Vector3> sceneBoxPoints = sceneAABox.GetPoints();
 
     Camera *cam = Camera::GetActive();
-    Debug_Log(cam->GetGameObject()->GetTransform()->GetPosition());
     float prevZFar = cam->GetZFar();
     cam->SetZFar( Math::Min(prevZFar, GetShadowDistance()) ); // Set shadow distance
     const std::array<Quad, 4> camQuads = {cam->GetTopQuad(),

@@ -70,6 +70,7 @@ const static Vector3G Infinity; \
 const static Vector3G NInfinity;
 
 CLASS_VECTOR_T(Vector3G, 3)
+CLASS_VECTOR_T_IMPL(Vector3G, 3)
 
 template<class T>
 const Vector3G<T> Vector3G<T>::Up = Vector3G<T>(Cast<T>(0),

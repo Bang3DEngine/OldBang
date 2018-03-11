@@ -24,6 +24,7 @@ const static Vector2G Infinity; \
 const static Vector2G NInfinity;
 
 CLASS_VECTOR_T(Vector2G, 2)
+CLASS_VECTOR_T_IMPL(Vector2G, 2)
 
 template<class T>
 const Vector2G<T> Vector2G<T>::Up = Vector2G<T>(Cast<T>(0), Cast<T>(1));

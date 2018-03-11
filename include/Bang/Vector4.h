@@ -67,6 +67,7 @@ const static Vector4G Infinity; \
 const static Vector4G NInfinity;
 
 CLASS_VECTOR_T(Vector4G, 4)
+CLASS_VECTOR_T_IMPL(Vector4G, 4)
 
 template<class T>
 const Vector4G<T> Vector4G<T>::Up = Vector4G<T>(Cast<T>(0),
