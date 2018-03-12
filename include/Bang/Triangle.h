@@ -30,6 +30,8 @@ private:
     std::array<Vector3, 3> m_points;
 };
 
+Triangle operator*(const Matrix4 &m, const Triangle &t);
+
 NAMESPACE_BANG_END
 
 #endif // TRIANGLE_H

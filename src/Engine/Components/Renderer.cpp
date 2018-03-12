@@ -46,9 +46,6 @@ void Renderer::OnRender() {}
 
 void Renderer::Bind() const
 {
-    Transform *t = GetGameObject()->GetTransform();
-    GLUniforms::SetModelMatrix( t ? t->GetLocalToWorldMatrix() : Matrix4::Identity );
-
     GL::SetViewProjMode( GetViewProjMode() );
     GL::SetWireframe( IsRenderWireframe() );
 
@@ -56,6 +53,9 @@ void Renderer::Bind() const
     GL::SetEnabled(GL::Test::CullFace, GetCulling());
 
     GL::LineWidth( GetLineWidth() );
+
+    Transform *t = GetGameObject()->GetTransform();
+    GLUniforms::SetModelMatrix( t ? t->GetLocalToWorldMatrix() : Matrix4::Identity );
 
     if (GetUserMaterial()) { GetUserMaterial()->Bind(); }
 }

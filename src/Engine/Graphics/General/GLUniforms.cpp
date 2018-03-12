@@ -20,24 +20,31 @@ GLUniforms::CameraUniforms *GLUniforms::GetCameraUniforms()
     return &GLUniforms::GetActive()->m_cameraUniforms;
 }
 
+Matrix4 GLUniforms::GetCanvasProjectionMatrix()
+{
+    const Vector2i vpSize = Vector2i::Max(GL::GetViewportSize(), Vector2i::One);
+    const Matrix4   ortho = Matrix4::Ortho(0, vpSize.x, 0, vpSize.y, 1, -1);
+    return ortho;
+}
+
 void GLUniforms::SetAllUniformsToShaderProgram(ShaderProgram *sp)
 {
     if (GL::IsBound(sp->GetGLBindTarget(), sp->GetGLId()))
     {
         MatrixUniforms *matrices = GLUniforms::GetMatrixUniforms();
-        sp->Set("B_Model", matrices->model, false);
-        sp->Set("B_Normal", matrices->normal, false);
-        sp->Set("B_View", matrices->view, false);
-        sp->Set("B_Projection", matrices->proj, false);
-        sp->Set("B_PVM", matrices->pvm, false);
+        sp->Set("B_Model",      matrices->model,  false);
+        sp->Set("B_Normal",     matrices->normal, false);
+        sp->Set("B_View",       matrices->view,   false);
+        sp->Set("B_Projection", matrices->proj,   false);
+        sp->Set("B_PVM",        matrices->pvm,    false);
 
         CameraUniforms *cameraUniforms = GLUniforms::GetCameraUniforms();
         sp->Set("B_Camera_ZNear", cameraUniforms->zNear, false);
-        sp->Set("B_Camera_ZFar", cameraUniforms->zFar, false);
+        sp->Set("B_Camera_ZFar",  cameraUniforms->zFar,  false);
 
         ViewportUniforms *viewportUniforms = GLUniforms::GetViewportUniforms();
         sp->Set("B_Viewport_MinPos", viewportUniforms->minPos, false);
-        sp->Set("B_Viewport_Size", viewportUniforms->size, false);
+        sp->Set("B_Viewport_Size",   viewportUniforms->size,   false);
     }
 }
 
@@ -82,7 +89,7 @@ void GLUniforms::SetProjectionMatrix(const Matrix4 &projection)
 void GLUniforms::UpdatePVMMatrix()
 {
     MatrixUniforms *matrices = GLUniforms::GetMatrixUniforms();
-    GLUniforms *gu = GLUniforms::GetActive();
+    GLUniforms *glu = GLUniforms::GetActive();
 
     Matrix4 pvmMatrix;
     const Matrix4 &model = matrices->model;
@@ -94,21 +101,16 @@ void GLUniforms::UpdatePVMMatrix()
                                    viewModel.c3).Inversed().Transposed();
     matrices->normal = normalMatrix;
 
-    switch (gu->GetViewProjMode())
+    switch (glu->GetViewProjMode())
     {
         case GL::ViewProjMode::World:
             pvmMatrix = matrices->proj * viewModel;
         break;
 
         case GL::ViewProjMode::Canvas:
-        {
-            Vector2i vpSize = Vector2i::Max(GL::GetViewportSize(), Vector2i::One);
-            Matrix4 ortho = Matrix4::Ortho(0, vpSize.x, 0, vpSize.y, 1, -1);
-            pvmMatrix = ortho * model;
-        }
+            pvmMatrix = GLUniforms::GetCanvasProjectionMatrix() * model;
         break;
     }
-
     matrices->pvm = pvmMatrix;
 }
 
@@ -117,7 +119,7 @@ void GLUniforms::SetViewProjMode(GL::ViewProjMode viewProjMode)
     if (viewProjMode != GetViewProjMode())
     {
         m_viewProjMode = viewProjMode;
-        UpdatePVMMatrix();
+        GLUniforms::UpdatePVMMatrix();
     }
 }
 
@@ -131,9 +133,12 @@ const Matrix4 &GLUniforms::GetViewMatrix()
     return GLUniforms::GetActive()->GetMatrixUniforms()->view;
 }
 
-const Matrix4 &GLUniforms::GetProjectionMatrix()
+Matrix4 GLUniforms::GetProjectionMatrix()
 {
-    return GLUniforms::GetActive()->GetMatrixUniforms()->proj;
+    GLUniforms *glu = GLUniforms::GetActive();
+    return (glu->GetViewProjMode() == GL::ViewProjMode::World) ?
+                glu->GetMatrixUniforms()->proj :
+                GLUniforms::GetCanvasProjectionMatrix();
 }
 
 GL::ViewProjMode GLUniforms::GetViewProjMode() const
@@ -144,5 +149,13 @@ GL::ViewProjMode GLUniforms::GetViewProjMode() const
 GLUniforms *GLUniforms::GetActive()
 {
     return GL::GetActive()->GetGLUniforms();
+}
+
+void GLUniforms::OnViewportChanged(const AARecti &newViewport)
+{
+    ViewportUniforms *vpUnifs = GLUniforms::GetViewportUniforms();
+    vpUnifs->minPos = Vector2(newViewport.GetMin());
+    vpUnifs->size   = Vector2(newViewport.GetSize());
+    GLUniforms::UpdatePVMMatrix();
 }
 

@@ -39,18 +39,6 @@ UITextRenderer::~UITextRenderer()
 {
 }
 
-void UITextRenderer::OnRender()
-{
-    UIRenderer::OnRender();
-    RegenerateCharQuadsVAO();
-
-    int vertCount = p_mesh.Get()->GetVertexCount();
-    if (vertCount >= 3)
-    {
-        GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
-    }
-}
-
 void UITextRenderer::CalculateLayout(Axis axis)
 {
     if (!GetFont()) { SetCalculatedLayout(axis, 0, 0); return; }
@@ -153,10 +141,6 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
 void UITextRenderer::Bind() const
 {
-    // Nullify RectTransform model, since we control its position and size
-    // directly from the VBO creation...
-    Vector3 translate(0, 0, GetGameObject()->GetTransform()->GetPosition().z);
-    GLUniforms::SetModelMatrix( Matrix4::TranslateMatrix(translate) );
     UIRenderer::Bind();
 
     if (GetFont())
@@ -164,6 +148,18 @@ void UITextRenderer::Bind() const
         const int textSize = Math::Max(GetTextSize(), 1);
         Texture2D *fontAtlas = GetFont()->GetFontAtlas(textSize);
         GetMaterial()->SetTexture(fontAtlas);
+    }
+}
+
+void UITextRenderer::OnRender()
+{
+    UIRenderer::OnRender();
+    RegenerateCharQuadsVAO();
+
+    int vertCount = p_mesh.Get()->GetVertexCount();
+    if (vertCount >= 3)
+    {
+        GL::Render(p_mesh.Get()->GetVAO(), GetRenderPrimitive(), vertCount);
     }
 }
 

@@ -76,7 +76,7 @@ void SceneManager::Render()
         {
             ge->Render(activeScene, camera);
             AARecti prevVP = GL::GetViewportRect();
-            camera->SetViewportForBlitting();
+            camera->BindViewportForBlitting();
             ge->RenderTexture(
                 camera->GetGBuffer()->GetAttachmentTexture(GBuffer::AttColor));
             GL::SetViewport(prevVP);

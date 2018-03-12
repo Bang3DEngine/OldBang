@@ -30,6 +30,6 @@ AABox ShadowMapper::GetSceneCastersAABox(Scene *scene)
 
     AABox sceneAABox;
     sceneAABox.CreateFromPositions(casterPoints);
-    DebugRenderer::RenderAABox(sceneAABox, Color::Green, 0.1f, 1.0f, true);
+    // DebugRenderer::RenderAABox(sceneAABox, Color::Green, 0.1f, 1.0f, true);
     return sceneAABox;
 }

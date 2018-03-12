@@ -122,6 +122,15 @@ void Debug::PrintUniforms(uint programId)
     }
 }
 
+void Debug::PrintAllUniforms()
+{
+    PrintUniforms();
+    Debug_Peek( GLUniforms::GetModelMatrix() );
+    Debug_Peek( GLUniforms::GetViewMatrix() );
+    Debug_Peek( GLUniforms::GetProjectionMatrix() );
+    Debug_Peek( GLUniforms::GetActive()->GetViewProjMode() );
+}
+
 void Debug::PrintUniforms()
 {
     Debug::PrintUniforms(GL::GetBoundId(GL::BindTarget::ShaderProgram));

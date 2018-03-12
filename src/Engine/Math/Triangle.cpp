@@ -1,5 +1,7 @@
 #include "Bang/Triangle.h"
 
+#include "Bang/Matrix4.h"
+
 USING_NAMESPACE_BANG
 
 Triangle::Triangle(const Vector3 &point0,
@@ -43,3 +45,14 @@ const Vector3 &Triangle::operator[](std::size_t i) const
     ASSERT(i >= 0 && i <= 2);
     return m_points[i];
 }
+
+NAMESPACE_BANG_BEGIN
+
+Triangle operator*(const Matrix4 &m, const Triangle &t)
+{
+    return Triangle(m.TransformPoint(t[0]),
+                    m.TransformPoint(t[1]),
+                    m.TransformPoint(t[2]));
+}
+
+NAMESPACE_BANG_END

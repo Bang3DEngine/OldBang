@@ -208,10 +208,15 @@ void UICanvas::OnAfterChildrenUpdate()
     if (GetCurrentFocus()) { GetCurrentFocus()->m_hasJustFocusChanged = false; }
 }
 
-void UICanvas::OnBeforeRender()
+
+void UICanvas::OnRender(RenderPass renderPass)
 {
-    Component::OnBeforeRender();
-    GetLayoutManager()->RebuildLayout( GetGameObject() );
+    Component::OnRender(renderPass);
+
+    if (renderPass == RenderPass::Canvas)
+    {
+        GetLayoutManager()->RebuildLayout( GetGameObject() );
+    }
 }
 
 void UICanvas::CloneInto(ICloneable *clone) const

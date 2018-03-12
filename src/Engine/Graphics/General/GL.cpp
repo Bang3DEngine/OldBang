@@ -460,7 +460,7 @@ String GL::GetProgramLinkErrorMsg(GLId programId)
     if (errorLength > 1)
     {
        char* errorLog = new char[errorLength];
-       glGetProgramInfoLog(programId, errorLength, NULL, errorLog);
+       GL_CALL( glGetProgramInfoLog(programId, errorLength, NULL, errorLog) );
        String error = String(errorLog);
        delete[] errorLog;
        return error;
@@ -817,7 +817,7 @@ void GL::LineWidth(float lineWidth)
     if (GL::GetLineWidth() != lineWidth)
     {
         GL::GetActive()->m_lineWidth = lineWidth;
-        glLineWidth(lineWidth);
+        GL_CALL( glLineWidth(lineWidth) );
     }
 }
 
@@ -896,13 +896,11 @@ void GL::SetViewport(int x, int y, int width, int height)
     {
         GL *gl = GL::GetActive();
         if (gl) { gl->m_viewportRect = vpRect; }
-        glViewport(x, y, width, height);
+        GL_CALL( glViewport(x, y, width, height) );
 
         if (gl && GLUniforms::GetActive())
         {
-            GLUniforms::ViewportUniforms *vpUnifs = GLUniforms::GetViewportUniforms();
-            vpUnifs->minPos = Vector2(GL::GetViewportRect().GetMin());
-            vpUnifs->size   = Vector2(GL::GetViewportSize());
+            GLUniforms::OnViewportChanged( GL::GetViewportRect() );
         }
     }
 }
@@ -989,7 +987,7 @@ void GL::Render(const VAO *vao, GL::Primitive primitivesMode,
                 int elementsCount, int startIndex)
 {
     vao->Bind();
-    glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount);
+    GL_CALL( glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount) );
     vao->UnBind();
 }
 
@@ -1095,7 +1093,7 @@ void GL::SetColorMask(bool maskR, bool maskG, bool maskB, bool maskA)
     if (!gl || (GL::GetColorMask() != newColorMask))
     {
         gl->m_colorMask = newColorMask;
-        glColorMask(maskR, maskG, maskB, maskA);
+        GL_CALL( glColorMask(maskR, maskG, maskB, maskA) );
     }
 }
 
@@ -1109,7 +1107,7 @@ void GL::SetStencilOp(GL::StencilOperation fail,
                       GL::StencilOperation zPass)
 {
     GL::GetActive()->m_stencilOp = zPass;
-    glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass));
+    GL_CALL( glStencilOp(GLCAST(fail), GLCAST(zFail), GLCAST(zPass)) );
 }
 
 void GL::SetStencilFunc(GL::Function stencilFunction, uint mask)
@@ -1556,6 +1554,53 @@ void GL::BindUniformBufferToShader(const String &uniformBlockName,
                                                uniformBlockName.ToCString()) );
     GL_CALL( glUniformBlockBinding(sp->GetGLId(), blockIndex,
                                    buffer->GetBindingPoint()) );
+}
+
+void GL::PrintGLContext()
+{
+    Debug_Log("GL Context: ================");
+    Debug_Peek(GL::GetViewportRect());
+    Debug_Peek(GL::GetScissorRect());
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::VAO)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::VBO)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::Framebuffer)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::DrawFramebuffer)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::ReadFramebuffer)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::ShaderProgram)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::Texture2D)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::UniformBuffer)) );
+    Debug_Peek(GL::GetColorMask());
+    Debug_Peek(GL::GetLineWidth());
+    Debug_Peek(GL::IsEnabled(GL::Test::Alpha));
+    Debug_Peek(GL::IsEnabled(GL::Test::Blend));
+    Debug_Peek(GL::IsEnabled(GL::Test::CullFace));
+    Debug_Peek(GL::IsEnabled(GL::Test::Depth));
+    Debug_Peek(GL::IsEnabled(GL::Test::DepthClamp));
+    Debug_Peek(GL::IsEnabled(GL::Test::Scissor));
+    Debug_Peek(GL::IsEnabled(GL::Test::Stencil));
+    Debug_Peek(GL::GetDrawBuffers());
+    Debug_Peek(GL::GetReadBuffer());
+    Debug_Peek(GL::GetDepthMask());
+    Debug_Peek(GL::GetDepthFunc());
+    Debug_Peek(GL::GetClearColor());
+    Debug_Peek(GL::GetCullFace());
+    Debug_Peek(GL::GetPolygonMode(GL::Face::Back));
+    Debug_Peek(GL::GetPolygonMode(GL::Face::Front));
+    Debug_Peek(GL::GetPolygonMode(GL::Face::FrontAndBack));
+    Debug_Peek(GL::GetStencilOp());
+    Debug_Peek(GL::GetStencilFunc());
+    Debug_Peek( SCAST<int>(GL::GetStencilValue()) );
+    Debug_Peek( SCAST<int>(GL::GetStencilMask()) );
+    Debug_Peek(GL::GetBlendDstFactorAlpha());
+    Debug_Peek(GL::GetBlendDstFactorColor());
+    Debug_Peek(GL::GetBlendEquationAlpha());
+    Debug_Peek(GL::GetBlendEquationColor());
+    Debug_Peek(GL::GetBlendSrcFactorAlpha());
+    Debug_Peek(GL::GetBlendSrcFactorColor());
+
+    Debug::PrintAllUniforms();
+
+    Debug_Log("==========================");
 }
 
 GL::ViewProjMode GL::GetViewProjMode()

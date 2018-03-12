@@ -42,6 +42,8 @@ private:
                                        Vector3::Zero};
 };
 
+Quad operator*(const Matrix4 &m, const Quad &q);
+
 NAMESPACE_BANG_END
 
 #endif // QUAD_H

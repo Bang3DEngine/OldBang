@@ -2,6 +2,7 @@
 #define RECTTRANSFORM_H
 
 #include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/Vector2.h"
 #include "Bang/Transform.h"
 #include "Bang/IEventEmitter.h"
@@ -118,11 +119,11 @@ public:
 private:
     mutable Matrix4 m_rectLocalToWorldMatrix;
     mutable Matrix4 m_rectLocalToWorldMatrixInv;
-    mutable bool m_invalidRectLocalToWorldMatrix = true;
+    mutable AARecti m_vpInWhichRectLocalToWorldWasCalc = AARecti::Zero;
 
     mutable Matrix4 m_rectTransformLocalToWorldMatrix;
     mutable Matrix4 m_rectTransformLocalToWorldMatrixInv;
-    mutable bool m_invalidRectTransformLocalToWorldMatrix = true;
+    mutable AARecti m_vpInWhichRectTransformLocalToWorldWasCalc = AARecti::Zero;
 
     Vector2i m_marginRightTop = Vector2i::Zero;
     Vector2i m_marginLeftBot  = Vector2i::Zero;

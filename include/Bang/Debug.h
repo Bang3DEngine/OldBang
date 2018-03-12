@@ -21,6 +21,7 @@ public:
 
     static void PrintUniforms(Shader *shader);
     static void PrintUniforms(uint shaderProgramId);
+    static void PrintAllUniforms();
     static void PrintUniforms();
 
 private:

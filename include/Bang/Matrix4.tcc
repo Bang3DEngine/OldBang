@@ -85,7 +85,7 @@ Matrix4G<T> Matrix4G<T>::Inversed() const
     Matrix4G<T> inv;
     const Matrix4G<T> &m = *this;
 
-    inv[0].x = m.c1.y * m.c2.z * m.c3.w -
+    inv.c0.x = m.c1.y * m.c2.z * m.c3.w -
                m.c1.y * m.c2.w * m.c3.z -
                m.c2.y * m.c1.z * m.c3.w +
                m.c2.y * m.c1.w * m.c3.z +

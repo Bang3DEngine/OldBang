@@ -617,6 +617,8 @@ public:
                                           const ShaderProgram *sp,
                                           const IUniformBuffer *buffer);
 
+    static void PrintGLContext();
+
     static GL::ViewProjMode GetViewProjMode();
 
     static GL* GetActive();

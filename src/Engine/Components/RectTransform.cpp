@@ -418,15 +418,15 @@ void RectTransform::CalculateLocalToParentMatrix() const
 void RectTransform::OnTransformInvalidated()
 {
     Transform::OnTransformInvalidated();
-    m_invalidRectLocalToWorldMatrix = true;
-    m_invalidRectTransformLocalToWorldMatrix = true;
+    m_vpInWhichRectLocalToWorldWasCalc = AARecti::Zero;
+    m_vpInWhichRectTransformLocalToWorldWasCalc = AARecti::Zero;
 }
 
 void RectTransform::InvalidateTransform()
 {
     Transform::InvalidateTransform();
-    m_invalidRectLocalToWorldMatrix = true;
-    m_invalidRectTransformLocalToWorldMatrix = true;
+    m_vpInWhichRectLocalToWorldWasCalc = AARecti::Zero;
+    m_vpInWhichRectTransformLocalToWorldWasCalc = AARecti::Zero;
 }
 
 void RectTransform::CalculateRectLocalToWorldMatrix() const
@@ -447,7 +447,7 @@ void RectTransform::CalculateRectLocalToWorldMatrix() const
 
     m_rectLocalToWorldMatrix = translateToAnchorCenterMat * scaleMat;
     m_rectLocalToWorldMatrixInv = m_rectLocalToWorldMatrix.Inversed();
-    m_invalidRectLocalToWorldMatrix = false;
+    m_vpInWhichRectLocalToWorldWasCalc = GL::GetViewportRect();
 }
 
 void RectTransform::CalculateRectTransformLocalToWorldMatrix() const
@@ -457,7 +457,7 @@ void RectTransform::CalculateRectTransformLocalToWorldMatrix() const
     const Matrix4& localToWorldMatrix = Transform::GetLocalToWorldMatrix();
     m_rectTransformLocalToWorldMatrix = localToWorldMatrix * GetRectLocalToWorldMatrix();
     m_rectTransformLocalToWorldMatrixInv = m_rectTransformLocalToWorldMatrix.Inversed();
-    m_invalidRectTransformLocalToWorldMatrix = false;
+    m_vpInWhichRectTransformLocalToWorldWasCalc = GL::GetViewportRect();
 }
 
 bool RectTransform::IsMouseOver(bool recursive) const
@@ -484,7 +484,7 @@ bool RectTransform::IsMouseOver(bool recursive) const
 
 const Matrix4 &RectTransform::GetLocalToWorldMatrix() const
 {
-    if (m_invalidRectTransformLocalToWorldMatrix)
+    if (m_vpInWhichRectTransformLocalToWorldWasCalc != GL::GetViewportRect())
     {
         CalculateRectTransformLocalToWorldMatrix();
     }
@@ -493,7 +493,7 @@ const Matrix4 &RectTransform::GetLocalToWorldMatrix() const
 
 const Matrix4 &RectTransform::GetLocalToWorldMatrixInv() const
 {
-    if (m_invalidRectTransformLocalToWorldMatrix)
+    if (m_vpInWhichRectTransformLocalToWorldWasCalc != GL::GetViewportRect())
     {
         CalculateRectTransformLocalToWorldMatrix();
     }
@@ -502,13 +502,19 @@ const Matrix4 &RectTransform::GetLocalToWorldMatrixInv() const
 
 const Matrix4 &RectTransform::GetRectLocalToWorldMatrix() const
 {
-    if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
+    if (m_vpInWhichRectLocalToWorldWasCalc != GL::GetViewportRect())
+    {
+        CalculateRectLocalToWorldMatrix();
+    }
     return m_rectLocalToWorldMatrix;
 }
 
 const Matrix4 &RectTransform::GetRectLocalToWorldMatrixInv() const
 {
-    if (m_invalidRectLocalToWorldMatrix) { CalculateRectLocalToWorldMatrix(); }
+    if (m_vpInWhichRectLocalToWorldWasCalc != GL::GetViewportRect())
+    {
+        CalculateRectLocalToWorldMatrix();
+    }
     return m_rectLocalToWorldMatrixInv;
 }
 

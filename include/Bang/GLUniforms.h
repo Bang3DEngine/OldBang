@@ -72,7 +72,9 @@ public:
 
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
-    static const Matrix4 &GetProjectionMatrix();
+    static       Matrix4  GetProjectionMatrix();
+
+    static GLUniforms *GetActive();
 
 private:
     ViewportUniforms m_viewportUniforms;
@@ -83,10 +85,12 @@ private:
     GLUniforms() = default;
     virtual ~GLUniforms() = default;
 
+    static void OnViewportChanged(const AARecti &newViewport);
+
     static ViewportUniforms* GetViewportUniforms();
     static MatrixUniforms *GetMatrixUniforms();
     static CameraUniforms *GetCameraUniforms();
-    static GLUniforms *GetActive();
+    static Matrix4 GetCanvasProjectionMatrix();
 
     friend class GL;
 };

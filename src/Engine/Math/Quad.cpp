@@ -1,5 +1,6 @@
 #include "Bang/Quad.h"
 
+#include "Bang/Matrix4.h"
 #include "Bang/Triangle.h"
 
 USING_NAMESPACE_BANG
@@ -85,3 +86,14 @@ const Vector3 &Quad::operator[](std::size_t i) const
     return m_points[i];
 }
 
+NAMESPACE_BANG_BEGIN
+
+Quad operator*(const Matrix4 &m, const Quad &q)
+{
+    return Quad(m.TransformPoint(q[0]),
+                m.TransformPoint(q[1]),
+                m.TransformPoint(q[2]),
+                m.TransformPoint(q[3]));
+}
+
+NAMESPACE_BANG_END

@@ -28,11 +28,11 @@ public:
 
     virtual void Bind() const;
     virtual void UnBind() const;
-    void SetViewportForBlitting() const;
-    void SetViewportForRendering() const;
 
     void BindGBuffer();
     void BindSelectionFramebuffer();
+    void BindViewportForBlitting() const;
+    void BindViewportForRendering() const;
 
     Ray      FromViewportPointNDCToRay(const Vector2 &vpPointNDC) const;
     Vector2i FromWindowPointToViewportPoint(const Vector2i &winPoint) const;
@@ -108,8 +108,6 @@ private:
     float m_zFar = 100.0f;
     AARect m_viewportRectNDC = AARect::NDCRect;
     ProjectionMode m_projMode = ProjectionMode::Perspective;
-
-    mutable AARecti m_latestViewportRect = AARecti::Zero;
 
     friend class Scene;
 };
