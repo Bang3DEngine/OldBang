@@ -1,19 +1,46 @@
 #ifndef MODELIO_H
 #define MODELIO_H
 
+#include "Bang/Tree.h"
 #include "Bang/Array.h"
+#include "Bang/Matrix4.h"
 #include "Bang/ResourceHandle.h"
 
 FORWARD class aiMesh;
 FORWARD class aiScene;
 FORWARD class aiMaterial;
-FORWARD namespace Assimp { FORWARD class Importer; }
+FORWARD namespace Assimp
+{
+    FORWARD class Importer;
+}
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD class Scene;
 FORWARD class Model;
 FORWARD class Texture2D;
+
+struct ModelIONode
+{
+    String name;
+    Matrix4 transformation;
+
+    Array<uint> meshIndices;
+    Array<uint> meshMaterialIndices;
+};
+
+struct ModelIOScene
+{
+    Array< RH<Mesh> > meshes;
+    Array< String > meshesNames;
+
+    Array< RH<Material> > materials;
+    Array< String > materialsNames;
+
+    Tree<ModelIONode> *modelTree = nullptr;
+
+    ~ModelIOScene() { if (modelTree) { delete modelTree; } }
+};
 
 class ModelIO
 {
@@ -22,10 +49,7 @@ public:
 
     static bool ReadModel(const Path& modelFilepath,
                           const GUID &modelGUID,
-                          Array< RH<Mesh> > *meshes,
-                          Array< RH<Material> > *materials,
-                          Array<String> *meshesNames,
-                          Array<String> *materialsNames);
+                          ModelIOScene *modelScene);
 
     static bool ReadFirstFoundMeshRaw(const Path& modelFilepath,
                                       Array<Vector3> *vertexPositions,

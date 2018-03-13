@@ -88,7 +88,10 @@ int Tree<T>::GetDepth() const
 }
 
 template<class T>
-const List< Tree<T>* > &Tree<T>::GetChildren() const { return m_subTrees; }
+List< Tree<T>* > &Tree<T>::GetChildren() { return m_subTrees; }
+
+template<class T>
+const List< Tree<T> *> &Tree<T>::GetChildren() const { return m_subTrees; }
 
 template<class T>
 List< Tree<T>* > Tree<T>::GetChildrenRecursive() const
@@ -103,6 +106,9 @@ List< Tree<T>* > Tree<T>::GetChildrenRecursive() const
 
 template<class T>
 Tree<T>* Tree<T>::GetParent() const { return p_parent; }
+
+template<class T>
+T &Tree<T>::GetData() { return m_data; }
 
 template<class T>
 const T& Tree<T>::GetData() const { return m_data; }

@@ -1,6 +1,7 @@
 #include "Bang/TextFormatter.h"
 
 #include "Bang/Font.h"
+#include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/RectTransform.h"
@@ -198,8 +199,8 @@ void TextFormatter::ApplyAlignment(Array< Array<CharRect> > *linesCharRects,
     }
     else if (vAlignment == VerticalAlignment::Bot)
     {
-        textVerticalOffset = -font->GetFontAscent(fontSize) -
-                              limitsRect.GetHeight() + textHeight;
+        textVerticalOffset = -font->GetFontDescent(fontSize)
+                             -limitsRect.GetHeight();
     }
 
     // Apply offsets

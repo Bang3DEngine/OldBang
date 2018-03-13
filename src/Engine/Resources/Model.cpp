@@ -4,6 +4,7 @@
 #include "Bang/ModelIO.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
+#include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/GUIDManager.h"
 #include "Bang/MeshRenderer.h"
@@ -20,36 +21,57 @@ Model::~Model()
 {
 }
 
-GameObject *Model::CreateGameObjectFromModel() const
+GameObject *CreateGameObjectFromModelNodeTree(const ModelIOScene &modelScene,
+                                              const Tree<ModelIONode>* modelTree)
 {
+    const ModelIONode &modelNode = modelTree->GetData();
     GameObject *gameObject = GameObjectFactory::CreateGameObject();
 
-    for (int i = 0; i < SCAST<int>(GetMeshes().Size()); ++i)
+    // Set name
+    gameObject->SetName( modelNode.name );
+
+    // Set transform
+    gameObject->GetTransform()->SetLocalPosition(
+                Transform::GetPositionFromMatrix4(modelNode.transformation) );
+    gameObject->GetTransform()->SetLocalRotation(
+                Transform::GetRotationFromMatrix4(modelNode.transformation) );
+    gameObject->GetTransform()->SetLocalScale(
+                Transform::GetScaleFromMatrix4(modelNode.transformation) );
+
+    // Add mesh renderers
+    for (int i = 0; i < SCAST<int>(modelNode.meshIndices.Size()); ++i)
     {
-        GameObject *subGameObject = GameObjectFactory::CreateGameObject();
-        MeshRenderer *mr = subGameObject->AddComponent<MeshRenderer>();
-        mr->SetMesh(GetMeshes()[i].Get());
-        mr->SetMaterial(GetMaterials()[i].Get());
-        subGameObject->SetName( GetMeshesNames()[i] );
-        subGameObject->SetParent(gameObject);
+        MeshRenderer *mr = gameObject->AddComponent<MeshRenderer>();
+        mr->SetMesh( modelScene.meshes[ modelNode.meshIndices[i] ].Get() );
+        mr->SetMaterial( modelScene.materials[ modelNode.meshIndices[i] ].Get() );
     }
 
-    String name = GetResourceFilepath().GetName();
-    if (!name.IsEmpty()) { gameObject->SetName(name); }
+    // Add children
+    for (const Tree<ModelIONode> *childTree : modelTree->GetChildren())
+    {
+        GameObject *childGo = CreateGameObjectFromModelNodeTree(modelScene,
+                                                                childTree);
+        childGo->SetParent(gameObject);
+    }
 
     return gameObject;
+}
+
+GameObject *Model::CreateGameObjectFromModel() const
+{
+    return CreateGameObjectFromModelNodeTree(m_modelScene, m_modelScene.modelTree);
 }
 
 void Model::AddMesh(Mesh *mesh, Material *material,
                     const String &meshName, const String &materialName)
 {
     String newMeshName = Model::GetNewName(meshName, GetMeshesNames());
-    m_meshesNames.PushBack(newMeshName);
-    m_meshes.PushBack( RH<Mesh>(mesh) );
+    m_modelScene.meshesNames.PushBack(newMeshName);
+    m_modelScene.meshes.PushBack( RH<Mesh>(mesh) );
 
     String newMaterialName = Model::GetNewName(materialName, GetMaterialsNames());
-    m_materialsNames.PushBack(newMaterialName);
-    m_materials.PushBack( RH<Material>(material) );
+    m_modelScene.materialsNames.PushBack(newMaterialName);
+    m_modelScene.materials.PushBack( RH<Material>(material) );
 }
 
 RH<Mesh> Model::GetMeshByName(const String &meshName)
@@ -83,27 +105,27 @@ RH<Material> Model::GetMaterialByName(const String &materialName)
 
 const Array<RH<Mesh> > &Model::GetMeshes() const
 {
-    return m_meshes;
+    return m_modelScene.meshes;
 }
 
 const Array<RH<Material> > &Model::GetMaterials() const
 {
-    return m_materials;
+    return m_modelScene.materials;
 }
 
 const Array<String> &Model::GetMeshesNames() const
 {
-    return m_meshesNames;
+    return m_modelScene.meshesNames;
 }
 
 const Array<String> &Model::GetMaterialsNames() const
 {
-    return m_materialsNames;
+    return m_modelScene.materialsNames;
 }
 
 GUID::GUIDType Model::GetNextInsideFileGUID() const
 {
-    return m_meshes.Size() + m_materials.Size();
+    return m_modelScene.meshes.Size() + m_modelScene.materials.Size();
 }
 
 Resource *Model::GetInsideFileResource(GUID::GUIDType insideFileGUID) const
@@ -125,12 +147,7 @@ void Model::Import(const Path &modelFilepath)
     Array< String > meshesNames;
     Array< String > materialsNames;
 
-    ModelIO::ReadModel(modelFilepath,
-                       GetGUID(),
-                       &meshes,
-                       &materials,
-                       &meshesNames,
-                       &materialsNames);
+    ModelIO::ReadModel(modelFilepath, GetGUID(), &m_modelScene);
 
     for (uint i = 0; i < meshes.Size(); ++i)
     {

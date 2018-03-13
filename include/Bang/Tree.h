@@ -10,7 +10,7 @@ class Tree
 {
 public:
     Tree();
-    virtual ~Tree();
+    ~Tree();
 
     Tree<T>* AddChild();
     Tree<T>* AddChild(const T& data);
@@ -23,8 +23,10 @@ public:
     void Clear();
 
     int GetDepth() const;
+    T& GetData();
     const T& GetData() const;
     Tree<T>* GetParent() const;
+    List< Tree<T>* >& GetChildren();
     const List< Tree<T>* >& GetChildren() const;
     List< Tree<T>* > GetChildrenRecursive() const;
 

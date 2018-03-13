@@ -28,6 +28,7 @@
 
 USING_NAMESPACE_BANG
 
+String AIStringToString(const aiString &str) { return String(str.C_Str()); }
 Vector3 AIVectorToVec3(const aiVector3D &v) { return Vector3(v.x, v.y, v.z); }
 Color AIColor3ToColor(const aiColor3D &c) { return Color(c.r, c.g, c.b, 1); }
 Color AIColor4ToColor(const aiColor4D &c) { return Color(c.r, c.g, c.b, c.a); }
@@ -41,66 +42,95 @@ int ModelIO::GetModelNumTriangles(const Path &modelFilepath)
     return 0;
 }
 
+Tree<ModelIONode>* ReadModelNode(aiNode *node)
+{
+    Tree<ModelIONode>* modelNodeTree = new Tree<ModelIONode>();
+    ModelIONode &modelNode = modelNodeTree->GetData();
+
+    // Set name
+    modelNode.name = AIStringToString(node->mName);
+
+    // Set transformation
+    const aiMatrix4x4 &m = node->mTransformation;
+    modelNode.transformation =
+           Matrix4(m[0][0], m[0][1], m[0][2], m[0][3],
+                   m[1][0], m[1][1], m[1][2], m[1][3],
+                   m[2][0], m[2][1], m[2][2], m[2][3],
+                   m[3][0], m[3][1], m[3][2], m[3][3]);
+
+    // Set mesh indices
+    for (int i = 0; i < node->mNumMeshes; ++i)
+    {
+        uint meshIndex = node->mMeshes[i];
+        modelNode.meshIndices.PushBack(meshIndex);
+    }
+
+    for (int i = 0; i < node->mNumChildren; ++i)
+    {
+        aiNode *child = node->mChildren[i];
+        Tree<ModelIONode> *childModelTree = ReadModelNode(child);
+        childModelTree->SetParent(modelNodeTree);
+    }
+
+    return modelNodeTree;
+}
+
 bool ModelIO::ReadModel(const Path& modelFilepath,
                         const GUID &modelGUID,
-                        Array< RH<Mesh> > *meshes,
-                        Array< RH<Material> > *materials,
-                        Array<String> *meshesNames,
-                        Array<String> *materialsNames)
+                        ModelIOScene *modelScene)
 {
     Assimp::Importer importer;
     const aiScene* scene = ReadScene(&importer, modelFilepath);
 
-    bool ok = false;
-    if (scene)
+    int innerResourceGUID = 1;
+
+    // Load materials
+    Array< String > unorderedMaterialNames;
+    Array< RH<Material> > unorderedMaterials;
+    for (int i = 0; i < SCAST<int>(scene->mNumMaterials); ++i)
     {
-        int innerResourceGUID = 1;
-
-        Array< String > unorderedMaterialNames;
-        Array< RH<Material> > unorderedMaterials;
-        for (int i = 0; i < SCAST<int>(scene->mNumMaterials); ++i)
-        {
-            String materialName;
-            RH<Material> materialRH;
-            ModelIO::ReadMaterial(scene->mMaterials[i],
-                                  modelFilepath.GetDirectory(),
-                                  modelGUID,
-                                  innerResourceGUID,
-                                  &materialRH,
-                                  &materialName);
-
-            unorderedMaterialNames.PushBack(materialName);
-            unorderedMaterials.PushBack(materialRH);
-
-            ++innerResourceGUID;
-        }
-
-        for (int i = 0; i < SCAST<int>(scene->mNumMeshes); ++i)
-        {
-            RH<Mesh> meshRH;
-            String meshName;
-            ModelIO::ReadMesh(scene->mMeshes[i],
+        String materialName;
+        RH<Material> materialRH;
+        ModelIO::ReadMaterial(scene->mMaterials[i],
+                              modelFilepath.GetDirectory(),
                               modelGUID,
                               innerResourceGUID,
-                              &meshRH,
-                              &meshName);
+                              &materialRH,
+                              &materialName);
 
-            int matIndex = scene->mMeshes[i]->mMaterialIndex;
-            RH<Material> mat = unorderedMaterials[matIndex];
-            const String &materialName = unorderedMaterialNames[matIndex];
+        unorderedMaterialNames.PushBack(materialName);
+        unorderedMaterials.PushBack(materialRH);
 
-            meshes->PushBack(meshRH);
-            meshesNames->PushBack(meshName);
-
-            materials->PushBack(mat);
-            materialsNames->PushBack(materialName);
-
-            ++innerResourceGUID;
-        }
-        ok = true;
+        ++innerResourceGUID;
     }
 
-    return ok;
+    // Load meshes and store them into arrays
+    for (int i = 0; i < SCAST<int>(scene->mNumMeshes); ++i)
+    {
+        RH<Mesh> meshRH;
+        String meshName;
+        ModelIO::ReadMesh(scene->mMeshes[i],
+                          modelGUID,
+                          innerResourceGUID,
+                          &meshRH,
+                          &meshName);
+
+        int matIndex = scene->mMeshes[i]->mMaterialIndex;
+        RH<Material> mat = unorderedMaterials[matIndex];
+        const String &materialName = unorderedMaterialNames[matIndex];
+
+        modelScene->meshes.PushBack(meshRH);
+        modelScene->meshesNames.PushBack(meshName);
+
+        modelScene->materials.PushBack(mat);
+        modelScene->materialsNames.PushBack(materialName);
+
+        ++innerResourceGUID;
+    }
+
+    modelScene->modelTree = ReadModelNode(scene->mRootNode);
+
+    return true;
 }
 
 bool ModelIO::ReadFirstFoundMeshRaw(const Path &modelFilepath,

@@ -2,9 +2,12 @@
 #define MODEL_H
 
 #include "Bang/Asset.h"
+#include "Bang/ModelIO.h"
 #include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
+
+FORWARD struct ModelIONode;
 
 class Model : public Asset
 {
@@ -39,10 +42,7 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    Array< RH<Mesh> > m_meshes;
-    Array< RH<Material> > m_materials;
-    Array<String> m_meshesNames;
-    Array<String> m_materialsNames;
+    ModelIOScene m_modelScene;
 
     std::pair<Resource*, String>
         GetInsideFileResourceAndName(GUID::GUIDType insideFileGUID) const;
