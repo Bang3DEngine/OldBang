@@ -95,10 +95,7 @@ void GLUniforms::UpdatePVMMatrix()
     const Matrix4 &model = matrices->model;
     Matrix4 viewModel = matrices->view * matrices->model;
 
-    Matrix4 normalMatrix = Matrix4(viewModel.c0,
-                                   viewModel.c1,
-                                   viewModel.c2,
-                                   viewModel.c3).Inversed().Transposed();
+    Matrix4 normalMatrix = model.Inversed().Transposed();
     matrices->normal = normalMatrix;
 
     switch (glu->GetViewProjMode())

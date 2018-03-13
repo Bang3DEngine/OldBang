@@ -81,6 +81,7 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
 {
     Assimp::Importer importer;
     const aiScene* scene = ReadScene(&importer, modelFilepath);
+    if (!scene) { return false; }
 
     int innerResourceGUID = 1;
 
@@ -98,8 +99,8 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
                               &materialRH,
                               &materialName);
 
-        unorderedMaterialNames.PushBack(materialName);
         unorderedMaterials.PushBack(materialRH);
+        unorderedMaterialNames.PushBack(materialName);
 
         ++innerResourceGUID;
     }
@@ -189,7 +190,7 @@ void ModelIO::ReadMaterial(aiMaterial *aMaterial,
         matTexture = Resources::Load<Texture2D>(texturePath);
     }
 
-    outMaterial->Get()->SetDiffuseColor( Color::White );
+    outMaterial->Get()->SetDiffuseColor( AIColor3ToColor(aDiffuseColor) );
     outMaterial->Get()->SetShininess( aShininess );
     outMaterial->Get()->SetTexture( matTexture.Get() );
 }

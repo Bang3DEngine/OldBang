@@ -10,6 +10,7 @@ NAMESPACE_BANG_BEGIN
 
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+FORWARD class UILayoutElement;
 
 class UICheckBox : public Component,
                    public EventEmitter<IValueChangedListener>,
@@ -27,6 +28,7 @@ public:
 
     UIImageRenderer *GetCheckImage() const;
     UIImageRenderer *GetBackgroundImage() const;
+    UILayoutElement *GetLayoutElement() const;
     IFocusable *GetFocusable() const;
 
 private:
@@ -37,6 +39,7 @@ private:
     UIFocusable *p_focusable = nullptr;
     UIImageRenderer *p_checkImage = nullptr;
     UIImageRenderer *p_checkBgImage = nullptr;
+    UILayoutElement *p_layoutElement = nullptr;
 
     UICheckBox();
     virtual ~UICheckBox();

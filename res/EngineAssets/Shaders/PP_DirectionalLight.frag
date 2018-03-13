@@ -6,14 +6,15 @@ void main()
     vec4 originalColor = B_SampleColor();
     vec3 pixelPosWorld = B_ComputeWorldPosition();
     vec3 pixelNormalWorld = B_SampleNormal();
+
     if (B_SampleReceivesLight())
     {
         float lightness = GetFragmentLightness(pixelPosWorld,
                                                pixelNormalWorld,
                                                B_LightForwardWorld);
 
-        vec2 shadowMapUv = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xy;
-        shadowMapUv = shadowMapUv * 0.5f + 0.5f;
+        // vec2 shadowMapUv = (B_WorldToShadowMapMatrix * vec4(pixelPosWorld,1)).xy;
+        // shadowMapUv = shadowMapUv * 0.5f + 0.5f;
         // B_GIn_Color = vec4(shadowMapUv, 0, 1); return; // Debug
         // B_GIn_Color = vec4( vec3(lightness), 1 ); return; // Debug
         // B_GIn_Color = (lightness != 1.0) ? vec4( vec3(lightness), 1 ) :

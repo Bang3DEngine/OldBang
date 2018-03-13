@@ -63,6 +63,11 @@ UIImageRenderer *UICheckBox::GetBackgroundImage() const
     return p_checkBgImage;
 }
 
+UILayoutElement *UICheckBox::GetLayoutElement() const
+{
+    return p_layoutElement;
+}
+
 IFocusable *UICheckBox::GetFocusable() const
 {
     return p_focusable;
@@ -108,6 +113,7 @@ UICheckBox *UICheckBox::CreateInto(GameObject *go)
     checkBox->p_focusable = focusable;
     checkBox->p_checkImage = checkImg;
     checkBox->p_checkBgImage = checkBoxImg;
+    checkBox->p_layoutElement = checkBoxBgImgLE;
 
     checkBoxBgImgGo->SetParent(go);
     checkImgGo->SetParent(checkBoxBgImgGo);

@@ -2,6 +2,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"
+#include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
@@ -258,6 +259,7 @@ void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
     if (m_anchorMin != anchorMin)
     {
         m_anchorMin = anchorMin;
+        WarnWrongAnchorsIfNeeded();
         InvalidateTransform();
     }
 }
@@ -267,6 +269,7 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     if (m_anchorMax != anchorMax)
     {
         m_anchorMax = anchorMax;
+        WarnWrongAnchorsIfNeeded();
         InvalidateTransform();
     }
 }
@@ -591,6 +594,14 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
     xmlInfo->Set("PivotPosition",  GetPivotPosition());
     xmlInfo->Set("AnchorMin",      GetAnchorMin()    );
     xmlInfo->Set("AnchorMax",      GetAnchorMax()    );
+}
+
+void RectTransform::WarnWrongAnchorsIfNeeded()
+{
+    if (GetAnchorMin().x > GetAnchorMax().x) { Debug_Warn("AnchorMin.x > AnchorMax.x!"); }
+    if (GetAnchorMin().y > GetAnchorMax().y) { Debug_Warn("AnchorMin.y > AnchorMax.y!"); }
+    if (GetAnchorMax().x < GetAnchorMin().x) { Debug_Warn("AnchorMax.x < AnchorMin.x!"); }
+    if (GetAnchorMax().y < GetAnchorMin().y) { Debug_Warn("AnchorMax.x < AnchorMin.y!"); }
 }
 
 void RectTransform::OnEnabled()  { InvalidateTransform(); }

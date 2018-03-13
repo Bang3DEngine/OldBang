@@ -24,8 +24,10 @@ Model::~Model()
 GameObject *CreateGameObjectFromModelNodeTree(const ModelIOScene &modelScene,
                                               const Tree<ModelIONode>* modelTree)
 {
-    const ModelIONode &modelNode = modelTree->GetData();
     GameObject *gameObject = GameObjectFactory::CreateGameObject();
+    if (!modelTree) { return gameObject; }
+
+    const ModelIONode &modelNode = modelTree->GetData();
 
     // Set name
     gameObject->SetName( modelNode.name );

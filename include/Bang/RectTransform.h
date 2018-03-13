@@ -132,6 +132,8 @@ private:
     Vector2 m_anchorMin     = -Vector2::One;
     Vector2 m_anchorMax     =  Vector2::One;
 
+    void WarnWrongAnchorsIfNeeded();
+
     // Transform
     void CalculateLocalToParentMatrix() const override;
 
