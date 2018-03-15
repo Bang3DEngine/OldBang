@@ -12,6 +12,7 @@ NAMESPACE_BANG_BEGIN
 class Framebuffer : public GLObject
 {
 public:
+    Framebuffer();
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 

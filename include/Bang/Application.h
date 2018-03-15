@@ -13,6 +13,7 @@ FORWARD class Scene;
 FORWARD class Paths;
 FORWARD class Window;
 FORWARD class GEngine;
+FORWARD class Settings;
 FORWARD class AudioManager;
 FORWARD class DialogWindow;
 FORWARD class SceneManager;
@@ -33,6 +34,7 @@ public:
 
     Time               *GetTime() const;
     Paths              *GetPaths() const;
+    Settings           *GetSettings() const;
     AudioManager       *GetAudioManager() const;
     WindowManager      *GetWindowManager() const;
     ImportFilesManager *GetImportFilesManager() const;
@@ -45,6 +47,7 @@ public:
 protected:
     Time               *m_time               = nullptr;
     Paths              *m_paths              = nullptr;
+    Settings           *m_settings           = nullptr;
     AudioManager       *m_audioManager       = nullptr;
     WindowManager      *m_windowManager      = nullptr;
     ImportFilesManager *m_importFilesManager = nullptr;
@@ -56,6 +59,7 @@ private:
     bool m_forcedExit = false;
 
     virtual Paths* CreatePaths();
+    virtual Settings* CreateSettings();
     virtual SceneManager* CreateSceneManager() const;
 };
 

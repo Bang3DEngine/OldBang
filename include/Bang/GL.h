@@ -420,6 +420,15 @@ public:
     static void Uniform(const String &name, const Vector2 &value);
     static void Uniform(const String &name, const Vector3 &value);
     static void Uniform(const String &name, const Vector4 &value);
+    static void Uniform(const String &name, const Array<int> &value);
+    static void Uniform(const String &name, const Array<bool> &value);
+    static void Uniform(const String &name, const Array<float> &value);
+    static void Uniform(const String &name, const Array<Color> &value);
+    static void Uniform(const String &name, const Array<Vector2> &value);
+    static void Uniform(const String &name, const Array<Vector3> &value);
+    static void Uniform(const String &name, const Array<Vector4> &value);
+    static void Uniform(const String &name, const Array<Matrix3> &value);
+    static void Uniform(const String &name, const Array<Matrix4> &value);
     static void Uniform(int location, int value);
     static void Uniform(int location, float value);
     static void Uniform(int location, bool value);
@@ -429,6 +438,15 @@ public:
     static void Uniform(int location, const Vector2 &value);
     static void Uniform(int location, const Vector3 &value);
     static void Uniform(int location, const Vector4 &value);
+    static void Uniform(int location, const Array<int> &value);
+    static void Uniform(int location, const Array<bool> &value);
+    static void Uniform(int location, const Array<float> &value);
+    static void Uniform(int location, const Array<Color> &value);
+    static void Uniform(int location, const Array<Vector2> &value);
+    static void Uniform(int location, const Array<Vector3> &value);
+    static void Uniform(int location, const Array<Vector4> &value);
+    static void Uniform(int location, const Array<Matrix3> &value);
+    static void Uniform(int location, const Array<Matrix4> &value);
 
     static void PixelStore(GL::Enum pixelStoreEnum, int n);
 
@@ -490,9 +508,6 @@ public:
     static void SetDepthFunc(GL::Function testDepth);
     static void SetWireframe(bool wireframe);
     static void SetCullFace(const GL::Face cullFace);
-    static void SetModelMatrix(const Matrix4 &model);
-    static void SetViewMatrix(const Matrix4 &view);
-    static void SetProjectionMatrix(const Matrix4 &projection);
     static void SetZNearFar(float zNear, float zFar);
 
     static Vector2    FromPixelsPointToPixelPerfect(const Vector2& winPoint);

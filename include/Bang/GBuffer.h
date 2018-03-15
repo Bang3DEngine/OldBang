@@ -47,6 +47,12 @@ public:
     void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const Color &backgroundColor);
 
+    static String GetMiscTexName();
+    static String GetColorsTexName();
+    static String GetDiffuseTexName();
+    static String GetNormalsTexName();
+    static String GetDepthStencilTexName();
+
 private:
     void RenderViewportPlane();
 

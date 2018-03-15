@@ -1,5 +1,7 @@
 #include "Bang/GLUniforms.h"
 
+#include "Bang/Camera.h"
+#include "Bang/Settings.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/UniformBuffer.h"
 
@@ -29,23 +31,25 @@ Matrix4 GLUniforms::GetCanvasProjectionMatrix()
 
 void GLUniforms::SetAllUniformsToShaderProgram(ShaderProgram *sp)
 {
-    if (GL::IsBound(sp->GetGLBindTarget(), sp->GetGLId()))
-    {
-        MatrixUniforms *matrices = GLUniforms::GetMatrixUniforms();
-        sp->Set("B_Model",      matrices->model,  false);
-        sp->Set("B_Normal",     matrices->normal, false);
-        sp->Set("B_View",       matrices->view,   false);
-        sp->Set("B_Projection", matrices->proj,   false);
-        sp->Set("B_PVM",        matrices->pvm,    false);
+    ASSERT (GL::IsBound(sp->GetGLBindTarget(), sp->GetGLId()));
 
-        CameraUniforms *cameraUniforms = GLUniforms::GetCameraUniforms();
-        sp->Set("B_Camera_ZNear", cameraUniforms->zNear, false);
-        sp->Set("B_Camera_ZFar",  cameraUniforms->zFar,  false);
+    MatrixUniforms *matrices = GLUniforms::GetMatrixUniforms();
+    sp->Set("B_Model",          matrices->model,    false);
+    sp->Set("B_Normal",         matrices->normal,   false);
+    sp->Set("B_View",           matrices->view,     false);
+    sp->Set("B_Projection",     matrices->proj,     false);
+    sp->Set("B_ProjectionView", matrices->projView, false);
+    sp->Set("B_PVM",            matrices->pvm,      false);
 
-        ViewportUniforms *viewportUniforms = GLUniforms::GetViewportUniforms();
-        sp->Set("B_Viewport_MinPos", viewportUniforms->minPos, false);
-        sp->Set("B_Viewport_Size",   viewportUniforms->size,   false);
-    }
+    sp->Set("B_AmbientLight", Settings::GetAmbientLight(), false);
+
+    Camera *cam = Camera::GetActive();
+    sp->Set("B_Camera_ZNear", (cam ? cam->GetZNear() : 0.0f), false);
+    sp->Set("B_Camera_ZFar",  (cam ?  cam->GetZFar() : 0.0f), false);
+
+    ViewportUniforms *viewportUniforms = GLUniforms::GetViewportUniforms();
+    sp->Set("B_Viewport_MinPos", viewportUniforms->minPos, false);
+    sp->Set("B_Viewport_Size",   viewportUniforms->size,   false);
 }
 
 void GLUniforms::SetCameraUniforms(float zNear, float zFar)
@@ -91,23 +95,30 @@ void GLUniforms::UpdatePVMMatrix()
     MatrixUniforms *matrices = GLUniforms::GetMatrixUniforms();
     GLUniforms *glu = GLUniforms::GetActive();
 
-    Matrix4 pvmMatrix;
     const Matrix4 &model = matrices->model;
     Matrix4 viewModel = matrices->view * matrices->model;
 
     Matrix4 normalMatrix = model.Inversed().Transposed();
     matrices->normal = normalMatrix;
 
+    Matrix4 pvmMatrix;
+    Matrix4 projViewMatrix;
     switch (glu->GetViewProjMode())
     {
         case GL::ViewProjMode::World:
             pvmMatrix = matrices->proj * viewModel;
+            projViewMatrix = matrices->proj * matrices->view;
         break;
 
         case GL::ViewProjMode::Canvas:
-            pvmMatrix = GLUniforms::GetCanvasProjectionMatrix() * model;
+        {
+            Matrix4 proj = GLUniforms::GetCanvasProjectionMatrix();
+            pvmMatrix = proj * model;
+            projViewMatrix = proj * matrices->view;
+        }
         break;
     }
+    matrices->projView = projViewMatrix;
     matrices->pvm = pvmMatrix;
 }
 

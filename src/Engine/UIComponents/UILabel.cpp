@@ -299,8 +299,7 @@ void UILabel::UpdateSelectionQuadRenderer()
     p2 = textParentRT->FromViewportPointNDCToLocalPointNDC(p2);
 
     RectTransform *quadRT = p_selectionQuad->GetRectTransform();
-    quadRT->SetAnchorMin( Vector2::Min(p1, p2) );
-    quadRT->SetAnchorMax( Vector2::Max(p1, p2) );
+    quadRT->SetAnchors( Vector2::Min(p1, p2), Vector2::Max(p1, p2) );
 }
 
 UILabel *UILabel::CreateInto(GameObject *go)

@@ -46,6 +46,16 @@ public:
     bool Set(const String &name, const Matrix3& v, bool warn = true);
     bool Set(const String &name, const Matrix4& v, bool warn = true);
     bool Set(const String &name, Texture2D *texture, bool warn = true);
+    bool Set(const String &name, const Array<int>& v, bool warn = true);
+    bool Set(const String &name, const Array<bool>& v, bool warn = true);
+    bool Set(const String &name, const Array<float>& v, bool warn = true);
+    bool Set(const String &name, const Array<Color>& v, bool warn = true);
+    bool Set(const String &name, const Array<Vector2>& v, bool warn = true);
+    bool Set(const String &name, const Array<Vector3>& v, bool warn = true);
+    bool Set(const String &name, const Array<Vector4>& v, bool warn = true);
+    bool Set(const String &name, const Array<Matrix3>& v, bool warn = true);
+    bool Set(const String &name, const Array<Matrix4>& v, bool warn = true);
+    bool Set(const String &name, const Array<Texture2D*>& v, bool warn = true);
 
     bool SetVertexShader(Shader* vertexShader);
     bool SetFragmentShader(Shader* fragmentShader);
@@ -72,6 +82,7 @@ private:
     std::unordered_map<String, Vector4> m_uniformCacheVector4;
     std::unordered_map<String, Matrix3> m_uniformCacheMatrix3;
     std::unordered_map<String, Matrix4> m_uniformCacheMatrix4;
+
     mutable std::unordered_map<String, GLuint> m_nameToLocationCache;
     mutable std::unordered_map<String, Texture2D*> m_namesToTexture;
 

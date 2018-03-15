@@ -12,6 +12,7 @@
 #include "Bang/Chrono.h"
 #include "Bang/Window.h"
 #include "Bang/GEngine.h"
+#include "Bang/Settings.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/AudioManager.h"
@@ -36,8 +37,11 @@ void Application::Init(const Path &engineRootPath)
     Application::s_appSingleton = this;
 
     m_time = new Time();
+
     m_paths = CreatePaths();
     m_paths->InitPaths(engineRootPath);
+
+    m_settings = CreateSettings();
 
     m_audioManager = new AudioManager();
     m_audioManager->Init();
@@ -55,6 +59,7 @@ Application::~Application()
 {
     delete m_time;
     delete m_paths;
+    delete m_settings;
     delete m_audioManager;
     delete m_windowManager;
     delete m_importFilesManager;
@@ -124,6 +129,11 @@ Paths *Application::GetPaths() const
     return m_paths;
 }
 
+Settings *Application::GetSettings() const
+{
+    return m_settings;
+}
+
 AudioManager *Application::GetAudioManager() const
 {
     return m_audioManager;
@@ -163,6 +173,11 @@ void Application::Exit(int returnCode, bool immediate)
 Paths *Application::CreatePaths()
 {
     return new Paths();
+}
+
+Settings *Application::CreateSettings()
+{
+    return new Settings();
 }
 
 SceneManager *Application::CreateSceneManager() const

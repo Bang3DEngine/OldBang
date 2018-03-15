@@ -107,33 +107,7 @@ SET(BANG_INCLUDE_DIR_BANG_DIR ${BANG_DIR}/include)
 SET(BANG_INCLUDE_DIR ${BANG_INCLUDE_DIR_BANG_DIR}/Bang)
 include_directories(${BANG_INCLUDE_DIR_BANG_DIR})
 
-# BangCore Library
-set(CORE_SRC_FILES
-${BANG_ENGINE_SRC_DIR}/DataStructures/String.cpp
-${BANG_ENGINE_SRC_DIR}/Debug/Debug.cpp
-${BANG_ENGINE_SRC_DIR}/Debug/DebugRenderer.cpp
-${BANG_ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
-${BANG_ENGINE_SRC_DIR}/IO/Files/File.cpp
-${BANG_ENGINE_SRC_DIR}/IO/Files/Path.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Color.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Geometry.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Math.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Plane.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Quad.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Random.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Ray.cpp
-${BANG_ENGINE_SRC_DIR}/Math/Triangle.cpp
-${BANG_ENGINE_SRC_DIR}/System/Cursor.cpp
-${BANG_ENGINE_SRC_DIR}/System/Mutex.cpp
-${BANG_ENGINE_SRC_DIR}/System/MutexLocker.cpp
-${BANG_ENGINE_SRC_DIR}/System/SystemProcess.cpp
-${BANG_ENGINE_SRC_DIR}/System/Thread.cpp
-${BANG_ENGINE_SRC_DIR}/System/ThreadPool.cpp
-)
-add_library(BangCoreObjects OBJECT ${CORE_SRC_FILES})
-add_library(BangCoreStatic  STATIC $<TARGET_OBJECTS:BangCoreObjects>)
-add_library(BangCore        SHARED $<TARGET_OBJECTS:BangCoreObjects>)
-
+# Macro to add misc files
 macro(add_info_files)
      foreach(_it ${ARGN})
          if(NOT IS_DIRECTORY ${_it})
@@ -181,6 +155,11 @@ ${BANG_ENGINE_SRC_DIR}/Components/RectTransform.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Renderer.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Timer.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Transform.cpp
+${BANG_ENGINE_SRC_DIR}/Components/PostProcessEffects/PostProcessEffectSSAO.cpp
+${BANG_ENGINE_SRC_DIR}/DataStructures/String.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/Debug.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/DebugRenderer.cpp
+${BANG_ENGINE_SRC_DIR}/Debug/StreamOperators.cpp
 ${BANG_ENGINE_SRC_DIR}/Debug/Chrono.cpp
 ${BANG_ENGINE_SRC_DIR}/Debug/FPSChrono.cpp
 ${BANG_ENGINE_SRC_DIR}/Debug/ChronoGL.cpp
@@ -202,10 +181,11 @@ ${BANG_ENGINE_SRC_DIR}/General/IEventEmitter.cpp
 ${BANG_ENGINE_SRC_DIR}/General/IEventListener.cpp
 ${BANG_ENGINE_SRC_DIR}/General/IDestroyListener.cpp
 ${BANG_ENGINE_SRC_DIR}/General/Input.cpp
-${BANG_ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${BANG_ENGINE_SRC_DIR}/General/Object.cpp
 ${BANG_ENGINE_SRC_DIR}/General/ObjectId.cpp
+${BANG_ENGINE_SRC_DIR}/General/SceneManager.cpp
 ${BANG_ENGINE_SRC_DIR}/General/Selection.cpp
+${BANG_ENGINE_SRC_DIR}/General/Settings.cpp
 ${BANG_ENGINE_SRC_DIR}/General/Time.cpp
 ${BANG_ENGINE_SRC_DIR}/Gizmos/Gizmos.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/Buffers/Framebuffer.cpp
@@ -235,15 +215,25 @@ ${BANG_ENGINE_SRC_DIR}/ImportFiles/GUIDManager.cpp
 ${BANG_ENGINE_SRC_DIR}/ImportFiles/ImportFilesManager.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/General/Paths.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/Files/Extensions.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/File.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/Files/Images/ImageIO.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/Files/Images/ImageIODDS.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/Files/Images/nv_dds.cpp
+${BANG_ENGINE_SRC_DIR}/IO/Files/Path.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/Files/ModelIO.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/XML/XMLAttribute.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/XML/XMLNode.cpp
 ${BANG_ENGINE_SRC_DIR}/IO/XML/XMLNodeReader.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/AABox.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Sphere.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Color.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Geometry.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Math.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Plane.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Quad.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Random.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Ray.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Triangle.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/Asset.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/AudioClip.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/Mesh.cpp
@@ -253,9 +243,15 @@ ${BANG_ENGINE_SRC_DIR}/Resources/Resource.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/Resources.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/ResourceHandle.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/Serializable.cpp
+${BANG_ENGINE_SRC_DIR}/System/Cursor.cpp
 ${BANG_ENGINE_SRC_DIR}/System/Library.cpp
-${BANG_ENGINE_SRC_DIR}/System/SystemUtils.cpp
+${BANG_ENGINE_SRC_DIR}/System/Mutex.cpp
+${BANG_ENGINE_SRC_DIR}/System/MutexLocker.cpp
+${BANG_ENGINE_SRC_DIR}/System/SystemProcess.cpp
 ${BANG_ENGINE_SRC_DIR}/System/SystemClipboard.cpp
+${BANG_ENGINE_SRC_DIR}/System/SystemUtils.cpp
+${BANG_ENGINE_SRC_DIR}/System/Thread.cpp
+${BANG_ENGINE_SRC_DIR}/System/ThreadPool.cpp
 ${BANG_ENGINE_SRC_DIR}/Text/TextFormatter.cpp
 ${BANG_ENGINE_SRC_DIR}/UIComponents/IFocusable.cpp
 ${BANG_ENGINE_SRC_DIR}/UIComponents/ILayoutController.cpp
@@ -305,21 +301,6 @@ add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${CORE_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${GRAPHICS_SRC_FILES})
 list(APPEND ALL_SRC_FILES ${ENGINE_SRC_FILES})
-add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangCoreObjects>
-                                 $<TARGET_OBJECTS:BangEngineObjects>)
-add_library(BangSharedLib SHARED $<TARGET_OBJECTS:BangCoreObjects>
-                                 $<TARGET_OBJECTS:BangEngineObjects>)
+add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
+add_library(BangSharedLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
 set_target_properties(BangSharedLib PROPERTIES OUTPUT_NAME Bang)
-
-
-# Executables ===========================
-link_directories(${LIBRARY_OUTPUT_PATH})
-link_libraries("Bang") # Use installed lib from now on
-set(PREPROCESSOR_SRC_FILES
-${BANG_SRC_DIR}/MainBangPreprocessor.cpp
-${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
-${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
-${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
-)
-add_executable(BangPreprocessor ${PREPROCESSOR_SRC_FILES})
-add_dependencies(BangPreprocessor BangEngineObjects)

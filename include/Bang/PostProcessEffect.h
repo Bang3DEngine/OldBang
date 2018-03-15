@@ -19,7 +19,7 @@ public:
     PostProcessEffect();
     virtual ~PostProcessEffect();
 
-    // Renderer
+    // Component
     virtual void OnRender(RenderPass renderPass) override;
 
     void SetType(Type type);
@@ -41,6 +41,9 @@ public:
 
     friend bool operator<(const PostProcessEffect& lhs,
                           const PostProcessEffect& rhs);
+
+protected:
+    bool MustBeRendered(RenderPass renderPass) const;
 
 private:
     RH<ShaderProgram> p_shaderProgram;

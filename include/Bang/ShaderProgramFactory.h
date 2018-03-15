@@ -9,6 +9,10 @@ NAMESPACE_BANG_BEGIN
 class ShaderProgramFactory
 {
 public:
+    static Path GetDefaultVertexShaderPath();
+    static Path GetDefaultFragmentShaderPath();
+    static Path GetPostProcessVertexShaderPath();
+
     static ShaderProgram* GetDefault();
     static ShaderProgram* GetDefaultPostProcess();
     static ShaderProgram* Get(const Path &vShaderPath, const Path &fShaderPath);

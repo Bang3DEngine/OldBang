@@ -117,6 +117,25 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
     return GL::BindTarget::ShaderProgram;
 }
 
+template <template <class T> class Container, class T>
+bool SetShaderUniformArray(ShaderProgram *sp,
+                           const String &name,
+                           const Container<T> &v,
+                           bool warn)
+{
+    ASSERT(GL::IsBound(sp));
+
+    bool update = true;
+    if (update)
+    {
+        int location = sp->GetUniformLocation(name);
+        if (location >= 0) { GL::Uniform(location, v); }
+        else if (warn) { Debug_Warn("Uniform '" << name << "' not found"); }
+        return (location >= 0);
+    }
+    return true;
+}
+
 template<class T, class=TT_NOT_POINTER(T)>
 bool SetShaderUniform(ShaderProgram *sp,
                       std::unordered_map<String, T> *cache,
@@ -138,14 +157,8 @@ bool SetShaderUniform(ShaderProgram *sp,
         if (cache) { (*cache)[name] = v; }
 
         int location = sp->GetUniformLocation(name);
-        if (location >= 0)
-        {
-            GL::Uniform(location, v);
-        }
-        else if (warn)
-        {
-            Debug_Warn("Uniform '" << name << "' not found");
-        }
+        if (location >= 0) { GL::Uniform(location, v); }
+        else if (warn) { Debug_Warn("Uniform '" << name << "' not found"); }
         return (location >= 0);
     }
     return true;
@@ -155,46 +168,75 @@ bool ShaderProgram::Set(const String &name, int v, bool warn)
 {
     return SetShaderUniform<int>(this, &m_uniformCacheInt, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, bool v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheBool, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, float v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheFloat, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Color &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheColor, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Vector2 &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheVector2, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Vector3 &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheVector3, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Vector4 &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheVector4, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Matrix3 &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheMatrix3, name, v, warn);
 }
-
 bool ShaderProgram::Set(const String &name, const Matrix4 &v, bool warn)
 {
     return SetShaderUniform(this, &m_uniformCacheMatrix4, name, v, warn);
 }
+bool ShaderProgram::Set(const String &name, const Array<int> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<bool> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<float> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Color> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Vector2> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Vector3> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Vector4> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Matrix3> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+bool ShaderProgram::Set(const String &name, const Array<Matrix4> &v, bool warn)
+{
+    return SetShaderUniformArray(this, name, v, warn);
+}
+
 
 bool ShaderProgram::Set(const String &name, Texture2D *texture, bool warn)
 {
@@ -304,6 +346,8 @@ bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
 
 void ShaderProgram::Bind() const
 {
+    if (!IsLinked()) { Debug_Warn("Binding a non-linked shader!"); }
+
     GL::Bind(this);
     UpdateTextureBindings();
     GLUniforms::SetAllUniformsToShaderProgram(const_cast<ShaderProgram*>(this));

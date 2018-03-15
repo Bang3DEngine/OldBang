@@ -26,16 +26,7 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
 
-    // Only render if its gameObject contains the active camera
-    Camera *activeCamera = Camera::GetActive();
-    if (!GetGameObject()->GetComponents().Contains(activeCamera)) { return; }
-
-    bool scenePostProcess = (GetType() == Type::AfterScene &&
-                             renderPass == RenderPass::ScenePostProcess);
-    bool canvasPostProcess = (GetType() == Type::AfterCanvas &&
-                              renderPass == RenderPass::CanvasPostProcess);
-
-    if (scenePostProcess || canvasPostProcess)
+    if ( MustBeRendered(renderPass) )
     {
         if (p_postProcessShader && p_shaderProgram.Get()->IsLinked())
         {
@@ -46,18 +37,41 @@ void PostProcessEffect::OnRender(RenderPass renderPass)
     }
 }
 
+bool PostProcessEffect::MustBeRendered(RenderPass renderPass) const
+{
+    // Only render if its gameObject contains the active camera
+    Camera *activeCamera = Camera::GetActive();
+    if (!GetGameObject()->GetComponents().Contains(activeCamera)) { return false; }
+
+    switch (GetType())
+    {
+        case Type::AfterScene:
+            return (renderPass == RenderPass::ScenePostProcess);
+
+        case Type::AfterCanvas:
+            return (renderPass == RenderPass::ScenePostProcess ||
+                    renderPass == RenderPass::CanvasPostProcess);
+    }
+
+    ASSERT(false);
+    return false;
+}
+
 void PostProcessEffect::SetType(PostProcessEffect::Type type) { m_type = type; }
 void PostProcessEffect::SetPriority(int priority) { m_priority = priority; }
 void PostProcessEffect::SetPostProcessShader(Shader *postProcessShader)
 {
+    ASSERT(postProcessShader);
     if (postProcessShader == p_postProcessShader.Get()) { return; }
 
+    p_postProcessShader = Resources::Create<Shader>();
     p_postProcessShader.Set(postProcessShader);
-    if (p_postProcessShader)
-    {
-        p_shaderProgram.Get()->SetFragmentShader( GetPostProcessShader() );
-        p_shaderProgram.Get()->Link();
-    }
+
+    p_shaderProgram = Resources::Create<ShaderProgram>();
+    p_shaderProgram.Get()->SetVertexShader(
+            ShaderProgramFactory::GetDefaultPostProcess()->GetVertexShader() );
+    p_shaderProgram.Get()->SetFragmentShader( GetPostProcessShader() );
+    p_shaderProgram.Get()->Link();
 }
 
 PostProcessEffect::Type PostProcessEffect::GetType() const { return m_type; }

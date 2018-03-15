@@ -256,22 +256,12 @@ void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 
 void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
 {
-    if (m_anchorMin != anchorMin)
-    {
-        m_anchorMin = anchorMin;
-        WarnWrongAnchorsIfNeeded();
-        InvalidateTransform();
-    }
+    SetAnchors(anchorMin, GetAnchorMax());
 }
 
 void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
 {
-    if (m_anchorMax != anchorMax)
-    {
-        m_anchorMax = anchorMax;
-        WarnWrongAnchorsIfNeeded();
-        InvalidateTransform();
-    }
+    SetAnchors(GetAnchorMin(), anchorMax);
 }
 
 void RectTransform::SetAnchorMinX(float anchorMinX)
@@ -314,8 +304,25 @@ void RectTransform::SetAnchors(const Vector2 &anchorPoint)
 void RectTransform::SetAnchors(const Vector2 &anchorMin,
                                const Vector2 &anchorMax)
 {
-    SetAnchorMin(anchorMin);
-    SetAnchorMax(anchorMax);
+    bool changed = false;
+
+    if (GetAnchorMin() != anchorMin)
+    {
+        m_anchorMin = anchorMin;
+        changed = true;
+    }
+
+    if (GetAnchorMax() != anchorMax)
+    {
+        m_anchorMax = anchorMax;
+        changed = true;
+    }
+
+    if (changed)
+    {
+        WarnWrongAnchorsIfNeeded();
+        InvalidateTransform();
+    }
 }
 
 void RectTransform::SetWidthFromPivot(int width)
@@ -598,10 +605,11 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
 
 void RectTransform::WarnWrongAnchorsIfNeeded()
 {
-    if (GetAnchorMin().x > GetAnchorMax().x) { Debug_Warn("AnchorMin.x > AnchorMax.x!"); }
-    if (GetAnchorMin().y > GetAnchorMax().y) { Debug_Warn("AnchorMin.y > AnchorMax.y!"); }
-    if (GetAnchorMax().x < GetAnchorMin().x) { Debug_Warn("AnchorMax.x < AnchorMin.x!"); }
-    if (GetAnchorMax().y < GetAnchorMin().y) { Debug_Warn("AnchorMax.x < AnchorMin.y!"); }
+    constexpr float Eps = 0.001f;
+    if (GetAnchorMin().x > GetAnchorMax().x + Eps) { Debug_Warn("AnchorMin.x > AnchorMax.x!"); }
+    if (GetAnchorMin().y > GetAnchorMax().y + Eps) { Debug_Warn("AnchorMin.y > AnchorMax.y!"); }
+    if (GetAnchorMax().x < GetAnchorMin().x - Eps) { Debug_Warn("AnchorMax.x < AnchorMin.x!"); }
+    if (GetAnchorMax().y < GetAnchorMin().y - Eps) { Debug_Warn("AnchorMax.x < AnchorMin.y!"); }
 }
 
 void RectTransform::OnEnabled()  { InvalidateTransform(); }

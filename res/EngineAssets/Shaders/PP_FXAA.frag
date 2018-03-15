@@ -7,12 +7,12 @@
 
 void main()
 {
-    vec2 uv = GetViewportUv();
+    vec2 uv = B_GetViewportUv();
 
-    vec3 rgbNW = B_SampleColor(uv + vec2(-1, -1) * GetViewportStep()).rgb;
-    vec3 rgbNE = B_SampleColor(uv + vec2( 1, -1) * GetViewportStep()).rgb;
-    vec3 rgbSW = B_SampleColor(uv + vec2(-1,  1) * GetViewportStep()).rgb;
-    vec3 rgbSE = B_SampleColor(uv + vec2( 1,  1) * GetViewportStep()).rgb;
+    vec3 rgbNW = B_SampleColor(uv + vec2(-1, -1) * B_GetViewportStep()).rgb;
+    vec3 rgbNE = B_SampleColor(uv + vec2( 1, -1) * B_GetViewportStep()).rgb;
+    vec3 rgbSW = B_SampleColor(uv + vec2(-1,  1) * B_GetViewportStep()).rgb;
+    vec3 rgbSE = B_SampleColor(uv + vec2( 1,  1) * B_GetViewportStep()).rgb;
     vec3 rgbM  = B_SampleColor(uv).rgb;
     vec3 luma = vec3(0.299, 0.587, 0.114);
 
@@ -36,7 +36,7 @@ void main()
     dir = min(
        vec2(FXAA_SPAN_MAX, FXAA_SPAN_MAX),
        max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),  dir * rcpDirMin)
-     ) * GetViewportStep();
+     ) * B_GetViewportStep();
 
     vec3 rgbA = 0.5 * (
             B_SampleColor(uv + dir * (1.0 / 3.0 - 0.5)).rgb +

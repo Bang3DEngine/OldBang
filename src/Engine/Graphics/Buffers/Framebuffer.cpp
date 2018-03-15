@@ -12,6 +12,10 @@
 
 USING_NAMESPACE_BANG
 
+Framebuffer::Framebuffer() : Framebuffer(1,1)
+{
+}
+
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height)
 {
@@ -27,6 +31,7 @@ void Framebuffer::CreateAttachment(GL::Attachment attachment,
                                    GL::ColorFormat texFormat)
 {
     GLId prevBoundFB = GL::GetBoundId(GetGLBindTarget());
+
     Bind();
 
     GL_ClearError();
@@ -52,6 +57,7 @@ void Framebuffer::SetAllDrawBuffers() const
 {
     Array<GL::Attachment> colorAtts = m_attachments;
     colorAtts.Remove(GL::Attachment::DepthStencil);
+    colorAtts.Remove(GL::Attachment::Depth);
     SetDrawBuffers(colorAtts);
 }
 

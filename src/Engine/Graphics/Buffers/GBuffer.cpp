@@ -31,11 +31,11 @@ void GBuffer::BindAttachmentsForReading(ShaderProgram *sp)
     if (!sp) { return; }
     ASSERT(GL::IsBound(sp));
 
-    sp->Set("B_GTex_Normal",       GetAttachmentTexture(AttNormal), false);
-    sp->Set("B_GTex_DiffColor",    GetAttachmentTexture(AttDiffuse), false);
-    sp->Set("B_GTex_Misc",         GetAttachmentTexture(AttMisc), false);
-    sp->Set("B_GTex_Color",        GetAttachmentTexture(AttColorRead), false);
-    sp->Set("B_GTex_DepthStencil", GetAttachmentTexture(AttDepthStencil), false);
+    sp->Set(GBuffer::GetNormalsTexName(), GetAttachmentTexture(AttNormal), false);
+    sp->Set(GBuffer::GetDiffuseTexName(), GetAttachmentTexture(AttDiffuse), false);
+    sp->Set(GBuffer::GetMiscTexName(), GetAttachmentTexture(AttMisc), false);
+    sp->Set(GBuffer::GetColorsTexName(), GetAttachmentTexture(AttColorRead), false);
+    sp->Set(GBuffer::GetDepthStencilTexName(), GetAttachmentTexture(AttDepthStencil), false);
 }
 
 
@@ -47,20 +47,20 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     ASSERT(GL::IsBound(this));
     ASSERT(GL::IsBound(sp));
 
+    // Save state
     GL::StencilOperation prevStencilOp = GL::GetStencilOp();
-    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
-
-    if (willReadFromColor) { PrepareColorReadBuffer(mask); }
-
-    BindAttachmentsForReading(sp);
-
     PushDrawAttachments();
+
+    // Set state
+    GL::SetStencilOp(GL::StencilOperation::Keep); // Dont modify stencil
+    if (willReadFromColor) { PrepareColorReadBuffer(mask); }
+    BindAttachmentsForReading(sp);
     SetColorDrawBuffer();
 
     GEngine::GetActive()->RenderViewportRect(sp, mask);
 
+    // Restore state
     PopDrawAttachments();
-
     GL::SetStencilOp(prevStencilOp);
 }
 
@@ -109,3 +109,9 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
     SetDrawBuffers({GBuffer::AttColor}); // , GBuffer::AttColorRead});
     GL::ClearColorBuffer(backgroundColor);
 }
+
+String GBuffer::GetMiscTexName() { return "B_GTex_Misc"; }
+String GBuffer::GetColorsTexName() { return "B_GTex_Color"; }
+String GBuffer::GetNormalsTexName() { return "B_GTex_Normal"; }
+String GBuffer::GetDiffuseTexName() { return "B_GTex_DiffColor"; }
+String GBuffer::GetDepthStencilTexName() { return "B_GTex_DepthStencil"; }

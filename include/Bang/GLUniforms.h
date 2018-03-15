@@ -23,6 +23,7 @@ public:
         Matrix4 viewInv;
         Matrix4 proj;
         Matrix4 projInv;
+        Matrix4 projView;
         Matrix4 pvm;
     };
 

@@ -206,14 +206,18 @@ void GEngine::SetActive(GEngine *gEngine)
 
 void GEngine::RenderViewportRect(ShaderProgram *sp, const AARect &destRectMask)
 {
+    // Save state
     GLId prevBoundShaderProgram = GL::GetBoundId(GL::BindTarget::ShaderProgram);
+
+    // Set state
     sp->Bind();
     sp->Set("B_UvOffset",         Vector2::Zero, false);
     sp->Set("B_UvMultiply",       Vector2::One, false);
     sp->Set("B_destRectMinCoord", destRectMask.GetMin(), false);
     sp->Set("B_destRectMaxCoord", destRectMask.GetMax(), false);
     RenderViewportPlane();
-    sp->UnBind();
+
+    // Restore state
     GL::Bind(GL::BindTarget::ShaderProgram, prevBoundShaderProgram);
 }
 
@@ -223,7 +227,7 @@ void GEngine::RenderTexture(Texture2D *texture)
     p_renderTextureToViewportMaterial.Get()->Bind();
 
     ShaderProgram *sp = p_renderTextureToViewportMaterial.Get()->GetShaderProgram();
-    sp->Set("B_GTex_Color", texture, false);
+    sp->Set(GBuffer::GetColorsTexName(), texture, false);
 
     GEngine::RenderViewportRect(sp, AARect::NDCRect);
 
@@ -232,23 +236,23 @@ void GEngine::RenderTexture(Texture2D *texture)
 
 void GEngine::RenderViewportPlane()
 {
-    bool prevWireframe = GL::IsWireframe();
-    GL::ViewProjMode prevViewProjMode = GL::GetViewProjMode();
-    bool prevDepthMask = GL::GetDepthMask();
-
-    GL::SetWireframe(false);
-    GL::SetViewProjMode(GL::ViewProjMode::Canvas);
+    // Save state
+    bool prevWireframe         = GL::IsWireframe();
+    bool prevDepthMask         = GL::GetDepthMask();
     GL::Function prevDepthFunc = GL::GetDepthFunc();
+
+    // Set state
+    GL::SetWireframe(false);
     GL::SetDepthFunc(GL::Function::Always);
     GL::SetDepthMask(false);
 
     GL::Render(p_windowPlaneMesh.Get()->GetVAO(), GL::Primitive::Triangles,
                p_windowPlaneMesh.Get()->GetVertexCount());
 
+    // Restore state
+    GL::SetWireframe(prevWireframe);
     GL::SetDepthMask(prevDepthMask);
     GL::SetDepthFunc(prevDepthFunc);
-    GL::SetWireframe(prevWireframe);
-    GL::SetViewProjMode(prevViewProjMode);
 }
 
 GEngine* GEngine::GetActive()
