@@ -39,6 +39,9 @@ Bang.tgz
 *CMakeFiles/*
 objs*/*
 build/*
+cmake_install.cmake
+Makefile
+
 
 # QtCreator
 *.autosave

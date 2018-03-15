@@ -1,7 +1,25 @@
-# CMake Options
+#=================================================================
+# CMake options ==================================================
+#=================================================================
 cmake_minimum_required(VERSION 2.8)
-# set(CMAKE_VERBOSE_MAKEFILE off)
+set(CMAKE_VERBOSE_MAKEFILE on)
+#=================================================================
+#=================================================================
+#=================================================================
 
+#=================================================================
+# Check input params =============================================
+#=================================================================
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    message(FATAL_ERROR "Please specify the build type -DCMAKE_BUILD_TYPE=(Debug|Release|RelWithDebInfo)")
+endif()
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# General variables ==============================================
+#=================================================================
 project(Bang C CXX)
 
 if(NOT DEFINED BANG_DIR)
@@ -9,9 +27,37 @@ if(NOT DEFINED BANG_DIR)
 endif()
 set(BANG_SRC_DIR ${BANG_DIR}/src)
 set(BANG_ENGINE_SRC_DIR ${BANG_SRC_DIR}/Engine)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(PROJECT_SOURCE_DIR ${BANG_SRC_DIR})
 
-set(CMAKE_BINARY_DIR ${BANG_DIR}/bin)
+# Output params
+message("===========================================")
+message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
+message("CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
+message("EXECUTABLE_OUTPUT_PATH: " ${EXECUTABLE_OUTPUT_PATH})
+message("LIBRARY_OUTPUT_PATH: " ${LIBRARY_OUTPUT_PATH})
+message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
+message("BANG_DIR: " ${BANG_DIR})
+message("BANG_SRC_DIR: " ${BANG_SRC_DIR})
+message("BANG_ENGINE_SRC_DIR: " ${BANG_ENGINE_SRC_DIR})
+message("===========================================")
+#=================================================================
+#=================================================================
+#=================================================================
 
+#=================================================================
+# CMake includes =================================================
+#=================================================================
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeDependencies.cmake) # Dependencies
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeMacros.cmake)       # Macros
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Flags ==========================================================
+#=================================================================
 # In case you want to break on sanitize error write this command on gdb:
 # rbreak __asan_report_error
 
@@ -27,13 +73,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=return")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=null")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
-set(CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
-message("Building in ${CMAKE_BUILD_TYPE} mode...")
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-set(PROJECT_SOURCE_DIR ${BANG_SRC_DIR})
-list(APPEND CMAKE_MODULE_PATH "${BANG_DIR}/scripts")
 
 # CXX_FLAGS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -45,89 +84,48 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+#=================================================================
+#=================================================================
+#=================================================================
 
+#=================================================================
+# Profiling set up if needed =====================================
+#=================================================================
 if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     add_definitions(-DGPROF)
     link_libraries("profiler") # gperftools
 endif()
+#=================================================================
+#=================================================================
+#=================================================================
 
-# GLEW Dependency
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-link_libraries(${GLEW_LIBRARIES})
-
-# GL Dependency
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
-link_libraries(${OPENGL_LIBRARIES})
-
-# png Dependency
-find_package(PNG REQUIRED)
-include_directories(${PNG_INCLUDE_DIRS})
-link_libraries(${PNG_LIBRARIES})
-
-# jpeg Dependency
-find_package(JPEG REQUIRED)
-include_directories(${JPEG_INCLUDE_DIRS})
-link_libraries(${JPEG_LIBRARIES})
-
-# DL Dependency
-link_libraries("dl")
-
-# SndFile Dependency
-link_libraries("sndfile")
-
-# Assimp Dependency
-link_libraries("assimp")
-
-# SDL Dependency
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2_INCLUDE_DIRS})
-string(STRIP "${SDL2_LIBRARY}" SDL2_LIBRARY)
-string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
-link_libraries(${SDL2_LIBRARY})
-link_libraries(${SDL2_LIBRARIES})
-
-find_package(SDL2_ttf REQUIRED)
-include_directories(${SDL2_TTF_INCLUDE_DIR})
-include_directories(${SDL2_TTF_INCLUDE_DIRS})
-string(STRIP "${SDL2_TTF_LIBRARY}" SDL2_LIBRARY)
-string(STRIP "${SDL2_TTF_LIBRARIES}" SDL2_LIBRARIES)
-link_libraries(${SDL2_TTF_LIBRARY})
-link_libraries(${SDL2_TTF_LIBRARIES})
-
-# OpenAL Dependency
-find_package(OpenAL REQUIRED)
-include_directories(${OPENAL_INCLUDE_DIRS})
-link_libraries(${OPENAL_LIBRARY})
-
-# Bang include's
+#=================================================================
+# Includes =======================================================
+#=================================================================
 SET(BANG_INCLUDE_DIR_BANG_DIR ${BANG_DIR}/include)
 SET(BANG_INCLUDE_DIR ${BANG_INCLUDE_DIR_BANG_DIR}/Bang)
 include_directories(${BANG_INCLUDE_DIR_BANG_DIR})
+#=================================================================
+#=================================================================
+#=================================================================
 
-# Macro to add misc files
-macro(add_info_files)
-     foreach(_it ${ARGN})
-         if(NOT IS_DIRECTORY ${_it})
-             get_filename_component(name ${_it} NAME)
-             if(NOT ${_it} MATCHES "^/\\\\..*$;~$")
-                set_source_files_properties(${_it} PROPERTIES HEADER_FILE_ONLY TRUE)
-             endif()
-         endif()
-     endforeach()
-endmacro()
-file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.frag" "[^.]*.frag"
-                              "[^.]*.vert" "[^.]*.vert" "[^.]*.vert"
+#=================================================================
+# Add misc files =================================================
+#=================================================================
+file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.vert"
                               "[^.]*.png" "[^.]*.svg" "[^.]*.bmat"
-                              "[^.]*.glsl"
+                              "[^.]*.glsl" "[^.]*.txt" "[^.]*.cmake"
+                              "[^.]*.md"
                               "${BANG_INCLUDE_DIR}/*.h"
                               "${BANG_INCLUDE_DIR}/*.tcc")
-set(OTHER_FILES README.md "${OTHER_FILES}")
 add_info_files(${OTHER_FILES})
+#=================================================================
+#=================================================================
+#=================================================================
 
-# BangEngine Library
+#=================================================================
+# BangEngine sources =============================================
+#=================================================================
 set (ENGINE_SRC_FILES
 ${BANG_ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
@@ -296,11 +294,17 @@ ${BANG_ENGINE_SRC_DIR}/Windows/Window.cpp
 ${BANG_ENGINE_SRC_DIR}/Windows/WindowManager.cpp
 ${OTHER_FILES}
 )
-add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
+#=================================================================
+#=================================================================
+#=================================================================
 
-list(APPEND ALL_SRC_FILES ${CORE_SRC_FILES})
-list(APPEND ALL_SRC_FILES ${GRAPHICS_SRC_FILES})
-list(APPEND ALL_SRC_FILES ${ENGINE_SRC_FILES})
+#=================================================================
+# Lib build ======================================================
+#=================================================================
+add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
 add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
 add_library(BangSharedLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
 set_target_properties(BangSharedLib PROPERTIES OUTPUT_NAME Bang)
+#=================================================================
+#=================================================================
+#=================================================================

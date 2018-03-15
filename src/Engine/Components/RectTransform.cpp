@@ -286,14 +286,14 @@ void RectTransform::SetAnchorMaxY(float anchorMaxY)
 
 void RectTransform::SetAnchorX(const Vector2 &anchorX)
 {
-    SetAnchorMinX(anchorX[0]);
-    SetAnchorMaxX(anchorX[1]);
+    SetAnchors(Vector2(anchorX[0], GetAnchorMin().y),
+               Vector2(anchorX[1], GetAnchorMax().y) );
 }
 
 void RectTransform::SetAnchorY(const Vector2 &anchorY)
 {
-    SetAnchorMinY(anchorY[0]);
-    SetAnchorMaxY(anchorY[1]);
+    SetAnchors(Vector2(GetAnchorMin().x, anchorY[0]),
+               Vector2(GetAnchorMax().x, anchorY[1]) );
 }
 
 void RectTransform::SetAnchors(const Vector2 &anchorPoint)
@@ -606,10 +606,22 @@ void RectTransform::ExportXML(XMLNode *xmlInfo) const
 void RectTransform::WarnWrongAnchorsIfNeeded()
 {
     constexpr float Eps = 0.001f;
-    if (GetAnchorMin().x > GetAnchorMax().x + Eps) { Debug_Warn("AnchorMin.x > AnchorMax.x!"); }
-    if (GetAnchorMin().y > GetAnchorMax().y + Eps) { Debug_Warn("AnchorMin.y > AnchorMax.y!"); }
-    if (GetAnchorMax().x < GetAnchorMin().x - Eps) { Debug_Warn("AnchorMax.x < AnchorMin.x!"); }
-    if (GetAnchorMax().y < GetAnchorMin().y - Eps) { Debug_Warn("AnchorMax.x < AnchorMin.y!"); }
+    if (GetAnchorMin().x > GetAnchorMax().x + Eps)
+    {
+        Debug_Warn("AnchorMin.x > AnchorMax.x!");
+    }
+    if (GetAnchorMin().y > GetAnchorMax().y + Eps)
+    {
+        Debug_Warn("AnchorMin.y > AnchorMax.y!");
+    }
+    if (GetAnchorMax().x < GetAnchorMin().x - Eps)
+    {
+        Debug_Warn("AnchorMax.x < AnchorMin.x!");
+    }
+    if (GetAnchorMax().y < GetAnchorMin().y - Eps)
+    {
+        Debug_Warn("AnchorMax.x < AnchorMin.y!");
+    }
 }
 
 void RectTransform::OnEnabled()  { InvalidateTransform(); }
