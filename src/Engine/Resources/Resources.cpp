@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG
 
 Resources::Resources()
 {
-    m_meshFactory = new MeshFactory();
+    m_meshFactory = CreateMeshFactory();
     m_materialFactory = new MaterialFactory();
     m_shaderProgramFactory = new ShaderProgramFactory();
 }
@@ -290,4 +290,9 @@ Resources *Resources::GetActive()
 {
     Window *win = Window::GetActive();
     return  win ? win->GetResources() : nullptr;
+}
+
+MeshFactory *Resources::CreateMeshFactory() const
+{
+    return new MeshFactory();
 }

@@ -23,12 +23,16 @@ RH<Mesh> MeshFactory::GetCone()
 RH<Mesh> MeshFactory::GetCamera()
 { return MeshFactory::GetMesh("Meshes/Camera.obj"); }
 
-
 RH<Mesh> MeshFactory::GetMesh(const String &enginePath)
 {
+    return MeshFactory::GetMesh( EPATH(enginePath) );
+}
+
+RH<Mesh> MeshFactory::GetMesh(const Path &fullPath)
+{
     MeshFactory *mf = MeshFactory::GetActive();
-    mf->m_cache.Add(enginePath, Resources::Load<Mesh>(EPATH(enginePath)));
-    return mf->m_cache.Get(enginePath);
+    mf->m_cache.Add(fullPath, Resources::Load<Mesh>(fullPath));
+    return mf->m_cache.Get(fullPath);
 }
 
 MeshFactory *MeshFactory::GetActive()

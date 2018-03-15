@@ -1,6 +1,8 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
+#include "Bang/Map.h"
+#include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 
 NAMESPACE_BANG_BEGIN
@@ -15,11 +17,15 @@ public:
     static RH<Mesh> GetCone();
     static RH<Mesh> GetCamera();
 
-private:
-    Map<String, RH<Mesh>> m_cache;
-
+protected:
     MeshFactory() = default;
+    virtual ~MeshFactory() = default;
+
     static RH<Mesh> GetMesh(const String &enginePath);
+    static RH<Mesh> GetMesh(const Path &fullPath);
+
+private:
+    Map<Path, RH<Mesh>> m_cache;
 
     static MeshFactory* GetActive();
 

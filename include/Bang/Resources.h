@@ -124,6 +124,7 @@ private:
     MaterialFactory *m_materialFactory = nullptr;
     ShaderProgramFactory *m_shaderProgramFactory = nullptr;
 
+    virtual MeshFactory* CreateMeshFactory() const;
     virtual Array<Path> GetLookUpPaths() const;
 
     friend class Window;
