@@ -1,3 +1,6 @@
+#ifndef UNIFORM_BUFFER_TCC
+#define UNIFORM_BUFFER_TCC
+
 #include "Bang/UniformBuffer.h"
 
 USING_NAMESPACE_BANG
@@ -56,3 +59,4 @@ GL::BindTarget UniformBuffer<BufferStruct>::GetGLBindTarget() const
     return GL::BindTarget::UniformBuffer;
 }
 
+#endif // UNIFORM_BUFFER_TCC

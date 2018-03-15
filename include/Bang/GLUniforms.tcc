@@ -1,3 +1,6 @@
+#ifndef GLUNIFORMS_TCC
+#define GLUNIFORMS_TCC
+
 #include "Bang/GLUniforms.h"
 
 USING_NAMESPACE_BANG
@@ -120,3 +123,5 @@ inline Matrix4 GLUniforms::GetUniform(GLId program, int uniformLocation)
 }
 
 NAMESPACE_BANG_END
+
+#endif // GL_UNIFORMS_TCC

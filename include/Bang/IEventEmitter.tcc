@@ -1,3 +1,6 @@
+#ifndef IEVENTEMITTER_TCC
+#define IEVENTEMITTER_TCC
+
 #include "Bang/IEventEmitter.h"
 
 USING_NAMESPACE_BANG
@@ -99,3 +102,4 @@ EventEmitter<EventListenerClass>::~EventEmitter()
     }
 }
 
+#endif // IEVENTEMITTER_TCC

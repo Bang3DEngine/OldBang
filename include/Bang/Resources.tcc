@@ -1,3 +1,6 @@
+#ifndef RESOURCES_TCC
+#define RESOURCES_TCC
+
 #include "Bang/Resources.h"
 
 #include "Bang/Debug.h"
@@ -207,3 +210,5 @@ RH<ResourceClass> Resources::Clone(const RH<ResourceClass> &src)
 }
 
 NAMESPACE_BANG_END
+
+#endif // RESOURCES_TCC
