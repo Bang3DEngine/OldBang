@@ -3,21 +3,19 @@
 cd "$(dirname "$0")"
 cd .. # Go to root directory
 
-source "scripts/messages.sh"
-
 CLASS_NAME=$1
 DIRECTORY=$2
 if [ -z "${CLASS_NAME}" ] || [ -z "${DIRECTORY}" ]
 then
-	Error "Please:"
-	Error " - 1st parameter: Class name."
-	Error " - 2nd parameter: Directory."
+	echo "Error. Please:"
+	echo " - 1st parameter: Class name."
+	echo " - 2nd parameter: Directory."
         exit 1
 fi
 
 if [ ! -d "${DIRECTORY}" ]
 then
-	Error "Directory '${DIRECTORY}' was not found"
+	echo "Error. Directory '${DIRECTORY}' was not found"
 	exit 2
 fi
 
@@ -26,13 +24,13 @@ CLASS_HEADER="${INC_DIR}/${CLASS_NAME}.h"
 CLASS_SOURCE="${DIRECTORY}/${CLASS_NAME}.cpp"
 if [ -f "${CLASS_HEADER}" ]
 then
-	Error "File '${CLASS_HEADER}' exists in directory '${INC_DIR}'"
+	echo "Error. File '${CLASS_HEADER}' exists in directory '${INC_DIR}'"
 	exit 3
 fi
 
 if [ -f "${CLASS_SOURCE}" ]
 then
-	Error "File '${CLASS_SOURCE}' exists in directory '${DIRECTORY}'"
+	echo "Error. File '${CLASS_SOURCE}' exists in directory '${DIRECTORY}'"
 	exit 4
 fi
 
@@ -72,6 +70,6 @@ ${CLASS_NAME}::~${CLASS_NAME}()
 }
 " > "${CLASS_SOURCE}"
 
-Success "Class header has been created in '${CLASS_HEADER}'"
-Success "Class source has been created in '${CLASS_SOURCE}'"
+"Class header has been created in '${CLASS_HEADER}'"
+"Class source has been created in '${CLASS_SOURCE}'"
 

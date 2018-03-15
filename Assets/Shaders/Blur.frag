@@ -1,6 +1,6 @@
 #include "PP.frag"
 
-uniform int B_BlurRadius = 1;
+uniform int B_BlurRadius = 3;
 
 void main()
 {

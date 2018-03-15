@@ -111,13 +111,9 @@ void PostProcessEffect::ImportXML(const XMLNode &xmlInfo)
 
     if (xmlInfo.Contains("PostProcessShader"))
     {
-        Path shaderFilepath = xmlInfo.Get<Path>("PostProcessShader");
-        if (!p_postProcessShader ||
-            shaderFilepath != p_postProcessShader.Get()->GetResourceFilepath())
-        {
-            RH<Shader> ppShader = Resources::Load<Shader>(shaderFilepath);
-            SetPostProcessShader(ppShader.Get());
-        }
+        GUID shaderGUID = xmlInfo.Get<GUID>("PostProcessShader");
+        RH<Shader> ppShader = Resources::Load<Shader>(shaderGUID);
+        SetPostProcessShader(ppShader.Get());
     }
 }
 
@@ -125,7 +121,8 @@ void PostProcessEffect::ExportXML(XMLNode *xmlInfo) const
 {
     Component::ExportXML(xmlInfo);
 
-    xmlInfo->Set("PostProcessShader", GetPostProcessShaderFilepath());
+    if (GetPostProcessShader())
+    { xmlInfo->Set("PostProcessShader", GetPostProcessShader()->GetGUID()); }
     xmlInfo->Set("Priority", GetPriority());
     xmlInfo->Set("Type", GetType());
 }

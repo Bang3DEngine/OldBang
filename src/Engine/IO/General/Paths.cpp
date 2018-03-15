@@ -73,12 +73,7 @@ const Path &Paths::GetEngineDir()
 }
 Path Paths::GetEngineAssetsDir()
 {
-    return GetEngineResourcesDir().Append("EngineAssets");
-}
-
-Path Paths::GetEngineResourcesDir()
-{
-    return Paths::GetEngineDir().Append("res");
+    return Paths::GetEngineDir().Append("Assets");
 }
 
 Path Paths::GetEngineLibrariesDir(BinType binaryType)
