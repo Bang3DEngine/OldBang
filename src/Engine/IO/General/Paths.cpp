@@ -33,21 +33,7 @@ void Paths::InitPaths(const Path &engineRootPath)
     // Try current directory (some dirs up)
     if (!GetEngineAssetsDir().IsDir())
     {
-        Paths::SetEngineRoot( Paths::GetExecutablePath().GetDirectory()
-                                                     .GetDirectory()
-                                                     .GetDirectory() );
-    }
-
-    // Try default installation path
-    if (!GetEngineAssetsDir().IsDir())
-    {
-        Paths::SetEngineRoot( Path("/opt/Bang") );
-        if (!GetEngineAssetsDir().IsDir())
-        {
-            Debug_Error("Bang is not properly installed. "
-                        "Can't find it in /opt.");
-            Application::Exit(1, true);
-        }
+        Paths::SetEngineRoot( Paths::GetExecutablePath().GetDirectory() );
     }
 }
 

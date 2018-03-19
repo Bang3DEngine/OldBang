@@ -42,12 +42,5 @@ build/*
 cmake_install.cmake
 Makefile
 
-# Git
-ThirdParty/.git*
-ThirdParty/*/.git*
-ThirdParty/*/.git*
-ThirdParty/*/*/.git*
-ThirdParty/*/*/*/.git*
-
 # QtCreator
 *.autosave

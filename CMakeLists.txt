@@ -8,11 +8,20 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 #=================================================================
 
 #=================================================================
+# Include guard ==================================================
+#=================================================================
+if (DEFINED BANG_BUILT)
+    return()
+endif()
+set(BANG_BUILT ON)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
 # Check input params =============================================
 #=================================================================
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    message(FATAL_ERROR "Please specify the build type -DCMAKE_BUILD_TYPE=(Debug|Release|RelWithDebInfo)")
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -22,14 +31,9 @@ endif()
 #=================================================================
 project(Bang C CXX)
 
-if(NOT DEFINED BANG_DIR)
-    set(BANG_DIR ${CMAKE_SOURCE_DIR})
-endif()
+set(BANG_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(BANG_SRC_DIR ${BANG_DIR}/src)
 set(BANG_ENGINE_SRC_DIR ${BANG_SRC_DIR}/Engine)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(PROJECT_SOURCE_DIR ${BANG_SRC_DIR})
 
 # Output params
 message("===========================================")
@@ -58,32 +62,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeMacros.cmake)       # Macro
 #=================================================================
 # Flags ==========================================================
 #=================================================================
-# In case you want to break on sanitize error write this command on gdb:
-# rbreak __asan_report_error
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-sanitize-recover")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=float-divide-by-zero")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=integer-divide-by-zero")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=return")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=null")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
-
-# CXX_FLAGS
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wint-to-pointer-cast")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeFlags.cmake)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -118,7 +97,7 @@ file(GLOB_RECURSE OTHER_FILES "[^.]*.frag" "[^.]*.vert"
                               "[^.]*.md"
                               "${BANG_INCLUDE_DIR}/*.h"
                               "${BANG_INCLUDE_DIR}/*.tcc")
-add_info_files(${OTHER_FILES})
+add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================
 #=================================================================
@@ -301,10 +280,12 @@ ${OTHER_FILES}
 #=================================================================
 # Lib build ======================================================
 #=================================================================
+
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
 add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
-add_library(BangSharedLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
-set_target_properties(BangSharedLib PROPERTIES OUTPUT_NAME Bang)
+add_library(BangLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
+set_target_properties(BangStaticLib PROPERTIES OUTPUT_NAME bang_static)
+set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_shared)
 #=================================================================
 #=================================================================
 #=================================================================
