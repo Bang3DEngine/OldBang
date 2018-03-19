@@ -71,53 +71,16 @@ add_custom_target(CREATE_PKG_DIRS ALL DEPENDS ${PKG_DIRECTORY} ${LIBRARY_OUTPUT_
 #=================================================================
 #=================================================================
 
-
-#=================================================================
-# Copy dependencies ==============================================
-#=================================================================
-# Get dependencies file libraries. They are retrieved when compiling Bang library
-# above into variable ${ALL_DEPENDENCIES_LIB_FILES}
-foreach(LIB_PATH ${ALL_DEPENDENCIES_LIB_FILES})
-
-    if (NOT "${LIB_PATH}" STREQUAL "")
-        get_filename_component(LIB_DIR  ${LIB_PATH} DIRECTORY)
-        get_filename_component(LIB_NAME ${LIB_PATH} NAME)
-
-        # Get library soname
-        get_soname(LIB_SONAME ${LIB_PATH})
-        if ("${LIB_SONAME}" STREQUAL "")
-            set(LIB_SONAME ${LIB_NAME})
-        endif()
-
-        set(LIBRARY_OUTPUT_FILE ${LIBRARY_OUTPUT_DIRECTORY}/${LIB_SONAME})
-        message("Copying ${LIB_PATH} libs into ${LIBRARY_OUTPUT_FILE}...")
-
-        add_custom_command(
-          OUTPUT ${LIBRARY_OUTPUT_FILE}
-          COMMAND cp ${LIB_PATH} ${LIBRARY_OUTPUT_FILE}
-          WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
-          COMMENT "Copying ${LIB_PATH} libs into ${LIBRARY_OUTPUT_FILE}..."
-          VERBATIM
-         )
-         add_custom_target(${LIB_NAME} ALL
-             DEPENDS CREATE_PKG_DIRS ${LIBRARY_OUTPUT_FILE})
-     endif()
-
-endforeach(LIB_PATH)
-#=================================================================
-#=================================================================
-#=================================================================
-
 #=================================================================
 # Copy engine directories ========================================
 #=================================================================
 # Assets
 set(ENGINE_ASSETS_DIR_NAME "Assets")
 set(ENGINE_ASSETS_DIR_SRC "${BANG_ROOT}/${ENGINE_ASSETS_DIR_NAME}")
-set(ENGINE_ASSETS_DIR_DST "${PKG_DIRECTORY}/")
+set(ENGINE_ASSETS_DIR_DST "${PKG_DIRECTORY}/${ENGINE_ASSETS_DIR_NAME}")
 add_custom_command(
   OUTPUT COPY_ASSETS_DIR_BANG_PKG
-  COMMAND cp -r ${ENGINE_ASSETS_DIR_SRC} ${ENGINE_ASSETS_DIR_DST}
+  COMMAND /bin/sh -c "cp -r ${ENGINE_ASSETS_DIR_SRC} ${ENGINE_ASSETS_DIR_DST}/*"
   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
   COMMENT "Copying ${ENGINE_ASSETS_DIR_SRC} to ${ENGINE_ASSETS_DIR_DST}..."
   VERBATIM
@@ -126,10 +89,10 @@ add_custom_command(
 # Includes
 set(ENGINE_INCLUDE_DIR_NAME "include")
 set(ENGINE_INCLUDE_DIR_SRC "${BANG_ROOT}/${ENGINE_INCLUDE_DIR_NAME}")
-set(ENGINE_INCLUDE_DIR_DST "${PKG_DIRECTORY}")
+set(ENGINE_INCLUDE_DIR_DST "${PKG_DIRECTORY}/${ENGINE_INCLUDE_DIR_NAME}")
 add_custom_command(
   OUTPUT COPY_INCLUDE_DIR_BANG_PKG
-  COMMAND cp -r ${ENGINE_INCLUDE_DIR_SRC} ${ENGINE_INCLUDE_DIR_DST}
+  COMMAND /bin/sh -c "cp -r ${ENGINE_INCLUDE_DIR_SRC} ${ENGINE_INCLUDE_DIR_DST}/*"
   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
   COMMENT "Copying ${ENGINE_INCLUDE_DIR_SRC} to ${ENGINE_INCLUDE_DIR_DST}..."
   VERBATIM

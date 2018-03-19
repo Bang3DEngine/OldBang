@@ -36,48 +36,6 @@ message("Looking for dependency dl...")
 find_library(DL_LIBRARY "dl")
 link_libraries(${DL_LIBRARY})
 
-# OGG Dependency =============
-message("Looking for dependency ogg...")
-find_library(OGG_LIBRARY "ogg")
-link_libraries(${OGG_LIBRARY})
-
-# GLX Dependency =============
-message("Looking for dependency GLX...")
-find_library(GLX_LIBRARY "GLX")
-link_libraries(${GLX_LIBRARY})
-
-# GLDISPATCH Dependency =============
-message("Looking for dependency GLDISPATCH...")
-find_library(GLDISPATCH_LIBRARY "libGLdispatch.so.0")
-link_libraries(${GLDISPATCH_LIBRARY})
-
-# MINIZIP Dependency ============================
-message("Looking for dependency MINIZIP...")
-find_library(MINZIP_LIBRARY "libminizip.so.1")
-include_directories(${MINIZIP_INCLUDE_DIRS})
-link_libraries(${MINZIP_LIBRARY})
-
-# MINIZIP Dependency ============================
-message("Looking for dependency MINIZIP...")
-find_library(MINZIP_LIBRARY "libminizip.so.1")
-include_directories(${MINIZIP_INCLUDE_DIRS})
-link_libraries(${MINZIP_LIBRARY})
-
-# VORBIS Dependency =============
-message("Looking for dependency vorbis...")
-find_library(VORBIS_LIBRARY "vorbis")
-link_libraries(${VORBIS_LIBRARY})
-
-# VORBIS Dependency =============
-message("Looking for dependency vorbisenc...")
-find_library(VORBISENC_LIBRARY "vorbisenc")
-link_libraries(${VORBISENC_LIBRARY})
-
-# FLAC Dependency =============
-message("Looking for dependency FLAC...")
-find_library(FLAC_LIBRARY "FLAC")
-link_libraries(${FLAC_LIBRARY})
-
 # GL Dependency ============================
 message("Looking for dependency OpenGL...")
 find_package(OpenGL REQUIRED)
@@ -151,18 +109,11 @@ set(ALL_DEPENDENCIES_LIB_FILES
     ${SDL2_LIBRARY}
     ${SDL2_LIBRARIES}
     ${SDL2_TTF_LIBRARIES}
-    ${MINZIP_LIBRARY}
-    ${GLX_LIBRARY}
-    ${GLDISPATCH_LIBRARY}
     ${SNDFILE_LIBRARY}
     ${ASSIMP_LIBRARY}
     ${OPENAL_LIBRARY}
     ${GLEW_LIBRARIES}
     ${DL_LIBRARY}
-    ${VORBIS_LIBRARY}
-    ${VORBISENC_LIBRARY}
-    ${OGG_LIBRARY}    # Must go after vorbis
-    ${FLAC_LIBRARY}
     ${SNDIO_LIBRARY}
     ${OPENGL_LIBRARIES}
 )
