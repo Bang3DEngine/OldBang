@@ -65,11 +65,6 @@ message("Looking for dependency sndfile...")
 find_library(SNDFILE_LIBRARY "sndfile")
 link_libraries(${SNDFILE_LIBRARY})
 
-# SNDIO Dependency =============
-message("Looking for dependency sndio...")
-find_library(SNDIO_LIBRARY "sndio")
-link_libraries(${SNDIO_LIBRARY})
-
 # ASSIMP Dependency ============================
 message("Looking for dependency assimp...")
 find_library(ASSIMP_LIBRARY "assimp")
@@ -114,7 +109,6 @@ set(ALL_DEPENDENCIES_LIB_FILES
     ${OPENAL_LIBRARY}
     ${GLEW_LIBRARIES}
     ${DL_LIBRARY}
-    ${SNDIO_LIBRARY}
     ${OPENGL_LIBRARIES}
 )
 
