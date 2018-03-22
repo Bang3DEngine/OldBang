@@ -77,8 +77,9 @@ void PostProcessEffectSSAO::OnRender(RenderPass renderPass)
             gbuffer->BindAttachmentsForReading(p_ssaoShaderProgram.Get());
 
             // Bind random textures and set uniforms
-            Vector2 randomRotsUvMult (m_randomRotationsTexture.Get()->GetSize() /
-                                      GL::GetViewportSize());
+            Vector2 randomRotsUvMult ((Vector2(GL::GetViewportSize()) /
+                                       Vector2(m_randomRotationsTexture.Get()->GetSize()))
+                                      );
             p_ssaoShaderProgram.Get()->Set("B_SSAORadius", GetSSAORadius());
             p_ssaoShaderProgram.Get()->Set("B_RandomRotationsUvMultiply",
                                            randomRotsUvMult);

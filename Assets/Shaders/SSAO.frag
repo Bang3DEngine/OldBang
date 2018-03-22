@@ -33,13 +33,14 @@ void main()
 
     float occlusionSum = 0.0;
     float totalOcclusion = 0.0;
-    float SSAORadiusSQ = (B_SSAORadius * B_SSAORadius);
+    float SSAORadius   = B_SSAORadius * (1.0f + depth);
+    float SSAORadiusSQ = (SSAORadius * SSAORadius);
     for (int i = 0; i < B_NumRandomOffsets; ++i) // Sample around!
     {
         // Get random hemisphere offset
         vec3 randomOffset = B_RandomHemisphereOffsetsArray[i];
         vec3 randomOffsetLocal = fromWorldToNormal * randomOffset;
-        vec3 sampleWorldPos = worldPos + (randomOffsetLocal * B_SSAORadius);
+        vec3 sampleWorldPos = worldPos + (randomOffsetLocal * SSAORadius);
 
         // Get depth in depth buffer
         vec4 projectedPos = B_ProjectionView * vec4(sampleWorldPos, 1);
@@ -59,9 +60,10 @@ void main()
         // Finally determine if we are occluded or not for this sample
         float sampleWorldPosDepth = projectedPos.z;
         float deltaDepth = (sampleWorldPosDepth - gbufferDepth);
-        float distanceFactor = length(randomOffsetLocal); // distance(sampleWorldPos, worldPos) / B_SSAORadius;
-        distanceFactor = ( (1.0 / pow((distanceFactor + 0.1), 2) ) ) / 1000.0;
-        float Bias       = 0.0; // 0.000001;
+        float distanceFactor = length(randomOffsetLocal);
+        // float distanceFactor = distance(sampleWorldPos, worldPos) / SSAORadius;
+        distanceFactor = ( (1.0 / pow((distanceFactor + 0.1), 2) ) ) / 10.0;
+        float Bias       = 0.0001; // 0.000001;
         float occluded   = step(Bias, deltaDepth); // smoothstep(Bias, 1.0, deltaDepth); // step(Bias, deltaDepth);
         float occlusionApport = distanceFactor * occluded * isInsideSphere;
 

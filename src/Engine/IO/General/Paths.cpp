@@ -25,15 +25,24 @@ Paths::~Paths()
 void Paths::InitPaths(const Path &engineRootPath)
 {
     c_engineRoot = Path::Empty;
-    if (!engineRootPath.IsEmpty())
-    {
-        Paths::SetEngineRoot(engineRootPath);
-    }
+    if (!engineRootPath.IsEmpty()) { Paths::SetEngineRoot(engineRootPath); }
 
-    // Try current directory (some dirs up)
-    if (!GetEngineAssetsDir().IsDir())
+    if (!GetEngineAssetsDir().IsDir()) // Try some other directories
     {
         Paths::SetEngineRoot( Paths::GetExecutablePath().GetDirectory() );
+    }
+    if (!GetEngineAssetsDir().IsDir()) // Try some other directories
+    {
+        Paths::SetEngineRoot( Paths::GetExecutablePath().GetDirectory().GetDirectory() );
+    }
+
+    if (GetEngineAssetsDir().IsDir())
+    {
+        Debug_Log("Picking as Paths Bang Root: '" << GetEngineDir() << "'");
+    }
+    else
+    {
+        Debug_Log("Could not find the Bang root directory!");
     }
 }
 
@@ -132,7 +141,6 @@ bool Paths::IsEnginePath(const Path &path)
 void Paths::SetEngineRoot(const Path &engineRootDir)
 {
     Paths::GetInstance()->c_engineRoot = engineRootDir;
-    Debug_Log("Picking as Paths Bang Engine Root: " << GetEngineDir());
 }
 
 void Paths::SortPathsByName(List<Path> *paths)

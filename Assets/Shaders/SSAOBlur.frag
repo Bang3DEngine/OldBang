@@ -4,7 +4,7 @@ uniform int B_BlurRadius = 1;
 
 void main()
 {
-    const float DepthEpsilon = 999.0;
+    const float DepthEpsilon = 0.01;
 
     int totalPixels = 0;
     float meanOcclusion = 0.0;

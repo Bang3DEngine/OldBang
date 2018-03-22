@@ -53,7 +53,13 @@ void Component::SetGameObject(GameObject *newGameObject)
         if (!CanBeRepeatedInGameObject())
         {
             for (Component *comp : newGameObject->GetComponents())
-            { ASSERT(comp == this || comp->GetClassName() != GetClassName()); }
+            {
+                if(comp == this || comp->GetClassName() != GetClassName())
+                {
+                    Debug_Error(comp->GetClassName() << " should not be repeated "
+                                                        "the same a GameObject.");
+                }
+            }
         }
 
         p_gameObject = newGameObject;
