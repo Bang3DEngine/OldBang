@@ -10,6 +10,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class IBO;
 FORWARD class VAO;
 FORWARD class VBO;
 
@@ -19,28 +20,43 @@ class Mesh : public Asset,
     ASSET(Mesh)
 
 public:
+    using VertexId = uint;
+
     static constexpr uint DefaultPositionsVBOLocation = 0;
     static constexpr uint DefaultNormalsVBOLocation   = 1;
     static constexpr uint DefaultUvsVBOLocation       = 2;
 
-    void LoadPositions(const Array<Vector3>& positions);
-    void LoadNormals(const Array<Vector3>& normals);
-    void LoadUvs(const Array<Vector2>& uvs);
-    void LoadAll(const Array<Vector3>& positions,
-                 const Array<Vector3>& normals,
-                 const Array<Vector2>& uvs);
+    void LoadVertexIndices(const Array<VertexId>& vertexIndices);
+    void LoadPositionsPool(const Array<Vector3>& positions);
+    void LoadNormalsPool(const Array<Vector3>& normals);
+    void LoadUvsPool(const Array<Vector2>& uvs);
+    void LoadAll(const Array<Vector3>& positionsPool,
+                 const Array<Vector3>& normalsPool,
+                 const Array<Vector2>& uvsPool);
+    void LoadAll(const Array<VertexId>& vertexIndices,
+                 const Array<Vector3>& positionsPool,
+                 const Array<Vector3>& normalsPool,
+                 const Array<Vector2>& uvsPool);
 
     void BindPositionsVBOToLocation(int positionsVBOLocation);
     void BindNormalsVBOToLocation(int normalsVBOLocation);
     void BindUvsVBOToLocation(int uvsVBOLocation);
 
+    uint GetNumTriangles() const;
+    std::array<VertexId, 3> GetTriangleVertexIndices(int triIndex) const;
+
     VAO *GetVAO() const;
+    IBO *GetVertexIndicesIBO() const;
+    VBO *GetVertexPositionsPoolVBO() const;
+    VBO *GetVertexNormalsPoolVBO() const;
+    VBO *GetVertexUvsPoolVBO() const;
     int GetVertexCount() const;
     const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
-    const Array<Vector3>& GetPositions();
-    const Array<Vector3>& GetNormals();
-    const Array<Vector2>& GetUvs();
+    const Array<VertexId>& GetVertexIndices() const;
+    const Array<Vector3>& GetPositionsPool() const;
+    const Array<Vector3>& GetNormalsPool() const;
+    const Array<Vector2>& GetUvsPool() const;
     const Path &GetModelFilepath() const;
 
     // ICloneable
@@ -54,14 +70,16 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
-    Array<Vector3> m_positions;
-    Array<Vector3> m_normals;
-    Array<Vector2> m_uvs;
+    Array<VertexId> m_vertexIndices;
+    Array<Vector3> m_positionsPool;
+    Array<Vector3> m_normalsPool;
+    Array<Vector2> m_uvsPool;
 
     mutable VAO *m_vao = nullptr;
-    VBO *m_vertexPositionsVBO = nullptr;
-    VBO *m_vertexNormalsVBO = nullptr;
-    VBO *m_vertexUvsVBO = nullptr;
+    IBO *m_vertexIndicesIBO = nullptr;
+    VBO *m_vertexPositionsPoolVBO = nullptr;
+    VBO *m_vertexNormalsPoolVBO = nullptr;
+    VBO *m_vertexUvsPoolVBO = nullptr;
 
     AABox m_bBox;
     Sphere m_bSphere;

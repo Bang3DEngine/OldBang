@@ -1,6 +1,7 @@
 #ifndef MODELIO_H
 #define MODELIO_H
 
+#include "Bang/Mesh.h"
 #include "Bang/Tree.h"
 #include "Bang/Array.h"
 #include "Bang/Matrix4.h"
@@ -51,10 +52,12 @@ public:
                           const GUID &modelGUID,
                           ModelIOScene *modelScene);
 
-    static bool ReadFirstFoundMeshRaw(const Path& modelFilepath,
-                                      Array<Vector3> *vertexPositions,
-                                      Array<Vector3> *vertexNormals,
-                                      Array<Vector2> *vertexUvs);
+    static bool ReadFirstFoundMeshRaw(
+                     const Path& modelFilepath,
+                     Array<Mesh::VertexId> *vertexIndices,
+                     Array<Vector3> *vertexPositions,
+                     Array<Vector3> *vertexNormals,
+                     Array<Vector2> *vertexUvs);
 
     static void ReadMesh(aiMesh *aMesh,
                          const GUID &parentModelGUID,
@@ -68,10 +71,12 @@ public:
                              RH<Material> *outMaterial,
                              String *outMaterialName);
 
-    static void ReadMeshRaw(aiMesh *aMesh,
-                            Array<Vector3> *vertexPositions,
-                            Array<Vector3> *vertexNormals,
-                            Array<Vector2> *vertexUvs);
+    static void ReadMeshRaw(
+                     aiMesh *aMesh,
+                     Array<Mesh::VertexId> *vertexIndices,
+                     Array<Vector3> *vertexPositionsPool,
+                     Array<Vector3> *vertexNormalsPool,
+                     Array<Vector2> *vertexUvsPool);
 
     ModelIO() = delete;
 

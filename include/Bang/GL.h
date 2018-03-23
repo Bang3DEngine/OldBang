@@ -98,33 +98,34 @@ public:
 
     enum class BindTarget
     {
-        None            = 0,
-        Texture2D       = GL_TEXTURE_2D,
-        ShaderProgram   = GL_SHADER,
-        Framebuffer     = GL_FRAMEBUFFER,
-        DrawFramebuffer = GL_DRAW_FRAMEBUFFER,
-        ReadFramebuffer = GL_READ_FRAMEBUFFER,
-        VAO             = GL_VERTEX_ARRAY,
-        VBO             = GL_ARRAY_BUFFER,
-        UniformBuffer   = GL_UNIFORM_BUFFER
+        None               = 0,
+        Texture2D          = GL_TEXTURE_2D,
+        ShaderProgram      = GL_SHADER,
+        Framebuffer        = GL_FRAMEBUFFER,
+        DrawFramebuffer    = GL_DRAW_FRAMEBUFFER,
+        ReadFramebuffer    = GL_READ_FRAMEBUFFER,
+        VAO                = GL_VERTEX_ARRAY,
+        ArrayBuffer        = GL_ARRAY_BUFFER,
+        ElementArrayBuffer = GL_ELEMENT_ARRAY_BUFFER,
+        UniformBuffer      = GL_UNIFORM_BUFFER
     };
 
     enum class DataType
     {
-        Byte          = GL_BYTE,
-        UnsignedByte  = GL_UNSIGNED_BYTE,
-        Short         = GL_SHORT,
-        UnsignedShort = GL_UNSIGNED_SHORT,
-        Int           = GL_INT,
-        UnsignedInt   = GL_UNSIGNED_INT,
-        Float         = GL_FLOAT,
-        Double        = GL_DOUBLE,
+        Byte             = GL_BYTE,
+        UnsignedByte     = GL_UNSIGNED_BYTE,
+        Short            = GL_SHORT,
+        UnsignedShort    = GL_UNSIGNED_SHORT,
+        Int              = GL_INT,
+        UnsignedInt      = GL_UNSIGNED_INT,
+        Float            = GL_FLOAT,
+        Double           = GL_DOUBLE,
         UnsignedInt_24_8 = GL_UNSIGNED_INT_24_8,
-        Vector2       = GL_FLOAT_VEC2,
-        Vector3       = GL_FLOAT_VEC3,
-        Vector4       = GL_FLOAT_VEC4,
-        Matrix3       = GL_FLOAT_MAT3,
-        Matrix4       = GL_FLOAT_MAT4
+        Vector2          = GL_FLOAT_VEC2,
+        Vector3          = GL_FLOAT_VEC3,
+        Vector4          = GL_FLOAT_VEC4,
+        Matrix3          = GL_FLOAT_MAT3,
+        Matrix4          = GL_FLOAT_MAT4
     };
 
     enum class ShaderType
@@ -548,6 +549,14 @@ public:
                        GL::Primitive renderMode,
                        int elementsCount,
                        int startElementIndex = 0);
+    static void DrawArrays(const VAO* vao,
+                           GL::Primitive renderMode,
+                           int elementsCount,
+                           int startElementIndex = 0);
+    static void DrawElements(const VAO* vao,
+                             GL::Primitive primitivesMode,
+                             int elementsCount,
+                             int startElementIndex = 0);
 
     static int GetInteger(GL::Enum glEnum);
     static void GetInteger(GL::Enum glEnum, int *values);
@@ -644,13 +653,14 @@ public:
 
 private:
     // Context
-    GLId m_boundVAOId              = 0;
-    GLId m_boundVBOId              = 0;
-    GLId m_boundTextureId          = 0;
-    GLId m_boundDrawFramebufferId  = 0;
-    GLId m_boundReadFramebufferId  = 0;
-    GLId m_boundShaderProgramId    = 0;
-    GLId m_boundUniformBufferId    = 0;
+    GLId m_boundVAOId               = 0;
+    GLId m_boundVBOArrayBufferId    = 0;
+    GLId m_boundVBOElementsBufferId = 0;
+    GLId m_boundTextureId           = 0;
+    GLId m_boundDrawFramebufferId   = 0;
+    GLId m_boundReadFramebufferId   = 0;
+    GLId m_boundShaderProgramId     = 0;
+    GLId m_boundUniformBufferId     = 0;
     std::array<bool, 4> m_colorMask = {{true, true, true, true}};
     uint m_lineWidth     = 0;
     Byte m_stencilValue  = 0;

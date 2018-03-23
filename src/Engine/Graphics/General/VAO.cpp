@@ -1,6 +1,7 @@
 #include "Bang/VAO.h"
 
 #include "Bang/GL.h"
+#include "Bang/IBO.h"
 #include "Bang/VBO.h"
 #include "Bang/ShaderProgram.h"
 
@@ -40,19 +41,29 @@ void VAO::BindVBO(const VBO *vbo,
 
     UnBind();
 
-    while (m_vbos.Size() <= location) m_vbos.PushBack(nullptr);
-    m_vbos[location] = vbo;
+    while (p_vbos.Size() <= location) p_vbos.PushBack(nullptr);
+    p_vbos[location] = vbo;
+}
+
+void VAO::BindIBO(IBO *ebo)
+{
+    p_ibo = ebo;
 }
 
 void VAO::UnBindVBO(GLint location)
 {
-    if (location >= 0 && location < m_vbos.Size())
+    if (location >= 0 && location < p_vbos.Size())
     {
         this->Bind();
         GL::DisableVertexAttribArray(location);
         this->UnBind();
-        m_vbos[location] = nullptr;
+        p_vbos[location] = nullptr;
     }
+}
+
+IBO *VAO::GetIBO() const
+{
+    return p_ibo;
 }
 
 GL::BindTarget VAO::GetGLBindTarget() const
@@ -63,19 +74,26 @@ GL::BindTarget VAO::GetGLBindTarget() const
 void VAO::Bind() const
 {
     GL::Bind(this);
+    if (GetIBO()) { GetIBO()->Bind(); }
 }
 void VAO::UnBind() const
 {
+    if (GetIBO()) { GetIBO()->UnBind(); }
     GL::UnBind(this);
+}
+
+bool VAO::IsIndexed() const
+{
+    return (GetIBO() != nullptr);
 }
 
 const VBO* VAO::GetVBOByLocation(GLint location) const
 {
-    if (location >= m_vbos.Size()) return nullptr;
-    else return m_vbos[location];
+    if (location >= p_vbos.Size()) return nullptr;
+    else return p_vbos[location];
 }
 
 int VAO::GetVBOCount() const
 {
-    return m_vbos.Size();
+    return p_vbos.Size();
 }

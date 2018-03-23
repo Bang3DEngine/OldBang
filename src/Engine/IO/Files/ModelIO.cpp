@@ -134,10 +134,12 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
     return true;
 }
 
-bool ModelIO::ReadFirstFoundMeshRaw(const Path &modelFilepath,
-                                    Array<Vector3> *vertexPositions,
-                                    Array<Vector3> *vertexNormals,
-                                    Array<Vector2> *vertexUvs)
+bool ModelIO::ReadFirstFoundMeshRaw(
+                     const Path &modelFilepath,
+                     Array<Mesh::VertexId> *vertexIndices,
+                     Array<Vector3> *vertexPositionsPool,
+                     Array<Vector3> *vertexNormalsPool,
+                     Array<Vector2> *vertexUvsPool)
 {
     Assimp::Importer importer;
     const aiScene* scene = ReadScene(&importer, modelFilepath);
@@ -146,9 +148,10 @@ bool ModelIO::ReadFirstFoundMeshRaw(const Path &modelFilepath,
     if (scene && scene->HasMeshes())
     {
         ModelIO::ReadMeshRaw(scene->mMeshes[0],
-                             vertexPositions,
-                             vertexNormals,
-                             vertexUvs);
+                             vertexIndices,
+                             vertexPositionsPool,
+                             vertexNormalsPool,
+                             vertexUvsPool);
         ok = true;
     }
     return ok;
@@ -195,47 +198,43 @@ void ModelIO::ReadMaterial(aiMaterial *aMaterial,
     outMaterial->Get()->SetTexture( matTexture.Get() );
 }
 
-void ModelIO::ReadMeshRaw(aiMesh *aMesh,
-                          Array<Vector3> *vertexPositions,
-                          Array<Vector3> *vertexNormals,
-                          Array<Vector2> *vertexUvs)
+void ModelIO::ReadMeshRaw(
+                  aiMesh *aMesh,
+                  Array<Mesh::VertexId> *vertexIndices,
+                  Array<Vector3> *vertexPositionsPool,
+                  Array<Vector3> *vertexNormalsPool,
+                  Array<Vector2> *vertexUvsPool)
 {
     for (int i = 0; i < SCAST<int>(aMesh->mNumFaces); ++i)
     {
-        if (aMesh->mFaces[i].mNumIndices < 3) { continue; }
-
-        const int iV0 = aMesh->mFaces[i].mIndices[0];
-        const int iV1 = aMesh->mFaces[i].mIndices[1];
-        const int iV2 = aMesh->mFaces[i].mIndices[2];
-
-        if (aMesh->HasPositions())
+        for (int j = 0; j < aMesh->mFaces[i].mNumIndices; ++j)
         {
-            Vector3 v0 = AIVectorToVec3(aMesh->mVertices[iV0]);
-            Vector3 v1 = AIVectorToVec3(aMesh->mVertices[iV1]);
-            Vector3 v2 = AIVectorToVec3(aMesh->mVertices[iV2]);
-            vertexPositions->PushBack(v0);
-            vertexPositions->PushBack(v1);
-            vertexPositions->PushBack(v2);
+            Mesh::VertexId vIndex = aMesh->mFaces[i].mIndices[j];
+            vertexIndices->PushBack(vIndex);
         }
+    }
 
-        if (aMesh->HasNormals())
-        {
-            Vector3 norm0 = AIVectorToVec3(aMesh->mNormals[iV0]);
-            Vector3 norm1 = AIVectorToVec3(aMesh->mNormals[iV1]);
-            Vector3 norm2 = AIVectorToVec3(aMesh->mNormals[iV2]);
-            vertexNormals->PushBack(norm0.NormalizedSafe());
-            vertexNormals->PushBack(norm1.NormalizedSafe());
-            vertexNormals->PushBack(norm2.NormalizedSafe());
-        }
+    // Positions
+    for (int i = 0; i < SCAST<int>(aMesh->mNumVertices); ++i)
+    {
+        Vector3 pos = AIVectorToVec3(aMesh->mVertices[i]);
+        vertexPositionsPool->PushBack(pos);
+    }
 
-        if (aMesh->GetNumUVChannels() > 0)
+    // Normals
+    for (int i = 0; i < SCAST<int>(aMesh->mNumVertices); ++i)
+    {
+        Vector3 normal = AIVectorToVec3(aMesh->mNormals[i]);
+        vertexNormalsPool->PushBack(normal);
+    }
+
+    // Uvs
+    if (aMesh->GetNumUVChannels() > 0)
+    {
+        for (int i = 0; i < SCAST<int>(aMesh->mNumVertices); ++i)
         {
-            Vector2 uv0 = AIVectorToVec3(aMesh->mTextureCoords[0][iV0]).xy();
-            Vector2 uv1 = AIVectorToVec3(aMesh->mTextureCoords[0][iV1]).xy();
-            Vector2 uv2 = AIVectorToVec3(aMesh->mTextureCoords[0][iV2]).xy();
-            vertexUvs->PushBack(uv0);
-            vertexUvs->PushBack(uv1);
-            vertexUvs->PushBack(uv2);
+            Vector3 uvs = AIVectorToVec3(aMesh->mTextureCoords[0][i]);
+            vertexUvsPool->PushBack( uvs.xy() );
         }
     }
 }
@@ -248,18 +247,26 @@ void ModelIO::ReadMesh(aiMesh *aMesh,
 {
     *outMesh =  Resources::CreateInnerResource<Mesh>(parentModelGUID, innerMeshGUID);
 
-    Array<Vector3> vertexPositions;
-    Array<Vector3> vertexNormals;
-    Array<Vector2> vertexUvs;
+    Array<Mesh::VertexId> vertexIndices;
+    Array<Vector3> vertexPositionsPool;
+    Array<Vector3> vertexNormalsPool;
+    Array<Vector2> vertexUvsPool;
 
-    ModelIO::ReadMeshRaw(aMesh, &vertexPositions, &vertexNormals, &vertexUvs);
+    ModelIO::ReadMeshRaw(aMesh,
+                         &vertexIndices,
+                         &vertexPositionsPool,
+                         &vertexNormalsPool,
+                         &vertexUvsPool);
     if (outMeshName)
     {
         *outMeshName = String( aMesh->mName.C_Str() );
         if (outMeshName->IsEmpty()) { *outMeshName = "Mesh"; }
     }
 
-    outMesh->Get()->LoadAll(vertexPositions, vertexNormals, vertexUvs);
+    outMesh->Get()->LoadAll(vertexIndices,
+                            vertexPositionsPool,
+                            vertexNormalsPool,
+                            vertexUvsPool);
 }
 
 const aiScene *ModelIO::ReadScene(Assimp::Importer *importer,

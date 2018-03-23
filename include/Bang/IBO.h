@@ -1,16 +1,16 @@
-#ifndef VBO_H
-#define VBO_H
+#ifndef IBO_H
+#define IBO_H
 
 #include "Bang/Bang.h"
 #include "Bang/GLObject.h"
 
 NAMESPACE_BANG_BEGIN
 
-class VBO : public GLObject
+class IBO : public GLObject
 {
 public:
-    VBO();
-    virtual ~VBO();
+    IBO();
+    virtual ~IBO();
 
     void Fill(const void *data, int dataSize,
               GL::UsageHint usage = GL::UsageHint::StaticDraw);
@@ -22,4 +22,5 @@ public:
 
 NAMESPACE_BANG_END
 
-#endif // VBO_H
+#endif // IBO_H
+

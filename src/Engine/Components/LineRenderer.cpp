@@ -49,7 +49,7 @@ void LineRenderer::SetPoints(const Array<Vector3> &points)
         !Containers::Equal(points.Begin(), points.End(), GetPoints().Begin()))
     {
         m_points = points;
-        p_mesh.Get()->LoadPositions(GetPoints());
+        p_mesh.Get()->LoadPositionsPool(GetPoints());
         PropagateRendererChanged();
     }
 }

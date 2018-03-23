@@ -1065,11 +1065,37 @@ void GL::BufferData(GL::BindTarget target, int dataSize,
     GL_CALL( glBufferData(GLCAST(target), dataSize, data, GLCAST(usageHint)) );
 }
 
-void GL::Render(const VAO *vao, GL::Primitive primitivesMode,
-                int elementsCount, int startIndex)
+
+void GL::Render(const VAO *vao, GL::Primitive renderMode,
+                int elementsCount, int startElementIndex)
+{
+    if (vao->IsIndexed())
+    {
+        // Debug_Log("Rendering " << elementsCount << " from " << startElementIndex);
+        GL::DrawElements(vao, renderMode, elementsCount, startElementIndex);
+    }
+    else
+    {
+        GL::DrawArrays(vao, renderMode, elementsCount, startElementIndex);
+    }
+}
+
+void GL::DrawArrays(const VAO *vao, GL::Primitive primitivesMode,
+                    int elementsCount, int startIndex)
 {
     vao->Bind();
     GL_CALL( glDrawArrays( GLCAST(primitivesMode), startIndex, elementsCount) );
+    vao->UnBind();
+}
+
+void GL::DrawElements(const VAO *vao, GL::Primitive primitivesMode,
+                      int elementsCount, int startElementIndex)
+{
+    vao->Bind();
+    GL_CALL( glDrawElements( GLCAST(primitivesMode),
+                             elementsCount,
+                             GLCAST(GL::DataType::UnsignedInt),
+                             RCAST<const void*>(startElementIndex)) );
     vao->UnBind();
 }
 
@@ -1135,10 +1161,15 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
             if(gl) { gl->m_boundVAOId = glId; }
             GL_CALL( glBindVertexArray(glId) );
         break;
-        case GL::BindTarget::VBO:
+        case GL::BindTarget::ElementArrayBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
-            if (gl) { gl->m_boundVBOId = glId; }
-            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::VBO), glId) );
+            if (gl) { gl->m_boundVBOElementsBufferId = glId; }
+            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::ElementArrayBuffer), glId) );
+        break;
+        case GL::BindTarget::ArrayBuffer:
+            if (GL::IsBound(bindTarget, glId)) { return; }
+            if (gl) { gl->m_boundVBOArrayBufferId = glId; }
+            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::ArrayBuffer), glId) );
         break;
         case GL::BindTarget::UniformBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
@@ -1482,8 +1513,10 @@ GLId GL::GetBoundId(GL::BindTarget bindTarget)
             return GL::GetActive()->m_boundReadFramebufferId;
         case GL::BindTarget::VAO:
             return GL::GetActive()->m_boundVAOId;
-        case GL::BindTarget::VBO:
-            return GL::GetActive()->m_boundVBOId;
+        case GL::BindTarget::ArrayBuffer:
+            return GL::GetActive()->m_boundVBOArrayBufferId;
+        case GL::BindTarget::ElementArrayBuffer:
+            return GL::GetActive()->m_boundVBOElementsBufferId;
         case GL::BindTarget::ShaderProgram:
             return GL::GetActive()->m_boundShaderProgramId;
         default: return 0;
@@ -1644,7 +1677,7 @@ void GL::PrintGLContext()
     Debug_Peek(GL::GetViewportRect());
     Debug_Peek(GL::GetScissorRect());
     Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::VAO)) );
-    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::VBO)) );
+    Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::ArrayBuffer)) );
     Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::Framebuffer)) );
     Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::DrawFramebuffer)) );
     Debug_Peek( SCAST<int>(GL::GetBoundId(GL::BindTarget::ReadFramebuffer)) );

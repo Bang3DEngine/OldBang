@@ -63,8 +63,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     if (!GetFont())
     {
-        p_mesh.Get()->LoadPositions({});
-        p_mesh.Get()->LoadUvs({});
+        p_mesh.Get()->LoadPositionsPool({});
+        p_mesh.Get()->LoadUvsPool({});
         return;
     }
 
@@ -135,8 +135,8 @@ void UITextRenderer::RegenerateCharQuadsVAO() const
 
     m_textRectNDC = AARect::GetBoundingRectFromPositions(textQuadPos2D.Begin(),
                                                        textQuadPos2D.End());
-    p_mesh.Get()->LoadPositions(textQuadPos3D);
-    p_mesh.Get()->LoadUvs(textQuadUvs);
+    p_mesh.Get()->LoadPositionsPool(textQuadPos3D);
+    p_mesh.Get()->LoadUvsPool(textQuadUvs);
 }
 
 void UITextRenderer::Bind() const

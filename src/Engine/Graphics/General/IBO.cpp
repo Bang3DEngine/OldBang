@@ -1,36 +1,36 @@
-#include "Bang/VBO.h"
+#include "Bang/IBO.h"
 
 #include "Bang/GL.h"
 
 USING_NAMESPACE_BANG
 
-VBO::VBO()
+IBO::IBO()
 {
     GL::GenBuffers(1, &m_idGL);
 }
 
-VBO::~VBO()
+IBO::~IBO()
 {
     GL::DeleteBuffers(1, &m_idGL);
 }
 
-void VBO::Fill(const void *data, int dataSize, GL::UsageHint usage)
+void IBO::Fill(const void *data, int dataSize, GL::UsageHint usage)
 {
     Bind();
     GL::BufferData(GetGLBindTarget(), dataSize, data, usage);
     UnBind();
 }
 
-GL::BindTarget VBO::GetGLBindTarget() const
+GL::BindTarget IBO::GetGLBindTarget() const
 {
-    return GL::BindTarget::ArrayBuffer;
+    return GL::BindTarget::ElementArrayBuffer;
 }
 
-void VBO::Bind() const
+void IBO::Bind() const
 {
     GL::Bind(this);
 }
-void VBO::UnBind() const
+void IBO::UnBind() const
 {
     GL::UnBind(this);
 }

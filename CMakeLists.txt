@@ -178,6 +178,7 @@ ${BANG_ENGINE_SRC_DIR}/Graphics/General/ShadowMapper.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/Texture.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/Texture2D.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/TextureUnitManager.cpp
+${BANG_ENGINE_SRC_DIR}/Graphics/General/IBO.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/VAO.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/VBO.cpp
 ${BANG_ENGINE_SRC_DIR}/Graphics/General/GL.cpp

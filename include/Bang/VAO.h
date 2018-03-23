@@ -9,6 +9,7 @@
 NAMESPACE_BANG_BEGIN
 
 FORWARD class VBO;
+FORWARD class IBO;
 
 class VAO : public GLObject
 {
@@ -16,6 +17,7 @@ public:
     VAO();
     virtual ~VAO();
 
+    void Bind() const override;
     void BindVBO(const VBO *vbo,
                  int location,
                  int dataComponentsCount,
@@ -23,20 +25,20 @@ public:
                  bool dataNormalized   = false,
                  int dataStride        = 0,
                  int dataOffset        = 0);
+    void BindIBO(IBO *ibo);
 
+    void UnBind() const override;
     void UnBindVBO(GLint location);
 
+    IBO *GetIBO() const;
+    bool IsIndexed() const;
+    int GetVBOCount() const;
     GL::BindTarget GetGLBindTarget() const override;
-
-    void Bind() const override;
-    void UnBind() const override;
-
     const VBO *GetVBOByLocation(int location) const;
 
-    int GetVBOCount() const;
-
 private:
-    Array<const VBO*> m_vbos;
+    Array<const VBO*> p_vbos;
+    IBO* p_ibo = nullptr;
 };
 
 NAMESPACE_BANG_END
