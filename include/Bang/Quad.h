@@ -8,6 +8,7 @@
 
 NAMESPACE_BANG_BEGIN
 
+FORWARD class Polygon;
 FORWARD class Triangle;
 
 class Quad
@@ -28,6 +29,7 @@ public:
     Vector3 GetNormal() const;
     const Vector3& GetPoint(int i) const;
     const std::array<Vector3, 4>& GetPoints() const;
+    Polygon ToPolygon() const;
 
     // Returns the two triangles of this quad
     void GetTriangles(Triangle *t0, Triangle *t1) const;

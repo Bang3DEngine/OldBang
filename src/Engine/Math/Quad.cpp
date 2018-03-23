@@ -1,6 +1,7 @@
 #include "Bang/Quad.h"
 
 #include "Bang/Matrix4.h"
+#include "Bang/Polygon.h"
 #include "Bang/Triangle.h"
 
 USING_NAMESPACE_BANG
@@ -34,6 +35,16 @@ const Vector3 &Quad::GetPoint(int i) const
 const std::array<Vector3, 4> &Quad::GetPoints() const
 {
     return m_points;
+}
+
+Polygon Quad::ToPolygon() const
+{
+    Polygon poly;
+    poly.AddPoint( GetPoint(0) );
+    poly.AddPoint( GetPoint(1) );
+    poly.AddPoint( GetPoint(2) );
+    poly.AddPoint( GetPoint(3) );
+    return poly;
 }
 
 void Quad::GetTriangles(Triangle *t0, Triangle *t1) const

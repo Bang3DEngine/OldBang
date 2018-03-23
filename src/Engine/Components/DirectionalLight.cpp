@@ -2,14 +2,17 @@
 
 #include "Bang/Quad.h"
 #include "Bang/AABox.h"
+#include "Bang/Ray2D.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
+#include "Bang/Polygon.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Geometry.h"
 #include "Bang/Triangle.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Segment2D.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/GLUniforms.h"
@@ -245,6 +248,20 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
     // First of all, we want to have the whole camera frustum inside of it
     // And then, we want to have all the shadow casters that affect us too
     float time = 20.0f;
+    {
+        /*
+        bool intersected;
+        Vector2 intersPoint;
+        Ray2D testRay( Vector2(0,0), Vector2(1,0) );
+        Segment2D segment(Vector2(5,-5), Vector2(5,5));
+        Geometry::IntersectRay2DSegment2D(testRay, segment,
+                                          &intersected, &intersPoint);
+        Debug_Peek(intersected);
+        Debug_Peek(intersPoint);
+        Debug_Log("==============");
+        */
+    }
+
     if (Input::GetKeyDown(Key::I))
     {
         int limits = 10;
@@ -253,9 +270,9 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
         Vector3 s0  = Vector3(10,  10, 10);
         Vector3 s1  = Vector3(-10, -10, -10);
         Triangle tri0 = Triangle(
-                    Vector3(-10, -10, 0),
-                    Vector3(-10,  10, 0),
-                    Vector3( 10,  10, 0)
+                    Vector3(-10, -11, 0),
+                    Vector3(-10,  11, 0),
+                    Vector3( 10,  11, 0)
                                  );
         Triangle tri1 = Triangle(
                     Vector3(0, -10 + 5, -10),
@@ -266,11 +283,16 @@ AABox DirectionalLight::GetShadowMapOrthoBox(Scene *scene) const
         Vector3 p0, p1;
         int numIntersectionPoints;
         Geometry::IntersectTriangleTriangle(tri0, tri1, &numIntersectionPoints, &p0, &p1);
-        // DebugRenderer::RenderLine(s0, s1, Color::Pink, time, 3.0f, true);
+        Array<Vector3> intersectionPoints =
+                Geometry::IntersectPolygonPolygon(tri0.ToPolygon(), tri1.ToPolygon());
+        for (const Vector3 &ip : intersectionPoints)
+        {
+            DebugRenderer::RenderPoint(ip, Color::Red, time, 10.0f, false);
+        }
         DebugRenderer::RenderTriangle(tri0, Color::Blue, time, false, false, true);
         DebugRenderer::RenderTriangle(tri1, Color::DarkBlue, time, false, false, true);
-        if (numIntersectionPoints >= 1) { DebugRenderer::RenderPoint(p0, Color::Red, time, 10.0f, false); }
-        if (numIntersectionPoints >= 2) { DebugRenderer::RenderPoint(p1, Color::Red, time, 10.0f, false); }
+        // if (numIntersectionPoints >= 1) { DebugRenderer::RenderPoint(p0, Color::Red, time, 10.0f, false); }
+        // if (numIntersectionPoints >= 2) { DebugRenderer::RenderPoint(p1, Color::Red, time, 10.0f, false); }
         Debug_Peek(numIntersectionPoints);
         Debug_Peek(p0);
         Debug_Peek(p1);

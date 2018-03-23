@@ -54,7 +54,7 @@ void Component::SetGameObject(GameObject *newGameObject)
         {
             for (Component *comp : newGameObject->GetComponents())
             {
-                if(comp == this || comp->GetClassName() != GetClassName())
+                if(comp != this && comp->GetClassName() == GetClassName())
                 {
                     Debug_Error(comp->GetClassName() << " should not be repeated "
                                                         "the same a GameObject.");

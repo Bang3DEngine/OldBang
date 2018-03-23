@@ -4,11 +4,69 @@
 
 #include "Bang/Ray.h"
 #include "Bang/Quad.h"
+#include "Bang/Debug.h"
+#include "Bang/Ray2D.h"
 #include "Bang/Plane.h"
 #include "Bang/Sphere.h"
+#include "Bang/Segment.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Polygon.h"
 #include "Bang/Triangle.h"
+#include "Bang/Polygon2D.h"
+#include "Bang/Segment2D.h"
 
 USING_NAMESPACE_BANG
+
+void Geometry::IntersectSegment2DSegment2D(const Segment2D &segment0,
+                                           const Segment2D &segment1,
+                                           bool *intersected,
+                                           Vector2 *intersPoint)
+{
+    const Vector2 &p0 = segment0.GetOrigin();
+    const Vector2 &p1 = segment0.GetDestiny();
+    const Vector2 &q0 = segment1.GetOrigin();
+    const Vector2 &q1 = segment1.GetDestiny();
+
+    Geometry::Orientation orient0 = Geometry::GetOrientation(p0, p1, q0);
+    Geometry::Orientation orient1 = Geometry::GetOrientation(p0, p1, q1);
+    if (orient0 == orient1 && orient0 != Geometry::Orientation::Middle)
+    { *intersected = false; return; }
+
+    Geometry::Orientation orient2 = Geometry::GetOrientation(q0, q1, p0);
+    Geometry::Orientation orient3 = Geometry::GetOrientation(q0, q1, p1);
+    if (orient2 == orient3 && orient2 != Geometry::Orientation::Middle)
+    { *intersected = false; return; }
+
+    const float x1 = p0.x, x2 = p1.x, x3 = q0.x, x4 = q1.x;
+    const float y1 = p0.y, y2 = p1.y, y3 = q0.y, y4 = q1.y;
+
+    const float d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    if (d == 0) { *intersected = false; return; }
+
+    const float pre = (x1*y2 - y1*x2), post = (x3*y4 - y3*x4);
+    const float x = ( pre * (x3 - x4) - (x1 - x2) * post ) / d;
+    const float y = ( pre * (y3 - y4) - (y1 - y2) * post ) / d;
+
+    *intersected = true;
+    *intersPoint = Vector2(x,y);
+}
+
+void Geometry::IntersectRay2DSegment2D(const Ray2D &ray,
+                                       const Segment2D& segment,
+                                       bool *intersected,
+                                       Vector2 *intersPoint)
+{
+    float maxSqDist = Math::Max( Vector2::SqDistance(ray.GetOrigin(),
+                                                     segment.GetOrigin()),
+                                 Vector2::SqDistance(ray.GetOrigin(),
+                                                     segment.GetDestiny()) );
+    Segment2D raySegment(ray.GetOrigin(),
+                         ray.GetOrigin() + (maxSqDist * ray.GetDirection()));
+    Geometry::IntersectSegment2DSegment2D(segment, raySegment,
+                                          intersected, intersPoint);
+}
+
 
 void Geometry::IntersectRayPlane(const Ray &ray,
                                  const Plane &plane,
@@ -101,6 +159,62 @@ void Geometry::RayLineClosestPoints(const Ray &ray,
     }
 }
 
+void Geometry::IntersectSegmentPolygon(const Segment &segment,
+                                       const Polygon &poly,
+                                       bool *intersected,
+                                       Vector3 *intersection)
+{
+    bool intersectedWithPlane;
+    Vector3 intersectionWithPlane;
+    IntersectRayPlane(Ray(segment.GetOrigin(), segment.GetDirection()),
+                      poly.GetPlane(),
+                      &intersectedWithPlane,
+                      &intersectionWithPlane);
+
+    *intersected = false;
+    if (intersectedWithPlane)
+    {
+        // Segment intersects with plane, but is it inside the polygon?
+        Axis3D axisToProj;
+        Vector3 pn = poly.GetNormal(); // Poly normal to know where to project
+        if      (pn.x > pn.y && pn.x > pn.z) { axisToProj = Axis3D::X; }
+        else if (pn.y > pn.x && pn.y > pn.z) { axisToProj = Axis3D::Y; }
+        else                                 { axisToProj = Axis3D::Z; }
+
+        Polygon2D projectedPolygon = poly.ProjectedOnAxis(axisToProj);
+        Vector2 projectedIntersPoint = intersectionWithPlane.ProjectedOnAxis(axisToProj);
+        if (projectedPolygon.Contains(projectedIntersPoint))
+        {
+            *intersected = true;
+            *intersection = intersectionWithPlane;
+        }
+    }
+}
+
+Array<Vector3> Geometry::IntersectPolygonPolygon(const Polygon &poly0,
+                                                 const Polygon &poly1)
+{
+    Array<Vector3> intersectionPoints;
+    const std::array<Polygon, 2> polys = {{poly0, poly1}};
+    for (int pi = 0; pi < 2; ++pi)
+    {
+        const Polygon &p0 = polys[pi];
+        const Polygon &p1 = polys[1-pi];
+        for (int i = 0; i < p0.GetPoints().Size(); ++i)
+        {
+            Segment segment(p0.GetPoint(i),
+                            p0.GetPoint((i+1) % p0.GetPoints().Size()));
+
+            bool intersected;
+            Vector3 intersPoint;
+            Geometry::IntersectSegmentPolygon(segment, p1,
+                                              &intersected, &intersPoint);
+            if (intersected) { intersectionPoints.PushBack(intersPoint); }
+        }
+    }
+    return intersectionPoints;
+}
+
 // http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
 void Geometry::IntersectRayTriangle(const Ray &ray,
                                     const Triangle &triangle,
@@ -152,20 +266,17 @@ void Geometry::IntersectRayTriangle(const Ray &ray,
     *intersectionPoint = *intersected ? ray.GetPoint(t) : ray.GetOrigin();
 }
 
-void Geometry::IntersectSegmentTriangle(const Vector3 &segmentPoint0,
-                                        const Vector3 &segmentPoint1,
+void Geometry::IntersectSegmentTriangle(const Segment &segment,
                                         const Triangle &triangle,
                                         bool *intersected,
                                         Vector3 *intersectionPoint)
 {
-    Ray ray;
-    ray.SetOrigin(segmentPoint0);
-    ray.SetDirection(segmentPoint1 - segmentPoint0);
+    Ray ray(segment.GetOrigin(), segment.GetDirection());
 
     float t;
     Geometry::IntersectRayTriangle(ray, triangle, intersected, &t);
 
-    const float segmentLength = Vector3::Distance(segmentPoint0, segmentPoint1);
+    const float segmentLength = segment.GetLength();
     *intersected = *intersected && (t >= 0.0f) && (t <= segmentLength);
     *intersectionPoint = *intersected ? ray.GetPoint(t) : ray.GetOrigin();
 }
@@ -188,8 +299,9 @@ void Geometry::IntersectTriangleTriangle(const Triangle &triangle0,
 
             bool intersected;
             Vector3 intersPoint;
-            Geometry::IntersectSegmentTriangle(triangles[t].GetPoint( i ),
-                                               triangles[t].GetPoint( (i+1) % 3 ),
+            Segment triSegment(triangles[t].GetPoint( i ),
+                               triangles[t].GetPoint( (i+1) % 3 ));
+            Geometry::IntersectSegmentTriangle(triSegment,
                                                triangles[1-t],
                                                &intersected,
                                                &intersPoint);
@@ -398,9 +510,9 @@ Array<Vector3> Geometry::IntersectQuadAABox(const Quad &quad, const AABox &aaBox
     return intersectionPoints;
 }
 
-Geometry::Orientation Geometry::GetOrientation(const Vector3 &lineP0,
-                                               const Vector3 &lineP1,
-                                               const Vector3 &point)
+Geometry::Orientation Geometry::GetOrientation(const Vector2 &lineP0,
+                                               const Vector2 &lineP1,
+                                               const Vector2 &point)
 {
     float det = ((point.x - lineP0.x) * (lineP1.y - lineP0.y)) -
                 ((point.y - lineP0.y) * (lineP1.x - lineP0.x));

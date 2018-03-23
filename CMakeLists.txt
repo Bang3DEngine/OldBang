@@ -110,6 +110,7 @@ ${BANG_ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/AudioManager.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/AudioPlayerRunnable.cpp
+${BANG_ENGINE_SRC_DIR}/BehaviourContainer.cpp
 ${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BangPreprocessor.cpp
 ${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedStruct.cpp
 ${BANG_ENGINE_SRC_DIR}/Compiler/BangPreprocessor/BPReflectedVariable.cpp
@@ -119,7 +120,6 @@ ${BANG_ENGINE_SRC_DIR}/Compiler/Compiler.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/AudioListener.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/AudioSource.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Behaviour.cpp
-${BANG_ENGINE_SRC_DIR}/BehaviourContainer.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Camera.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/Component.cpp
 ${BANG_ENGINE_SRC_DIR}/Components/DirectionalLight.cpp
@@ -207,9 +207,14 @@ ${BANG_ENGINE_SRC_DIR}/Math/Color.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Geometry.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Math.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Plane.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Polygon.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Polygon2D.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Quad.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Random.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Ray.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Ray2D.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Segment.cpp
+${BANG_ENGINE_SRC_DIR}/Math/Segment2D.cpp
 ${BANG_ENGINE_SRC_DIR}/Math/Triangle.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/Asset.cpp
 ${BANG_ENGINE_SRC_DIR}/Resources/AudioClip.cpp

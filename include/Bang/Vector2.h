@@ -13,6 +13,11 @@ explicit Vector2G(const OtherT1 &_x, \
                                        y( Cast<T>(_y) ) {}\
 \
 Vector2G<T> Perpendicular() const { return Vector2G<T>(-y,x); } \
+static T Cross(const Vector2G<T> &v1, const Vector2G<T> &v2) \
+{  \
+    return (v1.x * v2.y) - (v1.y * v2.x); \
+} \
+\
 \
 const static Vector2G Up; \
 const static Vector2G Down; \

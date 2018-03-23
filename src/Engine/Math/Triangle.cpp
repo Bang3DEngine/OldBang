@@ -1,6 +1,8 @@
 #include "Bang/Triangle.h"
 
+#include "Bang/Plane.h"
 #include "Bang/Matrix4.h"
+#include "Bang/Polygon.h"
 
 USING_NAMESPACE_BANG
 
@@ -18,6 +20,11 @@ void Triangle::SetPoint(int i, const Vector3 &point)
     (*this)[i] = point;
 }
 
+Plane Triangle::GetPlane() const
+{
+    return Plane(GetPoint(0), GetNormal());
+}
+
 Vector3 Triangle::GetNormal() const
 {
     return Vector3::Cross(GetPoint(1)-GetPoint(0), GetPoint(2)-GetPoint(0)).
@@ -27,6 +34,15 @@ Vector3 Triangle::GetNormal() const
 const Vector3 &Triangle::GetPoint(int i) const
 {
     return GetPoints()[i];
+}
+
+Polygon Triangle::ToPolygon() const
+{
+    Polygon poly;
+    poly.AddPoint( GetPoint(0) );
+    poly.AddPoint( GetPoint(1) );
+    poly.AddPoint( GetPoint(2) );
+    return poly;
 }
 
 const std::array<Vector3, 3> &Triangle::GetPoints() const

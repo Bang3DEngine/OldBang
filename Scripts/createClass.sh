@@ -70,6 +70,6 @@ ${CLASS_NAME}::~${CLASS_NAME}()
 }
 " > "${CLASS_SOURCE}"
 
-"Class header has been created in '${CLASS_HEADER}'"
-"Class source has been created in '${CLASS_SOURCE}'"
+echo "Class header has been created in '${CLASS_HEADER}'"
+echo "Class source has been created in '${CLASS_SOURCE}'"
 

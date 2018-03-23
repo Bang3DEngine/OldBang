@@ -8,15 +8,26 @@ NAMESPACE_BANG_BEGIN
 FORWARD class Ray;
 FORWARD class Quad;
 FORWARD class Plane;
+FORWARD class Ray2D;
 FORWARD class Sphere;
+FORWARD class Polygon;
+FORWARD class Segment;
 FORWARD class Triangle;
+FORWARD class Segment2D;
 
 class Geometry
 {
 public:
     enum Orientation { Left, Middle, Right };
 
-    // Computes the intersection between a ray and a plane.
+    static void IntersectSegment2DSegment2D(const Segment2D& segment0,
+                                            const Segment2D& segment1,
+                                            bool *intersected,
+                                            Vector2 *intersPoint);
+    static void IntersectRay2DSegment2D(const Ray2D &ray,
+                                        const Segment2D& segment,
+                                        bool *intersected,
+                                        Vector2 *intersPoint);
     static void IntersectRayPlane(const Ray &ray,
                                   const Plane& plane,
                                   bool *intersected,
@@ -39,6 +50,14 @@ public:
                                      Vector3 *pointOnRay  = nullptr,
                                      Vector3 *pointOnLine = nullptr);
 
+    // Computes the intersection between a ray and a PLANAR CONVEX polygon
+    static void IntersectSegmentPolygon(const Segment &segment,
+                                        const Polygon &poly,
+                                        bool *intersected,
+                                        Vector3 *intersection);
+    static Array<Vector3> IntersectPolygonPolygon(const Polygon &poly0,
+                                                  const Polygon &poly1);
+
     // Computes the intersection between a ray and a triangle
     static void IntersectRayTriangle(const Ray &ray,
                                      const Triangle &triangle,
@@ -50,8 +69,7 @@ public:
                                      Vector3 *intersectionPoint);
 
     // Computes the intersection between a triangle and a segment
-    static void IntersectSegmentTriangle(const Vector3 &segmentPoint0,
-                                         const Vector3 &segmentPoint1,
+    static void IntersectSegmentTriangle(const Segment &segment,
                                          const Triangle &triangle,
                                          bool *intersected,
                                          Vector3 *intersectionPoint);
@@ -98,9 +116,9 @@ public:
 
 
     // Returns the orientation of a point vs a line
-    static Orientation GetOrientation(const Vector3 &lineP0,
-                                      const Vector3 &lineP1,
-                                      const Vector3 &point);
+    static Orientation GetOrientation(const Vector2 &lineP0,
+                                      const Vector2 &lineP1,
+                                      const Vector2 &point);
 
     // Returns the point in the ray that is closer to the passed point
     static Vector3 RayClosestPointTo(const Ray &ray, const Vector3 &point);

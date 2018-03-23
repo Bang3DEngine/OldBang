@@ -1,6 +1,7 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include "Bang/Axis.h"
 #include "Bang/Vector.h"
 
 NAMESPACE_BANG_BEGIN
@@ -30,15 +31,25 @@ explicit Vector3G(const OtherT1 &_x, const Vector2G<OtherT2> &v)\
 \
 \
 \
-Vector3G ProjectedOnPlane(const Vector3G& planeNormal, \
-                          const Vector3G& planePoint) const \
+Vector3G<T> ProjectedOnPlane(const Vector3G<T> &planeNormal, \
+                             const Vector3G<T> &planePoint) const \
 { \
-    Vector3G n = planeNormal.Normalized(); \
+    Vector3G<T> n = planeNormal.Normalized(); \
     return (*this) - n * Vector3G<T>::Dot(n, *this - planePoint); \
 } \
-Vector3G ProjectedOnVector(const Vector3G& vector) const \
+Vector3G<T> ProjectedOnVector(const Vector3G<T> &vector) const \
 { \
     return Vector3G<T>::Dot(*this, vector) * vector.Normalized(); \
+} \
+Vector2G<T> ProjectedOnAxis(Axis3D axis) const \
+{ \
+    switch (axis) \
+    { \
+        case Axis3D::X: return Vector2G<T>(y, z); \
+        case Axis3D::Y: return Vector2G<T>(x, z); \
+        case Axis3D::Z: return Vector2G<T>(x, y); \
+    } \
+    return Vector2G<T>::Zero; \
 } \
 template<class OtherT1, class OtherT2> \
 static Vector3G<T> Cross(const Vector3G<OtherT1> &v1, \
