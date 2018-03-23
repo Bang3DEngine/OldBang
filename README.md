@@ -9,7 +9,7 @@
 Bang 3D game engine, using C++. <br/>
 <br/>
 Go to website for all the information: <br/>
-https://bang3dengine.github.io <br/>
+<h1> https://www.bang3dengine.site </h1> <br/>
 
 <br/>
 <img src="https://github.com/Bang3DEngine/Bang/blob/TFG/EngineAssets/Logos/LogoBang_512.png" width="512">
