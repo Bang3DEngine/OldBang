@@ -18,14 +18,14 @@ public:
     virtual ~VAO();
 
     void Bind() const override;
-    void BindVBO(const VBO *vbo,
-                 int location,
-                 int dataComponentsCount,
-                 GL::DataType dataType = GL::DataType::Float,
-                 bool dataNormalized   = false,
-                 int dataStride        = 0,
-                 int dataOffset        = 0);
-    void BindIBO(IBO *ibo);
+    void AddVBO(const VBO *vbo,
+                int location,
+                int dataComponentsCount,
+                GL::DataType dataType = GL::DataType::Float,
+                bool dataNormalized   = false,
+                int dataStride        = 0,
+                int dataOffset        = 0);
+    void SetIBO(IBO *ibo);
 
     void UnBind() const override;
     void UnBindVBO(GLint location);

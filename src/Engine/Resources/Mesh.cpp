@@ -38,7 +38,7 @@ void Mesh::LoadVertexIndices(const Array<Mesh::VertexId> &faceIndices)
     m_vertexIndicesIBO->Fill((void*)(&m_vertexIndices[0]),
                              m_vertexIndices.Size() * sizeof(Mesh::VertexId));
 
-    m_vao->BindIBO(m_vertexIndicesIBO); // Bind to VAO
+    m_vao->SetIBO(m_vertexIndicesIBO); // Bind to VAO
 }
 
 void Mesh::LoadPositionsPool(const Array<Vector3>& positions)
@@ -111,17 +111,17 @@ void Mesh::LoadAll(const Array<Mesh::VertexId> &vertexIndices,
 
 void Mesh::BindPositionsVBOToLocation(int positionsVBOLocation)
 {
-    m_vao->BindVBO(m_vertexPositionsPoolVBO, positionsVBOLocation, 3);
+    m_vao->AddVBO(m_vertexPositionsPoolVBO, positionsVBOLocation, 3);
 }
 
 void Mesh::BindNormalsVBOToLocation(int normalsVBOLocation)
 {
-    m_vao->BindVBO(m_vertexNormalsPoolVBO, normalsVBOLocation, 3);
+    m_vao->AddVBO(m_vertexNormalsPoolVBO, normalsVBOLocation, 3);
 }
 
 void Mesh::BindUvsVBOToLocation(int uvsVBOLocation)
 {
-    m_vao->BindVBO(m_vertexUvsPoolVBO, uvsVBOLocation, 2);
+    m_vao->AddVBO(m_vertexUvsPoolVBO, uvsVBOLocation, 2);
 }
 
 uint Mesh::GetNumTriangles() const
@@ -138,12 +138,18 @@ std::array<Mesh::VertexId, 3> Mesh::GetTriangleVertexIndices(int triIndex) const
     return {{triVertex0Index, triVertex1Index, triVertex2Index}};
 }
 
+int Mesh::GetVertexCount() const
+{
+    return GetVertexIndicesIBO() ? GetVertexIndices().Size() :
+                                   GetPositionsPool().Size();
+}
+
+
 VAO *Mesh::GetVAO() const { return m_vao; }
 IBO *Mesh::GetVertexIndicesIBO() const { return m_vertexIndicesIBO; }
 VBO *Mesh::GetVertexPositionsPoolVBO() const { return m_vertexPositionsPoolVBO; }
 VBO *Mesh::GetVertexNormalsPoolVBO() const { return m_vertexNormalsPoolVBO; }
 VBO *Mesh::GetVertexUvsPoolVBO() const { return m_vertexUvsPoolVBO; }
-int Mesh::GetVertexCount() const { return GetVertexIndices().Size(); }
 const AABox &Mesh::GetAABBox() const { return m_bBox; }
 const Sphere &Mesh::GetBoundingSphere() const { return m_bSphere; }
 
@@ -177,12 +183,6 @@ void Mesh::Import(const Path &meshFilepath)
                                         &uvsPool) )
     {
         LoadAll(vertexIndices, positionsPool, normalsPool, uvsPool);
-        Debug_Peek(vertexIndices);
-        Debug_Peek(positionsPool);
-        Debug_Peek(normalsPool);
-        Debug_Peek(uvsPool);
-        Debug_Log("==================");
-        int a = 2;
     }
     else
     {

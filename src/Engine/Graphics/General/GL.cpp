@@ -1071,7 +1071,6 @@ void GL::Render(const VAO *vao, GL::Primitive renderMode,
 {
     if (vao->IsIndexed())
     {
-        // Debug_Log("Rendering " << elementsCount << " from " << startElementIndex);
         GL::DrawElements(vao, renderMode, elementsCount, startElementIndex);
     }
     else
