@@ -60,7 +60,7 @@ uint Octree<T, ClassifyFunctor>::Fill(const Array<T> &elements, uint maxDepth)
             const Vector3 minPoint = GetAABox().GetMin();
             const Vector3 size     = GetAABox().GetSize();
             const Vector3 &mp      = minPoint;
-            const Vector3  hs      = size / 2.0f;
+            const Vector3 hs       = size / 2.0f;
 
             for (int i = 0; i < 8; ++i) { m_children[i] = new Octree<T, ClassifyFunctor>(); }
             m_children[0]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(0,0,0), hs) );

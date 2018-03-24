@@ -162,9 +162,9 @@ uint Mesh::GetNumTriangles() const
 std::array<Mesh::VertexId, 3> Mesh::GetTriangleVertexIndices(int triIndex) const
 {
     ASSERT(triIndex >= 0 && triIndex < GetNumTriangles());
-    const VertexId triVertex0Index = triIndex * 3;
-    const VertexId triVertex1Index = triVertex0Index + 1;
-    const VertexId triVertex2Index = triVertex0Index + 2;
+    const VertexId triVertex0Index = GetVertexIndices()[triIndex * 3 + 0];
+    const VertexId triVertex1Index = GetVertexIndices()[triIndex * 3 + 1];
+    const VertexId triVertex2Index = GetVertexIndices()[triIndex * 3 + 2];
     return {{triVertex0Index, triVertex1Index, triVertex2Index}};
 }
 
