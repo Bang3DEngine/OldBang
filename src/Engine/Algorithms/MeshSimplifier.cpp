@@ -41,7 +41,9 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
 
     constexpr int MaxOctreeDepth = 12;
     SimplOctree octree;
-    octree.SetAABox( mesh->GetAABBox() );
+    AABox meshAABox = mesh->GetAABBox();
+    octree.SetAABox( AABox(meshAABox.GetMin() - meshAABox.GetSize() * 0.05f,
+                           meshAABox.GetMax() + meshAABox.GetSize() * 0.05f) );
     octree.Fill(octreeData, MaxOctreeDepth);
 
     // Compute useful connectivity info for later
