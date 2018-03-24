@@ -107,6 +107,7 @@ add_misc_files("${OTHER_FILES}")
 #=================================================================
 set (ENGINE_SRC_FILES
 ${BANG_ENGINE_SRC_DIR}/Algorithms/ImageEffects.cpp
+${BANG_ENGINE_SRC_DIR}/Algorithms/MeshSimplifier.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/ALAudioSource.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/AudioManager.cpp
 ${BANG_ENGINE_SRC_DIR}/Audio/AudioPlayerRunnable.cpp

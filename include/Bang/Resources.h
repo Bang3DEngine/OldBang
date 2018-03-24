@@ -111,6 +111,10 @@ public:
     static String ToString(Resource *resource);
     static String ToString();
 
+    MeshFactory *GetMeshFactory() const;
+    MaterialFactory *GetMaterialFactory() const;
+    ShaderProgramFactory *GetShaderProgramFactory() const;
+
     void Destroy();
 
     static Resources* GetActive();
@@ -129,10 +133,7 @@ private:
 
     friend class Window;
     friend class GUIDManager;
-    friend class MeshFactory;
     friend class IResourceHandle;
-    friend class MaterialFactory;
-    friend class ShaderProgramFactory;
 };
 
 NAMESPACE_BANG_END

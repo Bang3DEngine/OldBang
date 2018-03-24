@@ -110,7 +110,6 @@ void Gizmos::SetThickness(float thickness)
     for (Renderer *rend : g->m_renderers)
     {
         rend->SetLineWidth(thickness);
-        GL::PointSize(thickness);
     }
 }
 
@@ -171,7 +170,7 @@ void Gizmos::RenderBox(const AABox &b)
     g->m_meshRenderer->SetMesh(g->p_boxMesh.Get());
     g->m_gizmosGo->GetTransform()->SetPosition(b.GetCenter());
     g->m_gizmosGo->GetTransform()->
-       SetScale(g->m_gizmosGo->GetTransform()->GetScale() * b.GetDimensions());
+       SetScale(g->m_gizmosGo->GetTransform()->GetScale() * b.GetSize());
     g->Render(g->m_meshRenderer);
 }
 

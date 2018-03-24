@@ -53,6 +53,7 @@ void Renderer::Bind() const
     GL::SetEnabled(GL::Test::CullFace, GetCulling());
 
     GL::LineWidth( GetLineWidth() );
+    GL::PointSize( GetLineWidth() );
 
     Transform *t = GetGameObject()->GetTransform();
     GLUniforms::SetModelMatrix( t ? t->GetLocalToWorldMatrix() : Matrix4::Identity );

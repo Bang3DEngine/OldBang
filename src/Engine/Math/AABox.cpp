@@ -94,7 +94,7 @@ Vector3 AABox::GetCenter() const
     return (GetMin() + GetMax()) / 2.0f;
 }
 
-Vector3 AABox::GetDimensions() const
+Vector3 AABox::GetSize() const
 {
     return Vector3(GetWidth(), GetHeight(), GetDepth());
 }
@@ -187,6 +187,11 @@ void AABox::CreateFromPositions(const Array<Vector3> &positions)
 {
     if (positions.IsEmpty()) { return; }
     for (const Vector3 &v : positions) { AddPoint(v); }
+}
+
+AABox AABox::FromPointAndSize(const Vector3 &point, const Vector3 &size)
+{
+    return AABox(point, point + size);
 }
 
 AABox AABox::FromSphere(const Sphere &sphere)

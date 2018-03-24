@@ -40,7 +40,7 @@ public:
     float GetHeight() const;
     float GetDepth() const;
     Vector3 GetCenter() const;
-    Vector3 GetDimensions() const;
+    Vector3 GetSize() const;
     float GetArea() const;
     float GetVolume() const;
     Vector3 GetExtents() const;
@@ -67,6 +67,7 @@ public:
     static AABox Union(const AABox &b1, const AABox &b2);
     void CreateFromPositions(const Array<Vector3> &positions);
 
+    static AABox FromPointAndSize(const Vector3 &point, const Vector3 &size);
     static AABox FromSphere(const Sphere &sphere);
 };
 

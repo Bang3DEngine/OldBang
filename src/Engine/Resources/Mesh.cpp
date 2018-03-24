@@ -9,6 +9,7 @@
 #include "Bang/ModelIO.h"
 #include "Bang/Resources.h"
 #include "Bang/XMLNodeReader.h"
+#include "Bang/MeshSimplifier.h"
 #include "Bang/ImportFilesManager.h"
 
 USING_NAMESPACE_BANG
@@ -39,6 +40,7 @@ void Mesh::LoadVertexIndices(const Array<Mesh::VertexId> &faceIndices)
                              m_vertexIndices.Size() * sizeof(Mesh::VertexId));
 
     m_vao->SetIBO(m_vertexIndicesIBO); // Bind to VAO
+    m_areLodsValid = false;
 }
 
 void Mesh::LoadPositionsPool(const Array<Vector3>& positions)
@@ -58,6 +60,7 @@ void Mesh::LoadPositionsPool(const Array<Vector3>& positions)
 
     m_bBox.CreateFromPositions(m_positionsPool);
     m_bSphere.FromBox(m_bBox);
+    m_areLodsValid = false;
 }
 
 void Mesh::LoadNormalsPool(const Array<Vector3> &normals)
@@ -74,6 +77,7 @@ void Mesh::LoadNormalsPool(const Array<Vector3> &normals)
     m_vertexNormalsPoolVBO->Fill((void*)(&m_normalsPool[0]),
                                      m_normalsPool.Size() * sizeof(float) * 3);
     BindNormalsVBOToLocation(Mesh::DefaultNormalsVBOLocation);
+    m_areLodsValid = false;
 }
 
 void Mesh::LoadUvsPool(const Array<Vector2> &uvs)
@@ -89,6 +93,7 @@ void Mesh::LoadUvsPool(const Array<Vector2> &uvs)
     m_vertexUvsPoolVBO = new VBO();
     m_vertexUvsPoolVBO->Fill((void*)(&m_uvsPool[0]), m_uvsPool.Size() * sizeof(float) * 2);
     BindUvsVBOToLocation(Mesh::DefaultUvsVBOLocation);
+    m_areLodsValid = false;
 }
 
 void Mesh::LoadAll(const Array<Vector3> &positionsPool,
@@ -122,6 +127,31 @@ void Mesh::BindNormalsVBOToLocation(int normalsVBOLocation)
 void Mesh::BindUvsVBOToLocation(int uvsVBOLocation)
 {
     m_vao->AddVBO(m_vertexUvsPoolVBO, uvsVBOLocation, 2);
+}
+
+void Mesh::CalculateLODs()
+{
+    if (!m_areLodsValid)
+    {
+        m_lodMeshes = MeshSimplifier::GetAllMeshLODs( this );
+        m_areLodsValid = true;
+    }
+}
+
+RH<Mesh> Mesh::GetLOD(uint lod) const
+{
+    if (GetLODs().IsEmpty())
+    {
+        return RH<Mesh>(const_cast<Mesh*>(this));
+    }
+
+    const uint clampedLODLevel = Math::Min(lod, GetLODs().Size()-1);
+    return GetLODs()[clampedLODLevel];
+}
+
+const Array<RH<Mesh> > Mesh::GetLODs() const
+{
+    return m_lodMeshes;
 }
 
 uint Mesh::GetNumTriangles() const

@@ -279,6 +279,21 @@ String Resources::ToString()
     return Resources::ToString(nullptr);
 }
 
+MeshFactory *Resources::GetMeshFactory() const
+{
+    return m_meshFactory;
+}
+
+MaterialFactory *Resources::GetMaterialFactory() const
+{
+    return m_materialFactory;
+}
+
+ShaderProgramFactory *Resources::GetShaderProgramFactory() const
+{
+    return m_shaderProgramFactory;
+}
+
 void Resources::Destroy()
 {
     delete m_meshFactory;          m_meshFactory          = nullptr;

@@ -37,5 +37,5 @@ RH<Mesh> MeshFactory::GetMesh(const Path &fullPath)
 
 MeshFactory *MeshFactory::GetActive()
 {
-    return Resources::GetActive()->m_meshFactory;
+    return Resources::GetActive()->GetMeshFactory();
 }

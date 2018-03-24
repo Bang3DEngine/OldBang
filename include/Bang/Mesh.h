@@ -42,6 +42,9 @@ public:
     void BindNormalsVBOToLocation(int normalsVBOLocation);
     void BindUvsVBOToLocation(int uvsVBOLocation);
 
+    void CalculateLODs();
+    RH<Mesh> GetLOD(uint lod) const;
+    const Array<RH<Mesh>> GetLODs() const;
     uint GetNumTriangles() const;
     std::array<VertexId, 3> GetTriangleVertexIndices(int triIndex) const;
 
@@ -70,6 +73,8 @@ public:
     virtual void ExportXML(XMLNode *xmlInfo) const override;
 
 private:
+    bool m_areLodsValid = false;
+    Array< RH<Mesh> > m_lodMeshes;
     Array<VertexId> m_vertexIndices;
     Array<Vector3> m_positionsPool;
     Array<Vector3> m_normalsPool;

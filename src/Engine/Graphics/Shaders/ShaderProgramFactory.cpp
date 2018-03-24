@@ -48,5 +48,5 @@ ShaderProgram *ShaderProgramFactory::Get(const Path &vShaderPath,
 ShaderProgramFactory *ShaderProgramFactory::GetActive()
 {
     Resources *rs = Resources::GetActive();
-    return rs ? rs->m_shaderProgramFactory : nullptr;
+    return rs ? rs->GetShaderProgramFactory() : nullptr;
 }

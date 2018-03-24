@@ -42,6 +42,27 @@ Mesh* MeshRenderer::GetMesh() const
     return p_mesh.Get();
 }
 Mesh *MeshRenderer::GetSharedMesh() const { return p_sharedMesh.Get(); }
+
+void MeshRenderer::SetCurrentLOD(uint lod)
+{
+    m_currentLOD = lod;
+}
+
+void MeshRenderer::SetAutoLOD(bool autoLOD)
+{
+    m_autoLOD = autoLOD;
+}
+
+bool MeshRenderer::GetAutoLOD() const
+{
+    return m_autoLOD;
+}
+
+uint MeshRenderer::GetCurrentLOD() const
+{
+    return m_currentLOD;
+}
+
 AABox MeshRenderer::GetAABBox() const
 {
     return GetUserMesh() ? GetUserMesh()->GetAABBox() : AABox::Empty;
@@ -50,9 +71,15 @@ AABox MeshRenderer::GetAABBox() const
 void MeshRenderer::OnRender()
 {
     Renderer::OnRender();
-    if (!GetUserMesh()) { return; }
-    GL::Render(GetUserMesh()->GetVAO(), GetRenderPrimitive(),
-               GetUserMesh()->GetVertexCount());
+
+    Mesh *baseMeshToRender = GetUserMesh();
+    if (baseMeshToRender)
+    {
+        Mesh *lodMeshToRender = baseMeshToRender->GetLOD( GetCurrentLOD() ).Get();
+        GL::Render(lodMeshToRender->GetVAO(),
+                   GetRenderPrimitive(),
+                   lodMeshToRender->GetVertexCount());
+    }
 }
 
 Mesh *MeshRenderer::GetUserMesh() const
