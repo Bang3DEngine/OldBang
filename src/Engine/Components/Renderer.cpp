@@ -26,7 +26,7 @@ Renderer::~Renderer()
 {
 }
 
-Material *Renderer::GetUserMaterial() const
+Material *Renderer::GetActiveMaterial() const
 {
     if (p_material) { return GetMaterial(); }
     return GetSharedMaterial();
@@ -36,7 +36,7 @@ void Renderer::OnRender(RenderPass renderPass)
 {
     Component::OnRender(renderPass);
 
-    Material *mat = GetUserMaterial();
+    Material *mat = GetActiveMaterial();
     if (IsVisible() && mat && mat->GetRenderPass() == renderPass)
     {
         GEngine::GetActive()->Render(this);
@@ -58,12 +58,12 @@ void Renderer::Bind() const
     Transform *t = GetGameObject()->GetTransform();
     GLUniforms::SetModelMatrix( t ? t->GetLocalToWorldMatrix() : Matrix4::Identity );
 
-    if (GetUserMaterial()) { GetUserMaterial()->Bind(); }
+    if (GetActiveMaterial()) { GetActiveMaterial()->Bind(); }
 }
 
 void Renderer::UnBind() const
 {
-    if (GetUserMaterial()) { GetUserMaterial()->UnBind(); }
+    if (GetActiveMaterial()) { GetActiveMaterial()->UnBind(); }
 }
 
 

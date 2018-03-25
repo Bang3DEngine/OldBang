@@ -26,8 +26,6 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
 {
     if (!mesh) { return Array<RH<Mesh>>(); }
 
-    if (mesh->GetVertexCount() != 1996*3) { return Array<RH<Mesh>>(); }
-
     Array<OctreeData> octreeData; // Retrieve all the octree data
     {
         for (int i = 0; i < mesh->GetVertexCount(); ++i)
@@ -36,10 +34,6 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
                                         mesh->GetVertexIndices()[i] : i);
             const Vector3 &position = mesh->GetPositionsPool()[vIndex];
             octreeData.PushBack( std::make_pair(vIndex, position) );
-            if (vIndex == 513)
-            {
-                // Debug_Log("ORIGINAL Uv: " << mesh->GetUvsPool()[vIndex]);
-            }
         }
     }
 
@@ -84,12 +78,9 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
     Array< RH<Mesh> > simplifiedMeshesArray;
     for (int level = 0; level <= MaxOctreeDepth; ++level)
     {
-        // Debug_Log("New level: " << level << "===================");
-
         // Get the octree nodes at that level (and leaves pruned before)
         Array<const SimplOctree*> octreeChildrenInLevel =
                                       octree.GetChildrenAtLevel(level, true);
-        // Debug_Log(i << ": " << octreeChildrenInLevel);
 
         struct VertexData // Simple struct to hold vertex data
         {
@@ -103,43 +94,74 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
         using VertexCluster = Map<Mesh::VertexId, VertexData>;
         Array<VertexCluster> vertexClusters;
         Map<Mesh::VertexId, ClusterId> vertexIndexToClusterIndex;
+
+        // Make clusters for each octree node in this level...
         for (const SimplOctree *octInLevel : octreeChildrenInLevel)
         {
-            VertexCluster vertexCluster;
             const Array<OctreeData> octLevelData = octInLevel->GetElementsRecursive();
-            for (const OctreeData &octData : octLevelData)
+            // Make a little check before for a corner case here...
+            bool allVerticesHaveSamePosition = true;
             {
-                const Mesh::VertexId vertexIndex = octData.first;
-                if (!vertexCluster.ContainsKey(vertexIndex))
+                const Vector3 &firstPos = octLevelData.Begin()->second;
+                for (const OctreeData &octData : octLevelData)
                 {
+                    const Vector3 &octDataPos = octData.second;
+                    if (Vector3::SqDistance(firstPos, octDataPos) > 10e-5)
+                    {
+                        allVerticesHaveSamePosition = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!allVerticesHaveSamePosition)
+            {
+                // Normal case.
+                // Create the vertex cluster from the octree node.
+                VertexCluster vertexCluster;
+                for (const OctreeData &octData : octLevelData)
+                {
+                    const Mesh::VertexId vertexIndex = octData.first;
+                    if (!vertexCluster.ContainsKey(vertexIndex))
+                    {
+                        VertexData vertexData;
+                        vertexData.pos    = mesh->GetPositionsPool()[vertexIndex];
+                        vertexData.normal = mesh->GetNormalsPool()[vertexIndex];
+                        vertexData.uv     = mesh->GetUvsPool()[vertexIndex];
+
+                        vertexCluster.Add(vertexIndex, vertexData);
+                        vertexIndexToClusterIndex[vertexIndex] = vertexClusters.Size();
+                    }
+                }
+                vertexClusters.PushBack(vertexCluster);
+            }
+            else
+            {
+                // Special case!
+                // We will treat here a very common corner case when arriving to
+                // maximum subdivision levels. It can happen that we have all these
+                // clustered vertices with the same pos, but different normals/uvs.
+                // If we clustered them, we would later average them, and not
+                // thus not respecting the original model discontinuity.
+                // Consequently, in this case, we must just not cluster them.
+
+                for (const OctreeData &octData : octLevelData)
+                {
+                    const Mesh::VertexId vertexIndex = octData.first;
+
                     VertexData vertexData;
                     vertexData.pos    = mesh->GetPositionsPool()[vertexIndex];
                     vertexData.normal = mesh->GetNormalsPool()[vertexIndex];
                     vertexData.uv     = mesh->GetUvsPool()[vertexIndex];
 
+                    VertexCluster vertexCluster;
                     vertexCluster.Add(vertexIndex, vertexData);
                     vertexIndexToClusterIndex[vertexIndex] = vertexClusters.Size();
+                    vertexClusters.PushBack(vertexCluster);
                 }
             }
-            vertexClusters.PushBack(vertexCluster);
-        }
 
-        /*
-        if (level == MaxOctreeDepth)
-        {
-            for (VertexCluster &vc : vertexClusters)
-            {
-                if (vc.Size() > 1)
-                {
-                    for (auto &pair : vc)
-                    {
-                        VertexData &vd = pair.second;
-                        vd.pos += vd.normal * 5.0f;
-                    }
-                    //Debug_Peek(vertexCluster.Size());
-                }
-            }
-        }*/
+        }
 
         // Now actually simplify the mesh. For each cluster of vertices we will
         // extract one single vertex averaging all the components of the cluster.
@@ -157,14 +179,9 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
             for (const auto &pair : vertexCluster)
             {
                 const VertexData &vData = pair.second;
-                clusterPositionsMean += vData.pos;
-                clusterNormalsMean   += vData.normal;
-                clusterUvsMean       += vData.uv;
-                // if (pair.first == 513)
-                // {
-                //     Debug_Peek(vData.uv);
-                //     Debug_Peek(vData.normal);
-                // }
+                clusterPositionsMean   += vData.pos;
+                clusterNormalsMean     += vData.normal;
+                clusterUvsMean         += vData.uv;
             }
 
             const float vertexClusterSize = vertexCluster.Size();
@@ -178,9 +195,6 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
         simplifiedMesh.Get()->LoadPositionsPool(positionsLOD);
         simplifiedMesh.Get()->LoadNormalsPool(normalsLOD);
         simplifiedMesh.Get()->LoadUvsPool(uvsLOD);
-        // Debug_Log("Level " << level << " has " << positionsLOD.Size() << "/" << mesh->GetVertexCount() << " positions");
-        // Debug_Log("Level " << level << " has " << octreeChildrenInLevel.Size() << " octrees in the level.");
-
 
         // All is left is determining the face vertex indices...For this we will
         // determine which combinations of 3 vertex clusters form up triangles.
@@ -257,14 +271,6 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
                 }
             }
         }
-        // Debug_Log("======================================================");
-        // Debug_Log("======================================================");
-        // Debug_Log("======================================================");
-        // Debug_Log("Original: " << mesh->GetVertexIndices());
-        // Debug_Log("Level " << level << ": " << vertexClusterIndices);
-        // Debug_Log("======================================================");
-        // Debug_Log("======================================================");
-        // Debug_Log("======================================================");
         simplifiedMesh.Get()->LoadVertexIndices(vertexClusterIndices);
 
         simplifiedMeshesArray.PushBack(simplifiedMesh);

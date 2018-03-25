@@ -263,7 +263,7 @@ void ModelIO::ExportModel(const GameObject *rootGameObject,
                    rootGameObject->GetComponentsInChildren<MeshRenderer>(true);
         for (MeshRenderer *mr : rootMRs)
         {
-            Mesh *mesh = mr->GetMesh();
+            Mesh *mesh = mr->GetActiveMesh();
             if (mesh)
             {
                 sceneMeshes.Add(mesh);
@@ -363,16 +363,16 @@ aiNode *ModelIO::GameObjectToAiNode(const GameObject *gameObject,
     goNode->mNumMeshes = 0; // Count number of meshes
     for (MeshRenderer *mr : mrs)
     {
-        goNode->mNumMeshes += (mr->GetMesh() ? 1 : 0);
+        goNode->mNumMeshes += (mr->GetActiveMesh() ? 1 : 0);
     }
     goNode->mMeshes = new unsigned int[goNode->mNumMeshes];
 
     int i = 0; // Populate meshes indices
     for (MeshRenderer *mr : mrs)
     {
-        if (mr->GetMesh())
+        if (mr->GetActiveMesh())
         {
-            goNode->mMeshes[i] = sceneMeshes.IndexOf(mr->GetMesh());
+            goNode->mMeshes[i] = sceneMeshes.IndexOf(mr->GetActiveMesh());
         }
     }
 

@@ -85,6 +85,18 @@ template<class T> \
 bool operator!=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs); \
 \
 template<class T> \
+bool operator<(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs); \
+\
+template<class T> \
+bool operator<=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs); \
+\
+template<class T> \
+bool operator>(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs); \
+\
+template<class T> \
+bool operator>=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs); \
+\
+template<class T> \
 VECTOR_G<T> operator+(const VECTOR_G<T> & v1, const VECTOR_G<T> &v2); \
 \
 template<class T> \

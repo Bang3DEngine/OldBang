@@ -543,8 +543,8 @@ AABox GameObject::GetLocalAABBox(bool includeChildren) const
     AABox aabBox = AABox::Empty;
     for (Renderer *rend : rends)
     {
-        if (rend && rend->IsEnabled() && rend->GetUserMaterial() &&
-            rend->GetUserMaterial()->GetRenderPass() == RenderPass::Scene)
+        if (rend && rend->IsEnabled() && rend->GetActiveMaterial() &&
+            rend->GetActiveMaterial()->GetRenderPass() == RenderPass::Scene)
         {
             const AABox rendAABox = rend->GetAABBox();
             if (rendAABox != AABox::Empty)

@@ -249,6 +249,32 @@ bool operator==(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
 } \
 \
 template<class T> \
+bool operator<(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
+{ \
+    for (int i = 0; i < N; ++i) { if (lhs[i] >= rhs[i]) { return false; } } \
+    return true; \
+} \
+\
+template<class T> \
+bool operator<=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
+{ \
+    for (int i = 0; i < N; ++i) { if (lhs[i] > rhs[i]) { return false; } } \
+    return true; \
+} \
+\
+template<class T> \
+bool operator>(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
+{ \
+    return (rhs < lhs); \
+} \
+\
+template<class T> \
+bool operator>=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
+{ \
+    return (rhs <= lhs); \
+} \
+\
+template<class T> \
 bool operator!=(const VECTOR_G<T> &lhs, const VECTOR_G<T> &rhs) \
 { \
     return !(lhs == rhs); \

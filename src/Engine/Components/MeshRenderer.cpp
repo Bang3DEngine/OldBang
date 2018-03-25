@@ -65,14 +65,14 @@ uint MeshRenderer::GetCurrentLOD() const
 
 AABox MeshRenderer::GetAABBox() const
 {
-    return GetUserMesh() ? GetUserMesh()->GetAABBox() : AABox::Empty;
+    return GetActiveMesh() ? GetActiveMesh()->GetAABBox() : AABox::Empty;
 }
 
 void MeshRenderer::OnRender()
 {
     Renderer::OnRender();
 
-    Mesh *baseMeshToRender = GetUserMesh();
+    Mesh *baseMeshToRender = GetActiveMesh();
     if (baseMeshToRender)
     {
         Mesh *lodMeshToRender = baseMeshToRender->GetLOD( GetCurrentLOD() ).Get();
@@ -82,7 +82,7 @@ void MeshRenderer::OnRender()
     }
 }
 
-Mesh *MeshRenderer::GetUserMesh() const
+Mesh *MeshRenderer::GetActiveMesh() const
 {
     if (p_mesh) { return GetMesh(); }
     return GetSharedMesh();

@@ -44,7 +44,7 @@ public:
 
     bool IsVisible() const;
     Material* GetSharedMaterial() const;
-    Material* GetUserMaterial() const;
+    Material* GetActiveMaterial() const;
     Material* GetMaterial() const;
     bool IsRenderWireframe() const;
     GL::Face GetCullFace() const;

@@ -15,6 +15,7 @@ class MeshRenderer : public Renderer
 public:
     void SetMesh(Mesh* m);
     Mesh* GetMesh() const;
+    Mesh* GetActiveMesh() const;
     Mesh* GetSharedMesh() const;
 
     void SetCurrentLOD(uint lod);
@@ -45,8 +46,6 @@ protected:
 
     // Renderer
     virtual void OnRender() override;
-
-    Mesh* GetUserMesh() const;
 };
 
 NAMESPACE_BANG_END

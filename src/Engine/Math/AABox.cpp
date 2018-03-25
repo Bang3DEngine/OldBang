@@ -161,9 +161,11 @@ bool AABox::CheckCollision(const AABox &aabox) const
 bool AABox::Contains(const Vector3 &point) const
 {
     if (!m_initialized) { return false; }
-    return point.x >= GetMin().x && point.x <= GetMax().x &&
-           point.y >= GetMin().y && point.y <= GetMax().y &&
-           point.z >= GetMin().z && point.z <= GetMax().z;
+    // return point.x >= GetMin().x && point.x <= GetMax().x &&
+    //        point.y >= GetMin().y && point.y <= GetMax().y &&
+    //        point.z >= GetMin().z && point.z <= GetMax().z;
+
+    return point >= GetMin() && point <= GetMax();
 }
 
 void AABox::AddPoint(const Vector3 &point)

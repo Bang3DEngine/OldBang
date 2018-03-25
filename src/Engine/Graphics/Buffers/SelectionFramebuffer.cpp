@@ -65,23 +65,23 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
-    if (!rend->GetUserMaterial()) { return; }
+    if (!rend->GetActiveMaterial()) { return; }
 
     GameObject *go = p_nextRenderSelectable ? p_nextRenderSelectable :
                                               rend->GetGameObject();
 
     RH<ShaderProgram> prevSP;
-    prevSP.Set( rend->GetUserMaterial()->GetShaderProgram() );
+    prevSP.Set( rend->GetActiveMaterial()->GetShaderProgram() );
 
     ShaderProgram *selSP = p_selectionMaterial.Get()->GetShaderProgram();
-    rend->GetUserMaterial()->SetShaderProgram(selSP);
+    rend->GetActiveMaterial()->SetShaderProgram(selSP);
 
     rend->Bind();
     selSP->Set("selectionColor", GetSelectionColor(go));
     rend->OnRender();
     rend->UnBind();
 
-    rend->GetUserMaterial()->SetShaderProgram(prevSP.Get());
+    rend->GetActiveMaterial()->SetShaderProgram(prevSP.Get());
 
     p_nextRenderSelectable = nullptr;
 }
