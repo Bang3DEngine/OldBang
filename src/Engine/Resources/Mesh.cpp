@@ -206,7 +206,7 @@ void Mesh::Import(const Path &meshFilepath)
     Array<Vector3> positionsPool;
     Array<Vector3> normalsPool;
     Array<Vector2> uvsPool;
-    if ( ModelIO::ReadFirstFoundMeshRaw(meshFilepath,
+    if ( ModelIO::ImportFirstFoundMeshRaw(meshFilepath,
                                         &vertexIndices,
                                         &positionsPool,
                                         &normalsPool,

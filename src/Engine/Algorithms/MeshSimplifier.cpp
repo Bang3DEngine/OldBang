@@ -26,6 +26,8 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
 {
     if (!mesh) { return Array<RH<Mesh>>(); }
 
+    if (mesh->GetVertexCount() != 1996*3) { return Array<RH<Mesh>>(); }
+
     Array<OctreeData> octreeData; // Retrieve all the octree data
     {
         for (int i = 0; i < mesh->GetVertexCount(); ++i)
@@ -34,16 +36,21 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
                                         mesh->GetVertexIndices()[i] : i);
             const Vector3 &position = mesh->GetPositionsPool()[vIndex];
             octreeData.PushBack( std::make_pair(vIndex, position) );
+            if (vIndex == 513)
+            {
+                // Debug_Log("ORIGINAL Uv: " << mesh->GetUvsPool()[vIndex]);
+            }
         }
     }
 
     using SimplOctree = Octree<OctreeData, ClassifyPoints>;
 
     constexpr int MaxOctreeDepth = 12;
+    constexpr float PaddingPercent = 0.05f;
     SimplOctree octree;
     AABox meshAABox = mesh->GetAABBox();
-    octree.SetAABox( AABox(meshAABox.GetMin() - meshAABox.GetSize() * 0.05f,
-                           meshAABox.GetMax() + meshAABox.GetSize() * 0.05f) );
+    octree.SetAABox( AABox(meshAABox.GetMin() - meshAABox.GetSize() * PaddingPercent,
+                           meshAABox.GetMax() + meshAABox.GetSize() * PaddingPercent) );
     octree.Fill(octreeData, MaxOctreeDepth);
 
     // Compute useful connectivity info for later
@@ -77,6 +84,8 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
     Array< RH<Mesh> > simplifiedMeshesArray;
     for (int level = 0; level <= MaxOctreeDepth; ++level)
     {
+        // Debug_Log("New level: " << level << "===================");
+
         // Get the octree nodes at that level (and leaves pruned before)
         Array<const SimplOctree*> octreeChildrenInLevel =
                                       octree.GetChildrenAtLevel(level, true);
@@ -115,6 +124,23 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
             vertexClusters.PushBack(vertexCluster);
         }
 
+        /*
+        if (level == MaxOctreeDepth)
+        {
+            for (VertexCluster &vc : vertexClusters)
+            {
+                if (vc.Size() > 1)
+                {
+                    for (auto &pair : vc)
+                    {
+                        VertexData &vd = pair.second;
+                        vd.pos += vd.normal * 5.0f;
+                    }
+                    //Debug_Peek(vertexCluster.Size());
+                }
+            }
+        }*/
+
         // Now actually simplify the mesh. For each cluster of vertices we will
         // extract one single vertex averaging all the components of the cluster.
         Array<Vector3> positionsLOD;
@@ -123,6 +149,8 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
         RH<Mesh> simplifiedMesh = Resources::Create<Mesh>();
         for (const VertexCluster &vertexCluster : vertexClusters)
         {
+            if (vertexCluster.IsEmpty()) { continue; }
+
             Vector3 clusterPositionsMean = Vector3::Zero;
             Vector3 clusterNormalsMean   = Vector3::Zero;
             Vector2 clusterUvsMean       = Vector2::Zero;
@@ -132,9 +160,14 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
                 clusterPositionsMean += vData.pos;
                 clusterNormalsMean   += vData.normal;
                 clusterUvsMean       += vData.uv;
+                // if (pair.first == 513)
+                // {
+                //     Debug_Peek(vData.uv);
+                //     Debug_Peek(vData.normal);
+                // }
             }
 
-            const float vertexClusterSize = Math::Max(vertexCluster.Size(), 1);
+            const float vertexClusterSize = vertexCluster.Size();
             clusterPositionsMean /= vertexClusterSize;
             clusterNormalsMean   /= vertexClusterSize;
             clusterUvsMean       /= vertexClusterSize;

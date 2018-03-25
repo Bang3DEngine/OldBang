@@ -149,7 +149,7 @@ void Model::Import(const Path &modelFilepath)
     Array< String > meshesNames;
     Array< String > materialsNames;
 
-    ModelIO::ReadModel(modelFilepath, GetGUID(), &m_modelScene);
+    ModelIO::ImportModel(modelFilepath, GetGUID(), &m_modelScene);
 
     for (uint i = 0; i < meshes.Size(); ++i)
     {

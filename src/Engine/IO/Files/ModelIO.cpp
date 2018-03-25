@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <assimp/scene.h>
+#include <assimp/Exporter.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
@@ -24,6 +25,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/XMLNodeReader.h"
 
 USING_NAMESPACE_BANG
@@ -32,11 +34,15 @@ String AIStringToString(const aiString &str) { return String(str.C_Str()); }
 Vector3 AIVectorToVec3(const aiVector3D &v) { return Vector3(v.x, v.y, v.z); }
 Color AIColor3ToColor(const aiColor3D &c) { return Color(c.r, c.g, c.b, 1); }
 Color AIColor4ToColor(const aiColor4D &c) { return Color(c.r, c.g, c.b, c.a); }
+aiVector3D VectorToAIVec3(const Vector3 &v) { return aiVector3D(v.x, v.y, v.z); }
+aiString StringToAIString(const String &str) { return aiString(str.ToCString()); }
+aiColor3D ColorToAiColor3(const Color &c) { return aiColor3D(c.r, c.g, c.b); }
+aiColor4D ColorToAiColor4(const Color &c) { return aiColor4D(c.r, c.g, c.b, c.a); }
 
 int ModelIO::GetModelNumTriangles(const Path &modelFilepath)
 {
     Assimp::Importer importer;
-    const aiScene* scene = ReadScene(&importer, modelFilepath);
+    const aiScene* scene = ImportScene(&importer, modelFilepath);
 
     if (scene && scene->HasMeshes()) { return scene->mMeshes[0]->mNumFaces; }
     return 0;
@@ -75,12 +81,12 @@ Tree<ModelIONode>* ReadModelNode(aiNode *node)
     return modelNodeTree;
 }
 
-bool ModelIO::ReadModel(const Path& modelFilepath,
-                        const GUID &modelGUID,
-                        ModelIOScene *modelScene)
+bool ModelIO::ImportModel(const Path& modelFilepath,
+                          const GUID &modelGUID,
+                          ModelIOScene *modelScene)
 {
     Assimp::Importer importer;
-    const aiScene* scene = ReadScene(&importer, modelFilepath);
+    const aiScene* scene = ImportScene(&importer, modelFilepath);
     if (!scene) { return false; }
 
     int innerResourceGUID = 1;
@@ -92,7 +98,7 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
     {
         String materialName;
         RH<Material> materialRH;
-        ModelIO::ReadMaterial(scene->mMaterials[i],
+        ModelIO::ImportMaterial(scene->mMaterials[i],
                               modelFilepath.GetDirectory(),
                               modelGUID,
                               innerResourceGUID,
@@ -110,7 +116,7 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
     {
         RH<Mesh> meshRH;
         String meshName;
-        ModelIO::ReadMesh(scene->mMeshes[i],
+        ModelIO::ImportMesh(scene->mMeshes[i],
                           modelGUID,
                           innerResourceGUID,
                           &meshRH,
@@ -134,7 +140,7 @@ bool ModelIO::ReadModel(const Path& modelFilepath,
     return true;
 }
 
-bool ModelIO::ReadFirstFoundMeshRaw(
+bool ModelIO::ImportFirstFoundMeshRaw(
                      const Path &modelFilepath,
                      Array<Mesh::VertexId> *vertexIndices,
                      Array<Vector3> *vertexPositionsPool,
@@ -142,12 +148,12 @@ bool ModelIO::ReadFirstFoundMeshRaw(
                      Array<Vector2> *vertexUvsPool)
 {
     Assimp::Importer importer;
-    const aiScene* scene = ReadScene(&importer, modelFilepath);
+    const aiScene* scene = ImportScene(&importer, modelFilepath);
 
     bool ok = false;
     if (scene && scene->HasMeshes())
     {
-        ModelIO::ReadMeshRaw(scene->mMeshes[0],
+        ModelIO::ImportMeshRaw(scene->mMeshes[0],
                              vertexIndices,
                              vertexPositionsPool,
                              vertexNormalsPool,
@@ -157,12 +163,12 @@ bool ModelIO::ReadFirstFoundMeshRaw(
     return ok;
 }
 
-void ModelIO::ReadMaterial(aiMaterial *aMaterial,
-                           const Path& modelDirectory,
-                           const GUID &parentModelGUID,
-                           const GUID::GUIDType &innerMaterialGUID,
-                           RH<Material> *outMaterial,
-                           String *outMaterialName)
+void ModelIO::ImportMaterial(aiMaterial *aMaterial,
+                             const Path& modelDirectory,
+                             const GUID &parentModelGUID,
+                             const GUID::GUIDType &innerMaterialGUID,
+                             RH<Material> *outMaterial,
+                             String *outMaterialName)
 {
     *outMaterial =  Resources::CreateInnerResource<Material>(parentModelGUID,
                                                              innerMaterialGUID);
@@ -198,7 +204,7 @@ void ModelIO::ReadMaterial(aiMaterial *aMaterial,
     outMaterial->Get()->SetTexture( matTexture.Get() );
 }
 
-void ModelIO::ReadMeshRaw(
+void ModelIO::ImportMeshRaw(
                   aiMesh *aMesh,
                   Array<Mesh::VertexId> *vertexIndices,
                   Array<Vector3> *vertexPositionsPool,
@@ -239,11 +245,207 @@ void ModelIO::ReadMeshRaw(
     }
 }
 
-void ModelIO::ReadMesh(aiMesh *aMesh,
-                       const GUID &parentModelGUID,
-                       const GUID::GUIDType &innerMeshGUID,
-                       RH<Mesh> *outMesh,
-                       String *outMeshName)
+void ModelIO::ExportModel(const GameObject *rootGameObject,
+                          const Path &meshExportPath)
+{
+    Assimp::Exporter exporter;
+    aiScene scene;
+
+    // Create scene meshes, materials and textures
+    Set<Mesh*> sceneMeshes;
+    Set<Material*> sceneMaterials;
+    Set<Texture2D*> sceneTextures;
+    Map<Mesh*, Material*> sceneMeshToMaterial;
+    Map<MeshRenderer*, Mesh*> meshRendererToMesh;
+    Map<MeshRenderer*, Material*> meshRendererToMaterial;
+    {
+        List<MeshRenderer*> rootMRs =
+                   rootGameObject->GetComponentsInChildren<MeshRenderer>(true);
+        for (MeshRenderer *mr : rootMRs)
+        {
+            Mesh *mesh = mr->GetMesh();
+            if (mesh)
+            {
+                sceneMeshes.Add(mesh);
+                meshRendererToMesh.Add(mr, mesh);
+            }
+
+            Material *material = mr->GetMaterial();
+            if (material)
+            {
+                sceneMeshToMaterial.Add(mesh, material);
+
+                sceneMaterials.Add(material);
+                meshRendererToMaterial.Add(mr, material);
+
+                if (material->GetTexture())
+                {
+                    sceneTextures.Add(material->GetTexture());
+                }
+            }
+        }
+    }
+
+    if (sceneMeshes.IsEmpty()) { return; }
+
+    Array<Mesh*> sceneMeshesArray(sceneMeshes.Begin(), sceneMeshes.End());
+    Array<Texture2D*> sceneTexturesArray(sceneTextures.Begin(), sceneTextures.End());
+    Array<Material*> sceneMaterialsArray(sceneMaterials.Begin(), sceneMaterials.End());
+
+    // Create materials
+    scene.mNumMaterials = sceneMaterialsArray.Size();
+    scene.mMaterials = new aiMaterial*[scene.mNumMaterials];
+    for (int i = 0; i < scene.mNumMaterials; ++i)
+    {
+        Material *material = sceneMaterialsArray[i];
+        aiMaterial *aMaterial = MaterialToAiMaterial(material);;
+        scene.mMaterials[i] = aMaterial;
+    }
+
+    // Create meshes
+    scene.mNumMeshes = sceneMeshesArray.Size();
+    scene.mMeshes = new aiMesh*[scene.mNumMeshes];
+    for (int i = 0; i < scene.mNumMeshes; ++i)
+    {
+        Mesh *mesh = sceneMeshesArray[i];
+        aiMesh *aMesh = MeshToAiMesh(mesh);
+        if (sceneMeshToMaterial.ContainsKey(mesh))
+        {
+            Material *meshMaterial = sceneMeshToMaterial[mesh];
+            aMesh->mMaterialIndex = sceneMaterialsArray.IndexOf(meshMaterial);
+        }
+        scene.mMeshes[i] = aMesh;
+    }
+    // scene.mNumTextures = sceneTexturesArray.Size();
+    // scene.mTextures = new aiTexture*[scene.mNumTextures];
+
+    scene.mRootNode = GameObjectToAiNode(rootGameObject, sceneMeshesArray);
+
+    const String extension = meshExportPath.GetExtension();
+    const String extensionId = GetExtensionIdFromExtension(extension).ToCString();
+    const int result =
+        exporter.Export(&scene,
+                        extensionId,
+                        meshExportPath.GetAbsolute().ToCString());
+
+    if (result != AI_SUCCESS)
+    {
+        Debug_Error("Error exporting to " << meshExportPath << ": " <<
+                    exporter.GetErrorString());
+    }
+}
+
+String ModelIO::GetExtensionIdFromExtension(const String &extension)
+{
+    Assimp::Exporter exporter;
+    for (int i = 0; i < exporter.GetExportFormatCount(); ++i)
+    {
+        const aiExportFormatDesc *fmtDesc = exporter.GetExportFormatDescription(i);
+        if (extension.EqualsNoCase(fmtDesc->fileExtension))
+        {
+            return String(fmtDesc->id);
+        }
+    }
+    Debug_Error("Can't export mesh to extension '" << extension << "'");
+    return 0;
+}
+
+aiNode *ModelIO::GameObjectToAiNode(const GameObject *gameObject,
+                                    const Array<Mesh*> &sceneMeshes)
+{
+    aiNode *goNode = new aiNode( gameObject->GetName() );
+    goNode->mNumChildren = gameObject->GetChildren().Size();
+
+    // Count number of meshes
+    const List<MeshRenderer*> mrs = gameObject->GetComponents<MeshRenderer>();
+
+    // Meshes
+    goNode->mNumMeshes = 0; // Count number of meshes
+    for (MeshRenderer *mr : mrs)
+    {
+        goNode->mNumMeshes += (mr->GetMesh() ? 1 : 0);
+    }
+    goNode->mMeshes = new unsigned int[goNode->mNumMeshes];
+
+    int i = 0; // Populate meshes indices
+    for (MeshRenderer *mr : mrs)
+    {
+        if (mr->GetMesh())
+        {
+            goNode->mMeshes[i] = sceneMeshes.IndexOf(mr->GetMesh());
+        }
+    }
+
+    // Add children if any
+    if (goNode->mNumChildren > 0)
+    {
+        goNode->mChildren = new aiNode*[goNode->mNumChildren];
+        for (int i = 0; i < goNode->mNumChildren; ++i)
+        {
+            GameObject *child = gameObject->GetChild(i);
+            aiNode *childNode = GameObjectToAiNode(child, sceneMeshes);
+            goNode->mChildren[i] = childNode;
+            childNode->mParent = goNode;
+        }
+    }
+
+    return goNode;
+}
+
+aiMesh *ModelIO::MeshToAiMesh(const Mesh *mesh)
+{
+    aiMesh *aMesh = new aiMesh();
+    aMesh->mNumVertices = mesh->GetPositionsPool().Size();
+    if (aMesh->mNumVertices > 0)
+    {
+        aMesh->mPrimitiveTypes     = 1;
+        aMesh->mNumUVComponents[0] = 1;
+        aMesh->mVertices         = new aiVector3D[aMesh->mNumVertices];
+        aMesh->mNormals          = new aiVector3D[aMesh->mNumVertices];
+        aMesh->mTextureCoords[0] = new aiVector3D[aMesh->mNumVertices];
+
+         // Populate vertices
+        for (int i = 0; i < aMesh->mNumVertices; ++i)
+        {
+            aMesh->mVertices[i] = VectorToAIVec3(mesh->GetPositionsPool()[i]);
+            aMesh->mNormals[i]  = VectorToAIVec3(mesh->GetNormalsPool()[i]);
+            aMesh->mTextureCoords[0][i] =
+                            VectorToAIVec3(Vector3(mesh->GetUvsPool()[i], 0));
+        }
+
+        aMesh->mNumFaces = mesh->GetNumTriangles();
+        aMesh->mFaces = new aiFace[aMesh->mNumFaces];
+        for(int tri = 0; tri < aMesh->mNumFaces; ++tri)
+        {
+            aiFace *aFace = &(aMesh->mFaces[tri]);
+            aFace->mNumIndices = 3;
+            aFace->mIndices = new unsigned int[aFace->mNumIndices];
+            const auto triIndices = mesh->GetTriangleVertexIndices(tri);
+            for (int i = 0; i < 3; ++i) { aFace->mIndices[i] = triIndices[i]; }
+        }
+    }
+    return aMesh;
+}
+
+aiMaterial *ModelIO::MaterialToAiMaterial(const Material *material)
+{
+    aiMaterial *aMaterial = new aiMaterial();
+    // aMaterial->mNumProperties = 1;
+    // aMaterial->mProperties = new aiMaterialProperty*[aMaterial->mNumProperties];
+
+    aiColor3D diffColor = ColorToAiColor3(Color::Red);
+    aMaterial->AddProperty(&diffColor, 1, AI_MATKEY_COLOR_DIFFUSE);/*
+    aMaterial->mProperties[0] = new aiMaterialProperty();
+    aMaterial->mProperties[0]->mKey = AI_MATKEY_COLOR_DIFFUSE;
+    aMaterial->mProperties[0]->*/
+    return aMaterial;
+}
+
+void ModelIO::ImportMesh(aiMesh *aMesh,
+                         const GUID &parentModelGUID,
+                         const GUID::GUIDType &innerMeshGUID,
+                         RH<Mesh> *outMesh,
+                         String *outMeshName)
 {
     *outMesh =  Resources::CreateInnerResource<Mesh>(parentModelGUID, innerMeshGUID);
 
@@ -252,7 +454,7 @@ void ModelIO::ReadMesh(aiMesh *aMesh,
     Array<Vector3> vertexNormalsPool;
     Array<Vector2> vertexUvsPool;
 
-    ModelIO::ReadMeshRaw(aMesh,
+    ModelIO::ImportMeshRaw(aMesh,
                          &vertexIndices,
                          &vertexPositionsPool,
                          &vertexNormalsPool,
@@ -269,7 +471,7 @@ void ModelIO::ReadMesh(aiMesh *aMesh,
                             vertexUvsPool);
 }
 
-const aiScene *ModelIO::ReadScene(Assimp::Importer *importer,
+const aiScene *ModelIO::ImportScene(Assimp::Importer *importer,
                                   const Path &modelFilepath)
 {
     const aiScene* scene =

@@ -8,6 +8,7 @@
 #include "Bang/ResourceHandle.h"
 
 FORWARD class aiMesh;
+FORWARD class aiNode;
 FORWARD class aiScene;
 FORWARD class aiMaterial;
 FORWARD namespace Assimp
@@ -48,41 +49,49 @@ class ModelIO
 public:
     static int GetModelNumTriangles(const Path& modelFilepath);
 
-    static bool ReadModel(const Path& modelFilepath,
-                          const GUID &modelGUID,
-                          ModelIOScene *modelScene);
+    static bool ImportModel(const Path& modelFilepath,
+                            const GUID &modelGUID,
+                            ModelIOScene *modelScene);
 
-    static bool ReadFirstFoundMeshRaw(
+    static bool ImportFirstFoundMeshRaw(
                      const Path& modelFilepath,
                      Array<Mesh::VertexId> *vertexIndices,
                      Array<Vector3> *vertexPositions,
                      Array<Vector3> *vertexNormals,
                      Array<Vector2> *vertexUvs);
 
-    static void ReadMesh(aiMesh *aMesh,
-                         const GUID &parentModelGUID,
-                         const GUID::GUIDType &innerMeshGUID,
-                         RH<Mesh> *outMesh,
-                         String *outMeshName);
-    static void ReadMaterial(aiMaterial *aMaterial,
-                             const Path& modelDirectory,
-                             const GUID &parentModelGUID,
-                             const GUID::GUIDType &innerMaterialGUID,
-                             RH<Material> *outMaterial,
-                             String *outMaterialName);
+    static void ImportMesh(aiMesh *aMesh,
+                           const GUID &parentModelGUID,
+                           const GUID::GUIDType &innerMeshGUID,
+                           RH<Mesh> *outMesh,
+                           String *outMeshName);
+    static void ImportMaterial(aiMaterial *aMaterial,
+                               const Path& modelDirectory,
+                               const GUID &parentModelGUID,
+                               const GUID::GUIDType &innerMaterialGUID,
+                               RH<Material> *outMaterial,
+                               String *outMaterialName);
 
-    static void ReadMeshRaw(
+    static void ImportMeshRaw(
                      aiMesh *aMesh,
                      Array<Mesh::VertexId> *vertexIndices,
                      Array<Vector3> *vertexPositionsPool,
                      Array<Vector3> *vertexNormalsPool,
                      Array<Vector2> *vertexUvsPool);
 
+    static void ExportModel(const GameObject *gameObject,
+                            const Path &meshExportPath);
+
     ModelIO() = delete;
 
 private:
-    static const aiScene *ReadScene(Assimp::Importer *importer,
-                                    const Path& modelFilepath);
+    static String GetExtensionIdFromExtension(const String &extension);
+    static aiNode* GameObjectToAiNode(const GameObject *gameObject,
+                                      const Array<Mesh*> &sceneMeshes);
+    static aiMesh* MeshToAiMesh(const Mesh *mesh);
+    static aiMaterial* MaterialToAiMaterial(const Material *material);
+    static const aiScene *ImportScene(Assimp::Importer *importer,
+                                      const Path& modelFilepath);
 };
 
 NAMESPACE_BANG_END

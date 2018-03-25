@@ -37,13 +37,13 @@ template<class T, class ClassifyFunctor>
 uint Octree<T, ClassifyFunctor>::Fill(const Array<T> &elements, uint maxDepth)
 {
     // Returns the number of contained elements after filling
-    if (maxDepth < 0) { return 0; }
+    if (maxDepth < 0) { return -1; }
 
     // Get elements inside me
     Array<T> containedElements;
+    ClassifyFunctor classifyFunctor;
     for (const T& element : elements)
     {
-        ClassifyFunctor classifyFunctor;
         if (classifyFunctor(GetAABox(), element))
         {
             // Debug_Peek(element);
@@ -62,27 +62,21 @@ uint Octree<T, ClassifyFunctor>::Fill(const Array<T> &elements, uint maxDepth)
             const Vector3 &mp      = minPoint;
             const Vector3 hs       = size / 2.0f;
 
-            for (int i = 0; i < 8; ++i) { m_children[i] = new Octree<T, ClassifyFunctor>(); }
-            m_children[0]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(0,0,0), hs) );
-            m_children[1]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(0,0,1), hs) );
-            m_children[2]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(0,1,0), hs) );
-            m_children[3]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(0,1,1), hs) );
-            m_children[4]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(1,0,0), hs) );
-            m_children[5]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(1,0,1), hs) );
-            m_children[6]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(1,1,0), hs) );
-            m_children[7]->SetAABox( AABox::FromPointAndSize(mp + hs * Vector3(1,1,1), hs) );
-            // DebugRenderer::RenderAABox(GetAABox(), Color::Red, 0.1f, 1.0f, true);
-
+            std::array<Vector3, 8> sizeDirs = {{
+              Vector3(0,0,0), Vector3(0,0,1), Vector3(0,1,0), Vector3(0,1,1),
+              Vector3(1,0,0), Vector3(1,0,1), Vector3(1,1,0), Vector3(1,1,1)}};
             for (int i = 0; i < 8; ++i)
             {
-                int childContainedElements =
-                        m_children[i]->Fill(containedElements, maxDepth-1);
+                const Vector3& sizeDir = sizeDirs[i];
 
-                if (childContainedElements == 0)
-                {
-                    delete m_children[i];
-                    m_children[i] = nullptr;
-                }
+                Octree *childOctree = new Octree<T, ClassifyFunctor>();
+                childOctree->SetAABox(
+                            AABox::FromPointAndSize(mp + hs * sizeDir, hs) );
+                int childContainedElements =
+                        childOctree->Fill(containedElements, maxDepth-1);
+
+                if (childContainedElements > 0) { m_children[i] = childOctree; }
+                else { delete childOctree; }
             }
         }
         else if (containedElements.Size() == 1)
