@@ -260,18 +260,42 @@ Array<RH<Mesh>> MeshSimplifier::GetAllMeshLODs(const Mesh *mesh)
             {
                 const ClusterId otherCId0 = otherTriVerticesClusterIdPair.first;
                 const ClusterId otherCId1 = otherTriVerticesClusterIdPair.second;
-                // if (cId < otherCId0 && (otherCId0 < otherCId1) && cId < otherCId1)
+                // This if is to avoid triplicates vvv
+                if (cId < otherCId0 && (otherCId0 < otherCId1) && cId < otherCId1)
                 {
-                    ASSERT(cId       < simplifiedMesh.Get()->GetVertexCount());
-                    ASSERT(otherCId0 < simplifiedMesh.Get()->GetVertexCount());
-                    ASSERT(otherCId1 < simplifiedMesh.Get()->GetVertexCount());
-                    vertexClusterIndices.PushBack(cId);
-                    vertexClusterIndices.PushBack(otherCId0);
-                    vertexClusterIndices.PushBack(otherCId1);
+                    ASSERT(cId       < simplifiedMesh.Get()->GetPositionsPool().Size());
+                    ASSERT(otherCId0 < simplifiedMesh.Get()->GetPositionsPool().Size());
+                    ASSERT(otherCId1 < simplifiedMesh.Get()->GetPositionsPool().Size());
+
+                    // Decide triangle winding based on its normal
+                    std::array<Mesh::VertexId, 3> triClusterIds =
+                                        {{cId, otherCId0, otherCId1}};
+                    const Array<Vector3> &clusterPositions =
+                                      simplifiedMesh.Get()->GetPositionsPool();
+                    const Array<Vector3> &clusterNormals =
+                                      simplifiedMesh.Get()->GetNormalsPool();
+                    const Vector3 &pos0   = clusterPositions[ triClusterIds[0] ];
+                    const Vector3 &pos1   = clusterPositions[ triClusterIds[1] ];
+                    const Vector3 &pos2   = clusterPositions[ triClusterIds[2] ];
+                    const Vector3 &norm0  =   clusterNormals[ triClusterIds[0] ];
+                    const Vector3 &norm1  =   clusterNormals[ triClusterIds[1] ];
+                    const Vector3 &norm2  =   clusterNormals[ triClusterIds[2] ];
+                    const Vector3 &normal = (norm0 + norm1 + norm2) / 3.0f;
+                    if (Vector3::Dot(
+                            Vector3::Cross(pos1-pos0, pos2-pos0), normal) < 0)
+                    {
+                        std::swap(triClusterIds[1], triClusterIds[2]);
+                    }
+
+                    // Add triangle indices
+                    vertexClusterIndices.PushBack(triClusterIds[0]);
+                    vertexClusterIndices.PushBack(triClusterIds[1]);
+                    vertexClusterIndices.PushBack(triClusterIds[2]);
                 }
             }
         }
         simplifiedMesh.Get()->LoadVertexIndices(vertexClusterIndices);
+        Debug_Log("Level " << level << ": " << vertexClusterIndices.Size() << "/" << mesh->GetVertexCount());
 
         simplifiedMeshesArray.PushBack(simplifiedMesh);
     }

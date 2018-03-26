@@ -48,6 +48,9 @@ void VAO::AddVBO(const VBO *vbo,
 void VAO::SetIBO(IBO *ebo)
 {
     p_ibo = ebo;
+    Bind();
+    ebo->Bind();
+    UnBind();
 }
 
 void VAO::UnBindVBO(GLint location)
@@ -74,11 +77,9 @@ GL::BindTarget VAO::GetGLBindTarget() const
 void VAO::Bind() const
 {
     GL::Bind(this);
-    if (GetIBO()) { GetIBO()->Bind(); }
 }
 void VAO::UnBind() const
 {
-    if (GetIBO()) { GetIBO()->UnBind(); }
     GL::UnBind(this);
 }
 

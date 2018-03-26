@@ -1059,6 +1059,11 @@ const AARecti& GL::GetScissorRect()
     return GL::GetActive()->m_scissorRectPx;
 }
 
+void GL::BindBuffer(GL::BindTarget target, GLId bufferId)
+{
+    GL_CALL( glBindBuffer(GLCAST(target), bufferId) );
+}
+
 void GL::BufferData(GL::BindTarget target, int dataSize,
                     const void *data, GL::UsageHint usageHint)
 {
@@ -1087,6 +1092,7 @@ void GL::DrawArrays(const VAO *vao, GL::Primitive primitivesMode,
     vao->UnBind();
 }
 
+#include "Bang/Input.h"
 void GL::DrawElements(const VAO *vao, GL::Primitive primitivesMode,
                       int elementsCount, int startElementIndex)
 {
@@ -1163,18 +1169,17 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
         case GL::BindTarget::ElementArrayBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundVBOElementsBufferId = glId; }
-            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::ElementArrayBuffer), glId) );
+            GL_CALL( GL::BindBuffer( GL::BindTarget::ElementArrayBuffer, glId) );
         break;
         case GL::BindTarget::ArrayBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundVBOArrayBufferId = glId; }
-            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::ArrayBuffer), glId) );
+            GL_CALL( GL::BindBuffer(GL::BindTarget::ArrayBuffer, glId) );
         break;
         case GL::BindTarget::UniformBuffer:
             if (GL::IsBound(bindTarget, glId)) { return; }
             if (gl) { gl->m_boundUniformBufferId = glId; }
-            GL_CALL( glBindBuffer( GLCAST(GL::BindTarget::UniformBuffer),
-                                   glId) );
+            GL_CALL( GL::BindBuffer(GL::BindTarget::UniformBuffer, glId) );
         break;
 
         default: ASSERT(false); break;

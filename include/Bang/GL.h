@@ -490,6 +490,7 @@ public:
     static void SetViewport(const AARecti &viewport);
     static void SetViewport(int x, int y, int width, int height);
 
+    static void BindBuffer(GL::BindTarget target, GLId bufferId);
     static void BufferData(GL::BindTarget target,
                            int dataSize, const void *data,
                            GL::UsageHint usageHint);
