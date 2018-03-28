@@ -37,6 +37,7 @@ set(NUM_COMPILE_THREADS 4)
 
 # Assimp
 set(ASSIMP_DIR "${CMAKE_CURRENT_LIST_DIR}/assimp")
+set(ASSIMP_INCLUDE_DIR "${ASSIMP_DIR}/include")
 set(ASSIMP_LIB_OUTPUT_DIR  "${ASSIMP_DIR}/build/code")
 set(ASSIMP_LIB_OUTPUT_NAME "libassimp.a")
 set(ASSIMP_LIB_OUTPUT "${ASSIMP_LIB_OUTPUT_DIR}/${ASSIMP_LIB_OUTPUT_NAME}")
@@ -122,18 +123,21 @@ set(SNDIO_LIB_OUTPUT  "${SNDIO_LIB_OUTPUT_DIR}/${SNDIO_LIB_OUTPUT_NAME}")
 
 # OPENAL
 set(OPENAL_DIR "${CMAKE_CURRENT_LIST_DIR}/openal-soft")
+set(OPENAL_INCLUDE_DIR "${OPENAL_DIR}/include")
 set(OPENAL_LIB_OUTPUT_DIR  "${OPENAL_DIR}/build")
 set(OPENAL_LIB_OUTPUT_NAME "libopenal.a")
 set(OPENAL_LIB_OUTPUT  "${OPENAL_LIB_OUTPUT_DIR}/${OPENAL_LIB_OUTPUT_NAME}")
 
 # SDL2
 set(SDL2_DIR "${CMAKE_CURRENT_LIST_DIR}/SDL2-2.0.8")
+set(SDL2_INCLUDE_DIR "${SDL2_DIR}/include")
 set(SDL2_LIB_OUTPUT_DIR  "${SDL2_DIR}/build")
 set(SDL2_LIB_OUTPUT_NAME "libSDL2.a")
 set(SDL2_LIB_OUTPUT  "${SDL2_LIB_OUTPUT_DIR}/${SDL2_LIB_OUTPUT_NAME}")
 
 # SDL2_ttf
 set(SDL2TTF_DIR "${CMAKE_CURRENT_LIST_DIR}/SDL2_ttf-2.0.14")
+set(SDL2_TTF_INCLUDE_DIR "${SDL2_TTF_DIR}/include")
 set(SDL2TTF_LIB_OUTPUT_DIR  "${SDL2TTF_DIR}/.libs")
 set(SDL2TTF_LIB_OUTPUT_NAME "libSDL2_ttf.a")
 set(SDL2TTF_LIB_OUTPUT  "${SDL2TTF_LIB_OUTPUT_DIR}/${SDL2TTF_LIB_OUTPUT_NAME}")
@@ -440,6 +444,19 @@ set(ALL_DEPENDENCIES_LIB_FILES
     ${GLEW_LIB_OUTPUT}
     ${FREETYPE_LIB_OUTPUT} # Must go after sdl2ttf
     ${ZLIB_LIB_OUTPUT}     # Must go after libpng, libassimp
+)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Include dirs ===================================================
+#=================================================================
+include_directories(
+    ${ASSIMP_INCLUDE_DIR}
+    ${OPENAL_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIR}
+    ${SDL2_TTF_INCLUDE_DIR}
 )
 #=================================================================
 #=================================================================
