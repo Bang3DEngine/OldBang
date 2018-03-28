@@ -1,0 +1,13 @@
+# Get source
+git clone https://github.com/xiph/ogg
+cd ogg
+
+# Compile
+mkdir build
+cd build
+cmake -DBUILD_SHARED_LIBS=OFF ..
+make
+
+# Static lib is in:
+./build/libogg.a
+

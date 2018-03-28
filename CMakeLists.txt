@@ -36,9 +36,10 @@ set(BANG_SRC_DIR ${BANG_DIR}/src)
 set(BANG_ENGINE_SRC_DIR ${BANG_SRC_DIR}/Engine)
 
 # Output params
-message("===========================================")
+message("Bang ======================================")
 message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 message("CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
+message("BUILD_SHARED_LIBS: " ${BUILD_SHARED_LIBS})
 message("EXECUTABLE_OUTPUT_PATH: " ${EXECUTABLE_OUTPUT_PATH})
 message("LIBRARY_OUTPUT_PATH: " ${LIBRARY_OUTPUT_PATH})
 message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
@@ -53,7 +54,6 @@ message("===========================================")
 #=================================================================
 # CMake includes =================================================
 #=================================================================
-include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeDependencies.cmake) # Dependencies
 include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeMacros.cmake)       # Macros
 #=================================================================
 #=================================================================
@@ -285,14 +285,22 @@ ${OTHER_FILES}
 #=================================================================
 
 #=================================================================
-# Lib build ======================================================
+# Lib and dependecies (if static) build ==========================s
 #=================================================================
 
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeDependencies.cmake) # Dependencies
+link_libraries(${ALL_DEPENDENCIES_LIB_FILES}) # Link the dependencies
+
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
-add_library(BangStaticLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
-add_library(BangLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
-set_target_properties(BangStaticLib PROPERTIES OUTPUT_NAME bang_static)
-set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_shared)
+if (${BUILD_SHARED_LIBS})
+    add_library(BangLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
+    set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_shared)
+else()
+    add_library(BangLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
+    set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_static)
+endif()
+
+set_target_properties(BangLib PROPERTIES LINKER_LANGUAGE CXX)
 #=================================================================
 #=================================================================
 #=================================================================

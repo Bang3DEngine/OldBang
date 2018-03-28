@@ -1,0 +1,12 @@
+prefix=/home/sephirot47/Projects/BangThirdParty/freetype-2.4.0/freetype-install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: FreeType 2
+Description: A free, high-quality, and portable font engine.
+Version: 11.0.5
+Requires:
+Libs: -L${libdir} -lfreetype
+Libs.private: -lz 
+Cflags: -I${includedir}/freetype2 -I${includedir}

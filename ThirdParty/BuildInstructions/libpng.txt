@@ -1,0 +1,14 @@
+# Get the source:
+wget ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.gz
+tar xvf libpng-1.6.34.tar.gz
+rm libpng-1.6.34.tar.gz
+
+# Compile:
+cd libpng-1.6.34
+mkdir -p build
+cd build
+cmake ..
+make -j6
+
+# STATIC LIB IS IN:
+./build/libpng16.a

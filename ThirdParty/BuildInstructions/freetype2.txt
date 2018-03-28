@@ -1,0 +1,15 @@
+# Get source code:
+wget https://download.savannah.gnu.org/releases/freetype/freetype-2.4.0.tar.gz
+tar xvf freetype-2.4.0.tar.gz
+rm freetype-2.4.0.tar.gz
+
+# Compile locally:
+cd freetype-2.4.0
+sh autogen.sh
+mkdir freetype-install
+./configure --prefix=$(pwd)/freetype-install
+make -j6
+make install
+
+# STATIC LIB IS IN:
+./freetype-install/lib/libfreetype.a

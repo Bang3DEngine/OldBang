@@ -1,0 +1,14 @@
+# Get source code:
+git clone https://github.com/kcat/openal-soft
+git checkout openal-soft-1.18.2
+
+# Compile:
+cd openal-soft
+mkdir -p build
+cd build
+cmake ..
+make -j6
+mv libcommon.a libopenal.a
+
+# STATIC LIB IS IN:
+build/libopenal.a

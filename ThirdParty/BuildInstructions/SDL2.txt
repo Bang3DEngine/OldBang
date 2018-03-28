@@ -1,0 +1,14 @@
+# First retrieve the source code:
+wget https://www.libsdl.org/release/SDL2-2.0.8.tar.gz
+tar xvf SDL2-2.0.8.tar.gz 
+rm SDL2-2.0.8.tar.gz
+
+# Now compile:
+cd SDL2-2.0.8
+mkdir -p build
+cd build
+cmake ..
+make -j6
+
+# STATIC LIB IS IN:
+build/libSDL2.a

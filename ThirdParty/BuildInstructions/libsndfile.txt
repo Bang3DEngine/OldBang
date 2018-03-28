@@ -1,0 +1,14 @@
+# Get source:
+git clone https://github.com/erikd/libsndfile
+git checkout 1.0.28
+
+# Compile
+cd libsndfile
+sudo apt install autoconf autogen automake build-essential libasound2-dev libflac-dev libogg-dev libtool libvorbis-dev pkg-config python
+./autogen.sh
+./configure
+make -j6
+make check
+
+# STATIC LIB WILL BE IN:
+# ./src/.libs/libsndfile.a

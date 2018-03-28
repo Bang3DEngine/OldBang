@@ -1,0 +1,13 @@
+# Get the source: For this download, you may have to wait several seconds until it starts downloading...
+wget https://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz/download
+mv download jpegsrc.v6b.tar.gz
+tar xvf jpegsrc.v6b.tar.gz
+rm jpegsrc.v6b.tar.gz
+
+# Compile:
+cd jpeg-6b
+./configure
+make -j6
+
+# STATIC LIB IS IN:
+./libjpeg.a

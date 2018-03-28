@@ -1,0 +1,12 @@
+# Get source code:
+wget https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.tgz/download
+mv download glew-2.1.0.tgz
+tar xvf glew-2.1.0.tgz
+rm glew-2.1.0.tgz
+
+# Compile:
+cd glew-2.1.0
+make -j6
+
+# STATIC LIB IS IN
+./lib/libGLEW.a

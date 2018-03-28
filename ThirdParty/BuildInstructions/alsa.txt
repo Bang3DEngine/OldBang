@@ -1,0 +1,26 @@
+# Get source:
+wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.tar.bz2
+tar xvf alsa-lib-1.1.4.tar.bz2
+rm alsa-lib-1.1.4.tar.bz2
+
+# Compile:
+cd alsa-lib-1.1.4
+./configure --prefix=$(pwd)/build --enable-shared=no --enable-static=yes
+make -j6
+make install
+cd build/lib
+ar x libasound.a
+
+# NOW WE HAVE ALL .o in:
+./build/lib/*.o
+
+./src/pcm/.libs/libpcm.a
+./src/control/.libs/libcontrol.a
+./src/seq/.libs/libseq.a
+./src/hwdep/.libs/libhwdep.a
+./src/ucm/.libs/libucm.a
+./src/timer/.libs/libtimer.a
+./src/rawmidi/.libs/librawmidi.a
+./src/mixer/.libs/libmixer.a
+./src/topology/.libs/libtopology.a
+./src/alisp/.libs/libalisp.a

@@ -1,0 +1,13 @@
+# Get assimp
+git clone https://github.com/assimp/assimp
+git checkout v4.1.0
+
+# Compile:
+cd assimp    
+mkdir build
+cd build
+cmake -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_STATIC_LIB=ON ..
+make -j6
+
+# STATIC LIB IS IN:
+build/code/libassimp.a

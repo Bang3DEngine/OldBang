@@ -1,0 +1,12 @@
+# Get source code:
+wget https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.tar.gz
+tar xvf SDL2_ttf-2.0.14.tar.gz
+rm SDL2_ttf-2.0.14.tar.gz
+
+# Now compile. WE MUST INSTALL FREETYPE2 BEFORE!
+cd SDL2_ttf-2.0.14
+./configure --with-freetype-prefix=$(pwd)/../freetype-2.4.0/freetype-install/
+make -j6
+
+# STATIC LIB IS IN:
+./.libs/libSDL2_ttf.a
