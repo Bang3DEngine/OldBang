@@ -1,13 +1,13 @@
-# Get the source: For this download, you may have to wait several seconds until it starts downloading...
-wget https://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz/download
-mv download jpegsrc.v6b.tar.gz
-tar xvf jpegsrc.v6b.tar.gz
-rm jpegsrc.v6b.tar.gz
+# Get the source:
+git clone https://github.com/libjpeg-turbo/libjpeg-turbo
+cd libjpeg-turbo/
+git checkout 1.5.x
 
 # Compile:
-cd jpeg-6b
-./configure
+mkdir -p build
+cd build
+cmake -DBUILD_SHARED_LIBS=OFF -DWITH_SIMD=OFF -DREQUIRE_SIMD=OFF ..
 make -j6
 
-# STATIC LIB IS IN:
-./libjpeg.a
+# Static lib is in:
+./build/libturbojpeg.a

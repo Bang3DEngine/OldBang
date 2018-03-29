@@ -71,15 +71,16 @@ set(GLEW_LIB_OUTPUT_NAME "libGLEW.a")
 set(GLEW_LIB_OUTPUT  "${GLEW_LIB_OUTPUT_DIR}/${GLEW_LIB_OUTPUT_NAME}")
 
 # JPEG
-set(JPEG_DIR "${CMAKE_CURRENT_LIST_DIR}/jpeg-6b")
+set(JPEG_DIR "${CMAKE_CURRENT_LIST_DIR}/libjpeg-turbo")
 set(JPEG_INCLUDE_DIR "${JPEG_DIR}")
-set(JPEG_LIB_OUTPUT_DIR  "${JPEG_DIR}")
-set(JPEG_LIB_OUTPUT_NAME "libjpeg.a")
+set(JPEG_LIB_OUTPUT_DIR  "${JPEG_DIR}/build")
+set(JPEG_LIB_OUTPUT_NAME "libturbojpeg.a")
 set(JPEG_LIB_OUTPUT  "${JPEG_LIB_OUTPUT_DIR}/${JPEG_LIB_OUTPUT_NAME}")
 
 # PNG
 set(PNG_DIR "${CMAKE_CURRENT_LIST_DIR}/libpng-1.6.34")
-set(PNG_INCLUDE_DIR "${PNG_DIR}")
+set(PNG_INCLUDE_DIR_0 "${PNG_DIR}")
+set(PNG_INCLUDE_DIR_1 "${PNG_DIR}/build")
 set(PNG_LIB_OUTPUT_DIR  "${PNG_DIR}/build")
 set(PNG_LIB_OUTPUT_NAME "libpng.a")
 set(PNG_LIB_OUTPUT  "${PNG_LIB_OUTPUT_DIR}/${PNG_LIB_OUTPUT_NAME}")
@@ -235,7 +236,9 @@ add_custom_command(
   OUTPUT ${JPEG_LIB_OUTPUT}
   COMMAND
       cd ${JPEG_DIR} &&
-      ./configure &&
+      mkdir -p build &&
+      cd build &&
+      cmake -DBUILD_SHARED_LIBS=OFF -DWITH_SIMD=OFF -DREQUIRE_SIMD=OFF .. &&
       make -j${NUM_COMPILE_THREADS}
   VERBATIM
 )
@@ -461,7 +464,8 @@ include_directories(
     ${ASSIMP_INCLUDE_DIR}
     ${OPENAL_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR_0}
+    ${PNG_INCLUDE_DIR_1}
     ${SDL2_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR}
 )
