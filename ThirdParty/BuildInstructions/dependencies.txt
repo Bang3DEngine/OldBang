@@ -1,0 +1,1 @@
+sudo apt-get install make cmake automake autoconf libtool autogen python pkg-config
