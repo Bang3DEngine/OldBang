@@ -1,2 +1,4 @@
 config.mk
 !/builds/
+!Makefile
+!modules.cfg

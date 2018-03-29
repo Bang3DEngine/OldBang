@@ -1,1 +1,1 @@
-sudo apt-get -y install make cmake automake autoconf libtool autogen python pkg-config libvorbis-dev libflac-dev
+sudo apt-get -y install make cmake automake autoconf libtool autogen python pkg-config libvorbis-dev libflac-dev wget
