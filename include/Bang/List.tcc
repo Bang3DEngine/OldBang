@@ -74,12 +74,11 @@ List<T>::Insert(const typename List<T>::Iterator &begin, int count, const T &x)
 
 template<class T>
 template <class OtherIterator>
-typename List<T>::Iterator
-List<T>::Insert(const List<T>::Iterator& begin,
-                const OtherIterator &otherBegin,
-                const OtherIterator &otherEnd)
+void List<T>::Insert(const List<T>::Iterator& begin,
+                     const OtherIterator &otherBegin,
+                     const OtherIterator &otherEnd)
 {
-    return m_list.insert(begin, otherBegin, otherEnd);
+    m_list.insert(begin, otherBegin, otherEnd);
 }
 
 

@@ -28,6 +28,8 @@
 .deps
 .dirstamp
 .libs
+/conf*/
+/libtoolT/
 confdefs.h
 conftest.*
 Build/

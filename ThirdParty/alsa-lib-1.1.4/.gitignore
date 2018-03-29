@@ -1,6 +1,6 @@
-alsalisp/alsalisp
-aserver/aserver
-include/config.h
-utils/alsa.pc
-conf*/
-confdefs.h
+/alsalisp/alsalisp
+/aserver/aserver
+/include/config.h
+/utils/alsa.pc
+/conf*/
+/confdefs.h
