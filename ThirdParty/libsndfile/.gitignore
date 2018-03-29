@@ -28,6 +28,8 @@
 .deps
 .dirstamp
 .libs
+confdefs.h
+conftest.*
 Build/
 CMake/config.h.in
 CMakeFiles

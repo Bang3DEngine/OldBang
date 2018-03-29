@@ -65,6 +65,7 @@ set(FREETYPE_LIB_OUTPUT  "${FREETYPE_LIB_OUTPUT_DIR}/${FREETYPE_LIB_OUTPUT_NAME}
 
 # GLEW
 set(GLEW_DIR "${CMAKE_CURRENT_LIST_DIR}/glew-2.1.0")
+set(GLEW_INCLUDE_DIR "${GLEW_DIR}/include")
 set(GLEW_LIB_OUTPUT_DIR  "${GLEW_DIR}/lib")
 set(GLEW_LIB_OUTPUT_NAME "libGLEW.a")
 set(GLEW_LIB_OUTPUT  "${GLEW_LIB_OUTPUT_DIR}/${GLEW_LIB_OUTPUT_NAME}")
@@ -454,6 +455,7 @@ set(ALL_DEPENDENCIES_LIB_FILES
 # Include dirs ===================================================
 #=================================================================
 include_directories(
+    ${GLEW_INCLUDE_DIR}
     ${ASSIMP_INCLUDE_DIR}
     ${OPENAL_INCLUDE_DIR}
     ${SDL2_INCLUDE_DIR}
