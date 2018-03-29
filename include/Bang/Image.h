@@ -91,29 +91,8 @@ template class Image<float>;
 using Imageb = Image<Byte>;
 using Imagef = Image<float>;
 
-// ImageResource
-template<class T>
-class ImageResource : public Image<T>,
-                      public Resource
-{
-    RESOURCE(ImageResource)
-
-public:
-    // Resource
-    virtual void Import(const Path &imageFilepath) override;
-
-private:
-    ImageResource();
-    ImageResource(int width, int height);
-};
-
-
-template class ImageResource<Byte>;
-template class ImageResource<float>;
-
-using ImageResourceb = ImageResource<Byte>;
-using ImageResourcef = ImageResource<float>;
-
 NAMESPACE_BANG_END
+
+#include "Bang/Image.tcc"
 
 #endif // IMAGE_H
