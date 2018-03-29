@@ -73,7 +73,8 @@ set(GLEW_LIB_OUTPUT  "${GLEW_LIB_OUTPUT_DIR}/${GLEW_LIB_OUTPUT_NAME}")
 
 # JPEG
 set(JPEG_DIR "${CMAKE_CURRENT_LIST_DIR}/libjpeg-turbo")
-set(JPEG_INCLUDE_DIR "${JPEG_DIR}")
+set(JPEG_INCLUDE_DIR_0 "${JPEG_DIR}")
+set(JPEG_INCLUDE_DIR_1 "${JPEG_DIR}/build")
 set(JPEG_LIB_OUTPUT_DIR  "${JPEG_DIR}/build")
 set(JPEG_LIB_OUTPUT_NAME "libturbojpeg.a")
 set(JPEG_LIB_OUTPUT  "${JPEG_LIB_OUTPUT_DIR}/${JPEG_LIB_OUTPUT_NAME}")
@@ -434,8 +435,7 @@ add_custom_command(
 #=================================================================
 set(ALL_DEPENDENCIES_LIB_FILES
     ${ALL_DEPENDENCIES_LIB_FILES}
-    ${ASSIMP_INCLUDE_DIR_0}
-    ${ASSIMP_INCLUDE_DIR_1}
+    ${ASSIMP_LIB_OUTPUT}
     ${IRRXML_LIB_OUTPUT}
     ${JPEG_LIB_OUTPUT}
     ${PNG_LIB_OUTPUT}
@@ -463,9 +463,11 @@ set(ALL_DEPENDENCIES_LIB_FILES
 #=================================================================
 include_directories(
     ${GLEW_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_DIR}
+    ${ASSIMP_INCLUDE_DIR_0}
+    ${ASSIMP_INCLUDE_DIR_1}
     ${OPENAL_INCLUDE_DIR}
-    ${JPEG_INCLUDE_DIR}
+    ${JPEG_INCLUDE_DIR_0}
+    ${JPEG_INCLUDE_DIR_1}
     ${PNG_INCLUDE_DIR_0}
     ${PNG_INCLUDE_DIR_1}
     ${SDL2_INCLUDE_DIR}
