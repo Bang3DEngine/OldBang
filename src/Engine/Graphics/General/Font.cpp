@@ -1,6 +1,7 @@
 #include "Bang/Font.h"
 
-#include <SDL2/SDL_ttf.h>
+#include "Bang/Bang.h"
+#include BANG_SDL2_TTF_INCLUDE(SDL_ttf.h)
 
 #include "Bang/Path.h"
 #include "Bang/Debug.h"

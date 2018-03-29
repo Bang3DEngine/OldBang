@@ -1,6 +1,6 @@
 #include "Bang/FontSheetCreator.h"
 
-#include <SDL2/SDL_ttf.h>
+#include BANG_SDL2_TTF_INCLUDE(SDL_ttf.h)
 
 #include "Bang/GL.h"
 #include "Bang/Math.h"
