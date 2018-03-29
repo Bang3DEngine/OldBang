@@ -292,12 +292,15 @@ include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeDependencies.cmake) # Depen
 link_libraries(${ALL_DEPENDENCIES_LIB_FILES}) # Link the dependencies
 
 add_library(BangEngineObjects OBJECT ${ENGINE_SRC_FILES})
+add_dependencies(BangEngineObjects BuildThirdParty)
+
 if (${BUILD_SHARED_LIBS})
     add_library(BangLib SHARED $<TARGET_OBJECTS:BangEngineObjects>)
     set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_shared)
 else()
     add_library(BangLib STATIC $<TARGET_OBJECTS:BangEngineObjects>)
     set_target_properties(BangLib PROPERTIES OUTPUT_NAME bang_static)
+    add_dependencies(BangEngineObjects BuildThirdParty)
 endif()
 
 set_target_properties(BangLib PROPERTIES LINKER_LANGUAGE CXX)

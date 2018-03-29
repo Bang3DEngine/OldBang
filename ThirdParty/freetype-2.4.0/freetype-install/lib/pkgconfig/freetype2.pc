@@ -1,4 +1,4 @@
-prefix=/home/sephirot47/Projects/BangThirdParty/freetype-2.4.0/freetype-install
+prefix=/Bang/ThirdParty/freetype-2.4.0/freetype-install
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

@@ -9,14 +9,14 @@
 # indicate that you have read the license and understand and accept it
 # fully.
 
-prefix=/home/sephirot47/Projects/BangThirdParty/freetype-2.4.0/freetype-install
+prefix=/Bang/ThirdParty/freetype-2.4.0/freetype-install
 exec_prefix=${prefix}
 exec_prefix_set=no
 includedir=${prefix}/include
 libdir=${exec_prefix}/lib
 enable_shared=
 wl=-Wl,
-hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
+hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
 
 usage()
 {

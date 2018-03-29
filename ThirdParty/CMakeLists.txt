@@ -14,18 +14,18 @@ project(BangThirdParty C CXX)
 # General
 set(NUM_COMPILE_THREADS 4)
 add_definitions(-DBUILD_STATIC)
-# set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes")
-#
-# #=================================================================
-# # Shared dependencies ============================================
-# #=================================================================
-# # VORBIS Dependency ============================
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes")
+
+#=================================================================
+# Shared dependencies ============================================
+#=================================================================
+# VORBIS Dependency ============================
 # message("Looking for dependency VORBIS...")
 # find_package(OggVorbis REQUIRED)
-# # include_directories(${VORBIS_INCLUDE_DIRS})
+# include_directories(${VORBIS_INCLUDE_DIRS})
 # link_libraries(${VORBIS_LIBRARY})
-#
-# # FLAC Dependency ============================
+
+# FLAC Dependency ============================
 # message("Looking for dependency FLAC...")
 # find_package(FLAC REQUIRED)
 # # include_directories(${FLAC_INCLUDE_DIRS})
@@ -88,45 +88,47 @@ set(PNG_LIB_OUTPUT_NAME "libpng.a")
 set(PNG_LIB_OUTPUT  "${PNG_LIB_OUTPUT_DIR}/${PNG_LIB_OUTPUT_NAME}")
 
 # OGG
-set(OGG_DIR "${CMAKE_CURRENT_LIST_DIR}/ogg")
-set(OGG_LIB_OUTPUT_DIR  "${OGG_DIR}/build")
-set(OGG_LIB_OUTPUT_NAME "libogg.a")
-set(OGG_LIB_OUTPUT  "${OGG_LIB_OUTPUT_DIR}/${OGG_LIB_OUTPUT_NAME}")
+#set(OGG_DIR "${CMAKE_CURRENT_LIST_DIR}/ogg")
+#set(OGG_LIB_OUTPUT_DIR  "${OGG_DIR}/build")
+#set(OGG_LIB_OUTPUT_NAME "libogg.a")
+#set(OGG_LIB_OUTPUT  "${OGG_LIB_OUTPUT_DIR}/${OGG_LIB_OUTPUT_NAME}")
 
 # FLAC
-set(FLAC_DIR "${CMAKE_CURRENT_LIST_DIR}/flac")
-set(FLAC_LIB_OUTPUT_DIR  "${FLAC_DIR}/src/libFLAC/.libs")
-set(FLAC_LIB_OUTPUT_NAME "libFLAC-static.a")
-set(FLAC_LIB_OUTPUT  "${FLAC_LIB_OUTPUT_DIR}/${FLAC_LIB_OUTPUT_NAME}")
+#set(FLAC_DIR "${CMAKE_CURRENT_LIST_DIR}/flac")
+#set(FLAC_LIB_OUTPUT_DIR  "${FLAC_DIR}/src/libFLAC/.libs")
+#set(FLAC_LIB_OUTPUT_NAME "libFLAC-static.a")
+#set(FLAC_LIB_OUTPUT  "${FLAC_LIB_OUTPUT_DIR}/${FLAC_LIB_OUTPUT_NAME}")
 
 # VORBIS
-set(VORBIS_DIR "${CMAKE_CURRENT_LIST_DIR}/vorbis")
-set(VORBIS_LIB_OUTPUT_DIR  "${VORBIS_DIR}/build/lib")
-set(VORBIS_LIB_OUTPUT_NAME_0 "libvorbis.a")
-set(VORBIS_LIB_OUTPUT_NAME_1 "libvorbisenc.a")
-set(VORBIS_LIB_OUTPUT_NAME_2 "libvorbisfile.a")
-set(VORBIS_LIB_OUTPUT_0 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_0}")
-set(VORBIS_LIB_OUTPUT_1 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_1}")
-set(VORBIS_LIB_OUTPUT_2 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_2}")
+#set(VORBIS_DIR "${CMAKE_CURRENT_LIST_DIR}/vorbis")
+#set(VORBIS_LIB_OUTPUT_DIR  "${VORBIS_DIR}/build/lib")
+#set(VORBIS_LIB_OUTPUT_NAME_0 "libvorbis.a")
+#set(VORBIS_LIB_OUTPUT_NAME_1 "libvorbisenc.a")
+#set(VORBIS_LIB_OUTPUT_NAME_2 "libvorbisfile.a")
+#set(VORBIS_LIB_OUTPUT_0 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_0}")
+#set(VORBIS_LIB_OUTPUT_1 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_1}")
+#set(VORBIS_LIB_OUTPUT_2 "${VORBIS_LIB_OUTPUT_DIR}/${VORBIS_LIB_OUTPUT_NAME_2}")
 
 # SNDFILE
 set(SNDFILE_DIR "${CMAKE_CURRENT_LIST_DIR}/libsndfile")
+set(SNDFILE_INCLUDE_DIR  "${SNDFILE_DIR}/src")
 set(SNDFILE_LIB_OUTPUT_DIR  "${SNDFILE_DIR}/src/.libs")
 set(SNDFILE_LIB_OUTPUT_NAME "libsndfile.a")
 set(SNDFILE_LIB_OUTPUT  "${SNDFILE_LIB_OUTPUT_DIR}/${SNDFILE_LIB_OUTPUT_NAME}")
 
 # ALSAOBJS
 set(ALSAOBJS_DIR "${CMAKE_CURRENT_LIST_DIR}/alsa-lib-1.1.4")
+set(ALSAOBJS_INCLUDE_DIR "${ALSAOBJS_DIR}/include")
 set(ALSAOBJS_LIB_OUTPUT_DIR  "${ALSAOBJS_DIR}/build/lib")
 set(ALSAOBJS_LIB_OUTPUT_NAME "alsaobjs.done")
 set(ALSAOBJS_LIB_OUTPUT  "${ALSAOBJS_LIB_OUTPUT_DIR}/${ALSAOBJS_LIB_OUTPUT_NAME}")
 # file(REMOVE ${ALSAOBJS_LIB_OUTPUT_NAME})
 
 # SNDIO
-set(SNDIO_DIR "${CMAKE_CURRENT_LIST_DIR}/sndio")
-set(SNDIO_LIB_OUTPUT_DIR  "${SNDIO_DIR}/libsndio")
-set(SNDIO_LIB_OUTPUT_NAME "libsndio.a")
-set(SNDIO_LIB_OUTPUT  "${SNDIO_LIB_OUTPUT_DIR}/${SNDIO_LIB_OUTPUT_NAME}")
+#set(SNDIO_DIR "${CMAKE_CURRENT_LIST_DIR}/sndio")
+#set(SNDIO_LIB_OUTPUT_DIR  "${SNDIO_DIR}/libsndio")
+#set(SNDIO_LIB_OUTPUT_NAME "libsndio.a")
+#set(SNDIO_LIB_OUTPUT  "${SNDIO_LIB_OUTPUT_DIR}/${SNDIO_LIB_OUTPUT_NAME}")
 
 # OPENAL
 set(OPENAL_DIR "${CMAKE_CURRENT_LIST_DIR}/openal-soft")
@@ -144,6 +146,7 @@ set(SDL2_LIB_OUTPUT  "${SDL2_LIB_OUTPUT_DIR}/${SDL2_LIB_OUTPUT_NAME}")
 
 # SDL2_ttf
 set(SDL2TTF_DIR "${CMAKE_CURRENT_LIST_DIR}/SDL2_ttf-2.0.14")
+set(SDL2TTF_INSTALL_DIR "${SDL2TTF_DIR}/sdl2-ttf-install")
 set(SDL2TTF_INCLUDE_DIR "${SDL2TTF_DIR}")
 set(SDL2TTF_LIB_OUTPUT_DIR  "${SDL2TTF_DIR}/.libs")
 set(SDL2TTF_LIB_OUTPUT_NAME "libSDL2_ttf.a")
@@ -208,7 +211,8 @@ add_custom_command(
       cd ${FREETYPE_DIR} &&
       sh autogen.sh &&
       mkdir -p ${FREETYPE_INSTALL_DIR} &&
-      ./configure --prefix=${FREETYPE_INSTALL_DIR} &&
+      mkdir -p ${FREETYPE_INSTALL_DIR}/include/freetype2/freetype/internal/ &&
+      ./configure --prefix=${FREETYPE_INSTALL_DIR} && 
       make -j${NUM_COMPILE_THREADS} &&
       make install
   VERBATIM
@@ -240,7 +244,7 @@ add_custom_command(
       cd ${JPEG_DIR} &&
       mkdir -p build &&
       cd build &&
-      cmake -DBUILD_SHARED_LIBS=OFF -DWITH_SIMD=OFF -DREQUIRE_SIMD=OFF .. &&
+      cmake -DBUILD_SHARED_LIBS=OFF -DWITH_SIMD=OFF -DREQUIRE_SIMD=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE .. &&
       make -j${NUM_COMPILE_THREADS}
   VERBATIM
 )
@@ -257,7 +261,7 @@ add_custom_command(
       cd ${PNG_DIR} &&
       mkdir -p build &&
       cd build &&
-      cmake -DBUILD_SHARED_LIBS=OFF .. &&
+      cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC" .. &&
       make -j${NUM_COMPILE_THREADS}
   VERBATIM
 )
@@ -268,16 +272,15 @@ add_custom_command(
 #=================================================================
 # OGG Compile ====================================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${OGG_LIB_OUTPUT}
-  COMMAND
-      cd ${OGG_DIR} &&
-      mkdir -p build &&
-      cd build &&
-      cmake -DBUILD_SHARED_LIBS=OFF .. &&
-      make -j${NUM_COMPILE_THREADS}
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${OGG_LIB_OUTPUT}
+#  COMMAND
+#      mkdir -p ${OGG_DIR}/build &&
+#      cd ${OGG_DIR}/build &&
+#      cmake -DBUILD_SHARED_LIBS=OFF .. &&
+#      make -j${NUM_COMPILE_THREADS}
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -285,33 +288,34 @@ add_custom_command(
 #=================================================================
 # VORBIS Compile =================================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${VORBIS_LIB_OUTPUT_0} ${VORBIS_LIB_OUTPUT_1} ${VORBIS_LIB_OUTPUT_2}
-  COMMAND
-      mkdir -p build &&
-      cd build &&
-      cmake -DBUILD_SHARED_LIBS=OFF .. &&
-      make -j6
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${VORBIS_LIB_OUTPUT_0} ${VORBIS_LIB_OUTPUT_1} ${VORBIS_LIB_OUTPUT_2}
+#  COMMAND
+#      mkdir -p ${VORBIS_DIR}/build &&
+#      cd ${VORBIS_DIR}/build &&
+#      cmake -DBUILD_SHARED_LIBS=OFF -DOGG_INCLUDE_DIRS=${OGG_DIR}/include\ -I${OGG_DIR}/include/build -DOGG_LIBRARIES=${OGG_DIR}/build .. &&
+#      make VERBOSE=1 -j6
+#  DEPENDS ${OGG_LIB_OUTPUT}
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
 
 #=================================================================
-# FLAC Compile ====================================================
+# FLAC Compile ===================================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${FLAC_LIB_OUTPUT}
-  COMMAND
-      sudo ln -s /usr/bin/libtoolize /usr/bin/libtool &&
-      sh autogen.sh &&
-      mkdir -p flac-install &&
-      ./configure --prefix=$(pwd)/flac-install &&
-      make -j6 &&
-      make install
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${FLAC_LIB_OUTPUT}
+#  COMMAND
+#      cd ${FLAC_DIR} &&
+#      sh autogen.sh &&
+#      mkdir -p ${FLAC_LIB_OUTPUT}/flac-install &&
+#      ./configure --prefix=${FLAC_LIB_OUTPUT}/flac-install &&
+#      make -j6 &&
+#      make install
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -326,8 +330,8 @@ add_custom_command(
       COMMAND
           cd ${ALSAOBJS_DIR} &&
           ./configure --prefix=${ALSAOBJS_DIR}/build --enable-shared=no --enable-static=yes &&
-          make -j${NUM_COMPILE_THREADS} VERBOSE=1 &&
-          make install VERBOSE=1 &&
+          make -j${NUM_COMPILE_THREADS} &&
+          make install &&
           cd build/lib &&
           ar x libasound.a &&
           /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/*.o     ${ALSAOBJS_DIR}/build/lib" &&
@@ -343,18 +347,19 @@ add_custom_command(
 #=================================================================
 # SNDIO Compile ==================================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${SNDIO_LIB_OUTPUT}
-  COMMAND
-      cd ${SNDIO_DIR} &&
-      ./configure --prefix=build &&
-      make -j${NUM_COMPILE_THREADS} &&
-      make install &&
-      cd libsndio &&
-      /bin/sh -c "ar ru ${SNDIO_DIR}/libsndio/${SNDIO_LIB_OUTPUT_NAME} ${SNDIO_DIR}/libsndio/*.o ${ALSAOBJS_LIB_OUTPUT_DIR}/*.o"
-  DEPENDS ${ALSAOBJS_LIB_OUTPUT}
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${SNDIO_LIB_OUTPUT}
+#  COMMAND
+#      cd ${SNDIO_DIR} &&
+#      export LIBRARY_PATH="$ENV{LIBRARY_PATH}:${ALSAOBJS_DIR}/build/lib" &&
+#      ./configure --prefix=build &&
+#      make -j${NUM_COMPILE_THREADS} &&
+#      make install &&
+#      cd libsndio &&
+#      /bin/sh -c "ar ru ${SNDIO_DIR}/libsndio/${SNDIO_LIB_OUTPUT_NAME} ${SNDIO_DIR}/libsndio/*.o ${ALSAOBJS_LIB_OUTPUT_DIR}/*.o"
+#  DEPENDS ${ALSAOBJS_LIB_OUTPUT}
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -367,8 +372,8 @@ add_custom_command(
   COMMAND
       cd ${SNDFILE_DIR} &&
       sh autogen.sh &&
-      ./configure &&
-      make -j${NUM_COMPILE_THREADS}
+      ./configure CFLAGS=-fPIC &&
+      make VERBOSE=1 -j${NUM_COMPILE_THREADS}
   DEPENDS ${SNDIO_LIB_OUTPUT} ${ALSAOBJS_LIB_OUTPUT}
   VERBATIM
 )
@@ -386,8 +391,10 @@ add_custom_command(
       mkdir -p build &&
       cd build &&
       cmake -DBUILD_SHARED_LIBS=OFF
-          -DLIBTYPE=STATIC
-          .. &&
+            -DLIBTYPE=STATIC 
+            -DCMAKE_CXX_FLAGS=-fPIC
+            -DCMAKE_C_FLAGS=-fPIC
+            .. &&
       make -j${NUM_COMPILE_THREADS}
   VERBATIM
 )
@@ -398,14 +405,14 @@ add_custom_command(
 #=================================================================
 # SDL2 Compile ===================================================
 #=================================================================
-add_custom_target(TARGET_SDL2)
 add_custom_command(
   OUTPUT ${SDL2_LIB_OUTPUT}
   COMMAND
       cd ${SDL2_DIR} &&
+      mkdir -p sdl2-install &&
       mkdir -p build &&
       cd build &&
-      cmake -DBUILD_SHARED_LIBS=OFF .. &&
+      cmake -DSDL_STATIC_PIC=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=${SDL2_DIR}/sdl2-install -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC .. &&
       make -j${NUM_COMPILE_THREADS}
   VERBATIM
 )
@@ -419,11 +426,14 @@ add_custom_command(
 add_custom_command(
   OUTPUT ${SDL2TTF_LIB_OUTPUT}
   COMMAND
+      export PATH=$ENV{PATH}:${SDL2TTF_INSTALL_DIR} &&
       cd ${SDL2TTF_DIR} &&
+      mkdir -p ${SDL2TTF_INSTALL_DIR} &&
       sh autogen.sh &&
-      ./configure --with-freetype-prefix=${FREETYPE_INSTALL_DIR} &&
-      make -j${NUM_COMPILE_THREADS}
-  DEPENDS ${FREETYPE_LIB_OUTPUT}
+      ./configure --with-freetype-prefix=${FREETYPE_INSTALL_DIR} --prefix=${SDL2TTF_INSTALL_DIR} --enable-static=yes --with-pic &&
+      make -j${NUM_COMPILE_THREADS} && 
+      make install
+  DEPENDS ${SDL2_LIB_OUTPUT} ${FREETYPE_LIB_OUTPUT}
   VERBATIM
 )
 #=================================================================
@@ -433,26 +443,30 @@ add_custom_command(
 #=================================================================
 # Variables ======================================================
 #=================================================================
-set(ALL_DEPENDENCIES_LIB_FILES
-    ${ALL_DEPENDENCIES_LIB_FILES}
+set(ALL_DEPENDENCIES_STATIC_LIB_FILES
     ${ASSIMP_LIB_OUTPUT}
     ${IRRXML_LIB_OUTPUT}
     ${JPEG_LIB_OUTPUT}
     ${PNG_LIB_OUTPUT}
-    ${SNDIO_LIB_OUTPUT}
+    #${SNDIO_LIB_OUTPUT}
     ${SNDFILE_LIB_OUTPUT}
     ${OPENAL_LIB_OUTPUT}
     ${SDL2_LIB_OUTPUT}
     ${SDL2TTF_LIB_OUTPUT}
     ${SNDIO_LIB_OUTPUT}
-    ${OGG_LIB_OUTPUT}
-    ${VORBIS_LIB_OUTPUT_0}
-    ${VORBIS_LIB_OUTPUT_1}
-    ${VORBIS_LIB_OUTPUT_2}
-    ${FLAC_LIB_OUTPUT}
+    #${OGG_LIB_OUTPUT}
+    #${VORBIS_LIB_OUTPUT_0}
+    #${VORBIS_LIB_OUTPUT_1}
+    #${VORBIS_LIB_OUTPUT_2}
+    #${FLAC_LIB_OUTPUT}
     ${GLEW_LIB_OUTPUT}
     ${FREETYPE_LIB_OUTPUT} # Must go after sdl2ttf
     ${ZLIB_LIB_OUTPUT}     # Must go after libpng, libassimp
+)
+
+set(ALL_DEPENDENCIES_LIB_FILES
+    ${ALL_DEPENDENCIES_LIB_FILES}
+    ${ALL_DEPENDENCIES_STATIC_LIB_FILES}
 )
 #=================================================================
 #=================================================================
@@ -465,6 +479,7 @@ include_directories(
     ${GLEW_INCLUDE_DIR}
     ${ASSIMP_INCLUDE_DIR_0}
     ${ASSIMP_INCLUDE_DIR_1}
+    ${SNDFILE_INCLUDE_DIR}
     ${OPENAL_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR_0}
     ${JPEG_INCLUDE_DIR_1}
@@ -478,9 +493,9 @@ include_directories(
 #=================================================================
 
 #=================================================================
-# Add Dummy target ===============================================
+# Add BuildThirdParty target =====================================
 #=================================================================
-add_custom_target(Dummy ALL DEPENDS ${ALL_DEPENDENCIES_LIB_FILES})
+add_custom_target(BuildThirdParty ALL DEPENDS ${ALL_DEPENDENCIES_STATIC_LIB_FILES})
 #=================================================================
 #=================================================================
 #=================================================================
@@ -489,7 +504,7 @@ add_custom_target(Dummy ALL DEPENDS ${ALL_DEPENDENCIES_LIB_FILES})
 # Check Force rebuild ============================================
 #=================================================================
 if (${FORCE_REBUILD}) # If force rebuild, remove all outputlibs
-    foreach(OUTPUT_LIB_FILE ${ALL_DEPENDENCIES_LIB_FILES})
+    foreach(OUTPUT_LIB_FILE ${ALL_DEPENDENCIES_STATIC_LIB_FILES})
         file(REMOVE ${OUTPUT_LIB_FILE})
     endforeach()
 endif()

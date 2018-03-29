@@ -32,7 +32,7 @@ DUALCASE=1; export DUALCASE # for MKS sh
 # if CDPATH is set.
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 
-relink_command=""
+relink_command="(cd /Bang/ThirdParty/SDL2_ttf-2.0.14; { test -z \"\${LIBRARY_PATH+set}\" || unset LIBRARY_PATH || { LIBRARY_PATH=; export LIBRARY_PATH; }; }; { test -z \"\${COMPILER_PATH+set}\" || unset COMPILER_PATH || { COMPILER_PATH=; export COMPILER_PATH; }; }; { test -z \"\${GCC_EXEC_PREFIX+set}\" || unset GCC_EXEC_PREFIX || { GCC_EXEC_PREFIX=; export GCC_EXEC_PREFIX; }; }; { test -z \"\${LD_RUN_PATH+set}\" || unset LD_RUN_PATH || { LD_RUN_PATH=; export LD_RUN_PATH; }; }; { test -z \"\${LD_LIBRARY_PATH+set}\" || unset LD_LIBRARY_PATH || { LD_LIBRARY_PATH=; export LD_LIBRARY_PATH; }; }; PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin; export PATH; /usr/bin/g++ -fPIC -g -O2 -I/Bang/ThirdParty/freetype-2.4.0/freetype-install/include/freetype2 -I/Bang/ThirdParty/freetype-2.4.0/freetype-install/include -D_REENTRANT -I/usr/local/include/SDL2 -DHAVE_OPENGL -o \$progdir/\$file glfont.o -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -pthread  ./.libs/libSDL2_ttf.so -L/Bang/ThirdParty/freetype-2.4.0/freetype-install/lib -L/usr/local/lib -lGL -lm /Bang/ThirdParty/freetype-2.4.0/freetype-install/lib/libfreetype.so -lz -lSDL2 -pthread -Wl,-rpath -Wl,/Bang/ThirdParty/SDL2_ttf-2.0.14/.libs -Wl,-rpath -Wl,/Bang/ThirdParty/freetype-2.4.0/freetype-install/lib -Wl,-rpath -Wl,/Bang/ThirdParty/freetype-2.4.0/freetype-install/lib)"
 
 # This environment variable determines our operation mode.
 if test "$libtool_install_magic" = "%%%MAGIC variable%%%"; then
@@ -98,20 +98,38 @@ else
   absdir=`cd "$thisdir" && pwd`
   test -n "$absdir" && thisdir="$absdir"
 
-  program='glfont'
+  program=lt-'glfont'
   progdir="$thisdir/.libs"
 
+  if test ! -f "$progdir/$program" ||
+     { file=`ls -1dt "$progdir/$program" "$progdir/../$program" 2>/dev/null | /bin/sed 1q`; \
+       test "X$file" != "X$progdir/$program"; }; then
+
+    file="$$-$program"
+
+    if test ! -d "$progdir"; then
+      mkdir "$progdir"
+    else
+      rm -f "$progdir/$file"
+    fi
+
+    # relink executable if necessary
+    if test -n "$relink_command"; then
+      if relink_command_output=`eval $relink_command 2>&1`; then :
+      else
+	echo "$relink_command_output" >&2
+	rm -f "$progdir/$file"
+	exit 1
+      fi
+    fi
+
+    mv -f "$progdir/$file" "$progdir/$program" 2>/dev/null ||
+    { rm -f "$progdir/$program";
+      mv -f "$progdir/$file" "$progdir/$program"; }
+    rm -f "$progdir/$file"
+  fi
 
   if test -f "$progdir/$program"; then
-    # Add our own library path to LD_LIBRARY_PATH
-    LD_LIBRARY_PATH="/home/sephirot47/Projects/BangThirdParty/SDL2_ttf-2.0.14/.libs:/home/sephirot47/Projects/BangThirdParty/freetype-2.4.0/freetype-install/lib:$LD_LIBRARY_PATH"
-
-    # Some systems cannot cope with colon-terminated LD_LIBRARY_PATH
-    # The second colon is a workaround for a bug in BeOS R4 sed
-    LD_LIBRARY_PATH=`$ECHO "X$LD_LIBRARY_PATH" | $Xsed -e 's/::*$//'`
-
-    export LD_LIBRARY_PATH
-
     if test "$libtool_execute_magic" != "%%%MAGIC variable%%%"; then
       # Run the actual program with our arguments.
 
