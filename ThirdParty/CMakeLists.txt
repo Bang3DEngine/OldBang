@@ -38,7 +38,8 @@ add_definitions(-DBUILD_STATIC)
 
 # Assimp
 set(ASSIMP_DIR "${CMAKE_CURRENT_LIST_DIR}/assimp")
-set(ASSIMP_INCLUDE_DIR "${ASSIMP_DIR}/include")
+set(ASSIMP_INCLUDE_DIR_0 "${ASSIMP_DIR}/include")
+set(ASSIMP_INCLUDE_DIR_1 "${ASSIMP_DIR}/build/include")
 set(ASSIMP_LIB_OUTPUT_DIR  "${ASSIMP_DIR}/build/code")
 set(ASSIMP_LIB_OUTPUT_NAME "libassimp.a")
 set(ASSIMP_LIB_OUTPUT "${ASSIMP_LIB_OUTPUT_DIR}/${ASSIMP_LIB_OUTPUT_NAME}")
@@ -433,7 +434,8 @@ add_custom_command(
 #=================================================================
 set(ALL_DEPENDENCIES_LIB_FILES
     ${ALL_DEPENDENCIES_LIB_FILES}
-    ${ASSIMP_LIB_OUTPUT}
+    ${ASSIMP_INCLUDE_DIR_0}
+    ${ASSIMP_INCLUDE_DIR_1}
     ${IRRXML_LIB_OUTPUT}
     ${JPEG_LIB_OUTPUT}
     ${PNG_LIB_OUTPUT}
