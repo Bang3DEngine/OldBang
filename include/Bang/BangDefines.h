@@ -164,6 +164,15 @@ template<class EnumT> constexpr EnumT Undef() { return SCAST<EnumT>(-1); }
 */
 // ======================================================
 
+
+#ifdef BUILD_STATIC
+    #define BANG_SDL2_INCLUDE(file)     <file>
+    #define BANG_SDL2_TTF_INCLUDE(file) <file>
+#else
+    #define BANG_SDL2_INCLUDE(file)     <SDL2/file>
+    #define BANG_SDL2_TTF_INCLUDE(file) <SDL2/file>
+#endif
+
 NAMESPACE_BANG_END
 
 #endif // BANGFORWARD_H

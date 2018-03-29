@@ -1,9 +1,8 @@
 #ifndef CURSOR_H
 #define CURSOR_H
 
-#include <SDL2/SDL_mouse.h>
-
 #include "Bang/Bang.h"
+#include BANG_SDL2_INCLUDE(SDL_mouse.h)
 
 NAMESPACE_BANG_BEGIN
 

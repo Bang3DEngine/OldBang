@@ -1,8 +1,10 @@
 ﻿#ifndef INPUT_H
 #define INPUT_H
 
+#include "Bang/Bang.h"
+
 #include <iostream>
-#include <SDL2/SDL.h>
+#include BANG_SDL2_INCLUDE(SDL.h)
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"

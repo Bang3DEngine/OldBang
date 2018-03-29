@@ -13,6 +13,7 @@ project(BangThirdParty C CXX)
 #=================================================================
 # General
 set(NUM_COMPILE_THREADS 4)
+add_definitions(-DBUILD_STATIC)
 # set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes")
 #
 # #=================================================================
@@ -137,7 +138,7 @@ set(SDL2_LIB_OUTPUT  "${SDL2_LIB_OUTPUT_DIR}/${SDL2_LIB_OUTPUT_NAME}")
 
 # SDL2_ttf
 set(SDL2TTF_DIR "${CMAKE_CURRENT_LIST_DIR}/SDL2_ttf-2.0.14")
-set(SDL2_TTF_INCLUDE_DIR "${SDL2_TTF_DIR}/include")
+set(SDL2TTF_INCLUDE_DIR "${SDL2TTF_DIR}")
 set(SDL2TTF_LIB_OUTPUT_DIR  "${SDL2TTF_DIR}/.libs")
 set(SDL2TTF_LIB_OUTPUT_NAME "libSDL2_ttf.a")
 set(SDL2TTF_LIB_OUTPUT  "${SDL2TTF_LIB_OUTPUT_DIR}/${SDL2TTF_LIB_OUTPUT_NAME}")
@@ -456,7 +457,7 @@ include_directories(
     ${ASSIMP_INCLUDE_DIR}
     ${OPENAL_INCLUDE_DIR}
     ${SDL2_INCLUDE_DIR}
-    ${SDL2_TTF_INCLUDE_DIR}
+    ${SDL2TTF_INCLUDE_DIR}
 )
 #=================================================================
 #=================================================================

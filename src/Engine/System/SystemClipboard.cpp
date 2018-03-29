@@ -1,6 +1,6 @@
 #include "Bang/SystemClipboard.h"
 
-#include <SDL2/SDL.h>
+#include BANG_SDL2_INCLUDE(SDL.h)
 
 USING_NAMESPACE_BANG
 

@@ -1,7 +1,7 @@
 
 #include "Bang/Window.h"
 
-#include <SDL2/SDL.h>
+#include BANG_SDL2_INCLUDE(SDL.h)
 
 #include "Bang/GL.h"
 #include "Bang/Debug.h"

@@ -1,7 +1,7 @@
 #include "Bang/WindowManager.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include BANG_SDL2_INCLUDE(SDL.h)
+#include BANG_SDL2_TTF_INCLUDE(SDL_ttf.h)
 
 #include "Bang/Debug.h"
 #include "Bang/Window.h"

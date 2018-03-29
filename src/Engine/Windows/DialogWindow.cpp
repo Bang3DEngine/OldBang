@@ -1,6 +1,6 @@
 #include "Bang/DialogWindow.h"
 
-#include <SDL2/SDL.h>
+#include BANG_SDL2_INCLUDE(SDL.h)
 #include "Bang/Input.h"
 
 USING_NAMESPACE_BANG
