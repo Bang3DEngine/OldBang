@@ -2,3 +2,4 @@ config.mk
 !/builds/
 !Makefile
 !modules.cfg
+/freetype-install/
