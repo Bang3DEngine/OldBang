@@ -48,6 +48,12 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 if (${BUILD_SHARED_LIBS})
     # Shared dependencies ===================
 
+    # GLEW Dependency ============================
+    message("Looking for dependency GLEW...")
+    find_package(GLEW REQUIRED)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLEW_LIBRARIES})
+
     # OpenAL Dependency ============================
     find_package(OpenAL REQUIRED)
     include_directories(${OPENAL_INCLUDE_DIRS})
@@ -92,6 +98,7 @@ if (${BUILD_SHARED_LIBS})
         ${OPENAL_LIBRARY}
         ${JPEG_LIBRARIES}
         ${SDL2_LIBRARY}
+        ${GLEW_LIBRARIES}
         ${SDL2_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${SNDFILE_LIBRARY}
@@ -106,7 +113,6 @@ endif()
 # Common libs
 set(ALL_DEPENDENCIES_LIB_FILES
     ${ALL_DEPENDENCIES_LIB_FILES}
-    ${GLEW_LIBRARIES}
     ${DL_LIBRARY}
     ${ZLIB_LIBRARY}
     ${OPENGL_LIBRARIES}

@@ -2,12 +2,12 @@
 #define IMAGEIO_H
 
 #include "Bang/Path.h"
-#include "Bang/Image.h"
 
 NAMESPACE_BANG_BEGIN
 
 FORWARD   class Texture2D;
 FORWARD_T class Image;
+using Imageb = Image<Byte>;
 
 class ImageIO
 {
