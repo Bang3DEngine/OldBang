@@ -40,10 +40,17 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
     message("Looking for dependency OpenGL...")
     find_package(OpenGL REQUIRED)
     include_directories(${OPENGL_INCLUDE_DIRS})
+
+    # ZLIB Dependency ============================
+    find_package(ZLIB REQUIRED "zlib")
 # =================================================
 
 if (${BUILD_SHARED_LIBS})
     # Shared dependencies ===================
+
+    # OpenAL Dependency ============================
+    find_package(OpenAL REQUIRED)
+    include_directories(${OPENAL_INCLUDE_DIRS})
 
     # PNG Dependency ============================
     message("Looking for dependency PNG...")
@@ -78,21 +85,17 @@ if (${BUILD_SHARED_LIBS})
     string(STRIP "${SDL2_TTF_LIBRARY}" SDL2_TTF_LIBRARY)
     string(STRIP "${SDL2_TTF_LIBRARIES}" SDL2_TTF_LIBRARIES)
 
-    # OpenAL Dependency ============================
-    find_package(OpenAL REQUIRED)
-    include_directories(${OPENAL_INCLUDE_DIRS})
-
     # Set output variables
     set(ALL_DEPENDENCIES_LIB_FILES
         ${ALL_DEPENDENCIES_LIB_FILES}
         ${PNG_LIBRARIES}
+        ${OPENAL_LIBRARY}
         ${JPEG_LIBRARIES}
         ${SDL2_LIBRARY}
         ${SDL2_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${SNDFILE_LIBRARY}
         ${ASSIMP_LIBRARY}
-        ${OPENAL_LIBRARY}
     )
 
 else ()
@@ -105,6 +108,7 @@ set(ALL_DEPENDENCIES_LIB_FILES
     ${ALL_DEPENDENCIES_LIB_FILES}
     ${GLEW_LIBRARIES}
     ${DL_LIBRARY}
+    ${ZLIB_LIBRARY}
     ${OPENGL_LIBRARIES}
 )
 

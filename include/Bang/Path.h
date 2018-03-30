@@ -24,6 +24,8 @@ public:
     };
     CREATE_FLAGS(FindFlags, FindFlag);
 
+    static const Path Empty;
+
     Path();
     Path(const Path &path);
     explicit Path(const String &absolutePath);
@@ -73,7 +75,7 @@ public:
     bool operator==(const Path &rhs) const;
     bool operator<(const Path &rhs) const;
 
-    static const Path Empty;
+    static Path EmptyPath();
 
 private:
     String m_absolutePath = "";

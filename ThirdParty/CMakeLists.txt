@@ -51,10 +51,10 @@ set(IRRXML_LIB_OUTPUT_NAME "libIrrXML.a")
 set(IRRXML_LIB_OUTPUT "${IRRXML_LIB_OUTPUT_DIR}/${IRRXML_LIB_OUTPUT_NAME}")
 
 # ZLIB (used by Assimp, and using the one inside it ftm)
-set(ZLIB_DIR "${ASSIMP_DIR}/build/contrib/zlib")
-set(ZLIB_LIB_OUTPUT_DIR  "${ZLIB_DIR}")
-set(ZLIB_LIB_OUTPUT_NAME "libzlibstatic.a")
-set(ZLIB_LIB_OUTPUT "${ZLIB_LIB_OUTPUT_DIR}/${ZLIB_LIB_OUTPUT_NAME}")
+#set(ZLIB_DIR "${ASSIMP_DIR}/build/contrib/zlib")
+#set(ZLIB_LIB_OUTPUT_DIR  "${ZLIB_DIR}")
+#set(ZLIB_LIB_OUTPUT_NAME "libzlibstatic.a")
+#set(ZLIB_LIB_OUTPUT "${ZLIB_LIB_OUTPUT_DIR}/${ZLIB_LIB_OUTPUT_NAME}")
 
 # Freetype2
 set(FREETYPE_DIR "${CMAKE_CURRENT_LIST_DIR}/freetype-2.4.0")
@@ -117,11 +117,11 @@ set(SNDFILE_LIB_OUTPUT_NAME "libsndfile.a")
 set(SNDFILE_LIB_OUTPUT  "${SNDFILE_LIB_OUTPUT_DIR}/${SNDFILE_LIB_OUTPUT_NAME}")
 
 # ALSAOBJS
-set(ALSAOBJS_DIR "${CMAKE_CURRENT_LIST_DIR}/alsa-lib-1.1.4")
-set(ALSAOBJS_INCLUDE_DIR "${ALSAOBJS_DIR}/include")
-set(ALSAOBJS_LIB_OUTPUT_DIR  "${ALSAOBJS_DIR}/build/lib")
-set(ALSAOBJS_LIB_OUTPUT_NAME "alsaobjs.done")
-set(ALSAOBJS_LIB_OUTPUT  "${ALSAOBJS_LIB_OUTPUT_DIR}/${ALSAOBJS_LIB_OUTPUT_NAME}")
+#set(ALSAOBJS_DIR "${CMAKE_CURRENT_LIST_DIR}/alsa-lib-1.1.4")
+#set(ALSAOBJS_INCLUDE_DIR "${ALSAOBJS_DIR}/include")
+#set(ALSAOBJS_LIB_OUTPUT_DIR  "${ALSAOBJS_DIR}/build/lib")
+#set(ALSAOBJS_LIB_OUTPUT_NAME "alsaobjs.done")
+#set(ALSAOBJS_LIB_OUTPUT  "${ALSAOBJS_LIB_OUTPUT_DIR}/${ALSAOBJS_LIB_OUTPUT_NAME}")
 # file(REMOVE ${ALSAOBJS_LIB_OUTPUT_NAME})
 
 # SNDIO
@@ -193,11 +193,11 @@ add_custom_command(
 #=================================================================
 # ZLib Compile ===================================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${ZLIB_LIB_OUTPUT}
-  COMMAND cp ${ZLIB_LIB_OUTPUT} ${ZLIB_LIB_OUTPUT}
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${ZLIB_LIB_OUTPUT}
+#  COMMAND cp ${ZLIB_LIB_OUTPUT} ${ZLIB_LIB_OUTPUT}
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -324,22 +324,22 @@ add_custom_command(
 #=================================================================
 # ALSAOBJS Compile ===============================================
 #=================================================================
-add_custom_command(
-  OUTPUT ${ALSAOBJS_LIB_OUTPUT}
-  EXECUTE_PROCESS(
-      COMMAND
-          cd ${ALSAOBJS_DIR} &&
-          ./configure --prefix=${ALSAOBJS_DIR}/build --enable-shared=no --enable-static=yes &&
-          make -j${NUM_COMPILE_THREADS} &&
-          make install &&
-          cd build/lib &&
-          ar x libasound.a &&
-          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/*.o     ${ALSAOBJS_DIR}/build/lib" &&
-          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/pcm/*.o ${ALSAOBJS_DIR}/build/lib" &&
-          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/ucm/*.o ${ALSAOBJS_DIR}/build/lib"
-  )
-  VERBATIM
-)
+#add_custom_command(
+#  OUTPUT ${ALSAOBJS_LIB_OUTPUT}
+#  EXECUTE_PROCESS(
+#      COMMAND
+#          cd ${ALSAOBJS_DIR} &&
+#          ./configure --prefix=${ALSAOBJS_DIR}/build --enable-shared=no --enable-static=yes &&
+#          make -j${NUM_COMPILE_THREADS} &&
+#          make install &&
+#          cd build/lib &&
+#          ar x libasound.a &&
+#          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/*.o     ${ALSAOBJS_DIR}/build/lib" &&
+#          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/pcm/*.o ${ALSAOBJS_DIR}/build/lib" &&
+#          /bin/sh -c "cp -R ${ALSAOBJS_DIR}/src/ucm/*.o ${ALSAOBJS_DIR}/build/lib"
+#  )
+#  VERBATIM
+#)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -461,7 +461,7 @@ set(ALL_DEPENDENCIES_STATIC_LIB_FILES
     #${FLAC_LIB_OUTPUT}
     ${GLEW_LIB_OUTPUT}
     ${FREETYPE_LIB_OUTPUT} # Must go after sdl2ttf
-    ${ZLIB_LIB_OUTPUT}     # Must go after libpng, libassimp
+    #${ZLIB_LIB_OUTPUT}     # Must go after libpng, libassimp
 )
 
 set(ALL_DEPENDENCIES_LIB_FILES
