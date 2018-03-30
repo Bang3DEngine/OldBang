@@ -43,6 +43,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
     # ZLIB Dependency ============================
     find_package(ZLIB REQUIRED "zlib")
+
+    # SNDFILE Dependency ============================
+    message("Looking for dependency sndfile...")
+    find_library(SNDFILE_LIBRARY "sndfile")
 # =================================================
 
 if (${BUILD_SHARED_LIBS})
@@ -67,10 +71,6 @@ if (${BUILD_SHARED_LIBS})
     message("Looking for dependency JPEG...")
     find_package(JPEG REQUIRED)
     include_directories(${JPEG_INCLUDE_DIRS})
-
-    # SNDFILE Dependency ============================
-    message("Looking for dependency sndfile...")
-    find_library(SNDFILE_LIBRARY "sndfile")
 
     # ASSIMP Dependency ============================
     message("Looking for dependency assimp...")
@@ -101,7 +101,6 @@ if (${BUILD_SHARED_LIBS})
         ${GLEW_LIBRARIES}
         ${SDL2_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
-        ${SNDFILE_LIBRARY}
         ${ASSIMP_LIBRARY}
     )
 
@@ -116,6 +115,7 @@ set(ALL_DEPENDENCIES_LIB_FILES
     ${DL_LIBRARY}
     ${ZLIB_LIBRARY}
     ${OPENGL_LIBRARIES}
+    ${SNDFILE_LIBRARY}
 )
 
 #=================================================================
